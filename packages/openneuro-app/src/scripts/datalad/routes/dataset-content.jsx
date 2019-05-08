@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import EditDescriptionField from '../fragments/edit-description-field.jsx'
+import Helmet from 'react-helmet'
+import { pageTitle } from '../../resources/strings'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
@@ -68,6 +70,12 @@ const DatasetContent = ({ dataset }) => {
   return (
     <>
       <LoggedIn>
+        <Helmet>
+          <title>
+            {pageTitle} - {dataset.draft.description.Name}
+          </title>
+          <meta name="description" content={dataset.draft.readme} />
+        </Helmet>
         <div className="col-xs-12">
           <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
         </div>
