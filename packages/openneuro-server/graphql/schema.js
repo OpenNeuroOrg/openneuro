@@ -97,6 +97,8 @@ const typeDefs = `
     addComment(datasetId: ID!, parentId: ID, comment: String!): ID
     # Edits an existing comment
     editComment(commentId: ID!, comment: String!): Boolean
+    # Subscribes user to newsletter
+    subscribeToNewsletter(email: String!): Boolean
   }
 
   type Subscription {
@@ -166,7 +168,7 @@ const typeDefs = `
     admin: Boolean
     blocked: Boolean
   }
-  
+
   # Which provider a user login comes from
   enum UserProvider {
     google
