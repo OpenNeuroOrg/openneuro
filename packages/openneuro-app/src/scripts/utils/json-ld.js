@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/browser'
+
 const schemaGenerator = snapshot => {
   try {
     const schema = {
@@ -20,8 +22,8 @@ const schemaGenerator = snapshot => {
       schema.identifier = [snapshot.description.DatasetDOI]
     }
     return JSON.stringify(schema)
-  } catch (e) {
-    console.error(e)
+  } catch (err) {
+    Sentry.captureException(err)
     return null
   }
 }
