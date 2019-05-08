@@ -39,3 +39,11 @@ You can add this to your shell path to quickly run dev commands like `dev-compos
 * [DataLad service](https://OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) microservice.
 * [bids-app-host](https://github.com/OpenNeuroOrg/bids-app-host) - Docker wrapper for cloud hosted job execution.
 * [bids-validator](https://github.com/INCF/bids-validator) - BIDS validation library.
+
+## Errors
+
+Package: OpenNeuro CLI download option
+
+Issue: `TypeError: path must be a string or Buffer`
+
+Solution: This error is due to a failure to read the ~/.openneuro configuration file. This file can be created with the command ```openneuro login```. To download a dataset, users need to authenticate with an API key at that time. One can obtain an API key at https://openneuro.org/keygen
