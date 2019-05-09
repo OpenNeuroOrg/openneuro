@@ -45,3 +45,11 @@ To download the current draft files:
 `openneuro download --draft <accession number> <destination directory>`
 
 If the destination directory does not exist, it will be created. Any files from the dataset that are already present in the directory will be skipped, allowing you to resume an interrupted download.
+
+## Errors
+
+Package: OpenNeuro CLI download option
+
+Issue: `TypeError: path must be a string or Buffer`
+
+Solution: This error is due to a failure to read the ~/.openneuro configuration file. This file can be created with the command ```openneuro login```. To download a dataset, users need to authenticate with an API key at that time. One can obtain an API key at https://openneuro.org/keygen
