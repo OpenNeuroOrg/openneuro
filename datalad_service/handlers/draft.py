@@ -41,8 +41,12 @@ class DraftResource(object):
             if name and email:
                 media_dict['name'] = name
                 media_dict['email'] = email
+            if 'validate' in req.params and req.params['validate'] == 'false':
+                validate = False
+            else:
+                validate = True
             commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                'files': None, 'name': name, 'email': email, 'cookies':req.cookies})
+                'files': None, 'name': name, 'email': email, 'cookies': req.cookies, 'validate': validate})
             commit.wait()
             if not commit.failed():
                 # Attach the commit hash to response

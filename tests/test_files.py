@@ -125,19 +125,21 @@ def test_empty_file(celery_app, client, new_dataset):
     response = client.simulate_post(
         '/datasets/{}/files/LICENSE'.format(ds_id), body='')
     assert response.status == falcon.HTTP_OK
+    # Commit files
+    response = client.simulate_post(
+        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+    assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     # Check that all elements exist in both lists
-    assert all(f in response_content['files'] for f in [
-        {'filename': 'dataset_description.json',
+    assert({'filename': 'LICENSE',
+            'id': '5bfdc52581371bfa051fa76825a0e1b5e5c3b4bf',
+            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'size': 0} in response_content['files'])
+    assert({'filename': 'dataset_description.json',
             'id': '43502da40903d08b18b533f8897330badd6e1da3',
-            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101},
-        {'filename': 'LICENSE',
-            'id': '5af11155317983632abdedd93b5be63ae98dae6f',
-            'key': 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391', 'size': 0}
-    ])
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101} in response_content['files'])
 
 
 def test_duplicate_file_id(celery_app, client, new_dataset):
@@ -149,6 +151,10 @@ def test_duplicate_file_id(celery_app, client, new_dataset):
     assert response.status == falcon.HTTP_OK
     response = client.simulate_post(
         '/datasets/{}/files/derivatives:two.json'.format(ds_id), body=file_body)
+    assert response.status == falcon.HTTP_OK
+    # Commit files
+    response = client.simulate_post(
+        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
