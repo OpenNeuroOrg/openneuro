@@ -3,6 +3,7 @@ from mmap import mmap
 import os
 import re
 import stat
+import subprocess
 
 from datalad.config import ConfigManager
 from datalad.support.exceptions import FileInGitError, FileNotInAnnexError
@@ -51,53 +52,37 @@ def compute_file_hash(git_hash, path):
     return hashlib.sha1('{}:{}'.format(git_hash, path).encode()).hexdigest()
 
 
-def get_repo_files(dataset, branch=None):
-    # If we're on the right branch, use the fast path with branch=None
-    if branch == None or branch == 'HEAD' or branch == dataset.repo.get_active_branch():
-        files = []
-        for dirpath, dirnames, filenames in os.walk(dataset.path, topdown=True):
-            # Filter out the '.git' and '.datalad' dirs
-            # topdown=True lets us do this during the loop
-            dirnames[:] = [d for d in dirnames if not (
-                d == '.git' or d == '.datalad')]
-            for f_name in filenames:
-                # Skip any .gitattributes
-                if f_name == '.gitattributes':
-                    continue
-                f_path = os.path.join(dirpath, f_name)
-                rel_path = os.path.relpath(f_path, dataset.path)
-                f_stat = os.lstat(f_path)
-                if stat.S_ISLNK(f_stat.st_mode):
-                    # Annexed file
-                    l_path = os.readlink(f_path)
-                    key = l_path.split('/')[-1]
-                    # Get the size from key
-                    size = int(key.split('-', 2)[1].lstrip('s'))
-                    file_id = compute_file_hash(key, rel_path)
-                    files.append(
-                        {'filename': rel_path, 'size': size, 'id': file_id, 'key': key})
-                else:
-                    # Regular git file
-                    size = f_stat.st_size
-                    # Compute git hash
-                    # An alternative would be to switch away from hashing
-                    # but this is pretty efficient since it only looks at non-annex files
-                    blob_hash = compute_git_hash(f_path, size)
-                    file_id = compute_file_hash(blob_hash, rel_path)
-                    files.append({'filename': rel_path, 'size': size,
-                                  'id': file_id, 'key': blob_hash})
-        return files
-    else:
-        working_files = dataset.repo.get_files(branch=branch)
-        # Do the tree lookup only once
-        tree = dataset.repo.repo.commit(branch).tree
-        # Zip up array of (filename, key) tuples
-        file_keys = zip(
-            working_files, dataset.repo.get_file_key(working_files))
-        # Produce JSON results and lookup any missing non-annex file sizes
-        files = [create_file_obj(dataset, tree, file_key)
-                 for file_key in file_keys if not (file_key[0].startswith('.datalad/') or file_key[0] == '.gitattributes')]
-        return files
+def get_repo_files(dataset, branch='HEAD'):
+    dir_fd = os.open(dataset.path, os.O_RDONLY)
+    gitProcess = subprocess.Popen(
+        ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE)
+    files = []
+    for line in gitProcess.stdout:
+        gitTreeLine = line.decode().rstrip()
+        metadata, filename = gitTreeLine.split('\t')
+        # Skip git / datalad files
+        if filename.startswith('.git/'):
+            continue
+        if filename.startswith('.datalad/'):
+            continue
+        if filename == '.gitattributes':
+            continue
+        mode, obj_type, obj_hash, size = metadata.split()
+        # Check if the file is annexed
+        if (mode == '120000'):
+            # Handle annexed here
+            l_path = os.readlink(filename, dir_fd=dir_fd)
+            key = l_path.split('/')[-1]
+            # Get the size from key
+            size = int(key.split('-', 2)[1].lstrip('s'))
+            file_id = compute_file_hash(key, filename)
+            files.append(
+                {'filename': filename, 'size': int(size), 'id': file_id, 'key': key})
+        else:
+            file_id = compute_file_hash(obj_hash, filename)
+            files.append({'filename': filename, 'size': int(size),
+                          'id': file_id, 'key': obj_hash})
+    return files
 
 
 class CommitInfo():
