@@ -35,19 +35,5 @@ describe('snapshot model operations', () => {
       )
       done()
     })
-    it('throws an exception if backend errors', async done => {
-      const tag = 'snapshot'
-      const dsId = await createDataset()
-      // Reset call count for request.post
-      request.post.mockClear()
-      request.__setMockError({ error: 'something went wrong' })
-      try {
-        await createSnapshot(dsId, tag, false)
-        done.fail(new Error('Failed request did not throw exception'))
-      } catch (e) {
-        expect(request.post).toHaveBeenCalledTimes(1)
-        done()
-      }
-    })
   })
 })
