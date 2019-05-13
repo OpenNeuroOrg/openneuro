@@ -78,7 +78,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
   const sKey = snapshotKey(datasetId, tag)
   // Get the newest description
   try {
-    const oldDesc = description({}, { datasetId, revision: 'HEAD' })
+    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
     // Mint a DOI
     const snapshotDoi = await doiLib.registerSnapshotDoi(
       datasetId,
