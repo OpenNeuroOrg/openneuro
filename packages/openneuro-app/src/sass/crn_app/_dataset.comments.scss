@@ -9,6 +9,7 @@
     outline: none;
   }
   blockquote.RichEditor-blockquote {
+    border-left: 5px solid $primary;
     border-left: 5px solid var(--primary);
   }
   .comment-header {
@@ -31,6 +32,7 @@
       .uploader-following {
         float: left;
         padding-top: 6px;
+        color: $primary;
         color: var(--primary);
       }
     }
@@ -46,108 +48,6 @@
     font-family: "FontAwesome";
     padding-right: 2px;
     padding-left: 2px;
-  }
-}
-
-/*Comment Tree*/
-
-.comment-tree {
-  margin-left: 20px;
-  padding-left: 15px;
-  border-left: solid 1px $ccc;
-
-  .comment-box {
-    padding: 20px;
-  }
-  .comment-div {
-    display: inline-block;
-    width: 80%;
-    display: inline-block;
-    .comment-text {
-      background: transparent;
-    }
-  }
-  .comment-avatar {
-    display: inline-block;
-    width: 75px;
-    vertical-align: top;
-    position: relative;
-    top: 10px;
-
-    .user-generic-thumb {
-      width: 60px;
-      height: 60px;
-      overflow: hidden;
-      display: table;
-      background-color: rgb(167, 204, 70);
-
-      .user-generic-thumb-letter {
-          font-size: xx-large;
-          display: table-cell;
-          text-align: center;
-          vertical-align: middle;
-          color: $white;
-      }
-    }
-
-    img {
-      height: 60px;
-      width: 60px;
-    }
-  }
-  .comment {
-    border: 1px solid $ddd;
-    padding: 15px 0px 10px 10px;
-    margin: 0px 0px 10px 0px;
-    .user-info {
-      font-size: 13px;
-      
-      .username {
-        font-weight: bold;
-      }
-
-      .copy-notification-active, .copy-notification-hidden {
-        color: var(--primary);
-        cursor: default;
-      }
-
-      .copy-notification-active {
-        opacity: 1;
-        visibility: visible;
-        transition: visibility 1s, opacity 1s;
-        cursor: pointer;
-      }
-
-      .copy-notification-hidden {
-        opacity: 0;
-        height: 0;
-        width: 0;
-        visibility: hidden;
-        transition: visibility 1s, opacity 1s;
-      }
-    }
-    .comment-actions {
-      text-align: right;
-      padding-right: 20px;
-      font-size: 12px;
-      a {
-        text-transform: uppercase;
-        color: var(--primary);
-        &:hover {
-          color: var(--secondary);
-        }
-      }
-      .reply-div {
-        border: solid 1px $ddd;
-        margin: 0px;
-        margin-top: 10px;
-        padding: 15px;
-        button {
-          margin-top: 10px;
-          margin-right: 5%;
-        }
-      }
-    }
   }
 }
 
@@ -185,19 +85,69 @@
   border-left: none;
 }
 
+.RichEditor-root, .comment {
+  background-color: $f4;
+  border-radius: 0 10px 10px 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.RichEditor-editor {
+  .btn-modal-action {
+    margin: 0;
+    margin-top: 4px;
+    background: $white;
+  }
+}
 
 /*Editor Block*/
+.DraftEditor-root {
+  padding: 0px 10px 10px 10px;
+  min-height: 2em;
+}
 
-.comment-box.top-level,
-.reply-div {
-  // margin: 0px 0px 30px 0px;
-  div.RichEditor-editor {
-    background-color: $f8;
-    color: $c-66;
-    padding: 0px 10px 10px 10px;
-    &:focus-within {
-      box-shadow: inset 0px 0px 5px $c-66;
-    }
+.RichEditor-root > .RichEditor-editor > .DraftEditor-root {
+  color: $c-66;
+  min-height: 6em;
+  background-color: $white;
+  &:focus-within {
+    box-shadow: inset 0px 0px 3px $c-66;
+  }
+}
+
+.dataset-comments {
+  .row {
+    margin: 0;
+  }
+  .row:first-child {
+    margin-bottom: 6px;
+  }
+  .row:last-child {
+    margin-top: 6px;
+  }
+  .replies {
+    margin-left: 2em;
+  }
+}
+
+.comment-body {
+  display: flex;
+  img.comment-avatar {
+    flex: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 1em;
+  }
+  div.DraftEditor-root {
+    flex: 1;
+  }
+}
+
+.comment {
+  .reply {
+    position: relative;
+    right: 0;
   }
 }
 
@@ -205,8 +155,10 @@
 
 .comment-submit {
   background: $white;
+  color: $primary;
   color: var(--primary);
   width: 90%;
+  border: 2px solid $primary;
   border: 2px solid var(--primary);
   border-radius: 0px;
   margin-left: 4%;
@@ -214,8 +166,10 @@
     outline: none !important;
   }
   &:hover {
+    background-color: $secondary;
     background-color: var(--secondary);
     color: $white;
+    border: 2px solid $secondary;
     border: 2px solid var(--secondary);
   }
 }
@@ -230,6 +184,7 @@
 
 .dataset-owner-flag {
   padding: 0px 2px;
+  background-color: $primary;
   background-color: var(--primary);
   color: $white;
 }
@@ -242,5 +197,5 @@
 .delete,
 .edit,
 .cancel-edit {
-  padding-left: 20px;
+  padding-left: 1em;
 }

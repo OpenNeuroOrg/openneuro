@@ -1,7 +1,11 @@
 import * as datalad from '../../datalad/snapshots.js'
+import { updateChanges } from '../../datalad/changelog.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
+import { readme } from './readme.js'
 import { description } from './description.js'
+import { summary } from './summary.js'
+import { snapshotIssues } from './issues.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -12,14 +16,34 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     ...snapshot,
     dataset: () => dataset(snapshot, { id: datasetId }, context),
     description: () => description(obj, { datasetId, tag }),
+    readme: () => readme(obj, { datasetId, revision: tag }),
+    summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
   }))
+}
+
+const sortSnapshots = (a, b) => new Date(b.created) - new Date(a.created)
+
+export const latestSnapshot = (obj, _, context) => {
+  return datalad.getSnapshots(obj.id).then(snapshots => {
+    const sortedSnapshots = Array.prototype.sort.call(snapshots, sortSnapshots)
+    return snapshot(
+      obj,
+      { datasetId: obj.id, tag: sortedSnapshots[0].tag },
+      context,
+    )
+  })
 }
 
 /**
  * Tag the working tree for a dataset
  */
-export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
+export const createSnapshot = (
+  obj,
+  { datasetId, tag, changes },
+  { user, userInfo },
+) => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
+    await updateChanges(datasetId, tag, changes)
     return datalad.createSnapshot(datasetId, tag, userInfo)
   })
 }
@@ -45,6 +69,7 @@ export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
 
 const Snapshot = {
   analytics: snapshot => analytics(snapshot),
+  issues: snapshot => snapshotIssues(snapshot),
 }
 
 export default Snapshot

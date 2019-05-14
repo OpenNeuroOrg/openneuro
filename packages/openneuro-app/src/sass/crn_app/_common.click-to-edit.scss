@@ -15,11 +15,13 @@
 .cte-edit-button {
     border: 0;
     background-color: $transparent;
+    color: $primary;
     color: var(--primary);
     padding: 0;
     margin: -5px 0 0 10px;
     span {
         font-size: 10px;
+        font-family: $font-family-open;
         font-family: var(--font-family-open);
         text-transform: uppercase;
     }
@@ -29,6 +31,7 @@
     }
     &:hover {
         background: none;
+        color: $primary-hover;
         color: var(--primary-hover);
     }
 }
@@ -37,6 +40,7 @@
     font-size: 15px;
     color: $c-66;
     font-weight: 400;
+    font-family: $font-family-open;
     font-family: var(--font-family-open);
     word-wrap: break-word;
     white-space: pre-wrap;

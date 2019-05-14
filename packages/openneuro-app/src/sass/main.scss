@@ -4,6 +4,12 @@ $bootstrap-sass-asset-helper: true;
 // Always required /_properties if not importing all animate/animate.scss
 @import 'animate/properties';
 
+// react-toastify
+@import '~react-toastify/dist/ReactToastify.css';
+
+// react-virtualized
+@import '~react-virtualized/styles.css';
+
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
@@ -30,12 +36,6 @@ $bootstrap-sass-asset-helper: true;
 // papaya asset default
 @import './crn_app/_common.papaya';
 
-// react-select
-@import './react-select';
-
-// react-table
-@import './react-table';
-
 //component common
 @import './crn_app/common.spinner';
 @import './crn_app/common.pagination';
@@ -49,7 +49,6 @@ $bootstrap-sass-asset-helper: true;
 
 //component specific
 @import './crn_app/nav.navbar';
-@import './crn_app/notification.alert';
 @import './crn_app/dataset.dataset';
 @import './crn_app/dataset.jobs';
 @import './crn_app/dataset.tools';
@@ -76,6 +75,7 @@ $bootstrap-sass-asset-helper: true;
     .logo-end{
         font-size: 75%;
         text-transform: uppercase;
+        color: $primary;
         color: var(--primary);
         font-weight: 400;
     }
@@ -229,11 +229,14 @@ $bootstrap-sass-asset-helper: true;
     }
     button{
         @extend %btn-admin;
+        border-color: $secondary;
         border-color: var(--secondary);
+        color: $secondary;
         color: var(--secondary);
         padding: 5px 2px;
         height: auto;
         &:hover{
+            background: $secondary-hover;
             background: var(--secondary-hover);
             color:$white;
         }

@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`File Viewer - JSON renders with invalid JSON 1`] = `
+<Fragment>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Tree
+    </h3>
+    <hr />
+    <p>
+      JSON failed to parse
+    </p>
+    <pre>
+      Unexpected token ; in JSON at position 4
+    </pre>
+  </div>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Raw
+    </h3>
+    <hr />
+    <Styled(pre)>
+      1234;
+    </Styled(pre)>
+  </div>
+</Fragment>
+`;
+
+exports[`File Viewer - JSON renders with valid JSON 1`] = `
+<Fragment>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Tree
+    </h3>
+    <hr />
+    <JSONTree
+      collectionLimit={50}
+      data={
+        Object {
+          "name": "string",
+          "thing": 1,
+        }
+      }
+      getItemString={[Function]}
+      hideRoot={false}
+      invertTheme={true}
+      isCustomNode={[Function]}
+      keyPath={
+        Array [
+          "root",
+        ]
+      }
+      labelRenderer={[Function]}
+      postprocessValue={[Function]}
+      shouldExpandNode={[Function]}
+      theme={
+        Object {
+          "author": "chris kempson (http://chriskempson.com)",
+          "base00": "#000000",
+          "base01": "#303030",
+          "base02": "#505050",
+          "base03": "#b0b0b0",
+          "base04": "#d0d0d0",
+          "base05": "#e0e0e0",
+          "base06": "#f5f5f5",
+          "base07": "#ffffff",
+          "base08": "#fb0120",
+          "base09": "#fc6d24",
+          "base0A": "#fda331",
+          "base0B": "#a1c659",
+          "base0C": "#76c7b7",
+          "base0D": "#6fb3d2",
+          "base0E": "#d381c3",
+          "base0F": "#be643c",
+          "scheme": "bright",
+        }
+      }
+      valueRenderer={[Function]}
+    />
+  </div>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Raw
+    </h3>
+    <hr />
+    <Styled(pre)>
+      {"thing":1,"name":"string"}
+    </Styled(pre)>
+  </div>
+</Fragment>
+`;

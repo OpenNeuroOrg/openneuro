@@ -1,15 +1,18 @@
+import * as Sentry from '@sentry/browser'
+import { toast } from 'react-toastify'
+import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
+import ReactGA from 'react-ga'
 import UploaderContext from './uploader-context.js'
-import notifications from '../notification/notification.actions'
+import FileSelect from '../common/forms/file-select.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
 import { xhrFetch } from './xhrfetch.js'
 import { withRouter } from 'react-router-dom'
-import moment from 'moment'
 
 /**
  * Stateful uploader workflow and status
@@ -71,6 +74,7 @@ export class UploadClient extends React.Component {
    * @param {string} path Virtual router path for upload modal
    */
   setLocation(path) {
+    ReactGA.pageview(path)
     this.setState({ location: locationFactory(path) })
   }
 
@@ -116,8 +120,8 @@ export class UploadClient extends React.Component {
             resume: true,
             files: filesToUpload,
             selectedFiles: files,
-            location: locationFactory('/upload/issues'),
           })
+          this.setLocation('/upload/issues')
         })
     }
   }
@@ -155,9 +159,9 @@ export class UploadClient extends React.Component {
         this.setState({
           files,
           selectedFiles: files,
-          location: locationFactory('/upload/rename'),
           name,
         })
+        this.setLocation('/upload/rename')
       } else {
         throw new Error('No files selected')
       }
@@ -165,10 +169,16 @@ export class UploadClient extends React.Component {
   }
 
   upload() {
+    // Track the start of uploads
+    ReactGA.event({
+      category: 'Upload',
+      action: 'Started web upload',
+      label: this.state.datasetId,
+    })
     this.setState({
       uploading: true,
-      location: locationFactory('/hidden'),
     })
+    this.setLocation('/hidden')
     if (this.state.resume && this.state.datasetId) {
       // Just add files since this is an existing dataset
       this._addFiles()
@@ -180,6 +190,21 @@ export class UploadClient extends React.Component {
           // Note chain to this._addFiles
           this.setState({ datasetId }, this._addFiles)
         })
+        .catch(error => {
+          Sentry.captureException(error)
+          toast.error(
+            <ToastContent
+              title="Dataset creation failed"
+              body="Please check your connection"
+            />,
+            { autoClose: false },
+          )
+          this.setState({
+            error,
+            uploading: false,
+          })
+          this.setLocation('/hidden')
+        })
     }
   }
 
@@ -189,6 +214,10 @@ export class UploadClient extends React.Component {
    * @returns {File[]} - New list of files with a replaced dataset_description.json
    */
   _editName(Name) {
+    if (!Name) {
+      // Return files if no name provided
+      return this.state.files
+    }
     // Merge in the new name for a new dataset_description object
     const description = {
       ...this.state.description,
@@ -222,7 +251,7 @@ export class UploadClient extends React.Component {
 
     // Construct the initial CHANGES file and add to the files array
     const snapshotText = 'Initial snapshot'
-    const date = moment().format('YYYY-MM-DD')
+    const date = new Date().toISOString().split('T')[0]
     const versionString = '1.0.0'
     const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
     const initialChangesFile = new Blob([initialChangesContent], {
@@ -263,28 +292,58 @@ export class UploadClient extends React.Component {
             this.setState({ uploading: false })
             this.uploadCompleteAction()
           })
-          .catch(() => {
-            this.setState({ uploading: false })
-          })
+      })
+      .catch(error => {
+        Sentry.captureException(error)
+        const toastId = toast.error(
+          <ToastContent
+            title="Dataset upload failed"
+            body="Please check your connection">
+            <FileSelect
+              onChange={event => {
+                toast.dismiss(toastId)
+                this.resumeDataset(this.state.datasetId)(event)
+              }}
+              resume
+            />
+          </ToastContent>,
+          { autoClose: false },
+        )
+        this.setState({
+          error,
+          uploading: false,
+        })
+        this.setLocation('/hidden')
+        if (this.state.xhr) {
+          try {
+            this.state.xhr.abort()
+          } catch (e) {
+            Sentry.captureException(e)
+          }
+        }
       })
   }
 
   uploadCompleteAction() {
+    // Record upload finished successfully with Google Analytics
+    ReactGA.event({
+      category: 'Upload',
+      action: 'Finished web upload',
+      label: this.state.datasetId,
+    })
     const datasetURL = `/datasets/${this.state.datasetId}`
     if (this.state.location.pathname !== locationFactory('/hidden').pathname) {
       this.props.history.push(datasetURL)
       this.setLocation('/hidden')
     } else {
-      notifications.createAlert({
-        type: 'Success',
-        message: (
-          <span>
-            {' '}
-            Dataset successfully uploaded.{' '}
-            <a href={datasetURL}>Click here to browse your dataset.</a>
-          </span>
-        ),
-      })
+      toast.success(
+        <ToastContent
+          title="Upload complete"
+          body="Dataset successfully uploaded">
+          <a href={datasetURL}>Click here to browse your dataset.</a>
+        </ToastContent>,
+        { autoClose: false },
+      )
     }
   }
 

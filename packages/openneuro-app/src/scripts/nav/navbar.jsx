@@ -9,8 +9,15 @@ import { Modal } from '../utils/modal.jsx'
 import LoginModal from '../common/partials/login.jsx'
 import config from '../../../config'
 import { frontPage } from 'openneuro-content'
+import styled from '@emotion/styled'
 
 // component setup ---------------------------------------------------------------
+const NavbarSpacer = styled.div`
+  width: 100%;
+  height: 85px;
+  min-height: 85px;
+`
+
 const OpenNeuroBrand = () => (
   <Link to="/" className="navbar-brand">
     {frontPage.navBar.brand.src ? (
@@ -52,7 +59,7 @@ class BSNavbar extends React.Component {
   // life cycle methods ------------------------------------------------------------
   render() {
     return (
-      <span>
+      <>
         <Navbar collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
@@ -67,13 +74,14 @@ class BSNavbar extends React.Component {
             />
           </Navbar.Collapse>
         </Navbar>
+        <NavbarSpacer />
         {this._supportModal()}
         <LoginModal
           show={this.state.loginModal}
           modalToggle={this.loginModal.bind(this)}
           min={true}
         />
-      </span>
+      </>
     )
   }
 
@@ -89,6 +97,13 @@ class BSNavbar extends React.Component {
         </Modal.Header>
         <hr className="modal-inner" />
         <Modal.Body>
+          If you have a question about details of a particular dataset
+          (clarifying the design, asking for additional metadata etc.) please
+          post it as a comment underneath the dataset. If you would like to
+          suggest a new feature please post it at
+          <a href="https://openneuro.featureupvote.com/">
+            https://openneuro.featureupvote.com/
+          </a>
           <script
             type="text/javascript"
             src="https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js"

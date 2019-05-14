@@ -6,22 +6,24 @@ import mongo from '../libs/mongo.js'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import { addFileUrl } from './utils.js'
-import { commitFilesKey } from './files.js'
 
 const uri = config.datalad.uri
+
+const draftFilesKey = datasetId => {
+  return `openneuro:draftFiles:${datasetId}`
+}
 
 /**
  * Retrieve draft files from cache or the datalad-service backend
  * @param {string} datasetId Accession number string
- * @param {string} revision Git hexsha to get files, does not apply to untracked
  * @param {object} options { untracked: true } - ignores the git index
  */
-export const getDraftFiles = async (datasetId, revision, options = {}) => {
+export const getDraftFiles = async (datasetId, options = {}) => {
   // If untracked is set and true
-  const untracked = ('untracked' in options && options.untracked) || !revision
+  const untracked = 'untracked' in options && options.untracked
   const query = untracked ? { untracked: true } : {}
   const filesUrl = `${uri}/datasets/${datasetId}/files`
-  const key = commitFilesKey(datasetId, revision)
+  const key = draftFilesKey(datasetId)
   return redis.get(key).then(data => {
     if (!untracked && data) return JSON.parse(data)
     else

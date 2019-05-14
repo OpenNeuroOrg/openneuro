@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import { formatDate } from '../../utils/date.js'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
 const DatasetUploaded = ({ uploader, created }) => {
-  const dateAdded = moment(created).format('L')
-  const difference = moment(created).fromNow(true)
+  const dateAdded = formatDate(created)
+  const difference = distanceInWordsToNow(created)
   return (
     <h6>
       {`uploaded by ${uploader.name} on ${dateAdded} - ${difference} ago`}
@@ -13,7 +14,7 @@ const DatasetUploaded = ({ uploader, created }) => {
 }
 
 DatasetUploaded.propTypes = {
-  uploader: PropTypes.string,
+  uploader: PropTypes.object,
   created: PropTypes.string,
 }
 

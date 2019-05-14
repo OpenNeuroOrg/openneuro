@@ -107,6 +107,25 @@ jobs:
               docker push "openneuro/server:${CIRCLE_TAG}"
             fi
 
+  sentry-release:
+    working_directory: ~/OpenNeuroOrg/openneuro
+    docker:
+      - image: circleci/node:8.11-jessie-browsers
+    steps:
+      - checkout
+      - run:
+          name: Install sentry-cli
+          command: yarn install
+      - run:
+          name: Update remote for Sentry bug
+          command: git remote set-url origin https://github.com/openneuroorg/openneuro.git
+      - run:
+          name: Create sentry release
+          command: yarn sentry-cli releases new -p openneuro $(jq -r .version lerna.json)
+      - run:
+          name: Associate releases with commits
+          command: yarn sentry-cli releases set-commits --auto $(jq -r .version lerna.json)
+
 workflows:
   version: 2
   build-and-deploy:
@@ -133,3 +152,12 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+      - sentry-release:
+          requires:
+            - server-build
+            - app-build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboard/datasets/DatasetRow renders successfully 1`] = `
+<div
+  className="panel panel-default"
+>
+  <Styled(div)
+    className="panel-heading"
+  >
+    <div
+      className="header clearfix"
+    >
+      <Link
+        to="/datasets/ds000001"
+      >
+        <h4
+          className="dataset-name"
+        >
+          test dataset
+        </h4>
+        <Uploaded />
+      </Link>
+      <div
+        className="metric-container"
+      >
+        <Metrics
+          dataset={
+            Object {
+              "draft": Object {
+                "description": Object {
+                  "Name": "test dataset",
+                },
+              },
+              "id": "ds000001",
+              "snapshots": Array [],
+            }
+          }
+          fromDashboard={true}
+        />
+      </div>
+      <div
+        className="status-container"
+      >
+        <ProfileComponent
+          dataset={
+            Object {
+              "draft": Object {
+                "description": Object {
+                  "Name": "test dataset",
+                },
+              },
+              "id": "ds000001",
+              "snapshots": Array [],
+            }
+          }
+          minimal={true}
+        />
+      </div>
+    </div>
+    <Summary
+      minimal={true}
+    />
+  </Styled(div)>
+</div>
+`;

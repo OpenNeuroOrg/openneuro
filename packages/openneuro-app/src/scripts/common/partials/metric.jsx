@@ -6,7 +6,7 @@ import Tooltip from './tooltip.jsx'
 
 // component setup -----------------------------------------------------------
 
-export default class Metric extends React.Component {
+export default class Metric extends React.PureComponent {
   // lifecycle events ----------------------------------------------------------
   render() {
     if (!this.props.display) {
@@ -14,29 +14,32 @@ export default class Metric extends React.Component {
     }
 
     let spanClass, tip, iconClass
-    let value = this.props.value ? this.props.value : null
+    const value = this.props.value ? this.props.value : 0
+    const noun = this.props.snapshot ? 'snapshot' : 'dataset'
 
     switch (this.props.type) {
       case 'stars':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-star'
-        tip = 'This dataset has ' + value + ' likes.'
+        tip = `This ${noun} has ${value} likes.`
         break
       case 'downloads':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-download'
-        tip = 'This dataset has ' + value + ' downloads.'
+        tip = `This ${noun} has ${value} downloads.`
         break
       case 'followers':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-users'
-        tip = 'This dataset has ' + value + ' followers.'
+        tip = `This ${noun} has ${value} followers.`
         break
       case 'views':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-eye'
-        tip = 'This dataset has ' + value + ' views.'
+        tip = `This ${noun} has ${value} views.`
         break
+      default:
+        throw new Error('Invalid type provided')
     }
 
     let content = (
@@ -62,6 +65,7 @@ export default class Metric extends React.Component {
 
 Metric.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.number,
   display: PropTypes.bool,
+  snapshot: PropTypes.bool,
 }

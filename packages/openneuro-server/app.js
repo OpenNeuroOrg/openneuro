@@ -5,7 +5,7 @@
  * Express app setup
  */
 import express from 'express'
-import Raven from 'raven'
+import * as Sentry from '@sentry/node'
 import passport from 'passport'
 import config from './config'
 import routes from './routes'
@@ -17,17 +17,15 @@ import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
-// import events lib to instantiate CRN Emitter
-import events from './libs/events'
 
-// test flag disables Raven for tests
+// test flag disables Sentry for tests
 export default test => {
   const app = express()
 
   setupPassportAuth()
 
-  // Raven must be first to work
-  test || app.use(Raven.requestHandler())
+  // Sentry must be first to work
+  test || app.use(Sentry.Handlers.requestHandler())
 
   app.use(passport.initialize())
 
@@ -46,8 +44,8 @@ export default test => {
   app.use(config.apiPrefix, routes)
 
   // error handling --------------------------------------------------\
-  // Raven reporting passes to the next step
-  test || app.use(Raven.errorHandler())
+  // Sentry reporting passes to the next step
+  test || app.use(Sentry.Handlers.errorHandler())
 
   // Apollo engine setup
   const engineConfig = {
@@ -77,6 +75,11 @@ export default test => {
         'request.credentials': 'same-origin',
       },
     },
+    // Enable cache options
+    tracing: true,
+    cacheControl: true,
+    // Don't limit the max size for dataset uploads
+    uploads: { maxFieldSize: Infinity },
   })
 
   // Setup pre-GraphQL middleware

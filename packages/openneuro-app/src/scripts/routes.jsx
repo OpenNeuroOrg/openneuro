@@ -1,11 +1,11 @@
 // dependencies ----------------------------------------------------------
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import loadable from 'loadable-components'
+import loadable from '@loadable/component'
 
 // wrap with loadable HOC
 const Dataset = loadable(() =>
-  import(/* webpackChunkName: 'Dataset' */ './dataset/dataset.jsx'),
+  import(/* webpackChunkName: 'Dataset' */ './datalad/dataset/dataset.jsx'),
 )
 const FrontPage = loadable(() =>
   import(/* webpackChunkName: 'FrontPage' */ './front-page/front-page.jsx'),
@@ -14,13 +14,13 @@ const Admin = loadable(() =>
   import(/* webpackChunkName: 'Admin' */ './admin/admin.jsx'),
 )
 const Dashboard = loadable(() =>
-  import(/* webpackChunkName: 'Dashboard' */ './dashboard/dashboard.jsx'),
+  import(/* webpackChunkName: 'Dashboard' */ './datalad/dashboard/dashboard.jsx'),
 )
 const Faq = loadable(() =>
   import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),
 )
 const SearchResults = loadable(() =>
-  import(/* webpackChunkName: 'SearchResults' */ './dashboard/dashboard.searchresults.jsx'),
+  import(/* webpackChunkName: 'SearchResults' */ './datalad/dashboard/search-results.jsx'),
 )
 const APIKey = loadable(() =>
   import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import ValidationPanel from './validation-panel.jsx'
 import Results from '../../validation/validation-results.jsx'
+
 /**
  * These can't be React components due to legacy react-bootstrap
  * validHeader, warningHeader, errorHeader
@@ -83,23 +84,10 @@ Errors.propTypes = {
   warnings: PropTypes.array,
 }
 
-class ValidationStatus extends React.Component {
-  constructor(props) {
-    super(props)
-    let issues = this.props.issues
-    this.state = this._getWarningsAndErrors(issues)
-  }
-
-  _getWarningsAndErrors(issues) {
-    return {
-      warnings: issues.filter(issue => issue.severity === 'warning'),
-      errors: issues.filter(issue => issue.severity === 'error'),
-    }
-  }
-
-  render() {
-    const warnings = this.state.warnings
-    const errors = this.state.errors
+const ValidationStatus = ({ issues }) => {
+  if (issues) {
+    const warnings = issues.filter(issue => issue.severity === 'warning')
+    const errors = issues.filter(issue => issue.severity === 'error')
     if (errors.length) {
       return <Errors errors={errors} warnings={warnings} />
     } else if (warnings.length) {
@@ -107,6 +95,21 @@ class ValidationStatus extends React.Component {
     } else {
       return <Valid />
     }
+  } else {
+    return (
+      <ValidationPanel
+        heading={
+          <div>
+            <span className="dataset-status ds-warning">
+              <i className="fa fa-circle-o-notch fa-spin" />
+              Validation Pending
+            </span>
+          </div>
+        }>
+        <br />
+        <p>The BIDS validator is running. This may take several minutes.</p>
+      </ValidationPanel>
+    )
   }
 }
 

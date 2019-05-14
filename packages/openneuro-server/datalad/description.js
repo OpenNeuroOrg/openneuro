@@ -2,8 +2,9 @@
  * Get description data from backend
  */
 import request from 'superagent'
-import { objectUrl } from './files.js'
-import { getDraftFiles } from './draft.js'
+import { redis } from '../libs/redis.js'
+import { addFileString, commitFiles } from './dataset.js'
+import { objectUrl, getFiles } from './files.js'
 import { getSnapshotHexsha } from './snapshots.js'
 
 export const defaultDescription = {
@@ -20,7 +21,7 @@ export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')
   if (file) {
     return request
-      .get(objectUrl(datasetId, file.id))
+      .get(objectUrl(datasetId, file.key))
       .then(({ body, type }) => {
         // Guard against non-JSON responses
         if (type === 'application/json') return body
@@ -35,12 +36,52 @@ export const getDescriptionObject = datasetId => files => {
   }
 }
 
+export const descriptionCacheKey = (datasetId, revision) => {
+  return `openneuro:dataset_description.json:${datasetId}:${revision}`
+}
+
 /**
  * Get a parsed dataset_description.json
  * @param {string} datasetId - dataset or snapshot object
  */
-export const description = async (obj, { datasetId, revision, tag }) =>
-  getDraftFiles(
+export const description = (obj, { datasetId, revision, tag }) => {
+  const redisKey = descriptionCacheKey(datasetId, revision || tag)
+  return redis
+    .get(redisKey)
+    .then(async cachedDescription => {
+      if (cachedDescription) {
+        return JSON.parse(cachedDescription)
+      } else {
+        const gitRef = revision
+          ? revision
+          : await getSnapshotHexsha(datasetId, tag)
+        return getFiles(datasetId, gitRef)
+          .then(getDescriptionObject(datasetId))
+          .then(uncachedDescription => {
+            redis.set(redisKey, JSON.stringify(uncachedDescription))
+            return { id: gitRef, ...uncachedDescription }
+          })
+      }
+    })
+    .then(description => {
+      if (typeof description.Authors === 'string') {
+        description.Authors = [description.Authors]
+      }
+      if (typeof description.ReferencesAndLinks === 'string') {
+        description.ReferencesAndLinks = [description.ReferencesAndLinks]
+      }
+      if (typeof description.Funding === 'string') {
+        description.Funding = [description.Funding]
+      }
+      return description
+    })
+}
+
+export const setDescription = (datasetId, description, user) => {
+  return addFileString(
     datasetId,
-    revision ? revision : await getSnapshotHexsha(datasetId, tag),
-  ).then(getDescriptionObject(datasetId))
+    'dataset_description.json',
+    'application/json',
+    JSON.stringify(description, null, 4),
+  ).then(() => commitFiles(datasetId, user))
+}

@@ -1,10 +1,14 @@
 import * as datalad from '../../datalad/dataset.js'
 import pubsub from '../pubsub.js'
-import { snapshots } from './snapshots.js'
+import { snapshots, latestSnapshot } from './snapshots.js'
+import { description } from './description.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
+import { datasetComments } from './comment.js'
+import * as dataladAnalytics from '../../datalad/analytics.js'
+import DatasetModel from '../../models/dataset.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -14,19 +18,57 @@ export const dataset = (obj, { id }, { user, userInfo }) => {
 
 export const datasets = (parent, args, { user, userInfo }) => {
   if (user) {
-    return datalad.getDatasets({ userId: user, admin: userInfo.admin })
+    return datalad.getDatasets({ ...args, userId: user, admin: userInfo.admin })
   } else {
-    return datalad.getDatasets()
+    return datalad.getDatasets(args)
   }
 }
+
+export const snapshotCreationComparison = ({ created: a }, { created: b }) => {
+  return new Date(a).getTime() - new Date(b).getTime()
+}
+
+/**
+ * Find the canonical name for a dataset from snapshots and drafts
+ * @param {object} obj Dataset object (at least {id: "datasetId"})
+ */
+export const datasetName = obj => {
+  return snapshots(obj).then(results => {
+    if (results && results.length) {
+      // Return the latest snapshot name
+      const sortedSnapshots = results.sort(snapshotCreationComparison)
+      return description(obj, {
+        datasetId: obj.id,
+        revision: sortedSnapshots[0].hexsha,
+      }).then(desc => desc.Name)
+    } else if (obj.revision) {
+      // Return the draft name or null
+      return description(obj, {
+        datasetId: obj.id,
+        revision: obj.revision,
+      }).then(desc => desc.Name)
+    } else {
+      return null
+    }
+  })
+}
+
+/**
+ * Resolve the best dataset name and cache in mongodb
+ * @param {string} datasetId
+ */
+export const updateDatasetName = datasetId =>
+  datasetName({ id: datasetId }).then(name =>
+    DatasetModel.update({ id: datasetId }, { $set: { name } }).exec(),
+  )
 
 /**
  * Create an empty dataset (new repo, new accession number)
  */
-export const createDataset = (obj, { label }, { user, userInfo }) => {
+export const createDataset = (obj, args, { user, userInfo }) => {
   // Check for a valid login
   if (user) {
-    return datalad.createDataset(label, user, userInfo)
+    return datalad.createDataset(user, userInfo)
   } else {
     throw new Error('You must be logged in to create a dataset.')
   }
@@ -58,7 +100,7 @@ export const updateFiles = (
       .then(() =>
         datalad
           .commitFiles(datasetId, userInfo)
-          .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
+          .then(() => pubsub.publish('draftFilesUpdated', { datasetId })),
       )
       .then(() => ({
         id: new Date(),
@@ -98,12 +140,22 @@ export const deleteFiles = (
       .then(() =>
         datalad
           .commitFiles(datasetId, userInfo)
-          .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
+          .then(() => pubsub.publish('draftFilesUpdated', { datasetId })),
       )
       .then(() => ({
         id: new Date(),
       }))
   })
+}
+
+export const deleteFile = async (
+  obj,
+  { datasetId, path, filename },
+  { user, userInfo },
+) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
+  await datalad.deleteFile(datasetId, path, { name: filename })
+  return datalad.commitFiles(datasetId, userInfo).then(() => true)
 }
 
 /**
@@ -160,8 +212,44 @@ export const analytics = async obj => {
  * Track analytic of type 'view' or 'download' for a dataset / snapshot
  */
 export const trackAnalytics = (obj, { datasetId, tag, type }) => {
-  return datalad.trackAnalytics(datasetId, tag, type)
+  return dataladAnalytics.trackAnalytics(datasetId, tag, type)
 }
+
+/**
+ * Get the star count for the dataset
+ */
+export const stars = async obj => {
+  const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
+  return datalad.getStars(datasetId)
+}
+
+/**
+ * Get the follower count for the dataset
+ */
+export const followers = async obj => {
+  const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
+  return datalad.getFollowers(datasetId)
+}
+
+/**
+ * Is this user following?
+ *
+ * Returns null for anonymous users
+ */
+export const following = (obj, _, { user }) =>
+  user
+    ? datalad.getUserFollowed(obj.id, user).then(res => (res ? true : false))
+    : null
+
+/**
+ * Has the user starred this dataset?
+ *
+ * Returns null for anonymous users
+ */
+export const starred = (obj, _, { user }) =>
+  user
+    ? datalad.getUserStarred(obj.id, user).then(res => (res ? true : false))
+    : null
 
 /**
  * Dataset object
@@ -170,7 +258,10 @@ const Dataset = {
   uploader: ds => user(ds, { id: ds.uploader }),
   draft,
   snapshots,
+  latestSnapshot,
   analytics: ds => analytics(ds),
+  stars: ds => stars(ds),
+  followers: ds => followers(ds),
   permissions: ds =>
     permissions(ds).then(p =>
       p.map(permission =>
@@ -179,6 +270,10 @@ const Dataset = {
         }),
       ),
     ),
+  name: datasetName,
+  comments: datasetComments,
+  following,
+  starred,
 }
 
 export default Dataset

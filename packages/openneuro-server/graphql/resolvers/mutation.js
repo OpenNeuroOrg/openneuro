@@ -5,6 +5,7 @@ import {
   createDataset,
   deleteDataset,
   updateFiles,
+  deleteFile,
   deleteFiles,
   updatePublic,
   trackAnalytics,
@@ -14,15 +15,23 @@ import {
   deleteSnapshot,
   updateSnapshotFileUrls,
 } from './snapshots.js'
-import { removeUser, setAdmin } from './user.js'
+import { removeUser, setAdmin, setBlocked } from './user.js'
 import { updateSummary } from './summary.js'
 import { updateValidation } from './validation.js'
 import { updatePermissions, removePermissions } from './permissions.js'
+import { followDataset } from './follow.js'
+import { starDataset } from './stars.js'
+import { publishDataset } from './publish.js'
+import { updateDescription, updateDescriptionList } from './description.js'
+import { updateReadme } from './readme.js'
+import { addComment, editComment } from './comment.js'
+import { subscribeToNewsletter } from './newsletter'
 
 const Mutation = {
   createDataset,
   deleteDataset,
   updateFiles,
+  deleteFile,
   deleteFiles,
   createSnapshot,
   deleteSnapshot,
@@ -34,7 +43,17 @@ const Mutation = {
   removePermissions,
   removeUser,
   setAdmin,
+  setBlocked,
   trackAnalytics,
+  followDataset,
+  starDataset,
+  publishDataset,
+  updateDescription,
+  updateDescriptionList,
+  updateReadme,
+  addComment,
+  editComment,
+  subscribeToNewsletter,
 }
 
 export default Mutation

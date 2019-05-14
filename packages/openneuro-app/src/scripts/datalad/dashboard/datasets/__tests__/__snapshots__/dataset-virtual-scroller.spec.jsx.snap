@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboard/datasets/DatasetVirtualScroller shallow renders successfully 1`] = `
+<Styled(div)>
+  <Styled(div)>
+    <InfiniteLoader
+      isRowLoaded={[Function]}
+      loadMoreRows={[MockFunction]}
+      minimumBatchSize={25}
+      rowCount={3}
+      threshold={7}
+    >
+      <Component />
+    </InfiniteLoader>
+  </Styled(div)>
+</Styled(div)>
+`;

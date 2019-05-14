@@ -7,7 +7,7 @@ import newId from '../../utils/newid'
 
 // component setup ---------------------------------------------------------------
 
-export default class TooltipTop extends React.Component {
+export default class TooltipTop extends React.PureComponent {
   // life cycle methods ------------------------------------------------------------
 
   componentWillMount() {

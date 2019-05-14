@@ -1,10 +1,9 @@
 import config from '../config'
 import request from 'superagent'
 import mime from 'mime-types'
-import { generateDataladCookie } from '../libs/authentication/jwt'
-import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
+import { getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
-import { encodeFilePath, decodeFilePath } from '../datalad/files.js'
+import { decodeFilePath, getFiles } from '../datalad/files.js'
 
 /**
  * Handlers for datalad dataset manipulation
@@ -16,45 +15,6 @@ import { encodeFilePath, decodeFilePath } from '../datalad/files.js'
  */
 
 const URI = config.datalad.uri
-
-/**
- * Create a git tag representing a snapshot
- */
-export const createSnapshot = (req, res) => {
-  const datasetId = req.params.datasetId
-  const snapshotId = req.params.snapshotId
-  const uri = `${URI}/datasets/${datasetId}/snapshots/${snapshotId}`
-  request
-    .post(uri)
-    .set('Cookie', generateDataladCookie(config)(req.user))
-    .then(() => {
-      res.send()
-    })
-}
-
-/** Migrate a dataset from the private to public aws bucket */
-export const publishDataset = (req, res) => {
-  const datasetId = req.params.datasetId
-  const uri = `${URI}/datasets/${datasetId}/publish`
-  request
-    .post(uri)
-    .set('Cookie', generateDataladCookie(config)(req.user))
-    .then(() => {
-      res.send()
-    })
-}
-
-/** Migrate a dataset from the private to public aws bucket */
-export const unpublishDataset = (req, res) => {
-  const datasetId = req.params.datasetId
-  const uri = `${URI}/datasets/${datasetId}/publish`
-  request
-    .del(uri)
-    .set('Cookie', generateDataladCookie(config)(req.user))
-    .then(() => {
-      res.send()
-    })
-}
 
 /**
  * Get a file from a dataset
@@ -72,14 +32,14 @@ export const getFile = async (req, res) => {
   } else {
     let currentRevision = await getDatasetRevision(datasetId)
     if (currentRevision) {
-      fileList = await getDraftFiles(datasetId, currentRevision)
+      fileList = await getFiles(datasetId, currentRevision)
     }
   }
-  let file = fileList.find(f => {
+  const file = fileList.find(f => {
     return f.filename == decodedFilename
   })
-  let filepath = file ? encodeFilePath(file.id) : null
+  const filepath = file ? file.key : null
   res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
-  let uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
+  const uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
   return request.get(uri).pipe(res)
 }

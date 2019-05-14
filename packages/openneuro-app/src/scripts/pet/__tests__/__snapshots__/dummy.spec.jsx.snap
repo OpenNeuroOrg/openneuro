@@ -29,7 +29,6 @@ exports[`pet/dummy.jsx renders successfully 1`] = `
             In the meantime, feel free to explore
              
             <Link
-              replace={false}
               to="/"
             >
               OpenNeuro
@@ -37,7 +36,6 @@ exports[`pet/dummy.jsx renders successfully 1`] = `
              or visit existing hosted PET datasets
              
             <Link
-              replace={false}
               to="/datasets/ds001421"
             >
               [11C]SB207145 PET Cimbi database example
@@ -45,7 +43,6 @@ exports[`pet/dummy.jsx renders successfully 1`] = `
             ,
              
             <Link
-              replace={false}
               to="/datasets/ds001420"
             >
               [11C]DASB PET Cimbi database example
@@ -53,7 +50,6 @@ exports[`pet/dummy.jsx renders successfully 1`] = `
             , or
              
             <Link
-              replace={false}
               to="/datasets/ds000204"
             >
               Imaging [18F]AV-1451 and [18F]AV-45 in acute and chronic traumatic brain injury

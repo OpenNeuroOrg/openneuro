@@ -1,3 +1,3 @@
 // Run any pending MongoDB migrations
-require('babel-core/register')
+require('@babel/register')
 require('./migrations/upgrade.js')

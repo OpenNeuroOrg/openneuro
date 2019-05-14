@@ -4,6 +4,11 @@ import createClient from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, uploadDirectory } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
+import { getSnapshots } from './snapshots.js'
+import { getDownload } from './download.js'
+
+export const configuredClient = () =>
+  createClient(`${getUrl()}crn/graphql`, getToken)
 
 /**
  * Login action to save an auth key locally
@@ -44,8 +49,7 @@ export const login = () => {
 export const loginAnswers = answers => answers
 
 const uploadDataset = (dir, datasetId, validatorOptions) => {
-  const url = getUrl()
-  const client = createClient(`${url}crn/graphql`, getToken)
+  const client = configuredClient()
   if (datasetId) {
     // Check for dataset -> validation -> upload
     // Get remote files and filter successful files out
@@ -104,7 +108,42 @@ export const upload = (dir, cmd) => {
     }
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(`"${dir}" does not exist or is not a directory`)
+    console.error(e)
+    // eslint-disable-next-line no-console
+    console.error(`"${dir}" may not exist or is inaccessible`)
     process.exit(1)
+  }
+}
+
+const promptTags = snapshots =>
+  inquirer.prompt({
+    type: 'list',
+    name: 'tag',
+    message: 'Choose a snapshot',
+    choices: snapshots,
+    default: snapshots[0],
+  })
+
+/**
+ * Download a draft or snapshot from a dataset
+ *
+ * @param {string} datasetId
+ * @param {Object} cmd
+ */
+export const download = (datasetId, destination, cmd) => {
+  if (!cmd.draft && !cmd.snapshot) {
+    const client = configuredClient()
+    return getSnapshots(client)(datasetId).then(({ data }) => {
+      if (data.dataset && data.dataset.snapshots) {
+        const tags = data.dataset.snapshots.map(snap => snap.tag)
+        return promptTags(tags).then(choices =>
+          getDownload(destination, datasetId, choices.tag),
+        )
+      }
+    })
+  } else if (cmd.snapshot) {
+    getDownload(destination, datasetId, cmd.snapshot)
+  } else {
+    getDownload(destination, datasetId)
   }
 }

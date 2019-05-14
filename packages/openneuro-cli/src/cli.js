@@ -2,7 +2,7 @@
 import commander from 'commander'
 import colors from 'colors'
 import packageJson from '../package.json'
-import { login, upload } from './actions.js'
+import { login, upload, download } from './actions.js'
 
 commander.version(packageJson.version).description(packageJson.description)
 
@@ -27,6 +27,16 @@ commander
   )
   .option('-v, --verbose', 'Verbose output')
   .action(upload)
+
+commander
+  .command('download <datasetId> <destination>')
+  .alias('d')
+  .description(
+    'Download a dataset draft or snapshot. If neither is specified, will prompt with available snapshots.',
+  )
+  .option('--draft')
+  .option('-s, --snapshot [snapshotVersion]')
+  .action(download)
 
 commander.command('*', { noHelp: true, isDefault: true }).action(() => {
   // eslint-disable-next-line no-console

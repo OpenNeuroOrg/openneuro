@@ -21,10 +21,17 @@ describe('datasets.js', () => {
     it('returns multiple datasets', done => {
       gqlClient
         .query({ query: getDatasets })
-        .then(({ data: { datasets } }) => {
-          expect(datasets).toHaveLength(2)
+        .then(({ data }) => {
+          expect(data.datasets.edges).toHaveLength(2)
           // Make sure the array is Dataset objects
-          expect(datasets[0]).toHaveProperty('__typename', 'Dataset')
+          expect(data.datasets).toHaveProperty(
+            '__typename',
+            'DatasetConnection',
+          )
+          expect(data.datasets.edges[0].node).toHaveProperty(
+            '__typename',
+            'Dataset',
+          )
         })
         .then(done)
     })

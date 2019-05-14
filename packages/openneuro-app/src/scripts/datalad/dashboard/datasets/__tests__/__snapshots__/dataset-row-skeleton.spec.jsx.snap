@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboard/datasets/DatasetRowSkeleton renders successfully 1`] = `
+<div
+  className="panel panel-default"
+>
+  <Styled(div)
+    className="panel-heading"
+  >
+     
+  </Styled(div)>
+</div>
+`;

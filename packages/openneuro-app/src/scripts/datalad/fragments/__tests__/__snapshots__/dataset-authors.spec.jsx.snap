@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatasetAuthors component renders when authors is null 1`] = `
+<h6>
+  authored by 
+</h6>
+`;
+
+exports[`DatasetAuthors component renders with common props 1`] = `
+<h6>
+  authored by One, Two
+</h6>
+`;

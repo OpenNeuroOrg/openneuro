@@ -32,6 +32,7 @@
     background: none;
     color: $c-66;
     font-size: 14px;
+    font-family: $font-family-cabin;
     font-family: var(--font-family-cabin);
     font-weight: 300;
     padding: 0;
@@ -47,6 +48,7 @@
 
     &.ds-primary {
         background: none;
+        color: $primary;
         color: var(--primary);
     }
 

@@ -6,12 +6,14 @@ export const xhrFetch = uploader => (url, opts = {}) => {
 
     for (let k in opts.headers || {}) xhr.setRequestHeader(k, opts.headers[k])
 
-    xhr.onload = e =>
+    xhr.onload = e => {
       resolve({
-        ok: true,
+        ok: e.target.status >= 200 && e.target.status < 300,
         text: () => Promise.resolve(e.target.responseText),
         json: () => Promise.resolve(JSON.parse(e.target.responseText)),
+        status: e.target.status,
       })
+    }
 
     xhr.onerror = reject
 

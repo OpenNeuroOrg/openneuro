@@ -3,7 +3,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import bowser from 'bowser'
-import notifications from '../../notification/notification.actions'
+import { toast } from 'react-toastify'
+import ToastContent from '../partials/toast-content.jsx'
 
 class Upload extends React.Component {
   constructor() {
@@ -14,7 +15,8 @@ class Upload extends React.Component {
   render() {
     let resumeIcon = (
       <span>
-        <i className="fa fa-repeat" />&nbsp;
+        <i className="fa fa-repeat" />
+        &nbsp;
       </span>
     )
     let icon = this.props.resume ? resumeIcon : null
@@ -45,19 +47,16 @@ class Upload extends React.Component {
     e.stopPropagation()
     e.target.value = null
     if (!bowser.chrome && !bowser.chromium && !bowser.firefox) {
-      let chromeMessage = (
-        <span>
-          This is a Google Chrome and Mozilla Firefox feature.{' '}
-          <a href="http://www.google.com/chrome/">
-            Please consider using Chrome or Firefox as your browser
-          </a>.
-        </span>
-      )
       e.preventDefault()
-      notifications.createAlert({
-        type: 'Error',
-        message: chromeMessage,
-      })
+      toast.error(
+        <ToastContent
+          title="Error"
+          body="This is a Chrome and Firefox feature.">
+          <a href="http://www.google.com/chrome/">
+            Please consider using Chrome or Firefox as your browser.
+          </a>
+        </ToastContent>,
+      )
     }
     if (this.props.onClick) {
       this.props.onClick(e)

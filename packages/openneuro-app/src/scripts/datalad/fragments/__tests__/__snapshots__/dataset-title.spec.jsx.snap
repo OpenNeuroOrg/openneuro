@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatasetTitle component renders with common props 1`] = `
+<h1>
+  Test Dataset
+</h1>
+`;

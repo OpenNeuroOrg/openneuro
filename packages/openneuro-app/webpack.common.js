@@ -56,11 +56,16 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: [/node_modules/],
+        include: [
+          path.resolve(__dirname, './src/scripts/'),
+          path.resolve(__dirname, './node_modules/bids-validator'),
+        ],
         use: [
           {
             loader: 'babel-loader',
-            options: { presets: ['es2015', 'react'] },
+            options: {
+              rootMode: 'upward',
+            },
           },
         ],
       },

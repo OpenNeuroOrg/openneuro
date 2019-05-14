@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatasetPage component renders with common props 1`] = `
+<div
+  className="page dataset"
+>
+  <div
+    className="open dataset-container"
+  >
+    <withRouter(LeftSidebar)
+      datasetId="1234"
+      draftModified="2018-10-10"
+      snapshots={Array []}
+    />
+    <span
+      className="show-nav-btn"
+      onClick={[Function]}
+    >
+      <i
+        aria-hidden="true"
+        className="fa fa-angle-double-left"
+      />
+    </span>
+    <withRouter(DatasetTools)
+      dataset={
+        Object {
+          "draft": Object {
+            "modified": "2018-10-10",
+          },
+          "id": "1234",
+          "snapshots": Array [],
+        }
+      }
+    />
+    <div
+      className="fade-in inner-route dataset-route light"
+    >
+      <div
+        className="clearfix dataset-wrap"
+      >
+        <div
+          className="dataset-animation dataset-inner"
+        >
+          <DatasetMain
+            dataset={
+              Object {
+                "draft": Object {
+                  "modified": "2018-10-10",
+                },
+                "id": "1234",
+                "snapshots": Array [],
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

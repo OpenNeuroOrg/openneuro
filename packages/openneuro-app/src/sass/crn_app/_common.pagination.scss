@@ -7,6 +7,7 @@
         a,
         span {
             transition: all .3s ease-out;
+            color: $secondary;
             color: var(--secondary);
         }
 
@@ -24,11 +25,13 @@
             a,
             span {
                 @include transition(all .3s ease-out);
+                background: $secondary-darken;
                 background: var(--secondary-darken);
                 color: $white;
 
                 &:hover {
                     @include transition(all .3s ease-out);
+                    background: $secondary-darken;
                     background: var(--secondary-darken);
                     color: $white;
                 }

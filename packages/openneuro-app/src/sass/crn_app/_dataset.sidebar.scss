@@ -31,22 +31,17 @@ body,
     height: 100%;
 }
 
-.main.view.container {
-    padding-top: 85px;
-}
-
 .dataset-wrap,
-.dataset-annimation {
+.dataset-animation {
     position: relative;
 }
 
 .dataset-wrap {
-    overflow-y: scroll;
     z-index: 100;
     margin-top: 45px;
 }
 
-.dataset-annimation {
+.dataset-animation {
     width: 100%;
     padding-top: 15px;
     -webkit-transition: width .3s;
@@ -133,9 +128,11 @@ body,
                 &.active {
                     background-color:  $white;
                     box-shadow: inset 0 0 2px $transparent1;
+                    color: $secondary;
                     color: var(--secondary);
 
                     .date-modified {
+                        color: $secondary;
                         color: var(--secondary);
                     }
                 }

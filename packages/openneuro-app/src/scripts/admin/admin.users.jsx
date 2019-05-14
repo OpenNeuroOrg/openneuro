@@ -1,53 +1,119 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
+import PropTypes from 'prop-types'
+import { Query, Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import Input from '../common/forms/input.jsx'
 import Spinner from '../common/partials/spinner.jsx'
-import adminStore from './admin.store'
-import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
-import moment from 'moment'
-import { refluxConnect } from '../utils/reflux'
 import { getProfile } from '../authentication/profile.js'
+import { formatDate } from '../utils/date.js'
 
-class Users extends Reflux.Component {
+export const USER_FRAGMENT = gql`
+  fragment userFields on User {
+    id
+    name
+    email
+    provider
+    admin
+    created
+    lastSeen
+    blocked
+  }
+`
+
+export const GET_USERS = gql`
+  query {
+    users {
+      ...userFields
+    }
+  }
+  ${USER_FRAGMENT}
+`
+
+export const SET_ADMIN = gql`
+  mutation($id: ID!, $admin: Boolean!) {
+    setAdmin(id: $id, admin: $admin) {
+      ...userFields
+    }
+  }
+  ${USER_FRAGMENT}
+`
+
+export const SET_BLOCKED = gql`
+  mutation($id: ID!, $blocked: Boolean!) {
+    setBlocked(id: $id, blocked: $blocked) {
+      ...userFields
+    }
+  }
+  ${USER_FRAGMENT}
+`
+
+const UsersQuery = () => <Query query={GET_USERS}>{UsersQueryResult}</Query>
+
+const UsersQueryResult = ({ loading, data, refetch }) => {
+  return <Users loading={loading} users={data.users || []} refetch={refetch} />
+}
+
+UsersQueryResult.propTypes = {
+  loading: PropTypes.bool,
+  data: PropTypes.object,
+  refetch: PropTypes.function,
+}
+
+class Users extends React.Component {
   constructor() {
     super()
-    refluxConnect(this, adminStore, 'admin')
+    this.state = {
+      stringFilter: null,
+      adminFilter: false,
+      blacklistFilter: false,
+    }
   }
-  // life cycle events --------------------------------------------------
 
+  // life cycle events --------------------------------------------------
   render() {
-    let users = []
-    this.state.admin.users.map(user => {
-      let adminBadge = user.admin ? 'Admin' : null
-      if (user.visible) {
-        let userEmail = user.hasOwnProperty('email') ? user.email : user.id
-        let userProvider = user.provider
-        users.push(
-          <div
-            className="fade-in user-panel clearfix panel panel-default"
-            key={user._id}>
-            <div className="col-xs-4 user-col">
-              <h3>
-                <div className="userName">
-                  <span>{user.name}</span>
-                  <div className="badge">{adminBadge}</div>
-                </div>
-              </h3>
-            </div>
-            <div className="col-xs-3 user-col middle">
-              <h3 className="user-email">{userEmail}</h3>
-            </div>
-            <div className="col-xs-2 user-col middle">
-              <h3 className="user-provider">{userProvider}</h3>
-            </div>
-            {this._userTools(user)}
-            {this._userSummary(user)}
-          </div>,
-        )
+    const users = this.props.users.map((user, index) => {
+      const adminBadge = user.admin ? 'Admin' : null
+      const userEmail = user.hasOwnProperty('email') ? user.email : user.id
+      if (this.state.adminFilter && !user.admin) {
+        return null
       }
+      if (this.state.stringFilter) {
+        const stringFilter = this.state.stringFilter.toLowerCase()
+        if (
+          !(
+            user.email.toLowerCase().includes(stringFilter) ||
+            user.name.toLowerCase().includes(stringFilter)
+          )
+        ) {
+          return null
+        }
+      }
+      return (
+        <div
+          className="fade-in user-panel clearfix panel panel-default"
+          key={index}>
+          <div className="col-xs-4 user-col">
+            <h3>
+              <div className="userName">
+                <span>{user.name}</span>
+                <div className="badge">{adminBadge}</div>
+              </div>
+            </h3>
+          </div>
+          <div className="col-xs-3 user-col middle">
+            <h3 className="user-email">{userEmail}</h3>
+          </div>
+          <div className="col-xs-2 user-col middle">
+            <h3 className="user-provider">{user.provider}</h3>
+          </div>
+          {this._userTools(user)}
+          {this._userSummary(user)}
+        </div>
+      )
     })
 
     return (
@@ -60,7 +126,7 @@ class Users extends Reflux.Component {
             <Input
               className="pull-right"
               placeholder="Search Name or Email"
-              onChange={this._searchUser}
+              onChange={e => this.setState({ stringFilter: e.target.value })}
             />
           </div>
         </div>
@@ -70,17 +136,37 @@ class Users extends Reflux.Component {
             <div className="filters">
               <label>Filter By:</label>
               <button
-                className={this.state.admin.adminFilter ? 'active' : null}
-                onClick={actions.filterAdmin}>
+                className={this.state.adminFilter ? 'active' : null}
+                onClick={() =>
+                  this.setState({ adminFilter: !this.state.adminFilter })
+                }>
                 <span className="filter-admin">
                   <i
                     className={
-                      this.state.admin.adminFilter
+                      this.state.adminFilter
                         ? 'fa fa-check-square-o'
                         : 'fa fa-square-o'
                     }
                   />{' '}
                   Admin
+                </span>
+              </button>
+              <button
+                className={this.state.blacklistFilter ? 'active' : null}
+                onClick={() =>
+                  this.setState({
+                    blacklistFilter: !this.state.blacklistFilter,
+                  })
+                }>
+                <span className="filter-admin">
+                  <i
+                    className={
+                      this.state.blacklistFilter
+                        ? 'fa fa-check-square-o'
+                        : 'fa fa-square-o'
+                    }
+                  />{' '}
+                  Blocked
                 </span>
               </button>
             </div>
@@ -103,7 +189,8 @@ class Users extends Reflux.Component {
                 <label>Actions</label>
               </div>
             </div>
-            {users.length != 0 ? users : this._noResults()}
+
+            {users.filter(u => u !== null).length ? users : this._noResults()}
           </div>
         </div>
       </div>
@@ -113,29 +200,29 @@ class Users extends Reflux.Component {
   // custom methods -----------------------------------------------------
 
   _noResults() {
-    return this.state.admin.loadingUsers ? (
-      <Spinner active={true} />
+    return this.state.loading ? (
+      <Spinner active message="Loading users" />
     ) : (
       <h4>No Results Found</h4>
     )
   }
 
   _userSummary(user) {
-    const lastLogin = moment(user.lastlogin ? user.lastlogin : user.created)
-    const created = moment(user.created)
+    const lastLogin = user.lastlogin ? user.lastlogin : user.created
+    const created = user.created
     return (
       <div className="panel-heading">
         <div className="minimal-summary">
           <div className="summary-data">
             <span>
-              <b>Signed Up:</b> {created.format('L')} - {created.fromNow(true)}{' '}
-              ago
+              <b>Signed Up:</b> {formatDate(created)} -{' '}
+              {distanceInWordsToNow(created)} ago
             </span>
           </div>
           <div className="summary-data">
             <span>
-              <b>Last Signed In:</b> {lastLogin.format('L')} -{' '}
-              {lastLogin.fromNow(true)} ago
+              <b>Last Signed In:</b> {formatDate(lastLogin)} -{' '}
+              {distanceInWordsToNow(lastLogin)} ago
             </span>
           </div>
         </div>
@@ -144,46 +231,60 @@ class Users extends Reflux.Component {
   }
 
   _userTools(user) {
-    let adminIcon = user.admin ? 'fa-check-square-o' : 'fa-square-o'
+    const adminIcon = user.admin ? 'fa-check-square-o' : 'fa-square-o'
+    const blacklistIcon = user.blocked ? 'fa-check-square-o' : 'fa-square-o'
 
     if (user.id !== getProfile().sub) {
       return (
         <div className="col-xs-3 last dataset-tools-wrap-admin">
           <div className="tools clearfix">
             <div className="tool">
-              <WarnButton
-                message="Admin"
-                icon={adminIcon}
-                action={actions.toggleSuperUser.bind(this, user)}
-              />
+              <Mutation
+                mutation={SET_ADMIN}
+                variables={{ id: user.id, admin: !user.admin }}>
+                {setAdmin => (
+                  <WarnButton
+                    message="Admin"
+                    icon={adminIcon}
+                    action={cb =>
+                      setAdmin().then(() => {
+                        this.props.refetch()
+                        cb()
+                      })
+                    }
+                  />
+                )}
+              </Mutation>
             </div>
             <div className="tool">
-              <WarnButton
-                message="Block"
-                icon="fa-ban"
-                warn={false}
-                action={actions.blacklistModal.bind(this, user)}
-              />
+              <Mutation
+                mutation={SET_BLOCKED}
+                variables={{ id: user.id, blocked: !user.blocked }}>
+                {setBlocked => (
+                  <WarnButton
+                    message="Block"
+                    icon={blacklistIcon}
+                    action={cb =>
+                      setBlocked().then(() => {
+                        this.props.refetch()
+                        cb()
+                      })
+                    }
+                  />
+                )}
+              </Mutation>
             </div>
           </div>
         </div>
       )
     }
   }
-
-  _newUserError() {
-    return this.state.admin.newUserError ? (
-      <div className="alert alert-danger">{this.state.admin.newUserError}</div>
-    ) : null
-  }
-
-  _inputChange(e) {
-    actions.inputChange('newUserForm', e.target.name, e.target.value)
-  }
-
-  _searchUser(e) {
-    actions.searchUser(e.target.value)
-  }
 }
 
-export default Users
+Users.propTypes = {
+  users: PropTypes.array,
+  loading: PropTypes.bool,
+  refetch: PropTypes.function,
+}
+
+export default UsersQuery

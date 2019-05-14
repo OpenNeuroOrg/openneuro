@@ -8,12 +8,13 @@ import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
 import { CookiesProvider } from 'react-cookie'
+import { ToastContainer } from 'react-toastify'
 
 const App = ({ config }) => {
   return (
     <CookiesProvider>
       <ApolloProvider client={getClient(`${config.url}/crn/graphql`)}>
-        <div>
+        <>
           <Helmet>
             <title>{frontPage.pageTitle}</title>
             <meta name="description" content={frontPage.pageDescription} />
@@ -21,7 +22,8 @@ const App = ({ config }) => {
           <Router>
             <Route component={analyticsWrapper(Index)} />
           </Router>
-        </div>
+          <ToastContainer position="bottom-right" />
+        </>
       </ApolloProvider>
     </CookiesProvider>
   )

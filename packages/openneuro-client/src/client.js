@@ -21,7 +21,7 @@ const cache = new InMemoryCache()
  */
 const createClient = (uri, getAuthorization, fetch) => {
   const link = createLink(uri, getAuthorization, fetch)
-  return new ApolloClient({ uri, link, cache })
+  return new ApolloClient({ uri, link, cache, connectToDevTools: true })
 }
 
 const authLink = getAuthorization =>
@@ -72,9 +72,14 @@ const createLink = (uri, getAuthorization, fetch) => {
 
   // server-side link
   let link = middlewareAuthLink(uri, getAuthorization, fetch)
+  let ws
 
-  // browser-side link
-  const ws = process.browser ? wsLink(uri) : null
+  try {
+    // browser-side link
+    ws = process.browser ? wsLink(uri) : null
+  } catch (e) {
+    // Don't die when websocket setup fails
+  }
   if (ws) {
     link = split(
       ({ query }) => {

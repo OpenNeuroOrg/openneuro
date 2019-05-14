@@ -1,4 +1,4 @@
-FROM node:8.11.4-alpine AS app
+FROM node:10.15.3-alpine AS app
 
 RUN apk --no-cache --update add git make gcc g++ python
 
@@ -12,10 +12,9 @@ RUN yarn install --pure-lockfile && yarn bootstrap && apk del make gcc g++ pytho
 
 WORKDIR /srv/packages/openneuro-app
 
-RUN yarn build
+RUN yarn build && cp maintenance.html dist/
 
 
 FROM nginx:alpine AS web
-
 COPY --from=app /srv/packages/openneuro-app/dist /srv/app/dist
 

@@ -32,19 +32,7 @@ services:
   server:
     build:
       context: ./packages/openneuro-server
-    command: sh -c "apk add make gcc g++ python && yarn install && node /srv/index.js"
-    volumes:
-      - ./packages/openneuro-server:/srv
-      - yarn_cache:/root/.cache
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
-    tmpfs:
-      - /srv/node_modules:exec
-
-  worker:
-    build:
-      context: ./packages/openneuro-server
-    command: sh -c "apk add make gcc g++ python && yarn install  && node /srv/worker.js"
+    command: sh -c "apk add make gcc g++ python && yarn install && node --trace-warnings /srv/index.js"
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
@@ -82,5 +70,3 @@ services:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "9876:80"
-      - "8110:8110"
-      - "8443:443"

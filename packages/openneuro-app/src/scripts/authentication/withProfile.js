@@ -1,25 +1,25 @@
 /* eslint-disable */
 import React from 'react'
-import { withCookies } from 'react-cookie'
-import LoggedIn from './logged-in.jsx'
-import { parseJwt } from './profile.js'
+import cookies from '../utils/cookies.js'
+import { getProfile } from './profile.js'
 
 const withProfile = WrappedComponent => {
-  const ProfileComponent = class extends React.Component {
+  return class ProfileComponent extends React.Component {
+    constructor(props) {
+      super(props)
+      cookies.addChangeListener(({ name }) => {
+        if (name === 'accessToken') {
+          this.forceUpdate()
+        }
+      })
+    }
     render() {
-      const accessToken = this.props.cookies.get('accessToken')
-      return (
-        <LoggedIn>
-          <WrappedComponent
-            profile={accessToken ? parseJwt(accessToken) : null}
-            {...this.props}
-          />
-        </LoggedIn>
-      )
+      const profile = getProfile()
+      return profile ? (
+        <WrappedComponent profile={profile} {...this.props} />
+      ) : null
     }
   }
-  // Curry in... cookies
-  return withCookies(ProfileComponent)
 }
 
 export default withProfile
