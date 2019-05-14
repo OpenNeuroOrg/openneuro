@@ -1,12 +1,18 @@
 /**
  * Get snapshots from datalad-service tags
  */
+import * as Sentry from '@sentry/node'
 import request from 'superagent'
 import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
+import {
+  description,
+  updateDescription,
+} from '../graphql/resolvers/description.js'
+import doiLib from '../libs/doi/index.js'
 import { filesKey, getFiles } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
@@ -70,6 +76,24 @@ export const createSnapshot = async (datasetId, tag, user) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
+  // Get the newest description
+  try {
+    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+    // Mint a DOI
+    const snapshotDoi = await doiLib.registerSnapshotDoi(
+      datasetId,
+      tag,
+      oldDesc,
+    )
+    // Save to DatasetDOI field
+    await updateDescription(
+      {},
+      { datasetId, field: 'DatasetDOI', value: snapshotDoi },
+    )
+  } catch (err) {
+    Sentry.captureException(err)
+  }
+  // Create snapshot once DOI is ready
   return request
     .post(url)
     .set('Accept', 'application/json')
