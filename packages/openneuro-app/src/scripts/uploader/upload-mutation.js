@@ -15,21 +15,6 @@ export const createDataset = client => label => {
 }
 
 /**
- * Create a dataset and update the label
- * @param {object} client Apollo client
- * @param {string} datasetId Id of the dataset to snapshot
- */
-export const createSnapshot = (client, datasetId) => {
-  return client.mutate({
-    mutation: snapshots.createSnapshot,
-    variables: {
-      datasetId: datasetId,
-      tag: '1.0.0',
-    },
-  })
-}
-
-/**
  * Recursively add a file and any needed directories to a tree
  * @param {Object} file
  * @param {Object} parent
