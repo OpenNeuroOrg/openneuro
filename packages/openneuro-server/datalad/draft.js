@@ -13,6 +13,10 @@ const draftFilesKey = datasetId => {
   return `openneuro:draftFiles:${datasetId}`
 }
 
+export const expireDraftFiles = datasetId => {
+  return redis.del(draftFilesKey(datasetId))
+}
+
 /**
  * Retrieve draft files from cache or the datalad-service backend
  * @param {string} datasetId Accession number string
@@ -45,10 +49,15 @@ export const updateDatasetRevision = datasetId => gitRef => {
   /**
    * Update the revision pointer in a draft on changes
    */
-  return mongo.collections.crn.datasets.update(
-    { id: datasetId },
-    { $set: { revision: gitRef, modified: new Date() } },
-  )
+  return mongo.collections.crn.datasets
+    .update(
+      { id: datasetId },
+      { $set: { revision: gitRef, modified: new Date() } },
+    )
+    .then(() => {
+      // Remove the now invalid draft files cache
+      return expireDraftFiles(datasetId)
+    })
 }
 
 export const draftPartialKey = datasetId => {
