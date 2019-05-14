@@ -74,6 +74,7 @@ export const uploadTree = (client, datasetId) => tree => {
 export const uploadDirectory = (client, dir, { datasetId, remoteFiles }) => {
   return getFileTree(dir, dir, { remoteFiles }).then(tree => {
     tree = generateChanges(tree)
+    tree.files = files.sortFiles(tree.files)
     return uploadTree(client, datasetId)(tree)
   })
 }

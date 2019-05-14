@@ -24,8 +24,14 @@ describe('datasets.js', () => {
         .then(({ data }) => {
           expect(data.datasets.edges).toHaveLength(2)
           // Make sure the array is Dataset objects
-          expect(data.datasets).toHaveProperty('__typename', 'DatasetConnection')
-          expect(data.datasets.edges[0].node).toHaveProperty('__typename', 'Dataset')
+          expect(data.datasets).toHaveProperty(
+            '__typename',
+            'DatasetConnection',
+          )
+          expect(data.datasets.edges[0].node).toHaveProperty(
+            '__typename',
+            'Dataset',
+          )
         })
         .then(done)
     })

@@ -33,9 +33,11 @@ export const updatePermissions = async (obj, args) => {
         .catch(err => reject(err))
     })
   })
-  return Promise.all(userPromises).then(() => {
-    return pubsub.publish('permissionsUpdated', { datasetId: args.datasetId })
-  }).then(() => users[0])
+  return Promise.all(userPromises)
+    .then(() => {
+      return pubsub.publish('permissionsUpdated', { datasetId: args.datasetId })
+    })
+    .then(() => users[0])
 }
 
 /**
