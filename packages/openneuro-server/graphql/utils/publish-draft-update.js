@@ -7,6 +7,7 @@ export default (datasetId, revision) => {
       __typename: 'Dataset',
       id: datasetId,
       revision,
+      modified: Date(), // Set date to now
     },
   })
 }
