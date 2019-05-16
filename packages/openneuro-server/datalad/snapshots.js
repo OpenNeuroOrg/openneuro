@@ -89,6 +89,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
     await updateDescription(
       {},
       { datasetId, field: 'DatasetDOI', value: snapshotDoi },
+      { userInfo: user, user: user.id },
     )
   } catch (err) {
     Sentry.captureException(err)
