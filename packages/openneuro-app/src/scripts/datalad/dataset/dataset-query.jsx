@@ -38,19 +38,13 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.DATASET_ISSUES}
 `
 
-export const DatasetQueryRender = ({ loading, error, data, refetch }) => {
+export const DatasetQueryRender = ({ loading, error, data }) => {
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) {
     Sentry.captureException(error)
     throw new Error(error)
   } else {
-    // Temporary refetch for validation
-    if (data.dataset.draft.issues === null) {
-      setTimeout(() => {
-        refetch()
-      }, 5000)
-    }
     return <DatasetPage dataset={data.dataset} />
   }
 }

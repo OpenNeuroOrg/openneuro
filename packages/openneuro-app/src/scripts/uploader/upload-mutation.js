@@ -1,5 +1,4 @@
 import { datasets, files } from 'openneuro-client'
-import { datasetQueryRefetch } from '../datalad/dataset/dataset-query-refetch'
 /**
  * Create a dataset and update the label
  * @param {object} client Apollo client
@@ -82,6 +81,5 @@ export const updateFiles = client => (datasetId, fileList) => {
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },
     errorPolicy: 'all',
-    refetchQueries: datasetQueryRefetch(datasetId),
   })
 }

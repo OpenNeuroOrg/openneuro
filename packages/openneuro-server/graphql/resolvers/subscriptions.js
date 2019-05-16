@@ -32,16 +32,9 @@ export const snapshotDeleted = {
   ),
 }
 
-export const datasetValidationUpdated = {
+export const draftUpdated = {
   subscribe: withFilter(
-    () => pubsub.asyncIterator('datasetValidationUpdated'),
-    filterDatasetId,
-  ),
-}
-
-export const draftFilesUpdated = {
-  subscribe: withFilter(
-    () => pubsub.asyncIterator('draftFilesUpdated'),
+    () => pubsub.asyncIterator('draftUpdated'),
     filterDatasetId,
   ),
 }
@@ -56,11 +49,10 @@ export const permissionsUpdated = {
 const Subscription = {
   datasetCreated,
   datasetDeleted,
-  datasetValidationUpdated,
-  draftFilesUpdated,
   snapshotAdded,
   snapshotDeleted,
   permissionsUpdated,
+  draftUpdated,
 }
 
 export default Subscription
