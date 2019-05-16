@@ -18,8 +18,8 @@ export const updateValidation = (obj, args) => {
     )
     .then(() => {
       pubsub.publish('datasetValidationUpdated', {
-        id: args.validation.id,
         datasetId: args.validation.datasetId,
+        datasetValidationUpdated: args.validation,
       })
       return true
     })

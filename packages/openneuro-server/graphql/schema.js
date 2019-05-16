@@ -106,7 +106,7 @@ const typeDefs = `
     datasetDeleted: ID
     snapshotAdded(datasetId: ID!): Snapshot
     snapshotDeleted(datasetId: ID!): ID
-    datasetValidationUpdated(id: ID!, datasetId: ID!): Boolean
+    datasetValidationUpdated(datasetId: ID!): ValidationUpdate
     draftFilesUpdated(datasetId: ID!): [DatasetFile]
     permissionsUpdated(datasetId: ID!): [Permission]
   }
@@ -139,6 +139,13 @@ const typeDefs = `
     name: ID! # directory name (or empty string for root)
     files: [Upload!] # files within the directory
     directories: [FileTree] # directories within the directory
+  }
+
+  # Validation updated message
+  type ValidationUpdate {
+    id: ID!
+    datasetId: ID!
+    issues: [ValidationIssue]
   }
 
   # Information for pagination in a connection.

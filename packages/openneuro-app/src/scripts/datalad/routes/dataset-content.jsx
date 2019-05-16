@@ -115,7 +115,11 @@ const DatasetContent = ({ dataset }) => {
           {dataset.draft.partial || dataset.draft.files.length === 0 ? (
             <IncompleteDataset datasetId={dataset.id} />
           ) : (
-            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+            <Validation
+              datasetId={dataset.id}
+              issues={dataset.draft.issues}
+              subscribe
+            />
           )}
           <DatasetFiles
             datasetId={dataset.id}

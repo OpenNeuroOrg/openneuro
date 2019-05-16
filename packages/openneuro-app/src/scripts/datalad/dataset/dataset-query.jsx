@@ -45,12 +45,6 @@ export const DatasetQueryRender = ({ loading, error, data, refetch }) => {
     Sentry.captureException(error)
     throw new Error(error)
   } else {
-    // Temporary refetch for validation
-    if (data.dataset.draft.issues === null) {
-      setTimeout(() => {
-        refetch()
-      }, 5000)
-    }
     return <DatasetPage dataset={data.dataset} />
   }
 }

@@ -105,7 +105,7 @@ export const DATASET_COMMENTS = gql`
   }
 `
 
-const ISSUE_FIELDS = `issues {
+export const ISSUE_FIELDS = `
   severity
   code
   reason
@@ -121,14 +121,16 @@ const ISSUE_FIELDS = `issues {
     }
   }
   additionalFileCount
-}`
+`
 
 export const DATASET_ISSUES = gql`
   fragment DatasetIssues on Dataset {
     id
     draft {
       id
-      ${ISSUE_FIELDS}
+      issues { 
+        ${ISSUE_FIELDS}
+      }
     }
   }
 `
@@ -136,6 +138,8 @@ export const DATASET_ISSUES = gql`
 export const SNAPSHOT_ISSUES = gql`
   fragment SnapshotIssues on Snapshot {
     id
-    ${ISSUE_FIELDS}
+    issues {
+      ${ISSUE_FIELDS}
+    }
   }
 `
