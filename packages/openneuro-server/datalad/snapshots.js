@@ -79,22 +79,24 @@ export const createSnapshot = async (datasetId, tag, user) => {
   // Reserve snapshot id to prevent a race condition on 1.0.0 snapshot
   await createSnapshotMetadata(datasetId, tag, null, null)
   // Get the newest description
-  try {
-    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
-    // Mint a DOI
-    const snapshotDoi = await doiLib.registerSnapshotDoi(
-      datasetId,
-      tag,
-      oldDesc,
-    )
-    // Save to DatasetDOI field
-    await updateDescription(
-      {},
-      { datasetId, field: 'DatasetDOI', value: snapshotDoi },
-      { userInfo: user, user: user.id },
-    )
-  } catch (err) {
-    Sentry.captureException(err)
+  if (config.doi.username && config.doi.password) {
+    try {
+      const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+      // Mint a DOI
+      const snapshotDoi = await doiLib.registerSnapshotDoi(
+        datasetId,
+        tag,
+        oldDesc,
+      )
+      // Save to DatasetDOI field
+      await updateDescription(
+        {},
+        { datasetId, field: 'DatasetDOI', value: snapshotDoi },
+        { userInfo: user, user: user.id },
+      )
+    } catch (err) {
+      Sentry.captureException(err)
+    }
   }
   // Create snapshot once DOI is ready
   return request
