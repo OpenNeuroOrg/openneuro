@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: openneuro-app
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
+    release: '{{ .Release.Name }}'
+    heritage: '{{ .Release.Service }}'
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: openneuro-app
+  template:
+    metadata:
+      labels:
+        app: openneuro-app
+    spec:
+      containers:
+        - name: openneuro-app
+          image: 'openneuro/app:{{ .Chart.appVersion }}'
+          ports:
+            - containerPort: 80

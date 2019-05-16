@@ -1,0 +1,12 @@
+apiVersion: v1
+name: openneuro
+version: 1.0.0
+description: OpenNeuro production deployment chart
+home: https://openneuro.org
+sources:
+  - https://github.com/openNeuroOrg/openneuro
+dependencies:
+  - name: redis
+    version: 7.1.0
+    repository: https://kubernetes-charts.storage.googleapis.com/
+appVersion: 3.1.2
