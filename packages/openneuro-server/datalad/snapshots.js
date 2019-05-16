@@ -76,6 +76,8 @@ export const createSnapshot = async (datasetId, tag, user) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
+  // Reserve snapshot id to prevent a race condition on 1.0.0 snapshot
+  await createSnapshotMetadata(datasetId, tag, null, null)
   // Get the newest description
   try {
     const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
