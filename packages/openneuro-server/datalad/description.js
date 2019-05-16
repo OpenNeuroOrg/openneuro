@@ -40,6 +40,36 @@ export const descriptionCacheKey = (datasetId, revision) => {
   return `openneuro:dataset_description.json:${datasetId}:${revision}`
 }
 
+export const repairDescriptionTypes = description => {
+  const newDescription = { ...description }
+  // Array types
+  if (!Array.isArray(description.Authors)) {
+    newDescription.Authors = [description.Authors]
+  }
+  if (!Array.isArray(description.ReferencesAndLinks)) {
+    newDescription.ReferencesAndLinks = [description.ReferencesAndLinks]
+  }
+  if (!Array.isArray(description.Funding === 'string')) {
+    newDescription.Funding = [description.Funding]
+  }
+  // String types
+  if (typeof description.Name !== 'string') {
+    newDescription.Name = JSON.stringify(description.Name) || ''
+  }
+  if (typeof description.DatasetDOI !== 'string') {
+    newDescription.DatasetDOI = JSON.stringify(description.DatasetDOI) || ''
+  }
+  if (typeof description.Acknowledgements !== 'string') {
+    newDescription.Acknowledgements =
+      JSON.stringify(description.Acknowledgements) || ''
+  }
+  if (typeof description.HowToAcknowledge !== 'string') {
+    newDescription.HowToAcknowledge =
+      JSON.stringify(description.HowToAcknowledge) || ''
+  }
+  return newDescription
+}
+
 /**
  * Get a parsed dataset_description.json
  * @param {string} datasetId - dataset or snapshot object
@@ -63,18 +93,7 @@ export const description = (obj, { datasetId, revision, tag }) => {
           })
       }
     })
-    .then(description => {
-      if (typeof description.Authors === 'string') {
-        description.Authors = [description.Authors]
-      }
-      if (typeof description.ReferencesAndLinks === 'string') {
-        description.ReferencesAndLinks = [description.ReferencesAndLinks]
-      }
-      if (typeof description.Funding === 'string') {
-        description.Funding = [description.Funding]
-      }
-      return description
-    })
+    .then(description => repairDescriptionTypes(description))
 }
 
 export const setDescription = (datasetId, description, user) => {
