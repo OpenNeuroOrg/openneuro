@@ -1,5 +1,5 @@
 import mongo from '../../libs/mongo.js'
-import pubsub from '../pubsub'
+import publishDraftUpdate from '../utils/publish-draft-update.js'
 
 /**
  * Save issues data returned by the datalad service
@@ -17,10 +17,7 @@ export const updateValidation = (obj, args) => {
       },
     )
     .then(() => {
-      pubsub.publish('datasetValidationUpdated', {
-        datasetId: args.validation.datasetId,
-        datasetValidationUpdated: args.validation,
-      })
+      publishDraftUpdate(args.validation.datasetId, args.validation.id)
       return true
     })
 }

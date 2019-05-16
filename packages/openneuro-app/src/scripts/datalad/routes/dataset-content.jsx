@@ -20,6 +20,7 @@ import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
 import { getProfile } from '../../authentication/profile.js'
+import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
 
 const MarginBottomDiv = styled.div`
@@ -115,11 +116,7 @@ const DatasetContent = ({ dataset }) => {
           {dataset.draft.partial || dataset.draft.files.length === 0 ? (
             <IncompleteDataset datasetId={dataset.id} />
           ) : (
-            <Validation
-              datasetId={dataset.id}
-              issues={dataset.draft.issues}
-              subscribe
-            />
+            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
           )}
           <DatasetFiles
             datasetId={dataset.id}
@@ -128,6 +125,7 @@ const DatasetContent = ({ dataset }) => {
             editMode={hasEdit}
           />
         </div>
+        <DraftSubscription datasetId={dataset.id} />
       </LoggedIn>
       <LoggedOut>
         {dataset.snapshots && (

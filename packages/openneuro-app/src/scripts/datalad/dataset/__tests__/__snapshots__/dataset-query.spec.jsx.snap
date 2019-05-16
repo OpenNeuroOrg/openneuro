@@ -1375,7 +1375,7 @@ exports[`DatasetQuery component renders with common params 1`] = `
       ],
       "kind": "Document",
       "loc": Object {
-        "end": 2071,
+        "end": 2088,
         "start": 0,
       },
     }

@@ -97,11 +97,7 @@ export const updateFiles = (
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     const promises = updateFilesTree(datasetId, fileTree)
     return Promise.all(promises)
-      .then(() =>
-        datalad
-          .commitFiles(datasetId, userInfo)
-          .then(() => pubsub.publish('draftFilesUpdated', { datasetId })),
-      )
+      .then(() => datalad.commitFiles(datasetId, userInfo))
       .then(() => ({
         id: new Date(),
       }))

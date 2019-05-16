@@ -38,7 +38,7 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.DATASET_ISSUES}
 `
 
-export const DatasetQueryRender = ({ loading, error, data, refetch }) => {
+export const DatasetQueryRender = ({ loading, error, data }) => {
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) {
