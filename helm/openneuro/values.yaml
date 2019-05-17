@@ -1,5 +1,5 @@
-openneuro:
-  hostname: openneuro.org
+hostname: openneuro.org
+efs-provisioner:
   efsProvisioner:
     awsRegion: us-east-1
-    # efsFileSystemId: ...
+    efsFileSystemId: fs-de60be3d
