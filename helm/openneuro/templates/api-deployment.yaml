@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
         - name: openneuro-api
-          image: 'openneuro/server:{{ .Chart.appVersion }}'
+          image: 'openneuro/server:{{ .Chart.AppVersion }}'
           ports:
             - containerPort: 8111

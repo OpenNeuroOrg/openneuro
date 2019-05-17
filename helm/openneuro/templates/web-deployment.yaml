@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
         - name: openneuro-app
-          image: 'openneuro/app:{{ .Chart.appVersion }}'
+          image: 'openneuro/app:{{ .Chart.AppVersion }}'
           ports:
             - containerPort: 80

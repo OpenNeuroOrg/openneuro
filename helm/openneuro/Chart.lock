@@ -2,5 +2,8 @@ dependencies:
 - name: redis
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 7.1.0
-digest: sha256:506225142fd9d2ce17fd66e010f852dc6ae4e1e60efd0a17e63e871031c34624
-generated: "2019-05-15T19:07:37.16126811-07:00"
+- name: efs-provisioner
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.3.7
+digest: sha256:b681f26b906569bf008bd81be79bf4049ca5196d9c6204ef5bababa7130c2af5
+generated: "2019-05-17T11:58:29.374465788-07:00"

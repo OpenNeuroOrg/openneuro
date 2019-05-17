@@ -9,4 +9,4 @@ Written for Helm 3.0.0 or later
 * API deployment - GraphQL service (openneuro-server npm package)
 * DataLad service deployment - Falcon server for microservice operations on datasets
 * Dataset worker - Celery workers responsible for read and write operations on datasets
-* Web deployment - static resources including the React application
+* Web deployment - static resources including the React application (openneuro-app npm package)

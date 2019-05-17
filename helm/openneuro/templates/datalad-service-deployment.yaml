@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
         - name: datalad-service
-          image: 'openneuro/datalad-service:{{ .Chart.appVersion }}'
+          image: 'openneuro/datalad-service:{{ .Chart.AppVersion }}'
           ports:
             - containerPort: 80
