@@ -20,6 +20,8 @@ describe('datalad dataset descriptions', () => {
       const repaired = repairDescriptionTypes(description)
       // Check for discarded fields
       expect(repaired.BIDSVersion).toBe(description.BIDSVersion)
+      // Check for extra fields
+      expect(repaired.DatasetDOI).toBe(undefined)
       // Test each repaired field for type correct value
       expect(Array.isArray(repaired.Authors)).toBe(true)
       expect(Array.isArray(repaired.ReferencesAndLinks)).toBe(true)
@@ -36,6 +38,9 @@ describe('datalad dataset descriptions', () => {
       const repaired = repairDescriptionTypes(description)
       // Check for discarded fields
       expect(repaired.BIDSVersion).toBe(description.BIDSVersion)
+      // Check for extra fields
+      expect(repaired.Authors).toBe(undefined)
+      // Check converted types
       expect(typeof repaired.Name).toBe('string')
       expect(typeof repaired.DatasetDOI).toBe('string')
       expect(typeof repaired.Acknowledgements).toBe('string')

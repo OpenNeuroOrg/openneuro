@@ -56,17 +56,23 @@ export const repairDescriptionTypes = description => {
     newDescription.Funding = [description.Funding]
   }
   // String types
-  if (typeof description.Name !== 'string') {
+  if (description.Name && typeof description.Name !== 'string') {
     newDescription.Name = JSON.stringify(description.Name) || ''
   }
-  if (typeof description.DatasetDOI !== 'string') {
+  if (description.DatasetDOI && typeof description.DatasetDOI !== 'string') {
     newDescription.DatasetDOI = JSON.stringify(description.DatasetDOI) || ''
   }
-  if (typeof description.Acknowledgements !== 'string') {
+  if (
+    description.Acknowledgements &&
+    typeof description.Acknowledgements !== 'string'
+  ) {
     newDescription.Acknowledgements =
       JSON.stringify(description.Acknowledgements) || ''
   }
-  if (typeof description.HowToAcknowledge !== 'string') {
+  if (
+    description.HowToAcknowledge &&
+    typeof description.HowToAcknowledge !== 'string'
+  ) {
     newDescription.HowToAcknowledge =
       JSON.stringify(description.HowToAcknowledge) || ''
   }
