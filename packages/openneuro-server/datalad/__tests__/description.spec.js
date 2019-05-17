@@ -46,6 +46,24 @@ describe('datalad dataset descriptions', () => {
       expect(typeof repaired.Acknowledgements).toBe('string')
       expect(typeof repaired.HowToAcknowledge).toBe('string')
     })
+    it('returns correct types for empty strings', () => {
+      const description = {
+        Name: 'Classification learning',
+        License:
+          'This dataset is made available under the Public Domain Dedication and License \nv1.0, whose full text can be found at \nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \nWe hope that all users will follow the ODC Attribution/Share-Alike \nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \nin particular, while not legally required, we hope that all users \nof the data will acknowledge the OpenfMRI project and NSF Grant \nOCI-1131441 (R. Poldrack, PI) in any publications.',
+        Authors: '',
+        Acknowledgements: '',
+        HowToAcknowledge: '',
+        Funding: '',
+        ReferencesAndLinks: '',
+        DatasetDOI: '',
+        BIDSVersion: '1.0.0',
+      }
+      const repaired = repairDescriptionTypes(description)
+      expect(Array.isArray(repaired.Authors)).toBe(true)
+      expect(Array.isArray(repaired.ReferencesAndLinks)).toBe(true)
+      expect(Array.isArray(repaired.Funding)).toBe(true)
+    })
   })
   it('returns the parsed dataset_description.json object', end => {
     request.post.mockClear()

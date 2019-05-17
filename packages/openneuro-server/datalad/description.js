@@ -43,34 +43,46 @@ export const descriptionCacheKey = (datasetId, revision) => {
 export const repairDescriptionTypes = description => {
   const newDescription = { ...description }
   // Array types
-  if (description.Authors && !Array.isArray(description.Authors)) {
+  if (
+    description.hasOwnProperty('Authors') &&
+    !Array.isArray(description.Authors)
+  ) {
     newDescription.Authors = [description.Authors]
   }
   if (
-    description.ReferencesAndLinks &&
+    description.hasOwnProperty('ReferencesAndLinks') &&
     !Array.isArray(description.ReferencesAndLinks)
   ) {
     newDescription.ReferencesAndLinks = [description.ReferencesAndLinks]
   }
-  if (description.Funding && !Array.isArray(description.Funding)) {
+  if (
+    description.hasOwnProperty('Funding') &&
+    !Array.isArray(description.Funding)
+  ) {
     newDescription.Funding = [description.Funding]
   }
   // String types
-  if (description.Name && typeof description.Name !== 'string') {
+  if (
+    description.hasOwnProperty('Name') &&
+    typeof description.Name !== 'string'
+  ) {
     newDescription.Name = JSON.stringify(description.Name) || ''
   }
-  if (description.DatasetDOI && typeof description.DatasetDOI !== 'string') {
+  if (
+    description.hasOwnProperty('DatasetDOI') &&
+    typeof description.DatasetDOI !== 'string'
+  ) {
     newDescription.DatasetDOI = JSON.stringify(description.DatasetDOI) || ''
   }
   if (
-    description.Acknowledgements &&
+    description.hasOwnProperty('Acknowledgements') &&
     typeof description.Acknowledgements !== 'string'
   ) {
     newDescription.Acknowledgements =
       JSON.stringify(description.Acknowledgements) || ''
   }
   if (
-    description.HowToAcknowledge &&
+    description.hasOwnProperty('HowToAcknowledge') &&
     typeof description.HowToAcknowledge !== 'string'
   ) {
     newDescription.HowToAcknowledge =
