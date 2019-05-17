@@ -43,13 +43,16 @@ export const descriptionCacheKey = (datasetId, revision) => {
 export const repairDescriptionTypes = description => {
   const newDescription = { ...description }
   // Array types
-  if (!Array.isArray(description.Authors)) {
+  if (description.Authors && !Array.isArray(description.Authors)) {
     newDescription.Authors = [description.Authors]
   }
-  if (!Array.isArray(description.ReferencesAndLinks)) {
+  if (
+    description.ReferencesAndLinks &&
+    !Array.isArray(description.ReferencesAndLinks)
+  ) {
     newDescription.ReferencesAndLinks = [description.ReferencesAndLinks]
   }
-  if (!Array.isArray(description.Funding)) {
+  if (description.Funding && !Array.isArray(description.Funding)) {
     newDescription.Funding = [description.Funding]
   }
   // String types
