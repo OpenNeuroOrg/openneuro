@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dataset-worker
+spec:
+  selector:
+    matchLabels:
+      app: dataset-worker # has to match .spec.template.metadata.labels
+  serviceName: "dataset-worker"
+  replicas: 16
+  template:
+    metadata:
+      labels:
+        app: dataset-worker # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: dataset-worker
+        image: 'openneuro/datalad-service:{{ .Chart.appVersion }}'
+        volumeMounts:
+        - name: datasets
+          mountPath: /datasets
+  volumeClaimTemplates:
+  - metadata:
+      name: datasets
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "efs"
+      resources:
+        requests:
+          storage: 1Gi # This is not used with EFS but we have to ask for it

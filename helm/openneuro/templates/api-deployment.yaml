@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
   labels:
-    app: openneuro-server
+    app: openneuro-api
     chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
     release: '{{ .Release.Name }}'
     heritage: '{{ .Release.Service }}'
@@ -11,14 +11,14 @@ spec:
   replicas: 4
   selector:
     matchLabels:
-      app: openneuro-server
+      app: openneuro-api
   template:
     metadata:
       labels:
-        app: openneuro-server
+        app: openneuro-api
     spec:
       containers:
-        - name: openneuro-server
+        - name: openneuro-api
           image: 'openneuro/server:{{ .Chart.appVersion }}'
           ports:
             - containerPort: 8111
