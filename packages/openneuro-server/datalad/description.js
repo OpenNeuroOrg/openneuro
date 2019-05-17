@@ -49,7 +49,7 @@ export const repairDescriptionTypes = description => {
   if (!Array.isArray(description.ReferencesAndLinks)) {
     newDescription.ReferencesAndLinks = [description.ReferencesAndLinks]
   }
-  if (!Array.isArray(description.Funding === 'string')) {
+  if (!Array.isArray(description.Funding)) {
     newDescription.Funding = [description.Funding]
   }
   // String types
