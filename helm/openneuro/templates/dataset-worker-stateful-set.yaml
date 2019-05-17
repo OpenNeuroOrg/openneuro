@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dataset-worker
-        image: 'openneuro/datalad-service:{{ .Chart.AppVersion }}'
+        image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
         volumeMounts:
         - name: datasets
           mountPath: /datasets
