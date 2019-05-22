@@ -55,10 +55,12 @@ def compute_file_hash(git_hash, path):
 def get_repo_files(dataset, branch='HEAD'):
     dir_fd = os.open(dataset.path, os.O_RDONLY)
     gitProcess = subprocess.Popen(
-        ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE)
+        ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
     files = []
+    symlinkFilenames = []
+    symlinkObjects = []
     for line in gitProcess.stdout:
-        gitTreeLine = line.decode().rstrip()
+        gitTreeLine = line.rstrip()
         metadata, filename = gitTreeLine.split('\t')
         # Skip git / datalad files
         if filename.startswith('.git/'):
@@ -70,18 +72,32 @@ def get_repo_files(dataset, branch='HEAD'):
         mode, obj_type, obj_hash, size = metadata.split()
         # Check if the file is annexed
         if (mode == '120000'):
-            # Handle annexed here
-            l_path = os.readlink(filename, dir_fd=dir_fd)
-            key = l_path.split('/')[-1]
-            # Get the size from key
-            size = int(key.split('-', 2)[1].lstrip('s'))
-            file_id = compute_file_hash(key, filename)
-            files.append(
-                {'filename': filename, 'size': int(size), 'id': file_id, 'key': key})
+            # Save annexed file symlinks for batch processing
+            symlinkFilenames.append(filename)
+            symlinkObjects.append(obj_hash)
         else:
+            # Immediately append regular files
             file_id = compute_file_hash(obj_hash, filename)
             files.append({'filename': filename, 'size': int(size),
                           'id': file_id, 'key': obj_hash})
+    # After regular files, process all symlinks with one git cat-file --batch call
+    # This is about 100x faster than one call per file for annexed file heavy datasets
+    catFileInput = '\n'.join(symlinkObjects)
+    catFileProcess = subprocess.run(['git', 'cat-file', '--batch', '--buffer'],
+                                    cwd=dataset.path, stdout=subprocess.PIPE, input=catFileInput, encoding='utf-8')
+    # Output looks like this:
+    # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
+    # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
+    for index, line in enumerate(catFileProcess.stdout.splitlines()):
+        # Skip metadata (even) lines
+        if index % 2 == 1:
+            key = line.rstrip().split('/')[-1]
+            # Get the size from key
+            size = int(key.split('-', 2)[1].lstrip('s'))
+            filename = symlinkFilenames[(index - 1) // 2]
+            file_id = compute_file_hash(key, filename)
+            files.append({'filename': filename, 'size': int(
+                size), 'id': file_id, 'key': key})
     return files
 
 
