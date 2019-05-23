@@ -22,3 +22,8 @@ spec:
           image: 'openneuro/server:v{{ .Chart.AppVersion }}'
           ports:
             - containerPort: 8111
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-configmap
+            - secretRef:
+                name: {{ .Release.Name }}-secret

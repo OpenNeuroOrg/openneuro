@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: dataset-worker # has to match .spec.template.metadata.labels
   serviceName: "dataset-worker"
-  replicas: 16
+  replicas: {{ .Values.dataladWorkers }}
   template:
     metadata:
       labels:
@@ -16,6 +16,11 @@ spec:
       containers:
       - name: dataset-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-configmap
+        - secretRef:
+            name: {{ .Release.Name }}-secret
         volumeMounts:
         - name: datasets
           mountPath: /datasets

@@ -1,4 +1,22 @@
-hostname: openneuro.org
+# Root hostname
+hostname: openneuro.staging.sqm.io
+
+# The FQDN URL for the site, optionally including port number
+url: https://openneuro.staging.sqm.io
+
+# A unique string identifying this install of OpenNeuro
+environment: staging
+
+# Enable FreshDesk ticketing
+freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
+
+# Enable Google Analytics
+googleTrackingId: UA-100754266-1
+
+# Dataset worker parallelism
+dataladWorkers: 16
+
+# The underlying EFS volume should be created manually and configured here
 efs-provisioner:
   efsProvisioner:
     awsRegion: us-east-1

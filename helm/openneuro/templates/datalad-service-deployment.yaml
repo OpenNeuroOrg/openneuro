@@ -18,7 +18,13 @@ spec:
         app: datalad-service
     spec:
       containers:
-        - name: datalad-service
-          image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-          ports:
-            - containerPort: 80
+      - name: datalad-service
+        image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-configmap
+        - secretRef:
+            name: {{ .Release.Name }}-secret
+
