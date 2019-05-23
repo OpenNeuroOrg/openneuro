@@ -13,6 +13,7 @@ import fetch from 'node-fetch'
 
 const checkBrainlife = async datasetId => {
   try {
+    // datasetId = 'ds000117'
     const url = `https://brainlife.io/api/warehouse/project?find={"openneuro.dataset_id":"${datasetId}"}`
     const res = await fetch(url)
     const body = await res.json()

@@ -5,9 +5,13 @@ import snapshotVersion from '../snapshotVersion'
 import styled from '@emotion/styled'
 
 const PaddedDiv = styled.div`
-  padding: 1.5em 0 0.5em;
+  padding: .5em 0 0.5em;
+  display: flex;
+  flex-wrap: wrap;
 `
 const LinkButton = styled.button`
+  margin: 1rem 1rem 0 0;
+  min-height: 3rem;
   border: none;
   border-radius: 0.5rem;
   background: #377881;
@@ -70,8 +74,18 @@ const LeftPadIconContainer = styled.div`
  * @param {*} rootPath base path for relative redirects
  * @param {*} path target path for redirect
  */
-const redirect = (history, rootPath, path) => {
+const goToDownloadPage = (history, rootPath, path) => {
   history.push(`${rootPath}/${path}`)
+}
+
+/**
+ * Immediate redirect to a dataset or snapshot route
+ * @param {object} history react-router-dom history
+ * @param {*} rootPath base path for relative redirects
+ * @param {*} path target path for redirect
+ */
+const goToBrainlife = datasetId => {
+  window.open(`https://brainlife.io/openneuro/${datasetId}`, '_blank')
 }
 
 // prominent link to dataset download page
@@ -83,12 +97,17 @@ const DownloadButton = ({ dataset, location, history }) => {
 
   return (
     <PaddedDiv>
-      <LinkButton onClick={() => redirect(history, rootPath, 'download')}>
+      <LinkButton onClick={() => goToDownloadPage(history, rootPath, 'download')}>
         <ButtonText>Download</ButtonText>
         <LeftPadIconContainer>
           <i className={'fa fa-arrow-circle-right align-middle'} />
         </LeftPadIconContainer>
       </LinkButton>
+      {dataset.onBrainlife &&
+        <LinkButton onClick={() => goToBrainlife(dataset.id)}>
+          <ButtonText>Analyze on brainlife.io</ButtonText>
+        </LinkButton>
+      }
     </PaddedDiv>
   )
 }
