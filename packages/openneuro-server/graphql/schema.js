@@ -222,6 +222,8 @@ const typeDefs = `
     starred: Boolean
     # When was this dataset first made public?
     publishDate: DateTime
+    # Is the dataset available for analysis on Brainlife?
+    onBrainlife: Boolean
   }
 
   enum SortOrdering {

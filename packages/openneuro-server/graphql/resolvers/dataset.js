@@ -9,11 +9,25 @@ import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
+import fetch from 'node-fetch'
 
-export const dataset = (obj, { id }, { user, userInfo }) => {
-  return checkDatasetRead(id, user, userInfo).then(() => {
-    return datalad.getDataset(id)
-  })
+const checkBrainlife = async datasetId => {
+  try {
+    const url = `https://brainlife.io/api/warehouse/project?find={"openneuro.dataset_id":"${datasetId}"}`
+    const res = await fetch(url)
+    const body = await res.json()
+    return Boolean(body.count)
+  } catch (err) {
+    return false
+  }
+}
+
+export const dataset = async (obj, { id }, { user, userInfo }) => {
+  const dataset = await checkDatasetRead(id, user, userInfo).then(() =>
+    datalad.getDataset(id),
+  )
+  dataset.onBrainlife = await checkBrainlife(id)
+  return dataset
 }
 
 export const datasets = (parent, args, { user, userInfo }) => {
