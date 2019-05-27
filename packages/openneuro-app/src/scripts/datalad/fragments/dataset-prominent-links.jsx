@@ -5,7 +5,7 @@ import snapshotVersion from '../snapshotVersion'
 import styled from '@emotion/styled'
 
 const PaddedDiv = styled.div`
-  padding: .5em 0 0.5em;
+  padding: 0.5em 0 0.5em;
   display: flex;
   flex-wrap: wrap;
 `
@@ -89,33 +89,37 @@ const goToBrainlife = datasetId => {
 }
 
 // prominent link to dataset download page
-const DownloadButton = ({ dataset, location, history }) => {
+const ProminentLinks = ({ dataset, location, history }) => {
   const snapshot = snapshotVersion(location)
   const rootPath = snapshot
     ? `/datasets/${dataset.id}/versions/${snapshot}`
     : `/datasets/${dataset.id}`
 
   return (
-    <PaddedDiv>
-      <LinkButton onClick={() => goToDownloadPage(history, rootPath, 'download')}>
+    <PaddedDiv id="hi">
+      <LinkButton
+        className="download-link"
+        onClick={() => goToDownloadPage(history, rootPath, 'download')}>
         <ButtonText>Download</ButtonText>
         <LeftPadIconContainer>
           <i className={'fa fa-arrow-circle-right align-middle'} />
         </LeftPadIconContainer>
       </LinkButton>
-      {dataset.onBrainlife &&
-        <LinkButton onClick={() => goToBrainlife(dataset.id)}>
+      {dataset.onBrainlife && (
+        <LinkButton
+          className="brainlife-link"
+          onClick={() => goToBrainlife(dataset.id)}>
           <ButtonText>Analyze on brainlife.io</ButtonText>
         </LinkButton>
-      }
+      )}
     </PaddedDiv>
   )
 }
 
-DownloadButton.propTypes = {
+ProminentLinks.propTypes = {
   dataset: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
 }
 
-export default withRouter(DownloadButton)
+export default withRouter(ProminentLinks)
