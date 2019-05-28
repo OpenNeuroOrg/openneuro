@@ -32,7 +32,7 @@ const config = {
     },
   },
   mongo: {
-    url: 'mongodb://mongo:27017/',
+    url: process.env.MONGO_URL,
   },
   redis: {
     port: process.env.REDIS_PORT,
