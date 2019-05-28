@@ -2,13 +2,10 @@ import json
 import os
 import subprocess
 import requests
+from datalad_service.config import GRAPHQL_ENDPOINT
 
 from datalad_service.common.raven import client
 from datalad_service.common.celery import app
-
-# TODO - This is hardcoded because it is internal
-# for docker-compose. May change for other deployment methods
-GRAPHQL_ENDPOINT = 'http://server:8111/crn/graphql'
 
 
 def setup_validator():

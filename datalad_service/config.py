@@ -27,3 +27,6 @@ JWT_SECRET=get_environ('JWT_SECRET')
 
 # Sentry monitoring
 SENTRY_DSN = get_environ('SENTRY_DSN')
+
+# GraphQL URL - override if not docker-compose
+GRAPHQL_ENDPOINT = get_environ('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
