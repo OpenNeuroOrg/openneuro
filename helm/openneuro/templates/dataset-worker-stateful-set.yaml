@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: dataset-worker
+  name: {{ .Release.Name }}-dataset-worker
 spec:
   selector:
     matchLabels:
-      app: dataset-worker # has to match .spec.template.metadata.labels
+      app: {{ .Release.Name }}-dataset-worker # has to match .spec.template.metadata.labels
   serviceName: "dataset-worker"
   replicas: {{ .Values.dataladWorkers }}
   template:
     metadata:
       labels:
-        app: dataset-worker # has to match .spec.selector.matchLabels
+        app: {{ .Release.Name }}-dataset-worker # has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: dataset-worker
+      - name: {{ .Release.Name }}-dataset-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
         envFrom:
         - configMapRef:
@@ -26,7 +26,7 @@ spec:
           mountPath: /datasets
   volumeClaimTemplates:
   - metadata:
-      name: datasets
+      name: {{ .Release.Name }}-datasets
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "efs"

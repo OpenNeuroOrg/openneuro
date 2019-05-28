@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: datalad-service
+  name: {{ .Release.Name }}-datalad-service
   labels:
-    app: datalad-service
+    app: {{ .Release.Name }}-datalad-service
     chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
     release: '{{ .Release.Name }}'
     heritage: '{{ .Release.Service }}'
@@ -11,14 +11,14 @@ spec:
   replicas: 4
   selector:
     matchLabels:
-      app: datalad-service
+      app: {{ .Release.Name }}-datalad-service
   template:
     metadata:
       labels:
-        app: datalad-service
+        app: {{ .Release.Name }}-datalad-service
     spec:
       containers:
-      - name: datalad-service
+      - name: {{ .Release.Name }}-datalad-service
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
         ports:
         - containerPort: 80
