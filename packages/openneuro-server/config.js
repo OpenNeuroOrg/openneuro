@@ -35,8 +35,8 @@ const config = {
     url: 'mongodb://mongo:27017/',
   },
   redis: {
-    port: 6379,
-    host: 'redis',
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
   },
   notifications: {
     email: {
