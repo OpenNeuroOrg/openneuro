@@ -20,4 +20,4 @@ dataladWorkers: 16
 efs-provisioner:
   efsProvisioner:
     awsRegion: us-east-1
-    efsFileSystemId: fs-de60be3d
+    efsFileSystemId: fs-acb10b4f
