@@ -10,4 +10,5 @@ data:
   GOOGLE_TRACKING_ID: {{ .Values.googleTrackingId | quote }}
   REDIS_HOST: {{ .Release.Name }}-redis-master
   REDIS_PORT: "6379"
-  GRAPHQL_ENDPOINT: {{ .Release.Name }}-api
+  GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111
+  DATALAD_SERVICE_URI: {{ .Release.Name }}-datalad-service:9877

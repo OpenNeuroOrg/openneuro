@@ -21,7 +21,7 @@ spec:
       - name: {{ .Release.Name }}-datalad-service
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
         ports:
-        - containerPort: 80
+        - containerPort: 9877
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-configmap

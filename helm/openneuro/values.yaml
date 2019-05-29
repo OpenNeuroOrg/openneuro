@@ -21,3 +21,7 @@ efs-provisioner:
   efsProvisioner:
     awsRegion: us-east-1
     efsFileSystemId: fs-acb10b4f
+
+# Disable Redis password for testing
+redis:
+  usePassword: false
