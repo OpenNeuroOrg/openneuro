@@ -51,8 +51,7 @@ const config = {
     ENVIRONMENT: process.env.ENVIRONMENT,
   },
   datalad: {
-    enabled: true,
-    uri: 'datalad:9877',
+    uri: process.env.DATALAD_SERVICE_URI,
   },
   doi: {
     username: process.env.DOI_USERNAME,
