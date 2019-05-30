@@ -13,9 +13,15 @@ spec:
       labels:
         app: {{ .Release.Name }}-dataset-worker # has to match .spec.selector.matchLabels
     spec:
+      volumes:
+      - name: datasets
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-datasets
       containers:
       - name: {{ .Release.Name }}-dataset-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        command:
+          - /dataset-worker
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-configmap
@@ -24,12 +30,3 @@ spec:
         volumeMounts:
         - name: datasets
           mountPath: /datalad
-  volumeClaimTemplates:
-  - metadata:
-      name: {{ .Release.Name }}-datasets
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "efs"
-      resources:
-        requests:
-          storage: 1Gi # This is not used with EFS but we have to ask for it

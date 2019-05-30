@@ -27,6 +27,9 @@ efs-provisioner:
   efsProvisioner:
     awsRegion: us-east-1
     efsFileSystemId: fs-acb10b4f
+    path: /pv
+    storageClass:
+      reclaimPolicy: Retain
 
 # Load balancer / ingress config
 aws-alb-ingress-controller:
