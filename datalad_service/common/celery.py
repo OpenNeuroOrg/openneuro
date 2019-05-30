@@ -4,11 +4,12 @@ from functools import wraps
 import redis
 from celery import Celery
 
-from datalad_service.config import DATALAD_WORKERS
+from datalad_service.config import DATALAD_WORKERS, REDIS_HOST
 from datalad_service.datalad import DataladStore
 
 
-app = Celery('tasks', broker='redis://redis', backend='redis://redis')
+app = Celery('tasks', broker='redis://{}'.format(REDIS_HOST),
+             backend='redis://{}'.format(REDIS_HOST))
 
 
 def dataset_queue(dataset):
