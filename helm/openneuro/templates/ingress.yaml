@@ -13,6 +13,10 @@ spec:
   rules:
     - http:
         paths:
+          - path: /graphql-subscriptions
+            backend:
+              serviceName: {{ .Release.Name }}-api
+              servicePort: 8111
           - path: /crn/*
             backend:
               serviceName: {{ .Release.Name }}-api
