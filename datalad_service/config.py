@@ -30,3 +30,6 @@ SENTRY_DSN = get_environ('SENTRY_DSN')
 
 # GraphQL URL - override if not docker-compose
 GRAPHQL_ENDPOINT = get_environ('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
+
+# Redis Host
+REDIS_HOST = get_environ('REDIS_HOST', 'redis')
