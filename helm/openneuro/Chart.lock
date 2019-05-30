@@ -5,5 +5,8 @@ dependencies:
 - name: efs-provisioner
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 0.3.7
-digest: sha256:b681f26b906569bf008bd81be79bf4049ca5196d9c6204ef5bababa7130c2af5
-generated: "2019-05-17T11:58:29.374465788-07:00"
+- name: aws-alb-ingress-controller
+  repository: https://kubernetes-charts-incubator.storage.googleapis.com/
+  version: 0.1.8
+digest: sha256:a403021d5903f8e11765b45546a00998fc250f3788a6e8a55c202cb898cce644
+generated: "2019-05-29T16:35:09.391271566-07:00"

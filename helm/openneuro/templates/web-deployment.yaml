@@ -17,6 +17,9 @@ spec:
       labels:
         app: {{ .Release.Name }}-web
     spec:
+      volumes:
+        - name: shared-data
+          emptyDir: {}
       containers:
         - name: {{ .Release.Name }}-web
           image: 'openneuro/app:v{{ .Chart.AppVersion }}'
@@ -27,3 +30,15 @@ spec:
                 name: {{ .Release.Name }}-configmap
             - secretRef:
                 name: {{ .Release.Name }}-secret
+          volumeMounts:
+            - name: shared-data
+              mountPath: /srv/app/dist/content
+      initContainers:
+        - name: {{ .Release.Name }}-content
+          image: 'openneuro/content:{{ .Values.contentTag }}'
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
+          command: ["/bin/sh"]
+          args: ["-c", "cp content/openneuro-content.js /shared"]
+
