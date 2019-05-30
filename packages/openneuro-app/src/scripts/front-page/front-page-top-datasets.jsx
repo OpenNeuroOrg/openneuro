@@ -137,7 +137,7 @@ const FrontPageTopRecent = ({ datasets }) => {
 }
 
 const FrontPageTopResult = query => ({ loading, error, data }) => {
-  if (error) {
+  if (error || data.datasets === null) {
     Sentry.captureException(error)
     return <div>Failed to load top datasets, please try again later.</div>
   } else if (loading) {
