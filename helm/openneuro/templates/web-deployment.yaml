@@ -40,5 +40,5 @@ spec:
             - name: shared-data
               mountPath: /shared
           command: ["/bin/sh"]
-          args: ["-c", "cp content/openneuro-content.js /shared"]
+          args: ["-c", "cp -r content/* /shared"]
 
