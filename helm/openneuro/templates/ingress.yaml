@@ -13,11 +13,11 @@ spec:
   rules:
     - http:
         paths:
-          - path: /*
-            backend:
-              serviceName: {{ .Release.Name }}-web
-              servicePort: 80
           - path: /crn/*
             backend:
               serviceName: {{ .Release.Name }}-api
               servicePort: 8111
+          - path: /*
+            backend:
+              serviceName: {{ .Release.Name }}-web
+              servicePort: 80
