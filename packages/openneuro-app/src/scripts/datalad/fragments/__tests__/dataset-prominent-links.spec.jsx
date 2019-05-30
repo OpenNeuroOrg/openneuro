@@ -9,15 +9,6 @@ describe('DatasetAuthors component', () => {
     onBrainlife: null,
   }
 
-  it('renders with basic props', () => {
-    const wrapper = mount(
-      <Router initialEntries={['/']}>
-        <ProminentLinks dataset={minDataset} />
-      </Router>,
-    )
-    expect(wrapper).toMatchSnapshot()
-  })
-
   it('does render brainlife button when onBrainlife', () => {
     minDataset.onBrainlife = true
     const wrapper = mount(
