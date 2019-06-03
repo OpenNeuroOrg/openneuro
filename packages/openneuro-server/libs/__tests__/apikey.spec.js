@@ -14,8 +14,10 @@ const userMock = {
 
 describe('util/apikey.js', () => {
   describe('apiKeyFactory', () => {
-    const token = jwt.verify(apiKeyFactory(userMock), config.auth.jwt.secret)
-    expect(token.sub).toEqual(userMock.id)
-    expect(token.email).toEqual(userMock.email)
+    it('produces a valid JWT', () => {
+      const token = jwt.verify(apiKeyFactory(userMock), config.auth.jwt.secret)
+      expect(token.sub).toEqual(userMock.id)
+      expect(token.email).toEqual(userMock.email)
+    })
   })
 })
