@@ -30,7 +30,7 @@ Sentry.init({
 const app = createApp(false)
 
 // Setup mongoose next to our old mongo lib
-mongoose.connect(`${config.mongo.url}crn`)
+mongoose.connect(config.mongo.url)
 
 // start server ----------------------------------------------------
 mongo.connect(config.mongo.url).then(() => {
