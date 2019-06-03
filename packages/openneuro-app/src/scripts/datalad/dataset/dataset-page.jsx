@@ -18,6 +18,7 @@ class DatasetPage extends React.Component {
   }
 
   render() {
+    const { dataset } = this.props
     return (
       <div className="page dataset">
         <div
@@ -25,9 +26,9 @@ class DatasetPage extends React.Component {
             this.state.sidebar ? 'open dataset-container' : 'dataset-container'
           }>
           <LeftSidebar
-            datasetId={this.props.dataset.id}
-            snapshots={this.props.dataset.snapshots}
-            draftModified={this.props.dataset.draft.modified}
+            datasetId={dataset.id}
+            snapshots={dataset.snapshots}
+            draftModified={dataset.draft.modified}
           />
           <span className="show-nav-btn" onClick={this.toggleSidebar}>
             {this.state.sidebar ? (
@@ -36,11 +37,11 @@ class DatasetPage extends React.Component {
               <i className="fa fa-angle-double-right" aria-hidden="true" />
             )}
           </span>
-          <DatasetTools dataset={this.props.dataset} />
+          <DatasetTools dataset={dataset} />
           <div className="fade-in inner-route dataset-route light">
             <div className="clearfix dataset-wrap">
               <div className="dataset-animation dataset-inner">
-                <DatasetMain dataset={this.props.dataset} />
+                <DatasetMain dataset={dataset} />
               </div>
             </div>
           </div>
@@ -55,6 +56,7 @@ DatasetPage.propTypes = {
     id: PropTypes.string,
     draft: PropTypes.object,
     snapshots: PropTypes.array,
+    onBrainlife: PropTypes.bool,
   }),
 }
 

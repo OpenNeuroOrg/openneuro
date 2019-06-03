@@ -10,7 +10,7 @@ import DatasetModified from '../fragments/dataset-modified.jsx'
 import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
-import DownloadButton from '../fragments/download-button.jsx'
+import DatasetProminentLinks from '../fragments/dataset-prominent-links.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
@@ -100,7 +100,7 @@ const DatasetContent = ({ dataset }) => {
             downloads={dataset.analytics.downloads}
             views={dataset.analytics.views}
           />
-          <DownloadButton dataset={dataset} />
+          <DatasetProminentLinks dataset={dataset} />
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
           <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>

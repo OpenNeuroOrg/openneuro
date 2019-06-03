@@ -29,6 +29,7 @@ export const getDatasetPage = gql`
         downloads
         views
       }
+      onBrainlife
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}
