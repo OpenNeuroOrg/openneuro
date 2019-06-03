@@ -33,6 +33,7 @@ const config = {
   },
   mongo: {
     url: process.env.MONGO_URL,
+    dbName: 'crn',
   },
   redis: {
     port: process.env.REDIS_PORT,
