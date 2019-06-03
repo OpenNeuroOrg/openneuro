@@ -27,7 +27,15 @@ eksctl create cluster --name=my-cluster-name --nodes=3 --instance-type=m5a.large
 
 This should configure the cluster and setup credentials and command context for later kubectl and helm commadns. If you encounter errors here, your user likely lacks access to manage EC2, EKS, or CloudFormation resources on the AWS account.
 
-### Access Kubernetes dashboard
+### Setup and access Kubernetes dashboard
+
+To install:
+
+```bash
+helm install dashboard stable/kubernetes-dashboard
+```
+
+To access:
 
 ```bash
 # Setup a port forward to the Dashboard pod
