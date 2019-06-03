@@ -4,21 +4,25 @@ import config from '../config'
 
 const c = mongo.collections
 
+export const apiKeyFactory = user => {
+  const apiKeyExpiration = 31536000
+  return addJWT(config)(user, apiKeyExpiration).token
+}
+
 /**
  * Replace or create an API key for a given user
  * @param {object} user
  */
 export const generateApiKey = user => {
-  let userId = user.id
-  const apiKeyExpiration = 31536000
-  const token = addJWT(config)(user, apiKeyExpiration).token
+  const userId = user.id
+
   return c.crn.keys
     .findOneAndUpdate(
       { id: userId },
       {
         $set: {
           id: userId,
-          hash: token,
+          hash: apiKeyFactory(user),
         },
       },
       { upsert: true, returnOriginal: false },

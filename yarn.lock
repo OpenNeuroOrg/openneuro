@@ -3450,10 +3450,10 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
-bson-objectid@^1.1.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/bson-objectid/-/bson-objectid-1.2.4.tgz#5932784c407dc033d8e1064c31f2ce3005d5a00b"
-  integrity sha512-z511nO3HgvLpB0Ax2+kfM2HRfgGKB0VbMnRKh5yNM9Eoh2o1/DRFXBrsoTpvjR09vNIHUMUmcwFFYhSU+0PBGQ==
+bson-objectid@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/bson-objectid/-/bson-objectid-1.2.5.tgz#622c0c9d40c02aece5ac5b61a70248ec303047f0"
+  integrity sha512-tKLZNr1eyK/Dd48k/5FHXmpN69dUHMioQCvNv1kxy8qJINkoyQkjf7+u933EZ77bMXC3lmN1HmyFm2WS6mRYxg==
 
 bson@^1.1.0, bson@~1.1.0:
   version "1.1.0"
@@ -4906,7 +4906,7 @@ dateformat@^3.0.0:
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
-debug@2.6.9, debug@^2.1.2, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
+debug@2.6.9, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
@@ -10646,13 +10646,14 @@ moment-timezone@^0.5.x:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
 
-"mongo-mock@https://github.com/williamkapke/mongo-mock":
-  version "3.3.2"
-  resolved "https://github.com/williamkapke/mongo-mock#45a95db4ca4062771a81192d45d4d12dfc710b99"
+mongo-mock@3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/mongo-mock/-/mongo-mock-3.7.1.tgz#8ed58dd0d4b601ddd5db579ea08e2fe7312eaeab"
+  integrity sha512-5xjxi6J8nUS15LvqKdEmMhUc0fyWoi5eo6MZ6enTFCB6bI0KoQNT3SB/wseQPUf6xPtqZwx0fFR2Oi0RFuyzyA==
   dependencies:
-    bson-objectid "^1.1.4"
-    debug "^2.1.3"
-    lodash "^4.17.10"
+    bson-objectid "^1.2.5"
+    debug "^2.6.9"
+    lodash "^4.17.11"
     modifyjs "^0.3.1"
     object-assign-deep "^0.4.0"
     sift "^3.1.1"

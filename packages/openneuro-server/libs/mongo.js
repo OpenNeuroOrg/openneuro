@@ -79,6 +79,7 @@ export default {
                 reject(err)
                 process.exit()
               } else {
+                this.client = client
                 this.dbs[dbName] = client.db(dbName)
                 for (let collectionName in this.collections[dbName]) {
                   if (this.collections[dbName][collectionName] === null) {
@@ -113,9 +114,7 @@ export default {
   /**
    * Shut down all active db connections
    */
-  async shutdown() {
-    for (const dbName of Object.keys(this.dbs)) {
-      await this.dbs[dbName].close()
-    }
+  shutdown() {
+    if (this.client) return this.client.close()
   },
 }
