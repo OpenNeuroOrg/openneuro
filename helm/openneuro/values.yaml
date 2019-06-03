@@ -17,7 +17,7 @@ googleTrackingId: UA-100754266-1
 certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/6883342b-63ac-4466-b3f8-d9a8dd80bfaa"
 
 # Dataset worker parallelism
-dataladWorkers: 16
+dataladWorkers: 4
 
 # Content container tag
 contentTag: v1.0.0
