@@ -8,7 +8,7 @@ metadata:
     release: '{{ .Release.Name }}'
     heritage: '{{ .Release.Service }}'
 spec:
-  replicas: 4
+  replicas: 3
   selector:
     matchLabels:
       app: {{ .Release.Name }}-api
@@ -16,6 +16,9 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-api
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Release.Name }}-api

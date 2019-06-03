@@ -12,6 +12,9 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-dataset-worker # has to match .spec.selector.matchLabels
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       volumes:
       - name: datasets
