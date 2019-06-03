@@ -15,14 +15,14 @@ export const apiKeyFactory = user => {
  */
 export const generateApiKey = user => {
   const userId = user.id
-
+  const token = apiKeyFactory(user)
   return c.crn.keys
     .findOneAndUpdate(
       { id: userId },
       {
         $set: {
           id: userId,
-          hash: apiKeyFactory(user),
+          hash: token,
         },
       },
       { upsert: true, returnOriginal: false },
