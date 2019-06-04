@@ -20,6 +20,10 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
+      volumes:
+      - name: datasets
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-datasets
       containers:
       - name: {{ .Release.Name }}-datalad-service
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
