@@ -22,7 +22,7 @@ def publish_queue():
 
 def dataset_hash(key):
     """Return which worker for a given task."""
-    return hash(key) % DATALAD_WORKERS + 1
+    return hash(key) % DATALAD_WORKERS
 
 
 def dataset_task(func):

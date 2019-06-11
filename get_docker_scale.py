@@ -15,6 +15,7 @@ else:
   ip_addr = socket.gethostbyname(hostname)
   answer = dns.resolver.query(dns.reversename.from_address(ip_addr), "PTR")
   subdomain = str(answer[0]).split('.')[0]
-  docker_compose_offset = subdomain.split('_')[-1]
+  # Subtract 1 to make this zero indexed (matching k8s)
+  docker_compose_offset = int(subdomain.split('_')[-1]) - 1
   # Printed so this can be referenced as a script
   print(docker_compose_offset)
