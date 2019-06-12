@@ -40,3 +40,5 @@ aws-alb-ingress-controller:
 # Disable Redis password for testing
 redis:
   usePassword: false
+  master:
+    disableCommands: []
