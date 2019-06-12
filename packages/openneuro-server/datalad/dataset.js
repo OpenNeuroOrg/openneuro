@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Implementation of dataset models internal to OpenNeuro's database
  *
@@ -39,18 +40,24 @@ const uri = config.datalad.uri
 export const createDataset = async (uploader, userInfo) => {
   // Obtain an accession number
   const datasetId = await getAccessionNumber()
+  console.log(`creating ${datasetId}`)
   try {
     const ds = new Dataset({ id: datasetId, uploader })
+    console.log('new')
     const req = await request
       .post(`${uri}/datasets/${datasetId}`)
       .set('Accept', 'application/json')
       .set('Cookie', generateDataladCookie(config)(userInfo))
+    console.log('request complete')
     // Record and initial revision (usually empty but could be a DataLad upload)
     ds.revision = req.body.hexsha
     // Write the new dataset to mongo after creation
     await ds.save()
+    console.log('saved')
     await giveUploaderPermission(datasetId, uploader)
+    console.log('permission granted')
     await subscriptions.subscribe(datasetId, uploader)
+    console.log('subscriber notified')
     return ds
   } catch (e) {
     // eslint-disable-next-line
