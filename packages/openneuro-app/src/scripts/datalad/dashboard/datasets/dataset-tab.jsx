@@ -7,6 +7,7 @@ import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
+import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import styled from '@emotion/styled'
 
 const FullHeightFlexDiv = styled.div`
@@ -49,6 +50,7 @@ const DatasetTab = ({
   queryVariables,
   loading,
   publicDashboard,
+  error,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
@@ -83,11 +85,13 @@ const DatasetTab = ({
     {loading ? (
       <Spinner text="Loading Datasets" active />
     ) : (
-      <DatasetTabLoaded
-        data={data}
-        loadMoreRows={loadMoreRows}
-        publicDashboard={publicDashboard}
-      />
+      <ErrorBoundary error={error}>
+        <DatasetTabLoaded
+          data={data}
+          loadMoreRows={loadMoreRows}
+          publicDashboard={publicDashboard}
+        />
+      </ErrorBoundary>
     )}
   </FullHeightFlexDiv>
 )

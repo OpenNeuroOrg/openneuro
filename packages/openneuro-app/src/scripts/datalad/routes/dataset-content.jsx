@@ -19,6 +19,7 @@ import EditReadme from '../fragments/edit-readme.jsx'
 import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { getProfile } from '../../authentication/profile.js'
 import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
@@ -103,9 +104,11 @@ const DatasetContent = ({ dataset }) => {
           <DatasetProminentLinks dataset={dataset} />
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
-          <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
-            <DatasetReadme content={dataset.draft.readme} />
-          </EditReadme>
+          <ErrorBoundary>
+            <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
+              <DatasetReadme content={dataset.draft.readme} />
+            </EditReadme>
+          </ErrorBoundary>
           <DatasetDescription
             datasetId={dataset.id}
             description={dataset.draft.description}

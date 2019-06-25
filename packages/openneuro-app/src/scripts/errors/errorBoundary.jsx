@@ -6,30 +6,16 @@ import config from '../../../config'
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
+    const errorAbove = Boolean(props.error)
     this.state = {
-      hasError: false,
-      supportModal: false,
+      hasError: errorAbove,
+      supportModal: errorAbove,
+      error: props.error,
     }
   }
 
   static getDerivedStateFromError(error) {
-    console.log('in static', error)
-    return { hasError: true, supportModal: true }
-  }
-
-  componentDidCatch(error, info) {
-    console.log('in catch', { error, info })
-  }
-
-  componentDidMount() {
-    window.addEventListener('error', this.handleGlobalError)
-  }
-  componentWillUnmount() {
-    window.removeEventListener('error', this.handleGlobalError)
-  }
-
-  handleGlobalError = e => {
-    console.log('global error', e)
+    return { hasError: true, supportModal: true, error: error }
   }
 
   closeSupportModal = () =>

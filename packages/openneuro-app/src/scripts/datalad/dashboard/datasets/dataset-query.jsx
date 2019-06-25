@@ -143,11 +143,13 @@ const datasetQueryDisplay = isPublic => ({
   fetchMore,
   refetch,
   variables,
+  error,
 }) => {
   return (
     <DatasetTab
       loading={loading}
       data={data}
+      error={error}
       loadMoreRows={loading ? () => {} : loadMoreRows(data, fetchMore)}
       refetch={refetch}
       queryVariables={variables}

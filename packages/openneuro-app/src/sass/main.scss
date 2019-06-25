@@ -257,3 +257,9 @@ $bootstrap-sass-asset-helper: true;
  margin: 15px 0;
  z-index: 1000;
 }
+
+.generic-error-message {
+    padding: 1rem;
+    border: $coral;
+    color: red;
+}

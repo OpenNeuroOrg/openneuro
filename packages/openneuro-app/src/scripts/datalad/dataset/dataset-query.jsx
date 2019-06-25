@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
 export const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
@@ -42,11 +43,9 @@ export const getDatasetPage = gql`
 export const DatasetQueryRender = ({ loading, error, data }) => {
   if (loading) {
     return <Spinner text="Loading Dataset" active />
-  } else if (error) {
-    Sentry.captureException(error)
-    throw new Error(error)
   } else {
-    return <DatasetPage dataset={data.dataset} />
+    if (error) Sentry.captureException(error)
+    return <DatasetPage dataset={data.dataset} error={error} />
   }
 }
 
@@ -57,11 +56,13 @@ DatasetQueryRender.propTypes = {
 }
 
 const DatasetQuery = ({ match }) => (
-  <Query
-    query={getDatasetPage}
-    variables={{ datasetId: match.params.datasetId }}>
-    {DatasetQueryRender}
-  </Query>
+  <ErrorBoundary>
+    <Query
+      query={getDatasetPage}
+      variables={{ datasetId: match.params.datasetId }}>
+      {DatasetQueryRender}
+    </Query>
+  </ErrorBoundary>
 )
 
 DatasetQuery.propTypes = {
