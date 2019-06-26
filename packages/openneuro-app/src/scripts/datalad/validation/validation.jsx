@@ -7,7 +7,7 @@ const Validation = ({ issues }) => {
   return (
     <div className="fade-in col-xs-12 validation">
       <h3 className="metaheader">BIDS Validation</h3>
-      <ErrorBoundary>
+      <ErrorBoundary error subject={'Error in dataset validation component'}>
         <ValidationStatus issues={issues} />
       </ErrorBoundary>
     </div>
