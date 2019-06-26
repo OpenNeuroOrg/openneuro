@@ -1,16 +1,19 @@
 import React from 'react'
-import withProfile from '../../authentication/withProfile.js'
+import { getProfile } from '../../authentication/profile'
 import config from '../../../../config'
 
 const prepopulatedFieldsQuery = prepopulatedFields => {
   const fieldQueries = Object.entries(prepopulatedFields)
     .filter(([key, value]) => value)
     .map(([key, value]) => `helpdesk_ticket[${key}]=${value}`)
-  return `&${fieldQueries.join(';')}`
+  return fieldQueries.length ? `&${fieldQueries.join(';')}` : ''
 }
 
-function FreshdeskWidget({ profile, subject, description }) {
-  console.log(profile, subject, description)
+function FreshdeskWidget(props) {
+  const profile = getProfile()
+  const { subject, error } = props
+  let { description } = props
+  description = [description, error].filter(item => item).join('\n\n')
   return (
     <>
       <script
@@ -29,7 +32,7 @@ function FreshdeskWidget({ profile, subject, description }) {
         src={
           config.support.url +
           prepopulatedFieldsQuery({
-            requester: profile.email,
+            requester: profile && profile.email,
             subject,
             description,
           })
@@ -43,4 +46,4 @@ function FreshdeskWidget({ profile, subject, description }) {
   )
 }
 
-export default withProfile(FreshdeskWidget)
+export default FreshdeskWidget

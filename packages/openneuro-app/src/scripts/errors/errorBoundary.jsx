@@ -33,6 +33,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     const { subject, description } = this.props
+    const error = this.props.error || this.state.error
     return this.state.hasError ? (
       <>
         <p className="generic-error-message">
@@ -50,7 +51,7 @@ class ErrorBoundary extends React.Component {
           </Modal.Header>
           <hr className="modal-inner" />
           <Modal.Body>
-            <FreshdeskWidget {...{ subject, description }} />
+            <FreshdeskWidget {...{ subject, description, error }} />
           </Modal.Body>
           <Modal.Footer>
             <a onClick={this.closeSupportModal}>Close</a>

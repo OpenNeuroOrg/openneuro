@@ -40,7 +40,7 @@ const Comments = ({ datasetId, uploader, comments }) => {
     <div className="col-xs-12">
       <div className="dataset-comments">
         <h2>Comments</h2>
-        <ErrorBoundary>
+        <ErrorBoundary subject="error in dataset comments">
           <LoggedIn>
             <CommentEditor datasetId={datasetId} />
           </LoggedIn>

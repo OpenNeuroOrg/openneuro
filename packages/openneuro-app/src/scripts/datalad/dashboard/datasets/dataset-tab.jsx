@@ -85,7 +85,7 @@ const DatasetTab = ({
     {loading ? (
       <Spinner text="Loading Datasets" active />
     ) : (
-      <ErrorBoundary error={error}>
+      <ErrorBoundary error={error} subject={'error in dashboard dataset tab'}>
         <DatasetTabLoaded
           data={data}
           loadMoreRows={loadMoreRows}

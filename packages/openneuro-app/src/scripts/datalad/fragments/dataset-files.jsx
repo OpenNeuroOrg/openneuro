@@ -19,7 +19,7 @@ const DatasetFiles = ({
           </div>
           <div className="panel-collapse" aria-expanded="false">
             <div className="panel-body">
-              <ErrorBoundary>
+              <ErrorBoundary subject={'error in dataset filetree'}>
                 <Files
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
