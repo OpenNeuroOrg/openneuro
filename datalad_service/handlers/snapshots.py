@@ -40,8 +40,10 @@ class SnapshotResource(object):
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
         queue = dataset_queue(dataset)
+        media = req.media
+        description_fields = media != None and media.get('description_fields') or {}
         create = create_snapshot.si(
-            self.store.annex_path, dataset, snapshot).set(queue=queue)
+            self.store.annex_path, dataset, snapshot, description_fields).set(queue=queue)
         created = create.apply_async()
         created.wait()
         if not created.failed():
@@ -51,7 +53,9 @@ class SnapshotResource(object):
             # Publish after response
             publish = publish_snapshot.s(
                 self.store.annex_path, dataset, snapshot, req.cookies)
-            publish.apply_async(queue=queue)
+            skip_publishing = req.media != None and media.get('skip_publishing')
+            if not skip_publishing and skip_publishing is not None:
+                publish.apply_async(queue=queue)
         else:
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT
