@@ -58,3 +58,25 @@ def test_get_snapshots(client, new_dataset, celery_app):
     assert result_doc['snapshots'][0]['id'] == '{}:{}'.format(ds_id, 'v1.0.0')
     assert result_doc['snapshots'][0]['tag'] == 'v1.0.0'
     assert result_doc['snapshots'][1]['tag'] == 'v2.0.0'
+
+def test_description_update(client, new_dataset, celery_app):
+    key = 'ReferencesAndLinks'
+    value = ['https://www.wikipedia.org']
+    description_fields = json.dumps({
+        key: value
+    })
+    
+    ds_id = os.path.basename(new_dataset.path)
+    update_response = client.simulate_post(
+        '/datasets/{}/snapshots/{}'.format(ds_id, 'v1.0.0'), body=description_fields)
+    assert update_response.status == falcon.HTTP_OK
+
+    check_response = client.simulate_get(
+        '/datasets/{}/files/dataset_description.json'.format(ds_id))
+    assert check_response.status == falcon.HTTP_OK
+    ds_description = json.loads(check_response.content, encoding='utf-8')
+    assert ds_description[key] == value
+
+    print(description_fields)
+    print(ds_description)
+    assert False # dev: to get stdout
