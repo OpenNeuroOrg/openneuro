@@ -32,11 +32,12 @@ const config = {
     },
   },
   mongo: {
-    url: 'mongodb://mongo:27017/',
+    url: process.env.MONGO_URL,
+    dbName: 'crn',
   },
   redis: {
-    port: 6379,
-    host: 'redis',
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
   },
   notifications: {
     email: {
@@ -51,8 +52,7 @@ const config = {
     ENVIRONMENT: process.env.ENVIRONMENT,
   },
   datalad: {
-    enabled: true,
-    uri: 'datalad:9877',
+    uri: process.env.DATALAD_SERVICE_URI,
   },
   doi: {
     username: process.env.DOI_USERNAME,

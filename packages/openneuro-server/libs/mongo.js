@@ -71,14 +71,16 @@ export default {
         Object.keys(this.dbs),
         (dbName, cb) => {
           MongoClient.connect(
-            url + dbName,
-            (err, db) => {
+            url,
+            { useNewUrlParser: true },
+            (err, client) => {
               if (err) {
                 console.log(err)
                 reject(err)
                 process.exit()
               } else {
-                this.dbs[dbName] = db
+                this.client = client
+                this.dbs[dbName] = client.db(dbName)
                 for (let collectionName in this.collections[dbName]) {
                   if (this.collections[dbName][collectionName] === null) {
                     this.collections[dbName][collectionName] = this.dbs[
@@ -112,9 +114,7 @@ export default {
   /**
    * Shut down all active db connections
    */
-  async shutdown() {
-    for (const dbName of Object.keys(this.dbs)) {
-      await this.dbs[dbName].close()
-    }
+  shutdown() {
+    if (this.client) return this.client.close()
   },
 }

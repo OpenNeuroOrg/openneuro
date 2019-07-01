@@ -43,7 +43,7 @@
     "juice": "^2.0.0",
     "mime-types": "^2.1.19",
     "moment": "^2.14.1",
-    "mongodb": "^2.2.34",
+    "mongodb": "3.2.6",
     "mongoose": "https://github.com/Automattic/mongoose.git#89bcfcf24e5dc78c4542d2319bf63923e970a542",
     "morgan": "^1.6.1",
     "node-fetch": "^2.6.0",
@@ -80,11 +80,10 @@
     "ioredis-mock": "^3.8.1",
     "jest": "^24.6.0",
     "mockingoose": "^2.11.0",
-    "mongo-mock": "https://github.com/williamkapke/mongo-mock",
+    "mongo-mock": "3.7.1",
     "supertest": "^3.0.0"
   },
   "jest": {
-    "testEnvironment": "node",
-    "globalSetup": "./jestSetup.js"
+    "testEnvironment": "node"
   }
 }

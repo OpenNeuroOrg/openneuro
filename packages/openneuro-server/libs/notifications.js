@@ -361,24 +361,30 @@ let notifications = {
       '0 */1 * * * *',
       () => {
         c.crn.notifications.find({}).toArray((err, docs) => {
-          for (let notification of docs) {
-            notifications.send(notification, (err, response) => {
-              if (!err) {
-                c.crn.notifications.removeOne(
-                  { _id: notification._id },
-                  {},
-                  () => {},
-                )
-                if (response && response.messageId) {
-                  c.crn.mailgunIdentifiers.insertOne({
-                    messageId: response.messageId,
-                  })
+          if (err) {
+            console.log(
+              'NOTIFICATION ERROR - Could not find notifcations collection',
+            )
+          } else {
+            for (let notification of docs) {
+              notifications.send(notification, (err, response) => {
+                if (!err) {
+                  c.crn.notifications.removeOne(
+                    { _id: notification._id },
+                    {},
+                    () => {},
+                  )
+                  if (response && response.messageId) {
+                    c.crn.mailgunIdentifiers.insertOne({
+                      messageId: response.messageId,
+                    })
+                  }
+                } else {
+                  console.log('NOTIFICATION ERROR ----------')
+                  console.log(err)
                 }
-              } else {
-                console.log('NOTIFICATION ERROR ----------')
-                console.log(err)
-              }
-            })
+              })
+            }
           }
         })
       },

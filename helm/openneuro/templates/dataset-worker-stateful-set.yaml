@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-dataset-worker
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-dataset-worker # has to match .spec.template.metadata.labels
+  serviceName: "dataset-worker"
+  replicas: {{ .Values.dataladWorkers }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-dataset-worker # has to match .spec.selector.matchLabels
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      volumes:
+      - name: datasets
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-datasets
+      containers:
+      - name: {{ .Release.Name }}-dataset-worker
+        image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        command:
+          - /dataset-worker
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-configmap
+        - secretRef:
+            name: {{ .Release.Name }}-secret
+        volumeMounts:
+        - name: datasets
+          mountPath: /datalad

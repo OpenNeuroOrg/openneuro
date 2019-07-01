@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  CRN_SERVER_URL: {{ .Values.url | quote }}
+  DATALAD_WORKERS: "16"
+  FRESH_DESK_URL: {{ .Values.freshDeskUrl | quote }}
+  ENVIRONMENT: {{ .Values.environment | quote }}
+  GOOGLE_TRACKING_ID: {{ .Values.googleTrackingId | quote }}
+  REDIS_HOST: {{ .Release.Name }}-redis-master
+  REDIS_PORT: "6379"
+  GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111/crn/graphql
+  DATALAD_SERVICE_URI: {{ .Release.Name }}-datalad-service:9877

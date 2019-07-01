@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+  labels:
+    app: {{ .Release.Name }}-web
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
+    release: '{{ .Release.Name }}'
+    heritage: '{{ .Release.Service }}'
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-web
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-web
+    spec:
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+      containers:
+        - name: {{ .Release.Name }}-web
+          image: 'openneuro/app:v{{ .Chart.AppVersion }}'
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-configmap
+            - secretRef:
+                name: {{ .Release.Name }}-secret
+          volumeMounts:
+            - name: shared-data
+              mountPath: /srv/app/dist/content
+      initContainers:
+        - name: {{ .Release.Name }}-content
+          image: 'openneuro/content:{{ .Values.contentTag }}'
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
+          command: ["/bin/sh"]
+          args: ["-c", "cp -r content/* /shared"]
+
