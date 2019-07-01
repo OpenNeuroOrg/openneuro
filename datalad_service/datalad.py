@@ -1,6 +1,7 @@
 from functools import wraps
 
 import falcon
+from os import path
 
 from datalad.api import Dataset
 from datalad_service.common.annex import CommitInfo, get_repo_files
@@ -17,5 +18,5 @@ class DataladStore(object):
         return Dataset(self.get_dataset_path(name))
 
     def get_dataset_path(self, name):
-        return '{}/{}'.format(self.annex_path, name)
+        return path.join(self.annex_path, name)
 
