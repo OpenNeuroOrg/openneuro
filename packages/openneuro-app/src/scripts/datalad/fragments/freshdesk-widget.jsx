@@ -4,7 +4,7 @@ import config from '../../../../config'
 
 const prepopulatedFieldsQuery = prepopulatedFields => {
   const fieldQueries = Object.entries(prepopulatedFields)
-    .filter(([key, value]) => value)
+    .filter(([_, value]) => value)
     .map(([key, value]) => `helpdesk_ticket[${key}]=${value}`)
   return fieldQueries.length ? `&${fieldQueries.join(';')}` : ''
 }

@@ -103,6 +103,7 @@ DatasetTab.propTypes = {
   queryVariables: PropTypes.object,
   loading: PropTypes.bool,
   publicDashboard: PropTypes.bool,
+  error: PropTypes.object,
 }
 
 export default DatasetTab
