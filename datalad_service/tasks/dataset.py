@@ -11,6 +11,7 @@ import json
 
 from datalad_service.common.annex import CommitInfo
 from datalad_service.common.celery import dataset_task, dataset_queue
+from datalad_service.tasks.description import update_description
 from datalad_service.tasks.publish import publish_snapshot
 
 
@@ -62,10 +63,6 @@ def delete_dataset(store, dataset):
     ds = store.get_dataset(dataset)
     force_rmtree(ds.path)
 
-def edit_description(description, new_fields):
-    updated = description.copy()
-    updated.update(new_fields)
-    return updated
 
 
 @dataset_task
@@ -80,20 +77,7 @@ def create_snapshot(store, dataset, snapshot, description_fields={}):
     # Search for any existing tags
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
-        if any (description_fields):
-            description = ds.repo.repo.git.show(
-                'HEAD:dataset_description.json')
-            description_json = json.loads(description)
-            updated = edit_description(description_json, description_fields)
-            path = os.path.join(store.get_dataset_path(dataset), 'dataset_description.json')
-            with open(path, 'r+', encoding='utf-8') as description_file:
-                description_file_contents = description_file.read()
-                if description != description_file_contents:
-                    raise Exception('unexpected dataset_description.json contents')
-                description_file.seek(0)
-                description_file.truncate(0)
-                description_file.write(json.dumps(updated))
-            ds.add(path=path, message='update dataset_description')
+        update_description(store, dataset, ds, description_fields)
         ds.save(version_tag=snapshot)
     else:
         raise Exception(

@@ -26,6 +26,3 @@ def test_update(celery_app, client, new_dataset):
     assert check_response.status == falcon.HTTP_OK
     ds_description = json.loads(check_response.content, encoding='utf-8')
     assert ds_description[key] == value
-    # print('update_ds', updated_ds)
-    # print('ds_description', ds_description)
-    # assert False
