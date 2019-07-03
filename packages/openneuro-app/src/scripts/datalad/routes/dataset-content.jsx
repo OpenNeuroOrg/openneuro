@@ -18,9 +18,8 @@ import Validation from '../validation/validation.jsx'
 import EditReadme from '../fragments/edit-readme.jsx'
 import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import LoggedOut from '../../authentication/logged-out.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
-import { getProfile } from '../../authentication/profile.js'
+import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
 
@@ -45,19 +44,6 @@ export const HasBeenPublished = ({ isPublic, datasetId }) =>
 HasBeenPublished.propTypes = {
   isPublic: PropTypes.bool,
   datasetId: PropTypes.string,
-}
-
-// Return true if the active user has write permission
-export const hasEditPermissions = (permissions, userId) => {
-  if (userId) {
-    const permission = permissions.find(perm => perm.user.id === userId)
-    return (
-      (permission &&
-        (permission.level === 'admin' || permission.level === 'rw')) ||
-      false
-    )
-  }
-  return false
 }
 
 /**

@@ -26,6 +26,7 @@ class DatasetPage extends React.Component {
             this.state.sidebar ? 'open dataset-container' : 'dataset-container'
           }>
           <LeftSidebar
+            dataset={dataset}
             datasetId={dataset.id}
             snapshots={dataset.snapshots}
             draftModified={dataset.draft.modified}
