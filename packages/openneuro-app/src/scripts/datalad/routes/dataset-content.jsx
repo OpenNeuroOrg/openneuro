@@ -69,8 +69,6 @@ const DatasetContent = ({ dataset }) => {
     ((user && user.admin) ||
       hasEditPermissions(dataset.permissions, user && user.sub)) &&
     !dataset.draft.partial
-  console.log('snapshots: ', dataset.snapshots)
-  console.log('does not have edit: ', !hasEdit)
   return (
     <>
       <LoggedIn>
