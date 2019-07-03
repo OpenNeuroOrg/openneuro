@@ -105,7 +105,10 @@ const DatasetContent = ({ dataset }) => {
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
           <ErrorBoundary subject={'error in dataset readme component'}>
-            <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
+            <EditReadme
+              datasetId={dataset.id}
+              content={dataset.draft.readme}
+              hasEdit={hasEdit}>
               <DatasetReadme content={dataset.draft.readme} />
             </EditReadme>
           </ErrorBoundary>
