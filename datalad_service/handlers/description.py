@@ -20,6 +20,11 @@ class DescriptionResource(object):
         if dataset:
             try:
                 description_fields = req.media.get('description_fields')
+                if not any(description_fields):
+                    resp.media = {
+                        'error': 'Missing description field updates.'
+                    }
+                    resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
                 dataset_description = update_description(self.store.annex_path, dataset, None, description_fields)
                 resp.media = dataset_description
                 resp.status = falcon.HTTP_OK
