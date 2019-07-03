@@ -96,6 +96,7 @@ const LeftSidebar = ({
 
 LeftSidebar.propTypes = {
   active: PropTypes.string,
+  dataset: PropTypes.object,
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
   location: PropTypes.object,
