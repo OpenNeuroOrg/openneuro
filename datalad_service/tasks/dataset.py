@@ -67,7 +67,6 @@ def delete_dataset(store, dataset):
 
 @dataset_task
 def create_snapshot(store, dataset, snapshot, description_fields={}):
-    print(snapshot)
     """
     Create a new snapshot (git tag).
 
