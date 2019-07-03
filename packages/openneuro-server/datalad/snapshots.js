@@ -72,7 +72,12 @@ const getSnapshotMetadata = (datasetId, snapshots) => {
  * @param {Object} user - User object that has made the snapshot request
  * @returns {Promise} - resolves when tag is created
  */
-export const createSnapshot = async (datasetId, tag, user) => {
+export const createSnapshot = async (
+  datasetId,
+  tag,
+  user,
+  descriptionFieldUpdates = {},
+) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
@@ -88,12 +93,6 @@ export const createSnapshot = async (datasetId, tag, user) => {
         tag,
         oldDesc,
       )
-      // Save to DatasetDOI field
-      await updateDescription(
-        {},
-        { datasetId, field: 'DatasetDOI', value: snapshotDoi },
-        { userInfo: user, user: user.id },
-      )
     } catch (err) {
       Sentry.captureException(err)
     }
@@ -101,6 +100,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
   // Create snapshot once DOI is ready
   return request
     .post(url)
+    .send({ description_fields: descriptionFieldUpdates })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
     .then(async ({ body }) => {

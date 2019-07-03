@@ -290,7 +290,7 @@ export const addFileString = (datasetId, filename, mimetype, content) =>
 /**
  * Commit a draft
  */
-export const commitFiles = (datasetId, user) => {
+export const commitFiles = (datasetId, user, descriptionFieldUpdates) => {
   let gitRef
   const url = `${uri}/datasets/${datasetId}/draft`
   return request
@@ -306,13 +306,19 @@ export const commitFiles = (datasetId, user) => {
       // Check if this is the first data commit and no snapshots exist
       c.crn.snapshots.findOne({ datasetId }).then(async snapshot => {
         if (!snapshot) {
-          await createSnapshot(datasetId, '1.0.0', user)
+          await createSnapshot(
+            datasetId,
+            '1.0.0',
+            user,
+            descriptionFieldUpdates,
+          )
         }
         return gitRef
       }),
     )
-    .then(() => {
+    .then(gitRef => {
       publishDraftUpdate(datasetId, gitRef)
+      return gitRef
     })
 }
 
