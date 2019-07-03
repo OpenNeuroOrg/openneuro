@@ -8,10 +8,7 @@ import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
-import {
-  description,
-  updateDescription,
-} from '../graphql/resolvers/description.js'
+import { description } from '../graphql/resolvers/description.js'
 import doiLib from '../libs/doi/index.js'
 import { filesKey, getFiles } from './files.js'
 import { addFileUrl } from './utils.js'
