@@ -1,0 +1,4 @@
+#!/bin/bash
+# kill all docker containers and restart in background
+docker kill $(docker ps -a -q);
+./bin/dev-compose up -dls

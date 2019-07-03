@@ -7,7 +7,7 @@ import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
 import LoginModal from '../common/partials/login.jsx'
-import config from '../../../config'
+import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import { frontPage } from 'openneuro-content'
 import styled from '@emotion/styled'
 
@@ -104,25 +104,7 @@ class BSNavbar extends React.Component {
           <a href="https://openneuro.featureupvote.com/">
             https://openneuro.featureupvote.com/
           </a>
-          <script
-            type="text/javascript"
-            src="https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js"
-          />
-          <style type="text/css" media="screen, projection">
-            {
-              '@import url(https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css); '
-            }
-          </style>
-          <iframe
-            title="Feedback Form"
-            className="freshwidget-embedded-form"
-            id="freshwidget-embedded-form"
-            src={config.support.url}
-            scrolling="no"
-            height="500px"
-            width="100%"
-            frameBorder="0"
-          />
+          <FreshdeskWidget />
         </Modal.Body>
         <Modal.Footer>
           <a onClick={() => this.setState({ supportModal: false })}>Close</a>
