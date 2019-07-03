@@ -93,6 +93,7 @@ export const createSnapshot = async (
         tag,
         oldDesc,
       )
+      if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
     } catch (err) {
       Sentry.captureException(err)
     }
