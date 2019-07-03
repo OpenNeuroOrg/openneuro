@@ -69,6 +69,8 @@ const DatasetContent = ({ dataset }) => {
     ((user && user.admin) ||
       hasEditPermissions(dataset.permissions, user && user.sub)) &&
     !dataset.draft.partial
+  console.log('snapshots: ', dataset.snapshots)
+  console.log('does not have edit: ', !hasEdit)
   return (
     <>
       <LoggedIn>
@@ -133,14 +135,13 @@ const DatasetContent = ({ dataset }) => {
         </div>
         <DraftSubscription datasetId={dataset.id} />
       </LoggedIn>
-      <LoggedOut>
-        {dataset.snapshots && (
+      {dataset.snapshots &&
+        !hasEdit && (
           <Redirect
             to={`/datasets/${dataset.id}/versions/${dataset.snapshots.length &&
-              dataset.snapshots[0].tag}`}
+              dataset.snapshots[dataset.snapshots.length - 1].tag}`}
           />
         )}
-      </LoggedOut>
     </>
   )
 }
