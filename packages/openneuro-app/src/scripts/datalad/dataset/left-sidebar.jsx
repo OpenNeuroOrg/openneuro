@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
 import format from 'date-fns/format'
-import LoggedIn from '../../authentication/logged-in.jsx'
+import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 
 export const SidebarRow = ({
   datasetId,
@@ -45,8 +45,19 @@ SidebarRow.propTypes = {
   modified: PropTypes.string,
 }
 
-const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
+const LeftSidebar = ({
+  dataset,
+  datasetId,
+  draftModified,
+  snapshots,
+  location,
+}) => {
   const active = snapshotVersion(location) || 'draft'
+  const user = getProfile()
+  const hasEdit =
+    ((user && user.admin) ||
+      hasEditPermissions(dataset.permissions, user && user.sub)) &&
+    !dataset.draft.partial
   return (
     <div className="left-sidebar">
       <span className="slide">
@@ -54,7 +65,7 @@ const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
           <span>
             <h3>Versions</h3>
             <ul>
-              <LoggedIn>
+              {hasEdit && (
                 <SidebarRow
                   key={'Draft'}
                   id={datasetId}
@@ -64,7 +75,7 @@ const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
                   draft
                   active={active}
                 />
-              </LoggedIn>
+              )}
               {snapshots.map(snapshot => (
                 <SidebarRow
                   key={snapshot.id}
@@ -85,6 +96,7 @@ const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
 
 LeftSidebar.propTypes = {
   active: PropTypes.string,
+  dataset: PropTypes.object,
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
   location: PropTypes.object,
