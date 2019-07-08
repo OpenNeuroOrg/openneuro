@@ -78,7 +78,7 @@ def create_snapshot(store, dataset, snapshot, description_fields={}):
     if not tagged:
         queue = dataset_queue(dataset)
         updated = update_description.apply_async(
-            queue=queue, args=(store, dataset, description_fields))
+            queue=queue, args=(store.annex_path, dataset, description_fields))
         updated.wait()
         if not updated.failed():
             ds.save(version_tag=snapshot)

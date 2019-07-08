@@ -33,6 +33,5 @@ def dataset_task(func):
     @wraps(func)
     def dataset_task_decorator(*args, **kwargs):
         annex_path = args[0]
-        arg0 = DataladStore(annex_path) if not isinstance(args[0], DataladStore) else args[0]
-        return func(arg0, *args[1:], **kwargs)
+        return func(DataladStore(annex_path), *args[1:], **kwargs)
     return dataset_task_decorator
