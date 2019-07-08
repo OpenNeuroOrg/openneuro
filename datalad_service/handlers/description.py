@@ -25,7 +25,7 @@ class DescriptionResource(object):
                         'error': 'Missing description field updates.'
                     }
                     resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
-                dataset_description = update_description(self.store.annex_path, dataset, None, description_fields)
+                dataset_description = update_description(self.store.annex_path, dataset, description_fields)
                 resp.media = dataset_description
                 resp.status = falcon.HTTP_OK
             except:

@@ -8,9 +8,9 @@ def edit_description(description, new_fields):
     return updated
 
 @dataset_task
-def update_description(store, dataset, ds, description_fields):
+def update_description(store, dataset, description_fields):
     if any (description_fields):
-        ds = ds if ds is not None else store.get_dataset(dataset)
+        ds = store.get_dataset(dataset)
         description = ds.repo.repo.git.show(
             'HEAD:dataset_description.json')
         description_json = json.loads(description)

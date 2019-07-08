@@ -76,7 +76,7 @@ def create_snapshot(store, dataset, snapshot, description_fields={}):
     # Search for any existing tags
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
-        update_description(store, dataset, ds, description_fields)
+        update_description(store, dataset, description_fields)
         ds.save(version_tag=snapshot)
     else:
         raise Exception(
