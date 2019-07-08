@@ -22,9 +22,12 @@ const NoErrors = ({ issues, children }) => {
   }
 }
 
-const SnapshotRoute = ({ datasetId, snapshots, issues }) => {
+const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
   const [changes, setChanges] = useState([])
   const [semanticLevel, setSemanticLevel] = useState('patch')
+  const draftLicense = (description && description.License) || 'none'
+  const requiredLicense = 'CC0'
+  const updateToCC0 = draftLicense !== requiredLicense
 
   const latestSnapshot = snapshots.length && snapshots[snapshots.length - 1]
   const newVersion =
@@ -45,6 +48,16 @@ const SnapshotRoute = ({ datasetId, snapshots, issues }) => {
         <hr />
       </div>
       <div className="col-xs-12 dataset-form-body">
+        {updateToCC0 && (
+          <div className="alert-warning padded-message">
+            <span>
+              <strong>Notice:</strong> the current license "{draftLicense}" will
+              be updated to "CC0" when the snapshot is created. Please see FAQ
+              item "Are there any restrictions on the uploaded data?" for
+              details.
+            </span>
+          </div>
+        )}
         <h4>BIDS Validation</h4>
         <ValidationStatus datasetId={datasetId} issues={issues} />
         <h4>Version</h4>
@@ -106,6 +119,7 @@ SnapshotRoute.propTypes = {
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
   issues: PropTypes.array,
+  description: PropTypes.object,
 }
 
 export default SnapshotRoute
