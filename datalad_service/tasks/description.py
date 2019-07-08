@@ -9,11 +9,11 @@ def edit_description(description, new_fields):
 
 @dataset_task
 def update_description(store, dataset, description_fields):
+    ds = store.get_dataset(dataset)
+    description = ds.repo.repo.git.show(
+        'HEAD:dataset_description.json')
+    description_json = json.loads(description)
     if any (description_fields):
-        ds = store.get_dataset(dataset)
-        description = ds.repo.repo.git.show(
-            'HEAD:dataset_description.json')
-        description_json = json.loads(description)
         updated = edit_description(description_json, description_fields)
         path = os.path.join(store.get_dataset_path(dataset), 'dataset_description.json')
         with open(path, 'r+', encoding='utf-8') as description_file:
@@ -25,3 +25,5 @@ def update_description(store, dataset, description_fields):
             description_file.write(json.dumps(updated))
         ds.add(path=path, message='update dataset_description')
         return updated
+    else:
+        return description_json
