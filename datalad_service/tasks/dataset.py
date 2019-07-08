@@ -76,8 +76,12 @@ def create_snapshot(store, dataset, snapshot, description_fields={}):
     # Search for any existing tags
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
-        update_description(store, dataset, description_fields)
-        ds.save(version_tag=snapshot)
+        queue = dataset_queue(dataset)
+        updated = update_description.apply_async(
+            queue=queue, args=(store, dataset, description_fields))
+        updated.wait()
+        if not updated.failed():
+            ds.save(version_tag=snapshot)
     else:
         raise Exception(
             'Tag "{}" already exists, name conflict'.format(snapshot))

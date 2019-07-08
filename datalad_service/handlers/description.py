@@ -2,6 +2,7 @@ import falcon
 import os
 
 from datalad_service.tasks.description import update_description
+from datalad_service.common.celery import dataset_queue
 
 
 class DescriptionResource(object):
@@ -25,9 +26,17 @@ class DescriptionResource(object):
                         'error': 'Missing description field updates.'
                     }
                     resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
-                dataset_description = update_description(self.store.annex_path, dataset, description_fields)
-                resp.media = dataset_description
-                resp.status = falcon.HTTP_OK
+                queue = dataset_queue(dataset)
+                updated = update_description.apply_async(
+                    queue=queue, args=(self.store.annex_path, dataset, description_fields))
+                updated.wait()
+                if updated.failed():
+                    resp.media = {'error': 'dataset update failed'}
+                    resp.status = falcon.HTTP_500
+                else:
+                    dataset_description = updated.get()
+                    resp.media = dataset_description
+                    resp.status = falcon.HTTP_OK
             except:
                 resp.media = {
                     'error': 'Unexpected error in dataset_description update.'
