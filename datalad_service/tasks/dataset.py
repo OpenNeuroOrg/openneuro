@@ -77,7 +77,7 @@ def create_snapshot(store, dataset, snapshot, description_fields={}):
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
         queue = dataset_queue(dataset)
-        updated = update_description.apply_async(
+        updated = update_description.apply(
             queue=queue, args=(store.annex_path, dataset, description_fields))
         updated.wait()
         if not updated.failed():
