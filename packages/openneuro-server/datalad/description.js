@@ -130,11 +130,9 @@ export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
     .set('Cookie', generateDataladCookie(config)(user))
     .then(res => {
       const description = res.body
-      return commitFiles(datasetId, user, descriptionFieldUpdates).then(
-        gitRef => ({
-          id: gitRef,
-          ...description,
-        }),
-      )
+      return commitFiles(datasetId, user).then(gitRef => ({
+        id: gitRef,
+        ...description,
+      }))
     })
 }
