@@ -42,7 +42,7 @@ SidebarRow.propTypes = {
   version: PropTypes.string,
   draft: PropTypes.bool,
   active: PropTypes.string,
-  modified: PropTypes.string,
+  modified: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
 }
 
 const LeftSidebar = ({

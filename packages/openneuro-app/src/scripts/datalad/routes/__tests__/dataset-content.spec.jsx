@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { HasBeenPublished, hasEditPermissions } from '../dataset-content.jsx'
+import { HasBeenPublished } from '../dataset-content.jsx'
+import { hasEditPermissions } from '../../../authentication/profile.js'
 
 describe('DatasetContent component', () => {
   describe('HasBeenPublished', () => {
