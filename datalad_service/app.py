@@ -4,6 +4,7 @@ from datalad_service.common import raven
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
+from datalad_service.handlers.description import DescriptionResource
 from datalad_service.handlers.files import FilesResource
 from datalad_service.handlers.objects import ObjectsResource
 from datalad_service.handlers.snapshots import SnapshotResource
@@ -32,6 +33,7 @@ def create_app(annex_path):
     heartbeat = HeartbeatResource()
     datasets = DatasetResource(store)
     dataset_draft = DraftResource(store)
+    dataset_description = DescriptionResource(store)
     dataset_files = FilesResource(store)
     dataset_objects = ObjectsResource(store)
     dataset_publish = PublishResource(store)
@@ -43,6 +45,7 @@ def create_app(annex_path):
     api.add_route('/datasets/{dataset}', datasets)
 
     api.add_route('/datasets/{dataset}/draft', dataset_draft)
+    api.add_route('/datasets/{dataset}/description', dataset_description)
 
     api.add_route('/datasets/{dataset}/files', dataset_files)
     api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)

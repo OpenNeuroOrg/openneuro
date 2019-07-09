@@ -7,9 +7,11 @@ import logging
 import os
 import stat
 import shutil
+import json
 
 from datalad_service.common.annex import CommitInfo
 from datalad_service.common.celery import dataset_task, dataset_queue
+from datalad_service.tasks.description import update_description
 from datalad_service.tasks.publish import publish_snapshot
 
 
@@ -62,8 +64,9 @@ def delete_dataset(store, dataset):
     force_rmtree(ds.path)
 
 
+
 @dataset_task
-def create_snapshot(store, dataset, snapshot):
+def create_snapshot(store, dataset, snapshot, description_fields={}):
     """
     Create a new snapshot (git tag).
 
@@ -73,7 +76,14 @@ def create_snapshot(store, dataset, snapshot):
     # Search for any existing tags
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
-        ds.save(version_tag=snapshot)
+        queue = dataset_queue(dataset)
+        updated = update_description.apply_async(
+            queue=queue, args=(store.annex_path, dataset, description_fields))
+        updated.wait()
+        if not updated.failed():
+            ds.save(version_tag=snapshot)
     else:
         raise Exception(
             'Tag "{}" already exists, name conflict'.format(snapshot))
+
+ 
