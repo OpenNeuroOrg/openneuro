@@ -51,10 +51,8 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
         {updateToCC0 && (
           <div className="alert-warning padded-message">
             <span>
-              <strong>Notice:</strong> the current license "{draftLicense}" will
-              be updated to "CC0" when the snapshot is created. Please see FAQ
-              item "Are there any restrictions on the uploaded data?" for
-              details.
+              <strong>Notice:</strong>
+              {` the current license "${draftLicense}" will be updated to "CC0" when the snapshot is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
             </span>
           </div>
         )}
