@@ -8,10 +8,7 @@ import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
-import {
-  description,
-  updateDescription,
-} from '../graphql/resolvers/description.js'
+import { description } from '../graphql/resolvers/description.js'
 import doiLib from '../libs/doi/index.js'
 import { filesKey, getFiles } from './files.js'
 import { addFileUrl } from './utils.js'
@@ -72,7 +69,12 @@ const getSnapshotMetadata = (datasetId, snapshots) => {
  * @param {Object} user - User object that has made the snapshot request
  * @returns {Promise} - resolves when tag is created
  */
-export const createSnapshot = async (datasetId, tag, user) => {
+export const createSnapshot = async (
+  datasetId,
+  tag,
+  user,
+  descriptionFieldUpdates = {},
+) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
@@ -88,12 +90,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
         tag,
         oldDesc,
       )
-      // Save to DatasetDOI field
-      await updateDescription(
-        {},
-        { datasetId, field: 'DatasetDOI', value: snapshotDoi },
-        { userInfo: user, user: user.id },
-      )
+      if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
     } catch (err) {
       Sentry.captureException(err)
     }
@@ -101,6 +98,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
   // Create snapshot once DOI is ready
   return request
     .post(url)
+    .send({ description_fields: descriptionFieldUpdates })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
     .then(async ({ body }) => {

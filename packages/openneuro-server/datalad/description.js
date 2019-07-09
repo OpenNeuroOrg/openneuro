@@ -3,14 +3,18 @@
  */
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
-import { addFileString, commitFiles } from './dataset.js'
+import { commitFiles } from './dataset.js'
+import config from '../config.js'
 import { objectUrl, getFiles } from './files.js'
 import { getSnapshotHexsha } from './snapshots.js'
+import { generateDataladCookie } from '../libs/authentication/jwt'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',
   BIDSVersion: '1.1.1',
 }
+
+const uri = config.datalad.uri
 
 /**
  * Find dataset_description.json id and fetch description object
@@ -117,11 +121,18 @@ export const description = (obj, { datasetId, revision, tag }) => {
     .then(description => repairDescriptionTypes(description))
 }
 
-export const setDescription = (datasetId, description, user) => {
-  return addFileString(
-    datasetId,
-    'dataset_description.json',
-    'application/json',
-    JSON.stringify(description, null, 4),
-  ).then(() => commitFiles(datasetId, user))
+export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
+  const url = `${uri}/datasets/${datasetId}/description`
+  return request
+    .post(url)
+    .send({ description_fields: descriptionFieldUpdates })
+    .set('Accept', 'application/json')
+    .set('Cookie', generateDataladCookie(config)(user))
+    .then(res => {
+      const description = res.body
+      return commitFiles(datasetId, user).then(gitRef => ({
+        id: gitRef,
+        ...description,
+      }))
+    })
 }

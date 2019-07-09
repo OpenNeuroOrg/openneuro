@@ -13,7 +13,6 @@ import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
-import { createSnapshot } from './snapshots.js'
 import { fileUrl } from './files.js'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
@@ -302,17 +301,9 @@ export const commitFiles = (datasetId, user) => {
       return gitRef
     })
     .then(updateDatasetRevision(datasetId))
-    .then(() =>
-      // Check if this is the first data commit and no snapshots exist
-      c.crn.snapshots.findOne({ datasetId }).then(async snapshot => {
-        if (!snapshot) {
-          await createSnapshot(datasetId, '1.0.0', user)
-        }
-        return gitRef
-      }),
-    )
-    .then(() => {
+    .then(gitRef => {
       publishDraftUpdate(datasetId, gitRef)
+      return gitRef
     })
 }
 

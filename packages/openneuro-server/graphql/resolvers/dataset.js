@@ -1,8 +1,10 @@
 import * as datalad from '../../datalad/dataset.js'
 import pubsub from '../pubsub.js'
+import mongo from '../../libs/mongo'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
+import { createSnapshot } from '../../datalad/snapshots.js'
 import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
@@ -99,6 +101,17 @@ export const updateFiles = (
     const promises = updateFilesTree(datasetId, fileTree)
     return Promise.all(promises)
       .then(() => datalad.commitFiles(datasetId, userInfo))
+      .then(gitRef =>
+        // Check if this is the first data commit and no snapshots exist
+        mongo.collections.crn.snapshots
+          .findOne({ datasetId })
+          .then(async snapshot => {
+            if (!snapshot) {
+              await createSnapshot(datasetId, '1.0.0', user)
+            }
+            return gitRef
+          }),
+      )
       .then(() => ({
         id: new Date(),
       }))
