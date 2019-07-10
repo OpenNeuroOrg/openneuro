@@ -662,6 +662,9 @@ h6 {
     .Toastify__close-button--error {
         color: $black;
     }
+    .Toastify__progress-bar {
+        background: $eee;
+    }
 }
 
 .Toastify__toast--success {
