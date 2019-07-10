@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from 'fs'
 import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
@@ -72,6 +73,19 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
   }
 }
 
+const notifyUploadComplete = datasetId => {
+  console.log(
+    '=====================================================================',
+  )
+  console.log('Upload Complete')
+  console.log(
+    `To publish your dataset go to https://openneuro.org/datasets/${datasetId}`,
+  )
+  console.log(
+    '=====================================================================',
+  )
+}
+
 /**
  * Upload files to a dataset draft
  *
@@ -91,7 +105,9 @@ export const upload = (dir, cmd) => {
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions)
+      uploadDataset(dir, cmd.dataset, validatorOptions).then(
+        notifyUploadComplete,
+      )
     } else {
       inquirer
         .prompt({
@@ -102,7 +118,9 @@ export const upload = (dir, cmd) => {
         })
         .then(({ yes }) => {
           if (yes) {
-            uploadDataset(dir, cmd.dataset, validatorOptions)
+            uploadDataset(dir, cmd.dataset, validatorOptions).then(
+              notifyUploadComplete,
+            )
           }
         })
     }
