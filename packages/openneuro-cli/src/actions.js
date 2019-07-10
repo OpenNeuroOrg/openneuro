@@ -75,14 +75,14 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
 
 const notifyUploadComplete = datasetId => {
   console.log(
-    '=====================================================================',
+    '=======================================================================',
   )
   console.log('Upload Complete')
   console.log(
     `To publish your dataset go to https://openneuro.org/datasets/${datasetId}`,
   )
   console.log(
-    '=====================================================================',
+    '=======================================================================',
   )
 }
 
