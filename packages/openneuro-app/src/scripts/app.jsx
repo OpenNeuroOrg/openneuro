@@ -9,8 +9,13 @@ import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
 import { CookiesProvider } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
+import { expiringBanner } from './utils/userNotify.js'
 
 const App = ({ config }) => {
+  expiringBanner(
+    'OpenNeuro will be unavailable for approximately 1 hour for planned maintenance on Wednesday, July 17th at 19:00 UTC',
+    new Date(1563519600 * 1000), // Friday, July 19th
+  )
   return (
     <CookiesProvider>
       <ApolloProvider client={getClient(`${config.url}/crn/graphql`)}>

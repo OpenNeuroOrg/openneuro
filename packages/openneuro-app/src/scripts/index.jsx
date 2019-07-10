@@ -6,16 +6,18 @@ import Happybrowser from './common/partials/happybrowser.jsx'
 import Routes from './routes.jsx'
 import Uploader from './uploader/uploader.jsx'
 
-const Index = () => (
-  <Uploader>
-    <div className="page">
-      <Happybrowser />
-      <div className="main">
-        <Navbar />
-        <Routes />
+const Index = () => {
+  return (
+    <Uploader>
+      <div className="page">
+        <Happybrowser />
+        <div className="main">
+          <Navbar />
+          <Routes />
+        </div>
       </div>
-    </div>
-  </Uploader>
-)
+    </Uploader>
+  )
+}
 
 export default Index
