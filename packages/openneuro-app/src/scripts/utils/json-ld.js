@@ -10,7 +10,11 @@ const schemaGenerator = snapshot => {
       datePublished: snapshot.created,
       dateModified: snapshot.created,
       license: snapshot.license,
-      publisher: 'OpenNeuro',
+      publisher: {
+        '@type': 'Organization', 
+        name: 'OpenNeuro',
+        url: 'https://openneuro.org'
+      },
       description: snapshot.readme,
       version: snapshot.tag,
       url: `https://openneuro.org/datasets/${
