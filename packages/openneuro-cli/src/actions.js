@@ -78,9 +78,7 @@ const notifyUploadComplete = datasetId => {
     '=======================================================================',
   )
   console.log('Upload Complete')
-  console.log(
-    `To publish your dataset go to https://openneuro.org/datasets/${datasetId}`,
-  )
+  console.log(`To publish your dataset go to ${getUrl()}datasets/${datasetId}`)
   console.log(
     '=======================================================================',
   )
