@@ -3,15 +3,8 @@ import os
 import subprocess
 import random
 
-from datalad_service.common.celery import app, dataset_task, publish_queue
+from datalad_service.common.celery import dataset_task, publish_queue
 from datalad_service.common.raven import client
-
-
-@app.on_after_configure.connect
-def schedule_celery_tasks(sender, annex_path):
-    """Run all periodic tasks."""
-    sender.add_periodic_task(
-        60 * 15, audit_datasets.s(annex_path), queue=publish_queue())
 
 
 @dataset_task

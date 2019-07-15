@@ -1,7 +1,7 @@
 import falcon
 
 from datalad_service.common import raven
-from datalad_service.tasks.audit import schedule_celery_tasks
+from datalad_service.common.celery import app
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
@@ -22,6 +22,12 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 
 def create_app(annex_path):
     raven.setup()
+
+    @app.on_after_configure.connect
+    def schedule_celery_tasks(sender, **kwargs):
+        """Run all periodic tasks."""
+        sender.add_periodic_task(
+            60 * 15, audit_datasets.s(annex_path), queue=publish_queue())
 
     api = application = falcon.API(middleware=AuthenticateMiddleware())
     api.router_options.converters['path'] = PathConverter
@@ -63,7 +69,5 @@ def create_app(annex_path):
     api.add_route(
         '/datasets/{dataset}/publish', dataset_publish
     )
-
-    schedule_celery_tasks(annex_path)
 
     return api
