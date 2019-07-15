@@ -11,9 +11,12 @@ const prepopulatedFieldsQuery = prepopulatedFields => {
 
 function FreshdeskWidget(props) {
   const profile = getProfile()
-  const { subject, error } = props
+  const { subject, error, sentryId } = props
   let { description } = props
-  description = [description, error].filter(item => item).join('\n\n')
+  const sentry = sentryId && `Sentry ID: ${sentryId}`
+  description = [sentry, description, error]
+    .filter(item => item)
+    .join(' \u2014 ')
   return (
     <>
       <script
