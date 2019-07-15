@@ -6,17 +6,25 @@ import SnapshotDataset from '../mutations/snapshot.jsx'
 import ValidationStatus from '../validation/validation-status.jsx'
 import EditList from '../fragments/edit-list.jsx'
 
-const NoErrors = ({ issues, children }) => {
-  if (
-    issues &&
-    issues.filter(issue => issue.severity === 'error').length === 0
-  ) {
+export const NoErrors = ({ issues, children }) => {
+  const noErrors =
+    issues && issues.filter(issue => issue.severity === 'error').length === 0
+  // zero authors will cause DOI minting to fail
+  const hasAuthor =
+    issues && issues.filter(issue => issue.code === 113).length === 0
+  if (noErrors && hasAuthor) {
     return children
   } else {
+    const correctErrorsMessage =
+      'BIDS validation must be complete and all errors corrected'
+    const noAuthorMessage =
+      '"Authors" must include at least one entry in dataset_description.json'
+    const includedMessages = []
+    if (!noErrors) includedMessages.push(correctErrorsMessage)
+    if (!hasAuthor) includedMessages.push(noAuthorMessage)
     return (
       <span className="text-danger">
-        BIDS validation must be complete and all errors corrected to create a
-        snapshot
+        {`${includedMessages.join(' and ')} to create a snapshot`}
       </span>
     )
   }
