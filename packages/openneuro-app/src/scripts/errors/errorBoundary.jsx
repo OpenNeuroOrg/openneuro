@@ -60,6 +60,9 @@ class ErrorBoundary extends React.Component {
           </Modal.Header>
           <hr className="modal-inner" />
           <Modal.Body>
+            To ensure that we can quickly help resolve this issue, please
+            provide as much detail as you can, including what you were trying to
+            accomplish when the error occurred.
             <FreshdeskWidget
               {...{ subject, description, error, sentryId: this.state.eventId }}
             />

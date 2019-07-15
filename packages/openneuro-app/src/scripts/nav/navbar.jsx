@@ -97,6 +97,20 @@ class BSNavbar extends React.Component {
         </Modal.Header>
         <hr className="modal-inner" />
         <Modal.Body>
+          <p>
+            If you would like to report an issue with openneuro.org, please
+            provide details in the text box below and an OpenNeuro
+            representative will be in touch with you by the next business day.
+          </p>
+          <p>
+            If you have concerns regarding a specific dataset (clarifying the
+            design, asking for additional metadata, etc.), please post them in
+            the comments beneath that dataset.
+          </p>
+          <p>
+            If you would like to suggest a new site feature, please post it at
+            https://openneuro.featureupvote.com/
+          </p>
           <FreshdeskWidget />
         </Modal.Body>
         <Modal.Footer>
