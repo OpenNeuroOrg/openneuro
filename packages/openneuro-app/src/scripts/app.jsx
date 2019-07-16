@@ -13,8 +13,8 @@ import { expiringBanner } from './utils/userNotify.js'
 
 const App = ({ config }) => {
   expiringBanner(
-    'OpenNeuro will be unavailable for approximately 1 hour for planned maintenance on Wednesday, July 17th at 19:00 UTC',
-    new Date(1563519600 * 1000), // Friday, July 19th
+    'OpenNeuro will be unavailable for approximately 1 hour for planned maintenance on Wednesday, July 24th at 19:00 UTC',
+    new Date(1564124400 * 1000), // Friday, July 26th
   )
   return (
     <CookiesProvider>
