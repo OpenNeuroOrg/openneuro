@@ -2,11 +2,14 @@ import React from 'react'
 import { getProfile } from '../../authentication/profile'
 import config from '../../../../config'
 
-const prepopulatedFieldsQuery = prepopulatedFields => {
-  const fieldQueries = Object.entries(prepopulatedFields)
-    .filter(([, value]) => value)
-    .map(([key, value]) => `helpdesk_ticket[${key}]=${value}`)
-  return fieldQueries.length ? `&${fieldQueries.join(';')}` : ''
+const buildCustomQuery = (customText, prepopulatedFields) => {
+  const customizerQueries = [
+    ...Object.entries(customText).map(([key, value]) => `${key}=${value}`),
+    ...Object.entries(prepopulatedFields)
+      .filter(([, value]) => value)
+      .map(([key, value]) => `helpdesk_ticket[${key}]=${value}`),
+  ]
+  return customizerQueries.length ? `&${customizerQueries.join(';')}` : ''
 }
 
 function FreshdeskWidget(props) {
@@ -17,6 +20,21 @@ function FreshdeskWidget(props) {
   description = [sentry, description, error]
     .filter(item => item)
     .join(' \u2014 ')
+
+  const customText = {
+    widgetType: 'embedded',
+    formTitle: 'Report+an+Issue',
+    submitTitle: 'Request+Support',
+    submitThanks:
+      'Thank+you+for+taking+the+time+to+report+your+case.+A+support+representative+will+be+reviewing+your+request+and+will+send+you+a+personal+response+within+24+to+48+hours.',
+    screenshot: 'No',
+    captcha: 'yes',
+  }
+  const prepopulatedFields = {
+    requester: profile && profile.email,
+    subject,
+    description,
+  }
   return (
     <>
       <script
@@ -33,12 +51,7 @@ function FreshdeskWidget(props) {
         className="freshwidget-embedded-form"
         id="freshwidget-embedded-form"
         src={
-          config.support.url +
-          prepopulatedFieldsQuery({
-            requester: profile && profile.email,
-            subject,
-            description,
-          })
+          config.support.url + buildCustomQuery(customText, prepopulatedFields)
         }
         scrolling="no"
         height="500px"
