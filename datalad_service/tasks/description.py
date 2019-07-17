@@ -18,6 +18,8 @@ def update_description(store, dataset, description_fields):
         path = os.path.join(store.get_dataset_path(dataset), 'dataset_description.json')
         with open(path, 'r+', encoding='utf-8') as description_file:
             description_file_contents = description_file.read()
+            if description_file_contents[-1] == '\n':
+                description_file_contents = description_file_contents[:-1]
             if description != description_file_contents:
                 raise Exception('unexpected dataset_description.json contents')
             description_file.seek(0)
