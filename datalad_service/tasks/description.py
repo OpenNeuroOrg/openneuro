@@ -15,7 +15,7 @@ def update_description(store, dataset, description_fields):
     description = ds.repo.repo.git.show(
         'HEAD:dataset_description.json')
     description_json = json.loads(description)
-    if description_json['License'] != 'CC0':
+    if (not 'License' in description_json) or (description_json['License'] != 'CC0'):
         description_fields = edit_description(description_fields, { 'License': 'CC0' })
     if any (description_fields):
         updated = edit_description(description_json, description_fields)
