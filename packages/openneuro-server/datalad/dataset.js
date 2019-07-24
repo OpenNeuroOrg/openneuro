@@ -212,7 +212,7 @@ const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
  */
 export const addFile = async (datasetId, path, file) => {
   // eslint-disable-next-line no-console
-  console.log(`addFile -> ${datasetId}//${path}//${file.filename} -> called`)
+  console.log(`addFile -> ${datasetId}//${path} -> called`)
   try {
     const { filename, mimetype, createReadStream, capacitor } = await file
     await redis.del(draftPartialKey(datasetId))
@@ -232,7 +232,7 @@ export const addFile = async (datasetId, path, file) => {
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line no-console
       console.log(
-        `addFile -> ${datasetId}//${path}//${file.filename} -> start request`,
+        `addFile -> ${datasetId}//${path}//${filename} -> start request`,
       )
       const downstreamRequest = requestNode(
         {
@@ -243,7 +243,7 @@ export const addFile = async (datasetId, path, file) => {
         err => (err ? reject(err) : resolve()),
       )
       // eslint-disable-next-line no-console
-      console.log(`addFile -> ${datasetId}//${path}//${file.filename} -> pipe`)
+      console.log(`addFile -> ${datasetId}//${path}//${filename} -> pipe`)
       // Attach error handler for incoming request and start feeding downstream
       stream
         .on('error', err => {
@@ -308,6 +308,8 @@ export const addFileString = (datasetId, filename, mimetype, content) =>
  * Commit a draft
  */
 export const commitFiles = (datasetId, user) => {
+  // eslint-disable-next-line no-console
+  console.log(`commitFiles -> ${datasetId} -> called`)
   let gitRef
   const url = `${uri}/datasets/${datasetId}/draft`
   return request
@@ -315,12 +317,18 @@ export const commitFiles = (datasetId, user) => {
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
     .then(res => {
+      // eslint-disable-next-line no-console
+      console.log(`commitFiles -> ${datasetId} -> backend service response`)
       gitRef = res.body.ref
       return gitRef
     })
     .then(updateDatasetRevision(datasetId))
     .then(gitRef => {
+      // eslint-disable-next-line no-console
+      console.log(`commitFiles -> ${datasetId} -> calling publishDraftUpdate`)
       publishDraftUpdate(datasetId, gitRef)
+      // eslint-disable-next-line no-console
+      console.log(`commitFiles -> ${datasetId} -> done!`)
       return gitRef
     })
 }

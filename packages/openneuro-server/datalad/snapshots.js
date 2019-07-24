@@ -75,6 +75,8 @@ export const createSnapshot = async (
   user,
   descriptionFieldUpdates = {},
 ) => {
+  // eslint-disable-next-line no-console
+  console.log(`createSnapshot -> ${datasetId}/${tag} -> called`)
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
@@ -82,6 +84,8 @@ export const createSnapshot = async (
   await createSnapshotMetadata(datasetId, tag, null, null)
   // Get the newest description
   if (config.doi.username && config.doi.password) {
+    // eslint-disable-next-line no-console
+    console.log(`createSnapshot -> ${datasetId}/${tag} -> DOI enabled`)
     try {
       const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
       // Mint a DOI
@@ -95,6 +99,8 @@ export const createSnapshot = async (
       Sentry.captureException(err)
     }
   }
+  // eslint-disable-next-line no-console
+  console.log(`createSnapshot -> ${datasetId}/${tag} -> backend service call`)
   // Create snapshot once DOI is ready
   return request
     .post(url)
@@ -102,6 +108,10 @@ export const createSnapshot = async (
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
     .then(async ({ body }) => {
+      // eslint-disable-next-line no-console
+      console.log(
+        `createSnapshot -> ${datasetId}/${tag} -> backend service response`,
+      )
       body.created = new Date()
 
       // We should almost always get the fast path here
@@ -115,6 +125,8 @@ export const createSnapshot = async (
         // Return the promise so queries won't block
         body.files = getFiles(datasetId, body.hexsha)
       }
+      // eslint-disable-next-line no-console
+      console.log(`createSnapshot -> ${datasetId}/${tag} -> files found`)
 
       return (
         createSnapshotMetadata(datasetId, tag, body.hexsha, body.created)
@@ -127,6 +139,10 @@ export const createSnapshot = async (
               notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
             }
             pubsub.publish('snapshotAdded', { datasetId })
+            // eslint-disable-next-line no-console
+            console.log(
+              `createSnapshot -> ${datasetId}/${tag} -> snapshot done`,
+            )
             return body
           })
       )

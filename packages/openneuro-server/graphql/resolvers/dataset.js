@@ -109,17 +109,25 @@ export const updateFiles = (
         console.log(`updateFiles -> ${datasetId} -> commitFiles`)
         return datalad.commitFiles(datasetId, userInfo)
       })
-      .then(gitRef =>
+      .then(gitRef => {
+        // eslint-disable-next-line no-console
+        console.log(
+          `updateFiles -> ${datasetId}//${gitRef} -> commitFiles done`,
+        )
         // Check if this is the first data commit and no snapshots exist
-        mongo.collections.crn.snapshots
+        return mongo.collections.crn.snapshots
           .findOne({ datasetId })
           .then(async snapshot => {
             if (!snapshot) {
+              // eslint-disable-next-line no-console
+              console.log(
+                `updateFiles -> ${datasetId}//${gitRef} -> creating snapshot`,
+              )
               await createSnapshot(datasetId, '1.0.0', user)
             }
             return gitRef
-          }),
-      )
+          })
+      })
       .then(() => {
         // eslint-disable-next-line no-console
         console.log(`updateFiles -> ${datasetId} -> done!`)
