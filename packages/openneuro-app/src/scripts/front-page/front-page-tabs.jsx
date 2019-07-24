@@ -8,6 +8,9 @@ import get_data_download from './assets/get_data_download.png'
 import tab_share_data from './assets/tab-share_data.png'
 import share_data_collaborate from './assets/share_data_collaborate.png'
 import share_data_publish from './assets/share_data_publish.png'
+import tab_use_data from './assets/tab-use_data.png'
+import use_data_analyze from './assets/use_data_analyze.png'
+import use_data_snapshot from './assets/use_data_snapshot.png'
 
 class FrontPageTabs extends React.Component {
   constructor() {
@@ -142,6 +145,22 @@ class FrontPageTabs extends React.Component {
           'Publish your datasets for anyone to view, download and run analyses on.',
         secondImage: share_data_publish,
         secondImageClass: 'publish',
+      },
+      {
+        header: 'Use Data',
+        abstract:
+          'Use our available pipelines to process any data on the site.',
+        icon: tab_use_data,
+        firstHeader: 'Snapshot',
+        firstDescription:
+          'Create snapshots of your datasets to ensure past analyses remain reproducible as your datasets grow and change. Publish any of your snapshots while you continue work on your original data behind the scenes.',
+        firstImage: use_data_snapshot,
+        firstImageClass: 'snapshot',
+        secondHeader: 'Analyze',
+        secondDescription:
+          "Use our simple web interface to run your analysis on a super computer. We'll notify you when it's complete so you can return to review the results.",
+        secondImage: use_data_analyze,
+        secondImageClass: 'analyze',
       },
     ]
   }
