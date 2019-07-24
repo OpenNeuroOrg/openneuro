@@ -211,6 +211,8 @@ const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
  * Add files to a dataset
  */
 export const addFile = async (datasetId, path, file) => {
+  // eslint-disable-next-line no-console
+  console.log(`addFile -> ${datasetId}//${path}//${file.filename} -> called`)
   try {
     const { filename, mimetype, createReadStream, capacitor } = await file
     await redis.del(draftPartialKey(datasetId))
@@ -228,6 +230,10 @@ export const addFile = async (datasetId, path, file) => {
 
     // Start request to backend
     return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-console
+      console.log(
+        `addFile -> ${datasetId}//${path}//${file.filename} -> start request`,
+      )
       const downstreamRequest = requestNode(
         {
           url: fileUrl(datasetId, path, filename),
@@ -236,6 +242,8 @@ export const addFile = async (datasetId, path, file) => {
         },
         err => (err ? reject(err) : resolve()),
       )
+      // eslint-disable-next-line no-console
+      console.log(`addFile -> ${datasetId}//${path}//${file.filename} -> pipe`)
       // Attach error handler for incoming request and start feeding downstream
       stream
         .on('error', err => {
@@ -252,9 +260,19 @@ export const addFile = async (datasetId, path, file) => {
           }
         })
         .pipe(downstreamRequest)
+      // eslint-disable-next-line no-console
+      console.log(
+        `addFile -> ${datasetId}//${path}//${file.filename} -> setup done`,
+      )
     })
   } catch (err) {
     if (err.constructor.name === 'UploadPromiseDisconnectUploadError') {
+      // eslint-disable-next-line no-console
+      console.log(
+        `addFile -> ${datasetId}//${path}//${
+          file.filename
+        } -> UploadPromiseDisconnectUploadError`,
+      )
       // Catch client aborts silently
     } else {
       // Raise any unknown errors

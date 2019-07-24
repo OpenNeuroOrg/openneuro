@@ -98,9 +98,17 @@ export const updateFiles = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
+    // eslint-disable-next-line no-console
+    console.log(`updateFiles -> ${datasetId} -> called`)
     const promises = updateFilesTree(datasetId, fileTree)
+    // eslint-disable-next-line no-console
+    console.log(`updateFiles -> ${datasetId} -> updateFilesTree`)
     return Promise.all(promises)
-      .then(() => datalad.commitFiles(datasetId, userInfo))
+      .then(() => {
+        // eslint-disable-next-line no-console
+        console.log(`updateFiles -> ${datasetId} -> commitFiles`)
+        return datalad.commitFiles(datasetId, userInfo)
+      })
       .then(gitRef =>
         // Check if this is the first data commit and no snapshots exist
         mongo.collections.crn.snapshots
@@ -112,9 +120,13 @@ export const updateFiles = (
             return gitRef
           }),
       )
-      .then(() => ({
-        id: new Date(),
-      }))
+      .then(() => {
+        // eslint-disable-next-line no-console
+        console.log(`updateFiles -> ${datasetId} -> done!`)
+        return {
+          id: new Date(),
+        }
+      })
   })
 }
 
