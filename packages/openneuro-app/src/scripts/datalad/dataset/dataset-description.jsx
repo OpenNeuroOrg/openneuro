@@ -31,15 +31,9 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
     </div>
     <div className="description-item">
       <h2>License</h2>
-      <EditDescriptionField
-        datasetId={datasetId}
-        field="License"
-        description={description}
-        editMode={editMode}>
-        <div className="cte-display fade-in">
-          <Markdown>{description.License}</Markdown>
-        </div>
-      </EditDescriptionField>
+      <div className="cte-display fade-in">
+        <Markdown>{description.License}</Markdown>
+      </div>
     </div>
     <div className="description-item">
       <h2>Acknowledgements</h2>
