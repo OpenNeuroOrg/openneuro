@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-api
   labels:
-    app: openneuro-api
+    app: '{{ .Release.Name }}-api'
     chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
     release: '{{ .Release.Name }}'
     heritage: '{{ .Release.Service }}'
