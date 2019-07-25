@@ -158,7 +158,7 @@ class FrontPageTabs extends React.Component {
         firstImageClass: 'snapshot',
         secondHeader: 'Analyze',
         secondDescription:
-          "Explore your pubblished OpenNeuro dataset using BrainLife's computing network. Utilize their community driven apps to run a variety of analysis and processing software in the browser.",
+          "Explore your published OpenNeuro dataset using BrainLife's computing network. Utilize their community driven apps to run a variety of analysis and processing software in the browser.",
         secondImage: use_data_analyze,
         secondImageClass: 'analyze',
       },
