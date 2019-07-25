@@ -149,7 +149,7 @@ class FrontPageTabs extends React.Component {
       {
         header: 'Use Data',
         abstract:
-          'Use our available pipelines to process any data on the site.',
+          'Use our affiliated website to process applicable data.',
         icon: tab_use_data,
         firstHeader: 'Snapshot',
         firstDescription:
@@ -158,7 +158,7 @@ class FrontPageTabs extends React.Component {
         firstImageClass: 'snapshot',
         secondHeader: 'Analyze',
         secondDescription:
-          "Use our simple web interface to run your analysis on a super computer. We'll notify you when it's complete so you can return to review the results.",
+          "Explore your pubblished OpenNeuro dataset using BrainLife's computing network. Utilize their community driven apps to run a variety of analysis and processing software in the browser.",
         secondImage: use_data_analyze,
         secondImageClass: 'analyze',
       },
