@@ -1,17 +1,21 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{ .Release.Name }}-publish-worker
+  labels:
+    app: openneuro-api
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
+    release: '{{ .Release.Name }}'
+    heritage: '{{ .Release.Service }}'
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-publish-worker # has to match .spec.template.metadata.labels
-  serviceName: "publish-worker"
-  replicas: 1
+      app: {{ .Release.Name }}-publish-worker
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-publish-worker # has to match .spec.selector.matchLabels
+        app: {{ .Release.Name }}-publish-worker
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
