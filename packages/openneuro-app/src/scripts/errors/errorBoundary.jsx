@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from '../utils/modal.jsx'
@@ -11,11 +12,19 @@ class ErrorBoundary extends React.Component {
       hasError: errorAbove,
       supportModal: false,
       error: props.error,
+      eventId: null,
     }
   }
 
   static getDerivedStateFromError(error) {
     return { hasError: true, supportModal: true, error: error }
+  }
+
+  componentDidCatch(error) {
+    Sentry.withScope(scope => {
+      scope.setTag('datasetId', this.props.datasetId)
+      this.setState({ eventId: Sentry.captureException(error) })
+    })
   }
 
   closeSupportModal = () =>
@@ -51,7 +60,12 @@ class ErrorBoundary extends React.Component {
           </Modal.Header>
           <hr className="modal-inner" />
           <Modal.Body>
-            <FreshdeskWidget {...{ subject, description, error }} />
+            To ensure that we can quickly help resolve this issue, please
+            provide as much detail as you can, including what you were trying to
+            accomplish when the error occurred.
+            <FreshdeskWidget
+              {...{ subject, description, error, sentryId: this.state.eventId }}
+            />
           </Modal.Body>
           <Modal.Footer>
             <a onClick={this.closeSupportModal}>Close</a>
