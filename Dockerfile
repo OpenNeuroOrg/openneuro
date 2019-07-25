@@ -5,6 +5,7 @@ COPY requirements.txt /requirements.txt
 COPY datalad_service /datalad_service
 COPY dataset-worker /dataset-worker
 COPY publish-worker /publish-worker
+COPY beat-scheduler /beat-scheduler
 COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 
