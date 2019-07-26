@@ -6,7 +6,7 @@ import mongo from '../libs/mongo.js'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import { addFileUrl } from './utils.js'
-
+import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'
 const uri = config.datalad.uri
 
 const draftFilesKey = datasetId => {
@@ -45,7 +45,7 @@ export const getDraftFiles = async (datasetId, options = {}) => {
   })
 }
 
-export const updateDatasetRevision = datasetId => gitRef => {
+export const updateDatasetRevision = (datasetId, gitRef) => {
   /**
    * Update the revision pointer in a draft on changes
    */
@@ -58,6 +58,7 @@ export const updateDatasetRevision = datasetId => gitRef => {
       // Remove the now invalid draft files cache
       return expireDraftFiles(datasetId)
     })
+    .then(() => publishDraftUpdate(datasetId, gitRef))
 }
 
 export const draftPartialKey = datasetId => {
