@@ -45,7 +45,7 @@ export const getDraftFiles = async (datasetId, options = {}) => {
   })
 }
 
-export const updateDatasetRevision = datasetId => gitRef => {
+export const updateDatasetRevision = (datasetId, gitRef) => {
   /**
    * Update the revision pointer in a draft on changes
    */

@@ -297,9 +297,8 @@ export const commitFiles = (datasetId, user) => {
     .set('Accept', 'application/json')
     .then(res => {
       gitRef = res.body.ref
-      return gitRef
+      return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
     })
-    .then(updateDatasetRevision(datasetId))
 }
 
 /**

@@ -118,7 +118,7 @@ export const createSnapshot = async (
       }
 
       // Update the draft status in case any changes were made (DOI, License)
-      await updateDatasetRevision(datasetId)(body.hexsha)
+      await updateDatasetRevision(datasetId, body.hexsha)
 
       return (
         createSnapshotMetadata(datasetId, tag, body.hexsha, body.created)
