@@ -2,8 +2,9 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
-import FrontPageTabs from './front-page-tabs.jsx'
+import Search from '../common/partials/search.jsx'
 import FrontPageStats from './front-page-stats.jsx'
+import FrontPageTabs from './front-page-tabs.jsx'
 import Footer from '../common/partials/footer.jsx'
 import AdditionalInfo from './front-page-additional-info.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
@@ -12,6 +13,13 @@ import SubscribeToNewsletter from '../datalad/mutations/subscribe-to-newsletter.
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
 //configurables
 import { frontPage } from 'openneuro-content'
+import styled from '@emotion/styled'
+
+const SearchContainer = styled.div`
+  margin: 5px auto 0;
+  width: 293.61px;
+  height: 55.56px;
+`
 
 // component setup ----------------------------------------------------
 
@@ -37,6 +45,9 @@ class FrontPage extends React.Component {
                     <AuthenticationButtons />
                   </div>
                 </LoggedOut>
+                <SearchContainer>
+                  <Search className="frontpage-search"/>
+                </SearchContainer>
                 <div className="browse-publicly">
                   <Link to="/public/datasets">
                     <span>
