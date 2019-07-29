@@ -65,7 +65,7 @@ class SearchResults extends React.Component {
                 </div>
               </div>
               <QuerySpreadsheetNoticeContainer className="filters-sort-wrap">
-                Not finding what you're looking for? See additional metadata <a href="https://docs.google.com/spreadsheets/d/1rsVlKg0vBzkx7XUGK4joky9cM8umtkQRpJ2Y-5d6x7c/edit#gid=1226202843">here</a>.
+                {'Not finding what you\'re looking for? See additional metadata '}<a href="https://docs.google.com/spreadsheets/d/1rsVlKg0vBzkx7XUGK4joky9cM8umtkQRpJ2Y-5d6x7c/edit#gid=1226202843">here</a>.
               </QuerySpreadsheetNoticeContainer>
               {this.state.loading ? (
                 <Spinner active={true} />
