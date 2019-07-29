@@ -2,8 +2,8 @@
  * Top level query
  */
 import { dataset, datasets } from './dataset.js'
-import { snapshot } from './snapshots.js'
-import { user, users, userCount } from './user.js'
+import { snapshot, participantCount } from './snapshots.js'
+import { user, users } from './user.js'
 import { partial } from './draft.js'
 
 const Query = {
@@ -11,8 +11,8 @@ const Query = {
   datasets,
   user,
   users,
-  userCount,
   snapshot,
+  participantCount,
   partial,
 }
 

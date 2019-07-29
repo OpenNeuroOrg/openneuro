@@ -13,10 +13,6 @@ export const users = () => {
   return User.find().exec()
 }
 
-export const userCount = () => {
-  return User.countDocuments({ blocked: false }).exec()
-}
-
 export const removeUser = (obj, { id }, { userInfo }) => {
   if (userInfo.admin) {
     return User.removeOne({ id }).exec()
