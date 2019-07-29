@@ -94,8 +94,6 @@ export const createSnapshot = async (
       if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
       else throw new Error('DOI minting failed.')
     } catch (err) {
-      console.log('error: ', err)
-      Sentry.captureException(err)
       return err
     }
   }
