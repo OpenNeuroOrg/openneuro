@@ -6,6 +6,13 @@ import request from '../../utils/request'
 import Spinner from '../../common/partials/spinner.jsx'
 import Search from '../../common/partials/search.jsx'
 import { withRouter } from 'react-router'
+import styled from '@emotion/styled'
+
+const QuerySpreadsheetNoticeContainer = styled.section({
+  marginTop: '1rem',
+  borderTop: '1px solid #e1e1e1',
+  padding: '1rem 2rem',
+})
 
 class SearchResults extends React.Component {
   constructor() {
@@ -57,6 +64,9 @@ class SearchResults extends React.Component {
                   <Search />
                 </div>
               </div>
+              <QuerySpreadsheetNoticeContainer className="filters-sort-wrap">
+                Not finding what you're looking for? See additional metadata <a href="https://docs.google.com/spreadsheets/d/1rsVlKg0vBzkx7XUGK4joky9cM8umtkQRpJ2Y-5d6x7c/edit#gid=1226202843">here</a>.
+              </QuerySpreadsheetNoticeContainer>
               {this.state.loading ? (
                 <Spinner active={true} />
               ) : (
