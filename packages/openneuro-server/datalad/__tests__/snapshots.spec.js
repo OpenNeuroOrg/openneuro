@@ -8,7 +8,9 @@ import config from '../../config.js'
 jest.mock('superagent')
 jest.mock('../../libs/redis.js')
 // Mock draft files calls
-jest.mock('../draft.js')
+jest.mock('../draft.js', () => ({
+  updateDatasetRevision: () => () => Promise.resolve(),
+}))
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {

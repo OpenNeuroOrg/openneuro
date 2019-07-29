@@ -1,0 +1,44 @@
+# Root hostname
+hostname: openneuro.org
+
+# The FQDN URL for the site, optionally including port number
+url: https://openneuro.org
+
+# A unique string identifying this install of OpenNeuro
+environment: production
+
+# Enable FreshDesk ticketing
+freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
+
+# Enable Google Analytics
+googleTrackingId: UA-100754266-2
+
+# AWS TLS Certificate ARN
+certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/2b4af116-1acd-447d-b33b-6e25219293a3"
+
+# Dataset worker parallelism
+dataladWorkers: 16
+
+# Content container tag
+contentTag: v1.0.1
+
+# The underlying EFS volume should be created manually and configured here
+efs-provisioner:
+  efsProvisioner:
+    awsRegion: us-east-1
+    efsFileSystemId: fs-9d8a877e
+    path: /pv
+    storageClass:
+      reclaimPolicy: Retain
+
+# Load balancer / ingress config
+aws-alb-ingress-controller:
+  awsRegion: us-east-1
+  autoDiscoverAwsVpcID: true
+  clusterName: openneuro-prod
+
+# Disable Redis password for testing
+redis:
+  usePassword: false
+  master:
+    disableCommands: []

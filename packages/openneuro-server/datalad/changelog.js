@@ -80,6 +80,7 @@ export const changesUrl = (datasetId, revision) => {
 /**
  * Edit the CHANGES file with a new set of changes and commit to backend
  * @param {string} datasetId
+ * @param {string} tag
  * @param {string[]} changes
  */
 export const updateChanges = async (datasetId, tag, changes, user) => {
@@ -92,7 +93,6 @@ export const updateChanges = async (datasetId, tag, changes, user) => {
     changeLogDate,
     changes,
   )
-  updatedChangelog
   await addFileString(datasetId, 'CHANGES', 'text/plain', updatedChangelog)
   return commitFiles(datasetId, user)
 }

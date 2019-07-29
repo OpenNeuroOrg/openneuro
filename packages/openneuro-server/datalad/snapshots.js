@@ -16,6 +16,7 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Snapshot from '../models/snapshot.js'
 import { trackAnalytics } from './analytics.js'
+import { updateDatasetRevision } from './draft.js'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -118,6 +119,9 @@ export const createSnapshot = async (
         // Return the promise so queries won't block
         body.files = getFiles(datasetId, body.hexsha)
       }
+
+      // Update the draft status in case any changes were made (DOI, License)
+      await updateDatasetRevision(datasetId, body.hexsha)
 
       return (
         createSnapshotMetadata(datasetId, tag, body.hexsha, body.created)

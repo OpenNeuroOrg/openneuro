@@ -40,6 +40,7 @@ const DatasetRoutes = ({ dataset }) => (
           datasetId={dataset.id}
           snapshots={dataset.snapshots}
           issues={dataset.draft.issues}
+          description={dataset.draft.description}
         />
       )}
     />

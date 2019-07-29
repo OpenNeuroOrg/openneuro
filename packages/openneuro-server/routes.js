@@ -17,6 +17,14 @@ import doi from './handlers/doi'
 import { sitemapHandler } from './handlers/sitemap.js'
 
 const routes = [
+  // Health check --------------------------------
+  {
+    method: 'get',
+    url: '/',
+    handler: (req, res) => {
+      res.sendStatus(200)
+    },
+  },
   // React config --------------------------------
   {
     method: 'get',
