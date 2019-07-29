@@ -1,5 +1,6 @@
 import React from 'react'
 import DatasetCount from './dataset-count.jsx'
+import UserCount from './user-count.jsx'
 import styled from '@emotion/styled'
 
 const breakpoint = '@media (max-width: 900px)'
@@ -57,7 +58,7 @@ const FrontPageStats = () => (
       </Panel>
       <VerticalDivider/>
       <Panel className="participant-count">
-        <Value><DatasetCount/></Value>
+        <Value><UserCount/></Value>
         <Label>Participants</Label>
       </Panel>
     </StatsContainer>
