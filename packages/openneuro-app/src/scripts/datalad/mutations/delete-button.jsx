@@ -5,20 +5,20 @@ import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 import styled from '@emotion/styled'
 
-const Button = styled.button({
-  // marginBottom: '10px',
-  // padding: '10px',
-  // minWidth: '200px',
-  // lineHeight: '16px',
-  // fontSize: '16px',
-  // backgroundColor: 'rgb(0, 124, 146)',
-  // border: 'none',
-  // fontFamily: [
-  //   '"Cabin", sans-serif',
-  //   'var(--font-family-cabin)'
-  // ],
-  // color: 'white',
+const WarnButton = styled.button({
+  flexBasis: '1px',
+  flexGrow: '1',
+  fontSize: '16px',
+  padding: '8px',
 })
+const WarnButtonContainer = styled.div`
+  display: flex;
+
+  button:last-child {
+    margin-left: 10px;
+  }
+`
+
 const DELETE_DATASET = gql`
   mutation deleteDataset($id: ID!) {
     deleteDataset(id: $id)
@@ -34,14 +34,30 @@ const DeleteDataset = ({ history, datasetId }) => {
     <Mutation mutation={DELETE_DATASET}>
       {deleteDataset => (
         warn ? (
-          <>{'warnin'}</>
+          <WarnButtonContainer>
+            <WarnButton
+              className="btn-success"
+              onClick={() => {
+                deleteDataset({ variables: { id: datasetId } })
+                  .then(() => history.push('/dashboard/datasets'))
+              }}
+            >
+              {'CONFIRM  '}<i className="fa fa-trash" />
+            </WarnButton>
+            <WarnButton
+              className="btn-danger"
+              onClick={toggleWarn}
+            >
+              {'CANCEL'}
+            </WarnButton>
+          </WarnButtonContainer>
         ) : (
-          <Button 
+          <button 
             className="btn-blue"
             onClick={toggleWarn}
           >
             <i className="fa fa-trash" />{' DELETE'}
-          </Button>
+          </button>
         )
       )}
     </Mutation>
