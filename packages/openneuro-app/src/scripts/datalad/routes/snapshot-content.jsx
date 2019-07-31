@@ -91,7 +91,9 @@ SnapshotContent.propTypes = {
 
 const StyleContainer = styled.div({
   '.fileupload-btn': {
-    margin: '20px 0 10px'
+    marginTop: '2rem',
+    maxWidth: 'none',
+    lineHeight: 'normal',
   }
 })
 
