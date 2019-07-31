@@ -202,7 +202,7 @@ h6 {
     &.hover,
     &.active,
     &:focus {
-        backgorund: $secondary-darken;
+        background: $secondary-darken;
         background: var(--secondary-darken);
         transition: all .3s ease-out;
         color: $white;
