@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import DeleteDataset from '../delete.jsx'
+import DeleteDataset from '../delete-icon-button.jsx'
 
 describe('DeleteDataset mutation', () => {
   it('renders with common props', () => {

@@ -18,6 +18,10 @@ import DownloadButton from '../fragments/dataset-prominent-links.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import UploadResume from '../../uploader/upload-resume.jsx'
+import DeleteDataset from '../mutations/delete-button.jsx'
+import styled from '@emotion/styled'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
@@ -60,22 +64,24 @@ const getSnapshotDetails = gql`
 `
 
 const SnapshotContent = ({ dataset, tag }) => (
-  <Query
-    query={getSnapshotDetails}
-    variables={{
-      datasetId: dataset.id,
-      tag,
-    }}>
-    {({ loading, error, data }) => {
-      if (loading) {
-        return <Spinner text="Loading Snapshot" active />
-      } else if (error) {
-        throw new Error(error)
-      } else {
-        return <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
-      }
-    }}
-  </Query>
+  <ErrorBoundary subject={'snapshot content unavailable'}>
+    <Query
+      query={getSnapshotDetails}
+      variables={{
+        datasetId: dataset.id,
+        tag,
+      }}>
+      {({ loading, error, data }) => {
+        if (loading) {
+          return <Spinner text="Loading Snapshot" active />
+        } else {
+          if(error && error.message !== 'GraphQL error: Internal Server Error')
+            throw new Error(error)
+          return <SnapshotDetails dataset={dataset} snapshot={data && data.snapshot} />
+        }
+      }}
+    </Query>
+  </ErrorBoundary>
 )
 
 SnapshotContent.propTypes = {
@@ -83,49 +89,73 @@ SnapshotContent.propTypes = {
   tag: PropTypes.string,
 }
 
+const StyleContainer = styled.div({
+  '.fileupload-btn': {
+    margin: '20px 0 10px'
+  }
+})
+
+
+const snapshotDescription = (snapshot, property, defaultValue) => ((snapshot && snapshot.description && snapshot.description[property]) || defaultValue)
+
 const SnapshotDetails = ({ dataset, snapshot }) => {
+  const snapshotName = snapshotDescription(snapshot, 'Name', 'No Snapshot')
+  
   return (
     <span>
       <div className="col-xs-6">
         <Helmet>
           <title>
-            {pageTitle} - {snapshot.description.Name}
+            {pageTitle} - {snapshotName}
           </title>
-          <meta name="description" content={snapshot.readme} />
-          <script type="application/ld+json">
-            {schemaGenerator(snapshot)}
-          </script>
+          {snapshot ? <>
+            <meta name="description" content={snapshot.readme} />
+            <script type="application/ld+json">
+              {schemaGenerator(snapshot)}
+            </script>
+          </> : ''}
         </Helmet>
-        <DatasetTitle title={snapshot.description.Name} />
-        <DatasetUploaded
-          uploader={dataset.uploader}
-          created={dataset.created}
-        />
-        <DatasetModified modified={snapshot.created} />
-        <DatasetAuthors authors={snapshot.description.Authors} />
-        <DatasetAnalytics
-          downloads={snapshot.analytics.downloads}
-          views={snapshot.analytics.views}
-          snapshot
-        />
-        <DownloadButton dataset={dataset} />
-        <DatasetSummary summary={snapshot.summary} />
-        <h2>README</h2>
-        <DatasetReadme content={snapshot.readme} />
-        <DatasetDescription
-          datasetId={dataset.id}
-          description={snapshot.description}
-          editable={false}
-        />
+        {snapshot 
+          ? <>
+            <DatasetTitle title={snapshotName} />
+            <DatasetUploaded
+              uploader={dataset.uploader}
+              created={dataset.created}
+            />
+            <DatasetModified modified={snapshot.created} />
+            <DatasetAuthors authors={snapshot.Authors} />
+            <DatasetAnalytics
+              downloads={snapshot.analytics.downloads}
+              views={snapshot.analytics.views}
+              snapshot
+            />
+            <DownloadButton dataset={dataset} />
+            <DatasetSummary summary={snapshot.summary} />
+            <h2>README</h2>
+            <DatasetReadme content={snapshot.readme} />
+            <DatasetDescription
+              datasetId={dataset.id}
+              description={snapshot.description}
+              editable={false}
+            />
+          </>
+          : <>
+            <DatasetTitle title="Partially Uploaded Dataset"/>
+            <StyleContainer><UploadResume datasetId={dataset.id} /></StyleContainer>
+            <DeleteDataset datasetId={dataset.id} />
+          </>
+        }
       </div>
       <div className="col-xs-6">
-        <Validation datasetId={dataset.id} issues={snapshot.issues} />
-        <DatasetFiles
-          datasetId={dataset.id}
-          snapshotTag={snapshot.tag}
-          datasetName={snapshot.description.Name}
-          files={snapshot.files}
-        />
+        {snapshot && <>
+          <Validation datasetId={dataset.id} issues={snapshot.issues} />
+          <DatasetFiles
+            datasetId={dataset.id}
+            snapshotTag={snapshot.tag}
+            datasetName={snapshotName}
+            files={snapshot.files}
+          />
+        </>}
       </div>
     </span>
   )
