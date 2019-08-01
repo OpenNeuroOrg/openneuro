@@ -20,7 +20,7 @@ certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/6883342b-63ac-446
 dataladWorkers: 4
 
 # Content container tag
-contentTag: v1.0.0
+contentTag: v1.0.1
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:
