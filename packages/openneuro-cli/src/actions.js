@@ -73,12 +73,14 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
   }
 }
 
-const notifyUploadComplete = datasetId => {
+const notifyUploadComplete = update => datasetId => {
   console.log(
     '=======================================================================',
   )
   console.log('Upload Complete')
-  console.log(`To publish your dataset go to ${getUrl()}datasets/${datasetId}`)
+  console.log(update
+    ? `To publish the update go to ${getUrl()}datasets/${datasetId} and create a new snapshot`
+    : `To publish your dataset go to ${getUrl()}datasets/${datasetId}`)
   console.log(
     '=======================================================================',
   )
@@ -104,7 +106,7 @@ export const upload = (dir, cmd) => {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
       uploadDataset(dir, cmd.dataset, validatorOptions).then(
-        notifyUploadComplete,
+        notifyUploadComplete('update'),
       )
     } else {
       inquirer
@@ -117,7 +119,7 @@ export const upload = (dir, cmd) => {
         .then(({ yes }) => {
           if (yes) {
             uploadDataset(dir, cmd.dataset, validatorOptions).then(
-              notifyUploadComplete,
+              notifyUploadComplete(false),
             )
           }
         })
