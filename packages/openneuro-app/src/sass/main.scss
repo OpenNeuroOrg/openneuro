@@ -263,3 +263,9 @@ $bootstrap-sass-asset-helper: true;
     border: $coral;
     color: red;
 }
+
+.padded-message {
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}

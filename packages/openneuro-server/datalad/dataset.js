@@ -21,7 +21,6 @@ import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
 import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
-import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -298,12 +297,7 @@ export const commitFiles = (datasetId, user) => {
     .set('Accept', 'application/json')
     .then(res => {
       gitRef = res.body.ref
-      return gitRef
-    })
-    .then(updateDatasetRevision(datasetId))
-    .then(gitRef => {
-      publishDraftUpdate(datasetId, gitRef)
-      return gitRef
+      return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
     })
 }
 

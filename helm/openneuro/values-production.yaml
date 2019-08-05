@@ -1,23 +1,23 @@
 # Root hostname
-hostname: openneuro.staging.sqm.io
+hostname: openneuro.org
 
 # The FQDN URL for the site, optionally including port number
-url: https://openneuro.staging.sqm.io
+url: https://openneuro.org
 
 # A unique string identifying this install of OpenNeuro
-environment: staging
+environment: production
 
 # Enable FreshDesk ticketing
 freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
 
 # Enable Google Analytics
-googleTrackingId: UA-100754266-1
+googleTrackingId: UA-100754266-2
 
 # AWS TLS Certificate ARN
-certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/6883342b-63ac-4466-b3f8-d9a8dd80bfaa"
+certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/2b4af116-1acd-447d-b33b-6e25219293a3"
 
 # Dataset worker parallelism
-dataladWorkers: 4
+dataladWorkers: 16
 
 # Content container tag
 contentTag: v1.0.1
@@ -26,7 +26,7 @@ contentTag: v1.0.1
 efs-provisioner:
   efsProvisioner:
     awsRegion: us-east-1
-    efsFileSystemId: fs-acb10b4f
+    efsFileSystemId: fs-9d8a877e
     path: /pv
     storageClass:
       reclaimPolicy: Retain
@@ -35,7 +35,7 @@ efs-provisioner:
 aws-alb-ingress-controller:
   awsRegion: us-east-1
   autoDiscoverAwsVpcID: true
-  clusterName: openneuro-staging
+  clusterName: openneuro-prod
 
 # Disable Redis password for testing
 redis:
