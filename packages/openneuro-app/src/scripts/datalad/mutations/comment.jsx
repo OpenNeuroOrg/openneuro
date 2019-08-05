@@ -6,6 +6,7 @@ import { convertToRaw } from 'draft-js'
 import withProfile from '../../authentication/withProfile.js'
 import { DATASET_COMMENTS } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
+import ErrorBoundary from '../../errors/errorBoundary.jsx';
 
 const NEW_COMMENT = gql`
   mutation addComment($datasetId: ID!, $parentId: ID, $comment: String!) {
@@ -56,52 +57,54 @@ const CommentMutation = ({
 }) => {
   return (
     <Mutation
-      mutation={commentId ? EDIT_COMMENT : NEW_COMMENT}
-      update={(cache, { data: { addComment } }) => {
-        const { comments } = cache.readFragment({
-          id: datasetCacheId(datasetId),
-          fragment: DATASET_COMMENTS,
-        })
-        // Create a mock comment
-        const newComment = {
-          id: addComment || commentId,
-          parentId,
-          text: JSON.stringify(convertToRaw(comment)),
-          createDate: new Date().toISOString(),
-          user: { __typename: 'User', ...profile },
-          replies: [],
-          __typename: 'Comment',
-        }
-        const newTree = appendCommentToTree(comments, newComment)
-        cache.writeFragment({
-          id: datasetCacheId(datasetId),
-          fragment: DATASET_COMMENTS,
-          data: {
-            __typename: 'Dataset',
-            id: datasetId,
-            comments: newTree,
-          },
-        })
-      }}>
-      {newComment => (
-        <button
-          className="btn-modal-action"
-          disabled={disabled}
-          onClick={async () => {
-            await newComment({
-              variables: {
-                datasetId,
-                parentId,
-                commentId,
-                comment: JSON.stringify(convertToRaw(comment)),
-              },
-            })
-            done()
-          }}>
-          Submit Comment
-        </button>
-      )}
-    </Mutation>
+        mutation={commentId ? EDIT_COMMENT : NEW_COMMENT}
+        update={(cache, { data: { addComment } }) => {
+          const { comments } = cache.readFragment({
+            id: datasetCacheId(datasetId),
+            fragment: DATASET_COMMENTS,
+          })
+          // Create a mock comment
+          const newComment = {
+            id: addComment || commentId,
+            parentId,
+            text: JSON.stringify(convertToRaw(comment)),
+            createDate: new Date().toISOString(),
+            user: { __typename: 'User', ...profile },
+            replies: [],
+            __typename: 'Comment',
+          }
+          const newTree = appendCommentToTree(comments, newComment)
+          cache.writeFragment({
+            id: datasetCacheId(datasetId),
+            fragment: DATASET_COMMENTS,
+            data: {
+              __typename: 'Dataset',
+              id: datasetId,
+              comments: newTree,
+            },
+          })
+        }}>
+        {(newComment, { error }) => (
+          <ErrorBoundary error={error} subject="error in comment mutation">
+            <button
+              className="btn-modal-action"
+              disabled={disabled}
+              onClick={async () => {
+                await newComment({
+                  variables: {
+                    datasetId,
+                    parentId,
+                    commentId,
+                    comment: JSON.stringify(convertToRaw(comment)),
+                  },
+                })
+                done()
+              }}>
+              Submit Comment
+            </button>
+          </ErrorBoundary>
+        )}
+      </Mutation>
   )
 }
 

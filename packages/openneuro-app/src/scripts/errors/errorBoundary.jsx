@@ -31,6 +31,16 @@ class ErrorBoundary extends React.Component {
     }))
   }
 
+  componentWillReceiveProps = nextProps => {
+    if(nextProps.error !== this.state.error) {
+      this.setState(prevState => ({
+        ...prevState,
+        hasError: true,
+        error: nextProps.error,
+      }))
+    }
+  }
+
   render() {
     const { subject, description } = this.props
     const error = this.props.error || this.state.error
