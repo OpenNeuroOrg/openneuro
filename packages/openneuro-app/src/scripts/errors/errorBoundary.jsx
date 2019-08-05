@@ -15,7 +15,7 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, supportModal: true, error: error }
+    return { hasError: true, supportModal: false, error: error }
   }
 
   closeSupportModal = () =>
