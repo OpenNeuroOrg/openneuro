@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
+import { Panel, PanelGroup } from 'react-bootstrap'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
@@ -143,8 +144,13 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           </>
           : <>
             <DatasetTitle title="Partially Uploaded Dataset"/>
-            <StyleContainer><UploadResume datasetId={dataset.id} /></StyleContainer>
-            <DeleteDataset datasetId={dataset.id} />
+            <PanelGroup accordion className="validation-wrap">
+              <Panel className="status">
+                <p>An upload or edit may have been interrupted.</p>
+                <StyleContainer><UploadResume datasetId={dataset.id} /></StyleContainer>
+                <DeleteDataset datasetId={dataset.id} />
+              </Panel>
+            </PanelGroup>
           </>
         }
       </div>
