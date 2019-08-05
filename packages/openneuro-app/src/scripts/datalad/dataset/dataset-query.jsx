@@ -46,9 +46,7 @@ export const DatasetQueryRender = ({ loading, error, data }) => {
   } else {
     if (error) Sentry.captureException(error)
     return (
-      <ErrorBoundary error={error} subject={'error in dataset page'}>
-        <DatasetPage dataset={data.dataset} />
-      </ErrorBoundary>
+      <DatasetPage dataset={data.dataset} />
     )
   }
 }
@@ -60,7 +58,7 @@ DatasetQueryRender.propTypes = {
 }
 
 const DatasetQuery = ({ match }) => (
-  <ErrorBoundary subject={'error in dataset query'}>
+  <ErrorBoundary subject={'error in dataset page'}>
     <Query
       query={getDatasetPage}
       variables={{ datasetId: match.params.datasetId }}>
