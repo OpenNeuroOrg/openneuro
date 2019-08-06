@@ -37,20 +37,5 @@ describe('snapshot model operations', () => {
       )
       done()
     })
-    it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {
-      const tag = 'snapshot'
-      const dsId = await createDataset()
-      // Reset call count for request.post
-      request.post.mockClear()
-      request.__setMockResponse({ body: {} })
-      await createSnapshot(dsId, tag, false)
-      expect(request.post).toHaveBeenCalledTimes(1)
-      expect(request.post).toHaveBeenCalledWith(
-        expect.stringContaining(
-          `${config.datalad.uri}/datasets/${dsId}/snapshots/${tag}`,
-        ),
-      )
-      done()
-    })
   })
 })
