@@ -8,7 +8,7 @@ const PARTICIPANT_COUNT = gql`
   }
 `
 
-export const participantCountDisplay = ({ loading, data }) => {
+export const participantCount = ({ loading, data }) => {
   try {
     return loading ? null : data.participantCount
   } catch (e) {
@@ -18,7 +18,7 @@ export const participantCountDisplay = ({ loading, data }) => {
 
 const ParticipantCount = () => (
   <Query query={PARTICIPANT_COUNT} errorPolicy="ignore">
-    {participantCountDisplay}
+    {participantCount}
   </Query>
 )
 
