@@ -6,7 +6,7 @@ import { convertToRaw } from 'draft-js'
 import withProfile from '../../authentication/withProfile.js'
 import { DATASET_COMMENTS } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
-import ErrorBoundary from '../../errors/errorBoundary.jsx';
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
 const NEW_COMMENT = gql`
   mutation addComment($datasetId: ID!, $parentId: ID, $comment: String!) {
