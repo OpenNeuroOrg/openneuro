@@ -44,7 +44,7 @@ export const participantCount = async () => {
   ]).exec()
   return Array.isArray(aggregateResult)
     ? aggregateResult[0].participantCount
-    : aggregateResult
+    : null
 }
 
 const sortSnapshots = (a, b) => new Date(b.created) - new Date(a.created)
