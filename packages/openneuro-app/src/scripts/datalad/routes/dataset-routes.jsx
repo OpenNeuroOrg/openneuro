@@ -111,13 +111,13 @@ const DatasetRoutes = ({ dataset }) => (
       name="metadata"
       exact
       path="/datasets/:datasetId/metadata"
-      component={() => <Metadata dataset={dataset}/>}
+      component={() => <Metadata metadata={dataset.metadata}/>}
     />
     <Route
       name="metadata-form"
       exact
       path="/datasets/:datasetId/metadata/edit"
-      component={() => <MetadataForm datasetId={dataset.id}/>}
+      component={() => <MetadataForm dataset={dataset}/>}
     />
   </Switch>
 )

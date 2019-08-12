@@ -1,8 +1,8 @@
 import React from 'react'
 
-const MetadataForm = ({ datasetId }) => (
+const MetadataForm = ({ dataset }) => (
   <>
-    <label>{datasetId}</label>
+    <label>{dataset.id}</label>
     <button>metadata form</button>
   </>
 )

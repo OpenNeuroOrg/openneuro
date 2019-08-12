@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Metadata = ({ dataset }) => (
+const Metadata = ({ metadata }) => (
+  console.log({metadata}),
   <>
     <h1>Metadata</h1>
-    <p>{JSON.stringify(dataset)}</p>
+    <p>{JSON.stringify(metadata)}</p>
   </>
 )
 

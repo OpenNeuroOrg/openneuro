@@ -88,7 +88,7 @@ const DatasetTools = ({ dataset, location, history }) => {
             <StarDataset datasetId={dataset.id} starred={dataset.starred} />
           </div>
           <div role="presentation" className="tool">
-            <DatasetMetadata datasetId={dataset.id} />
+            <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
           </div>
         </LoggedIn>
       </div>

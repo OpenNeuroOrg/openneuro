@@ -21,6 +21,7 @@ export const getDatasetPage = gql`
       ...DatasetSnapshots
       ...DatasetComments
       ...DatasetIssues
+      ...DatasetMetadata
       uploader {
         id
         name
@@ -38,6 +39,7 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.DATASET_SNAPSHOTS}
   ${DatasetQueryFragments.DATASET_COMMENTS}
   ${DatasetQueryFragments.DATASET_ISSUES}
+  ${DatasetQueryFragments.DATASET_METADATA}
 `
 
 export const DatasetQueryRender = ({ loading, error, data }) => {
