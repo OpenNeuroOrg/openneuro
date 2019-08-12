@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FrontPageTopStats renders container correctly 1`] = `
+<Styled(section)
+  className="openneuro-stats"
+>
+  <Styled(div)>
+    <Styled(section)
+      className="dataset-count"
+    >
+      <Styled(div)>
+        <DatasetCount />
+      </Styled(div)>
+      <Styled(div)>
+        Public Datasets
+      </Styled(div)>
+    </Styled(section)>
+    <Styled(div) />
+    <Styled(section)
+      className="participant-count"
+    >
+      <Styled(div)>
+        <ParticipantCount />
+      </Styled(div)>
+      <Styled(div)>
+        Participants
+      </Styled(div)>
+    </Styled(section)>
+  </Styled(div)>
+</Styled(section)>
+`;

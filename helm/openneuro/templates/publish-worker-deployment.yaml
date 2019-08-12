@@ -30,6 +30,7 @@ spec:
           items:
           - key: datalad-key
             path: datalad-key
+            mode: 0400
       containers:
       - name: {{ .Release.Name }}-publish-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
