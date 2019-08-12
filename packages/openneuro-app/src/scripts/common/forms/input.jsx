@@ -29,7 +29,7 @@ class Input extends React.Component {
     let value = this.state.value || this.props.value
 
     return (
-      <div className="form-group float-label-input">
+      <div className={`form-group float-label-input ${this.props.containerClass || ''}`}>
         {value && value.length > 0 ? <label>{placeholder}</label> : null}
         {this._input(type, name, placeholder, value)}
       </div>
@@ -87,6 +87,7 @@ Input.propTypes = {
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   checked: PropTypes.bool,
+  containerClass: PropTypes.string,
 }
 
 export default Input
