@@ -99,6 +99,8 @@ const typeDefs = `
     editComment(commentId: ID!, comment: String!): Boolean
     # Subscribes user to newsletter
     subscribeToNewsletter(email: String!): Boolean
+    # Upserts dataset metadata
+    addMetadata(datasetId: ID!, metadata: MetadataInput!): Metadata
   }
 
   type Subscription {
@@ -138,6 +140,37 @@ const typeDefs = `
     name: ID! # directory name (or empty string for root)
     files: [Upload!] # files within the directory
     directories: [FileTree] # directories within the directory
+  }
+
+  # Dataset Metadata
+  input MetadataInput {
+    datasetId: ID!
+    datasetUrl: String
+    datasetName: String
+    firstSnapshotCreatedAt: DateTime
+    latestSnapshotCreatedAt: DateTime
+    subjectCount: Int
+    modalities: [String]
+    dxStatus: [String]
+    ages: String
+    tasksCompleted: Boolean
+    trialCount: Int
+    studyDesign: String
+    studyDomain: String
+    studyLongitudinal: String
+    dataProcessed: String
+    species: String
+    associatedPaperDOI: String
+    openneuroPaperDOI: String
+    seniorAuthor: PersonNameInput
+    adminUsers: String
+    notes: String
+  }
+
+  # person's first and last name
+  input PersonNameInput {
+    firstname: String
+    lastname: String
   }
 
   # Validation updated message
@@ -224,6 +257,8 @@ const typeDefs = `
     publishDate: DateTime
     # Is the dataset available for analysis on Brainlife?
     onBrainlife: Boolean
+    # Dataset Metadata
+    metadata: Metadata
   }
 
   enum SortOrdering {
@@ -478,6 +513,69 @@ const typeDefs = `
     views
   }
 
+  # Dataset Metadata
+  type Metadata {
+    context: MetadataContext
+    datasetId: ID!
+    type: String
+    datasetUrl: String
+    datasetName: String
+    firstSnapshotCreatedAt: DateTime
+    latestSnapshotCreatedAt: DateTime
+    subjectCount: Int
+    modalities: [String]
+    dxStatus: [String]
+    ages: String
+    tasksCompleted: Boolean
+    trialCount: Int
+    studyDesign: String
+    studyDomain: String
+    studyLongitudinal: String
+    dataProcessed: String
+    species: String
+    associatedPaperDOI: String
+    openneuroPaperDOI: String
+    seniorAuthor: PersonName
+    adminUsers: String
+    notes: String
+  }
+
+  # JSON-LD Context for Metadata
+  type MetadataContext {
+    datasetId: String
+    datasetUrl: String
+    datasetName: String
+    firstSnapshotCreatedAt: String
+    latestSnapshotCreatedAt: String
+    subjectCount: String
+    modalities: jsonLdNodeProperties
+    dxStatus: jsonLdNodeProperties
+    ages: String
+    tasksCompleted: String
+    trialCount: String
+    studyDesign: String
+    studyDomain: String
+    studyLongitudinal: String
+    dataProcessed: String
+    species: String
+    associatedPaperDOI: jsonLdNodeProperties
+    openneuroPaperDOI: jsonLdNodeProperties
+    seniorAuthor: PersonName
+    adminUsers: String
+    notes: String
+  }
+
+  # person's first and last name
+  type PersonName {
+    firstname: String
+    lastname: String
+  }
+
+  type jsonLdNodeProperties {
+    id: String
+    type: String
+    container: String
+  }
 `
 
 export default makeExecutableSchema({

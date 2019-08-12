@@ -2,7 +2,7 @@ import uuid from 'uuid'
 import mongoose from 'mongoose'
 
 const metadataSchema = new mongoose.Schema({
-  id: { type: String, default: uuid.v4 }, // OpenNeuro id
+  datasetId: { type: String, default: uuid.v4 }, // OpenNeuro id
   type: String,
 
   datasetUrl: String, // @id type
@@ -32,7 +32,7 @@ const metadataSchema = new mongoose.Schema({
 
 metadataSchema.virtual('context').get(function() {
   return {
-    id: 'http://schema.org/Text', // OpenNeuro id
+    datasetId: 'http://schema.org/Text', // OpenNeuro id
 
     datasetUrl: 'http://schema.org/Text', // @id type
     datasetName: 'http://schema.org/Text',
@@ -40,12 +40,12 @@ metadataSchema.virtual('context').get(function() {
     latestSnapshotCreatedAt: 'http://schema.org/DateTime',
     subjectCount: 'http://schema.org/Number',
     modalities: {
-      '@type': 'http://schema.org/Text',
-      '@container': '@list',
+      type: 'http://schema.org/Text',
+      container: '@list',
     },
     dxStatus: {
-      '@type': 'http://schema.org/Text',
-      '@container': '@list',
+      type: 'http://schema.org/Text',
+      container: '@list',
     },
     ages: 'http://schema.org/typicalAgeRange',
     tasksCompleted: 'http://schema.org/Boolean',
@@ -56,12 +56,12 @@ metadataSchema.virtual('context').get(function() {
     dataProcessed: 'http://schema.org/Text', // 'true' | 'false' | 'user input string'
     species: 'http://schema.org/Text',
     associatedPaperDOI: {
-      '@id': 'http://schema.org/url',
-      '@type': '@id',
+      id: 'http://schema.org/url',
+      type: '@id',
     }, // @id type
     openneuroPaperDOI: {
-      '@id': 'http://schema.org/url',
-      '@type': '@id',
+      id: 'http://schema.org/url',
+      type: '@id',
     }, // @id type
     seniorAuthor: { // Person type
       firstName: 'http://schema.org/givenName',
@@ -71,6 +71,8 @@ metadataSchema.virtual('context').get(function() {
     notes: 'http://schema.org/Text',
   }
 })
+
+metadataSchema.index({ datasetId: 1 }, { unique: true })
 
 const Metadata = mongoose.model('Metadata', metadataSchema)
 
