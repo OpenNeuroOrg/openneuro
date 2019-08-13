@@ -115,12 +115,10 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           <title>
             {pageTitle} - {snapshotName}
           </title>
-          {snapshot ? <>
-            <meta name="description" content={snapshot.readme} />
-            <script type="application/ld+json">
-              {schemaGenerator(snapshot)}
-            </script>
-          </> : ''}
+          <meta name="description" content={snapshot.readme} />
+          <script type="application/ld+json">
+            {schemaGenerator(snapshot)}
+          </script>
         </Helmet>
           <DatasetTitle title={snapshotName} />
           <DatasetUploaded
