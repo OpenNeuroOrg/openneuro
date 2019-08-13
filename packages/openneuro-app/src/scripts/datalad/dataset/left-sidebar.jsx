@@ -55,9 +55,8 @@ export const LeftSidebar = ({
   const active = snapshotVersion(location) || 'draft'
   const user = getProfile()
   const hasEdit =
-    ((user && user.admin) ||
-      hasEditPermissions(dataset.permissions, user && user.sub)) &&
-    !dataset.draft.partial
+    (user && user.admin) ||
+    hasEditPermissions(dataset.permissions, user && user.sub)
   return (
     <div className="left-sidebar">
       <span className="slide">
