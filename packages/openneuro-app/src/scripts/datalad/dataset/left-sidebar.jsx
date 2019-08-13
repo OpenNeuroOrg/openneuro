@@ -45,7 +45,7 @@ SidebarRow.propTypes = {
   modified: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
 }
 
-const LeftSidebar = ({
+export const LeftSidebar = ({
   dataset,
   datasetId,
   draftModified,
