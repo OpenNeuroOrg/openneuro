@@ -78,7 +78,11 @@ const SnapshotContent = ({ dataset, tag }) => (
         } else {
           if(error && error.message !== 'GraphQL error: Internal Server Error')
             throw new Error(error)
-          return <SnapshotDetails dataset={dataset} snapshot={data && data.snapshot} />
+          return data && data.snapshot ? (
+            <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+          ) : (
+            <PartialUploadOptions datasetId={dataset.id} />
+          )
         }
       }}
     </Query>
@@ -118,41 +122,27 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
             </script>
           </> : ''}
         </Helmet>
-        {snapshot 
-          ? <>
-            <DatasetTitle title={snapshotName} />
-            <DatasetUploaded
-              uploader={dataset.uploader}
-              created={dataset.created}
-            />
-            <DatasetModified modified={snapshot.created} />
-            <DatasetAuthors authors={snapshot.Authors} />
-            <DatasetAnalytics
-              downloads={snapshot.analytics.downloads}
-              views={snapshot.analytics.views}
-              snapshot
-            />
-            <DownloadButton dataset={dataset} />
-            <DatasetSummary summary={snapshot.summary} />
-            <h2>README</h2>
-            <DatasetReadme content={snapshot.readme} />
-            <DatasetDescription
-              datasetId={dataset.id}
-              description={snapshot.description}
-              editable={false}
-            />
-          </>
-          : <>
-            <DatasetTitle title="Partially Uploaded Dataset"/>
-            <PanelGroup accordion className="validation-wrap">
-              <Panel className="status">
-                <p>An upload or edit may have been interrupted.</p>
-                <StyleContainer><UploadResume datasetId={dataset.id} /></StyleContainer>
-                <DeleteDataset datasetId={dataset.id} />
-              </Panel>
-            </PanelGroup>
-          </>
-        }
+          <DatasetTitle title={snapshotName} />
+          <DatasetUploaded
+            uploader={dataset.uploader}
+            created={dataset.created}
+          />
+          <DatasetModified modified={snapshot.created} />
+          <DatasetAuthors authors={snapshot.Authors} />
+          <DatasetAnalytics
+            downloads={snapshot.analytics.downloads}
+            views={snapshot.analytics.views}
+            snapshot
+          />
+          <DownloadButton dataset={dataset} />
+          <DatasetSummary summary={snapshot.summary} />
+          <h2>README</h2>
+          <DatasetReadme content={snapshot.readme} />
+          <DatasetDescription
+            datasetId={dataset.id}
+            description={snapshot.description}
+            editable={false}
+          />
       </div>
       <div className="col-xs-6">
         {snapshot && <>
@@ -172,6 +162,23 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
 SnapshotDetails.propTypes = {
   dataset: PropTypes.object,
   snapshot: PropTypes.object,
+}
+
+const PartialUploadOptions = ({ datasetId }) => (
+  <div className="col-xs-6">
+    <DatasetTitle title="Partially Uploaded Dataset"/>
+    <PanelGroup accordion className="validation-wrap">
+      <Panel className="status">
+        <p>An upload or edit may have been interrupted.</p>
+        <StyleContainer><UploadResume datasetId={datasetId} /></StyleContainer>
+        <DeleteDataset datasetId={datasetId} />
+      </Panel>
+    </PanelGroup>
+  </div>
+)
+
+PartialUploadOptions.propTypes = {
+  datasetId: PropTypes.String,
 }
 
 export default SnapshotContent
