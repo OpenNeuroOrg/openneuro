@@ -76,7 +76,7 @@ export const createSnapshot = async (
   user,
   descriptionFieldUpdates = {},
 ) => {
-  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  const createSnapshotUrl = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
   // Reserve snapshot id to prevent a race condition on 1.0.0 snapshot
@@ -84,8 +84,9 @@ export const createSnapshot = async (
   // Get the newest description
   if (config.doi.username && config.doi.password) {
     try {
-      const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
       // Mint a DOI
+      // const snapshotDoi = 'mock doi' // TODO: remove after testing
+      const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
       const snapshotDoi = await doiLib.registerSnapshotDoi(
         datasetId,
         tag,
@@ -93,20 +94,20 @@ export const createSnapshot = async (
       )
       if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
       else throw new Error('DOI minting failed.')
-    } catch (err) {
-      Sentry.captureException(err)
-      return err
-    }
-  }
-  // Create snapshot once DOI is ready
-  return request
-    .post(url)
-    .send({ description_fields: descriptionFieldUpdates })
-    .set('Accept', 'application/json')
-    .set('Cookie', generateDataladCookie(config)(user))
-    .then(async ({ body }) => {
+      
+      // Create snapshot once DOI is ready
+      const response = await request
+        .post(createSnapshotUrl)
+        .send({ 
+          description_fields: descriptionFieldUpdates,
+        })
+        .set('Accept', 'application/json')
+        .set('Cookie', generateDataladCookie(config)(user))
+    
+      const { body } = response
       body.created = new Date()
 
+      
       // We should almost always get the fast path here
       const fKey = filesKey(datasetId, body.hexsha)
       const filesFromCache = await redis.get(fKey)
@@ -118,33 +119,35 @@ export const createSnapshot = async (
         // Return the promise so queries won't block
         body.files = getFiles(datasetId, body.hexsha)
       }
+      // Clear the index now that the new snapshot is ready
+      redis.del(indexKey)
+      
+      await Promise.all([
+        // Update the draft status in datasets collection in case any changes were made (DOI, License)
+        updateDatasetRevision(datasetId, body.hexsha),
+      
+        // Update metadata in snapshots collection
+        createSnapshotMetadata(datasetId, tag, body.hexsha, body.created),
+  
+        // Trigger an async update for the name field (cache for sorting)
+        updateDatasetName(datasetId),
+      ])
 
-      // Update the draft status in case any changes were made (DOI, License)
-      await updateDatasetRevision(datasetId, body.hexsha)
+      if (body.files) {
+        notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
+      }
+      pubsub.publish('snapshotAdded', { datasetId })
+      return body
 
-      return (
-        createSnapshotMetadata(datasetId, tag, body.hexsha, body.created)
-          // Clear the index now that the new snapshot is ready
-          .then(() => redis.del(indexKey))
-          .then(() => {
-            // Trigger an async update for the name field (cache for sorting)
-            updateDatasetName(datasetId)
-            if (body.files) {
-              notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
-            }
-            pubsub.publish('snapshotAdded', { datasetId })
-            return body
-          })
-      )
-    })
-    .catch(err => {
-      // Also delete the keys if any step fails to trigger a recheck
+    } catch (err) {
+      // delete the keys if any step fails
       // this avoids inconsistent cache state after failures
       redis.del(sKey)
       redis.del(indexKey)
-      // Pass the actual error back to caller
-      throw err
-    })
+      Sentry.captureException(err)
+      return err
+    }
+  }
 }
 
 // TODO - deleteSnapshot
