@@ -13,7 +13,6 @@ import SubscribeToNewsletter from '../datalad/mutations/subscribe-to-newsletter.
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
 //configurables
 import { frontPage } from 'openneuro-content'
-import styled from '@emotion/styled'
 
 // component setup ----------------------------------------------------
 
