@@ -1,21 +1,63 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import LeftSidebar, { SidebarRow } from '../left-sidebar.jsx'
+import { LeftSidebar, SidebarRow } from '../left-sidebar.jsx'
+import cookies from '../../../utils/cookies.js'
 
 const fixedDate = new Date('2019-04-02T19:56:41.222Z')
+const mockLocation = { pathname: '/dataset/ds000001' }
 
 describe('LeftSidebar component', () => {
   it('renders with basic props', () => {
+    const testDataset = {
+      permissions: [],
+      draft: {
+        partial: false,
+      },
+    }
     expect(
       shallow(
         <LeftSidebar
+          dataset={testDataset}
           datasetId="ds000001"
           draftModified={fixedDate}
           snapshots={[]}
-          location="/dataset/ds000001"
+          location={mockLocation}
         />,
       ),
     ).toMatchSnapshot()
+  })
+  it('renders the draft when dataset.draft.partial is true', () => {
+    // Set admin token to enable edit access
+    cookies.set(
+      'accessToken',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhZG1pbiI6dHJ1ZX0.F-cvL2RcfQhUtCavIM7q7zYE8drmj2LJk0JRkrS6He4',
+    )
+    const testDataset = {
+      permissions: [],
+      draft: {
+        partial: true,
+      },
+    }
+    const wrapper = shallow(
+      <LeftSidebar
+        dataset={testDataset}
+        datasetId="ds000001"
+        draftModified={fixedDate}
+        snapshots={[]}
+        location={mockLocation}
+      />,
+    )
+    // Check that a SidebarRow is rendered
+    expect(wrapper.find('SidebarRow')).toHaveLength(1)
+    // Check that the first sidebar row is "draft" if the user can edit it
+    expect(
+      wrapper
+        .find('SidebarRow')
+        .first()
+        .props().version,
+    ).toBe('Draft')
+    // Cleanup cookie for other tests
+    cookies.remove('accessToken')
   })
   describe('SidebarRow', () => {
     it('renders draft version correctly', () => {
