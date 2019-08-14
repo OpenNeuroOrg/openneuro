@@ -83,8 +83,8 @@ export const createSnapshot = async (
   // Reserve snapshot id to prevent a race condition on 1.0.0 snapshot
   await createSnapshotMetadata(datasetId, tag, null, null)
   // Get the newest description
-  if (config.doi.username && config.doi.password) {
-    try {
+  try {
+    if (config.doi.username && config.doi.password) {
       // Mint a DOI
       // const snapshotDoi = 'mock doi' // TODO: remove after testing
       const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
@@ -95,60 +95,60 @@ export const createSnapshot = async (
       )
       if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
       else throw new Error('DOI minting failed.')
-      
-      // Create snapshot once DOI is ready
-      const response = await request
-        .post(createSnapshotUrl)
-        .send({ 
-          description_fields: descriptionFieldUpdates,
-          snapshot_changes: snapshotChanges,
-        })
-        .set('Accept', 'application/json')
-        .set('Cookie', generateDataladCookie(config)(user))
-    
-      const { body } = response
-      body.created = new Date()
-
-      
-      // We should almost always get the fast path here
-      const fKey = filesKey(datasetId, body.hexsha)
-      const filesFromCache = await redis.get(fKey)
-      if (filesFromCache) {
-        body.files = JSON.parse(filesFromCache)
-        // Eager caching for snapshots if all data is available
-        redis.set(sKey, JSON.stringify(body))
-      } else {
-        // Return the promise so queries won't block
-        body.files = getFiles(datasetId, body.hexsha)
-      }
-      // Clear the index now that the new snapshot is ready
-      redis.del(indexKey)
-      
-      await Promise.all([
-        // Update the draft status in datasets collection in case any changes were made (DOI, License)
-        updateDatasetRevision(datasetId, body.hexsha),
-      
-        // Update metadata in snapshots collection
-        createSnapshotMetadata(datasetId, tag, body.hexsha, body.created),
-  
-        // Trigger an async update for the name field (cache for sorting)
-        updateDatasetName(datasetId),
-      ])
-
-      if (body.files) {
-        notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
-      }
-      pubsub.publish('snapshotAdded', { datasetId })
-      return body
-
-    } catch (err) {
-      // delete the keys if any step fails
-      // this avoids inconsistent cache state after failures
-      redis.del(sKey)
-      redis.del(indexKey)
-      Sentry.captureException(err)
-      return err
     }
+      
+    // Create snapshot once DOI is ready
+    const response = await request
+      .post(createSnapshotUrl)
+      .send({ 
+        description_fields: descriptionFieldUpdates,
+        snapshot_changes: snapshotChanges,
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', generateDataladCookie(config)(user))
+  
+    const { body } = response
+    body.created = new Date()
+
+    
+    // We should almost always get the fast path here
+    const fKey = filesKey(datasetId, body.hexsha)
+    const filesFromCache = await redis.get(fKey)
+    if (filesFromCache) {
+      body.files = JSON.parse(filesFromCache)
+      // Eager caching for snapshots if all data is available
+      redis.set(sKey, JSON.stringify(body))
+    } else {
+      // Return the promise so queries won't block
+      body.files = getFiles(datasetId, body.hexsha)
+    }
+    // Clear the index now that the new snapshot is ready
+    redis.del(indexKey)
+    
+    await Promise.all([
+      // Update the draft status in datasets collection in case any changes were made (DOI, License)
+      updateDatasetRevision(datasetId, body.hexsha),
+    
+      // Update metadata in snapshots collection
+      createSnapshotMetadata(datasetId, tag, body.hexsha, body.created),
+
+      // Trigger an async update for the name field (cache for sorting)
+      updateDatasetName(datasetId),
+    ])
+
+    if (body.files) {
+      notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
+    }
+    pubsub.publish('snapshotAdded', { datasetId })
+    return body
+
+  } catch (err) {
+    // delete the keys if any step fails
+    // this avoids inconsistent cache state after failures
+    redis.del(sKey)
+    redis.del(indexKey)
+    Sentry.captureException(err)
+    return err
   }
 }
 
