@@ -18,6 +18,10 @@ const WarnButtonContainer = styled.div`
     margin-left: 10px;
   }
 `
+const WarningText = styled.p({
+  color: 'red'
+  
+})
 
 const DELETE_DATASET = gql`
   mutation deleteDataset($id: ID!) {
@@ -33,7 +37,7 @@ const DeleteDataset = ({ history, datasetId }) => {
   return (
     <Mutation mutation={DELETE_DATASET}>
       {deleteDataset => (
-        warn ? (
+        warn ? (<>
           <WarnButtonContainer>
             <WarnButton
               className="btn-success"
@@ -42,7 +46,7 @@ const DeleteDataset = ({ history, datasetId }) => {
                   .then(() => history.push('/dashboard/datasets'))
               }}
             >
-              {'CONFIRM  '}<i className="fa fa-trash" />
+              {'CONFIRM  DELETE*'}
             </WarnButton>
             <WarnButton
               className="btn-danger"
@@ -51,7 +55,8 @@ const DeleteDataset = ({ history, datasetId }) => {
               {'CANCEL'}
             </WarnButton>
           </WarnButtonContainer>
-        ) : (
+          <WarningText>* this will <strong>permanently</strong> remove this dataset and all associated data</WarningText>
+        </>) : (
           <button 
             className="btn-blue"
             onClick={toggleWarn}
