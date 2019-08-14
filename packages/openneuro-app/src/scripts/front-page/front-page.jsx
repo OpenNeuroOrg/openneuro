@@ -15,12 +15,6 @@ import FrontPageTopDatasets from './front-page-top-datasets.jsx'
 import { frontPage } from 'openneuro-content'
 import styled from '@emotion/styled'
 
-const SearchContainer = styled.div`
-  margin: 5px auto 0;
-  width: 293.61px;
-  height: 55.56px;
-`
-
 // component setup ----------------------------------------------------
 
 class FrontPage extends React.Component {
@@ -45,14 +39,10 @@ class FrontPage extends React.Component {
                     <AuthenticationButtons />
                   </div>
                 </LoggedOut>
-                <SearchContainer>
-                  <Search className="frontpage-search"/>
-                </SearchContainer>
+                <Search className="frontpage-search" />
                 <div className="browse-publicly">
                   <Link to="/public/datasets">
-                    <span>
-                      Browse All Public Datasets
-                    </span>
+                    <span>Browse All Public Datasets</span>
                   </Link>
                 </div>
                 <div className="privacy-detail">
@@ -62,7 +52,7 @@ class FrontPage extends React.Component {
             </div>
           </div>
         </div>
-        <FrontPageStats/>
+        <FrontPageStats />
         {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
         <SubscribeToNewsletter />
         <FrontPageTopDatasets />

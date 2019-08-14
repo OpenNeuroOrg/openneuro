@@ -443,7 +443,7 @@
 }
 
 .search-group {
-    float: right;
+    display: block;
     padding: 0px 20px;
     .btn-blue {
         height: 44px;
@@ -451,5 +451,11 @@
         padding: 10px 13px;
         margin-left: 5px;
         margin-bottom: 1px;
+    }
+}
+
+.datasets {
+    .search-group {
+        float: right;
     }
 }
