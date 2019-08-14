@@ -63,6 +63,59 @@ const getSnapshotMetadata = (datasetId, snapshots) => {
   })
 }
 
+const createIfNotExistsDoi = async (datasetId, tag, descriptionFieldUpdates) => {
+  if (config.doi.username && config.doi.password) {
+    // Mint a DOI
+    // const snapshotDoi = 'mock doi' // TODO: remove after testing
+    // Get the newest description
+    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+    const snapshotDoi = await doiLib.registerSnapshotDoi(
+      datasetId,
+      tag,
+      oldDesc,
+    )
+    if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
+    else throw new Error('DOI minting failed.')
+  }
+}
+
+const postSnapshot = async (user, createSnapshotUrl, descriptionFieldUpdates, snapshotChanges) => {      
+  // Create snapshot once DOI is ready
+  const response = await request
+    .post(createSnapshotUrl)
+    .send({ 
+      description_fields: descriptionFieldUpdates,
+      snapshot_changes: snapshotChanges,
+    })
+    .set('Accept', 'application/json')
+    .set('Cookie', generateDataladCookie(config)(user))
+
+  return response.body
+}
+
+const getSnapshotFiles = async (datasetId, sKey, snapshot) => {
+  let files
+  // We should almost always get the fast path here
+  const fKey = filesKey(datasetId, snapshot.hexsha)
+  const filesFromCache = await redis.get(fKey)
+  if (filesFromCache) {
+    files = JSON.parse(filesFromCache)
+    // Eager caching for snapshots if all data is available
+    redis.set(sKey, JSON.stringify(snapshot))
+  } else {
+    // Return the promise so queries won't block
+    files = getFiles(datasetId, snapshot.hexsha)
+  }
+  return files
+}
+
+const announceNewSnapshot = (snapshot, datasetId, user) => {
+  if (snapshot.files) {
+    notifications.snapshotCreated(datasetId, snapshot, user) // send snapshot notification to subscribers
+  }
+  pubsub.publish('snapshotAdded', { datasetId })
+}
+
 /**
  * Snapshot the current working tree for a dataset
  * @param {String} datasetId - Dataset ID string
@@ -77,70 +130,36 @@ export const createSnapshot = async (
   descriptionFieldUpdates = {},
   snapshotChanges = [],
 ) => {
-  const createSnapshotUrl = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
+
   // Reserve snapshot id to prevent a race condition on 1.0.0 snapshot
   await createSnapshotMetadata(datasetId, tag, null, null)
-  // Get the newest description
-  try {
-    if (config.doi.username && config.doi.password) {
-      // Mint a DOI
-      // const snapshotDoi = 'mock doi' // TODO: remove after testing
-      const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
-      const snapshotDoi = await doiLib.registerSnapshotDoi(
-        datasetId,
-        tag,
-        oldDesc,
-      )
-      if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
-      else throw new Error('DOI minting failed.')
-    }
-      
-    // Create snapshot once DOI is ready
-    const response = await request
-      .post(createSnapshotUrl)
-      .send({ 
-        description_fields: descriptionFieldUpdates,
-        snapshot_changes: snapshotChanges,
-      })
-      .set('Accept', 'application/json')
-      .set('Cookie', generateDataladCookie(config)(user))
   
-    const { body } = response
-    body.created = new Date()
-
+  try {
+    await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
     
-    // We should almost always get the fast path here
-    const fKey = filesKey(datasetId, body.hexsha)
-    const filesFromCache = await redis.get(fKey)
-    if (filesFromCache) {
-      body.files = JSON.parse(filesFromCache)
-      // Eager caching for snapshots if all data is available
-      redis.set(sKey, JSON.stringify(body))
-    } else {
-      // Return the promise so queries won't block
-      body.files = getFiles(datasetId, body.hexsha)
-    }
+    const createSnapshotUrl = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+    const snapshot = await postSnapshot(user, createSnapshotUrl, descriptionFieldUpdates, snapshotChanges)
+    snapshot.created = new Date()
+    snapshot.files = await getSnapshotFiles(datasetId, sKey, snapshot)
+
     // Clear the index now that the new snapshot is ready
     redis.del(indexKey)
     
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)
-      updateDatasetRevision(datasetId, body.hexsha),
+      updateDatasetRevision(datasetId, snapshot.hexsha),
     
       // Update metadata in snapshots collection
-      createSnapshotMetadata(datasetId, tag, body.hexsha, body.created),
+      createSnapshotMetadata(datasetId, tag, snapshot.hexsha, snapshot.created),
 
       // Trigger an async update for the name field (cache for sorting)
       updateDatasetName(datasetId),
     ])
 
-    if (body.files) {
-      notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
-    }
-    pubsub.publish('snapshotAdded', { datasetId })
-    return body
+    announceNewSnapshot(snapshot, datasetId, user)
+    return snapshot
 
   } catch (err) {
     // delete the keys if any step fails
