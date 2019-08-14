@@ -27,6 +27,11 @@ spec:
       containers:
       - name: {{ .Release.Name }}-datalad-service
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        resources:
+          limits:
+            cpu: "1"
+          requests:
+            cpu: "0.5"
         ports:
         - containerPort: 9877
         envFrom:
