@@ -16,8 +16,7 @@ import { frontPage } from 'openneuro-content'
 import styled from '@emotion/styled'
 
 const SearchContainer = styled.div`
-  margin: 5px auto 0;
-  height: 55.56px;
+  margin-top: 5px;
   display: flex;
   justify-content: center;
 `
