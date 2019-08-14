@@ -75,6 +75,7 @@ export const createSnapshot = async (
   tag,
   user,
   descriptionFieldUpdates = {},
+  snapshotChanges = [],
 ) => {
   const createSnapshotUrl = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
@@ -100,6 +101,7 @@ export const createSnapshot = async (
         .post(createSnapshotUrl)
         .send({ 
           description_fields: descriptionFieldUpdates,
+          snapshot_changes: snapshotChanges,
         })
         .set('Accept', 'application/json')
         .set('Cookie', generateDataladCookie(config)(user))

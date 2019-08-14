@@ -43,8 +43,7 @@ export const createSnapshot = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
-    await updateChanges(datasetId, tag, changes)
-    return datalad.createSnapshot(datasetId, tag, userInfo)
+    return datalad.createSnapshot(datasetId, tag, userInfo, {}, changes)
   })
 }
 
