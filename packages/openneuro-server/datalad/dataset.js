@@ -297,6 +297,8 @@ export const commitFiles = (datasetId, user) => {
     .set('Accept', 'application/json')
     .then(res => {
       gitRef = res.body.ref
+      // Always remove the partial key when a commit is successfully made
+      redis.del(draftPartialKey(datasetId))
       return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
     })
 }
