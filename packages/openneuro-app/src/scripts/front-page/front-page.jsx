@@ -17,8 +17,9 @@ import styled from '@emotion/styled'
 
 const SearchContainer = styled.div`
   margin: 5px auto 0;
-  width: 293.61px;
   height: 55.56px;
+  display: flex;
+  justify-content: center;
 `
 
 // component setup ----------------------------------------------------
