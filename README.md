@@ -18,19 +18,13 @@ yarn install && yarn bootstrap
 
 You can run tests with `yarn test` at the top level of the project. For each package, `yarn test --watch` will interactively run the tests for changes since the last commit.
 
-[docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together. Copy the example `.env.example` file to `.env` and `config.env.example` to `config.env` and start with the script.
+[docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together. Copy the example `.env.example` file to `.env` and `config.env.example` to `config.env` and use docker-compose to start the containers.
 
 ```shell
-./bin/start-dev
+docker-compose up -d
 ```
 
-To run docker-compose commands with the dev environment, a wrapper script is provided.
-
-```shell
-./bin/dev-compose [docker-compose options]
-```
-
-You can add this to your shell path to quickly run dev commands like `dev-compose restart` or `dev-compose logs -f --tail=10 server`.
+For example, you can restart the server container with `docker-compose restart server` or view logs with `docker-compose logs -f --tail=10 server`.
 
 ## Components
 

@@ -4,8 +4,30 @@ version: '2.3'
 # shared volumes
 volumes:
   project:
+  yarn_cache:
 
 services:
+  # web app bundle build
+  app:
+    build:
+      context: .
+      dockerfile: ./packages/openneuro-app/Dockerfile
+      target: app
+    working_dir: /srv/packages/openneuro-app
+    command: sh -c "apk add make gcc g++ python && yarn install && yarn start"
+    volumes:
+      - .:/srv
+      - yarn_cache:/root/.cache
+      - project:/srv/packages/openneuro-app/dist
+    ports:
+      - "8145:8145"
+    tmpfs:
+      - /srv/node_modules:exec
+      - /srv/packages/openneuro-app/node_modules:exec
+      - /srv/packages/openneuro-client/node_modules:exec
+      - /srv/packages/openneuro-cli/node_modules:exec
+      - /srv/packages/openneuro-server/node_modules:exec
+
   content:
     image: ${CONTENT_IMAGE}
     volumes:
@@ -16,27 +38,30 @@ services:
     image: mongo:4.0
     volumes:
       - ${PERSISTENT_DIR}/mongo:/data/db
-    restart: always
 
   # Redis
   redis:
     image: redis:alpine
     volumes:
       - ${PERSISTENT_DIR}/redis:/data
-    restart: always
 
   # crn node server
   server:
-    image: openneuro/server:${CRN_SERVER_TAG}
+    build:
+      context: ./packages/openneuro-server
+    command: sh -c "apk add make gcc g++ python && yarn install && node --trace-warnings /srv/index.js"
     volumes:
+      - ./packages/openneuro-server:/srv
+      - yarn_cache:/root/.cache
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
+    tmpfs:
+      - /srv/node_modules:exec
     env_file: ./config.env
     depends_on:
       - redis
       - mongo
       - datalad
-    restart: always
 
   # datalad Python backend
   datalad:
@@ -44,10 +69,10 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./datalad-key:/datalad-key
+      - ../datalad-service/datalad_service:/datalad_service
     env_file: ./config.env
     depends_on:
       - celery
-    restart: always
     init: true
 
   # celery Python backend
@@ -59,7 +84,8 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./datalad-key:/datalad-key
-    restart: always
+      - ../datalad-service/datalad_service:/datalad_service
+      - ../datalad-service/tests:/tests
     env_file: ./config.env
     init: true
 
@@ -71,7 +97,6 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./datalad-key:/datalad-key
-    restart: always
     env_file: ./config.env
     init: true
 
@@ -84,7 +109,6 @@ services:
       - --broker
       - redis://redis
     env_file: ./config.env
-    restart: always
     ports:
       - '5555:5555'
 
@@ -92,7 +116,7 @@ services:
   web:
     image: openneuro/app:${CRN_APP_TAG}
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
       - ./acme:/acme
       - ${SSL_DIR}:/etc/nginx/ssl
@@ -102,6 +126,7 @@ services:
       - '80:80'
       - '8110:8110'
       - '443:443'
+      - '9876:80'
     depends_on:
       - server
       - datalad
