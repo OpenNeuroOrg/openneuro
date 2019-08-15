@@ -99,9 +99,8 @@ def new_dataset(annex_path):
 
     changes_path = os.path.join(ds_path, 'CHANGES')
     with open(changes_path, 'w') as f:
-        json.dump(CHANGES, f, ensure_ascii=False)
+        f.write(CHANGES)
     ds.add(changes_path)
-    
     return ds
 
 

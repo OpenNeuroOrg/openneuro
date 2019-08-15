@@ -186,7 +186,7 @@ def test_untracked_file_index(celery_app, client, new_dataset):
         elif f['filename'] == 'LICENSE':
             assert f['size'] == 8
         elif f['filename'] == 'CHANGES':
-            assert f['size'] == 29
+            assert f['size'] == 25
         else:
             assert False
 
@@ -214,6 +214,6 @@ def test_untracked_dir_index(celery_app, client, new_dataset):
         elif f['filename'] == 'sub-01/anat/sub-01_T1w.nii.gz':
             assert f['size'] == 19
         elif f['filename'] == 'CHANGES':
-            assert f['size'] == 29
+            assert f['size'] == 25
         else:
             assert False
