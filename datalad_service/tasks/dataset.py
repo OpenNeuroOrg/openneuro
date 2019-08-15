@@ -12,6 +12,7 @@ import json
 from datalad_service.common.annex import CommitInfo
 from datalad_service.common.celery import dataset_task, dataset_queue
 from datalad_service.tasks.description import update_description
+from datalad_service.tasks.snapshots import update_changes
 from datalad_service.tasks.publish import publish_snapshot
 
 
@@ -66,7 +67,7 @@ def delete_dataset(store, dataset):
 
 
 @dataset_task
-def create_snapshot(store, dataset, snapshot, description_fields={}):
+def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
     """
     Create a new snapshot (git tag).
 
@@ -77,10 +78,13 @@ def create_snapshot(store, dataset, snapshot, description_fields={}):
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
         queue = dataset_queue(dataset)
-        updated = update_description.apply(
+        updated_description = update_description.apply(
             queue=queue, args=(store.annex_path, dataset, description_fields))
-        updated.wait()
-        if not updated.failed():
+        updated_changes = update_changes.apply(
+            queue=queue, args=(store.annex_path, dataset, snapshot, snapshot_changes))
+        updated_description.wait()
+        updated_changes.wait()
+        if not updated_description.failed() and not updated_changes.failed():
             ds.save(version_tag=snapshot)
     else:
         raise Exception(

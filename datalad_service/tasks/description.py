@@ -19,7 +19,7 @@ def update_description(store, dataset, description_fields, name=None, email=None
     if description_json.get('License') != 'CC0':
         description_fields = edit_description(
             description_fields, {'License': 'CC0'})
-    if any(description_fields):
+    if description_fields is not None and any(description_fields):
         updated = edit_description(description_json, description_fields)
         path = os.path.join(store.get_dataset_path(
             dataset), 'dataset_description.json')
