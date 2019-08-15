@@ -7,5 +7,39 @@ exports[`faq/faq/Faq renders successfully 1`] = `
   <h1>
     FAQ's
   </h1>
+  <div
+    className="panel"
+    key="0"
+  >
+    <ReactMarkdown
+      astPlugins={Array []}
+      className="panel-heading"
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Who tests the best?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
+    <div
+      className="panel-body"
+    >
+      <span>
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="we test the best!"
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
+      </span>
+    </div>
+  </div>
 </div>
 `;
