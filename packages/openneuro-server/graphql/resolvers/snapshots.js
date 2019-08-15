@@ -6,6 +6,7 @@ import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
+import SnapshotModel from '../../models/snapshot.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -19,6 +20,31 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     readme: () => readme(obj, { datasetId, revision: tag }),
     summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
   }))
+}
+
+export const participantCount = async () => {
+  const aggregateResult = await SnapshotModel.aggregate([
+    { $sort: { created: -1 } },
+    {
+      $group: {
+        _id: { datasetId: '$datasetId' },
+        hexsha: { $last: '$hexsha' },
+      },
+    },
+    {
+      $lookup: {
+        from: 'summaries',
+        localField: 'hexsha',
+        foreignField: 'id',
+        as: 'summary',
+      },
+    },
+    { $project: { subjects: { $size: '$summary.subjects' } } },
+    { $group: { _id: null, participantCount: { $sum: '$subjects' } } },
+  ]).exec()
+  return Array.isArray(aggregateResult)
+    ? aggregateResult[0].participantCount
+    : null
 }
 
 const sortSnapshots = (a, b) => new Date(b.created) - new Date(a.created)

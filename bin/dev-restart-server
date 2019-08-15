@@ -1,5 +1,0 @@
-#!/bin/bash
-# restarts server with logs
-./bin/dev-compose stop server
-./bin/dev-compose up -d server
-./bin/dev-compose logs --tail=150 -f server

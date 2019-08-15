@@ -52,9 +52,8 @@ HasBeenPublished.propTypes = {
 const DatasetContent = ({ dataset }) => {
   const user = getProfile()
   const hasEdit =
-    ((user && user.admin) ||
-      hasEditPermissions(dataset.permissions, user && user.sub)) &&
-    !dataset.draft.partial
+    (user && user.admin) ||
+    hasEditPermissions(dataset.permissions, user && user.sub)
   return (
     <>
       <LoggedIn>

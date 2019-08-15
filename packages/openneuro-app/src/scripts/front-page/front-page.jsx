@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Search from '../common/partials/search.jsx'
+import FrontPageStats from './front-page-stats.jsx'
 import FrontPageTabs from './front-page-tabs.jsx'
 import Footer from '../common/partials/footer.jsx'
 import AdditionalInfo from './front-page-additional-info.jsx'
@@ -9,7 +11,6 @@ import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
 import SubscribeToNewsletter from '../datalad/mutations/subscribe-to-newsletter.jsx'
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
-import DatasetCount from './dataset-count.jsx'
 //configurables
 import { frontPage } from 'openneuro-content'
 
@@ -37,11 +38,10 @@ class FrontPage extends React.Component {
                     <AuthenticationButtons />
                   </div>
                 </LoggedOut>
+                <Search className="frontpage-search" />
                 <div className="browse-publicly">
                   <Link to="/public/datasets">
-                    <span>
-                      Browse <DatasetCount /> Public Datasets
-                    </span>
+                    <span>Browse All Public Datasets</span>
                   </Link>
                 </div>
                 <div className="privacy-detail">
@@ -51,6 +51,7 @@ class FrontPage extends React.Component {
             </div>
           </div>
         </div>
+        <FrontPageStats />
         {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
         <SubscribeToNewsletter />
         <FrontPageTopDatasets />
