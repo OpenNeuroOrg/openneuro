@@ -1,3 +1,0 @@
-#!/bin/bash
-# Wrapper around docker-compose to use both configurations
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml "$@"
