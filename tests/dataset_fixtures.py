@@ -20,8 +20,8 @@ DATASET_DESCRIPTION = {
     'License': 'This is not a real dataset',
     'Name': 'Test fixture dataset',
 }
-CHANGES = '''1.0.0
-  - initial change
+CHANGES = '''1.0.0 2018-01-01
+  - Initial version
 '''
 
 # A list of patterns to avoid annexing in BIDS datasets

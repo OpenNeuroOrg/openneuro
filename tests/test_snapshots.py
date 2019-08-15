@@ -5,6 +5,7 @@ import falcon
 import pytest
 
 from .dataset_fixtures import *
+from datalad_service.tasks.snapshots import write_new_changes
 
 
 def test_get_snapshot(client, celery_app):
@@ -15,9 +16,11 @@ def test_get_snapshot(client, celery_app):
 
     assert response.status == falcon.HTTP_OK
     assert result_doc['files'] == [
-        {'filename': 'CHANGES', 'size': 29, 'id': '1aa439fe4270b89d343491dfea52a58209672d1c', 'key': '62c4c696525117c58ac5d43c4f67d864540a7a38'},
-        {'filename': 'dataset_description.json', 'id': '9c946a75b4c24c14e65d746b2ff295a904845aa3', 'key': '85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25', 'size': 97}
-        ] and \
+        {'filename': 'CHANGES', 'size': 41, 'id': '0daaa69260ab1f1fa8cfd0e17a4c1993d6d46e54',
+            'key': '63f4f8294caf64dccfedcb5300dee70e3fe3a7c5'},
+        {'filename': 'dataset_description.json', 'id': '9c946a75b4c24c14e65d746b2ff295a904845aa3',
+            'key': '85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25', 'size': 97}
+    ] and \
         result_doc['tag'] == SNAPSHOT_ID and \
         result_doc['id'] == '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)
 
@@ -119,3 +122,30 @@ def test_description_update(client, new_dataset, celery_app):
     assert check_response.status == falcon.HTTP_OK
     ds_description = json.loads(check_response.content, encoding='utf-8')
     assert ds_description[key] == value
+
+
+def test_write_new_changes(celery_app, annex_path, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
+    # Manually make the commit without validation
+    new_dataset.add('CHANGES')
+    # Get a fresh dataset object and verify correct CHANGES
+    dataset = Dataset(str(annex_path.join(ds_id)))
+    assert not dataset.repo.is_dirty()
+    assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
+  - Some changes
+1.0.0 2018-01-01
+  - Initial version'''
+
+
+def test_write_with_empty_changes(celery_app, annex_path, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    new_dataset.remove('CHANGES')
+    write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
+    # Manually make the commit without validation
+    new_dataset.add('CHANGES')
+    # Get a fresh dataset object and verify correct CHANGES
+    dataset = Dataset(str(annex_path.join(ds_id)))
+    assert not dataset.repo.is_dirty()
+    assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
+  - Some changes'''
