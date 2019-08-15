@@ -1,5 +1,4 @@
 import * as datalad from '../../datalad/snapshots.js'
-import { updateChanges } from '../../datalad/changelog.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
