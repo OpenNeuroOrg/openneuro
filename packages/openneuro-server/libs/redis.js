@@ -2,8 +2,10 @@
 
 // dependencies --------------------------------------------------
 import Redis from 'ioredis'
+import Redlock from 'redlock'
 
 let redis = null
+let redlock = null
 
 const connect = async config => {
   return new Promise(resolve => {
@@ -14,6 +16,7 @@ const connect = async config => {
         config.port,
       )
       redis = new Redis(config)
+      redlock = new Redlock([redis])
       redis.on('connect', () => {
         resolve(redis)
       })
@@ -24,4 +27,4 @@ const connect = async config => {
 }
 
 export default { connect }
-export { redis, connect }
+export { redis, redlock, connect }

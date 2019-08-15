@@ -1,5 +1,4 @@
 import * as datalad from '../../datalad/snapshots.js'
-import { updateChanges } from '../../datalad/changelog.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
@@ -69,8 +68,7 @@ export const createSnapshot = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
-    await updateChanges(datasetId, tag, changes)
-    return datalad.createSnapshot(datasetId, tag, userInfo)
+    return datalad.createSnapshot(datasetId, tag, userInfo, {}, changes)
   })
 }
 
