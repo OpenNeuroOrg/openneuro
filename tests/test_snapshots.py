@@ -14,7 +14,10 @@ def test_get_snapshot(client, celery_app):
     result_doc = json.loads(response.content, encoding='utf-8')
 
     assert response.status == falcon.HTTP_OK
-    assert result_doc['files'] == [{'filename': 'dataset_description.json', 'id': '9c946a75b4c24c14e65d746b2ff295a904845aa3', 'key': '85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25', 'size': 97}] and \
+    assert result_doc['files'] == [
+        {'filename': 'CHANGES', 'size': 29, 'id': '1aa439fe4270b89d343491dfea52a58209672d1c', 'key': '62c4c696525117c58ac5d43c4f67d864540a7a38'},
+        {'filename': 'dataset_description.json', 'id': '9c946a75b4c24c14e65d746b2ff295a904845aa3', 'key': '85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25', 'size': 97}
+        ] and \
         result_doc['tag'] == SNAPSHOT_ID and \
         result_doc['id'] == '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)
 
@@ -57,6 +60,9 @@ def test_pre_snapshot_edit(client, new_dataset, celery_app):
 def test_duplicate_snapshot(client, new_dataset, celery_app):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '2'
+    # body = json.dumps({
+    #     'snapshot_changes': ['test']
+    # })
     response = client.simulate_post(
         '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id))
     assert response.status == falcon.HTTP_OK
@@ -71,6 +77,9 @@ def test_duplicate_snapshot(client, new_dataset, celery_app):
 
 def test_get_snapshots(client, new_dataset, celery_app):
     ds_id = os.path.basename(new_dataset.path)
+    # body = json.dumps({
+    #     'snapshot_changes': ['test']
+    # })
     response = client.simulate_post(
         '/datasets/{}/snapshots/{}'.format(ds_id, 'v1.0.0'))
     assert response.status == falcon.HTTP_OK
@@ -94,6 +103,9 @@ def test_description_update(client, new_dataset, celery_app):
         'description_fields': {
             key: value
         },
+        'snapshot_changes': [
+            'change'
+        ],
         'skip_publishing': True
     })
 

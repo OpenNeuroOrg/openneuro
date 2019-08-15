@@ -71,7 +71,7 @@ def update_changes(store, dataset, tag, new_changes):
     ds = store.get_dataset(dataset)
     changes = ds.repo.repo.git.show(
         'HEAD:CHANGES')
-    if len(new_changes) > 0:
+    if new_changes is not None and len(new_changes) > 0:
         updated = edit_changes(changes, new_changes, tag)
         path = os.path.join(
             store.get_dataset_path(dataset), 

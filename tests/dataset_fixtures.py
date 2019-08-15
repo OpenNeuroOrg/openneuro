@@ -20,6 +20,9 @@ DATASET_DESCRIPTION = {
     'License': 'This is not a real dataset',
     'Name': 'Test fixture dataset',
 }
+CHANGES = '''1.0.0
+  - initial change
+'''
 
 # A list of patterns to avoid annexing in BIDS datasets
 BIDS_NO_ANNEX = [
@@ -59,10 +62,17 @@ def annex_path(tmpdir_factory):
     ds = Dataset(ds_path)
     ds.create()
     ds.no_annex(BIDS_NO_ANNEX)
+
     json_path = os.path.join(ds_path, 'dataset_description.json')
     with open(json_path, 'w') as f:
         json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
     ds.add(json_path)
+
+    changes_path = os.path.join(ds_path, 'CHANGES')
+    with open(changes_path, 'w') as f:
+        json.dump(CHANGES, f, ensure_ascii=False)
+    ds.add(changes_path)
+
     ds.save(version_tag=SNAPSHOT_ID)
     # Setup a seed for any new_dataset uses
     random.seed(42)
@@ -76,6 +86,7 @@ def new_dataset(annex_path):
     ds = Dataset(ds_path)
     ds.create()
     ds.no_annex(BIDS_NO_ANNEX)
+
     json_path = os.path.join(ds_path, 'dataset_description.json')
     dsdesc = {
         'BIDSVersion': '1.0.2',
@@ -85,6 +96,12 @@ def new_dataset(annex_path):
     with open(json_path, 'w') as f:
         json.dump(dsdesc, f, ensure_ascii=False)
     ds.add(json_path)
+
+    changes_path = os.path.join(ds_path, 'CHANGES')
+    with open(changes_path, 'w') as f:
+        json.dump(CHANGES, f, ensure_ascii=False)
+    ds.add(changes_path)
+    
     return ds
 
 

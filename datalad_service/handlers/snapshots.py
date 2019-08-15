@@ -41,9 +41,11 @@ class SnapshotResource(object):
         """Commit a revision (snapshot) from the working tree."""
         queue = dataset_queue(dataset)
         media = req.media
+        description_fields = {}
+        snapshot_changes = []
         if media != None:
-            description_fields = media.get('description_fields') or {}
-            snapshot_changes = media.get('snapshot_changes') or []
+            description_fields = media.get('description_fields')
+            snapshot_changes = media.get('snapshot_changes')
         create = create_snapshot.si(
             self.store.annex_path, dataset, snapshot, description_fields, snapshot_changes).set(queue=queue)
         created = create.apply_async()
