@@ -24,6 +24,19 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
 export const participantCount = async () => {
   const aggregateResult = await SnapshotModel.aggregate([
     {
+      $lookup: {
+        from: 'datasets',
+        localField: 'datasetId',
+        foreignField: 'id',
+        as: 'dataset',
+      },
+    },
+    {
+      $match: {
+        'dataset.public': true,
+      },
+    },
+    {
       $sort: {
         created: -1,
       },
