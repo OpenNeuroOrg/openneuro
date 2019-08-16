@@ -31,7 +31,7 @@ spec:
           limits:
             cpu: "1"
           requests:
-            cpu: "0.5"
+            cpu: "0.2"
         ports:
         - containerPort: 9877
         envFrom:
