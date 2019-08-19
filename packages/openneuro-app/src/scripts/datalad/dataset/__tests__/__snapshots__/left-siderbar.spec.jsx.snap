@@ -5,7 +5,23 @@ exports[`LeftSidebar component SidebarRow renders draft version correctly 1`] = 
 exports[`LeftSidebar component SidebarRow renders snapshot version correctly 1`] = `undefined`;
 
 exports[`LeftSidebar component renders with basic props 1`] = `
-<Route>
-  <Component />
-</Route>
+<div
+  className="left-sidebar"
+>
+  <span
+    className="slide"
+  >
+    <div
+      className="snapshot-select"
+      role="presentation"
+    >
+      <span>
+        <h3>
+          Versions
+        </h3>
+        <ul />
+      </span>
+    </div>
+  </span>
+</div>
 `;

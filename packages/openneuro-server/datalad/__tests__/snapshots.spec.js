@@ -6,7 +6,14 @@ import config from '../../config.js'
 
 // Mock requests to Datalad service
 jest.mock('superagent')
-jest.mock('../../libs/redis.js')
+jest.mock('../../libs/redis.js', () => ({
+  redis: {
+    del: jest.fn(),
+  },
+  redlock: {
+    lock: jest.fn().mockImplementation(() => ({ unlock: jest.fn() })),
+  },
+}))
 // Mock draft files calls
 jest.mock('../draft.js', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),

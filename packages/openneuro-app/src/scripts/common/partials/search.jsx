@@ -37,17 +37,18 @@ class Search extends React.Component {
   render() {
     let checkClass = this.state.error ? 'search-field error' : 'search-field'
     return (
-      <div className="search-group">
+      <div className="search-group admin">
         <form className="form-inline" onSubmit={this.handleSubmit}>
           <Input
             placeholder="Search Datasets"
             type="text"
+            containerClass="full-width"
             className={checkClass}
             name="q"
             value={this.state.query}
             onChange={this.handleChange}
           />
-          <div className="form-group float-label-input">
+          <div className="form-group full-width float-label-input">
             <button className="btn-blue" onClick={this.handleSubmit}>
               <span className="">
                 <i className="fa fa-search" />

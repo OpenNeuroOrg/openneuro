@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NoErrors component in SnapshotRoute handles case of errors and no authors 1`] = `
+<span
+  className="text-danger"
+>
+  BIDS validation must be complete and all errors corrected and "Authors" must include at least one entry in dataset_description.json to create a snapshot
+</span>
+`;
+
+exports[`NoErrors component in SnapshotRoute handles extant errors case 1`] = `
+<span
+  className="text-danger"
+>
+  BIDS validation must be complete and all errors corrected to create a snapshot
+</span>
+`;
+
+exports[`NoErrors component in SnapshotRoute handles no authors case 1`] = `
+<span
+  className="text-danger"
+>
+  "Authors" must include at least one entry in dataset_description.json to create a snapshot
+</span>
+`;
+
+exports[`NoErrors component in SnapshotRoute returns children when issues are okay 1`] = `
+<div>
+  child
+</div>
+`;

@@ -203,6 +203,12 @@ input[type='search'] {
   margin-bottom: $form-group-margin-bottom;
 }
 
+.form-group.full-width {
+  display: inline-block;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
 // Checkboxes and radios
 //
 // Indent the labels to position radios/checkboxes as hanging controls.

@@ -1,11 +1,11 @@
 import * as datalad from '../../datalad/snapshots.js'
-import { updateChanges } from '../../datalad/changelog.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
+import SnapshotModel from '../../models/snapshot.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -19,6 +19,77 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     readme: () => readme(obj, { datasetId, revision: tag }),
     summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
   }))
+}
+
+export const participantCount = async () => {
+  const aggregateResult = await SnapshotModel.aggregate([
+    {
+      $lookup: {
+        from: 'datasets',
+        localField: 'datasetId',
+        foreignField: 'id',
+        as: 'dataset',
+      },
+    },
+    {
+      $match: {
+        'dataset.public': true,
+      },
+    },
+    {
+      $sort: {
+        created: -1,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          datasetId: '$datasetId',
+        },
+        hexsha: {
+          $last: '$hexsha',
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: 'summaries',
+        localField: 'hexsha',
+        foreignField: 'id',
+        as: 'summary',
+      },
+    },
+    {
+      $match: {
+        hexsha: {
+          $ne: null,
+        },
+        'summary.subjects': {
+          $exists: true,
+        },
+      },
+    },
+    {
+      $project: {
+        subjects: {
+          $size: {
+            $arrayElemAt: ['$summary.subjects', 0],
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        participantCount: {
+          $sum: '$subjects',
+        },
+      },
+    },
+  ]).exec()
+  return Array.isArray(aggregateResult)
+    ? aggregateResult[0].participantCount
+    : null
 }
 
 const sortSnapshots = (a, b) => new Date(b.created) - new Date(a.created)
@@ -43,8 +114,7 @@ export const createSnapshot = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
-    await updateChanges(datasetId, tag, changes)
-    return datalad.createSnapshot(datasetId, tag, userInfo)
+    return datalad.createSnapshot(datasetId, tag, userInfo, {}, changes)
   })
 }
 

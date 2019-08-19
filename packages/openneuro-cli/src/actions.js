@@ -73,12 +73,14 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
   }
 }
 
-const notifyUploadComplete = datasetId => {
+const notifyUploadComplete = update => datasetId => {
   console.log(
     '=======================================================================',
   )
   console.log('Upload Complete')
-  console.log(`To publish your dataset go to ${getUrl()}datasets/${datasetId}`)
+  console.log(update
+    ? `To publish the update go to ${getUrl()}datasets/${datasetId} and create a new snapshot`
+    : `To publish your dataset go to ${getUrl()}datasets/${datasetId}`)
   console.log(
     '=======================================================================',
   )
@@ -104,7 +106,7 @@ export const upload = (dir, cmd) => {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
       uploadDataset(dir, cmd.dataset, validatorOptions).then(
-        notifyUploadComplete,
+        notifyUploadComplete('update'),
       )
     } else {
       inquirer
@@ -116,19 +118,60 @@ export const upload = (dir, cmd) => {
         })
         .then(({ yes }) => {
           if (yes) {
-            uploadDataset(dir, cmd.dataset, validatorOptions).then(
-              notifyUploadComplete,
+            return uploadDataset(dir, cmd.dataset, validatorOptions).then(
+              notifyUploadComplete(false),
             )
           }
         })
+        .catch(err => {
+          if(isNotLoggedInError(err)) {
+            logSpecificError([
+              err.message,
+              'Please use the command "openneuro login" and follow instructions, then try again.'
+            ])
+          } else if(isMissingDotOpenneuroError(err)) {
+            logSpecificError([
+              err.message,
+              'You may be missing the ~/.openneuro configuration file, please use the command "openneuro login" and follow instructions, then try again.'
+            ])
+          } else {
+            handleGenericErrors(err, dir)
+          }
+          process.exit(1)
+        })
     }
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e)
-    // eslint-disable-next-line no-console
-    console.error(`"${dir}" may not exist or is inaccessible`)
+    handleGenericErrors(e, dir)
     process.exit(1)
   }
+}
+
+const specificErrorTest = (err, targetErrMessage) => (
+  err.message && 
+  typeof err.message === 'string' && 
+  err.message.includes(targetErrMessage)
+)
+
+function isNotLoggedInError(err) {
+  return specificErrorTest(err, 'You must be logged in to create a dataset.')
+}
+
+function isMissingDotOpenneuroError(err) {
+  return specificErrorTest(err, 'The "path" argument must be one of type string, Buffer, or URL')
+}
+
+function logSpecificError(errors) {
+  errors.forEach(err => {
+    // eslint-disable-next-line no-console
+    console.error(err)
+  })
+}
+
+function handleGenericErrors(err, dir) {
+  // eslint-disable-next-line no-console
+  console.error(err)
+  // eslint-disable-next-line no-console
+  console.error(`"${dir}" may not exist or is inaccessible`)
 }
 
 const promptTags = snapshots =>

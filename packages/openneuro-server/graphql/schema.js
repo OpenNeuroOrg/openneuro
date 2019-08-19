@@ -40,6 +40,8 @@ const typeDefs = `
     user(id: ID!): User
     # Get a list of users
     users: [User]
+    # Get the total number of dataset participants
+    participantCount: Int
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
     # Determine if a dataset is partially uploaded
