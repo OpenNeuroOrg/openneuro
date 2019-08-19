@@ -52,7 +52,14 @@ def compute_file_hash(git_hash, path):
     return hashlib.sha1('{}:{}'.format(git_hash, path).encode()).hexdigest()
 
 
+def parse_ls_tree_line(gitTreeLine):
+    """Read one line of `git ls-tree` output and produce filename + metadata fields"""
+    metadata, filename = gitTreeLine.split('\t')
+    return [filename, *metadata.split()]
+
+
 def get_repo_files(dataset, branch='HEAD'):
+    """Read all files in a repo at a given branch, tag, or commit hash."""
     dir_fd = os.open(dataset.path, os.O_RDONLY)
     gitProcess = subprocess.Popen(
         ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
@@ -61,7 +68,8 @@ def get_repo_files(dataset, branch='HEAD'):
     symlinkObjects = []
     for line in gitProcess.stdout:
         gitTreeLine = line.rstrip()
-        metadata, filename = gitTreeLine.split('\t')
+        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
+            gitTreeLine)
         # Skip git / datalad files
         if filename.startswith('.git/'):
             continue
@@ -69,7 +77,6 @@ def get_repo_files(dataset, branch='HEAD'):
             continue
         if filename == '.gitattributes':
             continue
-        mode, obj_type, obj_hash, size = metadata.split()
         # Check if the file is annexed
         if (mode == '120000'):
             # Save annexed file symlinks for batch processing
