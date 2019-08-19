@@ -4,6 +4,15 @@ import PropTypes from 'prop-types'
 import { Modal } from '../utils/modal.jsx'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 
+const getDerivedStateFromErrorOnCondition = (error, conditionCb) => {
+  const raiseError = typeof conditionCb === 'function' ? conditionCb(error) : true
+  return raiseError
+    // trigger error component
+    ? { hasError: true, supportModal: true, error: error }
+    // don't show error handling component
+    : { hasError: false, supportModal: false, error: error }
+}
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
@@ -17,7 +26,7 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, supportModal: true, error: error }
+    return getDerivedStateFromErrorOnCondition(error, () => true)
   }
 
   componentDidCatch(error) {
@@ -84,6 +93,19 @@ ErrorBoundary.propTypes = {
     PropTypes.node,
   ]),
   errorMessage: PropTypes.string,
+}
+
+class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
+  constructor() {
+    super()
+  }
+
+  static getDerivedStateFromError(error) {
+    return getDerivedStateFromErrorOnCondition(
+      error, 
+      error => error.toString() === 'Error: assertion failure'
+    )
+  }
 }
 
 export default ErrorBoundary
