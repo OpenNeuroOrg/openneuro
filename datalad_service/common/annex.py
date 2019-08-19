@@ -55,7 +55,34 @@ def compute_file_hash(git_hash, path):
 def parse_ls_tree_line(gitTreeLine):
     """Read one line of `git ls-tree` output and produce filename + metadata fields"""
     metadata, filename = gitTreeLine.split('\t')
-    return [filename, *metadata.split()]
+    mode, obj_type, obj_hash, size = metadata.split()
+    return [filename, mode, obj_type, obj_hash, size]
+
+
+def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
+    """Read one line of `git ls-tree` and append to the correct buckets of files, symlinks, and objects."""
+    filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
+        gitTreeLine)
+    # Skip git / datalad files
+    if filename.startswith('.git/'):
+        return
+    if filename.startswith('.datalad/'):
+        return
+    if filename == '.gitattributes':
+        return
+    # Check if the file is annexed or a submodule
+    if (mode == '120000'):
+        # Save annexed file symlinks for batch processing
+        symlinkFilenames.append(filename)
+        symlinkObjects.append(obj_hash)
+    elif (mode == '160000'):
+        # Skip submodules
+        return
+    else:
+        # Immediately append regular files
+        file_id = compute_file_hash(obj_hash, filename)
+        files.append({'filename': filename, 'size': int(size),
+                      'id': file_id, 'key': obj_hash})
 
 
 def get_repo_files(dataset, branch='HEAD'):
@@ -68,25 +95,7 @@ def get_repo_files(dataset, branch='HEAD'):
     symlinkObjects = []
     for line in gitProcess.stdout:
         gitTreeLine = line.rstrip()
-        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
-            gitTreeLine)
-        # Skip git / datalad files
-        if filename.startswith('.git/'):
-            continue
-        if filename.startswith('.datalad/'):
-            continue
-        if filename == '.gitattributes':
-            continue
-        # Check if the file is annexed
-        if (mode == '120000'):
-            # Save annexed file symlinks for batch processing
-            symlinkFilenames.append(filename)
-            symlinkObjects.append(obj_hash)
-        else:
-            # Immediately append regular files
-            file_id = compute_file_hash(obj_hash, filename)
-            files.append({'filename': filename, 'size': int(size),
-                          'id': file_id, 'key': obj_hash})
+        read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
     catFileInput = '\n'.join(symlinkObjects)
