@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 import { Modal } from '../utils/modal.jsx'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 
-const getDerivedStateFromErrorOnCondition = (error, conditionCb) => {
-  const raiseError = typeof conditionCb === 'function' ? conditionCb(error) : true
+// raises error if catchErrorIf returns true
+const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
+  const raiseError = typeof catchErrorIf === 'function' ? catchErrorIf(error) : true
   return raiseError
     // trigger error component
     ? { hasError: true, supportModal: true, error: error }
@@ -95,17 +96,24 @@ ErrorBoundary.propTypes = {
   errorMessage: PropTypes.string,
 }
 
+// specific use case
+// ignore error in apollo lib
 class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
   }
 
   static getDerivedStateFromError(error) {
     return getDerivedStateFromErrorOnCondition(
       error, 
-      error => error.toString() === 'Error: assertion failure'
+      // catchErrorIf: ErrorBoundary not triggered for "assertion failure"
+      error => error.toString() !== 'Error: assertion failure'
     )
   }
+}
+
+export {
+  ErrorBoundaryAssertionFailureException
 }
 
 export default ErrorBoundary
