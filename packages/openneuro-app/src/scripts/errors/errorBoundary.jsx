@@ -27,7 +27,11 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    return getDerivedStateFromErrorOnCondition(error, () => true)
+    return getDerivedStateFromErrorOnCondition(
+      error, 
+      // error boundary should always be triggered in general case
+      () => true
+      )
   }
 
   componentDidCatch(error) {
@@ -106,7 +110,7 @@ class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
   static getDerivedStateFromError(error) {
     return getDerivedStateFromErrorOnCondition(
       error, 
-      // catchErrorIf: ErrorBoundary not triggered for "assertion failure"
+      // ErrorBoundary not triggered for "assertion failure"
       error => error.toString() !== 'Error: assertion failure'
     )
   }
