@@ -116,6 +116,14 @@ class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
   }
 }
 
+ErrorBoundaryAssertionFailureException.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  errorMessage: PropTypes.string,
+}
+
 export {
   ErrorBoundaryAssertionFailureException
 }
