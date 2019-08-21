@@ -6,7 +6,6 @@ import { getProfile } from '../../authentication/profile'
 import { Query } from 'react-apollo'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
-import { Panel, PanelGroup } from 'react-bootstrap'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
@@ -95,14 +94,6 @@ SnapshotContent.propTypes = {
   tag: PropTypes.string,
 }
 
-const StyleContainer = styled.div({
-  '.fileupload-btn': {
-    marginTop: '2rem',
-    maxWidth: 'none',
-    lineHeight: 'normal',
-  },
-})
-
 const snapshotDescription = (snapshot, property, defaultValue) =>
   (snapshot && snapshot.description && snapshot.description[property]) ||
   defaultValue
@@ -166,6 +157,16 @@ SnapshotDetails.propTypes = {
   snapshot: PropTypes.object,
 }
 
+const StyledP = styled.p({
+  marginTop: '15px',
+})
+
+const StyleContainer = styled.div({
+  '.fileupload-btn': {
+    margin: '20px 0 0',
+  },
+})
+
 const PartialUploadOptions = ({ datasetId }) => {
   useEffect(() => {
     const profile = getProfile()
@@ -176,17 +177,15 @@ const PartialUploadOptions = ({ datasetId }) => {
     })
   }, [])
   return (
-    <div className="col-xs-6">
+    <div className="col-xs-12">
       <DatasetTitle title="Partially Uploaded Dataset" />
-      <PanelGroup accordion className="validation-wrap">
-        <Panel className="status">
-          <p>An upload or edit may have been interrupted.</p>
-          <p>A support ticket has been opened for this dataset.</p>
-          <StyleContainer>
-            <UploadResume datasetId={datasetId} />
-          </StyleContainer>
-        </Panel>
-      </PanelGroup>
+      <StyledP>
+        An upload or edit may have been interrupted.
+        <br />A support ticket has been opened for this dataset.
+      </StyledP>
+      <StyleContainer>
+        <UploadResume datasetId={datasetId} />
+      </StyleContainer>
     </div>
   )
 }
