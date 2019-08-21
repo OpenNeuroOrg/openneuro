@@ -1,4 +1,4 @@
-FROM python:3.6.4-alpine3.7
+FROM python:3.6.9-alpine3.10
 
 COPY package.json /package.json
 COPY requirements.txt /requirements.txt
