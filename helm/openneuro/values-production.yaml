@@ -10,6 +10,10 @@ environment: production
 # Enable FreshDesk ticketing
 freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
 
+# Enable Automated Freshdesk ticketing
+freshDeskApi: https://openneuro.freshdesk.com/api/v2/tickets
+freshDeskKey: U8EJRREfnrCWPDQzEHr
+
 # Enable Google Analytics
 googleTrackingId: UA-100754266-2
 

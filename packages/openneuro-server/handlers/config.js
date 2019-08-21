@@ -68,6 +68,8 @@ const config = {
 
   support: {
     url: process.env.FRESH_DESK_URL,
+    api: process.env.FRESH_DESK_API,
+    key: process.env.FRESH_DESK_KEY,
   },
 
   analysis: {

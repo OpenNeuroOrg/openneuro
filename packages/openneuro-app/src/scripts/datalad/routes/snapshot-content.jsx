@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
+import freshdesk from '../../libs/freshdesk'
+import { getProfile } from '../../authentication/profile'
 import { Query } from 'react-apollo'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
@@ -76,7 +78,7 @@ const SnapshotContent = ({ dataset, tag }) => (
         if (loading) {
           return <Spinner text="Loading Snapshot" active />
         } else {
-          if(error && error.message !== 'GraphQL error: Internal Server Error')
+          if (error && error.message !== 'GraphQL error: Internal Server Error')
             throw new Error(error)
           return data && data.snapshot ? (
             <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
@@ -99,15 +101,16 @@ const StyleContainer = styled.div({
     marginTop: '2rem',
     maxWidth: 'none',
     lineHeight: 'normal',
-  }
+  },
 })
 
-
-const snapshotDescription = (snapshot, property, defaultValue) => ((snapshot && snapshot.description && snapshot.description[property]) || defaultValue)
+const snapshotDescription = (snapshot, property, defaultValue) =>
+  (snapshot && snapshot.description && snapshot.description[property]) ||
+  defaultValue
 
 const SnapshotDetails = ({ dataset, snapshot }) => {
   const snapshotName = snapshotDescription(snapshot, 'Name', 'No Snapshot')
-  
+
   return (
     <span>
       <div className="col-xs-6">
@@ -120,38 +123,40 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
             {schemaGenerator(snapshot)}
           </script>
         </Helmet>
-          <DatasetTitle title={snapshotName} />
-          <DatasetUploaded
-            uploader={dataset.uploader}
-            created={dataset.created}
-          />
-          <DatasetModified modified={snapshot.created} />
-          <DatasetAuthors authors={snapshot.Authors} />
-          <DatasetAnalytics
-            downloads={snapshot.analytics.downloads}
-            views={snapshot.analytics.views}
-            snapshot
-          />
-          <DownloadButton dataset={dataset} />
-          <DatasetSummary summary={snapshot.summary} />
-          <h2>README</h2>
-          <DatasetReadme content={snapshot.readme} />
-          <DatasetDescription
-            datasetId={dataset.id}
-            description={snapshot.description}
-            editable={false}
-          />
+        <DatasetTitle title={snapshotName} />
+        <DatasetUploaded
+          uploader={dataset.uploader}
+          created={dataset.created}
+        />
+        <DatasetModified modified={snapshot.created} />
+        <DatasetAuthors authors={snapshot.Authors} />
+        <DatasetAnalytics
+          downloads={snapshot.analytics.downloads}
+          views={snapshot.analytics.views}
+          snapshot
+        />
+        <DownloadButton dataset={dataset} />
+        <DatasetSummary summary={snapshot.summary} />
+        <h2>README</h2>
+        <DatasetReadme content={snapshot.readme} />
+        <DatasetDescription
+          datasetId={dataset.id}
+          description={snapshot.description}
+          editable={false}
+        />
       </div>
       <div className="col-xs-6">
-        {snapshot && <>
-          <Validation datasetId={dataset.id} issues={snapshot.issues} />
-          <DatasetFiles
-            datasetId={dataset.id}
-            snapshotTag={snapshot.tag}
-            datasetName={snapshotName}
-            files={snapshot.files}
-          />
-        </>}
+        {snapshot && (
+          <>
+            <Validation datasetId={dataset.id} issues={snapshot.issues} />
+            <DatasetFiles
+              datasetId={dataset.id}
+              snapshotTag={snapshot.tag}
+              datasetName={snapshotName}
+              files={snapshot.files}
+            />
+          </>
+        )}
       </div>
     </span>
   )
@@ -162,18 +167,30 @@ SnapshotDetails.propTypes = {
   snapshot: PropTypes.object,
 }
 
-const PartialUploadOptions = ({ datasetId }) => (
-  <div className="col-xs-6">
-    <DatasetTitle title="Partially Uploaded Dataset"/>
-    <PanelGroup accordion className="validation-wrap">
-      <Panel className="status">
-        <p>An upload or edit may have been interrupted.</p>
-        <StyleContainer><UploadResume datasetId={datasetId} /></StyleContainer>
-        <DeleteDataset datasetId={datasetId} />
-      </Panel>
-    </PanelGroup>
-  </div>
-)
+const PartialUploadOptions = ({ datasetId }) => {
+  useEffect(() => {
+    const profile = getProfile()
+    freshdesk.postTicket({
+      email: profile ? profile.email : '',
+      subject: 'Partial Upload Failure',
+      description: `Missing snapshot in ${datasetId} has resulted in inaccessible dataset page. Likely caused by partial upload error in dataset.`,
+    })
+  }, [])
+  return (
+    <div className="col-xs-6">
+      <DatasetTitle title="Partially Uploaded Dataset" />
+      <PanelGroup accordion className="validation-wrap">
+        <Panel className="status">
+          <p>An upload or edit may have been interrupted.</p>
+          <p>A support ticket has been opened for this dataset.</p>
+          <StyleContainer>
+            <UploadResume datasetId={datasetId} />
+          </StyleContainer>
+        </Panel>
+      </PanelGroup>
+    </div>
+  )
+}
 
 PartialUploadOptions.propTypes = {
   datasetId: PropTypes.String,
