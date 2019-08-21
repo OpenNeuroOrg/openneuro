@@ -23,7 +23,6 @@ import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import UploadResume from '../../uploader/upload-resume.jsx'
-import DeleteDataset from '../mutations/delete-button.jsx'
 import styled from '@emotion/styled'
 
 const getSnapshotDetails = gql`
