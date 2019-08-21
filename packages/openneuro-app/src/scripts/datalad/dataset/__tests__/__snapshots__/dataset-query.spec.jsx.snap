@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatasetQuery component renders with common params 1`] = `
-<ErrorBoundary
-  subject="error in dataset page"
+<ErrorBoundaryAssertionFailureException
+  subject="error in dataset query"
 >
   <Query
     query={
@@ -1402,5 +1402,5 @@ exports[`DatasetQuery component renders with common params 1`] = `
   >
     <Component />
   </Query>
-</ErrorBoundary>
+</ErrorBoundaryAssertionFailureException>
 `;
