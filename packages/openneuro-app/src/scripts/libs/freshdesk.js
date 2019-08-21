@@ -1,6 +1,6 @@
 import config from '../../../config'
 
-const { api: apiUrl, key } = config.support
+const { api: apiUrl, key } = config.support || { api: '', key: '' }
 // placeholder password - freshdesk doesn't require a password with api key
 const pass = 'x'
 
