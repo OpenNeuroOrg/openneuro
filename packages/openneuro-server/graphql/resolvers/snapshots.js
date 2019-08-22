@@ -1,5 +1,4 @@
 import * as datalad from '../../datalad/snapshots.js'
-import { updateChanges } from '../../datalad/changelog.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
@@ -24,11 +23,32 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
 
 export const participantCount = async () => {
   const aggregateResult = await SnapshotModel.aggregate([
-    { $sort: { created: -1 } },
+    {
+      $lookup: {
+        from: 'datasets',
+        localField: 'datasetId',
+        foreignField: 'id',
+        as: 'dataset',
+      },
+    },
+    {
+      $match: {
+        'dataset.public': true,
+      },
+    },
+    {
+      $sort: {
+        created: -1,
+      },
+    },
     {
       $group: {
-        _id: { datasetId: '$datasetId' },
-        hexsha: { $last: '$hexsha' },
+        _id: {
+          datasetId: '$datasetId',
+        },
+        hexsha: {
+          $last: '$hexsha',
+        },
       },
     },
     {
@@ -39,8 +59,33 @@ export const participantCount = async () => {
         as: 'summary',
       },
     },
-    { $project: { subjects: { $size: '$summary.subjects' } } },
-    { $group: { _id: null, participantCount: { $sum: '$subjects' } } },
+    {
+      $match: {
+        hexsha: {
+          $ne: null,
+        },
+        'summary.subjects': {
+          $exists: true,
+        },
+      },
+    },
+    {
+      $project: {
+        subjects: {
+          $size: {
+            $arrayElemAt: ['$summary.subjects', 0],
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        participantCount: {
+          $sum: '$subjects',
+        },
+      },
+    },
   ]).exec()
   return Array.isArray(aggregateResult)
     ? aggregateResult[0].participantCount
@@ -69,8 +114,7 @@ export const createSnapshot = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
-    await updateChanges(datasetId, tag, changes)
-    return datalad.createSnapshot(datasetId, tag, userInfo)
+    return datalad.createSnapshot(datasetId, tag, userInfo, {}, changes)
   })
 }
 

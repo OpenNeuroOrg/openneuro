@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/OpenNeuroOrg/openneuro
     docker:
-      - image: circleci/node:8.11-jessie-browsers
+      - image: circleci/node:10.16.3-stretch-browsers
     steps:
       - checkout
       - save_cache:
@@ -33,7 +33,7 @@ jobs:
   cli-install-test:
     working_directory: ~/OpenNeuroOrg/openneuro/packages/openneuro-cli
     docker:
-      - image: circleci/node:8.11-jessie-browsers
+      - image: circleci/node:10.16.3-stretch-browsers
     steps:
       - checkout
       - run: yarn
@@ -110,7 +110,7 @@ jobs:
   sentry-release:
     working_directory: ~/OpenNeuroOrg/openneuro
     docker:
-      - image: circleci/node:8.11-jessie-browsers
+      - image: circleci/node:10.16.3-stretch-browsers
     steps:
       - checkout
       - run:

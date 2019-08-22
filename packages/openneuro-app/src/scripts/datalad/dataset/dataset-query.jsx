@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import ErrorBoundary, { ErrorBoundaryAssertionFailureException } from '../../errors/errorBoundary.jsx'
 
 export const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
@@ -62,13 +62,13 @@ DatasetQueryRender.propTypes = {
 }
 
 const DatasetQuery = ({ match }) => (
-  <ErrorBoundary subject={'error in dataset query'}>
+  <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
     <Query
       query={getDatasetPage}
       variables={{ datasetId: match.params.datasetId }}>
       {DatasetQueryRender}
     </Query>
-  </ErrorBoundary>
+  </ErrorBoundaryAssertionFailureException>
 )
 
 DatasetQuery.propTypes = {

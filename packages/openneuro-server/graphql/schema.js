@@ -41,7 +41,7 @@ const typeDefs = `
     # Get a list of users
     users: [User]
     # Get the total number of dataset participants
-    participantCount: Int
+    participantCount: Int @cacheControl(maxAge: 86400, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
     # Determine if a dataset is partially uploaded
