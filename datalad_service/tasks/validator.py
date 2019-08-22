@@ -23,7 +23,7 @@ def validate_dataset_sync(dataset_path):
     setup_validator()
     try:
         process = subprocess.run(
-            ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE, timeout=180)
+            ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired:
         client.captureException()
