@@ -16,6 +16,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
+import { sitemapHandler } from './handlers/sitemap.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 
 // test flag disables Sentry for tests
@@ -40,7 +41,7 @@ export default test => {
   app.use(bodyParser.json({ limit: '50mb' }))
 
   // routing ---------------------------------------------------------
-
+  app.use('/sitemap.xml', sitemapHandler)
   app.use(config.apiPrefix, routes)
 
   // error handling --------------------------------------------------\
