@@ -1,65 +1,64 @@
 import React, { useState } from 'react'
 import { PropTypes } from 'prop-types'
+import TextInput from '../fragments/text-input.jsx'
+import styled from '@emotion/styled'
+
+const Form = styled.form({})
 
 const defaultMetadata = dataset => ({
+  // get from form
+  associatedPaperDOI: 'mock doi sdlfjsdlkfjlsdkf',
+  species: '1',
+  studyLongitudinal: '1',
+  studyDomain: '',
+  trialCount: '',
+  notes: 'testing',
+
+  studyDesign: '',
+  openneuroPaperDOI: '',
+  dxStatus: [],
+
+  // gettable from validator
   datasetId: dataset.id,
   datasetUrl: '',
-  datasetName: '',
   firstSnapshotCreatedAt: '',
   latestSnapshotCreatedAt: '',
+  adminUsers: '',
   subjectCount: '',
   modalities: [],
-  dxStatus: [],
+  datasetName: '',
+  seniorAuthor: '',
+  dataProcessed: '',
   ages: '',
   tasksCompleted: '',
-  trialCount: '',
-  studyDesign: '',
-  studyDomain: '',
-  studyLongitudinal: '1',
-  dataProcessed: '',
-  species: '1',
-  associatedPaperDOI: '',
-  openneuroPaperDOI: '',
-  seniorAuthor: {
-    firstname: '',
-    lastname: '',
-  },
-  adminUsers: '',
-  notes: 'testing',
 })
 
 const MetadataForm = ({ dataset }) => {
-  const [ values, setValues ] = useState(dataset.metadata || defaultMetadata(dataset))
+  const [values, setValues] = useState(
+    dataset.metadata || defaultMetadata(dataset),
+  )
+  console.log({ values })
   const handleChange = e => {
-    console.log('change')
-    console.log(e)
-    console.log(e.target)
-    console.log(e.target.name)
-    console.log(e.target.value)
-    console.dir(e.target)
-    console.log({values})
     const newValues = {
       ...values,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }
-    console.log({ newValues })
     setValues(newValues)
-    console.log({values})
   }
   const handleSubmit = e => {
     e.preventDefault()
-    console.log('SUBMIT')
-    console.log(e)
-    console.log(e.target)
-    console.dir(e.target)
   }
 
   const newMetadata = dataset.metadata === null
-  return(
-    <form
-      onSubmit={handleSubmit}
-    >
-      <label htmlFor="datasetName">Dataset Name</label>
+  return (
+    <Form onSubmit={handleSubmit}>
+      <TextInput
+        name="associatedPaperDOI"
+        label="Associated Paper DOI"
+        value={values.associatedPaperDOI}
+        onChange={handleChange}
+      />
+      {/* <label htmlFor="datasetName">Dataset Name</label>
       <input type="text" name="datasetName" value={values.datasetName} onChange={handleChange} />
       <label htmlFor="trialCount">Number of Trials</label>
       <input type="text" name="trialCount" value={values.trialCount} onChange={handleChange} />
@@ -81,8 +80,8 @@ const MetadataForm = ({ dataset }) => {
       </select>
       <label htmlFor="notes">Notes</label>
       <textarea name="notes" value={values.notes} onChange={handleChange} />
-      <button type="submit">{newMetadata ? 'Submit Metadata' : 'Update Metadata'}</button>
-    </form>
+      <button type="submit">{newMetadata ? 'Submit Metadata' : 'Update Metadata'}</button> */}
+    </Form>
   )
 }
 

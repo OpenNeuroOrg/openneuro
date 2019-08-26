@@ -6,7 +6,9 @@ import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
-import ErrorBoundary, { ErrorBoundaryAssertionFailureException } from '../../errors/errorBoundary.jsx'
+import ErrorBoundary, {
+  ErrorBoundaryAssertionFailureException,
+} from '../../errors/errorBoundary.jsx'
 
 export const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
@@ -47,6 +49,7 @@ export const DatasetQueryRender = ({ loading, error, data }) => {
     return <Spinner text="Loading Dataset" active />
   } else {
     if (error) Sentry.captureException(error)
+    console.log(data.dataset)
     return (
       <ErrorBoundary error={error} subject={'error in dataset page'}>
         <DatasetPage dataset={data.dataset} />

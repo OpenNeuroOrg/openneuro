@@ -32,7 +32,10 @@ const snapshotIndexKey = datasetId => {
 }
 
 const lockSnapshot = (datasetId, tag) => {
-  return redlock.lock(`openneuro:create-snapshot-lock:${datasetId}:${tag}`, 1800000) 
+  return redlock.lock(
+    `openneuro:create-snapshot-lock:${datasetId}:${tag}`,
+    1800000,
+  )
 }
 
 const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
@@ -67,26 +70,36 @@ const getSnapshotMetadata = (datasetId, snapshots) => {
   })
 }
 
-const createIfNotExistsDoi = async (datasetId, tag, descriptionFieldUpdates) => {
+const createIfNotExistsDoi = async (
+  datasetId,
+  tag,
+  descriptionFieldUpdates,
+) => {
   if (config.doi.username && config.doi.password) {
     // Mint a DOI
     // Get the newest description
-    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
-    const snapshotDoi = await doiLib.registerSnapshotDoi(
-      datasetId,
-      tag,
-      oldDesc,
-    )
+    const snapshotDoi = 'mockDOI'
+    // const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+    // const snapshotDoi = await doiLib.registerSnapshotDoi(
+    //   datasetId,
+    //   tag,
+    //   oldDesc,
+    // )
     if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
     else throw new Error('DOI minting failed.')
   }
 }
 
-const postSnapshot = async (user, createSnapshotUrl, descriptionFieldUpdates, snapshotChanges) => {      
+const postSnapshot = async (
+  user,
+  createSnapshotUrl,
+  descriptionFieldUpdates,
+  snapshotChanges,
+) => {
   // Create snapshot once DOI is ready
   const response = await request
     .post(createSnapshotUrl)
-    .send({ 
+    .send({
       description_fields: descriptionFieldUpdates,
       snapshot_changes: snapshotChanges,
     })
@@ -138,22 +151,27 @@ export const createSnapshot = async (
 
   // lock snapshot id to prevent upload/update conflicts
   const snapshotLock = await lockSnapshot(datasetId, tag)
-  
+
   try {
     await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
-    
+
     const createSnapshotUrl = `${uri}/datasets/${datasetId}/snapshots/${tag}`
-    const snapshot = await postSnapshot(user, createSnapshotUrl, descriptionFieldUpdates, snapshotChanges)
+    const snapshot = await postSnapshot(
+      user,
+      createSnapshotUrl,
+      descriptionFieldUpdates,
+      snapshotChanges,
+    )
     snapshot.created = new Date()
     snapshot.files = await getSnapshotFiles(datasetId, sKey, snapshot)
 
     // Clear the index now that the new snapshot is ready
     redis.del(indexKey)
-    
+
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)
       updateDatasetRevision(datasetId, snapshot.hexsha),
-    
+
       // Update metadata in snapshots collection
       createSnapshotMetadata(datasetId, tag, snapshot.hexsha, snapshot.created),
 
@@ -164,7 +182,6 @@ export const createSnapshot = async (
     snapshotLock.unlock()
     announceNewSnapshot(snapshot, datasetId, user)
     return snapshot
-    
   } catch (err) {
     // delete the keys if any step fails
     // this avoids inconsistent cache state after failures

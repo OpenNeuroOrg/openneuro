@@ -22,10 +22,7 @@ const metadataSchema = new mongoose.Schema({
   species: String,
   associatedPaperDOI: String, // @id type
   openneuroPaperDOI: String, // @id type
-  seniorAuthor: { // Person type
-    firstname: String,
-    lastname: String
-  },
+  seniorAuthor: String,
   adminUsers: String, // email type (@id type?)
   notes: String,
 })
@@ -53,7 +50,7 @@ metadataSchema.virtual('context').get(function() {
     studyDesign: 'http://schema.org/Text',
     studyDomain: 'http://schema.org/Text',
     studyLongitudinal: 'http://schema.org/Text', // 'true' | 'false' | 'user input string'
-    dataProcessed: 'http://schema.org/Text', // 'true' | 'false' | 'user input string'
+    dataProcessed: 'http://schema.org/Boolean', // 'true' | 'false' | 'user input string'
     species: 'http://schema.org/Text',
     associatedPaperDOI: {
       id: 'http://schema.org/url',
@@ -63,10 +60,7 @@ metadataSchema.virtual('context').get(function() {
       id: 'http://schema.org/url',
       type: '@id',
     }, // @id type
-    seniorAuthor: { // Person type
-      firstName: 'http://schema.org/givenName',
-      lastName: 'http://schema.org/familyName'
-    },
+    seniorAuthor: 'http://schema.org/name',
     adminUsers: 'http://schema.org/email', // email type (@id type?)
     notes: 'http://schema.org/Text',
   }
