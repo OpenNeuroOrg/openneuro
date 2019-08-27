@@ -183,12 +183,8 @@ export const DATASET_METADATA = gql`
           type
           container
         }
-        seniorAuthor {
-          firstname
-          lastname
-        }
+        seniorAuthor
         adminUsers
-        notes
       }
       datasetId
       type
@@ -209,12 +205,8 @@ export const DATASET_METADATA = gql`
       species
       associatedPaperDOI
       openneuroPaperDOI
-      seniorAuthor {
-        firstname
-        lastname
-      }
+      seniorAuthor
       adminUsers
-      notes
     }
   }
 `

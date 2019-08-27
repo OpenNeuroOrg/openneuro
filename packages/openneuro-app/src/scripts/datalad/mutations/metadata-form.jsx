@@ -1,92 +1,227 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { PropTypes } from 'prop-types'
 import TextInput from '../fragments/text-input.jsx'
+import SelectInput from '../fragments/select-input.jsx'
+import NumberInput from '../fragments/number-input.jsx'
+import TextArrayInput from '../fragments/text-array-input.jsx'
 import styled from '@emotion/styled'
 
-const Form = styled.form({})
+const Form = styled.form({
+  minWidth: '40rem',
+})
+const DisabledNote = styled.div({
+  display: 'flex',
+  color: '#5cb85c',
 
-const defaultMetadata = dataset => ({
-  // get from form
-  associatedPaperDOI: 'mock doi sdlfjsdlkfjlsdkf',
-  species: '1',
-  studyLongitudinal: '1',
-  studyDomain: '',
-  trialCount: '',
-  notes: 'testing',
-
-  studyDesign: '',
-  openneuroPaperDOI: '',
-  dxStatus: [],
-
-  // gettable from validator
-  datasetId: dataset.id,
-  datasetUrl: '',
-  firstSnapshotCreatedAt: '',
-  latestSnapshotCreatedAt: '',
-  adminUsers: '',
-  subjectCount: '',
-  modalities: [],
-  datasetName: '',
-  seniorAuthor: '',
-  dataProcessed: '',
-  ages: '',
-  tasksCompleted: '',
+  i: {
+    marginRight: '0.5rem',
+  },
+})
+const SubmitButton = styled.button({
+  marginTop: '15px',
 })
 
-const MetadataForm = ({ dataset }) => {
-  const [values, setValues] = useState(
-    dataset.metadata || defaultMetadata(dataset),
-  )
-  console.log({ values })
-  const handleChange = e => {
-    const newValues = {
-      ...values,
-      [e.target.name]: e.target.value,
-    }
-    setValues(newValues)
-  }
-  const handleSubmit = e => {
-    e.preventDefault()
-  }
+const userDependentInput = [
+  'associatedPaperDOI:',
+  'species',
+  'studyLongitudinal',
+  'studyDomain',
+  'trialCount',
+  'studyDesign',
+  'openneuroPaperDOI',
+  'dxStatus',
+]
 
-  const newMetadata = dataset.metadata === null
-  return (
-    <Form onSubmit={handleSubmit}>
-      <TextInput
-        name="associatedPaperDOI"
-        label="Associated Paper DOI"
-        value={values.associatedPaperDOI}
-        onChange={handleChange}
-      />
-      {/* <label htmlFor="datasetName">Dataset Name</label>
-      <input type="text" name="datasetName" value={values.datasetName} onChange={handleChange} />
-      <label htmlFor="trialCount">Number of Trials</label>
-      <input type="text" name="trialCount" value={values.trialCount} onChange={handleChange} />
-      <label htmlFor="studyDesign">Study Design</label>
-      <input type="text" name="studyDesign" value={values.studyDesign} onChange={handleChange} />
-      <label htmlFor="studyDomain">Domain Studied</label>
-      <input type="text" name="studyDomain" value={values.studyDomain} onChange={handleChange} />
-      <label htmlFor="studyLongitudinal">Study Type</label>
-      <select name="studyLongitudinal" value={values.studyLongitudinal} onChange={handleChange}>
-        <option value="1">option 1</option>
-        <option value="2">option 2</option>
-        <option value="other">other</option>
-      </select>
-      <label htmlFor="species">Species</label>
-      <select name="species" value={values.species} onChange={handleChange}>
-        <option value="1">option 1</option>
-        <option value="2">option 2</option>
-        <option value="other">other</option>
-      </select>
-      <label htmlFor="notes">Notes</label>
-      <textarea name="notes" value={values.notes} onChange={handleChange} />
-      <button type="submit">{newMetadata ? 'Submit Metadata' : 'Update Metadata'}</button> */}
-    </Form>
-  )
-}
+const metadataFields = [
+  {
+    key: 'associatedPaperDOI',
+    label: 'DOI of paper associated with DS (from submit lab)',
+    Component: TextInput,
+    additionalProps: {},
+  },
+  {
+    key: 'species',
+    label: 'Species',
+    Component: SelectInput,
+    additionalProps: {
+      options: [{ value: 'Human' }],
+      showOptionOther: true,
+    },
+  },
+  {
+    key: 'studyLongitudinal',
+    label: 'Study Type',
+    Component: SelectInput,
+    additionalProps: {
+      options: [{ value: 'Longitudinal' }],
+      showOptionOther: true,
+    },
+  },
+  {
+    key: 'studyDomain',
+    label: 'Domain Studied',
+    Component: TextInput,
+    additionalProps: {},
+  },
+  {
+    key: 'trialCount',
+    label: 'Number of Trials (if applicable)',
+    Component: NumberInput,
+    additionalProps: {
+      min: -1,
+    },
+  },
+  {
+    key: 'studyDesign',
+    label: 'Study Design',
+    Component: TextInput,
+    additionalProps: {},
+  },
+  {
+    key: 'openneuroPaperDOI',
+    label: 'DOI of paper b/c DS on OpenNeuro',
+    Component: TextInput,
+    additionalProps: {},
+  },
+  {
+    key: 'dxStatus',
+    label: 'DX status(es)',
+    Component: SelectInput,
+    additionalProps: {
+      options: [{ value: 'Healthy / Control' }],
+      showOptionOther: true,
+    },
+  },
+  {
+    key: 'tasksCompleted',
+    label: 'Tasks Completed',
+    Component: TextInput,
+    additionalProps: {},
+  },
+  {
+    key: 'datasetId',
+    label: 'Dataset ID',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'datasetUrl',
+    label: 'Dataset URL',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'firstSnapshotCreatedAt',
+    label: 'First Snapshot (Publish) Date',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'latestSnapshotCreatedAt',
+    label: 'Most Recent Snapshot Date',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'adminUsers',
+    label: 'Admin Users (email)',
+    Component: TextArrayInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'subjectCount',
+    label: 'Number of Subjects',
+    Component: NumberInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'modalities',
+    label: 'Avaliable Modalities',
+    Component: TextArrayInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'datasetName',
+    label: 'Dataset Name',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'seniorAuthor',
+    label: 'Senior Author (Last, First)',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'dataProcessed',
+    label: 'Has Processed Data',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+  {
+    key: 'ages',
+    label: 'Age Range (yy-YY)',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+    },
+  },
+]
+
+const MetadataForm = ({ values, onChange, onSubmit, hideDisabled }) => (
+  <Form className="col-xs-6" onSubmit={onSubmit}>
+    <DisabledNote>
+      <i className="fa fa-asterisk" />
+      <p>
+        Some data is pulled from the dataset for you and cannot be edited here.
+      </p>
+    </DisabledNote>
+    {metadataFields
+      .filter(
+        field => (hideDisabled ? userDependentInput.includes(field.key) : true),
+      )
+      .map(({ key, label, Component, additionalProps }, i) => (
+        <Component
+          name={key}
+          label={label}
+          value={values[key]}
+          onChange={onChange}
+          {...additionalProps}
+          key={i}
+        />
+      ))}
+    <SubmitButton className="btn-blue" type="submit">
+      Submit Metadata
+    </SubmitButton>
+  </Form>
+)
 
 MetadataForm.propTypes = {
-  dataset: PropTypes.object,
+  keyLabelMap: PropTypes.object,
+  values: PropTypes.object,
+  onChange: PropTypes.func,
+  onSubmit: PropTypes.func,
+  hideDisabled: PropTypes.bool,
 }
 
 export default MetadataForm

@@ -40,12 +40,9 @@ metadataSchema.virtual('context').get(function() {
       type: 'http://schema.org/Text',
       container: '@list',
     },
-    dxStatus: {
-      type: 'http://schema.org/Text',
-      container: '@list',
-    },
+    dxStatus: 'http://schema.org/Text',
     ages: 'http://schema.org/typicalAgeRange',
-    tasksCompleted: 'http://schema.org/Boolean',
+    tasksCompleted: 'http://schema.org/Text',
     trialCount: 'http://schema.org/Number',
     studyDesign: 'http://schema.org/Text',
     studyDomain: 'http://schema.org/Text',
@@ -61,7 +58,10 @@ metadataSchema.virtual('context').get(function() {
       type: '@id',
     }, // @id type
     seniorAuthor: 'http://schema.org/name',
-    adminUsers: 'http://schema.org/email', // email type (@id type?)
+    adminUsers: {
+      type: 'http://schema.org/email', // email type (@id type?)
+      container: '@list',
+    },
     notes: 'http://schema.org/Text',
   }
 })

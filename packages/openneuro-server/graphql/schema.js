@@ -153,26 +153,19 @@ const typeDefs = `
     latestSnapshotCreatedAt: DateTime
     subjectCount: Int
     modalities: [String]
-    dxStatus: [String]
+    dxStatus: String
     ages: String
-    tasksCompleted: Boolean
+    tasksCompleted: String
     trialCount: Int
     studyDesign: String
     studyDomain: String
     studyLongitudinal: String
-    dataProcessed: String
+    dataProcessed: Boolean
     species: String
     associatedPaperDOI: String
     openneuroPaperDOI: String
-    seniorAuthor: PersonNameInput
-    adminUsers: String
-    notes: String
-  }
-
-  # person's first and last name
-  input PersonNameInput {
-    firstname: String
-    lastname: String
+    seniorAuthor: String
+    adminUsers: [String]
   }
 
   # Validation updated message
@@ -526,20 +519,19 @@ const typeDefs = `
     latestSnapshotCreatedAt: DateTime
     subjectCount: Int
     modalities: [String]
-    dxStatus: [String]
+    dxStatus: String
     ages: String
-    tasksCompleted: Boolean
+    tasksCompleted: String
     trialCount: Int
     studyDesign: String
     studyDomain: String
     studyLongitudinal: String
-    dataProcessed: String
+    dataProcessed: Boolean
     species: String
     associatedPaperDOI: String
     openneuroPaperDOI: String
-    seniorAuthor: PersonName
-    adminUsers: String
-    notes: String
+    seniorAuthor: String
+    adminUsers: [String]
   }
 
   # JSON-LD Context for Metadata
@@ -562,15 +554,8 @@ const typeDefs = `
     species: String
     associatedPaperDOI: jsonLdNodeProperties
     openneuroPaperDOI: jsonLdNodeProperties
-    seniorAuthor: PersonName
+    seniorAuthor: String
     adminUsers: String
-    notes: String
-  }
-
-  # person's first and last name
-  type PersonName {
-    firstname: String
-    lastname: String
   }
 
   type jsonLdNodeProperties {

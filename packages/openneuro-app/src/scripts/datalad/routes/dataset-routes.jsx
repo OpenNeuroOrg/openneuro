@@ -9,7 +9,7 @@ import Share from './share.jsx'
 import Snapshot from './snapshot.jsx'
 import FileDisplay from './file-display.jsx'
 import Metadata from './metadata.jsx'
-import MetadataForm from '../mutations/metadata-form.jsx'
+import AddMetadata from '../mutations/add-metadata.jsx'
 
 const stubComponent = () => null
 
@@ -111,13 +111,13 @@ const DatasetRoutes = ({ dataset }) => (
       name="metadata"
       exact
       path="/datasets/:datasetId/metadata"
-      component={() => <Metadata metadata={dataset.metadata}/>}
+      component={() => <Metadata metadata={dataset.metadata} />}
     />
     <Route
       name="metadata-form"
       exact
       path="/datasets/:datasetId/metadata/edit"
-      component={() => <MetadataForm dataset={dataset}/>}
+      component={() => <AddMetadata dataset={dataset} />}
     />
   </Switch>
 )

@@ -33,6 +33,12 @@ const Label = styled.label(
     ':focus': pushedUpLabelStyles,
   }),
 )
+const DisabledIcon = styled.i({
+  position: 'absolute',
+  top: '0.4rem',
+  right: '0.4rem',
+  color: '#5cb85c',
+})
 const Input = styled.input({
   width: '100%',
   height: '100%',
@@ -40,7 +46,7 @@ const Input = styled.input({
   padding: '1.5rem 0.8rem 0.3rem',
 })
 
-const NumberInput = ({ name, label, value, min, max, onChange }) => {
+const NumberInput = ({ name, label, value, min, max, disabled, onChange }) => {
   const [hasFocus, setHasFocus] = useState(false)
 
   const input = createRef()
@@ -63,6 +69,7 @@ const NumberInput = ({ name, label, value, min, max, onChange }) => {
         onClick={focusInput}>
         {label}
       </Label>
+      {disabled && <DisabledIcon className="fa fa-asterisk" />}
       <Input
         type="number"
         ref={input}
@@ -70,6 +77,7 @@ const NumberInput = ({ name, label, value, min, max, onChange }) => {
         value={value}
         min={min}
         max={max}
+        disabled={disabled}
         onFocus={focusInput}
         onBlur={removeFocus}
         onChange={onChange}

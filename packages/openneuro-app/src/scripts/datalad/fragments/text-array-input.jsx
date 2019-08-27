@@ -2,19 +2,13 @@ import React, { useState, createRef } from 'react'
 import { PropTypes } from 'prop-types'
 import styled from '@emotion/styled'
 
-const Container = styled.div(
-  {
-    position: 'relative',
-    width: '100%',
-    marginBottom: '0.5rem',
-  },
-  ({ textarea }) =>
-    textarea
-      ? {}
-      : {
-          height: '4rem',
-        },
-)
+const Container = styled.div({
+  position: 'relative',
+  width: '100%',
+  marginBottom: '0.5rem',
+  height: '4rem',
+})
+
 const centerLabelStyles = {
   top: '1rem',
   fontSize: '1em',
@@ -53,15 +47,8 @@ const Input = styled.input({
   borderRadiusBottomRight: 0,
   padding: '1.5rem 0.8rem 0.3rem',
 })
-const Textarea = styled.textarea({
-  width: '100%',
-  border: '1px inset #eee',
-  borderRadius: '0.5rem',
 
-  padding: '1.5rem 0.8rem 0.3rem',
-})
-
-const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
+const TextInput = ({ name, label, value, disabled, onChange }) => {
   const [hasFocus, setHasFocus] = useState(false)
 
   const input = createRef()
@@ -76,7 +63,7 @@ const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
   const removeFocus = () => setHasFocus(false)
 
   return (
-    <Container textarea={textarea}>
+    <Container>
       <Label
         htmlFor={name}
         hasValue={Boolean(value)}
@@ -85,26 +72,14 @@ const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
         {label}
       </Label>
       {disabled && <DisabledIcon className="fa fa-asterisk" />}
-      {textarea ? (
-        <Textarea
-          ref={input}
-          name={name}
-          value={value}
-          onFocus={focusInput}
-          onBlur={removeFocus}
-          onChange={onChange}
-        />
-      ) : (
-        <Input
-          ref={input}
-          name={name}
-          value={value}
-          disabled={disabled}
-          onFocus={focusInput}
-          onBlur={removeFocus}
-          onChange={onChange}
-        />
-      )}
+      <Input
+        ref={input}
+        name={name}
+        value={value}
+        onFocus={focusInput}
+        onBlur={removeFocus}
+        onChange={onChange}
+      />
     </Container>
   )
 }
@@ -113,6 +88,7 @@ TextInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.string,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
 }
 

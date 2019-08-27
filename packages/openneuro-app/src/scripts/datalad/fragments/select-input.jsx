@@ -7,7 +7,6 @@ const Container = styled.div({
   position: 'relative',
   width: '100%',
   height: '4rem',
-  marginBottom: '0.5rem',
 })
 const centerLabelStyles = {
   top: '1rem',
@@ -29,23 +28,35 @@ const Label = styled.label(
     transition: 'top 100ms, font-size 100ms',
     transitionTimingFunction: 'ease-out',
   },
-  ({ hasValue }) => (
-    console.log({ hasValue }),
-    {
-      ...(hasValue ? pushedUpLabelStyles : centerLabelStyles),
-      ':focus': pushedUpLabelStyles,
-    }
-  ),
+  ({ hasValue }) => ({
+    ...(hasValue ? pushedUpLabelStyles : centerLabelStyles),
+    ':focus': pushedUpLabelStyles,
+  }),
 )
-const Select = styled.select({
+const DisabledIcon = styled.i({
   position: 'absolute',
-  top: 0,
-  width: '100%',
-  height: '100%',
-  border: '2px inset #eee',
-  color: 'rgba(0,0,0,0)',
-  backgroundColor: 'rgba(0,0,0,0)',
+  top: '0.4rem',
+  right: '0.4rem',
+  color: '#5cb85c',
 })
+const Select = styled.select(
+  {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: '100%',
+    border: '2px inset #eee',
+    color: 'rgba(0,0,0,0)',
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+  ({ showOther }) =>
+    showOther
+      ? {
+          borderBottomRightRadius: 0,
+          borderBottomLeftRadius: 0,
+        }
+      : {},
+)
 const SelectValueDisplay = styled.div({
   position: 'absolute',
   top: 0,
@@ -76,17 +87,29 @@ const SelectIcon = () => (
   </SelectIconContainer>
 )
 const OtherInputContainer = styled.div(
-  {},
+  {
+    marginBottom: '0.5rem',
+    overflow: 'hidden',
+    transition: 'opacity, transform, height',
+    transitionDuration: '200ms',
+    transitionTimingFunction: 'ease-out',
+
+    input: {
+      borderTopRightRadius: 0,
+      borderTopLeftRadius: 0,
+    },
+  },
   ({ showOther }) =>
     showOther
       ? {
-          // opacity: 1,
-          // transform: 'translateY(0)'
+          height: '4rem',
+          opacity: 1,
+          transform: 'translateY(0)',
         }
       : {
-          display: 'none',
-          // opacity: 0,
-          // transform: 'translateY(0)'
+          height: 0,
+          opacity: 0,
+          transform: 'translateY(-4rem)',
         },
 )
 const SelectInput = ({
@@ -95,6 +118,7 @@ const SelectInput = ({
   value,
   options,
   showOptionOther,
+  disabled,
   onChange,
 }) => {
   const defaultOptions = options.map(option => option.value)
@@ -113,13 +137,19 @@ const SelectInput = ({
         <Label htmlFor={name} hasValue={Boolean(value)}>
           {label}
         </Label>
+        {disabled && <DisabledIcon className="fa fa-asterisk" />}
         {/* Shows contents of select box, including value and up/down icon */}
         <SelectValueDisplay>
           {value}
           <SelectIcon />
         </SelectValueDisplay>
         {/* default children and background of select box are set to transparent */}
-        <Select name={name} value={selectValue} onChange={onChange}>
+        <Select
+          name={name}
+          value={selectValue}
+          disabled={disabled}
+          onChange={onChange}
+          showOther={showOptionOther && otherOptionSelected}>
           <option value="" disabled hidden />
           {options &&
             options.map((option, i) => (
@@ -135,6 +165,7 @@ const SelectInput = ({
           name={name}
           label={`Other ${label}`}
           value={value === 'Other' ? '' : value}
+          disabled={disabled}
           onChange={onChange}
         />
       </OtherInputContainer>
