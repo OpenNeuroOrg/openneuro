@@ -155,6 +155,7 @@ exports[`Comment component renders with an empty comment 1`] = `
           }
         }
         keyBindingFn={[Function]}
+        onChange={[Function]}
         readOnly={false}
         spellCheck={false}
         stripPastedStyles={false}
