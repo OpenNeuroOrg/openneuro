@@ -2,7 +2,7 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import ReactGA from 'react-ga'
+import { event } from 'react-ga'
 import config from '../../../../config.js'
 import datalad from '../../utils/datalad'
 
@@ -11,7 +11,7 @@ const startDownload = uri => {
 }
 
 const trackDownload = (datasetId, snapshotTag) => {
-  ReactGA.event({
+  event({
     category: 'Download',
     action: 'Started web download',
     label: snapshotTag ? `${datasetId}:${snapshotTag}` : datasetId,

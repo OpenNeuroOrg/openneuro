@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { getProfile } from '../../authentication/profile'
 import config from '../../../../config'
 
@@ -12,12 +13,10 @@ const buildCustomQuery = (customText, prepopulatedFields) => {
   return customizerQueries.length ? `&${customizerQueries.join(';')}` : ''
 }
 
-function FreshdeskWidget(props) {
+function FreshdeskWidget({ subject, error, sentryId, description }) {
   const profile = getProfile()
-  const { subject, error, sentryId } = props
-  let { description } = props
   const sentry = sentryId && `Sentry ID: ${sentryId}`
-  description = [sentry, description, error]
+  const joinedDescription = [sentry, description, error]
     .filter(item => item)
     .join(' \u2014 ')
 
@@ -33,7 +32,7 @@ function FreshdeskWidget(props) {
   const prepopulatedFields = {
     requester: profile && profile.email,
     subject,
-    description,
+    description: joinedDescription,
   }
   return (
     <>
@@ -60,6 +59,13 @@ function FreshdeskWidget(props) {
       />
     </>
   )
+}
+
+FreshdeskWidget.propTypes = {
+  subject: PropTypes.string,
+  error: PropTypes.string,
+  sentryId: PropTypes.string,
+  description: PropTypes.string,
 }
 
 export default FreshdeskWidget
