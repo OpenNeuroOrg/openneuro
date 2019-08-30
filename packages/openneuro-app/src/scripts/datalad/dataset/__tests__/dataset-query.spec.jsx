@@ -1,9 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import DatasetQuery, {
-  getDatasetPage,
-  DatasetQueryRender,
-} from '../dataset-query.jsx'
+import DatasetQuery, { getDatasetPage } from '../dataset-query.jsx'
 
 describe('DatasetQuery', () => {
   describe('getDatasetPage', () => {
@@ -18,23 +15,6 @@ describe('DatasetQuery', () => {
         <DatasetQuery match={{ params: { datasetId: 'ds000001' } }} />,
       )
       expect(wrapper).toMatchSnapshot()
-    })
-  })
-  describe('DatasetQueryRender', () => {
-    it('shows a spinner in the loading state', () => {
-      const wrapper = shallow(<DatasetQueryRender loading />)
-      expect(wrapper.find('Spinner')).toHaveLength(1)
-      expect(wrapper.find('DatasetPage')).toHaveLength(0)
-    })
-    it('shows renders DatasetPage once done', () => {
-      const wrapper = shallow(
-        <DatasetQueryRender
-          loading={false}
-          data={{ dataset: { draft: { issues: [] } } }}
-        />,
-      )
-      expect(wrapper.find('Spinner')).toHaveLength(0)
-      expect(wrapper.find('DatasetPage')).toHaveLength(1)
     })
   })
 })
