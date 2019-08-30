@@ -6,10 +6,13 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
-const CommentTree = ({ datasetId, uploader, comments }) => (
+const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
   <>
     {comments.map(comment => {
-      const nextLevel = comment.hasOwnProperty('replies') ? comment.replies : []
+      // Join any replies
+      const nextLevel = comment.hasOwnProperty('replies')
+        ? comment.replies.map(reply => commentMap[reply.id])
+        : []
       return (
         <Comment
           key={comment.id}
@@ -21,6 +24,7 @@ const CommentTree = ({ datasetId, uploader, comments }) => (
               datasetId={datasetId}
               uploader={uploader}
               comments={nextLevel}
+              commentMap={commentMap}
             />
           ) : null}
         </Comment>
@@ -33,9 +37,16 @@ CommentTree.propTypes = {
   datasetId: PropTypes.string,
   uploader: PropTypes.object,
   comments: PropTypes.array,
+  commentMap: PropTypes.object,
 }
 
 const Comments = ({ datasetId, uploader, comments }) => {
+  // Fast access map to dereference replies in CommentTree component
+  const commentMap = Object.fromEntries(
+    comments.map(comment => [comment.id, comment]),
+  )
+  // Get only top level comments
+  const rootComments = comments.filter(comment => comment.parent === null)
   return (
     <div className="col-xs-12">
       <div className="dataset-comments">
@@ -50,7 +61,8 @@ const Comments = ({ datasetId, uploader, comments }) => {
           <CommentTree
             datasetId={datasetId}
             uploader={uploader}
-            comments={comments}
+            comments={rootComments}
+            commentMap={commentMap}
           />
         </ErrorBoundary>
       </div>
