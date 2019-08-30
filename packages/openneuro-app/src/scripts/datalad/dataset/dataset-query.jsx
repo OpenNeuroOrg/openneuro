@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser'
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -54,14 +54,11 @@ export const getDatasetPage = gql`
  * @param {Object} props.datasetId Accession number / id for dataset to query
  */
 export const DatasetQueryHook = ({ datasetId }) => {
-  const [commentDepth, setCommentDepth] = useState(DEFAULT_COMMENT_DEPTH)
-  const [query, updateQuery] = useState(getDatasetPage)
   const {
     data: { dataset },
     loading,
     error,
-    fetchMore,
-  } = useQuery(query, {
+  } = useQuery(getDatasetPage, {
     variables: { datasetId },
   })
   if (loading) {
