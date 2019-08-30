@@ -19,6 +19,78 @@ const EDIT_COMMENT = gql`
   }
 `
 
+/**
+ * Create a new comment cache entry for Apollo update
+ * @param {string} id Comment ID
+ * @param {string|null} parentId Parent comment ID if one exists
+ * @param {Object} body DraftJS ContentState
+ * @param {Object} profile GraphQL User type
+ * @param {Object} profile.email User email is the only required property for comments
+ * @returns {{id: string, parent: Object, text: string, createDate: string, user: Object, replies: Array, __typename: string }}
+ */
+export const commentStateFactory = (id, parentId, body, profile) => ({
+  id,
+  parent: parentId ? { __typename: 'Comment', id: parentId } : null,
+  text: JSON.stringify(convertToRaw(body)),
+  createDate: new Date().toISOString(),
+  user: { __typename: 'User', ...profile },
+  replies: [],
+  __typename: 'Comment',
+})
+
+/**
+ * Add a new comment to comment state based on arguments
+ * @param {Object[]} comments
+ * @param {Object} arguments
+ * @param {string} arguments.parentId
+ * @param {string} arguments.commentId
+ * @param {Object} arguments.comment
+ * @param {Object} arguments.profile
+ * @returns {Object[]}
+ */
+export const newCommentsReducer = (
+  comments,
+  { parentId = null, commentId, comment, profile },
+) => {
+  const newComment = commentStateFactory(commentId, parentId, comment, profile)
+  // Must copy with freezeResults enabled
+  const nextCommentsState = [...comments, newComment]
+  // If this is not a root level comment, add to replies
+  if (parentId) {
+    const parentIndex = nextCommentsState.findIndex(
+      comment => comment.id === parentId,
+    )
+    const parentReplies = nextCommentsState[parentIndex].replies
+    nextCommentsState[parentIndex] = {
+      ...comments[parentIndex],
+      replies: [...parentReplies, { __typename: 'Comment', id: commentId }],
+    }
+  }
+  return nextCommentsState
+}
+
+/**
+ * Modify an exsiting comment and return new state based on arguments
+ * @param {Object[]} comments
+ * @param {Object} arguments
+ * @param {string} arguments.commentId
+ * @param {Object} arguments.comment
+ * @returns {Object[]}
+ */
+export const modifyCommentsReducer = (comments, { commentId, comment }) => {
+  // Must copy with freezeResults enabled
+  const nextCommentsState = [...comments]
+  const modifiedCommentIndex = nextCommentsState.findIndex(
+    c => c.id === commentId,
+  )
+  const modifiedComment = nextCommentsState[modifiedCommentIndex]
+  nextCommentsState[modifiedCommentIndex] = {
+    ...modifiedComment,
+    text: JSON.stringify(convertToRaw(comment)),
+  }
+  return nextCommentsState
+}
+
 const CommentMutation = ({
   datasetId,
   parentId,
@@ -36,39 +108,22 @@ const CommentMutation = ({
           id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
         })
-        // Must copy with freezeResults enabled
-        const commentsCopy = [...comments]
-        // If new comment, add to parent replies array
-        if (parentId) {
-          const parentIndex = comments.findIndex(
-            comment => comment.id === parentId,
-          )
-          const parentReplies = comments[parentIndex].replies
-          commentsCopy[parentIndex] = {
-            ...comments[parentIndex],
-            replies: [
-              ...parentReplies,
-              { __typename: 'Comment', id: addComment },
-            ],
-          }
-        }
-        // Create a mock comment
-        const newComment = {
-          id: addComment || commentId,
-          parent: { __typename: 'Comment', id: parentId },
-          text: JSON.stringify(convertToRaw(comment)),
-          createDate: new Date().toISOString(),
-          user: { __typename: 'User', ...profile },
-          replies: [],
-          __typename: 'Comment',
-        }
+        // Apply state reduction to cache for new comment changes
+        const nextCommentsState = parentId
+          ? newCommentsReducer(comments, {
+              parentId,
+              commentId: addComment,
+              comment,
+              profile,
+            })
+          : modifyCommentsReducer(comments, { commentId, comment })
         cache.writeFragment({
           id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
           data: {
             __typename: 'Dataset',
             id: datasetId,
-            comments: [...commentsCopy, newComment],
+            comments: nextCommentsState,
           },
         })
       }}>
