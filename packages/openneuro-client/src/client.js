@@ -12,7 +12,9 @@ import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache({
+  freezeResults: true,
+})
 
 /**
  * Setup a client for working with the OpenNeuro API
