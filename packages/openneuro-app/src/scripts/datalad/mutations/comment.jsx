@@ -109,7 +109,7 @@ const CommentMutation = ({
           fragment: DATASET_COMMENTS,
         })
         // Apply state reduction to cache for new comment changes
-        const nextCommentsState = parentId
+        const nextCommentsState = addComment
           ? newCommentsReducer(comments, {
               parentId,
               commentId: addComment,
