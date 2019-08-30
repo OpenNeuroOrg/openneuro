@@ -18,6 +18,7 @@
     "esm": "^3.0.84",
     "form-data": "^2.5.0",
     "graphql": "^14.4.2",
+    "graphql-tools": "^4.0.5",
     "node-fetch": "^2.6.0",
     "subscriptions-transport-ws": "^0.9.15"
   },
