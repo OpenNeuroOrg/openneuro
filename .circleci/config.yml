@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/python:3.6.5-stretch-node
+      - image: circleci/python:3.6.9-stretch-node
     steps:
       - checkout
 
