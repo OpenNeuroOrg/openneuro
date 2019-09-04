@@ -1,10 +1,6 @@
-from functools import wraps
-
-import falcon
 from os import path
 
 from datalad.api import Dataset
-from datalad_service.common.annex import CommitInfo, get_repo_files
 
 
 class DataladStore(object):

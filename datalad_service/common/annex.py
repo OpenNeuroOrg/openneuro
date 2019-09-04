@@ -6,7 +6,6 @@ import stat
 import subprocess
 
 from datalad.config import ConfigManager
-from datalad.support.exceptions import FileInGitError, FileNotInAnnexError
 
 
 SERVICE_EMAIL = 'git@openneuro.org'
@@ -87,7 +86,6 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
 
 def get_repo_files(dataset, branch='HEAD'):
     """Read all files in a repo at a given branch, tag, or commit hash."""
-    dir_fd = os.open(dataset.path, os.O_RDONLY)
     gitProcess = subprocess.Popen(
         ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
     files = []

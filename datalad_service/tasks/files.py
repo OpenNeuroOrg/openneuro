@@ -1,7 +1,6 @@
 import os
 
 from datalad_service.common.annex import CommitInfo, get_repo_files
-from datalad_service.common.celery import app
 from datalad_service.common.celery import dataset_task
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.validator import validate_dataset

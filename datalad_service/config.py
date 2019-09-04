@@ -1,6 +1,5 @@
 """Environment based configuration."""
 import os
-import sys
 
 
 def get_environ(key, fallback=None):
@@ -23,7 +22,7 @@ AWS_REGION = get_environ('AWS_REGION')
 AWS_ACCOUNT_ID = get_environ('AWS_ACCOUNT_ID')
 AWS_S3_PRIVATE_BUCKET = get_environ('AWS_S3_PRIVATE_BUCKET')
 AWS_S3_PUBLIC_BUCKET = get_environ('AWS_S3_PUBLIC_BUCKET')
-JWT_SECRET=get_environ('JWT_SECRET')
+JWT_SECRET = get_environ('JWT_SECRET')
 
 # Sentry monitoring
 SENTRY_DSN = get_environ('SENTRY_DSN')

@@ -31,7 +31,7 @@ def create_app(annex_path):
         sender.add_periodic_task(
             60 * 15, audit_datasets.s(annex_path), queue=publish_queue())
 
-    api = application = falcon.API(middleware=AuthenticateMiddleware())
+    api = falcon.API(middleware=AuthenticateMiddleware())
     api.router_options.converters['path'] = PathConverter
 
     raven.falcon_handler(api)

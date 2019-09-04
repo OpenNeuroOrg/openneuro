@@ -1,4 +1,3 @@
-import difflib
 import json
 import os
 from datalad_service.common.celery import dataset_task

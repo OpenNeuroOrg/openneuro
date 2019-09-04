@@ -1,3 +1,4 @@
+import requests
 from datalad.api import create_sibling_github
 
 from datalad_service.config import DATALAD_GITHUB_ORG
@@ -8,8 +9,6 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, s3_versions, get_s3_realm
 from datalad_service.common.celery import dataset_task, publish_queue
-
-import requests
 
 
 def create_github_repo(dataset, repo_name):

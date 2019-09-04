@@ -3,17 +3,13 @@ Dataset global tasks
 
 Any operations that affect an entire dataset (such as creating snapshots)
 """
-import logging
 import os
 import stat
-import shutil
-import json
 
 from datalad_service.common.annex import CommitInfo
 from datalad_service.common.celery import dataset_task, dataset_queue
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.snapshots import update_changes
-from datalad_service.tasks.publish import publish_snapshot
 
 
 # A list of patterns to avoid annexing in BIDS datasets
