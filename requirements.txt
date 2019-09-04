@@ -71,7 +71,7 @@ six==1.11.0
 smmap2==2.0.3
 tornado==5.0.2
 tqdm==4.23.0
-urllib3==1.22
+urllib3==1.24.2
 vine==1.1.4
 Whoosh==2.7.4
 wrapt==1.10.11
