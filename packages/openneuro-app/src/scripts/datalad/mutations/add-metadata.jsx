@@ -61,7 +61,7 @@ const initializeFormData = dataset => {
     modalities: getFromSummary('modalities') || [],
   }
 }
-const AddMetadata = ({ dataset, history, location }) => {
+const AddMetadata = ({ dataset, history, location, uploader }) => {
   const [values, setValues] = useState(initializeFormData(dataset))
   const handleInputChange = (name, value) => {
     const newValues = {
@@ -69,9 +69,6 @@ const AddMetadata = ({ dataset, history, location }) => {
       [name]: value,
     }
     setValues(newValues)
-  }
-  const handleFormSubmit = e => {
-    e.preventDefault()
   }
   const submitPath = location.state && location.state.submitPath
 
@@ -81,11 +78,7 @@ const AddMetadata = ({ dataset, history, location }) => {
         <h1>Add Metadata</h1>
         <hr />
       </header>
-      <MetadataForm
-        values={values}
-        onChange={handleInputChange}
-        onSubmit={handleFormSubmit}
-      />
+      <MetadataForm values={values} onChange={handleInputChange} />
       <div className="col-xs-12 dataset-form-controls">
         <div className="col-xs-12 modal-actions">
           <Link to={`/datasets/${dataset.id}`}>

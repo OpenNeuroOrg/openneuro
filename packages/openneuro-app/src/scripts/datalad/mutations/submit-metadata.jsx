@@ -5,7 +5,7 @@ import { Mutation } from 'react-apollo'
 import { DATASET_METADATA } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
 
-const SUBMIT_METADATA = gql`
+export const SUBMIT_METADATA = gql`
   mutation addMetadata($datasetId: ID!, $metadata: MetadataInput!) {
     addMetadata(datasetId: $datasetId, metadata: $metadata) {
       context {

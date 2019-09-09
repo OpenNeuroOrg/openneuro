@@ -47,16 +47,15 @@ const DisabledIcon = styled.i({
   color: '#5cb85c',
 })
 const Input = styled.input({
+  borderRadius: '5px',
   width: '100%',
   height: '100%',
-  borderRadius: '0.5rem',
-  borderRadiusBottomRight: 0,
   padding: '1.5rem 0.8rem 0.3rem',
 })
 const Textarea = styled.textarea({
   width: '100%',
   border: '1px inset #eee',
-  borderRadius: '0.5rem',
+  borderRadius: '5px',
 
   padding: '1.5rem 0.8rem 0.3rem',
 })

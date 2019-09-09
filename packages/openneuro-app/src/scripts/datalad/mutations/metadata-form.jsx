@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 
 const Form = styled.form({
   minWidth: '40rem',
-  margingBottom: '5rem',
+  margin: '10px 0',
 })
 const DisabledNote = styled.div({
   display: 'flex',
@@ -18,17 +18,6 @@ const DisabledNote = styled.div({
     marginRight: '0.5rem',
   },
 })
-
-const userDependentInput = [
-  'associatedPaperDOI:',
-  'species',
-  'studyLongitudinal',
-  'studyDomain',
-  'trialCount',
-  'studyDesign',
-  'openneuroPaperDOI',
-  'dxStatus',
-]
 
 const metadataFields = [
   {
@@ -97,7 +86,12 @@ const metadataFields = [
     label: 'DX status(es)',
     Component: SelectInput,
     additionalProps: {
-      options: [{ value: 'Healthy / Control' }],
+      options: [
+        { value: 'Healthy / Control' },
+        { value: 'Schizophrenia' },
+        { value: 'ADD/ADHD' },
+        { value: 'Alzheimers' },
+      ],
       showOptionOther: true,
       required: false,
     },
@@ -208,15 +202,19 @@ const metadataFields = [
 
 const MetadataForm = ({ values, onChange, hideDisabled }) => (
   <Form id="metadata-form" className="col-xs-6">
-    <DisabledNote>
-      <i className="fa fa-asterisk" />
-      <p>
-        Some data is pulled from the dataset for you and cannot be edited here.
-      </p>
-    </DisabledNote>
+    {!hideDisabled && (
+      <DisabledNote>
+        <i className="fa fa-asterisk" />
+        <p>
+          Some data is pulled from the dataset for you and cannot be edited
+          here.
+        </p>
+      </DisabledNote>
+    )}
     {metadataFields
       .filter(
-        field => (hideDisabled ? userDependentInput.includes(field.key) : true),
+        // remove disabled fields when hideDisabled is true
+        field => !(hideDisabled && field.additionalProps.disabled),
       )
       .map(({ key, label, Component, additionalProps }, i) => (
         <Component

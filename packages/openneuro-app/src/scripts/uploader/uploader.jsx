@@ -57,6 +57,8 @@ export class UploadClient extends React.Component {
       resumeDataset: this.resumeDataset,
       // Get files from the browser
       selectFiles: this.selectFiles,
+      // Capture metadata from form
+      captureMetadata: this.captureMetadata,
       // Start an upload
       upload: this.upload,
       // Upload XHR request
@@ -65,6 +67,8 @@ export class UploadClient extends React.Component {
       datasetId: null,
       // Cancel current upload
       cancel: this.cancel,
+      // dataset metadata
+      metadata: {},
     }
   }
 
@@ -161,12 +165,27 @@ export class UploadClient extends React.Component {
           selectedFiles: files,
           name,
         })
-        this.setLocation('/upload/rename')
+        this.setLocation('/upload/issues')
       } else {
         throw new Error('No files selected')
       }
     })
   }
+
+  captureMetadata = metadata => {
+    this.setState(
+      {
+        metadata,
+      },
+      () => console.log('uploader', this.state),
+    )
+  }
+
+  uploadMetadata = () =>
+    mutation.submitMetadata(this.props.client)(
+      this.state.datasetId,
+      this.state.metadata,
+    )
 
   upload() {
     // Track the start of uploads
@@ -188,7 +207,10 @@ export class UploadClient extends React.Component {
         .createDataset(this.props.client)(this.state.name)
         .then(datasetId => {
           // Note chain to this._addFiles
-          this.setState({ datasetId }, this._addFiles)
+          this.setState({ datasetId }, () => {
+            this.uploadMetadata()
+            this._addFiles()
+          })
         })
         .catch(error => {
           Sentry.captureException(error)

@@ -117,7 +117,7 @@ const UploadIssues = () => (
     {uploader => (
       <UploadValidator
         files={uploader.selectedFiles}
-        next={() => uploader.setLocation('/upload/disclaimer')}
+        next={() => uploader.setLocation('/upload/metadata')}
         reset={() => uploader.setLocation('/upload')}
       />
     )}

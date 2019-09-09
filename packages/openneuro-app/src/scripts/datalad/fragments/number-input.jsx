@@ -42,7 +42,7 @@ const DisabledIcon = styled.i({
 const Input = styled.input({
   width: '100%',
   height: '100%',
-  borderRadius: '0.5rem',
+  borderRadius: '5px',
   padding: '1.5rem 0.8rem 0.3rem',
 })
 

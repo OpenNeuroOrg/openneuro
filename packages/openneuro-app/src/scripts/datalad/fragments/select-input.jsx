@@ -7,6 +7,8 @@ const Container = styled.div({
   position: 'relative',
   width: '100%',
   height: '4rem',
+  backgroundColor: 'white',
+  borderRadius: '5px',
 })
 const centerLabelStyles = {
   top: '1rem',
@@ -43,6 +45,8 @@ const Select = styled.select(
   {
     position: 'absolute',
     top: 0,
+    left: 0,
+    right: 0,
     width: '100%',
     height: '100%',
     border: '2px inset #eee',
