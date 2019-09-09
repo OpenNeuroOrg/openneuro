@@ -15,7 +15,7 @@ const UploadMetadata = () => {
     species: '',
     studyLongitudinal: '',
     studyDomain: '',
-    trialCount: null,
+    trialCount: undefined,
     studyDesign: '',
     openneuroPaperDOI: '',
     dxStatus: '',

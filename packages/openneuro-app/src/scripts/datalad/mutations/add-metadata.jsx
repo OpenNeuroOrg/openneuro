@@ -27,7 +27,7 @@ const initializeFormData = dataset => {
     species: getFromMetadata('species') || '',
     studyLongitudinal: getFromMetadata('studyLongitudinal') || '',
     studyDomain: getFromMetadata('studyDomain') || '',
-    trialCount: getFromMetadata('trialCount') || '',
+    trialCount: getFromMetadata('trialCount') || undefined,
     studyDesign: getFromMetadata('studyDesign') || '',
     openneuroPaperDOI: getFromMetadata('openneuroPaperDOI') || '',
     dxStatus: getFromMetadata('dxStatus') || '',
