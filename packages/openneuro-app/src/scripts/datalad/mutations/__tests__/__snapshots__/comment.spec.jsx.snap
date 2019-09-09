@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CommentMutation renders with basic props 1`] = `""`;
+
+exports[`CommentMutation renders with common props 1`] = `""`;

@@ -33,7 +33,11 @@ const Comment = ({ datasetId, data, children }) => {
               done={() => setEditMode(false)}
             />
           ) : (
-            <Editor editorKey={data.id} editorState={editorState} />
+            <Editor
+              editorKey={data.id}
+              editorState={editorState}
+              onChange={() => {}}
+            />
           )}
         </div>
         <LoggedIn>

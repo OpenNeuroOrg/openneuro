@@ -78,6 +78,12 @@ const FileTree = ({
 FileTree.propTypes = {
   datasetId: PropTypes.string,
   files: PropTypes.array,
+  snapshotTag: PropTypes.string,
+  path: PropTypes.string,
+  name: PropTypes.string,
+  directories: PropTypes.array,
+  editMode: PropTypes.bool,
+  defaultExpanded: PropTypes.bool,
 }
 
 export default FileTree

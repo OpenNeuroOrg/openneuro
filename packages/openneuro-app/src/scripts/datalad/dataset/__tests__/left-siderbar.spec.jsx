@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { LeftSidebar, SidebarRow } from '../left-sidebar.jsx'
 import cookies from '../../../utils/cookies.js'
 
-const fixedDate = new Date('2019-04-02T19:56:41.222Z')
+const fixedDate = new Date('2019-04-02T19:56:41.222Z').toString()
 const mockLocation = { pathname: '/dataset/ds000001' }
 
 describe('LeftSidebar component', () => {

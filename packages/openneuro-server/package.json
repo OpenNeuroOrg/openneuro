@@ -80,7 +80,7 @@
     "eslint": "^4.18.1",
     "ioredis-mock": "^3.8.1",
     "jest": "^24.6.0",
-    "mockingoose": "^2.11.0",
+    "mockingoose": "2.11.0",
     "mongo-mock": "3.7.1",
     "supertest": "^3.0.0"
   },

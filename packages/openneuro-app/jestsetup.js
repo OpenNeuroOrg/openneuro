@@ -4,6 +4,7 @@ import Enzyme, { shallow, render, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import moment from 'moment-timezone'
 import fetch from 'jest-fetch-mock'
+import fromEntries from 'object.fromentries'
 
 Enzyme.configure({ adapter: new Adapter() })
 
@@ -15,5 +16,9 @@ global.shallow = shallow
 global.render = render
 global.mount = mount
 global.fetch = fetch
+
+if (!Object.fromEntries) {
+  fromEntries.shim()
+}
 
 jest.mock('./config.js')

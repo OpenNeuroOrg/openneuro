@@ -115,6 +115,10 @@ const FrontPageTopActive = ({ datasets }) => {
   )
 }
 
+FrontPageTopActive.propTypes = {
+  datasets: PropTypes.array,
+}
+
 const FrontPageTopRecent = ({ datasets }) => {
   return (
     <>
@@ -134,6 +138,10 @@ const FrontPageTopRecent = ({ datasets }) => {
       ))}
     </>
   )
+}
+
+FrontPageTopRecent.propTypes = {
+  datasets: PropTypes.array,
 }
 
 const FrontPageTopResult = query => ({ loading, error, data }) => {

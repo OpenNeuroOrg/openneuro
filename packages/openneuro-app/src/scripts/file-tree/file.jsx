@@ -45,10 +45,9 @@ const File = ({
             <i className="fa fa-file-o" /> Update
           </UpdateFile>
         )}
-        {editMode &&
-          filename !== 'dataset_description.json' && (
-            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-          )}
+        {editMode && filename !== 'dataset_description.json' && (
+          <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+        )}
       </span>
     </>
   )
@@ -59,6 +58,7 @@ File.propTypes = {
   path: PropTypes.string,
   filename: PropTypes.string,
   snapshotTag: PropTypes.string,
+  editMode: PropTypes.bool,
 }
 
 export default File

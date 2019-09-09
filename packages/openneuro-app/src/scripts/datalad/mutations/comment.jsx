@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { convertToRaw } from 'draft-js'
 import withProfile from '../../authentication/withProfile.js'
-import { DATASET_COMMENTS } from '../dataset/dataset-query-fragments.js'
+import { DATASET_COMMENTS } from '../dataset/comments-fragments.js'
 import { datasetCacheId } from './cache-id.js'
 
 const NEW_COMMENT = gql`
@@ -19,30 +19,76 @@ const EDIT_COMMENT = gql`
   }
 `
 
-export const appendCommentToTree = (tree, newComment) => {
-  if (newComment.hasOwnProperty('parentId') && newComment.parentId) {
-    const parentId = newComment.parentId
-    for (const comment of tree) {
-      if (comment.id === parentId) {
-        // We might need to add a replies field
-        if (comment.replies) {
-          comment.replies = [newComment, ...comment.replies]
-        } else {
-          comment.replies = [newComment]
-        }
-      } else {
-        // Iterate over this node's children
-        if (comment.replies) {
-          comment.replies = appendCommentToTree(comment.replies, newComment)
-        } else {
-          comment.replies = []
-        }
-      }
+/**
+ * Create a new comment cache entry for Apollo update
+ * @param {string} id Comment ID
+ * @param {string|null} parentId Parent comment ID if one exists
+ * @param {Object} body DraftJS ContentState
+ * @param {Object} profile GraphQL User type
+ * @param {Object} profile.email User email is the only required property for comments
+ * @returns {{id: string, parent: Object, text: string, createDate: string, user: Object, replies: Array, __typename: string }}
+ */
+export const commentStateFactory = (id, parentId, body, profile) => ({
+  id,
+  parent: parentId ? { __typename: 'Comment', id: parentId } : null,
+  text: JSON.stringify(convertToRaw(body)),
+  createDate: new Date().toISOString(),
+  user: { __typename: 'User', ...profile },
+  replies: [],
+  __typename: 'Comment',
+})
+
+/**
+ * Add a new comment to comment state based on arguments
+ * @param {Object[]} comments
+ * @param {Object} arguments
+ * @param {string} arguments.parentId
+ * @param {string} arguments.commentId
+ * @param {Object} arguments.comment
+ * @param {Object} arguments.profile
+ * @returns {Object[]}
+ */
+export const newCommentsReducer = (
+  comments,
+  { parentId = null, commentId, comment, profile },
+) => {
+  const newComment = commentStateFactory(commentId, parentId, comment, profile)
+  // Must copy with freezeResults enabled
+  const nextCommentsState = [...comments, newComment]
+  // If this is not a root level comment, add to replies
+  if (parentId) {
+    const parentIndex = nextCommentsState.findIndex(
+      comment => comment.id === parentId,
+    )
+    const parentReplies = nextCommentsState[parentIndex].replies
+    nextCommentsState[parentIndex] = {
+      ...comments[parentIndex],
+      replies: [...parentReplies, { __typename: 'Comment', id: commentId }],
     }
-    return tree
-  } else {
-    return [newComment, ...tree]
   }
+  return nextCommentsState
+}
+
+/**
+ * Modify an exsiting comment and return new state based on arguments
+ * @param {Object[]} comments
+ * @param {Object} arguments
+ * @param {string} arguments.commentId
+ * @param {Object} arguments.comment
+ * @returns {Object[]}
+ */
+export const modifyCommentsReducer = (comments, { commentId, comment }) => {
+  // Must copy with freezeResults enabled
+  const nextCommentsState = [...comments]
+  const modifiedCommentIndex = nextCommentsState.findIndex(
+    c => c.id === commentId,
+  )
+  const modifiedComment = nextCommentsState[modifiedCommentIndex]
+  nextCommentsState[modifiedCommentIndex] = {
+    ...modifiedComment,
+    text: JSON.stringify(convertToRaw(comment)),
+  }
+  return nextCommentsState
 }
 
 const CommentMutation = ({
@@ -62,24 +108,22 @@ const CommentMutation = ({
           id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
         })
-        // Create a mock comment
-        const newComment = {
-          id: addComment || commentId,
-          parentId,
-          text: JSON.stringify(convertToRaw(comment)),
-          createDate: new Date().toISOString(),
-          user: { __typename: 'User', ...profile },
-          replies: [],
-          __typename: 'Comment',
-        }
-        const newTree = appendCommentToTree(comments, newComment)
+        // Apply state reduction to cache for new comment changes
+        const nextCommentsState = addComment
+          ? newCommentsReducer(comments, {
+              parentId,
+              commentId: addComment,
+              comment,
+              profile,
+            })
+          : modifyCommentsReducer(comments, { commentId, comment })
         cache.writeFragment({
           id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
           data: {
             __typename: 'Dataset',
             id: datasetId,
-            comments: newTree,
+            comments: nextCommentsState,
           },
         })
       }}>

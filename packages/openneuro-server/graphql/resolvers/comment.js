@@ -7,7 +7,7 @@ export const comment = (obj, { id }) => {
 }
 
 export const datasetComments = obj => {
-  return Comment.find({ datasetId: obj.id, parentId: null }).exec()
+  return Comment.find({ datasetId: obj.id }).exec()
 }
 
 export const userComments = obj => {
