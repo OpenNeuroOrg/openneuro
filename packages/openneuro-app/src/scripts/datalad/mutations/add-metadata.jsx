@@ -60,7 +60,7 @@ export const compileMetadata = dataset => {
     modalities: getFromSummary('modalities') || [],
   }
 }
-const AddMetadata = ({ dataset, history, location, uploader }) => {
+const AddMetadata = ({ dataset, history, location }) => {
   const [values, setValues] = useState(compileMetadata(dataset))
   const handleInputChange = (name, value) => {
     const newValues = {
@@ -77,7 +77,11 @@ const AddMetadata = ({ dataset, history, location, uploader }) => {
         <h1>Add Metadata</h1>
         <hr />
       </header>
-      <MetadataForm values={values} onChange={handleInputChange} />
+      <MetadataForm
+        values={values}
+        onChange={handleInputChange}
+        hideDisabled={false}
+      />
       <div className="col-xs-12 dataset-form-controls">
         <div className="col-xs-12 modal-actions">
           <Link to={`/datasets/${dataset.id}`}>
@@ -96,6 +100,8 @@ const AddMetadata = ({ dataset, history, location, uploader }) => {
 
 AddMetadata.propTypes = {
   dataset: PropTypes.object,
+  history: PropTypes.object,
+  location: PropTypes.object,
 }
 
 export default withRouter(AddMetadata)
