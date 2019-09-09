@@ -54,7 +54,7 @@ const metadataFields = [
     label: 'Study Type',
     Component: SelectInput,
     additionalProps: {
-      options: [{ value: 'Longitudinal' }],
+      options: [{ value: 'Longitudinal' }, { value: 'Cross-Sectional' }],
       showOptionOther: true,
       required: false,
     },

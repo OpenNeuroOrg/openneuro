@@ -7,6 +7,7 @@ import { getDatasetUrl } from '../../utils/dataset-url'
 
 const initializeFormData = dataset => {
   const getFromMetadata = key => dataset.metadata && dataset.metadata[key]
+  const getFromSummary = key => dataset.summary && dataset.summary[key]
   return {
     // get from form
     associatedPaperDOI: getFromMetadata('associatedPaperDOI') || '',
@@ -46,12 +47,16 @@ const initializeFormData = dataset => {
     seniorAuthor:
       getFromMetadata('seniorAuthor') ||
       'authors not listed in description.json',
-    dataProcessed: getFromMetadata('dataProcessed') || false,
+    dataProcessed:
+      getFromMetadata('dataProcessed') ||
+      getFromSummary('dataProcessed') ||
+      false,
     tasksCompleted: getFromMetadata('tasksCompleted') || 'n/a - no tasks found',
   }
 }
 const AddMetadata = ({ dataset, history, location }) => {
   const [values, setValues] = useState(initializeFormData(dataset))
+  console.log(values)
   const handleInputChange = (name, value) => {
     const newValues = {
       ...values,
