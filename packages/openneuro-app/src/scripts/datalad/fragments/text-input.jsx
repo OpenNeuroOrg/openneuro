@@ -7,6 +7,8 @@ const Container = styled.div(
     position: 'relative',
     width: '100%',
     marginBottom: '0.5rem',
+    borderRadius: '5px',
+    border: '2px inset #eee',
   },
   ({ textarea }) =>
     textarea
@@ -47,7 +49,7 @@ const DisabledIcon = styled.i({
   color: '#5cb85c',
 })
 const Input = styled.input({
-  borderRadius: '5px',
+  border: 'none',
   width: '100%',
   height: '100%',
   padding: '1.5rem 0.8rem 0.3rem',
