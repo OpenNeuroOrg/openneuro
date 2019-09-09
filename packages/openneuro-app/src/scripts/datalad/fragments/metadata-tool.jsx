@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
@@ -27,6 +26,9 @@ const MetadataTool = ({ datasetId, metadata, history, location }) => {
 MetadataTool.propTypes = {
   metadata: PropTypes.object,
   following: PropTypes.object,
+  datasetId: PropTypes.string,
+  history: PropTypes.object,
+  location: PropTypes.object,
 }
 
 export default withRouter(MetadataTool)
