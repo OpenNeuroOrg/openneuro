@@ -7,6 +7,8 @@ const Container = styled.div({
   width: '100%',
   height: '4rem',
   marginBottom: '0.5rem',
+  borderRadius: '5px',
+  border: '2px inset #eee',
 })
 const centerLabelStyles = {
   top: '1rem',
@@ -42,7 +44,7 @@ const DisabledIcon = styled.i({
 const Input = styled.input({
   width: '100%',
   height: '100%',
-  borderRadius: '5px',
+  border: 'none',
   padding: '1.5rem 0.8rem 0.3rem',
 })
 
