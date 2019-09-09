@@ -3,26 +3,6 @@ import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import PublishDataset from '../mutations/publish.jsx'
 
-const expectedMetadata = [
-  'associatedPaperDOI',
-  'species',
-  'studyLongitudinal',
-  'studyDomain',
-  'trialCount',
-  'studyDesign',
-  'openneuroPaperDOI',
-  'dxStatus',
-  'datasetId',
-  'datasetUrl',
-  'firstSnapshotCreatedAt',
-  'latestSnapshotCreatedAt',
-  'adminUsers',
-  'datasetName',
-  'seniorAuthor',
-  'dataProcessed',
-  'tasksCompleted',
-]
-
 const hasExpectedMetadata = metadata =>
   metadata && typeof metadata.context === 'object'
 

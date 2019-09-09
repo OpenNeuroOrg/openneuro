@@ -103,6 +103,10 @@ const NumberInput = ({
 }
 
 NumberInput.propTypes = {
+  min: PropTypes.number,
+  max: PropTypes.number,
+  disabled: PropTypes.bool,
+  required: PropTypes.bool,
   name: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

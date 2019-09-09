@@ -127,7 +127,7 @@ const SelectInput = ({
   onChange,
 }) => {
   const defaultOptions = options.map(option => option.value)
-  const nothingSelected = !Boolean(value)
+  const nothingSelected = !value
   const otherOptionSelected =
     !nothingSelected && !defaultOptions.includes(value)
 

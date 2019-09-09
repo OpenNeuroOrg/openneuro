@@ -101,6 +101,7 @@ TextArrayInput.propTypes = {
   label: PropTypes.string,
   value: PropTypes.array,
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
   onChange: PropTypes.func,
 }
 

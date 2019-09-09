@@ -135,6 +135,7 @@ TextInput.propTypes = {
     PropTypes.bool,
   ]),
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
   textarea: PropTypes.bool,
   nullMessage: PropTypes.string,
   onChange: PropTypes.func,
