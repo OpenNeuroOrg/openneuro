@@ -165,12 +165,10 @@ export const DATASET_METADATA = gql`
         associatedPaperDOI {
           id
           type
-          container
         }
         openneuroPaperDOI {
           id
           type
-          container
         }
         seniorAuthor
         adminUsers {

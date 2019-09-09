@@ -21,7 +21,6 @@ const metadataSchema = new mongoose.Schema({
   openneuroPaperDOI: String, // @id type
   seniorAuthor: String,
   adminUsers: [String], // email type (@id type?)
-  notes: String,
 })
 
 metadataSchema.virtual('context').get(function() {
@@ -53,7 +52,6 @@ metadataSchema.virtual('context').get(function() {
       type: 'http://schema.org/email', // email type (@id type?)
       container: '@list',
     },
-    notes: 'http://schema.org/Text',
   }
 })
 

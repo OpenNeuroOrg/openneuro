@@ -4,11 +4,38 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { DATASET_METADATA } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
-import { withRouter } from 'react-router-dom'
 
 const SUBMIT_METADATA = gql`
   mutation addMetadata($datasetId: ID!, $metadata: MetadataInput!) {
     addMetadata(datasetId: $datasetId, metadata: $metadata) {
+      context {
+        datasetId
+        datasetUrl
+        datasetName
+        firstSnapshotCreatedAt
+        latestSnapshotCreatedAt
+        dxStatus
+        tasksCompleted
+        trialCount
+        studyDesign
+        studyDomain
+        studyLongitudinal
+        dataProcessed
+        species
+        associatedPaperDOI {
+          id
+          type
+        }
+        openneuroPaperDOI {
+          id
+          type
+        }
+        seniorAuthor
+        adminUsers {
+          type
+          container
+        }
+      }
       datasetId
       type
       datasetUrl
@@ -38,7 +65,11 @@ const SubmitMetadata = ({ datasetId, metadata, done }) => (
       cache.writeFragment({
         id: datasetCacheId(datasetId),
         fragment: DATASET_METADATA,
-        data: addMetadata,
+        data: {
+          __typename: 'Dataset',
+          id: datasetId,
+          metadata: addMetadata,
+        },
       })
     }}>
     {submitMetadata => (

@@ -17,22 +17,14 @@ const expectedMetadata = [
   'firstSnapshotCreatedAt',
   'latestSnapshotCreatedAt',
   'adminUsers',
-  'modalities',
   'datasetName',
   'seniorAuthor',
   'dataProcessed',
-  'ages',
   'tasksCompleted',
 ]
 
 const hasExpectedMetadata = metadata =>
-  metadata &&
-  Object.entries(metadata).every(item => {
-    const exists = item[1] !== undefined && item[1] !== null
-    console.log('check: ', { metadata, item })
-    if (!exists) console.log(item)
-    return exists
-  })
+  metadata && typeof metadata.context === 'object'
 
 const Publish = ({ datasetId, metadata }) =>
   hasExpectedMetadata(metadata) ? (
