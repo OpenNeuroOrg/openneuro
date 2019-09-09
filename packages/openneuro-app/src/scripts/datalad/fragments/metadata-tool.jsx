@@ -11,13 +11,14 @@ const MetadataTool = ({ datasetId, metadata, history, location }) => {
       tooltip={hasMetadata ? 'Metadata' : 'Add Metadata'}
       icon={hasMetadata ? 'fa-file-code-o' : 'fa-file-code-o icon-plus'}
       warn={false}
-      action={() => {
+      action={cb => {
         history.push({
           pathname: `/datasets/${datasetId}/metadata`,
           state: {
             submitPath: location.pathname,
           },
         })
+        cb()
       }}
     />
   )
