@@ -41,15 +41,12 @@ const initializeFormData = dataset => {
           .map(({ user }) => user && user.email)) || ['dataset has no admins'],
 
     // got from validator MOCK DATA
-    subjectCount: getFromMetadata('subjectCount') || -1,
-    modalities: getFromMetadata('modalities') || ['none'],
     datasetName:
       getFromMetadata('datasetName') || 'dataset unnamed in description.json',
     seniorAuthor:
       getFromMetadata('seniorAuthor') ||
       'authors not listed in description.json',
     dataProcessed: getFromMetadata('dataProcessed') || false,
-    ages: getFromMetadata('ages') || 'ages not found in participants.tsv',
     tasksCompleted: getFromMetadata('tasksCompleted') || 'n/a - no tasks found',
   }
 }

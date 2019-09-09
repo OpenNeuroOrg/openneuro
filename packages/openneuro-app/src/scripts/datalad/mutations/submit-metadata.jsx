@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { DATASET_METADATA } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
+import { withRouter } from 'react-router-dom'
 
 const SUBMIT_METADATA = gql`
   mutation addMetadata($datasetId: ID!, $metadata: MetadataInput!) {
@@ -45,7 +46,8 @@ const SubmitMetadata = ({ datasetId, metadata, done }) => (
         type="submit"
         form="metadata-form"
         className="btn-modal-action"
-        onClick={async () => {
+        onClick={async e => {
+          e.preventDefault()
           await submitMetadata({
             variables: { datasetId, metadata },
           })

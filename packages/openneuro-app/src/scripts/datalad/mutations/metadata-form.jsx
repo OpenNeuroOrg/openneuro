@@ -160,24 +160,6 @@ const metadataFields = [
     },
   },
   {
-    key: 'subjectCount',
-    label: 'Number of Subjects',
-    Component: NumberInput,
-    additionalProps: {
-      disabled: true,
-      required: false,
-    },
-  },
-  {
-    key: 'modalities',
-    label: 'Avaliable Modalities',
-    Component: TextArrayInput,
-    additionalProps: {
-      disabled: true,
-      required: false,
-    },
-  },
-  {
     key: 'datasetName',
     label: 'Dataset Name',
     Component: TextInput,
@@ -198,15 +180,6 @@ const metadataFields = [
   {
     key: 'dataProcessed',
     label: 'Has Processed Data',
-    Component: TextInput,
-    additionalProps: {
-      disabled: true,
-      required: false,
-    },
-  },
-  {
-    key: 'ages',
-    label: 'Age Range (yy-YY)',
     Component: TextInput,
     additionalProps: {
       disabled: true,
