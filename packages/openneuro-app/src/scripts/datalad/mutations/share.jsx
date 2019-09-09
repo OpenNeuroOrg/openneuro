@@ -26,7 +26,7 @@ export const mergeNewPermission = (
   datasetId,
   oldPermissions,
   userInfo,
-  access,
+  metadata,
 ) => {
   return {
     __typename: 'Dataset',
@@ -36,13 +36,13 @@ export const mergeNewPermission = (
       {
         __typename: 'Permission',
         user: { __typename: 'User', ...userInfo },
-        level: access,
+        level: metadata,
       },
     ],
   }
 }
 
-const ShareDataset = ({ datasetId, userEmail, access, done }) => (
+const ShareDataset = ({ datasetId, userEmail, metadata, done }) => (
   <Mutation
     mutation={SHARE_DATASET}
     update={(cache, { data: { updatePermissions } }) => {
@@ -57,7 +57,7 @@ const ShareDataset = ({ datasetId, userEmail, access, done }) => (
           datasetId,
           permissions,
           updatePermissions,
-          access,
+          metadata,
         ),
       })
     }}>
@@ -66,7 +66,7 @@ const ShareDataset = ({ datasetId, userEmail, access, done }) => (
         className="btn-modal-action"
         onClick={async () => {
           await shareDataset({
-            variables: { datasetId, userEmail, level: access },
+            variables: { datasetId, userEmail, level: metadata },
           })
           done()
         }}>
@@ -79,7 +79,7 @@ const ShareDataset = ({ datasetId, userEmail, access, done }) => (
 ShareDataset.propTypes = {
   datasetId: PropTypes.string,
   userEmail: PropTypes.string,
-  access: PropTypes.oneOf(['ro', 'rw', 'admin']),
+  metadata: PropTypes.oneOf(['ro', 'rw', 'admin']),
   done: PropTypes.func,
 }
 

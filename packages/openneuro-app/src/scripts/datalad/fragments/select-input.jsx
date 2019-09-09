@@ -119,6 +119,7 @@ const SelectInput = ({
   options,
   showOptionOther,
   disabled,
+  required,
   onChange,
 }) => {
   const defaultOptions = options.map(option => option.value)
@@ -130,6 +131,8 @@ const SelectInput = ({
   if (nothingSelected) selectValue = ''
   else if (otherOptionSelected) selectValue = 'Other'
   else selectValue = value
+
+  const handleChange = e => onChange(e.target.name, e.target.value)
 
   return (
     <>
@@ -148,8 +151,9 @@ const SelectInput = ({
           name={name}
           value={selectValue}
           disabled={disabled}
-          onChange={onChange}
-          showOther={showOptionOther && otherOptionSelected}>
+          onChange={handleChange}
+          showOther={showOptionOther && otherOptionSelected}
+          required={required}>
           <option value="" disabled hidden />
           {options &&
             options.map((option, i) => (

@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 
 const Form = styled.form({
   minWidth: '40rem',
+  margingBottom: '5rem',
 })
 const DisabledNote = styled.div({
   display: 'flex',
@@ -16,9 +17,6 @@ const DisabledNote = styled.div({
   i: {
     marginRight: '0.5rem',
   },
-})
-const SubmitButton = styled.button({
-  marginTop: '15px',
 })
 
 const userDependentInput = [
@@ -37,7 +35,9 @@ const metadataFields = [
     key: 'associatedPaperDOI',
     label: 'DOI of paper associated with DS (from submit lab)',
     Component: TextInput,
-    additionalProps: {},
+    additionalProps: {
+      required: false,
+    },
   },
   {
     key: 'species',
@@ -46,6 +46,7 @@ const metadataFields = [
     additionalProps: {
       options: [{ value: 'Human' }],
       showOptionOther: true,
+      required: false,
     },
   },
   {
@@ -55,13 +56,16 @@ const metadataFields = [
     additionalProps: {
       options: [{ value: 'Longitudinal' }],
       showOptionOther: true,
+      required: false,
     },
   },
   {
     key: 'studyDomain',
     label: 'Domain Studied',
     Component: TextInput,
-    additionalProps: {},
+    additionalProps: {
+      required: false,
+    },
   },
   {
     key: 'trialCount',
@@ -69,19 +73,24 @@ const metadataFields = [
     Component: NumberInput,
     additionalProps: {
       min: -1,
+      required: false,
     },
   },
   {
     key: 'studyDesign',
     label: 'Study Design',
     Component: TextInput,
-    additionalProps: {},
+    additionalProps: {
+      required: false,
+    },
   },
   {
     key: 'openneuroPaperDOI',
     label: 'DOI of paper b/c DS on OpenNeuro',
     Component: TextInput,
-    additionalProps: {},
+    additionalProps: {
+      required: false,
+    },
   },
   {
     key: 'dxStatus',
@@ -90,13 +99,18 @@ const metadataFields = [
     additionalProps: {
       options: [{ value: 'Healthy / Control' }],
       showOptionOther: true,
+      required: false,
     },
   },
   {
     key: 'tasksCompleted',
     label: 'Tasks Completed',
-    Component: TextInput,
-    additionalProps: {},
+    Component: SelectInput,
+    additionalProps: {
+      options: [{ value: 'True' }, { value: 'False' }],
+      showOptionOther: true,
+      required: false,
+    },
   },
   {
     key: 'datasetId',
@@ -104,6 +118,7 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -112,6 +127,7 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -120,6 +136,8 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      nullMessage: 'dataset has no snapshots',
+      required: false,
     },
   },
   {
@@ -128,6 +146,8 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      nullMessage: 'dataset has no snapshots',
+      required: false,
     },
   },
   {
@@ -136,6 +156,7 @@ const metadataFields = [
     Component: TextArrayInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -144,6 +165,7 @@ const metadataFields = [
     Component: NumberInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -152,6 +174,7 @@ const metadataFields = [
     Component: TextArrayInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -160,6 +183,7 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -168,6 +192,7 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -176,6 +201,7 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
   {
@@ -184,12 +210,13 @@ const metadataFields = [
     Component: TextInput,
     additionalProps: {
       disabled: true,
+      required: false,
     },
   },
 ]
 
-const MetadataForm = ({ values, onChange, onSubmit, hideDisabled }) => (
-  <Form className="col-xs-6" onSubmit={onSubmit}>
+const MetadataForm = ({ values, onChange, hideDisabled }) => (
+  <Form id="metadata-form" className="col-xs-6">
     <DisabledNote>
       <i className="fa fa-asterisk" />
       <p>
@@ -210,9 +237,6 @@ const MetadataForm = ({ values, onChange, onSubmit, hideDisabled }) => (
           key={i}
         />
       ))}
-    <SubmitButton className="btn-blue" type="submit">
-      Submit Metadata
-    </SubmitButton>
   </Form>
 )
 
@@ -220,7 +244,6 @@ MetadataForm.propTypes = {
   keyLabelMap: PropTypes.object,
   values: PropTypes.object,
   onChange: PropTypes.func,
-  onSubmit: PropTypes.func,
   hideDisabled: PropTypes.bool,
 }
 

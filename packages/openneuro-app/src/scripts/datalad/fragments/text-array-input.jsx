@@ -48,7 +48,14 @@ const Input = styled.input({
   padding: '1.5rem 0.8rem 0.3rem',
 })
 
-const TextInput = ({ name, label, value, disabled, onChange }) => {
+const TextArrayInput = ({
+  name,
+  label,
+  value,
+  disabled,
+  required,
+  onChange,
+}) => {
   const [hasFocus, setHasFocus] = useState(false)
 
   const input = createRef()
@@ -61,6 +68,10 @@ const TextInput = ({ name, label, value, disabled, onChange }) => {
   }
 
   const removeFocus = () => setHasFocus(false)
+
+  const handleChange = e => {
+    onChange(e.target.name, e.target.value.split(','))
+  }
 
   return (
     <Container>
@@ -75,21 +86,22 @@ const TextInput = ({ name, label, value, disabled, onChange }) => {
       <Input
         ref={input}
         name={name}
-        value={value}
+        value={value.join(', ')}
+        required={required}
         onFocus={focusInput}
         onBlur={removeFocus}
-        onChange={onChange}
+        onChange={handleChange}
       />
     </Container>
   )
 }
 
-TextInput.propTypes = {
+TextArrayInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.array,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
 }
 
-export default TextInput
+export default TextArrayInput

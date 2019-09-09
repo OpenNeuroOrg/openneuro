@@ -46,7 +46,16 @@ const Input = styled.input({
   padding: '1.5rem 0.8rem 0.3rem',
 })
 
-const NumberInput = ({ name, label, value, min, max, disabled, onChange }) => {
+const NumberInput = ({
+  name,
+  label,
+  value,
+  min,
+  max,
+  disabled,
+  required,
+  onChange,
+}) => {
   const [hasFocus, setHasFocus] = useState(false)
 
   const input = createRef()
@@ -59,6 +68,10 @@ const NumberInput = ({ name, label, value, min, max, disabled, onChange }) => {
   }
 
   const removeFocus = () => setHasFocus(false)
+
+  const handleChange = e => {
+    onChange(e.target.name, parseInt(e.target.value))
+  }
 
   return (
     <Container>
@@ -78,9 +91,10 @@ const NumberInput = ({ name, label, value, min, max, disabled, onChange }) => {
         min={min}
         max={max}
         disabled={disabled}
+        required={required}
         onFocus={focusInput}
         onBlur={removeFocus}
-        onChange={onChange}
+        onChange={handleChange}
       />
     </Container>
   )
@@ -89,7 +103,7 @@ const NumberInput = ({ name, label, value, min, max, disabled, onChange }) => {
 NumberInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChange: PropTypes.func,
 }
 

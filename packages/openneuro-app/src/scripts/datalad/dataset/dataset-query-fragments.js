@@ -154,18 +154,7 @@ export const DATASET_METADATA = gql`
         datasetName
         firstSnapshotCreatedAt
         latestSnapshotCreatedAt
-        subjectCount
-        modalities {
-          id
-          type
-          container
-        }
-        dxStatus {
-          id
-          type
-          container
-        }
-        ages
+        dxStatus
         tasksCompleted
         trialCount
         studyDesign
@@ -184,7 +173,10 @@ export const DATASET_METADATA = gql`
           container
         }
         seniorAuthor
-        adminUsers
+        adminUsers {
+          type
+          container
+        }
       }
       datasetId
       type
@@ -192,10 +184,7 @@ export const DATASET_METADATA = gql`
       datasetName
       firstSnapshotCreatedAt
       latestSnapshotCreatedAt
-      subjectCount
-      modalities
       dxStatus
-      ages
       tasksCompleted
       trialCount
       studyDesign

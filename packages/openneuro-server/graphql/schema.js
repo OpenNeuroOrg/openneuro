@@ -151,10 +151,7 @@ const typeDefs = `
     datasetName: String
     firstSnapshotCreatedAt: DateTime
     latestSnapshotCreatedAt: DateTime
-    subjectCount: Int
-    modalities: [String]
     dxStatus: String
-    ages: String
     tasksCompleted: String
     trialCount: Int
     studyDesign: String
@@ -517,10 +514,7 @@ const typeDefs = `
     datasetName: String
     firstSnapshotCreatedAt: DateTime
     latestSnapshotCreatedAt: DateTime
-    subjectCount: Int
-    modalities: [String]
     dxStatus: String
-    ages: String
     tasksCompleted: String
     trialCount: Int
     studyDesign: String
@@ -541,10 +535,7 @@ const typeDefs = `
     datasetName: String
     firstSnapshotCreatedAt: String
     latestSnapshotCreatedAt: String
-    subjectCount: String
-    modalities: jsonLdNodeProperties
-    dxStatus: jsonLdNodeProperties
-    ages: String
+    dxStatus: String
     tasksCompleted: String
     trialCount: String
     studyDesign: String
@@ -555,7 +546,7 @@ const typeDefs = `
     associatedPaperDOI: jsonLdNodeProperties
     openneuroPaperDOI: jsonLdNodeProperties
     seniorAuthor: String
-    adminUsers: String
+    adminUsers: jsonLdNodeProperties
   }
 
   type jsonLdNodeProperties {

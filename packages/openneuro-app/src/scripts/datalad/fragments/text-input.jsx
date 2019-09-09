@@ -61,9 +61,21 @@ const Textarea = styled.textarea({
   padding: '1.5rem 0.8rem 0.3rem',
 })
 
-const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
+const TextInput = ({
+  name,
+  label,
+  value,
+  disabled,
+  textarea,
+  nullMessage,
+  required,
+  onChange,
+}) => {
+  if (value === null) {
+    if (nullMessage) value = nullMessage
+    else value = ''
+  } else value = value.toString()
   const [hasFocus, setHasFocus] = useState(false)
-
   const input = createRef()
 
   const focusInput = () => {
@@ -74,6 +86,8 @@ const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
   }
 
   const removeFocus = () => setHasFocus(false)
+
+  const handleChange = e => onChange(e.target.name, e.target.value)
 
   return (
     <Container textarea={textarea}>
@@ -92,7 +106,7 @@ const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
           value={value}
           onFocus={focusInput}
           onBlur={removeFocus}
-          onChange={onChange}
+          onChange={handleChange}
         />
       ) : (
         <Input
@@ -102,7 +116,8 @@ const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
           disabled={disabled}
           onFocus={focusInput}
           onBlur={removeFocus}
-          onChange={onChange}
+          onChange={handleChange}
+          required={required}
         />
       )}
     </Container>
@@ -112,7 +127,15 @@ const TextInput = ({ name, label, value, disabled, textarea, onChange }) => {
 TextInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
+  disabled: PropTypes.bool,
+  textarea: PropTypes.bool,
+  nullMessage: PropTypes.string,
   onChange: PropTypes.func,
 }
 

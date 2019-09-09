@@ -4,8 +4,7 @@ import gql from 'graphql-tag'
 import { withRouter } from 'react-router'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
-
-const MetadataTool = ({ datasetId, metadata, history }) => {
+const MetadataTool = ({ datasetId, metadata, history, location }) => {
   const hasMetadata = metadata !== null
   return (
     <WarnButton
@@ -14,9 +13,10 @@ const MetadataTool = ({ datasetId, metadata, history }) => {
       warn={false}
       action={() => {
         history.push({
-          pathname: hasMetadata
-            ? `/datasets/${datasetId}/metadata`
-            : `/datasets/${datasetId}/metadata/edit`
+          pathname: `/datasets/${datasetId}/metadata`,
+          state: {
+            submitPath: location.pathname,
+          },
         })
       }}
     />

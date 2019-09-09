@@ -9,21 +9,18 @@ const metadataSchema = new mongoose.Schema({
   datasetName: String,
   firstSnapshotCreatedAt: Date,
   latestSnapshotCreatedAt: Date,
-  subjectCount: Number,
-  modalities: [String],
-  dxStatus: [String],
-  ages: String,
-  tasksCompleted: Boolean,
+  dxStatus: String,
+  tasksCompleted: String,
   trialCount: Number,
   studyDesign: String,
   studyDomain: String,
   studyLongitudinal: String, // 'true' | 'false' | 'user input string'
-  dataProcessed: String, // 'true' | 'false' | 'user input string'
+  dataProcessed: Boolean, // 'true' | 'false' | 'user input string'
   species: String,
   associatedPaperDOI: String, // @id type
   openneuroPaperDOI: String, // @id type
   seniorAuthor: String,
-  adminUsers: String, // email type (@id type?)
+  adminUsers: [String], // email type (@id type?)
   notes: String,
 })
 
@@ -35,13 +32,7 @@ metadataSchema.virtual('context').get(function() {
     datasetName: 'http://schema.org/Text',
     firstSnapshotCreatedAt: 'http://schema.org/DateTime',
     latestSnapshotCreatedAt: 'http://schema.org/DateTime',
-    subjectCount: 'http://schema.org/Number',
-    modalities: {
-      type: 'http://schema.org/Text',
-      container: '@list',
-    },
     dxStatus: 'http://schema.org/Text',
-    ages: 'http://schema.org/typicalAgeRange',
     tasksCompleted: 'http://schema.org/Text',
     trialCount: 'http://schema.org/Number',
     studyDesign: 'http://schema.org/Text',
