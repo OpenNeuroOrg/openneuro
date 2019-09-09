@@ -18,8 +18,7 @@ const initializeFormData = dataset => {
   const getAgesFromSummary = () => {
     const subjectMetadata = getFromSummary('subject-metadata')
     return (
-      typeof subjectMetadata === 'object' &&
-      Object.values(subjectMetadata).map(({ age }) => age)
+      subjectMetadata && Object.values(subjectMetadata).map(({ age }) => age)
     )
   }
   return {

@@ -32,28 +32,25 @@ const UploadMetadata = () => {
   return (
     <UploaderContext.Consumer>
       {uploader => (
-        console.log(uploader),
-        (
-          <Container className="message fade-in">
-            {/* <AddMetadata /> */}
-            Input dataset metadata.
-            <MetadataForm
-              values={values}
-              onChange={handleInputChange}
-              hideDisabled={true}
-            />
-            <br />
-            <button
-              className="fileupload-btn btn-blue"
-              disabled={false}
-              onClick={() => {
-                uploader.captureMetadata(values)
-                uploader.setLocation('/upload/disclaimer')
-              }}>
-              Continue
-            </button>
-          </Container>
-        )
+        <Container className="message fade-in">
+          {/* <AddMetadata /> */}
+          Input dataset metadata.
+          <MetadataForm
+            values={values}
+            onChange={handleInputChange}
+            hideDisabled={true}
+          />
+          <br />
+          <button
+            className="fileupload-btn btn-blue"
+            disabled={false}
+            onClick={() => {
+              uploader.captureMetadata(values)
+              uploader.setLocation('/upload/disclaimer')
+            }}>
+            Continue
+          </button>
+        </Container>
       )}
     </UploaderContext.Consumer>
   )

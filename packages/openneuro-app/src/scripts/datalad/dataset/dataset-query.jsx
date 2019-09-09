@@ -49,7 +49,6 @@ export const DatasetQueryRender = ({ loading, error, data }) => {
     return <Spinner text="Loading Dataset" active />
   } else {
     if (error) Sentry.captureException(error)
-    console.log(data.dataset)
     return (
       <ErrorBoundary error={error} subject={'error in dataset page'}>
         <DatasetPage dataset={data.dataset} />
