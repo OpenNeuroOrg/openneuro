@@ -5,7 +5,7 @@ import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
 import { getDatasetUrl } from '../../utils/dataset-url'
 
-const initializeFormData = dataset => {
+export const compileMetadata = dataset => {
   const getFromMetadata = key => dataset.metadata && dataset.metadata[key]
   const getFromSummary = key =>
     dataset.draft && dataset.draft.summary && dataset.draft.summary[key]
@@ -61,7 +61,7 @@ const initializeFormData = dataset => {
   }
 }
 const AddMetadata = ({ dataset, history, location, uploader }) => {
-  const [values, setValues] = useState(initializeFormData(dataset))
+  const [values, setValues] = useState(compileMetadata(dataset))
   const handleInputChange = (name, value) => {
     const newValues = {
       ...values,
