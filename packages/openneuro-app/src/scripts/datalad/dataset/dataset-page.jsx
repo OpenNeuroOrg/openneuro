@@ -19,8 +19,6 @@ class DatasetPage extends React.Component {
 
   render() {
     const { dataset } = this.props
-    console.log('DATASET PAGE')
-    console.log(dataset)
     return (
       <div className="page dataset">
         <div

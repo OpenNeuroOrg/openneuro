@@ -131,6 +131,33 @@ const metadataFields = [
     },
   },
   {
+    key: 'datasetName',
+    label: 'Dataset Name',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+      required: false,
+    },
+  },
+  {
+    key: 'seniorAuthor',
+    label: 'Senior Author (Last, First)',
+    Component: TextInput,
+    additionalProps: {
+      disabled: true,
+      required: false,
+    },
+  },
+  {
+    key: 'adminUsers',
+    label: 'Admin Users (email)',
+    Component: TextArrayInput,
+    additionalProps: {
+      disabled: true,
+      required: false,
+    },
+  },
+  {
     key: 'firstSnapshotCreatedAt',
     label: 'First Snapshot (Publish) Date',
     Component: TextInput,
@@ -151,8 +178,8 @@ const metadataFields = [
     },
   },
   {
-    key: 'adminUsers',
-    label: 'Admin Users (email)',
+    key: 'ages',
+    label: 'Subject Ages',
     Component: TextArrayInput,
     additionalProps: {
       disabled: true,
@@ -160,18 +187,9 @@ const metadataFields = [
     },
   },
   {
-    key: 'datasetName',
-    label: 'Dataset Name',
-    Component: TextInput,
-    additionalProps: {
-      disabled: true,
-      required: false,
-    },
-  },
-  {
-    key: 'seniorAuthor',
-    label: 'Senior Author (Last, First)',
-    Component: TextInput,
+    key: 'modalities',
+    label: 'Modalities Available',
+    Component: TextArrayInput,
     additionalProps: {
       disabled: true,
       required: false,

@@ -175,6 +175,14 @@ export const DATASET_METADATA = gql`
           type
           container
         }
+        ages {
+          type
+          container
+        }
+        modalities {
+          type
+          container
+        }
       }
       datasetId
       type
@@ -194,6 +202,8 @@ export const DATASET_METADATA = gql`
       openneuroPaperDOI
       seniorAuthor
       adminUsers
+      ages
+      modalities
     }
   }
 `

@@ -163,6 +163,8 @@ const typeDefs = `
     openneuroPaperDOI: String
     seniorAuthor: String
     adminUsers: [String]
+    ages: [Int]
+    modalities: [String]
   }
 
   # Validation updated message
@@ -526,6 +528,8 @@ const typeDefs = `
     openneuroPaperDOI: String
     seniorAuthor: String
     adminUsers: [String]
+    ages: [Int]
+    modalities: [String]
   }
 
   # JSON-LD Context for Metadata
@@ -547,6 +551,8 @@ const typeDefs = `
     openneuroPaperDOI: jsonLdNodeProperties
     seniorAuthor: String
     adminUsers: jsonLdNodeProperties
+    ages: jsonLdNodeProperties
+    modalities: jsonLdNodeProperties
   }
 
   type jsonLdNodeProperties {
