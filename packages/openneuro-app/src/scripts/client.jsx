@@ -8,7 +8,7 @@ import App from './app.jsx'
 import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 import packageJson from '../../package.json'
 import { loadConfig } from './config.js'
-import GoogleAnalytics from 'react-ga'
+import * as GoogleAnalytics from 'react-ga'
 
 if (module.hot) module.hot.accept()
 

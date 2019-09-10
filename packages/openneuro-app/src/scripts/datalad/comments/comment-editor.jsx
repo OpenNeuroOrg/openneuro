@@ -40,7 +40,7 @@ const CommentEditor = ({
           editorState={editorState}
           onChange={setEditorState}
           placeholder="Type your comment here..."
-          spellCheck={true}
+          spellCheck
         />
         {commentId ? (
           <CommentMutation

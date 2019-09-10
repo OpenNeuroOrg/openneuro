@@ -22,6 +22,10 @@ spec:
             backend:
               serviceName: {{ .Release.Name }}-api
               servicePort: 8111
+          - path: /sitemap.xml
+            backend:
+              serviceName: {{ .Release.Name }}-api
+              servicePort: 8111
           - path: /*
             backend:
               serviceName: {{ .Release.Name }}-web

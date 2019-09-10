@@ -1,104 +1,154 @@
-import { appendCommentToTree } from '../comment.jsx'
+import React from 'react'
+import { shallow } from 'enzyme'
+import { ContentState } from 'draft-js'
+import CommentMutation, {
+  commentStateFactory,
+  newCommentsReducer,
+  modifyCommentsReducer,
+} from '../comment.jsx'
 
-const testTree = [
-  {
-    id: '5c8c1d44b25d23ca69e168b2',
-    text:
-      '{"blocks":[{"key":"2eqse","text":"This is a test comment.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-    createDate: '2019-03-15T21:46:44.000Z',
-    user: { email: 'nell@squishymedia.com', __typename: 'User' },
-    replies: [
-      {
-        id: '5c8c1d4db25d23465be168b3',
-        text:
-          '{"blocks":[{"key":"t0rh","text":"Comment reply one level deep.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-        createDate: '2019-03-15T21:46:53.000Z',
-        user: { email: 'nell@squishymedia.com', __typename: 'User' },
-        replies: [
-          {
-            id: '5c8c1d55b25d2386eee168b4',
-            text:
-              '{"blocks":[{"key":"20s5h","text":"Comment reply two levels deep.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-            createDate: '2019-03-15T21:47:01.000Z',
-            user: { email: 'nell@squishymedia.com', __typename: 'User' },
-            replies: [],
-            __typename: 'Comment',
-          },
-        ],
-        __typename: 'Comment',
-      },
-    ],
-    __typename: 'Comment',
-  },
-]
+const ISO8601 = /^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([.,]\d+(?!:))?)?(\17[0-5]\d([.,]\d+)?)?([zZ]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/
 
 describe('CommentMutation', () => {
-  describe('appendCommentToTree()', () => {
-    it('prepends a top level comment', () => {
-      const newComment = {
-        id: '5c9bf9f154487708c9ccddb3',
-        text:
-          '{"blocks":[{"key":"898g8","text":"New top level comment.","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":22,"style":"CODE"}],"entityRanges":[],"data":{}}],"entityMap":{}}',
-        createDate: '2019-03-27T22:32:17.371Z',
-        user: { email: 'nell@squishymedia.com', __typename: 'User' },
-        __typename: 'Comment',
-      }
-      const newCommentTree = appendCommentToTree(testTree, newComment)
-      expect(newCommentTree).toHaveLength(2)
-      expect(newCommentTree[0]).toBe(newComment)
+  it('renders with basic props', () => {
+    const wrapper = shallow(<CommentMutation datasetId="ds001" />)
+    expect(wrapper).toMatchSnapshot()
+  })
+  it('renders with common props', () => {
+    const wrapper = shallow(
+      <CommentMutation
+        datasetId="ds001"
+        parentId="1234"
+        comment="new comment"
+        profile={{ id: 'user', email: 'something@example.com' }}
+        done={() => {}}
+      />,
+    )
+    expect(wrapper).toMatchSnapshot()
+  })
+  describe('commentStateFactory', () => {
+    it('returns values with __typename', () => {
+      const commentState = ContentState.createFromText('test comment')
+      const comment = commentStateFactory('12345', '5867', commentState, {
+        email: 'something@example.com',
+      })
+      expect(comment).toHaveProperty('__typename', 'Comment')
+      expect(comment.user).toHaveProperty('__typename', 'User')
+      expect(comment.parent).toHaveProperty('__typename', 'Comment')
     })
-    it('extends replies if parentId is present', () => {
-      const newComment = {
-        id: '5c9bfb53544877d695ccddb4',
-        text:
-          '{"blocks":[{"key":"8eecf","text":"Comment reply three levels deep.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-        createDate: '2019-03-27T22:38:11.246Z',
-        user: { email: 'nell@squishymedia.com', __typename: 'User' },
-        parentId: '5c8c1d55b25d2386eee168b4',
+    it('returns expected output', () => {
+      const commentState = ContentState.createFromText('test comment')
+      const comment = commentStateFactory('12345', '5867', commentState, {
+        email: 'something@example.com',
+      })
+      expect(comment).toEqual({
         __typename: 'Comment',
-      }
-      const newCommentTree = appendCommentToTree(testTree, newComment)
-      expect(newCommentTree).toHaveLength(1)
-      expect(newCommentTree[0].replies[0].replies[0].replies[0]).toBe(
-        newComment,
-      )
+        createDate: expect.stringMatching(ISO8601),
+        id: '12345',
+        parent: { __typename: 'Comment', id: '5867' },
+        replies: [],
+        text: expect.stringContaining(
+          '"text":"test comment","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
+        ),
+        user: { __typename: 'User', email: 'something@example.com' },
+      })
     })
-    it('prepends a top level comment if there are none', () => {
-      const newComment = {
-        id: '5c9bf9f154487708c9ccddb3',
-        text:
-          '{"blocks":[{"key":"898g8","text":"New top level comment.","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":22,"style":"CODE"}],"entityRanges":[],"data":{}}],"entityMap":{}}',
-        createDate: '2019-03-27T22:32:17.371Z',
-        user: { email: 'nell@squishymedia.com', __typename: 'User' },
-        __typename: 'Comment',
-      }
-      const newCommentTree = appendCommentToTree([], newComment)
-      expect(newCommentTree).toHaveLength(1)
-      expect(newCommentTree[0]).toBe(newComment)
-    })
-    it('does not require the replies field on base tree', () => {
-      const baseTree = [
+  })
+  describe('newCommentsReducer', () => {
+    it('appends new comment when there are none', () => {
+      const comment = ContentState.createFromText('test comment')
+      const next = newCommentsReducer([], {
+        commentId: '1234',
+        comment,
+        profile: { email: 'something@example.com' },
+      })
+      expect(next).toEqual([
         {
-          id: '5c8c1d44b25d23ca69e168b2',
-          text:
-            '{"blocks":[{"key":"2eqse","text":"This is a test comment.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-          createDate: '2019-03-15T21:46:44.000Z',
-          user: { email: 'nell@squishymedia.com', __typename: 'User' },
           __typename: 'Comment',
+          createDate: expect.stringMatching(ISO8601),
+          id: '1234',
+          parent: null,
+          replies: [],
+          text: expect.stringContaining(
+            '"text":"test comment","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
+          ),
+          user: { __typename: 'User', email: 'something@example.com' },
+        },
+      ])
+    })
+    it('appends a child comment', () => {
+      const comment = ContentState.createFromText('test comment 2')
+      const comments = [
+        {
+          __typename: 'Comment',
+          createDate: '2019-08-30T19:34:56.427Z',
+          id: '1234',
+          parent: null,
+          replies: [],
+          text: '',
+          user: { __typename: 'User', email: 'something@example.com' },
         },
       ]
-      const newComment = {
-        id: '5c9bfb53544877d695ccddb4',
-        text:
-          '{"blocks":[{"key":"8eecf","text":"Comment reply three levels deep.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-        createDate: '2019-03-27T22:38:11.246Z',
-        user: { email: 'nell@squishymedia.com', __typename: 'User' },
-        parentId: '5c8c1d44b25d23ca69e168b2',
-        __typename: 'Comment',
-      }
-      const newCommentTree = appendCommentToTree(baseTree, newComment)
-      expect(newCommentTree).toHaveLength(1)
-      expect(newCommentTree[0].replies).toEqual([newComment])
+      expect(
+        newCommentsReducer(comments, {
+          commentId: '1235',
+          parentId: '1234',
+          comment,
+          profile: { email: 'something@example.com' },
+        }),
+      ).toEqual([
+        {
+          __typename: 'Comment',
+          createDate: expect.stringMatching(ISO8601),
+          id: '1234',
+          parent: null,
+          replies: [{ __typename: 'Comment', id: '1235' }],
+          text: '',
+          user: { __typename: 'User', email: 'something@example.com' },
+        },
+        {
+          __typename: 'Comment',
+          createDate: expect.stringMatching(ISO8601),
+          id: '1235',
+          parent: { __typename: 'Comment', id: '1234' },
+          replies: [],
+          text: expect.any(String),
+          user: { __typename: 'User', email: 'something@example.com' },
+        },
+      ])
+    })
+  })
+  describe('modifyCommentsReducer', () => {
+    it('modifies a comment in place and returns new array', () => {
+      const commentContent = 'edited test comment'
+      const comment = ContentState.createFromText(commentContent)
+      const comments = [
+        {
+          __typename: 'Comment',
+          createDate: '2019-08-30T19:34:56.427Z',
+          id: '1234',
+          parent: null,
+          replies: [],
+          text: '',
+          user: { __typename: 'User', email: 'something@example.com' },
+        },
+      ]
+      expect(
+        modifyCommentsReducer(comments, {
+          commentId: '1234',
+          comment,
+        }),
+      ).toEqual([
+        {
+          __typename: 'Comment',
+          createDate: '2019-08-30T19:34:56.427Z',
+          id: '1234',
+          parent: null,
+          replies: [],
+          text: expect.stringContaining(commentContent),
+          user: { __typename: 'User', email: 'something@example.com' },
+        },
+      ])
     })
   })
 })

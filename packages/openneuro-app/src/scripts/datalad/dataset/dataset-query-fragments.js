@@ -59,52 +59,6 @@ export const DATASET_SNAPSHOTS = gql`
   }
 `
 
-export const DATASET_COMMENTS = gql`
-  fragment DatasetComments on Dataset {
-    id
-    comments {
-      id
-      text
-      createDate
-      user {
-        email
-      }
-      replies {
-        id
-        text
-        createDate
-        user {
-          email
-        }
-        replies {
-          id
-          text
-          createDate
-          user {
-            email
-          }
-          replies {
-            id
-            text
-            createDate
-            user {
-              email
-            }
-            replies {
-              id
-              text
-              createDate
-              user {
-                email
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
 export const ISSUE_FIELDS = `
   severity
   code

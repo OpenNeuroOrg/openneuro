@@ -29,8 +29,11 @@ const Files = ({
 }
 
 Files.propTypes = {
+  datasetId: PropTypes.string,
+  snapshotTag: PropTypes.string,
   datasetName: PropTypes.string,
   files: PropTypes.array,
+  editMode: PropTypes.bool,
 }
 
 export default Files

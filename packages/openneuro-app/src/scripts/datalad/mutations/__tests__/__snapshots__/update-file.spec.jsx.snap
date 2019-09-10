@@ -2,20 +2,12 @@
 
 exports[`UpdateFile mutation renders with default props 1`] = `
 <ApolloProvider
-  client={
-    Object {
-      "__operations_cache__": Map {},
-    }
-  }
+  client={Object {}}
 >
   <withApollo(UpdateFile)>
     <ApolloConsumer>
       <UpdateFile
-        client={
-          Object {
-            "__operations_cache__": Map {},
-          }
-        }
+        client={Object {}}
       >
         <div
           className="edit-file"

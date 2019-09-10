@@ -1,15 +1,21 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
+import DatasetQueryContext from './dataset-query-context.js'
 import DatasetPage from './dataset-page.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
+import { DATASET_COMMENTS } from './comments-fragments.js'
 import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
 
+/**
+ * Generate the dataset page query
+ * @param {number} commentDepth How many levels to recurse for comments
+ */
 export const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
     dataset(id: $datasetId) {
@@ -21,9 +27,9 @@ export const getDatasetPage = gql`
       ...DatasetDraft
       ...DatasetPermissions
       ...DatasetSnapshots
-      ...DatasetComments
       ...DatasetIssues
       ...DatasetMetadata
+      ...DatasetComments
       uploader {
         id
         name
@@ -39,37 +45,53 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.DRAFT_FRAGMENT}
   ${DatasetQueryFragments.PERMISSION_FRAGMENT}
   ${DatasetQueryFragments.DATASET_SNAPSHOTS}
-  ${DatasetQueryFragments.DATASET_COMMENTS}
   ${DatasetQueryFragments.DATASET_ISSUES}
   ${DatasetQueryFragments.DATASET_METADATA}
+  ${DATASET_COMMENTS}
 `
 
-export const DatasetQueryRender = ({ loading, error, data }) => {
+/**
+ * Query to load and render dataset page - most dataset loading is done here
+ * @param {Object} props
+ * @param {Object} props.datasetId Accession number / id for dataset to query
+ */
+export const DatasetQueryHook = ({ datasetId }) => {
+  const {
+    data: { dataset },
+    loading,
+    error,
+  } = useQuery(getDatasetPage, {
+    variables: { datasetId },
+  })
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else {
     if (error) Sentry.captureException(error)
     return (
       <ErrorBoundary error={error} subject={'error in dataset page'}>
-        <DatasetPage dataset={data.dataset} />
+        <DatasetQueryContext.Provider
+          value={{
+            datasetId,
+          }}>
+          <DatasetPage dataset={dataset} />
+        </DatasetQueryContext.Provider>
       </ErrorBoundary>
     )
   }
 }
 
-DatasetQueryRender.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.object,
-  data: PropTypes.object,
+DatasetQueryHook.propTypes = {
+  datasetId: PropTypes.string,
 }
 
+/**
+ * Routing wrapper for dataset query
+ * @param {Object} props
+ * @param {Object} props.match React router match object
+ */
 const DatasetQuery = ({ match }) => (
   <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
-    <Query
-      query={getDatasetPage}
-      variables={{ datasetId: match.params.datasetId }}>
-      {DatasetQueryRender}
-    </Query>
+    <DatasetQueryHook datasetId={match.params.datasetId} />
   </ErrorBoundaryAssertionFailureException>
 )
 

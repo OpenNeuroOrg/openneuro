@@ -59,6 +59,7 @@ File.propTypes = {
   path: PropTypes.string,
   filename: PropTypes.string,
   snapshotTag: PropTypes.string,
+  editMode: PropTypes.bool,
 }
 
 export default File

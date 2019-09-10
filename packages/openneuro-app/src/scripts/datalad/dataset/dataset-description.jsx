@@ -87,7 +87,9 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
 )
 
 DatasetDescription.propTypes = {
-  dataset: PropTypes.object,
+  datasetId: PropTypes.string,
+  description: PropTypes.object,
+  editMode: PropTypes.bool,
 }
 
 export default DatasetDescription

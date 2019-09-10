@@ -6,12 +6,13 @@ import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 
 // raises error if catchErrorIf returns true
 const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
-  const raiseError = typeof catchErrorIf === 'function' ? catchErrorIf(error) : true
+  const raiseError =
+    typeof catchErrorIf === 'function' ? catchErrorIf(error) : true
   return raiseError
-    // trigger error component
-    ? { hasError: true, supportModal: true, error: error }
-    // don't show error handling component
-    : { hasError: false, supportModal: false, error: error }
+    ? // trigger error component
+      { hasError: true, supportModal: true, error: error }
+    : // don't show error handling component
+      { hasError: false, supportModal: false, error: error }
 }
 
 class ErrorBoundary extends React.Component {
@@ -28,10 +29,10 @@ class ErrorBoundary extends React.Component {
 
   static getDerivedStateFromError(error) {
     return getDerivedStateFromErrorOnCondition(
-      error, 
+      error,
       // error boundary should always be triggered in general case
-      () => true
-      )
+      () => true,
+    )
   }
 
   componentDidCatch(error) {
@@ -98,6 +99,10 @@ ErrorBoundary.propTypes = {
     PropTypes.node,
   ]),
   errorMessage: PropTypes.string,
+  datasetId: PropTypes.string,
+  error: PropTypes.string,
+  subject: PropTypes.string,
+  description: PropTypes.string,
 }
 
 // specific use case
@@ -109,9 +114,9 @@ class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
 
   static getDerivedStateFromError(error) {
     return getDerivedStateFromErrorOnCondition(
-      error, 
+      error,
       // ErrorBoundary not triggered for "assertion failure"
-      error => error.toString() !== 'Error: assertion failure'
+      error => error.toString() !== 'Error: assertion failure',
     )
   }
 }
@@ -124,8 +129,6 @@ ErrorBoundaryAssertionFailureException.propTypes = {
   errorMessage: PropTypes.string,
 }
 
-export {
-  ErrorBoundaryAssertionFailureException
-}
+export { ErrorBoundaryAssertionFailureException }
 
 export default ErrorBoundary
