@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 const Container = styled.div({
   position: 'relative',
   width: '100%',
-  height: '4rem',
+  height: '4.5rem',
   marginBottom: '0.5rem',
   borderRadius: '5px',
   border: '2px inset #eee',
@@ -29,6 +29,7 @@ const Label = styled.label(
     color: '#999',
     transition: 'top 100ms, font-size 100ms',
     transitionTimingFunction: 'ease-out',
+    textAlign: 'left',
   },
   ({ hasValue, hasFocus }) => ({
     ...(hasValue || hasFocus ? pushedUpLabelStyles : centerLabelStyles),
@@ -46,6 +47,7 @@ const Input = styled.input({
   height: '100%',
   border: 'none',
   padding: '1.5rem 0.8rem 0.3rem',
+  textAlign: 'left',
 })
 
 const NumberInput = ({

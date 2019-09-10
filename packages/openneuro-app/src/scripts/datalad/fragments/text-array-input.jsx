@@ -6,7 +6,7 @@ const Container = styled.div({
   position: 'relative',
   width: '100%',
   marginBottom: '0.5rem',
-  height: '4rem',
+  height: '4.5rem',
 })
 
 const centerLabelStyles = {
@@ -28,6 +28,7 @@ const Label = styled.label(
     color: '#999',
     transition: 'top 100ms, font-size 100ms',
     transitionTimingFunction: 'ease-out',
+    textAlign: 'left',
   },
   ({ hasValue, hasFocus }) => ({
     ...(hasValue || hasFocus ? pushedUpLabelStyles : centerLabelStyles),
@@ -46,6 +47,7 @@ const Input = styled.input({
   borderRadius: '0.5rem',
   borderRadiusBottomRight: 0,
   padding: '1.5rem 0.8rem 0.3rem',
+  textAlign: 'left',
 })
 
 const TextArrayInput = ({

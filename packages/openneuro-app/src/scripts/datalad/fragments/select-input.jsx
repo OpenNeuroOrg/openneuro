@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 const Container = styled.div({
   position: 'relative',
   width: '100%',
-  height: '4rem',
+  height: '4.5rem',
   backgroundColor: 'white',
   borderRadius: '5px',
 })
@@ -29,6 +29,7 @@ const Label = styled.label(
     color: '#999',
     transition: 'top 100ms, font-size 100ms',
     transitionTimingFunction: 'ease-out',
+    textAlign: 'left',
   },
   ({ hasValue }) => ({
     ...(hasValue ? pushedUpLabelStyles : centerLabelStyles),
@@ -71,6 +72,7 @@ const SelectValueDisplay = styled.div({
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
+  textAlign: 'left',
 })
 const SelectIconContainer = styled.div({
   position: 'absolute',
@@ -106,7 +108,7 @@ const OtherInputContainer = styled.div(
   ({ showOther }) =>
     showOther
       ? {
-          height: '4rem',
+          height: '4.5rem',
           opacity: 1,
           transform: 'translateY(0)',
         }

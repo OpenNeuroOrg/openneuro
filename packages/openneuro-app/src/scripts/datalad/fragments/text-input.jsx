@@ -14,7 +14,7 @@ const Container = styled.div(
     textarea
       ? {}
       : {
-          height: '4rem',
+          height: '4.5rem',
         },
 )
 const centerLabelStyles = {
@@ -36,6 +36,7 @@ const Label = styled.label(
     color: '#999',
     transition: 'top 100ms, font-size 100ms',
     transitionTimingFunction: 'ease-out',
+    textAlign: 'left',
   },
   ({ hasValue, hasFocus }) => ({
     ...(hasValue || hasFocus ? pushedUpLabelStyles : centerLabelStyles),
@@ -53,12 +54,13 @@ const Input = styled.input({
   width: '100%',
   height: '100%',
   padding: '1.5rem 0.8rem 0.3rem',
+  textAlign: 'left',
 })
 const Textarea = styled.textarea({
   width: '100%',
   border: '1px inset #eee',
   borderRadius: '5px',
-
+  textAlign: 'left',
   padding: '1.5rem 0.8rem 0.3rem',
 })
 
