@@ -186,7 +186,10 @@ SelectInput.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
   options: PropTypes.array,
-  showOptionOthers: PropTypes.bool,
+  showOptionOther: PropTypes.bool,
+  disabled: PropTypes.bool,
+  required: PropTypes.bool,
+  onChange: PropTypes.func,
   handleChange: PropTypes.func,
 }
 
