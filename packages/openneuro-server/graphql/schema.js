@@ -509,9 +509,7 @@ const typeDefs = `
 
   # Dataset Metadata
   type Metadata {
-    context: MetadataContext
     datasetId: ID!
-    type: String
     datasetUrl: String
     datasetName: String
     firstSnapshotCreatedAt: DateTime
@@ -530,35 +528,6 @@ const typeDefs = `
     adminUsers: [String]
     ages: [Int]
     modalities: [String]
-  }
-
-  # JSON-LD Context for Metadata
-  type MetadataContext {
-    datasetId: String
-    datasetUrl: String
-    datasetName: String
-    firstSnapshotCreatedAt: String
-    latestSnapshotCreatedAt: String
-    dxStatus: String
-    tasksCompleted: String
-    trialCount: String
-    studyDesign: String
-    studyDomain: String
-    studyLongitudinal: String
-    dataProcessed: String
-    species: String
-    associatedPaperDOI: jsonLdNodeProperties
-    openneuroPaperDOI: jsonLdNodeProperties
-    seniorAuthor: String
-    adminUsers: jsonLdNodeProperties
-    ages: jsonLdNodeProperties
-    modalities: jsonLdNodeProperties
-  }
-
-  type jsonLdNodeProperties {
-    id: String
-    type: String
-    container: String
   }
 `
 

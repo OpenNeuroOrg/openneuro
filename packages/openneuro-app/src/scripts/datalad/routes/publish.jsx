@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import PublishDataset from '../mutations/publish.jsx'
 
 const hasExpectedMetadata = metadata =>
-  metadata && typeof metadata.context === 'object'
+  typeof metadata === 'object' && metadata !== null
 
 const Publish = ({ datasetId, metadata }) =>
   hasExpectedMetadata(metadata) ? (

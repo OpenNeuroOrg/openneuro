@@ -102,44 +102,7 @@ export const DATASET_METADATA = gql`
   fragment DatasetMetadata on Dataset {
     id
     metadata {
-      context {
-        datasetId
-        datasetUrl
-        datasetName
-        firstSnapshotCreatedAt
-        latestSnapshotCreatedAt
-        dxStatus
-        tasksCompleted
-        trialCount
-        studyDesign
-        studyDomain
-        studyLongitudinal
-        dataProcessed
-        species
-        associatedPaperDOI {
-          id
-          type
-        }
-        openneuroPaperDOI {
-          id
-          type
-        }
-        seniorAuthor
-        adminUsers {
-          type
-          container
-        }
-        ages {
-          type
-          container
-        }
-        modalities {
-          type
-          container
-        }
-      }
       datasetId
-      type
       datasetUrl
       datasetName
       firstSnapshotCreatedAt
