@@ -133,7 +133,7 @@ class FrontPageTabs extends React.Component {
       {
         header: 'Share Data',
         abstract:
-          'Upload your data and collaborate with your colleagues or share it with users around the world.',
+          'Upload your data to an NIH Brain Initiative approved repository.',
         icon: tab_share_data,
         firstHeader: 'Collaborate',
         firstDescription:
@@ -142,14 +142,13 @@ class FrontPageTabs extends React.Component {
         firstImageClass: 'collabotate',
         secondHeader: 'Publish',
         secondDescription:
-          'Publish your datasets for anyone to view, download and run analyses on.',
+          'Publish your dataset where anyone can view, download, and run analyses on it.',
         secondImage: share_data_publish,
         secondImageClass: 'publish',
       },
       {
         header: 'Use Data',
-        abstract:
-          'Use our affiliated website to process applicable data.',
+        abstract: 'Use our affiliated website to process applicable data.',
         icon: tab_use_data,
         firstHeader: 'Snapshot',
         firstDescription:
