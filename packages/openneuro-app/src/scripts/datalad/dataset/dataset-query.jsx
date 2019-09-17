@@ -28,6 +28,7 @@ export const getDatasetPage = gql`
       ...DatasetPermissions
       ...DatasetSnapshots
       ...DatasetIssues
+      ...DatasetMetadata
       ...DatasetComments
       uploader {
         id
@@ -45,6 +46,7 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.PERMISSION_FRAGMENT}
   ${DatasetQueryFragments.DATASET_SNAPSHOTS}
   ${DatasetQueryFragments.DATASET_ISSUES}
+  ${DatasetQueryFragments.DATASET_METADATA}
   ${DATASET_COMMENTS}
 `
 

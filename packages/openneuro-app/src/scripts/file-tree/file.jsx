@@ -45,9 +45,10 @@ const File = ({
             <i className="fa fa-file-o" /> Update
           </UpdateFile>
         )}
-        {editMode && filename !== 'dataset_description.json' && (
-          <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-        )}
+        {editMode &&
+          filename !== 'dataset_description.json' && (
+            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+          )}
       </span>
     </>
   )

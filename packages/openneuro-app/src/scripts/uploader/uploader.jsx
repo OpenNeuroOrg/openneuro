@@ -25,7 +25,6 @@ export class UploadClient extends React.Component {
     super(props)
 
     this.setLocation = this.setLocation.bind(this)
-    this.setName = this.setName.bind(this)
     this.resumeDataset = this.resumeDataset.bind(this)
     this.selectFiles = this.selectFiles.bind(this)
     this.upload = this.upload.bind(this)
@@ -51,12 +50,12 @@ export class UploadClient extends React.Component {
       resume: null,
       // Allow context consumers to change routes
       setLocation: this.setLocation,
-      // Rename on upload (optionally)
-      setName: this.setName,
       // Set a dataset to resume upload for
       resumeDataset: this.resumeDataset,
       // Get files from the browser
       selectFiles: this.selectFiles,
+      // Capture metadata from form
+      captureMetadata: this.captureMetadata,
       // Start an upload
       upload: this.upload,
       // Upload XHR request
@@ -65,6 +64,8 @@ export class UploadClient extends React.Component {
       datasetId: null,
       // Cancel current upload
       cancel: this.cancel,
+      // dataset metadata
+      metadata: {},
     }
   }
 
@@ -76,14 +77,6 @@ export class UploadClient extends React.Component {
   setLocation(path) {
     ReactGA.pageview(path)
     this.setState({ location: locationFactory(path) })
-  }
-
-  /**
-   * Change the dataset name/label on upload
-   * @param {string} name
-   */
-  setName(e) {
-    this.setState({ name: e.target.value })
   }
 
   /**
@@ -161,12 +154,24 @@ export class UploadClient extends React.Component {
           selectedFiles: files,
           name,
         })
-        this.setLocation('/upload/rename')
+        this.setLocation('/upload/issues')
       } else {
         throw new Error('No files selected')
       }
     })
   }
+
+  captureMetadata = metadata => {
+    this.setState({
+      metadata,
+    })
+  }
+
+  uploadMetadata = () =>
+    mutation.submitMetadata(this.props.client)(
+      this.state.datasetId,
+      this.state.metadata,
+    )
 
   upload() {
     // Track the start of uploads
@@ -188,7 +193,10 @@ export class UploadClient extends React.Component {
         .createDataset(this.props.client)(this.state.name)
         .then(datasetId => {
           // Note chain to this._addFiles
-          this.setState({ datasetId }, this._addFiles)
+          this.setState({ datasetId }, () => {
+            this.uploadMetadata()
+            this._addFiles()
+          })
         })
         .catch(error => {
           Sentry.captureException(error)
@@ -209,40 +217,10 @@ export class UploadClient extends React.Component {
   }
 
   /**
-   * Replace Name in dataset_description and return a new file list
-   * @param {string} Name - the new value for dataset Name field
-   * @returns {File[]} - New list of files with a replaced dataset_description.json
-   */
-  _editName(Name) {
-    if (!Name) {
-      // Return files if no name provided
-      return this.state.files
-    }
-    // Merge in the new name for a new dataset_description object
-    const description = {
-      ...this.state.description,
-      Name,
-    }
-    // Don't mutate this.state.files
-    const updatedFiles = [...this.state.files]
-    const fileIndex = updatedFiles.findIndex(
-      f => f.name === 'dataset_description.json',
-    )
-    // Hold onto webkitRelativePath for the new file
-    const webkitRelativePath = updatedFiles[fileIndex].webkitRelativePath
-    // Must be a Blob since File has immutable properties
-    updatedFiles[fileIndex] = new Blob([JSON.stringify(description, null, 4)], {
-      type: 'application/json',
-    })
-    updatedFiles[fileIndex].name = 'dataset_description.json'
-    updatedFiles[fileIndex].webkitRelativePath = webkitRelativePath
-    return updatedFiles
-  }
-
-  /**
    * Check for CHANGES file and add if it does not exist
    */
-  _includeChanges(files) {
+  _includeChanges() {
+    const files = [...this.state.files]
     // Determine if the files list has a CHANGES file already
     const hasChanges = files.some(f => f.name === 'CHANGES')
 
@@ -276,7 +254,7 @@ export class UploadClient extends React.Component {
     )
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
-    let filesToUpload = this._includeChanges(this._editName(this.state.name))
+    let filesToUpload = this._includeChanges()
 
     return mutation
       .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)

@@ -26,12 +26,12 @@ const UploadStep = ({ location }) => (
         active={location.pathname === '/upload'}
       />
       <UploadStepCol
-        text="Step 2: Name Dataset"
-        active={location.pathname === '/upload/rename'}
+        text="Step 2: Validation"
+        active={location.pathname === '/upload/issues'}
       />
       <UploadStepCol
-        text="Step 3: Validation"
-        active={location.pathname === '/upload/issues'}
+        text="Step 3: Metadata"
+        active={location.pathname === '/upload/metadata'}
       />
       <UploadStepCol
         text="Step 4: Accept Terms"

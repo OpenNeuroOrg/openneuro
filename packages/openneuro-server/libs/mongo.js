@@ -47,6 +47,7 @@ export default {
       permissions: null,
       users: null,
       analytics: null,
+      metadata: null,
     },
   },
 

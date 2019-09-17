@@ -8,6 +8,7 @@ import Publish from './publish.jsx'
 import Share from './share.jsx'
 import Snapshot from './snapshot.jsx'
 import FileDisplay from './file-display.jsx'
+import AddMetadata from '../mutations/add-metadata.jsx'
 
 const stubComponent = () => null
 
@@ -29,7 +30,9 @@ const DatasetRoutes = ({ dataset }) => (
       name="publish"
       exact
       path="/datasets/:datasetId/publish"
-      component={() => <Publish datasetId={dataset.id} />}
+      component={() => (
+        <Publish datasetId={dataset.id} metadata={dataset.metadata} />
+      )}
     />
     <Route
       name="snapshot-create"
@@ -104,6 +107,12 @@ const DatasetRoutes = ({ dataset }) => (
           />
         )
       }}
+    />
+    <Route
+      name="metadata"
+      exact
+      path="/datasets/:datasetId/metadata"
+      component={() => <AddMetadata dataset={dataset} />}
     />
   </Switch>
 )

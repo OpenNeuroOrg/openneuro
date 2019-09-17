@@ -9,6 +9,7 @@ import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
+import { metadata } from './metadata.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import fetch from 'node-fetch'
@@ -301,6 +302,7 @@ const Dataset = {
   following,
   starred,
   onBrainlife,
+  metadata,
 }
 
 export default Dataset

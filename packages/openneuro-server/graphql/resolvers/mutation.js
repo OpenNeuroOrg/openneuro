@@ -26,6 +26,7 @@ import { updateDescription, updateDescriptionList } from './description.js'
 import { updateReadme } from './readme.js'
 import { addComment, editComment } from './comment.js'
 import { subscribeToNewsletter } from './newsletter'
+import { addMetadata } from './metadata.js'
 
 const Mutation = {
   createDataset,
@@ -54,6 +55,7 @@ const Mutation = {
   addComment,
   editComment,
   subscribeToNewsletter,
+  addMetadata,
 }
 
 export default Mutation

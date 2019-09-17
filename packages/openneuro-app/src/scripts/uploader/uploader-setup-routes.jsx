@@ -4,8 +4,8 @@ import { Route, Switch } from 'react-router-dom'
 import UploaderModal from './uploader-modal.jsx'
 import UploadStep from './upload-step.jsx'
 import UploadSelect from './upload-select.jsx'
-import UploadRename from './upload-rename.jsx'
 import UploadIssues from './upload-issues.jsx'
+import UploadMetadata from './upload-metadata.jsx'
 import UploadDisclaimer from './upload-disclaimer.jsx'
 
 const UploaderSetupRoutes = props => (
@@ -21,16 +21,16 @@ const UploaderSetupRoutes = props => (
             component={UploadSelect}
           />
           <Route
-            name="upload-rename"
-            path="/upload/rename"
-            exact
-            component={UploadRename}
-          />
-          <Route
             name="upload-issues"
             path="/upload/issues"
             exact
             component={UploadIssues}
+          />
+          <Route
+            name="upload-metadata"
+            path="/upload/metadata"
+            exact
+            component={UploadMetadata}
           />
           <Route
             name="upload-disclaimer"

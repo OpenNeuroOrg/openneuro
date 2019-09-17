@@ -1,4 +1,6 @@
 import { datasets, files } from 'openneuro-client'
+import { SUBMIT_METADATA } from '../datalad/mutations/submit-metadata.jsx'
+
 /**
  * Create a dataset and update the label
  * @param {object} client Apollo client
@@ -80,6 +82,20 @@ export const updateFiles = client => (datasetId, fileList) => {
   return client.mutate({
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },
+    errorPolicy: 'all',
+  })
+}
+
+export const submitMetadata = client => (datasetId, metadata) => {
+  return client.mutate({
+    mutation: SUBMIT_METADATA,
+    variables: {
+      datasetId,
+      metadata: {
+        datasetId,
+        ...metadata,
+      },
+    },
     errorPolicy: 'all',
   })
 }

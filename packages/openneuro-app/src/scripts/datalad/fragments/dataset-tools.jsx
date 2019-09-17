@@ -6,6 +6,7 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
 import FollowDataset from '../mutations/follow.jsx'
 import StarDataset from '../mutations/star.jsx'
+import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
 /**
@@ -85,6 +86,9 @@ const DatasetTools = ({ dataset, location, history }) => {
           </div>
           <div role="presentation" className="tool">
             <StarDataset datasetId={dataset.id} starred={dataset.starred} />
+          </div>
+          <div role="presentation" className="tool">
+            <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
           </div>
         </LoggedIn>
       </div>

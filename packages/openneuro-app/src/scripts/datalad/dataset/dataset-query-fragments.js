@@ -97,3 +97,30 @@ export const SNAPSHOT_ISSUES = gql`
     }
   }
 `
+
+export const DATASET_METADATA = gql`
+  fragment DatasetMetadata on Dataset {
+    id
+    metadata {
+      datasetId
+      datasetUrl
+      datasetName
+      firstSnapshotCreatedAt
+      latestSnapshotCreatedAt
+      dxStatus
+      tasksCompleted
+      trialCount
+      studyDesign
+      studyDomain
+      studyLongitudinal
+      dataProcessed
+      species
+      associatedPaperDOI
+      openneuroPaperDOI
+      seniorAuthor
+      adminUsers
+      ages
+      modalities
+    }
+  }
+`
