@@ -14,7 +14,7 @@ def setup_validator():
         subprocess.run(['yarn'])
 
 
-def validate_dataset_sync(dataset_path):
+def validate_dataset_sync(dataset_path, ref):
     """
     Synchronous dataset validation.
 
@@ -23,7 +23,7 @@ def validate_dataset_sync(dataset_path):
     setup_validator()
     try:
         process = subprocess.run(
-            ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
+            ['./node_modules/.bin/bids-validator', '--json', '--gitTreeMode', '--gitRef', ref, dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired:
         client.captureException()
@@ -75,7 +75,7 @@ def issues_mutation(dataset_id, ref, validator_output):
 
 @app.task
 def validate_dataset(dataset_id, dataset_path, ref, cookies=None):
-    validator_output = validate_dataset_sync(dataset_path)
+    validator_output = validate_dataset_sync(dataset_path, ref)
     if validator_output:
         if 'issues' in validator_output:
             r = requests.post(
