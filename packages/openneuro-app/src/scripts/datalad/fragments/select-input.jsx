@@ -53,6 +53,7 @@ const Select = styled.select(
     border: '2px inset #eee',
     color: 'rgba(0,0,0,0)',
     backgroundColor: 'rgba(0,0,0,0)',
+    '-moz-appearance': 'none',
   },
   ({ showOther }) =>
     showOther
