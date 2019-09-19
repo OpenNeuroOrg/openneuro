@@ -28,12 +28,17 @@ const fatalError = err => {
 }
 
 /**
- * Runs validation and exits if an error is encountered
+ * Runs validation, logs summary or exits if an error is encountered
  * @param {string} dir Directory to validate
  * @param {object} validatorOptions Options passed to the validator
  */
 export const validation = (dir, validatorOptions) => {
-  return validatePromise(dir, validatorOptions).catch(fatalError)
+  return validatePromise(dir, validatorOptions)
+    .then(function({ summary }) {
+      // eslint-disable-next-line no-console
+      console.log({ summary })
+    })
+    .catch(fatalError)
 }
 
 /**
