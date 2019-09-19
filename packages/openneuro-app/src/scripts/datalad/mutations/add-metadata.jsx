@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
+import LoggedIn from '../../authentication/logged-in.jsx'
 import { getDatasetUrl } from '../../utils/dataset-url'
 
 export const compileMetadata = dataset => {
@@ -87,11 +88,13 @@ const AddMetadata = ({ dataset, history, location }) => {
           <Link to={`/datasets/${dataset.id}`}>
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
-          <SubmitMetadata
-            datasetId={dataset.id}
-            metadata={values}
-            done={() => submitPath && history.push(submitPath)}
-          />
+          <LoggedIn>
+            <SubmitMetadata
+              datasetId={dataset.id}
+              metadata={values}
+              done={() => submitPath && history.push(submitPath)}
+            />
+          </LoggedIn>
         </div>
       </div>
     </>
