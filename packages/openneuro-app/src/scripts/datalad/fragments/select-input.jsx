@@ -93,6 +93,9 @@ const SelectIcon = () => (
     <i className="fa fa-caret-down" />
   </SelectIconContainer>
 )
+const Option = styled.option({
+  color: 'black',
+})
 const OtherInputContainer = styled.div(
   {
     marginBottom: '0.5rem',
@@ -161,14 +164,14 @@ const SelectInput = ({
           onChange={handleChange}
           showOther={showOptionOther && otherOptionSelected}
           required={required}>
-          <option value="" disabled hidden />
+          <Option value="" disabled hidden />
           {options &&
             options.map((option, i) => (
-              <option value={option.value} key={i}>
+              <Option value={option.value} key={i}>
                 {option.text || option.value}
-              </option>
+              </Option>
             ))}
-          {showOptionOther && <option value="Other">Other</option>}
+          {showOptionOther && <Option value="Other">Other</Option>}
         </Select>
       </Container>
       <OtherInputContainer showOther={showOptionOther && otherOptionSelected}>
