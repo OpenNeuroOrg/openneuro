@@ -36,18 +36,17 @@ const DatasetTools = ({ dataset, location, history }) => {
       <div className="tools clearfix">
         <LoggedIn>
           <div role="presentation" className="tool">
-            {!dataset.public &&
-              edit && (
-                <WarnButton
-                  tooltip="Publish Dataset"
-                  icon="fa-globe icon-plus"
-                  warn={false}
-                  action={cb => {
-                    toolRedirect(history, rootPath, 'publish')
-                    cb()
-                  }}
-                />
-              )}
+            {!dataset.public && edit && (
+              <WarnButton
+                tooltip="Publish Dataset"
+                icon="fa-globe icon-plus"
+                warn={false}
+                action={cb => {
+                  toolRedirect(history, rootPath, 'publish')
+                  cb()
+                }}
+              />
+            )}
           </div>
           <div role="presentation" className="tool">
             {edit && <DeleteDataset datasetId={dataset.id} />}
@@ -87,10 +86,10 @@ const DatasetTools = ({ dataset, location, history }) => {
           <div role="presentation" className="tool">
             <StarDataset datasetId={dataset.id} starred={dataset.starred} />
           </div>
-          <div role="presentation" className="tool">
-            <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
-          </div>
         </LoggedIn>
+        <div role="presentation" className="tool">
+          <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
+        </div>
       </div>
     </div>
   )
