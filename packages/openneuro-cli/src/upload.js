@@ -2,6 +2,7 @@ import { inspect } from 'util'
 import { files } from 'openneuro-client'
 import validate from 'bids-validator'
 import { getFileTree, generateChanges } from './files'
+import consoleFormat from 'bids-validator/utils/consoleFormat'
 
 /**
  * BIDS validator promise wrapper
@@ -15,7 +16,7 @@ const validatePromise = (dir, options = {}) => {
       if (errors.length + warnings.length === 0) {
         resolve({ summary })
       } else {
-        reject({ errors, warnings })
+        reject(consoleFormat.issues({ errors, warnings }))
       }
     })
   })
@@ -36,7 +37,7 @@ export const validation = (dir, validatorOptions) => {
   return validatePromise(dir, validatorOptions)
     .then(function({ summary }) {
       // eslint-disable-next-line no-console
-      console.log({ summary })
+      console.log(consoleFormat.summary(summary))
     })
     .catch(fatalError)
 }
