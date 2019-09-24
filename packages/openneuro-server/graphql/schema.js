@@ -120,9 +120,18 @@ const typeDefs = `
     modalities: [String]
     sessions: [String]
     subjects: [String]
+    subjectMetadata: [SubjectMetadataInput]
     tasks: [String]
     size: BigInt!
     totalFiles: Int!
+    dataProcessed: Boolean
+  }
+
+  input SubjectMetadataInput {
+    participantId: String!
+    age: Int
+    sex: String
+    group: String
   }
 
   input ValidationInput {
@@ -385,9 +394,18 @@ const typeDefs = `
     modalities: [String]
     sessions: [String]
     subjects: [String]
+    subjectMetadata: [SubjectMetadata]
     tasks: [String]
     size: BigInt!
     totalFiles: Int!
+    dataProcessed: Boolean
+  }
+
+  type SubjectMetadata {
+    participantId: String!
+    age: Int
+    sex: String
+    group: String
   }
 
   # Dataset Followers
