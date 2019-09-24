@@ -27,9 +27,11 @@ export const DRAFT_FRAGMENT = gql`
         modalities
         sessions
         subjects
+        subjectMetadata
         tasks
         size
         totalFiles
+        dataProcessed
       }
     }
   }

@@ -46,9 +46,11 @@ const getDatasets = gql`
               modalities
               sessions
               subjects
+              subjectMetadata
               tasks
               size
               totalFiles
+              dataProcessed
             }
             issues {
               severity

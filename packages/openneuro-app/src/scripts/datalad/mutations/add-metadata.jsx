@@ -17,7 +17,7 @@ export const compileMetadata = dataset => {
     return Array.isArray(authors) && authors[0]
   }
   const getAgesFromSummary = () => {
-    const subjectMetadata = getFromSummary('subject-metadata')
+    const subjectMetadata = getFromSummary('subjectMetadata')
     return (
       subjectMetadata && Object.values(subjectMetadata).map(({ age }) => age)
     )

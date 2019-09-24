@@ -28,9 +28,11 @@ export const getDataset = gql`
           modalities
           sessions
           subjects
+          subjectMetadata
           tasks
           size
           totalFiles
+          dataProcessed
         }
         issues {
           key
@@ -109,9 +111,11 @@ export const getDatasets = gql`
               modalities
               sessions
               subjects
+              subjectMetadata
               tasks
               size
               totalFiles
+              dataProcessed
             }
             issues {
               severity
