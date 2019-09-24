@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom'
 import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
+import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
 import { getDatasetUrl } from '../../utils/dataset-url'
 
 export const compileMetadata = dataset => {
@@ -71,6 +72,10 @@ const AddMetadata = ({ dataset, history, location }) => {
     setValues(newValues)
   }
   const submitPath = location.state && location.state.submitPath
+  const user = getProfile()
+  const hasEdit =
+    (user && user.admin) ||
+    hasEditPermissions(dataset.permissions, user && user.sub)
 
   return (
     <>
@@ -82,19 +87,22 @@ const AddMetadata = ({ dataset, history, location }) => {
         values={values}
         onChange={handleInputChange}
         hideDisabled={false}
+        hasEdit={hasEdit}
       />
       <div className="col-xs-12 dataset-form-controls">
         <div className="col-xs-12 modal-actions">
           <Link to={`/datasets/${dataset.id}`}>
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
-          <LoggedIn>
-            <SubmitMetadata
-              datasetId={dataset.id}
-              metadata={values}
-              done={() => submitPath && history.push(submitPath)}
-            />
-          </LoggedIn>
+          {hasEdit && (
+            <LoggedIn>
+              <SubmitMetadata
+                datasetId={dataset.id}
+                metadata={values}
+                done={() => submitPath && history.push(submitPath)}
+              />
+            </LoggedIn>
+          )}
         </div>
       </div>
     </>
