@@ -39,6 +39,7 @@ const UploadMetadata = () => {
             values={values}
             onChange={handleInputChange}
             hideDisabled={true}
+            hasEdit={true}
           />
           <br />
           <button
