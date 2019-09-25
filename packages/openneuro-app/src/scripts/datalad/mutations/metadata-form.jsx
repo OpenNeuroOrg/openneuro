@@ -242,6 +242,7 @@ MetadataForm.propTypes = {
   values: PropTypes.object,
   onChange: PropTypes.func,
   hideDisabled: PropTypes.bool,
+  hasEdit: PropTypes.bool,
 }
 
 export default MetadataForm
