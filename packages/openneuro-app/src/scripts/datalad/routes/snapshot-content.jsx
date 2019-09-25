@@ -45,9 +45,16 @@ const getSnapshotDetails = gql`
         modalities
         sessions
         subjects
+        subjectMetadata {
+          participantId
+          age
+          sex
+          group
+        }
         tasks
         size
         totalFiles
+        dataProcessed
       }
       analytics {
         downloads
