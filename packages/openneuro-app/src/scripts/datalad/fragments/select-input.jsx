@@ -129,6 +129,7 @@ const SelectInput = ({
   options,
   showOptionOther,
   disabled,
+  annotated,
   required,
   onChange,
 }) => {
@@ -150,7 +151,7 @@ const SelectInput = ({
         <Label htmlFor={name} hasValue={Boolean(value)}>
           {label}
         </Label>
-        {disabled && <DisabledIcon className="fa fa-asterisk" />}
+        {annotated && <DisabledIcon className="fa fa-asterisk" />}
         {/* Shows contents of select box, including value and up/down icon */}
         <SelectValueDisplay>
           {value}
@@ -194,6 +195,7 @@ SelectInput.propTypes = {
   options: PropTypes.array,
   showOptionOther: PropTypes.bool,
   disabled: PropTypes.bool,
+  annotated: PropTypes.bool,
   required: PropTypes.bool,
   onChange: PropTypes.func,
   handleChange: PropTypes.func,

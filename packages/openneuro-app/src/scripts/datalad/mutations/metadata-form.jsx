@@ -113,6 +113,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -122,6 +123,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -131,6 +133,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -140,6 +143,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -149,6 +153,7 @@ const metadataFields = hasEdit => {
       Component: TextArrayInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -158,6 +163,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         nullMessage: 'dataset has no snapshots',
         required: false,
       },
@@ -168,6 +174,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         nullMessage: 'dataset has no snapshots',
         required: false,
       },
@@ -178,6 +185,7 @@ const metadataFields = hasEdit => {
       Component: TextArrayInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -187,6 +195,7 @@ const metadataFields = hasEdit => {
       Component: TextArrayInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },
@@ -196,6 +205,7 @@ const metadataFields = hasEdit => {
       Component: TextInput,
       additionalProps: {
         disabled: true,
+        annotated: true,
         required: false,
       },
     },

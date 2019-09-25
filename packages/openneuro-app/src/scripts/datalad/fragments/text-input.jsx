@@ -69,6 +69,7 @@ const TextInput = ({
   label,
   value,
   disabled,
+  annotated,
   textarea,
   nullMessage,
   required,
@@ -101,7 +102,7 @@ const TextInput = ({
         onClick={focusInput}>
         {label}
       </Label>
-      {disabled && <DisabledIcon className="fa fa-asterisk" />}
+      {annotated && <DisabledIcon className="fa fa-asterisk" />}
       {textarea ? (
         <Textarea
           ref={input}
@@ -137,6 +138,7 @@ TextInput.propTypes = {
     PropTypes.bool,
   ]),
   disabled: PropTypes.bool,
+  annotated: PropTypes.bool,
   required: PropTypes.bool,
   textarea: PropTypes.bool,
   nullMessage: PropTypes.string,
