@@ -57,6 +57,7 @@ const NumberInput = ({
   min,
   max,
   disabled,
+  annotated,
   required,
   onChange,
 }) => {
@@ -86,7 +87,7 @@ const NumberInput = ({
         onClick={focusInput}>
         {label}
       </Label>
-      {disabled && <DisabledIcon className="fa fa-asterisk" />}
+      {annotated && <DisabledIcon className="fa fa-asterisk" />}
       <Input
         type="number"
         ref={input}
@@ -108,6 +109,7 @@ NumberInput.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   disabled: PropTypes.bool,
+  annotated: PropTypes.bool,
   required: PropTypes.bool,
   name: PropTypes.string,
   label: PropTypes.string,

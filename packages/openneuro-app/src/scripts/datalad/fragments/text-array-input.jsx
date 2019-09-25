@@ -55,6 +55,7 @@ const TextArrayInput = ({
   label,
   value,
   disabled,
+  annotated,
   required,
   onChange,
 }) => {
@@ -84,11 +85,12 @@ const TextArrayInput = ({
         onClick={focusInput}>
         {label}
       </Label>
-      {disabled && <DisabledIcon className="fa fa-asterisk" />}
+      {annotated && <DisabledIcon className="fa fa-asterisk" />}
       <Input
         ref={input}
         name={name}
         value={value.join(', ')}
+        disabled={disabled}
         required={required}
         onFocus={focusInput}
         onBlur={removeFocus}
@@ -103,6 +105,7 @@ TextArrayInput.propTypes = {
   label: PropTypes.string,
   value: PropTypes.array,
   disabled: PropTypes.bool,
+  annotated: PropTypes.bool,
   required: PropTypes.bool,
   onChange: PropTypes.func,
 }
