@@ -18,9 +18,7 @@ export const compileMetadata = dataset => {
   }
   const getAgesFromSummary = () => {
     const subjectMetadata = getFromSummary('subjectMetadata')
-    return (
-      subjectMetadata && Object.values(subjectMetadata).map(({ age }) => age)
-    )
+    return subjectMetadata && subjectMetadata.map(({ age }) => age)
   }
   return {
     // get from form

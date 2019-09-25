@@ -28,7 +28,12 @@ export const getDataset = gql`
           modalities
           sessions
           subjects
-          subjectMetadata
+          subjectMetadata {
+            participantId
+            age
+            sex
+            group
+          }
           tasks
           size
           totalFiles
@@ -111,7 +116,12 @@ export const getDatasets = gql`
               modalities
               sessions
               subjects
-              subjectMetadata
+              subjectMetadata {
+                participantId
+                age
+                sex
+                group
+              }
               tasks
               size
               totalFiles
