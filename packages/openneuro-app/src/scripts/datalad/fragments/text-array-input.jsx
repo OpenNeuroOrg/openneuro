@@ -90,6 +90,7 @@ const TextArrayInput = ({
         ref={input}
         name={name}
         value={value.join(', ')}
+        disabled={disabled}
         required={required}
         onFocus={focusInput}
         onBlur={removeFocus}
