@@ -131,7 +131,7 @@ def test_write_new_changes(celery_app, annex_path, new_dataset):
     new_dataset.add('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
     dataset = Dataset(str(annex_path.join(ds_id)))
-    assert not dataset.repo.is_dirty()
+    assert not dataset.repo.dirty
     assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes
 1.0.0 2018-01-01
@@ -146,6 +146,6 @@ def test_write_with_empty_changes(celery_app, annex_path, new_dataset):
     new_dataset.add('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
     dataset = Dataset(str(annex_path.join(ds_id)))
-    assert not dataset.repo.is_dirty()
+    assert not dataset.repo.dirty
     assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes'''
