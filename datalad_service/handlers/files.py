@@ -89,7 +89,7 @@ class FilesResource(object):
         queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
-            file_path = os.path.join(ds_path, filename)
+            file_path = os.path.join(ds_path, filename) 
             if os.path.exists(file_path):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
@@ -120,40 +120,6 @@ class FilesResource(object):
                 except PermissionError:
                     resp.media = {'error': 'file already exists'}
                     resp.status = falcon.HTTP_CONFLICT
-        else:
-            resp.media = {'error': 'filename is missing'}
-            resp.status = falcon.HTTP_BAD_REQUEST
-
-    def on_put(self, req, resp, dataset, filename):
-        """Put will only update existing files and automatically unlocks them."""
-        queue = dataset_queue(dataset)
-        if filename:
-            ds_path = self.store.get_dataset_path(dataset)
-            file_path = os.path.join(ds_path, filename)
-            if os.path.exists(file_path):
-                ds = self.store.get_dataset(dataset)
-                media_dict = {'updated': filename}
-                # Record if this was done on behalf of a user
-                name, email = get_user_info(req)
-                if name and email:
-                    media_dict['name'] = name
-                    media_dict['email'] = email
-                unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename]})
-                unlock.wait()
-                self._update_file(file_path, req.stream)
-                commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename], 'name': name, 'email': email, 'cookies': req.cookies})
-                commit.wait()
-                # ds.publish(to='github')
-                if not commit.failed():
-                    resp.media = media_dict
-                    resp.status = falcon.HTTP_OK
-                resp.media = media_dict
-                resp.status = falcon.HTTP_OK
-            else:
-                resp.media = {'error': 'no such file'}
-                resp.status = falcon.HTTP_NOT_FOUND
         else:
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
