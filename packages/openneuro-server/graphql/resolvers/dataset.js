@@ -178,17 +178,17 @@ export const deleteFile = async (
  */
 export const deleteFilesTree = (datasetId, fileTree) => {
   // drafts just need something to invalidate client cache
-  const { name, files, directories } = fileTree
+  const { path, files, directories } = fileTree
   if (files.length) {
-    const filesPromises = files.map(file =>
-      datalad.deleteFile(datasetId, name, file),
+    const filesPromises = files.map(({ filename }) =>
+      datalad.deleteFile(datasetId, path, filename),
     )
     const dirPromises = directories.map(tree =>
       deleteFilesTree(datasetId, tree),
     )
     return filesPromises.concat(...dirPromises)
   } else {
-    return [datalad.deleteFile(datasetId, name, { name: '' })]
+    return [datalad.deleteFile(datasetId, path, { name: '' })]
   }
 }
 
@@ -267,9 +267,7 @@ export const starred = (obj, _, { user }) =>
  */
 export const onBrainlife = async dataset => {
   try {
-    const url = `https://brainlife.io/api/warehouse/project?find={"openneuro.dataset_id":"${
-      dataset.id
-    }"}`
+    const url = `https://brainlife.io/api/warehouse/project?find={"openneuro.dataset_id":"${dataset.id}"}`
     const res = await fetch(url)
     const body = await res.json()
     return Boolean(body.count)
