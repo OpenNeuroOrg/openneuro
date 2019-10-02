@@ -149,7 +149,7 @@ const typeDefs = `
   # File tree
   input FileTree {
     name: ID! # directory name (or empty string for root)
-    path: String! # path to file
+    path: String # path to file
     files: [Upload!] # files within the directory
     directories: [FileTree] # directories within the directory
   }
