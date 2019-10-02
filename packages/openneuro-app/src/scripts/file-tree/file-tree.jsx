@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
+import DeleteDir from '../datalad/mutations/delete-dir.jsx'
 
 export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -44,6 +45,10 @@ const FileTree = ({
                 multiple>
                 <i className="fa fa-plus" /> Add Directory
               </UpdateFile>
+              <DeleteDir
+                datasetId={datasetId}
+                fileTree={{ name, path, files, directories }}
+              />
             </span>
           )}
           <ul className="child-files">

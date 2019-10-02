@@ -7,36 +7,64 @@ import { datasetCacheId } from './cache-id.js'
 import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const DELETE_FILES = gql`
-  mutation deleteFiles($datasetId: ID!, $path: String!, $filename: String!) {
-    deleteFile(datasetId: $datasetId, path: $path, filename: $filename)
+  mutation deleteFiles($datasetId: ID!, $files: FileTree!) {
+    deleteFiles(datasetId: $datasetId, files: $files)
   }
 `
 
 /**
- * Remove file with given filename from draft
- * @param {string} filenames - array file to be deleted
- * @param {Object} draft - current draft in apollo cache
- * @returns {Object} - updated version of draft
+ * @typedef FileTree
+ * @type {Object}
+ * @property {Object[]} files
+ * @property {string} files.filename
+ * @property {FileTree[]} directories
+ * @property {string} path formatted as 'dirA:dirB:dirC'
  */
-export const deleteFilesReducer = (path, filenames, draft) => {
-  const filepath = [...path.split(':'), filenames].join('/')
-  return {
-    ...draft,
-    files: draft.files.filter(file => file.filename !== filepath),
+
+/**
+ * Get all filepaths in file tree
+ * @param {FileTree} fileTree
+ * @returns {string[]} filepaths formatted as 'dirA/dirB/dirC/filename.ext'
+ */
+const getDeletedFilepaths = fileTree => {
+  const { files, directories, path } = fileTree
+  if (files.length || directories.length) {
+    const filepaths = files.map(file =>
+      [...path.split(':'), file.filename].join('/'),
+    )
+    return filepaths.concat(...directories.map(getDeletedFilepaths))
+  } else {
+    return []
   }
 }
 
-const DeleteDir = ({ datasetId, path, filename }) => (
+/**
+ * Remove file with given filename from draft
+ * @param {FileTree} fileTree - array file to be deleted
+ * @param {Object} draft - current draft of dataset in apollo cache
+ * @returns {Object} - updated version of draft
+ */
+export const deleteFilesReducer = (fileTree, draft) => {
+  const deletedFilepaths = getDeletedFilepaths(fileTree)
+  return {
+    ...draft,
+    files: draft.files.filter(
+      file => !deletedFilepaths.includes(file.filename),
+    ),
+  }
+}
+
+const DeleteDir = ({ datasetId, fileTree }) => (
   <Mutation
     mutation={DELETE_FILES}
-    update={(cache, { data: { deleteFile } }) => {
-      if (deleteFile) {
+    update={(cache, { data: { deleteFiles } }) => {
+      if (deleteFiles) {
         const id = datasetCacheId(datasetId)
         const { draft } = cache.readFragment({
           id,
           fragment: DRAFT_FRAGMENT,
         })
-        const updatedDraft = deleteFilesReducer(path, filename, draft)
+        const updatedDraft = deleteFilesReducer(fileTree, draft)
         cache.writeFragment({
           id,
           fragment: DRAFT_FRAGMENT,
@@ -56,11 +84,14 @@ const DeleteDir = ({ datasetId, path, filename }) => (
           warn={true}
           className="edit-file"
           action={cb => {
-            deleteFiles({ variables: { datasetId, path, filename } }).then(
-              () => {
-                cb()
+            deleteFiles({
+              variables: {
+                datasetId,
+                files: fileTree,
               },
-            )
+            }).then(() => {
+              cb()
+            })
           }}
         />
       </span>
@@ -70,8 +101,7 @@ const DeleteDir = ({ datasetId, path, filename }) => (
 
 DeleteDir.propTypes = {
   datasetId: PropTypes.string,
-  path: PropTypes.string,
-  filename: PropTypes.string,
+  fileTree: PropTypes.object,
 }
 
 export default DeleteDir
