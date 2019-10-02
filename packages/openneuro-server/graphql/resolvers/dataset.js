@@ -13,6 +13,7 @@ import { metadata } from './metadata.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import fetch from 'node-fetch'
+import * as Sentry from '@sentry/browser'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -139,24 +140,23 @@ export const updateFilesTree = (datasetId, fileTree) => {
 /**
  * Delete files from a draft
  */
-export const deleteFiles = (
+export const deleteFiles = async (
   obj,
   { datasetId, files: fileTree },
   { user, userInfo },
 ) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    // TODO - The id returned here is a placeholder
-    const promises = deleteFilesTree(datasetId, fileTree)
-    return Promise.all(promises)
-      .then(() =>
-        datalad
-          .commitFiles(datasetId, userInfo)
-          .then(() => pubsub.publish('draftFilesUpdated', { datasetId })),
-      )
-      .then(() => ({
-        id: new Date(),
-      }))
-  })
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+    await Promise.all(deleteFilesTree(datasetId, fileTree))
+    await Promise.all([
+      datalad.commitFiles(datasetId, userInfo),
+      pubsub.publish('draftFilesUpdated', { datasetId }),
+    ])
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
 }
 
 export const deleteFile = async (
@@ -164,9 +164,15 @@ export const deleteFile = async (
   { datasetId, path, filename },
   { user, userInfo },
 ) => {
-  await checkDatasetWrite(datasetId, user, userInfo)
-  await datalad.deleteFile(datasetId, path, { name: filename })
-  return datalad.commitFiles(datasetId, userInfo).then(() => true)
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+    await datalad.deleteFile(datasetId, path, { name: filename })
+    await datalad.commitFiles(datasetId, userInfo)
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
 }
 
 /**
@@ -179,9 +185,9 @@ export const deleteFile = async (
 export const deleteFilesTree = (datasetId, fileTree) => {
   // drafts just need something to invalidate client cache
   const { path, files, directories } = fileTree
-  if (files.length) {
+  if (files.length || directories.length) {
     const filesPromises = files.map(({ filename }) =>
-      datalad.deleteFile(datasetId, path, filename),
+      datalad.deleteFile(datasetId, path, { name: filename }),
     )
     const dirPromises = directories.map(tree =>
       deleteFilesTree(datasetId, tree),
