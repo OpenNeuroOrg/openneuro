@@ -13,7 +13,7 @@ import { metadata } from './metadata.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import fetch from 'node-fetch'
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/node'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -148,10 +148,9 @@ export const deleteFiles = async (
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
     await Promise.all(deleteFilesTree(datasetId, fileTree))
-    await Promise.all([
-      datalad.commitFiles(datasetId, userInfo),
-      pubsub.publish('draftFilesUpdated', { datasetId }),
-    ])
+    await datalad.commitFiles(datasetId, userInfo)
+    await pubsub.publish('draftFilesUpdated', { datasetId })
+    await Promise.all([])
     return true
   } catch (err) {
     Sentry.captureException(err)
