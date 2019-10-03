@@ -76,7 +76,12 @@ const createIfNotExistsDoi = async (
   if (config.doi.username && config.doi.password) {
     // Mint a DOI
     // Get the newest description
-    const snapshotDoi = 'mockDOI'
+    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+    const snapshotDoi = await doiLib.registerSnapshotDoi(
+      datasetId,
+      tag,
+      oldDesc,
+    )
     if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
     else throw new Error('DOI minting failed.')
   }
