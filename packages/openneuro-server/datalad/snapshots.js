@@ -8,6 +8,8 @@ import { redis, redlock } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
+import { description } from '../graphql/resolvers/description.js'
+import doiLib from '../libs/doi/index.js'
 import { filesKey, getFiles } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
@@ -76,7 +78,12 @@ const createIfNotExistsDoi = async (
   if (config.doi.username && config.doi.password) {
     // Mint a DOI
     // Get the newest description
-    const snapshotDoi = 'mockDOI'
+    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+    const snapshotDoi = await doiLib.registerSnapshotDoi(
+      datasetId,
+      tag,
+      oldDesc,
+    )
     if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
     else throw new Error('DOI minting failed.')
   }
