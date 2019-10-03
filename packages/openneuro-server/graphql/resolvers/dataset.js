@@ -150,7 +150,6 @@ export const deleteFiles = async (
     await Promise.all(deleteFilesTree(datasetId, fileTree))
     await datalad.commitFiles(datasetId, userInfo)
     await pubsub.publish('draftFilesUpdated', { datasetId })
-    await Promise.all([])
     return true
   } catch (err) {
     Sentry.captureException(err)
