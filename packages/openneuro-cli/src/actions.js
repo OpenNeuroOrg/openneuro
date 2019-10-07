@@ -23,7 +23,7 @@ export const login = () => {
       type: 'list',
       name: 'url',
       message: 'Choose an OpenNeuro instance to use.',
-      choices: ['https://openneuro.org/', 'https://openneuro.dev.sqm.io/'],
+      choices: ['https://openneuro.org/', 'https://openneuro.staging.sqm.io/'],
       default: 'https://openneuro.org/',
     })
     .then(async answers =>
