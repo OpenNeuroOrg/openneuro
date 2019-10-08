@@ -45,15 +45,15 @@ redis:
     resources:
       limits:
         cpu: "500m"
-        memory: "1000Mi"
+        memory: "3Gi"
       requests:
         cpu: "250m"
-        memory: "500Mi"
+        memory: "1.5Gi"
   slave:
     resources:
       limits:
         cpu: "250m"
-        memory: "768Mi"
+        memory: "3Gi"
       requests:
         cpu: "125m"
-        memory: "256Mi"
+        memory: "1.5Gi"
