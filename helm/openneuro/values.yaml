@@ -42,3 +42,18 @@ redis:
   usePassword: false
   master:
     disableCommands: []
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1000Mi"
+      requests:
+        cpu: "250m"
+        memory: "500Mi"
+  slave:
+    resources:
+      limits:
+        cpu: "250m"
+        memory: "768Mi"
+      requests:
+        cpu: "125m"
+        memory: "256Mi"

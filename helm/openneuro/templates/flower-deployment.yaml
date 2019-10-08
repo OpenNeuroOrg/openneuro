@@ -23,6 +23,13 @@ spec:
       containers:
       - name: {{ .Release.Name }}-flower
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "1024Mi"
+          requests:
+            cpu: "50m"
+            memory: "512Mi"
         ports:
         - containerPort: 5555
         command:
