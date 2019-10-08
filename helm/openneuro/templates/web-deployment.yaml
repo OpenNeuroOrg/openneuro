@@ -23,6 +23,13 @@ spec:
       containers:
         - name: {{ .Release.Name }}-web
           image: 'openneuro/app:v{{ .Chart.AppVersion }}'
+          resources:
+            limits:
+              cpu: ".5"
+              memory: "256Mi"
+            requests:
+              cpu: ".25"
+              memory: "128Mi"
           ports:
             - containerPort: 80
           envFrom:
