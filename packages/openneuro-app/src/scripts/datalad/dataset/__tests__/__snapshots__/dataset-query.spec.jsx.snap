@@ -6,6 +6,7 @@ exports[`DatasetQuery component renders with common params 1`] = `
 >
   <DatasetQueryHook
     datasetId="ds000001"
+    draft={true}
   />
 </ErrorBoundaryAssertionFailureException>
 `;
