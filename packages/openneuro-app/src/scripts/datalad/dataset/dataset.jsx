@@ -1,21 +1,21 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import DatasetQuery from './dataset-query.jsx'
 
 const Dataset = () => {
   return (
-    <div>
-      <Route
-        name="datalad-dataset"
-        path="/datasets/:datasetId"
-        component={DatasetQuery}
-      />
+    <Switch>
       <Route
         name="datalad-snapshot"
-        path="/datasets/:datasetId/version/:snapshotId"
+        path="/datasets/:datasetId/versions/:snapshotId"
         component={DatasetQuery}
       />
-    </div>
+      <Route
+        name="datalad-dataset"
+        path="/datasets/:datasetId/"
+        component={DatasetQuery}
+      />
+    </Switch>
   )
 }
 
