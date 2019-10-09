@@ -60,7 +60,7 @@ const typeDefs = `
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
     # delete files in a draft - returns a new Draft
-    deleteFiles(datasetId: ID!, files: FileTree!): Draft
+    deleteFiles(datasetId: ID!, files: FileTree!): Boolean
     # delete one file based on path
     deleteFile(datasetId: ID!, path: String!, filename: String!): Boolean
     # Add or remove the public flag from a dataset
@@ -149,6 +149,7 @@ const typeDefs = `
   # File tree
   input FileTree {
     name: ID! # directory name (or empty string for root)
+    path: String # path to file
     files: [Upload!] # files within the directory
     directories: [FileTree] # directories within the directory
   }
