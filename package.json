@@ -49,5 +49,8 @@
       "!**/node_modules/**",
       "!**/vendor/**"
     ]
+  },
+  "dependencies": {
+    "core-js": "^3.2.1"
   }
 }
