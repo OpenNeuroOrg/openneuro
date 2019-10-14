@@ -110,7 +110,7 @@ const Share = ({ datasetId, permissions }) => {
             <ShareDataset
               datasetId={datasetId}
               userEmail={userEmail}
-              access={access}
+              metadata={access}
               done={() => setUserEmail('')}
             />
           </div>
