@@ -7,7 +7,7 @@ module.exports = function(api) {
       '@babel/plugin-proposal-class-properties',
       '@babel/syntax-dynamic-import',
       '@babel/plugin-proposal-optional-chaining',
-      '@babel/plugin-transform-runtime',
+      ['@babel/plugin-transform-runtime', { corejs: 3 }],
     ],
     presets: [
       '@babel/preset-react',
@@ -15,10 +15,12 @@ module.exports = function(api) {
         '@babel/preset-env',
         {
           targets: {
-            chrome: '41',
-            firefox: '50',
-            edge: '41',
+            chrome: '63',
+            firefox: '60',
+            safari: '11',
           },
+          useBuiltIns: 'usage',
+          corejs: 3,
         },
       ],
     ],

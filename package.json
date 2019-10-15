@@ -13,11 +13,12 @@
     "@types/jasmine": "^2.8.8",
     "babel-eslint": "8.2.2",
     "codecov": "^3.0.0",
+    "core-js": "^3.3.2",
     "eslint": "5.10.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-react": "^7.7.0",
     "husky": "^0.15.0-rc.13",
-    "jest": "^23.5.0",
+    "jest": "^24.9.0",
     "lerna": "^2.9.1",
     "lint-staged": "^6.0.1",
     "prettier": "^1.7.0"
