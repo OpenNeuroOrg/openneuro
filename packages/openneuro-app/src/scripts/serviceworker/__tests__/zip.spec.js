@@ -1,7 +1,7 @@
 import { zipFiles } from '../zip'
 
 // Mocks the browser Response.blob function
-async function Response(data) {
+function Response(data) {
   return {
     blob: async () => {
       return new Blob([data])
