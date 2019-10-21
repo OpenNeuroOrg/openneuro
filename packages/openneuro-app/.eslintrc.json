@@ -23,7 +23,8 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "semi": ["error", "never"],
-    "react/no-string-refs": 0
+    "react/no-string-refs": 0,
+    "no-prototype-builtins": 0
   },
   "settings": {
     "react": {

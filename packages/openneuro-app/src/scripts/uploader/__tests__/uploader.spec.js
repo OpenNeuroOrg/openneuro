@@ -5,7 +5,7 @@ import { UploadClient } from '../uploader.jsx'
 jest.mock('react-ga')
 
 // Stub constructor for File-like objects with webkitRelativePath
-const TestFile = (body, name, webkitRelativePath) => {
+function TestFile(body, name, webkitRelativePath) {
   const file = new Blob(body)
   file.name = name
   file.webkitRelativePath = webkitRelativePath ? webkitRelativePath : name

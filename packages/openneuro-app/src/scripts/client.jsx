@@ -1,6 +1,4 @@
 // dependencies ---------------------------------------------------------
-import 'url-search-params-polyfill'
-import 'es6-shim'
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
