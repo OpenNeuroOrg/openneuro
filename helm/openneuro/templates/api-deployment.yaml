@@ -37,3 +37,9 @@ spec:
                 name: {{ .Release.Name }}-configmap
             - secretRef:
                 name: {{ .Release.Name }}-secret
+          livenessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            httpGet:
+              path: '/crn/'
+              port: 8111
