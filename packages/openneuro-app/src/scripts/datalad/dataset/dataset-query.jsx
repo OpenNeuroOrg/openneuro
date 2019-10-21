@@ -14,7 +14,6 @@ import ErrorBoundary, {
 
 /**
  * Generate the dataset page query
- * @param {number} commentDepth How many levels to recurse for comments
  */
 export const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
@@ -51,16 +50,56 @@ export const getDatasetPage = gql`
 `
 
 /**
+ * Add files fragment for draft route
+ */
+export const getDraftPage = gql`
+  query dataset($datasetId: ID!) {
+    dataset(id: $datasetId) {
+      id
+      created
+      public
+      following
+      starred
+      ...DatasetDraft
+      ...DatasetDraftFiles
+      ...DatasetPermissions
+      ...DatasetSnapshots
+      ...DatasetIssues
+      ...DatasetMetadata
+      ...DatasetComments
+      uploader {
+        id
+        name
+        email
+      }
+      analytics {
+        downloads
+        views
+      }
+      onBrainlife
+    }
+  }
+  ${DatasetQueryFragments.DRAFT_FRAGMENT}
+  ${DatasetQueryFragments.DRAFT_FILES_FRAGMENT}
+  ${DatasetQueryFragments.PERMISSION_FRAGMENT}
+  ${DatasetQueryFragments.DATASET_SNAPSHOTS}
+  ${DatasetQueryFragments.DATASET_ISSUES}
+  ${DatasetQueryFragments.DATASET_METADATA}
+  ${DATASET_COMMENTS}
+`
+
+/**
  * Query to load and render dataset page - most dataset loading is done here
  * @param {Object} props
  * @param {Object} props.datasetId Accession number / id for dataset to query
+ * @param {Object} props.draft Is this the draft page?
  */
-export const DatasetQueryHook = ({ datasetId }) => {
+export const DatasetQueryHook = ({ datasetId, draft }) => {
   const {
     data: { dataset },
     loading,
     error,
-  } = useQuery(getDatasetPage, {
+  } = useQuery(draft ? getDraftPage : getDatasetPage, {
     variables: { datasetId },
   })
   if (loading) {
@@ -88,10 +127,14 @@ DatasetQueryHook.propTypes = {
  * Routing wrapper for dataset query
  * @param {Object} props
  * @param {Object} props.match React router match object
+ * @param {Object} props.draft Is this the draft page?
  */
 const DatasetQuery = ({ match }) => (
   <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
-    <DatasetQueryHook datasetId={match.params.datasetId} />
+    <DatasetQueryHook
+      datasetId={match.params.datasetId}
+      draft={!match.params.snapshotId}
+    />
   </ErrorBoundaryAssertionFailureException>
 )
 
