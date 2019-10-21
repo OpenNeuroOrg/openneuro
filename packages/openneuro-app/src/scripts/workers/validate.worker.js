@@ -1,4 +1,6 @@
+/* eslint-env worker */
 importScripts('https://unpkg.com/comlink/dist/umd/comlink.js')
+/* global Comlink */
 
 let error, output
 
