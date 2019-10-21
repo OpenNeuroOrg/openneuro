@@ -5,17 +5,55 @@ import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
-import { Modal } from '../utils/modal.jsx'
 import LoginModal from '../common/partials/login.jsx'
-import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import { frontPage } from 'openneuro-content'
 import styled from '@emotion/styled'
+import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 
 // component setup ---------------------------------------------------------------
 const NavbarSpacer = styled.div`
   width: 100%;
   height: 85px;
   min-height: 85px;
+`
+//styled components for custom support modal
+const Overlay = styled.div`
+  background: rgba(0, 0, 0, 0.8);
+  padding-top: 55px;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  -webkit-transition: opacity 400ms ease-in;
+  -moz-transition: opacity 400ms ease-in;
+  transition: opacity 400ms ease-in;
+  display: inline-block;
+  opacity: 100;
+  z-index: 999;
+`
+
+const ModalContainer = styled.div`
+  background-color: white;
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  padding: 3em;
+  height: 100%;
+  overflow: auto;
+`
+
+const ExitButton = styled.a`
+  color: black;
+  font-size: 34px;
+  padding: 12px 12px;
+  padding-top: 20px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  pointer-events: auto;
+  top: 0;
+  z-index: 100;
 `
 
 const OpenNeuroBrand = () => (
@@ -75,7 +113,36 @@ class BSNavbar extends React.Component {
           </Navbar.Collapse>
         </Navbar>
         <NavbarSpacer />
-        {this._supportModal()}
+        {this.state.supportModal && (
+          <Overlay>
+            <ModalContainer>
+              <ExitButton
+                onClick={() => this.setState({ supportModal: false })}>
+                &times;
+              </ExitButton>
+              <h3>Support</h3>
+              <hr />
+              <div>
+                <p>
+                  If you would like to report an issue with openneuro.org,
+                  please provide details in the text box below and an OpenNeuro
+                  representative will be in touch with you by the next business
+                  day.
+                </p>
+                <p>
+                  If you have concerns regarding a specific dataset (clarifying
+                  the design, asking for additional metadata, etc.), please post
+                  them in the comments beneath that dataset.
+                </p>
+                <p>
+                  If you would like to suggest a new site feature, please post
+                  it at https://openneuro.featureupvote.com/
+                </p>
+              </div>
+              <FreshdeskWidget />
+            </ModalContainer>
+          </Overlay>
+        )}
         <LoginModal
           show={this.state.loginModal}
           modalToggle={this.loginModal.bind(this)}
@@ -86,39 +153,6 @@ class BSNavbar extends React.Component {
   }
 
   // template methods --------------------------------------------------------------
-
-  _supportModal() {
-    return (
-      <Modal
-        show={this.state.supportModal}
-        onHide={() => this.setState({ supportModal: false })}>
-        <Modal.Header closeButton>
-          <Modal.Title>Support</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <p>
-            If you would like to report an issue with openneuro.org, please
-            provide details in the text box below and an OpenNeuro
-            representative will be in touch with you by the next business day.
-          </p>
-          <p>
-            If you have concerns regarding a specific dataset (clarifying the
-            design, asking for additional metadata, etc.), please post them in
-            the comments beneath that dataset.
-          </p>
-          <p>
-            If you would like to suggest a new site feature, please post it at
-            https://openneuro.featureupvote.com/
-          </p>
-          <FreshdeskWidget />
-        </Modal.Body>
-        <Modal.Footer>
-          <a onClick={() => this.setState({ supportModal: false })}>Close</a>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
 }
 
 BSNavbar.propTypes = {

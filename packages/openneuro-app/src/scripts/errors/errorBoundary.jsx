@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal } from '../utils/modal.jsx'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import styled from '@emotion/styled'
 
