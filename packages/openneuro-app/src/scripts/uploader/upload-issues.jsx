@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
-import validate from 'bids-validator'
 import Spinner from '../common/partials/spinner.jsx'
 import Results from '../validation/validation-results.jsx'
 import UploaderContext from './uploader-context.js'
+import workers from '../workers'
 
 const UploadValidatorStatus = ({ issues, next, reset }) => {
   const errorCount = issues.errors.length
@@ -65,7 +65,7 @@ class UploadValidator extends React.Component {
 
   componentWillMount() {
     const options = {}
-    validate.BIDS(this.props.files, options, this.done)
+    workers.validate.init(this.props.files, options).then(this.done)
   }
 
   /**
