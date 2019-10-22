@@ -179,6 +179,14 @@
     }
 }
 
+@media screen and (max-width: 700px) {
+    .sort {
+        overflow-x: scroll;
+        width: 100%;
+        white-space: nowrap;
+    }
+  }
+
 // Dashboard teaser layout for Datasets ========================
 
 .dashboard-dataset-teasers {
@@ -374,6 +382,8 @@
             color: #333;
             position: absolute;
             padding-top: 2vh;
+            overflow: scroll;
+            border: solid 1px white;
             .summary-data {
                 display: inline-flex;
                 padding: 2px 15px;
