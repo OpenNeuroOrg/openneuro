@@ -14,3 +14,6 @@ async function validate(cb) {
 }
 
 Comlink.expose(validate)
+
+// satisfies linters
+export default null
