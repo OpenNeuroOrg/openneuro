@@ -2,49 +2,11 @@ import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
-import styled from '@emotion/styled'
-
-//styled components
-
-const Overlay = styled.div`
-  background: rgba(0, 0, 0, 0.8);
-  padding-top: 55px;
-  pointer-events: none;
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  -webkit-transition: opacity 400ms ease-in;
-  -moz-transition: opacity 400ms ease-in;
-  transition: opacity 400ms ease-in;
-  display: inline-block;
-  opacity: 100;
-  z-index: 99;
-`
-
-const ModalContainer = styled.div`
-  background-color: white;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  margin: 0 auto;
-  padding: 3em;
-  pointer-events: auto;
-`
-
-const ExitButton = styled.a`
-  color: black;
-  font-size: 34px;
-  padding: 12px 12px;
-  padding-top: 20px;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  pointer-events: auto;
-  top: 0;
-  z-index: 100;
-`
+import {
+  Overlay,
+  ModalContainer,
+  ExitButton,
+} from '../../scripts/styles/support-modal.jsx'
 
 // raises error if catchErrorIf returns true
 const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
