@@ -61,7 +61,7 @@
     border-bottom: 1px solid $ddd;
 
     .filters {
-        float: right;
+        float: left;
         text-align: right;
         padding: 0;
         margin: 0;
@@ -74,7 +74,7 @@
             font-weight: 600;
             color: $c-77;
             text-align: right;
-            padding: 0 10px 0 0;
+            padding: 0 10px 0 20px;
 
         }
 
@@ -132,6 +132,14 @@
             }
         }
     }
+
+    @media screen and (max-width: 700px) {
+        .filters {
+            overflow-x: scroll;
+            width: 100%;
+            white-space: nowrap;
+        }
+      }
 
     .sort {
         float: left;
