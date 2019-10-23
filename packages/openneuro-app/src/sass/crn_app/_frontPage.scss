@@ -472,6 +472,12 @@
     }
 }
 
+@media only screen and (max-width: 765px) {
+    .mate-slide{
+    border-bottom: inset #009b76;
+    }
+}
+
 .mate-analyses-header {
     margin-bottom: 10px;
 }
