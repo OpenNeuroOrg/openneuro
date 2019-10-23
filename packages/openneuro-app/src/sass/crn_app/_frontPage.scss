@@ -471,6 +471,12 @@
         }
     }
 }
+// limits num of <li> items that populate the browse containers on mobile
+@media ( max-width: 765px) { 
+    .row > div > div > div:nth-child(n + 5) {
+        display: none;
+    }
+}
 
 @media only screen and (max-width: 765px) {
     .mate-slide{
