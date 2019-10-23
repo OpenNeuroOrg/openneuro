@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { event } from 'react-ga'
 import config from '../../../../config.js'
 import datalad from '../../utils/datalad'
+import { getDirectoryHandle } from '../../native-files/get-directory.js'
 
 const startDownload = uri => {
   global.location.assign(uri)
@@ -102,6 +103,38 @@ const downloadClick = (datasetId, snapshotTag) => () => {
 }
 
 /**
+ * Downloads a dataset via the native file API, skipping expensive compression if the browser supports it
+ * @param {string} datasetId Accession number string for a dataset
+ * @param {string} snapshotTag Snapshot tag name
+ */
+const downloadNative = (datasetId, snapshotTag) => async () => {
+  const uri = downloadUri(datasetId, snapshotTag)
+  const filesToDownload = await (await fetch(uri)).json()
+  console.log(filesToDownload)
+  // Obtain primary URL for each file
+  const dirHandle = await window.chooseFileSystemEntries({
+    type: 'openDirectory',
+  })
+  for (const file of filesToDownload.files) {
+    let dirLevel = dirHandle
+    // Get list of any parent directories
+    const pathTokens = file.filename.split('/')
+    const dirTokens = pathTokens.slice(0, -1)
+    const filename = pathTokens.slice(-1)
+    if (dirTokens.length > 0) {
+      for (const token of dirTokens) {
+        dirLevel = await dirLevel.getDirectory(token, { create: true })
+      }
+    }
+    const fileHandle = await dirLevel.getFile(filename, { create: true })
+    const writer = await fileHandle.createWriter()
+    const ff = await fetch(file.urls.pop())
+    await writer.write(0, await ff.blob())
+    await writer.close()
+  }
+}
+
+/**
  * Generate a magic bundle link for this dataset
  */
 const DownloadLink = ({ datasetId, snapshotTag }) => (
@@ -113,7 +146,7 @@ const DownloadLink = ({ datasetId, snapshotTag }) => (
     </p>
     <button
       className="btn-blue"
-      onClick={downloadClick(datasetId, snapshotTag)}>
+      onClick={downloadNative(datasetId, snapshotTag)}>
       <i className={'fa fa-download'} /> Download
     </button>
   </div>

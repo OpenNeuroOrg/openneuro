@@ -26,24 +26,19 @@ self.addEventListener('fetch', event => {
   // for non-GET requests.
   if (event.request.method === 'GET') {
     const url = new URL(event.request.url)
-    if (url.pathname.startsWith('/crn') && url.pathname.endsWith('download')) {
-      // Catch any aggregate download requests
-      return event.respondWith(bundleResponse(url))
-    } else {
-      // Skip serving from cache for cross origin 'only-if-cached' requests
-      if (
-        event.request.cache === 'only-if-cached' &&
-        event.request.mode !== 'same-origin'
-      )
-        return
-      // Respond from cache, then the network
-      event.respondWith(
-        caches.open(CACHE_NAME).then(cache => {
-          return cache.match(event.request).then(response => {
-            return response || fetch(event.request)
-          })
-        }),
-      )
-    }
+    // Skip serving from cache for cross origin 'only-if-cached' requests
+    if (
+      event.request.cache === 'only-if-cached' &&
+      event.request.mode !== 'same-origin'
+    )
+      return
+    // Respond from cache, then the network
+    event.respondWith(
+      caches.open(CACHE_NAME).then(cache => {
+        return cache.match(event.request).then(response => {
+          return response || fetch(event.request)
+        })
+      }),
+    )
   }
 })
