@@ -62,13 +62,11 @@ const Title = styled.span`
   padding-right: 0.5rem;
 `
 
-const Accordion = ({ title, icon, children }) => {
+const Accordion = ({ title, children }) => {
   const [isOpen, setOpen] = useState(false)
-
   const toggleItem = () => {
     setOpen(prevState => !prevState)
   }
-
   return (
     <>
       <Item onClick={toggleItem}>
@@ -92,5 +90,6 @@ Accordion.defaultProps = {
   icon: 'down-chevron',
   isOpen: false,
 }
+
 
 export default Accordion
