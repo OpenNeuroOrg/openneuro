@@ -51,6 +51,7 @@ const DatasetTab = ({
   loading,
   publicDashboard,
   error,
+  isMobile,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
@@ -62,7 +63,7 @@ const DatasetTab = ({
       <div className="admin header-wrap clearfix">
         <div className="row">
           <div className="col-md-5">
-            <h2>{title(publicDashboard)}</h2>
+            {!isMobile && <h2>{title(publicDashboard)}</h2>}
           </div>
           <div className="col-md-7">
             <Search />
