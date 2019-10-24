@@ -33,7 +33,6 @@ Collapse.defaultProps = {
 const Item = styled.button`
   background-color: transparent;
   border: 0;
-  cursor: pointer;
   font-weight: 700;
   padding: 0;
   &,
@@ -54,16 +53,19 @@ const Body = styled.div`
   ${props =>
     props.isOpen &&
     `
-      padding: 1rem 0;
+    padding: 1rem 0;
     `}
 `
 
-const Title = styled.span`
+const Title = styled.p`
   padding-right: 0.5rem;
+  color: #666;
 `
 
-const Accordion = ({ title, children }) => {
+const Accordion = ({ children, ...otherProps }) => {
   const [isOpen, setOpen] = useState(false)
+  const arrow = isOpen ? '\u25BE' : '\u25C2'
+  const title = isOpen ? 'Click to hide ' : 'Click to expand '
   const toggleItem = () => {
     setOpen(prevState => !prevState)
   }
@@ -71,7 +73,7 @@ const Accordion = ({ title, children }) => {
     <>
       <Item onClick={toggleItem}>
         <Wrapper>
-          <Title>{title}</Title>
+          <Title>{`${title} ${arrow}`}</Title>
         </Wrapper>
       </Item>
       <Body isOpen={isOpen}>
@@ -90,6 +92,5 @@ Accordion.defaultProps = {
   icon: 'down-chevron',
   isOpen: false,
 }
-
 
 export default Accordion
