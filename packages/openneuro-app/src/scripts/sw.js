@@ -28,7 +28,7 @@ self.addEventListener('fetch', event => {
     const url = new URL(event.request.url)
     // Check for native filesystem support before registering the custom download handler
     if (
-      !('chooseFileSystemEntries' in window) &&
+      !('chooseFileSystemEntries' in self) &&
       url.pathname.startsWith('/crn') &&
       url.pathname.endsWith('download')
     ) {
