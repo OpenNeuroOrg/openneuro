@@ -28,9 +28,9 @@ self.addEventListener('fetch', event => {
     const url = new URL(event.request.url)
     // Check for native filesystem support before registering the custom download handler
     if (
-      !('chooseFileSystemEntries' in self) &&
       url.pathname.startsWith('/crn') &&
-      url.pathname.endsWith('download')
+      url.pathname.endsWith('download') &&
+      url.searchParams.get('skip-bundle')
     ) {
       // Catch any aggregate download requests
       return event.respondWith(bundleResponse(url))

@@ -29,7 +29,7 @@ export const openFileTree = async (initialDirectoryHandle, path) => {
  */
 export const downloadNative = (datasetId, snapshotTag) => async () => {
   const uri = downloadUri(datasetId, snapshotTag)
-  const filesToDownload = await (await fetch(uri)).json()
+  const filesToDownload = await (await fetch(uri + '?skip-bundle')).json()
   trackDownload(datasetId, snapshotTag)
   // Open user selected directory
   const dirHandle = await window.chooseFileSystemEntries({
