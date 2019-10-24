@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
 import UploaderModal from './uploader-modal.jsx'
 import UploadStep from './upload-step.jsx'
-import UploadNativeSelect from './upload-native-select.jsx'
+import UploadSelect from './upload-select.jsx'
 import UploadIssues from './upload-issues.jsx'
 import UploadMetadata from './upload-metadata.jsx'
 import UploadDisclaimer from './upload-disclaimer.jsx'
@@ -18,7 +18,7 @@ const UploaderSetupRoutes = props => (
             name="upload-select"
             path="/upload"
             exact
-            component={UploadNativeSelect}
+            component={UploadSelect}
           />
           <Route
             name="upload-issues"
