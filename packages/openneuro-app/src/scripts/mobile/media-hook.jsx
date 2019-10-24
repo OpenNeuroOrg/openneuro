@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
 
-// custom media query hook - can be used anywhere by passing in desired breakpoint
+// custom media query hook
 function useMedia(query) {
-  const [match, setmatch] = useState(window.matchMedia(query).match)
+  const [matches, setMatches] = useState(window.matchMedia(query).matches)
 
   useEffect(() => {
     const media = window.matchMedia(query)
-    if (media.match !== match) setmatch(media.match)
-    const listener = () => setmatch(media.match)
+    if (media.matches !== matches) setMatches(media.matches)
+    const listener = () => setMatches(media.matches)
     media.addListener(listener)
     return () => media.removeListener(listener)
-  }, [match, query])
+  }, [matches, query])
 
-  return match
+  return matches
 }
 
 export default useMedia
