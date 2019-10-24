@@ -1,148 +1,15 @@
-/* eslint-disable no-console */
-import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { event } from 'react-ga'
-import config from '../../../../config.js'
-import datalad from '../../utils/datalad'
-import { getDirectoryHandle } from '../../native-files/get-directory.js'
+import { downloadNative } from './download-native.js'
+import { downloadClick } from './download-sw.js'
 
-const startDownload = uri => {
-  global.location.assign(uri)
-}
-
-const trackDownload = (datasetId, snapshotTag) => {
-  event({
-    category: 'Download',
-    action: 'Started web download',
-    label: snapshotTag ? `${datasetId}:${snapshotTag}` : datasetId,
-  })
-  datalad.trackAnalytics(datasetId, {
-    snapshot: true,
-    tag: snapshotTag,
-    type: 'downloads',
-  })
-}
-
-export const downloadUri = (datasetId, snapshotTag) =>
-  // This can't be a GraphQL query since it is intercepted
-  // by the service worker
-  snapshotTag
-    ? `${config.crn.url}datasets/${datasetId}/snapshots/${snapshotTag}/download`
-    : `${config.crn.url}datasets/${datasetId}/download`
-
-// Verify environment dependencies for downloads
-export const checkBrowserEnvironment = environment => {
-  if (!('serviceWorker' in environment.navigator)) {
-    throw new Error(
-      'Your browser must support service workers to download. See the FAQ for supported browsers.',
-    )
-  } else if (typeof environment.ReadableStream === 'undefined') {
-    throw new Error(
-      'Web streams are required to download. Try a recent version of Chrome or see the FAQ for how to enable these features on Firefox.',
-    )
-  }
-}
-
-// Wait for the service worker to be ready and call next()
-export const awaitRegistration = (next, environment) => registration =>
-  new Promise((resolve, reject) => {
-    if (registration.active) {
-      // Service worker is already running as expected
-      next()
-    } else {
-      // Waiting on the service worker
-      if (registration.installing || registration.waiting) {
-        environment.navigator.serviceWorker.addEventListener(
-          'statechange',
-          event => {
-            if (event.target.state === 'active') {
-              // Worker ready, start downloading
-              environment.navigator.serviceWorker.removeEventListener(
-                'statechange',
-                this,
-                true,
-              )
-              next()
-            }
-          },
-        )
-      } else {
-        reject(
-          new Error(
-            'Download failed, please refresh and try again in a few moments.',
-          ),
-        )
-      }
-    }
-  })
-
-/**
- * Event handler for initiating dataset or snapshot downloads
- * @param {string} datasetId Accession number string for a dataset
- */
-const downloadClick = (datasetId, snapshotTag) => () => {
-  // Check that a service worker is registered
-  try {
-    checkBrowserEnvironment(global)
-  } catch (e) {
-    global.alert(e.message)
-  }
-  // Create a closure for download path, datasetId, and optional tag
-  const next = () => {
-    startDownload(downloadUri(datasetId, snapshotTag))
-    trackDownload(datasetId, snapshotTag)
-  }
-  // Check for a running service worker
-  global.navigator.serviceWorker
-    .getRegistration()
-    .then(awaitRegistration(next, global))
-    .catch(err => {
-      Sentry.captureException(err)
-    })
-}
-
-/**
- * Downloads a dataset via the native file API, skipping expensive compression if the browser supports it
- * @param {string} datasetId Accession number string for a dataset
- * @param {string} snapshotTag Snapshot tag name
- */
-const downloadNative = (datasetId, snapshotTag) => async () => {
-  const uri = downloadUri(datasetId, snapshotTag)
-  const filesToDownload = await (await fetch(uri)).json()
-  console.log(filesToDownload)
-  // Obtain primary URL for each file
-  const dirHandle = await window.chooseFileSystemEntries({
-    type: 'openDirectory',
-  })
-  for (const file of filesToDownload.files) {
-    let dirLevel = dirHandle
-    // Get list of any parent directories
-    const pathTokens = file.filename.split('/')
-    const dirTokens = pathTokens.slice(0, -1)
-    const filename = pathTokens.slice(-1)
-    if (dirTokens.length > 0) {
-      for (const token of dirTokens) {
-        dirLevel = await dirLevel.getDirectory(token, { create: true })
-      }
-    }
-    const fileHandle = await dirLevel.getFile(filename, { create: true })
-    const writer = await fileHandle.createWriter()
-    const ff = await fetch(file.urls.pop())
-    await writer.write(0, await ff.blob())
-    await writer.close()
-  }
-}
-
-/**
- * Generate a magic bundle link for this dataset
- */
-const DownloadLink = ({ datasetId, snapshotTag }) => (
+const DownloadLinkNative = ({ datasetId, snapshotTag }) => (
   <div>
     <h4>Download with your browser</h4>
     <p>
-      This method is convenient and best for smaller datasets and with a good
-      internet connection.
+      This method is convenient and allows you to select a local directory to
+      download the dataset to. Existing files will not be downloaded if you
+      select an existing directory.
     </p>
     <button
       className="btn-blue"
@@ -151,6 +18,44 @@ const DownloadLink = ({ datasetId, snapshotTag }) => (
     </button>
   </div>
 )
+
+DownloadLinkNative.propTypes = {
+  datasetId: PropTypes.string.isRequired,
+  snapshotTag: PropTypes.string,
+}
+
+const DownloadLinkServiceWorker = ({ datasetId, snapshotTag }) => (
+  <div>
+    <h4>Download with your browser</h4>
+    <p>
+      This method is convenient and best for smaller datasets and with a good
+      internet connection.
+    </p>
+    <button
+      className="btn-blue"
+      onClick={downloadClick(datasetId, snapshotTag)}>
+      <i className={'fa fa-download'} /> Download
+    </button>
+  </div>
+)
+
+DownloadLinkServiceWorker.propTypes = {
+  datasetId: PropTypes.string.isRequired,
+  snapshotTag: PropTypes.string,
+}
+
+/**
+ * Generate a magic bundle link for this dataset
+ */
+const DownloadLink = ({ datasetId, snapshotTag }) =>
+  'chooseFileSystemEntries' in window ? (
+    <DownloadLinkNative datasetId={datasetId} snapshotTag={snapshotTag} />
+  ) : (
+    <DownloadLinkServiceWorker
+      datasetId={datasetId}
+      snapshotTag={snapshotTag}
+    />
+  )
 
 DownloadLink.propTypes = {
   datasetId: PropTypes.string.isRequired,

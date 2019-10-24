@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checkBrowserEnvironment should throw an error for no ReadableStream 1`] = `"Web streams are required to download. Try a recent version of Chrome or see the FAQ for how to enable these features on Firefox."`;
+
+exports[`checkBrowserEnvironment should throw an error for no service worker 1`] = `"Your browser must support service workers to download. See the FAQ for supported browsers."`;
