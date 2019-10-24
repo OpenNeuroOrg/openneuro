@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
+// wrapper for collapsible content on mobile
+
 const Content = styled.div`
   display: none;
   text-align: left;
@@ -51,7 +53,7 @@ const Wrapper = styled.span`
 const Body = styled.div`
   ${props =>
     props.isOpen &&
-    css`
+    `
       padding: 1rem 0;
     `}
 `
