@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Capitalized from '../../../styles/capitalized.jsx'
+import useMedia from '../../../mobile/media-hook.jsx'
 
 // DatasetSort GraphQL fields
 const sortFields = [
@@ -13,6 +14,7 @@ const sortFields = [
 ]
 
 export const SortField = ({ field, queryVariables, refetch }) => {
+  const isMobile = useMedia('(max-width: 700px) ')
   const fieldValue =
     field in queryVariables.orderBy && queryVariables.orderBy[field]
   let icon
@@ -34,14 +36,22 @@ export const SortField = ({ field, queryVariables, refetch }) => {
         : 'descending'
     refetch(newQueryVariables)
   }
-  return (
-    <a
-      key={field}
-      className={fieldValue ? 'btn-sort name active' : 'btn-sort name'}
-      onClick={sortBy}>
-      <Capitalized>{field}</Capitalized> {icon}
-    </a>
-  )
+  if (!isMobile) {
+    return (
+      <a
+        key={field}
+        className={fieldValue ? 'btn-sort name active' : 'btn-sort name'}
+        onClick={sortBy}>
+        <Capitalized>{field}</Capitalized> {icon}
+      </a>
+    )
+  } else if (isMobile) {
+    return (
+      <option key={field} onClick={sortBy}>
+        <Capitalized>{field}</Capitalized>
+      </option>
+    )
+  }
 }
 
 SortField.propTypes = {
