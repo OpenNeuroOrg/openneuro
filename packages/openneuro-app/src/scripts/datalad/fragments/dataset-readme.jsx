@@ -5,14 +5,6 @@ import Accordion from '../../mobile/accordion-wrapper.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
 import styled from '@emotion/styled'
 
-const Container = styled.div`
-  height: 110px;
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`
-
 /**
  * README file contents
  */
@@ -21,17 +13,13 @@ const DatasetReadme = ({ content }) => {
   const isMobile = useMedia('(max-width: 700px) ')
   if (isMobile) {
     return (
-      <Container>
-        <div className="cte-display">
-          <div className="fade-in">
+      <div className="cte-display">
+        <div className="fade-in">
+          <Accordion title={['Show More', 'Show Less']}>
             <Markdown>{content}</Markdown>
-            <button>Button</button>
-            <Accordion>
-              <Markdown>{content}</Markdown>
-            </Accordion>
-          </div>
+          </Accordion>
         </div>
-      </Container>
+      </div>
     )
   } else {
     return (

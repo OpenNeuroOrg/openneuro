@@ -5,13 +5,16 @@ import styled from '@emotion/styled'
 // wrapper for collapsible content on mobile
 
 const Content = styled.div`
-  display: none;
+  height: 7em;
+  overflow: hidden;
   text-align: left;
   font-size: 14px;
   ${props =>
     props.isOpen &&
     `
       display: block;
+      height: auto;
+      overflow: auto;
     `};
 `
 
@@ -29,6 +32,17 @@ Collapse.defaultProps = {
 }
 
 //
+const Container = styled.div`
+  height: 110px;
+  ${props =>
+    props.isOpen &&
+    `
+    overflow: auto;
+    height: 100%;
+    `};
+  display: block;
+  overflow: hidden;
+`
 
 const Item = styled.button`
   background-color: transparent;
@@ -72,20 +86,20 @@ const Accordion = ({ children, ...otherProps }) => {
   }
   return (
     <>
+      <Body>
+        <Collapse isOpen={isOpen}>{children}</Collapse>
+      </Body>
       {!isOpen && (
         <Item onClick={toggleItem}>
           <Wrapper>
-            <Title>Show More</Title>
+            <Title>{otherProps.title[0]}</Title>
           </Wrapper>
         </Item>
       )}
-      <Body isOpen={isOpen}>
-        <Collapse isOpen={isOpen}>{children}</Collapse>
-      </Body>
       {isOpen && (
         <Item onClick={toggleItem}>
           <Wrapper>
-            <Title>Show Less</Title>
+            <Title>{otherProps.title[1]}</Title>
           </Wrapper>
         </Item>
       )}
