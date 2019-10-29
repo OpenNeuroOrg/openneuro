@@ -1,96 +1,115 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import './accordion.scss'
 
-// wrapper for collapsible content on mobile
-
-const Content = styled.div`
-  display: none;
-  text-align: left;
-  font-size: 14px;
-  ${props =>
-    props.isOpen &&
-    `
-      display: block;
-    `};
-`
-
-const Collapse = ({ children, isOpen }) => {
-  return <Content isOpen={isOpen}>{children}</Content>
-}
-
-Collapse.propTypes = {
-  children: PropTypes.node.isRequired,
-  isOpen: PropTypes.bool,
-}
-
-Collapse.defaultProps = {
-  isOpen: undefined,
-}
-
-//
-
-const Item = styled.button`
-  background-color: transparent;
-  border: 0;
-  font-weight: 700;
-  padding: 0;
-  &,
-  &:hover {
-    text-decoration: none;
-  }
-  &:focus {
-    outline: 0;
-  }
-`
-
-const Wrapper = styled.span`
-  display: flex;
-  align-items: center;
-`
-
-const Body = styled.div`
-  ${props =>
-    props.isOpen &&
-    `
-    padding: 1rem 0;
-    `}
-`
-
-const Title = styled.p`
-  padding-right: 0.5rem;
-  color: #666;
-`
-
-const Accordion = ({ children, ...otherProps }) => {
-  const [isOpen, setOpen] = useState(false)
-  const arrow = isOpen ? '\u25BE' : '\u25C2'
-  const title = isOpen ? 'Click to hide ' : 'Click to expand '
-  const toggleItem = () => {
-    setOpen(prevState => !prevState)
-  }
+const PlusIcon = () => {
   return (
-    <>
-      <Item onClick={toggleItem}>
-        <Wrapper>
-          <Title>{`${title} ${arrow}`}</Title>
-        </Wrapper>
-      </Item>
-      <Body isOpen={isOpen}>
-        <Collapse isOpen={isOpen}>{children}</Collapse>
-      </Body>
-    </>
+    <span className="panel__header-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 16 16">
+        <path
+          fill="currentColor"
+          d="M14,7H9V2A1,1,0,0,0,7,2V7H2A1,1,0,0,0,2,9H7v5a1,1,0,0,0,2,0V9h5a1,1,0,0,0,0-2Z"
+        />
+      </svg>
+    </span>
   )
 }
 
-Accordion.propTypes = {
-  children: PropTypes.node.isRequired,
-  isOpen: PropTypes.bool,
+const MinusIcon = () => {
+  return (
+    <span className="panel__header-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 16 16">
+        <path fill="currentColor" d="M14,9H2A1,1,0,0,1,2,7H14a1,1,0,0,1,0,2Z" />
+      </svg>
+    </span>
+  )
 }
 
-Accordion.defaultProps = {
-  icon: 'down-chevron',
-  isOpen: false,
+const PanelHeader = props => {
+  return (
+    <button
+      className="panel__header"
+      onClick={props.handleToggle}
+      onKeyDown={props.handleKeyDown}
+      aria-expanded={props.isExpanded}>
+      {props.children}
+      {props.isExpanded ? <MinusIcon /> : <PlusIcon />}
+    </button>
+  )
 }
 
-export default Accordion
+const PanelBody = props => {
+  return (
+    <div className="panel__body" aria-hidden={props.isExpanded}>
+      {props.children}
+    </div>
+  )
+}
+
+const PanelGroup = props => {
+  return (
+    <div className="panel-group" role="group">
+      {props.children}
+    </div>
+  )
+}
+
+class Panel extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isExpanded: props.openDefault,
+    }
+
+    this.handleToggle = this.handleToggle.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  handleToggle() {
+    this.setState({
+      isExpanded: !this.state.isExpanded,
+    })
+  }
+
+  handleKeyDown(event) {
+    if (event.keyCode == 40) {
+      event.preventDefault()
+      this.setState({
+        isExpanded: true,
+      })
+    }
+
+    if (event.keyCode == 38) {
+      event.preventDefault()
+      this.setState({
+        isExpanded: false,
+      })
+    }
+  }
+
+  render() {
+    return (
+      <div className="panel">
+        <PanelHeader
+          handleToggle={this.handleToggle}
+          handleKeyDown={this.handleKeyDown}
+          isExpanded={this.state.isExpanded}>
+          {this.props.title}
+        </PanelHeader>
+        <PanelBody isExpanded={!this.state.isExpanded}>
+          {this.props.children}
+        </PanelBody>
+      </div>
+    )
+  }
+}
+
+export default Panel
