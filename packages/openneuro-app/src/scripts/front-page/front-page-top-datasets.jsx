@@ -160,7 +160,9 @@ const FrontPageTopResult = query => ({ loading, error, data }) => {
 }
 
 const FrontPageTopQuery = ({ query }) => (
-  <Query query={query}>{FrontPageTopResult(query)}</Query>
+  <Query query={query} errorPolicy="ignore">
+    {FrontPageTopResult(query)}
+  </Query>
 )
 
 FrontPageTopQuery.propTypes = {
