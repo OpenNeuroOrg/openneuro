@@ -91,7 +91,7 @@ const DatasetContent = ({ dataset }) => {
           />
           <DatasetProminentLinks dataset={dataset} />
           <DatasetSummary summary={dataset.draft.summary} />
-          {!isMobile && <h2>README</h2>}
+          <h2>README</h2>
           <ErrorBoundary subject={'error in dataset readme component'}>
             <EditReadme
               datasetId={dataset.id}

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
-import Panel from '../../mobile/accordion-wrapper.jsx'
+import Accordion from '../../mobile/accordion-wrapper.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
 import styled from '@emotion/styled'
 
@@ -21,9 +21,17 @@ const DatasetReadme = ({ content }) => {
   const isMobile = useMedia('(max-width: 700px) ')
   if (isMobile) {
     return (
-      <Panel title="README">
-        <Markdown>{content}</Markdown>
-      </Panel>
+      <Container>
+        <div className="cte-display">
+          <div className="fade-in">
+            <Markdown>{content}</Markdown>
+            <button>Button</button>
+            <Accordion>
+              <Markdown>{content}</Markdown>
+            </Accordion>
+          </div>
+        </div>
+      </Container>
     )
   } else {
     return (
