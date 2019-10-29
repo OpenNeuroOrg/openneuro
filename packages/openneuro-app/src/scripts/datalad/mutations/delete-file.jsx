@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import { datasetCacheId } from './cache-id.js'
-import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
+import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const DELETE_FILE = gql`
   mutation deleteFile($datasetId: ID!, $path: String!, $filename: String!) {
@@ -34,12 +34,12 @@ const DeleteFile = ({ datasetId, path, filename }) => (
         const id = datasetCacheId(datasetId)
         const { draft } = cache.readFragment({
           id,
-          fragment: DRAFT_FRAGMENT,
+          fragment: DRAFT_FILES_FRAGMENT,
         })
         const updatedDraft = deleteFileReducer(path, filename, draft)
         cache.writeFragment({
           id,
-          fragment: DRAFT_FRAGMENT,
+          fragment: DRAFT_FILES_FRAGMENT,
           data: {
             __typename: 'Dataset',
             id: datasetId,
