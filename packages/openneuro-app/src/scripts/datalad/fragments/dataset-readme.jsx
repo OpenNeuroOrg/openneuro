@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
-import Accordion from '../../mobile/accordion-wrapper.jsx'
+import Collapsible from '../../mobile/collapsible-wrapper.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
-import styled from '@emotion/styled'
 
 /**
  * README file contents
@@ -15,9 +14,9 @@ const DatasetReadme = ({ content }) => {
     return (
       <div className="cte-display">
         <div className="fade-in">
-          <Accordion title={['Show More', 'Show Less']}>
+          <Collapsible title={['SHOW MORE', 'SHOW LESS']}>
             <Markdown>{content}</Markdown>
-          </Accordion>
+          </Collapsible>
         </div>
       </div>
     )

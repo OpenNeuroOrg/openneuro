@@ -31,19 +31,6 @@ Collapse.defaultProps = {
   isOpen: undefined,
 }
 
-//
-const Container = styled.div`
-  height: 110px;
-  ${props =>
-    props.isOpen &&
-    `
-    overflow: auto;
-    height: 100%;
-    `};
-  display: block;
-  overflow: hidden;
-`
-
 const Item = styled.button`
   background-color: transparent;
   border: 0;
@@ -74,12 +61,13 @@ const Body = styled.div`
 const Title = styled.p`
   padding-right: 0.5rem;
   cursor: pointer;
-  color: blue;
-  text-decoration: underline;
+  color: #00505c;
+  text-decoration: none;
+  font-family: "Cabin", sans-serif;
   font-size: 12px;
 `
 
-const Accordion = ({ children, ...otherProps }) => {
+const Collapsible = ({ children, ...otherProps }) => {
   const [isOpen, setOpen] = useState(false)
   const toggleItem = () => {
     setOpen(prevState => !prevState)
@@ -107,14 +95,14 @@ const Accordion = ({ children, ...otherProps }) => {
   )
 }
 
-Accordion.propTypes = {
+Collapsible.propTypes = {
   children: PropTypes.node.isRequired,
   isOpen: PropTypes.bool,
 }
 
-Accordion.defaultProps = {
+Collapsible.defaultProps = {
   icon: 'down-chevron',
   isOpen: false,
 }
 
-export default Accordion
+export default Collapsible
