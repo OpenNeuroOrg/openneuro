@@ -47,9 +47,12 @@ export const SortField = ({ field, queryVariables, refetch }) => {
     )
   } else if (isMobile) {
     return (
-      <option key={field} onClick={sortBy}>
-        <Capitalized>{field}</Capitalized>
-      </option>
+      <li
+        key={field}
+        className={fieldValue ? 'btn-sort name active' : 'btn-sort name'}
+        onClick={sortBy}>
+        <Capitalized>{field}</Capitalized> {icon}
+      </li>
     )
   }
 }
