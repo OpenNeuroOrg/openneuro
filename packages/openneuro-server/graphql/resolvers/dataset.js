@@ -166,6 +166,13 @@ export const deleteFile = async (
     await checkDatasetWrite(datasetId, user, userInfo)
     await datalad.deleteFile(datasetId, path, { name: filename })
     await datalad.commitFiles(datasetId, userInfo)
+    await pubsub.publish('filesUpdated', {
+      datasetId,
+      filesUpdated: {
+        action: 'DELETE',
+        payload: [filename],
+      },
+    })
     return true
   } catch (err) {
     Sentry.captureException(err)

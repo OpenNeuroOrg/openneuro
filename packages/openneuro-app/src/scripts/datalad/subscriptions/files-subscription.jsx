@@ -8,10 +8,8 @@ import {} from '../dataset/dataset-query-fragments.js'
 const FILES_SUBSCRIPTION = gql`
   subscription filesUpdated($datasetId: ID!) {
     filesUpdated(datasetId: $datasetId) {
-      datasetId
       action
-      files
-      snapshot
+      payload
     }
   }
 `
