@@ -292,6 +292,7 @@
             @media only screen and (max-width: 765px) {
                 a {
                     width:75%;
+                    padding: 10px 10px 0px 20px;
                 }
             }
 
@@ -431,6 +432,12 @@
         @media only screen and (max-width: 765px) {
             .minimal-summary {
                 margin: 15px 0px;
+                display: inline-block;
+                white-space: pre-wrap;
+
+            [class='summary-data'] {
+                    display: none;
+                }
             }
         }
 
