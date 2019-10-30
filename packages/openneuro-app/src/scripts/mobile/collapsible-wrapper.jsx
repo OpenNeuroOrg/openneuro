@@ -8,7 +8,6 @@ const Content = styled.div`
   height: 7em;
   overflow: hidden;
   text-align: left;
-  font-size: 14px;
   ${props =>
     props.isOpen &&
     `
