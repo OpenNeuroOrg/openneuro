@@ -30,6 +30,15 @@ export const deleteFilesReducer = (files, draft) => {
   }
 }
 
+export const draftReducer = (draft, action, payload) => {
+  switch (action) {
+    case 'DELETE':
+      return deleteFilesReducer(payload, draft)
+    default:
+      return { ...draft }
+  }
+}
+
 const FilesSubscription = ({ datasetId }) => (
   console.log('subscribed to ', datasetId),
   (
@@ -47,7 +56,7 @@ const FilesSubscription = ({ datasetId }) => (
             id,
             fragment: DRAFT_FILES_FRAGMENT,
           })
-          const updatedDraft = deleteFilesReducer(payload, draft)
+          const updatedDraft = draftReducer(draft, action, payload)
           cache.writeFragment({
             id,
             fragment: DRAFT_FILES_FRAGMENT,
