@@ -94,6 +94,7 @@ services:
       - /publish-worker
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
+      - ../datalad-service/datalad_service:/datalad_service
       - ./datalad-key:/datalad-key
     env_file: ./config.env
     init: true
