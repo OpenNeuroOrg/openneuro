@@ -50,6 +50,14 @@
     }
 }
 
+@media only screen and (max-width: 765px) {
+    .tabs.nav.nav-pills > li {
+        a { 
+        display: none;
+        }
+    }
+}
+
 // Dashboard and Admin sort and filter ========================
 
 
@@ -209,6 +217,13 @@
         margin: 0 auto;
         padding: 20px;
     }
+    @media only screen and (max-width: 765px) {
+        h4 {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
 
     .panel-group {
         margin-bottom: 0;
@@ -242,6 +257,7 @@
                 width: 60%;
                 float: left;
 
+
                 .dataset-name {
                     border: 0;
                     margin: 5px 0 10px;
@@ -272,6 +288,11 @@
                 }
 
 
+            }
+            @media only screen and (max-width: 765px) {
+                a {
+                    width:75%;
+                }
             }
 
             .UPLOADING,
@@ -356,8 +377,28 @@
                         color: $c-33;
                     }
                 }
+                @media only screen and (max-width: 765px) {
+                    .date {
+                        display: none;
+                    }
+                }
+            }
+            @media only screen and (max-width: 765px) {
+                .metric-container {
+                    width: auto;
+                    float: none;
+                    box-sizing: border-box;
+                    padding: 5px 5px 0px 0px;
+                    align-items: center;
+                }
+            }
+            @media only screen and (max-width: 765px) {
+                .status-container {
+                    display:none;
+                }
             }
         }
+    
         // Dataset Dashboard Status
         .minimal-summary {
             display: flex;
@@ -385,6 +426,11 @@
                         font-size: 10px;
                         line-height: 13px;
                     }
+            }
+        }
+        @media only screen and (max-width: 765px) {
+            .minimal-summary {
+                margin: 15px 0px;
             }
         }
 
