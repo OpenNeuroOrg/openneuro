@@ -94,30 +94,19 @@ export const deleteDataset = (obj, { id }, { user, userInfo }) => {
 /**
  * Add files to a draft
  */
-export const updateFiles = (
+export const updateFiles = async (
   obj,
   { datasetId, files: fileTree },
   { user, userInfo },
 ) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    const promises = updateFilesTree(datasetId, fileTree)
-    return Promise.all(promises)
-      .then(() => datalad.commitFiles(datasetId, userInfo))
-      .then(gitRef =>
-        // Check if this is the first data commit and no snapshots exist
-        mongo.collections.crn.snapshots
-          .findOne({ datasetId })
-          .then(async snapshot => {
-            if (!snapshot) {
-              await createSnapshot(datasetId, '1.0.0', user)
-            }
-            return gitRef
-          }),
-      )
-      .then(() => ({
-        id: new Date(),
-      }))
-  })
+  await checkDatasetWrite(datasetId, user, userInfo)
+  const promises = updateFilesTree(datasetId, fileTree)
+  await Promise.all(promises)
+  await datalad.commitFiles(datasetId, userInfo)
+  // Check if this is the first data commit and no snapshots exist
+  const snapshot = await mongo.collections.crn.snapshots.findOne({ datasetId })
+  if (!snapshot) await createSnapshot(datasetId, '1.0.0', user)
+  return { id: new Date() }
 }
 
 /**
