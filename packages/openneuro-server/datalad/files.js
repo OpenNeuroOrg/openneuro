@@ -27,6 +27,13 @@ export const decodeFilePath = path => {
 }
 
 /**
+ * Extract the filename from its URL for DataLad service
+ * @param {String} url
+ */
+export const filenameFromUrl = url =>
+  url.match(/^http:\/\/.*\/datasets\/.*\/files\/(.*)$/)[1]
+
+/**
  * Generate file URL for DataLad service
  * @param {String} datasetId
  * @param {String} path - Relative path for the file
@@ -36,9 +43,7 @@ export const fileUrl = (datasetId, path, filename) => {
   // If path is provided, this is a subdirectory, otherwise a root level file.
   const filePath = path ? [path, filename].join('/') : filename
   const fileName = filename ? encodeFilePath(filePath) : encodeFilePath(path)
-  const url = `http://${
-    config.datalad.uri
-  }/datasets/${datasetId}/files/${fileName}`
+  const url = `http://${config.datalad.uri}/datasets/${datasetId}/files/${fileName}`
   return url
 }
 
@@ -48,9 +53,7 @@ export const fileUrl = (datasetId, path, filename) => {
  * @param {string} objectId - Git object id, a sha1 hash for git objects or key for annexed files
  */
 export const objectUrl = (datasetId, objectId) => {
-  return `http://${
-    config.datalad.uri
-  }/datasets/${datasetId}/objects/${objectId}`
+  return `http://${config.datalad.uri}/datasets/${datasetId}/objects/${objectId}`
 }
 
 /**
@@ -66,9 +69,7 @@ export const getFiles = async (datasetId, hexsha) => {
     else
       return request
         .get(
-          `${
-            config.datalad.uri
-          }/datasets/${datasetId}/snapshots/${hexsha}/files`,
+          `${config.datalad.uri}/datasets/${datasetId}/snapshots/${hexsha}/files`,
         )
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {

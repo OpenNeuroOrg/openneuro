@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Subscription } from 'react-apollo'
 import gql from 'graphql-tag'
+import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
+import { datasetCacheId } from '../mutations/cache-id.js'
 // import { datasetCacheId } from '../mutations/cache-id.js'
 import {} from '../dataset/dataset-query-fragments.js'
 
@@ -14,6 +16,20 @@ const FILES_SUBSCRIPTION = gql`
   }
 `
 
+/**
+ * Remove file with given filename from draft
+ * @param {string[]} files - file to be deleted
+ * @param {Object} draft - current draft in apollo cache
+ * @returns {Object} - updated version of draft
+ */
+export const deleteFilesReducer = (files, draft) => {
+  const deleted = files.map(filename => filename.split(':').join('/'))
+  return {
+    ...draft,
+    files: draft.files.filter(file => !deleted.includes(file.filename)),
+  }
+}
+
 const FilesSubscription = ({ datasetId }) => (
   console.log('subscribed to ', datasetId),
   (
@@ -21,13 +37,27 @@ const FilesSubscription = ({ datasetId }) => (
       subscription={FILES_SUBSCRIPTION}
       variables={{ datasetId }}
       // onSubscriptionData={({ client, subscriptionData: { data } }) => {
-      onSubscriptionData={payload => {
-        console.log(payload)
-        // client.writeFragment({
-        //   id: datasetCacheId(datasetId),
-        //   fragment: DRAFT_FRAGMENT,
-        //   data: data.draftUpdated,
-        // })
+      onSubscriptionData={({ client, subscriptionData }) => {
+        const { cache } = client
+        const { action, payload } = subscriptionData.data.filesUpdated
+        console.log({ cache, action, payload })
+        if (action && payload) {
+          const id = datasetCacheId(datasetId)
+          const { draft } = cache.readFragment({
+            id,
+            fragment: DRAFT_FILES_FRAGMENT,
+          })
+          const updatedDraft = deleteFilesReducer(payload, draft)
+          cache.writeFragment({
+            id,
+            fragment: DRAFT_FILES_FRAGMENT,
+            data: {
+              __typename: 'Dataset',
+              id: datasetId,
+              draft: updatedDraft,
+            },
+          })
+        }
       }}
     />
   )

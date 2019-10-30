@@ -164,13 +164,15 @@ export const deleteFile = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await datalad.deleteFile(datasetId, path, { name: filename })
+    const deletedFile = await datalad.deleteFile(datasetId, path, {
+      name: filename,
+    })
     await datalad.commitFiles(datasetId, userInfo)
     await pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
         action: 'DELETE',
-        payload: [filename],
+        payload: [deletedFile],
       },
     })
     return true
