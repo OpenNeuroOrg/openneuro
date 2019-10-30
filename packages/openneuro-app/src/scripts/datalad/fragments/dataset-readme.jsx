@@ -10,7 +10,7 @@ import useMedia from '../../mobile/media-hook.jsx'
 
 const DatasetReadme = ({ content }) => {
   const isMobile = useMedia('(max-width: 700px) ')
-  if (isMobile) {
+  if (isMobile && content) {
     return (
       <div className="cte-display">
         <div className="fade-in">
