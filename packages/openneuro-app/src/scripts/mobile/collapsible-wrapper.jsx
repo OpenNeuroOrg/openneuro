@@ -63,7 +63,7 @@ const Title = styled.p`
   cursor: pointer;
   color: #00505c;
   text-decoration: none;
-  font-family: "Cabin", sans-serif;
+  font-family: 'Cabin', sans-serif;
   font-size: 12px;
 `
 
@@ -77,20 +77,11 @@ const Collapsible = ({ children, ...otherProps }) => {
       <Body>
         <Collapse isOpen={isOpen}>{children}</Collapse>
       </Body>
-      {!isOpen && (
-        <Item onClick={toggleItem}>
-          <Wrapper>
-            <Title>{otherProps.title[0]}</Title>
-          </Wrapper>
-        </Item>
-      )}
-      {isOpen && (
-        <Item onClick={toggleItem}>
-          <Wrapper>
-            <Title>{otherProps.title[1]}</Title>
-          </Wrapper>
-        </Item>
-      )}
+      <Item onClick={toggleItem}>
+        <Wrapper>
+          <Title>{!isOpen ? otherProps.title[0] : otherProps.title[1]}</Title>
+        </Wrapper>
+      </Item>
     </>
   )
 }
