@@ -1,4 +1,5 @@
 import requests
+import subprocess
 from datalad.api import create_sibling_github
 
 from datalad_service.config import DATALAD_GITHUB_ORG
@@ -59,6 +60,15 @@ def s3_sibling(dataset, siblings, realm=DatasetRealm.PRIVATE):
     return sibling
 
 
+def github_export(dataset, target):
+    """
+    Publish GitHub repo and tags.
+    """
+    dataset.publish(to=target)
+    gitProcess = subprocess.check_call(
+        ['git', 'push', '--tags', target], cwd=dataset.path)
+
+
 def publish_target(dataset, target, treeish):
     """
     Publish target of dataset.
@@ -66,7 +76,7 @@ def publish_target(dataset, target, treeish):
     This exists so the actual publish can be easily mocked.
     """
     if target == 'github':
-        return dataset.publish(to=target)
+        return github_export(dataset, target)
     else:
         return s3_export(dataset, target, treeish)
 
