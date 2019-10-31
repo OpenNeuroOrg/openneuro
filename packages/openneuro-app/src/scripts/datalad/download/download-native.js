@@ -1,4 +1,10 @@
+import * as Sentry from '@sentry/browser'
 import { trackDownload } from './track-download.js'
+import {
+  nativeErrorToast,
+  permissionsToast,
+  downloadCompleteToast,
+} from './native-file-toast.jsx'
 import { downloadUri } from './download-uri.js'
 
 /**
@@ -30,18 +36,34 @@ export const openFileTree = async (initialDirectoryHandle, path) => {
 export const downloadNative = (datasetId, snapshotTag) => async () => {
   const uri = downloadUri(datasetId, snapshotTag)
   const filesToDownload = await (await fetch(uri + '?skip-bundle')).json()
-  trackDownload(datasetId, snapshotTag)
-  // Open user selected directory
-  const dirHandle = await window.chooseFileSystemEntries({
-    type: 'openDirectory',
-  })
-  for (const file of filesToDownload.files) {
-    const fileHandle = await openFileTree(dirHandle, file.filename)
-    // Skip files which are already complete
-    if (fileHandle.size == file.size) continue
-    const writer = await fileHandle.createWriter()
-    const ff = await fetch(file.urls.pop())
-    await writer.write(0, ff.arrayBuffer())
-    await writer.close()
+  // Try trackDownload but don't worry if it fails
+  try {
+    trackDownload(datasetId, snapshotTag)
+  } catch (err) {
+    Sentry.captureException(err)
+  }
+  try {
+    // Open user selected directory
+    const dirHandle = await window.chooseFileSystemEntries({
+      type: 'openDirectory',
+    })
+    for (const file of filesToDownload.files) {
+      const fileHandle = await openFileTree(dirHandle, file.filename)
+      // Skip files which are already complete
+      if (fileHandle.size == file.size) continue
+      const writer = await fileHandle.createWriter()
+      const ff = await fetch(file.urls.pop())
+      await writer.write(0, ff.arrayBuffer())
+      await writer.close()
+    }
+    downloadCompleteToast(dirHandle.name)
+  } catch (err) {
+    if (err.name === 'NoModificationAllowedError') {
+      permissionsToast()
+    } else {
+      // Some unknown issue occurred (out of disk space, disk caught fire, etc...)
+      nativeErrorToast()
+    }
+    Sentry.captureException(err)
   }
 }
