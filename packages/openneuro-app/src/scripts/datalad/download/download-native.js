@@ -53,7 +53,7 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
       if (fileHandle.size == file.size) continue
       const writer = await fileHandle.createWriter()
       const ff = await fetch(file.urls.pop())
-      await writer.write(0, ff.arrayBuffer())
+      await writer.write(0, await ff.arrayBuffer())
       await writer.close()
     }
     downloadCompleteToast(dirHandle.name)
