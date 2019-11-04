@@ -58,7 +58,10 @@ class UploadValidator extends React.Component {
     this.done = this.done.bind(this)
     this.state = {
       validating: true,
-      issues: {},
+      issues: {
+        errors: [],
+        warnings: [],
+      },
       summary: {},
     }
   }
@@ -71,7 +74,7 @@ class UploadValidator extends React.Component {
   /**
    * Called when validation finishes
    */
-  done(issues, summary) {
+  done({ issues, summary }) {
     this.setState({ issues, summary, validating: false })
   }
 
