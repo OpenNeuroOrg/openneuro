@@ -428,15 +428,30 @@
                         line-height: 13px;
                     }
             }
+            @media only screen and (max-width: 765px) {
+                .summary-data {
+                    border-right: none;
+                    border-bottom: 1px solid $f4;
+                    width: 100%;
+                    :last-child {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+
         }
         @media only screen and (max-width: 765px) {
             .minimal-summary {
-                margin: 15px 0px;
+                // margin: 15px 0px;
                 display: inline-block;
                 white-space: pre-wrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
 
             [class='summary-data'] {
-                    display: none;
+                    display:none;
                 }
             }
         }
