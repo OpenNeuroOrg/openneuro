@@ -144,8 +144,8 @@ FrontPageTopRecent.propTypes = {
   datasets: PropTypes.array,
 }
 
-const FrontPageTopResult = query => ({ loading, error, data }) => {
-  if (error || data.datasets === null) {
+export const FrontPageTopResult = query => ({ loading, error, data }) => {
+  if (error || data.datasets == null) {
     Sentry.captureException(error)
     return <div>Failed to load top datasets, please try again later.</div>
   } else if (loading) {
@@ -160,7 +160,9 @@ const FrontPageTopResult = query => ({ loading, error, data }) => {
 }
 
 const FrontPageTopQuery = ({ query }) => (
-  <Query query={query}>{FrontPageTopResult(query)}</Query>
+  <Query query={query} errorPolicy="ignore">
+    {FrontPageTopResult(query)}
+  </Query>
 )
 
 FrontPageTopQuery.propTypes = {
