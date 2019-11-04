@@ -33,6 +33,7 @@ const DatasetReadme = ({ content }) => {
 
 DatasetReadme.propTypes = {
   content: PropTypes.string,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetReadme

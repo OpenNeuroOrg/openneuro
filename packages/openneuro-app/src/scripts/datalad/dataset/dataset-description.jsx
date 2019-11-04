@@ -100,6 +100,7 @@ DatasetDescription.propTypes = {
   datasetId: PropTypes.string,
   description: PropTypes.object,
   editMode: PropTypes.bool,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetDescription
