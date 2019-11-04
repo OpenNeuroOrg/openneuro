@@ -68,7 +68,6 @@ services:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./datalad-key:/datalad-key
       - ../datalad-service/datalad_service:/datalad_service
     env_file: ./config.env
     depends_on:
@@ -83,7 +82,6 @@ services:
     scale: 4
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./datalad-key:/datalad-key
       - ../datalad-service/datalad_service:/datalad_service
       - ../datalad-service/tests:/tests
     env_file: ./config.env
@@ -96,6 +94,7 @@ services:
       - /publish-worker
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
+      - ../datalad-service/datalad_service:/datalad_service
       - ./datalad-key:/datalad-key
     env_file: ./config.env
     init: true
