@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "os": [
     "!win32"
