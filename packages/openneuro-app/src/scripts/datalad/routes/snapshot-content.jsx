@@ -62,6 +62,7 @@ const getSnapshotDetails = gql`
         views
       }
       ...SnapshotIssues
+      hexsha
     }
   }
   ${SNAPSHOT_ISSUES}
@@ -134,7 +135,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           datasetName={snapshot.description.Name}
           files={snapshot.files}
         />
-        <DatasetGitHash title="Snapshot Git Hash" gitHash={snapshot.gitHash} />
+        <DatasetGitHash title="Snapshot Git Hash" gitHash={snapshot.hexsha} />
       </div>
     </span>
   )
