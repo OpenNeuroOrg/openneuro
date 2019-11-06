@@ -26,7 +26,12 @@ self.addEventListener('fetch', event => {
   // for non-GET requests.
   if (event.request.method === 'GET') {
     const url = new URL(event.request.url)
-    if (url.pathname.startsWith('/crn') && url.pathname.endsWith('download')) {
+    // Check for native filesystem support before registering the custom download handler
+    if (
+      url.pathname.startsWith('/crn') &&
+      url.pathname.endsWith('download') &&
+      url.searchParams.get('skip-bundle')
+    ) {
       // Catch any aggregate download requests
       return event.respondWith(bundleResponse(url))
     } else {

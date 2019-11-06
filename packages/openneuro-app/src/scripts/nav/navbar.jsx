@@ -5,11 +5,15 @@ import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
-import { Modal } from '../utils/modal.jsx'
 import LoginModal from '../common/partials/login.jsx'
-import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import { frontPage } from 'openneuro-content'
 import styled from '@emotion/styled'
+import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
+import {
+  Overlay,
+  ModalContainer,
+  ExitButton,
+} from '../styles/support-modal.jsx'
 
 // component setup ---------------------------------------------------------------
 const NavbarSpacer = styled.div`
@@ -75,7 +79,36 @@ class BSNavbar extends React.Component {
           </Navbar.Collapse>
         </Navbar>
         <NavbarSpacer />
-        {this._supportModal()}
+        {this.state.supportModal && (
+          <Overlay>
+            <ModalContainer>
+              <ExitButton
+                onClick={() => this.setState({ supportModal: false })}>
+                &times;
+              </ExitButton>
+              <h3>Support</h3>
+              <hr />
+              <div>
+                <p>
+                  If you would like to report an issue with openneuro.org,
+                  please provide details in the text box below and an OpenNeuro
+                  representative will be in touch with you by the next business
+                  day.
+                </p>
+                <p>
+                  If you have concerns regarding a specific dataset (clarifying
+                  the design, asking for additional metadata, etc.), please post
+                  them in the comments beneath that dataset.
+                </p>
+                <p>
+                  If you would like to suggest a new site feature, please post
+                  it at https://openneuro.featureupvote.com/
+                </p>
+              </div>
+              <FreshdeskWidget />
+            </ModalContainer>
+          </Overlay>
+        )}
         <LoginModal
           show={this.state.loginModal}
           modalToggle={this.loginModal.bind(this)}
@@ -86,39 +119,6 @@ class BSNavbar extends React.Component {
   }
 
   // template methods --------------------------------------------------------------
-
-  _supportModal() {
-    return (
-      <Modal
-        show={this.state.supportModal}
-        onHide={() => this.setState({ supportModal: false })}>
-        <Modal.Header closeButton>
-          <Modal.Title>Support</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <p>
-            If you would like to report an issue with openneuro.org, please
-            provide details in the text box below and an OpenNeuro
-            representative will be in touch with you by the next business day.
-          </p>
-          <p>
-            If you have concerns regarding a specific dataset (clarifying the
-            design, asking for additional metadata, etc.), please post them in
-            the comments beneath that dataset.
-          </p>
-          <p>
-            If you would like to suggest a new site feature, please post it at
-            https://openneuro.featureupvote.com/
-          </p>
-          <FreshdeskWidget />
-        </Modal.Body>
-        <Modal.Footer>
-          <a onClick={() => this.setState({ supportModal: false })}>Close</a>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
 }
 
 BSNavbar.propTypes = {

@@ -1,8 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LeftSidebar component SidebarRow renders draft version correctly 1`] = `undefined`;
+exports[`LeftSidebar component SidebarRow renders draft version correctly 1`] = `
+<li
+  key="draft"
+>
+  <Link
+    className=""
+    to="/datasets/ds000001"
+  >
+    <div
+      className="clearfix"
+    >
+      <div
+        className=" col-xs-12"
+      >
+        <span
+          className="dataset-type"
+        />
+        <span
+          className="date-modified"
+        >
+          2019-04-02
+        </span>
+        <span
+          className="icons"
+        />
+      </div>
+    </div>
+  </Link>
+</li>
+`;
 
-exports[`LeftSidebar component SidebarRow renders snapshot version correctly 1`] = `undefined`;
+exports[`LeftSidebar component SidebarRow renders snapshot version correctly 1`] = `
+<li
+  key="ds000001:1.0.0"
+>
+  <Link
+    className="active"
+    to="/datasets/ds000001/versions/undefined"
+  >
+    <div
+      className="clearfix"
+    >
+      <div
+        className=" col-xs-12"
+      >
+        <span
+          className="dataset-type"
+        />
+        <span
+          className="date-modified"
+        >
+          2019-04-02
+        </span>
+        <span
+          className="icons"
+        />
+      </div>
+    </div>
+  </Link>
+</li>
+`;
 
 exports[`LeftSidebar component renders with basic props 1`] = `
 <div
