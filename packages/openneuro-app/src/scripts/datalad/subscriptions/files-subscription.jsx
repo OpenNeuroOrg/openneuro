@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from '../mutations/cache-id.js'
 // import { datasetCacheId } from '../mutations/cache-id.js'
-import {} from '../dataset/dataset-query-fragments.js'
 
 const FILES_SUBSCRIPTION = gql`
   subscription filesUpdated($datasetId: ID!) {

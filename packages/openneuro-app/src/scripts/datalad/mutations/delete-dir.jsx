@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import { datasetCacheId } from './cache-id.js'
-import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const DELETE_FILES = gql`
   mutation deleteFiles($datasetId: ID!, $files: FileTree!) {
