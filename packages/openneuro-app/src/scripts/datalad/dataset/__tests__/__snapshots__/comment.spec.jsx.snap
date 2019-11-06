@@ -18,7 +18,7 @@ exports[`Comment component renders with an empty comment 1`] = `
   >
     <div
       className="row comment-header"
-    >git log --follow 
+    >
       By example@example.com - about NaN years ago
     </div>
     <div
