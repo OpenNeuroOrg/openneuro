@@ -11,7 +11,7 @@ const Span = styled.span`
     right: -9999px;
     z-index: 9001;
     height: 24px;
-    padding: 0px 7px;
+    padding: 0px 10px;
     color: #565656;
     font-size: 12px;
     white-space: nowrap;

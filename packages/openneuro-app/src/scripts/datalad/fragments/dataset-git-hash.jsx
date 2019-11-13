@@ -5,7 +5,7 @@ import ToolTip from './tooltip.jsx'
 
 const Container = styled.div({
   textAlign: 'right',
-  padding: '1 10px',
+  padding: '0 10px',
   color: '#565656',
   fontSize: '12px',
 })
