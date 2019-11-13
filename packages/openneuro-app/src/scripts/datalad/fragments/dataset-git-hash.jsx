@@ -1,24 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import ToolTip from './tooltip.jsx'
+
+const Container = styled.div({
+  textAlign: 'right',
+  padding: '1 10px',
+  color: '#565656',
+  fontSize: '12px',
+})
 
 const DatasetGitHash = ({ title, gitHash }) => (
   <div className="dataset-git-hash">
     <div className="col-xs-12">
-      <div className="file-structure fade-in panel-group">
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h3 className="panel-title">{title}</h3>
-          </div>
-          <div className="panel-body">{gitHash}</div>
-        </div>
-      </div>
+      <Container className="fade-in">
+        <ToolTip text={`Git Hash: ${gitHash.slice(0, 7)}`} tip={gitHash} />
+      </Container>
     </div>
   </div>
 )
 
 DatasetGitHash.propTypes = {
-  title: PropTypes.String,
-  gitHash: PropTypes.String,
+  gitHash: PropTypes.string,
 }
 
 export default DatasetGitHash

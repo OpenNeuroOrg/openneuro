@@ -116,10 +116,7 @@ const DatasetContent = ({ dataset }) => {
             files={dataset.draft.files}
             editMode={hasEdit}
           />
-          <DatasetGitHash
-            title="Dataset Draft Git Hash"
-            gitHash={dataset.draft.id}
-          />
+          <DatasetGitHash gitHash={dataset.draft.id} />
         </div>
         <DraftSubscription datasetId={dataset.id} />
       </LoggedIn>
