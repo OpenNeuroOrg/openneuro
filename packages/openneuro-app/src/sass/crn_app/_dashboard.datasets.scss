@@ -222,6 +222,7 @@
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
+            height: 2em;
         }
     }
 
@@ -366,6 +367,7 @@
                         position: fixed;
                         flex-wrap: wrap;
                         left: 77%;
+                        padding: 0px 0px 0px 1%;
                     }
                 }
             }
