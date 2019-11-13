@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import ToolTip from './tooltip.jsx'
+import ToolTip from './copyable-tooltip.jsx'
 
 const Container = styled.div({
   textAlign: 'right',
@@ -10,7 +10,7 @@ const Container = styled.div({
   fontSize: '12px',
 })
 
-const DatasetGitHash = ({ title, gitHash }) => (
+const DatasetGitHash = ({ gitHash }) => (
   <div className="dataset-git-hash">
     <div className="col-xs-12">
       <Container className="fade-in">
