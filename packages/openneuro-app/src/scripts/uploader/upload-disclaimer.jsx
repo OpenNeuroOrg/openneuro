@@ -32,10 +32,10 @@ const UploadDisclaimer = () => (
             Creative Commons CC-BY
           </a>{' '}
           license (depending on the dataset metadata) after a grace period of 36
-          months counted from first successful analysis of data from more than
-          one participant. You will be able to apply for up to two 6 month
-          extensions to increase the grace period in case the publication of a
-          corresponding paper takes longer than expected. See{' '}
+          months from the date of the first snapshot creation for this dataset.
+          You will be able to apply for up to two 6 month extensions to increase 
+          the grace period in case the publication of a corresponding paper takes
+          longer than expected. See{' '}
           <a href="/faq">FAQ</a> for details.
         </p>
         <p>
