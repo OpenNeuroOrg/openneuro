@@ -26,11 +26,11 @@ const UploadDisclaimer = () => (
           <a href="https://wiki.creativecommons.org/wiki/CC0">
             Creative Commons CC0
           </a>{' '}
-          license after a grace period of 36 months counted from the first
-          successful snapshot of the dataset. You will be able to apply for up
-          to two 6 month extensions to increase the grace period in case the
-          publication of a corresponding paper takes longer than expected. See{' '}
-          <a href="/faq">FAQ</a> for details.
+          license after a grace period of 36 months counted from the date of the
+          first snapshot creation for this dataset. You will be able to apply
+          for up to two 6 month extensions to increase the grace period in case
+          the publication of a corresponding paper takes longer than expected.
+          See <a href="/faq">FAQ</a> for details.
         </p>
         <p>
           Please refrain from uploading datasets already publicly available in
