@@ -4,7 +4,7 @@ This tool allows you to upload and download [OpenNeuro.org](https://openneuro.or
 
 # Install
 
-1. Install [Node.js](https://nodejs.org)
+1. Install [Node.js](https://nodejs.org) (version 10 or higher)
 2. In a terminal type: `npm install -g openneuro-cli`
 
 If you are using [yarn](https://yarnpkg.com/) you can also perform the installation with `yarn global add openneuro-cli`

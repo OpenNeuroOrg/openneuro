@@ -67,8 +67,12 @@ class UploadValidator extends React.Component {
   }
 
   componentWillMount() {
-    const options = {}
-    workers.validate.init(this.props.files, options).then(this.done)
+    const options = {
+      config: {
+        error: ['NO_AUTHORS'],
+      },
+    }
+    validate.BIDS(this.props.files, options, this.done)
   }
 
   /**
