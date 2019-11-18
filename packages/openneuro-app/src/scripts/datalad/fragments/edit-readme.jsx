@@ -6,7 +6,7 @@ import CancelButton from './cancel-button.jsx'
 /**
  * This extends EditDescriptionField with Markdown display and a custom mutation
  */
-const EditReadme = ({ datasetId, content, children, hasEdit }) => {
+const EditReadme = ({ datasetId, content, children, hasEdit, isMobile }) => {
   const [editing, setEditing] = useState(false)
   const [value, setValue] = useState(content || '')
 
@@ -30,7 +30,9 @@ const EditReadme = ({ datasetId, content, children, hasEdit }) => {
     return (
       <>
         {children}
-        {hasEdit ? <EditButton action={() => setEditing(true)} /> : null}
+        {hasEdit && !isMobile ? (
+          <EditButton action={() => setEditing(true)} />
+        ) : null}
       </>
     )
   }

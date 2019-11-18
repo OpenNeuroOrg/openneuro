@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+window.matchMedia = window.matchMedia || function() {
+    return {
+        matches : false,
+        addListener : function() {},
+        removeListener: function() {}
+    };
+};
+
 exports[`DatasetReadme component renders with common props 1`] = `
 <div
   className="cte-display"

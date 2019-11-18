@@ -8,7 +8,12 @@ const arrayToMarkdown = arr => {
   return arr ? arr.map(element => ` * ${element}\n`).join('') : ''
 }
 
-const DatasetDescription = ({ datasetId, description, editMode = false }) => (
+const DatasetDescription = ({
+  datasetId,
+  description,
+  isMobile,
+  editMode = false,
+}) => (
   <>
     <div className="description-item">
       <h2>Authors</h2>
@@ -16,7 +21,8 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
         datasetId={datasetId}
         description={description}
         field="Authors"
-        editMode={editMode}>
+        editMode={editMode}
+        isMobile={isMobile}>
         <div className="cte-display fade-in">
           <Markdown>{arrayToMarkdown(description.Authors)}</Markdown>
         </div>
@@ -41,7 +47,8 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
         datasetId={datasetId}
         field="Acknowledgements"
         description={description}
-        editMode={editMode}>
+        editMode={editMode}
+        isMobile={isMobile}>
         <div className="cte-display fade-in">
           <Markdown>{description.Acknowledgements}</Markdown>
         </div>
@@ -53,7 +60,8 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
         datasetId={datasetId}
         field="HowToAcknowledge"
         description={description}
-        editMode={editMode}>
+        editMode={editMode}
+        isMobile={isMobile}>
         <div className="cte-display fade-in">
           <Markdown>{description.HowToAcknowledge}</Markdown>
         </div>
@@ -65,7 +73,8 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
         datasetId={datasetId}
         description={description}
         field="Funding"
-        editMode={editMode}>
+        editMode={editMode}
+        isMobile={isMobile}>
         <div className="cte-display fade-in">
           <Markdown>{arrayToMarkdown(description.Funding)}</Markdown>
         </div>
@@ -77,7 +86,8 @@ const DatasetDescription = ({ datasetId, description, editMode = false }) => (
         datasetId={datasetId}
         description={description}
         field="ReferencesAndLinks"
-        editMode={editMode}>
+        editMode={editMode}
+        isMobile={isMobile}>
         <div className="cte-display fade-in">
           <Markdown>{arrayToMarkdown(description.ReferencesAndLinks)}</Markdown>
         </div>
@@ -90,6 +100,7 @@ DatasetDescription.propTypes = {
   datasetId: PropTypes.string,
   description: PropTypes.object,
   editMode: PropTypes.bool,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetDescription
