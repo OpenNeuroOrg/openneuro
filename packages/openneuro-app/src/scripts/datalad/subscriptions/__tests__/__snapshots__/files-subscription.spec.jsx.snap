@@ -1,14 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DeleteDataset mutation renders with common props 1`] = `
-<Route>
-  <Component />
-</Route>
-`;
-
-exports[`DeleteDir mutation renders with common props 1`] = `
-<Mutation
-  mutation={
+exports[`FilesSubscription renders with common props 1`] = `
+<Subscription
+  onSubscriptionData={[Function]}
+  subscription={
     Object {
       "definitions": Array [
         Object {
@@ -16,9 +11,9 @@ exports[`DeleteDir mutation renders with common props 1`] = `
           "kind": "OperationDefinition",
           "name": Object {
             "kind": "Name",
-            "value": "deleteFiles",
+            "value": "filesUpdated",
           },
-          "operation": "mutation",
+          "operation": "subscription",
           "selectionSet": Object {
             "kind": "SelectionSet",
             "selections": Array [
@@ -39,28 +34,40 @@ exports[`DeleteDir mutation renders with common props 1`] = `
                       },
                     },
                   },
-                  Object {
-                    "kind": "Argument",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "files",
-                    },
-                    "value": Object {
-                      "kind": "Variable",
-                      "name": Object {
-                        "kind": "Name",
-                        "value": "files",
-                      },
-                    },
-                  },
                 ],
                 "directives": Array [],
                 "kind": "Field",
                 "name": Object {
                   "kind": "Name",
-                  "value": "deleteFiles",
+                  "value": "filesUpdated",
                 },
-                "selectionSet": undefined,
+                "selectionSet": Object {
+                  "kind": "SelectionSet",
+                  "selections": Array [
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "action",
+                      },
+                      "selectionSet": undefined,
+                    },
+                    Object {
+                      "alias": undefined,
+                      "arguments": Array [],
+                      "directives": Array [],
+                      "kind": "Field",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "payload",
+                      },
+                      "selectionSet": undefined,
+                    },
+                  ],
+                },
               },
             ],
           },
@@ -87,39 +94,20 @@ exports[`DeleteDir mutation renders with common props 1`] = `
                 },
               },
             },
-            Object {
-              "defaultValue": undefined,
-              "directives": Array [],
-              "kind": "VariableDefinition",
-              "type": Object {
-                "kind": "NonNullType",
-                "type": Object {
-                  "kind": "NamedType",
-                  "name": Object {
-                    "kind": "Name",
-                    "value": "FileTree",
-                  },
-                },
-              },
-              "variable": Object {
-                "kind": "Variable",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "files",
-                },
-              },
-            },
           ],
         },
       ],
       "kind": "Document",
       "loc": Object {
-        "end": 120,
+        "end": 127,
         "start": 0,
       },
     }
   }
->
-  <Component />
-</Mutation>
+  variables={
+    Object {
+      "datasetId": "ds001",
+    }
+  }
+/>
 `;
