@@ -12,6 +12,7 @@ import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
+import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import DownloadButton from '../fragments/dataset-prominent-links.jsx'
@@ -61,6 +62,7 @@ const getSnapshotDetails = gql`
         views
       }
       ...SnapshotIssues
+      hexsha
     }
   }
   ${SNAPSHOT_ISSUES}
@@ -133,6 +135,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           datasetName={snapshot.description.Name}
           files={snapshot.files}
         />
+        <DatasetGitHash gitHash={snapshot.hexsha} />
       </div>
     </span>
   )

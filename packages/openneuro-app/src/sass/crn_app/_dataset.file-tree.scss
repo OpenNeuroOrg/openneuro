@@ -120,7 +120,7 @@
 .snapshot,
 .dataset {
     .dataset-inner {
-        .dataset-files {
+        .dataset-files, .dataset-git-hash {
             .file-structure.panel-group {
                 .panel-default {
 
@@ -185,6 +185,12 @@
                         }
                     }
                 }
+            }
+        }
+        .dataset-git-hash {
+            .col-xs-12 .panel-group .panel.panel-default .panel-body {
+                padding: 8px 12px;
+                overflow-wrap: break-word;
             }
         }
     }

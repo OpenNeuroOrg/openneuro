@@ -12,6 +12,7 @@ import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetProminentLinks from '../fragments/dataset-prominent-links.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
+import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
@@ -120,6 +121,7 @@ const DatasetContent = ({ dataset }) => {
             files={dataset.draft.files}
             editMode={hasEdit}
           />
+          <DatasetGitHash gitHash={dataset.draft.id} />
         </div>
         <DraftSubscription datasetId={dataset.id} />
       </LoggedIn>
