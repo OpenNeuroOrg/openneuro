@@ -2,14 +2,6 @@
 import * as Comlink from 'comlink'
 import validate from 'bids-validator'
 
-/* MOCK VALIDATOR */
-// TODO: remove when bid-validator updates are released
-validate.BIDS = (files, options, cb) => {
-  const issues = { mocks: 'issues' },
-    summary = { mocks: 'summary' }
-  cb(issues, summary)
-}
-
 const asyncValidateBIDS = (files, options) =>
   new Promise(resolve => {
     validate.BIDS(files, options, (issues, summary) =>
