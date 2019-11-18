@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetQueryContext from './dataset-query-context.js'
 import DatasetPage from './dataset-page.jsx'
+import FilesSubscription from '../subscriptions/files-subscription.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
 import { DATASET_COMMENTS } from './comments-fragments.js'
 import ErrorBoundary, {
@@ -113,6 +114,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
             datasetId,
           }}>
           <DatasetPage dataset={dataset} />
+          <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
       </ErrorBoundary>
     )

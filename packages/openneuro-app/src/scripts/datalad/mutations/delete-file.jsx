@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import { datasetCacheId } from './cache-id.js'
-import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const DELETE_FILE = gql`
   mutation deleteFile($datasetId: ID!, $path: String!, $filename: String!) {
@@ -12,42 +10,8 @@ const DELETE_FILE = gql`
   }
 `
 
-/**
- * Remove file with given filename from draft
- * @param {string} filename - file to be deleted
- * @param {Object} draft - current draft in apollo cache
- * @returns {Object} - updated version of draft
- */
-export const deleteFileReducer = (path, filename, draft) => {
-  const filepath = [...path.split(':'), filename].join('/')
-  return {
-    ...draft,
-    files: draft.files.filter(file => file.filename !== filepath),
-  }
-}
-
 const DeleteFile = ({ datasetId, path, filename }) => (
-  <Mutation
-    mutation={DELETE_FILE}
-    update={(cache, { data: { deleteFile } }) => {
-      if (deleteFile) {
-        const id = datasetCacheId(datasetId)
-        const { draft } = cache.readFragment({
-          id,
-          fragment: DRAFT_FRAGMENT,
-        })
-        const updatedDraft = deleteFileReducer(path, filename, draft)
-        cache.writeFragment({
-          id,
-          fragment: DRAFT_FRAGMENT,
-          data: {
-            __typename: 'Dataset',
-            id: datasetId,
-            draft: updatedDraft,
-          },
-        })
-      }
-    }}>
+  <Mutation mutation={DELETE_FILE}>
     {deleteFile => (
       <span className="delete-file">
         <WarnButton

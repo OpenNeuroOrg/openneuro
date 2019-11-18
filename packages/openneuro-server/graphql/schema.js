@@ -112,6 +112,7 @@ const typeDefs = `
     snapshotDeleted(datasetId: ID!): ID
     permissionsUpdated(datasetId: ID!): [Permission]
     draftUpdated(datasetId: ID!): Dataset
+    filesUpdated(datasetId: ID!): FilesUpdate
   }
 
   input SummaryInput {
@@ -496,6 +497,13 @@ const typeDefs = `
   input UpdateFileUrlInput {
     filename: String!
     urls: [String]
+  }
+
+  # Update to files
+  type FilesUpdate {
+    datasetId: String
+    action: String
+    payload: [String]
   }
 
   # Analytics for a dataset

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import { datasetCacheId } from './cache-id.js'
-import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const DELETE_FILES = gql`
   mutation deleteFiles($datasetId: ID!, $files: FileTree!) {
@@ -59,21 +57,22 @@ const DeleteDir = ({ datasetId, fileTree }) => (
     mutation={DELETE_FILES}
     update={(cache, { data: { deleteFiles } }) => {
       if (deleteFiles) {
-        const id = datasetCacheId(datasetId)
-        const { draft } = cache.readFragment({
-          id,
-          fragment: DRAFT_FRAGMENT,
-        })
-        const updatedDraft = deleteFilesReducer(fileTree, draft)
-        cache.writeFragment({
-          id,
-          fragment: DRAFT_FRAGMENT,
-          data: {
-            __typename: 'Dataset',
-            id: datasetId,
-            draft: updatedDraft,
-          },
-        })
+        // const id = datasetCacheId(datasetId)
+        // const { draft } = cache.readFragment({
+        //   id,
+        //   fragment: DRAFT_FILES_FRAGMENT,
+        // })
+        // const updatedDraft = deleteFilesReducer(fileTree, draft)
+        // console.log({draft, updatedDraft})
+        //   cache.writeFragment({
+        //     id,
+        //     fragment: DRAFT_FILES_FRAGMENT,
+        //     data: {
+        //       __typename: 'Dataset',
+        //       id: datasetId,
+        //       draft: updatedDraft,
+        //     },
+        //   })
       }
     }}>
     {deleteFiles => (

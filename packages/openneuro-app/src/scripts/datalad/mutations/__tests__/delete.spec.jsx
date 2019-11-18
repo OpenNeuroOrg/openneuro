@@ -2,7 +2,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import DeleteDataset from '../delete.jsx'
 import DeleteDir, { deleteFilesReducer } from '../delete-dir.jsx'
-import DeleteFile, { deleteFileReducer } from '../delete-file.jsx'
 
 describe('DeleteDataset mutation', () => {
   it('renders with common props', () => {
@@ -63,32 +62,6 @@ describe('DeleteDir mutation', () => {
       const updatedDraft = deleteFilesReducer(fileTree, draft)
       expect(updatedDraft.files.length).toBe(1)
       expect(updatedDraft.files[0].filename).toBe('root_dir/last_lonely_file')
-    })
-  })
-})
-
-describe('DeleteFile mutation', () => {
-  it('renders with common props', () => {
-    const wrapper = shallow(
-      <DeleteFile datasetId="ds002" path="" filename="" />,
-    )
-    expect(wrapper).toMatchSnapshot()
-  })
-  describe('deleteFileReducer', () => {
-    it('removes specified file from dataset.draft', () => {
-      const path = 'file:to:be:deleted',
-        filename = 'filename.ext',
-        draft = {
-          files: [
-            { filename: 'file/to/be/deleted/filename.ext' },
-            { filename: 'not/the/deleted/file.ext' },
-          ],
-        }
-      Object.freeze(draft)
-
-      const updatedDraft = deleteFileReducer(path, filename, draft)
-      expect(updatedDraft.files.length).toBe(1)
-      expect(updatedDraft.files[0].filename).toBe('not/the/deleted/file.ext')
     })
   })
 })
