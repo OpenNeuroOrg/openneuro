@@ -72,7 +72,7 @@ class UploadValidator extends React.Component {
         error: ['NO_AUTHORS'],
       },
     }
-    validate(this.props.files, options, this.done)
+    validate(this.props.files, options).then(this.done)
   }
 
   /**
