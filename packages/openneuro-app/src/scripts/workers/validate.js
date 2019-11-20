@@ -17,6 +17,4 @@ async function init(files, options) {
   return output
 }
 
-export default {
-  init,
-}
+export default init
