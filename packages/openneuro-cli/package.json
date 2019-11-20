@@ -36,6 +36,9 @@
       "!**/*.spec.js",
       "!**/node_modules/**",
       "!**/vendor/**"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!bids-validator).+\\.js$"
     ]
   },
   "devDependencies": {
