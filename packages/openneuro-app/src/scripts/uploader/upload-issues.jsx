@@ -4,7 +4,7 @@ import pluralize from 'pluralize'
 import Spinner from '../common/partials/spinner.jsx'
 import Results from '../validation/validation-results.jsx'
 import UploaderContext from './uploader-context.js'
-import workers from '../workers'
+import validate from '../workers/validate.js'
 
 const UploadValidatorStatus = ({ issues, next, reset }) => {
   const errorCount = issues.errors.length
@@ -72,7 +72,7 @@ class UploadValidator extends React.Component {
         error: ['NO_AUTHORS'],
       },
     }
-    validate.BIDS(this.props.files, options, this.done)
+    validate(this.props.files, options).then(this.done)
   }
 
   /**
