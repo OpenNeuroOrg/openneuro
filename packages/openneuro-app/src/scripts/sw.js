@@ -30,7 +30,7 @@ self.addEventListener('fetch', event => {
     if (
       url.pathname.startsWith('/crn') &&
       url.pathname.endsWith('download') &&
-      url.searchParams.get('skip-bundle') !== null
+      url.searchParams.get('skip-bundle') === null
     ) {
       // Catch any aggregate download requests
       return event.respondWith(bundleResponse(url))
