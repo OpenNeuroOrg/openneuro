@@ -19,6 +19,19 @@ export const updateFiles = gql`
     }
   }
 `
+export const FileFeed = gql`
+  query FileFeed($cursor: String, $datasetId: ID!, $files: FileTree!) {
+    updateFiles(datasetId: $datasetId, files: $files) {
+      dataset {
+        id
+      }
+      files {
+        filename
+        size
+      }
+    }
+  }
+`
 
 export const deleteFiles = gql`
   mutation deleteFiles($datasetId: ID!, $files: FileTree!) {
