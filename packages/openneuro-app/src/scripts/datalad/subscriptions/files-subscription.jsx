@@ -4,7 +4,6 @@ import { Subscription } from 'react-apollo'
 import gql from 'graphql-tag'
 import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from '../mutations/cache-id.js'
-// import { datasetCacheId } from '../mutations/cache-id.js'
 
 const FILES_SUBSCRIPTION = gql`
   subscription filesUpdated($datasetId: ID!) {
@@ -52,7 +51,6 @@ const FilesSubscription = ({ datasetId }) => (
           const id = datasetCacheId(datasetId)
           const { draft } = cache.readFragment({
             id,
-            fragment: DRAFT_FILES_FRAGMENT,
           })
           const updatedDraft = draftReducer(draft, action, payload)
           cache.writeFragment({

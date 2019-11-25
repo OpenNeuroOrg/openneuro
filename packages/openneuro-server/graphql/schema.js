@@ -153,12 +153,6 @@ const typeDefs = `
     path: String # path to file
     files: [Upload!] # files within the directory
     directories: [FileTree] # directories within the directory
-    FilesFeed(cursor: String): FilesFeed  
-  }
-
-  type FilesFeed {
-    cursor: String!
-    files: [Upload]!
   }
 
   # Dataset Metadata
