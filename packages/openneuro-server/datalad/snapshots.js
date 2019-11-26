@@ -10,7 +10,7 @@ import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
 import { description } from '../graphql/resolvers/description.js'
 import doiLib from '../libs/doi/index.js'
-import { filesKey, getFiles } from './files.js'
+import { filesKey, getFiles, filterFiles } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
@@ -283,7 +283,7 @@ export const getSnapshot = async (datasetId, tag) => {
           const filesWithUrls = body.files.map(
             addFileUrl(datasetId, tag, externalFiles),
           )
-          const snapshot = { ...body, created, files: filesWithUrls, hexsha }
+          const snapshot = { ...body, created, hexsha }
           redis.set(key, JSON.stringify(snapshot))
           return snapshot
         })
