@@ -79,3 +79,38 @@ export const getFiles = async (datasetId, hexsha) => {
         })
   })
 }
+
+/**
+ * Given a list of files (from getFiles), return a subset matching the prefix
+ * @param {string} prefix The prefix to filter on
+ * @returns {(files: Object[]) => Object[]}
+ */
+export const filterFiles = (prefix = '') => files => {
+  // Disable on null
+  if (prefix === null) {
+    return files
+  }
+  // Track potential directories and include those as "files"
+  const directoryFacades = {}
+  // Return only root level files if prefix is set
+  const matchingFiles = files.filter(f => {
+    if (prefix === '') {
+      if (f.filename.includes('/')) {
+        const dirName = f.filename.split('/').slice(0, 1)[0]
+        directoryFacades[dirName] = {
+          id: `directory:${dirName}`,
+          urls: [],
+          filename: dirName,
+          size: 0,
+          directory: true,
+        }
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return f.filename.startsWith(prefix)
+    }
+  })
+  return [...matchingFiles, ...Object.values(directoryFacades)]
+}

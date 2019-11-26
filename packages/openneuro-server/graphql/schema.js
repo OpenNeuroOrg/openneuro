@@ -318,7 +318,7 @@ const typeDefs = `
     # Validator issues
     issues: [ValidationIssue]
     # Committed files in the working tree
-    files(untracked: Boolean): [DatasetFile]
+    files(untracked: Boolean, prefix: String = ""): [DatasetFile]
     # Flag if a dataset operation is incomplete (and may be reverted or resumed)
     partial: Boolean
     # dataset_description.json fields
@@ -491,6 +491,8 @@ const typeDefs = `
     size: BigInt
     urls: [String]
     objectpath: String
+    # Return a flag if this is a directory which contains more files
+    directory: Boolean
   }
 
   # Update file object
