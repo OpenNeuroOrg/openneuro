@@ -10,19 +10,23 @@ const FILES_SUBSCRIPTION = gql`
   subscription filesUpdated($datasetId: ID!) {
     filesUpdated(datasetId: $datasetId) {
       action
-      payload
+      payload {
+        id
+        filename
+        size
+      }
     }
   }
 `
 
 /**
  * Remove file with given filename from draft
- * @param {string[]} files - file to be deleted (see DatasetFile schema)
+ * @param {Object[]} files - file to be deleted (see DatasetFile schema)
  * @param {Object} draft - current draft in apollo cache
  * @returns {Object} - updated version of draft
  */
 export const deleteFilesReducer = (files, draft) => {
-  const deleted = files.map(filename => filename.split(':').join('/'))
+  const deleted = files.map(({ filename }) => filename.split(':').join('/'))
   return {
     ...draft,
     files: draft.files.filter(file => !deleted.includes(file.filename)),
@@ -46,6 +50,7 @@ const FilesSubscription = ({ datasetId }) => (
     onSubscriptionData={({ client, subscriptionData }) => {
       const { cache } = client
       const { action, payload } = subscriptionData.data.filesUpdated
+      console.log({ action, payload })
       if (action && payload) {
         const id = datasetCacheId(datasetId)
         const { draft } = cache.readFragment({

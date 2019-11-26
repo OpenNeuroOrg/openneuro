@@ -113,7 +113,7 @@ export const updateFiles = async (
       datasetId,
       filesUpdated: {
         action: 'UPDATE',
-        payload: updatedFiles,
+        payload: [],
       },
     })
     return true
