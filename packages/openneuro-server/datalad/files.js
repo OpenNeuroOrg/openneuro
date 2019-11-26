@@ -27,11 +27,14 @@ export const decodeFilePath = path => {
 }
 
 /**
- * Extract the filename from its URL for DataLad service
- * @param {String} url
+ * If path is provided, this is a subdirectory, otherwise a root level file.
+ * @param {String} path
+ * @param {String} filename
  */
-export const filenameFromUrl = url =>
-  url.match(/^http:\/\/.*\/datasets\/.*\/files\/(.*)$/)[1]
+export const getFileName = (path, filename) => {
+  const filePath = path ? [path, filename].join('/') : filename
+  return filename ? encodeFilePath(filePath) : encodeFilePath(path)
+}
 
 /**
  * Generate file URL for DataLad service
@@ -40,9 +43,7 @@ export const filenameFromUrl = url =>
  * @param {String} filename
  */
 export const fileUrl = (datasetId, path, filename) => {
-  // If path is provided, this is a subdirectory, otherwise a root level file.
-  const filePath = path ? [path, filename].join('/') : filename
-  const fileName = filename ? encodeFilePath(filePath) : encodeFilePath(path)
+  const fileName = getFileName(path, filename)
   const url = `http://${config.datalad.uri}/datasets/${datasetId}/files/${fileName}`
   return url
 }

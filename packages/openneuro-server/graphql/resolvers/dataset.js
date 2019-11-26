@@ -99,14 +99,28 @@ export const updateFiles = async (
   { datasetId, files: fileTree },
   { user, userInfo },
 ) => {
-  await checkDatasetWrite(datasetId, user, userInfo)
-  const promises = updateFilesTree(datasetId, fileTree)
-  await Promise.all(promises)
-  await datalad.commitFiles(datasetId, userInfo)
-  // Check if this is the first data commit and no snapshots exist
-  const snapshot = await mongo.collections.crn.snapshots.findOne({ datasetId })
-  if (!snapshot) await createSnapshot(datasetId, '1.0.0', user)
-  return { id: new Date() }
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+    const promises = updateFilesTree(datasetId, fileTree)
+    const updatedFiles = await Promise.all(promises)
+    await datalad.commitFiles(datasetId, userInfo)
+    // Check if this is the first data commit and no snapshots exist
+    const snapshot = await mongo.collections.crn.snapshots.findOne({
+      datasetId,
+    })
+    if (!snapshot) await createSnapshot(datasetId, '1.0.0', user)
+    pubsub.publish('filesUpdated', {
+      datasetId,
+      filesUpdated: {
+        action: 'UPDATE',
+        payload: updatedFiles,
+      },
+    })
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
 }
 
 /**
@@ -138,7 +152,7 @@ export const deleteFiles = async (
     await checkDatasetWrite(datasetId, user, userInfo)
     const deletedFiles = await Promise.all(deleteFilesTree(datasetId, fileTree))
     await datalad.commitFiles(datasetId, userInfo)
-    await pubsub.publish('filesUpdated', {
+    pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
         action: 'DELETE',
@@ -163,7 +177,7 @@ export const deleteFile = async (
       name: filename,
     })
     await datalad.commitFiles(datasetId, userInfo)
-    await pubsub.publish('filesUpdated', {
+    pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
         action: 'DELETE',
