@@ -499,17 +499,11 @@ const typeDefs = `
     urls: [String]
   }
 
-  type UpdatedFile {
-    id: ID
-    filename: String!
-    size: BigInt
-  }
-
   # Update to files
   type FilesUpdate {
     datasetId: String
     action: String
-    payload: [UpdatedFile]
+    payload: [DatasetFile]
   }
 
   # Analytics for a dataset

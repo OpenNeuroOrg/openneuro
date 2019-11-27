@@ -14,6 +14,7 @@ import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
+import { UpdatedFile } from '../utils/file.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -173,9 +174,9 @@ export const deleteFile = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFile = await datalad.deleteFile(datasetId, path, {
-      name: filename,
-    })
+    const deletedFile = await datalad
+      .deleteFile(datasetId, path, { name: filename })
+      .then(filename => new UpdatedFile(filename))
     await datalad.commitFiles(datasetId, userInfo)
     pubsub.publish('filesUpdated', {
       datasetId,
@@ -203,14 +204,20 @@ export const deleteFilesTree = (datasetId, fileTree) => {
   const { path, files, directories } = fileTree
   if (files.length || directories.length) {
     const filesPromises = files.map(({ filename }) =>
-      datalad.deleteFile(datasetId, path, { name: filename }),
+      datalad
+        .deleteFile(datasetId, path, { name: filename })
+        .then(filename => new UpdatedFile(filename)),
     )
     const dirPromises = directories.map(tree =>
       deleteFilesTree(datasetId, tree),
     )
     return filesPromises.concat(...dirPromises)
   } else {
-    return [datalad.deleteFile(datasetId, path, { name: '' })]
+    return [
+      datalad
+        .deleteFile(datasetId, path, { name: '' })
+        .then(filename => new UpdatedFile(filename)),
+    ]
   }
 }
 
