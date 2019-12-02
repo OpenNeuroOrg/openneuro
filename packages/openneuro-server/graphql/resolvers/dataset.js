@@ -137,7 +137,7 @@ export const updateFilesTree = (datasetId, fileTree) => {
   const filesPromises = files.map(file => {
     return datalad
       .addFile(datasetId, name, file)
-      .then(filename => new UpdatedFile(filename))
+      .then(({ filename, size }) => new UpdatedFile(filename, size))
   })
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
   return filesPromises.concat(...dirPromises)

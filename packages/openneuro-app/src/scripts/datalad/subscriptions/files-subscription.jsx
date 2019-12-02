@@ -72,7 +72,6 @@ const FilesSubscription = ({ datasetId }) => (
     onSubscriptionData={({ client, subscriptionData }) => {
       const { cache } = client
       const { action, payload } = subscriptionData.data.filesUpdated
-      console.log({ action, payload })
       if (action && payload) {
         const id = datasetCacheId(datasetId)
         const { draft } = cache.readFragment({
