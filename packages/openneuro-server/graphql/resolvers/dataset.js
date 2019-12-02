@@ -114,7 +114,7 @@ export const updateFiles = async (
       datasetId,
       filesUpdated: {
         action: 'UPDATE',
-        payload: [],
+        payload: updatedFiles,
       },
     })
     return true
@@ -134,9 +134,11 @@ export const updateFiles = async (
 export const updateFilesTree = (datasetId, fileTree) => {
   // drafts just need something to invalidate client cache
   const { name, files, directories } = fileTree
-  const filesPromises = files.map(file =>
-    datalad.addFile(datasetId, name, file),
-  )
+  const filesPromises = files.map(file => {
+    return datalad
+      .addFile(datasetId, name, file)
+      .then(filename => new UpdatedFile(filename))
+  })
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
   return filesPromises.concat(...dirPromises)
 }

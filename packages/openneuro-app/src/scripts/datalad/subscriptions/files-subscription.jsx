@@ -33,10 +33,32 @@ export const deleteFilesReducer = (files, draft) => {
   }
 }
 
+export const updateFilesReducer = (files, draft) => {
+  files = files.map(file => ({
+    ...file,
+    filename: file.filename.split(':').join('/'),
+  }))
+  const newFiles = []
+  const draftFiles = [...draft.files]
+  files.forEach(file => {
+    const updatedFileIndex = draftFiles.findIndex(
+      ({ filename: draftFileName }) => draftFileName === file.filename,
+    )
+    if (updatedFileIndex === -1) newFiles.push(file)
+    else draftFiles[updatedFileIndex] = file
+  })
+  return {
+    ...draft,
+    files: [...draftFiles, ...newFiles],
+  }
+}
+
 export const draftReducer = (draft, action, payload) => {
   switch (action) {
     case 'DELETE':
       return deleteFilesReducer(payload, draft)
+    case 'UPDATE':
+      return updateFilesReducer(payload, draft)
     default:
       return { ...draft }
   }

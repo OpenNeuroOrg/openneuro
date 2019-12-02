@@ -233,7 +233,7 @@ export const addFile = async (datasetId, path, file) => {
           method: 'post',
           headers: { 'Content-Type': mimetype },
         },
-        err => (err ? reject(err) : resolve()),
+        err => (err ? reject(err) : resolve(getFileName(path, filename))),
       )
       // Attach error handler for incoming request and start feeding downstream
       stream
