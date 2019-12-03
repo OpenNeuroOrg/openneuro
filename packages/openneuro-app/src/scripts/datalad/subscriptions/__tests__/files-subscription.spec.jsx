@@ -25,9 +25,9 @@ describe('deleteFilesReducer', () => {
       steak: 'sauce',
     }
     filesToDelete = [
-      'deleted:file.txt',
-      'another_deleted_file.txt',
-      'deleted:file:again:here',
+      { filename: 'deleted:file.txt' },
+      { filename: 'another_deleted_file.txt' },
+      { filename: 'deleted:file:again:here' },
     ]
   })
   it('removes files from draft', () => {
