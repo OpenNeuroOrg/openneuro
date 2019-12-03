@@ -227,25 +227,22 @@ export const addFile = async (datasetId, path, file) => {
 
     // Start request to backend
     return new Promise((resolve, reject) => {
-      let filesize = 0
+      const responseFile = {
+        filename: getFileName(path, filename),
+        size: 0,
+      }
       const downstreamRequest = requestNode(
         {
           url: fileUrl(datasetId, path, filename),
           method: 'post',
           headers: { 'Content-Type': mimetype },
         },
-        err =>
-          err
-            ? reject(err)
-            : resolve({
-                filename: getFileName(path, filename),
-                size: filesize,
-              }),
+        err => (err ? reject(err) : resolve(responseFile)),
       )
       // Attach error handler for incoming request and start feeding downstream
       stream
         .on('data', chunk => {
-          filesize += chunk.length
+          responseFile.size += chunk.length
         })
         .on('error', err => {
           if (err.constructor.name === 'FileStreamDisconnectUploadError') {
