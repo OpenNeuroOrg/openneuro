@@ -220,10 +220,6 @@ export const addFile = async (datasetId, path, file) => {
     }
 
     const stream = createReadStream()
-    let size = 0
-    stream.on('data', chunk => {
-      size += chunk.length
-    })
 
     // This does not close the fs-capacitor stream until the stream has finished
     // but it does prevent new readers and allows for cleanup of the temp file buffer
@@ -231,6 +227,7 @@ export const addFile = async (datasetId, path, file) => {
 
     // Start request to backend
     return new Promise((resolve, reject) => {
+      let filesize = 0
       const downstreamRequest = requestNode(
         {
           url: fileUrl(datasetId, path, filename),
@@ -242,11 +239,14 @@ export const addFile = async (datasetId, path, file) => {
             ? reject(err)
             : resolve({
                 filename: getFileName(path, filename),
-                size,
+                size: filesize,
               }),
       )
       // Attach error handler for incoming request and start feeding downstream
       stream
+        .on('data', chunk => {
+          filesize += chunk.length
+        })
         .on('error', err => {
           if (err.constructor.name === 'FileStreamDisconnectUploadError') {
             // Catch client disconnects.
