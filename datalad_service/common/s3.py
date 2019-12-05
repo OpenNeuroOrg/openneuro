@@ -41,7 +41,7 @@ class DatasetRealm(Enum):
         return 's3://{bucket}'.format(bucket=bucket)
 
 
-def generate_annex_options(dataset, realm):
+def generate_s3_annex_options(dataset, realm):
     dataset_id = os.path.basename(dataset.path)
     annex_options = [
         'type=S3',
@@ -67,7 +67,7 @@ def generate_annex_options(dataset, realm):
 
 def setup_s3_sibling(dataset, realm):
     """Add a sibling for an S3 bucket publish."""
-    annex_options = generate_annex_options(dataset, realm)
+    annex_options = generate_s3_annex_options(dataset, realm)
     dataset.repo.init_remote(realm.s3_remote, options=annex_options)
 
 
@@ -79,7 +79,7 @@ def validate_s3_config(dataset, realm):
         if options.get('name') == 's3-PUBLIC':
             s3_public_remote_options = options
 
-    expected_annex_options = generate_annex_options(dataset, realm)
+    expected_annex_options = generate_s3_annex_options(dataset, realm)
 
     # check that each of the expected annex options is set for s3_PUBLIC
     match = True
