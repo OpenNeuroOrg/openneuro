@@ -75,6 +75,7 @@ def update_s3_sibling(dataset, realm):
     """Update S3 remote with latest config."""
     annex_options = generate_s3_annex_options(dataset, realm)
 
+    # note: enableremote command will only upsert config options, none are deleted
     dataset.repo._run_annex_command('enableremote', annex_options=[realm.s3_remote] + annex_options)
     dataset.repo.config.reload()
 
