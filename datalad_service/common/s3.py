@@ -71,8 +71,16 @@ def setup_s3_sibling(dataset, realm):
     dataset.repo.init_remote(realm.s3_remote, options=annex_options)
 
 
-# checks that s3-PUBLIC annex-options match those set in setup_s3_siblings
+def update_s3_sibling(dataset, realm):
+    """Update S3 remote with latest config."""
+    annex_options = generate_s3_annex_options(dataset, realm)
+
+    dataset.repo._run_annex_command('enableremote', annex_options=[realm.s3_remote] + annex_options)
+    dataset.repo.config.reload()
+
+
 def validate_s3_config(dataset, realm):
+    """Checks that s3-PUBLIC annex-options match those set in setup_s3_siblings"""
     # get s3-PUBLIC annex options
     special_remotes = dataset.repo.get_special_remotes()
     for key, options in special_remotes.items():

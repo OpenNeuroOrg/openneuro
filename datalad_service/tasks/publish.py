@@ -10,7 +10,7 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, s3_versions, get_s3_realm
 from datalad_service.common.celery import dataset_task, publish_queue
-from datalad_service.common.s3 import validate_s3_config
+from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
 
 def create_github_repo(dataset, repo_name):
@@ -189,18 +189,9 @@ def monitor_remote_configs(store, dataset, snapshot, realm=None):
     """Check remote configs and correct invalidities."""
     ds = store.get_dataset(dataset)
     siblings = ds.siblings()
-
-    print('========================')
-    print(f'siblings: {siblings}')
-    print(f'realm: {realm}')
-
     realm = get_dataset_realm(ds, siblings, realm)
-    print(f'realm: {realm}')
 
     if realm == DatasetRealm.PUBLIC:
         s3_ok = validate_s3_config(ds, realm)
-        print(f's3 ok: {s3_ok}')
-
-    print('========================')
-
-    return { 'DOOOOOOOOOOONNNNNNNNEEEEEEEEEEEEE' }
+        if not s3_ok:
+            update_s3_sibling(ds, realm)
