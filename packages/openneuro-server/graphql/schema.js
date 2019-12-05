@@ -176,6 +176,8 @@ const typeDefs = `
     adminUsers: [String]
     ages: [Int]
     modalities: [String]
+    grantFunderName: String
+    grantIdentifier: String
   }
 
   # Validation updated message
@@ -555,6 +557,8 @@ const typeDefs = `
     adminUsers: [String]
     ages: [Int]
     modalities: [String]
+    grantFunderName: String
+    grantIdentifier: String
   }
 `
 
