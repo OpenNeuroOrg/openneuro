@@ -46,6 +46,7 @@ export const DRAFT_FILES_FRAGMENT = gql`
         id
         filename
         size
+        directory
       }
     }
   }
