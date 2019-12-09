@@ -70,6 +70,7 @@
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
+    "@babel/preset-typescript": "^7.7.4",
     "@babel/runtime": "^7.6.3",
     "@babel/runtime-corejs3": "^7.6.3",
     "@loadable/babel-plugin": "^5.10.3",

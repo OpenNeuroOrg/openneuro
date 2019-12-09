@@ -23,6 +23,7 @@ module.exports = function(api) {
           corejs: 3,
         },
       ],
+      '@babel/preset-typescript',
     ],
     sourceType: 'unambiguous',
   }
