@@ -96,13 +96,12 @@ export const getDraftPage = gql`
  * @param {Object} props.draft Is this the draft page?
  */
 export const DatasetQueryHook = ({ datasetId, draft }) => {
-  const {
-    data: { dataset },
-    loading,
-    error,
-  } = useQuery(draft ? getDraftPage : getDatasetPage, {
-    variables: { datasetId },
-  })
+  const { data, loading, error, fetchMore } = useQuery(
+    draft ? getDraftPage : getDatasetPage,
+    {
+      variables: { datasetId },
+    },
+  )
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else {
@@ -112,8 +111,9 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
         <DatasetQueryContext.Provider
           value={{
             datasetId,
+            fetchMore,
           }}>
-          <DatasetPage dataset={dataset} />
+          <DatasetPage dataset={data.dataset} fetchMore={fetchMore} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
       </ErrorBoundary>

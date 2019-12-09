@@ -3,30 +3,14 @@ import PropTypes from 'prop-types'
 import File from './file.jsx'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteDir from '../datalad/mutations/delete-dir.jsx'
-import { useLazyQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 
 export const sortByFilename = (a, b) =>
-  a.directory === b.directory || a.filename.localeCompare(b.filename)
+  (a.directory === b.directory && 1) || a.filename.localeCompare(b.filename)
 
 export const sortByName = (a, b) => a.name.localeCompare(b.name)
 
 export const unescapePath = path => path.replace(/:/g, '/')
-
-export const DRAFT_FILES_QUERY = gql`
-  query dataset($datasetId: ID!, $filePrefix: String!) {
-    dataset(id: $datasetId) {
-      draft {
-        files(prefix: $filePrefix) {
-          id
-          filename
-          size
-          directory
-        }
-      }
-    }
-  }
-`
 
 const FileTree = ({
   datasetId,
@@ -36,12 +20,9 @@ const FileTree = ({
   files = [],
   directories = [],
   editMode = false,
-  defaultExpanded = false,
+  defaultExpanded = true,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
-  const [getMoreFiles, { loading, newQueryFiles }] = useLazyQuery(
-    DRAFT_FILES_QUERY,
-  )
   return (
     <>
       <button
@@ -74,19 +55,13 @@ const FileTree = ({
           )}
           <ul className="child-files">
             {files.sort(sortByFilename).map((file, index) => {
-              console.log(file)
               if (file.directory) {
                 return (
                   <li className="clearfix" key={index}>
-                    <button
-                      onClick={() => {
-                        console.log('load', file)
-                        getMoreFiles({
-                          variables: { datasetId, filePrefix: file.filename },
-                        })
-                      }}>
-                      {file.filename}
-                    </button>
+                    <FileTreeUnloadedDirectory
+                      datasetId={datasetId}
+                      directory={file}
+                    />
                   </li>
                 )
               } else {
