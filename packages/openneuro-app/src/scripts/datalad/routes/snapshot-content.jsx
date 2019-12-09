@@ -5,6 +5,7 @@ import { Query } from 'react-apollo'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
 import Spinner from '../../common/partials/spinner.jsx'
+import DatasetQueryContext from '../dataset/dataset-query-context.js'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
@@ -41,6 +42,7 @@ const getSnapshotDetails = gql`
         id
         filename
         size
+        directory
       }
       summary {
         modalities
@@ -75,13 +77,21 @@ const SnapshotContent = ({ dataset, tag }) => (
       datasetId: dataset.id,
       tag,
     }}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data, fetchMore }) => {
       if (loading) {
         return <Spinner text="Loading Snapshot" active />
       } else if (error) {
         throw new Error(error)
       } else {
-        return <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+        return (
+          <DatasetQueryContext.Provider
+            value={{
+              datasetId: dataset.id,
+              fetchMore,
+            }}>
+            <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+          </DatasetQueryContext.Provider>
+        )
       }
     }}
   </Query>

@@ -58,5 +58,17 @@ describe('FileTreeUnloadedDirectory component', () => {
           .draft.files,
       ).toEqual([a, b, c])
     })
+    it('works with snapshots', () => {
+      const dir = { filename: 'sub-01', directory: true }
+      const a = { id: '1234', filename: 'a', directory: false }
+      const b = { id: '5678', filename: 'b', directory: false }
+      const c = { id: '91011', filename: 'sub-01/c', directory: false }
+      const defaultObj = { snapshot: { files: [dir, a, b] } }
+      const updatedObj = { snapshot: { files: [c] } }
+      expect(
+        mergeNewFiles(dir, '1.0.0')(defaultObj, { fetchMoreResult: updatedObj })
+          .snapshot.files,
+      ).toEqual([a, b, c])
+    })
   })
 })

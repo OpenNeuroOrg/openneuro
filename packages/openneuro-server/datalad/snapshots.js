@@ -10,8 +10,7 @@ import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
 import { description } from '../graphql/resolvers/description.js'
 import doiLib from '../libs/doi/index.js'
-import { filesKey, getFiles, filterFiles } from './files.js'
-import { addFileUrl } from './utils.js'
+import { filesKey, getFiles } from './files.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Snapshot from '../models/snapshot.js'
@@ -263,26 +262,10 @@ export const getSnapshot = async (datasetId, tag) => {
         .get(url)
         .set('Accept', 'application/json')
         .then(async ({ body }) => {
-          // Only add S3 URLs for public datasets
-          const dataset = await c.crn.datasets.findOne(
-            { id: datasetId },
-            { public: true },
-          )
-          let externalFiles
-          if (dataset.public) {
-            externalFiles = await c.crn.files
-              .findOne({ datasetId, tag }, { files: true })
-              .then(result => (result ? result.files : false))
-          }
           const { created, hexsha } = await c.crn.snapshots.findOne({
             datasetId,
             tag,
           })
-
-          // If not public, fallback URLs are used
-          const filesWithUrls = body.files.map(
-            addFileUrl(datasetId, tag, externalFiles),
-          )
           const snapshot = { ...body, created, hexsha }
           redis.set(key, JSON.stringify(snapshot))
           return snapshot

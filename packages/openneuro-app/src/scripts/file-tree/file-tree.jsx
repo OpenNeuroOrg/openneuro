@@ -60,6 +60,7 @@ const FileTree = ({
                   <li className="clearfix" key={index}>
                     <FileTreeUnloadedDirectory
                       datasetId={datasetId}
+                      snapshotTag={snapshotTag}
                       directory={file}
                     />
                   </li>

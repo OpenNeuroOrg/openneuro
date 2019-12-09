@@ -19,7 +19,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     description: () => description(obj, { datasetId, tag }),
     readme: () => readme(obj, { datasetId, revision: tag }),
     summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
-    files: (_, { prefix }) =>
+    files: ({ prefix }) =>
       getFiles(datasetId, snapshot.hexsha).then(filterFiles(prefix)),
   }))
 }

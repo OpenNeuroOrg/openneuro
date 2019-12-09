@@ -113,7 +113,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
             datasetId,
             fetchMore,
           }}>
-          <DatasetPage dataset={data.dataset} fetchMore={fetchMore} />
+          <DatasetPage dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
       </ErrorBoundary>

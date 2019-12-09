@@ -341,7 +341,7 @@ const typeDefs = `
     # bids-validator issues for this snapshot
     issues: [ValidationIssue]
     # Snapshot files
-    files: [DatasetFile]
+    files(prefix: String = ""): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Snapshot usage and download statistics
