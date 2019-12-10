@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
 import FileTreeLoading from './file-tree-loading.jsx'
@@ -70,20 +70,27 @@ export const fetchMoreDirectory = (
 
 const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
   const [loading, setLoading] = useState(false)
+  const [displayLoading, setDisplayLoading] = useState(false)
   const { fetchMore } = useContext(DatasetQueryContext)
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => setDisplayLoading(true), 150)
+      return () => clearTimeout(timer)
+    }
+  }, [loading])
   return (
     <button
       className="btn-file-folder"
       onClick={() => {
         // Show a loading state while we wait on the directory to stream in
         setLoading(true)
-        //fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
+        fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
         // No need to clear since this component is unmounted immediately
       }}>
       <i className={`type-icon fa fa-folder${loading ? '-open' : ''}`} />{' '}
       {directory.filename}
       <i className={`accordion-icon fa fa-caret${loading ? '-up' : '-down'}`} />
-      {loading && <FileTreeLoading />}
+      {displayLoading && <FileTreeLoading size={directory.size} />}
     </button>
   )
 }

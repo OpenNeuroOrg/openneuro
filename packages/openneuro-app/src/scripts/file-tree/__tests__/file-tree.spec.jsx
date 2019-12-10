@@ -7,6 +7,14 @@ import FileTree, {
   unescapePath,
 } from '../file-tree.jsx'
 
+jest.mock('react-spring', () => ({
+  useSpring: jest.fn().mockImplementation(() => [{ mockProp: 1 }, jest.fn()]),
+  animated: {
+    path: () => <path data-testid="ANIMATED-COMPONENT" />,
+    div: () => <div data-testid="ANIMATED-COMPONENT" />,
+  },
+}))
+
 describe('FileTree component', () => {
   it('renders with default props', () => {
     expect(mount(<FileTree />)).toMatchSnapshot()

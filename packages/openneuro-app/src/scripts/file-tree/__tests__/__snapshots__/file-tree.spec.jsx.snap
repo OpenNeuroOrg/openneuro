@@ -2,20 +2,50 @@
 
 exports[`FileTree component renders with default props 1`] = `
 <FileTree>
-  <button
-    className="btn-file-folder"
-    onClick={[Function]}
-  >
-    <i
-      className="type-icon fa fa-folder-open"
-    />
-     
-    <i
-      className="accordion-icon fa fa-caret-up"
-    />
-  </button>
-  <ul
-    className="child-files"
-  />
+  <Styled(div)>
+    <div
+      className="css-1b7l7mx"
+    >
+      <button
+        className="btn-file-folder"
+        onClick={[Function]}
+      >
+        <i
+          className="type-icon fa fa-folder-open"
+        />
+         
+        <Styled(span)>
+          <span
+            className="css-9ywbij"
+          />
+        </Styled(span)>
+        <i
+          className="accordion-icon fa fa-caret-up"
+        />
+      </button>
+      <Styled(div)
+        style={
+          Object {
+            "height": undefined,
+            "opacity": undefined,
+          }
+        }
+      >
+        <div
+          className="css-fcnj91"
+          style={
+            Object {
+              "height": undefined,
+              "opacity": undefined,
+            }
+          }
+        >
+          <div
+            data-testid="ANIMATED-COMPONENT"
+          />
+        </div>
+      </Styled(div)>
+    </div>
+  </Styled(div)>
 </FileTree>
 `;

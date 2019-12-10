@@ -97,8 +97,8 @@ export const filterFiles = (prefix = '') => files => {
     if (prefix === '') {
       if (f.filename.includes('/')) {
         const dirName = f.filename.split('/').slice(0, 1)[0]
-        if (directoryFacades[dirName]) {
-          directoryFacades[dirName] += 1
+        if (directoryFacades[dirName] !== undefined) {
+          directoryFacades[dirName].size += 1
         } else {
           directoryFacades[dirName] = {
             id: `directory:${dirName}`,

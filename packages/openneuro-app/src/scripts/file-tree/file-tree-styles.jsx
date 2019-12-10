@@ -1,7 +1,7 @@
 import { animated } from 'react-spring'
 import styled from '@emotion/styled'
 
-export const Frame = styled('div')`
+export const Frame = styled.div`
   position: relative;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -9,7 +9,7 @@ export const Frame = styled('div')`
   vertical-align: middle;
 `
 
-export const Title = styled('span')`
+export const Title = styled.span`
   vertical-align: middle;
 `
 
