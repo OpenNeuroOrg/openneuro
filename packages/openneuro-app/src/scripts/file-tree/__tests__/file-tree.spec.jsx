@@ -7,6 +7,7 @@ import FileTree, {
   unescapePath,
 } from '../file-tree.jsx'
 
+/* eslint-disable */
 jest.mock('react-spring', () => ({
   useSpring: jest.fn().mockImplementation(() => [{ mockProp: 1 }, jest.fn()]),
   animated: {
@@ -14,6 +15,7 @@ jest.mock('react-spring', () => ({
     div: () => <div data-testid="ANIMATED-COMPONENT" />,
   },
 }))
+/* eslint-enable */
 
 describe('FileTree component', () => {
   it('renders with default props', () => {
