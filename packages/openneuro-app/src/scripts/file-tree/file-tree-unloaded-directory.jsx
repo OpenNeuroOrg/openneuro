@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
-import Spinner from '../common/partials/spinner.jsx'
+import FileTreeLoading from './file-tree-loading.jsx'
 import gql from 'graphql-tag'
 
 export const DRAFT_FILES_QUERY = gql`
@@ -77,13 +77,13 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
       onClick={() => {
         // Show a loading state while we wait on the directory to stream in
         setLoading(true)
-        fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
+        //fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
         // No need to clear since this component is unmounted immediately
       }}>
       <i className={`type-icon fa fa-folder${loading ? '-open' : ''}`} />{' '}
       {directory.filename}
       <i className={`accordion-icon fa fa-caret${loading ? '-up' : '-down'}`} />
-      {loading && <Spinner active text="Loading..." />}
+      {loading && <FileTreeLoading />}
     </button>
   )
 }
