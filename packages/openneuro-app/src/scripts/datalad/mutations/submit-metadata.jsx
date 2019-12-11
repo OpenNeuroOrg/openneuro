@@ -15,6 +15,8 @@ export const SUBMIT_METADATA = gql`
       latestSnapshotCreatedAt
       dxStatus
       tasksCompleted
+      grantFunderName
+      grantIdentifier
       trialCount
       studyDesign
       studyDomain

@@ -32,6 +32,8 @@ export const compileMetadata = dataset => {
     openneuroPaperDOI: getFromMetadata('openneuroPaperDOI') || '',
     dxStatus: getFromMetadata('dxStatus') || '',
     tasksCompleted: getFromMetadata('tasksCompleted') || '',
+    grantFunderName: getFromMetadata('grantFunderName') || '',
+    grantIdentifier: getFromMetadata('grantIdentifier') || '',
 
     // get from openneuro
     datasetId: dataset.id || '',

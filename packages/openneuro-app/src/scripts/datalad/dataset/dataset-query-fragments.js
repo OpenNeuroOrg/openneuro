@@ -126,6 +126,8 @@ export const DATASET_METADATA = gql`
       dxStatus
       tasksCompleted
       trialCount
+      grantFunderName
+      grantIdentifier
       studyDesign
       studyDomain
       studyLongitudinal

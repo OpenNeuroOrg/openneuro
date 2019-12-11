@@ -108,6 +108,22 @@ const metadataFields = hasEdit => {
       },
     },
     {
+      key: 'grantFunderName',
+      label: 'Grant Funder Name',
+      Component: TextInput,
+      additionalProps: {
+        required: false,
+      },
+    },
+    {
+      key: 'grantIdentifier',
+      label: 'Grant Identifier',
+      Component: TextInput,
+      additionalProps: {
+        required: false,
+      },
+    },
+    {
       key: 'datasetId',
       label: 'Dataset ID',
       Component: TextInput,
