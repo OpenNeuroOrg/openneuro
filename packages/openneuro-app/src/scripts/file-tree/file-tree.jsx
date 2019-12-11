@@ -9,8 +9,7 @@ import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteDir from '../datalad/mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 
-export const sortByFilename = (a, b) =>
-  a.directory === b.directory && a.filename.localeCompare(b.filename)
+export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
 export const sortByName = (a, b) => a.name.localeCompare(b.name)
 
@@ -72,41 +71,43 @@ const FileTree = ({
             </span>
           )}
           <ul className="child-files">
-            {files.sort(sortByFilename).map((file, index) => {
-              if (file.directory) {
+            {files.sort(sortByFilename).map((file, index) => (
+              <li className="clearfix" key={index}>
+                <File
+                  datasetId={datasetId}
+                  snapshotTag={snapshotTag}
+                  path={path}
+                  editMode={editMode}
+                  {...file}
+                />
+              </li>
+            ))}
+            {directories.sort(sortByName).map((dir, index) => {
+              if ('files' in dir || 'directories' in dir) {
+                // Loaded directory
+                return (
+                  <li className="clearfix" key={index}>
+                    <FileTree
+                      datasetId={datasetId}
+                      snapshotTag={snapshotTag}
+                      editMode={editMode}
+                      {...dir}
+                    />
+                  </li>
+                )
+              } else {
+                // Unloaded
                 return (
                   <li className="clearfix" key={index}>
                     <FileTreeUnloadedDirectory
                       datasetId={datasetId}
                       snapshotTag={snapshotTag}
-                      directory={file}
-                    />
-                  </li>
-                )
-              } else {
-                return (
-                  <li className="clearfix" key={index}>
-                    <File
-                      datasetId={datasetId}
-                      snapshotTag={snapshotTag}
-                      path={path}
-                      editMode={editMode}
-                      {...file}
+                      directory={dir}
                     />
                   </li>
                 )
               }
             })}
-            {directories.sort(sortByName).map((dir, index) => (
-              <li className="clearfix" key={index}>
-                <FileTree
-                  datasetId={datasetId}
-                  snapshotTag={snapshotTag}
-                  editMode={editMode}
-                  {...dir}
-                />
-              </li>
-            ))}
           </ul>
         </animated.div>
       </Content>
