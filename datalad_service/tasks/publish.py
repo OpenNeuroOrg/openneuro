@@ -10,6 +10,7 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, s3_versions, get_s3_realm
 from datalad_service.common.celery import dataset_task, publish_queue
+from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
 
 def create_github_repo(dataset, repo_name):
@@ -81,6 +82,22 @@ def publish_target(dataset, target, treeish):
         return s3_export(dataset, target, treeish)
 
 
+def get_dataset_realm(ds, siblings, realm=None):
+    # if realm parameter is not included, find the best target
+    if realm is None:
+        # if the dataset has a public sibling, use this as the export target
+        # otherwise, use the private as the export target
+        public_bucket_name = DatasetRealm(DatasetRealm.PUBLIC).s3_remote
+        has_public_bucket = get_sibling_by_name(public_bucket_name, siblings)
+        if has_public_bucket:
+            realm = DatasetRealm(DatasetRealm.PUBLIC)
+        else:
+            realm = DatasetRealm(DatasetRealm.PRIVATE)
+    else:
+        realm = get_s3_realm(realm=realm)
+    return realm
+
+
 @dataset_task
 def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
     """Migrate a dataset and all snapshots to an S3 bucket"""
@@ -110,18 +127,7 @@ def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
     ds = store.get_dataset(dataset)
     siblings = ds.siblings()
 
-    # if realm parameter is not included, find the best target
-    if realm is None:
-        # if the dataset has a public sibling, use this as the export target
-        # otherwise, use the private as the export target
-        public_bucket_name = DatasetRealm(DatasetRealm.PUBLIC).s3_remote
-        has_public_bucket = get_sibling_by_name(public_bucket_name, siblings)
-        if has_public_bucket:
-            realm = DatasetRealm(DatasetRealm.PUBLIC)
-        else:
-            realm = DatasetRealm(DatasetRealm.PRIVATE)
-    else:
-        realm = get_s3_realm(realm=realm)
+    realm = get_dataset_realm(ds, siblings, realm)
 
     # Create the sibling if it does not exist
     s3_sibling(ds, siblings)
@@ -177,3 +183,15 @@ def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
             'files': file_update
         }
     }
+
+@dataset_task
+def monitor_remote_configs(store, dataset, snapshot, realm=None):
+    """Check remote configs and correct invalidities."""
+    ds = store.get_dataset(dataset)
+    siblings = ds.siblings()
+    realm = get_dataset_realm(ds, siblings, realm)
+
+    if realm == DatasetRealm.PUBLIC:
+        s3_ok = validate_s3_config(ds, realm)
+        if not s3_ok:
+            update_s3_sibling(ds, realm)

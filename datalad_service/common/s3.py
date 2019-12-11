@@ -41,8 +41,7 @@ class DatasetRealm(Enum):
         return 's3://{bucket}'.format(bucket=bucket)
 
 
-def setup_s3_sibling(dataset, realm):
-    """Add a sibling for an S3 bucket publish."""
+def generate_s3_annex_options(dataset, realm):
     dataset_id = os.path.basename(dataset.path)
     annex_options = [
         'type=S3',
@@ -62,10 +61,44 @@ def setup_s3_sibling(dataset, realm):
             ]
     else:
         public = 'no'
-
     annex_options.append('public={}'.format(public))
+    return annex_options
 
+
+def setup_s3_sibling(dataset, realm):
+    """Add a sibling for an S3 bucket publish."""
+    annex_options = generate_s3_annex_options(dataset, realm)
     dataset.repo.init_remote(realm.s3_remote, options=annex_options)
+
+
+def update_s3_sibling(dataset, realm):
+    """Update S3 remote with latest config."""
+    annex_options = generate_s3_annex_options(dataset, realm)
+
+    # note: enableremote command will only upsert config options, none are deleted
+    dataset.repo._run_annex_command('enableremote', annex_options=[realm.s3_remote] + annex_options)
+    dataset.repo.config.reload()
+
+
+def validate_s3_config(dataset, realm):
+    """Checks that s3-PUBLIC annex-options match those set in setup_s3_siblings"""
+    # get s3-PUBLIC annex options
+    special_remotes = dataset.repo.get_special_remotes()
+    for key, options in special_remotes.items():
+        if options.get('name') == 's3-PUBLIC':
+            s3_public_remote_options = options
+
+    expected_annex_options = generate_s3_annex_options(dataset, realm)
+
+    # check that each of the expected annex options is set for s3_PUBLIC
+    match = True
+    for option in expected_annex_options:
+        key, expected_value = option.split('=')
+        if not s3_public_remote_options.get(key) == expected_value:
+            match = False
+            break
+
+    return match
 
 
 def s3_export(dataset, target, treeish='HEAD'):
