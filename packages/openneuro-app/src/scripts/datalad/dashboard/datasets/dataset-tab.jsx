@@ -128,7 +128,10 @@ const DatasetTab = ({
           loadMoreRows={loadMoreRows}
           publicDashboard={publicDashboard}
         />
-        <DatasetDeletedSubscription datasetIds={extractIds(data)} />
+        <DatasetDeletedSubscription
+          datasetIds={extractIds(data)}
+          onDeleted={window.location.reload.bind(window.location)}
+        />
       </ErrorBoundary>
     )}
   </FullHeightFlexDiv>

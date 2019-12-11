@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Subscription } from 'react-apollo'
 import gql from 'graphql-tag'
-import { datasetCacheId } from '../mutations/cache-id.js'
 
 const DATASET_DELETED_SUBSCRIPTION = gql`
   subscription datasetDeleted($datasetIds: [ID!]) {
@@ -13,23 +12,20 @@ const DATASET_DELETED_SUBSCRIPTION = gql`
 `
 
 const DatasetDeletedSubscription = ({ datasetIds, onDeleted }) => (
-  console.log('subscribed to delete dataset for: ', datasetIds.join(', ')),
-  (
-    <Subscription
-      subscription={DATASET_DELETED_SUBSCRIPTION}
-      variables={{ datasetIds: datasetIds }}
-      onSubscriptionData={({ client, subscriptionData }) => {
-        const { datasetId } = subscriptionData.data.datasetDeleted
-        const { cache } = client
-        console.log({ cache, datasetId })
-        if (typeof onDeleted === 'function') onDeleted()
-      }}
-    />
-  )
+  <Subscription
+    subscription={DATASET_DELETED_SUBSCRIPTION}
+    variables={{ datasetIds: datasetIds }}
+    onSubscriptionData={() => {
+      // triggers a redirect to dashboard if on the deleted dataset's page
+      // triggers a reload if on a dashboard page containing the deleted dataset
+      if (typeof onDeleted === 'function') onDeleted()
+    }}
+  />
 )
 
 DatasetDeletedSubscription.propTypes = {
   datasetIds: PropTypes.array,
+  onDeleted: PropTypes.func,
 }
 
 export default DatasetDeletedSubscription

@@ -122,10 +122,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
           <FilesSubscription datasetId={datasetId} />
           <DatasetDeletedSubscription
             datasetIds={[datasetId]}
-            onDeleted={() => {
-              console.log('deleted')
-              history.push('/dashboard/datasets')
-            }}
+            onDeleted={() => history.push('/dashboard/datasets')}
           />
         </DatasetQueryContext.Provider>
       </ErrorBoundaryWithDataSet>

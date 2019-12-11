@@ -17,9 +17,7 @@ const DeleteDataset = ({ datasetId }) => (
         tooltip="Delete Dataset"
         icon="fa-trash"
         warn={true}
-        action={cb => {
-          deleteDataset({ variables: { id: datasetId } }).then(cb)
-        }}
+        action={cb => deleteDataset({ variables: { id: datasetId } }).then(cb)}
       />
     )}
   </Mutation>
