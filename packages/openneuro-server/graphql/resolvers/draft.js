@@ -3,10 +3,13 @@ import { issues } from './issues.js'
 import { description } from './description.js'
 import { readme } from './readme.js'
 import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
+import { filterFiles } from '../../datalad/files.js'
 
 // A draft must have a dataset parent
 const draftFiles = dataset => args => {
-  return getDraftFiles(dataset.id, args)
+  return getDraftFiles(dataset.id, args).then(
+    filterFiles('prefix' in args && args.prefix),
+  )
 }
 
 export const draft = obj => ({

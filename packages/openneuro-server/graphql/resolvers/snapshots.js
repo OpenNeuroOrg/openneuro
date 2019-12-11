@@ -5,6 +5,7 @@ import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
+import { getFiles, filterFiles } from '../../datalad/files.js'
 import SnapshotModel from '../../models/snapshot.js'
 
 export const snapshots = obj => {
@@ -18,6 +19,8 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     description: () => description(obj, { datasetId, tag }),
     readme: () => readme(obj, { datasetId, revision: tag }),
     summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
+    files: ({ prefix }) =>
+      getFiles(datasetId, snapshot.hexsha).then(filterFiles(prefix)),
   }))
 }
 

@@ -12,6 +12,13 @@ const nifti = Object.freeze({
   size: 311112,
 })
 
+const sub01Unloaded = Object.freeze({
+  id: 'directory:sub-01',
+  filename: 'sub-01',
+  size: 1,
+  directory: true,
+})
+
 const exampleFiles = [CHANGES, nifti]
 
 describe('FileTree', () => {
@@ -35,6 +42,13 @@ describe('FileTree', () => {
             ],
           },
         ],
+      })
+    })
+    it('accepts directory stubs and returns them as directories', () => {
+      expect(flatToTree([CHANGES, sub01Unloaded])).toEqual({
+        name: '',
+        files: [CHANGES],
+        directories: [{ ...sub01Unloaded, name: sub01Unloaded.filename }],
       })
     })
   })

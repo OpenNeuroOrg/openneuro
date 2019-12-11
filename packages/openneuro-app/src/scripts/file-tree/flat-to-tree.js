@@ -8,8 +8,12 @@ export const flatToTree = files => {
     const pathTokens = file.filename.split('/')
     const lastPath = pathTokens.slice(-1).pop()
     if (pathTokens.length === 1) {
-      // Top level file
-      tree.files.push({ ...file })
+      // Top level file or directory stub
+      if (file.directory) {
+        tree.directories.push({ ...file, name: file.filename })
+      } else {
+        tree.files.push({ ...file })
+      }
     } else {
       // File in a directory
       let directory = tree
