@@ -16,7 +16,7 @@ const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
     typeof catchErrorIf === 'function' ? catchErrorIf(error) : true
   return raiseError
     ? // trigger error component
-      { hasError: true, supportModal: true, error: error }
+      { hasError: true, supportModal: false, error: error }
     : // don't show error handling component
       { hasError: false, supportModal: false, error: error }
 }
@@ -50,7 +50,7 @@ const FreshdeskModal = props => {
   return (
     <>
       <p className="generic-error-message">
-        {props.error || 'An error has occurred.'}
+        {props.message || 'An error has occurred.'}
         <br />
         Please support us by documenting the issue with{' '}
         <a onClick={props.openModal}>
@@ -84,7 +84,8 @@ const FreshdeskModal = props => {
   )
 }
 FreshdeskModal.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.object,
+  message: PropTypes.string,
   openModal: PropTypes.func,
   closeModal: PropTypes.func,
   supportModal: PropTypes.bool,
@@ -104,13 +105,27 @@ class ErrorBoundary extends React.Component {
       message: props.error ? props.error.message : '',
     }
   }
+
+  nonexistantDatasetMessage = 'This dataset does not exist.'
+
+  // any error message that should trigger a link back to the dashboard
+  //   rather than the freshdesk modal link
+  redirectMessages = [
+    this.nonexistantDatasetMessage,
+    'GraphQL error: You do not have access to read this dataset.',
+  ]
+
   static getDerivedStateFromError(error) {
-    return getDerivedStateFromErrorOnCondition(error, () => true)
+    return getDerivedStateFromErrorOnCondition(
+      error,
+      // error boundary should always be triggered in general case
+      () => true,
+    )
   }
   componentDidCatch(error) {
     let message = this.state.message
     if (!this.props.dataset) {
-      message = 'This dataset does not exist.'
+      message = this.nonexistantDatasetMessage
     } else if (this.props.dataset && this.props.dataset.snapshots.length < 1) {
       message = 'This dataset has no associated snapshots.'
     }
@@ -138,13 +153,15 @@ class ErrorBoundary extends React.Component {
     const error = this.state.error || this.props.error
     const { supportModal, message } = this.state
     const { subject, description } = this.props
+
     if (error) {
-      if (message) {
+      if (this.redirectMessages.includes(message)) {
         return <DatasetRedirect message={message} />
       } else {
         return (
           <FreshdeskModal
-            error={message}
+            message={message}
+            error={error}
             openModal={this.openSupportModalFromLink}
             closeModal={this.closeSupportModal}
             subject={subject}
