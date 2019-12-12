@@ -102,19 +102,21 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
     draft ? getDraftPage : getDatasetPage,
     {
       variables: { datasetId },
+      errorPolicy: 'all',
     },
   )
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) Sentry.captureException(error)
   return (
-    <DatasetContext.Provider value={data}>
+    <DatasetContext.Provider value={data.dataset}>
       <ErrorBoundaryWithDataSet error={error} subject={'error in dataset page'}>
         <DatasetQueryContext.Provider
           value={{
             datasetId,
+            fetchMore,
           }}>
-          <DatasetPage dataset={dataset} />
+          <DatasetPage dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
       </ErrorBoundaryWithDataSet>
@@ -124,6 +126,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
 
 DatasetQueryHook.propTypes = {
   datasetId: PropTypes.string,
+  draft: PropTypes.bool,
 }
 
 /**
