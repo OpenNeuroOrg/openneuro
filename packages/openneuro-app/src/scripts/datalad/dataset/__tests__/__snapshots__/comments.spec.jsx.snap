@@ -36,43 +36,47 @@ exports[`Comments component recursively renders a tree of comments 1`] = `
       <h2>
         Comments
       </h2>
-      <ErrorBoundary
+      <ErrorBoundaryWithDataSet
         subject="error in dataset comments"
       >
-        <LoggedIn />
-        <LoggedOut>
-          <div>
-            Please sign in to contribute to the discussion.
-          </div>
-        </LoggedOut>
-        <CommentTree
-          commentMap={
-            Object {
-              "xyz": Object {
-                "id": "xyz",
-                "replies": Array [
-                  Object {
-                    "id": "xyz",
-                    "replies": Array [],
-                    "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
-                    "user": Object {
-                      "email": "example@example.com",
-                      "id": "1234",
+        <ErrorBoundary
+          subject="error in dataset comments"
+        >
+          <LoggedIn />
+          <LoggedOut>
+            <div>
+              Please sign in to contribute to the discussion.
+            </div>
+          </LoggedOut>
+          <CommentTree
+            commentMap={
+              Object {
+                "xyz": Object {
+                  "id": "xyz",
+                  "replies": Array [
+                    Object {
+                      "id": "xyz",
+                      "replies": Array [],
+                      "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
+                      "user": Object {
+                        "email": "example@example.com",
+                        "id": "1234",
+                      },
                     },
+                  ],
+                  "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
+                  "user": Object {
+                    "email": "example@example.com",
+                    "id": "1234",
                   },
-                ],
-                "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
-                "user": Object {
-                  "email": "example@example.com",
-                  "id": "1234",
                 },
-              },
+              }
             }
-          }
-          comments={Array []}
-          datasetId="ds000001"
-        />
-      </ErrorBoundary>
+            comments={Array []}
+            datasetId="ds000001"
+          />
+        </ErrorBoundary>
+      </ErrorBoundaryWithDataSet>
     </div>
   </div>
 </Comments>
@@ -104,33 +108,37 @@ exports[`Comments component renders one top level comment 1`] = `
       <h2>
         Comments
       </h2>
-      <ErrorBoundary
+      <ErrorBoundaryWithDataSet
         subject="error in dataset comments"
       >
-        <LoggedIn />
-        <LoggedOut>
-          <div>
-            Please sign in to contribute to the discussion.
-          </div>
-        </LoggedOut>
-        <CommentTree
-          commentMap={
-            Object {
-              "xyz": Object {
-                "id": "xyz",
-                "replies": Array [],
-                "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
-                "user": Object {
-                  "email": "example@example.com",
-                  "id": "1234",
+        <ErrorBoundary
+          subject="error in dataset comments"
+        >
+          <LoggedIn />
+          <LoggedOut>
+            <div>
+              Please sign in to contribute to the discussion.
+            </div>
+          </LoggedOut>
+          <CommentTree
+            commentMap={
+              Object {
+                "xyz": Object {
+                  "id": "xyz",
+                  "replies": Array [],
+                  "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
+                  "user": Object {
+                    "email": "example@example.com",
+                    "id": "1234",
+                  },
                 },
-              },
+              }
             }
-          }
-          comments={Array []}
-          datasetId="ds000001"
-        />
-      </ErrorBoundary>
+            comments={Array []}
+            datasetId="ds000001"
+          />
+        </ErrorBoundary>
+      </ErrorBoundaryWithDataSet>
     </div>
   </div>
 </Comments>
