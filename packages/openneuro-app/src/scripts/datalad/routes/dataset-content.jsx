@@ -19,7 +19,7 @@ import Validation from '../validation/validation.jsx'
 import EditReadme from '../fragments/edit-readme.jsx'
 import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
@@ -93,7 +93,8 @@ const DatasetContent = ({ dataset }) => {
           <DatasetProminentLinks dataset={dataset} />
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
-          <ErrorBoundary subject={'error in dataset readme component'}>
+          <ErrorBoundaryWithDataSet
+            subject={'error in dataset readme component'}>
             <EditReadme
               datasetId={dataset.id}
               content={dataset.draft.readme}
@@ -101,7 +102,7 @@ const DatasetContent = ({ dataset }) => {
               isMobile={isMobile}>
               <DatasetReadme content={dataset.draft.readme} />
             </EditReadme>
-          </ErrorBoundary>
+          </ErrorBoundaryWithDataSet>
           <DatasetDescription
             datasetId={dataset.id}
             description={dataset.draft.description}

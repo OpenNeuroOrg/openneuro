@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Files from '../../file-tree/files.jsx'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 
 const DatasetFiles = ({
   datasetId,
@@ -19,7 +19,7 @@ const DatasetFiles = ({
           </div>
           <div className="panel-collapse" aria-expanded="false">
             <div className="panel-body">
-              <ErrorBoundary subject={'error in dataset filetree'}>
+              <ErrorBoundaryWithDataSet subject={'error in dataset filetree'}>
                 <Files
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
@@ -27,7 +27,7 @@ const DatasetFiles = ({
                   files={files}
                   editMode={editMode}
                 />
-              </ErrorBoundary>
+              </ErrorBoundaryWithDataSet>
             </div>
           </div>
         </div>

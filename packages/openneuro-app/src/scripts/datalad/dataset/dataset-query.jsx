@@ -5,11 +5,13 @@ import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetQueryContext from './dataset-query-context.js'
+import DatasetContext from './dataset-context.js'
 import DatasetPage from './dataset-page.jsx'
 import FilesSubscription from '../subscriptions/files-subscription.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
 import { DATASET_COMMENTS } from './comments-fragments.js'
-import ErrorBoundary, {
+import {
+  ErrorBoundaryWithDataSet,
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
 
@@ -100,14 +102,15 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
     draft ? getDraftPage : getDatasetPage,
     {
       variables: { datasetId },
+      errorPolicy: 'all',
     },
   )
   if (loading) {
     return <Spinner text="Loading Dataset" active />
-  } else {
-    if (error) Sentry.captureException(error)
-    return (
-      <ErrorBoundary error={error} subject={'error in dataset page'}>
+  } else if (error) Sentry.captureException(error)
+  return (
+    <DatasetContext.Provider value={data.dataset}>
+      <ErrorBoundaryWithDataSet error={error} subject={'error in dataset page'}>
         <DatasetQueryContext.Provider
           value={{
             datasetId,
@@ -116,13 +119,14 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
           <DatasetPage dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
-      </ErrorBoundary>
-    )
-  }
+      </ErrorBoundaryWithDataSet>
+    </DatasetContext.Provider>
+  )
 }
 
 DatasetQueryHook.propTypes = {
   datasetId: PropTypes.string,
+  draft: PropTypes.bool,
 }
 
 /**

@@ -4,7 +4,7 @@ import Comment from './comment.jsx'
 import CommentEditor from '../comments/comment-editor.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 
 const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
   <>
@@ -51,7 +51,7 @@ const Comments = ({ datasetId, uploader, comments }) => {
     <div className="col-xs-12">
       <div className="dataset-comments">
         <h2>Comments</h2>
-        <ErrorBoundary subject="error in dataset comments">
+        <ErrorBoundaryWithDataSet subject="error in dataset comments">
           <LoggedIn>
             <CommentEditor datasetId={datasetId} />
           </LoggedIn>
@@ -64,7 +64,7 @@ const Comments = ({ datasetId, uploader, comments }) => {
             comments={rootComments}
             commentMap={commentMap}
           />
-        </ErrorBoundary>
+        </ErrorBoundaryWithDataSet>
       </div>
     </div>
   )
