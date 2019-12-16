@@ -42,7 +42,8 @@ export const updateFilesReducer = (files, draft) => {
   const draftFiles = [...draft.files]
   files.forEach(file => {
     const updatedFileIndex = draftFiles.findIndex(
-      ({ filename: draftFileName }) => draftFileName === file.filename,
+      draftFile =>
+        draftFile.filename === file.filename || draftFile.id === file.id,
     )
     if (updatedFileIndex === -1) newFiles.push(file)
     else draftFiles[updatedFileIndex] = file
