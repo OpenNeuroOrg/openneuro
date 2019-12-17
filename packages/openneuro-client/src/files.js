@@ -20,16 +20,6 @@ export const updateFiles = gql`
   }
 `
 
-export const deleteFiles = gql`
-  mutation deleteFiles($datasetId: ID!, $files: FileTree!) {
-    deleteFiles(datasetId: $datasetId, files: $files) {
-      dataset {
-        id
-      }
-    }
-  }
-`
-
 /**
  * Sort file streams so that dataset_description.json is first in the list
  *

@@ -507,7 +507,7 @@ const typeDefs = `
   type FilesUpdate {
     datasetId: String
     action: String
-    payload: [String]
+    payload: [DatasetFile]
   }
 
   # Analytics for a dataset
