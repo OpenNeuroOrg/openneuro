@@ -6,7 +6,7 @@ const UploadSelect = () => (
   <UploaderContext.Consumer>
     {uploader => (
       <div className="message fade-in">
-        <p style={{ color: 'red' }}>
+        <p>
           Notice: At this time we are not able to accept datasets protected by
           GDPR. We apologize for this inconvenience.
         </p>
