@@ -6,6 +6,10 @@ const UploadSelect = () => (
   <UploaderContext.Consumer>
     {uploader => (
       <div className="message fade-in">
+        <p style={{ color: 'red' }}>
+          Warning: At this time we are not able to accept datasets protected by
+          GDPR. We apologize for this inconvenience.
+        </p>
         Select a{' '}
         <a
           href="http://bids.neuroimaging.io"
