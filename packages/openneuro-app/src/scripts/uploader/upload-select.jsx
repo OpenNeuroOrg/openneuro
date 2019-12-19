@@ -7,7 +7,7 @@ const UploadSelect = () => (
     {uploader => (
       <div className="message fade-in">
         <p style={{ color: 'red' }}>
-          Warning: At this time we are not able to accept datasets protected by
+          Notice: At this time we are not able to accept datasets protected by
           GDPR. We apologize for this inconvenience.
         </p>
         Select a{' '}
