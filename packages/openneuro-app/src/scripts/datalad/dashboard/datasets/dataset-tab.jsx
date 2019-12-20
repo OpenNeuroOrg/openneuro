@@ -9,7 +9,6 @@ import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import styled from '@emotion/styled'
-import DropdownWrapper from '../../../mobile/dropdown.jsx'
 
 const FullHeightFlexDiv = styled.div`
   display: flex;
@@ -67,35 +66,22 @@ const DatasetTab = ({
             {!isMobile && <h2>{title(publicDashboard)}</h2>}
           </div>
           <div className="col-md-7">
-            {isMobile && (
-              <DropdownWrapper>
-                <DatasetSorter
-                  refetch={refetch}
-                  queryVariables={queryVariables}
-                />
-              </DropdownWrapper>
-            )}
             <Search />
           </div>
         </div>
       </div>
-      {!isMobile && (
-        <div className="filters-sort-wrap clearfix">
-          <div className="sort clearfix">
-            <label>Sort by:</label>
-            <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
-          </div>
-          {publicDashboard ? null : (
-            <div className="filters">
-              <label>Filter by:</label>
-              <DatasetFilter
-                refetch={refetch}
-                queryVariables={queryVariables}
-              />
-            </div>
-          )}
+      <div className="filters-sort-wrap clearfix">
+        <div className="sort clearfix">
+          {!isMobile && <label>Sort by:</label>}
+          <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
-      )}
+        {publicDashboard ? null : (
+          <div className="filters">
+            <label>Filter by:</label>
+            <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
+          </div>
+        )}
+      </div>
     </div>
     {loading ? (
       <Spinner text="Loading Datasets" active />
