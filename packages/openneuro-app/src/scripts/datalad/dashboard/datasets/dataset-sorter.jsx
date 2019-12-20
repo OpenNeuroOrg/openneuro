@@ -55,9 +55,7 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
   const isMobile = useMedia('(max-width: 700px) ')
   const onChange = event => {
     const newQueryVariables = { ...queryVariables }
-    // Clear existing sorts
     newQueryVariables.orderBy = {}
-    // Apply (or toggle) based on previous sort
     newQueryVariables.orderBy[event.target.value] =
       queryVariables.orderBy[event.target.value] === 'descending'
         ? 'ascending'
@@ -94,6 +92,7 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
 DatasetSorter.propTypes = {
   queryVariables: PropTypes.object,
   refetch: PropTypes.func,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetSorter

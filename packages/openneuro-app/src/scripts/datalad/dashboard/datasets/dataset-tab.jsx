@@ -105,6 +105,7 @@ DatasetTab.propTypes = {
   loading: PropTypes.bool,
   publicDashboard: PropTypes.bool,
   error: PropTypes.object,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetTab
