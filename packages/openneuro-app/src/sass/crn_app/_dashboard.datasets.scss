@@ -67,6 +67,7 @@
     padding: 0;
     background: $f9;
     border-bottom: 1px solid $ddd;
+    
 
     .filters {
         float: right;
@@ -187,6 +188,26 @@
     }
 }
 
+@media only screen and (max-width: 765px) {
+    .filters-sort-wrap {
+        background: #fff;
+            .dropdown {
+                border-radius: 2px;
+                height: auto;
+                font-size: 18px;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: lighter;
+                color: #777;
+                border: 0;
+                box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.1);
+                padding: 10px;
+                margin: 5px 20px;
+                width: 111%;
+            }
+        
+    }
+}
+
 // Dashboard teaser layout for Datasets ========================
 
 .dashboard-dataset-teasers {
@@ -199,6 +220,11 @@
 
     .header-wrap {
         border-bottom: 1px solid $e1;
+    }
+    @media only screen and (max-width: 765px) {
+        .header-wrap {
+            border: none;
+        }
     }
 
     h2,

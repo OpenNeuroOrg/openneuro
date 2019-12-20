@@ -14,7 +14,6 @@ const sortFields = [
 ]
 
 export const SortField = ({ field, queryVariables, refetch }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
   const fieldValue =
     field in queryVariables.orderBy && queryVariables.orderBy[field]
   let icon
@@ -27,7 +26,6 @@ export const SortField = ({ field, queryVariables, refetch }) => {
   }
   const sortBy = () => {
     const newQueryVariables = { ...queryVariables }
-    console.log({ newQueryVariables })
     // Clear existing sorts
     newQueryVariables.orderBy = {}
     // Apply (or toggle) based on previous sort
@@ -36,7 +34,6 @@ export const SortField = ({ field, queryVariables, refetch }) => {
         ? 'ascending'
         : 'descending'
     refetch(newQueryVariables)
-    console.log(newQueryVariables.orderBy[field])
   }
   return (
     <a
@@ -46,16 +43,6 @@ export const SortField = ({ field, queryVariables, refetch }) => {
       <Capitalized>{field}</Capitalized> {icon}
     </a>
   )
-
-  // (
-  //     <select onChange={sortBy}>
-  //     <option
-  //       key={field}
-  //       className={fieldValue ? 'btn-sort name active' : 'btn-sort name'}
-  //       value={field}>{field}
-  //       </option>
-  //     </select>
-  //   )
 }
 
 SortField.propTypes = {
@@ -66,8 +53,7 @@ SortField.propTypes = {
 
 const DatasetSorter = ({ queryVariables, refetch }) => {
   const isMobile = useMedia('(max-width: 700px) ')
-
-  const sortBy = event => {
+  const onChange = event => {
     const newQueryVariables = { ...queryVariables }
     // Clear existing sorts
     newQueryVariables.orderBy = {}
@@ -78,7 +64,6 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
         : 'descending'
     refetch(newQueryVariables)
   }
-
   if (!isMobile) {
     return (
       <div>
@@ -95,7 +80,7 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
   } else if (isMobile) {
     return (
       <React.Fragment>
-        <select className="dropdown" onChange={sortBy}>
+        <select className="dropdown" onChange={onChange}>
           <option>Sort by...</option>
           {sortFields.map(field => (
             <option key={field}>{field}</option>
