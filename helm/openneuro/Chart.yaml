@@ -14,5 +14,5 @@ dependencies:
     version: 0.3.7
     repository: https://kubernetes-charts.storage.googleapis.com/
   - name: aws-alb-ingress-controller
-    version: 0.1.8
+    version: 0.1.11
     repository: https://kubernetes-charts-incubator.storage.googleapis.com/
