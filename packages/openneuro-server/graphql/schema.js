@@ -112,6 +112,7 @@ const typeDefs = `
     snapshotDeleted(datasetId: ID!): ID
     permissionsUpdated(datasetId: ID!): [Permission]
     draftUpdated(datasetId: ID!): Dataset
+    filesUpdated(datasetId: ID!): FilesUpdate
   }
 
   input SummaryInput {
@@ -175,6 +176,8 @@ const typeDefs = `
     adminUsers: [String]
     ages: [Int]
     modalities: [String]
+    grantFunderName: String
+    grantIdentifier: String
   }
 
   # Validation updated message
@@ -317,7 +320,7 @@ const typeDefs = `
     # Validator issues
     issues: [ValidationIssue]
     # Committed files in the working tree
-    files(untracked: Boolean): [DatasetFile]
+    files(untracked: Boolean, prefix: String = ""): [DatasetFile]
     # Flag if a dataset operation is incomplete (and may be reverted or resumed)
     partial: Boolean
     # dataset_description.json fields
@@ -340,7 +343,7 @@ const typeDefs = `
     # bids-validator issues for this snapshot
     issues: [ValidationIssue]
     # Snapshot files
-    files: [DatasetFile]
+    files(prefix: String = ""): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Snapshot usage and download statistics
@@ -490,12 +493,21 @@ const typeDefs = `
     size: BigInt
     urls: [String]
     objectpath: String
+    # Return a flag if this is a directory which contains more files
+    directory: Boolean
   }
 
   # Update file object
   input UpdateFileUrlInput {
     filename: String!
     urls: [String]
+  }
+
+  # Update to files
+  type FilesUpdate {
+    datasetId: String
+    action: String
+    payload: [DatasetFile]
   }
 
   # Analytics for a dataset
@@ -547,6 +559,8 @@ const typeDefs = `
     adminUsers: [String]
     ages: [Int]
     modalities: [String]
+    grantFunderName: String
+    grantIdentifier: String
   }
 `
 

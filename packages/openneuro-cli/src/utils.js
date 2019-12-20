@@ -5,6 +5,6 @@ export const debounce = (fn, time) => {
     const functionCall = (...args) => fn.apply(this, args)
 
     clearTimeout(timeout)
-    timeout = setTimeout(functionCall, time)
+    timeout = global.setTimeout(functionCall, time)
   }
 }

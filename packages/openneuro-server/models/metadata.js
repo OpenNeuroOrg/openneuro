@@ -21,6 +21,8 @@ const metadataSchema = new mongoose.Schema({
   associatedPaperDOI: String, // @id type
   openneuroPaperDOI: String, // @id type
   seniorAuthor: String,
+  grantFunderName: String,
+  grantIdentifier: String,
 })
 
 metadataSchema.index({ datasetId: 1 }, { unique: true })

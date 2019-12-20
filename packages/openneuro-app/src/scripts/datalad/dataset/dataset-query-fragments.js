@@ -18,11 +18,6 @@ export const DRAFT_FRAGMENT = gql`
         Funding
         ReferencesAndLinks
       }
-      files {
-        id
-        filename
-        size
-      }
       summary {
         modalities
         sessions
@@ -37,6 +32,21 @@ export const DRAFT_FRAGMENT = gql`
         size
         totalFiles
         dataProcessed
+      }
+    }
+  }
+`
+
+export const DRAFT_FILES_FRAGMENT = gql`
+  fragment DatasetDraftFiles on Dataset {
+    id
+    draft {
+      id
+      files {
+        id
+        filename
+        size
+        directory
       }
     }
   }
@@ -117,6 +127,8 @@ export const DATASET_METADATA = gql`
       dxStatus
       tasksCompleted
       trialCount
+      grantFunderName
+      grantIdentifier
       studyDesign
       studyDomain
       studyLongitudinal

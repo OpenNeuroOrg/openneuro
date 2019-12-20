@@ -20,6 +20,8 @@ const UploadMetadata = () => {
     openneuroPaperDOI: '',
     dxStatus: '',
     tasksCompleted: '',
+    grantFunderName: '',
+    grantIdentifier: '',
   })
   const handleInputChange = (name, value) => {
     const newValues = {

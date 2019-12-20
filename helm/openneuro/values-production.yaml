@@ -14,7 +14,7 @@ freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widge
 googleTrackingId: UA-100754266-2
 
 # AWS TLS Certificate ARN
-certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/2b4af116-1acd-447d-b33b-6e25219293a3"
+certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/7a4fa0e4-aee0-481b-82ee-dbde4c10c227"
 
 # Dataset worker parallelism
 dataladWorkers: 16

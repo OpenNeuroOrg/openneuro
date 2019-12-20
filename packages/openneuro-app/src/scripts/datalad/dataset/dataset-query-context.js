@@ -5,6 +5,7 @@ const DatasetQueryContext = React.createContext({
   datasetId: null,
   commentDepth: 5,
   setCommentDepth: null,
+  fetchMore: null,
 })
 
 export default DatasetQueryContext

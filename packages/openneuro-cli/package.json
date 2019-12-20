@@ -1,11 +1,11 @@
 {
   "name": "openneuro-cli",
-  "version": "3.6.0",
+  "version": "3.9.0",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "os": [
     "!win32"
@@ -16,14 +16,14 @@
     "openneuro": "./src/index.js"
   },
   "dependencies": {
-    "bids-validator": "1.3.6",
+    "bids-validator": "1.3.10",
     "commander": "^2.15.1",
     "esm": "^3.0.16",
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.2",
-    "openneuro-client": "^3.6.0",
+    "openneuro-client": "^3.9.0",
     "superagent": "^4.1.0"
   },
   "scripts": {
@@ -36,6 +36,9 @@
       "!**/*.spec.js",
       "!**/node_modules/**",
       "!**/vendor/**"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!bids-validator).+\\.js$"
     ]
   },
   "devDependencies": {

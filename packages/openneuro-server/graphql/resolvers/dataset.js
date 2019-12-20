@@ -14,6 +14,7 @@ import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
+import { UpdatedFile } from '../utils/file.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -94,30 +95,33 @@ export const deleteDataset = (obj, { id }, { user, userInfo }) => {
 /**
  * Add files to a draft
  */
-export const updateFiles = (
+export const updateFiles = async (
   obj,
   { datasetId, files: fileTree },
   { user, userInfo },
 ) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
     const promises = updateFilesTree(datasetId, fileTree)
-    return Promise.all(promises)
-      .then(() => datalad.commitFiles(datasetId, userInfo))
-      .then(gitRef =>
-        // Check if this is the first data commit and no snapshots exist
-        mongo.collections.crn.snapshots
-          .findOne({ datasetId })
-          .then(async snapshot => {
-            if (!snapshot) {
-              await createSnapshot(datasetId, '1.0.0', user)
-            }
-            return gitRef
-          }),
-      )
-      .then(() => ({
-        id: new Date(),
-      }))
-  })
+    const updatedFiles = await Promise.all(promises)
+    await datalad.commitFiles(datasetId, userInfo)
+    // Check if this is the first data commit and no snapshots exist
+    const snapshot = await mongo.collections.crn.snapshots.findOne({
+      datasetId,
+    })
+    if (!snapshot) await createSnapshot(datasetId, '1.0.0', user)
+    pubsub.publish('filesUpdated', {
+      datasetId,
+      filesUpdated: {
+        action: 'UPDATE',
+        payload: updatedFiles,
+      },
+    })
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
 }
 
 /**
@@ -130,9 +134,11 @@ export const updateFiles = (
 export const updateFilesTree = (datasetId, fileTree) => {
   // drafts just need something to invalidate client cache
   const { name, files, directories } = fileTree
-  const filesPromises = files.map(file =>
-    datalad.addFile(datasetId, name, file),
-  )
+  const filesPromises = files.map(file => {
+    return datalad
+      .addFile(datasetId, name, file)
+      .then(({ filename, size }) => new UpdatedFile(filename, size))
+  })
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
   return filesPromises.concat(...dirPromises)
 }
@@ -147,9 +153,15 @@ export const deleteFiles = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await Promise.all(deleteFilesTree(datasetId, fileTree))
+    const deletedFiles = await Promise.all(deleteFilesTree(datasetId, fileTree))
     await datalad.commitFiles(datasetId, userInfo)
-    await pubsub.publish('draftFilesUpdated', { datasetId })
+    pubsub.publish('filesUpdated', {
+      datasetId,
+      filesUpdated: {
+        action: 'DELETE',
+        payload: deletedFiles,
+      },
+    })
     return true
   } catch (err) {
     Sentry.captureException(err)
@@ -164,8 +176,17 @@ export const deleteFile = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await datalad.deleteFile(datasetId, path, { name: filename })
+    const deletedFile = await datalad
+      .deleteFile(datasetId, path, { name: filename })
+      .then(filename => new UpdatedFile(filename))
     await datalad.commitFiles(datasetId, userInfo)
+    pubsub.publish('filesUpdated', {
+      datasetId,
+      filesUpdated: {
+        action: 'DELETE',
+        payload: [deletedFile],
+      },
+    })
     return true
   } catch (err) {
     Sentry.captureException(err)
@@ -185,14 +206,20 @@ export const deleteFilesTree = (datasetId, fileTree) => {
   const { path, files, directories } = fileTree
   if (files.length || directories.length) {
     const filesPromises = files.map(({ filename }) =>
-      datalad.deleteFile(datasetId, path, { name: filename }),
+      datalad
+        .deleteFile(datasetId, path, { name: filename })
+        .then(filename => new UpdatedFile(filename)),
     )
     const dirPromises = directories.map(tree =>
       deleteFilesTree(datasetId, tree),
     )
     return filesPromises.concat(...dirPromises)
   } else {
-    return [datalad.deleteFile(datasetId, path, { name: '' })]
+    return [
+      datalad
+        .deleteFile(datasetId, path, { name: '' })
+        .then(filename => new UpdatedFile(filename)),
+    ]
   }
 }
 

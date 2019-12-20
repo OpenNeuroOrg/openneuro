@@ -68,8 +68,8 @@ describe('LeftSidebar component', () => {
           draft
           modified={fixedDate}
         />,
-        expect(wrapper).toMatchSnapshot(),
       )
+      expect(wrapper).toMatchSnapshot()
     })
     it('renders snapshot version correctly', () => {
       const wrapper = shallow(
@@ -78,8 +78,8 @@ describe('LeftSidebar component', () => {
           id="ds000001:1.0.0"
           modified={fixedDate}
         />,
-        expect(wrapper).toMatchSnapshot(),
       )
+      expect(wrapper).toMatchSnapshot()
     })
     it('toggles the active state for matching snapshot versions', () => {
       const wrapper = shallow(

@@ -83,7 +83,7 @@ export default class Summary extends React.PureComponent {
     if (items && items.length > 0) {
       return (
         <span>
-          <b>Available</b> {type} : {items.join(', ')}
+          <b className="desktop">Available</b> {type} : {items.join(', ')}
         </span>
       )
     } else {

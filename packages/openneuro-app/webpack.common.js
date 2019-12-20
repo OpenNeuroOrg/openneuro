@@ -55,7 +55,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         include: [
           path.resolve(__dirname, './src/scripts/'),
           path.resolve(__dirname, './node_modules/bids-validator'),
@@ -68,6 +68,10 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
       },
       {
         test: /\.scss$/,

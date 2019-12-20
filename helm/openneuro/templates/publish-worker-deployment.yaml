@@ -54,3 +54,11 @@ spec:
         - name: ssh-key
           mountPath: /datalad-key
           subPath: datalad-key
+        livenessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 1
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - celery status --app datalad_service.worker | grep "${HOSTNAME}:.*OK"

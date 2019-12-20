@@ -46,6 +46,13 @@ export const permissionsUpdated = {
   ),
 }
 
+export const filesUpdated = {
+  subscribe: withFilter(
+    () => pubsub.asyncIterator('filesUpdated'),
+    filterDatasetId,
+  ),
+}
+
 const Subscription = {
   datasetCreated,
   datasetDeleted,
@@ -53,6 +60,7 @@ const Subscription = {
   snapshotDeleted,
   permissionsUpdated,
   draftUpdated,
+  filesUpdated,
 }
 
 export default Subscription

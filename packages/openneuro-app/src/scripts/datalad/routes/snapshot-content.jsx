@@ -5,6 +5,7 @@ import { Query } from 'react-apollo'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
 import Spinner from '../../common/partials/spinner.jsx'
+import DatasetQueryContext from '../dataset/dataset-query-context.js'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
@@ -12,6 +13,7 @@ import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
+import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import DownloadButton from '../fragments/dataset-prominent-links.jsx'
@@ -40,6 +42,7 @@ const getSnapshotDetails = gql`
         id
         filename
         size
+        directory
       }
       summary {
         modalities
@@ -61,6 +64,7 @@ const getSnapshotDetails = gql`
         views
       }
       ...SnapshotIssues
+      hexsha
     }
   }
   ${SNAPSHOT_ISSUES}
@@ -73,13 +77,21 @@ const SnapshotContent = ({ dataset, tag }) => (
       datasetId: dataset.id,
       tag,
     }}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data, fetchMore }) => {
       if (loading) {
         return <Spinner text="Loading Snapshot" active />
       } else if (error) {
         throw new Error(error)
       } else {
-        return <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+        return (
+          <DatasetQueryContext.Provider
+            value={{
+              datasetId: dataset.id,
+              fetchMore,
+            }}>
+            <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+          </DatasetQueryContext.Provider>
+        )
       }
     }}
   </Query>
@@ -133,6 +145,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           datasetName={snapshot.description.Name}
           files={snapshot.files}
         />
+        <DatasetGitHash gitHash={snapshot.hexsha} />
       </div>
     </span>
   )

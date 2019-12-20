@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
-import Accordion from '../../mobile/accordion-wrapper.jsx'
+import Collapsible from '../../mobile/collapsible-wrapper.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
 
 /**
@@ -9,16 +9,16 @@ import useMedia from '../../mobile/media-hook.jsx'
  */
 
 const DatasetReadme = ({ content }) => {
-  const match = useMedia('(max-width: 700px) ')
-  if (match) {
+  const isMobile = useMedia('(max-width: 700px) ')
+  if (isMobile && content) {
     return (
-      <Accordion>
-        <div className="cte-display">
-          <div className="fade-in">
+      <div className="cte-display">
+        <div className="fade-in">
+          <Collapsible title={['SHOW MORE', 'SHOW LESS']}>
             <Markdown>{content}</Markdown>
-          </div>
+          </Collapsible>
         </div>
-      </Accordion>
+      </div>
     )
   } else {
     return (

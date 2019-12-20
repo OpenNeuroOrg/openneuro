@@ -55,6 +55,14 @@ body {
     background: $e5;
 }
 
+@media only screen and (max-width: 765px) {
+    body{
+        background: $white;
+        display: flex;
+    }
+}
+
+
 .main {
     display: flex;
     flex-direction: column;

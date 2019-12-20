@@ -5,13 +5,15 @@ import styled from '@emotion/styled'
 // wrapper for collapsible content on mobile
 
 const Content = styled.div`
-  display: none;
+  height: 7em;
+  overflow: hidden;
   text-align: left;
-  font-size: 14px;
   ${props =>
     props.isOpen &&
     `
       display: block;
+      height: auto;
+      overflow: auto;
     `};
 `
 
@@ -27,8 +29,6 @@ Collapse.propTypes = {
 Collapse.defaultProps = {
   isOpen: undefined,
 }
-
-//
 
 const Item = styled.button`
   background-color: transparent;
@@ -59,38 +59,40 @@ const Body = styled.div`
 
 const Title = styled.p`
   padding-right: 0.5rem;
-  color: #666;
+  cursor: pointer;
+  color: #00505c;
+  text-decoration: none;
+  font-family: 'Cabin', sans-serif;
+  font-size: 12px;
 `
 
-const Accordion = ({ children, ...otherProps }) => {
+const Collapsible = ({ children, ...otherProps }) => {
   const [isOpen, setOpen] = useState(false)
-  const arrow = isOpen ? '\u25BE' : '\u25C2'
-  const title = isOpen ? 'Click to hide ' : 'Click to expand '
   const toggleItem = () => {
     setOpen(prevState => !prevState)
   }
   return (
     <>
-      <Item onClick={toggleItem}>
-        <Wrapper>
-          <Title>{`${title} ${arrow}`}</Title>
-        </Wrapper>
-      </Item>
-      <Body isOpen={isOpen}>
+      <Body>
         <Collapse isOpen={isOpen}>{children}</Collapse>
       </Body>
+      <Item onClick={toggleItem}>
+        <Wrapper>
+          <Title>{!isOpen ? otherProps.title[0] : otherProps.title[1]}</Title>
+        </Wrapper>
+      </Item>
     </>
   )
 }
 
-Accordion.propTypes = {
+Collapsible.propTypes = {
   children: PropTypes.node.isRequired,
   isOpen: PropTypes.bool,
 }
 
-Accordion.defaultProps = {
+Collapsible.defaultProps = {
   icon: 'down-chevron',
   isOpen: false,
 }
 
-export default Accordion
+export default Collapsible

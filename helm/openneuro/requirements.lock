@@ -1,0 +1,12 @@
+dependencies:
+- name: redis
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 7.1.0
+- name: efs-provisioner
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.3.7
+- name: aws-alb-ingress-controller
+  repository: https://kubernetes-charts-incubator.storage.googleapis.com/
+  version: 0.1.11
+digest: sha256:53f37b16af475683f16dc74b0dd2118dafd8276e6deb510b1a104e152dbe1c9d
+generated: "2019-12-19T21:30:53.957756636-08:00"

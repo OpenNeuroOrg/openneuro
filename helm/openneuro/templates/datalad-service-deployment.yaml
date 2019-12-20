@@ -44,4 +44,10 @@ spec:
         volumeMounts:
         - name: datasets
           mountPath: /datalad
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          httpGet:
+            path: '/heartbeat'
+            port: 9877
 

@@ -7,6 +7,16 @@ import FileTree, {
   unescapePath,
 } from '../file-tree.jsx'
 
+/* eslint-disable */
+jest.mock('react-spring', () => ({
+  useSpring: jest.fn().mockImplementation(() => [{ mockProp: 1 }, jest.fn()]),
+  animated: {
+    path: () => <path data-testid="ANIMATED-COMPONENT" />,
+    div: () => <div data-testid="ANIMATED-COMPONENT" />,
+  },
+}))
+/* eslint-enable */
+
 describe('FileTree component', () => {
   it('renders with default props', () => {
     expect(mount(<FileTree />)).toMatchSnapshot()
@@ -23,12 +33,6 @@ describe('FileTree component', () => {
       wrapper
         .find('button.btn-file-folder > i.type-icon')
         .hasClass('fa-folder-open'),
-    ).toBe(false)
-    wrapper.find('button').simulate('click')
-    expect(
-      wrapper
-        .find('button.btn-file-folder > i.type-icon')
-        .hasClass('fa-folder-open'),
     ).toBe(true)
     wrapper.find('button').simulate('click')
     expect(
@@ -36,6 +40,12 @@ describe('FileTree component', () => {
         .find('button.btn-file-folder > i.type-icon')
         .hasClass('fa-folder-open'),
     ).toBe(false)
+    wrapper.find('button').simulate('click')
+    expect(
+      wrapper
+        .find('button.btn-file-folder > i.type-icon')
+        .hasClass('fa-folder-open'),
+    ).toBe(true)
   })
   describe('sortByFilename()', () => {
     it('sorts the expected filename properties', () => {

@@ -27,18 +27,24 @@ export const decodeFilePath = path => {
 }
 
 /**
+ * If path is provided, this is a subdirectory, otherwise a root level file.
+ * @param {String} path
+ * @param {String} filename
+ */
+export const getFileName = (path, filename) => {
+  const filePath = path ? [path, filename].join('/') : filename
+  return filename ? encodeFilePath(filePath) : encodeFilePath(path)
+}
+
+/**
  * Generate file URL for DataLad service
  * @param {String} datasetId
  * @param {String} path - Relative path for the file
  * @param {String} filename
  */
 export const fileUrl = (datasetId, path, filename) => {
-  // If path is provided, this is a subdirectory, otherwise a root level file.
-  const filePath = path ? [path, filename].join('/') : filename
-  const fileName = filename ? encodeFilePath(filePath) : encodeFilePath(path)
-  const url = `http://${
-    config.datalad.uri
-  }/datasets/${datasetId}/files/${fileName}`
+  const fileName = getFileName(path, filename)
+  const url = `http://${config.datalad.uri}/datasets/${datasetId}/files/${fileName}`
   return url
 }
 
@@ -48,9 +54,7 @@ export const fileUrl = (datasetId, path, filename) => {
  * @param {string} objectId - Git object id, a sha1 hash for git objects or key for annexed files
  */
 export const objectUrl = (datasetId, objectId) => {
-  return `http://${
-    config.datalad.uri
-  }/datasets/${datasetId}/objects/${objectId}`
+  return `http://${config.datalad.uri}/datasets/${datasetId}/objects/${objectId}`
 }
 
 /**
@@ -66,9 +70,7 @@ export const getFiles = async (datasetId, hexsha) => {
     else
       return request
         .get(
-          `${
-            config.datalad.uri
-          }/datasets/${datasetId}/snapshots/${hexsha}/files`,
+          `${config.datalad.uri}/datasets/${datasetId}/snapshots/${hexsha}/files`,
         )
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
@@ -77,4 +79,43 @@ export const getFiles = async (datasetId, hexsha) => {
           return filesWithUrls
         })
   })
+}
+
+/**
+ * Given a list of files (from getFiles), return a subset matching the prefix
+ * @param {string} prefix The prefix to filter on
+ * @returns {(files: Object[]) => Object[]}
+ */
+export const filterFiles = (prefix = '') => files => {
+  // Disable on null
+  if (prefix === null) {
+    return files
+  }
+  // Track potential directories and include those as "files"
+  const directoryFacades = {}
+  // Return only root level files if prefix is set
+  const matchingFiles = files.filter(f => {
+    if (prefix === '') {
+      if (f.filename.includes('/')) {
+        const dirName = f.filename.split('/').slice(0, 1)[0]
+        if (directoryFacades[dirName] !== undefined) {
+          directoryFacades[dirName].size += 1
+        } else {
+          directoryFacades[dirName] = {
+            id: `directory:${dirName}`,
+            urls: [],
+            filename: dirName,
+            size: 1,
+            directory: true,
+          }
+        }
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return f.filename.startsWith(prefix)
+    }
+  })
+  return [...matchingFiles, ...Object.values(directoryFacades)]
 }

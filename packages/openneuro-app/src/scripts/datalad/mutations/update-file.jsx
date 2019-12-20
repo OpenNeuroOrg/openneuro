@@ -46,7 +46,7 @@ const UpdateFile = ({
           type="file"
           className="update-file"
           multiple={multiple}
-          webkitdirectory={multiple ? '' : null}
+          webkitdirectory={multiple ? path : null}
           onChange={async e => {
             setUploading(true)
             try {

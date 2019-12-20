@@ -13,7 +13,7 @@ import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
-import { fileUrl } from './files.js'
+import { fileUrl, getFileName } from './files.js'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
@@ -227,16 +227,23 @@ export const addFile = async (datasetId, path, file) => {
 
     // Start request to backend
     return new Promise((resolve, reject) => {
+      const responseFile = {
+        filename: getFileName(path, filename),
+        size: 0,
+      }
       const downstreamRequest = requestNode(
         {
           url: fileUrl(datasetId, path, filename),
           method: 'post',
           headers: { 'Content-Type': mimetype },
         },
-        err => (err ? reject(err) : resolve()),
+        err => (err ? reject(err) : resolve(responseFile)),
       )
       // Attach error handler for incoming request and start feeding downstream
       stream
+        .on('data', chunk => {
+          responseFile.size += chunk.length
+        })
         .on('error', err => {
           if (err.constructor.name === 'FileStreamDisconnectUploadError') {
             // Catch client disconnects.
@@ -309,7 +316,8 @@ export const commitFiles = (datasetId, user) => {
 export const deleteFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
   const url = fileUrl(datasetId, path, file.name)
-  return request.del(url)
+  const filename = getFileName(path, file.name)
+  return request.del(url).then(() => filename)
 }
 
 /**

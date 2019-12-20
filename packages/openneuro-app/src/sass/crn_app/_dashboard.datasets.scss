@@ -50,6 +50,14 @@
     }
 }
 
+@media only screen and (max-width: 765px) {
+    .tabs.nav.nav-pills > li {
+        a { 
+            display: none;
+        }
+    }
+}
+
 // Dashboard and Admin sort and filter ========================
 
 
@@ -209,6 +217,14 @@
         margin: 0 auto;
         padding: 20px;
     }
+    @media only screen and (max-width: 765px) {
+        h4 {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            height: 2em;
+        }
+    }
 
     .panel-group {
         margin-bottom: 0;
@@ -242,6 +258,7 @@
                 width: 60%;
                 float: left;
 
+
                 .dataset-name {
                     border: 0;
                     margin: 5px 0 10px;
@@ -272,6 +289,13 @@
                 }
 
 
+            }
+            @media only screen and (max-width: 765px) {
+                a {
+                    width: 80%;
+                    padding: 10px 5px 0px 20px;
+                    border-right: 1px solid #f4f4f4;
+                }
             }
 
             .UPLOADING,
@@ -316,7 +340,14 @@
                                 margin: 0 5px 0 0;
                             }
                         }
+                        @media only screen and (max-width: 765px) {
+                            .dataset-status {
+                                display: flex;
+                                flex-wrap: wrap;
+                            }
+                        }
                     }
+                        
                 }
 
                 .file-wrap {
@@ -327,6 +358,16 @@
                         font-size: 10px;
                         padding: 0 5px;
                         margin-top: 1px;
+                    }
+                }
+                
+                @media only screen and (max-width: 765px) {
+                    .metrics-wrap { 
+                        display: flex;
+                        position: fixed;
+                        flex-wrap: wrap;
+                        left: 77%;
+                        padding: 0px 0px 0px 1%;
                     }
                 }
             }
@@ -356,8 +397,26 @@
                         color: $c-33;
                     }
                 }
+                @media only screen and (max-width: 765px) {
+                    .date {
+                        display: none;
+                    }
+                }
+            }
+            @media only screen and (max-width: 765px) {
+                .metric-container {
+                    width: auto;
+                    float: none;
+                    box-sizing: border-box;
+                    padding: 10px 2px 0px 0px;
+                    align-items: center;
+                }
+                .status-container {
+                    display:none;
+                }
             }
         }
+    
         // Dataset Dashboard Status
         .minimal-summary {
             display: flex;
@@ -385,6 +444,35 @@
                         font-size: 10px;
                         line-height: 13px;
                     }
+            }
+            @media only screen and (max-width: 765px) {
+                .summary-data {
+                    border-right: none;
+                    border-bottom: 1px solid $f4;
+                    width: 100%;
+                    :last-child {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+
+        }
+        @media only screen and (max-width: 765px) {
+            .minimal-summary {
+                position: absolute;
+                top: 45%;
+                display: inline-block;
+                white-space: pre-wrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                width: 80%;
+                border-right: 1px solid $f4;
+
+            [class='summary-data'] {
+                    display:none;
+                }
             }
         }
 
@@ -457,5 +545,11 @@
 .datasets {
     .search-group {
         float: right;
+    }
+}
+
+@media only screen and (max-width: 765px) {
+    .desktop {
+        display: none;
     }
 }

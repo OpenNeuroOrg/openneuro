@@ -12,16 +12,18 @@ import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetProminentLinks from '../fragments/dataset-prominent-links.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
+import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
 import EditReadme from '../fragments/edit-readme.jsx'
 import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
+import useMedia from '../../mobile/media-hook.jsx'
 
 const MarginBottomDiv = styled.div`
   margin-bottom: 0.5em;
@@ -50,6 +52,7 @@ HasBeenPublished.propTypes = {
  * Data routing for the main dataset query to display/edit components
  */
 const DatasetContent = ({ dataset }) => {
+  const isMobile = useMedia('(max-width: 700px) ')
   const user = getProfile()
   const hasEdit =
     (user && user.admin) ||
@@ -71,7 +74,8 @@ const DatasetContent = ({ dataset }) => {
             datasetId={dataset.id}
             field="Name"
             description={dataset.draft.description}
-            editMode={hasEdit}>
+            editMode={hasEdit}
+            isMobile={isMobile}>
             <DatasetTitle title={dataset.draft.description.Name} />
           </EditDescriptionField>
           <DatasetUploaded
@@ -89,18 +93,21 @@ const DatasetContent = ({ dataset }) => {
           <DatasetProminentLinks dataset={dataset} />
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
-          <ErrorBoundary subject={'error in dataset readme component'}>
+          <ErrorBoundaryWithDataSet
+            subject={'error in dataset readme component'}>
             <EditReadme
               datasetId={dataset.id}
               content={dataset.draft.readme}
-              hasEdit={hasEdit}>
+              hasEdit={hasEdit}
+              isMobile={isMobile}>
               <DatasetReadme content={dataset.draft.readme} />
             </EditReadme>
-          </ErrorBoundary>
+          </ErrorBoundaryWithDataSet>
           <DatasetDescription
             datasetId={dataset.id}
             description={dataset.draft.description}
             editMode={hasEdit}
+            isMobile={isMobile}
           />
         </div>
         <div className="col-xs-6">
@@ -115,16 +122,16 @@ const DatasetContent = ({ dataset }) => {
             files={dataset.draft.files}
             editMode={hasEdit}
           />
+          <DatasetGitHash gitHash={dataset.draft.id} />
         </div>
         <DraftSubscription datasetId={dataset.id} />
       </LoggedIn>
-      {dataset.snapshots &&
-        !hasEdit && (
-          <Redirect
-            to={`/datasets/${dataset.id}/versions/${dataset.snapshots.length &&
-              dataset.snapshots[dataset.snapshots.length - 1].tag}`}
-          />
-        )}
+      {dataset.snapshots && !hasEdit && (
+        <Redirect
+          to={`/datasets/${dataset.id}/versions/${dataset.snapshots.length &&
+            dataset.snapshots[dataset.snapshots.length - 1].tag}`}
+        />
+      )}
     </>
   )
 }
