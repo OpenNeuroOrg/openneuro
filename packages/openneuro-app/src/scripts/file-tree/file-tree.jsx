@@ -15,6 +15,8 @@ export const sortByName = (a, b) => a.name.localeCompare(b.name)
 
 export const unescapePath = path => path.replace(/:/g, '/')
 
+const isTopLevel = dir => !dir.path.includes(':')
+
 const FileTree = ({
   datasetId,
   snapshotTag = null,
@@ -23,7 +25,7 @@ const FileTree = ({
   files = [],
   directories = [],
   editMode = false,
-  defaultExpanded = true,
+  defaultExpanded = false,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
   const previous = usePrevious(expanded)
@@ -91,6 +93,7 @@ const FileTree = ({
                       datasetId={datasetId}
                       snapshotTag={snapshotTag}
                       editMode={editMode}
+                      defaultExpanded={isTopLevel(dir)}
                       {...dir}
                     />
                   </li>

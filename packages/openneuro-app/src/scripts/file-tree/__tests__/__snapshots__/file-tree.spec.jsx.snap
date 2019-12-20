@@ -11,7 +11,7 @@ exports[`FileTree component renders with default props 1`] = `
         onClick={[Function]}
       >
         <i
-          className="type-icon fa fa-folder-open"
+          className="type-icon fa fa-folder"
         />
          
         <Styled(span)>
@@ -20,7 +20,7 @@ exports[`FileTree component renders with default props 1`] = `
           />
         </Styled(span)>
         <i
-          className="accordion-icon fa fa-caret-up"
+          className="accordion-icon fa fa-caret-down"
         />
       </button>
       <Styled(div)
