@@ -197,7 +197,7 @@ const metadataFields = hasEdit => {
     },
     {
       key: 'ages',
-      label: 'Subject Ages',
+      label: 'Subject Age(s)',
       // text input because field is read-only
       Component: TextInput,
       additionalProps: {
