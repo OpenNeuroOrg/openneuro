@@ -10,6 +10,9 @@ const Form = styled.form({
   minWidth: '40rem',
   margin: '10px 0',
 })
+const InfoText = styled.p({
+  fontWeight: 100,
+})
 const DisabledNote = styled.div({
   display: 'flex',
   color: '#5cb85c',
@@ -236,6 +239,13 @@ const metadataFields = hasEdit => {
 
 const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
   <Form id="metadata-form" className="col-xs-6">
+    <InfoText>
+      Incomplete fields in this form will make it more difficult for users to
+      search for your dataset.
+      <br />
+      We recommend completing the applicable fields to improve your search
+      results.
+    </InfoText>
     {!hideDisabled && (
       <DisabledNote>
         <i className="fa fa-asterisk" />
