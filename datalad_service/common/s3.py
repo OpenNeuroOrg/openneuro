@@ -82,23 +82,18 @@ def update_s3_sibling(dataset, realm):
 
 def validate_s3_config(dataset, realm):
     """Checks that s3-PUBLIC annex-options match those set in setup_s3_siblings"""
-    # get s3-PUBLIC annex options
+    # get annex options for s3 bucket
     special_remotes = dataset.repo.get_special_remotes()
     for key, options in special_remotes.items():
-        if options.get('name') == 's3-PUBLIC':
-            s3_public_remote_options = options
+        if options.get('name') == realm.s3_remote:
 
-    expected_annex_options = generate_s3_annex_options(dataset, realm)
-
-    # check that each of the expected annex options is set for s3_PUBLIC
-    match = True
-    for option in expected_annex_options:
-        key, expected_value = option.split('=')
-        if not s3_public_remote_options.get(key) == expected_value:
-            match = False
-            break
-
-    return match
+            # check that each of the expected annex options is what's actually configured
+            expected_options = generate_s3_annex_options(dataset, realm)
+            for expected_option in expected_options:
+                key, expected_value = expected_option.split('=')
+                if not options.get(key) == expected_value:
+                    return False
+    return True
 
 
 def s3_export(dataset, target, treeish='HEAD'):
