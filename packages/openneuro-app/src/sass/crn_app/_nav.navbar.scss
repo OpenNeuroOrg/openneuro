@@ -122,7 +122,7 @@
             }
             .sign-in-nav-btn {
                 margin: 15px 20px;
-                @media(max-width: 767px){
+                @include mobile {
                   margin: 0;
                 }
                 .link-name {
