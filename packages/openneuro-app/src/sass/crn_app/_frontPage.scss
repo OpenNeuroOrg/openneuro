@@ -132,7 +132,7 @@
         justify-content: center;
         display: flex;
         padding: 0;
-        @media(max-width: 767px){
+        @media(max-width: 765px){
             display: block;
         }
         > li {
@@ -154,7 +154,7 @@
                 img{
                     width: 150px;
                     height: auto;
-                    @media(max-width: 767px){
+                    @media(max-width: 765px){
                         display: none;
                     }
                 }

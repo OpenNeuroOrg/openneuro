@@ -57,6 +57,7 @@ const DatasetContent = ({ dataset }) => {
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
+  const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   return (
     <>
       <LoggedIn>
@@ -69,7 +70,7 @@ const DatasetContent = ({ dataset }) => {
         <div className="col-xs-12">
           <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
         </div>
-        <div className="col-xs-6">
+        <div className={mobileClass}>
           <EditDescriptionField
             datasetId={dataset.id}
             field="Name"
@@ -110,7 +111,7 @@ const DatasetContent = ({ dataset }) => {
             isMobile={isMobile}
           />
         </div>
-        <div className="col-xs-6">
+        <div className={mobileClass}>
           {dataset.draft.partial || dataset.draft.files.length === 0 ? (
             <IncompleteDataset datasetId={dataset.id} />
           ) : (

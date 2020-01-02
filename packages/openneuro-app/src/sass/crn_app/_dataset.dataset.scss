@@ -1,6 +1,11 @@
 .snapshot,
 .dataset {
   .dataset-inner {
+    @media(max-width: 765px){
+      .mobile-class {
+        padding: 15px;
+      }
+    }
     margin-bottom: 15%;
     h1 {
       margin-top: 0;
