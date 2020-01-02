@@ -21,6 +21,7 @@ const Validation = ({ issues, isMobile }) => {
 Validation.propTypes = {
   datasetId: PropTypes.string,
   issues: PropTypes.array,
+  isMobile: PropTypes.bool,
 }
 
 export default Validation
