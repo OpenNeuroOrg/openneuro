@@ -1,7 +1,7 @@
 .snapshot,
 .dataset {
   .dataset-inner {
-    @media(max-width: 765px){
+    @include mobile {
       .mobile-class {
         padding: 15px;
       }

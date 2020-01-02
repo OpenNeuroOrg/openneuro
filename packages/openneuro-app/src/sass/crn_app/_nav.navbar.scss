@@ -122,7 +122,7 @@
             }
             .sign-in-nav-btn {
                 margin: 15px 20px;
-                @media(max-width: 765px){
+                @include mobile {
                   margin: 0;
                 }
                 .link-name {
@@ -324,7 +324,7 @@
                 }
             }
 
-            @media(max-width: 765px){
+            @include mobile {
                 float: none;
                 width: 100%;
                 &.nav > li{
