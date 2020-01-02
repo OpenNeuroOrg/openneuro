@@ -104,7 +104,7 @@ SnapshotContent.propTypes = {
 }
 
 const SnapshotDetails = ({ dataset, snapshot }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
+  const isMobile = useMedia('(max-width: 765px) ')
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   return (
     <span>

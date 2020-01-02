@@ -52,7 +52,7 @@ HasBeenPublished.propTypes = {
  * Data routing for the main dataset query to display/edit components
  */
 const DatasetContent = ({ dataset }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
+  const isMobile = useMedia('(max-width: 765px) ')
   const user = getProfile()
   const hasEdit =
     (user && user.admin) ||
@@ -91,7 +91,14 @@ const DatasetContent = ({ dataset }) => {
             downloads={dataset.analytics.downloads}
             views={dataset.analytics.views}
           />
-          <DatasetProminentLinks dataset={dataset} />
+          {!isMobile && <DatasetProminentLinks dataset={dataset} />}
+          {isMobile && (
+            <Validation
+              datasetId={dataset.id}
+              issues={dataset.draft.issues}
+              isMobile={isMobile}
+            />
+          )}
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
           <ErrorBoundaryWithDataSet
@@ -112,11 +119,15 @@ const DatasetContent = ({ dataset }) => {
           />
         </div>
         <div className={mobileClass}>
-          {dataset.draft.partial || dataset.draft.files.length === 0 ? (
-            <IncompleteDataset datasetId={dataset.id} />
-          ) : (
-            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
-          )}
+          {!isMobile &&
+            (dataset.draft.partial || dataset.draft.files.length === 0 ? (
+              <IncompleteDataset datasetId={dataset.id} />
+            ) : (
+              <Validation
+                datasetId={dataset.id}
+                issues={dataset.draft.issues}
+              />
+            ))}
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}
