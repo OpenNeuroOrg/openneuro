@@ -1,7 +1,5 @@
 // Dashboard Tabs ========================
 
-@import 'common.variables';
-
 .tabs.nav.nav-pills > li {
     a {
         @include border-radius(0);
@@ -202,6 +200,12 @@
         border-bottom: 1px solid $e1;
     }
 
+    @include mobile {
+        .header-wrap {
+            border-bottom: none;
+        }
+    }
+
     h2,
     span.sub-title {
         margin: 0;
@@ -219,6 +223,9 @@
         padding: 20px;
     }
     @include mobile {
+        h2 {
+            padding: 20px 0px;
+        }
         h4 {
             text-overflow: ellipsis;
             overflow: hidden;
@@ -293,8 +300,8 @@
             }
             @include mobile {
                 a {
-                    width: 80%;
-                    padding: 10px 5px 0px 20px;
+                    width: 80.5%;
+                    
                     border-right: 1px solid #f4f4f4;
                 }
             }
@@ -529,6 +536,11 @@
             padding: 0;
         }
     }
+    @include mobile {
+        .panel {
+            border: 1px solid $e1;
+        }
+    }
 }
 
 .search-group {
@@ -552,5 +564,14 @@
 @include mobile {
     .desktop {
         display: none;
+    }
+    .search-group {
+        white-space: nowrap;
+        padding: 0;
+    }
+    .datasets {
+        .search-group {
+            float: none;
+        }
     }
 }

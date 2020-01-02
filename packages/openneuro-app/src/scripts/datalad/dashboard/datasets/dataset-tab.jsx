@@ -63,15 +63,15 @@ const DatasetTab = ({
       <div className="admin header-wrap clearfix">
         <div className="row">
           <div className="col-md-5">
-            {!isMobile && <h2>{title(publicDashboard)}</h2>}
+            <h2>{title(publicDashboard)}</h2>
           </div>
           <div className="col-md-7">
             <Search />
           </div>
         </div>
       </div>
-      <div className="filters-sort-wrap clearfix">
-        <div className="sort clearfix">
+      <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
+        <div className={isMobile ? '' : 'sort clearfix'}>
           {!isMobile && <label>Sort by:</label>}
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>

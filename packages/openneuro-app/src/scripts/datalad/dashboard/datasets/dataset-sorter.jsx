@@ -78,7 +78,7 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
   } else if (isMobile) {
     return (
       <React.Fragment>
-        <select name="test" className="dropdown" onChange={onChange}>
+        <select className="mobile-dropdown" onChange={onChange}>
           <option selected="true" disabled="disabled">
             Sort by...
           </option>
