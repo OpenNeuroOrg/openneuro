@@ -52,7 +52,7 @@ HasBeenPublished.propTypes = {
  * Data routing for the main dataset query to display/edit components
  */
 const DatasetContent = ({ dataset }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
+  const isMobile = useMedia('(max-width: 765px) ')
   const user = getProfile()
   const hasEdit =
     (user && user.admin) ||

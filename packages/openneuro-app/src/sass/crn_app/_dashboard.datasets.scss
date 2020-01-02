@@ -1,5 +1,7 @@
 // Dashboard Tabs ========================
 
+@import 'common.variables';
+
 .tabs.nav.nav-pills > li {
     a {
         @include border-radius(0);
@@ -50,7 +52,7 @@
     }
 }
 
-@media only screen and (max-width: 765px) {
+@include mobile {
     .tabs.nav.nav-pills > li {
         a { 
             display: none;
@@ -60,14 +62,12 @@
 
 // Dashboard and Admin sort and filter ========================
 
-
 .filters-sort-wrap {
     width: 100%;
     float: none;
     padding: 0;
     background: $f9;
     border-bottom: 1px solid $ddd;
-    
 
     .filters {
         float: right;
@@ -188,26 +188,6 @@
     }
 }
 
-@media only screen and (max-width: 765px) {
-    .filters-sort-wrap {
-        background: #fff;
-            .dropdown {
-                border-radius: 2px;
-                height: auto;
-                font-size: 18px;
-                font-family: 'Open Sans', sans-serif;
-                font-weight: lighter;
-                color: #777;
-                border: 0;
-                box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.1);
-                padding: 10px;
-                margin: 5px 20px;
-                width: 111%;
-                text-transform: capitalize;
-            }
-    }
-}
-
 // Dashboard teaser layout for Datasets ========================
 
 .dashboard-dataset-teasers {
@@ -220,11 +200,6 @@
 
     .header-wrap {
         border-bottom: 1px solid $e1;
-    }
-    @media only screen and (max-width: 765px) {
-        .header-wrap {
-            border: none;
-        }
     }
 
     h2,
@@ -243,7 +218,7 @@
         margin: 0 auto;
         padding: 20px;
     }
-    @media only screen and (max-width: 765px) {
+    @include mobile {
         h4 {
             text-overflow: ellipsis;
             overflow: hidden;
@@ -316,7 +291,7 @@
 
 
             }
-            @media only screen and (max-width: 765px) {
+            @include mobile {
                 a {
                     width: 80%;
                     padding: 10px 5px 0px 20px;
@@ -366,7 +341,7 @@
                                 margin: 0 5px 0 0;
                             }
                         }
-                        @media only screen and (max-width: 765px) {
+                        @include mobile {
                             .dataset-status {
                                 display: flex;
                                 flex-wrap: wrap;
@@ -387,7 +362,7 @@
                     }
                 }
                 
-                @media only screen and (max-width: 765px) {
+                @include mobile {
                     .metrics-wrap { 
                         display: flex;
                         position: fixed;
@@ -423,13 +398,13 @@
                         color: $c-33;
                     }
                 }
-                @media only screen and (max-width: 765px) {
+                @include mobile {
                     .date {
                         display: none;
                     }
                 }
             }
-            @media only screen and (max-width: 765px) {
+            @include mobile {
                 .metric-container {
                     width: auto;
                     float: none;
@@ -471,7 +446,7 @@
                         line-height: 13px;
                     }
             }
-            @media only screen and (max-width: 765px) {
+            @include mobile {
                 .summary-data {
                     border-right: none;
                     border-bottom: 1px solid $f4;
@@ -485,7 +460,7 @@
             }
 
         }
-        @media only screen and (max-width: 765px) {
+        @include mobile {
             .minimal-summary {
                 position: absolute;
                 top: 45%;
@@ -558,7 +533,6 @@
 
 .search-group {
     display: block;
-    white-space: nowrap;
     padding: 0px 20px;
     .btn-blue {
         height: 44px;
@@ -575,7 +549,7 @@
     }
 }
 
-@media only screen and (max-width: 765px) {
+@include mobile {
     .desktop {
         display: none;
     }

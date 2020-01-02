@@ -1,4 +1,6 @@
 //navbar // ================================================================
+@import 'common.variables';
+
 @include keyframes(alertown) {
     0% {transform: translateY(-50px);}
     100% {transform: translateY(0);}
@@ -324,7 +326,7 @@
                 }
             }
 
-            @media(max-width: 767px){
+            @include mobile {
                 float: none;
                 width: 100%;
                 &.nav > li{

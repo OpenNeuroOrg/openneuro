@@ -52,7 +52,7 @@ SortField.propTypes = {
 }
 
 const DatasetSorter = ({ queryVariables, refetch }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
+  const isMobile = useMedia('(max-width: 765px) ')
   const onChange = event => {
     const newQueryVariables = { ...queryVariables }
     newQueryVariables.orderBy = {}

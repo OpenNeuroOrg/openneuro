@@ -9,7 +9,7 @@ import useMedia from '../../mobile/media-hook.jsx'
  */
 
 const DatasetReadme = ({ content }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
+  const isMobile = useMedia('(max-width: 765px) ')
   if (isMobile && content) {
     return (
       <div className="cte-display">

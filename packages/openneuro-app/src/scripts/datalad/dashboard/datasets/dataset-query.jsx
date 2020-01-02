@@ -162,7 +162,7 @@ const datasetQueryDisplay = isPublic => ({
       refetch={refetch}
       queryVariables={variables}
       publicDashboard={isPublic}
-      isMobile={useMedia('(max-width: 700px) ')}
+      isMobile={useMedia('(max-width: 765px) ')}
     />
   )
 }
