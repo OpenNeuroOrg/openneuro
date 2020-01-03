@@ -12,6 +12,7 @@ const sortFields = [
   'downloads',
   'subscriptions',
 ]
+
 const ASC = 'ascending'
 const DESC = 'descending'
 
@@ -90,6 +91,7 @@ export const SortField = ({ field, queryVariables, refetch }) => {
       queryVariables.orderBy[field] === 'descending'
         ? 'ascending'
         : 'descending'
+    console.log({ newQueryVariables })
     refetch(newQueryVariables)
   }
   return (
@@ -117,6 +119,7 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
 
     newQueryVariables.orderBy[event.target.value] =
       queryVariables.orderBy[event.target.value]
+    console.log({ newQueryVariables })
     refetch(newQueryVariables)
   }
   if (!isMobile) {
@@ -139,8 +142,12 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
           <option selected="true" disabled="disabled">
             Sort by...
           </option>
-          {sortFieldsMobile.map(field => (
-            <option key={field}>{field}</option>
+          {sortFieldsMobile.map(sortField => (
+            <option
+              data-sort-type={sortField.order}
+              key={
+                sortField.field
+              }>{`${sortField.field} (${sortField.order})`}</option>
           ))}
         </select>
       </React.Fragment>
