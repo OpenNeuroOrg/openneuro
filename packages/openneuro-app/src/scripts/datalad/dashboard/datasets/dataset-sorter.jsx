@@ -12,10 +12,67 @@ const sortFields = [
   'downloads',
   'subscriptions',
 ]
+const ASC = 'ascending'
+const DESC = 'descending'
+
+const sortFieldsMobile = [
+  {
+    field: 'created',
+    order: ASC,
+  },
+  {
+    field: 'name',
+    order: ASC,
+  },
+  {
+    field: 'uploader',
+    order: ASC,
+  },
+  {
+    field: 'stars',
+    order: ASC,
+  },
+  {
+    field: 'downloads',
+    order: ASC,
+  },
+  {
+    field: 'subscriptions',
+    order: ASC,
+  },
+  {
+    field: 'created',
+    order: DESC,
+  },
+  {
+    field: 'name',
+    order: DESC,
+  },
+  {
+    field: 'uploader',
+    order: DESC,
+  },
+  {
+    field: 'stars',
+    order: DESC,
+  },
+  {
+    field: 'downloads',
+    order: DESC,
+  },
+  {
+    field: 'subscriptions',
+    order: DESC,
+  },
+]
 
 export const SortField = ({ field, queryVariables, refetch }) => {
+  // console.log({field})
+  // console.log({queryVariables})
+  // console.log({refetch})
   const fieldValue =
     field in queryVariables.orderBy && queryVariables.orderBy[field]
+  console.log(field in queryVariables.orderBy && queryVariables.orderBy[field])
   let icon
   if (fieldValue) {
     if (fieldValue === 'ascending') {
@@ -27,7 +84,7 @@ export const SortField = ({ field, queryVariables, refetch }) => {
   const sortBy = () => {
     const newQueryVariables = { ...queryVariables }
     // Clear existing sorts
-    newQueryVariables.orderBy = {}
+    newQueryVariables.orderBy = {} // newQueryVariables.orderBy  === {}
     // Apply (or toggle) based on previous sort
     newQueryVariables.orderBy[field] =
       queryVariables.orderBy[field] === 'descending'
@@ -55,11 +112,11 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const onChange = event => {
     const newQueryVariables = { ...queryVariables }
+    console.log({ queryVariables })
     newQueryVariables.orderBy = {}
+
     newQueryVariables.orderBy[event.target.value] =
-      queryVariables.orderBy[event.target.value] === 'descending'
-        ? 'ascending'
-        : 'descending'
+      queryVariables.orderBy[event.target.value]
     refetch(newQueryVariables)
   }
   if (!isMobile) {
@@ -82,7 +139,7 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
           <option selected="true" disabled="disabled">
             Sort by...
           </option>
-          {sortFields.map(field => (
+          {sortFieldsMobile.map(field => (
             <option key={field}>{field}</option>
           ))}
         </select>
