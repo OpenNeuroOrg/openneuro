@@ -68,12 +68,8 @@ const sortFieldsMobile = [
 ]
 
 export const SortField = ({ field, queryVariables, refetch }) => {
-  // console.log({field})
-  // console.log({queryVariables})
-  // console.log({refetch})
   const fieldValue =
     field in queryVariables.orderBy && queryVariables.orderBy[field]
-  console.log(field in queryVariables.orderBy && queryVariables.orderBy[field])
   let icon
   if (fieldValue) {
     if (fieldValue === 'ascending') {
@@ -85,13 +81,12 @@ export const SortField = ({ field, queryVariables, refetch }) => {
   const sortBy = () => {
     const newQueryVariables = { ...queryVariables }
     // Clear existing sorts
-    newQueryVariables.orderBy = {} // newQueryVariables.orderBy  === {}
+    newQueryVariables.orderBy = {}
     // Apply (or toggle) based on previous sort
     newQueryVariables.orderBy[field] =
       queryVariables.orderBy[field] === 'descending'
         ? 'ascending'
         : 'descending'
-    console.log({ newQueryVariables })
     refetch(newQueryVariables)
   }
   return (
@@ -113,12 +108,14 @@ SortField.propTypes = {
 const DatasetSorter = ({ queryVariables, refetch }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const onChange = event => {
+    // console.log(event.target.value) = field name
     const newQueryVariables = { ...queryVariables }
     console.log({ queryVariables })
     newQueryVariables.orderBy = {}
-
     newQueryVariables.orderBy[event.target.value] =
-      queryVariables.orderBy[event.target.value]
+      queryVariables.orderBy[event.target.value] === 'descending'
+        ? 'ascending'
+        : 'descending'
     console.log({ newQueryVariables })
     refetch(newQueryVariables)
   }
@@ -142,12 +139,10 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
           <option selected="true" disabled="disabled">
             Sort by...
           </option>
-          {sortFieldsMobile.map(sortField => (
+          {sortFieldsMobile.map((sortField, i) => (
             <option
-              data-sort-type={sortField.order}
-              key={
-                sortField.field
-              }>{`${sortField.field} (${sortField.order})`}</option>
+              value={sortField.field}
+              key={i}>{`${sortField.field} (${sortField.order})`}</option>
           ))}
         </select>
       </React.Fragment>
