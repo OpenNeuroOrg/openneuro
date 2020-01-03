@@ -9,6 +9,7 @@ import LoggedIn from '../authentication/logged-in.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 import config from '../../../config'
 import { faq } from 'openneuro-content'
+import useMedia from '../mobile/media-hook.jsx'
 
 const AdminLinkContent = ({ profile }) => {
   if (profile.admin) {
@@ -57,46 +58,51 @@ const SupportLink = ({ supportModal }) => {
   }
 }
 
-const NavMenu = ({ supportModal, loginModal }) => (
-  <ul className="nav navbar-nav main-nav">
-    <li className="link-dashboard">
-      <LoggedIn>
-        <NavLink className="nav-link" to="/dashboard/datasets">
-          <span className="link-name">My Dashboard</span>
+const NavMenu = ({ supportModal, loginModal }) => {
+  const isMobile = useMedia('(max-width: 700px) ')
+  return (
+    <ul className="nav navbar-nav main-nav">
+      <li className="link-dashboard">
+        <LoggedIn>
+          <NavLink className="nav-link" to="/dashboard/datasets">
+            <span className="link-name">My Dashboard</span>
+          </NavLink>
+        </LoggedIn>
+      </li>
+      <li className="link-public">
+        <NavLink className="nav-link" to="/public/datasets">
+          <span className="link-name">Public Dashboard</span>
         </NavLink>
-      </LoggedIn>
-    </li>
-    <li className="link-public">
-      <NavLink className="nav-link" to="/public/datasets">
-        <span className="link-name">Public Dashboard</span>
-      </NavLink>
-    </li>
-    <SupportLink supportModal={supportModal} />
-    <li className="link-faq">
-      <FaqLink faq={faq} />
-    </li>
-    <li className="link-admin">
-      <AdminLink />
-    </li>
-    <li className="link-dashboard">
-      <LoggedIn>
-        <UploaderView />
-      </LoggedIn>
-    </li>
-    <li>
-      <Navbar.Collapse>
-        <Usermenu />
-        <LoggedOut>
-          <div className="navbar-right sign-in-nav-btn">
-            <button className="btn-blue" onClick={() => loginModal()}>
-              <span>Sign in</span>
-            </button>
-          </div>
-        </LoggedOut>
-      </Navbar.Collapse>
-    </li>
-  </ul>
-)
+      </li>
+      <SupportLink supportModal={supportModal} />
+      <li className="link-faq">
+        <FaqLink faq={faq} />
+      </li>
+      <li className="link-admin">
+        <AdminLink />
+      </li>
+      {!isMobile && ( // only render upload button on desktop
+        <li className="link-dashboard">
+          <LoggedIn>
+            <UploaderView />
+          </LoggedIn>
+        </li>
+      )}
+      <li>
+        <Navbar.Collapse>
+          <Usermenu />
+          <LoggedOut>
+            <div className="navbar-right sign-in-nav-btn">
+              <button className="btn-blue" onClick={() => loginModal()}>
+                <span>Sign in</span>
+              </button>
+            </div>
+          </LoggedOut>
+        </Navbar.Collapse>
+      </li>
+    </ul>
+  )
+}
 
 NavMenu.propTypes = {
   supportModal: PropTypes.func,
