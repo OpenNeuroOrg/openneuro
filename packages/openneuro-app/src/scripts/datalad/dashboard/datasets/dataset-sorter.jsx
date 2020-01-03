@@ -13,6 +13,7 @@ const sortFields = [
   'subscriptions',
 ]
 
+// Sort fields and variables for mobile dropdown
 const ASC = 'ascending'
 const DESC = 'descending'
 
@@ -108,15 +109,13 @@ SortField.propTypes = {
 const DatasetSorter = ({ queryVariables, refetch }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const onChange = event => {
-    // console.log(event.target.value) = field name
     const newQueryVariables = { ...queryVariables }
-    console.log({ queryVariables })
+    // Clear existing sorts
     newQueryVariables.orderBy = {}
-    newQueryVariables.orderBy[event.target.value] =
-      queryVariables.orderBy[event.target.value] === 'descending'
-        ? 'ascending'
-        : 'descending'
-    console.log({ newQueryVariables })
+    // grab sort order (custom data attribute) from selected option
+    newQueryVariables.orderBy[event.target.value] = event.target[
+      event.target.selectedIndex
+    ].getAttribute('data-order')
     refetch(newQueryVariables)
   }
   if (!isMobile) {
@@ -142,7 +141,8 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
           {sortFieldsMobile.map((sortField, i) => (
             <option
               value={sortField.field}
-              key={i}>{`${sortField.field} (${sortField.order})`}</option>
+              data-order={sortField.order}
+              key={`${i}:${sortField.field}`}>{`${sortField.field} (${sortField.order})`}</option>
           ))}
         </select>
       </React.Fragment>
