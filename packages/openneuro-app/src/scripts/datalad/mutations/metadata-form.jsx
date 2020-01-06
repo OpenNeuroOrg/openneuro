@@ -12,6 +12,7 @@ const Form = styled.form({
 })
 const InfoText = styled.p({
   fontWeight: 100,
+  textAlign: 'left',
 })
 const DisabledNote = styled.div({
   display: 'flex',
