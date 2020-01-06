@@ -11,10 +11,10 @@ import config from '../../../config'
 import { faq } from 'openneuro-content'
 import useMedia from '../mobile/media-hook.jsx'
 
-const AdminLinkContent = ({ profile }) => {
+const AdminLinkContent = ({ profile, closeNav }) => {
   if (profile.admin) {
     return (
-      <NavLink className="nav-link" to="/admin">
+      <NavLink onClick={closeNav} className="nav-link" to="/admin">
         <span className="link-name">admin</span>
       </NavLink>
     )
@@ -24,14 +24,15 @@ const AdminLinkContent = ({ profile }) => {
 
 AdminLinkContent.propTypes = {
   profile: PropTypes.object,
+  closeNav: PropTypes.func,
 }
 
 const AdminLink = withProfile(AdminLinkContent)
 
-const FaqLink = ({ faq }) => {
+const FaqLink = ({ faq, closeNav }) => {
   if (faq && faq.length) {
     return (
-      <NavLink className="nav-link" to="/faq">
+      <NavLink onClick={closeNav} className="nav-link" to="/faq">
         <span className="link-name">faq</span>
       </NavLink>
     )
@@ -44,11 +45,16 @@ FaqLink.propTypes = {
   faq: PropTypes.array,
 }
 
-const SupportLink = ({ supportModal }) => {
+const SupportLink = ({ supportModal, closeNav }) => {
   if (config.support.url) {
     return (
       <li className="link-support">
-        <a className="nav-link" onClick={() => supportModal()}>
+        <a
+          className="nav-link"
+          onClick={() => {
+            supportModal()
+            closeNav()
+          }}>
           <span className="link-name">Support</span>
         </a>
       </li>
@@ -58,28 +64,31 @@ const SupportLink = ({ supportModal }) => {
   }
 }
 
-const NavMenu = ({ supportModal, loginModal }) => {
+const NavMenu = ({ supportModal, loginModal, closeNav }) => {
   const isMobile = useMedia('(max-width: 700px) ')
   return (
     <ul className="nav navbar-nav main-nav">
       <li className="link-dashboard">
         <LoggedIn>
-          <NavLink className="nav-link" to="/dashboard/datasets">
+          <NavLink
+            onClick={closeNav}
+            className="nav-link"
+            to="/dashboard/datasets">
             <span className="link-name">My Dashboard</span>
           </NavLink>
         </LoggedIn>
       </li>
       <li className="link-public">
-        <NavLink className="nav-link" to="/public/datasets">
+        <NavLink onClick={closeNav} className="nav-link" to="/public/datasets">
           <span className="link-name">Public Dashboard</span>
         </NavLink>
       </li>
-      <SupportLink supportModal={supportModal} />
+      <SupportLink closeNav={closeNav} supportModal={supportModal} />
       <li className="link-faq">
-        <FaqLink faq={faq} />
+        <FaqLink closeNav={closeNav} faq={faq} />
       </li>
       <li className="link-admin">
-        <AdminLink />
+        <AdminLink closeNav={closeNav} />
       </li>
       {!isMobile && ( // only render upload button on desktop
         <li className="link-dashboard">
@@ -90,7 +99,7 @@ const NavMenu = ({ supportModal, loginModal }) => {
       )}
       <li>
         <Navbar.Collapse>
-          <Usermenu />
+          <Usermenu closeNav={closeNav} />
           <LoggedOut>
             <div className="navbar-right sign-in-nav-btn">
               <button className="btn-blue" onClick={() => loginModal()}>
@@ -107,6 +116,7 @@ const NavMenu = ({ supportModal, loginModal }) => {
 NavMenu.propTypes = {
   supportModal: PropTypes.func,
   loginModal: PropTypes.func,
+  closeNav: PropTypes.func,
 }
 
 export default NavMenu

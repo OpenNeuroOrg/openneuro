@@ -43,9 +43,16 @@ const OpenNeuroBrand = () => (
 class BSNavbar extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { supportModal: false, loginModal: false, infoPanel: false }
+    this.state = {
+      supportModal: false,
+      loginModal: false,
+      infoPanel: false,
+      navExpanded: false,
+    }
     this.loginModal = this.loginModal.bind(this)
     this.supportModal = this.supportModal.bind(this)
+    this.setNavExpanded = this.setNavExpanded.bind(this)
+    this.closeNav = this.closeNav.bind(this)
   }
 
   loginModal(open = true) {
@@ -60,11 +67,21 @@ class BSNavbar extends React.Component {
     this.setState({ infoPanel: open })
   }
 
+  setNavExpanded(expanded = true) {
+    this.setState({ navExpanded: expanded })
+  }
+
+  closeNav() {
+    this.setState({ navExpanded: false })
+  }
+
   // life cycle methods ------------------------------------------------------------
   render() {
     return (
       <>
-        <Navbar collapseOnSelect>
+        <Navbar
+          onToggle={this.setNavExpanded}
+          expanded={this.state.navExpanded}>
           <Navbar.Header>
             <Navbar.Brand>
               <OpenNeuroBrand />
@@ -73,6 +90,7 @@ class BSNavbar extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <NavMenu
+              closeNav={this.closeNav}
               loginModal={this.loginModal}
               supportModal={this.supportModal}
             />
