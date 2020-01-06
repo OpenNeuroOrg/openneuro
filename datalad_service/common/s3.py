@@ -60,7 +60,10 @@ def generate_s3_annex_options(dataset, realm):
                 'publicurl=http://{}.s3.amazonaws.com/'.format(realm.s3_bucket),
             ]
     else:
-        annex_options += ['autoenable=no']
+        annex_options += [
+            'autoenable=no'
+            'publicurl=',
+            ]
         public = 'no'
     annex_options.append('public={}'.format(public))
     return annex_options
