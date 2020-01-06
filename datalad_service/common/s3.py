@@ -61,7 +61,7 @@ def generate_s3_annex_options(dataset, realm):
             ]
     else:
         annex_options += [
-            'autoenable=no'
+            'autoenable=no',
             'publicurl=',
             ]
         public = 'no'
