@@ -1,4 +1,12 @@
 //dataset loading icon spinner
+@import 'common.variables';
+
+@include mobile {
+    .loading-wrap {
+        padding: 150px !important;
+    }
+  }
+
 .loading-wrap {
     padding: 60px 0 30px;
     text-align: center;
