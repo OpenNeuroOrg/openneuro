@@ -201,12 +201,21 @@ const metadataFields = hasEdit => {
     },
     {
       key: 'ages',
-      label: 'Subject Ages',
-      Component: TextArrayInput,
+      label: 'Subject Age(s)',
+      // text input because field is read-only
+      Component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
         required: false,
+      },
+      transformValue: value => {
+        if (Array.isArray(value)) {
+          const ages = value.filter(x => x)
+          if (ages.length === 0) return 'N/A'
+          else if (ages.length === 1) return ages[0]
+          else return `${Math.min(...ages)} - ${Math.max(...ages)}`
+        } else if (value === undefined) return 'N/A'
       },
     },
     {
@@ -261,11 +270,11 @@ const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
         // remove disabled fields when hideDisabled is true
         field => !(hideDisabled && field.additionalProps.disabled),
       )
-      .map(({ key, label, Component, additionalProps }, i) => (
+      .map(({ key, label, Component, additionalProps, transformValue }, i) => (
         <Component
           name={key}
           label={label}
-          value={values[key]}
+          value={transformValue ? transformValue(values[key]) : values[key]}
           onChange={onChange}
           {...additionalProps}
           key={i}
