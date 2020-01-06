@@ -52,11 +52,12 @@ HasBeenPublished.propTypes = {
  * Data routing for the main dataset query to display/edit components
  */
 const DatasetContent = ({ dataset }) => {
-  const isMobile = useMedia('(max-width: 700px) ')
+  const isMobile = useMedia('(max-width: 765px) ')
   const user = getProfile()
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
+  const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   return (
     <>
       <LoggedIn>
@@ -69,7 +70,7 @@ const DatasetContent = ({ dataset }) => {
         <div className="col-xs-12">
           <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
         </div>
-        <div className="col-xs-6">
+        <div className={mobileClass}>
           <EditDescriptionField
             datasetId={dataset.id}
             field="Name"
@@ -90,7 +91,14 @@ const DatasetContent = ({ dataset }) => {
             downloads={dataset.analytics.downloads}
             views={dataset.analytics.views}
           />
-          <DatasetProminentLinks dataset={dataset} />
+          {!isMobile && <DatasetProminentLinks dataset={dataset} />}
+          {isMobile && (
+            <Validation
+              datasetId={dataset.id}
+              issues={dataset.draft.issues}
+              isMobile={isMobile}
+            />
+          )}
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
           <ErrorBoundaryWithDataSet
@@ -110,12 +118,16 @@ const DatasetContent = ({ dataset }) => {
             isMobile={isMobile}
           />
         </div>
-        <div className="col-xs-6">
-          {dataset.draft.partial || dataset.draft.files.length === 0 ? (
-            <IncompleteDataset datasetId={dataset.id} />
-          ) : (
-            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
-          )}
+        <div className={mobileClass}>
+          {!isMobile &&
+            (dataset.draft.partial || dataset.draft.files.length === 0 ? (
+              <IncompleteDataset datasetId={dataset.id} />
+            ) : (
+              <Validation
+                datasetId={dataset.id}
+                issues={dataset.draft.issues}
+              />
+            ))}
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}

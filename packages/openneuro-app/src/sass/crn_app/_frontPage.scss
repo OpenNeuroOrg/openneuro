@@ -132,7 +132,7 @@
         justify-content: center;
         display: flex;
         padding: 0;
-        @media(max-width: 767px){
+        @include mobile {
             display: block;
         }
         > li {
@@ -154,7 +154,7 @@
                 img{
                     width: 150px;
                     height: auto;
-                    @media(max-width: 767px){
+                    @include mobile {
                         display: none;
                     }
                 }
@@ -472,13 +472,13 @@
     }
 }
 // limits num of <li> items that populate the browse containers on mobile
-@media only screen and  ( max-width: 765px) { 
+@include mobile { 
     .row > div > div > div:nth-child(n + 5) {
         display: none;
     }
 }
 
-@media only screen and (max-width: 765px) {
+@include mobile {
     .mate-slide{
     border-bottom: inset #009b76;
     }
