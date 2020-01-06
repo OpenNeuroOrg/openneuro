@@ -28,7 +28,10 @@ const FileTree = ({
   editMode = false,
   defaultExpanded = false,
 }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded)
+  const isMobile = useMedia('(max-width: 765px) ')
+  const [expanded, setExpanded] = isMobile
+    ? useState(!defaultExpanded)
+    : useState(defaultExpanded)
   const previous = usePrevious(expanded)
   const [bind, { height: viewHeight }] = useMeasure()
   const { height, opacity, transform } = useSpring({
@@ -39,7 +42,6 @@ const FileTree = ({
       transform: `translate3d(${expanded ? 0 : 20}px,0,0)`,
     },
   })
-  const isMobile = useMedia('(max-width: 765px) ')
   return (
     <Frame>
       <button
