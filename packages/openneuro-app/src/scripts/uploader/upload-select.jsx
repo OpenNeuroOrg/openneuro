@@ -13,6 +13,7 @@ const UploadSelect = () => (
   <div>
     <GDPR>
       Notice: At this time we are not able to accept datasets protected by GDPR.
+      <br />
       We apologize for this inconvenience.
     </GDPR>
     <UploaderContext.Consumer>
