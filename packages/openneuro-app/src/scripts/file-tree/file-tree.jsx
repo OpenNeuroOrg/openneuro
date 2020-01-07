@@ -4,6 +4,7 @@ import File from './file.jsx'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteDir from '../datalad/mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
+import useMedia from '../mobile/media-hook.jsx'
 
 export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -23,7 +24,10 @@ const FileTree = ({
   editMode = false,
   defaultExpanded = false,
 }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded)
+  const isMobile = useMedia('(max-width: 765px) ')
+  const [expanded, setExpanded] = isMobile
+    ? useState(!defaultExpanded)
+    : useState(defaultExpanded)
   return (
     <>
       <button
@@ -37,7 +41,7 @@ const FileTree = ({
       </button>
       {expanded && (
         <>
-          {editMode && (
+          {!isMobile && editMode && (
             <span className="filetree-editfile">
               <UpdateFile datasetId={datasetId} path={unescapePath(path)}>
                 <i className="fa fa-plus" /> Add File
@@ -62,6 +66,7 @@ const FileTree = ({
                   snapshotTag={snapshotTag}
                   path={path}
                   editMode={editMode}
+                  isMobile={isMobile}
                   {...file}
                 />
               </li>

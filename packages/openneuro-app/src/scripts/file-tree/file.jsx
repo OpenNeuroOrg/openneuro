@@ -17,6 +17,7 @@ const File = ({
   filename,
   snapshotTag = null,
   editMode = false,
+  isMobile,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -28,27 +29,28 @@ const File = ({
     <>
       {filename}
       <span className="filetree-editfile">
-        <span className="edit-file download-file">
-          <a
-            href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
-            download>
-            <i className="fa fa-download" /> Download
-          </a>
-        </span>
+        {!isMobile && (
+          <span className="edit-file download-file">
+            <a
+              href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
+              download>
+              <i className="fa fa-download" /> Download
+            </a>
+          </span>
+        )}
         <span className="edit-file view-file">
           <Link to={viewerPath}>
             <i className="fa fa-eye" /> View
           </Link>
         </span>
-        {editMode && (
+        {!isMobile && editMode && (
           <UpdateFile datasetId={datasetId} path={path} filename={filename}>
             <i className="fa fa-file-o" /> Update
           </UpdateFile>
         )}
-        {editMode &&
-          filename !== 'dataset_description.json' && (
-            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-          )}
+        {!isMobile && editMode && filename !== 'dataset_description.json' && (
+          <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+        )}
       </span>
     </>
   )
@@ -60,6 +62,7 @@ File.propTypes = {
   filename: PropTypes.string,
   snapshotTag: PropTypes.string,
   editMode: PropTypes.bool,
+  isMobile: PropTypes.bool,
 }
 
 export default File

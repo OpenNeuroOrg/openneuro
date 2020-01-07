@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import FileView from '../../file-tree/file-view.jsx'
 import { apiPath } from '../../file-tree/file.jsx'
 import styled from '@emotion/styled'
+import useMedia from '../../mobile/media-hook.jsx'
 
 const PathBreadcrumb = styled.span`
   font-size: 18px;
@@ -42,35 +43,40 @@ FileDisplayBreadcrumb.propTypes = {
   filePath: PropTypes.string,
 }
 
-const FileDisplay = ({ datasetId, snapshotTag = null, filePath }) => (
-  <div className="dataset-form display-file">
-    <div className="col-xs-12 display-file-content">
-      <div className="display-file-header">
-        <div className="form-group modal-title">
-          <span className="ds-primary display-file-path">
-            <PathBreadcrumb>
-              {datasetId}
-              <FileDisplayBreadcrumb filePath={filePath} />
-            </PathBreadcrumb>
-          </span>
-          <div className="modal-download btn-admin-blue">
-            <a href={apiPath(datasetId, snapshotTag, filePath)} download>
-              <i className="fa fa-download" /> Download
-            </a>
+const FileDisplay = ({ datasetId, snapshotTag = null, filePath }) => {
+  const isMobile = useMedia('(max-width: 765px) ')
+  return (
+    <div className="dataset-form display-file">
+      <div className="col-xs-12 display-file-content">
+        <div className="display-file-header">
+          <div className="form-group modal-title">
+            <span className="ds-primary display-file-path">
+              <PathBreadcrumb>
+                {datasetId}
+                <FileDisplayBreadcrumb filePath={filePath} />
+              </PathBreadcrumb>
+            </span>
+            {!isMobile && (
+              <div className="modal-download btn-admin-blue">
+                <a href={apiPath(datasetId, snapshotTag, filePath)} download>
+                  <i className="fa fa-download" /> Download
+                </a>
+              </div>
+            )}
+            <hr />
           </div>
-          <hr />
+        </div>
+        <div className="display-file-body">
+          <FileView
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+            path={filePath}
+          />
         </div>
       </div>
-      <div className="display-file-body">
-        <FileView
-          datasetId={datasetId}
-          snapshotTag={snapshotTag}
-          path={filePath}
-        />
-      </div>
     </div>
-  </div>
-)
+  )
+}
 
 FileDisplay.propTypes = {
   datasetId: PropTypes.string,

@@ -7,6 +7,17 @@ import FileTree, {
   unescapePath,
 } from '../file-tree.jsx'
 
+// official Jest workaround for mocking methods not implemented in JSDOM
+window.matchMedia =
+  window.matchMedia ||
+  function() {
+    return {
+      matches: false,
+      addListener: function() {},
+      removeListener: function() {},
+    }
+  }
+
 /* eslint-disable */
 jest.mock('react-spring', () => ({
   useSpring: jest.fn().mockImplementation(() => [{ mockProp: 1 }, jest.fn()]),
