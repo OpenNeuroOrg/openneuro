@@ -33,12 +33,6 @@ describe('FileTree component', () => {
       wrapper
         .find('button.btn-file-folder > i.type-icon')
         .hasClass('fa-folder-open'),
-    ).toBe(true)
-    wrapper.find('button').simulate('click')
-    expect(
-      wrapper
-        .find('button.btn-file-folder > i.type-icon')
-        .hasClass('fa-folder-open'),
     ).toBe(false)
     wrapper.find('button').simulate('click')
     expect(
@@ -46,6 +40,12 @@ describe('FileTree component', () => {
         .find('button.btn-file-folder > i.type-icon')
         .hasClass('fa-folder-open'),
     ).toBe(true)
+    wrapper.find('button').simulate('click')
+    expect(
+      wrapper
+        .find('button.btn-file-folder > i.type-icon')
+        .hasClass('fa-folder-open'),
+    ).toBe(false)
   })
   describe('sortByFilename()', () => {
     it('sorts the expected filename properties', () => {

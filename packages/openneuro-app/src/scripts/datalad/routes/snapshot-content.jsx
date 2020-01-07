@@ -20,6 +20,7 @@ import DownloadButton from '../fragments/dataset-prominent-links.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
+import useMedia from '../../mobile/media-hook.jsx'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
@@ -103,9 +104,11 @@ SnapshotContent.propTypes = {
 }
 
 const SnapshotDetails = ({ dataset, snapshot }) => {
+  const isMobile = useMedia('(max-width: 765px) ')
+  const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   return (
     <span>
-      <div className="col-xs-6">
+      <div className={mobileClass}>
         <Helmet>
           <title>
             {pageTitle} - {snapshot.description.Name}
@@ -127,7 +130,14 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           views={snapshot.analytics.views}
           snapshot
         />
-        <DownloadButton dataset={dataset} />
+        {!isMobile && <DownloadButton dataset={dataset} />}
+        {isMobile && (
+          <Validation
+            datasetId={dataset.id}
+            issues={snapshot.issues}
+            isMobile={isMobile}
+          />
+        )}
         <DatasetSummary datasetId={dataset.id} summary={snapshot.summary} />
         <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
@@ -137,8 +147,10 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           editable={false}
         />
       </div>
-      <div className="col-xs-6">
-        <Validation datasetId={dataset.id} issues={snapshot.issues} />
+      <div className={mobileClass}>
+        {!isMobile && (
+          <Validation datasetId={dataset.id} issues={snapshot.issues} />
+        )}
         <DatasetFiles
           datasetId={dataset.id}
           snapshotTag={snapshot.tag}

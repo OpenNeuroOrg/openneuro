@@ -35,8 +35,6 @@ const UploadMetadata = () => {
     <UploaderContext.Consumer>
       {uploader => (
         <Container className="message fade-in">
-          {/* <AddMetadata /> */}
-          Input dataset metadata.
           <MetadataForm
             values={values}
             onChange={handleInputChange}
