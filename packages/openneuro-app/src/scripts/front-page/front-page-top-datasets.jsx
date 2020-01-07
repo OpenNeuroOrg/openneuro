@@ -151,10 +151,12 @@ export const FrontPageTopResult = query => ({ loading, error, data }) => {
     Sentry.captureException(error)
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
+    // Remove any edges which could not be loaded
+    const edges = data.datasets.edges.filter(dataset => dataset !== null)
     if (query === TOP_VIEWED) {
-      return <FrontPageTopActive datasets={data.datasets.edges} />
+      return <FrontPageTopActive datasets={edges} />
     } else if (query === RECENTLY_PUBLISHED) {
-      return <FrontPageTopRecent datasets={data.datasets.edges} />
+      return <FrontPageTopRecent datasets={edges} />
     }
   }
 }

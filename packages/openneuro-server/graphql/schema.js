@@ -233,7 +233,7 @@ const typeDefs = `
   # One connected dataset
   type DatasetEdge {
     # Connected dataset
-    node: Dataset
+    node: Dataset!
     # Pagination cursor
     cursor: String!
   }
@@ -247,7 +247,7 @@ const typeDefs = `
     draft: Draft
     snapshots: [Snapshot]
     # Newest snapshot
-    latestSnapshot: Snapshot
+    latestSnapshot: Snapshot!
     permissions: [Permission]
     analytics: Analytic
     stars: [Star]
