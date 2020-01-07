@@ -261,6 +261,10 @@ export const typeDefs = `
     cursor: String!
   }
 
+  type DatasetId {
+    datasetId: ID
+  }
+
   # Top level dataset, one draft and many snapshots
   type Dataset {
     id: ID!

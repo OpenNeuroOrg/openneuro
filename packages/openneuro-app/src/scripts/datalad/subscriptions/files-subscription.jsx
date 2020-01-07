@@ -7,8 +7,8 @@ import { datasetCacheId } from '../mutations/cache-id.js'
 // import { datasetCacheId } from '../mutations/cache-id.js'
 
 const FILES_SUBSCRIPTION = gql`
-  subscription filesUpdated($datasetId: ID!) {
-    filesUpdated(datasetId: $datasetId) {
+  subscription filesUpdated($datasetIds: [ID!]) {
+    filesUpdated(datasetIds: $datasetIds) {
       action
       payload {
         id
@@ -66,32 +66,35 @@ export const draftReducer = (draft, action, payload) => {
 }
 
 const FilesSubscription = ({ datasetId }) => (
-  <Subscription
-    subscription={FILES_SUBSCRIPTION}
-    variables={{ datasetId }}
-    // onSubscriptionData={({ client, subscriptionData: { data } }) => {
-    onSubscriptionData={({ client, subscriptionData }) => {
-      const { cache } = client
-      const { action, payload } = subscriptionData.data.filesUpdated
-      if (action && payload) {
-        const id = datasetCacheId(datasetId)
-        const { draft } = cache.readFragment({
-          id,
-          fragment: DRAFT_FILES_FRAGMENT,
-        })
-        const updatedDraft = draftReducer(draft, action, payload)
-        cache.writeFragment({
-          id,
-          fragment: DRAFT_FILES_FRAGMENT,
-          data: {
-            __typename: 'Dataset',
-            id: datasetId,
-            draft: updatedDraft,
-          },
-        })
-      }
-    }}
-  />
+  console.log('subscribed to ', datasetId),
+  (
+    <Subscription
+      subscription={FILES_SUBSCRIPTION}
+      variables={{ datasetIds: [datasetId] }}
+      // onSubscriptionData={({ client, subscriptionData: { data } }) => {
+      onSubscriptionData={({ client, subscriptionData }) => {
+        const { cache } = client
+        const { action, payload } = subscriptionData.data.filesUpdated
+        if (action && payload) {
+          const id = datasetCacheId(datasetId)
+          const { draft } = cache.readFragment({
+            id,
+            fragment: DRAFT_FILES_FRAGMENT,
+          })
+          const updatedDraft = draftReducer(draft, action, payload)
+          cache.writeFragment({
+            id,
+            fragment: DRAFT_FILES_FRAGMENT,
+            data: {
+              __typename: 'Dataset',
+              id: datasetId,
+              draft: updatedDraft,
+            },
+          })
+        }
+      }}
+    />
+  )
 )
 
 FilesSubscription.propTypes = {

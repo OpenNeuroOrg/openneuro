@@ -88,7 +88,10 @@ export const createDataset = (obj, args, { user, userInfo }) => {
 export const deleteDataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetWrite(id, user, userInfo).then(() => {
     return datalad.deleteDataset(id).then(deleted => {
-      pubsub.publish('datasetDeleted', { id })
+      pubsub.publish('datasetDeleted', {
+        datasetId: id,
+        datasetDeleted: { datasetId: id },
+      })
       return deleted
     })
   })

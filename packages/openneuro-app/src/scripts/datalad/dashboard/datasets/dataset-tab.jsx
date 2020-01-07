@@ -7,6 +7,7 @@ import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
+import DatasetDeletedSubscription from '../../subscriptions/dataset-deleted-subscription.jsx'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import styled from '@emotion/styled'
 
@@ -55,6 +56,9 @@ const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
     )
   }
 }
+
+const extractIds = data =>
+  data && data.datasets ? data.datasets.edges.map(d => d.node.id) : []
 
 const DatasetTab = ({
   data,
@@ -124,6 +128,7 @@ const DatasetTab = ({
           loadMoreRows={loadMoreRows}
           publicDashboard={publicDashboard}
         />
+        <DatasetDeletedSubscription datasetIds={extractIds(data)} />
       </ErrorBoundary>
     )}
   </FullHeightFlexDiv>

@@ -8,7 +8,19 @@ import { withFilter } from 'graphql-subscriptions'
  * @returns {boolean}
  */
 const filterDatasetId = (payload, variables) =>
-  payload.datasetId === variables.datasetId
+  variables.datasetIds.includes(payload.datasetId)
+
+
+export const datasetCreated = () => ({
+  subscribe: () => pubsub.asyncIterator('datasetCreated'),
+})
+
+export const datasetDeleted = {
+  subscribe: withFilter(
+    () => pubsub.asyncIterator('datasetDeleted'),
+    filterDatasetId,
+  ),
+}
 
 export const snapshotAdded = {
   type: 'Snapshot',
