@@ -29,6 +29,9 @@ body,
 .dataset-route,
 .dataset-wrap {
     height: 100%;
+    @include mobile {
+        width: 100%;
+    }
 }
 
 .dataset-wrap,
@@ -261,7 +264,3 @@ body,
         -webkit-transition: left 0.3s;
     }
 }
-
-
-
-

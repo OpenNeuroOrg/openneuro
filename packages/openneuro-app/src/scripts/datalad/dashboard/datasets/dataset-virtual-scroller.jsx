@@ -22,7 +22,7 @@ const FlexFullHeight = styled.div`
   flex: 1 1 auto;
   white-space: nowrap;
   @media (max-width: 765px) {
-    width: 100vw;
+    width: 100%;
   }
 `
 
