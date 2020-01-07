@@ -191,7 +191,6 @@ def monitor_remote_configs(store, dataset, snapshot, realm=None):
     siblings = ds.siblings()
     realm = get_dataset_realm(ds, siblings, realm)
 
-    if realm == DatasetRealm.PUBLIC:
-        s3_ok = validate_s3_config(ds, realm)
-        if not s3_ok:
+    s3_ok = validate_s3_config(ds, realm)
+    if not s3_ok:
             update_s3_sibling(ds, realm)
