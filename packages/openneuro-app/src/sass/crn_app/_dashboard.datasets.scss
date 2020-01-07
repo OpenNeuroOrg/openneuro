@@ -50,7 +50,7 @@
     }
 }
 
-@media only screen and (max-width: 765px) {
+@include mobile {
     .tabs.nav.nav-pills > li {
         a { 
             display: none;
@@ -59,7 +59,6 @@
 }
 
 // Dashboard and Admin sort and filter ========================
-
 
 .filters-sort-wrap {
     width: 100%;
@@ -217,7 +216,7 @@
         margin: 0 auto;
         padding: 20px;
     }
-    @media only screen and (max-width: 765px) {
+    @include mobile {
         h4 {
             text-overflow: ellipsis;
             overflow: hidden;
@@ -290,7 +289,7 @@
 
 
             }
-            @media only screen and (max-width: 765px) {
+            @include mobile {
                 a {
                     width: 80%;
                     padding: 10px 5px 0px 20px;
@@ -340,7 +339,7 @@
                                 margin: 0 5px 0 0;
                             }
                         }
-                        @media only screen and (max-width: 765px) {
+                        @include mobile {
                             .dataset-status {
                                 display: flex;
                                 flex-wrap: wrap;
@@ -361,7 +360,7 @@
                     }
                 }
                 
-                @media only screen and (max-width: 765px) {
+                @include mobile {
                     .metrics-wrap { 
                         display: flex;
                         position: fixed;
@@ -397,13 +396,13 @@
                         color: $c-33;
                     }
                 }
-                @media only screen and (max-width: 765px) {
+                @include mobile {
                     .date {
                         display: none;
                     }
                 }
             }
-            @media only screen and (max-width: 765px) {
+            @include mobile {
                 .metric-container {
                     width: auto;
                     float: none;
@@ -445,7 +444,7 @@
                         line-height: 13px;
                     }
             }
-            @media only screen and (max-width: 765px) {
+            @include mobile {
                 .summary-data {
                     border-right: none;
                     border-bottom: 1px solid $f4;
@@ -459,7 +458,7 @@
             }
 
         }
-        @media only screen and (max-width: 765px) {
+        @include mobile {
             .minimal-summary {
                 position: absolute;
                 top: 45%;
@@ -548,7 +547,7 @@
     }
 }
 
-@media only screen and (max-width: 765px) {
+@include mobile {
     .desktop {
         display: none;
     }
