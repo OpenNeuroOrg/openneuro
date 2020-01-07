@@ -20,6 +20,12 @@ export default class Summary extends React.PureComponent {
 
   _summary(summary, minimal) {
     if (summary) {
+      let accessionNumber = (
+        <h5>
+          <strong> OpenNeuro Accession Number: </strong>
+          {this.props.datasetId}
+        </h5>
+      )
       let numSessions =
         summary.sessions.length > 0 ? summary.sessions.length : 1
       let files = (
@@ -68,7 +74,10 @@ export default class Summary extends React.PureComponent {
             <hr />
             <h5>
               <b>
-                {files}, {size}, {subjects}, {sessions}
+                {accessionNumber}
+                <h5>
+                  {files}, {size}, {subjects}, {sessions}
+                </h5>
               </b>
             </h5>
             <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
@@ -83,7 +92,7 @@ export default class Summary extends React.PureComponent {
     if (items && items.length > 0) {
       return (
         <span>
-          <b className="desktop">Available</b> {type} : {items.join(', ')}
+          <b className="desktop">Available</b> {type}: {items.join(', ')}
         </span>
       )
     } else {
@@ -99,4 +108,5 @@ export default class Summary extends React.PureComponent {
 Summary.propTypes = {
   summary: PropTypes.object,
   minimal: PropTypes.bool,
+  datasetId: PropTypes.string,
 }
