@@ -2,6 +2,8 @@
 // Dropdown menus
 // --------------------------------------------------
 
+// mobile media query edits to be maintained when bootstrap removed
+@import '../crn_app/common.variables';
 
 // Dropdown arrow/caret
 .caret {
@@ -72,6 +74,13 @@
   }
 }
 
+@include mobile {
+  .dropdown-menu {
+   a {
+    text-align: center;
+    }
+  }
+}
 // Hover/Focus state
 .dropdown-menu > li > a {
   &:hover,

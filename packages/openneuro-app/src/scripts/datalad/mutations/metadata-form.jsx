@@ -10,6 +10,10 @@ const Form = styled.form({
   minWidth: '40rem',
   margin: '10px 0',
 })
+const InfoText = styled.p({
+  fontWeight: 100,
+  textAlign: 'left',
+})
 const DisabledNote = styled.div({
   display: 'flex',
   color: '#5cb85c',
@@ -197,12 +201,21 @@ const metadataFields = hasEdit => {
     },
     {
       key: 'ages',
-      label: 'Subject Ages',
-      Component: TextArrayInput,
+      label: 'Subject Age(s)',
+      // text input because field is read-only
+      Component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
         required: false,
+      },
+      transformValue: value => {
+        if (Array.isArray(value)) {
+          const ages = value.filter(x => x)
+          if (ages.length === 0) return 'N/A'
+          else if (ages.length === 1) return ages[0]
+          else return `${Math.min(...ages)} - ${Math.max(...ages)}`
+        } else if (value === undefined) return 'N/A'
       },
     },
     {
@@ -236,6 +249,13 @@ const metadataFields = hasEdit => {
 
 const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
   <Form id="metadata-form" className="col-xs-6">
+    <InfoText>
+      Incomplete fields in this form will make it more difficult for users to
+      search for your dataset.
+      <br />
+      We recommend completing the applicable fields to improve your search
+      results.
+    </InfoText>
     {!hideDisabled && (
       <DisabledNote>
         <i className="fa fa-asterisk" />
@@ -250,11 +270,11 @@ const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
         // remove disabled fields when hideDisabled is true
         field => !(hideDisabled && field.additionalProps.disabled),
       )
-      .map(({ key, label, Component, additionalProps }, i) => (
+      .map(({ key, label, Component, additionalProps, transformValue }, i) => (
         <Component
           name={key}
           label={label}
-          value={values[key]}
+          value={transformValue ? transformValue(values[key]) : values[key]}
           onChange={onChange}
           {...additionalProps}
           key={i}

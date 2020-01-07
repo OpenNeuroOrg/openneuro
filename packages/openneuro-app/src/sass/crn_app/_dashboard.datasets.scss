@@ -222,10 +222,12 @@
         margin: 0 auto;
         padding: 20px;
     }
+  
     @include mobile {
         h2 {
             padding: 20px 0px;
         }
+      
         h4 {
             text-overflow: ellipsis;
             overflow: hidden;
