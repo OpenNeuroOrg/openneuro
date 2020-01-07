@@ -16,6 +16,18 @@ const FullHeightFlexDiv = styled.div`
   flex: 0 1 auto;
 `
 
+// const DatasetViewTitle = styled.div`
+// margin: 10px 0px;
+// float: left;
+// font-size: 18px;
+// font-family: var(--font-family-open);
+// padding: 10px;
+// box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.1);
+// border-radius: 2px;
+// font-weight: lighter;
+// background: #f9f9f9;
+// `
+
 const title = isPublic => (isPublic ? 'Public Dataset Results' : 'My Datasets')
 
 const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
@@ -41,6 +53,11 @@ const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
       </div>
     )
   }
+}
+
+const ConsoleLog = ({ children }) => {
+  console.log(children)
+  return false
 }
 
 const DatasetTab = ({
@@ -69,6 +86,9 @@ const DatasetTab = ({
           )}
           <div className="col-md-5">
             <h2>{title(publicDashboard)}</h2>
+            {isMobile && !loading && (
+              <h6>Results {data.datasets.pageInfo.count} </h6>
+            )}
           </div>
           {!isMobile && (
             <div className="col-md-7">
@@ -80,6 +100,7 @@ const DatasetTab = ({
       <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
         <div className={isMobile ? '' : 'sort clearfix'}>
           {!isMobile && <label>Sort by:</label>}
+          {/* <DatasetViewTitle>Sort By:</DatasetViewTitle> */}
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
         {publicDashboard ? null : (

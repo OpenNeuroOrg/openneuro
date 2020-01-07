@@ -225,7 +225,8 @@
   
     @include mobile {
         h2 {
-            padding: 20px 0px;
+            padding: 10px 0px 0px;
+            white-space: nowrap;
         }
       
         h4 {
