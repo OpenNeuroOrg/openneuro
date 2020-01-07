@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
-import { withRouter } from 'react-router-dom'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
 const DELETE_DATASET = gql`
@@ -11,7 +10,7 @@ const DELETE_DATASET = gql`
   }
 `
 
-const DeleteDataset = ({ history, datasetId }) => (
+const DeleteDataset = ({ datasetId }) => (
   <Mutation mutation={DELETE_DATASET}>
     {deleteDataset => (
       <WarnButton
@@ -19,10 +18,7 @@ const DeleteDataset = ({ history, datasetId }) => (
         icon="fa-trash"
         warn={true}
         action={cb => {
-          deleteDataset({ variables: { id: datasetId } }).then(() => {
-            history.push('/dashboard/datasets')
-            cb()
-          })
+          deleteDataset({ variables: { id: datasetId } }).then(cb)
         }}
       />
     )}
@@ -30,8 +26,7 @@ const DeleteDataset = ({ history, datasetId }) => (
 )
 
 DeleteDataset.propTypes = {
-  history: PropTypes.object,
   datasetId: PropTypes.string,
 }
 
-export default withRouter(DeleteDataset)
+export default DeleteDataset

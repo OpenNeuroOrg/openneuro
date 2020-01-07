@@ -8,6 +8,7 @@ import DatasetQueryContext from './dataset-query-context.js'
 import DatasetContext from './dataset-context.js'
 import DatasetPage from './dataset-page.jsx'
 import FilesSubscription from '../subscriptions/files-subscription.jsx'
+import DatasetDeletedSubscription from '../subscriptions/dataset-deleted-subscription.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
 import { DATASET_COMMENTS } from './comments-fragments.js'
 import {
@@ -97,7 +98,7 @@ export const getDraftPage = gql`
  * @param {Object} props.datasetId Accession number / id for dataset to query
  * @param {Object} props.draft Is this the draft page?
  */
-export const DatasetQueryHook = ({ datasetId, draft }) => {
+export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   const { data, loading, error, fetchMore } = useQuery(
     draft ? getDraftPage : getDatasetPage,
     {
@@ -105,6 +106,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
       errorPolicy: 'all',
     },
   )
+
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) Sentry.captureException(error)
@@ -118,6 +120,13 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
           }}>
           <DatasetPage dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
+          <DatasetDeletedSubscription
+            datasetIds={[datasetId]}
+            onDeleted={() => {
+              console.log('deleted')
+              history.push('/dashboard/datasets')
+            }}
+          />
         </DatasetQueryContext.Provider>
       </ErrorBoundaryWithDataSet>
     </DatasetContext.Provider>
@@ -127,6 +136,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
 DatasetQueryHook.propTypes = {
   datasetId: PropTypes.string,
   draft: PropTypes.bool,
+  history: PropTypes.object,
 }
 
 /**
@@ -135,17 +145,19 @@ DatasetQueryHook.propTypes = {
  * @param {Object} props.match React router match object
  * @param {Object} props.draft Is this the draft page?
  */
-const DatasetQuery = ({ match }) => (
+const DatasetQuery = ({ match, history }) => (
   <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
     <DatasetQueryHook
       datasetId={match.params.datasetId}
       draft={!match.params.snapshotId}
+      history={history}
     />
   </ErrorBoundaryAssertionFailureException>
 )
 
 DatasetQuery.propTypes = {
   match: PropTypes.object,
+  history: PropTypes.object,
 }
 
 export default DatasetQuery
