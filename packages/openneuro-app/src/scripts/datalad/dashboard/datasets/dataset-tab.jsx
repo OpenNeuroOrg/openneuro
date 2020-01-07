@@ -9,7 +9,6 @@ import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import styled from '@emotion/styled'
-import useMedia from '../../../mobile/media-hook.jsx'
 
 const FullHeightFlexDiv = styled.div`
   display: flex;
@@ -52,7 +51,7 @@ const DatasetTab = ({
   loading,
   publicDashboard,
   error,
-  isMobile = useMedia('(max-width: 765px) '),
+  isMobile,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
@@ -78,9 +77,9 @@ const DatasetTab = ({
           )}
         </div>
       </div>
-      <div className="filters-sort-wrap clearfix">
-        <div className="sort clearfix">
-          <label>Sort by:</label>
+      <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
+        <div className={isMobile ? '' : 'sort clearfix'}>
+          {!isMobile && <label>Sort by:</label>}
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
         {publicDashboard ? null : (
@@ -113,6 +112,7 @@ DatasetTab.propTypes = {
   loading: PropTypes.bool,
   publicDashboard: PropTypes.bool,
   error: PropTypes.object,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetTab

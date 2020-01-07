@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Capitalized from '../../../styles/capitalized.jsx'
+import useMedia from '../../../mobile/media-hook.jsx'
 
 // DatasetSort GraphQL fields
 const sortFields = [
@@ -10,6 +11,61 @@ const sortFields = [
   'stars',
   'downloads',
   'subscriptions',
+]
+
+// Sort fields and variables for mobile dropdown
+const ASC = 'ascending'
+const DESC = 'descending'
+
+const sortFieldsMobile = [
+  {
+    field: 'created',
+    order: ASC,
+  },
+  {
+    field: 'name',
+    order: ASC,
+  },
+  {
+    field: 'uploader',
+    order: ASC,
+  },
+  {
+    field: 'stars',
+    order: ASC,
+  },
+  {
+    field: 'downloads',
+    order: ASC,
+  },
+  {
+    field: 'subscriptions',
+    order: ASC,
+  },
+  {
+    field: 'created',
+    order: DESC,
+  },
+  {
+    field: 'name',
+    order: DESC,
+  },
+  {
+    field: 'uploader',
+    order: DESC,
+  },
+  {
+    field: 'stars',
+    order: DESC,
+  },
+  {
+    field: 'downloads',
+    order: DESC,
+  },
+  {
+    field: 'subscriptions',
+    order: DESC,
+  },
 ]
 
 export const SortField = ({ field, queryVariables, refetch }) => {
@@ -50,22 +106,54 @@ SortField.propTypes = {
   refetch: PropTypes.func,
 }
 
-const DatasetSorter = ({ queryVariables, refetch }) => (
-  <>
-    {sortFields.map(field => (
-      <SortField
-        field={field}
-        queryVariables={queryVariables}
-        refetch={refetch}
-        key={field}
-      />
-    ))}
-  </>
-)
+const DatasetSorter = ({ queryVariables, refetch }) => {
+  const isMobile = useMedia('(max-width: 765px) ')
+  const onChange = event => {
+    const newQueryVariables = { ...queryVariables }
+    // Clear existing sorts
+    newQueryVariables.orderBy = {}
+    // grab sort order (custom data attribute) from selected option
+    newQueryVariables.orderBy[event.target.value] = event.target[
+      event.target.selectedIndex
+    ].getAttribute('data-order')
+    refetch(newQueryVariables)
+  }
+  if (!isMobile) {
+    return (
+      <div>
+        {sortFields.map(field => (
+          <SortField
+            field={field}
+            queryVariables={queryVariables}
+            refetch={refetch}
+            key={field}
+          />
+        ))}
+      </div>
+    )
+  } else if (isMobile) {
+    return (
+      <React.Fragment>
+        <select className="mobile-dropdown" onChange={onChange}>
+          <option selected="true" disabled="disabled">
+            Sort by...
+          </option>
+          {sortFieldsMobile.map((sortField, i) => (
+            <option
+              value={sortField.field}
+              data-order={sortField.order}
+              key={`${i}:${sortField.field}`}>{`${sortField.field} (${sortField.order})`}</option>
+          ))}
+        </select>
+      </React.Fragment>
+    )
+  }
+}
 
 DatasetSorter.propTypes = {
   queryVariables: PropTypes.object,
   refetch: PropTypes.func,
+  isMobile: PropTypes.bool,
 }
 
 export default DatasetSorter
