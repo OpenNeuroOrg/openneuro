@@ -72,11 +72,9 @@ export default class Summary extends React.PureComponent {
         return (
           <div>
             <hr />
+            {accessionNumber}
             <h5>
-              <b>
-                {accessionNumber}
-                {files}, {size}, {subjects}, {sessions}
-              </b>
+              {files}, {size}, {subjects}, {sessions}
             </h5>
             <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
             <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
