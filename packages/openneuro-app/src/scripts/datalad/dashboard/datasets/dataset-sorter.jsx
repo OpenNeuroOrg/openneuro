@@ -4,14 +4,7 @@ import Capitalized from '../../../styles/capitalized.jsx'
 import useMedia from '../../../mobile/media-hook.jsx'
 
 // DatasetSort GraphQL fields
-const sortFields = [
-  'created',
-  'name',
-  'uploader',
-  'stars',
-  'downloads',
-  'subscriptions',
-]
+const sortFields = ['created', 'name', 'stars', 'downloads', 'subscriptions']
 
 // Sort fields and variables for mobile dropdown
 const ASC = 'ascending'
@@ -24,10 +17,6 @@ const sortFieldsMobile = [
   },
   {
     field: 'name',
-    order: ASC,
-  },
-  {
-    field: 'uploader',
     order: ASC,
   },
   {
@@ -48,10 +37,6 @@ const sortFieldsMobile = [
   },
   {
     field: 'name',
-    order: DESC,
-  },
-  {
-    field: 'uploader',
     order: DESC,
   },
   {
@@ -134,15 +119,18 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
   } else if (isMobile) {
     return (
       <React.Fragment>
-        <select className="mobile-dropdown" onChange={onChange}>
-          <option selected={true} disabled="disabled">
-            Sort by...
-          </option>
+        <select
+          defaultValue={'DEFAULT'}
+          className="mobile-dropdown"
+          onChange={onChange}>
+          <option value="DEFAULT">Sort by...</option>
           {sortFieldsMobile.map((sortField, i) => (
             <option
               value={sortField.field}
               data-order={sortField.order}
-              key={`${i}:${sortField.field}`}>{`${sortField.field} (${sortField.order})`}</option>
+              key={`${i}:${sortField.field}`}>{`${sortField.field} (${
+              sortField.order === ASC ? 'asc' : 'desc'
+            })`}</option>
           ))}
         </select>
       </React.Fragment>
