@@ -517,8 +517,9 @@ div.rt-resizable-header-content {
 }
 
 .mobile-dropdown {
-  // appearance: none;
-  
+  /* remove browser-generated caret */
+  -webkit-appearance: none;
+
   text-transform: capitalize;
   margin: 5px 0px;
   width: 210px;
@@ -528,20 +529,21 @@ div.rt-resizable-header-content {
   font-weight: lighter;
   border: 0;
   box-shadow: inset 0 0 1px 1px $transparent1;
-    /* make arrow and background */
-    background:
-    linear-gradient(45deg, transparent 50%, black 50%), 
-    linear-gradient(135deg, black 50%, transparent 50%), 
-    linear-gradient(to right, white, white);
-    background-position:
-      calc(100% - 21px) calc(1em + 2px),
-      calc(100% - 16px) calc(1em + 2px),
-      100% 0;
-    background-size:
-      5px 5px,
-      5px 5px,
-      2.5em 2.5em;
-    background-repeat: no-repeat;
+
+  /* make custom arrow and background */
+  background:
+  linear-gradient(45deg, transparent 50%, black 50%), 
+  linear-gradient(135deg, black 50%, transparent 50%), 
+  linear-gradient(to right, white, white);
+  background-position:
+    calc(100% - 21px) calc(1em + 2px),
+    calc(100% - 16px) calc(1em + 2px),
+    100% 0;
+  background-size:
+    5px 5px,
+    5px 5px,
+    2.5em 2.5em;
+  background-repeat: no-repeat;
 }
 
 .login-modal {

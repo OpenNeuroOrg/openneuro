@@ -123,14 +123,16 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
           defaultValue={'DEFAULT'}
           className="mobile-dropdown"
           onChange={onChange}>
-          <option value="DEFAULT">Sort by...</option>
+          <option value="DEFAULT" disabled>
+            Sort by...
+          </option>
           {sortFieldsMobile.map((sortField, i) => (
             <option
               value={sortField.field}
               data-order={sortField.order}
-              key={`${i}:${sortField.field}`}>{`${sortField.field} (${
-              sortField.order === ASC ? 'asc' : 'desc'
-            })`}</option>
+              key={`${i}:${sortField.field}`}>
+              {`${sortField.field} (${sortField.order})`}
+            </option>
           ))}
         </select>
       </React.Fragment>
