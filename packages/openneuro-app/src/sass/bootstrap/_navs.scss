@@ -18,7 +18,7 @@
 
     > a {
       position: relative;
-      display: block;
+      display: inline-block;
       padding: $nav-link-padding;
       font-weight: 400;
       &:hover,
