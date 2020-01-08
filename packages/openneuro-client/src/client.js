@@ -13,24 +13,6 @@ import * as snapshots from './snapshots'
 import * as users from './users'
 
 const clientVersion = require(`${__dirname}/../package.json`).version
-const parse = version => version.split('.').map(n => parseInt(n))
-const checkVersions = serverVersion => {
-  const [serverMajor, serverMinor] = parse(serverVersion)
-  const [clientMajor, clientMinor] = parse(clientVersion)
-  if (serverMajor > clientMajor || serverMinor > clientMinor) {
-    console.warn(
-      `Your openNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.`,
-    )
-  } else if (
-    serverMajor < clientMajor ||
-    (serverMajor === clientMajor && serverMinor < clientMinor)
-  ) {
-    // panic, then
-    console.warn(
-      'Your openNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.',
-    )
-  }
-}
 
 const cache = new InMemoryCache({
   freezeResults: true,
@@ -86,6 +68,25 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
     return authLink(getAuthorization).concat(httpUploadLink)
   } else {
     return httpUploadLink
+  }
+}
+
+const parse = version => version.split('.').map(n => parseInt(n))
+const checkVersions = serverVersion => {
+  const [serverMajor, serverMinor] = parse(serverVersion)
+  const [clientMajor, clientMinor] = parse(clientVersion)
+  if (serverMajor > clientMajor || serverMinor > clientMinor) {
+    console.warn(
+      `Your openNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.`,
+    )
+  } else if (
+    serverMajor < clientMajor ||
+    (serverMajor === clientMajor && serverMinor < clientMinor)
+  ) {
+    // panic, then
+    console.warn(
+      'Your openNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.',
+    )
   }
 }
 
