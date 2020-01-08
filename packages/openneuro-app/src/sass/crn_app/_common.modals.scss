@@ -519,9 +519,9 @@ div.rt-resizable-header-content {
 .mobile-dropdown {
   /* remove browser-generated caret */
   -webkit-appearance: none;
-  
   padding: 5px;
   margin: 5px 0px;
+  max-width: 400px;
   text-transform: capitalize;
   color: #777;
   font-size: 18px;
