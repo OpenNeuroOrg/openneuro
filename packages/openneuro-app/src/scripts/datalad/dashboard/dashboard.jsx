@@ -34,8 +34,8 @@ const Dashboard = ({ public: isPublic, saved: isSaved }) => {
         </li>
       </FlexUl>
       <Switch>
-        {/* <Redirect path="/dashboard" to="/dashboard/datasets" exact />
-        <Redirect path="/saved" to="/saved/datasets" exact /> */}
+        <Redirect path="/dashboard" to="/dashboard/datasets" exact />
+        <Redirect path="/saved" to="/saved/datasets" exact />
         <Route
           name="datalad-datasets-dashboard"
           path={routePrefix + '/datasets'}
