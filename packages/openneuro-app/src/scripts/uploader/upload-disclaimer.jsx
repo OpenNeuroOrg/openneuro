@@ -42,6 +42,7 @@ const UploadDisclaimer = () => (
           Please refrain from uploading datasets already publicly available in
           other repositories.
         </p>
+        <p>This dataset is not subject to GDPR protections.</p>
         <span className="message">
           <button className="fileupload-btn btn-blue" onClick={uploader.upload}>
             I Agree
