@@ -17,7 +17,8 @@ export const draft = obj => ({
   files: draftFiles(obj),
   summary: () => summary(obj),
   issues: () => issues(obj),
-  modified: obj.modified,
+  modified:
+    obj.modified instanceof Date ? obj.modified : new Date(obj.modified),
   partial: () => partial(obj, { datasetId: obj.id }),
   description: () =>
     description(obj, { datasetId: obj.id, revision: obj.revision }),

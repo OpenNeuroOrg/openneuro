@@ -25,11 +25,13 @@ const DraftSubscription = ({ datasetId }) => (
     subscription={DRAFT_SUBSCRIPTION}
     variables={{ datasetIds: [datasetId] }}
     onSubscriptionData={({ client, subscriptionData: { data } }) => {
-      client.writeFragment({
-        id: datasetCacheId(datasetId),
-        fragment: DRAFT_FRAGMENT,
-        data: data.draftUpdated,
-      })
+      // console.log('draft subscription')
+      // console.log({ client, data })
+      // client.writeFragment({
+      //   id: datasetCacheId(datasetId),
+      //   fragment: DRAFT_FRAGMENT,
+      //   data: data.draftUpdated,
+      // })
     }}
   />
 )

@@ -21,9 +21,11 @@ import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
+import useMedia from '../../mobile/media-hook.jsx'
+import useDraftSubscription from '../subscriptions/useDraftSubscription.js'
+import { withApollo } from 'react-apollo'
 import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
-import useMedia from '../../mobile/media-hook.jsx'
 
 const MarginBottomDiv = styled.div`
   margin-bottom: 0.5em;
@@ -51,13 +53,14 @@ HasBeenPublished.propTypes = {
 /**
  * Data routing for the main dataset query to display/edit components
  */
-const DatasetContent = ({ dataset }) => {
+const DatasetContent = ({ dataset, client }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const user = getProfile()
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
+  useDraftSubscription(client, dataset.id)
   return (
     <>
       <LoggedIn>
@@ -139,7 +142,7 @@ const DatasetContent = ({ dataset }) => {
           />
           <DatasetGitHash gitHash={dataset.draft.id} />
         </div>
-        <DraftSubscription datasetId={dataset.id} />
+        {/* <DraftSubscription datasetId={dataset.id} /> */}
       </LoggedIn>
       {dataset.snapshots && !hasEdit && (
         <Redirect
@@ -153,6 +156,7 @@ const DatasetContent = ({ dataset }) => {
 
 DatasetContent.propTypes = {
   dataset: PropTypes.object,
+  client: PropTypes.object,
 }
 
-export default DatasetContent
+export default withApollo(DatasetContent)

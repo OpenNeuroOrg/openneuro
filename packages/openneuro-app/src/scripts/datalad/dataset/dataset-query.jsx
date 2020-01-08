@@ -106,6 +106,8 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
       errorPolicy: 'all',
     },
   )
+  console.log('dataset query')
+  console.log({ data, loading, error, fetchMore })
 
   if (loading) {
     return <Spinner text="Loading Dataset" active />
