@@ -13,7 +13,7 @@ const draftFiles = dataset => args => {
 }
 
 export const draft = obj => ({
-  id: obj.revision,
+  id: obj.id,
   files: draftFiles(obj),
   summary: () => summary(obj),
   issues: () => issues(obj),
