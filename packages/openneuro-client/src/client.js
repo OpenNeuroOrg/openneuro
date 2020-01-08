@@ -3,7 +3,7 @@ import { ApolloClient } from 'apollo-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
-import { split } from 'apollo-link'
+import { ApolloLink, split, Observable } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import FormData from 'form-data'
@@ -11,6 +11,26 @@ import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
+
+const clientVersion = require(`${__dirname}/../package.json`).version
+const parse = version => version.split('.').map(n => parseInt(n))
+const checkVersions = serverVersion => {
+  const [serverMajor, serverMinor] = parse(serverVersion)
+  const [clientMajor, clientMinor] = parse(clientVersion)
+  if (serverMajor > clientMajor || serverMinor > clientMinor) {
+    console.warn(
+      `Your openNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.`,
+    )
+  } else if (
+    serverMajor < clientMajor ||
+    (serverMajor === clientMajor && serverMinor < clientMinor)
+  ) {
+    // panic, then
+    console.warn(
+      'Your openNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.',
+    )
+  }
+}
 
 const cache = new InMemoryCache({
   freezeResults: true,
@@ -69,6 +89,22 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   }
 }
 
+const compareVersionsLink = new ApolloLink(
+  (operation, forward) =>
+    new Observable(observer =>
+      forward(operation).subscribe({
+        next: result => {
+          const serverVersion = result.extensions.openneuro.version
+          // alert user if major/minor versions are not in sync
+          checkVersions(serverVersion)
+          observer.next(result)
+        },
+        error: console.error,
+        complete: observer.complete.bind(observer),
+      }),
+    ),
+)
+
 const createLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
 
@@ -93,7 +129,7 @@ const createLink = (uri, getAuthorization, fetch) => {
     )
   }
 
-  return link
+  return ApolloLink.from([compareVersionsLink, link])
 }
 
 export { files, datasets, snapshots, users }
