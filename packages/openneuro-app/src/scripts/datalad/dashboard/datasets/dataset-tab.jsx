@@ -16,7 +16,8 @@ const FullHeightFlexDiv = styled.div`
   flex: 0 1 auto;
 `
 
-const title = isPublic => (isPublic ? 'Public Datasets' : 'My Datasets')
+const title = (isPublic, isSaved) =>
+  isPublic ? 'Public Datasets' : isSaved ? 'Saved Datasets' : 'My Datasets'
 
 const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
   if (
@@ -50,19 +51,20 @@ const DatasetTab = ({
   queryVariables,
   loading,
   publicDashboard,
+  savedDashboard,
   error,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
       <title>
-        {pageTitle} - {title(publicDashboard)}
+        {pageTitle} - {title(publicDashboard, savedDashboard)}
       </title>
     </Helmet>
     <div className="header-filter-sort clearfix">
       <div className="admin header-wrap clearfix">
         <div className="row">
           <div className="col-md-5">
-            <h2>{title(publicDashboard)}</h2>
+            <h2>{title(publicDashboard, savedDashboard)}</h2>
           </div>
           <div className="col-md-7">
             <Search />
@@ -74,7 +76,7 @@ const DatasetTab = ({
           <label>Sort by:</label>
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
-        {publicDashboard ? null : (
+        {publicDashboard || savedDashboard ? null : (
           <div className="filters">
             <label>Filter by:</label>
             <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
@@ -103,6 +105,7 @@ DatasetTab.propTypes = {
   queryVariables: PropTypes.object,
   loading: PropTypes.bool,
   publicDashboard: PropTypes.bool,
+  savedDashboard: PropTypes.bool,
   error: PropTypes.object,
 }
 

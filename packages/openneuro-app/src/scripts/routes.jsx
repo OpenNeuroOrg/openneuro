@@ -14,13 +14,17 @@ const Admin = loadable(() =>
   import(/* webpackChunkName: 'Admin' */ './admin/admin.jsx'),
 )
 const Dashboard = loadable(() =>
-  import(/* webpackChunkName: 'Dashboard' */ './datalad/dashboard/dashboard.jsx'),
+  import(
+    /* webpackChunkName: 'Dashboard' */ './datalad/dashboard/dashboard.jsx'
+  ),
 )
 const Faq = loadable(() =>
   import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),
 )
 const SearchResults = loadable(() =>
-  import(/* webpackChunkName: 'SearchResults' */ './datalad/dashboard/search-results.jsx'),
+  import(
+    /* webpackChunkName: 'SearchResults' */ './datalad/dashboard/search-results.jsx'
+  ),
 )
 const APIKey = loadable(() =>
   import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),
@@ -35,6 +39,7 @@ const PETDummy = loadable(() =>
 // routes ----------------------------------------------------------------
 
 const PublicDashboard = () => <Dashboard public />
+const SavedDashboard = () => <Dashboard saved />
 
 const appRoutes = () => (
   <Switch>
@@ -42,6 +47,7 @@ const appRoutes = () => (
     <Route name="faq" exact path="/faq" component={Faq} />
     <Route name="api-key" exact path="/keygen" component={APIKey} />
     <Route name="dashboard" path="/dashboard" component={Dashboard} />
+    <Route name="saved" path="/saved" component={SavedDashboard} />
     <Route name="public" path="/public" component={PublicDashboard} />
     <Route name="dataset" path="/datasets" component={Dataset} />
     <Route name="search" path="/search/:query?" component={SearchResults} />
