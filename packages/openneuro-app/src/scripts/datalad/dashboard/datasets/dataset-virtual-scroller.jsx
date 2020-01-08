@@ -16,6 +16,11 @@ const FlexParent = styled.div`
   flex-flow: column;
   height: 100%;
   flex: 1 1 auto;
+  @media (max-width: 765px) {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+  }
 `
 
 const FlexFullHeight = styled.div`
