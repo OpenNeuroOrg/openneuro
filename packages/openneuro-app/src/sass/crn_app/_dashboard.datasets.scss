@@ -53,7 +53,7 @@
 @include mobile {
     .tabs.nav.nav-pills > li {
         a { 
-            z-index: 1000;
+            z-index: 700;
             display: inline;
             white-space: nowrap;
             font-size: 10px;
