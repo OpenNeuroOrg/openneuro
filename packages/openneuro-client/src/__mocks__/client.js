@@ -1,8 +1,9 @@
 import { ApolloClient } from 'apollo-client'
 import { SchemaLink } from 'apollo-link-schema'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { addMockFunctionsToSchema } from 'graphql-tools'
-import schema from 'openneuro-server/graphql/schema'
+import { addMockFunctionsToSchema, makeExecutableSchema } from 'graphql-tools'
+import { typeDefs } from 'openneuro-server/graphql/schema'
+import resolvers from 'openneuro-server/graphql/resolvers/index.js'
 
 /**
  * Generate sequential dataset ids for tests
@@ -18,6 +19,23 @@ function* idGenerator(n = 0) {
 export const datasetIds = idGenerator()
 export const testDsId = datasetIds.next().value
 export const testTime = new Date()
+
+// Workaround to restore this test, it should be refactored with openneuro-client updates
+const schema = makeExecutableSchema({
+  typeDefs: `
+directive @cacheControl(
+  maxAge: Int,
+  scope: CacheControlScope
+) on OBJECT | FIELD_DEFINITION
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+${typeDefs}`,
+  resolvers,
+})
 
 addMockFunctionsToSchema({
   schema,
@@ -38,7 +56,9 @@ addMockFunctionsToSchema({
 
 const createClient = uri => {
   const cache = new InMemoryCache()
-  const link = new SchemaLink({ schema })
+  const link = new SchemaLink({
+    schema,
+  })
   return new ApolloClient({ uri, link, cache })
 }
 

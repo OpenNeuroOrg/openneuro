@@ -1,7 +1,7 @@
 import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
 
-const typeDefs = `
+export const typeDefs = `
   scalar Date
   scalar DateTime
   scalar Time

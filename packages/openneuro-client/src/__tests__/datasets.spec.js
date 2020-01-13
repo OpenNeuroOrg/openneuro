@@ -17,7 +17,7 @@ describe('datasets.js', () => {
         .then(done)
     })
   })
-  describe('getDataset query', () => {
+  describe('getDatasets query', () => {
     it('returns multiple datasets', done => {
       gqlClient
         .query({ query: getDatasets })
