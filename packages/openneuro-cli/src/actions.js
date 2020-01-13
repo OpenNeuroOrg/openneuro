@@ -8,8 +8,10 @@ import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
 
+const { version } = require('../package.json')
+
 export const configuredClient = () =>
-  createClient(`${getUrl()}crn/graphql`, getToken)
+  createClient(`${getUrl()}crn/graphql`, getToken, null, version)
 
 /**
  * Login action to save an auth key locally
@@ -32,9 +34,7 @@ export const login = () => {
         await inquirer.prompt({
           type: 'input',
           name: 'apikey',
-          message: `Enter your API key for OpenNeuro (get an API key from ${
-            answers.url
-          }keygen)`,
+          message: `Enter your API key for OpenNeuro (get an API key from ${answers.url}keygen)`,
         }),
       ),
     )
@@ -78,9 +78,11 @@ const notifyUploadComplete = update => datasetId => {
     '=======================================================================',
   )
   console.log('Upload Complete')
-  console.log(update
-    ? `To publish the update go to ${getUrl()}datasets/${datasetId} and create a new snapshot`
-    : `To publish your dataset go to ${getUrl()}datasets/${datasetId}`)
+  console.log(
+    update
+      ? `To publish the update go to ${getUrl()}datasets/${datasetId} and create a new snapshot`
+      : `To publish your dataset go to ${getUrl()}datasets/${datasetId}`,
+  )
   console.log(
     '=======================================================================',
   )
@@ -124,15 +126,15 @@ export const upload = (dir, cmd) => {
           }
         })
         .catch(err => {
-          if(isNotLoggedInError(err)) {
+          if (isNotLoggedInError(err)) {
             logSpecificError([
               err.message,
-              'Please use the command "openneuro login" and follow instructions, then try again.'
+              'Please use the command "openneuro login" and follow instructions, then try again.',
             ])
-          } else if(isMissingDotOpenneuroError(err)) {
+          } else if (isMissingDotOpenneuroError(err)) {
             logSpecificError([
               err.message,
-              'You may be missing the ~/.openneuro configuration file, please use the command "openneuro login" and follow instructions, then try again.'
+              'You may be missing the ~/.openneuro configuration file, please use the command "openneuro login" and follow instructions, then try again.',
             ])
           } else {
             handleGenericErrors(err, dir)
@@ -146,18 +148,20 @@ export const upload = (dir, cmd) => {
   }
 }
 
-const specificErrorTest = (err, targetErrMessage) => (
-  err.message && 
-  typeof err.message === 'string' && 
+const specificErrorTest = (err, targetErrMessage) =>
+  err.message &&
+  typeof err.message === 'string' &&
   err.message.includes(targetErrMessage)
-)
 
 function isNotLoggedInError(err) {
   return specificErrorTest(err, 'You must be logged in to create a dataset.')
 }
 
 function isMissingDotOpenneuroError(err) {
-  return specificErrorTest(err, 'The "path" argument must be one of type string, Buffer, or URL')
+  return specificErrorTest(
+    err,
+    'The "path" argument must be one of type string, Buffer, or URL',
+  )
 }
 
 function logSpecificError(errors) {

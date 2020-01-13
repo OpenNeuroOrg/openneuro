@@ -12,8 +12,6 @@ import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
 
-const clientVersion = require(`${__dirname}/../package.json`).version
-
 const cache = new InMemoryCache({
   freezeResults: true,
 })
@@ -23,8 +21,8 @@ const cache = new InMemoryCache({
  *
  * @param {string} uri
  */
-const createClient = (uri, getAuthorization, fetch) => {
-  const link = createLink(uri, getAuthorization, fetch)
+const createClient = (uri, getAuthorization, fetch, clientVersion) => {
+  const link = createLink(uri, getAuthorization, fetch, clientVersion)
   return new ApolloClient({ uri, link, cache, connectToDevTools: true })
 }
 
@@ -60,7 +58,7 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
   const httpUploadLink = createUploadLink({
     uri,
-    fetch,
+    fetch: fetch === null ? undefined : fetch,
     serverFormData: FormData,
     credentials: 'same-origin',
   })
@@ -72,7 +70,7 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
 }
 
 const parse = version => version.split('.').map(n => parseInt(n))
-const checkVersions = serverVersion => {
+const checkVersions = (serverVersion, clientVersion) => {
   const [serverMajor, serverMinor] = parse(serverVersion)
   const [clientMajor, clientMinor] = parse(clientVersion)
   if (serverMajor > clientMajor || serverMinor > clientMinor) {
@@ -90,23 +88,24 @@ const checkVersions = serverVersion => {
   }
 }
 
-const compareVersionsLink = new ApolloLink(
-  (operation, forward) =>
-    new Observable(observer =>
-      forward(operation).subscribe({
-        next: result => {
-          const serverVersion = result.extensions.openneuro.version
-          // alert user if major/minor versions are not in sync
-          checkVersions(serverVersion)
-          observer.next(result)
-        },
-        error: console.error,
-        complete: observer.complete.bind(observer),
-      }),
-    ),
-)
+const compareVersionsLink = clientVersion =>
+  new ApolloLink(
+    (operation, forward) =>
+      new Observable(observer =>
+        forward(operation).subscribe({
+          next: result => {
+            const serverVersion = result.extensions.openneuro.version
+            // alert user if major/minor versions are not in sync
+            checkVersions(serverVersion, clientVersion)
+            observer.next(result)
+          },
+          error: console.error,
+          complete: observer.complete.bind(observer),
+        }),
+      ),
+  )
 
-const createLink = (uri, getAuthorization, fetch) => {
+const createLink = (uri, getAuthorization, fetch, clientVersion) => {
   // We have to setup authLink to inject credentials here
 
   // server-side link
@@ -130,7 +129,7 @@ const createLink = (uri, getAuthorization, fetch) => {
     )
   }
 
-  return ApolloLink.from([compareVersionsLink, link])
+  return ApolloLink.from([compareVersionsLink(clientVersion), link])
 }
 
 export { files, datasets, snapshots, users }
