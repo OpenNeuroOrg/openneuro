@@ -1,21 +1,50 @@
-import { makeExecutableSchema } from 'graphql-tools'
+import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
 
-const typeDefs = `
+export const typeDefs = `
   scalar Date
   scalar DateTime
   scalar Time
   scalar Upload
   scalar BigInt
 
-  directive @cacheControl(
-    maxAge: Int,
-    scope: CacheControlScope
-  ) on OBJECT | FIELD_DEFINITION
+  enum SortOrdering {
+    ascending
+    descending
+  }
 
-  enum CacheControlScope {
-    PUBLIC
-    PRIVATE
+  # Sorting order for datasets
+  input DatasetSort {
+    # Dataset created time
+    created: SortOrdering
+    # Alphanumeric sort of dataset name
+    name: SortOrdering
+    # Alphanumeric sort of uploader name
+    uploader: SortOrdering
+    # Order by star count
+    stars: SortOrdering
+    # Order by download count
+    downloads: SortOrdering
+    # Order by dataset views
+    views: SortOrdering
+    # Order by count of dataset followers
+    subscriptions: SortOrdering
+    # Order by publish date
+    publishDate: SortOrdering
+  }
+
+  # Dataset query filter flags
+  input DatasetFilter {
+    "Limit to datasets available publicly"
+    public: Boolean
+    "Return only partially uploaded datasets"
+    incomplete: Boolean
+    "Return only datasets that are shared with the user"
+    shared: Boolean
+    "Return only datasets with an invalid Draft"
+    invalid: Boolean
+    "Return all datasets, ignores any other constraints but not sorts"
+    all: Boolean
   }
 
   type Query {
@@ -266,45 +295,6 @@ const typeDefs = `
     onBrainlife: Boolean
     # Dataset Metadata
     metadata: Metadata
-  }
-
-  enum SortOrdering {
-    ascending
-    descending
-  }
-
-  # Sorting order for datasets
-  input DatasetSort {
-    # Dataset created time
-    created: SortOrdering
-    # Alphanumeric sort of dataset name
-    name: SortOrdering
-    # Alphanumeric sort of uploader name
-    uploader: SortOrdering
-    # Order by star count
-    stars: SortOrdering
-    # Order by download count
-    downloads: SortOrdering
-    # Order by dataset views
-    views: SortOrdering
-    # Order by count of dataset followers
-    subscriptions: SortOrdering
-    # Order by publish date
-    publishDate: SortOrdering
-  }
-
-  # Dataset query filter flags
-  input DatasetFilter {
-    "Limit to datasets available publicly"
-    public: Boolean
-    "Return only partially uploaded datasets"
-    incomplete: Boolean
-    "Return only datasets that are shared with the user"
-    shared: Boolean
-    "Return only datasets with an invalid Draft"
-    invalid: Boolean
-    "Return all datasets, ignores any other constraints but not sorts"
-    all: Boolean
   }
 
   # Ephemeral draft or working tree for a dataset
@@ -564,7 +554,7 @@ const typeDefs = `
   }
 `
 
-export default makeExecutableSchema({
-  typeDefs,
-  resolvers,
-})
+schemaComposer.addTypeDefs(typeDefs)
+schemaComposer.addResolveMethods(resolvers)
+
+export default schemaComposer.buildSchema()
