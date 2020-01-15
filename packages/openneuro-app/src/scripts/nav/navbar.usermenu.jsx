@@ -15,7 +15,7 @@ const signOutAndRedirect = history => {
 
 // component setup ---------------------------------------------------------------
 
-const Usermenu = ({ profile, history, closeNav }) => {
+const Usermenu = ({ profile, history }) => {
   let username = profile.name
   let gear = <i className="fa fa-gear" />
 
@@ -29,10 +29,7 @@ const Usermenu = ({ profile, history, closeNav }) => {
         </li>
         <li role="separator" className="divider" />
         <li>
-          <Link to="/keygen" onClick={closeNav}>
-            {' '}
-            Obtain an API Key{' '}
-          </Link>
+          <Link to="/keygen"> Obtain an API Key </Link>
         </li>
         <li role="separator" className="divider" />
         <li>
@@ -50,7 +47,6 @@ const Usermenu = ({ profile, history, closeNav }) => {
 Usermenu.propTypes = {
   profile: PropTypes.object,
   history: PropTypes.object,
-  closeNav: PropTypes.func,
 }
 
 export default withRouter(withProfile(Usermenu))

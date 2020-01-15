@@ -52,7 +52,6 @@ class BSNavbar extends React.Component {
     this.loginModal = this.loginModal.bind(this)
     this.supportModal = this.supportModal.bind(this)
     this.setNavExpanded = this.setNavExpanded.bind(this)
-    this.closeNav = this.closeNav.bind(this)
   }
 
   loginModal(open = true) {
@@ -71,8 +70,10 @@ class BSNavbar extends React.Component {
     this.setState({ navExpanded: expanded })
   }
 
-  closeNav() {
-    this.setState({ navExpanded: false })
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      this.setNavExpanded(false)
+    }
   }
 
   // life cycle methods ------------------------------------------------------------
@@ -90,7 +91,6 @@ class BSNavbar extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <NavMenu
-              closeNav={this.closeNav}
               loginModal={this.loginModal}
               supportModal={this.supportModal}
             />
