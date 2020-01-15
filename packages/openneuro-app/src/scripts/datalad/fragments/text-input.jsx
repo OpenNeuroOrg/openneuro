@@ -25,25 +25,6 @@ const pushedUpLabelStyles = {
   top: '0.4rem',
   fontSize: '0.75em',
 }
-const Span = styled.span`
-  position: relative;
-  z-index: 100000;
-  height: 24px;
-  font-size: 12px;
-  box-shadow: 0 0 0 #ddd;
-  transition: opacity 0.4s ease-out, box-shadow 0.4s ease-out;
-  white-space: nowrap;
-  overflow: visible;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  line-height: 1.4;
-  color: #fff;
-  padding: 3px 8px;
-  text-align: center;
-  text-decoration: none;
-  background-color: #000;
-  border-radius: 4px;
-`
 const Label = styled.label(
   {
     position: 'absolute',
@@ -82,6 +63,25 @@ const Textarea = styled.textarea({
   textAlign: 'left',
   padding: '1.5rem 0.8rem 0.3rem',
 })
+const HoverMessage = styled.span`
+  position: relative;
+  z-index: 100000;
+  height: 24px;
+  font-size: 12px;
+  box-shadow: 0 0 0 #ddd;
+  transition: opacity 0.4s ease-out, box-shadow 0.4s ease-out;
+  white-space: nowrap;
+  overflow: visible;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: 1.4;
+  color: #fff;
+  padding: 3px 8px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #000;
+  border-radius: 4px;
+`
 
 const TextInput = ({
   name,
@@ -151,7 +151,7 @@ const TextInput = ({
           onMouseLeave={() => setIsShown(false)}
         />
       )}
-      {isShown && hoverText && <Span>{hoverText}</Span>}
+      {isShown && hoverText && <HoverMessage>{hoverText}</HoverMessage>}
     </Container>
   )
 }
