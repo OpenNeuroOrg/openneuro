@@ -27,7 +27,9 @@ const metadataFields = hasEdit => {
   const fields = [
     {
       key: 'associatedPaperDOI',
-      label: 'DOI of paper associated with DS (from submit lab)',
+      label: 'DOI of papers from the source data lab',
+      hoverText:
+        'Papers that were published from the Lab that collected this dataset',
       Component: TextInput,
       additionalProps: {
         required: false,
@@ -80,7 +82,8 @@ const metadataFields = hasEdit => {
     },
     {
       key: 'openneuroPaperDOI',
-      label: 'DOI of paper b/c DS on OpenNeuro',
+      label: 'Papers published from this dataset',
+      hoverText: 'Papers that were published from downloading this dataset',
       Component: TextInput,
       additionalProps: {
         required: false,
@@ -104,10 +107,8 @@ const metadataFields = hasEdit => {
     {
       key: 'tasksCompleted',
       label: 'Tasks Completed',
-      Component: SelectInput,
+      Component: TextInput,
       additionalProps: {
-        options: [{ value: 'True' }, { value: 'False' }],
-        showOptionOther: true,
         required: false,
       },
     },
@@ -160,6 +161,8 @@ const metadataFields = hasEdit => {
     {
       key: 'seniorAuthor',
       label: 'Senior Author (Last, First)',
+      hoverText:
+        'Please list the senior author as the last author in the dataset_description.json file field Authors',
       Component: TextInput,
       additionalProps: {
         disabled: true,
@@ -270,16 +273,22 @@ const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
         // remove disabled fields when hideDisabled is true
         field => !(hideDisabled && field.additionalProps.disabled),
       )
-      .map(({ key, label, Component, additionalProps, transformValue }, i) => (
-        <Component
-          name={key}
-          label={label}
-          value={transformValue ? transformValue(values[key]) : values[key]}
-          onChange={onChange}
-          {...additionalProps}
-          key={i}
-        />
-      ))}
+      .map(
+        (
+          { key, label, hoverText, Component, additionalProps, transformValue },
+          i,
+        ) => (
+          <Component
+            name={key}
+            label={label}
+            hoverText={hoverText}
+            value={transformValue ? transformValue(values[key]) : values[key]}
+            onChange={onChange}
+            {...additionalProps}
+            key={i}
+          />
+        ),
+      )}
   </Form>
 )
 
