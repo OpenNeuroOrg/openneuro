@@ -15,12 +15,12 @@ export const datasetCreated = () => ({
   subscribe: () => pubsub.asyncIterator('datasetCreated'),
 })
 
-export const datasetDeleted = {
+export const datasetDeleted = () => ({
   subscribe: withFilter(
     () => pubsub.asyncIterator('datasetDeleted'),
     filterDatasetId,
   ),
-}
+})
 
 export const snapshotAdded = {
   type: 'Snapshot',
