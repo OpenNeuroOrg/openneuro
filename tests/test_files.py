@@ -41,10 +41,8 @@ def test_add_file(client, annex_path):
 def test_add_existing_file(client):
     ds_id = 'ds000001'
     file_data = 'should update'
-
     response = client.simulate_post(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
-
     assert response.status == falcon.HTTP_OK
 
 
@@ -63,9 +61,11 @@ def test_update_file(celery_app, client, annex_path):
     response = client.simulate_post(
         '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
     assert response.status == falcon.HTTP_OK
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
     # Then update it
     file_data = 'New test LICENSE'
-    response = client.simulate_put(
+    response = client.simulate_post(
         '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
     assert response.status == falcon.HTTP_OK
     # Load the dataset to check for the updated file
@@ -75,16 +75,6 @@ def test_update_file(celery_app, client, annex_path):
     assert len(test_files) == 1
     with open(test_files.pop()['path']) as f:
         assert f.read() == file_data
-
-
-def test_update_missing_file(celery_app, client):
-    ds_id = 'ds000001'
-    file_data = 'File that does not exist'
-    # First post a file
-    response = client.simulate_put(
-        '/datasets/{}/files/NEWFILE'.format(ds_id), body=file_data)
-    assert response.status == falcon.HTTP_NOT_FOUND
-
 
 def test_file_indexing(celery_app, client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)

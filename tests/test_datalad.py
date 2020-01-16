@@ -27,4 +27,4 @@ def test_commit_file(celery_app, annex_path, new_dataset):
         fd.write("""GPL""")
     commit_files.run(annex_path, ds_id, ['LICENSE'])
     dataset = Dataset(str(annex_path.join(ds_id)))
-    assert not dataset.repo.is_dirty()
+    assert not dataset.repo.dirty

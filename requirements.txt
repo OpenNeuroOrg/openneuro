@@ -16,7 +16,7 @@ chardet==3.0.4
 citeproc-py==0.4.0
 coverage==4.5.1
 cryptography==2.3
-datalad==0.10.1
+datalad==0.12.1
 dnspython==1.15.0
 docutils==0.14
 duecredit==0.6.3
