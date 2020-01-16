@@ -9,7 +9,9 @@ const mockLocation = { pathname: '/dataset/ds000001' }
 describe('LeftSidebar component', () => {
   it('renders with basic props', () => {
     const testDataset = {
-      permissions: [],
+      permissions: {
+        userPermissions: [],
+      },
       draft: {
         partial: false,
       },
@@ -33,7 +35,9 @@ describe('LeftSidebar component', () => {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhZG1pbiI6dHJ1ZX0.F-cvL2RcfQhUtCavIM7q7zYE8drmj2LJk0JRkrS6He4',
     )
     const testDataset = {
-      permissions: [],
+      permissions: {
+        userPermissions: [],
+      },
       draft: {
         partial: true,
       },

@@ -1,10 +1,20 @@
 import mongo from '../../libs/mongo.js'
 import User from '../../models/user'
 import { checkDatasetAdmin } from '../permissions'
+import { user } from './user'
 import pubsub from '../pubsub.js'
 
-export const permissions = obj => {
-  return mongo.collections.crn.permissions.find({ datasetId: obj.id }).toArray()
+export const permissions = async ds => {
+  const permissions = await mongo.collections.crn.permissions
+    .find({ datasetId: ds.id })
+    .toArray()
+  return {
+    id: ds.id,
+    userPermissions: permissions.map(userPermission => ({
+      ...userPermission,
+      user: user(ds, { id: userPermission.userId }),
+    })),
+  }
 }
 
 /**

@@ -56,11 +56,14 @@ export const PERMISSION_FRAGMENT = gql`
   fragment DatasetPermissions on Dataset {
     id
     permissions {
-      user {
-        id
-        email
+      id
+      userPermissions {
+        user {
+          id
+          email
+        }
+        level
       }
-      level
     }
   }
 `

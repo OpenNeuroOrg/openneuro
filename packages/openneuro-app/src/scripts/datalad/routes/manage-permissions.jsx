@@ -37,7 +37,7 @@ export const ShareTable = ({ datasetId, permissions }) => (
       </tr>
     </thead>
     <tbody>
-      {permissions.map((perm, index) => (
+      {permissions.userPermissions.map((perm, index) => (
         <PermissionRow
           datasetId={datasetId}
           userId={perm.user.id}
@@ -52,7 +52,7 @@ export const ShareTable = ({ datasetId, permissions }) => (
 
 ShareTable.propTypes = {
   datasetId: PropTypes.string,
-  permissions: PropTypes.array,
+  permissions: PropTypes.object,
 }
 
 const Share = ({ datasetId, permissions }) => {
@@ -122,7 +122,7 @@ const Share = ({ datasetId, permissions }) => {
 
 Share.propTypes = {
   datasetId: PropTypes.string,
-  permissions: PropTypes.array,
+  permissions: PropTypes.object,
 }
 
 export default Share

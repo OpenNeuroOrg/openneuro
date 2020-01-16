@@ -24,13 +24,13 @@ exports[`FilesSubscription renders with common props 1`] = `
                     "kind": "Argument",
                     "name": Object {
                       "kind": "Name",
-                      "value": "datasetId",
+                      "value": "datasetIds",
                     },
                     "value": Object {
                       "kind": "Variable",
                       "name": Object {
                         "kind": "Name",
-                        "value": "datasetId",
+                        "value": "datasetIds",
                       },
                     },
                   },
@@ -114,12 +114,15 @@ exports[`FilesSubscription renders with common props 1`] = `
               "directives": Array [],
               "kind": "VariableDefinition",
               "type": Object {
-                "kind": "NonNullType",
+                "kind": "ListType",
                 "type": Object {
-                  "kind": "NamedType",
-                  "name": Object {
-                    "kind": "Name",
-                    "value": "ID",
+                  "kind": "NonNullType",
+                  "type": Object {
+                    "kind": "NamedType",
+                    "name": Object {
+                      "kind": "Name",
+                      "value": "ID",
+                    },
                   },
                 },
               },
@@ -127,7 +130,7 @@ exports[`FilesSubscription renders with common props 1`] = `
                 "kind": "Variable",
                 "name": Object {
                   "kind": "Name",
-                  "value": "datasetId",
+                  "value": "datasetIds",
                 },
               },
             },
@@ -136,14 +139,16 @@ exports[`FilesSubscription renders with common props 1`] = `
       ],
       "kind": "Document",
       "loc": Object {
-        "end": 178,
+        "end": 183,
         "start": 0,
       },
     }
   }
   variables={
     Object {
-      "datasetId": "ds001",
+      "datasetIds": Array [
+        "ds001",
+      ],
     }
   }
 />

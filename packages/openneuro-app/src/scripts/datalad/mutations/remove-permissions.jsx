@@ -14,11 +14,11 @@ const REMOVE_PERMISSION = gql`
 
 /**
  * Remove any permissions matching the user
- * @param {array} permissions
+ * @param {object} permissions
  * @param {string} userId
  */
-export const permissionsFilter = (permissions, userId) =>
-  permissions.filter(permission => permission.user.id !== userId)
+export const userPermissionsFilter = (userPermissions, userId) =>
+  userPermissions.filter(permission => permission.user.id !== userId)
 
 const RemovePermissions = ({ datasetId, userId }) => (
   <Mutation
@@ -34,7 +34,14 @@ const RemovePermissions = ({ datasetId, userId }) => (
         data: {
           __typename: 'Dataset',
           id: datasetId,
-          permissions: permissionsFilter(permissions, userId),
+          permissions: {
+            __typename: 'DatasetPermissions',
+            id: datasetId,
+            userPermissions: userPermissionsFilter(
+              permissions.userPermissions,
+              userId,
+            ),
+          },
         },
       })
     }}>

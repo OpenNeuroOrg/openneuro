@@ -15,15 +15,22 @@ export const getProfile = () => {
   return accessToken ? parseJwt(accessToken) : null
 }
 
-// Return true if the active user has write permission
-export const hasEditPermissions = (permissions, userId) => {
+/**
+ * Returns true if active user has at least one of the permissions in expectedLevels
+ * @param {string[]} expectedLevels
+ */
+const hasDatasetPermissions = expectedLevels => (permissions, userId) => {
   if (userId) {
-    const permission = permissions.find(perm => perm.user.id === userId)
-    return (
-      (permission &&
-        (permission.level === 'admin' || permission.level === 'rw')) ||
-      false
+    const permission = permissions.userPermissions.find(
+      perm => perm.user.id === userId,
     )
+    return (permission && expectedLevels.includes(permission.level)) || false
   }
   return false
 }
+
+// Return true if the active user has write permission
+export const hasEditPermissions = hasDatasetPermissions(['admin', 'rw'])
+
+//
+export const hasDatasetAdminPermissions = hasDatasetPermissions(['admin'])

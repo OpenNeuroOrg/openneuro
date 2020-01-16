@@ -31,14 +31,17 @@ export const mergeNewPermission = (
   return {
     __typename: 'Dataset',
     id: datasetId,
-    permissions: [
+    permissions: {
       ...oldPermissions,
-      {
-        __typename: 'Permission',
-        user: { __typename: 'User', ...userInfo },
-        level: metadata,
-      },
-    ],
+      userPermissions: [
+        ...oldPermissions.userPermissions,
+        {
+          __typename: 'Permission',
+          user: { __typename: 'User', ...userInfo },
+          level: metadata,
+        },
+      ],
+    },
   }
 }
 

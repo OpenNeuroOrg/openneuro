@@ -275,7 +275,7 @@ export const typeDefs = `
     snapshots: [Snapshot]
     # Newest snapshot
     latestSnapshot: Snapshot!
-    permissions: [Permission]
+    permissions: DatasetPermissions
     analytics: Analytic
     stars: [Star]
     followers: [Follower]
@@ -366,12 +366,19 @@ export const typeDefs = `
     DatasetDOI: String
   }
 
-  #User permissions on a dataset
+  # User permissions on a dataset
   type Permission {
     datasetId: ID!
     userId: String!
     level: String!
     user: User
+  }
+
+  # Fundamentally an array of permissions tied to an id
+  #   for better cache control
+  type DatasetPermissions {
+    id: ID!
+    userPermissions: [Permission]
   }
 
   # Authors of a dataset

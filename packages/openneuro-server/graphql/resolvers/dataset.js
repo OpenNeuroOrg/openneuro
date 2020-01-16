@@ -320,17 +320,10 @@ const Dataset = {
   draft,
   snapshots,
   latestSnapshot,
-  analytics: ds => analytics(ds),
-  stars: ds => stars(ds),
-  followers: ds => followers(ds),
-  permissions: ds =>
-    permissions(ds).then(p =>
-      p.map(permission =>
-        Object.assign(permission, {
-          user: user(ds, { id: permission.userId }),
-        }),
-      ),
-    ),
+  analytics,
+  stars,
+  followers,
+  permissions,
   name: datasetName,
   comments: datasetComments,
   following,
