@@ -17,7 +17,6 @@ const signOutAndRedirect = history => {
 
 const Usermenu = ({ profile, history }) => {
   let username = profile.name
-
   let gear = <i className="fa fa-gear" />
 
   return (

@@ -48,7 +48,11 @@ const SupportLink = ({ supportModal }) => {
   if (config.support.url) {
     return (
       <li className="link-support">
-        <a className="nav-link" onClick={() => supportModal()}>
+        <a
+          className="nav-link"
+          onClick={() => {
+            supportModal()
+          }}>
           <span className="link-name">Support</span>
         </a>
       </li>
