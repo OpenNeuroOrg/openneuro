@@ -63,10 +63,30 @@ const Textarea = styled.textarea({
   textAlign: 'left',
   padding: '1.5rem 0.8rem 0.3rem',
 })
+const HoverMessage = styled.span`
+  position: relative;
+  z-index: 100000;
+  height: 24px;
+  font-size: 12px;
+  box-shadow: 0 0 0 #ddd;
+  transition: opacity 0.4s ease-out, box-shadow 0.4s ease-out;
+  white-space: nowrap;
+  overflow: visible;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: 1.4;
+  color: #fff;
+  padding: 3px 8px;
+  text-align: center;
+  text-decoration: none;
+  background-color: #000;
+  border-radius: 4px;
+`
 
 const TextInput = ({
   name,
   label,
+  hoverText,
   value,
   disabled,
   annotated,
@@ -80,6 +100,7 @@ const TextInput = ({
     else value = ''
   } else value = value.toString()
   const [hasFocus, setHasFocus] = useState(false)
+  const [isShown, setIsShown] = useState(false)
   const input = createRef()
 
   const focusInput = () => {
@@ -99,7 +120,9 @@ const TextInput = ({
         htmlFor={name}
         hasValue={Boolean(value)}
         hasFocus={hasFocus}
-        onClick={focusInput}>
+        onClick={focusInput}
+        onMouseEnter={() => setIsShown(true)}
+        onMouseLeave={() => setIsShown(false)}>
         {label}
       </Label>
       {annotated && <DisabledIcon className="fa fa-asterisk" />}
@@ -111,6 +134,8 @@ const TextInput = ({
           onFocus={focusInput}
           onBlur={removeFocus}
           onChange={handleChange}
+          onMouseEnter={() => setIsShown(true)}
+          onMouseLeave={() => setIsShown(false)}
         />
       ) : (
         <Input
@@ -122,8 +147,11 @@ const TextInput = ({
           onBlur={removeFocus}
           onChange={handleChange}
           required={required}
+          onMouseEnter={() => setIsShown(true)}
+          onMouseLeave={() => setIsShown(false)}
         />
       )}
+      {isShown && hoverText && <HoverMessage>{hoverText}</HoverMessage>}
     </Container>
   )
 }
@@ -131,6 +159,7 @@ const TextInput = ({
 TextInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
+  hoverText: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
