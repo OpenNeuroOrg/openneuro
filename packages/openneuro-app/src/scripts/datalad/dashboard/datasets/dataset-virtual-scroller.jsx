@@ -21,6 +21,9 @@ const FlexParent = styled.div`
 const FlexFullHeight = styled.div`
   flex: 1 1 auto;
   white-space: nowrap;
+  @media (max-width: 765px) {
+    width: 100%;
+  }
 `
 
 class DatasetVirtualScroller extends React.Component {

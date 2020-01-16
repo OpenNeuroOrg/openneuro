@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import DatasetTab from './dataset-tab.jsx'
+import useMedia from '../../../mobile/media-hook.jsx'
 
 const getDatasets = gql`
   query getDatasets(
@@ -161,6 +162,7 @@ const datasetQueryDisplay = isPublic => ({
       refetch={refetch}
       queryVariables={variables}
       publicDashboard={isPublic}
+      isMobile={useMedia('(max-width: 765px) ')}
     />
   )
 }
