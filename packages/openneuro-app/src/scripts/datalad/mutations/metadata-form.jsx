@@ -109,6 +109,8 @@ const metadataFields = hasEdit => {
       label: 'Tasks Completed',
       Component: TextInput,
       additionalProps: {
+        disabled: true,
+        annotated: true,
         required: false,
       },
     },
