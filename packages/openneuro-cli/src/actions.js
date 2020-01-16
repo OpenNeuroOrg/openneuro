@@ -8,7 +8,7 @@ import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
 
-const { version } = require('../package.json')
+import { version } from '../package.json'
 
 export const configuredClient = () =>
   createClient(`${getUrl()}crn/graphql`, getToken, null, version)
