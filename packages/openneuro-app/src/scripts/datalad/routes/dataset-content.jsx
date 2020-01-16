@@ -99,7 +99,10 @@ const DatasetContent = ({ dataset }) => {
               isMobile={isMobile}
             />
           )}
-          <DatasetSummary summary={dataset.draft.summary} />
+          <DatasetSummary
+            datasetId={dataset.id}
+            summary={dataset.draft.summary}
+          />
           <h2>README</h2>
           <ErrorBoundaryWithDataSet
             subject={'error in dataset readme component'}>

@@ -138,7 +138,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
             isMobile={isMobile}
           />
         )}
-        <DatasetSummary summary={snapshot.summary} />
+        <DatasetSummary datasetId={dataset.id} summary={snapshot.summary} />
         <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
         <DatasetDescription
