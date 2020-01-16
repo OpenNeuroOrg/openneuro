@@ -59,7 +59,7 @@ export const compileMetadata = dataset => {
     dataProcessed: getFromSummary('dataProcessed') || false,
     ages: getAgesFromSummary() || [],
     modalities: getFromSummary('modalities') || [],
-    tasksCompleted: getFromSummary('tasks') || '',
+    tasksCompleted: getFromSummary('tasks') || [],
   }
 }
 const AddMetadata = ({ dataset, history, location }) => {
