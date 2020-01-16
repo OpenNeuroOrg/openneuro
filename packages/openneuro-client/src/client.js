@@ -7,6 +7,7 @@ import { ApolloLink, split, Observable } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import FormData from 'form-data'
+import semver from 'semver'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
@@ -69,22 +70,24 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   }
 }
 
-const parse = version => version.split('.').map(n => parseInt(n))
+const parse = version => [semver.major(version), semver.minor(version)]
 const checkVersions = (serverVersion, clientVersion) => {
-  const [serverMajor, serverMinor] = parse(serverVersion)
-  const [clientMajor, clientMinor] = parse(clientVersion)
-  if (serverMajor > clientMajor || serverMinor > clientMinor) {
-    console.warn(
-      `Your openNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.`,
-    )
-  } else if (
-    serverMajor < clientMajor ||
-    (serverMajor === clientMajor && serverMinor < clientMinor)
-  ) {
-    // panic, then
-    console.warn(
-      'Your openNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.',
-    )
+  if ([serverVersion, clientVersion].every(semver.valid)) {
+    const [serverMajor, serverMinor] = parse(serverVersion)
+    const [clientMajor, clientMinor] = parse(clientVersion)
+    if (serverMajor > clientMajor || serverMinor > clientMinor) {
+      console.warn(
+        `Your openNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.`,
+      )
+    } else if (
+      serverMajor < clientMajor ||
+      (serverMajor === clientMajor && serverMinor < clientMinor)
+    ) {
+      // panic, then
+      console.warn(
+        'Your openNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.',
+      )
+    }
   }
 }
 
