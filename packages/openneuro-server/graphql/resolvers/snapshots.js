@@ -141,8 +141,20 @@ export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
 }
 
 const Snapshot = {
-  analytics: snapshot => analytics(snapshot),
-  issues: snapshot => snapshotIssues(snapshot),
+  analytics: () => analytics,
+  issues: snapshotIssues,
+  description: snapshot =>
+    description(snapshot, {
+      datasetId: snapshot.datasetId,
+      tag: snapshot.tag,
+    }),
+  readme: snapshot =>
+    readme(snapshot, {
+      datasetId: snapshot.datasetId,
+      revision: snapshot.hexsha,
+    }),
+  files: (snapshot, { prefix }) =>
+    getFiles(snapshot.datasetId, snapshot.hexsha).then(filterFiles(prefix)),
 }
 
 export default Snapshot
