@@ -39,7 +39,7 @@ const PETDummy = loadable(() =>
 // routes ----------------------------------------------------------------
 
 const PublicDashboard = () => <Dashboard public />
-const SavedDashboard = () => <Dashboard starred />
+const SavedDashboard = () => <Dashboard saved />
 
 const appRoutes = () => (
   <Switch>

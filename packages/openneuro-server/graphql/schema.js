@@ -306,7 +306,7 @@ const typeDefs = `
     "Return all datasets, ignores any other constraints but not sorts"
     all: Boolean
     "Return starred datasets"
-    starred: Boolean  
+    saved: Boolean  
   }
 
   # Ephemeral draft or working tree for a dataset

@@ -15,7 +15,7 @@ const FlexUl = styled.ul`
   flex: 0 1;
 `
 
-const Dashboard = ({ public: isPublic, starred: isSaved }) => {
+const Dashboard = ({ public: isPublic, saved: isSaved }) => {
   const prefix = isPublic ? '/public' : '/dashboard'
   const routePrefix = isPublic ? '/public' : isSaved ? '/saved' : '/dashboard'
   const title = (isPublic ? 'Public' : 'My') + ' Datasets'
@@ -39,7 +39,7 @@ const Dashboard = ({ public: isPublic, starred: isSaved }) => {
         <Route
           name="datalad-datasets-dashboard"
           path={routePrefix + '/datasets'}
-          component={() => <DatasetQuery public={isPublic} starred={isSaved} />}
+          component={() => <DatasetQuery public={isPublic} saved={isSaved} />}
         />
       </Switch>
     </DashboardWrapper>
@@ -48,7 +48,7 @@ const Dashboard = ({ public: isPublic, starred: isSaved }) => {
 
 Dashboard.propTypes = {
   public: PropTypes.bool,
-  starred: PropTypes.bool,
+  saved: PropTypes.bool,
 }
 
 export default withRouter(Dashboard)
