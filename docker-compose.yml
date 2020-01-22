@@ -135,6 +135,21 @@ services:
     image: elasticsearch:7.5.1
     environment:
       discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: 'true'
+      cluster.routing.allocation.disk.watermark.flood_stage: 1gb
+      cluster.routing.allocation.disk.watermark.low: 10gb
+      cluster.routing.allocation.disk.watermark.high: 5gb
     ports:
       - '9200:9200'
       - '9300:9300'
+
+  indexer:
+    build:
+      context: .
+      dockerfile: ./packages/openneuro-indexer/Dockerfile
+      target: indexer
+    depends_on:
+      - server
+    env_file: ./config.env
+    volumes:
+      - .:/srv

@@ -4,9 +4,6 @@ import createClient from 'openneuro-client'
 import config from '../../../config'
 import packageJson from '../../../package.json'
 
-export default createClient(
-  `${config.url}/crn/graphql`,
-  null,
-  null,
-  packageJson.version,
-)
+export default createClient(`${config.url}/crn/graphql`, {
+  clientVersion: packageJson.version,
+})

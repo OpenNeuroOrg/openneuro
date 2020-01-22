@@ -6,13 +6,14 @@ import { createUploadLink } from 'apollo-upload-client'
 import { ApolloLink, split, Observable } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
-import FormData from 'form-data'
 import semver from 'semver'
+import * as FormData from 'form-data'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
-import * as datasetIterator from './datasetIterator.js'
+import datasetGenerator from './datasetGenerator.js'
+import { version } from '../package.json'
 
 const cache = new InMemoryCache({
   freezeResults: true,
@@ -21,11 +22,37 @@ const cache = new InMemoryCache({
 /**
  * Setup a client for working with the OpenNeuro API
  *
- * @param {string} uri
+ * @param {string} uri GraphQL API URI (passed to Apollo Client)
+ * @param {object} options Optional extra configuration
+ * @param {function} [options.getAuthorization] Synchronous authorization cookie factory
+ * @param {function} [options.fetch] Fetch implementation
+ * @param {string} [options.clientVersion] Client version to check automatically on requests
+ * @param {Array<ApolloLink>} [options.links] Any extra links to compose
  */
-const createClient = (uri, getAuthorization, fetch, clientVersion) => {
-  const link = createLink(uri, getAuthorization, fetch, clientVersion)
-  return new ApolloClient({ uri, link, cache, connectToDevTools: true })
+const createClient = (uri, options = {}) => {
+  const {
+    getAuthorization = null,
+    fetch = null,
+    clientVersion = version,
+    links = [],
+  } = options
+  // createLink must be last since it contains a terminating link
+  const composedLink = ApolloLink.from([
+    compareVersionsLink(clientVersion),
+    ...links,
+    createLink(uri, getAuthorization, fetch),
+  ])
+
+  const apolloClientOptions = {
+    uri,
+    link: composedLink,
+    cache,
+    connectToDevTools: true,
+  }
+
+  // TODO: Figure this out?
+  // @ts-ignore: This actually works but seems to be a typing error somewhere in Apollo
+  return new ApolloClient(apolloClientOptions)
 }
 
 const authLink = getAuthorization =>
@@ -110,7 +137,7 @@ const compareVersionsLink = clientVersion =>
       ),
   )
 
-const createLink = (uri, getAuthorization, fetch, clientVersion) => {
+const createLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
 
   // server-side link
@@ -119,23 +146,32 @@ const createLink = (uri, getAuthorization, fetch, clientVersion) => {
 
   try {
     // browser-side link
-    ws = process.browser ? wsLink(uri) : null
+    ws = typeof window !== 'undefined' ? wsLink(uri) : null
   } catch (e) {
     // Don't die when websocket setup fails
   }
   if (ws) {
     link = split(
       ({ query }) => {
-        const { kind, operation } = getMainDefinition(query)
-        return kind === 'OperationDefinition' && operation === 'subscription'
+        /**
+         * Typescript complains because this can return
+         * FragmentDefinitionNode or OperationDefinitionNode
+         * so we cannot use a simple destructuring
+         * `const { kind, operation }`
+         **/
+        const definition = getMainDefinition(query)
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        )
       },
       ws,
       middlewareAuthLink(uri, getAuthorization, fetch),
     )
   }
 
-  return ApolloLink.from([compareVersionsLink(clientVersion), link])
+  return link
 }
 
-export { files, datasets, snapshots, users, datasetIterator }
+export { files, datasets, snapshots, users, datasetGenerator }
 export default createClient

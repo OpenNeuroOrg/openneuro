@@ -17,7 +17,6 @@
   "dependencies": {
     "@passport-next/passport-google-oauth2": "^1.0.0",
     "@sentry/node": "^4.5.3",
-    "apollo-client-preset": "^1.0.8",
     "apollo-server": "2.7.0",
     "apollo-server-express": "2.7.0",
     "async": "^2.4.1",

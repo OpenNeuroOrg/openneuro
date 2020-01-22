@@ -1,8 +1,7 @@
-import config from '../config.js'
 import { schemaComposer } from 'graphql-compose'
-import { elasticApiFieldConfig } from 'graphql-compose-elasticsearch'
 import resolvers from './resolvers'
 import Subscription from './resolvers/subscriptions.js'
+import elasticField from './elastic-field'
 
 export const typeDefs = `
   scalar Date
@@ -553,10 +552,7 @@ schemaComposer.addTypeDefs(typeDefs)
 schemaComposer.addResolveMethods(resolvers)
 schemaComposer.Subscription.addFields(Subscription)
 schemaComposer.Query.addFields({
-  search: elasticApiFieldConfig({
-    host: config.elasticsearchConnection,
-    apiVersion: '7.5',
-  }),
+  search: elasticField,
 })
 
 export default schemaComposer.buildSchema()
