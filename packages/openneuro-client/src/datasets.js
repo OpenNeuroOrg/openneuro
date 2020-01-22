@@ -85,12 +85,22 @@ export const getUntrackedFiles = gql`
 `
 
 export const getDatasets = gql`
-  query getDatasets {
-    datasets(first: 5) {
+  query getDatasets(
+    $cursor: String
+    $orderBy: DatasetSort = { created: descending }
+    $filterBy: DatasetFilter = {}
+    $myDatasets: Boolean = false
+  ) {
+    datasets(
+      first: 25
+      after: $cursor
+      orderBy: $orderBy
+      filterBy: $filterBy
+      myDatasets: $myDatasets
+    ) {
       edges {
         node {
           id
-          _id: id
           created
           uploader {
             id
@@ -99,7 +109,6 @@ export const getDatasets = gql`
           public
           permissions {
             userId
-            _id: userId
             level
             access: level
             user {
@@ -146,7 +155,19 @@ export const getDatasets = gql`
             userId
             datasetId
           }
+          snapshots {
+            id
+            created
+            tag
+          }
         }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        count
       }
     }
   }

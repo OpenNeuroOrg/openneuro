@@ -12,6 +12,7 @@ import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
+import * as datasetIterator from './datasetIterator.js'
 
 const cache = new InMemoryCache({
   freezeResults: true,
@@ -136,5 +137,5 @@ const createLink = (uri, getAuthorization, fetch, clientVersion) => {
   return ApolloLink.from([compareVersionsLink(clientVersion), link])
 }
 
-export { files, datasets, snapshots, users }
+export { files, datasets, snapshots, users, datasetIterator }
 export default createClient
