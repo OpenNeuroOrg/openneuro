@@ -129,31 +129,53 @@ export const datasetsFilter = options => match => {
       aggregates.push({
         $lookup: {
           from: 'stars',
-          let: { userId: options.userId }, //datasetId: '$id',
+          let: { datasetId: '$id' },
           pipeline: [
             { $unwind: '$stars' }, //ea
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$userId', '$$userId'] }, // JOIN stars.userId = datasets.userId
-                    // { $eq: ['$datasetId', '$$datasetId'] }, // JOIN stars.datasetId ON datasets.id
+                    { $eq: ['$userId', '$$options.userId'] },
+                    { $eq: ['$datasetId', '$$id'] },
                   ],
                 },
               },
             },
           ],
-          as: 'userStarred',
-        },
-      })
-      // @ts-ignore
-      aggregates.push({
-        $addFields: {
-          saved: { $eq: '$userStarred' },
+          as: 'saved',
         },
       })
       filterMatch.saved = true
     }
+    //   aggregates.push({
+    //     $lookup: {
+    //       from: 'stars',
+    //       let: { userId: options.userId }, //datasetId: '$id',
+    //       pipeline: [
+    //         { $unwind: '$stars' }, //ea
+    //         {
+    //           $match: {
+    //             $expr: {
+    //               $and: [
+    //                 { $eq: ['$userId', '$$userId'] }, // JOIN stars.userId = datasets.userId
+    //                 // { $eq: ['$datasetId', '$$datasetId'] }, // JOIN stars.datasetId ON datasets.id
+    //               ],
+    //             },
+    //           },
+    //         },
+    //       ],
+    //       as: 'userStarred',
+    //     },
+    //   })
+    //   // @ts-ignore
+    //   aggregates.push({
+    //     $addFields: {
+    //       saved: { $eq: '$userStarred' },
+    //     },
+    //   })
+    //   filterMatch.saved = true
+    // }
     if ('incomplete' in filters && filters.incomplete) {
       filterMatch.revision = null
     }
