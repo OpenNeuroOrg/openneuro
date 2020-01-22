@@ -68,25 +68,27 @@
     border-bottom: 1px solid $ddd;
 
     .filters {
-        float: right;
+        float: left;
         text-align: right;
-        padding: 0;
         margin: 0;
         position: relative;
-
+        padding: 0 10px;
+        @media (min-width: 1080px) {
+            margin-left: 60px;
+        }
         label {
             margin: 0;
             text-transform: uppercase;
             font-size: 10px;
             font-weight: 600;
             color: $c-77;
-            text-align: right;
-            padding: 0 10px 0 0;
-
+            text-align: center;
+            padding: 10px;
         }
-
         button {
             @extend %btn-filter;
+            border: 1px solid #c2c2c2;
+            border-width: 0 1px;
 
             &.filter-all {
                 //text-transform: uppercase;
@@ -145,6 +147,7 @@
         padding: 0;
         margin: 0;
         position: relative;
+        white-space: nowrap;
 
         label {
             margin: 0;
@@ -153,7 +156,8 @@
             font-weight: 600;
             color: $c-77;
             text-align: right;
-            padding: 0 10px 0 20px;
+            float: left;
+            padding: 10px 10px 10px 10px;
         }
 
         a {

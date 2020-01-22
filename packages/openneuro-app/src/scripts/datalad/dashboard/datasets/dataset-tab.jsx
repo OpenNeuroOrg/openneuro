@@ -83,7 +83,6 @@ const DatasetTab = ({
       <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
         <div className={isMobile ? '' : 'sort clearfix'}>
           {!isMobile && <label>Sort by:</label>}
-          {/* <DatasetViewTitle>Sort By:</DatasetViewTitle> */}
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
         {publicDashboard ? null : (
