@@ -60,6 +60,9 @@ const config = {
     prefix: process.env.DOI_PREFIX,
     url: process.env.DOI_URL,
   },
+  elasticsearch: {
+    connection: process.env.ELASTICSEARCH_CONNECTION,
+  },
 }
 
 export default config
