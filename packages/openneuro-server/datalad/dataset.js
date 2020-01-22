@@ -131,6 +131,28 @@ export const datasetsFilter = options => match => {
     if ('userId' in options && 'shared' in filters && filters.shared) {
       filterMatch.uploader = { $ne: options.userId }
     }
+    if ('userId' in options && 'starred' in filters && filters.starred) {
+      aggregates.push({
+        $lookup: {
+          from: 'stars',
+          let: { datasetId: '$id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$datasetId', '$$datasetId'] },
+                    { $eq: ['$userId', options.userId] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'starred',
+        },
+      })
+      filterMatch.starred = { $exists: true, $ne: [] }
+    }
     if ('invalid' in filters && filters.invalid) {
       // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
       aggregates.push({
