@@ -7,6 +7,10 @@ const UploadSelect = () => (
     <UploaderContext.Consumer>
       {uploader => (
         <div className="message fade-in">
+          <p>
+            To protect the privacy of the individuals who have been scanned, we
+            require that all scan data be defaced before publishing a dataset.
+          </p>
           Select a{' '}
           <a
             href="http://bids.neuroimaging.io"
