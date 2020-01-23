@@ -21,7 +21,6 @@ import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
 import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
-import stars from '../handlers/stars'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -131,13 +130,12 @@ export const datasetsFilter = options => match => {
           from: 'stars',
           let: { datasetId: '$id' },
           pipeline: [
-            { $unwind: '$stars' }, //ea
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$userId', '$$options.userId'] },
-                    { $eq: ['$datasetId', '$$id'] },
+                    { $eq: ['$userId', options.userId] },
+                    { $eq: ['$datasetId', '$$datasetId'] },
                   ],
                 },
               },
@@ -146,36 +144,9 @@ export const datasetsFilter = options => match => {
           as: 'saved',
         },
       })
-      filterMatch.saved = true
+      filterMatch.saved = { $exists: true, $ne: [] } // arr datasetIds
     }
-    //   aggregates.push({
-    //     $lookup: {
-    //       from: 'stars',
-    //       let: { userId: options.userId }, //datasetId: '$id',
-    //       pipeline: [
-    //         { $unwind: '$stars' }, //ea
-    //         {
-    //           $match: {
-    //             $expr: {
-    //               $and: [
-    //                 { $eq: ['$userId', '$$userId'] }, // JOIN stars.userId = datasets.userId
-    //                 // { $eq: ['$datasetId', '$$datasetId'] }, // JOIN stars.datasetId ON datasets.id
-    //               ],
-    //             },
-    //           },
-    //         },
-    //       ],
-    //       as: 'userStarred',
-    //     },
-    //   })
-    //   // @ts-ignore
-    //   aggregates.push({
-    //     $addFields: {
-    //       saved: { $eq: '$userStarred' },
-    //     },
-    //   })
-    //   filterMatch.saved = true
-    // }
+
     if ('incomplete' in filters && filters.incomplete) {
       filterMatch.revision = null
     }
@@ -217,7 +188,6 @@ export const datasetsFilter = options => match => {
     }
     aggregates.push({ $match: filterMatch })
   }
-  console.log({ aggregates })
   return aggregates
 }
 /**
