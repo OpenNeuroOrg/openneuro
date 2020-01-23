@@ -44,7 +44,7 @@ export const typeDefs = `
     "Return only datasets with an invalid Draft"
     invalid: Boolean
     "Return only datasets starred by the query user"
-    starred: Boolean
+    saved: Boolean
     "Return all datasets, ignores any other constraints but not sorts"
     all: Boolean
   }

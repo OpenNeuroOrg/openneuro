@@ -145,7 +145,7 @@ const loadMoreRows = (data, fetchMore) => {
   return () => loadMoreInner(data.datasets.pageInfo.endCursor)
 }
 
-const datasetQueryDisplay = isPublic => ({
+const datasetQueryDisplay = (isPublic, isSaved) => ({
   loading,
   data,
   fetchMore,
@@ -163,16 +163,20 @@ const datasetQueryDisplay = isPublic => ({
       queryVariables={variables}
       publicDashboard={isPublic}
       isMobile={useMedia('(max-width: 765px) ')}
+      savedDashboard={isSaved}
     />
   )
 }
 
-const DatasetQuery = ({ public: isPublic }) => (
+const DatasetQuery = ({ public: isPublic, saved: isSaved }) => (
   <Query
     query={getDatasets}
-    variables={{ filterBy: { public: isPublic }, myDatasets: !isPublic }}
+    variables={{
+      filterBy: { public: isPublic, saved: isSaved },
+      myDatasets: !isPublic,
+    }}
     errorPolicy="all">
-    {datasetQueryDisplay(isPublic)}
+    {datasetQueryDisplay(isPublic, isSaved)}
   </Query>
 )
 
