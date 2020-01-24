@@ -66,14 +66,17 @@
     padding: 0;
     background: $f9;
     border-bottom: 1px solid $ddd;
-
     .filters {
-        float: right;
-        @media (min-width: 1080px) {
-            margin-left: 60px;
+        float: right; 
+        @media (max-width: 980px) {
+            float: left;
+            label {
+                margin-left: 0px !important;
+            }
         }
         label {
             margin: 0;
+            margin-left: 80px; 
             text-transform: uppercase;
             font-size: 10px;
             font-weight: 600;
@@ -154,7 +157,7 @@
             font-weight: 600;
             color: $c-77;
             float: left;
-            padding: 11px 10px 10px 10px;
+            padding: 11px 12px;
         }
 
         a {
