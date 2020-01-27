@@ -20,7 +20,7 @@
     "graphql": "14.5.8",
     "graphql-tools": "4.0.6",
     "node-fetch": "^2.6.0",
-    "semver": "^7.1.1",
+    "semver": "^5.5.0",
     "subscriptions-transport-ws": "^0.9.15"
   },
   "jest": {
