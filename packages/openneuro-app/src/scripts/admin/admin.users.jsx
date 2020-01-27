@@ -51,16 +51,24 @@ export const SET_BLOCKED = gql`
   ${USER_FRAGMENT}
 `
 
-const UsersQuery = () => <Query query={GET_USERS}>{UsersQueryResult}</Query>
+export const UsersQuery = () => (
+  <Query query={GET_USERS}>{UsersQueryResult}</Query>
+)
 
-const UsersQueryResult = ({ loading, data, refetch }) => {
-  return <Users loading={loading} users={data.users || []} refetch={refetch} />
+export const UsersQueryResult = ({ loading, data, refetch }) => {
+  if (loading) {
+    return <Spinner active message="Loading users" />
+  } else {
+    return (
+      <Users loading={loading} users={data.users || []} refetch={refetch} />
+    )
+  }
 }
 
 UsersQueryResult.propTypes = {
   loading: PropTypes.bool,
   data: PropTypes.object,
-  refetch: PropTypes.function,
+  refetch: PropTypes.func,
 }
 
 class Users extends React.Component {
