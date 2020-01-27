@@ -31,7 +31,6 @@ export const compileMetadata = dataset => {
     studyDesign: getFromMetadata('studyDesign') || '',
     openneuroPaperDOI: getFromMetadata('openneuroPaperDOI') || '',
     dxStatus: getFromMetadata('dxStatus') || '',
-    tasksCompleted: getFromMetadata('tasksCompleted') || '',
     grantFunderName: getFromMetadata('grantFunderName') || '',
     grantIdentifier: getFromMetadata('grantIdentifier') || '',
 
@@ -60,6 +59,7 @@ export const compileMetadata = dataset => {
     dataProcessed: getFromSummary('dataProcessed') || false,
     ages: getAgesFromSummary() || [],
     modalities: getFromSummary('modalities') || [],
+    tasksCompleted: getFromSummary('tasks') || [],
   }
 }
 const AddMetadata = ({ dataset, history, location }) => {
