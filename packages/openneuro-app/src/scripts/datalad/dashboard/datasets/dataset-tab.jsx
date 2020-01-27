@@ -16,6 +16,14 @@ const FullHeightFlexDiv = styled.div`
   flex: 0 1 auto;
 `
 
+const MobileLabel = styled.label`
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+  color: #777;
+  margin: 10px 10px 7px 10px;
+`
+
 const title = isPublic => (isPublic ? 'Public Dataset Results' : 'My Datasets')
 
 const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
@@ -83,12 +91,15 @@ const DatasetTab = ({
       <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
         <div className={isMobile ? '' : 'sort clearfix'}>
           {!isMobile && <label>Sort by:</label>}
-          {/* <DatasetViewTitle>Sort By:</DatasetViewTitle> */}
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
         {publicDashboard ? null : (
           <div className="filters">
-            <label>Filter by:</label>
+            {isMobile ? (
+              <MobileLabel>Filter by:</MobileLabel>
+            ) : (
+              <label>Filter by:</label>
+            )}
             <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
           </div>
         )}

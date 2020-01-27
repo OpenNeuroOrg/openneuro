@@ -66,27 +66,30 @@
     padding: 0;
     background: $f9;
     border-bottom: 1px solid $ddd;
-
     .filters {
-        float: right;
-        text-align: right;
-        padding: 0;
-        margin: 0;
-        position: relative;
-
+        float: right; 
+        @media (max-width: 980px) {
+            float: left;
+            label {
+                margin-left: 0px !important;
+            }
+        }
         label {
             margin: 0;
+            margin-left: 80px; 
             text-transform: uppercase;
             font-size: 10px;
             font-weight: 600;
             color: $c-77;
-            text-align: right;
-            padding: 0 10px 0 0;
-
+            text-align: center;
+            padding: 10px;
         }
-
         button {
             @extend %btn-filter;
+            padding: 10px 20px;
+            border: 1px solid #c2c2c2;
+            border-width: 0 1px;
+            border-right: none;
 
             &.filter-all {
                 //text-transform: uppercase;
@@ -145,6 +148,7 @@
         padding: 0;
         margin: 0;
         position: relative;
+        white-space: nowrap;
 
         label {
             margin: 0;
@@ -152,13 +156,13 @@
             font-size: 10px;
             font-weight: 600;
             color: $c-77;
-            text-align: right;
-            padding: 0 10px 0 20px;
+            float: left;
+            padding: 11px 12px;
         }
 
         a {
             @extend %btn-sort;
-
+            padding: 11px 20px;
             &.name,
             &.date {
                 border: 1px solid $c2;
