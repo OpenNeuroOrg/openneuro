@@ -70,6 +70,7 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   }
 }
 
+const hbar = '\n-----------------------------------------------------\n'
 const parse = version => [semver.major(version), semver.minor(version)]
 const checkVersions = (serverVersion, clientVersion) => {
   if ([serverVersion, clientVersion].every(semver.valid)) {
@@ -77,7 +78,7 @@ const checkVersions = (serverVersion, clientVersion) => {
     const [clientMajor, clientMinor] = parse(clientVersion)
     if (serverMajor > clientMajor || serverMinor > clientMinor) {
       console.warn(
-        `Your openNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.`,
+        `${hbar}Your OpenNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.${hbar}`,
       )
     } else if (
       serverMajor < clientMajor ||
@@ -85,7 +86,7 @@ const checkVersions = (serverVersion, clientVersion) => {
     ) {
       // panic, then
       console.warn(
-        'Your openNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.',
+        `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.${hbar}`,
       )
     }
   }
