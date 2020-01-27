@@ -24,7 +24,12 @@ const MobileLabel = styled.label`
   margin: 10px 10px 7px 10px;
 `
 
-const title = isPublic => (isPublic ? 'Public Dataset Results' : 'My Datasets')
+const title = (isPublic, isSaved) =>
+  isPublic
+    ? 'Public Dataset Results'
+    : isSaved
+    ? 'Saved Datasets'
+    : 'My Datasets'
 
 const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
   if (
@@ -58,13 +63,14 @@ const DatasetTab = ({
   queryVariables,
   loading,
   publicDashboard,
+  savedDashboard,
   error,
   isMobile,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
       <title>
-        {pageTitle} - {title(publicDashboard)}
+        {pageTitle} - {title(publicDashboard, savedDashboard)}
       </title>
     </Helmet>
     <div className="header-filter-sort clearfix">
@@ -76,7 +82,7 @@ const DatasetTab = ({
             </div>
           )}
           <div className="col-md-5">
-            <h2>{title(publicDashboard)}</h2>
+            <h2>{title(publicDashboard, savedDashboard)}</h2>
             {isMobile && !loading && (
               <h6>Results {data.datasets.pageInfo.count} </h6>
             )}
@@ -93,7 +99,7 @@ const DatasetTab = ({
           {!isMobile && <label>Sort by:</label>}
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
-        {publicDashboard ? null : (
+        {publicDashboard || savedDashboard ? null : (
           <div className="filters">
             {isMobile ? (
               <MobileLabel>Filter by:</MobileLabel>
@@ -126,6 +132,7 @@ DatasetTab.propTypes = {
   queryVariables: PropTypes.object,
   loading: PropTypes.bool,
   publicDashboard: PropTypes.bool,
+  savedDashboard: PropTypes.bool,
   error: PropTypes.object,
   isMobile: PropTypes.bool,
 }

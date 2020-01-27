@@ -15,23 +15,31 @@ const FlexUl = styled.ul`
   flex: 0 1;
 `
 
-const Dashboard = ({ public: isPublic }) => {
+const Dashboard = ({ public: isPublic, saved: isSaved }) => {
   const prefix = isPublic ? '/public' : '/dashboard'
+  const routePrefix = isPublic ? '/public' : isSaved ? '/saved' : '/dashboard'
+  const title = (isPublic ? 'Public' : 'My') + ' Datasets'
   return (
     <DashboardWrapper>
       <FlexUl className="nav nav-pills tabs">
         <li>
           <NavLink to={prefix + '/datasets'} className="btn-tab">
-            {isPublic ? 'Public' : 'My'} Datasets
+            {title}
           </NavLink>
+          {!isPublic && (
+            <NavLink to={'/saved/datasets'} className="btn-tab">
+              Saved Datasets
+            </NavLink>
+          )}
         </li>
       </FlexUl>
       <Switch>
         <Redirect path="/dashboard" to="/dashboard/datasets" exact />
+        <Redirect path="/saved" to="/saved/datasets" exact />
         <Route
           name="datalad-datasets-dashboard"
-          path={prefix + '/datasets'}
-          component={() => <DatasetQuery public={isPublic} />}
+          path={routePrefix + '/datasets'}
+          component={() => <DatasetQuery public={isPublic} saved={isSaved} />}
         />
       </Switch>
     </DashboardWrapper>
@@ -40,6 +48,7 @@ const Dashboard = ({ public: isPublic }) => {
 
 Dashboard.propTypes = {
   public: PropTypes.bool,
+  saved: PropTypes.bool,
 }
 
 export default withRouter(Dashboard)

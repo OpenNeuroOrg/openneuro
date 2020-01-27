@@ -106,11 +106,10 @@ export const cacheDatasetConnection = options => connectionArguments => {
  * @returns {(match: object) => array} Array of aggregate stages
  */
 export const datasetsFilter = options => match => {
-  const aggregates = [{ $match: match }]
+  const aggregates = [{ $match: match }] //mongo aggregates + match docs
   const filterMatch = {}
   if ('filterBy' in options) {
     const filters = options.filterBy
-
     if (
       'admin' in options &&
       options.admin &&
@@ -120,31 +119,77 @@ export const datasetsFilter = options => match => {
       // For admins and {filterBy: all}, ignore any passed in matches
       aggregates.length = 0
     }
-
     // Apply any filters as needed
     if ('public' in filters && filters.public) {
       filterMatch.public = true
     }
+    if ('saved' in filters && filters.saved) {
+      // @ts-ignore
+      aggregates.push({
+        $lookup: {
+          from: 'stars',
+          let: { datasetId: '$id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$userId', options.userId] },
+                    { $eq: ['$datasetId', '$$datasetId'] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'saved',
+        },
+      })
+      filterMatch.saved = { $exists: true, $ne: [] } // arr datasetIds
+    }
+
     if ('incomplete' in filters && filters.incomplete) {
       filterMatch.revision = null
     }
     if ('userId' in options && 'shared' in filters && filters.shared) {
       filterMatch.uploader = { $ne: options.userId }
     }
-    if ('invalid' in filters && filters.invalid) {
-      // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
+    if ('userId' in options && 'starred' in filters && filters.starred) {
       aggregates.push({
         $lookup: {
-          from: 'issues',
-          let: { revision: '$revision' },
+          from: 'stars',
+          let: { datasetId: '$id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$datasetId', '$$datasetId'] },
+                    { $eq: ['$userId', options.userId] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'starred',
+        },
+      })
+      filterMatch.starred = { $exists: true, $ne: [] }
+    }
+    if ('invalid' in filters && filters.invalid) {
+      // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
+      // @ts-ignore
+      aggregates.push({
+        $lookup: {
+          from: 'issues', //look at issues collection
+          let: { revision: '$revision' }, // find issue match revision datasets.revision
           pipeline: [
             { $unwind: '$issues' },
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$id', '$$revision'] }, // JOIN CONSTRAINT
-                    { $eq: ['$issues.severity', 'error'] }, // WHERE severity = 'error'
+                    { $eq: ['$id', '$$revision'] }, // JOIN CONSTRAINT  issues.id = datasets.revision
+                    { $eq: ['$issues.severity', 'error'] }, // WHERE severity = 'error'  issues.severity db
                   ],
                 },
               },
@@ -154,6 +199,7 @@ export const datasetsFilter = options => match => {
         },
       })
       // Count how many error fields matched in previous step
+      // @ts-ignore
       aggregates.push({
         $addFields: {
           errorCount: { $size: '$issues' },
@@ -166,7 +212,6 @@ export const datasetsFilter = options => match => {
   }
   return aggregates
 }
-
 /**
  * Fetch all datasets
  * @param {object} options {orderBy: {created: 'ascending'}, filterBy: {public: true}}
