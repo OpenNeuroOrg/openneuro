@@ -172,7 +172,7 @@ const DatasetQuery = ({ public: isPublic, saved: isSaved }) => (
   <Query
     query={getDatasets}
     variables={{
-      filterBy: { public: isPublic, saved: isSaved },
+      filterBy: { public: isPublic, starred: isSaved },
       myDatasets: !isPublic,
     }}
     errorPolicy="all">
