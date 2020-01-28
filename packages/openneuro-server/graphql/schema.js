@@ -1,5 +1,6 @@
 import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
+import Subscription from './resolvers/subscriptions.js'
 
 export const typeDefs = `
   scalar Date
@@ -134,16 +135,6 @@ export const typeDefs = `
     subscribeToNewsletter(email: String!): Boolean
     # Upserts dataset metadata
     addMetadata(datasetId: ID!, metadata: MetadataInput!): Metadata
-  }
-
-  type Subscription {
-    datasetCreated: Dataset
-    datasetDeleted: ID
-    snapshotAdded(datasetId: ID!): Snapshot
-    snapshotDeleted(datasetId: ID!): ID
-    permissionsUpdated(datasetId: ID!): [Permission]
-    draftUpdated(datasetId: ID!): Dataset
-    filesUpdated(datasetId: ID!): FilesUpdate
   }
 
   input SummaryInput {
@@ -558,5 +549,6 @@ export const typeDefs = `
 
 schemaComposer.addTypeDefs(typeDefs)
 schemaComposer.addResolveMethods(resolvers)
+schemaComposer.Subscription.addFields(Subscription)
 
 export default schemaComposer.buildSchema()

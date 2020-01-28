@@ -10,52 +10,62 @@ import { withFilter } from 'graphql-subscriptions'
 const filterDatasetId = (payload, variables) =>
   payload.datasetId === variables.datasetId
 
-export const datasetCreated = () => ({
-  subscribe: () => pubsub.asyncIterator('datasetCreated'),
-})
-
-export const datasetDeleted = () => ({
-  subscribe: () => pubsub.asyncIterator('datasetDeleted'),
-})
-
-export const snapshotAdded = () => ({
+export const snapshotAdded = {
+  type: 'Snapshot',
   subscribe: withFilter(
     () => pubsub.asyncIterator('snapshotAdded'),
     filterDatasetId,
   ),
-})
+  args: {
+    datasetId: 'ID!',
+  },
+}
 
-export const snapshotDeleted = () => ({
+export const snapshotDeleted = {
+  type: 'ID',
   subscribe: withFilter(
     () => pubsub.asyncIterator('snapshotDeleted'),
     filterDatasetId,
   ),
-})
+  args: {
+    datasetId: 'ID!',
+  },
+}
 
-export const draftUpdated = () => ({
+export const draftUpdated = {
+  type: 'Dataset',
   subscribe: withFilter(
     () => pubsub.asyncIterator('draftUpdated'),
     filterDatasetId,
   ),
-})
+  args: {
+    datasetId: 'ID!',
+  },
+}
 
-export const permissionsUpdated = () => ({
+export const permissionsUpdated = {
+  type: '[Permission]',
   subscribe: withFilter(
     () => pubsub.asyncIterator('permissionsUpdated'),
     filterDatasetId,
   ),
-})
+  args: {
+    datasetId: 'ID!',
+  },
+}
 
-export const filesUpdated = () => ({
+export const filesUpdated = {
+  type: 'FilesUpdate',
   subscribe: withFilter(
     () => pubsub.asyncIterator('filesUpdated'),
     filterDatasetId,
   ),
-})
+  args: {
+    datasetId: 'ID!',
+  },
+}
 
 const Subscription = {
-  datasetCreated,
-  datasetDeleted,
   snapshotAdded,
   snapshotDeleted,
   permissionsUpdated,
