@@ -2,12 +2,17 @@ import request from 'superagent'
 import config from '../../config'
 import templates from './templates'
 
+/**
+ * @param {Object} doiConfig
+ * @param {string} doiConfig.username DOI service username
+ * @param {string} doiConfig.password DOI service password
+ */
+export const formatBasicAuth = doiConfig =>
+  'Basic ' +
+  Buffer.from(doiConfig.username + ':' + doiConfig.password).toString('base64')
+
 export default {
-  auth:
-    'Basic ' +
-    new Buffer(config.doi.username + ':' + config.doi.password).toString(
-      'base64',
-    ),
+  auth: formatBasicAuth(config.doi),
   createDOI(accNumber, snapshotId) {
     let doi = config.doi.prefix + '/openneuro.' + accNumber
     if (snapshotId) {
