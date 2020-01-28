@@ -11,6 +11,7 @@ import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
+import packageJson from '../../../package.json'
 import { xhrFetch } from './xhrfetch.js'
 import { withRouter } from 'react-router-dom'
 
@@ -251,6 +252,7 @@ export class UploadClient extends React.Component {
       `${config.url}/crn/graphql`,
       null,
       xhrFetch(this),
+      packageJson.version,
     )
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present

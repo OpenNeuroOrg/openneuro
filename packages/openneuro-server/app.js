@@ -19,6 +19,8 @@ import * as auth from './libs/authentication/states.js'
 import { sitemapHandler } from './handlers/sitemap.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 
+import { version } from './package.json'
+
 // test flag disables Sentry for tests
 export default test => {
   const app = express()
@@ -81,6 +83,10 @@ export default test => {
     cacheControl: true,
     // Don't limit the max size for dataset uploads
     uploads: { maxFieldSize: Infinity },
+    formatResponse: response => {
+      response.extensions.openneuro = { version }
+      return response
+    },
   })
 
   // Setup pre-GraphQL middleware

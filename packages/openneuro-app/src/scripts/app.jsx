@@ -7,13 +7,20 @@ import { frontPage } from 'openneuro-content'
 import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
+import packageJson from '../../package.json'
 import { CookiesProvider } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
-
+//
 const App = ({ config }) => {
   return (
     <CookiesProvider>
-      <ApolloProvider client={getClient(`${config.url}/crn/graphql`)}>
+      <ApolloProvider
+        client={getClient(
+          `${config.url}/crn/graphql`,
+          null,
+          null,
+          packageJson.version,
+        )}>
         <>
           <Helmet>
             <title>{frontPage.pageTitle}</title>

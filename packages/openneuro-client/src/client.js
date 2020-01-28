@@ -3,10 +3,11 @@ import { ApolloClient } from 'apollo-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
-import { split } from 'apollo-link'
+import { ApolloLink, split, Observable } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import FormData from 'form-data'
+import semver from 'semver'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
@@ -21,8 +22,8 @@ const cache = new InMemoryCache({
  *
  * @param {string} uri
  */
-const createClient = (uri, getAuthorization, fetch) => {
-  const link = createLink(uri, getAuthorization, fetch)
+const createClient = (uri, getAuthorization, fetch, clientVersion) => {
+  const link = createLink(uri, getAuthorization, fetch, clientVersion)
   return new ApolloClient({ uri, link, cache, connectToDevTools: true })
 }
 
@@ -58,7 +59,7 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
   const httpUploadLink = createUploadLink({
     uri,
-    fetch,
+    fetch: fetch === null ? undefined : fetch,
     serverFormData: FormData,
     credentials: 'same-origin',
   })
@@ -69,7 +70,46 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   }
 }
 
-const createLink = (uri, getAuthorization, fetch) => {
+const hbar = '\n-----------------------------------------------------\n'
+const parse = version => [semver.major(version), semver.minor(version)]
+const checkVersions = (serverVersion, clientVersion) => {
+  if ([serverVersion, clientVersion].every(semver.valid)) {
+    const [serverMajor, serverMinor] = parse(serverVersion)
+    const [clientMajor, clientMinor] = parse(clientVersion)
+    if (serverMajor > clientMajor || serverMinor > clientMinor) {
+      console.warn(
+        `${hbar}Your OpenNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.${hbar}`,
+      )
+    } else if (
+      serverMajor < clientMajor ||
+      (serverMajor === clientMajor && serverMinor < clientMinor)
+    ) {
+      // panic, then
+      console.warn(
+        `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.${hbar}`,
+      )
+    }
+  }
+}
+
+const compareVersionsLink = clientVersion =>
+  new ApolloLink(
+    (operation, forward) =>
+      new Observable(observer =>
+        forward(operation).subscribe({
+          next: result => {
+            const serverVersion = result.extensions.openneuro.version
+            // alert user if major/minor versions are not in sync
+            checkVersions(serverVersion, clientVersion)
+            observer.next(result)
+          },
+          error: console.error,
+          complete: observer.complete.bind(observer),
+        }),
+      ),
+  )
+
+const createLink = (uri, getAuthorization, fetch, clientVersion) => {
   // We have to setup authLink to inject credentials here
 
   // server-side link
@@ -93,7 +133,7 @@ const createLink = (uri, getAuthorization, fetch) => {
     )
   }
 
-  return link
+  return ApolloLink.from([compareVersionsLink(clientVersion), link])
 }
 
 export { files, datasets, snapshots, users }

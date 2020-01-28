@@ -1,7 +1,13 @@
 import config from '../../../config'
 import getClient, { datasets } from 'openneuro-client'
+import packageJson from '../../../package.json'
 
-const client = getClient(`${config.url}/crn/graphql`)
+const client = getClient(
+  `${config.url}/crn/graphql`,
+  null,
+  null,
+  packageJson.version,
+)
 export default {
   //Analytics
   /**
