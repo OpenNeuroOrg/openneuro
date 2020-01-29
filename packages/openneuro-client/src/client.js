@@ -130,10 +130,8 @@ const compareVersionsLink = clientVersion =>
               const serverVersion = result.extensions.openneuro.version
               // alert user if major/minor versions are not in sync
               checkVersions(serverVersion, clientVersion)
-              observer.next(result)
-            } else {
-              console.error('GraphQL Errors:', result.errors)
             }
+            observer.next(result)
           },
           error: console.error,
           complete: observer.complete.bind(observer),
