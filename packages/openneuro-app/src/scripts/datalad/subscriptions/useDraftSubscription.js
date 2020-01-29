@@ -6,8 +6,8 @@ import {
 } from '../dataset/dataset-query-fragments.js'
 
 const DRAFT_SUBSCRIPTION = gql`
-  subscription draftUpdated($datasetIds: [ID!]) {
-    draftUpdated(datasetIds: $datasetIds) {
+  subscription draftUpdated($datasetId: ID!) {
+    draftUpdated(datasetId: $datasetId) {
       id
       ...DatasetDraft
       ...DatasetIssues
@@ -17,9 +17,9 @@ const DRAFT_SUBSCRIPTION = gql`
   ${DATASET_ISSUES}
 `
 
-const useDraftSubscription = (client, datasetId) => {
+const useDraftSubscription = datasetId => {
   useSubscription(DRAFT_SUBSCRIPTION, {
-    variables: { datasetIds: [datasetId] },
+    variables: { datasetId },
     shouldResubscribe: true,
   })
   console.log('GET subscription update')

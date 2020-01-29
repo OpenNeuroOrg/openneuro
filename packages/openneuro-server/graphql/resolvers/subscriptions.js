@@ -10,16 +10,19 @@ import { withFilter } from 'graphql-subscriptions'
 const filterDatasetId = (payload, variables) =>
   variables.datasetIds.includes(payload.datasetId)
 
-
 export const datasetCreated = () => ({
   subscribe: () => pubsub.asyncIterator('datasetCreated'),
 })
 
 export const datasetDeleted = () => ({
+  type: 'ID!',
   subscribe: withFilter(
     () => pubsub.asyncIterator('datasetDeleted'),
     filterDatasetId,
   ),
+  args: {
+    datasetIds: '[ID!]',
+  },
 })
 
 export const snapshotAdded = {
@@ -56,13 +59,13 @@ export const draftUpdated = {
 }
 
 export const permissionsUpdated = {
-  type: '[Permission]',
+  type: 'Dataset',
   subscribe: withFilter(
     () => pubsub.asyncIterator('permissionsUpdated'),
     filterDatasetId,
   ),
   args: {
-    datasetId: 'ID!',
+    datasetIds: '[ID!]',
   },
 }
 
@@ -78,6 +81,7 @@ export const filesUpdated = {
 }
 
 const Subscription = {
+  datasetDeleted,
   snapshotAdded,
   snapshotDeleted,
   permissionsUpdated,

@@ -7,8 +7,8 @@ import { datasetCacheId } from '../mutations/cache-id.js'
 // import { datasetCacheId } from '../mutations/cache-id.js'
 
 const FILES_SUBSCRIPTION = gql`
-  subscription filesUpdated($datasetIds: [ID!]) {
-    filesUpdated(datasetIds: $datasetIds) {
+  subscription filesUpdated($datasetId: ID!) {
+    filesUpdated(datasetId: $datasetId) {
       action
       payload {
         id
@@ -70,7 +70,7 @@ const FilesSubscription = ({ datasetId }) => (
   (
     <Subscription
       subscription={FILES_SUBSCRIPTION}
-      variables={{ datasetIds: [datasetId] }}
+      variables={{ datasetId }}
       // onSubscriptionData={({ client, subscriptionData: { data } }) => {
       onSubscriptionData={({ client, subscriptionData }) => {
         const { cache } = client

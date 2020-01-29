@@ -5,16 +5,14 @@ import gql from 'graphql-tag'
 
 const DATASET_DELETED_SUBSCRIPTION = gql`
   subscription datasetDeleted($datasetIds: [ID!]) {
-    datasetDeleted(datasetIds: $datasetIds) {
-      datasetId
-    }
+    datasetDeleted(datasetIds: $datasetIds)
   }
 `
 
 const DatasetDeletedSubscription = ({ datasetIds, onDeleted }) => (
   <Subscription
     subscription={DATASET_DELETED_SUBSCRIPTION}
-    variables={{ datasetIds: datasetIds }}
+    variables={{ datasetIds }}
     onSubscriptionData={() => {
       // triggers a redirect to dashboard if on the deleted dataset's page
       // triggers a reload if on a dashboard page containing the deleted dataset
