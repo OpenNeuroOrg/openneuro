@@ -17,12 +17,10 @@ const DRAFT_SUBSCRIPTION = gql`
   ${DATASET_ISSUES}
 `
 
-const useDraftSubscription = datasetId => {
+const useDraftSubscription = datasetId =>
   useSubscription(DRAFT_SUBSCRIPTION, {
     variables: { datasetId },
     shouldResubscribe: true,
   })
-  console.log('GET subscription update')
-}
 
 export default useDraftSubscription

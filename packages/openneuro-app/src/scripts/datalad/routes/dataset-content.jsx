@@ -60,7 +60,7 @@ const DatasetContent = ({ dataset, client }) => {
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
-  useDraftSubscription(client, dataset.id)
+  useDraftSubscription(dataset.id)
   return (
     <>
       <LoggedIn>
