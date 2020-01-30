@@ -24,13 +24,13 @@ exports[`FilesSubscription renders with common props 1`] = `
                     "kind": "Argument",
                     "name": Object {
                       "kind": "Name",
-                      "value": "datasetIds",
+                      "value": "datasetId",
                     },
                     "value": Object {
                       "kind": "Variable",
                       "name": Object {
                         "kind": "Name",
-                        "value": "datasetIds",
+                        "value": "datasetId",
                       },
                     },
                   },
@@ -114,15 +114,12 @@ exports[`FilesSubscription renders with common props 1`] = `
               "directives": Array [],
               "kind": "VariableDefinition",
               "type": Object {
-                "kind": "ListType",
+                "kind": "NonNullType",
                 "type": Object {
-                  "kind": "NonNullType",
-                  "type": Object {
-                    "kind": "NamedType",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "ID",
-                    },
+                  "kind": "NamedType",
+                  "name": Object {
+                    "kind": "Name",
+                    "value": "ID",
                   },
                 },
               },
@@ -130,7 +127,7 @@ exports[`FilesSubscription renders with common props 1`] = `
                 "kind": "Variable",
                 "name": Object {
                   "kind": "Name",
-                  "value": "datasetIds",
+                  "value": "datasetId",
                 },
               },
             },
@@ -139,16 +136,14 @@ exports[`FilesSubscription renders with common props 1`] = `
       ],
       "kind": "Document",
       "loc": Object {
-        "end": 183,
+        "end": 178,
         "start": 0,
       },
     }
   }
   variables={
     Object {
-      "datasetIds": Array [
-        "ds001",
-      ],
+      "datasetId": "ds001",
     }
   }
 />

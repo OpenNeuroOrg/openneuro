@@ -15,10 +15,6 @@ const filterDatasetId = (payload, variables) => {
   return false
 }
 
-export const datasetCreated = () => ({
-  subscribe: () => pubsub.asyncIterator('datasetCreated'),
-})
-
 export const datasetDeleted = () => ({
   type: 'ID!',
   subscribe: withFilter(

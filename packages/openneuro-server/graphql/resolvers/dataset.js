@@ -90,7 +90,7 @@ export const deleteDataset = (obj, { id }, { user, userInfo }) => {
     return datalad.deleteDataset(id).then(deleted => {
       pubsub.publish('datasetDeleted', {
         datasetId: id,
-        datasetDeleted: { datasetId: id },
+        datasetDeleted: id,
       })
       return deleted
     })
