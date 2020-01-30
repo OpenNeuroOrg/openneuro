@@ -12,13 +12,10 @@ const PERMISSIONS_SUBSCRIPTION = gql`
   ${PERMISSION_FRAGMENT}
 `
 
-const usePermissionsSubscription = datasetIds => {
-  console.log('PERMISSIONS UPDATE:', datasetIds)
-  const { data, error } = useSubscription(PERMISSIONS_SUBSCRIPTION, {
+const usePermissionsSubscription = datasetIds =>
+  useSubscription(PERMISSIONS_SUBSCRIPTION, {
     variables: { datasetIds: datasetIds || ['NULL_ID'] },
     shouldResubscribe: true,
   })
-  console.log({ data, error })
-}
 
 export default usePermissionsSubscription

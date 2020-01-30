@@ -5,8 +5,6 @@ import { Query } from 'react-apollo'
 import { datasets } from 'openneuro-client'
 import DatasetTab from './dataset-tab.jsx'
 import useMedia from '../../../mobile/media-hook.jsx'
-import userPermissionsSubscription from '../../subscriptions/usePermissionsSubscription.js'
-import usePermissionsSubscription from '../../subscriptions/usePermissionsSubscription.js'
 
 export const updateQuery = (previousResult, { fetchMoreResult }) => {
   const newEdges = fetchMoreResult.datasets.edges
@@ -66,9 +64,6 @@ const datasetQueryDisplay = (isPublic, isSaved) => ({
   variables,
   error,
 }) => {
-  usePermissionsSubscription(
-    data && data.datasets.edges.map(({ node }) => node.id),
-  )
   return (
     <DatasetTab
       loading={loading}
