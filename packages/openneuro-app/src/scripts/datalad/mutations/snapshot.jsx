@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import { DATASET_SNAPSHOTS } from '../dataset/dataset-query-fragments.js'
-import { datasetCacheId } from './cache-id.js'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
 const CREATE_SNAPSHOT = gql`

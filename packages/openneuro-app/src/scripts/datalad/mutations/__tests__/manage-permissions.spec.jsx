@@ -1,8 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import UpdateDatasetPermissions, {
-  mergeNewPermission,
-} from '../update-permissions.jsx'
+import UpdateDatasetPermissions from '../update-permissions.jsx'
 
 describe('UpdateDatasetPermissions mutation', () => {
   it('renders with default props', () => {

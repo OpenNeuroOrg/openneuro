@@ -24,7 +24,6 @@ import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import useMedia from '../../mobile/media-hook.jsx'
 import useDraftSubscription from '../subscriptions/useDraftSubscription.js'
 import { withApollo } from 'react-apollo'
-import DraftSubscription from '../subscriptions/draft-subscription.jsx'
 import styled from '@emotion/styled'
 
 const MarginBottomDiv = styled.div`
@@ -53,7 +52,7 @@ HasBeenPublished.propTypes = {
 /**
  * Data routing for the main dataset query to display/edit components
  */
-const DatasetContent = ({ dataset, client }) => {
+const DatasetContent = ({ dataset }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const user = getProfile()
   const hasEdit =
@@ -142,7 +141,6 @@ const DatasetContent = ({ dataset, client }) => {
           />
           <DatasetGitHash gitHash={dataset.draft.id} />
         </div>
-        {/* <DraftSubscription datasetId={dataset.id} /> */}
       </LoggedIn>
       {dataset.snapshots && !hasEdit && (
         <Redirect
