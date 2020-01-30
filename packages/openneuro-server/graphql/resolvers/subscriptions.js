@@ -1,4 +1,5 @@
 import pubsub from '../pubsub.js'
+
 import { withFilter } from 'graphql-subscriptions'
 
 /**
@@ -7,8 +8,12 @@ import { withFilter } from 'graphql-subscriptions'
  * @param {object} variables
  * @returns {boolean}
  */
-const filterDatasetId = (payload, variables) =>
-  variables.datasetIds.includes(payload.datasetId)
+const filterDatasetId = (payload, variables) => {
+  const { datasetId, datasetIds } = variables
+  if (datasetId) return datasetId === payload.datasetId
+  if (datasetIds) return datasetIds.includes(payload.datasetId)
+  return false
+}
 
 export const datasetCreated = () => ({
   subscribe: () => pubsub.asyncIterator('datasetCreated'),

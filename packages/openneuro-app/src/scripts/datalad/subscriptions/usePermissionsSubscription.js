@@ -1,8 +1,6 @@
 import { useSubscription } from 'react-apollo'
 import gql from 'graphql-tag'
-import {
-  PERMISSION_FRAGMENT
-} from '../dataset/dataset-query-fragments.js'
+import { PERMISSION_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const PERMISSIONS_SUBSCRIPTION = gql`
   subscription permissionsUpdated($datasetIds: [ID!]) {
@@ -15,15 +13,12 @@ const PERMISSIONS_SUBSCRIPTION = gql`
 `
 
 const usePermissionsSubscription = datasetIds => {
-  console.log('PERMISSION SUB')
-  const { data, loading, error } = useSubscription(PERMISSIONS_SUBSCRIPTION, {
-    variables: { datasetIds },
+  console.log('PERMISSIONS UPDATE:', datasetIds)
+  const { data, error } = useSubscription(PERMISSIONS_SUBSCRIPTION, {
+    variables: { datasetIds: datasetIds || ['NULL_ID'] },
     shouldResubscribe: true,
   })
-  console.log('------------------------')
-  console.log('PERMISSIONS!')
-  console.log({ data, loading, error })
-  console.log('------------------------')
+  console.log({ data, error })
 }
 
 export default usePermissionsSubscription
