@@ -30,21 +30,10 @@ export const datasetDeleted = () => ({
   },
 })
 
-export const snapshotAdded = {
-  type: 'Snapshot',
+export const snapshotsUpdated = {
+  type: 'Dataset',
   subscribe: withFilter(
-    () => pubsub.asyncIterator('snapshotAdded'),
-    filterDatasetId,
-  ),
-  args: {
-    datasetId: 'ID!',
-  },
-}
-
-export const snapshotDeleted = {
-  type: 'ID',
-  subscribe: withFilter(
-    () => pubsub.asyncIterator('snapshotDeleted'),
+    () => pubsub.asyncIterator('snapshotsUpdated'),
     filterDatasetId,
   ),
   args: {
@@ -87,8 +76,7 @@ export const filesUpdated = {
 
 const Subscription = {
   datasetDeleted,
-  snapshotAdded,
-  snapshotDeleted,
+  snapshotsUpdated,
   permissionsUpdated,
   draftUpdated,
   filesUpdated,

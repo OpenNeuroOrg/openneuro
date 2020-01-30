@@ -118,6 +118,53 @@ export const SNAPSHOT_ISSUES = gql`
   }
 `
 
+export const SNAPSHOT_FIELDS = gql`
+  fragment SnapshotFields on Snapshot {
+    id
+    tag
+    created
+    readme
+    description {
+      Name
+      Authors
+      DatasetDOI
+      License
+      Acknowledgements
+      HowToAcknowledge
+      Funding
+      ReferencesAndLinks
+    }
+    files {
+      id
+      filename
+      size
+      directory
+    }
+    summary {
+      modalities
+      sessions
+      subjects
+      subjectMetadata {
+        participantId
+        age
+        sex
+        group
+      }
+      tasks
+      size
+      totalFiles
+      dataProcessed
+    }
+    analytics {
+      downloads
+      views
+    }
+    ...SnapshotIssues
+    hexsha
+  }
+  ${SNAPSHOT_ISSUES}
+`
+
 export const DATASET_METADATA = gql`
   fragment DatasetMetadata on Dataset {
     id

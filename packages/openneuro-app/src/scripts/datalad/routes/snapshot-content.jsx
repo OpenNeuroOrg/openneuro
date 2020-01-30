@@ -18,7 +18,7 @@ import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import DownloadButton from '../fragments/dataset-prominent-links.jsx'
 import Validation from '../validation/validation.jsx'
-import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
+import { SNAPSHOT_FIELDS } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
 import useMedia from '../../mobile/media-hook.jsx'
 
@@ -26,49 +26,10 @@ const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
-      tag
-      created
-      readme
-      description {
-        Name
-        Authors
-        DatasetDOI
-        License
-        Acknowledgements
-        HowToAcknowledge
-        Funding
-        ReferencesAndLinks
-      }
-      files {
-        id
-        filename
-        size
-        directory
-      }
-      summary {
-        modalities
-        sessions
-        subjects
-        subjectMetadata {
-          participantId
-          age
-          sex
-          group
-        }
-        tasks
-        size
-        totalFiles
-        dataProcessed
-      }
-      analytics {
-        downloads
-        views
-      }
-      ...SnapshotIssues
-      hexsha
+      ...SnapshotFields
     }
   }
-  ${SNAPSHOT_ISSUES}
+  ${SNAPSHOT_FIELDS}
 `
 
 const SnapshotContent = ({ dataset, tag }) => (

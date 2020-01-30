@@ -10,6 +10,7 @@ import DatasetPage from './dataset-page.jsx'
 import FilesSubscription from '../subscriptions/files-subscription.jsx'
 import DatasetDeletedSubscription from '../subscriptions/dataset-deleted-subscription.jsx'
 import usePermissionsSubscription from '../subscriptions/usePermissionsSubscription'
+import { useSnapshotAddedSubscription } from '../subscriptions/snapshotSubscriptions'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
 import { DATASET_COMMENTS } from './comments-fragments.js'
 import {
@@ -108,6 +109,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     },
   )
   usePermissionsSubscription([datasetId])
+  useSnapshotAddedSubscription(datasetId)
 
   if (loading) return <Spinner text="Loading Dataset" active />
   else if (error) Sentry.captureException(error)
