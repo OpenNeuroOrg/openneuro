@@ -15,7 +15,6 @@ const useDatasetDeletedSubscription = (datasetIds, cb) => {
     variables: { datasetIds },
     shouldResubscribe: true,
   })
-  console.log(result)
   cb(result)
 }
 
