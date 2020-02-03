@@ -34,7 +34,7 @@ const StarDataset = ({ datasetId, starred }) => (
     }}>
     {starDataset => (
       <WarnButton
-        tooltip="Star Dataset"
+        tooltip="Save Dataset"
         icon={starred ? 'fa-star icon-minus' : 'fa-star icon-plus'}
         warn={false}
         action={cb => {
