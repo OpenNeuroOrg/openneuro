@@ -1,7 +1,7 @@
 // Custom SCSS Variables + Mixins ========================
 // * Variables *
 $mobile-breakpoint: 765px;
-$tablet-breakpoint: 1100px;
+$tablet-breakpoint: 1120px;
 // * Mixins *
 @mixin mobile {
     @media (max-width: #{$mobile-breakpoint}) {
