@@ -11,6 +11,7 @@ import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
 import SubscribeToNewsletter from '../datalad/mutations/subscribe-to-newsletter.jsx'
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
+import Helmet from 'react-helmet'
 //configurables
 import { frontPage } from 'openneuro-content'
 
@@ -25,39 +26,44 @@ class FrontPage extends React.Component {
 
   render() {
     return (
-      <span className="front-page is-front">
-        <div className="intro">
-          <div className="container">
-            <div className="intro-inner fade-in clearfix">
-              <div className="clearfix welcome-block">
-                {this._logoLayers()}
-                {frontPage.titlePanel.logoText ? this._logoText() : null}
-                <h1>{frontPage.pageDescription}</h1>
-                <LoggedOut>
-                  <div className="sign-in-block fade-in">
-                    <AuthenticationButtons />
+      <>
+        <Helmet>
+          <title>Home - {frontPage.pageTitle}</title>
+        </Helmet>
+        <span className="front-page is-front">
+          <div className="intro">
+            <div className="container">
+              <div className="intro-inner fade-in clearfix">
+                <div className="clearfix welcome-block">
+                  {this._logoLayers()}
+                  {frontPage.titlePanel.logoText ? this._logoText() : null}
+                  <h1>{frontPage.pageDescription}</h1>
+                  <LoggedOut>
+                    <div className="sign-in-block fade-in">
+                      <AuthenticationButtons />
+                    </div>
+                  </LoggedOut>
+                  <Search className="frontpage-search" />
+                  <div className="browse-publicly">
+                    <Link to="/public/datasets">
+                      <span>Browse All Public Datasets</span>
+                    </Link>
                   </div>
-                </LoggedOut>
-                <Search className="frontpage-search" />
-                <div className="browse-publicly">
-                  <Link to="/public/datasets">
-                    <span>Browse All Public Datasets</span>
-                  </Link>
-                </div>
-                <div className="privacy-detail">
-                  <span>{frontPage.titlePanel.privacyDetail}</span>
+                  <div className="privacy-detail">
+                    <span>{frontPage.titlePanel.privacyDetail}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <FrontPageStats />
-        {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
-        <SubscribeToNewsletter />
-        <FrontPageTopDatasets />
-        <AdditionalInfo />
-        <Footer />
-      </span>
+          <FrontPageStats />
+          {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
+          <SubscribeToNewsletter />
+          <FrontPageTopDatasets />
+          <AdditionalInfo />
+          <Footer />
+        </span>
+      </>
     )
   }
 

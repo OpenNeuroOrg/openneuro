@@ -70,7 +70,7 @@ const DatasetTab = ({
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
       <title>
-        {pageTitle} - {title(publicDashboard, savedDashboard)}
+        {title(publicDashboard, savedDashboard)} - {pageTitle}
       </title>
     </Helmet>
     <div className="header-filter-sort clearfix">

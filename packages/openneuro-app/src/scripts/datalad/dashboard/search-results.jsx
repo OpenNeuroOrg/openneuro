@@ -7,6 +7,8 @@ import Spinner from '../../common/partials/spinner.jsx'
 import Search from '../../common/partials/search.jsx'
 import { withRouter } from 'react-router'
 import styled from '@emotion/styled'
+import Helmet from 'react-helmet'
+import { pageTitle } from '../../resources/strings.js'
 
 const QuerySpreadsheetNoticeContainer = styled.section({
   marginTop: '1rem',
@@ -43,39 +45,53 @@ class SearchResults extends React.Component {
   render() {
     let query = this.props.match.params.query || this.state.query
     return (
-      <div className="route-wrapper">
-        <div className="fade-in inner-route clearfix">
-          <div className="dashboard-dataset-teasers datasets datasets-private">
-            <div className="admin clearfix">
-              <div className="row">
-                <div className="col-md-5">
-                  {query &&
-                  this.state.results &&
-                  this.state.results[0].link != 'No results' ? (
-                    <React.Fragment>
-                      <h2>Search Results</h2>
-                      <span className="sub-title">
-                        showing {this.state.results.length} results for: {query}
-                      </span>
-                    </React.Fragment>
-                  ) : null}
+      <>
+        <Helmet>
+          <title>
+            {query} - {pageTitle} Search
+          </title>
+        </Helmet>
+        <div className="route-wrapper">
+          <div className="fade-in inner-route clearfix">
+            <div className="dashboard-dataset-teasers datasets datasets-private">
+              <div className="admin clearfix">
+                <div className="row">
+                  <div className="col-md-5">
+                    {query &&
+                    this.state.results &&
+                    this.state.results[0].link != 'No results' ? (
+                      <React.Fragment>
+                        <h2>Search Results</h2>
+                        <span className="sub-title">
+                          showing {this.state.results.length} results for:{' '}
+                          {query}
+                        </span>
+                      </React.Fragment>
+                    ) : null}
+                  </div>
+                  <div className="col-md-7">
+                    <Search />
+                  </div>
                 </div>
-                <div className="col-md-7">
-                  <Search />
-                </div>
+                <QuerySpreadsheetNoticeContainer className="filters-sort-wrap">
+                  {
+                    "Not finding what you're looking for? See additional metadata "
+                  }
+                  <a href="https://docs.google.com/spreadsheets/d/1rsVlKg0vBzkx7XUGK4joky9cM8umtkQRpJ2Y-5d6x7c/edit#gid=1226202843">
+                    here
+                  </a>
+                  .
+                </QuerySpreadsheetNoticeContainer>
+                {this.state.loading ? (
+                  <Spinner active={true} />
+                ) : (
+                  this._checkLoadingStatus(this.state.results, this.state.query)
+                )}
               </div>
-              <QuerySpreadsheetNoticeContainer className="filters-sort-wrap">
-                {'Not finding what you\'re looking for? See additional metadata '}<a href="https://docs.google.com/spreadsheets/d/1rsVlKg0vBzkx7XUGK4joky9cM8umtkQRpJ2Y-5d6x7c/edit#gid=1226202843">here</a>.
-              </QuerySpreadsheetNoticeContainer>
-              {this.state.loading ? (
-                <Spinner active={true} />
-              ) : (
-                this._checkLoadingStatus(this.state.results, this.state.query)
-              )}
             </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
   // Custom Methods ------------------------------------------------

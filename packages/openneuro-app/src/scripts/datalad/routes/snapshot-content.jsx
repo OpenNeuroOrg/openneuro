@@ -106,12 +106,13 @@ SnapshotContent.propTypes = {
 const SnapshotDetails = ({ dataset, snapshot }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
+  console.log(snapshot.tag)
   return (
     <span>
       <div className={mobileClass}>
         <Helmet>
           <title>
-            {pageTitle} - {snapshot.description.Name}
+            {snapshot.description.Name} - Snapshot {snapshot.tag} - {pageTitle}
           </title>
           <meta name="description" content={snapshot.readme} />
           <script type="application/ld+json">

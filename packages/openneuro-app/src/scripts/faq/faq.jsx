@@ -3,6 +3,8 @@
 import React from 'react'
 import Markdown from 'react-markdown'
 import { faq } from 'openneuro-content'
+import Helmet from 'react-helmet'
+import { pageTitle } from '../resources/strings.js'
 
 class Faq extends React.Component {
   render() {
@@ -22,10 +24,15 @@ class Faq extends React.Component {
     })
 
     return (
-      <div className="container faqs">
-        <h1>{"FAQ's"}</h1>
-        {faqs}
-      </div>
+      <>
+        <Helmet>
+          <title>FAQ - {pageTitle}</title>
+        </Helmet>
+        <div className="container faqs">
+          <h1>{"FAQ's"}</h1>
+          {faqs}
+        </div>
+      </>
     )
   }
 }

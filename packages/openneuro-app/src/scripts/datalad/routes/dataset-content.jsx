@@ -63,7 +63,7 @@ const DatasetContent = ({ dataset }) => {
       <LoggedIn>
         <Helmet>
           <title>
-            {pageTitle} - {dataset.draft.description.Name}
+            {dataset.draft.description.Name} - Dataset - {pageTitle}
           </title>
           <meta name="description" content={dataset.draft.readme} />
         </Helmet>

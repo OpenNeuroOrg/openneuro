@@ -2,6 +2,8 @@ import React from 'react'
 import Spinner from '../common/partials/spinner.jsx'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import crn from '../utils/crn.js'
+import Helmet from 'react-helmet'
+import { pageTitle } from '../resources/strings.js'
 
 /**
  * Create API Key
@@ -98,26 +100,31 @@ export default class APIKeyGen extends React.Component {
       ? 'Your API Key:'
       : 'Click the button below to generate an API key'
     return (
-      <div className="container api">
-        <div className="panel">
-          <div className="panel-heading">CLI API Key Generator</div>
-          <div className="panel-body explanation">
-            Users that wish to use the CLI uploader will be required to
-            authenticate their requests with an API key. Please store your API
-            key in a safe place. If you lose your key, you can obtain a new one
-            on this page. Once a new key is obtained, the previous key will
-            become invalid.
+      <>
+        <Helmet>
+          <title>API Key Generator - {pageTitle}</title>
+        </Helmet>
+        <div className="container api">
+          <div className="panel">
+            <div className="panel-heading">CLI API Key Generator</div>
+            <div className="panel-body explanation">
+              Users that wish to use the CLI uploader will be required to
+              authenticate their requests with an API key. Please store your API
+              key in a safe place. If you lose your key, you can obtain a new
+              one on this page. Once a new key is obtained, the previous key
+              will become invalid.
+            </div>
+          </div>
+          <div className="panel">
+            <div className="panel-heading">{helperText}</div>
+            <div className="panel-body">
+              {this._loadingSpinner()}
+              {this._key()}
+              {this._requestButton()}
+            </div>
           </div>
         </div>
-        <div className="panel">
-          <div className="panel-heading">{helperText}</div>
-          <div className="panel-body">
-            {this._loadingSpinner()}
-            {this._key()}
-            {this._requestButton()}
-          </div>
-        </div>
-      </div>
+      </>
     )
   }
 }
