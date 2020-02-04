@@ -28,7 +28,10 @@ class FrontPage extends React.Component {
     return (
       <>
         <Helmet>
-          <title>Home - {frontPage.pageTitle}</title>
+          <title>
+            An open platform for sharing neuroimaging data -{' '}
+            {frontPage.pageTitle}
+          </title>
         </Helmet>
         <span className="front-page is-front">
           <div className="intro">

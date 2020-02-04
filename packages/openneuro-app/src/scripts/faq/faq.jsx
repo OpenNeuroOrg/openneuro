@@ -26,7 +26,7 @@ class Faq extends React.Component {
     return (
       <>
         <Helmet>
-          <title>FAQ - {pageTitle}</title>
+          <title>Frequently Asked Questions - {pageTitle}</title>
         </Helmet>
         <div className="container faqs">
           <h1>{"FAQ's"}</h1>

@@ -102,7 +102,7 @@ export default class APIKeyGen extends React.Component {
     return (
       <>
         <Helmet>
-          <title>API Key Generator - {pageTitle}</title>
+          <title>Generate API key for openneuro-cli - {pageTitle}</title>
         </Helmet>
         <div className="container api">
           <div className="panel">
