@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Search from '../common/partials/search.jsx'
+import { Link, useHistory } from 'react-router-dom'
+import SearchInput from '../search/search-input.tsx'
 import FrontPageStats from './front-page-stats.jsx'
 import FrontPageTabs from './front-page-tabs.jsx'
 import Footer from '../common/partials/footer.jsx'
@@ -15,98 +15,89 @@ import Helmet from 'react-helmet'
 //configurables
 import { frontPage } from 'openneuro-content'
 
-// component setup ----------------------------------------------------
+const LogoText = () => (
+  <div className="logo-text">
+    Open
+    <span className="logo-end">Neuro</span>
+  </div>
+)
 
-class FrontPage extends React.Component {
-  constructor(props) {
-    super(props)
+const LogoLayers = () => {
+  if (
+    frontPage.titlePanel &&
+    frontPage.titlePanel.logos &&
+    frontPage.titlePanel.logos.length
+  ) {
+    if (frontPage.titlePanel.logos.length > 1) {
+      const logoLayers = frontPage.titlePanel.logos.map((item, index) => {
+        return (
+          <img
+            key={index}
+            className={item.class}
+            src={item.src}
+            alt={item.alt}
+          />
+        )
+      })
+      return <div className="logo-layers">{logoLayers}</div>
+    } else {
+      const logo = frontPage.titlePanel.logos[0]
+      return <img className={logo.class} src={logo.src} alt={logo.alt} />
+    }
+  } else {
+    return null
   }
+}
 
-  // life cycle events --------------------------------------------------
+const handleSearch = history => searchQuery => {
+  history.push(`/search/${searchQuery}`)
+}
 
-  render() {
-    return (
-      <>
-        <Helmet>
-          <title>
-            An open platform for sharing neuroimaging data -{' '}
-            {frontPage.pageTitle}
-          </title>
-        </Helmet>
-        <span className="front-page is-front">
-          <div className="intro">
-            <div className="container">
-              <div className="intro-inner fade-in clearfix">
-                <div className="clearfix welcome-block">
-                  {this._logoLayers()}
-                  {frontPage.titlePanel.logoText ? this._logoText() : null}
-                  <h1>{frontPage.pageDescription}</h1>
-                  <LoggedOut>
-                    <div className="sign-in-block fade-in">
-                      <AuthenticationButtons />
-                    </div>
-                  </LoggedOut>
-                  <Search className="frontpage-search" />
-                  <div className="browse-publicly">
-                    <Link to="/public/datasets">
-                      <span>Browse All Public Datasets</span>
-                    </Link>
-                  </div>
-                  <div className="privacy-detail">
-                    <span>{frontPage.titlePanel.privacyDetail}</span>
-                  </div>
+const FrontPage = () => {
+  const history = useHistory()
+  return (
+    <span className="front-page is-front">
+      <Helmet>
+        <title>
+          {frontPage.pageDescription} - {frontPage.pageTitle}
+        </title>
+      </Helmet>
+      <div className="intro">
+        <div className="container">
+          <div className="intro-inner fade-in clearfix">
+            <div className="clearfix welcome-block">
+              <LogoLayers />
+              {frontPage.titlePanel.logoText ? <LogoText /> : null}
+              <h1>{frontPage.pageDescription}</h1>
+              <LoggedOut>
+                <div className="sign-in-block fade-in">
+                  <AuthenticationButtons />
                 </div>
+              </LoggedOut>
+              <SearchInput
+                className="frontpage-search"
+                onSearch={handleSearch(history)}
+              />
+              <div className="browse-publicly">
+                <Link to="/public/datasets">
+                  <span>Browse All Public Datasets</span>
+                </Link>
+              </div>
+              <div className="privacy-detail">
+                <span>{frontPage.titlePanel.privacyDetail}</span>
               </div>
             </div>
           </div>
-          <FrontPageStats />
-          {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
-          <SubscribeToNewsletter />
-          <FrontPageTopDatasets />
-          <AdditionalInfo />
-          <Footer />
-        </span>
-      </>
-    )
-  }
-
-  // template functions ----------------------------------------------------
-
-  _logoLayers() {
-    if (
-      frontPage.titlePanel &&
-      frontPage.titlePanel.logos &&
-      frontPage.titlePanel.logos.length
-    ) {
-      if (frontPage.titlePanel.logos.length > 1) {
-        let logoLayers = frontPage.titlePanel.logos.map((item, index) => {
-          return (
-            <img
-              key={index}
-              className={item.class}
-              src={item.src}
-              alt={item.alt}
-            />
-          )
-        })
-        return <div className="logo-layers">{logoLayers}</div>
-      } else {
-        let logo = frontPage.titlePanel.logos[0]
-        return <img className={logo.class} src={logo.src} alt={logo.alt} />
-      }
-    } else {
-      return null
-    }
-  }
-
-  _logoText() {
-    return (
-      <div className="logo-text">
-        Open
-        <span className="logo-end">Neuro</span>
+        </div>
       </div>
-    )
-  }
+      <FrontPageStats />
+      {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
+      <SubscribeToNewsletter />
+      <FrontPageTopDatasets />
+      <AdditionalInfo />
+      <Footer />
+    </span>
+  )
 }
 
 export default FrontPage
