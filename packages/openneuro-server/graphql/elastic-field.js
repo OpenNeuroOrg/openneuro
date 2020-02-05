@@ -1,17 +1,16 @@
 import config from '../config.js'
-import elasticsearch from 'elasticsearch'
 import { schemaComposer } from 'graphql-compose'
 import {
   composeWithElastic,
   elasticApiFieldConfig,
 } from 'graphql-compose-elasticsearch'
-import datasetsMapping from './datasets-mapping.json'
+import elasticClient from '../elasticsearch/elastic-client'
+import datasetsMapping from '../elasticsearch/datasets-mapping.json'
 
 const elasticConfig = {
   host: config.elasticsearch.connection,
   apiVersion: '7.5',
 }
-const elasticClient = new elasticsearch.Client(elasticConfig)
 
 const elasticIndex = 'datasets'
 
