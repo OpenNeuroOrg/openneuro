@@ -27,6 +27,7 @@ services:
       - /srv/packages/openneuro-client/node_modules:exec
       - /srv/packages/openneuro-cli/node_modules:exec
       - /srv/packages/openneuro-server/node_modules:exec
+      - /srv/packages/openneuro-indexer/node_modules:exec
 
   content:
     image: ${CONTENT_IMAGE}
@@ -152,4 +153,4 @@ services:
       - server
     env_file: ./config.env
     volumes:
-      - .:/srv
+      - ./packages/openneuro-indexer/src:/srv/packages/openneuro-indexer/src
