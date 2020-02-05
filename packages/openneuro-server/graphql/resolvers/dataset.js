@@ -299,12 +299,12 @@ export const starred = (obj, _, { user }) =>
  * Is this dataset available on brainlife?
  */
 export const onBrainlife = async dataset => {
-  try {
-    const url = `https://brainlife.io/api/warehouse/datalad/datasets?find={"path":{"$regex":"${dataset.id}$"}}`
-    const res = await fetch(url)
-    const body = await res.json()
+  const url = `https://brainlife.io/api/warehouse/datalad/datasets?find={"path":{"$regex":"${dataset.id}$"}}`
+  const res = await fetch(url)
+  const body = await res.json()
+  if (Array.isArray(body)) {
     return body[0].path === `OpenNeuroDatasets/${dataset.id}`
-  } catch (err) {
+  } else {
     return false
   }
 }
