@@ -27,6 +27,7 @@ services:
       - /srv/packages/openneuro-client/node_modules:exec
       - /srv/packages/openneuro-cli/node_modules:exec
       - /srv/packages/openneuro-server/node_modules:exec
+      - /srv/packages/openneuro-indexer/node_modules:exec
 
   content:
     image: ${CONTENT_IMAGE}
@@ -135,6 +136,22 @@ services:
     image: elasticsearch:7.5.1
     environment:
       discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: 'true'
+      cluster.routing.allocation.disk.watermark.flood_stage: 1gb
+      cluster.routing.allocation.disk.watermark.low: 10gb
+      cluster.routing.allocation.disk.watermark.high: 5gb
     ports:
       - '9200:9200'
       - '9300:9300'
+
+  indexer:
+    build:
+      context: .
+      dockerfile: ./packages/openneuro-indexer/Dockerfile
+      target: indexer
+    depends_on:
+      - server
+      - elasticsearch
+    env_file: ./config.env
+    volumes:
+      - ./packages/openneuro-indexer/src:/srv/packages/openneuro-indexer/src

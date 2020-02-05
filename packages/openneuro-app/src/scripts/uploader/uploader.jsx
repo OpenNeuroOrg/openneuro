@@ -9,7 +9,7 @@ import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
-import getClient, { datasets } from 'openneuro-client'
+import createClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
 import packageJson from '../../../package.json'
 import { xhrFetch } from './xhrfetch.js'
@@ -248,12 +248,10 @@ export class UploadClient extends React.Component {
   _addFiles() {
     // This is an upload specific apollo client to record progress
     // Uses XHR since Fetch does not provide the required interface
-    const uploadClient = getClient(
-      `${config.url}/crn/graphql`,
-      null,
-      xhrFetch(this),
-      packageJson.version,
-    )
+    const uploadClient = createClient(`${config.url}/crn/graphql`, {
+      fetch: xhrFetch(this),
+      clientVersion: packageJson.version,
+    })
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
     let filesToUpload = this._includeChanges()

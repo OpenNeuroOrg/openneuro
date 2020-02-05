@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "checkJs": true,
     "allowJs": true,
-    "outDir": "./built",
+    "baseUrl": "./packages",
+    "checkJs": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
     "target": "es6",
     "jsx": "preserve",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
   "include": ["./packages/**/*"]
 }

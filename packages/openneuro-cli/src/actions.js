@@ -11,7 +11,10 @@ import { getDownload } from './download.js'
 import { version } from '../package.json'
 
 export const configuredClient = () =>
-  createClient(`${getUrl()}crn/graphql`, getToken, null, version)
+  createClient(`${getUrl()}crn/graphql`, {
+    getAuthorizaiton: getToken,
+    clientVersion: version,
+  })
 
 /**
  * Login action to save an auth key locally

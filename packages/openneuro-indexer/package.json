@@ -1,0 +1,30 @@
+{
+  "name": "openneuro-indexer",
+  "version": "3.11.0-alpha.0",
+  "description": "OpenNeuro elastic search indexing tool",
+  "main": "./dist/index.js",
+  "types": "./src/index.d.ts",
+  "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
+  "author": "Squishymedia",
+  "license": "MIT",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "bin": {
+    "openneuro-indexer": "./src/index.ts"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.5.0",
+    "apollo-link-retry": "^2.2.15",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "tsc",
+    "openneuro-indexer": "ts-node --type-check src/index.ts"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}

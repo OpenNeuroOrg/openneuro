@@ -2,98 +2,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
+import { datasets } from 'openneuro-client'
 import DatasetTab from './dataset-tab.jsx'
 import useMedia from '../../../mobile/media-hook.jsx'
-
-const getDatasets = gql`
-  query getDatasets(
-    $cursor: String
-    $orderBy: DatasetSort = { created: descending }
-    $filterBy: DatasetFilter = {}
-    $myDatasets: Boolean = false
-  ) {
-    datasets(
-      first: 25
-      after: $cursor
-      orderBy: $orderBy
-      filterBy: $filterBy
-      myDatasets: $myDatasets
-    ) {
-      edges {
-        node {
-          id
-          created
-          uploader {
-            id
-            name
-          }
-          public
-          permissions {
-            userId
-            level
-            access: level
-            user {
-              id
-              name
-              email
-              provider
-            }
-          }
-          draft {
-            id
-            partial
-            summary {
-              modalities
-              sessions
-              subjects
-              subjectMetadata {
-                participantId
-                age
-                sex
-                group
-              }
-              tasks
-              size
-              totalFiles
-              dataProcessed
-            }
-            issues {
-              severity
-            }
-            description {
-              Name
-            }
-          }
-          analytics {
-            views
-            downloads
-          }
-          stars {
-            userId
-            datasetId
-          }
-          followers {
-            userId
-            datasetId
-          }
-          snapshots {
-            id
-            created
-            tag
-          }
-        }
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasPreviousPage
-        hasNextPage
-        count
-      }
-    }
-  }
-`
 
 export const updateQuery = (previousResult, { fetchMoreResult }) => {
   const newEdges = fetchMoreResult.datasets.edges
@@ -170,7 +81,7 @@ const datasetQueryDisplay = (isPublic, isSaved) => ({
 
 const DatasetQuery = ({ public: isPublic, saved: isSaved }) => (
   <Query
-    query={getDatasets}
+    query={datasets.getDatasets}
     variables={{
       filterBy: { public: isPublic, starred: isSaved },
       myDatasets: !(isPublic || isSaved),

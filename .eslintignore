@@ -1,3 +1,4 @@
 /packages/*/node_modules
 /packages/*/coverage
+/packages/*/dist
 papaya.js
