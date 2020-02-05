@@ -8,7 +8,7 @@ export const createIndices = async elasticClient => {
   const exists = await elasticClient.indices.exists({
     index: 'datasets',
   })
-  if (!exists) {
+  if (exists.statusCode !== 200) {
     await elasticClient.indices.create({
       index: 'datasets',
       body: {

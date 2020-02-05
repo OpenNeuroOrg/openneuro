@@ -1,11 +1,11 @@
 import config from '../config.js'
-import elasticsearch from 'elasticsearch'
+import { Client } from '@elastic/elasticsearch'
 
 const elasticConfig = {
-  host: config.elasticsearch.connection,
-  apiVersion: '7.5',
+  node: config.elasticsearch.connection,
+  maxRetries: 3,
 }
 
-const elasticClient = new elasticsearch.Client(elasticConfig)
+const elasticClient = new Client(elasticConfig)
 
 export default elasticClient
