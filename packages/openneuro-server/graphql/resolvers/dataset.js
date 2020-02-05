@@ -300,10 +300,10 @@ export const starred = (obj, _, { user }) =>
  */
 export const onBrainlife = async dataset => {
   try {
-    const url = `https://brainlife.io/api/warehouse/project?find={"openneuro.dataset_id":"${dataset.id}"}`
+    const url = `https://brainlife.io/api/warehouse/datalad/datasets?find={"path":{"$regex":"${dataset.id}$"}}`
     const res = await fetch(url)
     const body = await res.json()
-    return Boolean(body.count)
+    return body[0].path === `OpenNeuroDatasets/${dataset.id}`
   } catch (err) {
     return false
   }
