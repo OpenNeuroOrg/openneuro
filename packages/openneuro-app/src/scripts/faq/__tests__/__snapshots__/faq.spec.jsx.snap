@@ -7,7 +7,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     encodeSpecialCharacters={true}
   >
     <title>
-      FAQ - 
+      Frequently Asked Questions - 
       OpenNeuro
     </title>
   </HelmetWrapper>
