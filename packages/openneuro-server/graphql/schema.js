@@ -1,7 +1,7 @@
 import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
 import Subscription from './resolvers/subscriptions.js'
-import datasetSearch from './dataset-search'
+import datasetSearch from './resolvers/dataset-search'
 
 export const typeDefs = `
   scalar Date

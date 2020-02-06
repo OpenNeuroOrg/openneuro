@@ -5,7 +5,6 @@ import subscriptionServerFactory from './libs/subscription-server.js'
 import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
 import elasticClient from './elasticsearch/elastic-client'
-import { createIndices } from './elasticsearch/indices'
 import notifications from './libs/notifications'
 import config from './config'
 import createApp from './app'
@@ -40,12 +39,6 @@ mongoose.connect(config.mongo.url, {
 // start server ----------------------------------------------------
 mongo.connect(config.mongo.url).then(async () => {
   await redisConnect()
-  try {
-    await createIndices(elasticClient)
-  } catch (err) {
-    // If we can't create elasticsearch indices, continue anyways but log it
-    console.error(err)
-  }
   const server = createServer(app)
   server.listen(config.port, () => {
     // eslint-disable-next-line no-console

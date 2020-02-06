@@ -2,6 +2,7 @@ import { RetryLink } from 'apollo-link-retry'
 import { Client } from '@elastic/elasticsearch'
 import createClient, { datasetGenerator } from 'openneuro-client/src/client'
 import indexDatasets from './indexDatasets'
+import { createIndices } from './createIndices'
 import { indexQuery } from './indexQuery'
 
 /**
@@ -25,6 +26,12 @@ export default async function main() {
     maxRetries: 10,
     requestTimeout: 60000,
   })
+  try {
+    await createIndices(elasticClient)
+  } catch (err) {
+    console.error('Could not create indices, skipping indexing')
+    console.error(err)
+  }
   const datasets = datasetGenerator(apolloClient, indexQuery)
   await indexDatasets(elasticClient, datasets)
 }

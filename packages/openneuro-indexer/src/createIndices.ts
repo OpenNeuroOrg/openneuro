@@ -1,4 +1,4 @@
-import datasetsMapping from '../elasticsearch/datasets-mapping.json'
+import datasetsMapping from './mappings/datasets-mapping.json'
 
 /**
  * Setup any indices and mappings in elasticsearch
