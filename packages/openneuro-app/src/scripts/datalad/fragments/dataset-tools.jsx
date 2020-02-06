@@ -31,6 +31,7 @@ const DatasetTools = ({ dataset, location, history }) => {
     : `/datasets/${dataset.id}`
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
+  console.log('rootPath', rootPath, 'location', location, 'history', history)
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">

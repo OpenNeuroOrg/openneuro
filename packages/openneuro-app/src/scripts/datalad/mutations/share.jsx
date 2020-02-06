@@ -42,7 +42,7 @@ export const mergeNewPermission = (
   }
 }
 
-const ShareDataset = ({ datasetId, userEmail, metadata, done }) => (
+const ShareDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
   <Mutation
     mutation={SHARE_DATASET}
     update={(cache, { data: { updatePermissions } }) => {
@@ -61,11 +61,11 @@ const ShareDataset = ({ datasetId, userEmail, metadata, done }) => (
         ),
       })
     }}>
-    {shareDataset => (
+    {ShareDatasetPermissions => (
       <button
         className="btn-modal-action"
         onClick={async () => {
-          await shareDataset({
+          await ShareDatasetPermissions({
             variables: { datasetId, userEmail, level: metadata },
           })
           done()
@@ -76,11 +76,11 @@ const ShareDataset = ({ datasetId, userEmail, metadata, done }) => (
   </Mutation>
 )
 
-ShareDataset.propTypes = {
+ShareDatasetPermissions.propTypes = {
   datasetId: PropTypes.string,
   userEmail: PropTypes.string,
   metadata: PropTypes.oneOf(['ro', 'rw', 'admin']),
   done: PropTypes.func,
 }
 
-export default ShareDataset
+export default ShareDatasetPermissions
