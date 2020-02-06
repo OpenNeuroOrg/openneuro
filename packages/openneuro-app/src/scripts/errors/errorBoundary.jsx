@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import DatasetContext from '../datalad/dataset/dataset-context.js'
+import { Redirect, useParams } from 'react-router-dom'
 import {
   Overlay,
   ModalContainer,
@@ -32,15 +33,27 @@ let linkStyle = {
   textDecoration: 'underline',
 }
 
+// redirects to specific error message OR redirects param datasetId if dataset id has changed
 const DatasetRedirect = props => {
-  return (
-    <div>
-      <p style={messageStyle}>{props.message}</p>
-      <Link to="/">
-        <p style={linkStyle}>Return to Homepage</p>
-      </Link>
-    </div>
-  )
+  let { datasetId } = useParams()
+  let map = {
+    ds002078: 'ds001004',
+    ds002222: 'ds002250',
+    ds002245: 'ds002345',
+    test: 'ds001001',
+  }
+  if (map.hasOwnProperty(datasetId)) {
+    return <Redirect to={`/datasets/${map[datasetId]}`} />
+  } else {
+    return (
+      <div>
+        <p style={messageStyle}>{props.message}</p>
+        <Link to="/">
+          <p style={linkStyle}>Return to Homepage</p>
+        </Link>
+      </div>
+    )
+  }
 }
 DatasetRedirect.propTypes = {
   message: PropTypes.string,
@@ -93,6 +106,7 @@ FreshdeskModal.propTypes = {
   description: PropTypes.string,
   eventId: PropTypes.string,
 }
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
@@ -122,6 +136,7 @@ class ErrorBoundary extends React.Component {
       () => true,
     )
   }
+
   componentDidCatch(error) {
     let message = this.state.message
     if (!this.props.dataset) {
@@ -153,7 +168,6 @@ class ErrorBoundary extends React.Component {
     const error = this.state.error || this.props.error
     const { supportModal, message } = this.state
     const { subject, description } = this.props
-
     if (error) {
       if (this.redirectMessages.includes(message)) {
         return <DatasetRedirect message={message} />
