@@ -84,7 +84,11 @@ const DatasetTab = ({
           <div className="col-md-5">
             <h2>{title(publicDashboard, savedDashboard)}</h2>
             {isMobile && !loading && (
-              <h6>Results {data.datasets.pageInfo.count} </h6>
+              <h6>
+                {data.datasets
+                  ? `Results ${data.datasets.pageInfo.count}`
+                  : 'Zero results'}{' '}
+              </h6>
             )}
           </div>
           {!isMobile && (
