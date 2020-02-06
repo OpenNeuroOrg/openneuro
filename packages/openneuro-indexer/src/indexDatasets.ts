@@ -14,6 +14,7 @@ import {
 export function extractDatasetDocument(datasetObj: any): RequestParams.Index {
   const dataset: RequestParams.Index = {
     index: 'datasets',
+    id: datasetObj.id,
     body: {
       ...datasetObj,
     },
