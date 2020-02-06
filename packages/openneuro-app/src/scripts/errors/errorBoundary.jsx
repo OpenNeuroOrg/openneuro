@@ -33,14 +33,13 @@ let linkStyle = {
   textDecoration: 'underline',
 }
 
-// redirects to specific error message OR redirects param datasetId if dataset id has changed
+// redirects to specific error message OR redirects param datasegitId if dataset id has changed
 const DatasetRedirect = props => {
   let { datasetId } = useParams()
   let map = {
-    ds002078: 'ds001004',
+    ds002078: 'ds002149',
     ds002222: 'ds002250',
     ds002245: 'ds002345',
-    test: 'ds001001',
   }
   if (map.hasOwnProperty(datasetId)) {
     return <Redirect to={`/datasets/${map[datasetId]}`} />
