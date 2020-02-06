@@ -33,16 +33,16 @@ let linkStyle = {
   textDecoration: 'underline',
 }
 
-// redirects to specific error message OR redirects param datasegitId if dataset id has changed
+// redirects to specific error message OR redirects param datasetId if dataset id has changed
 const DatasetRedirect = props => {
   let { datasetId } = useParams()
-  let map = {
+  let redirectLib = {
     ds002078: 'ds002149',
     ds002222: 'ds002250',
     ds002245: 'ds002345',
   }
-  if (map.hasOwnProperty(datasetId)) {
-    return <Redirect to={`/datasets/${map[datasetId]}`} />
+  if (redirectLib.hasOwnProperty(datasetId)) {
+    return <Redirect to={`/datasets/${redirectLib[datasetId]}`} />
   } else {
     return (
       <div>
@@ -119,12 +119,12 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  nonexistantDatasetMessage = 'This dataset does not exist.'
+  nonexistentDatasetMessage = 'This dataset does not exist.'
 
   // any error message that should trigger a link back to the dashboard
   //   rather than the freshdesk modal link
   redirectMessages = [
-    this.nonexistantDatasetMessage,
+    this.nonexistentDatasetMessage,
     'GraphQL error: You do not have access to read this dataset.',
   ]
 
@@ -139,7 +139,7 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error) {
     let message = this.state.message
     if (!this.props.dataset) {
-      message = this.nonexistantDatasetMessage
+      message = this.nonexistentDatasetMessage
     } else if (this.props.dataset && this.props.dataset.snapshots.length < 1) {
       message = 'This dataset has no associated snapshots.'
     }
