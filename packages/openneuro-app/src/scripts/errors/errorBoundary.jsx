@@ -40,6 +40,7 @@ const DatasetRedirect = props => {
     ds002078: 'ds002149',
     ds002222: 'ds002250',
     ds002245: 'ds002345',
+    ds001988: 'ds001996',
   }
   if (redirectLib.hasOwnProperty(datasetId)) {
     return <Redirect to={`/datasets/${redirectLib[datasetId]}`} />
