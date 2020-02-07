@@ -1,46 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WarnButton from '../../common/forms/warn-button.jsx'
 import Tooltip from '../../common/partials/tooltip.jsx'
 
-var webShare = 'share' in navigator
+// uses the Web Share API - https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
 
 const ShareDatasetLink = props => {
-  let { url } = props.url
-  var share = {
-    title: '',
-    text: '',
-    url: url,
-  }
-
   const shareHandler = () => {
-    if (webShare) {
+    //does the user's device or client support the API ?
+    if (navigator.share) {
       navigator
-        .share(share)
-        .then(window.alert('Successful share'))
-        .catch(err => window.alert(err))
+        .share({ url: props.url })
+        .then(() => {})
+        .catch(() => err => window.alert(err))
     } else {
-      window.alert('share is not supported on your device')
+      window.alert('Share is not supported on this browser.')
     }
   }
   return (
-    <div>
-      <span className="disabled">
-        <button className="btn-warn-component warning">
-          <i className="fa-share" />
+    <Tooltip tooltip="Share Dataset">
+      <span>
+        <button className="btn-warn-component warning" onClick={shareHandler}>
+          <i className="fa fa-share" />
         </button>
       </span>
-      <Tooltip tooltip="Share Dataset"></Tooltip>
-
-      {/* 
-    <WarnButton
-      tooltip="Share Dataset"
-      icon={'fa-share'}
-      warn={false}
-      onClick={() => shareHandler()}>
-    
-      </WarnButton> */}
-    </div>
+    </Tooltip>
   )
 }
 

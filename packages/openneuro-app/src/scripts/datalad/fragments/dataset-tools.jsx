@@ -90,7 +90,7 @@ const DatasetTools = ({ dataset, location, history }) => {
           </div>
           {isMobile && (
             <div role="presentation" className="tool">
-              <ShareDatasetLink url={rootPath} />
+              <ShareDatasetLink url={`https://openneuro.org${rootPath}`} />
             </div>
           )}
         </LoggedIn>
