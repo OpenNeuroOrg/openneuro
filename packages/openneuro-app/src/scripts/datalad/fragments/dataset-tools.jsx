@@ -6,9 +6,9 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
 import FollowDataset from '../mutations/follow.jsx'
 import StarDataset from '../mutations/star.jsx'
+import ShareDatasetLink from '../fragments/share-dataset-button.jsx'
 import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-
 /**
  * Immediate redirect to a dataset or snapshot route
  * @param {object} history react-router-dom history
@@ -18,7 +18,6 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 const toolRedirect = (history, rootPath, path) => {
   history.push(`${rootPath}/${path}`)
 }
-
 /**
  * Toolbar parent component
  *
@@ -55,7 +54,7 @@ const DatasetTools = ({ dataset, location, history }) => {
           <div role="presentation" className="tool">
             {edit && (
               <WarnButton
-                tooltip="Share Dataset"
+                tooltip="Manage Dataset Permissions"
                 icon="fa-user icon-plus"
                 warn={false}
                 action={cb => {
@@ -87,6 +86,9 @@ const DatasetTools = ({ dataset, location, history }) => {
           <div role="presentation" className="tool">
             <StarDataset datasetId={dataset.id} starred={dataset.starred} />
           </div>
+          <div role="presentation" className="tool">
+            <ShareDatasetLink url={rootPath} />
+          </div>
         </LoggedIn>
         <div role="presentation" className="tool">
           <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
@@ -95,12 +97,10 @@ const DatasetTools = ({ dataset, location, history }) => {
     </div>
   )
 }
-
 DatasetTools.propTypes = {
   dataset: PropTypes.object,
   edit: PropTypes.bool,
   location: PropTypes.object,
   history: PropTypes.object,
 }
-
 export default withRouter(DatasetTools)
