@@ -9,6 +9,8 @@ import StarDataset from '../mutations/star.jsx'
 import ShareDatasetLink from '../fragments/share-dataset-button.jsx'
 import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
+import useMedia from '../../mobile/media-hook.jsx'
+
 /**
  * Immediate redirect to a dataset or snapshot route
  * @param {object} history react-router-dom history
@@ -30,7 +32,7 @@ const DatasetTools = ({ dataset, location, history }) => {
     : `/datasets/${dataset.id}`
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
-  console.log('rootPath', rootPath, 'location', location, 'history', history)
+  const isMobile = useMedia('(max-width: 765px) ')
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
@@ -65,7 +67,7 @@ const DatasetTools = ({ dataset, location, history }) => {
             )}
           </div>
           <div role="presentation" className="tool">
-            {edit && (
+            {edit && !isMobile && (
               <WarnButton
                 tooltip="Create Snapshot"
                 icon="fa-camera-retro icon-plus"
@@ -86,9 +88,11 @@ const DatasetTools = ({ dataset, location, history }) => {
           <div role="presentation" className="tool">
             <StarDataset datasetId={dataset.id} starred={dataset.starred} />
           </div>
-          <div role="presentation" className="tool">
-            <ShareDatasetLink url={rootPath} />
-          </div>
+          {isMobile && (
+            <div role="presentation" className="tool">
+              <ShareDatasetLink url={rootPath} />
+            </div>
+          )}
         </LoggedIn>
         <div role="presentation" className="tool">
           <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
