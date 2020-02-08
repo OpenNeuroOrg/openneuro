@@ -12,7 +12,7 @@ const metadataSchema = new mongoose.Schema({
   datasetId: { type: String, default: uuid.v4 }, // OpenNeuro id
   adminUsers: [String], // email type (@id type?)
   dxStatus: String,
-  tasksCompleted: String,
+  tasksCompleted: [String],
   trialCount: Number,
   studyDesign: String,
   studyDomain: String,

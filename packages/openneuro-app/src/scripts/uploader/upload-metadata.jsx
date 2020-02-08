@@ -19,7 +19,6 @@ const UploadMetadata = () => {
     studyDesign: '',
     openneuroPaperDOI: '',
     dxStatus: '',
-    tasksCompleted: '',
     grantFunderName: '',
     grantIdentifier: '',
   })
