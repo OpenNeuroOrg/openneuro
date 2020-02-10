@@ -3,6 +3,23 @@ import mongo from '../libs/mongo.js'
 
 const c = mongo.collections
 
+// Definitions for permission levels allowed
+// Admin is write + manage user permissions
+export const states = {
+  READ: {
+    errorMessage: 'You do not have access to read this dataset.',
+    allowed: ['ro', 'rw', 'admin'],
+  },
+  WRITE: {
+    errorMessage: 'You do not have access to modify this dataset.',
+    allowed: ['rw', 'admin'],
+  },
+  ADMIN: {
+    errorMessage: 'You do not have admin access to this dataset.',
+    allowed: ['admin'],
+  },
+}
+
 /**
  * Query to check if datasets exist and are accessible due to public flag
  * @param {string} datasetId
@@ -19,12 +36,15 @@ export const datasetReadQuery = (datasetId, userId, userInfo) => {
 }
 
 /**
- * Return true on matching permission level
- * @param {object} permission
- * @returns {boolean} read access
+ * Check for permission levels
+ * @param {object} permission Permission object
+ * @param {object} permission.level Field defining the current permission
+ * @param {object} state Permission state type
+ * @param {object} state.allowed Levels allowed for this permission state
+ * @returns {boolean} Access allowed
  */
-export const checkReadPermissionLevel = permission => {
-  if (permission && ['admin', 'rw', 'ro'].includes(permission.level)) {
+export const checkPermissionLevel = (permission, state) => {
+  if (permission && state.allowed.includes(permission.level)) {
     return true
   } else {
     return false
@@ -42,45 +62,46 @@ export const checkDatasetRead = (datasetId, userId, userInfo) => {
       } else {
         // Did not find a dataset, check permissions for additional read access
         return Permission.findOne({ datasetId, userId }).then(permission => {
-          if (checkReadPermissionLevel(permission)) {
+          if (checkPermissionLevel(permission, states.READ)) {
             return true
           } else {
-            throw new Error('You do not have access to read this dataset.')
+            throw new Error(states.READ.errorMessage)
           }
         })
       }
     })
 }
 
-const writeErrorMessage = 'You do not have access to modify this dataset.'
-
 /**
- * Return true on matching permission level
- * @param {object} permission
- * @returns {boolean} read access
+ * General verification of dataset permission given a dataset and user
+ * @param {string} datasetId Accession number for dataset
+ * @param {string} userId User UUID
+ * @param {object} userInfo User details object
+ * @param {object} state Level to verify
  */
-export const checkWritePermissionLevel = permission => {
-  if (permission && ['admin', 'rw'].includes(permission.level)) {
-    return true
-  } else {
-    return false
-  }
-}
 
-export const checkDatasetWrite = (datasetId, userId, userInfo) => {
+export const checkDatasetWrite = (
+  datasetId,
+  userId,
+  userInfo,
+  state = states.WRITE,
+) => {
   if (!userId) {
     // Quick path for anonymous writes
-    return Promise.reject(new Error(writeErrorMessage))
+    return Promise.reject(new Error(state.errorMessage))
   }
   if (userId && userInfo.admin) {
-    // Always allow admins
+    // Always allow site admins
     return Promise.resolve(true)
   }
   return Permission.findOne({ datasetId, userId }).then(permission => {
-    if (checkWritePermissionLevel(permission)) {
+    if (checkPermissionLevel(permission, state)) {
       return true
     } else {
-      throw new Error(writeErrorMessage)
+      throw new Error(state.errorMessage)
     }
   })
 }
+
+export const checkDatasetAdmin = (datasetId, userId, userInfo) =>
+  checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN)

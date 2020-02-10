@@ -1,8 +1,9 @@
 import {
   datasetReadQuery,
-  checkReadPermissionLevel,
-  checkWritePermissionLevel,
+  checkPermissionLevel,
+  states,
   checkDatasetWrite,
+  checkDatasetAdmin,
 } from '../permissions.js'
 
 describe('resolver permissions helpers', () => {
@@ -24,30 +25,34 @@ describe('resolver permissions helpers', () => {
       ).toHaveProperty('public', true)
     })
   })
-  describe('checkReadPermissionLevel()', () => {
+  describe('checkPermissionLevel(..., READ)', () => {
     it('returns false if no permission passed in', () => {
-      expect(checkReadPermissionLevel(null)).toBe(false)
+      expect(checkPermissionLevel(null, states.READ)).toBe(false)
     })
     it('returns true for valid read access level', () => {
-      expect(checkReadPermissionLevel({ level: 'admin' })).toBe(true)
-      expect(checkReadPermissionLevel({ level: 'ro' })).toBe(true)
+      expect(checkPermissionLevel({ level: 'admin' }, states.READ)).toBe(true)
+      expect(checkPermissionLevel({ level: 'ro' }, states.READ)).toBe(true)
     })
     it('returns false if an unexpected level is present', () => {
-      expect(checkReadPermissionLevel({ level: 'not-real' })).toBe(false)
+      expect(checkPermissionLevel({ level: 'not-real' }, states.READ)).toBe(
+        false,
+      )
     })
   })
-  describe('checkWritePermissionLevel()', () => {
+  describe('checkPermissionLevel(..., WRITE)', () => {
     it('returns false if no permission passed in', () => {
-      expect(checkWritePermissionLevel(null)).toBe(false)
+      expect(checkPermissionLevel(null, states.WRITE)).toBe(false)
     })
     it('returns true for admin', () => {
-      expect(checkWritePermissionLevel({ level: 'admin' })).toBe(true)
+      expect(checkPermissionLevel({ level: 'admin' }, states.WRITE)).toBe(true)
     })
     it('returns false for read only access', () => {
-      expect(checkWritePermissionLevel({ level: 'ro' })).toBe(false)
+      expect(checkPermissionLevel({ level: 'ro' }, states.WRITE)).toBe(false)
     })
     it('returns false if an unexpected level is present', () => {
-      expect(checkWritePermissionLevel({ level: 'not-real' })).toBe(false)
+      expect(checkPermissionLevel({ level: 'not-real' }, states.WRITE)).toBe(
+        false,
+      )
     })
   })
   describe('checkDatasetWrite()', () => {
@@ -59,6 +64,37 @@ describe('resolver permissions helpers', () => {
     it('resolves to true for admins', () => {
       return expect(
         checkDatasetWrite('ds000001', '1234', { admin: true }),
+      ).resolves.toBe(true)
+    })
+  })
+  describe('checkPermissionLevel(..., ADMIN)', () => {
+    it('returns false if no permission passed in', () => {
+      expect(checkPermissionLevel(null, states.ADMIN)).toBe(false)
+    })
+    it('returns true for admin', () => {
+      expect(checkPermissionLevel({ level: 'admin' }, states.ADMIN)).toBe(true)
+    })
+    it('returns false for read write access', () => {
+      expect(checkPermissionLevel({ level: 'rw' }, states.ADMIN)).toBe(false)
+    })
+    it('returns false for read only access', () => {
+      expect(checkPermissionLevel({ level: 'ro' }, states.ADMIN)).toBe(false)
+    })
+    it('returns false if an unexpected level is present', () => {
+      expect(checkPermissionLevel({ level: 'not-real' }, states.ADMIN)).toBe(
+        false,
+      )
+    })
+  })
+  describe('checkDatasetAdmin()', () => {
+    it('resolves to false for anonymous users', () => {
+      return expect(
+        checkDatasetAdmin('ds000001', null, null),
+      ).rejects.toThrowErrorMatchingSnapshot()
+    })
+    it('resolves to true for admins', () => {
+      return expect(
+        checkDatasetAdmin('ds000001', '1234', { admin: true }),
       ).resolves.toBe(true)
     })
   })
