@@ -1,10 +1,9 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import DatasetContext from '../datalad/dataset/dataset-context.js'
-import { Redirect, useParams } from 'react-router-dom'
+import { Redirect, useParams, Link } from 'react-router-dom'
 import {
   Overlay,
   ModalContainer,
@@ -35,8 +34,8 @@ let linkStyle = {
 
 // redirects to specific error message OR redirects param datasetId if dataset id has changed
 const DatasetRedirect = props => {
-  let { datasetId } = useParams()
-  let redirectLib = {
+  const { datasetId } = useParams()
+  const redirectLib = {
     ds002078: 'ds002149',
     ds002222: 'ds002250',
     ds002245: 'ds002345',
