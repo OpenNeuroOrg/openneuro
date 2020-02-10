@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import ManageDatasetPermissions from '../mutations/manage-permissions.jsx'
+import UpdateDatasetPermissions from '../mutations/update-permissions.jsx'
 import RemovePermissions from '../mutations/remove-permissions.jsx'
 
 const description = {
@@ -107,7 +107,7 @@ const Share = ({ datasetId, permissions }) => {
             <Link to={`/datasets/${datasetId}`}>
               <button className="btn-admin-blue">Return to Dataset</button>
             </Link>
-            <ManageDatasetPermissions
+            <UpdateDatasetPermissions
               datasetId={datasetId}
               userEmail={userEmail}
               metadata={access}
