@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ShareDatasetPermissions mutation renders with default props 1`] = `
+exports[`ManageDatasetPermissions mutation renders with default props 1`] = `
 <Mutation
   mutation={
     Object {
@@ -181,7 +181,7 @@ exports[`ShareDatasetPermissions mutation renders with default props 1`] = `
 </Mutation>
 `;
 
-exports[`ShareDatasetPermissions mutation renders with typical props 1`] = `
+exports[`ManageDatasetPermissions mutation renders with typical props 1`] = `
 <Mutation
   mutation={
     Object {

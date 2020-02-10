@@ -5,7 +5,7 @@ import { Mutation } from 'react-apollo'
 import { PERMISSION_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
 
-const SHARE_DATASET = gql`
+const MANAGE_PERMISSIONS = gql`
   mutation updatePermissions(
     $datasetId: ID!
     $userEmail: String!
@@ -42,9 +42,9 @@ export const mergeNewPermission = (
   }
 }
 
-const ShareDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
+const ManageDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
   <Mutation
-    mutation={SHARE_DATASET}
+    mutation={MANAGE_PERMISSIONS}
     update={(cache, { data: { updatePermissions } }) => {
       const { permissions } = cache.readFragment({
         id: datasetCacheId(datasetId),
@@ -61,11 +61,11 @@ const ShareDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
         ),
       })
     }}>
-    {ShareDatasetPermissions => (
+    {ManageDatasetPermissions => (
       <button
         className="btn-modal-action"
         onClick={async () => {
-          await ShareDatasetPermissions({
+          await ManageDatasetPermissions({
             variables: { datasetId, userEmail, level: metadata },
           })
           done()
@@ -76,11 +76,11 @@ const ShareDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
   </Mutation>
 )
 
-ShareDatasetPermissions.propTypes = {
+ManageDatasetPermissions.propTypes = {
   datasetId: PropTypes.string,
   userEmail: PropTypes.string,
   metadata: PropTypes.oneOf(['ro', 'rw', 'admin']),
   done: PropTypes.func,
 }
 
-export default ShareDatasetPermissions
+export default ManageDatasetPermissions
