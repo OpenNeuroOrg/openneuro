@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Dashboard my datasets renders successfully 1`] = `
-<ContextConsumer>
+<Route>
   <Component />
-</ContextConsumer>
+</Route>
 `;
 
 exports[`Dashboard public dashboard renders successfully 1`] = `
-<ContextConsumer>
+<Route>
   <Component />
-</ContextConsumer>
+</Route>
 `;

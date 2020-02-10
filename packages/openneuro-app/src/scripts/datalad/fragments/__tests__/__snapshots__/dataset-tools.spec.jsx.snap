@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatasetTools component renders tools for public datasets 1`] = `
-<ContextConsumer>
+<Route>
   <Component />
-</ContextConsumer>
+</Route>
 `;
 
 exports[`DatasetTools component renders tools for public snapshots 1`] = `
-<ContextConsumer>
+<Route>
   <Component />
-</ContextConsumer>
+</Route>
 `;
 
 exports[`DatasetTools component renders tools with common props 1`] = `
-<ContextConsumer>
+<Route>
   <Component />
-</ContextConsumer>
+</Route>
 `;
