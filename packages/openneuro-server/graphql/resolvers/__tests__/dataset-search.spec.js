@@ -1,4 +1,3 @@
-import { ApiResponse } from '@elastic/elasticsearch'
 import {
   encodeCursor,
   decodeCursor,
