@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import DatasetContext from '../datalad/dataset/dataset-context.js'
+import { Redirect, useParams, Link } from 'react-router-dom'
 import {
   Overlay,
   ModalContainer,
@@ -32,15 +32,27 @@ let linkStyle = {
   textDecoration: 'underline',
 }
 
+// redirects to specific error message OR redirects param datasetId if dataset id has changed
 const DatasetRedirect = props => {
-  return (
-    <div>
-      <p style={messageStyle}>{props.message}</p>
-      <Link to="/">
-        <p style={linkStyle}>Return to Homepage</p>
-      </Link>
-    </div>
-  )
+  const { datasetId } = useParams()
+  const redirectLib = {
+    ds002078: 'ds002149',
+    ds002222: 'ds002250',
+    ds002245: 'ds002345',
+    ds001988: 'ds001996',
+  }
+  if (redirectLib.hasOwnProperty(datasetId)) {
+    return <Redirect to={`/datasets/${redirectLib[datasetId]}`} />
+  } else {
+    return (
+      <div>
+        <p style={messageStyle}>{props.message}</p>
+        <Link to="/">
+          <p style={linkStyle}>Return to Homepage</p>
+        </Link>
+      </div>
+    )
+  }
 }
 DatasetRedirect.propTypes = {
   message: PropTypes.string,
@@ -93,6 +105,7 @@ FreshdeskModal.propTypes = {
   description: PropTypes.string,
   eventId: PropTypes.string,
 }
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
@@ -106,12 +119,12 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  nonexistantDatasetMessage = 'This dataset does not exist.'
+  nonexistentDatasetMessage = 'This dataset does not exist.'
 
   // any error message that should trigger a link back to the dashboard
   //   rather than the freshdesk modal link
   redirectMessages = [
-    this.nonexistantDatasetMessage,
+    this.nonexistentDatasetMessage,
     'GraphQL error: You do not have access to read this dataset.',
   ]
 
@@ -122,10 +135,11 @@ class ErrorBoundary extends React.Component {
       () => true,
     )
   }
+
   componentDidCatch(error) {
     let message = this.state.message
     if (!this.props.dataset) {
-      message = this.nonexistantDatasetMessage
+      message = this.nonexistentDatasetMessage
     } else if (this.props.dataset && this.props.dataset.snapshots.length < 1) {
       message = 'This dataset has no associated snapshots.'
     }
@@ -153,7 +167,6 @@ class ErrorBoundary extends React.Component {
     const error = this.state.error || this.props.error
     const { supportModal, message } = this.state
     const { subject, description } = this.props
-
     if (error) {
       if (this.redirectMessages.includes(message)) {
         return <DatasetRedirect message={message} />
