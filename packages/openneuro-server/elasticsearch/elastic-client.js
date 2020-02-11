@@ -2,7 +2,7 @@ import config from '../config.js'
 import { Client } from '@elastic/elasticsearch'
 
 const elasticConfig = {
-  node: config.elasticsearch.connection,
+  node: config.elasticsearch.connection || 'http://mock-client',
   maxRetries: 3,
 }
 
