@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../../resources/strings'
 import Spinner from '../../../common/partials/spinner.jsx'
-import Search from '../../../common/partials/search.jsx'
+import SearchInput from '../../../search/search-input.tsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
@@ -31,17 +31,12 @@ const title = (isPublic, isSaved) =>
     ? 'Saved Datasets'
     : 'My Datasets'
 
-const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
-  if (
-    data &&
-    data.datasets &&
-    data.datasets.edges &&
-    data.datasets.edges.length
-  ) {
+const DatasetTabLoaded = ({ datasets, loadMoreRows, publicDashboard }) => {
+  if (datasets && datasets.edges && datasets.edges.length) {
     return (
       <DatasetVirtualScroller
-        datasets={data.datasets.edges}
-        pageInfo={data.datasets.pageInfo}
+        datasets={datasets.edges}
+        pageInfo={datasets.pageInfo}
         loadMoreRows={loadMoreRows}
         publicDashboard={publicDashboard}
       />
@@ -78,7 +73,7 @@ const DatasetTab = ({
         <div className="row">
           {isMobile && (
             <div className="col-md-7">
-              <Search />
+              <SearchInput />
             </div>
           )}
           <div className="col-md-5">
@@ -93,7 +88,7 @@ const DatasetTab = ({
           </div>
           {!isMobile && (
             <div className="col-md-7">
-              <Search />
+              <SearchInput />
             </div>
           )}
         </div>
@@ -120,7 +115,7 @@ const DatasetTab = ({
     ) : (
       <ErrorBoundary error={error} subject={'error in dashboard dataset tab'}>
         <DatasetTabLoaded
-          data={data}
+          datasets={data.datasets || data.search}
           loadMoreRows={loadMoreRows}
           publicDashboard={publicDashboard}
         />

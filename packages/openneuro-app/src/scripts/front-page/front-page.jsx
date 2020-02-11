@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SearchInput from '../search/search-input.tsx'
 import FrontPageStats from './front-page-stats.jsx'
 import FrontPageTabs from './front-page-tabs.jsx'
@@ -49,55 +49,45 @@ const LogoLayers = () => {
   }
 }
 
-const handleSearch = history => searchQuery => {
-  history.push(`/search/${searchQuery}`)
-}
-
-const FrontPage = () => {
-  const history = useHistory()
-  return (
-    <span className="front-page is-front">
-      <Helmet>
-        <title>
-          {frontPage.pageDescription} - {frontPage.pageTitle}
-        </title>
-      </Helmet>
-      <div className="intro">
-        <div className="container">
-          <div className="intro-inner fade-in clearfix">
-            <div className="clearfix welcome-block">
-              <LogoLayers />
-              {frontPage.titlePanel.logoText ? <LogoText /> : null}
-              <h1>{frontPage.pageDescription}</h1>
-              <LoggedOut>
-                <div className="sign-in-block fade-in">
-                  <AuthenticationButtons />
-                </div>
-              </LoggedOut>
-              <SearchInput
-                className="frontpage-search"
-                onSearch={handleSearch(history)}
-              />
-              <div className="browse-publicly">
-                <Link to="/public/datasets">
-                  <span>Browse All Public Datasets</span>
-                </Link>
+const FrontPage = () => (
+  <span className="front-page is-front">
+    <Helmet>
+      <title>
+        {frontPage.pageDescription} - {frontPage.pageTitle}
+      </title>
+    </Helmet>
+    <div className="intro">
+      <div className="container">
+        <div className="intro-inner fade-in clearfix">
+          <div className="clearfix welcome-block">
+            <LogoLayers />
+            {frontPage.titlePanel.logoText ? <LogoText /> : null}
+            <h1>{frontPage.pageDescription}</h1>
+            <LoggedOut>
+              <div className="sign-in-block fade-in">
+                <AuthenticationButtons />
               </div>
-              <div className="privacy-detail">
-                <span>{frontPage.titlePanel.privacyDetail}</span>
-              </div>
+            </LoggedOut>
+            <SearchInput className="frontpage-search" />
+            <div className="browse-publicly">
+              <Link to="/public/datasets">
+                <span>Browse All Public Datasets</span>
+              </Link>
+            </div>
+            <div className="privacy-detail">
+              <span>{frontPage.titlePanel.privacyDetail}</span>
             </div>
           </div>
         </div>
       </div>
-      <FrontPageStats />
-      {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
-      <SubscribeToNewsletter />
-      <FrontPageTopDatasets />
-      <AdditionalInfo />
-      <Footer />
-    </span>
-  )
-}
+    </div>
+    <FrontPageStats />
+    {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
+    <SubscribeToNewsletter />
+    <FrontPageTopDatasets />
+    <AdditionalInfo />
+    <Footer />
+  </span>
+)
 
 export default FrontPage
