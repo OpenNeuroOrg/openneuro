@@ -111,7 +111,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
       <div className={mobileClass}>
         <Helmet>
           <title>
-            {pageTitle} - {snapshot.description.Name}
+            {snapshot.description.Name} - Snapshot {snapshot.tag} - {pageTitle}
           </title>
           <meta name="description" content={snapshot.readme} />
           <script type="application/ld+json">

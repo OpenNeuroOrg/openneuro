@@ -1,11 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`faq/faq/Faq renders successfully 1`] = `
-<div
-  className="container faqs"
->
-  <h1>
-    FAQ's
-  </h1>
-</div>
+<Fragment>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+  >
+    <title>
+      Frequently Asked Questions - 
+      OpenNeuro
+    </title>
+  </HelmetWrapper>
+  <div
+    className="container faqs"
+  >
+    <h1>
+      FAQ's
+    </h1>
+  </div>
+</Fragment>
 `;

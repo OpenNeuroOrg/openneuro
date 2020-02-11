@@ -10,6 +10,8 @@ import Spinner from '../common/partials/spinner.jsx'
 import WarnButton from '../common/forms/warn-button.jsx'
 import { getProfile } from '../authentication/profile.js'
 import { formatDate } from '../utils/date.js'
+import Helmet from 'react-helmet'
+import { pageTitle } from '../resources/strings.js'
 
 export const USER_FRAGMENT = gql`
   fragment userFields on User {
@@ -123,85 +125,89 @@ class Users extends React.Component {
         </div>
       )
     })
-
     return (
-      <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
-        <div className="header-wrap clearfix">
-          <div className="col-sm-9">
-            <h2>Current Users</h2>
-          </div>
-          <div className="col-sm-3">
-            <Input
-              className="pull-right"
-              placeholder="Search Name or Email"
-              onChange={e => this.setState({ stringFilter: e.target.value })}
-            />
-          </div>
-        </div>
-
-        <div className="filters-sort-wrap clearfix">
-          <span>
-            <div className="filters">
-              <label>Filter By:</label>
-              <button
-                className={this.state.adminFilter ? 'active' : null}
-                onClick={() =>
-                  this.setState({ adminFilter: !this.state.adminFilter })
-                }>
-                <span className="filter-admin">
-                  <i
-                    className={
-                      this.state.adminFilter
-                        ? 'fa fa-check-square-o'
-                        : 'fa fa-square-o'
-                    }
-                  />{' '}
-                  Admin
-                </span>
-              </button>
-              <button
-                className={this.state.blacklistFilter ? 'active' : null}
-                onClick={() =>
-                  this.setState({
-                    blacklistFilter: !this.state.blacklistFilter,
-                  })
-                }>
-                <span className="filter-admin">
-                  <i
-                    className={
-                      this.state.blacklistFilter
-                        ? 'fa fa-check-square-o'
-                        : 'fa fa-square-o'
-                    }
-                  />{' '}
-                  Blocked
-                </span>
-              </button>
+      <>
+        <Helmet>
+          <title>Admin Dashboard - {pageTitle}</title>
+        </Helmet>
+        <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
+          <div className="header-wrap clearfix">
+            <div className="col-sm-9">
+              <h2>Current Users</h2>
             </div>
-          </span>
-        </div>
-
-        <div>
-          <div className="col-xs-12 users-panel-wrap">
-            <div className="fade-in user-panel-header clearfix">
-              <div className="col-xs-4 user-col">
-                <label>User</label>
-              </div>
-              <div className="col-xs-3 user-col">
-                <label>Email</label>
-              </div>
-              <div className="col-xs-2 user-col">
-                <label>Provider</label>
-              </div>
-              <div className="col-xs-3 user-col">
-                <label>Actions</label>
-              </div>
+            <div className="col-sm-3">
+              <Input
+                className="pull-right"
+                placeholder="Search Name or Email"
+                onChange={e => this.setState({ stringFilter: e.target.value })}
+              />
             </div>
+          </div>
 
-            {users.filter(u => u !== null).length ? users : this._noResults()}
+          <div className="filters-sort-wrap clearfix">
+            <span>
+              <div className="filters">
+                <label>Filter By:</label>
+                <button
+                  className={this.state.adminFilter ? 'active' : null}
+                  onClick={() =>
+                    this.setState({ adminFilter: !this.state.adminFilter })
+                  }>
+                  <span className="filter-admin">
+                    <i
+                      className={
+                        this.state.adminFilter
+                          ? 'fa fa-check-square-o'
+                          : 'fa fa-square-o'
+                      }
+                    />{' '}
+                    Admin
+                  </span>
+                </button>
+                <button
+                  className={this.state.blacklistFilter ? 'active' : null}
+                  onClick={() =>
+                    this.setState({
+                      blacklistFilter: !this.state.blacklistFilter,
+                    })
+                  }>
+                  <span className="filter-admin">
+                    <i
+                      className={
+                        this.state.blacklistFilter
+                          ? 'fa fa-check-square-o'
+                          : 'fa fa-square-o'
+                      }
+                    />{' '}
+                    Blocked
+                  </span>
+                </button>
+              </div>
+            </span>
+          </div>
+
+          <div>
+            <div className="col-xs-12 users-panel-wrap">
+              <div className="fade-in user-panel-header clearfix">
+                <div className="col-xs-4 user-col">
+                  <label>User</label>
+                </div>
+                <div className="col-xs-3 user-col">
+                  <label>Email</label>
+                </div>
+                <div className="col-xs-2 user-col">
+                  <label>Provider</label>
+                </div>
+                <div className="col-xs-3 user-col">
+                  <label>Actions</label>
+                </div>
+              </div>
+
+              {users.filter(u => u !== null).length ? users : this._noResults()}
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 
