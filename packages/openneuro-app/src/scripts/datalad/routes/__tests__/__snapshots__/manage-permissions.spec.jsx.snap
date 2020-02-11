@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Share dataset route PermissionRow renders for admin permissions 1`] = `
+exports[`Manage dataset permissions route PermissionRow renders for admin permissions 1`] = `
 <tr>
   <td
     className="col-xs-4"
@@ -23,7 +23,7 @@ exports[`Share dataset route PermissionRow renders for admin permissions 1`] = `
 </tr>
 `;
 
-exports[`Share dataset route PermissionRow renders for ro permissions 1`] = `
+exports[`Manage dataset permissions route PermissionRow renders for ro permissions 1`] = `
 <tr>
   <td
     className="col-xs-4"
@@ -46,7 +46,7 @@ exports[`Share dataset route PermissionRow renders for ro permissions 1`] = `
 </tr>
 `;
 
-exports[`Share dataset route PermissionRow renders for rw permissions 1`] = `
+exports[`Manage dataset permissions route PermissionRow renders for rw permissions 1`] = `
 <tr>
   <td
     className="col-xs-4"
@@ -69,7 +69,7 @@ exports[`Share dataset route PermissionRow renders for rw permissions 1`] = `
 </tr>
 `;
 
-exports[`Share dataset route ShareTable renders with many permissions 1`] = `
+exports[`Manage dataset permissions route ShareTable renders with many permissions 1`] = `
 <table
   className="table"
 >
@@ -109,7 +109,7 @@ exports[`Share dataset route ShareTable renders with many permissions 1`] = `
 </table>
 `;
 
-exports[`Share dataset route ShareTable renders with no permissions 1`] = `
+exports[`Manage dataset permissions route ShareTable renders with no permissions 1`] = `
 <table
   className="table"
 >
@@ -130,7 +130,7 @@ exports[`Share dataset route ShareTable renders with no permissions 1`] = `
 </table>
 `;
 
-exports[`Share dataset route ShareTable renders with one permission 1`] = `
+exports[`Manage dataset permissions route ShareTable renders with one permission 1`] = `
 <table
   className="table"
 >

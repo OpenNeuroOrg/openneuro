@@ -1,4 +1,3 @@
-
 .dataset-tools-wrap {
     margin: 0 0 20px;
     padding: 0;
@@ -6,7 +5,6 @@
     z-index: 1000;
     height: 45px;
     overflow: hidden;
-
     .tools {
         padding: 0;
         margin: 0 0 0 40px;
@@ -14,22 +12,18 @@
         width: 100%;
         background: $f4;
         position: relative;
-
         .run-analysis {
             height: 45px;
             width: auto;
             float: left;
             border-left: 1px solid $aaa;
-
             .btn-blue {
                 margin: 0 5px 0 0;
                 padding: 11px 20px;
-
                 i {
                     font-size: 18px;
                     line-height: 16px;
                 }
-
                 span {
                     margin-left: 5px;
                     position: relative;
@@ -39,35 +33,36 @@
                 }
             }
         }
-
         .tool {
             text-align: center;
             width: 70px;
             float: left;
             display: block;
             overflow: hidden;
-
+            @include mobile {
+                width: 3.5em;
+            }
             .warning-loading {
                 margin-top: 10px;
                 display: block;
             }
-
-            > button,
-            .fade-in > button {width: 100%;}
-
-            .disabled > button {color: $stone;}
-
-            .btn-group {@include backface-visibility(initial);}
-
+            >button,
+            .fade-in>button {
+                width: 100%;
+            }
+            .disabled>button {
+                color: $stone;
+            }
+            .btn-group {
+                @include backface-visibility(initial);
+            }
             .btn-warn-component {
                 font-size: 18px;
                 padding: 7px 0;
-
                 i {
                     line-height: 30px;
                     margin-left: 0;
                 }
-
                 &.cancel,
                 &.success {
                     background: $brand-danger;
@@ -75,25 +70,25 @@
                     font-size: 14px;
                     padding: 5px 8px;
                     margin: 7px 5px 5px 0;
-
-                    &:hover {background: darken($brand-danger, 10%);}
-
-                    i {line-height: 15px;}
+                    &:hover {
+                        background: darken($brand-danger, 10%);
+                    }
+                    i {
+                        line-height: 15px;
+                    }
                 }
-
                 &.success {
                     background: $brand-success;
-
-                    &:hover {background: darken($brand-success, 10%);}
+                    &:hover {
+                        background: darken($brand-success, 10%);
+                    }
                 }
             }
         }
-
         .resume-upload-tool {
             @extend %clearfix;
             display: block;
             float: left;
-
             .fileupload-btn {
                 padding: 10px 25px;
                 line-height: 23px;

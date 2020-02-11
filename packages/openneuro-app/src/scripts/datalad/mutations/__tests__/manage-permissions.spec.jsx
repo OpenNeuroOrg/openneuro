@@ -1,15 +1,17 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import ShareDataset, { mergeNewPermission } from '../share.jsx'
+import UpdateDatasetPermissions, {
+  mergeNewPermission,
+} from '../update-permissions.jsx'
 
-describe('ShareDataset mutation', () => {
+describe('UpdateDatasetPermissions mutation', () => {
   it('renders with default props', () => {
-    const wrapper = shallow(<ShareDataset />)
+    const wrapper = shallow(<UpdateDatasetPermissions />)
     expect(wrapper).toMatchSnapshot()
   })
   it('renders with typical props', () => {
     const wrapper = shallow(
-      <ShareDataset
+      <UpdateDatasetPermissions
         datasetId="ds000005"
         userEmail="test@example.com"
         access="ro"

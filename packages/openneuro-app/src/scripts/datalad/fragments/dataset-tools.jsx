@@ -6,8 +6,10 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
 import FollowDataset from '../mutations/follow.jsx'
 import StarDataset from '../mutations/star.jsx'
+import ShareDatasetLink from '../fragments/share-dataset-button.jsx'
 import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
+import useMedia from '../../mobile/media-hook.jsx'
 
 /**
  * Immediate redirect to a dataset or snapshot route
@@ -18,7 +20,6 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 const toolRedirect = (history, rootPath, path) => {
   history.push(`${rootPath}/${path}`)
 }
-
 /**
  * Toolbar parent component
  *
@@ -31,6 +32,7 @@ const DatasetTools = ({ dataset, location, history }) => {
     : `/datasets/${dataset.id}`
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
+  const isMobile = useMedia('(max-width: 765px) ')
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
@@ -54,7 +56,7 @@ const DatasetTools = ({ dataset, location, history }) => {
           <div role="presentation" className="tool">
             {edit && (
               <WarnButton
-                tooltip="Share Dataset"
+                tooltip="Manage Dataset Permissions"
                 icon="fa-user icon-plus"
                 warn={false}
                 action={cb => {
@@ -65,7 +67,7 @@ const DatasetTools = ({ dataset, location, history }) => {
             )}
           </div>
           <div role="presentation" className="tool">
-            {edit && (
+            {edit && !isMobile && (
               <WarnButton
                 tooltip="Create Snapshot"
                 icon="fa-camera-retro icon-plus"
@@ -86,6 +88,11 @@ const DatasetTools = ({ dataset, location, history }) => {
           <div role="presentation" className="tool">
             <StarDataset datasetId={dataset.id} starred={dataset.starred} />
           </div>
+          {isMobile && (
+            <div role="presentation" className="tool">
+              <ShareDatasetLink url={`https://openneuro.org${rootPath}`} />
+            </div>
+          )}
         </LoggedIn>
         <div role="presentation" className="tool">
           <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
@@ -94,12 +101,10 @@ const DatasetTools = ({ dataset, location, history }) => {
     </div>
   )
 }
-
 DatasetTools.propTypes = {
   dataset: PropTypes.object,
   edit: PropTypes.bool,
   location: PropTypes.object,
   history: PropTypes.object,
 }
-
 export default withRouter(DatasetTools)

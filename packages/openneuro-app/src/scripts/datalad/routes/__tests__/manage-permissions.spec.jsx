@@ -1,8 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { PermissionRow, ShareTable } from '../share.jsx'
+import { PermissionRow, ShareTable } from '../manage-permissions.jsx'
 
-describe('Share dataset route', () => {
+describe('Manage dataset permissions route', () => {
   describe('PermissionRow', () => {
     it('renders for admin permissions', () => {
       expect(
