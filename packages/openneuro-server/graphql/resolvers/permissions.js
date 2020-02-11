@@ -1,5 +1,6 @@
 import mongo from '../../libs/mongo.js'
 import User from '../../models/user'
+import { checkDatasetAdmin } from '../permissions'
 import pubsub from '../pubsub.js'
 
 export const permissions = obj => {
@@ -9,7 +10,8 @@ export const permissions = obj => {
 /**
  * Update user permissions on a dataset
  */
-export const updatePermissions = async (obj, args) => {
+export const updatePermissions = async (obj, args, { user, userInfo }) => {
+  await checkDatasetAdmin(args.datasetId, user, userInfo)
   // get all users the the email specified by permissions arg
   let users = await User.find({ email: args.userEmail }).exec()
   let userPromises = users.map(user => {
