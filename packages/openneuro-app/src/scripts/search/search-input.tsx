@@ -18,7 +18,7 @@ const SearchInput = () => {
     <div class="search-group admin">
       <form
         class="form-inline"
-        onSubmit={(event) => onSearch(event, inputRef.current.value)}>
+        onSubmit={event => onSearch(event, inputRef.current.value)}>
         <div class="form-group float-label-input full-width">
           <input
             type="text"
@@ -30,7 +30,7 @@ const SearchInput = () => {
         <div class="form-group full-width float-label-input">
           <button
             class="btn-blue"
-            onClick={(event) => onSearch(event, inputRef.current.value)}>
+            onClick={event => onSearch(event, inputRef.current.value)}>
             <i class="fa fa-search"></i>
           </button>
         </div>
