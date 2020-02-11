@@ -186,7 +186,7 @@ export const typeDefs = `
     firstSnapshotCreatedAt: DateTime
     latestSnapshotCreatedAt: DateTime
     dxStatus: String
-    tasksCompleted: String
+    tasksCompleted: [String]
     trialCount: Int
     studyDesign: String
     studyDomain: String
@@ -530,7 +530,7 @@ export const typeDefs = `
     firstSnapshotCreatedAt: DateTime
     latestSnapshotCreatedAt: DateTime
     dxStatus: String
-    tasksCompleted: String
+    tasksCompleted: [String]
     trialCount: Int
     studyDesign: String
     studyDomain: String
