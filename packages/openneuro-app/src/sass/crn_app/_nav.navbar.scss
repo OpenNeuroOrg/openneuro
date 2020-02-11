@@ -1,7 +1,11 @@
 //navbar // ================================================================
 @include keyframes(alertown) {
-    0% {transform: translateY(-50px);}
-    100% {transform: translateY(0);}
+    0% {
+        transform: translateY(-50px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
 .navbar {
@@ -28,7 +32,6 @@
     height: 50px;
 }
 
-
 .navbar-default {
     background: $navbar-background-color;
     background: var(--navbar-background-color);
@@ -38,19 +41,18 @@
     padding: 0;
     z-index: 800;
     border-radius: 0;
-    .container{
+    .container {
         padding: 0;
-        .navbar-collapse{
+        .navbar-collapse {
             padding: 0;
         }
     }
-
     .main-nav.navbar-nav {
-        > li {
-            > .navbar-collapse {
+        >li {
+            >.navbar-collapse {
                 padding: 0;
             }
-            > .link {
+            >.link {
                 border: 1px solid transparent;
                 padding: 10px;
                 color: $navbar-btn-text-color;
@@ -59,12 +61,10 @@
                 border-radius: 2px;
                 transition: border .5s ease;
                 margin-left: 10px;
-
                 &:hover {
                     color: $stone;
                     border-color: $stone;
                 }
-
                 &.active {
                     color: $navbar-btn-text-color;
                     color: var(--navbar-btn-text-color);
@@ -73,10 +73,8 @@
                 }
             }
         }
-
         &.main-nav {
             float: right;
-
             .nav-link {
                 width: 110px;
                 height: 75px;
@@ -89,7 +87,6 @@
                 background: $transparent;
                 -webkit-transition: all .5s;
                 transition: all .5s;
-
                 .link-name {
                     width: 100%;
                     font-size: 14px;
@@ -99,7 +96,6 @@
                     line-height: normal;
                     border-bottom: 3px solid $transparent;
                 }
-
                 &:focus,
                 &:active,
                 &.active {
@@ -108,28 +104,25 @@
                     background: $navbar-btn-active-background-color;
                     background: var(--navbar-btn-active-background-color);
                 }
-
                 &:hover {
-
                     .link-name {
                         border-color: $navbar-btn-text-underline-color;
                         border-color: var(--navbar-btn-text-underline-color);
                     }
-                 }
+                }
             }
             .active-signin {
-              margin: 15px 20px;
+                margin: 15px 20px;
             }
             .sign-in-nav-btn {
                 margin: 15px 20px;
                 @include mobile {
-                  margin: 0;
+                    margin: 0;
                 }
                 .link-name {
-                  border-bottom: none;
+                    border-bottom: none;
                 }
-              }
-
+            }
             .user-wrap {
                 margin: 0;
                 height: 75px;
@@ -137,14 +130,11 @@
                 width: 75px;
                 border-left: 2px solid $c-56;
                 background: $c-21;
-
-                .greeting {text-transform: uppercase;}
+                .greeting {
+                    text-transform: uppercase;
+                }
             }
-
-
-
             .upload-btn-wrap {
-
                 .nav-link.nl-upload {
                     width: 180px;
                     padding: 0 15px;
@@ -152,27 +142,22 @@
                     background: var(--navbar-upload-btn-background-color);
                     color: $secondary;
                     color: var(--secondary);
-
                     .link-name {
                         border-color: $transparent;
                     }
-
                     &.nl-progress {
                         .link-name {
                             margin-top: -20px;
                         }
-
                         .progress {
                             margin-top: -30px;
                             height: 10px;
                             position: relative;
                         }
-
                         .progress-bar-warning {
                             background: $brand-warning;
                         }
                     }
-
                     &:hover,
                     &:focus,
                     &:active,
@@ -182,10 +167,7 @@
                         background: var(--navbar-upload-btn-active-background-color);
                     }
                 }
-
             }
-
-
             .user-img-thumb {
                 width: 75px;
                 height: auto;
@@ -194,7 +176,6 @@
                 top: 0;
                 right: 0;
             }
-
             .user-generic-thumb {
                 width: 75px;
                 height: 75px;
@@ -204,7 +185,6 @@
                 right: 0;
                 display: table;
                 background-color: rgb(167, 204, 70);
-
                 .user-generic-thumb-letter {
                     font-size: xx-large;
                     display: table-cell;
@@ -213,13 +193,8 @@
                     color: $white;
                 }
             }
-
-
-
-
             .dropdown {
                 position: initial;
-
                 &.btn-group {
                     .btn {
                         background: $transparent;
@@ -237,9 +212,9 @@
                         width: 75px;
                         height: 75px;
                         top: 0;
-
-                        .caret {display: none;}
-
+                        .caret {
+                            display: none;
+                        }
                         i {
                             top: 0;
                             right: 0;
@@ -251,13 +226,11 @@
                             line-height: 25px;
                             transition: all .3s ease;
                         }
-
                         &.active,
                         &:active,
                         &:hover,
                         &.hover,
                         &:focus {
-
                             i {
                                 transition: all .3s ease;
                                 background-color: $transparent3;
@@ -267,7 +240,6 @@
                             }
                         }
                     }
-
                     &.open {
                         .btn {
                             background: $transparent3;
@@ -277,9 +249,9 @@
                         }
                     }
                 }
-
-                .dropdown-toggle {padding: 25px 15px;}
-
+                .dropdown-toggle {
+                    padding: 25px 15px;
+                }
                 .dropdown-menu {
                     background-color: $white;
                     padding: 20px 15px 0;
@@ -289,19 +261,16 @@
                     border-color: $f4;
                     right: 0;
                     left: auto;
-
                     .dropdown-header {
                         width: 100%;
                         text-align: center;
                         padding: 10px 0;
                     }
-
                     .btn-submit-other {
                         margin-bottom: 15px;
                         color: $secondary;
                         color: var(--secondary);
                         border-color: $transparent;
-
                         &:hover,
                         &.active {
                             border-color: $transparent;
@@ -312,27 +281,23 @@
                     }
                 }
             }
-
-            @media(max-width: 1000px){
-              .nav-link{
+            @include tablet {
+                .nav-link {
                     padding: 0 10px;
                     max-width: 80px;
-
-                    .link-name{
+                    .link-name {
                         font-size: 12px;
                     }
                 }
             }
-
             @include mobile {
                 float: none;
                 width: 100%;
-                &.nav > li{
+                &.nav>li {
                     float: none;
                     margin: 0;
                     width: 100%;
-
-                    .nav-link{
+                    .nav-link {
                         float: none;
                         margin: 0;
                         max-width: initial;
@@ -340,28 +305,25 @@
                         height: auto;
                         line-height: 0;
                         padding: 0;
-                        .link-name{
+                        .link-name {
                             line-height: 30px;
                         }
-                        &.nl-upload{
+                        &.nl-upload {
                             margin: 0;
                             width: auto;
                             line-height: 40px;
                         }
                     }
                 }
-
-                .user-img-thumb{
+                .user-img-thumb {
                     display: none;
                 }
-                .user-generic-thumb{
+                .user-generic-thumb {
                     display: none;
                 }
-
-                .dropdown{
+                .dropdown {
                     display: block;
-
-                    .dropdown-menu{
+                    .dropdown-menu {
                         display: block;
                         width: 100%;
                         position: relative;
@@ -369,14 +331,12 @@
                         min-width: 0;
                         float: none;
                         padding: 0;
-
                     }
-                    &.btn-group .btn{
+                    &.btn-group .btn {
                         display: none;
                     }
                 }
-
-                .user-wrap{
+                .user-wrap {
                     height: auto;
                     width: auto;
                     margin: 0;
@@ -391,41 +351,35 @@
     height: 75px;
     padding: 5px 20px;
     border: 0;
-
-    @media(max-width: 1000px){
+    @include tablet {
         padding: 15px 25px;
     }
-
-    > img{
+    >img {
         display: block;
         width: 60px;
         height: 60px;
         float: left;
-
-        @media(max-width: 1000px){
+        @include tablet {
             width: 40px;
             height: 40px;
         }
     }
-
-    .logo-text{
+    .logo-text {
         display: block;
         font-size: 38px;
         color: $white;
         margin: 12px 10px;
         float: left;
-
-        @media(max-width: 1000px){
+        @include tablet {
             font-size: 22px;
         }
-
-        .logo-end{
+        .logo-end {
             transition: color 0.3s;
             color: $primary-hover;
             color: var(--primary-hover);
         }
-        &:hover{
-            .logo-end{
+        &:hover {
+            .logo-end {
                 color: $white;
             }
         }
