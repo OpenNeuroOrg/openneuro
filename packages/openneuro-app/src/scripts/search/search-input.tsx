@@ -9,16 +9,17 @@ const SearchInput = () => {
     inputRef.current.focus()
   })
 
-  const onSearch = (event, searchQuery) => {
+  const onSearch = event => {
     event.preventDefault()
-    history.push(`/search/${searchQuery}`)
+    // Don't submit unless there's a value entered
+    if (inputRef.current.value) {
+      history.push(`/search/${inputRef.current.value}`)
+    }
   }
 
   return (
     <div className="search-group admin">
-      <form
-        className="form-inline"
-        onSubmit={event => onSearch(event, inputRef.current.value)}>
+      <form className="form-inline" onSubmit={event => onSearch(event)}>
         <div className="form-group float-label-input full-width">
           <input
             type="text"
@@ -28,9 +29,7 @@ const SearchInput = () => {
           />
         </div>
         <div className="form-group full-width float-label-input">
-          <button
-            className="btn-blue"
-            onClick={event => onSearch(event, inputRef.current.value)}>
+          <button className="btn-blue" onClick={event => onSearch(event)}>
             <i className="fa fa-search"></i>
           </button>
         </div>
