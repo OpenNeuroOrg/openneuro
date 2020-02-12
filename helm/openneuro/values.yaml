@@ -4,6 +4,9 @@ hostname: openneuro.staging.sqm.io
 # The FQDN URL for the site, optionally including port number
 url: https://openneuro.staging.sqm.io
 
+# GraphQL endpoint
+graphql: https://openneuro.staging.sqm.io/crn/graphql
+
 # A unique string identifying this install of OpenNeuro
 environment: staging
 

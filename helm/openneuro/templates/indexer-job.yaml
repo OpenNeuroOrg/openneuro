@@ -1,0 +1,31 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-indexer
+  labels:
+    app: {{ .Release.Name }}-indexer
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version }}'
+    release: '{{ .Release.Name }}'
+    heritage: '{{ .Release.Service }}'
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: openneuro-indexer
+            image: 'openneuro/indexer'
+            resources:
+              limits:
+                cpu: ".5"
+                memory: "512Mi"
+              requests:
+                cpu: ".1"
+                memory: "256Mi"
+            envFrom:
+              - configMapRef:
+                  name: {{ .Release.Name }}-configmap
+              - secretRef:
+                  name: {{ .Release.Name }}-secret
+          restartPolicy: OnFailure

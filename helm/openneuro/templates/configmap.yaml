@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-configmap
 data:
   CRN_SERVER_URL: {{ .Values.url | quote }}
+  GRAPHQL_URI: {{ .Values.graphql | quote }}
   DATALAD_WORKERS: {{ .Values.dataladWorkers | quote }}
   FRESH_DESK_URL: {{ .Values.freshDeskUrl | quote }}
   ENVIRONMENT: {{ .Values.environment | quote }}

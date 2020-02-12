@@ -4,6 +4,9 @@ hostname: openneuro.org
 # The FQDN URL for the site, optionally including port number
 url: https://openneuro.org
 
+# GraphQL endpoint
+graphql: https://openneuro.org/crn/graphql
+
 # A unique string identifying this install of OpenNeuro
 environment: production
 
