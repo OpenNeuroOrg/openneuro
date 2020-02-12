@@ -15,11 +15,11 @@ const SearchInput = () => {
   }
 
   return (
-    <div class="search-group admin">
+    <div className="search-group admin">
       <form
-        class="form-inline"
+        className="form-inline"
         onSubmit={event => onSearch(event, inputRef.current.value)}>
-        <div class="form-group float-label-input full-width">
+        <div className="form-group float-label-input full-width">
           <input
             type="text"
             name="q"
@@ -27,11 +27,11 @@ const SearchInput = () => {
             ref={inputRef}
           />
         </div>
-        <div class="form-group full-width float-label-input">
+        <div className="form-group full-width float-label-input">
           <button
-            class="btn-blue"
+            className="btn-blue"
             onClick={event => onSearch(event, inputRef.current.value)}>
-            <i class="fa fa-search"></i>
+            <i className="fa fa-search"></i>
           </button>
         </div>
       </form>
