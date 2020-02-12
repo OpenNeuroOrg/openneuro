@@ -56,7 +56,7 @@ const loadMoreRows = (data, fetchMore) => {
   return () => loadMoreInner(data.datasets.pageInfo.endCursor)
 }
 
-const datasetQueryDisplay = (isPublic, isSaved) => ({
+export const datasetQueryDisplay = (isPublic, isSaved) => ({
   loading,
   data,
   fetchMore,

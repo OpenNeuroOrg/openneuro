@@ -54,6 +54,8 @@ const sortFieldsMobile = [
 ]
 
 export const SortField = ({ field, queryVariables, refetch }) => {
+  // Disable sorts that are not in the original query
+  if (!queryVariables.hasOwnProperty('orderBy')) return null
   const fieldValue =
     field in queryVariables.orderBy && queryVariables.orderBy[field]
   let icon

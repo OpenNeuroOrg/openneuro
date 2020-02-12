@@ -30,23 +30,19 @@ Sentry.init({
 const app = createApp(false)
 
 // Setup mongoose next to our old mongo lib
-mongoose.connect(
-  config.mongo.url,
-  {
-    useNewUrlParser: true,
-    dbName: config.mongo.dbName,
-  },
-)
+mongoose.connect(config.mongo.url, {
+  useNewUrlParser: true,
+  dbName: config.mongo.dbName,
+})
 
 // start server ----------------------------------------------------
-mongo.connect(config.mongo.url).then(() => {
-  redisConnect().then(() => {
-    const server = createServer(app)
-    server.listen(config.port, () => {
-      // eslint-disable-next-line no-console
-      console.log('Server is listening on port ' + config.port)
-      // Setup GraphQL subscription transport
-      subscriptionServerFactory(server)
-    })
+mongo.connect(config.mongo.url).then(async () => {
+  await redisConnect()
+  const server = createServer(app)
+  server.listen(config.port, () => {
+    // eslint-disable-next-line no-console
+    console.log('Server is listening on port ' + config.port)
+    // Setup GraphQL subscription transport
+    subscriptionServerFactory(server)
   })
 })

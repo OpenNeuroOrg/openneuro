@@ -23,15 +23,24 @@ describe('indexDatasets', () => {
           __typename: 'Dataset',
         }),
       ).toEqual({
+        id: 'ds000005',
         body: {
-          datasetId: "ds000005",
-          authors: ['J. Doe', 'A. Nonymous'],
+          id: 'ds000005',
           metadata: {
             species: 'Human',
           },
-          name: 'a test dataset',
-          readme: 'a longer description of this dataset',
-          tag: '1.0.0',
+          latestSnapshot: {
+            id: 'ds000005:1.0.0',
+            tag: '1.0.0',
+            name: 'a test dataset',
+            readme: 'a longer description of this dataset',
+            description: {
+              Name: 'a test dataset',
+              Authors: ['J. Doe', 'A. Nonymous'],
+            },
+            __typename: 'Snapshot',
+          },
+          __typename: 'Dataset',
         },
         index: 'datasets',
       })

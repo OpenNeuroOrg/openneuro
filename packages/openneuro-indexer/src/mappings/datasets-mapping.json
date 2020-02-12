@@ -1,0 +1,40 @@
+{
+  "properties": {
+    "id": { "type": "keyword" },
+    "created": { "type": "date" },
+    "metadata": {
+      "properties": {
+        "dxStatus": { "type": "keyword" },
+        "tasksCompleted": { "type": "keyword" },
+        "trialCount": { "type": "long" },
+        "studyDesign": { "type": "keyword" },
+        "studyDomain": { "type": "keyword" },
+        "studyLongitudinal": { "type": "boolean" },
+        "dataProcessed": { "type": "boolean" },
+        "species": { "type": "keyword" },
+        "associatedPaperDOI": { "type": "keyword" },
+        "openneuroPaperDOI": { "type": "keyword" },
+        "seniorAuthor": { "type": "keyword" },
+        "ages": { "type": "keyword" },
+        "modalities": { "type": "keyword" },
+        "grantFunderName": { "type": "keyword" },
+        "grantIdentifier": { "type": "keyword" }
+      }
+    },
+    "latestSnapshot": {
+      "properties": {
+        "id": { "type": "keyword" },
+        "tag": { "type": "keyword" },
+        "description": {
+          "properties": {
+            "Name": { "type": "text" },
+            "Authors": { "type": "text" }
+          }
+        },
+        "readme": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}
