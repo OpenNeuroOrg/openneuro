@@ -1,11 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DeleteDataset mutation renders with common props 1`] = `
-<<<<<<< HEAD
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
-=======
 <Mutation
   mutation={
     Object {
@@ -85,7 +80,6 @@ exports[`DeleteDataset mutation renders with common props 1`] = `
 >
   <Component />
 </Mutation>
->>>>>>> b95ea011... update permissions to array with id
 `;
 
 exports[`DeleteDir mutation renders with common props 1`] = `
