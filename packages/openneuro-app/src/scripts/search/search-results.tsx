@@ -17,13 +17,17 @@ const searchQuery = gql`
           }
           public
           permissions {
-            userId
-            level
-            user {
-              id
-              name
-              email
-              provider
+            id
+            userPermissions {
+              userId
+              level
+              access: level
+              user {
+                id
+                name
+                email
+                provider
+              }
             }
           }
           draft {
