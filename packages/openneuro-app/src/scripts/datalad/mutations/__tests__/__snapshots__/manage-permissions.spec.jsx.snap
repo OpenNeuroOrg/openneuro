@@ -175,7 +175,6 @@ exports[`UpdateDatasetPermissions mutation renders with default props 1`] = `
       },
     }
   }
-  update={[Function]}
 >
   <Component />
 </Mutation>
@@ -356,7 +355,6 @@ exports[`UpdateDatasetPermissions mutation renders with typical props 1`] = `
       },
     }
   }
-  update={[Function]}
 >
   <Component />
 </Mutation>

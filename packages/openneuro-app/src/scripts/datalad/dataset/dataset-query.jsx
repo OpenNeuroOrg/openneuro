@@ -8,6 +8,11 @@ import DatasetQueryContext from './dataset-query-context.js'
 import DatasetContext from './dataset-context.js'
 import DatasetPage from './dataset-page.jsx'
 import FilesSubscription from '../subscriptions/files-subscription.jsx'
+import usePermissionsSubscription from '../subscriptions/usePermissionsSubscription'
+import useSnapshotsUpdatedSubscriptions from '../subscriptions/useSnapshotsUpdatedSubscriptions'
+import useDatasetDeletedSubscription, {
+  datasetDeletedToast,
+} from '../subscriptions/useDatasetDeletedSubscription.jsx'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
 import { DATASET_COMMENTS } from './comments-fragments.js'
 import {
@@ -97,7 +102,7 @@ export const getDraftPage = gql`
  * @param {Object} props.datasetId Accession number / id for dataset to query
  * @param {Object} props.draft Is this the draft page?
  */
-export const DatasetQueryHook = ({ datasetId, draft }) => {
+export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   const { data, loading, error, fetchMore } = useQuery(
     draft ? getDraftPage : getDatasetPage,
     {
@@ -105,9 +110,18 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
       errorPolicy: 'all',
     },
   )
-  if (loading) {
-    return <Spinner text="Loading Dataset" active />
-  } else if (error) Sentry.captureException(error)
+  usePermissionsSubscription([datasetId])
+  useSnapshotsUpdatedSubscriptions(datasetId)
+  useDatasetDeletedSubscription([datasetId], ({ data: subData }) => {
+    if (subData && subData.datasetDeleted === datasetId) {
+      history.push('/dashboard/datasets')
+      datasetDeletedToast(datasetId, data?.dataset?.draft?.description?.Name)
+    }
+  })
+
+  if (loading) return <Spinner text="Loading Dataset" active />
+  else if (error) Sentry.captureException(error)
+
   return (
     <DatasetContext.Provider value={data.dataset}>
       <ErrorBoundaryWithDataSet error={error} subject={'error in dataset page'}>
@@ -127,6 +141,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
 DatasetQueryHook.propTypes = {
   datasetId: PropTypes.string,
   draft: PropTypes.bool,
+  history: PropTypes.object,
 }
 
 /**
@@ -135,17 +150,19 @@ DatasetQueryHook.propTypes = {
  * @param {Object} props.match React router match object
  * @param {Object} props.draft Is this the draft page?
  */
-const DatasetQuery = ({ match }) => (
+const DatasetQuery = ({ match, history }) => (
   <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
     <DatasetQueryHook
       datasetId={match.params.datasetId}
       draft={!match.params.snapshotId}
+      history={history}
     />
   </ErrorBoundaryAssertionFailureException>
 )
 
 DatasetQuery.propTypes = {
   match: PropTypes.object,
+  history: PropTypes.object,
 }
 
 export default DatasetQuery

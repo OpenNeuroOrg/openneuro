@@ -20,17 +20,26 @@ describe('DatasetContent component', () => {
     })
     it('returns true for admin users', () => {
       expect(
-        hasEditPermissions([{ user: { id: '1234' }, level: 'admin' }], '1234'),
+        hasEditPermissions(
+          { userPermissions: [{ user: { id: '1234' }, level: 'admin' }] },
+          '1234',
+        ),
       ).toBe(true)
     })
     it('returns true for rw users', () => {
       expect(
-        hasEditPermissions([{ user: { id: '1234' }, level: 'rw' }], '1234'),
+        hasEditPermissions(
+          { userPermissions: [{ user: { id: '1234' }, level: 'rw' }] },
+          '1234',
+        ),
       ).toBe(true)
     })
     it('returns false for ro users', () => {
       expect(
-        hasEditPermissions([{ user: { id: '1234' }, level: 'ro' }], '1234'),
+        hasEditPermissions(
+          { userPermissions: [{ user: { id: '1234' }, level: 'ro' }] },
+          '1234',
+        ),
       ).toBe(false)
     })
   })

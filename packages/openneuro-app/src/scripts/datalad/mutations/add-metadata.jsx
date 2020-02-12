@@ -47,8 +47,9 @@ export const compileMetadata = dataset => {
         dataset.snapshots.length &&
         dataset.snapshots[dataset.snapshots.length - 1].created) ||
       null,
-    adminUsers: (Array.isArray(dataset.permissions) &&
-      dataset.permissions
+    adminUsers: (dataset.permissions &&
+      Array.isArray(dataset.permissions.userPermissions) &&
+      dataset.permissions.userPermissions
         .filter(permission => permission.level === 'admin')
         .map(({ user }) => user && user.email)) || ['dataset has no admins'],
 

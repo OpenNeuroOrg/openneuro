@@ -123,11 +123,18 @@ const getSnapshotFiles = async (datasetId, sKey, snapshot) => {
   return files
 }
 
-const announceNewSnapshot = (snapshot, datasetId, user) => {
+const announceNewSnapshot = async (snapshot, datasetId, user) => {
   if (snapshot.files) {
     notifications.snapshotCreated(datasetId, snapshot, user) // send snapshot notification to subscribers
   }
-  pubsub.publish('snapshotAdded', { datasetId })
+  pubsub.publish('snapshotsUpdated', {
+    datasetId,
+    snapshotsUpdated: {
+      id: datasetId,
+      snapshots: await getSnapshots(datasetId),
+      latestSnapshot: snapshot,
+    },
+  })
 }
 
 /**
@@ -202,8 +209,14 @@ export const deleteSnapshot = (datasetId, tag) => {
     redis
       .del(indexKey)
       .then(() => redis.del(sKey))
-      .then(() => {
-        pubsub.publish('snapshotDeleted', { datasetId })
+      .then(async () => {
+        pubsub.publish('snapshotsUpdated', {
+          datasetId,
+          snapshotsUpdated: {
+            id: datasetId,
+            snapshots: await getSnapshots(datasetId),
+          },
+        })
         return body
       }),
   )

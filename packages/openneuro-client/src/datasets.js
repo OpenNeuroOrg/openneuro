@@ -53,15 +53,18 @@ export const getDataset = gql`
         snapshot_version: tag
       }
       permissions {
-        userId
-        _id: userId
-        level
-        access: level
-        user {
-          id
-          name
-          email
-          provider
+        id
+        userPermissions {
+          userId
+          _id: userId
+          level
+          access: level
+          user {
+            id
+            name
+            email
+            provider
+          }
         }
       }
     }
@@ -108,14 +111,17 @@ export const getDatasets = gql`
           }
           public
           permissions {
-            userId
-            level
-            access: level
-            user {
-              id
-              name
-              email
-              provider
+            id
+            userPermissions {
+              userId
+              level
+              access: level
+              user {
+                id
+                name
+                email
+                provider
+              }
             }
           }
           draft {

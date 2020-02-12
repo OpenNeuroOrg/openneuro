@@ -7,6 +7,7 @@ import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import { addFileUrl } from './utils.js'
 import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'
+import { generateFileId } from '../graphql/utils/file.js'
 const uri = config.datalad.uri
 
 const draftFilesKey = datasetId => {
@@ -16,6 +17,17 @@ const draftFilesKey = datasetId => {
 export const expireDraftFiles = datasetId => {
   return redis.del(draftFilesKey(datasetId))
 }
+
+/**
+ *
+ * @param {object} file
+ * @param {string} file.filename '/' delimited
+ * @param {string|number} file.size
+ */
+const withGeneratedId = file => ({
+  ...file,
+  id: generateFileId(file.filename.split('/').join(':'), file.size),
+})
 
 /**
  * Retrieve draft files from cache or the datalad-service backend
@@ -29,7 +41,7 @@ export const getDraftFiles = async (datasetId, options = {}) => {
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = draftFilesKey(datasetId)
   return redis.get(key).then(data => {
-    if (!untracked && data) return JSON.parse(data)
+    if (!untracked && data) return JSON.parse(data).map(withGeneratedId)
     else
       return request
         .get(filesUrl)
@@ -40,7 +52,7 @@ export const getDraftFiles = async (datasetId, options = {}) => {
           if (!untracked) {
             redis.set(key, JSON.stringify(filesWithUrls))
           }
-          return filesWithUrls
+          return filesWithUrls.map(withGeneratedId)
         })
   })
 }

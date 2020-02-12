@@ -1,10 +1,43 @@
 import mongo from '../../libs/mongo.js'
 import User from '../../models/user'
 import { checkDatasetAdmin } from '../permissions'
+import { user } from './user'
 import pubsub from '../pubsub.js'
 
-export const permissions = obj => {
-  return mongo.collections.crn.permissions.find({ datasetId: obj.id }).toArray()
+export const permissions = async ds => {
+  const permissions = await mongo.collections.crn.permissions
+    .find({ datasetId: ds.id })
+    .toArray()
+  return {
+    id: ds.id,
+    userPermissions: permissions.map(userPermission => ({
+      ...userPermission,
+      user: user(ds, { id: userPermission.userId }),
+    })),
+  }
+}
+
+const publishPermissions = async datasetId => {
+  // Create permissionsUpdated object with DatasetPermissions in Dataset
+  // and resolve all promises before publishing
+  const ds = { id: datasetId }
+  const { id, userPermissions } = await permissions(ds)
+  const permissionsUpdated = {
+    id: datasetId,
+    permissions: {
+      id,
+      userPermissions: await Promise.all(
+        userPermissions.map(async userPermission => ({
+          ...userPermission,
+          user: await user(ds, { id: userPermission.userId }),
+        })),
+      ),
+    },
+  }
+  pubsub.publish('permissionsUpdated', {
+    datasetId,
+    permissionsUpdated,
+  })
 }
 
 /**
@@ -35,11 +68,9 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
         .catch(err => reject(err))
     })
   })
-  return Promise.all(userPromises)
-    .then(() => {
-      return pubsub.publish('permissionsUpdated', { datasetId: args.datasetId })
-    })
-    .then(() => users[0])
+  return Promise.all(userPromises).then(() =>
+    publishPermissions(args.datasetId),
+  )
 }
 
 /**
@@ -47,11 +78,9 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
  */
 export const removePermissions = (obj, args) => {
   return mongo.collections.crn.permissions
-    .remove({
+    .deleteOne({
       datasetId: args.datasetId,
       userId: args.userId,
     })
-    .then(() => {
-      return pubsub.publish('permissionsUpdated', { datasetId: args.datasetId })
-    })
+    .then(() => publishPermissions(args.datasetId))
 }

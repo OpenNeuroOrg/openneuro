@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
-import { PERMISSION_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import { datasetCacheId } from './cache-id.js'
 
 const REMOVE_PERMISSION = gql`
   mutation removePermissions($datasetId: ID!, $userId: String!) {
@@ -14,30 +12,14 @@ const REMOVE_PERMISSION = gql`
 
 /**
  * Remove any permissions matching the user
- * @param {array} permissions
+ * @param {object} permissions
  * @param {string} userId
  */
-export const permissionsFilter = (permissions, userId) =>
-  permissions.filter(permission => permission.user.id !== userId)
+export const userPermissionsFilter = (userPermissions, userId) =>
+  userPermissions.filter(permission => permission.user.id !== userId)
 
 const RemovePermissions = ({ datasetId, userId }) => (
-  <Mutation
-    mutation={REMOVE_PERMISSION}
-    update={cache => {
-      const { permissions } = cache.readFragment({
-        id: datasetCacheId(datasetId),
-        fragment: PERMISSION_FRAGMENT,
-      })
-      cache.writeFragment({
-        id: datasetCacheId(datasetId),
-        fragment: PERMISSION_FRAGMENT,
-        data: {
-          __typename: 'Dataset',
-          id: datasetId,
-          permissions: permissionsFilter(permissions, userId),
-        },
-      })
-    }}>
+  <Mutation mutation={REMOVE_PERMISSION}>
     {removePermissions => (
       <WarnButton
         message="Remove Permission"

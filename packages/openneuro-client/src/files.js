@@ -12,10 +12,6 @@ export const updateFiles = gql`
       dataset {
         id
       }
-      files {
-        filename
-        size
-      }
     }
   }
 `

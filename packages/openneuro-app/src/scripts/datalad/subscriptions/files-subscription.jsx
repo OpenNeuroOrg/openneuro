@@ -14,6 +14,7 @@ const FILES_SUBSCRIPTION = gql`
         id
         filename
         size
+        directory
       }
     }
   }

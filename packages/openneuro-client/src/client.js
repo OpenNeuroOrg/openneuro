@@ -126,9 +126,11 @@ const compareVersionsLink = clientVersion =>
       new Observable(observer =>
         forward(operation).subscribe({
           next: result => {
-            const serverVersion = result.extensions.openneuro.version
-            // alert user if major/minor versions are not in sync
-            checkVersions(serverVersion, clientVersion)
+            if (result.extensions) {
+              const serverVersion = result.extensions.openneuro.version
+              // alert user if major/minor versions are not in sync
+              checkVersions(serverVersion, clientVersion)
+            }
             observer.next(result)
           },
           error: console.error,

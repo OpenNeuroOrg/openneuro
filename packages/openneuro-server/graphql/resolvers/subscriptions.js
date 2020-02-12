@@ -1,4 +1,5 @@
 import pubsub from '../pubsub.js'
+
 import { withFilter } from 'graphql-subscriptions'
 
 /**
@@ -7,24 +8,28 @@ import { withFilter } from 'graphql-subscriptions'
  * @param {object} variables
  * @returns {boolean}
  */
-const filterDatasetId = (payload, variables) =>
-  payload.datasetId === variables.datasetId
+const filterDatasetId = (payload, variables) => {
+  const { datasetId, datasetIds } = variables
+  if (datasetId) return datasetId === payload.datasetId
+  if (datasetIds) return datasetIds.includes(payload.datasetId)
+  return false
+}
 
-export const snapshotAdded = {
-  type: 'Snapshot',
+export const datasetDeleted = () => ({
+  type: 'ID!',
   subscribe: withFilter(
-    () => pubsub.asyncIterator('snapshotAdded'),
+    () => pubsub.asyncIterator('datasetDeleted'),
     filterDatasetId,
   ),
   args: {
-    datasetId: 'ID!',
+    datasetIds: '[ID!]',
   },
-}
+})
 
-export const snapshotDeleted = {
-  type: 'ID',
+export const snapshotsUpdated = {
+  type: 'Dataset',
   subscribe: withFilter(
-    () => pubsub.asyncIterator('snapshotDeleted'),
+    () => pubsub.asyncIterator('snapshotsUpdated'),
     filterDatasetId,
   ),
   args: {
@@ -44,13 +49,13 @@ export const draftUpdated = {
 }
 
 export const permissionsUpdated = {
-  type: '[Permission]',
+  type: 'Dataset',
   subscribe: withFilter(
     () => pubsub.asyncIterator('permissionsUpdated'),
     filterDatasetId,
   ),
   args: {
-    datasetId: 'ID!',
+    datasetIds: '[ID!]',
   },
 }
 
@@ -66,8 +71,8 @@ export const filesUpdated = {
 }
 
 const Subscription = {
-  snapshotAdded,
-  snapshotDeleted,
+  datasetDeleted,
+  snapshotsUpdated,
   permissionsUpdated,
   draftUpdated,
   filesUpdated,

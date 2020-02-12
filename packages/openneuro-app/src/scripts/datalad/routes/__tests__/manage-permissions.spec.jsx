@@ -42,19 +42,31 @@ describe('Manage dataset permissions route', () => {
     })
   })
   describe('ShareTable', () => {
+    const id = 'ds001'
     it('renders with no permissions', () => {
       expect(
-        shallow(<ShareTable datasetId="ds001" permissions={[]} />),
+        shallow(
+          <ShareTable
+            datasetId={id}
+            permissions={{ id, userPermissions: [] }}
+          />,
+        ),
       ).toMatchSnapshot()
     })
     it('renders with one permission', () => {
       expect(
         shallow(
           <ShareTable
-            datasetId="ds001"
-            permissions={[
-              { user: { id: '1234', email: 'test@example.com' }, access: 'ro' },
-            ]}
+            datasetId={id}
+            permissions={{
+              id,
+              userPermissions: [
+                {
+                  user: { id: '1234', email: 'test@example.com' },
+                  access: 'ro',
+                },
+              ],
+            }}
           />,
         ),
       ).toMatchSnapshot()
@@ -63,18 +75,24 @@ describe('Manage dataset permissions route', () => {
       expect(
         shallow(
           <ShareTable
-            datasetId="ds001"
-            permissions={[
-              { user: { id: '1234', email: 'test@example.com' }, access: 'ro' },
-              {
-                user: { id: '5678', email: 'tester@example.com' },
-                access: 'rw',
-              },
-              {
-                user: { id: '91011', email: 'testr@example.com' },
-                access: 'admin',
-              },
-            ]}
+            datasetId={id}
+            permissions={{
+              id,
+              userPermissions: [
+                {
+                  user: { id: '1234', email: 'test@example.com' },
+                  access: 'ro',
+                },
+                {
+                  user: { id: '5678', email: 'tester@example.com' },
+                  access: 'rw',
+                },
+                {
+                  user: { id: '91011', email: 'testr@example.com' },
+                  access: 'admin',
+                },
+              ],
+            }}
           />,
         ),
       ).toMatchSnapshot()
