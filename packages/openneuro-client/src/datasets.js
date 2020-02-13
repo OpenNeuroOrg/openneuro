@@ -78,7 +78,7 @@ export const getUntrackedFiles = gql`
       id
       draft {
         id
-        files(untracked: true) {
+        files(untracked: true, prefix: null) {
           filename
           size
         }
