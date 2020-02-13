@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
           - name: openneuro-indexer
-            image: 'openneuro/indexer:latest'
+            image: 'openneuro/indexer:v{{ .Chart.AppVersion }}'
             resources:
               limits:
                 cpu: ".5"
