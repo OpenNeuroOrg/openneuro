@@ -11,10 +11,10 @@ import { indexQuery } from './indexQuery'
 export default async function main() {
   const retryLink = new RetryLink({
     delay: {
-      initial: 3000,
+      initial: 5000,
     },
     attempts: {
-      max: 10,
+      max: 3,
     },
   })
   const apolloClient = await createClient(process.env.GRAPHQL_URI, {
