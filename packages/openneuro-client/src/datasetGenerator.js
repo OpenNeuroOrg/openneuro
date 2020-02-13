@@ -15,7 +15,7 @@ export default async function* datasetGenerator(client, query = getDatasets) {
         errorPolicy: 'ignore',
       })
       for (const edge of data.datasets.edges) {
-        if (edge.hasOwnProperty('node')) {
+        if (edge && edge.hasOwnProperty('node')) {
           // Yield one dataset if it did not error
           yield edge.node
         } else {
@@ -31,6 +31,7 @@ export default async function* datasetGenerator(client, query = getDatasets) {
       }
     } catch (e) {
       console.error(e)
+      return null
     }
   }
 }
