@@ -8,14 +8,14 @@ metadata:
     release: '{{ .Release.Name }}'
     heritage: '{{ .Release.Service }}'
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "57 * * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: openneuro-indexer
-            image: 'openneuro/indexer'
+            image: 'openneuro/indexer:latest'
             resources:
               limits:
                 cpu: ".5"
