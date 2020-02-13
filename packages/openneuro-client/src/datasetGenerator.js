@@ -14,9 +14,13 @@ export default async function* datasetGenerator(client, query = getDatasets) {
         variables: { filterBy: { public: true }, cursor },
         errorPolicy: 'ignore',
       })
-      for (let i = 0; i < data.datasets.edges.length; i++) {
-        // Yield one dataset result
-        yield data.datasets.edges[i].node
+      for (const edge of data.datasets.edges) {
+        if (edge.hasOwnProperty('node')) {
+          // Yield one dataset if it did not error
+          yield edge.node
+        } else {
+          continue
+        }
       }
       if (data.datasets.pageInfo.hasNextPage) {
         // Next query with new cursor
