@@ -118,7 +118,7 @@ jobs:
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
           name: build openneuro-indexer
-          command: docker build --pull -t openneuro/indexer packages/openneuro-indexer
+          command: docker build --pull -t openneuro/indexer -f packages/openneuro-indexer/Dockerfile .
       - run:
           name: docker tag + push (master)
           command: |
