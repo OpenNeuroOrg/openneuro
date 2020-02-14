@@ -62,6 +62,12 @@ module.exports = {
         ],
         use: [
           {
+            loader: 'cache-loader',
+            options: {
+              cacheDirectory: '/webpack-cache',
+            },
+          },
+          {
             loader: 'babel-loader',
             options: {
               rootMode: 'upward',
