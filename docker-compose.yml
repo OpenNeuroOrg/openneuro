@@ -5,29 +5,59 @@ version: '2.3'
 volumes:
   project:
   yarn_cache:
+  node_modules:
+  webpack_cache:
 
 services:
-  # web app bundle build
-  app:
-    build:
-      context: .
-      dockerfile: ./packages/openneuro-app/Dockerfile
-      target: app
-    working_dir: /srv/packages/openneuro-app
-    command: sh -c "apk add make gcc g++ python && yarn install && yarn start"
+  # This dummy service provides shared configuration for all Node deps
+  nodejs:
+    image: node:12
+    env_file: ./config.env
+    working_dir: /srv
     volumes:
       - .:/srv
       - yarn_cache:/root/.cache
+      - node_modules:/srv/node_modules
       - project:/srv/packages/openneuro-app/dist
-    ports:
-      - '8145:8145'
     tmpfs:
-      - /srv/node_modules:exec
       - /srv/packages/openneuro-app/node_modules:exec
       - /srv/packages/openneuro-client/node_modules:exec
       - /srv/packages/openneuro-cli/node_modules:exec
       - /srv/packages/openneuro-server/node_modules:exec
       - /srv/packages/openneuro-indexer/node_modules:exec
+
+  # web app bundle build
+  app:
+    extends:
+      service: nodejs
+    working_dir: /srv/packages/openneuro-app
+    command: sh -c "yarn install && yarn start"
+    volumes:
+      - webpack_cache:/webpack-cache
+    ports:
+      - '8145:8145'
+
+  # crn node server
+  server:
+    extends:
+      service: nodejs
+    command: sh -c "yarn install && cd /srv/packages/openneuro-server && node index.js"
+    depends_on:
+      - redis
+      - mongo
+      - datalad
+      - elasticsearch
+
+  # Elastic Search indexer
+  indexer:
+    extends:
+      service: nodejs
+    command: sh -c "yarn install && yarn ts-node /srv/packages/openneuro-indexer/src/index.ts"
+    depends_on:
+      - server
+      - elasticsearch
+    extends:
+      service: nodejs
 
   content:
     image: ${CONTENT_IMAGE}
@@ -46,25 +76,6 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/redis:/data
 
-  # crn node server
-  server:
-    build:
-      context: ./packages/openneuro-server
-    command: sh -c "apk add make gcc g++ python && yarn install && node --trace-warnings /srv/index.js"
-    volumes:
-      - ./packages/openneuro-server:/srv
-      - yarn_cache:/root/.cache
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
-    tmpfs:
-      - /srv/node_modules:exec
-    env_file: ./config.env
-    depends_on:
-      - redis
-      - mongo
-      - datalad
-      - elasticsearch
-
   # datalad Python backend
   datalad:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
@@ -81,7 +92,7 @@ services:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
     command:
       - /dataset-worker
-    scale: 4
+    scale: 2
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ../datalad-service/datalad_service:/datalad_service
@@ -143,15 +154,3 @@ services:
     ports:
       - '9200:9200'
       - '9300:9300'
-
-  indexer:
-    build:
-      context: .
-      dockerfile: ./packages/openneuro-indexer/Dockerfile
-      target: indexer
-    depends_on:
-      - server
-      - elasticsearch
-    env_file: ./config.env
-    volumes:
-      - ./packages/openneuro-indexer/src:/srv/packages/openneuro-indexer/src
