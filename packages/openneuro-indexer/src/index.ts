@@ -14,7 +14,7 @@ export default async function main() {
       initial: 5000,
     },
     attempts: {
-      max: 3,
+      max: 5,
     },
   })
   const apolloClient = await createClient(process.env.GRAPHQL_URI, {
@@ -33,7 +33,12 @@ export default async function main() {
     console.error(err)
   }
   const datasets = datasetGenerator(apolloClient, indexQuery)
-  await indexDatasets(elasticClient, datasets)
+  try {
+    await indexDatasets(elasticClient, datasets)
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
 }
 
 main()

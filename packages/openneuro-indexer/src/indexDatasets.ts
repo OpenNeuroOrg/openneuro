@@ -5,6 +5,7 @@ import {
   // Interface of the generic API response
   ApiResponse,
 } from '@elastic/elasticsearch'
+import Datasets from './indexes/datasets'
 
 /**
  * Convert from GraphQL dataset object to RequestParams.Index documents
@@ -13,7 +14,7 @@ import {
  */
 export function extractDatasetDocument(datasetObj: any): RequestParams.Index {
   const dataset: RequestParams.Index = {
-    index: 'datasets',
+    index: Datasets.name,
     id: datasetObj.id,
     body: {
       ...datasetObj,
@@ -43,6 +44,19 @@ export async function indexDataset(
 }
 
 /**
+ * Point 'datasets' index at the new version
+ */
+export const aliasDatasetsIndex = (elasticClient: ElasticClient) =>
+  elasticClient.indices.updateAliases({
+    body: {
+      actions: [
+        { remove_index: { index: 'datasets' } },
+        { add: { index: Datasets.name, alias: 'datasets' } },
+      ],
+    },
+  })
+
+/**
  * Request OpenNeuro datasets and loop over all public datasets for indexing
  */
 export default async function indexDatasets(
@@ -53,6 +67,7 @@ export default async function indexDatasets(
     for await (const dataset of datasets) {
       indexDataset(elasticClient, dataset)
     }
+    await aliasDatasetsIndex(elasticClient)
   } catch (e) {
     console.error(e)
   }

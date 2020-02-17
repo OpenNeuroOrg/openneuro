@@ -1,4 +1,4 @@
-import datasetsMapping from './mappings/datasets-mapping.json'
+import Datasets from './indexes/datasets'
 
 /**
  * Setup any indices and mappings in elasticsearch
@@ -6,13 +6,13 @@ import datasetsMapping from './mappings/datasets-mapping.json'
  */
 export const createIndices = async elasticClient => {
   const exists = await elasticClient.indices.exists({
-    index: 'datasets',
+    index: Datasets.name,
   })
   if (exists.statusCode !== 200) {
     await elasticClient.indices.create({
-      index: 'datasets',
+      index: Datasets.name,
       body: {
-        mappings: datasetsMapping,
+        mappings: Datasets.mapping,
       },
     })
   }
