@@ -6,19 +6,13 @@ export const indexQuery = gql`
     $orderBy: DatasetSort = { created: descending }
     $filterBy: DatasetFilter = { public: true }
   ) {
-    datasets(
-      first: 10
-      after: $cursor
-      orderBy: $orderBy
-      filterBy: $filterBy
-    ) {
+    datasets(first: 5, after: $cursor, orderBy: $orderBy, filterBy: $filterBy) {
       edges {
         node {
           id
           created
           metadata {
             dxStatus
-            tasksCompleted
             trialCount
             studyDesign
             studyDomain
@@ -28,8 +22,6 @@ export const indexQuery = gql`
             associatedPaperDOI
             openneuroPaperDOI
             seniorAuthor
-            ages
-            modalities
             grantFunderName
             grantIdentifier
           }
@@ -41,6 +33,16 @@ export const indexQuery = gql`
               Authors
             }
             readme
+          }
+          summary {
+            tasks
+            modalities
+            subjectMetadata {
+              participantId
+              group
+              sex
+              age
+            }
           }
         }
       }
