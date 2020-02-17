@@ -32,17 +32,17 @@ export const indexQuery = gql`
               Name
               Authors
             }
-            readme
-          }
-          summary {
-            tasks
-            modalities
-            subjectMetadata {
-              participantId
-              group
-              sex
-              age
+            summary {
+              tasks
+              modalities
+              subjectMetadata {
+                participantId
+                group
+                sex
+                age
+              }
             }
+            readme
           }
         }
       }

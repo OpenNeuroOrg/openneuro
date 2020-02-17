@@ -50,7 +50,6 @@ export const aliasDatasetsIndex = (elasticClient: ElasticClient) =>
   elasticClient.indices.updateAliases({
     body: {
       actions: [
-        { remove_index: { index: 'datasets' } },
         { add: { index: Datasets.name, alias: 'datasets' } },
       ],
     },
