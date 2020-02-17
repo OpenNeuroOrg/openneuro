@@ -5,7 +5,6 @@
     "metadata": {
       "properties": {
         "dxStatus": { "type": "keyword" },
-        "tasksCompleted": { "type": "keyword" },
         "trialCount": { "type": "long" },
         "studyDesign": { "type": "keyword" },
         "studyDomain": { "type": "keyword" },
@@ -14,9 +13,6 @@
         "species": { "type": "keyword" },
         "associatedPaperDOI": { "type": "keyword" },
         "openneuroPaperDOI": { "type": "keyword" },
-        "seniorAuthor": { "type": "keyword" },
-        "ages": { "type": "keyword" },
-        "modalities": { "type": "keyword" },
         "grantFunderName": { "type": "keyword" },
         "grantIdentifier": { "type": "keyword" }
       }
@@ -33,6 +29,20 @@
         },
         "readme": {
           "type": "text"
+        },
+        "summary": {
+          "properties": {
+            "tasks": { "type": "keyword" },
+            "modalities": { "type": "keyword" },
+            "subjectMetadata": {
+              "properties": {
+                "participantId": { "type": "keyword" },
+                "group": { "type": "keyword" },
+                "sex": { "type": "keyword" },
+                "age": { "type": "integer" }
+              }
+            }
+          }
         }
       }
     }
