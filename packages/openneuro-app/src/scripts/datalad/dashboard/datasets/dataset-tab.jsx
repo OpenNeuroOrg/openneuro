@@ -115,7 +115,7 @@ const DatasetTab = ({
     ) : (
       <ErrorBoundary error={error} subject={'error in dashboard dataset tab'}>
         <DatasetTabLoaded
-          datasets={data.datasets || data.search}
+          datasets={data.datasets}
           loadMoreRows={loadMoreRows}
           publicDashboard={publicDashboard}
         />
