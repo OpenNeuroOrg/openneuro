@@ -6,7 +6,7 @@ import { datasetQueryDisplay } from '../datalad/dashboard/datasets/dataset-query
 
 const searchQuery = gql`
   query searchDatasets($q: String!, $cursor: String) {
-    search(q: $q, first: 25, after: $cursor) {
+    datasets: search(q: $q, first: 2, after: $cursor) {
       edges {
         node {
           id
