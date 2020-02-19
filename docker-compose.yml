@@ -78,7 +78,7 @@ services:
 
   # datalad Python backend
   datalad:
-    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    image: openneuro/datalad-service:latest
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ../datalad-service/datalad_service:/datalad_service
@@ -89,7 +89,7 @@ services:
 
   # celery Python backend
   celery:
-    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    image: openneuro/datalad-service:latest
     command:
       - /dataset-worker
     scale: 2
@@ -102,7 +102,7 @@ services:
 
   # publish-only celery worker
   publish:
-    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    image: openneuro/datalad-service:latest
     command:
       - /publish-worker
     volumes:
@@ -113,7 +113,7 @@ services:
     init: true
 
   flower:
-    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    image: openneuro/datalad-service:latest
     command:
       - flower
       - -A
@@ -126,18 +126,14 @@ services:
 
   # nginx + app
   web:
-    image: openneuro/app:${CRN_APP_TAG}
+    image: nginx:1.16.1
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
-      - ./acme:/acme
-      - ${SSL_DIR}:/etc/nginx/ssl
     volumes_from:
       - content
     ports:
       - '80:80'
       - '8110:8110'
-      - '443:443'
       - '9876:80'
     depends_on:
       - server
