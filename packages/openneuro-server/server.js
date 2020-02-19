@@ -3,15 +3,19 @@ import { createServer } from 'http'
 import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
 import mongo from './libs/mongo'
-import { connect as redis_connect } from './libs/redis'
+import { connect as redisConnect } from './libs/redis'
 import notifications from './libs/notifications'
 import config from './config'
 import createApp from './app'
 import packageJson from './package.json'
 
-const redisConnect = async () => {
+/**
+ * Try to initiate the Redis connection
+ * @return {Promise<any>}
+ */
+const redisConnectionSetup = async () => {
   try {
-    await redis_connect(config.redis)
+    await redisConnect(config.redis)
     // start background tasks
     notifications.initCron()
   } catch (err) {
@@ -37,7 +41,7 @@ mongoose.connect(config.mongo.url, {
 
 // start server ----------------------------------------------------
 mongo.connect(config.mongo.url).then(async () => {
-  await redisConnect()
+  await redisConnectionSetup()
   const server = createServer(app)
   server.listen(config.port, () => {
     // eslint-disable-next-line no-console

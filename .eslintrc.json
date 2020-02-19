@@ -7,23 +7,40 @@
   "extends": [
     "eslint:recommended",
     "plugin:import/warnings",
-    "plugin:import/errors"
+    "plugin:import/errors",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/recommended"
   ],
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "allowImportExportEverywhere": false,
-    "codeFrame": false
+    "codeFrame": false,
+    "project": "./tsconfig.json"
   },
   "rules": {
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "semi": ["error", "never"],
-    "no-prototype-builtins": 0
+    "no-prototype-builtins": 0,
+    "@typescript-eslint/explicit-function-return-type": "off"
   },
-  "plugins": ["import"],
+  "plugins": ["import", "react"],
   "settings": {
-    "import/core-modules": ["openneuro-content"]
-  }
+    "import/core-modules": ["openneuro-content"],
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      // enable the rule specifically for TypeScript files
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": ["error"]
+      }
+    }
+  ]
 }
