@@ -175,5 +175,4 @@ const createLink = (uri, getAuthorization, fetch) => {
   return link
 }
 
-export { files, datasets, snapshots, users, datasetGenerator }
-export default createClient
+export { files, datasets, snapshots, users, datasetGenerator, createClient }

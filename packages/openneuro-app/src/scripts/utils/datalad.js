@@ -1,5 +1,5 @@
 import config from '../../../config'
-import createClient, { datasets } from 'openneuro-client'
+import { createClient, datasets } from 'openneuro-client'
 import packageJson from '../../../package.json'
 
 const client = createClient(`${config.url}/crn/graphql`, {

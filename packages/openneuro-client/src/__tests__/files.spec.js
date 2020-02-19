@@ -1,4 +1,4 @@
-import createClient from '../client'
+import { createClient } from '../client'
 import * as files from '../files'
 
 jest.mock('../client')

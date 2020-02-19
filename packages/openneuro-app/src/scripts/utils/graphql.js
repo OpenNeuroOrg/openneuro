@@ -1,6 +1,6 @@
 // Singleton for apollo-client connection
 // currently not in use
-import createClient from 'openneuro-client'
+import { createClient } from 'openneuro-client'
 import config from '../../../config'
 import packageJson from '../../../package.json'
 
