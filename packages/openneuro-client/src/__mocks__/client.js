@@ -54,12 +54,10 @@ addMockFunctionsToSchema({
   },
 })
 
-const createClient = uri => {
+export const createClient = uri => {
   const cache = new InMemoryCache()
   const link = new SchemaLink({
     schema,
   })
   return new ApolloClient({ uri, link, cache })
 }
-
-export default createClient
