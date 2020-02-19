@@ -1,6 +1,6 @@
 import { RetryLink } from 'apollo-link-retry'
 import { Client } from '@elastic/elasticsearch'
-import createClient, { datasetGenerator } from 'openneuro-client/src/client'
+import { createClient, datasetGenerator } from 'openneuro-client/src/client'
 import indexDatasets from './indexDatasets'
 import { createIndices } from './createIndices'
 import { indexQuery } from './indexQuery'

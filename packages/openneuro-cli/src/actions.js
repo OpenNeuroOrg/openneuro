@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from 'fs'
 import inquirer from 'inquirer'
-import createClient from 'openneuro-client'
+import { createClient } from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, uploadDirectory } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
@@ -12,7 +12,7 @@ import { version } from '../package.json'
 
 export const configuredClient = () =>
   createClient(`${getUrl()}crn/graphql`, {
-    getAuthorizaiton: getToken,
+    getAuthorization: getToken,
     clientVersion: version,
   })
 
