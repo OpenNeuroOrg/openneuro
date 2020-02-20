@@ -5,9 +5,9 @@
  */
 export default {
   hexToASCII(hexString) {
-    var hex = hexString.toString()
-    var str = ''
-    for (var n = 0; n < hex.length; n += 2) {
+    const hex = hexString.toString()
+    let str = ''
+    for (let n = 0; n < hex.length; n += 2) {
       str += String.fromCharCode(parseInt(hex.substr(n, 2), 16))
     }
     return str
@@ -33,7 +33,7 @@ export default {
   },
 
   decodeId(id) {
-    let decodedId = this.hexToASCII(id)
+    const decodedId = this.hexToASCII(id)
     if (/\s{4}ds\d{6}/.test(decodedId)) {
       return decodedId.slice(4)
     } else if (/\d{6}-\d{5}/.test(decodedId)) {
@@ -43,7 +43,7 @@ export default {
   },
 
   decode(id) {
-    let decodedId = this.hexToASCII(id)
+    const decodedId = this.hexToASCII(id)
     let datasetId = null
     let tag = null
     // decodes the two different formats of storing dataset + snapshot tag

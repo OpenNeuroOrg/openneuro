@@ -8,36 +8,36 @@ class Metrics extends React.PureComponent {
   // life cycle events --------------------------------------------------
 
   render() {
-    let dataset = this.props.dataset
-    let fromDashboard = this.props.fromDashboard
-    let analytics = dataset.analytics
-    let stars = dataset.stars ? '' + dataset.stars.length : '0'
-    let downloads =
+    const dataset = this.props.dataset
+    const fromDashboard = this.props.fromDashboard
+    const analytics = dataset.analytics
+    const stars = dataset.stars ? '' + dataset.stars.length : '0'
+    const downloads =
       analytics && analytics.downloads ? '' + analytics.downloads : '0'
-    let views = analytics && analytics.views ? '' + analytics.views : '0'
-    let followers = dataset.followers ? '' + dataset.followers.length : '0'
-    let displayStars = fromDashboard ? (stars !== '0' ? true : false) : true
-    let hasDownloads = downloads !== '0'
-    let isSnapshot = dataset.hasOwnProperty('snapshot_version')
-    let displayDownloads = fromDashboard
+    const views = analytics && analytics.views ? '' + analytics.views : '0'
+    const followers = dataset.followers ? '' + dataset.followers.length : '0'
+    const displayStars = fromDashboard ? (stars !== '0' ? true : false) : true
+    const hasDownloads = downloads !== '0'
+    const isSnapshot = dataset.hasOwnProperty('snapshot_version')
+    const displayDownloads = fromDashboard
       ? hasDownloads
         ? true
         : false // don't display downloads on dash if the count is 0
       : isSnapshot
-        ? true
-        : false // down't display downloads on dataset page if the dataset is a draft
-    let displayFollowers = fromDashboard
+      ? true
+      : false // don't display downloads on dataset page if the dataset is a draft
+    const displayFollowers = fromDashboard
       ? followers !== '0'
         ? true
         : false
       : true // don't display followers on dash if the count is 0
-    let displayViews = fromDashboard
+    const displayViews = fromDashboard
       ? analytics && views !== '0'
         ? true
         : false // don't display views on dash if the count is 0
       : isSnapshot
-        ? true
-        : false // don't display views on the dataset draft page
+      ? true
+      : false // don't display views on the dataset draft page
     return (
       <span className="metrics-wrap">
         <Metric type="stars" value={stars} display={displayStars} />

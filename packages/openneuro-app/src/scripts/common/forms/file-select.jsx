@@ -13,14 +13,14 @@ class Upload extends React.Component {
 
   // life cycle events --------------------------------------------------
   render() {
-    let resumeIcon = (
+    const resumeIcon = (
       <span>
         <i className="fa fa-repeat" />
         &nbsp;
       </span>
     )
-    let icon = this.props.resume ? resumeIcon : null
-    let text = this.props.resume ? 'Resume' : 'Select folder'
+    const icon = this.props.resume ? resumeIcon : null
+    const text = this.props.resume ? 'Resume' : 'Select folder'
 
     return (
       <div className="fileupload-btn">

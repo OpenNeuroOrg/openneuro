@@ -20,33 +20,33 @@ export default class Summary extends React.PureComponent {
 
   _summary(summary, minimal) {
     if (summary) {
-      let accessionNumber = (
+      const accessionNumber = (
         <h5>
           <strong> OpenNeuro Accession Number: </strong>
           {this.props.datasetId}
         </h5>
       )
-      let numSessions =
+      const numSessions =
         summary.sessions.length > 0 ? summary.sessions.length : 1
-      let files = (
+      const files = (
         <span>
           <strong> {pluralize('File', summary.totalFiles)}: </strong>
           {summary.totalFiles}
         </span>
       )
-      let size = (
+      const size = (
         <span>
           <strong>Size: </strong>
           {bytes(summary.size)}
         </span>
       )
-      let subjects = (
+      const subjects = (
         <span>
           <strong> {pluralize('Subject', summary.subjects.length)}: </strong>
           {summary.subjects.length}
         </span>
       )
-      let sessions = (
+      const sessions = (
         <span>
           <strong>{pluralize('Session', numSessions)}: </strong>
           {numSessions}

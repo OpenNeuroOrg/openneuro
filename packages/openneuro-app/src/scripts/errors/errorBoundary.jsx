@@ -21,13 +21,13 @@ const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
       { hasError: false, supportModal: false, error: error }
 }
 
-let messageStyle = {
+const messageStyle = {
   color: 'red',
   padding: '40px',
   textAlign: 'center',
   fontSize: '20px',
 }
-let linkStyle = {
+const linkStyle = {
   textAlign: 'center',
   textDecoration: 'underline',
 }

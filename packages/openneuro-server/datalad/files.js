@@ -63,7 +63,7 @@ export const objectUrl = (datasetId, objectId) => {
  * @param {string} datasetId - Dataset accession number
  * @param {string} hexsha - Git treeish hexsha
  */
-export const getFiles = async (datasetId, hexsha) => {
+export const getFiles = (datasetId, hexsha) => {
   const key = filesKey(datasetId, hexsha)
   return redis.get(key).then(data => {
     if (data) return JSON.parse(data)

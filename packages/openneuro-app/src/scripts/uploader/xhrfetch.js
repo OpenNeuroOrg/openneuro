@@ -4,7 +4,7 @@ export const xhrFetch = uploader => (url, opts = {}) => {
     xhr.open(opts.method || 'get', url)
     xhr.withCredentials = true
 
-    for (let k in opts.headers || {}) xhr.setRequestHeader(k, opts.headers[k])
+    for (const k in opts.headers || {}) xhr.setRequestHeader(k, opts.headers[k])
 
     xhr.onload = e => {
       resolve({

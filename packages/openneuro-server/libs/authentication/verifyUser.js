@@ -1,4 +1,4 @@
-export default (req, res, next) => {
+export default function verifyUser(req, res, next) {
   // Verify an authenticated user
   if (req.user) {
     res.json(req.user)

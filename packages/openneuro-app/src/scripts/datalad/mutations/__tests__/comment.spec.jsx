@@ -21,7 +21,7 @@ describe('CommentMutation', () => {
         parentId="1234"
         comment="new comment"
         profile={{ id: 'user', email: 'something@example.com' }}
-        done={() => {}}
+        done={jest.fn()}
       />,
     )
     expect(wrapper).toMatchSnapshot()

@@ -2,7 +2,9 @@
 import { Modal as ReactOverlayModal } from 'react-overlays'
 import { Modal } from 'react-bootstrap'
 
-const focus = () => {}
+function focus() {
+  // Dummy function
+}
 const cDU = ReactOverlayModal.prototype.componentDidUpdate
 const cDM = ReactOverlayModal.prototype.componentDidMount
 

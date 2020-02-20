@@ -46,8 +46,8 @@ const publishPermissions = async datasetId => {
 export const updatePermissions = async (obj, args, { user, userInfo }) => {
   await checkDatasetAdmin(args.datasetId, user, userInfo)
   // get all users the the email specified by permissions arg
-  let users = await User.find({ email: args.userEmail }).exec()
-  let userPromises = users.map(user => {
+  const users = await User.find({ email: args.userEmail }).exec()
+  const userPromises = users.map(user => {
     return new Promise((resolve, reject) => {
       mongo.collections.crn.permissions
         .updateOne(

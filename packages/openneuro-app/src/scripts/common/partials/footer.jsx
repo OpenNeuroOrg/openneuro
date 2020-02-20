@@ -6,7 +6,7 @@ import packageJson from '../../../../package.json'
 import { frontPage } from 'openneuro-content'
 
 const Footer = props => {
-  let version = props.version ? props.version : packageJson.version
+  const version = props.version ? props.version : packageJson.version
   return (
     <span>
       <footer>

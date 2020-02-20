@@ -1,6 +1,56 @@
 import request from 'request'
 
 /**
+ * Parse Options
+ *
+ * Normalizes request options.
+ */
+function parseOptions(req, options) {
+  if (options.query) {
+    req.qs = options.query
+  }
+  if (options.body) {
+    req.json = options.body
+  }
+  if (options.hasOwnProperty('encoding')) {
+    req.encoding = options.encoding
+  }
+  if (options.headers) {
+    for (const key in options.headers) {
+      req.headers[key] = options.headers[key]
+    }
+  }
+  return req
+}
+
+/**
+ * Handle Request
+ *
+ * Processes all requests before they fire.
+ */
+function handleRequest(url, options, callback) {
+  let req = {
+    url: url,
+    headers: {},
+    qs: {},
+    json: {},
+  }
+
+  req = parseOptions(req, options)
+  callback(req)
+}
+
+/**
+ * Handle Response
+ *
+ * Process all responses before they return
+ * to the callback.
+ */
+function handleResponse(err, res, callback) {
+  callback(err, res)
+}
+
+/**
  * Request
  *
  * A wrapper of npm 'request' to allow for
@@ -102,54 +152,4 @@ export default {
       })
     })
   },
-}
-
-/**
- * Handle Request
- *
- * Processes all requests before they fire.
- */
-function handleRequest(url, options, callback) {
-  let req = {
-    url: url,
-    headers: {},
-    qs: {},
-    json: {},
-  }
-
-  req = parseOptions(req, options)
-  callback(req)
-}
-
-/**
- * Handle Response
- *
- * Process all responses before they return
- * to the callback.
- */
-function handleResponse(err, res, callback) {
-  callback(err, res)
-}
-
-/**
- * Parse Options
- *
- * Normalizes request options.
- */
-function parseOptions(req, options) {
-  if (options.query) {
-    req.qs = options.query
-  }
-  if (options.body) {
-    req.json = options.body
-  }
-  if (options.hasOwnProperty('encoding')) {
-    req.encoding = options.encoding
-  }
-  if (options.headers) {
-    for (let key in options.headers) {
-      req.headers[key] = options.headers[key]
-    }
-  }
-  return req
 }

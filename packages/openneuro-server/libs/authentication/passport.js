@@ -8,87 +8,6 @@ import User from '../../models/user.js'
 import { addJWT, decodeJWT } from './jwt.js'
 import orcid from '../orcid.js'
 
-/**
- * Extract the JWT from a cookie
- * @param {Object} req
- */
-const jwtFromRequest = req => {
-  if (req.cookies && req.cookies.accessToken) {
-    return req.cookies.accessToken
-  } else {
-    return null
-  }
-}
-
-export const setupPassportAuth = () => {
-  // Setup all strategies here
-
-  // OpenNeuro JWT
-  if (config.auth.jwt.secret) {
-    passport.use(
-      new JwtStrategy(
-        { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
-        (jwt, done) => {
-          // A user must already exist to use a JWT to auth a request
-          User.findOne({ id: jwt.sub, provider: jwt.provider })
-            .then(user => {
-              if (user) done(null, user)
-              else done(null, false)
-            })
-            .catch(done)
-        },
-      ),
-    )
-  } else {
-    throw new Error('JWT_SECRET must be configured to allow authentication.')
-  }
-
-  // Google first
-  if (config.auth.google.clientID && config.auth.google.clientSecret) {
-    passport.use(
-      new GoogleStrategy(
-        {
-          clientID: config.auth.google.clientID,
-          clientSecret: config.auth.google.clientSecret,
-          callbackURL: `${config.url + config.apiPrefix}auth/google/callback`,
-          userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
-        },
-        verifyGoogleUser,
-      ),
-    )
-  }
-
-  // then ORCID
-  if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
-    passport.use(
-      new ORCIDStrategy(
-        {
-          sandbox:
-            config.auth.orcid.apiURI &&
-            config.auth.orcid.apiURI.indexOf('sandbox') >= 0,
-          clientID: config.auth.orcid.clientID,
-          clientSecret: config.auth.orcid.clientSecret,
-          callbackURL: `${config.url + config.apiPrefix}auth/orcid/callback`,
-        },
-        verifyORCIDUser,
-      ),
-    )
-  }
-  // finally globus
-  if (config.auth.globus.clientID && config.auth.globus.clientSecret) {
-    passport.use(
-      new GlobusStrategy(
-        {
-          clientID: config.auth.globus.clientID,
-          clientSecret: config.auth.globus.clientSecret,
-          callbackURL: `${config.url + config.apiPrefix}auth/globus/callback`,
-        },
-        verifyGlobusUser,
-      ),
-    )
-  }
-}
-
 const loadProfile = profile => {
   if (profile.provider === 'google') {
     // Get the account email from Google profile
@@ -121,12 +40,19 @@ const loadProfile = profile => {
   }
 }
 
-export const verifyGoogleUser = async (
-  accessToken,
-  refreshToken,
-  profile,
-  done,
-) => {
+/**
+ * Extract the JWT from a cookie
+ * @param {Object} req
+ */
+const jwtFromRequest = req => {
+  if (req.cookies && req.cookies.accessToken) {
+    return req.cookies.accessToken
+  } else {
+    return null
+  }
+}
+
+export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
   const profileUpdate = loadProfile(profile)
   // Look for an existing user
   User.findOneAndUpdate(
@@ -181,4 +107,73 @@ export const verifyGlobusUser = (
   )
     .then(user => done(null, addJWT(config)(user)))
     .catch(err => done(err, null))
+}
+
+export const setupPassportAuth = () => {
+  // Setup all strategies here
+
+  // OpenNeuro JWT
+  if (config.auth.jwt.secret) {
+    passport.use(
+      new JwtStrategy(
+        { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
+        (jwt, done) => {
+          // A user must already exist to use a JWT to auth a request
+          User.findOne({ id: jwt.sub, provider: jwt.provider })
+            .then(user => {
+              if (user) done(null, user)
+              else done(null, false)
+            })
+            .catch(done)
+        },
+      ),
+    )
+  } else {
+    throw new Error('JWT_SECRET must be configured to allow authentication.')
+  }
+
+  // Google first
+  if (config.auth.google.clientID && config.auth.google.clientSecret) {
+    passport.use(
+      new GoogleStrategy(
+        {
+          clientID: config.auth.google.clientID,
+          clientSecret: config.auth.google.clientSecret,
+          callbackURL: `${config.url + config.apiPrefix}auth/google/callback`,
+          userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
+        },
+        verifyGoogleUser,
+      ),
+    )
+  }
+
+  // then ORCID
+  if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
+    passport.use(
+      new ORCIDStrategy(
+        {
+          sandbox:
+            config.auth.orcid.apiURI &&
+            config.auth.orcid.apiURI.includes('sandbox'),
+          clientID: config.auth.orcid.clientID,
+          clientSecret: config.auth.orcid.clientSecret,
+          callbackURL: `${config.url + config.apiPrefix}auth/orcid/callback`,
+        },
+        verifyORCIDUser,
+      ),
+    )
+  }
+  // finally globus
+  if (config.auth.globus.clientID && config.auth.globus.clientSecret) {
+    passport.use(
+      new GlobusStrategy(
+        {
+          clientID: config.auth.globus.clientID,
+          clientSecret: config.auth.globus.clientSecret,
+          callbackURL: `${config.url + config.apiPrefix}auth/globus/callback`,
+        },
+        verifyGlobusUser,
+      ),
+    )
+  }
 }

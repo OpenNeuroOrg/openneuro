@@ -55,7 +55,6 @@ const UploadValidatorStatus = ({ issues, next, reset }) => {
 class UploadValidator extends React.Component {
   constructor(props) {
     super(props)
-    this.done = this.done.bind(this)
     this.state = {
       validating: true,
       issues: {
@@ -78,7 +77,7 @@ class UploadValidator extends React.Component {
   /**
    * Called when validation finishes
    */
-  done({ issues, summary }) {
+  done = ({ issues, summary }) => {
     this.setState({ issues, summary, validating: false })
   }
 

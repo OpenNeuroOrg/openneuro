@@ -1,7 +1,7 @@
 import config from '../../../config'
 import crn from './crn'
 
-let orcid = {
+const orcid = {
   initialized: true,
 
   init(token, callback) {
@@ -23,8 +23,10 @@ let orcid = {
   },
 
   getCurrentUser(callback) {
-    let { orcid, access_token } = this.token
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    const { orcid, access_token } = this.token
 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     if (!orcid || !access_token) {
       callback(true, {
         token: null,
@@ -37,8 +39,8 @@ let orcid = {
     crn
       .getORCIDProfile(access_token)
       .then(res => {
-        let { firstname, lastname, email } = res.body
-        let name = firstname + ' ' + lastname
+        const { firstname, lastname, email } = res.body
+        const name = firstname + ' ' + lastname
         callback(null, {
           token: this.token,
           profile: { _id: orcid, name, email },
@@ -52,7 +54,8 @@ let orcid = {
 
   refresh(callback) {
     if (this.initialized) {
-      let { refresh_token } = this.token
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      const { refresh_token } = this.token
 
       crn
         .refreshORCIDToken(refresh_token)

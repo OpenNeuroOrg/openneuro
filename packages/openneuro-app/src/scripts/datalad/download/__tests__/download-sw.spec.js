@@ -20,20 +20,20 @@ describe('dataset/download - Service Worker method', () => {
     })
     it('throws no errors if service worker and readable stream are available', () => {
       const mockWindow = {
-        navigator: { serviceWorker: () => {} },
-        ReadableStream: () => {},
+        navigator: { serviceWorker: jest.fn() },
+        ReadableStream: jest.fn(),
       }
       expect(() => checkBrowserEnvironment(mockWindow)).not.toThrowError()
     })
   })
   describe('awaitRegistration', () => {
-    it('calls next if registration is active', async done => {
+    it('calls next if registration is active', done => {
       const mockRegistration = { active: true }
       return expect(() =>
         awaitRegistration(done, {})(mockRegistration),
       ).not.toThrowError()
     })
-    it('waits for worker if installing', async done => {
+    it('waits for worker if installing', done => {
       const mockWindow = {
         navigator: {
           serviceWorker: {

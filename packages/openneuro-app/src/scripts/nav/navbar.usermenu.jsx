@@ -16,8 +16,8 @@ const signOutAndRedirect = history => {
 // component setup ---------------------------------------------------------------
 
 const Usermenu = ({ profile, history }) => {
-  let username = profile.name
-  let gear = <i className="fa fa-gear" />
+  const username = profile.name
+  const gear = <i className="fa fa-gear" />
 
   return (
     <ul className="clearfix user-wrap">

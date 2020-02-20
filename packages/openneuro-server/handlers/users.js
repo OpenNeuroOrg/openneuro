@@ -8,13 +8,8 @@ import { generateApiKey } from '../libs/apikey'
  *
  * Handlers for user actions.
  */
-export default {
-  /**
-   * Create API Key
-   */
-  createAPIKey(req, res, next) {
-    generateApiKey(req.user)
-      .then(key => res.send(key))
-      .catch(err => next(err))
-  },
+export function createAPIKey(req, res, next) {
+  generateApiKey(req.user)
+    .then(key => res.send(key))
+    .catch(err => next(err))
 }

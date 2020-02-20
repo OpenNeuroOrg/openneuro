@@ -17,6 +17,13 @@ export const configuredClient = () =>
   })
 
 /**
+ * Handle login answers returned by inquirer
+ *
+ * @param {Object} answers
+ */
+export const loginAnswers = answers => answers
+
+/**
  * Login action to save an auth key locally
  *
  * The user can do this manually as well, to allow for automation
@@ -44,13 +51,6 @@ export const login = () => {
     .then(loginAnswers)
     .then(saveConfig)
 }
-
-/**
- * Handle login answers returned by inquirer
- *
- * @param {Object} answers
- */
-export const loginAnswers = answers => answers
 
 const uploadDataset = (dir, datasetId, validatorOptions) => {
   const client = configuredClient()
@@ -89,6 +89,36 @@ const notifyUploadComplete = update => datasetId => {
   console.log(
     '=======================================================================',
   )
+}
+
+const specificErrorTest = (err, targetErrMessage) =>
+  err.message &&
+  typeof err.message === 'string' &&
+  err.message.includes(targetErrMessage)
+
+function isNotLoggedInError(err) {
+  return specificErrorTest(err, 'You must be logged in to create a dataset.')
+}
+
+function isMissingDotOpenneuroError(err) {
+  return specificErrorTest(
+    err,
+    'The "path" argument must be one of type string, Buffer, or URL',
+  )
+}
+
+function logSpecificError(errors) {
+  errors.forEach(err => {
+    // eslint-disable-next-line no-console
+    console.error(err)
+  })
+}
+
+function handleGenericErrors(err, dir) {
+  // eslint-disable-next-line no-console
+  console.error(err)
+  // eslint-disable-next-line no-console
+  console.error(`"${dir}" may not exist or is inaccessible`)
 }
 
 /**
@@ -149,36 +179,6 @@ export const upload = (dir, cmd) => {
     handleGenericErrors(e, dir)
     process.exit(1)
   }
-}
-
-const specificErrorTest = (err, targetErrMessage) =>
-  err.message &&
-  typeof err.message === 'string' &&
-  err.message.includes(targetErrMessage)
-
-function isNotLoggedInError(err) {
-  return specificErrorTest(err, 'You must be logged in to create a dataset.')
-}
-
-function isMissingDotOpenneuroError(err) {
-  return specificErrorTest(
-    err,
-    'The "path" argument must be one of type string, Buffer, or URL',
-  )
-}
-
-function logSpecificError(errors) {
-  errors.forEach(err => {
-    // eslint-disable-next-line no-console
-    console.error(err)
-  })
-}
-
-function handleGenericErrors(err, dir) {
-  // eslint-disable-next-line no-console
-  console.error(err)
-  // eslint-disable-next-line no-console
-  console.error(`"${dir}" may not exist or is inaccessible`)
 }
 
 const promptTags = snapshots =>

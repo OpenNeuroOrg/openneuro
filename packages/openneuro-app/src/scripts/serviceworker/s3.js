@@ -7,17 +7,6 @@ import xmldoc from 'xmldoc'
 import { zipFiles } from './zip'
 
 /**
- * Returns a promise of object keys within a bucket, filtered by prefix
- * @param {string} hostname An S3 bucket URL
- * @param {string} prefix The prefix to filter by
- */
-export const listBucket = (hostname, prefix) => {
-  return fetch(`http://${hostname}/?list-type=2&prefix=${prefix}`)
-    .then(res => res.text())
-    .then(getObjects(hostname))
-}
-
-/**
  * Helper function for finding the contents of an S3 listObjects query
  * @param {string} hostname
  * @param {string} listBucketBody Raw string containing XML body from listObjects
@@ -34,6 +23,17 @@ export const getObjects = hostname => listBucketBody => {
       url: `http://${hostname}/${key}`,
     }
   })
+}
+
+/**
+ * Returns a promise of object keys within a bucket, filtered by prefix
+ * @param {string} hostname An S3 bucket URL
+ * @param {string} prefix The prefix to filter by
+ */
+export const listBucket = (hostname, prefix) => {
+  return fetch(`http://${hostname}/?list-type=2&prefix=${prefix}`)
+    .then(res => res.text())
+    .then(getObjects(hostname))
 }
 
 /**

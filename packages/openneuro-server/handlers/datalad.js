@@ -30,7 +30,7 @@ export const getFile = async (req, res) => {
     data = await getSnapshot(datasetId, snapshotId)
     fileList = data ? data.files : []
   } else {
-    let currentRevision = await getDatasetRevision(datasetId)
+    const currentRevision = await getDatasetRevision(datasetId)
     if (currentRevision) {
       fileList = await getFiles(datasetId, currentRevision)
     }

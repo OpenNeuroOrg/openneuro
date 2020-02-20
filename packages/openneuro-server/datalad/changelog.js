@@ -7,8 +7,7 @@ import { addFileString, commitFiles } from './dataset.js'
  * Matches a CPAN changelog version line
  * @param {string} line
  */
-export const matchCpanVersion = line =>
-  line.match(/^(\S+) (\d{4}-\d{2}-\d{2})$/)
+export const matchCpanVersion = line => /^(\S+) (\d{4}-\d{2}-\d{2})$/.exec(line)
 
 /**
  * Returns start and end indexes for the version being modified
@@ -72,9 +71,7 @@ export const spliceChangelog = (changelog, tag, date, changes) => {
  * @param {string} revision Git name for the requested ref
  */
 export const changesUrl = (datasetId, revision) => {
-  return `http://${
-    config.datalad.uri
-  }/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
+  return `http://${config.datalad.uri}/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
 }
 
 /**

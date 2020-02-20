@@ -1,4 +1,4 @@
-/*eslint-disable no-unused-vars*/
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* global papaya, papayaContainers */
 
 // dependencies -------------------------------------------------------
@@ -18,10 +18,10 @@ export default class Papaya extends React.Component {
 
   componentDidMount() {
     // clear any old containers
-    // eslint-disable-next-line no-global-assign
+    // eslint-disable-next-line no-global-assign, @typescript-eslint/no-unused-vars
     papayaContainers = []
 
-    let params = {
+    const params = {
       worldSpace: true,
       fullScreen: false,
       allowScroll: false,
@@ -58,9 +58,9 @@ export default class Papaya extends React.Component {
   // custom methods -----------------------------------------------------
 
   _calculateWidth() {
-    let windowHeight = window.innerHeight
-    let headerHeight = 90
-    let contentHeight = windowHeight - headerHeight
+    const windowHeight = window.innerHeight
+    const headerHeight = 90
+    const contentHeight = windowHeight - headerHeight
 
     // estimate papaya viewer size ratio
     let denominator
@@ -80,7 +80,7 @@ export default class Papaya extends React.Component {
       denominator = 4.2
     }
 
-    let viewerWidth = contentHeight * 4 / denominator
+    const viewerWidth = (contentHeight * 4) / denominator
     return viewerWidth
   }
 

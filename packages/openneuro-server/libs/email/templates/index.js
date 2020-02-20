@@ -7,12 +7,12 @@ _.templateSettings = {
 }
 
 // generate object of template methods
-let templates = {}
-let files = fs.readdirSync(__dirname)
-for (let file of files) {
-  if (file.indexOf('.html') > -1) {
-    let tplName = file.slice(0, file.indexOf('.html'))
-    let tpl = fs.readFileSync(__dirname + '/' + file).toString('utf-8')
+const templates = {}
+const files = fs.readdirSync(__dirname)
+for (const file of files) {
+  if (file.includes('.html')) {
+    const tplName = file.slice(0, file.indexOf('.html'))
+    const tpl = fs.readFileSync(__dirname + '/' + file).toString('utf-8')
     templates[tplName] = _.template(tpl)
   }
 }

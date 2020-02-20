@@ -15,7 +15,7 @@ export default class TooltipTop extends React.PureComponent {
   }
 
   render() {
-    let tooltip = <Tooltip id={this.id}>{this.props.tooltip}</Tooltip>
+    const tooltip = <Tooltip id={this.id}>{this.props.tooltip}</Tooltip>
 
     return (
       <OverlayTrigger

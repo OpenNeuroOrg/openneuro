@@ -23,13 +23,15 @@ class Input extends React.Component {
   }
 
   render() {
-    let placeholder = this.props.placeholder
-    let type = this.props.type
-    let name = this.props.name
-    let value = this.state.value || this.props.value
+    const placeholder = this.props.placeholder
+    const type = this.props.type
+    const name = this.props.name
+    const value = this.state.value || this.props.value
 
     return (
-      <div className={`form-group float-label-input ${this.props.containerClass || ''}`}>
+      <div
+        className={`form-group float-label-input ${this.props.containerClass ||
+          ''}`}>
         {value && value.length > 0 ? <label>{placeholder}</label> : null}
         {this._input(type, name, placeholder, value)}
       </div>

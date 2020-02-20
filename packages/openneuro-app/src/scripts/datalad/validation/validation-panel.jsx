@@ -8,10 +8,9 @@ class ValidationPanel extends React.Component {
     this.state = {
       activeKey: '2',
     }
-    this.togglePanel = this.togglePanel.bind(this)
   }
 
-  togglePanel() {
+  togglePanel = () => {
     if (this.props.children.length && this.state.activeKey === '1') {
       this.setState({ activeKey: '2' })
     } else if (this.props.children.length && this.state.activeKey === '2') {

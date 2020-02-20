@@ -1,5 +1,4 @@
-// dependencies -------------------------------------------------------
-
+/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react'
 
 import tab_get_data from './assets/tab-get_data.png'
@@ -63,7 +62,7 @@ class FrontPageTabs extends React.Component {
     if (currentTab == null) {
       return false
     } else {
-      let tab = this._tabData()[currentTab]
+      const tab = this._tabData()[currentTab]
       return (
         <div className="tab-content">
           <div className="row">

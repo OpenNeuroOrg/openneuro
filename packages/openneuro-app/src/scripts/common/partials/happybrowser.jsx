@@ -64,8 +64,7 @@ export default class Happybrowser extends React.Component {
   }
 
   _dismiss() {
-    let self = this
-    self.setState({ hbVisible: false })
+    this.setState({ hbVisible: false })
   }
 }
 

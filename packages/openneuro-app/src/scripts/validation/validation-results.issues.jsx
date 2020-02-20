@@ -6,22 +6,17 @@ import { Accordion, Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
 import Issue from './validation-results.issues.issue.jsx'
 
-// component setup --------------------------------------------------------
-
 class Issues extends React.Component {
-  // life cycle events ------------------------------------------------------
-
   render() {
-    let self = this
-    let issueFiles = this.props.issues
-    let issues = issueFiles.map((issue, index) => {
+    const issueFiles = this.props.issues
+    const issues = issueFiles.map((issue, index) => {
       let totalFiles = issue.files.length
       if (issue.additionalFileCount) {
         totalFiles += issue.additionalFileCount
       }
-      let issueCount = pluralize('files', totalFiles)
+      const issueCount = pluralize('files', totalFiles)
 
-      let header = (
+      const header = (
         <span className="file-header">
           <h4 className="em-header clearfix">
             <strong className="em-header pull-left">
@@ -36,10 +31,10 @@ class Issues extends React.Component {
       )
 
       // issue sub-errors
-      let subErrors = issue.files.map(function(error, index2) {
+      const subErrors = issue.files.map((error, index2) => {
         return error ? (
           <Issue
-            type={self.props.issueType}
+            type={this.props.issueType}
             file={issue.file}
             error={error}
             index={index2}
@@ -73,8 +68,6 @@ class Issues extends React.Component {
 
     return <Accordion>{issues}</Accordion>
   }
-
-  // custom methods ---------------------------------------------------------
 }
 
 Issues.propTypes = {

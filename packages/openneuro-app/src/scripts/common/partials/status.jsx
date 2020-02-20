@@ -16,7 +16,7 @@ export default class Status extends React.PureComponent {
 
     let spanClass, tip, iconClass, fileSelect
     let title = this.props.title ? this.props.title : null
-    let minimal = this.props.minimal
+    const minimal = this.props.minimal
 
     switch (this.props.type) {
       case 'public':

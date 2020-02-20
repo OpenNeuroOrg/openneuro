@@ -1,10 +1,16 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { LeftSidebar, SidebarRow } from '../left-sidebar.jsx'
+import LeftSidebar, { SidebarRow } from '../left-sidebar.jsx'
 import cookies from '../../../utils/cookies.js'
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({
+    pathname: '/dataset/ds000001',
+  }),
+}))
+
 const fixedDate = new Date('2019-04-02T19:56:41.222Z').toString()
-const mockLocation = { pathname: '/dataset/ds000001' }
 
 describe('LeftSidebar component', () => {
   it('renders with basic props', () => {
@@ -23,7 +29,6 @@ describe('LeftSidebar component', () => {
           datasetId="ds000001"
           draftModified={fixedDate}
           snapshots={[]}
-          location={mockLocation}
         />,
       ),
     ).toMatchSnapshot()
@@ -48,7 +53,6 @@ describe('LeftSidebar component', () => {
         datasetId="ds000001"
         draftModified={fixedDate}
         snapshots={[]}
-        location={mockLocation}
       />,
     )
     // Check that a SidebarRow is rendered

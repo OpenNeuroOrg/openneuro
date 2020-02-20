@@ -3,7 +3,7 @@ import { frontPage } from 'openneuro-content'
 
 class Support extends React.Component {
   render() {
-    let support = frontPage.support.map((item, index) => {
+    const support = frontPage.support.map((item, index) => {
       return (
         <div
           key={index}

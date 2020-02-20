@@ -8,7 +8,7 @@ import { indexQuery } from './indexQuery'
 /**
  * Indexer entrypoint
  */
-export default async function main() {
+export default async function main(): Promise<void> {
   const retryLink = new RetryLink({
     delay: {
       initial: 5000,
@@ -17,7 +17,7 @@ export default async function main() {
       max: 5,
     },
   })
-  const apolloClient = await createClient(process.env.GRAPHQL_URI, {
+  const apolloClient = createClient(process.env.GRAPHQL_URI, {
     fetch,
     links: [retryLink],
   })

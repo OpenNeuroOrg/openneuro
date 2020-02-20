@@ -55,7 +55,7 @@ export const downloadFile = async (destination, filename, fileUrl) => {
 export const getDownload = (destination, datasetId, tag) =>
   getDownloadMetadata(datasetId, tag).then(async ({ body }) => {
     checkDestination(destination)
-    for (let file of body.files) {
+    for (const file of body.files) {
       if (testFile(destination, file.filename, file.size)) {
         // Now actually download
         // eslint-disable-next-line no-console

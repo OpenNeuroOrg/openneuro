@@ -97,7 +97,11 @@ export const repairDescriptionTypes = description => {
 
 /**
  * Get a parsed dataset_description.json
- * @param {string} datasetId - dataset or snapshot object
+ * @param {object} obj dataset or snapshot object
+ * @param {object} arguments
+ * @param {string} arguments.datasetId accession number
+ * @param {string} [arguments.revision] git revision hexsha
+ * @param {string} [arguments.tag] snapshot tag
  */
 export const description = (obj, { datasetId, revision, tag }) => {
   const redisKey = descriptionCacheKey(datasetId, revision || tag)
@@ -125,7 +129,7 @@ export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
   const url = `${uri}/datasets/${datasetId}/description`
   return request
     .post(url)
-    .send({ description_fields: descriptionFieldUpdates })
+    .send({ description_fields: descriptionFieldUpdates }) // eslint-disable-line @typescript-eslint/camelcase
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
     .then(res => {
