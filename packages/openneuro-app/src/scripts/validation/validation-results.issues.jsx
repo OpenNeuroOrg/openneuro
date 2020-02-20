@@ -31,7 +31,7 @@ class Issues extends React.Component {
       )
 
       // issue sub-errors
-      const subErrors = issue.files.map(function(error, index2) {
+      const subErrors = issue.files.map((error, index2) => {
         return error ? (
           <Issue
             type={this.props.issueType}
