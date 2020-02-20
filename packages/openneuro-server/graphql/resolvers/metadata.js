@@ -13,14 +13,9 @@ export const metadata = dataset => {
  * upserts metadata
  */
 export const addMetadata = async (obj, { datasetId, metadata }) => {
-  const result = await MetadataModel
-    .findOneAndUpdate(
-      { datasetId },
-      metadata,
-      {
-        new: true,
-        upsert: true,
-      },
-    )
+  const result = await MetadataModel.findOneAndUpdate({ datasetId }, metadata, {
+    new: true,
+    upsert: true,
+  })
   return result
 }

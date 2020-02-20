@@ -8,8 +8,8 @@ window.matchMedia =
   function() {
     return {
       matches: false,
-      addListener: function() {},
-      removeListener: function() {},
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
     }
   }
 

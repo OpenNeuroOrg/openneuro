@@ -5,81 +5,8 @@ import jsdom from 'jsdom'
 import { ObjectID } from 'mongodb'
 import { ContentState, convertFromHTML, convertToRaw } from 'draft-js'
 
-let c = mongo.collections
+const c = mongo.collections
 
-// handlers ----------------------------------------------------------------
-
-/**
- * Comments
- *
- * Handlers for comment actions.
- */
-
-export default {
-  // write
-
-  /**
-   * Reply to Comment via Email
-   *
-   * Creates an entry in the comments database,
-   * ** maybe returns the newly created comment id
-   */
-  async reply(req, res, next) {
-    /* eslint-disable no-console */
-    let comment
-    const parentId = req.params.commentId
-      ? decodeURIComponent(req.params.commentId)
-      : null
-    const userId = req.params.userId
-      ? decodeURIComponent(req.params.userId)
-      : null
-    const text = textToDraft(req.body['stripped-text'])
-    const inReplyToRaw = req.body['In-Reply-To']
-    const inReplyTo = inReplyToRaw
-      ? inReplyToRaw.replace('<', '').replace('>', '')
-      : null
-    const messageId = inReplyTo
-      ? await c.crn.mailgunIdentifiers.findOne({ messageId: inReplyTo })
-      : null
-    if (!messageId) {
-      return res.sendStatus(404)
-    }
-    const user = await c.crn.users.findOne({ id: userId })
-    let originalComment = await c.crn.comments.findOne({
-      _id: ObjectID(parentId),
-    })
-    if (user && originalComment) {
-      let flattenedUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-      }
-      comment = {
-        datasetId: originalComment.datasetId,
-        datasetLabel: originalComment.datasetLabel,
-        parentId: parentId,
-        text: text,
-        user: flattenedUser,
-        createDate: moment().format(),
-      }
-      c.crn.comments.insertOne(comment, (err, response) => {
-        if (err) {
-          return next(err)
-        } else {
-          if (response.ops && response.ops.length) {
-            comment = response.ops[0]
-          }
-          notifications.commentCreated(comment)
-          return res.send(response.ops[0])
-        }
-      })
-    } else {
-      return res.sendStatus(404)
-    }
-  },
-}
-
-// helpers --------------------
 /**
  * Text to Draft Content
  *
@@ -95,4 +22,64 @@ const textToDraft = text => {
   return JSON.stringify(
     convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))),
   )
+}
+
+/**
+ * Reply to Comment via Email
+ *
+ * Creates an entry in the comments database,
+ * ** maybe returns the newly created comment id
+ */
+export async function reply(req, res, next) {
+  /* eslint-disable no-console */
+  let comment
+  const parentId = req.params.commentId
+    ? decodeURIComponent(req.params.commentId)
+    : null
+  const userId = req.params.userId
+    ? decodeURIComponent(req.params.userId)
+    : null
+  const text = textToDraft(req.body['stripped-text'])
+  const inReplyToRaw = req.body['In-Reply-To']
+  const inReplyTo = inReplyToRaw
+    ? inReplyToRaw.replace('<', '').replace('>', '')
+    : null
+  const messageId = inReplyTo
+    ? await c.crn.mailgunIdentifiers.findOne({ messageId: inReplyTo })
+    : null
+  if (!messageId) {
+    return res.sendStatus(404)
+  }
+  const user = await c.crn.users.findOne({ id: userId })
+  const originalComment = await c.crn.comments.findOne({
+    _id: ObjectID(parentId),
+  })
+  if (user && originalComment) {
+    const flattenedUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    }
+    comment = {
+      datasetId: originalComment.datasetId,
+      datasetLabel: originalComment.datasetLabel,
+      parentId: parentId,
+      text: text,
+      user: flattenedUser,
+      createDate: moment().format(),
+    }
+    c.crn.comments.insertOne(comment, (err, response) => {
+      if (err) {
+        return next(err)
+      } else {
+        if (response.ops && response.ops.length) {
+          comment = response.ops[0]
+        }
+        notifications.commentCreated(comment)
+        return res.send(response.ops[0])
+      }
+    })
+  } else {
+    return res.sendStatus(404)
+  }
 }

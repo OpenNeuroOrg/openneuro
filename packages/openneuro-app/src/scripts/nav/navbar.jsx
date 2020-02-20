@@ -49,24 +49,21 @@ class BSNavbar extends React.Component {
       infoPanel: false,
       navExpanded: false,
     }
-    this.loginModal = this.loginModal.bind(this)
-    this.supportModal = this.supportModal.bind(this)
-    this.setNavExpanded = this.setNavExpanded.bind(this)
   }
 
-  loginModal(open = true) {
+  loginModal = (open = true) => {
     this.setState({ loginModal: open })
   }
 
-  supportModal(open = true) {
+  supportModal = (open = true) => {
     this.setState({ supportModal: open })
   }
 
-  infoModal(open = true) {
+  infoModal = (open = true) => {
     this.setState({ infoPanel: open })
   }
 
-  setNavExpanded(expanded = true) {
+  setNavExpanded = (expanded = true) => {
     this.setState({ navExpanded: expanded })
   }
 

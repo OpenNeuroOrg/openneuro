@@ -69,7 +69,13 @@ export const datasetQueryDisplay = (isPublic, isSaved) => ({
       loading={loading}
       data={data}
       error={error}
-      loadMoreRows={loading ? () => {} : loadMoreRows(data, fetchMore)}
+      loadMoreRows={
+        loading
+          ? () => {
+              /* No op while loading */
+            }
+          : loadMoreRows(data, fetchMore)
+      }
       refetch={refetch}
       queryVariables={variables}
       publicDashboard={isPublic}

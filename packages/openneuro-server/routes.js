@@ -1,10 +1,10 @@
 // dependencies ------------------------------------
 
 import express from 'express'
-import users from './handlers/users'
+import * as users from './handlers/users'
 import * as datalad from './handlers/datalad'
 import * as download from './handlers/download.js'
-import comments from './handlers/comments'
+import * as comments from './handlers/comments'
 import { clientConfig } from './handlers/config.js'
 import * as subscriptions from './handlers/subscriptions'
 import verifyUser from './libs/authentication/verifyUser.js'
@@ -13,7 +13,7 @@ import * as orcid from './libs/authentication/orcid.js'
 import * as globus from './libs/authentication/globus.js'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
-import doi from './handlers/doi'
+import * as doi from './handlers/doi'
 import { sitemapHandler } from './handlers/sitemap.js'
 
 const routes = [
@@ -178,10 +178,10 @@ const routes = [
 const router = express.Router()
 
 for (const route of routes) {
-  let arr = route.hasOwnProperty('middleware') ? route.middleware : []
+  const arr = route.hasOwnProperty('middleware') ? route.middleware : []
   arr.unshift(route.url)
   arr.push(route.handler)
-  router[route.method].apply(router, arr)
+  router[route.method](...arr)
 }
 
 // export ------------------------------------------

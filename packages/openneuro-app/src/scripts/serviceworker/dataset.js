@@ -2,6 +2,21 @@ import { Readable } from 'stream'
 import JSZip from 'jszip'
 
 /**
+ * Check each URL provided
+ * @param {Array} urls
+ */
+export const fetchAlternates = urls => {
+  if (urls.length > 0) {
+    const fileUrl = urls.shift()
+    return fetch(fileUrl, { method: 'HEAD' }).then(response =>
+      response.ok ? fetch(fileUrl) : fetchAlternates(urls),
+    )
+  } else {
+    throw new Error('All file URLs failed.')
+  }
+}
+
+/**
  * Return a streaming zip from array of file objects
  * @param {Array} files Array of files to fetch
  */
@@ -12,6 +27,7 @@ export const zipFiles = ({ files }) => {
   for (const { filename, urls } of files) {
     const readStream = new Readable()
     let reader
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     readStream._read = () => {
       reader = reader || fetchAlternates(urls).then(res => res.body.getReader())
       reader.then(reader =>
@@ -41,21 +57,6 @@ export const zipFiles = ({ files }) => {
         .resume()
     },
   })
-}
-
-/**
- * Check each URL provided
- * @param {Array} urls
- */
-export const fetchAlternates = urls => {
-  if (urls.length > 0) {
-    const fileUrl = urls.shift()
-    return fetch(fileUrl, { method: 'HEAD' }).then(
-      response => (response.ok ? fetch(fileUrl) : fetchAlternates(urls)),
-    )
-  } else {
-    throw new Error('All file URLs failed.')
-  }
 }
 
 /**

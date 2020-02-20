@@ -57,12 +57,10 @@ function fallbackCopyTextToClipboard(text) {
 function copyTextToClipboard(text) {
   if (!navigator.clipboard) fallbackCopyTextToClipboard(text)
   else
-    navigator.clipboard
-      .writeText(text)
-      .then(
-        () => console.log('Copying to clipboard was successful!'),
-        err => console.error('Could not copy text: ', err),
-      )
+    navigator.clipboard.writeText(text).then(
+      () => console.log('Copying to clipboard was successful!'),
+      err => console.error('Could not copy text: ', err),
+    )
 }
 
 const Tooltip = ({ text, tip }) => (

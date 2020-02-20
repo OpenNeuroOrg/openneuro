@@ -89,9 +89,12 @@ const searchQuery = gql`
  * This component is responsible for obtaining results from Elastic based
  * on the URL string and forwarding the data to the dashboard component
  */
-const SearchResultsQuery = ({ q }) => {
+const SearchResultsQuery = (): React.SFC => {
   const { query } = useParams()
-  return datasetQueryDisplay(true, false)(
+  return datasetQueryDisplay(
+    true,
+    false,
+  )(
     useQuery(searchQuery, {
       variables: {
         q: query,

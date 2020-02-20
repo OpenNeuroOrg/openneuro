@@ -34,7 +34,7 @@ const withGeneratedId = file => ({
  * @param {string} datasetId Accession number string
  * @param {object} options { untracked: true } - ignores the git index
  */
-export const getDraftFiles = async (datasetId, options = {}) => {
+export const getDraftFiles = (datasetId, options = {}) => {
   // If untracked is set and true
   const untracked = 'untracked' in options && options.untracked
   const query = untracked ? { untracked: true } : {}

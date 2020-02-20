@@ -6,7 +6,7 @@
 import { bundleResponse } from './serviceworker/dataset.js'
 
 const CACHE_NAME = 'openneuro'
-const CACHE_PATHS = serviceWorkerOption.assets
+const CACHE_PATHS = global.serviceWorkerOption.assets
 
 self.addEventListener('install', event => {
   self.skipWaiting()

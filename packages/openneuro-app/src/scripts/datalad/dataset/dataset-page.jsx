@@ -7,13 +7,12 @@ import DatasetTools from '../fragments/dataset-tools.jsx'
 class DatasetPage extends React.Component {
   constructor(props) {
     super(props)
-    this.toggleSidebar = this.toggleSidebar.bind(this)
     this.state = {
       sidebar: true,
     }
   }
 
-  toggleSidebar() {
+  toggleSidebar = () => {
     this.setState({ sidebar: !this.state.sidebar })
   }
 

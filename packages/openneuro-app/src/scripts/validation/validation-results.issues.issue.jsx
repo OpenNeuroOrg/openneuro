@@ -9,7 +9,7 @@ export default class Issue extends React.Component {
   // life cycle events --------------------------------------------------
 
   render() {
-    let error = this.props.error
+    const error = this.props.error
     let fileInfo
     // build error location string
     let errLocation = ''

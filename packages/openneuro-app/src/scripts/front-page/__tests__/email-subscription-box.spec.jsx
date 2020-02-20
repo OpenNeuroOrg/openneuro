@@ -8,19 +8,19 @@ import EmailSubscriptionBox, {
 describe('EmailSubscriptionBox', () => {
   it('renders correctly in get-email mode', () => {
     const wrapper = mount(
-      <EmailSubscriptionBox subscribe={() => {}} initialMode={modes.GET} />,
+      <EmailSubscriptionBox subscribe={jest.fn()} initialMode={modes.GET} />,
     )
     expect(wrapper).toMatchSnapshot()
   })
   it('renders correctly in success mode', () => {
     const wrapper = mount(
-      <EmailSubscriptionBox subscribe={() => {}} initialMode={modes.GET} />,
+      <EmailSubscriptionBox subscribe={jest.fn()} initialMode={modes.GET} />,
     )
     expect(wrapper).toMatchSnapshot()
   })
   it('renders correctly in error mode', () => {
     const wrapper = mount(
-      <EmailSubscriptionBox subscribe={() => {}} initialMode={modes.GET} />,
+      <EmailSubscriptionBox subscribe={jest.fn()} initialMode={modes.GET} />,
     )
     expect(wrapper).toMatchSnapshot()
   })
@@ -28,11 +28,11 @@ describe('EmailSubscriptionBox', () => {
 
 describe('EmailSubscriptionBox submitHandler', () => {
   const event = {
-    preventDefault: () => {},
+    preventDefault: jest.fn(),
     target: { email: { value: 'email@email.test' } },
   }
   it('calls setMode with GET when in ERROR mode', () => {
-    const subscribe = () => {}
+    const subscribe = jest.fn()
     const currentMode = modes.ERROR
     const setMode = newMode => expect(newMode).toEqual(modes.GET)
     submitHandler(subscribe, currentMode, setMode)(event)

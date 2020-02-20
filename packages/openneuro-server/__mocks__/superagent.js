@@ -1,66 +1,68 @@
 // mock for superagent - __mocks__/superagent.js
-
-let mockDelay
-let mockError
-let mockResponse = {
+class MockResponse {
   status() {
     return 200
-  },
+  }
   ok() {
     return true
-  },
-  body: {},
-  get: jest.fn(),
-  toError: jest.fn(),
+  }
+  body() {
+    return {}
+  }
+  get() {
+    return jest.fn()
+  }
+  toError() {
+    return jest.fn()
+  }
 }
 
 const createRequestStub = obj => jest.fn(() => obj)
 
 function Request() {
-  let self = this
-  self.mockResponse = mockResponse
-  self.mockDelay = mockDelay
-  self.mockError = mockError
+  this.mockResponse = new MockResponse()
+  this.mockDelay = null
+  this.mockError = null
 
-  self.post = createRequestStub(self)
-  self.get = createRequestStub(self)
-  self.send = createRequestStub(self)
-  self.query = createRequestStub(self)
-  self.field = createRequestStub(self)
-  self.set = createRequestStub(self)
-  self.accept = createRequestStub(self)
-  self.timeout = createRequestStub(self)
-  self.then = cb => {
+  this.post = createRequestStub(this)
+  this.get = createRequestStub(this)
+  this.send = createRequestStub(this)
+  this.query = createRequestStub(this)
+  this.field = createRequestStub(this)
+  this.set = createRequestStub(this)
+  this.accept = createRequestStub(this)
+  this.timeout = createRequestStub(this)
+  this.then = cb => {
     return new Promise((resolve, reject) => {
-      if (self.mockError) {
-        return reject(self.mockError)
+      if (this.mockError) {
+        return reject(this.mockError)
       }
-      return resolve(cb(self.mockResponse))
+      return resolve(cb(this.mockResponse))
     })
   }
-  self.end = jest.fn().mockImplementation(function(callback) {
-    if (self.mockDelay) {
+  this.end = jest.fn().mockImplementation(callback => {
+    if (this.mockDelay) {
       this.delayTimer = setTimeout(
         callback,
         0,
-        self.mockError,
-        self.mockResponse,
+        this.mockError,
+        this.mockResponse,
       )
 
       return
     }
 
-    callback(self.mockError, self.mockResponse)
+    callback(this.mockError, this.mockResponse)
   })
   //expose helper methods for tests to set
-  self.__setMockDelay = boolValue => {
-    self.mockDelay = boolValue
+  this.__setMockDelay = boolValue => {
+    this.mockDelay = boolValue
   }
-  self.__setMockResponse = mockRes => {
-    self.mockResponse = mockRes
+  this.__setMockResponse = mockRes => {
+    this.mockResponse = mockRes
   }
-  self.__setMockError = mockErr => {
-    self.mockError = mockErr
+  this.__setMockError = mockErr => {
+    this.mockError = mockErr
   }
 }
 

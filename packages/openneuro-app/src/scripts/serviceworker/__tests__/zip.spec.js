@@ -3,8 +3,8 @@ import { zipFiles } from '../zip'
 // Mocks the browser Response.blob function
 function Response(data) {
   return {
-    blob: async () => {
-      return new Blob([data])
+    blob: () => {
+      return Promise.resolve(new Blob([data]))
     },
   }
 }

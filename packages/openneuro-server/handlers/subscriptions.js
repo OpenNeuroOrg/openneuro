@@ -1,20 +1,19 @@
-// dependencies ------------------------------------------------------------
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
 import notifications from '../libs/notifications'
 import Subscription from '../models/subscription.js'
 
-let c = mongo.collections
-
-// handlers ----------------------------------------------------------------
+const c = mongo.collections
 
 /**
  * Subscriptions
  *
  * Handlers for subscription interactions.
  */
-
-// write
+export const subscribe = (datasetId, userId) => {
+  const subscription = new Subscription({ datasetId, userId })
+  return subscription.save()
+}
 
 /**
  * Create Subscription
@@ -22,18 +21,13 @@ let c = mongo.collections
  * Creates an entry in the c.crn.subscriptions database
  */
 export const create = (req, res, next) => {
-  let data = req.body
-  let datasetId = data.datasetId
-  let userId = data.userId
+  const data = req.body
+  const datasetId = data.datasetId
+  const userId = data.userId
 
   subscribe(datasetId, userId)
     .then(response => res.send(response.ops))
     .catch(err => next(err))
-}
-
-export const subscribe = (datasetId, userId) => {
-  const subscription = new Subscription({ datasetId, userId })
-  return subscription.save()
 }
 
 /**
@@ -41,11 +35,10 @@ export const subscribe = (datasetId, userId) => {
  *
  * Removes an entry in the subscriptions database
  */
-
 export const deleteSubscription = (req, res, next) => {
-  let data = req.params
-  let datasetId = data.datasetId ? data.datasetId : null
-  let userId = data.userId ? data.userId : null
+  const data = req.params
+  const datasetId = data.datasetId ? data.datasetId : null
+  const userId = data.userId ? data.userId : null
 
   // delete an entry in the c.crn.subscriptions db
   // with the datasetId and userId
@@ -65,8 +58,8 @@ export const deleteSubscription = (req, res, next) => {
 }
 
 export const deleteAll = (req, res, next) => {
-  let data = req.params
-  let datasetId = data.datasetId ? data.datasetId : null
+  const data = req.params
+  const datasetId = data.datasetId ? data.datasetId : null
 
   notifications.datasetDeleted(datasetId)
   c.crn.subscriptions
@@ -93,9 +86,8 @@ export const deleteAll = (req, res, next) => {
  *
  * Returns a list of subscriptions that are associated with a dataset
  */
-
 export const getSubscriptions = (req, res, next) => {
-  let datasetId =
+  const datasetId =
     req.params.datasetId === 'undefined' ? null : req.params.datasetId
   if (datasetId) {
     c.crn.subscriptions
@@ -123,10 +115,9 @@ export const getSubscriptions = (req, res, next) => {
  *
  * Checks to see if a user is subscribed to a dataset
  */
-
 export const checkUserSubscription = (req, res) => {
-  let datasetId = req.params.datasetId
-  let userId = req.params.userId
+  const datasetId = req.params.datasetId
+  const userId = req.params.userId
 
   c.crn.subscriptions
     .findOne({

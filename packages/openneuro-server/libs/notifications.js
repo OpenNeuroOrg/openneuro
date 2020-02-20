@@ -12,12 +12,16 @@ import bidsId from './bidsId'
 import { convertFromRaw, EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 
-let c = mongo.collections
+const c = mongo.collections
 const URI = config.datalad.uri
+
+function noop() {
+  // No callback helper
+}
 
 // public api ---------------------------------------------
 
-let notifications = {
+const notifications = {
   cron: null,
 
   /**
@@ -88,7 +92,7 @@ let notifications = {
               },
             },
           },
-          () => {},
+          noop,
         )
       })
   },
@@ -105,7 +109,7 @@ let notifications = {
     const tag = body.tag
     // if we still have a promise for the body files, await it
     const files = await body.files
-    let uploaderId = uploader ? uploader.id : null
+    const uploaderId = uploader ? uploader.id : null
     const datasetDescription = files.find(
       file => file.filename == 'dataset_description.json',
     )
@@ -141,7 +145,7 @@ let notifications = {
                   .exec()
                   .then(user => {
                     if (user && user.id !== uploaderId) {
-                      let emailContent = {
+                      const emailContent = {
                         _id:
                           datasetId + '_' + user._id + '_' + 'snapshot_created',
                         type: 'email',
@@ -163,7 +167,7 @@ let notifications = {
                         },
                       }
                       // send the email to the notifications database for distribution
-                      notifications.add(emailContent, () => {})
+                      notifications.add(emailContent, noop)
                     }
                   })
               })
@@ -180,20 +184,21 @@ let notifications = {
    * them that a new comment has been created.
    */
   commentCreated(comment) {
-    let datasetId = comment.datasetId ? comment.datasetId : null
-    let datasetLabel = comment.datasetLabel
+    const datasetId = comment.datasetId ? comment.datasetId : null
+    const datasetLabel = comment.datasetLabel
       ? comment.datasetLabel
       : comment.datasetId
-    let userId = comment.user && comment.user.email ? comment.user.email : null
-    let content = comment.text
-    let commentId = comment._id ? comment._id : null
-    let isReply = comment.parentId ? comment.parentId : null
-    let commentStatus = isReply ? 'reply to a comment' : 'comment'
-    let editorState = EditorState.createWithContent(
+    const userId =
+      comment.user && comment.user.email ? comment.user.email : null
+    const content = comment.text
+    const commentId = comment._id ? comment._id : null
+    const isReply = comment.parentId ? comment.parentId : null
+    const commentStatus = isReply ? 'reply to a comment' : 'comment'
+    const editorState = EditorState.createWithContent(
       convertFromRaw(JSON.parse(content)),
     )
-    let contentState = editorState.getCurrentContent()
-    let htmlContent = stateToHTML(contentState)
+    const contentState = editorState.getCurrentContent()
+    const htmlContent = stateToHTML(contentState)
 
     // get all users that are subscribed to the dataset
     c.crn.subscriptions
@@ -205,7 +210,7 @@ let notifications = {
             .exec()
             .then(user => {
               if (user && user.email !== userId) {
-                let emailContent = {
+                const emailContent = {
                   _id:
                     datasetId +
                     '_' +
@@ -242,7 +247,7 @@ let notifications = {
                   },
                 }
                 // send each email to the notification database for distribution
-                notifications.add(emailContent, () => {})
+                notifications.add(emailContent, noop)
               }
             })
         })
@@ -272,7 +277,7 @@ let notifications = {
             .exec()
             .then(user => {
               if (user) {
-                let emailContent = {
+                const emailContent = {
                   _id:
                     datasetId +
                     '_' +
@@ -295,7 +300,7 @@ let notifications = {
                   },
                 }
                 // send each email to the notification database for distribution
-                notifications.add(emailContent, () => {})
+                notifications.add(emailContent, noop)
               }
             })
         })
@@ -325,7 +330,7 @@ let notifications = {
             .exec()
             .then(user => {
               if (user) {
-                let emailContent = {
+                const emailContent = {
                   _id:
                     datasetId +
                     '_' +
@@ -348,7 +353,7 @@ let notifications = {
                   },
                 }
                 // send each email to the notification database for distribution
-                notifications.add(emailContent, () => {})
+                notifications.add(emailContent, noop)
               }
             })
         })
@@ -366,13 +371,13 @@ let notifications = {
               'NOTIFICATION ERROR - Could not find notifcations collection',
             )
           } else {
-            for (let notification of docs) {
+            for (const notification of docs) {
               notifications.send(notification, (err, response) => {
                 if (!err) {
                   c.crn.notifications.removeOne(
                     { _id: notification._id },
                     {},
-                    () => {},
+                    noop,
                   )
                   if (response && response.messageId) {
                     c.crn.mailgunIdentifiers.insertOne({

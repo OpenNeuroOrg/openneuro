@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // Run all pending migrations
 import config from '../config.js'
-import { connect as redis_connect } from '../libs/redis.js'
+import { connect as redisConnect } from '../libs/redis.js'
 import mongo from '../libs/mongo.js'
 import mongoose from 'mongoose'
 import Migration from '../models/migration.js'
@@ -19,7 +19,7 @@ mongoose.connect(`${config.mongo.url}crn`)
  * Runs manually for now but could run at startup.
  */
 const upgradeAll = async () => {
-  await redis_connect(config.redis)
+  await redisConnect(config.redis)
   // Connect to old database(s)
   await mongo.connect(config.mongo.url)
   for (const migrationDefinition of migrations) {

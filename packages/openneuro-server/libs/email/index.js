@@ -6,7 +6,7 @@ import juice from 'juice'
 // library configuration ---------------------------------------
 
 // setup email transporter
-var transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   service: config.notifications.email.service,
   auth: {
     user:
@@ -33,12 +33,12 @@ export default {
 
     // determine if the main is from a specific sender
     // or the generic email address
-    let user =
+    const user =
       email && email.from ? email.from : config.notifications.email.user
-    let from = user + '@' + config.notifications.email.url
+    const from = user + '@' + config.notifications.email.url
 
     // configure mail options
-    var mailOptions = {
+    const mailOptions = {
       from: '"OpenNeuro" <notifications@openneuro.org>',
       replyTo: from,
       to: email.to,

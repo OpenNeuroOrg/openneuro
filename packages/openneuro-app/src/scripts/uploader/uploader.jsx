@@ -25,14 +25,6 @@ export class UploadClient extends React.Component {
   constructor(props) {
     super(props)
 
-    this.setLocation = this.setLocation.bind(this)
-    this.resumeDataset = this.resumeDataset.bind(this)
-    this.selectFiles = this.selectFiles.bind(this)
-    this.upload = this.upload.bind(this)
-    this.uploadProgress = this.uploadProgress.bind(this)
-    this.uploadCompleteAction = this.uploadCompleteAction.bind(this)
-    this.cancel = this.cancel.bind(this)
-
     this.state = {
       // An upload is processing
       uploading: false,
@@ -75,7 +67,7 @@ export class UploadClient extends React.Component {
    *
    * @param {string} path Virtual router path for upload modal
    */
-  setLocation(path) {
+  setLocation = path => {
     ReactGA.pageview(path)
     this.setState({ location: locationFactory(path) })
   }
@@ -84,7 +76,7 @@ export class UploadClient extends React.Component {
    * Specify a dataset to resume upload for
    * @param {string} datasetId
    */
-  resumeDataset(datasetId) {
+  resumeDataset = datasetId => {
     return ({ files }) => {
       this.props.client
         .query({
@@ -124,7 +116,7 @@ export class UploadClient extends React.Component {
    * Select the files for upload
    * @param {object} event onChange event from multi file select
    */
-  selectFiles({ files }) {
+  selectFiles = ({ files }) => {
     // First get the name from dataset_description.json
     return new Promise(resolve => {
       const descriptionFile = [...files].find(
@@ -174,7 +166,7 @@ export class UploadClient extends React.Component {
       this.state.metadata,
     )
 
-  upload() {
+  upload = () => {
     // Track the start of uploads
     ReactGA.event({
       category: 'Upload',
@@ -254,7 +246,7 @@ export class UploadClient extends React.Component {
     })
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
-    let filesToUpload = this._includeChanges()
+    const filesToUpload = this._includeChanges()
 
     return mutation
       .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)
@@ -302,7 +294,7 @@ export class UploadClient extends React.Component {
       })
   }
 
-  uploadCompleteAction() {
+  uploadCompleteAction = () => {
     // Record upload finished successfully with Google Analytics
     ReactGA.event({
       category: 'Upload',
@@ -325,13 +317,13 @@ export class UploadClient extends React.Component {
     }
   }
 
-  uploadProgress(e) {
+  uploadProgress = e => {
     this.setState({
       progress: e.total > 0 ? Math.floor((e.loaded / e.total) * 100) : 0,
     })
   }
 
-  cancel() {
+  cancel = () => {
     this.state.xhr.abort()
     this.setState({ uploading: false, progress: 0 })
   }

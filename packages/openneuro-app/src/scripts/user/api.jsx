@@ -55,7 +55,7 @@ export default class APIKeyGen extends React.Component {
   }
 
   _key() {
-    let content = (
+    const content = (
       <div className="api-key-div">
         <div className="api-key">{this.state.key}</div>
         <div className="copy-key">
@@ -77,10 +77,10 @@ export default class APIKeyGen extends React.Component {
     }
   }
   _copyNotification() {
-    let copyClass = this.state.linkCopied
+    const copyClass = this.state.linkCopied
       ? 'copy-notification-active copy-notification-copied'
       : 'copy-notification-active'
-    let copyText = this.state.linkCopied ? 'Copied!' : 'Copy key to clipboard'
+    const copyText = this.state.linkCopied ? 'Copied!' : 'Copy key to clipboard'
     return (
       <span>
         <span className={copyClass}>{copyText}</span>
@@ -96,7 +96,7 @@ export default class APIKeyGen extends React.Component {
   }
 
   render() {
-    let helperText = this.state.key
+    const helperText = this.state.key
       ? 'Your API Key:'
       : 'Click the button below to generate an API key'
     return (

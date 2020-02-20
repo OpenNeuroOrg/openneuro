@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+// Camel case rule is disabled since ORCID API uses snake case variables
 import request from 'request'
 import xmldoc from 'xmldoc'
 import * as Sentry from '@sentry/node'
@@ -6,12 +8,12 @@ import config from '../config'
 export default {
   getProfile(token) {
     return new Promise((resolve, reject) => {
-      let data = token.split(':')
+      const data = token.split(':')
       if (data.length != 2) {
         reject('Invalid token')
       }
-      let orcid = data[0]
-      let accessToken = data[1]
+      const orcid = data[0]
+      const accessToken = data[1]
 
       request.get(
         `${config.auth.orcid.apiURI}/v2.0/${orcid}/record`,

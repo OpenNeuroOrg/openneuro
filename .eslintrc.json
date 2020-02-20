@@ -1,5 +1,6 @@
 {
   "env": {
+    "browser": true,
     "es6": true,
     "node": true,
     "jest": true
@@ -8,9 +9,13 @@
     "eslint:recommended",
     "plugin:import/warnings",
     "plugin:import/errors",
+    "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -20,14 +25,14 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "indent": ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "semi": ["error", "never"],
     "no-prototype-builtins": 0,
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "prettier/prettier": "error"
   },
-  "plugins": ["import", "react"],
+  "plugins": ["import", "prettier", "react"],
   "settings": {
     "import/core-modules": ["openneuro-content"],
     "react": {

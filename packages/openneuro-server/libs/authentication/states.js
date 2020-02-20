@@ -3,7 +3,7 @@
 import mongo from '../mongo'
 import { ObjectID } from 'mongodb'
 import bidsId from '../bidsId'
-let c = mongo.collections
+const c = mongo.collections
 
 /**
  * Authenticated
@@ -112,7 +112,7 @@ export const datasetAccess = (req, res, next) => {
  * to update / delete a comment
  */
 export const commentAccess = (req, res, next) => {
-  let commentId = req.params.commentId
+  const commentId = req.params.commentId
   if (req.user.admin) {
     return next()
   }
@@ -128,86 +128,6 @@ export const commentAccess = (req, res, next) => {
           .status(401)
           .send({ error: 'You do not have access to this comment.' })
       }
-    })
-    .catch(err => res.status(404).send(err))
-}
-
-/**
- * Check to see if user is an admin user. If so, just next()
- * if not, prevent user from having more than 2 jobs running concurrently
- * NOTE: this middleware function depends on auth middleware that attaches user and isSuperUser to req having already run
- */
-export const submitJobAccess = (req, res, next) => {
-  if (req.user.admin) {
-    return next()
-  }
-
-  c.crn.jobs
-    .find({
-      userId: req.user.id,
-      'analysis.status': {
-        $nin: ['SUCCEEDED', 'FAILED', 'REJECTED', 'CANCELED'],
-      },
-    })
-    .toArray((err, jobs) => {
-      if (err) {
-        return res.status(404).send(err)
-      }
-      let totalRunningJobs = jobs.length
-      if (totalRunningJobs < 2) {
-        return next()
-      }
-
-      return res
-        .status(403)
-        .send({ error: 'You only have access to run 2 concurrent jobs.' })
-    })
-}
-
-export const rerunJobAccess = (req, res, next) => {
-  let jobId = req.params.jobId
-  let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
-  if (req.user.admin) {
-    return next()
-  }
-
-  c.crn.jobs
-    .findOne({
-      _id: mongoJobId,
-    })
-    .then(job => {
-      let jobOwner = job.userId
-      if (jobOwner === req.user.id) {
-        return next()
-      }
-
-      res
-        .status(401)
-        .send({ error: 'You do not have access to rerun this job.' })
-    })
-    .catch(err => res.status(404).send(err))
-}
-
-export const deleteJobAccess = (req, res, next) => {
-  let jobId = req.params.jobId
-  let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
-  if (req.user.admin) {
-    return next()
-  }
-
-  c.crn.jobs
-    .findOne({
-      _id: mongoJobId,
-    })
-    .then(job => {
-      let jobOwner = job.userId
-      if (jobOwner === req.user.id) {
-        return next()
-      }
-
-      return res
-        .status(401)
-        .send({ error: 'You do not have access to delete this job.' })
     })
     .catch(err => res.status(404).send(err))
 }

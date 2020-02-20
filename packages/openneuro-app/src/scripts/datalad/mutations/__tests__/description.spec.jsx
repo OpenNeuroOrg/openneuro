@@ -13,7 +13,7 @@ describe('UpdateDescription mutation', () => {
         datasetId="ds001"
         field="Name"
         value="New Name"
-        done={() => {}}
+        done={jest.fn()}
       />,
     )
     expect(wrapper).toMatchSnapshot()
@@ -24,7 +24,7 @@ describe('UpdateDescription mutation', () => {
         datasetId="ds001"
         field="Name"
         value="New Name"
-        done={() => {}}
+        done={jest.fn()}
       />,
     )
     expect(wrapper.find('Mutation').props().mutation).toEqual(
@@ -37,7 +37,7 @@ describe('UpdateDescription mutation', () => {
         datasetId="ds001"
         field="Authors"
         value={['John Doe', 'Jane Doe']}
-        done={() => {}}
+        done={jest.fn()}
       />,
     )
     expect(wrapper.find('Mutation').props().mutation).toEqual(

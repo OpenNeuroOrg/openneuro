@@ -2,4 +2,5 @@
 /packages/*/node_modules
 /packages/*/coverage
 /packages/*/dist
+jestsetup.js
 papaya.js

@@ -9,7 +9,7 @@ export default class Spinner extends React.Component {
   // life cycle events -------------------------------------------------------------------------
 
   render() {
-    let spinner = (
+    const spinner = (
       <div className="loading-wrap fade-in">
         <div className="spinner">
           <div className="spinnerinner" />

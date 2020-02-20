@@ -12,8 +12,8 @@ export default class ValidationResults extends React.Component {
   // life cycle events ------------------------------------------------------
 
   render() {
-    let errors = this.props.errors
-    let warnings = this.props.warnings
+    const errors = this.props.errors
+    const warnings = this.props.warnings
 
     if (errors === 'Invalid') {
       return false
@@ -22,8 +22,8 @@ export default class ValidationResults extends React.Component {
     // errors
     let errorsWrap
     if (errors.length > 0) {
-      let fileCount = this._countFiles(errors)
-      let errorHeader = (
+      const fileCount = this._countFiles(errors)
+      const errorHeader = (
         <span>
           view {errors.length} {pluralize('error', errors.length)} in{' '}
           {fileCount} {pluralize('files', fileCount)}
@@ -42,8 +42,8 @@ export default class ValidationResults extends React.Component {
     //warnings
     let warningWrap
     if (warnings && warnings.length > 0) {
-      let fileCount = this._countFiles(warnings)
-      let warningHeader = (
+      const fileCount = this._countFiles(warnings)
+      const warningHeader = (
         <span>
           view {warnings.length} {pluralize('warning', warnings.length)} in{' '}
           {fileCount} {pluralize('files', fileCount)}
@@ -72,7 +72,7 @@ export default class ValidationResults extends React.Component {
 
   _countFiles(issues) {
     let numFiles = 0
-    for (let issue of issues) {
+    for (const issue of issues) {
       numFiles += issue.files.length
       if (issue.additionalFileCount) {
         numFiles += issue.additionalFileCount

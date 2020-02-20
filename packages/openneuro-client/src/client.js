@@ -19,42 +19,6 @@ const cache = new InMemoryCache({
   freezeResults: true,
 })
 
-/**
- * Setup a client for working with the OpenNeuro API
- *
- * @param {string} uri GraphQL API URI (passed to Apollo Client)
- * @param {object} options Optional extra configuration
- * @param {function} [options.getAuthorization] Synchronous authorization cookie factory
- * @param {function} [options.fetch] Fetch implementation
- * @param {string} [options.clientVersion] Client version to check automatically on requests
- * @param {Array<ApolloLink>} [options.links] Any extra links to compose
- */
-const createClient = (uri, options = {}) => {
-  const {
-    getAuthorization = null,
-    fetch = null,
-    clientVersion = version,
-    links = [],
-  } = options
-  // createLink must be last since it contains a terminating link
-  const composedLink = ApolloLink.from([
-    compareVersionsLink(clientVersion),
-    ...links,
-    createLink(uri, getAuthorization, fetch),
-  ])
-
-  const apolloClientOptions = {
-    uri,
-    link: composedLink,
-    cache,
-    connectToDevTools: true,
-  }
-
-  // TODO: Figure this out?
-  // @ts-ignore: This actually works but seems to be a typing error somewhere in Apollo
-  return new ApolloClient(apolloClientOptions)
-}
-
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
@@ -83,21 +47,6 @@ const wsLink = uri => {
   })
 }
 
-const middlewareAuthLink = (uri, getAuthorization, fetch) => {
-  // We have to setup authLink to inject credentials here
-  const httpUploadLink = createUploadLink({
-    uri,
-    fetch: fetch === null ? undefined : fetch,
-    serverFormData: FormData,
-    credentials: 'same-origin',
-  })
-  if (getAuthorization) {
-    return authLink(getAuthorization).concat(httpUploadLink)
-  } else {
-    return httpUploadLink
-  }
-}
-
 const hbar = '\n-----------------------------------------------------\n'
 const parse = version => [semver.major(version), semver.minor(version)]
 const checkVersions = (serverVersion, clientVersion) => {
@@ -117,6 +66,21 @@ const checkVersions = (serverVersion, clientVersion) => {
         `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.${hbar}`,
       )
     }
+  }
+}
+
+const middlewareAuthLink = (uri, getAuthorization, fetch) => {
+  // We have to setup authLink to inject credentials here
+  const httpUploadLink = createUploadLink({
+    uri,
+    fetch: fetch === null ? undefined : fetch,
+    serverFormData: FormData,
+    credentials: 'same-origin',
+  })
+  if (getAuthorization) {
+    return authLink(getAuthorization).concat(httpUploadLink)
+  } else {
+    return httpUploadLink
   }
 }
 
@@ -173,6 +137,43 @@ const createLink = (uri, getAuthorization, fetch) => {
   }
 
   return link
+}
+
+/**
+ * Setup a client for working with the OpenNeuro API
+ *
+ * @param {string} uri GraphQL API URI (passed to Apollo Client)
+ * @param {object} options Optional extra configuration
+ * @param {function} [options.getAuthorization] Synchronous authorization cookie factory
+ * @param {function} [options.fetch] Fetch implementation
+ * @param {string} [options.clientVersion] Client version to check automatically on requests
+ * @param {Array<ApolloLink>} [options.links] Any extra links to compose
+ */
+const createClient = (uri, options = {}) => {
+  const {
+    getAuthorization = null,
+    fetch = null,
+    clientVersion = version,
+    links = [],
+  } = options
+  // createLink must be last since it contains a terminating link
+  const composedLink = ApolloLink.from([
+    compareVersionsLink(clientVersion),
+    ...links,
+    createLink(uri, getAuthorization, fetch),
+  ])
+
+  const apolloClientOptions = {
+    uri,
+    link: composedLink,
+    cache,
+    connectToDevTools: true,
+  }
+
+  // TODO: Figure this out?
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore: This actually works but seems to be a typing error somewhere in Apollo
+  return new ApolloClient(apolloClientOptions)
 }
 
 export { files, datasets, snapshots, users, datasetGenerator, createClient }

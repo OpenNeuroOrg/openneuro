@@ -8,7 +8,9 @@ import fs from 'fs'
 export function LazyReadStream(path, options) {
   // Set an invalid fd to skip the open call and signal to _read
   const readStream = fs.createReadStream(path, { ...options, fd: -128 })
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const realRead = readStream._read
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   readStream._read = function(size) {
     if (this.fd === -128) {
       // Open sync here

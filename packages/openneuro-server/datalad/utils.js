@@ -17,17 +17,13 @@ export const addFileUrl = (datasetId, tag, externalFiles) => file => {
       if (matchedFile) urls.push(...matchedFile.urls)
     } else {
       // Backup URL for direct access
-      const fileUrl = `${config.url}${
-        config.apiPrefix
-      }datasets/${datasetId}/snapshots/${tag}/files/${filePath}`
+      const fileUrl = `${config.url}${config.apiPrefix}datasets/${datasetId}/snapshots/${tag}/files/${filePath}`
       urls.push(fileUrl)
     }
     return { ...file, urls }
   } else {
     // Dataset draft
-    const fileUrl = `${config.url}${
-      config.apiPrefix
-    }datasets/${datasetId}/files/${filePath}`
+    const fileUrl = `${config.url}${config.apiPrefix}datasets/${datasetId}/files/${filePath}`
     return { ...file, urls: [fileUrl] }
   }
 }

@@ -4,7 +4,7 @@ import Datasets from './indexes/datasets'
  * Setup any indices and mappings in elasticsearch
  * @param {*} elasticClient
  */
-export const createIndices = async elasticClient => {
+export const createIndices = async (elasticClient): Promise<void> => {
   const exists = await elasticClient.indices.exists({
     index: Datasets.name,
   })

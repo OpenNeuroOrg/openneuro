@@ -7,7 +7,7 @@ exports[`DatasetPage component renders with common props 1`] = `
   <div
     className="open dataset-container"
   >
-    <withRouter(LeftSidebar)
+    <LeftSidebar
       dataset={
         Object {
           "draft": Object {

@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 
-const SearchInput = () => {
+const SearchInput = (): React.SFC => {
   const inputRef = useRef(null)
   const history = useHistory()
 
-  useEffect(() => {
+  useEffect((): void => {
     inputRef.current.focus()
   })
 
-  const onSearch = event => {
+  const onSearch = (event): void => {
     event.preventDefault()
     // Don't submit unless there's a value entered
     if (inputRef.current.value) {
@@ -19,7 +19,7 @@ const SearchInput = () => {
 
   return (
     <div className="search-group admin">
-      <form className="form-inline" onSubmit={event => onSearch(event)}>
+      <form className="form-inline" onSubmit={onSearch}>
         <div className="form-group float-label-input full-width">
           <input
             type="text"
@@ -29,7 +29,7 @@ const SearchInput = () => {
           />
         </div>
         <div className="form-group full-width float-label-input">
-          <button className="btn-blue" onClick={event => onSearch(event)}>
+          <button className="btn-blue" onClick={onSearch}>
             <i className="fa fa-search"></i>
           </button>
         </div>

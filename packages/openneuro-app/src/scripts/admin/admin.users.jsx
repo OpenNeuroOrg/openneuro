@@ -53,10 +53,6 @@ export const SET_BLOCKED = gql`
   ${USER_FRAGMENT}
 `
 
-export const UsersQuery = () => (
-  <Query query={GET_USERS}>{UsersQueryResult}</Query>
-)
-
 export const UsersQueryResult = ({ loading, data, refetch }) => {
   if (loading) {
     return <Spinner active message="Loading users" />
@@ -66,6 +62,10 @@ export const UsersQueryResult = ({ loading, data, refetch }) => {
     )
   }
 }
+
+export const UsersQuery = () => (
+  <Query query={GET_USERS}>{UsersQueryResult}</Query>
+)
 
 UsersQueryResult.propTypes = {
   loading: PropTypes.bool,

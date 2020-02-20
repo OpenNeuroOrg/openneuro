@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
 import format from 'date-fns/format'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
@@ -45,13 +45,8 @@ SidebarRow.propTypes = {
   modified: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
 }
 
-export const LeftSidebar = ({
-  dataset,
-  datasetId,
-  draftModified,
-  snapshots,
-  location,
-}) => {
+const LeftSidebar = ({ dataset, datasetId, draftModified, snapshots }) => {
+  const location = useLocation()
   const active = snapshotVersion(location) || 'draft'
   const user = getProfile()
   const hasEdit =
@@ -98,8 +93,7 @@ LeftSidebar.propTypes = {
   dataset: PropTypes.object,
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
-  location: PropTypes.object,
   draftModified: PropTypes.string,
 }
 
-export default withRouter(LeftSidebar)
+export default LeftSidebar

@@ -98,7 +98,9 @@ const CommentMutation = ({
   comment,
   disabled,
   profile,
-  done = () => {},
+  done = () => {
+    /* default no op function */
+  },
 }) => {
   return (
     <Mutation

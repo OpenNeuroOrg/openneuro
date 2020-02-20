@@ -29,8 +29,8 @@ export default {
       .send('doi=' + doi + '\nurl=' + url)
   },
 
-  async registerMetadata(context) {
-    let xml = templates['metadata'](context)
+  registerMetadata(context) {
+    const xml = templates['metadata'](context)
     return request
       .post(config.doi.url + 'metadata/')
       .set('Authorization', this.auth)
@@ -38,11 +38,10 @@ export default {
       .send(xml)
   },
 
-  async registerSnapshotDoi(datasetId, snapshotId, oldDesc) {
-    let url, context
-    let baseDoi = this.createDOI(datasetId, snapshotId)
-    url = `https://openneuro.org/datasets/${datasetId}/versions/${snapshotId}`
-    context = {
+  registerSnapshotDoi(datasetId, snapshotId, oldDesc) {
+    const baseDoi = this.createDOI(datasetId, snapshotId)
+    const url = `https://openneuro.org/datasets/${datasetId}/versions/${snapshotId}`
+    const context = {
       doi: baseDoi,
       creators: oldDesc.Authors.filter(x => x),
       title: oldDesc.Name,
@@ -50,10 +49,10 @@ export default {
       resourceType: 'fMRI',
     }
     return this.registerMetadata(context)
-      .then(async () => {
+      .then(() => {
         return this.mintDOI(baseDoi, url)
       })
-      .then(async () => {
+      .then(() => {
         return baseDoi
       })
       .catch(() => {

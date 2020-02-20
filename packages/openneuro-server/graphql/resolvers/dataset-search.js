@@ -69,6 +69,7 @@ export const datasetSearchConnection = async (
   }
   if (after) {
     try {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       requestBody.search_after = decodeCursor(after)
     } catch (err) {
       // Don't include search_after if parsing fails

@@ -6,7 +6,7 @@
  * accessibility.
  */
 
-let ids = {}
+const ids = {}
 
 export default (prefix = 'id') => {
   ids[prefix] = ids[prefix] ? ids[prefix] + 1 : 1

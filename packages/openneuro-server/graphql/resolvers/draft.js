@@ -12,6 +12,13 @@ const draftFiles = dataset => args => {
   )
 }
 
+/**
+ * Check if a dataset draft is partially uploaded
+ */
+export const partial = (obj, { datasetId }) => {
+  return getPartialStatus(datasetId)
+}
+
 export const draft = obj => ({
   id: obj.id,
   files: draftFiles(obj),
@@ -24,10 +31,3 @@ export const draft = obj => ({
     description(obj, { datasetId: obj.id, revision: obj.revision }),
   readme: () => readme(obj, { datasetId: obj.id, revision: obj.revision }),
 })
-
-/**
- * Check if a dataset draft is partially uploaded
- */
-export const partial = (obj, { datasetId }) => {
-  return getPartialStatus(datasetId)
-}

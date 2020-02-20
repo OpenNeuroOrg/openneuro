@@ -27,16 +27,16 @@ class WarnButton extends React.Component {
   }
 
   render() {
-    let displayOptions = this.state.displayOptions
-    let message = this.props.message
-    let cancel = this.props.cancel
-    let confirm = this.props.confirm
+    const displayOptions = this.state.displayOptions
+    const message = this.props.message
+    const cancel = this.props.cancel
+    const confirm = this.props.confirm
 
     // check for bad validations and add disabled class
     let disabled = false
     if (this.props.validations) {
       for (let i = 0; i < this.props.validations.length; i++) {
-        let validation = this.props.validations[i]
+        const validation = this.props.validations[i]
         if (validation.check) {
           disabled = true
         }
@@ -55,7 +55,7 @@ class WarnButton extends React.Component {
       )
     }
 
-    let confirmBtn = (
+    const confirmBtn = (
       <button
         className={'btn-warn-component success'}
         onClick={this.toggle.bind(this, this.props.action)}>
@@ -63,7 +63,7 @@ class WarnButton extends React.Component {
       </button>
     )
 
-    let viewAction = (
+    const viewAction = (
       <span className="btn-group slide-in-right-fast" role="group">
         <button
           className="btn-warn-component cancel"
@@ -74,8 +74,7 @@ class WarnButton extends React.Component {
       </span>
     )
 
-    let hideAction
-    hideAction = (
+    const hideAction = (
       <span className={disabled ? ' disabled' : ''}>
         <button
           className="btn-warn-component warning"
@@ -86,8 +85,8 @@ class WarnButton extends React.Component {
       </span>
     )
 
-    let button = displayOptions ? viewAction : hideAction
-    let loading = (
+    const button = displayOptions ? viewAction : hideAction
+    const loading = (
       <span className="btn-warn-load" role="group">
         <span className="warning-loading">
           <i className="fa fa-spin fa-circle-o-notch" />
@@ -114,7 +113,7 @@ class WarnButton extends React.Component {
       // validate & warn
       if (this.props.validations) {
         for (let i = 0; i < this.props.validations.length; i++) {
-          let validation = this.props.validations[i]
+          const validation = this.props.validations[i]
           if (validation.check) {
             toast.error(
               <ToastContent

@@ -21,6 +21,18 @@ const c = mongo.collections
 const uri = config.datalad.uri
 
 /**
+ * Snapshot contents key
+ *
+ * Immutable data
+ *
+ * @param {string} datasetId
+ * @param {string} tag
+ */
+const snapshotKey = (datasetId, tag) => {
+  return `openneuro:snapshot:${datasetId}:${tag}`
+}
+
+/**
  * Index of snapshots
  *
  * This should get cleared when snapshots are added or removed
@@ -53,15 +65,15 @@ const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
 }
 
 const getSnapshotMetadata = (datasetId, snapshots) => {
-  let tags = snapshots.map(s => s.tag)
+  const tags = snapshots.map(s => s.tag)
   return new Promise((resolve, reject) => {
     c.crn.snapshots
       .find({ datasetId: datasetId, tag: { $in: tags } })
       .toArray((err, metadata) => {
         if (err) reject(err)
         snapshots = snapshots.map(s => {
-          const match_metadata = metadata.find(m => m.tag == s.tag)
-          s.created = match_metadata ? match_metadata.created : null
+          const matchMetadata = metadata.find(m => m.tag == s.tag)
+          s.created = matchMetadata ? matchMetadata.created : null
           return s
         })
         resolve(snapshots)
@@ -98,8 +110,8 @@ const postSnapshot = async (
   const response = await request
     .post(createSnapshotUrl)
     .send({
-      description_fields: descriptionFieldUpdates,
-      snapshot_changes: snapshotChanges,
+      description_fields: descriptionFieldUpdates, // eslint-disable-line @typescript-eslint/camelcase
+      snapshot_changes: snapshotChanges, // eslint-disable-line @typescript-eslint/camelcase
     })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
@@ -121,6 +133,30 @@ const getSnapshotFiles = async (datasetId, sKey, snapshot) => {
     files = getFiles(datasetId, snapshot.hexsha)
   }
   return files
+}
+
+/**
+ * Get a list of all snapshot tags available for a dataset
+ *
+ * This is equivalent to `git tag` on the repository
+ *
+ * @param {string} datasetId Dataset accession number
+ */
+export const getSnapshots = datasetId => {
+  const url = `${uri}/datasets/${datasetId}/snapshots`
+  const key = snapshotIndexKey(datasetId)
+  return redis.get(key).then(data => {
+    if (data) return JSON.parse(data)
+    else
+      return request
+        .get(url)
+        .set('Accept', 'application/json')
+        .then(async ({ body: { snapshots } }) => {
+          snapshots = await getSnapshotMetadata(datasetId, snapshots)
+          redis.set(key, JSON.stringify(snapshots))
+          return snapshots
+        })
+  })
 }
 
 const announceNewSnapshot = async (snapshot, datasetId, user) => {
@@ -223,47 +259,11 @@ export const deleteSnapshot = (datasetId, tag) => {
 }
 
 /**
- * Get a list of all snapshot tags available for a dataset
- *
- * This is equivalent to `git tag` on the repository
- *
- * @param {string} datasetId Dataset accession number
- */
-export const getSnapshots = datasetId => {
-  const url = `${uri}/datasets/${datasetId}/snapshots`
-  const key = snapshotIndexKey(datasetId)
-  return redis.get(key).then(data => {
-    if (data) return JSON.parse(data)
-    else
-      return request
-        .get(url)
-        .set('Accept', 'application/json')
-        .then(async ({ body: { snapshots } }) => {
-          snapshots = await getSnapshotMetadata(datasetId, snapshots)
-          redis.set(key, JSON.stringify(snapshots))
-          return snapshots
-        })
-  })
-}
-
-/**
- * Snapshot contents key
- *
- * Immutable data
- *
- * @param {string} datasetId
- * @param {string} tag
- */
-const snapshotKey = (datasetId, tag) => {
-  return `openneuro:snapshot:${datasetId}:${tag}`
-}
-
-/**
  * Get the contents of a snapshot (files, git metadata) from datalad-service
  * @param {string} datasetId Dataset accession number
  * @param {string} tag Tag name to retrieve
  */
-export const getSnapshot = async (datasetId, tag) => {
+export const getSnapshot = (datasetId, tag) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const key = snapshotKey(datasetId, tag)
   // Track a view for each snapshot query

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import RowHeight from './row-height.jsx'
 
 export const genLinkTarget = (dataset, publicDashboard) => {
-  let linkTarget = '/datasets/' + dataset.id
+  const linkTarget = '/datasets/' + dataset.id
   if (dataset.snapshots.length > 0 && publicDashboard) {
     const sortedSnapshots = [...dataset.snapshots].sort((a, b) => {
       return new Date(b.created) - new Date(a.created)

@@ -24,6 +24,11 @@ import { datasetsConnection } from './pagination.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
+export const giveUploaderPermission = (datasetId, userId) => {
+  const permission = new Permission({ datasetId, userId, level: 'admin' })
+  return permission.save()
+}
+
 /**
  * Create a new dataset
  *
@@ -55,11 +60,6 @@ export const createDataset = async (uploader, userInfo) => {
     console.error(`Failed to create ${datasetId}`)
     throw e
   }
-}
-
-export const giveUploaderPermission = (datasetId, userId) => {
-  const permission = new Permission({ datasetId, userId, level: 'admin' })
-  return permission.save()
 }
 
 /**
@@ -101,12 +101,19 @@ export const cacheDatasetConnection = options => connectionArguments => {
 }
 
 /**
+ * mongo aggregates + match docs
+ * @param {object} match MongoDB $match aggregate
+ * @returns {Array<object>} Array of MongoDB aggregate pipelines
+ */
+const aggregateArraySetup = match => [{ $match: match }]
+
+/**
  * Add any filter steps based on the filterBy options provided
  * @param {object} options GraphQL query parameters
- * @returns {(match: object) => array} Array of aggregate stages
+ * @returns {(match: object) => Array<any>} Array of aggregate stages
  */
 export const datasetsFilter = options => match => {
-  const aggregates = [{ $match: match }] //mongo aggregates + match docs
+  const aggregates = aggregateArraySetup(match)
   const filterMatch = {}
   if ('filterBy' in options) {
     const filters = options.filterBy
@@ -124,7 +131,6 @@ export const datasetsFilter = options => match => {
       filterMatch.public = true
     }
     if ('saved' in filters && filters.saved) {
-      // @ts-ignore
       aggregates.push({
         $lookup: {
           from: 'stars',
@@ -177,7 +183,6 @@ export const datasetsFilter = options => match => {
     }
     if ('invalid' in filters && filters.invalid) {
       // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
-      // @ts-ignore
       aggregates.push({
         $lookup: {
           from: 'issues', //look at issues collection
@@ -199,7 +204,6 @@ export const datasetsFilter = options => match => {
         },
       })
       // Count how many error fields matched in previous step
-      // @ts-ignore
       aggregates.push({
         $addFields: {
           errorCount: { $size: '$issues' },
@@ -326,14 +330,19 @@ export const addFileString = (datasetId, filename, mimetype, content) =>
     // Mock a stream so we can reuse addFile
     createReadStream: () => {
       const stream = new Readable()
-      stream._read = () => {}
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      stream._read = () => {
+        // Content is available already, _read does nothing
+      }
       stream.push(content)
       stream.push(null)
       return stream
     },
     // Mock capacitor
     capacitor: {
-      destroy: () => {},
+      destroy: () => {
+        // There is no capacitor to destroy
+      },
     },
   })
 
@@ -376,7 +385,7 @@ export const updatePublic = (datasetId, publicFlag) =>
   )
 
 export const getDatasetAnalytics = (datasetId, tag) => {
-  let datasetQuery = tag
+  const datasetQuery = tag
     ? { datasetId: datasetId, tag: tag }
     : { datasetId: datasetId }
   return Analytics.aggregate([

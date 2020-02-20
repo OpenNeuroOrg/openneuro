@@ -7,12 +7,19 @@ import {
 } from '@elastic/elasticsearch'
 import Datasets from './indexes/datasets'
 
+// TODO: This would be better to generate from the GraphQL schema
+interface DatasetQueryResult {
+  id: string
+}
+
 /**
  * Convert from GraphQL dataset object to RequestParams.Index documents
  * TODO: Use generated GraphQL typing
  * @param datasetObj GraphQL dataset object from searchDatasets query
  */
-export function extractDatasetDocument(datasetObj: any): RequestParams.Index {
+export function extractDatasetDocument(
+  datasetObj: DatasetQueryResult,
+): RequestParams.Index {
   const dataset: RequestParams.Index = {
     index: Datasets.name,
     id: datasetObj.id,
@@ -30,8 +37,8 @@ export function extractDatasetDocument(datasetObj: any): RequestParams.Index {
  */
 export async function indexDataset(
   elasticClient: ElasticClient,
-  datasetObj: any,
-) {
+  datasetObj: DatasetQueryResult,
+): Promise<ApiResponse> {
   try {
     console.log(`Indexing "${datasetObj.id}"`)
     const response: ApiResponse = await elasticClient.index(
@@ -46,12 +53,12 @@ export async function indexDataset(
 /**
  * Point 'datasets' index at the new version
  */
-export const aliasDatasetsIndex = (elasticClient: ElasticClient) =>
+export const aliasDatasetsIndex = (
+  elasticClient: ElasticClient,
+): Promise<ApiResponse> =>
   elasticClient.indices.updateAliases({
     body: {
-      actions: [
-        { add: { index: Datasets.name, alias: 'datasets' } },
-      ],
+      actions: [{ add: { index: Datasets.name, alias: 'datasets' } }],
     },
   })
 
@@ -60,8 +67,8 @@ export const aliasDatasetsIndex = (elasticClient: ElasticClient) =>
  */
 export default async function indexDatasets(
   elasticClient: ElasticClient,
-  datasets: AsyncGenerator<any>,
-) {
+  datasets: AsyncGenerator<DatasetQueryResult>,
+): Promise<void> {
   try {
     for await (const dataset of datasets) {
       indexDataset(elasticClient, dataset)

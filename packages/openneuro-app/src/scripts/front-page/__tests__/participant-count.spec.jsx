@@ -6,15 +6,15 @@ describe('DatasetCount', () => {
       const count = participantCount({
         loading: true,
         data: {
-          participantCount: 10
-        }
+          participantCount: 10,
+        },
       })
       expect(count).toBeNull()
     })
     it('returns null when no data', () => {
       const count = participantCount({
         loading: false,
-        data: undefined
+        data: undefined,
       })
       expect(count).toBeNull()
     })
@@ -22,8 +22,8 @@ describe('DatasetCount', () => {
       const count = participantCount({
         loading: false,
         data: {
-          participantCount: 10
-        }
+          participantCount: 10,
+        },
       })
       expect(count).toBe(10)
     })

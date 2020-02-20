@@ -1,12 +1,14 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { UploadClient } from '../uploader.jsx'
+import { JSDOM } from 'jsdom'
+const { window } = new JSDOM('', { runScripts: 'outside-only' })
 
 jest.mock('react-ga')
 
 // Stub constructor for File-like objects with webkitRelativePath
 function TestFile(body, name, webkitRelativePath) {
-  const file = new Blob(body)
+  const file = new window.Blob(body)
   file.name = name
   file.webkitRelativePath = webkitRelativePath ? webkitRelativePath : name
   return file

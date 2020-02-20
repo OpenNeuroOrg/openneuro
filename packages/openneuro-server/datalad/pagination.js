@@ -37,6 +37,9 @@ export const applyCursorToEdges = (edges, offset) =>
     node: edge,
   }))
 
+// Limit to options.first in range 1 <= limit <= 100
+export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
+
 // Decode cursor from options object
 export const getOffsetFromCursor = options => {
   if (options.hasOwnProperty('after') && options.after) {
@@ -49,57 +52,6 @@ export const getOffsetFromCursor = options => {
   }
   // Default to zero if no cursor
   return 0
-}
-
-// Limit to options.first in range 1 <= limit <= 100
-export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
-
-/**
- * Dataset pagination wrapper
- * @param {object} options Query options such as {limit: 5, orderBy: {creation: 'descending'}}
- * @returns {(presortAggregate: array) => object} presortAggregate Any presorting / pagination constraints
- */
-export const datasetsConnection = options => presortAggregate => {
-  const offset = getOffsetFromCursor(options)
-  const realLimit = maxLimit(options.first)
-  // One query for match -> count -> sort -> skip -> limit
-  return Dataset.aggregate([
-    ...presortAggregate,
-    ...sortAggregate(options),
-    {
-      $group: { _id: null, count: { $sum: 1 }, datasets: { $push: '$$ROOT' } },
-    },
-    {
-      $project: {
-        count: 1,
-        datasets: { $slice: ['$datasets', offset, realLimit] },
-      },
-    },
-  ])
-    .exec()
-    .then(results => {
-      const result = results.pop()
-      if (result) {
-        const { datasets, count } = result
-        return {
-          edges: applyCursorToEdges(datasets, offset),
-          pageInfo: {
-            // True if there are no results before this
-            hasPreviousPage: offset > 0,
-            // First ordered object id in the limited set
-            startCursor: apiCursor({ offset }),
-            // True if there are no results after this
-            hasNextPage: offset + realLimit < count,
-            // Last ordered object id in the limited set
-            endCursor: apiCursor({ offset: offset + realLimit }),
-            // Count of all documents in this query
-            count,
-          },
-        }
-      } else {
-        return null
-      }
-    })
 }
 
 /**
@@ -210,4 +162,52 @@ export const sortAggregate = options => {
     sortingStages.push({ $sort: finalSort })
   }
   return sortingStages
+}
+
+/**
+ * Dataset pagination wrapper
+ * @param {object} options Query options such as {limit: 5, orderBy: {creation: 'descending'}}
+ * @returns {(presortAggregate: array) => object} presortAggregate Any presorting / pagination constraints
+ */
+export const datasetsConnection = options => presortAggregate => {
+  const offset = getOffsetFromCursor(options)
+  const realLimit = maxLimit(options.first)
+  // One query for match -> count -> sort -> skip -> limit
+  return Dataset.aggregate([
+    ...presortAggregate,
+    ...sortAggregate(options),
+    {
+      $group: { _id: null, count: { $sum: 1 }, datasets: { $push: '$$ROOT' } },
+    },
+    {
+      $project: {
+        count: 1,
+        datasets: { $slice: ['$datasets', offset, realLimit] },
+      },
+    },
+  ])
+    .exec()
+    .then(results => {
+      const result = results.pop()
+      if (result) {
+        const { datasets, count } = result
+        return {
+          edges: applyCursorToEdges(datasets, offset),
+          pageInfo: {
+            // True if there are no results before this
+            hasPreviousPage: offset > 0,
+            // First ordered object id in the limited set
+            startCursor: apiCursor({ offset }),
+            // True if there are no results after this
+            hasNextPage: offset + realLimit < count,
+            // Last ordered object id in the limited set
+            endCursor: apiCursor({ offset: offset + realLimit }),
+            // Count of all documents in this query
+            count,
+          },
+        }
+      } else {
+        return null
+      }
+    })
 }

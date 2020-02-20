@@ -8,9 +8,9 @@ import { pageTitle } from '../resources/strings.js'
 
 class Faq extends React.Component {
   render() {
-    let faqsList = faq
+    const faqsList = faq
 
-    let faqs = faqsList.map((item, index) => {
+    const faqs = faqsList.map((item, index) => {
       return (
         <div className="panel" key={index}>
           <Markdown source={item.faq} className="panel-heading" />

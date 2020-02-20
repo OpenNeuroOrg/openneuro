@@ -9,10 +9,6 @@ import config from './config'
 import createApp from './app'
 import packageJson from './package.json'
 
-/**
- * Try to initiate the Redis connection
- * @return {Promise<any>}
- */
 const redisConnectionSetup = async () => {
   try {
     await redisConnect(config.redis)

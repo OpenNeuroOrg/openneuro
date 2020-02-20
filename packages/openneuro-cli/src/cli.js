@@ -4,6 +4,13 @@ import colors from 'colors'
 import packageJson from '../package.json'
 import { login, upload, download } from './actions.js'
 
+/**
+ * display the help text in red on the console
+ */
+function makeRed(txt) {
+  return colors.red(txt)
+}
+
 commander.version(packageJson.version).description(packageJson.description)
 
 commander
@@ -41,15 +48,11 @@ commander
 commander.command('*', { noHelp: true, isDefault: true }).action(() => {
   // eslint-disable-next-line no-console
   console.log('Unknown command!')
-  commander.outputHelp(make_red)
+  commander.outputHelp(makeRed)
 })
 
 commander.parse(process.argv)
 
 if (!process.argv.slice(2).length) {
-  commander.outputHelp(make_red)
-}
-
-function make_red(txt) {
-  return colors.red(txt) //display the help text in red on the console
+  commander.outputHelp(makeRed)
 }

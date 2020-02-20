@@ -7,7 +7,7 @@ const breakpoint = '@media (max-width: 900px)'
 
 const StatsSection = styled.section({
   backgroundColor: 'white',
-  padding: '4rem 0'
+  padding: '4rem 0',
 })
 const StatsContainer = styled.div({
   backgroundColor: '#f5f5f5',
@@ -20,19 +20,18 @@ const StatsContainer = styled.div({
     flexDirection: 'column',
     maxWidth: '45rem',
     width: '100%',
-  }
+  },
 })
 const Panel = styled.section({
- backgroundColor: 'transparent',
- flexBasis: '1px',
- flexGrow: '1',
- padding: '2rem 0 3rem',
- textAlign: 'center'
+  backgroundColor: 'transparent',
+  flexBasis: '1px',
+  flexGrow: '1',
+  padding: '2rem 0 3rem',
+  textAlign: 'center',
 })
 const Value = styled.div({
   color: '#007C92',
   fontSize: '70px',
-
 })
 const Label = styled.div({
   fontWeight: '200',
@@ -46,19 +45,23 @@ const VerticalDivider = styled.div({
     height: '2px',
     width: 'calc(100% - 4rem)',
     margin: '0 auto',
-  }
+  },
 })
 
 const FrontPageStats = () => (
   <StatsSection className="openneuro-stats">
     <StatsContainer>
       <Panel className="dataset-count">
-        <Value><DatasetCount/></Value>
+        <Value>
+          <DatasetCount />
+        </Value>
         <Label>Public Datasets</Label>
       </Panel>
-      <VerticalDivider/>
+      <VerticalDivider />
       <Panel className="participant-count">
-        <Value><ParticipantCount/></Value>
+        <Value>
+          <ParticipantCount />
+        </Value>
         <Label>Participants</Label>
       </Panel>
     </StatsContainer>

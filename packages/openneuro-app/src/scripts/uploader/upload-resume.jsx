@@ -12,8 +12,10 @@ const UploadResume = ({ datasetId }) => (
           disabled={true}
           title="Please wait for your current upload to finish before resuming">
           <span>
-            <i className="fa fa-repeat" />&nbsp;
-          </span>Resume
+            <i className="fa fa-repeat" />
+            &nbsp;
+          </span>
+          Resume
         </button>
       ) : (
         <FileSelect

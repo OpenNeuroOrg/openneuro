@@ -43,14 +43,12 @@ export const datasetName = obj => {
     if (results && results.length) {
       // Return the latest snapshot name
       const sortedSnapshots = results.sort(snapshotCreationComparison)
-      // @ts-ignore
       return description(obj, {
         datasetId: obj.id,
         revision: sortedSnapshots[0].hexsha,
       }).then(desc => desc.Name)
     } else if (obj.revision) {
       // Return the draft name or null
-      // @ts-ignore
       return description(obj, {
         datasetId: obj.id,
         revision: obj.revision,
@@ -98,6 +96,25 @@ export const deleteDataset = (obj, { id }, { user, userInfo }) => {
 }
 
 /**
+ * Recursively walk an upload tree and return an array of
+ * promises for each forwarded request.
+ *
+ * @param {string} datasetId
+ * @param {object} fileTree
+ */
+export const updateFilesTree = (datasetId, fileTree) => {
+  // drafts just need something to invalidate client cache
+  const { name, files, directories } = fileTree
+  const filesPromises = files.map(file => {
+    return datalad
+      .addFile(datasetId, name, file)
+      .then(({ filename, size }) => new UpdatedFile(filename, size))
+  })
+  const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
+  return filesPromises.concat(...dirPromises)
+}
+
+/**
  * Add files to a draft
  */
 export const updateFiles = async (
@@ -130,22 +147,32 @@ export const updateFiles = async (
 }
 
 /**
- * Recursively walk an upload tree and return an array of
+ * Recursively walk a delete tree and return an array of
  * promises for each forwarded request.
  *
  * @param {string} datasetId
  * @param {object} fileTree
  */
-export const updateFilesTree = (datasetId, fileTree) => {
+export const deleteFilesTree = (datasetId, fileTree) => {
   // drafts just need something to invalidate client cache
-  const { name, files, directories } = fileTree
-  const filesPromises = files.map(file => {
-    return datalad
-      .addFile(datasetId, name, file)
-      .then(({ filename, size }) => new UpdatedFile(filename, size))
-  })
-  const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
-  return filesPromises.concat(...dirPromises)
+  const { path, files, directories } = fileTree
+  if (files.length || directories.length) {
+    const filesPromises = files.map(({ filename }) =>
+      datalad
+        .deleteFile(datasetId, path, { name: filename })
+        .then(filename => new UpdatedFile(filename)),
+    )
+    const dirPromises = directories.map(tree =>
+      deleteFilesTree(datasetId, tree),
+    )
+    return filesPromises.concat(...dirPromises)
+  } else {
+    return [
+      datalad
+        .deleteFile(datasetId, path, { name: '' })
+        .then(filename => new UpdatedFile(filename)),
+    ]
+  }
 }
 
 /**
@@ -196,35 +223,6 @@ export const deleteFile = async (
   } catch (err) {
     Sentry.captureException(err)
     return false
-  }
-}
-
-/**
- * Recursively walk a delete tree and return an array of
- * promises for each forwarded request.
- *
- * @param {string} datasetId
- * @param {object} fileTree
- */
-export const deleteFilesTree = (datasetId, fileTree) => {
-  // drafts just need something to invalidate client cache
-  const { path, files, directories } = fileTree
-  if (files.length || directories.length) {
-    const filesPromises = files.map(({ filename }) =>
-      datalad
-        .deleteFile(datasetId, path, { name: filename })
-        .then(filename => new UpdatedFile(filename)),
-    )
-    const dirPromises = directories.map(tree =>
-      deleteFilesTree(datasetId, tree),
-    )
-    return filesPromises.concat(...dirPromises)
-  } else {
-    return [
-      datalad
-        .deleteFile(datasetId, path, { name: '' })
-        .then(filename => new UpdatedFile(filename)),
-    ]
   }
 }
 
