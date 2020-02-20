@@ -31,7 +31,7 @@ services:
     extends:
       service: nodejs
     working_dir: /srv/packages/openneuro-app
-    command: sh -c "yarn install && yarn start"
+    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && yarn start"
     volumes:
       - webpack_cache:/webpack-cache
     ports:
@@ -41,7 +41,7 @@ services:
   server:
     extends:
       service: nodejs
-    command: sh -c "yarn install && cd /srv/packages/openneuro-server && node index.js"
+    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && cd /srv/packages/openneuro-server && node index.js"
     depends_on:
       - redis
       - mongo
@@ -52,7 +52,7 @@ services:
   indexer:
     extends:
       service: nodejs
-    command: sh -c "yarn install && yarn ts-node /srv/packages/openneuro-indexer/src/index.ts"
+    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && yarn ts-node /srv/packages/openneuro-indexer/src/index.ts"
     depends_on:
       - server
       - elasticsearch
