@@ -7,7 +7,7 @@ import { ApolloLink, split, Observable } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import semver from 'semver'
-import * as FormData from 'form-data'
+import FormData from 'form-data'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
@@ -69,7 +69,7 @@ const checkVersions = (serverVersion, clientVersion) => {
   }
 }
 
-const middlewareAuthLink = (uri, getAuthorization, fetch) => {
+export const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
   const httpUploadLink = createUploadLink({
     uri,
