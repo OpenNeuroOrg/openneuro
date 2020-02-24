@@ -6,10 +6,6 @@
 const config = {
   url: process.env.CRN_SERVER_URL,
 
-  scitran: {
-    url: process.env.CRN_SERVER_URL + '/api/',
-  },
-
   /**
    * CRN
    */
@@ -31,30 +27,6 @@ const config = {
     },
     globus: {
       clientID: process.env.GLOBUS_CLIENT_ID,
-    },
-  },
-
-  /**
-   * Upload
-   */
-  upload: {
-    /**
-     * Filenames ignored during upload.
-     */
-    blacklist: ['.DS_Store', 'Icon\r'],
-  },
-
-  /**
-   * AWS configuration
-   */
-  aws: {
-    batch: {
-      vcpusMax: 12,
-      memoryMax: 30720,
-    },
-    s3: {
-      datasetBucket: process.env.AWS_S3_DATASET_BUCKET,
-      analysisBucket: process.env.AWS_S3_ANALYSIS_BUCKET,
     },
   },
 

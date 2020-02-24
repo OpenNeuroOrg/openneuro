@@ -253,7 +253,10 @@ export const getDatasets = options => {
 }
 
 // Files to skip in uploads
-const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
+const filenameBlacklist = new RegExp(/.DS_Store|Icon\r/)
+const pathBlacklist = new RegExp(/^.git|^.gitattributes|^.datalad|^.heudiconv/)
+export const testBlacklist = (path, filename) =>
+  filenameBlacklist.test(filename) || pathBlacklist.test(path)
 
 /**
  * Add files to a dataset
@@ -263,8 +266,8 @@ export const addFile = async (datasetId, path, file) => {
     const { filename, mimetype, createReadStream, capacitor } = await file
     await redis.del(draftPartialKey(datasetId))
 
-    // Skip any blacklisted files
-    if (blacklist.includes(filename)) {
+    // Apply blacklist to uploaded files
+    if (testBlacklist(path, filename)) {
       return true
     }
 
