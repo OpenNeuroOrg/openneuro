@@ -1,6 +1,6 @@
 import mockingoose from 'mockingoose'
 import request from 'superagent'
-import { createDataset, datasetsFilter } from '../dataset.js'
+import { createDataset, datasetsFilter, testBlacklist } from '../dataset.js'
 import config from '../../config.js'
 
 // Mock requests to Datalad service
@@ -77,6 +77,20 @@ describe('dataset model operations', () => {
             filterBy: { invalid: true, public: true, all: true },
           })({}),
         ).toHaveLength(3)
+      })
+    })
+    describe('testBlacklist', () => {
+      it('returns false for .bidsignore', () => {
+        expect(testBlacklist('', '.bidsignore')).toBe(false)
+      })
+      it('returns true for .git paths', () => {
+        expect(testBlacklist('.git', 'HEAD')).toBe(true)
+      })
+      it('returns true for root level .DS_Store files', () => {
+        expect(testBlacklist('', '.DS_Store'))
+      })
+      it('returns true for nested .DS_Store files', () => {
+        expect(testBlacklist('sub-01/anat/', '.DS_Store'))
       })
     })
   })

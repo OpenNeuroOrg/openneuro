@@ -1,8 +1,4 @@
 export default {
-  scitran: {
-    url: 'localhost:9876/api/',
-  },
-
   /**
    * CRN
    */
@@ -19,26 +15,6 @@ export default {
     },
     orcid: {
       clientID: 'orcid-client-id',
-    },
-  },
-
-  /**
-   * Upload
-   */
-  upload: {
-    /**
-     * Filenames ignored during upload.
-     */
-    blacklist: ['.DS_Store', 'Icon\r'],
-  },
-
-  /**
-   * AWS configuration
-   */
-  aws: {
-    batch: {
-      vcpusMax: 12,
-      memoryMax: 30720,
     },
   },
 
