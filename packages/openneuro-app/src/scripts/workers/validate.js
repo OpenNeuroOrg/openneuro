@@ -1,10 +1,9 @@
 import * as Comlink from 'comlink'
-import ValidateWorker from './validate.worker.js'
 
-async function init(files, options) {
-  const worker = new ValidateWorker()
+function init(files, options) {
+  const worker = new Worker('./validate.worker.js', { type: 'module' })
   const validate = Comlink.wrap(worker)
-  const output = await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     validate(
       files,
       options,
@@ -14,7 +13,6 @@ async function init(files, options) {
       }),
     )
   })
-  return output
 }
 
 export default init

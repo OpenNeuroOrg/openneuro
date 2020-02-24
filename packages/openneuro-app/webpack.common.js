@@ -5,6 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
+const WorkerPlugin = require('worker-plugin')
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -51,6 +52,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'style.css',
     }),
+    new WorkerPlugin(),
   ],
   module: {
     rules: [
@@ -74,10 +76,6 @@ module.exports = {
             },
           },
         ],
-      },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' },
       },
       {
         test: /\.scss$/,
