@@ -4,7 +4,6 @@ FROM node:12.16.1-alpine
 ADD . /srv
 WORKDIR /srv
 RUN apk add curl git make gcc g++ python --no-cache --update && \
-  npm install -g yarn && \
   yarn install && \
   apk del make gcc g++ python
 
