@@ -97,7 +97,7 @@
     "jest": "^24.6.0",
     "jest-fetch-mock": "^1.4.1",
     "mini-css-extract-plugin": "^0.4.1",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.13.1",
     "object.fromentries": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.8.6",
