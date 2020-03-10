@@ -1,0 +1,58 @@
+version: 2
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.6.9-stretch-node
+    steps:
+      - checkout
+
+      # get the build-essentials so we can compile
+      - run: sudo apt-get update && sudo apt-get install build-essential redis-server
+
+      # install yarn for bids-validator
+      - run: curl -o- -L https://yarnpkg.com/install.sh | sudo bash -s -- --version 1.9.2
+
+      # create venv and install dependencies
+      - run:
+          name: Install Python deps
+          command: sudo pip install -r requirements.txt
+
+      # Install codecov
+      - run: pip install --user codecov
+
+      # install git-annex
+      - run: curl https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz | tar -xvz  && sudo mv git-annex.linux/* /usr/local/bin
+
+      # run unit tests
+      - run: pytest --cov ./datalad_service
+
+      # Report coverage info
+      - run: $(python -c "import site; print(site.USER_BASE)")/bin/codecov
+
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      
+      # login
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      
+      # build datalad-service 
+      - run: docker build -t openneuro/datalad-service .
+
+      # push datalad-service
+      - run: docker push openneuro/datalad-service
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires: 
+            - test
+          filters:
+            branches:
+              only: master
