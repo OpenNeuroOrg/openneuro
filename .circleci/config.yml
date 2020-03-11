@@ -141,30 +141,63 @@ jobs:
               docker push "openneuro/indexer:${CIRCLE_TAG}"
             fi
 
-  sentry-release:
-    working_directory: ~/OpenNeuroOrg/openneuro
+  datalad-service-test:
     docker:
-      - image: circleci/node:10.16.3-stretch-browsers
+      - image: circleci/python:3.6.9-stretch-node
     steps:
       - checkout
+
+      # get the build-essentials so we can compile
+      - run: sudo apt-get update && sudo apt-get install build-essential redis-server
+
+      # install yarn for bids-validator
+      - run: curl -o- -L https://yarnpkg.com/install.sh | sudo bash -s -- --version 1.9.2
+
+      # create venv and install dependencies
       - run:
-          name: Install sentry-cli
-          command: yarn install
+          name: Install Python deps
+          command: sudo pip install -r requirements.txt
+          working_directory: ~/project/services/datalad
+
+      # Install codecov
+      - run: pip install --user codecov
+
+      # install git-annex
+      - run: curl https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz | tar -xvz  && sudo mv git-annex.linux/* /usr/local/bin
+
+      # run unit tests
+      - run: 
+          command: pytest --cov ./datalad_service
+          working_directory: ~/project/services/datalad
+
+      # Report coverage info
+      - run: $(python -c "import site; print(site.USER_BASE)")/bin/codecov
+
+  datalad-service-deploy:
+    machine:
+      enabled: true
+    working_directory: ~/project/services/datalad
+    steps:
+      - checkout
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -t openneuro/datalad-service .
       - run:
-          name: Update remote for Sentry bug
-          command: git remote set-url origin https://github.com/openneuroorg/openneuro.git
-      - run:
-          name: Create sentry release
-          command: yarn sentry-cli releases new -p openneuro $(jq -r .version lerna.json)
-      - run:
-          name: Associate releases with commits
-          command: yarn sentry-cli releases set-commits --auto $(jq -r .version lerna.json)
+          name: docker tag + push (tag)
+          command: |
+            if [ "${CIRCLE_TAG}" ]; then
+              docker tag openneuro/datalad-service "openneuro/datalad-service:${CIRCLE_TAG}"
+              docker push "openneuro/datalad-service:${CIRCLE_TAG}"
+            fi
 
 workflows:
   version: 2
   build-and-deploy:
     jobs:
       - build:
+          filters:
+            tags:
+              only: /^v.*/
+      - datalad-service-test:
           filters:
             tags:
               only: /^v.*/
@@ -176,6 +209,7 @@ workflows:
           requires:
             - build
             - cli-install-test
+            - datalad-service-test
           filters:
             tags:
               only: /^v.*/
@@ -183,6 +217,7 @@ workflows:
           requires:
             - build
             - cli-install-test
+            - datalad-service-test
           filters:
             tags:
               only: /^v.*/
@@ -190,15 +225,15 @@ workflows:
           requires:
             - build
             - cli-install-test
+            - datalad-service-test
           filters:
             tags:
               only: /^v.*/
-      - sentry-release:
+      - datalad-service-build:
           requires:
-            - server-build
-            - app-build
+            - build
+            - cli-install-test
+            - datalad-service-test
           filters:
             tags:
               only: /^v.*/
-            branches:
-              ignore: /.*/

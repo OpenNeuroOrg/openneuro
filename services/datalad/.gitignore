@@ -1,0 +1,6 @@
+/.venv
+/.pytest_cache
+/.vscode
+*.pyc
+/.coverage
+/node_modules

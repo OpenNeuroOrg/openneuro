@@ -1,0 +1,5 @@
+#!/bin/bash
+# Example worker script for docker-compose
+WORKER_ID=$(python get_docker_scale.py)
+echo "Worker $WORKER_ID starting..."
+celery -A datalad_service.worker worker -Q dataset-worker-$WORKER_ID -l info -c 1
