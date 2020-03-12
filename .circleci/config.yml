@@ -163,24 +163,25 @@ jobs:
       - run: pip install --user codecov
 
       # install git-annex
-      - run: curl https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz | tar -xvz  && sudo mv git-annex.linux/* /usr/local/bin
+      - run: curl http://ia600309.us.archive.org/26/items/git-annex-builds/SHA256E-s52708477--e5930f66a9b56a88de5dabe65964e9eb59bf34c0bbb6c9bb0305773d69852add.tar.gz | tar -xvz  && sudo mv git-annex.linux/* /usr/local/bin
 
       # run unit tests
-      - run: 
+      - run:
           command: pytest --cov ./datalad_service
           working_directory: ~/project/services/datalad
 
       # Report coverage info
       - run: $(python -c "import site; print(site.USER_BASE)")/bin/codecov
 
-  datalad-service-deploy:
+  datalad-service-build:
     machine:
       enabled: true
-    working_directory: ~/project/services/datalad
     steps:
       - checkout
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: docker build -t openneuro/datalad-service .
+      - run:
+          command: docker build -t openneuro/datalad-service .
+          working_directory: ~/project/services/datalad
       - run:
           name: docker tag + push (tag)
           command: |
