@@ -29,7 +29,7 @@ spec:
             memory: "1024Mi"
           requests:
             cpu: "50m"
-            memory: "512Mi"
+            memory: "256Mi"
         ports:
         - containerPort: 5555
         command:

@@ -29,7 +29,7 @@ spec:
               memory: "256Mi"
             requests:
               cpu: ".25"
-              memory: "128Mi"
+              memory: "64Mi"
           ports:
             - containerPort: 80
           envFrom:
