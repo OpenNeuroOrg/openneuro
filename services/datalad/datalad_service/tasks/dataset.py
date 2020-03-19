@@ -61,7 +61,6 @@ def delete_dataset(store, dataset):
     force_rmtree(ds.path)
 
 
-
 @dataset_task
 def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
     """
@@ -74,16 +73,14 @@ def create_snapshot(store, dataset, snapshot, description_fields, snapshot_chang
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
         queue = dataset_queue(dataset)
-        updated_description = update_description.apply(
-            queue=queue, args=(store.annex_path, dataset, description_fields))
-        updated_changes = update_changes.apply(
-            queue=queue, args=(store.annex_path, dataset, snapshot, snapshot_changes))
-        updated_description.wait()
-        updated_changes.wait()
-        if not updated_description.failed() and not updated_changes.failed():
+        updated_description = update_description.signature(
+            queue=queue, args=(store.annex_path, dataset, description_fields), immutable=True)
+        updated_changes = update_changes.signature(
+            queue=queue, args=(store.annex_path, dataset, snapshot, snapshot_changes), immutable=True)
+        chain = updated_description | updated_changes
+        result = chain.apply()
+        if not result.failed():
             ds.save(version_tag=snapshot)
     else:
         raise Exception(
             'Tag "{}" already exists, name conflict'.format(snapshot))
-
- 
