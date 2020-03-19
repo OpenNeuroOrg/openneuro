@@ -1,0 +1,28 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+codecov = "*"
+pytest = "*"
+coverage = "*"
+mock = "*"
+pytest-cov = "*"
+fakeredis = "*"
+
+[packages]
+boto3 = "*"
+celery = "*"
+datalad = "==0.12.3"
+falcon = "*"
+raven = "*"
+redis = "*"
+requests = "*"
+GitPython = "*"
+PyJWT = "*"
+gunicorn = "*"
+gevent = "*"
+
+[requires]
+python_version = "3.7"

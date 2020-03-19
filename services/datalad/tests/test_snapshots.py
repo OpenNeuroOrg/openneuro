@@ -130,7 +130,7 @@ def test_write_new_changes(celery_app, annex_path, new_dataset):
     # Manually make the commit without validation
     new_dataset.add('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
-    dataset = Dataset(str(annex_path.join(ds_id)))
+    dataset = Dataset(os.path.join(annex_path, ds_id))
     assert not dataset.repo.dirty
     assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes
@@ -145,7 +145,7 @@ def test_write_with_empty_changes(celery_app, annex_path, new_dataset):
     # Manually make the commit without validation
     new_dataset.add('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
-    dataset = Dataset(str(annex_path.join(ds_id)))
+    dataset = Dataset(os.path.join(annex_path, ds_id))
     assert not dataset.repo.dirty
     assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes'''

@@ -10,7 +10,7 @@ from datalad_service.tasks.files import commit_files
 def test_create_dataset(annex_path):
     ds_id = 'ds000002'
     create_dataset.run(annex_path, ds_id)
-    assert Dataset(str(annex_path.join(ds_id))).repo is not None
+    assert Dataset(os.path.join(annex_path, ds_id)).repo is not None
 
 
 def test_delete_dataset(annex_path, new_dataset):
@@ -26,5 +26,5 @@ def test_commit_file(celery_app, annex_path, new_dataset):
     with open(file_path, 'w') as fd:
         fd.write("""GPL""")
     commit_files.run(annex_path, ds_id, ['LICENSE'])
-    dataset = Dataset(str(annex_path.join(ds_id)))
+    dataset = Dataset(os.path.join(annex_path, ds_id))
     assert not dataset.repo.dirty

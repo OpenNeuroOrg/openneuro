@@ -1,6 +1,8 @@
-FROM python:3.6.10-alpine3.11
+FROM python:3.7.7-alpine3.11
 
 COPY package.json /package.json
+COPY Pipfile /Pipfile
+COPY Pipfile.lock /Pipfile.lock
 COPY requirements.txt /requirements.txt
 COPY datalad_service /datalad_service
 COPY dataset-worker /dataset-worker
@@ -15,7 +17,8 @@ RUN apk --update add bash yarn git python py-pip openssl openssh ca-certificates
   && rm git-annex-standalone-amd64.tar.gz \
   && mv git-annex.linux/* /usr/local/bin \
   && apk --update add --virtual build-dependencies libffi-dev openssl-dev python3-dev py3-pip build-base libxml2-dev libxslt-dev \
-  && pip install -r /requirements.txt \
+  && pip install pipenv \
+  && pipenv install --deploy --system \
   && apk del build-dependencies wget \
   && mkdir /datalad \
   && ssh-keyscan github.com >> /root/.ssh/known_hosts \

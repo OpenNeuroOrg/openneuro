@@ -9,7 +9,7 @@ from .dataset_fixtures import *
 
 def test_profile_get_repo_files(annex_path, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    ds = Dataset(str(annex_path.join(ds_id)))
+    ds = Dataset(os.path.join(annex_path, ds_id))
     for each in range(5000):
         filename = 'file-{}'.format(each)
         path = os.path.join(new_dataset.path, filename)
