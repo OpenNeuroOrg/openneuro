@@ -99,18 +99,6 @@ services:
     env_file: ./config.env
     init: true
 
-  # publish-only celery worker
-  publish:
-    build: services/datalad
-    command:
-      - /publish-worker
-    volumes:
-      - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./services/datalad/datalad_service:/datalad_service
-      - ./datalad-key:/datalad-key
-    env_file: ./config.env
-    init: true
-
   flower:
     image: openneuro/datalad-service:latest
     command:

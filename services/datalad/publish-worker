@@ -1,3 +1,0 @@
-#!/bin/bash
-echo "Publish worker starting..."
-celery -A datalad_service.worker worker -Q publish-worker -l info -c 4

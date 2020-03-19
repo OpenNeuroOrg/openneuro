@@ -16,10 +16,6 @@ def dataset_queue(dataset):
     return 'dataset-worker-{}'.format(dataset_hash(dataset))
 
 
-def publish_queue():
-    return 'publish-worker'
-
-
 def dataset_hash(key):
     """Return which worker for a given task."""
     return hash(key) % DATALAD_WORKERS
