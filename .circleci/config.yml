@@ -174,7 +174,9 @@ jobs:
           working_directory: ~/project/services/datalad
 
       # Report coverage info
-      - run: pipenv run codecov
+      - run:
+          command: pipenv run python -m codecov
+          working_directory: ~/project/services/datalad
 
   datalad-service-build:
     machine:
