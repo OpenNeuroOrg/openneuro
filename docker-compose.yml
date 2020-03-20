@@ -78,10 +78,10 @@ services:
 
   # datalad Python backend
   datalad:
-    image: openneuro/datalad-service:latest
+    build: services/datalad
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./services/datalad:/datalad_service
+      - ./services/datalad/datalad_service:/datalad_service
     env_file: ./config.env
     depends_on:
       - celery
@@ -89,24 +89,24 @@ services:
 
   # celery Python backend
   celery:
-    image: openneuro/datalad-service:latest
+    build: services/datalad
     command:
       - /dataset-worker
     scale: 2
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./services/datalad:/datalad_service
+      - ./services/datalad/datalad_service:/datalad_service
     env_file: ./config.env
     init: true
 
   # publish-only celery worker
   publish:
-    image: openneuro/datalad-service:latest
+    build: services/datalad
     command:
       - /publish-worker
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./services/datalad:/datalad_service
+      - ./services/datalad/datalad_service:/datalad_service
       - ./datalad-key:/datalad-key
     env_file: ./config.env
     init: true

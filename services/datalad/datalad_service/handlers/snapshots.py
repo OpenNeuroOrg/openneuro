@@ -52,11 +52,8 @@ class SnapshotResource(object):
             self.store.annex_path, dataset, snapshot).set(
                 queue=publish_queue()).apply_async()
 
-        create = create_snapshot.si(
-            self.store.annex_path, dataset, snapshot, description_fields, snapshot_changes).set(queue=queue)
-        snapshot = get_snapshot.si(
-            self.store.annex_path, dataset, snapshot)
-        created = (create | snapshot).apply_async()
+        created = create_snapshot(
+            self.store.annex_path, dataset, snapshot, description_fields, snapshot_changes)
         if not created.failed():
             resp.media = created.get()
             resp.status = falcon.HTTP_OK

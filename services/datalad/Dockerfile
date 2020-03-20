@@ -3,7 +3,6 @@ FROM python:3.7.7-alpine3.11
 COPY package.json /package.json
 COPY Pipfile /Pipfile
 COPY Pipfile.lock /Pipfile.lock
-COPY requirements.txt /requirements.txt
 COPY datalad_service /datalad_service
 COPY dataset-worker /dataset-worker
 COPY publish-worker /publish-worker
