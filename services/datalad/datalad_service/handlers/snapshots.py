@@ -4,7 +4,6 @@ import falcon
 from celery import chain
 
 from datalad_service.common.celery import dataset_queue
-from datalad_service.common.celery import publish_queue
 from datalad_service.tasks.dataset import create_snapshot
 from datalad_service.tasks.snapshots import get_snapshot, get_snapshots
 from datalad_service.tasks.files import get_files
@@ -50,7 +49,7 @@ class SnapshotResource(object):
 
         monitor_remote_configs.s(
             self.store.annex_path, dataset, snapshot).set(
-                queue=publish_queue()).apply_async()
+                queue=dataset_queue(dataset)).apply_async()
 
         created = create_snapshot(
             self.store.annex_path, dataset, snapshot, description_fields, snapshot_changes)

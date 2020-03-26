@@ -3,7 +3,7 @@ import os
 import subprocess
 import random
 
-from datalad_service.common.celery import dataset_task, publish_queue
+from datalad_service.common.celery import dataset_task, dataset_queue
 from datalad_service.common.raven import client
 
 
@@ -14,7 +14,7 @@ def audit_datasets(store):
     # Randomize start time a bit to reduce risk of stampedes
     countdown = random.randint(1, 30)
     audit_remotes.apply_async(
-        (store.annex_path, dataset), queue=publish_queue(), countdown=countdown)
+        (store.annex_path, dataset), queue=dataset_queue(dataset), countdown=countdown)
 
 
 def fsck_remote(ds, remote):
