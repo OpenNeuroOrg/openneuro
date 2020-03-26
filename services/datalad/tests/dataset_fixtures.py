@@ -76,13 +76,13 @@ def annex_path(tmpdir_factory):
     ds.save(version_tag=SNAPSHOT_ID)
     # Setup a seed for any new_dataset uses
     random.seed(42)
-    return path
+    return str(path)
 
 
 @pytest.fixture
 def new_dataset(annex_path):
     """Create a new dataset with a unique name for one test."""
-    ds_path = str(annex_path.join(id_generator()))
+    ds_path = str(os.path.join(annex_path, id_generator()))
     ds = Dataset(ds_path)
     ds.create()
     ds.no_annex(BIDS_NO_ANNEX)

@@ -9,7 +9,7 @@ import stat
 from datalad_service.common.annex import CommitInfo
 from datalad_service.common.celery import dataset_task, dataset_queue
 from datalad_service.tasks.description import update_description
-from datalad_service.tasks.snapshots import update_changes
+from datalad_service.tasks.snapshots import get_snapshot, update_changes
 
 
 # A list of patterns to avoid annexing in BIDS datasets
@@ -61,29 +61,38 @@ def delete_dataset(store, dataset):
     force_rmtree(ds.path)
 
 
+@dataset_task
+def validate_snapshot_name(store, dataset, snapshot):
+    ds = store.get_dataset(dataset)
+    # Search for any existing tags
+    tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
+    if tagged:
+        raise Exception(
+            'Tag "{}" already exists, name conflict'.format(snapshot))
+
 
 @dataset_task
-def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
+def save_snapshot(store, dataset, snapshot):
+    ds = store.get_dataset(dataset)
+    ds.save(version_tag=snapshot)
+
+
+def create_snapshot(annex_path, dataset, snapshot, description_fields, snapshot_changes):
     """
     Create a new snapshot (git tag).
 
     Raises an exception if the tag already exists.
     """
-    ds = store.get_dataset(dataset)
-    # Search for any existing tags
-    tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
-    if not tagged:
-        queue = dataset_queue(dataset)
-        updated_description = update_description.apply(
-            queue=queue, args=(store.annex_path, dataset, description_fields))
-        updated_changes = update_changes.apply(
-            queue=queue, args=(store.annex_path, dataset, snapshot, snapshot_changes))
-        updated_description.wait()
-        updated_changes.wait()
-        if not updated_description.failed() and not updated_changes.failed():
-            ds.save(version_tag=snapshot)
-    else:
-        raise Exception(
-            'Tag "{}" already exists, name conflict'.format(snapshot))
-
- 
+    queue = dataset_queue(dataset)
+    name_test = validate_snapshot_name.signature(
+        queue=queue, args=(annex_path, dataset, snapshot), immutable=True)
+    updated_description = update_description.signature(
+        queue=queue, args=(annex_path, dataset, description_fields), immutable=True)
+    updated_changes = update_changes.signature(
+        queue=queue, args=(annex_path, dataset, snapshot, snapshot_changes), immutable=True)
+    snapshot_saved = save_snapshot.signature(
+        queue=queue, args=(annex_path, dataset, snapshot), immutable=True)
+    load_new_snapshot = get_snapshot.signature(
+        queue=queue, args=(annex_path, dataset, snapshot), immutable=True)
+    chain = name_test | updated_description | updated_changes | snapshot_saved | load_new_snapshot
+    return chain.apply_async()
