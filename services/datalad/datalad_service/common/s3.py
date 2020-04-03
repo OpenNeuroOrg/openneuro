@@ -56,13 +56,12 @@ def generate_s3_annex_options(dataset, realm):
         public = getattr(datalad_service.config, 'DATALAD_S3_PUBLIC_ON_EXPORT')
         if public == 'yes':
             annex_options += [
-                'autoenable=yes',
+                'autoenable=true',
                 'publicurl=http://{}.s3.amazonaws.com/'.format(realm.s3_bucket),
             ]
     else:
         annex_options += [
-            'autoenable=no',
-            'publicurl=',
+            'autoenable=false',
             ]
         public = 'no'
     annex_options.append('public={}'.format(public))
