@@ -4253,10 +4253,10 @@ before-after-hook@^2.0.0:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.1.0.tgz#b6c03487f44e24200dd30ca5e6a1979c5d2fb635"
   integrity sha512-IWIbu7pMqyw3EAJHzzHbWa85b6oud/yfKYg5rqB5hNE8CeMi3nX+2C2sj0HswfblST86hpVEOAb9x34NZd6P7A==
 
-bids-validator@1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.4.3.tgz#a3d1c7d0989788703d855769ea0048f38c8fdd97"
-  integrity sha512-zl6JHWGz6Adiuj0LteRcvcLLy2Ztv4LDXD7zvrGuHdXO2xOoaM3VSl45mEQEckisS38XtT6r/8Lxbv5snIz/Yw==
+bids-validator@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.1.tgz#908c5be93475e0e9c4df40b6282a8cdd87902ebd"
+  integrity sha512-oLPswVGOYByklFzUmsmlEeLnfCZQv5o7XCX78U/0/5m0jNfkQ+M0rg9PMpPaYyMKz1SjwEq8EhdkAJ1W/G9Abg==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
@@ -4269,6 +4269,7 @@ bids-validator@1.4.3:
     ignore "^4.0.2"
     is-utf8 "^0.2.1"
     jshint "^2.9.6"
+    lerna "^3.15.0"
     minimatch "3.0.4"
     nifti-js "^1.0.1"
     p-limit "^2.1.0"
@@ -10303,7 +10304,7 @@ left-pad@^1.3.0:
   resolved "https://registry.yarnpkg.com/left-pad/-/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"
   integrity sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8ghrjyrvMCoEA==
 
-lerna@3.20.2:
+lerna@3.20.2, lerna@^3.15.0:
   version "3.20.2"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-3.20.2.tgz#abf84e73055fe84ee21b46e64baf37b496c24864"
   integrity sha512-bjdL7hPLpU3Y8CBnw/1ys3ynQMUjiK6l9iDWnEGwFtDy48Xh5JboR9ZJwmKGCz9A/sarVVIGwf1tlRNKUG9etA==
