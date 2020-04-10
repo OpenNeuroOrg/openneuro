@@ -7,7 +7,7 @@ const DRAFT_FILES = `
       id
       draft {
         id
-        files {
+        files(prefix: null) {
           id
           filename
           size
@@ -22,7 +22,7 @@ const SNAPSHOT_FILES = `
   query snapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
-      files {
+      files(prefix: null) {
         id
         filename
         size
