@@ -290,7 +290,7 @@ export const typeDefs = `
     # When was this dataset first made public?
     publishDate: DateTime
     # Is the dataset available for analysis on Brainlife?
-    onBrainlife: Boolean
+    onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Dataset Metadata
     metadata: Metadata
   }
