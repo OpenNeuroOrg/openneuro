@@ -10,6 +10,7 @@ import {
   updatePublic,
   trackAnalytics,
 } from './dataset.js'
+import { updateRef } from './draft.js'
 import {
   createSnapshot,
   deleteSnapshot,
@@ -56,6 +57,7 @@ const Mutation = {
   editComment,
   subscribeToNewsletter,
   addMetadata,
+  updateRef,
 }
 
 export default Mutation

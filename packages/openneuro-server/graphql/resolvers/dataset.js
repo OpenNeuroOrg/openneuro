@@ -147,32 +147,14 @@ export const updateFiles = async (
 }
 
 /**
- * Recursively walk a delete tree and return an array of
- * promises for each forwarded request.
+ * Delete a path within a dataset
  *
  * @param {string} datasetId
- * @param {object} fileTree
+ * @param {string} path Single filename or directory path to remove recursively
  */
-export const deleteFilesTree = (datasetId, fileTree) => {
+export const deleteFilesPath = (datasetId, path) => {
   // drafts just need something to invalidate client cache
-  const { path, files, directories } = fileTree
-  if (files.length || directories.length) {
-    const filesPromises = files.map(({ filename }) =>
-      datalad
-        .deleteFile(datasetId, path, { name: filename })
-        .then(filename => new UpdatedFile(filename)),
-    )
-    const dirPromises = directories.map(tree =>
-      deleteFilesTree(datasetId, tree),
-    )
-    return filesPromises.concat(...dirPromises)
-  } else {
-    return [
-      datalad
-        .deleteFile(datasetId, path, { name: '' })
-        .then(filename => new UpdatedFile(filename)),
-    ]
-  }
+  return datalad.deletePath(datasetId, path)
 }
 
 /**
@@ -180,22 +162,27 @@ export const deleteFilesTree = (datasetId, fileTree) => {
  */
 export const deleteFiles = async (
   obj,
-  { datasetId, files: fileTree },
+  { datasetId, path },
   { user, userInfo },
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFiles = await Promise.all(deleteFilesTree(datasetId, fileTree))
-    await datalad.commitFiles(datasetId, userInfo)
+    await deleteFilesPath(datasetId, path)
     pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
         action: 'DELETE',
-        payload: deletedFiles,
+        payload: [
+          {
+            id: `${path}:0`,
+            filename: path,
+          },
+        ],
       },
     })
     return true
   } catch (err) {
+    console.error(err)
     Sentry.captureException(err)
     return false
   }

@@ -92,8 +92,8 @@ export const typeDefs = `
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
-    # delete files in a draft - returns a new Draft
-    deleteFiles(datasetId: ID!, files: FileTree!): Boolean
+    # Recursively delete a file or directory in a draft - returns true on success
+    deleteFiles(datasetId: ID!, path: String!): Boolean
     # delete one file based on path
     deleteFile(datasetId: ID!, path: String!, filename: String!): Boolean
     # Add or remove the public flag from a dataset
@@ -136,6 +136,8 @@ export const typeDefs = `
     subscribeToNewsletter(email: String!): Boolean
     # Upserts dataset metadata
     addMetadata(datasetId: ID!, metadata: MetadataInput!): Metadata
+    # Update draft reference pointer
+    updateRef(datasetId: ID!, ref: String!): Boolean
   }
 
   input SummaryInput {

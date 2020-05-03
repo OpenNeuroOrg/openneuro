@@ -13,7 +13,7 @@ import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
-import { fileUrl, getFileName } from './files.js'
+import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files.js'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
@@ -371,10 +371,20 @@ export const commitFiles = (datasetId, user) => {
  * Delete an existing file in a dataset
  */
 export const deleteFile = (datasetId, path, file) => {
-  // Cannot use superagent 'request' due to inability to post streams
   const url = fileUrl(datasetId, path, file.name)
   const filename = getFileName(path, file.name)
   return request.del(url).then(() => filename)
+}
+
+/**
+ * Recursively delete a directory path within a dataset
+ */
+export const deletePath = (datasetId, path) => {
+  const url = pathUrl(datasetId, path)
+  return request
+    .del(url)
+    .query({ recursive: true })
+    .then(() => encodeFilePath(path))
 }
 
 /**
