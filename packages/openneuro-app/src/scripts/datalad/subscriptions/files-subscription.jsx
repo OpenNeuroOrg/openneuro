@@ -27,10 +27,12 @@ const FILES_SUBSCRIPTION = gql`
  * @returns {Object} - updated version of draft
  */
 export const deleteFilesReducer = (files, draft) => {
-  const deleted = files.map(({ filename }) => filename.split(':').join('/'))
+  const pathMatch = files
+    .map(({ filename }) => filename.split(':').join('\\/'))
+    .join('|')
   return {
     ...draft,
-    files: draft.files.filter(file => !deleted.includes(file.filename)),
+    files: draft.files.filter(file => !file.filename.match(pathMatch)),
   }
 }
 
