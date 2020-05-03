@@ -2,10 +2,12 @@ import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { description } from './description.js'
 import { readme } from './readme.js'
-import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
+import {
+  getDraftFiles,
+  getPartialStatus,
+  updateDatasetRevision,
+} from '../../datalad/draft.js'
 import { filterFiles } from '../../datalad/files.js'
-import { updateDatasetRevision } from '../../datalad/draft.js'
-import Dataset from '../../models/dataset.js'
 
 // A draft must have a dataset parent
 const draftFiles = dataset => args => {
@@ -24,9 +26,9 @@ export const partial = (obj, { datasetId }) => {
 /**
  * Mutation to move the draft HEAD reference forward or backward
  */
-export const updateRef = async (obj, { datasetId, ref }, { userInfo }) => {
+export const updateRef = (obj, { datasetId, ref }, { userInfo }) => {
   if (userInfo.admin) {
-    updateDatasetRevision(datasetId, ref)
+    return updateDatasetRevision(datasetId, ref)
   } else {
     throw new Error('Access denied')
   }
