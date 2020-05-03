@@ -10,6 +10,7 @@ from datalad_service.tasks.files import commit_files
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.files import get_untracked_files
 from datalad_service.tasks.files import remove_files
+from datalad_service.tasks.files import remove_recursive
 from datalad_service.tasks.files import unlock_files
 
 
@@ -89,7 +90,7 @@ class FilesResource(object):
         queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
-            file_path = os.path.join(ds_path, filename) 
+            file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
@@ -131,20 +132,18 @@ class FilesResource(object):
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
-                ds = self.store.get_dataset(dataset)
                 media_dict = {'deleted': filename}
                 name, email = get_user_info(req)
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-
-                # unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename]})
-                # unlock.wait()
-
-                remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename], 'name': name, 'email': email})
-                remove.wait()
-
+                # The recursive flag removes the entire tree in one commit
+                if 'recursive' in req.params and req.params['recursive'] != 'false':
+                    remove = remove_recursive.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                        'path': filename, 'name': name, 'email': email})
+                else:
+                    remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                        'files': [filename], 'name': name, 'email': email})
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
