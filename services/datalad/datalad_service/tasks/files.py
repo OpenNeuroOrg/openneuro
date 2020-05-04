@@ -74,18 +74,18 @@ def get_untracked_files(store, dataset):
 
 
 @dataset_task
-def remove_files(store, dataset, files, name=None, email=None):
+def remove_files(store, dataset, files, name=None, email=None, cookies=None):
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
         for filename in files:
             ds.remove(filename, check=False)
-            update_head(store, dataset)
+            update_head(store, dataset, cookies)
 
 
 @dataset_task
-def remove_recursive(store, dataset, path, name=None, email=None):
+def remove_recursive(store, dataset, path, name=None, email=None, cookies=None):
     """Remove a path within a dataset recursively."""
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
         ds.remove(path, recursive=True, check=False)
-        update_head(store, dataset)
+        update_head(store, dataset, cookies=cookies)

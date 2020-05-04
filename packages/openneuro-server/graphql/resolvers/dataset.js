@@ -147,17 +147,6 @@ export const updateFiles = async (
 }
 
 /**
- * Delete a path within a dataset
- *
- * @param {string} datasetId
- * @param {string} path Single filename or directory path to remove recursively
- */
-export const deleteFilesPath = (datasetId, path) => {
-  // drafts just need something to invalidate client cache
-  return datalad.deletePath(datasetId, path)
-}
-
-/**
  * Delete files from a draft
  */
 export const deleteFiles = async (
@@ -167,7 +156,7 @@ export const deleteFiles = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await deleteFilesPath(datasetId, path)
+    await datalad.deletePath(datasetId, path, userInfo)
     pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
@@ -196,7 +185,7 @@ export const deleteFile = async (
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
     const deletedFile = await datalad
-      .deleteFile(datasetId, path, { name: filename })
+      .deleteFile(datasetId, path, { name: filename }, userInfo)
       .then(filename => new UpdatedFile(filename))
     await datalad.commitFiles(datasetId, userInfo)
     pubsub.publish('filesUpdated', {

@@ -140,10 +140,10 @@ class FilesResource(object):
                 # The recursive flag removes the entire tree in one commit
                 if 'recursive' in req.params and req.params['recursive'] != 'false':
                     remove = remove_recursive.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                        'path': filename, 'name': name, 'email': email})
+                        'path': filename, 'name': name, 'email': email, 'cookies': req.cookies})
                 else:
                     remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                        'files': [filename], 'name': name, 'email': email})
+                        'files': [filename], 'name': name, 'email': email, 'cookies': req.cookies})
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:

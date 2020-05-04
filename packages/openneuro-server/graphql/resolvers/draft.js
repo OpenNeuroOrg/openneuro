@@ -7,6 +7,7 @@ import {
   getPartialStatus,
   updateDatasetRevision,
 } from '../../datalad/draft.js'
+import { checkDatasetWrite } from '../permissions.js'
 import { filterFiles } from '../../datalad/files.js'
 
 // A draft must have a dataset parent
@@ -26,12 +27,10 @@ export const partial = (obj, { datasetId }) => {
 /**
  * Mutation to move the draft HEAD reference forward or backward
  */
-export const updateRef = (obj, { datasetId, ref }, { userInfo }) => {
-  if (userInfo.admin) {
+export const updateRef = (obj, { datasetId, ref }, { user, userInfo }) => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return updateDatasetRevision(datasetId, ref)
-  } else {
-    throw new Error('Access denied')
-  }
+  })
 }
 
 export const draft = obj => ({

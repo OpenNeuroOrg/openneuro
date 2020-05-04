@@ -370,20 +370,26 @@ export const commitFiles = (datasetId, user) => {
 /**
  * Delete an existing file in a dataset
  */
-export const deleteFile = (datasetId, path, file) => {
+export const deleteFile = (datasetId, path, file, user) => {
   const url = fileUrl(datasetId, path, file.name)
   const filename = getFileName(path, file.name)
-  return request.del(url).then(() => filename)
+  return request
+    .del(url)
+    .set('Cookie', generateDataladCookie(config)(user))
+    .set('Accept', 'application/json')
+    .then(() => filename)
 }
 
 /**
  * Recursively delete a directory path within a dataset
  */
-export const deletePath = (datasetId, path) => {
+export const deletePath = (datasetId, path, user) => {
   const url = pathUrl(datasetId, path)
   return request
     .del(url)
     .query({ recursive: true })
+    .set('Cookie', generateDataladCookie(config)(user))
+    .set('Accept', 'application/json')
     .then(() => encodeFilePath(path))
 }
 
