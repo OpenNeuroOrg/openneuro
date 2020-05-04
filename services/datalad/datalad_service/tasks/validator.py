@@ -2,8 +2,8 @@ import json
 import os
 import subprocess
 import requests
-from datalad_service.config import GRAPHQL_ENDPOINT
 
+from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.common.raven import client
 from datalad_service.common.celery import app
 

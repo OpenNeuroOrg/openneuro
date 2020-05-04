@@ -49,6 +49,17 @@ export const fileUrl = (datasetId, path, filename) => {
 }
 
 /**
+ * Generate path URL (such a directory or virtual path) for DataLad service
+ * @param {String} datasetId
+ * @param {String} path - Relative path for the file
+ */
+export const pathUrl = (datasetId, path) => {
+  const fileName = encodeFilePath(path)
+  const url = `http://${config.datalad.uri}/datasets/${datasetId}/files/${fileName}`
+  return url
+}
+
+/**
  * Get the faster object URL for a file
  * @param {string} datasetId - Dataset accession number
  * @param {string} objectId - Git object id, a sha1 hash for git objects or key for annexed files

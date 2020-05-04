@@ -52,10 +52,7 @@ const FileTree = ({
                 multiple>
                 <i className="fa fa-plus" /> Add Directory
               </UpdateFile>
-              <DeleteDir
-                datasetId={datasetId}
-                fileTree={{ name, path, files, directories }}
-              />
+              <DeleteDir datasetId={datasetId} path={path} />
             </span>
           )}
           <ul className="child-files">

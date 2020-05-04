@@ -9,7 +9,7 @@ export const generateFileId = (filepath, size) => `${filepath}:${size}`
  * Creates a file object with an ApolloGQL cache-safe id.
  * @class
  * @param {string} filepath ':' delimited
- * @param {string|number} size
+ * @param {string|number} [size]
  */
 export function UpdatedFile(filepath, size) {
   /**

@@ -119,13 +119,13 @@ exports[`DeleteDir mutation renders with common props 1`] = `
                     "kind": "Argument",
                     "name": Object {
                       "kind": "Name",
-                      "value": "files",
+                      "value": "path",
                     },
                     "value": Object {
                       "kind": "Variable",
                       "name": Object {
                         "kind": "Name",
-                        "value": "files",
+                        "value": "path",
                       },
                     },
                   },
@@ -173,7 +173,7 @@ exports[`DeleteDir mutation renders with common props 1`] = `
                   "kind": "NamedType",
                   "name": Object {
                     "kind": "Name",
-                    "value": "FileTree",
+                    "value": "String",
                   },
                 },
               },
@@ -181,7 +181,7 @@ exports[`DeleteDir mutation renders with common props 1`] = `
                 "kind": "Variable",
                 "name": Object {
                   "kind": "Name",
-                  "value": "files",
+                  "value": "path",
                 },
               },
             },
@@ -190,7 +190,7 @@ exports[`DeleteDir mutation renders with common props 1`] = `
       ],
       "kind": "Document",
       "loc": Object {
-        "end": 120,
+        "end": 115,
         "start": 0,
       },
     }
