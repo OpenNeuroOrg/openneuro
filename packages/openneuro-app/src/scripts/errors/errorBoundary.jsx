@@ -36,6 +36,10 @@ const linkStyle = {
 const DatasetRedirect = props => {
   const { datasetId } = useParams()
   const redirectLib = {
+    ds001219: 'ds002734',
+    ds002653: 'ds002728',
+    ds001165: 'ds002750',
+    ds001393: 'ds002738',
     ds001934: 'ds002727',
     ds002070: 'ds002711',
     ds001985: 'ds002712',
