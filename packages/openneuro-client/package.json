@@ -18,7 +18,7 @@
     "cross-fetch": "^3.0.4",
     "esm": "^3.0.84",
     "form-data": "^2.5.0",
-    "graphql": "14.5.8",
+    "graphql": "14.6.0",
     "graphql-tag": "^2.10.3",
     "graphql-tools": "4.0.6",
     "node-fetch": "^2.6.0",

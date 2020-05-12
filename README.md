@@ -28,8 +28,8 @@ For example, you can restart the server container with `docker-compose restart s
 
 ## Components
 
-* [OpenNeuro app](packages/openneuro-app) - React frontend.
-* [OpenNeuro server](packages/openneuro-server) - Node.js web backend.
-* [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) microservice.
-* [bids-app-host](https://github.com/OpenNeuroOrg/bids-app-host) - Docker wrapper for cloud hosted job execution.
-* [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library.
+- [OpenNeuro app](packages/openneuro-app) - React frontend.
+- [OpenNeuro server](packages/openneuro-server) - Node.js web backend.
+- [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) microservice.
+- [bids-app-host](https://github.com/OpenNeuroOrg/bids-app-host) - Docker wrapper for cloud hosted job execution.
+- [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library.
