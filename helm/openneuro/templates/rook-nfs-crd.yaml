@@ -1,0 +1,16 @@
+apiVersion: edgefs.rook.io/v1
+kind: NFS
+metadata:
+  name: nfs-datasets
+  namespace: rook-edgefs
+spec:
+  instances: 3
+  relaxedDirUpdates: true
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: alpha.eksctl.io/nodegroup-name
+              operator: In
+              values:
+                - edgefs-target

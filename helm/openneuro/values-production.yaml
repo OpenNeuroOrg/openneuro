@@ -25,6 +25,11 @@ dataladWorkers: 16
 # Content container tag
 contentTag: v1.0.1
 
+# EdgeFS configuration
+edgefs:
+  version: 1.3.35
+  dataVolumeSize: 8Ti # This will allocate 8TB EBS per node (3 by default)
+
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:
   efsProvisioner:

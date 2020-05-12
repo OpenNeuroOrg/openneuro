@@ -17,13 +17,18 @@ freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widge
 googleTrackingId: UA-100754266-1
 
 # AWS TLS Certificate ARN
-certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/6883342b-63ac-4466-b3f8-d9a8dd80bfaa"
+certifcateArn: 'arn:aws:acm:us-east-1:488777458602:certificate/6883342b-63ac-4466-b3f8-d9a8dd80bfaa'
 
 # Dataset worker parallelism
 dataladWorkers: 4
 
 # Content container tag
 contentTag: v1.0.1
+
+# EdgeFS configuration
+edgefs:
+  version: 1.3.35
+  dataVolumeSize: 1Ti # This will allocate 1TB EBS per node (3 by default)
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:
@@ -47,16 +52,16 @@ redis:
     disableCommands: []
     resources:
       limits:
-        cpu: "500m"
-        memory: "3Gi"
+        cpu: '500m'
+        memory: '3Gi'
       requests:
-        cpu: "250m"
-        memory: "1.5Gi"
+        cpu: '250m'
+        memory: '1.5Gi'
   slave:
     resources:
       limits:
-        cpu: "250m"
-        memory: "3Gi"
+        cpu: '250m'
+        memory: '3Gi'
       requests:
-        cpu: "125m"
-        memory: "1.5Gi"
+        cpu: '125m'
+        memory: '1.5Gi'

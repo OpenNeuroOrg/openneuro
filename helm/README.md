@@ -14,6 +14,7 @@ Written for Helm 3.0.0 or later
 - DataLad service deployment - Falcon server for microservice operations on datasets
 - Dataset worker - Celery workers responsible for read and write operations on datasets
 - Web deployment - static resources including the React application (openneuro-app npm package)
+- Rook and EdgeFS namespace - a Rook deployment of EdgeFS providing storage services to dataset workers
 
 ## Pre-requisites
 
@@ -30,6 +31,14 @@ eksctl create cluster --name=my-cluster-name --nodes=3 --instance-type=m5a.large
 ```
 
 This should configure the cluster and setup credentials and command context for later kubectl and helm commadns. If you encounter errors here, your user likely lacks access to manage EC2, EKS, or CloudFormation resources on the AWS account.
+
+### (Optional) Deploy storage node group
+
+```bash
+eksctl create nodegroup --cluster=my-cluster-name --name=edgefs-target --nodes=3 --instance-type=i3en.large
+```
+
+This will provide a node group that runs only Rook and dataset workers. All other services will run on the default node group. i3en.large instances are recommended for NVME metadata and bcache to improve git operations. If this is not configured, the default node group will run the Rook and the workers.
 
 ### Setup and access Kubernetes dashboard
 
