@@ -1,5 +1,6 @@
 ---
 name: GraphQL API
+route: api
 ---
 
 # API Examples
@@ -22,7 +23,7 @@ OpenNeuro has several top level types with many fields available to query. Most 
 
 For a specific dataset you can query fields available for the draft or snapshots programmically.
 
-```GraphQL
+```graphql
 query {
   dataset(id: "ds000224") {
     id
@@ -33,7 +34,7 @@ query {
 
 Result:
 
-```JSON
+```json
 {
   "data": {
     "dataset": {
@@ -48,7 +49,7 @@ Root level fields for datasets are either top level metadata (does not belong to
 
 To obtain this information from a particular snapshot, snapshots can be queried in several ways. This example gets the DatasetDOI field from dataset_description.json as of the 1.0.1 snapshot.
 
-```GraphQL
+```graphql
 query {
   snapshot(datasetId: "ds000224", tag: "1.0.1") {
     id
@@ -61,7 +62,7 @@ query {
 }
 ```
 
-```JSON
+```json
 {
   "data": {
     "snapshot": {
