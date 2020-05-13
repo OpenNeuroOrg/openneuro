@@ -9,3 +9,4 @@ coverage
 datalad-key
 content
 packages/openneuro-server/yarn.lock
+.docz

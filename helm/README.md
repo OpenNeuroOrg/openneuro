@@ -1,3 +1,7 @@
+---
+name: Kubernetes Deployment
+---
+
 # OpenNeuro Kubernetes Deployment
 
 This chart is used to deploy a copy of OpenNeuro and all required services except for MongoDB.
@@ -6,10 +10,10 @@ Written for Helm 3.0.0 or later
 
 ## Major components
 
-* API deployment - GraphQL service (openneuro-server npm package)
-* DataLad service deployment - Falcon server for microservice operations on datasets
-* Dataset worker - Celery workers responsible for read and write operations on datasets
-* Web deployment - static resources including the React application (openneuro-app npm package)
+- API deployment - GraphQL service (openneuro-server npm package)
+- DataLad service deployment - Falcon server for microservice operations on datasets
+- Dataset worker - Celery workers responsible for read and write operations on datasets
+- Web deployment - static resources including the React application (openneuro-app npm package)
 
 ## Pre-requisites
 
@@ -47,7 +51,7 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 
 ### Configuration
 
-This chart is AWS specific at the moment, as OpenNeuro requires EFS and ALB resources to run. Pull requests welcome if you add support for other hosting environments. 
+This chart is AWS specific at the moment, as OpenNeuro requires EFS and ALB resources to run. Pull requests welcome if you add support for other hosting environments.
 
 To get started create a `values.yaml` and `secrets.yaml` file. In values.yaml you will override any chart settings necessary for your target environment. For a minimal dev environment it may look like this:
 
@@ -55,13 +59,13 @@ To get started create a `values.yaml` and `secrets.yaml` file. In values.yaml yo
 hostname: my.dev.site.domain
 url: https://my.dev.site.domain
 environment: any-unique-string
-googleTrackingId: ""
+googleTrackingId: ''
 efs-provisioner:
   efsProvisioner:
     efsFileSystemId: fs-12345678
 ```
 
-Other values which can be overriden are found in the chart version of [values.yaml](charts/values.yaml). 
+Other values which can be overriden are found in the chart version of [values.yaml](charts/values.yaml).
 
 `secrets.yaml` contains any privileged configuration, like database connection strings or oauth secrets. Start with [secrets.yaml.example](secrets.yaml.example) and fill in each value. Most values are required, but you only need one authentication provider and mail, doi, and flower configuration is optional.
 
@@ -103,7 +107,7 @@ helm delete openneuro-my-dev
 
 A few key Kubernetes terms are important to understand to setup or modify the site deployment.
 
-### Workloads 
+### Workloads
 
 Containers run in groups called **Pods** and these share resources on one **Node**. Nodes are EC2 instances that are automatically managed by EKS and Kubernetes. A **Deployment** is a declarative state defining which pods should exist and how many. A **StatefulSet** is a special kind of Deployment where pods are created with incremental ids and state is maintained across restarts.
 
