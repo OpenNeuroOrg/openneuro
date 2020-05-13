@@ -1,4 +1,5 @@
 export default {
+  title: 'OpenNeuro Documentation',
   typescript: true,
-  ignore: ['*'],
+  menu: ['Introduction', 'GraphQL API', 'Command Line Interface'],
 }

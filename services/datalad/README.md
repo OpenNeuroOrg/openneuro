@@ -1,4 +1,10 @@
-This provides HTTP interfaces for creating, updating, and exporting DataLad datasets, used by [OpenNeuro](https://openneuro.org). Underlying Git / DataLad APIs do not allow for concurrent operations in many cases, to solve this each repo is assigned to an exclusive-read queue. Multiple clients accessing one repo requires a higher level API, such as the one implemented in OpenNeuro.
+---
+name: DataLad Service
+---
+
+# DataLad Service
+
+A backend component of OpenNeuro, this service provides HTTP interfaces for creating, updating, and exporting DataLad datasets, used by [OpenNeuro](https://openneuro.org). This allows the OpenNeuro API to queue backend tasks here and asynchronously respond to these signals to update clients.
 
 # Setup
 

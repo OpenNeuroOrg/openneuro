@@ -1,3 +1,7 @@
+---
+name: Introduction
+---
+
 # [OpenNeuro](https://openneuro.org)
 
 ![CircleCI Build Status](https://circleci.com/gh/OpenNeuroOrg/openneuro.png?circle-token=d1fa3abe9dd6db187f656da7e7063663a67a2b69&style=shield)

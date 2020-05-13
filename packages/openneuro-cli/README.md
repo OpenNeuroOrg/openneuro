@@ -1,3 +1,7 @@
+---
+name: Command Line Interface
+---
+
 # OpenNeuro command line interface
 
 This tool allows you to upload and download [OpenNeuro.org](https://openneuro.org) datasets without a browser.
@@ -52,4 +56,4 @@ Package: OpenNeuro CLI download option
 
 Issue: `TypeError: path must be a string or Buffer`
 
-Solution: This error is due to a failure to read the ~/.openneuro configuration file. This file can be created with the command ```openneuro login```. To download a dataset, users need to authenticate with an API key at that time. One can obtain an API key at https://openneuro.org/keygen
+Solution: This error is due to a failure to read the ~/.openneuro configuration file. This file can be created with the command `openneuro login`. To download a dataset, users need to authenticate with an API key at that time. One can obtain an API key at https://openneuro.org/keygen
