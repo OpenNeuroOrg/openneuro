@@ -87,6 +87,8 @@ mutation {
     datasetId: "ds000001"
     tag: "1.2.0"
     changes: ["Added new subject", "Subject metadata corrections"]
-  )
+  ) {
+    id
+  }
 }
 ```
