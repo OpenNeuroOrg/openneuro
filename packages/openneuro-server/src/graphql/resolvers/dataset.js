@@ -1,6 +1,7 @@
 import * as datalad from '../../datalad/dataset.js'
 import pubsub from '../pubsub.js'
 import mongo from '../../libs/mongo'
+import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
@@ -83,16 +84,21 @@ export const createDataset = (obj, args, { user, userInfo }) => {
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = (obj, { id }, { user, userInfo }) => {
-  return checkDatasetWrite(id, user, userInfo).then(() => {
-    return datalad.deleteDataset(id).then(deleted => {
-      pubsub.publish('datasetDeleted', {
-        datasetId: id,
-        datasetDeleted: id,
-      })
-      return deleted
-    })
+export const deleteDataset = async (obj, { id }, { user, userInfo }) => {
+  await checkDatasetWrite(id, user, userInfo)
+  const deleted = await datalad.deleteDataset(id)
+  // Remove from the current version of the Elastic index
+  try {
+    await removeDatasetSearchDocument(id)
+  } catch (err) {
+    // This likely means this dataset had not yet been indexed
+    console.error(err)
+  }
+  await pubsub.publish('datasetDeleted', {
+    datasetId: id,
+    datasetDeleted: id,
   })
+  return deleted
 }
 
 /**
