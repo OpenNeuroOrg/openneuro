@@ -45,16 +45,15 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
   try {
     // Open user selected directory
     const dirHandle = await window.chooseFileSystemEntries({
-      type: 'openDirectory',
+      type: 'open-directory',
     })
     for (const file of filesToDownload.files) {
       const fileHandle = await openFileTree(dirHandle, file.filename)
       // Skip files which are already complete
       if (fileHandle.size == file.size) continue
-      const writer = await fileHandle.createWriter()
-      const ff = await fetch(file.urls.pop())
-      await writer.write(0, await ff.arrayBuffer())
-      await writer.close()
+      const writable = await fileHandle.createWritable()
+      const { body } = await fetch(file.urls.pop())
+      await body.pipeTo(writable)
     }
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
