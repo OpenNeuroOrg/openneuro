@@ -30,8 +30,7 @@ services:
   app:
     extends:
       service: nodejs
-    working_dir: /srv/packages/openneuro-app
-    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && yarn start"
+    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && cd /srv/packages/openneuro-app && yarn start"
     volumes:
       - webpack_cache:/webpack-cache
     ports:
