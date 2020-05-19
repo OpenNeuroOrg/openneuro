@@ -53,7 +53,8 @@
       "!**/papaya.js",
       "!**/*.spec.js",
       "!**/node_modules/**",
-      "!**/vendor/**"
+      "!**/vendor/**",
+      "!.docz/**"
     ]
   },
   "dependencies": {

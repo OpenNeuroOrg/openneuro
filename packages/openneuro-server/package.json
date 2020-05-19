@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
-    "start": "node index.js",
+    "start": "node src/index.js",
     "test": "jest"
   },
   "repository": {
