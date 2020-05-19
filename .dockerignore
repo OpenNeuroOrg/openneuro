@@ -1,2 +1,6 @@
-./coverage
-./node_modules
+coverage
+packages/*/node_modules
+node_modules
+scripts
+helm
+nginx

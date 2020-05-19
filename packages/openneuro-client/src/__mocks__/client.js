@@ -2,8 +2,8 @@ import { ApolloClient } from 'apollo-client'
 import { SchemaLink } from 'apollo-link-schema'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { addMockFunctionsToSchema, makeExecutableSchema } from 'graphql-tools'
-import { typeDefs } from 'openneuro-server/graphql/schema'
-import resolvers from 'openneuro-server/graphql/resolvers/index.js'
+import { typeDefs } from 'openneuro-server/src/graphql/schema'
+import resolvers from 'openneuro-server/src/graphql/resolvers/index.js'
 
 /**
  * Generate sequential dataset ids for tests

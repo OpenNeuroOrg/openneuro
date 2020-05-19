@@ -5,33 +5,25 @@ version: '2.3'
 volumes:
   project:
   yarn_cache:
-  node_modules:
   webpack_cache:
 
 services:
   # This dummy service provides shared configuration for all Node deps
   nodejs:
-    image: node:12
+    build: .
+    image: nodejs-image
     env_file: ./config.env
     working_dir: /srv
     volumes:
-      - .:/srv
-      - yarn_cache:/root/.cache
-      - node_modules:/srv/node_modules
+      - yarn_cache:/usr/local/share/.cache
       - project:/srv/packages/openneuro-app/dist
-    tmpfs:
-      - /srv/packages/openneuro-app/node_modules:exec
-      - /srv/packages/openneuro-client/node_modules:exec
-      - /srv/packages/openneuro-cli/node_modules:exec
-      - /srv/packages/openneuro-server/node_modules:exec
-      - /srv/packages/openneuro-indexer/node_modules:exec
 
   # web app bundle build
   app:
     extends:
       service: nodejs
     working_dir: /srv/packages/openneuro-app
-    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && yarn start"
+    command: yarn start
     volumes:
       - webpack_cache:/webpack-cache
     ports:
@@ -41,7 +33,8 @@ services:
   server:
     extends:
       service: nodejs
-    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && cd /srv/packages/openneuro-server && node index.js"
+    working_dir: /srv/packages/openneuro-server
+    command: node src/index.js
     depends_on:
       - redis
       - mongo
@@ -52,7 +45,7 @@ services:
   indexer:
     extends:
       service: nodejs
-    command: sh -c "yarn install --mutex file:/srv/node_modules/.yarn-mutex && yarn ts-node /srv/packages/openneuro-indexer/src/index.ts"
+    command: yarn ts-node /srv/packages/openneuro-indexer/src/index.ts
     depends_on:
       - server
       - elasticsearch
