@@ -99,7 +99,7 @@ const SearchResultsQuery = (): React.SFC => {
       variables: {
         q: query,
       },
-      errorPolicy: 'all',
+      errorPolicy: 'ignore',
     }),
   )
 }
