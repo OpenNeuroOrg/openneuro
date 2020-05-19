@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint libs/ handlers/ tests/",
+    "lint": "eslint src",
     "start": "node src/index.js",
     "test": "jest"
   },
