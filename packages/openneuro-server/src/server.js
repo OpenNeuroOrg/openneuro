@@ -7,7 +7,7 @@ import { connect as redisConnect } from './libs/redis'
 import notifications from './libs/notifications'
 import config from './config'
 import createApp from './app'
-import packageJson from './package.json'
+import packageJson from '../package.json'
 
 const redisConnectionSetup = async () => {
   try {
