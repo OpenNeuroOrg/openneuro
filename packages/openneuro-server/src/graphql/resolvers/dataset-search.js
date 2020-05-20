@@ -4,6 +4,15 @@ import { dataset } from './dataset'
 const elasticIndex = 'datasets'
 
 /**
+ * Remove a dataset from the index, used when deleting datasets to clean up
+ * unreachable index entries
+ * @param {string} id Dataset accession number id
+ * @returns {Promise}
+ */
+export const removeDatasetSearchDocument = id =>
+  elasticClient.delete({ id, index: elasticIndex })
+
+/**
  * Accepts an array of fields representing the sort order for the search
  * @param {Array<*>} sort
  * @returns {string}
