@@ -1,3 +1,4 @@
+import hashlib
 import os
 from functools import wraps
 
@@ -18,7 +19,7 @@ def dataset_queue(dataset):
 
 def dataset_hash(key):
     """Return which worker for a given task."""
-    return hash(key) % DATALAD_WORKERS
+    return (int(hashlib.sha256(key.encode('utf-8')).hexdigest(), 16) + 3) % DATALAD_WORKERS
 
 
 def dataset_task(func):
