@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rook-edgefs
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rook-edgefs-system

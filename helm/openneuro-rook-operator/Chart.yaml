@@ -1,0 +1,7 @@
+apiVersion: v1
+name: openneuro
+version: 0.1.0
+description: OpenNeuro Rook EdgeFS operator
+home: https://openneuro.org
+sources:
+  - https://github.com/openneuroorg/openneuro

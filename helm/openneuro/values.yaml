@@ -25,10 +25,16 @@ dataladWorkers: 4
 # Content container tag
 contentTag: v1.0.1
 
+# Rook operator configuration
+openneuro-rook-operator:
+  edgefs:
+    version: v1.3.3
+
 # EdgeFS configuration
-edgefs:
-  version: 1.3.35
-  dataVolumeSize: 1Ti # This will allocate 1TB EBS per node (3 by default)
+openneuro-rook-edgefs:
+  edgefs:
+    version: 1.3.35
+    dataVolumeSize: 1Ti # This will allocate 1TB EBS per node (3 by default)
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:
