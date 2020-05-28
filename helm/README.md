@@ -6,7 +6,7 @@ name: Kubernetes Deployment
 
 This chart is used to deploy a copy of OpenNeuro and all required services except for MongoDB.
 
-Written for Helm 3.0.0 or later
+Written for Helm 3.2.0 or later
 
 ## Major components
 
@@ -39,6 +39,22 @@ eksctl create nodegroup --cluster=my-cluster-name --name=edgefs-target --nodes=3
 ```
 
 This will provide a node group that runs only Rook and dataset workers. All other services will run on the default node group. i3en.large instances are recommended for NVME metadata and bcache to improve git operations. If this is not configured, the default node group will run the Rook and the workers.
+
+### Deploy storage charts
+
+Rook and EdgeFS are used for file operations on datasets. A Rook operator must be deployed in the `rook-edgefs-system` namespace to provide storage for datasets. This storage should have good performance when working with git repositories and guarantee immediate consistency for the storage client making writes to prevent git-annex data corruption.
+
+```
+helm install --create-namespace --namespace rook-edgefs-system openneuro-staging-rook-edgefs openneuro-rook-operator/
+```
+
+Once the operator is running, an EdgefS cluster should be deployed.
+
+```
+helm install --create-namespace --namespace rook-edgefs openneuro-staging-rook-edgefs openneuro-rook-edgefs/
+```
+
+All disks attached to edgefs-target nodegroups will be used by EdgeFS to store blocks. OpenNeuro consumes these with the NFS and S3 interfaces.
 
 ### Setup and access Kubernetes dashboard
 
