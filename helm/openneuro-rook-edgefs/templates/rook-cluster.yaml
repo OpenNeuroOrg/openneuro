@@ -41,7 +41,6 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: rook-edgefs-cluster
-  namespace: rook-edgefs
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -55,6 +54,7 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: privileged
+  namespace: default
 spec:
   fsGroup:
     rule: RunAsAny

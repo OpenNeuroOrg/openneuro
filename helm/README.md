@@ -6,7 +6,7 @@ name: Kubernetes Deployment
 
 This chart is used to deploy a copy of OpenNeuro and all required services except for MongoDB.
 
-Written for Helm 3.2.0 or later
+Written for Helm 3.2.0 and eksctl 0.20.0
 
 ## Major components
 
