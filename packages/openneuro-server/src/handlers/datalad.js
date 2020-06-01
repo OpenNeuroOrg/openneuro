@@ -4,6 +4,7 @@ import mime from 'mime-types'
 import { getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
 import { decodeFilePath, getFiles } from '../datalad/files.js'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 /**
  * Handlers for datalad dataset manipulation
@@ -13,8 +14,6 @@ import { decodeFilePath, getFiles } from '../datalad/files.js'
  *
  * Unlike the other handlers, these use superagent for performance reasons
  */
-
-const URI = config.datalad.uri
 
 /**
  * Get a file from a dataset
@@ -40,6 +39,8 @@ export const getFile = async (req, res) => {
   })
   const filepath = file ? file.key : null
   res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
-  const uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
+  const uri = `${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/objects/${filepath}`
   return request.get(uri).pipe(res)
 }

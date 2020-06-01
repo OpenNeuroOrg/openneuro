@@ -11,9 +11,9 @@ import url from 'url'
 import bidsId from './bidsId'
 import { convertFromRaw, EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 const c = mongo.collections
-const URI = config.datalad.uri
 
 function noop() {
   // No callback helper
@@ -116,6 +116,7 @@ const notifications = {
     const datasetDescriptionId = datasetDescription
       ? datasetDescription.id
       : null
+    const URI = getDatasetWorker(datasetId)
     const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/objects/${datasetDescriptionId}`
 
     const changesFile = files.find(file => file.filename == 'CHANGES')

@@ -1,7 +1,7 @@
 import mockingoose from 'mockingoose'
 import request from 'superagent'
 import { createDataset, datasetsFilter, testBlacklist } from '../dataset.js'
-import config from '../../config.js'
+import { getDatasetWorker } from '../../libs/datalad-service'
 
 // Mock requests to Datalad service
 jest.mock('superagent')
@@ -26,10 +26,10 @@ describe('dataset model operations', () => {
     it('posts to the DataLad /datasets/{dsId} endpoint', async done => {
       // Reset call count for request.post
       request.post.mockClear()
-      await createDataset()
+      const { id: dsId } = await createDataset()
       expect(request.post).toHaveBeenCalledTimes(1)
       expect(request.post).toHaveBeenCalledWith(
-        expect.stringContaining(`${config.datalad.uri}/datasets/`),
+        expect.stringContaining(`${getDatasetWorker(dsId)}/datasets/`),
       )
       done()
     })

@@ -21,8 +21,9 @@ import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
 import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
+import { getDatasetWorker } from '../libs/datalad-service'
+
 const c = mongo.collections
-const uri = config.datalad.uri
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: 'admin' })
@@ -45,7 +46,7 @@ export const createDataset = async (uploader, userInfo) => {
   try {
     const ds = new Dataset({ id: datasetId, uploader })
     const req = await request
-      .post(`${uri}/datasets/${datasetId}`)
+      .post(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
       .set('Accept', 'application/json')
       .set('Cookie', generateDataladCookie(config)(userInfo))
     // Record and initial revision (usually empty but could be a DataLad upload)
@@ -76,7 +77,7 @@ export const getDataset = id => {
  */
 export const deleteDataset = id =>
   request
-    .del(`${uri}/datasets/${id}`)
+    .del(`${getDatasetWorker(id)}/datasets/${id}`)
     .then(() => Dataset.deleteOne({ id }).exec())
     .then(() => true)
 
@@ -354,7 +355,7 @@ export const addFileString = (datasetId, filename, mimetype, content) =>
  */
 export const commitFiles = (datasetId, user) => {
   let gitRef
-  const url = `${uri}/datasets/${datasetId}/draft`
+  const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/draft`
   return request
     .post(url)
     .set('Cookie', generateDataladCookie(config)(user))

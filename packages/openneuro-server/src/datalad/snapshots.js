@@ -16,9 +16,9 @@ import notifications from '../libs/notifications'
 import Snapshot from '../models/snapshot.js'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 const c = mongo.collections
-const uri = config.datalad.uri
 
 /**
  * Snapshot contents key
@@ -143,7 +143,7 @@ const getSnapshotFiles = async (datasetId, sKey, snapshot) => {
  * @param {string} datasetId Dataset accession number
  */
 export const getSnapshots = datasetId => {
-  const url = `${uri}/datasets/${datasetId}/snapshots`
+  const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
   const key = snapshotIndexKey(datasetId)
   return redis.get(key).then(data => {
     if (data) return JSON.parse(data)
@@ -196,7 +196,9 @@ export const createSnapshot = async (
   try {
     await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
 
-    const createSnapshotUrl = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+    const createSnapshotUrl = `${getDatasetWorker(
+      datasetId,
+    )}/datasets/${datasetId}/snapshots/${tag}`
     const snapshot = await postSnapshot(
       user,
       createSnapshotUrl,
@@ -237,7 +239,9 @@ export const createSnapshot = async (
 // TODO - deleteSnapshot
 // It should delete the index redis key
 export const deleteSnapshot = (datasetId, tag) => {
-  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  const url = `${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
 
@@ -264,7 +268,9 @@ export const deleteSnapshot = (datasetId, tag) => {
  * @param {string} tag Tag name to retrieve
  */
 export const getSnapshot = (datasetId, tag) => {
-  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  const url = `${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/snapshots/${tag}`
   const key = snapshotKey(datasetId, tag)
   // Track a view for each snapshot query
   trackAnalytics(datasetId, tag, 'views')
