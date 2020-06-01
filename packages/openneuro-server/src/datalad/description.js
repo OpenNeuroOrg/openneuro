@@ -1,6 +1,7 @@
 /**
  * Get description data from backend
  */
+import config from '../config'
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { commitFiles } from './dataset.js'

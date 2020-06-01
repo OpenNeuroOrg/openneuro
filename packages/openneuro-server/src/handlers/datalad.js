@@ -1,4 +1,3 @@
-import config from '../config'
 import request from 'superagent'
 import mime from 'mime-types'
 import { getDatasetRevision } from '../datalad/draft'
