@@ -31,7 +31,7 @@ describe('snapshot model operations', () => {
     })
     it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {
       const tag = 'snapshot'
-      const dsId = await createDataset()
+      const { id: dsId } = await createDataset()
       // Reset call count for request.post
       request.post.mockClear()
       request.__setMockResponse({ body: {} })
