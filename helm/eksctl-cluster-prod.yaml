@@ -1,0 +1,13 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: openneuro-prod
+  region: us-east-1
+
+nodeGroups:
+  - name: general
+    instanceType: m5ad.xlarge
+    desiredCapacity: 4
+    ssh:
+      allow: true
