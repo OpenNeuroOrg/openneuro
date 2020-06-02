@@ -156,7 +156,7 @@ jobs:
       # Install codecov and pipenv
       - run:
           name: Install pipenv
-          command: pip install --user pipenv
+          command: pip install --user 'pipenv==2018.11.26'
           working_directory: ~/project/services/datalad
 
       # create venv and install dependencies
