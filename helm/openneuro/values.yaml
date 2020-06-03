@@ -32,6 +32,7 @@ efs-provisioner:
     efsFileSystemId: fs-acb10b4f
     path: /pv
     storageClass:
+      name: efs
       reclaimPolicy: Retain
 
 # Load balancer / ingress config
