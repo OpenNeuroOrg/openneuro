@@ -1,10 +1,12 @@
-import config from '../config.js'
 import fetch from 'node-fetch'
 import { addFileString, commitFiles } from './dataset.js'
 import { redis } from '../libs/redis.js'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 export const readmeUrl = (datasetId, revision) => {
-  return `http://${config.datalad.uri}/datasets/${datasetId}/snapshots/${revision}/files/README`
+  return `http://${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/snapshots/${revision}/files/README`
 }
 
 export const readmeKey = (datasetId, revision) =>

@@ -1,20 +1,19 @@
 /**
  * Get description data from backend
  */
+import config from '../config'
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { commitFiles } from './dataset.js'
-import config from '../config.js'
 import { objectUrl, getFiles } from './files.js'
 import { getSnapshotHexsha } from './snapshots.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',
   BIDSVersion: '1.1.1',
 }
-
-const uri = config.datalad.uri
 
 /**
  * Find dataset_description.json id and fetch description object
@@ -126,7 +125,7 @@ export const description = (obj, { datasetId, revision, tag }) => {
 }
 
 export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
-  const url = `${uri}/datasets/${datasetId}/description`
+  const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/description`
   return request
     .post(url)
     .send({ description_fields: descriptionFieldUpdates }) // eslint-disable-line @typescript-eslint/camelcase

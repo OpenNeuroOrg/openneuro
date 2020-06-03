@@ -1,7 +1,7 @@
-import config from '../config.js'
 import fetch from 'node-fetch'
 import format from 'date-fns/format'
 import { addFileString, commitFiles } from './dataset.js'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 /**
  * Matches a CPAN changelog version line
@@ -71,7 +71,9 @@ export const spliceChangelog = (changelog, tag, date, changes) => {
  * @param {string} revision Git name for the requested ref
  */
 export const changesUrl = (datasetId, revision) => {
-  return `http://${config.datalad.uri}/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
+  return `http://${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
 }
 
 /**

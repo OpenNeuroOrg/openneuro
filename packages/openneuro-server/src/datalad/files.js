@@ -1,7 +1,7 @@
 import request from 'superagent'
-import config from '../config.js'
 import { addFileUrl } from './utils.js'
 import { redis } from '../libs/redis.js'
+import { getDatasetWorker } from '../libs/datalad-service'
 
 /**
  * Hexsha files cache
@@ -44,7 +44,9 @@ export const getFileName = (path, filename) => {
  */
 export const fileUrl = (datasetId, path, filename) => {
   const fileName = getFileName(path, filename)
-  const url = `http://${config.datalad.uri}/datasets/${datasetId}/files/${fileName}`
+  const url = `http://${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/files/${fileName}`
   return url
 }
 
@@ -55,7 +57,9 @@ export const fileUrl = (datasetId, path, filename) => {
  */
 export const pathUrl = (datasetId, path) => {
   const fileName = encodeFilePath(path)
-  const url = `http://${config.datalad.uri}/datasets/${datasetId}/files/${fileName}`
+  const url = `http://${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/files/${fileName}`
   return url
 }
 
@@ -65,7 +69,9 @@ export const pathUrl = (datasetId, path) => {
  * @param {string} objectId - Git object id, a sha1 hash for git objects or key for annexed files
  */
 export const objectUrl = (datasetId, objectId) => {
-  return `http://${config.datalad.uri}/datasets/${datasetId}/objects/${objectId}`
+  return `http://${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/objects/${objectId}`
 }
 
 /**
@@ -81,7 +87,9 @@ export const getFiles = (datasetId, hexsha) => {
     else
       return request
         .get(
-          `${config.datalad.uri}/datasets/${datasetId}/snapshots/${hexsha}/files`,
+          `${getDatasetWorker(
+            datasetId,
+          )}/datasets/${datasetId}/snapshots/${hexsha}/files`,
         )
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {

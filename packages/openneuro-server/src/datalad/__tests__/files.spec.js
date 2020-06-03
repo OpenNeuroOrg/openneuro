@@ -59,12 +59,12 @@ describe('datalad files', () => {
   describe('fileUrl()', () => {
     it('returns a working URL', () => {
       expect(fileUrl('ds000001', '', filename)).toBe(
-        'http://datalad:9877/datasets/ds000001/files/sub-01:anat:sub-01_T1w.nii.gz',
+        'http://datalad-0/datasets/ds000001/files/sub-01:anat:sub-01_T1w.nii.gz',
       )
     })
     it('handles path nesting', () => {
       expect(fileUrl('ds000001', 'sub-01/anat', 'sub-01_T1w.nii.gz')).toBe(
-        'http://datalad:9877/datasets/ds000001/files/sub-01:anat:sub-01_T1w.nii.gz',
+        'http://datalad-0/datasets/ds000001/files/sub-01:anat:sub-01_T1w.nii.gz',
       )
     })
   })
@@ -73,7 +73,7 @@ describe('datalad files', () => {
       expect(
         objectUrl('ds000001', '27c8552038d55201560e5501093d637b27e7fd4b'),
       ).toBe(
-        'http://datalad:9877/datasets/ds000001/objects/27c8552038d55201560e5501093d637b27e7fd4b',
+        'http://datalad-0/datasets/ds000001/objects/27c8552038d55201560e5501093d637b27e7fd4b',
       )
     })
   })

@@ -2,7 +2,7 @@ import mockingoose from 'mockingoose'
 import request from 'superagent'
 import { createDataset } from '../dataset.js'
 import { createSnapshot } from '../snapshots.js'
-import config from '../../config.js'
+import { getDatasetWorker } from '../../libs/datalad-service'
 
 // Mock requests to Datalad service
 jest.mock('superagent')
@@ -31,7 +31,7 @@ describe('snapshot model operations', () => {
     })
     it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {
       const tag = 'snapshot'
-      const dsId = await createDataset()
+      const { id: dsId } = await createDataset()
       // Reset call count for request.post
       request.post.mockClear()
       request.__setMockResponse({ body: {} })
@@ -39,7 +39,7 @@ describe('snapshot model operations', () => {
       expect(request.post).toHaveBeenCalledTimes(1)
       expect(request.post).toHaveBeenCalledWith(
         expect.stringContaining(
-          `${config.datalad.uri}/datasets/${dsId}/snapshots/${tag}`,
+          `${getDatasetWorker(dsId)}/datasets/${dsId}/snapshots/${tag}`,
         ),
       )
       done()

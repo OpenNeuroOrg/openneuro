@@ -53,6 +53,7 @@ const config = {
   },
   datalad: {
     uri: process.env.DATALAD_SERVICE_URI,
+    workers: process.env.DATALAD_WORKERS,
   },
   doi: {
     username: process.env.DOI_USERNAME,

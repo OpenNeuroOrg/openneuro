@@ -19,7 +19,7 @@ def dataset_queue(dataset):
 
 def dataset_hash(key):
     """Return which worker for a given task."""
-    return (int(hashlib.sha256(key.encode('utf-8')).hexdigest(), 16) + 3) % DATALAD_WORKERS
+    return (int(hashlib.sha1(key.encode('utf-8')).hexdigest()[32:40], 16)) % DATALAD_WORKERS
 
 
 def dataset_task(func):
