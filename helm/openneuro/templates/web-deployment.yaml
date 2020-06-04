@@ -25,7 +25,7 @@ spec:
           image: 'openneuro/app:v{{ .Chart.AppVersion }}'
           resources:
             limits:
-              cpu: ".5"
+              cpu: ".75"
               memory: "256Mi"
             requests:
               cpu: ".25"
