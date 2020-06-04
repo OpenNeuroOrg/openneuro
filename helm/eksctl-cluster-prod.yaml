@@ -11,3 +11,4 @@ nodeGroups:
     desiredCapacity: 4
     ssh:
       allow: true
+      publicKeyPath: ~/.ssh/openneuro-prod-nodegroup.pub
