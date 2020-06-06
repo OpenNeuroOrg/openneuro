@@ -16,10 +16,12 @@ nodeGroups:
       - apt install -y nfs-common zfsutils-linux
   - name: storage
     amiFamily: Ubuntu1804
-    instanceType: c5d.xlarge
+    instanceType: m5ad.xlarge
     desiredCapacity: 2
     ssh:
       allow: true
+    taints:
+      storage: "true:NoSchedule"
     preBootstrapCommands:
       - apt update
       - apt install -y nfs-common zfsutils-linux
