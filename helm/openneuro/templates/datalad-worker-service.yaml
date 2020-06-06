@@ -1,0 +1,14 @@
+{{- $relname := .Release.Name -}}
+{{- range until ( .Values.dataladWorkers | int ) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $relname }}-dataset-worker-{{ . }}
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: {{ $relname }}-dataset-worker-{{ . }}
+  ports:
+    - protocol: TCP
+      port: 80
+---
+{{- end }}

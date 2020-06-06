@@ -1,0 +1,17 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Release.Name }}-datasets
+parameters:
+  fstype: 'zfs'
+  poolname: 'zfspv-pool'
+  compression: 'lz4'
+  recordsize: '1024k'
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+provisioner: zfs.csi.openebs.io
+allowedTopologies:
+  - matchLabelExpressions:
+      - key: alpha.eksctl.io/nodegroup-name
+        values:
+          - storage

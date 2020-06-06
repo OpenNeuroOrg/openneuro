@@ -1,0 +1,14 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-pool-block
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+provisioner: kubernetes.io/aws-ebs
+allowedTopologies:
+  - matchLabelExpressions:
+      - key: alpha.eksctl.io/nodegroup-name
+        values:
+          - storage
