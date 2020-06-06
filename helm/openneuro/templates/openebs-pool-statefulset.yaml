@@ -20,17 +20,17 @@ spec:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
-            matchExpressions:
-              - key: "alpha.eksctl.io/nodegroup-name"
-                operator: In
-                values:
-                - storage
+              matchExpressions:
+                - key: "alpha.eksctl.io/nodegroup-name"
+                  operator: In
+                  values:
+                  - storage
             topologyKey: "kubernetes.io/hostname"
-      initContainers:
+      containers:
       - name: init-storage-pool
         image: alpine
         command:
-          - sleep 1
+          - sleep infinity
         volumeDevices:
           - name: storage-pool
             devicePath: /dev/pool
