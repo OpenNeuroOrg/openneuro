@@ -11,6 +11,7 @@ nodeGroups:
     desiredCapacity: 3
     ssh:
       allow: true
+      publicKeyPath: ~/.ssh/openneuro-prod-nodegroup.pub
     preBootstrapCommands:
       - apt update
       - apt install -y nfs-common zfsutils-linux
@@ -20,6 +21,7 @@ nodeGroups:
     desiredCapacity: 3
     ssh:
       allow: true
+      publicKeyPath: ~/.ssh/openneuro-prod-nodegroup.pub
     taints:
       storage: "true:NoSchedule"
     preBootstrapCommands:
