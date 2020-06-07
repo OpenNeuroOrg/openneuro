@@ -32,6 +32,16 @@ spec:
                   values:
                   - {{ $relname }}-storage-pool-{{ .name }}
             topologyKey: "kubernetes.io/hostname"
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: "app"
+                      operator: NotIn
+                      values:
+                      - {{ $relname }}-storage-pool-{{ .name }}
+                topologyKey: "kubernetes.io/hostname"
       containers:
       - name: init-storage-pool
         image: alpine
