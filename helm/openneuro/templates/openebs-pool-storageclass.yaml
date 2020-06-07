@@ -7,6 +7,7 @@ parameters:
 reclaimPolicy: Retain
 allowVolumeExpansion: true
 provisioner: kubernetes.io/aws-ebs
+volumeBindingMode: WaitForFirstConsumer
 allowedTopologies:
   - matchLabelExpressions:
       - key: alpha.eksctl.io/nodegroup-name

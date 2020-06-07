@@ -30,14 +30,14 @@ contentTag: v1.0.2
 # Size in bytes
 storagePools:
   # This is the size of the pool disks
-  stripeSize: 17179869184
+  stripeSize: 17592186044416
   pools:
     - name: a
-      size: 10737418240
+      size: 10995116277760
     - name: b
-      size: 10737418240
+      size: 10995116277760
     - name: c
-      size: 10737418240
+      size: 10995116277760
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:

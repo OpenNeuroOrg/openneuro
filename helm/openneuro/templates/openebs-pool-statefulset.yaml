@@ -16,21 +16,30 @@ spec:
       labels:
         app: {{ $relname }}-storage-pool-{{ .name }}
     spec:
+      tolerations:
+      - key: "storage"
+        operator: "Exists"
+        effect: "NoSchedule"
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: storage
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-                - key: "alpha.eksctl.io/nodegroup-name"
+                - key: "app"
                   operator: In
                   values:
-                  - storage
+                  - {{ $relname }}-storage-pool-{{ .name }}
             topologyKey: "kubernetes.io/hostname"
       containers:
       - name: init-storage-pool
         image: alpine
         command:
-          - sleep infinity
+          - /bin/sh
+        args:
+          - "-c"
+          - "sleep infinity"
         volumeDevices:
           - name: storage-pool
             devicePath: /dev/pool
@@ -40,7 +49,9 @@ spec:
       spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: "openebs-pool-block"
+        volumeMode: Block
         resources:
           requests:
             storage: {{ $stripesize }}
+---
 {{- end }}
