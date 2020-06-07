@@ -2,13 +2,19 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
   name: openneuro-prod
-  region: us-east-1
+  region: us-west-2
   version: "1.15"
 nodeGroups:
   - name: general
     amiFamily: Ubuntu1804
     instanceType: c5a.xlarge
-    desiredCapacity: 3
+    desiredCapacity: 2
+    iam:
+      withAddonPolicies:
+        ebs: true
+        efs: true
+        albIngress: true
+        certManager: true
     ssh:
       allow: true
       publicKeyPath: ~/.ssh/openneuro-prod-nodegroup.pub
@@ -18,7 +24,13 @@ nodeGroups:
   - name: storage
     amiFamily: Ubuntu1804
     instanceType: m5ad.xlarge
-    desiredCapacity: 3
+    desiredCapacity: 2
+    iam:
+      withAddonPolicies:
+        ebs: true
+        efs: true
+        albIngress: true
+        certManager: true
     ssh:
       allow: true
       publicKeyPath: ~/.ssh/openneuro-prod-nodegroup.pub

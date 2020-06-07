@@ -33,11 +33,9 @@ storagePools:
   stripeSize: 17592186044416
   pools:
     - name: a
-      size: 10995116277760
+      size: 16492674416640
     - name: b
-      size: 10995116277760
-    - name: c
-      size: 10995116277760
+      size: 16492674416640
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:

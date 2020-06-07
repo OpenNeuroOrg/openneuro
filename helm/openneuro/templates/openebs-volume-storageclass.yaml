@@ -6,7 +6,7 @@ parameters:
   fstype: 'zfs'
   poolname: 'zfspv-pool'
   compression: 'lz4'
-  recordsize: '1024k'
+  recordsize: '16k'
 reclaimPolicy: Retain
 allowVolumeExpansion: true
 provisioner: zfs.csi.openebs.io
