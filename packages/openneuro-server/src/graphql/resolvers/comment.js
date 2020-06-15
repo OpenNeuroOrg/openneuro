@@ -19,6 +19,23 @@ const replies = obj => {
 }
 
 /**
+ * Flattens an array of arrays
+ * @param {*[][]} arr
+ * @returns {*[]}
+ */
+const flatten = arr => [].concat(...arr)
+
+const allNestedReplies = async obj => {
+  const replies = await Comment.find({ parentId: obj._id }).exec()
+  if (!replies.length) {
+    return replies
+  } else {
+    let nestedReplies = await Promise.all(replies.map(allNestedReplies))
+    return flatten(nestedReplies)
+  }
+}
+
+/**
  * Insert new comment and return the comment _id for replies to reference
  */
 export const addComment = (
@@ -56,6 +73,23 @@ export const editComment = async (
   } else {
     return Promise.reject(new Error('You may only edit your own comments.'))
   }
+}
+
+export const deleteComment = async (
+  obj,
+  { commentId, deleteChildren = false },
+) => {
+  const existingComment = await Comment.findById(commentId).exec()
+  const targetComments = [existingComment]
+  if (deleteChildren) {
+    targetComments.concat(allNestedReplies(existingComment))
+  }
+  const deletedCommentIds = targetComments.map(c => c.id)
+  return Comment.deleteMany({
+    _id: {
+      $in: deletedCommentIds,
+    },
+  }).then(() => deletedCommentIds)
 }
 
 //"5c9bf7e3088cea6fa775c42a"

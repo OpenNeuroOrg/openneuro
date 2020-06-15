@@ -142,6 +142,8 @@ export const typeDefs = `
     addComment(datasetId: ID!, parentId: ID, comment: String!): ID
     # Edits an existing comment
     editComment(commentId: ID!, comment: String!): Boolean
+    # Deletes an existing comment (deleteChildren defaults to false). Returns the ids of all deleted comments.
+    deleteComment(commentId: ID!, deleteChildren: Boolean): [String]
     # Subscribes user to newsletter
     subscribeToNewsletter(email: String!): Boolean
     # Upserts dataset metadata
