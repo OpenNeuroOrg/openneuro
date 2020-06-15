@@ -25,6 +25,16 @@ const replies = obj => {
  */
 const flatten = arr => [].concat(...arr)
 
+/**
+ * @typedef {Object} Comment
+ * @property {string} _id
+ */
+
+/**
+ * returns a flat array of all the dependencies of the given comment
+ * @param {Comment} obj
+ * @returns {Promise<Comment[]>}
+ */
 const allNestedReplies = async obj => {
   const replies = await Comment.find({ parentId: obj._id }).exec()
   if (!replies.length) {
@@ -82,9 +92,10 @@ export const deleteComment = async (
   const existingComment = await Comment.findById(commentId).exec()
   const targetComments = [existingComment]
   if (deleteChildren) {
-    targetComments.concat(allNestedReplies(existingComment))
+    targetComments.concat(await allNestedReplies(existingComment))
   }
-  const deletedCommentIds = targetComments.map(c => c.id)
+  console.log(targetComments)
+  const deletedCommentIds = targetComments.map(c => c._id)
   return Comment.deleteMany({
     _id: {
       $in: deletedCommentIds,
