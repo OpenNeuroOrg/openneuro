@@ -48,7 +48,7 @@ efs-provisioner:
 
 # Load balancer / ingress config
 aws-alb-ingress-controller:
-  awsRegion: us-east-1
+  awsRegion: us-west-2
   autoDiscoverAwsVpcID: true
   clusterName: openneuro-prod
 
