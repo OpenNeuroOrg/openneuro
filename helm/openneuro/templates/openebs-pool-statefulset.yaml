@@ -6,7 +6,7 @@ kind: StatefulSet
 metadata:
   name: {{ $relname }}-storage-pool-{{ .name }}
 spec:
-  replicas: {{ ceil (div (int .size) $stripesize)  }}
+  replicas: {{ ceil (div $stripesize (int .size))  }}
   selector:
     matchLabels:
       app: {{ $relname }}-storage-pool-{{ .name }}
@@ -34,7 +34,8 @@ spec:
             topologyKey: "kubernetes.io/hostname"
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
+            - weight: 100
+              podAffinityTerm:
                 labelSelector:
                   matchExpressions:
                     - key: "app"

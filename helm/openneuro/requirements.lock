@@ -2,11 +2,8 @@ dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 10.6.17
-- name: efs-provisioner
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 0.11.1
 - name: aws-alb-ingress-controller
   repository: https://kubernetes-charts-incubator.storage.googleapis.com/
   version: 1.0.0
-digest: sha256:3ab7809ee83e0dc58779d9edd1605144bc8cd292f85b2992e75e425491117244
-generated: "2020-06-01T19:40:21.004685521-07:00"
+digest: sha256:c3573f9eacafef670c523bee58a686aa3455205d007534e1cd4ce13c0d00999b
+generated: "2020-06-06T21:24:16.481015609-07:00"
