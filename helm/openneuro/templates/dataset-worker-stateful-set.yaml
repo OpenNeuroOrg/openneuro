@@ -6,8 +6,18 @@ spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}-dataset-worker # has to match .spec.template.metadata.labels
-  serviceName: "dataset-worker"
+  serviceName: {{ .Release.Name }}-dataset-worker
   replicas: {{ .Values.dataladWorkers }}
+  volumeClaimTemplates:
+    - metadata:
+        name: datasets-ebs
+      spec:
+        storageClassName: {{ .Release.Name }}-datasets
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Pi
   template:
     metadata:
       labels:
@@ -16,6 +26,10 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
+      tolerations:
+      - key: "storage"
+        operator: "Exists"
+        effect: "NoSchedule"
       volumes:
       - name: datasets
         persistentVolumeClaim:
@@ -30,13 +44,14 @@ spec:
       containers:
       - name: {{ .Release.Name }}-datalad-service
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
           limits:
             cpu: "1"
-            memory: "3Gi"
+            memory: "2Gi"
           requests:
             cpu: "0.2"
-            memory: "1Gi"
+            memory: "512Mi"
         ports:
         - containerPort: 80
         envFrom:
@@ -47,6 +62,8 @@ spec:
         volumeMounts:
         - name: datasets
           mountPath: /datalad
+        - name: datasets-ebs
+          mountPath: /datasets
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 30
@@ -61,7 +78,7 @@ spec:
             memory: "2Gi"
           requests:
             cpu: "0.5"
-            memory: "768Mi"
+            memory: "512Mi"
         command:
           - /dataset-worker
         envFrom:
@@ -72,6 +89,8 @@ spec:
         volumeMounts:
         - name: datasets
           mountPath: /datalad
+        - name: datasets-ebs
+          mountPath: /datasets
         - name: ssh-key
           mountPath: /datalad-key
           subPath: datalad-key

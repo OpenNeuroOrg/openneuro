@@ -25,6 +25,18 @@ dataladWorkers: 4
 # Content container tag
 contentTag: v1.0.2
 
+# Configure storage node EBS volumes
+# Workers are evenly distributed across available pools
+# Size in bytes
+storagePools:
+  # This is the size of the pool disks
+  stripeSize: 2147483648
+  pools:
+    - name: a
+      size: 4294967296
+    - name: b
+      size: 4294967296
+
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:
   efsProvisioner:

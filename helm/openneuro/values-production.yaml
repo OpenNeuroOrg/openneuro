@@ -17,13 +17,25 @@ freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widge
 googleTrackingId: UA-100754266-2
 
 # AWS TLS Certificate ARN
-certifcateArn: 'arn:aws:acm:us-east-1:488777458602:certificate/7a4fa0e4-aee0-481b-82ee-dbde4c10c227'
+certifcateArn: "arn:aws:acm:us-east-1:488777458602:certificate/7a4fa0e4-aee0-481b-82ee-dbde4c10c227"
 
 # Dataset worker parallelism
 dataladWorkers: 4
 
 # Content container tag
 contentTag: v1.0.2
+
+# Configure storage node EBS volumes
+# Workers are evenly distributed across available pools
+# Size in bytes
+storagePools:
+  # This is the size of the pool disks
+  stripeSize: 17592186044416
+  pools:
+    - name: a
+      size: 16492674416640
+    - name: b
+      size: 16492674416640
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:

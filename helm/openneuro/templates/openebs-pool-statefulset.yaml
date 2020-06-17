@@ -1,0 +1,67 @@
+{{- $relname := .Release.Name -}}
+{{- $stripesize := int .Values.storagePools.stripeSize }}
+{{- range .Values.storagePools.pools }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $relname }}-storage-pool-{{ .name }}
+spec:
+  replicas: {{ ceil (div (int .size) $stripesize)  }}
+  selector:
+    matchLabels:
+      app: {{ $relname }}-storage-pool-{{ .name }}
+  serviceName: {{ $relname }}-storage-pool-{{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $relname }}-storage-pool-{{ .name }}
+    spec:
+      tolerations:
+      - key: "storage"
+        operator: "Exists"
+        effect: "NoSchedule"
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: storage
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: "app"
+                  operator: In
+                  values:
+                  - {{ $relname }}-storage-pool-{{ .name }}
+            topologyKey: "kubernetes.io/hostname"
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: "app"
+                      operator: NotIn
+                      values:
+                      - {{ $relname }}-storage-pool-{{ .name }}
+                topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: init-storage-pool
+        image: alpine
+        command:
+          - /bin/sh
+        args:
+          - "-c"
+          - "sleep infinity"
+        volumeDevices:
+          - name: storage-pool
+            devicePath: /dev/pool
+  volumeClaimTemplates:
+    - metadata:
+        name: storage-pool
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "openebs-pool-block"
+        volumeMode: Block
+        resources:
+          requests:
+            storage: {{ $stripesize }}
+---
+{{- end }}

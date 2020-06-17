@@ -1,13 +1,27 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-
 metadata:
   name: openneuro-staging
   region: us-east-1
-
+  version: "1.15"
 nodeGroups:
   - name: general
-    instanceType: m5ad.large
-    desiredCapacity: 3
+    amiFamily: Ubuntu1804
+    instanceType: c5a.xlarge
+    desiredCapacity: 2
     ssh:
       allow: true
+    preBootstrapCommands:
+      - apt update
+      - apt install -y nfs-common zfsutils-linux
+  - name: storage
+    amiFamily: Ubuntu1804
+    instanceType: m5ad.xlarge
+    desiredCapacity: 2
+    ssh:
+      allow: true
+    taints:
+      storage: "true:NoSchedule"
+    preBootstrapCommands:
+      - apt update
+      - apt install -y nfs-common zfsutils-linux
