@@ -71,32 +71,39 @@ export default {
       async.each(
         Object.keys(this.dbs),
         (dbName, cb) => {
-          MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-            if (err) {
-              console.log(err)
-              reject(err)
-              process.exit()
-            } else {
-              this.client = client
-              this.dbs[dbName] = client.db(dbName)
-              for (const collectionName in this.collections[dbName]) {
-                if (this.collections[dbName][collectionName] === null) {
-                  this.collections[dbName][collectionName] = this.dbs[
-                    dbName
-                  ].collection(collectionName)
-                  if (
-                    this.indexes[dbName] &&
-                    this.indexes[dbName][collectionName]
-                  ) {
-                    this.collections[dbName][collectionName].createIndex(
-                      this.indexes[dbName][collectionName],
-                    )
+          MongoClient.connect(
+            url,
+            {
+              useNewUrlParser: true,
+              connectTimeoutMS: 1000 * 60 * 2,
+            },
+            (err, client) => {
+              if (err) {
+                console.log(err)
+                reject(err)
+                process.exit()
+              } else {
+                this.client = client
+                this.dbs[dbName] = client.db(dbName)
+                for (const collectionName in this.collections[dbName]) {
+                  if (this.collections[dbName][collectionName] === null) {
+                    this.collections[dbName][collectionName] = this.dbs[
+                      dbName
+                    ].collection(collectionName)
+                    if (
+                      this.indexes[dbName] &&
+                      this.indexes[dbName][collectionName]
+                    ) {
+                      this.collections[dbName][collectionName].createIndex(
+                        this.indexes[dbName][collectionName],
+                      )
+                    }
                   }
                 }
               }
-            }
-            cb()
-          })
+              cb()
+            },
+          )
         },
         () => {
           if (callback && typeof callback === 'function') {

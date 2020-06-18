@@ -33,8 +33,19 @@ const app = createApp(false)
 mongoose.connect(config.mongo.url, {
   useNewUrlParser: true,
   dbName: config.mongo.dbName,
+  connectTimeoutMS: 1000 * 60 * 2,
 })
-
+// start server w/o MongoClient connect
+// redisConnectionSetup()
+//   .then(() => {
+//     const server = createServer(app)
+//     server.listen(config.port, () => {
+//       // eslint-disable-next-line no-console
+//       console.log('Server is listening on port ' + config.port)
+//       // Setup GraphQL subscription transport
+//       subscriptionServerFactory(server)
+//     })
+//   })
 // start server ----------------------------------------------------
 mongo.connect(config.mongo.url).then(async () => {
   await redisConnectionSetup()
