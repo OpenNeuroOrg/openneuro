@@ -38,6 +38,7 @@ const DatasetRedirect = props => {
   const redirectLib = {
     ds001919: 'ds002902',
     ds002393: 'ds002900',
+    ds001868: 'ds002904',
     ds002355: 'ds002841',
     ds001569: 'ds002848',
     ds002221: 'ds002842',
