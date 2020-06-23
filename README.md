@@ -37,3 +37,7 @@ For example, you can restart the server container with `docker-compose restart s
 - [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) microservice.
 - [bids-app-host](https://github.com/OpenNeuroOrg/bids-app-host) - Docker wrapper for cloud hosted job execution.
 - [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library.
+
+## OpenNeuro Command-line utility tool
+
+OpenNeuro supports a [CLI tool](cli.openneuro.org) based on [nodejs](https://nodejs.org/en/) for uploading and downloading OpenNeuro datasets.
