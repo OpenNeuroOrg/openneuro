@@ -35,6 +35,8 @@ services:
       service: nodejs
     working_dir: /srv/packages/openneuro-server
     command: node src/index.js
+    volumes:
+      - ./packages/openneuro-server:/srv/packages/openneuro-server
     depends_on:
       - redis
       - mongo
