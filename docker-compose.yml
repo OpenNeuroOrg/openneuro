@@ -79,6 +79,11 @@ services:
     depends_on:
       - celery
     init: true
+    networks:
+      default:
+        aliases:
+          - datalad-0
+          - datalad-1
 
   # celery Python backend
   celery:
