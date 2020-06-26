@@ -97,22 +97,20 @@ export const repairDescriptionTypes = description => {
 /**
  * Get a parsed dataset_description.json
  * @param {object} obj dataset or snapshot object
- * @param {object} arguments
- * @param {string} arguments.datasetId accession number
- * @param {string} [arguments.revision] git revision hexsha
- * @param {string} [arguments.tag] snapshot tag
  */
-export const description = (obj, { datasetId, revision, tag }) => {
-  const redisKey = descriptionCacheKey(datasetId, revision || tag)
+export const description = obj => {
+  // Obtain datasetId from Dataset or Snapshot objects
+  const datasetId = 'tag' in obj ? obj.id.split(':')[0] : obj.id
+  const redisKey = descriptionCacheKey(datasetId, obj.revision || obj.tag)
   return redis
     .get(redisKey)
     .then(async cachedDescription => {
       if (cachedDescription) {
         return JSON.parse(cachedDescription)
       } else {
-        const gitRef = revision
-          ? revision
-          : await getSnapshotHexsha(datasetId, tag)
+        const gitRef = obj.revision
+          ? obj.revision
+          : await getSnapshotHexsha(datasetId, obj.tag)
         return getFiles(datasetId, gitRef)
           .then(getDescriptionObject(datasetId))
           .then(uncachedDescription => {

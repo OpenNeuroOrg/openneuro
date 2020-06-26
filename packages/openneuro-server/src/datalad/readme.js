@@ -12,7 +12,9 @@ export const readmeUrl = (datasetId, revision) => {
 export const readmeKey = (datasetId, revision) =>
   `openneuro:readme:${datasetId}:${revision}`
 
-export const readme = async (obj, { datasetId, revision }) => {
+export const readme = async obj => {
+  const datasetId = obj.id
+  const revision = obj.revision || obj.tag
   const key = readmeKey(datasetId, revision)
   const data = await redis.get(key)
   if (data) {

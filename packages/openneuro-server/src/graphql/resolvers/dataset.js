@@ -7,7 +7,6 @@ import { description } from './description.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { createSnapshot } from '../../datalad/snapshots.js'
 import { user } from './user.js'
-import { draft } from './draft.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
 import { metadata } from './metadata.js'
@@ -301,7 +300,11 @@ export const onBrainlife = async dataset => {
  */
 const Dataset = {
   uploader: ds => user(ds, { id: ds.uploader }),
-  draft,
+  draft: obj => ({
+    id: obj.id,
+    revision: obj.revision,
+    modified: obj.modified,
+  }),
   snapshots,
   latestSnapshot,
   analytics,
