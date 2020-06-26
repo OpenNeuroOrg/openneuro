@@ -1,14 +1,14 @@
-import mongo from '../../libs/mongo.js'
+import Issue from '../../models/issue'
 
 /**
  * Issues resolver
  */
 export const issues = dataset => {
-  return mongo.collections.crn.issues
-    .findOne({
-      id: dataset.revision,
-      datasetId: dataset.id,
-    })
+  return Issue.findOne({
+    id: dataset.revision,
+    datasetId: dataset.id,
+  })
+    .exec()
     .then(data => (data ? data.issues : null))
 }
 
@@ -17,10 +17,10 @@ export const issues = dataset => {
  */
 export const snapshotIssues = snapshot => {
   const datasetId = snapshot.id.split(':')[0]
-  return mongo.collections.crn.issues
-    .findOne({
-      id: snapshot.hexsha,
-      datasetId,
-    })
+  return Issue.findOne({
+    id: snapshot.hexsha,
+    datasetId,
+  })
+    .exec()
     .then(data => (data ? data.issues : null))
 }

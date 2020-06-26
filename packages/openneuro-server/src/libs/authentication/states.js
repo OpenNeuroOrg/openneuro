@@ -1,9 +1,10 @@
 /** Middleware to check for authorization states on top of authentication */
 
-import mongo from '../mongo'
+import Dataset from '../../models/dataset'
+import Permission from '../../models/permission'
+import Comment from '../../models/comment'
 import { ObjectID } from 'mongodb'
 import bidsId from '../bidsId'
-const c = mongo.collections
 
 /**
  * Authenticated
@@ -66,8 +67,8 @@ export const datasetAccess = (req, res, next) => {
   datasetId = bidsId.decodeId(datasetId) // handle old dataset request methods that encode ids
 
   // check to make sure that the dataset exists
-  return c.crn.datasets
-    .findOne({ id: datasetId })
+  return Dataset.findOne({ id: datasetId })
+    .exec()
     .then(dataset => {
       // if dataset does not exist, return 404 error
       if (!dataset) {
@@ -88,8 +89,8 @@ export const datasetAccess = (req, res, next) => {
       }
 
       // find permissions information for this user & dataset
-      c.crn.permissions
-        .findOne({ datasetId: datasetId, userId: req.user.id })
+      Permission.findOne({ datasetId: datasetId, userId: req.user.id })
+        .exec()
         .then(permission => {
           if (permission) {
             req.hasAccess = true
@@ -116,10 +117,10 @@ export const commentAccess = (req, res, next) => {
   if (req.user.admin) {
     return next()
   }
-  c.crn.comments
-    .findOne({
-      _id: ObjectID(commentId),
-    })
+  Comment.findOne({
+    _id: ObjectID(commentId),
+  })
+    .exec()
     .then(comment => {
       if (comment.userId === req.user.id) {
         return next()

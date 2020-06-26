@@ -1,13 +1,13 @@
-import mongo from '../../libs/mongo.js'
+import Summary from '../../models/summary'
 
 /**
  * Summary resolver
  */
 export const summary = dataset => {
-  return mongo.collections.crn.summaries.findOne({
+  return Summary.findOne({
     id: dataset.revision,
     datasetId: dataset.id,
-  })
+  }).exec()
 }
 
 /**
@@ -16,14 +16,13 @@ export const summary = dataset => {
  * Returns the saved summary if successful
  */
 export const updateSummary = (obj, args) => {
-  const summaries = mongo.collections.crn.summaries
-  return summaries
-    .update(
-      { id: args.summary.id, datasetId: args.summary.datasetId },
-      args.summary,
-      {
-        upsert: true,
-      },
-    )
+  return Summary.updateOne(
+    { id: args.summary.id, datasetId: args.summary.datasetId },
+    args.summary,
+    {
+      upsert: true,
+    },
+  )
+    .exec()
     .then(() => args.summary)
 }

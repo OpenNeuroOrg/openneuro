@@ -1,7 +1,5 @@
-import Permission from './../models/permission'
-import mongo from '../libs/mongo.js'
-
-const c = mongo.collections
+import Permission from '../models/permission'
+import Dataset from '../models/dataset'
 
 // Definitions for permission levels allowed
 // Admin is write + manage user permissions
@@ -53,8 +51,8 @@ export const checkPermissionLevel = (permission, state) => {
 
 export const checkDatasetRead = (datasetId, userId, userInfo) => {
   // Look for any matching datasets
-  return c.crn.datasets
-    .findOne(datasetReadQuery(datasetId, userId, userInfo))
+  return Dataset.findOne(datasetReadQuery(datasetId, userId, userInfo))
+    .exec()
     .then(datasetFound => {
       // Found a dataset and don't need to match further (public or admin user)
       if (datasetFound) {

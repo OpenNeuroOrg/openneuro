@@ -1,8 +1,7 @@
 import config from '../config'
 import doi from '../libs/doi'
-import mongo from '../libs/mongo'
-
-const c = mongo.collections
+import Doi from '../models/doi'
+import Snapshot from '../models/snapshot'
 
 export async function createSnapshotDoi(req, res) {
   let doiRes = null
@@ -12,7 +11,7 @@ export async function createSnapshotDoi(req, res) {
   const datasetId = req.params.datasetId
   const snapshotId = req.params.snapshotId
   const oldDesc = req.body
-  const doiExists = await c.crn.dois.findOne({
+  const doiExists = await Doi.findOne({
     datasetId: datasetId,
     snapshotId: snapshotId,
   })
@@ -20,10 +19,10 @@ export async function createSnapshotDoi(req, res) {
     doiRes = doiExists.doi
     return res.send({ doi: doiRes })
   } else {
-    const snapExists = c.crn.snapshots.findOne({
+    const snapExists = Snapshot.findOne({
       datasetId: datasetId,
       tag: snapshotId,
-    })
+    }).exec()
     if (!snapExists) {
       return
     }
@@ -31,7 +30,7 @@ export async function createSnapshotDoi(req, res) {
       .registerSnapshotDoi(datasetId, snapshotId, oldDesc)
       .then(doiRes => {
         if (doiRes) {
-          c.crn.dois.update(
+          Doi.updateOne(
             { datasetId: datasetId, snapshotId: snapshotId },
             { $set: { doi: doiRes } },
             { upsert: true },
@@ -47,10 +46,12 @@ export async function createSnapshotDoi(req, res) {
 export async function getDoi(req, res) {
   const datasetId = req.params.datasetId
   const snapshotId = req.params.snapshotId
-  const doi = await c.crn.dois.findOne(
-    { datasetId: datasetId },
-    { snapshotId: snapshotId },
-    { doi: 1, _id: 0 },
-  )
+  const doi = await Doi.findOne(
+    {
+      datasetId: datasetId,
+      snapshotId: snapshotId,
+    },
+    'doi',
+  ).exec()
   return res.send(doi)
 }

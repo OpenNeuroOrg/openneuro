@@ -1,8 +1,6 @@
-import mongo from './mongo.js'
+import Key from '../models/key'
 import { addJWT } from '../libs/authentication/jwt'
 import config from '../config'
-
-const c = mongo.collections
 
 export const apiKeyFactory = user => {
   const apiKeyExpiration = 31536000
@@ -16,18 +14,14 @@ export const apiKeyFactory = user => {
 export const generateApiKey = user => {
   const userId = user.id
   const token = apiKeyFactory(user)
-  return c.crn.keys
-    .findOneAndUpdate(
-      { id: userId },
-      {
-        $set: {
-          id: userId,
-          hash: token,
-        },
-      },
-      { upsert: true, returnOriginal: false },
-    )
-    .then(() => {
-      return { key: token }
-    })
+  return Key.updateOne(
+    { id: userId },
+    {
+      id: userId,
+      hash: token,
+    },
+    { upsert: true, new: true },
+  )
+    .exec()
+    .then(() => ({ key: token }))
 }

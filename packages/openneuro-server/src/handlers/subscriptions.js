@@ -1,9 +1,6 @@
-import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
 import notifications from '../libs/notifications'
 import Subscription from '../models/subscription.js'
-
-const c = mongo.collections
 
 /**
  * Subscriptions
@@ -42,7 +39,7 @@ export const deleteSubscription = (req, res, next) => {
 
   // delete an entry in the c.crn.subscriptions db
   // with the datasetId and userId
-  c.crn.subscriptions.deleteOne(
+  Subscription.deleteOne(
     {
       datasetId: datasetId,
       userId: userId,
@@ -62,21 +59,19 @@ export const deleteAll = (req, res, next) => {
   const datasetId = data.datasetId ? data.datasetId : null
 
   notifications.datasetDeleted(datasetId)
-  c.crn.subscriptions
-    .find({
-      datasetId: datasetId,
-    })
-    .toArray((err, subscriptions) => {
-      if (err) {
-        return next(err)
-      }
-      subscriptions.forEach(subscription => {
-        c.crn.subscriptions.deleteOne({
-          _id: ObjectID(subscription._id),
-        })
+  Subscription.find({
+    datasetId: datasetId,
+  }).exec((err, subscriptions) => {
+    if (err) {
+      return next(err)
+    }
+    subscriptions.forEach(subscription => {
+      Subscription.deleteOne({
+        _id: ObjectID(subscription._id),
       })
-      return res.send()
     })
+    return res.send()
+  })
 }
 
 // read
@@ -90,18 +85,16 @@ export const getSubscriptions = (req, res, next) => {
   const datasetId =
     req.params.datasetId === 'undefined' ? null : req.params.datasetId
   if (datasetId) {
-    c.crn.subscriptions
-      .find({
-        datasetId: datasetId,
-      })
-      .toArray((err, subscriptions) => {
-        if (err) {
-          return next(err)
-        }
-        res.send(subscriptions)
-      })
+    Subscription.find({
+      datasetId: datasetId,
+    }).exec((err, subscriptions) => {
+      if (err) {
+        return next(err)
+      }
+      res.send(subscriptions)
+    })
   } else {
-    c.crn.subscriptions.find().toArray((err, subscriptions) => {
+    Subscription.find().exec((err, subscriptions) => {
       if (err) {
         return next(err)
       }
@@ -119,11 +112,11 @@ export const checkUserSubscription = (req, res) => {
   const datasetId = req.params.datasetId
   const userId = req.params.userId
 
-  c.crn.subscriptions
-    .findOne({
-      datasetId: datasetId,
-      userId: userId,
-    })
+  Subscription.findOne({
+    datasetId: datasetId,
+    userId: userId,
+  })
+    .exec()
     .then(resp => {
       if (resp) {
         return res.send({ subscribed: true })

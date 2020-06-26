@@ -2,7 +2,6 @@ import * as Sentry from '@sentry/node'
 import { createServer } from 'http'
 import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
-import mongo from './libs/mongo'
 import { connect as redisConnect } from './libs/redis'
 import notifications from './libs/notifications'
 import config from './config'
@@ -29,26 +28,13 @@ Sentry.init({
 
 const app = createApp(false)
 
-// Setup mongoose next to our old mongo lib
 mongoose.connect(config.mongo.url, {
   useNewUrlParser: true,
   dbName: config.mongo.dbName,
   connectTimeoutMS: 1000 * 60 * 2,
 })
-// start server w/o MongoClient connect
-// redisConnectionSetup()
-//   .then(() => {
-//     const server = createServer(app)
-//     server.listen(config.port, () => {
-//       // eslint-disable-next-line no-console
-//       console.log('Server is listening on port ' + config.port)
-//       // Setup GraphQL subscription transport
-//       subscriptionServerFactory(server)
-//     })
-//   })
-// start server ----------------------------------------------------
-mongo.connect(config.mongo.url).then(async () => {
-  await redisConnectionSetup()
+
+redisConnectionSetup().then(() => {
   const server = createServer(app)
   server.listen(config.port, () => {
     // eslint-disable-next-line no-console
