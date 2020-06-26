@@ -1,6 +1,6 @@
-FROM node:12.16.1-alpine AS app
+FROM node:12.18.0-alpine3.12 AS app
 
-RUN apk --no-cache --update add git make gcc g++ python
+RUN apk --no-cache --update add git
 
 ADD . /srv
 
@@ -8,7 +8,7 @@ ADD . /srv
 WORKDIR /srv
 
 # Build the frontend
-RUN yarn install --pure-lockfile && yarn bootstrap && apk del make gcc g++ python
+RUN yarn install --pure-lockfile && yarn bootstrap
 
 WORKDIR /srv/packages/openneuro-app
 

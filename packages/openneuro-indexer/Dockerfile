@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine as indexer
+FROM node:12.18.0-alpine3.12 as indexer
 
 ADD . /srv
 WORKDIR /srv

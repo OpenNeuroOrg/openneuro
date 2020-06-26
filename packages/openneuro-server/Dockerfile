@@ -1,11 +1,9 @@
-FROM node:12.16.1-alpine
+FROM node:12.18.0-alpine3.12
 
 # install server app
 ADD . /srv
 WORKDIR /srv
-RUN apk add curl git make gcc g++ python --no-cache --update && \
-  yarn install && \
-  apk del make gcc g++ python
+RUN apk add curl git --no-cache --update && yarn install
 
 HEALTHCHECK --interval=10s --retries=10 CMD curl -f 'http://localhost:8111' || exit 1
 
