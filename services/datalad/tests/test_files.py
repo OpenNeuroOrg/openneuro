@@ -100,13 +100,13 @@ def test_file_indexing(celery_app, client, new_dataset):
     assert all(f in response_content['files'] for f in [
         {'filename': 'dataset_description.json', 'size': 101,
             'id': '43502da40903d08b18b533f8897330badd6e1da3',
-            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'urls': []},
         {'filename': 'LICENSE', 'size': 8,
             'id': '8a6f5281317d8a8fb695d12c940b0ff7a7dee435',
-            'key': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
+            'key': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27', 'urls': []},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
             'id': '7fa0e07afaec0ff2cdf1bfc783596b4472df9b12',
-            'key': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
+            'key': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19, 'urls': []}
     ])
 
 
@@ -128,10 +128,10 @@ def test_empty_file(celery_app, client, new_dataset):
     # Check that all elements exist in both lists
     assert({'filename': 'LICENSE',
             'id': '5bfdc52581371bfa051fa76825a0e1b5e5c3b4bf',
-            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'size': 0} in response_content['files'])
+            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'size': 0, 'urls': []} in response_content['files'])
     assert({'filename': 'dataset_description.json',
             'id': '43502da40903d08b18b533f8897330badd6e1da3',
-            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101} in response_content['files'])
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101, 'urls': []} in response_content['files'])
 
 
 def test_duplicate_file_id(celery_app, client, new_dataset):
