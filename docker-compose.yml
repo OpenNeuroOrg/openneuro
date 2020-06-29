@@ -26,6 +26,7 @@ services:
     command: yarn start
     volumes:
       - webpack_cache:/webpack-cache
+      - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
     ports:
       - '8145:8145'
 
@@ -35,6 +36,8 @@ services:
       service: nodejs
     working_dir: /srv/packages/openneuro-server
     command: node src/index.js
+    volumes:
+      - ./packages/openneuro-server/src:/srv/packages/openneuro-server/src
     depends_on:
       - redis
       - mongo
