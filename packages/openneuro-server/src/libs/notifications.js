@@ -137,7 +137,7 @@ const notifications = {
     }).exec()
     // create the email object for each user
     subscriptions.forEach(async subscription => {
-      const user = User.findOne({ id: subscription.userId }).exec()
+      const user = await User.findOne({ id: subscription.userId }).exec()
       if (user && user.id !== uploaderId) {
         const emailContent = {
           _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
@@ -357,7 +357,7 @@ const notifications = {
                   if (response && response.messageId) {
                     new MailgunIdentifier({
                       messageId: response.messageId,
-                    }).save(err => {
+                    }).save(() => {
                       throw `failed to save mailgunIdentifier ${response.messageId}`
                     })
                   }
