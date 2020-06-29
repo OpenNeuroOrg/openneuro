@@ -41,15 +41,16 @@ export const getDownloadMetadata = (datasetId, tag) =>
     .get(downloadUrl(getUrl(), datasetId, tag))
     .set('Cookie', `accessToken=${getToken()}`)
 
-export const downloadFile = async (destination, filename, fileUrl) => {
+export const downloadFile = (destination, filename, fileUrl) => {
   const fullPath = path.join(destination, filename)
   // Create any needed parent dirs
   mkdirp.sync(path.dirname(fullPath))
   const writeStream = fs.createWriteStream(fullPath)
-  await request
+  const readStream = request
     .get(fileUrl)
     .set('Cookie', `accessToken=${getToken()}`)
     .pipe(writeStream)
+  return new Promise(resolve => readStream.on('finish', resolve))
 }
 
 export const getDownload = (destination, datasetId, tag) =>
