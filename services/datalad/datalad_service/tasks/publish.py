@@ -109,12 +109,6 @@ def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
     s3_remote = s3_sibling(ds, siblings, realm=realm)
     for tag in tags:
         publish_target(ds, realm.s3_remote, tag)
-        versions = s3_versions(ds, realm, tag)
-        if (len(versions)):
-            r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, tag, versions), cookies=cookies)
-            if r.status_code != 200:
-                raise Exception(r.text)
         # Public publishes to GitHub
         if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
             github_remote = github_sibling(ds, dataset_id, siblings)

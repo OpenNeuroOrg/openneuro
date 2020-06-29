@@ -1,6 +1,5 @@
 import os
 from enum import Enum
-import boto3
 
 import datalad_service.config
 
@@ -8,12 +7,14 @@ import datalad_service.config
 class S3ConfigException(Exception):
     pass
 
+
 def get_s3_realm(realm):
-        if realm == 'PUBLIC':
-            realm = DatasetRealm.PUBLIC
-        else:
-            realm = DatasetRealm.PRIVATE
-        return realm
+    if realm == 'PUBLIC':
+        realm = DatasetRealm.PUBLIC
+    else:
+        realm = DatasetRealm.PRIVATE
+    return realm
+
 
 class DatasetRealm(Enum):
     PRIVATE = 1
@@ -57,12 +58,13 @@ def generate_s3_annex_options(dataset, realm):
         if public == 'yes':
             annex_options += [
                 'autoenable=true',
-                'publicurl=http://{}.s3.amazonaws.com/'.format(realm.s3_bucket),
+                'publicurl=http://{}.s3.amazonaws.com/'.format(
+                    realm.s3_bucket),
             ]
     else:
         annex_options += [
             'autoenable=false',
-            ]
+        ]
         public = 'no'
     annex_options.append('public={}'.format(public))
     return annex_options
@@ -79,7 +81,8 @@ def update_s3_sibling(dataset, realm):
     annex_options = generate_s3_annex_options(dataset, realm)
 
     # note: enableremote command will only upsert config options, none are deleted
-    dataset.repo._run_annex_command('enableremote', annex_options=[realm.s3_remote] + annex_options)
+    dataset.repo._run_annex_command('enableremote', annex_options=[
+                                    realm.s3_remote] + annex_options)
     dataset.repo.config.reload()
 
 
@@ -109,32 +112,3 @@ def s3_export(dataset, target, treeish='HEAD'):
             '{}'.format(target),
         ]
     )
-
-
-def s3_versions(dataset, bucket_name, snapshot='HEAD'):
-    dataset_id = os.path.basename(dataset.path)
-
-    # get s3 bucket
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket(bucket_name)
-
-    # crawl the list of objects in the s3 bucket with
-    # the prefix associated with this dataset
-    versions = [] 
-    try:
-        objects = bucket.objects
-        
-        url = 'https://s3.amazonaws.com/{}/{}?versionId={}'
-        rel = '/crn/datasets/{}/snapshots/{}/files/{}'
-        for obj in objects.filter(Prefix='{}'.format(dataset_id)):
-            key = obj.key
-            filename = key.split(dataset_id + '/')[-1]
-            o = s3.Object(bucket_name, key)
-            version = o.version_id
-            versions.append({
-                'filename': key.split(dataset_id + '/')[-1],
-                'urls': [url.format(bucket_name, key, version), rel.format(dataset_id, snapshot, filename.replace('/', ':'))]
-            })
-    finally:
-        return versions
-
