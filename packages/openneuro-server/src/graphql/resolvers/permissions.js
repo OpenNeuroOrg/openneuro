@@ -9,7 +9,7 @@ export const permissions = async ds => {
   return {
     id: ds.id,
     userPermissions: permissions.map(userPermission => ({
-      ...userPermission,
+      ...userPermission._doc,
       user: user(ds, { id: userPermission.userId }),
     })),
   }

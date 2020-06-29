@@ -224,12 +224,9 @@ export const getDatasets = options => {
   const connection = datasetsConnection(options)
   if (options && 'userId' in options) {
     // Authenticated request
-    console.log(`USER_ID:  ${options.userId}`)
     return Permission.find({ userId: options.userId })
       .exec()
       .then((...datasetsAllowed) => {
-        console.log(`DATASETS ALLOWED:`)
-        console.log(datasetsAllowed)
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
         )
