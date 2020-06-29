@@ -93,7 +93,7 @@ export const getFiles = (datasetId, hexsha) => {
         )
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
-          const filesWithUrls = files.map(addFileUrl(datasetId))
+          const filesWithUrls = files.map(addFileUrl(datasetId, hexsha))
           redis.set(key, JSON.stringify(filesWithUrls))
           return filesWithUrls
         })
