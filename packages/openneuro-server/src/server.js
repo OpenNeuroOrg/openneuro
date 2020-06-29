@@ -31,7 +31,7 @@ const app = createApp(false)
 mongoose.connect(config.mongo.url, {
   useNewUrlParser: true,
   dbName: config.mongo.dbName,
-  connectTimeoutMS: 1000 * 60 * 2,
+  connectTimeoutMS: config.mongo.connectTimeoutMS,
 })
 
 redisConnectionSetup().then(() => {

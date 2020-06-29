@@ -34,6 +34,7 @@ const config = {
   mongo: {
     url: process.env.MONGO_URL,
     dbName: 'crn',
+    connectTimeoutMS: 1000,
   },
   redis: {
     port: process.env.REDIS_PORT,
