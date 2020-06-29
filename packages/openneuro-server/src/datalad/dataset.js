@@ -226,7 +226,7 @@ export const getDatasets = options => {
     // Authenticated request
     return Permission.find({ userId: options.userId })
       .exec()
-      .then((...datasetsAllowed) => {
+      .then(datasetsAllowed => {
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
         )
