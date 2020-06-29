@@ -1,6 +1,7 @@
-import { ObjectID } from 'mongodb'
 import notifications from '../libs/notifications'
 import Subscription from '../models/subscription.js'
+import { Types } from 'mongoose'
+const { ObjectID } = Types
 
 /**
  * Subscriptions

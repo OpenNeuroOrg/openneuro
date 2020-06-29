@@ -1,4 +1,5 @@
-import { ObjectID } from 'mongodb'
+import { Types } from 'mongoose'
+const { ObjectID } = Types
 import mockingoose from 'mockingoose'
 import * as pagination from '../pagination.js'
 

@@ -3,9 +3,10 @@ import moment from 'moment'
 import jsdom from 'jsdom'
 import User from '../models/user'
 import Comment from '../models/comment'
-import { ObjectID } from 'mongodb'
 import MailgunIdentifier from '../models/mailgunIdentifier'
 import { ContentState, convertFromHTML, convertToRaw } from 'draft-js'
+import { Types } from 'mongoose'
+const { ObjectID } = Types
 
 /**
  * Text to Draft Content

@@ -3,8 +3,9 @@
 import Dataset from '../../models/dataset'
 import Permission from '../../models/permission'
 import Comment from '../../models/comment'
-import { ObjectID } from 'mongodb'
 import bidsId from '../bidsId'
+import { Types } from 'mongoose'
+const { ObjectID } = Types
 
 /**
  * Authenticated
