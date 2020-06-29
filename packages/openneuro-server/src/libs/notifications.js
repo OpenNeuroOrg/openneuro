@@ -344,13 +344,13 @@ const notifications = {
     notifications.cron = new cron.CronJob(
       '0 */1 * * * *',
       () => {
-        Notification.find({}).exec((err, notifications) => {
+        Notification.find({}).exec((err, docs) => {
           if (err) {
             console.log(
               'NOTIFICATION ERROR - Could not find notifcations collection',
             )
           } else {
-            for (const notification of notifications) {
+            for (const notification of docs) {
               notifications.send(notification, (err, response) => {
                 if (!err) {
                   notification.remove()
