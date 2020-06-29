@@ -5,8 +5,8 @@ import User from '../models/user'
 import Comment from '../models/comment'
 import MailgunIdentifier from '../models/mailgunIdentifier'
 import { ContentState, convertFromHTML, convertToRaw } from 'draft-js'
-import { Types } from 'mongoose'
-const { ObjectID } = Types
+import mongoose from 'mongoose'
+const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
  * Text to Draft Content

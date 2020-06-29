@@ -4,8 +4,8 @@ import Dataset from '../../models/dataset'
 import Permission from '../../models/permission'
 import Comment from '../../models/comment'
 import bidsId from '../bidsId'
-import { Types } from 'mongoose'
-const { ObjectID } = Types
+import mongoose from 'mongoose'
+const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
  * Authenticated

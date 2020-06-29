@@ -1,7 +1,7 @@
-import { Types } from 'mongoose'
-const { ObjectID } = Types
 import mockingoose from 'mockingoose'
 import * as pagination from '../pagination.js'
+import { Types } from 'mongoose'
+const ObjectID = Types.ObjectId
 
 const base64 = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/
 

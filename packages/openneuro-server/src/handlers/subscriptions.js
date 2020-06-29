@@ -1,7 +1,7 @@
 import notifications from '../libs/notifications'
 import Subscription from '../models/subscription.js'
-import { Types } from 'mongoose'
-const { ObjectID } = Types
+import mongoose from 'mongoose'
+const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
  * Subscriptions
