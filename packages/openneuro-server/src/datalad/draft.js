@@ -2,7 +2,7 @@
  * Manage serving a Draft object based on DataLad working trees
  */
 import request from 'superagent'
-import mongo from '../libs/mongo.js'
+import Dataset from '../models/dataset.js'
 import { redis } from '../libs/redis.js'
 import { addFileUrl } from './utils.js'
 import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'
@@ -60,11 +60,11 @@ export const updateDatasetRevision = (datasetId, gitRef) => {
   /**
    * Update the revision pointer in a draft on changes
    */
-  return mongo.collections.crn.datasets
-    .update(
-      { id: datasetId },
-      { $set: { revision: gitRef, modified: new Date() } },
-    )
+  return Dataset.updateOne(
+    { id: datasetId },
+    { revision: gitRef, modified: new Date() },
+  )
+    .exec()
     .then(() => {
       // Remove the now invalid draft files cache
       return expireDraftFiles(datasetId)
@@ -78,13 +78,15 @@ export const draftPartialKey = datasetId => {
 
 export const getDatasetRevision = async datasetId => {
   return new Promise((resolve, reject) => {
-    mongo.collections.crn.datasets.findOne({ id: datasetId }).then(obj => {
-      if (obj) {
-        resolve(obj.revision)
-      } else {
-        reject(null)
-      }
-    })
+    Dataset.findOne({ id: datasetId })
+      .exec()
+      .then(obj => {
+        if (obj) {
+          resolve(obj.revision)
+        } else {
+          reject(null)
+        }
+      })
   })
 }
 

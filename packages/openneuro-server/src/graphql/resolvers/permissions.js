@@ -1,17 +1,15 @@
-import mongo from '../../libs/mongo.js'
 import User from '../../models/user'
+import Permission from '../../models/permission'
 import { checkDatasetAdmin } from '../permissions'
 import { user } from './user'
 import pubsub from '../pubsub.js'
 
 export const permissions = async ds => {
-  const permissions = await mongo.collections.crn.permissions
-    .find({ datasetId: ds.id })
-    .toArray()
+  const permissions = await Permission.find({ datasetId: ds.id }).exec()
   return {
     id: ds.id,
     userPermissions: permissions.map(userPermission => ({
-      ...userPermission,
+      ...userPermission._doc,
       user: user(ds, { id: userPermission.userId }),
     })),
   }
@@ -49,21 +47,19 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
   const users = await User.find({ email: args.userEmail }).exec()
   const userPromises = users.map(user => {
     return new Promise((resolve, reject) => {
-      mongo.collections.crn.permissions
-        .updateOne(
-          {
-            datasetId: args.datasetId,
-            userId: user.id,
-          },
-          {
-            $set: {
-              datasetId: args.datasetId,
-              userId: user.id,
-              level: args.level,
-            },
-          },
-          { upsert: true },
-        )
+      Permission.updateOne(
+        {
+          datasetId: args.datasetId,
+          userId: user.id,
+        },
+        {
+          datasetId: args.datasetId,
+          userId: user.id,
+          level: args.level,
+        },
+        { upsert: true },
+      )
+        .exec()
         .then(() => resolve())
         .catch(err => reject(err))
     })
@@ -77,10 +73,10 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
  * Remove user permissions on a dataset
  */
 export const removePermissions = (obj, args) => {
-  return mongo.collections.crn.permissions
-    .deleteOne({
-      datasetId: args.datasetId,
-      userId: args.userId,
-    })
+  return Permission.deleteOne({
+    datasetId: args.datasetId,
+    userId: args.userId,
+  })
+    .exec()
     .then(() => publishPermissions(args.datasetId))
 }

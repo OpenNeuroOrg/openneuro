@@ -1,11 +1,12 @@
-import mongo from '../libs/mongo'
 import notifications from '../libs/notifications.js'
 import moment from 'moment'
 import jsdom from 'jsdom'
-import { ObjectID } from 'mongodb'
+import User from '../models/user'
+import Comment from '../models/comment'
+import MailgunIdentifier from '../models/mailgunIdentifier'
 import { ContentState, convertFromHTML, convertToRaw } from 'draft-js'
-
-const c = mongo.collections
+import mongoose from 'mongoose'
+const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
  * Text to Draft Content
@@ -45,15 +46,15 @@ export async function reply(req, res, next) {
     ? inReplyToRaw.replace('<', '').replace('>', '')
     : null
   const messageId = inReplyTo
-    ? await c.crn.mailgunIdentifiers.findOne({ messageId: inReplyTo })
+    ? await MailgunIdentifier.findOne({ messageId: inReplyTo }).exec()
     : null
   if (!messageId) {
     return res.sendStatus(404)
   }
-  const user = await c.crn.users.findOne({ id: userId })
-  const originalComment = await c.crn.comments.findOne({
+  const user = await User.findOne({ id: userId }).exec()
+  const originalComment = await Comment.findOne({
     _id: ObjectID(parentId),
-  })
+  }).exec()
   if (user && originalComment) {
     const flattenedUser = {
       id: user.id,
@@ -68,7 +69,7 @@ export async function reply(req, res, next) {
       user: flattenedUser,
       createDate: moment().format(),
     }
-    c.crn.comments.insertOne(comment, (err, response) => {
+    Comment.create(comment, (err, response) => {
       if (err) {
         return next(err)
       } else {

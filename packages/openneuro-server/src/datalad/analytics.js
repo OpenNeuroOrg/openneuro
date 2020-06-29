@@ -1,8 +1,7 @@
-import mongo from '../libs/mongo.js'
-const c = mongo.collections
+import Analytics from '../models/analytics'
 
 export const trackAnalytics = (datasetId, tag, type) => {
-  return c.crn.analytics.updateOne(
+  return Analytics.updateOne(
     {
       datasetId: datasetId,
       tag: tag,
@@ -15,5 +14,5 @@ export const trackAnalytics = (datasetId, tag, type) => {
     {
       upsert: true,
     },
-  )
+  ).exec()
 }
