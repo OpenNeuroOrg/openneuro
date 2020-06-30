@@ -49,7 +49,20 @@ export const downloadFile = async (destination, filename, fileUrl) => {
   await request
     .get(fileUrl)
     .set('Cookie', `accessToken=${getToken()}`)
-    .pipe(writeStream)
+    .buffer(false)
+    .then(res => {
+      // Stream data to the file.
+      // We can't use request.pipe() directly because it
+      // doesn't catch HTTP errors, meaning errors turn
+      // into corrupted datasets.
+      // We can't use request.then(res => writeStream.write(res.body))
+      // because that requires buffering the entire file
+      // -- an expensive and likely impossible suggestion
+      // for large neuroimaging files.
+      // Instead we set buffer(false) and stream content out manually.
+      // https://github.com/visionmedia/superagent/issues/1575
+      res.on('data', chunk => { writeStream.write(chunk) })
+    })
 }
 
 export const getDownload = (destination, datasetId, tag) =>
