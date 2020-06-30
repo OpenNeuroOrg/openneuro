@@ -11,7 +11,12 @@ export const getConfig = () => {
 }
 
 export const readConfig = () => {
-  return fs.readFileSync(getConfig())
+  const config = getConfig()
+  if (config) {
+    return fs.readFileSync(config, 'utf8')
+  } else {
+    return JSON.stringify({})
+  }
 }
 
 /**

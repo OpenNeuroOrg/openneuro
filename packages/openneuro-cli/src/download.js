@@ -1,7 +1,7 @@
+import 'cross-fetch/polyfill'
 import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import request from 'superagent'
 import { getToken, getUrl } from './config.js'
 
 export const downloadUrl = (baseUrl, datasetId, tag) =>
@@ -36,24 +36,77 @@ export const testFile = (destination, filename, size) => {
   }
 }
 
-export const getDownloadMetadata = (datasetId, tag) =>
-  request
-    .get(downloadUrl(getUrl(), datasetId, tag))
-    .set('Cookie', `accessToken=${getToken()}`)
+const getFetchOptions = () => ({
+  headers: {
+    cookie: `accessToken=${getToken()}`,
+  },
+})
 
+const handleFetchReject = err => {
+  console.error(
+    'Error starting download - please check your connection or try again later',
+  )
+  console.dir(err)
+}
+
+/**
+ * Obtain the listing of files to download
+ * @param {string} datasetId
+ * @param {string} tag
+ */
+export const getDownloadMetadata = async (config, datasetId, tag) => {
+  try {
+    const response = await fetch(
+      downloadUrl(getUrl(config), datasetId, tag),
+      getFetchOptions(),
+    )
+    if (response.status === 200) {
+      const body = await response.json()
+      return body
+    } else {
+      console.error(
+        `Error ${response.status} fetching download metadata - ${response.statusText}`,
+      )
+    }
+  } catch (err) {
+    handleFetchReject(err)
+  }
+}
+
+/**
+ * Download one file from a remote URL
+ * @param {string} destination Destination directory path
+ * @param {string} filename
+ * @param {string} fileUrl URL to download from
+ */
 export const downloadFile = async (destination, filename, fileUrl) => {
   const fullPath = path.join(destination, filename)
   // Create any needed parent dirs
   mkdirp.sync(path.dirname(fullPath))
   const writeStream = fs.createWriteStream(fullPath)
-  await request
-    .get(fileUrl)
-    .set('Cookie', `accessToken=${getToken()}`)
-    .pipe(writeStream)
+  try {
+    const response = await fetch(fileUrl, getFetchOptions())
+    if (response.status === 200) {
+      // Setup end/error handler with Promise interface
+      const responsePromise = new Promise((resolve, reject) => {
+        response.body.on('end', () => resolve())
+        response.body.on('error', err => reject(err))
+      })
+      // Start piping data
+      response.body.pipe(writeStream)
+      return responsePromise
+    } else {
+      console.error(
+        `Error ${response.status} fetching "${filename}" - ${response.statusText}`,
+      )
+    }
+  } catch (err) {
+    handleFetchReject(err)
+  }
 }
 
 export const getDownload = (destination, datasetId, tag) =>
-  getDownloadMetadata(datasetId, tag).then(async ({ body }) => {
+  getDownloadMetadata(datasetId, tag).then(async body => {
     checkDestination(destination)
     for (const file of body.files) {
       if (testFile(destination, file.filename, file.size)) {
