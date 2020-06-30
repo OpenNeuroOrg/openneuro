@@ -10,6 +10,16 @@ export const typeDefs = `
   scalar Upload
   scalar BigInt
 
+  enum CacheControlScope {
+    PUBLIC
+    PRIVATE
+  }
+
+  directive @cacheControl(
+    maxAge: Int,
+    scope: CacheControlScope
+  ) on OBJECT | FIELD_DEFINITION
+
   enum SortOrdering {
     ascending
     descending
