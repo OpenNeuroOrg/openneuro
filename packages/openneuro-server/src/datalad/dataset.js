@@ -8,7 +8,6 @@ import requestNode from 'request'
 import objectHash from 'object-hash'
 import { Readable } from 'stream'
 import config from '../config'
-import mongo from '../libs/mongo'
 import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
@@ -19,11 +18,10 @@ import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
 import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
+import Subscription from '../models/subscription.js'
 import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
 import { getDatasetWorker } from '../libs/datalad-service'
-
-const c = mongo.collections
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: 'admin' })
@@ -226,9 +224,8 @@ export const getDatasets = options => {
   const connection = datasetsConnection(options)
   if (options && 'userId' in options) {
     // Authenticated request
-    return c.crn.permissions
-      .find({ userId: options.userId })
-      .toArray()
+    return Permission.find({ userId: options.userId })
+      .exec()
       .then(datasetsAllowed => {
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
@@ -398,11 +395,11 @@ export const deletePath = (datasetId, path, user) => {
  * Update public state
  */
 export const updatePublic = (datasetId, publicFlag) =>
-  c.crn.datasets.updateOne(
+  Dataset.updateOne(
     { id: datasetId },
-    { $set: { public: publicFlag, publishDate: new Date() } },
+    { public: publicFlag, publishDate: new Date() },
     { upsert: true },
-  )
+  ).exec()
 
 export const getDatasetAnalytics = (datasetId, tag) => {
   const datasetQuery = tag
@@ -445,15 +442,13 @@ export const getUserStarred = (datasetId, userId) =>
   Star.count({ datasetId, userId }).exec()
 
 export const getFollowers = datasetId => {
-  return c.crn.subscriptions
-    .find({
-      datasetId: datasetId,
-    })
-    .toArray()
+  return Subscription.find({
+    datasetId: datasetId,
+  }).exec()
 }
 
 export const getUserFollowed = (datasetId, userId) =>
-  c.crn.subscriptions.findOne({
+  Subscription.findOne({
     datasetId,
     userId,
-  })
+  }).exec()

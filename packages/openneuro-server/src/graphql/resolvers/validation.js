@@ -1,4 +1,4 @@
-import mongo from '../../libs/mongo.js'
+import Issue from '../../models/issue'
 import publishDraftUpdate from '../utils/publish-draft-update.js'
 
 /**
@@ -7,15 +7,14 @@ import publishDraftUpdate from '../utils/publish-draft-update.js'
  * Returns only a boolean if successful or not
  */
 export const updateValidation = (obj, args) => {
-  const issues = mongo.collections.crn.issues
-  return issues
-    .update(
-      { id: args.validation.id, datasetId: args.validation.datasetId },
-      args.validation,
-      {
-        upsert: true,
-      },
-    )
+  return Issue.updateOne(
+    { id: args.validation.id, datasetId: args.validation.datasetId },
+    args.validation,
+    {
+      upsert: true,
+    },
+  )
+    .exec()
     .then(() => {
       publishDraftUpdate(args.validation.datasetId, args.validation.id)
       return true

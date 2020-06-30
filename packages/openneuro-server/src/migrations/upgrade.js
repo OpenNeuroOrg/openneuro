@@ -2,7 +2,6 @@
 // Run all pending migrations
 import config from '../config.js'
 import { connect as redisConnect } from '../libs/redis.js'
-import mongo from '../libs/mongo.js'
 import mongoose from 'mongoose'
 import Migration from '../models/migration.js'
 import migrations from './index.js'
@@ -21,7 +20,6 @@ mongoose.connect(`${config.mongo.url}crn`)
 const upgradeAll = async () => {
   await redisConnect(config.redis)
   // Connect to old database(s)
-  await mongo.connect(config.mongo.url)
   for (const migrationDefinition of migrations) {
     const key = migrationDefinition.id
     const migrate = await Migration.findOneAndUpdate(
@@ -47,7 +45,6 @@ const upgradeAll = async () => {
 
 // Entrypoint
 upgradeAll().then(() => {
-  mongo.dbs.crn.close()
   mongoose.connection.close()
   process.exit(0)
 })

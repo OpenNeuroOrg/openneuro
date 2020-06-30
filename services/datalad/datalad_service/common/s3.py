@@ -1,6 +1,5 @@
 import os
 from enum import Enum
-import boto3
 
 import datalad_service.config
 
@@ -60,6 +59,7 @@ def generate_s3_annex_options(dataset, realm):
             annex_options += [
                 'autoenable=true',
                 'publicurl=https://s3.amazonaws.com/{}'.format(
+
                     realm.s3_bucket),
             ]
     else:
@@ -114,30 +114,3 @@ def s3_export(dataset, target, treeish='HEAD'):
         ]
     )
 
-
-def s3_versions(dataset, bucket_name, snapshot='HEAD'):
-    dataset_id = os.path.basename(dataset.path)
-
-    # get s3 bucket
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket(bucket_name)
-
-    # crawl the list of objects in the s3 bucket with
-    # the prefix associated with this dataset
-    versions = []
-    try:
-        objects = bucket.objects
-
-        url = 'https://s3.amazonaws.com/{}/{}?versionId={}'
-        rel = '/crn/datasets/{}/snapshots/{}/files/{}'
-        for obj in objects.filter(Prefix='{}'.format(dataset_id)):
-            key = obj.key
-            filename = key.split(dataset_id + '/')[-1]
-            o = s3.Object(bucket_name, key)
-            version = o.version_id
-            versions.append({
-                'filename': key.split(dataset_id + '/')[-1],
-                'urls': [url.format(bucket_name, key, version), rel.format(dataset_id, snapshot, filename.replace('/', ':'))]
-            })
-    finally:
-        return versions

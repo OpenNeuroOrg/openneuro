@@ -1,6 +1,5 @@
 import * as datalad from '../../datalad/dataset.js'
 import pubsub from '../pubsub.js'
-import mongo from '../../libs/mongo'
 import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
@@ -13,6 +12,7 @@ import { datasetComments } from './comment.js'
 import { metadata } from './metadata.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
+import Snapshot from '../../models/snapshot.js'
 import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
 import { UpdatedFile } from '../utils/file.js'
@@ -134,9 +134,9 @@ export const updateFiles = async (
     const updatedFiles = await Promise.all(promises)
     await datalad.commitFiles(datasetId, userInfo)
     // Check if this is the first data commit and no snapshots exist
-    const snapshot = await mongo.collections.crn.snapshots.findOne({
+    const snapshot = await Snapshot.findOne({
       datasetId,
-    })
+    }).exec()
     if (!snapshot) await createSnapshot(datasetId, '1.0.0', user)
     pubsub.publish('filesUpdated', {
       datasetId,

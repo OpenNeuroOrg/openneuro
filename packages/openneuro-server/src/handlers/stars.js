@@ -1,7 +1,5 @@
 // dependencies ------------------------------------------------------------
-import mongo from '../libs/mongo'
-
-const c = mongo.collections
+import Star from '../models/stars'
 
 /**
  * Stars
@@ -20,7 +18,7 @@ export default {
     const datasetId = data.datasetId
     const userId = data.userId
 
-    c.crn.stars.insertOne(
+    Star.create(
       {
         datasetId: datasetId,
         userId: userId,
@@ -48,7 +46,7 @@ export default {
 
     // delete an entry in the c.crn.stars db
     // with the datasetId and userId
-    c.crn.stars.deleteOne(
+    Star.deleteOne(
       {
         datasetId: datasetId,
         userId: userId,
@@ -75,18 +73,16 @@ export default {
     const datasetId =
       req.params.datasetId === 'undefined' ? null : req.params.datasetId
     if (datasetId) {
-      c.crn.stars
-        .find({
-          datasetId: datasetId,
-        })
-        .toArray((err, stars) => {
-          if (err) {
-            return next(err)
-          }
-          res.send(stars)
-        })
+      Star.find({
+        datasetId: datasetId,
+      }).toArray((err, stars) => {
+        if (err) {
+          return next(err)
+        }
+        res.send(stars)
+      })
     } else {
-      c.crn.stars.find().toArray((err, stars) => {
+      Star.find().exec((err, stars) => {
         if (err) {
           return next(err)
         }

@@ -3,7 +3,6 @@
  */
 import * as Sentry from '@sentry/node'
 import request from 'superagent'
-import mongo from '../libs/mongo'
 import { redis, redlock } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
@@ -13,12 +12,12 @@ import doiLib from '../libs/doi/index.js'
 import { filesKey, getFiles } from './files.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
+import Dataset from '../models/dataset.js'
 import Snapshot from '../models/snapshot.js'
+import File from '../models/file.js'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
-
-const c = mongo.collections
 
 /**
  * Snapshot contents key
@@ -67,9 +66,8 @@ const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
 const getSnapshotMetadata = (datasetId, snapshots) => {
   const tags = snapshots.map(s => s.tag)
   return new Promise((resolve, reject) => {
-    c.crn.snapshots
-      .find({ datasetId: datasetId, tag: { $in: tags } })
-      .toArray((err, metadata) => {
+    Snapshot.find({ datasetId: datasetId, tag: { $in: tags } }).exec(
+      (err, metadata) => {
         if (err) reject(err)
         snapshots = snapshots.map(s => {
           const matchMetadata = metadata.find(m => m.tag == s.tag)
@@ -77,7 +75,8 @@ const getSnapshotMetadata = (datasetId, snapshots) => {
           return s
         })
         resolve(snapshots)
-      })
+      },
+    )
   })
 }
 
@@ -281,10 +280,10 @@ export const getSnapshot = (datasetId, tag) => {
         .get(url)
         .set('Accept', 'application/json')
         .then(async ({ body }) => {
-          const { created, hexsha } = await c.crn.snapshots.findOne({
+          const { created, hexsha } = await Snapshot.findOne({
             datasetId,
             tag,
-          })
+          }).exec()
           const snapshot = { ...body, created, hexsha }
           redis.set(key, JSON.stringify(snapshot))
           return snapshot
@@ -301,30 +300,29 @@ export const getSnapshot = (datasetId, tag) => {
  * @param {string} tag
  */
 export const getSnapshotHexsha = (datasetId, tag) => {
-  return c.crn.snapshots
-    .findOne({ datasetId, tag }, { hexsha: true })
+  return Snapshot.findOne({ datasetId, tag }, { hexsha: true })
+    .exec()
     .then(result => (result ? result.hexsha : null))
 }
 
 export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
   //insert the file url data into mongo
-  return c.crn.files
-    .updateOne(
-      {
-        datasetId: datasetId,
-        tag: snapshotTag,
-      },
-      {
-        $set: {
-          datasetId: datasetId,
-          tag: snapshotTag,
-          files: files,
-        },
-      },
-      {
-        upsert: true,
-      },
-    )
+  return File.updateOne(
+    {
+      datasetId: datasetId,
+      tag: snapshotTag,
+    },
+    {
+      datasetId: datasetId,
+      tag: snapshotTag,
+      files: files,
+    },
+    {
+      upsert: true,
+      new: true,
+    },
+  )
+    .exec()
     .then(data => {
       // Clear snapshot cache when we get new URLs
       return redis.del(snapshotKey(datasetId, snapshotTag)).then(() => data)
@@ -338,12 +336,11 @@ export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
  */
 export const getPublicSnapshots = () => {
   // query all publicly available dataset
-  return c.crn.datasets
-    .find({ public: true })
-    .project({ id: 1 })
-    .toArray(datasets => {
+  return Dataset.find({ public: true }, 'id')
+    .exec()
+    .then(datasets => {
       const datasetIds = datasets.map(dataset => dataset.id)
-      return c.crn.snapshots.aggregate([
+      return Snapshot.aggregate([
         { $match: { datasetId: { $in: datasetIds } } },
         { $sort: { created: -1 } },
         {
@@ -357,6 +354,6 @@ export const getPublicSnapshots = () => {
             newRoot: { $arrayElemAt: ['$snapshots', 0] },
           },
         },
-      ])
+      ]).exec()
     })
 }

@@ -1,6 +1,6 @@
 import sitemap from 'sitemap'
 import config from '../config.js'
-import mongo from '../libs/mongo'
+import Dataset from '../models/dataset'
 
 // Static URLs - manual for now, could be generated from routes
 export const sitemapStaticUrls = () => [
@@ -14,34 +14,32 @@ export const sitemapStaticUrls = () => [
 
 // URLs generated from site data
 export const sitemapDynamicUrls = () =>
-  mongo.collections.crn.datasets
-    .aggregate([
-      { $match: { public: true } },
-      {
-        $lookup: {
-          from: 'snapshots',
-          localField: 'id',
-          foreignField: 'datasetId',
-          as: 'snapshots',
+  Dataset.aggregate([
+    { $match: { public: true } },
+    {
+      $lookup: {
+        from: 'snapshots',
+        localField: 'id',
+        foreignField: 'datasetId',
+        as: 'snapshots',
+      },
+    },
+    {
+      $unwind: '$snapshots',
+    },
+    {
+      $project: {
+        url: {
+          $concat: ['/datasets/', '$id', '/versions/', '$snapshots.tag'],
         },
-      },
-      {
-        $unwind: '$snapshots',
-      },
-      {
-        $project: {
-          url: {
-            $concat: ['/datasets/', '$id', '/versions/', '$snapshots.tag'],
-          },
-          lastmodISO: {
-            $dateToString: { date: '$snapshots.created' },
-          },
-          priority: 0.8,
-          changefreq: 'daily', // To make sure new comments are indexed
+        lastmodISO: {
+          $dateToString: { date: '$snapshots.created' },
         },
+        priority: 0.8,
+        changefreq: 'daily', // To make sure new comments are indexed
       },
-    ])
-    .toArray()
+    },
+  ]).exec()
 
 export const sitemapFactory = async () => {
   return sitemap.createSitemap({
