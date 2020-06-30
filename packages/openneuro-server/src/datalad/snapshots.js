@@ -88,7 +88,7 @@ const createIfNotExistsDoi = async (
   if (config.doi.username && config.doi.password) {
     // Mint a DOI
     // Get the newest description
-    const oldDesc = await description({}, { datasetId, revision: 'HEAD' })
+    const oldDesc = await description({ id: datasetId, revision: 'HEAD' })
     const snapshotDoi = await doiLib.registerSnapshotDoi(
       datasetId,
       tag,
