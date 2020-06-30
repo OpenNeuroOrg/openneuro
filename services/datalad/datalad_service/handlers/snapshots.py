@@ -43,9 +43,11 @@ class SnapshotResource(object):
         media = req.media
         description_fields = {}
         snapshot_changes = []
+        skip_publishing = False
         if media != None:
             description_fields = media.get('description_fields')
             snapshot_changes = media.get('snapshot_changes')
+            skip_publishing = media.get('skip_publishing')
 
         monitor_remote_configs.s(
             self.store.annex_path, dataset, snapshot).set(
@@ -59,9 +61,7 @@ class SnapshotResource(object):
             # Publish after response
             publish = publish_snapshot.s(
                 self.store.annex_path, dataset, snapshot, req.cookies)
-            skip_publishing = req.media != None and media.get(
-                'skip_publishing')
-            if not skip_publishing and skip_publishing is not None:
+            if not skip_publishing:
                 publish.apply_async(queue=queue)
         else:
             resp.media = {'error': 'tag already exists'}

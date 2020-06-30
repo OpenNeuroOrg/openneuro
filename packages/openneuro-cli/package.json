@@ -18,18 +18,21 @@
   "dependencies": {
     "bids-validator": "1.5.3",
     "commander": "^2.15.1",
+    "cross-fetch": "^3.0.5",
     "esm": "^3.0.16",
     "find-config": "^1.0.0",
     "graphql-tag": "^2.10.3",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^3.15.1",
-    "superagent": "^4.1.0"
+    "openneuro-client": "^3.15.1"
   },
   "scripts": {
     "openneuro": "node src/index.js"
   },
   "jest": {
+    "setupFiles": [
+      "./jest.setup.js"
+    ],
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "**/*.js",
@@ -42,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "jest-fetch-mock": "^3.0.3",
     "metro-memory-fs": "^0.31.0"
   }
 }
