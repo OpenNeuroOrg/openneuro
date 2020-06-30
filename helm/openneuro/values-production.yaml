@@ -23,7 +23,7 @@ certifcateArn: "arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423
 dataladWorkers: 4
 
 # Content container tag
-contentTag: v1.0.2
+contentTag: v1.0.3
 
 # Configure storage node EBS volumes
 # Workers are evenly distributed across available pools
