@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { createLazyReadStream } from './lazyReadStream.js'
 import path from 'path'
-import moment from 'moment'
 import stream from 'stream'
 import { promisify } from 'util'
 import { debounce } from './utils'
@@ -110,7 +109,7 @@ export const generateChanges = tree => {
 
   // Construct the initial content of the CHANGES file
   const snapshotText = 'Initial snapshot'
-  const date = moment().format('YYYY-MM-DD')
+  const date = new Date().toISOString().substring(0, 10)
   const versionString = '1.0.0'
   const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
 
