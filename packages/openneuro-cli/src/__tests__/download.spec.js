@@ -4,6 +4,8 @@ import {
   getDownloadMetadata,
 } from '../download.js'
 
+jest.mock('../config.js')
+
 let errorSpy
 let dirSpy
 

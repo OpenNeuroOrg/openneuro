@@ -54,10 +54,10 @@ const handleFetchReject = err => {
  * @param {string} datasetId
  * @param {string} tag
  */
-export const getDownloadMetadata = async (datasetId, tag) => {
+export const getDownloadMetadata = async (config, datasetId, tag) => {
   try {
     const response = await fetch(
-      downloadUrl(getUrl(), datasetId, tag),
+      downloadUrl(getUrl(config), datasetId, tag),
       getFetchOptions(),
     )
     if (response.status === 200) {
