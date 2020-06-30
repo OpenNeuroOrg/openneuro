@@ -9,8 +9,12 @@ export const user = (obj, { id }) => {
   return User.findOne({ id }).exec()
 }
 
-export const users = () => {
-  return User.find().exec()
+export const users = (obj, args, { userInfo }) => {
+  if (userInfo.admin) {
+    return User.find().exec()
+  } else {
+    throw new Error('You must be a site admin to retrieve users')
+  }
 }
 
 export const removeUser = (obj, { id }, { userInfo }) => {

@@ -1,6 +1,6 @@
 import * as datalad from '../../datalad/snapshots.js'
 import { dataset, analytics } from './dataset.js'
-import { checkDatasetWrite } from '../permissions.js'
+import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
@@ -13,15 +13,19 @@ export const snapshots = obj => {
 }
 
 export const snapshot = (obj, { datasetId, tag }, context) => {
-  return datalad.getSnapshot(datasetId, tag).then(snapshot => ({
-    ...snapshot,
-    dataset: () => dataset(snapshot, { id: datasetId }, context),
-    description: () => description(obj, { datasetId, tag }),
-    readme: () => readme(obj, { datasetId, revision: tag }),
-    summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
-    files: ({ prefix }) =>
-      getFiles(datasetId, snapshot.hexsha).then(filterFiles(prefix)),
-  }))
+  return checkDatasetRead(datasetId, context.user, context.userInfo).then(
+    () => {
+      return datalad.getSnapshot(datasetId, tag).then(snapshot => ({
+        ...snapshot,
+        dataset: () => dataset(snapshot, { id: datasetId }, context),
+        description: () => description(snapshot),
+        readme: () => readme(snapshot),
+        summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
+        files: ({ prefix }) =>
+          getFiles(datasetId, snapshot.hexsha).then(filterFiles(prefix)),
+      }))
+    },
+  )
 }
 
 export const participantCount = async () => {
