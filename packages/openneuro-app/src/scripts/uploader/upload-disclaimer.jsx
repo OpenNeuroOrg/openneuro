@@ -22,20 +22,14 @@ const UploadDisclaimer = () => (
           used in the dataset.
         </p>
         <p>
-          I agree that this dataset and results of all analyses performed on it
-          using the OpenNeuro platform will become publicly available under a{' '}
+          I agree that this dataset will become publicly available under a{' '}
           <a href="https://wiki.creativecommons.org/wiki/CC0">
             Creative Commons CC0
           </a>{' '}
-          or{' '}
-          <a href="https://creativecommons.org/licenses/by/4.0/legalcode">
-            Creative Commons CC-BY
-          </a>{' '}
-          license (depending on the dataset metadata) after a grace period of 36
-          months counted from first successful analysis of data from more than
-          one participant. You will be able to apply for up to two 6 month
-          extensions to increase the grace period in case the publication of a
-          corresponding paper takes longer than expected. See{' '}
+          license after a grace period of 36 months counted from the first
+          successful snapshot of the dataset. You will be able to apply for up
+          to two 6 month extensions to increase the grace period in case the
+          publication of a corresponding paper takes longer than expected. See{' '}
           <a href="/faq">FAQ</a> for details.
         </p>
         <p>
