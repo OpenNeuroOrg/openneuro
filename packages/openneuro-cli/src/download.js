@@ -50,7 +50,7 @@ export const downloadFile = async (destination, filename, fileUrl) => {
     .get(fileUrl)
     .set('Cookie', `accessToken=${getToken()}`)
     .buffer(false)
-    .on('response', res => {
+    .parse((res, cb) => {
       // Stream data to the file.
       // We can't use request.pipe() directly because it
       // doesn't catch HTTP errors, meaning errors turn
@@ -60,10 +60,11 @@ export const downloadFile = async (destination, filename, fileUrl) => {
       // Instead we set stream content out manually.
       // https://github.com/visionmedia/superagent/issues/1575
 
-      // 'response' happens before superagent checks the
+      // this happens before superagent checks the
       // status code, so we need to check it ourselves.
-      if(request.Request.prototype._isResponseOK(res)) {
+      if(res.statusCode == 200) {
         res.on('data', chunk => { writeStream.write(chunk) })
+        res.on('end', () => { cb(null, undefined, null) })
       }
     })
 }
