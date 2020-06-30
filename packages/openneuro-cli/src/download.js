@@ -62,9 +62,13 @@ export const downloadFile = async (destination, filename, fileUrl) => {
 
       // this happens before superagent checks the
       // status code, so we need to check it ourselves.
-      if(res.statusCode == 200) {
-        res.on('data', chunk => { writeStream.write(chunk) })
-        res.on('end', () => { cb(null, undefined, null) })
+      if (res.statusCode == 200) {
+        res.on('data', chunk => {
+          writeStream.write(chunk)
+        })
+        res.on('end', () => {
+          cb(null, undefined, null)
+        })
       }
     })
 }
