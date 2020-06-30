@@ -58,7 +58,8 @@ def generate_s3_annex_options(dataset, realm):
         if public == 'yes':
             annex_options += [
                 'autoenable=true',
-                'publicurl=http://{}.s3.amazonaws.com/'.format(
+                'publicurl=https://s3.amazonaws.com/{}'.format(
+
                     realm.s3_bucket),
             ]
     else:
@@ -112,3 +113,4 @@ def s3_export(dataset, target, treeish='HEAD'):
             '{}'.format(target),
         ]
     )
+
