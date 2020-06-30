@@ -22,18 +22,7 @@ export const testTime = new Date()
 
 // Workaround to restore this test, it should be refactored with openneuro-client updates
 const schema = makeExecutableSchema({
-  typeDefs: `
-directive @cacheControl(
-  maxAge: Int,
-  scope: CacheControlScope
-) on OBJECT | FIELD_DEFINITION
-
-enum CacheControlScope {
-  PUBLIC
-  PRIVATE
-}
-
-${typeDefs}`,
+  typeDefs,
   resolvers,
 })
 
