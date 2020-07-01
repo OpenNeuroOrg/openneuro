@@ -138,7 +138,7 @@ def get_repo_urls(path, files):
         return files
     # Then read those objects with git cat-file --batch
     gitObjects = '\n'.join([rmetObjects['remote.log'], ] +
-                           [rmetObjects[compute_rmet(f['key'])] for f in files]) + '\n'
+                           [rmetObjects[compute_rmet(f['key'])] if compute_rmet(f['key']) in rmetObjects else '' for f in files]) + '\n'
     catFileProcess = subprocess.run(['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
                                     cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, universal_newlines=True)
     catFile = io.StringIO(catFileProcess.stdout)
@@ -161,7 +161,8 @@ def get_repo_urls(path, files):
         # \n
         for fIndex in range(len(files)):
             url = read_rmet_file(remote, catFile)
-            files[fIndex]['urls'].append(url)
+            if url:
+                files[fIndex]['urls'].append(url)
     return files
 
 
