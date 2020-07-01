@@ -81,11 +81,8 @@ def read_ls_tree_line(gitTreeLine, gitAnnexUrls, files, symlinkFilenames, symlin
     else:
         # Immediately append regular files
         file_id = compute_file_hash(obj_hash, filename)
-        git_annex_key = 'SHA1--' + obj_hash
-        urls = gitAnnexUrls[git_annex_key] if git_annex_key in gitAnnexUrls else [
-        ]
         files.append({'filename': filename, 'size': int(size),
-                      'id': file_id, 'key': obj_hash, 'urls': urls})
+                      'id': file_id, 'key': obj_hash, 'urls': []})
 
 
 def read_where_is_line(gitAnnexUrls, whereIsLine):
@@ -103,12 +100,6 @@ def read_where_is_line(gitAnnexUrls, whereIsLine):
 
 def get_repo_files(dataset, branch='HEAD'):
     """Read all files in a repo at a given branch, tag, or commit hash."""
-    # Obtain remote URLs for every object
-    gitAnnexUrls = {}
-    gitAnnexWhereIs = subprocess.Popen(
-        ['git-annex', 'whereis', '-A', '--json'], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
-    for whereIsLine in gitAnnexWhereIs.stdout:
-        read_where_is_line(gitAnnexUrls, whereIsLine)
     gitProcess = subprocess.Popen(
         ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
     files = []
@@ -116,7 +107,7 @@ def get_repo_files(dataset, branch='HEAD'):
     symlinkObjects = []
     for line in gitProcess.stdout:
         gitTreeLine = line.rstrip()
-        read_ls_tree_line(gitTreeLine, gitAnnexUrls, files,
+        read_ls_tree_line(gitTreeLine, {}, files,
                           symlinkFilenames, symlinkObjects)
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
@@ -134,9 +125,8 @@ def get_repo_files(dataset, branch='HEAD'):
             size = int(key.split('-', 2)[1].lstrip('s'))
             filename = symlinkFilenames[(index - 1) // 2]
             file_id = compute_file_hash(key, filename)
-            urls = gitAnnexUrls[key] if key in gitAnnexUrls else []
             files.append({'filename': filename, 'size': int(
-                size), 'id': file_id, 'key': key, 'urls': urls})
+                size), 'id': file_id, 'key': key, 'urls': []})
     return files
 
 
