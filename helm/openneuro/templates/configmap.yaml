@@ -14,3 +14,4 @@ data:
   GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111/crn/graphql
   DATALAD_SERVICE_URI: {{ .Release.Name }}-dataset-worker
   DATALAD_S3_PUBLIC_ON_EXPORT: "yes"
+  LOCPATH: ""
