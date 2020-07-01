@@ -3,6 +3,7 @@ from mmap import mmap
 import json
 import os
 import re
+import io
 import stat
 import subprocess
 
@@ -59,7 +60,7 @@ def parse_ls_tree_line(gitTreeLine):
     return [filename, mode, obj_type, obj_hash, size]
 
 
-def read_ls_tree_line(gitTreeLine, gitAnnexUrls, files, symlinkFilenames, symlinkObjects):
+def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
     """Read one line of `git ls-tree` and append to the correct buckets of files, symlinks, and objects."""
     filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
         gitTreeLine)
@@ -81,34 +82,91 @@ def read_ls_tree_line(gitTreeLine, gitAnnexUrls, files, symlinkFilenames, symlin
     else:
         # Immediately append regular files
         file_id = compute_file_hash(obj_hash, filename)
-        git_annex_key = 'SHA1--' + obj_hash
-        urls = gitAnnexUrls[git_annex_key] if git_annex_key in gitAnnexUrls else [
-        ]
         files.append({'filename': filename, 'size': int(size),
-                      'id': file_id, 'key': obj_hash, 'urls': urls})
+                      'id': file_id, 'key': obj_hash, 'urls': []})
 
 
-def read_where_is_line(gitAnnexUrls, whereIsLine):
-    """Read a line of git-annex whereis --json output."""
-    whereIs = json.loads(whereIsLine)
-    # Obtain s3-PUBLIC URLs only
-    try:
-        for remote in whereIs['whereis']:
-            if remote['description'] == '[s3-PUBLIC]':
-                gitAnnexUrls[whereIs['key']] = remote['urls']
-    except StopIteration:
-        # No results
-        return
+def compute_rmet(key):
+    if len(key) == 40:
+        key = 'SHA1--{}'.format(key)
+    keyHash = hashlib.md5(key.encode()).hexdigest()
+    return '{}/{}/{}.log.rmet'.format(keyHash[0:3], keyHash[3:6], key)
+
+
+def parse_remote_line(remoteLine,
+                      preferredRemote='s3-PUBLIC'):
+    remoteConfig = dict(item.split('=')
+                        for item in remoteLine[37:].split(' '))
+    if remoteConfig['name'] == preferredRemote:
+        remoteUuid = remoteLine[0:36]
+        remoteUrl = remoteConfig['publicurl'] if 'publicurl' in remoteConfig else None
+        return {'uuid': remoteUuid, 'url': remoteUrl}
+
+
+def parse_rmet_line(remote, rmetLine):
+    """Read one rmet line and return a valid URL for this object"""
+    remoteContext, remoteData = rmetLine.split('V +')
+    s3version, path = remoteData.split('#')
+    return '{}{}?versionId={}'.format(remote['url'], path, s3version)
+
+
+def read_rmet_file(remote, catFile):
+    # First line is git metadata
+    line = catFile.readline().rstrip()
+    if line[0:3] == ':::':
+        while True:
+            # Examine each remote entry in the rmet file
+            nextLine = catFile.readline().rstrip()
+            if (nextLine != ''):
+                # If we find expected remote, return the URL
+                if remote['uuid'] in nextLine:
+                    return parse_rmet_line(remote, nextLine)
+
+
+def get_repo_urls(path, files):
+    """For each file provided, obtain the rmet data and append URLs if possible."""
+    # First obtain the git-annex branch objects
+    gitAnnexBranch = subprocess.Popen(
+        ['git', 'ls-tree', '-l', '-r', 'git-annex'], cwd=path, stdout=subprocess.PIPE, encoding='utf-8')
+    rmetObjects = {}
+    for line in gitAnnexBranch.stdout:
+        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
+            line.rstrip())
+        rmetObjects[filename] = obj_hash
+    if 'remote.log' not in rmetObjects:
+        # Skip searching for URLs if no remote.log is present
+        return files
+    # Then read those objects with git cat-file --batch
+    gitObjects = '\n'.join([rmetObjects['remote.log'], ] +
+                           [rmetObjects[compute_rmet(f['key'])] for f in files]) + '\n'
+    catFileProcess = subprocess.run(['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
+                                    cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, universal_newlines=True)
+    catFile = io.StringIO(catFileProcess.stdout)
+    # Read in remote.log first
+    remoteLogMetadata = catFile.readline().rstrip()
+    remote = None
+    while True:
+        line = catFile.readline().rstrip()
+        if line == '':
+            break
+        else:
+            remote = parse_remote_line(line)
+    # Check if we found a useful external remote
+    if remote:
+        # Read the rest of the files.
+        # Output looks like this:
+        # fc83dd77328c85d9856d661ccee76b9c550b0600 blob 129
+        # 1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json
+        # 1590213748.042921433s c6ba9b9b-ce53-4dfb-b2cc-d2ebf5f27a99:V +z9Zl27ykeacyuMzZGfSbzrblwxPkN2SM#ds002778/dataset_description.json
+        # \n
+        for fIndex in range(len(files)):
+            url = read_rmet_file(remote, catFile)
+            files[fIndex]['urls'].append(url)
+    return files
 
 
 def get_repo_files(dataset, branch='HEAD'):
     """Read all files in a repo at a given branch, tag, or commit hash."""
-    # Obtain remote URLs for every object
-    gitAnnexUrls = {}
-    gitAnnexWhereIs = subprocess.Popen(
-        ['git-annex', 'whereis', '-A', '--json'], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
-    for whereIsLine in gitAnnexWhereIs.stdout:
-        read_where_is_line(gitAnnexUrls, whereIsLine)
     gitProcess = subprocess.Popen(
         ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
     files = []
@@ -116,7 +174,7 @@ def get_repo_files(dataset, branch='HEAD'):
     symlinkObjects = []
     for line in gitProcess.stdout:
         gitTreeLine = line.rstrip()
-        read_ls_tree_line(gitTreeLine, gitAnnexUrls, files,
+        read_ls_tree_line(gitTreeLine, files,
                           symlinkFilenames, symlinkObjects)
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
@@ -134,10 +192,10 @@ def get_repo_files(dataset, branch='HEAD'):
             size = int(key.split('-', 2)[1].lstrip('s'))
             filename = symlinkFilenames[(index - 1) // 2]
             file_id = compute_file_hash(key, filename)
-            urls = gitAnnexUrls[key] if key in gitAnnexUrls else []
             files.append({'filename': filename, 'size': int(
-                size), 'id': file_id, 'key': key, 'urls': urls})
-    return files
+                size), 'id': file_id, 'key': key, 'urls': []})
+    # Now find URLs for each file if available
+    return get_repo_urls(dataset.path, files)
 
 
 class CommitInfo():
