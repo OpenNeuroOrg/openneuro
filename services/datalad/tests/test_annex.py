@@ -1,5 +1,7 @@
+import io
+
 from .dataset_fixtures import *
-from datalad_service.common.annex import create_file_obj, parse_ls_tree_line, read_ls_tree_line, read_where_is_line
+from datalad_service.common.annex import create_file_obj, parse_ls_tree_line, read_ls_tree_line, compute_rmet, parse_remote_line, parse_rmet_line, read_rmet_file
 
 expected_file_object = {
     'filename': 'dataset_description.json',
@@ -43,12 +45,11 @@ def test_parse_ls_tree_line_submodule():
 
 
 def test_get_ls_tree_line():
-    gitAnnexUrls = {}
     files = []
     symlinkFilenames = []
     symlinkObjects = []
     read_ls_tree_line("""100644 blob a786c385bd1812410d01177affb6ce834d85facd     459	dataset_description.json""",
-                      gitAnnexUrls, files, symlinkFilenames, symlinkObjects)
+                      files, symlinkFilenames, symlinkObjects)
     assert files == [
         {'filename': 'dataset_description.json',
          'id': '78dd92373749f62af23f3ae499b7a8ac33418fff',
@@ -61,24 +62,22 @@ def test_get_ls_tree_line():
 
 
 def test_get_ls_tree_line_ignored():
-    gitAnnexUrls = {}
     files = []
     symlinkFilenames = []
     symlinkObjects = []
     read_ls_tree_line("""100644 blob a786c385bd1812410d01177affb6ce834d85facd     459	.gitattributes""",
-                      gitAnnexUrls, files, symlinkFilenames, symlinkObjects)
+                      files, symlinkFilenames, symlinkObjects)
     assert files == []
     assert symlinkFilenames == []
     assert symlinkObjects == []
 
 
 def test_get_ls_tree_line_annexed():
-    gitAnnexUrls = {}
     files = []
     symlinkFilenames = []
     symlinkObjects = []
     read_ls_tree_line("""120000 blob 570cb4a3fd80de6e8491312c935bfe8029066361     141	derivatives/mriqc/reports/sub-01_ses-01_T1w.html""",
-                      gitAnnexUrls, files, symlinkFilenames, symlinkObjects)
+                      files, symlinkFilenames, symlinkObjects)
     assert files == []
     assert symlinkFilenames == [
         'derivatives/mriqc/reports/sub-01_ses-01_T1w.html']
@@ -86,30 +85,46 @@ def test_get_ls_tree_line_annexed():
 
 
 def test_get_ls_tree_line_submodule():
-    gitAnnexUrls = {}
     files = []
     symlinkFilenames = []
     symlinkObjects = []
     read_ls_tree_line("""160000 commit fcafd17fbfa44495c7f5f8a0777e5ab610b09500       -	code/facedistid_analysis""",
-                      gitAnnexUrls, files, symlinkFilenames, symlinkObjects)
+                      files, symlinkFilenames, symlinkObjects)
     assert files == []
     assert symlinkFilenames == []
     assert symlinkObjects == []
 
 
-def test_read_where_is_line():
-    gitAnnexUrls = {}
-    exampleAnnexedLine = """{"command":"whereis","note":"2 copies\\n\\t87fe6ba3-eb5e-4419-b7ce-839dd8fd1308 -- root@35763ede081b:/datalad/ds002002 [here]\\n \\tdd8cfd6d-a11e-419b-bbbc-35085d98051a -- [s3-PUBLIC]\\n\\ns3-PUBLIC: http://openneuro-datalad-public-nell-test.s3.amazonaws.com/ds002002/sub-01/anat/sub-01_T1w.nii.gz?versionId=yuHcJT5RxnjxNVuwEx3yq15oDrpb7H9z\\n","success":true,"untrusted":[],"key":"MD5E-s311112--bc8bbbacfd2ff823c2047ead1afec9b3.nii.gz","whereis":[{"here":true,"uuid":"87fe6ba3-eb5e-4419-b7ce-839dd8fd1308","urls":[],"description":"root@35763ede081b:/datalad/ds002002"},{"here":false,"uuid":"dd8cfd6d-a11e-419b-bbbc-35085d98051a","urls":["http://openneuro-datalad-public-nell-test.s3.amazonaws.com/ds002002/sub-01/anat/sub-01_T1w.nii.gz?versionId=yuHcJT5RxnjxNVuwEx3yq15oDrpb7H9z"],"description":"[s3-PUBLIC]"}],"file":null}"""
-    read_where_is_line(gitAnnexUrls, exampleAnnexedLine)
-    assert "MD5E-s311112--bc8bbbacfd2ff823c2047ead1afec9b3.nii.gz" in gitAnnexUrls
-    assert gitAnnexUrls["MD5E-s311112--bc8bbbacfd2ff823c2047ead1afec9b3.nii.gz"] == [
-        'http://openneuro-datalad-public-nell-test.s3.amazonaws.com/ds002002/sub-01/anat/sub-01_T1w.nii.gz?versionId=yuHcJT5RxnjxNVuwEx3yq15oDrpb7H9z']
+def test_compute_rmet_git():
+    # Test a git SHA1 key
+    assert compute_rmet(
+        '99fe93bfea62c16a10488593da870df25d09be81') == '9e2/03e/SHA1--99fe93bfea62c16a10488593da870df25d09be81.log.rmet'
 
 
-def test_read_where_is_line_git_file():
-    gitAnnexUrls = {}
-    exampleAnnexedLine = """{"command":"whereis","note":"1 copy\\n\\tdd8cfd6d-a11e-419b-bbbc-35085d98051a -- [s3-PUBLIC]\\n\\ns3-PUBLIC: http://openneuro-datalad-public-nell-test.s3.amazonaws.com/ds002002/T1w.json?versionId=65LPwCLmnBAOYlJ0WBW0itAo3ooGAw4j\\n","success":true,"untrusted":[],"key":"SHA1--b08aa0ec5b5e716479824859524a22140fb2af82","whereis":[{"here":false,"uuid":"dd8cfd6d-a11e-419b-bbbc-35085d98051a","urls":["http://openneuro-datalad-public-nell-test.s3.amazonaws.com/ds002002/T1w.json?versionId=65LPwCLmnBAOYlJ0WBW0itAo3ooGAw4j"],"description":"[s3-PUBLIC]"}],"file":null}"""
-    read_where_is_line(gitAnnexUrls, exampleAnnexedLine)
-    assert "SHA1--b08aa0ec5b5e716479824859524a22140fb2af82" in gitAnnexUrls
-    assert gitAnnexUrls["SHA1--b08aa0ec5b5e716479824859524a22140fb2af82"] == [
-        'http://openneuro-datalad-public-nell-test.s3.amazonaws.com/ds002002/T1w.json?versionId=65LPwCLmnBAOYlJ0WBW0itAo3ooGAw4j']
+def test_compute_rmet_annex():
+    # Test a git annex MD5E key
+    assert compute_rmet(
+        'MD5E-s12102144--d614929593bf2a7cccea90bea67255f4.bdf') == '9ce/c07/MD5E-s12102144--d614929593bf2a7cccea90bea67255f4.bdf.log.rmet'
+
+
+def test_parse_remote_line():
+    remote = parse_remote_line("""57894849-d0c8-4c62-8418-3627be18a196 autoenable=true bucket=openneuro.org datacenter=US encryption=none exporttree=yes fileprefix=ds002778/ host=s3.amazonaws.com name=s3-PUBLIC partsize=1GiB port=80 public=yes publicurl=http://openneuro.org.s3.amazonaws.com/ storageclass=STANDARD type=S3 versioning=yes timestamp=1588743361.538097946s""")
+    assert remote == {'url': 'http://openneuro.org.s3.amazonaws.com/',
+                      'uuid': '57894849-d0c8-4c62-8418-3627be18a196'}
+
+
+def test_parse_rmet_line():
+    remote = {'url': 'http://openneuro.org.s3.amazonaws.com/',
+              'uuid': '57894849-d0c8-4c62-8418-3627be18a196'}
+    url = parse_rmet_line(
+        remote, """1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
+    assert url == 'http://openneuro.org.s3.amazonaws.com/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+
+
+def test_read_rmet_file():
+    remote = {'url': 'http://openneuro.org.s3.amazonaws.com/',
+              'uuid': '57894849-d0c8-4c62-8418-3627be18a196'}
+    catFile = io.StringIO(""":::99fe93bfea62c16a10488593da870df25d09be81
+    1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
+    url = read_rmet_file(remote, catFile)
+    assert url == 'http://openneuro.org.s3.amazonaws.com/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
