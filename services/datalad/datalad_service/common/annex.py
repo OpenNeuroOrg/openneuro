@@ -107,20 +107,25 @@ def parse_rmet_line(remote, rmetLine):
     """Read one rmet line and return a valid URL for this object"""
     remoteContext, remoteData = rmetLine.split('V +')
     s3version, path = remoteData.split('#')
-    return '{}{}?versionId={}'.format(remote['url'], path, s3version)
+    slash = '' if remote['url'][-1] == '/' else '/'
+    return '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
 
 
 def read_rmet_file(remote, catFile):
     # First line is git metadata
     line = catFile.readline().rstrip()
+    url = None
     if line[0:3] == ':::':
         while True:
             # Examine each remote entry in the rmet file
             nextLine = catFile.readline().rstrip()
-            if (nextLine != ''):
+            if nextLine == '':
+                break
+            else:
                 # If we find expected remote, return the URL
                 if remote['uuid'] in nextLine:
-                    return parse_rmet_line(remote, nextLine)
+                    url = parse_rmet_line(remote, nextLine)
+    return url
 
 
 def get_repo_urls(path, files):
@@ -136,9 +141,17 @@ def get_repo_urls(path, files):
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
         return files
+    rmetPaths = []
+    rmetFiles = {}
+    for f in files:
+        rmetPath = compute_rmet(f['key'])
+        if rmetPath in rmetObjects:
+            # Keep a reference to the files so we can add URLs later
+            rmetFiles[rmetPath] = f
+            rmetPaths.append(rmetPath)
     # Then read those objects with git cat-file --batch
-    gitObjects = '\n'.join([rmetObjects['remote.log'], ] +
-                           [rmetObjects[compute_rmet(f['key'])] if compute_rmet(f['key']) in rmetObjects else '' for f in files]) + '\n'
+    gitObjects = rmetObjects['remote.log'] + '\n' + \
+        '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
     catFileProcess = subprocess.run(['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
                                     cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, universal_newlines=True)
     catFile = io.StringIO(catFileProcess.stdout)
@@ -150,7 +163,9 @@ def get_repo_urls(path, files):
         if line == '':
             break
         else:
-            remote = parse_remote_line(line)
+            matched_remote = parse_remote_line(line)
+            if matched_remote:
+                remote = matched_remote
     # Check if we found a useful external remote
     if remote:
         # Read the rest of the files.
@@ -159,10 +174,10 @@ def get_repo_urls(path, files):
         # 1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json
         # 1590213748.042921433s c6ba9b9b-ce53-4dfb-b2cc-d2ebf5f27a99:V +z9Zl27ykeacyuMzZGfSbzrblwxPkN2SM#ds002778/dataset_description.json
         # \n
-        for fIndex in range(len(files)):
+        for path in rmetPaths:
             url = read_rmet_file(remote, catFile)
             if url:
-                files[fIndex]['urls'].append(url)
+                rmetFiles[path]['urls'].append(url)
     return files
 
 

@@ -121,6 +121,14 @@ def test_parse_rmet_line():
     assert url == 'http://openneuro.org.s3.amazonaws.com/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
 
 
+def test_parse_rmet_line_https():
+    remote = {'url': 'https://s3.amazonaws.com/openneuro.org',
+              'uuid': '57894849-d0c8-4c62-8418-3627be18a196'}
+    url = parse_rmet_line(
+        remote, """1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
+    assert url == 'https://s3.amazonaws.com/openneuro.org/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+
+
 def test_read_rmet_file():
     remote = {'url': 'http://openneuro.org.s3.amazonaws.com/',
               'uuid': '57894849-d0c8-4c62-8418-3627be18a196'}
