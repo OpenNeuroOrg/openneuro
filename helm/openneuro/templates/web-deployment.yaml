@@ -8,7 +8,7 @@ metadata:
     release: '{{ .Release.Name }}'
     heritage: '{{ .Release.Service }}'
 spec:
-  replicas: 3
+  replicas: {{ .Values.webReplicas }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-web

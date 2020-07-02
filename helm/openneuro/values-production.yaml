@@ -25,6 +25,9 @@ dataladWorkers: 4
 # OpenNeuro-server API parallelism
 apiReplicas: 4
 
+# Static service parallelism
+webReplicas: 4
+
 # Content container tag
 contentTag: v1.0.3
 
