@@ -105,15 +105,14 @@ def parse_remote_line(remoteLine,
 
 def parse_rmet_line(remote, rmetLine):
     """Read one rmet line and return a valid URL for this object"""
-    remoteContext, remoteData = rmetLine.split('V +')
-    slash = '' if remote['url'][-1] == '/' else '/'
-    if '#' in remoteData:
+    try:
+        remoteContext, remoteData = rmetLine.split('V +')
+        slash = '' if remote['url'][-1] == '/' else '/'
         s3version, path = remoteData.split('#')
         return '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
-    else:
-        # Handle unversioned data
-        path = remoteData
-        return '{}{}{}'.format(remote['url'], slash, path)
+    except ValueError:
+        # TODO - Log this error
+        return None
 
 
 def read_rmet_file(remote, catFile):
