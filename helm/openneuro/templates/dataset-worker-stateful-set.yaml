@@ -70,10 +70,10 @@ spec:
         resources:
           limits:
             cpu: "2"
-            memory: "2Gi"
+            memory: "8Gi"
           requests:
             cpu: "0.5"
-            memory: "512Mi"
+            memory: "1Gi"
         command:
           - /dataset-worker
         envFrom:
