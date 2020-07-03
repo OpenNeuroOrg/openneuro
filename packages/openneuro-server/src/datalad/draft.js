@@ -47,11 +47,13 @@ export const getDraftFiles = (datasetId, options = {}) => {
         .query(query)
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
-          const filesWithUrls = files.map(addFileUrl(datasetId))
-          if (!untracked) {
+          if (untracked) {
+            return files.map(withGeneratedId)
+          } else {
+            const filesWithUrls = files.map(addFileUrl(datasetId))
             redis.set(key, JSON.stringify(filesWithUrls))
+            return filesWithUrls.map(withGeneratedId)
           }
-          return filesWithUrls.map(withGeneratedId)
         })
   })
 }
