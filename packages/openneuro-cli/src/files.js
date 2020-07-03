@@ -115,7 +115,7 @@ export const generateChanges = tree => {
 
   // Create readable stream from the CHANGES file we have
   const initialChangesStream = new stream.PassThrough()
-  initialChangesStream.end(new Buffer(initialChangesContent, 'utf-8'))
+  initialChangesStream.end(Buffer.from(initialChangesContent, 'utf-8'))
   initialChangesStream.path = 'CHANGES'
 
   // Add the readable stream to the root level files list (tree.files)
