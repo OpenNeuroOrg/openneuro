@@ -7,7 +7,7 @@ import { datasetCacheId } from './cache-id.js'
 
 const deleteComment = gql`
   mutation deleteComment($commentId: ID!, $deleteChildren: Boolean) {
-    deleteComment($commentId: ID!, $deleteChildren: Boolean)
+    deleteComment(commentId: $commentId, deleteChildren: $deleteChildren)
   }
 `
 
@@ -21,7 +21,7 @@ const deleteComment = gql`
 export const deleteCommentsReducer = (comments, { deletedCommentIds }) => {
   // Must copy with freezeResults enabled
   const nextCommentsState = [...comments].filter(
-    c => !deletedCommentIds.includes(c.id),
+    (c) => !deletedCommentIds.includes(c.id),
   )
   return nextCommentsState
 }
@@ -49,7 +49,7 @@ const DeleteComment = ({ datasetId, commentId }) => {
           },
         })
       }}>
-      {deleteComment => (
+      {(deleteComment) => (
         <a
           className="delete"
           onClick={async () => {

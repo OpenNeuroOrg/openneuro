@@ -6,15 +6,15 @@ export const comment = (obj, { id }) => {
   return Comment.findOne({ _id: id }).exec()
 }
 
-export const datasetComments = obj => {
+export const datasetComments = (obj) => {
   return Comment.find({ datasetId: obj.id }).exec()
 }
 
-export const userComments = obj => {
+export const userComments = (obj) => {
   return Comment.find({ 'user._id': obj.id }).exec()
 }
 
-const replies = obj => {
+const replies = (obj) => {
   return Comment.find({ parentId: obj._id }).exec()
 }
 
@@ -23,7 +23,7 @@ const replies = obj => {
  * @param {*[][]} arr
  * @returns {*[]}
  */
-const flatten = arr => [].concat(...arr)
+const flatten = (arr) => [].concat(...arr)
 
 /**
  * @typedef {Object} Comment
@@ -35,13 +35,14 @@ const flatten = arr => [].concat(...arr)
  * @param {Comment} obj
  * @returns {Promise<Comment[]>}
  */
-const allNestedReplies = async obj => {
+const allNestedReplies = async (obj) => {
   const replies = await Comment.find({ parentId: obj._id }).exec()
   if (!replies.length) {
     return replies
   } else {
     let nestedReplies = await Promise.all(replies.map(allNestedReplies))
-    return flatten(nestedReplies)
+    const r = flatten([replies, ...nestedReplies])
+    return r
   }
 }
 
@@ -64,7 +65,7 @@ export const addComment = (
     text,
     user: { _id: user },
   })
-  return newComment.save().then(commentInsert => {
+  return newComment.save().then((commentInsert) => {
     notifications.commentCreated(commentInsert)
     return commentInsert._id
   })
@@ -87,27 +88,28 @@ export const editComment = async (
 
 export const deleteComment = async (
   obj,
-  { commentId, deleteChildren = false },
+  { commentId, deleteChildren = true },
 ) => {
   const existingComment = await Comment.findById(commentId).exec()
   const targetComments = [existingComment]
   if (deleteChildren) {
-    targetComments.concat(await allNestedReplies(existingComment))
+    targetComments.push(...(await allNestedReplies(existingComment)))
   }
-  console.log(targetComments)
-  const deletedCommentIds = targetComments.map(c => c._id)
+  const deletedCommentIds = targetComments.map((c) => c._id)
   return Comment.deleteMany({
     _id: {
       $in: deletedCommentIds,
     },
-  }).then(() => deletedCommentIds)
+  })
+    .then((deleted) => console.log({ deleted }))
+    .then(() => deletedCommentIds)
 }
 
 //"5c9bf7e3088cea6fa775c42a"
 const CommentFields = {
-  parent: obj => comment(obj, { id: obj.parentId }),
+  parent: (obj) => comment(obj, { id: obj.parentId }),
   replies,
-  user: obj => user(obj, { id: obj.user._id }),
+  user: (obj) => user(obj, { id: obj.user._id }),
 }
 
 export default CommentFields
