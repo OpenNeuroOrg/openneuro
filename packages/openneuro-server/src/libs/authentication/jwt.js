@@ -1,8 +1,13 @@
 import passport from 'passport'
+import refresh from 'passport-oauth2-refresh'
 import jwt from 'jsonwebtoken'
+import { decrypt } from './crypto'
+import User from '../../models/user'
+import config from '../../config.js'
 
 // Helper to generate a JWT containing user info
-export const addJWT = config => (user, expiration = 60 * 60 * 24 * 30 * 6) => {
+export const addJWT = (config) => (user, expiration = 20) => {
+  // export const addJWT = config => (user, expiration = 60 * 60 * 24 * 30 * 6) => {
   const token = jwt.sign(
     {
       sub: user.id,
@@ -19,12 +24,61 @@ export const addJWT = config => (user, expiration = 60 * 60 * 24 * 30 * 6) => {
   return Object.assign({}, user, { token })
 }
 
+const requestNewAccessToken = (jwtProvider, refreshToken) =>
+  new Promise((resolve, reject) => {
+    refresh.requestNewAccessToken(
+      jwtProvider,
+      refreshToken,
+      (err, accessToken) => {
+        if (err) reject(err)
+        else resolve(accessToken)
+      },
+    )
+  })
+
+/**
+ * Extract the JWT from a cookie
+ * @param {Object} req
+ */
+export const jwtFromRequest = (req) => {
+  if (req.cookies && req.cookies.accessToken) {
+    return req.cookies.accessToken
+  } else {
+    return null
+  }
+}
+const parsedJwtFromRequest = (req) => {
+  const jwt = jwtFromRequest(req)
+  if (jwt) return decodeJWT(jwt)
+  else return null
+}
+
+const refreshToken = async (jwt) => {
+  const user = await User.findOne({ id: jwt.sub, provider: jwt.provider })
+  if (user && user.refresh) {
+    const refreshToken = decrypt(user.refresh)
+    const accessToken = await requestNewAccessToken(jwt.provider, refreshToken)
+    if (accessToken) {
+      const newToken = addJWT(config)(user).token
+      return [newToken, user]
+    }
+  }
+}
+
 // attach user obj to request based on jwt
 // if user does not exist, continue
-export const authenticate = (req, res, next) => {
-  passport.authenticate('jwt', { session: false }, (err, user) =>
-    req.login(user, { session: false }, () => next()),
-  )(req, res, next)
+export const authenticate = async (req, res, next) => {
+  const jwt = parsedJwtFromRequest(req)
+  if (Date.now() > jwt.exp * 1000) {
+    const [token, user] = await refreshToken(jwt)
+    if (token) {
+      req.cookies.accessToken = token
+      res.cookie('accessToken', token)
+    }
+  }
+  passport.authenticate('jwt', { session: false }, (err, user) => {
+    req.login(user, { session: false }, () => next())
+  })(req, res, next)
 }
 
 export const authSuccessHandler = (req, res, next) => {
@@ -38,10 +92,10 @@ export const authSuccessHandler = (req, res, next) => {
   return next()
 }
 
-export const decodeJWT = token => {
+export const decodeJWT = (token) => {
   return jwt.decode(token)
 }
 
-export const generateDataladCookie = config => user => {
+export const generateDataladCookie = (config) => (user) => {
   return user ? `accessToken=${addJWT(config)(user).token}` : ''
 }
