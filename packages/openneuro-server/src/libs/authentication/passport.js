@@ -16,11 +16,11 @@ const PROVIDERS = {
   GLOBUS: 'globus',
 }
 
-const loadProfile = (profile) => {
+const loadProfile = profile => {
   if (profile.provider === PROVIDERS.GOOGLE) {
     // Get the account email from Google profile
     const primaryEmail = profile.emails
-      .filter((email) => email.verified === true)
+      .filter(email => email.verified === true)
       .shift()
     return {
       email: primaryEmail.value,
@@ -62,8 +62,8 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
     profileUpdate,
     { upsert: true, new: true, setDefaultsOnInsert: true },
   )
-    .then((user) => done(null, addJWT(config)(user)))
-    .catch((err) => done(err, null))
+    .then(user => done(null, addJWT(config)(user)))
+    .catch(err => done(err, null))
 }
 
 export const verifyORCIDUser = (
@@ -76,7 +76,7 @@ export const verifyORCIDUser = (
   const token = `${profile.orcid}:${profile.access_token}`
   orcid
     .getProfile(token)
-    .then((info) => {
+    .then(info => {
       profile.info = info
       profile.provider = PROVIDERS.ORCID
       const profileUpdate = loadProfile(profile)
@@ -84,9 +84,9 @@ export const verifyORCIDUser = (
         { providerId: profile.orcid, provider: profile.provider },
         profileUpdate,
         { upsert: true, new: true, setDefaultsOnInsert: true },
-      ).then((user) => done(null, addJWT(config)(user)))
+      ).then(user => done(null, addJWT(config)(user)))
     })
-    .catch((err) => done(err, null))
+    .catch(err => done(err, null))
 }
 
 export const verifyGlobusUser = (
@@ -104,8 +104,8 @@ export const verifyGlobusUser = (
     profileUpdate,
     { upsert: true, new: true, setDefaultsOnInsert: true },
   )
-    .then((user) => done(null, addJWT(config)(user)))
-    .catch((err) => done(err, null))
+    .then(user => done(null, addJWT(config)(user)))
+    .catch(err => done(err, null))
 }
 
 export const setupPassportAuth = () => {
@@ -118,7 +118,7 @@ export const setupPassportAuth = () => {
       (jwt, done) => {
         // A user must already exist to use a JWT to auth a request
         User.findOne({ id: jwt.sub, provider: jwt.provider })
-          .then((user) => {
+          .then(user => {
             if (user) done(null, user)
             else done(null, false)
           })
