@@ -8,11 +8,11 @@ import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 
 const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
   <>
-    {comments.map((comment) => {
+    {comments.map(comment => {
       if (!comment) return null
       // Join any replies
       const nextLevel = comment.hasOwnProperty('replies')
-        ? comment.replies.map((reply) => commentMap[reply.id])
+        ? comment.replies.map(reply => commentMap[reply.id])
         : []
       return (
         <Comment
@@ -44,10 +44,10 @@ CommentTree.propTypes = {
 const Comments = ({ datasetId, uploader, comments }) => {
   // Fast access map to dereference replies in CommentTree component
   const commentMap = Object.fromEntries(
-    comments.map((comment) => [comment.id, comment]),
+    comments.map(comment => [comment.id, comment]),
   )
   // Get only top level comments
-  const rootComments = comments.filter((comment) => comment.parent === null)
+  const rootComments = comments.filter(comment => comment.parent === null)
   return (
     <div className="col-xs-12">
       <div className="dataset-comments">
