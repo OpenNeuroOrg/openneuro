@@ -5,6 +5,7 @@ import {
 } from '../dataset-search'
 
 jest.mock('../../../elasticsearch/elastic-client.js')
+jest.mock('../../../config.js')
 
 describe('dataset search resolvers', () => {
   describe('encodeCursor()', () => {
