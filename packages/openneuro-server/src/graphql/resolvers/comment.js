@@ -1,6 +1,7 @@
 import Comment from '../../models/comment'
 import notifications from '../../libs/notifications.js'
 import { user } from './user.js'
+import { checkAdmin } from '../permissions'
 
 export const comment = (obj, { id }) => {
   return Comment.findOne({ _id: id }).exec()
@@ -40,9 +41,8 @@ const allNestedReplies = async obj => {
   if (!replies.length) {
     return replies
   } else {
-    let nestedReplies = await Promise.all(replies.map(allNestedReplies))
-    const r = flatten([replies, ...nestedReplies])
-    return r
+    const nestedReplies = await Promise.all(replies.map(allNestedReplies))
+    return flatten([replies, ...nestedReplies])
   }
 }
 
@@ -89,7 +89,10 @@ export const editComment = async (
 export const deleteComment = async (
   obj,
   { commentId, deleteChildren = true },
+  { user, userInfo },
 ) => {
+  await checkAdmin(user, userInfo)
+
   const existingComment = await Comment.findById(commentId).exec()
   const targetComments = [existingComment]
   if (deleteChildren) {
