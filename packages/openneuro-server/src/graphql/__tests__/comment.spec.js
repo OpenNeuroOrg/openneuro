@@ -2,7 +2,7 @@ import mockingoose from 'mockingoose'
 import { deleteComment, flatten } from '../resolvers/comment'
 import Comment from '../../models/comment'
 
-const incrementHex = (hex, step = 1) => {
+const incrementHex = hex => {
   hex = hex.toString()
   const splitLen = 14
   const start = hex.substr(0, splitLen)
@@ -15,9 +15,18 @@ const incrementHex = (hex, step = 1) => {
 describe('comment resolver helpers', () => {
   describe('deleteComment', () => {
     let aId
-    let commentA, commentB, commentC
+    let commentA
+    let adminUser, nonAdminUser
     beforeEach(async done => {
       mockingoose.resetAll()
+      adminUser = {
+        user: 'userid',
+        userInfo: { admin: true },
+      }
+      nonAdminUser = {
+        user: 'userid',
+        userInfo: { admin: false },
+      }
       commentA = {
         text: 'a',
         createDate: new Date().toISOString(),
@@ -30,14 +39,20 @@ describe('comment resolver helpers', () => {
     })
 
     it('returns an array of the deleted comment ids', async done => {
-      const deletedIds = (await deleteComment({}, { commentId: aId })).map(id =>
-        id.toString(),
-      )
+      const deletedIds = (
+        await deleteComment({}, { commentId: aId }, adminUser)
+      ).map(id => id.toString())
 
       // mockingoose ids are sequential, and the documents returned from each query get new ids for some reason
       //   TODO: Replace mockingoose with better library
       expect(deletedIds[0]).toEqual(incrementHex(aId))
       done()
+    })
+
+    it('prevents non-admin users from deleting comments', () => {
+      return expect(
+        deleteComment({}, { commentId: aId }, nonAdminUser),
+      ).rejects.toMatch('You do not have admin access to this dataset.')
     })
   })
 
