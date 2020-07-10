@@ -1,4 +1,4 @@
-FROM python:3.7.7-alpine3.11
+FROM python:3.8.3-alpine3.12
 
 COPY package.json /package.json
 COPY Pipfile /Pipfile
@@ -10,7 +10,7 @@ COPY hash-paths.js /hash-paths.js
 COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 
-RUN apk --update add bash yarn git python py-pip openssl openssh ca-certificates py-openssl wget \
+RUN apk --update add bash yarn git python3 py3-pip openssl openssh ca-certificates py-openssl wget \
   && wget -O git-annex-standalone-amd64.tar.gz http://archive.org/download/git-annex-builds/SHA256E-s52844027--52257d8de278e4ecf94a971c716b7929f6d0e1fe6c5a65ed40b03f0964f9c85d.tar.gz \
   && tar -xvf git-annex-standalone-amd64.tar.gz \
   && rm git-annex-standalone-amd64.tar.gz \
