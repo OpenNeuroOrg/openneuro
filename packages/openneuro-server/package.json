@@ -3,10 +3,10 @@
   "version": "3.16.5",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
     "lint": "eslint src",
-    "start": "node src/index.js",
+    "start": "ts-node src/server.js",
     "test": "jest"
   },
   "repository": {
@@ -18,6 +18,7 @@
     "@elastic/elasticsearch": "^7.5.1",
     "@passport-next/passport-google-oauth2": "^1.0.0",
     "@sentry/node": "^4.5.3",
+    "@types/ioredis": "^4.17.1",
     "apollo-server": "2.7.0",
     "apollo-server-express": "2.7.0",
     "async": "^2.4.1",
@@ -37,7 +38,7 @@
     "graphql-tag": "^2.10.1",
     "graphql-tools": "4.0.6",
     "immutable": "^3.8.2",
-    "ioredis": "^4.14.0",
+    "ioredis": "4.17.3",
     "jsdom": "^11.6.2",
     "jsonwebtoken": "^8.3.0",
     "juice": "^2.0.0",
@@ -55,12 +56,12 @@
     "passport-orcid": "^0.0.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "redis": "^2.8.0",
     "redlock": "^4.0.0",
     "request": "^2.83.0",
     "sitemap": "^2.1.0",
     "subscriptions-transport-ws": "^0.9.9",
     "superagent": "^3.8.2",
+    "ts-node": "^8.10.2",
     "underscore": "^1.8.3",
     "uuid": "^3.0.1",
     "xmldoc": "^1.1.0"
@@ -71,7 +72,6 @@
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/plugin-syntax-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.6.3",
-    "@babel/register": "^7.6.2",
     "apollo": "^2.16.1",
     "apollo-link-schema": "^1.2.3",
     "babel-eslint": "^10.0.3",
@@ -80,7 +80,8 @@
     "jest": "^24.6.0",
     "mockingoose": "2.11.0",
     "mongo-mock": "3.7.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "ts-node-dev": "^1.0.0-pre.51"
   },
   "jest": {
     "testEnvironment": "node"

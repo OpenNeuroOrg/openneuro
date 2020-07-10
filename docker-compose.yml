@@ -35,7 +35,7 @@ services:
     extends:
       service: nodejs
     working_dir: /srv/packages/openneuro-server
-    command: node src/index.js
+    command: yarn ts-node-dev --respawn --transpile-only src/server.js
     volumes:
       - ./packages/openneuro-server/src:/srv/packages/openneuro-server/src
     depends_on:
