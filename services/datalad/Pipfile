@@ -27,4 +27,8 @@ gunicorn = "*"
 gevent = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
+
+[packages.sentry-sdk]
+extras = [ "falcon",]
+version = "==0.16.0"
