@@ -3,18 +3,16 @@
  */
 import request from 'superagent'
 import Dataset from '../models/dataset.js'
-import { redis } from '../libs/redis.js'
+import { redis } from '../libs/redis'
+import CacheItem, { CacheType } from '../cache/item'
 import { addFileUrl } from './utils.js'
 import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'
 import { generateFileId } from '../graphql/utils/file.js'
 import { getDatasetWorker } from '../libs/datalad-service'
 
-const draftFilesKey = datasetId => {
-  return `openneuro:draftFiles:${datasetId}`
-}
-
 export const expireDraftFiles = datasetId => {
-  return redis.del(draftFilesKey(datasetId))
+  const cache = new CacheItem(redis, CacheType.commitFiles, [datasetId])
+  return cache.drop()
 }
 
 /**
@@ -38,24 +36,25 @@ export const getDraftFiles = (datasetId, options = {}) => {
   const untracked = 'untracked' in options && options.untracked
   const query = untracked ? { untracked: true } : {}
   const filesUrl = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/files`
-  const key = draftFilesKey(datasetId)
-  return redis.get(key).then(data => {
-    if (!untracked && data) return JSON.parse(data).map(withGeneratedId)
-    else
-      return request
+  if (untracked) {
+    return request
+      .get(filesUrl)
+      .query(query)
+      .set('Accept', 'application/json')
+      .then(({ body: { files } }) => files.map(withGeneratedId))
+  } else {
+    const cache = new CacheItem(redis, CacheType.commitFiles, [datasetId])
+    return cache.get(() =>
+      request
         .get(filesUrl)
         .query(query)
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
-          if (untracked) {
-            return files.map(withGeneratedId)
-          } else {
-            const filesWithUrls = files.map(addFileUrl(datasetId))
-            redis.set(key, JSON.stringify(filesWithUrls))
-            return filesWithUrls.map(withGeneratedId)
-          }
-        })
-  })
+          const filesWithUrls = files.map(addFileUrl(datasetId))
+          return filesWithUrls.map(withGeneratedId)
+        }),
+    )
+  }
 }
 
 export const updateDatasetRevision = (datasetId, gitRef) => {
@@ -72,10 +71,6 @@ export const updateDatasetRevision = (datasetId, gitRef) => {
       return expireDraftFiles(datasetId)
     })
     .then(() => publishDraftUpdate(datasetId, gitRef))
-}
-
-export const draftPartialKey = datasetId => {
-  return `openneuro:partialDraft:${datasetId}`
 }
 
 export const getDatasetRevision = async datasetId => {
@@ -96,16 +91,11 @@ export const getPartialStatus = datasetId => {
   const partialUrl = `${getDatasetWorker(
     datasetId,
   )}/datasets/${datasetId}/draft`
-  const key = draftPartialKey(datasetId)
-  return redis.get(key).then(data => {
-    if (data) return JSON.parse(data)
-    else
-      return request
-        .get(partialUrl)
-        .set('Accept', 'application/json')
-        .then(({ body: { partial } }) => {
-          redis.set(key, JSON.stringify(partial))
-          return partial
-        })
-  })
+  const cache = new CacheItem(redis, CacheType.partial, [datasetId])
+  return cache.get(() =>
+    request
+      .get(partialUrl)
+      .set('Accept', 'application/json')
+      .then(({ body: { partial } }) => partial),
+  )
 }

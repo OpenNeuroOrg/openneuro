@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
-import { addFileString, commitFiles } from './dataset.js'
-import { redis } from '../libs/redis.js'
+import { addFileString, commitFiles } from './dataset'
+import { redis } from '../libs/redis'
+import CacheItem, { CacheType } from '../cache/item'
 import { getDatasetWorker } from '../libs/datalad-service'
 
 export const readmeUrl = (datasetId, revision) => {
@@ -9,17 +10,14 @@ export const readmeUrl = (datasetId, revision) => {
   )}/datasets/${datasetId}/snapshots/${revision}/files/README`
 }
 
-export const readmeKey = (datasetId, revision) =>
-  `openneuro:readme:${datasetId}:${revision}`
-
 export const readme = async obj => {
   const datasetId = obj.id
   const revision = obj.revision || obj.tag
-  const key = readmeKey(datasetId, revision)
-  const data = await redis.get(key)
-  if (data) {
-    return data
-  } else {
+  const cache = new CacheItem(redis, CacheType.readme, [
+    datasetId,
+    revision.substring(0, 7),
+  ])
+  return cache.get(async () => {
     /** Why are we using fetch here instead of superagent?
      * The backend guesses wrong at the MIME type so fetch lets us get the string
      * without messing around with superagent parsers
@@ -28,13 +26,11 @@ export const readme = async obj => {
      */
     const readmeReq = await fetch(readmeUrl(datasetId, revision))
     if (readmeReq.status === 200) {
-      const readmeContent = await readmeReq.text()
-      redis.set(key, readmeContent)
-      return readmeContent
+      return await readmeReq.text()
     } else {
       return null
     }
-  }
+  })
 }
 
 export const setReadme = (datasetId, readme, user) => {

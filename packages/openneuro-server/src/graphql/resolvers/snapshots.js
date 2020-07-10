@@ -134,16 +134,6 @@ export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
   })
 }
 
-/**
- * Update the file urls within a snapshot
- */
-export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
-  const datasetId = fileUrls.datasetId
-  const snapshotTag = fileUrls.tag
-  const files = fileUrls.files
-  return datalad.updateSnapshotFileUrls(datasetId, snapshotTag, files)
-}
-
 const Snapshot = {
   analytics: snapshot => analytics(snapshot),
   issues: snapshot => snapshotIssues(snapshot),

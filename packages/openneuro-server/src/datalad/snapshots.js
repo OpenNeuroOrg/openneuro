@@ -3,43 +3,21 @@
  */
 import * as Sentry from '@sentry/node'
 import request from 'superagent'
-import { redis, redlock } from '../libs/redis.js'
+import { redis, redlock } from '../libs/redis'
+import CacheItem, { CacheType } from '../cache/item'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
 import { description } from '../graphql/resolvers/description.js'
 import doiLib from '../libs/doi/index.js'
-import { filesKey, getFiles } from './files.js'
+import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset.js'
 import Snapshot from '../models/snapshot.js'
-import File from '../models/file.js'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
-
-/**
- * Snapshot contents key
- *
- * Immutable data
- *
- * @param {string} datasetId
- * @param {string} tag
- */
-const snapshotKey = (datasetId, tag) => {
-  return `openneuro:snapshot:${datasetId}:${tag}`
-}
-
-/**
- * Index of snapshots
- *
- * This should get cleared when snapshots are added or removed
- * @param {string} datasetId
- */
-const snapshotIndexKey = datasetId => {
-  return `openneuro:snapshot-index:${datasetId}`
-}
 
 const lockSnapshot = (datasetId, tag) => {
   return redlock.lock(
@@ -118,22 +96,6 @@ const postSnapshot = async (
   return response.body
 }
 
-const getSnapshotFiles = async (datasetId, sKey, snapshot) => {
-  let files
-  // We should almost always get the fast path here
-  const fKey = filesKey(datasetId, snapshot.hexsha)
-  const filesFromCache = await redis.get(fKey)
-  if (filesFromCache) {
-    files = JSON.parse(filesFromCache)
-    // Eager caching for snapshots if all data is available
-    redis.set(sKey, JSON.stringify(snapshot))
-  } else {
-    // Return the promise so queries won't block
-    files = getFiles(datasetId, snapshot.hexsha)
-  }
-  return files
-}
-
 /**
  * Get a list of all snapshot tags available for a dataset
  *
@@ -143,19 +105,16 @@ const getSnapshotFiles = async (datasetId, sKey, snapshot) => {
  */
 export const getSnapshots = datasetId => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
-  const key = snapshotIndexKey(datasetId)
-  return redis.get(key).then(data => {
-    if (data) return JSON.parse(data)
-    else
-      return request
-        .get(url)
-        .set('Accept', 'application/json')
-        .then(async ({ body: { snapshots } }) => {
-          snapshots = await getSnapshotMetadata(datasetId, snapshots)
-          redis.set(key, JSON.stringify(snapshots))
-          return snapshots
-        })
-  })
+  const cache = new CacheItem(redis, CacheType.snapshotIndex, [datasetId])
+  return cache.get(() =>
+    request
+      .get(url)
+      .set('Accept', 'application/json')
+      .then(async ({ body: { snapshots } }) => {
+        snapshots = await getSnapshotMetadata(datasetId, snapshots)
+        return snapshots
+      }),
+  )
 }
 
 const announceNewSnapshot = async (snapshot, datasetId, user) => {
@@ -186,8 +145,11 @@ export const createSnapshot = async (
   descriptionFieldUpdates = {},
   snapshotChanges = [],
 ) => {
-  const indexKey = snapshotIndexKey(datasetId)
-  const sKey = snapshotKey(datasetId, tag)
+  const indexCache = new CacheItem(redis, CacheType.snapshotIndex, [datasetId])
+  const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
+    datasetId,
+    tag,
+  ])
 
   // lock snapshot id to prevent upload/update conflicts
   const snapshotLock = await lockSnapshot(datasetId, tag)
@@ -205,10 +167,10 @@ export const createSnapshot = async (
       snapshotChanges,
     )
     snapshot.created = new Date()
-    snapshot.files = await getSnapshotFiles(datasetId, sKey, snapshot)
+    snapshot.files = await getFiles(datasetId, tag)
 
     // Clear the index now that the new snapshot is ready
-    redis.del(indexKey)
+    indexCache.drop()
 
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)
@@ -227,38 +189,37 @@ export const createSnapshot = async (
   } catch (err) {
     // delete the keys if any step fails
     // this avoids inconsistent cache state after failures
-    redis.del(sKey)
-    redis.del(indexKey)
+    indexCache.drop()
+    snapshotCache.drop()
     snapshotLock.unlock()
     Sentry.captureException(err)
     return err
   }
 }
 
-// TODO - deleteSnapshot
-// It should delete the index redis key
 export const deleteSnapshot = (datasetId, tag) => {
   const url = `${getDatasetWorker(
     datasetId,
   )}/datasets/${datasetId}/snapshots/${tag}`
-  const indexKey = snapshotIndexKey(datasetId)
-  const sKey = snapshotKey(datasetId, tag)
-
-  return request.del(url).then(({ body }) =>
-    redis
-      .del(indexKey)
-      .then(() => redis.del(sKey))
-      .then(async () => {
-        pubsub.publish('snapshotsUpdated', {
-          datasetId,
-          snapshotsUpdated: {
-            id: datasetId,
-            snapshots: await getSnapshots(datasetId),
-          },
-        })
-        return body
-      }),
-  )
+  return request.del(url).then(async ({ body }) => {
+    const indexCache = new CacheItem(redis, CacheType.snapshotIndex, [
+      datasetId,
+    ])
+    const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
+      datasetId,
+      tag,
+    ])
+    await indexCache.drop()
+    await snapshotCache.drop()
+    pubsub.publish('snapshotsUpdated', {
+      datasetId,
+      snapshotsUpdated: {
+        id: datasetId,
+        snapshots: await getSnapshots(datasetId),
+      },
+    })
+    return body
+  })
 }
 
 /**
@@ -270,25 +231,22 @@ export const getSnapshot = (datasetId, tag) => {
   const url = `${getDatasetWorker(
     datasetId,
   )}/datasets/${datasetId}/snapshots/${tag}`
-  const key = snapshotKey(datasetId, tag)
   // Track a view for each snapshot query
   trackAnalytics(datasetId, tag, 'views')
-  return redis.get(key).then(data => {
-    if (data) return JSON.parse(data)
-    else
-      return request
-        .get(url)
-        .set('Accept', 'application/json')
-        .then(async ({ body }) => {
-          const { created, hexsha } = await Snapshot.findOne({
-            datasetId,
-            tag,
-          }).exec()
-          const snapshot = { ...body, created, hexsha }
-          redis.set(key, JSON.stringify(snapshot))
-          return snapshot
-        })
-  })
+  const cache = new CacheItem(redis, CacheType.snapshot, [datasetId, tag])
+  return cache.get(() =>
+    request
+      .get(url)
+      .set('Accept', 'application/json')
+      .then(async ({ body }) => {
+        const { created, hexsha } = await Snapshot.findOne({
+          datasetId,
+          tag,
+        }).exec()
+        const snapshot = { ...body, created, hexsha }
+        return snapshot
+      }),
+  )
 }
 
 /**
@@ -303,30 +261,6 @@ export const getSnapshotHexsha = (datasetId, tag) => {
   return Snapshot.findOne({ datasetId, tag }, { hexsha: true })
     .exec()
     .then(result => (result ? result.hexsha : null))
-}
-
-export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
-  //insert the file url data into mongo
-  return File.updateOne(
-    {
-      datasetId: datasetId,
-      tag: snapshotTag,
-    },
-    {
-      datasetId: datasetId,
-      tag: snapshotTag,
-      files: files,
-    },
-    {
-      upsert: true,
-      new: true,
-    },
-  )
-    .exec()
-    .then(data => {
-      // Clear snapshot cache when we get new URLs
-      return redis.del(snapshotKey(datasetId, snapshotTag)).then(() => data)
-    })
 }
 
 /**

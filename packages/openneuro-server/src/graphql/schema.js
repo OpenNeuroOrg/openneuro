@@ -112,8 +112,6 @@ export const typeDefs = `
     updateSummary(summary: SummaryInput!): Summary
     # Update a draft with validation results
     updateValidation(validation: ValidationInput!): Boolean
-    # Update a snapshot with a list of file urls
-    updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
     # Update a users's permissions on a dataset
     updatePermissions(datasetId: ID!, userEmail: String!, level: String): User
     # Remove a users's permissions on a dataset
