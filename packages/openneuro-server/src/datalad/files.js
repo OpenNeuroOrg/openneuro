@@ -1,14 +1,8 @@
 import request from 'superagent'
-import { addFileUrl } from './utils.js'
-import { redis } from '../libs/redis.js'
+import { addFileUrl } from './utils'
+import { redis } from '../libs/redis'
+import CacheItem, { CacheType } from '../cache/item'
 import { getDatasetWorker } from '../libs/datalad-service'
-
-/**
- * Hexsha files cache
- */
-export const filesKey = (datasetId, revision) => {
-  return `openneuro:files:${datasetId}:${revision}`
-}
 
 /**
  * Convert to URL compatible path
@@ -81,23 +75,20 @@ export const objectUrl = (datasetId, objectId) => {
  * @param {string} hexsha - Git treeish hexsha
  */
 export const getFiles = (datasetId, hexsha) => {
-  const key = filesKey(datasetId, hexsha)
-  return redis.get(key).then(data => {
-    if (data) return JSON.parse(data)
-    else
-      return request
-        .get(
-          `${getDatasetWorker(
-            datasetId,
-          )}/datasets/${datasetId}/snapshots/${hexsha}/files`,
-        )
-        .set('Accept', 'application/json')
-        .then(({ body: { files } }) => {
-          const filesWithUrls = files.map(addFileUrl(datasetId, hexsha))
-          redis.set(key, JSON.stringify(filesWithUrls))
-          return filesWithUrls
-        })
-  })
+  const cache = new CacheItem(redis, CacheType.commitFiles, [
+    datasetId,
+    hexsha.substring(0, 7),
+  ])
+  return cache.get(() =>
+    request
+      .get(
+        `${getDatasetWorker(
+          datasetId,
+        )}/datasets/${datasetId}/snapshots/${hexsha}/files`,
+      )
+      .set('Accept', 'application/json')
+      .then(({ body: { files } }) => files.map(addFileUrl(datasetId, hexsha))),
+  )
 }
 
 /**

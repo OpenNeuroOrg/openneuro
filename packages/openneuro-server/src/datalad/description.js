@@ -6,9 +6,9 @@ import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { commitFiles } from './dataset.js'
 import { objectUrl, getFiles } from './files.js'
-import { getSnapshotHexsha } from './snapshots.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDatasetWorker } from '../libs/datalad-service'
+import CacheItem, { CacheType } from '../cache/item'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',
@@ -101,23 +101,16 @@ export const repairDescriptionTypes = description => {
 export const description = obj => {
   // Obtain datasetId from Dataset or Snapshot objects
   const datasetId = 'tag' in obj ? obj.id.split(':')[0] : obj.id
-  const redisKey = descriptionCacheKey(datasetId, obj.revision || obj.tag)
-  return redis
-    .get(redisKey)
-    .then(async cachedDescription => {
-      if (cachedDescription) {
-        return JSON.parse(cachedDescription)
-      } else {
-        const gitRef = obj.revision
-          ? obj.revision
-          : await getSnapshotHexsha(datasetId, obj.tag)
-        return getFiles(datasetId, gitRef)
-          .then(getDescriptionObject(datasetId))
-          .then(uncachedDescription => {
-            redis.set(redisKey, JSON.stringify(uncachedDescription))
-            return { id: gitRef, ...uncachedDescription }
-          })
-      }
+  const gitHash = obj.revision || obj.hexsha
+  const cache = new CacheItem(redis, CacheType.datasetDescription, [
+    datasetId,
+    gitHash,
+  ])
+  return cache
+    .get(() => {
+      return getFiles(datasetId, gitHash)
+        .then(getDescriptionObject(datasetId))
+        .then(uncachedDescription => ({ id: gitHash, ...uncachedDescription }))
     })
     .then(description => repairDescriptionTypes(description))
 }

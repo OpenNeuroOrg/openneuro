@@ -10,9 +10,10 @@ import { Readable } from 'stream'
 import config from '../config'
 import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
-import { redis } from '../libs/redis.js'
-import { updateDatasetRevision, draftPartialKey } from './draft.js'
-import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files.js'
+import { redis } from '../libs/redis'
+import CacheItem, { CacheType } from '../cache/item'
+import { updateDatasetRevision, expireDraftFiles } from './draft.js'
+import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
@@ -85,18 +86,13 @@ export const deleteDataset = id =>
  */
 export const cacheDatasetConnection = options => connectionArguments => {
   const connection = datasetsConnection(options)
-  const redisKey = `openneuro:datasetsConnection:${objectHash(options)}`
-  const expirationTime = 60
-  return redis.get(redisKey).then(data => {
-    if (data) {
-      return JSON.parse(data)
-    } else {
-      return connection(connectionArguments).then(connection => {
-        redis.setex(redisKey, expirationTime, JSON.stringify(connection))
-        return connection
-      })
-    }
-  })
+  const cache = new CacheItem(
+    redis,
+    CacheType.datasetsConnection,
+    [objectHash(options)],
+    60,
+  )
+  return cache.get(() => connection(connectionArguments))
 }
 
 /**
@@ -262,7 +258,7 @@ export const testBlacklist = (path, filename) =>
 export const addFile = async (datasetId, path, file) => {
   try {
     const { filename, mimetype, createReadStream, capacitor } = await file
-    await redis.del(draftPartialKey(datasetId))
+    await expireDraftFiles(datasetId)
 
     // Apply blacklist to uploaded files
     if (testBlacklist(path, filename)) {
@@ -360,7 +356,8 @@ export const commitFiles = (datasetId, user) => {
     .then(res => {
       gitRef = res.body.ref
       // Always remove the partial key when a commit is successfully made
-      redis.del(draftPartialKey(datasetId))
+      const cache = new CacheItem(redis, CacheType.partial, [datasetId])
+      cache.drop()
       return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
     })
 }

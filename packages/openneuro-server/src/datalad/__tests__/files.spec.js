@@ -1,5 +1,4 @@
 import {
-  filesKey,
   encodeFilePath,
   decodeFilePath,
   fileUrl,
@@ -37,15 +36,6 @@ const mockFiles = [
 ]
 
 describe('datalad files', () => {
-  describe('filesKey()', () => {
-    it('encodes a valid cache key', () => {
-      expect(
-        filesKey('ds000001', '13582a0b2dc82b3644431ba54fd38926a5d2238f'),
-      ).toBe(
-        'openneuro:files:ds000001:13582a0b2dc82b3644431ba54fd38926a5d2238f',
-      )
-    })
-  })
   describe('encodeFilePath()', () => {
     it('should encode a nested path', () => {
       expect(encodeFilePath(filename)).toBe('sub-01:anat:sub-01_T1w.nii.gz')

@@ -11,11 +11,7 @@ import {
   trackAnalytics,
 } from './dataset.js'
 import { updateRef } from './draft.js'
-import {
-  createSnapshot,
-  deleteSnapshot,
-  updateSnapshotFileUrls,
-} from './snapshots.js'
+import { createSnapshot, deleteSnapshot } from './snapshots.js'
 import { removeUser, setAdmin, setBlocked } from './user.js'
 import { updateSummary } from './summary.js'
 import { updateValidation } from './validation.js'
@@ -39,7 +35,6 @@ const Mutation = {
   deleteSnapshot,
   updateSummary,
   updateValidation,
-  updateSnapshotFileUrls,
   updatePublic,
   updatePermissions,
   removePermissions,
