@@ -6,8 +6,7 @@ import User from '../../models/user'
 import config from '../../config.js'
 
 // Helper to generate a JWT containing user info
-export const addJWT = config => (user, expiration = 20) => {
-  // export const addJWT = config => (user, expiration = 60 * 60 * 24 * 30 * 6) => {
+export const addJWT = config => (user, expiration = 60 * 60 * 24 * 7) => {
   const token = jwt.sign(
     {
       sub: user.id,
