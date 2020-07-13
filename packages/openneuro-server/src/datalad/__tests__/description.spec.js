@@ -7,6 +7,7 @@ import {
 
 // Mock requests to Datalad service
 jest.mock('superagent')
+jest.mock('../../config.js')
 
 describe('datalad dataset descriptions', () => {
   describe('repairDescriptionTypes', () => {

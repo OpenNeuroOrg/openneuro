@@ -18,6 +18,7 @@ jest.mock('../../libs/redis.js', () => ({
 jest.mock('../draft.js', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
+jest.mock('../../config.js')
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {

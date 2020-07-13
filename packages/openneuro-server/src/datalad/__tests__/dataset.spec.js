@@ -6,6 +6,7 @@ import { getDatasetWorker } from '../../libs/datalad-service'
 // Mock requests to Datalad service
 jest.mock('superagent')
 jest.mock('../../libs/redis.js')
+jest.mock('../../config.js')
 
 describe('dataset model operations', () => {
   describe('createDataset()', () => {

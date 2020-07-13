@@ -2,6 +2,7 @@ import { createClient } from '../client'
 import * as files from '../files'
 
 jest.mock('../client')
+jest.mock('../../../openneuro-server/src/config.js')
 
 const gqlClient = createClient('http://test-uri')
 
