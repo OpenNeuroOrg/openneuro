@@ -3,8 +3,9 @@ import os
 import subprocess
 import random
 
+import sentry_sdk
+
 from datalad_service.common.celery import dataset_task, dataset_queue
-from datalad_service.common.raven import client
 
 
 @dataset_task
@@ -31,11 +32,12 @@ def fsck_remote(ds, remote):
             # Oops, log it!
             bad_files.append(annexed_file)
     if len(bad_files) > 0:
-        client.context.merge(
-            {'dataset': ds.path, 'remote': remote, bad_files: bad_files})
-        client.captureMessage(
+        sentry_sdk.context.merge()
+        with sentry_sdk.configure_scope() as scope:
+            scope.set_context(
+                {'dataset': ds.path, 'remote': remote, bad_files: bad_files})
+        sentry_sdk.captureMessage(
             'Remote audit failed! Some expected annex keys were unavailable at this remote.')
-        client.context.clear()
 
 
 @dataset_task
