@@ -23,7 +23,7 @@ class AuthenticateMiddleware(object):
                     sentry_user = req.context['user'].copy()
                     sentry_user['id'] = sentry_user['sub']
                     del(sentry_user['sub'])
-                    scope.setUser(sentry_user)
+                    scope.user = sentry_user
             except:
                 req.context['user'] = None
                 with configure_scope() as scope:

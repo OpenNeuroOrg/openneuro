@@ -12,7 +12,9 @@ def test_add_commit_info(celery_app, client):
     email = 'user@example.com'
     user = {
         'name': name,
-        'email': email
+        'email': email,
+        'sub': '123456',
+        'admin': False
     }
     jwt_secret = 'shhhhh'
     os.environ['JWT_SECRET'] = jwt_secret
