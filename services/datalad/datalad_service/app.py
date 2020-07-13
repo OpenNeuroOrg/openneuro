@@ -37,7 +37,7 @@ def create_app(annex_path):
         sender.add_periodic_task(
             60 * 15, audit_datasets.s(annex_path), queue=dataset_queue('publish'))
 
-    api = falcon.API(middleware=AuthenticateMiddleware())
+    api = falcon.API(middleware=[AuthenticateMiddleware()])
     api.router_options.converters['path'] = PathConverter
 
     store = DataladStore(annex_path)
