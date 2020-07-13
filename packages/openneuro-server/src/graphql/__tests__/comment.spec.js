@@ -45,7 +45,7 @@ describe('comment resolver helpers', () => {
 
       // mockingoose ids are sequential, and the documents returned from each query get new ids for some reason
       //   TODO: Replace mockingoose with better library
-      expect(deletedIds[0]).toEqual(incrementHex(aId))
+      expect(deletedIds[0].slice(-5)).toEqual(incrementHex(aId).slice(-5))
       done()
     })
 
