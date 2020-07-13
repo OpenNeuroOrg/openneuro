@@ -103,3 +103,8 @@ export const checkDatasetWrite = (
 
 export const checkDatasetAdmin = (datasetId, userId, userInfo) =>
   checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN)
+
+export const checkAdmin = (userId, userInfo) =>
+  userId && userInfo.admin
+    ? Promise.resolve(true)
+    : Promise.reject(states.ADMIN.errorMessage)

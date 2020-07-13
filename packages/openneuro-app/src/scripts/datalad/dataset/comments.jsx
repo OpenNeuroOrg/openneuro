@@ -9,6 +9,7 @@ import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
 const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
   <>
     {comments.map(comment => {
+      if (!comment) return null
       // Join any replies
       const nextLevel = comment.hasOwnProperty('replies')
         ? comment.replies.map(reply => commentMap[reply.id])

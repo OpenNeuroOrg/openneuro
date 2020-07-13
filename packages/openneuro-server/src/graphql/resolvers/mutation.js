@@ -21,7 +21,7 @@ import { starDataset } from './stars.js'
 import { publishDataset } from './publish.js'
 import { updateDescription, updateDescriptionList } from './description.js'
 import { updateReadme } from './readme.js'
-import { addComment, editComment } from './comment.js'
+import { addComment, editComment, deleteComment } from './comment.js'
 import { subscribeToNewsletter } from './newsletter'
 import { addMetadata } from './metadata.js'
 
@@ -50,6 +50,7 @@ const Mutation = {
   updateReadme,
   addComment,
   editComment,
+  deleteComment,
   subscribeToNewsletter,
   addMetadata,
   updateRef,

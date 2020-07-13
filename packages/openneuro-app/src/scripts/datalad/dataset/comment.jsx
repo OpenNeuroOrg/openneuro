@@ -4,6 +4,7 @@ import userUtil from '../../utils/user.js'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import { Editor, EditorState, convertFromRaw } from 'draft-js'
 import CommentEditor from '../comments/comment-editor.jsx'
+import DeleteComment from '../mutations/delete-comment.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
@@ -53,10 +54,7 @@ const Comment = ({ datasetId, data, children }) => {
               {editMode ? 'Hide' : 'Edit'}
             </a>
             <AdminUser>
-              <a className="delete" onClick={() => setReplyMode(false)}>
-                <i className="fa fa-trash" />
-                Delete
-              </a>
+              <DeleteComment datasetId={datasetId} commentId={data.id} />
             </AdminUser>
           </div>
         </LoggedIn>
