@@ -1,4 +1,4 @@
-FROM node:14.5.0-alpine3.12 AS build
+FROM node:12.18.2-alpine3.12 AS build
 
 # install server app
 ADD . /srv
@@ -7,7 +7,7 @@ RUN apk add curl git --no-cache --update
 WORKDIR /srv/packages/openneuro-server
 RUN yarn install --focus --production && yarn build
 
-FROM node:14.5.0-alpine3.12 AS server
+FROM node:12.18.2-alpine3.12 AS server
 
 COPY --from=build /srv/node_modules /srv/node_modules
 COPY --from=build /srv/packages/openneuro-server/dist /srv/dist

@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/OpenNeuroOrg/openneuro
     docker:
-      - image: circleci/node:14.5.0-stretch
+      - image: circleci/node:12.18.2-stretch
     steps:
       - checkout
       - save_cache:
@@ -33,7 +33,7 @@ jobs:
   cli-install-test:
     working_directory: ~/OpenNeuroOrg/openneuro/packages/openneuro-cli
     docker:
-      - image: circleci/node:14.5.0-stretch
+      - image: circleci/node:12.18.2-stretch
     steps:
       - checkout
       - run: yarn
