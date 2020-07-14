@@ -1,5 +1,5 @@
 import { Redis } from 'ioredis'
-import zlib from 'zlib'
+import * as zlib from 'zlib'
 import { promisify } from 'util'
 import { CacheType } from './types'
 export { CacheType } from './types'
