@@ -6,7 +6,8 @@
   "main": "src/server.js",
   "scripts": {
     "lint": "eslint src",
-    "start": "yarn ts-node src/server.js",
+    "build": "tsc",
+    "start": "./node_modules/.bin/ts-node src/server.js",
     "test": "jest"
   },
   "repository": {
@@ -18,6 +19,7 @@
     "@elastic/elasticsearch": "^7.5.1",
     "@passport-next/passport-google-oauth2": "^1.0.0",
     "@sentry/node": "^4.5.3",
+    "@types/draft-js": "^0.10.43",
     "@types/ioredis": "^4.17.1",
     "apollo-server": "2.7.0",
     "apollo-server-express": "2.7.0",
