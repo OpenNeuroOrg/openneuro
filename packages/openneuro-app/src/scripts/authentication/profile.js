@@ -16,6 +16,20 @@ export const getProfile = () => {
 }
 
 /**
+ * Test for an expired token
+ * @param {object} profile A profile returned by getProfile()
+ * @returns {boolean} False if expired
+ */
+export const guardExpired = profile => {
+  const now = new Date().getTime() / 1000
+  if (profile && now < profile.exp) {
+    return true
+  } else {
+    return false
+  }
+}
+
+/**
  * Returns true if active user has at least one of the permissions in expectedLevels
  * @param {string[]} expectedLevels
  */
