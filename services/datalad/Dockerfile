@@ -16,7 +16,7 @@ RUN apk --update add bash yarn git python3 py3-pip openssl openssh ca-certificat
   && rm git-annex-standalone-amd64.tar.gz \
   && mv git-annex.linux/* /usr/local/bin \
   && apk --update add --virtual build-dependencies libffi-dev openssl-dev python3-dev py3-pip build-base libxml2-dev libxslt-dev \
-  && pip install 'pipenv==2018.11.26' \
+  && pip install 'pipenv==2020.6.2' \
   && pipenv install --deploy --system \
   && apk del build-dependencies wget \
   && mkdir /datalad \

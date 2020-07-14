@@ -3,8 +3,9 @@ import os
 import subprocess
 import requests
 
+import sentry_sdk
+
 from datalad_service.config import GRAPHQL_ENDPOINT
-from datalad_service.common.raven import client
 from datalad_service.common.celery import app
 
 
@@ -26,7 +27,7 @@ def validate_dataset_sync(dataset_path, ref):
             ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired:
-        client.captureException()
+        sentry_sdk.captureException()
 
 
 def summary_mutation(dataset_id, ref, validator_output):

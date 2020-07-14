@@ -1,7 +1,7 @@
 import jwt
 import os
 
-from datalad_service.common.raven import set_user_context
+from sentry_sdk import configure_scope
 
 
 class AuthenticateMiddleware(object):
@@ -19,9 +19,15 @@ class AuthenticateMiddleware(object):
             try:
                 req.context['user'] = jwt.decode(
                     cookies['accessToken'], key=os.environ['JWT_SECRET'])
-                set_user_context(req.context['user'])
+                with configure_scope() as scope:
+                    sentry_user = req.context['user'].copy()
+                    sentry_user['id'] = sentry_user['sub']
+                    del(sentry_user['sub'])
+                    scope.user = sentry_user
             except:
                 req.context['user'] = None
-                set_user_context(None)
+                with configure_scope() as scope:
+                    scope.user = None
         else:
-            set_user_context(None)
+            with configure_scope() as scope:
+                scope.user = None

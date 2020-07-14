@@ -1,6 +1,8 @@
 import falcon
+import sentry_sdk
+from sentry_sdk.integrations.falcon import FalconIntegration
 
-from datalad_service.common import raven
+import datalad_service.config
 from datalad_service.common.celery import app, dataset_queue
 from datalad_service.tasks.audit import audit_datasets
 from datalad_service.datalad import DataladStore
@@ -23,7 +25,11 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 
 
 def create_app(annex_path):
-    raven.setup()
+    if datalad_service.config.SENTRY_DSN:
+        sentry_sdk.init(
+            dsn=datalad_service.config.SENTRY_DSN,
+            integrations=[FalconIntegration()]
+        )
 
     @app.on_after_configure.connect
     def schedule_celery_tasks(sender, **kwargs):
@@ -31,10 +37,8 @@ def create_app(annex_path):
         sender.add_periodic_task(
             60 * 15, audit_datasets.s(annex_path), queue=dataset_queue('publish'))
 
-    api = falcon.API(middleware=AuthenticateMiddleware())
+    api = falcon.API(middleware=[AuthenticateMiddleware()])
     api.router_options.converters['path'] = PathConverter
-
-    raven.falcon_handler(api)
 
     store = DataladStore(annex_path)
 
