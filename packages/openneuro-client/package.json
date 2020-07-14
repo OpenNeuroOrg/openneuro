@@ -1,6 +1,6 @@
 {
   "name": "openneuro-client",
-  "version": "3.17.0-alpha.6",
+  "version": "3.17.0-alpha.7",
   "description": "OpenNeuro shared client library.",
   "main": "src/index.js",
   "browser": "src/client.js",
