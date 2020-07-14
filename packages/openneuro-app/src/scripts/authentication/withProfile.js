@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import cookies from '../utils/cookies.js'
-import { getProfile } from './profile.js'
+import { getProfile, guardExpired } from './profile.js'
 
 const withProfile = WrappedComponent => {
   return class ProfileComponent extends React.Component {
@@ -15,9 +15,12 @@ const withProfile = WrappedComponent => {
     }
     render() {
       const profile = getProfile()
-      return profile ? (
-        <WrappedComponent profile={profile} {...this.props} />
-      ) : null
+      // If we have a profile and it is unexpired
+      if (profile && guardExpired(profile)) {
+        return <WrappedComponent profile={profile} {...this.props} />
+      } else {
+        return null
+      }
     }
   }
 }
