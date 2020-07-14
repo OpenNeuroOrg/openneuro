@@ -6,7 +6,7 @@
   "main": "src/server.js",
   "scripts": {
     "lint": "eslint src",
-    "start": "ts-node src/server.js",
+    "start": "yarn ts-node src/server.js",
     "test": "jest"
   },
   "repository": {
