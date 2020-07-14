@@ -1,0 +1,24 @@
+grafana.ini:
+  server:
+    root_url: https://monitoring.openneuro.org
+    domain: monitoring.openneuro.org
+  smtp:
+    enabled: true
+    host: smtp.mailgun.org:587
+    from_address: monitoring@mail.openneuro.org
+smtp:
+  existingSecret: mailgun-login
+persistence:
+  enabled: true
+  size: "50Gi"
+ingress:
+  enabled: true
+  path: /*
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-west-2:488777458602:certificate/d95b9196-db39-4783-a667-19223290c067"
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+  hosts:
+    - monitoring.openneuro.org
