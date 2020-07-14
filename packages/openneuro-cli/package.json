@@ -1,6 +1,6 @@
 {
   "name": "openneuro-cli",
-  "version": "3.17.0-alpha.7",
+  "version": "3.17.0",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
@@ -24,7 +24,7 @@
     "graphql-tag": "^2.10.3",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^3.17.0-alpha.7"
+    "openneuro-client": "^3.17.0"
   },
   "scripts": {
     "openneuro": "node src/index.js"
