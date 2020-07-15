@@ -9,6 +9,7 @@ import { objectUrl, getFiles } from './files.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDatasetWorker } from '../libs/datalad-service'
 import CacheItem, { CacheType } from '../cache/item'
+import { datasetOrSnapshot } from './utils.js'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',
@@ -100,17 +101,16 @@ export const repairDescriptionTypes = description => {
  */
 export const description = obj => {
   // Obtain datasetId from Dataset or Snapshot objects
-  const datasetId = 'tag' in obj ? obj.id.split(':')[0] : obj.id
-  const gitHash = obj.revision || obj.hexsha
+  const { datasetId, revision } = datasetOrSnapshot(obj)
   const cache = new CacheItem(redis, CacheType.datasetDescription, [
     datasetId,
-    gitHash,
+    revision,
   ])
   return cache
     .get(() => {
-      return getFiles(datasetId, gitHash)
+      return getFiles(datasetId, revision)
         .then(getDescriptionObject(datasetId))
-        .then(uncachedDescription => ({ id: gitHash, ...uncachedDescription }))
+        .then(uncachedDescription => ({ id: revision, ...uncachedDescription }))
     })
     .then(description => repairDescriptionTypes(description))
 }
