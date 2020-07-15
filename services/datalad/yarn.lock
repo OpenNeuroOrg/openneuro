@@ -1226,10 +1226,10 @@ before-after-hook@^2.0.0:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.1.0.tgz#b6c03487f44e24200dd30ca5e6a1979c5d2fb635"
   integrity sha512-IWIbu7pMqyw3EAJHzzHbWa85b6oud/yfKYg5rqB5hNE8CeMi3nX+2C2sj0HswfblST86hpVEOAb9x34NZd6P7A==
 
-bids-validator@1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.3.tgz#a7a896eca5042424b7e131cbdeaa70284b21736c"
-  integrity sha512-g1SJLpbGcH5QYuvPHw0bnK3prmbBAaSmzfNkPr+k1MNyUPwwun9FwqlNJa2wR3izJtptas3vihQhsKxkUiUvCg==
+bids-validator@1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.4.tgz#2f59a65a712dc1d0af685d774e7796ce0d7cabfc"
+  integrity sha512-ZjS+IIPunLyQv/c6G2gRNraYnD0HTuRvWQFPmrvMTQUyP4+l49vMaTwm4IzN9V6FlO9M2FL7bXvkyyN7KHvVIg==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
@@ -3357,9 +3357,9 @@ lodash.uniq@^4.5.0:
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
 lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.15, lodash@^4.2.1, lodash@~4.17.10:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 loud-rejection@^1.0.0:
   version "1.6.0"
