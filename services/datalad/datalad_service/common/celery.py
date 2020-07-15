@@ -12,6 +12,8 @@ from datalad_service.datalad import DataladStore
 app = Celery('tasks', broker='redis://{}'.format(REDIS_HOST),
              backend='redis://{}'.format(REDIS_HOST))
 
+app.conf.result_expires = 900
+
 
 def dataset_queue(dataset):
     return 'dataset-worker-{}'.format(dataset_hash(dataset))
