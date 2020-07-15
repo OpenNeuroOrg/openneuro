@@ -19,3 +19,15 @@ export const addFileUrl = (datasetId, tag) => file => {
     }
   }
 }
+
+/**
+ * Helper for resolvers with dataset and snapshot parents
+ * @param {object} obj A snapshot or dataset parent object
+ */
+export function datasetOrSnapshot(obj) {
+  if ('tag' in obj) {
+    return { datasetId: obj.id.split(':')[0], revision: obj.hexsha || obj.tag }
+  } else {
+    return { datasetId: obj.id, revision: obj.revision }
+  }
+}

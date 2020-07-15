@@ -3,6 +3,7 @@ import { addFileString, commitFiles } from './dataset'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { getDatasetWorker } from '../libs/datalad-service'
+import { datasetOrSnapshot } from './utils.js'
 
 export const readmeUrl = (datasetId, revision) => {
   return `http://${getDatasetWorker(
@@ -10,9 +11,8 @@ export const readmeUrl = (datasetId, revision) => {
   )}/datasets/${datasetId}/snapshots/${revision}/files/README`
 }
 
-export const readme = async obj => {
-  const datasetId = obj.id
-  const revision = obj.revision || obj.tag
+export const readme = obj => {
+  const { datasetId, revision } = datasetOrSnapshot(obj)
   const cache = new CacheItem(redis, CacheType.readme, [
     datasetId,
     revision.substring(0, 7),
