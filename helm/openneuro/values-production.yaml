@@ -29,7 +29,7 @@ apiReplicas: 4
 webReplicas: 4
 
 # Content container tag
-contentTag: v1.0.3
+contentTag: v1.0.4
 
 # Sentry DSN (non-secret version)
 sentryDsn: https://ba0c58863b3e40a2a412132bfd2711ea@o114074.ingest.sentry.io/251076
