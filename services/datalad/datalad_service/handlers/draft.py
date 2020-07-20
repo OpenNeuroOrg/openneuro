@@ -1,31 +1,24 @@
 import falcon
 
 from datalad_service.common.user import get_user_info
-from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import commit_files
-from datalad_service.tasks.draft import is_dirty
 
 
 class DraftResource(object):
     def __init__(self, store):
         self.store = store
 
-    @property
-    def annex_path(self):
-        return self.store.annex_path
-
     def on_get(self, req, resp, dataset):
         """
         Return draft state (other than files).
         """
         if dataset:
-            queue = dataset_queue(dataset)
             # Maybe turn this into status?
-            partial = is_dirty.apply_async(
-                queue=queue, args=(self.annex_path, dataset))
-            partial.wait()
-            resp.media = {'partial': partial.get()}
+            ds = self.store.get_dataset(dataset)
+            resp.media = {'partial': ds.repo.dirty}
             resp.status = falcon.HTTP_OK
+        else:
+            resp.status = falcon.HTTP_NOT_FOUND
 
     def on_post(self, req, resp, dataset):
         """
@@ -34,7 +27,6 @@ class DraftResource(object):
         This adds all files in the working tree.
         """
         if dataset:
-            queue = dataset_queue(dataset)
             # Record if this was done on behalf of a user
             name, email = get_user_info(req)
             media_dict = {}
@@ -45,14 +37,15 @@ class DraftResource(object):
                 validate = False
             else:
                 validate = True
-            commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                'files': None, 'name': name, 'email': email, 'cookies': req.cookies, 'validate': validate})
-            commit.wait()
-            if not commit.failed():
+            try:
+                commit = commit_files(self.store, dataset,
+                                      files=None, name=name, email=email, cookies=req.cookies)
                 # Attach the commit hash to response
-                media_dict['ref'] = commit.get()
+                media_dict['ref'] = commit
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
+            except:
+                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
             resp.media = {
                 'error': 'Missing or malformed dataset parameter in request.'}

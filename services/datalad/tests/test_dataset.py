@@ -23,7 +23,7 @@ def test_get_dataset_404(client):
     assert response.status == falcon.HTTP_NOT_FOUND
 
 
-def test_create_dataset_duplicate(celery_app, client, annex_path):
+def test_create_dataset_duplicate(client, datalad_store):
     ds_id = 'ds000003'
     first_response = client.simulate_post('/datasets/{}'.format(ds_id))
     assert first_response.status == falcon.HTTP_OK

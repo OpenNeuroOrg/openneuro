@@ -8,7 +8,7 @@ from datalad.api import Dataset
 from .dataset_fixtures import *
 
 
-def test_get_file(client, celery_app):
+def test_get_file(client):
     ds_id = 'ds000001'
     result = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)
@@ -24,14 +24,14 @@ def test_get_missing_file(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_add_file(client, annex_path):
+def test_add_file(client, datalad_store):
     ds_id = 'ds000001'
     file_data = 'Test dataset README'
     response = client.simulate_post(
         '/datasets/{}/files/README'.format(ds_id), body=file_data)
     assert response.status == falcon.HTTP_OK
     # Load the dataset to check for this file
-    ds_obj = Dataset(os.path.join(annex_path, ds_id))
+    ds_obj = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     test_files = ds_obj.get('README')
     assert test_files
     assert len(test_files) == 1
@@ -55,7 +55,7 @@ def test_add_directory_path(client):
     assert response.status == falcon.HTTP_OK
 
 
-def test_update_file(celery_app, client, annex_path):
+def test_update_file(client, datalad_store):
     ds_id = 'ds000001'
     file_data = 'Test dataset LICENSE'
     # First post a file
@@ -70,7 +70,7 @@ def test_update_file(celery_app, client, annex_path):
         '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
     assert response.status == falcon.HTTP_OK
     # Load the dataset to check for the updated file
-    ds_obj = Dataset(os.path.join(annex_path, ds_id))
+    ds_obj = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     test_files = ds_obj.get('LICENSE')
     assert test_files
     assert len(test_files) == 1
@@ -78,7 +78,7 @@ def test_update_file(celery_app, client, annex_path):
         assert f.read() == file_data
 
 
-def test_file_indexing(celery_app, client, new_dataset):
+def test_file_indexing(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # First post a couple test files
     response = client.simulate_post(
@@ -110,7 +110,7 @@ def test_file_indexing(celery_app, client, new_dataset):
     ])
 
 
-def test_empty_file(celery_app, client, new_dataset):
+def test_empty_file(client, new_dataset):
     """Catch any regressions for 0 length files."""
     ds_id = os.path.basename(new_dataset.path)
     # Post an empty file
@@ -134,7 +134,7 @@ def test_empty_file(celery_app, client, new_dataset):
             'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101, 'urls': []} in response_content['files'])
 
 
-def test_duplicate_file_id(celery_app, client, new_dataset):
+def test_duplicate_file_id(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     file_body = '{}'
     # Post the same file in two paths
@@ -160,7 +160,7 @@ def test_duplicate_file_id(celery_app, client, new_dataset):
     assert file_one['id'] != file_two['id']
 
 
-def test_untracked_file_index(celery_app, client, new_dataset):
+def test_untracked_file_index(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Post test file
     response = client.simulate_post(
@@ -183,7 +183,7 @@ def test_untracked_file_index(celery_app, client, new_dataset):
             assert False
 
 
-def test_untracked_dir_index(celery_app, client, new_dataset):
+def test_untracked_dir_index(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Post test file
     response = client.simulate_post(

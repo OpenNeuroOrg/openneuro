@@ -9,7 +9,6 @@ from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import GRAPHQL_ENDPOINT
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
-from datalad_service.common.celery import dataset_task, dataset_queue
 from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
 
@@ -98,7 +97,6 @@ def get_dataset_realm(ds, siblings, realm=None):
     return realm
 
 
-@dataset_task
 def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
     """Migrate a dataset and all snapshots to an S3 bucket"""
     realm = get_s3_realm(realm=realm)
@@ -115,7 +113,6 @@ def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
             publish_target(ds, realm.github_remote, tag)
 
 
-@dataset_task
 def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
     """Publish a snapshot tag to S3, GitHub or both."""
     ds = store.get_dataset(dataset)
@@ -127,28 +124,22 @@ def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
     s3_sibling(ds, siblings)
 
     # Export to S3 and GitHub in another worker
-    publish_s3_async \
-        .s(store.annex_path, dataset, snapshot,
-           realm.s3_remote, realm.s3_bucket, cookies) \
-        .apply_async(queue=dataset_queue(dataset))
+    publish_s3_async(store, dataset, snapshot,
+                     realm.s3_remote, realm.s3_bucket, cookies)
 
     # Public publishes to GitHub
     if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
         # Create Github sibling only if GitHub is enabled
         github_sibling(ds, dataset, siblings)
-        publish_github_async \
-            .s(store.annex_path, dataset, snapshot, realm.github_remote) \
-            .apply_async(queue=dataset_queue(dataset))
+        publish_github_async(store, dataset, snapshot, realm.github_remote)
 
 
-@dataset_task
 def publish_s3_async(store, dataset, snapshot, s3_remote, s3_bucket, cookies):
     """Actual S3 remote push. Can run on another queue, so it's its own task."""
     ds = store.get_dataset(dataset)
     publish_target(ds, s3_remote, snapshot)
 
 
-@dataset_task
 def publish_github_async(store, dataset, snapshot, github_remote):
     """Actual Github remote push. Can run on another queue, so it's its own task."""
     ds = store.get_dataset(dataset)
@@ -173,7 +164,6 @@ def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
     }
 
 
-@dataset_task
 def monitor_remote_configs(store, dataset, snapshot, realm=None):
     """Check remote configs and correct invalidities."""
     ds = store.get_dataset(dataset)

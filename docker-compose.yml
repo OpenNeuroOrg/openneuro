@@ -79,38 +79,12 @@ services:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./services/datalad/datalad_service:/datalad_service
     env_file: ./config.env
-    depends_on:
-      - celery
     init: true
     networks:
       default:
         aliases:
           - datalad-0
           - datalad-1
-
-  # celery Python backend
-  celery:
-    build: services/datalad
-    command:
-      - /dataset-worker
-    scale: 2
-    volumes:
-      - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./services/datalad/datalad_service:/datalad_service
-    env_file: ./config.env
-    init: true
-
-  flower:
-    image: openneuro/datalad-service:latest
-    command:
-      - flower
-      - -A
-      - datalad_service.worker
-      - --broker
-      - redis://redis
-    env_file: ./config.env
-    ports:
-      - '5555:5555'
 
   # nginx + app
   web:

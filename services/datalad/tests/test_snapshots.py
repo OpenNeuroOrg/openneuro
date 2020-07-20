@@ -8,7 +8,7 @@ from .dataset_fixtures import *
 from datalad_service.tasks.snapshots import write_new_changes
 
 
-def test_get_snapshot(client, celery_app):
+def test_get_snapshot(client):
     # The main test dataset has one revision we can fetch
     response = client.simulate_get(
         '/datasets/{}/snapshots/{}'.format(DATASET_ID, SNAPSHOT_ID))
@@ -25,7 +25,7 @@ def test_get_snapshot(client, celery_app):
         result_doc['id'] == '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)
 
 
-def test_create_snapshot(client, new_dataset, celery_app):
+def test_create_snapshot(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '1'
     response = client.simulate_post(
@@ -33,7 +33,7 @@ def test_create_snapshot(client, new_dataset, celery_app):
     assert response.status == falcon.HTTP_OK
 
 
-def test_pre_snapshot_edit(client, new_dataset, celery_app):
+def test_pre_snapshot_edit(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '1.0.0'
     file_data = json.dumps({
@@ -60,7 +60,7 @@ def test_pre_snapshot_edit(client, new_dataset, celery_app):
         assert commit_ref == current_ref
 
 
-def test_duplicate_snapshot(client, new_dataset, celery_app):
+def test_duplicate_snapshot(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '2'
     # body = json.dumps({
@@ -78,7 +78,7 @@ def test_duplicate_snapshot(client, new_dataset, celery_app):
         pass
 
 
-def test_get_snapshots(client, new_dataset, celery_app):
+def test_get_snapshots(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # body = json.dumps({
     #     'snapshot_changes': ['test']
@@ -99,7 +99,7 @@ def test_get_snapshots(client, new_dataset, celery_app):
     assert result_doc['snapshots'][1]['tag'] == 'v2.0.0'
 
 
-def test_description_update(client, new_dataset, celery_app):
+def test_description_update(client, new_dataset):
     key = 'ReferencesAndLinks'
     value = ['https://www.wikipedia.org']
     body = json.dumps({
@@ -124,13 +124,13 @@ def test_description_update(client, new_dataset, celery_app):
     assert ds_description[key] == value
 
 
-def test_write_new_changes(celery_app, annex_path, new_dataset):
+def test_write_new_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
     # Manually make the commit without validation
     new_dataset.add('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
-    dataset = Dataset(os.path.join(annex_path, ds_id))
+    dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
     assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes
@@ -138,14 +138,14 @@ def test_write_new_changes(celery_app, annex_path, new_dataset):
   - Initial version'''
 
 
-def test_write_with_empty_changes(celery_app, annex_path, new_dataset):
+def test_write_with_empty_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     new_dataset.remove('CHANGES')
     write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
     # Manually make the commit without validation
     new_dataset.add('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
-    dataset = Dataset(os.path.join(annex_path, ds_id))
+    dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
     assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes'''

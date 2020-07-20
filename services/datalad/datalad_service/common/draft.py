@@ -1,6 +1,5 @@
 import requests
 
-from datalad_service.common.celery import dataset_queue
 from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.tasks.validator import validate_dataset
 
@@ -18,8 +17,7 @@ def update_head(store, dataset, cookies=None):
     ds = store.get_dataset(dataset)
     ref = ds.repo.get_hexsha()
     # We may want to detect if we need to run validation here?
-    queue = dataset_queue(dataset)
-    validate_dataset.s(dataset, ds.path, ref).apply_async(queue=queue)
+    validate_dataset(dataset, ds.path, ref)
     r = requests.post(url=GRAPHQL_ENDPOINT,
                       json=draft_revision_mutation(dataset, ref), cookies=cookies)
     if r.status_code != 200:

@@ -3,7 +3,6 @@ import sentry_sdk
 from sentry_sdk.integrations.falcon import FalconIntegration
 
 import datalad_service.config
-from datalad_service.common.celery import app, dataset_queue
 from datalad_service.tasks.audit import audit_datasets
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
@@ -30,12 +29,6 @@ def create_app(annex_path):
             dsn=datalad_service.config.SENTRY_DSN,
             integrations=[FalconIntegration()]
         )
-
-    @app.on_after_configure.connect
-    def schedule_celery_tasks(sender, **kwargs):
-        """Run all periodic tasks."""
-        sender.add_periodic_task(
-            60 * 15, audit_datasets.s(annex_path), queue=dataset_queue('publish'))
 
     api = falcon.API(middleware=[AuthenticateMiddleware()])
     api.router_options.converters['path'] = PathConverter

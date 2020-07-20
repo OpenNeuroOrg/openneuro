@@ -1,9 +1,8 @@
 import os
 
+import gevent
 import falcon
-from celery import chain
 
-from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import create_snapshot
 from datalad_service.tasks.snapshots import get_snapshot, get_snapshots
 from datalad_service.tasks.files import get_files
@@ -19,27 +18,24 @@ class SnapshotResource(object):
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
-        queue = dataset_queue(dataset)
         if snapshot:
             ds = self.store.get_dataset(dataset)
-            files = get_files.s(self.store.annex_path, dataset,
-                                branch=snapshot).apply_async(queue=queue)
-            response = get_snapshot.s(
-                self.store.annex_path, dataset, snapshot).apply_async(queue=queue).get()
-            response['files'] = files.get()
+            files = get_files(self.store, dataset,
+                              branch=snapshot)
+            response = get_snapshot(self.store, dataset, snapshot)
+            response['files'] = files
             resp.media = response
             resp.status = falcon.HTTP_OK
         else:
-            tags = get_snapshots.s(self.store.annex_path,
-                                   dataset).apply_async(queue=queue)
+            tags = get_snapshots(self.store,
+                                 dataset)
             # Index of all tags
             ds = self.store.get_dataset(dataset)
-            resp.media = {'snapshots': tags.get()}
+            resp.media = {'snapshots': tags}
             resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        queue = dataset_queue(dataset)
         media = req.media
         description_fields = {}
         snapshot_changes = []
@@ -49,21 +45,22 @@ class SnapshotResource(object):
             snapshot_changes = media.get('snapshot_changes')
             skip_publishing = media.get('skip_publishing')
 
-        monitor_remote_configs.s(
-            self.store.annex_path, dataset, snapshot).set(
-                queue=dataset_queue(dataset)).apply_async()
+        monitor_remote_configs(
+            self.store, dataset, snapshot)
 
-        created = create_snapshot(
-            self.store.annex_path, dataset, snapshot, description_fields, snapshot_changes)
-        if not created.failed():
-            resp.media = created.get()
+        try:
+            created = create_snapshot(
+                self.store, dataset, snapshot, description_fields, snapshot_changes)
+            resp.media = created
             resp.status = falcon.HTTP_OK
-            # Publish after response
-            publish = publish_snapshot.s(
-                self.store.annex_path, dataset, snapshot, req.cookies)
+
             if not skip_publishing:
-                publish.apply_async(queue=queue)
-        else:
+                # Publish after response
+                gevent.spawn(publish_snapshot, self.store,
+                             dataset, snapshot, req.cookies)
+        except:
+            raise
+            # TODO - This seems like an incorrect error path?
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT
 

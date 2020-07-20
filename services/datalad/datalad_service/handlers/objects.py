@@ -23,10 +23,6 @@ class ObjectsResource(object):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    @property
-    def annex_path(self):
-        return self.store.annex_path
-
     def on_get(self, req, resp, dataset, filekey=None):
         ds_path = self.store.get_dataset_path(dataset)
         if filekey:

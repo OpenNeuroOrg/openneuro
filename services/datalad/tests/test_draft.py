@@ -5,7 +5,7 @@ import os
 from .dataset_fixtures import *
 
 
-def test_add_commit_info(celery_app, client):
+def test_add_commit_info(client):
     ds_id = 'ds000001'
     file_data = 'Test annotating requests with user info'
     name = 'Test User'
@@ -34,7 +34,7 @@ def test_add_commit_info(celery_app, client):
     assert response_content['email'] == email
 
 
-def test_is_dirty(celery_app, client, new_dataset):
+def test_is_dirty(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Check if new_dataset is not dirty
     response = client.simulate_get(

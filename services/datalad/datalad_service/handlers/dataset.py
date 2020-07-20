@@ -1,8 +1,10 @@
+import os
+
 import falcon
 
 from datalad_service.common.user import get_user_info
-from datalad_service.common.celery import dataset_queue
-from datalad_service.tasks.dataset import *
+from datalad_service.tasks.dataset import create_dataset
+from datalad_service.tasks.dataset import delete_dataset
 
 
 class DatasetResource(object):
@@ -31,28 +33,21 @@ class DatasetResource(object):
             resp.media = {'error': 'dataset already exists'}
             resp.status = falcon.HTTP_CONFLICT
         else:
-            queue = dataset_queue(dataset)
             # Record if this was done on behalf of a user
             name, email = get_user_info(req)
-
-            created = create_dataset.apply_async(
-                queue=queue, args=(self.store.annex_path, dataset, name, email))
-            created.wait()
-            if created.failed():
+            try:
+                hexsha = create_dataset(self.store, dataset, name, email)
+                resp.media = {'hexsha': hexsha}
+                resp.status = falcon.HTTP_OK
+            except:
                 resp.media = {'error': 'dataset creation failed'}
                 resp.status = falcon.HTTP_500
-            else:
-                resp.media = {'hexsha': created.get()}
-                resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, dataset):
-        queue = dataset_queue(dataset)
-        deleted = delete_dataset.apply_async(
-            queue=queue, args=(self.store.annex_path, dataset))
-        deleted.wait()
-        if deleted.failed():
-            resp.media = {'error': 'dataset not found'}
-            resp.status = falcon.HTTP_NOT_FOUND
-        else:
+        try:
+            delete_dataset(self.store, dataset)
             resp.media = {}
             resp.status = falcon.HTTP_OK
+        except:
+            resp.media = {'error': 'dataset not found'}
+            resp.status = falcon.HTTP_NOT_FOUND

@@ -32,22 +32,22 @@ def s3_creds(monkeypatch):
     monkeypatch.setenv('AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
 
 
-def test_publish(s3_creds, annex_path, new_dataset):
+def test_publish(s3_creds, datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    published = publish_snapshot.run(
-        annex_path, ds_id, 'test_version')
+    publish_snapshot(
+        datalad_store, ds_id, 'test_version')
 
 
-def test_publish_private(s3_creds, annex_path, new_dataset):
+def test_publish_private(s3_creds, datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    published = publish_snapshot.run(
-        annex_path, ds_id, 'test_version', cookies=None, realm='PRIVATE')
+    publish_snapshot(
+        datalad_store, ds_id, 'test_version', cookies=None, realm='PRIVATE')
 
 
-def test_publish_public(s3_creds, monkeypatch, github_dryrun, annex_path, new_dataset):
+def test_publish_public(s3_creds, monkeypatch, github_dryrun, datalad_store, new_dataset):
     monkeypatch.setenv('DATALAD_GITHUB_ORG', 'test')
     monkeypatch.setenv('DATALAD_GITHUB_LOGIN', 'user')
     monkeypatch.setenv('DATALAD_GITHUB_PASS', 'password')
     ds_id = os.path.basename(new_dataset.path)
-    published = publish_snapshot.run(
-        annex_path, ds_id, 'test_version', cookies=None, realm='PUBLIC')
+    publish_snapshot(
+        datalad_store, ds_id, 'test_version', cookies=None, realm='PUBLIC')
