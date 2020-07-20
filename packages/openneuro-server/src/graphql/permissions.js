@@ -88,8 +88,12 @@ export const checkDatasetWrite = async (
   userId,
   userInfo,
   state = states.WRITE,
+  checkExists = true,
 ) => {
-  await checkDatasetExists(datasetId)
+  if (checkExists) {
+    // Check that dataset exists.
+    await checkDatasetExists(datasetId)
+  }
   if (!userId) {
     // Quick path for anonymous writes
     throw new Error(state.errorMessage)
@@ -98,7 +102,7 @@ export const checkDatasetWrite = async (
     // Always allow site admins
     return true
   }
-  const permission = Permission.findOne({ datasetId, userId }).exec()
+  const permission = await Permission.findOne({ datasetId, userId }).exec()
   if (checkPermissionLevel(permission, state)) {
     return true
   } else {
@@ -106,8 +110,12 @@ export const checkDatasetWrite = async (
   }
 }
 
-export const checkDatasetAdmin = (datasetId, userId, userInfo) =>
-  checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN)
+export const checkDatasetAdmin = (
+  datasetId,
+  userId,
+  userInfo,
+  checkExists = true,
+) => checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN, checkExists)
 
 export const checkAdmin = (userId, userInfo) =>
   userId && userInfo.admin
