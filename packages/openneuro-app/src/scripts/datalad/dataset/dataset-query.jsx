@@ -19,6 +19,7 @@ import {
   ErrorBoundaryWithDataSet,
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
+import DatasetRedirect from '../routes/dataset-redirect.jsx'
 
 /**
  * Generate the dataset page query
@@ -151,13 +152,16 @@ DatasetQueryHook.propTypes = {
  * @param {Object} props.draft Is this the draft page?
  */
 const DatasetQuery = ({ match, history }) => (
-  <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
-    <DatasetQueryHook
-      datasetId={match.params.datasetId}
-      draft={!match.params.snapshotId}
-      history={history}
-    />
-  </ErrorBoundaryAssertionFailureException>
+  <>
+    <DatasetRedirect />
+    <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
+      <DatasetQueryHook
+        datasetId={match.params.datasetId}
+        draft={!match.params.snapshotId}
+        history={history}
+      />
+    </ErrorBoundaryAssertionFailureException>
+  </>
 )
 
 DatasetQuery.propTypes = {
