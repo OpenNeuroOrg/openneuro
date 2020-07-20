@@ -59,7 +59,6 @@ const DatasetTab = ({
   loading,
   publicDashboard,
   savedDashboard,
-  error,
   isMobile,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">

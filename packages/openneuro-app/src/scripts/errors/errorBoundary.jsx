@@ -33,7 +33,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, { componentStack }) {
-    let message = String(error)
+    const message = String(error)
     error.componentStack = componentStack
 
     Sentry.withScope(scope => {
@@ -46,8 +46,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const error = this.state.error || this.props.error
-    const { message } = this.state
+    const { error, message } = this.state
 
     const { subject, description } = this.props
     if (error) {
