@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ValidationStatus from './validation-status.jsx'
-import { ErrorBoundaryWithDataSet } from '../../errors/errorBoundary.jsx'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
 const Validation = ({ issues, isMobile }) => {
   const mobileClass = isMobile
@@ -10,10 +10,9 @@ const Validation = ({ issues, isMobile }) => {
   return (
     <div className={mobileClass}>
       {!isMobile && <h3 className="metaheader">BIDS Validation</h3>}
-      <ErrorBoundaryWithDataSet
-        subject={'error in dataset validation component'}>
+      <ErrorBoundary subject={'error in dataset validation component'}>
         <ValidationStatus issues={issues} />
-      </ErrorBoundaryWithDataSet>
+      </ErrorBoundary>
     </div>
   )
 }
