@@ -49,25 +49,30 @@ export const checkPermissionLevel = (permission, state) => {
   }
 }
 
-export const checkDatasetRead = (datasetId, userId, userInfo) => {
+export const checkDatasetExists = async datasetId => {
+  const found = await Dataset.count({ id: datasetId }).exec()
+  if (!found) throw new Error(`Dataset ${datasetId} does not exist.`)
+}
+
+export const checkDatasetRead = async (datasetId, userId, userInfo) => {
+  // Check that dataset exists.
+  await checkDatasetExists(datasetId)
   // Look for any matching datasets
-  return Dataset.findOne(datasetReadQuery(datasetId, userId, userInfo))
-    .exec()
-    .then(datasetFound => {
-      // Found a dataset and don't need to match further (public or admin user)
-      if (datasetFound) {
-        return true
-      } else {
-        // Did not find a dataset, check permissions for additional read access
-        return Permission.findOne({ datasetId, userId }).then(permission => {
-          if (checkPermissionLevel(permission, states.READ)) {
-            return true
-          } else {
-            throw new Error(states.READ.errorMessage)
-          }
-        })
-      }
-    })
+  const datasetFound = await Dataset.findOne(
+    datasetReadQuery(datasetId, userId, userInfo),
+  ).exec()
+  // Found a dataset and don't need to match further (public or admin user)
+  if (datasetFound) {
+    return true
+  } else {
+    // Did not find a dataset, check permissions for additional read access
+    const permission = await Permission.findOne({ datasetId, userId }).exec()
+    if (checkPermissionLevel(permission, states.READ)) {
+      return true
+    } else {
+      throw new Error(states.READ.errorMessage)
+    }
+  }
 }
 
 /**
@@ -78,27 +83,27 @@ export const checkDatasetRead = (datasetId, userId, userInfo) => {
  * @param {object} state Level to verify
  */
 
-export const checkDatasetWrite = (
+export const checkDatasetWrite = async (
   datasetId,
   userId,
   userInfo,
   state = states.WRITE,
 ) => {
+  await checkDatasetExists(datasetId)
   if (!userId) {
     // Quick path for anonymous writes
-    return Promise.reject(new Error(state.errorMessage))
+    throw new Error(state.errorMessage)
   }
   if (userId && userInfo.admin) {
     // Always allow site admins
-    return Promise.resolve(true)
+    return true
   }
-  return Permission.findOne({ datasetId, userId }).then(permission => {
-    if (checkPermissionLevel(permission, state)) {
-      return true
-    } else {
-      throw new Error(state.errorMessage)
-    }
-  })
+  const permission = Permission.findOne({ datasetId, userId }).exec()
+  if (checkPermissionLevel(permission, state)) {
+    return true
+  } else {
+    throw new Error(state.errorMessage)
+  }
 }
 
 export const checkDatasetAdmin = (datasetId, userId, userInfo) =>
