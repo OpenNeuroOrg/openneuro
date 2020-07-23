@@ -7,6 +7,8 @@ import io
 import stat
 import subprocess
 
+from sentry_sdk import capture_exception
+
 from datalad.config import ConfigManager
 
 
@@ -110,8 +112,8 @@ def parse_rmet_line(remote, rmetLine):
         slash = '' if remote['url'][-1] == '/' else '/'
         s3version, path = remoteData.split('#')
         return '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
-    except ValueError:
-        # TODO - Log this error
+    except:
+        capture_exception()
         return None
 
 
