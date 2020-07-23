@@ -15,7 +15,7 @@ COPY --from=build /srv/packages/openneuro-server/src/libs/doi/templates/*.html /
 COPY --from=build /srv/packages/openneuro-server/src/libs/email/templates/*.html /srv/dist/src/libs/email/templates/
 HEALTHCHECK --interval=10s --retries=10 CMD curl -f 'http://localhost:8111' || exit 1
 
-ENV NODE_OPTIONS=--max_old_space_size=1024
+ENV NODE_OPTIONS=--max_old_space_size=2048
 
 # start server
 CMD ["node", "/srv/dist/src/server.js"]
