@@ -88,7 +88,7 @@ export const checkDatasetWrite = async (
   userId,
   userInfo,
   state = states.WRITE,
-  checkExists = true,
+  options = { checkExists: true },
 ) => {
   if (checkExists) {
     // Check that dataset exists.
@@ -114,8 +114,8 @@ export const checkDatasetAdmin = (
   datasetId,
   userId,
   userInfo,
-  checkExists = true,
-) => checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN, checkExists)
+  options = { checkExists: true },
+) => checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN)
 
 export const checkAdmin = (userId, userInfo) =>
   userId && userInfo.admin

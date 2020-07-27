@@ -58,18 +58,16 @@ describe('resolver permissions helpers', () => {
   describe('checkDatasetWrite()', () => {
     it('resolves to false for anonymous users', () => {
       return expect(
-        checkDatasetWrite('ds000001', null, null, undefined, false),
+        checkDatasetWrite('ds000001', null, null, undefined, {
+          checkExists: false,
+        }),
       ).rejects.toThrowErrorMatchingSnapshot()
     })
     it('resolves to true for admins', () => {
       return expect(
-        checkDatasetWrite(
-          'ds000001',
-          '1234',
-          { admin: true },
-          undefined,
-          false,
-        ),
+        checkDatasetWrite('ds000001', '1234', { admin: true }, undefined, {
+          checkExists: false,
+        }),
       ).resolves.toBe(true)
     })
   })
