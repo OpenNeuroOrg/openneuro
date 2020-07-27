@@ -121,12 +121,15 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
 
   useEffect(() => {
     if (error) {
-      throw error
-    } else if (data && data.dataset && data.dataset.snapshots.length === 0) {
-      throw Error('This dataset has no associated snapshots.')
+      if (data.dataset) {
+        // show dataset page
+        captureException(error)
+      } else {
+        // direct to freshdesk
+        throw error
+      }
     }
-  }, [error, data])
-
+  }, [error])
   if (loading) return <Spinner text="Loading Dataset" active />
 
   return (
@@ -136,6 +139,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
           value={{
             datasetId,
             fetchMore,
+            error,
           }}>
           <DatasetPage dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
