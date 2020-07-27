@@ -9,7 +9,6 @@ import PropTypes from 'prop-types'
 
 const FreshdeskInterface = props => {
   const [showModal, setShowModal] = useState(false)
-  console.log(props)
   return (
     <>
       <p className="generic-error-message">
