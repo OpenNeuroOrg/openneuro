@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0, react/display-name: 0 */
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
 import { datasets } from 'openneuro-client'
@@ -65,9 +65,6 @@ export const datasetQueryDisplay = (isPublic, isSaved) => ({
   variables,
   error,
 }) => {
-  useEffect(() => {
-    if (error) throw error
-  }, [error])
   return (
     <DatasetTab
       loading={loading}

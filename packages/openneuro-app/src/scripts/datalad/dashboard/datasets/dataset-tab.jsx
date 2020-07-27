@@ -1,4 +1,5 @@
-import React from 'react'
+import { captureException } from '@sentry/browser'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../../resources/strings'
@@ -57,71 +58,91 @@ const DatasetTab = ({
   refetch,
   queryVariables,
   loading,
+  error,
   publicDashboard,
   savedDashboard,
   isMobile,
-}) => (
-  <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
-    <Helmet>
-      <title>
-        {title(publicDashboard, savedDashboard)} - {pageTitle}
-      </title>
-    </Helmet>
-    <div className="header-filter-sort clearfix">
-      <div className="admin header-wrap clearfix">
-        <div className="row">
-          {isMobile && (
-            <div className="col-md-7">
-              <SearchInput />
+}) => {
+  useEffect(() => {
+    if (error) {
+      if (data.datasets) {
+        // show datasets
+        captureException(error)
+      } else {
+        // direct to freshdesk
+        throw error
+      }
+    }
+  }, [error])
+  return (
+    <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
+      <Helmet>
+        <title>
+          {title(publicDashboard, savedDashboard)} - {pageTitle}
+        </title>
+      </Helmet>
+      <div className="header-filter-sort clearfix">
+        <div className="admin header-wrap clearfix">
+          <div className="row">
+            {isMobile && (
+              <div className="col-md-7">
+                <SearchInput />
+              </div>
+            )}
+            <div className="col-md-5">
+              <h2>{title(publicDashboard, savedDashboard)}</h2>
+              {isMobile && !loading && (
+                <h6>
+                  {data.datasets
+                    ? `Results ${data.datasets.pageInfo.count}`
+                    : 'Zero results'}{' '}
+                </h6>
+              )}
             </div>
-          )}
-          <div className="col-md-5">
-            <h2>{title(publicDashboard, savedDashboard)}</h2>
-            {isMobile && !loading && (
-              <h6>
-                {data.datasets
-                  ? `Results ${data.datasets.pageInfo.count}`
-                  : 'Zero results'}{' '}
-              </h6>
+            {!isMobile && (
+              <div className="col-md-7">
+                <SearchInput />
+              </div>
             )}
           </div>
-          {!isMobile && (
-            <div className="col-md-7">
-              <SearchInput />
+        </div>
+        <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
+          <div className={isMobile ? '' : 'sort clearfix'}>
+            {!isMobile && <label>Sort by:</label>}
+            <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
+          </div>
+          {publicDashboard || savedDashboard ? null : (
+            <div className="filters">
+              {isMobile ? (
+                <MobileLabel>Filter by:</MobileLabel>
+              ) : (
+                <label>Filter by:</label>
+              )}
+              <DatasetFilter
+                refetch={refetch}
+                queryVariables={queryVariables}
+              />
             </div>
           )}
         </div>
       </div>
-      <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
-        <div className={isMobile ? '' : 'sort clearfix'}>
-          {!isMobile && <label>Sort by:</label>}
-          <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
-        </div>
-        {publicDashboard || savedDashboard ? null : (
-          <div className="filters">
-            {isMobile ? (
-              <MobileLabel>Filter by:</MobileLabel>
-            ) : (
-              <label>Filter by:</label>
-            )}
-            <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
-          </div>
-        )}
-      </div>
-    </div>
-    {loading ? (
-      <Spinner text="Loading Datasets" active />
-    ) : (
-      <ErrorBoundary subject={'error in dashboard dataset tab'}>
-        <DatasetTabLoaded
-          datasets={data.datasets}
-          loadMoreRows={loadMoreRows}
-          publicDashboard={publicDashboard}
-        />
-      </ErrorBoundary>
-    )}
-  </FullHeightFlexDiv>
-)
+      {loading ? (
+        <Spinner text="Loading Datasets" active />
+      ) : (
+        (console.log({ loading, data }),
+        (
+          <ErrorBoundary subject={'error in dashboard dataset tab'}>
+            <DatasetTabLoaded
+              datasets={data.datasets}
+              loadMoreRows={loadMoreRows}
+              publicDashboard={publicDashboard}
+            />
+          </ErrorBoundary>
+        ))
+      )}
+    </FullHeightFlexDiv>
+  )
+}
 
 DatasetTab.propTypes = {
   data: PropTypes.object,
