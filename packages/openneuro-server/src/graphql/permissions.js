@@ -49,7 +49,7 @@ export const checkPermissionLevel = (permission, state) => {
   }
 }
 
-export const checkDatasetExists = async datasetId => {
+export const checkDatasetExists = async (datasetId) => {
   const found = await Dataset.count({ id: datasetId }).exec()
   if (!found) throw new Error(`Dataset ${datasetId} does not exist.`)
 }
@@ -90,7 +90,7 @@ export const checkDatasetWrite = async (
   state = states.WRITE,
   options = { checkExists: true },
 ) => {
-  if (checkExists) {
+  if (options.checkExists) {
     // Check that dataset exists.
     await checkDatasetExists(datasetId)
   }
@@ -115,7 +115,7 @@ export const checkDatasetAdmin = (
   userId,
   userInfo,
   options = { checkExists: true },
-) => checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN)
+) => checkDatasetWrite(datasetId, userId, userInfo, states.ADMIN, options)
 
 export const checkAdmin = (userId, userInfo) =>
   userId && userInfo.admin
