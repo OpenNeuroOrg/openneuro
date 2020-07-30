@@ -55,8 +55,5 @@ export default {
       .then(() => {
         return baseDoi
       })
-      .catch(() => {
-        return null
-      })
   },
 }
