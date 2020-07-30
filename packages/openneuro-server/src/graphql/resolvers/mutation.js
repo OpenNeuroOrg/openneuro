@@ -24,6 +24,7 @@ import { updateReadme } from './readme.js'
 import { addComment, editComment, deleteComment } from './comment.js'
 import { subscribeToNewsletter } from './newsletter'
 import { addMetadata } from './metadata.js'
+import { prepareUpload, finishUpload } from './upload.js'
 
 const Mutation = {
   createDataset,
@@ -54,6 +55,8 @@ const Mutation = {
   subscribeToNewsletter,
   addMetadata,
   updateRef,
+  prepareUpload,
+  finishUpload,
 }
 
 export default Mutation

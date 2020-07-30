@@ -27,7 +27,7 @@ def validate_dataset_sync(dataset_path, ref):
             ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired:
-        sentry_sdk.captureException()
+        sentry_sdk.capture_exception()
 
 
 def summary_mutation(dataset_id, ref, validator_output):

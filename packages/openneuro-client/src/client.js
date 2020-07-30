@@ -12,6 +12,7 @@ import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
+import * as uploads from './uploads'
 import datasetGenerator from './datasetGenerator.js'
 import { version } from '../package.json'
 
@@ -176,4 +177,12 @@ const createClient = (uri, options = {}) => {
   return new ApolloClient(apolloClientOptions)
 }
 
-export { files, datasets, snapshots, users, datasetGenerator, createClient }
+export {
+  files,
+  datasets,
+  snapshots,
+  users,
+  datasetGenerator,
+  createClient,
+  uploads,
+}

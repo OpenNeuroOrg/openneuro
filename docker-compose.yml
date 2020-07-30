@@ -1,5 +1,5 @@
 # docker compose versions
-version: '2.3'
+version: "2.3"
 
 # shared volumes
 volumes:
@@ -28,7 +28,7 @@ services:
       - webpack_cache:/webpack-cache
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
     ports:
-      - '8145:8145'
+      - "8145:8145"
 
   # crn node server
   server:
@@ -52,8 +52,6 @@ services:
     depends_on:
       - server
       - elasticsearch
-    extends:
-      service: nodejs
 
   content:
     image: ${CONTENT_IMAGE}
@@ -80,6 +78,24 @@ services:
       - ./services/datalad/datalad_service:/datalad_service
     env_file: ./config.env
     init: true
+    command:
+      [
+        "gunicorn",
+        "--bind",
+        "0.0.0.0:80",
+        "--reload",
+        "datalad_service.app:create_app('/datalad')",
+        "--workers",
+        "8",
+        "--worker-class",
+        "gevent",
+        "--timeout",
+        "60",
+        "--keep-alive",
+        "30",
+        "--log-level",
+        "debug",
+      ]
     networks:
       default:
         aliases:
@@ -94,9 +110,9 @@ services:
     volumes_from:
       - content
     ports:
-      - '80:80'
-      - '8110:8110'
-      - '9876:80'
+      - "80:80"
+      - "8110:8110"
+      - "9876:80"
     depends_on:
       - server
       - datalad
@@ -105,10 +121,10 @@ services:
     image: elasticsearch:7.5.1
     environment:
       discovery.type: single-node
-      cluster.routing.allocation.disk.threshold_enabled: 'true'
+      cluster.routing.allocation.disk.threshold_enabled: "true"
       cluster.routing.allocation.disk.watermark.flood_stage: 1gb
       cluster.routing.allocation.disk.watermark.low: 10gb
       cluster.routing.allocation.disk.watermark.high: 5gb
     ports:
-      - '9200:9200'
-      - '9300:9300'
+      - "9200:9200"
+      - "9300:9300"

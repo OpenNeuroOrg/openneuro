@@ -43,7 +43,7 @@ export const createDataset = (client, dir) => {
     .then(({ data }) => {
       const dsId = data.createDataset.id
       // eslint-disable-next-line no-console
-      console.log(`"${dsId}" created with label "${label}"`)
+      console.log(`"${dsId}" created`)
       return dsId
     })
 }

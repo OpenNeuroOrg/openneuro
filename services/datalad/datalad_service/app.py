@@ -1,3 +1,5 @@
+import logging
+
 import falcon
 import sentry_sdk
 from sentry_sdk.integrations.falcon import FalconIntegration
@@ -13,6 +15,8 @@ from datalad_service.handlers.objects import ObjectsResource
 from datalad_service.handlers.snapshots import SnapshotResource
 from datalad_service.handlers.heartbeat import HeartbeatResource
 from datalad_service.handlers.publish import PublishResource
+from datalad_service.handlers.upload import UploadResource
+from datalad_service.handlers.upload_file import UploadFileResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 
 
@@ -24,6 +28,10 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 
 
 def create_app(annex_path):
+    # If running under gunicorn, use that logger
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    logging.basicConfig(handlers=gunicorn_logger.handlers,
+                        level=gunicorn_logger.level)
     if datalad_service.config.SENTRY_DSN:
         sentry_sdk.init(
             dsn=datalad_service.config.SENTRY_DSN,
@@ -43,6 +51,8 @@ def create_app(annex_path):
     dataset_objects = ObjectsResource(store)
     dataset_publish = PublishResource(store)
     dataset_snapshots = SnapshotResource(store)
+    dataset_upload = UploadResource(store)
+    dataset_upload_file = UploadFileResource(store)
 
     api.add_route('/heartbeat', heartbeat)
 
@@ -69,6 +79,13 @@ def create_app(annex_path):
 
     api.add_route(
         '/datasets/{dataset}/publish', dataset_publish
+    )
+
+    api.add_route(
+        '/datasets/{dataset}/upload/{upload}', dataset_upload
+    )
+    api.add_route(
+        '/uploads/{dataset}/{upload}/{filename:path}', dataset_upload_file
     )
 
     return api

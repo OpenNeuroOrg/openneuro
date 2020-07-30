@@ -5,22 +5,49 @@ import { decrypt } from './crypto'
 import User from '../../models/user'
 import config from '../../config.js'
 
+export const buildToken = (config, user, expiresIn, options) => {
+  const fields = {
+    sub: user.id,
+    email: user.email,
+    provider: user.provider,
+    name: user.name,
+    admin: user.admin,
+  }
+  // Allow extensions of the base token format
+  if (options) {
+    if ('scopes' in options) {
+      fields.scopes = options.scopes
+    }
+    if ('dataset' in options) {
+      fields.dataset = options.dataset
+    }
+  }
+  return jwt.sign(fields, config.auth.jwt.secret, {
+    expiresIn,
+  })
+}
+
 // Helper to generate a JWT containing user info
 export const addJWT = config => (user, expiration = 60 * 60 * 24 * 7) => {
-  const token = jwt.sign(
-    {
-      sub: user.id,
-      email: user.email,
-      provider: user.provider,
-      name: user.name,
-      admin: user.admin,
-    },
-    config.auth.jwt.secret,
-    {
-      expiresIn: expiration,
-    },
-  )
+  const token = buildToken(config, user, expiration)
   return Object.assign({}, user, { token })
+}
+
+/**
+ * Generate an upload specific token
+ *
+ * This allows this scope to be checked specifically during upload and all other requests rejected
+ */
+export function generateUploadToken(
+  user,
+  datasetId,
+  expiresIn = 60 * 60 * 24 * 7,
+) {
+  const options = {
+    scopes: ['dataset:upload'],
+    dataset: datasetId,
+  }
+  return buildToken(config, user, expiresIn, options)
 }
 
 const requestNewAccessToken = (jwtProvider, refreshToken) =>

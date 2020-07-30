@@ -16,7 +16,9 @@
     "openneuro": "./src/index.js"
   },
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "bids-validator": "1.5.4",
+    "cli-progress": "^3.8.2",
     "commander": "^2.15.1",
     "cross-fetch": "^3.0.5",
     "esm": "^3.0.16",
@@ -24,7 +26,8 @@
     "graphql-tag": "^2.10.3",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^3.17.6"
+    "openneuro-client": "^3.17.6",
+    "node-fetch": "^2.6.0"
   },
   "scripts": {
     "openneuro": "node src/index.js"
@@ -46,6 +49,6 @@
   },
   "devDependencies": {
     "jest-fetch-mock": "^3.0.3",
-    "metro-memory-fs": "^0.31.0"
+    "metro-memory-fs": "0.61.0"
   }
 }
