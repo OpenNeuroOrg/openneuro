@@ -49,7 +49,7 @@ export const checkPermissionLevel = (permission, state) => {
   }
 }
 
-export const checkDatasetExists = async (datasetId) => {
+export const checkDatasetExists = async datasetId => {
   const found = await Dataset.count({ id: datasetId }).exec()
   if (!found) throw new Error(`Dataset ${datasetId} does not exist.`)
 }
