@@ -63,7 +63,7 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
 
 FreshdeskWidget.propTypes = {
   subject: PropTypes.string,
-  error: PropTypes.string,
+  error: PropTypes.object,
   sentryId: PropTypes.string,
   description: PropTypes.string,
 }

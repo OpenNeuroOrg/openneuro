@@ -1,12 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatasetQuery component renders with common params 1`] = `
-<ErrorBoundaryAssertionFailureException
-  subject="error in dataset query"
->
-  <DatasetQueryHook
-    datasetId="ds000001"
-    draft={true}
-  />
-</ErrorBoundaryAssertionFailureException>
+<Fragment>
+  <DatasetRedirect />
+  <ErrorBoundaryAssertionFailureException
+    subject="error in dataset query"
+  >
+    <DatasetQueryHook
+      datasetId="ds000001"
+      draft={true}
+    />
+  </ErrorBoundaryAssertionFailureException>
+</Fragment>
 `;

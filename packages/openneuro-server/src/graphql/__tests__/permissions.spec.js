@@ -58,12 +58,16 @@ describe('resolver permissions helpers', () => {
   describe('checkDatasetWrite()', () => {
     it('resolves to false for anonymous users', () => {
       return expect(
-        checkDatasetWrite('ds000001', null, null),
+        checkDatasetWrite('ds000001', null, null, undefined, {
+          checkExists: false,
+        }),
       ).rejects.toThrowErrorMatchingSnapshot()
     })
     it('resolves to true for admins', () => {
       return expect(
-        checkDatasetWrite('ds000001', '1234', { admin: true }),
+        checkDatasetWrite('ds000001', '1234', { admin: true }, undefined, {
+          checkExists: false,
+        }),
       ).resolves.toBe(true)
     })
   })
@@ -89,12 +93,12 @@ describe('resolver permissions helpers', () => {
   describe('checkDatasetAdmin()', () => {
     it('resolves to false for anonymous users', () => {
       return expect(
-        checkDatasetAdmin('ds000001', null, null),
+        checkDatasetAdmin('ds000001', null, null, false),
       ).rejects.toThrowErrorMatchingSnapshot()
     })
     it('resolves to true for admins', () => {
       return expect(
-        checkDatasetAdmin('ds000001', '1234', { admin: true }),
+        checkDatasetAdmin('ds000001', '1234', { admin: true }, false),
       ).resolves.toBe(true)
     })
   })
