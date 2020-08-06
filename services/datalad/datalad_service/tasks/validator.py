@@ -3,10 +3,10 @@ import os
 import subprocess
 import requests
 
+import gevent
 import sentry_sdk
 
 from datalad_service.config import GRAPHQL_ENDPOINT
-from datalad_service.common.celery import app
 
 
 def setup_validator():
@@ -74,8 +74,7 @@ def issues_mutation(dataset_id, ref, validator_output):
     }
 
 
-@app.task
-def validate_dataset(dataset_id, dataset_path, ref, cookies=None):
+def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None):
     validator_output = validate_dataset_sync(dataset_path, ref)
     if validator_output:
         if 'issues' in validator_output:
@@ -90,3 +89,8 @@ def validate_dataset(dataset_id, dataset_path, ref, cookies=None):
                 raise Exception(r.text)
     else:
         raise Exception('Validation failed unexpectedly')
+
+
+def validate_dataset(dataset_id, dataset_path, ref, cookies=None):
+    return gevent.spawn(_validate_dataset_eventlet,
+                        dataset_id, dataset_path, ref, cookies)

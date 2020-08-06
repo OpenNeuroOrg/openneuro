@@ -1,14 +1,13 @@
 import os
 
+import gevent
+
 from datalad_service.common.annex import CommitInfo, get_repo_files
-from datalad_service.common.celery import dataset_task
-from datalad_service.common.celery import dataset_queue
 from datalad_service.common.draft import update_head
 from datalad_service.tasks.validator import validate_dataset
 
 
-@dataset_task
-def commit_files(store, dataset, files, name=None, email=None, validate=True, cookies=None):
+def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     """
     Commit a list of files with the email and name provided.
 
@@ -23,29 +22,24 @@ def commit_files(store, dataset, files, name=None, email=None, validate=True, co
             # If no list of paths, add all untracked files
             ds.add('.')
     ref = ds.repo.get_hexsha()
-    if validate:
-        # Run the validator but don't block on the request
-        queue = dataset_queue(dataset)
-        validate_dataset.s(dataset, ds.path, ref,
-                           cookies).apply_async(queue=queue)
+    # Run the validator but don't block on the request
+    validate_dataset(dataset, ds.path, ref,
+                     cookies)
     return ref
 
 
-@dataset_task
 def unlock_files(store, dataset, files):
     ds = store.get_dataset(dataset)
     for filename in files:
         ds.unlock(filename)
 
 
-@dataset_task
 def get_files(store, dataset, branch=None):
     """Get the working tree, optionally a branch tree."""
     ds = store.get_dataset(dataset)
     return get_repo_files(ds, branch)
 
 
-@dataset_task
 def get_untracked_files(store, dataset):
     """Get file listing and size metadata for all files in the working tree."""
     ds_path = store.get_dataset_path(dataset)
@@ -73,7 +67,6 @@ def get_untracked_files(store, dataset):
     return fileMeta
 
 
-@dataset_task
 def remove_files(store, dataset, files, name=None, email=None, cookies=None):
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
@@ -82,10 +75,9 @@ def remove_files(store, dataset, files, name=None, email=None, cookies=None):
             update_head(store, dataset, cookies)
 
 
-@dataset_task
 def remove_recursive(store, dataset, path, name=None, email=None, cookies=None):
     """Remove a path within a dataset recursively."""
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
         ds.remove(path, recursive=True, check=False)
-        update_head(store, dataset, cookies=cookies)
+        update_head(store, dataset, cookies)

@@ -5,17 +5,11 @@ import random
 
 import sentry_sdk
 
-from datalad_service.common.celery import dataset_task, dataset_queue
 
-
-@dataset_task
 def audit_datasets(store):
     dataset_dirs = os.listdir(store.annex_path)
     dataset = random.choice(dataset_dirs)
-    # Randomize start time a bit to reduce risk of stampedes
-    countdown = random.randint(1, 30)
-    audit_remotes.apply_async(
-        (store.annex_path, dataset), queue=dataset_queue(dataset), countdown=countdown)
+    audit_remotes(store, dataset)
 
 
 def fsck_remote(ds, remote):
@@ -40,7 +34,6 @@ def fsck_remote(ds, remote):
             'Remote audit failed! Some expected annex keys were unavailable at this remote.')
 
 
-@dataset_task
 def audit_remotes(store, dataset):
     """
     Iterate over all defined S3 special remotes and run git-annex fsck.

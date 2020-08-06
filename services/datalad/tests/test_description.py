@@ -6,7 +6,7 @@ import json
 from .dataset_fixtures import *
 
 
-def test_update(celery_app, client, new_dataset):
+def test_update(client, new_dataset):
     key = 'Name'
     value = 'Guthrum'
     body = json.dumps({
@@ -62,31 +62,32 @@ def post_and_check_description(client, new_dataset, base_description):
     assert ds_description[key] == value
 
 
-def test_update_with_trailing_newline(celery_app, client, new_dataset):
+def test_update_with_trailing_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n'
     post_and_check_description(client, new_dataset, base_description)
 
-def test_update_with_trailing_double_newline(celery_app, client, new_dataset):
+
+def test_update_with_trailing_double_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n\n'
     post_and_check_description(client, new_dataset, base_description)
 
 
-def test_update_with_trailing_windows_newline(celery_app, client, new_dataset):
+def test_update_with_trailing_windows_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\r\n'
     post_and_check_description(client, new_dataset, base_description)
 
 
-def test_update_with_trailing_mac_newline(celery_app, client, new_dataset):
+def test_update_with_trailing_mac_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\r'
     post_and_check_description(client, new_dataset, base_description)
 
 
-def test_update_with_trailing_wat_newline(celery_app, client, new_dataset):
+def test_update_with_trailing_wat_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n\r'
     post_and_check_description(client, new_dataset, base_description)
 
 
-def test_description_formatting(celery_app, client, new_dataset):
+def test_description_formatting(client, new_dataset):
     key = 'Name'
     value = 'Guthrum'
     body = json.dumps({

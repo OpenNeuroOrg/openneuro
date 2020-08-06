@@ -1,6 +1,5 @@
 import json
 import os
-from datalad_service.common.celery import dataset_task
 from datalad_service.tasks.files import commit_files
 
 
@@ -10,7 +9,6 @@ def edit_description(description, new_fields):
     return updated
 
 
-@dataset_task
 def update_description(store, dataset, description_fields, name=None, email=None):
     ds = store.get_dataset(dataset)
     description = ds.repo.repo.tree(
@@ -32,8 +30,8 @@ def update_description(store, dataset, description_fields, name=None, email=None
             description_file.truncate(0)
             description_file.write(json.dumps(updated, indent=4))
         # Commit new content, run validator
-        commit_files.run(store.annex_path, dataset, [
-                         'dataset_description.json'])
+        commit_files(store, dataset, [
+            'dataset_description.json'])
         return updated
     else:
         return description_json

@@ -1,3 +1,0 @@
-#!/bin/bash
-echo "Beat scheduler starting..."
-celery -A datalad_service.worker beat -l info

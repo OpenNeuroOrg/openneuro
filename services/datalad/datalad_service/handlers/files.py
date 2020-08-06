@@ -5,8 +5,6 @@ import falcon
 
 import git
 from datalad_service.common.user import get_user_info
-from datalad_service.common.celery import dataset_queue
-from datalad_service.tasks.files import commit_files
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.files import get_untracked_files
 from datalad_service.tasks.files import remove_files
@@ -20,10 +18,6 @@ class FilesResource(object):
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
-
-    @property
-    def annex_path(self):
-        return self.store.annex_path
 
     def _update_file(self, path, stream):
         """Update a file on disk with a path and source stream."""
@@ -74,20 +68,18 @@ class FilesResource(object):
             # Request for index of files
             # Return a list of file objects
             # {name, path, size}
-            queue = dataset_queue(dataset)
-            if "untracked" in req.params:
-                files = get_untracked_files.apply_async(
-                    queue=queue, args=(self.store.annex_path, dataset)
-                )
-                resp.media = {'files': files.get()}
-            else:
-                files = get_files.apply_async(
-                    queue=queue, args=(self.store.annex_path, dataset, snapshot))
-                resp.media = {'files': files.get()}
+            try:
+                if "untracked" in req.params:
+                    files = get_untracked_files(self.store, dataset)
+                    resp.media = {'files': files}
+                else:
+                    files = get_files(self.store, dataset, snapshot)
+                    resp.media = {'files': files}
+            except:
+                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
 
     def on_post(self, req, resp, dataset, filename):
         """Post will create new files and adds them to the annex if they do not exist, else update existing files."""
-        queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
@@ -99,11 +91,8 @@ class FilesResource(object):
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename]})
-                unlock.wait()
+                unlock_files(self.store, dataset, files=[filename])
                 self._update_file(file_path, req.stream)
-                # ds.publish(to='github')
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
@@ -127,7 +116,6 @@ class FilesResource(object):
 
     def on_delete(self, req, resp, dataset, filename):
         """Delete an existing file from a dataset"""
-        queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
@@ -137,15 +125,18 @@ class FilesResource(object):
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                # The recursive flag removes the entire tree in one commit
-                if 'recursive' in req.params and req.params['recursive'] != 'false':
-                    remove = remove_recursive.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                        'path': filename, 'name': name, 'email': email, 'cookies': req.cookies})
-                else:
-                    remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                        'files': [filename], 'name': name, 'email': email, 'cookies': req.cookies})
-                resp.media = media_dict
-                resp.status = falcon.HTTP_OK
+                try:
+                    # The recursive flag removes the entire tree in one commit
+                    if 'recursive' in req.params and req.params['recursive'] != 'false':
+                        remove_recursive(self.store, dataset, files=[
+                            filename], name=name, email=email, cookies=req.cookies)
+                    else:
+                        remove_files(self.store, dataset, files=[
+                            filename], name=name, email=email, cookies=req.cookies)
+                    resp.media = media_dict
+                    resp.status = falcon.HTTP_OK
+                except:
+                    resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
             else:
                 resp.media = {'error': 'no such file'}
                 resp.status = falcon.HTTP_NOT_FOUND

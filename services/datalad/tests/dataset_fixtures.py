@@ -6,10 +6,12 @@ import random
 import pytest
 import fakeredis
 from falcon import testing
+import requests
 
+import datalad.api
+import datalad_service.common.s3
 from datalad.api import Dataset
 from datalad_service.app import create_app
-from datalad_service.common.celery import app as celeryapp
 from datalad_service.datalad import DataladStore
 
 # Test dataset to create
@@ -55,7 +57,7 @@ def no_git_config(monkeypatch):
 
 
 @pytest.fixture(scope='session')
-def annex_path(tmpdir_factory):
+def datalad_store(tmpdir_factory):
     path = tmpdir_factory.mktemp('annexes')
     ds_path = str(path.join(DATASET_ID))
     # Create an empty dataset for testing
@@ -76,13 +78,13 @@ def annex_path(tmpdir_factory):
     ds.save(version_tag=SNAPSHOT_ID)
     # Setup a seed for any new_dataset uses
     random.seed(42)
-    return str(path)
+    return DataladStore(path)
 
 
 @pytest.fixture
-def new_dataset(annex_path):
+def new_dataset(datalad_store):
     """Create a new dataset with a unique name for one test."""
-    ds_path = str(os.path.join(annex_path, id_generator()))
+    ds_path = str(os.path.join(datalad_store.annex_path, id_generator()))
     ds = Dataset(ds_path)
     ds.create()
     ds.no_annex(BIDS_NO_ANNEX)
@@ -104,9 +106,33 @@ def new_dataset(annex_path):
     return ds
 
 
+class MockResponse:
+    status_code = 200
+
+
+@pytest.fixture(autouse=True)
+def no_posts(monkeypatch):
+    """Remove requests.post for all tests."""
+    def mock_response(*args, **kwargs):
+        return MockResponse()
+    monkeypatch.setattr(requests, "post", mock_response)
+
+
+@pytest.fixture(autouse=True)
+def no_init_remote(monkeypatch):
+    def mock_publish(*args, **kwargs):
+        pass
+    monkeypatch.setattr(datalad_service.common.s3,
+                        "setup_s3_sibling", mock_publish)
+    monkeypatch.setattr(datalad_service.tasks.publish,
+                        "publish_target", mock_publish)
+    monkeypatch.setattr(datalad.api,
+                        "create_sibling_github", mock_publish)
+
+
 @pytest.fixture
-def client(annex_path):
-    return testing.TestClient(create_app(annex_path))
+def client(datalad_store):
+    return testing.TestClient(create_app(datalad_store.annex_path))
 
 
 class FileWrapper(object):
@@ -121,10 +147,3 @@ class FileWrapper(object):
             return data
 
         raise IndexError
-
-
-@pytest.fixture(scope='session')
-def celery_app(request):
-    """Allow celery tasks to run in eager mode for integration tests."""
-    celeryapp.conf.update(task_always_eager=True)
-    return celeryapp

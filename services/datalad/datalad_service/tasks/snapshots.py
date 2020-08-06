@@ -1,12 +1,10 @@
 import os
-from datalad_service.common.celery import dataset_task
 from datalad_service.tasks.files import commit_files
 from datetime import datetime
 import re
 import git
 
 
-@dataset_task
 def get_snapshot(store, dataset, snapshot):
     # Get metadata for a snapshot (hexsha)
     ds = store.get_dataset(dataset)
@@ -14,7 +12,6 @@ def get_snapshot(store, dataset, snapshot):
     return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
 
 
-@dataset_task
 def get_snapshots(store, dataset):
     ds = store.get_dataset(dataset)
     repo_tags = ds.repo.get_tags()
@@ -97,14 +94,13 @@ def write_new_changes(ds, tag, new_changes, date):
     return updated
 
 
-@dataset_task
 def update_changes(store, dataset, tag, new_changes):
     ds = store.get_dataset(dataset)
     if new_changes is not None and len(new_changes) > 0:
         current_date = datetime.today().strftime('%Y-%m-%d')
         updated = write_new_changes(ds, tag, new_changes, current_date)
         # Commit new content, run validator
-        commit_files.run(store.annex_path, dataset, ['CHANGES'])
+        commit_files(store, dataset, ['CHANGES'])
         return updated
     else:
         return get_head_changes(ds)

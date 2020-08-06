@@ -12,12 +12,9 @@ pytest-cov = "*"
 fakeredis = "*"
 
 [packages]
-boto3 = "*"
-celery = "*"
 dnspython = "*"
 datalad = "==0.12.3"
 falcon = "*"
-flower = "*"
 redis = "*"
 requests = "*"
 GitPython = "*"
@@ -30,4 +27,4 @@ python_version = "3.8"
 
 [packages.sentry-sdk]
 extras = [ "falcon",]
-version = "==0.16.0"
+version = "==0.16.1"
