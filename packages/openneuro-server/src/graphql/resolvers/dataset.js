@@ -136,7 +136,7 @@ export const updateFiles = async (
     const snapshot = await Snapshot.findOne({
       datasetId,
     }).exec()
-    if (!snapshot) await createSnapshot(datasetId, '1.0.0', user)
+    if (!snapshot) await createSnapshot(datasetId, '1.0.0', userInfo)
     pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
