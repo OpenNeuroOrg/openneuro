@@ -130,8 +130,13 @@ def no_init_remote(monkeypatch):
                         "create_sibling_github", mock_publish)
 
 
+@pytest.fixture(autouse=True)
+def mock_jwt_secret(monkeypatch):
+    monkeypatch.setenv('JWT_SECRET', 'test-secret-please-ignore')
+
+
 @pytest.fixture
-def client(datalad_store):
+def client(datalad_store, monkeypatch):
     return testing.TestClient(create_app(datalad_store.annex_path))
 
 

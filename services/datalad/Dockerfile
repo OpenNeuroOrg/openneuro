@@ -22,4 +22,6 @@ RUN apk --update add bash yarn git python3 py3-pip openssl openssh ca-certificat
   && chmod 600 /root/.ssh/config \
   && yarn
 
+ENV LOCPATH=""
+
 CMD ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]

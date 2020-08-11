@@ -9,6 +9,8 @@ import {
 } from '../../datalad/draft.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { filterFiles } from '../../datalad/files.js'
+import { createSnapshot } from '../../datalad/snapshots.js'
+import Snapshot from '../../models/snapshot.js'
 
 // A draft must have a dataset parent
 const draftFiles = (obj, args) => {
@@ -29,10 +31,18 @@ export const partial = (obj, _, { user, userInfo }) => {
 /**
  * Mutation to move the draft HEAD reference forward or backward
  */
-export const updateRef = (obj, { datasetId, ref }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    return updateDatasetRevision(datasetId, ref)
-  })
+export const updateRef = async (
+  obj,
+  { datasetId, ref },
+  { user, userInfo },
+) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
+  await updateDatasetRevision(datasetId, ref)
+  // Check if this is the first data commit and no snapshots exist
+  const snapshot = await Snapshot.findOne({
+    datasetId,
+  }).exec()
+  if (!snapshot) await createSnapshot(datasetId, '1.0.0', userInfo)
 }
 
 const draft = {

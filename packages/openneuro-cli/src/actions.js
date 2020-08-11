@@ -3,7 +3,7 @@ import fs from 'fs'
 import inquirer from 'inquirer'
 import { createClient } from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
-import { validation, uploadDirectory } from './upload'
+import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
@@ -42,7 +42,7 @@ export const login = () => {
       Object.assign(
         answers,
         await inquirer.prompt({
-          type: 'input',
+          type: 'password',
           name: 'apikey',
           message: `Enter your API key for OpenNeuro (get an API key from ${answers.url}keygen)`,
         }),
@@ -52,31 +52,30 @@ export const login = () => {
     .then(saveConfig)
 }
 
-const uploadDataset = (dir, datasetId, validatorOptions) => {
+const uploadDataset = async (dir, datasetId, validatorOptions) => {
   const client = configuredClient()
+  await validation(dir, validatorOptions)
+  let remoteFiles = []
   if (datasetId) {
     // Check for dataset -> validation -> upload
     // Get remote files and filter successful files out
-    return getDatasetFiles(client, datasetId)
-      .then(({ data }) =>
-        validation(dir, validatorOptions).then(() => data.dataset.draft.files),
-      )
-      .then(remoteFiles =>
-        uploadDirectory(client, dir, {
-          datasetId,
-          remoteFiles,
-          remove: false,
-        }),
-      )
+    const { data } = await getDatasetFiles(client, datasetId)
+    remoteFiles = data.dataset.draft.files
   } else {
     // Validation -> create dataset -> upload
-    return validation(dir, validatorOptions)
-      .then(() => createDataset(client, dir))
-      .then(dsId => uploadDirectory(client, dir, { datasetId: dsId }))
+    datasetId = await createDataset(client, dir)
+    remoteFiles = [] // New dataset has no remote files
   }
+  const preparedUpload = await prepareUpload(client, dir, {
+    datasetId,
+    remoteFiles,
+  })
+  await uploadFiles(preparedUpload)
+  await finishUpload(client, preparedUpload.id)
+  return datasetId
 }
 
-const notifyUploadComplete = update => datasetId => {
+const notifyUploadComplete = (update, datasetId) => {
   console.log(
     '=======================================================================',
   )
@@ -141,7 +140,7 @@ export const upload = (dir, cmd) => {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
       uploadDataset(dir, cmd.dataset, validatorOptions).then(
-        notifyUploadComplete('update'),
+        notifyUploadComplete('update', cmd.dataset),
       )
     } else {
       inquirer
@@ -153,9 +152,11 @@ export const upload = (dir, cmd) => {
         })
         .then(({ yes }) => {
           if (yes) {
-            return uploadDataset(dir, cmd.dataset, validatorOptions).then(
-              notifyUploadComplete(false),
-            )
+            return uploadDataset(
+              dir,
+              cmd.dataset,
+              validatorOptions,
+            ).then(datasetId => notifyUploadComplete(false, datasetId))
           }
         })
         .catch(err => {

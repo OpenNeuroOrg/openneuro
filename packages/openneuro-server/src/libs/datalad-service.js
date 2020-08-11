@@ -13,12 +13,18 @@ export function hashDatasetToRange(dataset, range) {
 }
 
 /**
+ * Obtain the statefulset or replica worker number for a dataset
+ * @param {string} dataset Accession number string - e.g. ds000001
+ * @returns {number}
+ */
+export function getDatasetEndpoint(dataset) {
+  return hashDatasetToRange(dataset, parseInt(config.datalad.workers))
+}
+
+/**
  * Find the statefulset or replica URL for a given dataset
  * @param {string} dataset
  */
 export function getDatasetWorker(dataset) {
-  return `${config.datalad.uri}-${hashDatasetToRange(
-    dataset,
-    parseInt(config.datalad.workers),
-  )}`
+  return `${config.datalad.uri}-${getDatasetEndpoint(dataset)}`
 }

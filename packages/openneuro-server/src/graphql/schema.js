@@ -148,6 +148,15 @@ export const typeDefs = `
     addMetadata(datasetId: ID!, metadata: MetadataInput!): Metadata
     # Update draft reference pointer
     updateRef(datasetId: ID!, ref: String!): Boolean
+    # Start an upload
+    prepareUpload(datasetId: ID!, files: [UploadFile]): UploadMetadata
+    # Add files from a completed upload to the dataset draft
+    finishUpload(uploadId: ID!): Boolean
+  }
+
+  input UploadFile {
+    filename: String!
+    size: BigInt!
   }
 
   input SummaryInput {
@@ -277,6 +286,22 @@ export const typeDefs = `
     datasetId: ID
   }
 
+  # Client metadata needed to complete an upload
+  type UploadMetadata {
+    # Unique identifier for this upload
+    id: ID!
+    # Dataset associated with this upload
+    datasetId: ID!
+    # File status
+    files: [DatasetFile]
+    # Is this a complete upload (do we allow a resume or not?)
+    complete: Boolean!
+    # Estimated size in bytes (this is just used for progress display and can be inaccurate)
+    estimatedSize: BigInt
+    # On the first request, this token is returned to allow uploads into this upload bucket
+    token: String
+  }
+
   # Top level dataset, one draft and many snapshots
   type Dataset {
     id: ID!
@@ -327,6 +352,8 @@ export const typeDefs = `
     description: Description
     # Dataset README
     readme: String
+    # Uploads in progress or recently completed
+    uploads: [UploadMetadata]
   }
 
   # Tagged snapshot of a draft

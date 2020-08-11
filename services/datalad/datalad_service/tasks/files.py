@@ -72,7 +72,7 @@ def remove_files(store, dataset, files, name=None, email=None, cookies=None):
     with CommitInfo(ds, name, email):
         for filename in files:
             ds.remove(filename, check=False)
-            update_head(store, dataset, cookies)
+            update_head(ds, dataset, cookies)
 
 
 def remove_recursive(store, dataset, path, name=None, email=None, cookies=None):
@@ -80,4 +80,4 @@ def remove_recursive(store, dataset, path, name=None, email=None, cookies=None):
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
         ds.remove(path, recursive=True, check=False)
-        update_head(store, dataset, cookies)
+        update_head(ds, dataset, cookies)

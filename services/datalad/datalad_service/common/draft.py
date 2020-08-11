@@ -12,13 +12,12 @@ def draft_revision_mutation(dataset_id, ref):
     }
 
 
-def update_head(store, dataset, cookies=None):
+def update_head(ds, dataset_id, cookies=None):
     """Pass HEAD commit references back to OpenNeuro"""
-    ds = store.get_dataset(dataset)
     ref = ds.repo.get_hexsha()
     # We may want to detect if we need to run validation here?
-    validate_dataset(dataset, ds.path, ref)
+    validate_dataset(dataset_id, ds.path, ref)
     r = requests.post(url=GRAPHQL_ENDPOINT,
-                      json=draft_revision_mutation(dataset, ref), cookies=cookies)
+                      json=draft_revision_mutation(dataset_id, ref), cookies=cookies)
     if r.status_code != 200:
         raise Exception(r.text)

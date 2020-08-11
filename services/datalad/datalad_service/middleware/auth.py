@@ -21,13 +21,17 @@ class AuthenticateMiddleware(object):
                     cookies['accessToken'], key=os.environ['JWT_SECRET'])
                 with configure_scope() as scope:
                     sentry_user = req.context['user'].copy()
-                    sentry_user['id'] = sentry_user['sub']
+                    try:
+                        sentry_user['id'] = sentry_user['sub']
+                    except KeyError:
+                        raise Exception(sentry_user)
                     del(sentry_user['sub'])
                     scope.user = sentry_user
             except:
                 req.context['user'] = None
                 with configure_scope() as scope:
                     scope.user = None
+                raise
         else:
             with configure_scope() as scope:
                 scope.user = None
