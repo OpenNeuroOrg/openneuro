@@ -1,11 +1,11 @@
 apiVersion: v1
 name: openneuro
-version: 1.1.0
+version: 1.2.0
 description: OpenNeuro production deployment chart
 home: https://openneuro.org
 sources:
   - https://github.com/openNeuroOrg/openneuro
-appVersion: 3.17.5
+appVersion: 3.17.6
 dependencies:
   - name: redis
     version: 10.6.17
