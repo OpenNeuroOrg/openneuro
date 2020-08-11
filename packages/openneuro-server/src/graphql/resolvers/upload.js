@@ -2,6 +2,7 @@ import Upload from '../../models/upload.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { generateUploadToken } from '../../libs/authentication/jwt.js'
 import { finishUploadRequest } from '../../datalad/upload.js'
+import { getDatasetEndpoint } from '../../libs/datalad-service.js'
 
 /**
  * Track initial state for a new upload
@@ -26,6 +27,7 @@ export async function prepareUpload(
   const UploadMetadata = {
     ...upload.toObject(),
     token,
+    endpoint: getDatasetEndpoint(datasetId),
   }
   return UploadMetadata
 }

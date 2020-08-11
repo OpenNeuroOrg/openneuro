@@ -6,6 +6,7 @@ export const prepareUpload = gql`
       id
       datasetId
       token
+      endpoint
     }
   }
 `

@@ -45,7 +45,7 @@ class UploadFileResource(UploadResource):
                     break
                 new_file.write(chunk)
 
-    def on_post(self, req, resp, dataset, upload, filename):
+    def on_post(self, req, resp, worker, dataset, upload, filename):
         # Check that this request includes the correct token
         if self._check_access(req, dataset, upload):
             upload_path = self.store.get_upload_path(dataset, upload)
@@ -59,7 +59,7 @@ class UploadFileResource(UploadResource):
         else:
             self._handle_failed_access(req, resp)
 
-    def on_get(self, req, resp, dataset, upload):
+    def on_get(self, req, resp, worker, dataset, upload):
         """Return the current upload state, files and sizes."""
         if self._check_access(req, dataset, upload):
             upload_path = self.store.get_upload_path(dataset, upload)

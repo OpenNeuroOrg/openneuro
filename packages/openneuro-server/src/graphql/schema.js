@@ -300,6 +300,8 @@ export const typeDefs = `
     estimatedSize: BigInt
     # On the first request, this token is returned to allow uploads into this upload bucket
     token: String
+    # An endpoint index used to identify the backend responsible for these files
+    endpoint: Int
   }
 
   # Top level dataset, one draft and many snapshots
