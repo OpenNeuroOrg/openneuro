@@ -41,6 +41,13 @@ spec:
             backend:
               serviceName: {{ .Release.Name }}-api
               servicePort: 8111
+          {{- $relname := .Release.Name -}}
+          {{- range until ( .Values.dataladWorkers | int ) }}
+          - path: /uploads/{{ . }}
+            backend:
+              serviceName: {{ $relname }}-dataset-worker-{{ . }}
+              servicePort: 80
+          {{- end }}
           - path: /*
             backend:
               serviceName: {{ .Release.Name }}-web
