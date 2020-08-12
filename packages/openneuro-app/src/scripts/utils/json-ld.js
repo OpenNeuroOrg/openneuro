@@ -38,8 +38,11 @@ const schemaGenerator = snapshot => {
       author: formatAuthors(snapshot.description.Authors),
       datePublished: snapshot.created,
       dateModified: snapshot.created,
-      license: snapshot.license,
-      publisher: 'OpenNeuro',
+      license: 'https://creativecommons.org/publicdomain/zero/1.0/',
+      publisher: {
+        '@type': 'Organization',
+        name: 'OpenNeuro',
+      },
       description: snapshot.readme,
       version: snapshot.tag,
       url: `https://openneuro.org/datasets/${
