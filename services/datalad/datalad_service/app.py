@@ -85,7 +85,7 @@ def create_app(annex_path):
         '/datasets/{dataset}/upload/{upload}', dataset_upload
     )
     api.add_route(
-        '/uploads/{dataset}/{upload}/{filename:path}', dataset_upload_file
+        '/uploads/{worker}/{dataset}/{upload}/{filename:path}', dataset_upload_file
     )
 
     return api

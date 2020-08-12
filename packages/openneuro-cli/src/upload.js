@@ -144,6 +144,7 @@ export const prepareUpload = async (
     datasetId: data.prepareUpload.datasetId,
     token: data.prepareUpload.token,
     files,
+    endpoint: data.prepareUpload.endpoint,
   }
 }
 
@@ -155,7 +156,13 @@ export const encodeFilePath = path => {
   return path.replace(new RegExp('/', 'g'), ':')
 }
 
-export const uploadFiles = async ({ id, datasetId, token, files }) => {
+export const uploadFiles = async ({
+  id,
+  datasetId,
+  token,
+  files,
+  endpoint,
+}) => {
   const uploadProgress = new cliProgress.SingleBar({
     format:
       datasetId + ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
@@ -167,9 +174,9 @@ export const uploadFiles = async ({ id, datasetId, token, files }) => {
     speed: 'N/A',
   })
   for (const f of files) {
-    // http://localhost:9876/uploads/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
+    // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
     const encodedFilePath = encodeFilePath(f.filename)
-    const fileUrl = `${rootUrl}uploads/${datasetId}/${id}/${encodedFilePath}`
+    const fileUrl = `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`
     const fileStream = createReadStream(f.path)
     // This is needed to cancel the request in case of client errors
     const controller = new AbortController()
