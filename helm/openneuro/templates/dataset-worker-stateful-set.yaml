@@ -39,43 +39,18 @@ spec:
             path: datalad-key
             mode: 0400
       containers:
-      - name: {{ .Release.Name }}-datalad-service
-        image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
-        resources:
-          limits:
-            cpu: "1"
-            memory: "2Gi"
-          requests:
-            cpu: "0.2"
-            memory: "512Mi"
-        ports:
-        - containerPort: 80
-        envFrom:
-        - configMapRef:
-            name: {{ .Release.Name }}-configmap
-        - secretRef:
-            name: {{ .Release.Name }}-secret
-        volumeMounts:
-        - name: datasets-ebs
-          mountPath: /datasets
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-          httpGet:
-            path: '/heartbeat'
-            port: 80
       - name: {{ .Release.Name }}-dataset-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
           limits:
             cpu: "2"
             memory: "8Gi"
           requests:
             cpu: "0.5"
-            memory: "1Gi"
-        command:
-          - /dataset-worker
+            memory: "2Gi"
+        ports:
+        - containerPort: 80
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-configmap
@@ -88,10 +63,8 @@ spec:
           mountPath: /datalad-key
           subPath: datalad-key
         livenessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 1
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - celery status --app datalad_service.worker | grep "${HOSTNAME}:.*OK"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          httpGet:
+            path: '/heartbeat'
+            port: 80
