@@ -48,7 +48,7 @@ spec:
             memory: "8Gi"
           requests:
             cpu: "0.5"
-            memory: "2Gi"
+            memory: "1Gi"
         ports:
         - containerPort: 80
         envFrom:
