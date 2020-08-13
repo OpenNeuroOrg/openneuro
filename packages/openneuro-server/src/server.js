@@ -32,6 +32,7 @@ mongoose.connect(config.mongo.url, {
   useNewUrlParser: true,
   dbName: config.mongo.dbName,
   connectTimeoutMS: config.mongo.connectTimeoutMS,
+  useFindAndModify: false,
 })
 
 redisConnectionSetup().then(() => {
