@@ -21,8 +21,11 @@ export async function prepareUpload(
   { user, userInfo },
 ) {
   await checkDatasetWrite(datasetId, user, userInfo)
-  const upload = new Upload({ datasetId, files })
-  await upload.save()
+  const upload = await Upload.findOneAndUpdate(
+    { datasetId, files },
+    { datasetId, files },
+    { new: true, upsert: true, setDefaultsOnInsert: true },
+  )
   const token = generateUploadToken(userInfo, datasetId)
   const UploadMetadata = {
     ...upload.toObject(),
