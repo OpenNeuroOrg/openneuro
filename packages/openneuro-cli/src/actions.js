@@ -70,8 +70,12 @@ const uploadDataset = async (dir, datasetId, validatorOptions) => {
     datasetId,
     remoteFiles,
   })
-  await uploadFiles(preparedUpload)
-  await finishUpload(client, preparedUpload.id)
+  if (preparedUpload.files.length > 1) {
+    await uploadFiles(preparedUpload)
+    await finishUpload(client, preparedUpload.id)
+  } else {
+    console.log('No files remaining to upload, exiting.')
+  }
   return datasetId
 }
 
