@@ -70,8 +70,12 @@ const uploadDataset = async (dir, datasetId, validatorOptions) => {
     datasetId,
     remoteFiles,
   })
-  await uploadFiles(preparedUpload)
-  await finishUpload(client, preparedUpload.id)
+  if (preparedUpload.files.length > 1) {
+    await uploadFiles(preparedUpload)
+    await finishUpload(client, preparedUpload.id)
+  } else {
+    console.log('No files remaining to upload, exiting.')
+  }
   return datasetId
 }
 
@@ -139,7 +143,7 @@ export const upload = (dir, cmd) => {
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions).then(
+      uploadDataset(dir, cmd.dataset, validatorOptions).then(() =>
         notifyUploadComplete('update', cmd.dataset),
       )
     } else {

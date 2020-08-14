@@ -36,6 +36,12 @@ const fatalError = err => {
 }
 
 /**
+ * Given a file list, calculate total size
+ */
+export const uploadSize = files =>
+  files.map(f => f.size).reduce((a, b) => a + b)
+
+/**
  * Runs validation, logs summary or exits if an error is encountered
  * @param {string} dir Directory to validate
  * @param {object} validatorOptions Options passed to the validator
@@ -114,7 +120,7 @@ export const prepareUpload = async (
       console.log(`${f.filename} - ${bytesToSize(f.size)}`)
     }
   } else {
-    const totalSize = files.map(f => f.size).reduce((a, b) => a + b)
+    const totalSize = uploadSize(files)
     console.log(
       `${files.length} files to be uploaded with a total size of ${bytesToSize(
         totalSize,
@@ -156,6 +162,76 @@ export const encodeFilePath = path => {
   return path.replace(new RegExp('/', 'g'), ':')
 }
 
+/**
+ * Determine parallelism based on file list
+ * @param {Array<object>} files
+ * @returns {number}
+ */
+export function uploadParallelism(files) {
+  const bytes = uploadSize(files)
+  const averageSize = bytes / files.length
+  const parallelism = averageSize / 524288 // 512KB
+  if (parallelism > 16) {
+    return 16
+  } else if (parallelism < 2) {
+    return 2
+  } else {
+    return Math.round(parallelism)
+  }
+}
+
+/**
+ * Repeatable function for single file upload fetch request
+ */
+const uploadFile = ({
+  id,
+  endpoint,
+  datasetId,
+  token,
+  rootUrl,
+  uploadProgress,
+}) => (f, attempt = 1) => {
+  // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
+  const encodedFilePath = encodeFilePath(f.filename)
+  const fileUrl = `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`
+  const fileStream = createReadStream(f.path)
+  // This is needed to cancel the request in case of client errors
+  const controller = new AbortController()
+  fileStream.on('error', err => {
+    console.error(err)
+    controller.abort()
+  })
+  return fetch(fileUrl, {
+    method: 'POST',
+    headers: {
+      cookie: `accessToken=${token}`,
+    },
+    body: fileStream,
+    signal: controller.signal,
+  }).then(response => {
+    if (response.status === 200) {
+      uploadProgress.increment()
+    } else {
+      if (attempt > 3) {
+        console.error(response)
+        throw new Error(
+          `Failed to upload file after ${attempt} attempts - "${f.filename}"`,
+        )
+      } else {
+        // Retry if up to attempts times
+        return uploadFile({
+          id,
+          endpoint,
+          datasetId,
+          token,
+          rootUrl,
+          uploadProgress,
+        })(f, attempt + 1)
+      }
+    }
+  })
+}
+
 export const uploadFiles = async ({
   id,
   datasetId,
@@ -168,37 +244,25 @@ export const uploadFiles = async ({
       datasetId + ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
     clearOnComplete: false,
     hideCursor: true,
+    etaBuffer: Math.round(files.length / 10), // More stable values for many small files
   })
-  const rootUrl = getUrl()
   uploadProgress.start(files.length, 0, {
     speed: 'N/A',
   })
-  for (const f of files) {
-    // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
-    const encodedFilePath = encodeFilePath(f.filename)
-    const fileUrl = `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`
-    const fileStream = createReadStream(f.path)
-    // This is needed to cancel the request in case of client errors
-    const controller = new AbortController()
-    fileStream.on('error', err => {
-      console.error(err)
-      controller.abort()
-    })
-    const response = await fetch(fileUrl, {
-      method: 'POST',
-      headers: {
-        cookie: `accessToken=${token}`,
-      },
-      body: fileStream,
-      signal: controller.signal,
-    })
-    if (response.status === 200) {
-      uploadProgress.increment()
-    } else {
-      uploadProgress.stop()
-      console.error(response)
-      throw new Error(`Failed to upload file "${f.filename}"`)
-    }
+  const uploader = uploadFile({
+    id,
+    datasetId,
+    token,
+    endpoint,
+    rootUrl: getUrl(),
+    uploadProgress,
+  })
+  // Array stride of parallel requests
+  const parallelism = uploadParallelism(files)
+  for (let fIndex = 0; fIndex < files.length; fIndex = fIndex + parallelism) {
+    await Promise.allSettled(
+      files.slice(fIndex, fIndex + parallelism).map(uploader),
+    )
   }
   uploadProgress.stop()
 }
