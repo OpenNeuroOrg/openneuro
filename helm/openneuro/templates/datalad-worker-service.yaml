@@ -4,6 +4,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $relname }}-dataset-worker-{{ . }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /heartbeat
 spec:
   selector:
     statefulset.kubernetes.io/pod-name: {{ $relname }}-dataset-worker-{{ . }}

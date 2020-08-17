@@ -7,6 +7,8 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /crn/
 spec:
   ports:
   - port: 8111
