@@ -91,6 +91,28 @@ class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
   }
 }
 
+// specific use case
+// ignore error in apollo lib
+class ErrorBoundaryDeletePageException extends ErrorBoundary {
+  constructor(props) {
+    super(props)
+  }
+
+  static getDerivedStateFromError(error) {
+    return getDerivedStateFromErrorOnCondition(
+      error,
+      // ErrorBoundary not triggered for "assertion failure"
+      () => {
+        const throwError = !/^\/datasets\/ds\d{6}\/delete$/.test(
+          window.location.pathname,
+        )
+        console.log(throwError)
+        return throwError
+      },
+    )
+  }
+}
+
 ErrorBoundaryAssertionFailureException.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -99,5 +121,8 @@ ErrorBoundaryAssertionFailureException.propTypes = {
   errorMessage: PropTypes.string,
 }
 
-export { ErrorBoundaryAssertionFailureException }
+export {
+  ErrorBoundaryAssertionFailureException,
+  ErrorBoundaryDeletePageException,
+}
 export default ErrorBoundary

@@ -9,6 +9,7 @@ import Share from './manage-permissions.jsx'
 import Snapshot from './snapshot.jsx'
 import FileDisplay from './file-display.jsx'
 import AddMetadata from '../mutations/add-metadata.jsx'
+import DeletePage from '../dataset/delete-page.jsx'
 
 const stubComponent = () => null
 
@@ -120,6 +121,12 @@ const DatasetRoutes = ({ dataset, error }) => {
         exact
         path="/datasets/:datasetId/metadata"
         component={() => <AddMetadata dataset={dataset} />}
+      />
+      <Route
+        name="delete"
+        exact
+        path="/datasets/:datasetId/delete"
+        component={() => <DeletePage dataset={dataset} />}
       />
     </Switch>
   )

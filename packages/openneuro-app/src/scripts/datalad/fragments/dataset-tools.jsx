@@ -3,13 +3,18 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import DeleteDataset from '../mutations/delete.jsx'
 import FollowDataset from '../mutations/follow.jsx'
 import StarDataset from '../mutations/star.jsx'
 import ShareDatasetLink from '../fragments/share-dataset-button.jsx'
 import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
+import DeletePage from '../dataset/delete-page.jsx'
+import {
+  Overlay,
+  ModalContainer,
+  ExitButton,
+} from '../../styles/support-modal.jsx'
 
 /**
  * Immediate redirect to a dataset or snapshot route
@@ -33,6 +38,7 @@ const DatasetTools = ({ dataset, location, history }) => {
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
   const isMobile = useMedia('(max-width: 765px) ')
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
@@ -51,7 +57,13 @@ const DatasetTools = ({ dataset, location, history }) => {
             )}
           </div>
           <div role="presentation" className="tool">
-            {edit && <DeleteDataset datasetId={dataset.id} />}
+            <span>
+              <button
+                className="btn-warn-component warning"
+                onClick={() => setShowDeleteModal(true)}>
+                <i className="fa fa-trash" />
+              </button>
+            </span>
           </div>
           <div role="presentation" className="tool">
             {edit && (
@@ -74,7 +86,6 @@ const DatasetTools = ({ dataset, location, history }) => {
                 warn={false}
                 action={cb => {
                   toolRedirect(history, rootPath, 'snapshot')
-                  cb()
                 }}
               />
             )}
@@ -98,6 +109,19 @@ const DatasetTools = ({ dataset, location, history }) => {
           <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
         </div>
       </div>
+      {showDeleteModal && (
+        <Overlay>
+          <ModalContainer>
+            <ExitButton onClick={() => setShowDeleteModal(false)}>
+              &times;
+            </ExitButton>
+            <DeletePage
+              dataset={dataset}
+              returnToDataset={() => setShowDeleteModal(false)}
+            />
+          </ModalContainer>
+        </Overlay>
+      )}
     </div>
   )
 }
