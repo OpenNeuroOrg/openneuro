@@ -45,7 +45,7 @@ export const participantCount = async () => {
     },
     {
       $sort: {
-        created: -1,
+        created: 1,
       },
     },
     {
