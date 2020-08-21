@@ -5,5 +5,8 @@ dependencies:
 - name: aws-alb-ingress-controller
   repository: https://kubernetes-charts-incubator.storage.googleapis.com/
   version: 1.0.0
-digest: sha256:c3573f9eacafef670c523bee58a686aa3455205d007534e1cd4ce13c0d00999b
-generated: "2020-06-06T21:24:16.481015609-07:00"
+- name: apm-server
+  repository: https://helm.elastic.co
+  version: 7.9.0
+digest: sha256:f90c303d40dcf002907179598ef0f1fda76b2edbc560f838910051aa9a2c21ab
+generated: "2020-08-21T14:22:28.124302759-07:00"

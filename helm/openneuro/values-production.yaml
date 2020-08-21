@@ -89,3 +89,16 @@ redis:
       requests:
         cpu: "500m"
         memory: "4Gi"
+
+apm-server:
+  apmConfig:
+    apm-server.yml: |
+      apm-server:
+        host: "0.0.0.0:8200"
+      queue: {}
+      cloud:
+        id: "${ELASTICSEARCH_CLOUD_ID}"
+        auth: "${ELASTICSEARCH_CLOUD_AUTH}"
+  envFrom:
+    - secretRef:
+        name: openneuro-prod-secret

@@ -82,3 +82,16 @@ redis:
       requests:
         cpu: '125m'
         memory: '1.5Gi'
+
+apm-server:
+  apmConfig:
+    apm-server.yml: |
+      apm-server:
+        host: "0.0.0.0:8200"
+      queue: {}
+      cloud:
+        id: "${ELASTICSEARCH_CLOUD_ID}"
+        auth: "${ELASTICSEARCH_CLOUD_AUTH}"
+  envFrom:
+    - secretRef:
+        name: openneuro-staging-secret
