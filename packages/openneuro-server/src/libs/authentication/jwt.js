@@ -104,7 +104,7 @@ export const authenticate = async (req, res, next) => {
     const token = await refreshToken(jwt)
     if (token) {
       req.cookies.accessToken = token
-      res.cookie('accessToken', token)
+      res.cookie('accessToken', token, { sameSite: 'Strict' })
     }
   }
   passport.authenticate('jwt', { session: false }, (err, user) => {
@@ -115,7 +115,7 @@ export const authenticate = async (req, res, next) => {
 export const authSuccessHandler = (req, res, next) => {
   if (req.user) {
     // Set the JWT associated with this login on a cookie
-    res.cookie('accessToken', req.user.token)
+    res.cookie('accessToken', req.user.token, { sameSite: 'Strict' })
     res.redirect('/')
   } else {
     res.status(401)
