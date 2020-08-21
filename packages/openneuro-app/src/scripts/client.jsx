@@ -1,4 +1,4 @@
-// dependencies ---------------------------------------------------------
+import { init as initApm } from '@elastic/apm-rum'
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -11,6 +11,10 @@ import * as GoogleAnalytics from 'react-ga'
 if (module.hot) module.hot.accept()
 
 loadConfig().then(config => {
+  initApm({
+    serverUrl: `${config.url}/apm`,
+  })
+
   GoogleAnalytics.initialize(config.analytics.trackingId)
 
   Sentry.init({

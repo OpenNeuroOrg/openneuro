@@ -1,3 +1,7 @@
+/** Needs to run before the other imports in Node */
+import { start } from 'elastic-apm-node'
+start()
+
 import * as Sentry from '@sentry/node'
 import { createServer } from 'http'
 import mongoose from 'mongoose'

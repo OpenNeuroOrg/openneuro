@@ -10,7 +10,7 @@ import { createClient } from 'openneuro-client'
 import packageJson from '../../package.json'
 import { CookiesProvider } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
-//
+
 const App = ({ config }) => {
   return (
     <CookiesProvider>
