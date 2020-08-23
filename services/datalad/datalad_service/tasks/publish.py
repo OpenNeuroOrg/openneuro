@@ -7,9 +7,13 @@ from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import GRAPHQL_ENDPOINT
+from datalad_service.config import AWS_ACCESS_KEY_ID
+from datalad_service.config import AWS_SECRET_ACCESS_KEY
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
 from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
+
+import boto3
 
 
 def create_github_repo(dataset, repo_name):
@@ -145,6 +149,31 @@ def publish_github_async(store, dataset, snapshot, github_remote):
     ds = store.get_dataset(dataset)
     publish_target(ds, github_remote, snapshot)
 
+def delete_s3_sibling(dataset, siblings, realm):
+    sibling = get_sibling_by_name(realm.s3_remote, siblings)
+    if sibling:
+        client = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        )
+        client.delete_object(Bucket=realm.s3_bucket, Key=dataset.id)
+
+def delete_github_sibling(dataset):
+    # delete from github
+    pass
+
+def delete_siblings(dataset):
+    siblings = dataset.siblings()
+    delete_s3_sibling(dataset, siblings, DatasetRealm.PRIVATE)
+    delete_s3_sibling(dataset, siblings, DatasetRealm.PUBLIC)
+
+    remotes = dataset.repo.get_remotes()
+    if DatasetRealm.github_remote in remotes:
+        delete_github_sibling(dataset)
+
+    for remote in remotes:
+        dataset.siblings('remove', remote)
 
 def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
     """

@@ -32,11 +32,9 @@ const DeleteDataset = ({ datasetId, metadata }) => {
                   redirect: metadata.redirect,
                 },
               })
-              console.log('pre redirect')
               window.location.replace(
                 `${window.location.origin}/dashboard/datasets`,
               )
-              console.log('post redirect')
             })}>
             <i className="fa fa-trash" />
             {warn ? ' Confirm Delete' : ' Delete Dataset'}
