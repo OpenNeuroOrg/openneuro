@@ -11,7 +11,7 @@ export const publishDataset = (obj, { datasetId }, { user, userInfo }) => {
     const uri = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/publish`
     return await request
       .post(uri)
-      .set('Cookie', generateDataladCookie(config)(user))
+      .set('Cookie', generateDataladCookie(config)(userInfo))
       .then(() => true)
   })
 }
