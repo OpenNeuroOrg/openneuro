@@ -47,6 +47,10 @@ spec:
               serviceName: {{ $relname }}-dataset-worker-{{ . }}
               servicePort: 80
           {{- end }}
+          - path: /apm/*
+            backend:
+              serviceName: {{ .Release.Name }}-apm-server
+              servicePort: 8200
           - path: /*
             backend:
               serviceName: {{ .Release.Name }}-web

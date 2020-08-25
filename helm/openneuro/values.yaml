@@ -92,6 +92,7 @@ apm-server:
       cloud:
         id: "${ELASTICSEARCH_CLOUD_ID}"
         auth: "${ELASTICSEARCH_CLOUD_AUTH}"
+      rum.enabled: true
   envFrom:
     - secretRef:
         name: openneuro-staging-secret

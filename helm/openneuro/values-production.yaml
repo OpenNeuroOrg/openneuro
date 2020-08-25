@@ -17,7 +17,7 @@ freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widge
 googleTrackingId: UA-100754266-2
 
 # AWS TLS Certificate ARN
-certifcateArn: "arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423a-86ef-0652e0332e33"
+certifcateArn: 'arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423a-86ef-0652e0332e33'
 
 # Dataset worker parallelism
 dataladWorkers: 4
@@ -72,11 +72,11 @@ redis:
       updateStrategy: RollingUpdate
     resources:
       limits:
-        cpu: "2"
-        memory: "8Gi"
+        cpu: '2'
+        memory: '8Gi'
       requests:
-        cpu: "500m"
-        memory: "4Gi"
+        cpu: '500m'
+        memory: '4Gi'
   slave:
     persistence:
       size: 40Gi
@@ -84,11 +84,11 @@ redis:
       updateStrategy: RollingUpdate
     resources:
       limits:
-        cpu: "2"
-        memory: "8Gi"
+        cpu: '2'
+        memory: '8Gi'
       requests:
-        cpu: "500m"
-        memory: "4Gi"
+        cpu: '500m'
+        memory: '4Gi'
 
 apm-server:
   apmConfig:
@@ -99,6 +99,7 @@ apm-server:
       cloud:
         id: "${ELASTICSEARCH_CLOUD_ID}"
         auth: "${ELASTICSEARCH_CLOUD_AUTH}"
+      rum.enabled: true
   envFrom:
     - secretRef:
         name: openneuro-prod-secret
