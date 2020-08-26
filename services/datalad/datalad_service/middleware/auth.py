@@ -15,10 +15,11 @@ class AuthenticateMiddleware(object):
                 the on_* responder.
         """
         cookies = req.cookies
-        if 'accessToken' in cookies:
+        if 'accessToken' in cookies or req.auth:
             try:
+                token = req.auth and req.auth[7:] or cookies['accessToken']
                 req.context['user'] = jwt.decode(
-                    cookies['accessToken'], key=os.environ['JWT_SECRET'])
+                    token, key=os.environ['JWT_SECRET'])
                 with configure_scope() as scope:
                     sentry_user = req.context['user'].copy()
                     try:

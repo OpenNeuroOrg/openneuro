@@ -16,3 +16,11 @@ export const finishUpload = gql`
     finishUpload(uploadId: $uploadId)
   }
 `
+
+/**
+ * Convert to URL compatible path
+ * @param {String} path
+ */
+export const encodeFilePath = path => {
+  return path.replace(new RegExp('/', 'g'), ':')
+}

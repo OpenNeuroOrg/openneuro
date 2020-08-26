@@ -155,14 +155,6 @@ export const prepareUpload = async (
 }
 
 /**
- * Convert to URL compatible path
- * @param {String} path
- */
-export const encodeFilePath = path => {
-  return path.replace(new RegExp('/', 'g'), ':')
-}
-
-/**
  * Determine parallelism based on file list
  * @param {Array<object>} files
  * @returns {number}
@@ -192,7 +184,7 @@ const uploadFile = ({
   uploadProgress,
 }) => (f, attempt = 1) => {
   // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
-  const encodedFilePath = encodeFilePath(f.filename)
+  const encodedFilePath = uploads.encodeFilePath(f.filename)
   const fileUrl = `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`
   const fileStream = createReadStream(f.path)
   // This is needed to cancel the request in case of client errors

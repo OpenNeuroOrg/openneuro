@@ -9,11 +9,9 @@ import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
-import { createClient, datasets } from 'openneuro-client'
-import config from '../../../config'
-import packageJson from '../../../package.json'
-import { xhrFetch } from './xhrfetch.js'
+import { datasets } from 'openneuro-client'
 import { withRouter } from 'react-router-dom'
+import { uploadFiles, getRelativePath } from './file-upload.js'
 
 /**
  * Stateful uploader workflow and status
@@ -229,7 +227,7 @@ export class UploadClient extends React.Component {
       type: 'text/plain',
     })
     initialChangesFile.name = 'CHANGES'
-    initialChangesFile.webkitRelativePath = '/'
+    initialChangesFile.webkitRelativePath = '/CHANGES'
     files.push(initialChangesFile)
     return files
   }
@@ -237,61 +235,64 @@ export class UploadClient extends React.Component {
   /**
    * Do the actual upload
    */
-  _addFiles() {
-    // This is an upload specific apollo client to record progress
-    // Uses XHR since Fetch does not provide the required interface
-    const uploadClient = createClient(`${config.url}/crn/graphql`, {
-      fetch: xhrFetch(this),
-      clientVersion: packageJson.version,
-    })
+  async _addFiles() {
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
     const filesToUpload = this._includeChanges()
 
-    return mutation
-      .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)
-      .then(() => {
-        this.props.client
-          .query({
-            query: datasets.getDataset,
-            variables: {
-              id: this.state.datasetId,
-            },
-          })
-          .then(() => {
-            this.setState({ uploading: false })
-            this.uploadCompleteAction()
-          })
+    // Call prepare upload to find the bucket needed and endpoint
+    const {
+      data: {
+        prepareUpload: { id: uploadId, endpoint, token },
+      },
+    } = await mutation.prepareUpload(this.props.client)({
+      datasetId: this.state.datasetId,
+      files: filesToUpload.map(f => ({
+        filename: getRelativePath(f),
+        size: f.size,
+      })),
+    })
+
+    try {
+      await uploadFiles(
+        uploadId,
+        this.state.datasetId,
+        endpoint,
+        filesToUpload,
+        token,
+      )
+      await mutation.finishUpload(this.props.client)(uploadId)
+      this.setState({ uploading: false })
+      this.uploadCompleteAction()
+    } catch (error) {
+      Sentry.captureException(error)
+      const toastId = toast.error(
+        <ToastContent
+          title="Dataset upload failed"
+          body="Please check your connection">
+          <FileSelect
+            onChange={event => {
+              toast.dismiss(toastId)
+              this.resumeDataset(this.state.datasetId)(event)
+            }}
+            resume
+          />
+        </ToastContent>,
+        { autoClose: false },
+      )
+      this.setState({
+        error,
+        uploading: false,
       })
-      .catch(error => {
-        Sentry.captureException(error)
-        const toastId = toast.error(
-          <ToastContent
-            title="Dataset upload failed"
-            body="Please check your connection">
-            <FileSelect
-              onChange={event => {
-                toast.dismiss(toastId)
-                this.resumeDataset(this.state.datasetId)(event)
-              }}
-              resume
-            />
-          </ToastContent>,
-          { autoClose: false },
-        )
-        this.setState({
-          error,
-          uploading: false,
-        })
-        this.setLocation('/hidden')
-        if (this.state.xhr) {
-          try {
-            this.state.xhr.abort()
-          } catch (e) {
-            Sentry.captureException(e)
-          }
+      this.setLocation('/hidden')
+      if (this.state.xhr) {
+        try {
+          this.state.xhr.abort()
+        } catch (e) {
+          Sentry.captureException(e)
         }
-      })
+      }
+    }
   }
 
   uploadCompleteAction = () => {
