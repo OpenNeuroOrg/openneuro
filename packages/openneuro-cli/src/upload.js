@@ -1,6 +1,5 @@
 import cliProgress from 'cli-progress'
 import path from 'path'
-import fetch from 'node-fetch'
 import inquirer from 'inquirer'
 import { AbortController } from 'abort-controller'
 import { createReadStream, promises as fs } from 'fs'
@@ -47,34 +46,6 @@ export const validation = (dir, validatorOptions) => {
       console.log(consoleFormat.summary(summary))
     })
     .catch(fatalError)
-}
-
-/**
- * Make an upload request given an array of streams
- */
-export const uploadTree = (client, datasetId) => tree => {
-  return client
-    .mutate({
-      mutation: files.updateFiles,
-      variables: { datasetId, files: tree },
-    })
-    .catch(err => {
-      // Since the error response content type does not match the request
-      // we need some special error handling any requests with Upload scalars
-      if (
-        err.hasOwnProperty('networkError') &&
-        err.networkError &&
-        err.networkError.hasOwnProperty('result')
-      ) {
-        for (const message of err.networkError.result.errors) {
-          // eslint-disable-next-line no-console
-          console.error(inspect(message))
-        }
-        process.exit(1)
-      } else {
-        throw err
-      }
-    })
 }
 
 /**
@@ -148,54 +119,6 @@ export const prepareUpload = async (
   }
 }
 
-/**
- * Repeatable function for single file upload fetch request
- */
-const uploadFile = ({
-  id,
-  endpoint,
-  datasetId,
-  token,
-  rootUrl,
-  uploadProgress,
-}) => (f, attempt = 1) => {
-  // This is needed to cancel the request in case of client errors
-  const controller = new AbortController()
-  fileStream.on('error', err => {
-    console.error(err)
-    controller.abort()
-  })
-  return fetch(fileUrl, {
-    method: 'POST',
-    headers: {
-      cookie: `accessToken=${token}`,
-    },
-    body: fileStream,
-    signal: controller.signal,
-  }).then(response => {
-    if (response.status === 200) {
-      uploadProgress.increment()
-    } else {
-      if (attempt > 3) {
-        console.error(response)
-        throw new Error(
-          `Failed to upload file after ${attempt} attempts - "${f.filename}"`,
-        )
-      } else {
-        // Retry if up to attempts times
-        return uploadFile({
-          id,
-          endpoint,
-          datasetId,
-          token,
-          rootUrl,
-          uploadProgress,
-        })(f, attempt + 1)
-      }
-    }
-  })
-}
-
 export const uploadFiles = async ({
   id,
   datasetId,
@@ -223,12 +146,22 @@ export const uploadFiles = async ({
       console.error(err)
       controller.abort()
     })
+    fileStream.on('open', ev => {
+      if (file.path.endsWith('nii.gz')) console.log(`open ${file.path}`)
+    })
+    fileStream.on('ready', ev => {
+      if (file.path.endsWith('nii.gz')) console.log(`ready ${file.path}`)
+    })
+    fileStream.on('close', ev => {
+      if (file.path.endsWith('nii.gz')) console.log(`close ${file.path}`)
+    })
     return new Request(
       `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
       {
         method: 'POST',
         headers: {
           Cookie: `accessToken=${token}`,
+          'Transfer-Encoding': 'identity',
         },
         body: fileStream,
         signal: controller.signal,

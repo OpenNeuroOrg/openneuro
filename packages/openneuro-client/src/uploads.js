@@ -1,3 +1,4 @@
+import fetch from 'cross-fetch'
 import gql from 'graphql-tag'
 
 export const prepareUpload = gql`
@@ -56,12 +57,12 @@ export function uploadParallelism(requests, bytes) {
  */
 export const uploadFile = uploadProgress => (request, attempt = 1) => {
   // This is needed to cancel the request in case of client errors
-  return fetch(request).then(response => {
+  return fetch(request).then(async response => {
+    console.log(response.status, await response.text())
     if (response.status === 200) {
       uploadProgress.increment()
     } else {
       if (attempt > 3) {
-        console.error(response)
         throw new Error(
           `Failed to upload file after ${attempt} attempts - "${request.url}"`,
         )
