@@ -22,20 +22,21 @@ export const getRelativePath = file => {
  * @param {number} endpoint Offset for upload endpoint
  * @param {Array<object>} filesToUpload Array of file objects
  */
-export async function uploadFiles(
+export async function uploadFiles({
   uploadId,
   datasetId,
   endpoint,
   filesToUpload,
   token,
-) {
+  uploadProgress,
+  abortController,
+}) {
   // Maps FileAPI objects to Request with the correct URL and body
   let totalSize = 0
   const requests = filesToUpload.map(f => {
     totalSize += f.size
     const encodedFilePath = uploads.encodeFilePath(getRelativePath(f))
     const fileUrl = `${config.url}/uploads/${endpoint}/${datasetId}/${uploadId}/${encodedFilePath}`
-    console.log(fileUrl)
     return new Request(fileUrl, {
       method: 'POST',
       body: f,
@@ -43,12 +44,16 @@ export async function uploadFiles(
         Authorization: `Bearer ${token}`,
       },
       credentials: 'omit',
+      signal: abortController.signal,
     })
   })
 
   // Verify the registration is ready
   const swReg = await navigator.serviceWorker.ready
-  if ('BackgroundFetchManager' in self) {
+  // TODO - This is disabled due to Chrome bugs
+  // eslint-disable-next-line no-constant-condition
+  if ('BackgroundFetchManager' in self && false) {
+    // If there is parallelism, the browser will handle it
     const bgFetch = await swReg.backgroundFetch.fetch(uploadId, requests, {
       title: `${datasetId} upload`,
       uploadTotal: totalSize,
@@ -68,8 +73,8 @@ export async function uploadFiles(
       })
     })
   } else {
-    for (const r of requests) {
-      await fetch(r)
-    }
+    // No background fetch
+    // Parallelism is handled by the client in this case
+    return uploads.uploadParallel(requests, totalSize, uploadProgress)
   }
 }

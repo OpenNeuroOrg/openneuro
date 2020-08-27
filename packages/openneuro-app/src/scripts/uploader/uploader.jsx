@@ -12,6 +12,7 @@ import * as mutation from './upload-mutation.js'
 import { datasets } from 'openneuro-client'
 import { withRouter } from 'react-router-dom'
 import { uploadFiles, getRelativePath } from './file-upload.js'
+import { UploadProgress } from './upload-progress.js'
 
 /**
  * Stateful uploader workflow and status
@@ -57,6 +58,12 @@ export class UploadClient extends React.Component {
       cancel: this.cancel,
       // dataset metadata
       metadata: {},
+      // Track currently uploading files
+      uploadingFiles: null,
+      // Track any failed files
+      failedFiles: null,
+      // Abort controller for abandoning the upload
+      abortController: null,
     }
   }
 
@@ -173,6 +180,7 @@ export class UploadClient extends React.Component {
     })
     this.setState({
       uploading: true,
+      abortController: new AbortController(),
     })
     this.setLocation('/hidden')
     if (this.state.resume && this.state.datasetId) {
@@ -254,16 +262,23 @@ export class UploadClient extends React.Component {
     })
 
     try {
-      await uploadFiles(
+      await uploadFiles({
         uploadId,
-        this.state.datasetId,
+        datasetId: this.state.datasetId,
         endpoint,
         filesToUpload,
         token,
-      )
-      await mutation.finishUpload(this.props.client)(uploadId)
-      this.setState({ uploading: false })
-      this.uploadCompleteAction()
+        uploadProgress: new UploadProgress(
+          this.uploadProgress,
+          filesToUpload.length,
+        ),
+        abortController: this.state.abortController,
+      })
+      if (!this.state.abortController.signal.aborted) {
+        await mutation.finishUpload(this.props.client)(uploadId)
+        this.setState({ uploading: false })
+        this.uploadCompleteAction()
+      }
     } catch (error) {
       Sentry.captureException(error)
       const toastId = toast.error(
@@ -318,14 +333,12 @@ export class UploadClient extends React.Component {
     }
   }
 
-  uploadProgress = e => {
-    this.setState({
-      progress: e.total > 0 ? Math.floor((e.loaded / e.total) * 100) : 0,
-    })
+  uploadProgress = state => {
+    this.setState(state)
   }
 
   cancel = () => {
-    this.state.xhr.abort()
+    this.state.abortController.abort()
     this.setState({ uploading: false, progress: 0 })
   }
 
