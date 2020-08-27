@@ -14,9 +14,7 @@ const stubComponent = () => null
 
 const DatasetRoutes = ({ dataset, error }) => {
   useEffect(() => {
-    if (dataset && dataset.snapshots.length === 0) {
-      throw Error('This dataset has no associated snapshots.')
-    } else if (error) {
+    if (error) {
       throw error
     }
   }, [dataset, error])
