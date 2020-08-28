@@ -17,10 +17,14 @@ export const getRelativePath = file => {
 
 /**
  * This provides a similar interface to Apollo mutation for a background fetch with a promise that resolves once all promises have settled
- * @param {string} uploadId Upload identifier for resume
- * @param {string} datasetId Accession number
- * @param {number} endpoint Offset for upload endpoint
- * @param {Array<object>} filesToUpload Array of file objects
+ * @param {object} options
+ * @param {string} options.uploadId Upload identifier for resume
+ * @param {string} options.datasetId Accession number
+ * @param {number} options.endpoint Offset for upload endpoint
+ * @param {Array<object>} options.filesToUpload Array of file objects
+ * @param {string} options.token Credentials
+ * @param {UploadProgress} options.uploadProgress Controller for reporting upload progress
+ * @param {AbortController} options.abortController Fetch AbortController for halting uploads
  */
 export async function uploadFiles({
   uploadId,

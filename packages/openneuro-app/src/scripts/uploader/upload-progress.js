@@ -8,21 +8,29 @@ export class UploadProgress {
   }
   increment(n = 1) {
     this.state = this.state + n
-    this.onProgress({
-      progress: Math.floor((this.state / this.total) * 100),
-      uploadingFiles: this.uploading,
-      failedFiles: this.failed,
-    })
+    this._notifySubscriber()
   }
   startUpload(file) {
     this.uploading.add(file)
+    this._notifySubscriber()
   }
   finishUpload(file) {
     this.uploading.delete(file)
     this.failed.delete(file)
+    this._notifySubscriber()
   }
   failUpload(file) {
     this.uploading.delete(file)
     this.failed.add(file)
+    this._notifySubscriber()
+  }
+  _notifySubscriber() {
+    window.requestAnimationFrame(() => {
+      this.onProgress({
+        progress: Math.floor((this.state / this.total) * 100),
+        uploadingFiles: this.uploading,
+        failedFiles: this.failed,
+      })
+    })
   }
 }

@@ -59,9 +59,9 @@ export class UploadClient extends React.Component {
       // dataset metadata
       metadata: {},
       // Track currently uploading files
-      uploadingFiles: null,
+      uploadingFiles: new Set(),
       // Track any failed files
-      failedFiles: null,
+      failedFiles: new Set(),
       // Abort controller for abandoning the upload
       abortController: null,
     }

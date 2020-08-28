@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch'
+import 'cross-fetch/polyfill'
 import gql from 'graphql-tag'
 
 export const prepareUpload = gql`
@@ -27,6 +27,14 @@ export const encodeFilePath = path => {
 }
 
 /**
+ * Convert from a URL compatible path
+ * @param {String} path
+ */
+export const decodeFilePath = path => {
+  return path.replace(new RegExp(':', 'g'), '/')
+}
+
+/**
  * Given a file list, calculate total size
  */
 export const uploadSize = files =>
@@ -51,18 +59,36 @@ export function uploadParallelism(requests, bytes) {
 }
 
 /**
+ * Extract filename from Request URL
+ * @param {string} url .../a:path:to:a:file
+ */
+export function parseFilename(url) {
+  const filePath = url.substring(url.lastIndexOf('/') + 1)
+  return decodeFilePath(filePath)
+}
+
+/**
  * Repeatable function for single file upload fetch request
  * @param {Request} request Constructed Request object
  * @param {number} attempt Increment attempt on retries
  */
 export const uploadFile = uploadProgress => (request, attempt = 1) => {
+  const filename = parseFilename(request.url)
   // This is needed to cancel the request in case of client errors
-  return fetch(request).then(async response => {
-    console.log(response.status, await response.text())
+  if ('startUpload' in uploadProgress) {
+    uploadProgress.startUpload(filename)
+  }
+  return fetch(request).then(response => {
     if (response.status === 200) {
+      if ('finishUpload' in uploadProgress) {
+        uploadProgress.finishUpload(filename)
+      }
       uploadProgress.increment()
     } else {
       if (attempt > 3) {
+        if ('failUpload' in uploadProgress) {
+          uploadProgress.failUpload(filename)
+        }
         throw new Error(
           `Failed to upload file after ${attempt} attempts - "${request.url}"`,
         )
