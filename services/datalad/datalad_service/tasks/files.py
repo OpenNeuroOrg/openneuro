@@ -17,10 +17,10 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     with CommitInfo(ds, name, email):
         if files:
             for filename in files:
-                ds.add(filename)
+                ds.save(filename)
         else:
             # If no list of paths, add all untracked files
-            ds.add('.')
+            ds.save('.')
     ref = ds.repo.get_hexsha()
     # Run the validator but don't block on the request
     validate_dataset(dataset, ds.path, ref,

@@ -6,6 +6,7 @@ import pytest
 
 from .dataset_fixtures import *
 from datalad_service.tasks.snapshots import write_new_changes
+from datalad_service.common.git import git_show
 
 
 def test_get_snapshot(client):
@@ -128,14 +129,15 @@ def test_write_new_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
     # Manually make the commit without validation
-    new_dataset.add('CHANGES')
+    new_dataset.save('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
     dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
-    assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
+    assert git_show(dataset.path, 'HEAD:CHANGES') == '''1.0.1 2019-01-01
   - Some changes
 1.0.0 2018-01-01
-  - Initial version'''
+  - Initial version
+'''
 
 
 def test_write_with_empty_changes(datalad_store, new_dataset):
@@ -143,9 +145,10 @@ def test_write_with_empty_changes(datalad_store, new_dataset):
     new_dataset.remove('CHANGES')
     write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
     # Manually make the commit without validation
-    new_dataset.add('CHANGES')
+    new_dataset.save('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
     dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
-    assert dataset.repo.repo.git.show('HEAD:CHANGES') == '''1.0.1 2019-01-01
-  - Some changes'''
+    assert git_show(dataset.path, 'HEAD:CHANGES') == '''1.0.1 2019-01-01
+  - Some changes
+'''

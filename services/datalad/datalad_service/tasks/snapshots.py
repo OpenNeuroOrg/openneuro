@@ -2,13 +2,15 @@ import os
 from datalad_service.tasks.files import commit_files
 from datetime import datetime
 import re
-import git
+from subprocess import CalledProcessError
+
+from datalad_service.common.git import git_show
 
 
 def get_snapshot(store, dataset, snapshot):
     # Get metadata for a snapshot (hexsha)
     ds = store.get_dataset(dataset)
-    hexsha = ds.repo.repo.commit(snapshot).hexsha
+    hexsha = ds.repo.get_hexsha(commitish=snapshot)
     return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
 
 
@@ -69,8 +71,8 @@ def edit_changes(changes, new_changes, tag, date):
 
 def get_head_changes(ds):
     try:
-        return ds.repo.repo.git.show('HEAD:CHANGES')
-    except git.exc.GitCommandError:
+        return git_show(ds.path, 'HEAD:CHANGES')
+    except CalledProcessError:
         return None
 
 

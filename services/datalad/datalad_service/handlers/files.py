@@ -1,9 +1,11 @@
 import logging
 import os
+from subprocess import CalledProcessError
 
 import falcon
 
 import git
+from datalad_service.common.git import git_show
 from datalad_service.common.user import get_user_info
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.files import get_untracked_files
@@ -35,7 +37,7 @@ class FilesResource(object):
             try:
                 ds = self.store.get_dataset(dataset)
                 if ds.repo.is_under_annex([filename])[0]:
-                    path = ds.repo.repo.git.show(snapshot + ':' + filename)
+                    path = git_show(ds_path, snapshot + ':' + filename)
                     # remove leading relative folder paths
                     fd = path[path.find('.git/annex'):]
 
@@ -46,10 +48,9 @@ class FilesResource(object):
                     resp.stream_len = os.fstat(fd.fileno()).st_size
                     resp.status = falcon.HTTP_OK
                 else:
-                    resp.body = ds.repo.repo.git.show(
-                        snapshot + ':' + filename)
+                    resp.body = git_show(ds_path, snapshot + ':' + filename)
                     resp.status = falcon.HTTP_OK
-            except git.exc.GitCommandError:
+            except CalledProcessError:
                 # File is not present in tree
                 resp.media = {'error': 'file not found in git tree'}
                 resp.status = falcon.HTTP_NOT_FOUND

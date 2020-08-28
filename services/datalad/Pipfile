@@ -13,7 +13,7 @@ fakeredis = "*"
 
 [packages]
 dnspython = "*"
-datalad = "==0.12.3"
+datalad = "==0.13.3"
 falcon = "*"
 redis = "*"
 requests = "*"

@@ -68,12 +68,12 @@ def datalad_store(tmpdir_factory):
     json_path = os.path.join(ds_path, 'dataset_description.json')
     with open(json_path, 'w') as f:
         json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
-    ds.add(json_path)
+    ds.save(json_path)
 
     changes_path = os.path.join(ds_path, 'CHANGES')
     with open(changes_path, 'w') as f:
         json.dump(CHANGES, f, ensure_ascii=False)
-    ds.add(changes_path)
+    ds.save(changes_path)
 
     ds.save(version_tag=SNAPSHOT_ID)
     # Setup a seed for any new_dataset uses
@@ -97,12 +97,12 @@ def new_dataset(datalad_store):
     }
     with open(json_path, 'w') as f:
         json.dump(dsdesc, f, ensure_ascii=False)
-    ds.add(json_path)
+    ds.save(json_path)
 
     changes_path = os.path.join(ds_path, 'CHANGES')
     with open(changes_path, 'w') as f:
         f.write(CHANGES)
-    ds.add(changes_path)
+    ds.save(changes_path)
     return ds
 
 
