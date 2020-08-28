@@ -50,7 +50,6 @@ def post_and_check_description(client, new_dataset, base_description):
 
     update_response = client.simulate_post(
         '/datasets/{}/description'.format(ds_id), body=body)
-    print(update_response.text)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
         update_response.content, encoding='utf-8') if update_response.content else None
