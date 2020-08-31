@@ -9,11 +9,10 @@ import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
-import { createClient, datasets } from 'openneuro-client'
-import config from '../../../config'
-import packageJson from '../../../package.json'
-import { xhrFetch } from './xhrfetch.js'
+import { datasets } from 'openneuro-client'
 import { withRouter } from 'react-router-dom'
+import { uploadFiles, getRelativePath } from './file-upload.js'
+import { UploadProgress } from './upload-progress.js'
 
 /**
  * Stateful uploader workflow and status
@@ -59,6 +58,12 @@ export class UploadClient extends React.Component {
       cancel: this.cancel,
       // dataset metadata
       metadata: {},
+      // Track currently uploading files
+      uploadingFiles: new Set(),
+      // Track any failed files
+      failedFiles: new Set(),
+      // Abort controller for abandoning the upload
+      abortController: null,
     }
   }
 
@@ -175,6 +180,7 @@ export class UploadClient extends React.Component {
     })
     this.setState({
       uploading: true,
+      abortController: new AbortController(),
     })
     this.setLocation('/hidden')
     if (this.state.resume && this.state.datasetId) {
@@ -229,7 +235,7 @@ export class UploadClient extends React.Component {
       type: 'text/plain',
     })
     initialChangesFile.name = 'CHANGES'
-    initialChangesFile.webkitRelativePath = '/'
+    initialChangesFile.webkitRelativePath = '/CHANGES'
     files.push(initialChangesFile)
     return files
   }
@@ -237,61 +243,71 @@ export class UploadClient extends React.Component {
   /**
    * Do the actual upload
    */
-  _addFiles() {
-    // This is an upload specific apollo client to record progress
-    // Uses XHR since Fetch does not provide the required interface
-    const uploadClient = createClient(`${config.url}/crn/graphql`, {
-      fetch: xhrFetch(this),
-      clientVersion: packageJson.version,
-    })
+  async _addFiles() {
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
     const filesToUpload = this._includeChanges()
 
-    return mutation
-      .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)
-      .then(() => {
-        this.props.client
-          .query({
-            query: datasets.getDataset,
-            variables: {
-              id: this.state.datasetId,
-            },
-          })
-          .then(() => {
-            this.setState({ uploading: false })
-            this.uploadCompleteAction()
-          })
+    // Call prepare upload to find the bucket needed and endpoint
+    const {
+      data: {
+        prepareUpload: { id: uploadId, endpoint, token },
+      },
+    } = await mutation.prepareUpload(this.props.client)({
+      datasetId: this.state.datasetId,
+      files: filesToUpload.map(f => ({
+        filename: getRelativePath(f),
+        size: f.size,
+      })),
+    })
+
+    try {
+      await uploadFiles({
+        uploadId,
+        datasetId: this.state.datasetId,
+        endpoint,
+        filesToUpload,
+        token,
+        uploadProgress: new UploadProgress(
+          this.uploadProgress,
+          filesToUpload.length,
+        ),
+        abortController: this.state.abortController,
       })
-      .catch(error => {
-        Sentry.captureException(error)
-        const toastId = toast.error(
-          <ToastContent
-            title="Dataset upload failed"
-            body="Please check your connection">
-            <FileSelect
-              onChange={event => {
-                toast.dismiss(toastId)
-                this.resumeDataset(this.state.datasetId)(event)
-              }}
-              resume
-            />
-          </ToastContent>,
-          { autoClose: false },
-        )
-        this.setState({
-          error,
-          uploading: false,
-        })
-        this.setLocation('/hidden')
-        if (this.state.xhr) {
-          try {
-            this.state.xhr.abort()
-          } catch (e) {
-            Sentry.captureException(e)
-          }
+      if (!this.state.abortController.signal.aborted) {
+        await mutation.finishUpload(this.props.client)(uploadId)
+        this.setState({ uploading: false })
+        this.uploadCompleteAction()
+      }
+    } catch (error) {
+      Sentry.captureException(error)
+      const toastId = toast.error(
+        <ToastContent
+          title="Dataset upload failed"
+          body="Please check your connection">
+          <FileSelect
+            onChange={event => {
+              toast.dismiss(toastId)
+              this.resumeDataset(this.state.datasetId)(event)
+            }}
+            resume
+          />
+        </ToastContent>,
+        { autoClose: false },
+      )
+      this.setState({
+        error,
+        uploading: false,
+      })
+      this.setLocation('/hidden')
+      if (this.state.xhr) {
+        try {
+          this.state.xhr.abort()
+        } catch (e) {
+          Sentry.captureException(e)
         }
-      })
+      }
+    }
   }
 
   uploadCompleteAction = () => {
@@ -317,14 +333,12 @@ export class UploadClient extends React.Component {
     }
   }
 
-  uploadProgress = e => {
-    this.setState({
-      progress: e.total > 0 ? Math.floor((e.loaded / e.total) * 100) : 0,
-    })
+  uploadProgress = state => {
+    this.setState(state)
   }
 
   cancel = () => {
-    this.state.xhr.abort()
+    this.state.abortController.abort()
     this.setState({ uploading: false, progress: 0 })
   }
 

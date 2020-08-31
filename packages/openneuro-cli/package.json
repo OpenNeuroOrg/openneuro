@@ -26,7 +26,6 @@
     "graphql-tag": "^2.10.3",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "node-fetch": "^2.6.0",
     "openneuro-client": "^3.18.1-alpha.0"
   },
   "scripts": {

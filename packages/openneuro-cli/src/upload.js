@@ -1,6 +1,5 @@
 import cliProgress from 'cli-progress'
 import path from 'path'
-import fetch from 'node-fetch'
 import inquirer from 'inquirer'
 import { AbortController } from 'abort-controller'
 import { createReadStream, promises as fs } from 'fs'
@@ -36,12 +35,6 @@ const fatalError = err => {
 }
 
 /**
- * Given a file list, calculate total size
- */
-export const uploadSize = files =>
-  files.map(f => f.size).reduce((a, b) => a + b)
-
-/**
  * Runs validation, logs summary or exits if an error is encountered
  * @param {string} dir Directory to validate
  * @param {object} validatorOptions Options passed to the validator
@@ -53,34 +46,6 @@ export const validation = (dir, validatorOptions) => {
       console.log(consoleFormat.summary(summary))
     })
     .catch(fatalError)
-}
-
-/**
- * Make an upload request given an array of streams
- */
-export const uploadTree = (client, datasetId) => tree => {
-  return client
-    .mutate({
-      mutation: files.updateFiles,
-      variables: { datasetId, files: tree },
-    })
-    .catch(err => {
-      // Since the error response content type does not match the request
-      // we need some special error handling any requests with Upload scalars
-      if (
-        err.hasOwnProperty('networkError') &&
-        err.networkError &&
-        err.networkError.hasOwnProperty('result')
-      ) {
-        for (const message of err.networkError.result.errors) {
-          // eslint-disable-next-line no-console
-          console.error(inspect(message))
-        }
-        process.exit(1)
-      } else {
-        throw err
-      }
-    })
 }
 
 /**
@@ -120,7 +85,7 @@ export const prepareUpload = async (
       console.log(`${f.filename} - ${bytesToSize(f.size)}`)
     }
   } else {
-    const totalSize = uploadSize(files)
+    const totalSize = uploads.uploadSize(files)
     console.log(
       `${files.length} files to be uploaded with a total size of ${bytesToSize(
         totalSize,
@@ -154,84 +119,6 @@ export const prepareUpload = async (
   }
 }
 
-/**
- * Convert to URL compatible path
- * @param {String} path
- */
-export const encodeFilePath = path => {
-  return path.replace(new RegExp('/', 'g'), ':')
-}
-
-/**
- * Determine parallelism based on file list
- * @param {Array<object>} files
- * @returns {number}
- */
-export function uploadParallelism(files) {
-  const bytes = uploadSize(files)
-  const averageSize = bytes / files.length
-  const parallelism = averageSize / 524288 // 512KB
-  if (parallelism > 16) {
-    return 16
-  } else if (parallelism < 2) {
-    return 2
-  } else {
-    return Math.round(parallelism)
-  }
-}
-
-/**
- * Repeatable function for single file upload fetch request
- */
-const uploadFile = ({
-  id,
-  endpoint,
-  datasetId,
-  token,
-  rootUrl,
-  uploadProgress,
-}) => (f, attempt = 1) => {
-  // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
-  const encodedFilePath = encodeFilePath(f.filename)
-  const fileUrl = `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`
-  const fileStream = createReadStream(f.path)
-  // This is needed to cancel the request in case of client errors
-  const controller = new AbortController()
-  fileStream.on('error', err => {
-    console.error(err)
-    controller.abort()
-  })
-  return fetch(fileUrl, {
-    method: 'POST',
-    headers: {
-      cookie: `accessToken=${token}`,
-    },
-    body: fileStream,
-    signal: controller.signal,
-  }).then(response => {
-    if (response.status === 200) {
-      uploadProgress.increment()
-    } else {
-      if (attempt > 3) {
-        console.error(response)
-        throw new Error(
-          `Failed to upload file after ${attempt} attempts - "${f.filename}"`,
-        )
-      } else {
-        // Retry if up to attempts times
-        return uploadFile({
-          id,
-          endpoint,
-          datasetId,
-          token,
-          rootUrl,
-          uploadProgress,
-        })(f, attempt + 1)
-      }
-    }
-  })
-}
-
 export const uploadFiles = async ({
   id,
   datasetId,
@@ -249,21 +136,43 @@ export const uploadFiles = async ({
   uploadProgress.start(files.length, 0, {
     speed: 'N/A',
   })
-  const uploader = uploadFile({
-    id,
-    datasetId,
-    token,
-    endpoint,
-    rootUrl: getUrl(),
-    uploadProgress,
-  })
-  // Array stride of parallel requests
-  const parallelism = uploadParallelism(files)
-  for (let fIndex = 0; fIndex < files.length; fIndex = fIndex + parallelism) {
-    await Promise.allSettled(
-      files.slice(fIndex, fIndex + parallelism).map(uploader),
+  const rootUrl = getUrl()
+  const controller = new AbortController()
+  const requests = files.map(file => {
+    // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
+    const encodedFilePath = uploads.encodeFilePath(file.filename)
+    const fileStream = createReadStream(file.path)
+    fileStream.on('error', err => {
+      console.error(err)
+      controller.abort()
+    })
+    fileStream.on('open', ev => {
+      if (file.path.endsWith('nii.gz')) console.log(`open ${file.path}`)
+    })
+    fileStream.on('ready', ev => {
+      if (file.path.endsWith('nii.gz')) console.log(`ready ${file.path}`)
+    })
+    fileStream.on('close', ev => {
+      if (file.path.endsWith('nii.gz')) console.log(`close ${file.path}`)
+    })
+    return new Request(
+      `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
+      {
+        method: 'POST',
+        headers: {
+          Cookie: `accessToken=${token}`,
+          'Transfer-Encoding': 'identity',
+        },
+        body: fileStream,
+        signal: controller.signal,
+      },
     )
-  }
+  })
+  await uploads.uploadParallel(
+    requests,
+    uploads.uploadSize(files),
+    uploadProgress,
+  )
   uploadProgress.stop()
 }
 
