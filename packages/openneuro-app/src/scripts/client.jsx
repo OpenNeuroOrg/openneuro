@@ -11,9 +11,16 @@ import * as GoogleAnalytics from 'react-ga'
 if (module.hot) module.hot.accept()
 
 loadConfig().then(config => {
-  initApm({
-    serverUrl: `${config.url}/apm`,
-  })
+  if (
+    config.sentry.environment === 'production' ||
+    config.sentry.environment === 'staging'
+  ) {
+    initApm({
+      serverUrl: `${config.url}/apm`,
+      serviceVersion: packageJson.version,
+      environment: config.sentry.environment,
+    })
+  }
 
   GoogleAnalytics.initialize(config.analytics.trackingId)
 
