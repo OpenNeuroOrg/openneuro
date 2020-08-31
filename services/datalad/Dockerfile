@@ -9,7 +9,7 @@ COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 
 RUN apk --update add bash yarn git python3 py3-pip openssl openssh ca-certificates py-openssl wget \
-  && wget -O git-annex-standalone-amd64.tar.gz http://archive.org/download/git-annex-builds/SHA256E-s52844027--52257d8de278e4ecf94a971c716b7929f6d0e1fe6c5a65ed40b03f0964f9c85d.tar.gz \
+  && wget -O git-annex-standalone-amd64.tar.gz http://archive.org/download/git-annex-builds/SHA256E-s54746876--31525511e3aecfd77a0425f0c3ae3f52194e841288300ab04f2e60406619d225.tar.gz \
   && tar -xvf git-annex-standalone-amd64.tar.gz \
   && rm git-annex-standalone-amd64.tar.gz \
   && mv git-annex.linux/* /usr/local/bin \

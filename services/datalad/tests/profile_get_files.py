@@ -16,7 +16,7 @@ def test_profile_get_repo_files(datalad_store, new_dataset):
         with open(path, 'a'):
             os.utime(path)
     # Add all generated files
-    ds.add('.')
+    ds.save('.')
     # Profile get_repo_files by itself
     with open('{}.prof'.format(__name__), 'w+b') as fd:
         vmprof.enable(fd.fileno())

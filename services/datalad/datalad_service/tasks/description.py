@@ -1,5 +1,7 @@
 import json
 import os
+
+from datalad_service.common.git import git_show
 from datalad_service.tasks.files import commit_files
 
 
@@ -11,8 +13,7 @@ def edit_description(description, new_fields):
 
 def update_description(store, dataset, description_fields, name=None, email=None):
     ds = store.get_dataset(dataset)
-    description = ds.repo.repo.tree(
-        'HEAD')['dataset_description.json'].data_stream.read().decode('utf-8')
+    description = git_show(ds.path, 'HEAD:dataset_description.json')
     description_json = json.loads(description)
     if description_json.get('License') != 'CC0':
         description_fields = edit_description(
@@ -21,8 +22,7 @@ def update_description(store, dataset, description_fields, name=None, email=None
         updated = edit_description(description_json, description_fields)
         path = os.path.join(store.get_dataset_path(
             dataset), 'dataset_description.json')
-        # newline='' disables universal newlines since we just want to compare decoded bytes
-        with open(path, 'r+', encoding='utf-8', newline='') as description_file:
+        with open(path, 'r+', encoding='utf-8') as description_file:
             description_file_contents = description_file.read()
             if description != description_file_contents:
                 raise Exception('unexpected dataset_description.json contents')

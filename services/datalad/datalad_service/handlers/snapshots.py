@@ -7,6 +7,7 @@ from datalad_service.tasks.dataset import create_snapshot
 from datalad_service.tasks.snapshots import get_snapshot, get_snapshots
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.publish import publish_snapshot, monitor_remote_configs
+from datalad_service.common.git import delete_tag
 
 
 class SnapshotResource(object):
@@ -68,7 +69,7 @@ class SnapshotResource(object):
         """Remove a tag on the dataset, which is equivalent to deleting a snapshot"""
         if snapshot:
             ds = self.store.get_dataset(dataset)
-            ds.repo.repo.delete_tag(snapshot)
+            delete_tag(ds.path, snapshot)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         else:
