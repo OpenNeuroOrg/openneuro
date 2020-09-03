@@ -16,7 +16,7 @@ loadConfig().then(config => {
     config.sentry.environment === 'staging'
   ) {
     initApm({
-      serverUrl: `${config.url}/apm`,
+      serverUrl: config.url,
       serviceVersion: packageJson.version,
       environment: config.sentry.environment,
     })

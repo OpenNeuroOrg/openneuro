@@ -88,11 +88,11 @@ apm-server:
     apm-server.yml: |
       apm-server:
         host: "0.0.0.0:8200"
+        rum.enabled: true
       queue: {}
       cloud:
         id: "${ELASTICSEARCH_CLOUD_ID}"
         auth: "${ELASTICSEARCH_CLOUD_AUTH}"
-      rum.enabled: true
   envFrom:
     - secretRef:
         name: openneuro-staging-secret
