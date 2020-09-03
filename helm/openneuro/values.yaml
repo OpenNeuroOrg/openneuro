@@ -39,12 +39,12 @@ sentryDsn: https://ba0c58863b3e40a2a412132bfd2711ea@o114074.ingest.sentry.io/251
 # Size in bytes
 storagePools:
   # This is the size of the pool disks
-  stripeSize: 2147483648
+  stripeSize: 2147483648000
   pools:
     - name: a
-      size: 4294967296
+      size: 6442450944000
     - name: b
-      size: 4294967296
+      size: 4294967296000
 
 # The underlying EFS volume should be created manually and configured here
 efs-provisioner:

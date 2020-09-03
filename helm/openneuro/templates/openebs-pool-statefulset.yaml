@@ -6,7 +6,7 @@ kind: StatefulSet
 metadata:
   name: {{ $relname }}-storage-pool-{{ .name }}
 spec:
-  replicas: {{ ceil (div $stripesize (int .size))  }}
+  replicas: {{ add (div (int .size) $stripesize) 1  }}
   selector:
     matchLabels:
       app: {{ $relname }}-storage-pool-{{ .name }}
