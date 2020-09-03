@@ -87,7 +87,14 @@ export const getFiles = (datasetId, hexsha) => {
         )}/datasets/${datasetId}/snapshots/${hexsha}/files`,
       )
       .set('Accept', 'application/json')
-      .then(({ body: { files } }) => files.map(addFileUrl(datasetId, hexsha))),
+      .then(response => {
+        if (response.status === 200) {
+          const {
+            body: { files },
+          } = response
+          return files.map(addFileUrl(datasetId, hexsha))
+        }
+      }),
   )
 }
 

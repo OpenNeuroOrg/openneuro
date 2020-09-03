@@ -140,6 +140,8 @@ const announceNewSnapshot = async (snapshot, datasetId, user) => {
  * @param {String} datasetId - Dataset ID string
  * @param {String} tag - Snapshot identifier and git tag
  * @param {Object} user - User object that has made the snapshot request
+ * @param {Object} descriptionFieldUpdates - Key/value pairs to update dataset_description.json
+ * @param {Array<string>} snapshotChanges - Array of changes to inject into CHANGES file
  * @returns {Promise} - resolves when tag is created
  */
 export const createSnapshot = async (
