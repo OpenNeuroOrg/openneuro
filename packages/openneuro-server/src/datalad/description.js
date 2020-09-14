@@ -5,7 +5,7 @@ import config from '../config'
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { commitFiles } from './dataset.js'
-import { objectUrl, getFiles } from './files.js'
+import { fileUrl, getFiles } from './files.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDatasetWorker } from '../libs/datalad-service'
 import CacheItem, { CacheType } from '../cache/item'
@@ -25,7 +25,7 @@ export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')
   if (file) {
     return request
-      .get(objectUrl(datasetId, file.key))
+      .get(fileUrl(datasetId, '', 'dataset_description.json'))
       .then(({ body, type }) => {
         // Guard against non-JSON responses
         if (type === 'application/json') return body

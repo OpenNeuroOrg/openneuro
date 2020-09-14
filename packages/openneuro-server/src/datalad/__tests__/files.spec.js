@@ -2,7 +2,6 @@ import {
   encodeFilePath,
   decodeFilePath,
   fileUrl,
-  objectUrl,
   filterFiles,
 } from '../files.js'
 
@@ -55,15 +54,6 @@ describe('datalad files', () => {
     it('handles path nesting', () => {
       expect(fileUrl('ds000001', 'sub-01/anat', 'sub-01_T1w.nii.gz')).toBe(
         'http://datalad-0/datasets/ds000001/files/sub-01:anat:sub-01_T1w.nii.gz',
-      )
-    })
-  })
-  describe('objectUrl()', () => {
-    it('returns a valid object URL', () => {
-      expect(
-        objectUrl('ds000001', '27c8552038d55201560e5501093d637b27e7fd4b'),
-      ).toBe(
-        'http://datalad-0/datasets/ds000001/objects/27c8552038d55201560e5501093d637b27e7fd4b',
       )
     })
   })
