@@ -21,6 +21,8 @@ GitPython = "*"
 PyJWT = "*"
 gunicorn = "*"
 gevent = "*"
+elastic-apm = "*"
+falcon-elastic-apm = "*"
 
 [requires]
 python_version = "3.8"
