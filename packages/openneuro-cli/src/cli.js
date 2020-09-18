@@ -13,6 +13,14 @@ function makeRed(txt) {
 
 commander.version(packageJson.version).description(packageJson.description)
 
+commander.on('--help', () => {
+  console.log('')
+  console.log(
+    'See additional options for each command with "openneuro [command] --help". Example:',
+  )
+  console.log('  $ openneuro upload --help')
+})
+
 commander
   .command('login')
   .alias('l')
