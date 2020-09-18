@@ -28,7 +28,12 @@ JWT_SECRET = get_environ('JWT_SECRET')
 SENTRY_DSN = get_environ('SENTRY_DSN')
 
 # GraphQL URL - override if not docker-compose
-GRAPHQL_ENDPOINT = get_environ('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
+GRAPHQL_ENDPOINT = get_environ(
+    'GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
 
 # Redis Host
 REDIS_HOST = get_environ('REDIS_HOST', 'redis')
+
+# The path to connect to Elastic APM server
+ELASTIC_APM_SERVER_URL = get_environ(
+    'ELASTIC_APM_SERVER_URL', 'http://localhost:8200')

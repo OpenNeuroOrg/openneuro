@@ -17,7 +17,7 @@ loadConfig().then(config => {
   ) {
     initApm({
       serverUrl: config.url,
-      serviceName: 'openneuro',
+      serviceName: 'openneuro-app',
       serviceVersion: packageJson.version,
       environment: config.sentry.environment,
     })

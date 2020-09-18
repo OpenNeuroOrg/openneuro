@@ -3,6 +3,7 @@ import logging
 import falcon
 import sentry_sdk
 from sentry_sdk.integrations.falcon import FalconIntegration
+from falcon_elastic_apm import ElasticApmMiddleware
 
 import datalad_service.config
 from datalad_service.tasks.audit import audit_datasets
@@ -37,7 +38,8 @@ def create_app(annex_path):
             integrations=[FalconIntegration()]
         )
 
-    api = falcon.API(middleware=[AuthenticateMiddleware()])
+    api = falcon.API(
+        middleware=[AuthenticateMiddleware(), ElasticApmMiddleware(service_name='datalad-service', server_url=datalad_service.config.ELASTIC_APM_SERVER_URL)])
     api.router_options.converters['path'] = PathConverter
 
     store = DataladStore(annex_path)
