@@ -58,17 +58,6 @@ export const pathUrl = (datasetId, path) => {
 }
 
 /**
- * Get the faster object URL for a file
- * @param {string} datasetId - Dataset accession number
- * @param {string} objectId - Git object id, a sha1 hash for git objects or key for annexed files
- */
-export const objectUrl = (datasetId, objectId) => {
-  return `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/objects/${objectId}`
-}
-
-/**
  * Get files for a specific revision
  * Similar to getDraftFiles but different cache key and fixed revisions
  * @param {string} datasetId - Dataset accession number
