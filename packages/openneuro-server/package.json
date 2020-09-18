@@ -22,7 +22,7 @@
     "@types/draft-js": "^0.10.43",
     "@types/ioredis": "^4.17.1",
     "apollo-server": "2.7.0",
-    "apollo-server-express": "2.7.0",
+    "apollo-server-express": "2.14.2",
     "async": "^2.4.1",
     "base64url": "^3.0.0",
     "body-parser": "^1.18.2",
