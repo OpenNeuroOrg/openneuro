@@ -76,7 +76,7 @@ redis:
         memory: "8Gi"
       requests:
         cpu: "500m"
-        memory: "4Gi"
+        memory: "2Gi"
   slave:
     persistence:
       size: 40Gi
@@ -88,7 +88,7 @@ redis:
         memory: "8Gi"
       requests:
         cpu: "500m"
-        memory: "4Gi"
+        memory: "2Gi"
 
 apm-server:
   apmConfig:
