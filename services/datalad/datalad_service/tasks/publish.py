@@ -14,7 +14,7 @@ from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
 from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
 import boto3
-
+from github import Github
 
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
@@ -160,8 +160,21 @@ def delete_s3_sibling(dataset, siblings, realm):
         client.delete_object(Bucket=realm.s3_bucket, Key=dataset.id)
 
 def delete_github_sibling(dataset):
-    # delete from github
-    pass
+    ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
+    org = ses.get_organizaton(DATALAD_GITHUB_ORG)
+    repos = org.get_repos()
+    try:
+        print('* * *')
+        print('* * *')
+        print('* * *')
+        print(f'deleting dataset {dataset.id}')
+        print('* * *')
+        print('* * *')
+        print('* * *')
+        r = next(r for r in repos if r.name == dataset.id)
+        r.delete()
+    except StopIteration:
+        raise Exception(f'Attempt to delete dataset {dataset.id} from GitHub failed, because dataset does not exist.')
 
 def delete_siblings(dataset):
     siblings = dataset.siblings()

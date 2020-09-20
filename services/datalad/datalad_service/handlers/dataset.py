@@ -5,7 +5,7 @@ import falcon
 from datalad_service.common.user import get_user_info
 from datalad_service.tasks.dataset import create_dataset
 from datalad_service.tasks.dataset import delete_dataset
-
+from datalad_service.tasks.publish import delete_siblings
 
 class DatasetResource(object):
 
@@ -45,6 +45,7 @@ class DatasetResource(object):
 
     def on_delete(self, req, resp, dataset):
         try:
+            delete_siblings(dataset)
             delete_dataset(self.store, dataset)
             resp.media = {}
             resp.status = falcon.HTTP_OK
