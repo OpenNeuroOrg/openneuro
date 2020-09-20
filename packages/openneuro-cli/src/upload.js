@@ -1,10 +1,10 @@
+import { fetch, Request } from 'fetch-h2'
 import cliProgress from 'cli-progress'
 import path from 'path'
 import inquirer from 'inquirer'
 import { AbortController } from 'abort-controller'
 import { createReadStream, promises as fs } from 'fs'
-import { inspect } from 'util'
-import { files, uploads } from 'openneuro-client'
+import { uploads } from 'openneuro-client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
@@ -146,22 +146,12 @@ export const uploadFiles = async ({
       console.error(err)
       controller.abort()
     })
-    fileStream.on('open', ev => {
-      if (file.path.endsWith('nii.gz')) console.log(`open ${file.path}`)
-    })
-    fileStream.on('ready', ev => {
-      if (file.path.endsWith('nii.gz')) console.log(`ready ${file.path}`)
-    })
-    fileStream.on('close', ev => {
-      if (file.path.endsWith('nii.gz')) console.log(`close ${file.path}`)
-    })
     return new Request(
       `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
       {
         method: 'POST',
         headers: {
-          Cookie: `accessToken=${token}`,
-          'Transfer-Encoding': 'identity',
+          Authorization: `Bearer ${token}`,
         },
         body: fileStream,
         signal: controller.signal,
@@ -172,6 +162,7 @@ export const uploadFiles = async ({
     requests,
     uploads.uploadSize(files),
     uploadProgress,
+    fetch,
   )
   uploadProgress.stop()
 }

@@ -1,4 +1,3 @@
-import 'cross-fetch/polyfill'
 import gql from 'graphql-tag'
 
 export const prepareUpload = gql`
@@ -69,17 +68,20 @@ export function parseFilename(url) {
 
 /**
  * Repeatable function for single file upload fetch request
- * @param {Request} request Constructed Request object
- * @param {number} attempt Increment attempt on retries
+ * @param {UploadProgress} uploadProgress Progress controller instance
+ * @param {fetch} fetch Fetch implementation to use - useful for environments without a native fetch
+ * @returns {function (Request, number): Promise<Response>}
  */
-export const uploadFile = uploadProgress => (request, attempt = 1) => {
+export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
   const filename = parseFilename(request.url)
   // This is needed to cancel the request in case of client errors
   if ('startUpload' in uploadProgress) {
     uploadProgress.startUpload(filename)
   }
-  return fetch(request).then(response => {
+  return fetch(request).then(async response => {
     if (response.status === 200) {
+      // We need to wait for the response body or fetch-h2 may leave the connection open
+      await response.json()
       if ('finishUpload' in uploadProgress) {
         uploadProgress.finishUpload(filename)
       }
@@ -94,13 +96,18 @@ export const uploadFile = uploadProgress => (request, attempt = 1) => {
         )
       } else {
         // Retry if up to attempts times
-        return uploadFile(uploadProgress)(request, attempt + 1)
+        await uploadFile(uploadProgress, fetch)(request, attempt + 1)
       }
     }
   })
 }
 
-export async function uploadParallel(requests, totalSize, uploadProgress) {
+export async function uploadParallel(
+  requests,
+  totalSize,
+  uploadProgress,
+  fetch = global.fetch,
+) {
   // Array stride of parallel requests
   const parallelism = uploadParallelism(requests, totalSize)
   for (
@@ -111,7 +118,7 @@ export async function uploadParallel(requests, totalSize, uploadProgress) {
     await Promise.allSettled(
       requests
         .slice(rIndex, rIndex + parallelism)
-        .map(uploadFile(uploadProgress)),
+        .map(uploadFile(uploadProgress, fetch)),
     )
   }
 }
