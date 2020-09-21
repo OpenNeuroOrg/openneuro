@@ -33,6 +33,34 @@ exports[`DeleteDataset mutation renders with common props 1`] = `
                       },
                     },
                   },
+                  Object {
+                    "kind": "Argument",
+                    "name": Object {
+                      "kind": "Name",
+                      "value": "reason",
+                    },
+                    "value": Object {
+                      "kind": "Variable",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "reason",
+                      },
+                    },
+                  },
+                  Object {
+                    "kind": "Argument",
+                    "name": Object {
+                      "kind": "Name",
+                      "value": "redirect",
+                    },
+                    "value": Object {
+                      "kind": "Variable",
+                      "name": Object {
+                        "kind": "Name",
+                        "value": "redirect",
+                      },
+                    },
+                  },
                 ],
                 "directives": Array [],
                 "kind": "Field",
@@ -67,12 +95,50 @@ exports[`DeleteDataset mutation renders with common props 1`] = `
                 },
               },
             },
+            Object {
+              "defaultValue": undefined,
+              "directives": Array [],
+              "kind": "VariableDefinition",
+              "type": Object {
+                "kind": "NamedType",
+                "name": Object {
+                  "kind": "Name",
+                  "value": "String",
+                },
+              },
+              "variable": Object {
+                "kind": "Variable",
+                "name": Object {
+                  "kind": "Name",
+                  "value": "reason",
+                },
+              },
+            },
+            Object {
+              "defaultValue": undefined,
+              "directives": Array [],
+              "kind": "VariableDefinition",
+              "type": Object {
+                "kind": "NamedType",
+                "name": Object {
+                  "kind": "Name",
+                  "value": "String",
+                },
+              },
+              "variable": Object {
+                "kind": "Variable",
+                "name": Object {
+                  "kind": "Name",
+                  "value": "redirect",
+                },
+              },
+            },
           ],
         },
       ],
       "kind": "Document",
       "loc": Object {
-        "end": 69,
+        "end": 143,
         "start": 0,
       },
     }
