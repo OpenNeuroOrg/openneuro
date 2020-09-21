@@ -84,6 +84,7 @@ exports[`DeleteDataset mutation renders with common props 1`] = `
 
 exports[`DeleteDir mutation renders with common props 1`] = `
 <Mutation
+  awaitRefetchQueries={true}
   mutation={
     Object {
       "definitions": Array [
