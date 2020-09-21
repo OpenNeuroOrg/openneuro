@@ -152,17 +152,16 @@ def publish_github_async(store, dataset, snapshot, github_remote):
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
     if sibling:
-        client = boto3.client(
-            's3',
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        )
-        # print(realm.s3_remote)
-        # print(AWS_ACCESS_KEY_ID)
-        # print(AWS_SECRET_ACCESS_KEY)
-        # print(realm.s3_bucket)
-        # print(dataset_id)
-        client.delete_object(Bucket=realm.s3_bucket, Key=dataset_id)
+        try:
+            session = boto3.Session(
+                aws_access_key_id=AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            )
+            s3 = session.resource('s3')
+            bucket = s3.Bucket(realm.s3_bucket)
+            bucket.objects.filter(Prefix=f'{dataset_id}/').delete()
+        except Exception as e:
+            raise Exception(f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
 
 def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
@@ -172,7 +171,7 @@ def delete_github_sibling(dataset_id):
         r = next(r for r in repos if r.name == dataset_id)
         r.delete()
     except StopIteration:
-        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub failed, because dataset does not exist.')
+        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist.')
 
 def delete_siblings(store, dataset_id):
     ds = store.get_dataset(dataset_id)

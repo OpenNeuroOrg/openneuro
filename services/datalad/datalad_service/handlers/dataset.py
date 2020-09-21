@@ -45,10 +45,16 @@ class DatasetResource(object):
 
     def on_delete(self, req, resp, dataset):
         try:
+            print('DELETE DATASET *****')
             delete_siblings(self.store, dataset)
+            print('SIBLINGS DONE *****')
             delete_dataset(self.store, dataset)
+            print('DATASET DONE *****')
             resp.media = {}
             resp.status = falcon.HTTP_OK
-        except:
+        except Exception as e:
+            print('<<<<<')
+            print(e)
+            print('<<<<<')
             resp.media = {'error': 'dataset not found'}
             resp.status = falcon.HTTP_NOT_FOUND
