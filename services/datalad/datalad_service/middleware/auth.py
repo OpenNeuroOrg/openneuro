@@ -32,7 +32,6 @@ class AuthenticateMiddleware(object):
                 req.context['user'] = None
                 with configure_scope() as scope:
                     scope.user = None
-                raise
         else:
             with configure_scope() as scope:
                 scope.user = None
