@@ -149,7 +149,7 @@ def publish_github_async(store, dataset, snapshot, github_remote):
     ds = store.get_dataset(dataset)
     publish_target(ds, github_remote, snapshot)
 
-def delete_s3_sibling(dataset, siblings, realm):
+def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
     if sibling:
         client = boto3.client(
@@ -157,36 +157,36 @@ def delete_s3_sibling(dataset, siblings, realm):
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         )
-        client.delete_object(Bucket=realm.s3_bucket, Key=dataset.id)
+        # print(realm.s3_remote)
+        # print(AWS_ACCESS_KEY_ID)
+        # print(AWS_SECRET_ACCESS_KEY)
+        # print(realm.s3_bucket)
+        # print(dataset_id)
+        client.delete_object(Bucket=realm.s3_bucket, Key=dataset_id)
 
-def delete_github_sibling(dataset):
+def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
-    org = ses.get_organizaton(DATALAD_GITHUB_ORG)
+    org = ses.get_organization(DATALAD_GITHUB_ORG)
     repos = org.get_repos()
     try:
-        print('* * *')
-        print('* * *')
-        print('* * *')
-        print(f'deleting dataset {dataset.id}')
-        print('* * *')
-        print('* * *')
-        print('* * *')
-        r = next(r for r in repos if r.name == dataset.id)
+        r = next(r for r in repos if r.name == dataset_id)
         r.delete()
     except StopIteration:
-        raise Exception(f'Attempt to delete dataset {dataset.id} from GitHub failed, because dataset does not exist.')
+        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub failed, because dataset does not exist.')
 
-def delete_siblings(dataset):
-    siblings = dataset.siblings()
-    delete_s3_sibling(dataset, siblings, DatasetRealm.PRIVATE)
-    delete_s3_sibling(dataset, siblings, DatasetRealm.PUBLIC)
+def delete_siblings(store, dataset_id):
+    ds = store.get_dataset(dataset_id)
 
-    remotes = dataset.repo.get_remotes()
-    if DatasetRealm.github_remote in remotes:
-        delete_github_sibling(dataset)
+    siblings = ds.siblings()
+    delete_s3_sibling(dataset_id, siblings, DatasetRealm(1))
+    delete_s3_sibling(dataset_id, siblings, DatasetRealm(2))
+
+    remotes = ds.repo.get_remotes()
+    if DatasetRealm(1).github_remote in remotes:
+        delete_github_sibling(dataset_id)
 
     for remote in remotes:
-        dataset.siblings('remove', remote)
+        ds.siblings('remove', remote)
 
 def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
     """

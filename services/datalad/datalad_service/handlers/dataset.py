@@ -45,7 +45,7 @@ class DatasetResource(object):
 
     def on_delete(self, req, resp, dataset):
         try:
-            delete_siblings(dataset)
+            delete_siblings(self.store, dataset)
             delete_dataset(self.store, dataset)
             resp.media = {}
             resp.status = falcon.HTTP_OK
