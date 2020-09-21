@@ -11,7 +11,7 @@ const DELETE_FILE = gql`
 `
 
 const DeleteFile = ({ datasetId, path, filename }) => (
-  <Mutation mutation={DELETE_FILE}>
+  <Mutation mutation={DELETE_FILE} awaitRefetchQueries={true}>
     {deleteFile => (
       <span className="delete-file">
         <WarnButton

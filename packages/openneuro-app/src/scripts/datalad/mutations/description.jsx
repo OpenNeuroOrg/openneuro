@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import SaveButton from '../fragments/save-button.jsx'
+import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
+import { datasetCacheId } from './cache-id.js'
 
 export const UPDATE_DESCRIPTION = gql`
   mutation updateDescription(
@@ -12,6 +14,15 @@ export const UPDATE_DESCRIPTION = gql`
   ) {
     updateDescription(datasetId: $datasetId, field: $field, value: $value) {
       id
+      Name
+      BIDSVersion
+      License
+      Authors
+      Acknowledgements
+      HowToAcknowledge
+      Funding
+      ReferencesAndLinks
+      DatasetDOI
     }
   }
 `
@@ -24,6 +35,15 @@ export const UPDATE_DESCRIPTION_LIST = gql`
   ) {
     updateDescriptionList(datasetId: $datasetId, field: $field, value: $value) {
       id
+      Name
+      BIDSVersion
+      License
+      Authors
+      Acknowledgements
+      HowToAcknowledge
+      Funding
+      ReferencesAndLinks
+      DatasetDOI
     }
   }
 `
@@ -53,7 +73,27 @@ const UpdateDescription = ({ datasetId, field, value, done }) => {
     ? UPDATE_DESCRIPTION_LIST
     : UPDATE_DESCRIPTION
   return (
-    <Mutation mutation={mutation} ignoreResults>
+    <Mutation
+      mutation={mutation}
+      update={(
+        cache,
+        { data: { updateDescription, updateDescriptionList } },
+      ) => {
+        const { draft } = cache.readFragment({
+          id: datasetCacheId(datasetId),
+          fragment: DRAFT_FRAGMENT,
+        })
+        cache.writeFragment({
+          id: datasetCacheId(datasetId),
+          fragment: DRAFT_FRAGMENT,
+          data: mergeFieldValue(
+            datasetId,
+            draft,
+            updateDescription,
+            updateDescriptionList,
+          ),
+        })
+      }}>
       {updateDescription => (
         <SaveButton
           action={async () => {

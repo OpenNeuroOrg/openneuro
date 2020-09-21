@@ -129,8 +129,7 @@ class FilesResource(object):
                 try:
                     # The recursive flag removes the entire tree in one commit
                     if 'recursive' in req.params and req.params['recursive'] != 'false':
-                        remove_recursive(self.store, dataset, files=[
-                            filename], name=name, email=email, cookies=req.cookies)
+                        remove_recursive(self.store, dataset, filename, name=name, email=email, cookies=req.cookies)
                     else:
                         remove_files(self.store, dataset, files=[
                             filename], name=name, email=email, cookies=req.cookies)

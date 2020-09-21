@@ -105,6 +105,7 @@ export const updateFiles = client => (datasetId, fileList) => {
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },
     errorPolicy: 'all',
+    awaitRefetchQueries: true,
   })
 }
 
