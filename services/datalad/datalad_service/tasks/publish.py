@@ -153,13 +153,25 @@ def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
     if sibling:
         try:
-            session = boto3.Session(
+            client = boto3.client(
+                's3',
                 aws_access_key_id=AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
             )
-            s3 = session.resource('s3')
-            bucket = s3.Bucket(realm.s3_bucket)
-            bucket.objects.filter(Prefix=f'{dataset_id}/').delete()
+            paginator = client.get_paginator('list_object_versions')
+            object_delete_list = []
+            for response in paginator.paginate(Bucket=realm.s3_bucket, Prefix=f'{dataset_id}/'):
+                versions = response.get('Versions', [])
+                versions.extend(response.get('DeleteMarkers', []))
+                object_delete_list.extend([{ 'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
+            for i in range(0, len(object_delete_list), 1000):
+                client.delete_objects(
+                    Bucket=realm.s3_bucket,
+                    Delete={
+                        'Objects': object_delete_list[i:i+1000],
+                        'Quiet': True
+                    }
+                )
         except Exception as e:
             raise Exception(f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
 
