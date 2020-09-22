@@ -182,8 +182,8 @@ def delete_github_sibling(dataset_id):
     try:
         r = next(r for r in repos if r.name == dataset_id)
         r.delete()
-    except StopIteration:
-        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist.')
+    except StopIteration as e:
+        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
 
 def delete_siblings(store, dataset_id):
     ds = store.get_dataset(dataset_id)
