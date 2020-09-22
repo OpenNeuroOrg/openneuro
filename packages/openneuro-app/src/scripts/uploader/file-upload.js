@@ -52,11 +52,11 @@ export async function uploadFiles({
     })
   })
 
-  // Verify the registration is ready
-  const swReg = await navigator.serviceWorker.ready
   // TODO - This is disabled due to Chrome bugs
   // eslint-disable-next-line no-constant-condition
   if ('BackgroundFetchManager' in self && false) {
+    // Verify the registration is ready
+    const swReg = await navigator.serviceWorker.ready
     // If there is parallelism, the browser will handle it
     const bgFetch = await swReg.backgroundFetch.fetch(uploadId, requests, {
       title: `${datasetId} upload`,
