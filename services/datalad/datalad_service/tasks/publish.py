@@ -177,11 +177,11 @@ def delete_siblings(store, dataset_id):
     ds = store.get_dataset(dataset_id)
 
     siblings = ds.siblings()
-    delete_s3_sibling(dataset_id, siblings, DatasetRealm(1))
-    delete_s3_sibling(dataset_id, siblings, DatasetRealm(2))
+    delete_s3_sibling(dataset_id, siblings, DatasetRealm.PRIVATE)
+    delete_s3_sibling(dataset_id, siblings, DatasetRealm.PUBLIC)
 
     remotes = ds.repo.get_remotes()
-    if DatasetRealm(1).github_remote in remotes:
+    if DatasetRealm.PUBLIC.github_remote in remotes:
         delete_github_sibling(dataset_id)
 
     for remote in remotes:
