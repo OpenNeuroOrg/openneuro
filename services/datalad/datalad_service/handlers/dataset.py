@@ -1,11 +1,12 @@
 import os
 
 import falcon
+import gevent
 
 from datalad_service.common.user import get_user_info
 from datalad_service.tasks.dataset import create_dataset
 from datalad_service.tasks.dataset import delete_dataset
-
+from datalad_service.tasks.publish import delete_siblings
 
 class DatasetResource(object):
 
@@ -44,8 +45,12 @@ class DatasetResource(object):
                 resp.status = falcon.HTTP_500
 
     def on_delete(self, req, resp, dataset):
+        def run_delete_tasks(store, dataset):
+            delete_siblings(store, dataset)
+            delete_dataset(store, dataset)
+
         try:
-            delete_dataset(self.store, dataset)
+            gevent.spawn(run_delete_tasks, self.store, dataset)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         except:

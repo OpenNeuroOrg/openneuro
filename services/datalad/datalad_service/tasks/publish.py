@@ -7,10 +7,14 @@ from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import GRAPHQL_ENDPOINT
+from datalad_service.config import AWS_ACCESS_KEY_ID
+from datalad_service.config import AWS_SECRET_ACCESS_KEY
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
 from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
+import boto3
+from github import Github
 
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
@@ -145,6 +149,55 @@ def publish_github_async(store, dataset, snapshot, github_remote):
     ds = store.get_dataset(dataset)
     publish_target(ds, github_remote, snapshot)
 
+def delete_s3_sibling(dataset_id, siblings, realm):
+    sibling = get_sibling_by_name(realm.s3_remote, siblings)
+    if sibling:
+        try:
+            client = boto3.client(
+                's3',
+                aws_access_key_id=AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            )
+            paginator = client.get_paginator('list_object_versions')
+            object_delete_list = []
+            for response in paginator.paginate(Bucket=realm.s3_bucket, Prefix=f'{dataset_id}/'):
+                versions = response.get('Versions', [])
+                versions.extend(response.get('DeleteMarkers', []))
+                object_delete_list.extend([{ 'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
+            for i in range(0, len(object_delete_list), 1000):
+                client.delete_objects(
+                    Bucket=realm.s3_bucket,
+                    Delete={
+                        'Objects': object_delete_list[i:i+1000],
+                        'Quiet': True
+                    }
+                )
+        except Exception as e:
+            raise Exception(f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
+
+def delete_github_sibling(dataset_id):
+    ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
+    org = ses.get_organization(DATALAD_GITHUB_ORG)
+    repos = org.get_repos()
+    try:
+        r = next(r for r in repos if r.name == dataset_id)
+        r.delete()
+    except StopIteration as e:
+        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
+
+def delete_siblings(store, dataset_id):
+    ds = store.get_dataset(dataset_id)
+
+    siblings = ds.siblings()
+    delete_s3_sibling(dataset_id, siblings, DatasetRealm.PRIVATE)
+    delete_s3_sibling(dataset_id, siblings, DatasetRealm.PUBLIC)
+
+    remotes = ds.repo.get_remotes()
+    if DatasetRealm.PUBLIC.github_remote in remotes:
+        delete_github_sibling(dataset_id)
+
+    for remote in remotes:
+        ds.siblings('remove', remote)
 
 def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
     """

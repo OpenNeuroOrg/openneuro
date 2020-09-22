@@ -19,10 +19,10 @@ const useDatasetDeletedSubscription = (datasetIds, cb) => {
 }
 
 export const datasetDeletedToast = (datasetId, name = datasetId) => {
-  toast.success(
+  toast.warn(
     <ToastContent
-      title="Dataset Deleted"
-      body={`Dataset "${name}" has been removed.`}
+      title="Deleting Dataset"
+      body={`Dataset "${name}" is being removed.`}
     />,
   )
 }

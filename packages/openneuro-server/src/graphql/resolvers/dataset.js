@@ -12,6 +12,7 @@ import { metadata } from './metadata.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import Snapshot from '../../models/snapshot.js'
+import Deletion from '../../models/deletion.js'
 import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
 import { UpdatedFile } from '../utils/file.js'
@@ -83,7 +84,11 @@ export const createDataset = (obj, args, { user, userInfo }) => {
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = async (obj, { id }, { user, userInfo }) => {
+export const deleteDataset = async (
+  obj,
+  { id, reason, redirect },
+  { user, userInfo },
+) => {
   await checkDatasetWrite(id, user, userInfo)
   const deleted = await datalad.deleteDataset(id)
   // Remove from the current version of the Elastic index
@@ -93,6 +98,12 @@ export const deleteDataset = async (obj, { id }, { user, userInfo }) => {
     // This likely means this dataset had not yet been indexed
     console.error(err)
   }
+  await new Deletion({
+    datasetId: id,
+    reason,
+    redirect,
+    user: { _id: user },
+  }).save()
   await pubsub.publish('datasetDeleted', {
     datasetId: id,
     datasetDeleted: id,

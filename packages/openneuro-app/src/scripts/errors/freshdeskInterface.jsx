@@ -4,7 +4,7 @@ import {
   Overlay,
   ModalContainer,
   ExitButton,
-} from '../../scripts/styles/support-modal.jsx'
+} from '../styles/support-modal.jsx'
 import PropTypes from 'prop-types'
 
 const FreshdeskInterface = props => {
