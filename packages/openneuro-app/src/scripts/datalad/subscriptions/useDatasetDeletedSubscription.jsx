@@ -22,7 +22,7 @@ export const datasetDeletedToast = (datasetId, name = datasetId) => {
   toast.warn(
     <ToastContent
       title="Deleting Dataset"
-      body={`Dataset "${name}" is being removed. Subscribers will recieve an email upon success.`}
+      body={`Dataset "${name}" is being removed.`}
     />,
   )
 }
