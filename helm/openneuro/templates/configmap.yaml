@@ -17,4 +17,3 @@ data:
   LOCPATH: ""
   SENTRY_DSN: {{ .Values.sentryDsn | quote }}
   ELASTIC_APM_SERVER_URL: http://{{ .Release.Name }}-apm-server:8200
-  ELASTIC_APM_SERVICE_NAME: openneuro
