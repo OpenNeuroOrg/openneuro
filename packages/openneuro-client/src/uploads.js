@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const prepareUpload = gql`
-  mutation prepareUpload($datasetId: ID!, $files: [UploadFile]!) {
-    prepareUpload(datasetId: $datasetId, files: $files) {
+  mutation prepareUpload($datasetId: ID!, $uploadId: ID!) {
+    prepareUpload(datasetId: $datasetId, uploadId: $uploadId) {
       id
       datasetId
       token
@@ -38,6 +38,41 @@ export const decodeFilePath = path => {
  */
 export const uploadSize = files =>
   files.map(f => f.size).reduce((a, b) => a + b)
+
+/**
+ * Java hashcode implementation for browser and Node.js
+ * @param {string} str
+ */
+function hashCode(str) {
+  return str
+    .split('')
+    .reduce(
+      (prevHash, currVal) =>
+        ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
+      0,
+    )
+}
+
+/**
+ * Calculate a hash from a list of files to upload
+ * @param {Array<object>} files Files being uploaded
+ * @returns {string} Hex string identity hash
+ */
+export function hashFileList(files) {
+  return Math.abs(
+    hashCode(
+      files
+        .map(
+          f =>
+            `${'webkitRelativePath' in f ? f.webkitRelativePath : f.filename}:${
+              f.size
+            }`,
+        )
+        .sort()
+        .join(':'),
+    ),
+  ).toString(16)
+}
 
 /**
  * Determine parallelism based on Request list

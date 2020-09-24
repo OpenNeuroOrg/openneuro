@@ -19,10 +19,10 @@ export const createDataset = client => label => {
  * Create a dataset and update the label
  * @param {object} client Apollo client
  */
-export const prepareUpload = client => ({ datasetId, files }) => {
+export const prepareUpload = client => ({ datasetId, uploadId }) => {
   return client.mutate({
     mutation: uploads.prepareUpload,
-    variables: { datasetId, files },
+    variables: { datasetId, uploadId },
   })
 }
 

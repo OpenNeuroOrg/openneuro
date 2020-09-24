@@ -1,4 +1,12 @@
-import { uploadSize, uploadParallelism } from '../uploads.js'
+import { uploadSize, uploadParallelism, hashFileList } from '../uploads.js'
+
+// Quick Mock for browser File
+class File {
+  constructor(content, fileName) {
+    this.webkitRelativePath = '/' + fileName
+    this.size = content.length
+  }
+}
 
 describe('upload implementation', () => {
   describe('uploadSize()', () => {
@@ -43,6 +51,19 @@ describe('upload implementation', () => {
           211,
         ),
       ).toBe(2)
+    })
+  })
+  describe('hashFileList()', () => {
+    it('works for node.js file arrays', () => {
+      const fileList = [{ filename: 'dataset_description.json', size: 256 }]
+      expect(hashFileList(fileList)).toBe('191c26')
+    })
+    it('works for browser arrays of File objects', () => {
+      const fileList = [
+        new File('{"name": "Dataset"}', 'dataset_description.json'),
+        new File('mock dataset', 'README'),
+      ]
+      expect(hashFileList(fileList)).toBe('797ffbf2')
     })
   })
 })

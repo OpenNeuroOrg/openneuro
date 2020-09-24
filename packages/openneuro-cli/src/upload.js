@@ -105,7 +105,7 @@ export const prepareUpload = async (
   const mutationFiles = files.map(f => ({ filename: f.filename, size: f.size }))
   const { data } = await client.mutate({
     mutation: uploads.prepareUpload,
-    variables: { datasetId, files: mutationFiles },
+    variables: { datasetId, uploadId: uploads.hashFileList(mutationFiles) },
   })
   const id = data.prepareUpload.id
   // eslint-disable-next-line no-console

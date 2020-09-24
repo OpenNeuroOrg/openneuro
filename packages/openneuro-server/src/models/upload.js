@@ -9,7 +9,6 @@ import mongoose from 'mongoose'
 const uploadSchema = new mongoose.Schema({
   id: { type: String, required: true, default: uuid.v4 },
   datasetId: { type: String, required: true },
-  files: Array,
   estimatedSize: Number,
   complete: { type: Boolean, default: false, required: true },
 })

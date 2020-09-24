@@ -11,19 +11,20 @@ import { getDatasetEndpoint } from '../../libs/datalad-service.js'
  * @param {object} obj Parent object or null
  * @param {object} arguments Resolver arguments
  * @param {string} arguments.datasetId Accession number string
+ * @param {string} arguments.uploadId Client provided value to identify this upload
  * @param {object} context Resolver context
  * @param {string} context.user User id
  * @param {object} context.userInfo Decoded userInfo from token
  */
 export async function prepareUpload(
   obj,
-  { datasetId, files },
+  { datasetId, uploadId },
   { user, userInfo },
 ) {
   await checkDatasetWrite(datasetId, user, userInfo)
   const upload = await Upload.findOneAndUpdate(
-    { datasetId, files },
-    { datasetId, files },
+    { datasetId, id: uploadId },
+    { datasetId, id: uploadId },
     { new: true, upsert: true, setDefaultsOnInsert: true },
   )
   const token = generateUploadToken(userInfo, datasetId)
