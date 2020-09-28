@@ -56,14 +56,14 @@ describe('upload implementation', () => {
   describe('hashFileList()', () => {
     it('works for node.js file arrays', () => {
       const fileList = [{ filename: 'dataset_description.json', size: 256 }]
-      expect(hashFileList(fileList)).toBe('191c26')
+      expect(hashFileList('ds000001', fileList)).toBe('27bb832a')
     })
     it('works for browser arrays of File objects', () => {
       const fileList = [
         new File('{"name": "Dataset"}', 'dataset_description.json'),
         new File('mock dataset', 'README'),
       ]
-      expect(hashFileList(fileList)).toBe('797ffbf2')
+      expect(hashFileList('ds000001', fileList)).toBe('509a4d42')
     })
   })
 })
