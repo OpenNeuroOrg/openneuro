@@ -7,7 +7,6 @@ export const typeDefs = `
   scalar Date
   scalar DateTime
   scalar Time
-  scalar Upload
   scalar BigInt
 
   enum CacheControlScope {
@@ -49,8 +48,6 @@ export const typeDefs = `
   input DatasetFilter {
     "Limit to datasets available publicly"
     public: Boolean
-    "Return only partially uploaded datasets"
-    incomplete: Boolean
     "Return only datasets that are shared with the user"
     shared: Boolean
     "Return only datasets with an invalid Draft"
@@ -87,8 +84,6 @@ export const typeDefs = `
     participantCount: Int @cacheControl(maxAge: 86400, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
-    # Determine if a dataset is partially uploaded
-    partial(datasetId: ID!): Boolean
   }
 
   type Mutation {
@@ -100,8 +95,6 @@ export const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!, changes: [String!]): Snapshot
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
-    # Add or update files in a draft - returns a new Draft
-    updateFiles(datasetId: ID!, files: FileTree!): Draft
     # Recursively delete a file or directory in a draft - returns true on success
     deleteFiles(datasetId: ID!, path: String!): Boolean
     # delete one file based on path
@@ -183,20 +176,6 @@ export const typeDefs = `
     id: ID! # Git reference for this validation
     datasetId: ID!
     issues: [ValidationIssueInput]!
-  }
-
-  input FileUrls {
-    datasetId: ID!
-    tag: String! # reference to the snapshot tag
-    files: [UpdateFileUrlInput]
-  }
-
-  # File tree
-  input FileTree {
-    name: ID! # directory name (or empty string for root)
-    path: String # path to file
-    files: [Upload!] # files within the directory
-    directories: [FileTree] # directories within the directory
   }
 
   # Dataset Metadata
@@ -346,8 +325,6 @@ export const typeDefs = `
     issues: [ValidationIssue]
     # Committed files in the working tree
     files(untracked: Boolean, prefix: String = ""): [DatasetFile]
-    # Flag if a dataset operation is incomplete (and may be reverted or resumed)
-    partial: Boolean
     # dataset_description.json fields
     description: Description
     # Dataset README
@@ -529,12 +506,6 @@ export const typeDefs = `
     objectpath: String
     # Return a flag if this is a directory which contains more files
     directory: Boolean
-  }
-
-  # Update file object
-  input UpdateFileUrlInput {
-    filename: String!
-    urls: [String]
   }
 
   # Update to files

@@ -2,12 +2,8 @@ import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { description } from './description.js'
 import { readme } from './readme.js'
-import {
-  getDraftFiles,
-  getPartialStatus,
-  updateDatasetRevision,
-} from '../../datalad/draft.js'
-import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
+import { getDraftFiles, updateDatasetRevision } from '../../datalad/draft.js'
+import { checkDatasetWrite } from '../permissions.js'
 import { filterFiles } from '../../datalad/files.js'
 import { createSnapshot } from '../../datalad/snapshots.js'
 import Snapshot from '../../models/snapshot.js'
@@ -17,15 +13,6 @@ const draftFiles = (obj, args) => {
   return getDraftFiles(obj.id, args).then(
     filterFiles('prefix' in args && args.prefix),
   )
-}
-
-/**
- * Check if a dataset draft is partially uploaded
- */
-export const partial = (obj, _, { user, userInfo }) => {
-  return checkDatasetRead(obj.id, user, userInfo).then(() => {
-    return getPartialStatus(obj.id)
-  })
 }
 
 /**
@@ -51,7 +38,6 @@ const draft = {
   summary,
   issues,
   modified: obj => obj.modified,
-  partial,
   description,
   readme,
 }

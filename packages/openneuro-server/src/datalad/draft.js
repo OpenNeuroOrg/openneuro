@@ -86,16 +86,3 @@ export const getDatasetRevision = async datasetId => {
       })
   })
 }
-
-export const getPartialStatus = datasetId => {
-  const partialUrl = `${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/draft`
-  const cache = new CacheItem(redis, CacheType.partial, [datasetId])
-  return cache.get(() =>
-    request
-      .get(partialUrl)
-      .set('Accept', 'application/json')
-      .then(({ body: { partial } }) => partial),
-  )
-}

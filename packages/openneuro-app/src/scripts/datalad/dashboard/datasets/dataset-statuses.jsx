@@ -22,12 +22,6 @@ class Statuses extends React.PureComponent {
     return (
       <span className="status-wrap">
         <Status type="public" minimal={minimal} display={dataset.public} />
-        <Status
-          type="incomplete"
-          minimal={minimal}
-          display={dataset.draft.partial && !uploading && minimal}
-          dataset={dataset}
-        />
         <Status type="shared" minimal={minimal} display={shared} />
         <Status type="inProgress" minimal={minimal} display={uploading} />
         <Status type="invalid" minimal={minimal} display={invalid && minimal} />

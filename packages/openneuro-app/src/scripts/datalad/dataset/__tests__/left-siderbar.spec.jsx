@@ -33,40 +33,6 @@ describe('LeftSidebar component', () => {
       ),
     ).toMatchSnapshot()
   })
-  it('renders the draft when dataset.draft.partial is true', () => {
-    // Set admin token to enable edit access
-    cookies.set(
-      'accessToken',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhZG1pbiI6dHJ1ZX0.F-cvL2RcfQhUtCavIM7q7zYE8drmj2LJk0JRkrS6He4',
-    )
-    const testDataset = {
-      permissions: {
-        userPermissions: [],
-      },
-      draft: {
-        partial: true,
-      },
-    }
-    const wrapper = shallow(
-      <LeftSidebar
-        dataset={testDataset}
-        datasetId="ds000001"
-        draftModified={fixedDate}
-        snapshots={[]}
-      />,
-    )
-    // Check that a SidebarRow is rendered
-    expect(wrapper.find('SidebarRow')).toHaveLength(1)
-    // Check that the first sidebar row is "draft" if the user can edit it
-    expect(
-      wrapper
-        .find('SidebarRow')
-        .first()
-        .props().version,
-    ).toBe('Draft')
-    // Cleanup cookie for other tests
-    cookies.remove('accessToken')
-  })
   describe('SidebarRow', () => {
     it('renders draft version correctly', () => {
       const wrapper = shallow(
