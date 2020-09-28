@@ -21,8 +21,16 @@ export const nativeErrorToast = () => {
     <ToastContent title="Download Error" body="An error occurred writing files">
       <p>
         Make sure you have enough free disk space and permission to write to the
-        dataset.
+        local directory.
       </p>
+    </ToastContent>,
+  )
+}
+
+export const requestFailureToast = () => {
+  toast.error(
+    <ToastContent title="Download Error" body="A file failed to download">
+      <p>You may not have access to download this dataset.</p>
     </ToastContent>,
   )
 }

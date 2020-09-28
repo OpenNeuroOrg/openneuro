@@ -4,6 +4,7 @@ import {
   nativeErrorToast,
   permissionsToast,
   downloadCompleteToast,
+  requestFailureToast,
 } from './native-file-toast.jsx'
 import { downloadUri } from './download-uri.js'
 
@@ -20,12 +21,12 @@ export const openFileTree = async (initialDirectoryHandle, path) => {
   const filename = pathTokens.slice(-1)
   if (dirTokens.length > 0) {
     for (const token of dirTokens) {
-      directoryHandle = await directoryHandle.getDirectory(token, {
+      directoryHandle = await directoryHandle.getDirectoryHandle(token, {
         create: true,
       })
     }
   }
-  return directoryHandle.getFile(filename, { create: true })
+  return directoryHandle.getFileHandle(filename, { create: true })
 }
 
 /**
@@ -44,16 +45,18 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
   }
   try {
     // Open user selected directory
-    const dirHandle = await window.chooseFileSystemEntries({
-      type: 'open-directory',
-    })
+    const dirHandle = await window.showDirectoryPicker()
     for (const file of filesToDownload.files) {
       const fileHandle = await openFileTree(dirHandle, file.filename)
       // Skip files which are already complete
       if (fileHandle.size == file.size) continue
       const writable = await fileHandle.createWritable()
-      const { body } = await fetch(file.urls.pop())
-      await body.pipeTo(writable)
+      const { body, status } = await fetch(file.urls.pop())
+      if (status === 200) {
+        await body.pipeTo(writable)
+      } else {
+        return requestFailureToast()
+      }
     }
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
