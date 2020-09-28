@@ -63,7 +63,7 @@ DownloadLinkServiceWorker.propTypes = {
  * Generate a magic bundle link for this dataset
  */
 const DownloadLink = ({ datasetId, snapshotTag }) =>
-  'chooseFileSystemEntries' in window ? (
+  'showDirectoryPicker' in window ? (
     <DownloadLinkNative datasetId={datasetId} snapshotTag={snapshotTag} />
   ) : (
     <DownloadLinkServiceWorker
