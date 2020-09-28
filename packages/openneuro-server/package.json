@@ -1,6 +1,6 @@
 {
   "name": "openneuro-server",
-  "version": "3.20.0",
+  "version": "3.21.0",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "src/server.js",
