@@ -9,7 +9,7 @@ import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
-import { datasets } from 'openneuro-client'
+import { datasets, uploads } from 'openneuro-client'
 import { withRouter } from 'react-router-dom'
 import { uploadFiles, getRelativePath } from './file-upload.js'
 import { UploadProgress } from './upload-progress.js'
@@ -255,10 +255,7 @@ export class UploadClient extends React.Component {
       },
     } = await mutation.prepareUpload(this.props.client)({
       datasetId: this.state.datasetId,
-      files: filesToUpload.map(f => ({
-        filename: getRelativePath(f),
-        size: f.size,
-      })),
+      uploadId: uploads.hashFileList(filesToUpload),
     })
 
     try {

@@ -149,7 +149,7 @@ export const typeDefs = `
     # Update draft reference pointer
     updateRef(datasetId: ID!, ref: String!): Boolean
     # Start an upload
-    prepareUpload(datasetId: ID!, files: [UploadFile]): UploadMetadata
+    prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata
     # Add files from a completed upload to the dataset draft
     finishUpload(uploadId: ID!): Boolean
   }
@@ -292,8 +292,6 @@ export const typeDefs = `
     id: ID!
     # Dataset associated with this upload
     datasetId: ID!
-    # File status
-    files: [DatasetFile]
     # Is this a complete upload (do we allow a resume or not?)
     complete: Boolean!
     # Estimated size in bytes (this is just used for progress display and can be inaccurate)
