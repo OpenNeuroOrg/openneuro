@@ -2,12 +2,11 @@ import 'cross-fetch/polyfill'
 import { ApolloClient } from 'apollo-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { createUploadLink } from 'apollo-upload-client'
 import { ApolloLink, split, Observable } from 'apollo-link'
+import { createHttpLink } from 'apollo-link-http'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import semver from 'semver'
-import FormData from 'form-data'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
@@ -73,16 +72,15 @@ const checkVersions = (serverVersion, clientVersion) => {
 
 export const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
-  const httpUploadLink = createUploadLink({
+  const httpLink = createHttpLink({
     uri,
     fetch: fetch === null ? undefined : fetch,
-    serverFormData: FormData,
     credentials: 'same-origin',
   })
   if (getAuthorization) {
-    return authLink(getAuthorization).concat(httpUploadLink)
+    return authLink(getAuthorization).concat(httpLink)
   } else {
-    return httpUploadLink
+    return httpLink
   }
 }
 
