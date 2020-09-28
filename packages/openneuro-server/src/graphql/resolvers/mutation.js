@@ -4,7 +4,6 @@
 import {
   createDataset,
   deleteDataset,
-  updateFiles,
   deleteFile,
   deleteFiles,
   updatePublic,
@@ -29,7 +28,6 @@ import { prepareUpload, finishUpload } from './upload.js'
 const Mutation = {
   createDataset,
   deleteDataset,
-  updateFiles,
   deleteFile,
   deleteFiles,
   createSnapshot,

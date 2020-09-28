@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import * as Sentry from '@sentry/browser'
-import { updateFiles } from '../../uploader/upload-mutation.js'
 import { withApollo } from 'react-apollo'
 
 /**

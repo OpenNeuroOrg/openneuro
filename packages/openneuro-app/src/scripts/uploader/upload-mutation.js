@@ -93,22 +93,6 @@ export const treeFromList = fileList => {
   return tree
 }
 
-/**
- * Update the files on a dataset given a
- * @param {object} client Apollo client
- */
-export const updateFiles = client => (datasetId, fileList) => {
-  const tree = treeFromList(fileList)
-  // Upload dataset_description.json first
-  tree.files = files.sortFiles(tree.files)
-  return client.mutate({
-    mutation: files.updateFiles,
-    variables: { datasetId, files: tree },
-    errorPolicy: 'all',
-    awaitRefetchQueries: true,
-  })
-}
-
 export const submitMetadata = client => (datasetId, metadata) => {
   return client.mutate({
     mutation: SUBMIT_METADATA,
