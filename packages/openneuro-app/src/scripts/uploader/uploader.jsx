@@ -255,7 +255,7 @@ export class UploadClient extends React.Component {
       },
     } = await mutation.prepareUpload(this.props.client)({
       datasetId: this.state.datasetId,
-      uploadId: uploads.hashFileList(filesToUpload),
+      uploadId: uploads.hashFileList(this.state.datasetId, filesToUpload),
     })
 
     try {
