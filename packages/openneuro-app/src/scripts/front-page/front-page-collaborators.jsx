@@ -89,7 +89,7 @@ const Collaborators = () => (
             Read more about{' '}
             <a
               target="_blank"
-              href="http://datalad.org"
+              href="http://handbook.datalad.org/r.html?about"
               rel="noopener noreferrer">
               DataLad
             </a>
