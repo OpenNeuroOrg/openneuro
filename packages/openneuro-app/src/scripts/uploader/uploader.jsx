@@ -252,7 +252,9 @@ export class UploadClient extends React.Component {
   async _addFiles() {
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
-    const filesToUpload = this._includeChanges()
+    const filesToUpload = this.state.resume
+      ? this.state.files
+      : this._includeChanges()
 
     // Call prepare upload to find the bucket needed and endpoint
     const {
