@@ -118,7 +118,7 @@ export class UploadClient extends React.Component {
             files: addPathToFiles(filesToUpload, path),
             selectedFiles: files,
           })
-          this.setLocation('/upload/disclaimer')
+          this.upload()
         })
     }
   }

@@ -2,7 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import UploaderContext from '../../uploader/uploader-context.js'
 
-const UpdateFile = ({ datasetId, path = null, children }) => {
+const UpdateFile = ({
+  datasetId,
+  directory = false,
+  multiple = false,
+  path = null,
+  children,
+}) => {
   return (
     <UploaderContext.Consumer>
       {uploader => (
@@ -18,8 +24,8 @@ const UpdateFile = ({ datasetId, path = null, children }) => {
                 false,
               )({ files: e.target.files })
             }}
-            webkitdirectory="true"
-            multiple="true"
+            webkitdirectory={directory && 'true'}
+            multiple={multiple && 'true'}
           />
           {children}
         </div>
@@ -31,6 +37,7 @@ const UpdateFile = ({ datasetId, path = null, children }) => {
 UpdateFile.propTypes = {
   client: PropTypes.object,
   datasetId: PropTypes.string,
+  directory: PropTypes.bool,
   multiple: PropTypes.bool,
   path: PropTypes.string,
   children: PropTypes.node,

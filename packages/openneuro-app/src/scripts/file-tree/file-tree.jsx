@@ -49,6 +49,12 @@ const FileTree = ({
                 multiple>
                 <i className="fa fa-plus" /> Add Files
               </UpdateFile>
+              <UpdateFile
+                datasetId={datasetId}
+                path={unescapePath(path)}
+                directory>
+                <i className="fa fa-plus" /> Add Directory
+              </UpdateFile>
               <DeleteDir datasetId={datasetId} path={path} />
             </span>
           )}
