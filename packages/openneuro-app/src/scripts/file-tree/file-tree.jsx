@@ -43,14 +43,11 @@ const FileTree = ({
         <>
           {!isMobile && editMode && (
             <span className="filetree-editfile">
-              <UpdateFile datasetId={datasetId} path={unescapePath(path)}>
-                <i className="fa fa-plus" /> Add File
-              </UpdateFile>
               <UpdateFile
                 datasetId={datasetId}
                 path={unescapePath(path)}
                 multiple>
-                <i className="fa fa-plus" /> Add Directory
+                <i className="fa fa-plus" /> Add Files
               </UpdateFile>
               <DeleteDir datasetId={datasetId} path={path} />
             </span>

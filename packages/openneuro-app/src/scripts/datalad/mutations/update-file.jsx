@@ -1,68 +1,31 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import * as Sentry from '@sentry/browser'
-import { withApollo } from 'react-apollo'
+import UploaderContext from '../../uploader/uploader-context.js'
 
-/**
- * Prefix all files with a path
- * This supports uploading within another directory
- * @param {FileList} fileList FileList for upload
- * @param {string} path Prefix path for all files
- * @returns {Array} Updated array of files with adapted paths
- */
-export const addPathToFiles = (fileList, path) => {
-  return path
-    ? Array.prototype.map.call(fileList, file => {
-        // Override webkitRelativePath with a new property
-        Object.defineProperty(file, 'webkitRelativePath', {
-          value: `/${path}/${file.webkitRelativePath}`,
-          writable: false,
-        })
-        return file
-      })
-    : fileList
-}
-
-const UpdateFile = ({
-  client,
-  datasetId,
-  multiple = false,
-  path = null,
-  children,
-}) => {
-  const [uploading, setUploading] = useState(false)
-  if (uploading) {
-    return (
-      <div className="edit-file">
-        <i className="fa fa-file-o" /> Uploading...
-      </div>
-    )
-  } else {
-    return (
-      <div className="edit-file">
-        {children}
-        <input
-          type="file"
-          className="update-file"
-          multiple={multiple}
-          webkitdirectory={multiple ? path : null}
-          onChange={async e => {
-            setUploading(true)
-            try {
-              await updateFiles(client)(
+const UpdateFile = ({ datasetId, path = null, children }) => {
+  return (
+    <UploaderContext.Consumer>
+      {uploader => (
+        <div className="edit-file">
+          <input
+            type="file"
+            className="update-file"
+            onChange={e => {
+              e.preventDefault()
+              uploader.resumeDataset(
                 datasetId,
-                addPathToFiles(e.target.files, path),
-              )
-            } catch (err) {
-              Sentry.captureException(err)
-            } finally {
-              setUploading(false)
-            }
-          }}
-        />
-      </div>
-    )
-  }
+                path,
+                false,
+              )({ files: e.target.files })
+            }}
+            webkitdirectory="true"
+            multiple="true"
+          />
+          {children}
+        </div>
+      )}
+    </UploaderContext.Consumer>
+  )
 }
 
 UpdateFile.propTypes = {
@@ -73,4 +36,4 @@ UpdateFile.propTypes = {
   children: PropTypes.node,
 }
 
-export default withApollo(UpdateFile)
+export default UpdateFile

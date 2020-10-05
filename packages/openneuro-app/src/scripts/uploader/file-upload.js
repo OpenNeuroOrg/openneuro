@@ -25,6 +25,7 @@ export const getRelativePath = file => {
  * @param {string} options.token Credentials
  * @param {UploadProgress} options.uploadProgress Controller for reporting upload progress
  * @param {AbortController} options.abortController Fetch AbortController for halting uploads
+ * @param {boolean} options.stripRelativePath True will remove the top-most directory name
  */
 export async function uploadFiles({
   uploadId,
@@ -34,12 +35,18 @@ export async function uploadFiles({
   token,
   uploadProgress,
   abortController,
+  stripRelativePath = true,
 }) {
   // Maps FileAPI objects to Request with the correct URL and body
   let totalSize = 0
   const requests = filesToUpload.map(f => {
     totalSize += f.size
-    const encodedFilePath = uploads.encodeFilePath(getRelativePath(f))
+    // Top level files have webkitRelativePath '' in some scenarios, use just the filename in that case
+    const encodedFilePath = f.webkitRelativePath
+      ? uploads.encodeFilePath(
+          stripRelativePath ? getRelativePath(f) : f.webkitRelativePath,
+        )
+      : f.name
     const fileUrl = `${config.url}/uploads/${endpoint}/${datasetId}/${uploadId}/${encodedFilePath}`
     return new Request(fileUrl, {
       method: 'POST',
