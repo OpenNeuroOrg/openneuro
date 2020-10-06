@@ -124,7 +124,7 @@ const DatasetContent = ({ dataset }) => {
         </div>
         <div className={mobileClass}>
           {!isMobile &&
-            (dataset.draft.partial || dataset.draft.files.length === 0 ? (
+            (dataset.draft.files.length === 0 ? (
               <IncompleteDataset datasetId={dataset.id} />
             ) : (
               <Validation

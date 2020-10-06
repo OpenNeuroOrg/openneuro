@@ -7,7 +7,6 @@ export enum CacheType {
   datasetsConnection = 'connection',
   datasetDescription = 'description',
   commitFiles = 'files',
-  partial = 'partial',
   readme = 'readme',
   snapshot = 'snapshot',
   snapshotIndex = 'snapshotIndex',

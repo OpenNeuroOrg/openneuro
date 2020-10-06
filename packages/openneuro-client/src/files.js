@@ -1,22 +1,6 @@
 import gql from 'graphql-tag'
 
 /**
- * Uploading/removing files in datasets after dataset creation
- *
- * This replicates the functionality of adding files to a SciTran project
- */
-
-export const updateFiles = gql`
-  mutation updateFiles($datasetId: ID!, $files: FileTree!) {
-    updateFiles(datasetId: $datasetId, files: $files) {
-      dataset {
-        id
-      }
-    }
-  }
-`
-
-/**
  * Sort file streams so that dataset_description.json is first in the list
  *
  * We do this at the top level so that it is uploaded first

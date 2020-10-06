@@ -43,7 +43,6 @@ export const getDataset = gql`
           key
           severity
         }
-        partial
       }
       snapshots {
         id
@@ -126,7 +125,6 @@ export const getDatasets = gql`
           }
           draft {
             id
-            partial
             summary {
               modalities
               sessions
@@ -254,11 +252,6 @@ export const updatePermissions = gql`
 export const removePermissions = gql`
   mutation($datasetId: ID!, $userId: String!) {
     removePermissions(datasetId: $datasetId, userId: $userId)
-  }
-`
-export const checkPartial = gql`
-  query partial($datasetId: ID!) {
-    partial(datasetId: $datasetId)
   }
 `
 

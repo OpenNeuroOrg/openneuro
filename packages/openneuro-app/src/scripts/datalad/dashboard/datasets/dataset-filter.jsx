@@ -4,10 +4,9 @@ import Capitalized from '../../../styles/capitalized.jsx'
 import { getProfile } from '../../../authentication/profile.js'
 
 // DatasetFilter GraphQL fields
-const filterFields = ['public', 'incomplete', 'shared', 'invalid']
+const filterFields = ['public', 'shared', 'invalid']
 const filterIcons = {
   public: 'fa-globe',
-  incomplete: 'fa-warning',
   shared: 'fa-user',
   invalid: 'fa-exclamation-circle',
   all: 'fa-magic',

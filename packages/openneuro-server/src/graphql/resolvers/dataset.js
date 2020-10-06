@@ -112,57 +112,6 @@ export const deleteDataset = async (
 }
 
 /**
- * Recursively walk an upload tree and return an array of
- * promises for each forwarded request.
- *
- * @param {string} datasetId
- * @param {object} fileTree
- */
-export const updateFilesTree = (datasetId, fileTree) => {
-  // drafts just need something to invalidate client cache
-  const { name, files, directories } = fileTree
-  const filesPromises = files.map(file => {
-    return datalad
-      .addFile(datasetId, name, file)
-      .then(({ filename, size }) => new UpdatedFile(filename, size))
-  })
-  const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
-  return filesPromises.concat(...dirPromises)
-}
-
-/**
- * Add files to a draft
- */
-export const updateFiles = async (
-  obj,
-  { datasetId, files: fileTree },
-  { user, userInfo },
-) => {
-  try {
-    await checkDatasetWrite(datasetId, user, userInfo)
-    const promises = updateFilesTree(datasetId, fileTree)
-    const updatedFiles = await Promise.all(promises)
-    await datalad.commitFiles(datasetId, userInfo)
-    // Check if this is the first data commit and no snapshots exist
-    const snapshot = await Snapshot.findOne({
-      datasetId,
-    }).exec()
-    if (!snapshot) await createSnapshot(datasetId, '1.0.0', userInfo)
-    pubsub.publish('filesUpdated', {
-      datasetId,
-      filesUpdated: {
-        action: 'UPDATE',
-        payload: updatedFiles,
-      },
-    })
-    return true
-  } catch (err) {
-    Sentry.captureException(err)
-    return false
-  }
-}
-
-/**
  * Delete files from a draft
  */
 export const deleteFiles = async (

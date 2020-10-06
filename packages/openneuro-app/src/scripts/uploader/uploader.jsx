@@ -11,8 +11,9 @@ import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import { datasets, uploads } from 'openneuro-client'
 import { withRouter } from 'react-router-dom'
-import { uploadFiles, getRelativePath } from './file-upload.js'
+import { uploadFiles } from './file-upload.js'
 import { UploadProgress } from './upload-progress.js'
+import { addPathToFiles } from './add-path-to-files.js'
 
 /**
  * Stateful uploader workflow and status
@@ -40,6 +41,8 @@ export class UploadClient extends React.Component {
       progress: 0,
       // Resume an existing dataset
       resume: null,
+      // Control if the top level path is trimmed out (good for initial uploads, bad for adding to dataset)
+      stripRelativePath: true,
       // Allow context consumers to change routes
       setLocation: this.setLocation,
       // Set a dataset to resume upload for
@@ -80,8 +83,10 @@ export class UploadClient extends React.Component {
   /**
    * Specify a dataset to resume upload for
    * @param {string} datasetId
+   * @param {string} path Optional path to prefix all files with
+   * @param {boolean} stripRelativePath Don't strip the first path (useful for adding directories)
    */
-  resumeDataset = datasetId => {
+  resumeDataset = (datasetId, path, stripRelativePath) => {
     return ({ files }) => {
       this.props.client
         .query({
@@ -109,10 +114,11 @@ export class UploadClient extends React.Component {
           this.setState({
             datasetId,
             resume: true,
-            files: filesToUpload,
+            stripRelativePath,
+            files: addPathToFiles(filesToUpload, path),
             selectedFiles: files,
           })
-          this.setLocation('/upload/issues')
+          this.upload()
         })
     }
   }
@@ -246,7 +252,9 @@ export class UploadClient extends React.Component {
   async _addFiles() {
     // Uploads the version of files with dataset_description formatted and Name updated
     // Adds a CHANGES file if it is not present
-    const filesToUpload = this._includeChanges()
+    const filesToUpload = this.state.resume
+      ? this.state.files
+      : this._includeChanges()
 
     // Call prepare upload to find the bucket needed and endpoint
     const {
@@ -270,6 +278,7 @@ export class UploadClient extends React.Component {
           filesToUpload.length,
         ),
         abortController: this.state.abortController,
+        stripRelativePath: this.state.stripRelativePath,
       })
       if (!this.state.abortController.signal.aborted) {
         await mutation.finishUpload(this.props.client)(uploadId)

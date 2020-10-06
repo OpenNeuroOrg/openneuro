@@ -4,24 +4,18 @@ exports[`UpdateFile mutation renders with default props 1`] = `
 <ApolloProvider
   client={Object {}}
 >
-  <withApollo(UpdateFile)>
-    <ApolloConsumer>
-      <UpdateFile
-        client={Object {}}
-      >
-        <div
-          className="edit-file"
-        >
-          <input
-            className="update-file"
-            multiple={false}
-            onChange={[Function]}
-            type="file"
-            webkitdirectory={null}
-          />
-        </div>
-      </UpdateFile>
-    </ApolloConsumer>
-  </withApollo(UpdateFile)>
+  <UpdateFile>
+    <div
+      className="edit-file"
+    >
+      <input
+        className="update-file"
+        multiple={false}
+        onChange={[Function]}
+        type="file"
+        webkitdirectory={false}
+      />
+    </div>
+  </UpdateFile>
 </ApolloProvider>
 `;

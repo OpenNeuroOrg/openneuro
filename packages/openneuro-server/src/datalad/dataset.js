@@ -148,9 +148,6 @@ export const datasetsFilter = options => match => {
       filterMatch.saved = { $exists: true, $ne: [] } // arr datasetIds
     }
 
-    if ('incomplete' in filters && filters.incomplete) {
-      filterMatch.revision = null
-    }
     if ('userId' in options && 'shared' in filters && filters.shared) {
       filterMatch.uploader = { $ne: options.userId }
     }
@@ -355,9 +352,6 @@ export const commitFiles = (datasetId, user) => {
     .set('Accept', 'application/json')
     .then(res => {
       gitRef = res.body.ref
-      // Always remove the partial key when a commit is successfully made
-      const cache = new CacheItem(redis, CacheType.partial, [datasetId])
-      cache.drop()
       return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
     })
 }
