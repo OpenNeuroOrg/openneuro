@@ -9,7 +9,8 @@
     "target": "es6",
     "jsx": "preserve",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "lib": ["es2020", "dom"]
   },
   "include": ["./packages/**/*"]
 }

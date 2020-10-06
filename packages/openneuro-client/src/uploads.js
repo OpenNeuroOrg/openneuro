@@ -105,7 +105,7 @@ export function parseFilename(url) {
 
 /**
  * Repeatable function for single file upload fetch request
- * @param {UploadProgress} uploadProgress Progress controller instance
+ * @param {object} uploadProgress Progress controller instance
  * @param {fetch} fetch Fetch implementation to use - useful for environments without a native fetch
  * @returns {function (Request, number): Promise<Response>}
  */
@@ -133,7 +133,7 @@ export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
         )
       } else {
         // Retry if up to attempts times
-        await uploadFile(uploadProgress, fetch)(request, attempt + 1)
+        return await uploadFile(uploadProgress, fetch)(request, attempt + 1)
       }
     }
   })
@@ -143,7 +143,7 @@ export async function uploadParallel(
   requests,
   totalSize,
   uploadProgress,
-  fetch = global.fetch,
+  fetch = window.fetch,
 ) {
   // Array stride of parallel requests
   const parallelism = uploadParallelism(requests, totalSize)
