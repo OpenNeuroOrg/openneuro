@@ -36,4 +36,4 @@ REDIS_HOST = get_environ('REDIS_HOST', 'redis')
 
 # The path to connect to Elastic APM server
 ELASTIC_APM_SERVER_URL = get_environ(
-    'ELASTIC_APM_SERVER_URL', 'http://localhost:8200')
+    'ELASTIC_APM_SERVER_URL')

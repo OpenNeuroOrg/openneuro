@@ -38,8 +38,13 @@ def create_app(annex_path):
             integrations=[FalconIntegration()]
         )
 
+    middleware = [AuthenticateMiddleware()]
+    if datalad_service.config.ELASTIC_APM_SERVER_URL:
+        middleware.append(ElasticApmMiddleware(service_name='datalad-service',
+                                               server_url=datalad_service.config.ELASTIC_APM_SERVER_URL))
+
     api = falcon.API(
-        middleware=[AuthenticateMiddleware(), ElasticApmMiddleware(service_name='datalad-service', server_url=datalad_service.config.ELASTIC_APM_SERVER_URL)])
+        middleware=middleware)
     api.router_options.converters['path'] = PathConverter
 
     store = DataladStore(annex_path)
