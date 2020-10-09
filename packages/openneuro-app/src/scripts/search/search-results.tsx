@@ -32,7 +32,6 @@ const searchQuery = gql`
           }
           draft {
             id
-            partial
             summary {
               modalities
               sessions
