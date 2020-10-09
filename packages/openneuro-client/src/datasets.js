@@ -71,13 +71,13 @@ export const getDataset = gql`
 `
 
 // Get only working tree files
-export const getUntrackedFiles = gql`
+export const getDraftFiles = gql`
   query dataset($id: ID!) {
     dataset(id: $id) {
       id
       draft {
         id
-        files(untracked: true, prefix: null) {
+        files(prefix: null) {
           filename
           size
         }
