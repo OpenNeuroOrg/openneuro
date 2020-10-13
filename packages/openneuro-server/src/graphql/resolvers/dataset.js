@@ -198,7 +198,12 @@ export const analytics = async obj => {
  * Track analytic of type 'view' or 'download' for a dataset / snapshot
  */
 export const trackAnalytics = (obj, { datasetId, tag, type }) => {
-  return dataladAnalytics.trackAnalytics(datasetId, tag, type)
+  try {
+    dataladAnalytics.trackAnalytics(datasetId, tag, type)
+    return true
+  } catch (err) {
+    return false
+  }
 }
 
 /**
