@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "start": "docker-compose up --build -V",
     "bootstrap": "lerna bootstrap",
     "test": "jest",
     "coverage": "jest --coverage",
