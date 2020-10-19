@@ -9,9 +9,11 @@ volumes:
 
 services:
   # This dummy service provides shared configuration for all Node deps
-  nodejs:
-    build: .
-    image: nodejs-image
+  node:
+    build: 
+      context: .
+      target: dependencies
+    image: openneuro/node
     env_file: ./config.env
     working_dir: /srv
     volumes:
@@ -21,7 +23,7 @@ services:
   # web app bundle build
   app:
     extends:
-      service: nodejs
+      service: node
     working_dir: /srv/packages/openneuro-app
     command: yarn start
     volumes:
@@ -33,7 +35,7 @@ services:
   # crn node server
   server:
     extends:
-      service: nodejs
+      service: node
     working_dir: /srv/packages/openneuro-server
     command: yarn ts-node-dev --respawn --transpile-only src/server.js
     volumes:
@@ -47,7 +49,7 @@ services:
   # Elastic Search indexer
   indexer:
     extends:
-      service: nodejs
+      service: node
     command: yarn ts-node /srv/packages/openneuro-indexer/src/index.ts
     depends_on:
       - server

@@ -1,0 +1,86 @@
+image: docker
+
+services:
+  - docker:dind
+
+stages:
+  - dependencies
+  - test
+  - deploy
+
+# Build base image for nodejs
+setup_nodejs:
+  stage: dependencies
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/node:latest || true
+    - docker build --target tests --cache-from $CI_REGISTRY_IMAGE/node:latest --tag $CI_REGISTRY_IMAGE/node:latest --tag $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/node:latest
+
+build_server:
+  stage: test
+  needs: ["setup_nodejs"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA openneuro/node:latest
+    - docker pull $CI_REGISTRY_IMAGE/server:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE/server:latest --tag $CI_REGISTRY_IMAGE/server:latest --tag $CI_REGISTRY_IMAGE/server:$CI_COMMIT_SHA packages/openneuro-server
+    - docker push $CI_REGISTRY_IMAGE/server:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/server:latest
+
+build_app:
+  stage: test
+  needs: ["setup_nodejs"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA openneuro/node:latest
+    - docker pull $CI_REGISTRY_IMAGE/app:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE/app:latest --tag $CI_REGISTRY_IMAGE/app:latest --tag $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA packages/openneuro-app
+    - docker push $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/app:latest
+
+build_indexer:
+  stage: test
+  needs: ["setup_nodejs"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA openneuro/node:latest
+    - docker pull $CI_REGISTRY_IMAGE/indexer:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE/indexer:latest --tag $CI_REGISTRY_IMAGE/indexer:latest --tag $CI_REGISTRY_IMAGE/indexer:$CI_COMMIT_SHA  packages/openneuro-indexer
+    - docker push $CI_REGISTRY_IMAGE/indexer:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/indexer:latest
+
+build_datalad_service:
+  stage: test
+  needs: []
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - cd services/datalad
+    - docker pull $CI_REGISTRY_IMAGE/datalad-service:latest || true
+    - docker build --target tests --cache-from $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE/datalad-service:latest
+
+deploy_docker_images:
+  stage: deploy
+  needs: ["build_app", "build_indexer", "build_server", "build_datalad_service"]
+  only:
+    - tags
+  script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - docker pull $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA
+    - docker pull $CI_REGISTRY_IMAGE/indexer:$CI_COMMIT_SHA
+    - docker pull $CI_REGISTRY_IMAGE/server:$CI_COMMIT_SHA
+    - docker pull $CI_REGISTRY_IMAGE/datalad_service:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA openneuro/app:$CI_COMMIT_TAG
+    - docker tag $CI_REGISTRY_IMAGE/indexer:$CI_COMMIT_SHA openneuro/indexer:$CI_COMMIT_TAG
+    - docker tag $CI_REGISTRY_IMAGE/server:$CI_COMMIT_SHA openneuro/server:$CI_COMMIT_TAG
+    - docker tag $CI_REGISTRY_IMAGE/datalad_service:$CI_COMMIT_SHA openneuro/datalad_service:$CI_COMMIT_TAG
+    - docker push openneuro/app:$CI_COMMIT_TAG
+    - docker push openneuro/indexer:$CI_COMMIT_TAG
+    - docker push openneuro/server:$CI_COMMIT_TAG
+    - docker push openneuro/datalad_service:$CI_COMMIT_TAG
