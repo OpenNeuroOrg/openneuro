@@ -25,7 +25,8 @@ You can run tests with `yarn test` at the top level of the project. For each pac
 [docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together. Copy the example `.env.example` file to `.env` and `config.env.example` to `config.env` and use docker-compose to start the containers.
 
 ```shell
-docker-compose up -d
+# This will run docker-compose in the background (-d flag is --detach)
+yarn start -d
 ```
 
 For example, you can restart the server container with `docker-compose restart server` or view logs with `docker-compose logs -f --tail=10 server`.
