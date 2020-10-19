@@ -20,13 +20,13 @@ def test_update(client, new_dataset):
         '/datasets/{}/description'.format(ds_id), body=body)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
-        update_response.content, encoding='utf-8') if update_response.content else None
+        update_response.content) if update_response.content else None
     assert updated_ds is not None
 
     check_response = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id))
     assert check_response.status == falcon.HTTP_OK
-    ds_description = json.loads(check_response.content, encoding='utf-8')
+    ds_description = json.loads(check_response.content)
     assert ds_description[key] == value
 
 
@@ -52,13 +52,13 @@ def post_and_check_description(client, new_dataset, base_description):
         '/datasets/{}/description'.format(ds_id), body=body)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
-        update_response.content, encoding='utf-8') if update_response.content else None
+        update_response.content) if update_response.content else None
     assert updated_ds is not None
 
     check_response = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id))
     assert check_response.status == falcon.HTTP_OK
-    ds_description = json.loads(check_response.content, encoding='utf-8')
+    ds_description = json.loads(check_response.content)
     assert ds_description[key] == value
 
 
@@ -101,7 +101,7 @@ def test_description_formatting(client, new_dataset):
         '/datasets/{}/description'.format(ds_id), body=body)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
-        update_response.content, encoding='utf-8') if update_response.content else None
+        update_response.content) if update_response.content else None
     assert updated_ds is not None
 
     check_response = client.simulate_get(

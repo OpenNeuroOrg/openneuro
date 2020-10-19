@@ -13,7 +13,7 @@ def test_get_snapshot(client):
     # The main test dataset has one revision we can fetch
     response = client.simulate_get(
         '/datasets/{}/snapshots/{}'.format(DATASET_ID, SNAPSHOT_ID))
-    result_doc = json.loads(response.content, encoding='utf-8')
+    result_doc = json.loads(response.content)
 
     assert response.status == falcon.HTTP_OK
     assert result_doc['files'] == [
@@ -92,7 +92,7 @@ def test_get_snapshots(client, new_dataset):
     assert response.status == falcon.HTTP_OK
     response = client.simulate_get(
         '/datasets/{}/snapshots'.format(ds_id))
-    result_doc = json.loads(response.content, encoding='utf-8')
+    result_doc = json.loads(response.content)
     assert response.status == falcon.HTTP_OK
     assert result_doc['snapshots'][0]['hexsha'] == result_doc['snapshots'][1]['hexsha']
     assert result_doc['snapshots'][0]['id'] == '{}:{}'.format(ds_id, 'v1.0.0')
@@ -121,7 +121,7 @@ def test_description_update(client, new_dataset):
     check_response = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id))
     assert check_response.status == falcon.HTTP_OK
-    ds_description = json.loads(check_response.content, encoding='utf-8')
+    ds_description = json.loads(check_response.content)
     assert ds_description[key] == value
 
 
