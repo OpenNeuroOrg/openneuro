@@ -40,75 +40,7 @@ const DatasetTools = ({ dataset, location, history }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   return (
-    <div className="col-xs-12 dataset-tools-wrap">
-      <div className="tools clearfix">
-        <LoggedIn>
-          <div role="presentation" className="tool">
-            {!dataset.public && edit && (
-              <WarnButton
-                tooltip="Publish Dataset"
-                icon="fa-globe icon-plus"
-                warn={false}
-                action={cb => {
-                  toolRedirect(history, rootPath, 'publish')
-                  cb()
-                }}
-              />
-            )}
-          </div>
-          <div role="presentation" className="tool">
-            <span>
-              <button
-                className="btn-warn-component warning"
-                onClick={() => setShowDeleteModal(true)}>
-                <i className="fa fa-trash" />
-              </button>
-            </span>
-          </div>
-          <div role="presentation" className="tool">
-            {edit && (
-              <WarnButton
-                tooltip="Manage Dataset Permissions"
-                icon="fa-user icon-plus"
-                warn={false}
-                action={cb => {
-                  toolRedirect(history, rootPath, 'share')
-                  cb()
-                }}
-              />
-            )}
-          </div>
-          <div role="presentation" className="tool">
-            {edit && !isMobile && (
-              <WarnButton
-                tooltip="Create Snapshot"
-                icon="fa-camera-retro icon-plus"
-                warn={false}
-                action={cb => {
-                  toolRedirect(history, rootPath, 'snapshot')
-                }}
-              />
-            )}
-          </div>
-          <div role="presentation" className="tool">
-            <FollowDataset
-              datasetId={dataset.id}
-              following={dataset.following}
-            />
-          </div>
-          <div role="presentation" className="tool">
-            <StarDataset datasetId={dataset.id} starred={dataset.starred} />
-          </div>
-          {isMobile && (
-            <div role="presentation" className="tool">
-              <ShareDatasetLink url={`https://openneuro.org${rootPath}`} />
-            </div>
-          )}
-        </LoggedIn>
-        <div role="presentation" className="tool">
-          <DatasetMetadata datasetId={dataset.id} metadata={dataset.metadata} />
-        </div>
-      </div>
+    <>
       {showDeleteModal && (
         <Overlay>
           <ModalContainer>
@@ -122,7 +54,80 @@ const DatasetTools = ({ dataset, location, history }) => {
           </ModalContainer>
         </Overlay>
       )}
-    </div>
+      <div className="col-xs-12 dataset-tools-wrap">
+        <div className="tools clearfix">
+          <LoggedIn>
+            <div role="presentation" className="tool">
+              {!dataset.public && edit && (
+                <WarnButton
+                  tooltip="Publish Dataset"
+                  icon="fa-globe icon-plus"
+                  warn={false}
+                  action={cb => {
+                    toolRedirect(history, rootPath, 'publish')
+                    cb()
+                  }}
+                />
+              )}
+            </div>
+            <div role="presentation" className="tool">
+              <span>
+                <button
+                  className="btn-warn-component warning"
+                  onClick={() => setShowDeleteModal(true)}>
+                  <i className="fa fa-trash" />
+                </button>
+              </span>
+            </div>
+            <div role="presentation" className="tool">
+              {edit && (
+                <WarnButton
+                  tooltip="Manage Dataset Permissions"
+                  icon="fa-user icon-plus"
+                  warn={false}
+                  action={cb => {
+                    toolRedirect(history, rootPath, 'share')
+                    cb()
+                  }}
+                />
+              )}
+            </div>
+            <div role="presentation" className="tool">
+              {edit && !isMobile && (
+                <WarnButton
+                  tooltip="Create Snapshot"
+                  icon="fa-camera-retro icon-plus"
+                  warn={false}
+                  action={cb => {
+                    toolRedirect(history, rootPath, 'snapshot')
+                  }}
+                />
+              )}
+            </div>
+            <div role="presentation" className="tool">
+              <FollowDataset
+                datasetId={dataset.id}
+                following={dataset.following}
+              />
+            </div>
+            <div role="presentation" className="tool">
+              <StarDataset datasetId={dataset.id} starred={dataset.starred} />
+            </div>
+            {isMobile && (
+              <div role="presentation" className="tool">
+                <ShareDatasetLink url={`https://openneuro.org${rootPath}`} />
+              </div>
+            )}
+          </LoggedIn>
+          <div role="presentation" className="tool">
+            <DatasetMetadata
+              datasetId={dataset.id}
+              metadata={dataset.metadata}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 DatasetTools.propTypes = {
