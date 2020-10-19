@@ -3,6 +3,8 @@ from falcon import testing
 
 from .dataset_fixtures import *
 
+from datalad_service.handlers.upload_file import skip_invalid_files
+
 
 def test_upload_file_no_auth(client):
     ds_id = 'ds000001'
@@ -25,3 +27,16 @@ def test_upload_file(client, datalad_store):
     # Check for the file in the upload bucket
     with open(readme_path) as f:
         assert f.read() == file_data
+
+
+def test_skip_invalid_files():
+    assert skip_invalid_files('.git/HEAD')
+    assert skip_invalid_files('.gitattributes')
+    assert skip_invalid_files('.heudiconv')
+    assert skip_invalid_files('.DS_Store')
+    assert skip_invalid_files('sub-01/.DS_Store')
+    assert skip_invalid_files('.datalad')
+    assert skip_invalid_files('.config')
+    assert not skip_invalid_files('dataset_description.json')
+    assert not skip_invalid_files('sub-01/anat/sub-01_T1w.nii.gz')
+    assert not skip_invalid_files('.bidsignore')
