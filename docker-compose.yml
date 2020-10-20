@@ -74,7 +74,9 @@ services:
 
   # datalad Python backend
   datalad:
-    build: services/datalad
+    build:
+      context: services/datalad
+      target: base
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./services/datalad/datalad_service:/datalad_service

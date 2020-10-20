@@ -19,7 +19,7 @@ class AuthenticateMiddleware(object):
             try:
                 token = req.auth and req.auth[7:] or cookies['accessToken']
                 req.context['user'] = jwt.decode(
-                    token, key=os.environ['JWT_SECRET'])
+                    token, key=os.environ['JWT_SECRET'], algorithms=["HS256"])
                 with configure_scope() as scope:
                     sentry_user = req.context['user'].copy()
                     try:

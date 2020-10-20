@@ -33,6 +33,6 @@ FROM base as tests
 COPY tests /tests
 # The base build confirms the lockfile is correct, skip updating or checking it here
 RUN pipenv install --keep-outdated --dev
-RUN pipenv run pytest ./tests
+RUN pipenv run pytest ./tests -n 4
 
 FROM base as production

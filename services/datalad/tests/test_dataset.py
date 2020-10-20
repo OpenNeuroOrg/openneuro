@@ -12,7 +12,7 @@ def test_get_dataset(client):
     }
 
     response = client.simulate_get('/datasets/{}'.format(DATASET_ID))
-    result_doc = json.loads(response.content, encoding='utf-8')
+    result_doc = json.loads(response.content)
 
     assert doc == result_doc
     assert response.status == falcon.HTTP_OK
