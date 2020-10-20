@@ -1,18 +1,20 @@
 @import 'common.variables';
 
 %clearfix {
-    &::before,
-    &::after {
-        content: ' ';
-        display: table;
-    }
+  &::before,
+  &::after {
+    content: ' ';
+    display: table;
+  }
 
-    &::after {
-        clear: both;
-    }
+  &::after {
+    clear: both;
+  }
 }
 
-.clearfix {@extend %clearfix;}
+.clearfix {
+  @extend %clearfix;
+}
 
 // ::-webkit-scrollbar {
 //     width: 0;
@@ -44,78 +46,79 @@ body,
 .full-col,
 .view.container,
 .uploader,
-.route-wrapper{height: 100%;}
+.route-wrapper {
+  height: 100%;
+}
 
-.page.dataset, .dataset-container {
-    min-height: calc(100vh - 85px);
+.page.dataset,
+.dataset-container {
+  min-height: calc(100vh - 85px);
 }
 
 body {
-    font-family: $font-family-cabin;
-    font-family: var(--font-family-cabin);
-    letter-spacing: .03em;
-    background: $e5;
+  font-family: $font-family-cabin;
+  font-family: var(--font-family-cabin);
+  letter-spacing: 0.03em;
+  background: $e5;
 }
 
 @include mobile {
-    body{
-        background: $white;
-        display: flex;
-    }
-    .main {
-   
+  body {
+    background: $white;
+    display: flex;
+  }
+  .main {
     padding: 3px;
-    }
+  }
 }
 
 .main {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-
 .container {
-    width: 100%;
+  width: 100%;
 
-    &.maxed {
-        width: 90%;
-        max-width: 1500px;
-    }
+  &.maxed {
+    width: 90%;
+    max-width: 1500px;
+  }
 }
 
 .view.container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .inner-route {
-    &.light {
-        background: $white;
-    }
+  &.light {
+    background: $white;
+  }
 
-    .message-4 {
-        text-align: center;
-    }
+  .message-4 {
+    text-align: center;
+  }
 }
 
 a {
-    color: $primary;
-    color: var(--primary);
-    cursor: pointer;
+  color: $primary;
+  color: var(--primary);
+  cursor: pointer;
 }
 
 a:hover,
 a:focus {
-    color: $primary-hover;
-    color: var(--primary-hover);
-    text-decoration: none;
+  color: $primary-hover;
+  color: var(--primary-hover);
+  text-decoration: none;
 }
 
 a:active,
 a:hover,
 a:focus {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 h1,
@@ -124,708 +127,725 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: $font-family-open;
-    font-family: var(--font-family-open);
-    font-weight: 400;
+  font-family: $font-family-open;
+  font-family: var(--font-family-open);
+  font-weight: 400;
 }
 
 .href-font {
-    font-family: $font-family-open;
-    font-family: var(--font-family-open);
+  font-family: $font-family-open;
+  font-family: var(--font-family-open);
 }
 
 .page {
-    width: 100%;
+  width: 100%;
 
-    &.snapshot,
-    &.dataset {
-        background: $white;
-    }
+  &.snapshot,
+  &.dataset {
+    background: $white;
+  }
 }
 
 .route-wrapper {
-    margin-top: 20px;
+  margin-top: 20px;
 
-    .inner-route {
-        padding: 0 25px;
-    }
+  .inner-route {
+    padding: 0 25px;
+  }
 }
 
 .is-front,
 .snapshot,
 .dataset {
-    .route-wrapper {
-        margin-top: 0;
-    }
+  .route-wrapper {
+    margin-top: 0;
+  }
 }
 
 .full-col {
-    padding: 0;
+  padding: 0;
 }
 
 //buttons ========================
 
 .btn-group {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 %btn-basic {
-    @include border-radius(1px);
-    @include user-select(none);
-    background: none;
-    outline: none;
-    white-space: nowrap;
-    cursor: pointer;
-    font-weight: 400;
-    font-size: 12pt;
-    color: $primary;
-    color: var(--primary);
-    text-align: center;
-    padding: 8px 13px;
-    width: 100%;
-    border: 1px solid $primary;
-    border: 1px solid var(--primary);
-    text-transform: uppercase;
-    margin: 0 0 10px;
-    transition: all .3s ease-out;
+  @include border-radius(1px);
+  @include user-select(none);
+  background: none;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 12pt;
+  color: $primary;
+  color: var(--primary);
+  text-align: center;
+  padding: 8px 13px;
+  width: 100%;
+  border: 1px solid $primary;
+  border: 1px solid var(--primary);
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  transition: all 0.3s ease-out;
 
-    &:hover,
-    &:active,
-    &.hover,
-    &.active {
-        border-color: $primary-hover;
-        border-color: var(--primary-hover);
-        background: $fa;
-        color: $primary-hover;
-        color: var(--primary-hover);
-    }
+  &:hover,
+  &:active,
+  &.hover,
+  &.active {
+    border-color: $primary-hover;
+    border-color: var(--primary-hover);
+    background: $fa;
+    color: $primary-hover;
+    color: var(--primary-hover);
+  }
 }
 
-.btn-basic { @extend %btn-basic;}
+.btn-basic {
+  @extend %btn-basic;
+}
 
 %btn-blue {
-    @extend %btn-basic;
-    background-color: $secondary;
-    background-color: var(--secondary);
-    color: $white;
-    margin: 0;
-    border: 0;
+  @extend %btn-basic;
+  background-color: $secondary;
+  background-color: var(--secondary);
+  color: $white;
+  margin: 0;
+  border: 0;
 
-    &:hover,
-    &:active,
-    &.hover,
-    &.active,
-    &:focus {
-        backgorund: $secondary-darken;
-        background: var(--secondary-darken);
-        transition: all .3s ease-out;
-        color: $white;
-        outline: none;
-    }
+  &:hover,
+  &:active,
+  &.hover,
+  &.active,
+  &:focus {
+    backgorund: $secondary-darken;
+    background: var(--secondary-darken);
+    transition: all 0.3s ease-out;
+    color: $white;
+    outline: none;
+  }
 }
 
-.btn-blue { @extend %btn-blue;}
+.btn-blue {
+  @extend %btn-blue;
+}
 .btn-blue.half {
-    width: 48%;
-    margin-right: 1%;
+  width: 48%;
+  margin-right: 1%;
 }
 
 %btn-admin {
-    @include border-radius(0);
-    @include user-select(none);
-    background: none;
-    border: 1px solid $aaa;
-    color: $c-77;
+  @include border-radius(0);
+  @include user-select(none);
+  background: none;
+  border: 1px solid $aaa;
+  color: $c-77;
+  box-shadow: none;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 300;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.3s ease-out;
+  margin: 0;
+  padding: 6px 10px;
+
+  &:hover,
+  &:active,
+  &.hover,
+  &.active {
+    border-color: $aaa;
+    background: $e1;
+    color: $c-66;
+    transition: all 0.3s ease-out;
+  }
+
+  &:focus {
+    border-color: $aaa;
     box-shadow: none;
     outline: none;
-    white-space: nowrap;
-    cursor: pointer;
-    font-weight: 300;
-    text-align: center;
-    text-transform: uppercase;
-    transition: all .3s ease-out;
-    margin: 0;
-    padding: 6px 10px;
+  }
 
-    &:hover,
-    &:active,
-    &.hover,
-    &.active {
-        border-color: $aaa;
-        background: $e1;
-        color: $c-66;
-        transition: all .3s ease-out;
+  &.delete {
+    border: 0;
+    color: $white;
+    background-color: $brand-danger;
+
+    &:hover {
+      color: $white;
+      background: darken($brand-danger, 10%);
+    }
+  }
+
+  &.success {
+    border: 0;
+    color: $white;
+    background-color: $brand-success;
+
+    &:hover {
+      color: $white;
+      border-color: lighten($brand-success, 10%);
+    }
+  }
+
+  &.cancel {
+    background: none;
+    border: 0;
+  }
+
+  &.warning {
+    border: 0;
+    color: $primary;
+    color: var(--primary);
+    background: none;
+
+    &:hover {
+      color: $primary-hover;
+      color: var(--primary-hover);
     }
 
-    &:focus {
-        border-color: $aaa;
-        box-shadow: none;
-        outline: none;
+    i {
+      margin-left: 6px;
     }
-
-    &.delete {
-        border: 0;
-        color: $white;
-        background-color: $brand-danger;
-
-        &:hover {
-            color: $white;
-            background: darken($brand-danger, 10%);
-        }
-    }
-
-    &.success {
-        border: 0;
-        color: $white;
-        background-color: $brand-success;
-
-        &:hover {
-            color: $white;
-            border-color: lighten($brand-success, 10%);
-        }
-    }
-
-    &.cancel {
-        background: none;
-        border: 0;
-    }
-
-    &.warning {
-        border: 0;
-        color: $primary;
-        color: var(--primary);
-        background: none;
-
-        &:hover {
-            color: $primary-hover;
-            color: var(--primary-hover);
-        }
-
-        i {margin-left: 6px;}
-    }
+  }
 }
 
-.btn-admin {@extend %btn-admin;}
+.btn-admin {
+  @extend %btn-admin;
+}
 
 %btn-admin-blue {
-    @extend %btn-admin;
-    color: $secondary;
-    color: var(--secondary);
-    border: 0;
-    text-transform: uppercase;
-    transition: all .3s ease-out;
+  @extend %btn-admin;
+  color: $secondary;
+  color: var(--secondary);
+  border: 0;
+  text-transform: uppercase;
+  transition: all 0.3s ease-out;
 
-    &:hover,
-    &:active,
-    &.hover,
-    &:focus,
-    &.active {
-        color: $secondary-darken;
-        color: var(--secondary-darken);
-        background: $eee;
-    }
+  &:hover,
+  &:active,
+  &.hover,
+  &:focus,
+  &.active {
+    color: $secondary-darken;
+    color: var(--secondary-darken);
+    background: $eee;
+  }
 }
 
-.btn-admin-blue {@extend %btn-admin-blue;}
+.btn-admin-blue {
+  @extend %btn-admin-blue;
+}
 
 %btn-submit-other {
-    @extend %btn-admin-blue;
+  @extend %btn-admin-blue;
+  border: 2px solid $secondary;
+  border: 2px solid var(--secondary);
+
+  &:active,
+  &:focus {
     border: 2px solid $secondary;
     border: 2px solid var(--secondary);
-
-    &:active,
-    &:focus {
-        border: 2px solid $secondary;
-        border: 2px solid var(--secondary);
-    }
+  }
 }
 .btn-submit-other,
-.btn-modal-submit { @extend %btn-submit-other}
+.btn-modal-submit {
+  @extend %btn-submit-other;
+}
 
 .btn-modal-submit {
-    float: right !important;
+  float: right !important;
 }
 
-.btn-modal-action { @extend %btn-submit-other}
-
-.btn-modal-action { 
-    margin-left: 30px;
+.btn-modal-action {
+  @extend %btn-submit-other;
 }
 
-.btn-modal-danger{
-    border-color: $brand-danger;
-    color: $brand-danger;
+.btn-modal-action {
+  margin-left: 30px;
+}
+
+.btn-modal-danger {
+  border-color: $brand-danger;
+  color: $brand-danger;
 }
 
 .btn-reset {
-    @extend %btn-admin;
-    border: 0;
-    margin-left: 2px;
-    padding: 5px;
-    font-size: 12px;
+  @extend %btn-admin;
+  border: 0;
+  margin-left: 2px;
+  padding: 5px;
+  font-size: 12px;
 }
 
 %btn-filter {
-    @include border-radius(0);
-    margin: 0;
-    color: $aaa;
-    background: $fa;
-    border: 1px solid $c2;
-    border-width: 0 0 0 1px;
-    padding: 6px 23px;
-    text-align: center;
-    display: inline-block;
-    transition: all .3s ease;
+  @include border-radius(0);
+  margin: 0;
+  color: $aaa;
+  background: $fa;
+  border: 1px solid $c2;
+  border-width: 0 0 0 1px;
+  padding: 6px 23px;
+  text-align: center;
+  display: inline-block;
+  transition: all 0.3s ease;
 }
 
-.btn-filter {@extend %btn-filter;}
+.btn-filter {
+  @extend %btn-filter;
+}
 
 .btn-file-folder {
-    @extend %btn-admin;
-    border: 0;
-    background: none;
-    margin-left: 2px;
-    padding: 2px 5px;
-    font-size: 12px;
-    text-transform: none;
+  @extend %btn-admin;
+  border: 0;
+  background: none;
+  margin-left: 2px;
+  padding: 2px 5px;
+  font-size: 12px;
+  text-transform: none;
 
-    &:hover {
-        color: $primary;
-        color: var(--primary);
-        background: none;
-    }
+  &:hover {
+    color: $primary;
+    color: var(--primary);
+    background: none;
+  }
 }
 
 %btn-sort {
-    padding: 7px 20px;
-    background: $fa;
-    color: $c-9e;
-    font-size: 12px;
-    font-weight: 600;
-    text-align: left;
-    transition: all .3s ease;
+  padding: 7px 20px;
+  background: $fa;
+  color: $c-9e;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  transition: all 0.3s ease;
 
-    &:hover,
-    &:focus,
-    &:active,
-    &.active {
-        outline: 0;
-        background: $eee;
-        color: $primary;
-        color: var(--primary);
-        box-sizing: border-box;
-    }
-}
-
-.btn-sort {@extend %btn-sort;}
-
-.btn-tab {
-    @include border-radius(0);
-    background: $f8;
-    border: 1px solid $eee;
-    box-shadow: 1px -1px 3px -1px $transparent1;
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    outline: 0;
+    background: $eee;
     color: $primary;
     color: var(--primary);
-    margin-left: 15px;
+    box-sizing: border-box;
+  }
+}
 
-    &.active {
-        background: $white;
-        border-color: $white;
-        border-left: 1px solid $f4;
-        border-bottom-color: $white;
-        color: $primary;
-        color: var(--primary);
-        box-shadow: 0 -1px 1px -1px $transparent5;
-    }
+.btn-sort {
+  @extend %btn-sort;
+}
 
-    &:hover {
-        background: $white;
-        color: $secondary;
-        color: var(--secondary);
-    }
+.btn-tab {
+  @include border-radius(0);
+  background: $f8;
+  border: 1px solid $eee;
+  box-shadow: 1px -1px 3px -1px $transparent1;
+  color: $primary;
+  color: var(--primary);
+  margin-left: 15px;
 
-    &.active:hover {
-        background: $white;
-        color: $primary;
-        color: var(--primary);
-        cursor: normal;
-        outline: none;
-    }
+  &.active {
+    background: $white;
+    border-color: $white;
+    border-left: 1px solid $f4;
+    border-bottom-color: $white;
+    color: $primary;
+    color: var(--primary);
+    box-shadow: 0 -1px 1px -1px $transparent5;
+  }
+
+  &:hover {
+    background: $white;
+    color: $secondary;
+    color: var(--secondary);
+  }
+
+  &.active:hover {
+    background: $white;
+    color: $primary;
+    color: var(--primary);
+    cursor: normal;
+    outline: none;
+  }
 }
 
 .btn-warn-component {
-    @extend %btn-admin;
-    @include border-radius(0);
-    padding: 5px;
-    transition: all .1s ease;
-    font-size: 12px;
-    display: inline-block;
+  @extend %btn-admin;
+  @include border-radius(0);
+  padding: 5px;
+  transition: all 0.1s ease;
+  font-size: 12px;
+  display: inline-block;
+
+  i {
+    line-height: 30px;
+    margin-left: 0;
+  }
+
+  &.cancel,
+  &.success {
+    background: $brand-danger;
+    color: $white;
+    font-size: 14px;
+    padding: 5px 8px;
+    margin: 7px 5px 5px 0;
+
+    &:hover {
+      background: darken($brand-danger, 10%);
+    }
 
     i {
-        line-height: 30px;
-        margin-left: 0;
+      line-height: 15px;
     }
+  }
 
-    &.cancel,
-    &.success {
-        background: $brand-danger;
-        color: $white;
-        font-size: 14px;
-        padding: 5px 8px;
-        margin: 7px 5px 5px 0;
-
-        &:hover {
-            background: darken($brand-danger, 10%);
-        }
-
-        i {
-            line-height: 15px;
-        }
+  &.success {
+    background: $brand-success;
+    &:hover {
+      background: darken($brand-success, 10%);
     }
-
-    &.success {
-        background: $brand-success;
-        &:hover {background: darken($brand-success, 10%);}
-    }
-
+  }
 }
 
 .btn-warn-load {
-    line-height: 15px;
-    display: inline-block;
-    padding: 5px 8px;
-    margin: 7px 5px 5px 0;
-    text-align: center;
-    min-width: 70px;
+  line-height: 15px;
+  display: inline-block;
+  padding: 5px 8px;
+  margin: 7px 5px 5px 0;
+  text-align: center;
+  min-width: 70px;
 }
 
 .filetree-editfile {
-    .delete-file,
-    .download-file,
-    .view-file {
-        float: left;
-        text-align: center;
-        display: inline-block;
-        padding: 0;
-        margin-bottom: 0;
-        overflow: hidden;
+  .delete-file,
+  .download-file,
+  .view-file {
+    float: left;
+    text-align: center;
+    display: inline-block;
+    padding: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 10px;
+    margin-right: 5px;
+
+    .btn-warn-component,
+    .warning.btn-warn-component {
+      @extend %btn-admin;
+      @include border-radius(0);
+      font-size: 10px;
+      padding: 3px 5px;
+      margin: 0;
+      background: none;
+      border: 0;
+      color: $secondary;
+      color: var(--secondary);
+
+      i {
+        margin: 0 0 0 2px;
+        line-height: 0;
+      }
+
+      &:hover,
+      &:active,
+      &.hover,
+      &.active {
+        background: $e1;
+        color: $c-66;
+        transition: all 0.3s ease-out;
+      }
+
+      &:focus {
+        box-shadow: none;
+        outline: none;
+      }
+
+      &.cancel,
+      &.success {
+        background: $brand-danger;
+        color: $white;
         font-size: 10px;
-        line-height: 10px;
-        margin-right: 5px;
-
-        .btn-warn-component,
-        .warning.btn-warn-component {
-            @extend %btn-admin;
-            @include border-radius(0);
-            font-size: 10px;
-            padding: 3px 5px;
-            margin: 0;
-            background: none;
-            border: 0;
-            color: $secondary;
-            color: var(--secondary);
-
-            i {
-                margin: 0 0 0 2px;
-                line-height: 0;
-            }
-
-            &:hover,
-            &:active,
-            &.hover,
-            &.active {
-                background: $e1;
-                color: $c-66;
-                transition: all .3s ease-out;
-            }
-
-            &:focus {
-                box-shadow: none;
-                outline: none;
-            }
-
-            &.cancel,
-            &.success {
-                background: $brand-danger;
-                color: $white;
-                font-size: 10px;
-                padding: 2px;
-                margin: 0 5px 0 0;
-                box-sizing: border-box;
-                line-height: 10px;
-                width: 18px;
-                height: 15px;
-
-                i {
-                    margin: 0;
-                    line-height: 10px;
-                }
-
-                &:hover {
-                    background: darken($brand-danger, 10%);
-                }
-            }
-
-            &.success {
-                margin-right: 0;
-                background: $brand-success;
-
-                &:hover {
-                    background: darken($brand-success, 10%);
-                }
-            }
-        }
-    }
-
-    .edit-file {
-        @extend %btn-admin;
-        float: left;
-        margin-right: 5px;
-        text-align: center;
-        display: inline-block;
-        overflow: hidden;
-        font-size: 10px;
-        line-height: 10px;
+        padding: 2px;
         margin: 0 5px 0 0;
-        width: auto;
-        position: relative;
-        padding: 3px 5px;
-        border: 0;
-        color: $secondary;
-        color: var(--secondary);
+        box-sizing: border-box;
+        line-height: 10px;
+        width: 18px;
+        height: 15px;
 
         i {
-            margin-left: 0;
-            line-height: 0;
+          margin: 0;
+          line-height: 10px;
         }
 
-        input {
-            @include opacity(0);
-            position: absolute;
-            cursor: pointer;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 0;
-            width: 100%;
+        &:hover {
+          background: darken($brand-danger, 10%);
         }
+      }
+
+      &.success {
+        margin-right: 0;
+        background: $brand-success;
+
+        &:hover {
+          background: darken($brand-success, 10%);
+        }
+      }
     }
-}
+  }
 
-.add-file {
+  .edit-file {
     @extend %btn-admin;
-    font-size: 10px;
-    position: relative;
-    width: 72px;
-    display: block;
+    float: left;
+    margin-right: 5px;
+    text-align: center;
+    display: inline-block;
     overflow: hidden;
-    background: $primary-hover;
-    background: var(--primary-hover);
-    color: $white;
+    font-size: 10px;
+    line-height: 10px;
+    margin: 0 5px 0 0;
+    width: auto;
+    position: relative;
+    padding: 3px 5px;
+    border: 0;
+    color: $secondary;
+    color: var(--secondary);
 
-    &:focus,
-    &:hover,
-    &:active {
-        color: $white;
-        background: $primary;
-        background: var(--primary);
+    i {
+      margin-left: 0;
+      line-height: 0;
     }
 
     input {
-        @include opacity(0);
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 0;
-        padding: 0;
-        font-size: 20px;
-        cursor: pointer;
+      @include opacity(0);
+      position: absolute;
+      cursor: pointer;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      width: 100%;
     }
+  }
+}
+
+.add-file {
+  @extend %btn-admin;
+  font-size: 10px;
+  position: relative;
+  width: 72px;
+  display: block;
+  overflow: hidden;
+  background: $primary-hover;
+  background: var(--primary-hover);
+  color: $white;
+
+  &:focus,
+  &:hover,
+  &:active {
+    color: $white;
+    background: $primary;
+    background: var(--primary);
+  }
+
+  input {
+    @include opacity(0);
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+  }
 }
 
 .fileupload-btn {
-    @extend %btn-blue;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    margin: 0 auto 10px;
-    max-width: 200px;
-    padding: 10px;
-    line-height: 16px;
-    font-size: 16px;
+  @extend %btn-blue;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto 10px;
+  max-width: 200px;
+  padding: 10px;
+  line-height: 16px;
+  font-size: 16px;
 
-    .multifile-select-btn {
-        @include opacity(0);
-        position: absolute;
-        cursor: pointer;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        width: 100%;
-    }
+  .multifile-select-btn {
+    @include opacity(0);
+    position: absolute;
+    cursor: pointer;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+  }
 }
 
 // Toasts
 
 .Toastify__toast {
-    text-align: center;
-    background: $white;
+  text-align: center;
+  background: $white;
+  color: $black;
+  padding: 1em;
+  .Toastify__close-button--error {
     color: $black;
-    padding: 1em;
-    .Toastify__close-button--error {
-        color: $black;
-    }
-    .Toastify__progress-bar {
-        background: $eee;
-    }
+  }
+  .Toastify__progress-bar {
+    background: $eee;
+  }
 }
 
 .Toastify__toast--success {
-    border-top: 4px solid $success;
+  border-top: 4px solid $success;
 }
 
 .Toastify__toast--warning {
-    border-top: 4px solid $warning;
+  border-top: 4px solid $warning;
 }
 
 .Toastify__toast--error {
-    border-top: 4px solid $danger;
+  border-top: 4px solid $danger;
 }
 
 //form ========================
 
 %form-field {
-    @include border-radius(2px);
-    width: 100%;
-    height: auto;
-    font-size: 18px;
-    font-family: $font-family-open;
-    font-family: var(--font-family-open);
-    font-weight: lighter;
-    border: 0;
-    background: $white;
-    box-shadow: inset 0 0 1px 1px $transparent1;
-    padding: 10px;
-    margin: 0;
+  @include border-radius(2px);
+  width: 100%;
+  height: auto;
+  font-size: 18px;
+  font-family: $font-family-open;
+  font-family: var(--font-family-open);
+  font-weight: lighter;
+  border: 0;
+  background: $white;
+  box-shadow: inset 0 0 1px 1px $transparent1;
+  padding: 10px;
+  margin: 0;
 
-    &:focus {
-        outline: 1px solid $transparent9;
-        box-shadow: none;
-    }
+  &:focus {
+    outline: 1px solid $transparent9;
+    box-shadow: none;
+  }
 }
 
-
 .form-group {
-    position: relative;
-    margin: 10px auto;
+  position: relative;
+  margin: 10px auto;
 
-    label {
-        font-size: 10px;
-        color: $c-77;
-        right: 5px;
-        top: 5px;
-        text-transform: uppercase;
+  label {
+    font-size: 10px;
+    color: $c-77;
+    right: 5px;
+    top: 5px;
+    text-transform: uppercase;
+  }
+
+  input {
+    @extend %form-field;
+
+    &:focus {
+      box-shadow: none;
+      outline: 1px solid $transparent9;
     }
+  }
 
-    input {
-        @extend %form-field;
-
-        &:focus {
-            box-shadow: none;
-            outline: 1px solid $transparent9;
-        }
-    }
-
-    .input-group-addon {
-        @include border-radius(0);
-        background: none;
-        box-shadow: none;
-        border: 0;
-        text-transform: uppercase;
-    }
+  .input-group-addon {
+    @include border-radius(0);
+    background: none;
+    box-shadow: none;
+    border: 0;
+    text-transform: uppercase;
+  }
 }
 
 textarea,
 textarea.form-control {
-    @extend %form-field;
-    min-height: 200px;
+  @extend %form-field;
+  min-height: 200px;
 
-    &:focus {
-        outline: 1px solid $transparent9;
-        box-shadow: none;
-    }
+  &:focus {
+    outline: 1px solid $transparent9;
+    box-shadow: none;
+  }
 }
 
 select {
-    @include border-radius(0);
-    width: 100%;
-    height: 45px;
-    border: 1px solid $d9;
-    background: $white;
-    font-size: 16px;
-    text-indent: 5px;
-    color: $a5;
+  @include border-radius(0);
+  width: 100%;
+  height: 45px;
+  border: 1px solid $d9;
+  background: $white;
+  font-size: 16px;
+  text-indent: 5px;
+  color: $a5;
 }
 
-.Select{
-    .Select-multi-value-wrapper{
-        input{
-            height: auto;
-            font-size: 16px;
-            float: none;
-            padding: 8px;
-            &:focus{
-                outline: none;
-            }
-        }
+.Select {
+  .Select-multi-value-wrapper {
+    input {
+      height: auto;
+      font-size: 16px;
+      float: none;
+      padding: 8px;
+      &:focus {
+        outline: none;
+      }
     }
+  }
 }
-
 
 .select-box-style {
-    @include border-radius(0);
-    padding: 5px 20px 5px 10px;
-    margin: 10px 10px 10px 0;
-    color: $black;
-    outline: none;
-    display: inline-block;
-    -webkit-appearance: none;
-    cursor: pointer;
-    border: 1px solid $ccc;
-    background: $white;
+  @include border-radius(0);
+  padding: 5px 20px 5px 10px;
+  margin: 10px 10px 10px 0;
+  color: $black;
+  outline: none;
+  display: inline-block;
+  -webkit-appearance: none;
+  cursor: pointer;
+  border: 1px solid $ccc;
+  background: $white;
 }
 
 .caret-down {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    vertical-align: top;
-    border-top: 4px solid $black;
-    border-right: 4px solid $transparent;
-    border-left: 4px solid $transparent;
-    content: '';
-    position: relative;
-    margin-top: 20px;
-    margin-left: -22px;
-    margin-right: 10px;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: top;
+  border-top: 4px solid $black;
+  border-right: 4px solid $transparent;
+  border-left: 4px solid $transparent;
+  content: '';
+  position: relative;
+  margin-top: 20px;
+  margin-left: -22px;
+  margin-right: 10px;
 }
 
 .file-view-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
 .file-view-iframe-container {
-    position: relative;
-    padding-bottom: 100%;
-    height: 0;
-    overflow: hidden;
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+  overflow: hidden;
 }
 
 .markdown {
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
