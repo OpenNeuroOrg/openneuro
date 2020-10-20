@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import UploaderContext from './uploader-context.js'
 
 const UploadDisclaimer = () => {
-  const [affirmOne, setAffirmOne] = useState()
-  const [affirmTwo, setAffirmTwo] = useState()
+  const [affirmedDefaced, setAffirmedDefaced] = useState(false)
+  const [affirmedConsent, setAffirmedConsent] = useState(false)
   return (
     <UploaderContext.Consumer>
       {uploader => (
@@ -44,8 +44,8 @@ const UploadDisclaimer = () => {
           <label>
             <input
               type="checkbox"
-              onChange={() => setAffirmOne(!affirmOne)}
-              defaultChecked={affirmOne}
+              onChange={() => setAffirmedDefaced(!affirmedDefaced)}
+              defaultChecked={affirmedDefaced}
             />
             &nbsp; All structural scans have been defaced, obscuring any tissue
             on or near the face that could potentially be used to reconstruct
@@ -54,8 +54,8 @@ const UploadDisclaimer = () => {
           <label>
             <input
               type="checkbox"
-              onChange={() => setAffirmTwo(!affirmTwo)}
-              defaultChecked={affirmTwo}
+              onChange={() => setAffirmedConsent(!affirmedConsent)}
+              defaultChecked={affirmedConsent}
             />
             &nbsp; I have explicit participant consent and ethical authorization
             to publish structural scans without defacing.
@@ -63,8 +63,15 @@ const UploadDisclaimer = () => {
           <span className="message">
             <button
               className="fileupload-btn btn-blue"
-              onClick={uploader.upload}
-              disabled={!(affirmOne || affirmTwo)}>
+              onClick={() => {
+                uploader.captureMetadata({
+                  ...uploader.metdata,
+                  affirmedDefaced,
+                  affirmedConsent,
+                })
+                uploader.upload()
+              }}
+              disabled={!(affirmedDefaced || affirmedConsent)}>
               I Agree
             </button>
           </span>

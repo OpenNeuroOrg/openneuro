@@ -29,6 +29,8 @@ export const SUBMIT_METADATA = gql`
       adminUsers
       ages
       modalities
+      affirmedDefaced
+      affirmedConsent
     }
   }
 `
