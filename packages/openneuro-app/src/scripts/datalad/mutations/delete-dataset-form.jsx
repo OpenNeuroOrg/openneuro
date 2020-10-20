@@ -43,7 +43,7 @@ const fields = hasEdit => {
 }
 
 const DeleteDatasetForm = ({ values, onChange, hasEdit }) => (
-  <Form id="metadata-form" className="col-xs-6">
+  <Form id="metadata-form" className="col-sm-6">
     {fields(hasEdit).map(
       (
         { key, label, hoverText, Component, additionalProps, transformValue },

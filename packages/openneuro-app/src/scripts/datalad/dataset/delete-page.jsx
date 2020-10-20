@@ -51,7 +51,7 @@ const DeletePage = ({ dataset, returnToDataset, history, location }) => {
         hideDisabled={false}
         hasEdit={hasEdit}
       />
-      <WarningNote className="col-xs-6">
+      <WarningNote className="col-sm-6">
         <i className="fa fa-asterisk" />
         <p>
           Warning: this action will permanently remove this dataset along with

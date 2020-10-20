@@ -42,7 +42,7 @@ const DatasetTools = ({ dataset, location, history }) => {
   return (
     <>
       {showDeleteModal && (
-        <Overlay>
+        <Overlay className="delete-modal">
           <ModalContainer>
             <ExitButton onClick={() => setShowDeleteModal(false)}>
               &times;
