@@ -5,6 +5,7 @@ import Adapter from 'enzyme-adapter-react-16'
 import moment from 'moment-timezone'
 import fetch from 'jest-fetch-mock'
 import fromEntries from 'object.fromentries'
+import '@testing-library/jest-dom'
 
 Enzyme.configure({ adapter: new Adapter() })
 
