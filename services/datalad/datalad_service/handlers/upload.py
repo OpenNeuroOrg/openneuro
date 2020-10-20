@@ -1,6 +1,6 @@
-import glob
 import logging
 import os
+import pathlib
 import shutil
 
 import falcon
@@ -22,10 +22,13 @@ class UploadResource(object):
             ds = self.store.get_dataset(dataset_id)
             with CommitInfo(ds, name, email):
                 upload_path = self.store.get_upload_path(dataset_id, upload)
-                unlock_files = [os.path.relpath(filename, start=upload_path) for filename in glob.iglob(
-                    upload_path + '**/**', recursive=True) if os.path.islink(os.path.join(ds.path, os.path.relpath(filename, start=upload_path)))]
-                ds.unlock(unlock_files)
-                shutil.copytree(upload_path, ds.path, dirs_exist_ok=True)
+                unlock_files = [os.path.relpath(filename, start=upload_path) for filename in
+                                pathlib.Path(upload_path).glob('**/*') if os.path.islink(
+                    os.path.join(ds.path, os.path.relpath(filename, start=upload_path)))]
+                for filename in pathlib.Path(upload_path).glob('**/*'):
+                    target = os.path.join(ds.path, os.path.relpath(
+                        filename, start=upload_path))
+                    shutil.move(str(filename), target)
                 shutil.rmtree(upload_path)
                 ds.save(unlock_files)
                 update_head(ds, dataset_id, cookies)
