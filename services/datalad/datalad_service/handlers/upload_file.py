@@ -1,10 +1,19 @@
-import os
 import logging
+import os
+import re
 
 import falcon
 
 from datalad_service.common.user import get_user_info
 from datalad_service.handlers.upload import UploadResource
+
+
+def skip_invalid_files(filename):
+    """Ignore certain files during upload (such as dot files, .DS_Store, .git, etc)"""
+    if filename == '.bidsignore':
+        return False
+    else:
+        return re.match(r'^\.|.*\/\.|.*Icon\r', filename)
 
 
 class UploadFileResource(UploadResource):
@@ -48,6 +57,11 @@ class UploadFileResource(UploadResource):
     def on_post(self, req, resp, worker, dataset, upload, filename):
         # Check that this request includes the correct token
         if self._check_access(req, dataset, upload):
+            if skip_invalid_files(filename):
+                # Allow the client to detect this but return 200 status
+                resp.media = {"skipped": True}
+                resp.status = falcon.HTTP_OK
+                return
             upload_path = self.store.get_upload_path(dataset, upload)
             # Save one file
             file_path = os.path.join(upload_path, filename)
