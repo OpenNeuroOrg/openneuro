@@ -56,3 +56,16 @@ export const getUrl = () => {
     )
   }
 }
+
+export const getErrorReporting = () => {
+  const config = JSON.parse(readConfig())
+  if (
+    config.hasOwnProperty('errorReporting') &&
+    config.hasOwnProperty('url') &&
+    config.errorReporting
+  ) {
+    return config.url
+  } else {
+    return false
+  }
+}
