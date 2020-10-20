@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
@@ -80,7 +80,7 @@ const DeletePage = ({ dataset, returnToDataset, history, location }) => {
 
 DeletePage.propTypes = {
   dataset: PropTypes.object,
-  returnToDataset: PropTypes.function,
+  returnToDataset: PropTypes.func,
   history: PropTypes.object,
   location: PropTypes.object,
 }
