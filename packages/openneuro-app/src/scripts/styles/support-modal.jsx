@@ -14,7 +14,7 @@ const Overlay = styled.div`
   transition: opacity 400ms ease-in;
   display: inline-block;
   opacity: 100;
-  z-index: 999;
+  z-index: 2000;
 `
 
 const ModalContainer = styled.div`
