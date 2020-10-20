@@ -688,6 +688,10 @@ h6 {
   }
 }
 
+.fileupload-btn:disabled {
+  background: $brand-danger;
+}
+
 // Toasts
 
 .Toastify__toast {
