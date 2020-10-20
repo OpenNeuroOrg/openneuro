@@ -69,6 +69,7 @@ class UploadValidator extends React.Component {
     const options = {
       config: {
         error: ['NO_AUTHORS'],
+        ignoreSubjectConsistency: true,
       },
     }
     validate(this.props.files, options).then(this.done)

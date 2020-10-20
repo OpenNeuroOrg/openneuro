@@ -40,6 +40,10 @@ commander
     '-n, --ignoreNiftiHeaders',
     'Disregard NIfTI header content during validation',
   )
+  .option(
+    '--ignoreSubjectConsistency',
+    'Skip checking that any given file for one subject is present for all other subjects',
+  )
   .option('-v, --verbose', 'Verbose output')
   .action(upload)
 

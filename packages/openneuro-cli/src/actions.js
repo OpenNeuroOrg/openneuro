@@ -138,6 +138,7 @@ export const upload = (dir, cmd) => {
     const validatorOptions = {
       ignoreWarnings: cmd.ignoreWarnings,
       ignoreNiftiHeaders: cmd.ignoreNiftiHeaders,
+      ignoreSubjectConsistency: cmd.ignoreSubjectConsistency,
       verbose: cmd.verbose,
     }
     if (cmd.dataset) {
