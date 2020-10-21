@@ -75,12 +75,12 @@ deploy_docker_images:
     - docker pull $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA
     - docker pull $CI_REGISTRY_IMAGE/indexer:$CI_COMMIT_SHA
     - docker pull $CI_REGISTRY_IMAGE/server:$CI_COMMIT_SHA
-    - docker pull $CI_REGISTRY_IMAGE/datalad_service:$CI_COMMIT_SHA
+    - docker pull $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA
     - docker tag $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA openneuro/app:$CI_COMMIT_TAG
     - docker tag $CI_REGISTRY_IMAGE/indexer:$CI_COMMIT_SHA openneuro/indexer:$CI_COMMIT_TAG
     - docker tag $CI_REGISTRY_IMAGE/server:$CI_COMMIT_SHA openneuro/server:$CI_COMMIT_TAG
-    - docker tag $CI_REGISTRY_IMAGE/datalad_service:$CI_COMMIT_SHA openneuro/datalad_service:$CI_COMMIT_TAG
+    - docker tag $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA openneuro/datalad-service:$CI_COMMIT_TAG
     - docker push openneuro/app:$CI_COMMIT_TAG
     - docker push openneuro/indexer:$CI_COMMIT_TAG
     - docker push openneuro/server:$CI_COMMIT_TAG
-    - docker push openneuro/datalad_service:$CI_COMMIT_TAG
+    - docker push openneuro/datalad-service:$CI_COMMIT_TAG
