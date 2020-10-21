@@ -115,7 +115,7 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "./jestsetup.js"
+      "./jestsetup.ts"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
