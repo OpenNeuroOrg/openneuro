@@ -105,8 +105,10 @@ export const downloadFile = async (destination, filename, fileUrl) => {
   }
 }
 
-export const getDownload = (destination, datasetId, tag) =>
+export const getDownload = (destination, datasetId, tag, apmTransaction) =>
   getDownloadMetadata(datasetId, tag).then(async body => {
+    apmTransaction.addLabels({ datasetId, tag })
+    const apmDownload = apmTransaction.startSpan('download')
     checkDestination(destination)
     for (const file of body.files) {
       if (testFile(destination, file.filename, file.size)) {
@@ -119,4 +121,5 @@ export const getDownload = (destination, datasetId, tag) =>
         console.log(`Skipping present file "${file.filename}"`)
       }
     }
+    apmDownload.end()
   })

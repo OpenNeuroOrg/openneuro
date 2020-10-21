@@ -21,6 +21,7 @@
     "cli-progress": "^3.8.2",
     "commander": "^2.15.1",
     "cross-fetch": "^3.0.5",
+    "elastic-apm-node": "^3.7.0",
     "esm": "^3.0.16",
     "fetch-h2": "^2.5.1",
     "find-config": "^1.0.0",

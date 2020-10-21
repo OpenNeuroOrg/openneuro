@@ -2,6 +2,7 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import { createClient } from 'openneuro-client'
+import { apm } from './apm.js'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
@@ -28,7 +29,11 @@ export const login = () => {
       type: 'list',
       name: 'url',
       message: 'Choose an OpenNeuro instance to use.',
-      choices: ['https://openneuro.org/', 'https://openneuro.staging.sqm.io/'],
+      choices: [
+        'https://openneuro.org/',
+        'https://openneuro.staging.sqm.io/',
+        'http://localhost:9876/',
+      ],
       default: 'https://openneuro.org/',
     })
     .then(async answers =>
@@ -41,10 +46,23 @@ export const login = () => {
         }),
       ),
     )
+    .then(async answers =>
+      Object.assign(
+        answers,
+        await inquirer.prompt({
+          type: 'confirm',
+          name: 'errorReporting',
+          message:
+            'Do you want to enable error reporting to help improve openneuro-cli?',
+        }),
+      ),
+    )
     .then(saveConfig)
 }
 
 const uploadDataset = async (dir, datasetId, validatorOptions) => {
+  const apmTransaction = apm && apm.startTransaction('upload', 'custom')
+  apmTransaction.addLabels({ datasetId })
   const client = configuredClient()
   await validation(dir, validatorOptions)
   let remoteFiles = []
@@ -58,17 +76,27 @@ const uploadDataset = async (dir, datasetId, validatorOptions) => {
     datasetId = await createDataset(client, dir)
     remoteFiles = [] // New dataset has no remote files
   }
+  const apmPrepareUploadSpan =
+    apmTransaction && apmTransaction.startSpan('prepareUpload')
   const preparedUpload = await prepareUpload(client, dir, {
     datasetId,
     remoteFiles,
   })
+  apmPrepareUploadSpan.end()
   if (preparedUpload) {
     if (preparedUpload.files.length > 1) {
+      const apmUploadFilesSpan =
+        apmTransaction && apmTransaction.startSpan('uploadFiles')
       await uploadFiles(preparedUpload)
+      apmUploadFilesSpan && apmUploadFilesSpan.end()
+      const apmFinishUploadSpan =
+        apmTransaction && apmTransaction.startSpan('finishUpload')
       await finishUpload(client, preparedUpload.id)
+      apmUploadFilesSpan && apmFinishUploadSpan.end()
     } else {
       console.log('No files remaining to upload, exiting.')
     }
+    apmTransaction && apmTransaction.end()
     return datasetId
   }
 }
@@ -201,19 +229,21 @@ const promptTags = snapshots =>
  * @param {Object} cmd
  */
 export const download = (datasetId, destination, cmd) => {
+  const apmTransaction = apm.startTransaction('download', 'custom')
   if (!cmd.draft && !cmd.snapshot) {
     const client = configuredClient()
     return getSnapshots(client)(datasetId).then(({ data }) => {
       if (data.dataset && data.dataset.snapshots) {
         const tags = data.dataset.snapshots.map(snap => snap.tag)
         return promptTags(tags).then(choices =>
-          getDownload(destination, datasetId, choices.tag),
+          getDownload(destination, datasetId, choices.tag, apmTransaction),
         )
       }
     })
   } else if (cmd.snapshot) {
-    getDownload(destination, datasetId, cmd.snapshot)
+    getDownload(destination, datasetId, cmd.snapshot, apmTransaction)
   } else {
-    getDownload(destination, datasetId)
+    getDownload(destination, datasetId, null, apmTransaction)
   }
+  apmTransaction.end()
 }
