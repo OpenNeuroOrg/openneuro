@@ -23,6 +23,8 @@ const metadataSchema = new mongoose.Schema({
   seniorAuthor: String,
   grantFunderName: String,
   grantIdentifier: String,
+  affirmedDefaced: Boolean,
+  affirmedConsent: Boolean,
 })
 
 metadataSchema.index({ datasetId: 1 }, { unique: true })

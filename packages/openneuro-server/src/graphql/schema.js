@@ -201,6 +201,8 @@ export const typeDefs = `
     modalities: [String]
     grantFunderName: String
     grantIdentifier: String
+    affirmedDefaced: Boolean
+    affirmedConsent: Boolean
   }
 
   # Validation updated message
@@ -566,6 +568,8 @@ export const typeDefs = `
     modalities: [String]
     grantFunderName: String
     grantIdentifier: String
+    affirmedDefaced: Boolean
+    affirmedConsent: Boolean
   }
 `
 
