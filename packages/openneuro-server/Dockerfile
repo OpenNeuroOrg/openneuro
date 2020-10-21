@@ -9,4 +9,4 @@ HEALTHCHECK --interval=10s --retries=10 CMD curl -f 'http://localhost:8111' || e
 ENV NODE_OPTIONS=--max_old_space_size=2048
 
 # start server
-CMD ["node", "/srv/dist/src/server.js"]
+CMD ["node", "/srv/packages/openneuro-server/dist/src/server.js"]
