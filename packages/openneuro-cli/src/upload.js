@@ -56,7 +56,7 @@ export const validation = (dir, validatorOptions) => {
  * @param {Object} options Query parameters for prepareUpload mutation
  * @param {string} options.datasetId Accession number
  * @param {Array<object>} options.remoteFiles An array of files available in HEAD, matching files are skipped
- * @returns {Promise<Object>} prepareUpload mutation fields {id, token, files}
+ * @returns {Promise<Object|void>} prepareUpload mutation fields {id, token, files}
  */
 export const prepareUpload = async (
   client,
@@ -92,33 +92,38 @@ export const prepareUpload = async (
       )}`,
     )
   }
-  await inquirer.prompt({
+  const answer = await inquirer.prompt({
     type: 'confirm',
     name: 'start',
     message: 'Begin upload?',
     default: true,
   })
-  console.log(
-    '=======================================================================',
-  )
-  // Filter out local paths in mutation
-  const mutationFiles = files.map(f => ({ filename: f.filename, size: f.size }))
-  const { data } = await client.mutate({
-    mutation: uploads.prepareUpload,
-    variables: {
-      datasetId,
-      uploadId: uploads.hashFileList(datasetId, mutationFiles),
-    },
-  })
-  const id = data.prepareUpload.id
-  // eslint-disable-next-line no-console
-  console.log(`Starting a new upload (${id}) to dataset: '${datasetId}'`)
-  return {
-    id,
-    datasetId: data.prepareUpload.datasetId,
-    token: data.prepareUpload.token,
-    files,
-    endpoint: data.prepareUpload.endpoint,
+  if (answer.start) {
+    console.log(
+      '=======================================================================',
+    )
+    // Filter out local paths in mutation
+    const mutationFiles = files.map(f => ({
+      filename: f.filename,
+      size: f.size,
+    }))
+    const { data } = await client.mutate({
+      mutation: uploads.prepareUpload,
+      variables: {
+        datasetId,
+        uploadId: uploads.hashFileList(datasetId, mutationFiles),
+      },
+    })
+    const id = data.prepareUpload.id
+    // eslint-disable-next-line no-console
+    console.log(`Starting a new upload (${id}) to dataset: '${datasetId}'`)
+    return {
+      id,
+      datasetId: data.prepareUpload.datasetId,
+      token: data.prepareUpload.token,
+      files,
+      endpoint: data.prepareUpload.endpoint,
+    }
   }
 }
 

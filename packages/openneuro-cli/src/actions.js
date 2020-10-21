@@ -17,13 +17,6 @@ export const configuredClient = () =>
   })
 
 /**
- * Handle login answers returned by inquirer
- *
- * @param {Object} answers
- */
-export const loginAnswers = answers => answers
-
-/**
  * Login action to save an auth key locally
  *
  * The user can do this manually as well, to allow for automation
@@ -48,7 +41,6 @@ export const login = () => {
         }),
       ),
     )
-    .then(loginAnswers)
     .then(saveConfig)
 }
 
@@ -70,13 +62,15 @@ const uploadDataset = async (dir, datasetId, validatorOptions) => {
     datasetId,
     remoteFiles,
   })
-  if (preparedUpload.files.length > 1) {
-    await uploadFiles(preparedUpload)
-    await finishUpload(client, preparedUpload.id)
-  } else {
-    console.log('No files remaining to upload, exiting.')
+  if (preparedUpload) {
+    if (preparedUpload.files.length > 1) {
+      await uploadFiles(preparedUpload)
+      await finishUpload(client, preparedUpload.id)
+    } else {
+      console.log('No files remaining to upload, exiting.')
+    }
+    return datasetId
   }
-  return datasetId
 }
 
 const notifyUploadComplete = (update, datasetId) => {
@@ -143,9 +137,11 @@ export const upload = (dir, cmd) => {
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions).then(() =>
-        notifyUploadComplete('update', cmd.dataset),
-      )
+      uploadDataset(dir, cmd.dataset, validatorOptions).then(datasetId => {
+        if (datasetId) {
+          notifyUploadComplete('update', cmd.dataset)
+        }
+      })
     } else {
       inquirer
         .prompt({
@@ -156,11 +152,13 @@ export const upload = (dir, cmd) => {
         })
         .then(({ yes }) => {
           if (yes) {
-            return uploadDataset(
-              dir,
-              cmd.dataset,
-              validatorOptions,
-            ).then(datasetId => notifyUploadComplete(false, datasetId))
+            return uploadDataset(dir, cmd.dataset, validatorOptions).then(
+              datasetId => {
+                if (datasetId) {
+                  notifyUploadComplete(false, datasetId)
+                }
+              },
+            )
           }
         })
         .catch(err => {
