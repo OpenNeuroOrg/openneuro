@@ -32,6 +32,7 @@ const notificationSchema = new mongoose.Schema({
       siteUrl: String,
     },
   },
+  notificationLock: { type: Date, default: null },
 })
 
 const Notification = mongoose.model('Notification', notificationSchema)
