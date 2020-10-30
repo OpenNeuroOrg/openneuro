@@ -145,6 +145,8 @@ export const typeDefs = `
     prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata
     # Add files from a completed upload to the dataset draft
     finishUpload(uploadId: ID!): Boolean
+    # Drop caches for a given dataset - requires site admin access
+    cacheClear(datasetId: ID!): Boolean
   }
 
   input UploadFile {
