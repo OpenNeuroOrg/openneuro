@@ -8,6 +8,7 @@ import { user } from './user.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
 import { metadata } from './metadata.js'
+import { history } from './history.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import Deletion from '../../models/deletion.js'
@@ -280,6 +281,7 @@ const Dataset = {
   starred,
   onBrainlife,
   metadata,
+  history,
 }
 
 export default Dataset

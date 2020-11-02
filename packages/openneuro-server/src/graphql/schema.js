@@ -313,6 +313,8 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Dataset Metadata
     metadata: Metadata
+    # Return the version history for a dataset (git log)
+    history: [String]
   }
 
   # Ephemeral draft or working tree for a dataset

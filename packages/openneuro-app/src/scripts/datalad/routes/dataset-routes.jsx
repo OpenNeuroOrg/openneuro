@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
+import AdminDataset from './admin.jsx'
 import DatasetContent from './dataset-content.jsx'
 import SnapshotContent from './snapshot-content.jsx'
 import DownloadDataset from '../download/download-dataset.jsx'
@@ -33,6 +34,12 @@ const DatasetRoutes = ({ dataset, error }) => {
         exact
         path="/datasets/:datasetId/download"
         component={DownloadDataset}
+      />
+      <Route
+        name="admin"
+        exact
+        path="/datasets/:datasetId/admin"
+        component={AdminDataset}
       />
       <Route
         name="publish"
