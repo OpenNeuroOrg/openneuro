@@ -707,6 +707,13 @@ h6 {
   }
 }
 
+.Toastify__toast--default {
+  border-top: 4px solid $c-33;
+  .Toastify__progress-bar {
+    background: $secondary;
+  }
+}
+
 .Toastify__toast--success {
   border-top: 4px solid $success;
 }

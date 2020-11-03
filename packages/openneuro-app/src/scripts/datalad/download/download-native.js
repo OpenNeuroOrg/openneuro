@@ -1,6 +1,10 @@
 import * as Sentry from '@sentry/browser'
 import { trackDownload } from './track-download.js'
 import {
+  downloadToast,
+  downloadToastUpdate,
+  downloadToastDone,
+  downloadAbortToast,
   nativeErrorToast,
   permissionsToast,
   downloadCompleteToast,
@@ -29,6 +33,13 @@ export const openFileTree = async (initialDirectoryHandle, path) => {
   return directoryHandle.getFileHandle(filename, { create: true })
 }
 
+class DownloadAbortError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'DownloadAbortError'
+  }
+}
+
 /**
  * Downloads a dataset via the native file API, skipping expensive compression if the browser supports it
  * @param {string} datasetId Accession number string for a dataset
@@ -36,17 +47,31 @@ export const openFileTree = async (initialDirectoryHandle, path) => {
  */
 export const downloadNative = (datasetId, snapshotTag) => async () => {
   const uri = downloadUri(datasetId, snapshotTag)
-  const filesToDownload = await (await fetch(uri + '?skip-bundle')).json()
+  const { files: filesToDownload } = await (
+    await fetch(uri + '?skip-bundle')
+  ).json()
+
   // Try trackDownload but don't worry if it fails
   try {
     trackDownload(datasetId, snapshotTag)
   } catch (err) {
     Sentry.captureException(err)
   }
+  let downloadCanceled = false
+  let toastId
   try {
     // Open user selected directory
     const dirHandle = await window.showDirectoryPicker()
-    for (const file of filesToDownload.files) {
+    toastId = downloadToast(
+      dirHandle.name,
+      datasetId,
+      snapshotTag,
+      () => (downloadCanceled = true),
+    )
+    for (const [index, file] of filesToDownload.entries()) {
+      if (downloadCanceled) {
+        throw new DownloadAbortError('Download canceled by user request')
+      }
       const fileHandle = await openFileTree(dirHandle, file.filename)
       // Skip files which are already complete
       if (fileHandle.size == file.size) continue
@@ -57,15 +82,22 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
       } else {
         return requestFailureToast()
       }
+      downloadToastUpdate(toastId, index / filesToDownload.length)
     }
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
-    if (err.name === 'NoModificationAllowedError') {
+    if (err.name === 'AbortError') {
+      return
+    } else if (err.name === 'DownloadAbortError') {
+      downloadAbortToast()
+    } else if (err.name === 'NotAllowedError') {
       permissionsToast()
     } else {
       // Some unknown issue occurred (out of disk space, disk caught fire, etc...)
       nativeErrorToast()
     }
     Sentry.captureException(err)
+  } finally {
+    downloadToastDone(toastId)
   }
 }
