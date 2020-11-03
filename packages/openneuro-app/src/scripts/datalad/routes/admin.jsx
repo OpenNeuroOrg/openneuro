@@ -18,17 +18,17 @@ export function hashDatasetToRange(dataset, range) {
 
 const AdminDataset = ({ dataset }) => (
   <div className="dataset-form">
-    <div className="col-xs-12 dataset-form-header">
+    <div className="col-lg-12 dataset-form-header">
       <div className="form-group">
         <label>Admin</label>
       </div>
-      <div className="col-xs-6">
+      <div className="col-lg-6">
         <h3>Draft Head</h3> {dataset.draft.head}
       </div>
       <DatasetHistory datasetId={dataset.id} />
       <hr />
-      <div className="col-xs-12 dataset-form-controls">
-        <div className="col-xs-12 modal-actions">
+      <div className="col-lg-12 dataset-form-controls">
+        <div className="col-lg-12 modal-actions">
           <Link to={`/datasets/${dataset.id}`}>
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
