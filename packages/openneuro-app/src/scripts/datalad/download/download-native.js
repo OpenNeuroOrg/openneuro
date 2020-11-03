@@ -88,7 +88,7 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
   } catch (err) {
     if (err.name === 'DownloadAbortError') {
       downloadAbortToast()
-    } else if (err.name === 'NoModificationAllowedError') {
+    } else if (err.name === 'NotAllowedError') {
       permissionsToast()
     } else {
       // Some unknown issue occurred (out of disk space, disk caught fire, etc...)
