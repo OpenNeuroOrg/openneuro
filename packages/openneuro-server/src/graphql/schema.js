@@ -314,9 +314,24 @@ export const typeDefs = `
     # Dataset Metadata
     metadata: Metadata
     # Return the version history for a dataset (git log)
-    history: [String]
+    history: [DatasetCommit]
     # Worker assignment
     worker: String
+  }
+
+  type DatasetCommit {
+    # Git commit hash
+    id: ID!
+    # Commit time
+    date: DateTime
+    # Author string
+    authorName: String
+    # Author email
+    authorEmail: String
+    # Commit message
+    message: String
+    # Associated commit references (tags or branches)
+    references: String
   }
 
   # Ephemeral draft or working tree for a dataset

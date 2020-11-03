@@ -23,7 +23,7 @@ const AdminDataset = ({ dataset }) => (
         <label>Admin</label>
       </div>
       <div className="col-xs-6">
-        <h4>Draft Head</h4> {dataset.draft.head}
+        <h3>Draft Head</h3> {dataset.draft.head}
       </div>
       <DatasetHistory datasetId={dataset.id} />
       <hr />
