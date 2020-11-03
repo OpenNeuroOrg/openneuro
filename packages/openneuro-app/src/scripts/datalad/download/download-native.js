@@ -86,7 +86,9 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
     }
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
-    if (err.name === 'DownloadAbortError') {
+    if (err.name === 'AbortError') {
+      return
+    } else if (err.name === 'DownloadAbortError') {
       downloadAbortToast()
     } else if (err.name === 'NotAllowedError') {
       permissionsToast()
