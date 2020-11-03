@@ -90,7 +90,7 @@ export class UploadClient extends React.Component {
     return ({ files }) => {
       this.props.client
         .query({
-          query: datasets.getUntrackedFiles,
+          query: datasets.getDraftFiles,
           variables: { id: datasetId },
         })
         .then(({ data }) => {
