@@ -1,7 +1,7 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 
+import subHours from 'date-fns/sub_hours'
 import config from '../config'
-import cron from 'cron'
 import email from './email'
 import request from 'superagent'
 import Notification from '../models/notification'
@@ -22,8 +22,6 @@ function noop() {
 // public api ---------------------------------------------
 
 const notifications = {
-  cron: null,
-
   /**
    * Add
    *
@@ -340,40 +338,39 @@ const notifications = {
   },
 
   initCron() {
-    // notifications cron -------------------------------------
-    notifications.cron = new cron.CronJob(
-      '0 */1 * * * *',
-      () => {
-        Notification.find({}).exec((err, docs) => {
-          if (err) {
-            console.log(
-              'NOTIFICATION ERROR - Could not find notifcations collection',
-            )
-          } else {
-            for (const notification of docs) {
-              notifications.send(notification, (err, response) => {
-                if (!err) {
-                  notification.remove()
-                  if (response && response.messageId) {
-                    new MailgunIdentifier({
-                      messageId: response.messageId,
-                    }).save(() => {
+    setInterval(() => {
+      // After one hour, retry a notification even if we have a lock
+      Notification.findOneAndUpdate(
+        { notificationLock: { $lte: subHours(Date.now(), 1).toDate() } },
+        { $set: { notificationLock: Date.now() } },
+      ).exec((err, docs) => {
+        if (err) {
+          console.log(
+            'NOTIFICATION ERROR - Could not find notifcations collection',
+          )
+        } else {
+          for (const notification of docs) {
+            notifications.send(notification, (err, response) => {
+              if (!err) {
+                notification.remove()
+                if (response && response.messageId) {
+                  new MailgunIdentifier({
+                    messageId: response.messageId,
+                  }).save(err => {
+                    if (err) {
                       throw `failed to save mailgunIdentifier ${response.messageId}`
-                    })
-                  }
-                } else {
-                  console.log('NOTIFICATION ERROR ----------')
-                  console.log(err)
+                    }
+                  })
                 }
-              })
-            }
+              } else {
+                console.log('NOTIFICATION ERROR ----------')
+                console.log(err)
+              }
+            })
           }
-        })
-      },
-      null,
-      true,
-      'America/Los_Angeles',
-    )
+        }
+      })
+    }, 3600000)
   },
 }
 
