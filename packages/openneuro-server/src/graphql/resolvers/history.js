@@ -1,7 +1,9 @@
+import fetch from 'node-fetch'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 
 export const history = async obj => {
-  const historyUrl = `${getDatasetWorker(
+  const datasetId = obj.id
+  const historyUrl = `http://${getDatasetWorker(
     datasetId,
   )}/datasets/${datasetId}/history`
   const resp = await fetch(historyUrl)

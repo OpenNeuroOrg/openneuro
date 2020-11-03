@@ -22,8 +22,7 @@ const CacheClear = ({ datasetId }) => (
               },
             })
           }}>
-          <i className="fa fa-trash" />
-          Delete Dataset Cache
+          <i className="fa fa-eraser" /> Delete Dataset Cache
         </button>
       </span>
     )}

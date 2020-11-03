@@ -315,11 +315,12 @@ export const typeDefs = `
     metadata: Metadata
     # Return the version history for a dataset (git log)
     history: [String]
+    # Worker assignment
+    worker: String
   }
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
-    # The draft id is the git hexsha of the most recent committed draft
     id: ID
     # Which dataset this draft is related to
     dataset: Dataset
@@ -337,6 +338,8 @@ export const typeDefs = `
     readme: String
     # Uploads in progress or recently completed
     uploads: [UploadMetadata]
+    # Git commit hash
+    head: String
   }
 
   # Tagged snapshot of a draft

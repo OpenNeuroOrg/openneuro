@@ -39,7 +39,7 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="admin"
         exact
         path="/datasets/:datasetId/admin"
-        component={AdminDataset}
+        component={() => <AdminDataset dataset={dataset} />}
       />
       <Route
         name="publish"

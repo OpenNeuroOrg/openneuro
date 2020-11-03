@@ -6,6 +6,7 @@ import { getDraftFiles, updateDatasetRevision } from '../../datalad/draft.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { filterFiles } from '../../datalad/files.js'
 import { createSnapshot } from '../../datalad/snapshots.js'
+import Dataset from '../../models/dataset.js'
 import Snapshot from '../../models/snapshot.js'
 
 // A draft must have a dataset parent
@@ -40,6 +41,7 @@ const draft = {
   modified: obj => obj.modified,
   description,
   readme,
+  head: async obj => (await Dataset.findOne({ id: obj.id }).exec()).revision,
 }
 
 export default draft

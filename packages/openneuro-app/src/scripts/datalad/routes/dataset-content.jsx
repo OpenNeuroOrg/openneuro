@@ -138,7 +138,7 @@ const DatasetContent = ({ dataset }) => {
             files={dataset.draft.files}
             editMode={hasEdit}
           />
-          <DatasetGitHash gitHash={dataset.draft.id} />
+          <DatasetGitHash gitHash={dataset.draft.head} />
         </div>
       </LoggedIn>
       {dataset.snapshots && !hasEdit && (
