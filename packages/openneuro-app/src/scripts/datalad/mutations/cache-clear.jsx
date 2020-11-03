@@ -18,7 +18,7 @@ const CacheClear = ({ datasetId }) => (
           onClick={async () => {
             await cacheClear({
               variables: {
-                id: datasetId,
+                datasetId,
               },
             })
           }}>
