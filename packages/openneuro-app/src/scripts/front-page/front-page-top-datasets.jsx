@@ -5,7 +5,8 @@ import gql from 'graphql-tag'
 import Spinner from '../common/partials/spinner.jsx'
 import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import parseISO from 'date-fns/parseISO'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import styled from '@emotion/styled'
 import Uppercase from '../styles/uppercase.jsx'
 
@@ -130,7 +131,7 @@ const FrontPageTopRecent = ({ datasets }) => {
           <div className="col-sm-4">
             <FontWeight600>
               <Uppercase>
-                {distanceInWordsToNow(node.publishDate)} ago
+                {formatDistanceToNow(parseISO(node.publishDate))} ago
               </Uppercase>
             </FontWeight600>
           </div>

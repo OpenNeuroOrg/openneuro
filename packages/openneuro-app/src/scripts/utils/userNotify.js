@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import isFuture from 'date-fns/is_future'
+import isFuture from 'date-fns/isFuture'
 
 export const expiringBanner = (message, expiration) => {
   if (isFuture(expiration)) {

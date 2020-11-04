@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import userUtil from '../../utils/user.js'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import parseISO from 'date-fns/parseISO'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Editor, EditorState, convertFromRaw } from 'draft-js'
 import CommentEditor from '../comments/comment-editor.jsx'
 import DeleteComment from '../mutations/delete-comment.jsx'
@@ -17,8 +18,8 @@ const Comment = ({ datasetId, data, children }) => {
     <>
       <div className="comment">
         <div className="row comment-header">
-          {`By ${data.user.email} - ${distanceInWordsToNow(
-            data.createDate,
+          {`By ${data.user.email} - ${formatDistanceToNow(
+            parseISO(data.createDate),
           )} ago`}
         </div>
         <div className="row comment-body">

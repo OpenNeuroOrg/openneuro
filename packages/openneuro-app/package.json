@@ -30,7 +30,7 @@
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "core-js": "^3.3.2",
-    "date-fns": "^1.29.0",
+    "date-fns": "^2.16.1",
     "draft-js": "^0.10.5",
     "enzyme-to-json": "^3.3.5",
     "eslint": "^6.5.1",
