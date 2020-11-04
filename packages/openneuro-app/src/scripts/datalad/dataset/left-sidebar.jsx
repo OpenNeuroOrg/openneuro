@@ -27,7 +27,7 @@ export const SidebarRow = ({
           <div className=" col-xs-12">
             <span className="dataset-type">{version}</span>
             <span className="date-modified">
-              {format(parseISO(modified), 'yyyy-mm-dd')}
+              {format(parseISO(modified), 'yyyy-MM-dd')}
             </span>
             <span className="icons" />
           </div>
