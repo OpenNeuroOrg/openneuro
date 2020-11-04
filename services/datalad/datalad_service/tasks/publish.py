@@ -9,12 +9,14 @@ from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
+from datalad_service.common.openneuro import clear_dataset_cache
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
 from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
 import boto3
 from github import Github
+
 
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
@@ -115,6 +117,7 @@ def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
         if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
             github_remote = github_sibling(ds, dataset_id, siblings)
             publish_target(ds, realm.github_remote, tag)
+    clear_dataset_cache(dataset, cookies)
 
 
 def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
@@ -127,9 +130,8 @@ def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
     # Create the sibling if it does not exist
     s3_sibling(ds, siblings)
 
-    # Export to S3 and GitHub in another worker
-    publish_s3_async(store, dataset, snapshot,
-                     realm.s3_remote, realm.s3_bucket, cookies)
+    # Export to S3
+    publish_target(ds, realm.s3_remote, snapshot)
 
     # Public publishes to GitHub
     if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
@@ -137,17 +139,14 @@ def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
         github_sibling(ds, dataset, siblings)
         publish_github_async(store, dataset, snapshot, realm.github_remote)
 
-
-def publish_s3_async(store, dataset, snapshot, s3_remote, s3_bucket, cookies):
-    """Actual S3 remote push. Can run on another queue, so it's its own task."""
-    ds = store.get_dataset(dataset)
-    publish_target(ds, s3_remote, snapshot)
+    clear_dataset_cache(dataset, cookies)
 
 
 def publish_github_async(store, dataset, snapshot, github_remote):
     """Actual Github remote push. Can run on another queue, so it's its own task."""
     ds = store.get_dataset(dataset)
     publish_target(ds, github_remote, snapshot)
+
 
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
@@ -163,7 +162,8 @@ def delete_s3_sibling(dataset_id, siblings, realm):
             for response in paginator.paginate(Bucket=realm.s3_bucket, Prefix=f'{dataset_id}/'):
                 versions = response.get('Versions', [])
                 versions.extend(response.get('DeleteMarkers', []))
-                object_delete_list.extend([{ 'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
+                object_delete_list.extend(
+                    [{'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
             for i in range(0, len(object_delete_list), 1000):
                 client.delete_objects(
                     Bucket=realm.s3_bucket,
@@ -173,7 +173,9 @@ def delete_s3_sibling(dataset_id, siblings, realm):
                     }
                 )
         except Exception as e:
-            raise Exception(f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
+            raise Exception(
+                f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
+
 
 def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
@@ -183,7 +185,9 @@ def delete_github_sibling(dataset_id):
         r = next(r for r in repos if r.name == dataset_id)
         r.delete()
     except StopIteration as e:
-        raise Exception(f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
+        raise Exception(
+            f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
+
 
 def delete_siblings(store, dataset_id):
     ds = store.get_dataset(dataset_id)
@@ -198,6 +202,7 @@ def delete_siblings(store, dataset_id):
 
     for remote in remotes:
         ds.siblings('remove', remote)
+
 
 def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
     """
