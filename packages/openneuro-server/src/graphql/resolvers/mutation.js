@@ -24,7 +24,7 @@ import { addComment, editComment, deleteComment } from './comment.js'
 import { subscribeToNewsletter } from './newsletter'
 import { addMetadata } from './metadata.js'
 import { prepareUpload, finishUpload } from './upload.js'
-import { cacheClear } from './cache.ts'
+import { cacheClear } from './cache'
 
 const Mutation = {
   createDataset,
