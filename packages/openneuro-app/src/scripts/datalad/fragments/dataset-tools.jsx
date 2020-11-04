@@ -10,6 +10,7 @@ import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
 import DeletePage from '../dataset/delete-page.jsx'
+import AdminUser from '../../authentication/admin-user.jsx'
 import {
   Overlay,
   ModalContainer,
@@ -112,6 +113,19 @@ const DatasetTools = ({ dataset, location, history }) => {
             </div>
             <div role="presentation" className="tool">
               <StarDataset datasetId={dataset.id} starred={dataset.starred} />
+            </div>
+            <div role="presentation" className="tool">
+              <AdminUser>
+                <WarnButton
+                  tooltip="Admin Tools"
+                  icon="fa-magic"
+                  warn={false}
+                  action={cb => {
+                    toolRedirect(history, rootPath, 'admin')
+                    cb()
+                  }}
+                />
+              </AdminUser>
             </div>
             {isMobile && (
               <div role="presentation" className="tool">

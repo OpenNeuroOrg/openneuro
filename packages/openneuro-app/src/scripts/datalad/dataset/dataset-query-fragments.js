@@ -7,6 +7,7 @@ export const DRAFT_FRAGMENT = gql`
       id
       modified
       readme
+      head
       description {
         Name
         Authors

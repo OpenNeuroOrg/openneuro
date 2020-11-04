@@ -8,12 +8,14 @@ import { user } from './user.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
 import { metadata } from './metadata.js'
+import { history } from './history.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 import Deletion from '../../models/deletion.js'
 import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
 import { UpdatedFile } from '../utils/file.js'
+import { getDatasetWorker } from '../../libs/datalad-service.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -258,6 +260,8 @@ export const onBrainlife = async dataset => {
   }
 }
 
+const worker = obj => getDatasetWorker(obj.id)
+
 /**
  * Dataset object
  */
@@ -280,6 +284,8 @@ const Dataset = {
   starred,
   onBrainlife,
   metadata,
+  history,
+  worker,
 }
 
 export default Dataset

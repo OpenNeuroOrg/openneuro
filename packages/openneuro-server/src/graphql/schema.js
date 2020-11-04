@@ -313,11 +313,29 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Dataset Metadata
     metadata: Metadata
+    # Return the version history for a dataset (git log)
+    history: [DatasetCommit]
+    # Worker assignment
+    worker: String
+  }
+
+  type DatasetCommit {
+    # Git commit hash
+    id: ID!
+    # Commit time
+    date: DateTime
+    # Author string
+    authorName: String
+    # Author email
+    authorEmail: String
+    # Commit message
+    message: String
+    # Associated commit references (tags or branches)
+    references: String
   }
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
-    # The draft id is the git hexsha of the most recent committed draft
     id: ID
     # Which dataset this draft is related to
     dataset: Dataset
@@ -335,6 +353,8 @@ export const typeDefs = `
     readme: String
     # Uploads in progress or recently completed
     uploads: [UploadMetadata]
+    # Git commit hash
+    head: String
   }
 
   # Tagged snapshot of a draft
