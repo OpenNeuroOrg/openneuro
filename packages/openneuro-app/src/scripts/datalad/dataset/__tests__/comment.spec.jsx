@@ -13,6 +13,7 @@ describe('Comment component', () => {
           id: '9001',
           text: emptyState,
           user: { id: '1234', email: 'example@example.com' },
+          createDate: new Date('2019-04-02T19:56:41.222Z').toISOString(),
         }}
       />,
     )

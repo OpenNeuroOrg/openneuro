@@ -4,7 +4,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import parseISO from 'date-fns/parseISO'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import Input from '../common/forms/input.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import WarnButton from '../common/forms/warn-button.jsx'
@@ -230,13 +231,13 @@ class Users extends React.Component {
           <div className="summary-data">
             <span>
               <b>Signed Up:</b> {formatDate(created)} -{' '}
-              {distanceInWordsToNow(created)} ago
+              {formatDistanceToNow(parseISO(created))} ago
             </span>
           </div>
           <div className="summary-data">
             <span>
               <b>Last Signed In:</b> {formatDate(lastLogin)} -{' '}
-              {distanceInWordsToNow(lastLogin)} ago
+              {formatDistanceToNow(parseISO(lastLogin))} ago
             </span>
           </div>
         </div>

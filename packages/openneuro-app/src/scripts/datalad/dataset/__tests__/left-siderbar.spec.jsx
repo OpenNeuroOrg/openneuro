@@ -10,7 +10,7 @@ jest.mock('react-router-dom', () => ({
   }),
 }))
 
-const fixedDate = new Date('2019-04-02T19:56:41.222Z').toString()
+const fixedDate = new Date('2019-04-02T19:56:41.222Z').toISOString()
 
 describe('LeftSidebar component', () => {
   it('renders with basic props', () => {

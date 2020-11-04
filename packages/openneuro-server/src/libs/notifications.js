@@ -1,6 +1,6 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 
-import subHours from 'date-fns/sub_hours'
+import subHours from 'date-fns/subHours'
 import config from '../config'
 import email from './email'
 import request from 'superagent'

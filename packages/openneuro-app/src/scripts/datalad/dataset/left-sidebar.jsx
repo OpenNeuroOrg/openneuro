@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, useLocation } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
+import parseISO from 'date-fns/parseISO'
 import format from 'date-fns/format'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 
@@ -26,7 +27,7 @@ export const SidebarRow = ({
           <div className=" col-xs-12">
             <span className="dataset-type">{version}</span>
             <span className="date-modified">
-              {format(modified, 'YYYY-MM-DD')}
+              {format(parseISO(modified), 'yyyy-MM-dd')}
             </span>
             <span className="icons" />
           </div>

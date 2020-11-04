@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { formatDate } from '../../utils/date.js'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import parseISO from 'date-fns/parseISO'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const DatasetUploaded = ({ uploader, created, testDifference }) => {
   const dateAdded = formatDate(created)
-  const difference = testDifference || distanceInWordsToNow(created)
+  const difference = testDifference || formatDistanceToNow(parseISO(created))
   console.log(difference)
   return (
     <h6>

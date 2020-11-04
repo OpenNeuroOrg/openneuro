@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import parseISO from 'date-fns/parseISO'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 class Uploaded extends React.PureComponent {
   render() {
@@ -9,7 +10,7 @@ class Uploaded extends React.PureComponent {
       ? new Date(this.props.created).toISOString().split('T')[0]
       : ''
     const timeago = this.props.created
-      ? distanceInWordsToNow(this.props.created)
+      ? formatDistanceToNow(parseISO(this.props.created))
       : ''
     return (
       <div className="meta-container">
