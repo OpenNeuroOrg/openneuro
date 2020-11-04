@@ -4,6 +4,7 @@ exports[`Comment component renders with an empty comment 1`] = `
 <Comment
   data={
     Object {
+      "createDate": "2019-04-02T19:56:41.222Z",
       "id": "9001",
       "text": "{\\"blocks\\":[{\\"key\\":\\"3sm42\\",\\"text\\":\\"\\",\\"type\\":\\"unstyled\\",\\"depth\\":0,\\"inlineStyleRanges\\":[],\\"entityRanges\\":[],\\"data\\":{}}],\\"entityMap\\":{}}",
       "user": Object {
@@ -19,7 +20,7 @@ exports[`Comment component renders with an empty comment 1`] = `
     <div
       className="row comment-header"
     >
-      By example@example.com - almost NaN years ago
+      By example@example.com - over 1 year ago
     </div>
     <div
       className="row comment-body"
