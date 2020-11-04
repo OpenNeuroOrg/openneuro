@@ -65,7 +65,7 @@ class UploadValidator extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const options = {
       config: {
         error: ['NO_AUTHORS'],

@@ -15,7 +15,7 @@ class Input extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     // Will reset value when prop changes
     if ('value' in nextProps) {
       this.setState({ value: nextProps.value })

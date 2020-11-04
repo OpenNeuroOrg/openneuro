@@ -17,7 +17,7 @@ const analyticsWrapper = (WrappedComponent, options = {}) => {
       trackPage(page)
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(nextProps) {
       const currentPage = this.props.location.pathname
       const nextPage = nextProps.location.pathname
 
