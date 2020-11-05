@@ -22,6 +22,17 @@ const AdminDataset = ({ dataset }) => (
       <div className="form-group">
         <label>Admin</label>
       </div>
+      <div className="col-lg-12">
+        <p>
+          Delete dataset cache drops all dataset caches (snapshot index,
+          draft/snapshot file listings, current dataset description) and the
+          cache is repopulated on the next API call.
+        </p>
+        <p>
+          Reset draft head will move the draft to a given commit and rerun
+          validation.
+        </p>
+      </div>
       <div className="col-lg-6">
         <h3>Draft Head</h3> {dataset.draft.head}
       </div>
@@ -33,7 +44,6 @@ const AdminDataset = ({ dataset }) => (
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
           <CacheClear datasetId={dataset.id} />
-          <UpdateRef datasetId={dataset.id} revision={dataset.draft.head} />
         </div>
       </div>
     </div>
