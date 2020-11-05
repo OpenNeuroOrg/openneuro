@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo'
+import UpdateRef from '../mutations/update-ref.jsx'
 
 const GET_HISTORY = gql`
   query getHistory($datasetId: ID!) {
@@ -55,23 +56,27 @@ const DatasetHistory = ({ datasetId }) => {
             <div className="row">
               <h4 className="col-lg-4">Commit</h4>
               <h4 className="col-lg-2">Date</h4>
-              <h4 className="col-lg-3">Author</h4>
-              <h4 className="col-lg-3">References</h4>
+              <h4 className="col-lg-2">Author</h4>
+              <h4 className="col-lg-2">References</h4>
+              <h4 className="col-lg-2">Action</h4>
             </div>
             {data.dataset.history.map(commit => (
-              <>
+              <React.Fragment key={commit.id}>
                 <div className="row">
                   <div className="col-lg-4">{commit.id}</div>
                   <div className="col-lg-2">{commit.date}</div>
-                  <div className="col-lg-3">
+                  <div className="col-lg-2">
                     {commit.authorName} &lt;{commit.authorEmail}&gt;
                   </div>
-                  <div className="col-lg-3">{commit.references}</div>
+                  <div className="col-lg-2">{commit.references}</div>
+                  <div className="col-lg-2">
+                    <UpdateRef datasetId={datasetId} revision={commit.id} />
+                  </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-12">{commit.message}</div>
                 </div>
-              </>
+              </React.Fragment>
             ))}
           </DatasetHistoryTable>
         </div>
