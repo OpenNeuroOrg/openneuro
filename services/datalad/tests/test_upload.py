@@ -1,9 +1,12 @@
+import os
+
 import falcon
 from falcon import testing
 
 from .dataset_fixtures import *
 
 from datalad_service.handlers.upload_file import skip_invalid_files
+from datalad_service.handlers.upload import move_files
 
 
 def test_upload_file_no_auth(client):
@@ -40,3 +43,24 @@ def test_skip_invalid_files():
     assert not skip_invalid_files('dataset_description.json')
     assert not skip_invalid_files('sub-01/anat/sub-01_T1w.nii.gz')
     assert not skip_invalid_files('.bidsignore')
+
+
+def test_move_files_nesting(tmpdir_factory, new_dataset):
+    # Create an upload source path
+    tmp_dir = tmpdir_factory.mktemp('upload')
+    tmp_anat = tmp_dir.join('sub-01', 'anat')
+    os.makedirs(tmp_anat)
+    with open(os.path.join(tmp_anat, 'sub-01_T1w.json'), 'w') as f:
+        f.write('{"dummy": "json"}')
+    # add conflicting file to dataset
+    anat_path = os.path.join(new_dataset.path, 'sub-01', 'anat')
+    nifti_path = os.path.join(anat_path, 'sub-01_T1w.nii.gz')
+    os.makedirs(anat_path)
+    with open(nifti_path, 'w') as f:
+        f.write('dummy file.gz')
+    new_dataset.save(nifti_path)
+    move_files(tmp_dir, new_dataset.path)
+    assert os.path.exists(os.path.join(
+        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz'))
+    assert os.path.exists(os.path.join(
+        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json'))
