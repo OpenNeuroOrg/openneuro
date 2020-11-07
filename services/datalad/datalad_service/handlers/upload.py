@@ -18,7 +18,7 @@ def move_files(upload_path, dataset_path):
         if os.path.isfile(filename):
             target = os.path.join(dataset_path, os.path.relpath(
                 filename, start=upload_path))
-            os.makedirs(target, exist_ok=True)
+            pathlib.Path(target).parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(filename), target)
 
 

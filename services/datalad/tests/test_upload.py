@@ -59,9 +59,9 @@ def test_move_files(tmpdir_factory, new_dataset):
     move_files(tmp_dir, new_dataset.path)
     new_dataset.save('sub-01')
     # Verify paths exist
-    assert os.path.exists(os.path.join(
+    assert os.path.isfile(os.path.join(
         new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz'))
-    assert os.path.exists(os.path.join(
+    assert os.path.isfile(os.path.join(
         new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json'))
 
 
@@ -82,7 +82,7 @@ def test_move_files_nesting(tmpdir_factory, new_dataset):
         f.write('dummy file.gz')
     new_dataset.save(nifti_path)
     move_files(tmp_dir, new_dataset.path)
-    assert os.path.exists(os.path.join(
+    assert os.path.isfile(os.path.join(
         new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz'))
-    assert os.path.exists(os.path.join(
+    assert os.path.isfile(os.path.join(
         new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json'))
