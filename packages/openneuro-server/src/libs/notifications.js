@@ -1,5 +1,5 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
-
+import toDate from 'date-fns/toDate'
 import subHours from 'date-fns/subHours'
 import config from '../config'
 import email from './email'
@@ -341,7 +341,7 @@ const notifications = {
     setInterval(() => {
       // After one hour, retry a notification even if we have a lock
       Notification.findOneAndUpdate(
-        { notificationLock: { $lte: subHours(Date.now(), 1).toDate() } },
+        { notificationLock: { $lte: toDate(subHours(Date.now(), 1)) } },
         { $set: { notificationLock: Date.now() } },
       ).exec((err, docs) => {
         if (err) {
