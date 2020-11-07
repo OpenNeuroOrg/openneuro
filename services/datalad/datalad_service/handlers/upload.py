@@ -13,10 +13,13 @@ from datalad_service.common.annex import CommitInfo
 
 
 def move_files(upload_path, dataset_path):
+    print(dataset_path)
     for filename in pathlib.Path(upload_path).glob('**/*'):
-        target = os.path.join(dataset_path, os.path.relpath(
-            filename, start=upload_path))
-        shutil.move(str(filename), target)
+        if os.path.isfile(filename):
+            target = os.path.join(dataset_path, os.path.relpath(
+                filename, start=upload_path))
+            os.makedirs(target, exist_ok=True)
+            shutil.move(str(filename), target)
 
 
 class UploadResource(object):

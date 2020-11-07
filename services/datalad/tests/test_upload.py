@@ -45,9 +45,31 @@ def test_skip_invalid_files():
     assert not skip_invalid_files('.bidsignore')
 
 
+def test_move_files(tmpdir_factory, new_dataset):
+    # Create an upload source path
+    tmp_dir = tmpdir_factory.mktemp('upload')
+    tmp_anat = tmp_dir.join('sub-01', 'anat')
+    os.makedirs(tmp_anat)
+    with open(os.path.join(tmp_anat, 'sub-01_T1w.json'), 'w') as f:
+        f.write('{"dummy": "json"}')
+    nifti_path = os.path.join(tmp_anat, 'sub-01_T1w.nii.gz')
+    with open(nifti_path, 'w') as f:
+        f.write('dummy file.gz')
+    # Test moving the files
+    move_files(tmp_dir, new_dataset.path)
+    new_dataset.save('sub-01')
+    # Verify paths exist
+    assert os.path.exists(os.path.join(
+        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz'))
+    assert os.path.exists(os.path.join(
+        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json'))
+
+
 def test_move_files_nesting(tmpdir_factory, new_dataset):
     # Create an upload source path
     tmp_dir = tmpdir_factory.mktemp('upload')
+    with open(tmp_dir.join('.bidsignore'), 'w') as f:
+        f.write('derivatives')
     tmp_anat = tmp_dir.join('sub-01', 'anat')
     os.makedirs(tmp_anat)
     with open(os.path.join(tmp_anat, 'sub-01_T1w.json'), 'w') as f:
