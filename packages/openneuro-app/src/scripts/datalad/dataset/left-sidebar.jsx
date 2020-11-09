@@ -20,15 +20,19 @@ export const SidebarRow = ({
   const activeClass = draft
     ? (active === 'draft' && 'active') || ''
     : (active === version && 'active') || ''
+  let dateModified
+  try {
+    dateModified = format(parseISO(modified), 'yyyy-MM-dd')
+  } catch (err) {
+    dateModified = 'N/A'
+  }
   return (
     <li key={id}>
       <Link to={url} className={activeClass}>
         <div className="clearfix">
           <div className=" col-xs-12">
             <span className="dataset-type">{version}</span>
-            <span className="date-modified">
-              {format(parseISO(modified), 'yyyy-MM-dd')}
-            </span>
+            <span className="date-modified">{dateModified}</span>
             <span className="icons" />
           </div>
         </div>
