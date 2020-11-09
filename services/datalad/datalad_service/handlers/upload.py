@@ -13,7 +13,6 @@ from datalad_service.common.annex import CommitInfo
 
 
 def move_files(upload_path, dataset_path):
-    print(dataset_path)
     for filename in pathlib.Path(upload_path).glob('**/*'):
         if os.path.isfile(filename):
             target = os.path.join(dataset_path, os.path.relpath(
