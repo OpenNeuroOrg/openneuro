@@ -5,13 +5,25 @@ import { uploads } from 'openneuro-client'
  * Trim the webkitRelativePath value to only include the dataset relative path
  * @param {File} file FileAPI object from a browser multiple file selector
  */
-export const getRelativePath = file => {
+export const getRelativePath = (
+  file,
+  options = { stripRelativePath: true },
+) => {
   const path = file.webkitRelativePath
-  const dirIndex = path.indexOf('/')
-  if (dirIndex === -1) {
+  const pathTokens = path.split('/')
+  if (pathTokens.length === 1) {
     return path
+  }
+  if (pathTokens[0] === '') {
+    pathTokens.shift()
+  }
+  if (pathTokens[pathTokens.length - 1] === '') {
+    pathTokens[pathTokens.length - 1] = file.name
+  }
+  if (options.stripRelativePath) {
+    return pathTokens.slice(1).join('/')
   } else {
-    return path.substring(dirIndex + 1, path.length)
+    return pathTokens.join('/')
   }
 }
 
@@ -26,11 +38,7 @@ export const getRelativePath = file => {
  **/
 export const encodeFilePath = (file, options = { stripRelativePath: false }) =>
   file.webkitRelativePath
-    ? uploads.encodeFilePath(
-        options.stripRelativePath
-          ? getRelativePath(file)
-          : file.webkitRelativePath,
-      )
+    ? uploads.encodeFilePath(getRelativePath(file, options))
     : file.name
 
 /**

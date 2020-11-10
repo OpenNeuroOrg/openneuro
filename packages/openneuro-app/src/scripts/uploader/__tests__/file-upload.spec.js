@@ -56,7 +56,7 @@ describe('file upload helpers', () => {
         ),
       ).toEqual('README')
     })
-    it('supports file upload from a webkit-derived browser (stripRelativePath: true)', () => {
+    it('supports file upload from a webkit-derived browser (stripRelativePath: false)', () => {
       expect(
         encodeFilePath(
           {
@@ -69,6 +69,48 @@ describe('file upload helpers', () => {
           { stripRelativePath: false },
         ),
       ).toEqual('README')
+    })
+    it('supports nested file upload from a webkit-derived browser (stripRelativePath: true)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'sub-02_T1w.nii.gz',
+            lastModified: 1604713385516,
+            webkitRelativePath: '/dataset/sub-02/anat/',
+            size: 2000,
+            type: 'text/plain',
+          },
+          { stripRelativePath: true },
+        ),
+      ).toEqual('sub-02:anat:sub-02_T1w.nii.gz')
+    })
+    it('supports nested file upload from a webkit-derived browser (stripRelativePath: false)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'sub-02_T1w.nii.gz',
+            lastModified: 1604713385516,
+            webkitRelativePath: '/sub-02/anat/',
+            size: 2000,
+            type: 'text/plain',
+          },
+          { stripRelativePath: false },
+        ),
+      ).toEqual('sub-02:anat:sub-02_T1w.nii.gz')
+    })
+    it('supports nested directory upload from a webkit-derived browser (stripRelativePath: false)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'sub-02_T1w.nii.gz',
+            lastModified: 1604713385516,
+            webkitRelativePath: '/sub-02/anat/sub-02_T1w.nii.gz',
+            size: 2000,
+            type: 'text/plain',
+          },
+          { stripRelativePath: false },
+        ),
+      ).toEqual('sub-02:anat:sub-02_T1w.nii.gz')
     })
   })
 })
