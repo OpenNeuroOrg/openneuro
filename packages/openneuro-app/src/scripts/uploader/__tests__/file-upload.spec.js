@@ -1,4 +1,4 @@
-import { getRelativePath } from '../file-upload.js'
+import { getRelativePath, encodeFilePath } from '../file-upload.js'
 
 describe('file upload helpers', () => {
   describe('getRelativePath', () => {
@@ -11,6 +11,64 @@ describe('file upload helpers', () => {
       expect(
         getRelativePath({ webkitRelativePath: 'dataset_description.json' }),
       ).toBe('dataset_description.json')
+    })
+  })
+  describe('encodeFilePath', () => {
+    it('supports directory upload from a webkit-derived browser (stripRelativePath: true)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'sub-02_T1w.nii.gz',
+            lastModified: 1604713385516,
+            webkitRelativePath: 'dataset/sub-02/anat/sub-02_T1w.nii.gz',
+            size: 311112,
+            type: 'application/gzip',
+          },
+          { stripRelativePath: true },
+        ),
+      ).toEqual('sub-02:anat:sub-02_T1w.nii.gz')
+    })
+    it('supports directory upload from a webkit-derived browser (stripRelativePath: false)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'sub-02_T1w.nii.gz',
+            lastModified: 1604713385516,
+            webkitRelativePath: 'sub-02/anat/sub-02_T1w.nii.gz',
+            size: 311112,
+            type: 'application/gzip',
+          },
+          { stripRelativePath: false },
+        ),
+      ).toEqual('sub-02:anat:sub-02_T1w.nii.gz')
+    })
+    it('supports file upload from a webkit-derived browser (stripRelativePath: true)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'README',
+            lastModified: 1604713385516,
+            webkitRelativePath: '',
+            size: 809,
+            type: 'text/plain',
+          },
+          { stripRelativePath: true },
+        ),
+      ).toEqual('README')
+    })
+    it('supports file upload from a webkit-derived browser (stripRelativePath: true)', () => {
+      expect(
+        encodeFilePath(
+          {
+            name: 'README',
+            lastModified: 1604713385516,
+            webkitRelativePath: '',
+            size: 809,
+            type: 'text/plain',
+          },
+          { stripRelativePath: false },
+        ),
+      ).toEqual('README')
     })
   })
 })

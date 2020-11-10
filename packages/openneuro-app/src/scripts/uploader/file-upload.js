@@ -16,11 +16,22 @@ export const getRelativePath = file => {
 }
 
 /**
- * Like getRelativePath but does not modify the overall path
+ * Handle all variants of File objects and return the encoded upload file path
+ *
+ * Top level files have webkitRelativePath '' in some scenarios, use just the filename in that case
+ *
  * @param {File} file
- */
-export const formatPath = file =>
-  `${file.webkitRelativePath.slice(1)}${file.name}`
+ * @param {object} options
+ * @param {boolean} options.stripRelativePath
+ **/
+export const encodeFilePath = (file, options = { stripRelativePath: false }) =>
+  file.webkitRelativePath
+    ? uploads.encodeFilePath(
+        options.stripRelativePath
+          ? getRelativePath(file)
+          : file.webkitRelativePath,
+      )
+    : file.name
 
 /**
  * This provides a similar interface to Apollo mutation for a background fetch with a promise that resolves once all promises have settled
@@ -48,12 +59,9 @@ export async function uploadFiles({
   let totalSize = 0
   const requests = filesToUpload.map(f => {
     totalSize += f.size
-    // Top level files have webkitRelativePath '' in some scenarios, use just the filename in that case
-    const encodedFilePath = f.webkitRelativePath
-      ? uploads.encodeFilePath(
-          stripRelativePath ? getRelativePath(f) : formatPath(f),
-        )
-      : f.name
+    const encodedFilePath = encodeFilePath(f, {
+      stripRelativePath,
+    })
     const fileUrl = `${config.url}/uploads/${endpoint}/${datasetId}/${uploadId}/${encodedFilePath}`
     return new Request(fileUrl, {
       method: 'POST',
