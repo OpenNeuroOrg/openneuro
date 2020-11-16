@@ -1,8 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dataset/download/DownloadLink renders successfully 1`] = `
-<DownloadLinkServiceWorker
-  datasetId="ds000001"
-  snapshotTag="1.0.0"
-/>
+<div>
+  <h4>
+    Download with your browser
+  </h4>
+  <p>
+    This method is convenient and allows you to select a local directory to download the dataset to.
+  </p>
+  <h5>
+    Steps
+  </h5>
+  <ol>
+    <li>
+      Select a local directory to save the dataset and grant permission to OpenNeuro to read and write into this directory.
+    </li>
+    <li>
+      Download will run in the background, please leave the site open while downloading.
+    </li>
+    <li>
+      A notification will appear when complete.
+    </li>
+  </ol>
+  <button
+    className="btn-blue"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-download"
+    />
+     Download
+  </button>
+</div>
 `;
