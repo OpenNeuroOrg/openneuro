@@ -17,6 +17,7 @@ export const DRAFT_FRAGMENT = gql`
         HowToAcknowledge
         Funding
         ReferencesAndLinks
+        EthicsApprovals
       }
       summary {
         modalities
@@ -133,6 +134,7 @@ export const SNAPSHOT_FIELDS = gql`
       HowToAcknowledge
       Funding
       ReferencesAndLinks
+      EthicsApprovals
     }
     files {
       id

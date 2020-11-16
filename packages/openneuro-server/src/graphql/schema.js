@@ -404,6 +404,8 @@ export const typeDefs = `
     ReferencesAndLinks: [String]
     # The Document Object Identifier of the dataset (not the corresponding paper).
     DatasetDOI: String
+    # List of ethics committee approvals of the research protocols and/or protocol identifiers.
+    EthicsApprovals: [String]
   }
 
   # User permissions on a dataset
