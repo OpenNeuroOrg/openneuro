@@ -12,10 +12,6 @@ const PaddedDiv = styled.div`
   padding: 1em;
 `
 
-const ExtraPaddedDiv = styled.div`
-  padding: 3em;
-`
-
 const DownloadDataset = ({
   match: {
     // snapshotId is widely used but snapshotTag is more accurate
@@ -29,25 +25,32 @@ const DownloadDataset = ({
     </div>
     <div className="col-xs-12">
       <PaddedDiv className="col-xs-6">
-        <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
+        {'showDirectoryPicker' in window ? (
+          <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
+        ) : (
+          <DownloadCommandLine
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+          />
+        )}
       </PaddedDiv>
       <PaddedDiv className="col-xs-6">
         <DownloadS3 datasetId={datasetId} />
       </PaddedDiv>
     </div>
-    <ExtraPaddedDiv className="col-xs-12">
-      <Panel header="Advanced Methods" collapsible>
+    <div className="col-xs-12">
+      {'showDirectoryPicker' in window && (
         <PaddedDiv className="col-xs-6">
           <DownloadCommandLine
             datasetId={datasetId}
             snapshotTag={snapshotTag}
           />
         </PaddedDiv>
-        <PaddedDiv className="col-xs-6">
-          <DownloadDatalad datasetId={datasetId} />
-        </PaddedDiv>
-      </Panel>
-    </ExtraPaddedDiv>
+      )}
+      <PaddedDiv className="col-xs-6">
+        <DownloadDatalad datasetId={datasetId} />
+      </PaddedDiv>
+    </div>
   </div>
 )
 
