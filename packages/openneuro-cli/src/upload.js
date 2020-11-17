@@ -154,6 +154,15 @@ export const uploadFiles = async ({
       console.error(err)
       controller.abort()
     })
+    fileStream.on('close', () => {
+      if (fileStream.bytesRead === 0) {
+        uploadProgress.stop()
+        console.error(
+          `Warning: "${file.filename}" read zero bytes - check that this file is readable and try again`,
+        )
+        controller.abort()
+      }
+    })
     return new Request(
       `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
       {
