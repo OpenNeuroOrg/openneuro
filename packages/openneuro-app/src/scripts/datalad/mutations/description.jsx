@@ -23,6 +23,7 @@ export const UPDATE_DESCRIPTION = gql`
       Funding
       ReferencesAndLinks
       DatasetDOI
+      EthicsApprovals
     }
   }
 `
@@ -44,6 +45,7 @@ export const UPDATE_DESCRIPTION_LIST = gql`
       Funding
       ReferencesAndLinks
       DatasetDOI
+      EthicsApprovals
     }
   }
 `
@@ -118,6 +120,7 @@ UpdateDescription.propTypes = {
     'Funding',
     'ReferencesAndLinks',
     'DatasetDOI',
+    'EthicsApprovals',
   ]),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   done: PropTypes.func,

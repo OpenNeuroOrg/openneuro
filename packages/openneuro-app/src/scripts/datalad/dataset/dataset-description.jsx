@@ -93,6 +93,19 @@ const DatasetDescription = ({
         </div>
       </EditDescriptionList>
     </div>
+    <div className="description-item">
+      <h2>Ethics Approvals</h2>
+      <EditDescriptionList
+        datasetId={datasetId}
+        description={description}
+        field="EthicsApprovals"
+        editMode={editMode}
+        isMobile={isMobile}>
+        <div className="cte-display fade-in">
+          <Markdown>{arrayToMarkdown(description.EthicsApprovals)}</Markdown>
+        </div>
+      </EditDescriptionList>
+    </div>
   </>
 )
 
