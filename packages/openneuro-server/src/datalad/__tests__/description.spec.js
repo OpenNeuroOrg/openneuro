@@ -17,6 +17,7 @@ describe('datalad dataset descriptions', () => {
         BIDSVersion: '1.2.0',
         ReferencesAndLinks: 'https://openneuro.org',
         Funding: ['This one', 'is correct'],
+        EthicsApprovals: 'Also, Not, Array',
       }
       const repaired = repairDescriptionTypes(description)
       // Check for discarded fields
@@ -27,6 +28,7 @@ describe('datalad dataset descriptions', () => {
       expect(Array.isArray(repaired.Authors)).toBe(true)
       expect(Array.isArray(repaired.ReferencesAndLinks)).toBe(true)
       expect(Array.isArray(repaired.Funding)).toBe(true)
+      expect(Array.isArray(repaired.EthicsApprovals)).toBe(true)
     })
     it('converts any invalid value to string values for string fields', () => {
       const description = {
