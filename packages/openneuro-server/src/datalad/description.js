@@ -65,6 +65,12 @@ export const repairDescriptionTypes = description => {
   ) {
     newDescription.Funding = [description.Funding]
   }
+  if (
+    description.hasOwnProperty('EthicsApprovals') &&
+    !Array.isArray(description.EthicsApprovals)
+  ) {
+    newDescription.EthicsApprovals = [description.EthicsApprovals]
+  }
   // String types
   if (
     description.hasOwnProperty('Name') &&
