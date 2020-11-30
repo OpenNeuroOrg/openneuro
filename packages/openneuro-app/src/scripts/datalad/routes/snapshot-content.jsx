@@ -17,6 +17,7 @@ import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import DownloadButton from '../fragments/dataset-prominent-links.jsx'
+import DatasetCitation from '../fragments/dataset-citation.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_FIELDS } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
@@ -107,6 +108,8 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           description={snapshot.description}
           editable={false}
         />
+        <h2>Citation</h2>
+        <DatasetCitation datasetId={dataset.id} snapshot={snapshot} />
       </div>
       <div className={mobileClass}>
         {!isMobile && (
