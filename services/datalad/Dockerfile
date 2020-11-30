@@ -22,7 +22,7 @@ RUN apt-get update \
   && pipenv install --deploy --system \
   && chmod 600 /root/.ssh/config \
   && yarn \
-  && apt-get remove -y openssh-client libbsd0 libedit2 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6 libxmuu1 xauth \
+  && apt-get remove -y libbsd0 libedit2 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 libxext6 libxmuu1 xauth \
   && rm -rf /var/lib/apt/lists/*
 
 ENV LOCPATH=""
