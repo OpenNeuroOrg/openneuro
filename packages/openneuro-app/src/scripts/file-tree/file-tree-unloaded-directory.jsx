@@ -64,7 +64,7 @@ export const fetchMoreDirectory = (
 ) =>
   fetchMore({
     query: snapshotTag ? SNAPSHOT_FILES_QUERY : DRAFT_FILES_QUERY,
-    variables: { datasetId, snapshotTag, filePrefix: directory.filename },
+    variables: { datasetId, snapshotTag, filePrefix: directory.filename + '/' },
     updateQuery: mergeNewFiles(directory, snapshotTag),
   })
 
