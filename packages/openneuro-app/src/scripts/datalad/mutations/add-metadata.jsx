@@ -33,6 +33,8 @@ export const compileMetadata = dataset => {
     dxStatus: getFromMetadata('dxStatus') || '',
     grantFunderName: getFromMetadata('grantFunderName') || '',
     grantIdentifier: getFromMetadata('grantIdentifier') || '',
+    affirmedDefaced: getFromMetadata('affirmedDefaced') || false,
+    affirmedConsent: getFromMetadata('affirmedConsent') || false,
 
     // get from openneuro
     datasetId: dataset.id || '',
