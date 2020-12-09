@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0, react/display-name: 0 */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { Query } from '@apollo/client/react/components'
 import { datasets } from 'openneuro-client'
 import DatasetTab from './dataset-tab.jsx'
 import useMedia from '../../../mobile/media-hook.jsx'

@@ -1,6 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { Mutation } from 'react-apollo'
+import { Mutation } from '@apollo/client/react/components'
 import EmailSubscriptionBox from '../../front-page/email-subscription-box.jsx'
 
 const SUBSCRIBE_TO_NEWSLETTER = gql`
