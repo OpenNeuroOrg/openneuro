@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
-import { Mutation } from 'react-apollo'
+import { Mutation } from '@apollo/client/react/components'
 
 const DELETE_DATASET = gql`
   mutation deleteDataset($id: ID!, $reason: String, $redirect: String) {

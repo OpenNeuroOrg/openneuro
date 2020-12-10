@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/browser'
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useQuery } from 'react-apollo'
+import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetQueryContext from './dataset-query-context.js'

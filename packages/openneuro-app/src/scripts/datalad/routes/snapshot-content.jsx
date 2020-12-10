@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
+import { Query } from '@apollo/client/react/components'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
 import Spinner from '../../common/partials/spinner.jsx'

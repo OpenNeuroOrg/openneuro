@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query, Mutation } from 'react-apollo'
+import { Query, Mutation } from '@apollo/client/react/components'
 import gql from 'graphql-tag'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'

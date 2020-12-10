@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import gql from 'graphql-tag'
-import { useQuery } from 'react-apollo'
+import { useQuery } from '@apollo/client'
 import UpdateRef from '../mutations/update-ref.jsx'
 
 const GET_HISTORY = gql`

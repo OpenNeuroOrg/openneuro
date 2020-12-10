@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
-import { Mutation } from 'react-apollo'
+import { Mutation } from '@apollo/client/react/components'
 import { DATASET_COMMENTS } from '../dataset/comments-fragments.js'
 import { datasetCacheId } from './cache-id.js'
 

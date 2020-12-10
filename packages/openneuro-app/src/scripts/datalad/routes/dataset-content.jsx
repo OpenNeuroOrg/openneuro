@@ -23,7 +23,6 @@ import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import useMedia from '../../mobile/media-hook.jsx'
 import useDraftSubscription from '../subscriptions/useDraftSubscription.js'
-import { withApollo } from 'react-apollo'
 import styled from '@emotion/styled'
 
 const MarginBottomDiv = styled.div`
@@ -156,4 +155,4 @@ DatasetContent.propTypes = {
   client: PropTypes.object,
 }
 
-export default withApollo(DatasetContent)
+export default DatasetContent
