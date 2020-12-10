@@ -147,6 +147,8 @@ export const typeDefs = `
     finishUpload(uploadId: ID!): Boolean
     # Drop caches for a given dataset - requires site admin access
     cacheClear(datasetId: ID!): Boolean
+    # Rerun the latest validator on a given commit
+    revalidate(datasetId: ID!, ref: String!): Boolean
   }
 
   input UploadFile {

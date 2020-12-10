@@ -18,6 +18,7 @@ from datalad_service.handlers.heartbeat import HeartbeatResource
 from datalad_service.handlers.publish import PublishResource
 from datalad_service.handlers.upload import UploadResource
 from datalad_service.handlers.upload_file import UploadFileResource
+from datalad_service.handlers.validation import ValidationResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 
 
@@ -53,6 +54,7 @@ def create_app(annex_path):
     heartbeat = HeartbeatResource()
     datasets = DatasetResource(store)
     dataset_draft = DraftResource(store)
+    dataset_validation = ValidationResource(store)
     dataset_history = HistoryResource(store)
     dataset_description = DescriptionResource(store)
     dataset_files = FilesResource(store)
@@ -69,6 +71,7 @@ def create_app(annex_path):
     api.add_route('/datasets/{dataset}/draft', dataset_draft)
     api.add_route('/datasets/{dataset}/history', dataset_history)
     api.add_route('/datasets/{dataset}/description', dataset_description)
+    api.add_route('/datasets/{dataset}/validate/{hexsha}', dataset_validation)
 
     api.add_route('/datasets/{dataset}/files', dataset_files)
     api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)

@@ -3,36 +3,36 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from '@apollo/client/react/components'
 
-const UPDATE_REF = gql`
-  mutation updateRef($datasetId: ID!, $ref: String!) {
-    updateRef(datasetId: $datasetId, ref: $ref)
+const REVALIDATE = gql`
+  mutation revalidate($datasetId: ID!, $ref: String!) {
+    revalidate(datasetId: $datasetId, ref: $ref)
   }
 `
 
-const UpdateRef = ({ datasetId, revision }) => (
-  <Mutation mutation={UPDATE_REF}>
-    {updateRef => (
+const Revalidate = ({ datasetId, revision }) => (
+  <Mutation mutation={REVALIDATE}>
+    {revalidate => (
       <span>
         <button
           className="btn-admin-blue"
           onClick={async () => {
-            await updateRef({
+            await revalidate({
               variables: {
                 datasetId,
                 ref: revision,
               },
             })
           }}>
-          <i className="fa fa-random" /> Reset Draft Head
+          <i className="fa fa-random" /> Revalidate Commit
         </button>
       </span>
     )}
   </Mutation>
 )
 
-UpdateRef.propTypes = {
+Revalidate.propTypes = {
   datasetId: PropTypes.string,
-  ref: PropTypes.string,
+  revision: PropTypes.string,
 }
 
-export default UpdateRef
+export default Revalidate

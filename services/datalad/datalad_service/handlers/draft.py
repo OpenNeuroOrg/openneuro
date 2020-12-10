@@ -15,7 +15,7 @@ class DraftResource(object):
         if dataset:
             # Maybe turn this into status?
             ds = self.store.get_dataset(dataset)
-            resp.media = {'partial': ds.repo.dirty}
+            resp.media = {'hexsha': ds.repo.get_hexsha()}
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND

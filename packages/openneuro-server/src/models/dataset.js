@@ -8,7 +8,6 @@ const datasetSchema = new mongoose.Schema(
     public: Boolean,
     publishDate: { type: Date, default: null },
     uploader: String,
-    revision: String,
     name: String,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
