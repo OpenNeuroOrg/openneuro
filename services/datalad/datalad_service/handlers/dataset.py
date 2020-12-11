@@ -8,6 +8,7 @@ from datalad_service.tasks.dataset import create_dataset
 from datalad_service.tasks.dataset import delete_dataset
 from datalad_service.tasks.publish import delete_siblings
 
+
 class DatasetResource(object):
 
     """A Falcon API wrapper around underlying datalad/git-annex datasets."""
@@ -47,6 +48,7 @@ class DatasetResource(object):
     def on_delete(self, req, resp, dataset):
         def run_delete_tasks(store, dataset):
             delete_siblings(store, dataset)
+            gevent.sleep()
             delete_dataset(store, dataset)
 
         try:
