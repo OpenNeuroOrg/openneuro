@@ -192,6 +192,8 @@ export const DATASET_METADATA = gql`
       adminUsers
       ages
       modalities
+      affirmedDefaced
+      affirmedConsent
     }
   }
 `
