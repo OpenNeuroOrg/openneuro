@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import DatasetHistory from '../fragments/dataset-history.jsx'
 import CacheClear from '../mutations/cache-clear.jsx'
-import UpdateRef from '../mutations/update-ref.jsx'
 
 /**
  * Map dataset IDs to a normal distribution of backend workers

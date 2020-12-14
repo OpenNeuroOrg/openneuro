@@ -48,8 +48,6 @@ export const createDataset = async (uploader, userInfo) => {
       .post(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
       .set('Accept', 'application/json')
       .set('Cookie', generateDataladCookie(config)(userInfo))
-    // Record and initial revision (usually empty but could be a DataLad upload)
-    ds.revision = req.body.hexsha
     // Write the new dataset to mongo after creation
     await ds.save()
     await giveUploaderPermission(datasetId, uploader)
@@ -63,12 +61,27 @@ export const createDataset = async (uploader, userInfo) => {
 }
 
 /**
+ * Return the latest commit
+ * @param {string} id Dataset accession number
+ */
+export const getDraftHead = async id => {
+  const draftRes = await request
+    .get(`${getDatasetWorker(id)}/datasets/${id}/draft`)
+    .set('Accept', 'application/json')
+  return draftRes.body.hexsha
+}
+
+/**
  * Fetch dataset document and related fields
  */
-export const getDataset = id => {
+export const getDataset = async id => {
   // Track any queries for one dataset as a view
   trackAnalytics(id, null, 'views')
-  return Dataset.findOne({ id }).exec()
+  const dataset = await Dataset.findOne({ id }).lean()
+  return {
+    ...dataset,
+    revision: await getDraftHead(id),
+  }
 }
 
 /**

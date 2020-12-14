@@ -59,30 +59,13 @@ export const getDraftFiles = (datasetId, options = {}) => {
 
 export const updateDatasetRevision = (datasetId, gitRef) => {
   /**
-   * Update the revision pointer in a draft on changes
+   * Update the revision modified time in a draft on changes
    */
-  return Dataset.updateOne(
-    { id: datasetId },
-    { revision: gitRef, modified: new Date() },
-  )
+  return Dataset.updateOne({ id: datasetId }, { modified: new Date() })
     .exec()
     .then(() => {
       // Remove the now invalid draft files cache
       return expireDraftFiles(datasetId)
     })
     .then(() => publishDraftUpdate(datasetId, gitRef))
-}
-
-export const getDatasetRevision = async datasetId => {
-  return new Promise((resolve, reject) => {
-    Dataset.findOne({ id: datasetId })
-      .exec()
-      .then(obj => {
-        if (obj) {
-          resolve(obj.revision)
-        } else {
-          reject(null)
-        }
-      })
-  })
 }

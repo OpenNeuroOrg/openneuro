@@ -33,6 +33,17 @@ export const updateRef = async (
   if (!snapshot) await createSnapshot(datasetId, '1.0.0', userInfo)
 }
 
+/**
+ * Mutation to move the draft HEAD reference forward or backward
+ */
+export const revalidate = async (
+  obj,
+  { datasetId, ref },
+  { user, userInfo },
+) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
+}
+
 const draft = {
   id: obj => obj.id,
   files: draftFiles,
@@ -41,7 +52,7 @@ const draft = {
   modified: obj => obj.modified,
   description,
   readme,
-  head: async obj => (await Dataset.findOne({ id: obj.id }).exec()).revision,
+  head: obj => obj.revision,
 }
 
 export default draft

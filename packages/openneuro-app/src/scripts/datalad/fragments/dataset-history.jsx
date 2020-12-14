@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/client'
-import UpdateRef from '../mutations/update-ref.jsx'
+import Revalidate from '../mutations/revalidate.jsx'
 
 const GET_HISTORY = gql`
   query getHistory($datasetId: ID!) {
@@ -70,7 +70,7 @@ const DatasetHistory = ({ datasetId }) => {
                   </div>
                   <div className="col-lg-2">{commit.references}</div>
                   <div className="col-lg-2">
-                    <UpdateRef datasetId={datasetId} revision={commit.id} />
+                    <Revalidate datasetId={datasetId} revision={commit.id} />
                   </div>
                 </div>
                 <div className="row">

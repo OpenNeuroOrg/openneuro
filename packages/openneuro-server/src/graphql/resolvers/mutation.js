@@ -13,7 +13,7 @@ import { updateRef } from './draft.js'
 import { createSnapshot, deleteSnapshot } from './snapshots.js'
 import { removeUser, setAdmin, setBlocked } from './user.js'
 import { updateSummary } from './summary.js'
-import { updateValidation } from './validation.js'
+import { revalidate, updateValidation } from './validation.js'
 import { updatePermissions, removePermissions } from './permissions.js'
 import { followDataset } from './follow.js'
 import { starDataset } from './stars.js'
@@ -57,6 +57,7 @@ const Mutation = {
   prepareUpload,
   finishUpload,
   cacheClear,
+  revalidate,
 }
 
 export default Mutation
