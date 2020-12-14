@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "bids-validator": "1.5.7",
+    "bids-validator": "1.5.8",
     "cli-progress": "^3.8.2",
     "commander": "^2.15.1",
     "cross-fetch": "^3.0.5",
