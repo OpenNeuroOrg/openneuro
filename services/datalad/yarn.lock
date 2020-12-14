@@ -1226,10 +1226,10 @@ before-after-hook@^2.0.0:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.1.0.tgz#b6c03487f44e24200dd30ca5e6a1979c5d2fb635"
   integrity sha512-IWIbu7pMqyw3EAJHzzHbWa85b6oud/yfKYg5rqB5hNE8CeMi3nX+2C2sj0HswfblST86hpVEOAb9x34NZd6P7A==
 
-bids-validator@1.5.7:
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.7.tgz#14f993a0e1d194d0108567d1c21d8e4f1336f80c"
-  integrity sha512-GOlqvzZ5d6rlJn/Y8KVEfmugOzGoftNMlw3oK4JgosU+ejAv+JBhrZqTfH5Kk11PpZmi57DWa4XIKmsC4RB01g==
+bids-validator@1.5.8:
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.8.tgz#fb31fd7a75ac5b5b75b33caca6e82a6313e74d28"
+  integrity sha512-MQgz9P8WTE9nefvqFn9Iw8Ywys5WFIytGhUhtJPaH+srARTapPo88CS8rX2DhbZL96tQd/3bLlD3LwH+VErbig==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
@@ -1238,7 +1238,7 @@ bids-validator@1.5.7:
     cross-fetch "^2.2.2"
     date-fns "^2.7.0"
     esm "^3.2.25"
-    hed-validator "^1.3.2"
+    hed-validator "^2.0.1"
     ignore "^4.0.2"
     is-utf8 "^0.2.1"
     jshint "^2.9.6"
@@ -1791,12 +1791,12 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-date-and-time@^0.14.0:
+date-and-time@^0.14.1:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/date-and-time/-/date-and-time-0.14.1.tgz#969634697b78956fb66b8be6fb0f39fbd631f2f6"
   integrity sha512-M4RggEH5OF2ZuCOxgOU67R6Z9ohjKbxGvAQz48vj53wLmL0bAgumkBvycR32f30pK+Og9pIR+RFDyChbaE4oLA==
 
-date-fns@^2.15.0:
+date-fns@^2.16.1:
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.16.1.tgz#05775792c3f3331da812af253e1a935851d3834b"
   integrity sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==
@@ -2665,14 +2665,15 @@ hasha@^2.2.0:
     is-stream "^1.0.1"
     pinkie-promise "^2.0.0"
 
-hed-validator@^1.3.2:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/hed-validator/-/hed-validator-1.4.0.tgz#613c87c186d8845bfd1c51f97a352bffc4914e9c"
-  integrity sha512-GsPnPz7OLMbrVaLlaP4iVg6oy/B7H47gGJvMWLceFKuBd5ZbjOKdJ01iW0jFhYMOrPYA549rz4wSYFANeqR0rw==
+hed-validator@^2.0.1:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/hed-validator/-/hed-validator-2.0.3.tgz#a7b831807e95495e3fbd0cba64ff7fecc9a66608"
+  integrity sha512-q9K6LzUWQhw+6MnOyqmiK3a4JSJ4/iJDF7FaewgMRkGQGTFPKQTOyLKpLd3s/aMLB++Hc3TX7BCCOxuMjQDOEg==
   dependencies:
-    date-and-time "^0.14.0"
-    date-fns "^2.15.0"
+    date-and-time "^0.14.1"
+    date-fns "^2.16.1"
     pluralize "^8.0.0"
+    semver "^7.3.2"
     then-request "^6.0.2"
     xml2js "^0.4.23"
 

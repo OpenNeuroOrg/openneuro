@@ -23,7 +23,7 @@
     "@loadable/component": "^5.7.0",
     "@sentry/browser": "^4.5.3",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "1.5.7",
+    "bids-validator": "1.5.8",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
