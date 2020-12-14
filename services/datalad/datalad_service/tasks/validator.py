@@ -1,9 +1,9 @@
 import json
 import os
-import subprocess
 import requests
 
 import gevent
+from gevent import subprocess
 import sentry_sdk
 
 from datalad_service.config import GRAPHQL_ENDPOINT
@@ -23,7 +23,7 @@ def validate_dataset_sync(dataset_path, ref):
     """
     setup_validator()
     try:
-        process = subprocess.run(
+        process = gevent.subprocess.run(
             ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired:

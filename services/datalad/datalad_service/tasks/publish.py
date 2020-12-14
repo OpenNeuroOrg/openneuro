@@ -16,6 +16,7 @@ from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 
 import boto3
 from github import Github
+import gevent
 
 
 def create_github_repo(dataset, repo_name):
@@ -113,10 +114,12 @@ def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
     s3_remote = s3_sibling(ds, siblings, realm=realm)
     for tag in tags:
         publish_target(ds, realm.s3_remote, tag)
+        gevent.sleep()
         # Public publishes to GitHub
         if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
             github_remote = github_sibling(ds, dataset_id, siblings)
             publish_target(ds, realm.github_remote, tag)
+            gevent.sleep()
     clear_dataset_cache(dataset, cookies)
 
 

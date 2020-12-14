@@ -19,6 +19,7 @@ def move_files(upload_path, dataset_path):
                 filename, start=upload_path))
             pathlib.Path(target).parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(filename), target)
+            gevent.sleep()
 
 
 class UploadResource(object):
@@ -34,10 +35,12 @@ class UploadResource(object):
                 unlock_files = [os.path.relpath(filename, start=upload_path) for filename in
                                 pathlib.Path(upload_path).glob('**/*') if os.path.islink(
                     os.path.join(ds.path, os.path.relpath(filename, start=upload_path)))]
+                gevent.sleep()
                 move_files(upload_path, ds.path)
-                shutil.rmtree(upload_path)
                 ds.save(unlock_files)
                 update_head(ds, dataset_id, cookies)
+                gevent.sleep()
+                shutil.rmtree(upload_path)
         except:
             self.logger.exception('Dataset upload could not be finalized')
             sentry_sdk.capture_exception()
