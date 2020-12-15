@@ -108,7 +108,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           description={snapshot.description}
           editable={false}
         />
-        <h2>Citation</h2>
+        <h2>How To Cite</h2>
         <DatasetCitation datasetId={dataset.id} snapshot={snapshot} />
       </div>
       <div className={mobileClass}>

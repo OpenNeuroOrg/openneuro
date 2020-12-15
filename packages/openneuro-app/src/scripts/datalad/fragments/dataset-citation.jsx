@@ -1,26 +1,15 @@
 import React, { useState } from 'react'
-import format from 'date-fns/format'
+import PropTypes from 'prop-types'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
-import CopyableTooltip from '../../datalad/fragments/copyable-tooltip.jsx'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-const formatCitation = (datasetId, snapshot, style) => {
+export const formatCitation = (snapshot, style) => {
   const year = getYear(parseISO(snapshot.created))
-  const today = format(new Date(), 'dd MMM yyyy')
-  if (style === 'APA') {
+  if (style === 'Text') {
     return `${snapshot.description.Authors.join(' and ')} (${year}). ${
       snapshot.description.Name
-    }. ${snapshot.tag}. OpenNeuro. Dataset. doi: ${
-      snapshot.description.DatasetDOI
-    }`
-  } else if (style === 'MLA') {
-    return `${snapshot.description.Authors.join(' and ')}. ${
-      snapshot.description.Name
-    } (${snapshot.tag}) OpenNeuro, ${year}. Web. ${today} doi: ${
-      snapshot.description.DatasetDOI
-    }`
-  } else if (style === 'Chicago') {
-    return ''
+    }. OpenNeuro. [Dataset] doi: ${snapshot.description.DatasetDOI}`
   } else if (style === 'BibTeX') {
     return `@dataset{${snapshot.id},
   author = {${snapshot.description.Authors.join(' and ')}},
@@ -32,22 +21,56 @@ const formatCitation = (datasetId, snapshot, style) => {
   }
 }
 
-const DatasetCitation = ({ datasetId, snapshot }) => {
-  const [style, setStyle] = useState('APA')
-  const citation = formatCitation(datasetId, snapshot, style)
+const DatasetCitation = ({ snapshot }) => {
+  const [style, setStyle] = useState('Text')
+  const [copied, setCopied] = useState(false)
+  const copiedTimeout = () => {
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 3000)
+  }
+  const citation = formatCitation(snapshot, style)
   return (
     <>
-      <div className="col-md-6">
-        <span>Style: </span>
-        <button onClick={() => setStyle('APA')}>APA</button>
-        <button onClick={() => setStyle('MLA')}>MLA</button>
-        <button onClick={() => setStyle('Chicago')}>Chicago</button>
-        <button onClick={() => setStyle('BibTeX')}>BibTeX</button>
+      <div className="description-item">
+        <button
+          onClick={() => {
+            setStyle('Text')
+            setCopied(false)
+          }}
+          className={style === 'Text' ? 'btn active' : 'btn'}>
+          Text
+        </button>
+        <button
+          onClick={() => {
+            setStyle('BibTeX')
+            setCopied(false)
+          }}
+          className={style === 'BibTeX' ? 'btn active' : 'btn'}>
+          BibTeX
+        </button>
+        <CopyToClipboard
+          text={citation}
+          onCopy={() => copiedTimeout()}
+          className="btn">
+          <span className="copy-key">
+            <i className="fa fa-link" aria-hidden="true" />{' '}
+            {copied ? <span>Copied to clipboard</span> : <span>Copy</span>}
+          </span>
+        </CopyToClipboard>
+        <div className="col-md-12">
+          <div className="row">
+            <h5>{style === 'BibTeX' ? <pre>{citation}</pre> : citation}</h5>
+          </div>
+        </div>
       </div>
-      {style === 'BibTeX' ? <pre>{citation}</pre> : citation}
-      <CopyableTooltip text={''} tip={citation} />
     </>
   )
+}
+
+DatasetCitation.propTypes = {
+  snapshot: PropTypes.object,
 }
 
 export default DatasetCitation
