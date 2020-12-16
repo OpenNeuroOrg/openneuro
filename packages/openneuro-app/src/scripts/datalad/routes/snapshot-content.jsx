@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from '@apollo/client/react/components'
+import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
 import Spinner from '../../common/partials/spinner.jsx'
@@ -17,6 +18,7 @@ import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import DownloadButton from '../fragments/dataset-prominent-links.jsx'
+import DatasetCitation from '../fragments/dataset-citation.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_FIELDS } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
@@ -107,6 +109,11 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           description={snapshot.description}
           editable={false}
         />
+        <h2>How To Cite</h2>
+        <DatasetCitation datasetId={dataset.id} snapshot={snapshot} />
+        <h5>
+          <Link to="/cite">More citation info</Link>
+        </h5>
       </div>
       <div className={mobileClass}>
         {!isMobile && (
