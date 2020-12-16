@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from '@apollo/client/react/components'
+import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
 import Spinner from '../../common/partials/spinner.jsx'
@@ -110,6 +111,9 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         />
         <h2>How To Cite</h2>
         <DatasetCitation datasetId={dataset.id} snapshot={snapshot} />
+        <h5>
+          <Link to="/cite">More citation info</Link>
+        </h5>
       </div>
       <div className={mobileClass}>
         {!isMobile && (

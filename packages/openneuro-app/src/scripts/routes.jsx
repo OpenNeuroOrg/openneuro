@@ -34,6 +34,10 @@ const PETDummy = loadable(() =>
   import(/* webpackChunkName: 'PET' */ './pet/dummy.jsx'),
 )
 
+const Citation = loadable(() =>
+  import(/* webpackChunkName: 'Citation' */ './pages/citation-page.jsx'),
+)
+
 // routes ----------------------------------------------------------------
 
 const PublicDashboard = () => <Dashboard public />
@@ -52,6 +56,7 @@ const appRoutes = () => (
     <Route name="admin" path="/admin" component={Admin} />
     <Route name="error" path="/error" component={ErrorRoute} />
     <Route name="pet-landing" path="/pet" component={PETDummy} />
+    <Route name="citation" path="/cite" component={Citation} />
   </Switch>
 )
 
