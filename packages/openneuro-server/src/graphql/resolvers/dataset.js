@@ -16,6 +16,7 @@ import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
 import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
+import { getDraftHead } from '../../datalad/dataset.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -267,9 +268,9 @@ const worker = obj => getDatasetWorker(obj.id)
  */
 const Dataset = {
   uploader: ds => user(ds, { id: ds.uploader }),
-  draft: obj => ({
+  draft: async obj => ({
     id: obj.id,
-    revision: obj.revision,
+    revision: await getDraftHead(obj.id),
     modified: obj.modified,
   }),
   snapshots,
