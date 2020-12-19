@@ -7,6 +7,7 @@ import falcon
 import git
 from datalad_service.common.git import git_show
 from datalad_service.common.user import get_user_info
+from datalad_service.common.stream import update_file
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.files import get_untracked_files
 from datalad_service.tasks.files import remove_files
@@ -15,21 +16,10 @@ from datalad_service.tasks.files import unlock_files
 
 
 class FilesResource(object):
-    _CHUNK_SIZE_BYTES = 4096
 
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
-
-    def _update_file(self, path, stream):
-        """Update a file on disk with a path and source stream."""
-        with open(path, 'wb') as new_file:
-            # Stream file to disk
-            while True:
-                chunk = stream.read(self._CHUNK_SIZE_BYTES)
-                if not chunk:
-                    break
-                new_file.write(chunk)
 
     def on_get(self, req, resp, dataset, filename=None, snapshot='HEAD'):
         ds_path = self.store.get_dataset_path(dataset)
@@ -93,7 +83,7 @@ class FilesResource(object):
                     media_dict['name'] = name
                     media_dict['email'] = email
                 unlock_files(self.store, dataset, files=[filename])
-                self._update_file(file_path, req.stream)
+                update_file(file_path, req.stream)
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
@@ -102,7 +92,7 @@ class FilesResource(object):
 
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     # Begin writing stream to disk
-                    self._update_file(file_path, req.stream)
+                    update_file(file_path, req.stream)
                     # Add to dataset
                     ds = self.store.get_dataset(dataset)
                     media_dict = {'created': filename}
@@ -129,7 +119,8 @@ class FilesResource(object):
                 try:
                     # The recursive flag removes the entire tree in one commit
                     if 'recursive' in req.params and req.params['recursive'] != 'false':
-                        remove_recursive(self.store, dataset, filename, name=name, email=email, cookies=req.cookies)
+                        remove_recursive(
+                            self.store, dataset, filename, name=name, email=email, cookies=req.cookies)
                     else:
                         remove_files(self.store, dataset, files=[
                             filename], name=name, email=email, cookies=req.cookies)

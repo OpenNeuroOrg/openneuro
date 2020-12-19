@@ -149,6 +149,8 @@ export const typeDefs = `
     cacheClear(datasetId: ID!): Boolean
     # Rerun the latest validator on a given commit
     revalidate(datasetId: ID!, ref: String!): Boolean
+    # Request a temporary token for git access
+    prepareRepoAccess(datasetId: ID!): RepoMetadata
   }
 
   input UploadFile {
@@ -596,6 +598,14 @@ export const typeDefs = `
     grantIdentifier: String
     affirmedDefaced: Boolean
     affirmedConsent: Boolean
+  }
+
+  # Info needed to access git repositories directly
+  type RepoMetadata {
+    # Temporary token used for HTTPS authentication via git
+    token: String
+    # An endpoint index used to identify the backend responsible for these files
+    endpoint: Int
   }
 `
 

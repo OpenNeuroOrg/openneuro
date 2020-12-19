@@ -22,7 +22,10 @@ RUN apt-get update \
   && pipenv install --deploy --system \
   && chmod 600 /root/.ssh/config \
   && yarn \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && git config --global user.name "Git Worker" \
+  && git config --global user.email "git@openneuro.org" \
+  && git config --global receive.denyCurrentBranch updateInstead
 
 ENV LOCPATH=""
 CMD ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
