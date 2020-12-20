@@ -13,7 +13,8 @@
   "author": "Squishymedia",
   "license": "MIT",
   "bin": {
-    "openneuro": "./src/index.js"
+    "openneuro": "./src/index.js",
+    "git-credential-openneuro": "./src/index.js"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
@@ -31,7 +32,8 @@
     "openneuro-client": "^3.26.1"
   },
   "scripts": {
-    "openneuro": "node src/index.js"
+    "openneuro": "node src/index.js",
+    "git-credential-openneuro": "node src/index.js"
   },
   "jest": {
     "setupFiles": [
