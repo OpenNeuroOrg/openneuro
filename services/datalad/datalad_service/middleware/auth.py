@@ -11,7 +11,8 @@ def parse_authorization_header(authorization):
         # This can be 'bearer' or 'basic' followed by space and token
         auth_value = authorization and authorization.split(" ", 1)[1]
         if authorization[:5].lower() == 'basic':
-            b64_bytes = base64.b64decode(auth_value.encode())
+            print(authorization)
+            b64_bytes = base64.urlsafe_b64decode(auth_value.encode())
             return b64_bytes.decode().split(':')[1]
         elif authorization[:6].lower() == 'bearer':
             return auth_value
