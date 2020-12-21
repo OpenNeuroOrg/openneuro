@@ -115,17 +115,19 @@ const DatasetTools = ({ dataset, location, history }) => {
               <StarDataset datasetId={dataset.id} starred={dataset.starred} />
             </div>
             <div role="presentation" className="tool">
-              <AdminUser>
-                <WarnButton
-                  tooltip="Admin Tools"
-                  icon="fa-magic"
-                  warn={false}
-                  action={cb => {
-                    toolRedirect(history, rootPath, 'admin')
-                    cb()
-                  }}
-                />
-              </AdminUser>
+              {edit && !isMobile && (
+                <AdminUser>
+                  <WarnButton
+                    tooltip="Admin Tools"
+                    icon="fa-magic"
+                    warn={false}
+                    action={cb => {
+                      toolRedirect(history, rootPath, 'admin')
+                      cb()
+                    }}
+                  />
+                </AdminUser>
+              )}
             </div>
             {isMobile && (
               <div role="presentation" className="tool">
