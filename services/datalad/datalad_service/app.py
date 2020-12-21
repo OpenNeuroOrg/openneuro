@@ -99,10 +99,11 @@ def create_app(annex_path):
         '/uploads/{worker}/{dataset}/{upload}/{filename:path}', dataset_upload_file
     )
 
-    api.add_route('/git/{dataset}/info/refs', dataset_git_refs_resource)
-    api.add_route('/git/{dataset}/git-receive-pack',
+    api.add_route('/git/{worker}/{dataset}/info/refs',
+                  dataset_git_refs_resource)
+    api.add_route('/git/{worker}/{dataset}/git-receive-pack',
                   dataset_git_receive_resource)
-    api.add_route('/git/{dataset}/git-upload-pack',
+    api.add_route('/git/{worker}/{dataset}/git-upload-pack',
                   dataset_git_upload_resource)
 
     return api
