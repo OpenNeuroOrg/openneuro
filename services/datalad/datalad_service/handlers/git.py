@@ -27,11 +27,10 @@ def _handle_failed_access(req, resp):
     user = 'user' in req.context and req.context['user'] or None
     # No user = unauthorized, otherwise token is present with the wrong scope/grant
     if user == None:
-        resp.media = {'error': 'Authentication required for git access'}
+        resp.data = 'Authentication required for git access'.encode()
         resp.status = falcon.HTTP_UNAUTHORIZED
     else:
-        resp.media = {
-            'error': 'You do not have permission to access this dataset'}
+        resp.data = 'You do not have permission to access this dataset'.encode()
         resp.status = falcon.HTTP_FORBIDDEN
 
 
@@ -42,7 +41,7 @@ class GitRefsResource(object):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, dataset):
+    def on_get(self, req, resp, worker, dataset):
         # Make sure load balancers and other proxies do not cache this
         resp.cache_control = cache_control
         resp.set_header('Expires', expires)
@@ -77,7 +76,7 @@ class GitReceiveResource(object):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp, dataset):
+    def on_post(self, req, resp, worker, dataset):
         resp.cache_control = cache_control
         resp.set_header('Expires', expires)
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
@@ -103,7 +102,7 @@ class GitUploadResource(object):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp, dataset):
+    def on_post(self, req, resp, worker, dataset):
         resp.cache_control = cache_control
         resp.set_header('Expires', expires)
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
