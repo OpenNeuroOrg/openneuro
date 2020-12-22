@@ -246,8 +246,20 @@ const metadataFields = hasEdit => {
     {
       key: 'affirmedDefaced',
       label: 'Uploader Affirmed Structural Scans Are Defaced',
-      Component: TextInput,
+      Component: SelectInput,
       additionalProps: {
+        options: [
+          {
+            value: true,
+            text: 'true',
+          },
+          {
+            value: false,
+            text: 'false',
+          },
+        ],
+        hasBooleanValues: true,
+        showOptionOther: false,
         disabled: true,
         annotated: true,
         required: false,
@@ -256,8 +268,20 @@ const metadataFields = hasEdit => {
     {
       key: 'affirmedConsent',
       label: 'Uploader Affirmed Consent To Publish Scans Without Defacing',
-      Component: TextInput,
+      Component: SelectInput,
       additionalProps: {
+        options: [
+          {
+            value: true,
+            text: 'true',
+          },
+          {
+            value: false,
+            text: 'false',
+          },
+        ],
+        hasBooleanValues: true,
+        showOptionOther: false,
         disabled: true,
         annotated: true,
         required: false,

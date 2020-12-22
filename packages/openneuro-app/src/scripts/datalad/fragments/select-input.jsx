@@ -132,19 +132,30 @@ const SelectInput = ({
   annotated,
   required,
   onChange,
+  hasBooleanValues,
 }) => {
   const defaultOptions = options.map(option => option.value)
+  if (hasBooleanValues && typeof value === 'boolean') {
+    value = value.toString()
+  }
   const nothingSelected = !value
-  const otherOptionSelected =
-    !nothingSelected && !defaultOptions.includes(value)
+  const otherOptionSelected = showOptionOther && value === 'Other'
 
   let selectValue
   if (nothingSelected) selectValue = ''
   else if (otherOptionSelected) selectValue = 'Other'
   else selectValue = value
 
-  const handleChange = e => onChange(e.target.name, e.target.value)
+  const handleChange = e => {
+    let value = e.target.value
+    if (hasBooleanValues) {
+      if (value === 'true') value = true
+      else if (value === 'false') value = false
+    }
+    onChange(e.target.name, value)
+  }
 
+  console.log({ selectValue, nothingSelected, defaultOptions })
   return (
     <>
       <Container>
@@ -167,11 +178,16 @@ const SelectInput = ({
           required={required}>
           <Option value="" disabled hidden />
           {options &&
-            options.map((option, i) => (
-              <Option value={option.value} key={i}>
-                {option.text || option.value}
-              </Option>
-            ))}
+            options.map(
+              (option, i) => (
+                console.log(option),
+                (
+                  <Option value={option.value} key={i}>
+                    {option.text || option.value}
+                  </Option>
+                )
+              ),
+            )}
           {showOptionOther && <Option value="Other">Other</Option>}
         </Select>
       </Container>
@@ -199,6 +215,7 @@ SelectInput.propTypes = {
   required: PropTypes.bool,
   onChange: PropTypes.func,
   handleChange: PropTypes.func,
+  hasBooleanValues: PropTypes.bool,
 }
 
 export default SelectInput
