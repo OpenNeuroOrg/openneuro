@@ -1,15 +1,26 @@
 import Issue from '../../models/issue'
+import { revalidate } from './validation.js'
 
 /**
  * Issues resolver
  */
-export const issues = dataset => {
+export const issues = (dataset, _, { userInfo }) => {
   return Issue.findOne({
     id: dataset.revision,
     datasetId: dataset.id,
   })
     .exec()
-    .then(data => (data ? data.issues : null))
+    .then(data => {
+      if (!data && userInfo) {
+        // If no results were found, acquire a lock and run validation
+        revalidate(
+          null,
+          { datasetId: dataset.id, ref: dataset.revision },
+          { userInfo },
+        )
+      }
+      return data ? data.issues : null
+    })
 }
 
 /**
