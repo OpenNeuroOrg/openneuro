@@ -1,0 +1,154 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SelectInput handles boolean display 1`] = `
+<Fragment>
+  <Styled(div)>
+    <Styled(label)
+      hasValue={true}
+      htmlFor="Expected name"
+    >
+      Expected label
+    </Styled(label)>
+    <Styled(i)
+      className="fa fa-asterisk"
+    />
+    <Styled(div)>
+      true
+      <SelectIcon />
+    </Styled(div)>
+    <styledSelect
+      disabled={true}
+      name="Expected name"
+      onChange={[Function]}
+      value="true"
+    >
+      <Styled(option)
+        disabled={true}
+        hidden={true}
+        value=""
+      />
+      <Styled(option)
+        key="0"
+        value={true}
+      >
+        true-label
+      </Styled(option)>
+      <Styled(option)
+        key="1"
+        value={false}
+      >
+        false-label
+      </Styled(option)>
+    </styledSelect>
+  </Styled(div)>
+  <Styled(div)>
+    <TextInput
+      disabled={true}
+      label="Other Expected label"
+      name="Expected name"
+      value="true"
+    />
+  </Styled(div)>
+</Fragment>
+`;
+
+exports[`SelectInput handles display as disabled 1`] = `
+<Fragment>
+  <Styled(div)>
+    <Styled(label)
+      hasValue={true}
+      htmlFor="Expected name"
+    >
+      Expected label
+    </Styled(label)>
+    <Styled(i)
+      className="fa fa-asterisk"
+    />
+    <Styled(div)>
+      hi
+      <SelectIcon />
+    </Styled(div)>
+    <styledSelect
+      disabled={true}
+      name="Expected name"
+      onChange={[Function]}
+      value="hi"
+    >
+      <Styled(option)
+        disabled={true}
+        hidden={true}
+        value=""
+      />
+      <Styled(option)
+        key="0"
+        value="hi"
+      >
+        hi
+      </Styled(option)>
+      <Styled(option)
+        key="1"
+        value="bye"
+      >
+        bye
+      </Styled(option)>
+    </styledSelect>
+  </Styled(div)>
+  <Styled(div)>
+    <TextInput
+      disabled={true}
+      label="Other Expected label"
+      name="Expected name"
+      value="hi"
+    />
+  </Styled(div)>
+</Fragment>
+`;
+
+exports[`SelectInput handles display as not disabled 1`] = `
+<Fragment>
+  <Styled(div)>
+    <Styled(label)
+      hasValue={true}
+      htmlFor="Expected name"
+    >
+      Expected label
+    </Styled(label)>
+    <Styled(div)>
+      hi
+      <SelectIcon />
+    </Styled(div)>
+    <styledSelect
+      disabled={false}
+      name="Expected name"
+      onChange={[Function]}
+      value="hi"
+    >
+      <Styled(option)
+        disabled={true}
+        hidden={true}
+        value=""
+      />
+      <Styled(option)
+        key="0"
+        value="hi"
+      >
+        hi
+      </Styled(option)>
+      <Styled(option)
+        key="1"
+        value="bye"
+      >
+        bye
+      </Styled(option)>
+    </styledSelect>
+  </Styled(div)>
+  <Styled(div)>
+    <TextInput
+      disabled={false}
+      label="Other Expected label"
+      name="Expected name"
+      value="hi"
+    />
+  </Styled(div)>
+</Fragment>
+`;

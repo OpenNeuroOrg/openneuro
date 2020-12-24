@@ -63,6 +63,7 @@ const Select = styled.select(
         }
       : {},
 )
+Select.displayName = 'styledSelect'
 const SelectValueDisplay = styled.div({
   position: 'absolute',
   top: 0,
@@ -155,7 +156,6 @@ const SelectInput = ({
     onChange(e.target.name, value)
   }
 
-  console.log({ selectValue, nothingSelected, defaultOptions })
   return (
     <>
       <Container>
@@ -178,16 +178,11 @@ const SelectInput = ({
           required={required}>
           <Option value="" disabled hidden />
           {options &&
-            options.map(
-              (option, i) => (
-                console.log(option),
-                (
-                  <Option value={option.value} key={i}>
-                    {option.text || option.value}
-                  </Option>
-                )
-              ),
-            )}
+            options.map((option, i) => (
+              <Option value={option.value} key={i}>
+                {option.text || option.value}
+              </Option>
+            ))}
           {showOptionOther && <Option value="Other">Other</Option>}
         </Select>
       </Container>
@@ -207,7 +202,7 @@ const SelectInput = ({
 SelectInput.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   options: PropTypes.array,
   showOptionOther: PropTypes.bool,
   disabled: PropTypes.bool,
