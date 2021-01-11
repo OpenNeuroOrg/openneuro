@@ -2,6 +2,7 @@ import React from 'react'
 import { Redirect, useParams, useLocation } from 'react-router-dom'
 
 const redirectLib = {
+  ds002777: 'ds003424',
   ds001482: 'ds003146',
   ds002895: 'ds003097',
   ds003023: 'ds003085',
