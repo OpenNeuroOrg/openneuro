@@ -4,6 +4,7 @@ import { generateDataladCookie } from '../../libs/authentication/jwt'
 import { getDatasetWorker } from '../../libs/datalad-service'
 import Issue from '../../models/issue'
 import publishDraftUpdate from '../utils/publish-draft-update.js'
+import { redlock } from '../../libs/redis.js'
 
 /**
  * Save issues data returned by the datalad service
@@ -39,16 +40,25 @@ export const validationUrl = (datasetId, ref) => {
  * @param {string} args.ref Git hexsha
  */
 export const revalidate = async (obj, { datasetId, ref }, { userInfo }) => {
-  const response = await fetch(validationUrl(datasetId, ref), {
-    method: 'POST',
-    body: JSON.stringify({}),
-    headers: {
-      cookie: generateDataladCookie(config)(userInfo),
-    },
-  })
-  if (response.status === 200) {
-    return true
-  } else {
-    return false
+  try {
+    // Lock for five minutes to avoid stacking up multiple validation requests
+    await redlock.lock(`openneuro:revalidate-lock:${datasetId}:${ref}`, 300000)
+    const response = await fetch(validationUrl(datasetId, ref), {
+      method: 'POST',
+      body: JSON.stringify({}),
+      headers: {
+        cookie: generateDataladCookie(config)(userInfo),
+      },
+    })
+    if (response.status === 200) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    // Backend unavailable or lock failed
+    if (err) {
+      return false
+    }
   }
 }
