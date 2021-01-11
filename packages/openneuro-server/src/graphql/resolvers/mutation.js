@@ -24,6 +24,7 @@ import { addComment, editComment, deleteComment } from './comment.js'
 import { subscribeToNewsletter } from './newsletter'
 import { addMetadata } from './metadata.js'
 import { prepareUpload, finishUpload } from './upload.js'
+import { prepareRepoAccess } from './git.ts'
 import { cacheClear } from './cache'
 
 const Mutation = {
@@ -58,6 +59,7 @@ const Mutation = {
   finishUpload,
   cacheClear,
   revalidate,
+  prepareRepoAccess,
 }
 
 export default Mutation

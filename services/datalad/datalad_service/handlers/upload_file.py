@@ -4,6 +4,7 @@ import re
 
 import falcon
 
+from datalad_service.common.stream import update_file
 from datalad_service.common.user import get_user_info
 from datalad_service.handlers.upload import UploadResource
 
@@ -17,8 +18,6 @@ def skip_invalid_files(filename):
 
 
 class UploadFileResource(UploadResource):
-    # Chunk size is aligned with filesystem block size to obtain the fastest write speed
-    _CHUNK_SIZE_BYTES = 16384
 
     def __init__(self, store):
         self.store = store
@@ -44,16 +43,6 @@ class UploadFileResource(UploadResource):
                 'error': 'You do not have permission to access this dataset'}
             resp.status = falcon.HTTP_FORBIDDEN
 
-    def _update_file(self, path, stream):
-        """Update a file on disk with a path and source stream."""
-        with open(path, 'wb') as new_file:
-            # Stream file to disk
-            while True:
-                chunk = stream.read(self._CHUNK_SIZE_BYTES)
-                if not chunk:
-                    break
-                new_file.write(chunk)
-
     def on_post(self, req, resp, worker, dataset, upload, filename):
         # Check that this request includes the correct token
         if self._check_access(req, dataset, upload):
@@ -67,7 +56,7 @@ class UploadFileResource(UploadResource):
             file_path = os.path.join(upload_path, filename)
             # Make any missing parent directories
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            self._update_file(file_path, req.stream)
+            update_file(file_path, req.stream)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         else:

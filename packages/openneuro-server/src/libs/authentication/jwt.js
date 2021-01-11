@@ -50,6 +50,19 @@ export function generateUploadToken(
   return buildToken(config, user, expiresIn, options)
 }
 
+/**
+ * Generate an git repo token
+ *
+ * Similary to the upload token, this shorter lived token is specific to git access
+ */
+export function generateRepoToken(user, datasetId, expiresIn = 60 * 60 * 24) {
+  const options = {
+    scopes: ['dataset:git'],
+    dataset: datasetId,
+  }
+  return buildToken(config, user, expiresIn, options)
+}
+
 const requestNewAccessToken = (jwtProvider, refreshToken) =>
   new Promise((resolve, reject) => {
     refresh.requestNewAccessToken(

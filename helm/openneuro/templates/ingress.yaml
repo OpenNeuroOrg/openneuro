@@ -47,6 +47,13 @@ spec:
               serviceName: {{ $relname }}-dataset-worker-{{ . }}
               servicePort: 80
           {{- end }}
+          {{- $relname := .Release.Name -}}
+          {{- range until ( .Values.dataladWorkers | int ) }}
+          - path: /git/{{ . }}/*
+            backend:
+              serviceName: {{ $relname }}-dataset-worker-{{ . }}
+              servicePort: 80
+          {{- end }}
           - path: /intake/*
             backend:
               serviceName: {{ .Release.Name }}-apm-server

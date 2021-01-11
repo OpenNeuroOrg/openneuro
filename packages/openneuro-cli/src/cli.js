@@ -3,6 +3,7 @@ import commander from 'commander'
 import colors from 'colors'
 import packageJson from '../package.json'
 import { login, upload, download } from './actions.js'
+import { gitCredential } from './gitCredential.js'
 
 /**
  * display the help text in red on the console
@@ -57,6 +58,13 @@ commander
   .option('-s, --snapshot [snapshotVersion]')
   .action(download)
 
+commander
+  .command('git-credential <operation>')
+  .description(
+    'A git credentials helper for easier datalad or git-annex access to datasets.',
+  )
+  .action(gitCredential)
+
 commander.command('*', { noHelp: true, isDefault: true }).action(() => {
   // eslint-disable-next-line no-console
   console.log('Unknown command!')
@@ -65,6 +73,8 @@ commander.command('*', { noHelp: true, isDefault: true }).action(() => {
 
 commander.parse(process.argv)
 
-if (!process.argv.slice(2).length) {
+if (process.argv[1].endsWith('git-credential-openneuro')) {
+  gitCredential()
+} else if (!process.argv.slice(2).length) {
   commander.outputHelp(makeRed)
 }
