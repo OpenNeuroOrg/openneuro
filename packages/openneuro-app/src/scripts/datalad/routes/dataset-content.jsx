@@ -31,10 +31,20 @@ const MarginBottomDiv = styled.div`
 
 export const HasBeenPublished = ({ isPublic, datasetId }) =>
   isPublic ? (
-    <MarginBottomDiv className="alert alert-success">
-      <strong>This dataset has been published!</strong> Create a new snapshot to
-      make changes available
-    </MarginBottomDiv>
+    false ? ( // hasDraftChanges
+      <MarginBottomDiv className="alert alert-warning">
+        <strong>This dataset has been published!</strong> There are currently
+        unsaved changes. To save changes,
+        <Link to={`/datasets/${datasetId}/snapshot`}>
+          {' Create a new snapshot'}
+        </Link>
+      </MarginBottomDiv>
+    ) : (
+      <MarginBottomDiv className="alert alert-success">
+        <strong>This dataset has been published!</strong> Create a new snapshot
+        make changes available
+      </MarginBottomDiv>
+    )
   ) : (
     <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has not been published!</strong>{' '}
