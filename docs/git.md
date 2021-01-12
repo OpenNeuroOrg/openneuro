@@ -32,6 +32,14 @@ git config credential.helper "openneuro"
 
 This will configure these options for one repository.
 
+To enable for all OpenNeuro repositories add this to your [git configuration file](https://git-scm.com/docs/git-config#FILES).
+
+```conf
+[credential "https://openneuro.org"]
+  useHttpPath = true
+  helper = "/path/to/openneuro git-credential"
+```
+
 ### Usage
 
 Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.
@@ -50,6 +58,19 @@ git pull origin git-annex:git-annex
 ```
 
 When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro will reject some invalid pushes but cannot run the full bids-validator until after your changes have been pushed.
+
+### Advanced authentication
+
+If you cannot use the credential helper you can manually generate a short lived key and pass this as the password for git operations. Substitute path= with the repository path for the dataset being accessed.
+
+```bash
+openneuro git-credential fill <<EOF
+protocol=https
+host=openneuro.org
+path=/git/0/ds000001
+EOF
+```
+
 
 ## Snapshots
 
