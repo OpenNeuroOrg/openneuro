@@ -22,7 +22,9 @@ yarn install && yarn bootstrap
 
 You can run tests with `yarn test` at the top level of the project. For each package, `yarn test --watch` will interactively run the tests for changes since the last commit.
 
-[docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together. Copy the example `.env.example` file to `.env` and `config.env.example` to `config.env` and use docker-compose to start the containers.
+Before starting up the services, you will need to copy the example `.env.example` file to `.env` and `config.env.example` to `config.env`. Many of the values are optional, and most that aren't have default values included in their `.example` file. The exception is `JWT_SECRET` in `config.env`, which you will need to set to a large random string.
+
+[docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together.
 
 ```shell
 # This will run docker-compose in the background (-d flag is --detach)
