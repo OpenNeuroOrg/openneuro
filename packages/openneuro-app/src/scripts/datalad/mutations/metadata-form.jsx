@@ -23,6 +23,15 @@ const DisabledNote = styled.div({
   },
 })
 
+const ValidationError = styled.div({
+  display: 'flex',
+  color: 'red',
+
+  i: {
+    marginRight: '0.5rem',
+  },
+})
+
 const metadataFields = hasEdit => {
   const fields = [
     {
@@ -306,6 +315,7 @@ const MetadataForm = ({
   hideDisabled,
   hiddenFields = [],
   hasEdit,
+  validationErrors = [],
 }) => (
   <Form id="metadata-form" className="col-xs-6">
     <InfoText>
@@ -347,6 +357,13 @@ const MetadataForm = ({
           />
         ),
       )}
+    {Boolean(validationErrors.length) &&
+      validationErrors.map((errorMessage, i) => (
+        <ValidationError key={i}>
+          <i className="fa fa-asterisk" />
+          <p>{errorMessage}</p>
+        </ValidationError>
+      ))}
   </Form>
 )
 
@@ -357,6 +374,7 @@ MetadataForm.propTypes = {
   hideDisabled: PropTypes.bool,
   hiddenFields: PropTypes.array,
   hasEdit: PropTypes.bool,
+  validationErrors: PropTypes.array,
 }
 
 export default MetadataForm

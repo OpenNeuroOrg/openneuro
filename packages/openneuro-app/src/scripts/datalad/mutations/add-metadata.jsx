@@ -66,14 +66,40 @@ export const compileMetadata = dataset => {
   }
 }
 
+const validations = [
+  {
+    fields: ['affirmedConsent', 'affirmedDefaced'],
+    check: ([affirmedConsent, affirmedDefaced]) =>
+      affirmedConsent || affirmedDefaced,
+    errorMessage:
+      'Uploader must affirm that structural scans are defaced or that they have consent to publish scans without defacing.',
+  },
+]
+
+const runValidations = values =>
+  validations
+    .map(validation => {
+      const relevantValues = validation.fields.map(key => values[key])
+      const isValid = validation.check(relevantValues)
+      if (!isValid) return validation.errorMessage
+    })
+    .filter(error => error)
+
+const hasChanged = (errorsA, errorsB) =>
+  JSON.stringify(errorsA) !== JSON.stringify(errorsB)
+
 const AddMetadata = ({ dataset, history, location }) => {
   const [values, setValues] = useState(compileMetadata(dataset))
+  const [validationErrors, setValidationErrors] = useState([])
   const handleInputChange = (name, value) => {
     const newValues = {
       ...values,
       [name]: value,
     }
     setValues(newValues)
+
+    const errors = runValidations(newValues)
+    if (hasChanged(errors, validationErrors)) setValidationErrors(errors)
   }
   const submitPath = location.state && location.state.submitPath
   const user = getProfile()
@@ -92,6 +118,7 @@ const AddMetadata = ({ dataset, history, location }) => {
         onChange={handleInputChange}
         hideDisabled={false}
         hasEdit={hasEdit}
+        validationErrors={validationErrors}
       />
       <div className="col-xs-12 dataset-form-controls">
         <div className="col-xs-12 modal-actions">
@@ -104,6 +131,7 @@ const AddMetadata = ({ dataset, history, location }) => {
                 datasetId={dataset.id}
                 metadata={values}
                 done={() => submitPath && history.push(submitPath)}
+                disabled={Boolean(validationErrors.length)}
               />
             </LoggedIn>
           )}
