@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextInput from './text-input.jsx'
 import { PropTypes } from 'prop-types'
 import styled from '@emotion/styled'
@@ -132,10 +132,10 @@ const SelectInput = ({
   disabled,
   annotated,
   required,
+  warningOnChange = '',
   onChange,
   hasBooleanValues,
 }) => {
-  const defaultOptions = options.map(option => option.value)
   if (hasBooleanValues && typeof value === 'boolean') {
     value = value.toString()
   }
@@ -147,13 +147,17 @@ const SelectInput = ({
   else if (otherOptionSelected) selectValue = 'Other'
   else selectValue = value
 
+  const [changed, setChanged] = useState(false)
+
   const handleChange = e => {
-    let value = e.target.value
+    const prevValue = value
+    let newValue = e.target.value
     if (hasBooleanValues) {
-      if (value === 'true') value = true
-      else if (value === 'false') value = false
+      if (newValue === 'true') newValue = true
+      else if (newValue === 'false') newValue = false
     }
-    onChange(e.target.name, value)
+    if (prevValue != newValue) setChanged(true)
+    onChange(e.target.name, newValue)
   }
 
   return (
@@ -195,6 +199,7 @@ const SelectInput = ({
           onChange={onChange}
         />
       </OtherInputContainer>
+      {changed && <p>{warningOnChange}</p>}
     </>
   )
 }
@@ -208,6 +213,7 @@ SelectInput.propTypes = {
   disabled: PropTypes.bool,
   annotated: PropTypes.bool,
   required: PropTypes.bool,
+  warningOnChange: PropTypes.string,
   onChange: PropTypes.func,
   handleChange: PropTypes.func,
   hasBooleanValues: PropTypes.bool,

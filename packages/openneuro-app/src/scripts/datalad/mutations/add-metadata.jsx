@@ -65,6 +65,7 @@ export const compileMetadata = dataset => {
     tasksCompleted: getFromSummary('tasks') || [],
   }
 }
+
 const AddMetadata = ({ dataset, history, location }) => {
   const [values, setValues] = useState(compileMetadata(dataset))
   const handleInputChange = (name, value) => {
