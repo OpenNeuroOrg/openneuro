@@ -1,0 +1,82 @@
+#!/bin/bash -u
+#
+# Pre-receive hook to limit pushed file size and run filename only validation
+#
+# Derived from https://github.com/mgit-at/git-max-filesize
+# Author: Christoph Hack <chack@mgit.at>
+# Copyright (c) 2017 mgIT GmbH. All rights reserved.
+# Distributed under the Apache License. See http://www.apache.org/licenses/LICENSE-2.0 for details.
+#
+set -o pipefail
+
+readonly MAXSIZE="104857600" # 100MB
+readonly NULLSHA="0000000000000000000000000000000000000000"
+readonly EXIT_SUCCESS="0"
+readonly EXIT_FAILURE="1"
+
+# main entry point
+function main() {
+  local status="$EXIT_SUCCESS"
+
+  # read lines from stdin (format: "<oldref> <newref> <refname>\n")
+  local oldref
+  local newref
+  local refname
+  while read oldref newref refname; do
+    # skip branch deletions
+    if [[ "$newref" == "$NULLSHA" ]]; then
+      continue
+    fi
+
+    # find large objects
+    # check all objects from $oldref (possible $NULLSHA) to $newref, but
+    # skip all objects that have already been accepted (i.e. are referenced by
+    # another branch or tag).
+    local target
+    if [[ "$oldref" == "$NULLSHA" ]]; then
+      target="$newref"
+    else
+      target="${oldref}..${newref}"
+    fi
+    local large_files
+    large_files="$(git rev-list --objects "$target" --not --branches=\* --tags=\* | \
+      git cat-file $'--batch-check=%(objectname)\t%(objecttype)\t%(objectsize)\t%(rest)' | \
+      awk -F '\t' -v maxbytes="$MAXSIZE" '$3 > maxbytes' | cut -f 4-)"
+    if [[ "$?" != 0 ]]; then
+      echo "failed to check for large files in ref ${refname}"
+      continue
+    fi
+
+
+    git diff --stat --name-only --diff-filter=ACMRT ${target} | \
+      /node_modules/.bin/bids-validator --filenames -
+    if [[ "$?" != 0 ]]; then
+      echo ""
+      echo "-------------------------------------------------------------------------"
+      echo "Your push was rejected because it failed validation."
+      echo "Please test with bids-validator locally to resolve any errors before pushing."
+      echo "-------------------------------------------------------------------------"
+      exit $?
+    fi
+
+    IFS=$'\n'
+    for file in $large_files; do
+      if [[ "$status" == 0 ]]; then
+        echo ""
+        echo "-------------------------------------------------------------------------"
+        echo "Your push was rejected because it contains files larger than 100MB."
+        echo "Please use git-annex to store larger files."
+        echo "-------------------------------------------------------------------------"
+        echo ""
+        echo "Offending files:"
+        status="$EXIT_FAILURE"
+      fi
+      echo " - ${file} (ref: ${refname})"
+    done
+    unset IFS
+  done
+
+  exit "$status"
+}
+
+main
