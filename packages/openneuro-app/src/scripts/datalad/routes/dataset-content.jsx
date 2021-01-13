@@ -29,33 +29,32 @@ const MarginBottomDiv = styled.div`
   margin-bottom: 0.5em;
 `
 
-export const HasBeenPublished = ({ isPublic, datasetId }) =>
-  isPublic ? (
-    false ? ( // hasDraftChanges
-      <MarginBottomDiv className="alert alert-warning">
-        <strong>This dataset has been published!</strong> There are currently
-        unsaved changes. To save changes,
-        <Link to={`/datasets/${datasetId}/snapshot`}>
-          {' Create a new snapshot'}
-        </Link>
-      </MarginBottomDiv>
-    ) : (
-      <MarginBottomDiv className="alert alert-success">
-        <strong>This dataset has been published!</strong> Create a new snapshot
-        make changes available
-      </MarginBottomDiv>
-    )
-  ) : (
+export const HasBeenPublished = ({ isPrivate, datasetId, hasDraftChanges }) =>
+  isPrivate ? (
     <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has not been published!</strong>{' '}
       <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link> to
       make all snapshots available publicly
     </MarginBottomDiv>
+  ) : hasDraftChanges ? (
+    <MarginBottomDiv className="alert alert-warning">
+      <strong>This dataset has been published!</strong> There are currently
+      unsaved changes. To save changes,
+      <Link to={`/datasets/${datasetId}/snapshot`}>
+        {' Create a new snapshot.'}
+      </Link>
+    </MarginBottomDiv>
+  ) : (
+    <MarginBottomDiv className="alert alert-success">
+      <strong>This dataset has been published!</strong> Make changes to Draft
+      and create a new snapshot to make them available.
+    </MarginBottomDiv>
   )
 
 HasBeenPublished.propTypes = {
-  isPublic: PropTypes.bool,
+  isPrivate: PropTypes.bool,
   datasetId: PropTypes.string,
+  hasDraftChanges: PropTypes.bool,
 }
 
 /**
@@ -69,6 +68,9 @@ const DatasetContent = ({ dataset }) => {
     hasEditPermissions(dataset.permissions, user && user.sub)
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   useDraftSubscription(dataset.id)
+  const hasDraftChanges =
+    dataset.draft.head !==
+    dataset.snapshots[dataset.snapshots.length - 1].hexsha
   return (
     <>
       <LoggedIn>
@@ -79,7 +81,11 @@ const DatasetContent = ({ dataset }) => {
           <meta name="description" content={dataset.draft.readme} />
         </Helmet>
         <div className="col-xs-12">
-          <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
+          <HasBeenPublished
+            isPrivate={!dataset.public}
+            datasetId={dataset.id}
+            hasDraftChanges={hasDraftChanges}
+          />
         </div>
         <div className={mobileClass}>
           <EditDescriptionField
