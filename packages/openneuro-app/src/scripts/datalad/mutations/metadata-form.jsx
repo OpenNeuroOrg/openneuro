@@ -23,6 +23,15 @@ const DisabledNote = styled.div({
   },
 })
 
+const ValidationError = styled.div({
+  display: 'flex',
+  color: 'red',
+
+  i: {
+    marginRight: '0.5rem',
+  },
+})
+
 const metadataFields = hasEdit => {
   const fields = [
     {
@@ -263,6 +272,8 @@ const metadataFields = hasEdit => {
         disabled: false,
         annotated: false,
         required: false,
+        warningOnChange:
+          'Details: Affirms or refutes that all structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.',
       },
     },
     {
@@ -285,6 +296,8 @@ const metadataFields = hasEdit => {
         disabled: false,
         annotated: false,
         required: false,
+        warningOnChange:
+          'Details: Affirms or refutes that I have explicit participant consent and ethical authorization to publish structural scans without defacing',
       },
     },
   ]
@@ -296,7 +309,14 @@ const metadataFields = hasEdit => {
       })
 }
 
-const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
+const MetadataForm = ({
+  values,
+  onChange,
+  hideDisabled,
+  hiddenFields = [],
+  hasEdit,
+  validationErrors = [],
+}) => (
   <Form id="metadata-form" className="col-xs-6">
     <InfoText>
       Incomplete fields in this form will make it more difficult for users to
@@ -317,7 +337,9 @@ const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
     {metadataFields(hasEdit)
       .filter(
         // remove disabled fields when hideDisabled is true
-        field => !(hideDisabled && field.additionalProps.disabled),
+        field =>
+          !(hideDisabled && field.additionalProps.disabled) &&
+          !hiddenFields.includes(field.key),
       )
       .map(
         (
@@ -335,6 +357,13 @@ const MetadataForm = ({ values, onChange, hideDisabled, hasEdit }) => (
           />
         ),
       )}
+    {Boolean(validationErrors.length) &&
+      validationErrors.map((errorMessage, i) => (
+        <ValidationError key={i}>
+          <i className="fa fa-asterisk" />
+          <p>{errorMessage}</p>
+        </ValidationError>
+      ))}
   </Form>
 )
 
@@ -343,7 +372,9 @@ MetadataForm.propTypes = {
   values: PropTypes.object,
   onChange: PropTypes.func,
   hideDisabled: PropTypes.bool,
+  hiddenFields: PropTypes.array,
   hasEdit: PropTypes.bool,
+  validationErrors: PropTypes.array,
 }
 
 export default MetadataForm

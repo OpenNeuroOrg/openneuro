@@ -35,7 +35,7 @@ export const SUBMIT_METADATA = gql`
   }
 `
 
-const SubmitMetadata = ({ datasetId, metadata, done }) => (
+const SubmitMetadata = ({ datasetId, metadata, done, disabled }) => (
   <Mutation
     mutation={SUBMIT_METADATA}
     update={(cache, { data: { addMetadata } }) => {
@@ -53,7 +53,8 @@ const SubmitMetadata = ({ datasetId, metadata, done }) => (
       <button
         type="submit"
         form="metadata-form"
-        className="btn-modal-action"
+        className={`btn-modal-action${disabled ? ' btn-modal-danger' : ''}`}
+        disabled={disabled}
         onClick={async e => {
           e.preventDefault()
           await submitMetadata({
@@ -71,6 +72,7 @@ SubmitMetadata.propTypes = {
   datasetId: PropTypes.string,
   metadata: PropTypes.object,
   done: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 export default SubmitMetadata
