@@ -22,7 +22,6 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import useMedia from '../../mobile/media-hook.jsx'
-import useDraftSubscription from '../subscriptions/useDraftSubscription.js'
 import styled from '@emotion/styled'
 
 const MarginBottomDiv = styled.div`
@@ -67,7 +66,6 @@ const DatasetContent = ({ dataset }) => {
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
-  useDraftSubscription(dataset.id)
   const hasDraftChanges =
     dataset.draft.head !==
     dataset.snapshots[dataset.snapshots.length - 1].hexsha

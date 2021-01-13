@@ -13,6 +13,7 @@ import useSnapshotsUpdatedSubscriptions from '../subscriptions/useSnapshotsUpdat
 import useDatasetDeletedSubscription, {
   datasetDeletedToast,
 } from '../subscriptions/useDatasetDeletedSubscription.jsx'
+import useDraftSubscription from '../subscriptions/useDraftSubscription.js'
 import * as DatasetQueryFragments from './dataset-query-fragments.js'
 import { DATASET_COMMENTS } from './comments-fragments.js'
 import ErrorBoundary, {
@@ -119,6 +120,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
       datasetDeletedToast(datasetId, data?.dataset?.draft?.description?.Name)
     }
   })
+  useDraftSubscription(datasetId)
 
   useEffect(() => {
     if (error) {
