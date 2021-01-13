@@ -33,20 +33,24 @@ export const HasBeenPublished = ({ isPrivate, datasetId, hasDraftChanges }) =>
     <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has not been published!</strong>{' '}
       <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link> to
-      make all snapshots available publicly
+      make all snapshots available publicly.
     </MarginBottomDiv>
   ) : hasDraftChanges ? (
     <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has been published!</strong> There are currently
-      unsaved changes. To save changes,
+      unsaved changes to this Draft. Changes made here become public when you
       <Link to={`/datasets/${datasetId}/snapshot`}>
-        {' Create a new snapshot.'}
+        {' create a new snapshot.'}
       </Link>
     </MarginBottomDiv>
   ) : (
     <MarginBottomDiv className="alert alert-success">
-      <strong>This dataset has been published!</strong> Make changes to Draft
-      and create a new snapshot to make them available.
+      <strong>This dataset has been published!</strong>
+      You can make changes to this Draft page, then
+      <Link to={`/datasets/${datasetId}/snapshot`}>
+        {' create a new snapshot '}
+      </Link>
+      to make them public.
     </MarginBottomDiv>
   )
 
