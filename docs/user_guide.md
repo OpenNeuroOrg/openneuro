@@ -24,7 +24,7 @@ To access public datasets, click on the PUBLIC DASHBOARD button in the navigatio
 
 On the Public Dashboard, datasets can be searched for by keyword or sorted by various criteria. 
 
-Visible from the dashboard are each dataset's high-level stats and information. To access a dataset's landing page, click on it's name. 
+Visible from the dashboard are each dataset's high-level stats and information. To access a dataset's landing page, click on its name. 
 
 ![public dashboard, dataset item](./assets/public-dashboard-dataset-item.png)
 
@@ -69,7 +69,7 @@ Once you've signed into OpenNeuro, you'll be able to upload your dataset by hitt
 
 There are a few things to keep in mind before uploading a dataset:
 
-  1. You must be the owner of the dataset and have the necessary ethics permissions to share the data publically.
+  1. You must be the owner of the dataset and have the necessary ethics permissions to share the data publicly.
 
   2. The dataset may not be subject to GDPR protections.
 
@@ -118,7 +118,7 @@ If you're running into complications, there are multiple means by which you can 
 
 To start, OpenNeuro has a [FAQ page](https://openneuro.org/faq) that might contain what you're looking for.
 
-If you're running into problems of a less general nature, we highly recommend looking to [NeuroStars](https://neurostars.org/) for assistance. It is a public forum hosted by the International Neuroinformatics Coordinating Facility (INCF) and there you'll be able to find experienced users of this an other related platforms.
+If you're running into problems of a less general nature, we highly recommend looking to [NeuroStars](https://neurostars.org/) for assistance. It is a public forum hosted by the International Neuroinformatics Coordinating Facility (INCF) and there you'll be able to find experienced users of this and other related platforms.
 
 Finally, users logged into [openneuro.org](https://openneuro.org/) can access the Support page for issues regarding the site or a specific dataset.
 
