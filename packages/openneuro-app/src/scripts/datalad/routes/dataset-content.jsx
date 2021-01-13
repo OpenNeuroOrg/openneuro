@@ -78,13 +78,11 @@ const DatasetContent = ({ dataset }) => {
           </title>
           <meta name="description" content={dataset.draft.readme} />
         </Helmet>
-        <div className="col-xs-12">
-          <HasBeenPublished
-            isPrivate={!dataset.public}
-            datasetId={dataset.id}
-            hasDraftChanges={hasDraftChanges}
-          />
-        </div>
+        <HasBeenPublished
+          isPrivate={!dataset.public}
+          datasetId={dataset.id}
+          hasDraftChanges={hasDraftChanges}
+        />
         <div className={mobileClass}>
           <EditDescriptionField
             datasetId={dataset.id}
