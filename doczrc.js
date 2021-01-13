@@ -2,7 +2,14 @@ export default {
   title: 'OpenNeuro Documentation',
   description: 'User and developer documentation for the OpenNeuro platform',
   typescript: true,
-  menu: ['Introduction', 'GraphQL API', 'Command Line Interface'],
+  menu: [
+    'Introduction',
+    'User Guide',
+    'GraphQL API',
+    'Command Line Interface',
+    'DataLad Service',
+    'Git Access',
+  ],
   plugins: [
     {
       resolve: `gatsby-plugin-s3`,
