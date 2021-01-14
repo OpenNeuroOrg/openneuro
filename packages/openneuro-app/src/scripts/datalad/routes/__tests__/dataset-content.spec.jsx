@@ -6,11 +6,17 @@ import { hasEditPermissions } from '../../../authentication/profile.js'
 describe('DatasetContent component', () => {
   describe('HasBeenPublished', () => {
     it('public datasets show success banner', () => {
-      const wrapper = shallow(<HasBeenPublished datasetId="1" isPublic />)
+      const wrapper = shallow(<HasBeenPublished datasetId="1" />)
       expect(wrapper.at(0).hasClass('alert-success')).toBeTruthy()
     })
+    it('public datasets with draft changes show warning banner', () => {
+      const wrapper = shallow(
+        <HasBeenPublished datasetId="1" hasDraftChanges />,
+      )
+      expect(wrapper.at(0).hasClass('alert-warning')).toBeTruthy()
+    })
     it('non-public datasets show warning banner', () => {
-      const wrapper = shallow(<HasBeenPublished datasetId="1" />)
+      const wrapper = shallow(<HasBeenPublished datasetId="1" isPrivate />)
       expect(wrapper.at(0).hasClass('alert-warning')).toBeTruthy()
     })
   })

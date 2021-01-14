@@ -76,6 +76,7 @@ export const DATASET_SNAPSHOTS = gql`
       id
       tag
       created
+      hexsha
     }
   }
 `

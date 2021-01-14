@@ -6,8 +6,8 @@ export default (datasetId, revision) => {
     draftUpdated: {
       __typename: 'Dataset',
       id: datasetId,
-      revision,
-      modified: Date(), // Set date to now
+      head: revision,
+      modified: new Date(), // Set date to now
     },
   })
 }
