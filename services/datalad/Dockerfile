@@ -1,5 +1,6 @@
 FROM python:3.8-slim as base
 
+COPY hooks /hooks
 COPY package.json /package.json
 COPY Pipfile /Pipfile
 COPY Pipfile.lock /Pipfile.lock
