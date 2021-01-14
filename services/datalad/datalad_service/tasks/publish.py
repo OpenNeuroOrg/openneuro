@@ -132,23 +132,19 @@ def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
 
     # Create the sibling if it does not exist
     s3_sibling(ds, siblings)
+    gevent.sleep()
 
     # Export to S3
     publish_target(ds, realm.s3_remote, snapshot)
+    gevent.sleep()
 
     # Public publishes to GitHub
     if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
         # Create Github sibling only if GitHub is enabled
         github_sibling(ds, dataset, siblings)
-        publish_github_async(store, dataset, snapshot, realm.github_remote)
+        publish_target(ds, realm.github_remote, snapshot)
 
     clear_dataset_cache(dataset, cookies)
-
-
-def publish_github_async(store, dataset, snapshot, github_remote):
-    """Actual Github remote push. Can run on another queue, so it's its own task."""
-    ds = store.get_dataset(dataset)
-    publish_target(ds, github_remote, snapshot)
 
 
 def delete_s3_sibling(dataset_id, siblings, realm):
