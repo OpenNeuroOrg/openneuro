@@ -6,6 +6,7 @@ route: user-guide
 # User Guide
 
 Welcome to OpenNeuro! This guide is dedicated to new users to the site who would like to get started on using the [OpenNeuro web platform](https://openneuro.org/) to freely store and share [Brain Imaging Data Structure (BIDS) datasets](https://bids.neuroimaging.io/).
+
 ## Signing Up
 
 OpenNeuro does not require you to have an account to browse and download public datasets, but having an account does allow you to save those that interest you or to subscribe to them for email updates. Naturally, you will also need an account if you plan to store or manage your own datasets.
@@ -57,7 +58,7 @@ This is the main section of the dataset landing page, containing almost all of i
 - View a dataset's information (extracted from its README and description.json files).
 - View and download individual files. The file viewer supports the following file extensions: csv, html, txt, json, tsv, nii, and nii.gz.
 - Download the dataset via the browser.
-- View instructions for downloading it from S3, or via datalad or the openneuro-cli.
+- View instructions for downloading it from S3, or via DataLad or the openneuro-cli.
 - View analyses of the dataset on BrainLife (if available).
 - Check the dataset's BIDS validation status.
 - View the datasets git hash at this version.
@@ -110,7 +111,7 @@ The dataset toolbar will have a few new items, including:
 - Create Snapshot: Create a new version of this dataset with changes made to Draft.
 - View and Edit Metadata: If you didn't add the metadata on upload, you can fill it in here.
 
-Advanced users may wish to manage their datasets by other means. OpenNeuro datasets and features are available through its [GraphQL API](/api), the [openneuro-cli](/packages-openneuro-cli-readme), [Datalad](/services-datalad-readme), and [direct git access](/git).
+Advanced users may wish to manage their datasets by other means. OpenNeuro datasets and features are available through its [GraphQL API](/api), the [openneuro-cli](/packages-openneuro-cli-readme), [DataLad](/services-datalad-readme), and [direct git access](/git).
 
 ## Support Channels
 
@@ -120,6 +121,8 @@ To start, OpenNeuro has a [FAQ page](https://openneuro.org/faq) that might conta
 
 If you're running into problems of a less general nature, we highly recommend looking to [NeuroStars](https://neurostars.org/) for assistance. It is a public forum hosted by the International Neuroinformatics Coordinating Facility (INCF) and there you'll be able to find experienced users of this and other related platforms.
 
-Finally, users logged into [openneuro.org](https://openneuro.org/) can access the Support page for issues regarding the site or a specific dataset.
+Finally, users logged into [openneuro.org](https://openneuro.org/) can access the SUPPORT modal for issues regarding the site or a specific dataset.
+
+![nav bar logged out support button](./assets/nav-bar-logged-out-support.png)
 
 As an aside, if you'd like to suggest a new feature, you can do so [here](https://openneuro.featureupvote.com/).
