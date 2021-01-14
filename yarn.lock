@@ -6406,10 +6406,10 @@ better-queue@^3.8.10:
     node-eta "^0.9.0"
     uuid "^3.0.0"
 
-bids-validator@1.5.8:
-  version "1.5.8"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.8.tgz#fb31fd7a75ac5b5b75b33caca6e82a6313e74d28"
-  integrity sha512-MQgz9P8WTE9nefvqFn9Iw8Ywys5WFIytGhUhtJPaH+srARTapPo88CS8rX2DhbZL96tQd/3bLlD3LwH+VErbig==
+bids-validator@1.5.9:
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.9.tgz#f7f3b97055d501c2d5fdba47c3e0e0d5aa979836"
+  integrity sha512-zrvE1GDrk3z6N/e88lO3FgKfZw/caOmx2mSrpZHtY3aGDhK8mimsTMqGgoZoey3V9tvpGeAgZhtjvtgU/w2qrw==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
@@ -6418,7 +6418,7 @@ bids-validator@1.5.8:
     cross-fetch "^2.2.2"
     date-fns "^2.7.0"
     esm "^3.2.25"
-    hed-validator "^2.0.1"
+    hed-validator "^3.0.0"
     ignore "^4.0.2"
     is-utf8 "^0.2.1"
     jshint "^2.9.6"
@@ -8783,7 +8783,7 @@ datauri@~0.2.0:
     mimer "*"
     templayed "*"
 
-date-and-time@^0.14.1:
+date-and-time@^0.14.2:
   version "0.14.2"
   resolved "https://registry.yarnpkg.com/date-and-time/-/date-and-time-0.14.2.tgz#a4266c3dead460f6c231fe9674e585908dac354e"
   integrity sha512-EFTCh9zRSEpGPmJaexg7HTuzZHh6cnJj1ui7IGCFNXzd2QdpsNh05Db5TF3xzJm30YN+A8/6xHSuRcQqoc3kFA==
@@ -12971,15 +12971,15 @@ header-case@^1.0.0:
     no-case "^2.2.0"
     upper-case "^1.1.3"
 
-hed-validator@^2.0.1:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/hed-validator/-/hed-validator-2.0.3.tgz#a7b831807e95495e3fbd0cba64ff7fecc9a66608"
-  integrity sha512-q9K6LzUWQhw+6MnOyqmiK3a4JSJ4/iJDF7FaewgMRkGQGTFPKQTOyLKpLd3s/aMLB++Hc3TX7BCCOxuMjQDOEg==
+hed-validator@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/hed-validator/-/hed-validator-3.0.2.tgz#0425c11f1efedc8a971aff1e65b4dd79642c58dc"
+  integrity sha512-RIxh70bwwvpg57XOQTbn0sWS2lK2J8wSFM3ilhBq8mvQHXFER4r5NZ/ZYKfS80NykRKYzBMATfcAyHdTWLpeAw==
   dependencies:
-    date-and-time "^0.14.1"
+    date-and-time "^0.14.2"
     date-fns "^2.16.1"
     pluralize "^8.0.0"
-    semver "^7.3.2"
+    semver "^7.3.4"
     then-request "^6.0.2"
     xml2js "^0.4.23"
 
@@ -16168,6 +16168,13 @@ lru-cache@^5.0.0, lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
+
+lru-cache@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
+  integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
+  dependencies:
+    yallist "^4.0.0"
 
 lru-queue@0.1:
   version "0.1.0"
@@ -21575,6 +21582,13 @@ semver@^7.3.2:
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
   integrity sha512-OrOb32TeeambH6UrhtShmF7CRDqhL6/5XpPNp2DuRH6+9QLw/orhp72j87v8Qa1ScDkvrrBNpZcDejAirJmfXQ==
 
+semver@^7.3.4:
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.4.tgz#27aaa7d2e4ca76452f98d3add093a72c943edc97"
+  integrity sha512-tCfb2WLjqFAtXn4KEdxIhalnRtoKFN7nAwj0B3ZXCbQloV2tq5eDbcTmT68JJD3nRJq24/XgxtQKFIpQdtvmVw==
+  dependencies:
+    lru-cache "^6.0.0"
+
 semver@~5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.3.0.tgz#9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f"
@@ -25292,6 +25306,11 @@ yallist@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.0.3.tgz#b4b049e314be545e3ce802236d6cd22cd91c3de9"
   integrity sha512-S+Zk8DEWE6oKpV+vI3qWkaK+jSbIK86pCwe2IF/xwIpQ8jEuxpw9NyaGjmp9+BoJv5FV2piqCDcoCtStppiq2A==
+
+yallist@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
+  integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
 yaml-loader@^0.6.0:
   version "0.6.0"
