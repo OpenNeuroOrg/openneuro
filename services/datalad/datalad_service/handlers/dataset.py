@@ -37,13 +37,9 @@ class DatasetResource(object):
         else:
             # Record if this was done on behalf of a user
             name, email = get_user_info(req)
-            try:
-                hexsha = create_dataset(self.store, dataset, name, email)
-                resp.media = {'hexsha': hexsha}
-                resp.status = falcon.HTTP_OK
-            except:
-                resp.media = {'error': 'dataset creation failed'}
-                resp.status = falcon.HTTP_500
+            hexsha = create_dataset(self.store, dataset, name, email)
+            resp.media = {'hexsha': hexsha}
+            resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, dataset):
         def run_delete_tasks(store, dataset):
