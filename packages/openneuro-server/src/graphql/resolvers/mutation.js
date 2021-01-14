@@ -24,7 +24,7 @@ import { addComment, editComment, deleteComment } from './comment.js'
 import { subscribeToNewsletter } from './newsletter'
 import { addMetadata } from './metadata.js'
 import { prepareUpload, finishUpload } from './upload.js'
-import { prepareRepoAccess } from './git.ts'
+import { prepareRepoAccess } from './git'
 import { cacheClear } from './cache'
 
 const Mutation = {
