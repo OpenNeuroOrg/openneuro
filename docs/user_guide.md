@@ -121,6 +121,8 @@ To start, OpenNeuro has a [FAQ page](https://openneuro.org/faq) that might conta
 
 If you're running into problems of a less general nature, we highly recommend looking to [NeuroStars](https://neurostars.org/) for assistance. It is a public forum hosted by the International Neuroinformatics Coordinating Facility (INCF) and there you'll be able to find experienced users of this and other related platforms.
 
-Finally, users logged into [openneuro.org](https://openneuro.org/) can access the Support page for issues regarding the site or a specific dataset.
+Finally, users logged into [openneuro.org](https://openneuro.org/) can access the SUPPORT modal for issues regarding the site or a specific dataset.
+
+![nav bar logged out support button](./assets/nav-bar-logged-out-support.png)
 
 As an aside, if you'd like to suggest a new feature, you can do so [here](https://openneuro.featureupvote.com/).
