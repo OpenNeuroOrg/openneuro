@@ -8,13 +8,17 @@ exports[`UpdateFile mutation renders with default props 1`] = `
     <div
       className="edit-file"
     >
-      <input
-        className="update-file"
-        multiple={false}
-        onChange={[Function]}
-        type="file"
-        webkitdirectory={false}
-      />
+      <TooltipTop
+        tooltip=""
+      >
+        <input
+          className="update-file"
+          multiple={false}
+          onChange={[Function]}
+          type="file"
+          webkitdirectory={false}
+        />
+      </TooltipTop>
     </div>
   </UpdateFile>
 </ApolloProvider>
