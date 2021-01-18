@@ -52,6 +52,7 @@ const FileTree = ({
               <UpdateFile
                 datasetId={datasetId}
                 path={unescapePath(path)}
+                tooltip={`Choose a folder to be added to /${name}.`}
                 directory>
                 <i className="fa fa-plus" /> Add Directory
               </UpdateFile>
