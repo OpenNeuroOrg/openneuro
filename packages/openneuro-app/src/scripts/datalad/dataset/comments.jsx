@@ -5,6 +5,8 @@ import CommentEditor from '../comments/comment-editor.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import { toast } from 'react-toastify'
+import ToastContent from '../../common/partials/toast-content.jsx'
 
 const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
   <>
@@ -54,7 +56,12 @@ const Comments = ({ datasetId, uploader, comments }) => {
         <h2>Comments</h2>
         <ErrorBoundary subject="error in dataset comments">
           <LoggedIn>
-            <CommentEditor datasetId={datasetId} />
+            <CommentEditor
+              datasetId={datasetId}
+              done={() =>
+                toast.success(<ToastContent title="Comment Posted" />)
+              }
+            />
           </LoggedIn>
           <LoggedOut>
             <div>Please sign in to contribute to the discussion.</div>
