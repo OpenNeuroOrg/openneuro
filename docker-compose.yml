@@ -80,6 +80,7 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./services/datalad/datalad_service:/datalad_service
+      - ./scripts/repair-git-annex-branch-all-tags.sh:/scripts/repair-git-annex-branch-all-tags.sh
     env_file: ./config.env
     init: true
     command:
