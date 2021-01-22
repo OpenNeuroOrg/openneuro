@@ -2,7 +2,7 @@ import falcon
 import os.path
 import logging
 import subprocess
-from datalad_service.common.stream import pipe_chunks
+from datalad_service.common.elasticsearch import log_reexporter
 
 class ReexporterResource(object):
     """/info/refs returns current state for either git-receive-pack or git-upload-pack"""
@@ -14,8 +14,6 @@ class ReexporterResource(object):
     def on_post(self, req, resp):
         process = subprocess.Popen(
             ['/scripts/repair-git-annex-branch-all-tags.sh'], stdout=subprocess.PIPE)
-        for line in iter(process.stdout.readline, ''):
-            print('***')
-            self.logger.log(20, line)
+        log_reexporter(process)
         resp.status = falcon.HTTP_OK
         resp.stream = process.stdout
