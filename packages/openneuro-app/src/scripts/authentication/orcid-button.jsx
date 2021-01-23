@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import config from '../../../config'
+import orcidLogo from '../../assets/orcid_24x24.png'
 
 const OrcidButton = ({ min }) => {
   const btnClass = min ? 'btn-blue' : 'btn-admin'
@@ -11,12 +12,7 @@ const OrcidButton = ({ min }) => {
       <a href={config.crn.url + 'auth/orcid'}>
         <button className={btnClass}>
           <span className="icon">
-            <img
-              alt="ORCID"
-              width={size}
-              height={size}
-              src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
-            />
+            <img alt="ORCID" width={size} height={size} src={orcidLogo} />
           </span>
           <span>{btnText}</span>
         </button>
