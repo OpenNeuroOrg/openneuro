@@ -151,6 +151,8 @@ export const typeDefs = `
     revalidate(datasetId: ID!, ref: String!): Boolean
     # Request a temporary token for git access
     prepareRepoAccess(datasetId: ID!): RepoMetadata
+    # Rerun remote exports
+    reexportRemotes: Boolean
   }
 
   input UploadFile {

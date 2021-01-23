@@ -26,6 +26,7 @@ import { addMetadata } from './metadata.js'
 import { prepareUpload, finishUpload } from './upload.js'
 import { prepareRepoAccess } from './git'
 import { cacheClear } from './cache'
+import { reexportRemotes } from './reexporter'
 
 const Mutation = {
   createDataset,
@@ -60,6 +61,7 @@ const Mutation = {
   cacheClear,
   revalidate,
   prepareRepoAccess,
+  reexportRemotes,
 }
 
 export default Mutation
