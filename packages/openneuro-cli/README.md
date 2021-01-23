@@ -16,9 +16,14 @@ If you are using [yarn](https://yarnpkg.com/) you can also perform the installat
 
 # Setup
 
-Run `openneuro login` to configure credentials. This prompts you for the required configuration fields and saves this to .openneuro in your home directory or profile.
+The setup step is needed for both uploading *and* downloading data from OpenNeuro.
 
-You can manually configure custom servers by editing this file.
+Run `openneuro login` to configure credentials.
+This prompts you for the required configuration fields and saves this to `.openneuro` in your home directory or profile.
+`openneuro login` will require you to enter an API key.
+You can obtain an API key via a browser at https://openneuro.org/keygen after logging to the OpenNeuro platform via one of the provided authentification services (for example ORCID).
+
+After successfully running `openneuro login`, you can manually configure custom servers by editing the `.openneuro` file.
 
 # Usage
 
@@ -56,4 +61,5 @@ Package: OpenNeuro CLI download option
 
 Issue: `TypeError: path must be a string or Buffer`
 
-Solution: This error is due to a failure to read the ~/.openneuro configuration file. This file can be created with the command `openneuro login`. To download a dataset, users need to authenticate with an API key at that time. One can obtain an API key at https://openneuro.org/keygen
+Solution: This error is due to a failure to read the `~/.openneuro` configuration file.
+This file can be created with the command `openneuro login`, see the "Setup" step above.
