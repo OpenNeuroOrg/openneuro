@@ -17,13 +17,7 @@ class ReexporterResource(object):
         process = subprocess.Popen(
             ['/scripts/repair-git-annex-branch-all-tags.sh'], stdout=secondary, stderr=secondary)
         stdout = os.fdopen(primary)
-        # self.logger.debug('******')
-        # self.logger.debug('******')
-        # self.logger.debug('******')
-        # self.logger.debug(stdout.readline())
-        # self.logger.debug(stdout.readline())
         log_reexporter(self.logger, stdout)
         
-        # log_reexporter(logger, process)
         resp.status = falcon.HTTP_OK
         resp.stream = process.stdout

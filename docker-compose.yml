@@ -133,3 +133,11 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+
+# x-disabled:
+  kibana:
+    image: kibana:7.10.1
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
