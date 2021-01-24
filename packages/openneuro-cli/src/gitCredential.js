@@ -11,9 +11,20 @@ const prepareRepoAccess = gql`
   }
 `
 
+export function getRepoToken(datasetId) {
+  const client = configuredClient()
+  return client
+    .mutate({
+      mutation: prepareRepoAccess,
+      variables: {
+        datasetId,
+      },
+    })
+    .then(({ data }) => data.prepareRepoAccess.token)
+}
+
 export function gitCredential() {
   const credential = {}
-  const client = configuredClient()
   const stdin = readline.createInterface({
     input: process.stdin,
   })
@@ -24,22 +35,15 @@ export function gitCredential() {
   stdin.on('close', () => {
     if ('path' in credential) {
       const datasetId = credential.path.split('/').pop()
-      client
-        .mutate({
-          mutation: prepareRepoAccess,
-          variables: {
-            datasetId,
-          },
-        })
-        .then(({ data }) => {
-          const output = {
-            username: 'openneuro-cli',
-            password: data.prepareRepoAccess.token,
-          }
-          for (const key in output) {
-            console.log(`${key}=${output[key]}`)
-          }
-        })
+      getRepoToken(datasetId).then(token => {
+        const output = {
+          username: 'openneuro-cli',
+          password: token,
+        }
+        for (const key in output) {
+          console.log(`${key}=${output[key]}`)
+        }
+      })
     } else {
       throw new Error(
         'Invalid input from git, check the credential helper is configured correctly',

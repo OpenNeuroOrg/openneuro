@@ -14,7 +14,8 @@
   "license": "MIT",
   "bin": {
     "openneuro": "./src/index.js",
-    "git-credential-openneuro": "./src/index.js"
+    "git-credential-openneuro": "./src/index.js",
+    "git-annex-remote-openneuro": "./src/index.js"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
@@ -33,7 +34,8 @@
   },
   "scripts": {
     "openneuro": "node src/index.js",
-    "git-credential-openneuro": "node src/index.js"
+    "git-credential-openneuro": "node src/index.js",
+    "git-annex-remote-openneuro": "node src/index.js"
   },
   "jest": {
     "setupFiles": [

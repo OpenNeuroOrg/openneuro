@@ -86,7 +86,8 @@ class GitReceiveResource(object):
             return _handle_failed_access(req, resp)
         if dataset:
             ds = self.store.get_dataset(dataset)
-            pre_receive_path = os.path.join(ds.path, '.git', 'hooks', 'pre-receive')
+            pre_receive_path = os.path.join(
+                ds.path, '.git', 'hooks', 'pre-receive')
             if not os.path.islink(pre_receive_path):
                 os.symlink('/hooks/pre-receive', pre_receive_path)
             process = subprocess.Popen(
