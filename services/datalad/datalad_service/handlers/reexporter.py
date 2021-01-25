@@ -3,7 +3,7 @@ import os.path
 import logging
 import subprocess
 import pty
-from datalad_service.common.elasticsearch import es, log_reexporter
+from datalad_service.common.elasticsearch import log_reexporter
 
 class ReexporterResource(object):
     """/info/refs returns current state for either git-receive-pack or git-upload-pack"""

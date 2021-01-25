@@ -4,9 +4,8 @@ from elasticsearch import Elasticsearch
 from datetime import datetime
 from datalad_service.config import ELASTICSEARCH_CONNECTION
 
-es = Elasticsearch([ELASTICSEARCH_CONNECTION])
-
 def log_reexporter(logger, stdout):
+    es = Elasticsearch([ELASTICSEARCH_CONNECTION])
     process_start = datetime.now()
     delineator = ':::\n'
     packet = []
