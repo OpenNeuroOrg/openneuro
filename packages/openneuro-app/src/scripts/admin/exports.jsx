@@ -5,7 +5,7 @@ import { gql, useMutation } from '@apollo/client'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../resources/strings'
 import PropTypes from 'prop-types'
-import { reexporterLogsURI } from '../resources/kibana'
+import { reexporterLogsURL } from '../resources/kibana'
 import styled from '@emotion/styled'
 
 const ButtonsContainer = styled.div({
@@ -107,7 +107,7 @@ const Exports = () => {
             <NormalizedButton
               className="btn-blue"
               onClick={() => {
-                window.open(reexporterLogsURI, '_blank')
+                window.open(reexporterLogsURL, '_blank')
               }}>
               View Export Logs
             </NormalizedButton>
