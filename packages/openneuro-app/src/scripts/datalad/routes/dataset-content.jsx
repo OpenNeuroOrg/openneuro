@@ -45,7 +45,7 @@ export const HasBeenPublished = ({ isPrivate, datasetId, hasDraftChanges }) =>
     </MarginBottomDiv>
   ) : (
     <MarginBottomDiv className="alert alert-success">
-      <strong>This dataset has been published!</strong>
+      <strong>{'This dataset has been published! '}</strong>
       You can make changes to this Draft page, then
       <Link to={`/datasets/${datasetId}/snapshot`}>
         {' create a new snapshot '}
