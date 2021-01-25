@@ -28,6 +28,16 @@ function main() {
       continue
     fi
 
+    local base
+    base=$(git merge-base $oldref $newref)
+    if [[ "${base}" != "${oldref}" ]]; then
+      echo ""
+      echo "-------------------------------------------------------------------------"
+      echo "Force update not allowed."
+      echo "-------------------------------------------------------------------------"
+      exit $EXIT_FAILURE
+    fi
+
     # find large objects
     # check all objects from $oldref (possible $NULLSHA) to $newref, but
     # skip all objects that have already been accepted (i.e. are referenced by
