@@ -8,6 +8,8 @@ import CommentEditor from '../comments/comment-editor.jsx'
 import DeleteComment from '../mutations/delete-comment.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
+import { toast } from 'react-toastify'
+import ToastContent from '../../common/partials/toast-content.jsx'
 
 const Comment = ({ datasetId, data, children }) => {
   const [replyMode, setReplyMode] = useState(false)
@@ -66,7 +68,10 @@ const Comment = ({ datasetId, data, children }) => {
             <CommentEditor
               datasetId={datasetId}
               parentId={data.id}
-              done={() => setReplyMode(false)}
+              done={() => {
+                setReplyMode(false)
+                toast.success(<ToastContent title="Reply Posted" />)
+              }}
             />
           ) : null}
         </div>

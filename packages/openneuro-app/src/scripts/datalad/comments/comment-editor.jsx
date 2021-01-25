@@ -18,6 +18,10 @@ const CommentEditor = ({
   const [editorState, setEditorState] = useState(
     state || EditorState.createEmpty(),
   )
+  const doAfterSubmit = () => {
+    setEditorState(EditorState.createEmpty())
+    done && done()
+  }
   const disabled = editorState.getUndoStack().size === 0
   return (
     <div className="RichEditor-root">
@@ -48,7 +52,7 @@ const CommentEditor = ({
             commentId={commentId}
             comment={editorState.getCurrentContent()}
             disabled={disabled}
-            done={done}
+            done={doAfterSubmit}
           />
         ) : (
           <CommentMutation
@@ -56,7 +60,7 @@ const CommentEditor = ({
             parentId={parentId}
             comment={editorState.getCurrentContent()}
             disabled={disabled}
-            done={done}
+            done={doAfterSubmit}
           />
         )}
       </div>

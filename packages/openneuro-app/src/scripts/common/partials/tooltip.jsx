@@ -17,7 +17,7 @@ export default class TooltipTop extends React.PureComponent {
   render() {
     const tooltip = <Tooltip id={this.id}>{this.props.tooltip}</Tooltip>
 
-    return (
+    return this.props.tooltip ? (
       <OverlayTrigger
         placement="top"
         overlay={tooltip}
@@ -25,6 +25,8 @@ export default class TooltipTop extends React.PureComponent {
         delayHide={150}>
         {this.props.children}
       </OverlayTrigger>
+    ) : (
+      this.props.children
     )
   }
 }
