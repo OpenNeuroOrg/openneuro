@@ -4,6 +4,7 @@ import colors from 'colors'
 import packageJson from '../package.json'
 import { login, upload, download } from './actions.js'
 import { gitCredential } from './gitCredential.js'
+import { gitAnnexRemote } from './gitAnnexRemote.js'
 
 /**
  * display the help text in red on the console
@@ -75,6 +76,8 @@ commander.parse(process.argv)
 
 if (process.argv[1].endsWith('git-credential-openneuro')) {
   gitCredential()
+} else if (process.argv[1].endsWith('git-annex-remote-openneuro')) {
+  gitAnnexRemote()
 } else if (!process.argv.slice(2).length) {
   commander.outputHelp(makeRed)
 }

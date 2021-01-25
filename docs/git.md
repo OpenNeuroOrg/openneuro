@@ -71,9 +71,31 @@ path=/git/0/ds000001
 EOF
 ```
 
-
 ## Snapshots
 
-Snapshots are represented as git tags. To use all OpenNeuro features, you must have at least one tag with a valid semantic versioning name. This is typically `1.0.0` but can be any valid semantic version.
+Snapshots are represented as git tags. To use all OpenNeuro features, you must have at least one tag with a valid semantic versioning name. This is typically `1.0.0` but can be any valid numeric semantic version.
 
-Other tags are allowed but will not be published to S3. This can be useful but the only way to retrieve the full copy of these snapshots at the moment is via direct git access. They will appear on the web.
+## git-annex special remote
+
+Direct access can clone, push, and pull dataset contents but it does not transfer annexed objects on its own. For public datasets, the annexed objects are available with a preconfigured remote on S3 shortly after the dataset is made public or a new snapshot is created if the dataset is already public.
+
+For private datasets or to add new data with DataLad or git-annex, a special remote is available to push data directly to OpenNeuro.
+
+### Configuring OpenNeuro special remote
+
+Obtain the URL from the dataset page and run initremote (or enableremote if you need to update it).
+
+```shell
+# Make sure openneuro-cli is installed and available in your path
+# You should see 'VERSION 1' 'EXTENSIONS' if this is working
+echo "EXTENSIONS" | git-annex-remote-openneuro
+# Configure the remote with the URL for your dataset
+git annex initremote openneuro type=external externaltype=openneuro encryption=none url=https://openneuro.org/git/0/ds0000001
+```
+
+After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.
+
+```shell
+# To upload any annexed objects to the remote
+git annex copy --to openneuro
+```
