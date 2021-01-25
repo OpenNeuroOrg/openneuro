@@ -6,8 +6,6 @@ import pty
 from datalad_service.common.elasticsearch import log_reexporter
 
 class ReexporterResource(object):
-    """/info/refs returns current state for either git-receive-pack or git-upload-pack"""
-
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
