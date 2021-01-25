@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { UsersQueryResult } from '../admin.users.jsx'
+import { UsersQueryResult } from '../users.jsx'
 
 describe('Admin users tab', () => {
   describe('UsersQueryResult component', () => {
