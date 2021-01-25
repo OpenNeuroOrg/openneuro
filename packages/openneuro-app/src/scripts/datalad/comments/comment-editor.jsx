@@ -22,7 +22,6 @@ const CommentEditor = ({
     setEditorState(EditorState.createEmpty())
     done && done()
   }
-  console.log(editorState)
   const disabled = editorState.getUndoStack().size === 0
   return (
     <div className="RichEditor-root">
