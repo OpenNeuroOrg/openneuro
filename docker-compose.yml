@@ -134,7 +134,8 @@ services:
       - "9200:9200"
       - "9300:9300"
 
-x-disabled:
+# comment out `x-disabled` to enable kibana service
+x-disabled: 
   kibana:
     image: kibana:7.10.1
     depends_on:

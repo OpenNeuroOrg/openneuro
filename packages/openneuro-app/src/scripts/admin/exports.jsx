@@ -3,8 +3,9 @@
 import React from 'react'
 import { gql, useMutation } from '@apollo/client'
 import Helmet from 'react-helmet'
-import { pageTitle } from '../resources/strings.js'
+import { pageTitle } from '../resources/strings'
 import PropTypes from 'prop-types'
+import { reexporterLogsURI } from '../resources/kibana'
 import styled from '@emotion/styled'
 
 const ButtonsContainer = styled.div({
@@ -106,7 +107,7 @@ const Exports = () => {
             <NormalizedButton
               className="btn-blue"
               onClick={() => {
-                window.open(linkToKibana(), '_blank')
+                window.open(reexporterLogsURI, '_blank')
               }}>
               View Export Logs
             </NormalizedButton>
@@ -118,24 +119,5 @@ const Exports = () => {
 }
 
 Exports.propTypes = {}
-
-const getKibanaURI = () => {
-  if (process.env.ELASTICSEARCH_CLOUD_ID) {
-    const ELASTICSEARCH_CLOUD_ID = process.env.ELASTICSEARCH_CLOUD_ID
-    const base64 = /:(.+?==)$/.exec(ELASTICSEARCH_CLOUD_ID)[1]
-    const decoded = atob(base64)
-    const deploymentId = /\$.+?\$(.+?)$/.exec(decoded)[1]
-    return `${deploymentId}.us-east-1.aws.found.io:9243/app/discover#/`
-  } else {
-    return 'http://localhost:5601/app/discover#/'
-  }
-}
-const uri = getKibanaURI()
-const reexportLogQueryParams =
-  "_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(dataset_id,text),filters:!(),index:'1c9e0a90-5ef5-11eb-b960-f3d93c188e87',interval:auto,query:(language:kuery,query:''),sort:!())"
-
-function linkToKibana() {
-  return `${uri}?${reexportLogQueryParams}`
-}
 
 export default Exports
