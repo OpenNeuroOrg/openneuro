@@ -6,7 +6,7 @@ import falcon
 from datalad_service.tasks.dataset import create_snapshot
 from datalad_service.tasks.snapshots import get_snapshot, get_snapshots
 from datalad_service.tasks.files import get_files
-from datalad_service.tasks.publish import publish_snapshot, monitor_remote_configs
+from datalad_service.tasks.publish import migrate_to_bucket, monitor_remote_configs
 from datalad_service.common.git import delete_tag
 
 
@@ -57,8 +57,8 @@ class SnapshotResource(object):
 
             if not skip_publishing:
                 # Publish after response
-                gevent.spawn(publish_snapshot, self.store,
-                             dataset, snapshot, req.cookies)
+                gevent.spawn(migrate_to_bucket, self.store,
+                             dataset, req.cookies, snapshot)
         except:
             raise
             # TODO - This seems like an incorrect error path?

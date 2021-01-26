@@ -18,6 +18,8 @@ import boto3
 from github import Github
 import gevent
 
+import logging
+logger = logging.getLogger('datalad_service.' + __name__)
 
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
@@ -104,47 +106,56 @@ def get_dataset_realm(ds, siblings, realm=None):
     return realm
 
 
-def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
+def migrate_to_bucket(store, dataset, cookies=None, snapshot=False, realm=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
-    realm = get_s3_realm(realm=realm)
     dataset_id = dataset
     ds = store.get_dataset(dataset)
     tags = [tag['name'] for tag in ds.repo.get_tags()]
     siblings = ds.siblings()
-    s3_remote = s3_sibling(ds, siblings, realm=realm)
-    for tag in tags:
-        publish_target(ds, realm.s3_remote, tag)
-        gevent.sleep()
-        # Public publishes to GitHub
-        if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
-            github_remote = github_sibling(ds, dataset_id, siblings)
-            publish_target(ds, realm.github_remote, tag)
+    realm = get_dataset_realm(ds, siblings, realm) if snapshot else get_s3_realm(realm=realm)
+    s3_sibling(ds, siblings, realm=realm)
+    if check_should_export(dataset_id, siblings, tags, realm, snapshot):
+        for tag in tags:
+            publish_target(ds, realm.s3_remote, tag)
             gevent.sleep()
-    clear_dataset_cache(dataset, cookies)
+            # Public publishes to GitHub
+            if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
+                github_sibling(ds, dataset_id, siblings)
+                publish_target(ds, realm.github_remote, tag)
+                gevent.sleep()
+        clear_dataset_cache(dataset, cookies)
 
+def check_should_export(dataset_id, siblings, tags, realm, snapshot):
+    has_public = check_already_public(siblings)
+    if has_public:
+        latest_tag = tags[-1:]
+        has_latest_version = check_s3_has_version(dataset_id, latest_tag, realm)
+    publishing = not has_public
+    reexporting = has_public and not has_latest_version
+    # if remote has latest snapshot, do not reexport. reexporting all snapshots could make a previous snapshot latest in s3
+    return snapshot or publishing or reexporting
 
-def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
-    """Publish a snapshot tag to S3, GitHub or both."""
-    ds = store.get_dataset(dataset)
-    siblings = ds.siblings()
+def check_already_public(siblings):
+    realm = DatasetRealm.PUBLIC
+    return get_sibling_by_name(realm.s3_remote, siblings)
 
-    realm = get_dataset_realm(ds, siblings, realm)
-
-    # Create the sibling if it does not exist
-    s3_sibling(ds, siblings)
-    gevent.sleep()
-
-    # Export to S3
-    publish_target(ds, realm.s3_remote, snapshot)
-    gevent.sleep()
-
-    # Public publishes to GitHub
-    if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
-        # Create Github sibling only if GitHub is enabled
-        github_sibling(ds, dataset, siblings)
-        publish_target(ds, realm.github_remote, snapshot)
-
-    clear_dataset_cache(dataset, cookies)
+def check_s3_has_version(dataset_id, tag, realm):
+    try:
+        client = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        )
+        paginator = client.get_paginator('list_objects')
+        for page in paginator.paginate(Bucket=realm.s3_bucket, Prefix=f'{dataset_id}/'):
+            for obj in page['Contents']:
+                logging.debug('---------------------')
+                logging.debug(obj)
+                # TODO: finish this
+        return False
+    except Exception as e:
+        raise Exception(
+            f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
 
 
 def delete_s3_sibling(dataset_id, siblings, realm):

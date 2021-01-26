@@ -4,7 +4,7 @@ from .dataset_fixtures import *
 
 import datalad_service.tasks.publish
 from datalad.api import create_sibling_github
-from datalad_service.tasks.publish import publish_snapshot, create_github_repo
+from datalad_service.tasks.publish import migrate_to_bucket, create_github_repo
 
 
 def mock_create_github(dataset, repo_name):
@@ -34,14 +34,14 @@ def s3_creds(monkeypatch):
 
 def test_publish(s3_creds, datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    publish_snapshot(
-        datalad_store, ds_id, 'test_version')
+    migrate_to_bucket(
+        datalad_store, ds_id, snapshot='test_version')
 
 
 def test_publish_private(s3_creds, datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    publish_snapshot(
-        datalad_store, ds_id, 'test_version', cookies=None, realm='PRIVATE')
+    migrate_to_bucket(
+        datalad_store, ds_id, snapshot='test_version', cookies=None, realm='PRIVATE')
 
 
 def test_publish_public(s3_creds, monkeypatch, github_dryrun, datalad_store, new_dataset):
@@ -49,5 +49,5 @@ def test_publish_public(s3_creds, monkeypatch, github_dryrun, datalad_store, new
     monkeypatch.setenv('DATALAD_GITHUB_LOGIN', 'user')
     monkeypatch.setenv('DATALAD_GITHUB_PASS', 'password')
     ds_id = os.path.basename(new_dataset.path)
-    publish_snapshot(
-        datalad_store, ds_id, 'test_version', cookies=None, realm='PUBLIC')
+    migrate_to_bucket(
+        datalad_store, ds_id, snapshot='test_version', cookies=None, realm='PUBLIC')

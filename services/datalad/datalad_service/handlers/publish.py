@@ -16,6 +16,6 @@ class PublishResource(object):
         datalad = self.store.get_dataset(dataset)
 
         gevent.spawn(migrate_to_bucket, self.store,
-                     dataset, cookies=req.cookies)
+                     dataset, cookies=req.cookies, realm='PUBLIC')
         resp.media = {}
         resp.status = falcon.HTTP_OK
