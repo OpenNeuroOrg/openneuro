@@ -17,6 +17,7 @@ from datalad_service.common.s3 import validate_s3_config, update_s3_sibling
 import boto3
 from github import Github
 import gevent
+from datalad_service.common.elasticsearch import ReexportLogger
 
 import logging
 logger = logging.getLogger('datalad_service.' + __name__)
@@ -121,7 +122,9 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
         # If remote has latest snapshot, do not reexport.
         # Reexporting all snapshots could make a previous snapshot latest in s3.
         return not check_s3_has_version(dataset, latest_tag, realm)
-    export_all_tags(store, dataset, cookies, get_realm, should_export)
+    # logs to elasticsearch
+    esLogger = ReexportLogger(dataset)
+    export_all_tags(store, dataset, cookies, get_realm, should_export, esLogger)
         
 def snapshot_dataset(store, dataset, cookies=None, snapshot=None, realm=None):
     # """Publish a snapshot tag to S3, GitHub or both."""
@@ -152,7 +155,7 @@ def snapshot_dataset(store, dataset, cookies=None, snapshot=None, realm=None):
     export_all_tags(store, dataset, cookies, get_realm, should_export)
     
 
-def export_all_tags(store, dataset, cookies, get_realm, check_should_export):
+def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esLogger=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
     dataset_id = dataset
     ds = store.get_dataset(dataset)
@@ -162,13 +165,21 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export):
     s3_sibling(ds, siblings, realm=realm)
     if check_should_export(tags, realm):
         for tag in tags:
-            publish_target(ds, realm.s3_remote, tag)
-            gevent.sleep()
-            # Public publishes to GitHub
-            if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
-                github_sibling(ds, dataset_id, siblings)
-                publish_target(ds, realm.github_remote, tag)
+            export_successful = False
+            error = None
+            try:
+                publish_target(ds, realm.s3_remote, tag)
                 gevent.sleep()
+                # Public publishes to GitHub
+                if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
+                    github_sibling(ds, dataset_id, siblings)
+                    publish_target(ds, realm.github_remote, tag)
+                    gevent.sleep()
+                    export_successful = True
+            except Exception as err:
+                error = err
+            finally:
+                esLogger(tag, export_successful, error)
         clear_dataset_cache(dataset, cookies)
 
 class FoundIt(Exception): pass
