@@ -1,21 +1,13 @@
 /* eslint-disable no-console */
 import fs from 'fs'
 import inquirer from 'inquirer'
-import { createClient } from 'openneuro-client'
 import { apm } from './apm.js'
-import { saveConfig, getToken, getUrl } from './config'
+import { saveConfig, getUrl } from './config'
 import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
-
-import { version } from '../package.json'
-
-export const configuredClient = () =>
-  createClient(`${getUrl()}crn/graphql`, {
-    getAuthorization: getToken,
-    clientVersion: version,
-  })
+import { configuredClient } from './configuredClient.js'
 
 /**
  * Login action to save an auth key locally
