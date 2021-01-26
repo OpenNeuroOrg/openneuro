@@ -123,7 +123,28 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
         return not check_s3_has_version(dataset, latest_tag, realm)
     export_all_tags(store, dataset, cookies, get_realm, should_export)
         
-def snapshot_dataset(store, dataset, cookies=None, realm=None):
+def snapshot_dataset(store, dataset, cookies=None, snapshot=None, realm=None):
+    # """Publish a snapshot tag to S3, GitHub or both."""
+    # ds = store.get_dataset(dataset)
+    # siblings = ds.siblings()
+
+    # realm = get_dataset_realm(ds, siblings, realm)
+
+    # # Create the sibling if it does not exist
+    # s3_sibling(ds, siblings)
+    # gevent.sleep()
+
+    # # Export to S3
+    # publish_target(ds, realm.s3_remote, snapshot)
+    # gevent.sleep()
+
+    # # Public publishes to GitHub
+    # if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
+    #     # Create Github sibling only if GitHub is enabled
+    #     github_sibling(ds, dataset, siblings)
+    #     publish_target(ds, realm.github_remote, snapshot)
+
+    # clear_dataset_cache(dataset, cookies)
     def get_realm(ds, siblings):
         return get_dataset_realm(ds, siblings, realm)
     def should_export(tags, realm):
@@ -150,6 +171,7 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export):
                 gevent.sleep()
         clear_dataset_cache(dataset, cookies)
 
+class FoundIt(Exception): pass
 def check_s3_has_version(dataset_id, tag, realm):
     try:
         client = boto3.client(
@@ -157,12 +179,11 @@ def check_s3_has_version(dataset_id, tag, realm):
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         )
-        paginator = client.get_paginator('list_objects')
-        for page in paginator.paginate(Bucket=realm.s3_bucket, Prefix=f'{dataset_id}/'):
-            for obj in page['Contents']:
-                logging.debug('---------------------')
-                logging.debug(obj)
-                # TODO: finish this
+        response = client.get_object(Bucket=realm.s3_bucket, Key=f'{dataset_id}/CHANGES')
+        text = response['Body'].read().decode('utf-8')
+        logger.debug('======================')
+        logger.debug(text)
+        logger.debug('======================')
         return False
     except Exception as e:
         raise Exception(
