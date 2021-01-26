@@ -47,8 +47,15 @@ function main() {
       continue
     fi
 
+    # Check if .bidsignore is in the new tree
+    local bidsignore
+    bidsignore=$(git show "${newref}:.bidsignore")
+    if [[ "$?" != 0 ]]; then
+      bidsignore=""
+    fi
 
-    git diff --stat --name-only --diff-filter=ACMRT ${target} | \
+    # Run validation (with .bidsignore if we found it above)
+    { echo "${bidsignore}\n0001" && git diff --stat --name-only --diff-filter=ACMRT "${target}"; } | \
       /node_modules/.bin/bids-validator --filenames -
     if [[ "$?" != 0 ]]; then
       echo ""
