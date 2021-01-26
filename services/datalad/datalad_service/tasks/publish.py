@@ -126,7 +126,7 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
     esLogger = ReexportLogger(dataset)
     export_all_tags(store, dataset, cookies, get_realm, should_export, esLogger)
         
-def snapshot_dataset(store, dataset, cookies=None, snapshot=None, realm=None):
+def publish_snapshot(store, dataset, cookies=None, snapshot=None, realm=None):
     # """Publish a snapshot tag to S3, GitHub or both."""
     # ds = store.get_dataset(dataset)
     # siblings = ds.siblings()
