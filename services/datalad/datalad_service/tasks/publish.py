@@ -106,15 +106,40 @@ def get_dataset_realm(ds, siblings, realm=None):
     return realm
 
 
-def migrate_to_bucket(store, dataset, cookies=None, snapshot=False, reexport=False, realm=None):
+def publish_dataset(store, dataset, cookies=None, realm='PUBLIC'):
+    def get_realm(ds, siblings):
+        return get_s3_realm(realm=realm)
+    def should_export(tags, realm):
+        return True
+    export_all_tags(store, dataset, cookies, get_realm, should_export)
+
+def reexport_dataset(store, dataset, cookies=None, realm=None):
+    def get_realm(ds, siblings):
+        return get_dataset_realm(ds, siblings, realm)
+    def should_export(tags, realm):
+        latest_tag = tags[-1:]
+        # If remote has latest snapshot, do not reexport.
+        # Reexporting all snapshots could make a previous snapshot latest in s3.
+        return not check_s3_has_version(dataset, latest_tag, realm)
+    export_all_tags(store, dataset, cookies, get_realm, should_export)
+        
+def snapshot_dataset(store, dataset, cookies=None, realm=None):
+    def get_realm(ds, siblings):
+        return get_dataset_realm(ds, siblings, realm)
+    def should_export(tags, realm):
+        return True
+    export_all_tags(store, dataset, cookies, get_realm, should_export)
+    
+
+def export_all_tags(store, dataset, cookies, get_realm, check_should_export):
     """Migrate a dataset and all snapshots to an S3 bucket"""
     dataset_id = dataset
     ds = store.get_dataset(dataset)
     tags = [tag['name'] for tag in ds.repo.get_tags()]
     siblings = ds.siblings()
-    realm = get_dataset_realm(ds, siblings, realm) if snapshot or reexport else get_s3_realm(realm=realm)
+    realm = get_realm(ds, siblings)
     s3_sibling(ds, siblings, realm=realm)
-    if check_should_export(dataset_id, siblings, tags, realm, snapshot):
+    if check_should_export(tags, realm):
         for tag in tags:
             publish_target(ds, realm.s3_remote, tag)
             gevent.sleep()
@@ -124,20 +149,6 @@ def migrate_to_bucket(store, dataset, cookies=None, snapshot=False, reexport=Fal
                 publish_target(ds, realm.github_remote, tag)
                 gevent.sleep()
         clear_dataset_cache(dataset, cookies)
-
-def check_should_export(dataset_id, siblings, tags, realm, snapshot):
-    has_public = check_already_public(siblings)
-    if has_public:
-        latest_tag = tags[-1:]
-        has_latest_version = check_s3_has_version(dataset_id, latest_tag, realm)
-    publishing = not has_public
-    reexporting = has_public and not has_latest_version
-    # if remote has latest snapshot, do not reexport. reexporting all snapshots could make a previous snapshot latest in s3
-    return snapshot or publishing or reexporting
-
-def check_already_public(siblings):
-    realm = DatasetRealm.PUBLIC
-    return get_sibling_by_name(realm.s3_remote, siblings)
 
 def check_s3_has_version(dataset_id, tag, realm):
     try:
