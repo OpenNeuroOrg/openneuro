@@ -1,21 +1,15 @@
 import falcon
-import os.path
 import logging
-import subprocess
-import pty
-from datalad_service.common.elasticsearch import log_reexporter
+import gevent
+
+from datalad_service.tasks.publish import migrate_to_bucket
 
 class ReexporterResource(object):
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp):
-        primary, secondary = pty.openpty()
-        process = subprocess.Popen(
-            ['/scripts/repair-git-annex-branch-all-tags.sh'], stdout=secondary, stderr=secondary)
-        stdout = os.fdopen(primary)
-        log_reexporter(self.logger, stdout)
-        
+    def on_post(self, req, resp, dataset):
+        gevent.spawn(migrate_to_bucket, self.store,
+                        dataset, req.cookies, reexport=True)
         resp.status = falcon.HTTP_OK
-        resp.stream = process.stdout

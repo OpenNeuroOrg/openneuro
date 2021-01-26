@@ -2,10 +2,14 @@
  * Resolver for rerunning remote exports.
  */
 import { checkAdmin } from '../permissions'
-import { runReexporter, CHECK } from '../../datalad/reexporter'
+import { runReexporter } from '../../datalad/reexporter'
 
-export const reexportRemotes = async (obj, {}, { user, userInfo }) => {
+export const reexportRemotes = async (
+  obj,
+  { datasetId },
+  { user, userInfo },
+) => {
   await checkAdmin(user, userInfo)
-  await runReexporter()
+  await runReexporter(datasetId)
   return true
 }

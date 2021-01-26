@@ -112,7 +112,7 @@ def create_app(annex_path):
     api.add_route('/git/{worker}/{dataset}/annex/{key}',
                   dataset_git_annex_resource)
 
-    api.add_route('/reexport-remotes',
+    api.add_route('/reexport-remotes/{dataset}',
                   dataset_reexporter_resources)
 
     return api

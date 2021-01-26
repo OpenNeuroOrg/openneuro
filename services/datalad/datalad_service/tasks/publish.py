@@ -106,13 +106,13 @@ def get_dataset_realm(ds, siblings, realm=None):
     return realm
 
 
-def migrate_to_bucket(store, dataset, cookies=None, snapshot=False, realm=None):
+def migrate_to_bucket(store, dataset, cookies=None, snapshot=False, reexport=False, realm=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
     dataset_id = dataset
     ds = store.get_dataset(dataset)
     tags = [tag['name'] for tag in ds.repo.get_tags()]
     siblings = ds.siblings()
-    realm = get_dataset_realm(ds, siblings, realm) if snapshot else get_s3_realm(realm=realm)
+    realm = get_dataset_realm(ds, siblings, realm) if snapshot or reexport else get_s3_realm(realm=realm)
     s3_sibling(ds, siblings, realm=realm)
     if check_should_export(dataset_id, siblings, tags, realm, snapshot):
         for tag in tags:

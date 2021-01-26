@@ -1,4 +1,5 @@
 import os
+import logging
 
 import gevent
 import falcon
@@ -16,6 +17,7 @@ class SnapshotResource(object):
 
     def __init__(self, store):
         self.store = store
+        self.logger = logging.getLogger('datalad_service.' + __name__)
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""

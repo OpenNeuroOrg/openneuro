@@ -28,12 +28,3 @@ export function getDatasetEndpoint(dataset) {
 export function getDatasetWorker(dataset) {
   return `${config.datalad.uri}-${getDatasetEndpoint(dataset)}`
 }
-
-/**
- * Get all worker urls.
- */
-export function getAllDatasetWorkers() {
-  return Array.from({ length: config.datalad.workers }).map(
-    (_, i) => `${config.datalad.uri}-${i}`,
-  )
-}
