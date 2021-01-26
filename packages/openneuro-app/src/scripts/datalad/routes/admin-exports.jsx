@@ -3,9 +3,9 @@
 import React from 'react'
 import { gql, useMutation } from '@apollo/client'
 import Helmet from 'react-helmet'
-import { pageTitle } from '../resources/strings'
+import { pageTitle } from '../../resources/strings'
 import PropTypes from 'prop-types'
-import { reexporterLogsURL } from '../resources/kibana'
+import { reexporterLogsURL } from '../../resources/kibana'
 import styled from '@emotion/styled'
 
 const ButtonsContainer = styled.div({
@@ -19,9 +19,9 @@ const ButtonsContainer = styled.div({
 const NormalizedButton = styled.button({
   margin: 0,
   fontWeight: 400,
-  fontSize: '14pt',
+  fontSize: '12pt',
   textAlign: 'center',
-  padding: '11px 13px',
+  padding: '9px 12px',
   width: '100%',
 })
 
@@ -67,12 +67,12 @@ Divider.propTypes = {
 }
 
 const REEXPORT_REMOTES = gql`
-  mutation reexportRemotes {
-    reexportRemotes
+  mutation reexportRemotes($datasetId: ID!) {
+    reexportRemotes(datasetId: $datasetId)
   }
 `
 
-const Exports = () => {
+const AdminExports = ({ dataset }) => {
   const [reexportRemotes, { data, loading, error }] = useMutation(
     REEXPORT_REMOTES,
   )
@@ -82,10 +82,10 @@ const Exports = () => {
       <Helmet>
         <title>Admin Dashboard - {pageTitle}</title>
       </Helmet>
-      <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
-        <div className="header-wrap clearfix">
-          <div className="col-sm-9">
-            <h2>Exports</h2>
+      <div className="dataset-form">
+        <div className="col-lg-12 dataset-form-header">
+          <div className="form-group">
+            <label>Admin: Remote Exports</label>
           </div>
         </div>
 
@@ -100,7 +100,9 @@ const Exports = () => {
             )}
             <NormalizedButton
               className="btn-modal-action"
-              onClick={() => reexportRemotes()}>
+              onClick={() =>
+                reexportRemotes({ variables: { datasetId: dataset.id } })
+              }>
               Run Export
             </NormalizedButton>
             <Divider text="or" />
@@ -118,6 +120,8 @@ const Exports = () => {
   )
 }
 
-Exports.propTypes = {}
+AdminExports.propTypes = {
+  dataset: PropTypes.object,
+}
 
-export default Exports
+export default AdminExports

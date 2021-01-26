@@ -3,7 +3,6 @@
 import React from 'react'
 import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
 import Users from './users.jsx'
-import Exports from './exports.jsx'
 import LoggedIn from '../authentication/logged-in.jsx'
 
 class Dashboard extends React.Component {
@@ -21,11 +20,6 @@ class Dashboard extends React.Component {
                     Users
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/admin/exports" className="btn-tab">
-                    Exports
-                  </NavLink>
-                </li>
               </ul>
               <Switch>
                 <Redirect
@@ -39,12 +33,6 @@ class Dashboard extends React.Component {
                   path="/admin/users"
                   exact
                   component={Users}
-                />
-                <Route
-                  name="users"
-                  path="/admin/exports"
-                  exact
-                  component={Exports}
                 />
               </Switch>
             </div>
