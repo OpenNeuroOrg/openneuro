@@ -1,7 +1,14 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { HasBeenPublished } from '../dataset-content.jsx'
+import { render, screen } from '@testing-library/react'
+import { DatasetContent, HasBeenPublished } from '../dataset-content.jsx'
 import { hasEditPermissions } from '../../../authentication/profile.js'
+import { BrowserRouter } from 'react-router-dom'
+import cookies from '../../../utils/cookies.js'
+
+jest.mock('../../fragments/dataset-files.jsx', () => () => (
+  <div>Mock File Tree</div>
+))
 
 describe('DatasetContent component', () => {
   describe('HasBeenPublished', () => {
@@ -48,5 +55,50 @@ describe('DatasetContent component', () => {
         ),
       ).toBe(false)
     })
+  })
+  it('renders when no snapshots are present', () => {
+    const datasetDraftOnly = {
+      created: '2021-01-26T17:10:53.738Z',
+      public: false,
+      draft: {
+        modified: '2021-01-26T17:10:53.738Z',
+        head: 'deb75470ec18e8656f4d6f7ad4b0f3b65bad7884',
+        description: {
+          Name: 'test dataset',
+        },
+        files: [{}],
+        issues: [],
+      },
+      permissions: {
+        userPermissions: [
+          {
+            level: 'admin',
+            user: { id: '123456', email: 'tests@example.com' },
+          },
+        ],
+      },
+      analytics: {
+        downloads: 1,
+        views: 1,
+      },
+      snapshots: [],
+      metadata: null,
+      uploader: {
+        name: 'test user',
+      },
+    }
+    cookies.set(
+      'accessToken',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTYiLCJlbWFpbCI6InRlc3RzQGV4YW1wbGUuY29tIiwicHJvdmlkZXIiOiJnb29nbGUiLCJuYW1lIjoiVGVzdCBVc2VyIiwiYWRtaW4iOmZhbHNlLCJpYXQiOjE2MTE2ODEwNjcsImV4cCI6MjE0NzQ4MzY0N30.fDNpHGjvzCodz7OlKrFudHRioPoDSnufi6saeAyAqBA',
+    )
+    render(
+      <BrowserRouter>
+        <DatasetContent dataset={datasetDraftOnly} />
+      </BrowserRouter>,
+    )
+    // Look for some text that's always rendered
+    expect(screen.getByText('README')).toHaveTextContent('README')
+    // Verify something specific to this example dataset
+    expect(screen.getByText('test dataset')).toHaveTextContent('test dataset')
   })
 })
