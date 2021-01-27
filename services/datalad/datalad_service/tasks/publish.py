@@ -1,5 +1,6 @@
 import requests
 import subprocess
+import re
 from datalad.api import create_sibling_github
 
 from datalad_service.config import DATALAD_GITHUB_ORG
@@ -118,7 +119,7 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
     def get_realm(ds, siblings):
         return get_dataset_realm(ds, siblings, realm)
     def should_export(tags, realm):
-        latest_tag = tags[-1:]
+        latest_tag = tags[-1:][0]
         # If remote has latest snapshot, do not reexport.
         # Reexporting all snapshots could make a previous snapshot latest in s3.
         return not check_s3_has_version(dataset, latest_tag, realm)
@@ -165,24 +166,17 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
                     esLogger.log(tag, s3_export_successful, github_export_successful, error)
         clear_dataset_cache(dataset, cookies)
 
-class FoundIt(Exception): pass
 def check_s3_has_version(dataset_id, tag, realm):
-    try:
-        client = boto3.client(
-            's3',
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        )
-        response = client.get_object(Bucket=realm.s3_bucket, Key=f'{dataset_id}/CHANGES')
-        text = response['Body'].read().decode('utf-8')
-        logger.debug('======================')
-        logger.debug(text)
-        logger.debug('======================')
-        return False
-    except Exception as e:
-        raise Exception(
-            f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
-
+    client = boto3.client(
+        's3',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    )
+    response = client.get_object(Bucket=realm.s3_bucket, Key=f'{dataset_id}/CHANGES')
+    text = response['Body'].read().decode('utf-8')
+    tag_pattern = re.compile(f'^{tag} ', re.MULTILINE)
+    match = tag_pattern.match(text)
+    return bool(match)
 
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
