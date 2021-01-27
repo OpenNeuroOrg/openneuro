@@ -35,13 +35,13 @@ def s3_creds(monkeypatch):
 def test_publish(s3_creds, datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     publish_snapshot(
-        datalad_store, ds_id, 'test-version')
+        datalad_store, ds_id, snapshot='test-version')
 
 
 def test_publish_private(s3_creds, datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     publish_snapshot(
-        datalad_store, ds_id, 'test-version', cookies=None, realm='PRIVATE')
+        datalad_store, ds_id, snapshot='test-version', cookies=None, realm='PRIVATE')
 
 
 def test_publish_public(s3_creds, monkeypatch, github_dryrun, datalad_store, new_dataset):
@@ -50,4 +50,4 @@ def test_publish_public(s3_creds, monkeypatch, github_dryrun, datalad_store, new
     monkeypatch.setenv('DATALAD_GITHUB_PASS', 'password')
     ds_id = os.path.basename(new_dataset.path)
     publish_snapshot(
-        datalad_store, ds_id, 'test-version', cookies=None, realm='PUBLIC')
+        datalad_store, ds_id, snapshot='test-version', cookies=None, realm='PUBLIC')
