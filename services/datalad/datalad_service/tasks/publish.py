@@ -127,27 +127,7 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
     export_all_tags(store, dataset, cookies, get_realm, should_export, esLogger)
         
 def publish_snapshot(store, dataset, cookies=None, snapshot=None, realm=None):
-    # """Publish a snapshot tag to S3, GitHub or both."""
-    # ds = store.get_dataset(dataset)
-    # siblings = ds.siblings()
 
-    # realm = get_dataset_realm(ds, siblings, realm)
-
-    # # Create the sibling if it does not exist
-    # s3_sibling(ds, siblings)
-    # gevent.sleep()
-
-    # # Export to S3
-    # publish_target(ds, realm.s3_remote, snapshot)
-    # gevent.sleep()
-
-    # # Public publishes to GitHub
-    # if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
-    #     # Create Github sibling only if GitHub is enabled
-    #     github_sibling(ds, dataset, siblings)
-    #     publish_target(ds, realm.github_remote, snapshot)
-
-    # clear_dataset_cache(dataset, cookies)
     def get_realm(ds, siblings):
         return get_dataset_realm(ds, siblings, realm)
     def should_export(tags, realm):
@@ -165,21 +145,24 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
     s3_sibling(ds, siblings, realm=realm)
     if check_should_export(tags, realm):
         for tag in tags:
-            export_successful = False
+            s3_export_successful = False
+            github_export_successful = False
             error = None
             try:
                 publish_target(ds, realm.s3_remote, tag)
                 gevent.sleep()
+                s3_export_successful = True
                 # Public publishes to GitHub
                 if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
                     github_sibling(ds, dataset_id, siblings)
                     publish_target(ds, realm.github_remote, tag)
                     gevent.sleep()
-                    export_successful = True
+                    github_export_successful = True
             except Exception as err:
                 error = err
             finally:
-                esLogger(tag, export_successful, error)
+                if esLogger:
+                    esLogger.log(tag, s3_export_successful, github_export_successful, error)
         clear_dataset_cache(dataset, cookies)
 
 class FoundIt(Exception): pass
