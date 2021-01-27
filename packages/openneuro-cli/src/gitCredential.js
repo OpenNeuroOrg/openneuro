@@ -1,5 +1,5 @@
 import readline from 'readline'
-import { configuredClient } from './actions.js'
+import { configuredClient } from './configuredClient.js'
 import gql from 'graphql-tag'
 
 const prepareRepoAccess = gql`
