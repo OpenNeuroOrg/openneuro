@@ -63,7 +63,7 @@ HasBeenPublished.propTypes = {
 /**
  * Data routing for the main dataset query to display/edit components
  */
-const DatasetContent = ({ dataset }) => {
+export const DatasetContent = ({ dataset }) => {
   const isMobile = useMedia('(max-width: 765px) ')
   const user = getProfile()
   const hasEdit =
@@ -71,8 +71,9 @@ const DatasetContent = ({ dataset }) => {
     hasEditPermissions(dataset.permissions, user && user.sub)
   const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   const hasDraftChanges =
+    dataset.snapshots.length === 0 ||
     dataset.draft.head !==
-    dataset.snapshots[dataset.snapshots.length - 1].hexsha
+      dataset.snapshots[dataset.snapshots.length - 1].hexsha
   return (
     <>
       <LoggedIn>
