@@ -9,6 +9,25 @@ The underlying format for dataset is a git-annex repo created with datalad. Ever
 
 Datasets support clones, pushes, and other git operations. All datasets require authentication for access but public datasets will be available via anonymous clones in a future release.
 
+## Repository conventions
+
+A dataset must always be present in the root level of the repository.
+
+OpenNeuro validates the size of regular git (non-annexed) files and a subset of bids-validation before accepting a git push. It is important to annex any large files in any commits before pushing. `.bidsignore` must always be a regular file. Some features are only available for regular files (such as diffing) and textual data is generally best kept as regular git objects.
+
+A recommended `.gitattributes` configuration for git-annex to automate annexing the correct files when using `git add` or `datalad save`
+
+```
+* annex.largefiles=largerthan=1mb
+*.bval annex.largefiles=nothing
+*.bvec annex.largefiles=nothing
+*.json annex.largefiles=nothing
+*.tsv annex.largefiles=nothing
+.bidsignore annex.largefiles=nothing
+CHANGES annex.largefiles=nothing
+README annex.largefiles=nothing
+```
+
 ## Credential Helper
 
 Using openneuro-cli, git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the [git credential helper](https://git-scm.com/docs/gitcredentials) for your use case.
