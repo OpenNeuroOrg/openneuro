@@ -101,6 +101,7 @@ const DatasetTools = ({ dataset, location, history }) => {
                   warn={false}
                   action={cb => {
                     toolRedirect(history, rootPath, 'snapshot')
+                    cb()
                   }}
                 />
               )}
