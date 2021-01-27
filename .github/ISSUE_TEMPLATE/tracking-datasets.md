@@ -13,5 +13,5 @@ assignees: ckrountree, franklin-feingold
 **The following datasets are affected:**
 *Please list below all affected datasets and add any additional information unique to that dataset. Check each off as it is resolved.*
 
-- [ ] ds0 , reported on <date> (also affected by: ) 
-- [ ] ds0 , reported on <date> (also affected by: )
+- [ ] ds0 , reported on `<date>` (also affected by: ) 
+- [ ] ds0 , reported on `<date>` (also affected by: )
