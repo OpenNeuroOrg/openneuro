@@ -92,12 +92,10 @@ const AdminExports = ({ dataset }) => {
         <div className="col-xs-4">
           <ButtonsContainer>
             {loading && (
-              <InProgressMessage>Your export is in progress.</InProgressMessage>
+              <InProgressMessage>Your export is starting.</InProgressMessage>
             )}
             {error && <ErrorMessage>An error has occurred.</ErrorMessage>}
-            {success && (
-              <SuccessMessage>Your export was successful.</SuccessMessage>
-            )}
+            {success && <SuccessMessage>Your export has begun.</SuccessMessage>}
             <NormalizedButton
               className="btn-modal-action"
               onClick={() =>

@@ -17,6 +17,6 @@ const getKibanaURL = () => {
 const url = getKibanaURL()
 // query params for index "logs-reexporter" with selected fields "dataset_id" and "text"
 const reexportLogQueryParams =
-  "_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(dataset_id,text),filters:!(),index:febdeca0-5f0f-11eb-984f-a9c276bf0582,interval:auto,query:(language:kuery,query:''),sort:!())"
+  "_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(dataset_id,tag,s3_export_successful,github_export_successful,error),filters:!(),index:'548067b0-607a-11eb-becc-a73e7e29924c',interval:auto,query:(language:kuery,query:''),sort:!())"
 
 export const reexporterLogsURL = `${url}?${reexportLogQueryParams}`
