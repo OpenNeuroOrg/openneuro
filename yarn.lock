@@ -6406,10 +6406,10 @@ better-queue@^3.8.10:
     node-eta "^0.9.0"
     uuid "^3.0.0"
 
-bids-validator@1.5.9:
-  version "1.5.9"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.9.tgz#f7f3b97055d501c2d5fdba47c3e0e0d5aa979836"
-  integrity sha512-zrvE1GDrk3z6N/e88lO3FgKfZw/caOmx2mSrpZHtY3aGDhK8mimsTMqGgoZoey3V9tvpGeAgZhtjvtgU/w2qrw==
+bids-validator@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.5.10.tgz#3a1537f35cdf89543f59b3b28cbb41d7b458e70e"
+  integrity sha512-UgPpR+q0196qrGxbZQbkXi6EOmgU9OiBR6qZGRytfwsXNXx0AEGLX41Vqd3GRXhSvr4eVAnhj/HPQmWtb3+qWQ==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
