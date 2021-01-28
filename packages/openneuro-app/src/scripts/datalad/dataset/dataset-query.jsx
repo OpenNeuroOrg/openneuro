@@ -69,6 +69,7 @@ export const getDraftPage = gql`
       public
       following
       starred
+      worker
       ...DatasetDraft
       ...DatasetDraftFiles
       ...DatasetPermissions

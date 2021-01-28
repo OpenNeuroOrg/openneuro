@@ -13,6 +13,7 @@ import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetProminentLinks from '../fragments/dataset-prominent-links.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetGitHash from '../fragments/dataset-git-hash.jsx'
+import DatasetGitAccess from '../fragments/dataset-git-access.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
@@ -148,6 +149,9 @@ export const DatasetContent = ({ dataset }) => {
                 issues={dataset.draft.issues}
               />
             ))}
+          {hasEdit && (
+            <DatasetGitAccess datasetId={dataset.id} worker={dataset.worker} />
+          )}
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}
