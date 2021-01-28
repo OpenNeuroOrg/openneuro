@@ -1,6 +1,6 @@
 {
   "name": "openneuro-indexer",
-  "version": "3.27.1",
+  "version": "3.28.0-alpha.0",
   "description": "OpenNeuro elastic search indexing tool",
   "main": "./dist/index.js",
   "types": "./src/index.d.ts",
