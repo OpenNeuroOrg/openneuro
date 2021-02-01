@@ -3,7 +3,7 @@
  *   or use localhost url.
  * For localhost url to be available, the kibana service must be enabled (docker-compose).
  */
-const getKibanaURL = () => {
+export const getKibanaURL = () => {
   if (process.env.ELASTICSEARCH_CLOUD_ID) {
     const ELASTICSEARCH_CLOUD_ID = process.env.ELASTICSEARCH_CLOUD_ID
     const base64 = /:(.+?==)$/.exec(ELASTICSEARCH_CLOUD_ID)[1]
