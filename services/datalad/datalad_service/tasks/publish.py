@@ -1,6 +1,7 @@
 import requests
 import subprocess
 import re
+import json
 from datalad.api import create_sibling_github
 
 from datalad_service.config import DATALAD_GITHUB_ORG
@@ -111,27 +112,26 @@ def get_dataset_realm(ds, siblings, realm=None):
 def publish_dataset(store, dataset, cookies=None, realm='PUBLIC'):
     def get_realm(ds, siblings):
         return get_s3_realm(realm=realm)
-    def should_export(tags, realm):
+    def should_export(ds, tags):
         return True
     export_all_tags(store, dataset, cookies, get_realm, should_export)
 
 def reexport_dataset(store, dataset, cookies=None, realm=None):
     def get_realm(ds, siblings):
         return get_dataset_realm(ds, siblings, realm)
-    def should_export(tags, realm):
+    def should_export(ds, tags):
         latest_tag = tags[-1:][0]
         # If remote has latest snapshot, do not reexport.
         # Reexporting all snapshots could make a previous snapshot latest in s3.
-        return not check_s3_has_version(dataset, latest_tag, realm)
+        return not check_s3_has_version(ds, latest_tag)
     # logs to elasticsearch
     esLogger = ReexportLogger(dataset)
     export_all_tags(store, dataset, cookies, get_realm, should_export, esLogger)
         
 def publish_snapshot(store, dataset, cookies=None, snapshot=None, realm=None):
-
     def get_realm(ds, siblings):
         return get_dataset_realm(ds, siblings, realm)
-    def should_export(tags, realm):
+    def should_export(ds, tags):
         return True
     export_all_tags(store, dataset, cookies, get_realm, should_export)
     
@@ -144,7 +144,7 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
     siblings = ds.siblings()
     realm = get_realm(ds, siblings)
     s3_sibling(ds, siblings, realm=realm)
-    if check_should_export(tags, realm):
+    if check_should_export(ds, tags, realm):
         for tag in tags:
             s3_export_successful = False
             github_export_successful = False
@@ -166,17 +166,16 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
                     esLogger.log(tag, s3_export_successful, github_export_successful, error)
         clear_dataset_cache(dataset, cookies)
 
-def check_s3_has_version(dataset_id, tag, realm):
-    client = boto3.client(
-        's3',
-        aws_access_key_id=AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+def check_s3_has_version(dataset, tag):
+    response = dataset.repo._run_annex_command(
+        'info',
+        annex_options=[
+            '--json',
+            tag,
+        ]
     )
-    response = client.get_object(Bucket=realm.s3_bucket, Key=f'{dataset_id}/CHANGES')
-    text = response['Body'].read().decode('utf-8')
-    tag_pattern = re.compile(f'^{tag} ', re.MULTILINE)
-    match = tag_pattern.match(text)
-    return bool(match)
+    info = json.loads(response[0])
+    return info['success']
 
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
