@@ -95,6 +95,8 @@ def create_app(annex_path):
     api.add_route(
         '/datasets/{dataset}/publish', dataset_publish
     )
+    api.add_route('/datasets/{dataset}/reexport-remotes',
+                  dataset_reexporter_resources)
 
     api.add_route(
         '/datasets/{dataset}/upload/{upload}', dataset_upload
@@ -111,8 +113,5 @@ def create_app(annex_path):
                   dataset_git_upload_resource)
     api.add_route('/git/{worker}/{dataset}/annex/{key}',
                   dataset_git_annex_resource)
-
-    api.add_route('/reexport-remotes/{dataset}',
-                  dataset_reexporter_resources)
 
     return api

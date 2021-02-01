@@ -6,7 +6,7 @@ import { getDatasetWorker } from '../libs/datalad-service'
  */
 export const runReexporter = datasetId => {
   const worker = getDatasetWorker(datasetId)
-  const uri = `${worker}/reexport-remotes/${datasetId}`
+  const uri = `${worker}/datasets/${datasetId}/reexport-remotes`
   return request.post(uri)
 }
 
