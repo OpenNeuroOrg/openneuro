@@ -1,9 +1,15 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
+import { ApolloProvider } from '@apollo/client'
 import Exports from '../../datalad/routes/admin-exports.jsx'
 
 describe('Dashboard', () => {
   it('my datasets renders successfully', () => {
-    expect(shallow(<Exports />)).toMatchSnapshot()
+    const wrapper = mount(
+      <ApolloProvider client={{}}>
+        <Exports />
+      </ApolloProvider>,
+    )
+    expect(wrapper).toMatchSnapshot()
   })
 })
