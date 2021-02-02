@@ -144,7 +144,7 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
     siblings = ds.siblings()
     realm = get_realm(ds, siblings)
     s3_sibling(ds, siblings, realm=realm)
-    if check_should_export(ds, tags, realm):
+    if check_should_export(ds, tags):
         for tag in tags:
             s3_export_successful = False
             github_export_successful = False
