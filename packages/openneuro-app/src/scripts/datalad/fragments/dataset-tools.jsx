@@ -11,6 +11,7 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 import useMedia from '../../mobile/media-hook.jsx'
 import DeletePage from '../dataset/delete-page.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
+import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import {
   Overlay,
   ModalContainer,
@@ -40,6 +41,11 @@ const DatasetTools = ({ dataset, location, history }) => {
   const edit = snapshot ? false : true
   const isMobile = useMedia('(max-width: 765px) ')
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
+  const user = getProfile()
+  const hasEdit =
+    (user && user.admin) ||
+    hasEditPermissions(dataset.permissions, user && user.sub)
+
   return (
     <>
       {showDeleteModal && (
@@ -71,15 +77,17 @@ const DatasetTools = ({ dataset, location, history }) => {
                 />
               )}
             </div>
-            <div role="presentation" className="tool">
-              <span>
-                <button
-                  className="btn-warn-component warning"
-                  onClick={() => setShowDeleteModal(true)}>
-                  <i className="fa fa-trash" />
-                </button>
-              </span>
-            </div>
+            {hasEdit && (
+              <div role="presentation" className="tool">
+                <span>
+                  <button
+                    className="btn-warn-component warning"
+                    onClick={() => setShowDeleteModal(true)}>
+                    <i className="fa fa-trash" />
+                  </button>
+                </span>
+              </div>
+            )}
             <div role="presentation" className="tool">
               {edit && (
                 <WarnButton

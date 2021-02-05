@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 import TextInput from '../fragments/text-input.jsx'
 import SelectInput from '../fragments/select-input.jsx'
 import styled from '@emotion/styled'
