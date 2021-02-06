@@ -2,6 +2,7 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import findConfig from 'find-config'
+import jwt_decode from 'jwt-decode'
 
 /**
  * Get the nearest working configuration
@@ -44,6 +45,15 @@ export const getToken = () => {
       'You must have an API key configured to continue, try `openneuro login` first',
     )
   }
+}
+
+/**
+ * Get the user object from the configured token
+ * @returns {object}
+ */
+export const getUser = () => {
+  const token = getToken()
+  return jwt_decode(token)
 }
 
 export const getUrl = () => {

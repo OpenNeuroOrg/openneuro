@@ -11,6 +11,7 @@ import {
   requestFailureToast,
 } from './native-file-toast.jsx'
 import { downloadUri } from './download-uri.js'
+import { apm } from '../../apm.js'
 
 /**
  * Given a file, create any missing parent directories, obtain directory handle, and return the file handle within that
@@ -57,9 +58,17 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
   } catch (err) {
     Sentry.captureException(err)
   }
+  const apmTransaction = apm.startTransaction(
+    `download:${datasetId}`,
+    'download',
+  )
+  if (apmTransaction)
+    apmTransaction.addLabels({ datasetId, snapshot: snapshotTag })
   let downloadCanceled = false
   let toastId
   try {
+    const apmSelect =
+      apmTransaction && apmTransaction.startSpan('showDirectoryPicker')
     // Open user selected directory
     const dirHandle = await window.showDirectoryPicker()
     toastId = downloadToast(
@@ -68,7 +77,11 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
       snapshotTag,
       () => (downloadCanceled = true),
     )
+    apmSelect && apmSelect.end()
     for (const [index, file] of filesToDownload.entries()) {
+      const apmDownload =
+        apmTransaction &&
+        apmTransaction.startSpan(`download ${file.filename}:${file.size}`)
       if (downloadCanceled) {
         throw new DownloadAbortError('Download canceled by user request')
       }
@@ -76,12 +89,14 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
       // Skip files which are already complete
       if (fileHandle.size == file.size) continue
       const writable = await fileHandle.createWritable()
-      const { body, status } = await fetch(file.urls.pop())
+      const { body, status, statusText } = await fetch(file.urls.pop())
       if (status === 200) {
         await body.pipeTo(writable)
       } else {
+        apmDownload && apmDownload.captureError(statusText)
         return requestFailureToast()
       }
+      apmDownload && apmDownload.end()
       downloadToastUpdate(toastId, index / filesToDownload.length)
     }
     downloadCompleteToast(dirHandle.name)
@@ -98,6 +113,7 @@ export const downloadNative = (datasetId, snapshotTag) => async () => {
     }
     Sentry.captureException(err)
   } finally {
+    if (apmTransaction) apmTransaction.end()
     downloadToastDone(toastId)
   }
 }

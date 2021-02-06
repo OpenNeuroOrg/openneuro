@@ -78,48 +78,72 @@ export const getDownloadMetadata = async (datasetId, tag) => {
  * @param {string} destination Destination directory path
  * @param {string} filename
  * @param {string} fileUrl URL to download from
+ * @param {object} apmTransaction Active APM transaction (optional)
  */
-export const downloadFile = async (destination, filename, fileUrl) => {
-  const fullPath = path.join(destination, filename)
-  // Create any needed parent dirs
-  mkdirp.sync(path.dirname(fullPath))
-  const writeStream = fs.createWriteStream(fullPath)
+export const downloadFile = async (
+  destination,
+  filename,
+  fileUrl,
+  apmTransaction,
+) => {
   try {
-    const response = await fetch(fileUrl, getFetchOptions())
-    if (response.status === 200) {
-      // Setup end/error handler with Promise interface
-      const responsePromise = new Promise((resolve, reject) => {
-        response.body.on('end', () => resolve())
-        response.body.on('error', err => reject(err))
-      })
-      // Start piping data
-      response.body.pipe(writeStream)
-      return responsePromise
-    } else {
-      console.error(
-        `Error ${response.status} fetching "${filename}" - ${response.statusText}`,
-      )
+    const fullPath = path.join(destination, filename)
+    // Create any needed parent dirs
+    mkdirp.sync(path.dirname(fullPath))
+    const writeStream = fs.createWriteStream(fullPath)
+    try {
+      const response = await fetch(fileUrl, getFetchOptions())
+      if (response.status === 200) {
+        // Setup end/error handler with Promise interface
+        const responsePromise = new Promise((resolve, reject) => {
+          response.body.on('end', () => resolve())
+          response.body.on('error', err => {
+            if (apmTransaction) apmTransaction.captureError(err)
+            reject(err)
+          })
+        })
+        // Start piping data
+        response.body.pipe(writeStream)
+        return responsePromise
+      } else {
+        console.error(
+          `Error ${response.status} fetching "${filename}" - ${response.statusText}`,
+        )
+      }
+    } catch (err) {
+      handleFetchReject(err)
     }
   } catch (err) {
-    handleFetchReject(err)
+    if (apmTransaction) apmTransaction.captureError(err)
+    throw err
   }
 }
 
-export const getDownload = (destination, datasetId, tag, apmTransaction) =>
-  getDownloadMetadata(datasetId, tag).then(async body => {
+export const getDownload = (destination, datasetId, tag, apmTransaction) => {
+  const apmSetup = apmTransaction.startSpan('getDownloadMetadata')
+  return getDownloadMetadata(datasetId, tag).then(async body => {
     apmTransaction.addLabels({ datasetId, tag })
-    const apmDownload = apmTransaction.startSpan('download')
     checkDestination(destination)
+    apmSetup.end()
     for (const file of body.files) {
       if (testFile(destination, file.filename, file.size)) {
         // Now actually download
+        const apmDownload = apmTransaction.startSpan(
+          `download ${file.filename}:${file.size}`,
+        )
         // eslint-disable-next-line no-console
         console.log(`Downloading "${file.filename}" - size ${file.size} bytes`)
-        await downloadFile(destination, file.filename, file.urls.pop())
+        await downloadFile(
+          destination,
+          file.filename,
+          file.urls.pop(),
+          apmTransaction,
+        )
+        apmDownload.end()
       } else {
         // eslint-disable-next-line no-console
         console.log(`Skipping present file "${file.filename}"`)
       }
     }
-    apmDownload.end()
   })
+}

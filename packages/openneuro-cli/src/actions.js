@@ -2,7 +2,7 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import { apm } from './apm.js'
-import { saveConfig, getUrl } from './config'
+import { saveConfig, getUrl, getUser } from './config'
 import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
@@ -221,7 +221,15 @@ const promptTags = snapshots =>
  * @param {Object} cmd
  */
 export const download = (datasetId, destination, cmd) => {
-  const apmTransaction = apm.startTransaction('download', 'custom')
+  const apmTransaction = apm.startTransaction(
+    `download:${datasetId}`,
+    'download',
+  )
+  const { sub } = getUser()
+  apmTransaction.addLabels({ datasetId, userId: sub })
+  if (cmd.snapshot) {
+    apmTransaction.addLabels({ snapshot: cmd.snapshot })
+  }
   if (!cmd.draft && !cmd.snapshot) {
     const client = configuredClient()
     return getSnapshots(client)(datasetId).then(({ data }) => {
