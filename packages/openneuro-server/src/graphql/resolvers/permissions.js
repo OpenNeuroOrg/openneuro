@@ -45,6 +45,11 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
   await checkDatasetAdmin(args.datasetId, user, userInfo)
   // get all users the the email specified by permissions arg
   const users = await User.find({ email: args.userEmail }).exec()
+
+  if (!users.length) {
+    throw new Error('A user with that email address does not exist')
+  }
+
   const userPromises = users.map(user => {
     return new Promise((resolve, reject) => {
       Permission.updateOne(
