@@ -1,4 +1,5 @@
 import os
+import logging
 
 import gevent
 import falcon
@@ -16,6 +17,7 @@ class SnapshotResource(object):
 
     def __init__(self, store):
         self.store = store
+        self.logger = logging.getLogger('datalad_service.' + __name__)
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
@@ -58,7 +60,7 @@ class SnapshotResource(object):
             if not skip_publishing:
                 # Publish after response
                 gevent.spawn(publish_snapshot, self.store,
-                             dataset, snapshot, req.cookies)
+                             dataset, req.cookies, snapshot)
         except:
             raise
             # TODO - This seems like an incorrect error path?

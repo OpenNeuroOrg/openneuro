@@ -109,6 +109,7 @@ const DatasetTools = ({ dataset, location, history }) => {
                   warn={false}
                   action={cb => {
                     toolRedirect(history, rootPath, 'snapshot')
+                    cb()
                   }}
                 />
               )}
@@ -126,11 +127,26 @@ const DatasetTools = ({ dataset, location, history }) => {
               {edit && !isMobile && (
                 <AdminUser>
                   <WarnButton
-                    tooltip="Admin Tools"
+                    tooltip="Admin Datalad Tools"
                     icon="fa-magic"
                     warn={false}
                     action={cb => {
-                      toolRedirect(history, rootPath, 'admin')
+                      toolRedirect(history, rootPath, 'admin-datalad')
+                      cb()
+                    }}
+                  />
+                </AdminUser>
+              )}
+            </div>
+            <div role="presentation" className="tool">
+              {edit && !isMobile && (
+                <AdminUser>
+                  <WarnButton
+                    tooltip="Admin Remote Export Tools"
+                    icon="fa-cloud-upload"
+                    warn={false}
+                    action={cb => {
+                      toolRedirect(history, rootPath, 'admin-exports')
                       cb()
                     }}
                   />

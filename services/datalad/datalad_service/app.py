@@ -21,6 +21,7 @@ from datalad_service.handlers.upload_file import UploadFileResource
 from datalad_service.handlers.validation import ValidationResource
 from datalad_service.handlers.git import GitRefsResource, GitReceiveResource, GitUploadResource
 from datalad_service.handlers.annex import GitAnnexResource
+from datalad_service.handlers.reexporter import ReexporterResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 
 
@@ -68,6 +69,7 @@ def create_app(annex_path):
     dataset_git_receive_resource = GitReceiveResource(store)
     dataset_git_upload_resource = GitUploadResource(store)
     dataset_git_annex_resource = GitAnnexResource(store)
+    dataset_reexporter_resources = ReexporterResource(store)
 
     api.add_route('/heartbeat', heartbeat)
 
@@ -93,6 +95,8 @@ def create_app(annex_path):
     api.add_route(
         '/datasets/{dataset}/publish', dataset_publish
     )
+    api.add_route('/datasets/{dataset}/reexport-remotes',
+                  dataset_reexporter_resources)
 
     api.add_route(
         '/datasets/{dataset}/upload/{upload}', dataset_upload

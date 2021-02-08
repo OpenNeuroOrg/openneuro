@@ -37,3 +37,7 @@ REDIS_HOST = get_environ('REDIS_HOST', 'redis')
 # The path to connect to Elastic APM server
 ELASTIC_APM_SERVER_URL = get_environ(
     'ELASTIC_APM_SERVER_URL')
+
+# Elasticsearch URL
+ELASTICSEARCH_CONNECTION = get_environ(
+    'ELASTICSEARCH_CONNECTION')

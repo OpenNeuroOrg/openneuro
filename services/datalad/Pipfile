@@ -26,6 +26,7 @@ elastic-apm = "*"
 falcon-elastic-apm = "*"
 sentry-sdk = {extras = [ "falcon",],version = "==0.16.1"}
 boto3 = "*"
+elasticsearch = "*"
 
 [requires]
 python_version = "3.8"

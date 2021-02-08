@@ -19,7 +19,7 @@ const AdminDataset = ({ dataset }) => (
   <div className="dataset-form">
     <div className="col-lg-12 dataset-form-header">
       <div className="form-group">
-        <label>Admin</label>
+        <label>Admin: Datalad Tools</label>
       </div>
       <div className="col-lg-12">
         <p>
