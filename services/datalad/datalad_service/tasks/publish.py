@@ -140,8 +140,6 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
     """Migrate a dataset and all snapshots to an S3 bucket"""
 
     dataset_id = dataset
-    logger.debug('0000000000000000000000000')
-    logger.debug(dataset_id)
     ds = store.get_dataset(dataset)
     tags = [tag['name'] for tag in ds.repo.get_tags()]
     siblings = ds.siblings()
