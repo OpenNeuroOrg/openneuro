@@ -21,7 +21,7 @@ const WarningNote = styled.div({
   },
 })
 
-const DeletePage = ({ dataset, returnToDataset, history, location }) => {
+const DeletePage = ({ dataset, returnToDataset }) => {
   const [values, setValues] = useState({
     reason: '',
     redirect: '',
@@ -34,7 +34,6 @@ const DeletePage = ({ dataset, returnToDataset, history, location }) => {
     setValues(newValues)
   }
   const user = getProfile()
-  const submitPath = location.state && location.state.submitPath
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
@@ -63,15 +62,9 @@ const DeletePage = ({ dataset, returnToDataset, history, location }) => {
           <button className="btn-admin-blue" onClick={returnToDataset}>
             Return to Dataset
           </button>
-          {hasEdit && (
-            <LoggedIn>
-              <DeleteDataset
-                datasetId={dataset.id}
-                metadata={values}
-                done={() => submitPath && history.push(submitPath)}
-              />
-            </LoggedIn>
-          )}
+          <LoggedIn>
+            <DeleteDataset datasetId={dataset.id} metadata={values} />
+          </LoggedIn>
         </div>
       </div>
     </Container>
@@ -81,8 +74,6 @@ const DeletePage = ({ dataset, returnToDataset, history, location }) => {
 DeletePage.propTypes = {
   dataset: PropTypes.object,
   returnToDataset: PropTypes.func,
-  history: PropTypes.object,
-  location: PropTypes.object,
 }
 
 export default withRouter(DeletePage)
