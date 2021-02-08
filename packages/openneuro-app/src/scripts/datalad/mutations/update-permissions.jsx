@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from '@apollo/client/react/components'
+import { toast } from 'react-toastify'
+import ToastContent from '../../common/partials/toast-content.jsx'
+import { validate as isValidEmail } from 'email-validator'
 
 const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(
@@ -49,10 +52,22 @@ const UpdateDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
       <button
         className="btn-modal-action"
         onClick={async () => {
-          await UpdateDatasetPermissions({
-            variables: { datasetId, userEmail, level: metadata },
-          })
-          done()
+          if (isValidEmail(userEmail)) {
+            try {
+              await UpdateDatasetPermissions({
+                variables: { datasetId, userEmail, level: metadata },
+              })
+              done()
+            } catch (err) {
+              toast.error(
+                <ToastContent body="A user with that email address does not exist" />,
+              )
+            }
+          } else {
+            toast.error(
+              <ToastContent body="Please enter a valid email address" />,
+            )
+          }
         }}>
         Share
       </button>

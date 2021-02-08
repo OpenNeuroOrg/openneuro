@@ -30,6 +30,7 @@
     "core-js": "^3.3.2",
     "date-fns": "^2.16.1",
     "draft-js": "^0.10.5",
+    "email-validator": "^2.0.4",
     "enzyme-to-json": "^3.3.5",
     "eslint": "^6.5.1",
     "graphql": "14.6.0",
