@@ -123,7 +123,7 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
         latest_tag = tags[-1:][0]
         # If remote has latest snapshot, do not reexport.
         # Reexporting all snapshots could make a previous snapshot latest in s3.
-        return not check_s3_has_version(ds, latest_tag)
+        return not check_remote_has_version(ds, DatasetRealm.PUBLIC.s3_remote, latest_tag)
     # logs to elasticsearch
     esLogger = ReexportLogger(dataset)
     export_all_tags(store, dataset, cookies, get_realm, should_export, esLogger)
@@ -138,7 +138,10 @@ def publish_snapshot(store, dataset, cookies=None, snapshot=None, realm=None):
 
 def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esLogger=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
+
     dataset_id = dataset
+    logger.debug('0000000000000000000000000')
+    logger.debug(dataset_id)
     ds = store.get_dataset(dataset)
     tags = [tag['name'] for tag in ds.repo.get_tags()]
     siblings = ds.siblings()
@@ -166,7 +169,7 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
                     esLogger.log(tag, s3_export_successful, github_export_successful, error)
         clear_dataset_cache(dataset, cookies)
 
-def check_s3_has_version(dataset, tag):
+def check_remote_has_version(dataset, remote, tag):
     response = dataset.repo._run_annex_command(
         'info',
         annex_options=[
@@ -174,8 +177,15 @@ def check_s3_has_version(dataset, tag):
             tag,
         ]
     )
-    info = json.loads(response[0])
-    return info['success']
+    try:
+        
+        info = json.loads(response[0])
+        remotes = info.get('repositories containing these files', [])
+        s3_PUBLIC_remote = [r for r in remotes if r.get('description') == f'[{remote}]']
+        return bool(s3_PUBLIC_remote)
+    except AttributeError as err:
+        logger.error(err)
+        return False
 
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
@@ -204,7 +214,6 @@ def delete_s3_sibling(dataset_id, siblings, realm):
         except Exception as e:
             raise Exception(
                 f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
-
 
 def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
