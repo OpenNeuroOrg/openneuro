@@ -168,22 +168,40 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
         clear_dataset_cache(dataset, cookies)
 
 def check_remote_has_version(dataset, remote, tag):
-    response = dataset.repo._run_annex_command(
-        'info',
-        annex_options=[
-            '--json',
-            tag,
-        ]
-    )
     try:
-        
+        # extract remote uuid from `git annex info <tag>`
+        response = dataset.repo._run_annex_command(
+            'info',
+            annex_options=[
+                '--json',
+                tag,
+            ]
+        )
         info = json.loads(response[0])
         remotes = info.get('repositories containing these files', [])
-        s3_PUBLIC_remote = [r for r in remotes if r.get('description') == f'[{remote}]']
-        return bool(s3_PUBLIC_remote)
-    except AttributeError as err:
-        logger.error(err)
+        remote_repo = [r for r in remotes if r.get('description') == f'[{remote}]']
+        remote_id_A = remote_repo and remote_repo[0].get('uuid')
+
+        # extract remote uuid and associated git tree id from `git show git-annex:export.log`
+        # this command only logs the latest export. previously exported tags will not show
+        response = dataset.repo.call_git(['show', 'git-annex:export.log'])
+        log_remote_id_pattern = re.compile(':(.+) .+$')
+        match = log_remote_id_pattern.search(response)
+        remote_id_B = match.group(1)
+        log_tree_id_pattern = re.compile('.* (.+)$')
+        match = log_tree_id_pattern.search(response)
+        tree_id_A = match.group(1)
+
+        # extract git tree id of <tag> with `git show -s <tag>`
+        response = dataset.repo.call_git(['show', '-s', '--pretty=raw', tag])
+        tree_id_pattern = re.compile('^tree (.+)$', re.MULTILINE)
+        match = tree_id_pattern.search(response)
+        tree_id_B = match.group(1)
+    except AttributeError:
         return False
+    # if the remote uuids and tree ids exist and match, then
+    # <tag> is the latest export to <remote>
+    return remote_id_A == remote_id_B and tree_id_A == tree_id_B
 
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
