@@ -86,6 +86,7 @@ describe('DatasetContent component', () => {
       uploader: {
         name: 'test user',
       },
+      worker: 'dataset-worker-0',
     }
     cookies.set(
       'accessToken',
