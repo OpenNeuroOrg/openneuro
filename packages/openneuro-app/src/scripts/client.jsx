@@ -1,4 +1,4 @@
-import { init as initApm } from '@elastic/apm-rum'
+import { setupApm } from './apm.js'
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -15,11 +15,19 @@ loadConfig().then(config => {
     config.sentry.environment === 'production' ||
     config.sentry.environment === 'staging'
   ) {
-    initApm({
+    setupApm({
       serverUrl: config.url,
       serviceName: 'openneuro-app',
       serviceVersion: packageJson.version,
       environment: config.sentry.environment,
+    })
+  } else {
+    setupApm({
+      serverUrl: config.url,
+      serviceName: 'openneuro-app',
+      serviceVersion: packageJson.version,
+      environment: config.sentry.environment,
+      active: false,
     })
   }
 
