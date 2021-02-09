@@ -179,22 +179,22 @@ def check_remote_has_version(dataset, remote, tag):
         )
         info = json.loads(response[0])
         remotes = info.get('repositories containing these files', [])
-        s3_PUBLIC_remote = [r for r in remotes if r.get('description') == f'[{remote}]']
-        remote_id_A = s3_PUBLIC_remote and s3_PUBLIC_remote[0].get('uuid')
+        remote_repo = [r for r in remotes if r.get('description') == f'[{remote}]']
+        remote_id_A = remote_repo and remote_repo[0].get('uuid')
 
         # extract remote uuid and associated git tree id from `git show git-annex:export.log`
         # this command only logs the latest export. previously exported tags will not show
         response = dataset.repo.call_git(['show', 'git-annex:export.log'])
-        log_remote_id_pattern = re.compile(f':(.+) .+$')
+        log_remote_id_pattern = re.compile(':(.+) .+$')
         match = log_remote_id_pattern.search(response)
         remote_id_B = match.group(1)
-        log_tree_id_pattern = re.compile(f'.* (.+)$')
+        log_tree_id_pattern = re.compile('.* (.+)$')
         match = log_tree_id_pattern.search(response)
         tree_id_A = match.group(1)
 
         # extract git tree id of <tag> with `git show -s <tag>`
         response = dataset.repo.call_git(['show', '-s', '--pretty=raw', tag])
-        tree_id_pattern = re.compile(f'^tree (.+)$', re.MULTILINE)
+        tree_id_pattern = re.compile('^tree (.+)$', re.MULTILINE)
         match = tree_id_pattern.search(response)
         tree_id_B = match.group(1)
     except AttributeError:
