@@ -26,7 +26,7 @@ const DocumentationLink = styled.a({
 
 const DatasetGitAccess = ({ datasetId, worker }) => {
   const workerId = worker.split('-').pop()
-  const port = window.location.port === '443' ? '' : `:${window.location.port}`
+  const port = window.location.port === '' ? '' : `:${window.location.port}`
   const url = `${window.location.protocol}//${window.location.hostname}${port}/git/${workerId}/${datasetId}`
   return (
     <div className="col-xs-12">
