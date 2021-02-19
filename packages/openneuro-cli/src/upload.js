@@ -139,7 +139,7 @@ export const uploadFiles = async ({
       datasetId + ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
     clearOnComplete: false,
     hideCursor: true,
-    etaBuffer: Math.round(files.length / 10), // More stable values for many small files
+    etaBuffer: Math.round(files.length / 10) + 1, // More stable values for many small files
   })
   uploadProgress.start(files.length, 0, {
     speed: 'N/A',
