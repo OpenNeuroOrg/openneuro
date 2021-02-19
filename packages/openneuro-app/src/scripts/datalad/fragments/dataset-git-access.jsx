@@ -30,7 +30,7 @@ const DatasetGitAccess = ({ datasetId, worker }) => {
   const url = `${window.location.protocol}//${window.location.hostname}${port}/git/${workerId}/${datasetId}`
   return (
     <div className="col-xs-12">
-      <h3 className="metaheader">Datalad/Git URL</h3>
+      <h3 className="metaheader">DataLad/Git URL</h3>
       <GitAccessWrap className="status panel panel-default">
         <Tooltip tooltip="Copy To Clipboard">
           <button
