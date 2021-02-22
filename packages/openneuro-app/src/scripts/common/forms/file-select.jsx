@@ -2,15 +2,8 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import bowser from 'bowser'
-import { toast } from 'react-toastify'
-import ToastContent from '../partials/toast-content.jsx'
 
 class Upload extends React.Component {
-  constructor() {
-    super()
-  }
-
   // life cycle events --------------------------------------------------
   render() {
     const resumeIcon = (
@@ -46,18 +39,6 @@ class Upload extends React.Component {
   _click(e) {
     e.stopPropagation()
     e.target.value = null
-    if (!bowser.chrome && !bowser.chromium && !bowser.firefox) {
-      e.preventDefault()
-      toast.error(
-        <ToastContent
-          title="Error"
-          body="This is a Chrome and Firefox feature.">
-          <a href="http://www.google.com/chrome/">
-            Please consider using Chrome or Firefox as your browser.
-          </a>
-        </ToastContent>,
-      )
-    }
     if (this.props.onClick) {
       this.props.onClick(e)
     }
