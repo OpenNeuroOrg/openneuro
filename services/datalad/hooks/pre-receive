@@ -9,7 +9,7 @@
 #
 set -o pipefail
 
-readonly MAXSIZE="104857600" # 100MB
+readonly MAXSIZE="10485760" # 10MB
 readonly NULLSHA="0000000000000000000000000000000000000000"
 readonly EXIT_SUCCESS="0"
 readonly EXIT_FAILURE="1"
@@ -94,7 +94,7 @@ function main() {
       if [[ "$status" == 0 ]]; then
         echo ""
         echo "-------------------------------------------------------------------------"
-        echo "Your push was rejected because it contains files larger than 100MB."
+        echo "Your push was rejected because it contains files larger than 10MB."
         echo "Please use git-annex to store larger files."
         echo "-------------------------------------------------------------------------"
         echo ""
