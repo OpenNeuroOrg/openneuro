@@ -69,3 +69,15 @@ export const updateDatasetRevision = (datasetId, gitRef) => {
     })
     .then(() => publishDraftUpdate(datasetId, gitRef))
 }
+
+/**
+ * Run a git reset on the draft
+ * @param {string} datasetId Accession number
+ * @param {string} ref Git hexsha
+ */
+export const resetDraft = (datasetId, ref) => {
+  const resetUrl = `${getDatasetWorker(
+    datasetId,
+  )}/datasets/${datasetId}/reset/${ref}`
+  return request.post(resetUrl).set('Accept', 'application/json')
+}

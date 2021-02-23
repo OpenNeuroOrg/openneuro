@@ -153,6 +153,8 @@ export const typeDefs = `
     prepareRepoAccess(datasetId: ID!): RepoMetadata
     # Rerun remote exports
     reexportRemotes(datasetId: ID!): Boolean
+    # Reset draft commit
+    resetDraft(datasetId: ID!, ref: String!): Boolean
   }
 
   input UploadFile {
