@@ -104,39 +104,60 @@ export function parseFilename(url) {
 }
 
 /**
+ * Control retry delay for upload file requests
+ * @param {number} step Attempt number
+ * @param {Request} request Active request
+ */
+export async function retryDelay(step, request) {
+  if (step <= 4) {
+    await new Promise(r => setTimeout(r, step ** 4))
+  } else {
+    throw new Error(
+      `Failed to upload file after ${step} attempts - "${request.url}"`,
+    )
+  }
+}
+
+/**
  * Repeatable function for single file upload fetch request
  * @param {object} uploadProgress Progress controller instance
  * @param {fetch} fetch Fetch implementation to use - useful for environments without a native fetch
  * @returns {function (Request, number): Promise<Response>}
  */
 export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
+  // Create a retry function with attempts incremented
   const filename = parseFilename(request.url)
+  const handleFailure = async failure => {
+    // eslint-disable-next-line no-console
+    console.warn(`Retrying upload for ${filename}: ${failure}`)
+    try {
+      await retryDelay(attempt, request)
+      return uploadFile(uploadProgress, fetch)(request, attempt + 1)
+    } catch (err) {
+      if ('failUpload' in uploadProgress) {
+        uploadProgress.failUpload(filename)
+      }
+      throw err
+    }
+  }
   // This is needed to cancel the request in case of client errors
   if ('startUpload' in uploadProgress) {
     uploadProgress.startUpload(filename)
   }
-  return fetch(request).then(async response => {
-    if (response.status === 200) {
-      // We need to wait for the response body or fetch-h2 may leave the connection open
-      await response.json()
-      if ('finishUpload' in uploadProgress) {
-        uploadProgress.finishUpload(filename)
-      }
-      uploadProgress.increment()
-    } else {
-      if (attempt > 3) {
-        if ('failUpload' in uploadProgress) {
-          uploadProgress.failUpload(filename)
+  return fetch(request)
+    .then(async response => {
+      if (response.status === 200) {
+        // We need to wait for the response body or fetch-h2 may leave the connection open
+        await response.json()
+        if ('finishUpload' in uploadProgress) {
+          uploadProgress.finishUpload(filename)
         }
-        throw new Error(
-          `Failed to upload file after ${attempt} attempts - "${request.url}"`,
-        )
+        uploadProgress.increment()
       } else {
-        // Retry if up to attempts times
-        return await uploadFile(uploadProgress, fetch)(request, attempt + 1)
+        await handleFailure(response.statusText)
       }
-    }
-  })
+    })
+    .catch(handleFailure)
 }
 
 export async function uploadParallel(
