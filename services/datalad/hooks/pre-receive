@@ -14,6 +14,23 @@ readonly NULLSHA="0000000000000000000000000000000000000000"
 readonly EXIT_SUCCESS="0"
 readonly EXIT_FAILURE="1"
 
+# Reject the push if any files start with a . character
+function filterDotFiles() {
+  local newFiles=$(git diff --stat --name-only --diff-filter=ACMRT ${oldref}..${newref})
+  for filename in $newFiles; do
+    if [[ "$filename" = ".bidsignore" ]] || [[ "$filename" =~ ".gitattributes" ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^\.gitignore|\/\.gitignore ]] || [[ "$filename" =~ ^\.datalad ]]; then
+      continue
+    fi
+    if [[ "$filename" =~ ^\..*|\/\..* ]]; then
+      echo ""
+      echo "-------------------------------------------------------------------------"
+      echo "Filenames beginning with . except for .bidsignore or DataLad repo settings are not allowed"
+      echo "-------------------------------------------------------------------------"
+      exit 1
+    fi
+  done
+}
+
 # main entry point
 function main() {
   local status="$EXIT_SUCCESS"
@@ -36,7 +53,7 @@ function main() {
           echo "-------------------------------------------------------------------------"
           echo "Only 'master', 'main', or 'git-annex' branches are accepted."
           echo "-------------------------------------------------------------------------"
-          exit 1
+          exit $EXIT_FAILURE
         fi
         ;;
       refs/tags/*)
@@ -46,11 +63,11 @@ function main() {
           echo "-------------------------------------------------------------------------"
           echo "Only version numbered tags are accepted, e.g. '1.2.3'"
           echo "-------------------------------------------------------------------------"
-          exit 1
+          exit $EXIT_FAILURE
         fi
         ;;
     esac
-    
+
     # find large objects
     # check all objects from $oldref (possible $NULLSHA) to $newref, but
     # skip all objects that have already been accepted (i.e. are referenced by
@@ -70,15 +87,16 @@ function main() {
       continue
     fi
 
+    filterDotFiles
+
     # Check if .bidsignore is in the new tree
-    local bidsignore
-    bidsignore=$(git show "${newref}:.bidsignore")
+    local bidsignore=$(git show "${newref}:.bidsignore")
     if [[ "$?" != 0 ]]; then
       bidsignore=""
     fi
 
     # Run validation (with .bidsignore if we found it above)
-    { echo "${bidsignore}\n0001" && git diff --stat --name-only --diff-filter=ACMRT "${target}"; } | \
+    { echo "${bidsignore}" && echo "0001" && git ls-tree --name-only -r "${newref}"; } | \
       /node_modules/.bin/bids-validator --filenames -
     if [[ "$?" != 0 ]]; then
       echo ""
@@ -86,7 +104,7 @@ function main() {
       echo "Your push was rejected because it failed validation."
       echo "Please test with bids-validator locally to resolve any errors before pushing."
       echo "-------------------------------------------------------------------------"
-      exit $?
+      exit $EXIT_FAILURE
     fi
 
     IFS=$'\n'
