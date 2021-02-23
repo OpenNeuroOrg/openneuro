@@ -3,20 +3,20 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from '@apollo/client/react/components'
 
-const UPDATE_REF = gql`
-  mutation updateRef($datasetId: ID!, $ref: String!) {
-    updateRef(datasetId: $datasetId, ref: $ref)
+const RESET_DRAFT = gql`
+  mutation resetDraft($datasetId: ID!, $ref: String!) {
+    resetDraft(datasetId: $datasetId, ref: $ref)
   }
 `
 
 const UpdateRef = ({ datasetId, revision }) => (
-  <Mutation mutation={UPDATE_REF}>
-    {updateRef => (
+  <Mutation mutation={RESET_DRAFT}>
+    {resetDraft => (
       <span>
         <button
           className="btn-admin-blue"
           onClick={async () => {
-            await updateRef({
+            await resetDraft({
               variables: {
                 datasetId,
                 ref: revision,
