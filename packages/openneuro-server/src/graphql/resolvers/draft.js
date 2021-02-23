@@ -17,7 +17,9 @@ const draftFiles = (obj, args) => {
 }
 
 /**
- * Mutation to move the draft HEAD reference forward or backward
+ * Deprecated mutation to move the draft HEAD reference forward or backward
+ *
+ * Exists to support existing usage where this would result in the initial snapshot
  */
 export const updateRef = async (
   obj,
