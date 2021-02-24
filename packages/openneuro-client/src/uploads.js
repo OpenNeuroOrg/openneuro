@@ -122,7 +122,7 @@ export async function retryDelay(step, request) {
  * Repeatable function for single file upload fetch request
  * @param {object} uploadProgress Progress controller instance
  * @param {fetch} fetch Fetch implementation to use - useful for environments without a native fetch
- * @returns {function (Request, number): Promise<Response>}
+ * @returns {function (Request, number): Promise<Response|void>}
  */
 export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
   // Create a retry function with attempts incremented
