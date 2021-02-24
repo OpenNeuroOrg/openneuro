@@ -1226,10 +1226,10 @@ before-after-hook@^2.0.0:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.1.0.tgz#b6c03487f44e24200dd30ca5e6a1979c5d2fb635"
   integrity sha512-IWIbu7pMqyw3EAJHzzHbWa85b6oud/yfKYg5rqB5hNE8CeMi3nX+2C2sj0HswfblST86hpVEOAb9x34NZd6P7A==
 
-bids-validator@1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.6.1.tgz#eef5414e14f9fb9a2b14ee1bae73eef19d595221"
-  integrity sha512-cjT58xTRHKL3kgNT+HrVvEEERYY6VglnKtK8343xIQC186LnefFothHStsbStCI4ml5J0XKKM9smdh5QINoKMA==
+bids-validator@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.6.2.tgz#0d314407711d78fa20a5694b71ecdb6cd3c201c6"
+  integrity sha512-fjUlu3NhpqtmLZnaWUs92m1MC7LMif4w1cM1csFEVHULPOoxQ/+geX0/5SI/l14WLTFKvXEOZq288wmRoI+3XA==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
