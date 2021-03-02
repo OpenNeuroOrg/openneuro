@@ -12,5 +12,6 @@
     "resolveJsonModule": true,
     "lib": ["es2020", "dom"]
   },
-  "include": ["./packages/**/*"]
+  "include": ["./packages/**/*"],
+  "exclude": ["./packages/openneuro-app/src/assets/**/*"]
 }
