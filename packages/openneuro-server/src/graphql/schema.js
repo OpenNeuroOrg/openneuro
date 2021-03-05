@@ -88,7 +88,7 @@ export const typeDefs = `
 
   type Mutation {
     # Create a new dataset container and repository
-    createDataset(label: String!): Dataset
+    createDataset: Dataset
     # Deletes a dataset and all associated snapshots
     deleteDataset(id: ID!, reason: String, redirect: String): Boolean
     # Tag the current draft

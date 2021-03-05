@@ -195,7 +195,7 @@ export class UploadClient extends React.Component {
     } else {
       // Create dataset and then add files
       mutation
-        .createDataset(this.props.client)(this.state.name)
+        .createDataset(this.props.client)
         .then(datasetId => {
           // Note chain to this._addFiles
           this.setState({ datasetId }, () => {

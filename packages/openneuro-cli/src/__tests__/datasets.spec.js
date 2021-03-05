@@ -8,7 +8,7 @@ describe('datasets.js', () => {
           Promise.resolve({ data: { createDataset: { id: 'testid' } } }),
         ),
       }
-      createDataset(client, 'test dataset')
+      createDataset(client)
         .then(() => expect(client.mutate).toHaveBeenCalledTimes(1))
         .then(done)
     })

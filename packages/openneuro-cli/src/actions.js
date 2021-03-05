@@ -65,7 +65,7 @@ const uploadDataset = async (dir, datasetId, validatorOptions) => {
     remoteFiles = data.dataset.draft.files
   } else {
     // Validation -> create dataset -> upload
-    datasetId = await createDataset(client, dir)
+    datasetId = await createDataset(client)
     remoteFiles = [] // New dataset has no remote files
   }
   const apmPrepareUploadSpan =

@@ -31,14 +31,11 @@ export const getDatasetFiles = (client, datasetId) => {
 /**
  * Create a dataset and return the new accession number
  * @param {object} client
- * @param {string} dir
  */
-export const createDataset = (client, dir) => {
-  const label = path.basename(dir)
+export const createDataset = client => {
   return client
     .mutate({
       mutation: datasets.createDataset,
-      variables: { label },
     })
     .then(({ data }) => {
       const dsId = data.createDataset.id

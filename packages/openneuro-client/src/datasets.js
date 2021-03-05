@@ -214,8 +214,8 @@ export const validationSubscription = gql`
 `
 
 export const createDataset = gql`
-  mutation createDataset($label: String!) {
-    createDataset(label: $label) {
+  mutation createDataset {
+    createDataset {
       id
     }
   }

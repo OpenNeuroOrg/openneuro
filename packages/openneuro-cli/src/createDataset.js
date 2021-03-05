@@ -5,7 +5,7 @@ import { apm } from './apm.js'
 
 const CREATE_DATASET = gql`
   mutation createDataset {
-    createDataset(label: "") {
+    createDataset {
       id
       worker
     }
