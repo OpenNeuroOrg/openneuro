@@ -75,11 +75,13 @@ commander
   )
   .action(createDataset)
 
-commander.command('*', { noHelp: true, isDefault: true }).action(() => {
-  // eslint-disable-next-line no-console
-  console.log('Unknown command!')
-  commander.outputHelp(makeRed)
-})
+commander
+  .command('*', 'default', { noHelp: true, isDefault: true })
+  .action(() => {
+    // eslint-disable-next-line no-console
+    console.log('Unknown command!')
+    commander.outputHelp(makeRed)
+  })
 
 commander.parse(process.argv)
 

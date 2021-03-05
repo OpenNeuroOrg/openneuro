@@ -1,8 +1,7 @@
-import { fetch, Request } from 'fetch-h2'
+import { fetch, Request, AbortController } from 'fetch-h2'
 import cliProgress from 'cli-progress'
 import path from 'path'
 import inquirer from 'inquirer'
-import { AbortController } from 'abort-controller'
 import { createReadStream, promises as fs } from 'fs'
 import { uploads } from 'openneuro-client'
 import validate from 'bids-validator'
@@ -41,7 +40,7 @@ const fatalError = err => {
  */
 export const validation = (dir, validatorOptions) => {
   return validatePromise(dir, validatorOptions)
-    .then(function({ summary }) {
+    .then(function ({ summary }) {
       // eslint-disable-next-line no-console
       console.log(consoleFormat.summary(summary))
     })
@@ -171,6 +170,7 @@ export const uploadFiles = async ({
           Authorization: `Bearer ${token}`,
         },
         body: fileStream,
+        // @ts-expect-error - this is missing in the upstream type
         signal: controller.signal,
       },
     )
@@ -179,6 +179,7 @@ export const uploadFiles = async ({
     requests,
     uploads.uploadSize(files),
     uploadProgress,
+    // @ts-expect-error - TODO does not actually break but Request and fetch-h2 Request are not quite compatible
     fetch,
   )
   uploadProgress.stop()

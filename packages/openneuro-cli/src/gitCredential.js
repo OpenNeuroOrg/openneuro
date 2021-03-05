@@ -23,7 +23,13 @@ export function getRepoToken(datasetId) {
     .then(({ data }) => data.prepareRepoAccess.token)
 }
 
+/**
+ * @typedef {Object} Credential
+ * @property {string} [path]
+ */
+
 export function gitCredential() {
+  /** @type {Credential} */
   const credential = {}
   const stdin = readline.createInterface({
     input: process.stdin,
