@@ -42,7 +42,7 @@ export async function prepareUpload(
  * Forwards this request to datalad-service
  * @param {object} obj Parent object or null
  * @param {object} arguments Resolver arguments
- * @param {string} arguments.id Upload id to finish (originally returned by prepareUpload)
+ * @param {string} arguments.uploadId Upload id to finish (originally returned by prepareUpload)
  * @param {object} context Resolver context
  * @param {string} context.user User id
  * @param {object} context.userInfo Decoded userInfo from token

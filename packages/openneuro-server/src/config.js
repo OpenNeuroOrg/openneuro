@@ -37,7 +37,7 @@ const config = {
     connectTimeoutMS: 1000,
   },
   redis: {
-    port: process.env.REDIS_PORT,
+    port: parseInt(process.env.REDIS_PORT),
     host: process.env.REDIS_HOST,
   },
   notifications: {

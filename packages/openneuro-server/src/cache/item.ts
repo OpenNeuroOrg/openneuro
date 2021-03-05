@@ -47,11 +47,11 @@ export default class CacheItem {
   private serialize(value: object): Promise<Buffer> {
     return compress(JSON.stringify(value))
   }
-  private async deserialize(value: Buffer): Promise<object> {
+  private async deserialize(value: Buffer): Promise<any> {
     const decompressed = await decompress(value)
     return JSON.parse(decompressed.toString())
   }
-  public async get(miss: Function): Promise<object> {
+  public async get(miss: Function): Promise<any> {
     try {
       const data = await this.redis.getBuffer(this.key)
       if (data) {

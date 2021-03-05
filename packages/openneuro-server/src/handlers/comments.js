@@ -1,3 +1,4 @@
+// @ts-nocheck
 import notifications from '../libs/notifications.js'
 import moment from 'moment'
 import jsdom from 'jsdom'

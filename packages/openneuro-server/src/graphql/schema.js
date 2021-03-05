@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
 import Subscription from './resolvers/subscriptions.js'
