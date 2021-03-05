@@ -52,7 +52,12 @@ export const login = () => {
     .then(saveConfig)
 }
 
-const uploadDataset = async (dir, datasetId, validatorOptions) => {
+const uploadDataset = async (
+  dir,
+  datasetId,
+  validatorOptions,
+  { affirmedDefaced, affirmedConsent },
+) => {
   const apmTransaction = apm && apm.startTransaction('upload', 'custom')
   apmTransaction.addLabels({ datasetId })
   const client = configuredClient()
@@ -65,7 +70,10 @@ const uploadDataset = async (dir, datasetId, validatorOptions) => {
     remoteFiles = data.dataset.draft.files
   } else {
     // Validation -> create dataset -> upload
-    datasetId = await createDataset(client)
+    datasetId = await createDataset(client)({
+      affirmedDefaced,
+      affirmedConsent,
+    })
     remoteFiles = [] // New dataset has no remote files
   }
   const apmPrepareUploadSpan =
@@ -165,21 +173,33 @@ export const upload = (dir, cmd) => {
       })
     } else {
       inquirer
-        .prompt({
-          type: 'confirm',
-          name: 'yes',
-          default: true,
-          message: 'This will create a new dataset, continue?',
-        })
-        .then(({ yes }) => {
+        .prompt([
+          {
+            type: 'confirm',
+            name: 'yes',
+            default: true,
+            message: 'This will create a new dataset, continue?',
+          },
+          {
+            type: 'checkbox',
+            name: 'affirmed',
+            message: 'Please affirm one of the following:',
+            choices: [
+              'All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.',
+              'I have explicit participant consent and ethical authorization to publish structural scans without defacing.',
+            ],
+          },
+        ])
+        .then(({ yes, affirmed: [affirmedDefaced, affirmedConsent] }) => {
           if (yes) {
-            return uploadDataset(dir, cmd.dataset, validatorOptions).then(
-              datasetId => {
-                if (datasetId) {
-                  notifyUploadComplete(false, datasetId)
-                }
-              },
-            )
+            return uploadDataset(dir, cmd.dataset, validatorOptions, {
+              affirmedDefaced: !!affirmedDefaced,
+              affirmedConsent: !!affirmedConsent,
+            }).then(datasetId => {
+              if (datasetId) {
+                notifyUploadComplete(false, datasetId)
+              }
+            })
           }
         })
         .catch(err => {

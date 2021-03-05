@@ -40,7 +40,10 @@ describe('datasets.js', () => {
   describe('createDataset mutation', () => {
     it('creates a dataset', done => {
       gqlClient
-        .mutate({ mutation: createDataset })
+        .mutate({
+          mutation: createDataset,
+          variables: { affirmedDefaced: false, affirmedConsent: true },
+        })
         .then(({ data: { createDataset } }) => {
           expect(createDataset.__typename).toBe('Dataset')
         })

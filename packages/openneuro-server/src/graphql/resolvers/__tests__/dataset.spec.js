@@ -15,7 +15,7 @@ describe('dataset resolvers', () => {
     it('createDataset mutation succeeds', async done => {
       const { id: dsId } = await ds.createDataset(
         null,
-        {},
+        { affirmedDefaced: true, affirmedConsent: false },
         { user: '123456', userInfo: {} },
       )
       expect(dsId).toEqual(expect.stringMatching(/^ds[0-9]{6}$/))

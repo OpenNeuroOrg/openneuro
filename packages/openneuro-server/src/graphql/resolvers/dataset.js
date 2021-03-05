@@ -81,7 +81,10 @@ export const createDataset = (
   // Check for a valid login
   if (user) {
     if (affirmedDefaced || affirmedConsent) {
-      return datalad.createDataset(user, userInfo)
+      return datalad.createDataset(user, userInfo, {
+        affirmedDefaced,
+        affirmedConsent,
+      })
     } else {
       throw new Error(
         'New dataset must be defaced or have participant consent.',
