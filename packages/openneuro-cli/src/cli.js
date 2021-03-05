@@ -5,7 +5,7 @@ import packageJson from '../package.json'
 import { login, upload, download } from './actions.js'
 import { gitCredential } from './gitCredential.js'
 import { gitAnnexRemote } from './gitAnnexRemote.js'
-import { createDataset } from './createDataset.js'
+import { create } from './createDataset.js'
 
 /**
  * display the help text in red on the console
@@ -73,7 +73,7 @@ commander
   .description(
     'Create a new empty dataset, useful for adding existing DataLad or git-annex datasets.',
   )
-  .action(createDataset)
+  .action(create)
 
 commander.command('*', { noHelp: true, isDefault: true }).action(() => {
   // eslint-disable-next-line no-console
