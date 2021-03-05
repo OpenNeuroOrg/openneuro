@@ -1,8 +1,6 @@
-import 'cross-fetch/polyfill'
-import { ApolloClient } from 'apollo-client'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { ApolloLink, split, Observable } from 'apollo-link'
+import { setContext } from 'apollo-link-context'
 import { createHttpLink } from 'apollo-link-http'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
@@ -16,9 +14,7 @@ import * as utils from './utils'
 import datasetGenerator from './datasetGenerator.js'
 import { version } from '../package.json'
 
-const cache = new InMemoryCache({
-  freezeResults: true,
-})
+const cache = new InMemoryCache()
 
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
@@ -145,7 +141,7 @@ const createLink = (uri, getAuthorization, fetch) => {
  * @param {string} uri GraphQL API URI (passed to Apollo Client)
  * @param {object} options Optional extra configuration
  * @param {function} [options.getAuthorization] Synchronous authorization cookie factory
- * @param {function} [options.fetch] Fetch implementation
+ * @param {typeof fetch} [options.fetch] Fetch implementation
  * @param {string} [options.clientVersion] Client version to check automatically on requests
  * @param {Array<ApolloLink>} [options.links] Any extra links to compose
  */
