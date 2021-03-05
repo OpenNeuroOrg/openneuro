@@ -3,6 +3,7 @@
   "version": "3.30.0",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
+  "main": "src/scripts/entrypoint.js",
   "module": "src/scripts/entrypoint.js",
   "repository": {
     "type": "git",
@@ -16,7 +17,7 @@
   },
   "author": "Squishymedia",
   "dependencies": {
-    "@apollo/client": "^3.3.4",
+    "@apollo/client": "^3.3.11",
     "@elastic/apm-rum": "^5.5.0",
     "@emotion/core": "^10.0.4",
     "@emotion/styled": "^10.0.4",

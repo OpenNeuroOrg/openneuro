@@ -8,10 +8,21 @@
     "outDir": "./dist",
     "target": "es6",
     "jsx": "preserve",
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": ["es2020", "dom"]
+    "lib": ["es2020", "dom", "webworker"],
+    "skipLibCheck": true
   },
   "include": ["./packages/**/*"],
-  "exclude": ["./packages/openneuro-app/src/assets/**/*"]
+  "exclude": [
+    "./packages/openneuro-app/src/assets/**/*",
+    "./packages/openneuro-app/dist",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "node_modules",
+    "**/__mocks__"
+  ]
 }
