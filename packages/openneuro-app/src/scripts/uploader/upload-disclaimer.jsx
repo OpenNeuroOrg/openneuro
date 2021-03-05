@@ -69,7 +69,7 @@ const UploadDisclaimer = () => {
                   affirmedDefaced,
                   affirmedConsent,
                 })
-                uploader.upload()
+                uploader.upload({ affirmedDefaced, affirmedConsent })
               }}
               disabled={!(affirmedDefaced || affirmedConsent)}>
               I Agree

@@ -93,33 +93,39 @@ export class UploadClient extends React.Component {
           query: datasets.getDraftFiles,
           variables: { id: datasetId },
         })
-        .then(({ data }) => {
-          // Create a new array of files to upload
-          const filesToUpload = []
-          // Create hashmap of filename -> size
-          const existingFiles = data.dataset.draft.files.reduce(
-            (existingFiles, f) => {
+        .then(
+          ({
+            data: {
+              dataset: {
+                draft,
+                metadata: { affirmedDefaced, affirmedConsent },
+              },
+            },
+          }) => {
+            // Create a new array of files to upload
+            const filesToUpload = []
+            // Create hashmap of filename -> size
+            const existingFiles = draft.files.reduce((existingFiles, f) => {
               existingFiles[f.filename] = f.size
               return existingFiles
-            },
-            {},
-          )
-          for (const newFile of files) {
-            const newFilePath = newFile.webkitRelativePath.split(/\/(.*)/)[1]
-            // Skip any existing files
-            if (existingFiles[newFilePath] !== newFile.size) {
-              filesToUpload.push(newFile)
+            }, {})
+            for (const newFile of files) {
+              const newFilePath = newFile.webkitRelativePath.split(/\/(.*)/)[1]
+              // Skip any existing files
+              if (existingFiles[newFilePath] !== newFile.size) {
+                filesToUpload.push(newFile)
+              }
             }
-          }
-          this.setState({
-            datasetId,
-            resume: true,
-            stripRelativePath,
-            files: addPathToFiles(filesToUpload, path),
-            selectedFiles: files,
-          })
-          this.upload()
-        })
+            this.setState({
+              datasetId,
+              resume: true,
+              stripRelativePath,
+              files: addPathToFiles(filesToUpload, path),
+              selectedFiles: files,
+            })
+            this.upload({ affirmedDefaced, affirmedConsent })
+          },
+        )
     }
   }
 
@@ -177,7 +183,7 @@ export class UploadClient extends React.Component {
       this.state.metadata,
     )
 
-  upload = () => {
+  upload = ({ affirmedDefaced, affirmedConsent }) => {
     // Track the start of uploads
     ReactGA.event({
       category: 'Upload',
@@ -195,7 +201,10 @@ export class UploadClient extends React.Component {
     } else {
       // Create dataset and then add files
       mutation
-        .createDataset(this.props.client)
+        .createDataset(this.props.client)({
+          affirmedDefaced,
+          affirmedConsent,
+        })
         .then(datasetId => {
           // Note chain to this._addFiles
           this.setState({ datasetId }, () => {

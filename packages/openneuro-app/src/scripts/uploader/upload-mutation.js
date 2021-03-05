@@ -5,10 +5,14 @@ import { SUBMIT_METADATA } from '../datalad/mutations/submit-metadata.jsx'
  * Create a dataset and update the label
  * @param {object} client Apollo client
  */
-export const createDataset = client => {
+export const createDataset = client => ({
+  affirmedDefaced,
+  affirmedConsent,
+}) => {
   return client
     .mutate({
       mutation: datasets.createDataset,
+      variables: { affirmedDefaced, affirmedConsent },
       errorPolicy: 'all',
     })
     .then(({ data }) => data.createDataset.id)

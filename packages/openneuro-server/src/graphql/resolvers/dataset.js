@@ -73,10 +73,20 @@ export const updateDatasetName = datasetId =>
 /**
  * Create an empty dataset (new repo, new accession number)
  */
-export const createDataset = (obj, args, { user, userInfo }) => {
+export const createDataset = (
+  obj,
+  { affirmedDefaced, affirmedConsent },
+  { user, userInfo },
+) => {
   // Check for a valid login
   if (user) {
-    return datalad.createDataset(user, userInfo)
+    if (affirmedDefaced || affirmedConsent) {
+      return datalad.createDataset(user, userInfo)
+    } else {
+      throw new Error(
+        'New dataset must be defaced or have participant consent.',
+      )
+    }
   } else {
     throw new Error('You must be logged in to create a dataset.')
   }

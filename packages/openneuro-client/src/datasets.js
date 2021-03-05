@@ -82,6 +82,10 @@ export const getDraftFiles = gql`
           size
         }
       }
+      metadata {
+        affirmedDefaced
+        affirmedConsent
+      }
     }
   }
 `
@@ -214,8 +218,11 @@ export const validationSubscription = gql`
 `
 
 export const createDataset = gql`
-  mutation createDataset {
-    createDataset {
+  mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
+    createDataset(
+      affirmedDefaced: $affirmedDefaced
+      affirmedConsent: $affirmedConsent
+    ) {
       id
     }
   }

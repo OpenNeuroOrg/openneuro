@@ -32,10 +32,14 @@ export const getDatasetFiles = (client, datasetId) => {
  * Create a dataset and return the new accession number
  * @param {object} client
  */
-export const createDataset = client => {
+export const createDataset = client => ({
+  affirmedDefaced,
+  affirmedConsent,
+}) => {
   return client
     .mutate({
       mutation: datasets.createDataset,
+      variables: { affirmedDefaced, affirmedConsent },
     })
     .then(({ data }) => {
       const dsId = data.createDataset.id
