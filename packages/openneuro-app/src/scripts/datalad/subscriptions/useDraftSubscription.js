@@ -1,5 +1,5 @@
 import { useSubscription } from '@apollo/client'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import {
   DRAFT_FRAGMENT,
   DATASET_ISSUES,

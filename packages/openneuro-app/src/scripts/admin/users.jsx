@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Query, Mutation } from '@apollo/client/react/components'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import Input from '../common/forms/input.jsx'
@@ -75,8 +75,8 @@ UsersQueryResult.propTypes = {
 }
 
 class Users extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       stringFilter: null,
       adminFilter: false,
@@ -299,7 +299,7 @@ class Users extends React.Component {
 Users.propTypes = {
   users: PropTypes.array,
   loading: PropTypes.bool,
-  refetch: PropTypes.function,
+  refetch: PropTypes.func,
 }
 
 export default UsersQuery

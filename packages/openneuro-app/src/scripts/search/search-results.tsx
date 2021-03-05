@@ -1,5 +1,5 @@
 import React from 'react'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { datasetQueryDisplay } from '../datalad/dashboard/datasets/dataset-query.jsx'
@@ -88,7 +88,7 @@ const searchQuery = gql`
  * This component is responsible for obtaining results from Elastic based
  * on the URL string and forwarding the data to the dashboard component
  */
-const SearchResultsQuery = (): React.SFC => {
+const SearchResultsQuery: React.FC = () => {
   const { query } = useParams()
   return datasetQueryDisplay(
     true,

@@ -8,8 +8,6 @@ import packageJson from '../../package.json'
 import { loadConfig } from './config.js'
 import * as GoogleAnalytics from 'react-ga'
 
-if (module.hot) module.hot.accept()
-
 loadConfig().then(config => {
   if (
     config.sentry.environment === 'production' ||

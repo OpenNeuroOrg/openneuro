@@ -44,7 +44,7 @@ const File = ({
           </Link>
         </span>
         {!isMobile && editMode && (
-          <UpdateFile datasetId={datasetId} path={path} filename={filename}>
+          <UpdateFile datasetId={datasetId} path={path}>
             <i className="fa fa-file-o" /> Update
           </UpdateFile>
         )}

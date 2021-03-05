@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
-import SearchInput from '../search/search-input.tsx'
+import SearchInput from '../search/search-input'
 import FrontPageStats from './front-page-stats.jsx'
 import FrontPageTabs from './front-page-tabs.jsx'
 import Footer from '../common/partials/footer.jsx'
@@ -68,7 +68,9 @@ const FrontPage = () => (
                 <AuthenticationButtons />
               </div>
             </LoggedOut>
-            <SearchInput className="frontpage-search" />
+            <span className="frontpage-search">
+              <SearchInput />
+            </span>
             <div className="browse-publicly">
               <Link to="/public/datasets">
                 <span>Browse All Public Datasets</span>

@@ -28,7 +28,7 @@ const UpdateFile = ({
                 )({ files: e.target.files })
               }}
               webkitdirectory={directory && 'true'}
-              multiple={multiple && 'true'}
+              multiple={multiple && true}
             />
           </Tooltip>
           {children}

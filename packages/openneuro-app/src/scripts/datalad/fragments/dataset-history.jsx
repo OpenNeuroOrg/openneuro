@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import Revalidate from '../mutations/revalidate.jsx'
 import UpdateRef from '../mutations/update-ref.jsx'

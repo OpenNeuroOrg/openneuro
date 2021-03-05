@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
@@ -80,6 +80,8 @@ const runValidations = values =>
   validations
     .map(validation => {
       const relevantValues = validation.fields.map(key => values[key])
+      // TODO - This doesn't seem necessary?
+      // @ts-expect-error
       const isValid = validation.check(relevantValues)
       if (!isValid) return validation.errorMessage
     })

@@ -46,6 +46,7 @@ const UploaderSetupRoutes = props => (
 
 UploaderSetupRoutes.propTypes = {
   location: PropTypes.object,
+  setLocation: PropTypes.func,
 }
 
 export default UploaderSetupRoutes

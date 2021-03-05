@@ -80,9 +80,7 @@ const goToDownloadPage = (history, rootPath, path) => {
 
 /**
  * Immediate redirect to a dataset or snapshot route
- * @param {object} history react-router-dom history
- * @param {*} rootPath base path for relative redirects
- * @param {*} path target path for redirect
+ * @param {string} datasetId Accession number
  */
 const goToBrainlife = datasetId => {
   window.open(`https://brainlife.io/openneuro/${datasetId}`, '_blank')

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
 import FileTreeLoading from './file-tree-loading.jsx'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export const DRAFT_FILES_QUERY = gql`
   query dataset($datasetId: ID!, $filePrefix: String!) {

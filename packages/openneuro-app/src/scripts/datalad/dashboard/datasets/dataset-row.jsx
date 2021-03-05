@@ -7,12 +7,13 @@ import Summary from '../../fragments/dataset-summary.jsx'
 import { Link } from 'react-router-dom'
 import RowHeight from './row-height.jsx'
 
+const sortByDate = (a, b) =>
+  Math.abs(new Date(b.created).getTime() - new Date(a.created).getTime())
+
 export const genLinkTarget = (dataset, publicDashboard) => {
   const linkTarget = '/datasets/' + dataset.id
   if (dataset.snapshots.length > 0 && publicDashboard) {
-    const sortedSnapshots = [...dataset.snapshots].sort((a, b) => {
-      return new Date(b.created) - new Date(a.created)
-    })
+    const sortedSnapshots = [...dataset.snapshots].sort(sortByDate)
     const newestSnapshot = sortedSnapshots[0]
     return `${linkTarget}/versions/${newestSnapshot.tag}`
   } else {

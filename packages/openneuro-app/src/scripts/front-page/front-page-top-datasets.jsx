@@ -1,14 +1,14 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
+import { gql, useQuery } from '@apollo/client'
 import Spinner from '../common/partials/spinner.jsx'
-import { Query } from '@apollo/client/react/components'
 import { Link } from 'react-router-dom'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import styled from '@emotion/styled'
 import Uppercase from '../styles/uppercase.jsx'
+import { DocumentNode } from 'graphql'
 
 const FontWeight600 = styled.span`
   font-weight: 600;
@@ -145,6 +145,10 @@ FrontPageTopRecent.propTypes = {
   datasets: PropTypes.array,
 }
 
+/**
+ * @param {DocumentNode} query
+ * @returns {function (import('@apollo/client').QueryResult): React.ReactElement}
+ */
 export const FrontPageTopResult = query => ({ loading, error, data }) => {
   if (loading) {
     return <Spinner active />
@@ -162,11 +166,10 @@ export const FrontPageTopResult = query => ({ loading, error, data }) => {
   }
 }
 
-const FrontPageTopQuery = ({ query }) => (
-  <Query query={query} errorPolicy="ignore">
-    {FrontPageTopResult(query)}
-  </Query>
-)
+const FrontPageTopQuery = ({ query }) => {
+  const result = useQuery(query)
+  return FrontPageTopResult(query)(result)
+}
 
 FrontPageTopQuery.propTypes = {
   query: PropTypes.object,

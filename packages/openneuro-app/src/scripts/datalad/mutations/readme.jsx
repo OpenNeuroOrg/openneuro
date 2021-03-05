@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import SaveButton from '../fragments/save-button.jsx'
 import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'

@@ -8,7 +8,6 @@ const Files = ({
   snapshotTag,
   datasetName,
   files,
-  fetchMore,
   editMode = false,
 }) => {
   const fileTree = flatToTree(files)
@@ -23,7 +22,6 @@ const Files = ({
           name={datasetName}
           editMode={editMode}
           defaultExpanded={true}
-          fetchMore={fetchMore}
         />
       </li>
     </ul>

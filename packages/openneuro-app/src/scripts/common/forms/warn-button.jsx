@@ -7,8 +7,8 @@ import { toast } from 'react-toastify'
 import ToastContent from '../partials/toast-content.jsx'
 
 class WarnButton extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       displayOptions: false,
       link: null,

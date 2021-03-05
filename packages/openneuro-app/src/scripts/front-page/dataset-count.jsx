@@ -1,6 +1,6 @@
 import React from 'react'
 import { Query } from '@apollo/client/react/components'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const PUBLIC_DATASET_COUNT = gql`
   query publicDatasetCount {

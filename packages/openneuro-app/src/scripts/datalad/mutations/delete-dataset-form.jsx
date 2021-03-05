@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextInput from '../fragments/text-input.jsx'
-import SelectInput from '../fragments/select-input.jsx'
+import TextInput from '../fragments/text-input'
+import SelectInput from '../fragments/select-input'
 import styled from '@emotion/styled'
 
 const Form = styled.form({
@@ -46,10 +46,10 @@ const DeleteDatasetForm = ({ values, onChange, hasEdit }) => (
   <Form id="metadata-form" className="col-sm-6">
     {fields(hasEdit).map(
       (
-        { key, label, hoverText, Component, additionalProps, transformValue },
+        { key, label, hoverText, Field, additionalProps, transformValue },
         i,
       ) => (
-        <Component
+        <Field
           name={key}
           label={label}
           hoverText={hoverText}

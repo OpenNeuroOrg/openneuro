@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import TextInput from './text-input.jsx'
-import { PropTypes } from 'prop-types'
+import TextInput from './text-input'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 const Container = styled.div({
@@ -18,7 +18,12 @@ const pushedUpLabelStyles = {
   top: '0.4rem',
   fontSize: '0.75em',
 }
-const Label = styled.label(
+
+interface SelectInputLabelProps {
+  hasValue: boolean
+}
+
+const Label = styled.label<SelectInputLabelProps>(
   {
     position: 'absolute',
     left: '1rem',
@@ -42,7 +47,11 @@ const DisabledIcon = styled.i({
   right: '0.4rem',
   color: '#5cb85c',
 })
-const Select = styled.select(
+
+interface ShowOtherProps {
+  showOther: boolean
+}
+const Select = styled.select<ShowOtherProps>(
   {
     position: 'absolute',
     top: 0,
@@ -88,7 +97,7 @@ const SelectIconContainer = styled.div({
   alignItems: 'center',
   color: '#999',
 })
-const SelectIcon = () => (
+const SelectIcon = (): React.ReactElement => (
   <SelectIconContainer>
     <i className="fa fa-caret-up" />
     <i className="fa fa-caret-down" />
@@ -97,7 +106,7 @@ const SelectIcon = () => (
 const Option = styled.option({
   color: 'black',
 })
-const OtherInputContainer = styled.div(
+const OtherInputContainer = styled.div<ShowOtherProps>(
   {
     marginBottom: '0.5rem',
     overflow: 'hidden',
@@ -135,7 +144,7 @@ const SelectInput = ({
   warningOnChange = '',
   onChange,
   hasBooleanValues,
-}) => {
+}): React.ReactElement => {
   if (hasBooleanValues && typeof value === 'boolean') {
     value = value.toString()
   }
@@ -149,7 +158,7 @@ const SelectInput = ({
 
   const [changed, setChanged] = useState(false)
 
-  const handleChange = e => {
+  const handleChange = (e): void => {
     const prevValue = value
     let newValue = e.target.value
     if (hasBooleanValues) {

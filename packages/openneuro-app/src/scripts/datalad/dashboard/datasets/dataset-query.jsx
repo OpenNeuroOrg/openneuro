@@ -27,7 +27,7 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
 
 /**
  * Load additional datasets based on next data cursor
- * @param {string} data Next data cursor
+ * @param {object} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
 const loadMoreRows = (data, fetchMore) => {
@@ -63,7 +63,7 @@ export const datasetQueryDisplay = (isPublic, isSaved) => ({
   fetchMore,
   refetch,
   variables,
-  error,
+  error = null,
 }) => {
   return (
     <DatasetTab

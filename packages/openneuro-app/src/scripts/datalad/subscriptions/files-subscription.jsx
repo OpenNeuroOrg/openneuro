@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Subscription } from '@apollo/client/react/components'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from '../mutations/cache-id.js'
 // import { datasetCacheId } from '../mutations/cache-id.js'

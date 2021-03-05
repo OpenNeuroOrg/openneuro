@@ -1,5 +1,5 @@
 import React from 'react'
 
-const DatasetContext = React.createContext()
+const DatasetContext = React.createContext(undefined)
 
 export default DatasetContext

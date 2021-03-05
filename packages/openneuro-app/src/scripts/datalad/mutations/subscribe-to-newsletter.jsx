@@ -1,5 +1,5 @@
 import React from 'react'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import EmailSubscriptionBox from '../../front-page/email-subscription-box.jsx'
 
@@ -14,9 +14,7 @@ const SubscribeToNewsletter = () => (
     {subscribeToNewsletter => (
       <EmailSubscriptionBox
         subscribe={(email, cb) => {
-          subscribeToNewsletter({ variables: { email } })
-            .then(cb)
-            .catch(cb)
+          subscribeToNewsletter({ variables: { email } }).then(cb).catch(cb)
         }}
       />
     )}

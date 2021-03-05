@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
-import { Query } from '@apollo/client/react/components'
+import { gql, useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
@@ -34,32 +33,30 @@ const getSnapshotDetails = gql`
   ${SNAPSHOT_FIELDS}
 `
 
-const SnapshotContent = ({ dataset, tag }) => (
-  <Query
-    query={getSnapshotDetails}
-    variables={{
+const SnapshotContent = ({ dataset, tag }) => {
+  const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
+    variables: {
       datasetId: dataset.id,
       tag,
-    }}>
-    {({ loading, error, data, fetchMore }) => {
-      if (loading) {
-        return <Spinner text="Loading Snapshot" active />
-      } else if (error) {
-        throw new Error(error)
-      } else {
-        return (
-          <DatasetQueryContext.Provider
-            value={{
-              datasetId: dataset.id,
-              fetchMore,
-            }}>
-            <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
-          </DatasetQueryContext.Provider>
-        )
-      }
-    }}
-  </Query>
-)
+    },
+  })
+  if (loading) {
+    return <Spinner text="Loading Snapshot" active />
+  } else if (error) {
+    throw new Error(error.toString())
+  } else {
+    return (
+      <DatasetQueryContext.Provider
+        value={{
+          datasetId: dataset.id,
+          fetchMore,
+          error: null,
+        }}>
+        <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+      </DatasetQueryContext.Provider>
+    )
+  }
+}
 
 SnapshotContent.propTypes = {
   dataset: PropTypes.object,
@@ -107,10 +104,10 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         <DatasetDescription
           datasetId={dataset.id}
           description={snapshot.description}
-          editable={false}
+          editMode={false}
         />
         <h2>How To Cite</h2>
-        <DatasetCitation datasetId={dataset.id} snapshot={snapshot} />
+        <DatasetCitation snapshot={snapshot} />
         <h5>
           <Link to="/cite">More citation info</Link>
         </h5>

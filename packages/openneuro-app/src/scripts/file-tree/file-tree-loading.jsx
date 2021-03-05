@@ -19,7 +19,8 @@ const ProgressInner = styled(animated.div)`
 
 /**
  * Estimate time to fetch files
- * @param {number} size Count of files
+ * @param {Navigator} navigator
+ * @returns {(size: number) => number}
  */
 export const estimateDuration = navigator => size => {
   // One file is about 100 bytes

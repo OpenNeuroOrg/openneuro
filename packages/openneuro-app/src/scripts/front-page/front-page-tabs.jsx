@@ -12,8 +12,8 @@ import use_data_analyze from './assets/use_data_analyze.png'
 import use_data_snapshot from './assets/use_data_snapshot.png'
 
 class FrontPageTabs extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       currentTab: null,
     }

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { convertToRaw } from 'draft-js'
 import withProfile from '../../authentication/withProfile.js'

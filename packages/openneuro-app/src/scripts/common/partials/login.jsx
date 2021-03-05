@@ -31,8 +31,8 @@ InfoPanel.propTypes = {
 }
 
 class Login extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = { infoPanel: false }
     this.toggleInfoPanel = this._toggleInfoPanel.bind(this)
   }

@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-// wrapper for collapsible content on mobile
+interface IsOpenProps {
+  isOpen: boolean
+}
 
-const Content = styled.div`
+// wrapper for collapsible content on mobile
+const Content = styled.div<IsOpenProps>`
   height: 7em;
   overflow: hidden;
   text-align: left;
-  ${props =>
+  ${(props): string =>
     props.isOpen &&
     `
       display: block;
@@ -17,7 +20,7 @@ const Content = styled.div`
     `};
 `
 
-const Collapse = ({ children, isOpen }) => {
+const Collapse = ({ children, isOpen }): React.ReactElement => {
   return <Content isOpen={isOpen}>{children}</Content>
 }
 
@@ -49,14 +52,6 @@ const Wrapper = styled.span`
   align-items: center;
 `
 
-const Body = styled.div`
-  ${props =>
-    props.isOpen &&
-    `
-    padding: 1rem 0;
-    `}
-`
-
 const Title = styled.p`
   padding-right: 0.5rem;
   cursor: pointer;
@@ -66,16 +61,16 @@ const Title = styled.p`
   font-size: 12px;
 `
 
-const Collapsible = ({ children, ...otherProps }) => {
+const Collapsible = ({ children, ...otherProps }): React.ReactElement => {
   const [isOpen, setOpen] = useState(false)
-  const toggleItem = () => {
+  const toggleItem = (): void => {
     setOpen(prevState => !prevState)
   }
   return (
     <>
-      <Body>
+      <div>
         <Collapse isOpen={isOpen}>{children}</Collapse>
-      </Body>
+      </div>
       <Item onClick={toggleItem}>
         <Wrapper>
           <Title>{!isOpen ? otherProps.title[0] : otherProps.title[1]}</Title>

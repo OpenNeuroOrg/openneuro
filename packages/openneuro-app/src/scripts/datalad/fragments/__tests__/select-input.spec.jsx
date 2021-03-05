@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import SelectInput from '../select-input.jsx'
+import SelectInput from '../select-input'
 
 describe('SelectInput', () => {
   it('handles display as disabled', () => {

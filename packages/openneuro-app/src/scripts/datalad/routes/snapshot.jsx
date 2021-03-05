@@ -65,7 +65,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
           </div>
         )}
         <h4>BIDS Validation</h4>
-        <ValidationStatus datasetId={datasetId} issues={issues} />
+        <ValidationStatus issues={issues} />
         <h4>Version</h4>
         <div className="input-group">
           <span className="input-group-addon" style={{ width: '100%' }}>

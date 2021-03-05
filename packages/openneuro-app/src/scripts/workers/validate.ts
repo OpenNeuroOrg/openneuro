@@ -1,10 +1,13 @@
 import * as Comlink from 'comlink'
+import { BIDSValidatorIssues } from './worker-interface'
 
-function init(files, options) {
+function init(files, options): Promise<BIDSValidatorIssues> {
   const worker = new Worker('./validate.worker.js', { type: 'module' })
-  const validate = Comlink.wrap(worker)
+  const workerComms = Comlink.wrap<
+    import('./validate.worker.js').ValidationWorker
+  >(worker)
   return new Promise((resolve, reject) => {
-    validate(
+    workerComms.runValidator(
       files,
       options,
       Comlink.proxy(({ error, output }) => {

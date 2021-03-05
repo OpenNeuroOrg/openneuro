@@ -3,7 +3,10 @@
  *
  * Be careful to only include necessary dependencies here
  */
+export default null
+declare const self: ServiceWorkerGlobalScope
 const CACHE_NAME = 'openneuro'
+// @ts-expect-error
 const CACHE_PATHS = global.serviceWorkerOption.assets
 
 self.addEventListener('install', event => {

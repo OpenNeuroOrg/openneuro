@@ -1,9 +1,9 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
-import TextInput from '../fragments/text-input.jsx'
-import SelectInput from '../fragments/select-input.jsx'
-import NumberInput from '../fragments/number-input.jsx'
-import TextArrayInput from '../fragments/text-array-input.jsx'
+import PropTypes from 'prop-types'
+import TextInput from '../fragments/text-input'
+import SelectInput from '../fragments/select-input'
+import NumberInput from '../fragments/number-input'
+import TextArrayInput from '../fragments/text-array-input'
 import styled from '@emotion/styled'
 
 const Form = styled.form({
@@ -343,10 +343,10 @@ const MetadataForm = ({
       )
       .map(
         (
-          { key, label, hoverText, Component, additionalProps, transformValue },
+          { key, label, hoverText, Field, additionalProps, transformValue },
           i,
         ) => (
-          <Component
+          <Field
             name={key}
             label={label}
             hoverText={hoverText}

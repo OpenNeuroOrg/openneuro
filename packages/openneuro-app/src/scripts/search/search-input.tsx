@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 
-const SearchInput = (): React.SFC => {
+const SearchInput: React.FC = () => {
   const inputRef = useRef(null)
   const history = useHistory()
 

@@ -1,4 +1,5 @@
 import config from '../../../config'
+import { UploadProgress } from './upload-progress-class'
 import { uploads } from 'openneuro-client'
 
 /**
@@ -109,6 +110,6 @@ export async function uploadFiles({
   } else {
     // No background fetch
     // Parallelism is handled by the client in this case
-    return uploads.uploadParallel(requests, totalSize, uploadProgress)
+    return uploads.uploadParallel(requests, totalSize, uploadProgress, fetch)
   }
 }
