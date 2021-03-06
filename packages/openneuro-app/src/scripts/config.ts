@@ -22,30 +22,38 @@ interface OpenNeuroNetworkConfig {
   url: string
   crn: { url: string }
   auth: {
-    google: {
+    google?: {
       clientID: string
     }
-    orcid: {
+    orcid?: {
       clientID: string
       URI: string
       redirectURI: string
     }
-    globus: {
+    globus?: {
       clientID: string
     }
   }
-  analytics: { trackingId: string }
-  sentry: { environment: string }
-  support: {
+  analytics?: { trackingId: string }
+  sentry?: { environment: string }
+  support?: {
     url: string
   }
-  github: string
-  publicBucket: string
-  theme: {}
+  github?: string
+  publicBucket?: string
+  theme?: {}
 }
 
 // Cache the result
-let loadedConfiguration: OpenNeuroNetworkConfig
+const loadedConfiguration: OpenNeuroNetworkConfig = {
+  url: '',
+  crn: {
+    url: ''
+  },
+  auth: {
+
+  }
+}
 let loaded = false
 
 export const loadConfig = (): Promise<OpenNeuroNetworkConfig> => {

@@ -2,9 +2,17 @@
   "compilerOptions": {
     "outDir": "./dist",
     "target": "ES5",
-    "checkJs": false
+    "checkJs": false,
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
   "extends": "../../tsconfig.json",
   "include": ["./src"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "ts-node": {
+    // these options are overrides used only by ts-node
+    // same as our --compilerOptions flag and our TS_NODE_COMPILER_OPTIONS environment variable
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

@@ -9,14 +9,13 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "3.3.11",
-    "apollo-link": "^1.2.12",
+    "apollo-link": "^1.2.14",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
-    "apollo-link-schema": "^1.2.3",
-    "apollo-link-ws": "^1.0.18",
+    "apollo-link-schema": "^1.2.5",
+    "apollo-link-ws": "^1.0.20",
     "esm": "^3.0.84",
-    "graphql": "14.6.0",
-    "graphql-tag": "^2.10.3",
+    "graphql": "14.7.0",
     "graphql-tools": "4.0.6",
     "semver": "^5.5.0",
     "subscriptions-transport-ws": "^0.9.15"

@@ -18,7 +18,7 @@ if (!Object.fromEntries) {
   fromEntries.shim()
 }
 
-jest.mock('./config.js')
+jest.mock('./config')
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

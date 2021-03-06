@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import App from './app.jsx'
 import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 import packageJson from '../../package.json'
-import { loadConfig } from './config.js'
+import { loadConfig } from './config'
 import * as GoogleAnalytics from 'react-ga'
 
 loadConfig().then(config => {

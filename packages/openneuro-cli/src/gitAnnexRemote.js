@@ -1,7 +1,6 @@
 import readline from 'readline'
 import { once } from 'events'
 import { getRepoToken } from './gitCredential.js'
-import gql from 'graphql-tag'
 import { storeKey, retrieveKey, checkKey, removeKey } from './transferKey.js'
 
 const GIT_ANNEX_VERSION = 'VERSION 1'

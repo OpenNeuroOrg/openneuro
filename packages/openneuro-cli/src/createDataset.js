@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import { getUrl } from './config.js'
 import { configuredClient } from './configuredClient.js'
 import { apm } from './apm.js'

@@ -1,5 +1,5 @@
 import React from 'react'
-import FileSelect from '../common/forms/file-select.jsx'
+import FileSelect from '../common/forms/file-select'
 import UploaderContext from './uploader-context.js'
 
 const UploadSelect = () => (

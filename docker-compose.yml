@@ -36,7 +36,7 @@ services:
   server:
     extends:
       service: node
-    command: yarn tsc-watch -b --onSuccess 'node dist/packages/openneuro-server/src/server.js'
+    command: yarn ts-node-dev --project packages/openneuro-server/tsconfig.json --respawn packages/openneuro-server/src/server.js
     volumes:
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
       - ./packages/openneuro-server/src:/srv/packages/openneuro-server/src

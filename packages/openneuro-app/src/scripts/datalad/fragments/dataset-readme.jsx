@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
-import Collapsible from '../../mobile/collapsible-wrapper.jsx'
+import Collapsible from '../../mobile/collapsible-wrapper'
 import useMedia from '../../mobile/media-hook.jsx'
 
 /**

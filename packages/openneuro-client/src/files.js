@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 /**
  * Sort file streams so that dataset_description.json is first in the list

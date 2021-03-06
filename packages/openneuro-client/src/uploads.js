@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export const prepareUpload = gql`
   mutation prepareUpload($datasetId: ID!, $uploadId: ID!) {

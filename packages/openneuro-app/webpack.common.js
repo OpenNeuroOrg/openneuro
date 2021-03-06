@@ -41,7 +41,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src/index.html'),
     }),
     new ServiceWorkerWebpackPlugin({
-      entry: path.join(__dirname, './src/scripts/sw.js'),
+      entry: path.join(__dirname, './src/scripts/sw.ts'),
     }),
     new CopyWebpackPlugin([
       {
@@ -104,4 +104,7 @@ module.exports = {
     fs: 'empty',
   },
   externals: { 'openneuro-content': 'window["openneuro-content"]' },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx'],
+  },
 }
