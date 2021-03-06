@@ -1,11 +1,13 @@
+import config from '../../../config.js'
+
 /**
  * Extract kibana deployment uri from ELASTICSEARCH_CLOUD_ID (prod/staging)
  *   or use localhost url.
  * For localhost url to be available, the kibana service must be enabled (docker-compose).
  */
 export const getKibanaURL = () => {
-  if (process.env.ELASTICSEARCH_CLOUD_ID) {
-    const ELASTICSEARCH_CLOUD_ID = process.env.ELASTICSEARCH_CLOUD_ID
+  if (config.elasticsearch.cloudID) {
+    const ELASTICSEARCH_CLOUD_ID = config.elasticsearch.cloudID
     const base64 = /:(.+?==)$/.exec(ELASTICSEARCH_CLOUD_ID)[1]
     const decoded = atob(base64)
     const [_, hostname, deploymentId] = /^(.+?)\$.+?\$(.+?)$/.exec(decoded)
