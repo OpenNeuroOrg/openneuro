@@ -39,7 +39,7 @@ const metadataFields = hasEdit => {
       label: 'DOI of papers from the source data lab',
       hoverText:
         'Papers that were published from the Lab that collected this dataset',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -47,7 +47,7 @@ const metadataFields = hasEdit => {
     {
       key: 'species',
       label: 'Species',
-      Component: SelectInput,
+      component: SelectInput,
       additionalProps: {
         options: [{ value: 'Human' }],
         showOptionOther: true,
@@ -57,7 +57,7 @@ const metadataFields = hasEdit => {
     {
       key: 'studyLongitudinal',
       label: 'Study Type',
-      Component: SelectInput,
+      component: SelectInput,
       additionalProps: {
         options: [{ value: 'Longitudinal' }, { value: 'Cross-Sectional' }],
         showOptionOther: true,
@@ -67,7 +67,7 @@ const metadataFields = hasEdit => {
     {
       key: 'studyDomain',
       label: 'Domain Studied',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -75,7 +75,7 @@ const metadataFields = hasEdit => {
     {
       key: 'trialCount',
       label: 'Number of Trials (if applicable)',
-      Component: NumberInput,
+      component: NumberInput,
       additionalProps: {
         min: -1,
         required: false,
@@ -84,7 +84,7 @@ const metadataFields = hasEdit => {
     {
       key: 'studyDesign',
       label: 'Study Design',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -93,7 +93,7 @@ const metadataFields = hasEdit => {
       key: 'openneuroPaperDOI',
       label: 'Papers published from this dataset',
       hoverText: 'Papers that were published from downloading this dataset',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -101,7 +101,7 @@ const metadataFields = hasEdit => {
     {
       key: 'dxStatus',
       label: 'DX status(es)',
-      Component: SelectInput,
+      component: SelectInput,
       additionalProps: {
         options: [
           { value: 'Healthy / Control' },
@@ -116,7 +116,7 @@ const metadataFields = hasEdit => {
     {
       key: 'tasksCompleted',
       label: 'Tasks Completed',
-      Component: TextArrayInput,
+      component: TextArrayInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -126,7 +126,7 @@ const metadataFields = hasEdit => {
     {
       key: 'grantFunderName',
       label: 'Grant Funder Name',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -134,7 +134,7 @@ const metadataFields = hasEdit => {
     {
       key: 'grantIdentifier',
       label: 'Grant Identifier',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -142,7 +142,7 @@ const metadataFields = hasEdit => {
     {
       key: 'datasetId',
       label: 'Dataset ID',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -152,7 +152,7 @@ const metadataFields = hasEdit => {
     {
       key: 'datasetUrl',
       label: 'Dataset URL',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -162,7 +162,7 @@ const metadataFields = hasEdit => {
     {
       key: 'datasetName',
       label: 'Dataset Name',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -174,7 +174,7 @@ const metadataFields = hasEdit => {
       label: 'Senior Author (Last, First)',
       hoverText:
         'Please list the senior author as the last author in the dataset_description.json file field Authors',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -184,7 +184,7 @@ const metadataFields = hasEdit => {
     {
       key: 'adminUsers',
       label: 'Admin Users (email)',
-      Component: TextArrayInput,
+      component: TextArrayInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -194,7 +194,7 @@ const metadataFields = hasEdit => {
     {
       key: 'firstSnapshotCreatedAt',
       label: 'First Snapshot (Publish) Date',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -205,7 +205,7 @@ const metadataFields = hasEdit => {
     {
       key: 'latestSnapshotCreatedAt',
       label: 'Most Recent Snapshot Date',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -217,7 +217,7 @@ const metadataFields = hasEdit => {
       key: 'ages',
       label: 'Subject Age(s)',
       // text input because field is read-only
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -235,7 +235,7 @@ const metadataFields = hasEdit => {
     {
       key: 'modalities',
       label: 'Modalities Available',
-      Component: TextArrayInput,
+      component: TextArrayInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -245,7 +245,7 @@ const metadataFields = hasEdit => {
     {
       key: 'dataProcessed',
       label: 'Has Processed Data',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -255,7 +255,7 @@ const metadataFields = hasEdit => {
     {
       key: 'affirmedDefaced',
       label: 'Uploader Affirmed Structural Scans Are Defaced',
-      Component: SelectInput,
+      component: SelectInput,
       additionalProps: {
         options: [
           {
@@ -279,7 +279,7 @@ const metadataFields = hasEdit => {
     {
       key: 'affirmedConsent',
       label: 'Uploader Affirmed Consent To Publish Scans Without Defacing',
-      Component: SelectInput,
+      component: SelectInput,
       additionalProps: {
         options: [
           {
@@ -343,10 +343,18 @@ const MetadataForm = ({
       )
       .map(
         (
-          { key, label, hoverText, Field, additionalProps, transformValue },
+          {
+            key,
+            label,
+            hoverText,
+            component: FieldComponent,
+            additionalProps,
+            transformValue,
+          },
           i,
         ) => (
-          <Field
+          // @ts-expect-error
+          <FieldComponent
             name={key}
             label={label}
             hoverText={hoverText}
