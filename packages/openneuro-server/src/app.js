@@ -84,8 +84,7 @@ export default test => {
     // Don't limit the max size for dataset uploads
     uploads: { maxFieldSize: Infinity },
     formatResponse: response => {
-      response.extensions.openneuro = { version }
-      return response
+      return { ...response, extensions: { openneuro: { version } } }
     },
   })
 
