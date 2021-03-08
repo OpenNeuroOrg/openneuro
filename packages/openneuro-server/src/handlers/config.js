@@ -30,6 +30,10 @@ const config = {
     },
   },
 
+  elasticsearch: {
+    cloudID: process.env.ELASTICSEARCH_CLOUD_ID,
+  },
+
   analytics: {
     trackingId: process.env.GOOGLE_TRACKING_ID,
   },

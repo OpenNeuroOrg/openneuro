@@ -16,7 +16,7 @@ export const typeDefs = `
   }
 
   directive @cacheControl(
-    maxAge: Int,
+    maxAge: Int
     scope: CacheControlScope
   ) on OBJECT | FIELD_DEFINITION
 
@@ -71,7 +71,7 @@ export const typeDefs = `
       "Cursor key used to fetch earlier results"
       before: String
       "Sorting fields"
-      orderBy: DatasetSort = {created: ascending}
+      orderBy: DatasetSort = { created: ascending }
       "Filtering fields"
       filterBy: DatasetFilter = {}
       "Query user's datasets only - excludes public datasets from other filters"
@@ -89,7 +89,7 @@ export const typeDefs = `
 
   type Mutation {
     # Create a new dataset container and repository
-    createDataset(label: String!): Dataset
+    createDataset(affirmedDefaced: Boolean, affirmedConsent: Boolean): Dataset
     # Deletes a dataset and all associated snapshots
     deleteDataset(id: ID!, reason: String, redirect: String): Boolean
     # Tag the current draft
