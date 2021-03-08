@@ -5,8 +5,8 @@ import config from '../../../config.js'
  *   or use localhost url.
  * For localhost url to be available, the kibana service must be enabled (docker-compose).
  */
-export const getKibanaURL = () => {
-  if (config.elasticsearch.cloudID) {
+export const getKibanaURL = config => {
+  if (config?.elasticsearch?.cloudID) {
     const ELASTICSEARCH_CLOUD_ID = config.elasticsearch.cloudID
     const base64 = /:(.+?==)$/.exec(ELASTICSEARCH_CLOUD_ID)[1]
     const decoded = atob(base64)
@@ -16,7 +16,7 @@ export const getKibanaURL = () => {
     return 'http://localhost:5601/app/discover#/'
   }
 }
-const url = getKibanaURL()
+const url = getKibanaURL(config)
 // query params for index "logs-reexporter" with selected fields "dataset_id" and "text"
 const reexportLogQueryParams =
   "_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(dataset_id,tag,s3_export_successful,github_export_successful,error),filters:!(),index:'548067b0-607a-11eb-becc-a73e7e29924c',interval:auto,query:(language:kuery,query:''),sort:!())"
