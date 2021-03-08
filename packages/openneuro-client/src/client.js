@@ -11,7 +11,6 @@ import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
 import * as uploads from './uploads'
-import * as utils from './utils'
 import datasetGenerator from './datasetGenerator.js'
 import { version } from '../package.json'
 
@@ -181,5 +180,4 @@ export {
   datasetGenerator,
   createClient,
   uploads,
-  utils,
 }
