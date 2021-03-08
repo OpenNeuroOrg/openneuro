@@ -1,5 +1,5 @@
-import mongoose, { model, Document } from 'mongoose'
-const { Schema } = mongoose
+import mongoose, { Document } from 'mongoose'
+const { model, Schema } = mongoose
 
 interface SnapshotDocument extends Document {
   datasetId: string
