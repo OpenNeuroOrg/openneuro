@@ -5,12 +5,9 @@ import PropTypes from 'prop-types'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import newId from '../../utils/newid'
 
-// component setup ---------------------------------------------------------------
-
 export default class TooltipTop extends React.PureComponent {
-  // life cycle methods ------------------------------------------------------------
-
-  componentWillMount() {
+  constructor(props) {
+    super(props)
     this.id = newId('tooltip-id-')
   }
 

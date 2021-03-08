@@ -48,11 +48,9 @@ interface OpenNeuroNetworkConfig {
 const loadedConfiguration: OpenNeuroNetworkConfig = {
   url: '',
   crn: {
-    url: ''
+    url: '',
   },
-  auth: {
-
-  }
+  auth: {},
 }
 let loaded = false
 

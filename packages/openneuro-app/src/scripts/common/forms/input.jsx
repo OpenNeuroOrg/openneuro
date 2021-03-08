@@ -15,10 +15,12 @@ class Input extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     // Will reset value when prop changes
     if ('value' in nextProps) {
-      this.setState({ value: nextProps.value })
+      return { value: nextProps.value }
+    } else {
+      return null
     }
   }
 

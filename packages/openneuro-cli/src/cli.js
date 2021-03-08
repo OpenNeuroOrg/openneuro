@@ -73,7 +73,9 @@ commander
   .description(
     'Create a new empty dataset, useful for adding existing DataLad or git-annex datasets.',
   )
-  .action(createDataset)
+  .action(() => {
+    createDataset()
+  })
 
 commander
   .command('*', 'default', { noHelp: true, isDefault: true })

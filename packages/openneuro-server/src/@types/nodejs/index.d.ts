@@ -1,7 +1,7 @@
-declare module NodeJS  {
+declare namespace NodeJS {
   interface Global {
-      document: any
-      HTMLElement: any
-      HTMLAnchorElement: any
+    document: any
+    HTMLElement: any
+    HTMLAnchorElement: any
   }
 }

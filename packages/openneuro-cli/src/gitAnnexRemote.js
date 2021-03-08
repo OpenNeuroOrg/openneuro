@@ -85,7 +85,9 @@ export async function gitAnnexRemote() {
       input: process.stdin,
     })
     console.log(GIT_ANNEX_VERSION)
-    rl.on('line', response(rl))
+    rl.on('line', () => {
+      response(rl)
+    })
     await once(rl, 'close')
     process.exit(0)
   } catch (err) {

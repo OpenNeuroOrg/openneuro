@@ -1,6 +1,6 @@
 import { model, Schema, Model, Document } from 'mongoose'
 
-interface ISnapshot extends Document {
+interface SnapshotDocument extends Document {
   datasetId: string
   tag: string
   created: Date
@@ -16,6 +16,6 @@ const snapshotSchema = new Schema({
 
 snapshotSchema.index({ datasetId: 1, tag: 1 }, { unique: true })
 
-const Snapshot: Model<ISnapshot> = model('Snapshot', snapshotSchema)
+const Snapshot: Model<SnapshotDocument> = model('Snapshot', snapshotSchema)
 
 export default Snapshot

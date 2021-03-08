@@ -34,7 +34,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
   },
-  "plugins": ["import", "prettier", "react"],
+  "plugins": ["import", "prettier", "react", "react-hooks"],
   "settings": {
     "import/core-modules": ["openneuro-content"],
     "react": {

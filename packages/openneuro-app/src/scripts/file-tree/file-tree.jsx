@@ -25,9 +25,9 @@ const FileTree = ({
   defaultExpanded = false,
 }) => {
   const isMobile = useMedia('(max-width: 765px) ')
-  const [expanded, setExpanded] = isMobile
-    ? useState(!defaultExpanded)
-    : useState(defaultExpanded)
+  const [expanded, setExpanded] = useState(
+    isMobile ? !defaultExpanded : defaultExpanded,
+  )
   return (
     <>
       <button

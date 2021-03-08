@@ -5,6 +5,6 @@ declare global {
       user?: any
     }
   }
-} 
+}
 
 export {}

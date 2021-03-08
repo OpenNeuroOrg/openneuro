@@ -18,12 +18,7 @@
   "exclude": [
     "./packages/openneuro-app/src/assets/**/*",
     "./packages/openneuro-app/dist",
-    "**/*.spec.js",
-    "**/*.spec.jsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "node_modules",
-    "**/__mocks__"
+    "node_modules"
   ],
   "ts-node": {
     // these options are overrides used only by ts-node

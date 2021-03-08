@@ -1,5 +1,5 @@
-import { useSubscription } from '@apollo/client'
-import { gql } from '@apollo/client'
+import { useSubscription, gql } from '@apollo/client'
+
 import { DATASET_SNAPSHOTS } from '../dataset/dataset-query-fragments.js'
 
 const SNAPSHOTS_UPDATED_SUBSCRIPTION = gql`

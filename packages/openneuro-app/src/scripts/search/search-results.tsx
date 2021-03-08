@@ -1,7 +1,7 @@
 import React from 'react'
-import { gql } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
+
 import { datasetQueryDisplay } from '../datalad/dashboard/datasets/dataset-query.jsx'
 
 const searchQuery = gql`

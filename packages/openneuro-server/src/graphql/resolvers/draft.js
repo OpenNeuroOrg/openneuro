@@ -37,11 +37,7 @@ export const updateRef = async (
 /**
  * Mutation to move the draft HEAD reference forward or backward
  */
-export const revalidate = async (
-  obj,
-  { datasetId, ref },
-  { user, userInfo },
-) => {
+export const revalidate = async (obj, { datasetId }, { user, userInfo }) => {
   await checkDatasetWrite(datasetId, user, userInfo)
 }
 
