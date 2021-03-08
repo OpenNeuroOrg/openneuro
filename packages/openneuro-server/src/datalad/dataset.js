@@ -16,6 +16,7 @@ import { updateDatasetRevision, expireDraftFiles } from './draft.js'
 import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
+import Metadata from '../models/metadata.js'
 import Permission from '../models/permission.js'
 import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
@@ -39,7 +40,11 @@ export const giveUploaderPermission = (datasetId, userId) => {
  * @param {Object} userInfo User metadata
  * @returns {Promise} Resolves to {id: accessionNumber} for the new dataset
  */
-export const createDataset = async (uploader, userInfo) => {
+export const createDataset = async (
+  uploader,
+  userInfo,
+  { affirmedDefaced, affirmedConsent },
+) => {
   // Obtain an accession number
   const datasetId = await getAccessionNumber()
   try {
@@ -50,6 +55,8 @@ export const createDataset = async (uploader, userInfo) => {
       .set('Cookie', generateDataladCookie(config)(userInfo))
     // Write the new dataset to mongo after creation
     await ds.save()
+    const md = new Metadata({ datasetId, affirmedDefaced, affirmedConsent })
+    await md.save()
     await giveUploaderPermission(datasetId, uploader)
     await subscriptions.subscribe(datasetId, uploader)
     return ds

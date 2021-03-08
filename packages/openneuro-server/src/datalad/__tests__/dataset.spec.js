@@ -19,7 +19,10 @@ describe('dataset model operations', () => {
       )
     })
     it('resolves to dataset id string', async done => {
-      const { id: dsId } = await createDataset()
+      const { id: dsId } = await createDataset(null, null, {
+        affirmedDefaced: true,
+        affirmedConsent: true,
+      })
       expect(dsId).toHaveLength(8)
       expect(dsId.slice(0, 2)).toBe('ds')
       done()
@@ -27,7 +30,10 @@ describe('dataset model operations', () => {
     it('posts to the DataLad /datasets/{dsId} endpoint', async done => {
       // Reset call count for request.post
       request.post.mockClear()
-      const { id: dsId } = await createDataset()
+      const { id: dsId } = await createDataset(null, null, {
+        affirmedDefaced: true,
+        affirmedConsent: true,
+      })
       expect(request.post).toHaveBeenCalledTimes(1)
       expect(request.post).toHaveBeenCalledWith(
         expect.stringContaining(`${getDatasetWorker(dsId)}/datasets/`),
