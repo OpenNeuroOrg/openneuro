@@ -1,4 +1,4 @@
-import { fetch } from 'fetch-h2'
+import 'cross-fetch/polyfill'
 import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
@@ -37,7 +37,7 @@ export const testFile = (destination, filename, size) => {
 }
 
 const getFetchHeaders = () => ({
-  cookie: `accessToken=${getToken()}`,
+  Authorization: `Bearer ${getToken()}`,
 })
 
 const handleFetchReject = err => {

@@ -6,8 +6,10 @@ import { hasEditPermissions } from '../../../authentication/profile.js'
 import { BrowserRouter } from 'react-router-dom'
 import cookies from '../../../utils/cookies.js'
 
-const MockFileTree = () => <div>Mock File Tree</div>
-jest.mock('../../fragments/dataset-files.jsx', () => MockFileTree)
+// eslint-disable-next-line
+jest.mock('../../fragments/dataset-files.jsx', () => () => (
+  <div>Mock File Tree</div>
+))
 
 describe('DatasetContent component', () => {
   describe('HasBeenPublished', () => {

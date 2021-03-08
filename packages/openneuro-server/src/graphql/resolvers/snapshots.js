@@ -100,7 +100,7 @@ export const participantCount = async () => {
 }
 
 const sortSnapshots = (a, b) =>
-  Math.abs(new Date(b.created).getTime() - new Date(a.created).getTime())
+  new Date(b.created).getTime() - new Date(a.created).getTime()
 
 export const latestSnapshot = (obj, _, context) => {
   return datalad.getSnapshots(obj.id).then(snapshots => {

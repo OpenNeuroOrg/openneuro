@@ -17,9 +17,9 @@ const analyticsWrapper = (WrappedComponent, options = {}) => {
       trackPage(page)
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-      const currentPage = prevState.location.pathname
-      const nextPage = nextProps.location.pathname
+    componentDidUpdate(prevProps) {
+      const currentPage = prevProps.location.pathname
+      const nextPage = this.props.location.pathname
 
       if (currentPage !== nextPage) {
         trackPage(nextPage)
