@@ -44,7 +44,7 @@ export const validation = (dir, validatorOptions) => {
   return validatePromise(dir, validatorOptions)
     .then(function({ summary }) {
       // eslint-disable-next-line no-console
-      console.log(consoleFormat.summary(summary))
+      // console.log(consoleFormat.summary(summary))
     })
     .catch(fatalError)
 }
