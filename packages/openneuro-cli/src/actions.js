@@ -61,7 +61,7 @@ const uploadDataset = async (
   const apmTransaction = apm && apm.startTransaction('upload', 'custom')
   apmTransaction.addLabels({ datasetId })
   const client = configuredClient()
-  await validation(dir, validatorOptions)
+  await validation(dir, validatorOptions, apmTransaction)
   let remoteFiles = []
   if (datasetId) {
     // Check for dataset -> validation -> upload
