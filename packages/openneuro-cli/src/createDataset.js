@@ -41,7 +41,7 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
 export const create = () => {
   inquirer
     .prompt({
-      type: 'checkbox',
+      type: 'list',
       name: 'affirmed',
       message: 'Please affirm one of the following:',
       choices: [

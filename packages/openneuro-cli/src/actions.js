@@ -181,7 +181,7 @@ export const upload = (dir, cmd) => {
             message: 'This will create a new dataset, continue?',
           },
           {
-            type: 'checkbox',
+            type: 'list',
             name: 'affirmed',
             message: 'Please affirm one of the following:',
             choices: [
