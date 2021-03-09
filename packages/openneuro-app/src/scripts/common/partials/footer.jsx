@@ -2,11 +2,11 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import packageJson from '../../../../package.json'
-import { frontPage } from 'openneuro-content'
+import { version as openneuroVersion } from '../../../lerna.json'
+import { frontPage } from '../../front-page/front-page-content.js'
 
 const Footer = props => {
-  const version = props.version ? props.version : packageJson.version
+  const version = props.version ? props.version : openneuroVersion
   return (
     <span>
       <footer>

@@ -47,5 +47,6 @@ export const createClient = uri => {
   const link = new SchemaLink({
     schema,
   })
+  // @ts-expect-error
   return new ApolloClient({ uri, link, cache })
 }

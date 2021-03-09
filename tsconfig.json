@@ -6,25 +6,41 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    "target": "es6",
-    "jsx": "preserve",
-    "module": "esnext",
+    "target": "es2020",
+    "jsx": "react",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "lib": ["es2020", "dom", "webworker"],
-    "skipLibCheck": true
-  },
-  "include": ["./packages/**/*"],
-  "exclude": [
-    "./packages/openneuro-app/src/assets/**/*",
-    "./packages/openneuro-app/dist",
-    "node_modules"
-  ],
-  "ts-node": {
-    // these options are overrides used only by ts-node
-    // same as our --compilerOptions flag and our TS_NODE_COMPILER_OPTIONS environment variable
-    "compilerOptions": {
-      "module": "commonjs"
+    "skipLibCheck": true,
+    "incremental": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "paths": {
+      "openneuro-app": ["packages/openneuro-app"],
+      "openneuro-cli": ["packages/openneuro-cli"],
+      "openneuro-client": ["packages/openneuro-client"],
+      "openneuro-indexer": ["packages/openneuro-indexer"],
+      "openneuro-server": ["packages/openneuro-server"]
     }
-  }
+  },
+  "exclude": [
+    "./packages/openneuro-app/src/assets",
+    "**/dist/*",
+    "node_modules",
+    "**/__mocks__/*",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "coverage"
+  ],
+  "references": [
+    { "path": "./packages/openneuro-app" },
+    { "path": "./packages/openneuro-cli" },
+    { "path": "./packages/openneuro-client" },
+    { "path": "./packages/openneuro-indexer" },
+    { "path": "./packages/openneuro-server" }
+  ]
 }

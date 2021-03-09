@@ -13,7 +13,7 @@ import SubscribeToNewsletter from '../datalad/mutations/subscribe-to-newsletter.
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
 import Helmet from 'react-helmet'
 //configurables
-import { frontPage } from 'openneuro-content'
+import { frontPage } from '../front-page/front-page-content.js'
 
 const LogoText = () => (
   <div className="logo-text">

@@ -25,9 +25,9 @@ export async function runValidator(
   return output
 }
 
-const exports = {
+const toExport = {
   runValidator,
 }
-export type ValidationWorker = typeof exports
+export type ValidationWorker = typeof toExport
 
-expose(exports)
+expose(toExport)

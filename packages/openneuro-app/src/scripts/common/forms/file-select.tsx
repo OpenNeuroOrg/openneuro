@@ -68,11 +68,4 @@ Upload.propTypes = {
   disabled: PropTypes.bool,
 }
 
-declare module 'react' {
-  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-    directory?: string
-    webkitdirectory?: string
-  }
-}
-
 export default Upload

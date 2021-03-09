@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import userUtil from '../../utils/user.js'
+import { generateGravatarUrl } from '../../utils/user.js'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Editor, EditorState, convertFromRaw } from 'draft-js'
@@ -26,7 +26,7 @@ const Comment = ({ datasetId, data, children }) => {
         </div>
         <div className="row comment-body">
           <img
-            src={userUtil.generateGravatarUrl(data.user)}
+            src={generateGravatarUrl(data.user)}
             className="comment-avatar"
           />
           {editMode ? (

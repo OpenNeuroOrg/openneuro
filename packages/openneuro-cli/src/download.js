@@ -92,6 +92,7 @@ export const downloadFile = async (
       const response = await fetch(fileUrl, {
         headers: getFetchHeaders(),
       })
+      // @ts-expect-error
       const stream = await response.readable()
       if (response.status === 200) {
         // Setup end/error handler with Promise interface

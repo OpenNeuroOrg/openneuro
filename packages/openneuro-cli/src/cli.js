@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import commander from 'commander'
 import colors from 'colors'
-import packageJson from '../package.json'
+import { version } from './lerna.json'
 import { login, upload, download } from './actions.js'
 import { gitCredential } from './gitCredential.js'
 import { gitAnnexRemote } from './gitAnnexRemote.js'
@@ -14,7 +14,7 @@ function makeRed(txt) {
   return colors.red(txt)
 }
 
-commander.version(packageJson.version).description(packageJson.description)
+commander.version(version).description('OpenNeuro command line tools.')
 
 commander.on('--help', () => {
   console.log('')

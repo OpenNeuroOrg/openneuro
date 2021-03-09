@@ -1,6 +1,6 @@
 /**
  * Configuration
  */
-import { getConfig } from './src/scripts/config'
+import { getConfig } from './scripts/config'
 
 export default getConfig()

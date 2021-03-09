@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import Avatar from '../user/avatar.jsx'
 import { DropdownButton } from 'react-bootstrap'
-import withProfile from '../authentication/withProfile.js'
+import withProfile from '../authentication/withProfile.jsx'
 import signOut from '../authentication/signOut.js'
 
 const signOutAndRedirect = history => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import config from '../../../config'
+import config from '../../config'
 import orcidLogo from '../../assets/orcid_24x24.png'
 
 const OrcidButton = ({ min }) => {

@@ -8,7 +8,6 @@ import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import styled from '@emotion/styled'
 import Uppercase from '../styles/uppercase.jsx'
-import { DocumentNode } from 'graphql'
 
 const FontWeight600 = styled.span`
   font-weight: 600;
@@ -146,7 +145,7 @@ FrontPageTopRecent.propTypes = {
 }
 
 /**
- * @param {DocumentNode} query
+ * @param {import('graphql').DocumentNode} query
  * @returns {function (import('@apollo/client').QueryResult): React.ReactElement}
  */
 export const FrontPageTopResult = query => ({ loading, error, data }) => {

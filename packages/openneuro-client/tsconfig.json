@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "../../.build-cache/client.tsbuildinfo"
+  },
+  "include": ["src"],
+  "files": ["src/lerna.json"]
+}

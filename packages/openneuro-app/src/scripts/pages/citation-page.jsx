@@ -1,5 +1,5 @@
 import React from 'react'
-import { frontPage } from 'openneuro-content'
+import { frontPage } from '../front-page/front-page-content.js'
 import styled from '@emotion/styled'
 import Footer from '../common/partials/footer.jsx'
 

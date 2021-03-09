@@ -12,7 +12,7 @@ import { connect as redisConnect } from './libs/redis'
 import notifications from './libs/notifications'
 import config from './config'
 import createApp from './app'
-import packageJson from '../package.json'
+import { version } from './lerna.json'
 
 const redisConnectionSetup = async () => {
   try {
@@ -28,7 +28,7 @@ const redisConnectionSetup = async () => {
 
 Sentry.init({
   dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
-  release: packageJson.version,
+  release: version,
   environment: config.sentry.ENVIRONMENT,
 })
 

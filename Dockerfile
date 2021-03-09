@@ -1,4 +1,4 @@
-FROM node:12.18.1 as dependencies
+FROM node:14.16.0 as dependencies
 
 WORKDIR /srv
 

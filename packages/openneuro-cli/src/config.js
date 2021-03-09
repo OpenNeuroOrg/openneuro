@@ -49,7 +49,7 @@ export const getToken = () => {
 
 /**
  * Get the user object from the configured token
- * @returns {object}
+ * @returns {any}
  */
 export const getUser = () => {
   const token = getToken()

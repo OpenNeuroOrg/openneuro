@@ -1,13 +1,6 @@
 declare module '*.png' {
-  const value: any
+  const value: string
   export = value
-}
-
-// TODO - Remove when openneuro-content is merged in
-declare module 'openneuro-content' {
-  const frontPage: any
-  const theme: any
-  const faq: any
 }
 
 interface ServiceWorkerRegistration {

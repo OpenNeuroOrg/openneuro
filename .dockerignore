@@ -4,6 +4,7 @@
 **/dist
 **/.eslintcache
 **/__pycache__
+.build-cache
 .github
 .vscode
 coverage

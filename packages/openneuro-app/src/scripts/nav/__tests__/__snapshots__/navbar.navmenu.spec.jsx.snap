@@ -38,16 +38,7 @@ exports[`NavMenu renders successfully 1`] = `
   <li
     className="link-faq"
   >
-    <FaqLink
-      faq={
-        Array [
-          Object {
-            "faq": "Who tests the best?",
-            "faq_answer": "we test the best!",
-          },
-        ]
-      }
-    />
+    <FaqLink />
   </li>
   <li
     className="link-admin"

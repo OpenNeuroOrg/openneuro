@@ -4,7 +4,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../common/partials/footer.jsx'
 //configurables
-import { frontPage } from 'openneuro-content'
+import { frontPage } from '../front-page/front-page-content.js'
 
 // component setup ----------------------------------------------------
 

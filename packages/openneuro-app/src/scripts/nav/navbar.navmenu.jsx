@@ -4,11 +4,10 @@ import { NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
 import UploaderView from '../uploader/uploader-view.jsx'
 import { Navbar } from 'react-bootstrap'
-import withProfile from '../authentication/withProfile.js'
+import withProfile from '../authentication/withProfile.jsx'
 import LoggedIn from '../authentication/logged-in.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
-import config from '../../../config'
-import { faq } from 'openneuro-content'
+import config from '../../config'
 import useMedia from '../mobile/media-hook.jsx'
 
 const AdminLinkContent = ({ profile }) => {
@@ -28,17 +27,11 @@ AdminLinkContent.propTypes = {
 
 const AdminLink = withProfile(AdminLinkContent)
 
-const FaqLink = ({ faq }) => {
-  if (faq && faq.length) {
-    return (
-      <NavLink className="nav-link" to="/faq">
-        <span className="link-name">faq</span>
-      </NavLink>
-    )
-  } else {
-    return null
-  }
-}
+const FaqLink = () => (
+  <NavLink className="nav-link" to="/faq">
+    <span className="link-name">faq</span>
+  </NavLink>
+)
 
 FaqLink.propTypes = {
   faq: PropTypes.array,
@@ -80,7 +73,7 @@ const NavMenu = ({ supportModal, loginModal }) => {
       </li>
       <SupportLink supportModal={supportModal} />
       <li className="link-faq">
-        <FaqLink faq={faq} />
+        <FaqLink />
       </li>
       <li className="link-admin">
         <AdminLink />

@@ -1,5 +1,9 @@
 import config from '../config.js'
 
+/**
+ * @param {string} datasetId
+ * @param {string} [tag]
+ */
 export const addFileUrl = (datasetId, tag) => file => {
   // Skip files annotated with a URL from datalad service
   if (file.urls.length > 0) {

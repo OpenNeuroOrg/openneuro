@@ -1,4 +1,4 @@
-import config from '../../../../config.js'
+import config from '../../../config.js'
 
 export const downloadUri = (datasetId, snapshotTag) =>
   // This can't be a GraphQL query since it is intercepted

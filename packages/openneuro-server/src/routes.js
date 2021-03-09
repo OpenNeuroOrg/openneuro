@@ -14,6 +14,7 @@ import * as globus from './libs/authentication/globus.js'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
 import * as doi from './handlers/doi'
+import { ssrHandler } from './handlers/ssr.js'
 import { sitemapHandler } from './handlers/sitemap.js'
 
 const routes = [
@@ -183,6 +184,8 @@ for (const route of routes) {
   arr.push(route.handler)
   router[route.method](...arr)
 }
+
+router.get('*', ssrHandler)
 
 // export ------------------------------------------
 

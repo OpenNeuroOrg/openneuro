@@ -179,7 +179,6 @@ export const uploadFiles = async ({
     requests,
     uploads.uploadSize(files),
     uploadProgress,
-    // @ts-expect-error - TODO does not actually break but Request and fetch-h2 Request are not quite compatible
     fetch,
   )
   uploadProgress.stop()

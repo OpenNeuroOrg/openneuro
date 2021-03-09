@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer'
 import config from '../../config'
 import templates from './templates'
-import juice from 'juice'
 
 // library configuration ---------------------------------------
 
@@ -29,7 +28,7 @@ export default {
     let html = templates[email.template](email.data)
 
     // inline styles
-    html = juice(html)
+    //html = juice(html)
 
     // determine if the main is from a specific sender
     // or the generic email address

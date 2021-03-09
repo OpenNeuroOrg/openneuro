@@ -1,5 +1,5 @@
 import React from 'react'
-import { frontPage } from 'openneuro-content'
+import { frontPage } from '../front-page/front-page-content.js'
 
 class Support extends React.Component {
   render() {

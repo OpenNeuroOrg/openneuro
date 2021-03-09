@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import config from '../../../config.js'
+import config from '../../config.js'
 
 /**
  * Button starts Google oauth2 workflow

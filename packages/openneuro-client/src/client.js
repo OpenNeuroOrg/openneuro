@@ -12,7 +12,6 @@ import * as snapshots from './snapshots'
 import * as users from './users'
 import * as uploads from './uploads'
 import datasetGenerator from './datasetGenerator.js'
-import { version } from '../package.json'
 
 const cache = new InMemoryCache()
 
@@ -137,21 +136,11 @@ const createLink = (uri, getAuthorization, fetch) => {
 
 /**
  * Setup a client for working with the OpenNeuro API
- *
- * @param {string} uri GraphQL API URI (passed to Apollo Client)
- * @param {object} options Optional extra configuration
- * @param {function} [options.getAuthorization] Synchronous authorization cookie factory
- * @param {typeof fetch} [options.fetch] Fetch implementation
- * @param {string} [options.clientVersion] Client version to check automatically on requests
- * @param {Array<ApolloLink>} [options.links] Any extra links to compose
  */
-const createClient = (uri, options = {}) => {
-  const {
-    getAuthorization = null,
-    fetch = null,
-    clientVersion = version,
-    links = [],
-  } = options
+const createClient = (
+  uri,
+  { getAuthorization = undefined, fetch = undefined, clientVersion = undefined, links = [] } = {},
+) => {
   // createLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),

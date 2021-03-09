@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "files": [],
+  "include": [],
+  "references": [
+    { "path": "./openneuro-app" },
+    { "path": "./openneuro-cli" },
+    { "path": "./openneuro-client" },
+    { "path": "./openneuro-indexer" },
+    { "path": "./openneuro-server" }
+  ]
+}

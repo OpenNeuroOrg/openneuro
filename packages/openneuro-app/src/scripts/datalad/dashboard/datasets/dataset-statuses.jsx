@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Status from '../../../common/partials/status.jsx'
-import withProfile from '../../../authentication/withProfile.js'
+import withProfile from '../../../authentication/withProfile.jsx'
 
 class Statuses extends React.PureComponent {
   // life cycle events --------------------------------------------------

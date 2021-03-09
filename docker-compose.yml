@@ -3,7 +3,6 @@ version: "2.3"
 
 # shared volumes
 volumes:
-  project:
   yarn_cache:
   webpack_cache:
 
@@ -18,7 +17,6 @@ services:
     working_dir: /srv
     volumes:
       - yarn_cache:/usr/local/share/.cache
-      - project:/srv/packages/openneuro-app/dist
 
   # web app bundle build
   app:
@@ -36,7 +34,8 @@ services:
   server:
     extends:
       service: node
-    command: yarn ts-node-dev --project packages/openneuro-server/tsconfig.json --respawn packages/openneuro-server/src/server.js
+    working_dir: /srv/packages/openneuro-server
+    command: yarn start
     volumes:
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
       - ./packages/openneuro-server/src:/srv/packages/openneuro-server/src

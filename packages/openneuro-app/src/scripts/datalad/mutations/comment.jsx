@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { convertToRaw } from 'draft-js'
-import withProfile from '../../authentication/withProfile.js'
+import withProfile from '../../authentication/withProfile.jsx'
 import { DATASET_COMMENTS } from '../dataset/comments-fragments.js'
 import { datasetCacheId } from './cache-id.js'
 

@@ -1,7 +1,6 @@
 // @ts-nocheck
 import notifications from '../libs/notifications.js'
 import moment from 'moment'
-import jsdom from 'jsdom'
 import User from '../models/user'
 import Comment from '../models/comment'
 import MailgunIdentifier from '../models/mailgunIdentifier'
@@ -17,10 +16,6 @@ const ObjectID = mongoose.Schema.Types.ObjectId
  * a client-side draft.js editor
  */
 const textToDraft = text => {
-  const window = new jsdom.JSDOM('').window
-  global.document = window.document
-  global.HTMLElement = window.HTMLElement
-  global.HTMLAnchorElement = window.HTMLElement
   return JSON.stringify(
     convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))),
   )
