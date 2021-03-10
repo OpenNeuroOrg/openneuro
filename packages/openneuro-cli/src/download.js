@@ -139,7 +139,7 @@ export const getDownload = (destination, datasetId, tag, apmTransaction) => {
           file.urls.pop(),
           apmTransaction,
         )
-        apmDownload.end()
+        if (apmDownload) apmDownload.end()
       } else {
         // eslint-disable-next-line no-console
         console.log(`Skipping present file "${file.filename}"`)
