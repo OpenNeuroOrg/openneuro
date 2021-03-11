@@ -1,6 +1,6 @@
 {
   "name": "openneuro-app",
-  "version": "3.30.0",
+  "version": "3.31.0-alpha.0",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "app.js",
@@ -36,7 +36,7 @@
     "graphql-tag": "^2.10.3",
     "graphql-tools": "4.0.6",
     "jwt-decode": "^2.2.0",
-    "openneuro-client": "^3.30.0",
+    "openneuro-client": "^3.31.0-alpha.0",
     "pluralize": "^7.0.0",
     "prop-types": "^15.6.0",
     "react": "16.9.0",
