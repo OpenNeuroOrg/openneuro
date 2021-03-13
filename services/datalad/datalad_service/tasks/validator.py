@@ -7,6 +7,7 @@ from gevent import subprocess
 import sentry_sdk
 
 from datalad_service.config import GRAPHQL_ENDPOINT
+from datalad_service.common.elasticsearch import ValidationLogger
 
 
 def setup_validator():
@@ -15,7 +16,7 @@ def setup_validator():
         subprocess.run(['yarn'])
 
 
-def validate_dataset_sync(dataset_path, ref):
+def validate_dataset_sync(dataset_path, ref, esLogger):
     """
     Synchronous dataset validation.
 
@@ -26,9 +27,9 @@ def validate_dataset_sync(dataset_path, ref):
         process = gevent.subprocess.run(
             ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(process.stdout)
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as err:
+        esLogger.log(err)
         sentry_sdk.capture_exception()
-
 
 def summary_mutation(dataset_id, ref, validator_output):
     """
@@ -74,8 +75,9 @@ def issues_mutation(dataset_id, ref, validator_output):
     }
 
 
-def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None):
-    validator_output = validate_dataset_sync(dataset_path, ref)
+def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None, user=''):
+    esLogger = ValidationLogger(dataset_id, user)
+    validator_output = validate_dataset_sync(dataset_path, ref, esLogger)
     if validator_output:
         if 'issues' in validator_output:
             r = requests.post(
@@ -91,6 +93,6 @@ def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None):
         raise Exception('Validation failed unexpectedly')
 
 
-def validate_dataset(dataset_id, dataset_path, ref, cookies=None):
+def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
     return gevent.spawn(_validate_dataset_eventlet,
-                        dataset_id, dataset_path, ref, cookies)
+                        dataset_id, dataset_path, ref, cookies, user)
