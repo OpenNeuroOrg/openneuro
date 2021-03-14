@@ -168,6 +168,9 @@ const createClient = (uri, options = {}) => {
     link: composedLink,
     cache,
     connectToDevTools: true,
+    onError: (error) => {
+      console.log(`${JSON.stringify(error)}`)
+    }
   }
 
   // TODO: Figure this out?

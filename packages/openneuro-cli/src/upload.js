@@ -148,16 +148,19 @@ export const uploadFiles = async ({
   const rootUrl = getUrl()
   const controller = new AbortController()
   let result = [];
+  let numChunks = 1;
   if (files.length > 500){
-    const numChunks = Math.ceil(files.length / 500);
-    console.log(`Splitting array of ${files.length} in to ${numChunks} chunks`);
+    numChunks = Math.ceil(files.length / 500);
+    console.log(`\nSplitting array of ${files.length} in to ${numChunks} chunks`);
     for(let i = 0; i < files.length; i += 500){
-      console.log(`${i}`);
       result = [...result, files.slice(i, i + 500 < files.length? i + 500 : files.length)];
     }
+  }else{
+    result = [files]
   }
 
   for (let i = 0; i < result.length; ++i){
+    console.log(`Processing chunk ${i+1} of ${numChunks}`);
     const requests = result[i].map(file => {
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
