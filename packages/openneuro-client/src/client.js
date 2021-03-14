@@ -159,6 +159,12 @@ const createClient = (uri, options = {}) => {
   // createLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),
+    new ApolloLink((operation, forward) => {
+      return forward(operation).map(result => {
+        console.info(JSON.stringify(operation.getContext().response));
+        return result
+      })
+    }),
     ...links,
     createLink(uri, getAuthorization, fetch),
   ])
@@ -168,9 +174,6 @@ const createClient = (uri, options = {}) => {
     link: composedLink,
     cache,
     connectToDevTools: true,
-    onError: (error) => {
-      console.log(`${JSON.stringify(error)}`)
-    }
   }
 
   // TODO: Figure this out?
