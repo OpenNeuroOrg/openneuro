@@ -139,7 +139,12 @@ const createLink = (uri, getAuthorization, fetch) => {
  */
 const createClient = (
   uri,
-  { getAuthorization = undefined, fetch = undefined, clientVersion = undefined, links = [] } = {},
+  {
+    getAuthorization = undefined,
+    fetch = undefined,
+    clientVersion = undefined,
+    links = [],
+  } = {},
 ) => {
   // createLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
