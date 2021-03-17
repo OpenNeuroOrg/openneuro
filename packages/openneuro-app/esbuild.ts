@@ -5,6 +5,7 @@ import liveServer from 'live-server'
 import { sassPlugin } from 'esbuild-sass-plugin'
 import { copyFile } from 'fs/promises'
 import { fixReactVirtualized } from './esbuild.plugin-fix-react-virtualized.js'
+import { webWorkerPlugin } from './esbuild.plugin-webworker'
 
 async function main(): Promise<void> {
   const command = new Command()
@@ -23,11 +24,13 @@ async function main(): Promise<void> {
     },
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      global: 'window',
+      global: 'globalThis',
     },
     bundle: true,
-    plugins: [sassPlugin(), fixReactVirtualized()],
+    plugins: [sassPlugin(), fixReactVirtualized(), webWorkerPlugin()],
     watch: options.watch,
+    target: ['chrome80', 'firefox80', 'safari13'],
+    sourcemap: 'inline',
   })
   await copyFile(
     path.join(__dirname, 'src/index.html'),

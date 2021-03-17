@@ -31,3 +31,5 @@ const toExport = {
 export type ValidationWorker = typeof toExport
 
 expose(toExport)
+
+export default toExport

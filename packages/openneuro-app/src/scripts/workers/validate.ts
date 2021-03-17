@@ -1,8 +1,10 @@
 import * as Comlink from 'comlink'
+import ValidateWorker from './validate.worker'
 import { BIDSValidatorIssues } from './worker-interface'
 
 function init(files, options): Promise<BIDSValidatorIssues> {
-  const worker = new Worker('./validate.worker', { type: 'module' })
+  // @ts-expect-error
+  const worker = new ValidateWorker()
   const workerComms = Comlink.wrap<
     import('./validate.worker').ValidationWorker
   >(worker)
