@@ -30,7 +30,7 @@ async function main(): Promise<void> {
     plugins: [sassPlugin(), fixReactVirtualized(), webWorkerPlugin()],
     watch: options.watch,
     target: ['chrome80', 'firefox80', 'safari13'],
-    sourcemap: 'inline',
+    sourcemap: true,
   })
   await copyFile(
     path.join(__dirname, 'src/index.html'),

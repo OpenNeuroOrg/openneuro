@@ -42,7 +42,7 @@ export const webWorkerPlugin = () => ({
             global: 'globalThis',
             window: 'globalThis',
           },
-          sourcemap: 'inline',
+          sourcemap: true,
         })
         return {
           contents: `
