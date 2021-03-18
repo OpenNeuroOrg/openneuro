@@ -31,7 +31,7 @@ export class UploadClient extends React.Component {
       // Which step in the modal
       location: locationFactory('/hidden'),
       // List of files being uploaded
-      files: {},
+      files: [],
       // Files selected, regardless of if they will be uploaded
       selectedFiles: {},
       // Relabel dataset during upload
@@ -242,11 +242,7 @@ export class UploadClient extends React.Component {
     if (hasChanges) return files
 
     // Construct the initial CHANGES file and add to the files array
-    const snapshotText = 'Initial snapshot'
-    const date = new Date().toISOString().split('T')[0]
-    const versionString = '1.0.0'
-    const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
-    const initialChangesFile = new Blob([initialChangesContent], {
+    const initialChangesFile = new Blob([], {
       type: 'text/plain',
     })
     initialChangesFile.name = 'CHANGES'
