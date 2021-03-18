@@ -346,7 +346,7 @@ const notifications = {
       ).exec((err, docs) => {
         if (err) {
           console.log(
-            'NOTIFICATION ERROR - Could not find notifcations collection',
+            'NOTIFICATION ERROR - Could not find notifications collection',
           )
         } else {
           for (const notification of docs) {
