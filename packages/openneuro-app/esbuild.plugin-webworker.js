@@ -1,7 +1,7 @@
-// Plugin by Marcell Endrey - https://github.com/endreymarcell/esbuild-plugin-webworker
-// This plugin lets you use web worker scripts the same way you do with Webpack's worker-loader.
+// Based on plugin by Marcell Endrey - https://github.com/endreymarcell/esbuild-plugin-webworker
 import path from 'path'
 import * as esbuild from 'esbuild'
+import GlobalsPlugin from 'esbuild-plugin-globals'
 
 export const webWorkerPlugin = () => ({
   name: 'webWorker',
@@ -37,12 +37,30 @@ export const webWorkerPlugin = () => ({
           outfile: outFileWithRelativePath,
           minify: true,
           bundle: true,
-          external: ['os', 'zlib', 'crypto', 'timers'], // Node modules used by bids-validator
+          sourcemap: true,
+          // Ugly hacks for bids-validator
           define: {
             global: 'globalThis',
             window: 'globalThis',
+            crypto: 'globalThis',
+            os: 'globalThis',
+            timers: 'globalThis',
+            process: JSON.stringify({
+              env: {},
+              argv: [],
+              stdout: '',
+              stderr: '',
+              stdin: '',
+            }),
           },
-          sourcemap: true,
+          plugins: [
+            GlobalsPlugin({
+              crypto: 'globalThis',
+              os: 'globalThis',
+              timers: 'globalThis',
+              process: 'globalThis',
+            }),
+          ],
         })
         return {
           contents: `

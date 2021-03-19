@@ -9160,6 +9160,11 @@ es6-weak-map@^2.0.3:
     es6-iterator "^2.0.3"
     es6-symbol "^3.1.1"
 
+esbuild-plugin-globals@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/esbuild-plugin-globals/-/esbuild-plugin-globals-0.1.1.tgz#ee1f9fa91fce3c6b675e1fd07edf4f5f9c0a2097"
+  integrity sha512-BK0OJ02paAPJp4tGyFBum/YHerGYeRvonCRuRpkIbJemQrFHw3uWy6MEXcKgOwecAyXo3fOY5opl8ude2kHVrw==
+
 esbuild-sass-plugin@^1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/esbuild-sass-plugin/-/esbuild-sass-plugin-1.0.11.tgz#d65e6c41d2d36d4cc6f0e07c73c74bce5fa72de3"
