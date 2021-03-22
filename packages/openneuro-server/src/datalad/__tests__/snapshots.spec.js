@@ -19,6 +19,7 @@ jest.mock('../draft.js', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
 jest.mock('../../config.js')
+jest.mock('../../libs/notifications.js')
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {
