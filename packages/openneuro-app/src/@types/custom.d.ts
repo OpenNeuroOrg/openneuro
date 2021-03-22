@@ -1,8 +1,16 @@
+// Allow .png imports
 declare module '*.png' {
   const value: string
   export = value
 }
 
+// Allow .scss imports
+declare module '*.scss' {
+  const value: string
+  export = value
+}
+
+// Misc interfaces fixing up common types
 interface ServiceWorkerRegistration {
   backgroundFetch: any
 }

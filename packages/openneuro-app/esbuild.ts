@@ -12,7 +12,7 @@ async function main(): Promise<void> {
   command.option('-w, --watch', 'Enable watch mode')
   command.parse(process.argv)
   const options = command.opts()
-  const outname = 'dist'
+  const outname = 'public'
   const outdir = path.join(__dirname, outname)
   process.env.NODE_ENV = 'development'
   await esbuild.build({
@@ -37,7 +37,11 @@ async function main(): Promise<void> {
     path.join(outdir, 'index.html'),
   )
   if (options.watch) {
-    liveServer.start({ root: outname, port: 9876 })
+    liveServer.start({
+      root: outname,
+      port: 9876,
+      proxy: [['/', 'http://server/crn/ssr']],
+    })
   }
 }
 

@@ -29,7 +29,7 @@ export const webWorkerPlugin = () => ({
       const outFileName = `${workerFileName}.js`
 
       // This one depends on your file structure
-      const outFileWithRelativePath = path.join('dist', outFileName)
+      const outFileWithRelativePath = path.join('public', outFileName)
 
       try {
         await esbuild.build({
@@ -59,6 +59,7 @@ export const webWorkerPlugin = () => ({
               os: 'globalThis',
               timers: 'globalThis',
               process: 'globalThis',
+              zlib: 'globalThis',
             }),
           ],
         })

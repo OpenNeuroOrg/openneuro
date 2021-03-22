@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "checkJs": true,
-    "tsBuildInfoFile": "../../.build-cache/server.tsbuildinfo",
-    "typeRoots": ["./node_modules/@types", "./src/@types"]
+    "tsBuildInfoFile": "../../.build-cache/server.tsbuildinfo"
   },
   "include": ["./src"],
   "files": ["./src/lerna.json"],
