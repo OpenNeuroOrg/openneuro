@@ -549,6 +549,15 @@ export const typeDefs = `
     payload: [DatasetFile]
   }
 
+  # Recent changes to datasets
+  type DatasetChange {
+    datasetId: String!
+    created: Boolean
+    modified: Boolean
+    deleted: Boolean
+    timestamp: DateTime
+  }
+
   # Analytics for a dataset
   type Analytic @cacheControl(maxAge: 300, scope: PUBLIC) {
     datasetId: ID!
