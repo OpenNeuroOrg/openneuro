@@ -1,6 +1,7 @@
 /**
  * Browser client entrypoint - see server.tsx for SSR entrypoint
  */
+import './scripts/utils/global-polyfill'
 import { setupApm } from './scripts/apm.js'
 import * as Sentry from '@sentry/browser'
 import React from 'react'

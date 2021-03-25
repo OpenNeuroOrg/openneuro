@@ -1,10 +1,15 @@
 import 'cross-fetch/polyfill'
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { ApolloLink, split, Observable } from 'apollo-link'
-import { setContext } from 'apollo-link-context'
-import { createHttpLink } from 'apollo-link-http'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  split,
+  Observable,
+  createHttpLink,
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 import semver from 'semver'
 import * as files from './files'
 import * as datasets from './datasets'
