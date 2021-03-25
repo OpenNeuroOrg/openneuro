@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 // component setup ---------------------------------------------------------------------------
 
-export default class Timeout extends React.Component {
+class Timeout extends React.Component {
   constructor(props) {
     super(props)
     this.state = { timedOut: false }
@@ -43,3 +43,5 @@ Timeout.defaultProps = {
   timeout: null,
   timeoutId: null,
 }
+
+export default Timeout

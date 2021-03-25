@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import newId from '../../utils/newid'
 
-export default class TooltipTop extends React.PureComponent {
+class TooltipTop extends React.PureComponent {
   constructor(props) {
     super(props)
     this.id = newId('tooltip-id-')
@@ -32,3 +32,5 @@ TooltipTop.propTypes = {
   tooltip: PropTypes.string,
   children: PropTypes.object,
 }
+
+export default TooltipTop

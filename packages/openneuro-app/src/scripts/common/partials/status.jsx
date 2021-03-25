@@ -7,7 +7,7 @@ import UploadResume from '../../uploader/upload-resume.jsx'
 
 // component setup -----------------------------------------------------------
 
-export default class Status extends React.PureComponent {
+class Status extends React.PureComponent {
   // lifecycle events ----------------------------------------------------------
   render() {
     if (!this.props.display) {
@@ -92,3 +92,5 @@ Status.propTypes = {
   dataset: PropTypes.object,
   title: PropTypes.string,
 }
+
+export default Status

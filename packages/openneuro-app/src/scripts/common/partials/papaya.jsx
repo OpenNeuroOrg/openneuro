@@ -7,7 +7,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default class Papaya extends React.Component {
+class Papaya extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor(props) {
@@ -95,3 +95,5 @@ export default class Papaya extends React.Component {
 Papaya.propTypes = {
   image: PropTypes.string,
 }
+
+export default Papaya

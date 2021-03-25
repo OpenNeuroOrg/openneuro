@@ -8,7 +8,7 @@ import Issues from './validation-results.issues.jsx'
 
 // component setup --------------------------------------------------------
 
-export default class ValidationResults extends React.Component {
+class ValidationResults extends React.Component {
   // life cycle events ------------------------------------------------------
 
   render() {
@@ -91,3 +91,5 @@ ValidationResults.propTypes = {
   errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   warnings: PropTypes.array,
 }
+
+export default ValidationResults

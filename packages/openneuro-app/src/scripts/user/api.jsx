@@ -15,7 +15,7 @@ const createAPIKey = () => {
   return crn.createAPIKey().then(res => (res && res.body ? res.body.key : null))
 }
 
-export default class APIKeyGen extends React.Component {
+class APIKeyGen extends React.Component {
   constructor(props) {
     super(props)
     this.requestKey = this._requestKey.bind(this)
@@ -128,3 +128,5 @@ export default class APIKeyGen extends React.Component {
     )
   }
 }
+
+export default APIKeyGen

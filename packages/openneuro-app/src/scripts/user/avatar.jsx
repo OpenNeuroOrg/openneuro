@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { generateGravatarUrl } from '../utils/user.js'
 
-export default class Avatar extends React.Component {
+class Avatar extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -36,3 +36,5 @@ export default class Avatar extends React.Component {
 Avatar.propTypes = {
   profile: PropTypes.object,
 }
+
+export default Avatar

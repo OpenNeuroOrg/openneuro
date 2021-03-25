@@ -21,7 +21,7 @@ export function cacheKey(
 /**
  * Cache items related to datasets
  */
-export default class CacheItem {
+class CacheItem {
   type: CacheType
   key: string
   expiration = 0
@@ -81,3 +81,5 @@ export default class CacheItem {
     return this.redis.del(this.key)
   }
 }
+
+export default CacheItem

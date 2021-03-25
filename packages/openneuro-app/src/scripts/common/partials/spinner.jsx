@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 // component setup ---------------------------------------------------------------------------
 
-export default class Spinner extends React.Component {
+class Spinner extends React.Component {
   // life cycle events -------------------------------------------------------------------------
 
   render() {
@@ -30,3 +30,5 @@ Spinner.defaultProps = {
   text: 'Loading',
   active: false,
 }
+
+export default Spinner
