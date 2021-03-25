@@ -1,5 +1,5 @@
 import React from 'react'
-import { frontPage } from '../front-page/front-page-content.js'
+import { frontPage } from '../front-page/front-page-content'
 
 class Support extends React.Component {
   render() {

@@ -1,9 +1,9 @@
 import * as Comlink from 'comlink'
-import ValidateWorker from './validate.worker'
+// @ts-expect-error
+import ValidateWorker from './validate.worker?worker' // ?worker is a vite hint
 import { BIDSValidatorIssues } from './worker-interface'
 
 function init(files, options): Promise<BIDSValidatorIssues> {
-  // @ts-expect-error
   const worker = new ValidateWorker()
   const workerComms = Comlink.wrap<
     import('./validate.worker').ValidationWorker

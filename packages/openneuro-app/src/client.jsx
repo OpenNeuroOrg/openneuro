@@ -1,10 +1,13 @@
-import { setupApm } from './apm.js'
+/**
+ * Browser client entrypoint - see server.tsx for SSR entrypoint
+ */
+import { setupApm } from './scripts/apm.js'
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './app.jsx'
-import { version } from '../lerna.json'
-import { loadConfig } from './config'
+import App from './scripts/app'
+import { version } from './lerna.json'
+import { loadConfig } from './scripts/config'
 import * as GoogleAnalytics from 'react-ga'
 
 loadConfig().then(config => {

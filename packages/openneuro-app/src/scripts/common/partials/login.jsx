@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal } from '../../utils/modal.jsx'
 import { Panel } from 'react-bootstrap'
 import AuthenticationButtons from '../../authentication/buttons.jsx'
-import { frontPage } from '../../front-page/front-page-content.js'
+import { frontPage } from '../../front-page/front-page-content'
 
 const InfoPanel = ({ show, toggle }) => {
   if (!show) {

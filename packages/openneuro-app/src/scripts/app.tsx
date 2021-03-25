@@ -1,8 +1,3 @@
-try {
-  require('../sass/main.scss')
-} catch (err) {
-  console.warn('SCSS could not be imported (Node.js?)')
-}
 import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'

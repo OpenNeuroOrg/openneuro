@@ -9,8 +9,8 @@
     "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "scripts": {
-    "start": "ts-node ./esbuild.ts --watch",
-    "build": "ts-node ./esbuild.ts",
+    "start": "vite",
+    "build": "vite build",
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
     "test": "jest"
   },
@@ -23,7 +23,7 @@
     "@loadable/component": "^5.7.0",
     "@sentry/browser": "^4.5.3",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "file:/bids-validator",
+    "bids-validator": "file:/home/nell/Git/crn/openneuro/bids-validator",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "core-js": "^3.3.2",
@@ -53,7 +53,7 @@
     "react-router-dom": "^5.1.2",
     "react-spring": "^8.0.27",
     "react-toastify": "6.0.9",
-    "react-virtualized": "9.22.3",
+    "react-virtualized": "remorses/react-virtualized-fixed-import.git#9.22.3",
     "resize-observer-polyfill": "^1.5.1",
     "semver": "^5.5.0",
     "serviceworker-webpack-plugin": "^1.0.1",
@@ -104,6 +104,7 @@
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.0.1",
+    "vite": "^2.1.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9",

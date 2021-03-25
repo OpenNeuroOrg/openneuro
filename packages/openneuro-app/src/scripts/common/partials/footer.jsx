@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { version as openneuroVersion } from '../../../lerna.json'
-import { frontPage } from '../../front-page/front-page-content.js'
+import { frontPage } from '../../front-page/front-page-content'
 
 const Footer = props => {
   const version = props.version ? props.version : openneuroVersion

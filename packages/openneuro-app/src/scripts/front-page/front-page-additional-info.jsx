@@ -1,7 +1,7 @@
 import React from 'react'
 import Collaborators from './front-page-collaborators.jsx'
 import Support from './front-page-support.jsx'
-import { frontPage } from '../front-page/front-page-content.js'
+import { frontPage } from '../front-page/front-page-content'
 
 const AdditionalInfo = () => (
   <div className="more-info">
