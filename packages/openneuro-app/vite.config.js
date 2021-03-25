@@ -1,7 +1,7 @@
 import builtins from 'rollup-plugin-polyfill-node'
 
 const builtinsPlugin = {
-  ...builtins({ crypto: true }),
+  ...builtins(),
   name: 'rollup-plugin-polyfill-node',
 }
 
@@ -21,8 +21,6 @@ export default {
   },
   rollupInputOptions: {
     preserveEntrySignatures: 'strict',
-    plugins: [
-      builtinsPlugin,
-    ]
-  }
+    plugins: [builtinsPlugin],
+  },
 }

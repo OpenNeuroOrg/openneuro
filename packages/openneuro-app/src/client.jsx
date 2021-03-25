@@ -6,7 +6,10 @@ import { setupApm } from './scripts/apm.js'
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import App from './scripts/app'
+import Index from './scripts/index'
+import analyticsWrapper from './scripts/utils/analytics'
 import { version } from './lerna.json'
 import { loadConfig } from './scripts/config'
 import * as GoogleAnalytics from 'react-ga'
@@ -47,5 +50,12 @@ loadConfig().then(config => {
     Sentry.captureMessage('Service worker registration failed.')
   }
 
-  ReactDOM.render(<App config={config} />, document.getElementById('main'))
+  ReactDOM.render(
+    <App config={config}>
+      <BrowserRouter>
+        <Route component={analyticsWrapper(Index)} />
+      </BrowserRouter>
+    </App>,
+    document.getElementById('main'),
+  )
 })

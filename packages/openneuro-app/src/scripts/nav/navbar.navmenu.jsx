@@ -38,7 +38,7 @@ FaqLink.propTypes = {
 }
 
 const SupportLink = ({ supportModal }) => {
-  if (config.support.url) {
+  if (config?.support?.url) {
     return (
       <li className="link-support">
         <a

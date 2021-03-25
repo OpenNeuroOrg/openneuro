@@ -9,7 +9,7 @@
     "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "scripts": {
-    "start": "vite",
+    "start": "ts-node-dev ./src/ssr.ts",
     "build": "vite build",
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
     "test": "jest"
