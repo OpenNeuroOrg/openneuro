@@ -4,6 +4,8 @@
 import './scripts/utils/global-polyfill'
 import { setupApm } from './scripts/apm.js'
 import * as Sentry from '@sentry/browser'
+import { ApolloProvider } from '@apollo/client'
+import { createClient } from 'openneuro-client'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
@@ -51,9 +53,14 @@ if ('serviceWorker' in navigator) {
 
 ReactDOM.render(
   <App config={config}>
-    <BrowserRouter>
-      <Route component={analyticsWrapper(Index)} />
-    </BrowserRouter>
+    <ApolloProvider
+      client={createClient(`${config.url}/crn/graphql`, {
+        clientVersion: version,
+      })}>
+      <BrowserRouter>
+        <Route component={analyticsWrapper(Index)} />
+      </BrowserRouter>
+    </ApolloProvider>
   </App>,
   document.getElementById('main'),
 )

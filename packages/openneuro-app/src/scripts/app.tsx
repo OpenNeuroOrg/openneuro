@@ -1,30 +1,31 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { ApolloProvider } from '@apollo/client'
 import { frontPage } from './front-page/front-page-content'
-import { createClient } from 'openneuro-client'
-import { version } from '../lerna.json'
-import { CookiesProvider } from 'react-cookie'
+import { CookiesProvider, Cookies } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
 import { MediaContextProvider } from './styles/media'
+import { OpenNeuroConfig } from './config'
 
-const App = ({ config, children }) => {
+const App = ({
+  config,
+  cookies,
+  children,
+}: {
+  config: OpenNeuroConfig
+  cookies: Cookies
+  children: ReactNode
+}) => {
   return (
-    <CookiesProvider>
-      <ApolloProvider
-        client={createClient(`${config.url}/crn/graphql`, {
-          clientVersion: version,
-        })}>
-        <MediaContextProvider>
-          <Helmet>
-            <title>{frontPage.pageTitle}</title>
-            <meta name="description" content={frontPage.pageDescription} />
-          </Helmet>
-          {children}
-          <ToastContainer position="bottom-right" />
-        </MediaContextProvider>
-      </ApolloProvider>
+    <CookiesProvider cookies={cookies}>
+      <MediaContextProvider>
+        <Helmet>
+          <title>{frontPage.pageTitle}</title>
+          <meta name="description" content={frontPage.pageDescription} />
+        </Helmet>
+        {children}
+        <ToastContainer position="bottom-right" />
+      </MediaContextProvider>
     </CookiesProvider>
   )
 }

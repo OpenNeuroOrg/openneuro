@@ -149,6 +149,7 @@ const createClient = (
     fetch = undefined,
     clientVersion = undefined,
     links = [],
+    ssrMode = false,
   } = {},
 ) => {
   // createLink must be last since it contains a terminating link
@@ -163,6 +164,7 @@ const createClient = (
     link: composedLink,
     cache,
     connectToDevTools: true,
+    ssrMode,
   }
 
   // TODO: Figure this out?

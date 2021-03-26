@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
+import cookiesMiddleware from 'universal-cookie-express'
 
 async function createServer(): Promise<void> {
   const app = express()
@@ -14,6 +15,8 @@ async function createServer(): Promise<void> {
   })
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
+
+  app.use(cookiesMiddleware())
 
   app.use('*', async (req, res) => {
     const url = req.originalUrl
@@ -38,7 +41,8 @@ async function createServer(): Promise<void> {
       // 4. render the app HTML. This assumes entry-server.js's exported `render`
       //    function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
-      const appHtml = await render(url)
+      console.log(url)
+      const appHtml = await render(url, req['universalCookies'])
 
       // 5. Inject the app-rendered HTML into the template.
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)

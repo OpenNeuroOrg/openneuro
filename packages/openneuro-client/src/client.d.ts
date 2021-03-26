@@ -3,4 +3,5 @@ export declare function createClient(uri: string, options: {
   fetch?: typeof fetch
   clientVersion?: string
   links?: Array<ApolloLink>
+  ssrMode?: boolean
 }): ApolloClient<*>
