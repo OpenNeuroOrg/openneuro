@@ -1,13 +1,9 @@
 /**
- * Dynamically loaded runtime configuration
+ * Interface describing the configuration object
  */
-
-/**
- * Interface describing the JSON encoded version of the legacy /crn/config.json endpoint
- */
-export interface OpenNeuroNetworkConfig {
+export interface OpenNeuroConfig {
   url: string
-  crn: { url: string }
+  api: string
   auth: {
     google?: {
       clientID: string
@@ -28,29 +24,39 @@ export interface OpenNeuroNetworkConfig {
   }
   github?: string
   publicBucket?: string
-  theme?: {}
 }
 
-// Cache the result
-const loadedConfiguration: OpenNeuroNetworkConfig = {
-  url: '',
-  crn: {
-    url: '',
+// TypeScript errors here are due to Vite transforming import.meta.env.
+// Vite requires the full name to be maintained (can't dereference it)
+export const config: OpenNeuroConfig = {
+  // @ts-expect-error
+  url: import.meta.env.VITE_CRN_SERVER_URL.toString(),
+  // @ts-expect-error
+  api: import.meta.env.VITE_API.toString(),
+  auth: {
+    // @ts-expect-error
+    google: { clientID: import.meta.env.VITE_GOOGLE_CLIENT_ID.toString() },
+    // @ts-expect-error
+    globus: { clientID: import.meta.env.VITE_GLOBUS_CLIENT_ID.toString() },
+    orcid: {
+      // @ts-expect-error
+      clientID: import.meta.env.VITE_ORCID_CLIENT_ID.toString(),
+      // @ts-expect-error
+      URI: import.meta.env.VITE_ORCID_URI.toString(),
+      // @ts-expect-error
+      redirectURI: import.meta.env.VITE_ORCID_REDIRECT_URI.toString(),
+    },
   },
-  auth: {},
-}
-let loaded = false
-
-export const loadConfig = (): Promise<OpenNeuroNetworkConfig> => {
-  return loaded
-    ? Promise.resolve(loadedConfiguration)
-    : fetch('/crn/config.json')
-        .then(res => res.json())
-        .then(config => {
-          Object.assign(loadedConfiguration, config)
-          loaded = true
-          return config
-        })
+  // @ts-expect-error
+  analytics: { trackingId: import.meta.env.VITE_GOOGLE_TRACKING_ID.toString() },
+  // @ts-expect-error
+  sentry: { environment: import.meta.env.VITE_ENVIRONMENT.toString() },
+  // @ts-expect-error
+  support: { url: import.meta.env.VITE_SUPPORT_URL.toString() },
+  // @ts-expect-error
+  github: import.meta.env.VITE_DATALAD_GITHUB_ORG.toString(),
+  // @ts-expect-error
+  publicBucket: import.meta.env.VITE_AWS_S3_PUBLIC_BUCKET.toString(),
 }
 
-export const getConfig = (): OpenNeuroNetworkConfig => loadedConfiguration
+export const getConfig = () => config

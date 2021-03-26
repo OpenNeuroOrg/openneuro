@@ -9,7 +9,7 @@ const OrcidButton = ({ min }) => {
   const btnText = min ? 'ORCID' : 'Sign in with ORCID'
   return (
     <div className="login-btns">
-      <a href={config.crn.url + 'auth/orcid'}>
+      <a href={config.api + 'auth/orcid'}>
         <button className={btnClass}>
           <span className="icon">
             <img alt="ORCID" width={size} height={size} src={orcidLogo} />

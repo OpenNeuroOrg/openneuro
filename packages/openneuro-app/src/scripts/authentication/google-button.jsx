@@ -11,7 +11,7 @@ const GoogleButton = ({ min }) => {
   const btnText = min ? 'Google' : 'Sign in with Google'
   return (
     <div className="login-btns">
-      <a href={config.crn.url + 'auth/google'}>
+      <a href={config.api + 'auth/google'}>
         <button className={btnClass}>
           <i className={iconClass} />
           <span>{btnText}</span>

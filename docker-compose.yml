@@ -23,7 +23,7 @@ services:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-app
-    command: yarn start
+    command: ./vite-env.sh
     volumes:
       - webpack_cache:/webpack-cache
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
