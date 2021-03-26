@@ -21,7 +21,8 @@ import DatasetCitation from '../fragments/dataset-citation.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_FIELDS } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
-import useMedia from '../../mobile/media-hook.jsx'
+import { Media } from '../../styles/media'
+import { MobileClass } from './mobile-class'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
@@ -64,11 +65,9 @@ SnapshotContent.propTypes = {
 }
 
 const SnapshotDetails = ({ dataset, snapshot }) => {
-  const isMobile = useMedia('(max-width: 765px) ')
-  const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   return (
     <span>
-      <div className={mobileClass}>
+      <MobileClass>
         <Helmet>
           <title>
             {snapshot.description.Name} - Snapshot {snapshot.tag} - {pageTitle}
@@ -90,14 +89,12 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           views={snapshot.analytics.views}
           snapshot
         />
-        {!isMobile && <DownloadButton dataset={dataset} />}
-        {isMobile && (
-          <Validation
-            datasetId={dataset.id}
-            issues={snapshot.issues}
-            isMobile={isMobile}
-          />
-        )}
+        <Media greaterThanOrEqual="medium">
+          <DownloadButton dataset={dataset} />
+        </Media>
+        <Media at="small">
+          <Validation datasetId={dataset.id} issues={snapshot.issues} />
+        </Media>
         <DatasetSummary datasetId={dataset.id} summary={snapshot.summary} />
         <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
@@ -111,11 +108,11 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         <h5>
           <Link to="/cite">More citation info</Link>
         </h5>
-      </div>
-      <div className={mobileClass}>
-        {!isMobile && (
+      </MobileClass>
+      <MobileClass>
+        <Media greaterThanOrEqual="medium">
           <Validation datasetId={dataset.id} issues={snapshot.issues} />
-        )}
+        </Media>
         <DatasetFiles
           datasetId={dataset.id}
           snapshotTag={snapshot.tag}
@@ -123,7 +120,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           files={snapshot.files}
         />
         <DatasetGitHash gitHash={snapshot.hexsha} />
-      </div>
+      </MobileClass>
     </span>
   )
 }

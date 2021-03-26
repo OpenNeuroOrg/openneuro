@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Capitalized from '../../../styles/capitalized.jsx'
-import useMedia from '../../../mobile/media-hook.jsx'
+import { Media } from '../../../styles/media'
 
 // DatasetSort GraphQL fields
 const sortFields = ['created', 'name', 'stars', 'downloads', 'subscriptions']
@@ -94,7 +94,6 @@ SortField.propTypes = {
 }
 
 const DatasetSorter = ({ queryVariables, refetch }) => {
-  const isMobile = useMedia('(max-width: 765px) ')
   const onChange = event => {
     const newQueryVariables = { ...queryVariables }
     // Clear existing sorts
@@ -105,22 +104,21 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
     ].getAttribute('data-order')
     refetch(newQueryVariables)
   }
-  if (!isMobile) {
-    return (
-      <div>
-        {sortFields.map(field => (
-          <SortField
-            field={field}
-            queryVariables={queryVariables}
-            refetch={refetch}
-            key={field}
-          />
-        ))}
-      </div>
-    )
-  } else if (isMobile) {
-    return (
-      <React.Fragment>
+  return (
+    <>
+      <Media greaterThanOrEqual="medium">
+        <div>
+          {sortFields.map(field => (
+            <SortField
+              field={field}
+              queryVariables={queryVariables}
+              refetch={refetch}
+              key={field}
+            />
+          ))}
+        </div>
+      </Media>
+      <Media at="small">
         <select
           defaultValue={'DEFAULT'}
           className="mobile-dropdown"
@@ -137,15 +135,14 @@ const DatasetSorter = ({ queryVariables, refetch }) => {
             </option>
           ))}
         </select>
-      </React.Fragment>
-    )
-  }
+      </Media>
+    </>
+  )
 }
 
 DatasetSorter.propTypes = {
   queryVariables: PropTypes.object,
   refetch: PropTypes.func,
-  isMobile: PropTypes.bool,
 }
 
 export default DatasetSorter

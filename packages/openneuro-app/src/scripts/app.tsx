@@ -7,6 +7,7 @@ import { createClient } from 'openneuro-client'
 import { version } from '../lerna.json'
 import { CookiesProvider } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
+import { MediaContextProvider } from './styles/media'
 
 const App = ({ config, children }) => {
   return (
@@ -15,14 +16,14 @@ const App = ({ config, children }) => {
         client={createClient(`${config.url}/crn/graphql`, {
           clientVersion: version,
         })}>
-        <>
+        <MediaContextProvider>
           <Helmet>
             <title>{frontPage.pageTitle}</title>
             <meta name="description" content={frontPage.pageDescription} />
           </Helmet>
           {children}
           <ToastContainer position="bottom-right" />
-        </>
+        </MediaContextProvider>
       </ApolloProvider>
     </CookiesProvider>
   )

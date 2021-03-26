@@ -45,7 +45,7 @@ loadConfig().then(config => {
 
   // Setup the service worker
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
+    //navigator.serviceWorker.register('/sw.js')
   } else {
     Sentry.captureMessage('Service worker registration failed.')
   }

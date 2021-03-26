@@ -8,7 +8,6 @@ import StarDataset from '../mutations/star.jsx'
 import ShareDatasetLink from '../fragments/share-dataset-button.jsx'
 import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import useMedia from '../../mobile/media-hook.jsx'
 import DeletePage from '../dataset/delete-page.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
@@ -17,6 +16,7 @@ import {
   ModalContainer,
   ExitButton,
 } from '../../styles/support-modal.jsx'
+import { Media } from '../../styles/media'
 
 /**
  * Immediate redirect to a dataset or snapshot route
@@ -39,7 +39,6 @@ const DatasetTools = ({ dataset, location, history }) => {
     : `/datasets/${dataset.id}`
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
-  const isMobile = useMedia('(max-width: 765px) ')
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const user = getProfile()
   const hasEdit =
@@ -102,16 +101,18 @@ const DatasetTools = ({ dataset, location, history }) => {
               )}
             </div>
             <div role="presentation" className="tool">
-              {edit && !isMobile && (
-                <WarnButton
-                  tooltip="Create Snapshot"
-                  icon="fa-camera-retro icon-plus"
-                  warn={false}
-                  action={cb => {
-                    toolRedirect(history, rootPath, 'snapshot')
-                    cb()
-                  }}
-                />
+              {edit && (
+                <Media greaterThanOrEqual="medium">
+                  <WarnButton
+                    tooltip="Create Snapshot"
+                    icon="fa-camera-retro icon-plus"
+                    warn={false}
+                    action={cb => {
+                      toolRedirect(history, rootPath, 'snapshot')
+                      cb()
+                    }}
+                  />
+                </Media>
               )}
             </div>
             <div role="presentation" className="tool">
@@ -124,40 +125,44 @@ const DatasetTools = ({ dataset, location, history }) => {
               <StarDataset datasetId={dataset.id} starred={dataset.starred} />
             </div>
             <div role="presentation" className="tool">
-              {edit && !isMobile && (
-                <AdminUser>
-                  <WarnButton
-                    tooltip="Admin Datalad Tools"
-                    icon="fa-magic"
-                    warn={false}
-                    action={cb => {
-                      toolRedirect(history, rootPath, 'admin-datalad')
-                      cb()
-                    }}
-                  />
-                </AdminUser>
+              {edit && (
+                <Media greaterThanOrEqual="medium">
+                  <AdminUser>
+                    <WarnButton
+                      tooltip="Admin Datalad Tools"
+                      icon="fa-magic"
+                      warn={false}
+                      action={cb => {
+                        toolRedirect(history, rootPath, 'admin-datalad')
+                        cb()
+                      }}
+                    />
+                  </AdminUser>
+                </Media>
               )}
             </div>
             <div role="presentation" className="tool">
-              {edit && !isMobile && (
-                <AdminUser>
-                  <WarnButton
-                    tooltip="Admin Remote Export Tools"
-                    icon="fa-cloud-upload"
-                    warn={false}
-                    action={cb => {
-                      toolRedirect(history, rootPath, 'admin-exports')
-                      cb()
-                    }}
-                  />
-                </AdminUser>
+              {edit && (
+                <Media greaterThanOrEqual="medium">
+                  <AdminUser>
+                    <WarnButton
+                      tooltip="Admin Remote Export Tools"
+                      icon="fa-cloud-upload"
+                      warn={false}
+                      action={cb => {
+                        toolRedirect(history, rootPath, 'admin-exports')
+                        cb()
+                      }}
+                    />
+                  </AdminUser>
+                </Media>
               )}
             </div>
-            {isMobile && (
+            <Media at="small">
               <div role="presentation" className="tool">
                 <ShareDatasetLink url={`https://openneuro.org${rootPath}`} />
               </div>
-            )}
+            </Media>
           </LoggedIn>
           <div role="presentation" className="tool">
             <DatasetMetadata

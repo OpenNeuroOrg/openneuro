@@ -4,7 +4,7 @@ import File from './file.jsx'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteDir from '../datalad/mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
-import useMedia from '../mobile/media-hook.jsx'
+import { Media } from '../styles/media'
 
 export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -24,10 +24,7 @@ const FileTree = ({
   editMode = false,
   defaultExpanded = false,
 }) => {
-  const isMobile = useMedia('(max-width: 765px) ')
-  const [expanded, setExpanded] = useState(
-    isMobile ? !defaultExpanded : defaultExpanded,
-  )
+  const [expanded, setExpanded] = useState(defaultExpanded)
   return (
     <>
       <button
@@ -41,23 +38,25 @@ const FileTree = ({
       </button>
       {expanded && (
         <>
-          {!isMobile && editMode && (
-            <span className="filetree-editfile">
-              <UpdateFile
-                datasetId={datasetId}
-                path={unescapePath(path)}
-                multiple>
-                <i className="fa fa-plus" /> Add Files
-              </UpdateFile>
-              <UpdateFile
-                datasetId={datasetId}
-                path={unescapePath(path)}
-                tooltip={`Choose a folder to be added to /${name}. Adding a folder with an existing name will overwrite that folder.`}
-                directory>
-                <i className="fa fa-plus" /> Add Directory
-              </UpdateFile>
-              <DeleteDir datasetId={datasetId} path={path} />
-            </span>
+          {editMode && (
+            <Media greaterThanOrEqual="medium">
+              <span className="filetree-editfile">
+                <UpdateFile
+                  datasetId={datasetId}
+                  path={unescapePath(path)}
+                  multiple>
+                  <i className="fa fa-plus" /> Add Files
+                </UpdateFile>
+                <UpdateFile
+                  datasetId={datasetId}
+                  path={unescapePath(path)}
+                  tooltip={`Choose a folder to be added to /${name}. Adding a folder with an existing name will overwrite that folder.`}
+                  directory>
+                  <i className="fa fa-plus" /> Add Directory
+                </UpdateFile>
+                <DeleteDir datasetId={datasetId} path={path} />
+              </span>
+            </Media>
           )}
           <ul className="child-files">
             {files.sort(sortByFilename).map((file, index) => (
@@ -67,7 +66,6 @@ const FileTree = ({
                   snapshotTag={snapshotTag}
                   path={path}
                   editMode={editMode}
-                  isMobile={isMobile}
                   {...file}
                 />
               </li>

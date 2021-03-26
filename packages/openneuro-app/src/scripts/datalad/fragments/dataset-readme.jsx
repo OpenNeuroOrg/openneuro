@@ -2,32 +2,36 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import Collapsible from '../../mobile/collapsible-wrapper'
-import useMedia from '../../mobile/media-hook.jsx'
+import { Media } from '../../styles/media'
 
 /**
  * README file contents
  */
 
 const DatasetReadme = ({ content }) => {
-  const isMobile = useMedia('(max-width: 765px) ')
-  if (isMobile && content) {
+  if (content) {
     return (
-      <div className="cte-display">
-        <div className="fade-in">
-          <Collapsible title={['SHOW MORE', 'SHOW LESS']}>
-            <Markdown>{content}</Markdown>
-          </Collapsible>
-        </div>
-      </div>
+      <>
+        <Media at="small">
+          <div className="cte-display">
+            <div className="fade-in">
+              <Collapsible title={['SHOW MORE', 'SHOW LESS']}>
+                <Markdown>{content}</Markdown>
+              </Collapsible>
+            </div>
+          </div>
+        </Media>
+        <Media greaterThanOrEqual="medium">
+          <div className="cte-display">
+            <div className="fade-in">
+              <Markdown>{content}</Markdown>
+            </div>
+          </div>
+        </Media>
+      </>
     )
   } else {
-    return (
-      <div className="cte-display">
-        <div className="fade-in">
-          <Markdown>{content}</Markdown>
-        </div>
-      </div>
-    )
+    return null
   }
 }
 

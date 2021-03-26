@@ -10,6 +10,7 @@ import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import styled from '@emotion/styled'
+import { Media } from '../../../styles/media'
 
 const FullHeightFlexDiv = styled.div`
   display: flex;
@@ -52,6 +53,28 @@ const DatasetTabLoaded = ({ datasets, loadMoreRows, publicDashboard }) => {
   }
 }
 
+const DatasetTabSortWrap = ({ children }) => (
+  <>
+    <Media at="small">
+      <div>{children}</div>
+    </Media>
+    <Media greaterThanOrEqual="medium">
+      <div className="filters-sort-wrap clearfix"></div>
+    </Media>
+  </>
+)
+
+const DatasetTabSortClearfix = ({ children }) => (
+  <>
+    <Media at="small">
+      <div>{children}</div>
+    </Media>
+    <Media greaterThanOrEqual="medium">
+      <div className="sort clearfix">{children}</div>
+    </Media>
+  </>
+)
+
 const DatasetTab = ({
   data,
   loadMoreRows,
@@ -61,7 +84,6 @@ const DatasetTab = ({
   error,
   publicDashboard,
   savedDashboard,
-  isMobile,
 }) => {
   useEffect(() => {
     if (error) {
@@ -84,47 +106,52 @@ const DatasetTab = ({
       <div className="header-filter-sort clearfix">
         <div className="admin header-wrap clearfix">
           <div className="row">
-            {isMobile && (
+            <Media at="small">
               <div className="col-md-7">
                 <SearchInput />
               </div>
-            )}
+            </Media>
             <div className="col-md-5">
               <h2>{title(publicDashboard, savedDashboard)}</h2>
-              {isMobile && !loading && (
-                <h6>
-                  {data.datasets
-                    ? `Results ${data.datasets.pageInfo.count}`
-                    : 'Zero results'}{' '}
-                </h6>
-              )}
+              <Media at="small">
+                {!loading && (
+                  <h6>
+                    {data.datasets
+                      ? `Results ${data.datasets.pageInfo.count}`
+                      : 'Zero results'}{' '}
+                  </h6>
+                )}
+              </Media>
             </div>
-            {!isMobile && (
+            <Media greaterThanOrEqual="medium">
               <div className="col-md-7">
                 <SearchInput />
               </div>
-            )}
+            </Media>
           </div>
         </div>
-        <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
-          <div className={isMobile ? '' : 'sort clearfix'}>
-            {!isMobile && <label>Sort by:</label>}
+        <DatasetTabSortWrap>
+          <DatasetTabSortClearfix>
+            <Media greaterThanOrEqual="medium">
+              <label>Sort by:</label>
+            </Media>
             <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
-          </div>
+          </DatasetTabSortClearfix>
           {publicDashboard || savedDashboard ? null : (
             <div className="filters">
-              {isMobile ? (
+              <Media at="small">
                 <MobileLabel>Filter by:</MobileLabel>
-              ) : (
+              </Media>
+              <Media greaterThanOrEqual="medium">
                 <label>Filter by:</label>
-              )}
+              </Media>
               <DatasetFilter
                 refetch={refetch}
                 queryVariables={queryVariables}
               />
             </div>
           )}
-        </div>
+        </DatasetTabSortWrap>
       </div>
       {loading ? (
         <Spinner text="Loading Datasets" active />
@@ -153,7 +180,6 @@ DatasetTab.propTypes = {
   publicDashboard: PropTypes.bool,
   savedDashboard: PropTypes.bool,
   error: PropTypes.object,
-  isMobile: PropTypes.bool,
 }
 
 export default DatasetTab

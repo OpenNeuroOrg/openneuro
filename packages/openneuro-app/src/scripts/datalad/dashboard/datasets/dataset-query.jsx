@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Query } from '@apollo/client/react/components'
 import { datasets } from 'openneuro-client'
 import DatasetTab from './dataset-tab.jsx'
-import useMedia from '../../../mobile/media-hook.jsx'
 import ErrorBoundary from '../../../../scripts/errors/errorBoundary.jsx'
 
 export const updateQuery = (previousResult, { fetchMoreResult }) => {
@@ -80,7 +79,6 @@ export const datasetQueryDisplay = (isPublic, isSaved) => ({
       refetch={refetch}
       queryVariables={variables}
       publicDashboard={isPublic}
-      isMobile={useMedia('(max-width: 765px) ')}
       savedDashboard={isSaved}
     />
   )

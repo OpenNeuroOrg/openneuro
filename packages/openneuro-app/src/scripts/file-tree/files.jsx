@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
+import { Media } from '../styles/media'
 
 const Files = ({
   datasetId,
@@ -14,15 +15,28 @@ const Files = ({
   return (
     <ul className="top-level-item">
       <li className="clearfix">
-        <FileTree
-          datasetId={datasetId}
-          snapshotTag={snapshotTag}
-          path={''}
-          {...fileTree}
-          name={datasetName}
-          editMode={editMode}
-          defaultExpanded={true}
-        />
+        <Media at="small">
+          <FileTree
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+            path={''}
+            {...fileTree}
+            name={datasetName}
+            editMode={editMode}
+            defaultExpanded={false}
+          />
+        </Media>
+        <Media greaterThanOrEqual="medium">
+          <FileTree
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+            path={''}
+            {...fileTree}
+            name={datasetName}
+            editMode={editMode}
+            defaultExpanded={true}
+          />
+        </Media>
       </li>
     </ul>
   )
