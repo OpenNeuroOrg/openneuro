@@ -84,6 +84,11 @@ export const typeDefs = `
     participantCount: Int @cacheControl(maxAge: 86400, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
+    # Get recent dataset changes (newest first)
+    datasetChanges(
+      "Limit results, default 100, max 1000"
+      limit: Int = 100
+    ): [DatasetChange]
   }
 
   type Mutation {

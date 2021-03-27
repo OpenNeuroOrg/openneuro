@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Changes from './changes.js'
+import DatasetChange from './datasetChange.js'
 
 const datasetSchema = new mongoose.Schema(
   {
@@ -46,7 +46,7 @@ datasetSchema.virtual('subscriptions', {
 })
 
 datasetSchema.post('save', dataset => {
-  new Changes({
+  new DatasetChange({
     datasetId: dataset.id,
     created: true,
   }).save()
@@ -54,7 +54,7 @@ datasetSchema.post('save', dataset => {
 
 datasetSchema.post('updateOne', function() {
   const datasetId = this._conditions ? this._conditions.id : null
-  new Changes({
+  new DatasetChange({
     datasetId,
     modified: true,
   }).save()
@@ -62,7 +62,7 @@ datasetSchema.post('updateOne', function() {
 
 datasetSchema.post('deleteOne', function() {
   const datasetId = this._conditions ? this._conditions.id : null
-  new Changes({
+  new DatasetChange({
     datasetId,
     deleted: true,
   }).save()

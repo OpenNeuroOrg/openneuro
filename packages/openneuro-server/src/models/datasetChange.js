@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import pubsub from '../graphql/pubsub.js'
 
-const changesSchema = new mongoose.Schema(
+const datasetChangeSchema = new mongoose.Schema(
   {
     datasetId: { type: String, required: true },
     created: { type: Boolean, default: false },
@@ -16,12 +16,12 @@ const changesSchema = new mongoose.Schema(
   },
 )
 
-changesSchema.post('save', doc => {
+datasetChangeSchema.post('save', doc => {
   pubsub.publish('datasetChanged', {
     datasetChanged: doc,
   })
 })
 
-const Changes = mongoose.model('Changes', changesSchema)
+const DatasetChange = mongoose.model('DatasetChange', datasetChangeSchema)
 
-export default Changes
+export default DatasetChange
