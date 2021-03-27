@@ -11,7 +11,7 @@ async function createServer(): Promise<void> {
   // serving logic and let the parent server take control.
   const vite = await createViteServer({
     root: __dirname,
-    server: { middlewareMode: true },
+    server: { middlewareMode: true, hmr: { port: 9992 } },
   })
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
