@@ -65,7 +65,7 @@ class Metric extends React.PureComponent {
 
 Metric.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   display: PropTypes.bool,
   snapshot: PropTypes.bool,
 }
