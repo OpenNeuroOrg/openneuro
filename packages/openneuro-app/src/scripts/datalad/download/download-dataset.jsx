@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { Panel } from 'react-bootstrap'
 import styled from '@emotion/styled'
 import DownloadLink from './download-link.jsx'
 import DownloadS3 from './download-s3.jsx'
@@ -25,7 +24,7 @@ const DownloadDataset = ({
     </div>
     <div className="col-xs-12">
       <PaddedDiv className="col-xs-6">
-        {'showDirectoryPicker' in window ? (
+        {'showDirectoryPicker' in globalThis ? (
           <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
         ) : (
           <DownloadCommandLine
@@ -39,7 +38,7 @@ const DownloadDataset = ({
       </PaddedDiv>
     </div>
     <div className="col-xs-12">
-      {'showDirectoryPicker' in window && (
+      {'showDirectoryPicker' in globalThis && (
         <PaddedDiv className="col-xs-6">
           <DownloadCommandLine
             datasetId={datasetId}
