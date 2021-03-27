@@ -13,7 +13,7 @@ const App = ({
   children,
 }: {
   config: OpenNeuroConfig
-  cookies: Cookies
+  cookies?: Cookies
   children: ReactNode
 }) => {
   return (

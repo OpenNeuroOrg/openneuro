@@ -72,26 +72,27 @@ const FilesSubscription = ({ datasetId }) => (
   <Subscription
     subscription={FILES_SUBSCRIPTION}
     variables={{ datasetId }}
-    // onSubscriptionData={({ client, subscriptionData: { data } }) => {
     onSubscriptionData={({ client, subscriptionData }) => {
       const { cache } = client
-      const { action, payload } = subscriptionData.data.filesUpdated
-      if (action && payload) {
-        const id = datasetCacheId(datasetId)
-        const { draft } = cache.readFragment({
-          id,
-          fragment: DRAFT_FILES_FRAGMENT,
-        })
-        const updatedDraft = draftReducer(draft, action, payload)
-        cache.writeFragment({
-          id,
-          fragment: DRAFT_FILES_FRAGMENT,
-          data: {
-            __typename: 'Dataset',
-            id: datasetId,
-            draft: updatedDraft,
-          },
-        })
+      if (subscriptionData.data.filesUpdated) {
+        const { action, payload } = subscriptionData.data.filesUpdated
+        if (action && payload) {
+          const id = datasetCacheId(datasetId)
+          const { draft } = cache.readFragment({
+            id,
+            fragment: DRAFT_FILES_FRAGMENT,
+          })
+          const updatedDraft = draftReducer(draft, action, payload)
+          cache.writeFragment({
+            id,
+            fragment: DRAFT_FILES_FRAGMENT,
+            data: {
+              __typename: 'Dataset',
+              id: datasetId,
+              draft: updatedDraft,
+            },
+          })
+        }
       }
     }}
   />

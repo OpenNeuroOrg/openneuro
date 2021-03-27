@@ -4,7 +4,7 @@
 import './scripts/utils/global-polyfill'
 import { setupApm } from './scripts/apm.js'
 import * as Sentry from '@sentry/browser'
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider, InMemoryCache } from '@apollo/client'
 import { createClient } from 'openneuro-client'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -56,6 +56,8 @@ ReactDOM.render(
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
+        // @ts-expect-error
+        cache: new InMemoryCache().restore(JSON.parse(window.__APOLLO_STATE__)),
       })}>
       <BrowserRouter>
         <Route component={analyticsWrapper(Index)} />

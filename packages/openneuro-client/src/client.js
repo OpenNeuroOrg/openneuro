@@ -18,8 +18,6 @@ import * as users from './users'
 import * as uploads from './uploads'
 import datasetGenerator from './datasetGenerator.js'
 
-const cache = new InMemoryCache()
-
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
@@ -150,6 +148,7 @@ const createClient = (
     clientVersion = undefined,
     links = [],
     ssrMode = false,
+    cache = undefined,
   } = {},
 ) => {
   // createLink must be last since it contains a terminating link
@@ -162,7 +161,7 @@ const createClient = (
   const apolloClientOptions = {
     uri,
     link: composedLink,
-    cache,
+    cache: cache || new InMemoryCache(),
     connectToDevTools: true,
     ssrMode,
   }

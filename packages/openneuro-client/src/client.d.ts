@@ -4,4 +4,5 @@ export declare function createClient(uri: string, options: {
   clientVersion?: string
   links?: Array<ApolloLink>
   ssrMode?: boolean
+  cache?: ApolloCache
 }): ApolloClient<*>

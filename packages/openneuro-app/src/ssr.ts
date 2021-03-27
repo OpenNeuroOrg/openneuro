@@ -41,10 +41,18 @@ async function createServer(): Promise<void> {
       // 4. render the app HTML. This assumes entry-server.js's exported `render`
       //    function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
-      const appHtml = await render(url, req['universalCookies'])
+      const { react, apolloState, head } = await render(
+        url,
+        req['universalCookies'],
+      )
 
       // 5. Inject the app-rendered HTML into the template.
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml)
+      const interpolate = {
+        head,
+        react,
+        apolloState,
+      }
+      const html = template.replace(/\${([^}]*)}/g, (r, k) => interpolate[k])
 
       // 6. Send the rendered HTML back.
       res
