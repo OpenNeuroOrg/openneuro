@@ -43,7 +43,7 @@
     "prop-types": "^15.6.0",
     "react": "^17.0.1",
     "react-bootstrap": "0.31.3",
-    "react-cookie": "^2.2.0",
+    "react-cookie": "4.0.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^17.0.1",
     "react-ga": "^2.2.0",

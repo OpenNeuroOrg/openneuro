@@ -2,52 +2,21 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query, Mutation } from '@apollo/client/react/components'
+import { Query } from '@apollo/client/react/components'
 import { gql } from '@apollo/client'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import Input from '../common/forms/input.jsx'
 import Spinner from '../common/partials/spinner.jsx'
-import WarnButton from '../common/forms/warn-button.jsx'
-import { getProfile } from '../authentication/profile.js'
 import { formatDate } from '../utils/date.js'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../resources/strings.js'
-
-export const USER_FRAGMENT = gql`
-  fragment userFields on User {
-    id
-    name
-    email
-    provider
-    admin
-    created
-    lastSeen
-    blocked
-  }
-`
+import { UserTools } from './user-tools'
+import { USER_FRAGMENT } from './user-fragment'
 
 export const GET_USERS = gql`
   query {
     users {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
-
-export const SET_ADMIN = gql`
-  mutation($id: ID!, $admin: Boolean!) {
-    setAdmin(id: $id, admin: $admin) {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
-
-export const SET_BLOCKED = gql`
-  mutation($id: ID!, $blocked: Boolean!) {
-    setBlocked(id: $id, blocked: $blocked) {
       ...userFields
     }
   }
@@ -121,7 +90,7 @@ class Users extends React.Component {
           <div className="col-xs-2 user-col middle">
             <h3 className="user-provider">{user.provider}</h3>
           </div>
-          {this._userTools(user)}
+          <UserTools user={user} refetch={this.props.refetch} />
           {this._userSummary(user)}
         </div>
       )
@@ -243,56 +212,6 @@ class Users extends React.Component {
         </div>
       </div>
     )
-  }
-
-  _userTools(user) {
-    const adminIcon = user.admin ? 'fa-check-square-o' : 'fa-square-o'
-    const blacklistIcon = user.blocked ? 'fa-check-square-o' : 'fa-square-o'
-
-    if (user.id !== getProfile().sub) {
-      return (
-        <div className="col-xs-3 last dataset-tools-wrap-admin">
-          <div className="tools clearfix">
-            <div className="tool">
-              <Mutation
-                mutation={SET_ADMIN}
-                variables={{ id: user.id, admin: !user.admin }}>
-                {setAdmin => (
-                  <WarnButton
-                    message="Admin"
-                    icon={adminIcon}
-                    action={cb =>
-                      setAdmin().then(() => {
-                        this.props.refetch()
-                        cb()
-                      })
-                    }
-                  />
-                )}
-              </Mutation>
-            </div>
-            <div className="tool">
-              <Mutation
-                mutation={SET_BLOCKED}
-                variables={{ id: user.id, blocked: !user.blocked }}>
-                {setBlocked => (
-                  <WarnButton
-                    message="Block"
-                    icon={blacklistIcon}
-                    action={cb =>
-                      setBlocked().then(() => {
-                        this.props.refetch()
-                        cb()
-                      })
-                    }
-                  />
-                )}
-              </Mutation>
-            </div>
-          </div>
-        </div>
-      )
-    }
   }
 }
 

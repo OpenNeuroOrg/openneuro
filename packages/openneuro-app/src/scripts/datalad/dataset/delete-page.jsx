@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
@@ -33,7 +34,8 @@ const DeletePage = ({ dataset, returnToDataset }) => {
     }
     setValues(newValues)
   }
-  const user = getProfile()
+  const [cookies] = useCookies()
+  const user = getProfile(cookies)
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import snapshotVersion from '../snapshotVersion.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import FollowDataset from '../mutations/follow.jsx'
@@ -40,7 +41,8 @@ const DatasetTools = ({ dataset, location, history }) => {
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
-  const user = getProfile()
+  const [cookies] = useCookies()
+  const user = getProfile(cookies)
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)

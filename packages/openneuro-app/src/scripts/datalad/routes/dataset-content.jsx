@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import EditDescriptionField from '../fragments/edit-description-field.jsx'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
@@ -66,7 +67,8 @@ HasBeenPublished.propTypes = {
  * Data routing for the main dataset query to display/edit components
  */
 export const DatasetContent = ({ dataset }) => {
-  const user = getProfile()
+  const [cookies] = useCookies()
+  const user = getProfile(cookies)
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)

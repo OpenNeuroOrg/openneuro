@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useCookies } from 'react-cookie'
 import { getProfile } from '../../authentication/profile'
 import config from '../../../config'
 
@@ -14,7 +15,8 @@ const buildCustomQuery = (customText, prepopulatedFields) => {
 }
 
 function FreshdeskWidget({ subject, error, sentryId, description }) {
-  const profile = getProfile()
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
   const sentry = sentryId && `Sentry ID: ${sentryId}`
   const joinedDescription = [sentry, description, error]
     .filter(item => item)
