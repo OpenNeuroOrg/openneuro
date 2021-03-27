@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { render } from '@testing-library/react'
 import Comment from '../comment.jsx'
 
 const emptyState =
@@ -7,7 +7,7 @@ const emptyState =
 
 describe('Comment component', () => {
   it('renders with an empty comment', () => {
-    const wrapper = mount(
+    const wrapper = render(
       <Comment
         data={{
           id: '9001',
