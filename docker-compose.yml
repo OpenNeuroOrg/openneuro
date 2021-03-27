@@ -29,6 +29,7 @@ services:
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
     ports:
       - "8145:8145"
+      - "9992:9992"
 
   # crn node server
   server:
