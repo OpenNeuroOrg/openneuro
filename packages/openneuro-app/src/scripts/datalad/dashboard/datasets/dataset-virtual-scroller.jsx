@@ -74,13 +74,13 @@ class DatasetVirtualScroller extends React.Component {
     height,
     scrollTop,
   }) => (
-    <AutoSizer disableHeight>
+    <AutoSizer disableHeight defaultHeight={2048} defaultWidth={1024}>
       {this._autosizeRender(onRowsRendered, registerChild, height, scrollTop)}
     </AutoSizer>
   )
 
   _loaderRender = ({ onRowsRendered, registerChild }) => (
-    <WindowScroller>
+    <WindowScroller serverHeight={2048} serverWidth={1024}>
       {this._windowScrollerRender(onRowsRendered, registerChild)}
     </WindowScroller>
   )

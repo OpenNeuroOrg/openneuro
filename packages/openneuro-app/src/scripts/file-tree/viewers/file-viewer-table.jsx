@@ -9,7 +9,7 @@ const HalfViewport = styled.div`
 
 const FileViewerTable = ({ tableData }) => (
   <HalfViewport>
-    <AutoSizer>
+    <AutoSizer defaultWidth={1024} defaultHeight={2048}>
       {({ width, height }) => (
         <Table
           width={width}
