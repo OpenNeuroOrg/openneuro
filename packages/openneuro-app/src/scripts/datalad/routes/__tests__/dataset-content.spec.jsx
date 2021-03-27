@@ -99,8 +99,8 @@ describe('DatasetContent component', () => {
       </BrowserRouter>,
     )
     // Look for some text that's always rendered
-    expect(screen.getByText('README')).toHaveTextContent('README')
+    expect(screen.getAllByText('README').pop()).toHaveTextContent('README')
     // Verify something specific to this example dataset
-    expect(screen.getByText('test dataset')).toHaveTextContent('test dataset')
+    expect(screen.getAllByText('test dataset').pop()).toHaveTextContent('test dataset')
   })
 })

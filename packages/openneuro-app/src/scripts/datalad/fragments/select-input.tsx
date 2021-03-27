@@ -169,6 +169,8 @@ const SelectInput = ({
     onChange(e.target.name, newValue)
   }
 
+  const labelString: string = label
+
   return (
     <>
       <Container>
@@ -202,7 +204,7 @@ const SelectInput = ({
       <OtherInputContainer showOther={showOptionOther && otherOptionSelected}>
         <TextInput
           name={name}
-          label={`Other ${label}`}
+          label={`Other ${labelString}`}
           value={value === 'Other' ? '' : value}
           disabled={disabled}
           onChange={onChange}

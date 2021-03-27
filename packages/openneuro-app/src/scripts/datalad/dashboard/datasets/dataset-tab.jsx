@@ -58,22 +58,30 @@ const DatasetTabSortWrap = ({ children }) => (
     <Media at="small">
       <div>{children}</div>
     </Media>
-    <Media greaterThanOrEqual="medium">
+    <Media greaterThan="medium">
       <div className="filters-sort-wrap clearfix"></div>
     </Media>
   </>
 )
+
+DatasetTabSortWrap.propTypes = {
+  children: PropTypes.element.isRequired,
+}
 
 const DatasetTabSortClearfix = ({ children }) => (
   <>
     <Media at="small">
       <div>{children}</div>
     </Media>
-    <Media greaterThanOrEqual="medium">
+    <Media greaterThan="medium">
       <div className="sort clearfix">{children}</div>
     </Media>
   </>
 )
+
+DatasetTabSortClearfix.propTypes = {
+  children: PropTypes.element.isRequired,
+}
 
 const DatasetTab = ({
   data,
@@ -95,7 +103,7 @@ const DatasetTab = ({
         throw error
       }
     }
-  }, [error])
+  }, [error, data.datasets])
   return (
     <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
       <Helmet>
@@ -123,7 +131,7 @@ const DatasetTab = ({
                 )}
               </Media>
             </div>
-            <Media greaterThanOrEqual="medium">
+            <Media greaterThan="medium">
               <div className="col-md-7">
                 <SearchInput />
               </div>
@@ -132,7 +140,7 @@ const DatasetTab = ({
         </div>
         <DatasetTabSortWrap>
           <DatasetTabSortClearfix>
-            <Media greaterThanOrEqual="medium">
+            <Media greaterThan="medium">
               <label>Sort by:</label>
             </Media>
             <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
@@ -142,7 +150,7 @@ const DatasetTab = ({
               <Media at="small">
                 <MobileLabel>Filter by:</MobileLabel>
               </Media>
-              <Media greaterThanOrEqual="medium">
+              <Media greaterThan="medium">
                 <label>Filter by:</label>
               </Media>
               <DatasetFilter
@@ -156,16 +164,13 @@ const DatasetTab = ({
       {loading ? (
         <Spinner text="Loading Datasets" active />
       ) : (
-        (console.log({ loading, data }),
-        (
-          <ErrorBoundary subject={'error in dashboard dataset tab'}>
-            <DatasetTabLoaded
-              datasets={data.datasets}
-              loadMoreRows={loadMoreRows}
-              publicDashboard={publicDashboard}
-            />
-          </ErrorBoundary>
-        ))
+        <ErrorBoundary subject={'error in dashboard dataset tab'}>
+          <DatasetTabLoaded
+            datasets={data.datasets}
+            loadMoreRows={loadMoreRows}
+            publicDashboard={publicDashboard}
+          />
+        </ErrorBoundary>
       )}
     </FullHeightFlexDiv>
   )

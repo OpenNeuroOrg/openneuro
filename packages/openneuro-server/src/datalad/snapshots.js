@@ -91,8 +91,8 @@ const postSnapshot = async (
   const response = await request
     .post(createSnapshotUrl)
     .send({
-      description_fields: descriptionFieldUpdates, // eslint-disable-line @typescript-eslint/camelcase
-      snapshot_changes: snapshotChanges, // eslint-disable-line @typescript-eslint/camelcase
+      description_fields: descriptionFieldUpdates,
+      snapshot_changes: snapshotChanges,
     })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))

@@ -33,7 +33,7 @@ describe('download.js', () => {
   })
   describe('checkDestination()', () => {
     it('throws an error on existing directories', () => {
-      expect(checkDestination('.')).toThrowErrorMatchingSnapshot()
+      expect(() => checkDestination('.')).toThrowErrorMatchingSnapshot()
     })
   })
   describe('getDownloadMetadata()', () => {

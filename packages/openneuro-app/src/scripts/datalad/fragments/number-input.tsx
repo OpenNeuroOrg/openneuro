@@ -76,7 +76,9 @@ const NumberInput = ({
     setHasFocus(true)
   }
 
-  const removeFocus = (): void => setHasFocus(false)
+  const removeFocus = (): void => {
+    setHasFocus(false)
+  }
 
   const handleChange = (e): void => {
     onChange(e.target.name, parseInt(e.target.value))

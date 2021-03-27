@@ -44,14 +44,19 @@ class CacheItem {
     this.expiration = expiration
     this.key = cacheKey(type, compositeKeys)
   }
-  private serialize(value: object): Promise<Buffer> {
+  private serialize(value: Record<string, unknown>): Promise<Buffer> {
     return compress(JSON.stringify(value))
   }
-  private async deserialize(value: Buffer): Promise<any> {
+  private async deserialize(value: Buffer): Promise<Record<string, unknown>> {
     const decompressed = await decompress(value)
-    return JSON.parse(decompressed.toString())
+    const deserialized: Record<string, unknown> = JSON.parse(
+      decompressed.toString(),
+    )
+    return deserialized
   }
-  public async get(miss: Function): Promise<any> {
+  public async get(
+    miss: () => Promise<Record<string, unknown>>,
+  ): Promise<Record<string, unknown>> {
     try {
       const data = await this.redis.getBuffer(this.key)
       if (data) {
@@ -62,9 +67,9 @@ class CacheItem {
         const serialized = await this.serialize(data)
         // Allow for the simple case of aging out keys
         if (this.expiration > 0) {
-          this.redis.setex(this.key, this.expiration, serialized)
+          void this.redis.setex(this.key, this.expiration, serialized)
         } else {
-          this.redis.set(this.key, serialized)
+          void this.redis.set(this.key, serialized)
         }
         return data
       }

@@ -7,7 +7,7 @@ describe('dataset resolvers', () => {
   beforeEach(() => {
     mockingoose.resetAll()
     mockingoose.Counter.toReturn(
-      { _id: 'dataset', sequence_value: 1 }, // eslint-disable-line @typescript-eslint/camelcase
+      { _id: 'dataset', sequence_value: 1 },
       'findOneAndUpdate',
     )
   })

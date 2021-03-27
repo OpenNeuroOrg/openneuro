@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react'
 
 import tab_get_data from './assets/tab-get_data.png'

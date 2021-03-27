@@ -6,11 +6,11 @@
 export default null
 declare const self: ServiceWorkerGlobalScope
 const CACHE_NAME = 'openneuro'
-// @ts-expect-error
+// @ts-expect-error Incorrect types for modern service worker APIs
 const CACHE_PATHS = global.serviceWorkerOption.assets
 
 self.addEventListener('install', event => {
-  self.skipWaiting()
+  void self.skipWaiting()
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(CACHE_PATHS)

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import loadable from '@loadable/component'
 
 // TODO - Re-enable code splitting these when we can
 import Dataset from './datalad/dataset/dataset'

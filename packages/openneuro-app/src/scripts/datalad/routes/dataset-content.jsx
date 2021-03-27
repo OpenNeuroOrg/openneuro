@@ -160,8 +160,10 @@ export const DatasetContent = ({ dataset }) => {
       </LoggedIn>
       {dataset.snapshots && !hasEdit && (
         <Redirect
-          to={`/datasets/${dataset.id}/versions/${dataset.snapshots.length &&
-            dataset.snapshots[dataset.snapshots.length - 1].tag}`}
+          to={`/datasets/${dataset.id}/versions/${
+            dataset.snapshots.length &&
+            dataset.snapshots[dataset.snapshots.length - 1].tag
+          }`}
         />
       )}
     </>

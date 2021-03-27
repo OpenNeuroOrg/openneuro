@@ -7,8 +7,8 @@ import { useCookies } from 'react-cookie'
 import { USER_FRAGMENT } from './user-fragment'
 
 interface UserToolsProps {
-  user: any
-  refetch: () => {}
+  user: Record<string, unknown>
+  refetch: () => Record<string, unknown>
 }
 
 export const SET_ADMIN = gql`
@@ -46,12 +46,12 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
                 <WarnButton
                   message="Admin"
                   icon={adminIcon}
-                  action={(cb): void =>
+                  action={(cb): void => {
                     setAdmin().then(() => {
                       refetch()
                       cb()
                     })
-                  }
+                  }}
                 />
               )}
             </Mutation>
@@ -64,12 +64,12 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
                 <WarnButton
                   message="Block"
                   icon={blacklistIcon}
-                  action={(cb): void =>
+                  action={(cb): void => {
                     setBlocked().then(() => {
                       refetch()
                       cb()
                     })
-                  }
+                  }}
                 />
               )}
             </Mutation>

@@ -40,7 +40,7 @@ const fatalError = err => {
  */
 export const validation = (dir, validatorOptions) => {
   return validatePromise(dir, validatorOptions)
-    .then(function({ summary }) {
+    .then(function ({ summary }) {
       // eslint-disable-next-line no-console
       console.log(consoleFormat.summary(summary))
     })

@@ -1,4 +1,3 @@
-import path from 'path'
 import { datasets } from 'openneuro-client'
 
 /**
@@ -8,7 +7,6 @@ import { datasets } from 'openneuro-client'
  * @param {string} datasetId
  */
 export const getDataset = (client, dir, datasetId) => {
-  console.log(datasets.getDataset)
   return client
     .query({
       query: datasets.getDataset,

@@ -167,7 +167,7 @@ const createClient = (
   }
 
   // TODO: Figure this out?
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: This actually works but seems to be a typing error somewhere in Apollo
   return new ApolloClient(apolloClientOptions)
 }

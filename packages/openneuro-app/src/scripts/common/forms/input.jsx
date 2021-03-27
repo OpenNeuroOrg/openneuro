@@ -1,6 +1,6 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
@@ -32,8 +32,9 @@ class Input extends React.Component {
 
     return (
       <div
-        className={`form-group float-label-input ${this.props.containerClass ||
-          ''}`}>
+        className={`form-group float-label-input ${
+          this.props.containerClass || ''
+        }`}>
         {value && value.length > 0 ? <label>{placeholder}</label> : null}
         {this._input(type, name, placeholder, value)}
       </div>

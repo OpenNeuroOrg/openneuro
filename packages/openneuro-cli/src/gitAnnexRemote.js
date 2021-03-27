@@ -19,14 +19,14 @@ export async function handleGitAnnexMessage(line, state) {
       return 'PREPARE-FAILURE url must be configured when running initremote or enableremote'
     }
   } else if (line.startsWith('TRANSFER STORE')) {
-    const [transfer, store, key, file] = line.split(' ', 4)
+    const [, , key, file] = line.split(' ', 4)
     if (await storeKey(state, key, file)) {
       return `TRANSFER-SUCCESS STORE ${key}`
     } else {
       return `TRANSFER-FAILURE STORE ${key}`
     }
   } else if (line.startsWith('TRANSFER RETRIEVE')) {
-    const [transfer, retrieve, key, file] = line.split(' ', 4)
+    const [, , key, file] = line.split(' ', 4)
     if (await retrieveKey(state, key, file)) {
       return `TRANSFER-SUCCESS RETRIEVE ${key}`
     } else {
@@ -58,9 +58,8 @@ export async function handleGitAnnexMessage(line, state) {
 
 /**
  * Stateful response handling for git annex protocol
- * @param {readline.Interface} rl Instance of Node.js readline
  */
-export const response = rl => {
+export const response = () => {
   const state = {}
   return async line => {
     if (line.startsWith('VALUE ')) {
@@ -85,9 +84,7 @@ export async function gitAnnexRemote() {
       input: process.stdin,
     })
     console.log(GIT_ANNEX_VERSION)
-    rl.on('line', () => {
-      response(rl)
-    })
+    rl.on('line', void response())
     await once(rl, 'close')
     process.exit(0)
   } catch (err) {

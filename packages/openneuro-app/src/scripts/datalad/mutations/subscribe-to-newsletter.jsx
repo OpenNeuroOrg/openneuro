@@ -14,9 +14,7 @@ const SubscribeToNewsletter = () => (
     {subscribeToNewsletter => (
       <EmailSubscriptionBox
         subscribe={(email, cb) => {
-          subscribeToNewsletter({ variables: { email } })
-            .then(cb)
-            .catch(cb)
+          subscribeToNewsletter({ variables: { email } }).then(cb).catch(cb)
         }}
       />
     )}

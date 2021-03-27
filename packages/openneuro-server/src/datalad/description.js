@@ -125,7 +125,7 @@ export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/description`
   return request
     .post(url)
-    .send({ description_fields: descriptionFieldUpdates }) // eslint-disable-line @typescript-eslint/camelcase
+    .send({ description_fields: descriptionFieldUpdates })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
     .then(res => {

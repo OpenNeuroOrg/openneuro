@@ -8,14 +8,14 @@ function focus() {
 const cDU = ReactOverlayModal.prototype.componentDidUpdate
 const cDM = ReactOverlayModal.prototype.componentDidMount
 
-ReactOverlayModal.prototype.componentDidUpdate = function(prevProps) {
+ReactOverlayModal.prototype.componentDidUpdate = function (prevProps) {
   if (this.focus !== focus) {
     this.focus = focus
   }
   cDU.call(this, prevProps)
 }
 
-ReactOverlayModal.prototype.componentDidMount = function() {
+ReactOverlayModal.prototype.componentDidMount = function () {
   if (this.focus !== focus) {
     this.focus = focus
   }

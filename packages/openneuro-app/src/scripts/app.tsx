@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { frontPage } from './front-page/front-page-content'
@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import { MediaContextProvider } from './styles/media'
 import { OpenNeuroConfig } from './config'
 
-const App = ({
+const App: FC = ({
   config,
   cookies,
   children,

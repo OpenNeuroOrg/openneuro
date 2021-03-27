@@ -74,7 +74,9 @@ const TextArrayInput = ({
     setHasFocus(true)
   }
 
-  const removeFocus = (): void => setHasFocus(false)
+  const removeFocus = (): void => {
+    setHasFocus(false)
+  }
 
   const handleChange = (e): void => {
     onChange(e.target.name, e.target.value.split(','))

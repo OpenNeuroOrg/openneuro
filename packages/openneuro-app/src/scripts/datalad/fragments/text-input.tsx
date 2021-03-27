@@ -123,9 +123,13 @@ const TextInput = ({
     setHasFocus(true)
   }
 
-  const removeFocus = (): void => setHasFocus(false)
+  const removeFocus = (): void => {
+    setHasFocus(false)
+  }
 
-  const handleChange = (e): void => onChange(e.target.name, e.target.value)
+  const handleChange = (e): void => {
+    onChange(e.target.name, e.target.value)
+  }
 
   return (
     <Container textarea={textarea}>
@@ -134,8 +138,12 @@ const TextInput = ({
         hasValue={Boolean(value)}
         hasFocus={hasFocus}
         onClick={focusInput}
-        onMouseEnter={(): void => setIsShown(true)}
-        onMouseLeave={(): void => setIsShown(false)}>
+        onMouseEnter={(): void => {
+          setIsShown(true)
+        }}
+        onMouseLeave={(): void => {
+          setIsShown(false)
+        }}>
         {label}
       </Label>
       {annotated && <DisabledIcon className="fa fa-asterisk" />}
@@ -147,8 +155,12 @@ const TextInput = ({
           onFocus={focusInput}
           onBlur={removeFocus}
           onChange={handleChange}
-          onMouseEnter={(): void => setIsShown(true)}
-          onMouseLeave={(): void => setIsShown(false)}
+          onMouseEnter={(): void => {
+            setIsShown(true)
+          }}
+          onMouseLeave={(): void => {
+            setIsShown(false)
+          }}
         />
       ) : (
         <Input
@@ -160,8 +172,12 @@ const TextInput = ({
           onBlur={removeFocus}
           onChange={handleChange}
           required={required}
-          onMouseEnter={(): void => setIsShown(true)}
-          onMouseLeave={(): void => setIsShown(false)}
+          onMouseEnter={(): void => {
+            setIsShown(true)
+          }}
+          onMouseLeave={(): void => {
+            setIsShown(false)
+          }}
         />
       )}
       {isShown && hoverText && <HoverMessage>{hoverText}</HoverMessage>}

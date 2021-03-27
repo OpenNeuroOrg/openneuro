@@ -71,7 +71,7 @@ export default async function indexDatasets(
 ): Promise<void> {
   try {
     for await (const dataset of datasets) {
-      indexDataset(elasticClient, dataset)
+      void indexDataset(elasticClient, dataset)
     }
     await aliasDatasetsIndex(elasticClient)
   } catch (e) {

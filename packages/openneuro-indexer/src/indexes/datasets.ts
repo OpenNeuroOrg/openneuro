@@ -3,7 +3,7 @@ import { elasticMappingName } from '../names'
 
 interface IndexDefinition {
   name: string
-  mapping: object
+  mapping: Record<string, unknown>
 }
 
 const Datasets: IndexDefinition = {

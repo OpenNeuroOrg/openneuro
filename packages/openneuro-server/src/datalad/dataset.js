@@ -49,7 +49,7 @@ export const createDataset = async (
   const datasetId = await getAccessionNumber()
   try {
     const ds = new Dataset({ id: datasetId, uploader })
-    const req = await request
+    await request
       .post(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
       .set('Accept', 'application/json')
       .set('Cookie', generateDataladCookie(config)(userInfo))

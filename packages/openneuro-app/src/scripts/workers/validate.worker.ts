@@ -15,7 +15,7 @@ export async function runValidator(
   options,
   cb,
 ): Promise<BIDSValidatorIssues> {
-  let error, output
+  let error, output: BIDSValidatorIssues
   try {
     output = await asyncValidateBIDS(files, options)
   } catch (err) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Allow .png imports
 declare module '*.png' {
   const value: string

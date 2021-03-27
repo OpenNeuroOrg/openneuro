@@ -15,7 +15,7 @@ import { version } from './lerna.json'
 
 export async function render(url, cookies) {
   // Client must be created on every call to avoid mixing credentials
-  const client = createClient(`http://server:8111/crn/graphql`, {
+  const client = createClient(config.graphql.uri, {
     clientVersion: version,
     ssrMode: true,
     getAuthorization: () => cookies.get('accessToken'),

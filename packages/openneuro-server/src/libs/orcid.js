@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 // Camel case rule is disabled since ORCID API uses snake case variables
 import request from 'request'
 import xmldoc from 'xmldoc'

@@ -1,5 +1,5 @@
 import { expiringBanner } from '../userNotify.js'
-const { toast } = require.requireMock('react-toastify')
+const { toast } = jest.requireMock('react-toastify')
 
 jest.mock('react-toastify', () => ({
   ...jest.requireActual('react-toastify'),

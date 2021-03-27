@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * Required to use the webkitdirectory attribute on <input>
  */

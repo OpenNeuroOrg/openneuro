@@ -1,6 +1,6 @@
 import * as Comlink from 'comlink'
-// @ts-expect-error
-import ValidateWorker from './validate.worker?worker&type=classic' // ?worker is a vite hint
+// @ts-expect-error ?worker is a vite hint
+import ValidateWorker from './validate.worker?worker&type=classic' // eslint-disable-line import/no-unresolved
 import { BIDSValidatorIssues } from './worker-interface'
 
 function init(files, options): Promise<BIDSValidatorIssues> {
@@ -9,7 +9,7 @@ function init(files, options): Promise<BIDSValidatorIssues> {
     import('./validate.worker').ValidationWorker
   >(worker)
   return new Promise((resolve, reject) => {
-    workerComms.runValidator(
+    void workerComms.runValidator(
       files,
       options,
       Comlink.proxy(({ error, output }) => {

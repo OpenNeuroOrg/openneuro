@@ -1,10 +1,10 @@
+import { Client } from '@elastic/elasticsearch'
 import Datasets from './indexes/datasets'
 
 /**
  * Setup any indices and mappings in elasticsearch
- * @param {*} elasticClient
  */
-export const createIndices = async (elasticClient): Promise<void> => {
+export const createIndices = async (elasticClient: Client): Promise<void> => {
   const exists = await elasticClient.indices.exists({
     index: Datasets.name,
   })
