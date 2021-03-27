@@ -14,6 +14,7 @@ import { mediaStyle } from './scripts/styles/media'
 import { version } from './lerna.json'
 
 export async function render(url, cookies) {
+  // Client must be created on every call to avoid mixing credentials
   const client = createClient(`http://server:8111/crn/graphql`, {
     clientVersion: version,
     ssrMode: true,
