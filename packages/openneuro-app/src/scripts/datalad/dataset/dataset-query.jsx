@@ -133,7 +133,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
         throw error
       }
     }
-  }, [error, data.dataset])
+  }, [error, data])
   if (loading) return <Spinner text="Loading Dataset" active />
 
   return (

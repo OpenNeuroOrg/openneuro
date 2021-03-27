@@ -19,7 +19,7 @@ export const defaultDescription = {
 /**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
- * @returns {(files: [Object]) => Promise} Promise resolving to dataset_description.json contents or defaults
+ * @returns {(files: [Record<string, unknown>]) => Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
  */
 export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')

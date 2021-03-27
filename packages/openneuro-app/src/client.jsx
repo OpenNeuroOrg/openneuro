@@ -52,7 +52,7 @@ if ('serviceWorker' in navigator) {
 }
 
 ReactDOM.render(
-  <App config={config}>
+  <App>
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,

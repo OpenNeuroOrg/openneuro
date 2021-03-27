@@ -14,7 +14,7 @@ import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset.js'
-import Snapshot from '../models/snapshot'
+import Snapshot, { SnapshotDocument } from '../models/snapshot'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -106,7 +106,7 @@ const postSnapshot = async (
  * This is equivalent to `git tag` on the repository
  *
  * @param {string} datasetId Dataset accession number
- * @returns {Promise<Snapshot[]>}
+ * @returns {Promise<SnapshotDocument[]>}
  */
 export const getSnapshots = datasetId => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`

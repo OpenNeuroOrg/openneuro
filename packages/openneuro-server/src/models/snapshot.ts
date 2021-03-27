@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose'
 const { model, Schema } = mongoose
 
-interface SnapshotDocument extends Document {
+export interface SnapshotDocument extends Document {
   datasetId: string
   tag: string
   created: Date

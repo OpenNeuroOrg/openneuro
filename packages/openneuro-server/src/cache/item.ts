@@ -44,19 +44,15 @@ class CacheItem {
     this.expiration = expiration
     this.key = cacheKey(type, compositeKeys)
   }
-  private serialize(value: Record<string, unknown>): Promise<Buffer> {
+  private serialize<T>(value: T): Promise<Buffer> {
     return compress(JSON.stringify(value))
   }
-  private async deserialize(value: Buffer): Promise<Record<string, unknown>> {
+  private async deserialize<T>(value: Buffer): Promise<T> {
     const decompressed = await decompress(value)
-    const deserialized: Record<string, unknown> = JSON.parse(
-      decompressed.toString(),
-    )
+    const deserialized: T = JSON.parse(decompressed.toString())
     return deserialized
   }
-  public async get(
-    miss: () => Promise<Record<string, unknown>>,
-  ): Promise<Record<string, unknown>> {
+  public async get<T>(miss: () => Promise<T>): Promise<T> {
     try {
       const data = await this.redis.getBuffer(this.key)
       if (data) {

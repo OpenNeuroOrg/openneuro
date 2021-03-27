@@ -58,7 +58,7 @@ const DatasetTabSortWrap = ({ children }) => (
     <Media at="small">
       <div>{children}</div>
     </Media>
-    <Media greaterThan="medium">
+    <Media greaterThanOrEqual="medium">
       <div className="filters-sort-wrap clearfix"></div>
     </Media>
   </>
@@ -73,7 +73,7 @@ const DatasetTabSortClearfix = ({ children }) => (
     <Media at="small">
       <div>{children}</div>
     </Media>
-    <Media greaterThan="medium">
+    <Media greaterThanOrEqual="medium">
       <div className="sort clearfix">{children}</div>
     </Media>
   </>
@@ -103,7 +103,7 @@ const DatasetTab = ({
         throw error
       }
     }
-  }, [error, data.datasets])
+  }, [error, data])
   return (
     <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
       <Helmet>
@@ -131,7 +131,7 @@ const DatasetTab = ({
                 )}
               </Media>
             </div>
-            <Media greaterThan="medium">
+            <Media greaterThanOrEqual="medium">
               <div className="col-md-7">
                 <SearchInput />
               </div>
@@ -139,26 +139,33 @@ const DatasetTab = ({
           </div>
         </div>
         <DatasetTabSortWrap>
-          <DatasetTabSortClearfix>
-            <Media greaterThan="medium">
-              <label>Sort by:</label>
-            </Media>
-            <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
-          </DatasetTabSortClearfix>
-          {publicDashboard || savedDashboard ? null : (
-            <div className="filters">
-              <Media at="small">
-                <MobileLabel>Filter by:</MobileLabel>
-              </Media>
-              <Media greaterThan="medium">
-                <label>Filter by:</label>
-              </Media>
-              <DatasetFilter
-                refetch={refetch}
-                queryVariables={queryVariables}
-              />
-            </div>
-          )}
+          <>
+            <DatasetTabSortClearfix>
+              <>
+                <Media greaterThanOrEqual="medium">
+                  <label>Sort by:</label>
+                </Media>
+                <DatasetSorter
+                  refetch={refetch}
+                  queryVariables={queryVariables}
+                />
+              </>
+            </DatasetTabSortClearfix>
+            {publicDashboard || savedDashboard ? null : (
+              <div className="filters">
+                <Media at="small">
+                  <MobileLabel>Filter by:</MobileLabel>
+                </Media>
+                <Media greaterThanOrEqual="medium">
+                  <label>Filter by:</label>
+                </Media>
+                <DatasetFilter
+                  refetch={refetch}
+                  queryVariables={queryVariables}
+                />
+              </div>
+            )}
+          </>
         </DatasetTabSortWrap>
       </div>
       {loading ? (

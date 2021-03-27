@@ -22,7 +22,7 @@ export async function render(url, cookies) {
   })
 
   const react = await getDataFromTree(
-    <App config={config} cookies={cookies}>
+    <App cookies={cookies}>
       <Helmet>
         <style type="text/css">{mediaStyle}</style>
       </Helmet>
