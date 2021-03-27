@@ -6,19 +6,24 @@ exports[`File component renders for dataset snapshots 1`] = `
   <span
     className="filetree-editfile"
   >
-    <span
-      className="edit-file download-file"
+    <Media
+      className=""
+      greaterThanOrEqual="medium"
     >
-      <a
-        download={true}
-        href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+      <span
+        className="edit-file download-file"
       >
-        <i
-          className="fa fa-download"
-        />
-         Download
-      </a>
-    </span>
+        <a
+          download={true}
+          href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+        >
+          <i
+            className="fa fa-download"
+          />
+           Download
+        </a>
+      </span>
+    </Media>
     <span
       className="edit-file view-file"
     >
@@ -41,19 +46,24 @@ exports[`File component renders with common props 1`] = `
   <span
     className="filetree-editfile"
   >
-    <span
-      className="edit-file download-file"
+    <Media
+      className=""
+      greaterThanOrEqual="medium"
     >
-      <a
-        download={true}
-        href="/crn/datasets/ds001/files/README"
+      <span
+        className="edit-file download-file"
       >
-        <i
-          className="fa fa-download"
-        />
-         Download
-      </a>
-    </span>
+        <a
+          download={true}
+          href="/crn/datasets/ds001/files/README"
+        >
+          <i
+            className="fa fa-download"
+          />
+           Download
+        </a>
+      </span>
+    </Media>
     <span
       className="edit-file view-file"
     >

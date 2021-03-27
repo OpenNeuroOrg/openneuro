@@ -1,4 +1,4 @@
-import config from '../../config'
+import { config } from '../config'
 import { createClient, datasets } from 'openneuro-client'
 import { version } from '../../lerna.json'
 

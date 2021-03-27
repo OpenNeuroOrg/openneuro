@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@sentry/cli": "1.37.4",
-    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^2.20.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1",
     "babel-eslint": "10.0.3",

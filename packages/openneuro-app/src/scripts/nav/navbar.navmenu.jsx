@@ -7,7 +7,7 @@ import { Navbar } from 'react-bootstrap'
 import withProfile from '../authentication/withProfile.jsx'
 import LoggedIn from '../authentication/logged-in.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
-import config from '../../config'
+import { config } from '../config'
 import { Media } from '../styles/media'
 
 const AdminLinkContent = ({ profile }) => {

@@ -1,3 +1,3 @@
-import config from '../../config'
+import { config } from '../config'
 
 export const getDatasetUrl = dataset => `${config.url}/datasets/${dataset.id}`

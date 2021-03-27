@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { config } from '../../config'
 import Tooltip from '../../common/partials/tooltip.jsx'
 
 function copyToClipboard(text) {
@@ -26,8 +27,7 @@ const DocumentationLink = styled.a({
 
 const DatasetGitAccess = ({ datasetId, worker }) => {
   const workerId = worker.split('-').pop()
-  const port = window.location.port === '' ? '' : `:${window.location.port}`
-  const url = `${window.location.protocol}//${window.location.hostname}${port}/git/${workerId}/${datasetId}`
+  const url = `${config.url}/git/${workerId}/${datasetId}`
   return (
     <div className="col-xs-12">
       <h3 className="metaheader">DataLad/Git URL</h3>

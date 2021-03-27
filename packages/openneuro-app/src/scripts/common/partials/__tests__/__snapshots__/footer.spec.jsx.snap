@@ -19,9 +19,9 @@ exports[`common/partials/footer renders successfully 1`] = `
       >
         <span>
           <a
-            href="nutsaboutbrains.org"
+            href="https://www.stanford.edu/site/privacy/"
           >
-            Testing
+            OpenNeuro
             's Privacy Policy
           </a>
         </span>
@@ -33,7 +33,7 @@ exports[`common/partials/footer renders successfully 1`] = `
           © 
           2021
            
-          squirrels
+          Stanford Center for Reproducible Neuroscience
         </span>
       </div>
     </div>

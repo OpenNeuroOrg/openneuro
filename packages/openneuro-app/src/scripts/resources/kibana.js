@@ -1,4 +1,4 @@
-import config from '../../config.js'
+import { config } from '../config'
 
 /**
  * Extract kibana deployment uri from ELASTICSEARCH_CLOUD_ID (prod/staging)

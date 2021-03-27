@@ -1,4 +1,4 @@
-import config from '../../config'
+import { config } from '../config'
 import { UploadProgress } from './upload-progress-class'
 import { uploads } from 'openneuro-client'
 

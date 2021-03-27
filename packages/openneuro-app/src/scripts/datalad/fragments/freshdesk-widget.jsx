@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
 import { getProfile } from '../../authentication/profile'
-import config from '../../../config'
+import { config } from '../../config'
 
 const buildCustomQuery = (customText, prepopulatedFields) => {
   const customizerQueries = [

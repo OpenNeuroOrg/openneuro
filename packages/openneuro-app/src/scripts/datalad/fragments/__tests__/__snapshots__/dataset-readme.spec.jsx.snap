@@ -1,32 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-window.matchMedia = window.matchMedia || function() {
-    return {
-        matches : false,
-        addListener : function() {},
-        removeListener: function() {}
-    };
-};
-
 exports[`DatasetReadme component renders with common props 1`] = `
-<div
-  className="cte-display"
->
-  <div
-    className="fade-in"
+<Fragment>
+  <Media
+    at="small"
+    className=""
   >
-    <ReactMarkdown
-      astPlugins={Array []}
-      escapeHtml={true}
-      plugins={Array []}
-      rawSourcePos={false}
-      renderers={Object {}}
-      skipHtml={false}
-      sourcePos={false}
-      transformLinkUri={[Function]}
+    <div
+      className="cte-display"
     >
-      markdown goes here
-    </ReactMarkdown>
-  </div>
-</div>
+      <div
+        className="fade-in"
+      >
+        <Collapsible
+          icon="down-chevron"
+          isOpen={false}
+          title={
+            Array [
+              "SHOW MORE",
+              "SHOW LESS",
+            ]
+          }
+        >
+          <ReactMarkdown
+            transformLinkUri={[Function]}
+          >
+            markdown goes here
+          </ReactMarkdown>
+        </Collapsible>
+      </div>
+    </div>
+  </Media>
+  <Media
+    className=""
+    greaterThanOrEqual="medium"
+  >
+    <div
+      className="cte-display"
+    >
+      <div
+        className="fade-in"
+      >
+        <ReactMarkdown
+          transformLinkUri={[Function]}
+        >
+          markdown goes here
+        </ReactMarkdown>
+      </div>
+    </div>
+  </Media>
+</Fragment>
 `;
