@@ -50,7 +50,8 @@ services:
   indexer:
     extends:
       service: node
-    command: yarn ts-node /srv/packages/openneuro-indexer/src/index.ts
+    working_dir: /srv/packages/openneuro-indexer
+    command: yarn start
     depends_on:
       - server
       - elasticsearch

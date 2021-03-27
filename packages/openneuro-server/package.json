@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint src",
     "build": "tsc -b",
-    "start": "yarn build && node --enable-source-maps ./dist/server.js",
+    "start": "yarn tsc-watch -b --onSuccess 'node --enable-source-maps ./dist/server.js'",
     "test": "jest"
   },
   "repository": {
