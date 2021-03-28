@@ -139,9 +139,11 @@ export const SNAPSHOT_FIELDS = gql`
     }
     files {
       id
+      key
       filename
       size
       directory
+      annexed
     }
     summary {
       modalities

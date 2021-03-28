@@ -540,8 +540,10 @@ export const typeDefs = `
   # File metadata and link to contents
   type DatasetFile {
     id: ID!
+    key: String
     filename: String!
     size: BigInt
+    annexed: Boolean
     urls: [String]
     objectpath: String
     # Return a flag if this is a directory which contains more files
