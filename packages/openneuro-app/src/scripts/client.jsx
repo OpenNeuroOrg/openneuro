@@ -6,7 +6,6 @@ import App from './app.jsx'
 import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 import packageJson from '../../package.json'
 import { loadConfig } from './config.js'
-import * as GoogleAnalytics from 'react-ga'
 
 if (module.hot) module.hot.accept()
 
@@ -30,8 +29,6 @@ loadConfig().then(config => {
       active: false,
     })
   }
-
-  GoogleAnalytics.initialize(config.analytics.trackingId)
 
   Sentry.init({
     dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',

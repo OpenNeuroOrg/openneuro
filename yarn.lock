@@ -19909,11 +19909,6 @@ react-frame-component@^4.1.1:
   resolved "https://registry.yarnpkg.com/react-frame-component/-/react-frame-component-4.1.2.tgz#c88fcc1e73fbe83eea6c82d95d66eefe44cd1ea4"
   integrity sha512-gWTtpOoi8Mgxayj0iWLL3SXRu2jW4eW4oim6B/FycaOH9HHIsCTPulC9u7CZ2BwY0CtqA+v8FsINp6qPuaN6qQ==
 
-react-ga@^2.2.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.6.0.tgz#c3fe830ead2ad25117e1d33280d9698de9b28496"
-  integrity sha512-GWHBWZDFjDGMkIk1LzroIn0mNTygKw3adXuqvGvheFZvlbpqMPbHsQsTdQBIxRRdXGQM/Zq+dQLRPKbwIHMTaw==
-
 react-helmet-async@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-1.0.6.tgz#11c15c74e79b3f66670c73779bef3e0e352b1d4e"
