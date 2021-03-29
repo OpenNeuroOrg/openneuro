@@ -67,6 +67,7 @@ const FileTree = ({
                   path={path}
                   editMode={editMode}
                   {...file}
+                  annexKey={file.key}
                 />
               </li>
             ))}

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteFile from '../datalad/mutations/delete-file.jsx'
 import { Media } from '../styles/media'
+import RemoveAnnexObject from '../datalad/mutations/remove-annex-object.jsx'
+import AdminUser from '../authentication/admin-user.jsx'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
 
@@ -18,6 +20,9 @@ const File = ({
   filename,
   snapshotTag = null,
   editMode = false,
+  isMobile,
+  annexed,
+  annexKey,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -54,6 +59,16 @@ const File = ({
           <Media greaterThanOrEqual="medium">
             <DeleteFile datasetId={datasetId} path={path} filename={filename} />
           </Media>
+        )}
+        {!isMobile && annexed && (
+          <AdminUser>
+            <RemoveAnnexObject
+              datasetId={datasetId}
+              path={path}
+              filename={filename}
+              annexKey={annexKey}
+            />
+          </AdminUser>
         )}
       </span>
     </>
