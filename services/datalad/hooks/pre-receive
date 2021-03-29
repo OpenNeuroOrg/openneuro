@@ -14,11 +14,48 @@ readonly NULLSHA="0000000000000000000000000000000000000000"
 readonly EXIT_SUCCESS="0"
 readonly EXIT_FAILURE="1"
 
+readonly requiredGitAttributes=(
+  "* annex.largefiles=largerthan=1mb"
+  "*.bval annex.largefiles=nothing"
+  "*.bvec annex.largefiles=nothing"
+  "*.json annex.largefiles=nothing"
+  "*.tsv annex.largefiles=nothing"
+  ".bidsignore annex.largefiles=nothing"
+  "CHANGES annex.largefiles=nothing"
+  "README annex.largefiles=nothing"
+)
+
+function validateGitAttributes() {
+  local missingLines=()
+
+  # Find .gitattributes file
+  local gitAttributes="../.gitattributes"
+  if [ -f $gitAttributes ]; then 
+    # Check for required lines in .gitattributes file
+    for line in "$requiredGitAttributes"; do
+      if ! grep -q "$line" "$gitAttributes"; then
+        missingLines+="$line"
+      fi
+    done
+  fi
+
+  if [ ${#missingLines[@]} -gt 0 ]; then
+    echo ""
+    echo "---------------------------------------------------------------------------------------"
+    echo "Your push was rejected because your .gitattributes file is missing the following lines:"
+    echo "---------------------------------------------------------------------------------------"
+    for missingLine in "$missingLines"; do
+      echo "  $missingLine"
+    done
+    exit 1
+  fi
+}
+
 # Reject the push if any files start with a . character
 function filterDotFiles() {
   local newFiles=$(git diff --stat --name-only --diff-filter=ACMRT ${oldref}..${newref})
   for filename in $newFiles; do
-    if [[ "$filename" = ".bidsignore" ]] || [[ "$filename" =~ ".gitattributes" ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^\.gitignore|\/\.gitignore ]] || [[ "$filename" =~ ^\.datalad ]]; then
+    if [[ "$filename" = ".bidsignore" ]] || [[ "$filename" =~ ".gitattributes" ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^.gitignore|\/\.gitignore ]] || [[ "$filename" =~ ^\.datalad ]]; then
       continue
     fi
     if [[ "$filename" =~ ^\..*|\/\..* ]]; then
@@ -123,6 +160,8 @@ function main() {
     done
     unset IFS
   done
+
+  validateGitAttributes
 
   exit "$status"
 }
