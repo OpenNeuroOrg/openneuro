@@ -64,8 +64,7 @@ const File = ({
           <AdminUser>
             <RemoveAnnexObject
               datasetId={datasetId}
-              path={path}
-              filename={filename}
+              snapshot={snapshotTag}
               annexKey={annexKey}
             />
           </AdminUser>

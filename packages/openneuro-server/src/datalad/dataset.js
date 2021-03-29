@@ -405,6 +405,18 @@ export const deletePath = (datasetId, path, user) => {
 }
 
 /**
+ * Delete the file's annex object and any public replicas
+ */
+export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
+  const worker = getDatasetWorker(datasetId)
+  const url = `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
+  return request
+    .del(url)
+    .set('Cookie', generateDataladCookie(config)(user))
+    .set('Accept', 'application/json')
+}
+
+/**
  * Update public state
  */
 export const updatePublic = (datasetId, publicFlag) =>

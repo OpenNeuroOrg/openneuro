@@ -6,6 +6,7 @@ import {
   deleteDataset,
   deleteFile,
   deleteFiles,
+  removeAnnexObject,
   updatePublic,
   trackAnalytics,
 } from './dataset.js'
@@ -34,6 +35,7 @@ const Mutation = {
   deleteDataset,
   deleteFile,
   deleteFiles,
+  removeAnnexObject,
   createSnapshot,
   deleteSnapshot,
   updateSummary,

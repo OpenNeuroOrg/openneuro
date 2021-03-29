@@ -7,20 +7,18 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 const DELETE_FILE = gql`
   mutation removeAnnexObject(
     $datasetId: ID!
-    $path: String!
-    $filename: String!
+    $snapshot: String!
     $annexKey: String!
   ) {
     removeAnnexObject(
       datasetId: $datasetId
-      path: $path
-      filename: $filename
+      snapshot: $snapshot
       annexKey: $annexKey
     )
   }
 `
 
-const RemoveAnnexObject = ({ datasetId, path, filename, annexKey }) => (
+const RemoveAnnexObject = ({ datasetId, snapshot, annexKey }) => (
   <Mutation mutation={DELETE_FILE} awaitRefetchQueries={true}>
     {removeAnnexObject => (
       // fa-exclamation-triangle might be better
@@ -32,7 +30,7 @@ const RemoveAnnexObject = ({ datasetId, path, filename, annexKey }) => (
           className="edit-file"
           action={cb => {
             removeAnnexObject({
-              variables: { datasetId, path, filename, annexKey },
+              variables: { datasetId, snapshot, annexKey },
             }).then(() => {
               cb()
             })
@@ -45,8 +43,7 @@ const RemoveAnnexObject = ({ datasetId, path, filename, annexKey }) => (
 
 RemoveAnnexObject.propTypes = {
   datasetId: PropTypes.string,
-  path: PropTypes.string,
-  filename: PropTypes.string,
+  snapshot: PropTypes.string,
   annexKey: PropTypes.string,
 }
 

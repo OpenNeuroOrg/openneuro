@@ -3,7 +3,11 @@ import pubsub from '../pubsub.js'
 import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
-import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
+import {
+  checkDatasetRead,
+  checkDatasetWrite,
+  checkDatasetAdmin,
+} from '../permissions.js'
 import { user } from './user.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
@@ -174,6 +178,21 @@ export const deleteFile = async (
         payload: [deletedFile],
       },
     })
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
+}
+
+export const removeAnnexObject = async (
+  obj,
+  { datasetId, snapshot, annexKey },
+  { user, userInfo },
+) => {
+  try {
+    await checkDatasetAdmin(datasetId, user, userInfo)
+    await datalad.removeAnnexObject(datasetId, snapshot, annexKey, userInfo)
     return true
   } catch (err) {
     Sentry.captureException(err)
