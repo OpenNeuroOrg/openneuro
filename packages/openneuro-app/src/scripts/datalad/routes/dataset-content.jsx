@@ -44,9 +44,9 @@ export const HasBeenPublished = ({
       </MarginBottomDiv>
     ) : (
       <MarginBottomDiv className="alert alert-warning">
-        <strong>This dataset has no snapshots!</strong>{' '}
-        <Link to={`/datasets/${datasetId}/snapshot`}>Create a snapshot</Link> to
-        publish this dataset.
+        <strong>This dataset has not been published!</strong> Before it can be
+        published, please{' '}
+        <Link to={`/datasets/${datasetId}/snapshot`}>create a snapshot</Link>.
       </MarginBottomDiv>
     )
   ) : hasDraftChanges ? (
