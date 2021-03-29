@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as GoogleAnalytics from 'react-ga'
+import * as gtag from '../utils/gtag'
 
 const analyticsWrapper = (WrappedComponent, options = {}) => {
   const trackPage = page => {
-    GoogleAnalytics.set({
-      page,
-      ...options,
-    })
-    GoogleAnalytics.pageview(page)
+    gtag.pageview(page)
   }
 
   const HOC = class HOC extends Component {
