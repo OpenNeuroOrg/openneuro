@@ -28,11 +28,6 @@ export const updateRef = async (
 ) => {
   await checkDatasetWrite(datasetId, user, userInfo)
   await updateDatasetRevision(datasetId, ref)
-  // Check if this is the first data commit and no snapshots exist
-  const snapshot = await Snapshot.findOne({
-    datasetId,
-  }).exec()
-  if (!snapshot) await createSnapshot(datasetId, '1.0.0', userInfo)
 }
 
 /**

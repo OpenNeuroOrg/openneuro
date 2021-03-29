@@ -8,6 +8,7 @@ import gevent
 import sentry_sdk
 
 from datalad_service.common.user import get_user_info
+from datalad_service.common.draft import update_head
 from datalad_service.common.annex import CommitInfo
 
 
@@ -37,6 +38,7 @@ class UploadResource(object):
                 gevent.sleep()
                 move_files(upload_path, ds.path)
                 ds.save(unlock_files)
+                update_head(ds, dataset_id, cookies)
                 gevent.sleep()
                 shutil.rmtree(upload_path)
         except:
