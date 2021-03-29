@@ -25,11 +25,15 @@ def validate_dataset_sync(dataset_path, ref, esLogger):
     setup_validator()
     try:
         process = gevent.subprocess.run(
-            ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path], stdout=subprocess.PIPE, timeout=300)
+            ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path], stdout=subprocess.PIPE, timeout=300, check=True)
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired as err:
         esLogger.log(err)
         sentry_sdk.capture_exception()
+    except subprocess.CalledProcessError as err:
+        esLogger.log(err)
+        sentry_sdk.capture_exception()
+
 
 def summary_mutation(dataset_id, ref, validator_output):
     """
