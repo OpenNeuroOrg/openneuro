@@ -4,7 +4,7 @@ import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from '@apollo/client'
-import * as ReactGA from 'react-ga'
+import * as gtag from '../utils/gtag'
 import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
 import { locationFactory } from './uploader-location.js'
@@ -76,7 +76,7 @@ export class UploadClient extends React.Component {
    * @param {string} path Virtual router path for upload modal
    */
   setLocation = path => {
-    ReactGA.pageview(path)
+    gtag.pageview(path)
     this.setState({ location: locationFactory(path) })
   }
 
@@ -185,7 +185,7 @@ export class UploadClient extends React.Component {
 
   upload = ({ affirmedDefaced, affirmedConsent }) => {
     // Track the start of uploads
-    ReactGA.event({
+    gtag.event({
       category: 'Upload',
       action: 'Started web upload',
       label: this.state.datasetId,
@@ -323,7 +323,7 @@ export class UploadClient extends React.Component {
 
   uploadCompleteAction = () => {
     // Record upload finished successfully with Google Analytics
-    ReactGA.event({
+    gtag.event({
       category: 'Upload',
       action: 'Finished web upload',
       label: this.state.datasetId,
