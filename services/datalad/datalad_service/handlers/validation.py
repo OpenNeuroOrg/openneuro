@@ -20,7 +20,7 @@ class ValidationResource(object):
             try:
                 ds = self.store.get_dataset(dataset)
                 # Run the validator but don't block on the request
-                validate_dataset(dataset, ds.path, hexsha, req.cookies)
+                validate_dataset(dataset, ds.path, hexsha, req.cookies, user=name)
                 resp.status = falcon.HTTP_OK
             except:
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
