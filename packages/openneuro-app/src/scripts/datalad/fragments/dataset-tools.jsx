@@ -45,6 +45,7 @@ const DatasetTools = ({ dataset, location, history }) => {
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
+  const hasSnapshot = !!dataset.snapshots.length
 
   return (
     <>
@@ -65,7 +66,7 @@ const DatasetTools = ({ dataset, location, history }) => {
         <div className="tools clearfix">
           <LoggedIn>
             <div role="presentation" className="tool">
-              {!dataset.public && edit && (
+              {!dataset.public && edit && hasSnapshot && (
                 <WarnButton
                   tooltip="Publish Dataset"
                   icon="fa-globe icon-plus"

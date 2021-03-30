@@ -2,6 +2,7 @@ import mockingoose from 'mockingoose'
 import * as ds from '../dataset'
 
 jest.mock('../../../config.js')
+jest.mock('../../../libs/notifications.js')
 
 describe('dataset resolvers', () => {
   beforeEach(() => {

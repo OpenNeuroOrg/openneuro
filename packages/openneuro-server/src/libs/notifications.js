@@ -337,6 +337,60 @@ const notifications = {
     })
   },
 
+  /**
+   * Snapshot Reminder
+   *
+   * Sends an email notification to
+   * the uploader of a dataset, informing
+   * them that their dataset does not have a snapshot.
+   */
+  async snapshotReminder(datasetId) {
+    console.log(
+      'snapshotReminder notification sent with datasetName:',
+      bidsId.decodeId(datasetId),
+    )
+
+    // get all users that are subscribed to the dataset
+    await Subscription.find({ datasetId: datasetId }).exec(
+      (err, subscriptions) => {
+        // create the email object for each user, using subscription userid and scitran
+        subscriptions.forEach(subscription => {
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user) {
+                const emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    'snapshot_reminder',
+                  type: 'email',
+                  email: {
+                    to: user.email,
+                    subject: 'Snapshot Reminder',
+                    template: 'snapshot-reminder',
+                    data: {
+                      name: user.name,
+                      datasetName: bidsId.decodeId(datasetId),
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                      datasetId,
+                    },
+                  },
+                }
+                // send each email to the notification database for distribution
+                notifications.add(emailContent, noop)
+              }
+            })
+        })
+      },
+    )
+  },
+
   initCron() {
     setInterval(() => {
       // After one hour, retry a notification even if we have a lock
@@ -346,7 +400,7 @@ const notifications = {
       ).exec((err, docs) => {
         if (err) {
           console.log(
-            'NOTIFICATION ERROR - Could not find notifcations collection',
+            'NOTIFICATION ERROR - Could not find notifications collection',
           )
         } else {
           for (const notification of docs) {

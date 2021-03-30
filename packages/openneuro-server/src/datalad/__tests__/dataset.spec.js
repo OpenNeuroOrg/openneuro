@@ -7,6 +7,7 @@ import { getDatasetWorker } from '../../libs/datalad-service'
 jest.mock('superagent')
 jest.mock('../../libs/redis.js')
 jest.mock('../../config.js')
+jest.mock('../../libs/notifications.js')
 
 describe('dataset model operations', () => {
   describe('createDataset()', () => {
