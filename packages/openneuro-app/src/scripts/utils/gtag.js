@@ -1,7 +1,7 @@
-window.dataLayer = window.dataLayer || []
+globalThis.dataLayer = globalThis.dataLayer || []
 
 function gtag(...args) {
-  window.dataLayer.push(...args)
+  globalThis.dataLayer.push(...args)
 }
 
 gtag('js', new Date())
