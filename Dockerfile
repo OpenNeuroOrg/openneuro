@@ -2,17 +2,9 @@ FROM node:14.16.0 as dependencies
 
 WORKDIR /srv
 
-COPY package.json yarn.lock ./
-# Sadly we have to manually copy each of these to get a full node_modules tree
-COPY packages/openneuro-app/package.json packages/openneuro-app/package.json
-COPY packages/openneuro-cli/package.json packages/openneuro-cli/package.json
-COPY packages/openneuro-client/package.json packages/openneuro-client/package.json
-COPY packages/openneuro-indexer/package.json packages/openneuro-indexer/package.json
-COPY packages/openneuro-server/package.json packages/openneuro-server/package.json
-
-RUN yarn install --frozen-lockfile
-
 COPY . /srv
+
+RUN yarn install --frozen-lockfile && yarn tsc -b
 
 FROM dependencies as tests
 
