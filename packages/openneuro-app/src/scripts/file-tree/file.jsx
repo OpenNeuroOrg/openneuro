@@ -18,7 +18,7 @@ const File = ({
   datasetId,
   path,
   filename,
-  snapshotTag = null,
+  snapshotTag,
   editMode = false,
   isMobile,
   annexed,
@@ -30,6 +30,7 @@ const File = ({
     path,
     filename,
   )}`
+  console.log(filename, snapshotTag, annexed, annexKey)
   return (
     <>
       {filename}

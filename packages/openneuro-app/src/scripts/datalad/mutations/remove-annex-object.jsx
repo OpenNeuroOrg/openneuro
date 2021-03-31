@@ -30,7 +30,7 @@ const RemoveAnnexObject = ({ datasetId, snapshot, annexKey }) => (
           className="edit-file"
           action={cb => {
             removeAnnexObject({
-              variables: { datasetId, snapshot, annexKey },
+              variables: { datasetId, snapshot: snapshot || 'HEAD', annexKey },
             }).then(() => {
               cb()
             })
