@@ -290,9 +290,6 @@ def monitor_remote_configs(store, dataset, snapshot, realm=None):
 def remove_file_remotes(store, urls):
     """Removes the remotes for the file with the given annex key."""
     for url in urls:
-        logger.debug('-------------------------')
-        logger.debug(url)
-        logger.debug('-------------------------')
         if 's3.amazonaws.com' in url:
             remove_object_from_s3(url)
         else:
