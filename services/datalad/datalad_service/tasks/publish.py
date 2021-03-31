@@ -285,3 +285,31 @@ def monitor_remote_configs(store, dataset, snapshot, realm=None):
     s3_ok = validate_s3_config(ds, realm)
     if not s3_ok:
         update_s3_sibling(ds, realm)
+
+
+def remove_file_remotes(store, urls):
+    """Removes the remotes for the file with the given annex key."""
+    for url in urls:
+        logger.debug('-------------------------')
+        logger.debug(url)
+        logger.debug('-------------------------')
+        if 's3.amazonaws.com' in url:
+            remove_object_from_s3(url)
+        else:
+            logger.debug(f'url is not in S3')
+
+def remove_object_from_s3(url):
+    m = re.match(r'.*?(?:s3\.amazonaws\.com\/)(.*?)\/(.*?)(?:\?|$)', url)
+    bucket = m[1]
+    filepath = m[2]
+    version_id = re.match(r'.*?[?&]versionId=([^&]+).*$', url)[1] if 'versionId=' in url else None
+    client = boto3.client(
+                's3',
+                aws_access_key_id=AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            )
+    client.delete_object(
+        Bucket=bucket,
+        Key=filepath,
+        VersionId=version_id,
+    )
