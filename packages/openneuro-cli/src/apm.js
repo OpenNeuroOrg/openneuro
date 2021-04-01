@@ -19,3 +19,11 @@ const setupApm = active =>
   })
 
 export const apm = setupApm(url ? true : false)
+
+export const startTransaction = (...args) => {
+  try {
+    return apm.startTransaction(...args)
+  } catch (err) {
+    console.error(err)
+  }
+}

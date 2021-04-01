@@ -42,13 +42,12 @@ const fatalError = (err, apmSpan) => {
  * @param {object} apmTransaction Elastic APM Transaction object
  */
 export const validation = (dir, validatorOptions, apmTransaction) => {
-  const apmValidatePromiseSpan =
-    apmTransaction && apmTransaction.startSpan('validatePromise')
+  const apmValidatePromiseSpan = apmTransaction?.startSpan('validatePromise')
   return validatePromise(dir, validatorOptions)
     .then(function({ summary }) {
       // eslint-disable-next-line no-console
       console.log(consoleFormat.summary(summary))
-      apmValidatePromiseSpan.end()
+      apmValidatePromiseSpan?.end()
     })
     .catch(err => fatalError(err, apmValidatePromiseSpan))
 }
