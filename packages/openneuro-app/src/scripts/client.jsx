@@ -31,7 +31,7 @@ loadConfig().then(config => {
     })
   }
 
-  gtag.initialize(config.analytics.trackingId)
+  gtag.initialize(config.analytics.trackingIds)
 
   Sentry.init({
     dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',

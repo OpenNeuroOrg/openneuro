@@ -6,7 +6,8 @@ function gtag() {
 
 gtag('js', new Date())
 
-export const initialize = trackingId => gtag('config', trackingId)
+export const initialize = trackingIds =>
+  trackingIds.forEach(trackingId => gtag('config', trackingId))
 
 export const pageview = path =>
   gtag('event', 'page_view', {
