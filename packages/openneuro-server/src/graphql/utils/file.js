@@ -1,4 +1,4 @@
-import RemovedAnnexObject from '../../models/removedAnnexObject.js'
+import BadAnnexObject from '../../models/badAnnexObject.js'
 
 /**
  * Generates unique id for untracked files.
@@ -31,7 +31,7 @@ export function UpdatedFile(filepath, size) {
 
 export const filterRemovedAnnexObjects = datasetId => async files => {
   const removedAnnexObjectKeys = (
-    await RemovedAnnexObject.find({ datasetId }).exec()
+    await BadAnnexObject.find({ datasetId }).exec()
   ).map(({ annexKey }) => annexKey)
   // keep files that havent had their annex objects removed
   return files.filter(({ key }) => !removedAnnexObjectKeys.includes(key))

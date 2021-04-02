@@ -21,7 +21,7 @@ import Permission from '../models/permission'
 import Star from '../models/stars'
 import Analytics from '../models/analytics'
 import Subscription from '../models/subscription'
-import RemovedAnnexObject from '../models/removedAnnexObject.js'
+import BadAnnexObject from '../models/badAnnexObject.js'
 import { trackAnalytics } from './analytics'
 import { datasetsConnection } from './pagination'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -416,12 +416,13 @@ export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
     .then(() => {
-      const removedAnnexObj = new RemovedAnnexObject({
+      const badAnnexObj = new BadAnnexObject({
         datasetId,
+        snapshot,
         annexKey,
-        user,
+        remover: user,
       })
-      removedAnnexObj.save()
+      badAnnexObj.save()
     })
 }
 
