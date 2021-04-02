@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
-const DELETE_FILE = gql`
+const REMOVE_ANNEX_OBJECT = gql`
   mutation removeAnnexObject(
     $datasetId: ID!
     $snapshot: String!
@@ -29,7 +29,7 @@ const RemoveAnnexObject = ({
   path,
   filename,
 }) => (
-  <Mutation mutation={DELETE_FILE} awaitRefetchQueries={true}>
+  <Mutation mutation={REMOVE_ANNEX_OBJECT} awaitRefetchQueries={true}>
     {removeAnnexObject => (
       // fa-exclamation-triangle might be better
       <span className="remove-annex-object">
