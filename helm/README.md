@@ -73,7 +73,7 @@ To get started create a `values.yaml` and `secrets.yaml` file. In values.yaml yo
 hostname: my.dev.site.domain
 url: https://my.dev.site.domain
 environment: any-unique-string
-googleTrackingId: ''
+googleTrackingIds: ''
 storagePools:
   stripeSize: 1099511627776 # 1TB EBS disks
   pools:
