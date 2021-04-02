@@ -106,7 +106,7 @@ export const typeDefs = `
     # delete one file based on path
     deleteFile(datasetId: ID!, path: String!, filename: String!): Boolean
     # removes the annex object of the given file
-    removeAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!): Boolean
+    removeAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!, path: String, filename: String): Boolean
     # Add or remove the public flag from a dataset
     updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
     # Update a draft summary

@@ -21,6 +21,7 @@ import * as Sentry from '@sentry/node'
 import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
+import { getFileName } from '../../datalad/files.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -187,12 +188,23 @@ export const deleteFile = async (
 
 export const removeAnnexObject = async (
   obj,
-  { datasetId, snapshot, annexKey },
+  { datasetId, snapshot, path, filename, annexKey },
   { user, userInfo },
 ) => {
   try {
     await checkDatasetAdmin(datasetId, user, userInfo)
     await datalad.removeAnnexObject(datasetId, snapshot, annexKey, userInfo)
+    if (path && filename) {
+      // remove file from Apollo cache
+      const file = new UpdatedFile(getFileName(path, filename))
+      pubsub.publish('filesUpdated', {
+        datasetId,
+        filesUpdated: {
+          action: 'DELETE',
+          payload: [file],
+        },
+      })
+    }
     return true
   } catch (err) {
     Sentry.captureException(err)

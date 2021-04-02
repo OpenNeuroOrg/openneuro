@@ -7,6 +7,8 @@ import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
 import DatasetModel from '../../models/dataset'
+import { filterRemovedAnnexObjects } from '../utils/file.js'
+import SnapshotModel from '../../models/snapshot.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -22,7 +24,9 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         readme: () => readme(snapshot),
         summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
         files: ({ prefix }) =>
-          getFiles(datasetId, snapshot.hexsha).then(filterFiles(prefix)),
+          getFiles(datasetId, snapshot.hexsha)
+            .then(filterFiles(prefix))
+            .then(filterRemovedAnnexObjects(datasetId)),
       }))
     },
   )

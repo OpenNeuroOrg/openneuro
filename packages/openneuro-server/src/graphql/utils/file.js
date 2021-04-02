@@ -1,3 +1,5 @@
+import RemovedAnnexObject from '../../models/removedAnnexObject.js'
+
 /**
  * Generates unique id for untracked files.
  * @param {string} filepath - filepath ('/' delimiters)
@@ -25,4 +27,12 @@ export function UpdatedFile(filepath, size) {
    */
   this.filename = filepath
   if (size) this.size = size
+}
+
+export const filterRemovedAnnexObjects = datasetId => async files => {
+  const removedAnnexObjectKeys = (
+    await RemovedAnnexObject.find({ datasetId }).exec()
+  ).map(({ annexKey }) => annexKey)
+  // keep files that havent had their annex objects removed
+  return files.filter(({ key }) => !removedAnnexObjectKeys.includes(key))
 }

@@ -9,16 +9,26 @@ const DELETE_FILE = gql`
     $datasetId: ID!
     $snapshot: String!
     $annexKey: String!
+    $path: String
+    $filename: String
   ) {
     removeAnnexObject(
       datasetId: $datasetId
       snapshot: $snapshot
       annexKey: $annexKey
+      path: $path
+      filename: $filename
     )
   }
 `
 
-const RemoveAnnexObject = ({ datasetId, snapshot, annexKey }) => (
+const RemoveAnnexObject = ({
+  datasetId,
+  snapshot,
+  annexKey,
+  path,
+  filename,
+}) => (
   <Mutation mutation={DELETE_FILE} awaitRefetchQueries={true}>
     {removeAnnexObject => (
       // fa-exclamation-triangle might be better
@@ -30,7 +40,13 @@ const RemoveAnnexObject = ({ datasetId, snapshot, annexKey }) => (
           className="edit-file"
           action={cb => {
             removeAnnexObject({
-              variables: { datasetId, snapshot: snapshot || 'HEAD', annexKey },
+              variables: {
+                datasetId,
+                snapshot: snapshot || 'HEAD',
+                annexKey,
+                path,
+                filename,
+              },
             }).then(() => {
               cb()
             })
@@ -45,6 +61,8 @@ RemoveAnnexObject.propTypes = {
   datasetId: PropTypes.string,
   snapshot: PropTypes.string,
   annexKey: PropTypes.string,
+  path: PropTypes.string,
+  filename: PropTypes.string,
 }
 
 export default RemoveAnnexObject

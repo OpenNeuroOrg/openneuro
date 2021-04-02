@@ -67,6 +67,8 @@ const File = ({
               datasetId={datasetId}
               snapshot={snapshotTag}
               annexKey={annexKey}
+              path={path}
+              filename={filename}
             />
           </AdminUser>
         )}
