@@ -8,7 +8,7 @@ data:
   DATALAD_WORKERS: {{ .Values.dataladWorkers | quote }}
   FRESH_DESK_URL: {{ .Values.freshDeskUrl | quote }}
   ENVIRONMENT: {{ .Values.environment | quote }}
-  GOOGLE_TRACKING_ID: {{ .Values.googleTrackingId | quote }}
+  GOOGLE_TRACKING_IDS: {{ .Values.googleTrackingIds | quote }}
   REDIS_HOST: {{ .Release.Name }}-redis-master
   REDIS_PORT: "6379"
   GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111/crn/graphql

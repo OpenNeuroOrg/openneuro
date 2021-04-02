@@ -35,7 +35,9 @@ const config = {
   },
 
   analytics: {
-    trackingId: process.env.GOOGLE_TRACKING_ID,
+    trackingIds: process.env.GOOGLE_TRACKING_IDS.split(',').map(id =>
+      id.trim(),
+    ),
   },
 
   sentry: {
