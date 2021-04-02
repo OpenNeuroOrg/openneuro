@@ -415,15 +415,39 @@ export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
     .del(url)
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
-    .then(() => {
-      const badAnnexObj = new BadAnnexObject({
-        datasetId,
-        snapshot,
-        annexKey,
-        remover: user,
-      })
-      badAnnexObj.save()
+    .then(async () => {
+      const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
+      if (existingBAO) {
+        existingBAO.forEach(bAO => {
+          bAO.remover = user
+          bAO.removed = true
+          bAO.save()
+        })
+      } else {
+        const badAnnexObj = new BadAnnexObject({
+          datasetId,
+          snapshot,
+          annexKey,
+          remover: user,
+          removed: true,
+        })
+        badAnnexObj.save()
+      }
     })
+}
+
+/**
+ * Flags file. Would be good to find a better way to store flags on dataset.
+ */
+export const flagAnnexObject = (datasetId, snapshot, annexKey, user) => {
+  const badAnnexObj = new BadAnnexObject({
+    datasetId,
+    snapshot,
+    annexKey,
+    flagger: user,
+    flagged: true,
+  })
+  badAnnexObj.save()
 }
 
 /**

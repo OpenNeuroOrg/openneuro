@@ -212,6 +212,21 @@ export const removeAnnexObject = async (
   }
 }
 
+export const flagAnnexObject = async (
+  obj,
+  { datasetId, snapshot, annexKey },
+  { user, userInfo },
+) => {
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+    await datalad.flagAnnexObject(datasetId, snapshot, annexKey, userInfo)
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
+}
+
 /**
  * Update the dataset Public status
  */
