@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import inquirer from 'inquirer'
 import { getUrl } from './config.js'
 import { configuredClient } from './configuredClient.js'
-import { apm } from './apm.js'
+import * as apm from './apm.js'
 
 const CREATE_DATASET = gql`
   mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
@@ -35,7 +35,7 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
       'Dataset creation failed, you may need to rerun setup with "openneuro login" first',
     )
   }
-  apmTransaction.end()
+  apmTransaction?.end()
 }
 
 export const create = () => {

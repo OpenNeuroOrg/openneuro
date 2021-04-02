@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from 'fs'
 import inquirer from 'inquirer'
-import { apm } from './apm.js'
+import * as apm from './apm.js'
 import { saveConfig, getUrl, getUser } from './config'
 import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
@@ -58,8 +58,8 @@ const uploadDataset = async (
   validatorOptions,
   { affirmedDefaced, affirmedConsent },
 ) => {
-  const apmTransaction = apm && apm.startTransaction('upload', 'custom')
-  apmTransaction.addLabels({ datasetId })
+  const apmTransaction = apm.startTransaction('upload', 'custom')
+  apmTransaction?.addLabels({ datasetId })
   const client = configuredClient()
   await validation(dir, validatorOptions, apmTransaction)
   let remoteFiles = []
@@ -76,27 +76,24 @@ const uploadDataset = async (
     })
     remoteFiles = [] // New dataset has no remote files
   }
-  const apmPrepareUploadSpan =
-    apmTransaction && apmTransaction.startSpan('prepareUpload')
+  const apmPrepareUploadSpan = apmTransaction?.startSpan('prepareUpload')
   const preparedUpload = await prepareUpload(client, dir, {
     datasetId,
     remoteFiles,
   })
-  apmPrepareUploadSpan.end()
+  apmPrepareUploadSpan?.end()
   if (preparedUpload) {
     if (preparedUpload.files.length > 1) {
-      const apmUploadFilesSpan =
-        apmTransaction && apmTransaction.startSpan('uploadFiles')
+      const apmUploadFilesSpan = apmTransaction?.startSpan('uploadFiles')
       await uploadFiles(preparedUpload)
-      apmUploadFilesSpan && apmUploadFilesSpan.end()
-      const apmFinishUploadSpan =
-        apmTransaction && apmTransaction.startSpan('finishUpload')
+      apmUploadFilesSpan?.end()
+      const apmFinishUploadSpan = apmTransaction?.startSpan('finishUpload')
       await finishUpload(client, preparedUpload.id)
-      apmUploadFilesSpan && apmFinishUploadSpan.end()
+      apmFinishUploadSpan?.end()
     } else {
       console.log('No files remaining to upload, exiting.')
     }
-    apmTransaction && apmTransaction.end()
+    apmTransaction?.end()
     return datasetId
   }
 }
@@ -246,9 +243,9 @@ export const download = (datasetId, destination, cmd) => {
     'download',
   )
   const { sub } = getUser()
-  apmTransaction.addLabels({ datasetId, userId: sub })
+  apmTransaction?.addLabels({ datasetId, userId: sub })
   if (cmd.snapshot) {
-    apmTransaction.addLabels({ snapshot: cmd.snapshot })
+    apmTransaction?.addLabels({ snapshot: cmd.snapshot })
   }
   if (!cmd.draft && !cmd.snapshot) {
     const client = configuredClient()
@@ -265,5 +262,5 @@ export const download = (datasetId, destination, cmd) => {
   } else {
     getDownload(destination, datasetId, null, apmTransaction)
   }
-  apmTransaction.end()
+  apmTransaction?.end()
 }

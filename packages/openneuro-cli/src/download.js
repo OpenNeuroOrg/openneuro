@@ -98,7 +98,7 @@ export const downloadFile = async (
         const responsePromise = new Promise((resolve, reject) => {
           response.body.on('end', () => resolve())
           response.body.on('error', err => {
-            if (apmTransaction) apmTransaction.captureError(err)
+            apmTransaction?.captureError(err)
             reject(err)
           })
         })
@@ -114,21 +114,21 @@ export const downloadFile = async (
       handleFetchReject(err)
     }
   } catch (err) {
-    if (apmTransaction) apmTransaction.captureError(err)
+    apmTransaction?.captureError(err)
     throw err
   }
 }
 
 export const getDownload = (destination, datasetId, tag, apmTransaction) => {
-  const apmSetup = apmTransaction.startSpan('getDownloadMetadata')
+  const apmSetup = apmTransaction?.startSpan('getDownloadMetadata')
   return getDownloadMetadata(datasetId, tag).then(async body => {
-    apmTransaction.addLabels({ datasetId, tag })
+    apmTransaction?.addLabels({ datasetId, tag })
     checkDestination(destination)
-    apmSetup.end()
+    apmSetup?.end()
     for (const file of body.files) {
       if (testFile(destination, file.filename, file.size)) {
         // Now actually download
-        const apmDownload = apmTransaction.startSpan(
+        const apmDownload = apmTransaction?.startSpan(
           `download ${file.filename}:${file.size}`,
         )
         // eslint-disable-next-line no-console
