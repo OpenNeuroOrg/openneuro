@@ -4,6 +4,20 @@ import express from 'express'
 import { createServer as createViteServer } from 'vite'
 import cookiesMiddleware from 'universal-cookie-express'
 
+const selfDestroyingServiceWorker = `self.addEventListener('install', function(e) {
+  self.skipWaiting()
+})
+
+self.addEventListener('activate', function(e) {
+  self.registration.unregister()
+    .then(function() {
+      return self.clients.matchAll()
+    })
+    .then(function(clients) {
+      clients.forEach(client => client.navigate(client.url))
+    })
+})`
+
 async function createServer(): Promise<void> {
   const app = express()
 
@@ -21,6 +35,14 @@ async function createServer(): Promise<void> {
   app.use('*', (req, res) => {
     async function ssrHandler(): Promise<void> {
       const url = req.originalUrl
+
+      if (url === '/sw.js') {
+        res
+          .status(200)
+          .set({ 'Content-Type': 'application/javascript' })
+          .end(selfDestroyingServiceWorker)
+        return
+      }
 
       try {
         // 1. Read index.html
