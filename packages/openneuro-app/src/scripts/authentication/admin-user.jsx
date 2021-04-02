@@ -1,6 +1,11 @@
 import { useCookies } from 'react-cookie'
 import { getProfile } from './profile.js'
 
+export const isAdmin = () => {
+  const profile = getProfile()
+  return profile && profile.admin
+}
+
 /**
  * Render children if this is an admin user
  */

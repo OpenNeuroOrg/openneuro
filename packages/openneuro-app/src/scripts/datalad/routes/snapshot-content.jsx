@@ -118,6 +118,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           snapshotTag={snapshot.tag}
           datasetName={snapshot.description.Name}
           files={snapshot.files}
+          datasetPermissions={dataset.permissions}
         />
         <DatasetGitHash gitHash={snapshot.hexsha} />
       </MobileClass>

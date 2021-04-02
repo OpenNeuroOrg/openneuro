@@ -10,6 +10,7 @@ const Files = ({
   datasetName,
   files,
   editMode = false,
+  datasetPermissions,
 }) => {
   const fileTree = flatToTree(files)
   return (
@@ -24,6 +25,7 @@ const Files = ({
             name={datasetName}
             editMode={editMode}
             defaultExpanded={false}
+            datasetPermissions={datasetPermissions}
           />
         </Media>
         <Media greaterThanOrEqual="medium">
@@ -35,6 +37,7 @@ const Files = ({
             name={datasetName}
             editMode={editMode}
             defaultExpanded={true}
+            datasetPermissions={datasetPermissions}
           />
         </Media>
       </li>
@@ -49,6 +52,7 @@ Files.propTypes = {
   files: PropTypes.array,
   editMode: PropTypes.bool,
   fetchMore: PropTypes.func,
+  datasetPermissions: PropTypes.object,
 }
 
 export default Files

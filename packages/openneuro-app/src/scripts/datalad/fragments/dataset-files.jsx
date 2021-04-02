@@ -9,6 +9,7 @@ const DatasetFiles = ({
   datasetName,
   files,
   editMode,
+  datasetPermissions,
 }) => (
   <div className="dataset-files">
     <div className="col-xs-12">
@@ -26,6 +27,7 @@ const DatasetFiles = ({
                   datasetName={datasetName}
                   files={files}
                   editMode={editMode}
+                  datasetPermissions={datasetPermissions}
                 />
               </ErrorBoundary>
             </div>
@@ -42,6 +44,7 @@ DatasetFiles.propTypes = {
   datasetName: PropTypes.string,
   files: PropTypes.array,
   editMode: PropTypes.bool,
+  datasetPermissions: PropTypes.object,
 }
 
 export default DatasetFiles

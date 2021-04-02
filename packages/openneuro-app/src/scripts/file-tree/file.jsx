@@ -5,7 +5,9 @@ import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteFile from '../datalad/mutations/delete-file.jsx'
 import { Media } from '../styles/media'
 import RemoveAnnexObject from '../datalad/mutations/remove-annex-object.jsx'
-import AdminUser from '../authentication/admin-user.jsx'
+import FlagAnnexObject from '../datalad/mutations/flag-annex-object.jsx'
+import { isAdmin } from '../authentication/admin-user.jsx'
+import { getProfile, hasEditPermissions } from '../authentication/profile.js'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
 
@@ -23,6 +25,7 @@ const File = ({
   isMobile,
   annexed,
   annexKey,
+  datasetPermissions,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -30,7 +33,7 @@ const File = ({
     path,
     filename,
   )}`
-  console.log(filename, snapshotTag, annexed, annexKey)
+  const user = getProfile()
   return (
     <>
       {filename}
@@ -61,8 +64,9 @@ const File = ({
             <DeleteFile datasetId={datasetId} path={path} filename={filename} />
           </Media>
         )}
-        {!isMobile && annexed && (
-          <AdminUser>
+        {!isMobile &&
+          annexed &&
+          (isAdmin() ? (
             <RemoveAnnexObject
               datasetId={datasetId}
               snapshot={snapshotTag}
@@ -70,8 +74,13 @@ const File = ({
               path={path}
               filename={filename}
             />
-          </AdminUser>
-        )}
+          ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
+            <FlagAnnexObject
+              datasetId={datasetId}
+              snapshot={snapshotTag}
+              annexKey={annexKey}
+            />
+          ) : null)}
       </span>
     </>
   )

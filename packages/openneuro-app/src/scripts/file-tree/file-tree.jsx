@@ -23,6 +23,7 @@ const FileTree = ({
   directories = [],
   editMode = false,
   defaultExpanded = false,
+  datasetPermissions,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
   return (
@@ -68,6 +69,7 @@ const FileTree = ({
                   editMode={editMode}
                   {...file}
                   annexKey={file.key}
+                  datasetPermissions={datasetPermissions}
                 />
               </li>
             ))}
@@ -81,6 +83,7 @@ const FileTree = ({
                       snapshotTag={snapshotTag}
                       editMode={editMode}
                       defaultExpanded={isTopLevel(dir)}
+                      datasetPermissions={datasetPermissions}
                       {...dir}
                     />
                   </li>
@@ -114,6 +117,7 @@ FileTree.propTypes = {
   directories: PropTypes.array,
   editMode: PropTypes.bool,
   defaultExpanded: PropTypes.bool,
+  datasetPermissions: PropTypes.object,
 }
 
 export default FileTree
