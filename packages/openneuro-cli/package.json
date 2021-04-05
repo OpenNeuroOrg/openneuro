@@ -18,7 +18,7 @@
     "git-annex-remote-openneuro": "./src/index.js"
   },
   "dependencies": {
-    "bids-validator": "1.6.2",
+    "bids-validator": "1.6.3",
     "cli-progress": "^3.8.2",
     "commander": "^2.15.1",
     "cross-fetch": "^3.0.5",
