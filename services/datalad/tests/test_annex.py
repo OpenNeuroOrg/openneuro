@@ -35,13 +35,15 @@ def test_get_ls_tree_line():
     symlinkObjects = []
     read_ls_tree_line("""100644 blob a786c385bd1812410d01177affb6ce834d85facd     459	dataset_description.json""",
                       files, symlinkFilenames, symlinkObjects)
+    print(files)
     assert files == [
-        {'filename': 'dataset_description.json',
-         'id': '78dd92373749f62af23f3ae499b7a8ac33418fff',
-         'key': 'a786c385bd1812410d01177affb6ce834d85facd',
-         'size': 459,
-         'urls': []
-         }]
+        {
+            'filename': 'dataset_description.json',
+            'size': 459,
+            'id': '78dd92373749f62af23f3ae499b7a8ac33418fff',
+            'key': 'a786c385bd1812410d01177affb6ce834d85facd',
+            'urls': [],
+            'annexed': False}]
     assert symlinkFilenames == []
     assert symlinkObjects == []
 
