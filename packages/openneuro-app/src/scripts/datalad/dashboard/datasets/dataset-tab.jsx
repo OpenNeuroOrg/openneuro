@@ -59,7 +59,7 @@ const DatasetTabSortWrap = ({ children }) => (
       <div>{children}</div>
     </Media>
     <Media greaterThanOrEqual="medium">
-      <div className="filters-sort-wrap clearfix"></div>
+      <div className="filters-sort-wrap clearfix">{children}</div>
     </Media>
   </>
 )
@@ -153,12 +153,7 @@ const DatasetTab = ({
             </DatasetTabSortClearfix>
             {publicDashboard || savedDashboard ? null : (
               <div className="filters">
-                <Media at="small">
-                  <MobileLabel>Filter by:</MobileLabel>
-                </Media>
-                <Media greaterThanOrEqual="medium">
-                  <label>Filter by:</label>
-                </Media>
+                <MobileLabel>Filter by:</MobileLabel>
                 <DatasetFilter
                   refetch={refetch}
                   queryVariables={queryVariables}
