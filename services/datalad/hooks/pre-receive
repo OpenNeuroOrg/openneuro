@@ -29,12 +29,11 @@ function validateGitAttributes() {
   local missingLines=()
 
   # Find .gitattributes file
-  local gitAttributes="../.gitattributes"
-  if [ -f $gitAttributes ]; then 
-    # Check for required lines in .gitattributes file
-    for line in "$requiredGitAttributes"; do
-      if ! grep -q "$line" "$gitAttributes"; then
-        missingLines+="$line"
+  local gitAttributes=$(git show "${newref}:.gitattributes")
+  if [[ "$?" = 0 ]]; then
+    for line in "${requiredGitAttributes[@]}"; do
+      if [[ ! "$gitAttributes" == *"$line"* ]]; then 
+        missingLines+=( "$line" ) 
       fi
     done
   fi
@@ -44,7 +43,7 @@ function validateGitAttributes() {
     echo "---------------------------------------------------------------------------------------"
     echo "Your push was rejected because your .gitattributes file is missing the following lines:"
     echo "---------------------------------------------------------------------------------------"
-    for missingLine in "$missingLines"; do
+    for missingLine in "${missingLines[@]}"; do
       echo "  $missingLine"
     done
     exit 1
@@ -159,9 +158,9 @@ function main() {
       echo " - ${file} (ref: ${refname})"
     done
     unset IFS
-  done
 
-  validateGitAttributes
+    validateGitAttributes
+  done
 
   exit "$status"
 }
