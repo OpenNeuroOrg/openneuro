@@ -56,7 +56,10 @@ const uploadDataset = async (
   dir,
   datasetId,
   validatorOptions,
-  { affirmedDefaced, affirmedConsent },
+  { affirmedDefaced, affirmedConsent } = {
+    affirmedDefaced: null,
+    affirmedConsent: null,
+  },
 ) => {
   const apmTransaction = apm && apm.startTransaction('upload', 'custom')
   apmTransaction.addLabels({ datasetId })
