@@ -1,3 +1,4 @@
+/*global globalThis*/
 globalThis.dataLayer = globalThis.dataLayer || []
 
 function gtag() {

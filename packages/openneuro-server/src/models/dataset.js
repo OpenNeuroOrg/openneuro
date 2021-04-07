@@ -52,7 +52,7 @@ datasetSchema.post('save', dataset => {
   }).save()
 })
 
-datasetSchema.post('updateOne', function() {
+datasetSchema.post('updateOne', function () {
   const datasetId = this._conditions ? this._conditions.id : null
   new DatasetChange({
     datasetId,
@@ -60,7 +60,7 @@ datasetSchema.post('updateOne', function() {
   }).save()
 })
 
-datasetSchema.post('deleteOne', function() {
+datasetSchema.post('deleteOne', function () {
   const datasetId = this._conditions ? this._conditions.id : null
   new DatasetChange({
     datasetId,
