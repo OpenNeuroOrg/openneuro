@@ -1,12 +1,17 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import Comment from '../comment.jsx'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+
+jest.mock('date-fns/formatDistanceToNow')
 
 const emptyState =
   '{"blocks":[{"key":"3sm42","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
 
 describe('Comment component', () => {
   it('renders with an empty comment', () => {
+    formatDistanceToNow.mockReturnValueOnce('almost 2 years')
+
     const wrapper = render(
       <Comment
         data={{
