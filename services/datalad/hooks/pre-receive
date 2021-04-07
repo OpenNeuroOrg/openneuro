@@ -93,14 +93,15 @@ function main() {
         fi
         ;;
       refs/tags/*)
-        tag=$(expr "$refname" : "refs/tags/\(.*\)")
-        if ! [[ "$tag" =~ "^[0-9]+\.[0-9]+\.[0-9]+$" ]]; then
-          echo ""
-          echo "-------------------------------------------------------------------------"
-          echo "Only version numbered tags are accepted, e.g. '1.2.3'"
-          echo "-------------------------------------------------------------------------"
-          exit $EXIT_FAILURE
-        fi
+        echo ""
+        echo "-------------------------------------------------------------------------"
+        echo "Git tags cannot be pushed to OpenNeuro."
+        echo ""
+        echo "To tag your dataset, please create a snapshot via the dataset's"
+        echo "page at https://openneuro.org (recommended) or the GraphQL API"
+        echo "(https://docs.openneuro.org/api#snapshot-creation)."
+        echo "-------------------------------------------------------------------------"
+        exit $EXIT_FAILURE
         ;;
     esac
 
