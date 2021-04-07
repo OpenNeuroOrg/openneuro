@@ -1,5 +1,4 @@
 /* eslint-env worker */
-import { expose } from 'comlink'
 import validate from 'bids-validator'
 import { BIDSValidatorIssues } from './worker-interface'
 
@@ -24,12 +23,3 @@ export async function runValidator(
   cb({ error, output })
   return output
 }
-
-const toExport = {
-  runValidator,
-}
-export type ValidationWorker = typeof toExport
-
-expose(toExport)
-
-export default toExport

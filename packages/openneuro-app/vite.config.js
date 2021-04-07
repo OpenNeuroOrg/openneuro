@@ -1,10 +1,3 @@
-import builtins from 'rollup-plugin-polyfill-node'
-
-const builtinsPlugin = {
-  ...builtins(),
-  name: 'rollup-plugin-polyfill-node',
-}
-
 export default {
   root: 'src',
   server: {
@@ -21,6 +14,5 @@ export default {
   },
   rollupInputOptions: {
     preserveEntrySignatures: 'strict',
-    plugins: [builtinsPlugin],
   },
 }
