@@ -12,9 +12,9 @@ import { getDatasetEndpoint } from '../../libs/datalad-service.js'
  * @param context.userInfo Decoded token values
  */
 export async function prepareRepoAccess(
-  _: any,
+  _: Record<string, unknown>,
   { datasetId }: { datasetId: string },
-  { user, userInfo }: { user: string; userInfo: any },
+  { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
 ): Promise<{ token: string; endpoint: number }> {
   await checkDatasetWrite(datasetId, user, userInfo)
   return {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
@@ -80,6 +81,8 @@ const runValidations = values =>
   validations
     .map(validation => {
       const relevantValues = validation.fields.map(key => values[key])
+      // TODO - This doesn't seem necessary?
+      // @ts-expect-error
       const isValid = validation.check(relevantValues)
       if (!isValid) return validation.errorMessage
     })
@@ -89,6 +92,7 @@ const hasChanged = (errorsA, errorsB) =>
   JSON.stringify(errorsA) !== JSON.stringify(errorsB)
 
 const AddMetadata = ({ dataset, history, location }) => {
+  const [cookies] = useCookies()
   const [values, setValues] = useState(compileMetadata(dataset))
   const [validationErrors, setValidationErrors] = useState([])
   const handleInputChange = (name, value) => {
@@ -102,7 +106,7 @@ const AddMetadata = ({ dataset, history, location }) => {
     if (hasChanged(errors, validationErrors)) setValidationErrors(errors)
   }
   const submitPath = location.state && location.state.submitPath
-  const user = getProfile()
+  const user = getProfile(cookies)
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)

@@ -1,5 +1,3 @@
-import gql from 'graphql-tag'
-
 /**
  * Sort file streams so that dataset_description.json is first in the list
  *

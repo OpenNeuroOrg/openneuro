@@ -4,13 +4,12 @@
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js"></script>
-    <base href="/"></base>
     <meta http-equiv="expires" content="0" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>OpenNeuro</title>
-    <link id="favicon" rel="icon" type="image/png" href="/content/img/favicon.ico" />
-    <link rel="preload" href="/crn/config.json" as="fetch" crossorigin>
+    <link id="favicon" rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" href="/sass/main.scss" />
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link rel="preconnect" href="https://netdna.bootstrapcdn.com/" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/cabin/v12/u-4x0qWljRw-Pd8w__0.woff2" as="font" crossorigin>
@@ -18,7 +17,6 @@
     <link rel="preload" href="https://fonts.gstatic.com/s/opensans/v15/mem8YaGs126MiZpBA-UFVZ0b.woff2" as="font" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/opensans/v15/mem5YaGs126MiZpBA-UN_r8OUuhp.woff2" as="font" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/opensans/v15/mem8YaGs126MiZpBA-UFWJ0bbck.woff2" as="font" crossorigin>
-    <link rel="preload" href="https://netdna.bootstrapcdn.com/font-awesome/5.10.0/fonts/fontawesome-webfont.woff2?v=5.10.0" as="font" crossorigin>
     <style>
 /* vietnamese */
 @font-face {
@@ -405,12 +403,13 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
     </style>
+    ${head}
 </head>
 
 <body>
-    <div id="main"></div>
-    <script src="/content/openneuro-content.js" /></script>
-    <script src="/papaya-831b0eb6.js" async></script>
+    <div id="main">${react}</div>
+    <script src="/client.jsx" type="module"></script>
+    <script>window.__APOLLO_STATE__=atob("${apolloState}");</script>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useCookies } from 'react-cookie'
 import Capitalized from '../../../styles/capitalized.jsx'
 import { getProfile } from '../../../authentication/profile.js'
 
@@ -49,7 +50,8 @@ FilterField.propTypes = {
 }
 
 const DatasetFilter = ({ queryVariables, refetch }) => {
-  const profile = getProfile()
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
   let fields = filterFields
   if (profile && 'admin' in profile && profile.admin) {
     fields = [...filterFields, 'all']

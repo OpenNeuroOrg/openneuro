@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteFile from '../datalad/mutations/delete-file.jsx'
+import { Media } from '../styles/media'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
 
@@ -17,7 +18,6 @@ const File = ({
   filename,
   snapshotTag = null,
   editMode = false,
-  isMobile,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -29,7 +29,7 @@ const File = ({
     <>
       {filename}
       <span className="filetree-editfile">
-        {!isMobile && (
+        <Media greaterThanOrEqual="medium">
           <span className="edit-file download-file">
             <a
               href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
@@ -37,19 +37,23 @@ const File = ({
               <i className="fa fa-download" /> Download
             </a>
           </span>
-        )}
+        </Media>
         <span className="edit-file view-file">
           <Link to={viewerPath}>
             <i className="fa fa-eye" /> View
           </Link>
         </span>
-        {!isMobile && editMode && (
-          <UpdateFile datasetId={datasetId} path={path} filename={filename}>
-            <i className="fa fa-file-o" /> Update
-          </UpdateFile>
+        {editMode && (
+          <Media greaterThanOrEqual="medium">
+            <UpdateFile datasetId={datasetId} path={path}>
+              <i className="fa fa-file-o" /> Update
+            </UpdateFile>
+          </Media>
         )}
-        {!isMobile && editMode && filename !== 'dataset_description.json' && (
-          <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+        {editMode && filename !== 'dataset_description.json' && (
+          <Media greaterThanOrEqual="medium">
+            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+          </Media>
         )}
       </span>
     </>
@@ -62,7 +66,6 @@ File.propTypes = {
   filename: PropTypes.string,
   snapshotTag: PropTypes.string,
   editMode: PropTypes.bool,
-  isMobile: PropTypes.bool,
 }
 
 export default File

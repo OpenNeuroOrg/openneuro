@@ -1,7 +1,7 @@
 /**
  * Prefix all files with a path
  * This supports uploading within another directory
- * @param {FileList} fileList FileList for upload
+ * @param {any[]} fileList FileList for upload
  * @param {string} path Prefix path for all files
  * @returns {Array} Updated array of files with adapted paths
  */

@@ -1,8 +1,8 @@
 import { captureException } from '@sentry/browser'
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useQuery } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useQuery, gql } from '@apollo/client'
+
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetQueryContext from './dataset-query-context.js'
 import DatasetContext from './dataset-context.js'
@@ -133,7 +133,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
         throw error
       }
     }
-  }, [error])
+  }, [error, data])
   if (loading) return <Spinner text="Loading Dataset" active />
 
   return (

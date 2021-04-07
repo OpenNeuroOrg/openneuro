@@ -2,26 +2,20 @@
   "name": "openneuro-client",
   "version": "3.31.0",
   "description": "OpenNeuro shared client library.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "browser": "src/client.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc -b"
+  },
   "dependencies": {
-    "apollo-cache-inmemory": "^1.6.5",
-    "apollo-client": "^2.6.8",
-    "apollo-link": "^1.2.12",
-    "apollo-link-context": "^1.0.18",
-    "apollo-link-http": "^1.5.17",
-    "apollo-link-schema": "^1.2.3",
-    "apollo-link-ws": "^1.0.18",
-    "cross-fetch": "^3.0.5",
-    "esm": "^3.0.84",
-    "graphql": "14.6.0",
-    "graphql-tag": "^2.10.3",
-    "graphql-tools": "4.0.6",
+    "@apollo/client": "3.3.14",
+    "cross-fetch": "^3.1.2",
+    "graphql": "14.7.0",
     "semver": "^5.5.0",
-    "subscriptions-transport-ws": "^0.9.15"
+    "subscriptions-transport-ws": "^0.9.18"
   },
   "jest": {
     "testEnvironment": "node"

@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export const prepareUpload = gql`
   mutation prepareUpload($datasetId: ID!, $uploadId: ID!) {
@@ -121,7 +121,7 @@ export async function retryDelay(step, request) {
 /**
  * Repeatable function for single file upload fetch request
  * @param {object} uploadProgress Progress controller instance
- * @param {fetch} fetch Fetch implementation to use - useful for environments without a native fetch
+ * @param {typeof fetch} fetch Fetch implementation to use - useful for environments without a native fetch
  * @returns {function (Request, number): Promise<Response|void>}
  */
 export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
@@ -160,11 +160,17 @@ export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
     .catch(handleFailure)
 }
 
+/**
+ * @param {Request[]} requests
+ * @param {number} totalSize
+ * @param {object} uploadProgress
+ * @param {typeof fetch} fetch
+ */
 export async function uploadParallel(
   requests,
   totalSize,
   uploadProgress,
-  fetch = window.fetch,
+  fetch,
 ) {
   // Array stride of parallel requests
   const parallelism = uploadParallelism(requests, totalSize)

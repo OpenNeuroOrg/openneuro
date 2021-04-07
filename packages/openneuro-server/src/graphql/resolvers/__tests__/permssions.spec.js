@@ -1,7 +1,7 @@
 import { updatePermissions } from '../permissions'
 
 jest.mock('../../permissions', () => ({
-  checkDatasetAdmin: async () => {},
+  checkDatasetAdmin: async () => Promise.resolve(),
 }))
 
 const mockExec = jest.fn()

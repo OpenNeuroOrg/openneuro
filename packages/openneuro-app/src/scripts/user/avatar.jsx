@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import user from '../utils/user.js'
+import { generateGravatarUrl } from '../utils/user.js'
 
-export default class Avatar extends React.Component {
+class Avatar extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -13,7 +13,7 @@ export default class Avatar extends React.Component {
     if (!profile) {
       return null
     }
-    const imageUrl = user.generateGravatarUrl(profile)
+    const imageUrl = generateGravatarUrl(profile)
     let thumbnail
     if (imageUrl) {
       const username = profile && profile.name ? profile.name : null
@@ -36,3 +36,5 @@ export default class Avatar extends React.Component {
 Avatar.propTypes = {
   profile: PropTypes.object,
 }
+
+export default Avatar

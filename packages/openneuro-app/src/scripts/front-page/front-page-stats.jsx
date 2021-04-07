@@ -25,7 +25,7 @@ const StatsContainer = styled.div({
 const Panel = styled.section({
   backgroundColor: 'transparent',
   flexBasis: '1px',
-  flexGrow: '1',
+  flexGrow: 1,
   padding: '2rem 0 3rem',
   textAlign: 'center',
 })
@@ -34,7 +34,7 @@ const Value = styled.div({
   fontSize: '70px',
 })
 const Label = styled.div({
-  fontWeight: '200',
+  fontWeight: 200,
   fontSize: '40px',
 })
 const VerticalDivider = styled.div({

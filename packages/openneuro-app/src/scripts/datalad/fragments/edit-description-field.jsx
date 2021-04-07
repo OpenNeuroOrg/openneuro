@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import UpdateDescription from '../mutations/description.jsx'
 import CancelButton from './cancel-button.jsx'
 import EditButton from './edit-button.jsx'
+import { Media } from '../../styles/media'
 
 /**
  * This is a hopefully less confusing click-to-edit component
@@ -15,7 +16,6 @@ const EditDescriptionField = ({
   children,
   editMode,
   rows = 1,
-  isMobile,
 }) => {
   const [editing, setEditing] = useState(false)
   const [value, setValue] = useState(description[field] || '')
@@ -41,9 +41,11 @@ const EditDescriptionField = ({
     return (
       <>
         {children}
-        {editMode && !isMobile ? (
-          <EditButton action={() => setEditing(true)} />
-        ) : null}
+        {editMode && (
+          <Media greaterThanOrEqual="medium">
+            <EditButton action={() => setEditing(true)} />
+          </Media>
+        )}
       </>
     )
   }

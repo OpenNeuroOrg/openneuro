@@ -4,7 +4,7 @@ import pluralize from 'pluralize'
 import Spinner from '../common/partials/spinner.jsx'
 import Results from '../validation/validation-results.jsx'
 import UploaderContext from './uploader-context.js'
-import validate from '../workers/validate.js'
+import validate from '../workers/validate'
 
 const UploadValidatorStatus = ({ issues, next, reset }) => {
   const errorCount = issues.errors.length
@@ -63,9 +63,6 @@ class UploadValidator extends React.Component {
       },
       summary: {},
     }
-  }
-
-  componentWillMount() {
     const options = {
       config: {
         error: ['NO_AUTHORS'],

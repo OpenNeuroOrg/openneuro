@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
 
-export default class Issue extends React.Component {
+class Issue extends React.Component {
   // life cycle events --------------------------------------------------
 
   render() {
@@ -86,3 +86,5 @@ Issue.propTypes = {
   error: PropTypes.object,
   type: PropTypes.string.isRequired,
 }
+
+export default Issue

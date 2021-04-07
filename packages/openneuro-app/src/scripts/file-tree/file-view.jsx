@@ -5,7 +5,7 @@ import FileViewerType from './file-viewer-type.jsx'
 
 const FileView = ({ datasetId, snapshotTag, path }) => {
   const url = apiPath(datasetId, snapshotTag, path)
-  const [data, setData] = useState()
+  const [data, setData] = useState(new ArrayBuffer(0))
   const [loading, setLoading] = useState(true)
 
   const fetchUrl = async () => {

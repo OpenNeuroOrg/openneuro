@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import mockingoose from 'mockingoose'
 import { getAccessionNumber } from '../dataset.js'
 

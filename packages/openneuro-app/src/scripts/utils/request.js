@@ -61,10 +61,7 @@ function handleRequest(url, options, callback) {
 const Request = {
   get(url, options) {
     return handleRequest(url, options, (url, options) => {
-      return request
-        .get(url)
-        .set(options.headers)
-        .query(options.query)
+      return request.get(url).set(options.headers).query(options.query)
     })
   },
 
@@ -90,10 +87,7 @@ const Request = {
 
   del(url, options) {
     return handleRequest(url, options, (url, options) => {
-      return request
-        .del(url)
-        .set(options.headers)
-        .query(options.query)
+      return request.del(url).set(options.headers).query(options.query)
     })
   },
 

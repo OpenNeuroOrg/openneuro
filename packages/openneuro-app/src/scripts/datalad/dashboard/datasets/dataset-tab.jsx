@@ -4,12 +4,13 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../../resources/strings'
 import Spinner from '../../../common/partials/spinner.jsx'
-import SearchInput from '../../../search/search-input.tsx'
+import SearchInput from '../../../search/search-input'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 import DatasetSorter from './dataset-sorter.jsx'
 import DatasetFilter from './dataset-filter.jsx'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import styled from '@emotion/styled'
+import { Media } from '../../../styles/media'
 
 const FullHeightFlexDiv = styled.div`
   display: flex;
@@ -52,6 +53,36 @@ const DatasetTabLoaded = ({ datasets, loadMoreRows, publicDashboard }) => {
   }
 }
 
+const DatasetTabSortWrap = ({ children }) => (
+  <>
+    <Media at="small">
+      <div>{children}</div>
+    </Media>
+    <Media greaterThanOrEqual="medium">
+      <div className="filters-sort-wrap clearfix">{children}</div>
+    </Media>
+  </>
+)
+
+DatasetTabSortWrap.propTypes = {
+  children: PropTypes.element.isRequired,
+}
+
+const DatasetTabSortClearfix = ({ children }) => (
+  <>
+    <Media at="small">
+      <div>{children}</div>
+    </Media>
+    <Media greaterThanOrEqual="medium">
+      <div className="sort clearfix">{children}</div>
+    </Media>
+  </>
+)
+
+DatasetTabSortClearfix.propTypes = {
+  children: PropTypes.element.isRequired,
+}
+
 const DatasetTab = ({
   data,
   loadMoreRows,
@@ -61,7 +92,6 @@ const DatasetTab = ({
   error,
   publicDashboard,
   savedDashboard,
-  isMobile,
 }) => {
   useEffect(() => {
     if (error) {
@@ -73,7 +103,7 @@ const DatasetTab = ({
         throw error
       }
     }
-  }, [error])
+  }, [error, data])
   return (
     <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
       <Helmet>
@@ -84,61 +114,65 @@ const DatasetTab = ({
       <div className="header-filter-sort clearfix">
         <div className="admin header-wrap clearfix">
           <div className="row">
-            {isMobile && (
+            <Media at="small">
               <div className="col-md-7">
                 <SearchInput />
               </div>
-            )}
+            </Media>
             <div className="col-md-5">
               <h2>{title(publicDashboard, savedDashboard)}</h2>
-              {isMobile && !loading && (
-                <h6>
-                  {data.datasets
-                    ? `Results ${data.datasets.pageInfo.count}`
-                    : 'Zero results'}{' '}
-                </h6>
-              )}
+              <Media at="small">
+                {!loading && (
+                  <h6>
+                    {data.datasets
+                      ? `Results ${data.datasets.pageInfo.count}`
+                      : 'Zero results'}{' '}
+                  </h6>
+                )}
+              </Media>
             </div>
-            {!isMobile && (
+            <Media greaterThanOrEqual="medium">
               <div className="col-md-7">
                 <SearchInput />
               </div>
-            )}
+            </Media>
           </div>
         </div>
-        <div className={isMobile ? '' : 'filters-sort-wrap clearfix'}>
-          <div className={isMobile ? '' : 'sort clearfix'}>
-            {!isMobile && <label>Sort by:</label>}
-            <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
-          </div>
-          {publicDashboard || savedDashboard ? null : (
-            <div className="filters">
-              {isMobile ? (
+        <DatasetTabSortWrap>
+          <>
+            <DatasetTabSortClearfix>
+              <>
+                <Media greaterThanOrEqual="medium">
+                  <label>Sort by:</label>
+                </Media>
+                <DatasetSorter
+                  refetch={refetch}
+                  queryVariables={queryVariables}
+                />
+              </>
+            </DatasetTabSortClearfix>
+            {publicDashboard || savedDashboard ? null : (
+              <div className="filters">
                 <MobileLabel>Filter by:</MobileLabel>
-              ) : (
-                <label>Filter by:</label>
-              )}
-              <DatasetFilter
-                refetch={refetch}
-                queryVariables={queryVariables}
-              />
-            </div>
-          )}
-        </div>
+                <DatasetFilter
+                  refetch={refetch}
+                  queryVariables={queryVariables}
+                />
+              </div>
+            )}
+          </>
+        </DatasetTabSortWrap>
       </div>
       {loading ? (
         <Spinner text="Loading Datasets" active />
       ) : (
-        (console.log({ loading, data }),
-        (
-          <ErrorBoundary subject={'error in dashboard dataset tab'}>
-            <DatasetTabLoaded
-              datasets={data.datasets}
-              loadMoreRows={loadMoreRows}
-              publicDashboard={publicDashboard}
-            />
-          </ErrorBoundary>
-        ))
+        <ErrorBoundary subject={'error in dashboard dataset tab'}>
+          <DatasetTabLoaded
+            datasets={data.datasets}
+            loadMoreRows={loadMoreRows}
+            publicDashboard={publicDashboard}
+          />
+        </ErrorBoundary>
       )}
     </FullHeightFlexDiv>
   )
@@ -153,7 +187,6 @@ DatasetTab.propTypes = {
   publicDashboard: PropTypes.bool,
   savedDashboard: PropTypes.bool,
   error: PropTypes.object,
-  isMobile: PropTypes.bool,
 }
 
 export default DatasetTab

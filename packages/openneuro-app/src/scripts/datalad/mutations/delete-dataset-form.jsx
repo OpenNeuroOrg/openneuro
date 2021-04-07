@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextInput from '../fragments/text-input.jsx'
-import SelectInput from '../fragments/select-input.jsx'
+import TextInput from '../fragments/text-input'
+import SelectInput from '../fragments/select-input'
 import styled from '@emotion/styled'
 
 const Form = styled.form({
@@ -14,7 +14,7 @@ const fields = hasEdit => {
     {
       key: 'reason',
       label: 'Reason',
-      Component: SelectInput,
+      component: SelectInput,
       additionalProps: {
         options: [
           { value: 'subject privacy' },
@@ -28,7 +28,7 @@ const fields = hasEdit => {
     {
       key: 'redirect',
       label: 'Superseded by (URL)',
-      Component: TextInput,
+      component: TextInput,
       additionalProps: {
         required: false,
       },
@@ -46,10 +46,18 @@ const DeleteDatasetForm = ({ values, onChange, hasEdit }) => (
   <Form id="metadata-form" className="col-sm-6">
     {fields(hasEdit).map(
       (
-        { key, label, hoverText, Component, additionalProps, transformValue },
+        {
+          key,
+          label,
+          hoverText,
+          component: FieldComponent,
+          additionalProps,
+          transformValue,
+        },
         i,
       ) => (
-        <Component
+        // @ts-expect-error
+        <FieldComponent
           name={key}
           label={label}
           hoverText={hoverText}

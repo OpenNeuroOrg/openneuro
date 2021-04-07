@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import config from '../../../config.js'
+import { config } from '../config'
 
 /**
  * Button starts Google oauth2 workflow
@@ -11,7 +11,7 @@ const GlobusButton = ({ min }) => {
   const btnText = min ? 'Globus' : 'Sign in with Globus'
   return (
     <div className="login-btns">
-      <a href={config.crn.url + 'auth/globus'}>
+      <a href={config.api + 'auth/globus'}>
         <button className={btnClass}>
           <span className="icon">
             <img

@@ -21,7 +21,7 @@ export function cacheKey(
 /**
  * Cache items related to datasets
  */
-export default class CacheItem {
+class CacheItem {
   type: CacheType
   key: string
   expiration = 0
@@ -44,14 +44,15 @@ export default class CacheItem {
     this.expiration = expiration
     this.key = cacheKey(type, compositeKeys)
   }
-  private serialize(value: object): Promise<Buffer> {
+  private serialize<T>(value: T): Promise<Buffer> {
     return compress(JSON.stringify(value))
   }
-  private async deserialize(value: Buffer): Promise<object> {
+  private async deserialize<T>(value: Buffer): Promise<T> {
     const decompressed = await decompress(value)
-    return JSON.parse(decompressed.toString())
+    const deserialized: T = JSON.parse(decompressed.toString())
+    return deserialized
   }
-  public async get(miss: Function): Promise<object> {
+  public async get<T>(miss: () => Promise<T>): Promise<T> {
     try {
       const data = await this.redis.getBuffer(this.key)
       if (data) {
@@ -62,9 +63,9 @@ export default class CacheItem {
         const serialized = await this.serialize(data)
         // Allow for the simple case of aging out keys
         if (this.expiration > 0) {
-          this.redis.setex(this.key, this.expiration, serialized)
+          void this.redis.setex(this.key, this.expiration, serialized)
         } else {
-          this.redis.set(this.key, serialized)
+          void this.redis.set(this.key, serialized)
         }
         return data
       }
@@ -81,3 +82,5 @@ export default class CacheItem {
     return this.redis.del(this.key)
   }
 }
+
+export default CacheItem

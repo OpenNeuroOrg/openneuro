@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* global papaya, papayaContainers */
 
@@ -6,11 +7,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default class Papaya extends React.Component {
+class Papaya extends React.Component {
   // life cycle events --------------------------------------------------
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       papayaWidth: this._calculateWidth(),
     }
@@ -94,3 +95,5 @@ export default class Papaya extends React.Component {
 Papaya.propTypes = {
   image: PropTypes.string,
 }
+
+export default Papaya

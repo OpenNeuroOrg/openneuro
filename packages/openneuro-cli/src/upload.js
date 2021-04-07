@@ -1,8 +1,7 @@
-import { fetch, Request } from 'fetch-h2'
+import { fetch, Request, AbortController } from 'fetch-h2'
 import cliProgress from 'cli-progress'
 import path from 'path'
 import inquirer from 'inquirer'
-import { AbortController } from 'abort-controller'
 import { createReadStream, promises as fs } from 'fs'
 import { uploads } from 'openneuro-client'
 import validate from 'bids-validator'
@@ -45,7 +44,7 @@ export const validation = (dir, validatorOptions, apmTransaction) => {
   const apmValidatePromiseSpan =
     apmTransaction && apmTransaction.startSpan('validatePromise')
   return validatePromise(dir, validatorOptions)
-    .then(function({ summary }) {
+    .then(function ({ summary }) {
       // eslint-disable-next-line no-console
       console.log(consoleFormat.summary(summary))
       apmValidatePromiseSpan.end()
@@ -176,6 +175,7 @@ export const uploadFiles = async ({
           Authorization: `Bearer ${token}`,
         },
         body: fileStream,
+        // @ts-expect-error - this is missing in the upstream type
         signal: controller.signal,
       },
     )

@@ -1,4 +1,4 @@
-import config from '../../../config'
+import { config } from '../config'
 import { uploads } from 'openneuro-client'
 
 /**
@@ -49,7 +49,7 @@ export const encodeFilePath = (file, options = { stripRelativePath: false }) =>
  * @param {number} options.endpoint Offset for upload endpoint
  * @param {Array<object>} options.filesToUpload Array of file objects
  * @param {string} options.token Credentials
- * @param {UploadProgress} options.uploadProgress Controller for reporting upload progress
+ * @param {import('./upload-progress-class').UploadProgress} options.uploadProgress Controller for reporting upload progress
  * @param {AbortController} options.abortController Fetch AbortController for halting uploads
  * @param {boolean} options.stripRelativePath True will remove the top-most directory name
  */
@@ -82,33 +82,7 @@ export async function uploadFiles({
     })
   })
 
-  // TODO - This is disabled due to Chrome bugs
-  // eslint-disable-next-line no-constant-condition
-  if ('BackgroundFetchManager' in self && false) {
-    // Verify the registration is ready
-    const swReg = await navigator.serviceWorker.ready
-    // If there is parallelism, the browser will handle it
-    const bgFetch = await swReg.backgroundFetch.fetch(uploadId, requests, {
-      title: `${datasetId} upload`,
-      uploadTotal: totalSize,
-    })
-    return new Promise((resolve, reject) => {
-      bgFetch.addEventListener('progress', () => {
-        const percent = Math.round(
-          (bgFetch.uploaded / bgFetch.uploadTotal) * 100,
-        )
-        console.log(`Upload progress: ${percent}%`)
-      })
-      bgFetch.addEventListener('backgroundfetchsuccess', bgFetchEvent => {
-        resolve()
-      })
-      bgFetch.addEventListener('backgroundfetchfail', bgFetchEvent => {
-        reject()
-      })
-    })
-  } else {
-    // No background fetch
-    // Parallelism is handled by the client in this case
-    return uploads.uploadParallel(requests, totalSize, uploadProgress)
-  }
+  // No background fetch
+  // Parallelism is handled by the client in this case
+  return uploads.uploadParallel(requests, totalSize, uploadProgress, fetch)
 }

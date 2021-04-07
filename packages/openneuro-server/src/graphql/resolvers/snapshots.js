@@ -6,7 +6,7 @@ import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
-import SnapshotModel from '../../models/snapshot.js'
+import SnapshotModel from '../../models/snapshot'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -99,7 +99,8 @@ export const participantCount = async () => {
     : null
 }
 
-const sortSnapshots = (a, b) => new Date(b.created) - new Date(a.created)
+const sortSnapshots = (a, b) =>
+  new Date(b.created).getTime() - new Date(a.created).getTime()
 
 export const latestSnapshot = (obj, _, context) => {
   return datalad.getSnapshots(obj.id).then(snapshots => {

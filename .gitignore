@@ -10,3 +10,6 @@ datalad-key
 content
 packages/openneuro-server/yarn.lock
 .docz
+dist
+.build-cache
+.ultra.cache.json

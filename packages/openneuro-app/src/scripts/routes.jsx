@@ -1,44 +1,17 @@
-// dependencies ----------------------------------------------------------
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import loadable from '@loadable/component'
 
-// wrap with loadable HOC
-const Dataset = loadable(() =>
-  import(/* webpackChunkName: 'Dataset' */ './datalad/dataset/dataset.jsx'),
-)
-const FrontPage = loadable(() =>
-  import(/* webpackChunkName: 'FrontPage' */ './front-page/front-page.jsx'),
-)
-const Admin = loadable(() =>
-  import(/* webpackChunkName: 'Admin' */ './admin/admin.jsx'),
-)
-const Dashboard = loadable(() =>
-  import(
-    /* webpackChunkName: 'Dashboard' */ './datalad/dashboard/dashboard.jsx'
-  ),
-)
-const Faq = loadable(() =>
-  import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),
-)
-const SearchResults = loadable(() =>
-  import(/* webpackChunkName: 'SearchResults' */ './search/search-results.tsx'),
-)
-const APIKey = loadable(() =>
-  import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),
-)
-const ErrorRoute = loadable(() =>
-  import(/* webpackChunkName: 'Errors' */ './errors/errorRoute.jsx'),
-)
-const PETDummy = loadable(() =>
-  import(/* webpackChunkName: 'PET' */ './pet/dummy.jsx'),
-)
-
-const Citation = loadable(() =>
-  import(/* webpackChunkName: 'Citation' */ './pages/citation-page.jsx'),
-)
-
-// routes ----------------------------------------------------------------
+// TODO - Re-enable code splitting these when we can
+import Dataset from './datalad/dataset/dataset'
+import FrontPage from './front-page/front-page'
+import Faq from './faq/faq'
+import Admin from './admin/admin'
+import Dashboard from './datalad/dashboard/dashboard'
+import SearchResults from './search/search-results'
+import APIKey from './user/api.jsx'
+import ErrorRoute from './errors/errorRoute'
+import PETDummy from './pet/dummy'
+import Citation from './pages/citation-page'
 
 const PublicDashboard = () => <Dashboard public />
 const SavedDashboard = () => <Dashboard saved />

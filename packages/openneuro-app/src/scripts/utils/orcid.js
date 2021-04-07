@@ -1,4 +1,4 @@
-import config from '../../../config'
+import { config } from '../config'
 import crn from './crn'
 
 const orcid = {
@@ -23,10 +23,8 @@ const orcid = {
   },
 
   getCurrentUser(callback) {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     const { orcid, access_token } = this.token
 
-    // eslint-disable-next-line @typescript-eslint/camelcase
     if (!orcid || !access_token) {
       callback(true, {
         token: null,
@@ -54,7 +52,6 @@ const orcid = {
 
   refresh(callback) {
     if (this.initialized) {
-      // eslint-disable-next-line @typescript-eslint/camelcase
       const { refresh_token } = this.token
 
       crn

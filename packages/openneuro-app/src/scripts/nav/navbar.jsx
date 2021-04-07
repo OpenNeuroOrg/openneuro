@@ -6,7 +6,7 @@ import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
 import LoginModal from '../common/partials/login.jsx'
-import { frontPage } from 'openneuro-content'
+import { frontPage } from '../front-page/front-page-content'
 import styled from '@emotion/styled'
 import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
 import {

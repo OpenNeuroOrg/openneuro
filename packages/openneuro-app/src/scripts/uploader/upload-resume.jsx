@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FileSelect from '../common/forms/file-select.jsx'
+import FileSelect from '../common/forms/file-select'
 import UploaderContext from './uploader-context.js'
 
 const UploadResume = ({ datasetId }) => (

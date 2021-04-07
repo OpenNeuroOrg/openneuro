@@ -18,8 +18,7 @@ import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
 import { sitemapHandler } from './handlers/sitemap.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
-
-import { version } from '../package.json'
+import { version } from './lerna.json'
 
 // test flag disables Sentry for tests
 export default test => {
@@ -84,8 +83,7 @@ export default test => {
     // Don't limit the max size for dataset uploads
     uploads: { maxFieldSize: Infinity },
     formatResponse: response => {
-      response.extensions.openneuro = { version }
-      return response
+      return { ...response, extensions: { openneuro: { version } } }
     },
   })
 

@@ -15,13 +15,14 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.5.0",
-    "apollo-link-retry": "^2.2.15",
-    "graphql-tag": "^2.10.3",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "apollo-link-retry": "^2.2.16",
+    "openneuro-client": "^3.30.0",
+    "ts-node": "^9.1.1",
+    "typescript": "4.0.6"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
+    "start": "tsc-watch -b --onSuccess 'node --enable-source-maps ./dist/index.js'",
     "openneuro-indexer": "ts-node --type-check src/index.ts"
   },
   "files": [

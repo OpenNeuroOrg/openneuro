@@ -27,7 +27,7 @@ describe('snapshot model operations', () => {
       mockingoose.resetAll()
       // Setup a default sequence value to return for each test
       mockingoose.Counter.toReturn(
-        { _id: 'dataset', sequence_value: 1 }, // eslint-disable-line @typescript-eslint/camelcase
+        { _id: 'dataset', sequence_value: 1 },
         'findOneAndUpdate',
       )
     })

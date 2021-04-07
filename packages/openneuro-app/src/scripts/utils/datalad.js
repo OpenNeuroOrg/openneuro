@@ -1,9 +1,9 @@
-import config from '../../../config'
+import { config } from '../config'
 import { createClient, datasets } from 'openneuro-client'
-import packageJson from '../../../package.json'
+import { version } from '../../lerna.json'
 
 const client = createClient(`${config.url}/crn/graphql`, {
-  clientVersion: packageJson.version,
+  clientVersion: version,
 })
 export default {
   //Analytics

@@ -53,17 +53,21 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
   if (refreshToken && !(profileUpdate instanceof Error))
     profileUpdate.refresh = encrypt(refreshToken)
 
-  // Look for an existing user
-  User.findOneAndUpdate(
-    {
-      provider: profile.provider,
-      $or: [{ providerId: profile.id }, { providerId: profileUpdate.email }],
-    },
-    profileUpdate,
-    { upsert: true, new: true, setDefaultsOnInsert: true },
-  )
-    .then(user => done(null, addJWT(config)(user)))
-    .catch(err => done(err, null))
+  if ('email' in profileUpdate) {
+    // Look for an existing user
+    User.findOneAndUpdate(
+      {
+        provider: profile.provider,
+        $or: [{ providerId: profile.id }, { providerId: profileUpdate.email }],
+      },
+      profileUpdate,
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+    )
+      .then(user => done(null, addJWT(config)(user)))
+      .catch(err => done(err, null))
+  } else {
+    done(profileUpdate, null)
+  }
 }
 
 export const verifyORCIDUser = (

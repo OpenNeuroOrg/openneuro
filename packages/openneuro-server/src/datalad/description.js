@@ -19,7 +19,7 @@ export const defaultDescription = {
 /**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
- * @returns {(files: [Object]) => Promise} Promise resolving to dataset_description.json contents or defaults
+ * @returns {(files: [Record<string, unknown>]) => Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
  */
 export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')
@@ -125,7 +125,7 @@ export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/description`
   return request
     .post(url)
-    .send({ description_fields: descriptionFieldUpdates }) // eslint-disable-line @typescript-eslint/camelcase
+    .send({ description_fields: descriptionFieldUpdates })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
     .then(res => {

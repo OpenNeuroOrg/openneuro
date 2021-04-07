@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
-import { Query } from '@apollo/client/react/components'
+import { gql, useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
@@ -22,7 +21,8 @@ import DatasetCitation from '../fragments/dataset-citation.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_FIELDS } from '../dataset/dataset-query-fragments.js'
 import schemaGenerator from '../../utils/json-ld.js'
-import useMedia from '../../mobile/media-hook.jsx'
+import { Media } from '../../styles/media'
+import { MobileClass } from './mobile-class'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
@@ -34,32 +34,30 @@ const getSnapshotDetails = gql`
   ${SNAPSHOT_FIELDS}
 `
 
-const SnapshotContent = ({ dataset, tag }) => (
-  <Query
-    query={getSnapshotDetails}
-    variables={{
+const SnapshotContent = ({ dataset, tag }) => {
+  const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
+    variables: {
       datasetId: dataset.id,
       tag,
-    }}>
-    {({ loading, error, data, fetchMore }) => {
-      if (loading) {
-        return <Spinner text="Loading Snapshot" active />
-      } else if (error) {
-        throw new Error(error)
-      } else {
-        return (
-          <DatasetQueryContext.Provider
-            value={{
-              datasetId: dataset.id,
-              fetchMore,
-            }}>
-            <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
-          </DatasetQueryContext.Provider>
-        )
-      }
-    }}
-  </Query>
-)
+    },
+  })
+  if (loading) {
+    return <Spinner text="Loading Snapshot" active />
+  } else if (error) {
+    throw new Error(error.toString())
+  } else {
+    return (
+      <DatasetQueryContext.Provider
+        value={{
+          datasetId: dataset.id,
+          fetchMore,
+          error: null,
+        }}>
+        <SnapshotDetails dataset={dataset} snapshot={data.snapshot} />
+      </DatasetQueryContext.Provider>
+    )
+  }
+}
 
 SnapshotContent.propTypes = {
   dataset: PropTypes.object,
@@ -67,11 +65,9 @@ SnapshotContent.propTypes = {
 }
 
 const SnapshotDetails = ({ dataset, snapshot }) => {
-  const isMobile = useMedia('(max-width: 765px) ')
-  const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   return (
     <span>
-      <div className={mobileClass}>
+      <MobileClass>
         <Helmet>
           <title>
             {snapshot.description.Name} - Snapshot {snapshot.tag} - {pageTitle}
@@ -93,32 +89,30 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           views={snapshot.analytics.views}
           snapshot
         />
-        {!isMobile && <DownloadButton dataset={dataset} />}
-        {isMobile && (
-          <Validation
-            datasetId={dataset.id}
-            issues={snapshot.issues}
-            isMobile={isMobile}
-          />
-        )}
+        <Media greaterThanOrEqual="medium">
+          <DownloadButton dataset={dataset} />
+        </Media>
+        <Media at="small">
+          <Validation datasetId={dataset.id} issues={snapshot.issues} />
+        </Media>
         <DatasetSummary datasetId={dataset.id} summary={snapshot.summary} />
         <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
         <DatasetDescription
           datasetId={dataset.id}
           description={snapshot.description}
-          editable={false}
+          editMode={false}
         />
         <h2>How To Cite</h2>
-        <DatasetCitation datasetId={dataset.id} snapshot={snapshot} />
+        <DatasetCitation snapshot={snapshot} />
         <h5>
           <Link to="/cite">More citation info</Link>
         </h5>
-      </div>
-      <div className={mobileClass}>
-        {!isMobile && (
+      </MobileClass>
+      <MobileClass>
+        <Media greaterThanOrEqual="medium">
           <Validation datasetId={dataset.id} issues={snapshot.issues} />
-        )}
+        </Media>
         <DatasetFiles
           datasetId={dataset.id}
           snapshotTag={snapshot.tag}
@@ -126,7 +120,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           files={snapshot.files}
         />
         <DatasetGitHash gitHash={snapshot.hexsha} />
-      </div>
+      </MobileClass>
     </span>
   )
 }

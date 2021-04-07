@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import GoogleButton from './google-button.jsx'
 import OrcidButton from './orcid-button.jsx'
 import GlobusButton from './globus-button.jsx'
-import config from '../../../config'
+import { config } from '../config'
 
 /**
  * Display a button for each enabled authentication mechanism

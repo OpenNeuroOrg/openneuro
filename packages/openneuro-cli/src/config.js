@@ -2,7 +2,7 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import findConfig from 'find-config'
-import jwt_decode from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
 
 /**
  * Get the nearest working configuration
@@ -49,11 +49,11 @@ export const getToken = () => {
 
 /**
  * Get the user object from the configured token
- * @returns {object}
+ * @returns {any}
  */
 export const getUser = () => {
   const token = getToken()
-  return jwt_decode(token)
+  return jwtDecode(token)
 }
 
 export const getUrl = () => {

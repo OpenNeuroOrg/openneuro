@@ -6,13 +6,13 @@ import PropTypes from 'prop-types'
 import { ApolloConsumer } from '@apollo/client'
 import * as gtag from '../utils/gtag'
 import UploaderContext from './uploader-context.js'
-import FileSelect from '../common/forms/file-select.jsx'
+import FileSelect from '../common/forms/file-select'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import { datasets, uploads } from 'openneuro-client'
 import { withRouter } from 'react-router-dom'
 import { uploadFiles } from './file-upload.js'
-import { UploadProgress } from './upload-progress.js'
+import { UploadProgress } from './upload-progress-class'
 import { addPathToFiles } from './add-path-to-files.js'
 
 /**
@@ -83,8 +83,8 @@ export class UploadClient extends React.Component {
   /**
    * Specify a dataset to resume upload for
    * @param {string} datasetId
-   * @param {string} path Optional path to prefix all files with
-   * @param {boolean} stripRelativePath Don't strip the first path (useful for adding directories)
+   * @param {string} [path] Optional path to prefix all files with
+   * @param {boolean} [stripRelativePath] Don't strip the first path (useful for adding directories)
    */
   resumeDataset = (datasetId, path, stripRelativePath) => {
     return ({ files }) => {
@@ -147,7 +147,7 @@ export class UploadClient extends React.Component {
       descriptionReader.onload = event => {
         try {
           // Read Name field from dataset_description.json
-          const description = JSON.parse(event.target.result)
+          const description = JSON.parse(event.target.result.toString())
           // Save description to state for writing later
           this.setState({ description })
           resolve(description.Name)

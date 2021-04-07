@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 // Camel case rule is disabled since ORCID API uses snake case variables
 import request from 'request'
 import xmldoc from 'xmldoc'
@@ -119,13 +118,7 @@ export default {
           res.body.access_token = `${orcid}:${access_token}`
 
           // Check if user has email
-          this.getProfile(res.body.access_token, err => {
-            if (err) {
-              callback(err)
-            } else {
-              callback(err, res.body)
-            }
-          })
+          this.getProfile(res.body.access_token)
         } else {
           callback(err, res.body)
         }

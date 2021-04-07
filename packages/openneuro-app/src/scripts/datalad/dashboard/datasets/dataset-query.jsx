@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Query } from '@apollo/client/react/components'
 import { datasets } from 'openneuro-client'
 import DatasetTab from './dataset-tab.jsx'
-import useMedia from '../../../mobile/media-hook.jsx'
 import ErrorBoundary from '../../../../scripts/errors/errorBoundary.jsx'
 
 export const updateQuery = (previousResult, { fetchMoreResult }) => {
@@ -27,7 +26,7 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
 
 /**
  * Load additional datasets based on next data cursor
- * @param {string} data Next data cursor
+ * @param {object} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
 const loadMoreRows = (data, fetchMore) => {
@@ -63,7 +62,7 @@ export const datasetQueryDisplay = (isPublic, isSaved) => ({
   fetchMore,
   refetch,
   variables,
-  error,
+  error = null,
 }) => {
   return (
     <DatasetTab
@@ -80,7 +79,6 @@ export const datasetQueryDisplay = (isPublic, isSaved) => ({
       refetch={refetch}
       queryVariables={variables}
       publicDashboard={isPublic}
-      isMobile={useMedia('(max-width: 765px) ')}
       savedDashboard={isSaved}
     />
   )

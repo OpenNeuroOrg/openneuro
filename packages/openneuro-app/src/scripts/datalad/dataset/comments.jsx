@@ -17,11 +17,7 @@ const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
         ? comment.replies.map(reply => commentMap[reply.id])
         : []
       return (
-        <Comment
-          key={comment.id}
-          datasetId={datasetId}
-          uploader={uploader}
-          data={comment}>
+        <Comment key={comment.id} datasetId={datasetId} data={comment}>
           {nextLevel.length ? (
             <CommentTree
               datasetId={datasetId}

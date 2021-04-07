@@ -14,7 +14,7 @@ import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset.js'
-import Snapshot from '../models/snapshot.js'
+import Snapshot from '../models/snapshot'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -91,8 +91,8 @@ const postSnapshot = async (
   const response = await request
     .post(createSnapshotUrl)
     .send({
-      description_fields: descriptionFieldUpdates, // eslint-disable-line @typescript-eslint/camelcase
-      snapshot_changes: snapshotChanges, // eslint-disable-line @typescript-eslint/camelcase
+      description_fields: descriptionFieldUpdates,
+      snapshot_changes: snapshotChanges,
     })
     .set('Accept', 'application/json')
     .set('Cookie', generateDataladCookie(config)(user))
@@ -106,6 +106,7 @@ const postSnapshot = async (
  * This is equivalent to `git tag` on the repository
  *
  * @param {string} datasetId Dataset accession number
+ * @returns {Promise<import('../models/snapshot').SnapshotDocument[]>}
  */
 export const getSnapshots = datasetId => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
@@ -142,7 +143,7 @@ const announceNewSnapshot = async (snapshot, datasetId, user) => {
  * @param {Object} user - User object that has made the snapshot request
  * @param {Object} descriptionFieldUpdates - Key/value pairs to update dataset_description.json
  * @param {Array<string>} snapshotChanges - Array of changes to inject into CHANGES file
- * @returns {Promise} - resolves when tag is created
+ * @returns {Promise<Snapshot>} - resolves when tag is created
  */
 export const createSnapshot = async (
   datasetId,
@@ -232,6 +233,7 @@ export const deleteSnapshot = (datasetId, tag) => {
  * Get the contents of a snapshot (files, git metadata) from datalad-service
  * @param {string} datasetId Dataset accession number
  * @param {string} tag Tag name to retrieve
+ * @returns {Snapshot}
  */
 export const getSnapshot = (datasetId, tag) => {
   const url = `${getDatasetWorker(

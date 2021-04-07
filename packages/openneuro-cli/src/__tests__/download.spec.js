@@ -33,11 +33,13 @@ describe('download.js', () => {
   })
   describe('checkDestination()', () => {
     it('throws an error on existing directories', () => {
-      expect(checkDestination('.')).toThrowErrorMatchingSnapshot()
+      expect(() =>
+        checkDestination('package.json'),
+      ).toThrowErrorMatchingSnapshot()
     })
   })
   describe('getDownloadMetadata()', () => {
-    it('fetches metdata on successful fetch', async () => {
+    it('fetches metadata on successful fetch', async () => {
       fetch.mockResponseOnce(JSON.stringify({}))
       await getDownloadMetadata('ds000testing', '1.0.0')
       expect(fetch).toHaveBeenCalledTimes(1)

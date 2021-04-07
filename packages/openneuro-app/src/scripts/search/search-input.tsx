@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 
-const SearchInput = (): React.SFC => {
+const SearchInput: React.FC = () => {
   const inputRef = useRef(null)
   const history = useHistory()
 
@@ -13,7 +13,8 @@ const SearchInput = (): React.SFC => {
     event.preventDefault()
     // Don't submit unless there's a value entered
     if (inputRef.current.value) {
-      history.push(`/search/${inputRef.current.value}`)
+      const value: string = inputRef.current.value
+      history.push(`/search/${value}`)
     }
   }
 

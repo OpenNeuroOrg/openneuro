@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch'
+import 'cross-fetch/polyfill'
 import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
@@ -36,10 +36,8 @@ export const testFile = (destination, filename, size) => {
   }
 }
 
-const getFetchOptions = () => ({
-  headers: {
-    cookie: `accessToken=${getToken()}`,
-  },
+const getFetchHeaders = () => ({
+  Authorization: `Bearer ${getToken()}`,
 })
 
 const handleFetchReject = err => {
@@ -56,10 +54,9 @@ const handleFetchReject = err => {
  */
 export const getDownloadMetadata = async (datasetId, tag) => {
   try {
-    const response = await fetch(
-      downloadUrl(getUrl(), datasetId, tag),
-      getFetchOptions(),
-    )
+    const response = await fetch(downloadUrl(getUrl(), datasetId, tag), {
+      headers: getFetchHeaders(),
+    })
     if (response.status === 200) {
       const body = await response.json()
       return body
@@ -92,18 +89,22 @@ export const downloadFile = async (
     mkdirp.sync(path.dirname(fullPath))
     const writeStream = fs.createWriteStream(fullPath)
     try {
-      const response = await fetch(fileUrl, getFetchOptions())
+      const response = await fetch(fileUrl, {
+        headers: getFetchHeaders(),
+      })
+      // @ts-expect-error
+      const stream = await response.readable()
       if (response.status === 200) {
         // Setup end/error handler with Promise interface
         const responsePromise = new Promise((resolve, reject) => {
-          response.body.on('end', () => resolve())
-          response.body.on('error', err => {
+          stream.on('end', () => resolve())
+          stream.on('error', err => {
             if (apmTransaction) apmTransaction.captureError(err)
             reject(err)
           })
         })
         // Start piping data
-        response.body.pipe(writeStream)
+        stream.pipe(writeStream)
         return responsePromise
       } else {
         console.error(

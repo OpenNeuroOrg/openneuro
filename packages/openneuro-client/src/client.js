@@ -1,24 +1,22 @@
 import 'cross-fetch/polyfill'
-import { ApolloClient } from 'apollo-client'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloLink, split, Observable } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  split,
+  Observable,
+  createHttpLink,
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 import semver from 'semver'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
 import * as uploads from './uploads'
-import * as utils from './utils'
 import datasetGenerator from './datasetGenerator.js'
-import { version } from '../package.json'
-
-const cache = new InMemoryCache({
-  freezeResults: true,
-})
 
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
@@ -141,21 +139,18 @@ const createLink = (uri, getAuthorization, fetch) => {
 
 /**
  * Setup a client for working with the OpenNeuro API
- *
- * @param {string} uri GraphQL API URI (passed to Apollo Client)
- * @param {object} options Optional extra configuration
- * @param {function} [options.getAuthorization] Synchronous authorization cookie factory
- * @param {function} [options.fetch] Fetch implementation
- * @param {string} [options.clientVersion] Client version to check automatically on requests
- * @param {Array<ApolloLink>} [options.links] Any extra links to compose
  */
-const createClient = (uri, options = {}) => {
-  const {
-    getAuthorization = null,
-    fetch = null,
-    clientVersion = version,
+const createClient = (
+  uri,
+  {
+    getAuthorization = undefined,
+    fetch = undefined,
+    clientVersion = undefined,
     links = [],
-  } = options
+    ssrMode = false,
+    cache = undefined,
+  } = {},
+) => {
   // createLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),
@@ -166,12 +161,13 @@ const createClient = (uri, options = {}) => {
   const apolloClientOptions = {
     uri,
     link: composedLink,
-    cache,
+    cache: cache || new InMemoryCache(),
     connectToDevTools: true,
+    ssrMode,
   }
 
   // TODO: Figure this out?
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: This actually works but seems to be a typing error somewhere in Apollo
   return new ApolloClient(apolloClientOptions)
 }
@@ -184,5 +180,4 @@ export {
   datasetGenerator,
   createClient,
   uploads,
-  utils,
 }

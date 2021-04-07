@@ -77,6 +77,7 @@ ErrorBoundary.propTypes = {
 
 // specific use case
 // ignore error in apollo lib
+// @ts-expect-error
 class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
   constructor(props) {
     super(props)

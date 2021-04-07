@@ -1,4 +1,3 @@
-import path from 'path'
 import { datasets } from 'openneuro-client'
 
 /**

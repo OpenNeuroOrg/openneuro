@@ -111,18 +111,21 @@ const refreshToken = async jwt => {
 
 // attach user obj to request based on jwt
 // if user does not exist, continue
-export const authenticate = async (req, res, next) => {
-  const jwt = parsedJwtFromRequest(req)
-  if (jwt && Date.now() > jwt.exp * 1000) {
-    const token = await refreshToken(jwt)
-    if (token) {
-      req.cookies.accessToken = token
-      res.cookie('accessToken', token, { sameSite: 'Strict' })
+export const authenticate = (req, res, next) => {
+  const authenticateAsync = async () => {
+    const jwt = parsedJwtFromRequest(req)
+    if (jwt && Date.now() > jwt.exp * 1000) {
+      const token = await refreshToken(jwt)
+      if (token) {
+        req.cookies.accessToken = token
+        res.cookie('accessToken', token, { sameSite: 'Strict' })
+      }
     }
+    passport.authenticate('jwt', { session: false }, (err, user) => {
+      req.login(user, { session: false }, () => next())
+    })(req, res, next)
   }
-  passport.authenticate('jwt', { session: false }, (err, user) => {
-    req.login(user, { session: false }, () => next())
-  })(req, res, next)
+  authenticateAsync()
 }
 
 export const authSuccessHandler = (req, res, next) => {

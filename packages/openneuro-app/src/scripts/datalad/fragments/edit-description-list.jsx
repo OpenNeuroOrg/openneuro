@@ -3,6 +3,7 @@ import UpdateDescription from '../mutations/description.jsx'
 import CancelButton from './cancel-button.jsx'
 import EditButton from './edit-button.jsx'
 import EditList from './edit-list.jsx'
+import { Media } from '../../styles/media'
 
 const EditDescriptionList = ({
   datasetId,
@@ -10,7 +11,6 @@ const EditDescriptionList = ({
   field,
   children,
   editMode,
-  isMobile,
 }) => {
   const [editing, setEditing] = useState(false)
   const [rows, setRows] = useState(description[field] || [])
@@ -36,9 +36,11 @@ const EditDescriptionList = ({
     return (
       <>
         {children}
-        {editMode && !isMobile ? (
-          <EditButton action={() => setEditing(true)} />
-        ) : null}
+        {editMode && (
+          <Media greaterThanOrEqual="medium">
+            <EditButton action={() => setEditing(true)} />
+          </Media>
+        )}
       </>
     )
   }

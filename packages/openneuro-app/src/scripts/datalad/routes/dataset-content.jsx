@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import EditDescriptionField from '../fragments/edit-description-field.jsx'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings'
@@ -22,8 +23,9 @@ import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
-import useMedia from '../../mobile/media-hook.jsx'
 import styled from '@emotion/styled'
+import { Media } from '../../styles/media'
+import { MobileClass } from './mobile-class'
 
 const MarginBottomDiv = styled.div`
   margin-bottom: 0.5em;
@@ -79,12 +81,11 @@ HasBeenPublished.propTypes = {
  * Data routing for the main dataset query to display/edit components
  */
 export const DatasetContent = ({ dataset }) => {
-  const isMobile = useMedia('(max-width: 765px) ')
-  const user = getProfile()
+  const [cookies] = useCookies()
+  const user = getProfile(cookies)
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
-  const mobileClass = isMobile ? 'mobile-class' : 'col-xs-6'
   const hasDraftChanges =
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
@@ -105,13 +106,12 @@ export const DatasetContent = ({ dataset }) => {
           hasDraftChanges={hasDraftChanges}
           hasSnapshot={!!dataset.snapshots.length}
         />
-        <div className={mobileClass}>
+        <MobileClass>
           <EditDescriptionField
             datasetId={dataset.id}
             field="Name"
             description={dataset.draft.description}
-            editMode={hasEdit}
-            isMobile={isMobile}>
+            editMode={hasEdit}>
             <DatasetTitle title={dataset.draft.description.Name} />
           </EditDescriptionField>
           <DatasetUploaded
@@ -126,14 +126,12 @@ export const DatasetContent = ({ dataset }) => {
             downloads={dataset.analytics.downloads}
             views={dataset.analytics.views}
           />
-          {!isMobile && <DatasetProminentLinks dataset={dataset} />}
-          {isMobile && (
-            <Validation
-              datasetId={dataset.id}
-              issues={dataset.draft.issues}
-              isMobile={isMobile}
-            />
-          )}
+          <Media greaterThanOrEqual="medium">
+            <DatasetProminentLinks dataset={dataset} />
+          </Media>
+          <Media at="small">
+            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+          </Media>
           <DatasetSummary
             datasetId={dataset.id}
             summary={dataset.draft.summary}
@@ -143,8 +141,7 @@ export const DatasetContent = ({ dataset }) => {
             <EditReadme
               datasetId={dataset.id}
               content={dataset.draft.readme}
-              hasEdit={hasEdit}
-              isMobile={isMobile}>
+              hasEdit={hasEdit}>
               <DatasetReadme content={dataset.draft.readme} />
             </EditReadme>
           </ErrorBoundary>
@@ -152,19 +149,19 @@ export const DatasetContent = ({ dataset }) => {
             datasetId={dataset.id}
             description={dataset.draft.description}
             editMode={hasEdit}
-            isMobile={isMobile}
           />
-        </div>
-        <div className={mobileClass}>
-          {!isMobile &&
-            (dataset.draft.files.length === 0 ? (
+        </MobileClass>
+        <MobileClass>
+          <Media greaterThanOrEqual="medium">
+            {dataset.draft.files.length === 0 ? (
               <IncompleteDataset datasetId={dataset.id} />
             ) : (
               <Validation
                 datasetId={dataset.id}
                 issues={dataset.draft.issues}
               />
-            ))}
+            )}
+          </Media>
           {hasEdit && (
             <DatasetGitAccess datasetId={dataset.id} worker={dataset.worker} />
           )}
@@ -175,12 +172,14 @@ export const DatasetContent = ({ dataset }) => {
             editMode={hasEdit}
           />
           <DatasetGitHash gitHash={dataset.draft.head} />
-        </div>
+        </MobileClass>
       </LoggedIn>
       {dataset.snapshots && !hasEdit && (
         <Redirect
-          to={`/datasets/${dataset.id}/versions/${dataset.snapshots.length &&
-            dataset.snapshots[dataset.snapshots.length - 1].tag}`}
+          to={`/datasets/${dataset.id}/versions/${
+            dataset.snapshots.length &&
+            dataset.snapshots[dataset.snapshots.length - 1].tag
+          }`}
         />
       )}
     </>

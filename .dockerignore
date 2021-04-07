@@ -4,6 +4,7 @@
 **/dist
 **/.eslintcache
 **/__pycache__
+.build-cache
 .github
 .vscode
 coverage
@@ -17,3 +18,4 @@ services/datalad/node_modules
 config.env.example
 LICENSE
 README.md
+yarn-error.log

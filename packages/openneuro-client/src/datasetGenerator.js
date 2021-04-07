@@ -2,7 +2,7 @@ import { getDatasets } from './datasets.js'
 
 /**
  * Iterator over all public datasets associated with a client connection
- * @param {import('apollo-client').ApolloClient} client
+ * @param {import('@apollo/client').ApolloClient} client
  * @param {*} query
  */
 export default async function* datasetGenerator(client, query = getDatasets) {

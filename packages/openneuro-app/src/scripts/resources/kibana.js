@@ -1,4 +1,4 @@
-import config from '../../../config.js'
+import { config } from '../config'
 
 /**
  * Extract kibana deployment uri from ELASTICSEARCH_CLOUD_ID (prod/staging)
@@ -10,7 +10,7 @@ export const getKibanaURL = config => {
     const ELASTICSEARCH_CLOUD_ID = config.elasticsearch.cloudID
     const base64 = /:(.+?==)$/.exec(ELASTICSEARCH_CLOUD_ID)[1]
     const decoded = atob(base64)
-    const [_, hostname, deploymentId] = /^(.+?)\$.+?\$(.+?)$/.exec(decoded)
+    const [, hostname, deploymentId] = /^(.+?)\$.+?\$(.+?)$/.exec(decoded)
     return `https://${deploymentId}.${hostname}:9243/app/discover#/`
   } else {
     return 'http://localhost:5601/app/discover#/'

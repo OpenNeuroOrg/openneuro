@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Markdown from 'react-markdown'
-import { faq } from 'openneuro-content'
+import { faq } from './faq-content'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../resources/strings.js'
 
@@ -16,7 +16,7 @@ class Faq extends React.Component {
           <Markdown source={item.faq} className="panel-heading" />
           <div className="panel-body">
             <span>
-              <Markdown source={item.faq_answer} />
+              <Markdown source={item.answer} />
             </span>
           </div>
         </div>

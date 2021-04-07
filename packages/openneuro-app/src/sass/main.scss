@@ -1,24 +1,24 @@
 $bootstrap-sass-asset-helper: true;
 //base ====================================================================
-@import 'bootstrap';
+@import './bootstrap';
 // Always required /_properties if not importing all animate/animate.scss
-@import 'animate/properties';
+@import './animate/properties';
 
 // react-toastify
-@import '~react-toastify/dist/ReactToastify.css';
+@import 'react-toastify/dist/ReactToastify.css';
 
 // react-virtualized
-@import '~react-virtualized/styles.css';
+@import 'react-virtualized/styles.css';
 
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
 // animations ============================================================
-@import 'animate/_fading-entrances/fading-entrances';
-@import 'animate/_sliding-entrances/sliding-entrances';
-@import 'animate/_sliding-exits/sliding-exits';
-@import 'animate/_flippers/flippers';
-@import 'animate/_attention-seekers/flash';
+@import './animate/_fading-entrances/fading-entrances';
+@import './animate/_sliding-entrances/sliding-entrances';
+@import './animate/_sliding-exits/sliding-exits';
+@import './animate/_flippers/flippers';
+@import './animate/_attention-seekers/flash';
 
 //openneuro SASS ================================================================
 @import './crn_app/colors';

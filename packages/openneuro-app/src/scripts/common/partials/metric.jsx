@@ -6,7 +6,7 @@ import Tooltip from './tooltip.jsx'
 
 // component setup -----------------------------------------------------------
 
-export default class Metric extends React.PureComponent {
+class Metric extends React.PureComponent {
   // lifecycle events ----------------------------------------------------------
   render() {
     if (!this.props.display) {
@@ -65,7 +65,9 @@ export default class Metric extends React.PureComponent {
 
 Metric.propTypes = {
   type: PropTypes.string,
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   display: PropTypes.bool,
   snapshot: PropTypes.bool,
 }
+
+export default Metric

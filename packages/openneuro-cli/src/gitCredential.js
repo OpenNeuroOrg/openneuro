@@ -1,6 +1,6 @@
 import readline from 'readline'
 import { configuredClient } from './configuredClient.js'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 const prepareRepoAccess = gql`
   mutation prepareRepoAccess($datasetId: ID!) {
@@ -23,7 +23,13 @@ export function getRepoToken(datasetId) {
     .then(({ data }) => data.prepareRepoAccess.token)
 }
 
+/**
+ * @typedef {Object} Credential
+ * @property {string} [path]
+ */
+
 export function gitCredential() {
+  /** @type {Credential} */
   const credential = {}
   const stdin = readline.createInterface({
     input: process.stdin,

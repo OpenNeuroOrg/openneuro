@@ -23,6 +23,8 @@ const UploaderStatusRoutes = props => (
 
 UploaderStatusRoutes.propTypes = {
   location: PropTypes.object,
+  setLocation: PropTypes.func,
+  footer: PropTypes.element,
 }
 
 export default UploaderStatusRoutes

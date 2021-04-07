@@ -1,6 +1,6 @@
 import React from 'react'
-import { useSubscription } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useSubscription, gql } from '@apollo/client'
+
 import { toast } from 'react-toastify'
 import ToastContent from '../../common/partials/toast-content.jsx'
 

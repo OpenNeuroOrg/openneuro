@@ -2,5 +2,10 @@
 /packages/*/node_modules
 /packages/*/coverage
 /packages/*/dist
+__mocks__
+*.spec.js
+*.spec.jsx
+*.spec.ts
+*.spec.tsx
 jestsetup.js
 papaya.js

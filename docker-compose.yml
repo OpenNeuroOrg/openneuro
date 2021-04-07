@@ -3,7 +3,6 @@ version: "2.3"
 
 # shared volumes
 volumes:
-  project:
   yarn_cache:
   webpack_cache:
 
@@ -18,27 +17,28 @@ services:
     working_dir: /srv
     volumes:
       - yarn_cache:/usr/local/share/.cache
-      - project:/srv/packages/openneuro-app/dist
 
   # web app bundle build
   app:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-app
-    command: yarn start
+    command: ./vite-env.sh
     volumes:
       - webpack_cache:/webpack-cache
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
     ports:
       - "8145:8145"
+      - "9992:9992"
 
   # crn node server
   server:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-server
-    command: yarn ts-node-dev --respawn --transpile-only src/server.js
+    command: yarn start
     volumes:
+      - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
       - ./packages/openneuro-server/src:/srv/packages/openneuro-server/src
     depends_on:
       - redis
@@ -50,7 +50,8 @@ services:
   indexer:
     extends:
       service: node
-    command: yarn ts-node /srv/packages/openneuro-indexer/src/index.ts
+    working_dir: /srv/packages/openneuro-indexer
+    command: yarn start
     depends_on:
       - server
       - elasticsearch

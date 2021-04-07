@@ -1,5 +1,5 @@
-import { useSubscription } from '@apollo/client'
-import gql from 'graphql-tag'
+import { useSubscription, gql } from '@apollo/client'
+
 import { PERMISSION_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const PERMISSIONS_SUBSCRIPTION = gql`

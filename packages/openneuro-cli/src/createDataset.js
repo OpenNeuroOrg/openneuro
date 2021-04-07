@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import inquirer from 'inquirer'
 import { getUrl } from './config.js'
 import { configuredClient } from './configuredClient.js'

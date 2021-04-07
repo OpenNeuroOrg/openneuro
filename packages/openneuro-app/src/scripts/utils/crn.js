@@ -1,5 +1,5 @@
 import request from './request'
-import config from '../../../config'
+import { config } from '../config'
 
 /**
  * CRN
@@ -10,6 +10,6 @@ import config from '../../../config'
 export default {
   // API Key ----------------------------------------------------------------------
   createAPIKey() {
-    return request.post(config.crn.url + 'keygen', {})
+    return request.post(config.api + 'keygen', {})
   },
 }

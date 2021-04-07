@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "../../.build-cache/app.tsbuildinfo"
+  },
+  "include": ["./src"],
+  "files": ["./src/lerna.json"],
+  "references": [{ "path": "../openneuro-client" }]
+}

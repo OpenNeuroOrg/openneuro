@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, useLocation } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import snapshotVersion from '../snapshotVersion.js'
 import parseISO from 'date-fns/parseISO'
 import format from 'date-fns/format'
@@ -51,9 +52,10 @@ SidebarRow.propTypes = {
 }
 
 const LeftSidebar = ({ dataset, datasetId, draftModified, snapshots }) => {
+  const [cookies] = useCookies()
   const location = useLocation()
   const active = snapshotVersion(location) || 'draft'
-  const user = getProfile()
+  const user = getProfile(cookies)
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)

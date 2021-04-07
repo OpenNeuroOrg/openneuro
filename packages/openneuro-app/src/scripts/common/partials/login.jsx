@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal } from '../../utils/modal.jsx'
 import { Panel } from 'react-bootstrap'
 import AuthenticationButtons from '../../authentication/buttons.jsx'
-import { frontPage } from 'openneuro-content'
+import { frontPage } from '../../front-page/front-page-content'
 
 const InfoPanel = ({ show, toggle }) => {
   if (!show) {
@@ -31,8 +31,8 @@ InfoPanel.propTypes = {
 }
 
 class Login extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = { infoPanel: false }
     this.toggleInfoPanel = this._toggleInfoPanel.bind(this)
   }
