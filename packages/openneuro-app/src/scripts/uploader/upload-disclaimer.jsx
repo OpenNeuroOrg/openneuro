@@ -65,7 +65,7 @@ const UploadDisclaimer = () => {
               className="fileupload-btn btn-blue"
               onClick={() => {
                 uploader.captureMetadata({
-                  ...uploader.metdata,
+                  ...uploader.metadata,
                   affirmedDefaced,
                   affirmedConsent,
                 })
