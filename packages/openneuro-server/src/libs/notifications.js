@@ -397,13 +397,13 @@ const notifications = {
       Notification.findOneAndUpdate(
         { notificationLock: { $lte: toDate(subHours(Date.now(), 1)) } },
         { $set: { notificationLock: Date.now() } },
-      ).exec((err, docs) => {
+      ).exec((err, notification) => {
         if (err) {
           console.log(
             'NOTIFICATION ERROR - Could not find notifications collection',
           )
         } else {
-          for (const notification of docs) {
+          if (notification) {
             notifications.send(notification, (err, response) => {
               if (!err) {
                 notification.remove()
