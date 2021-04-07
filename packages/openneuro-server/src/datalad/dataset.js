@@ -24,6 +24,7 @@ import Subscription from '../models/subscription.js'
 import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
 import { getDatasetWorker } from '../libs/datalad-service'
+import notifications from '../libs/notifications'
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: 'admin' })
@@ -59,6 +60,7 @@ export const createDataset = async (
     await md.save()
     await giveUploaderPermission(datasetId, uploader)
     await subscriptions.subscribe(datasetId, uploader)
+    await notifications.snapshotReminder(datasetId)
     return ds
   } catch (e) {
     // eslint-disable-next-line

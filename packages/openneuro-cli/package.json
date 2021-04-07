@@ -1,7 +1,7 @@
 {
   "name": "openneuro-cli",
-  "version": "3.30.0",
-  "description": "OpenNeuro command line tools.",
+  "version": "3.31.0",
+  "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "engines": {
@@ -22,14 +22,14 @@
     "cli-progress": "^3.8.2",
     "commander": "^2.15.1",
     "cross-fetch": "^3.0.5",
-    "elastic-apm-node": "^3.12.1",
+    "elastic-apm-node": "3.12.1",
     "esm": "^3.0.16",
     "fetch-h2": "^2.5.1",
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^3.30.0"
+    "openneuro-client": "^3.31.0"
   },
   "scripts": {
     "build": "tsc -b",

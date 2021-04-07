@@ -20,7 +20,7 @@ export interface OpenNeuroConfig {
       clientID: string
     }
   }
-  analytics?: { trackingId: string }
+  analytics?: { trackingIds: string }
   sentry?: { environment: string }
   support?: {
     url: string

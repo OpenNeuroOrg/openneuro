@@ -14,7 +14,7 @@ import Index from './scripts/index'
 import analyticsWrapper from './scripts/utils/analytics'
 import { version } from './lerna.json'
 import { config } from './scripts/config'
-import * as GoogleAnalytics from 'react-ga'
+import * as gtag from './scripts/utils/gtag'
 
 if (
   config.sentry.environment === 'production' ||
@@ -36,7 +36,7 @@ if (
   })
 }
 
-GoogleAnalytics.initialize(config.analytics.trackingId)
+gtag.initialize(config.analytics.trackingIds)
 
 Sentry.init({
   dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',

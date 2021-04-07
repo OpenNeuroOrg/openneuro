@@ -31,13 +31,26 @@ const MarginBottomDiv = styled.div`
   margin-bottom: 0.5em;
 `
 
-export const HasBeenPublished = ({ isPrivate, datasetId, hasDraftChanges }) =>
+export const HasBeenPublished = ({
+  isPrivate,
+  datasetId,
+  hasDraftChanges,
+  hasSnapshot,
+}) =>
   isPrivate ? (
-    <MarginBottomDiv className="alert alert-warning">
-      <strong>This dataset has not been published!</strong>{' '}
-      <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link> to
-      make all snapshots available publicly.
-    </MarginBottomDiv>
+    hasSnapshot ? (
+      <MarginBottomDiv className="alert alert-warning">
+        <strong>This dataset has not been published!</strong>{' '}
+        <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link>{' '}
+        to make all snapshots available publicly.
+      </MarginBottomDiv>
+    ) : (
+      <MarginBottomDiv className="alert alert-warning">
+        <strong>This dataset has not been published!</strong> Before it can be
+        published, please{' '}
+        <Link to={`/datasets/${datasetId}/snapshot`}>create a snapshot</Link>.
+      </MarginBottomDiv>
+    )
   ) : hasDraftChanges ? (
     <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has been published!</strong> There are currently
@@ -61,6 +74,7 @@ HasBeenPublished.propTypes = {
   isPrivate: PropTypes.bool,
   datasetId: PropTypes.string,
   hasDraftChanges: PropTypes.bool,
+  hasSnapshot: PropTypes.bool,
 }
 
 /**
@@ -76,6 +90,7 @@ export const DatasetContent = ({ dataset }) => {
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
+
   return (
     <>
       <LoggedIn>
@@ -89,6 +104,7 @@ export const DatasetContent = ({ dataset }) => {
           isPrivate={!dataset.public}
           datasetId={dataset.id}
           hasDraftChanges={hasDraftChanges}
+          hasSnapshot={!!dataset.snapshots.length}
         />
         <MobileClass>
           <EditDescriptionField

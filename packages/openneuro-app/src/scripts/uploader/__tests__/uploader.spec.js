@@ -4,8 +4,6 @@ import { UploadClient } from '../uploader.jsx'
 import { JSDOM } from 'jsdom'
 const { window } = new JSDOM('', { runScripts: 'outside-only' })
 
-jest.mock('react-ga')
-
 // Stub constructor for File-like objects with webkitRelativePath
 function TestFile(body, name, webkitRelativePath) {
   const file = new window.Blob(body)

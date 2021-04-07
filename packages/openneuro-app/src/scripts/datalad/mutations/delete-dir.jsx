@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
-const DELETE_FILES = gql`
+export const DELETE_FILES = gql`
   mutation deleteFiles($datasetId: ID!, $path: String!) {
     deleteFiles(datasetId: $datasetId, path: $path)
   }

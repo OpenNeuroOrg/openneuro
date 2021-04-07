@@ -4,7 +4,7 @@ import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from '@apollo/client'
-import * as ReactGA from 'react-ga'
+import * as gtag from '../utils/gtag'
 import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select'
 import { locationFactory } from './uploader-location.js'
@@ -76,7 +76,7 @@ export class UploadClient extends React.Component {
    * @param {string} path Virtual router path for upload modal
    */
   setLocation = path => {
-    ReactGA.pageview(path)
+    gtag.pageview(path)
     this.setState({ location: locationFactory(path) })
   }
 
@@ -185,7 +185,7 @@ export class UploadClient extends React.Component {
 
   upload = ({ affirmedDefaced, affirmedConsent }) => {
     // Track the start of uploads
-    ReactGA.event({
+    gtag.event({
       category: 'Upload',
       action: 'Started web upload',
       label: this.state.datasetId,
@@ -242,11 +242,7 @@ export class UploadClient extends React.Component {
     if (hasChanges) return files
 
     // Construct the initial CHANGES file and add to the files array
-    const snapshotText = 'Initial snapshot'
-    const date = new Date().toISOString().split('T')[0]
-    const versionString = '1.0.0'
-    const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
-    const initialChangesFile = new Blob([initialChangesContent], {
+    const initialChangesFile = new Blob([], {
       type: 'text/plain',
     })
     initialChangesFile.name = 'CHANGES'
@@ -327,7 +323,7 @@ export class UploadClient extends React.Component {
 
   uploadCompleteAction = () => {
     // Record upload finished successfully with Google Analytics
-    ReactGA.event({
+    gtag.event({
       category: 'Upload',
       action: 'Finished web upload',
       label: this.state.datasetId,

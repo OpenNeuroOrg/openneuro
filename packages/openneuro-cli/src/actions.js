@@ -61,7 +61,7 @@ const uploadDataset = async (
   const apmTransaction = apm && apm.startTransaction('upload', 'custom')
   apmTransaction.addLabels({ datasetId })
   const client = configuredClient()
-  await validation(dir, validatorOptions)
+  await validation(dir, validatorOptions, apmTransaction)
   let remoteFiles = []
   if (datasetId) {
     // Check for dataset -> validation -> upload
@@ -181,7 +181,7 @@ export const upload = (dir, cmd) => {
             message: 'This will create a new dataset, continue?',
           },
           {
-            type: 'checkbox',
+            type: 'list',
             name: 'affirmed',
             message: 'Please affirm one of the following:',
             choices: [
