@@ -1,7 +1,10 @@
-image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker
+variables:
+  DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": "$DOCKER_AUTH" } }}'
+
+image: docker
 
 services:
-  - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind
+  - docker:dind
 
 stages:
   - dependencies
