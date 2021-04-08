@@ -66,7 +66,7 @@ async function createServer(): Promise<void> {
         //    required, and provides efficient invalidation similar to HMR.
         const { render } = development
           ? await vite.ssrLoadModule('/server.jsx')
-          : require('dist/server/server.js')
+          : require('src/dist/server/server.js')
 
         // 4. render the app HTML. This assumes entry-server.js's exported `render`
         //    function calls appropriate framework SSR APIs,
