@@ -1,6 +1,6 @@
 {
   "name": "openneuro-indexer",
-  "version": "3.32.1-alpha.1",
+  "version": "3.32.1-alpha.2",
   "description": "OpenNeuro elastic search indexing tool",
   "main": "./dist/index.js",
   "types": "./src/index.d.ts",
@@ -16,7 +16,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.5.0",
     "apollo-link-retry": "^2.2.16",
-    "openneuro-client": "^3.32.1-alpha.1",
+    "openneuro-client": "^3.32.1-alpha.2",
     "ts-node": "^9.1.1",
     "typescript": "4.0.6"
   },
@@ -27,5 +27,6 @@
   },
   "files": [
     "lib/**/*"
-  ]
+  ],
+  "gitHead": "4790a16e91f811603c05b483dbcfaa998e0a450f"
 }
