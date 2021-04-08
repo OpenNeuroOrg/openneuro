@@ -53,7 +53,9 @@ async function createServer(): Promise<void> {
 
       try {
         // 1. Read index.html
-        const index = development ? 'index.html' : 'dist/client/index.html'
+        const index = development
+          ? 'index.html'
+          : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
         // 2. Apply vite HTML transforms. This injects the vite HMR client, and
