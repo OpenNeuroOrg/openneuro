@@ -14,7 +14,7 @@ environment: staging
 freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
 
 # Enable Google Analytics
-googleTrackingId: UA-100754266-1
+googleTrackingIds: 'UA-100754266-1,G-K092KXB4WL'
 
 # AWS TLS Certificate ARN
 certifcateArn: 'arn:aws:acm:us-east-1:488777458602:certificate/6883342b-63ac-4466-b3f8-d9a8dd80bfaa'
