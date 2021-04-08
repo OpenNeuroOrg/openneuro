@@ -1,7 +1,7 @@
 image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker
 
 services:
-  - docker:dind
+  - ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind
 
 stages:
   - dependencies
