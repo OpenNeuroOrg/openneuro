@@ -1,6 +1,6 @@
 {
   "name": "openneuro-cli",
-  "version": "3.31.0",
+  "version": "3.32.0-alpha.17",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
@@ -29,7 +29,7 @@
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^3.31.0"
+    "openneuro-client": "^3.32.0-alpha.17"
   },
   "scripts": {
     "build": "tsc -b",
