@@ -97,8 +97,8 @@ async function createServer(): Promise<void> {
         if (development) {
           vite.ssrFixStacktrace(e)
         }
-        console.error(e)
-        res.status(500).end(e.message)
+        console.error(e.stack)
+        res.status(500).end(e.stack)
       }
     }
     void ssrHandler()
