@@ -43,8 +43,7 @@ export const config: OpenNeuroConfig = {
   auth: {
     // @ts-expect-error Vite
     google: { clientID: import.meta.env.VITE_GOOGLE_CLIENT_ID.toString() },
-    // @ts-expect-error Vite
-    globus: { clientID: import.meta.env.VITE_GLOBUS_CLIENT_ID.toString() },
+    globus: { clientID: '' },
     orcid: {
       // @ts-expect-error Vite
       clientID: import.meta.env.VITE_ORCID_CLIENT_ID.toString(),
