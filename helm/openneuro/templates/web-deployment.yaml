@@ -25,11 +25,11 @@ spec:
           image: 'openneuro/app:v{{ .Chart.AppVersion }}'
           resources:
             limits:
-              cpu: ".75"
-              memory: "256Mi"
+              cpu: "1"
+              memory: "512Mi"
             requests:
               cpu: ".25"
-              memory: "64Mi"
+              memory: "128Mi"
           ports:
             - containerPort: 80
           envFrom:
