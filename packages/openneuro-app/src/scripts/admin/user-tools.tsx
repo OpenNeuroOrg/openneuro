@@ -77,5 +77,7 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
         </div>
       </div>
     )
+  } else {
+    return null
   }
 }
