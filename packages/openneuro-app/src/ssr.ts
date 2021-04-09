@@ -53,7 +53,9 @@ async function createServer(): Promise<void> {
 
       try {
         // 1. Read index.html
-        const index = development ? 'index.html' : 'dist/client/index.html'
+        const index = development
+          ? 'index.html'
+          : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
         // 2. Apply vite HTML transforms. This injects the vite HMR client, and
@@ -66,7 +68,7 @@ async function createServer(): Promise<void> {
         //    required, and provides efficient invalidation similar to HMR.
         const { render } = development
           ? await vite.ssrLoadModule('/server.jsx')
-          : require('dist/server/server.js')
+          : require('../src/dist/server/server.js')
 
         // 4. render the app HTML. This assumes entry-server.js's exported `render`
         //    function calls appropriate framework SSR APIs,
@@ -95,8 +97,8 @@ async function createServer(): Promise<void> {
         if (development) {
           vite.ssrFixStacktrace(e)
         }
-        console.error(e)
-        res.status(500).end(e.message)
+        console.error(e.stack)
+        res.status(500).end(e.stack)
       }
     }
     void ssrHandler()
