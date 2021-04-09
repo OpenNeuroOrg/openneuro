@@ -6,13 +6,14 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 export const formatCitation = (snapshot, style) => {
   const year = getYear(parseISO(snapshot.created))
+  const authors = snapshot.description.Authors
+    ? snapshot.description.Authors.join(' and ')
+    : 'NO AUTHORS FOUND'
   if (style === 'Text') {
-    return `${snapshot.description.Authors.join(' and ')} (${year}). ${
-      snapshot.description.Name
-    }. OpenNeuro. [Dataset] doi: ${snapshot.description.DatasetDOI}`
+    return `${authors} (${year}). ${snapshot.description.Name}. OpenNeuro. [Dataset] doi: ${snapshot.description.DatasetDOI}`
   } else if (style === 'BibTeX') {
     return `@dataset{${snapshot.id},
-  author = {${snapshot.description.Authors.join(' and ')}},
+  author = {${authors}},
   title = {"${snapshot.description.Name}"},
   year = {${year}},
   doi = {${snapshot.description.DatasetDOI}},
