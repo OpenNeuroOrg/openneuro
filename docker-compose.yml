@@ -23,13 +23,15 @@ services:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-app
-    command: bash -c 'source ./vite-env.sh && yarn start'
+    command: yarn start
     volumes:
       - webpack_cache:/webpack-cache
       - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
     ports:
       - "8145:8145"
       - "9992:9992"
+    environment:
+      - NODE_ENV=development
 
   # crn node server
   server:
