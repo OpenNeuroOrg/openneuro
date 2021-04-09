@@ -54,8 +54,12 @@ export const config: OpenNeuroConfig = {
       redirectURI: import.meta.env.VITE_ORCID_REDIRECT_URI.toString(),
     },
   },
-  // @ts-expect-error Vite
-  analytics: { trackingId: import.meta.env.VITE_GOOGLE_TRACKING_ID.toString() },
+  analytics: {
+    // @ts-expect-error Vite
+    trackingIds: import.meta.env.GOOGLE_TRACKING_IDS.split(',').map(id => {
+      return id.trim() as string
+    }),
+  },
   // @ts-expect-error Vite
   sentry: { environment: import.meta.env.VITE_ENVIRONMENT.toString() },
   // @ts-expect-error Vite
