@@ -1,8 +1,6 @@
-FROM openneuro/node AS app
+FROM openneuro/node AS web
 
 WORKDIR /srv/packages/openneuro-app
-RUN yarn build && cp maintenance.html dist/
+RUN yarn tsc -b && yarn build && cp maintenance.html src/dist/client
 
-FROM nginx:alpine AS web
-COPY --from=app /srv/packages/openneuro-app/dist /srv/app/dist
-COPY --from=app /srv/packages/openneuro-app/nginx.conf /etc/nginx/conf.d/default.conf
+CMD NODE_ENV=production node dist/ssr.js

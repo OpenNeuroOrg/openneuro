@@ -4,6 +4,8 @@ import express from 'express'
 import { createServer as createViteServer } from 'vite'
 import cookiesMiddleware from 'universal-cookie-express'
 
+const development = process.env.NODE_ENV === 'development'
+
 const selfDestroyingServiceWorker = `self.addEventListener('install', function(e) {
   self.skipWaiting()
 })
@@ -18,17 +20,41 @@ self.addEventListener('activate', function(e) {
     })
 })`
 
+globalThis.OpenNeuroConfig = {
+  CRN_SERVER_URL: process.env.CRN_SERVER_URL,
+  GRAPHQL_URI: process.env.GRAPHQL_URI,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GLOBUS_CLIENT_ID: process.env.GLOBUS_CLIENT_ID,
+  ORCID_CLIENT_ID: process.env.ORCID_CLIENT_ID,
+  ORCID_URI: process.env.ORCID_URI,
+  ORCID_REDIRECT_URI: process.env.ORCID_REDIRECT_URI,
+  GOOGLE_TRACKING_IDS: process.env.GOOGLE_TRACKING_IDS,
+  ENVIRONMENT: process.env.ENVIRONMENT,
+  SUPPORT_URL: process.env.SUPPORT_URL,
+  DATALAD_GITHUB_ORG: process.env.DATALAD_GITHUB_ORG,
+  AWS_S3_PUBLIC_BUCKET: process.env.AWS_S3_PUBLIC_BUCKET,
+}
+
+const configScript = `window.OpenNeuroConfig = ${JSON.stringify(
+  globalThis.OpenNeuroConfig,
+)}`
+
 async function createServer(): Promise<void> {
   const app = express()
 
-  // Create vite server in middleware mode. This disables Vite's own HTML
-  // serving logic and let the parent server take control.
-  const vite = await createViteServer({
-    root: __dirname,
-    server: { middlewareMode: true, hmr: { port: 9992 } },
-  })
-  // use vite's connect instance as middleware
-  app.use(vite.middlewares)
+  let vite
+  if (development) {
+    // Create vite server in middleware mode. This disables Vite's own HTML
+    // serving logic and let the parent server take control.
+    vite = await createViteServer({
+      root: __dirname,
+      server: { middlewareMode: true, hmr: { port: 9992 } },
+    })
+    // use vite's connect instance as middleware
+    app.use(vite.middlewares)
+  } else {
+    app.use(express.static('dist/client'))
+  }
 
   app.use(cookiesMiddleware())
 
@@ -42,24 +68,32 @@ async function createServer(): Promise<void> {
           .set({ 'Content-Type': 'application/javascript' })
           .end(selfDestroyingServiceWorker)
         return
+      } else if (url === '/config.js') {
+        res
+          .status(200)
+          .set({ 'Content-Type': 'application/javascript' })
+          .end(configScript)
+        return
       }
 
       try {
         // 1. Read index.html
-        let template = fs.readFileSync(
-          path.resolve(__dirname, 'index.html'),
-          'utf-8',
-        )
+        const index = development
+          ? 'index.html'
+          : '../src/dist/client/index.html'
+        let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
         // 2. Apply vite HTML transforms. This injects the vite HMR client, and
         //    also applies HTML transforms from Vite plugins, e.g. global preambles
         //    from @vitejs/plugin-react-refresh
-        template = await vite.transformIndexHtml(url, template)
+        if (development) template = await vite.transformIndexHtml(url, template)
 
         // 3. Load the server entry. vite.ssrLoadModule automatically transforms
         //    your ESM source code to be usable in Node.js! There is no bundling
         //    required, and provides efficient invalidation similar to HMR.
-        const { render } = await vite.ssrLoadModule('/server.jsx')
+        const { render } = development
+          ? await vite.ssrLoadModule('/server.jsx')
+          : require('../src/dist/server/server.js')
 
         // 4. render the app HTML. This assumes entry-server.js's exported `render`
         //    function calls appropriate framework SSR APIs,
@@ -85,15 +119,17 @@ async function createServer(): Promise<void> {
       } catch (e) {
         // If an error is caught, let vite fix the stracktrace so it maps back to
         // your actual source code.
-        vite.ssrFixStacktrace(e)
-        console.error(e)
-        res.status(500).end(e.message)
+        if (development) {
+          vite.ssrFixStacktrace(e)
+        }
+        console.error(e.stack)
+        res.status(500).end(e.stack)
       }
     }
     void ssrHandler()
   })
 
-  app.listen(9876)
+  app.listen(development ? 9876 : 80)
 }
 
 void createServer()

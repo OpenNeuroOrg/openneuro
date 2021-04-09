@@ -29,41 +29,36 @@ export interface OpenNeuroConfig {
   publicBucket?: string
 }
 
-// TypeScript errors here are due to Vite transforming import.meta.env.
-// Vite requires the full name to be maintained (can't dereference it)
 export const config: OpenNeuroConfig = {
-  // @ts-expect-error Vite
-  url: import.meta.env.VITE_CRN_SERVER_URL.toString(),
-  // @ts-expect-error Vite
-  api: import.meta.env.VITE_API.toString(),
+  url: globalThis.OpenNeuroConfig.CRN_SERVER_URL,
+  api: `${globalThis.OpenNeuroConfig.CRN_SERVER_URL as string}/crn/`,
   graphql: {
-    // @ts-expect-error Vite
-    uri: import.meta.env.VITE_GRAPHQL_URI.toString(),
+    uri: globalThis.OpenNeuroConfig.GRAPHQL_URI,
   },
   auth: {
-    // @ts-expect-error Vite
-    google: { clientID: import.meta.env.VITE_GOOGLE_CLIENT_ID.toString() },
-    // @ts-expect-error Vite
-    globus: { clientID: import.meta.env.VITE_GLOBUS_CLIENT_ID.toString() },
+    google: {
+      clientID: globalThis.OpenNeuroConfig.GOOGLE_CLIENT_ID,
+    },
+    globus: {
+      clientID: globalThis.OpenNeuroConfig.GLOBUS_CLIENT_ID,
+    },
     orcid: {
-      // @ts-expect-error Vite
-      clientID: import.meta.env.VITE_ORCID_CLIENT_ID.toString(),
-      // @ts-expect-error Vite
-      URI: import.meta.env.VITE_ORCID_URI.toString(),
-      // @ts-expect-error Vite
-      redirectURI: import.meta.env.VITE_ORCID_REDIRECT_URI.toString(),
+      clientID: globalThis.OpenNeuroConfig.ORCID_CLIENT_ID,
+      URI: globalThis.OpenNeuroConfig.ORCID_URI,
+      redirectURI: globalThis.OpenNeuroConfig.ORCID_REDIRECT_URI,
     },
   },
-  // @ts-expect-error Vite
-  analytics: { trackingId: import.meta.env.VITE_GOOGLE_TRACKING_ID.toString() },
-  // @ts-expect-error Vite
-  sentry: { environment: import.meta.env.VITE_ENVIRONMENT.toString() },
-  // @ts-expect-error Vite
-  support: { url: import.meta.env.VITE_SUPPORT_URL.toString() },
-  // @ts-expect-error Vite
-  github: import.meta.env.VITE_DATALAD_GITHUB_ORG.toString(),
-  // @ts-expect-error Vite
-  publicBucket: import.meta.env.VITE_AWS_S3_PUBLIC_BUCKET.toString(),
+  analytics: {
+    trackingIds: globalThis.OpenNeuroConfig.GOOGLE_TRACKING_IDS.split(',').map(
+      id => {
+        return id.trim() as string
+      },
+    ),
+  },
+  sentry: { environment: globalThis.OpenNeuroConfig.ENVIRONMENT },
+  support: { url: globalThis.OpenNeuroConfig.SUPPORT_URL },
+  github: globalThis.OpenNeuroConfig.DATALAD_GITHUB_ORG,
+  publicBucket: globalThis.OpenNeuroConfig.AWS_S3_PUBLIC_BUCKET,
 }
 
 export const getConfig = (): OpenNeuroConfig => config

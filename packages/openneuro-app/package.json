@@ -10,9 +10,7 @@
   },
   "scripts": {
     "start": "ts-node-dev ./src/ssr.ts",
-    "build": "vite build",
-    "lint": "eslint --ext .jsx --ext .js src/scripts/",
-    "test": "jest"
+    "build": "vite build --outDir dist/client && vite build --outDir dist/server --ssr server.jsx"
   },
   "author": "Squishymedia",
   "dependencies": {
