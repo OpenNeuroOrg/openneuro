@@ -9,7 +9,7 @@
     "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "scripts": {
-    "start": "ts-node-dev ./src/ssr.ts",
+    "start": "NODE_ENV=development ts-node-dev ./src/ssr.ts",
     "build": "vite build --outDir dist/client && vite build --outDir dist/server --ssr server.jsx"
   },
   "author": "Squishymedia",
