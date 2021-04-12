@@ -53,7 +53,7 @@ async function createServer(): Promise<void> {
     // use vite's connect instance as middleware
     app.use(vite.middlewares)
   } else {
-    app.use(express.static('../src/dist/client'))
+    app.use(express.static(path.resolve(__dirname, '../src/dist/client')))
   }
 
   app.use(cookiesMiddleware())
