@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal } from '../utils/modal.jsx'
+import { Modal } from 'react-bootstrap'
 
 // Show is always {true} because the router unmounts this otherwise
 const UploaderModal = ({ setLocation, location, children, footer }) => (

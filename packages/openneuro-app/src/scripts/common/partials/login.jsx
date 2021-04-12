@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal } from '../../utils/modal.jsx'
-import { Panel } from 'react-bootstrap'
+import { Modal, Panel } from 'react-bootstrap'
 import AuthenticationButtons from '../../authentication/buttons.jsx'
 import { frontPage } from '../../front-page/front-page-content'
 
