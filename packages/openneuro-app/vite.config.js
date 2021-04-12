@@ -3,6 +3,9 @@ export default {
   server: {
     port: 9876,
   },
+  build: {
+    sourcemaps: true,
+  },
   optimizeDeps: {
     include: [
       '@apollo/client/react/components',
