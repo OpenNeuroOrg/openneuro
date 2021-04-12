@@ -53,7 +53,10 @@ async function createServer(): Promise<void> {
     // use vite's connect instance as middleware
     app.use(vite.middlewares)
   } else {
-    app.use(express.static(path.resolve(__dirname, '../src/dist/client')))
+    app.use(
+      '/assets',
+      express.static(path.resolve(__dirname, '../src/dist/client/assets')),
+    )
   }
 
   app.use(cookiesMiddleware())
@@ -117,7 +120,7 @@ async function createServer(): Promise<void> {
         // 6. Send the rendered HTML back.
         res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
       } catch (e) {
-        // If an error is caught, let vite fix the stracktrace so it maps back to
+        // If an error is caught, let vite fix the stacktrace so it maps back to
         // your actual source code.
         if (development) {
           vite.ssrFixStacktrace(e)
