@@ -1,19 +1,16 @@
 # docker compose versions
 version: "2.3"
 
-# shared volumes
-volumes:
-  yarn_unplugged:
-
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
     image: node:14.16.1
     env_file: ./config.env
     working_dir: /srv
+    tmpfs:
+      - /srv/.yarn/unplugged
     volumes:
       - ./:/srv
-      - yarn_unplugged:/srv/.yarn/unplugged
 
   # web app bundle build
   app:
@@ -26,6 +23,8 @@ services:
       - "9992:9992"
     environment:
       - NODE_ENV=development
+    depends_on:
+      - node
 
   # crn node server
   server:
@@ -34,6 +33,7 @@ services:
     working_dir: /srv/packages/openneuro-server
     command: bash -c 'yarn install && yarn start'
     depends_on:
+      - node
       - redis
       - mongo
       - datalad
@@ -46,6 +46,7 @@ services:
     working_dir: /srv/packages/openneuro-indexer
     command: bash -c 'yarn install && yarn start'
     depends_on:
+      - node
       - server
       - elasticsearch
 
