@@ -18,8 +18,10 @@
     "openneuro": "./src/index.js"
   },
   "dependencies": {
+    "@apollo/client": "3.3.14",
     "bids-validator": "1.6.3",
     "cli-progress": "^3.8.2",
+    "colors": "1.4.0",
     "commander": "^2.15.1",
     "cross-fetch": "^3.0.5",
     "elastic-apm-node": "3.12.1",
@@ -53,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/colors": "^1",
     "jest-fetch-mock": "^3.0.3",
     "metro-memory-fs": "0.61.0"
   }
