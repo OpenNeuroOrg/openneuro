@@ -14,30 +14,26 @@ services:
     volumes:
       - ./:/srv
       - yarn_unplugged:/srv/.yarn/unplugged
-    command: yarn install
 
   # web app bundle build
   app:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-app
-    command: yarn start
+    command: bash -c 'yarn install && yarn start'
     ports:
       - "8145:8145"
       - "9992:9992"
     environment:
       - NODE_ENV=development
-    depends_on:
-      - node
 
   # crn node server
   server:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-server
-    command: yarn start
+    command: bash -c 'yarn install && yarn start'
     depends_on:
-      - node
       - redis
       - mongo
       - datalad
@@ -48,9 +44,8 @@ services:
     extends:
       service: node
     working_dir: /srv/packages/openneuro-indexer
-    command: yarn start
+    command: bash -c 'yarn install && yarn start'
     depends_on:
-      - node
       - server
       - elasticsearch
 
