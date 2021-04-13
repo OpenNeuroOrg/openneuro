@@ -1,9 +1,6 @@
 # docker compose versions
 version: "2.3"
 
-volumes:
-  yarn_cache:
-
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
@@ -11,11 +8,9 @@ services:
     env_file: ./config.env
     working_dir: /srv
     tmpfs:
-      - /srv/.yarn/unplugged
+      - /srv/.yarn/unplugged:exec
     volumes:
       - ./:/srv:delegated
-      - ./.yarnrc.docker.yaml:/srv/.yarnrc.yaml
-      - yarn_cache:/yarn/cache:cached
 
   # web app bundle build
   app:
