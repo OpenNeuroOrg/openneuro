@@ -3901,6 +3901,13 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/bson@*":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@types/bson/-/bson-4.0.3.tgz#30889d2ffde6262abbe38659364c631454999fbf"
+  integrity sha512-mVRvYnTOZJz3ccpxhr3wgxVmSeiYinW+zlzQz3SXWaJmD1DuL05Jeq7nKw3SnbKmbleW5qrLG5vdyWe/A9sXhw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/cheerio@^0.22.22":
   version "0.22.28"
   resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.28.tgz#90808aabb44fec40fa2950f4c72351e3e4eb065b"
@@ -4240,6 +4247,14 @@
   resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-0.5.2.tgz#503aacfe5cc2703d5484326b1b27efa67a339c1f"
   integrity sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==
   dependencies:
+    "@types/node" "*"
+
+"@types/mongodb@^3.5.27":
+  version "3.6.12"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.6.12.tgz#727960d34f35054d2f2ce68909e16094f742d935"
+  integrity sha512-49aEzQD5VdHPxyd5dRyQdqEveAg9LanwrH8RQipnMuulwzKmODXIZRp0umtxi1eBUfEusRkoy8AVOMr+kVuFog==
+  dependencies:
+    "@types/bson" "*"
     "@types/node" "*"
 
 "@types/node-fetch@2":
@@ -14746,10 +14761,10 @@ jwt-decode@^3.1.2:
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
   integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
 
-kareem@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.3.1.tgz#def12d9c941017fabfb00f873af95e9c99e1be87"
-  integrity sha512-l3hLhffs9zqoDe8zjmb/mAN4B8VT3L56EUvKNqLFVs9YlFA+zx7ke1DO8STAdDyYNkeSo1nKmjuvQeI12So8Xw==
+kareem@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.3.2.tgz#78c4508894985b8d38a0dc15e1a8e11078f2ca93"
+  integrity sha512-STHz9P7X2L4Kwn72fA4rGyqyXdmrMSdxqHx9IXon/FXluXieaFA6KJ2upcHAHxQPQ0LeM/OjLrhFxifHewOALQ==
 
 keycode@^2.1.2:
   version "2.2.0"
@@ -16344,10 +16359,10 @@ mongo-mock@3.7.1:
     object-assign-deep "^0.4.0"
     sift "^3.1.1"
 
-mongodb@3.6.3:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.6.3.tgz#eddaed0cc3598474d7a15f0f2a5b04848489fd05"
-  integrity sha512-rOZuR0QkodZiM+UbQE5kDsJykBqWi0CL4Ec2i1nrGrUI3KO11r6Fbxskqmq3JK2NH7aW4dcccBuUujAP0ERl5w==
+mongodb@3.6.5:
+  version "3.6.5"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.6.5.tgz#c27d786fd4d3c83dc19302483707d12a9d2aee5f"
+  integrity sha512-mQlYKw1iGbvJJejcPuyTaytq0xxlYbIoVDm2FODR+OHxyEiMR021vc32bTvamgBjCswsD54XIRwhg3yBaWqJjg==
   dependencies:
     bl "^2.2.1"
     bson "^1.1.4"
@@ -16362,17 +16377,18 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@5.10.18:
-  version "5.10.18"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.10.18.tgz#ec99a8bc524bd0fd2a82b5afd6f1f720f462c45f"
-  integrity sha512-vaLUzBpUxqacoCqP/xXWMg/uVwCDrlc8LvYjDXCf8hdApvX/CXa0HLa7v2ieFaVd5Fgv3W2QXODLoC4Z/abbNw==
+mongoose@^5.12.3:
+  version "5.12.3"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.12.3.tgz#e48b4cfd898bd779f6a776fc0e232bf790ac4c1a"
+  integrity sha512-frsSR9yeldaRpSUeTegXCSB0Tu5UGq8sHuHBuEV31Jk3COyxlKFQPL7UsdMhxPUCmk74FpOYSmNwxhWBEqgzQg==
   dependencies:
+    "@types/mongodb" "^3.5.27"
     bson "^1.1.4"
-    kareem "2.3.1"
-    mongodb "3.6.3"
+    kareem "2.3.2"
+    mongodb "3.6.5"
     mongoose-legacy-pluralize "1.0.2"
-    mpath "0.7.0"
-    mquery "3.2.2"
+    mpath "0.8.3"
+    mquery "3.2.5"
     ms "2.1.2"
     regexp-clone "1.0.0"
     safe-buffer "5.2.1"
@@ -16412,15 +16428,15 @@ move-concurrently@^1.0.1:
     rimraf "^2.5.4"
     run-queue "^1.0.3"
 
-mpath@0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.7.0.tgz#20e8102e276b71709d6e07e9f8d4d0f641afbfb8"
-  integrity sha512-Aiq04hILxhz1L+f7sjGyn7IxYzWm1zLNNXcfhDtx04kZ2Gk7uvFdgZ8ts1cWa/6d0TQmag2yR8zSGZUmp0tFNg==
+mpath@0.8.3:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.8.3.tgz#828ac0d187f7f42674839d74921970979abbdd8f"
+  integrity sha512-eb9rRvhDltXVNL6Fxd2zM9D4vKBxjVVQNLNijlj7uoXUy19zNDsIif5zR+pWmPCWNKwAtqyo4JveQm4nfD5+eA==
 
-mquery@3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/mquery/-/mquery-3.2.2.tgz#e1383a3951852ce23e37f619a9b350f1fb3664e7"
-  integrity sha512-XB52992COp0KP230I3qloVUbkLUxJIu328HBP2t2EsxSFtf4W1HPSOBWOXf1bqxK4Xbb66lfMJ+Bpfd9/yZE1Q==
+mquery@3.2.5:
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/mquery/-/mquery-3.2.5.tgz#8f2305632e4bb197f68f60c0cffa21aaf4060c51"
+  integrity sha512-VjOKHHgU84wij7IUoZzFRU07IAxd5kWJaDmyUzQlbjHjyoeK5TNeeo8ZsFDtTYnSgpW6n/nMNIHvE3u8Lbrf4A==
   dependencies:
     bluebird "3.5.1"
     debug "3.1.0"
