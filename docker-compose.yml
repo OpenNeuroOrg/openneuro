@@ -3,8 +3,7 @@ version: "2.3"
 
 # shared volumes
 volumes:
-  yarn_cache:
-  webpack_cache:
+  yarn_unplugged:
 
 services:
   # This dummy service provides shared configuration for all Node deps
@@ -14,6 +13,8 @@ services:
     working_dir: /srv
     volumes:
       - ./:/srv
+      - yarn_unplugged:/srv/.yarn/unplugged
+    command: yarn install
 
   # web app bundle build
   app:
@@ -26,6 +27,8 @@ services:
       - "9992:9992"
     environment:
       - NODE_ENV=development
+    depends_on:
+      - node
 
   # crn node server
   server:
@@ -34,6 +37,7 @@ services:
     working_dir: /srv/packages/openneuro-server
     command: yarn start
     depends_on:
+      - node
       - redis
       - mongo
       - datalad
@@ -46,6 +50,7 @@ services:
     working_dir: /srv/packages/openneuro-indexer
     command: yarn start
     depends_on:
+      - node
       - server
       - elasticsearch
 
