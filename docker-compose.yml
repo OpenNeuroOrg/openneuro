@@ -1,6 +1,9 @@
 # docker compose versions
 version: "2.3"
 
+volumes:
+  yarn_cache:
+
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
@@ -10,7 +13,9 @@ services:
     tmpfs:
       - /srv/.yarn/unplugged
     volumes:
-      - ./:/srv
+      - ./:/srv:delegated
+      - ./.yarnrc.docker.yaml:/srv/.yarnrc.yaml
+      - yarn_cache:/yarn/cache:cached
 
   # web app bundle build
   app:
@@ -23,8 +28,6 @@ services:
       - "9992:9992"
     environment:
       - NODE_ENV=development
-    depends_on:
-      - node
 
   # crn node server
   server:
@@ -33,7 +36,6 @@ services:
     working_dir: /srv/packages/openneuro-server
     command: bash -c 'yarn install && yarn start'
     depends_on:
-      - node
       - redis
       - mongo
       - datalad
@@ -46,7 +48,6 @@ services:
     working_dir: /srv/packages/openneuro-indexer
     command: bash -c 'yarn install && yarn start'
     depends_on:
-      - node
       - server
       - elasticsearch
 
@@ -69,7 +70,7 @@ services:
       target: base
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
-      - ./services/datalad/datalad_service:/datalad_service
+      - ./services/datalad/datalad_service:/datalad_service:delegated
     env_file: ./config.env
     init: true
     command:
