@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Panel } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import AuthenticationButtons from '../../authentication/buttons.jsx'
 import { frontPage } from '../../front-page/front-page-content'
 
@@ -9,7 +9,7 @@ const InfoPanel = ({ show, toggle }) => {
     return null
   }
   return (
-    <Panel className="fade-in panel">
+    <div className="fade-in panel">
       <button className="close" onClick={() => toggle(false)}>
         <span className="close-sym" />
         <span className="sr-only">close</span>
@@ -20,7 +20,7 @@ const InfoPanel = ({ show, toggle }) => {
         affiliations, across disciplines, borders, and time.{' '}
         <a href="https://orcid.org/content/about-orcid">Learn more</a>
       </span>
-    </Panel>
+    </div>
   )
 }
 
