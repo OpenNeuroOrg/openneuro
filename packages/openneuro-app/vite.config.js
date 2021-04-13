@@ -4,7 +4,7 @@ export default {
     port: 9876,
   },
   build: {
-    sourcemaps: true,
+    sourcemap: true,
   },
   optimizeDeps: {
     include: [

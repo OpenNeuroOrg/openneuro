@@ -3,7 +3,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
-import { Accordion, Panel } from 'react-bootstrap'
+import { Accordion } from 'react-bootstrap'
+import { Panel } from '../components/panel'
 import Issues from './validation-results.issues.jsx'
 
 // component setup --------------------------------------------------------
