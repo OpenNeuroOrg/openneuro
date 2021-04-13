@@ -55,7 +55,9 @@ async function createServer(): Promise<void> {
   } else {
     app.use(
       '/assets',
-      express.static(path.resolve(__dirname, '../src/dist/client/assets')),
+      express.static(path.resolve(__dirname, '../src/dist/client/assets'), {
+        maxAge: '1y',
+      }),
     )
   }
 
@@ -68,13 +70,19 @@ async function createServer(): Promise<void> {
       if (url === '/sw.js') {
         res
           .status(200)
-          .set({ 'Content-Type': 'application/javascript' })
+          .set({
+            'Content-Type': 'application/javascript',
+            'Cache-Control': 'public, max-age=0',
+          })
           .end(selfDestroyingServiceWorker)
         return
       } else if (url === '/config.js') {
         res
           .status(200)
-          .set({ 'Content-Type': 'application/javascript' })
+          .set({
+            'Content-Type': 'application/javascript',
+            'Cache-Control': 'public, max-age=0',
+          })
           .end(configScript)
         return
       }
@@ -117,8 +125,21 @@ async function createServer(): Promise<void> {
           return replace
         })
 
+        // Cache rendered pages for up to one hour
+        let cacheControl = 'private, max-age=3600'
+        if (req['universalCookies'].get('accessToken') === undefined) {
+          // Allow proxies to cache anonymous requests
+          cacheControl = 'public, max-age=3600'
+        }
+
         // 6. Send the rendered HTML back.
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+        res
+          .status(200)
+          .set({
+            'Content-Type': 'text/html',
+            'Cache-Control': cacheControl,
+          })
+          .end(html)
       } catch (e) {
         // If an error is caught, let vite fix the stacktrace so it maps back to
         // your actual source code.
