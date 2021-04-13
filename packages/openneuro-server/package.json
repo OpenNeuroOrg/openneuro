@@ -77,6 +77,7 @@
     "@babel/preset-env": "^7.6.3",
     "@types/draft-js": "^0.10.43",
     "@types/ioredis": "^4.17.1",
+    "@types/nodemailer": "^6.4.1",
     "apollo-link-schema": "^1.2.5",
     "ioredis-mock": "^3.8.1",
     "jest": "^26.6.3",

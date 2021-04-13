@@ -7740,6 +7740,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/nodemailer", [
+        ["npm:6.4.1", {
+          "packageLocation": "./.yarn/cache/@types-nodemailer-npm-6.4.1-f533871655-3c25dc14c8.zip/node_modules/@types/nodemailer/",
+          "packageDependencies": [
+            ["@types/nodemailer", "npm:6.4.1"],
+            ["@types/node", "npm:14.14.37"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/normalize-package-data", [
         ["npm:2.4.0", {
           "packageLocation": "./.yarn/cache/@types-normalize-package-data-npm-2.4.0-ed928aaaa8-6d077e73be.zip/node_modules/@types/normalize-package-data/",
@@ -27801,6 +27811,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@sentry/node", "npm:4.6.6"],
             ["@types/draft-js", "npm:0.10.45"],
             ["@types/ioredis", "npm:4.22.3"],
+            ["@types/nodemailer", "npm:6.4.1"],
             ["apollo-link-schema", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:1.2.5"],
             ["apollo-server", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:2.21.0"],
             ["apollo-server-express", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:2.21.0"],
