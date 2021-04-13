@@ -10,9 +10,7 @@
   "jest": {
     "testEnvironment": "node"
   },
-  "bin": {
-    "openneuro-indexer": "./src/index.ts"
-  },
+  "bin": "./src/index.ts",
   "dependencies": {
     "@elastic/elasticsearch": "^7.5.0",
     "apollo-link-retry": "^2.2.16",

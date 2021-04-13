@@ -13,9 +13,9 @@
   "author": "Squishymedia",
   "license": "MIT",
   "bin": {
-    "openneuro": "./src/index.js",
+    "git-annex-remote-openneuro": "./src/index.js",
     "git-credential-openneuro": "./src/index.js",
-    "git-annex-remote-openneuro": "./src/index.js"
+    "openneuro": "./src/index.js"
   },
   "dependencies": {
     "bids-validator": "1.6.3",

@@ -9,14 +9,11 @@ volumes:
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    build: 
-      context: .
-      target: dependencies
-    image: openneuro/node
+    image: node:14.16.1
     env_file: ./config.env
     working_dir: /srv
     volumes:
-      - yarn_cache:/usr/local/share/.cache
+      - ./:/srv
 
   # web app bundle build
   app:
@@ -24,9 +21,6 @@ services:
       service: node
     working_dir: /srv/packages/openneuro-app
     command: yarn start
-    volumes:
-      - webpack_cache:/webpack-cache
-      - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
     ports:
       - "8145:8145"
       - "9992:9992"
@@ -39,9 +33,6 @@ services:
       service: node
     working_dir: /srv/packages/openneuro-server
     command: yarn start
-    volumes:
-      - ./packages/openneuro-app/src:/srv/packages/openneuro-app/src
-      - ./packages/openneuro-server/src:/srv/packages/openneuro-server/src
     depends_on:
       - redis
       - mongo
@@ -57,11 +48,6 @@ services:
     depends_on:
       - server
       - elasticsearch
-
-  content:
-    image: ${CONTENT_IMAGE}
-    volumes:
-      - /content
 
   # mongodb
   mongo:
@@ -114,8 +100,6 @@ services:
     image: nginx:1.16.1
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
-    volumes_from:
-      - content
     ports:
       - "80:80"
       - "8110:8110"
