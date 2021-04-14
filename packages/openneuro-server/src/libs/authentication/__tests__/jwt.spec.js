@@ -1,4 +1,4 @@
-import User from '../../../models/user.js'
+import User from '../../../models/user'
 import { addJWT } from '../jwt.js'
 
 jest.mock('../../../config.js')

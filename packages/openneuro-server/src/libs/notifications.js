@@ -216,7 +216,6 @@ const notifications = {
                   template: 'comment-created',
                   data: {
                     name: user.name,
-                    lastName: user.lastname,
                     datasetName: bidsId.decodeId(datasetId),
                     datasetLabel: datasetLabel,
                     commentUserId: userId,
@@ -396,7 +395,7 @@ const notifications = {
       // After one hour, retry a notification even if we have a lock
       Notification.findOneAndUpdate(
         { notificationLock: { $lte: toDate(subHours(Date.now(), 1)) } },
-        { $set: { notificationLock: Date.now() } },
+        { $set: { notificationLock: new Date(Date.now()) } },
       ).exec((err, notification) => {
         if (err) {
           console.log(

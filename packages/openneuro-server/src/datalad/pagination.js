@@ -1,5 +1,5 @@
 // Helpers for pagination
-import Dataset from '../models/dataset.js'
+import Dataset from '../models/dataset'
 
 const sortEnumToInt = val => (val === 'ascending' ? 1 : -1)
 

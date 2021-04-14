@@ -5,8 +5,6 @@ import { readme } from './readme.js'
 import { getDraftFiles, updateDatasetRevision } from '../../datalad/draft.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { filterFiles } from '../../datalad/files.js'
-import { createSnapshot } from '../../datalad/snapshots.js'
-import Snapshot from '../../models/snapshot'
 
 // A draft must have a dataset parent
 const draftFiles = (obj, args) => {

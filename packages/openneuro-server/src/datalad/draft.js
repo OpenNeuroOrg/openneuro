@@ -2,7 +2,7 @@
  * Manage serving a Draft object based on DataLad working trees
  */
 import request from 'superagent'
-import Dataset from '../models/dataset.js'
+import Dataset from '../models/dataset'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { addFileUrl } from './utils.js'
