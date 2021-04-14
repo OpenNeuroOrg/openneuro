@@ -1,6 +1,27 @@
 import request from 'superagent'
 import config from '../../config'
-import templates from './templates'
+
+export const template = ({
+  doi,
+  creators,
+  title,
+  year,
+  resourceType,
+}) => `<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">
+  <identifier identifierType="DOI">${doi}</identifier>
+  <creators>
+  ${creators
+    .map(creator => `<creator><creatorName>${creator}</creatorName></creator>`)
+    .join('')}
+  </creators>
+  <titles>
+    <title xml:lang="en-us">${title}</title>
+  </titles>
+  <publisher>Openneuro</publisher>
+  <publicationYear>${year}</publicationYear>
+  <resourceType resourceTypeGeneral="Dataset">${resourceType}</resourceType>
+</resource>`
 
 /**
  * @param {Object} doiConfig
@@ -30,7 +51,7 @@ export default {
   },
 
   registerMetadata(context) {
-    const xml = templates['metadata'](context)
+    const xml = template(context)
     return request
       .post(config.doi.url + 'metadata/')
       .set('Authorization', this.auth)
