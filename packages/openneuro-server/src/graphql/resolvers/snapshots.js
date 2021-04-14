@@ -5,8 +5,10 @@ import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
+import { redis } from '../../libs/redis'
 import { getFiles, filterFiles } from '../../datalad/files.js'
 import SnapshotModel from '../../models/snapshot'
+import CacheItem, { CacheType } from '../../cache/item'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -29,74 +31,82 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
 }
 
 export const participantCount = async () => {
-  const aggregateResult = await SnapshotModel.aggregate([
-    {
-      $lookup: {
-        from: 'datasets',
-        localField: 'datasetId',
-        foreignField: 'id',
-        as: 'dataset',
-      },
-    },
-    {
-      $match: {
-        'dataset.public': true,
-      },
-    },
-    {
-      $sort: {
-        created: 1,
-      },
-    },
-    {
-      $group: {
-        _id: {
-          datasetId: '$datasetId',
-        },
-        hexsha: {
-          $last: '$hexsha',
+  const cache = new CacheItem(
+    redis,
+    CacheType.query,
+    ['participantCount'],
+    86400,
+  )
+  return cache.get(async () => {
+    const aggregateResult = await SnapshotModel.aggregate([
+      {
+        $lookup: {
+          from: 'datasets',
+          localField: 'datasetId',
+          foreignField: 'id',
+          as: 'dataset',
         },
       },
-    },
-    {
-      $lookup: {
-        from: 'summaries',
-        localField: 'hexsha',
-        foreignField: 'id',
-        as: 'summary',
-      },
-    },
-    {
-      $match: {
-        hexsha: {
-          $ne: null,
-        },
-        'summary.subjects': {
-          $exists: true,
+      {
+        $match: {
+          'dataset.public': true,
         },
       },
-    },
-    {
-      $project: {
-        subjects: {
-          $size: {
-            $arrayElemAt: ['$summary.subjects', 0],
+      {
+        $sort: {
+          created: 1,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            datasetId: '$datasetId',
+          },
+          hexsha: {
+            $last: '$hexsha',
           },
         },
       },
-    },
-    {
-      $group: {
-        _id: null,
-        participantCount: {
-          $sum: '$subjects',
+      {
+        $lookup: {
+          from: 'summaries',
+          localField: 'hexsha',
+          foreignField: 'id',
+          as: 'summary',
         },
       },
-    },
-  ]).exec()
-  return Array.isArray(aggregateResult)
-    ? aggregateResult[0].participantCount
-    : null
+      {
+        $match: {
+          hexsha: {
+            $ne: null,
+          },
+          'summary.subjects': {
+            $exists: true,
+          },
+        },
+      },
+      {
+        $project: {
+          subjects: {
+            $size: {
+              $arrayElemAt: ['$summary.subjects', 0],
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          participantCount: {
+            $sum: '$subjects',
+          },
+        },
+      },
+    ]).exec()
+    return Array.isArray(aggregateResult)
+      ? aggregateResult[0].participantCount
+      : null
+  })
 }
 
 const sortSnapshots = (a, b) =>
