@@ -1,4 +1,7 @@
-<html>
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`email template -> comment created renders with expected arguments 1`] = `
+"<html>
 <head>
 <style>
 	body {
@@ -35,14 +38,14 @@
 </style>
 </head>
 <body>
-	<div class="top-bar">
-		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
+	<div class=\\"top-bar\\">
+		<img src=\\"https://openneuro.org/assets/CRN-Logo-Placeholder.png\\" />
 	</div>
-	<div class="content">
-		<h2>Hi, {{name}}</h2>
+	<div class=\\"content\\">
+		<h2>Hi, J. Doe</h2>
 
 		<p>
-			A dataset you follow, <b>{{datasetName}}</b>, has been deleted. You will no longer receive notifications about this dataset.
+			The owner of a dataset you follow, <b>ds1245678</b>, has stopped tracking comments / changes to their dataset.
 		</p>
 
 		<p>
@@ -51,4 +54,5 @@
 		</p>
 	</div>
 </body>
-<html>
+<html>"
+`;

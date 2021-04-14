@@ -1,4 +1,24 @@
-<html>
+export const commentCreated = ({
+  siteUrl,
+  name,
+  commentStatus,
+  commentId,
+  commentUserId,
+  commentContent,
+  datasetName,
+  datasetLabel,
+  dateCreated,
+}: {
+  siteUrl: string
+  name: string
+  commentStatus: string
+  commentId: string
+  commentUserId: string
+  commentContent: string
+  datasetName: string
+  datasetLabel: string
+  dateCreated: string
+}): string => `<html>
 <head>
 <style>
 	body {
@@ -54,21 +74,21 @@
 </head>
 <body>
 	<div class="top-bar">
-		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
+		<img src="${siteUrl}/assets/CRN-Logo-Placeholder.png" />
 	</div>
 	<div class="content">
-		<h2>Hi, {{name}}</h2>
+		<h2>Hi, ${name}</h2>
 
 		<p>
-			A new {{commentStatus}} has been posted on a dataset you follow, <b>{{datasetLabel}}</b>. 
+			A new ${commentStatus} has been posted on a dataset you follow, <b>${datasetLabel}</b>. 
 		</p>
 		<div class="comment">
-			<p>By: <b>{{commentUserId}}</b> on {{dateCreated}}</p>
+			<p>By: <b>${commentUserId}</b> on ${dateCreated}</p>
 			
-			{{commentContent}}		
+			${commentContent}		
 		</div>
 		<div class="link-div">
-			<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetName}}#comment-{{commentId}}">Click here to view this comment on OpenNeuro &raquo;</a>
+			<a class="dataset-link" href="${siteUrl}/datasets/${datasetName}#comment-${commentId}">Click here to view this comment on OpenNeuro &raquo;</a>
 		</div>
 
 		<p>
@@ -79,6 +99,6 @@
 	</div>
 </body>
 <footer>
-	If you would like to stop receiving notifications about this dataset, please <a class='link' href="{{siteUrl}}/datasets/{{datasetName}}">visit the dataset page</a> and click the 'unfollow' icon.
+	If you would like to stop receiving notifications about this dataset, please <a class='link' href="${siteUrl}/datasets/${datasetName}">visit the dataset page</a> and click the 'unfollow' icon.
 </footer>
-<html>
+<html>`

@@ -1,4 +1,14 @@
-<html>
+export const snapshotReminder = ({
+  siteUrl,
+  name,
+  datasetName,
+  datasetId,
+}: {
+  siteUrl: string
+  name: string
+  datasetName: string
+  datasetId: string
+}): string => `<html>
 <head>
 <style>
 	body {
@@ -36,13 +46,13 @@
 </head>
 <body>
 	<div class="top-bar">
-		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
+		<img src="${siteUrl}/assets/CRN-Logo-Placeholder.png" />
 	</div>
 	<div class="content">
-		<h2>Hi, {{name}}</h2>
+		<h2>Hi, ${name}</h2>
 
 		<p>
-			Your analysis <b>{{appName}}</b> scheduled on <b>{{startDate}}</b> for dataset <b>{{datasetName}}</b> has <b class="{{status}}">{{status}}</b>. Go to your dataset snapshot to view the results.
+			Your dataset, <b>${datasetName}</b>, does not have a snapshot yet. If you would like to publish this dataset, you will first need to create a snapshot.
 		</p>
 
 		<p>
@@ -50,7 +60,7 @@
 			The CRN Team
 		</p>
 
-		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetId}}/versions/{{snapshotId}}?app={{appLabel}}&version={{appVersion}}&job={{jobId}}">Go to snapshot &raquo;</a>
+		<a class="dataset-link" href="${siteUrl}/datasets/${datasetId}/snapshot">Create a snapshot. &raquo;</a>
 	</div>
 </body>
-<html>
+<html>`

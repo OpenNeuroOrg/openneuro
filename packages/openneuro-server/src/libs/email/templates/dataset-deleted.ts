@@ -1,4 +1,12 @@
-<html>
+export const datasetDeleted = ({
+  siteUrl,
+  name,
+  datasetName,
+}: {
+  siteUrl: string
+  name: string
+  datasetName: string
+}): string => `<html>
 <head>
 <style>
 	body {
@@ -36,21 +44,19 @@
 </head>
 <body>
 	<div class="top-bar">
-		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
+		<img src="${siteUrl}/assets/CRN-Logo-Placeholder.png" />
 	</div>
 	<div class="content">
-		<h2>Hi, {{name}}</h2>
+		<h2>Hi, ${name}</h2>
 
 		<p>
-			Dataset <b>{{datasetName}}</b> has been shared with you.
+			A dataset you follow, <b>${datasetName}</b>, has been deleted. You will no longer receive notifications about this dataset.
 		</p>
 
 		<p>
 			Sincerely,
 			The CRN Team
 		</p>
-
-		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetId}}">Go to dataset. &raquo;</a>
 	</div>
 </body>
-<html>
+<html>`
