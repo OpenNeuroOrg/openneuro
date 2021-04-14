@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "ts-node-dev ./src/ssr.ts",
-    "build": "vite build --outDir dist/client && vite build --outDir dist/server --ssr server.jsx"
+    "build": "vite build --outDir dist/client && vite build --outDir dist/server --ssr server.jsx && cp src/assets/papaya.js src/dist/client/assets"
   },
   "author": "Squishymedia",
   "dependencies": {
