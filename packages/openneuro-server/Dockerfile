@@ -10,7 +10,6 @@ WORKDIR /srv
 
 COPY --from=build /srv/node_modules /srv/node_modules
 COPY --from=build /srv/packages/openneuro-server/dist /srv/dist
-COPY --from=build /srv/packages/openneuro-server/src/libs/email/templates/*.html /srv/dist/src/libs/email/templates/
 
 HEALTHCHECK --interval=10s --retries=10 CMD curl -f 'http://localhost:8111' || exit 1
 

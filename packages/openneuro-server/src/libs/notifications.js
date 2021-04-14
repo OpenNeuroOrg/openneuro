@@ -2,7 +2,7 @@
 import toDate from 'date-fns/toDate'
 import subHours from 'date-fns/subHours'
 import config from '../config'
-import email from './email'
+import { send as emailSend } from './email'
 import request from 'superagent'
 import Notification from '../models/notification'
 import User from '../models/user'
@@ -14,6 +14,11 @@ import bidsId from './bidsId'
 import { convertFromRaw, EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 import { getDatasetWorker } from '../libs/datalad-service'
+import { commentCreated } from '../libs/email/templates/comment-created'
+import { datasetDeleted } from '../libs/email/templates/dataset-deleted'
+import { ownerUnsubscribed } from '../libs/email/templates/owner-unsubscribed'
+import { snapshotCreated } from '../libs/email/templates/snapshot-created'
+import { snapshotReminder } from '../libs/email/templates/snapshot-reminder'
 
 function noop() {
   // No callback helper
@@ -41,56 +46,8 @@ const notifications = {
    */
   send(notification, callback) {
     if (notification.type === 'email') {
-      email.send(notification.email, callback)
+      emailSend(notification.email, callback)
     }
-  },
-
-  /**
-   * Job Complete
-   *
-   * Sends an email notification to the user
-   * with the status of their job.
-   */
-  jobComplete(job) {
-    User.findOne({ id: job.userId })
-      .exec()
-      .then(user => {
-        notifications.add(
-          {
-            _id: job.snapshotId + '_' + job.appId + '_' + job.analysis.created,
-            type: 'email',
-            email: {
-              to: user.email,
-              subject:
-                'Analysis - ' +
-                job.appLabel +
-                ' on ' +
-                job.datasetLabel +
-                ' - ' +
-                job.analysis.status,
-              template: 'job-complete',
-              data: {
-                name: user.name,
-                appName: job.appLabel,
-                appLabel: job.appLabel,
-                appVersion: job.appVersion,
-                jobId: job.analysis.analysisId,
-                startDate: moment(job.analysis.created).format('MMMM Do'),
-                datasetName: job.datasetLabel,
-                status: job.analysis.status,
-                siteUrl:
-                  url.parse(config.url).protocol +
-                  '//' +
-                  url.parse(config.url).hostname,
-                datasetId: bidsId.decodeId(job.datasetId),
-                snapshotId: bidsId.decodeId(job.snapshotId),
-                unsubscribeLink: '',
-              },
-            },
-          },
-          noop,
-        )
-      })
   },
 
   /**
@@ -143,8 +100,7 @@ const notifications = {
           email: {
             to: user.email,
             subject: 'Snapshot Created',
-            template: 'snapshot-created',
-            data: {
+            html: snapshotCreated({
               name: user.name,
               datasetLabel: datasetLabel,
               datasetId: bidsId.decodeId(datasetId),
@@ -154,7 +110,7 @@ const notifications = {
                 url.parse(config.url).protocol +
                 '//' +
                 url.parse(config.url).hostname,
-            },
+            }),
           },
         }
         // send the email to the notifications database for distribution
@@ -213,10 +169,8 @@ const notifications = {
                     '-' +
                     encodeURIComponent(user._id),
                   subject: 'Comment Created',
-                  template: 'comment-created',
-                  data: {
+                  html: commentCreated({
                     name: user.name,
-                    lastName: user.lastname,
                     datasetName: bidsId.decodeId(datasetId),
                     datasetLabel: datasetLabel,
                     commentUserId: userId,
@@ -228,7 +182,7 @@ const notifications = {
                       url.parse(config.url).protocol +
                       '//' +
                       url.parse(config.url).hostname,
-                  },
+                  }),
                 },
               }
               // send each email to the notification database for distribution
@@ -267,15 +221,14 @@ const notifications = {
                 email: {
                   to: user.email,
                   subject: 'Dataset Deleted',
-                  template: 'dataset-deleted',
-                  data: {
+                  html: datasetDeleted({
                     name: user.name,
                     datasetName: bidsId.decodeId(datasetId),
                     siteUrl:
                       url.parse(config.url).protocol +
                       '//' +
                       url.parse(config.url).hostname,
-                  },
+                  }),
                 },
               }
               // send each email to the notification database for distribution
@@ -318,15 +271,14 @@ const notifications = {
                 email: {
                   to: user.email,
                   subject: 'Owner Unsubscribed',
-                  template: 'owner-unsubscribed',
-                  data: {
+                  html: ownerUnsubscribed({
                     name: user.name,
                     datasetName: bidsId.decodeId(datasetId),
                     siteUrl:
                       url.parse(config.url).protocol +
                       '//' +
                       url.parse(config.url).hostname,
-                  },
+                  }),
                 },
               }
               // send each email to the notification database for distribution
@@ -370,8 +322,7 @@ const notifications = {
                   email: {
                     to: user.email,
                     subject: 'Snapshot Reminder',
-                    template: 'snapshot-reminder',
-                    data: {
+                    html: snapshotReminder({
                       name: user.name,
                       datasetName: bidsId.decodeId(datasetId),
                       siteUrl:
@@ -379,7 +330,7 @@ const notifications = {
                         '//' +
                         url.parse(config.url).hostname,
                       datasetId,
-                    },
+                    }),
                   },
                 }
                 // send each email to the notification database for distribution
