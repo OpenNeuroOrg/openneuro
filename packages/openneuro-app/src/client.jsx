@@ -56,7 +56,7 @@ ReactDOM.render(
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
-        // @ts-expect-error
+        // @ts-ignore
         cache: new InMemoryCache().restore(JSON.parse(window.__APOLLO_STATE__)),
       })}>
       <BrowserRouter>

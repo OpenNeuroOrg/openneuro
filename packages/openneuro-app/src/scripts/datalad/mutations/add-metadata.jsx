@@ -82,7 +82,7 @@ const runValidations = values =>
     .map(validation => {
       const relevantValues = validation.fields.map(key => values[key])
       // TODO - This doesn't seem necessary?
-      // @ts-expect-error
+      // @ts-ignore
       const isValid = validation.check(relevantValues)
       if (!isValid) return validation.errorMessage
     })
