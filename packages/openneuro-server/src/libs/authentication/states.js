@@ -119,11 +119,11 @@ export const commentAccess = (req, res, next) => {
     return next()
   }
   Comment.findOne({
-    _id: ObjectID(commentId),
+    _id: new ObjectID(commentId),
   })
     .exec()
     .then(comment => {
-      if (comment.userId === req.user.id) {
+      if (comment.user._id === req.user.id) {
         return next()
       } else {
         return res
