@@ -4,16 +4,9 @@ interface Object {
   global: object
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-function polyfillGlobal(): object {
-  if (typeof global !== 'undefined') return global
-  Object.defineProperty(Object.prototype, 'global', {
-    get: function () {
-      delete Object.prototype.global
-      this.global = this
-    },
-    configurable: true,
-  })
-  return global
+function polyfillGlobal(): void {
+  if (typeof global === 'object') return
+  Object.defineProperty(Object.prototype, 'global', globalThis)
 }
+
 polyfillGlobal()
