@@ -1,7 +1,34 @@
 import uuid from 'uuid'
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
+const { Schema, model } = mongoose
 
-const metadataSchema = new mongoose.Schema({
+export interface MetadataDocument extends Document {
+  datasetName: string
+  datasetUrl: string
+  dataProcessed: boolean
+  firstSnapshotCreatedAt: Date
+  latestSnapshotCreatedAt: Date
+  ages: number[]
+  modalities: string[]
+  datasetId: string
+  adminUsers: string[]
+  dxStatus: string
+  tasksCompleted: string[]
+  trialCount: number
+  studyDesign: string
+  studyDomain: string
+  studyLongitudinal: string
+  species: string
+  associatedPaperDOI: string
+  openneuroPaperDOI: string
+  seniorAuthor: string
+  grantFunderName: string
+  grantIdentifier: string
+  affirmedDefaced: boolean
+  affirmedConsent: boolean
+}
+
+const metadataSchema = new Schema({
   datasetName: String,
   datasetUrl: String, // @id type
   dataProcessed: Boolean, // 'true' | 'false' | 'user input string'
@@ -29,6 +56,6 @@ const metadataSchema = new mongoose.Schema({
 
 metadataSchema.index({ datasetId: 1 }, { unique: true })
 
-const Metadata = mongoose.model('Metadata', metadataSchema)
+const Metadata = model<MetadataDocument>('Metadata', metadataSchema)
 
 export default Metadata
