@@ -6,7 +6,10 @@ interface Object {
 
 function polyfillGlobal(): void {
   if (typeof global === 'object') return
-  Object.defineProperty(Object.prototype, 'global', globalThis)
+  Object.defineProperty(Object.prototype, 'global', {
+    get: () => globalThis,
+    configurable: true,
+  })
 }
 
 polyfillGlobal()
