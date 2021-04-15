@@ -24,10 +24,10 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^0.15.0-rc.13",
+    "husky": "5.1.1",
     "jest": "^26.6.3",
     "lerna": "3.20.2",
-    "lint-staged": "^6.0.1",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "tsc-watch": "^4.2.9",
     "typescript": "4.0.6"
@@ -36,17 +36,9 @@
     "packages/*"
   ],
   "lint-staged": {
-    "linters": {
-      "*.{js,jsx,json}": [
-        "prettier --write",
-        "git add"
-      ]
-    }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "*.{js,jsx,ts,tsx,json}": [
+      "prettier --write"
+    ]
   },
   "jest": {
     "projects": [
