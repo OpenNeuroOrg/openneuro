@@ -6,7 +6,7 @@ import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
-import SnapshotModel from '../../models/snapshot'
+import DatasetModel from '../../models/dataset'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -29,33 +29,24 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
 }
 
 export const participantCount = async () => {
-  const aggregateResult = await SnapshotModel.aggregate([
-    {
-      $lookup: {
-        from: 'datasets',
-        localField: 'datasetId',
-        foreignField: 'id',
-        as: 'dataset',
-      },
-    },
+  const aggregateResult = await DatasetModel.aggregate([
     {
       $match: {
-        'dataset.public': true,
+        public: true,
       },
     },
     {
-      $sort: {
-        created: 1,
+      $lookup: {
+        from: 'snapshots',
+        localField: 'id',
+        foreignField: 'datasetId',
+        as: 'snapshots',
       },
     },
     {
-      $group: {
-        _id: {
-          datasetId: '$datasetId',
-        },
-        hexsha: {
-          $last: '$hexsha',
-        },
+      $project: {
+        id: '$id',
+        hexsha: { $arrayElemAt: ['$snapshots.hexsha', -1] },
       },
     },
     {
@@ -68,20 +59,8 @@ export const participantCount = async () => {
     },
     {
       $match: {
-        hexsha: {
-          $ne: null,
-        },
         'summary.subjects': {
           $exists: true,
-        },
-      },
-    },
-    {
-      $project: {
-        subjects: {
-          $size: {
-            $arrayElemAt: ['$summary.subjects', 0],
-          },
         },
       },
     },
@@ -89,7 +68,7 @@ export const participantCount = async () => {
       $group: {
         _id: null,
         participantCount: {
-          $sum: '$subjects',
+          $sum: { $size: { $arrayElemAt: ['$summary.subjects', 0] } },
         },
       },
     },
