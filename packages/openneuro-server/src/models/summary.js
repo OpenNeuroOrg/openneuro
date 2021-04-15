@@ -13,6 +13,8 @@ const summarySchema = new mongoose.Schema({
   dataProcessed: Boolean,
 })
 
+summarySchema.index({ id: 1 })
+
 const Summary = mongoose.model('Summary', summarySchema)
 
 export default Summary
