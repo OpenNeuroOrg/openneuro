@@ -82,7 +82,7 @@ export const typeDefs = `
     # Get a list of users
     users: [User]
     # Get the total number of dataset participants
-    participantCount: Int @cacheControl(maxAge: 86400, scope: PUBLIC)
+    participantCount: Int @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
     # Get recent dataset changes (newest first)
