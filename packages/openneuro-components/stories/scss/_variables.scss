@@ -1,0 +1,58 @@
+$font-sans: 'Open Sans', sans-serif;
+
+/* SCSS RGB */
+$royal-purple: rgba(109, 83, 156, 1);
+$bud-green: rgba(138, 177, 89, 1);
+$magenta-crayola: rgba(235, 83, 152, 1);
+$dodger-blue: rgba(0, 139, 255, 1);
+$byzantium: rgba(121, 5, 93, 1);
+$mountain-meadow: rgba(0, 190, 143, 1);
+$metallic-seaweed: rgba(0, 127, 149, 1);
+$midnight-green: rgba(32, 78, 90, 1);
+$firebrick: rgba(185, 42, 39, 1);
+$persimmon: rgba(234, 93, 11, 1);
+
+/* CSS HEX */
+:root {
+  --royal-purple: #{$royal-purple};
+  --bud-green: #{$bud-green};
+  --magenta-crayola: #{$magenta-crayola};
+  --dodger-blue: #{$dodger-blue};
+  --byzantium: #{$byzantium};
+  --mountain-meadow: #{$mountain-meadow};
+  --metallic-seaweed: #{$metallic-seaweed};
+  --midnight-green: #{$midnight-green};
+  --firebrick: #{$firebrick};
+  --persimmon: #{$persimmon};
+}
+
+.royal-purple {
+  background-color: $royal-purple;
+}
+.bud-green {
+  background-color: $bud-green;
+}
+.magenta-crayola {
+  background-color: $magenta-crayola;
+}
+.dodger-blue {
+  background-color: $dodger-blue;
+}
+.byzantium {
+  background-color: $byzantium;
+}
+.mountain-meadow {
+  background-color: $mountain-meadow;
+}
+.metallic-seaweed {
+  background-color: $metallic-seaweed;
+}
+.midnight-green {
+  background-color: $midnight-green;
+}
+.firebrick {
+  background-color: $firebrick;
+}
+.persimmon {
+  background-color: $persimmon;
+}
