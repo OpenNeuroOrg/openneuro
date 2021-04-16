@@ -26,5 +26,8 @@
   },
   "files": [
     "lib/**/*"
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "^14.14.41"
+  }
 }

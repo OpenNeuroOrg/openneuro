@@ -5578,7 +5578,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^14.14.10, @types/node@npm:^14.14.37":
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^14.14.10, @types/node@npm:^14.14.37, @types/node@npm:^14.14.41":
   version: 14.14.41
   resolution: "@types/node@npm:14.14.41"
   checksum: 37dfb639644c8ee9b9846106834983f590d494b855e74645a4f169ea24199f7559366d25f6e72e83ba940b59eb6370e002bd53963d098d6d9fdf935a37011417
@@ -22365,6 +22365,7 @@ fsevents@^1.2.7:
   dependencies:
     "@apollo/client": 3.3.14
     "@types/colors": ^1
+    "@types/node": ^14.14.41
     bids-validator: 1.6.3
     cli-progress: ^3.8.2
     colors: 1.4.0
@@ -22405,6 +22406,7 @@ fsevents@^1.2.7:
   dependencies:
     "@apollo/client": 3.3.14
     "@elastic/elasticsearch": ^7.5.0
+    "@types/node": ^14.14.41
     apollo-link-retry: ^2.2.16
     openneuro-client: ^3.32.1
     ts-node: ^9.1.1
