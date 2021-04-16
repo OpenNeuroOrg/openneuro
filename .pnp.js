@@ -62,6 +62,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
+            ["@loadable/babel-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:5.13.2"],
             ["@sentry/cli", "npm:1.37.4"],
             ["@typescript-eslint/eslint-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.22.0"],
             ["@typescript-eslint/parser", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.22.0"],
@@ -2338,6 +2339,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@babel/plugin-syntax-dynamic-import", "virtual:d2da1d4661f9b0433dcc55ba52af4f4d2de54d0dfee40ecd4a13179381ae4a8f5ad46c0462edc956b68028022f87b0cecba2954f871506041cdb5454ca262c94#npm:7.8.3"],
             ["@babel/core", "npm:7.13.15"],
+            ["@babel/helper-plugin-utils", "npm:7.13.0"],
+            ["@types/babel__core", null]
+          ],
+          "packagePeers": [
+            "@babel/core",
+            "@types/babel__core"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:dc3f21896b079c4833a53337c8497c6252cedb9ea4abfc840221a8b64b62962793e9c9ab71a45de9589fafab5e8422cc96daf824b5351c5689eb2fdeaad6e833#npm:7.8.3", {
+          "packageLocation": "./.yarn/$$virtual/@babel-plugin-syntax-dynamic-import-virtual-545b3bb81f/0/cache/@babel-plugin-syntax-dynamic-import-npm-7.8.3-fb9ff5634a-134a6f37fe.zip/node_modules/@babel/plugin-syntax-dynamic-import/",
+          "packageDependencies": [
+            ["@babel/plugin-syntax-dynamic-import", "virtual:dc3f21896b079c4833a53337c8497c6252cedb9ea4abfc840221a8b64b62962793e9c9ab71a45de9589fafab5e8422cc96daf824b5351c5689eb2fdeaad6e833#npm:7.8.3"],
+            ["@babel/core", null],
             ["@babel/helper-plugin-utils", "npm:7.13.0"],
             ["@types/babel__core", null]
           ],
@@ -6211,6 +6226,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@loadable/babel-plugin", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:5.13.2"],
             ["@babel/core", "npm:7.13.15"],
             ["@babel/plugin-syntax-dynamic-import", "virtual:d2da1d4661f9b0433dcc55ba52af4f4d2de54d0dfee40ecd4a13179381ae4a8f5ad46c0462edc956b68028022f87b0cecba2954f871506041cdb5454ca262c94#npm:7.8.3"],
+            ["@types/babel__core", null]
+          ],
+          "packagePeers": [
+            "@babel/core",
+            "@types/babel__core"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:5.13.2", {
+          "packageLocation": "./.yarn/$$virtual/@loadable-babel-plugin-virtual-dc3f21896b/0/cache/@loadable-babel-plugin-npm-5.13.2-b7650ded1a-3a6faa2131.zip/node_modules/@loadable/babel-plugin/",
+          "packageDependencies": [
+            ["@loadable/babel-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:5.13.2"],
+            ["@babel/core", null],
+            ["@babel/plugin-syntax-dynamic-import", "virtual:dc3f21896b079c4833a53337c8497c6252cedb9ea4abfc840221a8b64b62962793e9c9ab71a45de9589fafab5e8422cc96daf824b5351c5689eb2fdeaad6e833#npm:7.8.3"],
             ["@types/babel__core", null]
           ],
           "packagePeers": [
@@ -32695,6 +32724,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["root-workspace-0b6124", "workspace:."],
+            ["@loadable/babel-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:5.13.2"],
             ["@sentry/cli", "npm:1.37.4"],
             ["@typescript-eslint/eslint-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.22.0"],
             ["@typescript-eslint/parser", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.22.0"],
