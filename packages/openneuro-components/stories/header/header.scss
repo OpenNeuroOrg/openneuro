@@ -1,0 +1,17 @@
+@import '../scss/global';
+@import '../scss/variables';
+
+.header-inner-wrap {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 25px 0;
+  align-items: center;
+}
+
+.svg-fill-on-dark-aqua {
+  fill: $on-dark-aqua;
+}
+
+.swoop {
+  width: 100%;
+}
