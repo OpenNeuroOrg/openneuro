@@ -5065,13 +5065,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/base16@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@types/base16@npm:1.0.2"
-  checksum: 0befdc73be877d530dd9964c45e5ab55859ea08ed2f06caf2b51343ee2051f000c2814eeda6fa66359fc38a26f4163b752184d7ca606ebd9b71daea336965a23
-  languageName: node
-  linkType: hard
-
 "@types/body-parser@npm:*, @types/body-parser@npm:1.19.0":
   version: 1.19.0
   resolution: "@types/body-parser@npm:1.19.0"
@@ -5508,16 +5501,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.curry@npm:^4.1.6":
-  version: 4.1.6
-  resolution: "@types/lodash.curry@npm:4.1.6"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 7e4e1dc62569c9c66a4b27c9d592af4264de47f94a89a3ccec518f97e6c1733c3f92aa1b5f06b5443d66c0e7ae9a316d3a97984226512e305deb3d2bf9b6040f
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*, @types/lodash@npm:^4.14.92":
+"@types/lodash@npm:^4.14.92":
   version: 4.14.168
   resolution: "@types/lodash@npm:4.14.168"
   checksum: 9a4e25f89fc035b9f0388f1f7be85e5eff49f9e6db0d93432c9a89fce0916f8a89db4e8290415f7ea02de6b00d3573826378dcb655b7b2d20530a6e8d6dd6fd0
@@ -5662,7 +5646,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*, @types/prop-types@npm:^15.7.3":
+"@types/prop-types@npm:*":
   version: 15.7.3
   resolution: "@types/prop-types@npm:15.7.3"
   checksum: bd0eab69d5120ad3784d0c9985f902653d5924707a7f2b3702a330e762dfd61b6494954cb54ad0c52b918ffd6f1e7e27c9270e4442bc15250de348596f2f60cb
@@ -6855,6 +6839,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"apollo-server-cache-redis@npm:1.4.0":
+  version: 1.4.0
+  resolution: "apollo-server-cache-redis@npm:1.4.0"
+  dependencies:
+    apollo-server-caching: ^0.6.0
+    apollo-server-env: ^3.0.0
+    dataloader: ^2.0.0
+    ioredis: ^4.0.0
+  checksum: 7cbd8023256e55f5008a8c67840b63157d0b381758c29fe847ecfd417eb66cf6b330542510c46988c9734ca69c0ad9420d38e84db335dbd81d3e43460a3b923d
+  languageName: node
+  linkType: hard
+
 "apollo-server-caching@npm:^0.5.3":
   version: 0.5.3
   resolution: "apollo-server-caching@npm:0.5.3"
@@ -8036,13 +8032,6 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 690643f3009a04289ac401079de5a780aae452f7625fb2884051cc847b231e6521ee15dd6430b066d3cf4bd8bb00bb7ff55b7d134f34b8f0b8c043806796f94e
-  languageName: node
-  linkType: hard
-
-"base16@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "base16@npm:1.0.0"
-  checksum: adc3f12a6b363a2bfa4062d45e2782791737f7ceb0857c027486fc90fd3fc8eaf1829c55cc7a4afd6e482105282ffc18362bc10b2a4c788f3102de3054558eba
   languageName: node
   linkType: hard
 
@@ -9660,7 +9649,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color@npm:^3.0.0, color@npm:^3.1.2":
+"color@npm:^3.0.0":
   version: 3.1.3
   resolution: "color@npm:3.1.3"
   dependencies:
@@ -10978,7 +10967,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dataloader@npm:2.0.0":
+"dataloader@npm:2.0.0, dataloader@npm:^2.0.0":
   version: 2.0.0
   resolution: "dataloader@npm:2.0.0"
   checksum: 0165c2e80751d269c33d2a14b0078a4f3853cb010e2531e7aa99523aba8d0cdc922b9ad67e4c2bb9074c90e0ee0a41b6e7f5f63c40d31224a71c8a0b703f4be3
@@ -17082,7 +17071,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"ioredis@npm:^4.6.3":
+"ioredis@npm:^4.0.0, ioredis@npm:^4.6.3":
   version: 4.26.0
   resolution: "ioredis@npm:4.26.0"
   dependencies:
@@ -19461,13 +19450,6 @@ fsevents@^1.2.7:
   version: 4.5.0
   resolution: "lodash.clonedeep@npm:4.5.0"
   checksum: 41e2fe4c57c56a66a4775a6ddeebe9272f0ce4d257d97b3cb8724a9b01eeec9b09ce7e8603d6926baf5f48c287d988f0de4bf5aa244ea86b1f22c1e6f203cc27
-  languageName: node
-  linkType: hard
-
-"lodash.curry@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "lodash.curry@npm:4.1.1"
-  checksum: 081f9214b5d65030e66d0219c330de5a07089096f20362fc965c671b70b2bdb7b8f4cbac45546f79afed3bf17ae46434ffea9db1dbcbe043a09b722e2834ac3d
   languageName: node
   linkType: hard
 
@@ -22295,7 +22277,7 @@ fsevents@^1.2.7:
     moment-timezone: ^0.5.31
     node-sass: 4.14.1
     object.fromentries: ^2.0.0
-    openneuro-client: ^3.32.1
+    openneuro-client: ^3.32.3
     os-browserify: ^0.3.0
     pluralize: ^7.0.0
     prop-types: ^15.6.0
@@ -22306,7 +22288,6 @@ fsevents@^1.2.7:
     react-copy-to-clipboard: ^5.0.1
     react-dom: ^17.0.1
     react-helmet: 6.1.0
-    react-json-tree: 0.15.0
     react-router: ^5.1.2
     react-router-dom: ^5.1.2
     react-spring: ^8.0.27
@@ -22362,7 +22343,7 @@ fsevents@^1.2.7:
     jwt-decode: ^3.1.2
     metro-memory-fs: 0.61.0
     mkdirp: ^0.5.1
-    openneuro-client: ^3.32.1
+    openneuro-client: ^3.32.3
   bin:
     git-annex-remote-openneuro: ./src/index.js
     git-credential-openneuro: ./src/index.js
@@ -22370,7 +22351,7 @@ fsevents@^1.2.7:
   languageName: unknown
   linkType: soft
 
-"openneuro-client@^3.32.1, openneuro-client@workspace:packages/openneuro-client":
+"openneuro-client@^3.32.3, openneuro-client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "openneuro-client@workspace:packages/openneuro-client"
   dependencies:
@@ -22397,7 +22378,7 @@ fsevents@^1.2.7:
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
     core-js: ^3.10.1
-    openneuro-client: ^3.32.1
+    openneuro-client: ^3.32.3
     ts-node: ^9.1.1
     tsc-watch: ^4.2.9
     typescript: 4.0.6
@@ -22424,6 +22405,7 @@ fsevents@^1.2.7:
     "@types/ioredis": ^4.17.1
     "@types/nodemailer": ^6.4.1
     apollo-server: 2.21.0
+    apollo-server-cache-redis: 1.4.0
     apollo-server-express: 2.21.0
     async: ^2.4.1
     base64url: ^3.0.0
@@ -24756,20 +24738,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-base16-styling@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "react-base16-styling@npm:0.8.0"
-  dependencies:
-    "@types/base16": ^1.0.2
-    "@types/lodash.curry": ^4.1.6
-    base16: ^1.0.0
-    color: ^3.1.2
-    csstype: ^3.0.2
-    lodash.curry: ^4.1.1
-  checksum: 1676a94077dbdd60bd5c7d7fbcf54be5b90fdcb7d0c03f0a27da51bc88348fa0aac45a6f6edaf0aec4fa480d2e9daaa036c33a7eaffda82fd414cf18f32c1cfc
-  languageName: node
-  linkType: hard
-
 "react-bootstrap@npm:0.33.1":
   version: 0.33.1
   resolution: "react-bootstrap@npm:0.33.1"
@@ -25009,20 +24977,6 @@ fsevents@^1.2.7:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 11bcf1267a314a522615f626f3ce3727a3a24cdbf61c4d452add3550a7875326669631326cfb1ba3e92b6f72244c32ffecf93ad21c0cad8455d3e169d0e3f060
-  languageName: node
-  linkType: hard
-
-"react-json-tree@npm:0.15.0":
-  version: 0.15.0
-  resolution: "react-json-tree@npm:0.15.0"
-  dependencies:
-    "@types/prop-types": ^15.7.3
-    prop-types: ^15.7.2
-    react-base16-styling: ^0.8.0
-  peerDependencies:
-    "@types/react": ^16.3.0 || ^17.0.0
-    react: ^16.3.0 || ^17.0.0
-  checksum: 0e509ee22408e64e69aad364d94548193ce7348c38c9a120244bc1172d787cbc2f39ff83f5154723002718fd22a66d9ae63dab778d79bab6630ebc3a5653de1f
   languageName: node
   linkType: hard
 

@@ -8386,15 +8386,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@types/base16", [
-        ["npm:1.0.2", {
-          "packageLocation": "./.yarn/cache/@types-base16-npm-1.0.2-6855fb0719-0befdc73be.zip/node_modules/@types/base16/",
-          "packageDependencies": [
-            ["@types/base16", "npm:1.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@types/body-parser", [
         ["npm:1.19.0", {
           "packageLocation": "./.yarn/cache/@types-body-parser-npm-1.19.0-3ca4d08a60-4576f3fde5.zip/node_modules/@types/body-parser/",
@@ -8893,16 +8884,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["npm:4.14.168", {
           "packageLocation": "./.yarn/cache/@types-lodash-npm-4.14.168-2d65abe211-9a4e25f89f.zip/node_modules/@types/lodash/",
           "packageDependencies": [
-            ["@types/lodash", "npm:4.14.168"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/lodash.curry", [
-        ["npm:4.1.6", {
-          "packageLocation": "./.yarn/cache/@types-lodash.curry-npm-4.1.6-1a148c849f-7e4e1dc625.zip/node_modules/@types/lodash.curry/",
-          "packageDependencies": [
-            ["@types/lodash.curry", "npm:4.1.6"],
             ["@types/lodash", "npm:4.14.168"]
           ],
           "linkType": "HARD",
@@ -10654,6 +10635,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["apollo-server-cache-redis", [
+        ["npm:1.4.0", {
+          "packageLocation": "./.yarn/cache/apollo-server-cache-redis-npm-1.4.0-4e514f5dae-7cbd802325.zip/node_modules/apollo-server-cache-redis/",
+          "packageDependencies": [
+            ["apollo-server-cache-redis", "npm:1.4.0"],
+            ["apollo-server-caching", "npm:0.6.0"],
+            ["apollo-server-env", "npm:3.0.0"],
+            ["dataloader", "npm:2.0.0"],
+            ["ioredis", "npm:4.26.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["apollo-server-caching", [
         ["npm:0.5.3", {
           "packageLocation": "./.yarn/cache/apollo-server-caching-npm-0.5.3-b023b1e69c-4bf723e10c.zip/node_modules/apollo-server-caching/",
@@ -12319,15 +12313,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["isobject", "npm:3.0.1"],
             ["mixin-deep", "npm:1.3.2"],
             ["pascalcase", "npm:0.1.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["base16", [
-        ["npm:1.0.0", {
-          "packageLocation": "./.yarn/cache/base16-npm-1.0.0-8525ba5e40-adc3f12a6b.zip/node_modules/base16/",
-          "packageDependencies": [
-            ["base16", "npm:1.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -25546,15 +25531,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["lodash.curry", [
-        ["npm:4.1.1", {
-          "packageLocation": "./.yarn/cache/lodash.curry-npm-4.1.1-b573bff179-081f9214b5.zip/node_modules/lodash.curry/",
-          "packageDependencies": [
-            ["lodash.curry", "npm:4.1.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["lodash.debounce", [
         ["npm:4.0.8", {
           "packageLocation": "./.yarn/cache/lodash.debounce-npm-4.0.8-f1d6e09799-b6042bd8c0.zip/node_modules/lodash.debounce/",
@@ -28746,7 +28722,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-copy-to-clipboard", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:5.0.3"],
             ["react-dom", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:17.0.2"],
             ["react-helmet", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:6.1.0"],
-            ["react-json-tree", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:0.15.0"],
             ["react-router", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:5.2.0"],
             ["react-router-dom", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:5.2.0"],
             ["react-spring", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:8.0.27"],
@@ -28866,6 +28841,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/ioredis", "npm:4.22.3"],
             ["@types/nodemailer", "npm:6.4.1"],
             ["apollo-server", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:2.21.0"],
+            ["apollo-server-cache-redis", "npm:1.4.0"],
             ["apollo-server-express", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:2.21.0"],
             ["async", "npm:2.6.3"],
             ["base64url", "npm:3.0.1"],
@@ -31552,21 +31528,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["react-base16-styling", [
-        ["npm:0.8.0", {
-          "packageLocation": "./.yarn/cache/react-base16-styling-npm-0.8.0-2191c82d13-1676a94077.zip/node_modules/react-base16-styling/",
-          "packageDependencies": [
-            ["react-base16-styling", "npm:0.8.0"],
-            ["@types/base16", "npm:1.0.2"],
-            ["@types/lodash.curry", "npm:4.1.6"],
-            ["base16", "npm:1.0.0"],
-            ["color", "npm:3.1.3"],
-            ["csstype", "npm:3.0.7"],
-            ["lodash.curry", "npm:4.1.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["react-bootstrap", [
         ["npm:0.33.1", {
           "packageLocation": "./.yarn/cache/react-bootstrap-npm-0.33.1-f3b147dc22-81e53d53b5.zip/node_modules/react-bootstrap/",
@@ -31976,33 +31937,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-is-npm-17.0.2-091bbb8db6-3eff23f410.zip/node_modules/react-is/",
           "packageDependencies": [
             ["react-is", "npm:17.0.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["react-json-tree", [
-        ["npm:0.15.0", {
-          "packageLocation": "./.yarn/cache/react-json-tree-npm-0.15.0-4f66867944-0e509ee224.zip/node_modules/react-json-tree/",
-          "packageDependencies": [
-            ["react-json-tree", "npm:0.15.0"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:0.15.0", {
-          "packageLocation": "./.yarn/$$virtual/react-json-tree-virtual-19a9ccd703/0/cache/react-json-tree-npm-0.15.0-4f66867944-0e509ee224.zip/node_modules/react-json-tree/",
-          "packageDependencies": [
-            ["react-json-tree", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:0.15.0"],
-            ["@types/prop-types", "npm:15.7.3"],
-            ["@types/react", "npm:17.0.3"],
-            ["@types/types__react", null],
-            ["prop-types", "npm:15.7.2"],
-            ["react", "npm:17.0.2"],
-            ["react-base16-styling", "npm:0.8.0"]
-          ],
-          "packagePeers": [
-            "@types/react",
-            "@types/types__react",
-            "react"
           ],
           "linkType": "HARD",
         }]

@@ -12,12 +12,14 @@ import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
 import { ApolloServer } from 'apollo-server-express'
+import { BaseRedisCache } from 'apollo-server-cache-redis'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
 import { sitemapHandler } from './handlers/sitemap.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
+import { redis } from './libs/redis'
 import { version } from './lerna.json'
 
 // test flag disables Sentry for tests
@@ -85,6 +87,9 @@ export default test => {
     formatResponse: response => {
       return { ...response, extensions: { openneuro: { version } } }
     },
+    cache: new BaseRedisCache({
+      client: redis,
+    }),
   })
 
   // Setup pre-GraphQL middleware
