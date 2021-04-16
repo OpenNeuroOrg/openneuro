@@ -1,58 +1,58 @@
 $font-sans: 'Open Sans', sans-serif;
 
 /* SCSS RGB */
-$royal-purple: rgba(109, 83, 156, 1);
-$bud-green: rgba(138, 177, 89, 1);
-$magenta-crayola: rgba(235, 83, 152, 1);
-$dodger-blue: rgba(0, 139, 255, 1);
-$byzantium: rgba(121, 5, 93, 1);
-$mountain-meadow: rgba(0, 190, 143, 1);
-$metallic-seaweed: rgba(0, 127, 149, 1);
-$midnight-green: rgba(32, 78, 90, 1);
-$firebrick: rgba(185, 42, 39, 1);
-$persimmon: rgba(234, 93, 11, 1);
+$mri-theme: rgba(109, 83, 156, 1);
+$eeg-theme: rgba(138, 177, 89, 1);
+$nirs-theme: rgba(235, 83, 152, 1);
+$pet-theme: rgba(0, 139, 255, 1);
+$ieeg-theme: rgba(121, 5, 93, 1);
+$ecog-theme: rgba(0, 190, 143, 1);
+$on-light-aqua: rgba(0, 127, 149, 1);
+$on-dark-aqua: rgba(32, 78, 90, 1);
+$asl-theme: rgba(185, 42, 39, 1);
+$meg-theme: rgba(234, 93, 11, 1);
 
 /* CSS HEX */
 :root {
-  --royal-purple: #{$royal-purple};
-  --bud-green: #{$bud-green};
-  --magenta-crayola: #{$magenta-crayola};
-  --dodger-blue: #{$dodger-blue};
-  --byzantium: #{$byzantium};
-  --mountain-meadow: #{$mountain-meadow};
-  --metallic-seaweed: #{$metallic-seaweed};
-  --midnight-green: #{$midnight-green};
-  --firebrick: #{$firebrick};
-  --persimmon: #{$persimmon};
+  --mri-theme: #{$mri-theme};
+  --eeg-theme: #{$eeg-theme};
+  --nirs-theme: #{$nirs-theme};
+  --pet-theme: #{$pet-theme};
+  --ieeg-theme: #{$ieeg-theme};
+  --ecog-theme: #{$ecog-theme};
+  --on-light-aqua: #{$on-light-aqua};
+  --on-dark-aqua: #{$on-dark-aqua};
+  --asl-theme: #{$asl-theme};
+  --meg-theme: #{$meg-theme};
 }
 
-.royal-purple {
-  background-color: $royal-purple;
+.mri-theme {
+  background-color: $mri-theme;
 }
-.bud-green {
-  background-color: $bud-green;
+.eeg-theme {
+  background-color: $eeg-theme;
 }
-.magenta-crayola {
-  background-color: $magenta-crayola;
+.nirs-theme {
+  background-color: $nirs-theme;
 }
-.dodger-blue {
-  background-color: $dodger-blue;
+.pet-theme {
+  background-color: $pet-theme;
 }
-.byzantium {
-  background-color: $byzantium;
+.ieeg-theme {
+  background-color: $ieeg-theme;
 }
-.mountain-meadow {
-  background-color: $mountain-meadow;
+.ecog-theme {
+  background-color: $ecog-theme;
 }
-.metallic-seaweed {
-  background-color: $metallic-seaweed;
+.on-light-aqua {
+  background-color: $on-light-aqua;
 }
-.midnight-green {
-  background-color: $midnight-green;
+.on-dark-aqua {
+  background-color: $on-dark-aqua;
 }
-.firebrick {
-  background-color: $firebrick;
+.asl-theme {
+  background-color: $asl-theme;
 }
-.persimmon {
-  background-color: $persimmon;
+.meg-theme {
+  background-color: $meg-theme;
 }

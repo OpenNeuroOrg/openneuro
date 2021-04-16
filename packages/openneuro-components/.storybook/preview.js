@@ -9,4 +9,17 @@ export const parameters = {
   docs: {
     inlineStories: false,
   },
+  backgrounds: {
+    default: 'light',
+    values: [
+      {
+        name: 'light',
+        value: '#ffffff',
+      },
+      {
+        name: 'dark',
+        value: '#204e5a',
+      },
+    ],
+  },
 }
