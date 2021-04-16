@@ -19,5 +19,11 @@
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@babel/runtime-corejs3": "^7.13.10",
+    "apollo-server": "^2.23.0",
+    "core-js": "^3.10.1",
+    "openneuro-server": "workspace:packages/openneuro-server"
   }
 }

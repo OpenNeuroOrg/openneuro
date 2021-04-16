@@ -3,6 +3,7 @@ import request from 'superagent'
 import * as ds from '../dataset'
 
 jest.mock('superagent')
+jest.mock('ioredis')
 jest.mock('../../../config.js')
 jest.mock('../../../libs/notifications.js')
 

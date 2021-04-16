@@ -28,6 +28,8 @@
     "lib/**/*"
   ],
   "devDependencies": {
-    "@types/node": "^14.14.41"
+    "@babel/runtime-corejs3": "^7.13.10",
+    "@types/node": "^14.14.41",
+    "core-js": "^3.10.1"
   }
 }
