@@ -12,7 +12,7 @@ export const faq = [
   {
     faq: 'Are there any restrictions on the uploaded data?',
     answer:
-      'Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: \n' +
+      'Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: \n\n' +
       '* ' +
       'You are the owner of this dataset and have any necessary ethics ' +
       'permissions to share the data publicly.\n' +
@@ -42,7 +42,7 @@ export const faq = [
     faq: 'Are there consent form templates we can use in our study?',
     answer:
       'Yes! We recommend using the Open Brain Consent - ' +
-      '[Ultimate consent form](https://open-brain-consent.readthedocs.io/en/stable/ultimate.html).\n' +
+      '[Ultimate consent form](https://open-brain-consent.readthedocs.io/en/stable/ultimate.html).\n\n' +
       '* ' +
       'For GDPR protected studies, they have a ' +
       '[Ultimate consent form GDPR edition](https://open-brain-consent.readthedocs.io/en/stable/gdpr/ultimate_gdpr.html).',
@@ -92,19 +92,18 @@ export const faq = [
       'the academic norm of citing sources, ' +
       'but it fails to achieve that goal. ' +
       'In [CC BY and data: Not always a good fit](https://osc.universityofcalifornia.edu/2016/09/cc-by-and-data-not-always-a-good-fit/), ' +
-      'it is argued:\n' +
+      'it is argued:\n\n' +
       '>  **CC licenses are not sufficient for ensuring proper attribution ' +
       'in many  cases because their restrictions ' +
       '— including attribution — do not apply to facts.**\n' +
-      '> ...\n' +
+      '> ...\n\n' +
       "> **CC licenses' attribution requirements aren't necessary " +
       'because scholars have very good reasons to provide attribution ' +
       'that has nothing to do with copyright** [...] ' +
       'Data that comes from nowhere has little credibility. ' +
       'If someone wants to use data as persuasive evidence, ' +
       'they need to refer readers and reviewers back to its source: ' +
-      'who it came from and how it was produced.\n' +
-      '\n' +
+      'who it came from and how it was produced.\n\n' +
       'CC-BY places an ambiguous legal hurdle between researchers ' +
       'and data they are considering using, ' +
       'even if only intended to enforce standard academic practice. ' +
