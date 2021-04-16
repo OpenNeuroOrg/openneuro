@@ -11,6 +11,7 @@ $on-light-aqua: rgba(0, 127, 149, 1);
 $on-dark-aqua: rgba(32, 78, 90, 1);
 $asl-theme: rgba(185, 42, 39, 1);
 $meg-theme: rgba(234, 93, 11, 1);
+$on-light-green: #00b489;
 
 /* CSS HEX */
 :root {
@@ -24,6 +25,7 @@ $meg-theme: rgba(234, 93, 11, 1);
   --on-dark-aqua: #{$on-dark-aqua};
   --asl-theme: #{$asl-theme};
   --meg-theme: #{$meg-theme};
+  --on-light-green: #{on-light-green};
 }
 
 .mri-theme {
@@ -46,6 +48,9 @@ $meg-theme: rgba(234, 93, 11, 1);
 }
 .on-light-aqua {
   background-color: $on-light-aqua;
+}
+.on-light-green {
+  background-color: $on-light-green;
 }
 .on-dark-aqua {
   background-color: $on-dark-aqua;

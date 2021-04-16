@@ -3,31 +3,48 @@ import './button.scss';
 
 export interface ButtonProps {
   primary?: boolean;
+  secondary?: boolean;
   backgroundColor?: string;
   size?: 'small' | 'medium' | 'large';
-  label: string;
+  label?: string;
+  disabled?: boolean;
   onClick?: () => void;
+  navbar?: boolean;
+  icon?: string;
+  color?: string;
+  imgSrc?: string;
+  iconSize?: string;
 }
 
 /**
  * Primary UI component for user interaction
  */
 export const Button: React.FC<ButtonProps> = ({
-  primary = false,
+  primary,
   size = 'medium',
   backgroundColor,
   label,
+  navbar = false,
+  icon,
+  secondary,
+  color,
+  imgSrc,
+  iconSize,
   ...props
 }) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+  const mode = primary && !navbar ? 'on-button--primary' : secondary && !navbar ? 'on-button--secondary' : !navbar ? 'on-no-background' : 'on-button--navbar';
+  const iconWithText = icon && label ? 'icon-text' : imgSrc && label  ? 'img-icon-text' : null;
+  const fontIcon = icon ? <i style={{fontSize: iconSize}} className={icon}></i> : null;
+  const imgIcon = imgSrc ? <img style={{width: iconSize}}  src={imgSrc} alt="" /> : null;
+
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
-      style={{ backgroundColor }}
+      className={['on-button', `on-button--${size}`, mode, iconWithText].join(' ')}
+      style={{ backgroundColor, color }}
       {...props}
     >
-      {label}
+      {imgIcon}{fontIcon}{label}
     </button>
   );
 };

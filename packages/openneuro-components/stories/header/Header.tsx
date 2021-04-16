@@ -8,7 +8,6 @@ export interface HeaderProps {
   onLogin: () => void;
   onLogout: () => void;
   onCreateAccount: () => void;
-  themeColor: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,11 +15,10 @@ export const Header: React.FC<HeaderProps> = ({
   onLogin,
   onLogout,
   onCreateAccount,
-  themeColor = 'on-dark-aqua',
   expanded
 }) => (
   <header>
-    <div className={'header-inner-wrap ' + themeColor}>
+    <div className="header-inner-wrap">
       <div>
         <Logo horizontal dark={false}/>
         <h1 className="sr-only">Acme</h1>
@@ -32,17 +30,17 @@ export const Header: React.FC<HeaderProps> = ({
           <>
             <Button size="small" onClick={onLogin} label="Log in" />
             <Button
-              primary
-              size="small"
+              navbar
               onClick={onCreateAccount}
-              label="Sign up"
+              label="Sign in"
+              size="large"
             />
           </>
         )}
       </div>
     </div>
     <svg className="swoop" height="60" viewbox="0 0 100 100" preserveAspectRatio="none">
-  <path d="M1,0  L1200,0 C100,120 0,0 -100, 10z" className={'svg-fill-'+themeColor} />
+  <path d="M1,0  L1200,0 C100,120 0,0 -100, 10z" className="svg-fill-on-dark-aqua" />
 </svg>
   </header>
 )
