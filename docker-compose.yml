@@ -8,9 +8,12 @@ services:
     env_file: ./config.env
     working_dir: /srv
     tmpfs:
-      - /srv/.yarn/unplugged:exec
+      - /srv/.yarn:exec
     volumes:
       - ./:/srv
+      - ./.yarn/cache:/srv/.yarn/cache
+      - ./.yarn/releases:/srv/.yarn/releases
+      - ./.yarn/plugins:/srv/.yarn/plugins
 
   # web app bundle build
   app:
