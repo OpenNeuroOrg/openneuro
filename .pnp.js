@@ -9262,6 +9262,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/tsc-watch", [
+        ["npm:4.2.0", {
+          "packageLocation": "./.yarn/cache/@types-tsc-watch-npm-4.2.0-c3074fef16-878edb8442.zip/node_modules/@types/tsc-watch/",
+          "packageDependencies": [
+            ["@types/tsc-watch", "npm:4.2.0"],
+            ["@types/node", "npm:14.14.41"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/unist", [
         ["npm:2.0.3", {
           "packageLocation": "./.yarn/cache/@types-unist-npm-2.0.3-4b26dedfde-42e0dc4ac7.zip/node_modules/@types/unist/",
@@ -28895,10 +28905,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/runtime-corejs3", "npm:7.13.10"],
             ["@elastic/elasticsearch", "npm:7.12.0"],
             ["@types/node", "npm:14.14.41"],
+            ["@types/tsc-watch", "npm:4.2.0"],
             ["apollo-link-retry", "npm:2.2.16"],
             ["core-js", "npm:3.10.1"],
             ["openneuro-client", "workspace:packages/openneuro-client"],
             ["ts-node", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:9.1.1"],
+            ["tsc-watch", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.2.9"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"]
           ],
           "linkType": "SOFT",

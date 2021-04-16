@@ -5827,6 +5827,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/tsc-watch@npm:^4":
+  version: 4.2.0
+  resolution: "@types/tsc-watch@npm:4.2.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: 878edb84424de23d63f58cf53706b76664a0c1608d05b2f4fe4f7fc86936d273866d24355e56ab392e816675a8b9cc59801a15ddad987f9da169391fd5b1ad3f
+  languageName: node
+  linkType: hard
+
 "@types/unist@npm:*, @types/unist@npm:^2.0.0, @types/unist@npm:^2.0.2, @types/unist@npm:^2.0.3":
   version: 2.0.3
   resolution: "@types/unist@npm:2.0.3"
@@ -22452,10 +22461,12 @@ fsevents@^1.2.7:
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
     "@types/node": ^14.14.41
+    "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
     core-js: ^3.10.1
     openneuro-client: ^3.32.1
     ts-node: ^9.1.1
+    tsc-watch: ^4.2.9
     typescript: 4.0.6
   bin:
     openneuro-indexer: ./src/index.ts
