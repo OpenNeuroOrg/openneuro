@@ -10,7 +10,7 @@ services:
     tmpfs:
       - /srv/.yarn/unplugged:exec
     volumes:
-      - ./:/srv:delegated
+      - ./:/srv
 
   # web app bundle build
   app:
