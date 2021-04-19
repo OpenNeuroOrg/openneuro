@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
+import { AccordionWrap } from '../accordion/AccordionWrap'
+import { AccordionTab } from '../accordion/AccordionTab'
 
 import orcidIcon from '../assets/orcid_24x24.png'
 
@@ -55,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
         <svg className="swoop" height="60" viewbox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M1,0  L1200,0 C100,120 0,0 -100, 10z" className="svg-fill-on-dark-aqua" />
+          <path d="M1,0  L2400,0 C100,120 0,0 -100, 10z" className="svg-fill-on-dark-aqua" />
         </svg>
       </header>
       <Modal isOpen={isOpen} toggle={toggle} closeText="Close">
@@ -80,8 +82,17 @@ export const Header: React.FC<HeaderProps> = ({
                 buttonClass="login-button"
                 primary
                 label='ORCID'  
-                imgSrc={orcidIcon} />   
+                imgSrc={orcidIcon} /> 
+                <AccordionWrap>
+                  <AccordionTab 
+                    tabId="orcid-info-accordion"
+                    tabLable="What is this?" 
+                    children={
+                      <>ORCID users are identified and connected to their contributions and affiliations, across disciplines, borders, and time. <a href="https://orcid.org/content/about-orcid" target="_blank">Learn more</a></>
+                    } />
+                </AccordionWrap> 
             </div>
+
           </div>
         </div>
       </Modal>

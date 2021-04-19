@@ -12,45 +12,44 @@ export default {
 const Template: Story<AccordionWrapProps> = (args) => <AccordionWrap {...args} />;
 
 
+const singleTabAccordion = <AccordionTab accordionStyle="plain" name='single' tabId='tab1' tabLable='Single Tab' children='This is a single accordion' />
+
+
+const multiTabAccordion = (<>
+  <AccordionTab accordionStyle="plain" tabLable='one' children={<><h4 style={{margin: 0}}>heading</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></>} />
+  <AccordionTab accordionStyle="plain" tabLable='two' children='Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' />
+  <AccordionTab accordionStyle="plain" tabLable='three' children='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' />
+  <AccordionTab accordionStyle="plain" tabLable='four' children='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt' />
+</>)
+
+const fileTreeAccordion = (<>
+  <AccordionTab accordionStyle="file-tree" tabLable='one' children={<AccordionWrap><AccordionTab accordionStyle="file-tree" tabLable='Another Folder' children="file"/></AccordionWrap>} />
+  <AccordionTab accordionStyle="file-tree" tabLable='two' children={<>File</>} />
+  <AccordionTab accordionStyle="file-tree" tabLable='three' children={<AccordionWrap><AccordionTab accordionStyle="file-tree" tabLable='Another Folder' children="file"/></AccordionWrap>} />
+  <AccordionTab accordionStyle="file-tree" tabLable='four' children={<AccordionWrap><AccordionTab accordionStyle="file-tree" tabLable='Another Folder' children="file"/></AccordionWrap>} />
+</>)
 
 
 export const SingleTabAccordion = Template.bind({})
-const singleTabAccordion = <AccordionTab  name='single' tabId='tab1' tabLable='Single Tab' children='This is a single accordion' />
-const multiTabAccordionOne = (<>
-  <AccordionTab expandOne name="onlyOne" tabId='tab1' tabLable='one' children={<><h4 style={{margin: 0}}>heading</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></>} />
-  <AccordionTab expandOne name="onlyOne" tabId='tab2' tabLable='two' children='Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' />
-  <AccordionTab expandOne name="onlyOne" tabId='tab3' tabLable='three' children='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' />
-  <AccordionTab expandOne name="onlyOne" tabId='tab4' tabLable='four' children='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt' />
-  <AccordionTab expandOne name="onlyOne" tabId='tab5' tabLable='Close' />
-</>)
-
-const multiTabAccordionAll = (<>
-  <AccordionTab  name="any" tabId='tab1' tabLable='one' children={<><h4 style={{margin: 0}}>heading</h4><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></>} />
-  <AccordionTab name="any" tabId='tab2' tabLable='two' children='Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' />
-  <AccordionTab name="any" tabId='tab3' tabLable='three' children='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' />
-  <AccordionTab name="any" tabId='tab4' tabLable='four' children='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt' />
-  <AccordionTab name="any" tabId='tab5' tabLable='Close' />
-</>)
-
 SingleTabAccordion.args = {
   accordionID: 'single-tab-accordion',
   children: singleTabAccordion
 }
 
 
-
-export const MultiTabAccordionOnlyOne = Template.bind({})
-
-MultiTabAccordionOnlyOne.args = {
+export const MultiTabAccordion= Template.bind({})
+MultiTabAccordion.args = {
   accordionID: 'multi-tab-accordion',
-  children: multiTabAccordionOne
+  children: multiTabAccordion
 }
 
 
-export const MultiTabAccordionAll = Template.bind({})
 
-MultiTabAccordionAll.args = {
+
+export const FileTreeAccordion= Template.bind({})
+FileTreeAccordion.args = {
   accordionID: 'multi-tab-accordion',
-  children: multiTabAccordionAll
+  children: fileTreeAccordion
 }
+
 

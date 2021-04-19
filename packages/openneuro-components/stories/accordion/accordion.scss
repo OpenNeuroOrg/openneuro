@@ -1,62 +1,57 @@
-// :checked
-
 /* Accordion styles */
 
-input.on-accordion-input {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-}
-.on-accordion-tabs {
-  overflow: hidden;
-}
-.on-accordion-tab {
-  width: 100%;
-  color: #000;
-  overflow: hidden;
-  .on-accordion-tab-label {
+.on-accordion-wrapper {
+  .accordion-item {
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+    height: auto;
+    max-height: 9999px;
+  }
+
+  .accordion-item.collapsed {
+    max-height: 0;
+    transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
+  }
+
+  .accordion-title {
+    cursor: pointer;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0;
-    font-weight: bold;
-    cursor: pointer;
-    /* Icon */
-    &:hover span {
-      text-decoration: underline;
-    }
+
     &::after {
-      content: '\276F';
       margin-left: 10px;
-      text-align: center;
-      transition: all 0.35s;
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid currentColor;
+    }
+
+    &:hover,
+    &.open {
+      color: black;
+    }
+
+    &.open {
+      &::after {
+        content: '';
+        border-top: 0;
+        border-bottom: 5px solid;
+      }
+    }
+
+    .file-icon {
+      margin-right: 10px;
     }
   }
-  .on-accordion-tab-content {
-    max-height: 0;
+
+  .accordion-content {
     padding: 0;
-    transition: all 0.35s;
-  }
-  &.on-accordion-tab-close {
-    display: flex;
-    justify-content: flex-end;
-    padding: 1em;
-    font-size: 0.75em;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }
 
-input.on-accordion-input:checked {
-  + .on-accordion-tab-label {
-    &::after {
-      transform: rotate(90deg);
-    }
-  }
-  ~ .on-accordion-tab-content {
-    max-height: 100vh;
-    padding: 1em 0;
-  }
+.file-tree .accordion-content {
+  margin-left: 10px;
 }

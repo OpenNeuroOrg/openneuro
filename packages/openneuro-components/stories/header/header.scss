@@ -6,10 +6,10 @@
   justify-content: space-between;
   padding: 10px 25px 0;
   align-items: center;
-  background-color: $on-dark-aqua;
+  background-color: $primary;
 }
 .svg-fill-on-dark-aqua {
-  fill: $on-dark-aqua;
+  fill: $primary;
 }
 
 .swoop {
@@ -52,6 +52,25 @@
         }
       }
     }
+  }
+}
+
+#orcid-info-accordion {
+  .accordion-title {
+    color: $primary;
+    color: darken($primary, 5%);
+    text-decoration: underline;
+    font-size: 12px;
+    justify-content: flex-end;
+    margin: 10px 20px 0 0;
+
+    &:after {
+      content: none;
+    }
+  }
+  .accordion-content {
+    padding: 20px;
+    font-size: 12px;
   }
 }
 

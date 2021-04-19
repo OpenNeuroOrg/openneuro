@@ -1,13 +1,16 @@
 import React from 'react';
 
+import {Icon} from '../icon/Icon'
+
 import './accordion.scss'
 
 export interface AccordionTabProps {
   children: object;
   tabId: string;
+  className:string;
   tabLable: string;
-  expandOne: boolean;
-  name: string;
+  plainStyle: boolean;
+  accordionStyle: 'plain' | 'file-tree' | 'bids-wrappper';
 }
 
 /**
@@ -16,19 +19,36 @@ export interface AccordionTabProps {
 export const AccordionTab: React.FC<AccordionTabProps> = ({
   children,
   tabId,
+  plainStyle,
   tabLable,
-  expandOne,
-  name,
+  className,
+  accordionStyle,
   ...props
 }) => {
-  return (
-    <div className={children? "on-accordion-tab" : "on-accordion-tab on-accordion-tabs-close"} {...props} >
-      <input className="on-accordion-input" type={expandOne ? "radio" : "checkbox"} id={name+'-'+tabId} name={expandOne ? name : null}/>
-      <label className="on-accordion-tab-label" htmlFor={name+'-'+tabId}><span>{tabLable}</span></label>
-      {children? <div className="on-accordion-tab-content">
-        {children}
-      </div> : null}
+  const [isOpen, setOpen] = React.useState(false);
+  const isFileTree = accordionStyle == 'file-tree'
+  const fileTreeIcon = isFileTree ? <Icon className="file-icon" icon={isOpen ? "fas fa-folder-open" : "fas fa-folder"} /> : null
+  const plain = accordionStyle === 'plain' || 'file-tree' ? (
+  <span className={`${accordionStyle}` + ' ' + `${className}`} id={tabId} >
+    <div 
+      className={`accordion-title ${isOpen ? "open" : ""}` } 
+      onClick={() => setOpen(!isOpen)}
+    >
+       {fileTreeIcon} {tabLable}
     </div>
+    <div className={`accordion-item ${!isOpen ? "collapsed" : ""}`}>
+      <div className="accordion-content">
+        {children}
+      </div>
+    </div>
+  </span> )
+  : null
+
+
+  return (
+    <>
+      {plain}
+    </>
   );
 };
 

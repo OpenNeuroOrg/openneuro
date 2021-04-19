@@ -12,9 +12,9 @@
 
 .on-button--primary {
   color: #fff;
-  background-color: $on-light-aqua;
+  background-color: $primary;
   &:hover {
-    background-color: darken($on-light-aqua, 5%);
+    background-color: darken($primary, 5%);
   }
 }
 
