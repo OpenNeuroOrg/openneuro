@@ -9720,7 +9720,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^2.15.1, commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.20.3, commander@npm:^2.5.0":
+"commander@npm:7.2.0":
+  version: 7.2.0
+  resolution: "commander@npm:7.2.0"
+  checksum: bdc0eca5e25cd24af8440163d3c9a996785bbac4b49a590365699cdc1ed08cefbac8f268153208ab2bc5dc3cb1d3fb573fd1590c681e36e371342186bd331a4c
+  languageName: node
+  linkType: hard
+
+"commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.20.3, commander@npm:^2.5.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: b73428e97de7624323f81ba13f8ed9271de487017432d18b4da3f07cfc528ad754bbd199004bd5d14e0ccd67d1fdfe0ec8dbbd4c438b401df3c4cc387bfd1daa
@@ -22331,7 +22338,7 @@ fsevents@^1.2.7:
     bids-validator: 1.6.3
     cli-progress: ^3.8.2
     colors: 1.4.0
-    commander: ^2.15.1
+    commander: 7.2.0
     core-js: ^3.10.1
     cross-fetch: ^3.0.5
     elastic-apm-node: 3.12.1

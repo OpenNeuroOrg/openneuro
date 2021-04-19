@@ -9,13 +9,15 @@ const url = getErrorReporting()
  * @returns {typeof import('elastic-apm-node')}
  */
 const setupApm = active =>
-  elasticApm.start({
-    serverUrl: url,
-    serviceName: 'openneuro-cli',
-    environment: 'production',
-    logLevel: 'fatal',
-    active,
-  })
+  elasticApm.isStarted()
+    ? elasticApm
+    : elasticApm.start({
+        serverUrl: url,
+        serviceName: 'openneuro-cli',
+        environment: 'production',
+        logLevel: 'fatal',
+        active,
+      })
 
 /**
  * @type {typeof import('elastic-apm-node')}
