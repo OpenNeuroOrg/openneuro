@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 import { AccordionTab } from './AccordionTab'
 
 import './accordion.scss'
 
 export interface AccordionWrapProps {
-  children: object;
-  accordionID: string;
+  children: object
+  accordionID: string
 }
 
 /**
@@ -20,6 +20,5 @@ export const AccordionWrap: React.FC<AccordionWrapProps> = ({
     <div className="on-accordion-wrapper" {...props} id={accordionID}>
       {children}
     </div>
-  );
-};
-
+  )
+}

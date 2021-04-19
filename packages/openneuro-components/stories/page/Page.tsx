@@ -4,10 +4,10 @@ import { Header } from '../header/Header'
 import './page.scss'
 
 export interface PageProps {
-  user?: {};
-  onLogin: () => void;
-  onLogout: () => void;
-  onCreateAccount: () => void;
+  user?: {}
+  onLogin: () => void
+  onLogout: () => void
+  onCreateAccount: () => void
 }
 
 export const Page: React.FC<PageProps> = ({
