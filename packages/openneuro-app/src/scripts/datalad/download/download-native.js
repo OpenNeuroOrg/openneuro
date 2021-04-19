@@ -10,7 +10,6 @@ import {
   downloadCompleteToast,
   requestFailureToast,
 } from './native-file-toast.jsx'
-import { downloadQuery } from './download-query'
 import { apm } from '../../apm.js'
 import { config } from '../../config'
 
@@ -48,16 +47,15 @@ class DownloadAbortError extends Error {
  * @param {string} snapshotTag Snapshot tag name
  */
 export const downloadNative = (datasetId, snapshotTag) => async () => {
-  const { query, variables } = downloadQuery(datasetId, snapshotTag)
-  const filesToDownload = await (
-    await fetch(`${config.api}graphql`, {
-      method: 'POST',
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
-    })
-  ).json()
+  // const filesToDownload = await (
+  //   await fetch(`${config.api}graphql`, {
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       query,
+  //       variables,
+  //     }),
+  //   })
+  // ).json()
 
   // Try trackDownload but don't worry if it fails
   try {
