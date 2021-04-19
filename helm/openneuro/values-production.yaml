@@ -14,7 +14,7 @@ environment: production
 freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
 
 # Enable Google Analytics
-googleTrackingIds: UA-100754266-2
+googleTrackingIds: 'UA-100754266-2,G-MJNMY6D3FX'
 
 # AWS TLS Certificate ARN
 certifcateArn: "arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423a-86ef-0652e0332e33"

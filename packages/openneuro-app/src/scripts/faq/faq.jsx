@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Markdown from 'react-markdown'
+import Markdown from 'markdown-to-jsx'
 import { faq } from './faq-content'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../resources/strings.js'
@@ -13,10 +13,12 @@ class Faq extends React.Component {
     const faqs = faqsList.map((item, index) => {
       return (
         <div className="panel" key={index}>
-          <Markdown source={item.faq} className="panel-heading" />
+          <Markdown options={{ forceBlock: true }} className="panel-heading">
+            {item.faq}
+          </Markdown>
           <div className="panel-body">
             <span>
-              <Markdown source={item.answer} />
+              <Markdown>{item.answer}</Markdown>
             </span>
           </div>
         </div>

@@ -26,6 +26,8 @@ const datasetSchema = new Schema<DatasetDocument>(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 )
 
+datasetSchema.index({ public: 1 }, { sparse: true })
+
 // Foreign key virtuals for sorting
 
 datasetSchema.virtual('uploadUser', {

@@ -4,7 +4,7 @@ WORKDIR /srv
 
 COPY . /srv
 
-RUN yarn install --frozen-lockfile && yarn tsc -b
+RUN yarn install && yarn tsc -b
 
 FROM dependencies as tests
 

@@ -22,11 +22,9 @@ exports[`DatasetReadme component renders with common props 1`] = `
             ]
           }
         >
-          <ReactMarkdown
-            transformLinkUri={[Function]}
-          >
+          <Te>
             markdown goes here
-          </ReactMarkdown>
+          </Te>
         </Collapsible>
       </div>
     </div>
@@ -41,11 +39,9 @@ exports[`DatasetReadme component renders with common props 1`] = `
       <div
         className="fade-in"
       >
-        <ReactMarkdown
-          transformLinkUri={[Function]}
-        >
+        <Te>
           markdown goes here
-        </ReactMarkdown>
+        </Te>
       </div>
     </div>
   </Media>

@@ -27,6 +27,8 @@ const summarySchema = new Schema({
   dataProcessed: Boolean,
 })
 
+summarySchema.index({ id: 1 })
+
 const Summary = model<SummaryDocument>('Summary', summarySchema)
 
 export default Summary

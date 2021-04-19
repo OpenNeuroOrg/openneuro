@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Panel, PanelGroup } from 'react-bootstrap'
+import { Panel } from '../../components/panel'
+import { PanelGroup } from '../../components/panel-group'
 import UploadResume from '../../uploader/upload-resume.jsx'
 
 const IncompleteDataset = ({ datasetId }) => (

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Panel, PanelGroup } from 'react-bootstrap'
+import { Panel } from '../../components/panel'
+import { PanelGroup } from '../../components/panel-group'
 
 class ValidationPanel extends React.Component {
   constructor(props) {

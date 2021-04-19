@@ -1,4 +1,12 @@
-<html>
+export const ownerUnsubscribed = ({
+  siteUrl,
+  name,
+  datasetName,
+}: {
+  siteUrl: string
+  name: string
+  datasetName: string
+}): string => `<html>
 <head>
 <style>
 	body {
@@ -36,21 +44,19 @@
 </head>
 <body>
 	<div class="top-bar">
-		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
+		<img src="${siteUrl}/assets/CRN-Logo-Placeholder.png" />
 	</div>
 	<div class="content">
-		<h2>Hi, {{name}}</h2>
+		<h2>Hi, ${name}</h2>
 
 		<p>
-			Your dataset, <b>{{datasetName}}</b>, does not have a snapshot yet. If you would like to publish this dataset, you will first need to create a snapshot.
+			The owner of a dataset you follow, <b>${datasetName}</b>, has stopped tracking comments / changes to their dataset.
 		</p>
 
 		<p>
 			Sincerely,
 			The CRN Team
 		</p>
-
-		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetId}}/snapshot">Create a snapshot. &raquo;</a>
 	</div>
 </body>
-<html>
+<html>`

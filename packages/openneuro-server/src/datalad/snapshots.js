@@ -76,6 +76,7 @@ const createIfNotExistsDoi = async (
       if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
     } catch (err) {
       Sentry.captureException(err)
+      console.error(err)
       throw new Error('DOI minting failed.')
     }
   }

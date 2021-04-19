@@ -16,6 +16,7 @@ const snapshotSchema = new Schema({
 })
 
 snapshotSchema.index({ datasetId: 1, tag: 1 }, { unique: true })
+snapshotSchema.index({ datasetId: 1 })
 
 const Snapshot = model<SnapshotDocument>('Snapshot', snapshotSchema)
 

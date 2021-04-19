@@ -1,9 +1,6 @@
 // @ts-nocheck
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* global papaya, papayaContainers */
-
-// dependencies -------------------------------------------------------
-
+/* global papaya, papayaContainers, globalThis */
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -20,7 +17,7 @@ class Papaya extends React.Component {
   componentDidMount() {
     // clear any old containers
     // eslint-disable-next-line no-global-assign, @typescript-eslint/no-unused-vars
-    papayaContainers = []
+    globalThis.papayaContainers = []
 
     const params = {
       worldSpace: true,
@@ -33,17 +30,17 @@ class Papaya extends React.Component {
     }
 
     // rebuild container
-    papaya.Container.startPapaya()
+    globalThis.papaya.Container.startPapaya()
 
     // start viewer
-    papaya.Container.resetViewer(0, params)
+    globalThis.papaya.Container.resetViewer(0, params)
 
     // listen to window resizes
-    window.addEventListener('resize', this._updateDimensions.bind(this))
+    globalThis.addEventListener('resize', this._updateDimensions.bind(this))
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._updateDimensions.bind(this))
+    globalThis.removeEventListener('resize', this._updateDimensions.bind(this))
   }
 
   render() {

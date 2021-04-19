@@ -7,5 +7,5 @@
   },
   "include": ["./src"],
   "files": ["./src/lerna.json"],
-  "references": [{ "path": "../openneuro-app" }]
+  "references": [{ "path": "../openneuro-client" }]
 }

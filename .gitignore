@@ -13,3 +13,9 @@ packages/openneuro-server/yarn.lock
 dist
 .build-cache
 .ultra.cache.json
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

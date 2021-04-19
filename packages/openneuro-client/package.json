@@ -1,6 +1,6 @@
 {
   "name": "openneuro-client",
-  "version": "3.32.0-alpha.21",
+  "version": "3.32.3",
   "description": "OpenNeuro shared client library.",
   "main": "dist/index.js",
   "browser": "src/client.js",
@@ -19,5 +19,11 @@
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@babel/runtime-corejs3": "^7.13.10",
+    "apollo-server": "^2.23.0",
+    "core-js": "^3.10.1",
+    "openneuro-server": "workspace:packages/openneuro-server"
   }
 }

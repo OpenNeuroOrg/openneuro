@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { SchemaLink } from 'apollo-link-schema'
-import { addMockFunctionsToSchema, makeExecutableSchema } from 'graphql-tools'
+import { SchemaLink } from '@apollo/client/link/schema'
+import { addMockFunctionsToSchema, makeExecutableSchema } from 'apollo-server'
 import { typeDefs } from 'openneuro-server/src/graphql/schema'
 import resolvers from 'openneuro-server/src/graphql/resolvers/index.js'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Markdown from 'react-markdown'
+import Markdown from 'markdown-to-jsx'
 import Collapsible from '../../mobile/collapsible-wrapper'
 import { Media } from '../../styles/media'
 
@@ -16,7 +16,7 @@ const DatasetReadme = ({ content }) => {
           <div className="cte-display">
             <div className="fade-in">
               <Collapsible title={['SHOW MORE', 'SHOW LESS']}>
-                <Markdown>{content}</Markdown>
+                <Markdown>{content || ''}</Markdown>
               </Collapsible>
             </div>
           </div>
@@ -24,7 +24,7 @@ const DatasetReadme = ({ content }) => {
         <Media greaterThanOrEqual="medium">
           <div className="cte-display">
             <div className="fade-in">
-              <Markdown>{content}</Markdown>
+              <Markdown>{content || ''}</Markdown>
             </div>
           </div>
         </Media>

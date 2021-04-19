@@ -32,8 +32,6 @@ Sentry.init({
   environment: config.sentry.ENVIRONMENT,
 })
 
-const app = createApp(false)
-
 mongoose.connect(config.mongo.url, {
   useNewUrlParser: true,
   dbName: config.mongo.dbName,
@@ -42,6 +40,7 @@ mongoose.connect(config.mongo.url, {
 })
 
 redisConnectionSetup().then(() => {
+  const app = createApp(false)
   const server = createServer(app)
   server.listen(config.port, () => {
     // eslint-disable-next-line no-console
