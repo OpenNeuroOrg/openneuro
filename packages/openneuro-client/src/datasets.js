@@ -267,3 +267,34 @@ export const trackAnalytics = gql`
     trackAnalytics(datasetId: $datasetId, tag: $tag, type: $type)
   }
 `
+
+export const downloadDataset = gql`
+  query dataset($datasetId: ID!) {
+    dataset(id: $datasetId) {
+      id
+      draft {
+        id
+        files(prefix: null) {
+          id
+          filename
+          size
+          urls
+        }
+      }
+    }
+  }
+`
+
+export const downloadSnapshot = gql`
+  query snapshot($datasetId: ID!, $tag: String!) {
+    snapshot(datasetId: $datasetId, tag: $tag) {
+      id
+      files(prefix: null) {
+        id
+        filename
+        size
+        urls
+      }
+    }
+  }
+`

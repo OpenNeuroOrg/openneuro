@@ -11,7 +11,7 @@ import {
   requestFailureToast,
 } from './native-file-toast.jsx'
 import { apm } from '../../apm.js'
-import { config } from '../../config'
+import { downloadDataset } from './download-query'
 
 /**
  * Given a file, create any missing parent directories, obtain directory handle, and return the file handle within that
@@ -46,16 +46,11 @@ class DownloadAbortError extends Error {
  * @param {string} datasetId Accession number string for a dataset
  * @param {string} snapshotTag Snapshot tag name
  */
-export const downloadNative = (datasetId, snapshotTag) => async () => {
-  // const filesToDownload = await (
-  //   await fetch(`${config.api}graphql`, {
-  //     method: 'POST',
-  //     body: JSON.stringify({
-  //       query,
-  //       variables,
-  //     }),
-  //   })
-  // ).json()
+export const downloadNative = (datasetId, snapshotTag, client) => async () => {
+  const filesToDownload = await downloadDataset(client)({
+    datasetId,
+    snapshotTag,
+  })
 
   // Try trackDownload but don't worry if it fails
   try {
