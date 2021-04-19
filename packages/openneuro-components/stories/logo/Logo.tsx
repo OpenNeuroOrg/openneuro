@@ -36,7 +36,7 @@ export const Logo: React.FC<LogoProps> = ({
         width: width,
       }}
       {...props}>
-      <img src={logoStyle} />
+      <img src={logoStyle} alt="box with connection dots and lines that says openneuro next to it " />
     </div>
   )
 }

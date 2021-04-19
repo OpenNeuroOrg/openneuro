@@ -1,14 +1,11 @@
 @import '../scss/global';
 @import '../scss/variables';
 
-.header-inner-wrap {
+.navbar-inner-wrap {
   display: flex;
   justify-content: space-between;
   padding: 10px 25px 0;
   align-items: center;
-}
-
-.header-inner-wrap {
   background-color: $on-dark-aqua;
 }
 .svg-fill-on-dark-aqua {
@@ -17,4 +14,49 @@
 
 .swoop {
   width: 100%;
+}
+
+.navbar-navigation {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    li {
+      margin: 0 10px -10px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      a {
+        color: #f4f4f4;
+        text-decoration: none;
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      &:after {
+        transition: width 0.5s;
+        content: '';
+        border-bottom: 2px solid #fff;
+        width: 0;
+        display: block;
+        transition: width 0.3s;
+        margin-top: 10px;
+      }
+      &:hover {
+        &:after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.navbar-account {
+  flex-basis: 300px;
+  display: flex;
+  justify-content: flex-end;
 }

@@ -14,6 +14,7 @@ export interface ButtonProps {
   color?: string;
   imgSrc?: string;
   iconSize?: string;
+  buttonClass?: string;
 }
 
 /**
@@ -30,6 +31,7 @@ export const Button: React.FC<ButtonProps> = ({
   color,
   imgSrc,
   iconSize,
+  buttonClass,
   ...props
 }) => {
   const mode = primary && !navbar ? 'on-button--primary' : secondary && !navbar ? 'on-button--secondary' : !navbar ? 'on-no-background' : 'on-button--navbar';
@@ -39,8 +41,9 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      role="button"
       type="button"
-      className={['on-button', `on-button--${size}`, mode, iconWithText].join(' ')}
+      className={['on-button', `on-button--${size}`, mode, iconWithText, buttonClass].join(' ')}
       style={{ backgroundColor, color }}
       {...props}
     >

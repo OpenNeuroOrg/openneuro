@@ -69,6 +69,7 @@
     "@babel/runtime-corejs3": "^7.6.3",
     "@loadable/babel-plugin": "^5.10.3",
     "@mdx-js/react": "^1.6.22",
+    "@storybook/addon-a11y": "^6.2.8",
     "@storybook/addon-actions": "^6.2.8",
     "@storybook/addon-docs": "^6.2.8",
     "@storybook/addon-essentials": "^6.2.8",
