@@ -12,3 +12,12 @@ const Template: Story<ModalExampleProps> = (args) => <ModalExample {...args} />;
 
 export const BasicModal = Template.bind({})
 
+BasicModal.args = {
+  closeText: 'Close Me',
+  buttonText: 'Open Modal'
+}
+
+export const NoCloseButton = Template.bind({})
+NoCloseButton.args = {
+  buttonText: 'Open No Button Modal'
+}

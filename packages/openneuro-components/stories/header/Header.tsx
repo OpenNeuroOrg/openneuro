@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
+
+import orcidIcon from '../assets/orcid_24x24.png'
+
 import './header.scss'
 
 export interface HeaderProps {
@@ -55,8 +58,32 @@ export const Header: React.FC<HeaderProps> = ({
           <path d="M1,0  L1200,0 C100,120 0,0 -100, 10z" className="svg-fill-on-dark-aqua" />
         </svg>
       </header>
-      <Modal isOpen={isOpen} toggle={toggle}closeText="Close">
-        <p>This is the content.</p>
+      <Modal isOpen={isOpen} toggle={toggle} closeText="Close">
+        <div class='grid grid-center grid-column'>
+          <Logo horizontal dark={true} width="230px" className="m-t-20" />
+          <h4>Sign in</h4>
+        </div>
+        <div class='grid grid-between'>
+          <div class='col'>
+          <div class='grid grid-center'>
+            <Button
+              buttonClass="login-button" 
+              primary   
+              label='Google'  
+              icon='fab fa-google'  
+              iconSize='23px' />   
+              </div>
+          </div>
+          <div class='col'>  
+            <div class='grid grid-center'>
+              <Button 
+                buttonClass="login-button"
+                primary
+                label='ORCID'  
+                imgSrc={orcidIcon} />   
+            </div>
+          </div>
+        </div>
       </Modal>
     </>
   )

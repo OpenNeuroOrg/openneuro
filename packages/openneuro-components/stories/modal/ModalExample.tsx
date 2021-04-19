@@ -4,10 +4,13 @@ import { Button } from '../button/Button'
 import { Modal } from '../modal/Modal'
 
 export interface ModalExampleProps {
-
+  closeText: string;
+  buttonText: string;
 }
 
 export const ModalExample: React.FC<ModalExampleProps> = ({
+  closeText,
+  buttonText,
   ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,9 +21,9 @@ export const ModalExample: React.FC<ModalExampleProps> = ({
         size='small'
         primary
         onClick={toggle}
-        label="Click Me"
+        label={buttonText}
       />
-      <Modal isOpen={isOpen} toggle={toggle} closeText="Now Close">
+      <Modal isOpen={isOpen} toggle={toggle} closeText={closeText}>
         <p>This is the content.</p>
       </Modal>
     </>

@@ -19,19 +19,30 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const showModal = isOpen ? "show-modal" : "hide-modal"
   return (
-    <div className={'modal-wrapper ' + showModal} >
+    <div className={'modal-wrapper ' + showModal} {...props}>
     <div className="overlay" onClick={toggle}></div>
 
-    <div className="modal" isOpen={isOpen} toggle={toggle} >
-      <span className="modal-close-x" onClick={toggle}>&times;</span>
-      <div className="modal-body">{children}</div>
-      <Button
-        buttonClass="modal-close-button"
-        size='small'
-        primary
-        onClick={toggle}
-        label={closeText}
-      />
+    <div className="grid modal" isOpen={isOpen} toggle={toggle} >
+      <div className="col">
+        <span className="modal-close-x" onClick={toggle}>&times;</span>
+        <div className="grid modal-body">
+          <div className="col">
+            {children}
+          </div>
+        </div>
+        {closeText ? 
+          (<div className="grid grid-end">
+            <div className="m-b-20 m-r-20">
+              <Button
+                buttonClass="modal-close-button"
+                size='small'
+                onClick={toggle}
+                label={closeText}
+              /> 
+            </div>
+          </div>)
+        : null}
+        </div>
     </div>
   </div>
   );

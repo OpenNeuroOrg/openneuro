@@ -1,0 +1,219 @@
+//Base unit used for spacing gutters
+$base-unit: 8px;
+
+//Screen Sizes
+$screen-sm: 480px;
+$screen-md: 624px;
+$screen-lg: 744px;
+
+////////////////////////
+//The Flex Grid
+////////////////////////
+.grid {
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  -webkit-box-flex: 0;
+  flex: 0 1 auto;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: 0 ($base-unit * -1) 0 ($base-unit * -1);
+  //Use this modifier to remove gutters
+  &.grid-nogutter {
+    margin: 0;
+    & > .col {
+      padding: 0;
+    }
+  }
+
+  &.grid-column {
+    flex-direction: column;
+  }
+}
+
+.col {
+  box-sizing: border-box;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  -ms-flex-preferred-size: 0;
+  -webkit-flex-basis: 0;
+  flex-basis: 0;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 $base-unit 0 $base-unit;
+}
+
+////////////////////////
+//Column Modifiers
+////////////////////////
+
+//Column Vertical Alignment Classes
+.col-align-top {
+  -webkit-align-self: flex-start;
+  -ms-flex-item-align: start;
+  align-self: flex-start;
+}
+
+.col-align-bottom {
+  align-self: flex-end;
+}
+
+.col-align-middle {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+
+//Column Content Alignment Classes
+.col-top {
+  justify-content: flex-start !important;
+  flex-direction: column;
+  display: flex;
+}
+
+.col-bottom {
+  justify-content: flex-end !important;
+  flex-direction: column;
+  display: flex;
+}
+
+.col-middle {
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+}
+
+//Horizontal Grid Alignment
+.grid-start {
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.grid-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.grid-end {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.grid-column {
+  &.grid-start {
+    align-items: flex-start;
+  }
+
+  &.grid-center {
+    align-items: center;
+  }
+
+  &.grid-end {
+    align-items: flex-end;
+  }
+}
+
+//Column Distribution
+.grid-around {
+  justify-content: space-around;
+}
+
+.grid-between {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+//Reordering Columns
+.col-first {
+  -webkit-box-ordinal-group: 0;
+  -ms-flex-order: -1;
+  order: -1;
+}
+
+.col-last {
+  -webkit-box-ordinal-group: 2;
+  -ms-flex-order: 1;
+  order: 1;
+}
+
+.grid-reverse {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+}
+
+////////////////////////
+//Column Sizing Classes
+////////////////////////
+
+//Fixed Column Class
+.col-fixed {
+  flex: initial;
+}
+
+//Grow Based Columns
+@for $i from 2 through 11 {
+  .col-grow-#{$i} {
+    flex-grow: $i;
+  }
+}
+
+//Percent Based Columns
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    -ms-flex-preferred-size: (100% / 12) * $i;
+    -webkit-flex-basis: (100% / 12) * $i;
+    flex-basis: (100% / 12) * $i;
+    max-width: (100% / 12) * $i;
+  }
+}
+
+//////////////////
+//Media Queries
+//////////////////
+@media only screen and (max-width: $screen-sm) {
+  // .grid-sm {
+  .col-sm {
+    flex: 100%;
+    max-width: 100%;
+  }
+  // }
+}
+
+@media only screen and (max-width: $screen-md) {
+  // .grid-md {
+  .col-md {
+    flex: 100%;
+    max-width: 100%;
+  }
+  // }
+}
+
+@media only screen and (max-width: $screen-lg) {
+  // .grid-lg {
+  .col-lg {
+    flex: 100%;
+    max-width: 100%;
+  }
+  // }
+}
