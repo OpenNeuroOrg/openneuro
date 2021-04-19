@@ -37,7 +37,9 @@
     "build": "tsc -b",
     "openneuro": "node src/index.js",
     "git-credential-openneuro": "node src/index.js",
-    "git-annex-remote-openneuro": "node src/index.js"
+    "git-annex-remote-openneuro": "node src/index.js",
+    "prepack": "rm src/lerna.json && cp ../../lerna.json src/lerna.json",
+    "postpack": "rm src/lerna.json && ln -sf ../../../lerna.json src/lerna.json"
   },
   "jest": {
     "setupFiles": [
