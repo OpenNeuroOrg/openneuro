@@ -8,7 +8,9 @@
   "author": "Squishymedia",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "prepack": "rm src/lerna.json && cp ../../lerna.json src/lerna.json",
+    "postpack": "rm src/lerna.json && ln -sf ../../../lerna.json src/lerna.json"
   },
   "dependencies": {
     "@apollo/client": "3.3.14",
