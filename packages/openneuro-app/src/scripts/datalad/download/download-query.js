@@ -17,7 +17,6 @@ export const downloadDataset = client => async ({ datasetId, snapshotTag }) => {
         datasetId,
       },
     })
-    console.log({ data })
     return data.dataset.draft.files
   }
 }
