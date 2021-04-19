@@ -14158,6 +14158,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["commander", "npm:6.2.1"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:7.2.0", {
+          "packageLocation": "./.yarn/cache/commander-npm-7.2.0-19178180f8-bdc0eca5e2.zip/node_modules/commander/",
+          "packageDependencies": [
+            ["commander", "npm:7.2.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["common-tags", [
@@ -28767,7 +28774,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bids-validator", "npm:1.6.3"],
             ["cli-progress", "npm:3.9.0"],
             ["colors", "npm:1.4.0"],
-            ["commander", "npm:2.20.3"],
+            ["commander", "npm:7.2.0"],
             ["core-js", "npm:3.10.1"],
             ["cross-fetch", "npm:3.1.4"],
             ["elastic-apm-node", "npm:3.12.1"],
