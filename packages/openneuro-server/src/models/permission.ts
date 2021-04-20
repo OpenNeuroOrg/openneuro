@@ -4,7 +4,7 @@ const { Schema, model } = mongoose
 export interface PermissionDocument extends Document {
   datasetId: string
   userId: string
-  level: string
+  level: 'ro' | 'rw' | 'admin'
 }
 
 const permissionSchema = new Schema({
