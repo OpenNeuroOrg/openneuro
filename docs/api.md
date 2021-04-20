@@ -92,3 +92,17 @@ mutation {
   }
 }
 ```
+
+### Dataset Deletion
+
+Datasets can be deleted with the `deleteDataset` mutation, which returns a Boolean. This will delete the dataset in datalad, its associated snapshots, and its remotes on GitHub and S3.
+
+```graphql
+mutation deleteDataset {
+  deleteDataset(
+		id: "ds000001"
+    reason: "demo"
+    redirect: "https://openneuro.org/datasets/ds999999"
+  )
+}
+```
