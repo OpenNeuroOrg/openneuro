@@ -28744,7 +28744,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["style-loader", "npm:0.23.1"],
             ["subscriptions-transport-ws", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:0.9.18"],
             ["superagent", "npm:3.8.3"],
-            ["ts-node-dev", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:1.1.6"],
+            ["ts-node-dev", "virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:1.1.6"],
+            ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"],
             ["universal-cookie", "npm:4.0.4"],
             ["universal-cookie-express", "npm:4.0.3"],
             ["url-loader", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:1.1.2"],
@@ -36919,34 +36920,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-node-dev", "npm:1.1.6"]
           ],
           "linkType": "SOFT",
-        }],
-        ["virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:1.1.6", {
-          "packageLocation": "./.yarn/$$virtual/ts-node-dev-virtual-5761dcb6c7/0/cache/ts-node-dev-npm-1.1.6-e6df3f5219-565064856b.zip/node_modules/ts-node-dev/",
-          "packageDependencies": [
-            ["ts-node-dev", "virtual:5e3dbdbc1e144945c59d53bfa1bbc6d5cbbd40703070ffe98614d3e9d456ae7f64d7f1867e6d3458485a0e3df7f2e4b193e7d1ed606ec7c7a673349bc046476f#npm:1.1.6"],
-            ["@types/node-notifier", null],
-            ["@types/typescript", null],
-            ["chokidar", "npm:3.5.1"],
-            ["dateformat", "npm:1.0.12"],
-            ["dynamic-dedupe", "npm:0.3.0"],
-            ["minimist", "npm:1.2.5"],
-            ["mkdirp", "npm:1.0.4"],
-            ["node-notifier", null],
-            ["resolve", "patch:resolve@npm%3A1.20.0#builtin<compat/resolve>::version=1.20.0&hash=3388aa"],
-            ["rimraf", "npm:2.7.1"],
-            ["source-map-support", "npm:0.5.19"],
-            ["tree-kill", "npm:1.2.2"],
-            ["ts-node", "virtual:f4067222220ec014880790e572c17a33194a8654a3447b7b014d076771f04a87d2e739138c52baef52e6ceff1e36d5794b7bae0ff72699782fffb0e064926c47#npm:9.1.1"],
-            ["tsconfig", "npm:7.0.0"],
-            ["typescript", null]
-          ],
-          "packagePeers": [
-            "@types/node-notifier",
-            "@types/typescript",
-            "node-notifier",
-            "typescript"
-          ],
-          "linkType": "HARD",
         }],
         ["virtual:cccc99206e94c007d8d5b1f08e150b0b9d0a26e8d007a83d7c6e7818bd37f5c3ffac2ec93789bfb48ee06ce36cf8443e7c1b8aafa0dc72de9c10fd4bfe2db9c3#npm:1.1.6", {
           "packageLocation": "./.yarn/$$virtual/ts-node-dev-virtual-75a62d4600/0/cache/ts-node-dev-npm-1.1.6-e6df3f5219-565064856b.zip/node_modules/ts-node-dev/",

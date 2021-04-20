@@ -22311,6 +22311,7 @@ fsevents@^1.2.7:
     subscriptions-transport-ws: ^0.9.9
     superagent: ^3.6.0
     ts-node-dev: ^1.1.6
+    typescript: 4.0.6
     universal-cookie: ^4.0.4
     universal-cookie-express: ^4.0.3
     url-loader: ^1.0.1
