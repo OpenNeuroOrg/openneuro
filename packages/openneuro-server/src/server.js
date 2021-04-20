@@ -37,6 +37,8 @@ mongoose.connect(config.mongo.url, {
   dbName: config.mongo.dbName,
   connectTimeoutMS: config.mongo.connectTimeoutMS,
   useFindAndModify: false,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
 })
 
 redisConnectionSetup().then(() => {
