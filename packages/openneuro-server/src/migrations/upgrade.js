@@ -3,7 +3,7 @@
 import config from '../config.js'
 import { connect as redisConnect } from '../libs/redis.js'
 import mongoose from 'mongoose'
-import Migration from '../models/migration.js'
+import Migration from '../models/migration'
 import migrations from './index.js'
 
 // Setup Mongoose

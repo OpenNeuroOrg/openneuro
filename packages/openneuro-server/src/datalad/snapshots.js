@@ -13,7 +13,7 @@ import doiLib from '../libs/doi/index.js'
 import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
-import Dataset from '../models/dataset.js'
+import Dataset from '../models/dataset'
 import Snapshot from '../models/snapshot'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
@@ -234,7 +234,7 @@ export const deleteSnapshot = (datasetId, tag) => {
  * Get the contents of a snapshot (files, git metadata) from datalad-service
  * @param {string} datasetId Dataset accession number
  * @param {string} tag Tag name to retrieve
- * @returns {Snapshot}
+ * @returns {Promise<import('../models/snapshot').SnapshotDocument>}
  */
 export const getSnapshot = (datasetId, tag) => {
   const url = `${getDatasetWorker(

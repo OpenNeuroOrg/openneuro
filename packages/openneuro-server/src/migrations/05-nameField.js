@@ -3,7 +3,7 @@
  * Prepopulate Dataset.name field on upgrade
  */
 import path from 'path'
-import Dataset from '../models/dataset.js'
+import Dataset from '../models/dataset'
 import { datasetName } from '../graphql/resolvers/dataset.js'
 
 export default {

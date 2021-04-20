@@ -1,5 +1,5 @@
 import notifications from '../libs/notifications'
-import Subscription from '../models/subscription.js'
+import Subscription from '../models/subscription'
 import mongoose from 'mongoose'
 const ObjectID = mongoose.Schema.Types.ObjectId
 
@@ -24,7 +24,7 @@ export const create = (req, res, next) => {
   const userId = data.userId
 
   subscribe(datasetId, userId)
-    .then(response => res.send(response.ops))
+    .then(response => res.send(response.$op))
     .catch(err => next(err))
 }
 
@@ -40,19 +40,16 @@ export const deleteSubscription = (req, res, next) => {
 
   // delete an entry in the c.crn.subscriptions db
   // with the datasetId and userId
-  Subscription.deleteOne(
-    {
-      datasetId: datasetId,
-      userId: userId,
-    },
-    err => {
-      if (err) {
-        return next(err)
-      } else {
-        return res.send()
-      }
-    },
-  )
+  Subscription.deleteOne({
+    datasetId: datasetId,
+    userId: userId,
+  }).catch(err => {
+    if (err) {
+      return next(err)
+    } else {
+      return res.send()
+    }
+  })
 }
 
 export const deleteAll = (req, res, next) => {
@@ -68,7 +65,7 @@ export const deleteAll = (req, res, next) => {
     }
     subscriptions.forEach(subscription => {
       Subscription.deleteOne({
-        _id: ObjectID(subscription._id),
+        _id: new ObjectID(subscription._id),
       })
     })
     return res.send()

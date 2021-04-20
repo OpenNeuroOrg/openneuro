@@ -1,4 +1,4 @@
-import MetadataModel from '../../models/metadata.js'
+import MetadataModel from '../../models/metadata'
 
 /**
  * Summary resolver

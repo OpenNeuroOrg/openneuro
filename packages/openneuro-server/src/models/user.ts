@@ -1,7 +1,21 @@
 import uuid from 'uuid'
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
+const { Schema, model } = mongoose
 
-const userSchema = new mongoose.Schema({
+export interface UserDocument extends Document {
+  id: string
+  email: string
+  name: string
+  provider: StaticRangeInit
+  providerId: string
+  refresh: string
+  admin: boolean
+  blocked: boolean
+  created: Date
+  lastSeen: Date
+}
+
+const userSchema = new Schema({
   id: { type: String, default: uuid.v4 }, // OpenNeuro id
   email: String,
   name: String,
@@ -16,6 +30,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.index({ id: 1, provider: 1 }, { unique: true })
 
-const User = mongoose.model('User', userSchema)
+const User = model<UserDocument>('User', userSchema)
 
 export default User

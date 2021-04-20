@@ -1,4 +1,4 @@
-import Upload from '../../models/upload.js'
+import Upload from '../../models/upload'
 import { checkDatasetWrite } from '../permissions.js'
 import { generateUploadToken } from '../../libs/authentication/jwt.js'
 import { finishUploadRequest } from '../../datalad/upload.js'

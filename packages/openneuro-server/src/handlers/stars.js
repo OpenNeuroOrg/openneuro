@@ -27,7 +27,7 @@ export default {
         if (err) {
           return next(err)
         } else {
-          return res.send(response.ops)
+          return res.send(response.$op)
         }
       },
     )
@@ -46,19 +46,16 @@ export default {
 
     // delete an entry in the c.crn.stars db
     // with the datasetId and userId
-    Star.deleteOne(
-      {
-        datasetId: datasetId,
-        userId: userId,
-      },
-      err => {
-        if (err) {
-          return next(err)
-        } else {
-          return res.send()
-        }
-      },
-    )
+    Star.deleteOne({
+      datasetId: datasetId,
+      userId: userId,
+    }).catch(err => {
+      if (err) {
+        return next(err)
+      } else {
+        return res.send()
+      }
+    })
   },
 
   // read
@@ -75,7 +72,7 @@ export default {
     if (datasetId) {
       Star.find({
         datasetId: datasetId,
-      }).toArray((err, stars) => {
+      }).exec((err, stars) => {
         if (err) {
           return next(err)
         }

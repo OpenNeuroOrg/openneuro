@@ -27,14 +27,9 @@ const replies = obj => {
 export const flatten = arr => [].concat(...arr)
 
 /**
- * @typedef {Object} Comment
- * @property {string} _id
- */
-
-/**
  * returns a flat array of all the dependencies of the given comment
- * @param {Comment} obj
- * @returns {Promise<Comment[]>}
+ * @param {import('../../models/comment').CommentDocument} obj
+ * @returns {Promise<import('../../models/comment').CommentDocument[]>}
  */
 const allNestedReplies = async obj => {
   const replies = await Comment.find({ parentId: obj._id }).exec()

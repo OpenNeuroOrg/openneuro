@@ -13,6 +13,7 @@ describe('email template -> comment created', () => {
         datasetName: 'ds1245678',
         datasetLabel: 'Not Real Dataset',
         dateCreated: '2063-04-05',
-      })).toMatchSnapshot()
+      }),
+    ).toMatchSnapshot()
   })
 })

@@ -1,7 +1,19 @@
-import mongoose from 'mongoose'
-import DatasetChange from './datasetChange.js'
+import mongoose, { Document } from 'mongoose'
+const { Schema, model } = mongoose
+import DatasetChange from './datasetChange'
 
-const datasetSchema = new mongoose.Schema(
+export interface DatasetDocument extends Document {
+  id: string
+  created: Date
+  modified: Date
+  public: boolean
+  publishDate: Date
+  uploader: string
+  name: string
+  _conditions: any
+}
+
+const datasetSchema = new Schema<DatasetDocument>(
   {
     id: { type: String, unique: true }, // Accession number
     created: { type: Date, default: Date.now },
@@ -70,6 +82,6 @@ datasetSchema.post('deleteOne', function () {
   }).save()
 })
 
-const Dataset = mongoose.model('Dataset', datasetSchema)
+const Dataset = model<DatasetDocument>('Dataset', datasetSchema)
 
 export default Dataset

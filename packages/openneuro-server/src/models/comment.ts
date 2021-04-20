@@ -1,6 +1,18 @@
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
+const { Schema, model } = mongoose
 
-const commentSchema = new mongoose.Schema(
+export interface CommentDocument extends Document {
+  createDate: Date
+  datasetId: string
+  datasetLabel: string
+  user: {
+    _id: string
+  }
+  parentId: string
+  text: string
+}
+
+const commentSchema = new Schema(
   {
     createDate: { type: Date, default: Date.now },
     datasetId: String,
@@ -28,6 +40,6 @@ commentSchema.virtual('parent', {
   justOne: true,
 })
 
-const Comment = mongoose.model('Comment', commentSchema)
+const Comment = model<CommentDocument>('Comment', commentSchema)
 
 export default Comment
