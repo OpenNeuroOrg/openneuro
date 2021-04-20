@@ -1,7 +1,7 @@
 /** Needs to run before the other imports in Node */
 import { start } from 'elastic-apm-node'
 start({
-  serviceName: 'openneuro-server',
+  serviceName: '@openneuro/server',
 })
 
 import * as Sentry from '@sentry/node'

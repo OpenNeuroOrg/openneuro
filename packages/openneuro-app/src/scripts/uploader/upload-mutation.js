@@ -1,4 +1,4 @@
-import { datasets, uploads } from 'openneuro-client'
+import { datasets, uploads } from '@openneuro/client'
 import { SUBMIT_METADATA } from '../datalad/mutations/submit-metadata.jsx'
 
 /**

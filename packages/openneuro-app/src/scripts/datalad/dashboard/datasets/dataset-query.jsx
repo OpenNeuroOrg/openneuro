@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from '@apollo/client/react/components'
-import { datasets } from 'openneuro-client'
+import { datasets } from '@openneuro/client'
 import DatasetTab from './dataset-tab.jsx'
 import ErrorBoundary from '../../../../scripts/errors/errorBoundary.jsx'
 

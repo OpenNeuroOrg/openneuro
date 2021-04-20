@@ -13,7 +13,7 @@ const setupApm = active =>
     ? elasticApm
     : elasticApm.start({
         serverUrl: url,
-        serviceName: 'openneuro-cli',
+        serviceName: '@openneuro/cli',
         environment: 'production',
         logLevel: 'fatal',
         active,

@@ -1019,8 +1019,8 @@ __metadata:
   linkType: hard
 
 "@babel/cli@npm:^7.5.5":
-  version: 7.13.14
-  resolution: "@babel/cli@npm:7.13.14"
+  version: 7.13.16
+  resolution: "@babel/cli@npm:7.13.16"
   dependencies:
     "@nicolo-ribaudo/chokidar-2": 2.1.8-no-fsevents
     chokidar: ^3.4.0
@@ -1028,7 +1028,6 @@ __metadata:
     convert-source-map: ^1.1.0
     fs-readdir-recursive: ^1.1.0
     glob: ^7.0.0
-    lodash: ^4.17.19
     make-dir: ^2.1.0
     slash: ^2.0.0
     source-map: ^0.5.0
@@ -1042,7 +1041,7 @@ __metadata:
   bin:
     babel: ./bin/babel.js
     babel-external-helpers: ./bin/babel-external-helpers.js
-  checksum: 6259a752460c92685ce6c4d4a63f2010081add799388bce003b8a2278e9ce94fd6b470ab511fbab509da2034631539d030932059ca343b1a09433ed88032e91f
+  checksum: 97324cb2b8469b61452bc189a7de4b4d248a4b5fb9a697a3a2f9388f85f1291ac58fe8f5eeb9d419652d4e9e242d970db845578a31a1a118227625faf955ca7f
   languageName: node
   linkType: hard
 
@@ -1064,7 +1063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@npm:^7.13.11, @babel/compat-data@npm:^7.13.12, @babel/compat-data@npm:^7.13.15, @babel/compat-data@npm:^7.13.8":
+"@babel/compat-data@npm:^7.13.11, @babel/compat-data@npm:^7.13.15, @babel/compat-data@npm:^7.13.8":
   version: 7.13.15
   resolution: "@babel/compat-data@npm:7.13.15"
   checksum: 6abe95cbd36e54217cdcc51829e377cf31451ed0a64ff43cc82e0ce728d9e265990c5e079d5c3f9ee0afd49e20d6c90112fe2093ed0699c2ffc62f5172df24fa
@@ -1119,37 +1118,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.13.15, @babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.15, @babel/core@npm:^7.5.5, @babel/core@npm:^7.6.4, @babel/core@npm:^7.7.5":
-  version: 7.13.15
-  resolution: "@babel/core@npm:7.13.15"
+"@babel/core@npm:7.13.16, @babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.15, @babel/core@npm:^7.5.5, @babel/core@npm:^7.6.4, @babel/core@npm:^7.7.5":
+  version: 7.13.16
+  resolution: "@babel/core@npm:7.13.16"
   dependencies:
     "@babel/code-frame": ^7.12.13
-    "@babel/generator": ^7.13.9
-    "@babel/helper-compilation-targets": ^7.13.13
+    "@babel/generator": ^7.13.16
+    "@babel/helper-compilation-targets": ^7.13.16
     "@babel/helper-module-transforms": ^7.13.14
-    "@babel/helpers": ^7.13.10
-    "@babel/parser": ^7.13.15
+    "@babel/helpers": ^7.13.16
+    "@babel/parser": ^7.13.16
     "@babel/template": ^7.12.13
     "@babel/traverse": ^7.13.15
-    "@babel/types": ^7.13.14
+    "@babel/types": ^7.13.16
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.1.2
     semver: ^6.3.0
     source-map: ^0.5.0
-  checksum: 818377633fa89d9b333c1a71625f9398e9e5a92270209cc8b5392e36385b5fe61210b2b31fb114ffe255974a3341cdfaa9e89a0fa81fabba9f6c14332fb72a02
+  checksum: 1a53b70629fae3c5b714af1c582a92ffbb1a87d0f8fe705292faed6281476bf0a35ffa19d9d28ad791610d203fdbb8928e28aedb52a02023a561caaa44a9ee61
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.10.5, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.13.9, @babel/generator@npm:^7.4.0, @babel/generator@npm:^7.5.5":
-  version: 7.13.9
-  resolution: "@babel/generator@npm:7.13.9"
+"@babel/generator@npm:^7.10.5, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.13.16, @babel/generator@npm:^7.13.9, @babel/generator@npm:^7.4.0, @babel/generator@npm:^7.5.5":
+  version: 7.13.16
+  resolution: "@babel/generator@npm:7.13.16"
   dependencies:
-    "@babel/types": ^7.13.0
+    "@babel/types": ^7.13.16
     jsesc: ^2.5.1
     source-map: ^0.5.0
-  checksum: d9cf7db910dd703a55c3ba147a8024564d51de06f5e3e61aef6ca197bcd80a6cb0a633fe4688c8c9f6226c70ee6f32a747050a8e420972b45cc98a6b3fc5ae66
+  checksum: 299bf875ea550f52d157260804bf5b1acdc27269ae7287e53a1a5a602ff6052a466f4a4c03dc7377b3f2d5240eea5ee92162e2a943acb4d28e017ac89ab89e9d
   languageName: node
   linkType: hard
 
@@ -1172,17 +1171,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@npm:^7.13.0, @babel/helper-compilation-targets@npm:^7.13.13, @babel/helper-compilation-targets@npm:^7.13.8":
-  version: 7.13.13
-  resolution: "@babel/helper-compilation-targets@npm:7.13.13"
+"@babel/helper-compilation-targets@npm:^7.13.0, @babel/helper-compilation-targets@npm:^7.13.13, @babel/helper-compilation-targets@npm:^7.13.16, @babel/helper-compilation-targets@npm:^7.13.8":
+  version: 7.13.16
+  resolution: "@babel/helper-compilation-targets@npm:7.13.16"
   dependencies:
-    "@babel/compat-data": ^7.13.12
+    "@babel/compat-data": ^7.13.15
     "@babel/helper-validator-option": ^7.12.17
     browserslist: ^4.14.5
     semver: ^6.3.0
   peerDependencies:
     "@babel/core": ^7.0.0
-  checksum: 2d77381d5fa0e488e86b2abbf5c299a6c1b0e490c95d3ca9a63fac8d45713a182a32fedabceb207588681ae09fc1c19c5418c26e686ae752d46102c9537f9ec7
+  checksum: baa1e4cdd562996c6af0a8cedb097cd72f67c44577faf4b657015f477d4930ebcc40ca21dc1e5fcffe91a1517de6e4114bc21f805ca701dfac2ddd2e9b006228
   languageName: node
   linkType: hard
 
@@ -1261,12 +1260,12 @@ __metadata:
   linkType: hard
 
 "@babel/helper-hoist-variables@npm:^7.13.0":
-  version: 7.13.0
-  resolution: "@babel/helper-hoist-variables@npm:7.13.0"
+  version: 7.13.16
+  resolution: "@babel/helper-hoist-variables@npm:7.13.16"
   dependencies:
-    "@babel/traverse": ^7.13.0
-    "@babel/types": ^7.13.0
-  checksum: dae64c4d490fe1721f3bde984297711e7009a9d595e275cf725f3aec0e2183eb3cfcff00bbb2823c4e3845c5852dcea99be0db339941ba9a3229fa6e0314afc5
+    "@babel/traverse": ^7.13.15
+    "@babel/types": ^7.13.16
+  checksum: 5a0c74c19e1b3dd1c90619eb6088c4fae0b1a35b77479beaa294fd132a51b2d699ebadb05bca7ebff26b9d305f057341d4efc5caff118efde55a73a92321688a
   languageName: node
   linkType: hard
 
@@ -1403,14 +1402,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@npm:^7.10.4, @babel/helpers@npm:^7.12.5, @babel/helpers@npm:^7.13.10":
-  version: 7.13.10
-  resolution: "@babel/helpers@npm:7.13.10"
+"@babel/helpers@npm:^7.10.4, @babel/helpers@npm:^7.12.5, @babel/helpers@npm:^7.13.16":
+  version: 7.13.16
+  resolution: "@babel/helpers@npm:7.13.16"
   dependencies:
     "@babel/template": ^7.12.13
-    "@babel/traverse": ^7.13.0
-    "@babel/types": ^7.13.0
-  checksum: 1bc93126957b51108080ab1aa24997a9a10d5f395de54621ce9df7825cdbce878ad9d26886c927c3d9bcfd75d24972037ed5fb904fcd83fb92e5c8f8628f6b40
+    "@babel/traverse": ^7.13.15
+    "@babel/types": ^7.13.16
+  checksum: 8e3e8cdb2d996956843e8539b635711ddbf547eb6e65fc6a168b4c7ee7c548d0954bfd5859f5d644f6ce5116d6c4953051aca617a1e32f7224ceefbcaa30045f
   languageName: node
   linkType: hard
 
@@ -1425,12 +1424,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.10.5, @babel/parser@npm:^7.12.13, @babel/parser@npm:^7.12.5, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.13.15, @babel/parser@npm:^7.4.3, @babel/parser@npm:^7.5.5, @babel/parser@npm:^7.7.0":
-  version: 7.13.15
-  resolution: "@babel/parser@npm:7.13.15"
+"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.10.5, @babel/parser@npm:^7.12.13, @babel/parser@npm:^7.12.5, @babel/parser@npm:^7.12.7, @babel/parser@npm:^7.13.15, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.4.3, @babel/parser@npm:^7.5.5, @babel/parser@npm:^7.7.0":
+  version: 7.13.16
+  resolution: "@babel/parser@npm:7.13.16"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: 74e9edc72f187c3956a52b3bb7dad22769fa9bf91c0107d6d5f1841ad5f655e6d12e0380a5b296f8c61c4471b200cdfea490969b75d5dff6b942157a26a1a9ac
+  checksum: 4f02b226686ad98684128d64082388c8af3a2cd0bb986e8eb0339235d99f9a6bb55ba225da953291d975f341fe6d5d5dc006706d515f999be5ad49dd99f815e3
   languageName: node
   linkType: hard
 
@@ -1868,13 +1867,13 @@ __metadata:
   linkType: hard
 
 "@babel/plugin-transform-block-scoping@npm:^7.12.13":
-  version: 7.12.13
-  resolution: "@babel/plugin-transform-block-scoping@npm:7.12.13"
+  version: 7.13.16
+  resolution: "@babel/plugin-transform-block-scoping@npm:7.13.16"
   dependencies:
-    "@babel/helper-plugin-utils": ^7.12.13
+    "@babel/helper-plugin-utils": ^7.13.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: cea49384ce946e14a4d8141cccadd09f7d9467964ee2df83e7f7e0c8cbd3ef1901125caf5a4013720539780647092ceb875cef214841126aa2e68dc05381f1f5
+  checksum: 4ada80ee426255e0ab75e6bf816477ecbcbef225d9110ba07b09addeae9addad1765541c405d711678f3ea7a926e26e2e6796c7f5d1d7ca7ef8b5e25080cfe58
   languageName: node
   linkType: hard
 
@@ -2420,53 +2419,53 @@ __metadata:
   linkType: hard
 
 "@babel/register@npm:^7.5.5":
-  version: 7.13.14
-  resolution: "@babel/register@npm:7.13.14"
+  version: 7.13.16
+  resolution: "@babel/register@npm:7.13.16"
   dependencies:
+    clone-deep: ^4.0.1
     find-cache-dir: ^2.0.0
-    lodash: ^4.17.19
     make-dir: ^2.1.0
     pirates: ^4.0.0
     source-map-support: ^0.5.16
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 0dacbad9a231907c71ade15952bb9cfdc7bea35e22dac9190fa7bd3328ebae34f3fe16e957e4b8a6f10e50e1a614957195a4a9dbe4245018c8a986bc386fd2ec
+  checksum: 9a859b9fb5301525450638d57a7db72f0364a14b3e433f62062140b45ce13e5c92d9618f1f0413c6b41336937062e3cbd7fad88f2938b030e1b4331c11a74f23
   languageName: node
   linkType: hard
 
 "@babel/runtime-corejs2@npm:^7.0.0":
-  version: 7.13.10
-  resolution: "@babel/runtime-corejs2@npm:7.13.10"
+  version: 7.13.16
+  resolution: "@babel/runtime-corejs2@npm:7.13.16"
   dependencies:
     core-js: ^2.6.5
     regenerator-runtime: ^0.13.4
-  checksum: 92227fc200e5d76f229ab132dbc570ad7fb70b097045f7e4f7cb22d015345835801e6221558c6d180b5d24f58aca1eadde06cef179c63fd33cf7c9f55d88d6ae
+  checksum: 5072f6136b41dc1700ab7bf6a11a631651d35afb6835a7a513be7c032380b532dd9416299cda60ba600a2a296f5e98b7d81ccf9970c7f1f8437cac8c49a5ad4a
   languageName: node
   linkType: hard
 
 "@babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.13.10":
-  version: 7.13.10
-  resolution: "@babel/runtime-corejs3@npm:7.13.10"
+  version: 7.13.16
+  resolution: "@babel/runtime-corejs3@npm:7.13.16"
   dependencies:
     core-js-pure: ^3.0.0
     regenerator-runtime: ^0.13.4
-  checksum: cbf4de5c0e73197447c112b31e1e7bb48b7940c815fdc6e8aee28a9e33f57f5c3991ba0598dfbfb8bc4d22a7cfe3b2eced0f08c12f8e618aa2ccf73684ced051
+  checksum: ec3fdafe86b929ed6e603441c13023c1b964d925d71baf0a7cb991c464cfa838faa385106af04628a4bbd8c09fbbfc831ad2b607f83ef7c3bc2723f6f9e77936
   languageName: node
   linkType: hard
 
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.0, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
-  version: 7.13.10
-  resolution: "@babel/runtime@npm:7.13.10"
+  version: 7.13.16
+  resolution: "@babel/runtime@npm:7.13.16"
   dependencies:
     regenerator-runtime: ^0.13.4
-  checksum: 22014226b96a8c8e8d4e8bcdb011f317d1b32881aef424a669dc6ceaee14993d3609172967853cbf9c25c724c25145d45885b6c9df56ba241c12820776607f1f
+  checksum: 5975f71ee999ee80d5a2f9e35a645c1d6a54acf77bcfe1ce2904e0ed3155b2f2984aafdaabd0b776dc7ba19fe6764ca4a705fa22de07df983655faa76d5927a1
   languageName: node
   linkType: hard
 
 "@babel/standalone@npm:^7.12.6, @babel/standalone@npm:^7.4.5":
-  version: 7.13.15
-  resolution: "@babel/standalone@npm:7.13.15"
-  checksum: d6796c2219f6b32b1f96d49c7bf3af0a06dceed318cc469c9c1d4808147c02d5c82d910fe9a4a7dd28e58088e50f9d6c628139534016e22d0f2cd76c016746d6
+  version: 7.13.16
+  resolution: "@babel/standalone@npm:7.13.16"
+  checksum: 8f40a4d92928894d421a8c2a6aa08b4ed71db0b6567165c97d4177eb44b4b709493e8c139c40ac66c6c66baee46f67ac48109b08fe1c3a887a7239cf105c296a
   languageName: node
   linkType: hard
 
@@ -2497,14 +2496,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.0.0-beta.49, @babel/types@npm:^7.10.5, @babel/types@npm:^7.12.1, @babel/types@npm:^7.12.13, @babel/types@npm:^7.12.6, @babel/types@npm:^7.12.7, @babel/types@npm:^7.13.0, @babel/types@npm:^7.13.12, @babel/types@npm:^7.13.14, @babel/types@npm:^7.3.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.0, @babel/types@npm:^7.4.4, @babel/types@npm:^7.5.5, @babel/types@npm:^7.7.0, @babel/types@npm:^7.8.3":
-  version: 7.13.14
-  resolution: "@babel/types@npm:7.13.14"
+"@babel/types@npm:^7.0.0, @babel/types@npm:^7.0.0-beta.49, @babel/types@npm:^7.10.5, @babel/types@npm:^7.12.1, @babel/types@npm:^7.12.13, @babel/types@npm:^7.12.6, @babel/types@npm:^7.12.7, @babel/types@npm:^7.13.0, @babel/types@npm:^7.13.12, @babel/types@npm:^7.13.14, @babel/types@npm:^7.13.16, @babel/types@npm:^7.3.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.0, @babel/types@npm:^7.4.4, @babel/types@npm:^7.5.5, @babel/types@npm:^7.7.0, @babel/types@npm:^7.8.3":
+  version: 7.13.16
+  resolution: "@babel/types@npm:7.13.16"
   dependencies:
     "@babel/helper-validator-identifier": ^7.12.11
-    lodash: ^4.17.19
     to-fast-properties: ^2.0.0
-  checksum: 0dda1e774076c763ad38d77a2292524556be0629f5b7a2078bddb40ae4a2fd059d10197029a988926dc314f7519e17daa8a714656e0faa207f2bb5339b57410c
+  checksum: 220641637a3b3b4dbb8ea3d9b70051ba1f81f906cb776564aa70c0fa32364704867723e6f1df44b5fef6a39e9da8ae5a848d1e00d4576046316fce1c986a890b
   languageName: node
   linkType: hard
 
@@ -4507,6 +4505,262 @@ __metadata:
   checksum: 20e7f159be0ebd386291b8e37521f191ca1adc922e2096b6f1434e980336f3a5ee4073bc0e99a8bb91e1657c4a8a1671ce458fbe299d918d773bd4bcf7cb8f5c
   languageName: node
   linkType: hard
+
+"@openneuro/app@workspace:packages/openneuro-app":
+  version: 0.0.0-use.local
+  resolution: "@openneuro/app@workspace:packages/openneuro-app"
+  dependencies:
+    "@apollo/client": 3.3.14
+    "@artsy/fresnel": ^1.3.1
+    "@babel/core": ^7.6.4
+    "@babel/plugin-proposal-class-properties": ^7.5.5
+    "@babel/plugin-proposal-object-rest-spread": ^7.6.2
+    "@babel/plugin-proposal-optional-chaining": ^7.6.0
+    "@babel/plugin-syntax-dynamic-import": ^7.2.0
+    "@babel/plugin-transform-runtime": ^7.6.2
+    "@babel/preset-env": ^7.6.3
+    "@babel/preset-react": ^7.6.3
+    "@babel/preset-typescript": ^7.7.4
+    "@babel/runtime": ^7.6.3
+    "@babel/runtime-corejs3": ^7.13.10
+    "@elastic/apm-rum": ^5.5.0
+    "@emotion/core": ^10.0.4
+    "@emotion/styled": ^10.0.4
+    "@jest/globals": ^26.6.2
+    "@loadable/babel-plugin": ^5.10.3
+    "@loadable/component": ^5.7.0
+    "@openneuro/client": ^3.32.3
+    "@sentry/browser": ^4.5.3
+    "@testing-library/jest-dom": ^5.11.4
+    "@testing-library/react": ^11.1.0
+    "@types/jest": ^26.0.22
+    "@types/jsdom": ^16
+    "@types/node": ^14.14.37
+    "@types/react": ^17.0.3
+    "@wojtekmaj/enzyme-adapter-react-17": ^0.6.1
+    babel-core: ^7.0.0-bridge.0
+    babel-jest: ^24.9.0
+    babel-loader: ^8.0.4
+    babel-runtime: ^6.26.0
+    bids-validator: "npm:@squishymedia/bids-validator-debug@1.6.2-dev.15"
+    bytes: ^3.0.0
+    cache-loader: ^1.2.2
+    clean-webpack-plugin: ^0.1.19
+    comlink: ^4.0.5
+    compression-webpack-plugin: ^1.0.0
+    connect-history-api-fallback: ^1.5.0
+    copy-webpack-plugin: ^4.5.2
+    core-js: ^3.3.2
+    css-loader: ^1.0.0
+    date-fns: ^2.16.1
+    draft-js: ^0.11.7
+    email-validator: ^2.0.4
+    enzyme: 3.9.0
+    enzyme-to-json: ^3.3.5
+    esbuild-plugin-globals: ^0.1.1
+    esbuild-sass-plugin: ^1.0.11
+    express: ^4.17.1
+    file-loader: ^1.1.11
+    graphql: 14.7.0
+    jest: ^26.6.3
+    jest-fetch-mock: ^1.4.1
+    jsdom: ^16.5.3
+    jwt-decode: ^2.2.0
+    live-server: ^1.2.1
+    markdown-to-jsx: ^7.1.2
+    md5: ^2.3.0
+    mini-css-extract-plugin: ^0.4.1
+    moment-timezone: ^0.5.31
+    node-sass: 4.14.1
+    object.fromentries: ^2.0.0
+    os-browserify: ^0.3.0
+    pluralize: ^7.0.0
+    prop-types: ^15.6.0
+    react: ^17.0.1
+    react-addons-test-utils: ^15.6.2
+    react-bootstrap: 0.33.1
+    react-cookie: 4.0.3
+    react-copy-to-clipboard: ^5.0.1
+    react-dom: ^17.0.1
+    react-helmet: 6.1.0
+    react-router: ^5.1.2
+    react-router-dom: ^5.1.2
+    react-spring: ^8.0.27
+    react-test-renderer: ^16.8.6
+    react-toastify: 6.0.9
+    react-virtualized: "remorses/react-virtualized-fixed-import.git#9.22.3"
+    resize-observer-polyfill: ^1.5.1
+    rollup-plugin-polyfill-node: ^0.6.2
+    sass: ^1.32.8
+    sass-loader: ^7.1.0
+    semver: ^5.5.0
+    serviceworker-webpack-plugin: ^1.0.1
+    style-loader: ^0.23.1
+    subscriptions-transport-ws: ^0.9.9
+    superagent: ^3.6.0
+    ts-node-dev: ^1.1.6
+    typescript: 4.0.6
+    universal-cookie: ^4.0.4
+    universal-cookie-express: ^4.0.3
+    url-loader: ^1.0.1
+    url-search-params-polyfill: ^2.0.1
+    urlite: ^1.2.8
+    vite: 2.1.5
+    webpack: ^4.20.2
+    webpack-cli: ^3.1.2
+    webpack-dev-server: ^3.1.9
+    webpack-merge: ^4.1.4
+    webpack-visualizer-plugin: ^0.1.11
+    worker-plugin: ^3.2.0
+    xmldoc: ^1.1.0
+  languageName: unknown
+  linkType: soft
+
+"@openneuro/cli@workspace:packages/openneuro-cli":
+  version: 0.0.0-use.local
+  resolution: "@openneuro/cli@workspace:packages/openneuro-cli"
+  dependencies:
+    "@apollo/client": 3.3.14
+    "@babel/runtime-corejs3": ^7.13.10
+    "@openneuro/client": ^3.32.3
+    "@types/colors": ^1
+    "@types/node": ^14.14.41
+    bids-validator: 1.6.3
+    cli-progress: ^3.8.2
+    colors: 1.4.0
+    commander: 7.2.0
+    core-js: ^3.10.1
+    cross-fetch: ^3.0.5
+    elastic-apm-node: 3.12.1
+    esm: ^3.0.16
+    fetch-h2: ^2.5.1
+    find-config: ^1.0.0
+    inquirer: ^5.2.0
+    jest-fetch-mock: ^3.0.3
+    jwt-decode: ^3.1.2
+    metro-memory-fs: 0.61.0
+    mkdirp: ^0.5.1
+  bin:
+    git-annex-remote-openneuro: ./src/index.js
+    git-credential-openneuro: ./src/index.js
+    openneuro: ./src/index.js
+  languageName: unknown
+  linkType: soft
+
+"@openneuro/client@^3.32.3, @openneuro/client@workspace:packages/openneuro-client":
+  version: 0.0.0-use.local
+  resolution: "@openneuro/client@workspace:packages/openneuro-client"
+  dependencies:
+    "@apollo/client": 3.3.14
+    "@babel/runtime-corejs3": ^7.13.10
+    "@openneuro/server": "workspace:packages/openneuro-server"
+    apollo-server: ^2.23.0
+    core-js: ^3.10.1
+    cross-fetch: ^3.1.2
+    graphql: 14.7.0
+    semver: ^5.5.0
+    subscriptions-transport-ws: ^0.9.18
+  languageName: unknown
+  linkType: soft
+
+"@openneuro/indexer@workspace:packages/openneuro-indexer":
+  version: 0.0.0-use.local
+  resolution: "@openneuro/indexer@workspace:packages/openneuro-indexer"
+  dependencies:
+    "@apollo/client": 3.3.14
+    "@babel/runtime-corejs3": ^7.13.10
+    "@elastic/elasticsearch": ^7.5.0
+    "@openneuro/client": ^3.32.3
+    "@types/node": ^14.14.41
+    "@types/tsc-watch": ^4
+    apollo-link-retry: ^2.2.16
+    core-js: ^3.10.1
+    ts-node: ^9.1.1
+    tsc-watch: ^4.2.9
+    typescript: 4.0.6
+  bin:
+    indexer: ./src/index.ts
+  languageName: unknown
+  linkType: soft
+
+"@openneuro/server@workspace:packages/openneuro-server":
+  version: 0.0.0-use.local
+  resolution: "@openneuro/server@workspace:packages/openneuro-server"
+  dependencies:
+    "@apollo/client": 3.3.14
+    "@babel/core": ^7.6.4
+    "@babel/plugin-proposal-object-rest-spread": ^7.6.2
+    "@babel/plugin-proposal-optional-chaining": ^7.6.0
+    "@babel/plugin-syntax-object-rest-spread": ^7.0.0
+    "@babel/preset-env": ^7.6.3
+    "@babel/runtime-corejs3": ^7.13.10
+    "@elastic/elasticsearch": ^7.5.1
+    "@passport-next/passport-google-oauth2": ^1.0.0
+    "@sentry/node": ^4.5.3
+    "@types/draft-js": ^0.10.43
+    "@types/ioredis": ^4.17.1
+    "@types/nodemailer": ^6.4.1
+    apollo-link-schema: ^1.2.5
+    apollo-server: 2.21.0
+    apollo-server-cache-redis: 1.4.0
+    apollo-server-express: 2.21.0
+    async: ^2.4.1
+    babel-eslint: ^10.1.0
+    base64url: ^3.0.0
+    body-parser: ^1.18.2
+    cookie-parser: ^1.4.3
+    core-js: ^3.10.1
+    crypto: ^1.0.1
+    date-fns: ^2.16.1
+    draft-js: ^0.11.7
+    draft-js-export-html: ^1.4.1
+    elastic-apm-node: 3.12.1
+    express: ^4.17.1
+    graphql: 14.7.0
+    graphql-bigint: ^1.0.0
+    graphql-compose: ^7.25.0
+    graphql-iso-date: ^3.6.1
+    graphql-redis-subscriptions: 2.1.0
+    graphql-subscriptions: ^1.1.0
+    graphql-tools: 4.0.6
+    immutable: ^3.8.2
+    ioredis: 4.17.3
+    ioredis-mock: ^3.8.1
+    jest: ^26.6.3
+    jsdom: ^11.6.2
+    jsonwebtoken: ^8.3.0
+    mime-types: ^2.1.19
+    mockingoose: 2.11.0
+    moment: ^2.14.1
+    mongo-mock: 3.7.1
+    mongoose: 5.12.3
+    morgan: ^1.6.1
+    node-fetch: ^2.6.0
+    nodemailer: 6.4.10
+    object-hash: 2.1.1
+    passport: ^0.4.0
+    passport-globus: ^0.0.1
+    passport-google-oauth20: ^1.0.0
+    passport-jwt: ^4.0.0
+    passport-oauth2-refresh: ^2.0.0
+    passport-orcid: ^0.0.3
+    react: ^17.0.1
+    react-dom: ^17.0.1
+    redlock: ^4.0.0
+    request: ^2.83.0
+    sitemap: ^2.1.0
+    subscriptions-transport-ws: 0.9.18
+    superagent: ^3.8.2
+    supertest: ^3.0.0
+    ts-node: 9.1.1
+    ts-node-dev: 1.1.6
+    tsc-watch: ^4.2.9
+    typescript: 4.0.6
+    underscore: ^1.8.3
+    uuid: ^3.0.1
+    xmldoc: ^1.1.0
+  languageName: unknown
+  linkType: soft
 
 "@passport-next/passport-google-oauth2@npm:^1.0.0":
   version: 1.0.0
@@ -7609,8 +7863,8 @@ __metadata:
   linkType: hard
 
 "aws-sdk@npm:^2.382.0":
-  version: 2.888.0
-  resolution: "aws-sdk@npm:2.888.0"
+  version: 2.889.0
+  resolution: "aws-sdk@npm:2.889.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -7621,7 +7875,7 @@ __metadata:
     url: 0.10.3
     uuid: 3.3.2
     xml2js: 0.4.19
-  checksum: c1e6a066b5a3a00b3b070e30edc0c049434ca1b072551aeb0882ef608ca3a012a49391e04a71a62bbc5c0e2b80aea9878ab07f9e7c4bdf9d7a79f6bbc16b4877
+  checksum: a8d8cffb0cdd8282742ff172dda48aca3f5addab02dfa35a6a671b8f348ba8638db3bdc048a3a51632a07f8bd4441dde71b4d5aa54b080d53b62ccfe80ad2d2e
   languageName: node
   linkType: hard
 
@@ -8557,7 +8811,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.12.0, browserslist@npm:^4.12.2, browserslist@npm:^4.14.5, browserslist@npm:^4.16.3":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.12.0, browserslist@npm:^4.12.2, browserslist@npm:^4.14.5, browserslist@npm:^4.16.4":
   version: 4.16.4
   resolution: "browserslist@npm:4.16.4"
   dependencies:
@@ -9051,9 +9305,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001208":
-  version: 1.0.30001211
-  resolution: "caniuse-lite@npm:1.0.30001211"
-  checksum: 7222b15450c8f8227be02a2c3c28981f6ba58374e309e04eec12036b4dbc31cfa904a13a28fe505771024c0bb701ec320a4eab50db5c5c996b4c34c8594dab03
+  version: 1.0.30001214
+  resolution: "caniuse-lite@npm:1.0.30001214"
+  checksum: 96c09af8989fe03e6aa0cc0130be3392c4a871093f0ae7190cb1185862a63b54de14483561578564d034cf993c315d4939727badee39ed76144e94ae4ab2a0f7
   languageName: node
   linkType: hard
 
@@ -10066,8 +10320,8 @@ __metadata:
   linkType: hard
 
 "contentful-management@npm:^7.5.1":
-  version: 7.15.1
-  resolution: "contentful-management@npm:7.15.1"
+  version: 7.15.2
+  resolution: "contentful-management@npm:7.15.2"
   dependencies:
     "@types/json-patch": 0.0.30
     axios: ^0.21.0
@@ -10075,7 +10329,7 @@ __metadata:
     fast-copy: ^2.1.0
     lodash.isplainobject: ^4.0.6
     type-fest: 0.20.2
-  checksum: b6dd48e7f5a02dabcee85a9b007de8f3127ea5feed3c6884dff003db01415c9d66ea8656292e267cfac0304c6b8267d42a2c5b2f66871b6770ef11ae0ef35752
+  checksum: 864fe4f31b06dbdd8efeab63c0528997aab025bf79c16d08b6c6f2330f3fb6214f20cf403d865b59ddb1a3a8fdb153e7423be65c68c2506cb03da11611ae9e7e
   languageName: node
   linkType: hard
 
@@ -10335,19 +10589,19 @@ __metadata:
   linkType: hard
 
 "core-js-compat@npm:^3.6.5, core-js-compat@npm:^3.9.0, core-js-compat@npm:^3.9.1":
-  version: 3.10.1
-  resolution: "core-js-compat@npm:3.10.1"
+  version: 3.10.2
+  resolution: "core-js-compat@npm:3.10.2"
   dependencies:
-    browserslist: ^4.16.3
+    browserslist: ^4.16.4
     semver: 7.0.0
-  checksum: f71049e3cf8c283127e22ec278f77e195463f4b570e3852cbc2437afa448c37ee27f3e672139d8dba19803e53e56f00acbe6d5f6fec44781952774f1e2220abe
+  checksum: 3177f9b882943237e0a3641d5970f36063bae9020270589a88c08a73e53bc2542ec181e1a365eb6f5a0915cfa110bd5a001db85b2d8aa03e0f50a7e68e4b2da5
   languageName: node
   linkType: hard
 
 "core-js-pure@npm:^3.0.0":
-  version: 3.10.1
-  resolution: "core-js-pure@npm:3.10.1"
-  checksum: f821fce01aa74d0ba5c14770f09d89680973f69ee6cace0e02d9406ce4a99c4971d2a747631ac9a65541b323db76dcea58e8258b960de2012cc583544c5db3f9
+  version: 3.10.2
+  resolution: "core-js-pure@npm:3.10.2"
+  checksum: 6afa50b38c1a92c8367c37e0194e800c6ba4c22f6c9fce9786e3d1e8ed6f6f63eb95fe097369323a1ae0573ed25d9893fc2912ca2de544c1b90fcbdff0ebd419
   languageName: node
   linkType: hard
 
@@ -10366,9 +10620,9 @@ __metadata:
   linkType: hard
 
 "core-js@npm:^3.0.1, core-js@npm:^3.10.1, core-js@npm:^3.3.2, core-js@npm:^3.6.4, core-js@npm:^3.6.5":
-  version: 3.10.1
-  resolution: "core-js@npm:3.10.1"
-  checksum: 5329c1bb03a9fa36d259b26180d9c4ad377a37867d2753b08a53738d41adb3b1193708abfaec4976d422140abcfabdc272584fb9ed16b1406a5c02fd122b8702
+  version: 3.10.2
+  resolution: "core-js@npm:3.10.2"
+  checksum: 6ff7c525419144998bfbe9c101872fcd350f46c455375e794fe34eb8d086bfdabb95a67da9eb0e98bcfc190f2cf4d7efd43eb726dcdb5f12a46dc5c8a7191f54
   languageName: node
   linkType: hard
 
@@ -19276,8 +19530,8 @@ fsevents@^1.2.7:
   linkType: hard
 
 "listr2@npm:^3.2.2":
-  version: 3.7.0
-  resolution: "listr2@npm:3.7.0"
+  version: 3.7.1
+  resolution: "listr2@npm:3.7.1"
   dependencies:
     chalk: ^4.1.0
     cli-truncate: ^2.1.0
@@ -19290,7 +19544,7 @@ fsevents@^1.2.7:
     wrap-ansi: ^7.0.0
   peerDependencies:
     enquirer: ">= 2.3.0 < 3"
-  checksum: cd2198e8bed03611525e4eae401bb177f41fdcfb5c301b3fec67b0497a8bd2520df04ed5f7fee6664d755c8bebb4739f6b0155874caa092bda0a975afad93284
+  checksum: 3f213bafd8174575bdde4694b6e20edae5d1faeb2c764a0621912f75f2d02b586557ed8fb1a623dd72e566c18e63569db5e4cdc4051c13a3c97bee5288e34e1b
   languageName: node
   linkType: hard
 
@@ -22249,262 +22503,6 @@ fsevents@^1.2.7:
   checksum: 07545fa768e5fbc25c6f53c6f17465f1b7ee663a494f87608d99a7b3227c83d2d2e0f0e5ecb70325b4ddef97dcd02d206f9afe3f8d6bb3d6612db9ca310ed4eb
   languageName: node
   linkType: hard
-
-"openneuro-app@workspace:packages/openneuro-app":
-  version: 0.0.0-use.local
-  resolution: "openneuro-app@workspace:packages/openneuro-app"
-  dependencies:
-    "@apollo/client": 3.3.14
-    "@artsy/fresnel": ^1.3.1
-    "@babel/core": ^7.6.4
-    "@babel/plugin-proposal-class-properties": ^7.5.5
-    "@babel/plugin-proposal-object-rest-spread": ^7.6.2
-    "@babel/plugin-proposal-optional-chaining": ^7.6.0
-    "@babel/plugin-syntax-dynamic-import": ^7.2.0
-    "@babel/plugin-transform-runtime": ^7.6.2
-    "@babel/preset-env": ^7.6.3
-    "@babel/preset-react": ^7.6.3
-    "@babel/preset-typescript": ^7.7.4
-    "@babel/runtime": ^7.6.3
-    "@babel/runtime-corejs3": ^7.13.10
-    "@elastic/apm-rum": ^5.5.0
-    "@emotion/core": ^10.0.4
-    "@emotion/styled": ^10.0.4
-    "@jest/globals": ^26.6.2
-    "@loadable/babel-plugin": ^5.10.3
-    "@loadable/component": ^5.7.0
-    "@sentry/browser": ^4.5.3
-    "@testing-library/jest-dom": ^5.11.4
-    "@testing-library/react": ^11.1.0
-    "@types/jest": ^26.0.22
-    "@types/jsdom": ^16
-    "@types/node": ^14.14.37
-    "@types/react": ^17.0.3
-    "@wojtekmaj/enzyme-adapter-react-17": ^0.6.1
-    babel-core: ^7.0.0-bridge.0
-    babel-jest: ^24.9.0
-    babel-loader: ^8.0.4
-    babel-runtime: ^6.26.0
-    bids-validator: "npm:@squishymedia/bids-validator-debug@1.6.2-dev.15"
-    bytes: ^3.0.0
-    cache-loader: ^1.2.2
-    clean-webpack-plugin: ^0.1.19
-    comlink: ^4.0.5
-    compression-webpack-plugin: ^1.0.0
-    connect-history-api-fallback: ^1.5.0
-    copy-webpack-plugin: ^4.5.2
-    core-js: ^3.3.2
-    css-loader: ^1.0.0
-    date-fns: ^2.16.1
-    draft-js: ^0.11.7
-    email-validator: ^2.0.4
-    enzyme: 3.9.0
-    enzyme-to-json: ^3.3.5
-    esbuild-plugin-globals: ^0.1.1
-    esbuild-sass-plugin: ^1.0.11
-    express: ^4.17.1
-    file-loader: ^1.1.11
-    graphql: 14.7.0
-    jest: ^26.6.3
-    jest-fetch-mock: ^1.4.1
-    jsdom: ^16.5.3
-    jwt-decode: ^2.2.0
-    live-server: ^1.2.1
-    markdown-to-jsx: ^7.1.2
-    md5: ^2.3.0
-    mini-css-extract-plugin: ^0.4.1
-    moment-timezone: ^0.5.31
-    node-sass: 4.14.1
-    object.fromentries: ^2.0.0
-    openneuro-client: ^3.32.3
-    os-browserify: ^0.3.0
-    pluralize: ^7.0.0
-    prop-types: ^15.6.0
-    react: ^17.0.1
-    react-addons-test-utils: ^15.6.2
-    react-bootstrap: 0.33.1
-    react-cookie: 4.0.3
-    react-copy-to-clipboard: ^5.0.1
-    react-dom: ^17.0.1
-    react-helmet: 6.1.0
-    react-router: ^5.1.2
-    react-router-dom: ^5.1.2
-    react-spring: ^8.0.27
-    react-test-renderer: ^16.8.6
-    react-toastify: 6.0.9
-    react-virtualized: "remorses/react-virtualized-fixed-import.git#9.22.3"
-    resize-observer-polyfill: ^1.5.1
-    rollup-plugin-polyfill-node: ^0.6.2
-    sass: ^1.32.8
-    sass-loader: ^7.1.0
-    semver: ^5.5.0
-    serviceworker-webpack-plugin: ^1.0.1
-    style-loader: ^0.23.1
-    subscriptions-transport-ws: ^0.9.9
-    superagent: ^3.6.0
-    ts-node-dev: ^1.1.6
-    typescript: 4.0.6
-    universal-cookie: ^4.0.4
-    universal-cookie-express: ^4.0.3
-    url-loader: ^1.0.1
-    url-search-params-polyfill: ^2.0.1
-    urlite: ^1.2.8
-    vite: 2.1.5
-    webpack: ^4.20.2
-    webpack-cli: ^3.1.2
-    webpack-dev-server: ^3.1.9
-    webpack-merge: ^4.1.4
-    webpack-visualizer-plugin: ^0.1.11
-    worker-plugin: ^3.2.0
-    xmldoc: ^1.1.0
-  languageName: unknown
-  linkType: soft
-
-"openneuro-cli@workspace:packages/openneuro-cli":
-  version: 0.0.0-use.local
-  resolution: "openneuro-cli@workspace:packages/openneuro-cli"
-  dependencies:
-    "@apollo/client": 3.3.14
-    "@babel/runtime-corejs3": ^7.13.10
-    "@types/colors": ^1
-    "@types/node": ^14.14.41
-    bids-validator: 1.6.3
-    cli-progress: ^3.8.2
-    colors: 1.4.0
-    commander: 7.2.0
-    core-js: ^3.10.1
-    cross-fetch: ^3.0.5
-    elastic-apm-node: 3.12.1
-    esm: ^3.0.16
-    fetch-h2: ^2.5.1
-    find-config: ^1.0.0
-    inquirer: ^5.2.0
-    jest-fetch-mock: ^3.0.3
-    jwt-decode: ^3.1.2
-    metro-memory-fs: 0.61.0
-    mkdirp: ^0.5.1
-    openneuro-client: ^3.32.3
-  bin:
-    git-annex-remote-openneuro: ./src/index.js
-    git-credential-openneuro: ./src/index.js
-    openneuro: ./src/index.js
-  languageName: unknown
-  linkType: soft
-
-"openneuro-client@^3.32.3, openneuro-client@workspace:packages/openneuro-client":
-  version: 0.0.0-use.local
-  resolution: "openneuro-client@workspace:packages/openneuro-client"
-  dependencies:
-    "@apollo/client": 3.3.14
-    "@babel/runtime-corejs3": ^7.13.10
-    apollo-server: ^2.23.0
-    core-js: ^3.10.1
-    cross-fetch: ^3.1.2
-    graphql: 14.7.0
-    openneuro-server: "workspace:packages/openneuro-server"
-    semver: ^5.5.0
-    subscriptions-transport-ws: ^0.9.18
-  languageName: unknown
-  linkType: soft
-
-"openneuro-indexer@workspace:packages/openneuro-indexer":
-  version: 0.0.0-use.local
-  resolution: "openneuro-indexer@workspace:packages/openneuro-indexer"
-  dependencies:
-    "@apollo/client": 3.3.14
-    "@babel/runtime-corejs3": ^7.13.10
-    "@elastic/elasticsearch": ^7.5.0
-    "@types/node": ^14.14.41
-    "@types/tsc-watch": ^4
-    apollo-link-retry: ^2.2.16
-    core-js: ^3.10.1
-    openneuro-client: ^3.32.3
-    ts-node: ^9.1.1
-    tsc-watch: ^4.2.9
-    typescript: 4.0.6
-  bin:
-    openneuro-indexer: ./src/index.ts
-  languageName: unknown
-  linkType: soft
-
-"openneuro-server@workspace:packages/openneuro-server":
-  version: 0.0.0-use.local
-  resolution: "openneuro-server@workspace:packages/openneuro-server"
-  dependencies:
-    "@apollo/client": 3.3.14
-    "@babel/core": ^7.6.4
-    "@babel/plugin-proposal-object-rest-spread": ^7.6.2
-    "@babel/plugin-proposal-optional-chaining": ^7.6.0
-    "@babel/plugin-syntax-object-rest-spread": ^7.0.0
-    "@babel/preset-env": ^7.6.3
-    "@babel/runtime-corejs3": ^7.13.10
-    "@elastic/elasticsearch": ^7.5.1
-    "@passport-next/passport-google-oauth2": ^1.0.0
-    "@sentry/node": ^4.5.3
-    "@types/draft-js": ^0.10.43
-    "@types/ioredis": ^4.17.1
-    "@types/nodemailer": ^6.4.1
-    apollo-link-schema: ^1.2.5
-    apollo-server: 2.21.0
-    apollo-server-cache-redis: 1.4.0
-    apollo-server-express: 2.21.0
-    async: ^2.4.1
-    babel-eslint: ^10.1.0
-    base64url: ^3.0.0
-    body-parser: ^1.18.2
-    cookie-parser: ^1.4.3
-    core-js: ^3.10.1
-    crypto: ^1.0.1
-    date-fns: ^2.16.1
-    draft-js: ^0.11.7
-    draft-js-export-html: ^1.4.1
-    elastic-apm-node: 3.12.1
-    express: ^4.17.1
-    graphql: 14.7.0
-    graphql-bigint: ^1.0.0
-    graphql-compose: ^7.25.0
-    graphql-iso-date: ^3.6.1
-    graphql-redis-subscriptions: 2.1.0
-    graphql-subscriptions: ^1.1.0
-    graphql-tools: 4.0.6
-    immutable: ^3.8.2
-    ioredis: 4.17.3
-    ioredis-mock: ^3.8.1
-    jest: ^26.6.3
-    jsdom: ^11.6.2
-    jsonwebtoken: ^8.3.0
-    mime-types: ^2.1.19
-    mockingoose: 2.11.0
-    moment: ^2.14.1
-    mongo-mock: 3.7.1
-    mongoose: 5.12.3
-    morgan: ^1.6.1
-    node-fetch: ^2.6.0
-    nodemailer: 6.4.10
-    object-hash: 2.1.1
-    passport: ^0.4.0
-    passport-globus: ^0.0.1
-    passport-google-oauth20: ^1.0.0
-    passport-jwt: ^4.0.0
-    passport-oauth2-refresh: ^2.0.0
-    passport-orcid: ^0.0.3
-    react: ^17.0.1
-    react-dom: ^17.0.1
-    redlock: ^4.0.0
-    request: ^2.83.0
-    sitemap: ^2.1.0
-    subscriptions-transport-ws: 0.9.18
-    superagent: ^3.8.2
-    supertest: ^3.0.0
-    ts-node: 9.1.1
-    ts-node-dev: 1.1.6
-    tsc-watch: ^4.2.9
-    typescript: 4.0.6
-    underscore: ^1.8.3
-    uuid: ^3.0.1
-    xmldoc: ^1.1.0
-  languageName: unknown
-  linkType: soft
 
 "opentracing@npm:^0.14.3, opentracing@npm:^0.14.4":
   version: 0.14.5
@@ -26707,13 +26705,13 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "sass@npm:^1.32.8":
-  version: 1.32.10
-  resolution: "sass@npm:1.32.10"
+  version: 1.32.11
+  resolution: "sass@npm:1.32.11"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: dc310c9d4f73fc9fd39c7c3cb7adc481f1d3a7cbd51704ed94972738b181b3db1e485864497edf2d2954340a34b49bfccac61b792e2609431227a6ab521997db
+  checksum: a56ca780febc1f4c5c015f2fbd5dacd780297371456197424bce7e48d54cef8ae564fb8927076ef61e6fcd34f69556d0a3dd8e157ff06081729066ad595e97bf
   languageName: node
   linkType: hard
 
@@ -28678,8 +28676,8 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "table@npm:^6.0.4":
-  version: 6.3.0
-  resolution: "table@npm:6.3.0"
+  version: 6.3.2
+  resolution: "table@npm:6.3.2"
   dependencies:
     ajv: ^8.0.1
     is-boolean-object: ^1.1.0
@@ -28690,7 +28688,7 @@ resolve@^2.0.0-next.3:
     lodash.truncate: ^4.4.2
     slice-ansi: ^4.0.0
     string-width: ^4.2.0
-  checksum: ef64145cba22c729c51249273d8ad769ce4e9fdb1552c58d75d91fb5124bc7a1615b34ced45bbfa065ee6462ed5c0bfeb3e057b419b17e138af0b2f822553cb1
+  checksum: 8c016c3f92e87fe1f11623c73eb7bc7e1a4574415952942b9cb9722d2ed70c197a0abe21ef06b1b490f90af3abf9dc2378d8f5bb3624a38faee8640bada43bd1
   languageName: node
   linkType: hard
 
