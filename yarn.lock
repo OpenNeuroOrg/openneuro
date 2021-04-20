@@ -29392,7 +29392,6 @@ resolve@^2.0.0-next.3:
     "@babel/runtime-corejs3": ^7.13.10
     "@loadable/babel-plugin": ^5.13.2
     "@sentry/cli": 1.37.4
-    "@storybook/addon-a11y": ^6.2.8
     "@types/babel__core": ^7
     "@types/babel__plugin-transform-runtime": ^7
     "@types/babel__preset-env": ^7

@@ -1,6 +1,7 @@
-@import '../scss/variables';
-@import '../scss/helper-classes';
-@import '../scss/flex-grid';
+@import './normalize';
+@import './variables';
+@import './helper-classes';
+@import './flex-grid';
 
 div {
   box-sizing: border-box;
