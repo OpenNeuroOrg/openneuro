@@ -5563,6 +5563,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mkdirp@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@types/mkdirp@npm:1.0.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 075e821a8fe69349a3b642f798b4632139982f039c8890b83bcd9068bfac3787dd536c9f3bb18bb3f9c68277431514b38e6c57509cdb766c8d7ebff9a1427ecb
+  languageName: node
+  linkType: hard
+
 "@types/mongodb@npm:^3.5.27":
   version: 3.6.12
   resolution: "@types/mongodb@npm:3.6.12"
@@ -22367,6 +22376,7 @@ fsevents@^1.2.7:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
     "@types/colors": ^1
+    "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
     bids-validator: 1.6.3
     cli-progress: ^3.8.2

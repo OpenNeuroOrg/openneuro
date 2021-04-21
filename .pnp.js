@@ -8953,6 +8953,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:14.14.41"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.0.1", {
+          "packageLocation": "./.yarn/cache/@types-mkdirp-npm-1.0.1-0568c0101a-075e821a8f.zip/node_modules/@types/mkdirp/",
+          "packageDependencies": [
+            ["@types/mkdirp", "npm:1.0.1"],
+            ["@types/node", "npm:14.14.41"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@types/mongodb", [
@@ -20728,7 +20736,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
+          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.13.10"],
@@ -28836,6 +28844,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@apollo/client", "virtual:65e68a87c63e1c04890214f728aa8dadea81ac7f12f06942b63d98830b87ea045ba89b0c0a48627cd1fd799e1e1d48c59762f384c7732aa3c07329de830d04e0#npm:3.3.14"],
             ["@babel/runtime-corejs3", "npm:7.13.10"],
             ["@types/colors", "npm:1.1.3"],
+            ["@types/mkdirp", "npm:1.0.1"],
             ["@types/node", "npm:14.14.41"],
             ["bids-validator", "npm:1.6.3"],
             ["cli-progress", "npm:3.9.0"],
