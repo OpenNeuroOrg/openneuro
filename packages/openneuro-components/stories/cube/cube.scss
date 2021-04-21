@@ -6,7 +6,7 @@
   height: 200px;
   .hexagon {
     position: absolute;
-    width: 250px;
+    width: 251px;
     height: 144.34px;
     margin: 72.17px 0;
     background-size: auto 288.6751px;
@@ -22,8 +22,8 @@
   .hexBottom {
     position: absolute;
     z-index: 1;
-    width: 176.78px;
-    height: 176.78px;
+    width: 177.78px;
+    height: 177.78px;
     overflow: hidden;
     transform: scaleY(0.5774) rotate(-45deg);
     background: inherit;
@@ -48,7 +48,7 @@
     }
 
     &.hexBottom {
-      bottom: -88.3883px;
+      bottom: -89.3883px;
       &:after {
         background-position: center bottom;
       }

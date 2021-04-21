@@ -6569,6 +6569,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jquery@npm:*":
+  version: 3.5.5
+  resolution: "@types/jquery@npm:3.5.5"
+  dependencies:
+    "@types/sizzle": "*"
+  checksum: 9e3c34451577c6916ac9de8a26fd8bce2831cb5861116514cba4a984189067635a3e084039308324d8e20bfa5f2e1ce7725a509110e5e05487b91f9369b1ae43
+  languageName: node
+  linkType: hard
+
 "@types/jsdom@npm:^16":
   version: 16.2.10
   resolution: "@types/jsdom@npm:16.2.10"
@@ -6891,6 +6900,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-slick@npm:^0":
+  version: 0.23.4
+  resolution: "@types/react-slick@npm:0.23.4"
+  dependencies:
+    "@types/react": "*"
+  checksum: 49abcf8bcf77eea3fc51ab5af92957174d02328431e5108bca6cf49fcd23d942daced1d301535ea5ea4d1f3ff995b28d1ba17257c7e4b31508c08b5b1355cbcc
+  languageName: node
+  linkType: hard
+
 "@types/react-syntax-highlighter@npm:11.0.5":
   version: 11.0.5
   resolution: "@types/react-syntax-highlighter@npm:11.0.5"
@@ -6954,6 +6972,22 @@ __metadata:
     "@types/mime": ^1
     "@types/node": "*"
   checksum: f261127514057b5c038d76259128d7b765dd92bfeaf769d05b8ddf5f254d066ce6142a935e2fc707bb3009d6544a979591852f0d135d0ed4d0c56db08738df6b
+  languageName: node
+  linkType: hard
+
+"@types/sizzle@npm:*":
+  version: 2.3.2
+  resolution: "@types/sizzle@npm:2.3.2"
+  checksum: 447a1c3f39f0e47ffdbccd1df58d63e8b67dc001f44f26f43ac8243db7834a3d956cebc8abe9272ecbdccfc8f4ec0ae74b811ccdad5b6cddaf8f0968513d618a
+  languageName: node
+  linkType: hard
+
+"@types/slick-carousel@npm:^1":
+  version: 1.6.34
+  resolution: "@types/slick-carousel@npm:1.6.34"
+  dependencies:
+    "@types/jquery": "*"
+  checksum: e1aef73233b187290c0d7881eb6209e7c88ae11681a3adc3593bf40dbcf890a889fee4eb424d5b34f89517f8ca956623166e610b95407fef48b5de3ff4fb72f7
   languageName: node
   linkType: hard
 
@@ -12539,7 +12573,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^2.14.0, date-fns@npm:^2.16.1, date-fns@npm:^2.17.0, date-fns@npm:^2.7.0":
+"date-fns@npm:^2.14.0, date-fns@npm:^2.16.1, date-fns@npm:^2.17.0, date-fns@npm:^2.21.1, date-fns@npm:^2.7.0":
   version: 2.21.1
   resolution: "date-fns@npm:2.21.1"
   checksum: 00a2ddea1047c4ce6eaadda76a0ee0782d1cfe65061641bbff94f7a70d2d6ab12dac89e027b39d49710bdb2cf264bc1a4e096b0324c7de79699296a4c19f4a40
@@ -13897,6 +13931,13 @@ __metadata:
     memory-fs: ^0.5.0
     tapable: ^1.0.0
   checksum: 72e679343f3ca6f2f84b1259460705fa29d46f0b806fa562db96edeb7826357a97ba9ccb61a07cdb05f51c1b4d2f5b544a2e4a6c257d7395a0c9b6e727f86d08
+  languageName: node
+  linkType: hard
+
+"enquire.js@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "enquire.js@npm:2.1.6"
+  checksum: b606573cfe49285ef5648ddd7044f2b4bef21a20ca32e48f2f5d10cedef2454c82f5085805f1a966aa65faec1a36eac081c337ae80cb8e74872d7643a5c93c94
   languageName: node
   linkType: hard
 
@@ -20938,6 +20979,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"json2mq@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "json2mq@npm:0.2.0"
+  dependencies:
+    string-convert: ^0.2.0
+  checksum: 4d017ede2baf2a2b5cd27d311082b49acbabd498020ec1bd1c36a915662c8be011f3a1a7e9629076bb779d8382466a0067e0d442cde6f9b8d09273273424c702
+  languageName: node
+  linkType: hard
+
 "json3@npm:^3.3.2, json3@npm:^3.3.3":
   version: 3.3.3
   resolution: "json3@npm:3.3.3"
@@ -24676,6 +24726,8 @@ fsevents@^1.2.7:
     "@types/babel__core": ^7
     "@types/mdx-js__react": ^1
     "@types/node": ^14.14.37
+    "@types/react-slick": ^0
+    "@types/slick-carousel": ^1
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^24.9.0
     babel-loader: ^8.2.2
@@ -24690,7 +24742,7 @@ fsevents@^1.2.7:
     copy-webpack-plugin: ^4.5.2
     core-js: ^3.3.2
     css-loader: ^5.2.1
-    date-fns: ^2.16.1
+    date-fns: ^2.21.1
     draft-js: ^0.11.7
     email-validator: ^2.0.4
     enzyme: 3.9.0
@@ -24724,6 +24776,7 @@ fsevents@^1.2.7:
     react-markdown: 5.0.3
     react-router: ^5.1.2
     react-router-dom: ^5.1.2
+    react-slick: ^0.28.1
     react-spring: ^8.0.27
     react-test-renderer: ^16.8.6
     react-toastify: 6.0.9
@@ -24734,6 +24787,7 @@ fsevents@^1.2.7:
     sass-loader: ^10.1.1
     semver: ^5.5.0
     serviceworker-webpack-plugin: ^1.0.1
+    slick-carousel: ^1.8.1
     style-loader: ^2.0.0
     subscriptions-transport-ws: ^0.9.9
     superagent: ^3.6.0
@@ -28018,6 +28072,22 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-slick@npm:^0.28.1":
+  version: 0.28.1
+  resolution: "react-slick@npm:0.28.1"
+  dependencies:
+    classnames: ^2.2.5
+    enquire.js: ^2.1.6
+    json2mq: ^0.2.0
+    lodash.debounce: ^4.0.8
+    resize-observer-polyfill: ^1.5.0
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0
+    react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0
+  checksum: fa9694f2e8ce05ab2e19acb577bed85433be4a0a7dca8ee5888090c6bc171f3417d957b8097fdd3a08284fa96e1c621585313431a9e8c2c138a4acbb9e318321
+  languageName: node
+  linkType: hard
+
 "react-spring@npm:^8.0.27":
   version: 8.0.27
   resolution: "react-spring@npm:8.0.27"
@@ -29166,7 +29236,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"resize-observer-polyfill@npm:^1.5.1":
+"resize-observer-polyfill@npm:^1.5.0, resize-observer-polyfill@npm:^1.5.1":
   version: 1.5.1
   resolution: "resize-observer-polyfill@npm:1.5.1"
   checksum: ba14bfaf584eda299eafd6a06233a65c76586bc2bab3cdfdd1edd25fc6479f4270788ddd082e65390049b3ed542558f02bdf1f123bd912624de5b11d48857ac8
@@ -30330,6 +30400,15 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"slick-carousel@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "slick-carousel@npm:1.8.1"
+  peerDependencies:
+    jquery: ">=1.8.0"
+  checksum: a955d871056eaa0663b99a128cced4d03d8f153261b82a4b2ef8a1ed033a36c776c731cccbebd1f82ad63b5e32fd3fce9bc3d740799a74047c3fcdffa4a5d203
+  languageName: node
+  linkType: hard
+
 "slide@npm:^1.1.6":
   version: 1.1.6
   resolution: "slide@npm:1.1.6"
@@ -31147,6 +31226,13 @@ resolve@^2.0.0-next.3:
   version: 0.1.2
   resolution: "string-argv@npm:0.1.2"
   checksum: 16c89881d6d999b8814f51b45f63187a7832872075249162fa3d4936b0a25cf9c717e21c8db781a265faa3d0d83117e5fef435ee7c776c9fadd241eaf8157f2c
+  languageName: node
+  linkType: hard
+
+"string-convert@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "string-convert@npm:0.2.1"
+  checksum: 75d8fa2c6ec50105f232ed394142086e60ae358b4902111be7d93baa0d848b7551ab23db508cb959a33652fdc5808276bb8300e3792f9ec8e02b6736496b4295
   languageName: node
   linkType: hard
 

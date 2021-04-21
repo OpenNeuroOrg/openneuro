@@ -13,9 +13,6 @@ export interface LogoProps {
   horizontal: boolean
 }
 
-/**
- * Primary UI component for user interaction
- */
 export const Logo: React.FC<LogoProps> = ({
   dark = true,
   width = '300px',

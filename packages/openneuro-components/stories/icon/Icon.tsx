@@ -14,9 +14,6 @@ export interface IconProps {
   iconSize?: string
 }
 
-/**
- * Primary UI component for user interaction
- */
 export const Icon: React.FC<IconProps> = ({
   backgroundColor,
   label,

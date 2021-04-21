@@ -10,9 +10,6 @@ export interface CubeProps {
   cubeImage: string
 }
 
-/**
- * Primary UI component for user interaction
- */
 export const Cube: React.FC<CubeProps> = ({
   backgroundColor,
   label,

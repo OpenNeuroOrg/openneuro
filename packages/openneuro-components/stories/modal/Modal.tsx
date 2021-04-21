@@ -10,9 +10,6 @@ export interface ModalProps {
   closeText: string
 }
 
-/**
- * Primary UI component for user interaction
- */
 export const Modal: React.FC<ModalProps> = ({
   children,
   isOpen,

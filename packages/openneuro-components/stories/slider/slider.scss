@@ -1,0 +1,21 @@
+.activity-slider {
+  h2 {
+    text-align: center;
+  }
+  a {
+    text-decoration: none;
+    .activity-slider-node {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      text-align: center;
+      .ds-name {
+        font-weight: 600;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
