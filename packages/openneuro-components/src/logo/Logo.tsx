@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import './logo.scss'
 
 import logodh from '../assets/on-dark-horz.svg'
