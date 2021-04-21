@@ -6170,6 +6170,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bson@npm:*":
+  version: 4.0.3
+  resolution: "@types/bson@npm:4.0.3"
+  dependencies:
+    "@types/node": "*"
+  checksum: 73c0179851f02bd43f010db65c465b09f7c495b35b0e3820a79d36f4bb209c84a512121c1af4c1d2512e5f13cd27cc74fa8aa6f3df9b17b7cca9d37d59ece3ce
+  languageName: node
+  linkType: hard
+
 "@types/cheerio@npm:^0.22.22":
   version: 0.22.28
   resolution: "@types/cheerio@npm:0.22.28"
@@ -6719,6 +6728,16 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 3bb3f7ec84b831040b2807104cf9219e3eed61d5cb01a5dbaaeff892e4bcb9cd922a3c1642f87c11eb816ebdd995dd12c5bac33c70a6761631e330d59347e502
+  languageName: node
+  linkType: hard
+
+"@types/mongodb@npm:^3.5.27":
+  version: 3.6.12
+  resolution: "@types/mongodb@npm:3.6.12"
+  dependencies:
+    "@types/bson": "*"
+    "@types/node": "*"
+  checksum: 7e41e42a941a5c07cc45f83722e617f1e96942b27cabae8f06dd253ae86b420c1ca5c75e1de7bfbce787bb703714bc297bef45215ef1275815e8d355e03bc27c
   languageName: node
   linkType: hard
 
@@ -8105,6 +8124,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"apollo-link-schema@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "apollo-link-schema@npm:1.2.5"
+  dependencies:
+    apollo-link: ^1.2.14
+    tslib: ^1.9.3
+  peerDependencies:
+    graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+  checksum: 1ff1266229545ce83f36eb1e5447b08482153c102963167a07eb93d337cce49c38f6acd64ddc32a99f5023692a9a6dbddf0db4eba2fe2eeb854dfa10dea691ea
+  languageName: node
+  linkType: hard
+
 "apollo-link@npm:^1.2.14, apollo-link@npm:^1.2.3":
   version: 1.2.14
   resolution: "apollo-link@npm:1.2.14"
@@ -8125,6 +8156,18 @@ __metadata:
   dependencies:
     "@apollo/protobufjs": ^1.0.3
   checksum: 6e00d364753b93554d879efbc84b8756e70232ab674e499332d1cace3bb4b6de9662a534eef3610f1ab9619f5b90eb6b5baa698d5d1a5019c0e32874953c23c6
+  languageName: node
+  linkType: hard
+
+"apollo-server-cache-redis@npm:1.4.0":
+  version: 1.4.0
+  resolution: "apollo-server-cache-redis@npm:1.4.0"
+  dependencies:
+    apollo-server-caching: ^0.6.0
+    apollo-server-env: ^3.0.0
+    dataloader: ^2.0.0
+    ioredis: ^4.0.0
+  checksum: 7cbd8023256e55f5008a8c67840b63157d0b381758c29fe847ecfd417eb66cf6b330542510c46988c9734ca69c0ad9420d38e84db335dbd81d3e43460a3b923d
   languageName: node
   linkType: hard
 
@@ -11141,7 +11184,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^2.15.1, commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.20.3, commander@npm:^2.5.0":
+"commander@npm:7.2.0":
+  version: 7.2.0
+  resolution: "commander@npm:7.2.0"
+  checksum: bdc0eca5e25cd24af8440163d3c9a996785bbac4b49a590365699cdc1ed08cefbac8f268153208ab2bc5dc3cb1d3fb573fd1590c681e36e371342186bd331a4c
+  languageName: node
+  linkType: hard
+
+"commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.20.3, commander@npm:^2.5.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: b73428e97de7624323f81ba13f8ed9271de487017432d18b4da3f07cfc528ad754bbd199004bd5d14e0ccd67d1fdfe0ec8dbbd4c438b401df3c4cc387bfd1daa
@@ -12468,7 +12518,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dataloader@npm:2.0.0":
+"dataloader@npm:2.0.0, dataloader@npm:^2.0.0":
   version: 2.0.0
   resolution: "dataloader@npm:2.0.0"
   checksum: 0165c2e80751d269c33d2a14b0078a4f3853cb010e2531e7aa99523aba8d0cdc922b9ad67e4c2bb9074c90e0ee0a41b6e7f5f63c40d31224a71c8a0b703f4be3
@@ -19026,7 +19076,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"ioredis@npm:^4.6.3":
+"ioredis@npm:^4.0.0, ioredis@npm:^4.6.3":
   version: 4.26.0
   resolution: "ioredis@npm:4.26.0"
   dependencies:
@@ -21075,10 +21125,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"kareem@npm:2.3.1":
-  version: 2.3.1
-  resolution: "kareem@npm:2.3.1"
-  checksum: 6fc69a89f857aedccc16c1efaea1d6d72d7f47893797109443d31d354c7c70369c7d967fa1ad57c1b180670b828958dd4de513629695d2a1223d7c3f04898391
+"kareem@npm:2.3.2":
+  version: 2.3.2
+  resolution: "kareem@npm:2.3.2"
+  checksum: de7225607b86280e5c39c00d564e1cb4daee9f0a75076fa0c096af75069681ca9a97ea39d8d48ce58ff8dd4d3a738942b1b43101aa95982c4599284ec36e02b4
   languageName: node
   linkType: hard
 
@@ -22233,7 +22283,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:^7.1.0":
+"markdown-to-jsx@npm:^7.1.0, markdown-to-jsx@npm:^7.1.2":
   version: 7.1.2
   resolution: "markdown-to-jsx@npm:7.1.2"
   peerDependencies:
@@ -23265,9 +23315,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mongodb@npm:3.6.3":
-  version: 3.6.3
-  resolution: "mongodb@npm:3.6.3"
+"mongodb@npm:3.6.5":
+  version: 3.6.5
+  resolution: "mongodb@npm:3.6.5"
   dependencies:
     bl: ^2.2.1
     bson: ^1.1.4
@@ -23291,7 +23341,7 @@ fsevents@^1.2.7:
       optional: true
     snappy:
       optional: true
-  checksum: 85a80641803e75b93e76bb9e84c26429ec2c374e7138114562a25a6272880d1c18cf5dda21b8bd75c7dd110dac997d11572bb2da506c12c99c9faa4c668364c7
+  checksum: 6a838b79e104cee243e2ed10a5ded90490bb4db687ca1f1cabeab6c578441b1db64136fd33bad7112ca4a09e60a99a3b039d1c11e515521ffffa66ed91fb3148
   languageName: node
   linkType: hard
 
@@ -23304,22 +23354,23 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mongoose@npm:5.10.18":
-  version: 5.10.18
-  resolution: "mongoose@npm:5.10.18"
+"mongoose@npm:5.12.3":
+  version: 5.12.3
+  resolution: "mongoose@npm:5.12.3"
   dependencies:
+    "@types/mongodb": ^3.5.27
     bson: ^1.1.4
-    kareem: 2.3.1
-    mongodb: 3.6.3
+    kareem: 2.3.2
+    mongodb: 3.6.5
     mongoose-legacy-pluralize: 1.0.2
-    mpath: 0.7.0
-    mquery: 3.2.2
+    mpath: 0.8.3
+    mquery: 3.2.5
     ms: 2.1.2
     regexp-clone: 1.0.0
     safe-buffer: 5.2.1
     sift: 7.0.1
     sliced: 1.0.1
-  checksum: 35108c634b42d4efa96800f0413b9b028de46714260d894ac83386a05760fda23d369b708279722271374e8849de189e060f73379a306af99b0a9b1b4b979a1c
+  checksum: 50e05e10571347562ffe2df29f797446954c257fe0ae6f2075136af214aacf58a698a9a5d8ebe45aa44d010ea8b490bfc64670cb222336fa859c3a3863bb5b72
   languageName: node
   linkType: hard
 
@@ -23364,23 +23415,23 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mpath@npm:0.7.0":
-  version: 0.7.0
-  resolution: "mpath@npm:0.7.0"
-  checksum: 76e271ff01a637452b1b8bb36825e74020e23d6fa1792455dc2992931b3fdfffcd637dcbe4c02a6bbb9e264f3920be4c5dcf42041f37176b00d5c8175604c4c1
+"mpath@npm:0.8.3":
+  version: 0.8.3
+  resolution: "mpath@npm:0.8.3"
+  checksum: 6c129da222169bcf2eb28ae73abca2a8a32c3c659748efd496308aed21c7dca7a9a923de53a5a1df3d898f5eba74c704fdf352ca68e5ecb602d2352a9d5ab90e
   languageName: node
   linkType: hard
 
-"mquery@npm:3.2.2":
-  version: 3.2.2
-  resolution: "mquery@npm:3.2.2"
+"mquery@npm:3.2.5":
+  version: 3.2.5
+  resolution: "mquery@npm:3.2.5"
   dependencies:
     bluebird: 3.5.1
     debug: 3.1.0
     regexp-clone: ^1.0.0
     safe-buffer: 5.1.2
     sliced: 1.0.1
-  checksum: 80b422ec102e1045999b3f818964db69a56ddf394a64ef7dac3bf164e4824d179717844d00cf414827fb39c61334a88fd3c1b1cab91b624cf6a78db302bd63c4
+  checksum: d7d611b3eed531f4ebb4a0d58bd5704712b5b0fb88c058e9ed433bb25f3dda72a5fbbcac8026c9c11a56a8d3983c039abd90d329ff91137f31fdea93ee7ce5d1
   languageName: node
   linkType: hard
 
@@ -24490,12 +24541,13 @@ fsevents@^1.2.7:
     jsdom: ^16.5.3
     jwt-decode: ^2.2.0
     live-server: ^1.2.1
+    markdown-to-jsx: ^7.1.2
     md5: ^2.3.0
     mini-css-extract-plugin: ^0.4.1
     moment-timezone: ^0.5.31
     node-sass: 4.14.1
     object.fromentries: ^2.0.0
-    openneuro-client: ^3.32.1
+    openneuro-client: ^3.32.3
     os-browserify: ^0.3.0
     pluralize: ^7.0.0
     prop-types: ^15.6.0
@@ -24506,8 +24558,6 @@ fsevents@^1.2.7:
     react-copy-to-clipboard: ^5.0.1
     react-dom: ^17.0.1
     react-helmet: 6.1.0
-    react-json-tree: 0.15.0
-    react-markdown: 5.0.3
     react-router: ^5.1.2
     react-router-dom: ^5.1.2
     react-spring: ^8.0.27
@@ -24524,6 +24574,7 @@ fsevents@^1.2.7:
     subscriptions-transport-ws: ^0.9.9
     superagent: ^3.6.0
     ts-node-dev: ^1.1.6
+    typescript: 4.0.6
     universal-cookie: ^4.0.4
     universal-cookie-express: ^4.0.3
     url-loader: ^1.0.1
@@ -24551,7 +24602,7 @@ fsevents@^1.2.7:
     bids-validator: 1.6.3
     cli-progress: ^3.8.2
     colors: 1.4.0
-    commander: ^2.15.1
+    commander: 7.2.0
     core-js: ^3.10.1
     cross-fetch: ^3.0.5
     elastic-apm-node: 3.12.1
@@ -24563,7 +24614,7 @@ fsevents@^1.2.7:
     jwt-decode: ^3.1.2
     metro-memory-fs: 0.61.0
     mkdirp: ^0.5.1
-    openneuro-client: ^3.32.1
+    openneuro-client: ^3.32.3
   bin:
     git-annex-remote-openneuro: ./src/index.js
     git-credential-openneuro: ./src/index.js
@@ -24571,7 +24622,7 @@ fsevents@^1.2.7:
   languageName: unknown
   linkType: soft
 
-"openneuro-client@^3.32.0-alpha.21, openneuro-client@^3.32.1, openneuro-client@workspace:packages/openneuro-client":
+"openneuro-client@^3.32.0-alpha.21, openneuro-client@^3.32.3, openneuro-client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "openneuro-client@workspace:packages/openneuro-client"
   dependencies:
@@ -24714,7 +24765,7 @@ fsevents@^1.2.7:
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
     core-js: ^3.10.1
-    openneuro-client: ^3.32.1
+    openneuro-client: ^3.32.3
     ts-node: ^9.1.1
     tsc-watch: ^4.2.9
     typescript: 4.0.6
@@ -24740,9 +24791,12 @@ fsevents@^1.2.7:
     "@types/draft-js": ^0.10.43
     "@types/ioredis": ^4.17.1
     "@types/nodemailer": ^6.4.1
+    apollo-link-schema: ^1.2.5
     apollo-server: 2.21.0
+    apollo-server-cache-redis: 1.4.0
     apollo-server-express: 2.21.0
     async: ^2.4.1
+    babel-eslint: ^10.1.0
     base64url: ^3.0.0
     body-parser: ^1.18.2
     cookie-parser: ^1.4.3
@@ -24770,7 +24824,7 @@ fsevents@^1.2.7:
     mockingoose: 2.11.0
     moment: ^2.14.1
     mongo-mock: 3.7.1
-    mongoose: 5.10.18
+    mongoose: 5.12.3
     morgan: ^1.6.1
     node-fetch: ^2.6.0
     nodemailer: 6.4.10
