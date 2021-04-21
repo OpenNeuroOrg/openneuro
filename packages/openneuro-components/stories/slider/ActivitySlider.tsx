@@ -19,6 +19,7 @@ export interface ActivitySliderProps {
   draggable?: boolean
   infinite?: boolean
   speed?: number
+  responsive?: object
   slidesToShow?: number
   slidesToScroll?: number
   swipeToSlide?: boolean
@@ -32,11 +33,11 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   sliderClass,
   ...props
 }) => {
-  const datasets = data.data.datasets.edges
+  const datasets = data.datasets.edges
   console.log(datasets)
   return (
     <div className={'container activity-slider' + ' ' + sliderClass}>
-      <h2>{slideHeader}</h2>
+      <h3>{slideHeader}</h3>
       <Slider {...props}>
         {datasets.map((item, index) => (
           <>
@@ -49,16 +50,47 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
               }>
               <div className="activity-slider-node" key={index}>
                 <div className="ds-name">
-                  {item.node.latestSnapshot.description.Name}
-                </div>
-                <div className="ds-pub-date">
-                  {formatDistanceToNow(parseISO(item.node.publishDate))} ago
+                  <h4>{item.node.latestSnapshot.description.Name}</h4>
                 </div>
 
+                {item.node.publishDate ? (
+                  <div className="ds-pub-date">
+                    {formatDistanceToNow(parseISO(item.node.publishDate))} ago
+                  </div>
+                ) : null}
+
+                {item.node.analytics ? (
+                  <div className="ds-pub-views">
+                    {item.node.analytics.views.toLocaleString()} views
+                  </div>
+                ) : null}
+
                 <div className="ds-modality">
-                  {item.node.latestSnapshot.summary !== null
-                    ? item.node.latestSnapshot.summary.modalities[0]
-                    : 'n/a'}
+                  <div className="hexagon-wrapper">
+                    {item.node.latestSnapshot.summary !== null ? (
+                      <>
+                        <div
+                          className={
+                            'hexagon ' +
+                            item.node.latestSnapshot.summary.modalities[0].substr(
+                              0,
+                              4,
+                            )
+                          }></div>
+                        <div className="label">
+                          {item.node.latestSnapshot.summary.modalities[0].substr(
+                            0,
+                            4,
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="hexagon no-modality"></div>
+                        <div className="label">N/A</div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </a>

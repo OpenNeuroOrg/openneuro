@@ -4,11 +4,11 @@ import { Story, Meta } from '@storybook/react'
 import { ActivitySlider, ActivitySliderProps } from './ActivitySlider'
 
 export default {
-  title: 'Components/Slider',
+  title: 'Components/Sliders',
   component: ActivitySlider,
 } as Meta
 
-const RecentDatasets = {
+const RecentData = {
   data: {
     datasets: {
       edges: [
@@ -154,12 +154,125 @@ const RecentDatasets = {
   },
 }
 
+const TopViewed = {
+  data: {
+    datasets: {
+      edges: [
+        {
+          node: {
+            id: 'ds000030',
+            analytics: {
+              views: 2534735,
+            },
+            latestSnapshot: {
+              tag: '1.0.0',
+              description: {
+                Name:
+                  'UCLA Consortium for Neuropsychiatric Phenomics LA5c Study',
+              },
+              summary: {
+                modalities: ['T1w', 'beh', 'events', 'dwi', 'bold', 'physio'],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            id: 'ds000113',
+            analytics: {
+              views: 1378301,
+            },
+            latestSnapshot: {
+              tag: '1.3.0',
+              description: {
+                Name: 'Forrest Gump',
+              },
+              summary: {
+                modalities: ['bold', 'T1w', 'T2w', 'angio', 'dwi', 'fieldmap'],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            id: 'ds000201',
+            analytics: {
+              views: 1000755,
+            },
+            latestSnapshot: {
+              tag: '1.0.3',
+              description: {
+                Name:
+                  'The Stockholm Sleepy Brain Study: Effects of Sleep Deprivation on Cognitive and Emotional Processing in Young and Old',
+              },
+              summary: {
+                modalities: [
+                  'T1w',
+                  'T2w',
+                  'events',
+                  'bold',
+                  'physio',
+                  'dwi',
+                  'fieldmap',
+                ],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            id: 'ds000117',
+            analytics: {
+              views: 897215,
+            },
+            latestSnapshot: {
+              tag: '1.0.4',
+              description: {
+                Name: 'Multisubject, multimodal face processing',
+              },
+              summary: {
+                modalities: [
+                  'events',
+                  'headshape',
+                  'coordsystem',
+                  'meg',
+                  'T1w',
+                  'dwi',
+                  'bold',
+                  'fieldmap',
+                ],
+              },
+            },
+          },
+        },
+        {
+          node: {
+            id: 'ds001506',
+            analytics: {
+              views: 896328,
+            },
+            latestSnapshot: {
+              tag: '1.3.1',
+              description: {
+                Name: 'Deep Image Reconstruction',
+              },
+              summary: {
+                modalities: ['T1w', 'inplaneT2', 'bold', 'events'],
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+}
+
 const Template: Story<ActivitySliderProps> = args => (
   <ActivitySlider {...args} />
 )
 
-export const Recent = Template.bind({})
-Recent.args = {
+export const RecentDatasets = Template.bind({})
+RecentDatasets.args = {
   accessibility: true,
   arrows: true,
   autoplaySpeed: 4000,
@@ -173,5 +286,52 @@ Recent.args = {
   slidesToScroll: 3,
   swipeToSlide: true,
   slideHeader: 'Newly Added',
-  data: RecentDatasets,
+  data: RecentData.data,
+  responsive: [
+    {
+      breakpoint: 800,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+      },
+    },
+    {
+      breakpoint: 580,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+}
+
+export const PopularDatasets = Template.bind({})
+PopularDatasets.args = {
+  accessibility: true,
+  arrows: true,
+  sliderClass: 'recent-slider',
+  dots: true,
+  draggable: true,
+  speed: 700,
+  slidesToShow: 3,
+  slidesToScroll: 3,
+  swipeToSlide: true,
+  slideHeader: 'Newly Added',
+  data: TopViewed.data,
+  responsive: [
+    {
+      breakpoint: 800,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+      },
+    },
+    {
+      breakpoint: 580,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
 }

@@ -23,6 +23,14 @@ body {
   padding: 0;
 }
 
+a,
+a:link {
+  color: $on-dark-aqua;
+  transition: color 0.3s;
+  &:hover {
+    color: lighten($on-dark-aqua, 15%);
+  }
+}
 .container {
   max-width: 90%;
   max-width: 1400px;
