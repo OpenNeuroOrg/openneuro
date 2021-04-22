@@ -10,31 +10,25 @@ import 'slick-carousel/slick/slick-theme.css'
 import './slider.scss'
 
 export interface ActivitySliderProps {
-  accessibility?: boolean
-  arrows?: boolean
-  autoplaySpeed?: number
-  autoplay?: boolean
   sliderClass?: string
   dots?: boolean
-  draggable?: boolean
-  infinite?: boolean
-  speed?: number
   responsive?: object
   slidesToShow?: number
   slidesToScroll?: number
   swipeToSlide?: boolean
   slideHeader?: string
-  data: object
+  data: Record<string, any>
 }
 
 export const ActivitySlider: React.FC<ActivitySliderProps> = ({
-  data,
   slideHeader,
   sliderClass,
+  data,
+  accessibility = true,
+  draggable = true,
   ...props
 }) => {
   const datasets = data.datasets.edges
-  console.log(datasets)
   return (
     <div className={'container activity-slider' + ' ' + sliderClass}>
       <h3>{slideHeader}</h3>

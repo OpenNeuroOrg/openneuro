@@ -273,20 +273,13 @@ const Template: Story<ActivitySliderProps> = args => (
 
 export const RecentDatasets = Template.bind({})
 RecentDatasets.args = {
-  accessibility: true,
-  arrows: true,
-  autoplaySpeed: 4000,
-  autoplay: false,
-  sliderClass: 'recent-slider',
+  data: RecentData.data,
+  slidersliderClass: 'recent-slider',
+  slideHeader: 'Newly Added',
   dots: true,
-  draggable: true,
-  infinite: true,
-  speed: 700,
   slidesToShow: 3,
   slidesToScroll: 3,
   swipeToSlide: true,
-  slideHeader: 'Newly Added',
-  data: RecentData.data,
   responsive: [
     {
       breakpoint: 800,
@@ -307,17 +300,14 @@ RecentDatasets.args = {
 
 export const PopularDatasets = Template.bind({})
 PopularDatasets.args = {
-  accessibility: true,
-  arrows: true,
+  data: TopViewed.data,
   sliderClass: 'recent-slider',
+  slideHeader: 'Popular Datasets',
   dots: true,
   draggable: true,
-  speed: 700,
   slidesToShow: 3,
   slidesToScroll: 3,
   swipeToSlide: true,
-  slideHeader: 'Newly Added',
-  data: TopViewed.data,
   responsive: [
     {
       breakpoint: 800,
