@@ -13,11 +13,14 @@ export const apiPath = (datasetId, snapshotTag, filePath) => {
 }
 
 const File = ({
+  id,
   datasetId,
   path,
   filename,
   snapshotTag = null,
   editMode = false,
+  toggleFileToDelete,
+  isFileToBeDeleted,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -55,6 +58,11 @@ const File = ({
             <DeleteFile datasetId={datasetId} path={path} filename={filename} />
           </Media>
         )}
+        <input
+          type="checkbox"
+          checked={isFileToBeDeleted(id)}
+          onChange={() => toggleFileToDelete({ id, path, filename })}
+        />
       </span>
     </>
   )
