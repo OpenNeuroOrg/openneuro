@@ -23,6 +23,8 @@ const FileTree = ({
   directories = [],
   editMode = false,
   defaultExpanded = false,
+  toggleFileToDelete,
+  isFileToBeDeleted,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
   return (
@@ -62,10 +64,13 @@ const FileTree = ({
             {files.sort(sortByFilename).map((file, index) => (
               <li className="clearfix" key={index}>
                 <File
+                  id={file.id}
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
                   path={path}
                   editMode={editMode}
+                  toggleFileToDelete={toggleFileToDelete}
+                  isFileToBeDeleted={isFileToBeDeleted}
                   {...file}
                 />
               </li>
@@ -80,6 +85,8 @@ const FileTree = ({
                       snapshotTag={snapshotTag}
                       editMode={editMode}
                       defaultExpanded={isTopLevel(dir)}
+                      toggleFileToDelete={toggleFileToDelete}
+                      isFileToBeDeleted={isFileToBeDeleted}
                       {...dir}
                     />
                   </li>
