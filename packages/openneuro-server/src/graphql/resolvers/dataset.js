@@ -181,6 +181,44 @@ export const deleteFile = async (
   }
 }
 
+export const deleteBulk = async (
+  obj,
+  { datasetId, files },
+  { user, userInfo },
+) => {
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+
+    const deletedFiles = await Promise.all(
+      files.map(({ path, filename }) =>
+        datalad
+          .deleteFile(datasetId, path, { name: filename }, userInfo)
+          .then(filename => new UpdatedFile(filename)),
+      ),
+    )
+
+    try {
+      await datalad.commitFiles(datasetId, userInfo)
+    } catch (err) {
+      console.log({ commitErr: err })
+    }
+    deletedFiles.forEach(deletedFile =>
+      pubsub.publish('filesUpdated', {
+        datasetId,
+        filesUpdated: {
+          action: 'DELETE',
+          payload: [deletedFile],
+        },
+      }),
+    )
+
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
+}
+
 /**
  * Update the dataset Public status
  */
