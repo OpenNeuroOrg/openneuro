@@ -161,6 +161,13 @@ export const typeDefs = `
     reexportRemotes(datasetId: ID!): Boolean
     # Reset draft commit
     resetDraft(datasetId: ID!, ref: String!): Boolean
+    # Bulk delete individual files
+    deleteBulk(datasetId: ID!, files: [DeleteFile]): Boolean
+  }
+
+  input DeleteFile {
+    path: String!
+    filename: String!
   }
 
   input UploadFile {

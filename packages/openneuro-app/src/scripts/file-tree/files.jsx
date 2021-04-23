@@ -5,9 +5,9 @@ import FileTree from './file-tree.jsx'
 import { Media } from '../styles/media'
 import { useMutation, gql } from '@apollo/client'
 
-const DELETE_FILE = gql`
-  mutation deleteFile($datasetId: ID!, $path: String!, $filename: String!) {
-    deleteFile(datasetId: $datasetId, path: $path, filename: $filename)
+const DELETE_BULK = gql`
+  mutation deleteBulk($datasetId: ID!, $files: [DeleteFile]) {
+    deleteBulk(datasetId: $datasetId, files: $files)
   }
 `
 
@@ -20,11 +20,13 @@ const Files = ({
 }) => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
-  const [deleteFile] = useMutation(DELETE_FILE)
+  const [deleteBulk] = useMutation(DELETE_BULK)
 
-  function toggleFileToDelete({ id, path, filename }) {
+  const isFileToBeDeleted = id => id in filesToDelete
+
+  const toggleFileToDelete = ({ id, path, filename }) =>
     setFilesToDelete(prevFilesToDelete => {
-      if (id in prevFilesToDelete) {
+      if (isFileToBeDeleted(id)) {
         delete prevFilesToDelete[id]
         return { ...prevFilesToDelete }
       }
@@ -33,19 +35,17 @@ const Files = ({
         [id]: { path, filename },
       }
     })
-  }
 
-  function isFileToBeDeleted(id) {
-    return id in filesToDelete
-  }
-
-  function bulkDelete() {
-    setIsDeleting(true)
-    Promise.all(
-      Object.values(filesToDelete).map(async ({ path, filename }) =>
-        deleteFile({ variables: { datasetId, path, filename } }),
-      ),
-    ).then(() => setIsDeleting(false))
+  const bulkDelete = () => {
+    if (Object.values(filesToDelete).length) {
+      setIsDeleting(true)
+      deleteBulk({
+        variables: { datasetId, files: Object.values(filesToDelete) },
+      }).then(() => {
+        setIsDeleting(false)
+        setFilesToDelete({})
+      })
+    }
   }
 
   const fileTree = flatToTree(files)
