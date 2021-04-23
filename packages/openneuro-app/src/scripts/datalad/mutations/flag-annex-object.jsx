@@ -9,17 +9,19 @@ const FLAG_ANNEX_OBJECT = gql`
   mutation flagAnnexObject(
     $datasetId: ID!
     $snapshot: String!
+    $filepath: String!
     $annexKey: String!
   ) {
     flagAnnexObject(
       datasetId: $datasetId
       snapshot: $snapshot
+      filepath: $filepath
       annexKey: $annexKey
     )
   }
 `
 
-const FlagAnnexObject = ({ datasetId, snapshot, annexKey }) => (
+const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
   <Mutation mutation={FLAG_ANNEX_OBJECT} awaitRefetchQueries={true}>
     {flagAnnexObject => (
       // fa-exclamation-triangle might be better
@@ -36,6 +38,7 @@ const FlagAnnexObject = ({ datasetId, snapshot, annexKey }) => (
               variables: {
                 datasetId,
                 snapshot: snapshot || 'HEAD',
+                filepath,
                 annexKey,
               },
             }).then(() => {

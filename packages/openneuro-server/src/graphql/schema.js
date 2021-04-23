@@ -90,6 +90,11 @@ export const typeDefs = `
       "Limit results, default 100, max 1000"
       limit: Int = 100
     ): [DatasetChange]
+    # Get annexed files that have been flagged for deletion.
+    flaggedFiles(
+      "Get files that have already been deleted, default false."
+      deleted: Boolean = false
+    ): [FlaggedFile]
   }
 
   type Mutation {
@@ -108,7 +113,7 @@ export const typeDefs = `
     # removes the annex object of the given file
     removeAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!, path: String, filename: String): Boolean
     # flags the given file
-    flagAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!): Boolean
+    flagAnnexObject(datasetId: ID!, snapshot: String!, filepath: String!, annexKey: String!): Boolean
     # Add or remove the public flag from a dataset
     updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
     # Update a draft summary
@@ -631,6 +636,19 @@ export const typeDefs = `
     token: String
     # An endpoint index used to identify the backend responsible for these files
     endpoint: Int
+  }
+
+  # An annexed file that has been flagged for removal.
+  type FlaggedFile {
+    datasetId: String
+    snapshot: String
+    filepath: String
+    annexKey: String
+    removed: Boolean
+    remover: User
+    flagged: Boolean
+    flagger: User
+    createdAt: DateTime
   }
 `
 

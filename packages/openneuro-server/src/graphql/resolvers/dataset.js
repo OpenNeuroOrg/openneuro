@@ -193,10 +193,17 @@ export const removeAnnexObject = async (
 ) => {
   try {
     await checkDatasetAdmin(datasetId, user, userInfo)
-    await datalad.removeAnnexObject(datasetId, snapshot, annexKey, userInfo)
+    const filepath = getFileName(path, filename)
+    await datalad.removeAnnexObject(
+      datasetId,
+      snapshot,
+      filepath,
+      annexKey,
+      userInfo,
+    )
     if (path && filename) {
       // remove file from Apollo cache
-      const file = new UpdatedFile(getFileName(path, filename))
+      const file = new UpdatedFile(filepath)
       pubsub.publish('filesUpdated', {
         datasetId,
         filesUpdated: {
@@ -214,12 +221,18 @@ export const removeAnnexObject = async (
 
 export const flagAnnexObject = async (
   obj,
-  { datasetId, snapshot, annexKey },
+  { datasetId, snapshot, filepath, annexKey },
   { user, userInfo },
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await datalad.flagAnnexObject(datasetId, snapshot, annexKey, userInfo)
+    await datalad.flagAnnexObject(
+      datasetId,
+      snapshot,
+      filepath,
+      annexKey,
+      userInfo,
+    )
     return true
   } catch (err) {
     Sentry.captureException(err)

@@ -1,14 +1,17 @@
 import mongoose from 'mongoose'
 
+const ObjectId = mongoose.Schema.Types.ObjectId
+
 const badAnnexObject = new mongoose.Schema(
   {
     datasetId: String, // OpenNeuro id
     snapshot: String,
+    filepath: String,
     annexKey: String,
     removed: { type: Boolean, default: false },
-    remover: { _id: String },
+    remover: { type: ObjectId, ref: 'User' },
     flagged: { type: Boolean, default: false },
-    flagger: { _id: String },
+    flagger: { type: ObjectId, ref: 'User' },
   },
   { timestamps: { createdAt: 'created_at' } },
 )

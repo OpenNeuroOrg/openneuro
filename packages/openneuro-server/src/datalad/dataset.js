@@ -408,7 +408,13 @@ export const deletePath = (datasetId, path, user) => {
 /**
  * Delete the file's annex object and any public replicas
  */
-export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
+export const removeAnnexObject = (
+  datasetId,
+  snapshot,
+  filepath,
+  annexKey,
+  user,
+) => {
   const worker = getDatasetWorker(datasetId)
   const url = `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
   return request
@@ -419,7 +425,7 @@ export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
       const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
       if (existingBAO) {
         existingBAO.forEach(bAO => {
-          bAO.remover = user
+          bAO.remover = user._id
           bAO.removed = true
           bAO.save()
         })
@@ -427,8 +433,9 @@ export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
         const badAnnexObj = new BadAnnexObject({
           datasetId,
           snapshot,
+          filepath,
           annexKey,
-          remover: user,
+          remover: user._id,
           removed: true,
         })
         badAnnexObj.save()
@@ -439,10 +446,17 @@ export const removeAnnexObject = (datasetId, snapshot, annexKey, user) => {
 /**
  * Flags file. Would be good to find a better way to store flags on dataset.
  */
-export const flagAnnexObject = (datasetId, snapshot, annexKey, user) => {
+export const flagAnnexObject = (
+  datasetId,
+  snapshot,
+  filepath,
+  annexKey,
+  user,
+) => {
   const badAnnexObj = new BadAnnexObject({
     datasetId,
     snapshot,
+    filepath,
     annexKey,
     flagger: user,
     flagged: true,

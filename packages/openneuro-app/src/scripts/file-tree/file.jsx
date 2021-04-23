@@ -78,6 +78,7 @@ const File = ({
             <FlagAnnexObject
               datasetId={datasetId}
               snapshot={snapshotTag}
+              filepath={filePath(path, filename)}
               annexKey={annexKey}
             />
           ) : null)}
