@@ -26,7 +26,7 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
     {flagAnnexObject => (
       // fa-exclamation-triangle might be better
       <TooltipSpan
-        className="remove-annex-object"
+        className="flag-annex-object"
         data-tip="Use this to alert site admins if this file has been found to contain subject sensitive data.">
         <WarnButton
           message="Flag"

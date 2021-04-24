@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import { TooltipSpan } from '../fragments/copyable-tooltip.jsx'
 
 const REMOVE_ANNEX_OBJECT = gql`
   mutation removeAnnexObject(
@@ -32,7 +33,9 @@ const RemoveAnnexObject = ({
   <Mutation mutation={REMOVE_ANNEX_OBJECT} awaitRefetchQueries={true}>
     {removeAnnexObject => (
       // fa-exclamation-triangle might be better
-      <span className="remove-annex-object">
+      <TooltipSpan
+        className="remove-annex-object"
+        data-tip="This admin tool will remove this file's annex objects.">
         <WarnButton
           message="Rm Annexed"
           icon="fa-frown-o"
@@ -52,7 +55,7 @@ const RemoveAnnexObject = ({
             })
           }}
         />
-      </span>
+      </TooltipSpan>
     )}
   </Mutation>
 )
