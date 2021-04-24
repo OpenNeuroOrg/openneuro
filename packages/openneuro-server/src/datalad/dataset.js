@@ -13,7 +13,13 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { updateDatasetRevision, expireDraftFiles } from './draft.js'
-import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files'
+import {
+  fileUrl,
+  pathUrl,
+  getFileName,
+  encodeFilePath,
+  filesUrl,
+} from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset'
 import Metadata from '../models/metadata'
@@ -389,6 +395,16 @@ export const deleteFile = (datasetId, path, file, user) => {
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
     .then(() => filename)
+}
+
+export const deleteBulk = (datasetId, files, user) => {
+  const filenames = files.map(file => getFileName(file.path, file.filename))
+  return request
+    .del(filesUrl(datasetId))
+    .set('Cookie', generateDataladCookie(config)(user))
+    .set('Accept', 'application/json')
+    .send({ filenames })
+    .then(() => filenames)
 }
 
 /**

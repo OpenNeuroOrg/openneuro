@@ -1,5 +1,6 @@
 import logging
 import os
+import json
 from subprocess import CalledProcessError
 
 import falcon
@@ -105,7 +106,7 @@ class FilesResource(object):
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
 
-    def on_delete(self, req, resp, dataset, filename):
+    def on_delete(self, req, resp, dataset, filename=None):
         """Delete an existing file from a dataset"""
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
@@ -131,6 +132,24 @@ class FilesResource(object):
             else:
                 resp.media = {'error': 'no such file'}
                 resp.status = falcon.HTTP_NOT_FOUND
+        elif req.content_length:
+            filenames = json.loads(req.bounded_stream.read().decode('utf8'))['filenames']
+            ds_path = self.store.get_dataset_path(dataset)
+            deleted_files = [
+                filename for filename in filenames 
+                if os.path.exists(os.path.join(ds_path, filename))
+            ]
+            media_dict = {'deleted': deleted_files}
+            name, email = get_user_info(req)
+            if name and email:
+                media_dict['name'] = name
+                media_dict['email'] = email
+            try:
+                remove_files(self.store, dataset, files=deleted_files, name=name, email=email, cookies=req.cookies)
+                resp.media = media_dict
+                resp.status = falcon.HTTP_OK
+            except:
+                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST

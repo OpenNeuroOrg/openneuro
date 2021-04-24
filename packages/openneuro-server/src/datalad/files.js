@@ -44,6 +44,8 @@ export const fileUrl = (datasetId, path, filename) => {
   return url
 }
 
+export const filesUrl = datasetId => `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}/files`
+
 /**
  * Generate path URL (such a directory or virtual path) for DataLad service
  * @param {String} datasetId
