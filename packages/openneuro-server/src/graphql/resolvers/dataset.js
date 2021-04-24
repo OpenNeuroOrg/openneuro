@@ -188,29 +188,20 @@ export const deleteBulk = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
+    const deletedFiles = await datalad
+      .deleteBulk(datasetId, files, userInfo)
+      .then(filenames =>
+        Promise.all(filenames.map(filename => new UpdatedFile(filename))),
+      )
 
-    const deletedFiles = await Promise.all(
-      files.map(({ path, filename }) =>
-        datalad
-          .deleteFile(datasetId, path, { name: filename }, userInfo)
-          .then(filename => new UpdatedFile(filename)),
-      ),
-    )
-
-    try {
-      await datalad.commitFiles(datasetId, userInfo)
-    } catch (err) {
-      console.log({ commitErr: err })
-    }
-    deletedFiles.forEach(deletedFile =>
-      pubsub.publish('filesUpdated', {
-        datasetId,
-        filesUpdated: {
-          action: 'DELETE',
-          payload: [deletedFile],
-        },
-      }),
-    )
+    await datalad.commitFiles(datasetId, userInfo)
+    pubsub.publish('filesUpdated', {
+      datasetId,
+      filesUpdated: {
+        action: 'DELETE',
+        payload: deletedFiles,
+      },
+    })
 
     return true
   } catch (err) {
