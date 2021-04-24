@@ -54,15 +54,21 @@ const File = ({
           </Media>
         )}
         {editMode && filename !== 'dataset_description.json' && (
-          <Media greaterThanOrEqual="medium">
-            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-          </Media>
+          <>
+            <Media greaterThanOrEqual="medium">
+              <DeleteFile
+                datasetId={datasetId}
+                path={path}
+                filename={filename}
+              />
+            </Media>
+            <input
+              type="checkbox"
+              checked={isFileToBeDeleted(id)}
+              onChange={() => toggleFileToDelete({ id, path, filename })}
+            />
+          </>
         )}
-        <input
-          type="checkbox"
-          checked={isFileToBeDeleted(id)}
-          onChange={() => toggleFileToDelete({ id, path, filename })}
-        />
       </span>
     </>
   )
