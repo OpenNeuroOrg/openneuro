@@ -28,4 +28,4 @@ class AnnexObjectsResource(object):
             gevent.spawn(remove_file_remotes, self.store, urls)
         else:
             resp.media = {'error': 'annex-key is missing'}
-            resp.status = falcon.HTTP_BAD_REQUEST
+            resp.status = falcon.HTTP_NOT_FOUND
