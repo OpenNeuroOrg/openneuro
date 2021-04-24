@@ -90,8 +90,10 @@ export const typeDefs = `
       "Limit results, default 100, max 1000"
       limit: Int = 100
     ): [DatasetChange]
-    # Get annexed files that have been flagged for deletion.
+    # Get annexed files that have been flagged or removed.
     flaggedFiles(
+      "Get files that have been flagged, default true."
+      flagged: Boolean = true
       "Get files that have already been deleted, default false."
       deleted: Boolean = false
     ): [FlaggedFile]
