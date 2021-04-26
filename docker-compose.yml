@@ -19,7 +19,7 @@ services:
   app:
     extends:
       service: node
-    command: bash -c 'yarn install && yarn workspace openneuro-app start'
+    command: bash -c 'yarn install && yarn workspace @openneuro/app start'
     ports:
       - '8145:8145'
       - '9992:9992'
@@ -30,7 +30,7 @@ services:
   server:
     extends:
       service: node
-    command: bash -c 'yarn install && yarn workspace openneuro-server start'
+    command: bash -c 'yarn install && yarn workspace @openneuro/server start'
     depends_on:
       - redis
       - mongo
@@ -41,7 +41,7 @@ services:
   indexer:
     extends:
       service: node
-    command: bash -c 'yarn install && yarn workspace openneuro-indexer start'
+    command: bash -c 'yarn install && yarn workspace @openneuro/indexer start'
     depends_on:
       - server
       - elasticsearch

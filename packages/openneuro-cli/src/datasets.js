@@ -1,4 +1,4 @@
-import { datasets } from 'openneuro-client'
+import { datasets } from '@openneuro/client'
 
 /**
  * Check for an existing dataset
