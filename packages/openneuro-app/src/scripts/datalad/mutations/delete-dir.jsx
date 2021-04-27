@@ -5,14 +5,14 @@ import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
 export const DELETE_FILES = gql`
-  mutation deleteFiles($datasetId: ID!, $path: String!) {
-    deleteFiles(datasetId: $datasetId, path: $path)
+  mutation deletePath($datasetId: ID!, $path: String!) {
+    deletePath(datasetId: $datasetId, path: $path)
   }
 `
 
 const DeleteDir = ({ datasetId, path }) => (
   <Mutation mutation={DELETE_FILES} awaitRefetchQueries={true}>
-    {deleteFiles => (
+    {deletePath => (
       <span className="delete-file">
         <WarnButton
           message="Delete"
@@ -20,7 +20,7 @@ const DeleteDir = ({ datasetId, path }) => (
           warn={true}
           className="edit-file"
           action={cb => {
-            deleteFiles({
+            deletePath({
               variables: {
                 datasetId,
                 path,

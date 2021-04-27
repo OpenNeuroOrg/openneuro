@@ -50,7 +50,7 @@ describe('dataset resolvers', () => {
       expect(sorted[2].id).toBe(3)
     })
   })
-  describe('deleteFiles', () => {
+  describe('deletePath', () => {
     beforeEach(() => {
       mockingoose.resetAll()
       request.post.mockClear()
@@ -74,7 +74,7 @@ describe('dataset resolvers', () => {
         }),
       })
 
-      ds.deleteFiles(
+      ds.deletePath(
         null,
         { datasetId: 'ds999999', path: '/sub-99' },
         {

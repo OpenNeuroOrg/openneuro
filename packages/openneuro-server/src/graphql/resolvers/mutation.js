@@ -4,9 +4,8 @@
 import {
   createDataset,
   deleteDataset,
-  deleteFile,
   deleteFiles,
-  deleteBulk,
+  deletePath,
   updatePublic,
   trackAnalytics,
 } from './dataset.js'
@@ -33,9 +32,8 @@ import { resetDraft } from './reset'
 const Mutation = {
   createDataset,
   deleteDataset,
-  deleteFile,
   deleteFiles,
-  deleteBulk,
+  deletePath,
   createSnapshot,
   deleteSnapshot,
   updateSummary,

@@ -128,7 +128,7 @@ export const deleteDataset = async (
 /**
  * Delete files from a draft
  */
-export const deleteFiles = async (
+export const deletePath = async (
   obj,
   { datasetId, path },
   { user, userInfo },
@@ -156,32 +156,7 @@ export const deleteFiles = async (
   }
 }
 
-export const deleteFile = async (
-  obj,
-  { datasetId, path, filename },
-  { user, userInfo },
-) => {
-  try {
-    await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFile = await datalad
-      .deleteFile(datasetId, path, { name: filename }, userInfo)
-      .then(filename => new UpdatedFile(filename))
-    await datalad.commitFiles(datasetId, userInfo)
-    pubsub.publish('filesUpdated', {
-      datasetId,
-      filesUpdated: {
-        action: 'DELETE',
-        payload: [deletedFile],
-      },
-    })
-    return true
-  } catch (err) {
-    Sentry.captureException(err)
-    return false
-  }
-}
-
-export const deleteBulk = async (
+export const deleteFiles = async (
   obj,
   { datasetId, files },
   { user, userInfo },
@@ -189,7 +164,7 @@ export const deleteBulk = async (
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
     const deletedFiles = await datalad
-      .deleteBulk(datasetId, files, userInfo)
+      .deleteFiles(datasetId, files, userInfo)
       .then(filenames =>
         Promise.all(filenames.map(filename => new UpdatedFile(filename))),
       )

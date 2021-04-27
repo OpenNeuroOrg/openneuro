@@ -385,19 +385,9 @@ export const commitFiles = (datasetId, user) => {
 }
 
 /**
- * Delete an existing file in a dataset
+ * Delete existing files in a dataset
  */
-export const deleteFile = (datasetId, path, file, user) => {
-  const url = fileUrl(datasetId, path, file.name)
-  const filename = getFileName(path, file.name)
-  return request
-    .del(url)
-    .set('Cookie', generateDataladCookie(config)(user))
-    .set('Accept', 'application/json')
-    .then(() => filename)
-}
-
-export const deleteBulk = (datasetId, files, user) => {
+export const deleteFiles = (datasetId, files, user) => {
   const filenames = files.map(file => getFileName(file.path, file.filename))
   return request
     .del(filesUrl(datasetId))
