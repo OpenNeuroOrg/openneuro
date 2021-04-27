@@ -1,16 +1,17 @@
 import mongoose, { Document } from 'mongoose'
+import { UserDocument } from './user'
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 export interface BadAnnexObject extends Document {
   datasetId: string
-  snapshot: string,
-  filepath: string,
-  annexKey: string,
-  removed: boolean,
+  snapshot: string
+  filepath: string
+  annexKey: string
+  removed: boolean
   // TODO: update any to UserDocument once #2054 Mongoose upgrade is merged
-  remover: string | any,
-  flagged: boolean,
-  flagger: string | any,
+  remover: string | UserDocument
+  flagged: boolean
+  flagger: string | UserDocument
 }
 
 /**
@@ -32,6 +33,9 @@ const badAnnexObject = new mongoose.Schema(
 
 badAnnexObject.index({ datasetId: 1, annexKey: 1 }, { unique: true })
 
-const BadAnnexObject = mongoose.model('BadAnnexObject', badAnnexObject)
+const BadAnnexObject = mongoose.model<BadAnnexObject>(
+  'BadAnnexObject',
+  badAnnexObject,
+)
 
 export default BadAnnexObject

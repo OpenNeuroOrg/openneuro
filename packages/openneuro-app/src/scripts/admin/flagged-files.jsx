@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/client'
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 import Helmet from 'react-helmet'
 import Spinner from '../common/partials/spinner.jsx'
 import { Link } from 'react-router-dom'

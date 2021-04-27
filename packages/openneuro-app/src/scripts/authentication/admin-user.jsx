@@ -2,7 +2,8 @@ import { useCookies } from 'react-cookie'
 import { getProfile } from './profile.js'
 
 export const isAdmin = () => {
-  const profile = getProfile()
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
   return profile && profile.admin
 }
 
