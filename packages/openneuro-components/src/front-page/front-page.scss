@@ -109,12 +109,12 @@ body {
   .get-updates-form {
     max-width: 50%;
     flex-basis: 50%;
+    height: 110px;
   }
   .get-updates-form {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    height: 110px;
     button {
       margin-left: 5px;
     }
@@ -157,7 +157,7 @@ body {
     box-sizing: border-box;
     height: 270px;
     border-radius: 50%;
-    margin: 0 auto -59px 30%;
+    margin: 0 auto -59px;
     img {
       max-width: 90%;
       margin: 0 auto;
@@ -167,7 +167,7 @@ body {
 
   .info-card {
     div {
-      max-width: 450px;
+      max-width: 540px;
       background: #e8f2f6;
       border: 1px solid #d0dee2;
       padding: 20px;
@@ -184,12 +184,15 @@ body {
     position: relative;
 
     margin: 0 auto 0 0;
-    width: 450px;
+    width: 540px;
   }
 
   &#share-data {
     margin-left: auto;
-    margin-right: -80px;
+    margin-right: -100px;
+    span {
+      margin-right: 50px;
+    }
   }
 
   &#use-data {

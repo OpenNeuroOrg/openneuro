@@ -6,7 +6,7 @@ export interface GetUpdatesProps {}
 
 export const GetUpdates: React.FC<GetUpdatesProps> = ({}) => {
   const getUpdatesInput = {
-    type: 'text',
+    type: 'email',
     label: 'Email Address',
     placeholder: ' ',
     labelStyle: 'float',
