@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { frontPage } from '../content/front-page-content.jsx'
-import './infographic.scss'
+
 export interface InfographicProps {}
 
 export const Infographic: React.FC<InfographicProps> = ({}) => {

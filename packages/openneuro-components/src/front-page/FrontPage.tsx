@@ -4,7 +4,8 @@ import { Header } from '../header/Header'
 import { AffiliateBlock } from './AffiliateBlock'
 import { ActivitySliderFront } from './ActivitySlider'
 import { Contributors } from './Contributors'
-import { Infographic } from '../infographic/Infographic'
+import { GetUpdates } from './GetUpdates'
+import { Infographic } from './Infographic'
 
 import { Footer } from '../footer/Footer'
 
@@ -46,6 +47,9 @@ export const FrontPage: React.FC<FrontPageProps> = ({
         <div className="swoop-content gray-bg">
           <ActivitySliderFront />
         </div>
+      </section>
+      <section className="gray-bg">
+        <GetUpdates />
       </section>
       <section className="gray-bg">
         <Contributors />
