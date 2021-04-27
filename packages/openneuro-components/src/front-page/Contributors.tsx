@@ -10,7 +10,7 @@ export const Contributors: React.FC<ContributersProps> = ({}) => {
     <div className="contributors">
       <div className="container">
         <div className="contributor-logo-header">
-          <Logo dark horizontal={false} width="400px" />
+          <Logo dark horizontal={false} />
 
           <h3>Support for {frontPage.pageTitle} provided by</h3>
         </div>

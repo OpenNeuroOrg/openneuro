@@ -25,7 +25,7 @@ export const GetUpdates: React.FC<GetUpdatesProps> = ({}) => {
           <div className="col col-10 get-updates-bar">
             <div className="get-updates-label">
               <h2>Get Updates</h2>
-              <h3>Find out abiout new version releases and features</h3>
+              <h3>Find out about new version and future releases.</h3>
             </div>
             <div className="get-updates-form">
               <Input {...getUpdatesInput} />
