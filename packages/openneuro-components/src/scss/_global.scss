@@ -3,9 +3,10 @@
 @import './helper-classes';
 @import './flex-grid';
 
-div {
-  box-sizing: border-box;
+.sb-show-main.sb-main-padded {
+  padding: 0 !important;
 }
+
 .sr-only {
   border: 0;
   clip: rect(0, 0, 0, 0);
@@ -32,7 +33,12 @@ a:link {
   }
 }
 .container {
-  max-width: 90%;
-  max-width: 1400px;
+  max-width: calc(100vw - 20px);
+  width: 1400px;
   margin: 0 auto;
+  position: relative;
+}
+
+div {
+  box-sizing: border-box;
 }

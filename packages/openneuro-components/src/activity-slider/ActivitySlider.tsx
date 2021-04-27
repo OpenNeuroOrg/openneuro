@@ -28,7 +28,7 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   draggable = true,
   ...props
 }) => {
-  const datasets = data.datasets.edges
+  const datasets = data
   return (
     <div className={'container activity-slider' + ' ' + sliderClass}>
       <h3>{slideHeader}</h3>

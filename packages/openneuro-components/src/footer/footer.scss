@@ -1,0 +1,19 @@
+@import '../scss/variables';
+
+.on-foot {
+  background: #333;
+  color: #ffffff;
+  padding: 10px;
+  a {
+    color: $on-light-aqua;
+  }
+  .grid {
+    font-size: 12px;
+    .col:nth-child(2) {
+      text-align: center;
+    }
+    .col:last-child {
+      text-align: right;
+    }
+  }
+}

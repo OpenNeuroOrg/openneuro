@@ -35,7 +35,9 @@ $screen-lg: 744px;
       padding: 0;
     }
   }
-
+  &.align-center {
+    align-items: center;
+  }
   &.grid-column {
     flex-direction: column;
   }

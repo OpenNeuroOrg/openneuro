@@ -3,10 +3,12 @@
 
 .navbar-inner-wrap {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 10px 25px 0;
   align-items: center;
   background-color: $primary;
+  overflow: hidden;
 }
 .svg-fill-on-dark-aqua {
   fill: $primary;
@@ -78,4 +80,191 @@
   flex-basis: 300px;
   display: flex;
   justify-content: flex-end;
+}
+
+.expaned-header {
+  min-width: 100%;
+}
+
+.sign-in-modal-content {
+  button {
+    width: 220px;
+    justify-content: center;
+  }
+}
+
+.hero-signin {
+  margin: 20px 8px 0;
+  align-items: center;
+  > div {
+    margin-right: 60px;
+  }
+  h4 {
+    color: #fff;
+    margin: 0;
+  }
+}
+
+.expaned-header {
+  a {
+    color: $on-light-aqua;
+  }
+  h2 {
+    font-weight: 300;
+    color: #fff;
+    width: 570px;
+    font-size: 29px;
+    a {
+      font-weight: 600;
+    }
+  }
+}
+
+.cube-wrap {
+  // position: absolute;
+  // right: 0;
+  // width: 680px;
+  // margin-right: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .cube-block {
+    height: 240px;
+    position: relative;
+    &:nth-child(3n + 2) {
+      margin: 0 50px;
+    }
+    &:first-child {
+      left: -55px;
+      top: 30px;
+      position: relative;
+    }
+    &:nth-child(2) {
+      left: -25px;
+      top: -5px;
+    }
+    &:nth-child(3) {
+      top: 60px;
+      left: -15px;
+    }
+    &:nth-child(4) {
+      left: 40px;
+      top: -5px;
+    }
+    &:nth-child(5) {
+      left: 30px;
+      top: -5px;
+    }
+    &:nth-child(6) {
+      left: 25px;
+      top: 80px;
+    }
+    &:nth-child(7) {
+      left: 0px;
+      top: -15px;
+    }
+
+    &:last-child {
+      left: 75px;
+      top: 0;
+      margin-right: auto;
+    }
+    @media (max-width: 1400px) {
+      &:first-child {
+        left: 112px;
+      }
+      &:nth-child(2) {
+        left: 70px;
+      }
+      &:nth-child(3) {
+        left: 25px;
+      }
+      &:nth-child(4) {
+        left: 40px;
+        top: -5px;
+      }
+      &:nth-child(5) {
+        left: 30px;
+        top: -25px;
+      }
+      &:nth-child(6) {
+        left: -5px;
+        top: 50px;
+      }
+      &:nth-child(7) {
+        left: 80px;
+      }
+
+      &:last-child {
+        left: 95px;
+        top: -30px;
+      }
+    }
+  }
+  // @media (max-width: 1100px) {
+  //   width: 50%;
+  //   position: relative;
+  //   margin: 0;
+  //   .cube-block {
+  //     height: auto;
+  //     .modality-cube-wrap {
+  //       margin-top: 0;
+  //       width: auto;
+  //       height: auto;
+  //       .hexagon-bg,
+  //       .hexagon-img {
+  //         position: relative;
+  //         display: none;
+  //       }
+  //       .modality-cube {
+  //         margin: 0;
+  //         width: 100%;
+  //         height: 150px;
+  //         transform: none;
+  //         > div.front {
+  //           background-color: rgb(0, 139, 255);
+  //           transform: none;
+  //           position: relative;
+  //         }
+  //       }
+  //     }
+  //     &:nth-child(3n + 2) {
+  //       margin: 0;
+  //     }
+  //     &:first-child {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //     &:nth-child(2) {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //     &:nth-child(3) {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //     &:nth-child(4) {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //     &:nth-child(5) {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //     &:nth-child(6) {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //     &:nth-child(7) {
+  //       left: 0;
+  //       top: 0;
+  //     }
+
+  //     &:last-child {
+  //       left: 0;
+  //       top: 0;
+  //     }
+  //   }
+  // }
 }

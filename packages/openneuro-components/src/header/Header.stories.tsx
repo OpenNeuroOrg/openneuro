@@ -17,3 +17,8 @@ LoggedIn.args = {
 
 export const LoggedOut = Template.bind({})
 LoggedOut.args = {}
+
+export const Expanded = Template.bind({})
+Expanded.args = {
+  expanded: {},
+}

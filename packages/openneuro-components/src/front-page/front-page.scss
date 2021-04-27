@@ -1,0 +1,96 @@
+@import '../scss/variables';
+
+body {
+  font-family: $font-sans;
+}
+
+.front-page section {
+  margin: 100px 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &.gray-bg {
+    margin: 0;
+    padding: 100px 0;
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.contributors {
+  .contributor {
+    text-align: center;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      max-height: 102px;
+      padding: 0 0 30px 0;
+      box-sizing: border-box;
+    }
+
+    &:nth-child(1),
+    &:nth-child(3) {
+      img {
+        width: 320px;
+      }
+    }
+    &:nth-child(2) {
+      img {
+        width: 185px;
+      }
+    }
+    &:nth-child(4),
+    &:nth-child(5) {
+      img {
+        width: 240px;
+      }
+    }
+
+    &:nth-child(8) {
+      img {
+        width: 320px;
+      }
+    }
+  }
+}
+
+.contributor-logo-header {
+  text-align: center;
+  margin-bottom: 50px;
+  .logo-wrap {
+    margin: 0 auto;
+  }
+}
+
+.front-page .activity-slider {
+  padding-bottom: 70px;
+}
+
+.front-page .front-page-activity {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 40px 0 0;
+
+  h2 {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .on-icon {
+    justify-content: center;
+    margin-bottom: 70px;
+  }
+}
+
+.activity-swoop {
+  background: #f3f3f3;
+  width: 120%;
+  height: 110px;
+  border-radius: 100%;
+  margin: -34px 0 0;
+  position: absolute;
+  transform: scale(1.05) rotate(-0.1deg);
+}
