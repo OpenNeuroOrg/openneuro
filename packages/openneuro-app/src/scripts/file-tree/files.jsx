@@ -5,9 +5,9 @@ import FileTree from './file-tree.jsx'
 import { Media } from '../styles/media'
 import { useMutation, gql } from '@apollo/client'
 
-const DELETE_BULK = gql`
-  mutation deleteBulk($datasetId: ID!, $files: [DeleteFile]) {
-    deleteBulk(datasetId: $datasetId, files: $files)
+const DELETE_FILES = gql`
+  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
+    deleteFiles(datasetId: $datasetId, files: $files)
   }
 `
 
@@ -20,7 +20,7 @@ const Files = ({
 }) => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
-  const [deleteBulk] = useMutation(DELETE_BULK)
+  const [deleteFiles] = useMutation(DELETE_FILES)
 
   const isFileToBeDeleted = id => id in filesToDelete
 
@@ -39,7 +39,7 @@ const Files = ({
   const bulkDelete = () => {
     if (Object.values(filesToDelete).length) {
       setIsDeleting(true)
-      deleteBulk({
+      deleteFiles({
         variables: { datasetId, files: Object.values(filesToDelete) },
       }).then(() => {
         setIsDeleting(false)
