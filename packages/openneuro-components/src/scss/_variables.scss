@@ -67,3 +67,11 @@ $primary: $on-dark-aqua;
 .gray-bg {
   background: #f3f3f3;
 }
+
+//Base unit used for spacing gutters
+$base-unit: 20px;
+
+//Screen Sizes
+$screen-sm: 480px;
+$screen-md: 767px;
+$screen-lg: 989px;

@@ -1,3 +1,4 @@
+@import '../scss/variables';
 .affiliate-card {
   img {
     width: 300px;
@@ -16,11 +17,12 @@
 }
 
 .affiliate-wrap .grid {
-  @media (max-width: 767px) {
+  @media (max-width: $screen-lg) {
     display: block;
     .col.col-3 {
-      max-width: 100%;
+      max-width: 90%;
       padding: 0 20px 50px;
+      margin: 0 auto;
     }
   }
 }

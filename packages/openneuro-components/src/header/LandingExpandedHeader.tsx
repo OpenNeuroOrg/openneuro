@@ -33,7 +33,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
     <div className="expaned-header" style={{ minHeight: '720px' }}>
       <div className="container">
         <div className="grid grid-between">
-          <div className="col col-5">
+          <div className="col col-6 expaned-h-left">
             {frontPage.pageDescription}
             {!user ? (
               <div className="grid  grid-start hero-signin">
