@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from 'react'
 
 import { Button } from '../button/Button'
 import { Cube } from '../cube/Cube'
-import { cubeData } from '../content/cube-content.jsx'
+import { cubeData } from '../mock-content/cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
 
-import { frontPage } from '../content/front-page-content.jsx'
+import { frontPage } from '../mock-content/front-page-content.jsx'
 
 export interface LandingExpandedHeaderProps {
   user?: {}

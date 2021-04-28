@@ -1,5 +1,4 @@
 import React from 'react'
-import { AccordionTab } from './AccordionTab'
 
 import './accordion.scss'
 

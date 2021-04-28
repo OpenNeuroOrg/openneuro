@@ -4,8 +4,8 @@ export interface TypographyProps {}
 
 export const Typography: React.FC<TypographyProps> = ({}) => {
   return (
-    <header>
-      <div className="wrapper">
+    <article>
+      <div className="container">
         <h1>Heading 1</h1>
         <h2>Heading 2</h2>
         <h3>Heading 3</h3>
@@ -22,6 +22,6 @@ export const Typography: React.FC<TypographyProps> = ({}) => {
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
       </div>
-    </header>
+    </article>
   )
 }

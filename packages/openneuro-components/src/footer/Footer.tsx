@@ -1,6 +1,6 @@
 import React from 'react'
 import './footer.scss'
-import { frontPage } from '../content/front-page-content'
+import { frontPage } from '../mock-content/front-page-content'
 
 export interface FooterProps {}
 

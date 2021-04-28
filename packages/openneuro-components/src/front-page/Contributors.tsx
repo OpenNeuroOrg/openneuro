@@ -1,7 +1,7 @@
 import React from 'react'
 import { Logo } from '../logo/Logo'
 
-import { frontPage } from '../content/front-page-content.jsx'
+import { frontPage } from '../mock-content/front-page-content.jsx'
 
 export interface ContributersProps {}
 

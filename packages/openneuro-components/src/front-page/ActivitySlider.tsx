@@ -3,7 +3,10 @@ import React from 'react'
 import { ActivitySlider } from '../activity-slider/ActivitySlider'
 import { Icon } from '../icon/Icon'
 
-import { RecentData, TopViewed } from '../content/activity-slider-content.jsx'
+import {
+  RecentData,
+  TopViewed,
+} from '../mock-content/activity-slider-content.jsx'
 
 export interface ContributersProps {}
 

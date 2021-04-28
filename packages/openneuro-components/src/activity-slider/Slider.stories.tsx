@@ -3,7 +3,10 @@ import { Story, Meta } from '@storybook/react'
 
 import { ActivitySlider, ActivitySliderProps } from './ActivitySlider'
 
-import { RecentData, TopViewed } from '../content/activity-slider-content.jsx'
+import {
+  RecentData,
+  TopViewed,
+} from '../mock-content/activity-slider-content.jsx'
 
 export default {
   title: 'Components/Sliders',

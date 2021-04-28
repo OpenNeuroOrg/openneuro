@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { affiliateContent } from '../content/affiliate-content.jsx'
+import { affiliateContent } from '../mock-content/affiliate-content.jsx'
 
 import { AffiliateArticle } from '../affiliate-article/AffiliateArticle'
 
