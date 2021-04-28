@@ -101,9 +101,7 @@ export const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!, changes: [String!]): Snapshot
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
-    # Recursively delete a file or directory in a draft - returns true on success
-    deletePath(datasetId: ID!, path: String!): Boolean
-    # Delete individual files
+    # Delete files or directories in a draft
     deleteFiles(datasetId: ID!, files: [DeleteFile]): Boolean
     # Add or remove the public flag from a dataset
     updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
@@ -165,7 +163,7 @@ export const typeDefs = `
 
   input DeleteFile {
     path: String!
-    filename: String!
+    filename: String
   }
 
   input UploadFile {

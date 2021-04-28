@@ -44,20 +44,12 @@ export const fileUrl = (datasetId, path, filename) => {
   return url
 }
 
-export const filesUrl = datasetId => `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}/files`
-
 /**
  * Generate path URL (such a directory or virtual path) for DataLad service
  * @param {String} datasetId
- * @param {String} path - Relative path for the file
  */
-export const pathUrl = (datasetId, path) => {
-  const fileName = encodeFilePath(path)
-  const url = `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/files/${fileName}`
-  return url
-}
+export const filesUrl = datasetId =>
+  `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}/files`
 
 /**
  * Get files for a specific revision

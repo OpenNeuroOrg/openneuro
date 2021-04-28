@@ -15,7 +15,6 @@ import CacheItem, { CacheType } from '../cache/item'
 import { updateDatasetRevision, expireDraftFiles } from './draft.js'
 import {
   fileUrl,
-  pathUrl,
   getFileName,
   encodeFilePath,
   filesUrl,
@@ -388,26 +387,15 @@ export const commitFiles = (datasetId, user) => {
  * Delete existing files in a dataset
  */
 export const deleteFiles = (datasetId, files, user) => {
-  const filenames = files.map(file => getFileName(file.path, file.filename))
+  const filenames = files.map(({ filename, path }) =>
+    filename ? getFileName(path, filename) : encodeFilePath(path),
+  )
   return request
     .del(filesUrl(datasetId))
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
     .send({ filenames })
     .then(() => filenames)
-}
-
-/**
- * Recursively delete a directory path within a dataset
- */
-export const deletePath = (datasetId, path, user) => {
-  const url = pathUrl(datasetId, path)
-  return request
-    .del(url)
-    .query({ recursive: true })
-    .set('Cookie', generateDataladCookie(config)(user))
-    .set('Accept', 'application/json')
-    .then(() => encodeFilePath(path))
 }
 
 /**
