@@ -1,14 +1,20 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: openneuro-prod
+  name: openneuro-prod-2021
   region: us-west-2
-  version: "1.15"
+  version: "1.19"
+availabilityZones:
+  - us-west-2b
+  - us-west-2c
 nodeGroups:
   - name: general
-    amiFamily: Ubuntu1804
-    instanceType: c5a.xlarge
-    desiredCapacity: 2
+    amiFamily: Ubuntu2004
+    instanceType: r5a.large
+    desiredCapacity: 3
+    availabilityZones:
+      - us-west-2b
+      - us-west-2c
     iam:
       withAddonPolicies:
         ebs: true
@@ -22,9 +28,12 @@ nodeGroups:
       - apt update
       - apt install -y nfs-common zfsutils-linux
   - name: storage
-    amiFamily: Ubuntu1804
-    instanceType: m5ad.xlarge
+    amiFamily: Ubuntu2004
+    instanceType: r5ad.large
     desiredCapacity: 2
+    availabilityZones:
+      - us-west-2b
+      - us-west-2c
     iam:
       withAddonPolicies:
         ebs: true
@@ -39,3 +48,6 @@ nodeGroups:
     preBootstrapCommands:
       - apt update
       - apt install -y nfs-common zfsutils-linux
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
