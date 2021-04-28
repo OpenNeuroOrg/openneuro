@@ -35,7 +35,7 @@ describe('DeleteDir mutation', () => {
           query: DELETE_FILES,
           variables: {
             datasetId,
-            path,
+            files: [{ path: 'sub-99' }],
           },
         },
         newData: jest.fn(() => ({
