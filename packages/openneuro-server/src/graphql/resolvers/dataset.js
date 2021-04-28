@@ -128,34 +128,6 @@ export const deleteDataset = async (
 /**
  * Delete files from a draft
  */
-export const deletePath = async (
-  obj,
-  { datasetId, path },
-  { user, userInfo },
-) => {
-  try {
-    await checkDatasetWrite(datasetId, user, userInfo)
-    await datalad.deletePath(datasetId, path, userInfo)
-    pubsub.publish('filesUpdated', {
-      datasetId,
-      filesUpdated: {
-        action: 'DELETE',
-        payload: [
-          {
-            id: `${path}:0`,
-            filename: path,
-          },
-        ],
-      },
-    })
-    return true
-  } catch (err) {
-    console.error(err)
-    Sentry.captureException(err)
-    return false
-  }
-}
-
 export const deleteFiles = async (
   obj,
   { datasetId, files },

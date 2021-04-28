@@ -106,48 +106,42 @@ class FilesResource(object):
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
 
-    def on_delete(self, req, resp, dataset, filename=None):
+    def on_delete(self, req, resp, dataset):
         """Delete an existing file from a dataset"""
-        ds_path = self.store.get_dataset_path(dataset)
-        media_dict = {}
-        name, email = get_user_info(req)
-        if name and email:
-            media_dict['name'] = name
-            media_dict['email'] = email
-            
-        # The recursive flag removes the entire tree in one commit
-        if 'recursive' in req.params and req.params['recursive'] != 'false':
-            file_path = os.path.join(ds_path, filename)
-            if os.path.exists(file_path):
-                media_dict['deleted'] = filename
-                try:
-                    remove_recursive(self.store, dataset, filename, name=name, email=email, cookies=req.cookies)
-                    resp.media = media_dict
-                    resp.status = falcon.HTTP_OK
-                except:
-                    resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
-            else:
-                resp.media = {'error': 'no such path'}
-                resp.status = falcon.HTTP_NOT_FOUND
-        elif req.media:
+        if req.media:
+            ds_path = self.store.get_dataset_path(dataset)
+            files_to_delete = []
+            dirs_to_delete = []
+            paths_not_found = []
             filenames = req.media['filenames']
-            deleted_files = []
-            not_found_files = []
             for filename in filenames:
-                if os.path.exists(os.path.join(ds_path, filename)): 
-                    deleted_files.append(filename)
+                file_path = os.path.join(ds_path, filename)
+                if os.path.exists(file_path):
+                    if os.path.isdir(file_path):
+                        dirs_to_delete.append(filename)
+                    else:
+                        files_to_delete.append(filename)
                 else:
-                    not_found_files.append(filename)
-            if len(not_found_files) == 0:
-                media_dict['deleted'] = deleted_files
-                try:
-                    remove_files(self.store, dataset, files=deleted_files, name=name, email=email, cookies=req.cookies)
+                    paths_not_found.append(filename)
+
+            if len(paths_not_found) == 0:
+                media_dict = { 'deleted': dirs_to_delete + files_to_delete }
+                name, email = get_user_info(req)
+                if name and email:
+                    media_dict['name'] = name
+                    media_dict['email'] = email
+                try: 
+                    if len(dirs_to_delete) > 0:
+                        remove_recursive(self.store, dataset, dirs_to_delete, name=name, email=email, cookies=req.cookies)
+                        resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+                    if len(files_to_delete) > 0:
+                        remove_files(self.store, dataset, files=files_to_delete, name=name, email=email, cookies=req.cookies)
                     resp.media = media_dict
                     resp.status = falcon.HTTP_OK
                 except:
                     resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
             else:
-                resp.media = { 'error': f'the following files not found: {", ".join(not_found_files)}' }
+                resp.media = { 'error': f'the following files not found: {", ".join(paths_not_found)}' }
         else:
             resp.media = {'error': 'recursive query or request body is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
