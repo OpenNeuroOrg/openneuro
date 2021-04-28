@@ -123,7 +123,7 @@ export const frontPage = {
           <p>
             {' '}
             Explore your published OpenNeuro dataset using
-            <a herf="#" target="_blank">
+            <a href="#" target="_blank">
               BrainLife's
             </a>
             computing network. Utilize their community driven apps to run a
