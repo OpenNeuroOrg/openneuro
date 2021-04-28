@@ -10,8 +10,15 @@ availabilityZones:
 nodeGroups:
   - name: general
     amiFamily: Ubuntu2004
-    instanceType: r5a.large
+    instanceType: mixed
     desiredCapacity: 3
+    minSize: 2
+    maxSize: 6
+    instancesDistribution:
+      maxPrice: 0.075
+      instanceTypes: ["r5a.large"]
+      onDemandBaseCapacity: 2
+      spotInstancePools: 2
     availabilityZones:
       - us-west-2b
       - us-west-2c
