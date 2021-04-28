@@ -50,7 +50,7 @@ describe('dataset resolvers', () => {
       expect(sorted[2].id).toBe(3)
     })
   })
-  describe('deletePath', () => {
+  describe('deleteFiles', () => {
     beforeEach(() => {
       mockingoose.resetAll()
       request.post.mockClear()
@@ -60,23 +60,23 @@ describe('dataset resolvers', () => {
       mockingoose.Dataset.toReturn(true, 'count')
       // capture and check datalad delete request
       request.del = url => ({
-        query: ({ recursive }) => ({
           set: (header1, headerValue1) => ({
-            set: async () => {
+          set: () => ({
+              send: ({ filenames}) => {
               expect(url).toEqual(
-                'http://datalad-0/datasets/ds999999/files/:sub-99',
+                'http://datalad-0/datasets/ds999999/files',
               )
-              expect(recursive).toBe(true)
+              expect(filenames).toEqual([':sub-99'])
               expect(header1).toEqual('Cookie')
               expect(headerValue1).toMatch(/^accessToken=/)
-            },
+            }
+            }),
           }),
-        }),
       })
 
-      ds.deletePath(
+      ds.deleteFiles(
         null,
-        { datasetId: 'ds999999', path: '/sub-99' },
+        { datasetId: 'ds999999', files: [{ path: '/sub-99' }] },
         {
           user: 'a_user_id',
           userInfo: {
