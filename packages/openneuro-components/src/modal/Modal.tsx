@@ -22,7 +22,7 @@ export const Modal: React.FC<ModalProps> = ({
     <div className={'modal-wrapper ' + showModal} {...props}>
       <div className="overlay" onClick={toggle}></div>
 
-      <div className="grid modal" isOpen={isOpen} toggle={toggle}>
+      <div className="grid modal">
         <div className="col">
           <span className="modal-close-x" onClick={toggle}>
             &times;
