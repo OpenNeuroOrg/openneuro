@@ -1,5 +1,5 @@
 {
-  "name": "openneuro-server",
+  "name": "@openneuro/server",
   "version": "3.32.3",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",

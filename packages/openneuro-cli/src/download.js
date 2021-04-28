@@ -37,7 +37,7 @@ export const testFile = (destination, filename, size) => {
 }
 
 const getFetchHeaders = () => ({
-  Authorization: `Bearer ${getToken()}`,
+  cookie: `accessToken=${getToken()}`,
 })
 
 const handleFetchReject = err => {
@@ -92,8 +92,8 @@ export const downloadFile = async (
       const response = await fetch(fileUrl, {
         headers: getFetchHeaders(),
       })
-      // @ts-expect-error
-      const stream = await response.readable()
+      /** @ts-expect-error @type {import('stream').Readable} */
+      const stream = response.body
       if (response.status === 200) {
         // Setup end/error handler with Promise interface
         const responsePromise = new Promise((resolve, reject) => {

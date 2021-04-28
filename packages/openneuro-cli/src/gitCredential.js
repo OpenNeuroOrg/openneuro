@@ -43,7 +43,7 @@ export function gitCredential() {
       const datasetId = credential.path.split('/').pop()
       getRepoToken(datasetId).then(token => {
         const output = {
-          username: 'openneuro-cli',
+          username: '@openneuro/cli',
           password: token,
         }
         for (const key in output) {
