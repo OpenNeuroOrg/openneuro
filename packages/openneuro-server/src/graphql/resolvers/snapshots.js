@@ -8,7 +8,7 @@ import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
-import SnapshotModel from '../../models/snapshot.js'
+import SnapshotModel from '../../models/snapshot'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
