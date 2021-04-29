@@ -1,4 +1,4 @@
-import BadAnnexObject from '../../models/badAnnexObject.js'
+import BadAnnexObject from '../../models/badAnnexObject'
 
 /**
  * Generates unique id for untracked files.
