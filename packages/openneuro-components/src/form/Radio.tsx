@@ -2,34 +2,26 @@ import React from 'react'
 import './forms.scss'
 
 export interface RadioProps {
-  elementId?: string
   label: string
-  radioGroupName: string
-  radioNumber: string
-  onClick?: () => void
+  name: string
+  onClick?: React.MouseEventHandler<HTMLInputElement>
   checked: boolean
+  value: string
 }
 
-export const Radio: React.FC<RadioProps> = ({
-  elementId,
-  label,
-  radioGroupName,
-  radioNumber,
-  onClick,
-  checked,
-  ...props
-}) => {
+export const Radio = ({ label, name, onClick, checked, value }: RadioProps) => {
+  const id = name + '-' + label
   return (
     <span className="custom-radio">
       <input
         type="radio"
-        id={elementId}
-        name={radioGroupName}
+        id={id}
+        name={name}
         checked={checked}
         onClick={onClick}
-        value={label}
+        value={value}
       />
-      <label htmlFor={elementId}>{label}</label>
+      <label htmlFor={id}>{label}</label>
     </span>
   )
 }
