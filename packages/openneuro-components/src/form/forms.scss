@@ -1,0 +1,127 @@
+// This is base reset for form elements.
+//
+// Note: If you use a framework that includes form styling then you need to remove this file.
+
+form,
+fieldset {
+  margin: 0;
+  padding: 0;
+  border-style: none;
+}
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='search'],
+input[type='password'],
+textarea {
+  display: inline-block;
+  appearance: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 0.1rem solid #ddd;
+  padding: 12px;
+  max-width: 100%;
+  &:focus {
+    border-color: rgb(76, 104, 230);
+  }
+
+  &::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(160, 160, 160);
+
+    opacity: 1; /* Firefox */
+  }
+}
+
+select {
+  border-radius: 0;
+}
+
+textarea {
+  resize: vertical;
+  vertical-align: top;
+}
+
+button,
+input[type='button'],
+input[type='reset'],
+input[type='file'],
+input[type='submit'] {
+  appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-control.inline {
+  display: flex;
+  flex-direction: row;
+  label {
+    padding: 12px 10px 0 0;
+    min-width: 100px;
+    text-align: right;
+  }
+}
+
+.float-form-style.form-control {
+  display: flex;
+  flex-flow: column-reverse;
+  margin-bottom: 1em;
+
+  label,
+  input,
+  textarea {
+    transition: all 0.2s;
+    touch-action: manipulation;
+  }
+
+  input,
+  textarea {
+    border-radius: 0;
+    cursor: text;
+    z-index: 2;
+    background: none;
+  }
+
+  label {
+    z-index: 1;
+  }
+
+  textarea:placeholder-shown,
+  input:placeholder-shown {
+    + label {
+      cursor: text;
+      max-width: 66.66%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transform-origin: left bottom;
+      transform: translate(12px, 36px) scale(1.5);
+      font-size: 13px;
+    }
+  }
+  textarea::-webkit-input-placeholder,
+  input::-webkit-input-placeholder {
+    opacity: 0;
+    transition: inherit;
+    &:focus::-webkit-input-placeholder {
+      opacity: 1;
+    }
+  }
+
+  textarea:not(:placeholder-shown),
+  textarea:focus,
+  input:not(:placeholder-shown),
+  input:focus {
+    + label {
+      transform: translate(0, 0) scale(1);
+      font-size: 13px;
+      cursor: pointer;
+    }
+  }
+}

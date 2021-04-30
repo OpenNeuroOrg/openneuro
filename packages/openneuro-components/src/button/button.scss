@@ -1,0 +1,105 @@
+@import '../scss/global';
+
+.on-button {
+  font-family: $font-sans;
+  font-weight: 600;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+}
+
+.on-button--primary {
+  color: #fff;
+  background-color: $primary;
+  &:hover {
+    background-color: darken($primary, 5%);
+  }
+}
+
+.on-button--secondary {
+  color: #fff;
+  background-color: $on-light-green;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
+  &:hover {
+    background-color: darken($on-light-green, 5%);
+  }
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  i {
+    margin-right: 10px;
+  }
+}
+
+.img-icon-text {
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 10px;
+    height: auto;
+  }
+}
+
+.on-no-background {
+  background-color: transparent;
+  &:hover {
+    text-decoration: underline;
+  }
+  &.icon-text,
+  &.img-icon-text {
+    padding: 0 0 5px;
+    border-radius: 0;
+    border-bottom: 1px solid transparent;
+    &:hover {
+      text-decoration: none;
+      border-bottom: 1px solid;
+    }
+  }
+}
+
+.on-button--navbar {
+  background-color: #f4f4f4;
+  color: #204e5a;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
+  &:hover {
+    background-color: darken(#f4f4f4, 5%);
+  }
+}
+
+.on-button[disabled] {
+  cursor: default;
+  background-color: #aaa;
+  color: #777;
+}
+
+.on-button--small {
+  font-size: 12px;
+  padding: 12px 16px;
+}
+
+.on-button--medium {
+  font-size: 14px;
+  padding: 16px 20px;
+}
+
+.on-button--large {
+  font-size: 18px;
+  padding: 17px 24px;
+
+  &.on-button--navbar {
+    font-size: 14px;
+    padding: 20px 24px;
+  }
+}
+
+.login-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 20px;
+}

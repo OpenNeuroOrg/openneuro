@@ -1,0 +1,141 @@
+@import '../scss/variables';
+
+.navbar-inner-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px 25px 0;
+  align-items: center;
+  background-color: $primary;
+  overflow: hidden;
+}
+.svg-fill-on-dark-aqua {
+  fill: $primary;
+}
+
+.swoop {
+  width: 100%;
+}
+
+.navbar-navigation {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    li {
+      margin: 0 10px -10px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      a {
+        color: #f4f4f4;
+        text-decoration: none;
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      &:after {
+        transition: width 0.5s;
+        content: '';
+        border-bottom: 2px solid #fff;
+        width: 0;
+        display: block;
+        transition: width 0.3s;
+        margin-top: 10px;
+      }
+      &:hover {
+        &:after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+#orcid-info-accordion {
+  .accordion-title {
+    color: $primary;
+    color: darken($primary, 5%);
+    text-decoration: underline;
+    font-size: 12px;
+    justify-content: flex-end;
+    margin: 10px 20px 0 0;
+
+    &:after {
+      content: none;
+    }
+  }
+  .accordion-content {
+    padding: 20px;
+    font-size: 12px;
+  }
+}
+
+.navbar-account {
+  flex-basis: 300px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.expaned-header {
+  min-width: 100%;
+}
+
+.sign-in-modal-content {
+  button {
+    width: 220px;
+    justify-content: center;
+  }
+}
+
+.hero-signin {
+  margin: 20px 8px 0;
+  align-items: center;
+  > div {
+    margin-right: 60px;
+  }
+  h4 {
+    color: #fff;
+    margin: 0;
+  }
+}
+
+.expaned-header {
+  a {
+    color: $on-light-aqua;
+  }
+  h2 {
+    font-weight: 300;
+    color: #fff;
+    font-size: 29px;
+    max-width: 90%;
+    a {
+      font-weight: 600;
+    }
+  }
+  .expaned-h-left {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+    .hero-signin {
+      margin-top: auto;
+      margin-bottom: 30px;
+    }
+  }
+
+  @media (max-width: $screen-lg) {
+    .expaned-h-left,
+    .cube-wrap {
+      flex-basis: 90%;
+      max-width: 90%;
+      margin: 0 auto;
+      h2 {
+        width: auto;
+      }
+    }
+  }
+}

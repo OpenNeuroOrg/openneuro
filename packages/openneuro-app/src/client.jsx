@@ -5,7 +5,7 @@ import './scripts/utils/global-polyfill'
 import { setupApm } from './scripts/apm.js'
 import * as Sentry from '@sentry/browser'
 import { ApolloProvider, InMemoryCache } from '@apollo/client'
-import { createClient } from 'openneuro-client'
+import { createClient } from '@openneuro/client'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route } from 'react-router-dom'
@@ -22,14 +22,14 @@ if (
 ) {
   setupApm({
     serverUrl: config.url,
-    serviceName: 'openneuro-app',
+    serviceName: '@openneuro/app',
     serviceVersion: version,
     environment: config.sentry.environment,
   })
 } else {
   setupApm({
     serverUrl: config.url,
-    serviceName: 'openneuro-app',
+    serviceName: '@openneuro/app',
     serviceVersion: version,
     environment: config.sentry.environment,
     active: false,
