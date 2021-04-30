@@ -1,4 +1,4 @@
-import { datasets } from 'openneuro-client'
+import { datasets } from '@openneuro/client'
 
 export const downloadDataset = client => async ({ datasetId, snapshotTag }) => {
   if (snapshotTag) {
