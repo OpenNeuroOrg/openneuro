@@ -41,7 +41,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
         <div className="grid grid-between">
           <div className="col col-6 expaned-h-left">
             {frontPage.pageDescription}
-            <div className="header-aggriate">
+            <div className="header-aggregate">
               <AggregateCount type="publicDataset" count={202} />
               <AggregateCount type="publicDataset" count={22} />
             </div>
