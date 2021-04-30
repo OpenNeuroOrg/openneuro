@@ -12,8 +12,9 @@ export const AggregateCount = ({ count, type }: AggregateCountProps) => {
   }[type]
 
   return (
-    <div>
-      <span>{count.toLocaleString()}</span> {textContent}{count !== 1 && 's'}
+    <div className="aggregate-count">
+      <span>{count.toLocaleString()}</span> {textContent}
+      {count !== 1 && 's'}
     </div>
   )
 }

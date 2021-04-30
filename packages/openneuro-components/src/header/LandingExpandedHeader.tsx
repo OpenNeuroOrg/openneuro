@@ -4,6 +4,7 @@ import { Button } from '../button/Button'
 import { Cube } from '../cube/Cube'
 import { cubeData } from '../mock-content/cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
+import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 import { frontPage } from '../mock-content/front-page-content.jsx'
 
@@ -23,7 +24,12 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
             label={item.label}
             backgroundColor={item.backgroundColor}
             cubeImage={item.cubeImage}
-            stats={item.stats}
+            stats={
+              <>
+                <AggregateCount type="publicDataset" count={122} />
+                <AggregateCount type="publicDataset" count={22} />
+              </>
+            }
           />
         </div>
       ))}
@@ -35,6 +41,10 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
         <div className="grid grid-between">
           <div className="col col-6 expaned-h-left">
             {frontPage.pageDescription}
+            <div className="header-aggriate">
+              <AggregateCount type="publicDataset" count={202} />
+              <AggregateCount type="publicDataset" count={22} />
+            </div>
             {!user ? (
               <div className="grid  grid-start hero-signin">
                 <div className=" hero-sigin-label">
