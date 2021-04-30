@@ -5,7 +5,7 @@ import { getDatasets } from './datasets.js'
  * @param {import('@apollo/client').ApolloClient} client
  * @param {*} query
  */
-export default async function* datasetGenerator(client, query = getDatasets) {
+export async function* datasetGenerator(client, query = getDatasets) {
   let cursor
   while (true) {
     try {

@@ -21,8 +21,7 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "start": "tsc-watch -b --onSuccess 'node --enable-source-maps ./dist/index.js'",
-    "openneuro-indexer": "ts-node --type-check src/index.ts"
+    "start": "tsc-watch -b --onSuccess 'node --enable-source-maps ./dist/index.js'"
   },
   "files": [
     "lib/**/*"
