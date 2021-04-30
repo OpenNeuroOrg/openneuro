@@ -47,3 +47,24 @@ export const createDataset = client => ({
       return dsId
     })
 }
+
+export const downloadDataset = client => async ({ datasetId, tag }) => {
+  if (tag) {
+    const { data } = await client.query({
+      query: datasets.downloadSnapshot,
+      variables: {
+        datasetId,
+        tag,
+      },
+    })
+    return data.snapshot.files
+  } else {
+    const { data } = await client.query({
+      query: datasets.downloadDataset,
+      variables: {
+        datasetId,
+      },
+    })
+    return data.dataset.draft.files
+  }
+}
