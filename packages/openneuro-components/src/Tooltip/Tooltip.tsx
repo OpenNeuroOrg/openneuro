@@ -14,7 +14,8 @@ export const Tooltip = ({
 }: TooltipProps) => {
   const myRef = React.createRef<HTMLSpanElement>()
   useEffect(() => {
-    const placement = myRef.current.offsetTop < 150 ? 'down' : flow
+    const placement =
+      myRef.current.offsetTop < 150 && flow === 'up' ? 'down' : flow
     myRef.current.setAttribute('data-flow', placement)
   }, [])
 
