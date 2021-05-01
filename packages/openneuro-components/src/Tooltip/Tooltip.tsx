@@ -4,6 +4,7 @@ import './tooltip.scss'
 export interface TooltipProps {
   tooltip: string
   flow: 'up' | 'down' | 'left' | 'right'
+  children
 }
 
 export const Tooltip = ({
