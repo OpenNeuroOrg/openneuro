@@ -1,0 +1,31 @@
+digraph architecture {
+  rankdir=LR
+
+  subgraph frontend {
+    Browser -> {CDN}
+    CLI -> {CDN}
+    "Git Clients" -> {CDN}
+    
+    {rank=same; Browser, CLI, "Git Clients"}
+  }
+
+  subgraph load_balancers {
+    CDN[label=<AWS CloudFront>]
+    CDN -> "AWS ALB"
+    "AWS ALB" -> {GraphQL, "DataLad Service", SSR}
+  }
+
+  subgraph api_gateways {
+    GraphQL -> {"DataLad Service", MongoDB, Redis, ElasticSearch, Brainlife, CEDAR}
+  }
+  
+  subgraph microservices {
+    graph[style=dotted]
+    "DataLad Service" -> {Datasets, GraphQL, "AWS S3", GitHub}
+    SSR -> {GraphQL}
+    Indexer -> {GraphQL, ElasticSearch, CEDAR}
+    {rank=same; "DataLad Service", MongoDB, Redis}
+  }
+
+  Datasets[label=<Datasets Filesystem<br /><font point-size="10">OpenEBS ZFS on EBS</font>>]
+}
