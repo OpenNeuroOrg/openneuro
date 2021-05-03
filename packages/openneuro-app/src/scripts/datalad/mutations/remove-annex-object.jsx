@@ -37,7 +37,7 @@ const RemoveAnnexObject = ({
         className="remove-annex-object"
         data-tip="This admin tool will remove this file's annex objects.">
         <WarnButton
-          message="Rm Annexed"
+          message="Purge"
           icon="fa-frown-o"
           warn={true}
           className="edit-file"
