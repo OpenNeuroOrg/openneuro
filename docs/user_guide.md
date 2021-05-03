@@ -106,12 +106,18 @@ The draft page information is nearly identical to the snapshot pages, the differ
 
 The dataset toolbar will have a few new items, including:
 - Publish: Make your dataset public. This will make it available under the CC0 license. 
-- Delete: Permanently remove your dataset from OpenNeuro. If you are deleting the dataset to replace it, a redirect url can be submitted with the delete form.
+- Delete: Permanently remove your dataset from OpenNeuro.
 - Manage Permissions: Add collaborators to the dataset and manage their read/write permissions.
 - Create Snapshot: Create a new version of this dataset with changes made to Draft.
 - View and Edit Metadata: If you didn't add the metadata on upload, you can fill it in here.
 
 Advanced users may wish to manage their datasets by other means. OpenNeuro datasets and features are available through its [GraphQL API](/api), the [openneuro-cli](/packages-openneuro-cli-readme), [DataLad](/services-datalad-readme), and [direct git access](/git).
+
+## Deleting Your Dataset
+
+![delete-tool](./assets/delete-tool.png)
+
+This tool will take you to the Delete Dataset form, which will prompt you for a reason, and give you the option to supply a redirect url if you are replacing the dataset.
 
 ## Support Channels
 
