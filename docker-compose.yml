@@ -4,6 +4,7 @@ version: '2.3'
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
+    user: $UID
     image: node:14.16.1
     env_file: ./config.env
     working_dir: /srv
