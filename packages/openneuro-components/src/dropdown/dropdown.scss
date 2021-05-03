@@ -1,52 +1,58 @@
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 0;
+@import '../scss/variables';
+
+.dropdown-wrapper {
   .toggle {
     cursor: pointer;
-    padding: 10px;
-    margin: 2px 2px 0 0;
-    transition: background 0.25s;
-
-    &:hover,
-    &.active {
-      background: rgba(0, 0, 0, 0.05);
-    }
   }
   .menu {
-    position: absolute;
-    right: 25px;
-    top: 10px;
     overflow: hidden;
-    width: 0;
     height: 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 9999;
-    ul {
-      list-style: none;
-
-      li {
-        cursor: pointer;
-        width: 100%;
-        padding: 10px 10px;
-        transition: background 0.25s, color 0.25s;
-        display: flex;
-        align-items: center;
-
-        &:hover {
-          color: rgb(0, 125, 255);
-          background: rgba(0, 0, 0, 0.025);
-        }
-
-        .label {
-          margin-left: 10px;
-        }
-      }
-    }
 
     &.expanded {
-      width: 120px;
       height: auto;
+    }
+  }
+}
+
+.list-label {
+  padding: 0 0 20px;
+  color: $on-dark-aqua;
+  span {
+    color: #333;
+  }
+}
+.dropdown-list {
+  .label {
+    margin-left: 30px;
+    b {
+      margin-right: 20px;
+    }
+  }
+  i + .label {
+    margin-left: 12px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-width: 200px;
+
+    li {
+      cursor: pointer;
+      width: 100%;
+      padding: 10px 10px;
+      transition: background 0.25s, color 0.25s;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      color: $on-dark-aqua;
+      &:hover {
+        color: #333;
+        background: rgba(0, 0, 0, 0.025);
+      }
     }
   }
 }

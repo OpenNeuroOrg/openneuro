@@ -1,34 +1,41 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { Dropdown, DropdownProps } from './Dropdown'
+import { DropdownList, DropdownListProps } from './DropdownList'
 
 export default {
   title: 'Components/Dropdown',
-  component: Dropdown,
+  component: DropdownList,
 } as Meta
 
-const DropdownTemplate: Story<DropdownProps> = args => <Dropdown {...args} />
+const DropdownListTemplate: Story<DropdownListProps> = args => (
+  <DropdownList {...args} />
+)
 
 const menuItems = [
   {
-    label: 'Clone',
-    icon: 'fa fa-clone',
-    onClick: () => alert('Clone'),
+    label: 'Newest',
+    onClick: () => alert('Newest'),
+    active: true,
   },
   {
-    label: 'Share',
-    icon: 'fa fa-bullhorn',
-    onClick: () => alert('Share'),
+    label: 'Oldest',
+    onClick: () => alert('Oldest'),
   },
   {
-    label: 'Delete',
-    icon: 'fa fa-trash-o',
-    onClick: () => alert('Delete'),
+    label: 'A-Z',
+    onClick: () => alert('A-Z'),
+  },
+  {
+    label: 'Z-A',
+    onClick: () => alert('Z-A'),
+  },
+  {
+    label: 'Activity',
+    onClick: () => alert('Activity'),
   },
 ]
-export const Default = DropdownTemplate.bind({})
-Default.args = {
-  label: 'click me',
+export const SortBy = DropdownListTemplate.bind({})
+SortBy.args = {
   items: menuItems,
 }
