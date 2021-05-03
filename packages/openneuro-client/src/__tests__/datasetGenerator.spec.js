@@ -1,4 +1,4 @@
-import datasetGenerator from '../datasetGenerator'
+import { datasetGenerator } from '../datasetGenerator'
 
 const firstResult = Promise.resolve({
   data: {
