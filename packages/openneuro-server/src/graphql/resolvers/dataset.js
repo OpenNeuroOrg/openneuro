@@ -201,17 +201,6 @@ export const removeAnnexObject = async (
       annexKey,
       userInfo,
     )
-    if (path && filename) {
-      // remove file from Apollo cache
-      const file = new UpdatedFile(filepath)
-      pubsub.publish('filesUpdated', {
-        datasetId,
-        filesUpdated: {
-          action: 'DELETE',
-          payload: [file],
-        },
-      })
-    }
     return true
   } catch (err) {
     Sentry.captureException(err)
