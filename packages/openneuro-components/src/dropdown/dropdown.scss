@@ -1,6 +1,7 @@
 @import '../scss/variables';
 
 .dropdown-wrapper {
+  display: inline-block;
   .toggle {
     cursor: pointer;
   }
