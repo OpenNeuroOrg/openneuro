@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import './tooltip.scss'
 
 export interface TooltipProps {
@@ -7,21 +7,16 @@ export interface TooltipProps {
   children
 }
 
-export const Tooltip = ({
-  children,
-  tooltip,
-  flow,
-  ...props
-}: TooltipProps) => {
-  const myRef = React.createRef<HTMLSpanElement>()
+export const Tooltip = ({ children, tooltip, flow }: TooltipProps) => {
+  const reference = useRef()
   useEffect(() => {
     const placement =
-      myRef.current.offsetTop < 150 && flow === 'up' ? 'down' : flow
-    myRef.current.setAttribute('data-flow', placement)
+      reference.current.offsetTop < 150 && flow === 'up' ? 'down' : flow
+    reference.current.setAttribute('data-flow', placement)
   }, [])
 
   return (
-    <span ref={myRef} data-tooltip={tooltip} {...props} data-flow={flow}>
+    <span ref={reference} data-tooltip={tooltip} data-flow={flow}>
       {children}
     </span>
   )
