@@ -233,6 +233,7 @@
     z-index: -1;
   }
   label {
+    color: $secondary;
     position: relative;
     margin-right: 1em;
     padding-left: 2em;
@@ -250,7 +251,7 @@
       display: block;
       width: 15px;
       height: 15px;
-      border: 2px solid red;
+      border: 2px solid $secondary;
       border-radius: 0.25em;
       z-index: -1;
     }
@@ -259,7 +260,7 @@
   /* Checked */
   input[type='checkbox']:checked + label {
     padding-left: 1em;
-    color: red;
+    color: $secondary;
     &:after {
       width: 100%;
       background: white;
