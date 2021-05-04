@@ -2,6 +2,7 @@ import React from 'react'
 
 import { ActivitySlider } from '../activity-slider/ActivitySlider'
 import { Icon } from '../icon/Icon'
+import activityIcon from '../assets/activity-icon.png'
 
 import {
   RecentData,
@@ -39,7 +40,7 @@ export const ActivitySliderFront: React.FC<ContributersProps> = ({}) => {
   const popularSlider = {
     data: TopViewed.data.datasets.edges,
     sliderClass: 'popular-slider',
-    slideHeader: 'Popular Datasets',
+    slideHeader: 'Most Viewed',
     dots: true,
     draggable: true,
     slidesToShow: 3,
@@ -66,10 +67,10 @@ export const ActivitySliderFront: React.FC<ContributersProps> = ({}) => {
   return (
     <>
       <h2>
-        <Icon label="Activity" icon="fab fa-google" />
+        <Icon label="Activity" imgSrc={activityIcon} iconSize="40px" />
       </h2>
-      <ActivitySlider {...recentSlider} />
       <ActivitySlider {...popularSlider} />
+      <ActivitySlider {...recentSlider} />
     </>
   )
 }

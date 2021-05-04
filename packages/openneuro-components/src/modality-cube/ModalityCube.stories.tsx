@@ -1,19 +1,19 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { Cube, CubeProps } from './Cube'
+import { ModalityCube, ModalityCubeProps } from './ModalityCube'
 
 import petScan from '../assets/pet-scan.jpg'
 
 export default {
-  title: 'Components/Cube',
-  component: Cube,
+  title: 'Components/ModalityCube',
+  component: ModalityCube,
   argTypes: {
     backgroundColor: { control: 'color' },
   },
 } as Meta
 
-const Template: Story<CubeProps> = args => <Cube {...args} />
+const Template: Story<ModalityCubeProps> = args => <ModalityCube {...args} />
 
 export const Default = Template.bind({})
 Default.args = {

@@ -48,7 +48,7 @@ export const PopularDatasets = Template.bind({})
 PopularDatasets.args = {
   data: TopViewed.data.datasets.edges,
   sliderClass: 'recent-slider',
-  slideHeader: 'Popular Datasets',
+  slideHeader: 'Most Viewed',
   dots: true,
   draggable: true,
   slidesToShow: 3,

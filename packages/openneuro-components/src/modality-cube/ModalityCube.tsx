@@ -1,8 +1,8 @@
 import React from 'react'
 
-import './cube.scss'
+import './modality-cube.scss'
 
-export interface CubeProps {
+export interface ModalityCubeProps {
   backgroundColor?: string
   backgroundImage?: string
   label: string
@@ -10,7 +10,7 @@ export interface CubeProps {
   cubeImage: string
 }
 
-export const Cube: React.FC<CubeProps> = ({
+export const ModalityCube: React.FC<ModalityCubeProps> = ({
   backgroundColor,
   label,
   backgroundImage,
