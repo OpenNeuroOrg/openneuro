@@ -5,6 +5,7 @@ import falcon
 
 from datalad_service.common.annex import get_repo_files
 from datalad_service.tasks.publish import remove_file_remotes
+from datalad_service.tasks.files import remove_annex_object
 
 
 class AnnexObjectsResource(object):
@@ -26,6 +27,7 @@ class AnnexObjectsResource(object):
             urls = file.get('urls')
 
             gevent.spawn(remove_file_remotes, self.store, urls)
+            gevent.spawn(remove_annex_object, self.store, ds, annex_key)
         else:
             resp.media = {'error': 'annex-key is missing'}
             resp.status = falcon.HTTP_NOT_FOUND
