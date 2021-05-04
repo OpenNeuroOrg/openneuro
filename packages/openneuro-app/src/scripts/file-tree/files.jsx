@@ -49,8 +49,30 @@ const Files = ({
   }
 
   const fileTree = flatToTree(files)
+  const diableBtn = Object.values(filesToDelete).length ? null : true
+  const filesCount = Object.values(filesToDelete).length
   return (
     <ul className="top-level-item">
+      {editMode &&
+        (isDeleting ? (
+          <span>Deleting...</span>
+        ) : (
+          <>
+            <button
+              className="btn-blue bulk-delete"
+              onClick={bulkDelete}
+              disabled={diableBtn}>
+              Bulk Delete
+            </button>{' '}
+            {diableBtn ? (
+              '0 files added'
+            ) : (
+              <>
+                {filesCount} file{filesCount > 1 ? 's' : ''} added
+              </>
+            )}
+          </>
+        ))}
       <li className="clearfix">
         <Media at="small">
           <FileTree
@@ -78,14 +100,6 @@ const Files = ({
             isFileToBeDeleted={isFileToBeDeleted}
           />
         </Media>
-        {editMode &&
-          (isDeleting ? (
-            <span>Deleting...</span>
-          ) : (
-            <button onClick={bulkDelete} disabled={isDeleting}>
-              Bulk Delete
-            </button>
-          ))}
       </li>
     </ul>
   )

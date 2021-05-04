@@ -62,11 +62,17 @@ const File = ({
                 filename={filename}
               />
             </Media>
-            <input
-              type="checkbox"
-              checked={isFileToBeDeleted(id)}
-              onChange={() => toggleFileToDelete({ id, path, filename })}
-            />
+            <div className="bulk-delete-checkbox-group">
+              <input
+                id={'cb-' + filename}
+                type="checkbox"
+                checked={isFileToBeDeleted(id)}
+                onChange={() => toggleFileToDelete({ id, path, filename })}
+              />
+              <label htmlFor={'cb-' + filename}>
+                {isFileToBeDeleted(id) ? 'Added' : 'Add to bulk delete'}{' '}
+              </label>
+            </div>
           </>
         )}
       </span>
