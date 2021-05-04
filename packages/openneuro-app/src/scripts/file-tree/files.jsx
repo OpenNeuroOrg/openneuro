@@ -4,6 +4,7 @@ import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
 import { Media } from '../styles/media'
 import { useMutation, gql } from '@apollo/client'
+import WarnButton from '../common/forms/warn-button.jsx'
 
 const DELETE_FILES = gql`
   mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
@@ -51,28 +52,30 @@ const Files = ({
   const fileTree = flatToTree(files)
   const diableBtn = Object.values(filesToDelete).length ? null : true
   const filesCount = Object.values(filesToDelete).length
-  return (
-    <ul className="top-level-item">
-      {editMode &&
-        (isDeleting ? (
-          <span>Deleting...</span>
+  const bulkDeleteButton =
+    editMode &&
+    (isDeleting ? (
+      <span>Deleting...</span>
+    ) : (
+      <span className="delete-file">
+        <WarnButton
+          message="Bulk Delete"
+          icon="fa-trash"
+          warn={true}
+          className="edit-file"
+          action={bulkDelete}
+        />{' '}
+        {diableBtn ? (
+          '0 files added'
         ) : (
           <>
-            <button
-              className="btn-blue bulk-delete"
-              onClick={bulkDelete}
-              disabled={diableBtn}>
-              Bulk Delete
-            </button>{' '}
-            {diableBtn ? (
-              '0 files added'
-            ) : (
-              <>
-                {filesCount} file{filesCount > 1 ? 's' : ''} added
-              </>
-            )}
+            {filesCount} file{filesCount > 1 ? 's' : ''} added
           </>
-        ))}
+        )}
+      </span>
+    ))
+  return (
+    <ul className="top-level-item">
       <li className="clearfix">
         <Media at="small">
           <FileTree
@@ -85,6 +88,7 @@ const Files = ({
             defaultExpanded={false}
             toggleFileToDelete={toggleFileToDelete}
             isFileToBeDeleted={isFileToBeDeleted}
+            bulkDeleteButton={bulkDeleteButton}
           />
         </Media>
         <Media greaterThanOrEqual="medium">
@@ -98,6 +102,7 @@ const Files = ({
             defaultExpanded={true}
             toggleFileToDelete={toggleFileToDelete}
             isFileToBeDeleted={isFileToBeDeleted}
+            bulkDeleteButton={bulkDeleteButton}
           />
         </Media>
       </li>

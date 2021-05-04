@@ -25,6 +25,7 @@ const FileTree = ({
   defaultExpanded = false,
   toggleFileToDelete,
   isFileToBeDeleted,
+  bulkDeleteButton,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
   return (
@@ -57,6 +58,7 @@ const FileTree = ({
                   <i className="fa fa-plus" /> Add Directory
                 </UpdateFile>
                 <DeleteDir datasetId={datasetId} path={path} />
+                {bulkDeleteButton}
               </span>
             </Media>
           )}

@@ -62,7 +62,7 @@ const File = ({
                 filename={filename}
               />
             </Media>
-            <div className="bulk-delete-checkbox-group">
+            <div className="bulk-delete-checkbox-group delete-file">
               <input
                 id={'cb-' + filename}
                 type="checkbox"
@@ -70,7 +70,7 @@ const File = ({
                 onChange={() => toggleFileToDelete({ id, path, filename })}
               />
               <label htmlFor={'cb-' + filename}>
-                {isFileToBeDeleted(id) ? 'Added' : 'Add to bulk delete'}{' '}
+                {isFileToBeDeleted(id) ? 'ADDED' : 'ADD TO BULK DELETE'}{' '}
               </label>
             </div>
           </>
