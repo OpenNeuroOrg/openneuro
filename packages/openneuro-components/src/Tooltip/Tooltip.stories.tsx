@@ -5,8 +5,6 @@ import { Tooltip, TooltipProps } from './Tooltip'
 import { Button } from '../button/Button'
 import { Icon } from '../icon/Icon'
 
-import bidsLogo from '../assets/bids.jpg'
-
 export default {
   title: 'Components/Tooltip',
   component: Tooltip,
