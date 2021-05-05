@@ -5,8 +5,8 @@ import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
 export const DELETE_FILES = gql`
-  mutation deleteFiles($datasetId: ID!, $path: String!) {
-    deleteFiles(datasetId: $datasetId, path: $path)
+  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]!) {
+    deleteFiles(datasetId: $datasetId, files: $files)
   }
 `
 
@@ -23,7 +23,7 @@ const DeleteDir = ({ datasetId, path }) => (
             deleteFiles({
               variables: {
                 datasetId,
-                path,
+                files: [{ path }],
               },
             }).then(() => {
               cb()

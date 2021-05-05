@@ -5,12 +5,13 @@ import { readme } from './readme.js'
 import { getDraftFiles, updateDatasetRevision } from '../../datalad/draft.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { filterFiles } from '../../datalad/files.js'
+import { filterRemovedAnnexObjects } from '../utils/file.js'
 
 // A draft must have a dataset parent
-const draftFiles = (obj, args) => {
-  return getDraftFiles(obj.id, args).then(
-    filterFiles('prefix' in args && args.prefix),
-  )
+const draftFiles = (dataset, args) => {
+  return getDraftFiles(dataset.id, args)
+    .then(filterFiles('prefix' in args && args.prefix))
+    .then(filterRemovedAnnexObjects(dataset.id))
 }
 
 /**

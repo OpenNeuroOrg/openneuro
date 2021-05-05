@@ -524,6 +524,8 @@ h6 {
 .filetree-editfile {
   .delete-file,
   .download-file,
+  .remove-annex-object,
+  .flag-annex-object,
   .view-file {
     float: left;
     text-align: center;

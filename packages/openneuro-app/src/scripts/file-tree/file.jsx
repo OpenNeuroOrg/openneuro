@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteFile from '../datalad/mutations/delete-file.jsx'
 import { Media } from '../styles/media'
+import RemoveAnnexObject from '../datalad/mutations/remove-annex-object.jsx'
+import FlagAnnexObject from '../datalad/mutations/flag-annex-object.jsx'
+import { isAdmin } from '../authentication/admin-user.jsx'
+import { getProfile, hasEditPermissions } from '../authentication/profile.js'
+import { useCookies } from 'react-cookie'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
 
@@ -13,11 +18,18 @@ export const apiPath = (datasetId, snapshotTag, filePath) => {
 }
 
 const File = ({
+  id,
   datasetId,
   path,
   filename,
-  snapshotTag = null,
+  snapshotTag,
   editMode = false,
+  isMobile,
+  annexed,
+  annexKey,
+  datasetPermissions,
+  toggleFileToDelete,
+  isFileToBeDeleted,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -25,6 +37,8 @@ const File = ({
     path,
     filename,
   )}`
+  const [cookies] = useCookies()
+  const user = getProfile(cookies)
   return (
     <>
       {filename}
@@ -51,10 +65,45 @@ const File = ({
           </Media>
         )}
         {editMode && filename !== 'dataset_description.json' && (
-          <Media greaterThanOrEqual="medium">
-            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-          </Media>
+          <>
+            <Media greaterThanOrEqual="medium">
+              <DeleteFile
+                datasetId={datasetId}
+                path={path}
+                filename={filename}
+              />
+            </Media>
+            <div className="bulk-delete-checkbox-group delete-file">
+              <input
+                id={'cb-' + filename}
+                type="checkbox"
+                checked={isFileToBeDeleted(id)}
+                onChange={() => toggleFileToDelete({ id, path, filename })}
+              />
+              <label htmlFor={'cb-' + filename}>
+                {isFileToBeDeleted(id) ? 'ADDED' : 'ADD TO BULK DELETE'}{' '}
+              </label>
+            </div>
+          </>
         )}
+        {!isMobile &&
+          annexed &&
+          (isAdmin() ? (
+            <RemoveAnnexObject
+              datasetId={datasetId}
+              snapshot={snapshotTag}
+              annexKey={annexKey}
+              path={path}
+              filename={filename}
+            />
+          ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
+            <FlagAnnexObject
+              datasetId={datasetId}
+              snapshot={snapshotTag}
+              filepath={filePath(path, filename)}
+              annexKey={annexKey}
+            />
+          ) : null)}
       </span>
     </>
   )

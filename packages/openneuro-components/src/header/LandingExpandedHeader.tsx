@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 
 import { Button } from '../button/Button'
-import { Cube } from '../cube/Cube'
-import { cubeData } from '../mock-content/cube-content.jsx'
+import { ModalityCube } from '../modality-cube/ModalityCube'
+import { cubeData } from '../mock-content/modality-cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
 
 import { frontPage } from '../mock-content/front-page-content.jsx'
@@ -18,7 +18,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
     <div className="cube-wrap col col-6" id="front-cubes">
       {cubeData.map((item, index) => (
         <div className="cube-block ">
-          <Cube
+          <ModalityCube
             key={index}
             label={item.label}
             backgroundColor={item.backgroundColor}
