@@ -3,7 +3,13 @@ version: '2.3'
 
 volumes:
   node_deps:
-  build_cache:
+  dist:
+  dist_app:
+  dist_client:
+  dist_cli:
+  dist_components:
+  dist_indexer:
+  dist_server:
 
 services:
   # This dummy service provides shared configuration for all Node deps
@@ -11,14 +17,27 @@ services:
     image: node:14.16.1
     env_file: ./config.env
     working_dir: /srv
-    command: bash -c 'yarn install && yarn build'
+    command: bash -c 'yarn install && yarn tsc-watch -b --onSuccess "touch /watch/done"'
+    healthcheck:
+      test: test -f /watch/done || exit 1
+      interval: 5s
+      retries: 60
+    tmpfs:
+      - /watch
+      - /srv/.build-cache:exec
     volumes:
       - ./:/srv
-      - build_cache:/srv/.build-cache
       - node_deps:/srv/.yarn
       - ./.yarn/cache:/srv/.yarn/cache
       - ./.yarn/releases:/srv/.yarn/releases
       - ./.yarn/plugins:/srv/.yarn/plugins
+      - dist:/src/dist
+      - dist_app:/srv/packages/openneuro-app/dist
+      - dist_cli:/srv/packages/openneuro-cli/dist
+      - dist_client:/srv/packages/openneuro-client/dist
+      - dist_components:/srv/packages/openneuro-components/dist
+      - dist_indexer:/srv/packages/openneuro-indexer/dist
+      - dist_server:/srv/packages/openneuro-server/dist
 
   # web app bundle build
   app:
@@ -32,7 +51,7 @@ services:
       - NODE_ENV=development
     depends_on:
       node:
-        condition: service_completed_successfully
+        condition: service_healthy
 
   # crn node server
   server:
@@ -53,7 +72,7 @@ services:
       elasticsearch:
         condition: service_started
       node:
-        condition: service_completed_successfully
+        condition: service_healthy
 
   # Elastic Search indexer
   indexer:
@@ -66,7 +85,7 @@ services:
       elasticsearch:
         condition: service_started
       node:
-        condition: service_completed_successfully
+        condition: service_healthy
 
   # mongodb
   mongo:

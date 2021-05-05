@@ -9,7 +9,7 @@
     "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "scripts": {
-    "start": "yarn ts-node-dev ./src/ssr.ts",
+    "start": "nodemon --enable-source-maps ./dist/ssr.js",
     "build": "yarn vite build --outDir dist/client && yarn vite build --outDir dist/server --ssr server.jsx && cp src/assets/papaya.js src/dist/client/assets"
   },
   "author": "Squishymedia",
@@ -102,6 +102,7 @@
     "mini-css-extract-plugin": "^0.4.1",
     "moment-timezone": "^0.5.31",
     "node-sass": "4.14.1",
+    "nodemon": "^2.0.7",
     "object.fromentries": "^2.0.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.8.6",
@@ -109,7 +110,6 @@
     "sass": "^1.32.8",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "ts-node-dev": "^1.1.6",
     "typescript": "4.0.6",
     "url-loader": "^1.0.1",
     "vite": "2.1.5",
