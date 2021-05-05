@@ -75,9 +75,10 @@ def remove_files(store, dataset, files, name=None, email=None, cookies=None):
             update_head(ds, dataset, cookies)
 
 
-def remove_recursive(store, dataset, path, name=None, email=None, cookies=None):
+def remove_recursive(store, dataset, paths, name=None, email=None, cookies=None):
     """Remove a path within a dataset recursively."""
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
-        ds.remove(path, recursive=True, check=False)
-        update_head(ds, dataset, cookies)
+        for path in paths: 
+            ds.remove(path, recursive=True, check=False)
+            update_head(ds, dataset, cookies)

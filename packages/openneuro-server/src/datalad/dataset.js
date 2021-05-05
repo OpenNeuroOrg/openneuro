@@ -13,7 +13,12 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { updateDatasetRevision, expireDraftFiles } from './draft.js'
-import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files'
+import {
+  fileUrl,
+  getFileName,
+  encodeFilePath,
+  filesUrl,
+} from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset'
 import Metadata from '../models/metadata'
@@ -379,29 +384,18 @@ export const commitFiles = (datasetId, user) => {
 }
 
 /**
- * Delete an existing file in a dataset
+ * Delete existing files in a dataset
  */
-export const deleteFile = (datasetId, path, file, user) => {
-  const url = fileUrl(datasetId, path, file.name)
-  const filename = getFileName(path, file.name)
+export const deleteFiles = (datasetId, files, user) => {
+  const filenames = files.map(({ filename, path }) =>
+    filename ? getFileName(path, filename) : encodeFilePath(path),
+  )
   return request
-    .del(url)
+    .del(filesUrl(datasetId))
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
-    .then(() => filename)
-}
-
-/**
- * Recursively delete a directory path within a dataset
- */
-export const deletePath = (datasetId, path, user) => {
-  const url = pathUrl(datasetId, path)
-  return request
-    .del(url)
-    .query({ recursive: true })
-    .set('Cookie', generateDataladCookie(config)(user))
-    .set('Accept', 'application/json')
-    .then(() => encodeFilePath(path))
+    .send({ filenames })
+    .then(() => filenames)
 }
 
 /**

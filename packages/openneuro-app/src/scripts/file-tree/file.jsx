@@ -13,11 +13,14 @@ export const apiPath = (datasetId, snapshotTag, filePath) => {
 }
 
 const File = ({
+  id,
   datasetId,
   path,
   filename,
   snapshotTag = null,
   editMode = false,
+  toggleFileToDelete,
+  isFileToBeDeleted,
 }) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -51,9 +54,26 @@ const File = ({
           </Media>
         )}
         {editMode && filename !== 'dataset_description.json' && (
-          <Media greaterThanOrEqual="medium">
-            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-          </Media>
+          <>
+            <Media greaterThanOrEqual="medium">
+              <DeleteFile
+                datasetId={datasetId}
+                path={path}
+                filename={filename}
+              />
+            </Media>
+            <div className="bulk-delete-checkbox-group delete-file">
+              <input
+                id={'cb-' + filename}
+                type="checkbox"
+                checked={isFileToBeDeleted(id)}
+                onChange={() => toggleFileToDelete({ id, path, filename })}
+              />
+              <label htmlFor={'cb-' + filename}>
+                {isFileToBeDeleted(id) ? 'ADDED' : 'ADD TO BULK DELETE'}{' '}
+              </label>
+            </div>
+          </>
         )}
       </span>
     </>
