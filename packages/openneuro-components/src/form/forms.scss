@@ -200,3 +200,28 @@ input[type='submit'] {
     }
   }
 }
+
+// Range
+.formRange-inner {
+  max-width: 80%;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  //remove this
+  height: 300px;
+  .range-lable {
+    font-size: 14px;
+    margin: 20px 0 0;
+  }
+  .rc-slider-handle,
+  .rc-slider-dot-active {
+    border-color: $on-light-aqua;
+  }
+
+  .rc-slider-track {
+    background-color: $on-light-aqua;
+  }
+}
