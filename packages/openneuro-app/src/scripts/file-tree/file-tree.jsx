@@ -23,6 +23,7 @@ const FileTree = ({
   directories = [],
   editMode = false,
   defaultExpanded = false,
+  datasetPermissions,
   toggleFileToDelete,
   isFileToBeDeleted,
   bulkDeleteButton,
@@ -74,6 +75,8 @@ const FileTree = ({
                   toggleFileToDelete={toggleFileToDelete}
                   isFileToBeDeleted={isFileToBeDeleted}
                   {...file}
+                  annexKey={file.key}
+                  datasetPermissions={datasetPermissions}
                 />
               </li>
             ))}
@@ -87,6 +90,7 @@ const FileTree = ({
                       snapshotTag={snapshotTag}
                       editMode={editMode}
                       defaultExpanded={isTopLevel(dir)}
+                      datasetPermissions={datasetPermissions}
                       toggleFileToDelete={toggleFileToDelete}
                       isFileToBeDeleted={isFileToBeDeleted}
                       {...dir}
@@ -122,6 +126,7 @@ FileTree.propTypes = {
   directories: PropTypes.array,
   editMode: PropTypes.bool,
   defaultExpanded: PropTypes.bool,
+  datasetPermissions: PropTypes.object,
 }
 
 export default FileTree

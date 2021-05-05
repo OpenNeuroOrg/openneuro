@@ -1,6 +1,7 @@
 import os
 
 import gevent
+import subprocess
 
 from datalad_service.common.annex import CommitInfo, get_repo_files
 from datalad_service.common.draft import update_head
@@ -74,6 +75,23 @@ def remove_files(store, dataset, files, name=None, email=None, cookies=None):
             ds.remove(filename, check=False)
             update_head(ds, dataset, cookies)
 
+def remove_annex_object(store, dataset, annex_key):
+    """Remove an annex object by its key.
+
+    :type annex_key: str
+    :return: True if successful, false is the annex object does not exist.
+    :rtype: bool
+    """
+    with subprocess.Popen(
+        ['git-annex', 'drop', '--force', f'--key={annex_key}'],
+        cwd=dataset._path,
+        stdout=subprocess.PIPE,
+        encoding='utf-8'
+    ) as drop_object:
+        for i, line in enumerate(drop_object.stdout):
+            if i == 0 and line[-2:] == 'ok':
+                return True
+    return False
 
 def remove_recursive(store, dataset, paths, name=None, email=None, cookies=None):
     """Remove a path within a dataset recursively."""

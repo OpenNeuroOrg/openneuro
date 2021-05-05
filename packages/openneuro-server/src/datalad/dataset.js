@@ -26,6 +26,7 @@ import Permission from '../models/permission'
 import Star from '../models/stars'
 import Analytics from '../models/analytics'
 import Subscription from '../models/subscription'
+import BadAnnexObject from '../models/badAnnexObject'
 import { trackAnalytics } from './analytics'
 import { datasetsConnection } from './pagination'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -396,6 +397,65 @@ export const deleteFiles = (datasetId, files, user) => {
     .set('Accept', 'application/json')
     .send({ filenames })
     .then(() => filenames)
+}
+
+/**
+ * Delete the file's annex object and any public replicas
+ */
+export const removeAnnexObject = (
+  datasetId,
+  snapshot,
+  filepath,
+  annexKey,
+  user,
+) => {
+  const worker = getDatasetWorker(datasetId)
+  const url = `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
+  return request
+    .del(url)
+    .set('Cookie', generateDataladCookie(config)(user))
+    .set('Accept', 'application/json')
+    .then(async () => {
+      const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
+      if (existingBAO) {
+        existingBAO.forEach(bAO => {
+          bAO.remover = user._id
+          bAO.removed = true
+          bAO.save()
+        })
+      } else {
+        const badAnnexObj = new BadAnnexObject({
+          datasetId,
+          snapshot,
+          filepath,
+          annexKey,
+          remover: user._id,
+          removed: true,
+        })
+        badAnnexObj.save()
+      }
+    })
+}
+
+/**
+ * Flags file. Would be good to find a better way to store flags on dataset.
+ */
+export const flagAnnexObject = (
+  datasetId,
+  snapshot,
+  filepath,
+  annexKey,
+  user,
+) => {
+  const badAnnexObj = new BadAnnexObject({
+    datasetId,
+    snapshot,
+    filepath,
+    annexKey,
+    flagger: user,
+    flagged: true,
+  })
+  badAnnexObj.save()
 }
 
 /**

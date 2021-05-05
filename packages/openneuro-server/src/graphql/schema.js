@@ -90,6 +90,13 @@ export const typeDefs = `
       "Limit results, default 100, max 1000"
       limit: Int = 100
     ): [DatasetChange]
+    # Get annexed files that have been flagged or removed.
+    flaggedFiles(
+      "Get files that have been flagged, default true."
+      flagged: Boolean = true
+      "Get files that have already been deleted, default false."
+      deleted: Boolean = false
+    ): [FlaggedFile]
   }
 
   type Mutation {
@@ -101,6 +108,10 @@ export const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!, changes: [String!]): Snapshot
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
+    # removes the annex object of the given file
+    removeAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!, path: String, filename: String): Boolean
+    # flags the given file
+    flagAnnexObject(datasetId: ID!, snapshot: String!, filepath: String!, annexKey: String!): Boolean
     # Delete files or directories in a draft
     deleteFiles(datasetId: ID!, files: [DeleteFile]): Boolean
     # Add or remove the public flag from a dataset
@@ -543,8 +554,10 @@ export const typeDefs = `
   # File metadata and link to contents
   type DatasetFile {
     id: ID!
+    key: String
     filename: String!
     size: BigInt
+    annexed: Boolean
     urls: [String]
     objectpath: String
     # Return a flag if this is a directory which contains more files
@@ -628,6 +641,19 @@ export const typeDefs = `
     token: String
     # An endpoint index used to identify the backend responsible for these files
     endpoint: Int
+  }
+
+  # An annexed file that has been flagged for removal.
+  type FlaggedFile {
+    datasetId: String
+    snapshot: String
+    filepath: String
+    annexKey: String
+    removed: Boolean
+    remover: User
+    flagged: Boolean
+    flagger: User
+    createdAt: DateTime
   }
 `
 

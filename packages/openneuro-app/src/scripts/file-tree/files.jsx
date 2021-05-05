@@ -18,6 +18,7 @@ const Files = ({
   datasetName,
   files,
   editMode = false,
+  datasetPermissions,
 }) => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
@@ -86,6 +87,7 @@ const Files = ({
             name={datasetName}
             editMode={editMode}
             defaultExpanded={false}
+            datasetPermissions={datasetPermissions}
             toggleFileToDelete={toggleFileToDelete}
             isFileToBeDeleted={isFileToBeDeleted}
             bulkDeleteButton={bulkDeleteButton}
@@ -100,6 +102,7 @@ const Files = ({
             name={datasetName}
             editMode={editMode}
             defaultExpanded={true}
+            datasetPermissions={datasetPermissions}
             toggleFileToDelete={toggleFileToDelete}
             isFileToBeDeleted={isFileToBeDeleted}
             bulkDeleteButton={bulkDeleteButton}
@@ -117,6 +120,7 @@ Files.propTypes = {
   files: PropTypes.array,
   editMode: PropTypes.bool,
   fetchMore: PropTypes.func,
+  datasetPermissions: PropTypes.object,
 }
 
 export default Files

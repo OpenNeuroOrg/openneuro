@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteFile from '../datalad/mutations/delete-file.jsx'
 import { Media } from '../styles/media'
+import RemoveAnnexObject from '../datalad/mutations/remove-annex-object.jsx'
+import FlagAnnexObject from '../datalad/mutations/flag-annex-object.jsx'
+import { isAdmin } from '../authentication/admin-user.jsx'
+import { getProfile, hasEditPermissions } from '../authentication/profile.js'
+import { useCookies } from 'react-cookie'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
 
@@ -17,8 +22,12 @@ const File = ({
   datasetId,
   path,
   filename,
-  snapshotTag = null,
+  snapshotTag,
   editMode = false,
+  isMobile,
+  annexed,
+  annexKey,
+  datasetPermissions,
   toggleFileToDelete,
   isFileToBeDeleted,
 }) => {
@@ -28,6 +37,8 @@ const File = ({
     path,
     filename,
   )}`
+  const [cookies] = useCookies()
+  const user = getProfile(cookies)
   return (
     <>
       {filename}
@@ -75,6 +86,24 @@ const File = ({
             </div>
           </>
         )}
+        {!isMobile &&
+          annexed &&
+          (isAdmin() ? (
+            <RemoveAnnexObject
+              datasetId={datasetId}
+              snapshot={snapshotTag}
+              annexKey={annexKey}
+              path={path}
+              filename={filename}
+            />
+          ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
+            <FlagAnnexObject
+              datasetId={datasetId}
+              snapshot={snapshotTag}
+              filepath={filePath(path, filename)}
+              annexKey={annexKey}
+            />
+          ) : null)}
       </span>
     </>
   )

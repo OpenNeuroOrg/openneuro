@@ -10,9 +10,11 @@ export const DRAFT_FILES_QUERY = gql`
       draft {
         files(prefix: $filePrefix) {
           id
+          key
           filename
           size
           directory
+          annexed
         }
       }
     }
@@ -24,9 +26,11 @@ export const SNAPSHOT_FILES_QUERY = gql`
     snapshot(datasetId: $datasetId, tag: $snapshotTag) {
       files(prefix: $filePrefix) {
         id
+        key
         filename
         size
         directory
+        annexed
       }
     }
   }
