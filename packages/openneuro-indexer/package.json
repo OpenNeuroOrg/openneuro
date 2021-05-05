@@ -1,5 +1,5 @@
 {
-  "name": "openneuro-indexer",
+  "name": "@openneuro/indexer",
   "version": "3.32.3",
   "description": "OpenNeuro elastic search indexing tool",
   "main": "./dist/index.js",
@@ -14,15 +14,14 @@
   "dependencies": {
     "@apollo/client": "3.3.14",
     "@elastic/elasticsearch": "^7.5.0",
+    "@openneuro/client": "^3.32.3",
     "apollo-link-retry": "^2.2.16",
-    "openneuro-client": "^3.32.3",
     "ts-node": "^9.1.1",
     "typescript": "4.0.6"
   },
   "scripts": {
     "build": "tsc -b",
-    "start": "tsc-watch -b --onSuccess 'node --enable-source-maps ./dist/index.js'",
-    "openneuro-indexer": "ts-node --type-check src/index.ts"
+    "start": "tsc-watch -b --onSuccess 'node --enable-source-maps ./dist/index.js'"
   },
   "files": [
     "lib/**/*"

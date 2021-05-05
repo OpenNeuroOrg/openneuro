@@ -135,50 +135,26 @@ export const deleteDataset = async (
  */
 export const deleteFiles = async (
   obj,
-  { datasetId, path },
+  { datasetId, files },
   { user, userInfo },
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await datalad.deletePath(datasetId, path, userInfo)
-    pubsub.publish('filesUpdated', {
-      datasetId,
-      filesUpdated: {
-        action: 'DELETE',
-        payload: [
-          {
-            id: `${path}:0`,
-            filename: path,
-          },
-        ],
-      },
-    })
-    return true
-  } catch (err) {
-    console.error(err)
-    Sentry.captureException(err)
-    return false
-  }
-}
+    const deletedFiles = await datalad
+      .deleteFiles(datasetId, files, userInfo)
+      .then(filenames =>
+        Promise.all(filenames.map(filename => new UpdatedFile(filename))),
+      )
 
-export const deleteFile = async (
-  obj,
-  { datasetId, path, filename },
-  { user, userInfo },
-) => {
-  try {
-    await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFile = await datalad
-      .deleteFile(datasetId, path, { name: filename }, userInfo)
-      .then(filename => new UpdatedFile(filename))
     await datalad.commitFiles(datasetId, userInfo)
     pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
         action: 'DELETE',
-        payload: [deletedFile],
+        payload: deletedFiles,
       },
     })
+
     return true
   } catch (err) {
     Sentry.captureException(err)

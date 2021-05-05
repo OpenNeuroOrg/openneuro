@@ -3,25 +3,51 @@ kind: ClusterConfig
 metadata:
   name: openneuro-staging
   region: us-east-1
-  version: "1.15"
+  version: "1.19"
+availabilityZones:
+  - us-east-1a
+  - us-east-1f
 nodeGroups:
   - name: general
-    amiFamily: Ubuntu1804
-    instanceType: c5a.xlarge
+    amiFamily: Ubuntu2004
+    instanceType: r5a.large
     desiredCapacity: 2
+    iam:
+      withAddonPolicies:
+        ebs: true
+        efs: true
+        albIngress: true
+        certManager: true
     ssh:
       allow: true
+    labels: { role: general }
+    availabilityZones:
+      - us-east-1a
+      - us-east-1f
     preBootstrapCommands:
       - apt update
       - apt install -y nfs-common zfsutils-linux
   - name: storage
-    amiFamily: Ubuntu1804
-    instanceType: m5ad.xlarge
+    amiFamily: Ubuntu2004
+    instanceType: r5ad.large
     desiredCapacity: 2
+    iam:
+      withAddonPolicies:
+        ebs: true
+        efs: true
+        albIngress: true
+        certManager: true
     ssh:
       allow: true
     taints:
       storage: "true:NoSchedule"
+    labels: { role: storage }
+    availabilityZones:
+      - us-east-1a
+      - us-east-1f
     preBootstrapCommands:
       - apt update
       - apt install -y nfs-common zfsutils-linux
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]

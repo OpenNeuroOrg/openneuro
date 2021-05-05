@@ -11,12 +11,6 @@ import { setContext } from '@apollo/client/link/context'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import semver from 'semver'
-import * as files from './files'
-import * as datasets from './datasets'
-import * as snapshots from './snapshots'
-import * as users from './users'
-import * as uploads from './uploads'
-import datasetGenerator from './datasetGenerator.js'
 
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
@@ -140,7 +134,7 @@ const createLink = (uri, getAuthorization, fetch) => {
 /**
  * Setup a client for working with the OpenNeuro API
  */
-const createClient = (
+export const createClient = (
   uri,
   {
     getAuthorization = undefined,
@@ -170,14 +164,4 @@ const createClient = (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: This actually works but seems to be a typing error somewhere in Apollo
   return new ApolloClient(apolloClientOptions)
-}
-
-export {
-  files,
-  datasets,
-  snapshots,
-  users,
-  datasetGenerator,
-  createClient,
-  uploads,
 }

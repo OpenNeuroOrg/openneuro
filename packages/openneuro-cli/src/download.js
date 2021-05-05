@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import { getToken, getUrl } from './config.js'
+import { downloadDataset } from './datasets'
 
 export const downloadUrl = (baseUrl, datasetId, tag) =>
   tag
@@ -45,29 +46,6 @@ const handleFetchReject = err => {
     'Error starting download - please check your connection or try again later',
   )
   console.dir(err)
-}
-
-/**
- * Obtain the listing of files to download
- * @param {string} datasetId
- * @param {string} tag
- */
-export const getDownloadMetadata = async (datasetId, tag) => {
-  try {
-    const response = await fetch(downloadUrl(getUrl(), datasetId, tag), {
-      headers: getFetchHeaders(),
-    })
-    if (response.status === 200) {
-      const body = await response.json()
-      return body
-    } else {
-      console.error(
-        `Error ${response.status} fetching download metadata - ${response.statusText}`,
-      )
-    }
-  } catch (err) {
-    handleFetchReject(err)
-  }
 }
 
 /**
@@ -120,13 +98,19 @@ export const downloadFile = async (
   }
 }
 
-export const getDownload = (destination, datasetId, tag, apmTransaction) => {
-  const apmSetup = apmTransaction.startSpan('getDownloadMetadata')
-  return getDownloadMetadata(datasetId, tag).then(async body => {
+export const getDownload = (
+  destination,
+  datasetId,
+  tag,
+  apmTransaction,
+  client,
+) => {
+  const apmSetup = apmTransaction.startSpan('downloadDataset')
+  return downloadDataset(client)({ datasetId, tag }).then(async files => {
     apmTransaction.addLabels({ datasetId, tag })
     checkDestination(destination)
     apmSetup.end()
-    for (const file of body.files) {
+    for (const file of files) {
       if (testFile(destination, file.filename, file.size)) {
         // Now actually download
         const apmDownload = apmTransaction.startSpan(
@@ -137,7 +121,7 @@ export const getDownload = (destination, datasetId, tag, apmTransaction) => {
         await downloadFile(
           destination,
           file.filename,
-          file.urls.pop(),
+          file.urls[file.urls.length - 1],
           apmTransaction,
         )
         if (apmDownload) apmDownload.end()

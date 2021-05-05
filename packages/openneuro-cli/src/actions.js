@@ -253,20 +253,20 @@ export const download = (datasetId, destination, cmd) => {
   if (cmd.snapshot) {
     apmTransaction.addLabels({ snapshot: cmd.snapshot })
   }
+  const client = configuredClient()
   if (!cmd.draft && !cmd.snapshot) {
-    const client = configuredClient()
     return getSnapshots(client)(datasetId).then(({ data }) => {
       if (data.dataset && data.dataset.snapshots) {
         const tags = data.dataset.snapshots.map(snap => snap.tag)
         return promptTags(tags).then(choices =>
-          getDownload(destination, datasetId, choices.tag, apmTransaction),
+          getDownload(destination, datasetId, choices.tag, apmTransaction, client),
         )
       }
     })
   } else if (cmd.snapshot) {
-    getDownload(destination, datasetId, cmd.snapshot, apmTransaction)
+    getDownload(destination, datasetId, cmd.snapshot, apmTransaction, client)
   } else {
-    getDownload(destination, datasetId, null, apmTransaction)
+    getDownload(destination, datasetId, null, apmTransaction, client)
   }
   apmTransaction.end()
 }

@@ -43,6 +43,13 @@ Example eksctl configurations from the main OpenNeuro instance are available in 
 
 OpenEBS is used to manage volume allocation for worker nodes. Your Kubernetes nodes requires OpenZFS configuration. See [OpenEBS for supported versions](https://github.com/openebs/zfs-localpv#prerequisites). This can be built into the AMI on EKS or installed at node creation by eksctl as in the above example cluster configuration files.
 
+Storage pool nodes should be labeled to allow migration of the EBS disks on EKS updates. Label each node like so - this must be done before installing zfs-localpv the first time.
+
+```bash
+kubectl label node node-1 openebs.io/nodeid=pool-a
+kubectl label node node-2 openebs.io/nodeid=pool-b
+```
+
 Once the cluster is running, initialize the CSI driver for OpenEBS ZFS LocalPV following the [install instructions](https://github.com/openebs/zfs-localpv#setup).
 
 ### Setup and access Kubernetes dashboard

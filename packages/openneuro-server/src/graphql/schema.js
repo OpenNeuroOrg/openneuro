@@ -108,14 +108,12 @@ export const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!, changes: [String!]): Snapshot
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
-    # Recursively delete a file or directory in a draft - returns true on success
-    deleteFiles(datasetId: ID!, path: String!): Boolean
-    # delete one file based on path
-    deleteFile(datasetId: ID!, path: String!, filename: String!): Boolean
     # removes the annex object of the given file
     removeAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!, path: String, filename: String): Boolean
     # flags the given file
     flagAnnexObject(datasetId: ID!, snapshot: String!, filepath: String!, annexKey: String!): Boolean
+    # Delete files or directories in a draft
+    deleteFiles(datasetId: ID!, files: [DeleteFile]): Boolean
     # Add or remove the public flag from a dataset
     updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
     # Update a draft summary
@@ -172,6 +170,11 @@ export const typeDefs = `
     reexportRemotes(datasetId: ID!): Boolean
     # Reset draft commit
     resetDraft(datasetId: ID!, ref: String!): Boolean
+  }
+
+  input DeleteFile {
+    path: String!
+    filename: String
   }
 
   input UploadFile {

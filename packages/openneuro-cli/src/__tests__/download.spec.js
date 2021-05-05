@@ -1,8 +1,4 @@
-import {
-  downloadUrl,
-  checkDestination,
-  getDownloadMetadata,
-} from '../download.js'
+import { downloadUrl, checkDestination } from '../download.js'
 
 jest.mock('../config.js')
 
@@ -36,22 +32,6 @@ describe('download.js', () => {
       expect(() =>
         checkDestination('package.json'),
       ).toThrowErrorMatchingSnapshot()
-    })
-  })
-  describe('getDownloadMetadata()', () => {
-    it('fetches metadata on successful fetch', async () => {
-      fetch.mockResponseOnce(JSON.stringify({}))
-      await getDownloadMetadata('ds000testing', '1.0.0')
-      expect(fetch).toHaveBeenCalledTimes(1)
-    })
-    it('returns an error message on rejected fetch', async () => {
-      const testError = { testError: true }
-      fetch.mockReject(testError)
-      await getDownloadMetadata('ds000testing', '1.0.0')
-      expect(console.error).toHaveBeenCalledWith(
-        'Error starting download - please check your connection or try again later',
-      )
-      expect(console.dir).toHaveBeenCalledWith(testError)
     })
   })
 })

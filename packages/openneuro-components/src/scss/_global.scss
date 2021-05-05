@@ -1,0 +1,44 @@
+@import './normalize';
+@import './variables';
+@import './helper-classes';
+@import './flex-grid';
+
+.sb-show-main.sb-main-padded {
+  padding: 0 !important;
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+body {
+  font-family: $font-sans;
+  min-height: 100vh;
+  padding: 0;
+}
+
+a,
+a:link {
+  color: $on-dark-aqua;
+  transition: color 0.3s;
+  &:hover {
+    color: lighten($on-dark-aqua, 15%);
+  }
+}
+.container {
+  max-width: calc(100vw - 20px);
+  width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+div {
+  box-sizing: border-box;
+}

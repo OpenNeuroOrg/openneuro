@@ -1,4 +1,4 @@
-import { datasets } from 'openneuro-client'
+import { datasets } from '@openneuro/client'
 
 /**
  * Check for an existing dataset
@@ -46,4 +46,25 @@ export const createDataset = client => ({
       console.log(`"${dsId}" created`)
       return dsId
     })
+}
+
+export const downloadDataset = client => async ({ datasetId, tag }) => {
+  if (tag) {
+    const { data } = await client.query({
+      query: datasets.downloadSnapshot,
+      variables: {
+        datasetId,
+        tag,
+      },
+    })
+    return data.snapshot.files
+  } else {
+    const { data } = await client.query({
+      query: datasets.downloadDataset,
+      variables: {
+        datasetId,
+      },
+    })
+    return data.dataset.draft.files
+  }
 }

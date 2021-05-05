@@ -1,5 +1,5 @@
 {
-  "name": "openneuro-cli",
+  "name": "@openneuro/cli",
   "version": "3.32.3",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.3.14",
+    "@openneuro/client": "^3.32.3",
     "bids-validator": "1.6.3",
     "cli-progress": "^3.8.2",
     "colors": "1.4.0",
@@ -30,8 +31,7 @@
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
-    "mkdirp": "^0.5.1",
-    "openneuro-client": "^3.32.3"
+    "mkdirp": "^0.5.1"
   },
   "scripts": {
     "build": "tsc -b",
@@ -59,6 +59,7 @@
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
     "@types/colors": "^1",
+    "@types/mkdirp": "^1.0.1",
     "@types/node": "^14.14.41",
     "core-js": "^3.10.1",
     "jest-fetch-mock": "^3.0.3",

@@ -4,7 +4,6 @@
 import {
   createDataset,
   deleteDataset,
-  deleteFile,
   deleteFiles,
   removeAnnexObject,
   flagAnnexObject,
@@ -34,7 +33,6 @@ import { resetDraft } from './reset'
 const Mutation = {
   createDataset,
   deleteDataset,
-  deleteFile,
   deleteFiles,
   removeAnnexObject,
   flagAnnexObject,

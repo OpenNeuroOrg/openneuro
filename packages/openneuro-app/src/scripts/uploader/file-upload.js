@@ -1,5 +1,5 @@
 import { config } from '../config'
-import { uploads } from 'openneuro-client'
+import { uploads } from '@openneuro/client'
 
 /**
  * Trim the webkitRelativePath value to only include the dataset relative path

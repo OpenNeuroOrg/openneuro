@@ -24,6 +24,9 @@ const FileTree = ({
   editMode = false,
   defaultExpanded = false,
   datasetPermissions,
+  toggleFileToDelete,
+  isFileToBeDeleted,
+  bulkDeleteButton,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
   return (
@@ -56,6 +59,7 @@ const FileTree = ({
                   <i className="fa fa-plus" /> Add Directory
                 </UpdateFile>
                 <DeleteDir datasetId={datasetId} path={path} />
+                {bulkDeleteButton}
               </span>
             </Media>
           )}
@@ -63,10 +67,13 @@ const FileTree = ({
             {files.sort(sortByFilename).map((file, index) => (
               <li className="clearfix" key={index}>
                 <File
+                  id={file.id}
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
                   path={path}
                   editMode={editMode}
+                  toggleFileToDelete={toggleFileToDelete}
+                  isFileToBeDeleted={isFileToBeDeleted}
                   {...file}
                   annexKey={file.key}
                   datasetPermissions={datasetPermissions}
@@ -84,6 +91,8 @@ const FileTree = ({
                       editMode={editMode}
                       defaultExpanded={isTopLevel(dir)}
                       datasetPermissions={datasetPermissions}
+                      toggleFileToDelete={toggleFileToDelete}
+                      isFileToBeDeleted={isFileToBeDeleted}
                       {...dir}
                     />
                   </li>

@@ -3,7 +3,6 @@
 import express from 'express'
 import * as users from './handlers/users'
 import * as datalad from './handlers/datalad'
-import * as download from './handlers/download.js'
 import * as comments from './handlers/comments'
 import { clientConfig } from './handlers/config.js'
 import * as subscriptions from './handlers/subscriptions'
@@ -109,20 +108,6 @@ const routes = [
     method: 'get',
     url: '/datasets/:datasetId/snapshots/:snapshotId/files/:filename',
     handler: datalad.getFile,
-  },
-
-  // Download routes
-  {
-    method: 'get',
-    url: '/datasets/:datasetId/download',
-    middleware: [jwt.authenticate, auth.optional],
-    handler: download.datasetDownload,
-  },
-  {
-    method: 'get',
-    url: '/datasets/:datasetId/snapshots/:snapshotId/download',
-    middleware: [jwt.authenticate, auth.optional],
-    handler: download.snapshotDownload,
   },
 
   // Authentication routes
