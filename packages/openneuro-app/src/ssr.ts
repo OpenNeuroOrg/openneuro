@@ -109,10 +109,7 @@ async function createServer(): Promise<void> {
         // 4. render the app HTML. This assumes entry-server.js's exported `render`
         //    function calls appropriate framework SSR APIs,
         //    e.g. ReactDOMServer.renderToString()
-        const { react, apolloState, head } = await render(
-          url,
-          req['universalCookies'],
-        )
+        const { react, apolloState, head } = await render(url)
 
         // 5. Inject the app-rendered HTML into the template.
         const interpolate = {
@@ -125,12 +122,8 @@ async function createServer(): Promise<void> {
           return replace
         })
 
-        // Cache rendered pages for up to one hour
-        let cacheControl = 'private, max-age=3600'
-        if (req['universalCookies'].get('accessToken') === undefined) {
-          // Allow proxies to cache anonymous requests
-          cacheControl = 'public, max-age=3600'
-        }
+        // Allow proxies to cache anonymous requests
+        const cacheControl = 'public, max-age=2592000'
 
         // 6. Send the rendered HTML back.
         res
