@@ -4724,7 +4724,7 @@ __metadata:
     babel-jest: ^24.9.0
     babel-loader: ^8.0.4
     babel-runtime: ^6.26.0
-    bids-validator: "npm:@squishymedia/bids-validator-debug@1.6.2-dev.15"
+    bids-validator: "npm:@squishymedia/bids-validator@1.7.1-1"
     bytes: ^3.0.0
     cache-loader: ^1.2.2
     clean-webpack-plugin: ^0.1.19
@@ -4807,7 +4807,7 @@ __metadata:
     "@types/colors": ^1
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
-    bids-validator: 1.6.3
+    bids-validator: 1.7.1
     cli-progress: ^3.8.2
     colors: 1.4.0
     commander: 7.2.0
@@ -9950,9 +9950,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.6.3":
-  version: 1.6.3
-  resolution: "bids-validator@npm:1.6.3"
+"bids-validator@npm:1.7.1":
+  version: 1.7.1
+  resolution: "bids-validator@npm:1.7.1"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -9976,13 +9976,13 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: af4c39e8dc8b2c69d8133e0ef24eea6c5891a443de487f2beae2c71ff51ceddf8c39bbd0a24e3e0a4c0560fa36354c88b3070e7b2a41796e4024cf46c0dcd34e
+  checksum: 21016741a9c4e8ea5c7a0558e8d7add9fddab063e4f26e1c809292f8cef27f53187c8ce635b948a73a6b18f38e3a8b335a6d3fb9fd728e76937d800dfe7305e9
   languageName: node
   linkType: hard
 
-"bids-validator@npm:@squishymedia/bids-validator-debug@1.6.2-dev.15":
-  version: 1.6.2-dev.15
-  resolution: "@squishymedia/bids-validator-debug@npm:1.6.2-dev.15"
+"bids-validator@npm:@squishymedia/bids-validator@1.7.1-1":
+  version: 1.7.1-1
+  resolution: "@squishymedia/bids-validator@npm:1.7.1-1"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -9990,7 +9990,6 @@ __metadata:
     colors: ^1.3.1
     cross-fetch: ^3.0.6
     date-fns: ^2.7.0
-    esm: ^3.2.25
     events: ^3.3.0
     hed-validator: 3.0.5
     ignore: ^4.0.2
@@ -10008,7 +10007,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 60a6f251f14a9fc3349322a1f31c331aa9f64583748b1ff5ae3e5e51de71a2baa4e2c6bf3f28f87733cd31b4e6779affb4b1ec6ab9a4e3f98ef47b70b84a5384
+  checksum: 51d052a7a3b91057266297c8b5ce2735a167e3c704477b70c6012bbd37e0a9a21fc7c2edf899a38f12ad34c04f6ed87102182ca67a177b519b3c36cc1c174020
   languageName: node
   linkType: hard
 

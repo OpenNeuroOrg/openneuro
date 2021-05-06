@@ -9224,8 +9224,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.2.2"],
             ["babel-runtime", "npm:6.26.0"],
             ["bids-validator", [
-              "@squishymedia/bids-validator-debug",
-              "npm:1.6.2-dev.15"
+              "@squishymedia/bids-validator",
+              "npm:1.7.1-1"
             ]],
             ["bytes", "npm:3.1.0"],
             ["cache-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.2.5"],
@@ -9311,7 +9311,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/colors", "npm:1.1.3"],
             ["@types/mkdirp", "npm:1.0.1"],
             ["@types/node", "npm:14.14.43"],
-            ["bids-validator", "npm:1.6.3"],
+            ["bids-validator", "npm:1.7.1"],
             ["cli-progress", "npm:3.9.0"],
             ["colors", "npm:1.4.0"],
             ["commander", "npm:7.2.0"],
@@ -10047,18 +10047,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@squishymedia/bids-validator-debug", [
-        ["npm:1.6.2-dev.15", {
-          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-debug-npm-1.6.2-dev.15-628c82b092-60a6f251f1.zip/node_modules/@squishymedia/bids-validator-debug/",
+      ["@squishymedia/bids-validator", [
+        ["npm:1.7.1-1", {
+          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.1-1-6c9fde3d90-51d052a7a3.zip/node_modules/@squishymedia/bids-validator/",
           "packageDependencies": [
-            ["@squishymedia/bids-validator-debug", "npm:1.6.2-dev.15"],
+            ["@squishymedia/bids-validator", "npm:1.7.1-1"],
             ["@aws-sdk/client-s3", "npm:3.13.1"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
             ["colors", "npm:1.4.0"],
             ["cross-fetch", "npm:3.1.4"],
             ["date-fns", "npm:2.21.1"],
-            ["esm", "npm:3.2.25"],
             ["events", "npm:3.3.0"],
             ["hed-validator", "npm:3.0.5"],
             ["ignore", "npm:4.0.6"],
@@ -16342,10 +16341,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["bids-validator", [
-        ["npm:1.6.3", {
-          "packageLocation": "./.yarn/cache/bids-validator-npm-1.6.3-4996311f44-af4c39e8dc.zip/node_modules/bids-validator/",
+        ["npm:1.7.1", {
+          "packageLocation": "./.yarn/cache/bids-validator-npm-1.7.1-ec5009e963-21016741a9.zip/node_modules/bids-validator/",
           "packageDependencies": [
-            ["bids-validator", "npm:1.6.3"],
+            ["bids-validator", "npm:1.7.1"],
             ["@aws-sdk/client-s3", "npm:3.13.1"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
@@ -25115,7 +25114,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
+          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.14.0"],
