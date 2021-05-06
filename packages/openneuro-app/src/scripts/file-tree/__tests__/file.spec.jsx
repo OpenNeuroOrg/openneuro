@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import File from '../file.jsx'
+import { CookiesProvider, Cookies } from 'react-cookie'
 
 describe('File component', () => {
   it('renders with common props', () => {

@@ -10,8 +10,8 @@ import {
   downloadCompleteToast,
   requestFailureToast,
 } from './native-file-toast.jsx'
-import { downloadUri } from './download-uri.js'
 import { apm } from '../../apm.js'
+import { downloadDataset } from './download-query'
 
 /**
  * Given a file, create any missing parent directories, obtain directory handle, and return the file handle within that
@@ -46,11 +46,11 @@ class DownloadAbortError extends Error {
  * @param {string} datasetId Accession number string for a dataset
  * @param {string} snapshotTag Snapshot tag name
  */
-export const downloadNative = (datasetId, snapshotTag) => async () => {
-  const uri = downloadUri(datasetId, snapshotTag)
-  const { files: filesToDownload } = await (
-    await fetch(uri + '?skip-bundle')
-  ).json()
+export const downloadNative = (datasetId, snapshotTag, client) => async () => {
+  const filesToDownload = await downloadDataset(client)({
+    datasetId,
+    snapshotTag,
+  })
 
   // Try trackDownload but don't worry if it fails
   try {

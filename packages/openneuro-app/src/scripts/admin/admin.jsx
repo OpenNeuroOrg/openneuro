@@ -3,6 +3,7 @@
 import React from 'react'
 import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
 import Users from './users.jsx'
+import FlaggedFiles from './flagged-files.jsx'
 import LoggedIn from '../authentication/logged-in.jsx'
 
 class Dashboard extends React.Component {
@@ -20,6 +21,11 @@ class Dashboard extends React.Component {
                     Users
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink to="/admin/flagged-files" className="btn-tab">
+                    Flagged Files
+                  </NavLink>
+                </li>
               </ul>
               <Switch>
                 <Redirect
@@ -33,6 +39,12 @@ class Dashboard extends React.Component {
                   path="/admin/users"
                   exact
                   component={Users}
+                />
+                <Route
+                  name="flaggedFiles"
+                  path="/admin/flagged-files"
+                  exact
+                  component={FlaggedFiles}
                 />
               </Switch>
             </div>

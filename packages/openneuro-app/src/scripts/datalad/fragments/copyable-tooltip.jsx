@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-const Span = styled.span`
+export const TooltipSpan = styled.span`
   &::before {
     content: attr(data-tip);
 
@@ -28,6 +28,7 @@ const Span = styled.span`
     opacity: 1;
     right: 15px;
     box-shadow: 0 2px 5px #ddd;
+    background-color: white;
   }
 `
 const CopyButton = styled('i')({
@@ -64,13 +65,13 @@ function copyTextToClipboard(text) {
 }
 
 const Tooltip = ({ text, tip }) => (
-  <Span data-tip={tip}>
+  <TooltipSpan data-tip={tip}>
     {text}&nbsp;
     <CopyButton
       className="fa fa-copy"
       onClick={() => copyTextToClipboard(tip)}
     />
-  </Span>
+  </TooltipSpan>
 )
 
 Tooltip.propTypes = {

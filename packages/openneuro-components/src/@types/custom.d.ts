@@ -4,21 +4,17 @@ declare module '*.scss' {
   export = value
 }
 
-
 // Allow .png imports
 declare module '*.png' {
   const value: string
   export = value
 }
 
-
 // Allow .jpg imports
 declare module '*.jpg' {
   const value: string
   export = value
 }
-
-
 
 // Allow .svg imports
 declare module '*.svg' {

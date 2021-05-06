@@ -45,9 +45,11 @@ export const DRAFT_FILES_FRAGMENT = gql`
       id
       files {
         id
+        key
         filename
         size
         directory
+        annexed
       }
     }
   }
@@ -139,9 +141,11 @@ export const SNAPSHOT_FIELDS = gql`
     }
     files {
       id
+      key
       filename
       size
       directory
+      annexed
     }
     summary {
       modalities

@@ -3,7 +3,11 @@ import pubsub from '../pubsub.js'
 import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
-import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
+import {
+  checkDatasetRead,
+  checkDatasetWrite,
+  checkDatasetAdmin,
+} from '../permissions.js'
 import { user } from './user.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
@@ -17,6 +21,7 @@ import * as Sentry from '@sentry/node'
 import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
+import { getFileName } from '../../datalad/files.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -130,50 +135,69 @@ export const deleteDataset = async (
  */
 export const deleteFiles = async (
   obj,
-  { datasetId, path },
+  { datasetId, files },
   { user, userInfo },
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    await datalad.deletePath(datasetId, path, userInfo)
-    pubsub.publish('filesUpdated', {
-      datasetId,
-      filesUpdated: {
-        action: 'DELETE',
-        payload: [
-          {
-            id: `${path}:0`,
-            filename: path,
-          },
-        ],
-      },
-    })
-    return true
-  } catch (err) {
-    console.error(err)
-    Sentry.captureException(err)
-    return false
-  }
-}
+    const deletedFiles = await datalad
+      .deleteFiles(datasetId, files, userInfo)
+      .then(filenames =>
+        Promise.all(filenames.map(filename => new UpdatedFile(filename))),
+      )
 
-export const deleteFile = async (
-  obj,
-  { datasetId, path, filename },
-  { user, userInfo },
-) => {
-  try {
-    await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFile = await datalad
-      .deleteFile(datasetId, path, { name: filename }, userInfo)
-      .then(filename => new UpdatedFile(filename))
     await datalad.commitFiles(datasetId, userInfo)
     pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
         action: 'DELETE',
-        payload: [deletedFile],
+        payload: deletedFiles,
       },
     })
+
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
+}
+
+export const removeAnnexObject = async (
+  obj,
+  { datasetId, snapshot, path, filename, annexKey },
+  { user, userInfo },
+) => {
+  try {
+    await checkDatasetAdmin(datasetId, user, userInfo)
+    const filepath = getFileName(path, filename)
+    await datalad.removeAnnexObject(
+      datasetId,
+      snapshot,
+      filepath,
+      annexKey,
+      userInfo,
+    )
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
+}
+
+export const flagAnnexObject = async (
+  obj,
+  { datasetId, snapshot, filepath, annexKey },
+  { user, userInfo },
+) => {
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+    await datalad.flagAnnexObject(
+      datasetId,
+      snapshot,
+      filepath,
+      annexKey,
+      userInfo,
+    )
     return true
   } catch (err) {
     Sentry.captureException(err)
