@@ -65,5 +65,8 @@
     "jest-fetch-mock": "^3.0.3",
     "metro-memory-fs": "0.61.0"
   },
-  "gitHead": "05e535d4db663865e4b53fbe4e4208b4fd0d4791"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
 }

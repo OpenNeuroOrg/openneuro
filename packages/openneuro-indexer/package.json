@@ -32,5 +32,8 @@
     "@types/tsc-watch": "^4",
     "core-js": "^3.10.1"
   },
-  "gitHead": "05e535d4db663865e4b53fbe4e4208b4fd0d4791"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
 }

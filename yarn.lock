@@ -4711,7 +4711,7 @@ __metadata:
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
     "@loadable/component": ^5.7.0
-    "@openneuro/client": ^3.32.3
+    "@openneuro/client": ^3.33.0-alpha.0
     "@sentry/browser": ^4.5.3
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
@@ -4803,7 +4803,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^3.32.3
+    "@openneuro/client": ^3.33.0-alpha.0
     "@types/colors": ^1
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
@@ -4829,13 +4829,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^3.32.3, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^3.33.0-alpha.0, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^3.32.3
+    "@openneuro/server": ^3.33.0-alpha.0
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4889,7 +4889,7 @@ __metadata:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
-    "@openneuro/client": ^3.32.3
+    "@openneuro/client": ^3.33.0-alpha.0
     "@types/node": ^14.14.41
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
@@ -4901,7 +4901,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^3.32.3, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^3.33.0-alpha.0, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -16251,6 +16251,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fromentries@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "fromentries@npm:1.3.2"
+  checksum: 5cc722e4e3fd333ba75f31dd3ef80b4a6c405d8814e86e343b4676c1483c00f4f29b39aca462d268e918b3316a4fb03cea8022458fd8ad965f251362a129783f
+  languageName: node
+  linkType: hard
+
 "fs-capacitor@npm:^2.0.4":
   version: 2.0.4
   resolution: "fs-capacitor@npm:2.0.4"
@@ -25939,6 +25946,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"pinst@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "pinst@npm:2.1.6"
+  dependencies:
+    fromentries: ^1.3.2
+  bin:
+    pinst: bin.js
+  checksum: ac950620de58cec8a2d601b79186e04f7a166c3df82a7a25fe2ca3c1ea38710fa881640e788fa8f81f13b17f38f646d17360c8266f12ae7682bf0ae420786b61
+  languageName: node
+  linkType: hard
+
 "pirates@npm:^4.0.0, pirates@npm:^4.0.1":
   version: 4.0.1
   resolution: "pirates@npm:4.0.1"
@@ -29407,6 +29425,7 @@ resolve@^2.0.0-next.3:
     jest: ^26.6.3
     lerna: 3.20.2
     lint-staged: ^10.5.4
+    pinst: ^2.1.6
     prettier: ^2.2.1
     react: ^17.0.1
     react-dom: ^17.0.1
