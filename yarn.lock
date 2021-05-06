@@ -4724,7 +4724,7 @@ __metadata:
     babel-jest: ^24.9.0
     babel-loader: ^8.0.4
     babel-runtime: ^6.26.0
-    bids-validator: "npm:@squishymedia/bids-validator@1.7.1"
+    bids-validator: "npm:@squishymedia/bids-validator@1.7.1-1"
     bytes: ^3.0.0
     cache-loader: ^1.2.2
     clean-webpack-plugin: ^0.1.19
@@ -9980,9 +9980,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:@squishymedia/bids-validator@1.7.1":
-  version: 1.7.1
-  resolution: "@squishymedia/bids-validator@npm:1.7.1"
+"bids-validator@npm:@squishymedia/bids-validator@1.7.1-1":
+  version: 1.7.1-1
+  resolution: "@squishymedia/bids-validator@npm:1.7.1-1"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -10007,7 +10007,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: d6ed6ad15b7e4e2a5f31f434d72c5ad8d5d7fb64c4f576f9d3a49140495608593d0e59cba922cab630b3c71b4552de1040bf7ab4bf0c22777e1af26626a2a171
+  checksum: 51d052a7a3b91057266297c8b5ce2735a167e3c704477b70c6012bbd37e0a9a21fc7c2edf899a38f12ad34c04f6ed87102182ca67a177b519b3c36cc1c174020
   languageName: node
   linkType: hard
 
