@@ -47,7 +47,7 @@ async function createServer(): Promise<void> {
     // Create vite server in middleware mode. This disables Vite's own HTML
     // serving logic and let the parent server take control.
     vite = await createViteServer({
-      root: __dirname,
+      root: path.resolve(__dirname, '../src'),
       server: { middlewareMode: true, hmr: { port: 9992 } },
     })
     // use vite's connect instance as middleware
@@ -96,7 +96,7 @@ async function createServer(): Promise<void> {
       try {
         // 1. Read index.html
         const index = development
-          ? 'index.html'
+          ? '../src/index.html'
           : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
@@ -114,7 +114,7 @@ async function createServer(): Promise<void> {
           //    your ESM source code to be usable in Node.js! There is no bundling
           //    required, and provides efficient invalidation similar to HMR.
           const { render } = development
-            ? await vite.ssrLoadModule('/server.jsx')
+            ? await vite.ssrLoadModule('../src/server.jsx')
             : require('../src/dist/server/server.js')
 
           // 4. render the app HTML. This assumes entry-server.js's exported `render`
