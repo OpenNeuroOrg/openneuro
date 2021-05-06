@@ -236,6 +236,40 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["hoist-non-react-statics", "npm:3.3.2"],
             ["optimism", "npm:0.15.0"],
             ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"],
+            ["subscriptions-transport-ws", null],
+            ["symbol-observable", "npm:2.0.3"],
+            ["ts-invariant", "npm:0.7.3"],
+            ["tslib", "npm:1.14.1"],
+            ["zen-observable", "npm:0.8.15"]
+          ],
+          "packagePeers": [
+            "@types/graphql",
+            "@types/react",
+            "@types/subscriptions-transport-ws",
+            "graphql",
+            "react",
+            "subscriptions-transport-ws"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:91213f02ae820a190b230a7880bf0bf0c2c9838397b0cf7428815db9bfbf992c47df4585ca3b01cd14d7a39c5069db5fdbf809cb9db4dfc613f95e2e83ce1e0a#npm:3.3.14", {
+          "packageLocation": "./.yarn/$$virtual/@apollo-client-virtual-b5f3d5b2fd/0/cache/@apollo-client-npm-3.3.14-1ebea52b4f-a08163a998.zip/node_modules/@apollo/client/",
+          "packageDependencies": [
+            ["@apollo/client", "virtual:91213f02ae820a190b230a7880bf0bf0c2c9838397b0cf7428815db9bfbf992c47df4585ca3b01cd14d7a39c5069db5fdbf809cb9db4dfc613f95e2e83ce1e0a#npm:3.3.14"],
+            ["@graphql-typed-document-node/core", "virtual:51e032042460c5acb2fee2f0f33950a409d321b7c2d7932ec5edd2d65c6eef219caf38d6fbd40ae889377bab601157a449b02b052ebb0cf87371875d317dc909#npm:3.1.0"],
+            ["@types/graphql", null],
+            ["@types/react", null],
+            ["@types/subscriptions-transport-ws", null],
+            ["@types/zen-observable", "npm:0.8.2"],
+            ["@wry/context", "npm:0.6.0"],
+            ["@wry/equality", "npm:0.4.0"],
+            ["fast-json-stable-stringify", "npm:2.1.0"],
+            ["graphql", null],
+            ["graphql-tag", "virtual:51e032042460c5acb2fee2f0f33950a409d321b7c2d7932ec5edd2d65c6eef219caf38d6fbd40ae889377bab601157a449b02b052ebb0cf87371875d317dc909#npm:2.12.4"],
+            ["hoist-non-react-statics", "npm:3.3.2"],
+            ["optimism", "npm:0.15.0"],
+            ["prop-types", "npm:15.7.2"],
             ["react", null],
             ["subscriptions-transport-ws", null],
             ["symbol-observable", "npm:2.0.3"],
@@ -9326,7 +9360,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-fetch-mock", "npm:3.0.3"],
             ["jwt-decode", "npm:3.1.2"],
             ["metro-memory-fs", "npm:0.61.0"],
-            ["mkdirp", "npm:0.5.5"]
+            ["mkdirp", "npm:0.5.5"],
+            ["react", "npm:17.0.2"]
           ],
           "linkType": "SOFT",
         }]
@@ -9393,7 +9428,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/openneuro-indexer/",
           "packageDependencies": [
             ["@openneuro/indexer", "workspace:packages/openneuro-indexer"],
-            ["@apollo/client", "virtual:90f6a129d8adfee793b93ece48b319375c46f70206be38f532b28e127912d214b54604b30e8cb269ad6cd82b0db01373baefbe471fefa8ff4f96f22e6afba034#npm:3.3.14"],
+            ["@apollo/client", "virtual:91213f02ae820a190b230a7880bf0bf0c2c9838397b0cf7428815db9bfbf992c47df4585ca3b01cd14d7a39c5069db5fdbf809cb9db4dfc613f95e2e83ce1e0a#npm:3.3.14"],
             ["@babel/runtime-corejs3", "npm:7.14.0"],
             ["@elastic/elasticsearch", "npm:7.12.0"],
             ["@openneuro/client", "workspace:packages/openneuro-client"],
