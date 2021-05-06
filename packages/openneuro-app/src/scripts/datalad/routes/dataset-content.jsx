@@ -170,6 +170,7 @@ export const DatasetContent = ({ dataset }) => {
             datasetName={dataset.draft.description.Name}
             files={dataset.draft.files}
             editMode={hasEdit}
+            datasetPermissions={dataset.permissions}
           />
           <DatasetGitHash gitHash={dataset.draft.head} />
         </MobileClass>

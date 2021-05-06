@@ -4,11 +4,14 @@
     "start": "docker-compose up --build -V",
     "build": "yarn tsc -b",
     "bootstrap": "lerna bootstrap",
-    "test": "jest",
+    "test": "jest --maxWorkers=50%",
     "coverage": "jest --coverage",
     "codecov": "codecov",
     "lint": "eslint --ext .jsx --ext .js --ext .ts --ext .tsx packages/*/src",
-    "openneuro": "node packages/openneuro-cli/src"
+    "openneuro": "node packages/openneuro-cli/src",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

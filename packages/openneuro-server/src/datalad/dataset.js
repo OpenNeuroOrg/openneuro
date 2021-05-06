@@ -13,7 +13,12 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { updateDatasetRevision, expireDraftFiles } from './draft.js'
-import { fileUrl, pathUrl, getFileName, encodeFilePath } from './files'
+import {
+  fileUrl,
+  getFileName,
+  encodeFilePath,
+  filesUrl,
+} from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset'
 import Metadata from '../models/metadata'
@@ -21,6 +26,7 @@ import Permission from '../models/permission'
 import Star from '../models/stars'
 import Analytics from '../models/analytics'
 import Subscription from '../models/subscription'
+import BadAnnexObject from '../models/badAnnexObject'
 import { trackAnalytics } from './analytics'
 import { datasetsConnection } from './pagination'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -379,29 +385,77 @@ export const commitFiles = (datasetId, user) => {
 }
 
 /**
- * Delete an existing file in a dataset
+ * Delete existing files in a dataset
  */
-export const deleteFile = (datasetId, path, file, user) => {
-  const url = fileUrl(datasetId, path, file.name)
-  const filename = getFileName(path, file.name)
+export const deleteFiles = (datasetId, files, user) => {
+  const filenames = files.map(({ filename, path }) =>
+    filename ? getFileName(path, filename) : encodeFilePath(path),
+  )
   return request
-    .del(url)
+    .del(filesUrl(datasetId))
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
-    .then(() => filename)
+    .send({ filenames })
+    .then(() => filenames)
 }
 
 /**
- * Recursively delete a directory path within a dataset
+ * Delete the file's annex object and any public replicas
  */
-export const deletePath = (datasetId, path, user) => {
-  const url = pathUrl(datasetId, path)
+export const removeAnnexObject = (
+  datasetId,
+  snapshot,
+  filepath,
+  annexKey,
+  user,
+) => {
+  const worker = getDatasetWorker(datasetId)
+  const url = `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
   return request
     .del(url)
-    .query({ recursive: true })
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
-    .then(() => encodeFilePath(path))
+    .then(async () => {
+      const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
+      if (existingBAO) {
+        existingBAO.forEach(bAO => {
+          bAO.remover = user._id
+          bAO.removed = true
+          bAO.save()
+        })
+      } else {
+        const badAnnexObj = new BadAnnexObject({
+          datasetId,
+          snapshot,
+          filepath,
+          annexKey,
+          remover: user._id,
+          removed: true,
+        })
+        badAnnexObj.save()
+      }
+    })
+}
+
+/**
+ * Flags file. Would be good to find a better way to store flags on dataset.
+ */
+export const flagAnnexObject = (
+  datasetId,
+  snapshot,
+  filepath,
+  annexKey,
+  user,
+) => {
+  const badAnnexObj = new BadAnnexObject({
+    datasetId,
+    snapshot,
+    filepath,
+    annexKey,
+    flagger: user,
+    flagged: true,
+  })
+  badAnnexObj.save()
 }
 
 /**
