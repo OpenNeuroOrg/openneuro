@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/components",
-  "version": "3.33.0-alpha.5",
+  "version": "3.33.0",
   "description": "OpenNeuro component library and Storybook configuration",
   "main": "dist/index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
