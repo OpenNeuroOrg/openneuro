@@ -87,6 +87,12 @@ async function createServer(): Promise<void> {
         return
       }
 
+      let interpolate = {
+        head: '',
+        react: '',
+        apolloState: 'e30K',
+      }
+
       try {
         // 1. Read index.html
         const index = development
@@ -94,36 +100,43 @@ async function createServer(): Promise<void> {
           : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
-        // 2. Apply vite HTML transforms. This injects the vite HMR client, and
-        //    also applies HTML transforms from Vite plugins, e.g. global preambles
-        //    from @vitejs/plugin-react-refresh
-        if (development) template = await vite.transformIndexHtml(url, template)
+        // Allow proxies to cache anonymous requests
+        let cacheControl = 'public, max-age=2592000'
 
-        // 3. Load the server entry. vite.ssrLoadModule automatically transforms
-        //    your ESM source code to be usable in Node.js! There is no bundling
-        //    required, and provides efficient invalidation similar to HMR.
-        const { render } = development
-          ? await vite.ssrLoadModule('/server.jsx')
-          : require('../src/dist/server/server.js')
+        try {
+          // 2. Apply vite HTML transforms. This injects the vite HMR client, and
+          //    also applies HTML transforms from Vite plugins, e.g. global preambles
+          //    from @vitejs/plugin-react-refresh
+          if (development)
+            template = await vite.transformIndexHtml(url, template)
 
-        // 4. render the app HTML. This assumes entry-server.js's exported `render`
-        //    function calls appropriate framework SSR APIs,
-        //    e.g. ReactDOMServer.renderToString()
-        const { react, apolloState, head } = await render(url)
+          // 3. Load the server entry. vite.ssrLoadModule automatically transforms
+          //    your ESM source code to be usable in Node.js! There is no bundling
+          //    required, and provides efficient invalidation similar to HMR.
+          const { render } = development
+            ? await vite.ssrLoadModule('/server.jsx')
+            : require('../src/dist/server/server.js')
+
+          // 4. render the app HTML. This assumes entry-server.js's exported `render`
+          //    function calls appropriate framework SSR APIs,
+          //    e.g. ReactDOMServer.renderToString()
+          interpolate = await render(url)
+        } catch (e) {
+          // no-cache on errors
+          cacheControl = 'no-cache'
+          // If an error is caught, let vite fix the stacktrace so it maps back to
+          // your actual source code.
+          if (development) {
+            vite.ssrFixStacktrace(e)
+          }
+          console.error(e.stack)
+        }
 
         // 5. Inject the app-rendered HTML into the template.
-        const interpolate = {
-          head,
-          react,
-          apolloState,
-        }
         const html = template.replace(/\${([^}]*)}/g, (r, k): string => {
           const replace: string = interpolate[k]
           return replace
         })
-
-        // Allow proxies to cache anonymous requests
-        const cacheControl = 'public, max-age=2592000'
 
         // 6. Send the rendered HTML back.
         res
@@ -134,8 +147,7 @@ async function createServer(): Promise<void> {
           })
           .end(html)
       } catch (e) {
-        // If an error is caught, let vite fix the stacktrace so it maps back to
-        // your actual source code.
+        // If all else fails, show the stack
         if (development) {
           vite.ssrFixStacktrace(e)
         }
