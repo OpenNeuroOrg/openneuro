@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/server",
-  "version": "3.33.0-alpha.1",
+  "version": "3.33.0-alpha.2",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "src/server.js",
@@ -95,5 +95,5 @@
   "jest": {
     "testEnvironment": "node"
   },
-  "gitHead": "de1eefd71d033d1f88688e0de5ac391f75a15ab8"
+  "gitHead": "cff944718139768290ee37e7288d10ec502fa769"
 }
