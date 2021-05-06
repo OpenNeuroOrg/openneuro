@@ -9256,7 +9256,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mini-css-extract-plugin", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.4.5"],
             ["moment-timezone", "npm:0.5.33"],
             ["node-sass", "npm:4.14.1"],
-            ["nodemon", "npm:2.0.7"],
             ["object.fromentries", "npm:2.0.4"],
             ["os-browserify", "npm:0.3.0"],
             ["pluralize", "npm:7.0.0"],
