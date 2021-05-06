@@ -1,7 +1,8 @@
+import * as files from './files'
+import * as datasets from './datasets'
+import * as snapshots from './snapshots'
+import * as users from './users'
+import * as uploads from './uploads'
 export { createClient } from './client'
-export * as files from './files'
-export * as datasets from './datasets'
-export * as snapshots from './snapshots'
-export * as users from './users'
-export * as uploads from './uploads'
 export { datasetGenerator } from './datasetGenerator'
+export { files, datasets, snapshots, users, uploads }
