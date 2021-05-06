@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/app",
-  "version": "3.33.0-alpha.2",
+  "version": "3.33.0-alpha.3",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "public/client.js",
@@ -20,7 +20,7 @@
     "@emotion/core": "^10.0.4",
     "@emotion/styled": "^10.0.4",
     "@loadable/component": "^5.7.0",
-    "@openneuro/client": "^3.33.0-alpha.2",
+    "@openneuro/client": "^3.33.0-alpha.3",
     "@sentry/browser": "^4.5.3",
     "babel-runtime": "^6.26.0",
     "bids-validator": "npm:@squishymedia/bids-validator@1.7.1-1",
@@ -135,5 +135,5 @@
       "/node_modules/(?!bids-validator).+\\.js$"
     ]
   },
-  "gitHead": "cff944718139768290ee37e7288d10ec502fa769"
+  "gitHead": "05e535d4db663865e4b53fbe4e4208b4fd0d4791"
 }
