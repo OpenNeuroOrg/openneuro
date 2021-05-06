@@ -1,0 +1,38 @@
+.search-page-portal-header {
+  overflow: hidden;
+  margin: -200px 0 0;
+  padding: 145px 0 30px;
+  height: 250px;
+  position: relative;
+  .search-swoop {
+    background: red;
+    width: 120%;
+    height: 480px;
+    border-radius: 100%;
+    margin: 0 0 0 -120px;
+    top: -100px;
+    position: absolute;
+    transform: scale(1.05) rotate(-5.1deg);
+    z-index: 1;
+  }
+}
+
+.search-page-coms {
+  overflow: hidden;
+  position: relative;
+  margin: -190px 0 0;
+  padding: 180px 0 0;
+  height: 320px;
+  position: relative;
+  .search-swoop {
+    background: #f3f3f3;
+    width: 120%;
+    height: 620px;
+    border-radius: 100%;
+    margin: 0 0 0 -160px;
+    top: -250px;
+    position: absolute;
+    transform: scale(1.05) rotate(-7.1deg);
+    z-index: -1;
+  }
+}
