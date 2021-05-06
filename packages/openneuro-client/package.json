@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
-    "@openneuro/server": "workspace:packages/openneuro-server",
+    "@openneuro/server": "^3.32.3",
     "apollo-server": "^2.23.0",
     "core-js": "^3.10.1"
   }

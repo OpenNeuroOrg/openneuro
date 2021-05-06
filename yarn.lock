@@ -4835,7 +4835,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": "workspace:packages/openneuro-server"
+    "@openneuro/server": ^3.32.3
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4901,7 +4901,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^3.32.3, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
