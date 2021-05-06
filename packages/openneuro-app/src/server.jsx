@@ -13,16 +13,15 @@ import { config } from './scripts/config'
 import { mediaStyle } from './scripts/styles/media'
 import { version } from './lerna.json'
 
-export async function render(url, cookies) {
+export async function render(url) {
   // Client must be created on every call to avoid mixing credentials
   const client = createClient(config.graphql.uri, {
     clientVersion: version,
     ssrMode: true,
-    getAuthorization: () => cookies.get('accessToken'),
   })
 
   const react = await getDataFromTree(
-    <App cookies={cookies}>
+    <App>
       <Helmet>
         <style type="text/css">{mediaStyle}</style>
       </Helmet>
