@@ -3,11 +3,11 @@ import React from 'react'
 export interface SearchResultItemProps {
   name: string
   modalities: string[]
-  tasks?: string[]
+  tasks: string[]
   accessionNumber: string
   subjects: number
   sessions: number
-  files: string
+  files: number
   size: string
   uploader: string
   updated: string
