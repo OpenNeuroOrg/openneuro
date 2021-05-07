@@ -30,7 +30,7 @@ SearchPageExample.args = {
 }
 export const MRIPortalPageExample = Template.bind({})
 MRIPortalPageExample.args = {
-  children: <SearchPage content={MRIPortalContent} />,
+  children: <SearchPage portalContent={MRIPortalContent} />,
   headerArgs: HeaderStories.LoggedOut.args,
   className: 'search-page',
 }

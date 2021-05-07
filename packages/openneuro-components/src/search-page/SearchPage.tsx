@@ -4,31 +4,35 @@ import { CommunitySwoop } from './CommunitySwoop'
 import './search-page.scss'
 
 export interface SearchPageProps {
-  content?: Record<string, any>
+  portalContent?: Record<string, any>
 }
 
-export const SearchPage = ({ content }: SearchPageProps) => {
+export const SearchPage = ({ portalContent }: SearchPageProps) => {
   return (
     <>
       <div className="page">
-        {content ? (
+        {portalContent ? (
           <>
-            {content.portalName ? (
+            {portalContent.portalName ? (
               <ModalityHeader
-                portalName={content.portalName}
-                portalPrimary={content.portalPrimary}
-                publicDatasetStat={content.publicDatasetStat}
-                participantsStat={content.participantsStat}
-                hexBackgroundImage={content.hexBackgroundImage}
-                swoopBackgroundColorLight={content.swoopBackgroundColorLight}
-                swoopBackgroundColorDark={content.swoopBackgroundColorDark}
+                portalName={portalContent.portalName}
+                portalPrimary={portalContent.portalPrimary}
+                publicDatasetStat={portalContent.publicDatasetStat}
+                participantsStat={portalContent.participantsStat}
+                hexBackgroundImage={portalContent.hexBackgroundImage}
+                swoopBackgroundColorLight={
+                  portalContent.swoopBackgroundColorLight
+                }
+                swoopBackgroundColorDark={
+                  portalContent.swoopBackgroundColorDark
+                }
               />
             ) : null}
-            {content.communityHeader ? (
+            {portalContent.communityHeader ? (
               <CommunitySwoop
-                communityHeader={content.communityHeader}
-                communityPrimary={content.communityPrimary}
-                communitySecondary={content.communitySecondary}
+                communityHeader={portalContent.communityHeader}
+                communityPrimary={portalContent.communityPrimary}
+                communitySecondary={portalContent.communitySecondary}
               />
             ) : null}
           </>
@@ -37,8 +41,8 @@ export const SearchPage = ({ content }: SearchPageProps) => {
         <section className="search">
           <div className="container">
             <div className="grid grid-start">
-              <div className="col col-4">facets</div>
-              <div className="col col-8">results</div>
+              <div className="col col-4">facets Todo</div>
+              <div className="col col-8">results todo</div>
             </div>
           </div>
         </section>
