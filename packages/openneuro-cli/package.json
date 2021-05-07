@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/cli",
-  "version": "3.32.3",
+  "version": "3.33.0",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@apollo/client": "3.3.14",
-    "@openneuro/client": "^3.32.3",
-    "bids-validator": "1.6.3",
+    "@openneuro/client": "^3.33.0",
+    "bids-validator": "1.7.1",
     "cli-progress": "^3.8.2",
     "colors": "1.4.0",
     "commander": "7.2.0",
@@ -31,7 +31,8 @@
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "react": "^17.0.1"
   },
   "scripts": {
     "build": "tsc -b",
@@ -64,5 +65,9 @@
     "core-js": "^3.10.1",
     "jest-fetch-mock": "^3.0.3",
     "metro-memory-fs": "0.61.0"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
 }

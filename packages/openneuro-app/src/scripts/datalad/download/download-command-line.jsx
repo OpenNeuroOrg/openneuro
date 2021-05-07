@@ -20,7 +20,7 @@ const DownloadCommandLine = ({ datasetId, snapshotTag }) => (
     <h4>Download with Node.js</h4>
     <p>
       Using{' '}
-      <a href="https://www.npmjs.com/package/openneuro-cli">openneuro-cli</a>{' '}
+      <a href="https://www.npmjs.com/package/@openneuro/cli">@openneuro/cli</a>{' '}
       you can download this dataset from the command line using{' '}
       <a href="https://nodejs.org/en/download/">Node.js</a>. This method is good
       for larger datasets or unstable connections, but has known issues on

@@ -1,51 +1,91 @@
 # docker compose versions
 version: '2.3'
 
+volumes:
+  node_deps:
+  dist:
+  dist_app:
+  dist_client:
+  dist_cli:
+  dist_components:
+  dist_indexer:
+  dist_server:
+
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    user: $UID
     image: node:14.16.1
     env_file: ./config.env
     working_dir: /srv
+    command: bash -c 'yarn install && yarn tsc-watch -b --onSuccess "touch /watch/done"'
+    healthcheck:
+      test: test -f /watch/done || exit 1
+      interval: 5s
+      retries: 60
     tmpfs:
-      - /srv/.yarn:exec
+      - /watch
+      - /srv/.build-cache:exec
     volumes:
       - ./:/srv
+      - node_deps:/srv/.yarn
       - ./.yarn/cache:/srv/.yarn/cache
       - ./.yarn/releases:/srv/.yarn/releases
       - ./.yarn/plugins:/srv/.yarn/plugins
+      - dist:/src/dist
+      - dist_app:/srv/packages/openneuro-app/dist
+      - dist_cli:/srv/packages/openneuro-cli/dist
+      - dist_client:/srv/packages/openneuro-client/dist
+      - dist_components:/srv/packages/openneuro-components/dist
+      - dist_indexer:/srv/packages/openneuro-indexer/dist
+      - dist_server:/srv/packages/openneuro-server/dist
 
   # web app bundle build
   app:
     extends:
       service: node
-    command: bash -c 'yarn install && yarn workspace @openneuro/app start'
+    command: bash -c 'yarn workspace @openneuro/app start'
     ports:
       - '8145:8145'
       - '9992:9992'
     environment:
       - NODE_ENV=development
+    depends_on:
+      node:
+        condition: service_healthy
 
   # crn node server
   server:
     extends:
       service: node
-    command: bash -c 'yarn install && yarn workspace @openneuro/server start'
+    command: bash -c 'yarn workspace @openneuro/server start'
+    healthcheck:
+      test: curl -f http://localhost:8111/crn || exit 1
+      interval: 5s
+      retries: 10
     depends_on:
-      - redis
-      - mongo
-      - datalad
-      - elasticsearch
+      redis:
+        condition: service_started
+      mongo:
+        condition: service_started
+      datalad:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_started
+      node:
+        condition: service_healthy
 
   # Elastic Search indexer
   indexer:
     extends:
       service: node
-    command: bash -c 'yarn install && yarn workspace @openneuro/indexer start'
+    command: bash -c 'yarn workspace @openneuro/indexer start'
     depends_on:
-      - server
-      - elasticsearch
+      server:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_started
+      node:
+        condition: service_healthy
 
   # mongodb
   mongo:
@@ -103,8 +143,10 @@ services:
       - '8110:8110'
       - '9876:80'
     depends_on:
-      - server
-      - datalad
+      server:
+        condition: service_healthy
+      datalad:
+        condition: service_healthy
 
   elasticsearch:
     image: elasticsearch:7.10.1

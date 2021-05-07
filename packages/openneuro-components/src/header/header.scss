@@ -144,6 +144,18 @@ header {
       margin-top: auto;
       margin-bottom: 30px;
     }
+    .header-aggregate {
+      display: flex;
+      justify-content: space-between;
+      max-width: 90%;
+      .aggregate-count {
+        color: #fff;
+        font-size: 23px;
+        span {
+          font-weight: 600;
+        }
+      }
+    }
   }
 
   @media (max-width: $screen-lg) {
