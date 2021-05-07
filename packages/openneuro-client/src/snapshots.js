@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const createSnapshot = gql`
-  mutation($datasetId: ID!, $tag: String!) {
+  mutation createSnapshot($datasetId: ID!, $tag: String!) {
     createSnapshot(datasetId: $datasetId, tag: $tag) {
       id
       tag

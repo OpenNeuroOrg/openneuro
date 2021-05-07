@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const getDataset = gql`
-  query dataset($id: ID!) {
+  query getDataset($id: ID!) {
     dataset(id: $id) {
       id
       _id: id
@@ -72,7 +72,7 @@ export const getDataset = gql`
 
 // Get only working tree files
 export const getDraftFiles = gql`
-  query dataset($id: ID!) {
+  query getDraftFiles($id: ID!) {
     dataset(id: $id) {
       id
       draft {
@@ -182,7 +182,7 @@ export const getDatasets = gql`
 `
 
 export const getDatasetIssues = gql`
-  query dataset($datasetId: ID!) {
+  query getDatasetIssues($datasetId: ID!) {
     dataset(id: $datasetId) {
       id
       draft {
@@ -205,14 +205,6 @@ export const getDatasetIssues = gql`
           additionalFileCount
         }
       }
-    }
-  }
-`
-
-export const validationSubscription = gql`
-  subscription {
-    datasetValidationUpdated {
-      id
     }
   }
 `
@@ -241,35 +233,45 @@ export const deleteSnapshot = gql`
 `
 
 export const updatePublic = gql`
-  mutation($id: ID!, $publicFlag: Boolean!) {
+  mutation updatePublic($id: ID!, $publicFlag: Boolean!) {
     updatePublic(datasetId: $id, publicFlag: $publicFlag)
   }
 `
 
 export const updatePermissions = gql`
-  mutation($datasetId: ID!, $userEmail: String!, $level: String) {
+  mutation updatePermissions(
+    $datasetId: ID!
+    $userEmail: String!
+    $level: String
+  ) {
     updatePermissions(
       datasetId: $datasetId
       userEmail: $userEmail
       level: $level
-    )
+    ) {
+      id
+    }
   }
 `
 
 export const removePermissions = gql`
-  mutation($datasetId: ID!, $userId: String!) {
+  mutation removePermissions($datasetId: ID!, $userId: String!) {
     removePermissions(datasetId: $datasetId, userId: $userId)
   }
 `
 
 export const trackAnalytics = gql`
-  mutation($datasetId: ID!, $tag: String, $type: AnalyticTypes!) {
+  mutation trackAnalytics(
+    $datasetId: ID!
+    $tag: String
+    $type: AnalyticTypes!
+  ) {
     trackAnalytics(datasetId: $datasetId, tag: $tag, type: $type)
   }
 `
 
 export const downloadDataset = gql`
-  query dataset($datasetId: ID!) {
+  query downloadDataset($datasetId: ID!) {
     dataset(id: $datasetId) {
       id
       draft {
@@ -286,7 +288,7 @@ export const downloadDataset = gql`
 `
 
 export const downloadSnapshot = gql`
-  query snapshot($datasetId: ID!, $tag: String!) {
+  query downloadSnapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
       files(prefix: null) {

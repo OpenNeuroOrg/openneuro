@@ -33,7 +33,7 @@
     "draft-js-export-html": "^1.4.1",
     "elastic-apm-node": "3.12.1",
     "express": "^4.17.1",
-    "graphql": "14.7.0",
+    "graphql": "15.5.0",
     "graphql-bigint": "^1.0.0",
     "graphql-compose": "^7.25.0",
     "graphql-iso-date": "^3.6.1",

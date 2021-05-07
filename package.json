@@ -11,7 +11,8 @@
     "openneuro": "node packages/openneuro-cli/src",
     "_postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "postpublish": "pinst --enable",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",
@@ -24,11 +25,18 @@
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
     "@babel/runtime-corejs3": "^7.13.10",
+    "@graphql-codegen/cli": "1.21.4",
+    "@graphql-codegen/fragment-matcher": "2.0.1",
+    "@graphql-codegen/introspection": "1.18.2",
+    "@graphql-codegen/typescript": "1.22.0",
+    "@graphql-codegen/typescript-operations": "1.17.16",
+    "@graphql-codegen/typescript-react-apollo": "2.2.4",
     "@loadable/babel-plugin": "^5.13.2",
     "@sentry/cli": "1.37.4",
     "@types/babel__core": "^7",
     "@types/babel__plugin-transform-runtime": "^7",
     "@types/babel__preset-env": "^7",
+    "@types/graphql": "^14.5.0",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "babel-eslint": "10.0.3",
@@ -75,5 +83,8 @@
     "gatsby-plugin-s3": "^0.3.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
+  },
+  "resolutions": {
+    "graphql": "15.5.0"
   }
 }

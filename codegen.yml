@@ -1,0 +1,17 @@
+overwrite: true
+schema: "packages/openneuro-server/src/graphql/schema.graphql"
+documents: 
+  - 'packages/*/src/**/!(*.d).{js,jsx,ts,tsx}'
+  - '!packages/openneuro-client/src/generated'
+  - '!**/__tests__/*'
+  - '!**/__mocks__/*'
+generates:
+  ./packages/openneuro-client/src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "fragment-matcher"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

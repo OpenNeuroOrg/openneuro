@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const getUsers = gql`
-  query {
+  query getUsers {
     users {
       id
       _id: id
@@ -16,13 +16,15 @@ export const getUsers = gql`
 `
 
 export const removeUser = gql`
-  mutation($id: ID!) {
+  mutation removeUser($id: ID!) {
     removeUser(id: $id)
   }
 `
 
 export const setAdmin = gql`
-  mutation($id: ID!, $admin: Boolean!) {
-    setAdmin(id: $id, admin: $admin)
+  mutation setAdmin($id: ID!, $admin: Boolean!) {
+    setAdmin(id: $id, admin: $admin) {
+      id
+    }
   }
 `
