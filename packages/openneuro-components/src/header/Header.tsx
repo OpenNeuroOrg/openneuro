@@ -86,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="col col-3">
               <div className="grid grid-center">
                 <Button
-                  buttonclassName="login-button"
+                  buttonClass="login-button"
                   primary
                   label="Google"
                   icon="fab fa-google"
@@ -97,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="col col-3">
               <div className="grid grid-center">
                 <Button
-                  buttonclassName="login-button"
+                  buttonClass="login-button"
                   primary
                   label="ORCID"
                   imgSrc={orcidIcon}

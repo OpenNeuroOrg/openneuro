@@ -1,11 +1,13 @@
 .search-page-portal-header {
   margin: -200px 0 0;
   padding: 145px 0 30px;
-  height: 250px;
+  height: 290px;
   position: relative;
-
   color: #fff;
-
+  .hex-col {
+    margin-top: 50px;
+    position: relative;
+  }
   .swoop-wrap {
     overflow: hidden;
     max-width: 100%;
@@ -13,24 +15,35 @@
   .search-swoop {
     background: #444;
     width: calc(100% + 40vw);
-    height: 480px;
+    height: 550px;
     border-radius: 100%;
-    margin: 0 0 0 -120px;
+    margin: 0 0 0 -300px;
     top: -100px;
     position: absolute;
-    transform: scale(1.05) rotate(-4.1deg);
+    transform: scale(1.05) rotate(-3deg);
     z-index: 1;
   }
-  .primary-content {
+  .primary-content,
+  .secondary-content {
     font-weight: 300;
-    font-size: 21px;
+    font-size: 24px;
+  }
+  .secondary-content {
+    margin-top: 25px;
+    display: flex;
+    .aggregate-count:first-child {
+      margin-right: 60px;
+    }
+    span {
+      font-weight: 600;
+    }
   }
 }
 
 .search-page-coms {
   overflow: hidden;
   position: relative;
-  margin: -190px 0 0;
+  margin: -160px 0 0;
   padding: 180px 0 0;
   height: 320px;
   position: relative;
@@ -44,6 +57,19 @@
     position: absolute;
     transform: scale(1.05) rotate(-7.1deg);
     z-index: -1;
+  }
+  h2 {
+    font-size: 19px;
+  }
+  .primary-content {
+    font-weight: 300;
+    font-size: 19px;
+  }
+  .secondary-content {
+    font-weight: 300;
+    font-size: 15px;
+    margin-top: 25px;
+    display: flex;
   }
 }
 
@@ -133,7 +159,7 @@
       justify-content: center;
       align-items: center;
 
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: rgba(0, 0, 0, 0.32);
     }
     &.top {
       transform: rotateX(-270deg) translateY(-100px);
@@ -142,7 +168,7 @@
     &.right {
       transform: rotateY(-270deg) translateX(100px);
       transform-origin: top right;
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.53);
     }
   }
 }
