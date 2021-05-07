@@ -26,14 +26,14 @@ header {
 
 .header-swoop {
   background: $on-dark-aqua;
-  width: 120%;
-  height: 110px;
+  width: calc(100% + 104vw);
+  height: 330px;
   border-radius: 100%;
-  margin: 0 0 0 -40px;
+  margin: 0 0 0 -26vw;
   position: absolute;
-  transform: scale(1.05) rotate(-2.1deg);
+  transform: scale(1.05) rotate(-2deg);
   z-index: 2;
-  bottom: 68px;
+  bottom: 81px;
 }
 
 .navbar-navigation {
