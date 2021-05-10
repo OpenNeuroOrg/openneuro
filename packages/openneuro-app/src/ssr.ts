@@ -158,7 +158,7 @@ async function createServer(): Promise<void> {
     void ssrHandler()
   })
 
-  app.listen(development ? 9876 : 80)
+  app.listen(80)
 }
 
 void createServer()
