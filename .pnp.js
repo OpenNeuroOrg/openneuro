@@ -9270,6 +9270,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["connect-history-api-fallback", "npm:1.6.0"],
             ["copy-webpack-plugin", "npm:4.6.0"],
             ["core-js", "npm:3.11.1"],
+            ["cross-fetch", "npm:3.1.4"],
             ["css-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.1"],
             ["date-fns", "npm:2.21.1"],
             ["draft-js", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.7"],
