@@ -1,0 +1,61 @@
+@import '../scss/variables';
+
+.dropdown-wrapper {
+  display: inline-block;
+  .toggle {
+    cursor: pointer;
+  }
+  .menu {
+    overflow: hidden;
+    height: 0;
+    z-index: 9999;
+
+    &.expanded {
+      height: auto;
+    }
+  }
+}
+
+.list-label {
+  padding: 0 0 20px;
+  color: $on-dark-aqua;
+  span {
+    color: #333;
+  }
+}
+.dropdown-list {
+  .label {
+    margin: 0 15px 0 30px;
+    b {
+      margin-right: 20px;
+    }
+  }
+  i + .label {
+    margin-left: 12px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-width: 400px;
+    min-width: 150px;
+
+    li {
+      cursor: pointer;
+      width: 100%;
+      padding: 10px 10px;
+      transition: background 0.25s, color 0.25s;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      color: $on-dark-aqua;
+      justify-content: flex-end;
+      &:hover {
+        color: #333;
+        background: rgba(0, 0, 0, 0.025);
+      }
+    }
+  }
+}
