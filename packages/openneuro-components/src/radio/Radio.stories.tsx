@@ -10,16 +10,23 @@ export default {
   component: RadioGroup,
 } as Meta
 
-const RadioTemplate: Story<RadioGroupProps> = ({ ...args }) => {
+const RadioTemplate: Story<RadioGroupProps> = ({ radioArr, layout, name }) => {
   const [active, setActive] = React.useState(0)
   console.log(active)
-  return <RadioGroup setActive={setActive} active={active} {...args} />
+  return (
+    <RadioGroup
+      setActive={setActive}
+      active={active}
+      name={name}
+      radioArr={radioArr}
+      layout={layout}
+    />
+  )
 }
 
 export const RowRadio = RadioTemplate.bind({})
 RowRadio.args = {
   radioArr: RadioContent,
-  id: 'row-radios',
   layout: 'row',
   name: 'radio-row',
 }
@@ -27,7 +34,6 @@ RowRadio.args = {
 export const ColumnRadio = RadioTemplate.bind({})
 ColumnRadio.args = {
   radioArr: RadioContent,
-  id: 'column-radios',
   layout: 'column',
   name: 'radio-column',
 }
