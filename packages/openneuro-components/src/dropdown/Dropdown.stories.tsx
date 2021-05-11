@@ -15,24 +15,24 @@ const DropdownListTemplate: Story<DropdownListProps> = args => (
 const menuItems = [
   {
     label: 'Newest',
-    onClick: () => alert('Newest'),
-    active: true,
+    value: 'newest',
+    selected: true,
   },
   {
     label: 'Oldest',
-    onClick: () => alert('Oldest'),
+    value: 'oldest',
   },
   {
     label: 'A-Z',
-    onClick: () => alert('A-Z'),
+    value: 'alphaDesc',
   },
   {
     label: 'Z-A',
-    onClick: () => alert('Z-A'),
+    value: 'alphaAsc',
   },
   {
     label: 'Activity',
-    onClick: () => alert('Activity'),
+    value: 'activity',
   },
 ]
 export const SortBy = DropdownListTemplate.bind({})

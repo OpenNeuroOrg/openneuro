@@ -25,7 +25,7 @@
 }
 .dropdown-list {
   .label {
-    margin-left: 30px;
+    margin: 0 15px 0 30px;
     b {
       margin-right: 20px;
     }
@@ -39,7 +39,8 @@
     margin: 0;
     border: 1px solid #ccc;
     border-radius: 6px;
-    max-width: 200px;
+    max-width: 400px;
+    min-width: 150px;
 
     li {
       cursor: pointer;
@@ -50,6 +51,7 @@
       align-items: center;
       box-sizing: border-box;
       color: $on-dark-aqua;
+      justify-content: flex-end;
       &:hover {
         color: #333;
         background: rgba(0, 0, 0, 0.025);

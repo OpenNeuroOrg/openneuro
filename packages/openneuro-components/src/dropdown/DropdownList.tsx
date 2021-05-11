@@ -6,27 +6,29 @@ export interface DropdownListProps {
   items: [
     {
       label: string
-      icon: string
-      onClick: () => void
-      active: boolean
+      value: string
     },
   ]
 }
 
 export const DropdownList = ({ items }: DropdownListProps) => {
+  const [selected, setSelected] = React.useState(items[0])
+
   return (
     <Dropdown
       label={
         <div className="list-label">
-          <b>SORT BY:</b> Newest{' '}
-          <i className="fas fa-exchange-alt fa-rotate-90" />{' '}
+          <b>SORT BY:</b> {selected.label}
+          <i className="fas fa-exchange-alt fa-rotate-90" />
         </div>
       }>
       <div className="dropdown-list">
         <ul>
           {items.map((item, index) => (
-            <li key={index} onClick={item.onClick}>
-              {item.active ? <i className="fas fa-check" /> : null}
+            <li key={index} onClick={() => setSelected(item)}>
+              {selected.value === item.value ? (
+                <i className="fas fa-check" />
+              ) : null}
               <span className="label">{item.label}</span>
             </li>
           ))}

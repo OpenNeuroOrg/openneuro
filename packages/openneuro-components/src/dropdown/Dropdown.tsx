@@ -8,7 +8,6 @@ export interface DropdownProps {
 
 export const Dropdown = ({ children, label }: DropdownProps) => {
   const [isOpen, setIsOpen] = React.useState(false)
-  console.log(isOpen)
 
   function removeIsOpen(ref) {
     useEffect(() => {
@@ -25,11 +24,13 @@ export const Dropdown = ({ children, label }: DropdownProps) => {
   }
   const wrapperRef = useRef(null)
   removeIsOpen(wrapperRef)
+
   return (
-    <div className="dropdown-wrapper" ref={wrapperRef}>
-      <div
-        className={`toggle ${isOpen ? 'active' : ''}`}
-        onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)}>
+    <div
+      className="dropdown-wrapper"
+      ref={wrapperRef}
+      onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)}>
+      <div className={`toggle ${isOpen ? 'active' : ''}`}>
         <span>{label}</span>
       </div>
       <div className={`menu ${isOpen ? 'expanded' : 'collapsed'}`}>
