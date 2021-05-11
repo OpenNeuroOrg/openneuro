@@ -9,7 +9,7 @@ export default {
 } as Meta
 
 const DropdownListTemplate: Story<DropdownListProps> = ({ items }) => {
-  const [selected, setSelected] = React.useState({})
+  const [selected, setSelected] = React.useState(items[0])
 
   return (
     <DropdownList items={items} selected={selected} setSelected={setSelected} />
