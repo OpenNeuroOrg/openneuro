@@ -100,15 +100,16 @@ input[type='submit'] {
       font-size: 13px;
     }
   }
-  textarea::-webkit-input-placeholder,
-  input::-webkit-input-placeholder {
-    opacity: 0;
-    transition: inherit;
+  textarea,
+  input {
+    &::-webkit-input-placeholder {
+      opacity: 0;
+      transition: inherit;
+    }
     &:focus::-webkit-input-placeholder {
       opacity: 1;
     }
   }
-
   textarea:not(:placeholder-shown),
   textarea:focus,
   input:not(:placeholder-shown),

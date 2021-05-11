@@ -8,7 +8,21 @@ export default {
   component: Input,
 } as Meta
 
-const InputTemplate: Story<InputProps> = args => <Input {...args} />
+const InputTemplate: Story<InputProps> = ({
+  placeholder,
+  type,
+  label,
+  name,
+  labelStyle,
+}) => (
+  <Input
+    placeholder={placeholder}
+    type={type}
+    label={label}
+    name={name}
+    labelStyle={labelStyle}
+  />
+)
 
 export const DefaultInput = InputTemplate.bind({})
 DefaultInput.args = {

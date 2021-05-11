@@ -18,24 +18,23 @@ export const Input: React.FC<InputProps> = ({
   name,
   inline,
   labelStyle,
-  ...props
 }) => {
   return (
     <>
       {labelStyle == 'float' ? (
         <div className="form-control float-form-style">
-          <input type={type} name={name} placeholder={placeholder} {...props} />
+          <input type={type} name={name} placeholder={placeholder} />
           {label ? <label htmlFor={name}>{label}</label> : null}
         </div>
       ) : labelStyle == 'inline' ? (
         <div className="form-control inline">
           {label ? <label htmlFor={name}>{label}</label> : null}
-          <input type={type} name={name} placeholder={placeholder} {...props} />
+          <input type={type} name={name} placeholder={placeholder} />
         </div>
       ) : (
         <div className="form-control ">
           {label ? <label htmlFor={name}>{label}</label> : null}
-          <input type={type} name={name} placeholder={placeholder} {...props} />
+          <input type={type} name={name} placeholder={placeholder} />
         </div>
       )}
     </>
