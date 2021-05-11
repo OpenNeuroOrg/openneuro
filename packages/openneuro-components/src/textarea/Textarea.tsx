@@ -1,5 +1,5 @@
 import React from 'react'
-import './forms.scss'
+import '../input/input.scss'
 
 export interface TextareaProps {
   placeholder: string

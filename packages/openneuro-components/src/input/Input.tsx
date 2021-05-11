@@ -1,5 +1,5 @@
 import React from 'react'
-import './forms.scss'
+import './input.scss'
 
 export interface InputProps {
   placeholder: string

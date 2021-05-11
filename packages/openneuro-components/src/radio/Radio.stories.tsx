@@ -6,11 +6,15 @@ import { RadioGroup, RadioGroupProps } from './RadioGroup'
 import { RadioContent } from '../mock-content/radio-content.jsx'
 
 export default {
-  title: 'Components/Radio',
+  title: 'Components/Form/Radio',
   component: RadioGroup,
 } as Meta
 
-const RadioTemplate: Story<RadioGroupProps> = args => <RadioGroup {...args} />
+const RadioTemplate: Story<RadioGroupProps> = ({ ...args }) => {
+  const [active, setActive] = React.useState(0)
+  console.log(active)
+  return <RadioGroup setActive={setActive} active={active} {...args} />
+}
 
 export const RowRadio = RadioTemplate.bind({})
 RowRadio.args = {
