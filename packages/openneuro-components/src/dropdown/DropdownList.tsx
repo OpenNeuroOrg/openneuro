@@ -9,11 +9,18 @@ export interface DropdownListProps {
       value: string
     },
   ]
+  selected: {
+    label: string
+    value: string
+  }
+  setSelected: (selected: { label: string; value: string }) => void
 }
 
-export const DropdownList = ({ items }: DropdownListProps) => {
-  const [selected, setSelected] = React.useState(items[0])
-
+export const DropdownList = ({
+  items,
+  selected,
+  setSelected,
+}: DropdownListProps) => {
   return (
     <Dropdown
       label={
@@ -26,9 +33,7 @@ export const DropdownList = ({ items }: DropdownListProps) => {
         <ul>
           {items.map((item, index) => (
             <li key={index} onClick={() => setSelected(item)}>
-              {selected.value === item.value ? (
-                <i className="fas fa-check" />
-              ) : null}
+              {selected.value === item.value && <i className="fas fa-check" />}
               <span className="label">{item.label}</span>
             </li>
           ))}

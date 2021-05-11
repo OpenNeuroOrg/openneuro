@@ -8,9 +8,13 @@ export default {
   component: DropdownList,
 } as Meta
 
-const DropdownListTemplate: Story<DropdownListProps> = args => (
-  <DropdownList {...args} />
-)
+const DropdownListTemplate: Story<DropdownListProps> = ({ items }) => {
+  const [selected, setSelected] = React.useState({})
+
+  return (
+    <DropdownList items={items} selected={selected} setSelected={setSelected} />
+  )
+}
 
 const menuItems = [
   {
