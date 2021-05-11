@@ -20,7 +20,6 @@ const menuItems = [
   {
     label: 'Newest',
     value: 'newest',
-    selected: true,
   },
   {
     label: 'Oldest',
