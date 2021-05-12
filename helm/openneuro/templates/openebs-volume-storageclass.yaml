@@ -12,6 +12,6 @@ allowVolumeExpansion: true
 provisioner: zfs.csi.openebs.io
 allowedTopologies:
   - matchLabelExpressions:
-      - key: alpha.eksctl.io/nodegroup-name
+      - key: role
         values:
           - storage

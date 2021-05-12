@@ -123,6 +123,11 @@ Other values which can be overriden are found in the chart version of [values.ya
 Installing a chart deploys it to a cluster. This creates an initial release by generating the configuration templates and applying them to the cluster.
 
 ```bash
+# Add an ssh key for GitHub remotes
+kubectl create secret generic openneuro-my-dev-ssh-key --from-file=datalad-key=datalad-key
+```
+
+```bash
 # Make sure you're in the helm directory and run
 helm install -f values.yaml -f secrets.yaml openneuro-my-dev openneuro/
 ```
