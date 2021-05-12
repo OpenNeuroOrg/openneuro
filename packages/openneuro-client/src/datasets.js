@@ -216,6 +216,7 @@ export const createDataset = gql`
       affirmedConsent: $affirmedConsent
     ) {
       id
+      worker
     }
   }
 `

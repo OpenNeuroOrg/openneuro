@@ -11,8 +11,8 @@ interface UserToolsProps {
   refetch: () => Record<string, unknown>
 }
 
-export const SET_ADMIN = gql`
-  mutation($id: ID!, $admin: Boolean!) {
+export const SET_ADMIN_PERMISSIONS = gql`
+  mutation setAdminPermissions($id: ID!, $admin: Boolean!) {
     setAdmin(id: $id, admin: $admin) {
       ...userFields
     }
@@ -21,7 +21,7 @@ export const SET_ADMIN = gql`
 `
 
 export const SET_BLOCKED = gql`
-  mutation($id: ID!, $blocked: Boolean!) {
+  mutation ($id: ID!, $blocked: Boolean!) {
     setBlocked(id: $id, blocked: $blocked) {
       ...userFields
     }
@@ -40,7 +40,7 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
         <div className="tools clearfix">
           <div className="tool">
             <Mutation
-              mutation={SET_ADMIN}
+              mutation={SET_ADMIN_PERMISSIONS}
               variables={{ id: user.id, admin: !user.admin }}>
               {(setAdmin): ReactElement => (
                 <WarnButton

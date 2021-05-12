@@ -5,7 +5,7 @@ import FileTreeLoading from './file-tree-loading.jsx'
 import { gql } from '@apollo/client'
 
 export const DRAFT_FILES_QUERY = gql`
-  query getDraftFiles($datasetId: ID!, $filePrefix: String!) {
+  query getDraftFileTree($datasetId: ID!, $filePrefix: String!) {
     dataset(id: $datasetId) {
       draft {
         files(prefix: $filePrefix) {
@@ -22,7 +22,7 @@ export const DRAFT_FILES_QUERY = gql`
 `
 
 export const SNAPSHOT_FILES_QUERY = gql`
-  query getSnapshotFiles(
+  query getSnapshotFileTree(
     $datasetId: ID!
     $snapshotTag: String!
     $filePrefix: String!
@@ -48,16 +48,16 @@ export const mergeNewFiles =
     const mergeNewFileFilter = f => f.id !== directory.id
     // Remove ourselves from the array
     if (snapshotTag) {
-      newDatasetObj.getSnapshotFiles.files =
-        newDatasetObj.getSnapshotFiles.files.filter(mergeNewFileFilter)
-      newDatasetObj.getSnapshotFiles.files.push(
-        ...fetchMoreResult.getSnapshotFiles.files,
+      newDatasetObj.getSnapshotFileTree.files =
+        newDatasetObj.getSnapshotFileTree.files.filter(mergeNewFileFilter)
+      newDatasetObj.getSnapshotFileTree.files.push(
+        ...fetchMoreResult.getSnapshotFileTree.files,
       )
     } else {
-      newDatasetObj.getDraftFiles.draft.files =
-        newDatasetObj.getDraftFiles.draft.files.filter(mergeNewFileFilter)
-      newDatasetObj.getDraftFiles.draft.files.push(
-        ...fetchMoreResult.getDraftFiles.draft.files,
+      newDatasetObj.getDraftFileTree.draft.files =
+        newDatasetObj.getDraftFileTree.draft.files.filter(mergeNewFileFilter)
+      newDatasetObj.getDraftFileTree.draft.files.push(
+        ...fetchMoreResult.getDraftFileTree.draft.files,
       )
     }
     return newDatasetObj
