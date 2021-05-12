@@ -3,38 +3,38 @@ import '../input/input.scss'
 
 export interface TextareaProps {
   placeholder: string
-  disabled: boolean
   label?: string
   name: string
-  labelStyle?: 'inline' | 'float' | 'default'
+  type?: 'inline' | 'float' | 'default'
+  setValue: string
 }
 
 export const Textarea: React.FC<TextareaProps> = ({
   placeholder,
   label,
   name,
-  labelStyle,
-  ...props
+  type,
+  setValue,
 }) => {
   return (
     <>
-      {labelStyle == 'float' ? (
+      {type == 'float' ? (
         <div className="float-form-style form-control">
           <textarea
             name={name}
             placeholder={placeholder}
-            {...props}
+            onChange={e => setValue(e.target.value)}
             rows={5}
             cols={100}></textarea>
           {label ? <label htmlFor={name}>{label}</label> : null}
         </div>
-      ) : labelStyle == 'inline' ? (
+      ) : type == 'inline' ? (
         <div className="form-control inline">
           {label ? <label htmlFor={name}>{label}</label> : null}
           <textarea
             name={name}
             placeholder={placeholder}
-            {...props}
+            onChange={e => setValue(e.target.value)}
             rows={5}
             cols={100}></textarea>
         </div>
@@ -44,7 +44,7 @@ export const Textarea: React.FC<TextareaProps> = ({
           <textarea
             name={name}
             placeholder={placeholder}
-            {...props}
+            onChange={e => setValue(e.target.value)}
             rows={5}
             cols={100}></textarea>
         </div>

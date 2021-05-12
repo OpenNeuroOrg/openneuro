@@ -7,22 +7,27 @@ export default {
   title: 'Components/Form/Input',
   component: Input,
 } as Meta
-
 const InputTemplate: Story<InputProps> = ({
   placeholder,
   type,
   label,
   name,
   labelStyle,
-}) => (
-  <Input
-    placeholder={placeholder}
-    type={type}
-    label={label}
-    name={name}
-    labelStyle={labelStyle}
-  />
-)
+}) => {
+  const [value, setValue] = React.useState()
+
+  return (
+    <Input
+      placeholder={placeholder}
+      type={type}
+      label={label}
+      name={name}
+      labelStyle={labelStyle}
+      value={value}
+      setValue={setValue}
+    />
+  )
+}
 
 export const DefaultInput = InputTemplate.bind({})
 DefaultInput.args = {

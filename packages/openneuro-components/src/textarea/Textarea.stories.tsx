@@ -8,28 +8,48 @@ export default {
   component: Textarea,
 } as Meta
 
-const TextAreaInput: Story<TextareaProps> = args => <Textarea {...args} />
+const TextareaTemplate: Story<TextareaProps> = ({
+  placeholder,
+  label,
+  name,
+  type,
+}) => {
+  const [value, setValue] = React.useState()
 
-export const DefaultTextarea = TextAreaInput.bind({})
+  return (
+    <>
+      <Textarea
+        placeholder={placeholder}
+        type={type}
+        label={label}
+        name={name}
+        value={value}
+        setValue={setValue}
+      />
+    </>
+  )
+}
+
+export const DefaultTextarea = TextareaTemplate.bind({})
 DefaultTextarea.args = {
   placeholder: 'type something',
   name: 'example',
   label: 'Example',
-  labelStyle: 'default',
+  type: 'default',
 }
 
-export const InlineLabelTextarea = TextAreaInput.bind({})
+export const InlineLabelTextarea = TextareaTemplate.bind({})
 InlineLabelTextarea.args = {
   placeholder: 'type something',
   name: 'example1',
   label: 'Inline Label',
-  labelStyle: 'inline',
+  type: 'inline',
 }
 
-export const FloatLabelTextarea = TextAreaInput.bind({})
+export const FloatLabelTextarea = TextareaTemplate.bind({})
 FloatLabelTextarea.args = {
   placeholder: 'type something',
   name: 'example1',
   label: 'Float Label',
-  labelStyle: 'float',
+  type: 'float',
 }
