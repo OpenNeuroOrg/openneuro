@@ -250,6 +250,7 @@ export const updatePermissions = gql`
       level: $level
     ) {
       id
+      email
     }
   }
 `
