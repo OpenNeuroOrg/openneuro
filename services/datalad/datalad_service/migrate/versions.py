@@ -170,7 +170,7 @@ for datasetId in data:
                 'Error: {}:{} | Unable to checkout git-annex branch for dataset'.format(datasetId, tag))
             sys.exit()
 
-        print('Success: {}:{} | Succesfully created all s3 version .log.rmet files for this dataset snapshot!'.format(
+        print('Success: {}:{} | Successfully created all s3 version .log.rmet files for this dataset snapshot!'.format(
             datasetId, tag))
 
         try:
