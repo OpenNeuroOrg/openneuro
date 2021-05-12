@@ -9260,7 +9260,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-runtime", "npm:6.26.0"],
             ["bids-validator", [
               "@squishymedia/bids-validator",
-              "npm:1.7.1-1"
+              "npm:1.7.1-3"
             ]],
             ["bytes", "npm:3.1.0"],
             ["cache-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.2.5"],
@@ -10085,10 +10085,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@squishymedia/bids-validator", [
-        ["npm:1.7.1-1", {
-          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.1-1-6c9fde3d90-51d052a7a3.zip/node_modules/@squishymedia/bids-validator/",
+        ["npm:1.7.1-3", {
+          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.1-3-3e66ceadd0-0741c13f06.zip/node_modules/@squishymedia/bids-validator/",
           "packageDependencies": [
-            ["@squishymedia/bids-validator", "npm:1.7.1-1"],
+            ["@squishymedia/bids-validator", "npm:1.7.1-3"],
             ["@aws-sdk/client-s3", "npm:3.13.1"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
