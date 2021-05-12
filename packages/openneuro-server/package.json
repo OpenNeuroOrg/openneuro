@@ -49,7 +49,7 @@
     "mongoose": "5.12.3",
     "morgan": "^1.6.1",
     "node-fetch": "^2.6.0",
-    "nodemailer": "6.4.10",
+    "nodemailer": "6.4.16",
     "object-hash": "2.1.1",
     "passport": "^0.4.0",
     "passport-globus": "^0.0.1",
