@@ -3,14 +3,9 @@ import PropTypes from 'prop-types'
 import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
 import { Media } from '../styles/media'
-import { useMutation, gql } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import WarnButton from '../common/forms/warn-button.jsx'
-
-const DELETE_FILES = gql`
-  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
-    deleteFiles(datasetId: $datasetId, files: $files)
-  }
-`
+import { files as client } from '@openneuro/client'
 
 const Files = ({
   datasetId,
@@ -22,7 +17,7 @@ const Files = ({
 }) => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
-  const [deleteFiles] = useMutation(DELETE_FILES)
+  const [deleteFiles] = useMutation(client.deleteFiles)
 
   const isFileToBeDeleted = id => id in filesToDelete
 

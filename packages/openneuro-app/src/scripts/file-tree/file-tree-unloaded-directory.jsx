@@ -5,7 +5,7 @@ import FileTreeLoading from './file-tree-loading.jsx'
 import { gql } from '@apollo/client'
 
 export const DRAFT_FILES_QUERY = gql`
-  query dataset($datasetId: ID!, $filePrefix: String!) {
+  query getDraftFiles($datasetId: ID!, $filePrefix: String!) {
     dataset(id: $datasetId) {
       draft {
         files(prefix: $filePrefix) {
@@ -22,7 +22,11 @@ export const DRAFT_FILES_QUERY = gql`
 `
 
 export const SNAPSHOT_FILES_QUERY = gql`
-  query snapshot($datasetId: ID!, $snapshotTag: String!, $filePrefix: String!) {
+  query getSnapshotFiles(
+    $datasetId: ID!
+    $snapshotTag: String!
+    $filePrefix: String!
+  ) {
     snapshot(datasetId: $datasetId, tag: $snapshotTag) {
       files(prefix: $filePrefix) {
         id
@@ -36,29 +40,28 @@ export const SNAPSHOT_FILES_QUERY = gql`
   }
 `
 
-export const mergeNewFiles = (directory, snapshotTag) => (
-  past,
-  { fetchMoreResult },
-) => {
-  // Deep clone the old dataset object
-  const newDatasetObj = JSON.parse(JSON.stringify(past))
-  const mergeNewFileFilter = f => f.id !== directory.id
-  // Remove ourselves from the array
-  if (snapshotTag) {
-    newDatasetObj.snapshot.files = newDatasetObj.snapshot.files.filter(
-      mergeNewFileFilter,
-    )
-    newDatasetObj.snapshot.files.push(...fetchMoreResult.snapshot.files)
-  } else {
-    newDatasetObj.dataset.draft.files = newDatasetObj.dataset.draft.files.filter(
-      mergeNewFileFilter,
-    )
-    newDatasetObj.dataset.draft.files.push(
-      ...fetchMoreResult.dataset.draft.files,
-    )
+export const mergeNewFiles =
+  (directory, snapshotTag) =>
+  (past, { fetchMoreResult }) => {
+    // Deep clone the old dataset object
+    const newDatasetObj = JSON.parse(JSON.stringify(past))
+    const mergeNewFileFilter = f => f.id !== directory.id
+    // Remove ourselves from the array
+    if (snapshotTag) {
+      newDatasetObj.getSnapshotFiles.files =
+        newDatasetObj.getSnapshotFiles.files.filter(mergeNewFileFilter)
+      newDatasetObj.getSnapshotFiles.files.push(
+        ...fetchMoreResult.getSnapshotFiles.files,
+      )
+    } else {
+      newDatasetObj.getDraftFiles.draft.files =
+        newDatasetObj.getDraftFiles.draft.files.filter(mergeNewFileFilter)
+      newDatasetObj.getDraftFiles.draft.files.push(
+        ...fetchMoreResult.getDraftFiles.draft.files,
+      )
+    }
+    return newDatasetObj
   }
-  return newDatasetObj
-}
 
 export const fetchMoreDirectory = (
   fetchMore,

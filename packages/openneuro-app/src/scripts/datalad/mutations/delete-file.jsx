@@ -1,17 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../common/forms/warn-button.jsx'
-
-const DELETE_FILE = gql`
-  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
-    deleteFiles(datasetId: $datasetId, files: $files)
-  }
-`
+import { files } from '@openneuro/client'
 
 const DeleteFile = ({ datasetId, path, filename }) => (
-  <Mutation mutation={DELETE_FILE} awaitRefetchQueries={true}>
+  <Mutation mutation={files.deleteFiles} awaitRefetchQueries={true}>
     {deleteFiles => (
       <span className="delete-file">
         <WarnButton
