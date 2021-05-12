@@ -24,7 +24,7 @@ commander
 commander
   .command('upload <dir>')
   .alias('u')
-  .description('Upload or sync a dataset (if a accession number is provided)')
+  .description('Upload or sync a dataset (if an accession number is provided)')
   .option(
     '-d, --dataset [dsId]',
     'Specify the dataset to update, use this to resume uploads or add new files',

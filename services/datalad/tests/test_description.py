@@ -108,6 +108,6 @@ def test_description_formatting(client, new_dataset):
         '/datasets/{}/files/dataset_description.json'.format(ds_id))
     assert check_response.status == falcon.HTTP_OK
     decoded_response = check_response.content.decode('utf-8')
-    # Verify the 4 space indent in the endcoded file
+    # Verify the 4 space indent in the encoded file
     assert decoded_response[:6] == '{\n    '
     assert decoded_response[6] != ' '

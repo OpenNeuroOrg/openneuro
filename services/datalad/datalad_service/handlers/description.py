@@ -10,7 +10,7 @@ class DescriptionResource(object):
 
     def on_post(self, req, resp, dataset):
         """
-        Commmit a description change.
+        Commit a description change.
         Returns update dataset_description
         """
         if dataset:
