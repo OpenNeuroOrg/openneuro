@@ -1,28 +1,19 @@
 #!/usr/bin/env node
 import commander from 'commander'
-import colors from 'colors'
 import { version } from './lerna.json'
 import { login, upload, download } from './actions.js'
 import { gitCredential } from './gitCredential.js'
 import { gitAnnexRemote } from './gitAnnexRemote.js'
 import { create } from './createDataset.js'
 
-/**
- * display the help text in red on the console
- */
-function makeRed(txt) {
-  return colors.red(txt)
-}
-
 commander.version(version).description('OpenNeuro command line tools.')
 
-commander.on('--help', () => {
-  console.log('')
-  console.log(
-    'See additional options for each command with "openneuro [command] --help". Example:',
-  )
-  console.log('  $ openneuro upload --help')
-})
+commander.addHelpText(
+  'after',
+  `
+See additional options for each command with "openneuro [command] --help". Example:
+  $ openneuro upload --help`,
+)
 
 commander
   .command('login')
@@ -77,14 +68,6 @@ commander
     create()
   })
 
-commander
-  .command('*', 'default', { noHelp: true, isDefault: true })
-  .action(() => {
-    // eslint-disable-next-line no-console
-    console.log('Unknown command!')
-    commander.outputHelp(makeRed)
-  })
-
 commander.parse(process.argv)
 
 if (process.argv[1].endsWith('git-credential-openneuro')) {
@@ -92,5 +75,5 @@ if (process.argv[1].endsWith('git-credential-openneuro')) {
 } else if (process.argv[1].endsWith('git-annex-remote-openneuro')) {
   gitAnnexRemote()
 } else if (!process.argv.slice(2).length) {
-  commander.outputHelp(makeRed)
+  commander.help()
 }
