@@ -4,7 +4,6 @@ import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../common/forms/warn-button.jsx'
 import { getProfile } from '../authentication/profile.js'
 import { useCookies } from 'react-cookie'
-import { USER_FRAGMENT } from './user-fragment'
 
 interface UserToolsProps {
   user: Record<string, unknown>
@@ -14,19 +13,31 @@ interface UserToolsProps {
 export const SET_ADMIN_PERMISSIONS = gql`
   mutation setAdminPermissions($id: ID!, $admin: Boolean!) {
     setAdmin(id: $id, admin: $admin) {
-      ...userFields
+      id
+      name
+      email
+      provider
+      admin
+      created
+      lastSeen
+      blocked
     }
   }
-  ${USER_FRAGMENT}
 `
 
 export const SET_BLOCKED = gql`
-  mutation ($id: ID!, $blocked: Boolean!) {
+  mutation setBlocked($id: ID!, $blocked: Boolean!) {
     setBlocked(id: $id, blocked: $blocked) {
-      ...userFields
+      id
+      name
+      email
+      provider
+      admin
+      created
+      lastSeen
+      blocked
     }
   }
-  ${USER_FRAGMENT}
 `
 
 export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
