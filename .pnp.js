@@ -9272,7 +9272,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-runtime", "npm:6.26.0"],
             ["bids-validator", [
               "@squishymedia/bids-validator",
-              "npm:1.7.1-3"
+              "npm:1.7.1-15"
             ]],
             ["bytes", "npm:3.1.0"],
             ["cache-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.2.5"],
@@ -9306,7 +9306,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node-sass", "npm:4.14.1"],
             ["object.fromentries", "npm:2.0.4"],
             ["os-browserify", "npm:0.3.0"],
-            ["pluralize", "npm:7.0.0"],
+            ["pluralize", "npm:8.0.0"],
             ["prop-types", "npm:15.7.2"],
             ["react", "npm:17.0.2"],
             ["react-addons-test-utils", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:15.6.2"],
@@ -9327,6 +9327,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sass-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:7.3.1"],
             ["semver", "npm:5.7.1"],
             ["serviceworker-webpack-plugin", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.1"],
+            ["stream-browserify", "npm:3.0.0"],
             ["style-loader", "npm:0.23.1"],
             ["subscriptions-transport-ws", "virtual:27e2d3d06893d2413b1bf4f3907c1c8b13b106d3e43660b438a0c3c425614a1f005ad76fd84d3cb2367d2c2f397660eac94011dcb7375352fc748c7188315736#npm:0.9.18"],
             ["superagent", "npm:3.8.3"],
@@ -9336,7 +9337,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url-loader", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.1.2"],
             ["url-search-params-polyfill", "npm:2.0.3"],
             ["urlite", "npm:1.2.8"],
-            ["vite", "npm:2.1.5"],
+            ["vite", "npm:2.3.1"],
             ["webpack", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:4.46.0"],
             ["webpack-cli", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:3.3.12"],
             ["webpack-dev-server", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:3.11.2"],
@@ -9507,7 +9508,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mongoose", "npm:5.12.3"],
             ["morgan", "npm:1.10.0"],
             ["node-fetch", "npm:2.6.1"],
-            ["nodemailer", "npm:6.4.10"],
+            ["nodemailer", "npm:6.4.16"],
             ["nodemon", "npm:2.0.7"],
             ["object-hash", "npm:2.1.1"],
             ["passport", "npm:0.4.1"],
@@ -10095,10 +10096,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@squishymedia/bids-validator", [
-        ["npm:1.7.1-3", {
-          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.1-3-3e66ceadd0-0741c13f06.zip/node_modules/@squishymedia/bids-validator/",
+        ["npm:1.7.1-15", {
+          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.1-15-ce0aa1f759-3cdf6cb52b.zip/node_modules/@squishymedia/bids-validator/",
           "packageDependencies": [
-            ["@squishymedia/bids-validator", "npm:1.7.1-3"],
+            ["@squishymedia/bids-validator", "npm:1.7.1-15"],
             ["@aws-sdk/client-s3", "npm:3.15.0"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
@@ -16847,6 +16848,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/buffer-npm-5.7.1-513ef8259e-1750ac396e.zip/node_modules/buffer/",
           "packageDependencies": [
             ["buffer", "npm:5.7.1"],
+            ["base64-js", "npm:1.5.1"],
+            ["ieee754", "npm:1.2.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:6.0.3", {
+          "packageLocation": "./.yarn/cache/buffer-npm-6.0.3-cd90dfedfe-a8cf6a5857.zip/node_modules/buffer/",
+          "packageDependencies": [
+            ["buffer", "npm:6.0.3"],
             ["base64-js", "npm:1.5.1"],
             ["ieee754", "npm:1.2.1"]
           ],
@@ -33041,10 +33051,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["nodemailer", [
-        ["npm:6.4.10", {
-          "packageLocation": "./.yarn/unplugged/nodemailer-npm-6.4.10-5eef46c3af/node_modules/nodemailer/",
+        ["npm:6.4.16", {
+          "packageLocation": "./.yarn/cache/nodemailer-npm-6.4.16-a499e1866b-95c4d1c415.zip/node_modules/nodemailer/",
           "packageDependencies": [
-            ["nodemailer", "npm:6.4.10"]
+            ["nodemailer", "npm:6.4.16"]
           ],
           "linkType": "HARD",
         }]
@@ -39571,14 +39581,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["npm:1.2.1", {
           "packageLocation": "./.yarn/cache/sax-npm-1.2.1-fd2ad7b223-66b6389933.zip/node_modules/sax/",
           "packageDependencies": [
-            ["sax", "npm:1.2.1"]
+            ["sax", "npm:1.2.1"],
+            ["buffer", "npm:6.0.3"],
+            ["stream-browserify", "npm:3.0.0"]
           ],
           "linkType": "HARD",
         }],
         ["npm:1.2.4", {
           "packageLocation": "./.yarn/cache/sax-npm-1.2.4-178f05f12f-9d7668d691.zip/node_modules/sax/",
           "packageDependencies": [
-            ["sax", "npm:1.2.4"]
+            ["sax", "npm:1.2.4"],
+            ["buffer", "npm:6.0.3"],
+            ["stream-browserify", "npm:3.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -44470,6 +44484,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["vite", "npm:2.1.5"],
             ["esbuild", "npm:0.9.7"],
+            ["fsevents", "patch:fsevents@npm%3A2.3.2#builtin<compat/fsevents>::version=2.3.2&hash=11e9ea"],
+            ["postcss", "npm:8.2.15"],
+            ["resolve", "patch:resolve@npm%3A1.20.0#builtin<compat/resolve>::version=1.20.0&hash=3388aa"],
+            ["rollup", "npm:2.47.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.3.1", {
+          "packageLocation": "./.yarn/cache/vite-npm-2.3.1-c58e3980f3-4bb6cc6df2.zip/node_modules/vite/",
+          "packageDependencies": [
+            ["vite", "npm:2.3.1"],
+            ["esbuild", "npm:0.11.20"],
             ["fsevents", "patch:fsevents@npm%3A2.3.2#builtin<compat/fsevents>::version=2.3.2&hash=11e9ea"],
             ["postcss", "npm:8.2.15"],
             ["resolve", "patch:resolve@npm%3A1.20.0#builtin<compat/resolve>::version=1.20.0&hash=3388aa"],

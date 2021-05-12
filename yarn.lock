@@ -4734,7 +4734,7 @@ __metadata:
     babel-jest: ^24.9.0
     babel-loader: ^8.0.4
     babel-runtime: ^6.26.0
-    bids-validator: "npm:@squishymedia/bids-validator@1.7.1-3"
+    bids-validator: "npm:@squishymedia/bids-validator@1.7.1-15"
     bytes: ^3.0.0
     cache-loader: ^1.2.2
     clean-webpack-plugin: ^0.1.19
@@ -4767,7 +4767,7 @@ __metadata:
     node-sass: 4.14.1
     object.fromentries: ^2.0.0
     os-browserify: ^0.3.0
-    pluralize: ^7.0.0
+    pluralize: 8.0.0
     prop-types: ^15.6.0
     react: ^17.0.1
     react-addons-test-utils: ^15.6.2
@@ -4788,6 +4788,7 @@ __metadata:
     sass-loader: ^7.1.0
     semver: ^5.5.0
     serviceworker-webpack-plugin: ^1.0.1
+    stream-browserify: ^3.0.0
     style-loader: ^0.23.1
     subscriptions-transport-ws: ^0.9.9
     superagent: ^3.6.0
@@ -4797,7 +4798,7 @@ __metadata:
     url-loader: ^1.0.1
     url-search-params-polyfill: ^2.0.1
     urlite: ^1.2.8
-    vite: 2.1.5
+    vite: 2.3.1
     webpack: ^4.20.2
     webpack-cli: ^3.1.2
     webpack-dev-server: ^3.1.9
@@ -4964,7 +4965,7 @@ __metadata:
     mongoose: 5.12.3
     morgan: ^1.6.1
     node-fetch: ^2.6.0
-    nodemailer: 6.4.10
+    nodemailer: 6.4.16
     nodemon: ^2.0.7
     object-hash: 2.1.1
     passport: ^0.4.0
@@ -9985,9 +9986,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:@squishymedia/bids-validator@1.7.1-3":
-  version: 1.7.1-3
-  resolution: "@squishymedia/bids-validator@npm:1.7.1-3"
+"bids-validator@npm:@squishymedia/bids-validator@1.7.1-15":
+  version: 1.7.1-15
+  resolution: "@squishymedia/bids-validator@npm:1.7.1-15"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -10012,7 +10013,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 0741c13f067d93a6b1f22cc562fb9fc396ae9072f4ac35da6bf7f1a900d60dc378fdc58f096154059010d69e0a2f43bc7833379415bd87d9f65aba9738077e0c
+  checksum: 3cdf6cb52bc66844b4d566e83efe142a46b65bd80e16977bf12f4a59213dfe218a9bb7f06d0d3a258bb34d45c655b7fcd68bae0477b88beb40a5b05e63900730
   languageName: node
   linkType: hard
 
@@ -10429,6 +10430,16 @@ __metadata:
   version: 1.0.3
   resolution: "buffer-xor@npm:1.0.3"
   checksum: 58ce260802968a06448f58ba20f83146ef21c7fb55839602ad951aa3b839035f181341375f2692aca46c86c15f6fcf668985ceef2063a2d33eafb5c6a0a4f627
+  languageName: node
+  linkType: hard
+
+"buffer@npm:*":
+  version: 6.0.3
+  resolution: "buffer@npm:6.0.3"
+  dependencies:
+    base64-js: ^1.3.1
+    ieee754: ^1.2.1
+  checksum: a8cf6a58571dc7c43b24ab821ad4c72222d9040775f49fd143a30fad45f33ec0a8e0d572ca80d589ad4f8b4715aa012c029dc2b925dc95467f135c2d13d7abfb
   languageName: node
   linkType: hard
 
@@ -14669,7 +14680,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.11.15":
+"esbuild@npm:^0.11.15, esbuild@npm:^0.11.19":
   version: 0.11.20
   resolution: "esbuild@npm:0.11.20"
   bin:
@@ -24312,10 +24323,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.4.10":
-  version: 6.4.10
-  resolution: "nodemailer@npm:6.4.10"
-  checksum: 89f86182929d512ae6ebaa1e01030d191a91c65db9f1567d57b849b578f418d1a66821e8213c5ef09332dac3673094ab58da97f10cbbac271758316da6d3982d
+"nodemailer@npm:6.4.16":
+  version: 6.4.16
+  resolution: "nodemailer@npm:6.4.16"
+  checksum: 95c4d1c4150d6160abc4964dc3d7facaf859e8a7296da2aeabd3e3dd1267e7e0c3bbf8fb0dea78915c6ee51c4b4516d964db07153b48b179e3f272011770a4ff
   languageName: node
   linkType: hard
 
@@ -26071,17 +26082,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"pluralize@npm:8.0.0, pluralize@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "pluralize@npm:8.0.0"
+  checksum: 5251b470a0c8e5181ac7e1d61028553f90cb2c85c34b8e468cea269ae715499524546c2c3681029ef5697d86c54bfb12e49388f5cc6082051e84f5888588f4ec
+  languageName: node
+  linkType: hard
+
 "pluralize@npm:^7.0.0":
   version: 7.0.0
   resolution: "pluralize@npm:7.0.0"
   checksum: d35d8aeda1eb2f81123131e76ed0f2f48d681abfa4c46e4c6fdd6dca622650c8bd531aa0c5a3c7f779bd9660d08ceb51660e1f55def4bd14328ecfa76fe69962
-  languageName: node
-  linkType: hard
-
-"pluralize@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "pluralize@npm:8.0.0"
-  checksum: 5251b470a0c8e5181ac7e1d61028553f90cb2c85c34b8e468cea269ae715499524546c2c3681029ef5697d86c54bfb12e49388f5cc6082051e84f5888588f4ec
   languageName: node
   linkType: hard
 
@@ -31023,6 +31034,16 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"stream-browserify@npm:*, stream-browserify@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "stream-browserify@npm:3.0.0"
+  dependencies:
+    inherits: ~2.0.4
+    readable-stream: ^3.5.0
+  checksum: 55fb0c30082a87f7e42f1c093ad7aee42c942864edf11ac911e6e89d5be9877ba32fd20569f6bfb489dabd71b63d3264bec349463294abc270fba42bedd6ca22
+  languageName: node
+  linkType: hard
+
 "stream-browserify@npm:^2.0.1":
   version: 2.0.2
   resolution: "stream-browserify@npm:2.0.2"
@@ -31030,16 +31051,6 @@ resolve@^2.0.0-next.3:
     inherits: ~2.0.1
     readable-stream: ^2.0.2
   checksum: d50d9a28df714f2d599f416388541de445bfa417039a4808a1ca68381f0152205b8e50dbc04e39959b3b1a9c5e561cab1ecb1bdf4f6ab2f66f6b1450000049d9
-  languageName: node
-  linkType: hard
-
-"stream-browserify@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "stream-browserify@npm:3.0.0"
-  dependencies:
-    inherits: ~2.0.4
-    readable-stream: ^3.5.0
-  checksum: 55fb0c30082a87f7e42f1c093ad7aee42c942864edf11ac911e6e89d5be9877ba32fd20569f6bfb489dabd71b63d3264bec349463294abc270fba42bedd6ca22
   languageName: node
   linkType: hard
 
@@ -33952,6 +33963,24 @@ typescript@4.0.6:
   bin:
     vite: bin/vite.js
   checksum: 6e56aa6654e776d9561195a8b8b5abeacd7d06d74ec3cdd58fdcac4cadd1f5c01664d782667eaec0dc1d49d88ec91d0f71d45d50c02ff5e22559760bff75ab5a
+  languageName: node
+  linkType: hard
+
+"vite@npm:2.3.1":
+  version: 2.3.1
+  resolution: "vite@npm:2.3.1"
+  dependencies:
+    esbuild: ^0.11.19
+    fsevents: ~2.3.1
+    postcss: ^8.2.10
+    resolve: ^1.19.0
+    rollup: ^2.38.5
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    vite: bin/vite.js
+  checksum: 4bb6cc6df27ff04d6d669b168d77462cd5722bfece3099bc09e5813e2cc685af4f52e61c239799ed8cdb96fe251a51f2cf1fc8e66adffa5799f2f22a90ded378
   languageName: node
   linkType: hard
 

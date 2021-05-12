@@ -1,4 +1,8 @@
-export default {
+import path from 'path'
+import { defineConfig } from 'vite'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
+
+export default defineConfig({
   root: 'src',
   server: {
     port: 9876,
@@ -14,8 +18,25 @@ export default {
       '@apollo/client/link/ws',
       '@apollo/client/utilities',
     ],
+    exclude: ['buffer', 'stream-browserify'],
   },
-  rollupInputOptions: {
-    preserveEntrySignatures: 'strict',
+  resolve: {
+    alias: [
+      // Workaround for `'request' is not exported by __vite-browser-external`
+      {
+        find: './runtimeConfig',
+        replacement: './runtimeConfig.browser',
+      },
+      // Workaround for bids-validator -> hed-validator -> xml2js -> sax -> Stream shim
+      { find: 'stream', replacement: 'stream-browserify' },
+      // sax -> Buffer shim
+      { find: 'buffer', replacement: 'buffer/' },
+      // Workaround UMD -> ESM issues in pluralize
+      {
+        find: 'pluralize',
+        replacement: path.resolve(__dirname, './pluralize-esm.js'),
+      },
+    ],
   },
-}
+  plugins: [nodePolyfills()],
+})
