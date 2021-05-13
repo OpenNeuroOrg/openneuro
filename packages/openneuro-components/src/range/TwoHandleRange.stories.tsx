@@ -18,7 +18,6 @@ const RangeTemplate: Story<TwoHandleRangeProps> = ({
   marks,
 }) => {
   const [newvalue, setNewValue] = React.useState(defaultValue)
-  console.log(newvalue)
   return (
     <TwoHandleRange
       min={min}

@@ -28,6 +28,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   const createSliderWithTooltip = Slider.createSliderWithTooltip
   const Range = createSliderWithTooltip(Slider.Range)
   const setSetter = value => {
+    console.log(value)
     //setNewValue(value)
   }
   return (
