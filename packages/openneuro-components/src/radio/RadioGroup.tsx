@@ -1,33 +1,40 @@
 import React, { useState } from 'react'
 import { Radio } from './Radio'
 
-import './forms.scss'
+import './radio.scss'
 
 export interface RadioGroupProps {
   layout: string
   radioArr: [
     {
       label: string
-      onClick?: React.MouseEventHandler<HTMLInputElement>
+      onChange?: React.MouseEventHandler<HTMLInputElement>
       checked: boolean
       value: string
     },
   ]
   name: string
+  active: number
+  setActive: (index) => void
 }
 
-export const RadioGroup = ({ radioArr, layout, name }: RadioGroupProps) => {
-  const [active, setActive] = React.useState(0)
-
+export const RadioGroup = ({
+  radioArr,
+  layout,
+  name,
+  active,
+  setActive,
+}: RadioGroupProps) => {
   return (
     <div className={'on-radio-wrapper' + ' ' + layout}>
       {radioArr.map((item, index) => (
         <Radio
+          key={index}
           name={name}
           value={item.value}
           label={item.label}
           checked={active === index}
-          onClick={() => setActive(index)}
+          onChange={() => setActive(index)}
         />
       ))}
     </div>
