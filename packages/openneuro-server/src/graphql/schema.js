@@ -2,7 +2,6 @@
 import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
 import Subscription from './resolvers/subscriptions.js'
-import datasetSearch from './resolvers/dataset-search'
 import { gql } from 'apollo-server'
 
 const typeDefs = gql`
@@ -78,6 +77,8 @@ const typeDefs = gql`
       "Query user's datasets only - excludes public datasets from other filters"
       myDatasets: Boolean
     ): DatasetConnection
+    # Search datasets via Elasticsearch
+    searchDatasets(q: String!, after: String, first: Int): DatasetConnection
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -680,6 +681,5 @@ const typeDefs = gql`
 schemaComposer.addTypeDefs(typeDefs.loc.source.body)
 schemaComposer.addResolveMethods(resolvers)
 schemaComposer.Subscription.addFields(Subscription)
-schemaComposer.Query.addFields(datasetSearch)
 
 export default schemaComposer.buildSchema()

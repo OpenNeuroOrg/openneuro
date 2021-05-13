@@ -70,6 +70,8 @@ type Query {
     "Query user's datasets only - excludes public datasets from other filters"
     myDatasets: Boolean
   ): DatasetConnection
+  # Search datasets via Elasticsearch
+  searchDatasets(q: String!, after: String, first: Int): DatasetConnection
   # Get one user
   user(id: ID!): User
   # Get a list of users
