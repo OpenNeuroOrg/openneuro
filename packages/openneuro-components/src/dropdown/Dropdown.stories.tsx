@@ -1,18 +1,22 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { DropdownList, DropdownListProps } from './DropdownList'
+import { DropdownListWrap, DropdownListWrapProps } from './DropdownListWrap'
 
 export default {
   title: 'Components/Dropdown',
-  component: DropdownList,
+  component: DropdownListWrap,
 } as Meta
 
-const DropdownListTemplate: Story<DropdownListProps> = ({ items }) => {
+const DropdownListWrapTemplate: Story<DropdownListWrapProps> = ({ items }) => {
   const [selected, setSelected] = React.useState(items[0])
 
   return (
-    <DropdownList items={items} selected={selected} setSelected={setSelected} />
+    <DropdownListWrap
+      items={items}
+      selected={selected}
+      setSelected={setSelected}
+    />
   )
 }
 
@@ -38,7 +42,7 @@ const menuItems = [
     value: 'activity',
   },
 ]
-export const SortBy = DropdownListTemplate.bind({})
+export const SortBy = DropdownListWrapTemplate.bind({})
 SortBy.args = {
   items: menuItems,
 }
