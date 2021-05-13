@@ -16,7 +16,7 @@ const singleTabAccordion = (
     accordionStyle="plain"
     name="single"
     tabId="tab1"
-    tabLable="Single Tab"
+    label="Single Tab"
     children="This is a single accordion"
   />
 )
@@ -25,7 +25,7 @@ const multiTabAccordion = (
   <>
     <AccordionTab
       accordionStyle="plain"
-      tabLable="one"
+      label="one"
       children={
         <>
           <h4 style={{ margin: 0 }}>heading</h4>
@@ -43,17 +43,17 @@ const multiTabAccordion = (
     />
     <AccordionTab
       accordionStyle="plain"
-      tabLable="two"
+      label="two"
       children="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     />
     <AccordionTab
       accordionStyle="plain"
-      tabLable="three"
+      label="three"
       children="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     />
     <AccordionTab
       accordionStyle="plain"
-      tabLable="four"
+      label="four"
       children="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
     />
   </>
@@ -63,12 +63,26 @@ const fileTreeAccordion = (
   <>
     <AccordionTab
       accordionStyle="file-tree"
-      tabLable="one"
+      label="one"
       children={
         <AccordionWrap>
           <AccordionTab
             accordionStyle="file-tree"
-            tabLable="Another Folder"
+            label="Another Folder"
+            children="file"
+          />
+        </AccordionWrap>
+      }
+    />
+    <AccordionTab accordionStyle="file-tree" label="two" children={<>File</>} />
+    <AccordionTab
+      accordionStyle="file-tree"
+      label="three"
+      children={
+        <AccordionWrap>
+          <AccordionTab
+            accordionStyle="file-tree"
+            label="Another Folder"
             children="file"
           />
         </AccordionWrap>
@@ -76,30 +90,12 @@ const fileTreeAccordion = (
     />
     <AccordionTab
       accordionStyle="file-tree"
-      tabLable="two"
-      children={<>File</>}
-    />
-    <AccordionTab
-      accordionStyle="file-tree"
-      tabLable="three"
+      label="four"
       children={
         <AccordionWrap>
           <AccordionTab
             accordionStyle="file-tree"
-            tabLable="Another Folder"
-            children="file"
-          />
-        </AccordionWrap>
-      }
-    />
-    <AccordionTab
-      accordionStyle="file-tree"
-      tabLable="four"
-      children={
-        <AccordionWrap>
-          <AccordionTab
-            accordionStyle="file-tree"
-            tabLable="Another Folder"
+            label="Another Folder"
             children="file"
           />
         </AccordionWrap>

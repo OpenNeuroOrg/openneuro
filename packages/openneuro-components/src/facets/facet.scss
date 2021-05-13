@@ -39,11 +39,10 @@
   border-bottom: 1px solid #aaa;
   .accordion-title {
     font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
+    font-weight: 400;
     letter-spacing: 1px;
     color: #444;
-    margin: 10px 0;
+    padding: 10px 0;
     display: flex;
     justify-content: space-between;
     &.open {
@@ -57,6 +56,8 @@
       list-style: none;
       li {
         cursor: pointer;
+        font-weight: 300;
+
         &.selected-facet {
           color: $on-light-aqua;
         }

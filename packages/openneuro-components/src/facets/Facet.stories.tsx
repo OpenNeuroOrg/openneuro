@@ -3,6 +3,7 @@ import { Story, Meta } from '@storybook/react'
 
 import { AccordionTab } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
+
 import { FacetListWrap, FacetListWrapProps } from './FacetListWrap'
 
 export default {
@@ -16,7 +17,10 @@ const FacetListWrapTemplate: Story<FacetListWrapProps> = ({ items }) => {
   return (
     <div style={{ width: '400px' }}>
       <AccordionWrap className="facet-accordion">
-        <AccordionTab accordionStyle="plain" label="Modaliteis" open={true}>
+        <AccordionTab
+          accordionStyle="plain"
+          label="Modalities"
+          startOpen={true}>
           <FacetListWrap
             items={items}
             selected={selected}
