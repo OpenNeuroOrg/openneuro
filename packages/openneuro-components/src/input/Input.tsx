@@ -1,5 +1,5 @@
 import React from 'react'
-import './forms.scss'
+import './input.scss'
 
 export interface InputProps {
   placeholder: string
@@ -7,8 +7,9 @@ export interface InputProps {
   disabled: boolean
   label?: string
   name: string
-  inline?: boolean
   labelStyle?: 'inline' | 'float' | 'default'
+  value: string
+  setValue: string
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -16,26 +17,40 @@ export const Input: React.FC<InputProps> = ({
   type,
   label,
   name,
-  inline,
   labelStyle,
-  ...props
+  setValue,
 }) => {
   return (
     <>
       {labelStyle == 'float' ? (
         <div className="form-control float-form-style">
-          <input type={type} name={name} placeholder={placeholder} {...props} />
+          <input
+            type={type}
+            name={name}
+            placeholder={placeholder}
+            onChange={e => setValue(e.target.value)}
+          />
           {label ? <label htmlFor={name}>{label}</label> : null}
         </div>
       ) : labelStyle == 'inline' ? (
         <div className="form-control inline">
           {label ? <label htmlFor={name}>{label}</label> : null}
-          <input type={type} name={name} placeholder={placeholder} {...props} />
+          <input
+            type={type}
+            name={name}
+            placeholder={placeholder}
+            onChange={e => setValue(e.target.value)}
+          />
         </div>
       ) : (
         <div className="form-control ">
           {label ? <label htmlFor={name}>{label}</label> : null}
-          <input type={type} name={name} placeholder={placeholder} {...props} />
+          <input
+            type={type}
+            name={name}
+            placeholder={placeholder}
+            onChange={e => setValue(e.target.value)}
+          />
         </div>
       )}
     </>

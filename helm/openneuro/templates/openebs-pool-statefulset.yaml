@@ -21,7 +21,7 @@ spec:
         operator: "Exists"
         effect: "NoSchedule"
       nodeSelector:
-        role: storage
+        alpha.eksctl.io/nodegroup-name: storage
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

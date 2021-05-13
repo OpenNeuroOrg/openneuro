@@ -22,7 +22,7 @@ class DraftResource(object):
 
     def on_post(self, req, resp, dataset):
         """
-        Commmit a draft change.
+        Commit a draft change.
 
         This adds all files in the working tree.
         """

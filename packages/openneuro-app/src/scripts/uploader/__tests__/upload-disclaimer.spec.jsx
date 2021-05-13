@@ -21,7 +21,7 @@ describe('UploadDisclaimer component', () => {
     )
     expect(screen.getByText('I Agree')).toBeDisabled()
   })
-  it('enabled the upload button when both boxes are checked', () => {
+  it('disable the upload button when both boxes are checked', () => {
     const { getByLabelText } = render(
       <UploaderContext.Provider value={{ uploader: jest.fn() }}>
         <UploadDisclaimer />
@@ -37,13 +37,18 @@ describe('UploadDisclaimer component', () => {
         'I have explicit participant consent and ethical authorization to publish structural scans without defacing.',
       ),
     )
-    expect(screen.getByText('I Agree')).not.toBeDisabled()
+    expect(screen.getByText('I Agree')).toBeDisabled()
   })
-  it('enable the upload button when one box is checked', () => {
+  it('enable the upload button when one box is checked for both sections', () => {
     const { getByLabelText } = render(
       <UploaderContext.Provider value={{ uploader: jest.fn() }}>
         <UploadDisclaimer />
       </UploaderContext.Provider>,
+    )
+    fireEvent.click(
+      getByLabelText(
+        'This dataset will be exclusively made available on OpenNeuro as the repository of record and will not be uploaded to other repositories.',
+      ),
     )
     fireEvent.click(
       getByLabelText(

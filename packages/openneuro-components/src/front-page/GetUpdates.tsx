@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../button/Button'
-import { Input } from '../form/Input'
+import { Input } from '../input/Input'
 
 export interface GetUpdatesProps {}
 

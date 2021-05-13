@@ -28,6 +28,8 @@ RUN apt-get update \
   && git config --global user.email "git@openneuro.org" \
   && git config --global receive.denyCurrentBranch updateInstead
 
+HEALTHCHECK --interval=5s --timeout=30s --start-period=10s --retries=10 CMD [ "curl", "-f", "http://localhost/heartbeat" ]
+
 ENV LOCPATH=""
 CMD ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
 

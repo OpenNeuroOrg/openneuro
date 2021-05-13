@@ -3,7 +3,7 @@ kind: StorageClass
 metadata:
   name: openebs-pool-block
 parameters:
-  type: gp3
+  type: gp2
 reclaimPolicy: Retain
 allowVolumeExpansion: true
 provisioner: kubernetes.io/aws-ebs

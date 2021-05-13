@@ -47,7 +47,7 @@ async function createServer(): Promise<void> {
     // Create vite server in middleware mode. This disables Vite's own HTML
     // serving logic and let the parent server take control.
     vite = await createViteServer({
-      root: __dirname,
+      root: path.resolve(__dirname, '../src'),
       server: { middlewareMode: true, hmr: { port: 9992 } },
     })
     // use vite's connect instance as middleware
@@ -87,50 +87,56 @@ async function createServer(): Promise<void> {
         return
       }
 
+      let interpolate = {
+        head: '',
+        react: '',
+        apolloState: 'e30K',
+      }
+
       try {
         // 1. Read index.html
         const index = development
-          ? 'index.html'
+          ? '../src/index.html'
           : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
-        // 2. Apply vite HTML transforms. This injects the vite HMR client, and
-        //    also applies HTML transforms from Vite plugins, e.g. global preambles
-        //    from @vitejs/plugin-react-refresh
-        if (development) template = await vite.transformIndexHtml(url, template)
+        // Allow proxies to cache anonymous requests
+        let cacheControl = 'public, max-age=2592000'
 
-        // 3. Load the server entry. vite.ssrLoadModule automatically transforms
-        //    your ESM source code to be usable in Node.js! There is no bundling
-        //    required, and provides efficient invalidation similar to HMR.
-        const { render } = development
-          ? await vite.ssrLoadModule('/server.jsx')
-          : require('../src/dist/server/server.js')
+        try {
+          // 2. Apply vite HTML transforms. This injects the vite HMR client, and
+          //    also applies HTML transforms from Vite plugins, e.g. global preambles
+          //    from @vitejs/plugin-react-refresh
+          if (development)
+            template = await vite.transformIndexHtml(url, template)
 
-        // 4. render the app HTML. This assumes entry-server.js's exported `render`
-        //    function calls appropriate framework SSR APIs,
-        //    e.g. ReactDOMServer.renderToString()
-        const { react, apolloState, head } = await render(
-          url,
-          req['universalCookies'],
-        )
+          // 3. Load the server entry. vite.ssrLoadModule automatically transforms
+          //    your ESM source code to be usable in Node.js! There is no bundling
+          //    required, and provides efficient invalidation similar to HMR.
+          const { render } = development
+            ? await vite.ssrLoadModule('../src/server.jsx')
+            : require('../src/dist/server/server.js')
+
+          // 4. render the app HTML. This assumes entry-server.js's exported `render`
+          //    function calls appropriate framework SSR APIs,
+          //    e.g. ReactDOMServer.renderToString()
+          interpolate = await render(url)
+        } catch (e) {
+          // no-cache on errors
+          cacheControl = 'no-cache'
+          // If an error is caught, let vite fix the stacktrace so it maps back to
+          // your actual source code.
+          if (development) {
+            vite.ssrFixStacktrace(e)
+          }
+          console.error(e.stack)
+        }
 
         // 5. Inject the app-rendered HTML into the template.
-        const interpolate = {
-          head,
-          react,
-          apolloState,
-        }
         const html = template.replace(/\${([^}]*)}/g, (r, k): string => {
           const replace: string = interpolate[k]
           return replace
         })
-
-        // Cache rendered pages for up to one hour
-        let cacheControl = 'private, max-age=3600'
-        if (req['universalCookies'].get('accessToken') === undefined) {
-          // Allow proxies to cache anonymous requests
-          cacheControl = 'public, max-age=3600'
-        }
 
         // 6. Send the rendered HTML back.
         res
@@ -141,8 +147,7 @@ async function createServer(): Promise<void> {
           })
           .end(html)
       } catch (e) {
-        // If an error is caught, let vite fix the stacktrace so it maps back to
-        // your actual source code.
+        // If all else fails, show the stack
         if (development) {
           vite.ssrFixStacktrace(e)
         }
@@ -153,7 +158,7 @@ async function createServer(): Promise<void> {
     void ssrHandler()
   })
 
-  app.listen(development ? 9876 : 80)
+  app.listen(80)
 }
 
 void createServer()

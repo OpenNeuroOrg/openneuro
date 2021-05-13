@@ -4,6 +4,7 @@ import UploaderContext from './uploader-context.js'
 const UploadDisclaimer = () => {
   const [affirmedDefaced, setAffirmedDefaced] = useState(false)
   const [affirmedConsent, setAffirmedConsent] = useState(false)
+  const [repositoryOfRecord, setRepositoryOfRecord] = useState(false)
   return (
     <UploaderContext.Consumer>
       {uploader => (
@@ -35,11 +36,24 @@ const UploadDisclaimer = () => {
             in case the publication of a corresponding paper takes longer than
             expected. See <a href="/faq">FAQ</a> for details.
           </p>
-          <p>
-            Please refrain from uploading datasets already publicly available in
-            other repositories.
-          </p>
           <p>This dataset is not subject to GDPR protections.</p>
+          <p>
+            To minimize the potential for confusion regarding dataset versioning
+            and availability from different sources, please only upload your
+            dataset to one data repository. Datasets uploaded to the NIMH Data
+            Archive or other public repositories should not be uploaded to
+            OpenNeuro.
+          </p>
+          <label>
+            <input
+              type="checkbox"
+              onChange={() => setRepositoryOfRecord(!repositoryOfRecord)}
+              defaultChecked={repositoryOfRecord}
+            />
+            &nbsp; This dataset will be exclusively made available on OpenNeuro
+            as the repository of record and will not be uploaded to other
+            repositories.
+          </label>
           <p>Please affirm one of the following:</p>
           <label>
             <input
@@ -71,7 +85,13 @@ const UploadDisclaimer = () => {
                 })
                 uploader.upload({ affirmedDefaced, affirmedConsent })
               }}
-              disabled={!(affirmedDefaced || affirmedConsent)}>
+              disabled={
+                !(
+                  ((affirmedDefaced && !affirmedConsent) ||
+                    (!affirmedDefaced && affirmedConsent)) &&
+                  repositoryOfRecord
+                )
+              }>
               I Agree
             </button>
           </span>

@@ -30,7 +30,7 @@ def fix_perms():
                 print(bucket.get_acl(key.name, version_id=key.version_id))
                 print("\n")
             except S3ResponseError:
-                print ("S3 Reponse Failure")
+                print ("S3 Response Failure")
 
 parser = argparse.ArgumentParser(description='...')
 parser.add_argument('--key', help='Your S3 Access Key', type=str, required=True)

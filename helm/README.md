@@ -29,7 +29,7 @@ Helm manages configuration templates. Kubectl makes API calls to Kubernetes on y
 eksctl create cluster --name=my-cluster-name --nodegroup-name=general --nodes=2 --instance-type=c5a.xlarge --node-ami-family=Ubuntu1804
 ```
 
-This should configure the cluster and setup credentials and command context for later kubectl and helm commadns. If you encounter errors here, your user likely lacks access to manage EC2, EKS, or CloudFormation resources on the AWS account.
+This should configure the cluster and setup credentials and command context for later kubectl and helm commands. If you encounter errors here, your user likely lacks access to manage EC2, EKS, or CloudFormation resources on the AWS account.
 
 OpenNeuro uses at least two node groups to run. A general node group created as above and a secondary node group assigned to storage resources only.
 
@@ -114,7 +114,7 @@ kubectl delete pvc storage-pool-release-name-storage-pool-a-1
 kubectl delete pv pvc-3a29528a-7b17-40b6-96a7-6385316fb401
 ```
 
-Other values which can be overriden are found in the chart version of [values.yaml](charts/values.yaml).
+Other values which can be overridden are found in the chart version of [values.yaml](charts/values.yaml).
 
 `secrets.yaml` contains any privileged configuration, like database connection strings or oauth secrets. Start with [secrets.yaml.example](secrets.yaml.example) and fill in each value. Most values are required, but you only need one authentication provider and mail, doi, and flower configuration is optional.
 
