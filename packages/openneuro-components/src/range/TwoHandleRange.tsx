@@ -10,8 +10,9 @@ export interface TwoHandleRangeProps {
   dots: boolean
   pushable: number | boolean
   defaultValue: [number, number]
-  onChange: React.MouseEventHandler<HTMLInputElement>
   marks: { number: string }
+  newvalue: [number, number]
+  setNewValue: [number, number]
 }
 
 export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
@@ -21,12 +22,14 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   dots,
   pushable,
   defaultValue,
-  onChange,
   marks,
+  setNewValue,
 }) => {
   const createSliderWithTooltip = Slider.createSliderWithTooltip
   const Range = createSliderWithTooltip(Slider.Range)
-
+  const setSetter = value => {
+    //setNewValue(value)
+  }
   return (
     <div className="formRange-inner">
       <Range
@@ -36,7 +39,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
         dots={dots}
         pushable={pushable}
         defaultValue={defaultValue}
-        onChange={onChange}
+        onChange={value => setSetter(value)}
         marks={marks}
       />
     </div>

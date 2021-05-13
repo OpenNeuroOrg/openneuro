@@ -4,13 +4,34 @@ import { Story, Meta } from '@storybook/react'
 import { TwoHandleRange, TwoHandleRangeProps } from './TwoHandleRange'
 
 export default {
-  title: 'Components/Form',
+  title: 'Components/Form/Range',
   component: TwoHandleRange,
 } as Meta
 
-const RangeTemplate: Story<TwoHandleRangeProps> = args => (
-  <TwoHandleRange {...args} />
-)
+const RangeTemplate: Story<TwoHandleRangeProps> = ({
+  min,
+  max,
+  step,
+  dots,
+  pushable,
+  defaultValue,
+  marks,
+}) => {
+  const [newvalue, setNewValue] = React.useState(defaultValue)
+  console.log(newvalue)
+  return (
+    <TwoHandleRange
+      min={min}
+      max={max}
+      step={step}
+      dots={dots}
+      pushable={pushable}
+      defaultValue={defaultValue}
+      marks={marks}
+      setNewValue={setNewValue}
+    />
+  )
+}
 
 export const DefaultRange = RangeTemplate.bind({})
 DefaultRange.args = {
@@ -20,6 +41,5 @@ DefaultRange.args = {
   dots: true,
   pushable: 5,
   defaultValue: [0, 20],
-  onChange: value => console.log(value),
   marks: { 0: '0', 50: '50', 100: '100' },
 }
