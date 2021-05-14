@@ -49,6 +49,15 @@ async function createServer(): Promise<void> {
     vite = await createViteServer({
       root: path.resolve(__dirname, '../src'),
       server: { middlewareMode: true, hmr: { port: 9992 } },
+      resolve: {
+        alias: [
+          // Workaround UMD -> ESM issues in pluralize
+          {
+            find: 'pluralize',
+            replacement: path.resolve(__dirname, '../pluralize-esm.js'),
+          },
+        ],
+      },
     })
     // use vite's connect instance as middleware
     app.use(vite.middlewares)
