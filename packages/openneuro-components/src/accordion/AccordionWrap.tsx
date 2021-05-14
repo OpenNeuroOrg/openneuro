@@ -4,7 +4,7 @@ import './accordion.scss'
 
 export interface AccordionWrapProps {
   children: object
-  accordionID: string
+  className: string
 }
 
 /**
@@ -12,11 +12,11 @@ export interface AccordionWrapProps {
  */
 export const AccordionWrap: React.FC<AccordionWrapProps> = ({
   children,
-  accordionID,
+  className,
   ...props
 }) => {
   return (
-    <div className="on-accordion-wrapper" {...props} id={accordionID}>
+    <div className={className + ' on-accordion-wrapper'} {...props}>
       {children}
     </div>
   )
