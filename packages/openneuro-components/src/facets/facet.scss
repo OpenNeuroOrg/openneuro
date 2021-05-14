@@ -59,7 +59,10 @@
         font-weight: 300;
 
         &.selected-facet {
-          color: $on-light-aqua;
+          > .label,
+          > .label span {
+            color: $on-light-aqua;
+          }
         }
         .label {
           display: flex;
