@@ -27,6 +27,7 @@ const RangeTemplate: Story<TwoHandleRangeProps> = ({
       pushable={pushable}
       defaultValue={defaultValue}
       marks={marks}
+      newvalue={newvalue}
       setNewValue={setNewValue}
     />
   )

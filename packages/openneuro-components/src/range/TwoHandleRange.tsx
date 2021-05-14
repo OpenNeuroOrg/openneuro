@@ -24,13 +24,11 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   defaultValue,
   marks,
   setNewValue,
+  newvalue,
 }) => {
   const createSliderWithTooltip = Slider.createSliderWithTooltip
   const Range = createSliderWithTooltip(Slider.Range)
-  const setSetter = value => {
-    console.log(value)
-    //setNewValue(value)
-  }
+
   return (
     <div className="formRange-inner">
       <Range
@@ -40,8 +38,9 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
         dots={dots}
         pushable={pushable}
         defaultValue={defaultValue}
-        onChange={value => setSetter(value)}
+        onChange={value => setNewValue(value)}
         marks={marks}
+        value={newvalue}
       />
     </div>
   )
