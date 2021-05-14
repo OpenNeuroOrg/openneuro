@@ -14,6 +14,8 @@ export interface TwoHandleRangeProps {
   newvalue: [number, number]
   setNewValue: [number, number]
 }
+const createSliderWithTooltip = Slider.createSliderWithTooltip
+const Range = createSliderWithTooltip(Slider.Range)
 
 export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   min,
@@ -26,9 +28,6 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   setNewValue,
   newvalue,
 }) => {
-  const createSliderWithTooltip = Slider.createSliderWithTooltip
-  const Range = createSliderWithTooltip(Slider.Range)
-
   return (
     <div className="formRange-inner">
       <Range

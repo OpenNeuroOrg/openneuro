@@ -19,17 +19,24 @@ const RangeTemplate: Story<TwoHandleRangeProps> = ({
 }) => {
   const [newvalue, setNewValue] = React.useState(defaultValue)
   return (
-    <TwoHandleRange
-      min={min}
-      max={max}
-      step={step}
-      dots={dots}
-      pushable={pushable}
-      defaultValue={defaultValue}
-      marks={marks}
-      newvalue={newvalue}
-      setNewValue={setNewValue}
-    />
+    <div className="container">
+      <div className="grid grid-center">
+        <div className="col-4">
+          <TwoHandleRange
+            min={min}
+            max={max}
+            step={step}
+            dots={dots}
+            pushable={pushable}
+            defaultValue={defaultValue}
+            marks={marks}
+            newvalue={newvalue}
+            setNewValue={setNewValue}
+          />
+          {newvalue[0]} thru {newvalue[1]}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -37,7 +44,7 @@ export const DefaultRange = RangeTemplate.bind({})
 DefaultRange.args = {
   min: 0,
   max: 100,
-  step: 5,
+  step: 10,
   dots: true,
   pushable: 5,
   defaultValue: [0, 20],
