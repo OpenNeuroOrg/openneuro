@@ -1,0 +1,91 @@
+@import '../scss/variables';
+
+// .selected-facets-clear {
+//   margin: 20px 15px;
+//   border-bottom: 1px solid #bbb;
+//   padding-bottom: 20px;
+//   button {
+//     width: 100%;
+//     margin-bottom: 20px;
+//   }
+//   .on-icon {
+//     cursor: pointer;
+//     color: $on-dark-aqua;
+//     i {
+//       color: $on-light-aqua;
+//     }
+//   }
+// }
+
+// {selected && (
+//   <div className="selected-facets-clear">
+//     <Button
+//       borderColor="#333"
+//       type="ghost"
+//       label="CLEAR ALL"
+//       color="#333"
+//       onClick={() => setSelected(null)}
+//     />
+//     <Icon
+//       icon="fas fa-times"
+//       label={selected.label}
+//       onClick={() => setSelected(null)}
+//     />
+//   </div>
+// )}
+
+.facet-accordion.on-accordion-wrapper {
+  padding: 0 15px;
+  border-bottom: 1px solid #aaa;
+  .accordion-title {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #444;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    &.open {
+      color: #000;
+    }
+  }
+  .facet-list {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      li {
+        cursor: pointer;
+        font-weight: 300;
+
+        &.selected-facet {
+          color: $on-light-aqua;
+        }
+        .label {
+          display: flex;
+          align-items: center;
+          span {
+            margin-left: 10px;
+            display: inline-block;
+            color: #444;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .level-1 > li {
+      margin-bottom: 10px;
+    }
+    .level-2 > li {
+      display: flex;
+      justify-content: flex-start;
+      .label {
+        margin-left: 15px;
+      }
+      &:before {
+        content: '-';
+        margin-left: 12px;
+      }
+    }
+  }
+}

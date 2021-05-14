@@ -2,7 +2,7 @@ import React from 'react'
 import { Dropdown } from './Dropdown'
 import './dropdown.scss'
 
-export interface DropdownListProps {
+export interface DropdownListWrapProps {
   items: [
     {
       label: string
@@ -16,11 +16,11 @@ export interface DropdownListProps {
   setSelected: (selected: { label: string; value: string }) => void
 }
 
-export const DropdownList = ({
+export const DropdownListWrap = ({
   items,
   selected,
   setSelected,
-}: DropdownListProps) => {
+}: DropdownListWrapProps) => {
   return (
     <Dropdown
       label={
