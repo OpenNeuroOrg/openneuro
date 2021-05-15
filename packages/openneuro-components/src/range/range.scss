@@ -9,11 +9,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  //remove this
-  height: 300px;
-  .range-lable {
+  min-width: 270px;
+  label {
     font-size: 14px;
-    margin: 20px 0 0;
+    margin: 40px 0 0;
+    color: $on-dark-aqua;
   }
   .rc-slider-handle,
   .rc-slider-dot-active {

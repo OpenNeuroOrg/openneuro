@@ -41,6 +41,9 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
         marks={marks}
         value={newvalue}
       />
+      <label>
+        {newvalue[0]} &mdash; {newvalue[1]}
+      </label>
     </div>
   )
 }
