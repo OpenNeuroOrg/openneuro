@@ -11,29 +11,11 @@ import { Footer } from '../footer/Footer'
 
 import './front-page.scss'
 
-export interface FrontPageProps {
-  user?: {}
-  onLogin: () => void
-  onLogout: () => void
-  onCreateAccount: () => void
-}
+export interface FrontPageProps {}
 
-export const FrontPage: React.FC<FrontPageProps> = ({
-  user,
-  onLogin,
-  onLogout,
-  onCreateAccount,
-}) => (
+export const FrontPage: React.FC<FrontPageProps> = ({}) => (
   <>
-    <article className="front-page">
-      <Header
-        user={user}
-        onLogin={onLogin}
-        onLogout={onLogout}
-        onCreateAccount={onCreateAccount}
-        expanded={true}
-      />
-
+    <div className="page">
       <section>
         <AffiliateBlock />
       </section>
@@ -54,9 +36,6 @@ export const FrontPage: React.FC<FrontPageProps> = ({
       <section className="gray-bg">
         <Contributors />
       </section>
-    </article>
-    <div className="on-foot">
-      <Footer />
     </div>
   </>
 )
