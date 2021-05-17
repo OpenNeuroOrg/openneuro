@@ -11,6 +11,7 @@ export const getUsers = gql`
       admin
       created
       lastSeen
+      blocked
     }
   }
 `
