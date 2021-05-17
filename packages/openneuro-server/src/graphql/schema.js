@@ -193,6 +193,15 @@ const typeDefs = gql`
     resetDraft(datasetId: ID!, ref: String!): Boolean
   }
 
+  type Subscription {
+    datasetDeleted(datasetIds: [ID!]): ID!
+    snapshotsUpdated(datasetId: ID!): Dataset
+    draftUpdated(datasetId: ID!): Dataset
+    permissionsUpdated(datasetIds: [ID!]): Dataset
+    filesUpdated(datasetId: ID!): FilesUpdate
+    datasetChanged: DatasetChange
+  }
+
   input DeleteFile {
     path: String!
     filename: String
@@ -680,6 +689,5 @@ const typeDefs = gql`
 
 schemaComposer.addTypeDefs(typeDefs.loc.source.body)
 schemaComposer.addResolveMethods(resolvers)
-schemaComposer.Subscription.addFields(Subscription)
 
 export default schemaComposer.buildSchema()
