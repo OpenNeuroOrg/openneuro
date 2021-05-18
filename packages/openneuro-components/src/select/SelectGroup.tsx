@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import './select.scss'
 
 export interface SelectGroupProps {
-  SelectArr: [
+  options: [
     {
       label: string
       value: string
     },
   ]
-  value?: string
+  value: string
   setValue: (string) => void
   label?: string
   id: string
@@ -18,7 +18,7 @@ export interface SelectGroupProps {
 
 export const SelectGroup = ({
   setValue,
-  SelectArr,
+  options,
   label,
   id,
   layout,
@@ -33,7 +33,7 @@ export const SelectGroup = ({
         className="on-select"
         onChange={e => setValue(e.target.value)}
         id={id}>
-        {SelectArr.map((item, index) => (
+        {options.map((item, index) => (
           <option key={index} label={item.label} value={item.value} />
         ))}
       </select>

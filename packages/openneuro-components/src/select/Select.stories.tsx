@@ -17,7 +17,7 @@ const SelectContent = [
 ]
 
 const SelectTemplate: Story<SelectGroupProps> = ({
-  SelectArr,
+  options,
   id,
   label,
   layout,
@@ -28,7 +28,7 @@ const SelectTemplate: Story<SelectGroupProps> = ({
       <SelectGroup
         setValue={setValue}
         value={value}
-        SelectArr={SelectArr}
+        options={options}
         label={label}
         id={id}
         layout={layout}
@@ -39,14 +39,14 @@ const SelectTemplate: Story<SelectGroupProps> = ({
 
 export const SelectExample = SelectTemplate.bind({})
 SelectExample.args = {
-  SelectArr: SelectContent,
+  options: SelectContent,
   label: 'Example Select',
   id: 'example1',
 }
 
 export const SelectExampleStacked = SelectTemplate.bind({})
 SelectExampleStacked.args = {
-  SelectArr: SelectContent,
+  options: SelectContent,
   label: 'Example Select',
   id: 'example1',
   layout: 'stacked',
