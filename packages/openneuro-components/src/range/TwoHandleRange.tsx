@@ -14,8 +14,7 @@ export interface TwoHandleRangeProps {
   newvalue: [number, number]
   setNewValue: [number, number]
 }
-const createSliderWithTooltip = Slider.createSliderWithTooltip
-const Range = createSliderWithTooltip(Slider.Range)
+const Range = Slider.createSliderWithTooltip(Slider.Range)
 
 export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   min,
