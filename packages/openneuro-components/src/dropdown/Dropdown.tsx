@@ -4,9 +4,10 @@ import './dropdown.scss'
 export interface DropdownProps {
   label: Record<string, any>
   children
+  className: string
 }
 
-export const Dropdown = ({ children, label }: DropdownProps) => {
+export const Dropdown = ({ children, label, className }: DropdownProps) => {
   const [isOpen, setIsOpen] = React.useState(false)
 
   function removeIsOpen(ref) {
@@ -27,7 +28,7 @@ export const Dropdown = ({ children, label }: DropdownProps) => {
 
   return (
     <div
-      className="dropdown-wrapper"
+      className={className + ' dropdown-wrapper'}
       ref={wrapperRef}
       onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)}>
       <div className={`toggle ${isOpen ? 'active' : ''}`}>

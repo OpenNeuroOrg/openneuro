@@ -28,6 +28,7 @@ a,
 a:link {
   color: $on-dark-aqua;
   transition: color 0.3s;
+  cursor: pointer;
   &:hover {
     color: lighten($on-dark-aqua, 15%);
   }

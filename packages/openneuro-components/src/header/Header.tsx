@@ -6,27 +6,28 @@ import { Modal } from '../modal/Modal'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { AccordionTab } from '../accordion/AccordionTab'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
+import { UserMenu } from '../user/UserMenu'
 
 import orcidIcon from '../assets/orcid_24x24.png'
 
 import './header.scss'
 
 export interface HeaderProps {
-  user?: {}
+  profile?: {}
   onLogin?: () => void
   onLogout?: () => void
   expanded?: boolean
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  user,
+  profile,
   onLogin,
   onLogout,
   expanded,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const toggle = () => setIsOpen(!isOpen)
-
+  const toggleLogin = () => setIsOpen(!isOpen)
+  const toggleUpload = () => setIsOpen(!isOpen)
   return (
     <>
       <header>
@@ -51,16 +52,30 @@ export const Header: React.FC<HeaderProps> = ({
             </ul>
           </div>
           <div className="navbar-account">
-            {user ? (
-              <Button size="small" onClick={onLogout} label="Log out" primary />
+            {profile ? (
+              <div className="header-upload-btn">
+                <Button
+                  onClick={toggleUpload}
+                  label="upload a dataset"
+                  size="large"
+                  icon="fas fa-upload"
+                  iconSize="'23px"
+                />
+                <UserMenu profile={profile} />
+              </div>
             ) : (
               // TODO ADD ACCOUNT INFO DROPDOWN
               <>
-                <Button navbar onClick={toggle} label="Sign in" size="large" />
+                <Button
+                  navbar
+                  onClick={toggleLogin}
+                  label="Sign in"
+                  size="large"
+                />
               </>
             )}
           </div>
-          {expanded ? <LandingExpandedHeader user={user} /> : null}
+          {expanded ? <LandingExpandedHeader profile={profile} /> : null}
         </div>
         {/* <svg
           className="swoop"
@@ -72,12 +87,15 @@ export const Header: React.FC<HeaderProps> = ({
             className="svg-fill-on-dark-aqua"
           />
         </svg> */}
-        <div className="header-swoop">
-          <div></div>
+        <div className="swoop-hide-overflow">
+          {' '}
+          <div className="header-swoop">
+            <div></div>
+          </div>
         </div>
       </header>
-      {!user ? (
-        <Modal isOpen={isOpen} toggle={toggle} closeText="Close">
+      {!profile ? (
+        <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
           <div className="grid grid-center grid-column">
             <Logo horizontal dark={true} width="230px" className="m-t-20" />
             <h4>Sign in</h4>
@@ -123,6 +141,11 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
           </div>
+        </Modal>
+      ) : null}
+      {profile ? (
+        <Modal isOpen={isOpen} toggle={toggleUpload} closeText="Close">
+          Upload TODO
         </Modal>
       ) : null}
     </>

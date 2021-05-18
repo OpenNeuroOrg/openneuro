@@ -4721,7 +4721,7 @@ __metadata:
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
     "@loadable/component": ^5.7.0
-    "@openneuro/client": ^3.33.1-alpha.0
+    "@openneuro/client": ^3.33.1
     "@sentry/browser": ^4.5.3
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
@@ -4815,7 +4815,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^3.33.1-alpha.0
+    "@openneuro/client": ^3.33.1
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
     bids-validator: 1.7.1
@@ -4840,13 +4840,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^3.33.1-alpha.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^3.33.1, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^3.33.1-alpha.0
+    "@openneuro/server": ^3.33.1
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4873,11 +4873,13 @@ __metadata:
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/mdx-js__react": ^1
+    "@types/react-router-dom": ^5
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
     css-loader: ^5.2.1
     date-fns: ^2.21.1
     react: ^17.0.1
+    react-router-dom: ^5.2.0
     react-slick: ^0.28.1
     sass: ^1.32.8
     sass-loader: ^10.1.1
@@ -4900,7 +4902,7 @@ __metadata:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
-    "@openneuro/client": ^3.33.1-alpha.0
+    "@openneuro/client": ^3.33.1
     "@types/node": ^14.14.41
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
@@ -4912,7 +4914,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^3.33.1-alpha.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^3.33.1, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -6810,6 +6812,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/history@npm:*":
+  version: 4.7.8
+  resolution: "@types/history@npm:4.7.8"
+  checksum: 54020371a412e949d0a329cc325253f16daf5b33e2e485135d39d3b30d3f9a8e323b00ce1162da82387c8ecf0397a8da49ad36ab309f06284326c064092879c7
+  languageName: node
+  linkType: hard
+
 "@types/hoist-non-react-statics@npm:^3.0.1":
   version: 3.3.1
   resolution: "@types/hoist-non-react-statics@npm:3.3.1"
@@ -7236,6 +7245,27 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: a17679f85c6f39a94cacbac62fff7b976adadd660ee9a8e2c5ab58036520869d4875b2707f7dd097f9eb14756b2041462d3615dfbb1efa61b37327f377866c61
+  languageName: node
+  linkType: hard
+
+"@types/react-router-dom@npm:^5":
+  version: 5.1.7
+  resolution: "@types/react-router-dom@npm:5.1.7"
+  dependencies:
+    "@types/history": "*"
+    "@types/react": "*"
+    "@types/react-router": "*"
+  checksum: c5afe043f99cbe8e05e85db5b95b5fd724e7b00e0314b8bbc081e36c113e22fd102cd0c7a957c7ad55a55d2def91c17b07ffba45c2ac4a00cc56c5c927c93d4c
+  languageName: node
+  linkType: hard
+
+"@types/react-router@npm:*":
+  version: 5.1.14
+  resolution: "@types/react-router@npm:5.1.14"
+  dependencies:
+    "@types/history": "*"
+    "@types/react": "*"
+  checksum: 106c8802cb8ca8c8eb925067faacf8de958126d625f5bf542b556b3b38eb598f1928f9c379ac5964888a8932aa7d19bf16891ecdb70af45669b486b34b716391
   languageName: node
   linkType: hard
 
@@ -27942,7 +27972,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^5.1.2":
+"react-router-dom@npm:^5.1.2, react-router-dom@npm:^5.2.0":
   version: 5.2.0
   resolution: "react-router-dom@npm:5.2.0"
   dependencies:

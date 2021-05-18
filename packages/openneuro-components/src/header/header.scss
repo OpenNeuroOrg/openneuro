@@ -2,7 +2,19 @@
 header {
   position: relative;
   padding-bottom: 100px;
-  overflow: hidden;
+}
+
+.header-upload-btn {
+  display: flex;
+  align-items: center;
+  background: #eee;
+  padding: 10px 10px 10px 20px;
+  border-radius: 4px;
+  button.on-no-background.icon-text {
+    color: $on-dark-aqua;
+    margin: 5px 20px 0;
+    font-size: 16px;
+  }
 }
 
 .navbar-inner-wrap {
@@ -20,9 +32,13 @@ header {
   fill: $primary;
 }
 
-// .swoop {
-//   width: 100%;
-// }
+.swoop-hide-overflow {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 330px;
+  bottom: 0;
+}
 
 .header-swoop {
   background: $on-dark-aqua;
