@@ -48,16 +48,14 @@ export const mergeNewFiles =
     const mergeNewFileFilter = f => f.id !== directory.id
     // Remove ourselves from the array
     if (snapshotTag) {
-      newDatasetObj.getSnapshotFileTree.files =
-        newDatasetObj.getSnapshotFileTree.files.filter(mergeNewFileFilter)
-      newDatasetObj.getSnapshotFileTree.files.push(
-        ...fetchMoreResult.getSnapshotFileTree.files,
-      )
+      newDatasetObj.snapshot.files =
+        newDatasetObj.snapshot.files.filter(mergeNewFileFilter)
+      newDatasetObj.snapshot.files.push(...fetchMoreResult.snapshot.files)
     } else {
-      newDatasetObj.getDraftFileTree.draft.files =
-        newDatasetObj.getDraftFileTree.draft.files.filter(mergeNewFileFilter)
-      newDatasetObj.getDraftFileTree.draft.files.push(
-        ...fetchMoreResult.getDraftFileTree.draft.files,
+      newDatasetObj.dataset.draft.files =
+        newDatasetObj.dataset.draft.files.filter(mergeNewFileFilter)
+      newDatasetObj.dataset.draft.files.push(
+        ...fetchMoreResult.dataset.draft.files,
       )
     }
     return newDatasetObj

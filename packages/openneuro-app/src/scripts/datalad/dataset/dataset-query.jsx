@@ -119,11 +119,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   useDatasetDeletedSubscription([datasetId], ({ data: subData }) => {
     if (subData && subData.datasetDeleted === datasetId) {
       history.push('/dashboard/datasets')
-      datasetDeletedToast(
-        datasetId,
-        data?.[draft ? 'getDraftPage' : 'getDatasetPage']?.draft?.description
-          ?.Name,
-      )
+      datasetDeletedToast(datasetId, data?.dataset?.draft?.description?.Name)
     }
   })
   useDraftSubscription(datasetId)
