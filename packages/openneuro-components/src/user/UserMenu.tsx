@@ -34,7 +34,7 @@ export const UserMenu = ({ profile }: UserMenuProps) => {
         <div className="user-menu-dropdown-list">
           <ul>
             <li className="dropdown-header">
-              Hello <br />
+              <span>Hello</span> <br />
               {profile.name}
             </li>
             <li className="user-menu-link">

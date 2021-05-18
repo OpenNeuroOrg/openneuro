@@ -52,6 +52,10 @@
         border-bottom: 1px solid #ddd;
         &.dropdown-header {
           padding: 10px 0;
+          span {
+            color: #777;
+            font-size: 14px;
+          }
         }
         a {
           display: block;
