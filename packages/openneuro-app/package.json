@@ -23,7 +23,7 @@
     "@openneuro/client": "^3.33.1",
     "@sentry/browser": "^4.5.3",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "npm:@squishymedia/bids-validator@1.7.1-15",
+    "bids-validator": "npm:@squishymedia/bids-validator@1.7.2-3",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "core-js": "^3.3.2",
