@@ -83,31 +83,27 @@ export const DATASET_SNAPSHOTS = gql`
   }
 `
 
-export const ISSUE_FIELDS = `
-  severity
-  code
-  reason
-  files {
-    evidence
-    line
-    character
-    reason
-    file {
-      name
-      path
-      relativePath
-    }
-  }
-  additionalFileCount
-`
-
 export const DATASET_ISSUES = gql`
   fragment DatasetIssues on Dataset {
     id
     draft {
       id
-      issues { 
-        ${ISSUE_FIELDS}
+      issues {
+        severity
+        code
+        reason
+        files {
+          evidence
+          line
+          character
+          reason
+          file {
+            name
+            path
+            relativePath
+          }
+        }
+        additionalFileCount
       }
     }
   }
@@ -117,7 +113,21 @@ export const SNAPSHOT_ISSUES = gql`
   fragment SnapshotIssues on Snapshot {
     id
     issues {
-      ${ISSUE_FIELDS}
+      severity
+      code
+      reason
+      files {
+        evidence
+        line
+        character
+        reason
+        file {
+          name
+          path
+          relativePath
+        }
+      }
+      additionalFileCount
     }
   }
 `

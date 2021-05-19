@@ -1,3 +1,5 @@
+import { gql } from '@apollo/client'
+
 /**
  * Sort file streams so that dataset_description.json is first in the list
  *
@@ -11,3 +13,9 @@ export const sortFiles = files =>
     const yPath = y.hasOwnProperty('path') ? y.path : y.webkitRelativePath
     return xPath.endsWith(filename) ? -1 : yPath.endsWith(filename) ? 1 : 0
   })
+
+export const deleteFiles = gql`
+  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]!) {
+    deleteFiles(datasetId: $datasetId, files: $files)
+  }
+`

@@ -1,20 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { withRouter } from 'react-router-dom'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
-
-const CREATE_SNAPSHOT = gql`
-  mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
-    createSnapshot(datasetId: $datasetId, tag: $tag, changes: $changes) {
-      id
-      tag
-    }
-  }
-`
+import { snapshots } from '@openneuro/client'
 
 const CreateSnapshotMutation = ({ history, datasetId, tag, changes }) => {
-  const [snapshotDataset, { error }] = useMutation(CREATE_SNAPSHOT)
+  const [snapshotDataset, { error }] = useMutation(snapshots.createSnapshot)
   if (error) throw error
   return (
     <button

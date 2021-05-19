@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const indexQuery = gql`
-  query getDatasets(
+  query getIndex(
     $cursor: String
     $orderBy: DatasetSort = { created: descending }
     $filterBy: DatasetFilter = { public: true }

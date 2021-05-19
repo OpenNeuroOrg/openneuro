@@ -1,20 +1,8 @@
-import { gql } from '@apollo/client'
 import inquirer from 'inquirer'
 import { getUrl } from './config.js'
 import { configuredClient } from './configuredClient.js'
 import { apm } from './apm.js'
-
-const CREATE_DATASET = gql`
-  mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
-    createDataset(
-      affirmedDefaced: $affirmedDefaced
-      affirmedConsent: $affirmedConsent
-    ) {
-      id
-      worker
-    }
-  }
-`
+import { datasets } from '@openneuro/client'
 
 export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
   const apmTransaction = apm.startTransaction('createDataset', 'custom')
@@ -22,7 +10,7 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
   const client = configuredClient()
   try {
     const { data } = await client.mutate({
-      mutation: CREATE_DATASET,
+      mutation: datasets.createDataset,
       variables: { affirmedDefaced, affirmedConsent },
     })
     const datasetId = data.createDataset.id

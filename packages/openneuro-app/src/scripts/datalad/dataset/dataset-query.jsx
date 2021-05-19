@@ -25,7 +25,7 @@ import DatasetRedirect from '../routes/dataset-redirect.jsx'
  * Generate the dataset page query
  */
 export const getDatasetPage = gql`
-  query dataset($datasetId: ID!) {
+  query getDatasetPage($datasetId: ID!) {
     dataset(id: $datasetId) {
       id
       created
@@ -62,7 +62,7 @@ export const getDatasetPage = gql`
  * Add files fragment for draft route
  */
 export const getDraftPage = gql`
-  query dataset($datasetId: ID!) {
+  query getDraftPage($datasetId: ID!) {
     dataset(id: $datasetId) {
       id
       created

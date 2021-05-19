@@ -1,27 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { toast } from 'react-toastify'
 import ToastContent from '../../common/partials/toast-content.jsx'
 import { validate as isValidEmail } from 'email-validator'
-
-const UPDATE_PERMISSIONS = gql`
-  mutation updatePermissions(
-    $datasetId: ID!
-    $userEmail: String!
-    $level: String!
-  ) {
-    updatePermissions(
-      datasetId: $datasetId
-      userEmail: $userEmail
-      level: $level
-    ) {
-      id
-      email
-    }
-  }
-`
+import { datasets } from '@openneuro/client'
 
 export const mergeNewPermission = (
   datasetId,
@@ -47,7 +30,7 @@ export const mergeNewPermission = (
 }
 
 const UpdateDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
-  <Mutation mutation={UPDATE_PERMISSIONS}>
+  <Mutation mutation={datasets.updatePermissions}>
     {UpdateDatasetPermissions => (
       <button
         className="btn-modal-action"

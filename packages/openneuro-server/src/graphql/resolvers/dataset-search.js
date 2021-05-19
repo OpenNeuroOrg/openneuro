@@ -69,10 +69,7 @@ export const elasticRelayConnection = (
  * @param {string} args.after Cursor for paging forward
  * @param {number} args.first Limit of entries to find
  */
-export const datasetSearchConnection = async (
-  obj,
-  { q, after, first = 25 },
-) => {
+export const searchDatasets = async (obj, { q, after, first = 25 }) => {
   const requestBody = {
     sort: [{ _score: 'asc', id: 'desc' }],
   }
@@ -90,16 +87,4 @@ export const datasetSearchConnection = async (
     body: requestBody,
   })
   return elasticRelayConnection(result)
-}
-
-export default {
-  search: {
-    type: 'DatasetConnection',
-    resolve: datasetSearchConnection,
-    args: {
-      q: { type: 'String!' },
-      after: { type: 'String' },
-      first: { type: 'Int' },
-    },
-  },
 }

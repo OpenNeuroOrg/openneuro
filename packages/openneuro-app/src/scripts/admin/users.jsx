@@ -12,16 +12,7 @@ import { formatDate } from '../utils/date.js'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../resources/strings.js'
 import { UserTools } from './user-tools'
-import { USER_FRAGMENT } from './user-fragment'
-
-export const GET_USERS = gql`
-  query {
-    users {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
+import { users } from '@openneuro/client'
 
 export const UsersQueryResult = ({ loading, data, refetch }) => {
   if (loading) {
@@ -34,7 +25,7 @@ export const UsersQueryResult = ({ loading, data, refetch }) => {
 }
 
 export const UsersQuery = () => (
-  <Query query={GET_USERS}>{UsersQueryResult}</Query>
+  <Query query={users.getUsers}>{UsersQueryResult}</Query>
 )
 
 UsersQueryResult.propTypes = {

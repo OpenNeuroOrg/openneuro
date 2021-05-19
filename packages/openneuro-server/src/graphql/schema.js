@@ -1,10 +1,8 @@
 // @ts-nocheck
-import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
-import Subscription from './resolvers/subscriptions.js'
-import datasetSearch from './resolvers/dataset-search'
+import { gql, makeExecutableSchema } from 'apollo-server'
 
-export const typeDefs = `
+const typeDefs = gql`
   scalar Date
   scalar DateTime
   scalar Time
@@ -77,6 +75,8 @@ export const typeDefs = `
       "Query user's datasets only - excludes public datasets from other filters"
       myDatasets: Boolean
     ): DatasetConnection
+    # Search datasets via Elasticsearch
+    searchDatasets(q: String!, after: String, first: Int): DatasetConnection
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -109,9 +109,20 @@ export const typeDefs = `
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
     # removes the annex object of the given file
-    removeAnnexObject(datasetId: ID!, snapshot: String!, annexKey: String!, path: String, filename: String): Boolean
+    removeAnnexObject(
+      datasetId: ID!
+      snapshot: String!
+      annexKey: String!
+      path: String
+      filename: String
+    ): Boolean
     # flags the given file
-    flagAnnexObject(datasetId: ID!, snapshot: String!, filepath: String!, annexKey: String!): Boolean
+    flagAnnexObject(
+      datasetId: ID!
+      snapshot: String!
+      filepath: String!
+      annexKey: String!
+    ): Boolean
     # Delete files or directories in a draft
     deleteFiles(datasetId: ID!, files: [DeleteFile]): Boolean
     # Add or remove the public flag from a dataset
@@ -139,9 +150,17 @@ export const typeDefs = `
     # Make a dataset public
     publishDataset(datasetId: ID!): Boolean
     # Update dataset_description.json scalar fields
-    updateDescription(datasetId: ID!, field: String!, value: String!): Description
+    updateDescription(
+      datasetId: ID!
+      field: String!
+      value: String!
+    ): Description
     # Update dataset_description.json list fields
-    updateDescriptionList(datasetId: ID!, field: String!, value: [String!]): Description
+    updateDescriptionList(
+      datasetId: ID!
+      field: String!
+      value: [String!]
+    ): Description
     # Update dataset README file
     updateReadme(datasetId: ID!, value: String!): Boolean
     # Submits a new comment and returns the comment ID for replies
@@ -170,6 +189,15 @@ export const typeDefs = `
     reexportRemotes(datasetId: ID!): Boolean
     # Reset draft commit
     resetDraft(datasetId: ID!, ref: String!): Boolean
+  }
+
+  type Subscription {
+    datasetDeleted(datasetIds: [ID!]): ID!
+    snapshotsUpdated(datasetId: ID!): Dataset
+    draftUpdated(datasetId: ID!): Dataset
+    permissionsUpdated(datasetIds: [ID!]): Dataset
+    filesUpdated(datasetId: ID!): FilesUpdate
+    datasetChanged: DatasetChange
   }
 
   input DeleteFile {
@@ -657,9 +685,7 @@ export const typeDefs = `
   }
 `
 
-schemaComposer.addTypeDefs(typeDefs)
-schemaComposer.addResolveMethods(resolvers)
-schemaComposer.Subscription.addFields(Subscription)
-schemaComposer.Query.addFields(datasetSearch)
-
-export default schemaComposer.buildSchema()
+export default makeExecutableSchema({
+  typeDefs,
+  resolvers,
+})

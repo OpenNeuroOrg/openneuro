@@ -7,6 +7,7 @@ import Draft from './draft.js'
 import Snapshot from './snapshots.js'
 import User from './user.js'
 import Comment from './comment.js'
+import Subscription from './subscriptions'
 
 export default {
   // Scalars
@@ -17,6 +18,7 @@ export default {
   // Complex types
   Query,
   Mutation,
+  Subscription,
   User,
   Dataset,
   Draft,
