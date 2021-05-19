@@ -15,44 +15,44 @@ const filterDatasetId = (payload, variables) => {
   return false
 }
 
-export const datasetDeleted = () => ({
+export const datasetDeleted = {
   subscribe: withFilter(
     () => pubsub.asyncIterator('datasetDeleted'),
     filterDatasetId,
   ),
-})
+}
 
-export const snapshotsUpdated = () => ({
+export const snapshotsUpdated = {
   subscribe: withFilter(
     () => pubsub.asyncIterator('snapshotsUpdated'),
     filterDatasetId,
   ),
-})
+}
 
-export const draftUpdated = () => ({
+export const draftUpdated = {
   subscribe: withFilter(
     () => pubsub.asyncIterator('draftUpdated'),
     filterDatasetId,
   ),
-})
+}
 
-export const permissionsUpdated = () => ({
+export const permissionsUpdated = {
   subscribe: withFilter(
     () => pubsub.asyncIterator('permissionsUpdated'),
     filterDatasetId,
   ),
-})
+}
 
-export const filesUpdated = () => ({
+export const filesUpdated = {
   subscribe: withFilter(
     () => pubsub.asyncIterator('filesUpdated'),
     filterDatasetId,
   ),
-})
+}
 
-export const datasetChanged = () => ({
+export const datasetChanged = {
   subscribe: () => pubsub.asyncIterator('datasetChanged'),
-})
+}
 
 const Subscription = {
   datasetDeleted,

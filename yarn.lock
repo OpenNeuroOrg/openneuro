@@ -5282,7 +5282,6 @@ __metadata:
     express: ^4.17.1
     graphql: 15.5.0
     graphql-bigint: ^1.0.0
-    graphql-compose: ^7.25.0
     graphql-iso-date: ^3.6.1
     graphql-redis-subscriptions: 2.1.0
     graphql-subscriptions: ^1.1.0
@@ -18433,18 +18432,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-compose@npm:^7.25.0":
-  version: 7.25.1
-  resolution: "graphql-compose@npm:7.25.1"
-  dependencies:
-    graphql-type-json: 0.3.2
-    object-path: 0.11.5
-  peerDependencies:
-    graphql: ^14.2.0 || ^15.0.0
-  checksum: 96aa8a6ab9f2c3b2c97747bb2706aeaa4a88d90c10246d0d40caf8936aeea04e61267fb60db2651e59a6665e58a4a52c911259297c005a63900095dd3881e44f
-  languageName: node
-  linkType: hard
-
 "graphql-config@npm:^3.0.2, graphql-config@npm:^3.2.0":
   version: 3.2.0
   resolution: "graphql-config@npm:3.2.0"
@@ -18589,21 +18576,21 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-type-json@npm:0.3.2, graphql-type-json@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "graphql-type-json@npm:0.3.2"
-  peerDependencies:
-    graphql: ">=0.8.0"
-  checksum: dbc2ca9b003788012b278209a92d9b084ab5061da8c596d0ffd65dce2e770c29d26dded1812186293bb0bf33b476369dcda1576a10cd4e5b12d2458c878977f3
-  languageName: node
-  linkType: hard
-
 "graphql-type-json@npm:^0.2.4":
   version: 0.2.4
   resolution: "graphql-type-json@npm:0.2.4"
   peerDependencies:
     graphql: ">=0.8.0"
   checksum: 9b41439c6e2bb961d70b3b4b465062e65d6febf2aca6c311fe03ab0de4897f83f429e1724eb1bd1871b047f04e64f3993b534a2824543358c6a161d8fe7058b0
+  languageName: node
+  linkType: hard
+
+"graphql-type-json@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "graphql-type-json@npm:0.3.2"
+  peerDependencies:
+    graphql: ">=0.8.0"
+  checksum: dbc2ca9b003788012b278209a92d9b084ab5061da8c596d0ffd65dce2e770c29d26dded1812186293bb0bf33b476369dcda1576a10cd4e5b12d2458c878977f3
   languageName: node
   linkType: hard
 
@@ -25526,7 +25513,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"object-path@npm:0.11.5, object-path@npm:^0.11.4":
+"object-path@npm:^0.11.4":
   version: 0.11.5
   resolution: "object-path@npm:0.11.5"
   checksum: a2be57f65eb247161763280e857ddbafcfbb41ad7cfcfb0a78aca2e8adb990a7b5afe6b182c20baf0e218e541ec75c1807fd04d50e3049920c2ec65e6eb9c900

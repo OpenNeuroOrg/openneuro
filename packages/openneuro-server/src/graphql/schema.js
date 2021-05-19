@@ -1,8 +1,6 @@
 // @ts-nocheck
-import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
-import Subscription from './resolvers/subscriptions.js'
-import { gql } from 'apollo-server'
+import { gql, makeExecutableSchema } from 'apollo-server'
 
 const typeDefs = gql`
   scalar Date
@@ -687,7 +685,7 @@ const typeDefs = gql`
   }
 `
 
-schemaComposer.addTypeDefs(typeDefs.loc.source.body)
-schemaComposer.addResolveMethods(resolvers)
-
-export default schemaComposer.buildSchema()
+export default makeExecutableSchema({
+  typeDefs,
+  resolvers,
+})

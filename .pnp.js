@@ -10282,7 +10282,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["express", "npm:4.17.1"],
             ["graphql", "npm:15.5.0"],
             ["graphql-bigint", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.0.0"],
-            ["graphql-compose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:7.25.1"],
             ["graphql-iso-date", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:3.6.1"],
             ["graphql-redis-subscriptions", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.1.0"],
             ["graphql-subscriptions", "virtual:1f9b205ae500ece47828e35133ac56204209325c90ff184817980e0a7f1f0e80ed2fe70712b50f28d439ae22252ab70aaf9de8ca1f66309acadf1da5d2011eaf#npm:1.2.1"],
@@ -26751,13 +26750,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["npm:7.25.1", {
-          "packageLocation": "./.yarn/cache/graphql-compose-npm-7.25.1-c6cb4562b5-96aa8a6ab9.zip/node_modules/graphql-compose/",
-          "packageDependencies": [
-            ["graphql-compose", "npm:7.25.1"]
-          ],
-          "linkType": "SOFT",
-        }],
         ["virtual:1f9b205ae500ece47828e35133ac56204209325c90ff184817980e0a7f1f0e80ed2fe70712b50f28d439ae22252ab70aaf9de8ca1f66309acadf1da5d2011eaf#npm:6.3.8", {
           "packageLocation": "./.yarn/$$virtual/graphql-compose-virtual-f03b71c2f8/0/cache/graphql-compose-npm-6.3.8-7ebc580c80-eebae4dfe6.zip/node_modules/graphql-compose/",
           "packageDependencies": [
@@ -26765,21 +26757,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/graphql", null],
             ["graphql", "npm:15.5.0"],
             ["graphql-type-json", "virtual:f03b71c2f8f5fa21589e11ff769757211554ae7010df43edc614a22b625a17689ab2e314e380e7c3a47b3c691a1d2857bde47bd0cbdcdcf0c5c09d3b454eaf01#npm:0.2.4"],
-            ["object-path", "npm:0.11.5"]
-          ],
-          "packagePeers": [
-            "@types/graphql",
-            "graphql"
-          ],
-          "linkType": "HARD",
-        }],
-        ["virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:7.25.1", {
-          "packageLocation": "./.yarn/$$virtual/graphql-compose-virtual-0810848e8a/0/cache/graphql-compose-npm-7.25.1-c6cb4562b5-96aa8a6ab9.zip/node_modules/graphql-compose/",
-          "packageDependencies": [
-            ["graphql-compose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:7.25.1"],
-            ["@types/graphql", null],
-            ["graphql", "npm:15.5.0"],
-            ["graphql-type-json", "virtual:1f9b205ae500ece47828e35133ac56204209325c90ff184817980e0a7f1f0e80ed2fe70712b50f28d439ae22252ab70aaf9de8ca1f66309acadf1da5d2011eaf#npm:0.3.2"],
             ["object-path", "npm:0.11.5"]
           ],
           "packagePeers": [
