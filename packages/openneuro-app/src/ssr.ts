@@ -110,7 +110,7 @@ async function createServer(): Promise<void> {
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
         // Allow proxies to cache anonymous requests
-        let cacheControl = 'public, max-age=2592000'
+        let cacheControl = 'public, max-age=86400'
 
         try {
           // 2. Apply vite HTML transforms. This injects the vite HMR client, and
