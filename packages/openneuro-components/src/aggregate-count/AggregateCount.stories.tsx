@@ -15,7 +15,7 @@ const AggregateCountTemplate: Story<AggregateCountProps> = args => (
 export const SinglePublicDatasetCount = AggregateCountTemplate.bind({})
 SinglePublicDatasetCount.args = {
   count: 1,
-  type: 'publicDataset'
+  type: 'publicDataset',
 }
 
 export const MultiplePublicDatasetsCount = AggregateCountTemplate.bind({})
