@@ -8,7 +8,7 @@ export interface TwoHandleRangeProps {
   max: number
   step: number
   dots: boolean
-  pushable: number | boolean
+  pushable: boolean
   defaultValue: [number, number]
   marks: { number: string }
   newvalue: [number, number]
