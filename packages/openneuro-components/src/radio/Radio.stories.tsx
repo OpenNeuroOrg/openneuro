@@ -12,7 +12,6 @@ export default {
 
 const RadioTemplate: Story<RadioGroupProps> = ({ radioArr, layout, name }) => {
   const [active, setActive] = React.useState(0)
-  console.log(active)
   return (
     <RadioGroup
       setActive={setActive}
