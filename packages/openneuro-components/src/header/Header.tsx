@@ -15,7 +15,7 @@ export interface HeaderProps {
   user?: {}
   onLogin?: () => void
   onLogout?: () => void
-  expanded?: () => void
+  expanded?: boolean
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -62,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           {expanded ? <LandingExpandedHeader user={user} /> : null}
         </div>
-        <svg
+        {/* <svg
           className="swoop"
           height="60"
           viewBox={`0 0 1900 80`}
@@ -71,7 +71,10 @@ export const Header: React.FC<HeaderProps> = ({
             d="M1,0  L2400,0 C100,120 0,0 -100, 10z"
             className="svg-fill-on-dark-aqua"
           />
-        </svg>
+        </svg> */}
+        <div className="header-swoop">
+          <div></div>
+        </div>
       </header>
       {!user ? (
         <Modal isOpen={isOpen} toggle={toggle} closeText="Close">
@@ -83,7 +86,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="col col-3">
               <div className="grid grid-center">
                 <Button
-                  buttonclassName="login-button"
+                  buttonClass="login-button"
                   primary
                   label="Google"
                   icon="fab fa-google"
@@ -94,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="col col-3">
               <div className="grid grid-center">
                 <Button
-                  buttonclassName="login-button"
+                  buttonClass="login-button"
                   primary
                   label="ORCID"
                   imgSrc={orcidIcon}

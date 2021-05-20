@@ -1,4 +1,9 @@
 @import '../scss/variables';
+header {
+  position: relative;
+  padding-bottom: 100px;
+  overflow: hidden;
+}
 
 .navbar-inner-wrap {
   display: flex;
@@ -7,14 +12,28 @@
   padding: 10px 25px 0;
   align-items: center;
   background-color: $primary;
-  overflow: hidden;
+
+  position: relative;
+  z-index: 3;
 }
 .svg-fill-on-dark-aqua {
   fill: $primary;
 }
 
-.swoop {
-  width: 100%;
+// .swoop {
+//   width: 100%;
+// }
+
+.header-swoop {
+  background: $on-dark-aqua;
+  width: calc(100% + 104vw);
+  height: 330px;
+  border-radius: 100%;
+  margin: 0 0 0 -26vw;
+  position: absolute;
+  transform: scale(1.05) rotate(-2deg);
+  z-index: 2;
+  bottom: 81px;
 }
 
 .navbar-navigation {
