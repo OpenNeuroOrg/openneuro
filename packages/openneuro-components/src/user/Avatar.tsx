@@ -14,11 +14,10 @@ export const Avatar = ({ profile }: AvatarProps) => {
   const imageUrl = generateGravatarUrl(profile)
   let thumbnail
   if (imageUrl) {
-    const username = profile && profile.name ? profile.name : null
+    const username = profile?.name
     thumbnail = <img src={imageUrl} alt={username} className="user-img-thumb" />
   } else {
-    const firstLetter =
-      profile && profile.name ? profile.name.slice(0, 1) : null
+    const firstLetter = profile?.name.slice(0, 1)
     thumbnail = (
       <div className="user-generic-thumb">
         <div className="user-generic-thumb-letter">{firstLetter}</div>

@@ -12656,7 +12656,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/react-router", "npm:5.1.14"],
             ["@types/history", "npm:4.7.8"],
-            ["@types/react", "npm:17.0.5"]
+            ["@types/react", "npm:17.0.6"]
           ],
           "linkType": "HARD",
         }]
@@ -12667,7 +12667,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/react-router-dom", "npm:5.1.7"],
             ["@types/history", "npm:4.7.8"],
-            ["@types/react", "npm:17.0.5"],
+            ["@types/react", "npm:17.0.6"],
             ["@types/react-router", "npm:5.1.14"]
           ],
           "linkType": "HARD",
@@ -25229,7 +25229,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
+          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.14.0"],

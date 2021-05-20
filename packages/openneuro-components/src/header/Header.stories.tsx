@@ -8,7 +8,27 @@ export default {
   component: Header,
 } as Meta
 
-const Template: Story<HeaderProps> = args => <Header {...args} />
+const Template: Story<HeaderProps> = ({
+  profile,
+  onLogin,
+  onLogout,
+  expanded,
+}) => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const toggleLogin = () => setIsOpen(!isOpen)
+  const toggleUpload = () => setIsOpen(!isOpen)
+  return (
+    <Header
+      profile={profile}
+      onLogin={onLogin}
+      onLogout={onLogout}
+      expanded={expanded}
+      isOpen={isOpen}
+      toggleLogin={toggleLogin}
+      toggleUpload={toggleUpload}
+    />
+  )
+}
 
 export const LoggedIn = Template.bind({})
 LoggedIn.args = {

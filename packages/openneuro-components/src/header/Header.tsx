@@ -17,6 +17,9 @@ export interface HeaderProps {
   onLogin?: () => void
   onLogout?: () => void
   expanded?: boolean
+  isOpen: boolean
+  toggleLogin: () => void
+  toggleUpload: () => void
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -24,10 +27,10 @@ export const Header: React.FC<HeaderProps> = ({
   onLogin,
   onLogout,
   expanded,
+  isOpen,
+  toggleLogin,
+  toggleUpload,
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const toggleLogin = () => setIsOpen(!isOpen)
-  const toggleUpload = () => setIsOpen(!isOpen)
   return (
     <>
       <header>

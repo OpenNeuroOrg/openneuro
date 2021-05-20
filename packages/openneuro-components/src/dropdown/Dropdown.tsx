@@ -4,7 +4,7 @@ import './dropdown.scss'
 export interface DropdownProps {
   label: Record<string, any>
   children
-  className: string
+  className?: string
 }
 
 export const Dropdown = ({ children, label, className }: DropdownProps) => {

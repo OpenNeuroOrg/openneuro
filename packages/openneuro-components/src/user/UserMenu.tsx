@@ -6,21 +6,15 @@ import { Avatar } from '../user/Avatar'
 import '../dropdown/dropdown.scss'
 import './user-menu.scss'
 
-//import signOut from '../../../openneuro-app/src/scripts/authentication/signOut.js'
-
 export interface UserMenuProps {
   profile: {
     name: string
     admin: boolean
   }
+  signOutAndRedirect: ({}) => void
 }
 
-// const signOutAndRedirect = history => {
-//   signOut()
-//   history.push('/')
-// }
-
-export const UserMenu = ({ profile }: UserMenuProps) => {
+export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
   return (
     <Dropdown
       className={'user-menu-dropdown'}
@@ -47,7 +41,7 @@ export const UserMenu = ({ profile }: UserMenuProps) => {
             )}
             <li className="user-menu-link">
               <a
-                //onClick={() => signOutAndRedirect(history)}
+                onClick={() => signOutAndRedirect(history)}
                 className="btn-submit-other">
                 Sign Out
               </a>

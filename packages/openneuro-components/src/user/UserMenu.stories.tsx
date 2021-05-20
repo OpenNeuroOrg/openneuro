@@ -1,5 +1,6 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
+import signOut from '../../../openneuro-app/src/scripts/authentication/signOut.js'
 
 import { UserMenu, UserMenuProps } from './UserMenu'
 
@@ -9,7 +10,12 @@ export default {
 } as Meta
 
 const UserMenuTemplate: Story<UserMenuProps> = ({ profile }) => {
-  return <UserMenu profile={profile} />
+  const signOutAndRedirect = history => {
+    signOut()
+    history.push('/')
+  }
+
+  return <UserMenu profile={profile} signOutAndRedirect={signOutAndRedirect} />
 }
 
 const profile = {
