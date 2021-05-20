@@ -112,6 +112,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
       variables: { datasetId },
       errorPolicy: 'all',
       fetchPolicy: draft ? 'cache-and-network' : 'cache-first',
+      nextFetchPolicy: 'cache-first',
     },
   )
   usePermissionsSubscription([datasetId])
