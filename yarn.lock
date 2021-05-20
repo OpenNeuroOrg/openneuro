@@ -4711,7 +4711,7 @@ __metadata:
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
     "@loadable/component": ^5.7.0
-    "@openneuro/client": ^3.33.1
+    "@openneuro/client": ^3.33.2
     "@sentry/browser": ^4.5.3
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
@@ -4805,7 +4805,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^3.33.1
+    "@openneuro/client": ^3.33.2
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
     bids-validator: 1.7.2
@@ -4830,13 +4830,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^3.33.1, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^3.33.2, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^3.33.1
+    "@openneuro/server": ^3.33.2
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4890,7 +4890,7 @@ __metadata:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
-    "@openneuro/client": ^3.33.1
+    "@openneuro/client": ^3.33.2
     "@types/node": ^14.14.41
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
@@ -4902,7 +4902,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^3.33.1, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^3.33.2, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
