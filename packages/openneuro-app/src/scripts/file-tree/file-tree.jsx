@@ -58,8 +58,9 @@ const FileTree = ({
                   directory>
                   <i className="fa fa-plus" /> Add Directory
                 </UpdateFile>
-                <DeleteDir datasetId={datasetId} path={path} />
-                {bulkDeleteButton}
+                {bulkDeleteButton || (
+                  <DeleteDir datasetId={datasetId} path={path} />
+                )}
               </span>
             </Media>
           )}
