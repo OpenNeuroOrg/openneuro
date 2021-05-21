@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/components",
-  "version": "3.33.4",
+  "version": "3.33.5",
   "description": "OpenNeuro component library and Storybook configuration",
   "main": "dist/index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
@@ -11,6 +11,7 @@
     "date-fns": "^2.21.1",
     "rc-slider": "^9.7.2",
     "react": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-slick": "^0.28.1",
     "slick-carousel": "^1.8.1"
   },
@@ -27,6 +28,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@types/mdx-js__react": "^1",
+    "@types/react-router-dom": "^5",
     "@types/react-slick": "^0",
     "@types/slick-carousel": "^1",
     "css-loader": "^5.2.1",

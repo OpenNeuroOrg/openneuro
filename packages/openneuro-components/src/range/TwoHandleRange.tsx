@@ -1,3 +1,4 @@
+// @ts-nocheck rc-slider types are broken (wrong types for Range)
 import React from 'react'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
