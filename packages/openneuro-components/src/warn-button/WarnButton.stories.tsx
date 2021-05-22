@@ -10,36 +10,32 @@ export default {
 
 const WarnButtonTemplate: Story<WarnButtonProps> = ({
   message,
-  cancel,
-  confirm,
   icon,
-  warn,
+  disabled,
   tooltip,
   onClick,
 }) => {
+  const [displayOptions, setDisplayOptions] = React.useState(false)
   return (
     <WarnButton
       message={message}
-      cancel={cancel}
-      confirm={confirm}
       icon={icon}
-      warn={warn}
-      tooltip={tooltip}
+      disabled={disabled}
       onClick={onClick}
       tooltip={tooltip}
+      displayOptions={displayOptions}
+      setDisplayOptions={setDisplayOptions}
     />
   )
 }
 
 export const Example = WarnButtonTemplate.bind({})
 Example.args = {
-  message: '',
-  cancel: <i className="fa fa-times" />,
-  confirm: <i className="fa fa-check" />,
   icon: 'fa-trash-o',
-  warn: true,
-  tooltip: 'hello TT',
+  disabled: false,
+  tooltip: 'hello Tip',
   onClick: () => console.log('clicked'),
+  message: 'message?',
 }
 
 Example.parameters = {
