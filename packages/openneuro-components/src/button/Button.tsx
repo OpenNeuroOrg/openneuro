@@ -14,7 +14,8 @@ export interface ButtonProps {
   color?: string
   imgSrc?: string
   iconSize?: string
-  buttonClass?: string
+  className?: string
+  children
 }
 
 /**
@@ -31,7 +32,8 @@ export const Button: React.FC<ButtonProps> = ({
   color,
   imgSrc,
   iconSize,
-  buttonClass,
+  className,
+  children,
   ...props
 }) => {
   const mode =
@@ -67,6 +69,7 @@ export const Button: React.FC<ButtonProps> = ({
       {imgIcon}
       {fontIcon}
       {label}
+      {children}
     </button>
   )
 }

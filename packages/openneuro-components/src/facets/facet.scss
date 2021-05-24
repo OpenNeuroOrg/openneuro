@@ -1,39 +1,5 @@
 @import '../scss/variables';
 
-// .selected-facets-clear {
-//   margin: 20px 15px;
-//   border-bottom: 1px solid #bbb;
-//   padding-bottom: 20px;
-//   button {
-//     width: 100%;
-//     margin-bottom: 20px;
-//   }
-//   .on-icon {
-//     cursor: pointer;
-//     color: $on-dark-aqua;
-//     i {
-//       color: $on-light-aqua;
-//     }
-//   }
-// }
-
-// {selected && (
-//   <div className="selected-facets-clear">
-//     <Button
-//       borderColor="#333"
-//       type="ghost"
-//       label="CLEAR ALL"
-//       color="#333"
-//       onClick={() => setSelected(null)}
-//     />
-//     <Icon
-//       icon="fas fa-times"
-//       label={selected.label}
-//       onClick={() => setSelected(null)}
-//     />
-//   </div>
-// )}
-
 .facet-accordion.on-accordion-wrapper {
   padding: 0 15px;
   border-bottom: 1px solid #aaa;
@@ -61,7 +27,7 @@
         &.selected-facet {
           > .label,
           > .label span {
-            color: $on-light-aqua;
+            color: $current-theme-primary;
           }
         }
         .label {
