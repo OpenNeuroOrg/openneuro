@@ -34,6 +34,7 @@ export const Button: React.FC<ButtonProps> = ({
   iconSize,
   className,
   children,
+  disabled,
   ...props
 }) => {
   const mode =
@@ -55,6 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      disabled={disabled}
       role="button"
       type="button"
       className={[
@@ -62,7 +64,7 @@ export const Button: React.FC<ButtonProps> = ({
         `on-button--${size}`,
         mode,
         iconWithText,
-        `${buttonClass}`,
+        `${className}`,
       ].join(' ')}
       style={{ backgroundColor, color }}
       {...props}>

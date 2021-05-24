@@ -34,7 +34,7 @@ export const Modal: React.FC<ModalProps> = ({
             <div className="grid grid-end">
               <div className="m-b-20 m-r-20">
                 <Button
-                  buttonClass="modal-close-button"
+                  className="modal-close-button"
                   size="small"
                   onClick={toggle}
                   label={closeText}

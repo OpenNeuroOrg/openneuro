@@ -48,3 +48,15 @@ Example.args = {
 Example.parameters = {
   layout: 'centered',
 }
+
+export const disabled = CountToggleTemplate.bind({})
+disabled.args = {
+  icon: 'fa-thumbtack',
+  disabled: true,
+  tooltip: 'hello Tip',
+  label: 'Follow',
+}
+
+disabled.parameters = {
+  layout: 'centered',
+}

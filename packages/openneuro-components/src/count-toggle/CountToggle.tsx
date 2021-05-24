@@ -2,6 +2,8 @@ import React from 'react'
 import './count-toggle.scss'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
+import { Modal } from '../modal/Modal'
+import { UserModalInner } from '../modal/UserModalInner'
 
 export interface CountToggleProps {
   label?: string
@@ -28,29 +30,47 @@ export const CountToggle = ({
     onClick()
     setDisplayOptions(!displayOptions)
   }
-
+  const [isOpen, setIsOpen] = React.useState(false)
+  const toggleLogin = () => setIsOpen(!isOpen)
   const toggleButton = (
-    <span className={disabled ? ' disabled toggle-counter' : 'toggle-counter'}>
+    <span className="toggle-counter">
       <Button
         className={displayOptions ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={() => toggleClick()}
-        disabled={disabled}>
+        onClick={() => toggleClick()}>
+        {label} <span>{count}</span>
+      </Button>
+    </span>
+  )
+  const disabledToggleButton = (
+    <span className="toggle-counter disabled">
+      <Button
+        className={displayOptions ? 'toggle-btn active' : 'toggle-btn'}
+        iconSize="12px"
+        icon={'fa ' + icon}
+        onClick={() => toggleLogin()}>
         {label} <span>{count}</span>
       </Button>
     </span>
   )
 
   return (
-    <div className="toggle-counter-wrap">
-      {tooltip ? (
-        <Tooltip flow="up" tooltip={tooltip}>
-          {toggleButton}
-        </Tooltip>
-      ) : (
-        toggleButton
-      )}
-    </div>
+    <>
+      <div className="toggle-counter-wrap">
+        {tooltip ? (
+          <Tooltip flow="up" tooltip={tooltip}>
+            {disabled ? disabledToggleButton : toggleButton}
+          </Tooltip>
+        ) : disabled ? (
+          disabledToggleButton
+        ) : (
+          toggleButton
+        )}
+      </div>
+      <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
+        <UserModalInner />
+      </Modal>
+    </>
   )
 }
