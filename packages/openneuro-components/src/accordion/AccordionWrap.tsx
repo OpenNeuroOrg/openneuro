@@ -3,7 +3,7 @@ import React from 'react'
 import './accordion.scss'
 
 export interface AccordionWrapProps {
-  children: object
+  children: React.ReactNode
   className: string
 }
 

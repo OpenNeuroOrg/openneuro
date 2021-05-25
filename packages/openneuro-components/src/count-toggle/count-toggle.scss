@@ -1,0 +1,30 @@
+@import '../scss/variables';
+
+.toggle-btn {
+  border: 1px solid #aaa;
+  padding: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &:hover {
+    text-decoration: none;
+    background-color: #eee;
+  }
+  i {
+    margin: 2px 13px 0 5px;
+    color: #999;
+  }
+  span {
+    border-left: 1px solid #aaa;
+    margin: -7px 0 -7px 12px;
+    display: block;
+    position: relative;
+    padding: 7px 3px 7px 10px;
+  }
+
+  &.active {
+    i {
+      color: $current-theme-primary;
+    }
+  }
+}

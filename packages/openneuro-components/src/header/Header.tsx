@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
+import { UserModalInner } from '../modal/UserModalInner'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { AccordionTab } from '../accordion/AccordionTab'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
@@ -64,7 +65,10 @@ export const Header: React.FC<HeaderProps> = ({
                   icon="fas fa-upload"
                   iconSize="'23px"
                 />
-                <UserMenu profile={profile} />
+                <UserMenu
+                  profile={profile}
+                  signOutAndRedirect={() => console.log('signout')}
+                />
               </div>
             ) : (
               // TODO ADD ACCOUNT INFO DROPDOWN
@@ -99,51 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
       </header>
       {!profile ? (
         <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
-          <div className="grid grid-center grid-column">
-            <Logo horizontal dark={true} width="230px" className="m-t-20" />
-            <h4>Sign in</h4>
-          </div>
-          <div className="grid grid-center sign-in-modal-content">
-            <div className="col col-3">
-              <div className="grid grid-center">
-                <Button
-                  buttonClass="login-button"
-                  primary
-                  label="Google"
-                  icon="fab fa-google"
-                  iconSize="23px"
-                />
-              </div>
-            </div>
-            <div className="col col-3">
-              <div className="grid grid-center">
-                <Button
-                  buttonClass="login-button"
-                  primary
-                  label="ORCID"
-                  imgSrc={orcidIcon}
-                />
-                <AccordionWrap>
-                  <AccordionTab
-                    tabId="orcid-info-accordion"
-                    tabLable="What is this?"
-                    children={
-                      <>
-                        ORCID users are identified and connected to their
-                        contributions and affiliations, across disciplines,
-                        borders, and time.{' '}
-                        <a
-                          href="https://orcid.org/content/about-orcid"
-                          target="_blank">
-                          Learn more
-                        </a>
-                      </>
-                    }
-                  />
-                </AccordionWrap>
-              </div>
-            </div>
-          </div>
+          <UserModalInner />
         </Modal>
       ) : null}
       {profile ? (

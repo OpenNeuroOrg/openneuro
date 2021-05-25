@@ -5,7 +5,7 @@ import { Footer } from '../footer/Footer'
 
 import './page.scss'
 export interface PageProps {
-  children
+  children: React.ReactNode
   headerArgs
   className?: string
 }

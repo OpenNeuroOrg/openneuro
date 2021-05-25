@@ -14,7 +14,8 @@ export interface ButtonProps {
   color?: string
   imgSrc?: string
   iconSize?: string
-  buttonClass?: string
+  className?: string
+  children: React.ReactNode
 }
 
 /**
@@ -31,7 +32,9 @@ export const Button: React.FC<ButtonProps> = ({
   color,
   imgSrc,
   iconSize,
-  buttonClass,
+  className,
+  children,
+  disabled,
   ...props
 }) => {
   const mode =
@@ -53,6 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      disabled={disabled}
       role="button"
       type="button"
       className={[
@@ -60,13 +64,14 @@ export const Button: React.FC<ButtonProps> = ({
         `on-button--${size}`,
         mode,
         iconWithText,
-        `${buttonClass}`,
+        `${className}`,
       ].join(' ')}
       style={{ backgroundColor, color }}
       {...props}>
       {imgIcon}
       {fontIcon}
       {label}
+      {children}
     </button>
   )
 }
