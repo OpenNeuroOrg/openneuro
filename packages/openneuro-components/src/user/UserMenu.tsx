@@ -11,7 +11,7 @@ export interface UserMenuProps {
     name: string
     admin: boolean
   }
-  signOutAndRedirect: ({}) => void
+  signOutAndRedirect: () => void
 }
 
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
@@ -41,7 +41,7 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
             )}
             <li className="user-menu-link">
               <a
-                onClick={() => signOutAndRedirect(history)}
+                onClick={() => signOutAndRedirect()}
                 className="btn-submit-other">
                 Sign Out
               </a>
