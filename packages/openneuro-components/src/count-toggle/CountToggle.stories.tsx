@@ -17,9 +17,7 @@ const CountToggleTemplate: Story<CountToggleProps> = ({
   const [count, setCount] = React.useState(1)
 
   const onClick = () => {
-    let newCount
-    count === 1 ? (newCount = 2) : (newCount = 1)
-    setCount(newCount)
+    setCount(count === 1 ? 2 : 1)
   }
 
   return (
