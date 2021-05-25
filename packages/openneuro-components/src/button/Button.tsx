@@ -15,7 +15,7 @@ export interface ButtonProps {
   imgSrc?: string
   iconSize?: string
   className?: string
-  children
+  children: React.ReactNode
 }
 
 /**

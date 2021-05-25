@@ -5,7 +5,7 @@ import { Icon } from '../icon/Icon'
 import './accordion.scss'
 
 export interface AccordionTabProps {
-  children: object
+  children: React.ReactNode
   tabId: string
   className: string
   label: string

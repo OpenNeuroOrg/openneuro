@@ -4,7 +4,7 @@ import { Button } from '../button/Button'
 import './modal.scss'
 
 export interface ModalProps {
-  children?: object
+  children?: React.ReactNode
   isOpen?: boolean
   toggle?: () => void
   closeText: string

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import { useQuery, useMutation } from 'graphql-hooks'
 import { CountToggle, CountToggleProps } from './CountToggle'
 
 export default {

@@ -3,7 +3,7 @@ import './dropdown.scss'
 
 export interface DropdownProps {
   label: Record<string, any>
-  children
+  children: React.ReactNode
   className?: string
 }
 
