@@ -13,11 +13,12 @@ const CountToggleTemplate: Story<CountToggleProps> = ({
   disabled,
   tooltip,
 }) => {
-  const [displayOptions, setDisplayOptions] = React.useState(false)
+  const [clicked, showClicked] = React.useState(false)
   const [count, setCount] = React.useState(1)
 
-  const onClick = () => {
+  const toggleClick = () => {
     setCount(count === 1 ? 2 : 1)
+    showClicked(!clicked)
   }
 
   return (
@@ -25,10 +26,10 @@ const CountToggleTemplate: Story<CountToggleProps> = ({
       label={label}
       icon={icon}
       disabled={disabled}
-      onClick={onClick}
+      toggleClick={toggleClick}
       tooltip={tooltip}
-      displayOptions={displayOptions}
-      setDisplayOptions={setDisplayOptions}
+      clicked={clicked}
+      showClicked={showClicked}
       count={count}
     />
   )

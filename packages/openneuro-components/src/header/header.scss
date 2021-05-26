@@ -184,3 +184,40 @@ header {
     }
   }
 }
+
+.header-input-wrap {
+  width: 90%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  .header-input {
+    flex-grow: 1;
+    input {
+      width: 100%;
+      padding: 16px;
+    }
+  }
+  .header-input-button {
+    width: 55px;
+    margin-left: 15px;
+    button.on-button--primary {
+      background-color: $on-light-aqua;
+      max-width: 100%;
+      padding: 17px;
+    }
+  }
+}
+
+.header-or-text {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.header-modality-wrap {
+  width: 90%;
+  margin: 60px 0 20px;
+  .facet-accordion.on-accordion-wrapper .accordion-title {
+    padding: 15px 0;
+  }
+}

@@ -11,6 +11,7 @@ export interface AccordionTabProps {
   label: string
   plainStyle: boolean
   startOpen: boolean
+  dropdown: boolean
   accordionStyle: 'plain' | 'file-tree' | 'bids-wrappper'
 }
 
@@ -24,6 +25,7 @@ export const AccordionTab: React.FC<AccordionTabProps> = ({
   className,
   accordionStyle,
   startOpen,
+  dropdown,
 }) => {
   const [isOpen, setOpen] = React.useState(startOpen)
   const fileTreeIcon = accordionStyle == 'file-tree' && (
@@ -41,7 +43,10 @@ export const AccordionTab: React.FC<AccordionTabProps> = ({
           onClick={() => setOpen(!isOpen)}>
           {fileTreeIcon} {label}
         </div>
-        <div className={`accordion-item ${!isOpen ? 'collapsed' : ''}`}>
+        <div
+          className={`accordion-item ${!isOpen ? ' collapsed' : ''} ${
+            dropdown ? ' dropdown-style' : ''
+          }`}>
           <div className="accordion-content">{children}</div>
         </div>
       </span>

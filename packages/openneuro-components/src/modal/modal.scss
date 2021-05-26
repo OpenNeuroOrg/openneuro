@@ -9,14 +9,13 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  transition: opacity 0.5s;
+  transition: opacity 0.3s;
   z-index: 9000;
   .modal {
     background-color: #fff;
     min-width: 500px;
     max-width: 90%;
     transition: transform 0.3s;
-    transition-delay: 0.2s;
   }
 
   .modal-close-x {
@@ -41,8 +40,8 @@
 
   &.hide-modal {
     opacity: 0;
-    transition-delay: 0.2s;
-    animation: hideModal 0.6s 1;
+    transition-delay: 0;
+    animation: hideModal 0.4s 1;
     animation-fill-mode: forwards;
     .modal {
       transform: translateY(-100vh);
