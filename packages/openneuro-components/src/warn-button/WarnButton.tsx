@@ -21,10 +21,6 @@ export const WarnButton = ({
   displayOptions,
   setDisplayOptions,
 }: WarnButtonProps) => {
-  const confirmClick = () => {
-    onClick()
-    setDisplayOptions(currentState => !currentState)
-  }
   const viewAction = (
     <div className="warn-btn-group " role="group">
       <div className="slide-in">
@@ -44,7 +40,10 @@ export const WarnButton = ({
           icon="fa fa-check"
           color="#fff"
           backgroundColor="#00b489"
-          onClick={() => confirmClick()}
+          onClick={() => {
+            onClick()
+            setDisplayOptions(currentState => !currentState)
+          }}
           size="xsmall"
         />
       </div>
