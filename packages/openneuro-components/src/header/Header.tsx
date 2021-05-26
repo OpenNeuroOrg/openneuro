@@ -4,8 +4,6 @@ import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
 import { UserModalInner } from '../modal/UserModalInner'
-import { AccordionWrap } from '../accordion/AccordionWrap'
-import { AccordionTab } from '../accordion/AccordionTab'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
 import { UserMenu } from '../user/UserMenu'
 
@@ -84,16 +82,6 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           {expanded ? <LandingExpandedHeader profile={profile} /> : null}
         </div>
-        {/* <svg
-          className="swoop"
-          height="60"
-          viewBox={`0 0 1900 80`}
-          preserveAspectRatio="none">
-          <path
-            d="M1,0  L2400,0 C100,120 0,0 -100, 10z"
-            className="svg-fill-on-dark-aqua"
-          />
-        </svg> */}
         <div className="swoop-hide-overflow">
           {' '}
           <div className="header-swoop">

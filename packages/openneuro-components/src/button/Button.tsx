@@ -5,7 +5,7 @@ export interface ButtonProps {
   primary?: boolean
   secondary?: boolean
   backgroundColor?: string
-  size?: 'small' | 'medium' | 'large'
+  size?: 'xsmall' | 'small' | 'medium' | 'large'
   label?: string
   disabled?: boolean
   onClick?: () => void

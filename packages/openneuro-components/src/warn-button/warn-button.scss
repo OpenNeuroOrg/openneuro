@@ -1,0 +1,33 @@
+.warn-btn {
+  .btn-warn-component {
+    padding: 10px;
+  }
+  .slide-in {
+    overflow: hidden;
+  }
+  .warn-btn-group {
+    opacity: 1;
+    transition: opacity 0.3s;
+    animation: fade 0.4s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    button {
+      margin: 5px;
+      padding: 6px;
+      width: 26px;
+      height: 26px;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
