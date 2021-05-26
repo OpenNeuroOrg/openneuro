@@ -9,7 +9,6 @@ export interface WarnButtonProps {
   disabled?: boolean
   tooltip?: string
   onClick?: () => void
-  lock?: boolean
   displayOptions: boolean
   setDisplayOptions: (boolean) => void
 }
@@ -22,6 +21,10 @@ export const WarnButton = ({
   displayOptions,
   setDisplayOptions,
 }: WarnButtonProps) => {
+  const confirmClick = () => {
+    onClick()
+    setDisplayOptions(currentState => !currentState)
+  }
   const viewAction = (
     <div className="warn-btn-group " role="group">
       <div className="slide-in">
@@ -31,7 +34,7 @@ export const WarnButton = ({
           icon="fa fa-times"
           color="#fff"
           backgroundColor="#c00342"
-          onClick={() => setDisplayOptions(!displayOptions)}
+          onClick={() => setDisplayOptions(currentState => !currentState)}
           size="xsmall"
         />
 
@@ -41,7 +44,7 @@ export const WarnButton = ({
           icon="fa fa-check"
           color="#fff"
           backgroundColor="#00b489"
-          onClick={onClick}
+          onClick={() => confirmClick()}
           size="xsmall"
         />
       </div>
@@ -55,7 +58,7 @@ export const WarnButton = ({
         iconSize="12px"
         icon={'fa ' + icon}
         label={message}
-        onClick={() => setDisplayOptions(!displayOptions)}
+        onClick={() => setDisplayOptions(currentState => !currentState)}
         disabled={disabled}
       />
     </span>
