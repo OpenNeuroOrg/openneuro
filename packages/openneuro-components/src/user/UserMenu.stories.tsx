@@ -10,12 +10,12 @@ export default {
 } as Meta
 
 const UserMenuTemplate: Story<UserMenuProps> = ({ profile }) => {
-  const signOutAndRedirect = history => {
-    signOut()
-    history.push('/')
-  }
-
-  return <UserMenu profile={profile} signOutAndRedirect={signOutAndRedirect} />
+  return (
+    <UserMenu
+      profile={profile}
+      signOutAndRedirect={() => console.log('signout')}
+    />
+  )
 }
 
 const profile = {

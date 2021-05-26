@@ -31,7 +31,7 @@ export const CountToggle = ({
     setDisplayOptions(!displayOptions)
   }
   const [isOpen, setIsOpen] = React.useState(false)
-  const toggleLoginModal = () => setIsOpen(!isOpen)
+  const toggleLogin = () => setIsOpen(!isOpen)
   const toggleButton = (
     <span className="toggle-counter">
       <Button
@@ -49,7 +49,7 @@ export const CountToggle = ({
         className={displayOptions ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={() => toggleLoginModal()}>
+        onClick={() => toggleLogin()}>
         {label} <span>{count}</span>
       </Button>
     </span>
@@ -68,7 +68,7 @@ export const CountToggle = ({
           toggleButton
         )}
       </div>
-      <Modal isOpen={isOpen} toggle={toggleLoginModal} closeText="Close">
+      <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
         <UserModalInner />
       </Modal>
     </>

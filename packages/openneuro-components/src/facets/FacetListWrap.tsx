@@ -9,7 +9,7 @@ export interface FacetListWrapProps {
       label: string
       value: string
       count: number
-      children
+      children: React.ReactNode
     },
   ]
   accordionStyle: string
@@ -20,7 +20,7 @@ export interface FacetListWrapProps {
     label: string
     value: string
     count: number
-    children
+    children: React.ReactNode
   }
   setSelected: (selected: { label: string; value: string }) => void
 }

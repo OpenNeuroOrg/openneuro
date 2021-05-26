@@ -12,6 +12,7 @@ $on-dark-aqua: rgba(32, 78, 90, 1);
 $asl-theme: rgba(185, 42, 39, 1);
 $meg-theme: rgba(234, 93, 11, 1);
 $on-light-green: #00b489;
+$on-light-red: #c00342;
 
 $primary: $on-dark-aqua;
 
@@ -75,3 +76,5 @@ $base-unit: 20px;
 $screen-sm: 480px;
 $screen-md: 767px;
 $screen-lg: 989px;
+
+$current-theme-primary: $on-dark-aqua;

@@ -140,9 +140,6 @@ header {
 }
 
 .expaned-header {
-  a {
-    color: $on-light-aqua;
-  }
   h2 {
     font-weight: 300;
     color: #fff;
@@ -150,6 +147,7 @@ header {
     max-width: 90%;
     a {
       font-weight: 600;
+      color: $on-light-aqua;
     }
   }
   .expaned-h-left {
