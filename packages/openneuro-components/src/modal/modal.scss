@@ -42,7 +42,7 @@
   &.hide-modal {
     opacity: 0;
     transition-delay: 0.2s;
-    animation: hideModal 0.6s 1;
+    animation: hideModal 0.4s 1;
     animation-fill-mode: forwards;
     .modal {
       transform: translateY(-100vh);
