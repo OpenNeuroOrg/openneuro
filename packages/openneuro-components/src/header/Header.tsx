@@ -64,7 +64,10 @@ export const Header: React.FC<HeaderProps> = ({
                   icon="fas fa-upload"
                   iconSize="'23px"
                 />
-                <UserMenu profile={profile} />
+                <UserMenu
+                  profile={profile}
+                  signOutAndRedirect={() => console.log('need signout')}
+                />
               </div>
             ) : (
               // TODO ADD ACCOUNT INFO DROPDOWN
