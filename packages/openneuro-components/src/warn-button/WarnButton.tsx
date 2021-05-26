@@ -10,7 +10,7 @@ export interface WarnButtonProps {
   tooltip?: string
   onClick?: () => void
   displayOptions: boolean
-  setDisplayOptions: (boolean) => void
+  setDisplayOptions(cb: (currentState: boolean) => boolean): void
 }
 export const WarnButton = ({
   message,
