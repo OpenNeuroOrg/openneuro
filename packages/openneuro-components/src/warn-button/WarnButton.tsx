@@ -8,7 +8,7 @@ export interface WarnButtonProps {
   icon?: string
   disabled?: boolean
   tooltip?: string
-  onClick?: () => void
+  onConfirmedClick?: () => void
   displayOptions: boolean
   setDisplayOptions(cb: (currentState: boolean) => boolean): void
 }
@@ -17,7 +17,7 @@ export const WarnButton = ({
   icon,
   disabled,
   tooltip,
-  onClick,
+  onConfirmedClick,
   displayOptions,
   setDisplayOptions,
 }: WarnButtonProps) => {
@@ -41,7 +41,7 @@ export const WarnButton = ({
           color="#fff"
           backgroundColor="#00b489"
           onClick={() => {
-            onClick()
+            onConfirmedClick()
             setDisplayOptions(currentState => !currentState)
           }}
           size="xsmall"

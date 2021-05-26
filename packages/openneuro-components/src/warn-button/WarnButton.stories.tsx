@@ -13,7 +13,7 @@ const WarnButtonTemplate: Story<WarnButtonProps> = ({
   icon,
   disabled,
   tooltip,
-  onClick,
+  onConfirmedClick,
 }) => {
   const [displayOptions, setDisplayOptions] = React.useState(false)
   return (
@@ -21,7 +21,7 @@ const WarnButtonTemplate: Story<WarnButtonProps> = ({
       message={message}
       icon={icon}
       disabled={disabled}
-      onClick={onClick}
+      onConfirmedClick={onConfirmedClick}
       tooltip={tooltip}
       displayOptions={displayOptions}
       setDisplayOptions={setDisplayOptions}
@@ -34,7 +34,7 @@ Example.args = {
   icon: 'fa-trash-o',
   disabled: false,
   tooltip: 'hello Tip',
-  onClick: () => console.log('clicked'),
+  onConfirmedClick: () => console.log('clicked'),
   message: 'message?',
 }
 
