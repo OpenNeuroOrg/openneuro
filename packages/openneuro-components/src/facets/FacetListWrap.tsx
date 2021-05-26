@@ -7,14 +7,14 @@ export interface FacetListWrapProps {
       label: string
       value: string
       count: number
-      children
+      children: React.ReactNode
     },
   ]
   selected: {
     label: string
     value: string
     count: number
-    children
+    children: React.ReactNode
   }
   setSelected: (selected: { label: string; value: string }) => void
 }

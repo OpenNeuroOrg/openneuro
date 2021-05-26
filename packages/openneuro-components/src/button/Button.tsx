@@ -15,6 +15,7 @@ export interface ButtonProps {
   imgSrc?: string
   iconSize?: string
   className?: string
+  children: React.ReactNode
 }
 
 /**
@@ -32,6 +33,8 @@ export const Button: React.FC<ButtonProps> = ({
   imgSrc,
   iconSize,
   className,
+  children,
+  disabled,
   ...props
 }) => {
   const mode =
@@ -53,6 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      disabled={disabled}
       role="button"
       type="button"
       className={[
@@ -67,6 +71,7 @@ export const Button: React.FC<ButtonProps> = ({
       {imgIcon}
       {fontIcon}
       {label}
+      {children}
     </button>
   )
 }
