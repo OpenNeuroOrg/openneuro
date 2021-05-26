@@ -1,6 +1,9 @@
 import React from 'react'
 import { ModalityHeader } from './ModalityHeader'
 import { CommunitySwoop } from './CommunitySwoop'
+
+import { FacetExample } from '../facets/Facet.stories'
+import { SortBy } from './SearchSort.stories'
 import './search-page.scss'
 
 export interface SearchPageProps {
@@ -41,8 +44,15 @@ export const SearchPage = ({ portalContent }: SearchPageProps) => {
         <section className="search">
           <div className="container">
             <div className="grid grid-start">
-              <div className="col col-4">facets Todo</div>
-              <div className="col col-8">results todo</div>
+              <div className="col col-4">
+                <FacetExample {...FacetExample.args} />
+              </div>
+              <div className="col col-8">
+                <div className="search-sort">
+                  <SortBy {...SortBy.args} />
+                </div>
+                results todo
+              </div>
             </div>
           </div>
         </section>
