@@ -12,6 +12,7 @@ export interface IconProps {
   color?: string
   imgSrc?: string
   iconSize?: string
+  className?: string
 }
 
 export const Icon: React.FC<IconProps> = ({
@@ -21,7 +22,7 @@ export const Icon: React.FC<IconProps> = ({
   color,
   imgSrc,
   iconSize,
-  ...props
+  className,
 }) => {
   const iconWithText =
     icon && label ? 'icon-text' : imgSrc && label ? 'img-icon-text' : null
@@ -35,9 +36,10 @@ export const Icon: React.FC<IconProps> = ({
 
   return (
     <span
-      className={['on-icon', iconWithText, wBackgroundColor].join(' ')}
-      style={{ backgroundColor, color }}
-      {...props}>
+      className={[className, 'on-icon', iconWithText, wBackgroundColor].join(
+        ' ',
+      )}
+      style={{ backgroundColor, color }}>
       {imgIcon}
       {fontIcon}
       {label}
