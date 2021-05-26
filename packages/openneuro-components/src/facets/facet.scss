@@ -59,4 +59,17 @@
       }
     }
   }
+
+  .facet-list ul li {
+    > .label {
+      font-weight: 500;
+    }
+    &.selected-facet > .label {
+      color: $on-light-aqua;
+
+      span {
+        color: $on-light-aqua;
+      }
+    }
+  }
 }

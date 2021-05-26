@@ -34,8 +34,8 @@ export const FacetListWrap = ({
   accordionStyle,
   dropdown,
 }: FacetListWrapProps) => {
-  const setSetter = (e, item) => {
-    e.stopPropagation() // Stop this click event to trigger click on parent onClick()
+  const setSelectorNoPropagation = (e, item) => {
+    e.stopPropagation()
     setSelected(item)
   }
   return (
@@ -50,7 +50,7 @@ export const FacetListWrap = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                onClick={e => setSetter(e, item)}
+                onClick={e => setSelectorNoPropagation(e, item)}
                 className={
                   selected && selected.value == item.value
                     ? 'selected-facet facet'
@@ -65,7 +65,7 @@ export const FacetListWrap = ({
                     {item.children.map((item, index) => (
                       <li
                         key={index}
-                        onClick={e => setSetter(e, item)}
+                        onClick={e => setSelectorNoPropagation(e, item)}
                         className={
                           selected && selected.value == item.value
                             ? 'selected-facet facet'

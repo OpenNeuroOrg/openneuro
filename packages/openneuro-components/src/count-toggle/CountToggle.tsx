@@ -54,18 +54,16 @@ export const CountToggle = ({
       </Button>
     </span>
   )
-
+  const button = disabled ? disabledToggleButton : toggleButton
   return (
     <>
       <div className="toggle-counter-wrap">
         {tooltip ? (
           <Tooltip flow="up" tooltip={tooltip}>
-            {disabled ? disabledToggleButton : toggleButton}
+            {button}
           </Tooltip>
-        ) : disabled ? (
-          disabledToggleButton
         ) : (
-          toggleButton
+          button
         )}
       </div>
       <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
