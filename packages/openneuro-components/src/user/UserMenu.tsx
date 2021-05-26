@@ -11,7 +11,7 @@ export interface UserMenuProps {
     name: string
     admin: boolean
   }
-  signOutAndRedirect: (history: any) => void
+  signOutAndRedirect: () => void
 }
 
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
