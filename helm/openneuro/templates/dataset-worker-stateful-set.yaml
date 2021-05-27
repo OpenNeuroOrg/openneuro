@@ -30,6 +30,8 @@ spec:
       - key: "storage"
         operator: "Exists"
         effect: "NoSchedule"
+      nodeSelector:
+        role: storage
       volumes:
       - name: ssh-key
         secret:
@@ -41,13 +43,13 @@ spec:
       containers:
       - name: {{ .Release.Name }}-dataset-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
+        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "4", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
           limits:
-            cpu: "2"
-            memory: "8Gi"
+            cpu: "1.6"
+            memory: "10Gi"
           requests:
-            cpu: "0.5"
+            cpu: "0.3"
             memory: "1Gi"
         ports:
         - containerPort: 80

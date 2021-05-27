@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}
@@ -18,47 +18,74 @@ spec:
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: www-redirect
-              servicePort: use-annotation
+              service:
+                name: www-redirect
+                port:
+                  name: use-annotation
     - host: {{ .Values.hostname }}
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: ssl-redirect
-              servicePort: use-annotation
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
           - path: /graphql-subscriptions
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ .Release.Name }}-api
-              servicePort: 8111
+              service:
+                name: {{ .Release.Name }}-api
+                port:
+                  number: 8111
           - path: /crn/*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ .Release.Name }}-api
-              servicePort: 8111
+              service:
+                name: {{ .Release.Name }}-api
+                port:
+                  number: 8111
           - path: /sitemap.xml
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ .Release.Name }}-api
-              servicePort: 8111
+              service:
+                name: {{ .Release.Name }}-api
+                port:
+                  number: 8111
           {{- $relname := .Release.Name -}}
           {{- range until ( .Values.dataladWorkers | int ) }}
           - path: /uploads/{{ . }}/*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ $relname }}-dataset-worker-{{ . }}
-              servicePort: 80
+              service:
+                name: {{ $relname }}-dataset-worker-{{ . }}
+                port:
+                  number: 80
           {{- end }}
           {{- $relname := .Release.Name -}}
           {{- range until ( .Values.dataladWorkers | int ) }}
           - path: /git/{{ . }}/*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ $relname }}-dataset-worker-{{ . }}
-              servicePort: 80
+              service:
+                name: {{ $relname }}-dataset-worker-{{ . }}
+                port:
+                  number: 80
           {{- end }}
           - path: /intake/*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ .Release.Name }}-apm-server
-              servicePort: 8200
+              service:
+                name: {{ .Release.Name }}-apm-server
+                port:
+                  number: 8200
           - path: /*
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ .Release.Name }}-web
-              servicePort: 80
+              service:
+                name: {{ .Release.Name }}-web
+                port:
+                  number: 80
