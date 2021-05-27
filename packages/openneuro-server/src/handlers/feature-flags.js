@@ -1,5 +1,5 @@
 const feature = {
-  REDESIGN_2021: 'redesign_2021',
+  REDESIGN_2021: 'redesign-2021',
 }
 
 export const setFlagRedesign2021 = (req, res) => {

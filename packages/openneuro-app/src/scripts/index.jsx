@@ -9,7 +9,7 @@ import FeatureToggle from './components/feature-toggle'
 const Index = () => {
   return (
     <FeatureToggle
-      feature="redesign_2021"
+      feature="redesign-2021"
       renderOnEnabled={() => <h1>Redesign 2021</h1>}
       renderOnDisabled={() => (
         <Uploader>
