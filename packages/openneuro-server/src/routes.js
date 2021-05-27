@@ -163,12 +163,12 @@ const routes = [
   // feature flag setters and unsetters
   {
     method: 'get',
-    url: '/feature-flag/redesign-2021/enable',
+    url: '/feature/redesign-2021/enable',
     handler: setFlagRedesign2021,
   },
   {
     method: 'get',
-    url: '/feature-flag/redesign-2021/disable',
+    url: '/feature/redesign-2021/disable',
     handler: unsetFlagRedesign2021,
   },
 ]
