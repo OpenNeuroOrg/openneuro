@@ -2,6 +2,7 @@ import React, { FC, ReactNode } from 'react'
 import { useCookies } from 'react-cookie'
 
 interface FeatureToggleProps {
+  feature: string
   renderOnEnabled(): ReactNode
   renderOnDisabled(): ReactNode
 }
