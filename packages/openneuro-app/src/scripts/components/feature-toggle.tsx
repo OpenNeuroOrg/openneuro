@@ -13,7 +13,7 @@ const FeatureToggle: FC<FeatureToggleProps> = ({
   renderOnDisabled,
 }) => {
   const [cookies] = useCookies()
-  return cookies[feature] ? renderOnEnabled() : renderOnDisabled()
+  return <>{cookies[feature] ? renderOnEnabled() : renderOnDisabled()}</>
 }
 
 export default FeatureToggle
