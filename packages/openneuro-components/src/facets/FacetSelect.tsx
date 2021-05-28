@@ -32,9 +32,9 @@ export const FacetSelect = ({
   accordionStyle,
   dropdown,
 }: FacetSelectProps) => {
-  const setSelectorNoPropagation = (e, item) => {
+  const setSelectorNoPropagation = (e, value) => {
     e.stopPropagation()
-    setSelected(item)
+    setSelected(value)
   }
   return (
     <AccordionWrap className="facet-accordion">
@@ -48,9 +48,9 @@ export const FacetSelect = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                onClick={e => setSelectorNoPropagation(e, item)}
+                onClick={e => setSelectorNoPropagation(e, item.value)}
                 className={
-                  selected && selected.value == item.value
+                  selected && selected == item.value
                     ? 'selected-facet facet'
                     : 'facet'
                 }>
@@ -63,9 +63,9 @@ export const FacetSelect = ({
                     {item.children.map((item, index) => (
                       <li
                         key={index}
-                        onClick={e => setSelectorNoPropagation(e, item)}
+                        onClick={e => setSelectorNoPropagation(e, item.value)}
                         className={
-                          selected && selected.value == item.value
+                          selected && selected == item.value
                             ? 'selected-facet facet'
                             : 'facet'
                         }>
