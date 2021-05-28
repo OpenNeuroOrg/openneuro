@@ -43,14 +43,14 @@ spec:
       containers:
       - name: {{ .Release.Name }}-dataset-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "4", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
+        command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
           limits:
-            cpu: "1.6"
+            cpu: "3"
             memory: "10Gi"
           requests:
-            cpu: "0.3"
-            memory: "1Gi"
+            cpu: "1"
+            memory: "4Gi"
         ports:
         - containerPort: 80
         envFrom:
