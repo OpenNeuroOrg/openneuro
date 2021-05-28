@@ -23,6 +23,8 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
 /* DEMO */
 // Quick demo on container components that draw from and update the SearchParams context
 //   using the display components in @openneuro/components.
+// Components used (temporarily) in src/scripts/index.jsx.
+// Wiew locally by navigating to http://localhost:9876/crn/feature/redesign-2021/enable.
 // The following components are just put here for ease of access, but
 //   should exist in their own files in practice.
 // TODO: delete demo
