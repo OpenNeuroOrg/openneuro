@@ -4712,13 +4712,15 @@ __metadata:
     "@loadable/babel-plugin": ^5.10.3
     "@loadable/component": ^5.7.0
     "@openneuro/client": ^3.33.5
+    "@openneuro/components": ^3.33.5
     "@sentry/browser": ^4.5.3
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
     "@types/jsdom": ^16
     "@types/node": ^14.14.37
-    "@types/react": ^17.0.3
+    "@types/react": ^17.0.8
+    "@types/react-dom": ^17.0.5
     "@wojtekmaj/enzyme-adapter-react-17": ^0.6.1
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^24.9.0
@@ -4846,7 +4848,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^3.33.5, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -4863,6 +4865,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/bytes": ^3
+    "@types/md5": ^2
     "@types/mdx-js__react": ^1
     "@types/react-router-dom": ^5
     "@types/react-slick": ^0
@@ -4871,6 +4874,7 @@ __metadata:
     css-loader: ^5.2.1
     date-fns: ^2.21.1
     pluralize: ^8.0.0
+    md5: ^2.3.0
     rc-slider: ^9.7.2
     react: ^17.0.1
     react-router-dom: ^5.2.0
@@ -4879,6 +4883,7 @@ __metadata:
     sass-loader: ^10.1.1
     slick-carousel: ^1.8.1
     style-loader: ^2.0.0
+    typescript: 4.0.6
     url-loader: ^1.0.1
     vite: 2.1.5
     webpack: ^4.20.2
@@ -7026,6 +7031,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/md5@npm:^2":
+  version: 2.3.0
+  resolution: "@types/md5@npm:2.3.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: c71340ae0c52b731c45f102745d6862c333d04cbe6a7b3de3bb5049180bb6c5904e1dd9e100e0df4436f6fa5c0fbaff999f96fdd2e85688aa1a73d6725733dcd
+  languageName: node
+  linkType: hard
+
 "@types/mdast@npm:^3.0.0":
   version: 3.0.3
   resolution: "@types/mdast@npm:3.0.3"
@@ -7249,6 +7263,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^17.0.5":
+  version: 17.0.5
+  resolution: "@types/react-dom@npm:17.0.5"
+  dependencies:
+    "@types/react": "*"
+  checksum: b3e23acb7be9405050abb4bcd443d14b16b2f3ded2d1853528199e4307b17b25186f905ddd236c27b6ef0297e6779b7fedd11fd24ee9170771be45a7e8e70f4b
+  languageName: node
+  linkType: hard
+
 "@types/react-router-dom@npm:^5":
   version: 5.1.7
   resolution: "@types/react-router-dom@npm:5.1.7"
@@ -7288,7 +7311,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:>=16.9.11, @types/react@npm:^17.0.3":
+"@types/react@npm:*, @types/react@npm:>=16.9.11":
   version: 17.0.6
   resolution: "@types/react@npm:17.0.6"
   dependencies:
@@ -7296,6 +7319,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: dcd8e559f758de7c856bd24136d9005e2b6fbae3d6d81704ba33c6a8ba787874f738b7aae8cfffd89ee35f05658800c43d7fdb9493b79c06a3bcdc1e37ea4635
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17.0.8":
+  version: 17.0.8
+  resolution: "@types/react@npm:17.0.8"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: b59a3abafd240b2880f9e6a11b2b7f75165888260c56e95a77ed10a7dd55570b307fb2356eda7fde2a8e1255d2def11797e4ae9800ae114a1f578546acabda67
   languageName: node
   linkType: hard
 
