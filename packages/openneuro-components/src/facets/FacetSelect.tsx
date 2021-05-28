@@ -14,12 +14,7 @@ export interface FacetSelectProps {
   startOpen: boolean
   label: string
   dropdown?: boolean
-  selected: {
-    label: string
-    value: string
-    count?: number
-    children?: React.ReactNode
-  }
+  selected: string
   setSelected: (selected: { label: string; value: string }) => void
 }
 
