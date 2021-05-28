@@ -1,7 +1,6 @@
 @import '../scss/variables';
 header {
   position: relative;
-  padding-bottom: 100px;
 }
 
 .header-upload-btn {
@@ -21,7 +20,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 10px 25px 0;
+  padding: 10px 25px;
   align-items: center;
   background-color: $primary;
 

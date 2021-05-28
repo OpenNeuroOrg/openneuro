@@ -22,7 +22,12 @@ export const ModalityHeader = ({
 }: ModalityHeaderProps) => {
   console.log(hexBackgroundImage)
   return (
-    <section className="search-page-portal-header">
+    <section
+      className="search-page-portal-header"
+      style={{
+        backgroundColor: swoopBackgroundColorLight,
+        background: `linear-gradient(16deg, ${swoopBackgroundColorDark} 0%, ${swoopBackgroundColorLight} 70%)`,
+      }}>
       <div className="container">
         <div className="grid grid-between">
           <div className="col ">
@@ -48,16 +53,6 @@ export const ModalityHeader = ({
               <div className="right"></div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="swoop-wrap">
-        <div
-          className="search-swoop"
-          style={{
-            backgroundColor: swoopBackgroundColorLight,
-            background: `linear-gradient(16deg, ${swoopBackgroundColorDark} 0%, ${swoopBackgroundColorLight} 70%)`,
-          }}>
-          <div></div>
         </div>
       </div>
     </section>

@@ -1,9 +1,6 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { AccordionTab } from '../accordion/AccordionTab'
-import { AccordionWrap } from '../accordion/AccordionWrap'
-
 import { FacetListWrap, FacetListWrapProps } from './FacetListWrap'
 
 export default {
@@ -21,7 +18,7 @@ const FacetListWrapTemplate: Story<FacetListWrapProps> = ({
   const [selected, setSelected] = React.useState()
 
   return (
-    <div style={{ minWidth: '400px' }}>
+    <div>
       <FacetListWrap
         items={items}
         selected={selected}
@@ -38,40 +35,69 @@ const FacetListWrapTemplate: Story<FacetListWrapProps> = ({
 const modalities = [
   {
     label: 'MRI',
-    value: 'mri',
-    count: 30,
+    value: 'MRI',
+    count: 3000,
     children: [
       {
-        label: 'Structural',
-        value: 'structural',
-        count: 30,
+        label: 'Functional',
+        value: 'Functional',
+        count: 300,
       },
       {
-        label: 'Diffusional',
-        value: 'diffusional',
-        count: 30,
+        label: 'Structural',
+        value: 'Structural',
+        count: 200,
+      },
+      {
+        label: 'Diffusion',
+        value: 'Diffusion',
+        count: 300,
+      },
+      {
+        label: 'Perfusion',
+        value: 'Perfusion',
+        count: 150,
       },
     ],
   },
   {
-    label: 'PET',
-    value: 'pet',
-    count: 30,
-  },
-  {
-    label: 'ASL',
-    value: 'asl',
-    count: 30,
-  },
-  {
     label: 'EEG',
-    value: 'eeg',
-    count: 30,
+    value: 'EEG',
+    count: 303,
+    children: [
+      {
+        label: 'ECoG',
+        value: 'ECoG',
+        count: 300,
+      },
+      {
+        label: 'SEEG',
+        value: 'SEEG',
+        count: 200,
+      },
+    ],
   },
   {
-    label: 'ECoG',
-    value: 'ecog',
+    label: 'MEG',
+    value: 'MEG',
+    count: 330,
+  },
+  {
+    label: 'PET',
+    value: 'PET',
     count: 30,
+    children: [
+      {
+        label: 'Static',
+        value: 'Static',
+        count: 300,
+      },
+      {
+        label: 'Dynamic',
+        value: 'Dynamic',
+        count: 200,
+      },
+    ],
   },
 ]
 export const FacetExample = FacetListWrapTemplate.bind({})

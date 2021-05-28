@@ -3,6 +3,7 @@ import { ModalityHeader } from './ModalityHeader'
 import { CommunitySwoop } from './CommunitySwoop'
 
 import { FacetExample } from '../facets/Facet.stories'
+import { SearchResults } from './SearchResults.stories'
 import { SortBy } from './SearchSort.stories'
 import './search-page.scss'
 
@@ -42,16 +43,42 @@ export const SearchPage = ({ portalContent }: SearchPageProps) => {
         ) : null}
 
         <section className="search">
-          <div className="container">
-            <div className="grid grid-start">
-              <div className="col col-4">
-                <FacetExample {...FacetExample.args} />
-              </div>
-              <div className="col col-8">
-                <div className="search-sort">
-                  <SortBy {...SortBy.args} />
+          <div className="grid grid-start">
+            <div className="col col-12">
+              <h1>
+                {portalContent ? 'Search MRI Portal' : 'Search all Dataset'}
+              </h1>
+            </div>
+
+            <div className="col col-12">
+              <div className="grid grid-between grid-nogutter">
+                <div
+                  className="col"
+                  style={{
+                    maxWidth: '500px',
+                  }}></div>
+                <div className="col  col-center results-count">
+                  <b>
+                    100 Datasets found for "<span>MRI</span>"
+                  </b>
                 </div>
-                results todo
+                <div className="col col-center">
+                  <div className="search-sort">
+                    <SortBy {...SortBy.args} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col search-facet-wrapper">
+              <FacetExample {...FacetExample.args} />
+            </div>
+            <div className="col">
+              <SearchResults {...SearchResults.args} />
+              <div className="col  col-center results-count">
+                <b>
+                  100 Datasets found for "<span>MRI</span>"
+                </b>
               </div>
             </div>
           </div>

@@ -1,19 +1,22 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import { bimodal } from '../mock-content/bimodal-search-results'
+import { mri } from '../mock-content/mri-search-results'
 
 import { SearchResult, SearchResultProps } from './SearchResult'
 
 export default {
-  title: 'Components/Search',
+  title: 'Components/SearchResult',
   component: SearchResult,
 } as Meta
 
-const SearchResultTemplate: Story<SearchResultProps> = ({ result }) => {
-  return <SearchResult result={result} />
+const SearchResultTemplate: Story<SearchResultProps> = ({ node, profile }) => {
+  return <SearchResult node={node} profile={profile} />
 }
 
-export const SortBy = SearchResultTemplate.bind({})
-SortBy.args = {
-  result: bimodal.data.datasets.edges[0],
+export const Result = SearchResultTemplate.bind({})
+Result.args = {
+  node: mri.data.datasets.edges[0].node,
+}
+Result.parameters = {
+  layout: 'centered',
 }
