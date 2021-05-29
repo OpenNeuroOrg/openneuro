@@ -160,7 +160,6 @@
 }
 .search-facet-wrapper {
   max-width: 500px;
-  margin-top: -47px;
   .facet-accordion.on-accordion-wrapper {
     padding: 0;
   }
@@ -172,6 +171,7 @@
 
 .results-count {
   padding: 20px 0;
+
   span {
     color: $current-theme-primary;
   }

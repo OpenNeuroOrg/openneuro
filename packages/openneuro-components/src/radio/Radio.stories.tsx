@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react'
 
 import { RadioGroup, RadioGroupProps } from './RadioGroup'
 
-import { RadioContent } from '../mock-content/radio-content.jsx'
+import { showDatasetsRadio } from '../mock-content/facet-content'
 
 export default {
   title: 'Components/Form/Radio',
@@ -25,14 +25,14 @@ const RadioTemplate: Story<RadioGroupProps> = ({ radioArr, layout, name }) => {
 
 export const RowRadio = RadioTemplate.bind({})
 RowRadio.args = {
-  radioArr: RadioContent,
+  radioArr: showDatasetsRadio,
   layout: 'row',
   name: 'radio-row',
 }
 
 export const ColumnRadio = RadioTemplate.bind({})
 ColumnRadio.args = {
-  radioArr: RadioContent,
+  radioArr: showDatasetsRadio,
   layout: 'column',
   name: 'radio-column',
 }

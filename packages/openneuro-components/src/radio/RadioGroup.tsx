@@ -5,14 +5,12 @@ import './radio.scss'
 
 export interface RadioGroupProps {
   layout: string
-  radioArr: [
-    {
-      label: string
-      onChange?: React.MouseEventHandler<HTMLInputElement>
-      checked: boolean
-      value: string
-    },
-  ]
+  radioArr: {
+    label: string
+    onChange?: React.MouseEventHandler<HTMLInputElement>
+    checked: boolean
+    value: string
+  }[]
   name: string
   active: number
   setActive: (index) => void

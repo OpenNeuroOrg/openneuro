@@ -1,0 +1,34 @@
+@import '../scss/variables';
+.search-facet-wrapper {
+  .on-button {
+    display: block;
+    border: 1px solid;
+    width: 100%;
+    transition: background-color 0.3s;
+    &:hover {
+      text-decoration: none;
+      background-color: #eee;
+    }
+  }
+
+  .active-filters {
+    padding: 0;
+    margin: 10px 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+      strong {
+        margin-right: 10px;
+      }
+      span {
+        color: $current-theme-primary;
+        font-size: 22px;
+        margin-left: 8px;
+      }
+    }
+  }
+}

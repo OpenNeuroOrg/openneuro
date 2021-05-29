@@ -69,3 +69,23 @@ export const modalities = [
     ],
   },
 ]
+
+export const showDatasetsRadio = [
+  {
+    label: 'All',
+    value: 'All',
+  },
+
+  {
+    label: 'Following',
+    value: 'following',
+  },
+  {
+    label: 'My Datasets',
+    value: 'datasets',
+  },
+  {
+    label: 'My Bookmarks',
+    value: 'bookmarks',
+  },
+]

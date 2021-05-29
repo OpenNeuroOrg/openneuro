@@ -1,12 +1,11 @@
 import React from 'react'
-import { FacetSelect } from '../facets/FacetSelect'
+import { FacetBlockContainer } from './FacetBlockContainer'
 import { SearchResults } from './SearchResults'
-import { FiltersBlock } from './FiltersBlock'
+import { FiltersBlockContainer } from './FiltersBlockContainer'
 import { SearchPage } from './SearchPage'
 import { SearchSortContainer } from './SearchSortContainer'
-
+import { KeywordInputContainer } from './KeywordInputContainer'
 import { sortBy } from '../mock-content/sortby-list'
-import { modalities } from '../mock-content/facet-content'
 
 import './search-page.scss'
 
@@ -27,17 +26,12 @@ export const SearchPageContainer = ({
         portalContent={portalContent}
         renderSortBy={() => (
           <>
-            <div
-              className="col"
-              style={{
-                maxWidth: '500px',
-              }}></div>
-            <div className="col  col-center results-count">
+            <div className="col">
               <b>
                 100 Datasets found for "<span>MRI</span>"
               </b>
             </div>
-            <div className="col col-center">
+            <div className="col">
               <div className="search-sort">
                 <SearchSortContainer items={sortBy} />
               </div>
@@ -46,13 +40,9 @@ export const SearchPageContainer = ({
         )}
         renderSearchFacets={() => (
           <>
-            <FiltersBlock />
-            <FacetSelect
-              items={modalities}
-              accordionStyle="plain"
-              label="Modalities"
-              startOpen={true}
-            />
+            <KeywordInputContainer />
+            <FiltersBlockContainer />
+            <FacetBlockContainer />
           </>
         )}
         renderSearchResults={() => (
