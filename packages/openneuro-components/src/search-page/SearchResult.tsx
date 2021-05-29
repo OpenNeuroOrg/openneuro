@@ -40,9 +40,9 @@ export interface SearchResultProps {
     draft: {
       id: string
       summary: {
-        modalities: [string]
+        modalities: string[]
         sessions: []
-        subjects: [string]
+        subjects: string[]
         subjectMetadata: [
           {
             participantId: string
@@ -51,7 +51,7 @@ export interface SearchResultProps {
             group: null
           },
         ]
-        tasks: [string]
+        tasks: string[]
         size: number
         totalFiles: number
         dataProcessed: boolean
