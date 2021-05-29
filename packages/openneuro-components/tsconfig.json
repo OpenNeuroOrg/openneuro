@@ -4,7 +4,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "tsBuildInfoFile": "../../.build-cache/components.tsbuildinfo",
-    "composite": true
+    "composite": true,
+    "jsx": "react"
   },
   "include": ["src"],
   "files": ["src/lerna.json"]
