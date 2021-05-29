@@ -3,15 +3,17 @@ kind: StorageClass
 metadata:
   name: {{ .Release.Name }}-datasets
 parameters:
+  scheduler: "VolumeWeighted"
   fstype: 'zfs'
   poolname: 'zfspv-pool'
   compression: 'lz4'
   recordsize: '16k'
 reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 provisioner: zfs.csi.openebs.io
 allowedTopologies:
   - matchLabelExpressions:
-      - key: alpha.eksctl.io/nodegroup-name
+      - key: role
         values:
           - storage

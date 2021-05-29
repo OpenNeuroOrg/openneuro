@@ -34,10 +34,11 @@ nodeGroups:
     preBootstrapCommands:
       - apt update
       - apt install -y nfs-common zfsutils-linux
-  - name: storage
+  - name: storage-m5
     amiFamily: Ubuntu2004
-    instanceType: r5ad.large
+    instanceType: m5ad.2xlarge
     desiredCapacity: 2
+    labels: { role: storage }
     availabilityZones:
       - us-west-2b
       - us-west-2c

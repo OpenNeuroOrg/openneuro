@@ -59,7 +59,7 @@ efs-provisioner:
 aws-alb-ingress-controller:
   awsRegion: us-west-2
   autoDiscoverAwsVpcID: true
-  clusterName: openneuro-prod
+  clusterName: openneuro-prod-2021
 
 # Disable Redis password for testing
 redis:
