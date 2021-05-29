@@ -10,7 +10,6 @@ export default {
 } as Meta
 
 const SearchResultsTemplate: Story = ({ items, profile }) => {
-  console.log(items)
   return (
     <div className="search-results">
       {items.map((item, index) => (

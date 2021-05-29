@@ -5,7 +5,7 @@ export interface TooltipProps {
   tooltip: string
   flow: 'up' | 'down' | 'left' | 'right'
   children: React.ReactNode
-  className: string
+  className?: string
 }
 
 export const Tooltip = ({
