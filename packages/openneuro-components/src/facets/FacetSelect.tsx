@@ -3,15 +3,13 @@ import { AccordionTab } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import './facet.scss'
 
-export interface FacetListWrapProps {
-  items: [
-    {
-      label: string
-      value: string
-      count: number
-      children: React.ReactNode
-    },
-  ]
+export interface FacetSelectProps {
+  items: {
+    label: string
+    value: string
+    count: number
+    children?: null | { label: string; value: string; count: number }[]
+  }
   accordionStyle: string
   startOpen: boolean
   label: string
@@ -25,7 +23,7 @@ export interface FacetListWrapProps {
   setSelected: (selected: { label: string; value: string }) => void
 }
 
-export const FacetListWrap = ({
+export const FacetSelect = ({
   items,
   selected,
   setSelected,
@@ -33,7 +31,7 @@ export const FacetListWrap = ({
   label,
   accordionStyle,
   dropdown,
-}: FacetListWrapProps) => {
+}: FacetSelectProps) => {
   const setSelectorNoPropagation = (e, item) => {
     e.stopPropagation()
     setSelected(item)

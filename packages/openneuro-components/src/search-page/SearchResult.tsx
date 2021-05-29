@@ -93,8 +93,6 @@ export interface SearchResultProps {
 }
 
 export const SearchResult = ({ node, profile }: SearchResultProps) => {
-  console.log(node)
-
   const heading = node.draft.description.Name
   const summary = node.draft.summary
   const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1

@@ -4,12 +4,11 @@ import '../dropdown/dropdown.scss'
 import './search-sort.scss'
 
 export interface SearchSortProps {
-  items: [
-    {
-      label: string
-      value: string
-    },
-  ]
+  items: {
+    label: string
+    value: string
+  }[]
+
   selected: {
     label: string
     value: string

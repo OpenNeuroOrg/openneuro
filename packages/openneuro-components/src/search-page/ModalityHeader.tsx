@@ -20,7 +20,6 @@ export const ModalityHeader = ({
   swoopBackgroundColorLight,
   swoopBackgroundColorDark,
 }: ModalityHeaderProps) => {
-  console.log(hexBackgroundImage)
   return (
     <section
       className="search-page-portal-header"
