@@ -13,7 +13,7 @@ export interface TwoHandleRangeProps {
   defaultValue: [number, number]
   marks: { number: string }
   newvalue: [number, number]
-  setNewValue: [number, number]
+  setNewValue: (newvalue) => void
 }
 const Range = Slider.createSliderWithTooltip(Slider.Range)
 

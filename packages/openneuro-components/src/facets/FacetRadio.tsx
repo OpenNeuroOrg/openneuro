@@ -16,7 +16,7 @@ export interface FacetRadioProps {
   accordionStyle: string
   startOpen: boolean
   label: string
-  dropdown: boolean
+  dropdown?: boolean
   active: number
   setActive: (index) => void
 }

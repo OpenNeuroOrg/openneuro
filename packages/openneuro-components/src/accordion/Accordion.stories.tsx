@@ -15,7 +15,7 @@ const singleTabAccordion = (
   <AccordionTab
     accordionStyle="plain"
     name="single"
-    tabId="tab1"
+    id="tab1"
     label="Single Tab"
     children="This is a single accordion"
   />

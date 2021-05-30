@@ -38,8 +38,9 @@ export const UserModalInner: React.FC = ({}) => {
             />
             <AccordionWrap>
               <AccordionTab
+                name="single"
                 tabId="orcid-info-accordion"
-                tabLable="What is this?"
+                label="What is this?"
                 children={
                   <>
                     ORCID users are identified and connected to their

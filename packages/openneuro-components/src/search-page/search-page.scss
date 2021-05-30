@@ -176,3 +176,11 @@
     color: $current-theme-primary;
   }
 }
+
+.on-accordion-wrapper .search-facets-more {
+  .accordion-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+}

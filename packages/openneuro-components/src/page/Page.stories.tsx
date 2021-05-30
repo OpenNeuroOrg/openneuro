@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react'
 
 import { Page, PageProps } from './Page'
 import { FrontPage } from '../front-page/FrontPage'
-import { SearchPageContainer } from '../search-page/SearchPageContainer'
+import { SearchPageContainerExample } from '../search-page/SearchPageContainerExample'
 import * as HeaderStories from '../header/Header.stories'
 
 import { MRIPortalContent } from '../mock-content/portal-content'
@@ -25,14 +25,16 @@ FrontPageExample.args = {
 
 export const SearchPageExample = Template.bind({})
 SearchPageExample.args = {
-  children: <SearchPageContainer searchResults={mri.data.datasets.edges} />,
+  children: (
+    <SearchPageContainerExample searchResults={mri.data.datasets.edges} />
+  ),
   headerArgs: HeaderStories.LoggedOut.args,
   className: 'search-page search-page-mri',
 }
 export const MRIPortalPageExample = Template.bind({})
 MRIPortalPageExample.args = {
   children: (
-    <SearchPageContainer
+    <SearchPageContainerExample
       searchResults={mri.data.datasets.edges}
       portalContent={MRIPortalContent}
     />

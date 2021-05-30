@@ -1,9 +1,9 @@
 import React from 'react'
 import { Input } from '../input/Input'
 
-export const KeywordInputContainer = () => {
-  const [value, setValue] = React.useState()
-
+export const KeywordInputContainerExample = ({ searchValue }) => {
+  const [value, setValue] = React.useState(searchValue)
+  console.log(value)
   return (
     <>
       <Input

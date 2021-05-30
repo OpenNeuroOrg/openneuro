@@ -12,8 +12,8 @@ export default {
 const SearchResultsTemplate: Story = ({ items, profile }) => {
   return (
     <div className="search-results">
-      {items.map((item, index) => (
-        <SearchResult node={items[index].node} profile={profile} />
+      {items.map(({ node }) => (
+        <SearchResult node={node} profile={profile} />
       ))}
     </div>
   )

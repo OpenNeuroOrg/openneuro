@@ -6,12 +6,11 @@ import './accordion.scss'
 
 export interface AccordionTabProps {
   children: React.ReactNode
-  tabId: string
+  id: string
   className: string
   label: string
-  plainStyle: boolean
-  startOpen: boolean
-  dropdown: boolean
+  startOpen?: boolean
+  dropdown?: boolean
   accordionStyle: 'plain' | 'file-tree' | 'bids-wrappper'
 }
 
@@ -20,7 +19,7 @@ export interface AccordionTabProps {
  */
 export const AccordionTab: React.FC<AccordionTabProps> = ({
   children,
-  tabId,
+  id,
   label,
   className,
   accordionStyle,
@@ -37,7 +36,7 @@ export const AccordionTab: React.FC<AccordionTabProps> = ({
 
   return (
     <>
-      <span className={`${accordionStyle}` + ' ' + `${className}`} id={tabId}>
+      <span className={`${accordionStyle}` + ' ' + `${className}`} id={id}>
         <div
           className={`accordion-title ${isOpen ? 'open' : ''}`}
           onClick={() => setOpen(!isOpen)}>

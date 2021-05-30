@@ -1,15 +1,15 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { SearchSortContainer } from './SearchSortContainer'
+import { SearchSortContainerExample } from './SearchSortContainerExample'
 
 export default {
   title: 'Components/Search',
-  component: SearchSortContainer,
+  component: SearchSortContainerExample,
 } as Meta
 
 const SearchSortTemplate: Story = ({ items }) => {
-  return <SearchSortContainer items={items} />
+  return <SearchSortContainerExample items={items} />
 }
 
 const menuItems = [

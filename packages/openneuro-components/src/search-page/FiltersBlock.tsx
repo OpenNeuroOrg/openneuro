@@ -6,7 +6,7 @@ export interface FiltersBlockProps {}
 
 export const FiltersBlock = ({}: FiltersBlockProps) => {
   return (
-    <>
+    <div className="filters-block">
       <ul className="active-filters">
         <li>
           <strong>Modality:</strong>Functional<span>&times;</span>
@@ -22,6 +22,6 @@ export const FiltersBlock = ({}: FiltersBlockProps) => {
         </li>
       </ul>
       <Button label="Clear All" size="small" />
-    </>
+    </div>
   )
 }

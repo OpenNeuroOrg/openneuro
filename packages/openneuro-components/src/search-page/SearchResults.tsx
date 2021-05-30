@@ -11,8 +11,8 @@ export interface SearchResultsProps {
 export const SearchResults = ({ items, profile }: SearchResultsProps) => {
   return (
     <div className="search-results">
-      {items.map((item, index) => (
-        <SearchResult node={items[index].node} profile={profile} />
+      {items.map(({ node }, index) => (
+        <SearchResult node={node} key={index} profile={profile} />
       ))}
     </div>
   )
