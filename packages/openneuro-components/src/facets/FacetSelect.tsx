@@ -9,7 +9,7 @@ export interface FacetSelectProps {
     value: string
     count: number
     children?: null | { label: string; value: string; count: number }[]
-  }
+  }[]
   accordionStyle: string
   startOpen: boolean
   label: string
