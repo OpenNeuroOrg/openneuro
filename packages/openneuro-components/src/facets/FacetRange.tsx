@@ -11,11 +11,11 @@ export interface FacetRangeProps {
   dropdown?: boolean
   min: number
   max: number
-  step: number
-  dots: boolean
-  pushable: boolean
+  step?: number
+  dots?: boolean
+  pushable?: boolean
   defaultValue: [number, number]
-  marks: { number: string }
+  marks?: { number: string }
   newvalue: [number, number]
   setNewValue: (newvalue) => void
 }
@@ -48,6 +48,7 @@ export const FacetRange = ({
             max={max}
             step={step}
             dots={dots}
+            marks={marks}
             pushable={pushable}
             defaultValue={defaultValue}
             newvalue={newvalue}

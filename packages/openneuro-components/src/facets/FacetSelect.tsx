@@ -7,18 +7,18 @@ export interface FacetSelectProps {
   items: {
     label: string
     value: string
-    count: number
+    count?: number
     children?: null | { label: string; value: string; count: number }[]
   }[]
   accordionStyle: string
   startOpen: boolean
   label: string
-  dropdown: boolean
+  dropdown?: boolean
   selected: {
     label: string
     value: string
-    count: number
-    children: React.ReactNode
+    count?: number
+    children?: React.ReactNode
   }
   setSelected: (selected: { label: string; value: string }) => void
 }

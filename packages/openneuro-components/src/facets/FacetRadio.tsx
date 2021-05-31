@@ -8,7 +8,6 @@ export interface FacetRadioProps {
   radioArr: {
     label: string
     onChange?: React.MouseEventHandler<HTMLInputElement>
-    checked: boolean
     value: string
   }[]
   layout: string
@@ -17,8 +16,8 @@ export interface FacetRadioProps {
   startOpen: boolean
   label: string
   dropdown?: boolean
-  active: number
-  setActive: (index) => void
+  selected: string
+  setSelected: (value) => void
 }
 
 export const FacetRadio = ({
@@ -29,8 +28,8 @@ export const FacetRadio = ({
   label,
   accordionStyle,
   dropdown,
-  active,
-  setActive,
+  selected,
+  setSelected,
 }: FacetRadioProps) => {
   return (
     <AccordionWrap className="facet-accordion">
@@ -41,8 +40,8 @@ export const FacetRadio = ({
         dropdown={dropdown}>
         <div className="facet-radio">
           <RadioGroup
-            setActive={setActive}
-            active={active}
+            setSelected={setSelected}
+            selected={selected}
             name={name}
             radioArr={radioArr}
             layout={layout}

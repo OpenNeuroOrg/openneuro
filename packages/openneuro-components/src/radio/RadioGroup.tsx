@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Radio } from './Radio'
 
 import './radio.scss'
@@ -8,20 +8,19 @@ export interface RadioGroupProps {
   radioArr: {
     label: string
     onChange?: React.MouseEventHandler<HTMLInputElement>
-    checked: boolean
     value: string
   }[]
   name: string
-  active: number
-  setActive: (index) => void
+  selected: string
+  setSelected: (value) => void
 }
 
 export const RadioGroup = ({
   radioArr,
   layout,
   name,
-  active,
-  setActive,
+  selected,
+  setSelected,
 }: RadioGroupProps) => {
   return (
     <div className={'on-radio-wrapper' + ' ' + layout}>
@@ -31,8 +30,8 @@ export const RadioGroup = ({
           name={name}
           value={item.value}
           label={item.label}
-          checked={active === index}
-          onChange={() => setActive(index)}
+          checked={selected === item.value}
+          onChange={e => setSelected(e.target.value)}
         />
       ))}
     </div>

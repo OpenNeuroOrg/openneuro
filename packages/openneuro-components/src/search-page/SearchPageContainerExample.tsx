@@ -13,17 +13,15 @@ import { FacetRange } from '../facets/FacetRange'
 import {
   modalities,
   show_available,
-  showMyUploads_available,
-  diagnosis,
-  task,
-  author_pi,
-  gender,
-  species,
-  section,
-  domain,
+  dataset_type,
+  diagnosis_list,
+  task_list,
+  author_pi_list,
+  gender_list,
+  species_list,
+  section_list,
+  domain_list,
 } from '../mock-content/facet-content'
-import { AccordionWrap } from '../accordion/AccordionWrap'
-import { AccordionTab } from '../accordion/AccordionTab'
 
 import './search-page.scss'
 
@@ -38,10 +36,19 @@ export const SearchPageContainerExample = ({
   portalContent,
   profile,
 }: SearchContainereProps) => {
-  const [selected, setSelected] = React.useState()
-  const [active, setActive] = React.useState(0)
-  const [newvalue, setNewValue] = React.useState([0, 20])
-  console.log(active)
+  const [modality, setModality] = React.useState()
+  const [datasetsType, setDatasetsType] = React.useState('all')
+  const [datasetStatus, setDatasetStatus] = React.useState()
+  const [ageRange, setAgeRange] = React.useState([0, 20])
+  const [subjectRange, setSubjectRange] = React.useState([0, 20])
+  const [author_pi, setAuthor_pi] = React.useState()
+  const [gender, setGender] = React.useState('all')
+  const [task, setTask] = React.useState()
+  const [diagnosis, setDiagnosis] = React.useState()
+  const [section, setSection] = React.useState(0)
+  const [species, setSpecies] = React.useState()
+  const [domain, setDomain] = React.useState()
+
   return (
     <div>
       <SearchPage
@@ -66,8 +73,8 @@ export const SearchPageContainerExample = ({
             <FiltersBlock />
             <FacetBlockContainerExample>
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
+                selected={modality}
+                setSelected={setModality}
                 items={modalities}
                 accordionStyle="plain"
                 label="Modalities"
@@ -81,15 +88,15 @@ export const SearchPageContainerExample = ({
                 startOpen={false}
                 label="Show"
                 accordionStyle="plain"
-                active={active}
-                setActive={setActive}
+                selected={datasetsType}
+                setSelected={setDatasetsType}
               />
 
-              {active == 2 ? (
+              {datasetsType == 2 ? (
                 <FacetSelect
-                  selected={selected}
-                  setSelected={setSelected}
-                  items={showMyUploads_available}
+                  selected={datasetStatus}
+                  setSelected={setDatasetStatus}
+                  items={dataset_type}
                   accordionStyle="plain"
                   label="My Datasets Status"
                   startOpen={false}
@@ -104,10 +111,10 @@ export const SearchPageContainerExample = ({
                 max={100}
                 step={10}
                 dots={true}
-                pushable={5}
+                pushable={5 as unknown as undefined}
                 defaultValue={[0, 20]}
-                newvalue={newvalue}
-                setNewValue={setNewValue}
+                newvalue={ageRange}
+                setNewValue={setAgeRange}
               />
               <FacetRange
                 startOpen={false}
@@ -117,69 +124,69 @@ export const SearchPageContainerExample = ({
                 max={100}
                 step={10}
                 dots={true}
-                pushable={5}
+                pushable={5 as unknown as undefined}
                 defaultValue={[0, 20]}
-                newvalue={newvalue}
-                setNewValue={setNewValue}
+                newvalue={subjectRange}
+                setNewValue={setSubjectRange}
               />
 
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
-                items={diagnosis}
+                selected={diagnosis}
+                setSelected={setDiagnosis}
+                items={diagnosis_list}
                 accordionStyle="plain"
                 label="Diagnosis"
                 startOpen={false}
               />
 
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
-                items={task}
+                selected={task}
+                setSelected={setTask}
+                items={task_list}
                 accordionStyle="plain"
                 label="Task"
                 startOpen={false}
               />
 
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
-                items={author_pi}
+                selected={author_pi}
+                setSelected={setAuthor_pi}
+                items={author_pi_list}
                 accordionStyle="plain"
                 label="Sr. Author / PI"
                 startOpen={false}
               />
 
               <FacetRadio
-                radioArr={gender}
+                selected={gender}
+                setSelected={setGender}
+                radioArr={gender_list}
                 layout="row"
                 name="Gender"
                 startOpen={false}
                 label="Gender"
                 accordionStyle="plain"
-                active={active}
-                setActive={setActive}
               />
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
-                items={species}
+                selected={species}
+                setSelected={setSpecies}
+                items={species_list}
                 accordionStyle="plain"
                 label="Species"
                 startOpen={false}
               />
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
-                items={section}
+                selected={section}
+                setSelected={setSection}
+                items={section_list}
                 accordionStyle="plain"
                 label="Section"
                 startOpen={false}
               />
               <FacetSelect
-                selected={selected}
-                setSelected={setSelected}
-                items={domain}
+                selected={domain}
+                setSelected={setDomain}
+                items={domain_list}
                 accordionStyle="plain"
                 label="Domain Studied/Ontology"
                 startOpen={false}

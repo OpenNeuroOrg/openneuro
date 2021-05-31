@@ -32,7 +32,6 @@ export const modalities = [
     label: 'EEG',
     value: 'EEG',
     count: 303,
-    children: null,
   },
   {
     label: 'iEEG',
@@ -55,7 +54,6 @@ export const modalities = [
     label: 'MEG',
     value: 'MEG',
     count: 330,
-    children: null,
   },
   {
     label: 'PET',
@@ -83,127 +81,108 @@ export const show_available = [
   { label: 'My Bookmarks', value: 'bookmarked' },
 ]
 
-export const showMyUploads_available = [
+export const dataset_type = [
   { label: 'Public', value: 'public' },
   { label: 'Shared with Me', value: 'shared_with_me' },
   { label: 'Invalid', value: 'invalid' },
 ]
 
-export const diagnosis = [
+export const diagnosis_list = [
   {
     label: "Alzheimer's",
     value: 'alzheimers',
-    children: null,
   },
   {
     label: 'Another',
     value: 'Another',
-    children: null,
   },
   {
     label: 'Other',
     value: 'Other',
-    children: null,
   },
 ]
 
-export const task = [
+export const task_list = [
   {
     label: 'Rest',
     value: 'rest',
-    children: null,
   },
   {
     label: 'Another',
     value: 'Another',
-    children: null,
   },
   {
     label: 'Other',
     value: 'Other',
-    children: null,
   },
 ]
 
-export const author_pi = [
+export const author_pi_list = [
   {
     label: 'Author 1',
     value: 'author-1',
-    children: null,
   },
   {
     label: 'Author 2',
     value: 'author-2',
-    children: null,
   },
   {
     label: 'Author 3',
     value: 'author-3',
-    children: null,
   },
 ]
 
-export const gender = [
+export const gender_list = [
   { label: 'All', value: 'all' },
   { label: 'Male', value: 'male' },
   { label: 'Female', value: 'female' },
 ]
 
-export const species = [
+export const species_list = [
   {
     label: 'Human',
     value: 'human',
-    children: null,
   },
   {
     label: 'Pig',
     value: 'pig',
-    children: null,
   },
   {
     label: 'Rat',
     value: 'rat',
-    children: null,
   },
   {
     label: 'Other',
     value: 'other',
-    children: null,
   },
 ]
 
-export const section = [
+export const section_list = [
   {
     label: 'Cross',
     value: 'cross',
-    children: null,
   },
   {
     label: 'Longitudinal',
     value: 'longitudinal',
-    children: null,
   },
   {
     label: 'Other',
     value: 'other',
-    children: null,
   },
 ]
 
-export const domain = [
+export const domain_list = [
   {
     label: 'Domain 1',
     value: '1',
-    children: null,
   },
   {
     label: 'Domain 2',
     value: '2',
-    children: null,
   },
   {
     label: 'Ontology',
     value: 'ontology',
-    children: null,
   },
 ]
