@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 
 // TODO - Re-enable code splitting these when we can
 import Dataset from '../datalad/dataset/dataset'
-import FrontPage from './containers/header'
+import FrontPage from './containers/front-page'
 import Faq from '../faq/faq'
 import Admin from '../admin/admin'
 import Dashboard from '../datalad/dashboard/dashboard'
@@ -15,10 +15,6 @@ import Citation from '../pages/citation-page'
 
 const PublicDashboard = () => <Dashboard public />
 const SavedDashboard = () => <Dashboard saved />
-
-// import { FrontPage } from '@openneuro/components'
-import * as check from '@openneuro/components'
-console.log({ check })
 
 const Routes = () => (
   <Switch>
