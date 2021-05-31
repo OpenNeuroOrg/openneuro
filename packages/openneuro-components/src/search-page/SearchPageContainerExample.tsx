@@ -57,7 +57,7 @@ export const SearchPageContainerExample = ({
           <>
             <div className="col">
               <b>
-                100 Datasets found for "<span>MRI</span>"
+                100 Datasets found for "<span>Forrest Gump</span>"
               </b>
             </div>
             <div className="col">
@@ -69,8 +69,15 @@ export const SearchPageContainerExample = ({
         )}
         renderSearchFacets={() => (
           <>
-            <KeywordInputContainerExample searchValue={'MRI'} />
-            <FiltersBlock />
+            <KeywordInputContainerExample searchValue={'Forrest Gump'} />
+            <FiltersBlock
+              datasetsType={'My Datasets'}
+              ageRange={[0, 20]}
+              author_pi={'Charles Darwin'}
+              gender={'Male'}
+              task={'T1w'}
+              species={'Human'}
+            />
             <FacetBlockContainerExample>
               <FacetSelect
                 selected={modality}
@@ -199,7 +206,7 @@ export const SearchPageContainerExample = ({
             <SearchResults items={searchResults} profile={profile} />
             <div className="col  col-center results-count">
               <b>
-                100 Datasets found for "<span>MRI</span>"
+                100 Datasets found for "<span>Forrest Gump</span>"
               </b>
             </div>
           </>

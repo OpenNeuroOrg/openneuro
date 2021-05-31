@@ -212,9 +212,6 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
   )
 
   const _list = (type, items) => {
-    function wrapWords(str) {
-      return str.replace(/\w+/g, '<span>$&</span>')
-    }
     if (items && items.length > 0) {
       return (
         <>
