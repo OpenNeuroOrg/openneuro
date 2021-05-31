@@ -69,9 +69,11 @@
     }
     &.selected-facet > .label {
       color: var(--current-theme-primary);
+      font-weight: bold;
 
       span {
         color: var(--current-theme-primary);
+        font-weight: 400;
       }
     }
   }
