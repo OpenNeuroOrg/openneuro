@@ -25,11 +25,12 @@
       li {
         cursor: pointer;
         font-weight: 300;
-
+        color: #666;
+        font-size: 14px;
         &.selected-facet {
           > .label,
           > .label span {
-            color: $current-theme-primary;
+            color: var(--current-theme-primary);
           }
         }
         .label {
@@ -38,7 +39,7 @@
           span {
             margin-left: 10px;
             display: inline-block;
-            color: #444;
+            color: #666;
             font-size: 14px;
           }
         }
@@ -46,6 +47,8 @@
     }
     .level-1 > li {
       margin-bottom: 10px;
+      border-top: 1px solid #dfdfdf;
+      padding: 10px 10px 0;
     }
     .level-2 > li {
       display: flex;
@@ -65,11 +68,15 @@
       font-weight: 500;
     }
     &.selected-facet > .label {
-      color: $on-light-aqua;
+      color: var(--current-theme-primary);
 
       span {
-        color: $on-light-aqua;
+        color: var(--current-theme-primary);
       }
     }
   }
+}
+
+.facet-range {
+  margin: 20px 0;
 }

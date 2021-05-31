@@ -42,7 +42,7 @@ export const FacetRange = ({
         label={label}
         startOpen={startOpen}
         dropdown={dropdown}>
-        <div className="facet-radio">
+        <div className="facet-range">
           <TwoHandleRange
             min={min}
             max={max}

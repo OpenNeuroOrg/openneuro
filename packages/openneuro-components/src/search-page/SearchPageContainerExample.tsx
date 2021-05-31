@@ -85,14 +85,14 @@ export const SearchPageContainerExample = ({
                 items={modalities}
                 accordionStyle="plain"
                 label="Modalities"
-                startOpen={false}
+                startOpen={true}
               />
 
               <FacetRadio
                 radioArr={show_available}
                 layout="row"
                 name="show-datasets"
-                startOpen={false}
+                startOpen={true}
                 label="Show"
                 accordionStyle="plain"
                 selected={datasetsType}

@@ -29,6 +29,8 @@ $primary: $on-dark-aqua;
   --asl-theme: #{$asl-theme};
   --meg-theme: #{$meg-theme};
   --on-light-green: #{on-light-green};
+  --current-theme-primary: #{$on-dark-aqua};
+  --current-theme-primary-hover: #{$on-light-aqua};
 }
 
 .mri-theme {
@@ -77,4 +79,7 @@ $screen-sm: 480px;
 $screen-md: 767px;
 $screen-lg: 989px;
 
-$current-theme-primary: $on-dark-aqua;
+.search-page-mri {
+  --current-theme-primary: #{$mri-theme};
+  --current-theme-primary-hover: lighten(#{$mri-theme}, 10%);
+}

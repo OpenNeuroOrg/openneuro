@@ -1,6 +1,7 @@
 @import '../scss/variables';
 
 .custom-radio {
+  margin: 10px 0 20px;
   [type='radio']:checked,
   [type='radio']:not(:checked) {
     position: absolute;
@@ -8,8 +9,9 @@
   }
   [type='radio']:checked + label,
   [type='radio']:not(:checked) + label {
+    font-size: 14px;
     position: relative;
-    padding-left: 28px;
+    padding-left: 25px;
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
@@ -32,7 +34,7 @@
     content: '';
     width: 12px;
     height: 12px;
-    background: $current-theme-primary;
+    background: var(--current-theme-primary);
     position: absolute;
     top: 4px;
     left: 4px;

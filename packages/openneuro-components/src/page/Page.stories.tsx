@@ -29,7 +29,7 @@ SearchPageExample.args = {
     <SearchPageContainerExample searchResults={mri.data.datasets.edges} />
   ),
   headerArgs: HeaderStories.LoggedOut.args,
-  className: 'search-page search-page-mri',
+  className: 'search-page',
 }
 export const MRIPortalPageExample = Template.bind({})
 MRIPortalPageExample.args = {
@@ -40,5 +40,5 @@ MRIPortalPageExample.args = {
     />
   ),
   headerArgs: HeaderStories.LoggedOut.args,
-  className: 'search-page',
+  className: 'search-page search-page-mri',
 }

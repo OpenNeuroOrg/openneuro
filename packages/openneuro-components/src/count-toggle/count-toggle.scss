@@ -24,7 +24,7 @@
 
   &.active {
     i {
-      color: $current-theme-primary;
+      color: var(--current-theme-primary);
     }
   }
 }

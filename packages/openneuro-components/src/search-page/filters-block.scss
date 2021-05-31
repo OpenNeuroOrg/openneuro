@@ -26,6 +26,7 @@
         display: flex;
         align-items: center;
         margin-right: 30px;
+        margin-bottom: 10px;
         font-size: 13px;
         line-height: 1.7em;
 
@@ -35,7 +36,7 @@
           color: #777;
         }
         span {
-          color: $current-theme-primary;
+          color: var(--current-theme-primary);
           font-size: 22px;
           margin-left: 8px;
           margin-top: -1px;
