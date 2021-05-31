@@ -9,6 +9,7 @@ import { sortBy } from '../mock-content/sortby-list'
 import { FacetSelect } from '../facets/FacetSelect'
 import { FacetRadio } from '../facets/FacetRadio'
 import { FacetRange } from '../facets/FacetRange'
+import { Button } from '../button/Button'
 
 import {
   modalities,
@@ -206,8 +207,11 @@ export const SearchPageContainerExample = ({
             <SearchResults items={searchResults} profile={profile} />
             <div className="col  col-center results-count">
               <b>
-                100 Datasets found for "<span>Forrest Gump</span>"
+                Showing 25 of 100 Datasets found for "<span>Forrest Gump</span>"
               </b>
+            </div>
+            <div className=" load-more ">
+              <Button label="Load More" />
             </div>
           </>
         )}
