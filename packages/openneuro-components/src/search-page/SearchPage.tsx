@@ -1,16 +1,28 @@
 import React from 'react'
 import { ModalityHeader } from './ModalityHeader'
 import { CommunitySwoop } from './CommunitySwoop'
+
+import { FacetExample } from '../facets/Facet.stories'
+import { SearchResults } from './SearchResults.stories'
+import { SortBy } from './SearchSort.stories'
 import './search-page.scss'
 
 export interface SearchPageProps {
   portalContent?: Record<string, any>
+  renderSearchFacets: () => React.ReactNode
+  renderSearchResults: () => React.ReactNode
+  renderSortBy: () => React.ReactNode
 }
 
-export const SearchPage = ({ portalContent }: SearchPageProps) => {
+export const SearchPage = ({
+  portalContent,
+  renderSearchFacets,
+  renderSearchResults,
+  renderSortBy,
+}: SearchPageProps) => {
   return (
     <>
-      <div className="page">
+      <section className="search">
         {portalContent ? (
           <>
             {portalContent.portalName ? (
@@ -38,15 +50,22 @@ export const SearchPage = ({ portalContent }: SearchPageProps) => {
           </>
         ) : null}
 
-        <section className="search">
-          <div className="container">
-            <div className="grid grid-start">
-              <div className="col col-4">facets Todo</div>
-              <div className="col col-8">results todo</div>
+        <div className="grid grid-start">
+          <div className="col col-12">
+            <h1>
+              {portalContent ? 'Search MRI Portal' : 'Search all Dataset'}
+            </h1>
+          </div>
+
+          <div className="col col-12">
+            <div className="grid grid-between grid-nogutter">
+              {renderSortBy()}
             </div>
           </div>
-        </section>
-      </div>
+          <div className="col search-facet-wrapper">{renderSearchFacets()}</div>
+          <div className="col">{renderSearchResults()}</div>
+        </div>
+      </section>
     </>
   )
 }

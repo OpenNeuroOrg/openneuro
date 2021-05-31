@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 
 import { Button } from '../button/Button'
 import { ModalityCube } from '../modality-cube/ModalityCube'
+import { Input } from '../input/Input'
 import { cubeData } from '../mock-content/modality-cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
 import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 import { frontPage } from '../mock-content/front-page-content.jsx'
+import { FrontFacetExample } from '../facets/Facet.stories'
 
 export interface LandingExpandedHeaderProps {
   user?: {}
@@ -45,6 +47,25 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
               <AggregateCount type="publicDataset" count={202} />
               <AggregateCount type="publicDataset" count={22} />
             </div>
+            <div className="header-modality-wrap">
+              <FrontFacetExample {...FrontFacetExample.args} />
+            </div>
+            <span className="header-or-text">Or</span>
+            <div className="header-input-wrap">
+              <div className="header-input">
+                <Input
+                  placeholder="Search"
+                  type="text"
+                  name="front-page-search"
+                  labelStyle="default"
+                />
+              </div>
+
+              <div className="header-input-button">
+                <Button primary={true} icon="fas fa-search" size="large" />
+              </div>
+            </div>
+
             {!user ? (
               <div className="grid  grid-start hero-signin">
                 <div className=" hero-sigin-label">

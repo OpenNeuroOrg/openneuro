@@ -5,9 +5,15 @@ export interface TooltipProps {
   tooltip: string
   flow: 'up' | 'down' | 'left' | 'right'
   children: React.ReactNode
+  className?: string
 }
 
-export const Tooltip = ({ children, tooltip, flow }: TooltipProps) => {
+export const Tooltip = ({
+  children,
+  tooltip,
+  flow,
+  className,
+}: TooltipProps) => {
   const reference = useRef()
   useEffect(() => {
     const placement =
@@ -16,7 +22,11 @@ export const Tooltip = ({ children, tooltip, flow }: TooltipProps) => {
   }, [])
 
   return (
-    <span ref={reference} data-tooltip={tooltip} data-flow={flow}>
+    <span
+      className={className}
+      ref={reference}
+      data-tooltip={tooltip}
+      data-flow={flow}>
       {children}
     </span>
   )

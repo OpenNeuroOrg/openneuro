@@ -35,36 +35,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.3.19":
-  version: 3.3.19
-  resolution: "@apollo/client@npm:3.3.19"
-  dependencies:
-    "@graphql-typed-document-node/core": ^3.0.0
-    "@types/zen-observable": ^0.8.0
-    "@wry/context": ^0.6.0
-    "@wry/equality": ^0.4.0
-    fast-json-stable-stringify: ^2.0.0
-    graphql-tag: ^2.12.0
-    hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.0
-    prop-types: ^15.7.2
-    symbol-observable: ^2.0.0
-    ts-invariant: ^0.7.0
-    tslib: ^1.10.0
-    zen-observable: ^0.8.14
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0
-    react: ^16.8.0 || ^17.0.0
-    subscriptions-transport-ws: ^0.9.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-    subscriptions-transport-ws:
-      optional: true
-  checksum: a7266cfdff900ef71adece4d24c853fc6179dfe3d3b89905b468b0a487959a435ef84219fb1266c86e2edb0747ff0e52b6ac49dba72bdac7cdbc55e1d0a2e357
-  languageName: node
-  linkType: hard
-
 "@apollo/protobufjs@npm:1.2.2, @apollo/protobufjs@npm:^1.0.3":
   version: 1.2.2
   resolution: "@apollo/protobufjs@npm:1.2.2"
@@ -4880,7 +4850,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
-    "@apollo/client": ^3.3.19
     "@mdx-js/react": ^1.6.22
     "@storybook/addon-a11y": ^6.2.8
     "@storybook/addon-actions": ^6.2.8
@@ -4893,13 +4862,15 @@ __metadata:
     "@storybook/theming": ^6.2.8
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
+    "@types/bytes": ^3
     "@types/mdx-js__react": ^1
     "@types/react-router-dom": ^5
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
+    bytes: ^3.1.0
     css-loader: ^5.2.1
     date-fns: ^2.21.1
-    graphql-hooks: ^5.1.1
+    pluralize: ^8.0.0
     rc-slider: ^9.7.2
     react: ^17.0.1
     react-router-dom: ^5.2.0
@@ -6550,6 +6521,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 73c0179851f02bd43f010db65c465b09f7c495b35b0e3820a79d36f4bb209c84a512121c1af4c1d2512e5f13cd27cc74fa8aa6f3df9b17b7cca9d37d59ece3ce
+  languageName: node
+  linkType: hard
+
+"@types/bytes@npm:^3":
+  version: 3.1.0
+  resolution: "@types/bytes@npm:3.1.0"
+  checksum: 184b8481789417872c8055811b4af7a41e1f5a30488ae0be8468ce0ca86f29a36a7175db9cc434599d50658ae0b709331323d97eb2a721e4ca1d2199da53a0a4
   languageName: node
   linkType: hard
 
@@ -10567,7 +10545,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bytes@npm:3.1.0, bytes@npm:^3.0.0":
+"bytes@npm:3.1.0, bytes@npm:^3.0.0, bytes@npm:^3.1.0":
   version: 3.1.0
   resolution: "bytes@npm:3.1.0"
   checksum: c3f64645ef37922c8194fef88a052de2a28101882dfdf8a225493888c4941a26ea15164957e7492e5c5e3a8e98ee6276f4834efacb68e2d8ad4d91f903250b6c
@@ -13355,13 +13333,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dequal@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "dequal@npm:2.0.2"
-  checksum: 3b5b019a873da282a25512c632c077e5e8e2a019e71c5b6968836443b861e44176ee3934facfecdc14994d553c1ff4a6c7232278d6aef87baf65e2413d41760c
-  languageName: node
-  linkType: hard
-
 "des.js@npm:^1.0.0":
   version: 1.0.1
   resolution: "des.js@npm:1.0.1"
@@ -15644,7 +15615,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"extract-files@npm:9.0.0, extract-files@npm:^9.0.0":
+"extract-files@npm:9.0.0":
   version: 9.0.0
   resolution: "extract-files@npm:9.0.0"
   checksum: 021b10787718a2f81847e58bd5eea3b09d636e8bb3cf281dad2aeeafc439c32f9e7d2353b2b4b30f6a7febf93be9d1edd76706ea56cff6850b3f39e1594e5bb3
@@ -17954,18 +17925,6 @@ fsevents@^1.2.7:
   peerDependencies:
     graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
   checksum: 4d3b808a16e5343a42ca972ea35ec265c5fd030bbbb441d664570d0d75abb3a40d16a02905647a8b77c78f1231f0a435c73a76bcb9c83b2ae690d8a0baa42e5a
-  languageName: node
-  linkType: hard
-
-"graphql-hooks@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "graphql-hooks@npm:5.1.1"
-  dependencies:
-    dequal: ^2.0.0
-    extract-files: ^9.0.0
-  peerDependencies:
-    react: ^17.0.0
-  checksum: 4d615236e206e70d6f334e513243385c10c9524d50542e6ca9eee85c843c0effea7d07fa5ff84b8b15619598c46a93a5cf7d6ec979c95118147473414525e1e9
   languageName: node
   linkType: hard
 
@@ -25035,16 +24994,6 @@ fsevents@^1.2.7:
     "@wry/context": ^0.6.0
     "@wry/trie": ^0.3.0
   checksum: a9152e33a27be9b2b4a441387061a7e8aff9877872169eba49c11c07fee19b7369efd48f7530f5a65e142f46b63ba3c8a56c9b893eaa696e143f1fdff33760a2
-  languageName: node
-  linkType: hard
-
-"optimism@npm:^0.16.0":
-  version: 0.16.1
-  resolution: "optimism@npm:0.16.1"
-  dependencies:
-    "@wry/context": ^0.6.0
-    "@wry/trie": ^0.3.0
-  checksum: 760b1295525ba86592edf245736ed704670330a8997d91144c1b45bc9f76e392b53c170fb1eb3b265f67584a4f7e205bc777d0c8ed97774326dba9fbfe899e27
   languageName: node
   linkType: hard
 

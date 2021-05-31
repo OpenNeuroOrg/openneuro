@@ -26,11 +26,11 @@ body {
 
 a,
 a:link {
-  color: $current-theme-primary;
+  color: var(--current-theme-primary);
   transition: color 0.3s;
   cursor: pointer;
   &:hover {
-    color: lighten($current-theme-primary, 15%);
+    color: var(--current-theme-primary-hover);
   }
 }
 .container {

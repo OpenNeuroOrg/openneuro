@@ -22,9 +22,6 @@ export const CommunitySwoop = ({
           </div>
         </div>
       </div>
-      <div className="search-swoop">
-        <div></div>
-      </div>
     </section>
   )
 }

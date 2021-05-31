@@ -13,14 +13,14 @@
   label {
     font-size: 14px;
     margin: 40px 0 0;
-    color: $current-theme-primary;
+    color: var(--current-theme-primary);
   }
   .rc-slider-handle,
   .rc-slider-dot-active {
-    border-color: $current-theme-primary;
+    border-color: var(--current-theme-primary);
   }
 
   .rc-slider-track {
-    background-color: $current-theme-primary;
+    background-color: var(--current-theme-primary);
   }
 }

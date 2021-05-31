@@ -1,0 +1,47 @@
+@import '../scss/variables';
+.search-facet-wrapper {
+  .on-button {
+    display: block;
+    border: 1px solid;
+    width: 100%;
+    background-color: #fff;
+    transition: background-color 0.3s;
+    &:hover {
+      text-decoration: none;
+      background-color: #dfdfdf;
+    }
+  }
+
+  .filters-block {
+    background-color: #eee;
+    padding: 30px 20px;
+    margin: 0 0 30px;
+    .active-filters {
+      padding: 0;
+      margin: 0 0 20px;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+        margin-bottom: 10px;
+        font-size: 13px;
+        line-height: 1.7em;
+
+        strong {
+          margin-right: 10px;
+          text-transform: uppercase;
+          color: #777;
+        }
+        span {
+          color: var(--current-theme-primary);
+          font-size: 22px;
+          margin-left: 8px;
+          margin-top: -1px;
+        }
+      }
+    }
+  }
+}

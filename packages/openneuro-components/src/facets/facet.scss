@@ -3,6 +3,7 @@
 .facet-accordion.on-accordion-wrapper {
   padding: 0 15px;
   border-bottom: 1px solid #aaa;
+
   .accordion-title {
     font-size: 14px;
     font-weight: 400;
@@ -15,6 +16,7 @@
       color: #000;
     }
   }
+
   .facet-list {
     ul {
       margin: 0;
@@ -23,11 +25,12 @@
       li {
         cursor: pointer;
         font-weight: 300;
-
+        color: #666;
+        font-size: 14px;
         &.selected-facet {
           > .label,
           > .label span {
-            color: $current-theme-primary;
+            color: var(--current-theme-primary);
           }
         }
         .label {
@@ -36,7 +39,7 @@
           span {
             margin-left: 10px;
             display: inline-block;
-            color: #444;
+            color: #666;
             font-size: 14px;
           }
         }
@@ -44,6 +47,8 @@
     }
     .level-1 > li {
       margin-bottom: 10px;
+      border-top: 1px solid #dfdfdf;
+      padding: 10px 10px 0;
     }
     .level-2 > li {
       display: flex;
@@ -57,4 +62,23 @@
       }
     }
   }
+
+  .facet-list ul li {
+    > .label {
+      font-weight: 500;
+    }
+    &.selected-facet > .label {
+      color: var(--current-theme-primary);
+      font-weight: bold;
+
+      span {
+        color: var(--current-theme-primary);
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.facet-range {
+  margin: 20px 0;
 }

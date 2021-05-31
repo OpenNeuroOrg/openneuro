@@ -10,10 +10,10 @@ export interface CountToggleProps {
   icon?: string
   disabled?: boolean
   tooltip?: string
-  onClick?: () => void
+  toggleClick?: () => void
   lock?: boolean
-  displayOptions: boolean
-  setDisplayOptions: (boolean) => void
+  clicked: boolean
+  showClicked: (boolean) => void
   count: number
 }
 export const CountToggle = ({
@@ -21,24 +21,19 @@ export const CountToggle = ({
   icon,
   disabled,
   tooltip,
-  onClick,
-  displayOptions,
-  setDisplayOptions,
+  toggleClick,
+  clicked,
   count,
 }: CountToggleProps) => {
-  const toggleClick = () => {
-    onClick()
-    setDisplayOptions(!displayOptions)
-  }
   const [isOpen, setIsOpen] = React.useState(false)
   const toggleLogin = () => setIsOpen(!isOpen)
   const toggleButton = (
     <span className="toggle-counter">
       <Button
-        className={displayOptions ? 'toggle-btn active' : 'toggle-btn'}
+        className={clicked ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={() => toggleClick()}>
+        onClick={toggleClick}>
         {label} <span>{count}</span>
       </Button>
     </span>
@@ -46,26 +41,24 @@ export const CountToggle = ({
   const disabledToggleButton = (
     <span className="toggle-counter disabled">
       <Button
-        className={displayOptions ? 'toggle-btn active' : 'toggle-btn'}
+        className={clicked ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={() => toggleLogin()}>
+        onClick={toggleLogin}>
         {label} <span>{count}</span>
       </Button>
     </span>
   )
-
+  const button = disabled ? disabledToggleButton : toggleButton
   return (
     <>
       <div className="toggle-counter-wrap">
         {tooltip ? (
           <Tooltip flow="up" tooltip={tooltip}>
-            {disabled ? disabledToggleButton : toggleButton}
+            {button}
           </Tooltip>
-        ) : disabled ? (
-          disabledToggleButton
         ) : (
-          toggleButton
+          button
         )}
       </div>
       <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">

@@ -19,6 +19,7 @@ export const Input: React.FC<InputProps> = ({
   name,
   labelStyle,
   setValue,
+  value,
 }) => {
   return (
     <>
@@ -27,6 +28,7 @@ export const Input: React.FC<InputProps> = ({
           <input
             type={type}
             name={name}
+            value={value}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
           />
@@ -36,6 +38,7 @@ export const Input: React.FC<InputProps> = ({
         <div className="form-control inline">
           {label ? <label htmlFor={name}>{label}</label> : null}
           <input
+            value={value}
             type={type}
             name={name}
             placeholder={placeholder}
@@ -46,6 +49,7 @@ export const Input: React.FC<InputProps> = ({
         <div className="form-control ">
           {label ? <label htmlFor={name}>{label}</label> : null}
           <input
+            value={value}
             type={type}
             name={name}
             placeholder={placeholder}

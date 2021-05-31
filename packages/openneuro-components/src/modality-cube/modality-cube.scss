@@ -1,31 +1,31 @@
 .modality-cube-wrap {
   // perspective: 2000px;
   // perspective-origin: 50% 50%;
-  margin-top: 60px;
-  width: 183px;
-  height: 160px;
+  margin-top: 40px;
+  width: 153px;
+  height: 130px;
   position: relative;
   .hexagon {
     position: absolute;
-    width: 180px;
-    height: 103.92px;
-    margin: -8px 0 0;
-    background-size: auto 207.8461px;
-    background-position: center;
+    width: 170px;
+    height: 98.15px;
+    margin: -7px 0 0;
+    background-size: auto 197.2991px;
+    background-position: center 53%;
   }
 
   .hexTop,
   .hexBottom {
     position: absolute;
     z-index: 1;
-    width: 127.28px;
-    height: 127.28px;
+    width: 120.21px;
+    height: 120.21px;
     overflow: hidden;
     -webkit-transform: scaleY(0.5774) rotate(-45deg);
     -ms-transform: scaleY(0.5774) rotate(-45deg);
     transform: scaleY(0.5774) rotate(-45deg);
     background: inherit;
-    left: 26.36px;
+    left: 24.9px;
   }
 
   /*counter transform the bg image on the caps*/
@@ -33,8 +33,8 @@
   .hexBottom:after {
     content: '';
     position: absolute;
-    width: 180px;
-    height: 103.92304845413264px;
+    width: 170px;
+    height: 98.14954576223639px;
     -webkit-transform: rotate(45deg) scaleY(1.7321) translateY(-51.9615px);
     -ms-transform: rotate(45deg) scaleY(1.7321) translateY(-51.9615px);
     transform: rotate(45deg) scaleY(1.7321) translateY(-51.9615px);
@@ -45,7 +45,7 @@
   }
 
   .hexTop {
-    top: -63.6396px;
+    top: -60.1041px;
   }
 
   .hexTop:after {
@@ -53,7 +53,7 @@
   }
 
   .hexBottom {
-    bottom: -63.6396px;
+    bottom: -60.1041px;
   }
 
   .hexBottom:after {
@@ -65,8 +65,8 @@
     position: absolute;
     top: 0px;
     left: 0;
-    width: 180px;
-    height: 103.923px;
+    width: 170px;
+    height: 98.1495px;
     z-index: 2;
     background: inherit;
   }
@@ -89,7 +89,7 @@
       transition: transform 0.4s, opacity 0.4s;
       transition-delay: 0s;
       transform: translateY(45px);
-
+      margin-top: -20px;
       opacity: 0;
       font-weight: 600;
       font-size: 19px;
@@ -109,8 +109,8 @@
 .modality-cube {
   margin: 0;
   position: relative;
-  height: 123px;
-  width: 122px;
+  height: 115px;
+  width: 115px;
   transform-style: preserve-3d;
   transform: scale3d(1.05, 1.04, 1.04) rotateX(-36deg) rotateY(-45deg)
     rotateZ(0deg) translate3d(0px, 0px, 0px) skew(0deg, 0deg);
@@ -125,7 +125,7 @@
     color: #000;
     font-weight: bold;
     &.front {
-      transform: translateZ(23px);
+      transform: translateZ(22px);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -137,12 +137,12 @@
       }
     }
     &.top {
-      transform: rotateX(-270deg) translateY(-100px);
+      transform: rotateX(-270deg) translateY(-93px);
       transform-origin: top center;
       background-color: rgba(0, 0, 0, 0.4);
     }
     &.right {
-      transform: rotateY(-270deg) translateX(100px);
+      transform: rotateY(-270deg) translateX(94px);
       transform-origin: top right;
       background-color: rgba(0, 0, 0, 0.2);
     }
@@ -176,44 +176,45 @@
   justify-content: space-between;
 
   .cube-block {
+    width: 170px;
     height: 240px;
     position: relative;
     &:nth-child(3n + 2) {
-      margin: 0 50px;
+      margin: 0 30px;
     }
     &:first-child {
-      left: -55px;
+      left: -5px;
       top: 30px;
       position: relative;
     }
     &:nth-child(2) {
-      left: -25px;
+      left: -5px;
       top: -5px;
     }
     &:nth-child(3) {
       top: 60px;
-      left: -15px;
+      left: 5px;
     }
     &:nth-child(4) {
-      left: 40px;
-      top: -5px;
+      left: 80px;
+      top: -25px;
     }
     &:nth-child(5) {
-      left: 30px;
-      top: -5px;
+      left: 55px;
+      top: -35px;
     }
     &:nth-child(6) {
-      left: 25px;
+      left: 5px;
       top: 80px;
     }
     &:nth-child(7) {
-      left: 0px;
-      top: -15px;
+      left: 160px;
+      top: -85px;
     }
 
     &:last-child {
-      left: 75px;
-      top: 0;
+      left: 155px;
+      top: -30px;
       margin-right: auto;
     }
     @media (max-width: 1400px) {

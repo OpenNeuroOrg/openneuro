@@ -30,6 +30,8 @@ spec:
       - key: "storage"
         operator: "Exists"
         effect: "NoSchedule"
+      nodeSelector:
+        role: storage
       volumes:
       - name: ssh-key
         secret:
@@ -44,11 +46,11 @@ spec:
         command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
           limits:
-            cpu: "2"
-            memory: "8Gi"
+            cpu: "3"
+            memory: "10Gi"
           requests:
-            cpu: "0.5"
-            memory: "1Gi"
+            cpu: "1"
+            memory: "4Gi"
         ports:
         - containerPort: 80
         envFrom:

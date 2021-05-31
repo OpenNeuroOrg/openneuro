@@ -82,12 +82,6 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           {expanded ? <LandingExpandedHeader profile={profile} /> : null}
         </div>
-        <div className="swoop-hide-overflow">
-          {' '}
-          <div className="header-swoop">
-            <div></div>
-          </div>
-        </div>
       </header>
       {!profile ? (
         <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
