@@ -36,7 +36,9 @@ export const FiltersBlock = ({
       <>
         <li>
           <strong>{type}:</strong>
-          {item}
+          {type === 'Age' || type === 'Subjects'
+            ? item[0] + ' - ' + item[1]
+            : item}
           <span>&times;</span>
         </li>
       </>
@@ -45,18 +47,18 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <ul className="active-filters">
-        {modality && _listItem('modality', modality)}
-        {datasetsType && _listItem('datasetsType', datasetsType)}
-        {datasetStatus && _listItem('datasetStatus', datasetStatus)}
-        {ageRange && _listItem('ageRange', ageRange)}
-        {subjectRange && _listItem('subjectRange', subjectRange)}
-        {author_pi && _listItem('author_pi', author_pi)}
-        {gender && _listItem('gender', gender)}
-        {task && _listItem('task', task)}
-        {diagnosis && _listItem('diagnosis', diagnosis)}
-        {section && _listItem('section', section)}
-        {species && _listItem('species', species)}
-        {domain && _listItem('domain', domain)}
+        {modality && _listItem('Modality', modality)}
+        {datasetsType && _listItem('Type', datasetsType)}
+        {datasetStatus && _listItem('Status', datasetStatus)}
+        {ageRange && _listItem('Age', ageRange)}
+        {subjectRange && _listItem('Subjects', subjectRange)}
+        {author_pi && _listItem('Author/PI', author_pi)}
+        {gender && _listItem('Gender', gender)}
+        {task && _listItem('Task', task)}
+        {diagnosis && _listItem('Diagnosis', diagnosis)}
+        {section && _listItem('Section', section)}
+        {species && _listItem('Species', species)}
+        {domain && _listItem('Domain', domain)}
       </ul>
       <Button label="Clear All" size="small" />
     </div>
