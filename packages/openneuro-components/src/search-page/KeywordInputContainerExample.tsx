@@ -4,7 +4,7 @@ import { Input } from '../input/Input'
 export const KeywordInputContainerExample = ({ searchValue }) => {
   const [value, setValue] = React.useState(searchValue)
   return (
-    <>
+    <div className="search-keyword">
       <Input
         type="search"
         label="Keyword"
@@ -14,6 +14,6 @@ export const KeywordInputContainerExample = ({ searchValue }) => {
         value={value}
         setValue={setValue}
       />
-    </>
+    </div>
   )
 }
