@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
 import Capitalized from '../../../styles/capitalized.jsx'
-import { getProfile } from '../../../authentication/profile.js'
+import { getProfile } from '../../../refactor_2021/authentication/profile.js'
 
 // DatasetFilter GraphQL fields
 const filterFields = ['public', 'shared', 'invalid']

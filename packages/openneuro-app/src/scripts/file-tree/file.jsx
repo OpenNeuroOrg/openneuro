@@ -7,7 +7,10 @@ import { Media } from '../styles/media'
 import RemoveAnnexObject from '../datalad/mutations/remove-annex-object.jsx'
 import FlagAnnexObject from '../datalad/mutations/flag-annex-object.jsx'
 import { isAdmin } from '../authentication/admin-user.jsx'
-import { getProfile, hasEditPermissions } from '../authentication/profile.js'
+import {
+  getProfile,
+  hasEditPermissions,
+} from '../refactor_2021/authentication/profile.js'
 import { useCookies } from 'react-cookie'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`

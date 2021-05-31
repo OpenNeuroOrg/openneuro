@@ -11,7 +11,10 @@ import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import DeletePage from '../dataset/delete-page.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
-import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
+import {
+  getProfile,
+  hasEditPermissions,
+} from '../../refactor_2021/authentication/profile.js'
 import {
   Overlay,
   ModalContainer,

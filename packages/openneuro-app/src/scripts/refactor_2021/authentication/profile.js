@@ -15,6 +15,15 @@ export const getProfile = cookies => {
 }
 
 /**
+ * Return profile if token is not expired.
+ * @param {*} cookies
+ */
+export const getUnexpiredProfile = cookies => {
+  const profile = getProfile(cookies)
+  if (guardExpired(profile)) return profile
+}
+
+/**
  * Test for an expired token
  * @param {object} profile A profile returned by getProfile()
  * @returns {boolean} False if expired

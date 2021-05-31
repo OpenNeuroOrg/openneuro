@@ -5,7 +5,10 @@ import { useCookies } from 'react-cookie'
 import snapshotVersion from '../snapshotVersion.js'
 import parseISO from 'date-fns/parseISO'
 import format from 'date-fns/format'
-import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
+import {
+  getProfile,
+  hasEditPermissions,
+} from '../../refactor_2021/authentication/profile.js'
 
 export const SidebarRow = ({
   datasetId,

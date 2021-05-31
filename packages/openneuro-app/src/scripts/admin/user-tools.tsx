@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../common/forms/warn-button.jsx'
-import { getProfile } from '../authentication/profile.js'
+import { getProfile } from '../refactor_2021/authentication/profile.js'
 import { useCookies } from 'react-cookie'
 import { USER_FRAGMENT } from './user-fragment'
 
@@ -12,7 +12,7 @@ interface UserToolsProps {
 }
 
 export const SET_ADMIN = gql`
-  mutation($id: ID!, $admin: Boolean!) {
+  mutation ($id: ID!, $admin: Boolean!) {
     setAdmin(id: $id, admin: $admin) {
       ...userFields
     }
@@ -21,7 +21,7 @@ export const SET_ADMIN = gql`
 `
 
 export const SET_BLOCKED = gql`
-  mutation($id: ID!, $blocked: Boolean!) {
+  mutation ($id: ID!, $blocked: Boolean!) {
     setBlocked(id: $id, blocked: $blocked) {
       ...userFields
     }

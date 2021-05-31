@@ -22,7 +22,10 @@ import EditReadme from '../fragments/edit-readme.jsx'
 import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
-import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
+import {
+  getProfile,
+  hasEditPermissions,
+} from '../../refactor_2021/authentication/profile.js'
 import styled from '@emotion/styled'
 import { Media } from '../../styles/media'
 import { MobileClass } from './mobile-class'
