@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 
 // TODO - Re-enable code splitting these when we can
 import Dataset from '../datalad/dataset/dataset'
-import FrontPage from './front-page/front-page-container'
+import FrontPage from './containers/header'
 import Faq from '../faq/faq'
 import Admin from '../admin/admin'
 import Dashboard from '../datalad/dashboard/dashboard'
