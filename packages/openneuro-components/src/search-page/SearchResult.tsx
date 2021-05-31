@@ -237,8 +237,8 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
   const datasetOwenerIcons = (
     <div className="owner-icon-wrap">
       {node.public ? publicIcon : null}
-      {!shared ? sharedWithIcon : null}
-      {!invalid ? errorsIcon : null}
+      {shared ? sharedWithIcon : null}
+      {invalid ? errorsIcon : null}
     </div>
   )
 
