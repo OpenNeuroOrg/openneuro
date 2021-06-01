@@ -29,7 +29,7 @@ export const ModalityHeader = ({
       }}>
       <div className="container">
         <div className="grid grid-between">
-          <div className="col ">
+          <div className="col col-7 ">
             <h1>{portalName}</h1>
             <div className="primary-content">{portalPrimary}</div>
             <div className="secondary-content">
