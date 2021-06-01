@@ -4867,6 +4867,7 @@ __metadata:
     "@types/react-router-dom": ^5
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
+    "@wojtekmaj/react-daterange-picker": ^3.2.0
     bytes: ^3.1.0
     css-loader: ^5.2.1
     date-fns: ^2.21.1
@@ -7249,6 +7250,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-calendar@npm:^3.0.0":
+  version: 3.4.0
+  resolution: "@types/react-calendar@npm:3.4.0"
+  dependencies:
+    "@types/react": "*"
+  checksum: a76adc86b7e757596e2b26818b9f103c5ad35498d68305546479b0c9df333db93cf9d164711885c1ee4076b3fceb6ffe0fdedc161293bb9782b37d5c0e0e5d24
+  languageName: node
+  linkType: hard
+
 "@types/react-router-dom@npm:^5":
   version: 5.1.7
   resolution: "@types/react-router-dom@npm:5.1.7"
@@ -7923,6 +7933,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wojtekmaj/date-utils@npm:^1.0.2, @wojtekmaj/date-utils@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@wojtekmaj/date-utils@npm:1.0.3"
+  checksum: b51df8d0d29cc4f62d07cfb3c29acb621207ec4e7401834b232e0c264dc3558897128361e29ac85560cc6fb0306639a62a6a398ef22a8ccd2f25753414dbf26a
+  languageName: node
+  linkType: hard
+
 "@wojtekmaj/enzyme-adapter-react-17@npm:^0.6.1":
   version: 0.6.1
   resolution: "@wojtekmaj/enzyme-adapter-react-17@npm:0.6.1"
@@ -7955,6 +7972,23 @@ __metadata:
   peerDependencies:
     react: ^17.0.0-0
   checksum: adeda98a41e93a9197938ed7c112cfcb5b50817420e93591f0913e1f6d06d2907d4b36d7c3e3abfa086cd7d0e79412b1a48cf040bd45e586674af8a855e2d87b
+  languageName: node
+  linkType: hard
+
+"@wojtekmaj/react-daterange-picker@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@wojtekmaj/react-daterange-picker@npm:3.2.0"
+  dependencies:
+    make-event-props: ^1.1.0
+    merge-class-names: ^1.1.1
+    prop-types: ^15.6.0
+    react-calendar: ^3.3.1
+    react-date-picker: ^8.1.0
+    react-fit: ^1.0.3
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0-0
+    react-dom: ^16.3.0 || ^17.0.0-0
+  checksum: a7c10a86ac23ceb30adde8bc9482ffc61f251d000ae512ac9642f0bc77b02fb1d0b1ae722746c7675126d3c69a23fc6baadde2b038d89e2496e4eebb1e6e422c
   languageName: node
   linkType: hard
 
@@ -13359,6 +13393,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"detect-element-overflow@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "detect-element-overflow@npm:1.2.0"
+  checksum: 6d9b0332a60c0db91521419a266dc486fff12e736e3cfa2aa274f67da20ecccb3d122e060f6b7717cf93a243bf8a5d1e648c51c430e1754d9ece7b1a9dc09027
+  languageName: node
+  linkType: hard
+
 "detect-file@npm:^1.0.0":
   version: 1.0.0
   resolution: "detect-file@npm:1.0.0"
@@ -17401,6 +17442,15 @@ fsevents@^1.2.7:
     ftp: ~0.3.10
     readable-stream: 2
   checksum: c795b18ff9941598624329f68513287c3296fe680fd7cadd04f82cf9e52dc86b970e39a7873a654e3fea2e5820d6e099a720498c184380b869806b66bd674a91
+  languageName: node
+  linkType: hard
+
+"get-user-locale@npm:^1.2.0":
+  version: 1.4.0
+  resolution: "get-user-locale@npm:1.4.0"
+  dependencies:
+    lodash.once: ^4.1.1
+  checksum: 3fee33d74173732c1a3895a584b271f993171b2ecc60b0a1b985d8c4f7625432d9152ce817f2759d7d075dbf6b16f219001c32b924ffb4b918c946be82b864fb
   languageName: node
   linkType: hard
 
@@ -22244,7 +22294,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash.once@npm:^4.0.0":
+"lodash.once@npm:^4.0.0, lodash.once@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
   checksum: 236e00ca5f20304fab5b38aa3aedb034959153dae6edf33d7f9b00406ced8f24ed232a74f1200505d9049165ceea2ce1256199e1683b0a25e9de89091d4b13c2
@@ -22587,6 +22637,13 @@ fsevents@^1.2.7:
   version: 1.3.6
   resolution: "make-error@npm:1.3.6"
   checksum: 2c780bab8409b865e8ee86697c599a2bf2765ec64d21eb67ccda27050e039f983feacad05a0d43aba3c966ea03d305d2612e94fec45474bcbc61181f57c5bb88
+  languageName: node
+  linkType: hard
+
+"make-event-props@npm:^1.1.0":
+  version: 1.2.0
+  resolution: "make-event-props@npm:1.2.0"
+  checksum: 628334a87740fe02801b987c84c339b19697ff5d99a375c7793c0165d5bf5018f77ffffe8eb9f2bd4098c515e4c96bb231c7080340fa58a50c34b2bf5d2d6554
   languageName: node
   linkType: hard
 
@@ -23154,6 +23211,13 @@ fsevents@^1.2.7:
     type-fest: ^0.18.0
     yargs-parser: ^20.2.3
   checksum: 7246c3e824298dc1ceddc4b9930bf6a04df8f240d09e76ee180c4f9168df3d6a7d27593a5a3ef7005efbc1557780981e169a7acac56120c7bf2f99f5f54563aa
+  languageName: node
+  linkType: hard
+
+"merge-class-names@npm:^1.1.1":
+  version: 1.4.0
+  resolution: "merge-class-names@npm:1.4.0"
+  checksum: b8453886475ac1510901437b5f3e845046389b8f3452c472aecb29a945440a934f386587d386965075afa3eebf3252d13c375a2ce0f12a71d1e5c29a57089e68
   languageName: node
   linkType: hard
 
@@ -27627,6 +27691,21 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-calendar@npm:^3.3.1":
+  version: 3.4.0
+  resolution: "react-calendar@npm:3.4.0"
+  dependencies:
+    "@wojtekmaj/date-utils": ^1.0.2
+    get-user-locale: ^1.2.0
+    merge-class-names: ^1.1.1
+    prop-types: ^15.6.0
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0-0
+    react-dom: ^16.3.0 || ^17.0.0-0
+  checksum: 36ea2dd18c4f1273cf6cdf6036db023b831de2976b15ec442d918b31db6f4ff52cc4d07b65704ae2b6f4dc932644d76bc75c9c198f208d34517bf49b3cf49bff
+  languageName: node
+  linkType: hard
+
 "react-colorful@npm:^5.0.1":
   version: 5.2.0
   resolution: "react-colorful@npm:5.2.0"
@@ -27659,6 +27738,26 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ^15.3.0 || ^16.0.0 || ^17.0.0
   checksum: 82e0caff24d44920fe20333bbb061ae7f55fb669a9264ab3789534189dbba9fb6e59b6a74c6341fe454d3c56da181808ab137c9a3f3bdaae9c410d9a874dc9eb
+  languageName: node
+  linkType: hard
+
+"react-date-picker@npm:^8.1.0":
+  version: 8.2.0
+  resolution: "react-date-picker@npm:8.2.0"
+  dependencies:
+    "@types/react-calendar": ^3.0.0
+    "@wojtekmaj/date-utils": ^1.0.3
+    get-user-locale: ^1.2.0
+    make-event-props: ^1.1.0
+    merge-class-names: ^1.1.1
+    prop-types: ^15.6.0
+    react-calendar: ^3.3.1
+    react-fit: ^1.0.3
+    update-input-width: ^1.1.1
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0-0
+    react-dom: ^16.3.0 || ^17.0.0-0
+  checksum: 504a4f070fd69f63d4a509229c7e3746b96ed27a7810e54b78d4516479f7075dfbbe8a3b9ffd57388fcdeb6473f31e312fbe0b4d5605422b5e107e9bdb18069d
   languageName: node
   linkType: hard
 
@@ -27872,6 +27971,19 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ^16.8.6 || ^17
   checksum: 302a5ce0bffbd789b0c9ffe29146191db1b0926ae090bb48486f9cb40267d4e636822fa468dfb8614cbc0b3ac13e394937cd51327ec6c6b7ec6032060dfafbd2
+  languageName: node
+  linkType: hard
+
+"react-fit@npm:^1.0.3":
+  version: 1.3.1
+  resolution: "react-fit@npm:1.3.1"
+  dependencies:
+    detect-element-overflow: ^1.2.0
+    prop-types: ^15.6.0
+  peerDependencies:
+    react: ">=15.5"
+    react-dom: ">=15.5"
+  checksum: 16b9851e599e4c3069ced6b0d9cfba0940f9a0c3b7bc4a27f84243f90475930eeb91edbd1b503fcb497c67dab6f186bea0f9b3c8ab678354bdaafaa11e323700
   languageName: node
   linkType: hard
 
@@ -33548,6 +33660,13 @@ typescript@4.0.6:
   version: 1.2.0
   resolution: "upath@npm:1.2.0"
   checksum: ecb08ff3e7e3b152e03bceb7089e6f0077bf3494764397a301eb99a7a5cd4c593ea4d0b13a7714195ad8a3ddca9d7a5964037a1c0bc712e1ba7b67a79165a0be
+  languageName: node
+  linkType: hard
+
+"update-input-width@npm:^1.1.1":
+  version: 1.2.1
+  resolution: "update-input-width@npm:1.2.1"
+  checksum: 596aeabe86fde376b09c5a29d7cc109b2628317b45fec57fd6e35512039297a425f311b42bdd3a5f4a3e200683a520a39c10b46b9537b774280c4d8c3cf060d2
   languageName: node
   linkType: hard
 

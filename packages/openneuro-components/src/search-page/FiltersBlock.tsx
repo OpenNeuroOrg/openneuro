@@ -15,6 +15,7 @@ export interface FiltersBlockProps {
   section?: string
   species?: string
   domain?: string
+  selectedDate?: string[]
 }
 
 export const FiltersBlock = ({
@@ -30,7 +31,9 @@ export const FiltersBlock = ({
   section,
   species,
   domain,
+  selectedDate,
 }: FiltersBlockProps) => {
+  console.log(selectedDate)
   const _listItem = (type, item) => {
     return (
       <>

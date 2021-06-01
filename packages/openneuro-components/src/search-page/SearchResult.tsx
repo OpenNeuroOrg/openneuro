@@ -95,6 +95,7 @@ export interface SearchResultProps {
 export const SearchResult = ({ node, profile }: SearchResultProps) => {
   const heading = node.draft.description.Name
   const summary = node.draft.summary
+  const datasetId = node.draft.id
   const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
   const numSubjects = summary.subjects.length > 0 ? summary.subjects.length : 1
 
@@ -257,7 +258,7 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
       <div className="grid grid-nogutter search-result">
         <div className="col col-9">
           <h3>
-            <Link to="/">{heading}</Link>
+            <Link to={'/datasets/' + datasetId}>{heading}</Link>
           </h3>
           <div className="result-meta-body">
             {modalityList}

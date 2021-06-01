@@ -8,6 +8,7 @@ import { KeywordInputContainerExample } from './KeywordInputContainerExample'
 import { sortBy } from '../mock-content/sortby-list'
 import { FacetSelect } from '../facets/FacetSelect'
 import { FacetRadio } from '../facets/FacetRadio'
+import { FacetDatePicker } from '../facets/FacetDatePicker'
 import { FacetRange } from '../facets/FacetRange'
 import { Button } from '../button/Button'
 
@@ -49,7 +50,7 @@ export const SearchPageContainerExample = ({
   const [section, setSection] = React.useState(0)
   const [species, setSpecies] = React.useState()
   const [domain, setDomain] = React.useState()
-
+  const [selectedDate, setSelectedDate] = React.useState()
   return (
     <div>
       <SearchPage
@@ -174,6 +175,14 @@ export const SearchPageContainerExample = ({
                 startOpen={false}
                 label="Gender"
                 accordionStyle="plain"
+              />
+
+              <FacetDatePicker
+                startOpen={false}
+                label="Date"
+                accordionStyle="plain"
+                selected={selectedDate}
+                setSelected={setSelectedDate}
               />
               <FacetSelect
                 selected={species}
