@@ -49,21 +49,24 @@ export const SearchPage = ({
             ) : null}
           </>
         ) : null}
-
-        <div className="grid grid-start">
-          <div className="col col-12">
-            <h1>
-              {portalContent ? 'Search MRI Portal' : 'Search all Dataset'}
-            </h1>
-          </div>
-
-          <div className="col col-12">
-            <div className="grid grid-between grid-nogutter">
-              {renderSortBy()}
+        <div className="container">
+          <div className="grid grid-start">
+            <div className="col col-12">
+              <h1>
+                {portalContent ? 'Search MRI Portal' : 'Search all Dataset'}
+              </h1>
             </div>
+
+            <div className="col col-12">
+              <div className="grid grid-between grid-nogutter">
+                {renderSortBy()}
+              </div>
+            </div>
+            <div className="col search-facet-wrapper">
+              {renderSearchFacets()}
+            </div>
+            <div className="col">{renderSearchResults()}</div>
           </div>
-          <div className="col search-facet-wrapper">{renderSearchFacets()}</div>
-          <div className="col">{renderSearchResults()}</div>
         </div>
       </section>
     </>
