@@ -256,7 +256,7 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
   return (
     <>
       <div className="grid grid-nogutter search-result">
-        <div className="col col-9">
+        <div className="col col-8">
           <h3>
             <Link to={'/datasets/' + datasetId}>{heading}</Link>
           </h3>
@@ -265,7 +265,7 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
             {taskList}
           </div>
         </div>
-        <div className="col col-3">
+        <div className="col col-4">
           <div className="result-icon-wrap">
             {datasetOwenerIcons}
             {activityIcon}

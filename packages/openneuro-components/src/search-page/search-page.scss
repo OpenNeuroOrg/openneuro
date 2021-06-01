@@ -159,7 +159,9 @@
   }
 }
 .search-facet-wrapper {
-  max-width: 380px;
+  max-width: 450px;
+  padding-right: 0;
+
   .facet-accordion.on-accordion-wrapper {
     padding: 0;
   }
