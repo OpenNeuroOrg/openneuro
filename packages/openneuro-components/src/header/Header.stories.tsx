@@ -26,6 +26,7 @@ const Template: Story<HeaderProps> = ({
       isOpen={isOpen}
       toggleLogin={toggleLogin}
       toggleUpload={toggleUpload}
+      pushHistory={path => console.log(`User navigation to ${path}.`)}
     />
   )
 }
