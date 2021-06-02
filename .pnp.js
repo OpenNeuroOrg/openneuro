@@ -9406,8 +9406,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bytes", "npm:3.1.0"],
             ["css-loader", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:5.2.4"],
             ["date-fns", "npm:2.21.3"],
-            ["pluralize", "npm:8.0.0"],
             ["md5", "npm:2.3.0"],
+            ["pluralize", "npm:8.0.0"],
             ["rc-slider", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:9.7.2"],
             ["react", "npm:17.0.2"],
             ["react-router-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:5.2.0"],
@@ -25683,7 +25683,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
+          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.14.0"],

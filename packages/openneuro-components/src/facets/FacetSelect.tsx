@@ -15,7 +15,7 @@ export interface FacetSelectProps {
   label: string
   dropdown?: boolean
   selected: string
-  setSelected: (selected: { label: string; value: string }) => void
+  setSelected: (selected: string) => void
 }
 
 export const FacetSelect = ({

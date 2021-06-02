@@ -1,6 +1,6 @@
 import React, { createContext, useState, FC, ReactNode } from 'react'
 import { useContext } from 'react'
-import { FacetListWrap } from '@openneuro/components'
+import { FacetSelect } from '@openneuro/components'
 import initialSearchParams from './initial-search-params'
 
 export const SearchParamsCtx = createContext(null)
@@ -51,7 +51,7 @@ export const ModalitySelectContainer: FC = () => {
   }
 
   return (
-    <FacetListWrap
+    <FacetSelect
       items={searchParams.modality_available}
       selected={searchParams.modality_selected}
       setSelected={setModality}

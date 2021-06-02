@@ -9,7 +9,7 @@ import {
   SearchParamsProvider,
   IntermediateComponent,
   ModalitySelectContainer,
-} from './search/search-params-ctx'
+} from './refactor_2021/search/search-params-ctx'
 
 const Index = () => {
   return (
