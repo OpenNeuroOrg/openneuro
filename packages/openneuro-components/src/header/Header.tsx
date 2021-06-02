@@ -19,6 +19,7 @@ export interface HeaderProps {
   isOpen: boolean
   toggleLogin: () => void
   toggleUpload: () => void
+  pushHistory: (string) => void
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,7 +30,12 @@ export const Header: React.FC<HeaderProps> = ({
   isOpen,
   toggleLogin,
   toggleUpload,
+  pushHistory,
 }) => {
+  const goTo = path => e => {
+    e.preventDefault()
+    pushHistory(path)
+  }
   return (
     <>
       <header>
@@ -41,15 +47,16 @@ export const Header: React.FC<HeaderProps> = ({
             <h1 className="sr-only">OpenNeuro</h1>
           </div>
           <div className="navbar-navigation">
+            {/* TODO: convert Support to trigger support modal. */}
             <ul>
               <li>
-                <a href="/">Search</a>
+                <a onClick={goTo('/search')}>Search</a>
               </li>
               <li>
-                <a href="/">Support</a>
+                <a onClick={() => {}}>Support</a>
               </li>
               <li>
-                <a href="/">FAQ</a>
+                <a onClick={goTo('/faq')}>FAQ</a>
               </li>
             </ul>
           </div>
