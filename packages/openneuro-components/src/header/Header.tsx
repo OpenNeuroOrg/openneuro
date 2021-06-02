@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
       <header>
         <div className="navbar-inner-wrap">
           <div className="navbar-brand">
-            <a href="/">
+            <a onClick={goTo('/')}>
               <Logo horizontal dark={false} />
             </a>
             <h1 className="sr-only">OpenNeuro</h1>
