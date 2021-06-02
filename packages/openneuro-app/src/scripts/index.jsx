@@ -7,6 +7,7 @@ import HeaderContainer from './refactor_2021/containers/header'
 import Routes from './routes.jsx'
 import Uploader from './uploader/uploader.jsx'
 import FeatureToggle from './components/feature-toggle'
+import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
 
 const Index = () => {
   return (
@@ -15,7 +16,9 @@ const Index = () => {
       renderOnEnabled={() => (
         <Uploader>
           <HeaderContainer />
-          <Routes_REFACTOR />
+          <SearchParamsProvider>
+            <Routes_REFACTOR />
+          </SearchParamsProvider>
         </Uploader>
       )}
       renderOnDisabled={() => (

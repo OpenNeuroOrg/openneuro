@@ -7,7 +7,7 @@ import FrontPage from './containers/front-page'
 import Faq from '../faq/faq'
 import Admin from '../admin/admin'
 import Dashboard from '../datalad/dashboard/dashboard'
-import SearchResults from '../search/search-results'
+import SearchContainer from './search/search-container'
 import APIKey from '../user/api.jsx'
 import ErrorRoute from '../errors/errorRoute'
 import PETDummy from '../pet/dummy'
@@ -21,11 +21,8 @@ const Routes = () => (
     <Route name="front-page" exact path="/" component={FrontPage} />
     <Route name="faq" exact path="/faq" component={Faq} />
     <Route name="api-key" exact path="/keygen" component={APIKey} />
-    <Route name="dashboard" path="/dashboard" component={Dashboard} />
-    <Route name="saved" path="/saved" component={SavedDashboard} />
-    <Route name="public" path="/public" component={PublicDashboard} />
     <Route name="dataset" path="/datasets" component={Dataset} />
-    <Route name="search" path="/search/:query?" component={SearchResults} />
+    <Route name="search" path="/search" component={SearchContainer} />
     <Route name="admin" path="/admin" component={Admin} />
     <Route name="error" path="/error" component={ErrorRoute} />
     <Route name="pet-landing" path="/pet" component={PETDummy} />
