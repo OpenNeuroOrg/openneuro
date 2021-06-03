@@ -14,12 +14,14 @@ export interface LandingExpandedHeaderProps {
   user?: {}
   renderFacetSelect: () => typeof FacetSelect
   renderSearchInput: () => typeof Input
+  onSearch: () => void
 }
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   user,
   renderFacetSelect,
   renderSearchInput,
+  onSearch,
 }) => {
   const cubeWrap = (
     <div className="cube-wrap col col-6" id="front-cubes">
@@ -57,7 +59,12 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
               <div className="header-input">{renderSearchInput()}</div>
 
               <div className="header-input-button">
-                <Button primary={true} icon="fas fa-search" size="large" />
+                <Button
+                  onClick={() => onSearch()}
+                  primary={true}
+                  icon="fas fa-search"
+                  size="large"
+                />
               </div>
             </div>
 

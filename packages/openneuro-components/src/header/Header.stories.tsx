@@ -44,6 +44,7 @@ const Template: Story<HeaderProps> = ({
               labelStyle="default"
             />
           )}
+          onSearch={() => console.log('User search by keyword.')}
         />
       )}
     />

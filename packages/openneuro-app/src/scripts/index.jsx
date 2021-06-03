@@ -15,8 +15,8 @@ const Index = () => {
       feature="redesign-2021"
       renderOnEnabled={() => (
         <Uploader>
-          <HeaderContainer />
           <SearchParamsProvider>
+            <HeaderContainer />
             <Routes_REFACTOR />
           </SearchParamsProvider>
         </Uploader>

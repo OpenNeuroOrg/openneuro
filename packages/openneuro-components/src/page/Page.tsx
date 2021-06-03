@@ -37,6 +37,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
                   labelStyle="default"
                 />
               )}
+              onSearch={() => console.log('User search by keyword.')}
             />
           )}
         />
