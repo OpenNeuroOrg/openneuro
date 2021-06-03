@@ -10,6 +10,7 @@ export interface AccordionTabProps {
   className: string
   label: string
   startOpen?: boolean
+  plainStyle: boolean
   dropdown?: boolean
   accordionStyle: 'plain' | 'file-tree' | 'bids-wrappper'
 }
