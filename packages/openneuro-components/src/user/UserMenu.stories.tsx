@@ -1,6 +1,5 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import signOut from '../../../openneuro-app/src/scripts/authentication/signOut.js'
 
 import { UserMenu, UserMenuProps } from './UserMenu'
 

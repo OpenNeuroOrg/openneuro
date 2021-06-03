@@ -3,7 +3,6 @@ import bytes from 'bytes'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
-import { formatDate } from '../../../openneuro-app/src/scripts/utils/date.js'
 
 import { Tooltip } from '../tooltip/Tooltip'
 import { Icon } from '../icon/Icon'
@@ -11,6 +10,13 @@ import { Icon } from '../icon/Icon'
 import './search-result.scss'
 
 import activityPulseIcon from '../assets/activity-icon.png'
+
+/**
+ * Return an equivalent to moment(date).format('L') without moment
+ * @param {*} dateObject
+ */
+export const formatDate = dateObject =>
+  new Date(dateObject).toISOString().split('T')[0]
 
 export interface SearchResultItemProps {
   node: {

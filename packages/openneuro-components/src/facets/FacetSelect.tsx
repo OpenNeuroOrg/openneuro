@@ -14,13 +14,8 @@ export interface FacetSelectProps {
   startOpen: boolean
   label: string
   dropdown?: boolean
-  selected: {
-    label: string
-    value: string
-    count?: number
-    children?: React.ReactNode
-  }
-  setSelected: (selected: { label: string; value: string }) => void
+  selected: string
+  setSelected: (selected: string) => void
   className?: string
 }
 
@@ -34,9 +29,9 @@ export const FacetSelect = ({
   dropdown,
   className,
 }: FacetSelectProps) => {
-  const setSelectorNoPropagation = (e, item) => {
+  const setSelectorNoPropagation = (e, value) => {
     e.stopPropagation()
-    setSelected(item)
+    setSelected(value)
   }
   return (
     <AccordionWrap className={className + ' facet-accordion'}>
@@ -50,9 +45,9 @@ export const FacetSelect = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                onClick={e => setSelectorNoPropagation(e, item)}
+                onClick={e => setSelectorNoPropagation(e, item.value)}
                 className={
-                  selected && selected.value == item.value
+                  selected && selected == item.value
                     ? 'selected-facet facet'
                     : 'facet'
                 }>
@@ -65,9 +60,9 @@ export const FacetSelect = ({
                     {item.children.map((item, index) => (
                       <li
                         key={index}
-                        onClick={e => setSelectorNoPropagation(e, item)}
+                        onClick={e => setSelectorNoPropagation(e, item.value)}
                         className={
-                          selected && selected.value == item.value
+                          selected && selected == item.value
                             ? 'selected-facet facet'
                             : 'facet'
                         }>

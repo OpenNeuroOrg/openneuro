@@ -34,7 +34,6 @@ export const FiltersBlock = ({
   selectedDate,
 }: FiltersBlockProps) => {
   const _listItem = (type, item) => {
-    console.log(item)
     if (item === 'All') {
       return
     } else
@@ -70,20 +69,20 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <ul className="active-filters">
-        {modality && _listItem('Modality', modality.value)}
+        {modality && _listItem('Modality', modality)}
         {datasetsType && _listItem('Type', datasetsType)}
-        {datasetStatus && _listItem('Status', datasetStatus.value)}
+        {datasetStatus && _listItem('Status', datasetStatus)}
         {ageRange && !ageRangeIsNull && _listItem('Age', ageRange)}
         {subjectRange &&
           !subjectRangeIsNull &&
           _listItem('Subjects', subjectRange)}
-        {author_pi && _listItem('Author/PI', author_pi.value)}
+        {author_pi && _listItem('Author/PI', author_pi)}
         {gender && _listItem('Gender', gender)}
-        {task && _listItem('Task', task.value)}
-        {diagnosis && _listItem('Diagnosis', diagnosis.value)}
-        {section && _listItem('Section', section.value)}
-        {species && _listItem('Species', species.value)}
-        {domain && _listItem('Domain', domain.value)}
+        {task && _listItem('Task', task)}
+        {diagnosis && _listItem('Diagnosis', diagnosis)}
+        {section && _listItem('Section', section)}
+        {species && _listItem('Species', species)}
+        {domain && _listItem('Domain', domain)}
         {subjectRange && !dateIsNull && (
           <li className="Date-Range">
             <strong>Date:</strong>

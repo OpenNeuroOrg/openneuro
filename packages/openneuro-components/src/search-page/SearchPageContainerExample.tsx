@@ -112,38 +112,36 @@ export const SearchPageContainerExample = ({
           <>
             <KeywordInputContainerExample searchValue={'Forrest Gump'} />
             <FacetBlockContainerExample>
-              {profile && (
-                <>
-                  <FacetRadio
-                    radioArr={show_available}
-                    layout="row"
-                    name="show-datasets"
-                    startOpen={true}
-                    label="Show"
-                    accordionStyle="plain"
-                    selected={datasetsType}
-                    setSelected={setDatasetsType}
-                    className={
-                      datasetsType == 'My Datasets'
-                        ? 'dataset-status-open'
-                        : null
-                    }
-                  />
-                  <FacetSelect
-                    selected={datasetStatus}
-                    setSelected={setDatasetStatus}
-                    items={dataset_type}
-                    accordionStyle="plain"
-                    label="My Datasets Status"
-                    startOpen={true}
-                    className={
-                      datasetsType == 'My Datasets'
-                        ? 'fade-in-facet'
-                        : 'fade-out-facet'
-                    }
-                  />
-                </>
-              )}
+              {/* {profile TODO hide Show && My Datasets Status if logged out */}
+              <>
+                <FacetRadio
+                  radioArr={show_available}
+                  layout="row"
+                  name="show-datasets"
+                  startOpen={true}
+                  label="Show"
+                  accordionStyle="plain"
+                  selected={datasetsType}
+                  setSelected={setDatasetsType}
+                  className={
+                    datasetsType == 'My Datasets' ? 'dataset-status-open' : null
+                  }
+                />
+                <FacetSelect
+                  selected={datasetStatus}
+                  setSelected={setDatasetStatus}
+                  items={dataset_type}
+                  accordionStyle="plain"
+                  label="My Datasets Status"
+                  startOpen={true}
+                  className={
+                    datasetsType == 'My Datasets'
+                      ? 'fade-in-facet'
+                      : 'fade-out-facet'
+                  }
+                />
+              </>
+
               {!portalContent && (
                 <FacetSelect
                   selected={modality}

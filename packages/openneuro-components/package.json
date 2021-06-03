@@ -3,6 +3,10 @@
   "version": "3.33.5",
   "description": "OpenNeuro component library and Storybook configuration",
   "main": "dist/index.js",
+  "browser": "src/index.js",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
   "license": "MIT",
@@ -11,6 +15,7 @@
     "@wojtekmaj/react-daterange-picker": "^3.2.0",
     "bytes": "^3.1.0",
     "date-fns": "^2.21.1",
+    "md5": "^2.3.0",
     "pluralize": "^8.0.0",
     "rc-slider": "^9.7.2",
     "react": "^17.0.1",
@@ -31,6 +36,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
+    "@types/md5": "^2",
     "@types/mdx-js__react": "^1",
     "@types/react-router-dom": "^5",
     "@types/react-slick": "^0",
@@ -39,6 +45,7 @@
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
+    "typescript": "4.0.6",
     "url-loader": "^1.0.1",
     "vite": "2.1.5",
     "webpack": "^4.20.2",
@@ -48,6 +55,7 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "scripts": {
+    "build": "tsc --build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

@@ -149,7 +149,7 @@ export const species_list = [
   },
   {
     label: 'Rat',
-    value: 'rRatat',
+    value: 'Rat',
   },
   {
     label: 'Other',
