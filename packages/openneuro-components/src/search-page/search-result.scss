@@ -32,7 +32,7 @@
   }
 
   .result-meta-body > div {
-    margin-bottom: 20px;
+    margin-bottom: 0;
     font-size: 14px;
     display: flex;
 
@@ -52,7 +52,27 @@
       }
     }
   }
+  .task-list {
+    margin: 20px 0;
+    font-size: 14px;
+    display: flex;
 
+    strong {
+      text-transform: uppercase;
+      color: #777;
+      margin-right: 20px;
+    }
+    .list-item {
+      display: inline-block;
+      padding: 0px 12px 0 0;
+      margin: 0 12px 10px 0;
+      border-right: 1px solid #cacaca;
+      font-weight: 600;
+      &:last-child {
+        border: 0;
+      }
+    }
+  }
   .result-meta-footer {
     display: flex;
     .result-summary-meta {

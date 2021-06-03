@@ -266,10 +266,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
           <h3>
             <Link to={'/datasets/' + datasetId}>{heading}</Link>
           </h3>
-          <div className="result-meta-body">
-            {modalityList}
-            {taskList}
-          </div>
+          <div className="result-meta-body">{modalityList}</div>
         </div>
         <div className="col col-4">
           <div className="result-icon-wrap">
@@ -282,6 +279,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
             {addedDate}
           </div>
         </div>
+        <div className="col col-12">{taskList}</div>
         <div className="result-meta-footer">
           {accessionNumber}
           {sessions}
