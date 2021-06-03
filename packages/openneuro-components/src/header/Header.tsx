@@ -4,8 +4,8 @@ import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
 import { UserModalInner } from '../modal/UserModalInner'
-import { LandingExpandedHeader } from './LandingExpandedHeader'
 import { UserMenu } from '../user/UserMenu'
+import { LandingExpandedHeader } from './LandingExpandedHeader'
 
 import orcidIcon from '../assets/orcid_24x24.png'
 
@@ -19,7 +19,8 @@ export interface HeaderProps {
   isOpen: boolean
   toggleLogin: () => void
   toggleUpload: () => void
-  pushHistory: (string) => void
+  pushHistory: (path: string) => void
+  renderOnExpanded: (profile) => typeof LandingExpandedHeader
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,6 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
   toggleLogin,
   toggleUpload,
   pushHistory,
+  renderOnExpanded,
 }) => {
   const goTo = path => e => {
     e.preventDefault()
@@ -87,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
               </>
             )}
           </div>
-          {expanded ? <LandingExpandedHeader profile={profile} /> : null}
+          {expanded ? renderOnExpanded(profile) : null}
         </div>
       </header>
       {!profile ? (

@@ -8,14 +8,18 @@ import orcidIcon from '../assets/orcid_24x24.png'
 import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 import { frontPage } from '../mock-content/front-page-content.jsx'
-import { FrontFacetExample } from '../facets/Facet.stories'
+import { FacetSelect } from '../facets/FacetSelect'
 
 export interface LandingExpandedHeaderProps {
   user?: {}
+  renderFacetSelect: () => typeof FacetSelect
+  renderSearchInput: () => typeof Input
 }
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   user,
+  renderFacetSelect,
+  renderSearchInput,
 }) => {
   const cubeWrap = (
     <div className="cube-wrap col col-6" id="front-cubes">
@@ -47,19 +51,10 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
               <AggregateCount type="publicDataset" count={202} />
               <AggregateCount type="publicDataset" count={22} />
             </div>
-            <div className="header-modality-wrap">
-              <FrontFacetExample {...FrontFacetExample.args} />
-            </div>
+            <div className="header-modality-wrap">{renderFacetSelect()}</div>
             <span className="header-or-text">Or</span>
             <div className="header-input-wrap">
-              <div className="header-input">
-                <Input
-                  placeholder="Search"
-                  type="text"
-                  name="front-page-search"
-                  labelStyle="default"
-                />
-              </div>
+              <div className="header-input">{renderSearchInput()}</div>
 
               <div className="header-input-button">
                 <Button primary={true} icon="fas fa-search" size="large" />

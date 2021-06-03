@@ -2,6 +2,9 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
 import { Header, HeaderProps } from './Header'
+import { LandingExpandedHeader } from './LandingExpandedHeader'
+import { FrontFacetExample } from '../facets/Facet.stories'
+import { Input } from '../input/Input'
 
 export default {
   title: 'Example/Header',
@@ -27,6 +30,22 @@ const Template: Story<HeaderProps> = ({
       toggleLogin={toggleLogin}
       toggleUpload={toggleUpload}
       pushHistory={path => console.log(`User navigation to ${path}.`)}
+      renderOnExpanded={profile => (
+        <LandingExpandedHeader
+          profile={profile}
+          renderFacetSelect={() => (
+            <FrontFacetExample {...FrontFacetExample.args} />
+          )}
+          renderSearchInput={() => (
+            <Input
+              placeholder="Search"
+              type="text"
+              name="front-page-search"
+              labelStyle="default"
+            />
+          )}
+        />
+      )}
     />
   )
 }
