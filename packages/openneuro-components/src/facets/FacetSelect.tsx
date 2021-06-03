@@ -4,12 +4,16 @@ import { AccordionWrap } from '../accordion/AccordionWrap'
 import './facet.scss'
 
 export interface FacetSelectProps {
-  items: {
-    label: string
-    value: string
-    count?: number
-    children?: null | { label: string; value: string; count: number }[]
-  }[]
+  // items may be a list of objects with labels and values
+  //   or a simple array of strings, where the string is used for both their labels and values
+  items:
+    | {
+        label: string
+        value: string
+        count?: number
+        children?: null | { label: string; value: string; count: number }[]
+      }[]
+    | string[]
   accordionStyle: string
   startOpen: boolean
   label: string
@@ -45,14 +49,14 @@ export const FacetSelect = ({
               {items.map((item, index) => (
                 <li
                   key={index}
-                  onClick={e => setSelectorNoPropagation(e, item.value)}
+                  onClick={e => setSelectorNoPropagation(e, item.value || item)}
                   className={
-                    selected && selected == item.value
+                    selected && selected == item.value || item
                       ? 'selected-facet facet'
                       : 'facet'
                   }>
                   <span className="label">
-                    {item.label}
+                    {item.label || item}
                     {item.count && <span>({item.count})</span>}
                   </span>
                   {item.children && (
