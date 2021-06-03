@@ -21,6 +21,7 @@ export interface FacetSelectProps {
     children?: React.ReactNode
   }
   setSelected: (selected: { label: string; value: string }) => void
+  className?: string
 }
 
 export const FacetSelect = ({
@@ -31,13 +32,14 @@ export const FacetSelect = ({
   label,
   accordionStyle,
   dropdown,
+  className,
 }: FacetSelectProps) => {
   const setSelectorNoPropagation = (e, item) => {
     e.stopPropagation()
     setSelected(item)
   }
   return (
-    <AccordionWrap className="facet-accordion">
+    <AccordionWrap className={className + ' facet-accordion'}>
       <AccordionTab
         accordionStyle={accordionStyle}
         label={label}

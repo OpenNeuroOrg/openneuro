@@ -14,7 +14,7 @@ export interface FacetRangeProps {
   step?: number
   dots?: boolean
   pushable?: boolean
-  defaultValue: [number, number]
+  defaultValue: [number | null, number | null]
   marks?: { number: string }
   newvalue: [number, number]
   setNewValue: (newvalue) => void

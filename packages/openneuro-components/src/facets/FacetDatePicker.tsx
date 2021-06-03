@@ -11,7 +11,7 @@ export interface FacetDatePickerProps {
   startOpen: boolean
   label: string
   dropdown?: boolean
-  selected: Date | Date[]
+  selected: [Date | null, Date | null]
   setSelected: (value) => void
 }
 

@@ -18,6 +18,7 @@ export interface FacetRadioProps {
   dropdown?: boolean
   selected: string
   setSelected: (value) => void
+  className?: string
 }
 
 export const FacetRadio = ({
@@ -30,9 +31,10 @@ export const FacetRadio = ({
   dropdown,
   selected,
   setSelected,
+  className,
 }: FacetRadioProps) => {
   return (
-    <AccordionWrap className="facet-accordion">
+    <AccordionWrap className={className + ' facet-accordion'}>
       <AccordionTab
         accordionStyle={accordionStyle}
         label={label}

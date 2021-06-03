@@ -1,6 +1,6 @@
 import React from 'react'
 import { FacetBlockContainerExample } from './FacetBlockContainerExample'
-import { SearchResults } from './SearchResults'
+import { SearchResultsList } from './SearchResultsList'
 import { FiltersBlock } from './FiltersBlock'
 import { SearchPage } from './SearchPage'
 import { SearchSortContainerExample } from './SearchSortContainerExample'
@@ -39,79 +39,121 @@ export const SearchPageContainerExample = ({
   profile,
 }: SearchContainereProps) => {
   const [modality, setModality] = React.useState()
-  const [datasetsType, setDatasetsType] = React.useState('all')
+  const [datasetsType, setDatasetsType] = React.useState('All')
   const [datasetStatus, setDatasetStatus] = React.useState()
-  const [ageRange, setAgeRange] = React.useState([0, 20])
-  const [subjectRange, setSubjectRange] = React.useState([0, 20])
+  const [ageRange, setAgeRange] = React.useState([null, null])
+  const [subjectRange, setSubjectRange] = React.useState([null, null])
   const [author_pi, setAuthor_pi] = React.useState()
-  const [gender, setGender] = React.useState('all')
+  const [gender, setGender] = React.useState('All')
   const [task, setTask] = React.useState()
   const [diagnosis, setDiagnosis] = React.useState()
-  const [section, setSection] = React.useState(0)
+  const [section, setSection] = React.useState()
   const [species, setSpecies] = React.useState()
   const [domain, setDomain] = React.useState()
-  const [selectedDate, setSelectedDate] = React.useState()
+  const [selectedDate, setSelectedDate] = React.useState([null, null])
+
+  let filterBlockIsEmpty
+
+  if (
+    modality === undefined &&
+    datasetsType === 'All' &&
+    datasetStatus === undefined &&
+    JSON.stringify(ageRange) === JSON.stringify([null, null]) &&
+    JSON.stringify(subjectRange) === JSON.stringify([null, null]) &&
+    author_pi === undefined &&
+    gender === 'All' &&
+    task === undefined &&
+    diagnosis === undefined &&
+    section === undefined &&
+    species === undefined &&
+    domain === undefined &&
+    JSON.stringify(selectedDate) === JSON.stringify([null, null])
+  ) {
+    filterBlockIsEmpty = true
+  } else {
+    filterBlockIsEmpty = false
+  }
   return (
     <div>
       <SearchPage
         portalContent={portalContent}
+        renderFilterBlock={() => (
+          <>
+            {!filterBlockIsEmpty ? (
+              <FiltersBlock
+                modality={modality}
+                datasetsType={datasetsType}
+                datasetStatus={datasetStatus}
+                ageRange={ageRange}
+                subjectRange={subjectRange}
+                author_pi={author_pi}
+                gender={gender}
+                task={task}
+                diagnosis={diagnosis}
+                section={section}
+                species={species}
+                domain={domain}
+                selectedDate={selectedDate}
+              />
+            ) : null}
+          </>
+        )}
         renderSortBy={() => (
           <>
-            <div className="col">
-              <b>
-                100 Datasets found for "<span>Forrest Gump</span>"
-              </b>
+            <div className="col results-count">
+              Showing <b>25</b> of <b>100</b> Datasets
             </div>
-            <div className="col">
-              <div className="search-sort">
-                <SearchSortContainerExample items={sortBy} />
-              </div>
+            <div className="col search-sort">
+              <SearchSortContainerExample items={sortBy} />
             </div>
           </>
         )}
         renderSearchFacets={() => (
           <>
             <KeywordInputContainerExample searchValue={'Forrest Gump'} />
-            <FiltersBlock
-              datasetsType={'My Datasets'}
-              ageRange={[0, 20]}
-              author_pi={'Charles Darwin'}
-              gender={'Male'}
-              task={'T1w'}
-              species={'Human'}
-            />
             <FacetBlockContainerExample>
-              <FacetSelect
-                selected={modality}
-                setSelected={setModality}
-                items={modalities}
-                accordionStyle="plain"
-                label="Modalities"
-                startOpen={true}
-              />
-
-              <FacetRadio
-                radioArr={show_available}
-                layout="row"
-                name="show-datasets"
-                startOpen={true}
-                label="Show"
-                accordionStyle="plain"
-                selected={datasetsType}
-                setSelected={setDatasetsType}
-              />
-
-              {datasetsType == 2 ? (
+              {profile && (
+                <>
+                  <FacetRadio
+                    radioArr={show_available}
+                    layout="row"
+                    name="show-datasets"
+                    startOpen={true}
+                    label="Show"
+                    accordionStyle="plain"
+                    selected={datasetsType}
+                    setSelected={setDatasetsType}
+                    className={
+                      datasetsType == 'My Datasets'
+                        ? 'dataset-status-open'
+                        : null
+                    }
+                  />
+                  <FacetSelect
+                    selected={datasetStatus}
+                    setSelected={setDatasetStatus}
+                    items={dataset_type}
+                    accordionStyle="plain"
+                    label="My Datasets Status"
+                    startOpen={true}
+                    className={
+                      datasetsType == 'My Datasets'
+                        ? 'fade-in-facet'
+                        : 'fade-out-facet'
+                    }
+                  />
+                </>
+              )}
+              {!portalContent && (
                 <FacetSelect
-                  selected={datasetStatus}
-                  setSelected={setDatasetStatus}
-                  items={dataset_type}
+                  selected={modality}
+                  setSelected={setModality}
+                  items={modalities}
                   accordionStyle="plain"
-                  label="My Datasets Status"
-                  startOpen={false}
+                  label="Modalities"
+                  startOpen={true}
                 />
-              ) : null}
-
+              )}
               <FacetRange
                 startOpen={false}
                 label="Age"
@@ -138,7 +180,6 @@ export const SearchPageContainerExample = ({
                 newvalue={subjectRange}
                 setNewValue={setSubjectRange}
               />
-
               <FacetSelect
                 selected={diagnosis}
                 setSelected={setDiagnosis}
@@ -147,7 +188,6 @@ export const SearchPageContainerExample = ({
                 label="Diagnosis"
                 startOpen={false}
               />
-
               <FacetSelect
                 selected={task}
                 setSelected={setTask}
@@ -156,7 +196,6 @@ export const SearchPageContainerExample = ({
                 label="Task"
                 startOpen={false}
               />
-
               <FacetSelect
                 selected={author_pi}
                 setSelected={setAuthor_pi}
@@ -165,7 +204,6 @@ export const SearchPageContainerExample = ({
                 label="Sr. Author / PI"
                 startOpen={false}
               />
-
               <FacetRadio
                 selected={gender}
                 setSelected={setGender}
@@ -176,7 +214,6 @@ export const SearchPageContainerExample = ({
                 label="Gender"
                 accordionStyle="plain"
               />
-
               <FacetDatePicker
                 startOpen={false}
                 label="Date"
@@ -211,13 +248,11 @@ export const SearchPageContainerExample = ({
             </FacetBlockContainerExample>
           </>
         )}
-        renderSearchResults={() => (
+        renderSearchResultsList={() => (
           <>
-            <SearchResults items={searchResults} profile={profile} />
+            <SearchResultsList items={searchResults} profile={profile} />
             <div className="col  col-center results-count">
-              <b>
-                Showing 25 of 100 Datasets found for "<span>Forrest Gump</span>"
-              </b>
+              Showing <b>25</b> of <b>100</b> Datasets
             </div>
             <div className=" load-more ">
               <Button label="Load More" />

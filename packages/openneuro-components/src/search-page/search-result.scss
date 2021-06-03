@@ -42,11 +42,11 @@
       margin-right: 20px;
     }
     .list-item {
-      color: #c83fad;
       display: inline-block;
       padding: 0px 12px 0 0;
       margin: 0 12px 10px 0;
       border-right: 1px solid #cacaca;
+      font-weight: 600;
       &:last-child {
         border: 0;
       }

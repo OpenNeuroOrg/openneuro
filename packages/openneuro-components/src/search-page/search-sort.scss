@@ -2,7 +2,10 @@
 
 .search-sort-list-label {
   padding: 0 0 20px;
-  color: $on-dark-aqua;
+  color: var(--current-theme-primary);
+  &:hover {
+    color: var(--current-theme-primary-hover);
+  }
   i {
     margin-left: 5px;
     font-size: 12px;
@@ -41,10 +44,10 @@
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      color: $on-dark-aqua;
+      color: var(--current-theme-primary);
       justify-content: flex-end;
       &:hover {
-        color: #333;
+        color: var(--current-theme-primary-hover);
         background: rgba(0, 0, 0, 0.025);
       }
     }

@@ -28,6 +28,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   setNewValue,
   newvalue,
 }) => {
+  const noValue = JSON.stringify(newvalue) === JSON.stringify([null, null])
   return (
     <div className="formRange-inner">
       <Range
@@ -42,7 +43,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
         value={newvalue}
       />
       <label>
-        {newvalue[0]} &mdash; {newvalue[1]}
+        {noValue ? 0 : newvalue[0]} &mdash; {noValue ? 0 : newvalue[1]}
       </label>
     </div>
   )

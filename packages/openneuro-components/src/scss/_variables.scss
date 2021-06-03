@@ -16,6 +16,7 @@ $on-light-red: #c00342;
 
 $primary: $on-dark-aqua;
 
+$mri-hover: lighten($mri-theme, 10%);
 /* CSS HEX */
 :root {
   --mri-theme: #{$mri-theme};
@@ -81,5 +82,5 @@ $screen-lg: 989px;
 
 .search-page-mri {
   --current-theme-primary: #{$mri-theme};
-  --current-theme-primary-hover: lighten(#{$mri-theme}, 10%);
+  --current-theme-primary-hover: #{$mri-hover};
 }

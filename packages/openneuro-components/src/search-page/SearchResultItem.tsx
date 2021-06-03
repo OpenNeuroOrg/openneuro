@@ -12,7 +12,7 @@ import './search-result.scss'
 
 import activityPulseIcon from '../assets/activity-icon.png'
 
-export interface SearchResultProps {
+export interface SearchResultItemProps {
   node: {
     id: string
     created: string
@@ -92,7 +92,7 @@ export interface SearchResultProps {
   profile: Record<string, any>
 }
 
-export const SearchResult = ({ node, profile }: SearchResultProps) => {
+export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const heading = node.draft.description.Name
   const summary = node.draft.summary
   const datasetId = node.draft.id
@@ -101,7 +101,7 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
 
   const accessionNumber = (
     <span className="result-summary-meta">
-      <strong>Openneuro Acession Number:</strong>
+      <strong>Openneuro Accession Number:</strong>
       <span> {node.id}</span>
     </span>
   )
