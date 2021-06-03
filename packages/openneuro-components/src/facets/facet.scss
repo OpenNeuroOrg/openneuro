@@ -47,6 +47,9 @@
     }
     .level-1 > li {
       border-top: 1px solid #dfdfdf;
+      &:hover {
+        background-color: #efefef;
+      }
       > .label {
         display: inline-block;
         margin-bottom: 10px;
@@ -82,6 +85,9 @@
         color: var(--current-theme-primary);
         font-weight: 400;
       }
+    }
+    &.selected-facet:hover {
+      background-color: none;
     }
   }
 }
@@ -144,6 +150,7 @@
   max-height: 0;
   height: auto;
   transition: max-height 1s;
+  overflow: hidden;
 }
 
 .fade-in-facet {
@@ -154,4 +161,50 @@
 
 .dataset-status.facet-accordion.on-accordion-wrapper {
   border-bottom: 0;
+}
+
+.search-nav .facet-accordion.on-accordion-wrapper.modality-facet {
+  margin: 20px 0;
+  border: 0;
+  background: #efefef;
+  padding: 10px;
+
+  &.facet-accordion.on-accordion-wrapper {
+    .accordion-title {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--current-theme-primary);
+    }
+    .facet-list {
+      padding: 0 0 10px;
+      .label {
+        display: flex;
+      }
+      .level-1 > li > .label {
+        padding: 10px;
+        margin-bottom: 0;
+      }
+      ul li {
+        width: 100%;
+        font-size: 16px;
+        color: var(--current-theme-primary);
+        span {
+          color: var(--current-theme-primary);
+        }
+      }
+      .level-1 > li:first-child {
+        border: 0;
+      }
+
+      .level-1 > li:hover {
+        background-color: transparent;
+      }
+      .level-1 li .label:hover {
+        background: #fff;
+      }
+      .level-2 > li:hover {
+        background: #fff;
+      }
+    }
+  }
 }
