@@ -123,9 +123,7 @@ export const SearchPageContainerExample = ({
                   accordionStyle="plain"
                   selected={datasetsType}
                   setSelected={setDatasetsType}
-                  className={
-                    datasetsType == 'My Datasets' ? 'dataset-status-open' : null
-                  }
+                  className="dataset-status"
                 />
                 <FacetSelect
                   selected={datasetStatus}
@@ -150,6 +148,7 @@ export const SearchPageContainerExample = ({
                   accordionStyle="plain"
                   label="Modalities"
                   startOpen={true}
+                  className="modality-facet"
                 />
               )}
               <FacetRange

@@ -144,30 +144,14 @@
   max-height: 0;
   height: auto;
   transition: max-height 1s;
-  &.facet-accordion.on-accordion-wrapper .facet-list ul {
-    border-bottom: 0;
-  }
 }
 
 .fade-in-facet {
-  opacity: 0;
-  animation: fade-in 2s 1;
-  animation-delay: 0.3s;
-  animation-fill-mode: forwards;
   height: auto;
-  max-height: 1000px;
+  max-height: 800px;
   transition: max-height 1s;
 }
 
-.dataset-status-open {
+.dataset-status.facet-accordion.on-accordion-wrapper {
   border-bottom: 0;
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
