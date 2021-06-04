@@ -2,7 +2,7 @@ import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from './search-params-ctx'
 import {
   SearchPage,
-  SearchResults,
+  SearchResultsList,
   FiltersBlock,
   sortBy,
   FacetSelect,
@@ -20,12 +20,16 @@ import AgeRangeInput from './age-range-input'
 import SubjectCountRangeInput from './subject-count-range-input'
 import DiagnosisSelect from './diagnosis-select'
 import GenderRadios from './gender-radios'
+import DateRangeInput from './date-range-input'
+import SectionSelect from './section-select'
+import StudyDomainSelect from './study-domain-select'
 
 const SearchContainer: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   return (
     <SearchPage
+      renderFilterBlock={() => null}
       renderSortBy={() => (
         <>
           <div className="col">
@@ -52,9 +56,13 @@ const SearchContainer: FC = () => {
           <h1>Task Input Placeholder</h1>
           <h1>Author Input Placeholder</h1>
           <GenderRadios />
+          <DateRangeInput />
+          <h1>Species Input Placeholder</h1>
+          <SectionSelect />
+          <StudyDomainSelect />
         </>
       )}
-      renderSearchResults={() => null}
+      renderSearchResultsList={() => null}
     />
   )
 }

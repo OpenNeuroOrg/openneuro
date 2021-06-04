@@ -1,4 +1,4 @@
-export * from './SearchResults'
+export * from './SearchResultsList'
 export * from './FiltersBlock'
 export * from './SearchPage'
 
