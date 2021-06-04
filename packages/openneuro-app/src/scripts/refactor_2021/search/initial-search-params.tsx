@@ -85,6 +85,12 @@ const modality_available = [
   },
 ]
 
+export const gender_list = [
+  { label: 'All', value: 'all' },
+  { label: 'Male', value: 'male' },
+  { label: 'Female', value: 'female' },
+]
+
 type OptionalNumberRange = [number | null, number | null]
 type OptionalDateRange = [Date | null, Date | null]
 
