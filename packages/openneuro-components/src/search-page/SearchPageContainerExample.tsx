@@ -52,6 +52,9 @@ export const SearchPageContainerExample = ({
   const [domain, setDomain] = React.useState()
   const [selectedDate, setSelectedDate] = React.useState([null, null])
 
+  const setSelectedDateValue = value =>
+    setSelectedDate(value === null ? [null, null] : value)
+
   let filterBlockIsEmpty
 
   if (
@@ -216,7 +219,7 @@ export const SearchPageContainerExample = ({
                 label="Date"
                 accordionStyle="plain"
                 selected={selectedDate}
-                setSelected={setSelectedDate}
+                setSelected={setSelectedDateValue}
               />
               <FacetSelect
                 selected={species}
