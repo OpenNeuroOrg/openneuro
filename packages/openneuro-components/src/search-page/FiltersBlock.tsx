@@ -1,5 +1,7 @@
 import React from 'react'
 import { Button } from '../button/Button'
+import { FilterListItem } from './FilterListItem'
+import { TermListItem } from './TermListItem'
 import './filters-block.scss'
 
 export interface FiltersBlockProps {
@@ -27,7 +29,6 @@ export const FiltersBlock = ({
   ageRange,
   subjectRange,
   gender,
-  task,
   diagnosis,
   section,
   species,
@@ -69,76 +70,25 @@ export const FiltersBlock = ({
   const endMonth = !dateIsNull && selectedDate[1].getMonth()
   const startYear = !dateIsNull && selectedDate[0].getFullYear()
   const endYear = !dateIsNull && selectedDate[1].getFullYear()
+
   return (
     <div className="filters-block">
       <ul className="active-filters">
-        {allTerms.length ? (
-          <li className="search-term-list">
-            <strong className="terms-heading">Search Term:</strong>
-            <ul>
-              {allTerms.map((item, index) => (
-                <li key={index}>
-                  <span>
-                    {item}
-                    <span>&times;</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ) : null}
-        {modality && _listItem('Modality', modality)}
-        {datasetsType && _listItem('Type', datasetsType)}
-        {datasetStatus && _listItem('Status', datasetStatus)}
-        {ageRange && !ageRangeIsNull && _listItem('Age', ageRange)}
-        {subjectRange &&
-          !subjectRangeIsNull &&
-          _listItem('Subjects', subjectRange)}
-        {allAuthors.length ? (
-          <li className="search-term-list">
-            <strong className="terms-heading">Authors/PI:</strong>
-            <ul>
-              {allAuthors.map((item, index) => (
-                <li key={index}>
-                  <span>
-                    {item}
-                    <span>&times;</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ) : null}
-        {gender && _listItem('Gender', gender)}
-        {allTasks.length ? (
-          <li className="search-term-list">
-            <strong className="terms-heading">Task</strong>
-            <ul>
-              {allTasks.map((item, index) => (
-                <li key={index}>
-                  <span>
-                    {item}
-                    <span>&times;</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ) : null}
-        {diagnosis && _listItem('Diagnosis', diagnosis)}
-        {section && _listItem('Section', section)}
-        {species && _listItem('Species', species)}
-        {domain && _listItem('Domain', domain)}
-        {subjectRange && !dateIsNull && (
-          <li className="Date-Range">
-            <strong>Date:</strong>
-            <span>
-              {startMonth}/{startDay}/{startYear} - {endMonth}/{endDay}/
-              {endYear}
-              <span>&times;</span>
-            </span>
-          </li>
-        )}
+        {allTerms && <TermListItem item={allTerms} type="Keyword" />}
+        {modality && <FilterListItem item={modality} type="Modality" />}
+        {datasetsType && <FilterListItem item={datasetsType} type="Type" />}
+        {datasetStatus && <FilterListItem item={datasetStatus} type="Status" />}
+        {!ageRangeIsNull && <FilterListItem item={ageRange} type="Age" />}
+        {!dateIsNull && <FilterListItem item={subjectRange} type="Subjects" />}
+        {allAuthors && <TermListItem item={allAuthors} type="Authors/PI" />}
+        {gender && <FilterListItem item={gender} type="Gender" />}
+        {allTasks && <TermListItem item={allTasks} type="Task" />}
+        {gender && <FilterListItem item={gender} type="Gender" />}
+        {diagnosis && <FilterListItem item={diagnosis} type="Diagnosis" />}
+        {section && <FilterListItem item={section} type="Section" />}
+        {species && <FilterListItem item={species} type="Species" />}
+        {domain && <FilterListItem item={domain} type="Domain" />}
+
         <li>
           <Button label="Clear All" size="small" />
         </li>

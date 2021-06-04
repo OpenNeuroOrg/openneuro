@@ -81,6 +81,8 @@ export const SearchPageContainerExample = ({
     filterBlockIsEmpty = false
   }
 
+  console.log(allTerms)
+
   return (
     <div>
       <SearchPage
