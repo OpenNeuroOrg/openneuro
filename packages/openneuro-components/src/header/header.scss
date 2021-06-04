@@ -8,7 +8,7 @@ header {
   align-items: center;
   background: #eee;
   padding: 10px 10px 10px 20px;
-  border-radius: 4px;
+  border-radius: $border-radius-default;
   button.on-no-background.icon-text {
     color: $on-dark-aqua;
     margin: 5px 20px 0;

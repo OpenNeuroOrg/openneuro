@@ -136,12 +136,6 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </span>
   )
 
-  const uploader = (
-    <div className="uploader">
-      <span>Uploaded by: </span>
-      {node.uploader.name}
-    </div>
-  )
   const dateAdded = formatDate(node.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(node.created))
   const dateUpdated = formatDate(
@@ -152,19 +146,21 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   )
 
   const lastUpdatedDate = (
-    <div>
+    <>
       {node.snapshots.length ? (
-        <>
+        <div className="updated-date">
+          <span className="divider">|</span>
           <span>Updated: </span>
           {dateUpdated} - {dateUpdatedDifference} ago
-        </>
+        </div>
       ) : null}
-    </div>
+    </>
   )
-  const addedDate = (
-    <div>
-      <span>Uploaded: </span>
-      {dateAdded} - {dateAddedDifference} ago
+
+  const uploader = (
+    <div className="uploader">
+      <span>Uploaded by: </span>
+      {node.uploader.name} on {dateAdded} - {dateAddedDifference} ago
     </div>
   )
   const downloads = node.analytics.downloads
@@ -249,37 +245,37 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </div>
   )
 
-  const modalityList = summary.modalities ? (
+  const modalityList = summary.modalities.length ? (
     <div className="modality-list">
       {_list(<>Modalities</>, summary.modalities)}
     </div>
   ) : null
-
-  const taskList = summary.modalities ? (
+  const taskList = summary.tasks.length ? (
     <div className="task-list">{_list(<>Tasks</>, summary.tasks)}</div>
   ) : null
 
   return (
     <>
       <div className="grid grid-nogutter search-result">
-        <div className="col col-8">
+        <div className="col col-9">
           <h3>
             <Link to={'/datasets/' + datasetId}>{heading}</Link>
           </h3>
-          <div className="result-meta-body">{modalityList}</div>
+          <div className="result-upload-info">
+            {uploader}
+            {lastUpdatedDate}
+          </div>
         </div>
-        <div className="col col-4">
+        <div className="col col-3">
           <div className="result-icon-wrap">
             {datasetOwenerIcons}
             {activityIcon}
           </div>
-          <div className="result-upload-info">
-            {uploader}
-            {lastUpdatedDate}
-            {addedDate}
-          </div>
         </div>
-        <div className="col col-12">{taskList}</div>
+        <div className="col col-12 result-meta-body">
+          {modalityList}
+          {taskList}
+        </div>
         <div className="result-meta-footer">
           {accessionNumber}
           {sessions}

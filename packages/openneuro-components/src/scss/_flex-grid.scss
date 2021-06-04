@@ -24,7 +24,8 @@
   &.grid-nogutter {
     margin: 0;
     & > .col {
-      padding: 0;
+      padding-right: 0;
+      padding-left: 0;
     }
   }
   &.align-center {

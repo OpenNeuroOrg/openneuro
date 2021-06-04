@@ -5,7 +5,7 @@
   .menu {
     box-shadow: 0px 0px 5px -4px black;
     background-color: #fff;
-    border-radius: 4px;
+    border-radius: $border-radius-default;
     width: 100%;
     min-width: 200px;
     right: 0;

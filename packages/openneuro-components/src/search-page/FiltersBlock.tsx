@@ -8,7 +8,6 @@ export interface FiltersBlockProps {
   datasetStatus?: { label: string; value: string }
   ageRange?: [number, number]
   subjectRange?: [number, number]
-  author_pi?: { label: string; value: string }
   gender?: string
   task?: { label: string; value: string }
   diagnosis?: { label: string; value: string }
@@ -16,6 +15,9 @@ export interface FiltersBlockProps {
   species?: { label: string; value: string }
   domain?: { label: string; value: string }
   selectedDate?: [Date | null, Date | null]
+  allTerms: string[]
+  allAuthors: string[]
+  allTasks: string[]
 }
 
 export const FiltersBlock = ({
@@ -24,7 +26,6 @@ export const FiltersBlock = ({
   datasetStatus,
   ageRange,
   subjectRange,
-  author_pi,
   gender,
   task,
   diagnosis,
@@ -32,6 +33,9 @@ export const FiltersBlock = ({
   species,
   domain,
   selectedDate,
+  allTerms,
+  allAuthors,
+  allTasks,
 }: FiltersBlockProps) => {
   const _listItem = (type, item) => {
     if (item === 'All') {
@@ -65,10 +69,24 @@ export const FiltersBlock = ({
   const endMonth = !dateIsNull && selectedDate[1].getMonth()
   const startYear = !dateIsNull && selectedDate[0].getFullYear()
   const endYear = !dateIsNull && selectedDate[1].getFullYear()
-
   return (
     <div className="filters-block">
       <ul className="active-filters">
+        {allTerms.length ? (
+          <li className="search-term-list">
+            <strong className="terms-heading">Search Term:</strong>
+            <ul>
+              {allTerms.map((item, index) => (
+                <li key={index}>
+                  <span>
+                    {item}
+                    <span>&times;</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ) : null}
         {modality && _listItem('Modality', modality)}
         {datasetsType && _listItem('Type', datasetsType)}
         {datasetStatus && _listItem('Status', datasetStatus)}
@@ -76,9 +94,37 @@ export const FiltersBlock = ({
         {subjectRange &&
           !subjectRangeIsNull &&
           _listItem('Subjects', subjectRange)}
-        {author_pi && _listItem('Author/PI', author_pi)}
+        {allAuthors.length ? (
+          <li className="search-term-list">
+            <strong className="terms-heading">Authors/PI:</strong>
+            <ul>
+              {allAuthors.map((item, index) => (
+                <li key={index}>
+                  <span>
+                    {item}
+                    <span>&times;</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ) : null}
         {gender && _listItem('Gender', gender)}
-        {task && _listItem('Task', task)}
+        {allTasks.length ? (
+          <li className="search-term-list">
+            <strong className="terms-heading">Task</strong>
+            <ul>
+              {allTasks.map((item, index) => (
+                <li key={index}>
+                  <span>
+                    {item}
+                    <span>&times;</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ) : null}
         {diagnosis && _listItem('Diagnosis', diagnosis)}
         {section && _listItem('Section', section)}
         {species && _listItem('Species', species)}
@@ -94,7 +140,6 @@ export const FiltersBlock = ({
           </li>
         )}
         <li>
-          {' '}
           <Button label="Clear All" size="small" />
         </li>
       </ul>
