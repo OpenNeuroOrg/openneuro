@@ -16,6 +16,7 @@ export interface FacetSelectProps {
   dropdown?: boolean
   selected: string
   setSelected: (selected: string) => void
+  className?: string
 }
 
 export const FacetSelect = ({
@@ -26,13 +27,14 @@ export const FacetSelect = ({
   label,
   accordionStyle,
   dropdown,
+  className,
 }: FacetSelectProps) => {
   const setSelectorNoPropagation = (e, value) => {
     e.stopPropagation()
     setSelected(value)
   }
   return (
-    <AccordionWrap className="facet-accordion">
+    <AccordionWrap className={className + ' facet-accordion'}>
       <AccordionTab
         accordionStyle={accordionStyle}
         label={label}

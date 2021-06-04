@@ -75,22 +75,22 @@ export const modalities = [
 ]
 
 export const show_available = [
-  { label: 'All', value: 'all' },
-  { label: 'Following', value: 'following' },
-  { label: 'My Uploads', value: 'my_uploads' },
-  { label: 'My Bookmarks', value: 'bookmarked' },
+  { label: 'All', value: 'All' },
+  { label: 'Following', value: 'Following' },
+  { label: 'My Datasets', value: 'My Datasets' },
+  { label: 'My Bookmarks', value: 'My Bookmarks' },
 ]
 
 export const dataset_type = [
-  { label: 'Public', value: 'public' },
-  { label: 'Shared with Me', value: 'shared_with_me' },
-  { label: 'Invalid', value: 'invalid' },
+  { label: 'Public', value: 'Public' },
+  { label: 'Shared with Me', value: 'Shared with Me' },
+  { label: 'Invalid', value: 'Invalid' },
 ]
 
 export const diagnosis_list = [
   {
     label: "Alzheimer's",
-    value: 'alzheimers',
+    value: "Alzheimer's",
   },
   {
     label: 'Another',
@@ -105,7 +105,7 @@ export const diagnosis_list = [
 export const task_list = [
   {
     label: 'Rest',
-    value: 'rest',
+    value: 'Rest',
   },
   {
     label: 'Another',
@@ -120,69 +120,69 @@ export const task_list = [
 export const author_pi_list = [
   {
     label: 'Author 1',
-    value: 'author-1',
+    value: 'Author 1',
   },
   {
     label: 'Author 2',
-    value: 'author-2',
+    value: 'Author 2',
   },
   {
     label: 'Author 3',
-    value: 'author-3',
+    value: 'Author 3',
   },
 ]
 
 export const gender_list = [
-  { label: 'All', value: 'all' },
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
+  { label: 'All', value: 'All' },
+  { label: 'Male', value: 'Male' },
+  { label: 'Female', value: 'Female' },
 ]
 
 export const species_list = [
   {
     label: 'Human',
-    value: 'human',
+    value: 'Human',
   },
   {
     label: 'Pig',
-    value: 'pig',
+    value: 'Pig',
   },
   {
     label: 'Rat',
-    value: 'rat',
+    value: 'Rat',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'Other',
   },
 ]
 
 export const section_list = [
   {
     label: 'Cross',
-    value: 'cross',
+    value: 'Cross',
   },
   {
     label: 'Longitudinal',
-    value: 'longitudinal',
+    value: 'Longitudinal',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'Other',
   },
 ]
 
 export const domain_list = [
   {
     label: 'Domain 1',
-    value: '1',
+    value: 'Domain 1',
   },
   {
     label: 'Domain 2',
-    value: '2',
+    value: 'Domain 2',
   },
   {
     label: 'Ontology',
-    value: 'ontology',
+    value: 'Ontology',
   },
 ]

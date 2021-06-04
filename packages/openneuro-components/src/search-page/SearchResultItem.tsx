@@ -18,7 +18,7 @@ import activityPulseIcon from '../assets/activity-icon.png'
 export const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
 
-export interface SearchResultProps {
+export interface SearchResultItemProps {
   node: {
     id: string
     created: string
@@ -98,15 +98,16 @@ export interface SearchResultProps {
   profile: Record<string, any>
 }
 
-export const SearchResult = ({ node, profile }: SearchResultProps) => {
+export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const heading = node.draft.description.Name
   const summary = node.draft.summary
+  const datasetId = node.draft.id
   const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
   const numSubjects = summary.subjects.length > 0 ? summary.subjects.length : 1
 
   const accessionNumber = (
     <span className="result-summary-meta">
-      <strong>Openneuro Acession Number:</strong>
+      <strong>Openneuro Accession Number:</strong>
       <span> {node.id}</span>
     </span>
   )
@@ -261,16 +262,13 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
   return (
     <>
       <div className="grid grid-nogutter search-result">
-        <div className="col col-9">
+        <div className="col col-8">
           <h3>
-            <Link to="/">{heading}</Link>
+            <Link to={'/datasets/' + datasetId}>{heading}</Link>
           </h3>
-          <div className="result-meta-body">
-            {modalityList}
-            {taskList}
-          </div>
+          <div className="result-meta-body">{modalityList}</div>
         </div>
-        <div className="col col-3">
+        <div className="col col-4">
           <div className="result-icon-wrap">
             {datasetOwenerIcons}
             {activityIcon}
@@ -281,6 +279,7 @@ export const SearchResult = ({ node, profile }: SearchResultProps) => {
             {addedDate}
           </div>
         </div>
+        <div className="col col-12">{taskList}</div>
         <div className="result-meta-footer">
           {accessionNumber}
           {sessions}

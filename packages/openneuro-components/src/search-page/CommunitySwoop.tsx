@@ -15,7 +15,7 @@ export const CommunitySwoop = ({
     <section className="search-page-coms">
       <div className="container">
         <div className="grid grid-start">
-          <div className="col col-8">
+          <div className="col col-7">
             <h2>{communityHeader}</h2>
             <div className="primary-content">{communityPrimary}</div>
             <div className="secondary-content">{communitySecondary}</div>

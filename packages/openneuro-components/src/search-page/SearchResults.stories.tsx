@@ -2,24 +2,24 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 import { mri } from '../mock-content/mri-search-results'
 
-import { SearchResult } from './SearchResult'
+import { SearchResultItem } from './SearchResultItem'
 
 export default {
-  title: 'Components/SearchResults',
-  component: SearchResult,
+  title: 'Components/SearchResultsList',
+  component: SearchResultItem,
 } as Meta
 
-const SearchResultsTemplate: Story = ({ items, profile }) => {
+const SearchResultsListTemplate: Story = ({ items, profile }) => {
   return (
     <div className="search-results">
       {items.map(({ node }) => (
-        <SearchResult node={node} profile={profile} />
+        <SearchResultItem node={node} profile={profile} />
       ))}
     </div>
   )
 }
 
-export const SearchResults = SearchResultsTemplate.bind({})
-SearchResults.args = {
+export const SearchResultsList = SearchResultsListTemplate.bind({})
+SearchResultsList.args = {
   items: mri.data.datasets.edges,
 }

@@ -58,6 +58,7 @@
   &.row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     .custom-radio {
       margin-right: 20px;
       &:last-child {

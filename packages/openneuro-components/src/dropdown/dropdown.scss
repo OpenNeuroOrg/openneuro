@@ -10,7 +10,7 @@
     overflow: hidden;
     height: 0;
     z-index: 9999;
-
+    right: 0;
     &.expanded {
       height: auto;
     }
