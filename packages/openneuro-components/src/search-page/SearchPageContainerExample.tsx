@@ -122,7 +122,7 @@ export const SearchPageContainerExample = ({
             <TermSearch
               className="search-keyword"
               type="text"
-              label="Search Term"
+              label="Keyword"
               placeholder="eg. something here"
               labelStyle="default"
               name="default-example"
