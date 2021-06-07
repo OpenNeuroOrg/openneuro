@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '../button/Button'
 import { FilterListItem } from './FilterListItem'
+import { FilterDateItem } from './FilterDateItem'
 import { TermListItem } from './TermListItem'
 import './filters-block.scss'
 
@@ -64,13 +65,6 @@ export const FiltersBlock = ({
   const dateIsNull =
     JSON.stringify(selectedDate) === JSON.stringify([null, null])
 
-  const startDay = !dateIsNull && selectedDate[0].getDate()
-  const endDay = !dateIsNull && selectedDate[1].getDate()
-  const startMonth = !dateIsNull && selectedDate[0].getMonth()
-  const endMonth = !dateIsNull && selectedDate[1].getMonth()
-  const startYear = !dateIsNull && selectedDate[0].getFullYear()
-  const endYear = !dateIsNull && selectedDate[1].getFullYear()
-
   return (
     <div className="filters-block">
       <ul className="active-filters">
@@ -79,7 +73,9 @@ export const FiltersBlock = ({
         {datasetsType && <FilterListItem item={datasetsType} type="Type" />}
         {datasetStatus && <FilterListItem item={datasetStatus} type="Status" />}
         {!ageRangeIsNull && <FilterListItem item={ageRange} type="Age" />}
-        {!dateIsNull && <FilterListItem item={subjectRange} type="Subjects" />}
+        {!subjectRangeIsNull && (
+          <FilterListItem item={subjectRange} type="Subjects" />
+        )}
         {allAuthors && <TermListItem item={allAuthors} type="Authors/PI" />}
         {gender && <FilterListItem item={gender} type="Gender" />}
         {allTasks && <TermListItem item={allTasks} type="Task" />}
@@ -88,6 +84,7 @@ export const FiltersBlock = ({
         {section && <FilterListItem item={section} type="Section" />}
         {species && <FilterListItem item={species} type="Species" />}
         {domain && <FilterListItem item={domain} type="Domain" />}
+        {!dateIsNull && <FilterDateItem item={selectedDate} type="Date" />}
 
         <li>
           <Button label="Clear All" size="small" />

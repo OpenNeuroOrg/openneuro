@@ -3,11 +3,10 @@ import React from 'react'
 type TextList = string[]
 type Text = string
 type NumberCouple = [number, number]
-type DateRange = [Date | null, Date | null]
 type OptionObject = { label: string; value: string }
 
 export interface FilterListItemProps {
-  item: TextList | Text | DateRange | OptionObject | NumberCouple
+  item: TextList | Text | OptionObject | NumberCouple
   type?: string
 }
 export const FilterListItem = ({ item, type }: FilterListItemProps) => {

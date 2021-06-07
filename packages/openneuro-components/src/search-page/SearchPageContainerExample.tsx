@@ -71,17 +71,15 @@ export const SearchPageContainerExample = ({
     section === undefined &&
     species === undefined &&
     domain === undefined &&
-    JSON.stringify(selectedDate) === JSON.stringify([null, null]) &&
+    JSON.stringify(selectedDate) === JSON.stringify(null) &&
     allTerms.length === 0 &&
-    allAuthors.length === 0 &&
+    allTasks.length === 0 &&
     allAuthors.length === 0
   ) {
     filterBlockIsEmpty = true
   } else {
     filterBlockIsEmpty = false
   }
-
-  console.log(allTerms)
 
   return (
     <div>

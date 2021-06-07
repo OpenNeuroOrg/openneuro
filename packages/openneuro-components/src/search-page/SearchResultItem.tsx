@@ -145,17 +145,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     parseISO(node.snapshots[node.snapshots.length - 1].created),
   )
 
-  const lastUpdatedDate = (
-    <>
-      {node.snapshots.length ? (
-        <div className="updated-date">
-          <span className="divider">|</span>
-          <span>Updated: </span>
-          {dateUpdated} - {dateUpdatedDifference} ago
-        </div>
-      ) : null}
-    </>
-  )
+  const lastUpdatedDate = node.snapshots.length ? (
+    <div className="updated-date">
+      <span className="divider">|</span>
+      <span>Updated: </span>
+      {dateUpdated} - {dateUpdatedDifference} ago
+    </div>
+  ) : null
 
   const uploader = (
     <div className="uploader">
