@@ -3,7 +3,11 @@ import { SearchParamsCtx } from './search-params-ctx'
 import { FiltersBlock } from '@openneuro/components'
 import initialSearchParams from './initial-search-params'
 
-const getSelectedParams = ({
+/**
+ * Takes an object with a superset of the following keys and
+ * extracts them into a new object
+ */
+const getSelectParams = ({
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
@@ -35,7 +39,7 @@ const getSelectedParams = ({
 
 const FiltersBlockContainer: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-  const selectedParams = getSelectedParams(searchParams)
+  const selectedParams = getSelectParams(searchParams)
 
   const someParamsAreSelected = Object.keys(selectedParams).some(key => {
     // check if a search param has been changed from it's initial value
@@ -50,8 +54,20 @@ const FiltersBlockContainer: FC = () => {
     console.log({ key, value })
   }
 
+  const removeAllFilters = () => {
+    // reset params to default valuse
+    setSearchParams(prevState => ({
+      ...prevState,
+      ...getSelectParams(initialSearchParams),
+    }))
+  }
+
   return someParamsAreSelected ? (
-    <FiltersBlock removeFilter={removeFilter} {...selectedParams} />
+    <FiltersBlock
+      removeFilter={removeFilter}
+      removeAllFilters={removeAllFilters}
+      {...selectedParams}
+    />
   ) : null
 }
 

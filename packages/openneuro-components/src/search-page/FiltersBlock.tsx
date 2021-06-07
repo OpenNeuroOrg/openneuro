@@ -21,6 +21,7 @@ export interface FiltersBlockProps {
   studyDomain_selected?: { label: string; value: string }
   datePublicizedRange?: [Date | null, Date | null]
   removeFilter?(key: string, value): void
+  removeAllFilters?(): void
 }
 
 export const FiltersBlock = ({
@@ -39,6 +40,7 @@ export const FiltersBlock = ({
   studyDomain_selected,
   datePublicizedRange,
   removeFilter,
+  removeAllFilters,
 }: FiltersBlockProps) => {
   const _listItem = (type, item) => {
     if (item === 'All') {
@@ -88,7 +90,7 @@ export const FiltersBlock = ({
         {!dateIsNull && <FilterDateItem item={datePublicizedRange} type="Date" />}
 
         <li>
-          <Button label="Clear All" size="small" />
+          <Button label="Clear All" size="small" onClick={removeAllFilters} />
         </li>
       </ul>
     </div>
