@@ -20,7 +20,7 @@ const KeywordInput: FC = () => {
         placeholder="eg. something here"
         labelStyle="default"
         name="default-example"
-        value={keyword}
+        value={keyword || ''}
         setValue={setKeyword}
       />
     </div>
