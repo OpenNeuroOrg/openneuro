@@ -6,39 +6,39 @@ const ShowDatasetsRadios: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const {
-    show_available,
-    show_selected,
-    showMyUploads_available,
-    showMyUploads_selected,
+    datasetType_available,
+    datasetType_selected,
+    datasetStatus_available,
+    datasetStatus_selected,
   } = searchParams
-  const setShowSelected = show_selected =>
+  const setShowSelected = datasetType_selected =>
     setSearchParams(prevState => ({
       ...prevState,
-      show_selected,
+      datasetType_selected,
     }))
-  const setShowMyUploadsSelected = showMyUploads_selected =>
+  const setShowMyUploadsSelected = datasetStatus_selected =>
     setSearchParams(prevState => ({
       ...prevState,
-      showMyUploads_selected,
+      datasetStatus_selected,
     }))
 
   return (
     <>
       <FacetRadio
-        radioArr={show_available}
+        radioArr={datasetType_available}
         layout="row"
         name="show-datasets"
         startOpen={true}
         label="Show"
         accordionStyle="plain"
-        selected={show_selected}
+        selected={datasetType_selected}
         setSelected={setShowSelected}
       />
-      {show_selected == 'my_uploads' ? (
+      {datasetType_selected == 'my_uploads' ? (
         <FacetSelect
-          selected={showMyUploads_selected}
+          selected={datasetStatus_selected}
           setSelected={setShowMyUploadsSelected}
-          items={showMyUploads_available}
+          items={datasetStatus_available}
           accordionStyle="plain"
           label="My Datasets Status"
           startOpen={true}

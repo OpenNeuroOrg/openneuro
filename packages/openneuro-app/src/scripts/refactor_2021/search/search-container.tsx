@@ -3,7 +3,6 @@ import { SearchParamsCtx } from './search-params-ctx'
 import {
   SearchPage,
   SearchResultsList,
-  FiltersBlock,
   sortBy,
   FacetSelect,
   FacetRadio,
@@ -13,6 +12,7 @@ import {
   SearchSortContainerExample,
   KeywordInputContainerExample,
 } from '@openneuro/components'
+import FiltersBlockContainer from './filters-block-container'
 import KeywordInput from './keyword-input'
 import ModalitySelect from './modality-select'
 import ShowDatasetRadios from './show-datasets-radios'
@@ -29,7 +29,7 @@ const SearchContainer: FC = () => {
 
   return (
     <SearchPage
-      renderFilterBlock={() => null}
+      renderFilterBlock={() => <FiltersBlockContainer />}
       renderSortBy={() => (
         <>
           <div className="col">

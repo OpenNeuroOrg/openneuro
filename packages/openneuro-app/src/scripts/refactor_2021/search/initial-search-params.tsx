@@ -1,14 +1,14 @@
-const show_available = [
-  { label: 'All', value: 'all' },
-  { label: 'Following', value: 'following' },
-  { label: 'My Uploads', value: 'my_uploads' },
-  { label: 'My Bookmarks', value: 'bookmarked' },
+const datasetType_available = [
+  { label: 'All', value: 'All' },
+  { label: 'Following', value: 'Following' },
+  { label: 'My Uploads', value: 'My Uploads' },
+  { label: 'My Bookmarks', value: 'My Bookmarks' },
 ]
 
-const showMyUploads_available = [
-  { label: 'Public', value: 'public' },
-  { label: 'Shared with Me', value: 'shared_with_me' },
-  { label: 'Invalid', value: 'invalid' },
+const datasetStatus_available = [
+  { label: 'Public', value: 'Public' },
+  { label: 'Shared with Me', value: 'Shared with Me' },
+  { label: 'Invalid', value: 'Invalid' },
 ]
 
 const modality_available = [
@@ -86,9 +86,9 @@ const modality_available = [
 ]
 
 export const gender_list = [
-  { label: 'All', value: 'all' },
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
+  { label: 'All', value: 'All' },
+  { label: 'Male', value: 'Male' },
+  { label: 'Female', value: 'Female' },
 ]
 
 type OptionalNumberRange = [number | null, number | null]
@@ -96,10 +96,10 @@ type OptionalDateRange = [Date | null, Date | null]
 
 interface SearchParams {
   keyword: string | null
-  show_available: typeof show_available
-  show_selected: string | null
-  showMyUploads_available: typeof showMyUploads_available
-  showMyUploads_selected: string | null
+  datasetType_available: typeof datasetType_available
+  datasetType_selected: string | null
+  datasetStatus_available: typeof datasetStatus_available
+  datasetStatus_selected: string | null
   modality_available: typeof modality_available
   modality_selected: string | null
   ageRange: OptionalNumberRange
@@ -126,10 +126,10 @@ interface SearchParams {
 //       and load dynamic options on mount
 const initialSearchParams: SearchParams = {
   keyword: null,
-  show_available,
-  show_selected: null,
-  showMyUploads_available,
-  showMyUploads_selected: null,
+  datasetType_available,
+  datasetType_selected: null,
+  datasetStatus_available,
+  datasetStatus_selected: null,
   modality_available,
   modality_selected: null,
   ageRange: [null, null],
@@ -155,27 +155,27 @@ const initialSearchParams: SearchParams = {
 // TODO: delete and move to dynamically loaded initialSearchParams
 const TEMPORARY_initialSearchParams: SearchParams = {
   keyword: null,
-  show_available,
-  show_selected: null,
-  showMyUploads_available,
-  showMyUploads_selected: null,
+  datasetType_available,
+  datasetType_selected: 'All',
+  datasetStatus_available,
+  datasetStatus_selected: null,
   modality_available,
   modality_selected: null,
   ageRange: [null, null],
   subjectCountRange: [null, null],
-  diagnosis_available: ['good', 'bad', 'ugly'],
+  diagnosis_available: ["Alzheimer's", 'Another', 'Other'],
   diagnosis_selected: null,
-  task_available: ['bold', 'nback', 'xyz'],
+  task_available: ['Rest', 'Another', 'Other'],
   task_selected: null,
-  seniorAuthor_available: ['Einstein', 'Dexter'],
+  seniorAuthor_available: ['Author 1', 'Author 2'],
   seniorAuthor_selected: null,
   // more
-  gender_available: ['Male', 'Female', 'Other'],
-  gender_selected: null,
+  gender_available: ['All', 'Male', 'Female'],
+  gender_selected: 'All',
   datePublicizedRange: [null, null],
-  species_available: ['Human', 'Other'],
+  species_available: ['Human', 'Pig', 'Rat', 'Other'],
   species_selected: null,
-  section_available: ['Transverse', 'Longitudinal'],
+  section_available: ['Cross', 'Longitudinal', 'Other'],
   section_selected: null,
   studyDomain_available: ['a', 'b', 'c'],
   studyDomain_selected: null,

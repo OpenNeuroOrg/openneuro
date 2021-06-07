@@ -6,38 +6,39 @@ import { TermListItem } from './TermListItem'
 import './filters-block.scss'
 
 export interface FiltersBlockProps {
-  modality?: { label: string; value: string }
-  datasetsType?: string
-  datasetStatus?: { label: string; value: string }
-  ageRange?: [number, number]
-  subjectRange?: [number, number]
-  gender?: string
-  task?: { label: string; value: string }
-  diagnosis?: { label: string; value: string }
-  section?: { label: string; value: string }
-  species?: { label: string; value: string }
-  domain?: { label: string; value: string }
-  selectedDate?: [Date | null, Date | null]
   allTerms: string[]
+  modality_selected?: { label: string; value: string }
+  datasetType_selected?: string
+  datasetStatus_selected?: { label: string; value: string }
+  ageRange?: [number, number]
+  subjectCountRange?: [number, number]
   allAuthors: string[]
+  gender_selected?: string
   allTasks: string[]
+  diagnosis_selected?: { label: string; value: string }
+  section_selected?: { label: string; value: string }
+  species_selected?: { label: string; value: string }
+  studyDomain_selected?: { label: string; value: string }
+  datePublicizedRange?: [Date | null, Date | null]
+  removeFilter?(key: string, value): void
 }
 
 export const FiltersBlock = ({
-  modality,
-  datasetsType,
-  datasetStatus,
-  ageRange,
-  subjectRange,
-  gender,
-  diagnosis,
-  section,
-  species,
-  domain,
-  selectedDate,
   allTerms,
+  modality_selected,
+  datasetType_selected,
+  datasetStatus_selected,
+  ageRange,
+  subjectCountRange,
   allAuthors,
+  gender_selected,
   allTasks,
+  diagnosis_selected,
+  section_selected,
+  species_selected,
+  studyDomain_selected,
+  datePublicizedRange,
+  removeFilter,
 }: FiltersBlockProps) => {
   const _listItem = (type, item) => {
     if (item === 'All') {
@@ -59,32 +60,32 @@ export const FiltersBlock = ({
   }
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
-  const subjectRangeIsNull =
-    JSON.stringify(subjectRange) === JSON.stringify([null, null])
+  const subjectCountRangeIsNull =
+    JSON.stringify(subjectCountRange) === JSON.stringify([null, null])
 
   const dateIsNull =
-    JSON.stringify(selectedDate) === JSON.stringify([null, null])
+    JSON.stringify(datePublicizedRange) === JSON.stringify([null, null])
 
   return (
     <div className="filters-block">
       <ul className="active-filters">
         {allTerms && <TermListItem item={allTerms} type="Keyword" />}
-        {modality && <FilterListItem item={modality} type="Modality" />}
-        {datasetsType && <FilterListItem item={datasetsType} type="Type" />}
-        {datasetStatus && <FilterListItem item={datasetStatus} type="Status" />}
+        {modality_selected && <FilterListItem item={modality_selected} type="Modality" />}
+        {datasetType_selected && <FilterListItem item={datasetType_selected} type="Type" />}
+        {datasetStatus_selected && <FilterListItem item={datasetStatus_selected} type="Status" />}
         {!ageRangeIsNull && <FilterListItem item={ageRange} type="Age" />}
-        {!subjectRangeIsNull && (
-          <FilterListItem item={subjectRange} type="Subjects" />
+        {!subjectCountRangeIsNull && (
+          <FilterListItem item={subjectCountRange} type="Subjects" />
         )}
         {allAuthors && <TermListItem item={allAuthors} type="Authors/PI" />}
-        {gender && <FilterListItem item={gender} type="Gender" />}
+        {gender_selected && <FilterListItem item={gender_selected} type="Gender" />}
         {allTasks && <TermListItem item={allTasks} type="Task" />}
-        {gender && <FilterListItem item={gender} type="Gender" />}
-        {diagnosis && <FilterListItem item={diagnosis} type="Diagnosis" />}
-        {section && <FilterListItem item={section} type="Section" />}
-        {species && <FilterListItem item={species} type="Species" />}
-        {domain && <FilterListItem item={domain} type="Domain" />}
-        {!dateIsNull && <FilterDateItem item={selectedDate} type="Date" />}
+        {gender_selected && <FilterListItem item={gender_selected} type="Gender" />}
+        {diagnosis_selected && <FilterListItem item={diagnosis_selected} type="Diagnosis" />}
+        {section_selected && <FilterListItem item={section_selected} type="Section" />}
+        {species_selected && <FilterListItem item={species_selected} type="Species" />}
+        {studyDomain_selected && <FilterListItem item={studyDomain_selected} type="Domain" />}
+        {!dateIsNull && <FilterDateItem item={datePublicizedRange} type="Date" />}
 
         <li>
           <Button label="Clear All" size="small" />
