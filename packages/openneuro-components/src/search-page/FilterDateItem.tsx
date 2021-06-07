@@ -7,7 +7,7 @@ export interface FilterDateItemProps {
   type?: string
 }
 export const FilterDateItem = ({ item, type }: FilterDateItemProps) => {
-  const dateIsNull = JSON.stringify(item) === JSON.stringify(null)
+  const dateIsNull = JSON.stringify(item) === JSON.stringify([null, null])
   const startDay = !dateIsNull && item[0].getDate()
   const endDay = !dateIsNull && item[1].getDate()
   const startMonth = !dateIsNull && item[0].getMonth() + 1

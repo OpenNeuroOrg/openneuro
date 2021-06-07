@@ -71,7 +71,7 @@ export const SearchPageContainerExample = ({
     section === undefined &&
     species === undefined &&
     domain === undefined &&
-    JSON.stringify(selectedDate) === JSON.stringify(null) &&
+    JSON.stringify(selectedDate) === JSON.stringify([null, null]) &&
     allTerms.length === 0 &&
     allTasks.length === 0 &&
     allAuthors.length === 0
