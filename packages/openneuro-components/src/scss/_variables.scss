@@ -32,6 +32,7 @@ $mri-hover: lighten($mri-theme, 10%);
   --on-light-green: #{on-light-green};
   --current-theme-primary: #{$on-dark-aqua};
   --current-theme-primary-hover: #{$on-light-aqua};
+  --current-theme-secondary: #4795b4;
 }
 
 .mri-theme {
@@ -84,3 +85,5 @@ $screen-lg: 989px;
   --current-theme-primary: #{$mri-theme};
   --current-theme-primary-hover: #{$mri-hover};
 }
+
+$border-radius-default: 4px;

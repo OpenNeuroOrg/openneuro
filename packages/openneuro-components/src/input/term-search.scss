@@ -1,14 +1,23 @@
 @import '../scss/variables';
+.term-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  .form-control {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+}
 
-.filters-block {
+.term-block {
   background-color: #eee;
   border-radius: px;
   padding: 30px 20px 0;
   margin: 0 0 30px;
   position: relative;
-  .active-filters {
+  .active-search-terms {
     padding: 0;
-    margin: 0;
+    margin: 0 20px 0 0;
     list-style: none;
     display: flex;
     flex-wrap: wrap;
@@ -45,36 +54,6 @@
           margin-top: -1px;
         }
       }
-      &.search-term-list {
-        margin-bottom: 0;
-      }
-      ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        li {
-        }
-      }
-    }
-  }
-
-  .on-button {
-    display: block;
-    width: 65px;
-    text-transform: uppercase;
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    background-color: none;
-    border-bottom: 2px solid transparent;
-    transition: border 0.3s, color 0.3s;
-    &:hover {
-      text-decoration: none;
-      color: #000;
-      border-bottom-color: #000;
     }
   }
 }

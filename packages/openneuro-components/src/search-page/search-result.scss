@@ -2,7 +2,7 @@
 .search-result {
   padding: 20px;
   h3 {
-    margin: 0 0 20px;
+    margin: 0 0 5px;
     a {
       color: var(--current-theme-primary);
       &:hover {
@@ -32,52 +32,34 @@
   }
 
   .result-meta-body > div {
-    margin-bottom: 0;
     font-size: 14px;
+    margin-bottom: 10px;
     display: flex;
+    flex-direction: column;
 
     strong {
       text-transform: uppercase;
       color: #777;
-      margin-right: 20px;
+      margin-bottom: 5px;
     }
     .list-item {
       display: inline-block;
-      padding: 0px 12px 0 0;
-      margin: 0 12px 10px 0;
-      border-right: 1px solid #cacaca;
-      font-weight: 600;
-      &:last-child {
-        border: 0;
-      }
-    }
-  }
-  .task-list {
-    margin: 20px 0;
-    font-size: 14px;
-    display: flex;
 
-    strong {
-      text-transform: uppercase;
-      color: #777;
-      margin-right: 20px;
-    }
-    .list-item {
-      display: inline-block;
-      padding: 0px 12px 0 0;
-      margin: 0 12px 10px 0;
       border-right: 1px solid #cacaca;
       font-weight: 600;
-      &:last-child {
-        border: 0;
-      }
+      padding: 3px 6px;
+      margin: 0 10px 5px 0;
+      color: var(--current-theme-secondary);
+      border: 1px solid;
+      border-radius: $border-radius-default;
     }
   }
+
   .result-meta-footer {
     display: flex;
     .result-summary-meta {
       margin-right: 10px;
-      padding: 5px 40px 5px 0;
+      padding: 0 40px 0 0;
       font-size: 14px;
       font-weight: 600;
       &:last-child {
@@ -90,10 +72,15 @@
     }
   }
 
+  .updated-date .divider {
+    margin: 0 10px;
+  }
   .result-upload-info {
     text-align: right;
     font-size: 12px;
-    margin-top: 10px;
+    margin: 0 0 20px;
+    display: flex;
+    justify-content: flex-start;
     span {
       color: #777;
     }

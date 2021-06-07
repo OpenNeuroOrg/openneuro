@@ -4,21 +4,20 @@ import { SearchResultsList } from './SearchResultsList'
 import { FiltersBlock } from './FiltersBlock'
 import { SearchPage } from './SearchPage'
 import { SearchSortContainerExample } from './SearchSortContainerExample'
-import { KeywordInputContainerExample } from './KeywordInputContainerExample'
+import { Button } from '../button/Button'
 import { sortBy } from '../mock-content/sortby-list'
 import { FacetSelect } from '../facets/FacetSelect'
 import { FacetRadio } from '../facets/FacetRadio'
 import { FacetDatePicker } from '../facets/FacetDatePicker'
 import { FacetRange } from '../facets/FacetRange'
-import { Button } from '../button/Button'
+import { FacetSearch } from '../facets/FacetSearch'
+import { TermSearch } from '../input/TermSearch'
 
 import {
   modalities,
   show_available,
   dataset_type,
   diagnosis_list,
-  task_list,
-  author_pi_list,
   gender_list,
   species_list,
   section_list,
@@ -43,14 +42,18 @@ export const SearchPageContainerExample = ({
   const [datasetStatus, setDatasetStatus] = React.useState()
   const [ageRange, setAgeRange] = React.useState([null, null])
   const [subjectRange, setSubjectRange] = React.useState([null, null])
-  const [author_pi, setAuthor_pi] = React.useState()
   const [gender, setGender] = React.useState('All')
-  const [task, setTask] = React.useState()
   const [diagnosis, setDiagnosis] = React.useState()
   const [section, setSection] = React.useState()
   const [species, setSpecies] = React.useState()
   const [domain, setDomain] = React.useState()
   const [selectedDate, setSelectedDate] = React.useState([null, null])
+  const [termValue, setTermValue] = React.useState('')
+  const [allTerms, pushTerm] = React.useState([])
+  const [authorValue, setAuthorValue] = React.useState('')
+  const [allAuthors, pushAuthor] = React.useState([])
+  const [taskValue, setTaskValue] = React.useState('')
+  const [allTasks, pushTask] = React.useState([])
 
   const setSelectedDateValue = value =>
     setSelectedDate(value === null ? [null, null] : value)
@@ -63,19 +66,21 @@ export const SearchPageContainerExample = ({
     datasetStatus === undefined &&
     JSON.stringify(ageRange) === JSON.stringify([null, null]) &&
     JSON.stringify(subjectRange) === JSON.stringify([null, null]) &&
-    author_pi === undefined &&
     gender === 'All' &&
-    task === undefined &&
     diagnosis === undefined &&
     section === undefined &&
     species === undefined &&
     domain === undefined &&
-    JSON.stringify(selectedDate) === JSON.stringify([null, null])
+    JSON.stringify(selectedDate) === JSON.stringify([null, null]) &&
+    allTerms.length === 0 &&
+    allTasks.length === 0 &&
+    allAuthors.length === 0
   ) {
     filterBlockIsEmpty = true
   } else {
     filterBlockIsEmpty = false
   }
+
   return (
     <div>
       <SearchPage
@@ -84,14 +89,15 @@ export const SearchPageContainerExample = ({
           <>
             {!filterBlockIsEmpty ? (
               <FiltersBlock
+                allTerms={allTerms}
+                allAuthors={allAuthors}
+                allTasks={allTasks}
                 modality={modality}
                 datasetsType={datasetsType}
                 datasetStatus={datasetStatus}
                 ageRange={ageRange}
                 subjectRange={subjectRange}
-                author_pi={author_pi}
                 gender={gender}
-                task={task}
                 diagnosis={diagnosis}
                 section={section}
                 species={species}
@@ -113,8 +119,38 @@ export const SearchPageContainerExample = ({
         )}
         renderSearchFacets={() => (
           <>
-            <KeywordInputContainerExample searchValue={'Forrest Gump'} />
+            <TermSearch
+              className="search-keyword"
+              type="text"
+              label="Keyword"
+              placeholder="eg. something here"
+              labelStyle="default"
+              name="default-example"
+              termValue={termValue}
+              setTermValue={setTermValue}
+              primary={true}
+              color="#fff"
+              icon="fas fa-plus"
+              iconSize="20px"
+              size="small"
+              pushTerm={pushTerm}
+              allTerms={allTerms}
+            />
+
             <FacetBlockContainerExample>
+              {!portalContent && (
+                <FacetSelect
+                  selected={modality}
+                  setSelected={setModality}
+                  items={modalities}
+                  accordionStyle="plain"
+                  label="Modalities"
+                  startOpen={true}
+                  className="modality-facet"
+                  noAccordion={true}
+                />
+              )}
+
               {/* {profile TODO hide Show && My Datasets Status if logged out */}
               <>
                 <FacetRadio
@@ -142,18 +178,6 @@ export const SearchPageContainerExample = ({
                   }
                 />
               </>
-
-              {!portalContent && (
-                <FacetSelect
-                  selected={modality}
-                  setSelected={setModality}
-                  items={modalities}
-                  accordionStyle="plain"
-                  label="Modalities"
-                  startOpen={true}
-                  className="modality-facet"
-                />
-              )}
               <FacetRange
                 startOpen={false}
                 label="Age"
@@ -188,21 +212,45 @@ export const SearchPageContainerExample = ({
                 label="Diagnosis"
                 startOpen={false}
               />
-              <FacetSelect
-                selected={task}
-                setSelected={setTask}
-                items={task_list}
+
+              <FacetSearch
                 accordionStyle="plain"
                 label="Task"
                 startOpen={false}
+                className="search-authors"
+                type="text"
+                placeholder="eg. something here"
+                labelStyle="default"
+                name="default-example"
+                termValue={taskValue}
+                setTermValue={setTaskValue}
+                primary={true}
+                color="#fff"
+                icon="fas fa-plus"
+                iconSize="20px"
+                size="small"
+                pushTerm={pushTask}
+                allTerms={allTasks}
               />
-              <FacetSelect
-                selected={author_pi}
-                setSelected={setAuthor_pi}
-                items={author_pi_list}
+
+              <FacetSearch
                 accordionStyle="plain"
                 label="Sr. Author / PI"
                 startOpen={false}
+                className="search-authors"
+                type="text"
+                placeholder="eg. something here"
+                labelStyle="default"
+                name="default-example"
+                termValue={authorValue}
+                setTermValue={setAuthorValue}
+                primary={true}
+                color="#fff"
+                icon="fas fa-plus"
+                iconSize="20px"
+                size="small"
+                pushTerm={pushAuthor}
+                allTerms={allAuthors}
               />
               <FacetRadio
                 selected={gender}
@@ -251,11 +299,13 @@ export const SearchPageContainerExample = ({
         renderSearchResultsList={() => (
           <>
             <SearchResultsList items={searchResults} profile={profile} />
-            <div className="col  col-center results-count">
-              Showing <b>25</b> of <b>100</b> Datasets
-            </div>
-            <div className=" load-more ">
-              <Button label="Load More" />
+            <div className="grid grid-nogutter" style={{ width: '100%' }}>
+              <div className="col col-12 results-count">
+                Showing <b>25</b> of <b>100</b> Datasets
+              </div>
+              <div className="col col-12 load-more ">
+                <Button label="Load More" />
+              </div>
             </div>
           </>
         )}

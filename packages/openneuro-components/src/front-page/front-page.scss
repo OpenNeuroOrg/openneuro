@@ -126,7 +126,7 @@ body {
   align-items: center;
   background: #204e5a;
   padding: 30px 60px;
-  border-radius: 4px;
+  border-radius: $border-radius-default;
   .get-updates-label,
   .get-updates-form {
     max-width: 50%;
