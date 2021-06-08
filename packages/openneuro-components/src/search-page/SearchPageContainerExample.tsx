@@ -110,7 +110,7 @@ export const SearchPageContainerExample = ({
         renderSortBy={() => (
           <>
             <div className="col results-count">
-              Showing <b>25</b> of <b>100</b> Datasets
+              Showing All <b>100</b> Public Datasets
             </div>
             <div className="col search-sort">
               <SearchSortContainerExample items={sortBy} />
@@ -265,7 +265,7 @@ export const SearchPageContainerExample = ({
               />
               <FacetDatePicker
                 startOpen={false}
-                label="Date"
+                label="Upload Date"
                 accordionStyle="plain"
                 selected={datePublicizedRange}
                 setSelected={setSelectedDateValue}
@@ -302,7 +302,7 @@ export const SearchPageContainerExample = ({
             <SearchResultsList items={searchResults} profile={profile} />
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
               <div className="col col-12 results-count">
-                Showing <b>25</b> of <b>100</b> Datasets
+                Showing All <b>100</b> Public Datasets
               </div>
               <div className="col col-12 load-more ">
                 <Button label="Load More" />
