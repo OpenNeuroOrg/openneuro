@@ -1,13 +1,10 @@
 import React from 'react'
 
-import { Header } from '../header/Header'
 import { AffiliateBlock } from './AffiliateBlock'
 import { ActivitySliderFront } from './ActivitySlider'
 import { Contributors } from './Contributors'
 import { GetUpdates } from './GetUpdates'
 import { Infographic } from './Infographic'
-
-import { Footer } from '../footer/Footer'
 
 import './front-page.scss'
 

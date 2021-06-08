@@ -1,0 +1,215 @@
+@import '../scss/variables';
+.dataset {
+  .dataset-header {
+    padding: 20px 0;
+    margin-bottom: 40px;
+    h1 {
+      display: flex;
+      align-items: center;
+      color: #fff;
+    }
+    .hexagon-wrapper {
+      margin-right: 10px;
+    }
+  }
+
+  .dataset-header-meta {
+    margin: 40px 0;
+    font-size: 14px;
+    span {
+      margin: 0 2px 0 30px;
+      font-weight: bold;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+  .dataset-header-alert {
+    padding: 10px 20px;
+    background: #f7e395;
+    display: flex;
+    justify-content: center;
+    a {
+      margin: 0 5px;
+    }
+  }
+
+  .dataset-tool-buttons {
+    display: flex;
+    > span {
+      margin-right: auto;
+      &:last-child {
+        margin-right: 0;
+      }
+      .dataset-tool {
+        color: var(--current-theme-primary);
+        font-size: 17px;
+        i {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+  .dataset-validation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    .validation-accordion {
+      flex-grow: 1;
+      margin-right: 20px;
+    }
+    .brainlife-block {
+      margin-right: 20px;
+    }
+    .clone-dropdown {
+      position: relative;
+      i {
+        margin-left: 10px;
+      }
+      .toggle {
+        .fa-caret-up {
+          display: none;
+        }
+        .fa-caret-down {
+          display: inline;
+        }
+        &.active {
+          .fa-caret-up {
+            display: inline;
+          }
+          .fa-caret-down {
+            display: none;
+          }
+        }
+      }
+      .menu.expanded {
+        box-shadow: 0px 1px 5px -1px rgba(0, 0, 0, 51%);
+        width: 320px;
+        min-height: 170px;
+        margin-top: 4px;
+        background: #fff;
+        border-radius: $border-radius-default;
+      }
+    }
+  }
+}
+
+.dataset {
+  .hexagon-wrapper {
+    text-align: center;
+    margin: 20px auto;
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    div.label {
+      position: absolute;
+      top: 0;
+      text-align: center;
+      width: 100%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .hexagon {
+      height: 100%;
+      width: calc(100% * 0.57735);
+      display: inline-block;
+    }
+
+    .hexagon:before {
+      position: absolute;
+      top: 0;
+      right: calc((100% / 2) - ((100% * 0.57735) / 2));
+      background-color: inherit;
+      height: inherit;
+      width: inherit;
+      content: '';
+      transform: rotateZ(60deg);
+    }
+
+    .hexagon:after {
+      position: absolute;
+      top: 0;
+      right: calc((100% / 2) - ((100% * 0.57735) / 2));
+      background-color: inherit;
+      height: inherit;
+      width: inherit;
+      content: '';
+      transform: rotateZ(-60deg);
+    }
+  }
+
+  a {
+    .hexagon {
+      transition: color 0.3s;
+      background-color: #fff;
+
+      &.mri {
+        color: $mri-theme;
+      }
+      &.eeg {
+        color: $eeg-theme;
+      }
+      &.nirs {
+        color: $nirs-theme;
+      }
+      &.pet {
+        color: $pet-theme;
+      }
+      &.ieeg {
+        color: $ieeg-theme;
+      }
+      &.ecog {
+        color: $ecog-theme;
+      }
+      &.asl {
+        color: $asl-theme;
+      }
+      &.meg {
+        color: $meg-theme;
+      }
+      &.eeg {
+        color: $on-light-green;
+      }
+    }
+    &:hover {
+      .hexagon {
+        color: lighten($on-dark-aqua, 15%);
+        &.mri {
+          color: lighten($mri-theme, 10%);
+        }
+        &.eeg {
+          color: lighten($eeg-theme, 10%);
+        }
+        &.nirs {
+          color: lighten($nirs-theme, 10%);
+        }
+        &.pet {
+          color: lighten($pet-theme, 10%);
+        }
+        &.ieeg {
+          color: lighten($ieeg-theme, 10%);
+        }
+        &.ecog {
+          color: lighten($ecog-theme, 10%);
+        }
+        &.asl {
+          color: lighten($asl-theme, 10%);
+        }
+        &.meg {
+          color: lighten($meg-theme, 10%);
+        }
+        &.eeg {
+          color: lighten($on-light-green, 10%);
+        }
+      }
+    }
+  }
+}

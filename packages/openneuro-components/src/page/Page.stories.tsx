@@ -4,9 +4,12 @@ import { Story, Meta } from '@storybook/react'
 import { Page, PageProps } from './Page'
 import { FrontPage } from '../front-page/FrontPage'
 import { SearchPageContainerExample } from '../search-page/SearchPageContainerExample'
+import { DraftDatasetPageExample } from '../dataset/DraftDatasetPageExample'
 import * as HeaderStories from '../header/Header.stories'
 
 import { MRIPortalContent } from '../mock-content/portal-content'
+import { DraftDataset } from '../mock-content/draft-dataset-content'
+
 import { mri } from '../mock-content/mri-search-results'
 
 export default {
@@ -41,4 +44,11 @@ MRIPortalPageExample.args = {
   ),
   headerArgs: HeaderStories.LoggedOut.args,
   className: 'search-page search-page-mri',
+}
+
+export const DatasetDraft = Template.bind({})
+DatasetDraft.args = {
+  children: <DraftDatasetPageExample dataset={DraftDataset.data.dataset} />,
+  headerArgs: HeaderStories.LoggedOut.args,
+  className: 'dataset dataset-draft dataset-page-mri',
 }

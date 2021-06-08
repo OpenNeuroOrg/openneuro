@@ -4867,6 +4867,7 @@ __metadata:
     "@types/bytes": ^3
     "@types/md5": ^2
     "@types/mdx-js__react": ^1
+    "@types/prop-types": ^15
     "@types/react-router-dom": ^5
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
@@ -4874,8 +4875,10 @@ __metadata:
     bytes: ^3.1.0
     css-loader: ^5.2.1
     date-fns: ^2.21.1
+    markdown-to-jsx: ^7.1.3
     md5: ^2.3.0
     pluralize: ^8.0.0
+    prop-types: ^15.7.2
     rc-slider: ^9.7.2
     react: ^17.0.1
     react-router-dom: ^5.2.0
@@ -7227,7 +7230,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*":
+"@types/prop-types@npm:*, @types/prop-types@npm:^15":
   version: 15.7.3
   resolution: "@types/prop-types@npm:15.7.3"
   checksum: bd0eab69d5120ad3784d0c9985f902653d5924707a7f2b3702a330e762dfd61b6494954cb54ad0c52b918ffd6f1e7e27c9270e4442bc15250de348596f2f60cb
@@ -22831,6 +22834,15 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ">= 0.14.0"
   checksum: 4a211aba6af98525dc08e944eb13c92fe25261d5a8b00d4f22923f928737d8fbd345c52ec119a09a227a478acfa8d2a6ef3a5ea560cd6b01c4ba34d728259a97
+  languageName: node
+  linkType: hard
+
+"markdown-to-jsx@npm:^7.1.3":
+  version: 7.1.3
+  resolution: "markdown-to-jsx@npm:7.1.3"
+  peerDependencies:
+    react: ">= 0.14.0"
+  checksum: db5580aa747e78fd729a210d4a57ae4d3bdb31d2b3cbe513c449e46a2d779019d254ed745d7f9963ea490878c87460fda519f3d468173b765007b50c840bf52f
   languageName: node
   linkType: hard
 

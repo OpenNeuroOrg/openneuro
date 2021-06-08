@@ -81,7 +81,8 @@ $screen-sm: 480px;
 $screen-md: 767px;
 $screen-lg: 989px;
 
-.search-page-mri {
+.search-page-mri,
+.dataset-page-mri {
   --current-theme-primary: #{$mri-theme};
   --current-theme-primary-hover: #{$mri-hover};
 }

@@ -6,6 +6,7 @@ export interface TooltipProps {
   flow: 'up' | 'down' | 'left' | 'right'
   children: React.ReactNode
   className?: string
+  wrapText?: boolean
 }
 
 export const Tooltip = ({
@@ -13,18 +14,12 @@ export const Tooltip = ({
   tooltip,
   flow,
   className,
+  wrapText,
 }: TooltipProps) => {
-  const reference = useRef()
-  useEffect(() => {
-    const placement =
-      reference.current.offsetTop < 150 && flow === 'up' ? 'down' : flow
-    reference.current.setAttribute('data-flow', placement)
-  }, [])
-
+  const wrap = wrapText && ' wrap-text'
   return (
     <span
-      className={className}
-      ref={reference}
+      className={wrap + ' ' + className}
       data-tooltip={tooltip}
       data-flow={flow}>
       {children}
