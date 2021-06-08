@@ -1,41 +1,43 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { SearchParamsCtx } from './search-params-ctx'
-import { TermSearch } from '@openneuro/components'
+import { FacetSearch } from '@openneuro/components'
 
-const KeywordInput: FC = () => {
+const TaskInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-  const keywords = searchParams.keywords
+  const tasks = searchParams.tasks
 
-  const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
+  const [newTask, setNewTask, newTaskRef] = useState('')
 
-  const addKeyword = () => {
+  const addTask = () => {
     setSearchParams(prevState => ({
       ...prevState,
-      keywords: [...keywords, newKeywordRef.current],
+      tasks: [...tasks, newTaskRef.current],
     }))
-    setNewKeyword('')
+    setNewTask('')
   }
 
   return (
-    <TermSearch
-      className="search-keyword"
+    <FacetSearch
+      accordionStyle="plain"
+      label="Task"
+      startOpen={false}
+      className="search-authors"
       type="text"
-      label="Keyword"
       placeholder="eg. something here"
       labelStyle="default"
       name="default-example"
-      termValue={newKeyword}
-      setTermValue={setNewKeyword}
+      termValue={newTask}
+      setTermValue={setNewTask}
       primary={true}
       color="#fff"
       icon="fas fa-plus"
       iconSize="20px"
       size="small"
-      pushTerm={addKeyword}
-      allTerms={keywords}
+      pushTerm={addTask}
+      allTerms={tasks}
     />
   )
 }
 
-export default KeywordInput
+export default TaskInput

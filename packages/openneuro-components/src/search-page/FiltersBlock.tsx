@@ -6,15 +6,15 @@ import { TermListItem } from './TermListItem'
 import './filters-block.scss'
 
 export interface FiltersBlockProps {
-  allTerms: string[]
+  keywords: string[]
   modality_selected?: { label: string; value: string }
   datasetType_selected?: string
   datasetStatus_selected?: { label: string; value: string }
   ageRange?: [number, number]
   subjectCountRange?: [number, number]
-  allAuthors: string[]
+  authors: string[]
   gender_selected?: string
-  allTasks: string[]
+  tasks: string[]
   diagnosis_selected?: { label: string; value: string }
   section_selected?: { label: string; value: string }
   species_selected?: { label: string; value: string }
@@ -25,15 +25,15 @@ export interface FiltersBlockProps {
 }
 
 export const FiltersBlock = ({
-  allTerms,
+  keywords,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
   subjectCountRange,
-  allAuthors,
+  authors,
   gender_selected,
-  allTasks,
+  tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
@@ -71,23 +71,43 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <ul className="active-filters">
-        {allTerms && <TermListItem item={allTerms} type="Keyword" />}
-        {modality_selected && <FilterListItem item={modality_selected} type="Modality" />}
-        {datasetType_selected && <FilterListItem item={datasetType_selected} type="Type" />}
-        {datasetStatus_selected && <FilterListItem item={datasetStatus_selected} type="Status" />}
+        {keywords && <TermListItem item={keywords} type="Keyword" />}
+        {modality_selected && (
+          <FilterListItem item={modality_selected} type="Modality" />
+        )}
+        {datasetType_selected && (
+          <FilterListItem item={datasetType_selected} type="Type" />
+        )}
+        {datasetStatus_selected && (
+          <FilterListItem item={datasetStatus_selected} type="Status" />
+        )}
         {!ageRangeIsNull && <FilterListItem item={ageRange} type="Age" />}
         {!subjectCountRangeIsNull && (
           <FilterListItem item={subjectCountRange} type="Subjects" />
         )}
-        {allAuthors && <TermListItem item={allAuthors} type="Authors/PI" />}
-        {gender_selected && <FilterListItem item={gender_selected} type="Gender" />}
-        {allTasks && <TermListItem item={allTasks} type="Task" />}
-        {gender_selected && <FilterListItem item={gender_selected} type="Gender" />}
-        {diagnosis_selected && <FilterListItem item={diagnosis_selected} type="Diagnosis" />}
-        {section_selected && <FilterListItem item={section_selected} type="Section" />}
-        {species_selected && <FilterListItem item={species_selected} type="Species" />}
-        {studyDomain_selected && <FilterListItem item={studyDomain_selected} type="Domain" />}
-        {!dateIsNull && <FilterDateItem item={datePublicizedRange} type="Date" />}
+        {authors && <TermListItem item={authors} type="Authors/PI" />}
+        {gender_selected && (
+          <FilterListItem item={gender_selected} type="Gender" />
+        )}
+        {tasks && <TermListItem item={tasks} type="Task" />}
+        {gender_selected && (
+          <FilterListItem item={gender_selected} type="Gender" />
+        )}
+        {diagnosis_selected && (
+          <FilterListItem item={diagnosis_selected} type="Diagnosis" />
+        )}
+        {section_selected && (
+          <FilterListItem item={section_selected} type="Section" />
+        )}
+        {species_selected && (
+          <FilterListItem item={species_selected} type="Species" />
+        )}
+        {studyDomain_selected && (
+          <FilterListItem item={studyDomain_selected} type="Domain" />
+        )}
+        {!dateIsNull && (
+          <FilterDateItem item={datePublicizedRange} type="Date" />
+        )}
 
         <li>
           <Button label="Clear All" size="small" onClick={removeAllFilters} />

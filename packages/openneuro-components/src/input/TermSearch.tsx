@@ -5,7 +5,7 @@ import './term-search.scss'
 
 export interface TermSearchProps {
   setTermValue: (string) => void
-  pushTerm: (string) => void
+  pushTerm: () => void
   allTerms: string[]
   className?: string
   type?: string
@@ -37,16 +37,6 @@ export const TermSearch = ({
   size,
   iconSize,
 }: TermSearchProps) => {
-  const termsArr = []
-  const addTerms = value => {
-    if (value === '' || value === undefined) {
-      alert('please enter a term')
-    } else {
-      allTerms.push(value)
-      setTermValue('')
-    }
-  }
-
   return (
     <>
       <div className={className + ' term-input'}>
@@ -58,14 +48,16 @@ export const TermSearch = ({
           name={name}
           value={termValue}
           setValue={setTermValue}
+          onKeyDown={e => e.keyCode === 13 && pushTerm()}
         />
         <Button
           primary={true}
+          disabled={termValue === ''}
           color={color}
           icon={icon}
           iconSize={iconSize}
           size={size}
-          onClick={() => addTerms(termValue)}
+          onClick={() => pushTerm()}
         />
       </div>
       {allTerms.length ? (

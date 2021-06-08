@@ -37,8 +37,8 @@ export const SearchPageContainerExample = ({
   portalContent,
   profile,
 }: SearchContainereProps) => {
-  const [allTerms, pushTerm] = React.useState([])
-  const [termValue, setTermValue] = React.useState('')
+  const [allKeywords, pushKeyword] = React.useState([])
+  const [keywordValue, setKeywordValue] = React.useState('')
   const [modality_selected, setModality] = React.useState()
   const [datasetType_selected, setDatasetsType] = React.useState('All')
   const [datasetStatus_selected, setDatasetStatus] = React.useState()
@@ -72,7 +72,7 @@ export const SearchPageContainerExample = ({
     species_selected === undefined &&
     studyDomain_selected === undefined &&
     JSON.stringify(datePublicizedRange) === JSON.stringify([null, null]) &&
-    allTerms.length === 0 &&
+    allKeywords.length === 0 &&
     allTasks.length === 0 &&
     allAuthors.length === 0
   ) {
@@ -89,9 +89,9 @@ export const SearchPageContainerExample = ({
           <>
             {!filterBlockIsEmpty ? (
               <FiltersBlock
-                allTerms={allTerms}
-                allAuthors={allAuthors}
-                allTasks={allTasks}
+                keywords={allKeywords}
+                authors={allAuthors}
+                tasks={allTasks}
                 modality_selected={modality_selected}
                 datasetType_selected={datasetType_selected}
                 datasetStatus_selected={datasetStatus_selected}
@@ -126,15 +126,15 @@ export const SearchPageContainerExample = ({
               placeholder="eg. something here"
               labelStyle="default"
               name="default-example"
-              termValue={termValue}
-              setTermValue={setTermValue}
+              termValue={keywordValue}
+              setTermValue={setKeywordValue}
               primary={true}
               color="#fff"
               icon="fas fa-plus"
               iconSize="20px"
               size="small"
-              pushTerm={pushTerm}
-              allTerms={allTerms}
+              pushTerm={pushKeyword}
+              allTerms={allKeywords}
             />
 
             <FacetBlockContainerExample>

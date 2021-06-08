@@ -8,28 +8,30 @@ import initialSearchParams from './initial-search-params'
  * extracts them into a new object
  */
 const getSelectParams = ({
+  keywords,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
   subjectCountRange,
-  seniorAuthor_selected,
+  authors,
   gender_selected,
-  task_selected,
+  tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
   studyDomain_selected,
   datePublicizedRange,
 }) => ({
+  keywords,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
   subjectCountRange,
-  seniorAuthor_selected,
+  authors,
   gender_selected,
-  task_selected,
+  tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
@@ -67,9 +69,6 @@ const FiltersBlockContainer: FC = () => {
       removeFilter={removeFilter}
       removeAllFilters={removeAllFilters}
       {...selectedParams}
-      allTerms={[]}
-      allAuthors={[]}
-      allTasks={[]}
     />
   ) : null
 }

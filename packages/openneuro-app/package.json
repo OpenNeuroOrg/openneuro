@@ -52,6 +52,7 @@
     "react-router-dom": "^5.1.2",
     "react-spring": "^8.0.27",
     "react-toastify": "6.0.9",
+    "react-usestateref": "^1.0.5",
     "react-virtualized": "remorses/react-virtualized-fixed-import.git#9.22.3",
     "resize-observer-polyfill": "^1.5.1",
     "semver": "^5.5.0",
