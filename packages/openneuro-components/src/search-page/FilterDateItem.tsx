@@ -1,12 +1,21 @@
 import React from 'react'
 
 type DateRange = [Date | null, Date | null]
+type Item = {
+  param: string
+  value: DateRange
+}
 
 export interface FilterDateItemProps {
-  item: DateRange
+  item: Item
   type?: string
+  removeFilterItem?(param, value): void
 }
-export const FilterDateItem = ({ item, type }: FilterDateItemProps) => {
+export const FilterDateItem = ({
+  item,
+  type,
+  removeFilterItem = () => {},
+}: FilterDateItemProps) => {
   const dateIsNull = JSON.stringify(item) === JSON.stringify([null, null])
   const startDay = !dateIsNull && item[0].getDate()
   const endDay = !dateIsNull && item[1].getDate()
@@ -24,7 +33,9 @@ export const FilterDateItem = ({ item, type }: FilterDateItemProps) => {
           <strong>{type}:</strong>
           <span>
             {startMonth}/{startDay}/{startYear} - {endMonth}/{endDay}/{endYear}
-            <span>&times;</span>
+            <span onClick={() => removeFilterItem(item.param, item.value)}>
+              &times;
+            </span>
           </span>
         </li>
       </>

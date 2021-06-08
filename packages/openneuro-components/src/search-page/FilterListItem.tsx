@@ -4,13 +4,25 @@ type TextList = string[]
 type Text = string
 type NumberCouple = [number, number]
 type OptionObject = { label: string; value: string }
+type Item = {
+  param: string
+  value: TextList | Text | OptionObject | NumberCouple
+}
 
 export interface FilterListItemProps {
-  item: TextList | Text | OptionObject | NumberCouple
+  item: Item
   type?: string
+  removeFilterItem?(param, value): void
 }
-export const FilterListItem = ({ item, type }: FilterListItemProps) => {
-  if (item === 'All' || JSON.stringify(item) === JSON.stringify([null, null])) {
+export const FilterListItem = ({
+  item,
+  type,
+  removeFilterItem = () => {},
+}: FilterListItemProps) => {
+  if (
+    item.value === 'All' ||
+    JSON.stringify(item.value) === JSON.stringify([null, null])
+  ) {
     return null
   } else
     return (
@@ -19,9 +31,11 @@ export const FilterListItem = ({ item, type }: FilterListItemProps) => {
           <strong>{type}:</strong>
           <span>
             {type === 'Age' || type === 'Subjects'
-              ? item[0] + ' - ' + item[1]
-              : item}
-            <span>&times;</span>
+              ? item.value[0] + ' - ' + item.value[1]
+              : item.value}
+            <span onClick={() => removeFilterItem(item.param, item.value)}>
+              &times;
+            </span>
           </span>
         </li>
       </>

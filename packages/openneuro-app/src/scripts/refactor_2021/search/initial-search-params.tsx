@@ -95,7 +95,7 @@ type OptionalNumberRange = [number | null, number | null]
 type OptionalDateRange = [Date | null, Date | null]
 
 interface SearchParams {
-  keyword: string | null
+  keywords: string[]
   datasetType_available: typeof datasetType_available
   datasetType_selected: string | null
   datasetStatus_available: typeof datasetStatus_available
@@ -106,10 +106,8 @@ interface SearchParams {
   subjectCountRange: OptionalNumberRange
   diagnosis_available: string[]
   diagnosis_selected: string | null
-  task_available: string[]
-  task_selected: string | null
-  seniorAuthor_available: string[]
-  seniorAuthor_selected: string | null
+  tasks: string[]
+  authors: string[]
   // more
   gender_available: string[]
   gender_selected: string | null
@@ -125,7 +123,7 @@ interface SearchParams {
 // TODO: move to this initial state
 //       and load dynamic options on mount
 const initialSearchParams: SearchParams = {
-  keyword: null,
+  keywords: [],
   datasetType_available,
   datasetType_selected: null,
   datasetStatus_available,
@@ -136,10 +134,8 @@ const initialSearchParams: SearchParams = {
   subjectCountRange: [null, null],
   diagnosis_available: [],
   diagnosis_selected: null,
-  task_available: [],
-  task_selected: null,
-  seniorAuthor_available: [],
-  seniorAuthor_selected: null,
+  tasks: [],
+  authors: [],
   // more
   gender_available: [],
   gender_selected: null,
@@ -154,7 +150,7 @@ const initialSearchParams: SearchParams = {
 
 // TODO: delete and move to dynamically loaded initialSearchParams
 const TEMPORARY_initialSearchParams: SearchParams = {
-  keyword: null,
+  keywords: [],
   datasetType_available,
   datasetType_selected: 'All',
   datasetStatus_available,
@@ -165,10 +161,8 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   subjectCountRange: [null, null],
   diagnosis_available: ["Alzheimer's", 'Another', 'Other'],
   diagnosis_selected: null,
-  task_available: ['Rest', 'Another', 'Other'],
-  task_selected: null,
-  seniorAuthor_available: ['Author 1', 'Author 2'],
-  seniorAuthor_selected: null,
+  tasks: [],
+  authors: [],
   // more
   gender_available: ['All', 'Male', 'Female'],
   gender_selected: 'All',

@@ -18,8 +18,11 @@ import ShowDatasetRadios from './show-datasets-radios'
 import AgeRangeInput from './age-range-input'
 import SubjectCountRangeInput from './subject-count-range-input'
 import DiagnosisSelect from './diagnosis-select'
+import TaskInput from './task-input'
+import AuthorInput from './author-input'
 import GenderRadios from './gender-radios'
 import DateRangeInput from './date-range-input'
+import SpeciesSelect from './species-select'
 import SectionSelect from './section-select'
 import StudyDomainSelect from './study-domain-select'
 
@@ -46,17 +49,16 @@ const SearchContainer: FC = () => {
       renderSearchFacets={() => (
         <>
           <KeywordInput />
-          <h1>Filter Block Placeholder</h1>
           <ModalitySelect />
           <ShowDatasetRadios />
           <AgeRangeInput />
           <SubjectCountRangeInput />
           <DiagnosisSelect />
-          <h1>Task Input Placeholder</h1>
-          <h1>Author Input Placeholder</h1>
+          <TaskInput />
+          <AuthorInput />
           <GenderRadios />
           <DateRangeInput />
-          <h1>Species Input Placeholder</h1>
+          <SpeciesSelect />
           <SectionSelect />
           <StudyDomainSelect />
         </>

@@ -1,6 +1,7 @@
 export * from './FacetSelect'
 export * from './FacetRadio'
 export * from './FacetRange'
+export * from './FacetSearch'
 
 // export * from './FacetDatePicker'
 

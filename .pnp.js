@@ -9304,6 +9304,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-spring", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.0.27"],
             ["react-test-renderer", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:16.14.0"],
             ["react-toastify", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.0.9"],
+            ["react-usestateref", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.5"],
             ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],
             ["resize-observer-polyfill", "npm:1.5.1"],
             ["rollup-plugin-polyfill-node", "npm:0.6.2"],
@@ -38795,6 +38796,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/react-dom",
             "@types/react",
             "react-dom",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-usestateref", [
+        ["npm:1.0.5", {
+          "packageLocation": "./.yarn/cache/react-usestateref-npm-1.0.5-d937e65739-9a37306c48.zip/node_modules/react-usestateref/",
+          "packageDependencies": [
+            ["react-usestateref", "npm:1.0.5"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.5", {
+          "packageLocation": "./.yarn/$$virtual/react-usestateref-virtual-725a6f5d7d/0/cache/react-usestateref-npm-1.0.5-d937e65739-9a37306c48.zip/node_modules/react-usestateref/",
+          "packageDependencies": [
+            ["react-usestateref", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.5"],
+            ["@types/react", "npm:17.0.8"],
+            ["react", "npm:17.0.2"]
+          ],
+          "packagePeers": [
+            "@types/react",
             "react"
           ],
           "linkType": "HARD",

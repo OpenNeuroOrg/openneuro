@@ -10,6 +10,7 @@ export interface InputProps {
   labelStyle?: 'inline' | 'float' | 'default'
   value: string
   setValue: string
+  onKeyDown?(event): void
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -20,6 +21,7 @@ export const Input: React.FC<InputProps> = ({
   labelStyle,
   setValue,
   value,
+  onKeyDown = () => {},
 }) => {
   return (
     <>
@@ -31,6 +33,7 @@ export const Input: React.FC<InputProps> = ({
             value={value}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
+            onKeyDown={onKeyDown}
           />
           {label ? <label htmlFor={name}>{label}</label> : null}
         </div>
@@ -43,6 +46,7 @@ export const Input: React.FC<InputProps> = ({
             name={name}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
+            onKeyDown={onKeyDown}
           />
         </div>
       ) : (
@@ -54,6 +58,7 @@ export const Input: React.FC<InputProps> = ({
             name={name}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
+            onKeyDown={onKeyDown}
           />
         </div>
       )}

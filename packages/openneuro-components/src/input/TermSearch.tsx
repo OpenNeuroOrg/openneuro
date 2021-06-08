@@ -5,7 +5,7 @@ import './term-search.scss'
 
 export interface TermSearchProps {
   setTermValue: (string) => void
-  pushTerm: (string) => void
+  pushTerm: () => void
   allTerms: string[]
   className?: string
   type?: string
@@ -19,6 +19,7 @@ export interface TermSearchProps {
   icon?: string
   iconSize?: string
   size?: string
+  removeFilterItem?(param, value): void
 }
 
 export const TermSearch = ({
@@ -36,17 +37,11 @@ export const TermSearch = ({
   icon,
   size,
   iconSize,
+  removeFilterItem,
 }: TermSearchProps) => {
-  const termsArr = []
-  const addTerms = value => {
-    if (value === '' || value === undefined) {
-      alert('please enter a term')
-    } else {
-      allTerms.push(value)
-      setTermValue('')
-    }
-  }
-
+  const emptyOrWhitespace = /^\s*$/
+  const disabled =
+    emptyOrWhitespace.test(termValue) || allTerms.includes(termValue)
   return (
     <>
       <div className={className + ' term-input'}>
@@ -58,24 +53,28 @@ export const TermSearch = ({
           name={name}
           value={termValue}
           setValue={setTermValue}
+          onKeyDown={e => e.keyCode === 13 && !disabled && pushTerm()}
         />
         <Button
           primary={true}
+          disabled={disabled}
           color={color}
           icon={icon}
           iconSize={iconSize}
           size={size}
-          onClick={() => addTerms(termValue)}
+          onClick={() => pushTerm()}
         />
       </div>
       {allTerms.length ? (
         <div className="term-block">
           <ul className="active-search-terms">
-            {allTerms.map((item, index) => (
+            {allTerms.map((term, index) => (
               <li key={index}>
                 <span>
-                  {item}
-                  <span>&times;</span>
+                  {term}
+                  <span onClick={() => removeFilterItem(name, term)}>
+                    &times;
+                  </span>
                 </span>
               </li>
             ))}

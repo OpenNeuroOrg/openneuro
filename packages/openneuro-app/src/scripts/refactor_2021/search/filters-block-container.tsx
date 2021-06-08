@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx, removeFilterItem } from './search-params-ctx'
 import { FiltersBlock } from '@openneuro/components'
 import initialSearchParams from './initial-search-params'
 
@@ -8,28 +8,30 @@ import initialSearchParams from './initial-search-params'
  * extracts them into a new object
  */
 const getSelectParams = ({
+  keywords,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
   subjectCountRange,
-  seniorAuthor_selected,
+  authors,
   gender_selected,
-  task_selected,
+  tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
   studyDomain_selected,
   datePublicizedRange,
 }) => ({
+  keywords,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
   subjectCountRange,
-  seniorAuthor_selected,
+  authors,
   gender_selected,
-  task_selected,
+  tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
@@ -49,11 +51,6 @@ const FiltersBlockContainer: FC = () => {
     )
   })
 
-  const removeFilter = (key, value) => {
-    // TODO: implement when chiclets components are done
-    console.log({ key, value })
-  }
-
   const removeAllFilters = () => {
     // reset params to default valuse
     setSearchParams(prevState => ({
@@ -64,12 +61,9 @@ const FiltersBlockContainer: FC = () => {
 
   return someParamsAreSelected ? (
     <FiltersBlock
-      removeFilter={removeFilter}
+      removeFilterItem={removeFilterItem(setSearchParams)}
       removeAllFilters={removeAllFilters}
       {...selectedParams}
-      allTerms={[]}
-      allAuthors={[]}
-      allTasks={[]}
     />
   ) : null
 }

@@ -1,6 +1,6 @@
 // dependencies --------------------------------------------------------------
 
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import Routes_REFACTOR from './refactor_2021/routes'
 import Navbar from './nav/navbar.jsx'
 import HeaderContainer from './refactor_2021/containers/header'
@@ -8,6 +8,10 @@ import Routes from './routes.jsx'
 import Uploader from './uploader/uploader.jsx'
 import FeatureToggle from './components/feature-toggle'
 import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
+
+// downside to this approach is that the first SSR paint has no styles
+// might be better to do the class on body
+const MainStyles = lazy(() => import('../sass/MainStyles'))
 
 const Index = () => {
   return (
@@ -22,14 +26,17 @@ const Index = () => {
         </Uploader>
       )}
       renderOnDisabled={() => (
-        <Uploader>
-          <div className="page">
-            <div className="main">
-              <Navbar />
-              <Routes />
+        <>
+          <Suspense fallback={<></>}>{<MainStyles />}</Suspense>
+          <Uploader>
+            <div className="page">
+              <div className="main">
+                <Navbar />
+                <Routes />
+              </div>
             </div>
-          </div>
-        </Uploader>
+          </Uploader>
+        </>
       )}
     />
   )

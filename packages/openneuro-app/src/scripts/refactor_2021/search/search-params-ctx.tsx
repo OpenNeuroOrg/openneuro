@@ -1,6 +1,4 @@
 import React, { createContext, useState, FC, ReactNode } from 'react'
-import { useContext } from 'react'
-import { FacetSelect } from '@openneuro/components'
 import initialSearchParams from './initial-search-params'
 
 export const SearchParamsCtx = createContext(null)
@@ -20,44 +18,37 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
   )
 }
 
-/* DEMO */
-// Quick demo on container components that draw from and update the SearchParams context
-//   using the display components in @openneuro/components.
-// Components used (temporarily) in src/scripts/index.jsx.
-// Wiew locally by navigating to http://localhost:9876/crn/feature/redesign-2021/enable.
-// The following components are just put here for ease of access, but
-//   should exist in their own files in practice.
-// TODO: delete demo
-
-interface IntermediateComponentProps {
-  children: ReactNode
-}
-// this would be something like the SearchParamsContainer
-export const IntermediateComponent: FC<IntermediateComponentProps> = ({
-  children,
-}) => {
-  return <div className="intermediate-component">{children}</div>
-}
-
-export const ModalitySelectContainer: FC = () => {
-  const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-  const setModality = value => {
-    setSearchParams(prevSearchParams => {
-      return {
-        ...prevSearchParams,
-        modality_selected: value,
-      }
-    })
+export const removeFilterItem = setSearchParams => (param, value) => {
+  switch (param) {
+    case 'modality_selected':
+    case 'datasetType_selected':
+    case 'datasetStatus_selected':
+    case 'ageRange':
+    case 'subjectCountRange':
+    case 'gender_selected':
+    case 'diagnosis_selected':
+    case 'section_selected':
+    case 'species_selected':
+    case 'studyDomain_selected':
+    case 'datePublicizedRange':
+      setSearchParams(prevState => ({
+        ...prevState,
+        [param]: initialSearchParams[param],
+      }))
+      break
+    case 'keywords':
+    case 'authors':
+    case 'tasks':
+      setSearchParams(prevState => {
+        const list = prevState[param]
+        const i = list.indexOf(value)
+        const newList =
+          i === -1 ? list : [...list.slice(0, i), ...list.slice(i + 1)]
+        return {
+          ...prevState,
+          [param]: newList,
+        }
+      })
+      break
   }
-
-  return (
-    <FacetSelect
-      items={searchParams.modality_available}
-      selected={searchParams.modality_selected}
-      setSelected={setModality}
-      accordionStyle="plain"
-      label="modalities"
-      startOpen={true}
-    />
-  )
 }

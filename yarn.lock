@@ -4773,6 +4773,7 @@ __metadata:
     react-spring: ^8.0.27
     react-test-renderer: ^16.8.6
     react-toastify: 6.0.9
+    react-usestateref: ^1.0.5
     react-virtualized: "remorses/react-virtualized-fixed-import.git#9.22.3"
     resize-observer-polyfill: ^1.5.1
     rollup-plugin-polyfill-node: ^0.6.2
@@ -28420,6 +28421,15 @@ fsevents@^1.2.7:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
   checksum: e14446123f820e804335c64be5270333c29e8cfaa43dfc33387e132c5d521cf4a0a7c2408058a147b254ae82a6569f373394d83e977ef340d6937bc2f4ff7d6c
+  languageName: node
+  linkType: hard
+
+"react-usestateref@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "react-usestateref@npm:1.0.5"
+  peerDependencies:
+    react: ">16.0.0"
+  checksum: 9a37306c4862aee03488879d3593675239ff51538166893f5335f92e9f130f9c6139345de1d8aaac4df692d70f06e6e647d25fd2f1797fe992533a780318fc8b
   languageName: node
   linkType: hard
 
