@@ -39,6 +39,9 @@ export const TermSearch = ({
   iconSize,
   removeFilterItem,
 }: TermSearchProps) => {
+  const emptyOrWhitespace = /^\s*$/
+  const disabled =
+    emptyOrWhitespace.test(termValue) || allTerms.includes(termValue)
   return (
     <>
       <div className={className + ' term-input'}>
@@ -50,11 +53,11 @@ export const TermSearch = ({
           name={name}
           value={termValue}
           setValue={setTermValue}
-          onKeyDown={e => e.keyCode === 13 && pushTerm()}
+          onKeyDown={e => e.keyCode === 13 && !disabled && pushTerm()}
         />
         <Button
           primary={true}
-          disabled={termValue === ''}
+          disabled={disabled}
           color={color}
           icon={icon}
           iconSize={iconSize}
