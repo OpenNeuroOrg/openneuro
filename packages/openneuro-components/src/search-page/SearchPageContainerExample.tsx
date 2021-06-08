@@ -179,17 +179,6 @@ export const SearchPageContainerExample = ({
                 />
               </>
 
-              {!portalContent && (
-                <FacetSelect
-                  selected={modality_selected}
-                  setSelected={setModality}
-                  items={modalities}
-                  accordionStyle="plain"
-                  label="Modalities"
-                  startOpen={true}
-                  className="modality-facet"
-                />
-              )}
               <FacetRange
                 startOpen={false}
                 label="Age"

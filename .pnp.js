@@ -9405,6 +9405,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/slick-carousel", "npm:1.6.34"],
             ["@wojtekmaj/react-daterange-picker", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:3.2.0"],
             ["bytes", "npm:3.1.0"],
+            ["commafy", "npm:0.0.6"],
             ["css-loader", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:5.2.4"],
             ["date-fns", "npm:2.21.3"],
             ["md5", "npm:2.3.0"],
@@ -18580,6 +18581,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["commafy", [
+        ["npm:0.0.6", {
+          "packageLocation": "./.yarn/cache/commafy-npm-0.0.6-128d8e915e-5b9e202b43.zip/node_modules/commafy/",
+          "packageDependencies": [
+            ["commafy", "npm:0.0.6"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["command-exists", [
         ["npm:1.2.9", {
           "packageLocation": "./.yarn/cache/command-exists-npm-1.2.9-cc51a1f78a-c682ee2215.zip/node_modules/command-exists/",
@@ -25754,7 +25764,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
+          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.14.0"],
