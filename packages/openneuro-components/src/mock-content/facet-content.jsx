@@ -74,7 +74,7 @@ export const modalities = [
   },
 ]
 
-export const show_available = [
+export const datasetType_available = [
   { label: 'All', value: 'All' },
   { label: 'Following', value: 'Following' },
   { label: 'My Datasets', value: 'My Datasets' },

@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { render, screen } from '@testing-library/react'
 import { DatasetContent, HasBeenPublished } from '../dataset-content.jsx'
-import { hasEditPermissions } from '../../../authentication/profile.js'
+import { hasEditPermissions } from '../../../refactor_2021/authentication/profile.js'
 import { BrowserRouter } from 'react-router-dom'
 import cookies from '../../../utils/cookies.js'
 
@@ -101,6 +101,8 @@ describe('DatasetContent component', () => {
     // Look for some text that's always rendered
     expect(screen.getAllByText('README').pop()).toHaveTextContent('README')
     // Verify something specific to this example dataset
-    expect(screen.getAllByText('test dataset').pop()).toHaveTextContent('test dataset')
+    expect(screen.getAllByText('test dataset').pop()).toHaveTextContent(
+      'test dataset',
+    )
   })
 })

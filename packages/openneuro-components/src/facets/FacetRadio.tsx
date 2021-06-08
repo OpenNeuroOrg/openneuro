@@ -5,11 +5,16 @@ import { RadioGroup } from '../radio/RadioGroup'
 import './facet.scss'
 
 export interface FacetRadioProps {
-  radioArr: {
-    label: string
-    onChange?: React.MouseEventHandler<HTMLInputElement>
-    value: string
-  }[]
+  // if radioArr is string[]
+  // then the string items are both the label and value for the radio buttons
+  radioArr: (
+    | string
+    | {
+        label: string
+        onChange?: React.MouseEventHandler<HTMLInputElement>
+        value: string
+      }
+  )[]
   layout: string
   name: string
   accordionStyle: string

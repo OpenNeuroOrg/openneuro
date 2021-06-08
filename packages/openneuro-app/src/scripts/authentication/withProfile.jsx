@@ -1,7 +1,10 @@
 /* eslint-disable */
 import React from 'react'
 import { useCookies } from 'react-cookie'
-import { getProfile, guardExpired } from './profile.js'
+import {
+  getProfile,
+  guardExpired,
+} from '../refactor_2021/authentication/profile.js'
 
 const withProfile = WrappedComponent => {
   return props => {

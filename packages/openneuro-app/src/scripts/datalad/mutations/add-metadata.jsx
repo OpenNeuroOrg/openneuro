@@ -5,7 +5,10 @@ import { useCookies } from 'react-cookie'
 import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
+import {
+  hasEditPermissions,
+  getProfile,
+} from '../../refactor_2021/authentication/profile.js'
 import { getDatasetUrl } from '../../utils/dataset-url'
 
 export const compileMetadata = dataset => {

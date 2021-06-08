@@ -4,8 +4,8 @@ import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
 import { UserModalInner } from '../modal/UserModalInner'
-import { LandingExpandedHeader } from './LandingExpandedHeader'
 import { UserMenu } from '../user/UserMenu'
+import { LandingExpandedHeader } from './LandingExpandedHeader'
 
 import orcidIcon from '../assets/orcid_24x24.png'
 
@@ -19,6 +19,8 @@ export interface HeaderProps {
   isOpen: boolean
   toggleLogin: () => void
   toggleUpload: () => void
+  pushHistory: (path: string) => void
+  renderOnExpanded: (profile) => typeof LandingExpandedHeader
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,27 +31,34 @@ export const Header: React.FC<HeaderProps> = ({
   isOpen,
   toggleLogin,
   toggleUpload,
+  pushHistory,
+  renderOnExpanded,
 }) => {
+  const goTo = path => e => {
+    e.preventDefault()
+    pushHistory(path)
+  }
   return (
     <>
       <header>
         <div className="navbar-inner-wrap">
           <div className="navbar-brand">
-            <a href="/">
+            <a onClick={goTo('/')}>
               <Logo horizontal dark={false} />
             </a>
             <h1 className="sr-only">OpenNeuro</h1>
           </div>
           <div className="navbar-navigation">
+            {/* TODO: convert Support to trigger support modal. */}
             <ul>
               <li>
-                <a href="/">Search</a>
+                <a onClick={goTo('/search')}>Search</a>
               </li>
               <li>
-                <a href="/">Support</a>
+                <a onClick={() => {}}>Support</a>
               </li>
               <li>
-                <a href="/">FAQ</a>
+                <a onClick={goTo('/faq')}>FAQ</a>
               </li>
             </ul>
           </div>
@@ -80,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
               </>
             )}
           </div>
-          {expanded ? <LandingExpandedHeader profile={profile} /> : null}
+          {expanded ? renderOnExpanded(profile) : null}
         </div>
       </header>
       {!profile ? (

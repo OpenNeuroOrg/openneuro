@@ -1,5 +1,5 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-export const FacetBlockContainerExample = ({ children }) => {
+export const FacetBlockContainerExample: FC = ({ children }) => {
   return <>{children}</>
 }

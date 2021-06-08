@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie'
-import { getProfile } from './profile.js'
+import { getProfile } from '../refactor_2021/authentication/profile.js'
 
 export const isAdmin = () => {
   const [cookies] = useCookies()

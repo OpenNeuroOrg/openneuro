@@ -15,7 +15,7 @@ import { TermSearch } from '../input/TermSearch'
 
 import {
   modalities,
-  show_available,
+  datasetType_available,
   dataset_type,
   diagnosis_list,
   gender_list,
@@ -37,23 +37,23 @@ export const SearchPageContainerExample = ({
   portalContent,
   profile,
 }: SearchContainereProps) => {
-  const [modality, setModality] = React.useState()
-  const [datasetsType, setDatasetsType] = React.useState('All')
-  const [datasetStatus, setDatasetStatus] = React.useState()
-  const [ageRange, setAgeRange] = React.useState([null, null])
-  const [subjectRange, setSubjectRange] = React.useState([null, null])
-  const [gender, setGender] = React.useState('All')
-  const [diagnosis, setDiagnosis] = React.useState()
-  const [section, setSection] = React.useState()
-  const [species, setSpecies] = React.useState()
-  const [domain, setDomain] = React.useState()
-  const [selectedDate, setSelectedDate] = React.useState([null, null])
-  const [termValue, setTermValue] = React.useState('')
   const [allTerms, pushTerm] = React.useState([])
+  const [termValue, setTermValue] = React.useState('')
+  const [modality_selected, setModality] = React.useState()
+  const [datasetType_selected, setDatasetsType] = React.useState('All')
+  const [datasetStatus_selected, setDatasetStatus] = React.useState()
+  const [ageRange, setAgeRange] = React.useState([null, null])
+  const [subjectCountRange, setSubjectRange] = React.useState([null, null])
   const [authorValue, setAuthorValue] = React.useState('')
   const [allAuthors, pushAuthor] = React.useState([])
+  const [gender_selected, setGender] = React.useState('All')
   const [taskValue, setTaskValue] = React.useState('')
   const [allTasks, pushTask] = React.useState([])
+  const [diagnosis_selected, setDiagnosis] = React.useState()
+  const [section_selected, setSection] = React.useState()
+  const [species_selected, setSpecies] = React.useState()
+  const [studyDomain_selected, setDomain] = React.useState()
+  const [datePublicizedRange, setSelectedDate] = React.useState([null, null])
 
   const setSelectedDateValue = value =>
     setSelectedDate(value === null ? [null, null] : value)
@@ -61,17 +61,17 @@ export const SearchPageContainerExample = ({
   let filterBlockIsEmpty
 
   if (
-    modality === undefined &&
-    datasetsType === 'All' &&
-    datasetStatus === undefined &&
+    modality_selected === undefined &&
+    datasetType_selected === 'All' &&
+    datasetStatus_selected === undefined &&
     JSON.stringify(ageRange) === JSON.stringify([null, null]) &&
-    JSON.stringify(subjectRange) === JSON.stringify([null, null]) &&
-    gender === 'All' &&
-    diagnosis === undefined &&
-    section === undefined &&
-    species === undefined &&
-    domain === undefined &&
-    JSON.stringify(selectedDate) === JSON.stringify([null, null]) &&
+    JSON.stringify(subjectCountRange) === JSON.stringify([null, null]) &&
+    gender_selected === 'All' &&
+    diagnosis_selected === undefined &&
+    section_selected === undefined &&
+    species_selected === undefined &&
+    studyDomain_selected === undefined &&
+    JSON.stringify(datePublicizedRange) === JSON.stringify([null, null]) &&
     allTerms.length === 0 &&
     allTasks.length === 0 &&
     allAuthors.length === 0
@@ -92,17 +92,17 @@ export const SearchPageContainerExample = ({
                 allTerms={allTerms}
                 allAuthors={allAuthors}
                 allTasks={allTasks}
-                modality={modality}
-                datasetsType={datasetsType}
-                datasetStatus={datasetStatus}
+                modality_selected={modality_selected}
+                datasetType_selected={datasetType_selected}
+                datasetStatus_selected={datasetStatus_selected}
                 ageRange={ageRange}
-                subjectRange={subjectRange}
-                gender={gender}
-                diagnosis={diagnosis}
-                section={section}
-                species={species}
-                domain={domain}
-                selectedDate={selectedDate}
+                subjectCountRange={subjectCountRange}
+                gender_selected={gender_selected}
+                diagnosis_selected={diagnosis_selected}
+                section_selected={section_selected}
+                species_selected={species_selected}
+                studyDomain_selected={studyDomain_selected}
+                datePublicizedRange={datePublicizedRange}
               />
             ) : null}
           </>
@@ -140,7 +140,7 @@ export const SearchPageContainerExample = ({
             <FacetBlockContainerExample>
               {!portalContent && (
                 <FacetSelect
-                  selected={modality}
+                  selected={modality_selected}
                   setSelected={setModality}
                   items={modalities}
                   accordionStyle="plain"
@@ -154,30 +154,42 @@ export const SearchPageContainerExample = ({
               {/* {profile TODO hide Show && My Datasets Status if logged out */}
               <>
                 <FacetRadio
-                  radioArr={show_available}
+                  radioArr={datasetType_available}
                   layout="row"
                   name="show-datasets"
                   startOpen={true}
                   label="Show"
                   accordionStyle="plain"
-                  selected={datasetsType}
+                  selected={datasetType_selected}
                   setSelected={setDatasetsType}
                   className="dataset-status"
                 />
                 <FacetSelect
-                  selected={datasetStatus}
+                  selected={datasetStatus_selected}
                   setSelected={setDatasetStatus}
                   items={dataset_type}
                   accordionStyle="plain"
                   label="My Datasets Status"
                   startOpen={true}
                   className={
-                    datasetsType == 'My Datasets'
+                    datasetType_selected == 'My Datasets'
                       ? 'fade-in-facet'
                       : 'fade-out-facet'
                   }
                 />
               </>
+
+              {!portalContent && (
+                <FacetSelect
+                  selected={modality_selected}
+                  setSelected={setModality}
+                  items={modalities}
+                  accordionStyle="plain"
+                  label="Modalities"
+                  startOpen={true}
+                  className="modality-facet"
+                />
+              )}
               <FacetRange
                 startOpen={false}
                 label="Age"
@@ -201,11 +213,11 @@ export const SearchPageContainerExample = ({
                 dots={true}
                 pushable={5 as unknown as undefined}
                 defaultValue={[0, 20]}
-                newvalue={subjectRange}
+                newvalue={subjectCountRange}
                 setNewValue={setSubjectRange}
               />
               <FacetSelect
-                selected={diagnosis}
+                selected={diagnosis_selected}
                 setSelected={setDiagnosis}
                 items={diagnosis_list}
                 accordionStyle="plain"
@@ -253,7 +265,7 @@ export const SearchPageContainerExample = ({
                 allTerms={allAuthors}
               />
               <FacetRadio
-                selected={gender}
+                selected={gender_selected}
                 setSelected={setGender}
                 radioArr={gender_list}
                 layout="row"
@@ -266,11 +278,11 @@ export const SearchPageContainerExample = ({
                 startOpen={false}
                 label="Date"
                 accordionStyle="plain"
-                selected={selectedDate}
+                selected={datePublicizedRange}
                 setSelected={setSelectedDateValue}
               />
               <FacetSelect
-                selected={species}
+                selected={species_selected}
                 setSelected={setSpecies}
                 items={species_list}
                 accordionStyle="plain"
@@ -278,7 +290,7 @@ export const SearchPageContainerExample = ({
                 startOpen={false}
               />
               <FacetSelect
-                selected={section}
+                selected={section_selected}
                 setSelected={setSection}
                 items={section_list}
                 accordionStyle="plain"
@@ -286,7 +298,7 @@ export const SearchPageContainerExample = ({
                 startOpen={false}
               />
               <FacetSelect
-                selected={domain}
+                selected={studyDomain_selected}
                 setSelected={setDomain}
                 items={domain_list}
                 accordionStyle="plain"
