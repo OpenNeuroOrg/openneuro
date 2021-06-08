@@ -20,7 +20,7 @@ export interface FiltersBlockProps {
   species_selected?: { label: string; value: string }
   studyDomain_selected?: { label: string; value: string }
   datePublicizedRange?: [Date | null, Date | null]
-  removeFilter?(key: string, value): void
+  removeFilterItem?(key: string, value): void
   removeAllFilters?(): void
 }
 
@@ -39,7 +39,7 @@ export const FiltersBlock = ({
   species_selected,
   studyDomain_selected,
   datePublicizedRange,
-  removeFilter,
+  removeFilterItem,
   removeAllFilters,
 }: FiltersBlockProps) => {
   const _listItem = (type, item) => {
@@ -71,44 +71,113 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <ul className="active-filters">
-        {keywords && <TermListItem item={keywords} type="Keyword" />}
+        {keywords && (
+          <TermListItem
+            type="Keyword"
+            item={{ param: 'keywords', values: keywords }}
+            removeFilterItem={removeFilterItem}
+          />
+        )}
         {modality_selected && (
-          <FilterListItem item={modality_selected} type="Modality" />
+          <FilterListItem
+            type="Modality"
+            item={{ param: 'modality_selected', value: modality_selected }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {datasetType_selected && (
-          <FilterListItem item={datasetType_selected} type="Type" />
+          <FilterListItem
+            type="Type"
+            item={{
+              param: 'datasetType_selected',
+              value: datasetType_selected,
+            }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {datasetStatus_selected && (
-          <FilterListItem item={datasetStatus_selected} type="Status" />
+          <FilterListItem
+            type="Status"
+            item={{
+              param: 'datasetStatus_selected',
+              value: datasetStatus_selected,
+            }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
-        {!ageRangeIsNull && <FilterListItem item={ageRange} type="Age" />}
+        {!ageRangeIsNull && (
+          <FilterListItem
+            type="Age"
+            item={{ param: 'ageRange', value: ageRange }}
+            removeFilterItem={removeFilterItem}
+          />
+        )}
         {!subjectCountRangeIsNull && (
-          <FilterListItem item={subjectCountRange} type="Subjects" />
+          <FilterListItem
+            type="Subjects"
+            item={{ param: 'subjectCountRange', value: subjectCountRange }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
-        {authors && <TermListItem item={authors} type="Authors/PI" />}
-        {gender_selected && (
-          <FilterListItem item={gender_selected} type="Gender" />
+        {authors && (
+          <TermListItem
+            type="Authors/PI"
+            item={{ param: 'authors', values: authors }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
-        {tasks && <TermListItem item={tasks} type="Task" />}
         {gender_selected && (
-          <FilterListItem item={gender_selected} type="Gender" />
+          <FilterListItem
+            type="Gender"
+            item={{ param: 'gender_selected', value: gender_selected }}
+            removeFilterItem={removeFilterItem}
+          />
+        )}
+        {tasks && (
+          <TermListItem
+            type="Task"
+            item={{ param: 'tasks', values: tasks }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {diagnosis_selected && (
-          <FilterListItem item={diagnosis_selected} type="Diagnosis" />
+          <FilterListItem
+            type="Diagnosis"
+            item={{ param: 'diagnosis_selected', value: diagnosis_selected }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {section_selected && (
-          <FilterListItem item={section_selected} type="Section" />
+          <FilterListItem
+            type="Section"
+            item={{ param: 'section_selected', value: section_selected }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {species_selected && (
-          <FilterListItem item={species_selected} type="Species" />
+          <FilterListItem
+            type="Species"
+            item={{ param: 'species_selected', value: species_selected }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {studyDomain_selected && (
-          <FilterListItem item={studyDomain_selected} type="Domain" />
+          <FilterListItem
+            type="Domain"
+            item={{
+              param: 'studyDomain_selected',
+              value: studyDomain_selected,
+            }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
         {!dateIsNull && (
-          <FilterDateItem item={datePublicizedRange} type="Date" />
+          <FilterDateItem
+            type="Date"
+            item={{ param: 'datePublicizedRange', value: datePublicizedRange }}
+            removeFilterItem={removeFilterItem}
+          />
         )}
-
         <li>
           <Button label="Clear All" size="small" onClick={removeAllFilters} />
         </li>

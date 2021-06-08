@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx, removeFilterItem } from './search-params-ctx'
 import { FacetSearch } from '@openneuro/components'
 
 const TaskInput: FC = () => {
@@ -26,7 +26,7 @@ const TaskInput: FC = () => {
       type="text"
       placeholder="eg. something here"
       labelStyle="default"
-      name="default-example"
+      name="tasks"
       termValue={newTask}
       setTermValue={setNewTask}
       primary={true}
@@ -36,6 +36,7 @@ const TaskInput: FC = () => {
       size="small"
       pushTerm={addTask}
       allTerms={tasks}
+      removeFilterItem={removeFilterItem(setSearchParams)}
     />
   )
 }

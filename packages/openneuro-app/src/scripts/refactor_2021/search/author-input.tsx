@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx, removeFilterItem } from './search-params-ctx'
 import { FacetSearch } from '@openneuro/components'
 
 const AuthorInput: FC = () => {
@@ -26,7 +26,7 @@ const AuthorInput: FC = () => {
       type="text"
       placeholder="eg. something here"
       labelStyle="default"
-      name="default-example"
+      name="authors"
       termValue={newAuthor}
       setTermValue={setNewAuthor}
       primary={true}
@@ -36,6 +36,7 @@ const AuthorInput: FC = () => {
       size="small"
       pushTerm={addAuthor}
       allTerms={authors}
+      removeFilterItem={removeFilterItem(setSearchParams)}
     />
   )
 }

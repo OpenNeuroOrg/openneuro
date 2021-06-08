@@ -1,11 +1,21 @@
 import React from 'react'
 
-export interface TermListItemProps {
-  item: string[]
-  type?: string
+type Item = {
+  param: string
+  values: string[]
 }
-export const TermListItem = ({ item, type }: TermListItemProps) => {
-  if (item.length === 0) {
+
+export interface TermListItemProps {
+  item: Item
+  type?: string
+  removeFilterItem?(param, value): void
+}
+export const TermListItem = ({
+  item,
+  type,
+  removeFilterItem = () => {},
+}: TermListItemProps) => {
+  if (item.values.length === 0) {
     return null
   } else {
     return (
@@ -13,11 +23,13 @@ export const TermListItem = ({ item, type }: TermListItemProps) => {
         <li className="search-term-list">
           <strong className="terms-heading">{type}:</strong>
           <ul>
-            {item.map((items, index) => (
+            {item.values.map((term, index) => (
               <li key={index}>
                 <span>
-                  {items}
-                  <span>&times;</span>
+                  {term}
+                  <span onClick={() => removeFilterItem(item.param, term)}>
+                    &times;
+                  </span>
                 </span>
               </li>
             ))}

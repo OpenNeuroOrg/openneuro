@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx, removeFilterItem } from './search-params-ctx'
 import { TermSearch } from '@openneuro/components'
 
 const KeywordInput: FC = () => {
@@ -24,7 +24,7 @@ const KeywordInput: FC = () => {
       label="Keyword"
       placeholder="eg. something here"
       labelStyle="default"
-      name="default-example"
+      name="keywords"
       termValue={newKeyword}
       setTermValue={setNewKeyword}
       primary={true}
@@ -34,6 +34,7 @@ const KeywordInput: FC = () => {
       size="small"
       pushTerm={addKeyword}
       allTerms={keywords}
+      removeFilterItem={removeFilterItem(setSearchParams)}
     />
   )
 }

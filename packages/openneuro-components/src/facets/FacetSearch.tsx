@@ -10,7 +10,7 @@ export interface FacetSearchProps {
   label: string
   dropdown?: boolean
   setTermValue: (string) => void
-  pushTerm: (string) => void
+  pushTerm: () => void
   allTerms: string[]
   className?: string
   type?: string
@@ -23,6 +23,7 @@ export interface FacetSearchProps {
   icon?: string
   iconSize?: string
   size?: string
+  removeFilterItem?(param, value): void
 }
 
 export const FacetSearch = ({
@@ -43,6 +44,7 @@ export const FacetSearch = ({
   icon,
   size,
   iconSize,
+  removeFilterItem,
 }: FacetSearchProps) => {
   return (
     <AccordionWrap className="facet-accordion">
@@ -68,6 +70,7 @@ export const FacetSearch = ({
             termValue={termValue}
             setTermValue={setTermValue}
             allTerms={allTerms}
+            removeFilterItem={removeFilterItem}
           />
         </div>
       </AccordionTab>

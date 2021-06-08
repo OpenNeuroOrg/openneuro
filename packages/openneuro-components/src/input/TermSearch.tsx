@@ -19,6 +19,7 @@ export interface TermSearchProps {
   icon?: string
   iconSize?: string
   size?: string
+  removeFilterItem?(param, value): void
 }
 
 export const TermSearch = ({
@@ -36,6 +37,7 @@ export const TermSearch = ({
   icon,
   size,
   iconSize,
+  removeFilterItem,
 }: TermSearchProps) => {
   return (
     <>
@@ -63,11 +65,13 @@ export const TermSearch = ({
       {allTerms.length ? (
         <div className="term-block">
           <ul className="active-search-terms">
-            {allTerms.map((item, index) => (
+            {allTerms.map((term, index) => (
               <li key={index}>
                 <span>
-                  {item}
-                  <span>&times;</span>
+                  {term}
+                  <span onClick={() => removeFilterItem(name, term)}>
+                    &times;
+                  </span>
                 </span>
               </li>
             ))}
