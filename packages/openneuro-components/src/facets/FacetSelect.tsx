@@ -62,7 +62,9 @@ export const FacetSelect = ({
                   }>
                   <span className="label">
                     {get(item, 'label')}
-                    {check(item, 'count') && <span>({check(item, 'count')})</span>}
+                    {check(item, 'count') && (
+                      <span>({check(item, 'count')})</span>
+                    )}
                   </span>
                   {check(item, 'children') && (
                     <ul className="level-2">
@@ -100,32 +102,38 @@ export const FacetSelect = ({
                 {items.map((item, index) => (
                   <li
                     key={index}
-                    onClick={e => setSelectorNoPropagation(e, item.value)}
+                    onClick={e =>
+                      setSelectorNoPropagation(e, get(item, 'value'))
+                    }
                     className={
-                      selected && selected == item.value
+                      selected && selected == get(item, 'value')
                         ? 'selected-facet facet'
                         : 'facet'
                     }>
                     <span className="label">
-                      {item.label}
-                      {item.count && <span>({item.count})</span>}
+                      {get(item, 'label')}
+                      {check(item, 'count') && (
+                        <span>({get(item, 'count')})</span>
+                      )}
                     </span>
-                    {item.children && (
+                    {check(item, 'children') && (
                       <ul className="level-2">
-                        {item.children.map((item, index) => (
+                        {get(item, 'children').map((item, index) => (
                           <li
                             key={index}
                             onClick={e =>
-                              setSelectorNoPropagation(e, item.value)
+                              setSelectorNoPropagation(e, get(item, 'value'))
                             }
                             className={
-                              selected && selected == item.value
+                              selected && selected == get(item, 'value')
                                 ? 'selected-facet facet'
                                 : 'facet'
                             }>
                             <span className="label">
-                              {item.label}
-                              {item.count && <span>({item.count})</span>}
+                              {get(item, 'label')}
+                              {check(item, 'count') && (
+                                <span>({get(item, 'count')})</span>
+                              )}
                             </span>
                           </li>
                         ))}

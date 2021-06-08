@@ -10,7 +10,6 @@ import {
   Button,
   FacetBlockContainerExample,
   SearchSortContainerExample,
-  KeywordInputContainerExample,
 } from '@openneuro/components'
 import FiltersBlockContainer from './filters-block-container'
 import KeywordInput from './keyword-input'

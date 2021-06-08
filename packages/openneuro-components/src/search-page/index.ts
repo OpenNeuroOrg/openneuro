@@ -6,4 +6,3 @@ export * from './SearchPage'
 // TODO: remove
 export * from './FacetBlockContainerExample'
 export * from './SearchSortContainerExample'
-export * from './KeywordInputContainerExample'

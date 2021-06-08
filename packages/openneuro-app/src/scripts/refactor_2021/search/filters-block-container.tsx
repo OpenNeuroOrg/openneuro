@@ -67,6 +67,9 @@ const FiltersBlockContainer: FC = () => {
       removeFilter={removeFilter}
       removeAllFilters={removeAllFilters}
       {...selectedParams}
+      allTerms={[]}
+      allAuthors={[]}
+      allTasks={[]}
     />
   ) : null
 }
