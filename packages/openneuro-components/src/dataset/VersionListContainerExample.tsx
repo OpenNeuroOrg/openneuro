@@ -6,16 +6,19 @@ export const VersionListContainerExample = ({
   className,
   activeDataset,
   dateModified,
+  selectedVersion,
+  setSelectedVersion,
+  setDeprecatedModalIsOpen,
 }) => {
-  const [selected, setSelected] = React.useState(activeDataset)
   return (
     <VersionList
       className={className}
       items={items}
-      selected={selected}
-      setSelected={setSelected}
+      selected={selectedVersion}
+      setSelected={setSelectedVersion}
       activeDataset={activeDataset}
       dateModified={dateModified}
+      setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
     />
   )
 }

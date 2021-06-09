@@ -1,3 +1,26 @@
+@import '../scss/variables';
+
+.version-dropdown {
+  .toggle {
+    .fas {
+      margin-left: 5px;
+    }
+    .fa-chevron-up {
+      display: none;
+    }
+    .fa-chevron-down {
+      display: inline;
+    }
+    &.active {
+      .fa-chevron-up {
+        display: inline;
+      }
+      .fa-chevron-down {
+        display: none;
+      }
+    }
+  }
+}
 .version-list-dropdow {
   ul {
     font-size: 14px;
@@ -10,10 +33,19 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #ddd;
-      span span {
-        color: red;
-        font-weight: 300;
-        padding-left: 15px;
+      &.selected {
+        background-color: #f4f4f4;
+      }
+      span {
+        .active {
+          color: $on-light-green;
+          margin-left: 5px;
+        }
+        .deprecated {
+          color: $on-light-red;
+          font-weight: 300;
+          padding-left: 15px;
+        }
       }
     }
   }

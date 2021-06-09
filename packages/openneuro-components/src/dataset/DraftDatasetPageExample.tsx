@@ -1,6 +1,8 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
+import { Modal } from '../modal/Modal'
+
 import bytes from 'bytes'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
@@ -34,6 +36,10 @@ export const DraftDatasetPageExample = ({
 }: DraftDatasetPageExampleProps) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
+
+  const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
+  const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
+    React.useState(false)
 
   const snapshots = dataset.snapshots
 
@@ -110,6 +116,9 @@ export const DraftDatasetPageExample = ({
                     className="version-dropdown"
                     activeDataset={activeDataset}
                     dateModified={dateModified}
+                    selectedVersion={selectedVersion}
+                    setSelectedVersion={setSelectedVersion}
+                    setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
                   />
                 </div>
               }
@@ -341,6 +350,16 @@ export const DraftDatasetPageExample = ({
           />
         )}
       />
+      <Modal
+        isOpen={deprecatedmodalIsOpen}
+        toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
+        closeText={'close'}
+        className="deprecated-modal">
+        <p>
+          You have selected a deprecated version. The author of the dataset does
+          not recommend this specific version.
+        </p>
+      </Modal>
     </>
   )
 }

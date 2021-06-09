@@ -7,7 +7,8 @@ export interface ModalProps {
   children?: React.ReactNode
   isOpen?: boolean
   toggle?: () => void
-  closeText: string
+  closeText?: string
+  className?: string
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -15,11 +16,11 @@ export const Modal: React.FC<ModalProps> = ({
   isOpen,
   toggle,
   closeText,
-  ...props
+  className,
 }) => {
   const showModal = isOpen ? 'show-modal' : 'hide-modal'
   return (
-    <div className={'modal-wrapper ' + showModal} {...props}>
+    <div className={'modal-wrapper ' + showModal + ' ' + className}>
       <div className="overlay" onClick={toggle}></div>
 
       <div className="grid modal">
