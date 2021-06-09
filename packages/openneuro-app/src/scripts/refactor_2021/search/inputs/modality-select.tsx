@@ -20,6 +20,8 @@ const ModalitySelect: FC = () => {
       accordionStyle="plain"
       label="Modalities"
       startOpen={true}
+      className="modality-facet"
+      noAccordion={true}
     />
   )
 }
