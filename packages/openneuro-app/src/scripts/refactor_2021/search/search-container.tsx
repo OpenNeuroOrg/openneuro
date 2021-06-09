@@ -72,7 +72,7 @@ const SearchContainer: FC = () => {
       )}
       renderSearchResultsList={() =>
         loading ? (
-          <h1>Datasets loading placeholder</h1>
+          resultsList.length !== 0 && <>Datasets loading placeholder</>
         ) : (
           <h1>
             <SearchResultsList items={resultsList} profile={profile} />
@@ -82,9 +82,11 @@ const SearchContainer: FC = () => {
                 Showing <b>{numResultsShown}</b> of <b>{numTotalResults}</b>{' '}
                 Datasets
               </div>
-              <div className="col col-12 load-more ">
-                <Button label="Load More" />
-              </div>
+              {resultsList.length == 0 || resultsList.length < 25 ? null : (
+                <div className="col col-12 load-more ">
+                  <Button label="Load More" />
+                </div>
+              )}
             </div>
           </h1>
         )
