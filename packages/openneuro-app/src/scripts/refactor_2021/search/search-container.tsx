@@ -37,15 +37,11 @@ const SearchContainer: FC = () => {
       renderFilterBlock={() => <FiltersBlockContainer />}
       renderSortBy={() => (
         <>
-          <div className="col">
-            <b>
-              100 Datasets found for "<span>Forrest Gump</span>"
-            </b>
+          <div className="col results-count">
+            Showing <b>25</b> of <b>100</b> Datasets
           </div>
-          <div className="col">
-            <div className="search-sort">
-              <SearchSortContainerExample items={sortBy} />
-            </div>
+          <div className="col search-sort">
+            <SearchSortContainerExample items={sortBy} />
           </div>
         </>
       )}
@@ -74,7 +70,8 @@ const SearchContainer: FC = () => {
             <SearchResultsList items={data?.datasets.edges} profile={profile} />
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
               <div className="col col-12 results-count">
-                Showing <b>25</b> of <b>100</b> Datasets
+                Showing <b>{data.datasets.pageInfo.count}</b> of{' '}
+                <b>[NUM_PLACEHOLDER]</b> Datasets
               </div>
               <div className="col col-12 load-more ">
                 <Button label="Load More" />
