@@ -1,21 +1,21 @@
 import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetRange } from '@openneuro/components'
 
-const AgeRangeInput: FC = () => {
+const SubjectCountRangeInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
-  const ageRange = searchParams.ageRange
-  const setAgeRange = ageRange =>
+  const subjectCountRange = searchParams.subjectCountRange
+  const setSubjectRange = subjectCountRange =>
     setSearchParams(prevState => ({
       ...prevState,
-      ageRange,
+      subjectCountRange,
     }))
 
   return (
     <FacetRange
       startOpen={false}
-      label="Age"
+      label="Number of Subjects"
       accordionStyle="plain"
       min={0}
       max={100}
@@ -23,10 +23,10 @@ const AgeRangeInput: FC = () => {
       dots={true}
       pushable={5 as unknown as undefined}
       defaultValue={[0, 20]}
-      newvalue={ageRange}
-      setNewValue={setAgeRange}
+      newvalue={subjectCountRange}
+      setNewValue={setSubjectRange}
     />
   )
 }
 
-export default AgeRangeInput
+export default SubjectCountRangeInput

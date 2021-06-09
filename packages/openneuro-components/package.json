@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "browser": "src/index.js",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./page/page.scss": "./src/page/page.scss"
   },
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
@@ -22,6 +23,7 @@
     "react": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-slick": "^0.28.1",
+    "react-usestateref": "^1.0.5",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 export * from './SearchResultsList'
 export * from './FiltersBlock'
 export * from './SearchPage'
+export * from './SearchSort'
 
 /* TEMPORARY EXPORTS */
 // TODO: remove

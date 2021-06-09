@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetSelect } from '@openneuro/components'
 
 const ModalitySelect: FC = () => {
@@ -20,6 +20,8 @@ const ModalitySelect: FC = () => {
       accordionStyle="plain"
       label="Modalities"
       startOpen={true}
+      className="modality-facet"
+      noAccordion={true}
     />
   )
 }

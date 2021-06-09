@@ -4,15 +4,24 @@
     "created": { "type": "date" },
     "metadata": {
       "properties": {
+        "datasetName": { "type": "keyword" },
+        "datasetUrl": { "type": "keyword" },
+        "dataProcessed": { "type": "boolean" },
+        "firstSnapshotCreatedAt": { "type": "date" },
+        "latestSnapshotCreatedAt": { "type": "date" },
+        "ages": { "type": "float" },
+        "modalities": { "type": "keyword" },
+        "datasetId": { "type": "keyword" },
         "dxStatus": { "type": "keyword" },
         "trialCount": { "type": "long" },
+        "tasksCompleted": { "type": "keyword" },
         "studyDesign": { "type": "keyword" },
         "studyDomain": { "type": "keyword" },
         "studyLongitudinal": { "type": "keyword" },
-        "dataProcessed": { "type": "keyword" },
         "species": { "type": "keyword" },
         "associatedPaperDOI": { "type": "keyword" },
         "openneuroPaperDOI": { "type": "keyword" },
+        "seniorAuthor": { "type": "keyword" },
         "grantFunderName": { "type": "keyword" },
         "grantIdentifier": { "type": "keyword" }
       }

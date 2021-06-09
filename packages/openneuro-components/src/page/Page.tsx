@@ -18,7 +18,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
     <>
       <article className={className}>
         <Header
-          user={headerArgs.user}
+          profile={headerArgs.user}
           onLogin={headerArgs.onLogin}
           onLogout={headerArgs.onLogout}
           onCreateAccount={headerArgs.onCreateAccount}
