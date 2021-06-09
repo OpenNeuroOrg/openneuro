@@ -119,25 +119,23 @@ export const useSearchResults = () => {
   if (modality_selected)
     qStrings.push(`metadata.modalities: ${modality_selected}`)
   if (isActiveRange(ageRange))
-    qStrings.push(
-      `latestSnapshot.summary.subjectMetadata.age: ${range(ageRange)}`,
-    )
+    qStrings.push(`metadata.ages: ${range(ageRange)}`)
   if (isActiveRange(subjectCountRange)) {
   } // TODO: https://discuss.elastic.co/t/painless-check-length-field-in-each-object-of-array/161699
-  if (diagnosis_selected) {
-  } // TODO: indexer (dsStatus)
+  if (diagnosis_selected)
+    qStrings.push(`metadata.dsStatus: ${diagnosis_selected}`)
   if (tasks.length)
-    qStrings.push(`latestSnapshot.summary.tasks: ${range(ageRange)}`)
-  if (authors.length) {
-  } // TODO: indexer (seniorAuthor)
+    qStrings.push(`latestSnapshot.summary.tasks: ${joinWithAND(tasks)}`)
+  if (authors.length)
+    qStrings.push(`metadata.seniorAuthor: ${joinWithAND(authors)}`)
   if (gender_selected)
     qStrings.push(
       `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
     )
   if (datePublicizedRange) qStrings.push(`created:${datePublicizedRange}`)
   if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
-  if (section_selected) {
-  } //TODO: indexer (studyLongitudinal)
+  if (section_selected)
+    qStrings.push(`metadata.studyLongitudinal: ${section_selected}`)
   if (studyDomain_selected)
     qStrings.push(`metadata.studyDomain: ${species_selected}`)
 
