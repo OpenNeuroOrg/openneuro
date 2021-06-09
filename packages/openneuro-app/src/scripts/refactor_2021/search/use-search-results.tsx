@@ -85,7 +85,10 @@ const searchQuery = gql`
 
 const joinWithAND = (list: string[]) =>
   list.map(str => `(${str})`).join(' AND ')
-const range = ([min, max]) => `[${min} TO ${max}]`
+const isActiveRange = range =>
+  JSON.stringify(range) !== JSON.stringify([null, null])
+const range = ([min, max]) =>
+  `[${min === null ? '*' : min} TO ${max === null ? '*' : max}]`
 
 export const useSearchResults = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -108,7 +111,37 @@ export const useSearchResults = () => {
   } = searchParams
 
   const qStrings = []
-  if (keywords) qStrings.push(joinWithAND(keywords))
+  if (keywords.length) qStrings.push(joinWithAND(keywords))
+  if (datasetType_selected) {
+  } // TODO: gql resolver level
+  if (datasetStatus_selected) {
+  } // TODO: gql resolver level
+  if (modality_selected)
+    qStrings.push(`metadata.modalities: ${modality_selected}`)
+  if (isActiveRange(ageRange))
+    qStrings.push(
+      `latestSnapshot.summary.subjectMetadata.age: ${range(ageRange)}`,
+    )
+  if (isActiveRange(subjectCountRange)) {
+  } // TODO: https://discuss.elastic.co/t/painless-check-length-field-in-each-object-of-array/161699
+  if (diagnosis_selected) {
+  } // TODO: indexer (dsStatus)
+  if (tasks.length)
+    qStrings.push(`latestSnapshot.summary.tasks: ${range(ageRange)}`)
+  if (authors.length) {
+  } // TODO: indexer (seniorAuthor)
+  if (gender_selected)
+    qStrings.push(
+      `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
+    )
+  if (datePublicizedRange) qStrings.push(`created:${datePublicizedRange}`)
+  if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
+  if (section_selected) {
+  } //TODO: indexer (studyLongitudinal)
+  if (studyDomain_selected)
+    qStrings.push(`metadata.studyDomain: ${species_selected}`)
+
+  // qStrings.push('id: (ds001120) OR (ds001113)')
 
   const qString = joinWithAND(qStrings)
   console.log(qString)
