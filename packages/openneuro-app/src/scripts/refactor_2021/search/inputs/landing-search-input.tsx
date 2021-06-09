@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import { Input } from '@openneuro/components'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx } from '../search-params-ctx'
 
 const LandingSearchInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

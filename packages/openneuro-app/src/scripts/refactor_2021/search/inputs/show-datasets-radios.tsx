@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetRadio, FacetSelect } from '@openneuro/components'
 
 const ShowDatasetsRadios: FC = () => {

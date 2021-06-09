@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Header, LandingExpandedHeader } from '@openneuro/components'
 import { FrontFacetExample } from '@openneuro/components'
-import LandingSearchInput from '../search/landing-search-input'
+import LandingSearchInput from '../search/inputs/landing-search-input'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../authentication/profile'
@@ -14,7 +14,6 @@ const HeaderContainer: FC = () => {
 
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
-
   return (
     <Header
       profile={profile}
