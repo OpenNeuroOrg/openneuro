@@ -1,8 +1,13 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetRadio, FacetSelect } from '@openneuro/components'
+import { useCookies } from 'react-cookie'
+import { getUnexpiredProfile } from '../../authentication/profile'
 
 const ShowDatasetsRadios: FC = () => {
+  const [cookies] = useCookies()
+  const loggedOut = !getUnexpiredProfile(cookies)
+
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const {
@@ -22,7 +27,7 @@ const ShowDatasetsRadios: FC = () => {
       datasetStatus_selected,
     }))
 
-  return (
+  return loggedOut ? null : (
     <>
       <FacetRadio
         radioArr={datasetType_available}

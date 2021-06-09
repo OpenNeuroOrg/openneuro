@@ -151,7 +151,6 @@ export const SearchPageContainerExample = ({
                 />
               )}
 
-              {/* {profile TODO hide Show && My Datasets Status if logged out */}
               <>
                 <FacetRadio
                   radioArr={datasetType_available}
