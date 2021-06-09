@@ -21,6 +21,7 @@ export interface DraftDatasetPageExampleProps {
 }
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
+
 // Helper function for getting version from URL
 
 const snapshotVersion = location => {
@@ -46,12 +47,10 @@ export const DraftDatasetPageExample = ({
     ? `/datasets/${datasetId}/versions/${activeDataset}`
     : `/datasets/${datasetId}`
 
-  const arrayToMarkdown = arr => {
-    return arr ? arr.map(element => ` * ${element}\n`).join('') : ''
-  }
   const goToToolPath = (history, rootPath, path) => {
     history.push(`${rootPath}/${path}`)
   }
+
   const goToBrainlife = datasetId => {
     window.open(`https://brainlife.io/openneuro/${datasetId}`, '_blank')
   }
@@ -109,6 +108,8 @@ export const DraftDatasetPageExample = ({
                   <VersionListContainerExample
                     items={snapshots}
                     className="version-dropdown"
+                    activeDataset={activeDataset}
+                    dateModified={dateModified}
                   />
                 </div>
               }

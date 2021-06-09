@@ -12,6 +12,7 @@
     z-index: 9999;
     right: 0;
     background-color: #fff;
+    border-radius: $border-radius-default;
     &.expanded {
       height: auto;
     }

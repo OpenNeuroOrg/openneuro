@@ -1,0 +1,23 @@
+.version-list-dropdow {
+  ul {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    li {
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      span span {
+        color: red;
+        font-weight: 300;
+        padding-left: 15px;
+      }
+    }
+  }
+  .label {
+    font-weight: 600;
+  }
+}
