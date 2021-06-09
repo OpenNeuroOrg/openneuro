@@ -12,18 +12,24 @@ import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
 // downside to this approach is that the first SSR paint has no styles
 // might be better to do the class on body
 const MainStyles = lazy(() => import('../sass/MainStyles'))
+const MainStyles_REFACTOR = lazy(() =>
+  import('./refactor_2021/styles/MainStyles'),
+)
 
 const Index = () => {
   return (
     <FeatureToggle
       feature="redesign-2021"
       renderOnEnabled={() => (
-        <Uploader>
-          <SearchParamsProvider>
-            <HeaderContainer />
-            <Routes_REFACTOR />
-          </SearchParamsProvider>
-        </Uploader>
+        <>
+          <Suspense fallback={<></>}>{<MainStyles_REFACTOR />}</Suspense>
+          <Uploader>
+            <SearchParamsProvider>
+              <HeaderContainer />
+              <Routes_REFACTOR />
+            </SearchParamsProvider>
+          </Uploader>
+        </>
       )}
       renderOnDisabled={() => (
         <>

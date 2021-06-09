@@ -33,6 +33,9 @@ const HeaderContainer: FC = () => {
   return (
     <Header
       profile={profile}
+      onLogin={() => {}}
+      onLogout={() => {}}
+      onCreateAccount={() => {}}
       expanded={expanded}
       pushHistory={history.push}
       renderOnExpanded={profile => (
