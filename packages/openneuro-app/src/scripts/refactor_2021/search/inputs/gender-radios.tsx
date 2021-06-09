@@ -19,7 +19,7 @@ const GenderRadios: FC = () => {
       radioArr={gender_available}
       layout="row"
       name="Gender"
-      startOpen={true}
+      startOpen={false}
       label="Gender"
       accordionStyle="plain"
     />
