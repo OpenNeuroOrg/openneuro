@@ -27,11 +27,10 @@ export const Dropdown = ({ children, label, className }: DropdownProps) => {
   removeIsOpen(wrapperRef)
 
   return (
-    <div
-      className={className + ' dropdown-wrapper'}
-      ref={wrapperRef}
-      onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)}>
-      <div className={`toggle ${isOpen ? 'active' : ''}`}>
+    <div className={className + ' dropdown-wrapper'} ref={wrapperRef}>
+      <div
+        className={`toggle ${isOpen ? 'active' : ''}`}
+        onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)}>
         <span>{label}</span>
       </div>
       <div className={`menu ${isOpen ? 'expanded' : 'collapsed'}`}>
