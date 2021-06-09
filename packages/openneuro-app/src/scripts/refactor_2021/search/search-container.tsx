@@ -33,8 +33,9 @@ const SearchContainer: FC = () => {
   const { loading, data, fetchMore, refetch, variables, error } =
     useSearchResults()
 
-  const numResultsShown = data?.datasets.edges.length || 0
-  const numTotalResults = data?.datasets.pageInfo.count
+  const numResultsShown = data?.datasets?.edges.length || 0
+  const numTotalResults = data?.datasets?.pageInfo.count || 0
+  const resultsList = data?.datasets?.edges || []
 
   return (
     <SearchPage
@@ -74,7 +75,7 @@ const SearchContainer: FC = () => {
           <h1>Datasets loading placeholder</h1>
         ) : (
           <h1>
-            <SearchResultsList items={data?.datasets.edges} profile={profile} />
+            <SearchResultsList items={resultsList} profile={profile} />
             {/* TODO: make div below into display component. */}
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
               <div className="col col-12 results-count">

@@ -82,12 +82,40 @@ const searchQuery = gql`
     }
   }
 `
+
+const joinWithAND = (list: string[]) =>
+  list.map(str => `(${str})`).join(' AND ')
+const range = ([min, max]) => `[${min} TO ${max}]`
+
 export const useSearchResults = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
+  const {
+    keywords,
+    datasetType_selected,
+    datasetStatus_selected,
+    modality_selected,
+    ageRange,
+    subjectCountRange,
+    diagnosis_selected,
+    tasks,
+    authors,
+    gender_selected,
+    datePublicizedRange,
+    species_selected,
+    section_selected,
+    studyDomain_selected,
+    sortBy_selected,
+  } = searchParams
+
+  const qStrings = []
+  if (keywords) qStrings.push(joinWithAND(keywords))
+
+  const qString = joinWithAND(qStrings)
+  console.log(qString)
 
   return useQuery(searchQuery, {
     variables: {
-      q: 'FSL',
+      q: qString,
     },
     errorPolicy: 'ignore',
   })
