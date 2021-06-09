@@ -1,4 +1,5 @@
 import React from 'react'
+import useState from 'react-usestateref'
 import { FacetBlockContainerExample } from './FacetBlockContainerExample'
 import { SearchResultsList } from './SearchResultsList'
 import { FiltersBlock } from './FiltersBlock'
@@ -37,8 +38,11 @@ export const SearchPageContainerExample = ({
   portalContent,
   profile,
 }: SearchContainereProps) => {
-  const [allKeywords, pushKeyword] = React.useState([])
-  const [keywordValue, setKeywordValue] = React.useState('')
+  const [keywordValue, setKeywordValue, keywordValueRef] = useState('')
+  const [allKeywords, setAllKeywords] = React.useState([])
+  const pushKeyword = () => {
+    setAllKeywords(prevState => [...prevState, keywordValueRef.current])
+  }
   const [modality_selected, setModality] = React.useState()
   const [datasetType_selected, setDatasetsType] = React.useState('All')
   const [datasetStatus_selected, setDatasetStatus] = React.useState()

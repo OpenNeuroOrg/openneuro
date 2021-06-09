@@ -23,6 +23,7 @@
     "react": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-slick": "^0.28.1",
+    "react-usestateref": "^1.0.5",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
