@@ -128,11 +128,12 @@ export const useSearchResults = () => {
     qStrings.push(`latestSnapshot.summary.tasks: ${joinWithAND(tasks)}`)
   if (authors.length)
     qStrings.push(`metadata.seniorAuthor: ${joinWithAND(authors)}`)
-  if (gender_selected)
+  if (gender_selected !== 'All')
     qStrings.push(
       `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
     )
-  if (datePublicizedRange) qStrings.push(`created:${datePublicizedRange}`)
+  if (isActiveRange(datePublicizedRange))
+    qStrings.push(`created:${datePublicizedRange}`)
   if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
   if (section_selected)
     qStrings.push(`metadata.studyLongitudinal: ${section_selected}`)
