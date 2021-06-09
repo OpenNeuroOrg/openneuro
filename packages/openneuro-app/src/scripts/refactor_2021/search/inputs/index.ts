@@ -11,6 +11,7 @@ import DateRangeInput from './date-range-input'
 import SpeciesSelect from './species-select'
 import SectionSelect from './section-select'
 import StudyDomainSelect from './study-domain-select'
+import SortBySelect from './sort-by-select'
 
 export {
   KeywordInput,
@@ -26,4 +27,5 @@ export {
   SpeciesSelect,
   SectionSelect,
   StudyDomainSelect,
+  SortBySelect,
 }

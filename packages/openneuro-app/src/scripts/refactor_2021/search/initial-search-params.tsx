@@ -1,3 +1,5 @@
+import { sortBy } from '@openneuro/components'
+
 const datasetType_available = [
   { label: 'All', value: 'All' },
   { label: 'Following', value: 'Following' },
@@ -118,6 +120,8 @@ interface SearchParams {
   section_selected: string | null
   studyDomain_available: string[]
   studyDomain_selected: string | null
+  sortBy_available
+  sortBy_selected
 }
 
 // TODO: move to this initial state
@@ -146,6 +150,8 @@ const initialSearchParams: SearchParams = {
   section_selected: null,
   studyDomain_available: [],
   studyDomain_selected: null,
+  sortBy_available: sortBy,
+  sortBy_selected: sortBy[0],
 }
 
 // TODO: delete and move to dynamically loaded initialSearchParams
@@ -173,6 +179,8 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   section_selected: null,
   studyDomain_available: ['a', 'b', 'c'],
   studyDomain_selected: null,
+  sortBy_available: sortBy,
+  sortBy_selected: sortBy[0],
 }
 
 export default TEMPORARY_initialSearchParams
