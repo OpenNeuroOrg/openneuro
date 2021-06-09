@@ -108,9 +108,6 @@ export const DraftDatasetPageExample = ({
               heading="Versions"
               item={
                 <div className="version-block">
-                  <div className="active-version">
-                    <div>todo active version</div>Updated: active version date
-                  </div>
                   <VersionListContainerExample
                     items={snapshots}
                     className="version-dropdown"

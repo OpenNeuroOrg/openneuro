@@ -31,12 +31,24 @@ export const VersionList = ({
   dateModified,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
-  const deprecatedItem = itemId => {
+  const [date, setDate] = React.useState()
+  const deprecatedItem = (itemTag, itemCreated) => {
     setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)
-    setSelected(itemId)
+    setSelected(itemTag)
+    setDate(formatDate(itemCreated))
   }
+  const setVersion = (itemTag, itemCreated) => {
+    setSelected(itemTag)
+    setDate(formatDate(itemCreated))
+  }
+
   return (
     <>
+      <div className="active-version">
+        <div>{selected === 'draft' ? 'Draft' : selected}</div>
+        {selected === 'draft' ? 'Updated' : 'Created'}:{' '}
+        {selected === 'draft' ? dateModified : 'version date'}
+      </div>
       <Dropdown
         className={className}
         label={
@@ -50,33 +62,33 @@ export const VersionList = ({
           <div className="version-list-dropdow">
             <ul>
               <li
-                onClick={() => setSelected('draft')}
+                onClick={() => setVersion('draft', dateModified)}
                 className={selected === 'draft' && 'selected'}>
                 <span className="label">
-                  Draft{' '}
+                  Draft
                   <span className="active">{selected === 'draft' && '*'}</span>
-                </span>{' '}
-                {dateModified}
+                </span>
+                {date}
               </li>
               {items.map((item, index) => (
                 <li
                   key={index}
                   onClick={
                     item.deprecated == true
-                      ? () => deprecatedItem(item.id)
-                      : () => setSelected(item.id)
+                      ? () => deprecatedItem(item.tag, item.created)
+                      : () => setVersion(item.tag, formatDate(item.created))
                   }
-                  className={selected === item.id && 'selected'}>
+                  className={selected === item.tag && 'selected'}>
                   <span className="label">
                     v{item.tag}
                     <span className="active">
-                      {selected === item.id && '*'}
+                      {selected === item.tag && '*'}
                     </span>
                     <span className="deprecated">
                       {item.deprecated == true && 'Deprecated'}
                     </span>
                   </span>
-                  {formatDate(item.created)}
+                  {date}
                 </li>
               ))}
             </ul>
