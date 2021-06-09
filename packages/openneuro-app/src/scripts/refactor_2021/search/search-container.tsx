@@ -33,6 +33,9 @@ const SearchContainer: FC = () => {
   const { loading, data, fetchMore, refetch, variables, error } =
     useSearchResults()
 
+  const numResultsShown = data?.datasets.edges.length || 0
+  const numTotalResults = data?.datasets.pageInfo.count
+
   return (
     <SearchPage
       renderFilterBlock={() => <FiltersBlockContainer />}
@@ -40,7 +43,7 @@ const SearchContainer: FC = () => {
         <>
           {/* TODO: Make div.results-count into display component. */}
           <div className="col results-count">
-            Showing <b>{data?.datasets.pageInfo.count || 0}</b> of <b>[###]</b>{' '}
+            Showing <b>{numResultsShown}</b> of <b>{numTotalResults}</b>{' '}
             Datasets
           </div>
           {/* TODO: move wrapper div.col.search-sort into <SearchSort/> */}
@@ -75,7 +78,7 @@ const SearchContainer: FC = () => {
             {/* TODO: make div below into display component. */}
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
               <div className="col col-12 results-count">
-                Showing <b>{data?.datasets.pageInfo.count}</b> of <b>[###]</b>{' '}
+                Showing <b>{numResultsShown}</b> of <b>{numTotalResults}</b>{' '}
                 Datasets
               </div>
               <div className="col col-12 load-more ">
