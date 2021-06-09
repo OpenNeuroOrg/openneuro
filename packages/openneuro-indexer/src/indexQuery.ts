@@ -12,8 +12,17 @@ export const indexQuery = gql`
           id
           created
           metadata {
+            datasetName
+            datasetUrl
+            dataProcessed
+            firstSnapshotCreatedAt
+            latestSnapshotCreatedAt
+            ages
+            modalities
+            datasetId
             dxStatus
             trialCount
+            tasksCompleted
             studyDesign
             studyDomain
             studyLongitudinal
