@@ -14,6 +14,7 @@
     "@mdx-js/react": "^1.6.22",
     "@wojtekmaj/react-daterange-picker": "^3.2.0",
     "bytes": "^3.1.0",
+    "commafy": "^0.0.6",
     "date-fns": "^2.21.1",
     "md5": "^2.3.0",
     "pluralize": "^8.0.0",

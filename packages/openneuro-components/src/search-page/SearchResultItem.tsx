@@ -1,5 +1,6 @@
 import React from 'react'
 import bytes from 'bytes'
+import commafy from 'commafy'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
@@ -114,13 +115,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const sessions = (
     <span className="result-summary-meta">
       <strong>Sessions: </strong>
-      <span>{numSessions}</span>
+      <span>{commafy(numSessions)}</span>
     </span>
   )
   const subjects = (
     <span className="result-summary-meta">
       <strong> Subjects: </strong>
-      <span>{numSubjects}</span>
+      <span>{commafy(numSubjects)}</span>
     </span>
   )
   const size = (
@@ -132,7 +133,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const files = (
     <span className="result-summary-meta">
       <strong>Files: </strong>
-      <span>{summary.totalFiles}</span>
+      <span>{commafy(summary.totalFiles)}</span>
     </span>
   )
 
@@ -160,16 +161,19 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </div>
   )
   const downloads = node.analytics.downloads
-    ? node.analytics.downloads + ' Downloads'
-    : null
-  const views = node.analytics.views ? node.analytics.views + ' Views' : null
+    ? commafy(node.analytics.downloads) + ' Downloads \n'
+    : ''
+  const views = node.analytics.views
+    ? commafy(node.analytics.views) + ' Views \n'
+    : ''
   const following = node.followers.length
-    ? node.followers.length + ' Follower'
-    : null
-  const stars = node.stars.length ? node.stars.length + ' Bookmarked' : null
+    ? commafy(node.followers.length) + ' Follower \n'
+    : ''
+  const stars = node.stars.length
+    ? commafy(node.stars.length) + ' Bookmarked'
+    : ''
 
-  const activtyTooltip =
-    downloads + '\n' + views + '\n' + following + '\n' + stars
+  const activtyTooltip = downloads + views + following + stars
 
   const activityIcon = (
     <Tooltip
