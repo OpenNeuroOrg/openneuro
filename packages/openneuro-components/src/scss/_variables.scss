@@ -8,7 +8,7 @@ $on-secondary: #4795b4;
 $mri-theme: rgba(109, 83, 156, 1);
 $mri-hover: adjust-color($mri-theme, $lightness: 10%);
 $mri-dark: darken($mri-theme, 25%);
-$mri-secondary: adjust-color($mri-theme, $lightness: 30%);
+$mri-secondary: adjust-color($mri-theme, $lightness: 15%);
 
 $eeg-theme: rgba(138, 177, 89, 1);
 $nirs-theme: rgba(235, 83, 152, 1);
