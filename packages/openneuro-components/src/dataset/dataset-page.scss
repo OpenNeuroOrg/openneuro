@@ -357,3 +357,12 @@
     font-weight: bold;
   }
 }
+
+.dataset-page-mri .dataset-header {
+  background-color: rgba(109, 83, 156, 1);
+  background: linear-gradient(
+    16deg,
+    rgba(57, 41, 86, 1) 0%,
+    rgba(109, 83, 156, 1) 70%
+  );
+}

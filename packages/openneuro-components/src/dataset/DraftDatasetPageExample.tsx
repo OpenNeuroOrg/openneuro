@@ -1,9 +1,7 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
-import { Link, useLocation } from 'react-router-dom'
-import { Modal } from '../modal/Modal'
+import { useLocation } from 'react-router-dom'
 
-import bytes from 'bytes'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
@@ -11,10 +9,18 @@ import { VersionListContainerExample } from './VersionListContainerExample'
 import { DatasetPage } from './DatasetPage'
 import { Button } from '../button/Button'
 import { Tooltip } from '../tooltip/Tooltip'
-import { Dropdown } from '../dropdown/Dropdown'
-import { DatasetGitAccess } from './DatasetGitAccess'
+
 import { ReadMore } from '../read-more/ReadMore'
 import { MetaDataBlock } from './MetaDataBlock'
+import { BrainLifeButton } from './BrainLifeButton'
+
+import { ValidationBlock } from './ValidationBlock'
+
+import { CloneDropdown } from './CloneDropdown'
+import { DatasetHeader } from './DatasetHeader'
+import { DatasetAlert } from './DatasetAlert'
+import { DatasetHeaderMeta } from './DatasetHeaderMeta'
+import { DeprecatedModal } from './DeprecatedModal'
 
 import './dataset-page.scss'
 
@@ -25,7 +31,6 @@ const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
 
 // Helper function for getting version from URL
-
 const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
@@ -41,13 +46,18 @@ export const DraftDatasetPageExample = ({
   const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
     React.useState(false)
 
-  const snapshots = dataset.snapshots
-
   const summary = dataset.draft.summary
   const description = dataset.draft.description
   const datasetId = dataset.id
-
   const isPublic = dataset.public === true
+  const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
+
+  const dateAdded = formatDate(dataset.created)
+  const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
+  const dateModified = formatDate(dataset.draft.modified)
+  const dateUpdatedDifference = formatDistanceToNow(
+    parseISO(dataset.draft.modified),
+  )
 
   const rootPath = activeDataset
     ? `/datasets/${datasetId}/versions/${activeDataset}`
@@ -57,25 +67,8 @@ export const DraftDatasetPageExample = ({
     history.push(`${rootPath}/${path}`)
   }
 
-  const goToBrainlife = datasetId => {
-    window.open(`https://brainlife.io/openneuro/${datasetId}`, '_blank')
-  }
-
-  const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
-
-  const dateAdded = formatDate(dataset.created)
-  const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
-
-  const dateModified = formatDate(dataset.draft.modified)
-
-  const dateUpdatedDifference = formatDistanceToNow(
-    parseISO(dataset.draft.modified),
-  )
-
-  const backgroundColorLight = 'rgba(109, 83, 156, 1)'
-  const backgroundColorDark = 'rgba(57, 41, 86, 1)'
   //TODO setup  Redirect, Errorboundry, and Edit functionality
-
+  //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
   //TODO Setup hasEdit
   const hasEdit = true
   // (user && user.admin) ||
@@ -109,7 +102,7 @@ export const DraftDatasetPageExample = ({
               item={
                 <div className="version-block">
                   <VersionListContainerExample
-                    items={snapshots}
+                    items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}
                     dateModified={dateModified}
@@ -131,7 +124,7 @@ export const DraftDatasetPageExample = ({
               }
             />
 
-            {snapshots.length && (
+            {dataset.snapshots.length && (
               <MetaDataBlock
                 heading="Last Updated"
                 item={
@@ -189,94 +182,33 @@ export const DraftDatasetPageExample = ({
             />
           </>
         )}
-        renderValidationBlock={() => (
-          <>
-            <div className="dataset-validation">
-              <div className="validation-accordion">validation</div>
-              {dataset.onBrainlife && (
-                <div className="brainlife-block">
-                  <Tooltip tooltip="Analyze on brainlife" flow="up">
-                    <Button
-                      className="brainlife-link"
-                      primary={true}
-                      onClick={() => goToBrainlife(dataset.id)}
-                      label="brainlife.io"
-                    />
-                  </Tooltip>
-                </div>
-              )}
-              <div className="clone-dropdown">
-                <Dropdown
-                  label={
-                    <Button className="clone-link" primary={true} label="Clone">
-                      <i className="fas fa-caret-up"></i>
-                      <i className="fas fa-caret-down"></i>
-                    </Button>
-                  }>
-                  <div>
-                    <span>
-                      <DatasetGitAccess
-                        configUrl="configurl"
-                        worker="worker"
-                        datasetId={datasetId}
-                        gitHash={dataset.draft.head}
-                      />
-                    </span>
-                  </div>
-                </Dropdown>
-              </div>
-            </div>
-          </>
+        renderBrainLifeButton={() => (
+          <BrainLifeButton
+            datasetId={datasetId}
+            onBrainlife={dataset.onBrainlife}
+          />
+        )}
+        renderValidationBlock={() => <ValidationBlock />}
+        renderCloneDropdown={() => (
+          <CloneDropdown datasetId={datasetId} gitHash={dataset.draft.head} />
         )}
         renderHeader={() => (
-          <>
-            <div
-              className="dataset-header"
-              style={{
-                backgroundColor: backgroundColorLight,
-                background: `linear-gradient(16deg, ${backgroundColorDark} 0%, ${backgroundColorLight} 70%)`,
-              }}>
-              <div className="container">
-                <div className="grid grid-between">
-                  <div className="col">
-                    <h1>
-                      <a href={'/' + summary.modalities[0]}>
-                        <div className="hexagon-wrapper">
-                          <div className="hexagon no-modality"></div>
-                          <div className="label">
-                            {summary.modalities[0].substr(0, 4)}
-                          </div>
-                        </div>
-                      </a>
-                      {description.Name}
-                    </h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
+          <DatasetHeader
+            pageHeading={description.Name}
+            modality={summary.modalities[0]}
+          />
         )}
-        renderAlert={() => (
-          <>
-            {isPublic && (
-              <div className="dataset-header-alert">
-                This dataset has not been published!
-                <a href="">Publish the Dataset</a> to make all snapshots
-                available publicly.
-              </div>
-            )}
-          </>
-        )}
+        renderAlert={() => <>{isPublic && <DatasetAlert />}</>}
         renderHeaderMeta={() => (
-          <div className="dataset-header-meta">
-            <span>OpenNeuro Accession Number:</span> {datasetId}
-            <span>Files:</span> {summary.totalFiles}
-            <span>Size:</span> {bytes(summary.size)}
-          </div>
+          <DatasetHeaderMeta
+            size={summary.size}
+            totalFiles={summary.totalFiles}
+            datasetId={datasetId}
+          />
         )}
         renderToolButtons={() => (
-          <div className="dataset-tool-buttons">
-            <Tooltip tooltip="Publish the dataset publicly" flow="right">
+          <>
+            <Tooltip tooltip="Publish the dataset publicly" flow="up">
               <Button
                 className="dataset-tool"
                 onClick={() => goToToolPath(history, rootPath, 'publish')}
@@ -328,7 +260,7 @@ export const DraftDatasetPageExample = ({
                 icon="fas fa-trash"
               />
             </Tooltip>
-          </div>
+          </>
         )}
         renderReadMe={() => (
           <MetaDataBlock
@@ -346,17 +278,19 @@ export const DraftDatasetPageExample = ({
             className="dataset-readme markdown-body"
           />
         )}
+        renderDeprecatedModal={() => (
+          <DeprecatedModal
+            isOpen={deprecatedmodalIsOpen}
+            toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
+            closeText={'close'}
+            className="deprecated-modal">
+            <p>
+              You have selected a deprecated version. The author of the dataset
+              does not recommend this specific version.
+            </p>
+          </DeprecatedModal>
+        )}
       />
-      <Modal
-        isOpen={deprecatedmodalIsOpen}
-        toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
-        closeText={'close'}
-        className="deprecated-modal">
-        <p>
-          You have selected a deprecated version. The author of the dataset does
-          not recommend this specific version.
-        </p>
-      </Modal>
     </>
   )
 }

@@ -8,6 +8,9 @@ export interface DatasetPageProps {
   renderHeaderMeta: () => React.ReactNode
   renderToolButtons: () => React.ReactNode
   renderReadMe: () => React.ReactNode
+  renderBrainLifeButton: () => React.ReactNode
+  renderCloneDropdown: () => React.ReactNode
+  renderDeprecatedModal: () => React.ReactNode
 }
 
 export const DatasetPage = ({
@@ -18,6 +21,9 @@ export const DatasetPage = ({
   renderHeaderMeta,
   renderToolButtons,
   renderReadMe,
+  renderBrainLifeButton,
+  renderCloneDropdown,
+  renderDeprecatedModal,
 }: DatasetPageProps) => {
   return (
     <>
@@ -31,13 +37,18 @@ export const DatasetPage = ({
       <div className="container">
         <div className="grid grid-between">
           <div className="col col-8">
-            {renderValidationBlock()}
-            {renderToolButtons()}
+            <div className="dataset-validation">
+              {renderValidationBlock()}
+              {renderBrainLifeButton()}
+              {renderCloneDropdown()}
+            </div>
+            <div className="dataset-tool-buttons">{renderToolButtons()}</div>
             {renderReadMe()}
           </div>
           <div className="col sidebar"> {renderSidebar()}</div>
         </div>
       </div>
+      {renderDeprecatedModal()}
     </>
   )
 }

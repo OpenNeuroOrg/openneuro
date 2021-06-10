@@ -174,7 +174,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const activityIcon = (
     <Tooltip
       tooltip={activtyTooltip}
-      flow="left"
+      flow="up"
       className="result-icon result-activity-icon">
       <Icon imgSrc={activityPulseIcon} iconSize="22px" />
     </Tooltip>
