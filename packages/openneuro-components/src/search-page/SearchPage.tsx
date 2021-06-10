@@ -67,7 +67,7 @@ export const SearchPage = ({
               )}
             </div>
 
-            <div className="search-wrapper">
+            <div className="col col-12 search-wrapper">
               <div className="search-nav search-facet-wrapper">
                 {renderSearchFacets()}
               </div>

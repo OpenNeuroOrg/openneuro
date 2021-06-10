@@ -1,11 +1,34 @@
 @import '../scss/variables';
 
 .filters-block {
-  background-color: #eee;
-  border-radius: px;
-  padding: 30px 20px 0;
-  margin: 0 0 30px;
   position: relative;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+  h4 {
+    margin: 0 0 10px;
+    display: flex;
+    align-items: flex-end;
+    line-height: 1;
+    font-weight: 400;
+    span {
+      color: #000;
+      font-weight: 700;
+      margin: 0 5px;
+    }
+    .on-button {
+      display: block;
+      width: 65px;
+      margin-left: 30px;
+      text-transform: uppercase;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      background: none;
+      &:hover {
+        color: #000;
+      }
+    }
+  }
   .active-filters {
     padding: 0;
     margin: 0;
@@ -14,8 +37,8 @@
     flex-wrap: wrap;
     align-items: center;
     li {
-      margin-right: 30px;
-      margin-bottom: 30px;
+      margin-right: 10px;
+      margin-bottom: 15px;
       font-size: 13px;
       line-height: 1.7em;
       &:last-child {
@@ -47,6 +70,7 @@
       }
       &.search-term-list {
         margin-bottom: 0;
+        margin-right: 30px;
       }
       ul {
         padding: 0;
@@ -58,23 +82,6 @@
         li {
         }
       }
-    }
-  }
-
-  .on-button {
-    display: block;
-    width: 65px;
-    text-transform: uppercase;
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    background-color: none;
-    border-bottom: 2px solid transparent;
-    transition: border 0.3s, color 0.3s;
-    &:hover {
-      text-decoration: none;
-      color: #000;
-      border-bottom-color: #000;
     }
   }
 }

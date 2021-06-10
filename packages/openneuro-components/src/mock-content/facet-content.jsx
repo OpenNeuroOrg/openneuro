@@ -75,7 +75,7 @@ export const modalities = [
 ]
 
 export const datasetType_available = [
-  { label: 'All', value: 'All' },
+  { label: 'All Public', value: 'All Public' },
   { label: 'Following', value: 'Following' },
   { label: 'My Datasets', value: 'My Datasets' },
   { label: 'My Bookmarks', value: 'My Bookmarks' },

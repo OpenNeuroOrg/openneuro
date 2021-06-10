@@ -17,7 +17,7 @@ const DateRangeInput: FC = () => {
     /* Throwing error: see openneuro-components/src/facets/index.ts for details. */
     // <FacetDatePicker
     //   startOpen={false}
-    //   label="Date"
+    //   label="Publication Date"
     //   accordionStyle="plain"
     //   selected={datePublicizedRange}
     //   setSelected={setDatePublicizedRange}

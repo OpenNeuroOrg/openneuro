@@ -44,7 +44,7 @@ export const SearchPageContainerExample = ({
     setAllKeywords(prevState => [...prevState, keywordValueRef.current])
   }
   const [modality_selected, setModality] = React.useState()
-  const [datasetType_selected, setDatasetsType] = React.useState('All')
+  const [datasetType_selected, setDatasetsType] = React.useState('All Public')
   const [datasetStatus_selected, setDatasetStatus] = React.useState()
   const [ageRange, setAgeRange] = React.useState([null, null])
   const [subjectCountRange, setSubjectRange] = React.useState([null, null])
@@ -113,9 +113,6 @@ export const SearchPageContainerExample = ({
         )}
         renderSortBy={() => (
           <>
-            <div className="col results-count">
-              Showing All <b>100</b> Public Datasets
-            </div>
             <div className="col search-sort">
               <SearchSortContainerExample items={sortBy} />
             </div>
@@ -126,7 +123,7 @@ export const SearchPageContainerExample = ({
             <TermSearch
               className="search-keyword"
               type="text"
-              label="Keyword"
+              label="Keywords"
               placeholder="eg. something here"
               labelStyle="default"
               name="default-example"
@@ -184,7 +181,7 @@ export const SearchPageContainerExample = ({
 
               <FacetRange
                 startOpen={false}
-                label="Age"
+                label="Age of Participant"
                 accordionStyle="plain"
                 min={0}
                 max={100}
@@ -197,7 +194,7 @@ export const SearchPageContainerExample = ({
               />
               <FacetRange
                 startOpen={false}
-                label="Number of Subjects"
+                label="Number of Participant"
                 accordionStyle="plain"
                 min={0}
                 max={100}
@@ -304,9 +301,6 @@ export const SearchPageContainerExample = ({
           <>
             <SearchResultsList items={searchResults} profile={profile} />
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
-              <div className="col col-12 results-count">
-                Showing All <b>100</b> Public Datasets
-              </div>
               <div className="col col-12 load-more ">
                 <Button label="Load More" />
               </div>

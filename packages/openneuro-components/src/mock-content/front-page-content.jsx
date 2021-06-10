@@ -24,10 +24,11 @@ export const frontPage = {
   },
   pageDescription: (
     <h2>
-      A free and open platform for validating and sharing BIDS compliant{' '}
-      <a href="#">MRI</a>, <a href="#">PET</a>, <a href="#">MEG</a>,{' '}
-      <a href="#">EEG</a>, <a href="#">iEEG</a>, <a href="#">ECoG</a>,{' '}
-      <a href="#">ASL</a>, and <a href="#">NIRS</a> data
+      A free and open platform for validating and sharing BIDS-compliant{' '}
+      <a href="/search/mri">MRI</a>, <a href="/search/pet">PET</a>,{' '}
+      <a href="/search/meg">MEG</a>, <a href="/search/eeg">EEG</a>,{' '}
+      <a href="/search/ieeg">iEEG</a>, <a href="/search/ecog">ECoG</a>, and{' '}
+      <a href="/search/asl">ASL</a> data
     </h2>
   ),
   titlePanel: {
@@ -121,11 +122,10 @@ export const frontPage = {
             scenes.{' '}
           </p>
           <p>
-            {' '}
-            Explore your published OpenNeuro dataset using
+            Explore your published OpenNeuro dataset using{' '}
             <a href="#" target="_blank">
               BrainLife's
-            </a>
+            </a>{' '}
             computing network. Utilize their community driven apps to run a
             variety of analysis and processing software in the browser.
           </p>

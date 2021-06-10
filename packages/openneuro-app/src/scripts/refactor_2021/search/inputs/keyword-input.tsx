@@ -21,7 +21,7 @@ const KeywordInput: FC = () => {
     <TermSearch
       className="search-keyword"
       type="text"
-      label="Keyword"
+      label="Keywords"
       placeholder="eg. something here"
       labelStyle="default"
       name="keywords"
