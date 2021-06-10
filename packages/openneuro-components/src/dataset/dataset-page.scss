@@ -359,10 +359,10 @@
 }
 
 .dataset-page-mri .dataset-header {
-  background-color: rgba(109, 83, 156, 1);
+  background-color: var(--current-theme-primary);
   background: linear-gradient(
     16deg,
-    rgba(57, 41, 86, 1) 0%,
-    rgba(109, 83, 156, 1) 70%
+    var(--current-theme-primary-dark),
+    var(--current-theme-primary)
   );
 }

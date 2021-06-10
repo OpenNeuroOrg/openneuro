@@ -1,6 +1,6 @@
 import React from 'react'
 import { ModalityHeader } from './ModalityHeader'
-import { CommunitySwoop } from './CommunitySwoop'
+import { CommunityHeader } from './CommunityHeader'
 import { Link } from 'react-router-dom'
 
 import './search-page.scss'
@@ -37,16 +37,10 @@ export const SearchPage = ({
                 publicDatasetStat={portalContent.publicDatasetStat}
                 participantsStat={portalContent.participantsStat}
                 hexBackgroundImage={portalContent.hexBackgroundImage}
-                swoopBackgroundColorLight={
-                  portalContent.swoopBackgroundColorLight
-                }
-                swoopBackgroundColorDark={
-                  portalContent.swoopBackgroundColorDark
-                }
               />
             ) : null}
             {portalContent.communityHeader ? (
-              <CommunitySwoop
+              <CommunityHeader
                 communityHeader={portalContent.communityHeader}
                 communityPrimary={portalContent.communityPrimary}
                 communitySecondary={portalContent.communitySecondary}

@@ -1,16 +1,16 @@
 import React from 'react'
 
-export interface CommunitySwoopProps {
+export interface CommunityHeaderProps {
   communityHeader: string
   communityPrimary: string
   communitySecondary: Record<string, any>
 }
 
-export const CommunitySwoop = ({
+export const CommunityHeader = ({
   communityHeader,
   communityPrimary,
   communitySecondary,
-}: CommunitySwoopProps) => {
+}: CommunityHeaderProps) => {
   return (
     <section className="search-page-coms">
       <div className="container">
