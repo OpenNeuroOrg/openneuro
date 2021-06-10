@@ -26,9 +26,8 @@ export const frontPage = {
     <h2>
       A free and open platform for validating and sharing BIDS-compliant{' '}
       <a href="/search/mri">MRI</a>, <a href="/search/pet">PET</a>,{' '}
-      <a href="/search/meg">MEG</a>, <a href="/search/eeg">EEG</a>,{' '}
-      <a href="/search/ieeg">iEEG</a>, <a href="/search/ecog">ECoG</a>, and{' '}
-      <a href="/search/asl">ASL</a> data
+      <a href="/search/meg">MEG</a>, <a href="/search/eeg">EEG</a>, and{' '}
+      <a href="/search/asl">iEEG</a> data
     </h2>
   ),
   titlePanel: {

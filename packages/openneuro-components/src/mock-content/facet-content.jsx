@@ -22,8 +22,8 @@ export const modalities = [
         count: 300,
       },
       {
-        label: 'Perfusion',
-        value: 'Perfusion',
+        label: 'ASL Perfusion',
+        value: 'ASL Perfusion',
         count: 150,
       },
     ],
