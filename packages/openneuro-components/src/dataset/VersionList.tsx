@@ -74,7 +74,7 @@ export const VersionList = ({
                 <li
                   key={index}
                   onClick={
-                    item.deprecated == true
+                    item.deprecated === true
                       ? () => deprecatedItem(item.tag, item.created)
                       : () => setVersion(item.tag, formatDate(item.created))
                   }
@@ -85,7 +85,7 @@ export const VersionList = ({
                       {selected === item.tag && '*'}
                     </span>
                     <span className="deprecated">
-                      {item.deprecated == true && 'Deprecated'}
+                      {item.deprecated === true && 'Deprecated'}
                     </span>
                   </span>
                   {date}

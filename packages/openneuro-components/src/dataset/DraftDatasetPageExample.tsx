@@ -1,14 +1,16 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 import { VersionListContainerExample } from './VersionListContainerExample'
 import { DatasetPage } from './DatasetPage'
-import { Button } from '../button/Button'
+import { DatasetGitAccess } from './DatasetGitAccess'
+import { Icon } from '../icon/Icon'
 import { Tooltip } from '../tooltip/Tooltip'
+import { Modal } from '../modal/Modal'
 
 import { ReadMore } from '../read-more/ReadMore'
 import { MetaDataBlock } from './MetaDataBlock'
@@ -20,7 +22,6 @@ import { CloneDropdown } from './CloneDropdown'
 import { DatasetHeader } from './DatasetHeader'
 import { DatasetAlert } from './DatasetAlert'
 import { DatasetHeaderMeta } from './DatasetHeaderMeta'
-import { DeprecatedModal } from './DeprecatedModal'
 
 import './dataset-page.scss'
 
@@ -62,10 +63,6 @@ export const DraftDatasetPageExample = ({
   const rootPath = activeDataset
     ? `/datasets/${datasetId}/versions/${activeDataset}`
     : `/datasets/${datasetId}`
-
-  const goToToolPath = (history, rootPath, path) => {
-    history.push(`${rootPath}/${path}`)
-  }
 
   //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
@@ -190,7 +187,17 @@ export const DraftDatasetPageExample = ({
         )}
         renderValidationBlock={() => <ValidationBlock />}
         renderCloneDropdown={() => (
-          <CloneDropdown datasetId={datasetId} gitHash={dataset.draft.head} />
+          <CloneDropdown
+            gitAccess={
+              <DatasetGitAccess
+                //TODO add worker and configURL
+                configUrl="configurl"
+                worker="worker"
+                datasetId={datasetId}
+                gitHash={dataset.draft.head}
+              />
+            }
+          />
         )}
         renderHeader={() => (
           <DatasetHeader
@@ -198,7 +205,9 @@ export const DraftDatasetPageExample = ({
             modality={summary.modalities[0]}
           />
         )}
-        renderAlert={() => <>{isPublic && <DatasetAlert />}</>}
+        renderAlert={() => (
+          <>{isPublic && <DatasetAlert rootPath={rootPath} />}</>
+        )}
         renderHeaderMeta={() => (
           <DatasetHeaderMeta
             size={summary.size}
@@ -209,56 +218,38 @@ export const DraftDatasetPageExample = ({
         renderToolButtons={() => (
           <>
             <Tooltip tooltip="Publish the dataset publicly" flow="up">
-              <Button
-                className="dataset-tool"
-                onClick={() => goToToolPath(history, rootPath, 'publish')}
-                label="Publish"
-                icon="fa fa-globe"
-              />
+              <Link className="dataset-tool" to={rootPath + '/publish'}>
+                <Icon icon="fa fa-globe" /> Publish
+              </Link>
             </Tooltip>
             <Tooltip tooltip="Share this dataset with collaborators" flow="up">
-              <Button
-                className="dataset-tool"
-                onClick={() => goToToolPath(history, rootPath, 'share')}
-                label="Share"
-                icon="fa fa-user"
-              />
+              <Link className="dataset-tool" to={rootPath + '/share'}>
+                <Icon icon="fa fa-user" /> Share
+              </Link>
             </Tooltip>
 
             <Tooltip tooltip="Create a new version of the dataset" flow="up">
-              <Button
-                className="dataset-tool"
-                onClick={() => goToToolPath(history, rootPath, 'snapshot')}
-                label="Snapshot"
-                icon="fa fa-camera"
-              />
+              <Link className="dataset-tool" to={rootPath + '/snapshot'}>
+                <Icon icon="fa fa-camera" /> Snapshot
+              </Link>
             </Tooltip>
             <span>
-              <Button
-                className="dataset-tool"
-                onClick={() => goToToolPath(history, rootPath, 'download')}
-                label="Download"
-                icon="fa fa-download"
-              />
+              <Link className="dataset-tool" to={rootPath + '/download'}>
+                <Icon icon="fa fa-download" /> Download
+              </Link>
             </span>
             <Tooltip
               wrapText={true}
               tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
               flow="up">
-              <Button
-                className="dataset-tool"
-                onClick={() => goToToolPath(history, rootPath, 'metadata')}
-                label="Metadata"
-                icon="fas fa-file-code"
-              />
+              <Link className="dataset-tool" to={rootPath + '/metadata'}>
+                <Icon icon="fa fa-file-code" /> Metadata
+              </Link>
             </Tooltip>
             <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-              <Button
-                className="dataset-tool"
-                onClick={() => goToToolPath(history, rootPath, 'delete')}
-                label="Delete"
-                icon="fas fa-trash"
-              />
+              <Link className="dataset-tool" to={rootPath + '/delete'}>
+                <Icon icon="fa fa-trash" /> Delete
+              </Link>
             </Tooltip>
           </>
         )}
@@ -279,7 +270,7 @@ export const DraftDatasetPageExample = ({
           />
         )}
         renderDeprecatedModal={() => (
-          <DeprecatedModal
+          <Modal
             isOpen={deprecatedmodalIsOpen}
             toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
             closeText={'close'}
@@ -288,7 +279,7 @@ export const DraftDatasetPageExample = ({
               You have selected a deprecated version. The author of the dataset
               does not recommend this specific version.
             </p>
-          </DeprecatedModal>
+          </Modal>
         )}
       />
     </>

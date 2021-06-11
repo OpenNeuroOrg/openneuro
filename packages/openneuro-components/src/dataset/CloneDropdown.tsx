@@ -1,17 +1,12 @@
 import React from 'react'
 import { Dropdown } from '../dropdown/Dropdown'
-import { DatasetGitAccess } from './DatasetGitAccess'
 import { Button } from '../button/Button'
 
 export interface CloneDropdownProps {
-  gitHash: string
-  datasestId: string
+  gitAccess: React.ReactNode
 }
 
-export const CloneDropdown: React.FC<CloneDropdownProps> = ({
-  gitHash,
-  datasetId,
-}) => {
+export const CloneDropdown: React.FC<CloneDropdownProps> = ({ gitAccess }) => {
   return (
     <div className="clone-dropdown">
       <Dropdown
@@ -22,14 +17,7 @@ export const CloneDropdown: React.FC<CloneDropdownProps> = ({
           </Button>
         }>
         <div>
-          <span>
-            <DatasetGitAccess
-              configUrl="configurl"
-              worker="worker"
-              datasetId={datasetId}
-              gitHash={gitHash}
-            />
-          </span>
+          <span>{gitAccess}</span>
         </div>
       </Dropdown>
     </div>
