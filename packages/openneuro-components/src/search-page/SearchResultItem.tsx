@@ -120,7 +120,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   )
   const subjects = (
     <span className="result-summary-meta">
-      <strong> Subjects: </strong>
+      <strong> Participants: </strong>
       <span>{commafy(numSubjects)}</span>
     </span>
   )

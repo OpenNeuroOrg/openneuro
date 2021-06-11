@@ -167,9 +167,7 @@
 .search-nav {
   flex: 0 0 auto;
   padding: 0;
-  // overflow: scroll;
-  // max-height: calc(100vh - 190px);
-  width: 450px;
+  width: 430px;
 
   .facet-accordion.on-accordion-wrapper {
     padding: 0;
@@ -181,8 +179,7 @@
 }
 
 .search-content {
-  flex: 1 1 auto;
-  // overflow: auto;
+  flex: 1;
   padding: 0 0 0 30px;
   .search-results {
     border: 1px solid #ddd;

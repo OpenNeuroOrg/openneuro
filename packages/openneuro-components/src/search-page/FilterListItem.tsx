@@ -21,6 +21,7 @@ export const FilterListItem = ({
 }: FilterListItemProps) => {
   if (
     item.value === 'All' ||
+    item.value === 'All Public' ||
     JSON.stringify(item.value) === JSON.stringify([null, null])
   ) {
     return null

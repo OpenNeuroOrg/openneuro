@@ -22,8 +22,8 @@ export const modalities = [
         count: 300,
       },
       {
-        label: 'Perfusion',
-        value: 'Perfusion',
+        label: 'ASL Perfusion',
+        value: 'ASL Perfusion',
         count: 150,
       },
     ],
@@ -75,7 +75,7 @@ export const modalities = [
 ]
 
 export const datasetType_available = [
-  { label: 'All', value: 'All' },
+  { label: 'All Public', value: 'All Public' },
   { label: 'Following', value: 'Following' },
   { label: 'My Datasets', value: 'My Datasets' },
   { label: 'My Bookmarks', value: 'My Bookmarks' },

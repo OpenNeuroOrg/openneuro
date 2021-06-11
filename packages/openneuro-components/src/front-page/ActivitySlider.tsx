@@ -19,13 +19,14 @@ export const ActivitySliderFront: React.FC<ContributersProps> = ({}) => {
     dots: true,
     slidesToShow: 3,
     slidesToScroll: 3,
-    swipeToSlide: true,
+    swipe: true,
+    touchThreshold: 100,
     responsive: [
       {
         breakpoint: 989,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll: 3,
         },
       },
       {
@@ -45,7 +46,8 @@ export const ActivitySliderFront: React.FC<ContributersProps> = ({}) => {
     draggable: true,
     slidesToShow: 3,
     slidesToScroll: 3,
-    swipeToSlide: true,
+    swipe: true,
+    touchThreshold: 100,
     responsive: [
       {
         breakpoint: 989,

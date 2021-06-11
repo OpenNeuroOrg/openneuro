@@ -1,7 +1,7 @@
 import { sortBy } from '@openneuro/components'
 
 const datasetType_available = [
-  { label: 'All', value: 'All' },
+  { label: 'All Public', value: 'All Public' },
   { label: 'Following', value: 'Following' },
   { label: 'My Uploads', value: 'My Uploads' },
   { label: 'My Bookmarks', value: 'My Bookmarks' },
@@ -158,7 +158,7 @@ const initialSearchParams: SearchParams = {
 const TEMPORARY_initialSearchParams: SearchParams = {
   keywords: [],
   datasetType_available,
-  datasetType_selected: 'All',
+  datasetType_selected: 'All Public',
   datasetStatus_available,
   datasetStatus_selected: null,
   modality_available,

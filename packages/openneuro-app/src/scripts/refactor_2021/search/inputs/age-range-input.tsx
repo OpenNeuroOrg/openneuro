@@ -15,7 +15,7 @@ const AgeRangeInput: FC = () => {
   return (
     <FacetRange
       startOpen={false}
-      label="Age"
+      label="Age of Participants"
       accordionStyle="plain"
       min={0}
       max={100}

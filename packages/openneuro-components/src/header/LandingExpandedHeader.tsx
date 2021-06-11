@@ -35,7 +35,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
             stats={
               <>
                 <AggregateCount type="publicDataset" count={122} />
-                <AggregateCount type="publicDataset" count={22} />
+                <AggregateCount type="participants" count={22} />
               </>
             }
           />
@@ -51,7 +51,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
             {frontPage.pageDescription}
             <div className="header-aggregate">
               <AggregateCount type="publicDataset" count={202} />
-              <AggregateCount type="publicDataset" count={22} />
+              <AggregateCount type="participants" count={22} />
             </div>
             <div className="header-modality-wrap">{renderFacetSelect()}</div>
             <span className="header-or-text">Or</span>

@@ -1,0 +1,146 @@
+@import '../scss/variables';
+
+$spinner-base-value: 20px;
+$spinner-width: $spinner-base-value * 2 * 1.732;
+$spinner-height: $spinner-base-value * 2;
+$spinner-hexagon-width: $spinner-width;
+$spinner-hexagon-height: $spinner-height * 2;
+$spinner-hexagon-bg-color: var(--current-theme-primary-hover);
+
+/*
+.cxq-spinner.cxq-spinner--doubleBounce
+  .cxq-spinner-hexagon
+  .cxq-spinner-hexagon
+
+
+.cxq-spinner.cxq-spinner--rotatePlane
+  .cxq-spinner-hexagon
+
+.cxq-spinner.cxq-spinner--waveStretchDelay
+  .cxq-spinner-hexagon
+  .rects
+    .rect
+    .rect
+    .rect
+    .rect
+    .rect
+*/
+
+.cxq-spinner {
+  position: relative;
+  width: $spinner-hexagon-width;
+  height: $spinner-hexagon-height;
+  margin: auto;
+}
+.cxq-spinner-hexagon {
+  position: absolute;
+  width: $spinner-width;
+  height: $spinner-height;
+  border-radius: 0;
+  background: $spinner-hexagon-bg-color;
+  opacity: 0.3;
+  top: $spinner-base-value;
+}
+.cxq-spinner-hexagon:before,
+.cxq-spinner-hexagon:after {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  background: inherit;
+  content: '';
+}
+.cxq-spinner-hexagon:before {
+  transform: rotate(60deg);
+}
+.cxq-spinner-hexagon:after {
+  transform: rotate(-60deg);
+}
+
+// rotating plane
+.cxq-spinner--rotatePlane .cxq-spinner-hexagon {
+  animation: rotatePlane 2s infinite ease-in-out;
+}
+
+// double bounce
+.cxq-spinner--doubleBounce .cxq-spinner-hexagon {
+  animation: doubleBounce 2s infinite ease-in-out;
+}
+.cxq-spinner--doubleBounce .cxq-spinner-hexagon:nth-child(2) {
+  animation-delay: -1s;
+}
+
+// wave stretch
+.cxq-spinner--waveStretchDelay .rects {
+  width: $spinner-hexagon-width;
+  height: $spinner-hexagon-height / 3;
+  text-align: center;
+  position: relative;
+  top: $spinner-hexagon-height * 1 /3;
+}
+.cxq-spinner--waveStretchDelay .rect {
+  position: relative;
+  height: 100%;
+  width: $spinner-base-value / 10;
+  display: inline-block;
+  background-color: $spinner-hexagon-bg-color;
+  opacity: 1;
+  margin: 0 2px;
+  animation: waveStretchDelay 1.4s infinite ease-in-out;
+
+  &:nth-child(1) {
+    animation-delay: -1.2s;
+  }
+  &:nth-child(2) {
+    animation-delay: -1.1s;
+  }
+  &:nth-child(3) {
+    animation-delay: -1s;
+  }
+  &:nth-child(4) {
+    animation-delay: -0.9s;
+  }
+  &:nth-child(5) {
+    animation-delay: -0.8s;
+  }
+}
+
+@keyframes doubleBounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0.2);
+    transform: scale(0.2);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes rotatePlane {
+  0% {
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+  }
+  100% {
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+  }
+}
+
+@keyframes waveStretchDelay {
+  0%,
+  40%,
+  100% {
+    -webkit-transform: scaleY(0.4);
+    transform: scaleY(0.4);
+  }
+  20% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+}

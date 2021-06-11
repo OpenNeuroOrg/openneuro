@@ -74,7 +74,7 @@ const SearchContainer: FC = () => {
         loading ? (
           resultsList.length !== 0 && <>Datasets loading placeholder</>
         ) : (
-          <h1>
+          <>
             <SearchResultsList items={resultsList} profile={profile} />
             {/* TODO: make div below into display component. */}
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
@@ -88,7 +88,7 @@ const SearchContainer: FC = () => {
                 </div>
               )}
             </div>
-          </h1>
+          </>
         )
       }
     />

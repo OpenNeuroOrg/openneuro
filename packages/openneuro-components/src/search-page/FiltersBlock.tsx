@@ -70,6 +70,10 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
+      <h4>
+        These filters return <span>100</span> results:{' '}
+        <Button label="Clear All" size="small" onClick={removeAllFilters} />
+      </h4>
       <ul className="active-filters">
         {keywords && (
           <TermListItem
@@ -178,9 +182,6 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem}
           />
         )}
-        <li>
-          <Button label="Clear All" size="small" onClick={removeAllFilters} />
-        </li>
       </ul>
     </div>
   )
