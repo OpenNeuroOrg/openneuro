@@ -34,7 +34,7 @@ a:link {
   }
 }
 .container {
-  max-width: calc(100vw - 20px);
+  max-width: calc(100vw - 80px);
   width: 1690px;
   margin: 0 auto;
   position: relative;
@@ -43,4 +43,13 @@ a:link {
 
 div {
   box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.3em;
 }

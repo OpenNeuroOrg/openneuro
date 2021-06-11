@@ -9401,6 +9401,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/bytes", "npm:3.1.0"],
             ["@types/md5", "npm:2.3.0"],
             ["@types/mdx-js__react", "npm:1.5.3"],
+            ["@types/prop-types", "npm:15.7.3"],
             ["@types/react-router-dom", "npm:5.1.7"],
             ["@types/react-slick", "npm:0.23.4"],
             ["@types/slick-carousel", "npm:1.6.34"],
@@ -9409,8 +9410,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["commafy", "npm:0.0.6"],
             ["css-loader", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:5.2.4"],
             ["date-fns", "npm:2.21.3"],
+            ["markdown-to-jsx", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:7.1.3"],
             ["md5", "npm:2.3.0"],
             ["pluralize", "npm:8.0.0"],
+            ["prop-types", "npm:15.7.2"],
             ["rc-slider", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:9.7.2"],
             ["react", "npm:17.0.2"],
             ["react-router-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:5.2.0"],
@@ -31753,6 +31756,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
+        ["npm:7.1.3", {
+          "packageLocation": "./.yarn/cache/markdown-to-jsx-npm-7.1.3-7b61f9f1da-db5580aa74.zip/node_modules/markdown-to-jsx/",
+          "packageDependencies": [
+            ["markdown-to-jsx", "npm:7.1.3"]
+          ],
+          "linkType": "SOFT",
+        }],
         ["virtual:2a2a80ce482f9354d11e742fa44ae7f3b6a4885d12f26fc7f15accd9f67dead008af1ce570df1dba80487bd0c3d1630f88ac8b2e25c0d316770be8ce0fab40b2#npm:6.11.4", {
           "packageLocation": "./.yarn/$$virtual/markdown-to-jsx-virtual-91ef28c638/0/cache/markdown-to-jsx-npm-6.11.4-e7ef0863b5-d3a830400e.zip/node_modules/markdown-to-jsx/",
           "packageDependencies": [
@@ -31785,6 +31795,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/$$virtual/markdown-to-jsx-virtual-bae59e8bc5/0/cache/markdown-to-jsx-npm-7.1.2-c6eece1f1f-4a211aba6a.zip/node_modules/markdown-to-jsx/",
           "packageDependencies": [
             ["markdown-to-jsx", "virtual:b8ec4dadc1d0b1e914187cf443acb118bc49dd90c289125df8ccfa0164450b5fd91235a00d6651824c86faad6c63d67d6dffae39b7872acdf23b72bbf270f093#npm:7.1.2"],
+            ["@types/react", null],
+            ["react", "npm:17.0.2"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:7.1.3", {
+          "packageLocation": "./.yarn/$$virtual/markdown-to-jsx-virtual-bde4f7c700/0/cache/markdown-to-jsx-npm-7.1.3-7b61f9f1da-db5580aa74.zip/node_modules/markdown-to-jsx/",
+          "packageDependencies": [
+            ["markdown-to-jsx", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:7.1.3"],
             ["@types/react", null],
             ["react", "npm:17.0.2"]
           ],

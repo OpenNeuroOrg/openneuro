@@ -12,9 +12,9 @@
 
 .on-button--primary {
   color: #fff;
-  background-color: $primary;
+  background-color: var(--current-theme-primary);
   &:hover {
-    background-color: darken($primary, 5%);
+    background-color: var(--current-theme-primary-hover);
   }
 }
 

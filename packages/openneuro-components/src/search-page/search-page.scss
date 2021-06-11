@@ -1,9 +1,6 @@
 @import '../scss/variables';
 
 .search-page-portal-header {
-  // margin: -200px 0 0;
-  // padding: 145px 0 30px;
-  // height: 290px;
   position: relative;
   color: #fff;
   .hex-col {
@@ -27,6 +24,15 @@
       font-weight: 600;
     }
   }
+}
+
+.search-page-mri .search-page-portal-header {
+  background-color: var(--current-theme-primary);
+  background: linear-gradient(
+    16deg,
+    var(--current-theme-primary-dark) 0%,
+    var(--current-theme-primary) 70%
+  );
 }
 
 .search-page-coms {

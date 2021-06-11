@@ -22,13 +22,18 @@ header {
   justify-content: space-between;
   padding: 10px 25px;
   align-items: center;
-  background-color: $primary;
+  background-color: $on-dark-aqua;
+  background: linear-gradient(
+    69deg,
+    darken($on-dark-aqua, 5%),
+    adjust-color($on-dark-aqua, $lightness: 8%)
+  );
 
   position: relative;
   z-index: 3;
 }
 .svg-fill-on-dark-aqua {
-  fill: $primary;
+  fill: $on-dark-aqua;
 }
 
 .swoop-hide-overflow {
@@ -92,8 +97,8 @@ header {
 
 #orcid-info-accordion {
   .accordion-title {
-    color: $primary;
-    color: darken($primary, 5%);
+    color: $on-dark-aqua;
+    color: darken($on-dark-aqua, 5%);
     text-decoration: underline;
     font-size: 12px;
     justify-content: flex-end;

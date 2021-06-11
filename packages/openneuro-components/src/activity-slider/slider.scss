@@ -39,122 +39,123 @@
       }
     }
   }
+  .activity-slider {
+    .hexagon-wrapper {
+      text-align: center;
+      margin: 20px auto;
+      position: relative;
+      display: inline-block;
+      width: 45px;
+      height: 45px;
+      div.label {
+        position: absolute;
+        top: 0;
+        text-align: center;
+        width: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-weight: 600;
+        font-size: 13px;
+      }
+    }
 
-  .hexagon-wrapper {
-    text-align: center;
-    margin: 20px auto;
-    position: relative;
-    display: inline-block;
-    width: 45px;
-    height: 45px;
-    div.label {
+    .hexagon {
+      height: 100%;
+      width: calc(100% * 0.57735);
+      display: inline-block;
+    }
+
+    .hexagon:before {
       position: absolute;
       top: 0;
-      text-align: center;
-      width: 100%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-weight: 600;
-      font-size: 13px;
+      right: calc((100% / 2) - ((100% * 0.57735) / 2));
+      background-color: inherit;
+      height: inherit;
+      width: inherit;
+      content: '';
+      transform: rotateZ(60deg);
+    }
+
+    .hexagon:after {
+      position: absolute;
+      top: 0;
+      right: calc((100% / 2) - ((100% * 0.57735) / 2));
+      background-color: inherit;
+      height: inherit;
+      width: inherit;
+      content: '';
+      transform: rotateZ(-60deg);
     }
   }
 
-  .hexagon {
-    height: 100%;
-    width: calc(100% * 0.57735);
-    display: inline-block;
-  }
-
-  .hexagon:before {
-    position: absolute;
-    top: 0;
-    right: calc((100% / 2) - ((100% * 0.57735) / 2));
-    background-color: inherit;
-    height: inherit;
-    width: inherit;
-    content: '';
-    transform: rotateZ(60deg);
-  }
-
-  .hexagon:after {
-    position: absolute;
-    top: 0;
-    right: calc((100% / 2) - ((100% * 0.57735) / 2));
-    background-color: inherit;
-    height: inherit;
-    width: inherit;
-    content: '';
-    transform: rotateZ(-60deg);
-  }
-}
-
-a {
-  .hexagon {
-    transition: background-color 0.3s;
-    background-color: $on-dark-aqua;
-
-    &.mri {
-      background-color: $mri-theme;
-    }
-    &.eeg {
-      background-color: $eeg-theme;
-    }
-    &.nirs {
-      background-color: $nirs-theme;
-    }
-    &.pet {
-      background-color: $pet-theme;
-    }
-    &.ieeg {
-      background-color: $ieeg-theme;
-    }
-    &.ecog {
-      background-color: $ecog-theme;
-    }
-    &.asl {
-      background-color: $asl-theme;
-    }
-    &.meg {
-      background-color: $meg-theme;
-    }
-    &.eeg {
-      background-color: $on-light-green;
-    }
-  }
-  &:hover {
+  a {
     .hexagon {
-      background-color: lighten($on-dark-aqua, 15%);
+      transition: background-color 0.3s;
+      background-color: $on-dark-aqua;
+
       &.mri {
-        background-color: lighten($mri-theme, 10%);
+        background-color: $mri-theme;
       }
       &.eeg {
-        background-color: lighten($eeg-theme, 10%);
+        background-color: $eeg-theme;
       }
       &.nirs {
-        background-color: lighten($nirs-theme, 10%);
+        background-color: $nirs-theme;
       }
       &.pet {
-        background-color: lighten($pet-theme, 10%);
+        background-color: $pet-theme;
       }
       &.ieeg {
-        background-color: lighten($ieeg-theme, 10%);
+        background-color: $ieeg-theme;
       }
       &.ecog {
-        background-color: lighten($ecog-theme, 10%);
+        background-color: $ecog-theme;
       }
       &.asl {
-        background-color: lighten($asl-theme, 10%);
+        background-color: $asl-theme;
       }
       &.meg {
-        background-color: lighten($meg-theme, 10%);
+        background-color: $meg-theme;
       }
       &.eeg {
-        background-color: lighten($on-light-green, 10%);
+        background-color: $on-light-green;
+      }
+    }
+    &:hover {
+      .hexagon {
+        background-color: lighten($on-dark-aqua, 15%);
+        &.mri {
+          background-color: lighten($mri-theme, 10%);
+        }
+        &.eeg {
+          background-color: lighten($eeg-theme, 10%);
+        }
+        &.nirs {
+          background-color: lighten($nirs-theme, 10%);
+        }
+        &.pet {
+          background-color: lighten($pet-theme, 10%);
+        }
+        &.ieeg {
+          background-color: lighten($ieeg-theme, 10%);
+        }
+        &.ecog {
+          background-color: lighten($ecog-theme, 10%);
+        }
+        &.asl {
+          background-color: lighten($asl-theme, 10%);
+        }
+        &.meg {
+          background-color: lighten($meg-theme, 10%);
+        }
+        &.eeg {
+          background-color: lighten($on-light-green, 10%);
+        }
       }
     }
   }

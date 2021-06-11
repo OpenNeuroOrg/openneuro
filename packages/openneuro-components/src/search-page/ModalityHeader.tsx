@@ -7,8 +7,6 @@ export interface ModalityHeaderProps {
   publicDatasetStat: number
   participantsStat: number
   hexBackgroundImage: string
-  swoopBackgroundColorLight: string
-  swoopBackgroundColorDark: string
 }
 
 export const ModalityHeader = ({
@@ -17,16 +15,9 @@ export const ModalityHeader = ({
   publicDatasetStat,
   participantsStat,
   hexBackgroundImage,
-  swoopBackgroundColorLight,
-  swoopBackgroundColorDark,
 }: ModalityHeaderProps) => {
   return (
-    <section
-      className="search-page-portal-header"
-      style={{
-        backgroundColor: swoopBackgroundColorLight,
-        background: `linear-gradient(16deg, ${swoopBackgroundColorDark} 0%, ${swoopBackgroundColorLight} 70%)`,
-      }}>
+    <section className="search-page-portal-header">
       <div className="container">
         <div className="grid grid-between">
           <div className="col col-7 ">
