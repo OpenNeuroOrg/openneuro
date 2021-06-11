@@ -1,8 +1,9 @@
 @import '../scss/variables';
 
 .search-sort-list-label {
-  padding: 0 0 20px;
+  padding: 0 0 5px;
   color: var(--current-theme-primary);
+  font-size: 14px;
   &:hover {
     color: var(--current-theme-primary-hover);
   }
@@ -18,7 +19,7 @@
 }
 .search-sort-dropdown-list {
   .label {
-    margin: 0 15px 0 30px;
+    margin: 0 0px 0 30px;
     b {
       margin-right: 20px;
     }
@@ -28,24 +29,24 @@
   }
   ul {
     list-style: none;
-    padding: 0;
+    padding: 10px;
     margin: 0;
     border: 1px solid #ccc;
     border-radius: 6px;
-    max-width: 400px;
-    min-width: 150px;
+
     background-color: #fff;
 
     li {
       cursor: pointer;
       width: 100%;
-      padding: 10px 10px;
+      padding: 0;
       transition: background 0.25s, color 0.25s;
       display: flex;
       align-items: center;
       box-sizing: border-box;
       color: var(--current-theme-primary);
       justify-content: flex-end;
+      font-size: 14px;
       &:hover {
         color: var(--current-theme-primary-hover);
         background: rgba(0, 0, 0, 0.025);

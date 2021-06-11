@@ -8,13 +8,9 @@
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.05em;
-    color: #444;
     padding: 10px 0;
     display: flex;
     justify-content: space-between;
-    &.open {
-      color: #000;
-    }
   }
 
   .facet-list {

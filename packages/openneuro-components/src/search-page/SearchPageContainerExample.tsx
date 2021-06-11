@@ -66,7 +66,7 @@ export const SearchPageContainerExample = ({
 
   if (
     modality_selected === undefined &&
-    datasetType_selected === 'All' &&
+    datasetType_selected === 'All Public' &&
     datasetStatus_selected === undefined &&
     JSON.stringify(ageRange) === JSON.stringify([null, null]) &&
     JSON.stringify(subjectCountRange) === JSON.stringify([null, null]) &&
@@ -162,7 +162,7 @@ export const SearchPageContainerExample = ({
                   accordionStyle="plain"
                   selected={datasetType_selected}
                   setSelected={setDatasetsType}
-                  className="dataset-status"
+                  className="dataset-status chiclet"
                 />
                 <FacetSelect
                   selected={datasetStatus_selected}
