@@ -103,7 +103,7 @@ export const useSearchResults = () => {
     tasks,
     authors,
     gender_selected,
-    datePublicizedRange,
+    date_selected,
     species_selected,
     section_selected,
     studyDomain_selected,
@@ -132,8 +132,10 @@ export const useSearchResults = () => {
     qStrings.push(
       `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
     )
-  if (isActiveRange(datePublicizedRange))
-    qStrings.push(`created:${datePublicizedRange}`)
+  if (date_selected !== 'All Time')
+    qStrings.push(
+      `latestSnapshot.summary.subjectMetadata.sex: ${date_selected}`,
+    )
   if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
   if (section_selected)
     qStrings.push(`metadata.studyLongitudinal: ${section_selected}`)

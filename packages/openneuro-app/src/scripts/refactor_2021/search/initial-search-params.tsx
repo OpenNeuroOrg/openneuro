@@ -3,7 +3,7 @@ import { sortBy } from '@openneuro/components'
 const datasetType_available = [
   { label: 'All Public', value: 'All Public' },
   { label: 'Following', value: 'Following' },
-  { label: 'My Uploads', value: 'My Uploads' },
+  { label: 'My Datasets', value: 'My Datasets' },
   { label: 'My Bookmarks', value: 'My Bookmarks' },
 ]
 
@@ -93,8 +93,14 @@ export const gender_list = [
   { label: 'Female', value: 'Female' },
 ]
 
+export const date_list = [
+  { label: 'All Time', value: 'All Time' },
+  { label: 'Last 30 days', value: 'Last 30 days' },
+  { label: 'Last 180 days', value: 'Last 180 days' },
+  { label: 'Last 12 months', value: 'Last 12 months' },
+]
+
 type OptionalNumberRange = [number | null, number | null]
-type OptionalDateRange = [Date | null, Date | null]
 
 interface SearchParams {
   keywords: string[]
@@ -113,7 +119,8 @@ interface SearchParams {
   // more
   gender_available: string[]
   gender_selected: string | null
-  datePublicizedRange: OptionalDateRange
+  date_available: string[]
+  date_selected: string | null
   species_available: string[]
   species_selected: string | null
   section_available: string[]
@@ -143,7 +150,8 @@ const initialSearchParams: SearchParams = {
   // more
   gender_available: [],
   gender_selected: null,
-  datePublicizedRange: [null, null],
+  date_available: [],
+  date_selected: null,
   species_available: [],
   species_selected: null,
   section_available: [],
@@ -172,7 +180,13 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   // more
   gender_available: ['All', 'Male', 'Female'],
   gender_selected: 'All',
-  datePublicizedRange: [null, null],
+  date_available: [
+    'All Time',
+    'Last 30 days',
+    'Last 180 days',
+    'Last 12 months',
+  ],
+  date_selected: 'All Time',
   species_available: ['Human', 'Pig', 'Rat', 'Other'],
   species_selected: null,
   section_available: ['Cross', 'Longitudinal', 'Other'],

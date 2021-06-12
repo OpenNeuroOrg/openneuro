@@ -80,62 +80,152 @@
   }
 }
 
-.chiclet .on-radio-wrapper.row .custom-radio {
-  margin: 0 0 10px;
-  > label {
-    margin: 0 10px 0 0;
-  }
-  [type='radio']:checked + label:before,
-  [type='radio']:not(:checked) + label:before,
-  [type='radio']:not(:checked) + label:after,
-  [type='radio']:checked + label:after {
-    content: '';
-    width: auto;
-    height: auto;
-    background: none;
-    position: relative;
-    top: 0;
-    left: 0;
-    border-radius: 0;
-    transition: none;
-    font-size: 20px;
+.on-radio-wrapper.chiclet {
+  display: flex;
+  justify-content: space-between;
+  .custom-radio {
+    margin: 0 0 10px;
 
-    line-height: 0;
-    border: 0;
-  }
-
-  [type='radio']:checked + label:after {
-    content: '\d7';
-    margin: 0 0 0 10px;
-  }
-
-  [type='radio']:not(:checked) + label {
-    border-radius: 4px;
-    border: 1px solid #c83fad;
-    color: #c83fad;
-    transition: background-color 0.3s;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1.7em;
-    position: relative;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
-    &:nth-child(1) {
+    > label {
       margin: 0 10px 0 0;
     }
+    &:last-child {
+      > label {
+        margin-right: 0;
+      }
+    }
+    [type='radio']:checked + label:before,
+    [type='radio']:not(:checked) + label:before,
+    [type='radio']:not(:checked) + label:after,
+    [type='radio']:checked + label:after {
+      content: '';
+      width: auto;
+      height: auto;
+      background: none;
+      position: relative;
+      top: 0;
+      left: 0;
+      border-radius: 0;
+      transition: none;
+      font-size: 20px;
+
+      line-height: 0;
+      border: 0;
+    }
+
+    [type='radio']:checked + label:after {
+      content: '\d7';
+      margin: 0 0 0 10px;
+    }
+
+    [type='radio']:not(:checked) + label {
+      border-radius: 4px;
+      border: 1px solid #c83fad;
+      color: #c83fad;
+      transition: background-color 0.3s;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1.7em;
+      position: relative;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      &:nth-child(1) {
+        margin: 0 10px 0 0;
+      }
+    }
+    [type='radio']:checked + label {
+      color: #fff;
+      border-radius: 4px;
+      background-color: #c83fad;
+      transition: background-color 0.3s;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1.7em;
+      position: relative;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+    }
   }
-  [type='radio']:checked + label {
-    color: #fff;
-    border-radius: 4px;
-    background-color: #c83fad;
-    transition: background-color 0.3s;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1.7em;
-    position: relative;
-    padding: 6px 10px;
-    display: flex;
-    align-items: center;
+}
+
+.btn-group-wrapper {
+  position: relative;
+  margin: 0 0 10px;
+  border: 1px solid var(--current-theme-primary);
+  border-radius: 4px;
+  &:after {
+    content: '';
+    min-width: 25%;
+    height: 100%;
+    background-color: var(--current-theme-primary);
+    position: absolute;
+    display: block;
+    top: 0;
+    transition: margin 0.3s;
+  }
+  &.Following {
+    &:after {
+      margin-left: 25%;
+    }
+  }
+  &.MyDatasets {
+    &:after {
+      margin-left: 50%;
+    }
+  }
+  &.MyBookmarks {
+    &:after {
+      margin-left: 75%;
+    }
+  }
+}
+.on-radio-wrapper.btn-group {
+  display: flex;
+  justify-content: space-between;
+  z-index: 1;
+  position: relative;
+  .custom-radio {
+    min-width: 25%;
+    margin: 0;
+
+    > label {
+      margin: 0;
+    }
+
+    [type='radio']:checked + label:before,
+    [type='radio']:not(:checked) + label:before,
+    [type='radio']:not(:checked) + label:after,
+    [type='radio']:checked + label:after {
+      display: none;
+    }
+
+    [type='radio']:checked + label,
+    [type='radio']:not(:checked) + label {
+      border-radius: 0;
+      border: none;
+      color: var(--current-theme-primary);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1.7em;
+      position: relative;
+      padding: 6px 2px;
+      display: block;
+      text-align: center;
+      transition: color 0s;
+      transition-delay: 0s;
+      border-right: 1px solid var(--current-theme-primary);
+    }
+    [type='radio']:checked + label {
+      color: #fff;
+      transition-delay: 0.15s;
+    }
+    &:last-child {
+      [type='radio']:checked + label,
+      [type='radio']:not(:checked) + label {
+        border: 0;
+      }
+    }
   }
 }

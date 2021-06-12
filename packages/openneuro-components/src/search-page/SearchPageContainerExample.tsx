@@ -9,10 +9,10 @@ import { Button } from '../button/Button'
 import { sortBy } from '../mock-content/sortby-list'
 import { FacetSelect } from '../facets/FacetSelect'
 import { FacetRadio } from '../facets/FacetRadio'
-import { FacetDatePicker } from '../facets/FacetDatePicker'
 import { FacetRange } from '../facets/FacetRange'
 import { FacetSearch } from '../facets/FacetSearch'
 import { TermSearch } from '../input/TermSearch'
+import { RadioGroup } from '../radio/RadioGroup'
 
 import {
   modalities,
@@ -23,6 +23,7 @@ import {
   species_list,
   section_list,
   domain_list,
+  date_list,
 } from '../mock-content/facet-content'
 
 import './search-page.scss'
@@ -57,10 +58,7 @@ export const SearchPageContainerExample = ({
   const [section_selected, setSection] = React.useState()
   const [species_selected, setSpecies] = React.useState()
   const [studyDomain_selected, setDomain] = React.useState()
-  const [datePublicizedRange, setSelectedDate] = React.useState([null, null])
-
-  const setSelectedDateValue = value =>
-    setSelectedDate(value === null ? [null, null] : value)
+  const [date_selected, setDate] = React.useState('All Time')
 
   let filterBlockIsEmpty
 
@@ -71,11 +69,11 @@ export const SearchPageContainerExample = ({
     JSON.stringify(ageRange) === JSON.stringify([null, null]) &&
     JSON.stringify(subjectCountRange) === JSON.stringify([null, null]) &&
     gender_selected === 'All' &&
+    date_selected === 'All Time' &&
     diagnosis_selected === undefined &&
     section_selected === undefined &&
     species_selected === undefined &&
     studyDomain_selected === undefined &&
-    JSON.stringify(datePublicizedRange) === JSON.stringify([null, null]) &&
     allKeywords.length === 0 &&
     allTasks.length === 0 &&
     allAuthors.length === 0
@@ -106,7 +104,7 @@ export const SearchPageContainerExample = ({
                 section_selected={section_selected}
                 species_selected={species_selected}
                 studyDomain_selected={studyDomain_selected}
-                datePublicizedRange={datePublicizedRange}
+                date_selected={date_selected}
               />
             ) : null}
           </>
@@ -137,7 +135,34 @@ export const SearchPageContainerExample = ({
               pushTerm={pushKeyword}
               allTerms={allKeywords}
             />
-
+            <>
+              <div
+                className={
+                  datasetType_selected.replace(/\s/g, '') +
+                  ' btn-group-wrapper facet-radio'
+                }>
+                <RadioGroup
+                  setSelected={setDatasetsType}
+                  selected={datasetType_selected}
+                  name="show-datasets"
+                  radioArr={datasetType_available}
+                  layout="btn-group"
+                />
+              </div>
+              <FacetSelect
+                selected={datasetStatus_selected}
+                setSelected={setDatasetStatus}
+                items={dataset_type}
+                accordionStyle="plain"
+                label="My Datasets Status"
+                startOpen={true}
+                className={
+                  datasetType_selected == 'My Datasets'
+                    ? 'fade-in-facet'
+                    : 'fade-out-facet'
+                }
+              />
+            </>
             <FacetBlockContainerExample>
               {!portalContent && (
                 <FacetSelect
@@ -151,33 +176,6 @@ export const SearchPageContainerExample = ({
                   noAccordion={true}
                 />
               )}
-
-              <>
-                <FacetRadio
-                  radioArr={datasetType_available}
-                  layout="row"
-                  name="show-datasets"
-                  startOpen={true}
-                  label="Show"
-                  accordionStyle="plain"
-                  selected={datasetType_selected}
-                  setSelected={setDatasetsType}
-                  className="dataset-status chiclet"
-                />
-                <FacetSelect
-                  selected={datasetStatus_selected}
-                  setSelected={setDatasetStatus}
-                  items={dataset_type}
-                  accordionStyle="plain"
-                  label="My Datasets Status"
-                  startOpen={true}
-                  className={
-                    datasetType_selected == 'My Datasets'
-                      ? 'fade-in-facet'
-                      : 'fade-out-facet'
-                  }
-                />
-              </>
 
               <FacetRange
                 startOpen={false}
@@ -263,12 +261,15 @@ export const SearchPageContainerExample = ({
                 label="Gender"
                 accordionStyle="plain"
               />
-              <FacetDatePicker
+              <FacetRadio
+                selected={date_selected}
+                setSelected={setDate}
+                radioArr={date_list}
+                layout="row"
+                name="published"
                 startOpen={false}
-                label="Upload Date"
+                label="Date Published"
                 accordionStyle="plain"
-                selected={datePublicizedRange}
-                setSelected={setSelectedDateValue}
               />
               <FacetSelect
                 selected={species_selected}

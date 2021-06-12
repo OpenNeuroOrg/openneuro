@@ -16,7 +16,7 @@ import {
   TaskInput,
   AuthorInput,
   GenderRadios,
-  DateRangeInput,
+  DateRadios,
   SpeciesSelect,
   SectionSelect,
   StudyDomainSelect,
@@ -56,15 +56,15 @@ const SearchContainer: FC = () => {
       renderSearchFacets={() => (
         <>
           <KeywordInput />
-          <ModalitySelect />
           <ShowDatasetRadios />
+          <ModalitySelect />
           <AgeRangeInput />
           <SubjectCountRangeInput />
           <DiagnosisSelect />
           <TaskInput />
           <AuthorInput />
           <GenderRadios />
-          <DateRangeInput />
+          <DateRadios />
           <SpeciesSelect />
           <SectionSelect />
           <StudyDomainSelect />

@@ -5,6 +5,7 @@ export * from './header/LandingExpandedHeader'
 export * from './input'
 export * from './search-page'
 export * from './button/Button'
+export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
 
 /* TEMPORARY EXPORTS */
