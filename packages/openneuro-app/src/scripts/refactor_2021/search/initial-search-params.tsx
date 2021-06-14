@@ -3,7 +3,7 @@ import { sortBy } from '@openneuro/components'
 const datasetType_available = [
   { label: 'All Public', value: 'All Public' },
   { label: 'Following', value: 'Following' },
-  { label: 'My Uploads', value: 'My Uploads' },
+  { label: 'My Datasets', value: 'My Datasets' },
   { label: 'My Bookmarks', value: 'My Bookmarks' },
 ]
 
