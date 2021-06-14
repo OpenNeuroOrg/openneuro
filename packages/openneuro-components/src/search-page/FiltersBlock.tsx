@@ -22,6 +22,7 @@ export interface FiltersBlockProps {
   datePublicizedRange?: [Date | null, Date | null]
   removeFilterItem?(key: string, value): void
   removeAllFilters?(): void
+  numTotalResults: number
 }
 
 export const FiltersBlock = ({
@@ -41,6 +42,7 @@ export const FiltersBlock = ({
   datePublicizedRange,
   removeFilterItem,
   removeAllFilters,
+  numTotalResults,
 }: FiltersBlockProps) => {
   const _listItem = (type, item) => {
     if (item === 'All') {
@@ -71,7 +73,7 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <h4>
-        These filters return <span>100</span> results:{' '}
+        These filters return <span>{numTotalResults}</span> results:{' '}
         <Button label="Clear All" size="small" onClick={removeAllFilters} />
       </h4>
       <ul className="active-filters">
