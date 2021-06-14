@@ -15,7 +15,7 @@ const SubjectCountRangeInput: FC = () => {
   return (
     <FacetRange
       startOpen={false}
-      label="Number of Subjects"
+      label="Number of Participants"
       accordionStyle="plain"
       min={0}
       max={100}
