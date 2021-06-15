@@ -39,7 +39,7 @@ const ShowDatasetsRadios: FC = () => {
         selected={datasetType_selected}
         setSelected={setShowSelected}
       />
-      {datasetType_selected == 'My Uploads' ? (
+      {datasetType_selected == 'My Datasets' ? (
         <FacetSelect
           selected={datasetStatus_selected}
           setSelected={setShowMyUploadsSelected}

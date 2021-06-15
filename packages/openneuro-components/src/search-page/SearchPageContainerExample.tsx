@@ -85,6 +85,8 @@ export const SearchPageContainerExample = ({
     filterBlockIsEmpty = false
   }
 
+  const numTotalResults = 2000
+
   return (
     <div>
       <SearchPage
@@ -107,6 +109,7 @@ export const SearchPageContainerExample = ({
                 species_selected={species_selected}
                 studyDomain_selected={studyDomain_selected}
                 datePublicizedRange={datePublicizedRange}
+                numTotalResults={numTotalResults}
               />
             ) : null}
           </>
@@ -181,7 +184,7 @@ export const SearchPageContainerExample = ({
 
               <FacetRange
                 startOpen={false}
-                label="Age of Participant"
+                label="Age of Participants"
                 accordionStyle="plain"
                 min={0}
                 max={100}
@@ -194,7 +197,7 @@ export const SearchPageContainerExample = ({
               />
               <FacetRange
                 startOpen={false}
-                label="Number of Participant"
+                label="Number of Participants"
                 accordionStyle="plain"
                 min={0}
                 max={100}

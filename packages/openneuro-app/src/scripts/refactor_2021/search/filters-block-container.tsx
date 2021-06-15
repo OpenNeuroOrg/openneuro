@@ -39,7 +39,13 @@ const getSelectParams = ({
   datePublicizedRange,
 })
 
-const FiltersBlockContainer: FC = () => {
+interface FiltersBlockContainerProps {
+  numTotalResults: number
+}
+
+const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
+  numTotalResults,
+}) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const selectedParams = getSelectParams(searchParams)
 
@@ -63,6 +69,7 @@ const FiltersBlockContainer: FC = () => {
     <FiltersBlock
       removeFilterItem={removeFilterItem(setSearchParams)}
       removeAllFilters={removeAllFilters}
+      numTotalResults={numTotalResults}
       {...selectedParams}
     />
   ) : null

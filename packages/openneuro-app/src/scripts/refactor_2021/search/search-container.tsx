@@ -36,17 +36,15 @@ const SearchContainer: FC = () => {
   const numResultsShown = data?.datasets?.edges.length || 0
   const numTotalResults = data?.datasets?.pageInfo.count || 0
   const resultsList = data?.datasets?.edges || []
+  console.log(numTotalResults)
 
   return (
     <SearchPage
-      renderFilterBlock={() => <FiltersBlockContainer />}
+      renderFilterBlock={() => (
+        <FiltersBlockContainer numTotalResults={numTotalResults} />
+      )}
       renderSortBy={() => (
         <>
-          {/* TODO: Make div.results-count into display component. */}
-          <div className="col results-count">
-            Showing <b>{numResultsShown}</b> of <b>{numTotalResults}</b>{' '}
-            Datasets
-          </div>
           {/* TODO: move wrapper div.col.search-sort into <SearchSort/> */}
           <div className="col search-sort">
             <SortBySelect />
@@ -78,10 +76,6 @@ const SearchContainer: FC = () => {
             <SearchResultsList items={resultsList} profile={profile} />
             {/* TODO: make div below into display component. */}
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
-              <div className="col col-12 results-count">
-                Showing <b>{numResultsShown}</b> of <b>{numTotalResults}</b>{' '}
-                Datasets
-              </div>
               {resultsList.length == 0 || resultsList.length < 25 ? null : (
                 <div className="col col-12 load-more ">
                   <Button label="Load More" />
