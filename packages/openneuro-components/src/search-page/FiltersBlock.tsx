@@ -22,6 +22,7 @@ export interface FiltersBlockProps {
   studyDomain_selected?: { label: string; value: string }
   removeFilterItem?(key: string, value): void
   removeAllFilters?(): void
+  numTotalResults: number
 }
 
 export const FiltersBlock = ({
@@ -41,6 +42,7 @@ export const FiltersBlock = ({
   date_selected,
   removeFilterItem,
   removeAllFilters,
+  numTotalResults,
 }: FiltersBlockProps) => {
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
@@ -50,7 +52,7 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <h4>
-        These filters return <span>100</span> results:{' '}
+        These filters return <span>{numTotalResults}</span> results:{' '}
         <Button label="Clear All" size="small" onClick={removeAllFilters} />
       </h4>
       <ul className="active-filters">

@@ -20,7 +20,7 @@ const AuthorInput: FC = () => {
   return (
     <FacetSearch
       accordionStyle="plain"
-      label="Author"
+      label="Sr. Author / PI"
       startOpen={false}
       className="search-authors"
       type="text"
