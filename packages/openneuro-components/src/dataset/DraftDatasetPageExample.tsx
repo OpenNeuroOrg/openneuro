@@ -28,6 +28,7 @@ import './dataset-page.scss'
 export interface DraftDatasetPageExampleProps {
   dataset
 }
+
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
 
@@ -36,6 +37,17 @@ const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
+var last30 = new Date()
+last30.setDate(last30.getDate() - 30)
+console.log(last30)
+
+var last180 = new Date()
+last180.setDate(last180.getDate() - 180)
+console.log(last180)
+
+var last1365 = new Date()
+last1365.setDate(last1365.getDate() - 365)
+console.log(last1365)
 
 export const DraftDatasetPageExample = ({
   dataset,
@@ -206,7 +218,7 @@ export const DraftDatasetPageExample = ({
           />
         )}
         renderAlert={() => (
-          <>{isPublic && <DatasetAlert rootPath={rootPath} />}</>
+          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
         )}
         renderHeaderMeta={() => (
           <DatasetHeaderMeta

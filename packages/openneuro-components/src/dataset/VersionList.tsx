@@ -63,10 +63,12 @@ export const VersionList = ({
             <ul>
               <li
                 onClick={() => setVersion('draft', dateModified)}
-                className={selected === 'draft' && 'selected'}>
+                className={selected === 'draft' ? 'selected' : ''}>
                 <span className="label">
                   Draft
-                  <span className="active">{selected === 'draft' && '*'}</span>
+                  <span className="active">
+                    {selected === 'draft' ? '*' : ''}
+                  </span>
                 </span>
                 {date}
               </li>
@@ -78,14 +80,14 @@ export const VersionList = ({
                       ? () => deprecatedItem(item.tag, item.created)
                       : () => setVersion(item.tag, formatDate(item.created))
                   }
-                  className={selected === item.tag && 'selected'}>
+                  className={selected === item.tag ? 'selected' : ''}>
                   <span className="label">
                     v{item.tag}
                     <span className="active">
-                      {selected === item.tag && '*'}
+                      {selected === item.tag ? '*' : ''}
                     </span>
                     <span className="deprecated">
-                      {item.deprecated === true && 'Deprecated'}
+                      {item.deprecated === true ? 'Deprecated' : ''}
                     </span>
                   </span>
                   {date}
