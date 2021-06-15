@@ -42,24 +42,6 @@ export const FiltersBlock = ({
   removeFilterItem,
   removeAllFilters,
 }: FiltersBlockProps) => {
-  const _listItem = (type, item) => {
-    if (item === 'All' || item === 'All Time') {
-      return
-    } else
-      return (
-        <>
-          <li className={type}>
-            <strong>{type}:</strong>
-            <span>
-              {type === 'Age' || type === 'Participants'
-                ? item[0] + ' - ' + item[1]
-                : item}
-              <span>&times;</span>
-            </span>
-          </li>
-        </>
-      )
-  }
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
   const subjectCountRangeIsNull =

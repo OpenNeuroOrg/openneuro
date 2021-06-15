@@ -22,6 +22,7 @@ export const FilterListItem = ({
   if (
     item.value === 'All' ||
     item.value === 'All Public' ||
+    item.value === 'All Time' ||
     JSON.stringify(item.value) === JSON.stringify([null, null])
   ) {
     return null
@@ -31,7 +32,7 @@ export const FilterListItem = ({
         <li className={type}>
           <strong>{type}:</strong>
           <span>
-            {type === 'Age' || type === 'Subjects'
+            {type === 'Age' || type === 'Participants'
               ? item.value[0] + ' - ' + item.value[1]
               : item.value}
             <span onClick={() => removeFilterItem(item.param, item.value)}>

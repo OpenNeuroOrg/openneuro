@@ -26,7 +26,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   const cubeWrap = (
     <div className="cube-wrap col col-6" id="front-cubes">
       {cubeData.map((item, index) => (
-        <div className="cube-block ">
+        <div className="cube-block " key={index}>
           <ModalityCube
             key={index}
             label={item.label}
