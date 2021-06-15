@@ -85,6 +85,8 @@ export const SearchPageContainerExample = ({
     filterBlockIsEmpty = false
   }
 
+  const numTotalResults = 2000
+
   return (
     <div>
       <SearchPage
@@ -107,6 +109,7 @@ export const SearchPageContainerExample = ({
                 species_selected={species_selected}
                 studyDomain_selected={studyDomain_selected}
                 datePublicizedRange={datePublicizedRange}
+                numTotalResults={numTotalResults}
               />
             ) : null}
           </>
