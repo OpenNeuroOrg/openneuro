@@ -128,14 +128,28 @@ export const useSearchResults = () => {
     qStrings.push(`latestSnapshot.summary.tasks: ${joinWithAND(tasks)}`)
   if (authors.length)
     qStrings.push(`metadata.seniorAuthor: ${joinWithAND(authors)}`)
-  if (gender_selected !== 'All')
+  if (gender_selected !== 'All') {
     qStrings.push(
       `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
     )
-  if (date_selected !== 'All Time')
-    qStrings.push(
-      `latestSnapshot.summary.subjectMetadata.sex: ${date_selected}`,
-    )
+  }
+  const now = new Date()
+  const last30 = new Date()
+  const last180 = new Date()
+  const last1365 = new Date()
+  last30.setDate(last30.getDate() - 30)
+  last180.setDate(last180.getDate() - 180)
+  last1365.setDate(last1365.getDate() - 365)
+
+  if (date_selected === 'Last 30 days') {
+    qStrings.push(`created:range([${last30}, ${now}])`)
+  }
+  if (date_selected === 'Last 180 days') {
+    qStrings.push(`created:range([${last180}, ${now}])`)
+  }
+  if (date_selected === 'Last 12 months') {
+    qStrings.push(`created:range([${last1365}, ${now}])`)
+  }
   if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
   if (section_selected)
     qStrings.push(`metadata.studyLongitudinal: ${section_selected}`)

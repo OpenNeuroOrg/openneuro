@@ -6,7 +6,7 @@ const DateRadios: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const { date_available, date_selected } = searchParams
-  const setGender = date_selected =>
+  const setDate = date_selected =>
     setSearchParams(prevState => ({
       ...prevState,
       date_selected,
@@ -15,7 +15,7 @@ const DateRadios: FC = () => {
   return (
     <FacetRadio
       selected={date_selected}
-      setSelected={setGender}
+      setSelected={setDate}
       radioArr={date_available}
       layout="row"
       name="Date"
