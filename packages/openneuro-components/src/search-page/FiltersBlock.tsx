@@ -51,7 +51,7 @@ export const FiltersBlock = ({
           <li className={type}>
             <strong>{type}:</strong>
             <span>
-              {type === 'Age' || type === 'Subjects'
+              {type === 'Age' || type === 'Participants'
                 ? item[0] + ' - ' + item[1]
                 : item}
               <span>&times;</span>
@@ -115,7 +115,7 @@ export const FiltersBlock = ({
         )}
         {!subjectCountRangeIsNull && (
           <FilterListItem
-            type="Subjects"
+            type="Participants"
             item={{ param: 'subjectCountRange', value: subjectCountRange }}
             removeFilterItem={removeFilterItem}
           />
