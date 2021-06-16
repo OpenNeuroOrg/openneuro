@@ -166,5 +166,6 @@ export const useSearchResults = () => {
       q: qString,
     },
     errorPolicy: 'ignore',
+    fetchPolicy: 'no-cache',
   })
 }

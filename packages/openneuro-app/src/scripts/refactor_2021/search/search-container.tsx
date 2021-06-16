@@ -36,7 +36,6 @@ const SearchContainer: FC = () => {
   const numResultsShown = data?.datasets?.edges.length || 0
   const numTotalResults = data?.datasets?.pageInfo.count || 0
   const resultsList = data?.datasets?.edges || []
-  console.log(numTotalResults)
 
   return (
     <SearchPage
@@ -69,7 +68,7 @@ const SearchContainer: FC = () => {
         </>
       )}
       renderSearchResultsList={() =>
-        loading ? (
+        loading && numTotalResults === 0 ? (
           resultsList.length !== 0 && <>Datasets loading placeholder</>
         ) : (
           <>
