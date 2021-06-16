@@ -87,8 +87,11 @@ const joinWithAND = (list: string[]) =>
   list.map(str => `(${str})`).join(' AND ')
 const isActiveRange = range =>
   JSON.stringify(range) !== JSON.stringify([null, null])
-const range = ([min, max]) =>
-  `[${min === null ? '*' : min} TO ${max === null ? '*' : max}]`
+const range = ([min, max]: [Date, Date]) => {
+  const minISO = min === null ? '*' : min.toISOString()
+  const maxISO = max === null ? '*' : max.toISOString()
+  return `[${minISO} TO ${maxISO}]`
+}
 
 export const useSearchResults = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -141,13 +144,13 @@ export const useSearchResults = () => {
   last180.setDate(last180.getDate() - 180)
   last365.setDate(last365.getDate() - 365)
 
-  if (date_selected === 'Last 30 days') {
+  if (date_selected === 'All Time') {
+    qStrings.push(`created:${range([null, now])}`)
+  } else if (date_selected === 'Last 30 days') {
     qStrings.push(`created:${range([last30, now])}`)
-  }
-  if (date_selected === 'Last 180 days') {
+  } else if (date_selected === 'Last 180 days') {
     qStrings.push(`created:${range([last180, now])}`)
-  }
-  if (date_selected === 'Last 12 months') {
+  } else if (date_selected === 'Last 12 months') {
     qStrings.push(`created:${range([last365, now])}`)
   }
   if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
@@ -156,10 +159,7 @@ export const useSearchResults = () => {
   if (studyDomain_selected)
     qStrings.push(`metadata.studyDomain: ${species_selected}`)
 
-  // qStrings.push('id: (ds001120) OR (ds001113)')
-
   const qString = joinWithAND(qStrings)
-  console.log(qString)
 
   return useQuery(searchQuery, {
     variables: {
