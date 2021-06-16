@@ -46,10 +46,10 @@ spec:
         command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
           limits:
-            cpu: "3"
-            memory: "10Gi"
+            cpu: "8"
+            memory: "12Gi"
           requests:
-            cpu: "1"
+            cpu: "2"
             memory: "4Gi"
         ports:
         - containerPort: 80
