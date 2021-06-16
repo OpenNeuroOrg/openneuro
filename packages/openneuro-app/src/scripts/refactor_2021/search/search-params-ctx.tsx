@@ -26,11 +26,11 @@ export const removeFilterItem = setSearchParams => (param, value) => {
     case 'ageRange':
     case 'subjectCountRange':
     case 'gender_selected':
+    case 'date_selected':
     case 'diagnosis_selected':
     case 'section_selected':
     case 'species_selected':
     case 'studyDomain_selected':
-    case 'datePublicizedRange':
       setSearchParams(prevState => ({
         ...prevState,
         [param]: initialSearchParams[param],

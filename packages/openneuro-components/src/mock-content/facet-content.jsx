@@ -138,6 +138,13 @@ export const gender_list = [
   { label: 'Female', value: 'Female' },
 ]
 
+export const date_list = [
+  { label: 'All Time', value: 'All Time' },
+  { label: 'Last 30 days', value: 'Last 30 days' },
+  { label: 'Last 180 days', value: 'Last 180 days' },
+  { label: 'Last 12 months', value: 'Last 12 months' },
+]
+
 export const species_list = [
   {
     label: 'Human',

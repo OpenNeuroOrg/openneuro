@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
-import { FacetRadio, FacetSelect } from '@openneuro/components'
+import { RadioGroup, FacetSelect } from '@openneuro/components'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../../authentication/profile'
 
@@ -29,16 +29,19 @@ const ShowDatasetsRadios: FC = () => {
 
   return loggedOut ? null : (
     <>
-      <FacetRadio
-        radioArr={datasetType_available}
-        layout="row"
-        name="show-datasets"
-        startOpen={true}
-        label="Show"
-        accordionStyle="plain"
-        selected={datasetType_selected}
-        setSelected={setShowSelected}
-      />
+      <div
+        className={
+          datasetType_selected.replace(/\s/g, '') +
+          ' btn-group-wrapper facet-radio'
+        }>
+        <RadioGroup
+          radioArr={datasetType_available}
+          layout="btn-group"
+          name="show-datasets"
+          selected={datasetType_selected}
+          setSelected={setShowSelected}
+        />
+      </div>
       {datasetType_selected == 'My Datasets' ? (
         <FacetSelect
           selected={datasetStatus_selected}

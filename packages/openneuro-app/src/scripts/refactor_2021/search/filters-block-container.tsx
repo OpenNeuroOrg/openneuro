@@ -16,12 +16,12 @@ const getSelectParams = ({
   subjectCountRange,
   authors,
   gender_selected,
+  date_selected,
   tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
   studyDomain_selected,
-  datePublicizedRange,
 }) => ({
   keywords,
   modality_selected,
@@ -31,12 +31,12 @@ const getSelectParams = ({
   subjectCountRange,
   authors,
   gender_selected,
+  date_selected,
   tasks,
   diagnosis_selected,
   section_selected,
   species_selected,
   studyDomain_selected,
-  datePublicizedRange,
 })
 
 interface FiltersBlockContainerProps {
@@ -64,7 +64,6 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       ...getSelectParams(initialSearchParams),
     }))
   }
-
   return someParamsAreSelected ? (
     <FiltersBlock
       removeFilterItem={removeFilterItem(setSearchParams)}

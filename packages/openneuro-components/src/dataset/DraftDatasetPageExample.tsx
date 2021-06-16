@@ -28,6 +28,7 @@ import './dataset-page.scss'
 export interface DraftDatasetPageExampleProps {
   dataset
 }
+
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
 
@@ -206,7 +207,7 @@ export const DraftDatasetPageExample = ({
           />
         )}
         renderAlert={() => (
-          <>{isPublic && <DatasetAlert rootPath={rootPath} />}</>
+          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
         )}
         renderHeaderMeta={() => (
           <DatasetHeaderMeta

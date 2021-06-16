@@ -1,6 +1,9 @@
 {
   "properties": {
-    "id": { "type": "keyword" },
+    "id": {
+      "type": "keyword",
+      "format": "date_optional_time"
+    },
     "created": { "type": "date" },
     "metadata": {
       "properties": {

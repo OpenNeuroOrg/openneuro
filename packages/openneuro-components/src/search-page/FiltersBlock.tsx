@@ -14,12 +14,12 @@ export interface FiltersBlockProps {
   subjectCountRange?: [number, number]
   authors: string[]
   gender_selected?: string
+  date_selected?: string
   tasks: string[]
   diagnosis_selected?: { label: string; value: string }
   section_selected?: { label: string; value: string }
   species_selected?: { label: string; value: string }
   studyDomain_selected?: { label: string; value: string }
-  datePublicizedRange?: [Date | null, Date | null]
   removeFilterItem?(key: string, value): void
   removeAllFilters?(): void
   numTotalResults: number
@@ -39,36 +39,15 @@ export const FiltersBlock = ({
   section_selected,
   species_selected,
   studyDomain_selected,
-  datePublicizedRange,
+  date_selected,
   removeFilterItem,
   removeAllFilters,
   numTotalResults,
 }: FiltersBlockProps) => {
-  const _listItem = (type, item) => {
-    if (item === 'All') {
-      return
-    } else
-      return (
-        <>
-          <li className={type}>
-            <strong>{type}:</strong>
-            <span>
-              {type === 'Age' || type === 'Subjects'
-                ? item[0] + ' - ' + item[1]
-                : item}
-              <span>&times;</span>
-            </span>
-          </li>
-        </>
-      )
-  }
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
   const subjectCountRangeIsNull =
     JSON.stringify(subjectCountRange) === JSON.stringify([null, null])
-
-  const dateIsNull =
-    JSON.stringify(datePublicizedRange) === JSON.stringify([null, null])
 
   return (
     <div className="filters-block">
@@ -120,7 +99,7 @@ export const FiltersBlock = ({
         )}
         {!subjectCountRangeIsNull && (
           <FilterListItem
-            type="Subjects"
+            type="Participants"
             item={{ param: 'subjectCountRange', value: subjectCountRange }}
             removeFilterItem={removeFilterItem}
           />
@@ -177,10 +156,10 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem}
           />
         )}
-        {!dateIsNull && (
-          <FilterDateItem
-            type="Date"
-            item={{ param: 'datePublicizedRange', value: datePublicizedRange }}
+        {date_selected && (
+          <FilterListItem
+            type="Date Published"
+            item={{ param: 'date_selected', value: date_selected }}
             removeFilterItem={removeFilterItem}
           />
         )}
