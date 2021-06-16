@@ -166,6 +166,8 @@ export const useSearchResults = () => {
       q: qString,
     },
     errorPolicy: 'ignore',
+    // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)
+    // TODO: find better solution
     fetchPolicy: 'no-cache',
   })
 }
