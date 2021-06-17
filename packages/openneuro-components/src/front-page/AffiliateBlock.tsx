@@ -11,7 +11,7 @@ export const AffiliateBlock: React.FC<AffiliateBlockProps> = () => {
     <div className="container affiliate-wrap">
       <div className="grid grid-between">
         {affiliateContent.map((item, index) => (
-          <div className="col col-3">
+          <div className="col col-4">
             <AffiliateArticle
               logo={item.logo}
               key={index}
