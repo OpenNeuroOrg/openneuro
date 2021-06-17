@@ -32,6 +32,21 @@ def test_get_annexed_file(client):
     assert result.content.decode() == file_data
 
 
+def test_get_annexed_file_nested(client):
+    ds_id = 'ds000001'
+    file_data = 'test image, please ignore'
+    response = client.simulate_post(
+        '/datasets/{}/files/sub-01:data.nii.gz'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    result = client.simulate_get(
+        '/datasets/{}/files/sub-01:data.nii.gz'.format(ds_id), file_wrapper=FileWrapper)
+    content_len = int(result.headers['content-length'])
+    assert content_len == len(result.content)
+    assert result.content.decode() == file_data
+
+
 def test_get_missing_file(client):
     ds_id = 'ds000001'
     result = client.simulate_get(
