@@ -27,7 +27,9 @@ class FilesResource(object):
                 file_content = git_show(ds_path, snapshot + ':' + filename)
                 # If the file begins with an annex path, return that path
                 if file_content[0:4096].find('.git/annex') != -1:
-                    target_path = os.path.join(ds_path, file_content)
+                    # Resolve absolute path for annex target
+                    target_path = os.path.join(
+                        ds_path, os.path.dirname(filename), file_content)
                     # Verify the annex path is within the dataset dir
                     if ds_path == os.path.commonpath((ds_path, target_path)):
                         fd = open(target_path, 'rb')
