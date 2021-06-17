@@ -17,6 +17,36 @@ def test_get_file(client):
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
 
 
+def test_get_annexed_file(client):
+    ds_id = 'ds000001'
+    file_data = 'test image, please ignore'
+    response = client.simulate_post(
+        '/datasets/{}/files/data.nii.gz'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    result = client.simulate_get(
+        '/datasets/{}/files/data.nii.gz'.format(ds_id), file_wrapper=FileWrapper)
+    content_len = int(result.headers['content-length'])
+    assert content_len == len(result.content)
+    assert result.content.decode() == file_data
+
+
+def test_get_annexed_file_nested(client):
+    ds_id = 'ds000001'
+    file_data = 'test image, please ignore'
+    response = client.simulate_post(
+        '/datasets/{}/files/sub-01:data.nii.gz'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    result = client.simulate_get(
+        '/datasets/{}/files/sub-01:data.nii.gz'.format(ds_id), file_wrapper=FileWrapper)
+    content_len = int(result.headers['content-length'])
+    assert content_len == len(result.content)
+    assert result.content.decode() == file_data
+
+
 def test_get_missing_file(client):
     ds_id = 'ds000001'
     result = client.simulate_get(
@@ -213,16 +243,22 @@ def test_untracked_dir_index(client, new_dataset):
         else:
             assert False
 
+
 def test_delete_file(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    response = client.simulate_delete('/datasets/{}/files'.format(ds_id), body='{ "filenames": ["dataset_description.json", "CHANGES"] }')
+    response = client.simulate_delete('/datasets/{}/files'.format(
+        ds_id), body='{ "filenames": ["dataset_description.json", "CHANGES"] }')
     assert response.status == falcon.HTTP_OK
     print(response.content)
-    assert json.loads(response.content)['deleted'] == ['dataset_description.json', 'CHANGES']
+    assert json.loads(response.content)['deleted'] == [
+        'dataset_description.json', 'CHANGES']
+
 
 def test_delete_non_existing_file(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    response = client.simulate_delete('/datasets/{}/files'.format(ds_id), body='{ "filenames": ["fake", "test"]}')
+    response = client.simulate_delete(
+        '/datasets/{}/files'.format(ds_id), body='{ "filenames": ["fake", "test"]}')
     assert response.status == falcon.HTTP_OK
     print(response.content)
-    assert json.loads(response.content)['error'] == 'the following files not found: fake, test'
+    assert json.loads(response.content)[
+        'error'] == 'the following files not found: fake, test'
