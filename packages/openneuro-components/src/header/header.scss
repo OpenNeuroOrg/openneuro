@@ -76,19 +76,25 @@ header {
         font-size: 14px;
         text-transform: uppercase;
         font-weight: 600;
-      }
-      &:after {
-        transition: width 0.5s;
-        content: '';
-        border-bottom: 2px solid #fff;
-        width: 0;
-        display: block;
-        transition: width 0.3s;
-        margin-top: 10px;
-      }
-      &:hover {
+
         &:after {
-          width: 100%;
+          transition: width 0.5s;
+          content: '';
+          border-bottom: 2px solid #fff;
+          width: 0;
+          display: block;
+          transition: width 0.3s;
+          margin-top: 10px;
+        }
+        &:hover {
+          &:after {
+            width: 100%;
+          }
+        }
+        &.active {
+          &:after {
+            width: 100%;
+          }
         }
       }
     }

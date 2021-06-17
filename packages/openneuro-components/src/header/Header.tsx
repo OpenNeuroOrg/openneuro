@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { NavLink } from 'react-router-dom'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
@@ -34,31 +34,27 @@ export const Header: React.FC<HeaderProps> = ({
   pushHistory,
   renderOnExpanded,
 }) => {
-  const goTo = path => e => {
-    e.preventDefault()
-    pushHistory(path)
-  }
   return (
     <>
       <header>
         <div className="navbar-inner-wrap">
           <div className="navbar-brand">
-            <a onClick={goTo('/')}>
+            <NavLink to="/">
               <Logo horizontal dark={false} />
-            </a>
+            </NavLink>
             <h1 className="sr-only">OpenNeuro</h1>
           </div>
           <div className="navbar-navigation">
             {/* TODO: convert Support to trigger support modal. */}
             <ul>
               <li>
-                <a onClick={goTo('/search')}>Search</a>
+                <NavLink to="/search">Search</NavLink>
               </li>
               <li>
-                <a onClick={() => {}}>Support</a>
+                <NavLink to="/support">Search</NavLink>
               </li>
               <li>
-                <a onClick={goTo('/faq')}>FAQ</a>
+                <NavLink to="/faq">FAQ</NavLink>
               </li>
             </ul>
           </div>
