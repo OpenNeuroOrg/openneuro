@@ -45,19 +45,19 @@ const FrontPageContainer: FC = () => {
           <>
             {/* <h2>
                 <Icon label="Activity" imgSrc={activityIcon} iconSize="40px" />
-              </h2>
-              <ActivitySlider
-                data={RecentData.data.datasets.edges}
-                sliderArgs={sliderArgs}
-                className="recent-slider"
-                slideHeader="Newly Added"
-              />
-              <ActivitySlider
-                data={TopViewed.data.datasets.edges}
-                sliderArgs={sliderArgs}
-                className="popular-slider"
-                slideHeader="Most Viewed"
-              /> */}
+              </h2>*/}
+            <ActivitySlider
+              data={RecentData.data.datasets.edges}
+              sliderArgs={sliderArgs}
+              className="recent-slider"
+              slideHeader="Newly Added"
+            />
+            <ActivitySlider
+              data={TopViewed.data.datasets.edges}
+              sliderArgs={sliderArgs}
+              className="popular-slider"
+              slideHeader="Most Viewed"
+            />
           </>
         )}
         renderGetUpdates={() => <GetUpdates />}
