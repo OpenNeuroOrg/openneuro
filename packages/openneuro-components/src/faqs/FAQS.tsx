@@ -14,9 +14,10 @@ export const FAQS: React.FC<FAQSProps> = ({}) => {
     return (
       <AccordionTab
         accordionStyle="plain"
-        className="faq-accordion"
+        className="faq-item"
         label={item.faq}
-        key={index}>
+        key={index}
+        startOpen={true}>
         <Markdown>{item.answer}</Markdown>
       </AccordionTab>
     )
@@ -24,7 +25,7 @@ export const FAQS: React.FC<FAQSProps> = ({}) => {
 
   return (
     <>
-      <AccordionWrap>
+      <AccordionWrap className="faqs-accordion">
         <div className="container faqs">
           <h1>FAQ's</h1>
           {faqs}

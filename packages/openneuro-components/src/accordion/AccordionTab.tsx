@@ -37,7 +37,9 @@ export const AccordionTab: React.FC<AccordionTabProps> = ({
 
   return (
     <>
-      <span className={`${accordionStyle}` + ' ' + `${className}`} id={id}>
+      <span
+        className={`${accordionStyle}` + ' accordion ' + `${className}`}
+        id={id}>
         <div
           className={`accordion-title ${isOpen ? 'open' : ''}`}
           onClick={() => setOpen(!isOpen)}>
