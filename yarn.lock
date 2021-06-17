@@ -2849,6 +2849,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime-corejs3@npm:^7.14.6":
+  version: 7.14.6
+  resolution: "@babel/runtime-corejs3@npm:7.14.6"
+  dependencies:
+    core-js-pure: ^3.14.0
+    regenerator-runtime: ^0.13.4
+  checksum: aa0271b4e850d95a41474ee8e81029aee5a6407242935d551cf454561b161ed893194f58a79f5e57aafa91fb73c27434f103f517bed9b83568aa6fd5d5a357d3
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.0, @babel/runtime@npm:^7.10.1, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.1, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.13.17, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.14.0
   resolution: "@babel/runtime@npm:7.14.0"
@@ -5322,6 +5332,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
+    "@babel/runtime-corejs3": ^7.14.6
     "@mdx-js/react": ^1.6.22
     "@storybook/addon-a11y": ^6.2.8
     "@storybook/addon-actions": ^6.2.8
@@ -5343,6 +5354,7 @@ __metadata:
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
     "@wojtekmaj/react-daterange-picker": ^3.2.0
+    babel-jest: ^27.0.2
     bytes: ^3.1.0
     commafy: ^0.0.6
     css-loader: ^5.2.1
@@ -12896,6 +12908,13 @@ __metadata:
   version: 3.12.1
   resolution: "core-js-pure@npm:3.12.1"
   checksum: f1f797aaccb4a612ddb24293bfad478bbec212353021019d3763557c737b0c9a00b445e3ff2ca80b2b8b14422181859a1c2b4a941f58e89c605ff9a8f66a6166
+  languageName: node
+  linkType: hard
+
+"core-js-pure@npm:^3.14.0":
+  version: 3.14.0
+  resolution: "core-js-pure@npm:3.14.0"
+  checksum: 8afceb673f05fd3fa384783f063b69f20f4f9a7963a66ac2330e3c63c14cb1e63b520e0195eba7019ee64bc3d5c3389000ef225b612dbadc8e1cfce7de54c907
   languageName: node
   linkType: hard
 
