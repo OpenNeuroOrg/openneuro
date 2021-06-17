@@ -19,18 +19,14 @@ export const GetUpdates: React.FC<GetUpdatesProps> = ({}) => {
   }
 
   return (
-    <div className="contributors">
-      <div className="container">
-        <div className="get-updates-bar">
-          <div className="get-updates-label">
-            <h2>Get Updates</h2>
-            <h3>Find out about new version and future releases.</h3>
-          </div>
-          <div className="get-updates-form">
-            <Input {...getUpdatesInput} />
-            <Button {...getUpdateButton} />
-          </div>
-        </div>
+    <div className="get-updates-bar">
+      <div className="get-updates-label">
+        <h2>Get Updates</h2>
+        <h3>Find out about new version and future releases.</h3>
+      </div>
+      <div className="get-updates-form">
+        <Input {...getUpdatesInput} />
+        <Button {...getUpdateButton} />
       </div>
     </div>
   )

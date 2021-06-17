@@ -1,11 +1,14 @@
 import React from 'react'
 import petScan from '../assets/pet-scan.jpg'
+import eeg from '../assets/eeg.jpg'
+import ieeg from '../assets/ieeg.jpg'
+import mri from '../assets/mri.jpg'
+import meg from '../assets/meg.jpg'
 
 export const cubeData = [
   {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
+    label: 'MRI',
+    cubeImage: mri,
     stats: (
       <>
         200 Datasets
@@ -16,7 +19,6 @@ export const cubeData = [
   },
   {
     label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
     cubeImage: petScan,
     stats: (
       <>
@@ -27,9 +29,8 @@ export const cubeData = [
     ),
   },
   {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
+    label: 'MEG',
+    cubeImage: meg,
     stats: (
       <>
         200 Datasets
@@ -39,9 +40,8 @@ export const cubeData = [
     ),
   },
   {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
+    label: 'EEG',
+    cubeImage: eeg,
     stats: (
       <>
         200 Datasets
@@ -51,45 +51,8 @@ export const cubeData = [
     ),
   },
   {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
-    stats: (
-      <>
-        200 Datasets
-        <br />
-        200 Participants
-      </>
-    ),
-  },
-  {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
-    stats: (
-      <>
-        200 Datasets
-        <br />
-        200 Participants
-      </>
-    ),
-  },
-  {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
-    stats: (
-      <>
-        200 Datasets
-        <br />
-        200 Participants
-      </>
-    ),
-  },
-  {
-    label: 'PET',
-    backgroundColor: 'rgba(0, 139, 255, 1)',
-    cubeImage: petScan,
+    label: 'iEEG',
+    cubeImage: ieeg,
     stats: (
       <>
         200 Datasets
