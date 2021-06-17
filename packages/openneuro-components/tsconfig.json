@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "tsBuildInfoFile": "../../.build-cache/components.tsbuildinfo",
-    "composite": true,
-    "jsx": "react"
+    "tsBuildInfoFile": "../../.build-cache/components.tsbuildinfo"
   },
   "include": ["src"],
   "files": ["src/lerna.json"]

@@ -41,6 +41,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
+    "@types/jest": "^26.0.23",
     "@types/md5": "^2",
     "@types/mdx-js__react": "^1",
     "@types/prop-types": "^15",
@@ -48,6 +49,7 @@
     "@types/react-slick": "^0",
     "@types/slick-carousel": "^1",
     "css-loader": "^5.2.1",
+    "jest": "^27.0.4",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
@@ -67,6 +69,11 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
   },
   "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
 }
