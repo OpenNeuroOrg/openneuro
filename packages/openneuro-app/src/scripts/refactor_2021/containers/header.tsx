@@ -7,6 +7,7 @@ import { Input } from '@openneuro/components'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../authentication/profile'
+import FreshdeskWidget from '../freshdesk-widget'
 
 const HeaderContainer: FC = () => {
   const history = useHistory()
@@ -30,14 +31,27 @@ const HeaderContainer: FC = () => {
     setNewKeyword('')
     history.push('/search')
   }
+  const [isOpenSupport, setSupportIsOpen] = React.useState(false)
+  const [isOpenUpload, setUploadIsOpen] = React.useState(false)
+  const [isOpenLogin, setLoginIsOpen] = React.useState(false)
+  const toggleLogin = () => setLoginIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
     <Header
+      isOpenSupport={isOpenSupport}
+      isOpenUpload={isOpenUpload}
+      isOpenLogin={isOpenLogin}
+      toggleLogin={toggleLogin}
+      toggleSupport={toggleSupport}
+      toggleUpload={toggleUpload}
       profile={profile}
       onLogin={() => {}}
       onLogout={() => {}}
       onCreateAccount={() => {}}
       expanded={expanded}
       pushHistory={history.push}
+      renderOnFreshDeskWidget={() => <FreshdeskWidget />}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           profile={profile}

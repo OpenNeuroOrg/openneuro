@@ -16,11 +16,15 @@ export interface HeaderProps {
   onLogin?: () => void
   onLogout?: () => void
   expanded?: boolean
-  isOpen: boolean
+  isOpenSupport: boolean
+  isOpenUpload: boolean
+  isOpenLogin: boolean
   toggleLogin: () => void
+  toggleSupport: () => void
   toggleUpload: () => void
   pushHistory: (path: string) => void
   renderOnExpanded: (profile) => typeof LandingExpandedHeader
+  renderOnFreshDeskWidget: () => React.ReactNode
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -28,11 +32,15 @@ export const Header: React.FC<HeaderProps> = ({
   onLogin,
   onLogout,
   expanded,
-  isOpen,
+  isOpenSupport,
+  isOpenUpload,
+  isOpenLogin,
   toggleLogin,
   toggleUpload,
   pushHistory,
+  toggleSupport,
   renderOnExpanded,
+  renderOnFreshDeskWidget,
 }) => {
   return (
     <>
@@ -51,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <NavLink to="/search">Search</NavLink>
               </li>
               <li>
-                <NavLink to="/support">Search</NavLink>
+                <span onClick={toggleSupport}>Support</span>
               </li>
               <li>
                 <NavLink to="/faq">FAQ</NavLink>
@@ -89,12 +97,21 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
       {!profile ? (
-        <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
+        <Modal isOpen={isOpenLogin} toggle={toggleLogin} closeText="Close">
           <UserModalInner />
         </Modal>
       ) : null}
+
+      <Modal
+        className="freshdesk-support"
+        isOpen={isOpenSupport}
+        toggle={toggleSupport}
+        closeText="Close">
+        {renderOnFreshDeskWidget()}
+      </Modal>
+
       {profile ? (
-        <Modal isOpen={isOpen} toggle={toggleUpload} closeText="Close">
+        <Modal isOpen={isOpenUpload} toggle={toggleUpload} closeText="Close">
           Upload TODO
         </Modal>
       ) : null}

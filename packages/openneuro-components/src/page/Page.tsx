@@ -14,10 +14,22 @@ export interface PageProps {
 }
 
 export const Page = ({ children, headerArgs, className }: PageProps) => {
+  const [isOpenSupport, setSupportIsOpen] = React.useState(false)
+  const [isOpenUpload, setUploadIsOpen] = React.useState(false)
+  const [isOpenLogin, setLoginIsOpen] = React.useState(false)
+  const toggleLogin = () => setLoginIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
     <>
       <article className={className}>
         <Header
+          isOpenSupport={isOpenSupport}
+          isOpenUpload={isOpenUpload}
+          isOpenLogin={isOpenLogin}
+          toggleLogin={toggleLogin}
+          toggleSupport={toggleSupport}
+          toggleUpload={toggleUpload}
           profile={headerArgs.user}
           onLogin={headerArgs.onLogin}
           onLogout={headerArgs.onLogout}
