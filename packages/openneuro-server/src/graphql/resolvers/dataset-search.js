@@ -92,12 +92,56 @@ export const datasetSearchConnection = async (
   return elasticRelayConnection(result)
 }
 
-export default {
+export const datasetSearch = {
   search: {
     type: 'DatasetConnection',
     resolve: datasetSearchConnection,
     args: {
       q: { type: 'String!' },
+      after: { type: 'String' },
+      first: { type: 'Int' },
+    },
+  },
+}
+
+/**
+ * Search result cursor resolver
+ * TODO this is a Relay pagination type and could use the interface
+ * @param {any} obj
+ * @param {object} args
+ * @param {string} args.query Stringified Query (DSL) argument for ElasticSearch
+ * @param {string} args.after Cursor for paging forward
+ * @param {number} args.first Limit of entries to find
+ */
+export const advancedDatasetSearchConnection = async (
+  obj,
+  { query, after, first = 25 },
+) => {
+  const requestBody = {
+    sort: [{ _score: 'asc', id: 'desc' }],
+    query: JSON.parse(query),
+  }
+  if (after) {
+    try {
+      requestBody.search_after = decodeCursor(after)
+    } catch (err) {
+      // Don't include search_after if parsing fails
+    }
+  }
+  const result = await elasticClient.search({
+    index: elasticIndex,
+    size: first,
+    body: requestBody,
+  })
+  return elasticRelayConnection(result)
+}
+
+export const advancedDatasetSearch = {
+  search: {
+    type: 'DatasetConnection',
+    resolve: advancedDatasetSearchConnection,
+    args: {
+      query: { type: 'String!' },
       after: { type: 'String' },
       first: { type: 'Int' },
     },
