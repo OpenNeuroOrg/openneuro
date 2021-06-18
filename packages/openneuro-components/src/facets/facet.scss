@@ -42,7 +42,7 @@
       }
     }
     .level-1 > li {
-      border-top: 1px solid #dfdfdf;
+      border-top: 1px solid $newspaper;
       &:hover {
         background-color: var(--current-theme-primary-light);
       }
@@ -197,7 +197,7 @@
       }
 
       .level-1 > li {
-        border-top: 1px solid #dfdfdf;
+        border-top: 1px solid $newspaper;
 
         > .label {
           display: inline-block;

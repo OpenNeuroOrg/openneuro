@@ -188,11 +188,11 @@
   flex: 1;
   padding: 0 0 0 30px;
   .search-results {
-    border: 1px solid #ddd;
+    border: 1px solid $newspaper;
     border-radius: $border-radius-default;
 
     .search-result {
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $newspaper;
     }
   }
   .load-more {
@@ -204,7 +204,7 @@
       transition: background-color 0.3s;
       &:hover {
         text-decoration: none;
-        background-color: #dfdfdf;
+        background-color: $newspaper;
       }
     }
   }
