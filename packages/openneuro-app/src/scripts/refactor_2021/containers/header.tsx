@@ -35,7 +35,6 @@ const HeaderContainer: FC = () => {
     history.push('/search')
   }
 
-  console.log(userModalParams)
   const toggleLogin = userModalParams =>
     setUserModalParams(prevState => ({
       ...prevState,
