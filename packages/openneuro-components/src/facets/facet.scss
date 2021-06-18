@@ -44,7 +44,7 @@
     .level-1 > li {
       border-top: 1px solid #dfdfdf;
       &:hover {
-        background-color: #efefef;
+        background-color: var(--current-theme-primary-light);
       }
       > .label {
         display: inline-block;

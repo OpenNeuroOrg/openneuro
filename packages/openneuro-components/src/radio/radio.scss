@@ -217,6 +217,9 @@
       transition-delay: 0s;
       border-right: 1px solid var(--current-theme-primary);
     }
+    [type='radio']:not(:checked) + label:hover {
+      background-color: var(--current-theme-primary-light);
+    }
     [type='radio']:checked + label {
       color: #fff;
       transition-delay: 0.15s;
