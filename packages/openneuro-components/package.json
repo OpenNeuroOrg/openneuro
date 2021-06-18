@@ -29,6 +29,7 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
+    "@babel/runtime-corejs3": "^7.14.6",
     "@storybook/addon-a11y": "^6.2.8",
     "@storybook/addon-actions": "^6.2.8",
     "@storybook/addon-docs": "^6.2.8",
@@ -41,13 +42,16 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
+    "@types/jest": "^26.0.23",
     "@types/md5": "^2",
     "@types/mdx-js__react": "^1",
     "@types/prop-types": "^15",
     "@types/react-router-dom": "^5",
     "@types/react-slick": "^0",
     "@types/slick-carousel": "^1",
+    "babel-jest": "^27.0.2",
     "css-loader": "^5.2.1",
+    "jest": "^27.0.4",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
@@ -67,6 +71,14 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "dist"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|less|scss)$": "babel-jest"
+    }
   },
   "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
 }

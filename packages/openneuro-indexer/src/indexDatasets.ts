@@ -10,6 +10,9 @@ import Datasets from './indexes/datasets'
 // TODO: This would be better to generate from the GraphQL schema
 interface DatasetQueryResult {
   id: string
+  metadata: Record<string, any>
+  latestSnapshot: Record<string, any>
+  __typename: string
 }
 
 /**
