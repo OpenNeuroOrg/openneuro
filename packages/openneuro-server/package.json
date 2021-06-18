@@ -79,6 +79,7 @@
     "@babel/runtime-corejs3": "^7.13.10",
     "@types/draft-js": "^0.10.43",
     "@types/ioredis": "^4.17.1",
+    "@types/jest": "^26.0.23",
     "@types/nodemailer": "^6.4.1",
     "apollo-link-schema": "^1.2.5",
     "babel-eslint": "^10.1.0",
@@ -93,7 +94,10 @@
     "tsc-watch": "^4.2.9"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
   },
   "publishConfig": {
     "access": "public"
