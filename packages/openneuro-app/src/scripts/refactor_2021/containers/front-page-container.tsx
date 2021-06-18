@@ -3,6 +3,7 @@ import {
   FrontPage,
   AffiliateBlock,
   ActivitySlider,
+  ActivityHeader,
   Contributors,
   GetUpdates,
   Infographic,
@@ -46,10 +47,8 @@ const FrontPageContainer: React.FC = () => {
         renderInfographic={() => <Infographic />}
         renderActivitySliderFront={() => (
           <>
-            {/* <h2>
-                <Icon label="Activity" imgSrc={activityIcon} iconSize="40px" />
-              </h2>*/}
-            <ActivitySlider
+            <ActivityHeader />
+            {/* <ActivitySlider
               data={RecentData.data.datasets.edges}
               sliderArgs={sliderArgs}
               className="recent-slider"
@@ -60,7 +59,7 @@ const FrontPageContainer: React.FC = () => {
               sliderArgs={sliderArgs}
               className="popular-slider"
               slideHeader="Most Viewed"
-            />
+            /> */}
           </>
         )}
         renderGetUpdates={() => <GetUpdates />}

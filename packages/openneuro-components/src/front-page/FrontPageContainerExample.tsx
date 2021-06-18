@@ -5,12 +5,12 @@ import { ActivitySlider } from '../activity-slider/ActivitySlider'
 import { Contributors } from './Contributors'
 import { GetUpdates } from './GetUpdates'
 import { Infographic } from './Infographic'
-import { Icon } from '../icon/Icon'
+import { ActivityHeader } from './ActivityHeader'
+
 import {
   RecentData,
   TopViewed,
 } from '../mock-content/activity-slider-content.jsx'
-import activityIcon from '../assets/activity-icon.png'
 
 export interface FrontPageContainerExampleProps {}
 
@@ -50,7 +50,7 @@ export const FrontPageContainerExample =
           renderActivitySliderFront={() => (
             <>
               <h2>
-                <Icon label="Activity" imgSrc={activityIcon} iconSize="40px" />
+                <ActivityHeader />
               </h2>
               <ActivitySlider
                 data={RecentData.data.datasets.edges}
