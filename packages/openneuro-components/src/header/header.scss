@@ -131,10 +131,30 @@ header {
   min-width: 100%;
 }
 
+.sign-in-modal {
+  flex-basis: 730px;
+}
+.sign-in-modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .sign-in-modal-content {
+  display: flex;
+  justify-content: space-between;
+  > div {
+    flex-basis: 50%;
+    max-width: 50%;
+    margin: 0 10px 0 0;
+    &:last-child {
+      margin: 0 0 0 10px;
+    }
+  }
   button {
-    width: 220px;
+    width: 100%;
     justify-content: center;
+    margin: 0;
   }
 }
 
