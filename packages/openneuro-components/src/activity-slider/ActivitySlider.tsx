@@ -48,8 +48,8 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
       <Slider {...sliderArgs}>
-        {data.map(({ node, index }) => (
-          <div className="activity-slider-node" key={index}>
+        {data.map(({ node }) => (
+          <div className="activity-slider-node" key={node.id}>
             <div className="ds-name">
               <h4>
                 <Link
