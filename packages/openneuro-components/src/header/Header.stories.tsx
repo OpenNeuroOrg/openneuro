@@ -17,17 +17,23 @@ const Template: Story<HeaderProps> = ({
   onLogout,
   expanded,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const toggleLogin = () => setIsOpen(!isOpen)
-  const toggleUpload = () => setIsOpen(!isOpen)
+  const [isOpenSupport, setSupportIsOpen] = React.useState(false)
+  const [isOpenUpload, setUploadIsOpen] = React.useState(false)
+  const [isOpenLogin, setLoginIsOpen] = React.useState(false)
+  const toggleLogin = () => setLoginIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
     <Header
       profile={profile}
       onLogin={onLogin}
       onLogout={onLogout}
       expanded={expanded}
-      isOpen={isOpen}
+      isOpenSupport={isOpenSupport}
+      isOpenUpload={isOpenUpload}
+      isOpenLogin={isOpenLogin}
       toggleLogin={toggleLogin}
+      toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
       pushHistory={path => console.log(`User navigation to ${path}.`)}
       renderOnExpanded={profile => (

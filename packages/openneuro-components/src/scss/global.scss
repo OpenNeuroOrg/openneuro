@@ -53,3 +53,12 @@ h5,
 h6 {
   line-height: 1.3em;
 }
+
+blockquote {
+  font-style: italic;
+  color: #454545;
+  margin: 20px 60px;
+  border-left: 10px solid #e2e2e2;
+  display: block;
+  padding: 0 0 0 30px;
+}

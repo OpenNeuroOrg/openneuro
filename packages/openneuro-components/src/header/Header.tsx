@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { NavLink } from 'react-router-dom'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
@@ -16,11 +16,15 @@ export interface HeaderProps {
   onLogin?: () => void
   onLogout?: () => void
   expanded?: boolean
-  isOpen: boolean
+  isOpenSupport: boolean
+  isOpenUpload: boolean
+  isOpenLogin: boolean
   toggleLogin: () => void
+  toggleSupport: () => void
   toggleUpload: () => void
   pushHistory: (path: string) => void
   renderOnExpanded: (profile) => typeof LandingExpandedHeader
+  renderOnFreshDeskWidget: () => React.ReactNode
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -28,37 +32,37 @@ export const Header: React.FC<HeaderProps> = ({
   onLogin,
   onLogout,
   expanded,
-  isOpen,
+  isOpenSupport,
+  isOpenUpload,
+  isOpenLogin,
   toggleLogin,
   toggleUpload,
   pushHistory,
+  toggleSupport,
   renderOnExpanded,
+  renderOnFreshDeskWidget,
 }) => {
-  const goTo = path => e => {
-    e.preventDefault()
-    pushHistory(path)
-  }
   return (
     <>
       <header>
         <div className="navbar-inner-wrap">
           <div className="navbar-brand">
-            <a onClick={goTo('/')}>
+            <NavLink to="/">
               <Logo horizontal dark={false} />
-            </a>
+            </NavLink>
             <h1 className="sr-only">OpenNeuro</h1>
           </div>
           <div className="navbar-navigation">
             {/* TODO: convert Support to trigger support modal. */}
             <ul>
               <li>
-                <a onClick={goTo('/search')}>Search</a>
+                <NavLink to="/search">Search</NavLink>
               </li>
               <li>
-                <a onClick={() => {}}>Support</a>
+                <span onClick={toggleSupport}>Support</span>
               </li>
               <li>
-                <a onClick={goTo('/faq')}>FAQ</a>
+                <NavLink to="/faq">FAQ</NavLink>
               </li>
             </ul>
           </div>
@@ -93,12 +97,21 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
       {!profile ? (
-        <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
+        <Modal isOpen={isOpenLogin} toggle={toggleLogin} closeText="Close">
           <UserModalInner />
         </Modal>
       ) : null}
+
+      <Modal
+        className="freshdesk-support"
+        isOpen={isOpenSupport}
+        toggle={toggleSupport}
+        closeText="Close">
+        {renderOnFreshDeskWidget()}
+      </Modal>
+
       {profile ? (
-        <Modal isOpen={isOpen} toggle={toggleUpload} closeText="Close">
+        <Modal isOpen={isOpenUpload} toggle={toggleUpload} closeText="Close">
           Upload TODO
         </Modal>
       ) : null}

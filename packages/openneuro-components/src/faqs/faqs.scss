@@ -1,0 +1,27 @@
+.faqs.container {
+  width: 800px;
+}
+.faqs-accordion {
+  &.on-accordion-wrapper .accordion-title {
+    justify-content: space-between;
+    font-size: 20px;
+    padding: 5px 0;
+  }
+}
+.faq-item {
+  display: block;
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+
+  .accordion-content {
+    padding: 20px 0px 15px;
+    border-top: 1px solid #dadada;
+    margin-top: 10px;
+    p:first-of-type {
+      margin-top: 0;
+    }
+  }
+}
