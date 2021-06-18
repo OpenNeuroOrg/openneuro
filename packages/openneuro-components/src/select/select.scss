@@ -10,8 +10,8 @@
   select {
     padding: 20px;
     background-color: #fff;
-    background: linear-gradient(45deg, transparent 50%, #333 50%),
-      linear-gradient(135deg, #333 50%, transparent 50%),
+    background: linear-gradient(45deg, transparent 50%, $charcoal 50%),
+      linear-gradient(135deg, $charcoal 50%, transparent 50%),
       linear-gradient(to right, #fff, #fff);
     background-position: calc(100% - 21px) calc(1em + 2px),
       calc(100% - 16px) calc(1em + 2px), 100% 0;
