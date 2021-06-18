@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
-import { UserModalInner } from '../modal/UserModalInner'
+import { UserLoginModal } from '../modal/UserLoginModal'
 import { UserMenu } from '../user/UserMenu'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
 
@@ -100,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
           toggle={toggleLogin}
           closeText="Close"
           className="sign-in-modal">
-          <UserModalInner />
+          <UserLoginModal />
         </Modal>
       ) : null}
 

@@ -3,6 +3,7 @@ import useState from 'react-usestateref'
 import { Header, LandingExpandedHeader } from '@openneuro/components'
 import { FrontFacetExample } from '@openneuro/components'
 import { SearchParamsCtx } from '../search/search-params-ctx'
+import { UserModalParamsCtx } from '../user-login-modal-ctx'
 import { Input } from '@openneuro/components'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
@@ -19,6 +20,8 @@ const HeaderContainer: FC = () => {
   const profile = getUnexpiredProfile(cookies)
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
+  const { userModalParams, setUserModalParams } = useContext(UserModalParamsCtx)
+
   const keywords = searchParams.keywords
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
@@ -31,17 +34,25 @@ const HeaderContainer: FC = () => {
     setNewKeyword('')
     history.push('/search')
   }
+
+  console.log(userModalParams)
+  const toggleLogin = userModalParams =>
+    setUserModalParams(prevState => ({
+      ...prevState,
+      userModalParams,
+    }))
+
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
   const [isOpenUpload, setUploadIsOpen] = React.useState(false)
-  const [isOpenLogin, setLoginIsOpen] = React.useState(false)
-  const toggleLogin = () => setLoginIsOpen(prevIsOpen => !prevIsOpen)
+
   const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
+
   return (
     <Header
       isOpenSupport={isOpenSupport}
       isOpenUpload={isOpenUpload}
-      isOpenLogin={isOpenLogin}
+      isOpenLogin={userModalParams}
       toggleLogin={toggleLogin}
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
