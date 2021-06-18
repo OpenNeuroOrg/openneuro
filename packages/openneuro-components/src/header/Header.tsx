@@ -7,8 +7,6 @@ import { UserModalInner } from '../modal/UserModalInner'
 import { UserMenu } from '../user/UserMenu'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
 
-import orcidIcon from '../assets/orcid_24x24.png'
-
 import './header.scss'
 
 export interface HeaderProps {

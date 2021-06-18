@@ -222,3 +222,8 @@
     color: var(--current-theme-primary);
   }
 }
+
+.date-facet .on-radio-wrapper.row .custom-radio {
+  margin-right: 0;
+  flex-basis: 50%;
+}
