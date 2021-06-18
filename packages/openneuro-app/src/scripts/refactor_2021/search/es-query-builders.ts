@@ -26,9 +26,13 @@ BoolQuery.prototype.toString = function () {
   return JSON.stringify(this.query)
 }
 
-export const simpleQueryString = (queryString: string, fields?: string[]) => ({
+export const simpleQueryString = (
+  queryString: string,
+  fields?: string[],
+  fuzzy = true,
+) => ({
   simple_query_string: {
-    query: queryString,
+    query: `${queryString}${fuzzy ? '~' : ''}`,
     fields,
   },
 })
@@ -54,7 +58,7 @@ export const rangeQuery = (
   lte?: number | string,
   relation?: string = 'INTERSECTS',
 ) => ({
-  match: {
+  range: {
     [field]: {
       gte,
       lte,
@@ -81,4 +85,6 @@ export const rangeListLengthQuery = (field, gte: number, lte: number) => {
 
 /** SimpleQueryString join multiple terms with and `+`. */
 export const sqsJoinWithAND = (list: string[]) =>
-  list.map(str => `"${str}"`).join(' + ')
+  list.map(str => `${str}`).join(' + ')
+export const joinWithOR = (list: string[]) =>
+  list.map(str => `${str}`).join(' OR ')

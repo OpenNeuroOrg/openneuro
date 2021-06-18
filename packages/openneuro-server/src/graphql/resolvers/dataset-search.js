@@ -137,7 +137,7 @@ export const advancedDatasetSearchConnection = async (
 }
 
 export const advancedDatasetSearch = {
-  search: {
+  advancedSearch: {
     type: 'DatasetConnection',
     resolve: advancedDatasetSearchConnection,
     args: {

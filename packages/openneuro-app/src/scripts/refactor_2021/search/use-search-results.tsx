@@ -7,13 +7,14 @@ import {
   simpleQueryString,
   matchQuery,
   rangeQuery,
-  sqsJoinWithAND,
   rangeListLengthQuery,
+  sqsJoinWithAND,
+  joinWithOR,
 } from './es-query-builders'
 
 const searchQuery = gql`
   query advancedSearchDatasets($query: String!, $cursor: String) {
-    datasets: search(query: $query, first: 25, after: $cursor) {
+    datasets: advancedSearch(query: $query, first: 25, after: $cursor) {
       edges {
         node {
           id
@@ -128,11 +129,11 @@ export const useSearchResults = () => {
   // } // TODO: gql resolver level
   if (modality_selected)
     boolQuery.addClause(
-      'must',
+      'filter',
       matchQuery('latestSnapshot.summary.modalities', modality_selected),
     )
   if (isActiveRange(ageRange))
-    boolQuery.addClause('must', rangeQuery('metadata.ages', ...ageRange))
+    boolQuery.addClause('filter', rangeQuery('metadata.ages', ...ageRange))
   if (isActiveRange(subjectCountRange))
     boolQuery.addClause(
       'filter',
@@ -142,41 +143,52 @@ export const useSearchResults = () => {
         subjectCountRange[1],
       ),
     )
-  // if (diagnosis_selected)
-  //   qStrings.push(`metadata.dsStatus: ${diagnosis_selected}`)
-  // if (tasks.length)
-  //   qStrings.push(`latestSnapshot.summary.tasks: ${joinWithAND(tasks)}`)
-  // if (authors.length)
-  //   qStrings.push(`metadata.seniorAuthor: ${joinWithAND(authors)}`)
-  // if (gender_selected !== 'All') {
-  //   qStrings.push(
-  //     `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
-  //   )
-  // }
-  // const now = new Date()
-  // const last30 = new Date()
-  // const last180 = new Date()
-  // const last365 = new Date()
-  // last30.setDate(last30.getDate() - 30)
-  // last180.setDate(last180.getDate() - 180)
-  // last365.setDate(last365.getDate() - 365)
-
-  // if (date_selected === 'All Time') {
-  //   qStrings.push(`created:${range([null, now])}`)
-  // } else if (date_selected === 'Last 30 days') {
-  //   qStrings.push(`created:${range([last30, now])}`)
-  // } else if (date_selected === 'Last 180 days') {
-  //   qStrings.push(`created:${range([last180, now])}`)
-  // } else if (date_selected === 'Last 12 months') {
-  //   qStrings.push(`created:${range([last365, now])}`)
-  // }
-  // if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
-  // if (section_selected)
-  //   qStrings.push(`metadata.studyLongitudinal: ${section_selected}`)
-  // if (studyDomain_selected)
-  //   qStrings.push(`metadata.studyDomain: ${species_selected}`)
-
-  // const qString = joinWithAND(qStrings)
+  if (diagnosis_selected)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.dxStatus', diagnosis_selected),
+    )
+  if (tasks.length)
+    boolQuery.addClause(
+      'must',
+      simpleQueryString(sqsJoinWithAND(tasks), [
+        'latestSnapshot.summary.tasks',
+      ]),
+    )
+  if (authors.length)
+    boolQuery.addClause(
+      'must',
+      matchQuery('metadata.seniorAuthor', joinWithOR(authors)),
+    )
+  if (gender_selected !== 'All')
+    boolQuery.addClause(
+      'filter',
+      matchQuery('latestSnapshot.summary.subjectMetadata.sex', gender_selected),
+    )
+  if (date_selected !== 'All Time') {
+    const d =
+      date_selected === 'Last 30 days'
+        ? 30
+        : date_selected === 'Last 180 days'
+        ? 180
+        : 365 // 'Last 365 days'
+    boolQuery.addClause('filter', rangeQuery('created', `now-${d}d/d`, 'now/d'))
+  }
+  if (species_selected)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.species', species_selected, 'AUTO'),
+    )
+  if (section_selected)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.studyLongitudinal', section_selected, 'AUTO'),
+    )
+  if (studyDomain_selected)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.studyDomain', studyDomain_selected, 'AUTO'),
+    )
 
   console.log(boolQuery.get())
 
