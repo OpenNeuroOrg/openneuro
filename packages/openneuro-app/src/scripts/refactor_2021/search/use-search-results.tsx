@@ -8,6 +8,7 @@ import {
   matchQuery,
   rangeQuery,
   sqsJoinWithAND,
+  rangeListLengthQuery,
 } from './es-query-builders'
 
 const searchQuery = gql`
@@ -118,8 +119,6 @@ export const useSearchResults = () => {
     sortBy_selected,
   } = searchParams
 
-  // const qStrings = []
-  // if (keywords.length) qStrings.push(joinWithAND(keywords))
   const boolQuery = new BoolQuery()
   if (keywords.length)
     boolQuery.addClause('must', simpleQueryString(sqsJoinWithAND(keywords)))
@@ -127,12 +126,22 @@ export const useSearchResults = () => {
   // } // TODO: gql resolver level
   // if (datasetStatus_selected) {
   // } // TODO: gql resolver level
-  // if (modality_selected)
-  //   qStrings.push(`metadata.modalities: ${modality_selected}`)
-  // if (isActiveRange(ageRange))
-  //   qStrings.push(`metadata.ages: ${range(ageRange)}`)
-  // if (isActiveRange(subjectCountRange)) {
-  // } // TODO: https://discuss.elastic.co/t/painless-check-length-field-in-each-object-of-array/161699
+  if (modality_selected)
+    boolQuery.addClause(
+      'must',
+      matchQuery('latestSnapshot.summary.modalities', modality_selected),
+    )
+  if (isActiveRange(ageRange))
+    boolQuery.addClause('must', rangeQuery('metadata.ages', ...ageRange))
+  if (isActiveRange(subjectCountRange))
+    boolQuery.addClause(
+      'filter',
+      rangeListLengthQuery(
+        'latestSnapshot.summary.subjects',
+        subjectCountRange[0],
+        subjectCountRange[1],
+      ),
+    )
   // if (diagnosis_selected)
   //   qStrings.push(`metadata.dsStatus: ${diagnosis_selected}`)
   // if (tasks.length)
