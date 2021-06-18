@@ -35,6 +35,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           onLogout={headerArgs.onLogout}
           onCreateAccount={headerArgs.onCreateAccount}
           expanded={headerArgs.expanded}
+          renderOnFreshDeskWidget={() => <></>}
           renderOnExpanded={profile => (
             <LandingExpandedHeader
               profile={profile}

@@ -1,7 +1,7 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
-
+import { CountToggle } from '../count-toggle/CountToggle'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
@@ -41,6 +41,20 @@ const snapshotVersion = location => {
 export const DraftDatasetPageExample = ({
   dataset,
 }: DraftDatasetPageExampleProps) => {
+  const [bookmarked, showBookmarked] = React.useState(false)
+  const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
+  const [followed, showFollowed] = React.useState(false)
+  const [followedCount, setFollowedCount] = React.useState(1)
+
+  const toggleBookmarkClick = () => {
+    setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
+    showBookmarked(!bookmarked)
+  }
+  const toggleFollowedClick = () => {
+    setFollowedCount(followedCount === 1 ? 2 : 1)
+    showFollowed(!followed)
+  }
+
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -69,11 +83,127 @@ export const DraftDatasetPageExample = ({
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
   //TODO Setup hasEdit
   const hasEdit = true
+  //TODO Setup profile - isloggedin
+  const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
   return (
     <>
       <DatasetPage
+        renderHeader={() => (
+          <DatasetHeader
+            pageHeading={description.Name}
+            modality={summary.modalities[0]}
+          />
+        )}
+        renderAlert={() => (
+          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
+        )}
+        renderHeaderMeta={() => (
+          <DatasetHeaderMeta
+            size={summary.size}
+            totalFiles={summary.totalFiles}
+            datasetId={datasetId}
+          />
+        )}
+        renderFollowBookmark={() => (
+          <>
+            <CountToggle
+              label="Follow"
+              icon="fa-thumbtack"
+              disabled={profile ? false : true}
+              toggleClick={toggleBookmarkClick}
+              tooltip="hello Tip"
+              clicked={bookmarked}
+              showClicked={showBookmarked}
+              count={bookmarkedCount}
+            />
+            <CountToggle
+              label="Bookmark"
+              icon="fa-bookmark"
+              disabled={profile ? false : true}
+              toggleClick={toggleFollowedClick}
+              tooltip="hello Tip"
+              clicked={followed}
+              showClicked={showFollowed}
+              count={followedCount}
+            />
+          </>
+        )}
+        renderBrainLifeButton={() => (
+          <BrainLifeButton
+            datasetId={datasetId}
+            onBrainlife={dataset.onBrainlife}
+          />
+        )}
+        renderValidationBlock={() => <ValidationBlock />}
+        renderCloneDropdown={() => (
+          <CloneDropdown
+            gitAccess={
+              <DatasetGitAccess
+                //TODO add worker and configURL
+                configUrl="configurl"
+                worker="worker"
+                datasetId={datasetId}
+                gitHash={dataset.draft.head}
+              />
+            }
+          />
+        )}
+        renderToolButtons={() => (
+          <>
+            <Tooltip tooltip="Publish the dataset publicly" flow="up">
+              <Link className="dataset-tool" to={rootPath + '/publish'}>
+                <Icon icon="fa fa-globe" /> Publish
+              </Link>
+            </Tooltip>
+            <Tooltip tooltip="Share this dataset with collaborators" flow="up">
+              <Link className="dataset-tool" to={rootPath + '/share'}>
+                <Icon icon="fa fa-user" /> Share
+              </Link>
+            </Tooltip>
+
+            <Tooltip tooltip="Create a new version of the dataset" flow="up">
+              <Link className="dataset-tool" to={rootPath + '/snapshot'}>
+                <Icon icon="fa fa-camera" /> Snapshot
+              </Link>
+            </Tooltip>
+            <span>
+              <Link className="dataset-tool" to={rootPath + '/download'}>
+                <Icon icon="fa fa-download" /> Download
+              </Link>
+            </span>
+            <Tooltip
+              wrapText={true}
+              tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
+              flow="up">
+              <Link className="dataset-tool" to={rootPath + '/metadata'}>
+                <Icon icon="fa fa-file-code" /> Metadata
+              </Link>
+            </Tooltip>
+            <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
+              <Link className="dataset-tool" to={rootPath + '/delete'}>
+                <Icon icon="fa fa-trash" /> Delete
+              </Link>
+            </Tooltip>
+          </>
+        )}
+        renderReadMe={() => (
+          <MetaDataBlock
+            heading="README"
+            item={
+              <ReadMore
+                id="readme"
+                expandLabel="Read More"
+                collapseabel="Collapse">
+                <Markdown>
+                  {dataset.draft.readme == null ? 'N/A' : dataset.draft.readme}
+                </Markdown>
+              </ReadMore>
+            }
+            className="dataset-readme markdown-body"
+          />
+        )}
         renderSidebar={() => (
           <>
             <MetaDataBlock
@@ -179,96 +309,6 @@ export const DraftDatasetPageExample = ({
               className="dmb-list"
             />
           </>
-        )}
-        renderBrainLifeButton={() => (
-          <BrainLifeButton
-            datasetId={datasetId}
-            onBrainlife={dataset.onBrainlife}
-          />
-        )}
-        renderValidationBlock={() => <ValidationBlock />}
-        renderCloneDropdown={() => (
-          <CloneDropdown
-            gitAccess={
-              <DatasetGitAccess
-                //TODO add worker and configURL
-                configUrl="configurl"
-                worker="worker"
-                datasetId={datasetId}
-                gitHash={dataset.draft.head}
-              />
-            }
-          />
-        )}
-        renderHeader={() => (
-          <DatasetHeader
-            pageHeading={description.Name}
-            modality={summary.modalities[0]}
-          />
-        )}
-        renderAlert={() => (
-          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
-        )}
-        renderHeaderMeta={() => (
-          <DatasetHeaderMeta
-            size={summary.size}
-            totalFiles={summary.totalFiles}
-            datasetId={datasetId}
-          />
-        )}
-        renderToolButtons={() => (
-          <>
-            <Tooltip tooltip="Publish the dataset publicly" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/publish'}>
-                <Icon icon="fa fa-globe" /> Publish
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Share this dataset with collaborators" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/share'}>
-                <Icon icon="fa fa-user" /> Share
-              </Link>
-            </Tooltip>
-
-            <Tooltip tooltip="Create a new version of the dataset" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" /> Snapshot
-              </Link>
-            </Tooltip>
-            <span>
-              <Link className="dataset-tool" to={rootPath + '/download'}>
-                <Icon icon="fa fa-download" /> Download
-              </Link>
-            </span>
-            <Tooltip
-              wrapText={true}
-              tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
-              flow="up">
-              <Link className="dataset-tool" to={rootPath + '/metadata'}>
-                <Icon icon="fa fa-file-code" /> Metadata
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/delete'}>
-                <Icon icon="fa fa-trash" /> Delete
-              </Link>
-            </Tooltip>
-          </>
-        )}
-        renderReadMe={() => (
-          <MetaDataBlock
-            heading="README"
-            item={
-              <ReadMore
-                id="readme"
-                expandLabel="Read More"
-                collapseabel="Collapse">
-                <Markdown>
-                  {dataset.draft.readme == null ? 'N/A' : dataset.draft.readme}
-                </Markdown>
-              </ReadMore>
-            }
-            className="dataset-readme markdown-body"
-          />
         )}
         renderDeprecatedModal={() => (
           <Modal

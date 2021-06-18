@@ -23,6 +23,18 @@
         margin-left: 0;
       }
     }
+    .follow-bookmark {
+      display: flex;
+      justify-content: flex-start;
+      .toggle-counter-wrap {
+        &:first-child {
+          margin-right: 30px;
+        }
+        .toggle-btn {
+          padding: 0 7px;
+        }
+      }
+    }
   }
   .dataset-header-alert {
     padding: 10px 20px;

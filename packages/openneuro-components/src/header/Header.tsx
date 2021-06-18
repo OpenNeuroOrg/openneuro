@@ -97,7 +97,11 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
       {!profile ? (
-        <Modal isOpen={isOpenLogin} toggle={toggleLogin} closeText="Close">
+        <Modal
+          isOpen={isOpenLogin}
+          toggle={toggleLogin}
+          closeText="Close"
+          className="sign-in-modal">
           <UserModalInner />
         </Modal>
       ) : null}

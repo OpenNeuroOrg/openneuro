@@ -11,6 +11,7 @@ export interface DatasetPageProps {
   renderBrainLifeButton: () => React.ReactNode
   renderCloneDropdown: () => React.ReactNode
   renderDeprecatedModal: () => React.ReactNode
+  renderFollowBookmark: () => React.ReactNode
 }
 
 export const DatasetPage = ({
@@ -24,14 +25,16 @@ export const DatasetPage = ({
   renderBrainLifeButton,
   renderCloneDropdown,
   renderDeprecatedModal,
+  renderFollowBookmark,
 }: DatasetPageProps) => {
   return (
     <>
       {renderHeader()}
       {renderAlert()}
       <div className="container">
-        <div className="grid grid-between">
-          <div className="col">{renderHeaderMeta()}</div>
+        <div className="grid grid-between dataset-header-meta">
+          <div className="col col-8">{renderHeaderMeta()}</div>
+          <div className="col follow-bookmark">{renderFollowBookmark()}</div>
         </div>
       </div>
       <div className="container">

@@ -35,6 +35,7 @@ const Template: Story<HeaderProps> = ({
       toggleLogin={toggleLogin}
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
+      renderOnFreshDeskWidget={() => <></>}
       pushHistory={path => console.log(`User navigation to ${path}.`)}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
