@@ -8,7 +8,7 @@ import Routes from './routes.jsx'
 import Uploader from './uploader/uploader.jsx'
 import FeatureToggle from './components/feature-toggle'
 import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
-import { UserModalParamsProvider } from './refactor_2021/user-login-modal-ctx.tsx'
+import { UserModalParamsProvider } from './refactor_2021/user-login-modal-ctx'
 
 // downside to this approach is that the first SSR paint has no styles
 // might be better to do the class on body
