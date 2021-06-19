@@ -13,8 +13,19 @@ import {
 } from './es-query-builders'
 
 const searchQuery = gql`
-  query advancedSearchDatasets($query: String!, $cursor: String) {
-    datasets: advancedSearch(query: $query, first: 25, after: $cursor) {
+  query advancedSearchDatasets(
+    $query: String!
+    $cursor: String
+    $datasetType: String
+    $datasetStatus: String
+  ) {
+    datasets: advancedSearch(
+      query: $query
+      datasetType: $datasetType
+      datasetStatus: $datasetStatus
+      first: 25
+      after: $cursor
+    ) {
       edges {
         node {
           id
@@ -123,10 +134,6 @@ export const useSearchResults = () => {
   const boolQuery = new BoolQuery()
   if (keywords.length)
     boolQuery.addClause('must', simpleQueryString(sqsJoinWithAND(keywords)))
-  // if (datasetType_selected) {
-  // } // TODO: gql resolver level
-  // if (datasetStatus_selected) {
-  // } // TODO: gql resolver level
   if (modality_selected)
     boolQuery.addClause(
       'filter',
@@ -195,6 +202,8 @@ export const useSearchResults = () => {
   return useQuery(searchQuery, {
     variables: {
       query: boolQuery.toString(),
+      datasetType: datasetType_selected,
+      datasetStatus: datasetStatus_selected,
     },
     errorPolicy: 'ignore',
     // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)

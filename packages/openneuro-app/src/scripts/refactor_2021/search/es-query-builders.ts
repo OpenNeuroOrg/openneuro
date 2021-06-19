@@ -11,12 +11,9 @@ export function BoolQuery() {
 }
 BoolQuery.prototype.addClause = function (type: string, query: object) {
   if (this.query.bool[type]) {
-    this.query.bool[type] = {
-      ...this.query.bool[type],
-      ...query,
-    }
+    this.query.bool[type] = [...this.query.bool[type], query]
   } else {
-    this.query.bool[type] = query
+    this.query.bool[type] = [query]
   }
 }
 BoolQuery.prototype.get = function () {
