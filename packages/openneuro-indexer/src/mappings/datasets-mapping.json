@@ -1,10 +1,8 @@
 {
   "properties": {
-    "id": {
-      "type": "keyword",
-      "format": "date_optional_time"
-    },
+    "id": { "type": "keyword" },
     "created": { "type": "date" },
+    "public": { "type": "boolean" },
     "metadata": {
       "properties": {
         "datasetName": { "type": "keyword" },
@@ -46,6 +44,7 @@
           "properties": {
             "tasks": { "type": "keyword" },
             "modalities": { "type": "keyword" },
+            "subjects": { "type": "keyword" },
             "subjectMetadata": {
               "properties": {
                 "participantId": { "type": "keyword" },
@@ -55,6 +54,19 @@
               }
             }
           }
+        }
+      }
+    },
+    "draft": {
+      "issues": {
+        "severity": { "type": "keyword" }
+      }
+    },
+    "permissions": {
+      "userPermissions": {
+        "level": { "type": "keyword" },
+        "user": {
+          "id": { "type": "keyword" }
         }
       }
     }
