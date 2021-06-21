@@ -1,14 +1,19 @@
 $font-sans: 'Open Sans', sans-serif;
 
+$charcoal: #333;
+$newspaper: #dfdfdf;
+
 /* SCSS RGB */
 $on-light-aqua: rgb(55, 188, 210);
 $on-dark-aqua: rgba(32, 78, 90, 1);
 $on-secondary: #4795b4;
+$on-dark-aqua-light: adjust-color($on-dark-aqua, $lightness: 45%);
 
 $mri-theme: rgba(109, 83, 156, 1);
 $mri-hover: adjust-color($mri-theme, $lightness: 10%);
 $mri-dark: darken($mri-theme, 25%);
 $mri-secondary: adjust-color($mri-theme, $lightness: 15%);
+$mri-light: adjust-color($mri-theme, $lightness: 45%);
 
 $eeg-theme: rgba(138, 177, 89, 1);
 $nirs-theme: rgba(235, 83, 152, 1);
@@ -39,6 +44,7 @@ $primary: $on-dark-aqua;
   --current-theme-primary-hover: #{$on-light-aqua};
   --current-theme-secondary: #{$on-secondary};
   --current-theme-primary-dark: #{$on-dark-aqua};
+  --current-theme-primary-light: #{$on-dark-aqua-light};
 }
 
 .mri-theme {
@@ -93,6 +99,7 @@ $screen-lg: 989px;
   --current-theme-primary-hover: #{$mri-hover};
   --current-theme-primary-dark: #{$mri-dark};
   --current-theme-secondary: #{$mri-secondary};
+  --current-theme-primary-light: #{$mri-light};
 }
 
 $border-radius-default: 4px;

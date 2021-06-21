@@ -13,7 +13,7 @@ export const DatasetHeaderMeta: React.FC<DatasetHeaderMetaProps> = ({
   size,
 }) => {
   return (
-    <div className="dataset-header-meta">
+    <div>
       <span>OpenNeuro Accession Number:</span> {datasetId}
       <span>Files:</span> {totalFiles}
       <span>Size:</span> {bytes(size)}

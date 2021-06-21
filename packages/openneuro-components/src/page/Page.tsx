@@ -16,8 +16,8 @@ export interface PageProps {
 export const Page = ({ children, headerArgs, className }: PageProps) => {
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
   const [isOpenUpload, setUploadIsOpen] = React.useState(false)
-  const [isOpenLogin, setLoginIsOpen] = React.useState(false)
-  const toggleLogin = () => setLoginIsOpen(prevIsOpen => !prevIsOpen)
+
+  const toggleLogin = () => alert('this is a context')
   const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
@@ -26,7 +26,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
         <Header
           isOpenSupport={isOpenSupport}
           isOpenUpload={isOpenUpload}
-          isOpenLogin={isOpenLogin}
+          isOpenLogin={false}
           toggleLogin={toggleLogin}
           toggleSupport={toggleSupport}
           toggleUpload={toggleUpload}
@@ -35,6 +35,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           onLogout={headerArgs.onLogout}
           onCreateAccount={headerArgs.onCreateAccount}
           expanded={headerArgs.expanded}
+          renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
           renderOnExpanded={profile => (
             <LandingExpandedHeader
               profile={profile}

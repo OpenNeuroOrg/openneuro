@@ -273,6 +273,7 @@ export const SearchPageContainerExample = ({
                 startOpen={false}
                 label="Date Published"
                 accordionStyle="plain"
+                className="date-facet"
               />
               <FacetSelect
                 selected={species_selected}

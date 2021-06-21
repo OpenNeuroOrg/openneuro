@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Modal } from './Modal'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { AccordionWrap } from '../accordion/AccordionWrap'
@@ -9,16 +9,22 @@ import orcidIcon from '../assets/orcid_24x24.png'
 
 import '../header/header.scss'
 
-export const UserModalInner: React.FC = ({}) => {
+export const UserLoginModal: React.FC = ({
+  userModalParams,
+  setUserModalParams,
+}) => {
   return (
     <>
-      <div className="grid grid-center grid-column">
-        <Logo horizontal dark={true} width="230px" className="m-t-20" />
-        <h4>Sign in</h4>
-      </div>
-      <div className="grid grid-center sign-in-modal-content">
-        <div className="col col-3">
-          <div className="grid grid-center">
+      <Modal
+        isOpen={userModalParams}
+        toggle={() => setUserModalParams(prevState => !prevState)}
+        closeText="Close">
+        <div className="sign-in-modal-header">
+          <Logo horizontal dark={true} width="230px" className="m-t-20" />
+          <h4>Sign in</h4>
+        </div>
+        <div className="sign-in-modal-content">
+          <div>
             <Button
               className="login-button"
               primary
@@ -27,9 +33,7 @@ export const UserModalInner: React.FC = ({}) => {
               iconSize="23px"
             />
           </div>
-        </div>
-        <div className="col col-3">
-          <div className="grid grid-center">
+          <div>
             <Button
               className="login-button"
               primary
@@ -39,7 +43,7 @@ export const UserModalInner: React.FC = ({}) => {
             <AccordionWrap>
               <AccordionTab
                 name="single"
-                tabId="orcid-info-accordion"
+                id="orcid-info-accordion"
                 label="What is this?"
                 children={
                   <>
@@ -57,7 +61,7 @@ export const UserModalInner: React.FC = ({}) => {
             </AccordionWrap>
           </div>
         </div>
-      </div>
+      </Modal>
     </>
   )
 }

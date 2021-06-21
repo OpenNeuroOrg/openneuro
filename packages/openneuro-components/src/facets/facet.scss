@@ -42,9 +42,9 @@
       }
     }
     .level-1 > li {
-      border-top: 1px solid #dfdfdf;
+      border-top: 1px solid $newspaper;
       &:hover {
-        background-color: #efefef;
+        background-color: var(--current-theme-primary-light);
       }
       > .label {
         display: inline-block;
@@ -131,7 +131,7 @@
 
   .react-calendar__month-view__days__day,
   .react-calendar__month-view__days__day--weekend {
-    color: #333;
+    color: $charcoal;
   }
   .react-calendar__tile--now {
     background-color: #eee;
@@ -197,7 +197,7 @@
       }
 
       .level-1 > li {
-        border-top: 1px solid #dfdfdf;
+        border-top: 1px solid $newspaper;
 
         > .label {
           display: inline-block;

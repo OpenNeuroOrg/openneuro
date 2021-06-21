@@ -19,8 +19,8 @@ const Template: Story<HeaderProps> = ({
 }) => {
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
   const [isOpenUpload, setUploadIsOpen] = React.useState(false)
-  const [isOpenLogin, setLoginIsOpen] = React.useState(false)
-  const toggleLogin = () => setLoginIsOpen(prevIsOpen => !prevIsOpen)
+
+  const toggleLogin = () => alert('this is a context')
   const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
@@ -31,10 +31,11 @@ const Template: Story<HeaderProps> = ({
       expanded={expanded}
       isOpenSupport={isOpenSupport}
       isOpenUpload={isOpenUpload}
-      isOpenLogin={isOpenLogin}
+      isOpenLogin={false}
       toggleLogin={toggleLogin}
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
+      renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
       pushHistory={path => console.log(`User navigation to ${path}.`)}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
