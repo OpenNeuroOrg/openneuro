@@ -9,13 +9,12 @@ import './slider.scss'
 
 export interface ActivitySliderProps {
   className?: string
-  sliderArgs: {
-    showDots?: boolean
-    infinite?: boolean
-    keyBoardControl?: boolean
-    containerClass?: string
-    itemClass?: string
-  }
+  showDots?: boolean
+  infinite?: boolean
+  keyBoardControl?: boolean
+  containerClass?: string
+  itemClass?: string
+
   responsive: {
     superLargeDesktop?: {
       // the naming can be any, depends on you.
@@ -51,21 +50,38 @@ export interface ActivitySliderProps {
     }
   }[]
 }
+const LeftArrow: React.FC = ({ onClick }) => (
+  <i className="fas fa-chevron-left" onClick={() => onClick()} />
+)
+
+const RightArrow: React.FC = ({ onClick }) => (
+  <i className="fas fa-chevron-right" onClick={() => onClick()} />
+)
 
 export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   className,
   data,
+  showDots,
   slideHeader,
-  sliderArgs,
   responsive,
+  infinite,
+  keyBoardControl,
+  containerClass,
+  itemClass,
 }) => {
-  console.log(data)
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
-      {/* 
-      // @ts-ignore */}
-      <Carousel {...sliderArgs} responsive={responsive}>
+      {/* @ts-expect-error */}
+      <Carousel
+        infinite={infinite}
+        keyBoardControl={keyBoardControl}
+        containerClass={containerClass}
+        itemClass={itemClass}
+        showDots={showDots}
+        responsive={responsive}
+        customLeftArrow={<LeftArrow />}
+        customRightArrow={<RightArrow />}>
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-name">

@@ -7,38 +7,34 @@ import {
   Contributors,
   GetUpdates,
   Infographic,
-  Icon,
   RecentData,
   TopViewed,
 } from '@openneuro/components'
 
 const FrontPageContainer: React.FC = () => {
-  const sliderArgs = {
-    data: RecentData.data.datasets.edges,
-    dots: true,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    swipeToSlide: false,
-    swipe: true,
-    infinite: true,
-    responsive: [
-      {
-        breakpoint: 800,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 580,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+      slidesToSlide: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      slidesToSlide: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      slidesToSlide: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      slidesToSlide: 1,
+    },
   }
-
   return (
     <>
       <FrontPage
@@ -48,18 +44,26 @@ const FrontPageContainer: React.FC = () => {
         renderActivitySliderFront={() => (
           <>
             <ActivityHeader />
-            {/* <ActivitySlider
+            <ActivitySlider
               data={RecentData.data.datasets.edges}
-              sliderArgs={sliderArgs}
-              className="recent-slider"
               slideHeader="Newly Added"
+              showDots={true}
+              infinite={true}
+              keyBoardControl={true}
+              containerClass="activity-slider recent-slider"
+              itemClass="carousel-item"
+              responsive={responsive}
             />
             <ActivitySlider
               data={TopViewed.data.datasets.edges}
-              sliderArgs={sliderArgs}
-              className="popular-slider"
               slideHeader="Most Viewed"
-            /> */}
+              showDots={true}
+              infinite={true}
+              keyBoardControl={true}
+              containerClass="activity-slider popular-slider"
+              itemClass="carousel-item"
+              responsive={responsive}
+            />
           </>
         )}
         renderGetUpdates={() => <GetUpdates />}

@@ -1,14 +1,6 @@
 @import '../scss/variables';
 
 .activity-slider {
-  // .slick-prev:before,
-  // .slick-next:before {
-  //   color: #bbb;
-  // }
-  // .slick-dots li button:before {
-  //   color: $on-dark-aqua;
-  // }
-
   h3 {
     text-align: center;
     color: #9f2995;
@@ -122,36 +114,18 @@
       }
     }
   }
-  // &:hover {
-  //   .hexagon {
-  //     background-color: lighten($on-dark-aqua, 15%);
-  //     &.mri {
-  //       background-color: lighten($mri-theme, 10%);
-  //     }
-  //     &.eeg {
-  //       background-color: lighten($eeg-theme, 10%);
-  //     }
-  //     &.nirs {
-  //       background-color: lighten($nirs-theme, 10%);
-  //     }
-  //     &.pet {
-  //       background-color: lighten($pet-theme, 10%);
-  //     }
-  //     &.ieeg {
-  //       background-color: lighten($ieeg-theme, 10%);
-  //     }
-  //     &.ecog {
-  //       background-color: lighten($ecog-theme, 10%);
-  //     }
-  //     &.asl {
-  //       background-color: lighten($asl-theme, 10%);
-  //     }
-  //     &.meg {
-  //       background-color: lighten($meg-theme, 10%);
-  //     }
-  //     &.eeg {
-  //       background-color: lighten($on-light-green, 10%);
-  //     }
-  //   }
-  // }
+}
+.react-multi-carousel-dot--active button {
+  background-color: var(--current-theme-primary);
+}
+.react-multi-carousel-dot button {
+  border-color: var(--current-theme-primary);
+}
+
+.react-multi-carousel-list.activity-slider i.fas {
+  position: absolute;
+  color: var(--current-theme-primary);
+  &.fa-chevron-right {
+    right: 0;
+  }
 }
