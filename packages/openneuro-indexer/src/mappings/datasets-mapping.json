@@ -31,15 +31,6 @@
       "properties": {
         "id": { "type": "keyword" },
         "tag": { "type": "keyword" },
-        "description": {
-          "properties": {
-            "Name": { "type": "text" },
-            "Authors": { "type": "text" }
-          }
-        },
-        "readme": {
-          "type": "text"
-        },
         "summary": {
           "properties": {
             "tasks": { "type": "keyword" },
@@ -58,6 +49,9 @@
       }
     },
     "draft": {
+      "description": {
+        "Name": { "type": "keyword" }
+      },
       "issues": {
         "severity": { "type": "keyword" }
       }

@@ -76,7 +76,11 @@ export default async function indexDatasets(
     for await (const dataset of datasets) {
       void indexDataset(elasticClient, dataset)
     }
+    console.log('ALIAS!!!')
+    console.log('ALIAS!!!')
+    console.log('ALIAS!!!')
     await aliasDatasetsIndex(elasticClient)
+    console.log('ALIASED!!!')
   } catch (e) {
     console.error(e)
   }

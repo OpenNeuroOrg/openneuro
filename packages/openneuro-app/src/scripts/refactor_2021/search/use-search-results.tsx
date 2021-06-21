@@ -18,11 +18,13 @@ const searchQuery = gql`
     $cursor: String
     $datasetType: String
     $datasetStatus: String
+    $sortBy: String
   ) {
     datasets: advancedSearch(
       query: $query
       datasetType: $datasetType
       datasetStatus: $datasetStatus
+      sortBy: $sortBy
       first: 25
       after: $cursor
     ) {
@@ -197,11 +199,32 @@ export const useSearchResults = () => {
       matchQuery('metadata.studyDomain', studyDomain_selected, 'AUTO'),
     )
 
+  let sortField = 'created',
+    order = 'desc'
+  switch (sortBy_selected.label) {
+    case 'Activity':
+      // TODO: figure this out
+      break
+    case 'A-Z':
+      order = 'asc'
+    case 'Z-A':
+      sortField = 'draft.description.Name'
+      break
+    case 'Oldest':
+      order = 'asc'
+      break
+    default:
+      // Newest
+      break
+  }
+  const sortBy = JSON.stringify({ [sortField]: order })
+  console.log(sortBy)
   console.log(boolQuery.get())
 
   return useQuery(searchQuery, {
     variables: {
       query: boolQuery.toString(),
+      sortBy,
       datasetType: datasetType_selected,
       datasetStatus: datasetStatus_selected,
     },
