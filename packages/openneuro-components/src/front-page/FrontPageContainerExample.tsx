@@ -17,31 +17,31 @@ export interface FrontPageContainerExampleProps {}
 export const FrontPageContainerExample =
   ({}: FrontPageContainerExampleProps) => {
     //TopViewed.data.datasets.edges,
-    const sliderArgs = {
-      data: RecentData.data.datasets.edges,
-      dots: true,
-      slidesToShow: 3,
-      slidesToScroll: 3,
-      swipeToSlide: false,
-      swipe: true,
-      infinite: true,
-      responsive: [
-        {
-          breakpoint: 800,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-          },
-        },
-        {
-          breakpoint: 580,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-      ],
-    }
+    // const sliderArgs = {
+    //   dots: true,
+    //   slidesToShow: 3,
+    //   slidesToScroll: 3,
+    //   swipeToSlide: false,
+    //   swipe: true,
+    //   infinite: true,
+    //   containerClass: 'activity-slider',
+    //   responsive: [
+    //     {
+    //       breakpoint: 800,
+    //       settings: {
+    //         slidesToShow: 2,
+    //         slidesToScroll: 2,
+    //       },
+    //     },
+    //     {
+    //       breakpoint: 580,
+    //       settings: {
+    //         slidesToShow: 1,
+    //         slidesToScroll: 1,
+    //       },
+    //     },
+    //   ],
+    // }
     return (
       <div>
         <FrontPage

@@ -1,13 +1,13 @@
 @import '../scss/variables';
 
 .activity-slider {
-  .slick-prev:before,
-  .slick-next:before {
-    color: #bbb;
-  }
-  .slick-dots li button:before {
-    color: $on-dark-aqua;
-  }
+  // .slick-prev:before,
+  // .slick-next:before {
+  //   color: #bbb;
+  // }
+  // .slick-dots li button:before {
+  //   color: $on-dark-aqua;
+  // }
 
   h3 {
     text-align: center;
@@ -17,29 +17,27 @@
     font-size: 22px;
     letter-spacing: 1px;
   }
-  a {
-    text-decoration: none;
-    .activity-slider-node {
-      padding: 20px 30px;
-      display: flex;
-      flex-direction: column;
-      align-self: center;
-      text-align: center;
-      .ds-name h4 {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 0;
-        text-decoration: underline;
-      }
-      .ds-pub-views,
-      .ds-pub-date {
-        font-weight: 600;
-        font-size: 14px;
-        margin: 10px 0 0;
-      }
+
+  .activity-slider-node {
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
+    .ds-name h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 0;
+      text-decoration: underline;
+    }
+    .ds-pub-views,
+    .ds-pub-date {
+      font-weight: 600;
+      font-size: 14px;
+      margin: 10px 0 0;
     }
   }
-  .activity-slider {
+  .activity-slider-node {
     .hexagon-wrapper {
       text-align: center;
       margin: 20px auto;
@@ -91,9 +89,6 @@
       content: '';
       transform: rotateZ(-60deg);
     }
-  }
-
-  a {
     .hexagon {
       transition: background-color 0.3s;
       background-color: $on-dark-aqua;
@@ -126,37 +121,37 @@
         background-color: $on-light-green;
       }
     }
-    &:hover {
-      .hexagon {
-        background-color: lighten($on-dark-aqua, 15%);
-        &.mri {
-          background-color: lighten($mri-theme, 10%);
-        }
-        &.eeg {
-          background-color: lighten($eeg-theme, 10%);
-        }
-        &.nirs {
-          background-color: lighten($nirs-theme, 10%);
-        }
-        &.pet {
-          background-color: lighten($pet-theme, 10%);
-        }
-        &.ieeg {
-          background-color: lighten($ieeg-theme, 10%);
-        }
-        &.ecog {
-          background-color: lighten($ecog-theme, 10%);
-        }
-        &.asl {
-          background-color: lighten($asl-theme, 10%);
-        }
-        &.meg {
-          background-color: lighten($meg-theme, 10%);
-        }
-        &.eeg {
-          background-color: lighten($on-light-green, 10%);
-        }
-      }
-    }
   }
+  // &:hover {
+  //   .hexagon {
+  //     background-color: lighten($on-dark-aqua, 15%);
+  //     &.mri {
+  //       background-color: lighten($mri-theme, 10%);
+  //     }
+  //     &.eeg {
+  //       background-color: lighten($eeg-theme, 10%);
+  //     }
+  //     &.nirs {
+  //       background-color: lighten($nirs-theme, 10%);
+  //     }
+  //     &.pet {
+  //       background-color: lighten($pet-theme, 10%);
+  //     }
+  //     &.ieeg {
+  //       background-color: lighten($ieeg-theme, 10%);
+  //     }
+  //     &.ecog {
+  //       background-color: lighten($ecog-theme, 10%);
+  //     }
+  //     &.asl {
+  //       background-color: lighten($asl-theme, 10%);
+  //     }
+  //     &.meg {
+  //       background-color: lighten($meg-theme, 10%);
+  //     }
+  //     &.eeg {
+  //       background-color: lighten($on-light-green, 10%);
+  //     }
+  //   }
+  // }
 }

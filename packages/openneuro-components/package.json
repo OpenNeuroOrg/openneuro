@@ -6,8 +6,7 @@
   "browser": "src/index.js",
   "exports": {
     ".": "./src/index.ts",
-    "./page/page.scss": "./src/page/page.scss",
-    "./assets/activity-icon.png": "./assets/activity-icon.png"
+    "./page/page.scss": "./src/page/page.scss"
   },
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
@@ -24,10 +23,9 @@
     "prop-types": "^15.7.2",
     "rc-slider": "^9.7.2",
     "react": "^17.0.1",
+    "react-multi-carousel": "^2.6.3",
     "react-router-dom": "^5.2.0",
-    "react-slick": "^0.28.1",
-    "react-usestateref": "^1.0.5",
-    "slick-carousel": "^1.8.1"
+    "react-usestateref": "^1.0.5"
   },
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.14.6",
@@ -48,8 +46,6 @@
     "@types/mdx-js__react": "^1",
     "@types/prop-types": "^15",
     "@types/react-router-dom": "^5",
-    "@types/react-slick": "^0",
-    "@types/slick-carousel": "^1",
     "babel-jest": "^27.0.2",
     "css-loader": "^5.2.1",
     "jest": "^27.0.4",

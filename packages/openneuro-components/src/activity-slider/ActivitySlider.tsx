@@ -1,25 +1,39 @@
 import React from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
-import Slider from 'react-slick'
 import { Link } from 'react-router-dom'
-
-// Import css files
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
 
 import './slider.scss'
 
 export interface ActivitySliderProps {
   className?: string
   sliderArgs: {
-    dots?: boolean
-    responsive?: object
-    slidesToShow?: number
-    slidesToScroll?: number
-    swipeToSlide?: boolean
-    slideHeader?: string
-    infinite: boolean
+    showDots?: boolean
+    infinite?: boolean
+    keyBoardControl?: boolean
+    containerClass?: string
+    itemClass?: string
+  }
+  responsive: {
+    superLargeDesktop?: {
+      // the naming can be any, depends on you.
+      breakpoint?: { max?: number; min?: number }
+      items?: number
+    }
+    desktop?: {
+      breakpoint?: { max?: number; min?: number }
+      items?: number
+    }
+    tablet?: {
+      breakpoint?: { max?: number; min?: number }
+      items?: number
+    }
+    mobile?: {
+      breakpoint?: { max?: number; min?: number }
+      items?: number
+    }
   }
   data: {
     id: string
@@ -43,11 +57,13 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   data,
   slideHeader,
   sliderArgs,
+  responsive,
 }) => {
+  console.log(data)
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
-      <Slider {...sliderArgs}>
+      <Carousel {...sliderArgs} responsive={responsive}>
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-name">
@@ -99,7 +115,7 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
             </div>
           </div>
         ))}
-      </Slider>
+      </Carousel>
     </div>
   )
 }
