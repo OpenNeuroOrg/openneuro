@@ -262,7 +262,9 @@ body {
 
 .front-infographic {
   width: 1100px;
+  margin: 0 auto;
   .bg-circle {
+    margin: 0 auto;
     max-width: calc(100vw - 20px);
     max-height: calc(100vw - 20px);
     height: 1100px;

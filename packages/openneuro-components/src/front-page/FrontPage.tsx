@@ -1,38 +1,40 @@
 import React from 'react'
 
-import { AffiliateBlock } from './AffiliateBlock'
-import { ActivitySliderFront } from './ActivitySlider'
-import { Contributors } from './Contributors'
-import { GetUpdates } from './GetUpdates'
-import { Infographic } from './Infographic'
-
 import './front-page.scss'
 
-export interface FrontPageProps {}
+export interface FrontPageProps {
+  renderAffiliateBlock: () => React.ReactNode
+  renderInfographic: () => React.ReactNode
+  renderActivitySliderFront: () => React.ReactNode
+  renderGetUpdates: () => React.ReactNode
+  renderContributors: () => React.ReactNode
+  className?: string
+}
 
-export const FrontPage: React.FC<FrontPageProps> = ({}) => (
+export const FrontPage: React.FC<FrontPageProps> = ({
+  renderAffiliateBlock,
+  renderInfographic,
+  renderActivitySliderFront,
+  renderGetUpdates,
+  renderContributors,
+  className,
+}) => (
   <>
-    <div className="page">
+    <div className={className + ' page'}>
+      <section>{renderAffiliateBlock()}</section>
       <section>
-        <AffiliateBlock />
-      </section>
-      <section>
-        <Infographic />
+        <div className="container">{renderInfographic()}</div>
       </section>
       <section className="front-page-activity">
         <div className="activity-swoop">
           <div></div>
         </div>
         <div className="swoop-content gray-bg">
-          <ActivitySliderFront />
+          <div className="container">{renderActivitySliderFront()}</div>
         </div>
       </section>
-      <section className="gray-bg">
-        <GetUpdates />
-      </section>
-      <section className="gray-bg">
-        <Contributors />
-      </section>
+      <section className="gray-bg">{renderGetUpdates()}</section>
+      <section className="gray-bg">{renderContributors()}</section>
     </div>
   </>
 )

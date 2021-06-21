@@ -10,69 +10,81 @@ import 'slick-carousel/slick/slick-theme.css'
 import './slider.scss'
 
 export interface ActivitySliderProps {
-  sliderClass?: string
-  dots?: boolean
-  responsive?: object
-  slidesToShow?: number
-  slidesToScroll?: number
-  swipeToSlide?: boolean
-  slideHeader?: string
-  data: Record<string, any>
+  className?: string
+  sliderArgs: {
+    dots?: boolean
+    responsive?: object
+    slidesToShow?: number
+    slidesToScroll?: number
+    swipeToSlide?: boolean
+    slideHeader?: string
+  }
+  data: {
+    id: string
+    analytics: {
+      views: number
+    }
+    latestSnapshot: {
+      tag: string
+      description: {
+        Name: string
+      }
+      summary: {
+        modalities: string[]
+      }
+    }
+  }[]
 }
 
 export const ActivitySlider: React.FC<ActivitySliderProps> = ({
-  slideHeader,
-  sliderClass,
+  className,
   data,
-  accessibility = true,
-  draggable = true,
-  ...props
+  slideHeader,
+  sliderArgs,
 }) => {
   const datasets = data
+  console.log(data)
   return (
-    <div className={'container activity-slider' + ' ' + sliderClass}>
+    <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
-      <Slider {...props}>
-        {datasets.map((item, index) => (
+      <Slider {...sliderArgs}>
+        {data.map(({ node, index }) => (
           <>
             <a
               href={
-                'datasets/' +
-                item.node.id +
-                '/versions/' +
-                item.node.latestSnapshot.tag
+                'datasets/' + node.id + '/versions/' + node.latestSnapshot.tag
               }>
               <div className="activity-slider-node" key={index}>
                 <div className="ds-name">
-                  <h4>{item.node.latestSnapshot.description.Name}</h4>
+                  <h4>{node.latestSnapshot.description.Name}</h4>
                 </div>
 
-                {item.node.publishDate ? (
+                {node.publishDate ? (
                   <div className="ds-pub-date">
-                    {formatDistanceToNow(parseISO(item.node.publishDate))} ago
+                    {formatDistanceToNow(parseISO(node.publishDate))} ago
                   </div>
                 ) : null}
 
-                {item.node.analytics ? (
+                {node.analytics ? (
                   <div className="ds-pub-views">
-                    {item.node.analytics.views.toLocaleString()} views
+                    {node.analytics.views.toLocaleString()} views
                   </div>
                 ) : null}
 
                 <div className="ds-modality">
                   <div className="hexagon-wrapper">
-                    {item.node.latestSnapshot.summary !== null ? (
+                    {node.latestSnapshot.summary !== null ? (
                       <>
                         <div
                           className={
                             'hexagon ' +
-                            item.node.latestSnapshot.summary.modalities[0].substr(
+                            node.latestSnapshot.summary.modalities[0].substr(
                               0,
                               4,
                             )
                           }></div>
                         <div className="label">
-                          {item.node.latestSnapshot.summary.modalities[0].substr(
+                          {node.latestSnapshot.summary.modalities[0].substr(
                             0,
                             4,
                           )}

@@ -9,6 +9,9 @@ export * from './button/Button'
 export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
 
+// Front Page Exports
+export * from './front-page'
+
 /* TEMPORARY EXPORTS */
 // TODO: remove
 export * from './facets/Facet.stories'

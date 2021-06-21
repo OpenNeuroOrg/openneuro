@@ -2,7 +2,7 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
 import { Page, PageProps } from './Page'
-import { FrontPage } from '../front-page/FrontPage'
+import { FrontPageContainerExample } from '../front-page/FrontPageContainerExample'
 import { SearchPageContainerExample } from '../search-page/SearchPageContainerExample'
 import { DraftDatasetPageExample } from '../dataset/DraftDatasetPageExample'
 import * as HeaderStories from '../header/Header.stories'
@@ -21,7 +21,7 @@ const Template: Story<PageProps> = args => <Page {...args} />
 
 export const FrontPageExample = Template.bind({})
 FrontPageExample.args = {
-  children: <FrontPage />,
+  children: <FrontPageContainerExample />,
   headerArgs: HeaderStories.FrontPage.args,
   className: 'front-page',
 }
