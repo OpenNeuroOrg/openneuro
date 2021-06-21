@@ -16,14 +16,15 @@ export interface FrontPageContainerExampleProps {}
 
 export const FrontPageContainerExample =
   ({}: FrontPageContainerExampleProps) => {
-    console.log(RecentData.data.datasets.edges)
     //TopViewed.data.datasets.edges,
     const sliderArgs = {
       data: RecentData.data.datasets.edges,
       dots: true,
       slidesToShow: 3,
       slidesToScroll: 3,
-      swipeToSlide: true,
+      swipeToSlide: false,
+      swipe: true,
+      infinite: true,
       responsive: [
         {
           breakpoint: 800,
@@ -48,7 +49,7 @@ export const FrontPageContainerExample =
           renderInfographic={() => <Infographic />}
           renderActivitySliderFront={() => (
             <>
-              {/* <h2>
+              <h2>
                 <Icon label="Activity" imgSrc={activityIcon} iconSize="40px" />
               </h2>
               <ActivitySlider
@@ -62,7 +63,7 @@ export const FrontPageContainerExample =
                 sliderArgs={sliderArgs}
                 className="popular-slider"
                 slideHeader="Most Viewed"
-              /> */}
+              />
             </>
           )}
           renderGetUpdates={() => <GetUpdates />}

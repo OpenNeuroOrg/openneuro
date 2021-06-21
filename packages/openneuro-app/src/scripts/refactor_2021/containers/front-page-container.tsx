@@ -11,12 +11,15 @@ import {
   TopViewed,
 } from '@openneuro/components'
 
-const FrontPageContainer: FC = () => {
+const FrontPageContainer: React.FC = () => {
   const sliderArgs = {
+    data: RecentData.data.datasets.edges,
     dots: true,
     slidesToShow: 3,
     slidesToScroll: 3,
-    swipeToSlide: true,
+    swipeToSlide: false,
+    swipe: true,
+    infinite: true,
     responsive: [
       {
         breakpoint: 800,

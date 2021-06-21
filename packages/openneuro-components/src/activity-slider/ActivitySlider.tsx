@@ -2,6 +2,7 @@ import React from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 import Slider from 'react-slick'
+import { Link } from 'react-router-dom'
 
 // Import css files
 import 'slick-carousel/slick/slick.css'
@@ -18,6 +19,7 @@ export interface ActivitySliderProps {
     slidesToScroll?: number
     swipeToSlide?: boolean
     slideHeader?: string
+    infinite: boolean
   }
   data: {
     id: string
@@ -42,65 +44,60 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   slideHeader,
   sliderArgs,
 }) => {
-  const datasets = data
-  console.log(data)
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
       <Slider {...sliderArgs}>
         {data.map(({ node, index }) => (
-          <>
-            <a
-              href={
-                'datasets/' + node.id + '/versions/' + node.latestSnapshot.tag
-              }>
-              <div className="activity-slider-node" key={index}>
-                <div className="ds-name">
-                  <h4>{node.latestSnapshot.description.Name}</h4>
-                </div>
+          <div className="activity-slider-node" key={index}>
+            <div className="ds-name">
+              <h4>
+                <Link
+                  to={
+                    'datasets/' +
+                    node.id +
+                    '/versions/' +
+                    node.latestSnapshot.tag
+                  }>
+                  {node.latestSnapshot.description.Name}
+                </Link>
+              </h4>
+            </div>
 
-                {node.publishDate ? (
-                  <div className="ds-pub-date">
-                    {formatDistanceToNow(parseISO(node.publishDate))} ago
-                  </div>
-                ) : null}
-
-                {node.analytics ? (
-                  <div className="ds-pub-views">
-                    {node.analytics.views.toLocaleString()} views
-                  </div>
-                ) : null}
-
-                <div className="ds-modality">
-                  <div className="hexagon-wrapper">
-                    {node.latestSnapshot.summary !== null ? (
-                      <>
-                        <div
-                          className={
-                            'hexagon ' +
-                            node.latestSnapshot.summary.modalities[0].substr(
-                              0,
-                              4,
-                            )
-                          }></div>
-                        <div className="label">
-                          {node.latestSnapshot.summary.modalities[0].substr(
-                            0,
-                            4,
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="hexagon no-modality"></div>
-                        <div className="label">N/A</div>
-                      </>
-                    )}
-                  </div>
-                </div>
+            {node.publishDate ? (
+              <div className="ds-pub-date">
+                {formatDistanceToNow(parseISO(node.publishDate))} ago
               </div>
-            </a>
-          </>
+            ) : null}
+
+            {node.analytics ? (
+              <div className="ds-pub-views">
+                {node.analytics.views.toLocaleString()} views
+              </div>
+            ) : null}
+
+            <div className="ds-modality">
+              <div className="hexagon-wrapper">
+                {node.latestSnapshot.summary !== null ? (
+                  <>
+                    <div
+                      className={
+                        'hexagon ' +
+                        node.latestSnapshot.summary.modalities[0].substr(0, 4)
+                      }></div>
+                    <div className="label">
+                      {node.latestSnapshot.summary.modalities[0].substr(0, 4)}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="hexagon no-modality"></div>
+                    <div className="label">N/A</div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         ))}
       </Slider>
     </div>
