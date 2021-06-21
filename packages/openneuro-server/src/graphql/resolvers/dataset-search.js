@@ -147,21 +147,19 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
  * @param {string} args.query Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.datasetType Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.datasetStatus Stringified Query (DSL) argument for ElasticSearch
+ * @param {string} args.sortBy Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.after Cursor for paging forward
  * @param {number} args.first Limit of entries to find
  */
 export const advancedDatasetSearchConnection = async (
   obj,
-  { query, datasetType, datasetStatus, after, first = 25 },
+  { query, datasetType, datasetStatus, sortBy, after, first = 25 },
   { user, userInfo },
 ) => {
-  console.log('==========')
-  console.log('==========')
-  console.log(datasetType)
-  console.log('==========')
-  console.log('==========')
+  const sort = [{ _score: 'asc', id: 'desc' }]
+  if (sortBy) sort.unshift(JSON.parse(sortBy))
   const requestBody = {
-    sort: [{ _score: 'asc', id: 'desc' }],
+    sort,
     query: await parseQuery(query, datasetType, datasetStatus, user),
   }
   if (after) {
@@ -187,6 +185,7 @@ export const advancedDatasetSearch = {
       query: { type: 'String!' },
       datasetType: { type: 'String' },
       datasetStatus: { type: 'String' },
+      sortBy: { type: 'String' },
       after: { type: 'String' },
       first: { type: 'Int' },
     },

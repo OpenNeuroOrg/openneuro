@@ -53,6 +53,22 @@ export const indexQuery = gql`
             }
             readme
           }
+          draft {
+            description {
+              Name
+            }
+            issues {
+              severity
+            }
+          }
+          permissions {
+            userPermissions {
+              level
+              user {
+                id
+              }
+            }
+          }
         }
       }
       pageInfo {
