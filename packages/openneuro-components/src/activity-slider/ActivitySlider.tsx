@@ -63,6 +63,8 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
+      {/* 
+      // @ts-ignore */}
       <Carousel {...sliderArgs} responsive={responsive}>
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
