@@ -148,6 +148,18 @@ services:
       datalad:
         condition: service_healthy
 
+  storybook:
+    extends:
+      service: node
+    command: bash -c 'yarn workspace @openneuro/components storybook'
+    ports:
+      - '6006:6006'
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      node:
+        condition: service_healthy
+
   elasticsearch:
     image: elasticsearch:7.10.1
     environment:
