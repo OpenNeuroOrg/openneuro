@@ -2,7 +2,7 @@ import React from 'react'
 
 import mriScan from '../assets/mri-scan.jpg'
 
-const portalContent = {
+export const portalContent = {
   mri: {
     modality: 'MRI', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     portalName: 'OpenNeuro MRI',
@@ -27,5 +27,3 @@ const portalContent = {
     ),
   },
 }
-
-export default portalContent

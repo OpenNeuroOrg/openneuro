@@ -1,8 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useContext, useEffect } from 'react'
 import {
   SearchPage,
   sortBy,
-  SearchSortContainerExample,
   SearchResultsList,
   Button,
 } from '@openneuro/components'
@@ -26,6 +25,8 @@ import FiltersBlockContainer from './filters-block-container'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../authentication/profile'
 import { useSearchResults } from './use-search-results'
+import { SearchParamsCtx } from './search-params-ctx'
+import { SearchParams } from './initial-search-params'
 
 export interface SearchContainerProps {
   portalContent?: Record<string, any>
@@ -34,6 +35,20 @@ export interface SearchContainerProps {
 const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
+
+  const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
+  const modality = portalContent?.modality || false
+  useEffect(() => {
+    if (searchParams.modality_selected !== modality) {
+      setSearchParams(
+        (prevState: SearchParams): SearchParams => ({
+          ...prevState,
+          modality_selected: modality,
+        }),
+      )
+    }
+  }, [modality, searchParams.modality_selected, setSearchParams])
+
   let loading, data
   // const { loading, data, fetchMore, refetch, variables, error } =
   //   useSearchResults()
@@ -60,7 +75,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         <>
           <KeywordInput />
           <ShowDatasetRadios />
-          <ModalitySelect />
+          {!portalContent && <ModalitySelect />}
           <AgeRangeInput />
           <SubjectCountRangeInput />
           <DiagnosisSelect />

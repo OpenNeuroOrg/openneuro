@@ -102,7 +102,7 @@ export const date_list = [
 
 type OptionalNumberRange = [number | null, number | null]
 
-interface SearchParams {
+export interface SearchParams {
   keywords: string[]
   datasetType_available: typeof datasetType_available
   datasetType_selected: string | null

@@ -25,7 +25,6 @@ export const SearchPage = ({
     getScrollTop: (scrollTop: number) => void
     // Your other Props
   }
-  console.log({ portalContent })
   return (
     <>
       <section className="search">
