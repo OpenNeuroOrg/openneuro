@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import './warn-button.scss'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'

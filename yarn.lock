@@ -5343,7 +5343,7 @@ __metadata:
     "@storybook/preset-scss": ^1.0.3
     "@storybook/react": ^6.2.8
     "@storybook/theming": ^6.2.8
-    "@testing-library/jest-dom": ^5.11.4
+    "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^11.1.0
     "@types/bytes": ^3
     "@types/jest": ^26.0.23
@@ -5353,10 +5353,12 @@ __metadata:
     "@types/react-router-dom": ^5
     "@types/react-slick": ^0
     "@types/slick-carousel": ^1
+    "@types/testing-library__jest-dom": ^5.14.0
     "@wojtekmaj/react-daterange-picker": ^3.2.0
     babel-jest: ^27.0.2
     bytes: ^3.1.0
     commafy: ^0.0.6
+    core-js: ^3.14.0
     css-loader: ^5.2.1
     date-fns: ^2.21.1
     jest: ^27.0.4
@@ -6862,6 +6864,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/jest-dom@npm:^5.14.1":
+  version: 5.14.1
+  resolution: "@testing-library/jest-dom@npm:5.14.1"
+  dependencies:
+    "@babel/runtime": ^7.9.2
+    "@types/testing-library__jest-dom": ^5.9.1
+    aria-query: ^4.2.2
+    chalk: ^3.0.0
+    css: ^3.0.0
+    css.escape: ^1.5.1
+    dom-accessibility-api: ^0.5.6
+    lodash: ^4.17.15
+    redent: ^3.0.0
+  checksum: b0c4b4ffa1d58bdf22f1682eb973397e8044a3cdd8527de8d1c8169640b3c4585165abcbfc819dee7f4aa40204c6a63afb28dd74ad9bb4e1bfbdc680fd491e30
+  languageName: node
+  linkType: hard
+
 "@testing-library/react@npm:^11.1.0":
   version: 11.2.7
   resolution: "@testing-library/react@npm:11.2.7"
@@ -7960,7 +7979,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:^5.14.0":
+"@types/testing-library__jest-dom@npm:^5, @types/testing-library__jest-dom@npm:^5.14.0":
   version: 5.14.0
   resolution: "@types/testing-library__jest-dom@npm:5.14.0"
   dependencies:
@@ -12939,6 +12958,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:^3.14.0":
+  version: 3.14.0
+  resolution: "core-js@npm:3.14.0"
+  checksum: fc830e61146f50241f431c711674a6af0a3633269a2a2afada3da1054f0c3b3a8b571fb4ca4c87d53193def47a4f56a18c32e832e6587b363ff0ff153508f300
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:1.0.2, core-util-is@npm:^1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -14400,6 +14426,13 @@ __metadata:
   version: 0.5.4
   resolution: "dom-accessibility-api@npm:0.5.4"
   checksum: 39351d26a3732312f14411effef698204bf6c79a7d5eb0664441897541243f2cdf2e508aca52684ccf3b10df6708a6c265d1fde323eebcb8363a1093f5927b10
+  languageName: node
+  linkType: hard
+
+"dom-accessibility-api@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "dom-accessibility-api@npm:0.5.6"
+  checksum: b579681083e683291df022bdf094dae2c7e39db0ff28f70ed2c8368eda203fe4c45bcf92f1c623ce4b746cb245f9a5dc9d176f1781d600b9218728d3a1d1580f
   languageName: node
   linkType: hard
 
@@ -30932,10 +30965,12 @@ resolve@^2.0.0-next.3:
     "@babel/runtime-corejs3": ^7.13.10
     "@loadable/babel-plugin": ^5.13.2
     "@sentry/cli": 1.37.4
+    "@testing-library/jest-dom": ^5.14.1
     "@types/babel__core": ^7
     "@types/babel__plugin-transform-runtime": ^7
     "@types/babel__preset-env": ^7
     "@types/jest": ^26.0.23
+    "@types/testing-library__jest-dom": ^5
     "@typescript-eslint/eslint-plugin": ^4.19.0
     "@typescript-eslint/parser": ^4.19.0
     babel-eslint: 10.0.3
@@ -30959,6 +30994,9 @@ resolve@^2.0.0-next.3:
     react-dom: ^17.0.1
     tsc-watch: ^4.2.9
     typescript: 4.0.6
+  dependenciesMeta:
+    open@7.4.2:
+      unplugged: true
   languageName: unknown
   linkType: soft
 
