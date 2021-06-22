@@ -6,13 +6,14 @@ export interface IconProps {
   primary?: boolean
   secondary?: boolean
   backgroundColor?: string
-  label?: string
+  label: string
   disabled?: boolean
   icon?: string
   color?: string
   imgSrc?: string
   iconSize?: string
   className?: string
+  iconOnly?: boolean
 }
 
 export const Icon: React.FC<IconProps> = ({
@@ -23,9 +24,14 @@ export const Icon: React.FC<IconProps> = ({
   imgSrc,
   iconSize,
   className,
+  iconOnly,
 }) => {
   const iconWithText =
-    icon && label ? 'icon-text' : imgSrc && label ? 'img-icon-text' : null
+    icon && label && !iconOnly
+      ? 'icon-text'
+      : imgSrc && label
+      ? 'img-icon-text'
+      : null
   const fontIcon = icon ? (
     <i style={{ fontSize: iconSize }} className={icon}></i>
   ) : null
@@ -40,10 +46,12 @@ export const Icon: React.FC<IconProps> = ({
         ' ',
       )}
       style={{ backgroundColor, color }}
-      role="img">
+      role="img"
+      aria-label="icon"
+      title={label}>
       {imgIcon}
       {fontIcon}
-      {label}
+      {iconOnly ? null : label}
     </span>
   )
 }

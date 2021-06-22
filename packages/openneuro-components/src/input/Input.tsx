@@ -30,6 +30,7 @@ export const Input: React.FC<InputProps> = ({
           <input
             type={type}
             name={name}
+            id={name}
             value={value}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
@@ -44,6 +45,7 @@ export const Input: React.FC<InputProps> = ({
             value={value}
             type={type}
             name={name}
+            id={name}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
             onKeyDown={onKeyDown}
@@ -56,6 +58,7 @@ export const Input: React.FC<InputProps> = ({
             value={value}
             type={type}
             name={name}
+            id={name}
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
             onKeyDown={onKeyDown}

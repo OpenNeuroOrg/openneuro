@@ -139,6 +139,9 @@ header {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  h2 {
+    font-size: 18px;
+  }
 }
 .sign-in-modal-content {
   display: flex;

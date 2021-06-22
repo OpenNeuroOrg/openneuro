@@ -6,7 +6,7 @@ $newspaper: #dfdfdf;
 /* SCSS RGB */
 $on-light-aqua: rgb(55, 188, 210);
 $on-dark-aqua: rgba(32, 78, 90, 1);
-$on-secondary: #4795b4;
+$on-secondary: #196583;
 $on-dark-aqua-light: adjust-color($on-dark-aqua, $lightness: 45%);
 
 $mri-theme: rgba(109, 83, 156, 1);
@@ -22,7 +22,7 @@ $ieeg-theme: rgba(121, 5, 93, 1);
 $ecog-theme: rgba(0, 190, 143, 1);
 $asl-theme: rgba(185, 42, 39, 1);
 $meg-theme: rgba(234, 93, 11, 1);
-$on-light-green: #00b489;
+$on-light-green: #00eeb5;
 $on-light-red: #c00342;
 
 $primary: $on-dark-aqua;

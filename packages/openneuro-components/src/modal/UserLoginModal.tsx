@@ -21,7 +21,7 @@ export const UserLoginModal: React.FC = ({
         closeText="Close">
         <div className="sign-in-modal-header">
           <Logo horizontal dark={true} width="230px" className="m-t-20" />
-          <h4>Sign in</h4>
+          <h2>Sign in</h2>
         </div>
         <div className="sign-in-modal-content">
           <div>
