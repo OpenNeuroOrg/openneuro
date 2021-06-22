@@ -3,11 +3,9 @@ import { NavLink } from 'react-router-dom'
 import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
-import { UserModalInner } from '../modal/UserModalInner'
+import { UserLoginModal } from '../modal/UserLoginModal'
 import { UserMenu } from '../user/UserMenu'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
-
-import orcidIcon from '../assets/orcid_24x24.png'
 
 import './header.scss'
 
@@ -97,8 +95,12 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
       {!profile ? (
-        <Modal isOpen={isOpenLogin} toggle={toggleLogin} closeText="Close">
-          <UserModalInner />
+        <Modal
+          isOpen={isOpenLogin}
+          toggle={toggleLogin}
+          closeText="Close"
+          className="sign-in-modal">
+          <UserLoginModal />
         </Modal>
       ) : null}
 

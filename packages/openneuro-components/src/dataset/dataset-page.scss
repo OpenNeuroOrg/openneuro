@@ -23,6 +23,18 @@
         margin-left: 0;
       }
     }
+    .follow-bookmark {
+      display: flex;
+      justify-content: flex-start;
+      .toggle-counter-wrap {
+        &:first-child {
+          margin-right: 30px;
+        }
+        .toggle-btn {
+          padding: 0 7px;
+        }
+      }
+    }
   }
   .dataset-header-alert {
     padding: 10px 20px;
@@ -325,7 +337,7 @@
   background-color: #eaeaea;
   padding: 20px;
   border-radius: $border-radius-default;
-  border: 1px solid #ddd;
+  border: 1px solid $newspaper;
   .active-version {
     font-size: 14px;
     div {
@@ -338,7 +350,7 @@
     position: relative;
     .menu .version-list-dropdow {
       min-width: 380px;
-      border: 1px solid #ddd;
+      border: 1px solid $newspaper;
       border-radius: $border-radius-default;
     }
     .version-list-label {

@@ -44,7 +44,7 @@
     .level-1 > li {
       border-top: 1px solid #dfdfdf;
       > span:hover {
-        background-color: #efefef;
+        background-color: var(--current-theme-primary-light);
       }
 
       > .label {
@@ -59,7 +59,7 @@
         display: flex;
         justify-content: flex-start;
         &:hover {
-          background-color: #efefef;
+          background-color: var(--current-theme-primary-light);
         }
 
         .label {
@@ -135,7 +135,7 @@
 
   .react-calendar__month-view__days__day,
   .react-calendar__month-view__days__day--weekend {
-    color: #333;
+    color: $charcoal;
   }
   .react-calendar__tile--now {
     background-color: #eee;
@@ -201,7 +201,7 @@
       }
 
       .level-1 > li {
-        border-top: 1px solid #dfdfdf;
+        border-top: 1px solid $newspaper;
 
         > .label {
           display: inline-block;

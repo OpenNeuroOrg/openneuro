@@ -13,6 +13,7 @@
 .on-button--primary {
   color: #fff;
   background-color: var(--current-theme-primary);
+  transition: background-color 0.3s;
   &:hover {
     background-color: var(--current-theme-primary-hover);
   }
@@ -21,6 +22,7 @@
 .on-button--secondary {
   color: #fff;
   background-color: $on-light-green;
+  transition: background-color 0.3s;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
   &:hover {
     background-color: darken($on-light-green, 5%);

@@ -1,3 +1,4 @@
+@import '../scss/variables';
 .faqs.container {
   width: 800px;
 }
@@ -11,14 +12,14 @@
 .faq-item {
   display: block;
   width: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid $newspaper;
   padding: 10px 20px;
   margin-bottom: 20px;
   border-radius: 4px;
 
   .accordion-content {
     padding: 20px 0px 15px;
-    border-top: 1px solid #dadada;
+    border-top: 1px solid $newspaper;
     margin-top: 10px;
     p:first-of-type {
       margin-top: 0;

@@ -25,7 +25,7 @@
     top: 0;
     width: 18px;
     height: 18px;
-    border: 1px solid #ddd;
+    border: 1px solid $newspaper;
     border-radius: 100%;
     background: #fff;
   }
@@ -216,6 +216,9 @@
       transition: color 0s;
       transition-delay: 0s;
       border-right: 1px solid var(--current-theme-primary);
+    }
+    [type='radio']:not(:checked) + label:hover {
+      background-color: var(--current-theme-primary-light);
     }
     [type='radio']:checked + label {
       color: #fff;

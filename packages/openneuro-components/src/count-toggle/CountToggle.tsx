@@ -3,7 +3,6 @@ import './count-toggle.scss'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
 import { Modal } from '../modal/Modal'
-import { UserModalInner } from '../modal/UserModalInner'
 
 export interface CountToggleProps {
   label?: string
@@ -25,8 +24,7 @@ export const CountToggle = ({
   clicked,
   count,
 }: CountToggleProps) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const toggleLogin = () => setIsOpen(!isOpen)
+  const toggleLogin = () => alert('TODO needs login modal')
   const toggleButton = (
     <span className="toggle-counter">
       <Button
@@ -61,9 +59,6 @@ export const CountToggle = ({
           button
         )}
       </div>
-      <Modal isOpen={isOpen} toggle={toggleLogin} closeText="Close">
-        <UserModalInner />
-      </Modal>
     </>
   )
 }

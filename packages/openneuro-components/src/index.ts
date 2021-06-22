@@ -1,5 +1,6 @@
 export * from './facets'
 export * from './accordion'
+export * from './modal'
 export * from './header/Header'
 export * from './header/LandingExpandedHeader'
 export * from './input'

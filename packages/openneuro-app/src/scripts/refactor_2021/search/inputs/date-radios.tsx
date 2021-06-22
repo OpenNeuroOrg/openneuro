@@ -22,6 +22,7 @@ const DateRadios: FC = () => {
       startOpen={false}
       label="Publication Date"
       accordionStyle="plain"
+      className="date-facet"
     />
   )
 }
