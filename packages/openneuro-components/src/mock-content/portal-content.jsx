@@ -5,6 +5,7 @@ import mriScan from '../assets/mri-scan.jpg'
 export const portalContent = {
   mri: {
     modality: 'MRI', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    className: 'search-page-mri',
     portalName: 'OpenNeuro MRI',
     portalPrimary:
       'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
