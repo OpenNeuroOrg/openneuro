@@ -156,7 +156,7 @@ export const advancedDatasetSearchConnection = async (
   { query, datasetType, datasetStatus, sortBy, after, first = 25 },
   { user, userInfo },
 ) => {
-  const sort = [{ _score: 'asc', id: 'desc' }]
+  const sort = [{ _score: 'asc' }]
   if (sortBy) sort.unshift(JSON.parse(sortBy))
   const requestBody = {
     sort,
