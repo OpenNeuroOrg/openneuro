@@ -8,7 +8,7 @@ export const GetUpdates: React.FC<GetUpdatesProps> = ({}) => {
   const getUpdatesInput = {
     type: 'email',
     label: 'Email Address',
-    placeholder: ' ',
+    placeholder: 'email@openneuro.com',
     labelStyle: 'float',
     name: 'float-example',
   }

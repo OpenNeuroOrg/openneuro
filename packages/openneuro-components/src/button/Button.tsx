@@ -6,10 +6,11 @@ export interface ButtonProps {
   secondary?: boolean
   backgroundColor?: string
   size?: 'xsmall' | 'small' | 'medium' | 'large'
-  label?: string
+  label: string
   disabled?: boolean
   onClick?: () => void
   navbar?: boolean
+  iconOnly?: boolean
   icon?: string
   color?: string
   imgSrc?: string
@@ -35,6 +36,7 @@ export const Button: React.FC<ButtonProps> = ({
   className,
   children,
   disabled,
+  iconOnly,
   ...props
 }) => {
   const mode =
@@ -46,12 +48,22 @@ export const Button: React.FC<ButtonProps> = ({
       ? 'on-no-background'
       : 'on-button--navbar'
   const iconWithText =
-    icon && label ? 'icon-text' : imgSrc && label ? 'img-icon-text' : null
+    icon && label && !iconOnly
+      ? 'icon-text'
+      : imgSrc && label
+      ? 'img-icon-text'
+      : null
   const fontIcon = icon ? (
-    <i style={{ fontSize: iconSize }} className={icon}></i>
+    <span>
+      <span className="sr-only">{label}</span>
+      <i style={{ fontSize: iconSize }} className={icon}></i>
+    </span>
   ) : null
   const imgIcon = imgSrc ? (
-    <img style={{ width: iconSize }} src={imgSrc} alt="" />
+    <span>
+      <span className="sr-only">{label}</span>
+      <img style={{ width: iconSize }} src={imgSrc} alt="" />
+    </span>
   ) : null
 
   return (
@@ -70,7 +82,7 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}>
       {imgIcon}
       {fontIcon}
-      {label}
+      {iconOnly ? null : label}
       {children}
     </button>
   )

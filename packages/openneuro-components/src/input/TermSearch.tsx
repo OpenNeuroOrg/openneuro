@@ -60,9 +60,11 @@ export const TermSearch = ({
           disabled={disabled}
           color={color}
           icon={icon}
+          iconOnly={true}
           iconSize={iconSize}
           size={size}
           onClick={() => pushTerm()}
+          label="Add Term"
         />
       </div>
       {allTerms.length ? (

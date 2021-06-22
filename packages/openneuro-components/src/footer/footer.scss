@@ -4,7 +4,8 @@
   background: $charcoal;
   color: #ffffff;
   padding: 10px;
-  a {
+  a,
+  a:link {
     color: $on-light-aqua;
   }
   .grid {

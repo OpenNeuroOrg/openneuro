@@ -64,6 +64,8 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
                   primary={true}
                   icon="fas fa-search"
                   size="large"
+                  iconOnly={true}
+                  label="Search"
                 />
               </div>
             </div>
@@ -71,7 +73,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
             {!user ? (
               <div className="grid  grid-start hero-signin">
                 <div className=" hero-sigin-label">
-                  <h4>SIGN IN</h4>
+                  <h2>SIGN IN</h2>
                 </div>
                 <div>
                   <Button

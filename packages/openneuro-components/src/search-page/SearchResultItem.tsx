@@ -180,7 +180,12 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
       tooltip={activtyTooltip}
       flow="up"
       className="result-icon result-activity-icon">
-      <Icon imgSrc={activityPulseIcon} iconSize="22px" />
+      <Icon
+        imgSrc={activityPulseIcon}
+        iconSize="22px"
+        label="activity"
+        iconOnly={true}
+      />
     </Tooltip>
   )
 
@@ -189,7 +194,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
       tooltip="Shared with me"
       flow="up"
       className="result-icon result-shared-icon">
-      <Icon icon="fas fa-user" color="rgb(119,191,217)" iconSize="16px" />
+      <Icon
+        icon="fas fa-user"
+        color="rgb(119,191,217)"
+        iconSize="16px"
+        label="Shared With"
+        iconOnly={true}
+      />
     </Tooltip>
   )
   const publicIcon = (
@@ -197,7 +208,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
       tooltip="Visable to all viewers"
       flow="up"
       className="result-icon result-publlic-icon">
-      <Icon icon="fas fa-globe" color="rgb(116,181,105)" iconSize="16px" />
+      <Icon
+        icon="fas fa-globe"
+        color="rgb(116,181,105)"
+        iconSize="16px"
+        label="Public"
+        iconOnly={true}
+      />
     </Tooltip>
   )
 
@@ -210,6 +227,8 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
         icon="fas fa-exclamation-circle"
         color="rgb(202,97,86)"
         iconSize="16px"
+        label="Invalid"
+        iconOnly={true}
       />
     </Tooltip>
   )
