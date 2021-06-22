@@ -39,7 +39,8 @@ export const Icon: React.FC<IconProps> = ({
       className={[className, 'on-icon', iconWithText, wBackgroundColor].join(
         ' ',
       )}
-      style={{ backgroundColor, color }}>
+      style={{ backgroundColor, color }}
+      role="img">
       {imgIcon}
       {fontIcon}
       {label}
