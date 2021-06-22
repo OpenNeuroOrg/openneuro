@@ -7,7 +7,7 @@ import { SearchPageContainerExample } from '../search-page/SearchPageContainerEx
 import { DraftDatasetPageExample } from '../dataset/DraftDatasetPageExample'
 import * as HeaderStories from '../header/Header.stories'
 
-import portalContent from '../mock-content/portal-content'
+import { portalContent } from '../mock-content/portal-content'
 import { DraftDataset } from '../mock-content/draft-dataset-content'
 
 import { mri } from '../mock-content/mri-search-results'

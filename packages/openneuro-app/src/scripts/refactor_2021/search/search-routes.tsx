@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import SearchContainer from './search-container'
 import { portalContent } from '@openneuro/components'
-console.log(portalContent.mri)
 
 const SearchRoutes: FC = () => {
   const { path } = useRouteMatch()

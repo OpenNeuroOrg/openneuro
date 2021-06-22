@@ -75,7 +75,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         <>
           <KeywordInput />
           <ShowDatasetRadios />
-          {!portalContent && <ModalitySelect />}
+          {!portalContent && <ModalitySelect portalStyles={true} />}
           <AgeRangeInput />
           <SubjectCountRangeInput />
           <DiagnosisSelect />

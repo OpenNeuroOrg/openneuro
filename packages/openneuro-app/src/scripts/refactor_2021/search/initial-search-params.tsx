@@ -13,30 +13,43 @@ const datasetStatus_available = [
   { label: 'Invalid', value: 'Invalid' },
 ]
 
-const modality_available = [
+type ModalityOption = {
+  label: string
+  value: string
+  portalPath: string
+  count?: number
+  children?: ModalityOption[]
+}
+
+const modality_available: ModalityOption[] = [
   {
     label: 'MRI',
     value: 'MRI',
+    portalPath: '/search/modality/mri',
     count: 3000,
     children: [
       {
         label: 'Functional',
         value: 'Functional',
+        portalPath: '/search/modality/mri',
         count: 300,
       },
       {
         label: 'Structural',
         value: 'Structural',
+        portalPath: '/search/modality/mri',
         count: 200,
       },
       {
         label: 'Diffusion',
         value: 'Diffusion',
+        portalPath: '/search/modality/mri',
         count: 300,
       },
       {
         label: 'Perfusion',
         value: 'Perfusion',
+        portalPath: '/search/modality/mri',
         count: 150,
       },
     ],
@@ -44,21 +57,25 @@ const modality_available = [
   {
     label: 'EEG',
     value: 'EEG',
+    portalPath: '/search/modality/eeg',
     count: 303,
   },
   {
     label: 'IEEG',
     value: 'IEEG',
+    portalPath: '/search/modality/ieeg',
     count: 303,
     children: [
       {
         label: 'ECoG',
         value: 'ECoG',
+        portalPath: '/search/modality/ieeg',
         count: 300,
       },
       {
         label: 'SEEG',
         value: 'SEEG',
+        portalPath: '/search/modality/ieeg',
         count: 200,
       },
     ],
@@ -66,26 +83,44 @@ const modality_available = [
   {
     label: 'MEG',
     value: 'MEG',
+    portalPath: '/search/modality/meg',
     count: 330,
   },
   {
     label: 'PET',
     value: 'PET',
+    portalPath: '/search/modality/pet',
     count: 30,
     children: [
       {
         label: 'Static',
         value: 'Static',
+        portalPath: '/search/modality/pet',
         count: 300,
       },
       {
         label: 'Dynamic',
         value: 'Dynamic',
+        portalPath: '/search/modality/pet',
         count: 200,
       },
     ],
   },
 ]
+
+export const flattenedModalities = modality_available.reduce(
+  (flattened: ModalityOption[], modality: ModalityOption): ModalityOption[] => {
+    if (modality.children) {
+      const { children } = modality
+      const childlessModality = { ...modality }
+      delete childlessModality.children
+      return [...flattened, childlessModality, ...children]
+    } else {
+      return [...flattened, modality]
+    }
+  },
+  [] as ModalityOption[],
+)
 
 export const gender_list = [
   { label: 'All', value: 'All' },
@@ -108,7 +143,7 @@ export interface SearchParams {
   datasetType_selected: string | null
   datasetStatus_available: typeof datasetStatus_available
   datasetStatus_selected: string | null
-  modality_available: typeof modality_available
+  modality_available: ModalityOption[]
   modality_selected: string | null
   ageRange: OptionalNumberRange
   subjectCountRange: OptionalNumberRange
