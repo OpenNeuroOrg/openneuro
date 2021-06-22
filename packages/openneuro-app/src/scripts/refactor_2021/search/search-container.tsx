@@ -27,11 +27,16 @@ import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../authentication/profile'
 import { useSearchResults } from './use-search-results'
 
-const SearchContainer: FC = () => {
+export interface SearchContainerProps {
+  portalContent?: Record<string, any>
+}
+
+const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
-  const { loading, data, fetchMore, refetch, variables, error } =
-    useSearchResults()
+  let loading, data
+  // const { loading, data, fetchMore, refetch, variables, error } =
+  //   useSearchResults()
 
   const numResultsShown = data?.datasets?.edges.length || 0
   const numTotalResults = data?.datasets?.pageInfo.count || 0
@@ -39,6 +44,7 @@ const SearchContainer: FC = () => {
 
   return (
     <SearchPage
+      portalContent={portalContent}
       renderFilterBlock={() => (
         <FiltersBlockContainer numTotalResults={numTotalResults} />
       )}

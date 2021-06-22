@@ -9,6 +9,7 @@ export * from './search-page'
 export * from './button/Button'
 export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
+export * from './mock-content/portal-content'
 
 /* TEMPORARY EXPORTS */
 // TODO: remove
