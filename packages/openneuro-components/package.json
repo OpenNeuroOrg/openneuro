@@ -79,7 +79,8 @@
       "dist"
     ],
     "moduleNameMapper": {
-      "^.+\\.(css|less|scss|svg|png|jpg)$": "babel-jest"
+      "^.+\\.(css|less|scss|svg|png|jpg)$": "babel-jest",
+      "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
     }
   },
   "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
