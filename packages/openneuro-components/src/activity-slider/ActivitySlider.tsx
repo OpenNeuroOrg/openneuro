@@ -114,6 +114,7 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
               <div className="hexagon-wrapper">
                 {node.latestSnapshot.summary !== null ? (
                   <>
+                    {/* TODO GET the primary modality when available */}
                     <div
                       className={
                         'hexagon ' +
