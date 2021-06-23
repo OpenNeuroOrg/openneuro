@@ -47,8 +47,8 @@ const modality_available: ModalityOption[] = [
         count: 300,
       },
       {
-        label: 'Perfusion',
-        value: 'Perfusion',
+        label: 'ASL Perfusion',
+        value: 'ASL Perfusion',
         portalPath: '/search/modality/mri',
         count: 150,
       },
@@ -61,8 +61,8 @@ const modality_available: ModalityOption[] = [
     count: 303,
   },
   {
-    label: 'IEEG',
-    value: 'IEEG',
+    label: 'iEEG',
+    value: 'iEEG',
     portalPath: '/search/modality/ieeg',
     count: 303,
     children: [
