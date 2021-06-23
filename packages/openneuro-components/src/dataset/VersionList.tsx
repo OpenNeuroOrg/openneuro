@@ -23,6 +23,8 @@ export interface VersionListProps {
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
 
+//TODO set up deprecated
+
 export const VersionList = ({
   items,
   selected,
@@ -47,7 +49,7 @@ export const VersionList = ({
       <div className="active-version">
         <div>{selected === 'draft' ? 'Draft' : selected}</div>
         {selected === 'draft' ? 'Updated' : 'Created'}:{' '}
-        {selected === 'draft' ? dateModified : 'version date'}
+        {selected === 'draft' ? dateModified : date}
       </div>
       <Dropdown
         className={className}
@@ -70,7 +72,7 @@ export const VersionList = ({
                     {selected === 'draft' ? '*' : ''}
                   </span>
                 </span>
-                {date}
+                {dateModified}
               </li>
               {items.map((item, index) => (
                 <li
@@ -90,7 +92,7 @@ export const VersionList = ({
                       {item.deprecated === true ? 'Deprecated' : ''}
                     </span>
                   </span>
-                  {date}
+                  {formatDate(item.created)}
                 </li>
               ))}
             </ul>

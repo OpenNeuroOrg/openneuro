@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 // TODO - Re-enable code splitting these when we can
-import Dataset from '../datalad/dataset/dataset'
+import Dataset from './dataset/draft-snapshot-routes'
 import FrontPage from './containers/front-page'
 import { FAQS } from '@openneuro/components'
 import Admin from '../admin/admin'

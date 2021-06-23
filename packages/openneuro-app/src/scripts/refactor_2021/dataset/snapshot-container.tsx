@@ -1,29 +1,29 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
-import { CountToggle } from '../count-toggle/CountToggle'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
-import { VersionListContainerExample } from './VersionListContainerExample'
-import { DatasetPage } from './DatasetPage'
-import { DatasetGitAccess } from './DatasetGitAccess'
-import { Icon } from '../icon/Icon'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Modal } from '../modal/Modal'
 
-import { ReadMore } from '../read-more/ReadMore'
-import { MetaDataBlock } from './MetaDataBlock'
-import { BrainLifeButton } from './BrainLifeButton'
+import {
+  Icon,
+  Tooltip,
+  Modal,
+  ReadMore,
+  MetaDataBlock,
+  BrainLifeButton,
+  ValidationBlock,
+  CloneDropdown,
+  DatasetHeader,
+  DatasetAlert,
+  DatasetHeaderMeta,
+  CountToggle,
+  DatasetPage,
+  DatasetGitAccess,
+  VersionListContainerExample,
+} from '@openneuro/components'
 
-import { ValidationBlock } from './ValidationBlock'
-
-import { CloneDropdown } from './CloneDropdown'
-import { DatasetHeader } from './DatasetHeader'
-import { DatasetAlert } from './DatasetAlert'
-import { DatasetHeaderMeta } from './DatasetHeaderMeta'
-
-export interface DraftDatasetPageExampleProps {
+export interface SnapshotContainerProps {
   dataset
 }
 
@@ -35,15 +35,13 @@ const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
-
-export const DraftDatasetPageExample = ({
-  dataset,
-}: DraftDatasetPageExampleProps) => {
+const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const [bookmarked, showBookmarked] = React.useState(false)
   const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
   const [followed, showFollowed] = React.useState(false)
   const [followedCount, setFollowedCount] = React.useState(1)
 
+  //TODO hook up follow and bookmark
   const toggleBookmarkClick = () => {
     setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
     showBookmarked(!bookmarked)
@@ -73,9 +71,10 @@ export const DraftDatasetPageExample = ({
     parseISO(dataset.draft.modified),
   )
 
-  const rootPath = activeDataset
-    ? `/datasets/${datasetId}/versions/${activeDataset}`
-    : `/datasets/${datasetId}`
+  const rootPath =
+    activeDataset !== 'draft'
+      ? `/datasets/${datasetId}/versions/${activeDataset}`
+      : `/datasets/${datasetId}`
 
   //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
@@ -324,3 +323,4 @@ export const DraftDatasetPageExample = ({
     </>
   )
 }
+export default SnapshotContainer

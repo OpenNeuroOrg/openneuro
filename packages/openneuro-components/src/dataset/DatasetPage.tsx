@@ -1,4 +1,5 @@
 import React from 'react'
+import './dataset-page.scss'
 
 export interface DatasetPageProps {
   renderSidebar: () => React.ReactNode
@@ -12,6 +13,7 @@ export interface DatasetPageProps {
   renderCloneDropdown: () => React.ReactNode
   renderDeprecatedModal: () => React.ReactNode
   renderFollowBookmark: () => React.ReactNode
+  modality: string
 }
 
 export const DatasetPage = ({
@@ -26,9 +28,10 @@ export const DatasetPage = ({
   renderCloneDropdown,
   renderDeprecatedModal,
   renderFollowBookmark,
+  modality,
 }: DatasetPageProps) => {
   return (
-    <>
+    <div className={'dataset dataset-draft' + ' dataset-page-' + modality}>
       {renderHeader()}
       {renderAlert()}
       <div className="container">
@@ -52,6 +55,6 @@ export const DatasetPage = ({
         </div>
       </div>
       {renderDeprecatedModal()}
-    </>
+    </div>
   )
 }

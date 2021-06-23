@@ -372,6 +372,10 @@
   }
 }
 
+.dataset-header {
+  background-color: #333;
+}
+
 .dataset-page-mri .dataset-header {
   background-color: var(--current-theme-primary);
   background: linear-gradient(
