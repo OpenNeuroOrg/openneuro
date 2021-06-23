@@ -8,10 +8,12 @@ export const VersionListContainerExample = ({
   dateModified,
   selectedVersion,
   setSelectedVersion,
+  rootPath,
   setDeprecatedModalIsOpen,
 }) => {
   return (
     <VersionList
+      rootPath={rootPath}
       className={className}
       items={items}
       selected={selectedVersion}

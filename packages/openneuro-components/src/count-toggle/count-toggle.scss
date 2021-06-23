@@ -14,12 +14,16 @@
     margin: 2px 13px 0 5px;
     color: #999;
   }
-  span {
-    border-left: 1px solid #aaa;
-    margin: -7px 0 -7px 12px;
+  > span {
     display: block;
     position: relative;
-    padding: 7px 3px 7px 10px;
+
+    &.count-span {
+      border-left: 1px solid #aaa;
+      margin-left: 30px;
+      padding: 7px 3px 7px 10px;
+      margin: -7px 0 -7px 12px;
+    }
   }
 
   &.active {

@@ -10,6 +10,7 @@ export * from './dataset'
 export * from './button/Button'
 export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
+export * from './select/SelectGroup'
 
 /* TEMPORARY EXPORTS */
 // TODO: remove

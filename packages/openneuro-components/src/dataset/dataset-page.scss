@@ -16,12 +16,9 @@
   .dataset-header-meta {
     margin: 40px 0;
     font-size: 14px;
-    span {
-      margin: 0 2px 0 30px;
+    > span {
+      margin: 0 2px 0 0;
       font-weight: bold;
-      &:first-child {
-        margin-left: 0;
-      }
     }
     .follow-bookmark {
       display: flex;
@@ -29,9 +26,6 @@
       .toggle-counter-wrap {
         &:first-child {
           margin-right: 30px;
-        }
-        .toggle-btn {
-          padding: 0 7px;
         }
       }
     }

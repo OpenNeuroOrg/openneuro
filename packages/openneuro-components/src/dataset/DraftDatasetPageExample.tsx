@@ -85,6 +85,7 @@ export const DraftDatasetPageExample = ({
   const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
+
   return (
     <>
       <DatasetPage
