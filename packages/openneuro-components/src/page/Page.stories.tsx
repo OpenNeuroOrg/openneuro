@@ -7,7 +7,7 @@ import { SearchPageContainerExample } from '../search-page/SearchPageContainerEx
 import { DraftDatasetPageExample } from '../dataset/DraftDatasetPageExample'
 import * as HeaderStories from '../header/Header.stories'
 
-import { MRIPortalContent } from '../mock-content/portal-content'
+import { portalContent } from '../mock-content/portal-content'
 import { DraftDataset } from '../mock-content/draft-dataset-content'
 
 import { mri } from '../mock-content/mri-search-results'
@@ -39,7 +39,7 @@ MRIPortalPageExample.args = {
   children: (
     <SearchPageContainerExample
       searchResults={mri.data.datasets.edges}
-      portalContent={MRIPortalContent}
+      portalContent={portalContent.mri}
     />
   ),
   headerArgs: HeaderStories.LoggedOut.args,
