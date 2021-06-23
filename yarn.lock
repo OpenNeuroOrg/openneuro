@@ -5343,7 +5343,7 @@ __metadata:
     "@storybook/preset-scss": ^1.0.3
     "@storybook/react": ^6.2.8
     "@storybook/theming": ^6.2.8
-    "@testing-library/jest-dom": ^5.11.4
+    "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^11.1.0
     "@types/bytes": ^3
     "@types/jest": ^26.0.23
@@ -5351,10 +5351,14 @@ __metadata:
     "@types/mdx-js__react": ^1
     "@types/prop-types": ^15
     "@types/react-router-dom": ^5
+    "@types/react-slick": ^0
+    "@types/slick-carousel": ^1
+    "@types/testing-library__jest-dom": ^5.14.0
     "@wojtekmaj/react-daterange-picker": ^3.2.0
     babel-jest: ^27.0.2
     bytes: ^3.1.0
     commafy: ^0.0.6
+    core-js: ^3.14.0
     css-loader: ^5.2.1
     date-fns: ^2.21.1
     jest: ^27.0.4
@@ -6859,6 +6863,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/jest-dom@npm:^5.14.1":
+  version: 5.14.1
+  resolution: "@testing-library/jest-dom@npm:5.14.1"
+  dependencies:
+    "@babel/runtime": ^7.9.2
+    "@types/testing-library__jest-dom": ^5.9.1
+    aria-query: ^4.2.2
+    chalk: ^3.0.0
+    css: ^3.0.0
+    css.escape: ^1.5.1
+    dom-accessibility-api: ^0.5.6
+    lodash: ^4.17.15
+    redent: ^3.0.0
+  checksum: b0c4b4ffa1d58bdf22f1682eb973397e8044a3cdd8527de8d1c8169640b3c4585165abcbfc819dee7f4aa40204c6a63afb28dd74ad9bb4e1bfbdc680fd491e30
+  languageName: node
+  linkType: hard
+
 "@testing-library/react@npm:^11.1.0":
   version: 11.2.7
   resolution: "@testing-library/react@npm:11.2.7"
@@ -7423,6 +7444,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jquery@npm:*":
+  version: 3.5.5
+  resolution: "@types/jquery@npm:3.5.5"
+  dependencies:
+    "@types/sizzle": "*"
+  checksum: 9e3c34451577c6916ac9de8a26fd8bce2831cb5861116514cba4a984189067635a3e084039308324d8e20bfa5f2e1ce7725a509110e5e05487b91f9369b1ae43
+  languageName: node
+  linkType: hard
+
 "@types/jsdom@npm:^16":
   version: 16.2.10
   resolution: "@types/jsdom@npm:16.2.10"
@@ -7797,6 +7827,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-slick@npm:^0":
+  version: 0.23.4
+  resolution: "@types/react-slick@npm:0.23.4"
+  dependencies:
+    "@types/react": "*"
+  checksum: 49abcf8bcf77eea3fc51ab5af92957174d02328431e5108bca6cf49fcd23d942daced1d301535ea5ea4d1f3ff995b28d1ba17257c7e4b31508c08b5b1355cbcc
+  languageName: node
+  linkType: hard
+
 "@types/react-syntax-highlighter@npm:11.0.5":
   version: 11.0.5
   resolution: "@types/react-syntax-highlighter@npm:11.0.5"
@@ -7874,6 +7913,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/sizzle@npm:*":
+  version: 2.3.3
+  resolution: "@types/sizzle@npm:2.3.3"
+  checksum: 8f019f9e1b110b4fdfc08f8a3a8b8b87118a11f3ba11e159541b17f17498c0ef95e8efa0b818c9fed6911041f6b71ef8d44cf8c1c83b4cbb7bd14e4248892f4c
+  languageName: node
+  linkType: hard
+
+"@types/slick-carousel@npm:^1":
+  version: 1.6.34
+  resolution: "@types/slick-carousel@npm:1.6.34"
+  dependencies:
+    "@types/jquery": "*"
+  checksum: e1aef73233b187290c0d7881eb6209e7c88ae11681a3adc3593bf40dbcf890a889fee4eb424d5b34f89517f8ca956623166e610b95407fef48b5de3ff4fb72f7
+  languageName: node
+  linkType: hard
+
 "@types/source-list-map@npm:*":
   version: 0.1.2
   resolution: "@types/source-list-map@npm:0.1.2"
@@ -7923,7 +7978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__jest-dom@npm:^5.14.0":
+"@types/testing-library__jest-dom@npm:^5, @types/testing-library__jest-dom@npm:^5.14.0":
   version: 5.14.0
   resolution: "@types/testing-library__jest-dom@npm:5.14.0"
   dependencies:
@@ -12902,6 +12957,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:^3.14.0":
+  version: 3.14.0
+  resolution: "core-js@npm:3.14.0"
+  checksum: fc830e61146f50241f431c711674a6af0a3633269a2a2afada3da1054f0c3b3a8b571fb4ca4c87d53193def47a4f56a18c32e832e6587b363ff0ff153508f300
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:1.0.2, core-util-is@npm:^1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -14363,6 +14425,13 @@ __metadata:
   version: 0.5.4
   resolution: "dom-accessibility-api@npm:0.5.4"
   checksum: 39351d26a3732312f14411effef698204bf6c79a7d5eb0664441897541243f2cdf2e508aca52684ccf3b10df6708a6c265d1fde323eebcb8363a1093f5927b10
+  languageName: node
+  linkType: hard
+
+"dom-accessibility-api@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "dom-accessibility-api@npm:0.5.6"
+  checksum: b579681083e683291df022bdf094dae2c7e39db0ff28f70ed2c8368eda203fe4c45bcf92f1c623ce4b746cb245f9a5dc9d176f1781d600b9218728d3a1d1580f
   languageName: node
   linkType: hard
 
@@ -30870,10 +30939,12 @@ resolve@^2.0.0-next.3:
     "@babel/runtime-corejs3": ^7.13.10
     "@loadable/babel-plugin": ^5.13.2
     "@sentry/cli": 1.37.4
+    "@testing-library/jest-dom": ^5.14.1
     "@types/babel__core": ^7
     "@types/babel__plugin-transform-runtime": ^7
     "@types/babel__preset-env": ^7
     "@types/jest": ^26.0.23
+    "@types/testing-library__jest-dom": ^5
     "@typescript-eslint/eslint-plugin": ^4.19.0
     "@typescript-eslint/parser": ^4.19.0
     babel-eslint: 10.0.3

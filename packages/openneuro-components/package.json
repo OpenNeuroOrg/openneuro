@@ -38,7 +38,7 @@
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/react": "^6.2.8",
     "@storybook/theming": "^6.2.8",
-    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
     "@types/jest": "^26.0.23",
@@ -46,7 +46,11 @@
     "@types/mdx-js__react": "^1",
     "@types/prop-types": "^15",
     "@types/react-router-dom": "^5",
+    "@types/react-slick": "^0",
+    "@types/slick-carousel": "^1",
+    "@types/testing-library__jest-dom": "^5.14.0",
     "babel-jest": "^27.0.2",
+    "core-js": "^3.14.0",
     "css-loader": "^5.2.1",
     "jest": "^27.0.4",
     "sass": "^1.32.8",
@@ -74,7 +78,7 @@
       "dist"
     ],
     "moduleNameMapper": {
-      "^.+\\.(css|less|scss)$": "babel-jest"
+      "^.+\\.(css|less|scss|svg|png|jpg)$": "babel-jest"
     }
   },
   "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"

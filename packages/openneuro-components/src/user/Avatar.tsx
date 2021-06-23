@@ -21,6 +21,7 @@ export function generateGravatarUrl(userProfile) {
 export interface AvatarProps {
   profile: {
     name: string
+    email?: string
   }
 }
 

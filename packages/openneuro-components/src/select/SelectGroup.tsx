@@ -3,12 +3,10 @@ import React from 'react'
 import './select.scss'
 
 export interface SelectGroupProps {
-  options: [
-    {
-      label: string
-      value: string
-    },
-  ]
+  options: {
+    label: string
+    value: string
+  }[]
   value: string
   setValue: (string) => void
   label?: string
