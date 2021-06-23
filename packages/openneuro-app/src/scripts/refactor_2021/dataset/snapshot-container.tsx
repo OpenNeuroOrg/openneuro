@@ -5,6 +5,8 @@ import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
+import Validation from './validation/validation.jsx'
+
 import {
   Icon,
   Tooltip,
@@ -62,7 +64,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const description = dataset.draft.description
   const datasetId = dataset.id
   const isPublic = dataset.public === true
-  const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
+  const numSessions =
+    summary && summary.sessions.length > 0 ? summary.sessions.length : 1
 
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
@@ -88,20 +91,28 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     <>
       <DatasetPage
         renderHeader={() => (
-          <DatasetHeader
-            pageHeading={description.Name}
-            modality={summary.modalities[0]}
-          />
+          <>
+            {summary && (
+              <DatasetHeader
+                pageHeading={description.Name}
+                modality={summary.modalities[0]}
+              />
+            )}
+          </>
         )}
         renderAlert={() => (
           <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
         )}
         renderHeaderMeta={() => (
-          <DatasetHeaderMeta
-            size={summary.size}
-            totalFiles={summary.totalFiles}
-            datasetId={datasetId}
-          />
+          <>
+            {summary && (
+              <DatasetHeaderMeta
+                size={summary.size}
+                totalFiles={summary.totalFiles}
+                datasetId={datasetId}
+              />
+            )}
+          </>
         )}
         renderFollowBookmark={() => (
           <>
@@ -133,7 +144,11 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             onBrainlife={dataset.onBrainlife}
           />
         )}
-        renderValidationBlock={() => <ValidationBlock />}
+        renderValidationBlock={() => (
+          <ValidationBlock>
+            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+          </ValidationBlock>
+        )}
         renderCloneDropdown={() => (
           <CloneDropdown
             gitAccess={
@@ -209,18 +224,24 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               isMarkdown={true}
               className="dmb-inline-list"
             />
-            <MetaDataBlock
-              heading="Available Modalities"
-              item={summary.modalities}
-              isMarkdown={true}
-              className="dmb-modalities"
-            />
-            <MetaDataBlock
-              heading="Tasks"
-              item={summary.tasks}
-              isMarkdown={true}
-              className="dmb-inline-list"
-            />
+            <>
+              {summary && (
+                <>
+                  <MetaDataBlock
+                    heading="Available Modalities"
+                    item={summary.modalities}
+                    isMarkdown={true}
+                    className="dmb-modalities"
+                  />
+                  <MetaDataBlock
+                    heading="Tasks"
+                    item={summary.tasks}
+                    isMarkdown={true}
+                    className="dmb-inline-list"
+                  />
+                </>
+              )}
+            </>
 
             <MetaDataBlock
               heading="Versions"
@@ -265,10 +286,14 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               item={numSessions}
             />
 
-            <MetaDataBlock
-              heading={pluralize('Subject', summary.subjects.length)}
-              item={summary.subjects.length}
-            />
+            <>
+              {summary && (
+                <MetaDataBlock
+                  heading={pluralize('Subject', summary.subjects.length)}
+                  item={summary.subjects.length}
+                />
+              )}
+            </>
 
             <MetaDataBlock
               heading="Dataset DOI"

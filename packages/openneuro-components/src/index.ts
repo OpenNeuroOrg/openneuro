@@ -11,6 +11,8 @@ export * from './button/Button'
 export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
 export * from './select/SelectGroup'
+export * from './accordion/AccordionTab'
+export * from './accordion/AccordionWrap'
 
 /* TEMPORARY EXPORTS */
 // TODO: remove
