@@ -13,6 +13,26 @@ const SearchRoutes: FC = () => {
         path={`${path}/modality/mri`}
         render={() => <SearchContainer portalContent={portalContent.mri} />}
       />
+      <Route
+        exact
+        path={`${path}/modality/eeg`}
+        render={() => <SearchContainer portalContent={portalContent.eeg} />}
+      />
+      <Route
+        exact
+        path={`${path}/modality/ieeg`}
+        render={() => <SearchContainer portalContent={portalContent.ieeg} />}
+      />
+      <Route
+        exact
+        path={`${path}/modality/meg`}
+        render={() => <SearchContainer portalContent={portalContent.meg} />}
+      />
+      <Route
+        exact
+        path={`${path}/modality/pet`}
+        render={() => <SearchContainer portalContent={portalContent.pet} />}
+      />
     </Switch>
   )
 }
