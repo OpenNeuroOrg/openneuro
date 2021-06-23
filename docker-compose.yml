@@ -28,7 +28,6 @@ services:
     volumes:
       - ./:/srv
       - node_deps:/srv/.yarn
-      - ./.yarn/cache:/srv/.yarn/cache
       - ./.yarn/releases:/srv/.yarn/releases
       - ./.yarn/plugins:/srv/.yarn/plugins
       - dist:/src/dist
