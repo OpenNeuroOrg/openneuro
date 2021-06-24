@@ -16,6 +16,8 @@ export * from './accordion/AccordionWrap'
 
 export * from './loading/Loading'
 
+export * from './loading/Loading'
+
 // Front Page Exports
 export * from './front-page'
 
