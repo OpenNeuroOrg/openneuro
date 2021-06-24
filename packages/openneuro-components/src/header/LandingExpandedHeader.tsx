@@ -73,7 +73,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
             {!user ? (
               <div className="grid  grid-start hero-signin">
                 <div className=" hero-sigin-label">
-                  <h2>SIGN IN</h2>
+                  <h3>SIGN IN</h3>
                 </div>
                 <div>
                   <Button

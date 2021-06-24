@@ -1,3 +1,39 @@
+$white: #fff;
+$black: #000;
+$mine-shaft: #222;
+$stanford-red: #8c1515;
+$coral: #eb472c;
+$salmon: #ec7764;
+
+$rock: #5f574f;
+$stone: #928b81;
+$driftwood: #b6b1a9;
+$misty: #dad7cb;
+
+$fuchsia: #9169a7;
+
+$ocean: #00505c;
+$algae: #175e54;
+$sky: rgb(0, 124, 146);
+$turquoise: #009b76;
+$persian-green: #00b489;
+$night: #012a30;
+$jungle-mist: #b5cbd3;
+$dodger-blue: #5890ff;
+
+$yellow: #ffd820;
+$honey: #fffcee;
+
+$success: #24c85e;
+$info: #24c8c8;
+$warning: #f7ba4b;
+$danger: #c82424;
+
+$notification-green: #77e6a3;
+
+$warning-orange-cream: #ffefdb;
+$warning-orange: #df7600;
+
 .validation-messages {
   margin-bottom: 0;
   margin: 0;
@@ -32,7 +68,7 @@
         padding: 10px;
         display: block;
         background: lighten($salmon, 25%);
-        color: $brand-danger;
+        color: $danger;
         text-align: center;
         text-transform: uppercase;
         font-weight: 700;
@@ -196,7 +232,7 @@
 
           .e-meta {
             label {
-              color: $black;
+              color: #000;
               font-size: 12px;
               text-transform: uppercase;
             }
