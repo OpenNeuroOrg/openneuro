@@ -1,11 +1,17 @@
 @import '../scss/variables';
 
-.container {
-  height: 100vh;
+
+.formRange-inner {
+  max-width: 80%;
+  margin: 0 auto;
   display: flex;
-  align-items: center;
   justify-content: center;
-}
+  align-items: center;
+  flex-direction: column;
+  min-width: 270px;
+  position: relative;
+  padding: 0 0 30px;
+  }
 
 .slider {
   position: relative;
