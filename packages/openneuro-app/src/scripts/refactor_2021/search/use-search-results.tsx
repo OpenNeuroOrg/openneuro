@@ -208,7 +208,7 @@ export const useSearchResults = () => {
     case 'A-Z':
       order = 'asc'
     case 'Z-A':
-      sortField = 'draft.description.Name'
+      sortField = 'draft.description.Name.keyword'
       break
     case 'Oldest':
       order = 'asc'
