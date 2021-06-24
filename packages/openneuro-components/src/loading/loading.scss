@@ -144,3 +144,10 @@ $spinner-hexagon-bg-color: var(--current-theme-primary-hover);
     transform: scaleY(1);
   }
 }
+
+.search-loading {
+  display: flex;
+  justify-content: center;
+  min-width: 100%;
+  margin-top: 10px;
+}

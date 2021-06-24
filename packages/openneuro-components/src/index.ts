@@ -11,6 +11,8 @@ export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
 export * from './mock-content/portal-content'
 
+export * from './loading/Loading'
+
 // Front Page Exports
 export * from './front-page'
 
