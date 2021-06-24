@@ -50,6 +50,7 @@ export const indexQuery = gql`
                 sex
                 age
               }
+              subjects
             }
             readme
           }
