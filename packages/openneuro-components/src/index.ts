@@ -11,6 +11,9 @@ export * from './radio/RadioGroup'
 export * from './mock-content/sortby-list'
 export * from './mock-content/portal-content'
 
+// Front Page Exports
+export * from './front-page'
+
 /* TEMPORARY EXPORTS */
 // TODO: remove
 export * from './facets/Facet.stories'

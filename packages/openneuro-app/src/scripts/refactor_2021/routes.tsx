@@ -3,8 +3,8 @@ import { Route, Switch } from 'react-router-dom'
 
 // TODO - Re-enable code splitting these when we can
 import Dataset from '../datalad/dataset/dataset'
-import FrontPage from './containers/front-page'
 import { FAQS } from '@openneuro/components'
+import FrontPageContainer from './containers/front-page-container'
 import Admin from '../admin/admin'
 import SearchRoutes from './search/search-routes'
 import APIKey from '../user/api.jsx'
@@ -14,8 +14,8 @@ import Citation from '../pages/citation-page'
 
 const Routes = () => (
   <Switch>
-    <Route name="front-page" exact path="/" component={FrontPage} />
     <Route name="faq" exact path="/faq" component={FAQS} />
+    <Route name="front-page" exact path="/" component={FrontPageContainer} />
     <Route name="api-key" exact path="/keygen" component={APIKey} />
     <Route name="dataset" path="/datasets" component={Dataset} />
     <Route name="search" path="/search" component={SearchRoutes} />
