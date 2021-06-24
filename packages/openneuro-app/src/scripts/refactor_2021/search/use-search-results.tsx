@@ -113,6 +113,22 @@ const range = ([min, max]: [Date, Date]) => {
   return `[${minISO} TO ${maxISO}]`
 }
 
+// https://bids-specification.readthedocs.io/en/stable/99-appendices/04-entity-table.html
+const modality_to_formats = modality => {
+  switch (modality) {
+    case 'MRI':
+      return 'T1w OR T2w OR dwi OR bold OR asl'
+    case 'EEG':
+      return 'eeg'
+    case 'iEEG':
+      return 'ieeg'
+    case 'MEG':
+      return 'meg'
+    case 'PET':
+      return 'peg OR blood'
+  }
+}
+
 export const useSearchResults = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const {
@@ -139,7 +155,10 @@ export const useSearchResults = () => {
   if (modality_selected)
     boolQuery.addClause(
       'filter',
-      matchQuery('latestSnapshot.summary.modalities', modality_selected),
+      matchQuery(
+        'latestSnapshot.summary.modalities',
+        modality_to_formats(modality_selected),
+      ),
     )
   if (isActiveRange(ageRange))
     boolQuery.addClause('filter', rangeQuery('metadata.ages', ...ageRange))
