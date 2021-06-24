@@ -147,7 +147,7 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       'filter',
       rangeListLengthQuery(
-        'latestSnapshot.summary.subjects',
+        'latestSnapshot.summary.subjects.keyword',
         subjectCountRange[0],
         subjectCountRange[1],
       ),
