@@ -4,6 +4,7 @@ import {
   sortBy,
   SearchResultsList,
   Button,
+  Loading,
 } from '@openneuro/components'
 import {
   KeywordInput,
@@ -100,7 +101,11 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
       )}
       renderSearchResultsList={() =>
         loading && numTotalResults === 0 ? (
-          resultsList.length !== 0 && <>Datasets loading placeholder</>
+          resultsList.length !== 0 && (
+            <div className="search-loading">
+              <Loading />
+            </div>
+          )
         ) : (
           <>
             <SearchResultsList items={resultsList} profile={profile} />
