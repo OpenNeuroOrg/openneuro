@@ -14,9 +14,9 @@ export const Contributors: React.FC<ContributersProps> = ({}) => {
 
           <h3>Support for {frontPage.pageTitle} provided by</h3>
         </div>
-        <div className="grid grid-center align-center">
+        <div className="contributors-wrap">
           {frontPage.support.map((item, index) => (
-            <div key={index} className="contributor col-4">
+            <div key={index} className="contributor">
               <a
                 target="_blank"
                 href={item.link}

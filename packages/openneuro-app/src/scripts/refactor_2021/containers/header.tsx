@@ -2,6 +2,7 @@ import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { Header, LandingExpandedHeader } from '@openneuro/components'
 import { FrontFacetExample } from '@openneuro/components'
+import ModalitySelect from '../search/inputs/modality-select'
 import { SearchParamsCtx } from '../search/search-params-ctx'
 import { UserModalParamsCtx } from '../user-login-modal-ctx'
 import { Input } from '@openneuro/components'
@@ -66,7 +67,7 @@ const HeaderContainer: FC = () => {
         <LandingExpandedHeader
           profile={profile}
           renderFacetSelect={() => (
-            <FrontFacetExample {...FrontFacetExample.args} />
+            <ModalitySelect startOpen={false} label="Browse by Modalities" />
           )}
           renderSearchInput={() => (
             <Input

@@ -22,42 +22,30 @@ body {
   h3 {
     margin: 20px 0 60px;
   }
+  .contributors-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
   .contributor {
     text-align: center;
-    margin-bottom: 50px;
+    margin: 0 45px 50px;
 
     img {
       max-width: 100%;
       height: auto;
       max-height: 112px;
-      padding: 0 0 30px 0;
+      padding: 20px;
       box-sizing: border-box;
     }
 
-    // &:nth-child(1),
-    // &:nth-child(3) {
-    //   img {
-    //     width: 320px;
-    //   }
-    // }
     &:nth-child(2) {
-      a {
-        max-width: 250px;
-        margin: 0 auto;
-      }
+      max-width: 250px;
     }
-    // &:nth-child(4),
-    // &:nth-child(5) {
-    //   img {
-    //     width: 240px;
-    //   }
-    // }
-
-    // &:nth-child(8) {
-    //   img {
-    //     width: 320px;
-    //   }
-    // }
 
     @media (max-width: 1170px) {
       max-width: 50%;
@@ -97,12 +85,13 @@ body {
   overflow: hidden;
   position: relative;
   margin: 0;
-  padding: 40px 0 0;
+  padding: 0;
 
   h2 {
     text-align: center;
     position: relative;
     z-index: 2;
+    padding-top: 60px;
   }
   .on-icon {
     justify-content: center;
@@ -117,6 +106,8 @@ body {
   background: #204e5a;
   padding: 30px 60px;
   border-radius: $border-radius-default;
+  max-width: 960px;
+  margin: 0 auto;
   .get-updates-label,
   .get-updates-form {
     max-width: 50%;
@@ -134,9 +125,10 @@ body {
       background-color: #fff;
       margin-bottom: 0;
       flex-grow: 1;
+      position: relative;
       input:not(:placeholder-shown) + label,
       input:placeholder-shown + label {
-        top: 45px;
+        top: -18px;
         position: absolute;
       }
       input:focus + label,
@@ -262,7 +254,9 @@ body {
 
 .front-infographic {
   width: 1100px;
+  margin: 0 auto;
   .bg-circle {
+    margin: 0 auto;
     max-width: calc(100vw - 20px);
     max-height: calc(100vw - 20px);
     height: 1100px;

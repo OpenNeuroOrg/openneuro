@@ -21,6 +21,7 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
 export const removeFilterItem = setSearchParams => (param, value) => {
   switch (param) {
     case 'modality_selected':
+      break
     case 'datasetType_selected':
     case 'datasetStatus_selected':
     case 'ageRange':

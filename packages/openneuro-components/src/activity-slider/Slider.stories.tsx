@@ -13,61 +13,49 @@ export default {
   component: ActivitySlider,
 } as Meta
 
+const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+    slidesToSlide: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    slidesToSlide: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+    slidesToSlide: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1,
+  },
+}
 const Template: Story<ActivitySliderProps> = args => (
-  <ActivitySlider {...args} />
+  <ActivitySlider {...args} responsive={responsive} />
 )
 
 export const RecentDatasets = Template.bind({})
 RecentDatasets.args = {
   data: RecentData.data.datasets.edges,
-  slidersliderClass: 'recent-slider',
-  slideHeader: 'Newly Added',
-  dots: true,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  swipeToSlide: true,
-  responsive: [
-    {
-      breakpoint: 800,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-      },
-    },
-    {
-      breakpoint: 580,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-    },
-  ],
+  showDots: true,
+  infinite: true,
+  keyBoardControl: true,
+  containerClass: 'activity-slider',
+  itemClass: 'carousel-item',
 }
 
 export const PopularDatasets = Template.bind({})
 PopularDatasets.args = {
   data: TopViewed.data.datasets.edges,
-  sliderClass: 'recent-slider',
-  slideHeader: 'Most Viewed',
-  dots: true,
-  draggable: true,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  swipeToSlide: true,
-  responsive: [
-    {
-      breakpoint: 800,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-      },
-    },
-    {
-      breakpoint: 580,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-    },
-  ],
+  showDots: true,
+  infinite: true,
+  keyBoardControl: true,
+  containerClass: 'carousel-container',
+  itemClass: 'carousel-item',
 }

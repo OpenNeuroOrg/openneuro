@@ -6,7 +6,7 @@ export interface InfographicProps {}
 
 export const Infographic: React.FC<InfographicProps> = ({}) => {
   return (
-    <div className="container front-infographic">
+    <div className="front-infographic">
       <span className="bg-circle"></span>
       {frontPage.infographic.map((item, index) => (
         <div key={index} className="infograph-block" id={item.htmlID}>

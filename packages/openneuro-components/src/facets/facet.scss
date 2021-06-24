@@ -34,7 +34,7 @@
           align-items: center;
           span {
             margin-left: 10px;
-            display: inline-block;
+            display: flex;
             color: #666;
             font-size: 14px;
           }
@@ -42,21 +42,25 @@
       }
     }
     .level-1 > li {
-      border-top: 1px solid $newspaper;
-      &:hover {
+      border-top: 1px solid #dfdfdf;
+      > span:hover {
         background-color: var(--current-theme-primary-light);
       }
+
       > .label {
-        display: inline-block;
-        margin-bottom: 10px;
-        padding: 10px 10px 0;
+        padding: 10px;
       }
     }
     .level-2 {
       margin-bottom: 10px;
+      display: block;
+      width: 100%;
       > li {
         display: flex;
         justify-content: flex-start;
+        &:hover {
+          background-color: var(--current-theme-primary-light);
+        }
 
         .label {
           margin-left: 15px;

@@ -1,252 +1,248 @@
-.modality-cube-wrap {
-  // perspective: 2000px;
-  // perspective-origin: 50% 50%;
-  margin-top: 40px;
-  width: 153px;
-  height: 130px;
-  position: relative;
-  .hexagon {
-    position: absolute;
-    width: 170px;
-    height: 98.15px;
-    margin: -7px 0 0;
-    background-size: auto 197.2991px;
-    background-position: center 53%;
-  }
+@import '../scss/variables';
 
-  .hexTop,
-  .hexBottom {
-    position: absolute;
-    z-index: 1;
-    width: 120.21px;
-    height: 120.21px;
-    overflow: hidden;
-    -webkit-transform: scaleY(0.5774) rotate(-45deg);
-    -ms-transform: scaleY(0.5774) rotate(-45deg);
-    transform: scaleY(0.5774) rotate(-45deg);
-    background: inherit;
-    left: 24.9px;
-  }
-
-  /*counter transform the bg image on the caps*/
-  .hexTop:after,
-  .hexBottom:after {
-    content: '';
-    position: absolute;
-    width: 170px;
-    height: 98.14954576223639px;
-    -webkit-transform: rotate(45deg) scaleY(1.7321) translateY(-51.9615px);
-    -ms-transform: rotate(45deg) scaleY(1.7321) translateY(-51.9615px);
-    transform: rotate(45deg) scaleY(1.7321) translateY(-51.9615px);
-    -webkit-transform-origin: 0 0;
-    -ms-transform-origin: 0 0;
-    transform-origin: 0 0;
-    background: inherit;
-  }
-
-  .hexTop {
-    top: -60.1041px;
-  }
-
-  .hexTop:after {
-    background-position: center top;
-  }
-
-  .hexBottom {
-    bottom: -60.1041px;
-  }
-
-  .hexBottom:after {
-    background-position: center bottom;
-  }
-
-  .hexagon:after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    left: 0;
-    width: 170px;
-    height: 98.1495px;
-    z-index: 2;
-    background: inherit;
-  }
-
-  .hexagon-bg {
-    z-index: 5;
-    opacity: 0;
-    transition: opacity 1.2s;
-    position: absolute;
-    top: 0;
-    .label,
-    .stats {
-      z-index: 3;
-      color: #fff;
-      position: absolute;
-      display: flex;
-      justify-content: center;
-      text-align: center;
-      width: 100%;
-      transition: transform 0.4s, opacity 0.4s;
-      transition-delay: 0s;
-      transform: translateY(45px);
-      margin-top: -20px;
-      opacity: 0;
-      font-weight: 600;
-      font-size: 19px;
-    }
-    .stats {
-      font-size: 16px;
-      transform: translateY(75px);
-      flex-direction: column;
-    }
-  }
-}
-.hexagon-img {
-  position: absolute;
-  top: 0;
-}
-
-.modality-cube {
-  margin: 0;
-  position: relative;
-  height: 115px;
-  width: 115px;
-  transform-style: preserve-3d;
-  transform: scale3d(1.05, 1.04, 1.04) rotateX(-36deg) rotateY(-45deg)
-    rotateZ(0deg) translate3d(0px, 0px, 0px) skew(0deg, 0deg);
-  z-index: 4;
-
-  > div {
-    position: absolute;
-    box-sizing: border-box;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    color: #000;
-    font-weight: bold;
-    &.front {
-      transform: translateZ(22px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 20px;
-
-      span.label {
-        color: #fff;
-      }
-    }
-    &.top {
-      transform: rotateX(-270deg) translateY(-93px);
-      transform-origin: top center;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-    &.right {
-      transform: rotateY(-270deg) translateX(94px);
-      transform-origin: top right;
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-  }
-}
-
-.modality-cube-wrap:hover {
-  .hexagon-bg {
-    opacity: 1;
-    .label,
-    .stats {
-      transform: translateY(15px);
-      transition: transform 0.8s, opacity 0.8s;
-      transition-delay: 0.9s;
-      opacity: 1;
-    }
-    .stats {
-      transform: translateY(55px);
-      transition-delay: 1.4s;
-    }
-  }
-}
-
-.cube-wrap {
-  // position: absolute;
-  // right: 0;
-  // width: 680px;
-  // margin-right: 50px;
+#hexGrid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  font-family: sans-serif;
+  list-style-type: none;
+}
 
-  .cube-block {
-    width: 170px;
-    height: 240px;
-    position: relative;
-    &:nth-child(3n + 2) {
-      margin: 0 30px;
+.hex {
+  position: relative;
+  visibility: hidden;
+  outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+  backface-visibility: hidden;
+
+  &::after {
+    content: '';
+    display: block;
+    padding-bottom: 86.602%; /* =  100 / tan(60) * 1.5 */
+  }
+}
+.hexIn {
+  position: absolute;
+  width: 96%;
+  padding-bottom: 110.851%; /* =  width / sin(60) */
+  margin: 2%;
+  overflow: hidden;
+  visibility: hidden;
+  outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+
+  > div {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+    transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+    position: absolute;
+    visibility: visible;
+    outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+    .img {
+      position: absolute;
+      visibility: visible;
+      outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+
+      .modality-cube {
+        height: 60%;
+        width: 69%;
+        margin: 20px 0 0;
+        z-index: 1000;
+        position: relative;
+        visibility: visible;
+        transform-style: preserve-3d;
+        transform: scale3d(1.05, 1.04, 1.04) rotateX(-36deg) rotateY(-45deg)
+          rotateZ(0deg) translate3d(0px, 0px, 0px) skew(0deg, 0deg);
+        > .front,
+        > .top,
+        > .right {
+          position: absolute;
+          box-sizing: border-box;
+          text-align: center;
+          height: 100%;
+          width: 100%;
+          color: #000;
+          font-weight: bold;
+          opacity: 1;
+          transition: opacity 0.8s;
+        }
+        > .front {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 20px;
+          transform: translate3d(-30px, 93px, 0);
+          span.label {
+            color: #fff;
+          }
+        }
+        > .top {
+          transform-origin: top center;
+          background-color: rgba(0, 0, 0, 0.1);
+          transform: rotateX(-270deg) translate3d(62px, -69px, 0);
+        }
+        > .right {
+          transform-origin: top right;
+          background-color: rgba(0, 0, 0, 0.4);
+          transform: rotateY(-270deg) translate3d(130px, 64px, 0);
+        }
+      }
     }
-    &:first-child {
-      left: -5px;
-      top: 30px;
-      position: relative;
+  }
+  > div .img .modality-cube > .front {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+    -webkit-clip-path: polygon(
+      50% 0%,
+      100% 25%,
+      100% 75%,
+      50% 100%,
+      0% 75%,
+      0% 25%
+    );
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+    &:before,
+    &:after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      content: '';
+      opacity: 0;
+      transition: opacity 0.6s;
     }
-    &:nth-child(2) {
-      left: -5px;
-      top: -5px;
-    }
-    &:nth-child(3) {
-      top: 60px;
-      left: 5px;
-    }
-    &:nth-child(4) {
-      left: 80px;
-      top: -25px;
-    }
-    &:nth-child(5) {
-      left: 55px;
-      top: -35px;
-    }
-    &:nth-child(6) {
-      left: 5px;
-      top: 80px;
-    }
-    &:nth-child(7) {
-      left: 160px;
-      top: -85px;
+    &:before {
+      background: rgb(13 255 0);
     }
 
-    &:last-child {
-      left: 155px;
-      top: -30px;
-      margin-right: auto;
+    .content1,
+    .content2 {
+      width: 100%;
+      box-sizing: border-box;
+      font-weight: 300;
+      opacity: 0;
+      padding: 0 5px;
+      position: absolute;
+      top: 0;
     }
-    @media (max-width: 1400px) {
-      &:first-child {
-        left: 112px;
-      }
-      &:nth-child(2) {
-        left: 70px;
-      }
-      &:nth-child(3) {
-        left: 25px;
-      }
-      &:nth-child(4) {
-        left: 40px;
-        top: -5px;
-      }
-      &:nth-child(5) {
-        left: 30px;
-        top: -25px;
-      }
-      &:nth-child(6) {
-        left: -5px;
-        top: 50px;
-      }
-      &:nth-child(7) {
-        left: 80px;
-      }
 
-      &:last-child {
-        left: 95px;
-        top: -30px;
-      }
+    .content1,
+    .content2 {
+      color: #fff;
+      text-align: center;
+      z-index: 1;
+      margin: 0;
+      font-weight: 600;
     }
+    .content1 {
+      transform: translateY(120px);
+    }
+
+    .content2 {
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0;
+      transform: translateY(150px);
+    }
+  }
+}
+
+.hexIn:hover,
+.hexIn:focus {
+  .content1,
+  .content2 {
+    opacity: 1;
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .content1 {
+    transform: translateY(80px);
+  }
+  .content2 {
+    transform: translateY(120px);
+  }
+
+  > div .img .modality-cube {
+    .front,
+    .top,
+    .right {
+      opacity: 0;
+      transition: 0.8s;
+    }
+  }
+  .img:before,
+  .img:after {
+    opacity: 1;
+    transition: 0.5s;
+  }
+}
+
+#hexGrid {
+  padding: 40px 0 7.4%;
+}
+.hex {
+  width: 30%;
+}
+
+.mri-cube > div .img {
+  &:before {
+    background-color: $mri-theme;
+  }
+  .modality-cube > .front {
+    background-color: $mri-theme;
+  }
+}
+.eeg-cube > div .img {
+  &:before {
+    background-color: $eeg-theme;
+  }
+  .modality-cube > .front {
+    background-color: $eeg-theme;
+  }
+}
+
+.pet-cube > div .img {
+  &:before {
+    background-color: $pet-theme;
+  }
+  .modality-cube > .front {
+    background-color: $pet-theme;
+  }
+}
+.ieeg-cube > div .img {
+  &:before {
+    background-color: $ieeg-theme;
+  }
+  .modality-cube > .front {
+    background-color: $ieeg-theme;
+  }
+}
+
+.meg-cube > div .img {
+  &:before {
+    background-color: $meg-theme;
+  }
+  .modality-cube > .front {
+    background-color: $meg-theme;
   }
 }

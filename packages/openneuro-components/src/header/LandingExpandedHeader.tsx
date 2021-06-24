@@ -23,31 +23,29 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   renderSearchInput,
   onSearch,
 }) => {
-  const cubeWrap = (
-    <div className="cube-wrap col col-6" id="front-cubes">
+  const hexGrid = (
+    <ul id="hexGrid">
       {cubeData.map((item, index) => (
-        <div className="cube-block " key={index}>
-          <ModalityCube
-            key={index}
-            label={item.label}
-            backgroundColor={item.backgroundColor}
-            cubeImage={item.cubeImage}
-            stats={
-              <>
-                <AggregateCount type="publicDataset" count={122} />
-                <AggregateCount type="participants" count={22} />
-              </>
-            }
-          />
-        </div>
+        <ModalityCube
+          key={index}
+          label={item.label}
+          cubeImage={item.cubeImage}
+          stats={
+            <>
+              <AggregateCount type="publicDataset" count={122} />
+              <AggregateCount type="participants" count={22} />
+            </>
+          }
+        />
       ))}
-    </div>
+    </ul>
   )
+
   return (
     <div className="expaned-header" style={{ minHeight: '720px' }}>
       <div className="container">
         <div className="grid grid-between">
-          <div className="col col-6 expaned-h-left">
+          <div className="col expaned-h-left">
             {frontPage.pageDescription}
             <div className="header-aggregate">
               <AggregateCount type="publicDataset" count={202} />
@@ -94,7 +92,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
               </div>
             ) : null}
           </div>
-          {cubeWrap}
+          {hexGrid}
         </div>
       </div>
     </div>

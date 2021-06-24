@@ -14,8 +14,12 @@ export * from './select/SelectGroup'
 export * from './accordion/AccordionTab'
 export * from './accordion/AccordionWrap'
 
+// Front Page Exports
+export * from './front-page'
+
 /* TEMPORARY EXPORTS */
 // TODO: remove
 export * from './facets/Facet.stories'
 export * from './mock-content/sortby-list'
 export * from './mock-content/facet-content'
+export * from './mock-content/portal-content'
