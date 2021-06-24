@@ -78,7 +78,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   }
 
   return (
-    <div className="container">
+    <div className="formRange-inner">
       <input
         type="range"
         min={min}
