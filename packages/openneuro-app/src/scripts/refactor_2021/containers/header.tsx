@@ -1,9 +1,9 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { Header, LandingExpandedHeader } from '@openneuro/components'
-import { FrontFacetExample } from '@openneuro/components'
 import ModalitySelect from '../search/inputs/modality-select'
 import { SearchParamsCtx } from '../search/search-params-ctx'
+import initialSearchParams from '../search/initial-search-params'
 import { UserModalParamsCtx } from '../user-login-modal-ctx'
 import { Input } from '@openneuro/components'
 import { useLocation, useHistory } from 'react-router-dom'
@@ -20,17 +20,17 @@ const HeaderContainer: FC = () => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
 
-  const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
+  const { setSearchParams } = useContext(SearchParamsCtx)
   const { userModalParams, setUserModalParams } = useContext(UserModalParamsCtx)
-
-  const keywords = searchParams.keywords
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
 
   const handleSubmit = () => {
-    setSearchParams(prevState => ({
-      ...prevState,
-      keywords: [...keywords, newKeywordRef.current],
+    // reset search params and set keyword to initiate new search, then navigate to global search page
+    console.log(initialSearchParams)
+    setSearchParams(() => ({
+      ...initialSearchParams,
+      keywords: [newKeywordRef.current],
     }))
     setNewKeyword('')
     history.push('/search')
