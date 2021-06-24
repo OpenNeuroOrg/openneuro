@@ -100,12 +100,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         </>
       )}
       renderSearchResultsList={() =>
-        loading && numTotalResults === 0 ? (
-          resultsList.length !== 0 && (
-            <div className="search-loading">
-              <Loading />
-            </div>
-          )
+        loading ? (
+          <div className="search-loading">
+            <Loading />
+          </div>
+        ) : numTotalResults === 0 ? (
+          <h3>No results: please broaden your search.</h3>
         ) : (
           <>
             <SearchResultsList items={resultsList} profile={profile} />
