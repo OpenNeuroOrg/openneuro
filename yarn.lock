@@ -5409,7 +5409,6 @@ __metadata:
     "@wojtekmaj/react-daterange-picker": ^3.2.0
     babel-jest: ^27.0.2
     bytes: ^3.1.0
-    commafy: ^0.0.6
     core-js: ^3.14.0
     css-loader: ^5.2.1
     date-fns: ^2.21.1
@@ -12355,13 +12354,6 @@ __metadata:
   version: 1.0.8
   resolution: "comma-separated-tokens@npm:1.0.8"
   checksum: 31a5a2fa6e0f02764b0634e0aa31913c9be0ef568f4e58b5c1ec85d0a6e4a6c367905eacf2c7e59b57d3d05f40cff166ea3c9b6ee8338625cad060ce43ede9fd
-  languageName: node
-  linkType: hard
-
-"commafy@npm:^0.0.6":
-  version: 0.0.6
-  resolution: "commafy@npm:0.0.6"
-  checksum: 5b9e202b43f7d1086aae4ab04325c679acd6a3e09d95de96e47d356fae30dc2798eb370a20e9d9d0bdb6a810c581f420ebf9f63ff74df7d8321249d592c8d68e
   languageName: node
   linkType: hard
 

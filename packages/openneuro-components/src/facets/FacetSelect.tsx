@@ -1,5 +1,4 @@
 import React from 'react'
-import commafy from 'commafy'
 import { AccordionTab } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import './facet.scss'
@@ -27,9 +26,9 @@ export interface FacetSelectProps {
 }
 
 const get = (obj, property) => (typeof obj === 'object' ? obj[property] : obj)
-const check = (obj, property) =>
+export const check = (obj, property) =>
   typeof obj === 'object' && typeof obj[property] === 'number'
-    ? commafy(obj[property])
+    ? obj[property].toLocaleString()
     : typeof obj === 'object'
     ? obj[property]
     : false

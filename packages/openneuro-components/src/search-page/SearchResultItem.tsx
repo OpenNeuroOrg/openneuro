@@ -1,6 +1,5 @@
 import React from 'react'
 import bytes from 'bytes'
-import commafy from 'commafy'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
@@ -115,13 +114,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const sessions = (
     <span className="result-summary-meta">
       <strong>Sessions: </strong>
-      <span>{commafy(numSessions)}</span>
+      <span>{numSessions.toLocaleString()}</span>
     </span>
   )
   const subjects = (
     <span className="result-summary-meta">
       <strong> Participants: </strong>
-      <span>{commafy(numSubjects)}</span>
+      <span>{numSubjects.toLocaleString()}</span>
     </span>
   )
   const size = (
@@ -133,7 +132,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const files = (
     <span className="result-summary-meta">
       <strong>Files: </strong>
-      <span>{commafy(summary.totalFiles)}</span>
+      <span>{summary.totalFiles.toLocaleString()}</span>
     </span>
   )
 
@@ -161,16 +160,16 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </div>
   )
   const downloads = node.analytics.downloads
-    ? commafy(node.analytics.downloads) + ' Downloads \n'
+    ? node.analytics.downloads.toLocaleString() + ' Downloads \n'
     : ''
   const views = node.analytics.views
-    ? commafy(node.analytics.views) + ' Views \n'
+    ? node.analytics.views.toLocaleString() + ' Views \n'
     : ''
   const following = node.followers.length
-    ? commafy(node.followers.length) + ' Follower \n'
+    ? node.followers.length.toLocaleString() + ' Follower \n'
     : ''
   const stars = node.stars.length
-    ? commafy(node.stars.length) + ' Bookmarked'
+    ? node.stars.length.toLocaleString() + ' Bookmarked'
     : ''
 
   const activtyTooltip = downloads + views + following + stars

@@ -10330,7 +10330,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@wojtekmaj/react-daterange-picker", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:3.2.0"],
             ["babel-jest", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:27.0.2"],
             ["bytes", "npm:3.1.0"],
-            ["commafy", "npm:0.0.6"],
             ["core-js", "npm:3.14.0"],
             ["css-loader", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:5.2.4"],
             ["date-fns", "npm:2.21.3"],
@@ -19734,15 +19733,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/comma-separated-tokens-npm-1.0.8-00dbbf3418-31a5a2fa6e.zip/node_modules/comma-separated-tokens/",
           "packageDependencies": [
             ["comma-separated-tokens", "npm:1.0.8"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["commafy", [
-        ["npm:0.0.6", {
-          "packageLocation": "./.yarn/cache/commafy-npm-0.0.6-128d8e915e-5b9e202b43.zip/node_modules/commafy/",
-          "packageDependencies": [
-            ["commafy", "npm:0.0.6"]
           ],
           "linkType": "HARD",
         }]
