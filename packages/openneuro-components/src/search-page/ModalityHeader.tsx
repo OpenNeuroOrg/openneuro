@@ -19,7 +19,7 @@ export const ModalityHeader = ({
   return (
     <section className="search-page-portal-header">
       <div className="container">
-        <div className="grid grid-between">
+        <div className="grid grid-nogutter">
           <div className="col col-7 ">
             <h1>{portalName}</h1>
             <div className="primary-content">{portalPrimary}</div>

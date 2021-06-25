@@ -77,7 +77,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          font-size: 20px;
+          font-size: 30px;
           transform: translate3d(-30px, 93px, 0);
           span.label {
             color: #fff;
@@ -202,6 +202,7 @@
 }
 .hex {
   width: 30%;
+  margin: 0 10px;
 }
 
 .mri-cube > div .img {

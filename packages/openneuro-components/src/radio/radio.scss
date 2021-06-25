@@ -153,7 +153,8 @@
 .btn-group-wrapper {
   position: relative;
   margin: 0 0 10px;
-  border: 1px solid var(--current-theme-primary);
+  background-color: #f6f6f6;
+  border: 1px solid #eee;
   border-radius: 4px;
   &:after {
     content: '';
@@ -164,20 +165,24 @@
     display: block;
     top: 0;
     transition: margin 0.3s;
+    border-radius: 4px 0 0 4px;
   }
   &.Following {
     &:after {
       margin-left: 25%;
+      border-radius: 0;
     }
   }
   &.MyDatasets {
     &:after {
       margin-left: 50%;
+      border-radius: 0;
     }
   }
   &.MyBookmarks {
     &:after {
       margin-left: 75%;
+      border-radius: 0 4px 4px 0;
     }
   }
 }

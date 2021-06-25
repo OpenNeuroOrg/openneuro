@@ -2,7 +2,7 @@
 
 .facet-accordion.on-accordion-wrapper {
   padding: 0 15px;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #ddd;
 
   .accordion-title {
     font-size: 14px;
@@ -79,7 +79,6 @@
     }
     &.selected-facet > .label {
       color: var(--current-theme-primary);
-      font-weight: bold;
 
       span {
         color: var(--current-theme-primary);
@@ -232,7 +231,6 @@
       }
       &.selected-facet > .label {
         color: var(--current-theme-primary);
-        font-weight: bold;
 
         span {
           color: var(--current-theme-primary);
