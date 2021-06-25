@@ -21,7 +21,6 @@
     "md5": "^2.3.0",
     "pluralize": "^8.0.0",
     "prop-types": "^15.7.2",
-    "rc-slider": "^9.7.2",
     "react": "^17.0.1",
     "react-multi-carousel": "^2.6.3",
     "react-router-dom": "^5.2.0",
