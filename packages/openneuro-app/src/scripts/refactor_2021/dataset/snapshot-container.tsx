@@ -5,7 +5,7 @@ import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
-import Validation from './validation/validation.jsx'
+import Validation from '../validation/validation.jsx'
 
 import {
   Icon,
@@ -27,6 +27,7 @@ import {
 
 export interface SnapshotContainerProps {
   dataset
+  tag?: string
 }
 
 const formatDate = dateObject =>

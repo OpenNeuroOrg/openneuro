@@ -13,7 +13,7 @@ export interface DatasetPageProps {
   renderCloneDropdown: () => React.ReactNode
   renderDeprecatedModal: () => React.ReactNode
   renderFollowBookmark: () => React.ReactNode
-  modality: string
+  modality?: string
 }
 
 export const DatasetPage = ({

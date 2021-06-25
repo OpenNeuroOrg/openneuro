@@ -35,7 +35,7 @@ class Issue extends React.Component {
     // Check if this issue has an file associated with it at all
     if (error.file) {
       fileInfo = (
-        <span>
+        <span className="e-meta">
           {this._location(error.file)}
           {this._fileMetadata(error.file)}
         </span>

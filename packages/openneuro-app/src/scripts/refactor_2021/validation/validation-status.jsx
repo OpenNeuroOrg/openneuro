@@ -11,6 +11,7 @@ import Results from './validation-results.jsx'
 
 const validHeader = () => (
   <div className="super-valid">
+    <h3 className="metaheader">BIDS Validation</h3>
     <span className="dataset-status ds-success">
       <i className="fa fa-check-circle" /> Valid
     </span>
@@ -19,30 +20,36 @@ const validHeader = () => (
 
 const warningHeader = count => (
   <div>
-    <span className="dataset-status ds-success">
-      <i className="fa fa-check-circle" /> Valid
-    </span>
+    <h3 className="metaheader">BIDS Validation</h3>
+
     <span className="label text-warning pull-right">
       {count} {pluralize('Warning', count)}
+    </span>
+    <span className="dataset-status ds-success">
+      <i className="fa fa-check-circle" /> Valid
     </span>
   </div>
 )
 
 const errorHeader = count => (
   <div>
-    <span className="dataset-status ds-danger">
-      <i className="fa fa-exclamation-circle" /> Invalid
-    </span>
+    <h3 className="metaheader">BIDS Validation</h3>
+
     <span className="label text-warning pull-right">
       {count} {pluralize('Error', count)}
+    </span>
+    <span className="dataset-status ds-danger">
+      <i className="fa fa-exclamation-circle" /> Invalid
     </span>
   </div>
 )
 
 const Valid = () => (
-  <ValidationPanel heading={validHeader()}>
-    <br />
-  </ValidationPanel>
+  <div className="validation-wrap on-accordion-wrapper">
+    <span className="undefined accordion status">
+      <div className="accordion-title valid">{validHeader()}</div>
+    </span>
+  </div>
 )
 
 const Warnings = ({ errors, warnings }) => (

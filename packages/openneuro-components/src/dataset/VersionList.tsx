@@ -20,7 +20,7 @@ export interface VersionListProps {
   activeDataset: string
   dateModified: Date
   setDeprecatedModalIsOpen: (boolean) => void
-  rootPath: string
+  rootPath?: string
 }
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]

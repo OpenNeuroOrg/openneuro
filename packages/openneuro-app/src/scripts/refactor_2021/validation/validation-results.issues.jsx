@@ -19,11 +19,11 @@ class Issues extends React.Component {
 
       const header = (
         <span className="file-header">
-          <h4 className="em-header clearfix">
-            <strong className="em-header pull-left">
+          <h4 className="em-header">
+            <strong className="em-header ">
               {this.props.issueType}: {index + 1}
             </strong>
-            <span className="pull-right">
+            <span className="file-issue-count">
               {totalFiles} {issueCount}
             </span>
           </h4>
