@@ -10440,10 +10440,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/runtime-corejs3", "npm:7.14.0"],
             ["@elastic/elasticsearch", "npm:7.12.0"],
             ["@openneuro/client", "workspace:packages/openneuro-client"],
+            ["@types/jsonwebtoken", "npm:8.5.2"],
             ["@types/node", "npm:14.17.0"],
             ["@types/tsc-watch", "npm:4.2.0"],
             ["apollo-link-retry", "npm:2.2.16"],
             ["core-js", "npm:3.12.1"],
+            ["jsonwebtoken", "npm:8.5.1"],
             ["ts-node", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:9.1.1"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"]
           ],
@@ -13681,6 +13683,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-json5-npm-0.0.29-f63a7916bd-66e9ac0143.zip/node_modules/@types/json5/",
           "packageDependencies": [
             ["@types/json5", "npm:0.0.29"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/jsonwebtoken", [
+        ["npm:8.5.2", {
+          "packageLocation": "./.yarn/cache/@types-jsonwebtoken-npm-8.5.2-dd180f8c8e-835c4bf15c.zip/node_modules/@types/jsonwebtoken/",
+          "packageDependencies": [
+            ["@types/jsonwebtoken", "npm:8.5.2"],
+            ["@types/node", "npm:15.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -27080,7 +27092,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
+          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.14.0"],
