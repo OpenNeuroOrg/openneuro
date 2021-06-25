@@ -1,7 +1,6 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 import './modality-cube.scss'
-import { toLowerCase } from './modality-cube.scss'
 
 export interface ModalityCubeProps {
   label: string
@@ -16,7 +15,7 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
 }) => {
   return (
     <li className="hex">
-      <a href={'search/' + label.toLowerCase()}>
+      <Link to={'search/' + label.toLowerCase()}>
         <div className={'hexIn ' + label.toLowerCase() + '-cube'}>
           <div>
             <div
@@ -34,7 +33,7 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     </li>
   )
 }

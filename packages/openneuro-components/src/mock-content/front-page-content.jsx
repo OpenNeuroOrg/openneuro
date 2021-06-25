@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import ljaf from '../assets/ljaf.png'
 import nihbi from '../assets/nih-bi-logo.png'
 import nsf from '../assets/nsf.png'
@@ -25,9 +26,9 @@ export const frontPage = {
   pageDescription: (
     <h2>
       A free and open platform for validating and sharing BIDS-compliant{' '}
-      <a href="/search/mri">MRI</a>, <a href="/search/pet">PET</a>,{' '}
-      <a href="/search/meg">MEG</a>, <a href="/search/eeg">EEG</a>, and{' '}
-      <a href="/search/asl">iEEG</a> data
+      <Link to="/search/mri">MRI</Link>, <Link to="/search/pet">PET</Link>,{' '}
+      <Link to="/search/meg">MEG</Link>, <Link to="/search/eeg">EEG</Link>, and{' '}
+      <Link to="/search/asl">iEEG</Link> data
     </h2>
   ),
   titlePanel: {
