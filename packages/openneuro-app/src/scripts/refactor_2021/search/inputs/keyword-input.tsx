@@ -22,7 +22,7 @@ const KeywordInput: FC = () => {
       className="search-keyword"
       type="text"
       label="Keywords"
-      placeholder="eg. something here"
+      placeholder="Enter Keyword(s) to Search"
       labelStyle="default"
       name="keywords"
       termValue={newKeyword}

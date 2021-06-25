@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 export interface ModalityHeaderProps {
   portalName: string
-  portalPrimary: string
+  portalPrimary: string | ReactNode
   publicDatasetStat: number
   participantsStat: number
   hexBackgroundImage: string
