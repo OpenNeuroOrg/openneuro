@@ -24,7 +24,7 @@ const AuthorInput: FC = () => {
       startOpen={false}
       className="search-authors"
       type="text"
-      placeholder="eg. something here"
+      placeholder="Enter Name to Search"
       labelStyle="default"
       name="authors"
       termValue={newAuthor}
