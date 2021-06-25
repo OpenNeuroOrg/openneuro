@@ -13,7 +13,7 @@ interface ModalitySelectProps {
 
 const ModalitySelect: FC<ModalitySelectProps> = ({
   startOpen = true,
-  label = 'Modalities',
+  label,
   portalStyles = false,
   dropdown,
 }) => {
@@ -43,7 +43,7 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
       setSelected={setModality}
       items={modality_available}
       accordionStyle="plain"
-      label={label}
+      label={portalStyles ? 'Modalities' : 'Choose Another Modality'}
       startOpen={portalStyles ? startOpen : false}
       className={portalStyles ? 'modality-facet' : ''}
       noAccordion={portalStyles}
