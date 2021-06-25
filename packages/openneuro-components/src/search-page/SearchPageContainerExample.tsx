@@ -119,6 +119,13 @@ export const SearchPageContainerExample = ({
             </div>
           </>
         )}
+        renderSearchHeader={() => (
+          <>
+            {portalContent
+              ? 'Search' + ' todo add modality ' + 'Portal'
+              : 'Search All Datasets'}
+          </>
+        )}
         renderSearchFacets={() => (
           <>
             <TermSearch

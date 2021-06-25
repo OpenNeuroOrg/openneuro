@@ -71,6 +71,13 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           </div>
         </>
       )}
+      renderSearchHeader={() => (
+        <>
+          {portalContent
+            ? 'Search ' + modality + ' Portal'
+            : 'Search All Datasets'}
+        </>
+      )}
       renderSearchFacets={() => (
         <>
           <KeywordInput />

@@ -11,6 +11,7 @@ export interface SearchPageProps {
   renderSearchResultsList: () => React.ReactNode
   renderSortBy: () => React.ReactNode
   renderFilterBlock: () => React.ReactNode
+  renderSearchHeader: () => React.ReactNode
 }
 
 export const SearchPage = ({
@@ -19,6 +20,7 @@ export const SearchPage = ({
   renderSearchResultsList,
   renderSortBy,
   renderFilterBlock,
+  renderSearchHeader,
 }: SearchPageProps) => {
   interface IProps {
     children: React.ReactNode
@@ -52,14 +54,7 @@ export const SearchPage = ({
         <div className="container">
           <div className="grid grid-nogutter">
             <div className="col col-12 search-heading">
-              <h1>
-                {portalContent ? 'Search MRI Portal' : 'Search All Datasets'}
-              </h1>
-              {portalContent && (
-                <Link className="go-back" to="/">
-                  Choose Another Modality
-                </Link>
-              )}
+              <h1>{renderSearchHeader()}</h1>
             </div>
 
             <div className="col col-12 search-wrapper">
