@@ -19,7 +19,8 @@ export const portalContent = {
     hexBackgroundImage: mriScan,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
-    communityHeader: 'Join the OHBM virtual meeting the week of June 21st, 2021',
+    communityHeader:
+      'Join the OHBM virtual meeting the week of June 21st, 2021',
     communityPrimary:
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (

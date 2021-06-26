@@ -1,30 +1,33 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
-import { CountToggle } from '../count-toggle/CountToggle'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
-import { VersionListContainerExample } from './VersionListContainerExample'
-import { DatasetPage } from './DatasetPage'
-import { DatasetGitAccess } from './DatasetGitAccess'
-import { Icon } from '../icon/Icon'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Modal } from '../modal/Modal'
 
-import { ReadMore } from '../read-more/ReadMore'
-import { MetaDataBlock } from './MetaDataBlock'
-import { BrainLifeButton } from './BrainLifeButton'
+import Validation from '../validation/validation.jsx'
 
-import { ValidationBlock } from './ValidationBlock'
+import {
+  Icon,
+  Tooltip,
+  Modal,
+  ReadMore,
+  MetaDataBlock,
+  BrainLifeButton,
+  ValidationBlock,
+  CloneDropdown,
+  DatasetHeader,
+  DatasetAlert,
+  DatasetHeaderMeta,
+  CountToggle,
+  DatasetPage,
+  DatasetGitAccess,
+  VersionListContainerExample,
+} from '@openneuro/components'
 
-import { CloneDropdown } from './CloneDropdown'
-import { DatasetHeader } from './DatasetHeader'
-import { DatasetAlert } from './DatasetAlert'
-import { DatasetHeaderMeta } from './DatasetHeaderMeta'
-
-export interface DraftDatasetPageExampleProps {
+export interface SnapshotContainerProps {
   dataset
+  tag?: string
 }
 
 const formatDate = dateObject =>
@@ -35,15 +38,13 @@ const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
-
-export const DraftDatasetPageExample = ({
-  dataset,
-}: DraftDatasetPageExampleProps) => {
+const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const [bookmarked, showBookmarked] = React.useState(false)
   const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
   const [followed, showFollowed] = React.useState(false)
   const [followedCount, setFollowedCount] = React.useState(1)
 
+  //TODO hook up follow and bookmark
   const toggleBookmarkClick = () => {
     setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
     showBookmarked(!bookmarked)
@@ -64,7 +65,8 @@ export const DraftDatasetPageExample = ({
   const description = dataset.draft.description
   const datasetId = dataset.id
   const isPublic = dataset.public === true
-  const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
+  const numSessions =
+    summary && summary.sessions.length > 0 ? summary.sessions.length : 1
 
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
@@ -73,9 +75,10 @@ export const DraftDatasetPageExample = ({
     parseISO(dataset.draft.modified),
   )
 
-  const rootPath = activeDataset
-    ? `/datasets/${datasetId}/versions/${activeDataset}`
-    : `/datasets/${datasetId}`
+  const rootPath =
+    activeDataset !== 'draft'
+      ? `/datasets/${datasetId}/versions/${activeDataset}`
+      : `/datasets/${datasetId}`
 
   //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
@@ -85,25 +88,32 @@ export const DraftDatasetPageExample = ({
   const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
-
   return (
     <>
       <DatasetPage
         renderHeader={() => (
-          <DatasetHeader
-            pageHeading={description.Name}
-            modality={summary.modalities[0]}
-          />
+          <>
+            {summary && (
+              <DatasetHeader
+                pageHeading={description.Name}
+                modality={summary.modalities[0]}
+              />
+            )}
+          </>
         )}
         renderAlert={() => (
           <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
         )}
         renderHeaderMeta={() => (
-          <DatasetHeaderMeta
-            size={summary.size}
-            totalFiles={summary.totalFiles}
-            datasetId={datasetId}
-          />
+          <>
+            {summary && (
+              <DatasetHeaderMeta
+                size={summary.size}
+                totalFiles={summary.totalFiles}
+                datasetId={datasetId}
+              />
+            )}
+          </>
         )}
         renderFollowBookmark={() => (
           <>
@@ -135,7 +145,11 @@ export const DraftDatasetPageExample = ({
             onBrainlife={dataset.onBrainlife}
           />
         )}
-        renderValidationBlock={() => <ValidationBlock />}
+        renderValidationBlock={() => (
+          <ValidationBlock>
+            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+          </ValidationBlock>
+        )}
         renderCloneDropdown={() => (
           <CloneDropdown
             gitAccess={
@@ -211,18 +225,24 @@ export const DraftDatasetPageExample = ({
               isMarkdown={true}
               className="dmb-inline-list"
             />
-            <MetaDataBlock
-              heading="Available Modalities"
-              item={summary.modalities}
-              isMarkdown={true}
-              className="dmb-modalities"
-            />
-            <MetaDataBlock
-              heading="Tasks"
-              item={summary.tasks}
-              isMarkdown={true}
-              className="dmb-inline-list"
-            />
+            <>
+              {summary && (
+                <>
+                  <MetaDataBlock
+                    heading="Available Modalities"
+                    item={summary.modalities}
+                    isMarkdown={true}
+                    className="dmb-modalities"
+                  />
+                  <MetaDataBlock
+                    heading="Tasks"
+                    item={summary.tasks}
+                    isMarkdown={true}
+                    className="dmb-inline-list"
+                  />
+                </>
+              )}
+            </>
 
             <MetaDataBlock
               heading="Versions"
@@ -267,10 +287,14 @@ export const DraftDatasetPageExample = ({
               item={numSessions}
             />
 
-            <MetaDataBlock
-              heading={pluralize('Subject', summary.subjects.length)}
-              item={summary.subjects.length}
-            />
+            <>
+              {summary && (
+                <MetaDataBlock
+                  heading={pluralize('Subject', summary.subjects.length)}
+                  item={summary.subjects.length}
+                />
+              )}
+            </>
 
             <MetaDataBlock
               heading="Dataset DOI"
@@ -326,3 +350,4 @@ export const DraftDatasetPageExample = ({
     </>
   )
 }
+export default SnapshotContainer

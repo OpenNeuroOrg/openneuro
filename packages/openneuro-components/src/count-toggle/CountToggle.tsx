@@ -32,7 +32,7 @@ export const CountToggle = ({
         iconSize="12px"
         icon={'fa ' + icon}
         onClick={toggleClick}>
-        {label} <span>{count}</span>
+        {label} <span className="count-span">{count}</span>
       </Button>
     </span>
   )

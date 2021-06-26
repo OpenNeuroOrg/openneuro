@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Dropdown } from '../dropdown/Dropdown'
 import '../dropdown/dropdown.scss'
 import './version-dropdown.scss'
@@ -19,9 +20,12 @@ export interface VersionListProps {
   activeDataset: string
   dateModified: Date
   setDeprecatedModalIsOpen: (boolean) => void
+  rootPath?: string
 }
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
+
+//TODO set up deprecated
 
 export const VersionList = ({
   items,
@@ -29,6 +33,7 @@ export const VersionList = ({
   setSelected,
   className,
   dateModified,
+  rootPath,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
   const [date, setDate] = React.useState()
@@ -47,7 +52,7 @@ export const VersionList = ({
       <div className="active-version">
         <div>{selected === 'draft' ? 'Draft' : selected}</div>
         {selected === 'draft' ? 'Updated' : 'Created'}:{' '}
-        {selected === 'draft' ? dateModified : 'version date'}
+        {selected === 'draft' ? dateModified : date}
       </div>
       <Dropdown
         className={className}
@@ -64,13 +69,15 @@ export const VersionList = ({
               <li
                 onClick={() => setVersion('draft', dateModified)}
                 className={selected === 'draft' ? 'selected' : ''}>
-                <span className="label">
-                  Draft
-                  <span className="active">
-                    {selected === 'draft' ? '*' : ''}
+                <Link className="dataset-tool" to={rootPath}>
+                  <span className="label">
+                    Draft
+                    <span className="active">
+                      {selected === 'draft' ? '*' : ''}
+                    </span>
                   </span>
-                </span>
-                {date}
+                  {dateModified}
+                </Link>
               </li>
               {items.map((item, index) => (
                 <li
@@ -81,16 +88,20 @@ export const VersionList = ({
                       : () => setVersion(item.tag, formatDate(item.created))
                   }
                   className={selected === item.tag ? 'selected' : ''}>
-                  <span className="label">
-                    v{item.tag}
-                    <span className="active">
-                      {selected === item.tag ? '*' : ''}
+                  <Link
+                    className="dataset-tool"
+                    to={rootPath + '/versions/' + item.tag}>
+                    <span className="label">
+                      v{item.tag}
+                      <span className="active">
+                        {selected === item.tag ? '*' : ''}
+                      </span>
+                      <span className="deprecated">
+                        {item.deprecated === true ? 'Deprecated' : ''}
+                      </span>
                     </span>
-                    <span className="deprecated">
-                      {item.deprecated === true ? 'Deprecated' : ''}
-                    </span>
-                  </span>
-                  {date}
+                    {formatDate(item.created)}
+                  </Link>
                 </li>
               ))}
             </ul>

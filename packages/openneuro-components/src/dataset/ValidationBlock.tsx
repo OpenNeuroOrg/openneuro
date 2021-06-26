@@ -1,7 +1,12 @@
 import React from 'react'
 
-export interface ValidationBlockProps {}
+import './validation.scss'
+export interface ValidationBlockProps {
+  children: React.ReactNode
+}
 
-export const ValidationBlock: React.FC<ValidationBlockProps> = ({}) => {
-  return <div className="validation-accordion">validation</div>
+export const ValidationBlock: React.FC<ValidationBlockProps> = ({
+  children,
+}) => {
+  return <div className="validation-accordion">{children}</div>
 }
