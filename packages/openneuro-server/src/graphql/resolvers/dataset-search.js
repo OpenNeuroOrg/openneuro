@@ -115,7 +115,6 @@ const addClause = (query, type, clause) => {
 }
 
 const parseQuery = async (query, datasetType, datasetStatus, userId) => {
-  const queryObj = JSON.parse(query)
   if (datasetType === 'Following') {
     const results = await Subscription.find({ userId })
     const followedDatasets = results.map(({ datasetId }) => datasetId)
@@ -124,7 +123,7 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
         id: followedDatasets,
       },
     }
-    addClause(queryObj, 'filter', termsClause)
+    addClause(query, 'filter', termsClause)
   } else if (datasetType === 'My Bookmarks') {
     const results = await Star.find({ userId })
     const bookmarkedDatasets = results.map(({ datasetId }) => datasetId)
@@ -133,10 +132,11 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
         id: bookmarkedDatasets,
       },
     }
-    addClause(queryObj, 'filter', termsClause)
+    addClause(query, 'filter', termsClause)
   } else if (datasetType === 'My Datasets') {
+    // TODO
   }
-  return queryObj
+  return query
 }
 
 /**
@@ -144,10 +144,10 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
  * TODO this is a Relay pagination type and could use the interface
  * @param {any} obj
  * @param {object} args
- * @param {string} args.query Stringified Query (DSL) argument for ElasticSearch
+ * @param {object} args.query Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.datasetType Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.datasetStatus Stringified Query (DSL) argument for ElasticSearch
- * @param {string} args.sortBy Stringified Query (DSL) argument for ElasticSearch
+ * @param {object} args.sortBy Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.after Cursor for paging forward
  * @param {number} args.first Limit of entries to find
  */
@@ -157,7 +157,7 @@ export const advancedDatasetSearchConnection = async (
   { user, userInfo },
 ) => {
   const sort = [{ _score: 'asc' }]
-  if (sortBy) sort.unshift(JSON.parse(sortBy))
+  if (sortBy) sort.unshift(sortBy)
   const requestBody = {
     sort,
     query: await parseQuery(query, datasetType, datasetStatus, user),
@@ -182,10 +182,10 @@ export const advancedDatasetSearch = {
     type: 'DatasetConnection',
     resolve: advancedDatasetSearchConnection,
     args: {
-      query: { type: 'String!' },
+      query: { type: 'JSON!' },
       datasetType: { type: 'String' },
       datasetStatus: { type: 'String' },
-      sortBy: { type: 'String' },
+      sortBy: { type: 'JSON' },
       after: { type: 'String' },
       first: { type: 'Int' },
     },

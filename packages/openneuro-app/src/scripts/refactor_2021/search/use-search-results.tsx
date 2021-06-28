@@ -1,6 +1,5 @@
-import React, { FC, useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import { SearchResultsList, Button } from '@openneuro/components'
 import { SearchParamsCtx } from './search-params-ctx'
 import {
   BoolQuery,
@@ -14,11 +13,11 @@ import {
 
 const searchQuery = gql`
   query advancedSearchDatasets(
-    $query: String!
+    $query: JSON!
     $cursor: String
     $datasetType: String
     $datasetStatus: String
-    $sortBy: String
+    $sortBy: JSON
   ) {
     datasets: advancedSearch(
       query: $query
@@ -130,7 +129,7 @@ const modality_to_formats = modality => {
 }
 
 export const useSearchResults = () => {
-  const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
+  const { searchParams } = useContext(SearchParamsCtx)
   const {
     keywords,
     datasetType_selected,
@@ -229,7 +228,7 @@ export const useSearchResults = () => {
     case 'A-Z':
       order = 'asc'
     case 'Z-A':
-      sortField = 'description.Name.keyword'
+      sortField = 'latestSnapshot.description.Name.keyword'
       break
     case 'Oldest':
       order = 'asc'
@@ -238,11 +237,11 @@ export const useSearchResults = () => {
       // Newest
       break
   }
-  const sortBy = JSON.stringify({ [sortField]: order })
+  const sortBy = { [sortField]: order }
 
   return useQuery(searchQuery, {
     variables: {
-      query: boolQuery.toString(),
+      query: boolQuery.get(),
       sortBy,
       datasetType: datasetType_selected,
       datasetStatus: datasetStatus_selected,
