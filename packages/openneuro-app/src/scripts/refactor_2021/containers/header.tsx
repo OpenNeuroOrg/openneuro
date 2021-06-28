@@ -27,7 +27,6 @@ const HeaderContainer: FC = () => {
 
   const handleSubmit = () => {
     // reset search params and set keyword to initiate new search, then navigate to global search page
-    console.log(initialSearchParams)
     setSearchParams(() => ({
       ...initialSearchParams,
       keywords: [newKeywordRef.current],

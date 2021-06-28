@@ -237,8 +237,6 @@ export const useSearchResults = () => {
       break
   }
   const sortBy = JSON.stringify({ [sortField]: order })
-  console.log(sortBy)
-  console.log(boolQuery.get())
 
   return useQuery(searchQuery, {
     variables: {
