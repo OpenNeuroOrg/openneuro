@@ -20,7 +20,7 @@ export interface FiltersBlockProps {
   section_selected?: { label: string; value: string }
   species_selected?: { label: string; value: string }
   studyDomain_selected?: { label: string; value: string }
-  removeFilterItem?(key: string, value): void
+  removeFilterItem?(isModality: boolean): (key: string, value) => void
   removeAllFilters?(): void
   numTotalResults: number
 }
@@ -60,14 +60,14 @@ export const FiltersBlock = ({
           <TermListItem
             type="Keyword"
             item={{ param: 'keywords', values: keywords }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {modality_selected && (
           <FilterListItem
             type="Modality"
             item={{ param: 'modality_selected', value: modality_selected }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem(true)}
           />
         )}
         {datasetType_selected && (
@@ -77,7 +77,7 @@ export const FiltersBlock = ({
               param: 'datasetType_selected',
               value: datasetType_selected,
             }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {datasetStatus_selected && (
@@ -87,63 +87,63 @@ export const FiltersBlock = ({
               param: 'datasetStatus_selected',
               value: datasetStatus_selected,
             }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {!ageRangeIsNull && (
           <FilterListItem
             type="Age"
             item={{ param: 'ageRange', value: ageRange }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {!subjectCountRangeIsNull && (
           <FilterListItem
             type="Participants"
             item={{ param: 'subjectCountRange', value: subjectCountRange }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {authors && (
           <TermListItem
             type="Authors/PI"
             item={{ param: 'authors', values: authors }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {gender_selected && (
           <FilterListItem
             type="Gender"
             item={{ param: 'gender_selected', value: gender_selected }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {tasks && (
           <TermListItem
             type="Task"
             item={{ param: 'tasks', values: tasks }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {diagnosis_selected && (
           <FilterListItem
             type="Diagnosis"
             item={{ param: 'diagnosis_selected', value: diagnosis_selected }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {section_selected && (
           <FilterListItem
             type="Section"
             item={{ param: 'section_selected', value: section_selected }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {species_selected && (
           <FilterListItem
             type="Species"
             item={{ param: 'species_selected', value: species_selected }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {studyDomain_selected && (
@@ -153,14 +153,14 @@ export const FiltersBlock = ({
               param: 'studyDomain_selected',
               value: studyDomain_selected,
             }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {date_selected && (
           <FilterListItem
             type="Date Published"
             item={{ param: 'date_selected', value: date_selected }}
-            removeFilterItem={removeFilterItem}
+            removeFilterItem={removeFilterItem()}
           />
         )}
       </ul>
