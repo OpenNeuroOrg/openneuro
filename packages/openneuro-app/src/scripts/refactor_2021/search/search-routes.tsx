@@ -16,29 +16,37 @@ const SearchRoutes: FC = () => {
         )}
       />
       <Route
-        component={(): React.ReactNode => (
-          <Redirect to={`${path}/modality/mri`} />
+        exact
+        path={`${path}/modality/eeg`}
+        render={(): React.ReactNode => (
+          <SearchContainer portalContent={portalContent.eeg} />
         )}
       />
       <Route
         exact
-        path={`${path}/modality/eeg`}
-        render={() => <SearchContainer portalContent={portalContent.eeg} />}
-      />
-      <Route
-        exact
         path={`${path}/modality/ieeg`}
-        render={() => <SearchContainer portalContent={portalContent.ieeg} />}
+        render={(): React.ReactNode => (
+          <SearchContainer portalContent={portalContent.ieeg} />
+        )}
       />
       <Route
         exact
         path={`${path}/modality/meg`}
-        render={() => <SearchContainer portalContent={portalContent.meg} />}
+        render={(): React.ReactNode => (
+          <SearchContainer portalContent={portalContent.meg} />
+        )}
       />
       <Route
         exact
         path={`${path}/modality/pet`}
-        render={() => <SearchContainer portalContent={portalContent.pet} />}
+        render={(): React.ReactNode => (
+          <SearchContainer portalContent={portalContent.pet} />
+        )}
+      />
+      <Route
+        component={(): React.ReactNode => (
+          <Redirect to={`${path}/modality/mri`} />
+        )}
       />
     </Switch>
   )
