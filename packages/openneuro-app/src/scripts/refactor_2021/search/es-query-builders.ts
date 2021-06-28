@@ -1,6 +1,3 @@
-// @ts-nocheck
-// TODO: remove @ts-nocheck
-
 // Builds query components using the Elasticsearch Query DSL
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
 
@@ -53,7 +50,7 @@ export const rangeQuery = (
   field,
   gte?: number | string,
   lte?: number | string,
-  relation?: string = 'INTERSECTS',
+  relation: string = 'INTERSECTS',
 ) => ({
   range: {
     [field]: {
