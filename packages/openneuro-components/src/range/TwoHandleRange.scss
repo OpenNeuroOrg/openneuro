@@ -1,5 +1,6 @@
 @import '../scss/variables';
 
+$rangeWidth: 310px;
 
 .formRange-inner {
   max-width: 80%;
@@ -8,14 +9,14 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-width: 270px;
+  min-width: $rangeWidth;
   position: relative;
   padding: 0 0 30px;
-  }
+}
 
 .slider {
   position: relative;
-  width: 200px;
+  width: $rangeWidth;
 }
 
 .slider__track,
@@ -38,13 +39,13 @@
 }
 
 .slider__range {
-  background-color: #9fe5e1;
+  background-color: var(--current-theme-primary);
   z-index: 2;
 }
 
 .slider__left-value,
 .slider__right-value {
-  color: #dee2e6;
+  color: #333;
   font-size: 12px;
   margin-top: 20px;
 }
@@ -67,7 +68,7 @@
   pointer-events: none;
   position: absolute;
   height: 0;
-  width: 200px;
+  width: $rangeWidth;
   outline: none;
 }
 
@@ -81,10 +82,10 @@
 
 /* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
-  background-color: #f1f5f7;
-  border: none;
+  background-color: #fff;
+  border: 1px solid var(--current-theme-primary-light);
   border-radius: 50%;
-  box-shadow: 0 0 1px 1px #ced4da;
+  box-shadow: 0 0 5px -1px var(--current-theme-primary);
   cursor: pointer;
   height: 18px;
   width: 18px;
@@ -95,10 +96,10 @@
 
 /* For Firefox browsers */
 .thumb::-moz-range-thumb {
-  background-color: #f1f5f7;
-  border: none;
+  background-color: #fff;
+  border: 1px solid var(--current-theme-primary-light);
   border-radius: 50%;
-  box-shadow: 0 0 1px 1px #ced4da;
+  box-shadow: 0 0 5px -1px var(--current-theme-primary);
   cursor: pointer;
   height: 18px;
   width: 18px;

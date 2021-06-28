@@ -8,12 +8,14 @@ interface ModalitySelectProps {
   startOpen?: boolean
   label?: string
   portalStyles?: boolean
+  dropdown?: boolean
 }
 
 const ModalitySelect: FC<ModalitySelectProps> = ({
   startOpen = true,
-  label = 'Modalities',
+  label,
   portalStyles = false,
+  dropdown,
 }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const { path } = useRouteMatch()
@@ -41,10 +43,11 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
       setSelected={setModality}
       items={modality_available}
       accordionStyle="plain"
-      label={label}
-      startOpen={startOpen}
+      label={portalStyles ? 'Modalities' : 'Choose Another Modality'}
+      startOpen={portalStyles ? startOpen : false}
       className={portalStyles ? 'modality-facet' : ''}
       noAccordion={portalStyles}
+      dropdown={dropdown}
     />
   )
 }

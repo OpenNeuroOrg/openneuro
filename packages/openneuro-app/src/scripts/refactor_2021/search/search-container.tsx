@@ -71,11 +71,22 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           </div>
         </>
       )}
+      renderSearchHeader={() => (
+        <>
+          {portalContent
+            ? 'Search ' + modality + ' Portal'
+            : 'Search All Datasets'}
+        </>
+      )}
       renderSearchFacets={() => (
         <>
           <KeywordInput />
           <ShowDatasetRadios />
-          {!portalContent && <ModalitySelect portalStyles={true} />}
+          {!portalContent ? (
+            <ModalitySelect portalStyles={true} />
+          ) : (
+            <ModalitySelect portalStyles={false} />
+          )}
           <AgeRangeInput />
           <SubjectCountRangeInput />
           <DiagnosisSelect />

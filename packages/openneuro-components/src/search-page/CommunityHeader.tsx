@@ -14,7 +14,7 @@ export const CommunityHeader = ({
   return (
     <section className="search-page-coms">
       <div className="container">
-        <div className="grid grid-start">
+        <div className="grid grid-nogutter">
           <div className="col col-7">
             <h2>{communityHeader}</h2>
             <div className="primary-content">{communityPrimary}</div>

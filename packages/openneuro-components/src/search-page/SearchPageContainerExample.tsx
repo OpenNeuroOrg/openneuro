@@ -119,6 +119,13 @@ export const SearchPageContainerExample = ({
             </div>
           </>
         )}
+        renderSearchHeader={() => (
+          <>
+            {portalContent
+              ? 'Search' + ' todo add modality ' + 'Portal'
+              : 'Search All Datasets'}
+          </>
+        )}
         renderSearchFacets={() => (
           <>
             <TermSearch
@@ -167,7 +174,7 @@ export const SearchPageContainerExample = ({
               />
             </>
             <FacetBlockContainerExample>
-              {!portalContent && (
+              {!portalContent ? (
                 <FacetSelect
                   selected={modality_selected}
                   setSelected={setModality}
@@ -176,6 +183,17 @@ export const SearchPageContainerExample = ({
                   label="Modalities"
                   startOpen={true}
                   className="modality-facet"
+                  noAccordion={true}
+                />
+              ) : (
+                <FacetSelect
+                  selected={modality_selected}
+                  setSelected={setModality}
+                  items={modalities}
+                  accordionStyle="plain"
+                  label="Modalities"
+                  startOpen={false}
+                  className="modality-facet-accordion"
                   noAccordion={true}
                 />
               )}

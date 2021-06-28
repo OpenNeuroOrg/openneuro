@@ -67,7 +67,11 @@ const HeaderContainer: FC = () => {
         <LandingExpandedHeader
           profile={profile}
           renderFacetSelect={() => (
-            <ModalitySelect startOpen={false} label="Browse by Modalities" />
+            <ModalitySelect
+              startOpen={false}
+              label="Browse by Modalities"
+              dropdown={true}
+            />
           )}
           renderSearchInput={() => (
             <Input
