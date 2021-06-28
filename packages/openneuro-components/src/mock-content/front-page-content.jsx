@@ -26,9 +26,11 @@ export const frontPage = {
   pageDescription: (
     <h2>
       A free and open platform for validating and sharing BIDS-compliant{' '}
-      <Link to="/search/mri">MRI</Link>, <Link to="/search/pet">PET</Link>,{' '}
-      <Link to="/search/meg">MEG</Link>, <Link to="/search/eeg">EEG</Link>, and{' '}
-      <Link to="/search/asl">iEEG</Link> data
+      <Link to="/search/modality/mri">MRI</Link>,{' '}
+      <Link to="/search/modality/pet">PET</Link>,{' '}
+      <Link to="/search/modality/meg">MEG</Link>,{' '}
+      <Link to="/search/modality/eeg">EEG</Link>, and{' '}
+      <Link to="/search/modality/asl">iEEG</Link> data
     </h2>
   ),
   titlePanel: {
