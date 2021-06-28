@@ -194,12 +194,14 @@ export const useSearchResults = () => {
       matchQuery('latestSnapshot.summary.subjectMetadata.sex', gender_selected),
     )
   if (date_selected !== 'All Time') {
-    const d =
-      date_selected === 'Last 30 days'
-        ? 30
-        : date_selected === 'Last 180 days'
-        ? 180
-        : 365 // 'Last 365 days'
+    let d: number
+    if (date_selected === 'Last 30 days') {
+      d = 30
+    } else if (date_selected === 'Last 180 days') {
+      d = 180
+    } else {
+      d = 365
+    }
     boolQuery.addClause('filter', rangeQuery('created', `now-${d}d/d`, 'now/d'))
   }
   if (species_selected)
