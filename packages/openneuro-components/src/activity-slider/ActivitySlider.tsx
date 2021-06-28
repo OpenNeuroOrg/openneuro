@@ -2,11 +2,13 @@ import React from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 import { Link } from 'react-router-dom'
-import Carousel from 'react-multi-carousel'
-import { ArrowProps } from 'react-multi-carousel/lib/types'
+import { CarouselProps, ArrowProps } from 'react-multi-carousel/lib/types'
 import 'react-multi-carousel/lib/styles.css'
 
 import './slider.scss'
+
+// TODO - restore react-multi-carousel
+const Carousel = ({ children }: CarouselProps) => <div>{children}</div>
 
 export interface ActivitySliderProps {
   className?: string
@@ -73,7 +75,6 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
-      {/* @ts-expect-error */}
       <Carousel
         infinite={infinite}
         keyBoardControl={keyBoardControl}
