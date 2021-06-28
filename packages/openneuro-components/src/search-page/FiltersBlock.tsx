@@ -20,7 +20,7 @@ export interface FiltersBlockProps {
   section_selected?: { label: string; value: string }
   species_selected?: { label: string; value: string }
   studyDomain_selected?: { label: string; value: string }
-  removeFilterItem?(isModality: boolean): (key: string, value) => void
+  removeFilterItem?(isModality?: boolean): (key: string, value) => void
   removeAllFilters?(): void
   numTotalResults: number
 }
