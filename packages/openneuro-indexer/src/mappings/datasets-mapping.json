@@ -57,14 +57,6 @@
     "readme": {
       "type": "text"
     },
-    "draft": {
-      "description": {
-        "Name": { "type": "keyword" }
-      },
-      "issues": {
-        "severity": { "type": "keyword" }
-      }
-    },
     "permissions": {
       "userPermissions": {
         "level": { "type": "keyword" },
