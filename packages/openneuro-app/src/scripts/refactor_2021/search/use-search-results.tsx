@@ -1,11 +1,32 @@
-import React, { FC, useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import { SearchResultsList, Button } from '@openneuro/components'
 import { SearchParamsCtx } from './search-params-ctx'
+import {
+  BoolQuery,
+  simpleQueryString,
+  matchQuery,
+  rangeQuery,
+  rangeListLengthQuery,
+  sqsJoinWithAND,
+  joinWithOR,
+} from './es-query-builders'
 
 const searchQuery = gql`
-  query searchDatasets($q: String!, $cursor: String) {
-    datasets: search(q: $q, first: 25, after: $cursor) {
+  query advancedSearchDatasets(
+    $query: JSON!
+    $cursor: String
+    $datasetType: String
+    $datasetStatus: String
+    $sortBy: JSON
+  ) {
+    datasets: advancedSearch(
+      query: $query
+      datasetType: $datasetType
+      datasetStatus: $datasetStatus
+      sortBy: $sortBy
+      first: 25
+      after: $cursor
+    ) {
       edges {
         node {
           id
@@ -83,8 +104,6 @@ const searchQuery = gql`
   }
 `
 
-const joinWithAND = (list: string[]) =>
-  list.map(str => `(${str})`).join(' AND ')
 const isActiveRange = range =>
   JSON.stringify(range) !== JSON.stringify([null, null])
 const range = ([min, max]: [Date, Date]) => {
@@ -93,8 +112,24 @@ const range = ([min, max]: [Date, Date]) => {
   return `[${minISO} TO ${maxISO}]`
 }
 
+// https://bids-specification.readthedocs.io/en/stable/99-appendices/04-entity-table.html
+const modality_to_formats = modality => {
+  switch (modality) {
+    case 'MRI':
+      return 'T1w OR T2w OR dwi OR bold OR asl'
+    case 'EEG':
+      return 'eeg'
+    case 'iEEG':
+      return 'ieeg'
+    case 'MEG':
+      return 'meg'
+    case 'PET':
+      return 'peg OR blood'
+  }
+}
+
 export const useSearchResults = () => {
-  const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
+  const { searchParams } = useContext(SearchParamsCtx)
   const {
     keywords,
     datasetType_selected,
@@ -113,57 +148,103 @@ export const useSearchResults = () => {
     sortBy_selected,
   } = searchParams
 
-  const qStrings = []
-  if (keywords.length) qStrings.push(joinWithAND(keywords))
-  if (datasetType_selected) {
-  } // TODO: gql resolver level
-  if (datasetStatus_selected) {
-  } // TODO: gql resolver level
+  const boolQuery = new BoolQuery()
+  if (keywords.length)
+    boolQuery.addClause('must', simpleQueryString(sqsJoinWithAND(keywords)))
   if (modality_selected)
-    qStrings.push(`metadata.modalities: ${modality_selected}`)
-  if (isActiveRange(ageRange))
-    qStrings.push(`metadata.ages: ${range(ageRange)}`)
-  if (isActiveRange(subjectCountRange)) {
-  } // TODO: https://discuss.elastic.co/t/painless-check-length-field-in-each-object-of-array/161699
-  if (diagnosis_selected)
-    qStrings.push(`metadata.dsStatus: ${diagnosis_selected}`)
-  if (tasks.length)
-    qStrings.push(`latestSnapshot.summary.tasks: ${joinWithAND(tasks)}`)
-  if (authors.length)
-    qStrings.push(`metadata.seniorAuthor: ${joinWithAND(authors)}`)
-  if (gender_selected !== 'All') {
-    qStrings.push(
-      `latestSnapshot.summary.subjectMetadata.sex: ${gender_selected}`,
+    boolQuery.addClause(
+      'filter',
+      matchQuery(
+        'latestSnapshot.summary.modalities',
+        modality_to_formats(modality_selected),
+      ),
     )
+  if (isActiveRange(ageRange))
+    boolQuery.addClause('filter', rangeQuery('metadata.ages', ...ageRange))
+  if (isActiveRange(subjectCountRange))
+    boolQuery.addClause(
+      'filter',
+      rangeListLengthQuery(
+        'latestSnapshot.summary.subjects.keyword',
+        subjectCountRange[0],
+        subjectCountRange[1],
+      ),
+    )
+  if (diagnosis_selected)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.dxStatus', diagnosis_selected),
+    )
+  if (tasks.length)
+    boolQuery.addClause(
+      'must',
+      simpleQueryString(sqsJoinWithAND(tasks), [
+        'latestSnapshot.summary.tasks',
+      ]),
+    )
+  if (authors.length)
+    boolQuery.addClause(
+      'must',
+      matchQuery('metadata.seniorAuthor', joinWithOR(authors)),
+    )
+  if (gender_selected !== 'All')
+    boolQuery.addClause(
+      'filter',
+      matchQuery('latestSnapshot.summary.subjectMetadata.sex', gender_selected),
+    )
+  if (date_selected !== 'All Time') {
+    let d: number
+    if (date_selected === 'Last 30 days') {
+      d = 30
+    } else if (date_selected === 'Last 180 days') {
+      d = 180
+    } else {
+      d = 365
+    }
+    boolQuery.addClause('filter', rangeQuery('created', `now-${d}d/d`, 'now/d'))
   }
-  const now = new Date()
-  const last30 = new Date()
-  const last180 = new Date()
-  const last365 = new Date()
-  last30.setDate(last30.getDate() - 30)
-  last180.setDate(last180.getDate() - 180)
-  last365.setDate(last365.getDate() - 365)
-
-  if (date_selected === 'All Time') {
-    qStrings.push(`created:${range([null, now])}`)
-  } else if (date_selected === 'Last 30 days') {
-    qStrings.push(`created:${range([last30, now])}`)
-  } else if (date_selected === 'Last 180 days') {
-    qStrings.push(`created:${range([last180, now])}`)
-  } else if (date_selected === 'Last 12 months') {
-    qStrings.push(`created:${range([last365, now])}`)
-  }
-  if (species_selected) qStrings.push(`metadata.species: ${species_selected}`)
+  if (species_selected)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.species', species_selected, 'AUTO'),
+    )
   if (section_selected)
-    qStrings.push(`metadata.studyLongitudinal: ${section_selected}`)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.studyLongitudinal', section_selected, 'AUTO'),
+    )
   if (studyDomain_selected)
-    qStrings.push(`metadata.studyDomain: ${species_selected}`)
+    boolQuery.addClause(
+      'filter',
+      matchQuery('metadata.studyDomain', studyDomain_selected, 'AUTO'),
+    )
 
-  const qString = joinWithAND(qStrings)
+  let sortField = 'created',
+    order = 'desc'
+  switch (sortBy_selected.label) {
+    case 'Activity':
+      // TODO: figure this out
+      break
+    case 'A-Z':
+      order = 'asc'
+    case 'Z-A':
+      sortField = 'latestSnapshot.description.Name.keyword'
+      break
+    case 'Oldest':
+      order = 'asc'
+      break
+    default:
+      // Newest
+      break
+  }
+  const sortBy = { [sortField]: order }
 
   return useQuery(searchQuery, {
     variables: {
-      q: qString,
+      query: boolQuery.get(),
+      sortBy,
+      datasetType: datasetType_selected,
+      datasetStatus: datasetStatus_selected,
     },
     errorPolicy: 'ignore',
     // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)

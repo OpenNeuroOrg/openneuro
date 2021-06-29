@@ -4,6 +4,7 @@ import {
   sortBy,
   SearchResultsList,
   Button,
+  Loading,
 } from '@openneuro/components'
 import {
   KeywordInput,
@@ -49,9 +50,8 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     }
   }, [modality, searchParams.modality_selected, setSearchParams])
 
-  let loading, data
-  // const { loading, data, fetchMore, refetch, variables, error } =
-  //   useSearchResults()
+  const { loading, data, fetchMore, refetch, variables, error } =
+    useSearchResults()
 
   const numResultsShown = data?.datasets?.edges.length || 0
   const numTotalResults = data?.datasets?.pageInfo.count || 0
@@ -100,8 +100,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         </>
       )}
       renderSearchResultsList={() =>
-        loading && numTotalResults === 0 ? (
-          resultsList.length !== 0 && <>Datasets loading placeholder</>
+        loading ? (
+          <div className="search-loading">
+            <Loading />
+          </div>
+        ) : numTotalResults === 0 ? (
+          <h3>No results: please broaden your search.</h3>
         ) : (
           <>
             <SearchResultsList items={resultsList} profile={profile} />
