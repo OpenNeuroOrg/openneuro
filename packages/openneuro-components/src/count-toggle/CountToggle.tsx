@@ -32,7 +32,7 @@ export const CountToggle = ({
         icon={'fa ' + icon}
         onClick={toggleClick}
         label={label}>
-        {label} <span className="count-span">{count}</span>
+        <span className="count-span">{count}</span>
       </Button>
     </span>
   )
@@ -44,7 +44,7 @@ export const CountToggle = ({
         icon={'fa ' + icon}
         onClick={toggleLogin}
         label={label}>
-        {label} <span>{count}</span>
+        <span>{count}</span>
       </Button>
     </span>
   )
