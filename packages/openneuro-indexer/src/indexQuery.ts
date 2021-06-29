@@ -11,6 +11,7 @@ export const indexQuery = gql`
         node {
           id
           created
+          public
           metadata {
             datasetName
             datasetUrl
@@ -50,8 +51,17 @@ export const indexQuery = gql`
                 sex
                 age
               }
+              subjects
             }
             readme
+          }
+          permissions {
+            userPermissions {
+              level
+              user {
+                id
+              }
+            }
           }
         }
       }

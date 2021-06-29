@@ -1,4 +1,5 @@
 import React, { FC, useContext } from 'react'
+import { useRouteMatch, useHistory } from 'react-router-dom'
 import { SearchParamsCtx, removeFilterItem } from './search-params-ctx'
 import { FiltersBlock } from '@openneuro/components'
 import initialSearchParams from './initial-search-params'
@@ -57,16 +58,28 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
     )
   })
 
-  const removeAllFilters = () => {
-    // reset params to default valuse
+  const history = useHistory()
+  const { path } = useRouteMatch()
+  const globalSearchPath = '/search'
+
+  const removeFilter =
+    (isModality: boolean) =>
+    (param, value): void => {
+      removeFilterItem(setSearchParams)(param, value)
+      if (isModality) history.push(globalSearchPath)
+    }
+
+  const removeAllFilters = (): void => {
+    // reset params to default values
     setSearchParams(prevState => ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
     }))
+    if (path !== globalSearchPath) history.push(globalSearchPath)
   }
   return someParamsAreSelected ? (
     <FiltersBlock
-      removeFilterItem={removeFilterItem(setSearchParams)}
+      removeFilterItem={removeFilter}
       removeAllFilters={removeAllFilters}
       numTotalResults={numTotalResults}
       {...selectedParams}
