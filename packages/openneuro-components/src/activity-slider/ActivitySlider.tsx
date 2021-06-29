@@ -2,7 +2,7 @@ import React from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 import { Link } from 'react-router-dom'
-import { CarouselProps } from 'react-multi-carousel/lib/types'
+import { CarouselProps, ArrowProps } from 'react-multi-carousel/lib/types'
 import 'react-multi-carousel/lib/styles.css'
 
 import './slider.scss'
@@ -53,11 +53,11 @@ export interface ActivitySliderProps {
     }
   }[]
 }
-const LeftArrow: React.FC = ({ onClick }) => (
+const LeftArrow: React.FC = ({ onClick }: ArrowProps) => (
   <i className="fas fa-chevron-left" onClick={() => onClick()} />
 )
 
-const RightArrow: React.FC = ({ onClick }) => (
+const RightArrow: React.FC = ({ onClick }: ArrowProps) => (
   <i className="fas fa-chevron-right" onClick={() => onClick()} />
 )
 
