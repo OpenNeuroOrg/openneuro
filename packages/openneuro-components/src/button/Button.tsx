@@ -1,11 +1,13 @@
 import React from 'react'
 import './button.scss'
 
+export type ButtonPropsSize = 'xsmall' | 'small' | 'medium' | 'large'
+
 export interface ButtonProps {
   primary?: boolean
   secondary?: boolean
   backgroundColor?: string
-  size?: 'xsmall' | 'small' | 'medium' | 'large'
+  size?: ButtonPropsSize
   label: string
   disabled?: boolean
   onClick?: () => void
@@ -16,13 +18,13 @@ export interface ButtonProps {
   imgSrc?: string
   iconSize?: string
   className?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   primary,
   size = 'medium',
   backgroundColor,
@@ -38,7 +40,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   iconOnly,
   ...props
-}) => {
+}: ButtonProps) => {
   const mode =
     primary && !navbar
       ? 'on-button--primary'

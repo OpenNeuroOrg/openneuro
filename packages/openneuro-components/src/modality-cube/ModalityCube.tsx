@@ -4,7 +4,7 @@ import './modality-cube.scss'
 
 export interface ModalityCubeProps {
   label: string
-  stats: string
+  stats: React.ReactNode
   cubeImage: string
 }
 

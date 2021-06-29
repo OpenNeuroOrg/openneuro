@@ -34,6 +34,7 @@ class ValidationResults extends React.Component {
         <AccordionTab
           className="fade-in upload-panel error-wrap"
           label={errorHeader}
+          accordionStyle="plain"
           //eventKey="1"
         >
           <Issues issues={errors} issueType="Error" />
@@ -55,6 +56,7 @@ class ValidationResults extends React.Component {
         <AccordionTab
           className="fade-in upload-panel warning-wrap"
           label={warningHeader}
+          accordionStyle="plain"
           //eventKey="2"
         >
           <Issues issues={warnings} issueType="Warning" />

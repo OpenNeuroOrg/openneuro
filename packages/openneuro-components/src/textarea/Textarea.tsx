@@ -6,16 +6,18 @@ export interface TextareaProps {
   label?: string
   name: string
   type?: 'inline' | 'float' | 'default'
-  setValue: string
+  setValue: (e: React.FormEvent<HTMLTextAreaElement>) => void
+  value?: string
 }
 
-export const Textarea: React.FC<TextareaProps> = ({
+export const Textarea = ({
   placeholder,
   label,
   name,
   type,
   setValue,
-}) => {
+  value,
+}: TextareaProps) => {
   return (
     <>
       {type == 'float' ? (
@@ -23,9 +25,10 @@ export const Textarea: React.FC<TextareaProps> = ({
           <textarea
             name={name}
             placeholder={placeholder}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setValue(e)}
             rows={5}
-            cols={100}></textarea>
+            cols={100}
+            value={value}></textarea>
           {label ? <label htmlFor={name}>{label}</label> : null}
         </div>
       ) : type == 'inline' ? (
@@ -34,9 +37,10 @@ export const Textarea: React.FC<TextareaProps> = ({
           <textarea
             name={name}
             placeholder={placeholder}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setValue(e)}
             rows={5}
-            cols={100}></textarea>
+            cols={100}
+            value={value}></textarea>
         </div>
       ) : (
         <div className="form-control">
@@ -44,9 +48,10 @@ export const Textarea: React.FC<TextareaProps> = ({
           <textarea
             name={name}
             placeholder={placeholder}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => setValue(e)}
             rows={5}
-            cols={100}></textarea>
+            cols={100}
+            value={value}></textarea>
         </div>
       )}
     </>

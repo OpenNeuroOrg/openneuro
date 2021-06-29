@@ -1,28 +1,30 @@
 import React from 'react'
-import { AccordionTab } from '../accordion/AccordionTab'
+import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { TermSearch } from '../input/TermSearch'
+import { ButtonPropsSize } from '../button/Button'
+import { InputPropsStyle } from '../input/Input'
 import './facet.scss'
 
 export interface FacetSearchProps {
-  accordionStyle: string
+  accordionStyle: AccordionTabStyle
   startOpen: boolean
   label: string
   dropdown?: boolean
   setTermValue: (string) => void
-  pushTerm: () => void
+  pushTerm: React.Dispatch<React.SetStateAction<any[]>>
   allTerms: string[]
   className?: string
   type?: string
   placeholder?: string
-  labelStyle?: string
+  labelStyle?: InputPropsStyle
   name?: string
   termValue: string
   primary?: boolean
   color?: string
   icon?: string
   iconSize?: string
-  size?: string
+  size?: ButtonPropsSize
   removeFilterItem?(param, value): void
 }
 

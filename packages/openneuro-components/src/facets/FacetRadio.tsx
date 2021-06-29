@@ -1,5 +1,5 @@
 import React from 'react'
-import { AccordionTab } from '../accordion/AccordionTab'
+import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { RadioGroup } from '../radio/RadioGroup'
 import './facet.scss'
@@ -17,7 +17,7 @@ export interface FacetRadioProps {
   )[]
   layout: string
   name: string
-  accordionStyle: string
+  accordionStyle: AccordionTabStyle
   startOpen: boolean
   label: string
   dropdown?: boolean

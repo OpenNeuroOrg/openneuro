@@ -10,22 +10,26 @@ import { LandingExpandedHeader } from './LandingExpandedHeader'
 import './header.scss'
 
 export interface HeaderProps {
-  profile?: {}
+  profile?: {
+    name: string
+    admin: boolean
+  }
   onLogin?: () => void
   onLogout?: () => void
+  onCreateAccount?: () => void
   expanded?: boolean
   isOpenSupport: boolean
   isOpenUpload: boolean
   isOpenLogin: boolean
-  toggleLogin: () => void
+  toggleLogin: (userModalParams?: Record<string, any>) => void
   toggleSupport: () => void
   toggleUpload: () => void
   pushHistory: (path: string) => void
-  renderOnExpanded: (profile) => typeof LandingExpandedHeader
+  renderOnExpanded: (profile) => React.ReactNode
   renderOnFreshDeskWidget: () => React.ReactNode
 }
 
-export const Header: React.FC<HeaderProps> = ({
+export const Header = ({
   profile,
   onLogin,
   onLogout,
@@ -39,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
   toggleSupport,
   renderOnExpanded,
   renderOnFreshDeskWidget,
-}) => {
+}: HeaderProps) => {
   return (
     <>
       <header>

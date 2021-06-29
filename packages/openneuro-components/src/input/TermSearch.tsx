@@ -1,24 +1,24 @@
 import React from 'react'
-import { Input } from '../input/Input'
-import { Button } from '../button/Button'
+import { Input, InputPropsStyle } from '../input/Input'
+import { Button, ButtonPropsSize } from '../button/Button'
 import './term-search.scss'
 
 export interface TermSearchProps {
   setTermValue: (string) => void
-  pushTerm: () => void
+  pushTerm: React.Dispatch<React.SetStateAction<any[]>>
   allTerms: string[]
   className?: string
   type?: string
   label?: string
   placeholder?: string
-  labelStyle?: string
+  labelStyle?: InputPropsStyle
   name?: string
   termValue: string
   primary?: boolean
   color?: string
   icon?: string
   iconSize?: string
-  size?: string
+  size?: ButtonPropsSize
   removeFilterItem?(param, value): void
 }
 
@@ -53,7 +53,11 @@ export const TermSearch = ({
           name={name}
           value={termValue}
           setValue={setTermValue}
-          onKeyDown={e => e.keyCode === 13 && !disabled && pushTerm()}
+          onKeyDown={e =>
+            e.keyCode === 13 &&
+            !disabled &&
+            pushTerm(termValue as React.SetStateAction<any>)
+          }
         />
         <Button
           primary={true}
@@ -63,7 +67,7 @@ export const TermSearch = ({
           iconOnly={true}
           iconSize={iconSize}
           size={size}
-          onClick={() => pushTerm()}
+          onClick={() => pushTerm(termValue as React.SetStateAction<any>)}
           label="Add Term"
         />
       </div>

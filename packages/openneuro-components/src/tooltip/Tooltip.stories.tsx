@@ -63,7 +63,7 @@ ButtonTip.parameters = {
 
 export const IconTip = Template.bind({})
 IconTip.args = {
-  children: <Icon icon="fab fa-google" />,
+  children: <Icon icon="fab fa-google" label="tooltip story" />,
   tooltip: 'this is the tooltip using the data attr',
   flow: 'right',
 }

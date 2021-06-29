@@ -1,7 +1,12 @@
 import React from 'react'
-import { AccordionTab } from '../accordion/AccordionTab'
+import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import './facet.scss'
+
+export type FacetSelectValueType =
+  | { label: string; value: string }
+  | string
+  | null
 
 export interface FacetSelectProps {
   // items may be a list of objects with labels and values
@@ -15,12 +20,12 @@ export interface FacetSelectProps {
         children?: null | { label: string; value: string; count: number }[]
       }
   )[]
-  accordionStyle: string
+  accordionStyle: AccordionTabStyle
   startOpen: boolean
   label: string
   dropdown?: boolean
-  selected: string
-  setSelected: (selected: string) => void
+  selected: FacetSelectValueType
+  setSelected: (selected: FacetSelectValueType) => void
   className?: string
   noAccordion?: boolean
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import './affiliate.scss'
 
 export interface AffiliateArticleProps {
-  logo?: boolean
+  logo?: string
   header?: string
   contentOne?: Record<string, any>
   contentTwo?: Record<string, any>

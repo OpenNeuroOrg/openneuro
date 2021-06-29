@@ -36,7 +36,7 @@ export const VersionList = ({
   rootPath,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
-  const [date, setDate] = React.useState()
+  const [date, setDate] = React.useState(formatDate(new Date()))
   const deprecatedItem = (itemTag, itemCreated) => {
     setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)
     setSelected(itemTag)

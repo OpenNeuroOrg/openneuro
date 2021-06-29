@@ -153,23 +153,23 @@ export const DraftDatasetPageExample = ({
           <>
             <Tooltip tooltip="Publish the dataset publicly" flow="up">
               <Link className="dataset-tool" to={rootPath + '/publish'}>
-                <Icon icon="fa fa-globe" /> Publish
+                <Icon icon="fa fa-globe" label="publish" /> Publish
               </Link>
             </Tooltip>
             <Tooltip tooltip="Share this dataset with collaborators" flow="up">
               <Link className="dataset-tool" to={rootPath + '/share'}>
-                <Icon icon="fa fa-user" /> Share
+                <Icon icon="fa fa-user" label="share" /> Share
               </Link>
             </Tooltip>
 
             <Tooltip tooltip="Create a new version of the dataset" flow="up">
               <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" /> Snapshot
+                <Icon icon="fa fa-camera" label="snapshot" /> Snapshot
               </Link>
             </Tooltip>
             <span>
               <Link className="dataset-tool" to={rootPath + '/download'}>
-                <Icon icon="fa fa-download" /> Download
+                <Icon icon="fa fa-download" label="download" /> Download
               </Link>
             </span>
             <Tooltip
@@ -177,12 +177,12 @@ export const DraftDatasetPageExample = ({
               tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
               flow="up">
               <Link className="dataset-tool" to={rootPath + '/metadata'}>
-                <Icon icon="fa fa-file-code" /> Metadata
+                <Icon icon="fa fa-file-code" label="metadata" /> Metadata
               </Link>
             </Tooltip>
             <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
               <Link className="dataset-tool" to={rootPath + '/delete'}>
-                <Icon icon="fa fa-trash" /> Delete
+                <Icon icon="fa fa-trash" label="delete" /> Delete
               </Link>
             </Tooltip>
           </>

@@ -4,21 +4,22 @@ import { Icon } from '../icon/Icon'
 
 import './accordion.scss'
 
+export type AccordionTabStyle = 'plain' | 'file-tree' | 'bids-wrapper'
+
 export interface AccordionTabProps {
   children: React.ReactNode
-  id: string
-  className: string
-  label: string
+  id?: string
+  className?: string
+  label: React.ReactNode
   startOpen?: boolean
-  plainStyle: boolean
   dropdown?: boolean
-  accordionStyle: 'plain' | 'file-tree' | 'bids-wrappper'
+  accordionStyle: AccordionTabStyle
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const AccordionTab: React.FC<AccordionTabProps> = ({
+export const AccordionTab = ({
   children,
   id,
   label,
@@ -26,12 +27,13 @@ export const AccordionTab: React.FC<AccordionTabProps> = ({
   accordionStyle,
   startOpen,
   dropdown,
-}) => {
+}: AccordionTabProps) => {
   const [isOpen, setOpen] = React.useState(startOpen)
   const fileTreeIcon = accordionStyle == 'file-tree' && (
     <Icon
       className="file-icon"
       icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
+      label="directory"
     />
   )
 

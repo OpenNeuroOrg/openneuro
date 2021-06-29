@@ -1,5 +1,5 @@
 import React from 'react'
-import { AccordionTab } from '../accordion/AccordionTab'
+import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 
@@ -7,7 +7,7 @@ import './facet.scss'
 import { Icon } from '../icon/Icon'
 
 export interface FacetDatePickerProps {
-  accordionStyle: string
+  accordionStyle: AccordionTabStyle
   startOpen: boolean
   label: string
   dropdown?: boolean
@@ -34,8 +34,10 @@ export const FacetDatePicker = ({
           <DateRangePicker
             onChange={setSelected}
             value={selected}
-            calendarIcon={<Icon icon="far fa-calendar-alt" />}
-            clearIcon={<Icon icon="fas fa-times" />}
+            calendarIcon={
+              <Icon icon="far fa-calendar-alt" label="date range" />
+            }
+            clearIcon={<Icon icon="fas fa-times" label="clear" />}
           />
         </div>
       </AccordionTab>

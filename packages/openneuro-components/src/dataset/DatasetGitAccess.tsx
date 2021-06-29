@@ -36,6 +36,7 @@ export const DatasetGitAccess = ({
             icon="fas fa-clipboard"
             size="small"
             iconSize="18px"
+            label="copy git URL"
           />
         </Tooltip>
         <div>{url}</div>
@@ -47,6 +48,7 @@ export const DatasetGitAccess = ({
             icon="fas fa-clipboard"
             size="small"
             iconSize="18px"
+            label="copy git hash"
           />
         </Tooltip>
         <div>Git Hash: {gitHash.slice(0, 7)}</div>

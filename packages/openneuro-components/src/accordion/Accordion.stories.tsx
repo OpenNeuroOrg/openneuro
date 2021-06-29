@@ -14,7 +14,6 @@ const Template: Story<AccordionWrapProps> = args => <AccordionWrap {...args} />
 const singleTabAccordion = (
   <AccordionTab
     accordionStyle="plain"
-    name="single"
     id="tab1"
     label="Single Tab"
     children="This is a single accordion"
