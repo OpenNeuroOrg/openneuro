@@ -22,7 +22,9 @@ export default async function main(): Promise<void> {
   })
 
   const accessToken = jwt.sign(
-    { scopes: ['dataset:indexing'] },
+    {
+      scopes: ['dataset:indexing'],
+    },
     process.env.JWT_SECRET,
     { expiresIn: 60 * 60 * 3 }, // 3 hours
   )

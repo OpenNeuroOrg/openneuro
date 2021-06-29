@@ -31,9 +31,13 @@ export const dataset = (obj, { id }, { user, userInfo }) => {
 
 export const datasets = (parent, args, { user, userInfo }) => {
   if (user) {
-    return datalad.getDatasets({ ...args, userId: user, admin: userInfo.admin })
+    return datalad.getDatasets({
+      ...args,
+      userId: user,
+      admin: userInfo.admin,
+    })
   } else {
-    return datalad.getDatasets(args)
+    return datalad.getDatasets({ ...args, indexer: userInfo.indexer })
   }
 }
 

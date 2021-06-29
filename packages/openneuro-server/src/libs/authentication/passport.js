@@ -120,13 +120,21 @@ export const setupPassportAuth = () => {
     const jwtStrategy = new JwtStrategy(
       { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
       (jwt, done) => {
-        // A user must already exist to use a JWT to auth a request
-        User.findOne({ id: jwt.sub, provider: jwt.provider })
-          .then(user => {
-            if (user) done(null, user)
-            else done(null, false)
+        if (jwt.scopes.includes('dataset:indexing')) {
+          done(null, {
+            admin: false,
+            blocked: false,
+            indexer: true,
           })
-          .catch(done)
+        } else {
+          // A user must already exist to use a JWT to auth a request
+          User.findOne({ id: jwt.sub, provider: jwt.provider })
+            .then(user => {
+              if (user) done(null, user)
+              else done(null, false)
+            })
+            .catch(done)
+        }
       },
     )
     passport.use(jwtStrategy)
