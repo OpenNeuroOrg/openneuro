@@ -25,6 +25,7 @@ export interface FacetSearchProps {
   icon?: string
   iconSize?: string
   size?: ButtonPropsSize
+  helpText?: React.ReactNode
   removeFilterItem?(param, value): void
 }
 
@@ -46,6 +47,7 @@ export const FacetSearch = ({
   icon,
   size,
   iconSize,
+  helpText,
   removeFilterItem,
 }: FacetSearchProps) => {
   return (
@@ -56,6 +58,7 @@ export const FacetSearch = ({
         startOpen={startOpen}
         dropdown={dropdown}>
         <div className="facet-search">
+          {helpText ? <div className="help-text">{helpText}</div> : null}
           <TermSearch
             className={className}
             primary={true}

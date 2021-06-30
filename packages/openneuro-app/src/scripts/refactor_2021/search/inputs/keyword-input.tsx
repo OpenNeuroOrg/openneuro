@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { SearchParamsCtx, removeFilterItem } from '../search-params-ctx'
-import { TermSearch } from '@openneuro/components'
+import { TermSearch, Icon } from '@openneuro/components'
 
 const KeywordInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -36,8 +36,18 @@ const KeywordInput: FC = () => {
         pushTerm={addKeyword}
         allTerms={keywords}
         removeFilterItem={removeFilterItem(setSearchParams)}
+        tipContent={
+          <span>
+            Each time the <Icon icon="fas fa-plus" /> button is clicked, it will
+            add a search filter. Multiple words in a filter will return results
+            containing either or both words. For advanced filters use the{' '}
+            <a href="" target="_blank">
+              simple query string syntax
+            </a>
+            .
+          </span>
+        }
       />
-      <span>?</span>
     </>
   )
 }

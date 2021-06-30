@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { SearchParamsCtx, removeFilterItem } from '../search-params-ctx'
-import { FacetSearch } from '@openneuro/components'
+import { FacetSearch, Icon } from '@openneuro/components'
 
 const TaskInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -37,6 +37,17 @@ const TaskInput: FC = () => {
       pushTerm={addTask}
       allTerms={tasks}
       removeFilterItem={removeFilterItem(setSearchParams)}
+      helpText={
+        <span>
+          Each time the <Icon icon="fas fa-plus" /> button is clicked, it will
+          add a search filter. Multiple words in a filter will return results
+          containing either or both words. For advanced filters use the{' '}
+          <a href="" target="_blank">
+            simple query string syntax
+          </a>
+          .
+        </span>
+      }
     />
   )
 }
