@@ -56,16 +56,15 @@ export const Button = ({
       ? 'img-icon-text'
       : null
   const fontIcon = icon ? (
-    <span>
-      <span className="sr-only">{label}</span>
-      <i style={{ fontSize: iconSize }} className={icon}></i>
-    </span>
+    <i style={{ fontSize: iconSize }} className={icon} aria-hidden="true"></i>
   ) : null
   const imgIcon = imgSrc ? (
-    <span>
-      <span className="sr-only">{label}</span>
-      <img style={{ width: iconSize }} src={imgSrc} alt="" />
-    </span>
+    <img
+      style={{ width: iconSize }}
+      src={imgSrc}
+      alt={label}
+      aria-hidden="true"
+    />
   ) : null
 
   return (
@@ -81,6 +80,7 @@ export const Button = ({
         `${className}`,
       ].join(' ')}
       style={{ backgroundColor, color }}
+      aria-label={label}
       {...props}>
       {imgIcon}
       {fontIcon}
