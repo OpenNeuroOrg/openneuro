@@ -43,6 +43,9 @@ export interface SearchResultItemProps {
         },
       ]
     }
+    metadata: {
+      ages: number
+    }
     draft: {
       id: string
       summary: {
@@ -115,6 +118,15 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     <span className="result-summary-meta">
       <strong>Sessions: </strong>
       <span>{numSessions.toLocaleString()}</span>
+    </span>
+  )
+
+  const ages = (
+    <span className="result-summary-meta">
+      <strong>Participants Ages: </strong>
+      <span>
+        {node.metadata.ages ? 'N/A' : node.metadata.ages.toLocaleString()}
+      </span>
     </span>
   )
   const subjects = (
@@ -298,6 +310,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
           {accessionNumber}
           {sessions}
           {subjects}
+          {ages}
           {size}
           {files}
         </div>

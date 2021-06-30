@@ -50,6 +50,9 @@ const searchQuery = gql`
               }
             }
           }
+          metadata {
+            ages
+          }
           draft {
             id
             summary {
