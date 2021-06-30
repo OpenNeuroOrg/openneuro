@@ -58,6 +58,9 @@ async function createServer(): Promise<void> {
           },
         ],
       },
+      optimizeDeps: {
+        include: ['react-multi-carousel'],
+      },
     })
     // use vite's connect instance as middleware
     app.use(vite.middlewares)
