@@ -40,8 +40,8 @@ const KeywordInput: FC = () => {
           <span>
             Each time the <Icon icon="fas fa-plus" /> button is clicked, it will
             add a search filter. Multiple words in a filter will return results
-            containing either or both words. For advanced filters use the{' '}
-            <a href="" target="_blank">
+            containing any or all words. For advanced filters use the{' '}
+            <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#simple-query-string-syntax">
               simple query string syntax
             </a>
             .

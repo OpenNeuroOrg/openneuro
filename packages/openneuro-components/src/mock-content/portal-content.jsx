@@ -28,11 +28,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -52,11 +48,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -76,11 +68,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -100,11 +88,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -124,11 +108,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
