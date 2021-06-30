@@ -37,17 +37,21 @@ export const decodeCursor = cursor =>
 export const elasticRelayConnection = (
   { body },
   childResolvers = { dataset },
+  user = null,
+  userInfo = null,
 ) => {
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
   return {
-    edges: body.hits.hits.map(hit => ({
-      node: childResolvers.dataset(
-        null,
-        { id: hit._source.id },
-        { user: null, userInfo: null }, // All searches are anonymous
-      ),
-    })),
+    edges: body.hits.hits
+      .map(hit => ({
+        node: childResolvers.dataset(
+          null,
+          { id: hit._source.id },
+          { user, userInfo },
+        ),
+      }))
+      .filter(edge => edge !== null), // remove datasets that user does not have permissions for
     pageInfo: {
       count,
       endCursor: lastMatch
@@ -174,7 +178,7 @@ export const advancedDatasetSearchConnection = async (
     size: first,
     body: requestBody,
   })
-  return elasticRelayConnection(result)
+  return elasticRelayConnection(result, undefined, user, userInfo)
 }
 
 export const advancedDatasetSearch = {
