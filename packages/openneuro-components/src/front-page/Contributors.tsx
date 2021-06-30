@@ -17,7 +17,7 @@ export const Contributors: React.FC<ContributersProps> = ({}) => {
         <div className="contributors-wrap">
           {frontPage.support.map((item, index) => (
             <div key={index} className="contributor">
-              <a href={item.link} title={item.title} rel="noopener noreferrer">
+              <a href={item.link} title={item.title}>
                 <img src={item.logo} alt={item.alt} />
               </a>
             </div>
