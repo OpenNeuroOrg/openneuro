@@ -37,7 +37,7 @@ export const datasets = (parent, args, { user, userInfo }) => {
       admin: userInfo.admin,
     })
   } else {
-    return datalad.getDatasets({ ...args, indexer: userInfo.indexer })
+    return datalad.getDatasets({ ...args, indexing: userInfo.indexer })
   }
 }
 
