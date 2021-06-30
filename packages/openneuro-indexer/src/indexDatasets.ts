@@ -43,7 +43,6 @@ export async function indexDataset(
   datasetObj: DatasetQueryResult,
 ): Promise<ApiResponse> {
   try {
-    console.log(`Indexing "${datasetObj.id}"`)
     const response: ApiResponse = await elasticClient.index(
       extractDatasetDocument(datasetObj),
     )

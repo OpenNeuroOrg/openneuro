@@ -4,7 +4,7 @@ export const indexQuery = gql`
   query getDatasets(
     $cursor: String
     $orderBy: DatasetSort = { created: descending }
-    $filterBy: DatasetFilter = { public: true }
+    $filterBy: DatasetFilter = {}
   ) {
     datasets(first: 5, after: $cursor, orderBy: $orderBy, filterBy: $filterBy) {
       edges {
