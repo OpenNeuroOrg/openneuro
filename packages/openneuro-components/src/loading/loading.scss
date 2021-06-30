@@ -7,25 +7,6 @@ $spinner-hexagon-width: $spinner-width;
 $spinner-hexagon-height: $spinner-height * 2;
 $spinner-hexagon-bg-color: var(--current-theme-primary);
 
-/*
-.cxq-spinner.cxq-spinner--doubleBounce
-  .cxq-spinner-hexagon
-  .cxq-spinner-hexagon
-
-
-.cxq-spinner.cxq-spinner--rotatePlane
-  .cxq-spinner-hexagon
-
-.cxq-spinner.cxq-spinner--waveStretchDelay
-  .cxq-spinner-hexagon
-  .rects
-    .rect
-    .rect
-    .rect
-    .rect
-    .rect
-*/
-
 .cxq-spinner {
   position: relative;
   width: $spinner-hexagon-width;
