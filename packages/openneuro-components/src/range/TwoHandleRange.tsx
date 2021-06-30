@@ -15,7 +15,7 @@ export interface TwoHandleRangeProps {
   // [min, max] starting values
   defaultValue: [number, number]
   // Change event handler for either value changing, returns [minVal, maxVal]
-  onChange: React.ChangeEvent<HTMLInputElement>
+  onChange: (value: [number, number]) => void
 }
 
 export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
@@ -58,18 +58,28 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
     }
   }, [maxVal, getPercent])
 
-  const minChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const minChangeHandler = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    const changeEvent = event as React.ChangeEvent<HTMLInputElement>
     const value = stepping(
-      Math.min(Number(event.target.value), maxVal - 1),
+      Math.min(Number(changeEvent.target.value), maxVal - 1),
       step,
     )
     setMinVal(value)
     minValRef.current = value
     onChange([value, maxVal])
   }
-  const maxChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const maxChangeHandler = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    const changeEvent = event as React.ChangeEvent<HTMLInputElement>
     const value = stepping(
-      Math.max(Number(event.target.value), minVal + 1),
+      Math.max(Number(changeEvent.target.value), minVal + 1),
       step,
     )
     setMaxVal(value)

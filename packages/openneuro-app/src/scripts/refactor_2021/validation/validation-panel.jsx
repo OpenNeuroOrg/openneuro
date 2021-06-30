@@ -12,6 +12,7 @@ class ValidationPanel extends React.Component {
       <AccordionWrap className="validation-wrap">
         <AccordionTab
           className="status"
+          accordionStyle="plain"
           label={this.props.heading} //eventKey="1"
         >
           {this.props.children ? this.props.children : null}

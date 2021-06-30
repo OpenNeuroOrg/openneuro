@@ -5,7 +5,7 @@ import { Icon } from '../Icon'
 
 describe('Icon component', () => {
   it('provides "img" role', async () => {
-    render(<Icon />)
+    render(<Icon label="test icon" />)
     expect(await screen.getByRole('img')).toBeVisible()
   })
 })

@@ -167,23 +167,23 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <>
             <Tooltip tooltip="Publish the dataset publicly" flow="up">
               <Link className="dataset-tool" to={rootPath + '/publish'}>
-                <Icon icon="fa fa-globe" /> Publish
+                <Icon icon="fa fa-globe" label="Publish" />
               </Link>
             </Tooltip>
             <Tooltip tooltip="Share this dataset with collaborators" flow="up">
               <Link className="dataset-tool" to={rootPath + '/share'}>
-                <Icon icon="fa fa-user" /> Share
+                <Icon icon="fa fa-user" label="Share" />
               </Link>
             </Tooltip>
 
             <Tooltip tooltip="Create a new version of the dataset" flow="up">
               <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" /> Snapshot
+                <Icon icon="fa fa-camera" label="Snapshot" />
               </Link>
             </Tooltip>
             <span>
               <Link className="dataset-tool" to={rootPath + '/download'}>
-                <Icon icon="fa fa-download" /> Download
+                <Icon icon="fa fa-download" label="Download" />
               </Link>
             </span>
             <Tooltip
@@ -191,12 +191,12 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
               flow="up">
               <Link className="dataset-tool" to={rootPath + '/metadata'}>
-                <Icon icon="fa fa-file-code" /> Metadata
+                <Icon icon="fa fa-file-code" label="Metadata" />
               </Link>
             </Tooltip>
             <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
               <Link className="dataset-tool" to={rootPath + '/delete'}>
-                <Icon icon="fa fa-trash" /> Delete
+                <Icon icon="fa fa-trash" label="Delete" />
               </Link>
             </Tooltip>
           </>

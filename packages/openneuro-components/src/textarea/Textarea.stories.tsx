@@ -14,7 +14,7 @@ const TextareaTemplate: Story<TextareaProps> = ({
   name,
   type,
 }) => {
-  const [value, setValue] = React.useState()
+  const [value, setValue] = React.useState('')
 
   return (
     <>
@@ -24,7 +24,7 @@ const TextareaTemplate: Story<TextareaProps> = ({
         label={label}
         name={name}
         value={value}
-        setValue={setValue}
+        setValue={e => setValue(e.currentTarget.value)}
       />
     </>
   )

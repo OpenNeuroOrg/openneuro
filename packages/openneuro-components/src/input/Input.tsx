@@ -1,15 +1,17 @@
 import React from 'react'
 import './input.scss'
 
+export type InputPropsStyle = 'inline' | 'float' | 'default'
+
 export interface InputProps {
   placeholder: string
   type: string
-  disabled: boolean
+  disabled?: boolean
   label?: string
   name: string
-  labelStyle?: 'inline' | 'float' | 'default'
+  labelStyle?: InputPropsStyle
   value: string
-  setValue: string
+  setValue: (string) => void
   onKeyDown?(event): void
 }
 

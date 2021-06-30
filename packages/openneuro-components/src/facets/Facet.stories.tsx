@@ -1,7 +1,11 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-import { FacetSelect, FacetSelectProps } from './FacetSelect'
+import {
+  FacetSelect,
+  FacetSelectProps,
+  FacetSelectValueType,
+} from './FacetSelect'
 import { modalities } from '../mock-content/facet-content'
 
 export default {
@@ -16,7 +20,7 @@ const FacetSelectTemplate: Story<FacetSelectProps> = ({
   accordionStyle,
   dropdown,
 }) => {
-  const [selected, setSelected] = React.useState()
+  const [selected, setSelected] = React.useState<FacetSelectValueType>()
 
   return (
     <div>

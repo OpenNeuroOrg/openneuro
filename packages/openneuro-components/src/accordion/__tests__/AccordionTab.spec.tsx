@@ -6,7 +6,12 @@ import { AccordionTab } from '../AccordionTab'
 describe('AccordionTab component', () => {
   it('is open by default with startOpen prop', async () => {
     render(
-      <AccordionTab id="test" className="" label="test" startOpen>
+      <AccordionTab
+        id="test"
+        className=""
+        label="test"
+        startOpen
+        accordionStyle="plain">
         Child Element Text
       </AccordionTab>,
     )

@@ -32,6 +32,7 @@ export const WarnButton = ({
           backgroundColor="#c00342"
           onClick={() => setDisplayOptions(currentState => !currentState)}
           size="xsmall"
+          label="cancel"
         />
 
         <Button
@@ -45,6 +46,7 @@ export const WarnButton = ({
             setDisplayOptions(currentState => !currentState)
           }}
           size="xsmall"
+          label="confirm"
         />
       </div>
     </div>

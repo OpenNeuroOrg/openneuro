@@ -11,7 +11,7 @@ export default {
 } as Meta
 
 const RadioTemplate: Story<RadioGroupProps> = ({ radioArr, layout, name }) => {
-  const [selected, setSelected] = React.useState(0)
+  const [selected, setSelected] = React.useState('0')
   return (
     <RadioGroup
       setSelected={setSelected}

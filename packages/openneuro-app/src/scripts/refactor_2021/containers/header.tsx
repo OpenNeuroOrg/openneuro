@@ -37,11 +37,12 @@ const HeaderContainer: FC = () => {
     history.push('/search')
   }
 
-  const toggleLogin = userModalParams =>
+  const toggleLogin = userModalParams => {
     setUserModalParams(prevState => ({
       ...prevState,
       userModalParams,
     }))
+  }
 
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
   const [isOpenUpload, setUploadIsOpen] = React.useState(false)
@@ -66,7 +67,7 @@ const HeaderContainer: FC = () => {
       renderOnFreshDeskWidget={() => <FreshdeskWidget />}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
-          profile={profile}
+          user={profile}
           renderFacetSelect={() => (
             <ModalitySelect
               startOpen={false}

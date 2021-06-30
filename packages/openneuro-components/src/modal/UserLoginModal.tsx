@@ -9,10 +9,16 @@ import orcidIcon from '../assets/orcid_24x24.png'
 
 import '../header/header.scss'
 
-export const UserLoginModal: React.FC = ({
+export interface UserLoginModalProps {
+  userModalParams?: boolean
+  setUserModalParams?: (boolean) => void
+  children?: React.ReactNode
+}
+
+export const UserLoginModal = ({
   userModalParams,
   setUserModalParams,
-}) => {
+}: UserLoginModalProps) => {
   return (
     <>
       <Modal
@@ -20,7 +26,7 @@ export const UserLoginModal: React.FC = ({
         toggle={() => setUserModalParams(prevState => !prevState)}
         closeText="Close">
         <div className="sign-in-modal-header">
-          <Logo horizontal dark={true} width="230px" className="m-t-20" />
+          <Logo horizontal dark={true} width="230px" />
           <h2>Sign in</h2>
         </div>
         <div className="sign-in-modal-content">
@@ -42,9 +48,9 @@ export const UserLoginModal: React.FC = ({
             />
             <AccordionWrap>
               <AccordionTab
-                name="single"
                 id="orcid-info-accordion"
                 label="What is this?"
+                accordionStyle="plain"
                 children={
                   <>
                     ORCID users are identified and connected to their

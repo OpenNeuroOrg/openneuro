@@ -4,7 +4,7 @@ import './radio.scss'
 export interface RadioProps {
   label: string
   name: string
-  onChange?: React.MouseEventHandler<HTMLInputElement>
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
   checked: boolean
   value: string
 }

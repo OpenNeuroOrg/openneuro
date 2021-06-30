@@ -39,7 +39,7 @@ const Template: Story<HeaderProps> = ({
       pushHistory={path => console.log(`User navigation to ${path}.`)}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
-          profile={profile}
+          user={profile}
           renderFacetSelect={() => (
             <FrontFacetExample {...FrontFacetExample.args} />
           )}
@@ -49,6 +49,8 @@ const Template: Story<HeaderProps> = ({
               type="text"
               name="front-page-search"
               labelStyle="default"
+              value=""
+              setValue={value => {}}
             />
           )}
           onSearch={() => console.log('User search by keyword.')}

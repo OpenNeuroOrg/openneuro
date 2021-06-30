@@ -2,18 +2,16 @@ import React from 'react'
 
 import { Button } from '../button/Button'
 import { ModalityCube } from '../modality-cube/ModalityCube'
-import { Input } from '../input/Input'
 import { cubeData } from '../mock-content/modality-cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
 import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 import { frontPage } from '../mock-content/front-page-content.jsx'
-import { FacetSelect } from '../facets/FacetSelect'
 
 export interface LandingExpandedHeaderProps {
   user?: {}
-  renderFacetSelect: () => typeof FacetSelect
-  renderSearchInput: () => typeof Input
+  renderFacetSelect: () => React.ReactNode
+  renderSearchInput: () => React.ReactNode
   onSearch: () => void
 }
 

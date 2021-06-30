@@ -14,14 +14,14 @@ const RangeTemplate: Story<TwoHandleRangeProps> = ({
   step,
   defaultValue,
 }) => {
-  const [newvalue, setNewValue] = React.useState(defaultValue)
+  const setNewValue = (value: [number, number]) => {}
   return (
     <TwoHandleRange
       min={min}
       max={max}
       step={step}
-      newvalue={newvalue}
-      setNewValue={setNewValue}
+      defaultValue={defaultValue}
+      onChange={setNewValue}
     />
   )
 }

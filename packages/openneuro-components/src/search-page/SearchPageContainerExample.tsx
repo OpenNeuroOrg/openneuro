@@ -7,7 +7,7 @@ import { SearchPage } from './SearchPage'
 import { SearchSortContainerExample } from './SearchSortContainerExample'
 import { Button } from '../button/Button'
 import { sortBy } from '../mock-content/sortby-list'
-import { FacetSelect } from '../facets/FacetSelect'
+import { FacetSelect, FacetSelectValueType } from '../facets/FacetSelect'
 import { FacetRadio } from '../facets/FacetRadio'
 import { FacetRange } from '../facets/FacetRange'
 import { FacetSearch } from '../facets/FacetSearch'
@@ -44,20 +44,30 @@ export const SearchPageContainerExample = ({
   const pushKeyword = () => {
     setAllKeywords(prevState => [...prevState, keywordValueRef.current])
   }
-  const [modality_selected, setModality] = React.useState()
+  const [modality_selected, setModality] =
+    React.useState<FacetSelectValueType>()
   const [datasetType_selected, setDatasetsType] = React.useState('All Public')
-  const [datasetStatus_selected, setDatasetStatus] = React.useState()
-  const [ageRange, setAgeRange] = React.useState([null, null])
-  const [subjectCountRange, setSubjectRange] = React.useState([null, null])
+  const [datasetStatus_selected, setDatasetStatus] =
+    React.useState<FacetSelectValueType>()
+  const [ageRange, setAgeRange]: [
+    [number, number],
+    React.Dispatch<[number, number]>,
+  ] = React.useState([null, null])
+  const [subjectCountRange, setSubjectRange]: [
+    [number, number],
+    React.Dispatch<[number, number]>,
+  ] = React.useState([null, null])
   const [authorValue, setAuthorValue] = React.useState('')
   const [allAuthors, pushAuthor] = React.useState([])
   const [gender_selected, setGender] = React.useState('All')
   const [taskValue, setTaskValue] = React.useState('')
   const [allTasks, pushTask] = React.useState([])
-  const [diagnosis_selected, setDiagnosis] = React.useState()
-  const [section_selected, setSection] = React.useState()
-  const [species_selected, setSpecies] = React.useState()
-  const [studyDomain_selected, setDomain] = React.useState()
+  const [diagnosis_selected, setDiagnosis] =
+    React.useState<FacetSelectValueType>()
+  const [section_selected, setSection] = React.useState<FacetSelectValueType>()
+  const [species_selected, setSpecies] = React.useState<FacetSelectValueType>()
+  const [studyDomain_selected, setDomain] =
+    React.useState<FacetSelectValueType>()
   const [date_selected, setDate] = React.useState('All Time')
 
   let filterBlockIsEmpty
@@ -205,11 +215,8 @@ export const SearchPageContainerExample = ({
                 min={0}
                 max={100}
                 step={10}
-                dots={true}
-                pushable={5 as unknown as undefined}
                 defaultValue={[0, 20]}
-                newvalue={ageRange}
-                setNewValue={setAgeRange}
+                onChange={setAgeRange}
               />
               <FacetRange
                 startOpen={false}
@@ -218,11 +225,8 @@ export const SearchPageContainerExample = ({
                 min={0}
                 max={100}
                 step={10}
-                dots={true}
-                pushable={5 as unknown as undefined}
                 defaultValue={[0, 20]}
-                newvalue={subjectCountRange}
-                setNewValue={setSubjectRange}
+                onChange={setSubjectRange}
               />
               <FacetSelect
                 selected={diagnosis_selected}

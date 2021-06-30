@@ -3,7 +3,7 @@ import React from 'react'
 import './read-more.scss'
 
 export interface ReadMoreProps {
-  children: React.ReactElement
+  children: React.ReactNode
   id: string
   collapseabel: string
   expandLabel: string

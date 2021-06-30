@@ -1,23 +1,19 @@
 import React from 'react'
-import { AccordionTab } from '../accordion/AccordionTab'
+import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { TwoHandleRange } from '../range/TwoHandleRange'
 import './facet.scss'
 
 export interface FacetRangeProps {
-  accordionStyle: string
+  accordionStyle: AccordionTabStyle
   startOpen: boolean
   label: string
   dropdown?: boolean
   min: number
   max: number
-  step?: number
-  dots?: boolean
-  pushable?: boolean
+  step: number
   defaultValue: [number | null, number | null]
-  marks?: { number: string }
-  newvalue: [number, number]
-  setNewValue: (newvalue) => void
+  onChange: (newvalue) => void
 }
 
 export const FacetRange = ({
@@ -28,12 +24,8 @@ export const FacetRange = ({
   min,
   max,
   step,
-  dots,
-  pushable,
   defaultValue,
-  marks,
-  newvalue,
-  setNewValue,
+  onChange,
 }: FacetRangeProps) => {
   return (
     <AccordionWrap className="facet-accordion">
@@ -47,12 +39,8 @@ export const FacetRange = ({
             min={min}
             max={max}
             step={step}
-            dots={dots}
-            marks={marks}
-            pushable={pushable}
             defaultValue={defaultValue}
-            newvalue={newvalue}
-            setNewValue={setNewValue}
+            onChange={onChange}
           />
         </div>
       </AccordionTab>

@@ -20,11 +20,8 @@ const AgeRangeInput: FC = () => {
       min={0}
       max={100}
       step={10}
-      dots={true}
-      pushable={5 as unknown as undefined}
       defaultValue={[0, 20]}
-      newvalue={ageRange}
-      setNewValue={setAgeRange}
+      onChange={setAgeRange}
     />
   )
 }

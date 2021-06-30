@@ -2,7 +2,11 @@ import React from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 import { Link } from 'react-router-dom'
-import { CarouselProps, ArrowProps } from 'react-multi-carousel/lib/types'
+import {
+  CarouselProps,
+  ArrowProps,
+  ResponsiveType,
+} from 'react-multi-carousel/lib/types'
 import 'react-multi-carousel/lib/styles.css'
 
 import './slider.scss'
@@ -17,51 +21,21 @@ export interface ActivitySliderProps {
   keyBoardControl?: boolean
   containerClass?: string
   itemClass?: string
+  slideHeader?: React.ReactNode
 
-  responsive: {
-    superLargeDesktop?: {
-      // the naming can be any, depends on you.
-      breakpoint?: { max?: number; min?: number }
-      items?: number
-    }
-    desktop?: {
-      breakpoint?: { max?: number; min?: number }
-      items?: number
-    }
-    tablet?: {
-      breakpoint?: { max?: number; min?: number }
-      items?: number
-    }
-    mobile?: {
-      breakpoint?: { max?: number; min?: number }
-      items?: number
-    }
-  }
-  data: {
-    id: string
-    analytics: {
-      views: number
-    }
-    latestSnapshot: {
-      tag: string
-      description: {
-        Name: string
-      }
-      summary: {
-        modalities: string[]
-      }
-    }
-  }[]
+  responsive: ResponsiveType
+  data: Array<any>
 }
-const LeftArrow: React.FC = ({ onClick }: ArrowProps) => (
+
+const LeftArrow = ({ onClick }: ArrowProps) => (
   <i className="fas fa-chevron-left" onClick={() => onClick()} />
 )
 
-const RightArrow: React.FC = ({ onClick }: ArrowProps) => (
+const RightArrow = ({ onClick }: ArrowProps) => (
   <i className="fas fa-chevron-right" onClick={() => onClick()} />
 )
 
-export const ActivitySlider: React.FC<ActivitySliderProps> = ({
+export const ActivitySlider = ({
   className,
   data,
   showDots,
@@ -71,7 +45,7 @@ export const ActivitySlider: React.FC<ActivitySliderProps> = ({
   keyBoardControl,
   containerClass,
   itemClass,
-}) => {
+}: ActivitySliderProps) => {
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>

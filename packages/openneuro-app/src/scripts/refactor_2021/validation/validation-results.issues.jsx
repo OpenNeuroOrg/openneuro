@@ -60,6 +60,7 @@ class Issues extends React.Component {
         <AccordionTab
           key={index}
           label={header}
+          accordionStyle="plain"
           className="validation-error fade-in"
           //eventKey={index}
         >

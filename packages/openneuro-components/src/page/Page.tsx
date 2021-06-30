@@ -35,10 +35,11 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           onLogout={headerArgs.onLogout}
           onCreateAccount={headerArgs.onCreateAccount}
           expanded={headerArgs.expanded}
+          pushHistory={() => {}}
           renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
           renderOnExpanded={profile => (
             <LandingExpandedHeader
-              profile={profile}
+              user={profile}
               renderFacetSelect={() => (
                 <FrontFacetExample {...FrontFacetExample.args} />
               )}
@@ -48,6 +49,9 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
                   type="text"
                   name="front-page-search"
                   labelStyle="default"
+                  label="search"
+                  value=""
+                  setValue={value => {}}
                 />
               )}
               onSearch={() => console.log('User search by keyword.')}

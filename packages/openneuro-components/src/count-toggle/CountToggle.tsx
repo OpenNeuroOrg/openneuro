@@ -2,7 +2,6 @@ import React from 'react'
 import './count-toggle.scss'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
-import { Modal } from '../modal/Modal'
 
 export interface CountToggleProps {
   label?: string
@@ -31,8 +30,9 @@ export const CountToggle = ({
         className={clicked ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={toggleClick}>
-        {label} <span className="count-span">{count}</span>
+        onClick={toggleClick}
+        label={label}>
+        <span className="count-span">{count}</span>
       </Button>
     </span>
   )
@@ -42,8 +42,9 @@ export const CountToggle = ({
         className={clicked ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={toggleLogin}>
-        {label} <span>{count}</span>
+        onClick={toggleLogin}
+        label={label}>
+        <span>{count}</span>
       </Button>
     </span>
   )

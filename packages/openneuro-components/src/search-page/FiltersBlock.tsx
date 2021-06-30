@@ -3,23 +3,24 @@ import { Button } from '../button/Button'
 import { FilterListItem } from './FilterListItem'
 import { FilterDateItem } from './FilterDateItem'
 import { TermListItem } from './TermListItem'
+import { FacetSelectValueType } from '../facets/FacetSelect'
 import './filters-block.scss'
 
 export interface FiltersBlockProps {
   keywords: string[]
-  modality_selected?: { label: string; value: string }
+  modality_selected?: FacetSelectValueType
   datasetType_selected?: string
-  datasetStatus_selected?: { label: string; value: string }
+  datasetStatus_selected?: FacetSelectValueType
   ageRange?: [number, number]
   subjectCountRange?: [number, number]
   authors: string[]
   gender_selected?: string
   date_selected?: string
   tasks: string[]
-  diagnosis_selected?: { label: string; value: string }
-  section_selected?: { label: string; value: string }
-  species_selected?: { label: string; value: string }
-  studyDomain_selected?: { label: string; value: string }
+  diagnosis_selected?: FacetSelectValueType
+  section_selected?: FacetSelectValueType
+  species_selected?: FacetSelectValueType
+  studyDomain_selected?: FacetSelectValueType
   removeFilterItem?(isModality?: boolean): (key: string, value) => void
   removeAllFilters?(): void
   numTotalResults: number
