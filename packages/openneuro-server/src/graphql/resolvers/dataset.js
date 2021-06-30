@@ -37,7 +37,7 @@ export const datasets = (parent, args, { user, userInfo }) => {
       admin: userInfo.admin,
     })
   } else {
-    return datalad.getDatasets({ ...args, indexing: userInfo.indexer })
+    return datalad.getDatasets({ ...args, indexing: userInfo?.indexer })
   }
 }
 
@@ -87,6 +87,8 @@ export const createDataset = (
   { affirmedDefaced, affirmedConsent },
   { user, userInfo },
 ) => {
+  console.log('PRE IF/ELSE')
+  console.log({ user, userInfo })
   // Check for a valid login
   if (user) {
     if (affirmedDefaced || affirmedConsent) {
@@ -100,6 +102,7 @@ export const createDataset = (
       )
     }
   } else {
+    console.log('IN ELSE')
     throw new Error('You must be logged in to create a dataset.')
   }
 }

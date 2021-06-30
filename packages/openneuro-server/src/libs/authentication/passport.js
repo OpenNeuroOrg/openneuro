@@ -120,7 +120,7 @@ export const setupPassportAuth = () => {
     const jwtStrategy = new JwtStrategy(
       { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
       (jwt, done) => {
-        if (jwt.scopes.includes('dataset:indexing')) {
+        if (jwt.scopes?.includes('dataset:indexing')) {
           done(null, {
             admin: false,
             blocked: false,
