@@ -83,9 +83,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <KeywordInput />
           <ShowDatasetRadios />
           {!portalContent ? (
-            <ModalitySelect portalStyles={true} />
+            <ModalitySelect portalStyles={true} label="Modalites" />
           ) : (
-            <ModalitySelect portalStyles={false} />
+            <ModalitySelect
+              portalStyles={false}
+              label="Choose Another Modality"
+            />
           )}
           <AgeRangeInput />
           <SubjectCountRangeInput />
@@ -99,12 +102,15 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <StudyDomainSelect />
         </>
       )}
-      renderSearchResultsList={() =>
+      renderLoading={() =>
         loading ? (
           <div className="search-loading">
             <Loading />
           </div>
-        ) : numTotalResults === 0 ? (
+        ) : null
+      }
+      renderSearchResultsList={() =>
+        numTotalResults === 0 ? (
           <h3>No results: please broaden your search.</h3>
         ) : (
           <>

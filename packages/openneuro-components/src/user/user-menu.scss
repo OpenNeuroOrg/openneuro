@@ -8,38 +8,8 @@
     border-radius: $border-radius-default;
     width: 100%;
     min-width: 200px;
-    right: 0;
-  }
-  .user-menu-list-label {
-    position: relative;
-    overflow: hidden;
-    width: 60px;
-    background-color: #000;
-    transition: background-color 0.3s;
-    img {
-      width: 100%;
-      height: auto;
-      transition: opacity 0.6s;
-      image-rendering: -webkit-optimize-contrast;
-    }
-    i {
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: color 0.4s;
-    }
-    &:hover {
-      img {
-        opacity: 0.7;
-      }
-      i {
-        color: $on-light-aqua;
-      }
-    }
+    right: -20px;
+    top: 30px;
   }
 
   .user-menu-dropdown-list {

@@ -66,25 +66,22 @@ export const Header = ({
               <li>
                 <NavLink to="/faq">FAQ</NavLink>
               </li>
+              {profile ? (
+                <li>
+                  <span onClick={toggleUpload}>Upload</span>
+                </li>
+              ) : null}
             </ul>
           </div>
           <div className="navbar-account">
             {profile ? (
-              <div className="header-upload-btn">
-                <Button
-                  onClick={toggleUpload}
-                  label="upload a dataset"
-                  size="large"
-                  icon="fas fa-upload"
-                  iconSize="'23px"
-                />
+              <div className="header-account-btn">
                 <UserMenu
                   profile={profile}
                   signOutAndRedirect={() => console.log('signout')}
                 />
               </div>
             ) : (
-              // TODO ADD ACCOUNT INFO DROPDOWN
               <>
                 <Button
                   navbar

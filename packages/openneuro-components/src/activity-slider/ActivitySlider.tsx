@@ -60,6 +60,28 @@ export const ActivitySlider = ({
         customRightArrow={<RightArrow />}>
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
+            <div className="ds-modality">
+              <div className="hexagon-wrapper">
+                {node.latestSnapshot.summary !== null ? (
+                  <>
+                    {/* TODO GET the primary modality when available */}
+                    <div
+                      className={
+                        'hexagon ' +
+                        node.latestSnapshot.summary.modalities[0].substr(0, 4)
+                      }></div>
+                    <div className="label">
+                      {node.latestSnapshot.summary.modalities[0].substr(0, 4)}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="hexagon no-modality"></div>
+                    <div className="label">N/A</div>
+                  </>
+                )}
+              </div>
+            </div>
             <div className="ds-name">
               <h4>
                 <Link
@@ -85,29 +107,6 @@ export const ActivitySlider = ({
                 {node.analytics.views.toLocaleString()} views
               </div>
             ) : null}
-
-            <div className="ds-modality">
-              <div className="hexagon-wrapper">
-                {node.latestSnapshot.summary !== null ? (
-                  <>
-                    {/* TODO GET the primary modality when available */}
-                    <div
-                      className={
-                        'hexagon ' +
-                        node.latestSnapshot.summary.modalities[0].substr(0, 4)
-                      }></div>
-                    <div className="label">
-                      {node.latestSnapshot.summary.modalities[0].substr(0, 4)}
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="hexagon no-modality"></div>
-                    <div className="label">N/A</div>
-                  </>
-                )}
-              </div>
-            </div>
           </div>
         ))}
       </Carousel>

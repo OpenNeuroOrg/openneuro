@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Dropdown } from '../dropdown/Dropdown'
-import { Avatar } from '../user/Avatar'
 
 import '../dropdown/dropdown.scss'
 import './user-menu.scss'
@@ -18,12 +17,7 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
   return (
     <Dropdown
       className={'user-menu-dropdown'}
-      label={
-        <div className="user-menu-list-label">
-          <Avatar profile={profile} />
-          <i className="fas fa-ellipsis-v" />
-        </div>
-      }
+      label={<div className="user-menu-label">Account</div>}
       children={
         <div className="user-menu-dropdown-list">
           <ul>

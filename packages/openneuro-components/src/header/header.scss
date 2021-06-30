@@ -3,11 +3,11 @@ header {
   position: relative;
 }
 
-.header-upload-btn {
+.header-account-btn {
   display: flex;
   align-items: center;
   background: #eee;
-  padding: 10px 10px 10px 20px;
+  padding: 10px 20px;
   border-radius: $border-radius-default;
   button.on-no-background.icon-text {
     color: $on-dark-aqua;

@@ -16,12 +16,29 @@ $mri-secondary: adjust-color($mri-theme, $lightness: 15%);
 $mri-light: adjust-color($mri-theme, $lightness: 45%);
 
 $eeg-theme: rgba(138, 177, 89, 1);
-$nirs-theme: rgba(235, 83, 152, 1);
+$eeg-hover: adjust-color($eeg-theme, $lightness: 10%);
+$eeg-dark: darken($eeg-theme, 25%);
+$eeg-secondary: adjust-color($eeg-theme, $lightness: 15%);
+$eeg-light: adjust-color($eeg-theme, $lightness: 45%);
+
 $pet-theme: rgba(0, 139, 255, 1);
+$pet-hover: adjust-color($pet-theme, $lightness: 10%);
+$pet-dark: darken($pet-theme, 25%);
+$pet-secondary: adjust-color($pet-theme, $lightness: 15%);
+$pet-light: adjust-color($pet-theme, $lightness: 45%);
+
 $ieeg-theme: rgba(121, 5, 93, 1);
-$ecog-theme: rgba(0, 190, 143, 1);
-$asl-theme: rgba(185, 42, 39, 1);
+$ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
+$ieeg-dark: darken($ieeg-theme, 25%);
+$ieeg-secondary: adjust-color($ieeg-theme, $lightness: 15%);
+$ieeg-light: adjust-color($ieeg-theme, $lightness: 45%);
+
 $meg-theme: rgba(234, 93, 11, 1);
+$meg-hover: adjust-color($meg-theme, $lightness: 10%);
+$meg-dark: darken($meg-theme, 25%);
+$meg-secondary: adjust-color($meg-theme, $lightness: 15%);
+$meg-light: adjust-color($meg-theme, $lightness: 45%);
+
 $on-light-green: #00eeb5;
 $on-light-red: #c00342;
 
@@ -31,15 +48,14 @@ $primary: $on-dark-aqua;
 :root {
   --mri-theme: #{$mri-theme};
   --eeg-theme: #{$eeg-theme};
-  --nirs-theme: #{$nirs-theme};
   --pet-theme: #{$pet-theme};
   --ieeg-theme: #{$ieeg-theme};
-  --ecog-theme: #{$ecog-theme};
+  --meg-theme: #{$meg-theme};
+
   --on-light-aqua: #{$on-light-aqua};
   --on-dark-aqua: #{$on-dark-aqua};
-  --asl-theme: #{$asl-theme};
-  --meg-theme: #{$meg-theme};
   --on-light-green: #{on-light-green};
+
   --current-theme-primary: #{$on-dark-aqua};
   --current-theme-primary-hover: #{$on-light-aqua};
   --current-theme-secondary: #{$on-secondary};
@@ -53,18 +69,14 @@ $primary: $on-dark-aqua;
 .eeg-theme {
   background-color: $eeg-theme;
 }
-.nirs-theme {
-  background-color: $nirs-theme;
-}
+
 .pet-theme {
   background-color: $pet-theme;
 }
 .ieeg-theme {
   background-color: $ieeg-theme;
 }
-.ecog-theme {
-  background-color: $ecog-theme;
-}
+
 .on-light-aqua {
   background-color: $on-light-aqua;
 }
@@ -74,9 +86,7 @@ $primary: $on-dark-aqua;
 .on-dark-aqua {
   background-color: $on-dark-aqua;
 }
-.asl-theme {
-  background-color: $asl-theme;
-}
+
 .meg-theme {
   background-color: $meg-theme;
 }
@@ -93,6 +103,8 @@ $screen-sm: 480px;
 $screen-md: 767px;
 $screen-lg: 989px;
 
+$border-radius-default: 4px;
+
 .search-page-mri,
 .dataset-page-mri {
   --current-theme-primary: #{$mri-theme};
@@ -102,4 +114,38 @@ $screen-lg: 989px;
   --current-theme-primary-light: #{$mri-light};
 }
 
-$border-radius-default: 4px;
+.search-page-eeg,
+.dataset-page-eeg {
+  --current-theme-primary: #{$eeg-theme};
+  --current-theme-primary-hover: #{$eeg-hover};
+  --current-theme-primary-dark: #{$eeg-dark};
+  --current-theme-secondary: #{$eeg-secondary};
+  --current-theme-primary-light: #{$eeg-light};
+}
+
+.search-page-pet,
+.dataset-page-pet {
+  --current-theme-primary: #{$pet-theme};
+  --current-theme-primary-hover: #{$pet-hover};
+  --current-theme-primary-dark: #{$pet-dark};
+  --current-theme-secondary: #{$pet-secondary};
+  --current-theme-primary-light: #{$pet-light};
+}
+
+.search-page-ieeg,
+.dataset-page-ieeg {
+  --current-theme-primary: #{$ieeg-theme};
+  --current-theme-primary-hover: #{$ieeg-hover};
+  --current-theme-primary-dark: #{$ieeg-dark};
+  --current-theme-secondary: #{$ieeg-secondary};
+  --current-theme-primary-light: #{$ieeg-light};
+}
+
+.search-page-meg,
+.dataset-page-meg {
+  --current-theme-primary: #{$meg-theme};
+  --current-theme-primary-hover: #{$meg-hover};
+  --current-theme-primary-dark: #{$meg-dark};
+  --current-theme-secondary: #{$meg-secondary};
+  --current-theme-primary-light: #{$meg-light};
+}

@@ -15,7 +15,7 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
 }) => {
   return (
     <li className="hex">
-      <Link to={'search/' + label.toLowerCase()}>
+      <Link to={'search/modality/' + label.toLowerCase()}>
         <div className={'hexIn ' + label.toLowerCase() + '-cube'}>
           <div>
             <div
