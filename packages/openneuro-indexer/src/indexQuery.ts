@@ -55,6 +55,11 @@ export const indexQuery = gql`
             }
             readme
           }
+          draft {
+            issues {
+              severity
+            }
+          }
           permissions {
             userPermissions {
               level
