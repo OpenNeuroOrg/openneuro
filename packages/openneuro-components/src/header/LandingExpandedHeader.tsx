@@ -10,6 +10,7 @@ import { frontPage } from '../mock-content/front-page-content.jsx'
 
 export interface LandingExpandedHeaderProps {
   user?: {}
+  renderAggregateCounts?: (label?: string) => React.ReactNode
   renderFacetSelect: () => React.ReactNode
   renderSearchInput: () => React.ReactNode
   onSearch: () => void
@@ -17,10 +18,13 @@ export interface LandingExpandedHeaderProps {
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   user,
+  renderAggregateCounts,
   renderFacetSelect,
   renderSearchInput,
   onSearch,
 }) => {
+  const aggregateCounts = label =>
+    renderAggregateCounts ? renderAggregateCounts(label) : null
   const hexGrid = (
     <ul id="hexGrid">
       {cubeData.map((item, index) => (
@@ -28,12 +32,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           key={index}
           label={item.label}
           cubeImage={item.cubeImage}
-          stats={
-            <>
-              <AggregateCount type="publicDataset" count={122} />
-              <AggregateCount type="participants" count={22} />
-            </>
-          }
+          stats={aggregateCounts(item.label)}
         />
       ))}
     </ul>
@@ -45,10 +44,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
         <div className="grid grid-between">
           <div className="col expaned-h-left">
             {frontPage.pageDescription}
-            <div className="header-aggregate">
-              <AggregateCount type="publicDataset" count={202} />
-              <AggregateCount type="participants" count={22} />
-            </div>
+            <div className="header-aggregate">{aggregateCounts(null)}</div>
             <div className="header-modality-wrap">{renderFacetSelect()}</div>
             <span className="header-or-text">Or</span>
             <div className="header-input-wrap">
