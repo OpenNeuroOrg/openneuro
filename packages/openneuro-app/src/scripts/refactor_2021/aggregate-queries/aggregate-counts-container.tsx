@@ -4,22 +4,22 @@ import usePublicDatasetsCount from './use-publicDatasets-count'
 import { AggregateCount } from '@openneuro/components'
 
 export interface AggregateCountsContainerProps {
-  label?: string
+  modality?: string
 }
 
 const AggregateCountsContainer: React.FC<AggregateCountsContainerProps> = ({
-  label,
+  modality,
 }) => {
   const {
     loading: participantLoading,
     data: participantData,
     error: participantError,
-  } = useParticipantCount(label)
+  } = useParticipantCount(modality)
   const {
     loading: publicDatasetsLoading,
     data: publicDatasetsData,
     error: publicDatasetsError,
-  } = usePublicDatasetsCount(label)
+  } = usePublicDatasetsCount(modality)
 
   const loading = participantLoading || publicDatasetsLoading
   const error = participantError || publicDatasetsError

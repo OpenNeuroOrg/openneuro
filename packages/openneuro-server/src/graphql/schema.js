@@ -79,13 +79,15 @@ export const typeDefs = `
       filterBy: DatasetFilter = {}
       "Query user's datasets only - excludes public datasets from other filters"
       myDatasets: Boolean
+      "Query datasets of a specific modality"
+      modality: String
     ): DatasetConnection
     # Get one user
     user(id: ID!): User
     # Get a list of users
     users: [User]
     # Get the total number of dataset participants
-    participantCount: Int @cacheControl(maxAge: 3600, scope: PUBLIC)
+    participantCount(modality: String): Int @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
     # Get recent dataset changes (newest first)

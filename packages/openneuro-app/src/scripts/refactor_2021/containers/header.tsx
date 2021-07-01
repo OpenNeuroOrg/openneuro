@@ -69,8 +69,8 @@ const HeaderContainer: FC = () => {
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}
-          renderAggregateCounts={label => (
-            <AggregateCountsContainer label={label} />
+          renderAggregateCounts={(modality: string) => (
+            <AggregateCountsContainer modality={modality} />
           )}
           renderFacetSelect={() => (
             <ModalitySelect

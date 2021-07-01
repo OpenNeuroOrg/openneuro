@@ -4,7 +4,6 @@ import { Button } from '../button/Button'
 import { ModalityCube } from '../modality-cube/ModalityCube'
 import { cubeData } from '../mock-content/modality-cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
-import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 import { frontPage } from '../mock-content/front-page-content.jsx'
 
@@ -23,8 +22,8 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   renderSearchInput,
   onSearch,
 }) => {
-  const aggregateCounts = label =>
-    renderAggregateCounts ? renderAggregateCounts(label) : null
+  const aggregateCounts = (modality: string): React.ReactNode =>
+    renderAggregateCounts ? renderAggregateCounts(modality) : null
   const hexGrid = (
     <ul id="hexGrid">
       {cubeData.map((item, index) => (

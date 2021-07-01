@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 
 const PUBLIC_DATASETS_COUNT = gql`
-  query publicDatasetCount {
-    datasets(filterBy: { public: true }) {
+  query publicDatasetCount($modality: String) {
+    datasets(filterBy: { public: true }, modality: $modality) {
       pageInfo {
         count
       }
@@ -10,9 +10,9 @@ const PUBLIC_DATASETS_COUNT = gql`
   }
 `
 
-const usePublicDatasetsCount = (label?: string) => {
+const usePublicDatasetsCount = (modality?: string) => {
   return useQuery(PUBLIC_DATASETS_COUNT, {
-    variables: { label },
+    variables: { modality },
   })
 }
 
