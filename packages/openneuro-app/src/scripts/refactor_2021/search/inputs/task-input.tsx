@@ -24,7 +24,7 @@ const TaskInput: FC = () => {
       startOpen={false}
       className="search-authors"
       type="text"
-      placeholder="Enter Task to Search"
+      placeholder="Enter Task(s) to Search"
       labelStyle="default"
       name="tasks"
       termValue={newTask}

@@ -149,7 +149,7 @@ export const FiltersBlock = ({
         )}
         {studyDomain_selected && (
           <FilterListItem
-            type="Domain"
+            type="Ontology"
             item={{
               param: 'studyDomain_selected',
               value: studyDomain_selected,
@@ -159,7 +159,7 @@ export const FiltersBlock = ({
         )}
         {date_selected && (
           <FilterListItem
-            type="Date Published"
+            type="Publication Date "
             item={{ param: 'date_selected', value: date_selected }}
             removeFilterItem={removeFilterItem()}
           />

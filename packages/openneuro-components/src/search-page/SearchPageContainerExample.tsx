@@ -295,7 +295,7 @@ export const SearchPageContainerExample = ({
                 layout="row"
                 name="published"
                 startOpen={false}
-                label="Date Published"
+                label="Publication Date"
                 accordionStyle="plain"
                 className="date-facet"
               />
@@ -320,7 +320,7 @@ export const SearchPageContainerExample = ({
                 setSelected={setDomain}
                 items={domain_list}
                 accordionStyle="plain"
-                label="Domain Studied/Ontology"
+                label="Ontology/Domain Studied"
                 startOpen={false}
               />
             </FacetBlockContainerExample>
