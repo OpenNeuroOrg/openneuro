@@ -1,6 +1,6 @@
 export * from './FrontPage'
 export * from './AffiliateBlock'
-export * from '../activity-slider/ActivitySlider'
+
 export * from './Contributors'
 export * from './GetUpdates'
 export * from './Infographic'

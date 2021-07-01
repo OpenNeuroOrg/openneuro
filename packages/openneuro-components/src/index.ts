@@ -20,6 +20,7 @@ export * from './modal/UserLoginModal'
 export * from './tooltip/Tooltip'
 export * from './read-more/ReadMore'
 export * from './count-toggle/CountToggle'
+export * from './activity-slider/ActivitySlider'
 
 // Front Page Exports
 export * from './front-page'
