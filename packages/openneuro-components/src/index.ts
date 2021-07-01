@@ -13,7 +13,7 @@ export * from './mock-content/sortby-list'
 export * from './select/SelectGroup'
 export * from './accordion/AccordionTab'
 export * from './accordion/AccordionWrap'
-
+export * from './icon/Icon'
 export * from './loading/Loading'
 
 // Front Page Exports

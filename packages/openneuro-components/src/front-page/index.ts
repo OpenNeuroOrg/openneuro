@@ -4,7 +4,6 @@ export * from '../activity-slider/ActivitySlider'
 export * from './Contributors'
 export * from './GetUpdates'
 export * from './Infographic'
-export * from '../icon/Icon'
 export * from './ActivityHeader'
 
 export {

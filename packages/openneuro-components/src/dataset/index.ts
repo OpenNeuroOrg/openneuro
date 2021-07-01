@@ -1,4 +1,3 @@
-export * from '../icon/Icon'
 export * from '../tooltip/Tooltip'
 export * from '../modal/Modal'
 export * from '../read-more/ReadMore'
