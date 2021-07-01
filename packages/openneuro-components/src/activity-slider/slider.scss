@@ -32,7 +32,7 @@
   .activity-slider-node {
     .hexagon-wrapper {
       text-align: center;
-      margin: 20px auto;
+      margin: 20px auto 0;
       position: relative;
       display: inline-block;
       width: 45px;
@@ -91,21 +91,14 @@
       &.eeg {
         background-color: $eeg-theme;
       }
-      &.nirs {
-        background-color: $nirs-theme;
-      }
+
       &.pet {
         background-color: $pet-theme;
       }
       &.ieeg {
         background-color: $ieeg-theme;
       }
-      &.ecog {
-        background-color: $ecog-theme;
-      }
-      &.asl {
-        background-color: $asl-theme;
-      }
+
       &.meg {
         background-color: $meg-theme;
       }

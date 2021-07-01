@@ -13,7 +13,7 @@ import { FacetRange } from '../facets/FacetRange'
 import { FacetSearch } from '../facets/FacetSearch'
 import { TermSearch } from '../input/TermSearch'
 import { RadioGroup } from '../radio/RadioGroup'
-
+import { Loading } from '../loading/Loading'
 import {
   modalities,
   datasetType_available,
@@ -94,6 +94,8 @@ export const SearchPageContainerExample = ({
   }
 
   const numTotalResults = 2000
+
+  const loading = false
 
   return (
     <div>
@@ -324,6 +326,13 @@ export const SearchPageContainerExample = ({
             </FacetBlockContainerExample>
           </>
         )}
+        renderLoading={() =>
+          loading ? (
+            <div className="search-loading">
+              <Loading />
+            </div>
+          ) : null
+        }
         renderSearchResultsList={() => (
           <>
             <SearchResultsList items={searchResults} profile={profile} />

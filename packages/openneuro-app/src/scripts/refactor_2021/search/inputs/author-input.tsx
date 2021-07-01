@@ -37,6 +37,12 @@ const AuthorInput: FC = () => {
       pushTerm={addAuthor}
       allTerms={authors}
       removeFilterItem={removeFilterItem(setSearchParams)}
+      helpText={
+        <>
+          Results on multiple inputs will include all datasets that have{' '}
+          <b>ANY</b> of the entered names
+        </>
+      }
     />
   )
 }

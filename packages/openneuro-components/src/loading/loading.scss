@@ -5,40 +5,21 @@ $spinner-width: $spinner-base-value * 2 * 1.732;
 $spinner-height: $spinner-base-value * 2;
 $spinner-hexagon-width: $spinner-width;
 $spinner-hexagon-height: $spinner-height * 2;
-$spinner-hexagon-bg-color: var(--current-theme-primary-hover);
-
-/*
-.cxq-spinner.cxq-spinner--doubleBounce
-  .cxq-spinner-hexagon
-  .cxq-spinner-hexagon
-
-
-.cxq-spinner.cxq-spinner--rotatePlane
-  .cxq-spinner-hexagon
-
-.cxq-spinner.cxq-spinner--waveStretchDelay
-  .cxq-spinner-hexagon
-  .rects
-    .rect
-    .rect
-    .rect
-    .rect
-    .rect
-*/
+$spinner-hexagon-bg-color: var(--current-theme-primary);
 
 .cxq-spinner {
   position: relative;
   width: $spinner-hexagon-width;
   height: $spinner-hexagon-height;
-  margin: auto;
+  margin: 0 auto;
 }
 .cxq-spinner-hexagon {
   position: absolute;
   width: $spinner-width;
   height: $spinner-height;
   border-radius: 0;
-  background: $spinner-hexagon-bg-color;
-  opacity: 0.3;
+  background: var(--current-theme-primary-light);
+  opacity: 1;
   top: $spinner-base-value;
 }
 .cxq-spinner-hexagon:before,
@@ -146,8 +127,15 @@ $spinner-hexagon-bg-color: var(--current-theme-primary-hover);
 }
 
 .search-loading {
+  padding-top: 100px;
   display: flex;
   justify-content: center;
-  min-width: 100%;
-  margin-top: 10px;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 1;
 }

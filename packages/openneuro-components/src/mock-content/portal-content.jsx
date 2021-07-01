@@ -9,9 +9,12 @@ export const portalContent = {
     portalName: 'OpenNeuro MRI',
     portalPrimary: (
       <>
-        The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using 
-        <a href="https://bids.neuroimaging.io">{' BIDS '}</a> 
-        to organize and standardize this data. Since its release in 2017 the site has seen the upload of more than 200 public MRI-specific datasets.
+        The OpenNeuro platform was developed by the Center for Reproducible
+        Neuroscience as a tool to encourage and enhance data sharing and
+        analysis of raw MRI data, using{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> to organize and
+        standardize this data. Since its release in 2017 the site has seen the
+        upload of more than 200 public MRI-specific datasets.
       </>
     ),
     publicDatasetStat: 100,
@@ -25,11 +28,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -49,11 +48,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -73,11 +68,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -97,11 +88,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },
@@ -121,11 +108,7 @@ export const portalContent = {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
     communitySecondary: (
       <span>
-        Visit the{' '}
-        <a href="#" target="_blank">
-          Eventbright
-        </a>{' '}
-        for more information.
+        Visit the <a href="#">Eventbright</a> for more information.
       </span>
     ),
   },

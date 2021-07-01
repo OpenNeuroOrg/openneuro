@@ -56,9 +56,7 @@ export const UserLoginModal = ({
                     ORCID users are identified and connected to their
                     contributions and affiliations, across disciplines, borders,
                     and time.{' '}
-                    <a
-                      href="https://orcid.org/content/about-orcid"
-                      target="_blank">
+                    <a href="https://orcid.org/content/about-orcid">
                       Learn more
                     </a>
                   </>

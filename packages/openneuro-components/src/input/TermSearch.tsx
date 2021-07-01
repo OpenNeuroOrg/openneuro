@@ -20,6 +20,7 @@ export interface TermSearchProps {
   iconSize?: string
   size?: ButtonPropsSize
   removeFilterItem?(param, value): void
+  tipContent?: React.ReactNode
 }
 
 export const TermSearch = ({
@@ -37,6 +38,7 @@ export const TermSearch = ({
   icon,
   size,
   iconSize,
+  tipContent,
   removeFilterItem,
 }: TermSearchProps) => {
   const emptyOrWhitespace = /^\s*$/
@@ -53,6 +55,7 @@ export const TermSearch = ({
           name={name}
           value={termValue}
           setValue={setTermValue}
+          tipContent={tipContent}
           onKeyDown={e =>
             e.keyCode === 13 &&
             !disabled &&

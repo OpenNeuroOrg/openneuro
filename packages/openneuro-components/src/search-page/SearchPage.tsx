@@ -12,6 +12,7 @@ export interface SearchPageProps {
   renderSortBy: () => React.ReactNode
   renderFilterBlock: () => React.ReactNode
   renderSearchHeader: () => React.ReactNode
+  renderLoading: () => React.ReactNode
 }
 
 export const SearchPage = ({
@@ -21,6 +22,7 @@ export const SearchPage = ({
   renderSortBy,
   renderFilterBlock,
   renderSearchHeader,
+  renderLoading,
 }: SearchPageProps) => {
   interface IProps {
     children: React.ReactNode
@@ -62,6 +64,7 @@ export const SearchPage = ({
                 {renderSearchFacets()}
               </div>
               <div className="search-content">
+                {renderLoading()}
                 <div className="grid grid-nogutter">
                   <div className="col col-12">{renderFilterBlock()}</div>
                   <div className="col col-12">

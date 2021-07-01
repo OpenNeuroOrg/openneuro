@@ -1,4 +1,6 @@
 import React from 'react'
+import { AccordionTab } from '../accordion/AccordionTab'
+import { AccordionWrap } from '../accordion/AccordionWrap'
 import './input.scss'
 
 export type InputPropsStyle = 'inline' | 'float' | 'default'
@@ -13,6 +15,7 @@ export interface InputProps {
   value: string
   setValue: (string) => void
   onKeyDown?(event): void
+  tipContent?: React.ReactNode
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -23,6 +26,7 @@ export const Input: React.FC<InputProps> = ({
   labelStyle,
   setValue,
   value,
+  tipContent,
   onKeyDown = () => {},
 }) => {
   return (
@@ -38,11 +42,39 @@ export const Input: React.FC<InputProps> = ({
             onChange={e => setValue(e.target.value)}
             onKeyDown={onKeyDown}
           />
-          {label ? <label htmlFor={name}>{label}</label> : null}
+          {label ? (
+            <label htmlFor={name}>
+              {label}
+              {tipContent ? (
+                <AccordionWrap>
+                  <AccordionTab
+                    accordionStyle="plain"
+                    label="?"
+                    className="keyword-accordion">
+                    {tipContent}
+                  </AccordionTab>
+                </AccordionWrap>
+              ) : null}
+            </label>
+          ) : null}
         </div>
       ) : labelStyle == 'inline' ? (
         <div className="form-control inline">
-          {label ? <label htmlFor={name}>{label}</label> : null}
+          {label ? (
+            <label htmlFor={name}>
+              {label}
+              {tipContent ? (
+                <AccordionWrap>
+                  <AccordionTab
+                    accordionStyle="plain"
+                    label="?"
+                    className="keyword-accordion">
+                    {tipContent}
+                  </AccordionTab>
+                </AccordionWrap>
+              ) : null}
+            </label>
+          ) : null}
           <input
             value={value}
             type={type}
@@ -55,7 +87,21 @@ export const Input: React.FC<InputProps> = ({
         </div>
       ) : (
         <div className="form-control ">
-          {label ? <label htmlFor={name}>{label}</label> : null}
+          {label ? (
+            <label htmlFor={name}>
+              {label}
+              {tipContent ? (
+                <AccordionWrap>
+                  <AccordionTab
+                    accordionStyle="plain"
+                    label="?"
+                    className="keyword-accordion">
+                    {tipContent}
+                  </AccordionTab>
+                </AccordionWrap>
+              ) : null}
+            </label>
+          ) : null}
           <input
             value={value}
             type={type}

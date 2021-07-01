@@ -201,26 +201,16 @@
       &.eeg {
         color: $eeg-theme;
       }
-      &.nirs {
-        color: $nirs-theme;
-      }
+
       &.pet {
         color: $pet-theme;
       }
       &.ieeg {
         color: $ieeg-theme;
       }
-      &.ecog {
-        color: $ecog-theme;
-      }
-      &.asl {
-        color: $asl-theme;
-      }
+
       &.meg {
         color: $meg-theme;
-      }
-      &.eeg {
-        color: $on-light-green;
       }
     }
     &:hover {
@@ -232,26 +222,16 @@
         &.eeg {
           color: lighten($eeg-theme, 10%);
         }
-        &.nirs {
-          color: lighten($nirs-theme, 10%);
-        }
+
         &.pet {
           color: lighten($pet-theme, 10%);
         }
         &.ieeg {
           color: lighten($ieeg-theme, 10%);
         }
-        &.ecog {
-          color: lighten($ecog-theme, 10%);
-        }
-        &.asl {
-          color: lighten($asl-theme, 10%);
-        }
+
         &.meg {
           color: lighten($meg-theme, 10%);
-        }
-        &.eeg {
-          color: lighten($on-light-green, 10%);
         }
       }
     }
