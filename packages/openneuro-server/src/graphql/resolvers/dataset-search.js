@@ -2,6 +2,7 @@ import elasticClient from '../../elasticsearch/elastic-client'
 import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
+import Permission from '../../models/permission'
 
 const elasticIndex = 'datasets'
 
@@ -138,7 +139,36 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
     }
     addClause(query, 'filter', termsClause)
   } else if (datasetType === 'My Datasets') {
-    // TODO
+    const results = await Permission.find({ userId })
+    const bookmarkedDatasets = results.map(({ datasetId }) => datasetId)
+    const termsClause = {
+      terms: {
+        id: bookmarkedDatasets,
+      },
+    }
+    addClause(query, 'filter', termsClause)
+
+    if (datasetStatus === 'Public') {
+      addClause(query, 'filter', {
+        term: {
+          public: {
+            value: true,
+          },
+        },
+      })
+    } else if (datasetStatus === 'Shared with Me') {
+      addClause(query, 'filter', {
+        terms: {
+          ['permissions.userPermissions.level']: ['ro', 'rw'],
+        },
+      })
+    } else if (datasetStatus === 'Invalid') {
+      addClause(query, 'filter', {
+        term: {
+          ['draft.issues.severity']: 'error',
+        },
+      })
+    }
   }
   return query
 }
