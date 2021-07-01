@@ -1,6 +1,6 @@
 export * from './facets'
 export * from './accordion'
-export * from './modal'
+
 export * from './header/Header'
 export * from './header/LandingExpandedHeader'
 export * from './input'
@@ -15,6 +15,8 @@ export * from './accordion/AccordionTab'
 export * from './accordion/AccordionWrap'
 export * from './icon/Icon'
 export * from './loading/Loading'
+export * from './modal/Modal'
+export * from './modal/UserLoginModal'
 
 // Front Page Exports
 export * from './front-page'
