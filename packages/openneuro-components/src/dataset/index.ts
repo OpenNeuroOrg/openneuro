@@ -1,5 +1,4 @@
 export * from '../tooltip/Tooltip'
-export * from '../modal/Modal'
 export * from '../read-more/ReadMore'
 export * from './MetaDataBlock'
 export * from './BrainLifeButton'
