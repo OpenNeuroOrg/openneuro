@@ -1,6 +1,6 @@
 import React, { createContext, useState, FC, ReactNode } from 'react'
 import { UserLoginModal } from '@openneuro/components'
-import { config } from '../config'
+import loginUrls from './authentication/loginUrls'
 
 export const UserModalOpenCtx = createContext(null)
 
@@ -21,10 +21,7 @@ export const UserModalOpenProvider: FC<UserModalOpenProviderProps> = ({
       <UserLoginModal
         isOpen={userModalOpen}
         toggle={toggle}
-        loginUrls={{
-          google: `${config.api}auth/google`,
-          orcid: `${config.api}auth/orcid`,
-        }}
+        loginUrls={loginUrls}
       />
     </UserModalOpenCtx.Provider>
   )

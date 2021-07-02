@@ -12,6 +12,7 @@ import signOut from '../authentication/signOut'
 import { getUnexpiredProfile } from '../authentication/profile'
 import FreshdeskWidget from '../freshdesk-widget'
 import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
+import loginUrls from '../authentication/loginUrls'
 
 const HeaderContainer: FC = () => {
   const history = useHistory()
@@ -73,6 +74,7 @@ const HeaderContainer: FC = () => {
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}
+          loginUrls={loginUrls}
           renderAggregateCounts={(modality: string) => (
             <AggregateCountsContainer modality={modality} />
           )}

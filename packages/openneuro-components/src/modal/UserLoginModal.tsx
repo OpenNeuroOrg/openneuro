@@ -20,7 +20,6 @@ export const UserLoginModal = ({
   toggle,
   loginUrls,
 }: UserLoginModalProps) => {
-  console.log('usermodal')
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
