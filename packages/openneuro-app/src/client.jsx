@@ -51,7 +51,7 @@ if ('serviceWorker' in navigator) {
   Sentry.captureMessage('Service worker registration failed.')
 }
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <App>
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
