@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import LeftSidebar, { SidebarRow } from '../left-sidebar.jsx'
-import cookies from '../../../utils/cookies.js'
+import cookies from '../../../refactor_2021/utils/cookies.js'
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

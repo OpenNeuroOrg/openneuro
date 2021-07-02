@@ -9,6 +9,7 @@ import { frontPage } from '../mock-content/front-page-content.jsx'
 
 export interface LandingExpandedHeaderProps {
   user?: {}
+  loginUrls?: Record<string, string>
   renderAggregateCounts?: (label?: string) => React.ReactNode
   renderFacetSelect: () => React.ReactNode
   renderSearchInput: () => React.ReactNode
@@ -17,6 +18,7 @@ export interface LandingExpandedHeaderProps {
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   user,
+  loginUrls,
   renderAggregateCounts,
   renderFacetSelect,
   renderSearchInput,
@@ -67,20 +69,24 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
                   <h3>SIGN IN</h3>
                 </div>
                 <div>
-                  <Button
-                    label="Google"
-                    color="#fff"
-                    icon="fab fa-google"
-                    iconSize="23px"
-                  />
+                  <a href={loginUrls.google}>
+                    <Button
+                      label="Google"
+                      color="#fff"
+                      icon="fab fa-google"
+                      iconSize="23px"
+                    />
+                  </a>
                 </div>
                 <div>
-                  <Button
-                    label="ORCID"
-                    color="#fff"
-                    imgSrc={orcidIcon}
-                    iconSize="23px"
-                  />
+                  <a href={loginUrls.orcid}>
+                    <Button
+                      label="ORCID"
+                      color="#fff"
+                      imgSrc={orcidIcon}
+                      iconSize="23px"
+                    />
+                  </a>
                 </div>
               </div>
             ) : null}

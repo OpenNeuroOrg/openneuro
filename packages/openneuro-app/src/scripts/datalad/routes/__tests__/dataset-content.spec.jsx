@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import { DatasetContent, HasBeenPublished } from '../dataset-content.jsx'
 import { hasEditPermissions } from '../../../refactor_2021/authentication/profile.js'
 import { BrowserRouter } from 'react-router-dom'
-import cookies from '../../../utils/cookies.js'
+import cookies from '../../../refactor_2021/utils/cookies.js'
 
 // eslint-disable-next-line
 jest.mock('../../fragments/dataset-files.jsx', () => () => (

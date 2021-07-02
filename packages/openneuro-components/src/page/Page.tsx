@@ -26,16 +26,12 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
         <Header
           isOpenSupport={isOpenSupport}
           isOpenUpload={isOpenUpload}
-          isOpenLogin={false}
-          toggleLogin={toggleLogin}
+          toggleLoginModal={toggleLogin}
+          signOutAndRedirect={() => console.log('signed out')}
           toggleSupport={toggleSupport}
           toggleUpload={toggleUpload}
           profile={headerArgs.user}
-          onLogin={headerArgs.onLogin}
-          onLogout={headerArgs.onLogout}
-          onCreateAccount={headerArgs.onCreateAccount}
           expanded={headerArgs.expanded}
-          pushHistory={() => {}}
           renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
           renderOnExpanded={profile => (
             <LandingExpandedHeader
