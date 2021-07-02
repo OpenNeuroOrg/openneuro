@@ -1,0 +1,399 @@
+$bootstrap-sass-asset-helper: true;
+
+$font-sans: 'Open Sans', sans-serif;
+
+$charcoal: #333;
+$newspaper: #dfdfdf;
+
+/* SCSS RGB */
+$on-light-aqua: rgb(55, 188, 210);
+$on-dark-aqua: rgba(32, 78, 90, 1);
+$on-secondary: #196583;
+$on-dark-aqua-light: adjust-color($on-dark-aqua, $lightness: 45%);
+
+$mri-theme: rgba(109, 83, 156, 1);
+$mri-hover: adjust-color($mri-theme, $lightness: 10%);
+$mri-dark: darken($mri-theme, 25%);
+$mri-secondary: adjust-color($mri-theme, $lightness: 15%);
+$mri-light: adjust-color($mri-theme, $lightness: 45%);
+
+$eeg-theme: rgba(138, 177, 89, 1);
+$eeg-hover: adjust-color($eeg-theme, $lightness: 10%);
+$eeg-dark: darken($eeg-theme, 25%);
+$eeg-secondary: adjust-color($eeg-theme, $lightness: 15%);
+$eeg-light: adjust-color($eeg-theme, $lightness: 45%);
+
+$pet-theme: rgba(0, 139, 255, 1);
+$pet-hover: adjust-color($pet-theme, $lightness: 10%);
+$pet-dark: darken($pet-theme, 25%);
+$pet-secondary: adjust-color($pet-theme, $lightness: 15%);
+$pet-light: adjust-color($pet-theme, $lightness: 45%);
+
+$ieeg-theme: rgba(121, 5, 93, 1);
+$ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
+$ieeg-dark: darken($ieeg-theme, 25%);
+$ieeg-secondary: adjust-color($ieeg-theme, $lightness: 15%);
+$ieeg-light: adjust-color($ieeg-theme, $lightness: 45%);
+
+$meg-theme: rgba(234, 93, 11, 1);
+$meg-hover: adjust-color($meg-theme, $lightness: 10%);
+$meg-dark: darken($meg-theme, 25%);
+$meg-secondary: adjust-color($meg-theme, $lightness: 15%);
+$meg-light: adjust-color($meg-theme, $lightness: 45%);
+
+$on-light-green: #00eeb5;
+$on-light-red: #c00342;
+
+$primary: $on-dark-aqua default;
+
+// react-toastify
+@import 'react-toastify/dist/ReactToastify.css';
+// react-virtualized
+@import 'react-virtualized/styles.css';
+// Always required /_properties if not importing all animate/animate.scss
+@import './animate/properties';
+
+.pre-refactor-styles {
+  //base ====================================================================
+  @import './bootstrap';
+  //font  //=================================================================
+
+  //font  //=================================================================
+  @import './font-awesome/font-awesome';
+
+  // animations ============================================================
+  @import './animate/_fading-entrances/fading-entrances';
+  @import './animate/_sliding-entrances/sliding-entrances';
+  @import './animate/_sliding-exits/sliding-exits';
+  @import './animate/_flippers/flippers';
+  @import './animate/_attention-seekers/flash';
+
+  //openneuro SASS ================================================================
+  @import './crn_app/colors';
+  @import './crn_app/theme';
+  @import './crn_app/bootstrap.overrides';
+  @import './crn_app/elements-wrappers';
+
+  // draft.js
+  @import './draft/draft';
+  @import './draft/rich-editor';
+
+  // papaya asset default
+  @import './crn_app/_common.papaya';
+
+  --current-theme-primary: #{$on-dark-aqua};
+  --current-theme-primary-hover: #{$on-light-aqua};
+  --current-theme-secondary: #{$on-secondary};
+  --current-theme-primary-dark: #{$on-dark-aqua};
+  --current-theme-primary-light: #{$on-dark-aqua-light};
+  /* CSS HEX */
+
+  --primary: var(--current-theme-primary);
+  --primary-hover: var(--current-theme-primary-hover);
+  --secondary: var(--current-theme-secondary);
+  --secondary-hover: var(--current-theme-primary-light);
+  --secondary-darken: var(--current-theme-primary-dark);
+
+  // Fonts
+  --font-family-open: $font-sans;
+
+  // Shadows
+  --btn-shadow: none;
+
+  //openneuro SASS ================================================================
+  @import './crn_app/colors';
+
+  @import './crn_app/theme';
+  @import './crn_app/bootstrap.overrides';
+  @import './crn_app/elements-wrappers';
+
+  // draft.js
+  @import './draft/draft';
+  @import './draft/rich-editor';
+
+  // papaya asset default
+  @import './crn_app/_common.papaya';
+
+  //component common
+  @import './crn_app/common.spinner';
+  @import './crn_app/common.pagination';
+  @import './crn_app/common.status';
+  @import './crn_app/common.click-to-edit';
+  @import './crn_app/common.typeahead';
+  @import './crn_app/common.modals';
+  @import './crn_app/common.progress-bar';
+  @import './crn_app/common.tooltip';
+
+  //component specific
+  @import './crn_app/nav.navbar';
+  @import './crn_app/dataset.dataset';
+  @import './crn_app/dataset.jobs';
+  @import './crn_app/dataset.tools';
+  @import './crn_app/dataset.file-tree';
+  @import './crn_app/dataset.sidebar';
+  @import './crn_app/dataset.comments';
+  @import './crn_app/admin.admin';
+  @import './crn_app/admin.graphs';
+  @import './crn_app/frontPage';
+  @import './crn_app/dashboard.datasets';
+  @import './crn_app/upload.upload';
+  @import './crn_app/upload.validation';
+  @import './crn_app/admin.tools';
+  @import './crn_app/faq';
+  @import './crn_app/api';
+
+  .logo-text {
+    color: $c-42;
+    font-size: 75px;
+    font-weight: 700;
+    position: relative;
+    line-height: 1em;
+    .logo-end {
+      font-size: 75%;
+      text-transform: uppercase;
+      color: $primary;
+      color: var(--primary);
+      font-weight: 400;
+    }
+  }
+
+  .fade-in {
+    @include fadeIn();
+  }
+  %slide-down-fast {
+    @include slideInDown($duration: 0.3s, $delay: 0);
+  }
+
+  .slide-in-left {
+    @include slideInLeft();
+  }
+  .slide-out-left {
+    @include slideOutLeft();
+  }
+  .slide-in-right-fast {
+    @include slideInRightFast();
+  }
+  %slide-in-down {
+    @include slideInDown();
+  }
+  .flipin-x {
+    @include flipInX();
+  }
+  %flash {
+    @include flash();
+  }
+
+  .slide-in-down {
+    @extend %slide-in-down;
+  }
+
+  @include keyframes(spin) {
+    0% {
+      @include transform(rotate(0));
+    }
+    100% {
+      @include transform(rotate(360deg));
+    }
+  }
+
+  @include keyframes(dot) {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @include keyframes(border-flash) {
+    0% {
+      border: 1px solid $yellow;
+    }
+    50% {
+      border: 1px solid transparent;
+    }
+    100% {
+      border: 1px solid $yellow;
+    }
+  }
+  @include keyframes(background-flash) {
+    0% {
+      background-color: $honey;
+    }
+    50% {
+      background-color: transparent;
+    }
+    100% {
+      background-color: $honey;
+    }
+  }
+
+  @include keyframes(borderxpand) {
+    0% {
+      width: 0;
+      height: 0;
+    }
+    100% {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  @include keyframes(revealIn) {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @include keyframes(shrink-bounce) {
+    0% {
+      @include transform(scale(1));
+    }
+    33% {
+      @include transform(rscale(0.85));
+    }
+    100% {
+      @include transform(rscale(1));
+    }
+  }
+
+  @include keyframes(checkbox-check) {
+    0% {
+      @include transform(translate3d(0, 0, 0) rotate(45deg));
+      width: 0;
+      height: 0;
+      border-color: $c-21;
+    }
+
+    33% {
+      @include transform(translate3d(0, 0, 0) rotate(45deg));
+      width: 0.2em;
+      height: 0;
+    }
+
+    100% {
+      @include transform(translate3d(0, -0.5em, 0) rotate(45deg));
+      width: 0.2em;
+      height: 0.5em;
+      border-color: $c-21;
+    }
+  }
+
+  .ellipsis-animation {
+    color: $rock;
+    margin: 0;
+    padding: 4px;
+    font-size: 12px;
+
+    .one,
+    .two,
+    .three {
+      @include animation(dot 1.3s infinite);
+      opacity: 0;
+      font-size: 20px;
+      line-height: 10px;
+    }
+
+    .one {
+      @include animation-delay(0s);
+    }
+    .two {
+      @include animation-delay(0.2s);
+    }
+    .three {
+      @include animation-delay(0.3s);
+    }
+  }
+
+  .ds-danger .ellipsis-animation {
+    color: $brand-danger;
+  }
+  .ds-warning .ellipsis-animation {
+    color: $brand-warning;
+  }
+
+  .icon-ban:after,
+  .icon-undo:after,
+  .icon-plus:after,
+  .icon-minus:after {
+    font-size: 11px;
+    top: -10px;
+    position: relative;
+    right: -2px;
+  }
+
+  .icon-plus:after {
+    font-size: 9px;
+    content: '\f067';
+  }
+
+  .icon-minus:after {
+    content: '\f068';
+  }
+
+  .icon-undo:after {
+    content: '\f0e2';
+  }
+
+  .icon-ban:after {
+    content: '\f05e';
+    color: $brand-danger;
+  }
+
+  //papaya overrides
+
+  .papaya-wrap {
+    margin: auto;
+    max-width: 90%;
+    .papaya-controlbar-label {
+      color: $black;
+    }
+    button {
+      @extend %btn-admin;
+      border-color: $secondary;
+      border-color: var(--secondary);
+      color: $secondary;
+      color: var(--secondary);
+      padding: 5px 2px;
+      height: auto;
+      &:hover {
+        background: $secondary-hover;
+        background: var(--secondary-hover);
+        color: $white;
+      }
+    }
+  }
+
+  #hidden {
+    display: none;
+  }
+
+  .add-btn {
+    font-size: 18px;
+    margin-top: 0.5em;
+  }
+
+  .apps-filter,
+  .versions-filter {
+    margin: 15px 0;
+    z-index: 1000;
+  }
+
+  .generic-error-message {
+    padding: 1rem;
+    border: $coral;
+    color: red;
+  }
+
+  .padded-message {
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+  }
+}
