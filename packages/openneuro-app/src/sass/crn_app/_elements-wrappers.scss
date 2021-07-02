@@ -601,6 +601,12 @@ h6 {
     }
   }
 
+  .remove-annex-object {
+    &:before {
+      top: -10px;
+    }
+  }
+
   .edit-file {
     @extend %btn-admin;
     float: left;
