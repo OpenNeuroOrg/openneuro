@@ -68,7 +68,6 @@ const HeaderContainer: FC = () => {
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
       profile={profile}
-      onCreateAccount={() => {}}
       expanded={expanded}
       renderOnFreshDeskWidget={() => <FreshdeskWidget />}
       renderOnExpanded={profile => (
