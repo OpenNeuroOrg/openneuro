@@ -10,6 +10,7 @@ import { useLocation, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../authentication/profile'
 import FreshdeskWidget from '../freshdesk-widget'
+import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
 
 const HeaderContainer: FC = () => {
   const history = useHistory()
@@ -68,6 +69,9 @@ const HeaderContainer: FC = () => {
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}
+          renderAggregateCounts={(modality: string) => (
+            <AggregateCountsContainer modality={modality} />
+          )}
           renderFacetSelect={() => (
             <ModalitySelect
               startOpen={false}

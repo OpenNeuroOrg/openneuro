@@ -32,7 +32,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
   )
 }
 
-export const participantCount = async () => {
+export const participantCount = async (obj, { modality }) => {
   const aggregateResult = await DatasetModel.aggregate([
     {
       $match: {
