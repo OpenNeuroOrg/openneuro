@@ -11,32 +11,24 @@ export default {
   component: Header,
 } as Meta
 
-const Template: Story<HeaderProps> = ({
-  profile,
-  onLogin,
-  onLogout,
-  expanded,
-}) => {
+const Template: Story<HeaderProps> = ({ profile, expanded }) => {
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
   const [isOpenUpload, setUploadIsOpen] = React.useState(false)
 
-  const toggleLogin = () => alert('this is a context')
+  const toggleLoginModal = () => alert('this is a context')
   const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
     <Header
       profile={profile}
-      onLogin={onLogin}
-      onLogout={onLogout}
       expanded={expanded}
       isOpenSupport={isOpenSupport}
       isOpenUpload={isOpenUpload}
-      isOpenLogin={false}
-      toggleLogin={toggleLogin}
+      toggleLoginModal={toggleLoginModal}
+      signOutAndRedirect={() => console.log('signed out')}
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
       renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
-      pushHistory={path => console.log(`User navigation to ${path}.`)}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}

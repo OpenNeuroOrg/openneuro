@@ -10,42 +10,44 @@ import orcidIcon from '../assets/orcid_24x24.png'
 import '../header/header.scss'
 
 export interface UserLoginModalProps {
-  userModalParams?: boolean
-  setUserModalParams?: (boolean) => void
-  children?: React.ReactNode
+  isOpen: boolean
+  toggle: () => void
+  loginUrls: Record<string, string>
 }
 
 export const UserLoginModal = ({
-  userModalParams,
-  setUserModalParams,
+  isOpen,
+  toggle,
+  loginUrls,
 }: UserLoginModalProps) => {
   return (
     <>
-      <Modal
-        isOpen={userModalParams}
-        toggle={() => setUserModalParams(prevState => !prevState)}
-        closeText="Close">
+      <Modal isOpen={isOpen} toggle={toggle}>
         <div className="sign-in-modal-header">
           <Logo horizontal dark={true} width="230px" />
           <h2>Sign in</h2>
         </div>
         <div className="sign-in-modal-content">
           <div>
-            <Button
-              className="login-button"
-              primary
-              label="Google"
-              icon="fab fa-google"
-              iconSize="23px"
-            />
+            <a href={loginUrls.google}>
+              <Button
+                className="login-button"
+                primary
+                label="Google"
+                icon="fab fa-google"
+                iconSize="23px"
+              />
+            </a>
           </div>
           <div>
-            <Button
-              className="login-button"
-              primary
-              label="ORCID"
-              imgSrc={orcidIcon}
-            />
+            <a href={loginUrls.orcid}>
+              <Button
+                className="login-button"
+                primary
+                label="ORCID"
+                imgSrc={orcidIcon}
+              />
+            </a>
             <AccordionWrap>
               <AccordionTab
                 id="orcid-info-accordion"
