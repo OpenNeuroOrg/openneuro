@@ -1,5 +1,5 @@
 import React, { createContext, useState, FC, ReactNode } from 'react'
-import { Modal, UserLoginModal } from '@openneuro/components'
+import { UserLoginModal } from '@openneuro/components'
 
 export const UserModalOpenCtx = createContext(null)
 
