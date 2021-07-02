@@ -48,7 +48,6 @@ const HeaderContainer: FC = () => {
 
   const signOutAndRedirect = () => {
     signOut()
-    window.location.pathname = '/'
   }
 
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
@@ -66,6 +65,7 @@ const HeaderContainer: FC = () => {
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
       profile={profile}
+      onCreateAccount={() => {}}
       expanded={expanded}
       renderOnFreshDeskWidget={() => <FreshdeskWidget />}
       renderOnExpanded={profile => (

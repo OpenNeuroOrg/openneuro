@@ -12,9 +12,14 @@ import '../header/header.scss'
 export interface UserLoginModalProps {
   isOpen: boolean
   toggle: () => void
+  loginUrls: Record<string, string>
 }
 
-export const UserLoginModal = ({ isOpen, toggle }: UserLoginModalProps) => {
+export const UserLoginModal = ({
+  isOpen,
+  toggle,
+  loginUrls,
+}: UserLoginModalProps) => {
   console.log('usermodal')
   return (
     <>
@@ -25,21 +30,25 @@ export const UserLoginModal = ({ isOpen, toggle }: UserLoginModalProps) => {
         </div>
         <div className="sign-in-modal-content">
           <div>
-            <Button
-              className="login-button"
-              primary
-              label="Google"
-              icon="fab fa-google"
-              iconSize="23px"
-            />
+            <a href={loginUrls.google}>
+              <Button
+                className="login-button"
+                primary
+                label="Google"
+                icon="fab fa-google"
+                iconSize="23px"
+              />
+            </a>
           </div>
           <div>
-            <Button
-              className="login-button"
-              primary
-              label="ORCID"
-              imgSrc={orcidIcon}
-            />
+            <a href={loginUrls.orcid}>
+              <Button
+                className="login-button"
+                primary
+                label="ORCID"
+                imgSrc={orcidIcon}
+              />
+            </a>
             <AccordionWrap>
               <AccordionTab
                 id="orcid-info-accordion"

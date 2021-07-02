@@ -1,5 +1,6 @@
 import React, { createContext, useState, FC, ReactNode } from 'react'
 import { UserLoginModal } from '@openneuro/components'
+import { config } from '../config'
 
 export const UserModalOpenCtx = createContext(null)
 
@@ -17,7 +18,14 @@ export const UserModalOpenProvider: FC<UserModalOpenProviderProps> = ({
   return (
     <UserModalOpenCtx.Provider value={{ userModalOpen, setUserModalOpen }}>
       {children}
-      <UserLoginModal isOpen={userModalOpen} toggle={toggle} />
+      <UserLoginModal
+        isOpen={userModalOpen}
+        toggle={toggle}
+        loginUrls={{
+          google: `${config.api}auth/google`,
+          orcid: `${config.api}auth/orcid`,
+        }}
+      />
     </UserModalOpenCtx.Provider>
   )
 }
