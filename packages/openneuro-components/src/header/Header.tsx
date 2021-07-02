@@ -14,32 +14,25 @@ export interface HeaderProps {
     name: string
     admin: boolean
   }
-  onLogin?: () => void
-  onLogout?: () => void
-  onCreateAccount?: () => void
   expanded?: boolean
   isOpenSupport: boolean
   isOpenUpload: boolean
-  isOpenLogin: boolean
-  toggleLogin: (userModalParams?: Record<string, any>) => void
-  toggleSupport: () => void
+  toggleLoginModal: (userModalParams?: Record<string, any>) => void
+  signOutAndRedirect: () => void
   toggleUpload: () => void
-  pushHistory: (path: string) => void
+  toggleSupport: () => void
   renderOnExpanded: (profile) => React.ReactNode
   renderOnFreshDeskWidget: () => React.ReactNode
 }
 
 export const Header = ({
   profile,
-  onLogin,
-  onLogout,
   expanded,
   isOpenSupport,
   isOpenUpload,
-  isOpenLogin,
-  toggleLogin,
+  toggleLoginModal,
+  signOutAndRedirect,
   toggleUpload,
-  pushHistory,
   toggleSupport,
   renderOnExpanded,
   renderOnFreshDeskWidget,
@@ -78,14 +71,14 @@ export const Header = ({
               <div className="header-account-btn">
                 <UserMenu
                   profile={profile}
-                  signOutAndRedirect={() => console.log('signout')}
+                  signOutAndRedirect={signOutAndRedirect}
                 />
               </div>
             ) : (
               <>
                 <Button
                   navbar
-                  onClick={toggleLogin}
+                  onClick={toggleLoginModal}
                   label="Sign in"
                   size="large"
                 />
@@ -95,16 +88,6 @@ export const Header = ({
           {expanded ? renderOnExpanded(profile) : null}
         </div>
       </header>
-      {!profile ? (
-        <Modal
-          isOpen={isOpenLogin}
-          toggle={toggleLogin}
-          closeText="Close"
-          className="sign-in-modal">
-          <UserLoginModal />
-        </Modal>
-      ) : null}
-
       <Modal
         className="freshdesk-support"
         isOpen={isOpenSupport}

@@ -1,24 +1,23 @@
 import React, { createContext, useState, FC, ReactNode } from 'react'
 import { Modal, UserLoginModal } from '@openneuro/components'
 
-export const UserModalParamsCtx = createContext(null)
+export const UserModalOpenCtx = createContext(null)
 
-interface UserModalParamsProviderProps {
+interface UserModalOpenProviderProps {
   children: ReactNode
 }
 
-export const UserModalParamsProvider: FC<UserModalParamsProviderProps> = ({
+export const UserModalOpenProvider: FC<UserModalOpenProviderProps> = ({
   children,
 }) => {
-  const [userModalParams, setUserModalParams] = useState(false)
+  const [userModalOpen, setUserModalOpen] = useState(false)
+  const toggle = (): void => {
+    setUserModalOpen(prevState => !prevState)
+  }
   return (
-    <UserModalParamsCtx.Provider
-      value={{ userModalParams, setUserModalParams }}>
+    <UserModalOpenCtx.Provider value={{ userModalOpen, setUserModalOpen }}>
       {children}
-      <UserLoginModal
-        userModalParams={userModalParams}
-        setUserModalParams={setUserModalParams}
-      />
-    </UserModalParamsCtx.Provider>
+      <UserLoginModal isOpen={userModalOpen} toggle={toggle} />
+    </UserModalOpenCtx.Provider>
   )
 }
