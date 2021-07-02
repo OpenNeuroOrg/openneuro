@@ -48,6 +48,9 @@ const HeaderContainer: FC = () => {
 
   const signOutAndRedirect = () => {
     signOut()
+    const homepage = '/'
+    if (window.location.pathname === homepage) window.location.reload()
+    else window.location.pathname = homepage
   }
 
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
