@@ -12,8 +12,8 @@ export interface InputProps {
   label?: string
   name: string
   labelStyle?: InputPropsStyle
-  value: string
-  setValue: (string) => void
+  value?: string
+  setValue?: (string) => void
   onKeyDown?(event): void
   tipContent?: React.ReactNode
 }

@@ -11,6 +11,15 @@ import {
   TopViewed,
 } from '@openneuro/components'
 
+import { gql } from '@apollo/client'
+import { Mutation } from '@apollo/client/react/components'
+
+const SUBSCRIBE_TO_NEWSLETTER = gql`
+  mutation subscribeToNewsletter($email: String!) {
+    subscribeToNewsletter(email: $email)
+  }
+`
+
 const FrontPageContainer: React.FC = () => {
   const responsive = {
     superLargeDesktop: {
@@ -66,7 +75,19 @@ const FrontPageContainer: React.FC = () => {
             />
           </>
         )}
-        renderGetUpdates={() => <GetUpdates />}
+        renderGetUpdates={() => (
+          <Mutation mutation={SUBSCRIBE_TO_NEWSLETTER}>
+            {subscribeToNewsletter => (
+              <GetUpdates
+                subscribe={(email, cb) => {
+                  subscribeToNewsletter({ variables: { email } })
+                    .then(cb)
+                    .catch(cb)
+                }}
+              />
+            )}
+          </Mutation>
+        )}
         renderContributors={() => <Contributors />}
       />
     </>
