@@ -22,7 +22,6 @@ export const submitHandler = (subscribe, mode, setMode, value) => e => {
     case modes.GET:
     default:
       subscribe(value, result => {
-        console.log(value)
         if (result.data) {
           setMode(
             result.data.subscribeToNewsletter ? modes.SUCCESS : modes.ERROR,
