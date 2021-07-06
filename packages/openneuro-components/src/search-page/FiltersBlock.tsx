@@ -71,9 +71,8 @@ export const FiltersBlock = ({
             <Button label="Clear All" size="small" onClick={removeAllFilters} />
           </>
         ) : (
-          'Showing all available datasets'
+          <b>Showing all available datasets</b>
         )}
-        <Button label="Clear All" size="small" onClick={removeAllFilters} />
       </h4>
       <ul className="active-filters">
         {keywords && (
