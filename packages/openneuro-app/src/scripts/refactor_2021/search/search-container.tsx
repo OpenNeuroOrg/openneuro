@@ -56,7 +56,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const numResultsShown = data?.datasets?.edges.length || 0
   const numTotalResults = data?.datasets?.pageInfo.count || 0
   const resultsList = data?.datasets?.edges || []
-
   return (
     <SearchPage
       portalContent={portalContent}

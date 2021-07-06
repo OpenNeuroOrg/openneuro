@@ -53,7 +53,26 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <h4>
-        These filters return <span>{numTotalResults}</span> results:{' '}
+        {modality_selected ||
+        datasetType_selected !== 'All Public' ||
+        !ageRangeIsNull ||
+        !subjectCountRangeIsNull ||
+        gender_selected !== 'All' ||
+        date_selected !== 'All Time' ||
+        diagnosis_selected !== null ||
+        section_selected !== null ||
+        species_selected !== null ||
+        studyDomain_selected !== null ||
+        keywords.length !== 0 ||
+        tasks.length !== 0 ||
+        authors.length !== 0 ? (
+          <>
+            These filters return <span>{numTotalResults}</span> results:{' '}
+            <Button label="Clear All" size="small" onClick={removeAllFilters} />
+          </>
+        ) : (
+          'Showing all available datasets'
+        )}
         <Button label="Clear All" size="small" onClick={removeAllFilters} />
       </h4>
       <ul className="active-filters">
