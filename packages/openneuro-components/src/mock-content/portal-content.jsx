@@ -9,12 +9,8 @@ export const portalContent = {
     portalName: 'OpenNeuro MRI',
     portalPrimary: (
       <>
-        The OpenNeuro platform was developed by the Center for Reproducible
-        Neuroscience as a tool to encourage and enhance data sharing and
-        analysis of raw MRI data, using{' '}
-        <a href="https://bids.neuroimaging.io">BIDS</a> to organize and
-        standardize this data. Since its release in 2017 the site has seen the
-        upload of more than 200 public MRI-specific datasets.
+        The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> to organize and standardize these data.
       </>
     ),
     publicDatasetStat: 100,
@@ -36,8 +32,12 @@ export const portalContent = {
     modality: 'EEG', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: 'search-page-eeg',
     portalName: 'OpenNeuro EEG',
-    portalPrimary:
-      'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
+    portalPrimary: (
+      <>
+        OpenNeuro added support for EEG datasets in 2019, when EEG was incorporated into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+      </>
+    ),
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: mriScan,
@@ -56,8 +56,12 @@ export const portalContent = {
     modality: 'iEEG', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: 'search-page-ieeg',
     portalName: 'OpenNeuro iEEG',
-    portalPrimary:
-      'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
+    portalPrimary: (
+      <>
+        OpenNeuro added support for iEEG datasets in 2019, when iEEG was incorporated into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+      </>
+    ),
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: mriScan,
@@ -76,8 +80,12 @@ export const portalContent = {
     modality: 'MEG', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: 'search-page-meg',
     portalName: 'OpenNeuro MEG',
-    portalPrimary:
-      'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
+    portalPrimary: (
+      <>
+        OpenNeuro added support for MEG datasets in 2018, when MEG was incorporated into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+      </>
+    ),
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: mriScan,
