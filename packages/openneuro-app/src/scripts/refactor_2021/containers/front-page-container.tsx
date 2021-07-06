@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser'
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 
@@ -11,6 +12,7 @@ import {
   Infographic,
   RecentData,
   TopViewed,
+  Loading,
 } from '@openneuro/components'
 
 const TOP_VIEWED = gql`
@@ -28,6 +30,9 @@ const TOP_VIEWED = gql`
           }
           latestSnapshot {
             tag
+            summary {
+              modalities
+            }
             description {
               Name
             }
@@ -38,35 +43,113 @@ const TOP_VIEWED = gql`
   }
 `
 
-const FrontPageContainer: React.FC = () => {
-  const responsive = {
-    superLargeDesktop: {
-      // the naming can be any, depends on you.
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-      slidesToSlide: 5,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 3,
-      slidesToSlide: 3,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-      slidesToSlide: 2,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-      slidesToSlide: 1,
-    },
+const RECENTLY_PUBLISHED = gql`
+  query recently_published_datasets {
+    datasets(
+      first: 5
+      orderBy: { publishDate: descending }
+      filterBy: { public: true }
+    ) {
+      edges {
+        node {
+          id
+          publishDate
+          latestSnapshot {
+            tag
+            summary {
+              modalities
+            }
+            description {
+              Name
+            }
+          }
+        }
+      }
+    }
   }
+`
 
-  const result = useQuery(TOP_VIEWED)
+const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+    slidesToSlide: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    slidesToSlide: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+    slidesToSlide: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1,
+  },
+}
 
-  console.log(result)
+export const FrontPageTopQuery = ({ query }) => {
+  const result = useQuery(query)
+  if (result.loading) {
+    return (
+      <>
+        <Loading />
+        <br />
+      </>
+    )
+  } else if (result.error || result.data.datasets == null) {
+    Sentry.captureException(result.error)
+    return <div>Failed to load top datasets, please try again later.</div>
+  } else {
+    // Remove any edges which could not be loaded
+    const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
+    console.log(edges)
+    return (
+      <ActivitySlider
+        data={edges}
+        slideHeader="Most Viewed"
+        showDots={true}
+        infinite={true}
+        keyBoardControl={true}
+        containerClass="activity-slider recent-slider"
+        itemClass="carousel-item"
+        responsive={responsive}
+      />
+    )
+  }
+}
 
+export const FrontPageNewQuery = ({ query }) => {
+  const result = useQuery(query)
+  if (result.loading) {
+    return <Loading />
+  } else if (result.error || result.data.datasets == null) {
+    Sentry.captureException(result.error)
+    return <div>Failed to load top datasets, please try again later.</div>
+  } else {
+    // Remove any edges which could not be loaded
+    const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
+    console.log(edges)
+    return (
+      <ActivitySlider
+        data={edges}
+        slideHeader="Newly Added"
+        showDots={true}
+        infinite={true}
+        keyBoardControl={true}
+        containerClass="activity-slider recent-slider"
+        itemClass="carousel-item"
+        responsive={responsive}
+      />
+    )
+  }
+}
+const FrontPageContainer: React.FC = () => {
   return (
     <>
       <FrontPage
@@ -76,26 +159,8 @@ const FrontPageContainer: React.FC = () => {
         renderActivitySliderFront={() => (
           <>
             <ActivityHeader />
-            <ActivitySlider
-              data={RecentData.data.datasets.edges}
-              slideHeader="Newly Added"
-              showDots={true}
-              infinite={true}
-              keyBoardControl={true}
-              containerClass="activity-slider recent-slider"
-              itemClass="carousel-item"
-              responsive={responsive}
-            />
-            <ActivitySlider
-              data={TopViewed.data.datasets.edges}
-              slideHeader="Most Viewed"
-              showDots={true}
-              infinite={true}
-              keyBoardControl={true}
-              containerClass="activity-slider popular-slider"
-              itemClass="carousel-item"
-              responsive={responsive}
-            />
+            <FrontPageTopQuery query={TOP_VIEWED} />
+            <FrontPageNewQuery query={RECENTLY_PUBLISHED} />
           </>
         )}
         renderGetUpdates={() => <GetUpdates />}
