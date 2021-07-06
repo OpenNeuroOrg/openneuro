@@ -1,4 +1,6 @@
 import React from 'react'
+import { gql, useQuery } from '@apollo/client'
+
 import {
   FrontPage,
   AffiliateBlock,
@@ -10,6 +12,31 @@ import {
   RecentData,
   TopViewed,
 } from '@openneuro/components'
+
+const TOP_VIEWED = gql`
+  query top_viewed_datasets {
+    datasets(
+      first: 5
+      orderBy: { views: descending }
+      filterBy: { public: true }
+    ) {
+      edges {
+        node {
+          id
+          analytics {
+            views
+          }
+          latestSnapshot {
+            tag
+            description {
+              Name
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 const FrontPageContainer: React.FC = () => {
   const responsive = {
@@ -35,6 +62,11 @@ const FrontPageContainer: React.FC = () => {
       slidesToSlide: 1,
     },
   }
+
+  const result = useQuery(TOP_VIEWED)
+
+  console.log(result)
+
   return (
     <>
       <FrontPage
