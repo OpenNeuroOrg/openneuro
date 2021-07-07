@@ -120,8 +120,8 @@
 
     [type='radio']:not(:checked) + label {
       border-radius: 4px;
-      border: 1px solid #c83fad;
-      color: #c83fad;
+      border: 1px solid $chiclet-color;
+      color: $chiclet-color;
       transition: background-color 0.3s;
       cursor: pointer;
       font-size: 13px;
@@ -137,7 +137,7 @@
     [type='radio']:checked + label {
       color: #fff;
       border-radius: 4px;
-      background-color: #c83fad;
+      background-color: $chiclet-color;
       transition: background-color 0.3s;
       cursor: pointer;
       font-size: 13px;
