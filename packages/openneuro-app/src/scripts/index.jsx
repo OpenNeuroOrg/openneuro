@@ -1,52 +1,14 @@
-// dependencies --------------------------------------------------------------
-
-import React, { Suspense, lazy } from 'react'
-import Routes_REFACTOR from './refactor_2021/routes'
-import Navbar from './nav/navbar.jsx'
-import HeaderContainer from './refactor_2021/containers/header'
-import Routes from './routes.jsx'
-import Uploader from './uploader/uploader.jsx'
+import React from 'react'
 import FeatureToggle from './components/feature-toggle'
-import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
-import { UserModalOpenProvider } from './refactor_2021/user-login-modal-ctx'
-
-// downside to this approach is that the first SSR paint has no styles
-// might be better to do the class on body
-const MainStyles = lazy(() => import('../sass/MainStyles'))
-const MainStyles_REFACTOR = lazy(() =>
-  import('./refactor_2021/styles/MainStyles'),
-)
+import Redesign from './redesign'
+import Classic from './classic'
 
 const Index = () => {
   return (
     <FeatureToggle
       feature="redesign-2021"
-      renderOnEnabled={() => (
-        <>
-          <Suspense fallback={<></>}>{<MainStyles_REFACTOR />}</Suspense>
-          <Uploader>
-            <SearchParamsProvider>
-              <UserModalOpenProvider>
-                <HeaderContainer />
-                <Routes_REFACTOR />
-              </UserModalOpenProvider>
-            </SearchParamsProvider>
-          </Uploader>
-        </>
-      )}
-      renderOnDisabled={() => (
-        <>
-          <Suspense fallback={<></>}>{<MainStyles />}</Suspense>
-          <Uploader>
-            <div className="page">
-              <div className="main">
-                <Navbar />
-                <Routes />
-              </div>
-            </div>
-          </Uploader>
-        </>
-      )}
+      renderOnEnabled={() => <Redesign />}
+      renderOnDisabled={() => <Classic />}
     />
   )
 }

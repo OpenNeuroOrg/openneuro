@@ -41,7 +41,6 @@ const configScript = `window.OpenNeuroConfig = ${JSON.stringify(
 
 async function createServer(): Promise<void> {
   const app = express()
-
   let vite
   if (development) {
     // Create vite server in middleware mode. This disables Vite's own HTML
@@ -132,7 +131,7 @@ async function createServer(): Promise<void> {
           // 4. render the app HTML. This assumes entry-server.js's exported `render`
           //    function calls appropriate framework SSR APIs,
           //    e.g. ReactDOMServer.renderToString()
-          interpolate = await render(url)
+          interpolate = await render(url, req['universalCookies'])
         } catch (e) {
           // no-cache on errors
           cacheControl = 'no-cache'
