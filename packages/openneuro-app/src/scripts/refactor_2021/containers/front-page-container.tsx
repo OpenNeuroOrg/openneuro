@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
+import { Mutation } from '@apollo/client/react/components'
 
 import {
   FrontPage,
@@ -14,6 +15,12 @@ import {
   TopViewed,
   Loading,
 } from '@openneuro/components'
+
+const SUBSCRIBE_TO_NEWSLETTER = gql`
+  mutation subscribeToNewsletter($email: String!) {
+    subscribeToNewsletter(email: $email)
+  }
+`
 
 const TOP_VIEWED = gql`
   query top_viewed_datasets {
@@ -159,7 +166,19 @@ const FrontPageContainer: React.FC = () => {
             <FrontPageNewQuery query={RECENTLY_PUBLISHED} />
           </>
         )}
-        renderGetUpdates={() => <GetUpdates />}
+        renderGetUpdates={() => (
+          <Mutation mutation={SUBSCRIBE_TO_NEWSLETTER}>
+            {subscribeToNewsletter => (
+              <GetUpdates
+                subscribe={(email, cb) => {
+                  subscribeToNewsletter({ variables: { email } })
+                    .then(cb)
+                    .catch(cb)
+                }}
+              />
+            )}
+          </Mutation>
+        )}
         renderContributors={() => <Contributors />}
       />
     </>

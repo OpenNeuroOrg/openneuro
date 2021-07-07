@@ -3,7 +3,6 @@ import { FrontPage } from './FrontPage'
 import { AffiliateBlock } from './AffiliateBlock'
 import { ActivitySlider } from '../activity-slider/ActivitySlider'
 import { Contributors } from './Contributors'
-import { GetUpdates } from './GetUpdates'
 import { Infographic } from './Infographic'
 import { ActivityHeader } from './ActivityHeader'
 
@@ -71,7 +70,7 @@ export const FrontPageContainerExample =
               />
             </>
           )}
-          renderGetUpdates={() => <GetUpdates />}
+          renderGetUpdates={() => <>Get updates </>}
           renderContributors={() => <Contributors />}
         />
       </div>

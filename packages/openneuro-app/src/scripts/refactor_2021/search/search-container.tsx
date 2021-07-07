@@ -38,7 +38,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const profile = getUnexpiredProfile(cookies)
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-  const modality = portalContent?.modality || false
+  const modality = portalContent?.modality || null
   useEffect(() => {
     if (searchParams.modality_selected !== modality) {
       setSearchParams(
@@ -56,7 +56,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const numResultsShown = data?.datasets?.edges.length || 0
   const numTotalResults = data?.datasets?.pageInfo.count || 0
   const resultsList = data?.datasets?.edges || []
-
   return (
     <SearchPage
       portalContent={portalContent}
