@@ -78,7 +78,7 @@ export const getSelectParams = ({
   section_selected,
   species_selected,
   studyDomain_selected,
-}: Record<string, any>): Record<string, any> => ({
+}) => ({
   keywords,
   modality_selected,
   datasetType_selected,
