@@ -32,7 +32,7 @@ export const submitHandler = (subscribe, mode, setMode, value) => e => {
   }
 }
 
-export const getText = mode => {
+const getText = mode => {
   switch (mode) {
     case modes.ERROR:
       return {
@@ -72,7 +72,7 @@ export const GetUpdates = ({ subscribe, initialMode = modes.GET }) => {
         className="get-updates-form">
         <>
           <div className="">{}</div>
-          {mode === modes.ERROR || mode === modes.SUCCESS ? null : (
+          {mode === modes.GET && (
             <Input
               type="email"
               label="Email Address"
