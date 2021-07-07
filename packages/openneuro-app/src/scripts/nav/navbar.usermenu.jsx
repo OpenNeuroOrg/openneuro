@@ -6,7 +6,7 @@ import { withRouter, Link } from 'react-router-dom'
 import Avatar from '../user/avatar.jsx'
 import { DropdownButton } from '../components/dropdown-button'
 import withProfile from '../authentication/withProfile.jsx'
-import signOut from '../authentication/signOut.js'
+import signOut from '../refactor_2021/authentication/signOut'
 
 const signOutAndRedirect = history => {
   signOut()

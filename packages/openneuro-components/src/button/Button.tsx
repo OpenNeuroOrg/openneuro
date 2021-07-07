@@ -19,6 +19,7 @@ export interface ButtonProps {
   iconSize?: string
   className?: string
   children?: React.ReactNode
+  type?: 'button' | 'submit' | 'reset'
 }
 
 /**
@@ -39,6 +40,7 @@ export const Button = ({
   children,
   disabled,
   iconOnly,
+  type,
   ...props
 }: ButtonProps) => {
   const mode =
@@ -71,7 +73,7 @@ export const Button = ({
     <button
       disabled={disabled}
       role="button"
-      type="button"
+      type={type ? type : 'button'}
       className={[
         'on-button',
         `on-button--${size}`,

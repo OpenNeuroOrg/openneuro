@@ -4,12 +4,15 @@ import { Header, LandingExpandedHeader } from '@openneuro/components'
 import ModalitySelect from '../search/inputs/modality-select'
 import { SearchParamsCtx } from '../search/search-params-ctx'
 import initialSearchParams from '../search/initial-search-params'
-import { UserModalParamsCtx } from '../user-login-modal-ctx'
+import { UserModalOpenCtx } from '../user-login-modal-ctx'
 import { Input } from '@openneuro/components'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import signOut from '../authentication/signOut'
 import { getUnexpiredProfile } from '../authentication/profile'
 import FreshdeskWidget from '../freshdesk-widget'
+import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
+import loginUrls from '../authentication/loginUrls'
 
 const HeaderContainer: FC = () => {
   const history = useHistory()
@@ -21,7 +24,7 @@ const HeaderContainer: FC = () => {
   const profile = getUnexpiredProfile(cookies)
 
   const { setSearchParams } = useContext(SearchParamsCtx)
-  const { userModalParams, setUserModalParams } = useContext(UserModalParamsCtx)
+  const { userModalOpen, setUserModalOpen } = useContext(UserModalOpenCtx)
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
 
@@ -37,11 +40,18 @@ const HeaderContainer: FC = () => {
     history.push('/search')
   }
 
-  const toggleLogin = userModalParams => {
-    setUserModalParams(prevState => ({
+  const toggleLoginModal = (): void => {
+    setUserModalOpen(prevState => ({
       ...prevState,
-      userModalParams,
+      userModalOpen: !prevState.userModalOpen,
     }))
+  }
+
+  const signOutAndRedirect = () => {
+    signOut()
+    const homepage = '/'
+    if (window.location.pathname === homepage) window.location.reload()
+    else window.location.pathname = homepage
   }
 
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
@@ -54,20 +64,20 @@ const HeaderContainer: FC = () => {
     <Header
       isOpenSupport={isOpenSupport}
       isOpenUpload={isOpenUpload}
-      isOpenLogin={userModalParams}
-      toggleLogin={toggleLogin}
+      toggleLoginModal={toggleLoginModal}
+      signOutAndRedirect={signOutAndRedirect}
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
       profile={profile}
-      onLogin={() => {}}
-      onLogout={() => {}}
-      onCreateAccount={() => {}}
       expanded={expanded}
-      pushHistory={history.push}
       renderOnFreshDeskWidget={() => <FreshdeskWidget />}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}
+          loginUrls={loginUrls}
+          renderAggregateCounts={(modality: string) => (
+            <AggregateCountsContainer modality={modality} />
+          )}
           renderFacetSelect={() => (
             <ModalitySelect
               startOpen={false}

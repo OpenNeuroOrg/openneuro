@@ -4,37 +4,41 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 const Container = styled.div({
-  position: 'relative',
-  width: '100%',
-  height: '4.5rem',
-  backgroundColor: 'white',
-  borderRadius: '5px',
+  '&&': {
+    position: 'relative',
+    width: '100%',
+    height: '4.5rem',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+  },
 })
 const centerLabelStyles = {
-  top: '1rem',
-  fontSize: '1em',
+  '&&': {
+    top: '1rem',
+    fontSize: '1em',
+  },
 }
 const pushedUpLabelStyles = {
-  top: '0.4rem',
-  fontSize: '0.75em',
+  '&&': { top: '0.4rem', fontSize: '0.75em' },
 }
-
 interface SelectInputLabelProps {
   hasValue: boolean
 }
 
 const Label = styled.label<SelectInputLabelProps>(
   {
-    position: 'absolute',
-    left: '1rem',
-    right: '1rem',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    color: '#999',
-    transition: 'top 100ms, font-size 100ms',
-    transitionTimingFunction: 'ease-out',
-    textAlign: 'left',
+    '&&': {
+      position: 'absolute',
+      left: '1rem',
+      right: '1rem',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      color: '#999',
+      transition: 'top 100ms, font-size 100ms',
+      transitionTimingFunction: 'ease-out',
+      textAlign: 'left',
+    },
   },
   ({ hasValue }) => ({
     ...(hasValue ? pushedUpLabelStyles : centerLabelStyles),
@@ -42,10 +46,12 @@ const Label = styled.label<SelectInputLabelProps>(
   }),
 )
 const DisabledIcon = styled.i({
-  position: 'absolute',
-  top: '0.4rem',
-  right: '0.4rem',
-  color: '#5cb85c',
+  '&&': {
+    position: 'absolute',
+    top: '0.4rem',
+    right: '0.4rem',
+    color: '#5cb85c',
+  },
 })
 
 interface ShowOtherProps {
@@ -53,16 +59,18 @@ interface ShowOtherProps {
 }
 const Select = styled.select<ShowOtherProps>(
   {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    width: '100%',
-    height: '100%',
-    border: '2px inset #eee',
-    color: 'rgba(0,0,0,0)',
-    backgroundColor: 'rgba(0,0,0,0)',
-    '-moz-appearance': 'none',
+    '&&': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      width: '100%',
+      height: '100%',
+      border: '2px inset #eee',
+      color: 'rgba(0,0,0,0)',
+      backgroundColor: 'rgba(0,0,0,0)',
+      '-moz-appearance': 'none',
+    },
   },
   ({ showOther }) =>
     showOther
@@ -74,28 +82,32 @@ const Select = styled.select<ShowOtherProps>(
 )
 Select.displayName = 'styledSelect'
 const SelectValueDisplay = styled.div({
-  position: 'absolute',
-  top: 0,
-  width: '100%',
-  height: '100%',
-  padding: '1.7rem 1rem 0',
-  color: 'black',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  textAlign: 'left',
+  '&&': {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: '100%',
+    padding: '1.7rem 1rem 0',
+    color: 'black',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    textAlign: 'left',
+  },
 })
 const SelectIconContainer = styled.div({
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  height: '100%',
-  width: '3rem',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  color: '#999',
+  '&&': {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    height: '100%',
+    width: '3rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#999',
+  },
 })
 const SelectIcon = (): React.ReactElement => (
   <SelectIconContainer>
@@ -108,28 +120,30 @@ const Option = styled.option({
 })
 const OtherInputContainer = styled.div<ShowOtherProps>(
   {
-    marginBottom: '0.5rem',
-    overflow: 'hidden',
-    transition: 'opacity, transform, height',
-    transitionDuration: '200ms',
-    transitionTimingFunction: 'ease-out',
+    '&&': {
+      marginBottom: '0.5rem',
+      overflow: 'hidden',
+      transition: 'opacity, transform, height',
+      transitionDuration: '200ms',
+      transitionTimingFunction: 'ease-out',
 
-    input: {
-      borderTopRightRadius: 0,
-      borderTopLeftRadius: 0,
+      input: {
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+      },
     },
   },
   ({ showOther }) =>
     showOther
       ? {
-          height: '4.5rem',
-          opacity: 1,
-          transform: 'translateY(0)',
+          '&&': {
+            height: '4.5rem',
+            opacity: 1,
+            transform: 'translateY(0)',
+          },
         }
       : {
-          height: 0,
-          opacity: 0,
-          transform: 'translateY(-4rem)',
+          '&&': { height: 0, opacity: 0, transform: 'translateY(-4rem)' },
         },
 )
 const SelectInput = ({

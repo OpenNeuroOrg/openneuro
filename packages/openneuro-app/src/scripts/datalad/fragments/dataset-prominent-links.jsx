@@ -5,61 +5,65 @@ import snapshotVersion from '../snapshotVersion'
 import styled from '@emotion/styled'
 
 const PaddedDiv = styled.div`
-  padding: 0.5em 0 0.5em;
-  display: flex;
-  flex-wrap: wrap;
+  && {
+    padding: 0.5em 0 0.5em;
+    display: flex;
+    flex-wrap: wrap;
+  }
 `
 const LinkButton = styled.button`
-  margin: 1rem 1rem 0 0;
-  min-height: 3rem;
-  border: none;
-  border-radius: 0.5rem;
-  background: #377881;
-  background: -moz-linear-gradient(
-    top,
-    hsl(187, 40%, 36%) 0%,
-    hsl(191, 56%, 26%) 100%
-  );
-  background: -webkit-linear-gradient(
-    top,
-    hsl(187, 40%, 36%) 0%,
-    hsl(191, 56%, 26%) 100%
-  );
-  background: linear-gradient(
-    to bottom,
-    hsl(187, 40%, 36%) 0%,
-    hsl(191, 56%, 26%) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#377881', endColorstr='#1d5967',GradientType=0 );
-  display: flex;
-  align-items: center;
-  padding: 0.2em 1.33em;
-  font-family: sans-serif;
-  font-weight: 100;
-  color: white;
-
-  &:hover,
-  &:active,
-  &.hover,
-  &.active,
-  &:focus {
+  && {
+    margin: 1rem 1rem 0 0;
+    min-height: 3rem;
+    border: none;
+    border-radius: 0.5rem;
     background: #377881;
     background: -moz-linear-gradient(
       top,
-      hsl(187, 40%, 24%) 0%,
-      hsl(191, 56%, 18%) 100%
+      hsl(187, 40%, 36%) 0%,
+      hsl(191, 56%, 26%) 100%
     );
     background: -webkit-linear-gradient(
       top,
-      hsl(187, 40%, 24%) 0%,
-      hsl(191, 56%, 18%) 100%
+      hsl(187, 40%, 36%) 0%,
+      hsl(191, 56%, 26%) 100%
     );
     background: linear-gradient(
       to bottom,
-      hsl(187, 40%, 24%) 0%,
-      hsl(191, 56%, 18%) 100%
+      hsl(187, 40%, 36%) 0%,
+      hsl(191, 56%, 26%) 100%
     );
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#377881', endColorstr='#1d5967',GradientType=0 );
+    display: flex;
+    align-items: center;
+    padding: 0.2em 1.33em;
+    font-family: sans-serif;
+    font-weight: 100;
+    color: white;
+
+    &:hover,
+    &:active,
+    &.hover,
+    &.active,
+    &:focus {
+      background: #377881;
+      background: -moz-linear-gradient(
+        top,
+        hsl(187, 40%, 24%) 0%,
+        hsl(191, 56%, 18%) 100%
+      );
+      background: -webkit-linear-gradient(
+        top,
+        hsl(187, 40%, 24%) 0%,
+        hsl(191, 56%, 18%) 100%
+      );
+      background: linear-gradient(
+        to bottom,
+        hsl(187, 40%, 24%) 0%,
+        hsl(191, 56%, 18%) 100%
+      );
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#377881', endColorstr='#1d5967',GradientType=0 );
+    }
   }
 `
 const ButtonText = styled.div``
