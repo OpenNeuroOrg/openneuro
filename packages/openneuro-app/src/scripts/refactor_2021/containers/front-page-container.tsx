@@ -113,7 +113,6 @@ export const FrontPageTopQuery = ({ query }) => {
         data={edges}
         slideHeader="Most Viewed"
         showDots
-        infinite
         keyBoardControl
         containerClass="activity-slider recent-slider"
         itemClass="carousel-item"
@@ -138,7 +137,6 @@ export const FrontPageNewQuery = ({ query }) => {
         data={edges}
         slideHeader="Newly Added"
         showDots
-        infinite
         keyBoardControl
         containerClass="activity-slider recent-slider"
         itemClass="carousel-item"
