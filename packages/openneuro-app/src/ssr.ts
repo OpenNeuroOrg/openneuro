@@ -41,7 +41,6 @@ const configScript = `window.OpenNeuroConfig = ${JSON.stringify(
 
 async function createServer(): Promise<void> {
   const app = express()
-
   let vite
   if (development) {
     // Create vite server in middleware mode. This disables Vite's own HTML
