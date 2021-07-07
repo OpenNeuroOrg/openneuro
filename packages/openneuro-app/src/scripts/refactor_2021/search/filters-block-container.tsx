@@ -77,14 +77,14 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
     }))
     if (path !== globalSearchPath) history.push(globalSearchPath)
   }
-  return someParamsAreSelected ? (
+  return (
     <FiltersBlock
       removeFilterItem={removeFilter}
       removeAllFilters={removeAllFilters}
       numTotalResults={numTotalResults}
       {...selectedParams}
     />
-  ) : null
+  )
 }
 
 export default FiltersBlockContainer
