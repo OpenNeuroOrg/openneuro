@@ -34,7 +34,8 @@ export const portalContent = {
     portalName: 'OpenNeuro EEG',
     portalPrimary: (
       <>
-        OpenNeuro added support for EEG datasets in 2019, when EEG was incorporated into the{' '}
+        OpenNeuro added support for EEG datasets in 2019, when{' '}
+        <a href="https://www.nature.com/articles/s41597-019-0104-8">EEG was incorporated</a> into the{' '}
         <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
@@ -58,7 +59,8 @@ export const portalContent = {
     portalName: 'OpenNeuro iEEG',
     portalPrimary: (
       <>
-        OpenNeuro added support for iEEG datasets in 2019, when iEEG was incorporated into the{' '}
+        OpenNeuro added support for iEEG datasets in 2019, when{' '}
+        <a href="https://www.nature.com/articles/s41597-019-0105-7">iEEG was incorporated</a> into the{' '}
         <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
@@ -82,7 +84,8 @@ export const portalContent = {
     portalName: 'OpenNeuro MEG',
     portalPrimary: (
       <>
-        OpenNeuro added support for MEG datasets in 2018, when MEG was incorporated into the{' '}
+        OpenNeuro added support for MEG datasets in 2018, when{' '}
+        <a href="https://www.nature.com/articles/sdata2018110">MEG was incorporated</a> into the{' '}
         <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
