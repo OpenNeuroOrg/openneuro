@@ -21,6 +21,7 @@ export interface FiltersBlockProps {
   section_selected?: FacetSelectValueType
   species_selected?: FacetSelectValueType
   studyDomain_selected?: FacetSelectValueType
+  noFilters: boolean
   removeFilterItem?(isModality?: boolean): (key: string, value) => void
   removeAllFilters?(): void
   numTotalResults: number
@@ -41,6 +42,7 @@ export const FiltersBlock = ({
   species_selected,
   studyDomain_selected,
   date_selected,
+  noFilters,
   removeFilterItem,
   removeAllFilters,
   numTotalResults,
@@ -53,25 +55,13 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <h4>
-        {modality_selected ||
-        datasetType_selected !== 'All Public' ||
-        !ageRangeIsNull ||
-        !subjectCountRangeIsNull ||
-        gender_selected !== 'All' ||
-        date_selected !== 'All Time' ||
-        diagnosis_selected !== null ||
-        section_selected !== null ||
-        species_selected !== null ||
-        studyDomain_selected !== null ||
-        keywords.length !== 0 ||
-        tasks.length !== 0 ||
-        authors.length !== 0 ? (
+        {noFilters ? (
+          <b>Showing all available datasets</b>
+        ) : (
           <>
             These filters return <span>{numTotalResults}</span> results:{' '}
             <Button label="Clear All" size="small" onClick={removeAllFilters} />
           </>
-        ) : (
-          <b>Showing all available datasets</b>
         )}
       </h4>
       <ul className="active-filters">

@@ -103,25 +103,24 @@ export const SearchPageContainerExample = ({
         portalContent={portalContent}
         renderFilterBlock={() => (
           <>
-            {!filterBlockIsEmpty ? (
-              <FiltersBlock
-                keywords={allKeywords}
-                authors={allAuthors}
-                tasks={allTasks}
-                modality_selected={modality_selected}
-                datasetType_selected={datasetType_selected}
-                datasetStatus_selected={datasetStatus_selected}
-                ageRange={ageRange}
-                subjectCountRange={subjectCountRange}
-                gender_selected={gender_selected}
-                diagnosis_selected={diagnosis_selected}
-                section_selected={section_selected}
-                species_selected={species_selected}
-                studyDomain_selected={studyDomain_selected}
-                date_selected={date_selected}
-                numTotalResults={numTotalResults}
-              />
-            ) : null}
+            <FiltersBlock
+              keywords={allKeywords}
+              authors={allAuthors}
+              tasks={allTasks}
+              modality_selected={modality_selected}
+              datasetType_selected={datasetType_selected}
+              datasetStatus_selected={datasetStatus_selected}
+              ageRange={ageRange}
+              subjectCountRange={subjectCountRange}
+              gender_selected={gender_selected}
+              diagnosis_selected={diagnosis_selected}
+              section_selected={section_selected}
+              species_selected={species_selected}
+              studyDomain_selected={studyDomain_selected}
+              date_selected={date_selected}
+              numTotalResults={numTotalResults}
+              noFilters={filterBlockIsEmpty}
+            />
           </>
         )}
         renderSortBy={() => (
