@@ -18,15 +18,9 @@ export const portalContent = {
     hexBackgroundImage: mriScan,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
-    communityHeader:
-      'Join the OHBM virtual meeting the week of June 21st, 2021',
-    communityPrimary:
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
-    communitySecondary: (
-      <span>
-        Visit the <a href="#">Eventbright</a> for more information.
-      </span>
-    ),
+    communityHeader: null,
+    communityPrimary: null,
+    communitySecondary: null,
   },
   eeg: {
     modality: 'EEG', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
@@ -44,14 +38,9 @@ export const portalContent = {
     hexBackgroundImage: mriScan,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
-    communityHeader: 'Join the EEG hackathon on July 1st, 2021',
-    communityPrimary:
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
-    communitySecondary: (
-      <span>
-        Visit the <a href="#">Eventbright</a> for more information.
-      </span>
-    ),
+    communityHeader: null,
+    communityPrimary: null,
+    communitySecondary: null,
   },
   ieeg: {
     modality: 'iEEG', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
@@ -69,14 +58,9 @@ export const portalContent = {
     hexBackgroundImage: mriScan,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
-    communityHeader: 'Join the iEEG hackathon on July 1st, 2021',
-    communityPrimary:
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
-    communitySecondary: (
-      <span>
-        Visit the <a href="#">Eventbright</a> for more information.
-      </span>
-    ),
+    communityHeader: null,
+    communityPrimary: null,
+    communitySecondary: null,
   },
   meg: {
     modality: 'MEG', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
@@ -94,14 +78,9 @@ export const portalContent = {
     hexBackgroundImage: mriScan,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
-    communityHeader: 'Join the MEG hackathon on July 1st, 2021',
-    communityPrimary:
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deser unt mollit anim id est laborumror sit voluptatem accusantium doloremque.',
-    communitySecondary: (
-      <span>
-        Visit the <a href="#">Eventbright</a> for more information.
-      </span>
-    ),
+    communityHeader: null,
+    communityPrimary: null,
+    communitySecondary: null,
   },
   pet: {
     modality: 'PET', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
