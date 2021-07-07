@@ -18,7 +18,7 @@ import {
 const TOP_VIEWED = gql`
   query top_viewed_datasets {
     datasets(
-      first: 5
+      first: 12
       orderBy: { views: descending }
       filterBy: { public: true }
     ) {
@@ -46,7 +46,7 @@ const TOP_VIEWED = gql`
 const RECENTLY_PUBLISHED = gql`
   query recently_published_datasets {
     datasets(
-      first: 5
+      first: 12
       orderBy: { publishDate: descending }
       filterBy: { public: true }
     ) {
@@ -73,13 +73,13 @@ const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-    slidesToSlide: 5,
+    items: 4,
+    slidesToSlide: 4,
   },
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3,
+    items: 4,
+    slidesToSlide: 4,
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
@@ -108,14 +108,13 @@ export const FrontPageTopQuery = ({ query }) => {
   } else {
     // Remove any edges which could not be loaded
     const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
-    console.log(edges)
     return (
       <ActivitySlider
         data={edges}
         slideHeader="Most Viewed"
-        showDots={true}
-        infinite={true}
-        keyBoardControl={true}
+        showDots
+        infinite
+        keyBoardControl
         containerClass="activity-slider recent-slider"
         itemClass="carousel-item"
         responsive={responsive}
@@ -134,14 +133,13 @@ export const FrontPageNewQuery = ({ query }) => {
   } else {
     // Remove any edges which could not be loaded
     const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
-    console.log(edges)
     return (
       <ActivitySlider
         data={edges}
         slideHeader="Newly Added"
-        showDots={true}
-        infinite={true}
-        keyBoardControl={true}
+        showDots
+        infinite
+        keyBoardControl
         containerClass="activity-slider recent-slider"
         itemClass="carousel-item"
         responsive={responsive}
