@@ -15,7 +15,7 @@ $mri-dark: darken($mri-theme, 25%);
 $mri-secondary: adjust-color($mri-theme, $lightness: 15%);
 $mri-light: adjust-color($mri-theme, $lightness: 45%);
 
-$eeg-theme: rgba(138, 177, 89, 1);
+$eeg-theme: rgba(179, 37, 37, 1);
 $eeg-hover: adjust-color($eeg-theme, $lightness: 10%);
 $eeg-dark: darken($eeg-theme, 25%);
 $eeg-secondary: adjust-color($eeg-theme, $lightness: 15%);
@@ -27,7 +27,7 @@ $pet-dark: darken($pet-theme, 25%);
 $pet-secondary: adjust-color($pet-theme, $lightness: 15%);
 $pet-light: adjust-color($pet-theme, $lightness: 45%);
 
-$ieeg-theme: rgba(121, 5, 93, 1);
+$ieeg-theme: rgba(99, 121, 10, 1);
 $ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
 $ieeg-dark: darken($ieeg-theme, 25%);
 $ieeg-secondary: adjust-color($ieeg-theme, $lightness: 15%);
