@@ -59,7 +59,7 @@ export const FiltersBlock = ({
           <b>Showing all available datasets</b>
         ) : (
           <>
-            These filters return <span>{numTotalResults}</span> results:{' '}
+            These filters return <span>{numTotalResults}</span> datasets:{' '}
             <Button label="Clear All" size="small" onClick={removeAllFilters} />
           </>
         )}
