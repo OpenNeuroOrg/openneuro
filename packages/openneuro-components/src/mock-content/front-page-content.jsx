@@ -141,12 +141,6 @@ export const frontPage = {
       link: 'https://braininitiative.nih.gov/',
     },
     {
-      title: 'The National Institute of Mental Health',
-      alt: 'The National Institute of Mental Health logo',
-      logo: nimh,
-      link: 'https://www.nimh.nih.gov/index.shtml',
-    },
-    {
       title: 'NSF',
       alt: 'National Science Foundation',
       logo: nsf,
