@@ -1,6 +1,10 @@
 import React from 'react'
 
-import mriScan from '../assets/mri-scan.jpg'
+import pet from '../assets/pet-scan.jpg'
+import eeg from '../assets/eeg.jpg'
+import ieeg from '../assets/ieeg.jpg'
+import mri from '../assets/mri.jpg'
+import meg from '../assets/meg.jpg'
 
 export const portalContent = {
   mri: {
@@ -19,7 +23,7 @@ export const portalContent = {
     ),
     publicDatasetStat: 100,
     participantsStat: 1100,
-    hexBackgroundImage: mriScan,
+    hexBackgroundImage: mri,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
     communityHeader:
@@ -40,7 +44,7 @@ export const portalContent = {
       'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
     publicDatasetStat: 100,
     participantsStat: 1100,
-    hexBackgroundImage: mriScan,
+    hexBackgroundImage: eeg,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
     communityHeader: 'Join the EEG hackathon on July 1st, 2021',
@@ -60,7 +64,7 @@ export const portalContent = {
       'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
     publicDatasetStat: 100,
     participantsStat: 1100,
-    hexBackgroundImage: mriScan,
+    hexBackgroundImage: ieeg,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
     communityHeader: 'Join the iEEG hackathon on July 1st, 2021',
@@ -80,7 +84,7 @@ export const portalContent = {
       'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
     publicDatasetStat: 100,
     participantsStat: 1100,
-    hexBackgroundImage: mriScan,
+    hexBackgroundImage: meg,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
     communityHeader: 'Join the MEG hackathon on July 1st, 2021',
@@ -100,7 +104,7 @@ export const portalContent = {
       'The OpenNeuro platform was developed by the Center for Reproducible Neuroscience as a tool to encourage and enhance data sharing and analysis of raw MRI data, using BIDS to organize and standardize this data. Since its release in 2017, the site has seen the upload of more than 200 public MRI-specific datasets.',
     publicDatasetStat: 100,
     participantsStat: 1100,
-    hexBackgroundImage: mriScan,
+    hexBackgroundImage: pet,
     swoopBackgroundColorLight: 'rgba(109,83,156,1)',
     swoopBackgroundColorDark: 'rgba(45,34,64,1)',
     communityHeader: 'Join the PET hackathon on July 1st, 2021',
