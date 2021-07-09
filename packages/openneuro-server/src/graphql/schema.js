@@ -416,7 +416,7 @@ export const typeDefs = `
     # Whether or not this snapshot has been deprecated
     deprecated: Boolean
     # ID of user who flagged snapshot as deprecated
-    deprecatedBy: String
+    deprecatedBy: User
     # Timestamp of snapshot deprecation
     deprecatedAt: Date
     # Reason for deprecating snaphot
