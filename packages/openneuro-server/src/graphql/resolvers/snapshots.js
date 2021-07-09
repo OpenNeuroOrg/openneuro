@@ -12,6 +12,8 @@ import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
+import SnapshotModel from '../../models/snapshot'
+import * as Sentry from '@sentry/node'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -125,21 +127,26 @@ export const deprecateSnapshot = async (
   { datasetId, tag, reason },
   { user, userInfo },
 ) => {
-  await checkDatasetAdmin(datasetId, user, userInfo)
-  await SnapshotModel.updateOne(
-    { datasetId, tag },
-    {
-      deprecated: true,
-      deprecatedBy: user,
-      deprecatedAt: new Date(),
-      deprecatedFor: reason,
-    },
-    {
-      runValidators: true,
-      context: 'query',
-    },
-  )
-  return true
+  try {
+    await checkDatasetAdmin(datasetId, user, userInfo)
+    await SnapshotModel.updateOne(
+      { datasetId, tag },
+      {
+        deprecated: true,
+        deprecatedBy: user,
+        deprecatedAt: new Date(),
+        deprecatedFor: reason,
+      },
+      {
+        runValidators: true,
+        context: 'query',
+      },
+    )
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    return false
+  }
 }
 
 /**
