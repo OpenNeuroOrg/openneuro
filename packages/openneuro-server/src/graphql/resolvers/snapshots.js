@@ -116,6 +116,27 @@ export const createSnapshot = (
   })
 }
 
+export const deprecateSnapshot = async (
+  obj,
+  { datasetId, tag, reason },
+  { user },
+) => {
+  await SnapshotModel.updateOne(
+    { datasetId, tag },
+    {
+      deprecated: true,
+      deprecatedBy: user,
+      deprecatedAt: new Date(),
+      deprecatedFor: reason,
+    },
+    {
+      runValidators: true,
+      context: 'query',
+    },
+  )
+  return true
+}
+
 /**
  * Remove a tag from a dataset
  */

@@ -175,6 +175,8 @@ export const typeDefs = `
     reexportRemotes(datasetId: ID!): Boolean
     # Reset draft commit
     resetDraft(datasetId: ID!, ref: String!): Boolean
+    # Flag snapshot as deprecated
+    deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Boolean
   }
 
   input DeleteFile {
