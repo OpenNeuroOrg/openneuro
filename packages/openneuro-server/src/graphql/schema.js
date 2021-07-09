@@ -413,6 +413,14 @@ export const typeDefs = `
     readme: String @cacheControl(maxAge: 31536000, scope: PUBLIC)
     # The git hash associated with this snapshot
     hexsha: String
+    # Whether or not this snapshot has been deprecated
+    deprecated: Boolean
+    # ID of user who flagged snapshot as deprecated
+    deprecatedBy: String
+    # Timestamp of snapshot deprecation
+    deprecatedAt: Date
+    # Reason for deprecating snaphot
+    deprecatedFor: String
   }
 
   # Contents of dataset_description.json
