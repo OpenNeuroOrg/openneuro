@@ -61,7 +61,6 @@
     "subscriptions-transport-ws": "^0.9.9",
     "superagent": "^3.6.0",
     "universal-cookie": "^4.0.4",
-    "universal-cookie-express": "^4.0.3",
     "url-search-params-polyfill": "^2.0.1",
     "urlite": "^1.2.8",
     "xmldoc": "^1.1.0"

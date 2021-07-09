@@ -10309,7 +10309,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["superagent", "npm:3.8.3"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"],
             ["universal-cookie", "npm:4.0.4"],
-            ["universal-cookie-express", "npm:4.0.3"],
             ["url-loader", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:1.1.2"],
             ["url-search-params-polyfill", "npm:2.0.3"],
             ["urlite", "npm:1.2.8"],
@@ -46110,16 +46109,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["universal-cookie", "npm:4.0.4"],
             ["@types/cookie", "npm:0.3.3"],
             ["cookie", "npm:0.4.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["universal-cookie-express", [
-        ["npm:4.0.3", {
-          "packageLocation": "./.yarn/cache/universal-cookie-express-npm-4.0.3-58bd00417c-2512afecc5.zip/node_modules/universal-cookie-express/",
-          "packageDependencies": [
-            ["universal-cookie-express", "npm:4.0.3"],
-            ["universal-cookie", "npm:4.0.4"]
           ],
           "linkType": "HARD",
         }]
