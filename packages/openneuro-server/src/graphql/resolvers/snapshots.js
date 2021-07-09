@@ -145,7 +145,7 @@ export const deprecateSnapshot = async (
     return true
   } catch (err) {
     Sentry.captureException(err)
-    return false
+    throw err
   }
 }
 
