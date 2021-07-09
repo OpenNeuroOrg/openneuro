@@ -63,9 +63,16 @@ export const participantCount = async (obj, { modality }) => {
     },
     {
       $match: {
-        'summary.subjects': {
-          $exists: true,
-        },
+        $and: [
+          {
+            'summary.subjects': {
+              $exists: true,
+            },
+          },
+          {
+            'summary.modalities.0': modality,
+          },
+        ],
       },
     },
     {
