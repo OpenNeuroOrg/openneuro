@@ -27,6 +27,8 @@ def test_get_snapshot(client):
     assert result_doc['tag'] == SNAPSHOT_ID
     assert result_doc['id'] == '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)
     assert type(result_doc['created']) == int
+    assert type(result_doc['hexsha']) == str
+    assert len(result_doc['hexsha']) == 40
 
 
 def test_create_snapshot(client, new_dataset):

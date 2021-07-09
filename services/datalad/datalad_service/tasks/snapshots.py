@@ -12,7 +12,7 @@ def get_snapshot(store, dataset, snapshot):
     # Get metadata for a snapshot (hexsha)
     repo = pygit2.Repository(store.get_dataset_path(dataset))
     commit, _ = repo.resolve_refish(snapshot)
-    hexsha = commit.tree_id.hex
+    hexsha = commit.hex
     created = commit.commit_time
     return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha, 'created': created}
 
