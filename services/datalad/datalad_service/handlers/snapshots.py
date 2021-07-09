@@ -1,4 +1,3 @@
-import os
 import logging
 
 import gevent
@@ -22,7 +21,6 @@ class SnapshotResource(object):
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
         if snapshot:
-            ds = self.store.get_dataset(dataset)
             files = get_files(self.store, dataset,
                               branch=snapshot)
             response = get_snapshot(self.store, dataset, snapshot)
@@ -32,8 +30,6 @@ class SnapshotResource(object):
         else:
             tags = get_snapshots(self.store,
                                  dataset)
-            # Index of all tags
-            ds = self.store.get_dataset(dataset)
             resp.media = {'snapshots': tags}
             resp.status = falcon.HTTP_OK
 
@@ -62,7 +58,6 @@ class SnapshotResource(object):
                 gevent.spawn(publish_snapshot, self.store,
                              dataset, req.cookies, snapshot)
         except:
-            raise
             # TODO - This seems like an incorrect error path?
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT

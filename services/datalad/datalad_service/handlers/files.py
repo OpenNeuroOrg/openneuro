@@ -1,6 +1,5 @@
 import logging
 import os
-from subprocess import CalledProcessError
 
 import falcon
 
@@ -24,7 +23,7 @@ class FilesResource(object):
         ds_path = self.store.get_dataset_path(dataset)
         if filename:
             try:
-                file_content = git_show(ds_path, snapshot + ':' + filename)
+                file_content = git_show(ds_path, snapshot, filename)
                 # If the file begins with an annex path, return that path
                 if file_content[0:4096].find('.git/annex') != -1:
                     # Resolve absolute path for annex target
@@ -42,7 +41,7 @@ class FilesResource(object):
                 else:
                     resp.body = file_content
                     resp.status = falcon.HTTP_OK
-            except CalledProcessError:
+            except KeyError:
                 # File is not present in tree
                 resp.media = {'error': 'file not found in git tree'}
                 resp.status = falcon.HTTP_NOT_FOUND
