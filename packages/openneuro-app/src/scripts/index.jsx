@@ -7,8 +7,8 @@ const Index = () => {
   return (
     <FeatureToggle
       feature="redesign-2021"
-      renderOnEnabled={() => <Redesign />}
-      renderOnDisabled={() => <Classic />}
+      renderOnEnabled={<Redesign />}
+      renderOnDisabled={<Classic />}
     />
   )
 }

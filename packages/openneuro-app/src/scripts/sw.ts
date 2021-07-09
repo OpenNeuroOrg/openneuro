@@ -5,9 +5,9 @@
  */
 export default null
 declare const self: ServiceWorkerGlobalScope
+const globalAny: any = global // Workaround for serviceWorkerOption type missing
 const CACHE_NAME = 'openneuro'
-// @ts-expect-error Incorrect types for modern service worker APIs
-const CACHE_PATHS = global.serviceWorkerOption.assets
+const CACHE_PATHS = globalAny.serviceWorkerOption.assets
 
 self.addEventListener('install', event => {
   void self.skipWaiting()

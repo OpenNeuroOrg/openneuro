@@ -89,7 +89,7 @@ const searchQuery = gql`
  * on the URL string and forwarding the data to the dashboard component
  */
 const SearchResultsQuery: React.FC = () => {
-  const { query } = useParams()
+  const { query } = useParams() as { query: string }
   return datasetQueryDisplay(
     true,
     false,
