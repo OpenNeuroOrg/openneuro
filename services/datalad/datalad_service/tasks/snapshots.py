@@ -1,24 +1,27 @@
 import os
-from datalad_service.tasks.files import commit_files
 from datetime import datetime
 import re
-from subprocess import CalledProcessError
 
-from datalad_service.common.git import git_show
+import pygit2
+
+from datalad_service.common.git import git_show, git_tag
+from datalad_service.tasks.files import commit_files
 
 
 def get_snapshot(store, dataset, snapshot):
     # Get metadata for a snapshot (hexsha)
-    ds = store.get_dataset(dataset)
-    hexsha = ds.repo.get_hexsha(commitish=snapshot)
-    return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
+    repo = pygit2.Repository(store.get_dataset_path(dataset))
+    commit, _ = repo.resolve_refish(snapshot)
+    hexsha = commit.tree_id.hex
+    created = commit.commit_time
+    return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha, 'created': created}
 
 
 def get_snapshots(store, dataset):
-    ds = store.get_dataset(dataset)
-    repo_tags = ds.repo.get_tags()
+    path = store.get_dataset_path(dataset)
+    repo_tags = git_tag(path)
     # Include an extra id field to uniquely identify snapshots
-    tags = [{'id': '{}:{}'.format(dataset, tag['name']), 'tag': tag['name'], 'hexsha': tag['hexsha']}
+    tags = [{'id': '{}:{}'.format(dataset, tag.shorthand), 'tag': tag.shorthand, 'hexsha': tag.target.hex, 'created': tag.peel().commit_time}
             for tag in repo_tags]
     return tags
 
@@ -71,8 +74,8 @@ def edit_changes(changes, new_changes, tag, date):
 
 def get_head_changes(ds):
     try:
-        return git_show(ds.path, 'HEAD:CHANGES')
-    except CalledProcessError:
+        return git_show(ds.path, 'HEAD', 'CHANGES')
+    except KeyError:
         return None
 
 

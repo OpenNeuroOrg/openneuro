@@ -1,11 +1,22 @@
-import subprocess
+import re
+
+import pygit2
+
+tag_ref = re.compile('^refs/tags/')
 
 
-def git_show(path, commitish):
-    return subprocess.run(['git', 'cat-file', 'blob', commitish],
-                          cwd=path, capture_output=True, encoding='utf-8', bufsize=0, universal_newlines=True, check=True).stdout
+def git_show(path, commitish, obj):
+    repo = pygit2.Repository(path)
+    commit, _ = repo.resolve_refish(commitish)
+    data = (commit.tree / obj).read_raw().decode()
+    return data
 
 
 def delete_tag(path, tag):
-    return subprocess.run(['git', 'tag', '-d', tag],
-                          cwd=path, stdout=subprocess.PIPE, encoding='utf-8', bufsize=0, universal_newlines=True, check=True)
+    repo = pygit2.Repository(path)
+    repo.references.delete(f'refs/tags/{tag}')
+
+
+def git_tag(path):
+    repo = pygit2.Repository(path)
+    return [repo.references[r] for r in repo.references if tag_ref.match(r)]

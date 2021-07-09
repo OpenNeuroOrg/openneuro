@@ -14,27 +14,21 @@ class DescriptionResource(object):
         Returns update dataset_description
         """
         if dataset:
+            description_fields = req.media.get('description_fields')
+            if not any(description_fields):
+                resp.media = {
+                    'error': 'Missing description field updates.'
+                }
+                resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             try:
-                description_fields = req.media.get('description_fields')
-                if not any(description_fields):
-                    resp.media = {
-                        'error': 'Missing description field updates.'
-                    }
-                    resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
-                try:
-                    updated = update_description(
-                        self.store, dataset, description_fields)
-                    dataset_description = updated
-                    resp.media = dataset_description
-                    resp.status = falcon.HTTP_OK
-                except:
-                    resp.media = {'error': 'dataset update failed'}
-                    resp.status = falcon.HTTP_500
+                updated = update_description(
+                    self.store, dataset, description_fields)
+                dataset_description = updated
+                resp.media = dataset_description
+                resp.status = falcon.HTTP_OK
             except:
                 raise
-                resp.media = {
-                    'error': 'Unexpected error in dataset_description update.'
-                }
+                resp.media = {'error': 'dataset update failed'}
                 resp.status = falcon.HTTP_500
         else:
             resp.media = {
