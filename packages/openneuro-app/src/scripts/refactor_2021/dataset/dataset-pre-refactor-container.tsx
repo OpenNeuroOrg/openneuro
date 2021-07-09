@@ -1,14 +1,10 @@
-import React, { Suspense, lazy } from 'react'
+import React from 'react'
 import Dataset from '../../datalad/dataset/dataset'
 
-const PreRefactorMainStyles = lazy(
-  () => import('../../../sass/PreRefactorMainStyles'),
-)
-
 const PreRefactorDatasetProps: React.FC = () => {
+  import('../../../sass/pre-refactor-with-wrapper-main.scss')
   return (
     <span className="pre-refactor-styles">
-      <Suspense fallback={<></>}>{<PreRefactorMainStyles />}</Suspense>
       <Dataset />
     </span>
   )

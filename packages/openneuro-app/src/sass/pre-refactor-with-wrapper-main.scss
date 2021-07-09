@@ -1646,4 +1646,41 @@ $primary: $on-dark-aqua default;
     border-radius: 1rem;
     margin-bottom: 2rem;
   }
+
+  .dataset-inner > span {
+    display: flex;
+    > .fresnel-at-small {
+      display: none;
+    }
+    > .fresnel-greaterThanOrEqual-medium {
+      min-width: 50%;
+      padding: 0 20px;
+    }
+  }
+
+  .dataset-tools-wrap {
+    min-width: calc(100% - 20px);
+  }
+  .open {
+    .dataset-tools-wrap {
+      min-width: calc(80% - 20px);
+    }
+    .dataset-route {
+      left: calc(20% + 2px);
+      width: 80%;
+    }
+  }
+  .file-structure.panel-group
+    .panel-default
+    .panel-collapse
+    .panel-body
+    > ul
+    li
+    .btn-file-folder {
+    white-space: initial;
+    line-height: 1.8em;
+  }
+  .cte-display ul li {
+    display: list-item;
+  }
 }
