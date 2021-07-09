@@ -1,6 +1,10 @@
 import * as datalad from '../../datalad/snapshots.js'
 import { dataset, analytics } from './dataset.js'
-import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
+import {
+  checkDatasetRead,
+  checkDatasetWrite,
+  checkDatasetAdmin,
+} from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
@@ -119,8 +123,9 @@ export const createSnapshot = (
 export const deprecateSnapshot = async (
   obj,
   { datasetId, tag, reason },
-  { user },
+  { user, userInfo },
 ) => {
+  await checkDatasetAdmin(datasetId, user, userInfo)
   await SnapshotModel.updateOne(
     { datasetId, tag },
     {
