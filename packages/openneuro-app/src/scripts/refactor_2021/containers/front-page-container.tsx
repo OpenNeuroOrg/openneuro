@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import { apm } from '../../apm'
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
@@ -110,7 +110,7 @@ export const FrontPageTopQuery = ({ query }) => {
       </>
     )
   } else if (result.error || result.data.datasets == null) {
-    Sentry.captureException(result.error)
+    apm.captureError(result.error)
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
     // Remove any edges which could not be loaded
@@ -134,7 +134,7 @@ export const FrontPageNewQuery = ({ query }) => {
   if (result.loading) {
     return <Loading />
   } else if (result.error || result.data.datasets == null) {
-    Sentry.captureException(result.error)
+    apm.captureError(result.error)
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
     // Remove any edges which could not be loaded

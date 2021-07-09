@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/browser'
+import { apm } from '../../../apm'
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
@@ -97,7 +97,7 @@ const DatasetTab = ({
     if (error) {
       if (data.datasets) {
         // show datasets
-        captureException(error)
+        apm.captureError(error)
       } else {
         // direct to freshdesk
         throw error

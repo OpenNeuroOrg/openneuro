@@ -1,271 +1,181 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DeleteDataset mutation renders with common props 1`] = `
-<Mutation
-  mutation={
-    Object {
-      "definitions": Array [
-        Object {
-          "directives": Array [],
-          "kind": "OperationDefinition",
-          "name": Object {
-            "kind": "Name",
-            "value": "deleteDataset",
-          },
-          "operation": "mutation",
-          "selectionSet": Object {
-            "kind": "SelectionSet",
-            "selections": Array [
-              Object {
-                "alias": undefined,
-                "arguments": Array [
-                  Object {
-                    "kind": "Argument",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "id",
-                    },
-                    "value": Object {
-                      "kind": "Variable",
-                      "name": Object {
-                        "kind": "Name",
-                        "value": "id",
-                      },
-                    },
-                  },
-                  Object {
-                    "kind": "Argument",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "reason",
-                    },
-                    "value": Object {
-                      "kind": "Variable",
-                      "name": Object {
-                        "kind": "Name",
-                        "value": "reason",
-                      },
-                    },
-                  },
-                  Object {
-                    "kind": "Argument",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "redirect",
-                    },
-                    "value": Object {
-                      "kind": "Variable",
-                      "name": Object {
-                        "kind": "Name",
-                        "value": "redirect",
-                      },
-                    },
-                  },
-                ],
-                "directives": Array [],
-                "kind": "Field",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "deleteDataset",
-                },
-                "selectionSet": undefined,
-              },
-            ],
-          },
-          "variableDefinitions": Array [
-            Object {
-              "defaultValue": undefined,
-              "directives": Array [],
-              "kind": "VariableDefinition",
-              "type": Object {
-                "kind": "NonNullType",
-                "type": Object {
-                  "kind": "NamedType",
-                  "name": Object {
-                    "kind": "Name",
-                    "value": "ID",
-                  },
-                },
-              },
-              "variable": Object {
-                "kind": "Variable",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "id",
-                },
-              },
-            },
-            Object {
-              "defaultValue": undefined,
-              "directives": Array [],
-              "kind": "VariableDefinition",
-              "type": Object {
-                "kind": "NamedType",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "String",
-                },
-              },
-              "variable": Object {
-                "kind": "Variable",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "reason",
-                },
-              },
-            },
-            Object {
-              "defaultValue": undefined,
-              "directives": Array [],
-              "kind": "VariableDefinition",
-              "type": Object {
-                "kind": "NamedType",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "String",
-                },
-              },
-              "variable": Object {
-                "kind": "Variable",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "redirect",
-                },
-              },
-            },
-          ],
-        },
-      ],
-      "kind": "Document",
-      "loc": Object {
-        "end": 143,
-        "start": 0,
-      },
-    }
-  }
->
-  <Component />
-</Mutation>
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <span>
+        <button
+          class="btn-admin-blue"
+        >
+          <i
+            class="fa fa-trash"
+          />
+           Delete Dataset
+        </button>
+      </span>
+    </div>
+  </body>,
+  "container": <div>
+    <span>
+      <button
+        class="btn-admin-blue"
+      >
+        <i
+          class="fa fa-trash"
+        />
+         Delete Dataset
+      </button>
+    </span>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
 `;
 
 exports[`DeleteDir mutation renders with common props 1`] = `
-<Mutation
-  awaitRefetchQueries={true}
-  mutation={
-    Object {
-      "definitions": Array [
-        Object {
-          "directives": Array [],
-          "kind": "OperationDefinition",
-          "name": Object {
-            "kind": "Name",
-            "value": "deleteFiles",
-          },
-          "operation": "mutation",
-          "selectionSet": Object {
-            "kind": "SelectionSet",
-            "selections": Array [
-              Object {
-                "alias": undefined,
-                "arguments": Array [
-                  Object {
-                    "kind": "Argument",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "datasetId",
-                    },
-                    "value": Object {
-                      "kind": "Variable",
-                      "name": Object {
-                        "kind": "Name",
-                        "value": "datasetId",
-                      },
-                    },
-                  },
-                  Object {
-                    "kind": "Argument",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "files",
-                    },
-                    "value": Object {
-                      "kind": "Variable",
-                      "name": Object {
-                        "kind": "Name",
-                        "value": "files",
-                      },
-                    },
-                  },
-                ],
-                "directives": Array [],
-                "kind": "Field",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "deleteFiles",
-                },
-                "selectionSet": undefined,
-              },
-            ],
-          },
-          "variableDefinitions": Array [
-            Object {
-              "defaultValue": undefined,
-              "directives": Array [],
-              "kind": "VariableDefinition",
-              "type": Object {
-                "kind": "NonNullType",
-                "type": Object {
-                  "kind": "NamedType",
-                  "name": Object {
-                    "kind": "Name",
-                    "value": "ID",
-                  },
-                },
-              },
-              "variable": Object {
-                "kind": "Variable",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "datasetId",
-                },
-              },
-            },
-            Object {
-              "defaultValue": undefined,
-              "directives": Array [],
-              "kind": "VariableDefinition",
-              "type": Object {
-                "kind": "NonNullType",
-                "type": Object {
-                  "kind": "ListType",
-                  "type": Object {
-                    "kind": "NamedType",
-                    "name": Object {
-                      "kind": "Name",
-                      "value": "DeleteFile",
-                    },
-                  },
-                },
-              },
-              "variable": Object {
-                "kind": "Variable",
-                "name": Object {
-                  "kind": "Name",
-                  "value": "files",
-                },
-              },
-            },
-          ],
-        },
-      ],
-      "kind": "Document",
-      "loc": Object {
-        "end": 124,
-        "start": 0,
-      },
-    }
-  }
->
-  <Component />
-</Mutation>
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <span
+        class="delete-file"
+      >
+        <span
+          class=""
+        >
+          <button
+            class="btn-warn-component warning"
+          >
+            <i
+              class="fa fa-trash"
+            />
+             
+            Delete
+          </button>
+        </span>
+      </span>
+    </div>
+  </body>,
+  "container": <div>
+    <span
+      class="delete-file"
+    >
+      <span
+        class=""
+      >
+        <button
+          class="btn-warn-component warning"
+        >
+          <i
+            class="fa fa-trash"
+          />
+           
+          Delete
+        </button>
+      </span>
+    </span>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
 `;

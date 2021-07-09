@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/browser'
 import { trackDownload } from './track-download.js'
 import {
   downloadToast,
@@ -56,7 +55,7 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
   try {
     trackDownload(datasetId, snapshotTag)
   } catch (err) {
-    Sentry.captureException(err)
+    apm.captureError(err)
   }
   const apmTransaction = apm.startTransaction(
     `download:${datasetId}`,
@@ -111,7 +110,7 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
       // Some unknown issue occurred (out of disk space, disk caught fire, etc...)
       nativeErrorToast()
     }
-    Sentry.captureException(err)
+    apm.captureError(err)
   } finally {
     if (apmTransaction) apmTransaction.end()
     downloadToastDone(toastId)

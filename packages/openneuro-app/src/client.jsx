@@ -21,14 +21,14 @@ if (
 ) {
   setupApm({
     serverUrl: config.url,
-    serviceName: 'openneuro/app',
+    serviceName: 'openneuro-app',
     serviceVersion: version,
     environment: config.sentry.environment,
   })
 } else {
   setupApm({
     serverUrl: config.url,
-    serviceName: 'openneuro/app',
+    serviceName: 'openneuro-app',
     serviceVersion: version,
     environment: config.sentry.environment,
     active: false,

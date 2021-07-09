@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import { apm } from '../apm'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { gql, useQuery } from '@apollo/client'
@@ -148,22 +148,24 @@ FrontPageTopRecent.propTypes = {
  * @param {import('graphql').DocumentNode} query
  * @returns {function (import('@apollo/client').QueryResult): React.ReactElement}
  */
-export const FrontPageTopResult = query => ({ loading, error, data }) => {
-  if (loading) {
-    return <Spinner active />
-  } else if (error || data.datasets == null) {
-    Sentry.captureException(error)
-    return <div>Failed to load top datasets, please try again later.</div>
-  } else {
-    // Remove any edges which could not be loaded
-    const edges = data.datasets.edges.filter(dataset => dataset !== null)
-    if (query === TOP_VIEWED) {
-      return <FrontPageTopActive datasets={edges} />
-    } else if (query === RECENTLY_PUBLISHED) {
-      return <FrontPageTopRecent datasets={edges} />
+export const FrontPageTopResult =
+  query =>
+  ({ loading, error, data }) => {
+    if (loading) {
+      return <Spinner active />
+    } else if (error || data.datasets == null) {
+      apm.captureError(error)
+      return <div>Failed to load top datasets, please try again later.</div>
+    } else {
+      // Remove any edges which could not be loaded
+      const edges = data.datasets.edges.filter(dataset => dataset !== null)
+      if (query === TOP_VIEWED) {
+        return <FrontPageTopActive datasets={edges} />
+      } else if (query === RECENTLY_PUBLISHED) {
+        return <FrontPageTopRecent datasets={edges} />
+      }
     }
   }
-}
 
 const FrontPageTopQuery = ({ query }) => {
   const result = useQuery(query)
