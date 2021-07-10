@@ -11,7 +11,7 @@ export async function* datasetGenerator(client, query = getDatasets) {
     try {
       const { data } = await client.query({
         query,
-        variables: { filterBy: { public: true }, cursor },
+        variables: { cursor },
         errorPolicy: 'ignore',
       })
       for (const edge of data.datasets.edges) {
