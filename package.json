@@ -91,5 +91,8 @@
     "open@7.4.2": {
       "unplugged": true
     }
+  },
+  "resolutions": {
+    "react-router-dom": "5.2.0"
   }
 }
