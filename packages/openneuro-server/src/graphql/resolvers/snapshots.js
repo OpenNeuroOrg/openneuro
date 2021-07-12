@@ -32,6 +32,21 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
 }
 
 export const participantCount = async (obj, { modality }) => {
+  const queryHasSubjects = {
+    'summary.subjects': {
+      $exists: true,
+    },
+  }
+  const matchQuery = modality
+    ? {
+        $and: [
+          queryHasSubjects,
+          {
+            'summary.modalities.0': modality,
+          },
+        ],
+      }
+    : queryHasSubjects
   const aggregateResult = await DatasetModel.aggregate([
     {
       $match: {
@@ -61,11 +76,7 @@ export const participantCount = async (obj, { modality }) => {
       },
     },
     {
-      $match: {
-        'summary.subjects': {
-          $exists: true,
-        },
-      },
+      $match: matchQuery,
     },
     {
       $group: {
@@ -76,9 +87,10 @@ export const participantCount = async (obj, { modality }) => {
       },
     },
   ]).exec()
-  return Array.isArray(aggregateResult)
-    ? aggregateResult[0].participantCount
-    : null
+  if (Array.isArray(aggregateResult)) {
+    if (aggregateResult.length) return aggregateResult[0].participantCount
+    else return 0
+  } else return null
 }
 
 const sortSnapshots = (a, b) =>

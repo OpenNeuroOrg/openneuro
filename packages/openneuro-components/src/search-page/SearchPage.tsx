@@ -1,7 +1,6 @@
 import React from 'react'
 import { ModalityHeader } from './ModalityHeader'
 import { CommunityHeader } from './CommunityHeader'
-import { Link } from 'react-router-dom'
 
 import './search-page.scss'
 
@@ -13,6 +12,7 @@ export interface SearchPageProps {
   renderFilterBlock: () => React.ReactNode
   renderSearchHeader: () => React.ReactNode
   renderLoading: () => React.ReactNode
+  renderAggregateCounts: () => React.ReactNode
 }
 
 export const SearchPage = ({
@@ -23,12 +23,8 @@ export const SearchPage = ({
   renderFilterBlock,
   renderSearchHeader,
   renderLoading,
+  renderAggregateCounts,
 }: SearchPageProps) => {
-  interface IProps {
-    children: React.ReactNode
-    getScrollTop: (scrollTop: number) => void
-    // Your other Props
-  }
   return (
     <>
       <section
@@ -42,6 +38,7 @@ export const SearchPage = ({
                 publicDatasetStat={portalContent.publicDatasetStat}
                 participantsStat={portalContent.participantsStat}
                 hexBackgroundImage={portalContent.hexBackgroundImage}
+                renderAggregateCounts={renderAggregateCounts}
               />
             ) : null}
             {portalContent.communityHeader ? (

@@ -132,6 +132,35 @@ const aggregateArraySetup = match => [{ $match: match }]
  */
 export const datasetsFilter = options => match => {
   const aggregates = aggregateArraySetup(match)
+  if (options.modality) {
+    aggregates.push(
+      ...[
+        {
+          $lookup: {
+            from: 'snapshots',
+            localField: 'id',
+            foreignField: 'datasetId',
+            as: 'snapshots',
+          },
+        },
+        { $addFields: { snapshots: { $slice: ['$snapshots', -1] } } },
+        {
+          $lookup: {
+            from: 'summaries',
+            localField: 'snapshots.0.hexsha',
+            foreignField: 'id',
+            as: 'summaries',
+          },
+        },
+        {
+          $match: {
+            'summaries.0.modalities.0': options.modality,
+          },
+        },
+      ],
+    )
+    return aggregates
+  }
   const filterMatch = {}
   if ('filterBy' in options) {
     const filters = options.filterBy

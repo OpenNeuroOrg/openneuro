@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react'
-import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 export interface ModalityHeaderProps {
   portalName: string
@@ -7,6 +6,7 @@ export interface ModalityHeaderProps {
   publicDatasetStat: number
   participantsStat: number
   hexBackgroundImage: string
+  renderAggregateCounts: () => ReactNode
 }
 
 export const ModalityHeader = ({
@@ -15,6 +15,7 @@ export const ModalityHeader = ({
   publicDatasetStat,
   participantsStat,
   hexBackgroundImage,
+  renderAggregateCounts,
 }: ModalityHeaderProps) => {
   return (
     <section className="search-page-portal-header">
@@ -23,10 +24,7 @@ export const ModalityHeader = ({
           <div className="col col-7 ">
             <h1>{portalName}</h1>
             <div className="primary-content">{portalPrimary}</div>
-            <div className="secondary-content">
-              <AggregateCount count={publicDatasetStat} type="publicDataset" />
-              <AggregateCount count={participantsStat} type="participants" />
-            </div>
+            <div className="secondary-content">{renderAggregateCounts()}</div>
           </div>
           <div className="col col-3 hex-col">
             <div

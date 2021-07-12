@@ -23,6 +23,7 @@ import {
   SortBySelect,
 } from './inputs'
 import FiltersBlockContainer from './filters-block-container'
+import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../authentication/profile'
 import { useSearchResults } from './use-search-results'
@@ -59,6 +60,9 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   return (
     <SearchPage
       portalContent={portalContent}
+      renderAggregateCounts={() => (
+        <AggregateCountsContainer modality={portalContent.modality} />
+      )}
       renderFilterBlock={() => (
         <FiltersBlockContainer numTotalResults={numTotalResults} />
       )}
