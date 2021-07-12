@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
@@ -25,7 +25,15 @@ const WarningNote = styled.div({
   },
 })
 
-const DeletePage = ({ dataset, returnToDataset }) => {
+interface DeletePageProps extends RouteComponentProps {
+  dataset: Record<string, any>
+  returnToDataset?: () => void
+}
+
+const DeletePage = ({
+  dataset,
+  returnToDataset,
+}: DeletePageProps): React.ReactElement => {
   const [values, setValues] = useState({
     reason: '',
     redirect: '',

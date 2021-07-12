@@ -13,12 +13,7 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { updateDatasetRevision, expireDraftFiles } from './draft.js'
-import {
-  fileUrl,
-  getFileName,
-  encodeFilePath,
-  filesUrl,
-} from './files'
+import { fileUrl, getFileName, encodeFilePath, filesUrl } from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset'
 import Metadata from '../models/metadata'
@@ -137,6 +132,35 @@ const aggregateArraySetup = match => [{ $match: match }]
  */
 export const datasetsFilter = options => match => {
   const aggregates = aggregateArraySetup(match)
+  if (options.modality) {
+    aggregates.push(
+      ...[
+        {
+          $lookup: {
+            from: 'snapshots',
+            localField: 'id',
+            foreignField: 'datasetId',
+            as: 'snapshots',
+          },
+        },
+        { $addFields: { snapshots: { $slice: ['$snapshots', -1] } } },
+        {
+          $lookup: {
+            from: 'summaries',
+            localField: 'snapshots.0.hexsha',
+            foreignField: 'id',
+            as: 'summaries',
+          },
+        },
+        {
+          $match: {
+            'summaries.0.modalities.0': options.modality,
+          },
+        },
+      ],
+    )
+    return aggregates
+  }
   const filterMatch = {}
   if ('filterBy' in options) {
     const filters = options.filterBy
@@ -262,6 +286,8 @@ export const getDatasets = options => {
           )
         }
       })
+  } else if (options?.indexing) {
+    return connection([])
   } else {
     // Anonymous request implies public datasets only
     const match = { public: true }

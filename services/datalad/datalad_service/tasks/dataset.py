@@ -6,6 +6,8 @@ Any operations that affect an entire dataset (such as creating snapshots)
 import os
 import stat
 
+import pygit2
+
 from datalad_service.common.annex import CommitInfo
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.snapshots import get_snapshot, update_changes

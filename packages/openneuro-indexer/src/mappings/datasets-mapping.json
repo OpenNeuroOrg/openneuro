@@ -57,6 +57,15 @@
         }
       }
     },
+    "draft": {
+      "properties": {
+        "issues": {
+          "properties": {
+            "severity": { "type": "keyword" }
+          }
+        }
+      }
+    },
     "permissions": {
       "userPermissions": {
         "level": { "type": "keyword" },

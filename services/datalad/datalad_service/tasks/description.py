@@ -13,7 +13,8 @@ def edit_description(description, new_fields):
 
 def update_description(store, dataset, description_fields, name=None, email=None):
     ds = store.get_dataset(dataset)
-    description = git_show(ds.path, 'HEAD:dataset_description.json')
+    description = git_show(
+        ds.path, 'HEAD', 'dataset_description.json').rstrip()
     description_json = json.loads(description)
     if description_json.get('License') != 'CC0':
         description_fields = edit_description(
@@ -23,7 +24,7 @@ def update_description(store, dataset, description_fields, name=None, email=None
         path = os.path.join(store.get_dataset_path(
             dataset), 'dataset_description.json')
         with open(path, 'r+', encoding='utf-8') as description_file:
-            description_file_contents = description_file.read()
+            description_file_contents = description_file.read().rstrip()
             if description != description_file_contents:
                 raise Exception('unexpected dataset_description.json contents')
             description_file.seek(0)

@@ -11,7 +11,7 @@ import Share from './manage-permissions.jsx'
 import Snapshot from './snapshot.jsx'
 import FileDisplay from './file-display.jsx'
 import AddMetadata from '../mutations/add-metadata.jsx'
-import DeletePage from '../dataset/delete-page.jsx'
+import DeletePage from '../dataset/delete-page'
 
 const stubComponent = () => null
 
@@ -84,7 +84,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         component={stubComponent}
       />
       <Route
-        name="fileDisplay"
         path="/datasets/:datasetId/file-display/:filePath"
         render={({
           match: {
@@ -96,7 +95,6 @@ const DatasetRoutes = ({ dataset, error }) => {
       />
       {/* Snapshot routes */}
       <Route
-        name="snapshot"
         exact
         path="/datasets/:datasetId/versions/:tag"
         render={({
@@ -114,7 +112,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         component={DownloadDataset}
       />
       <Route
-        name="snapshot-fileDisplay"
         path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"
         render={({
           match: {

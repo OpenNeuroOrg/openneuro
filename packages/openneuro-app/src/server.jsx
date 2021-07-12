@@ -12,6 +12,8 @@ import Index from './scripts/index'
 import { config } from './scripts/config'
 import { mediaStyle } from './scripts/styles/media'
 import { version } from './lerna.json'
+import redesignStyles from '@openneuro/components/page/page.scss'
+import classicStyles from './sass/main.scss'
 
 export async function render(url, cookies) {
   // Client must be created on every call to avoid mixing credentials
@@ -20,8 +22,8 @@ export async function render(url, cookies) {
     ssrMode: true,
   })
 
-  // Disable authentication for SSR
-  cookies.remove('accessToken')
+  const css =
+    cookies.get('redesign-2021') == 'true' ? redesignStyles : classicStyles
 
   const react = await getDataFromTree(
     <App cookies={cookies}>
@@ -45,5 +47,5 @@ export async function render(url, cookies) {
     'base64',
   )
 
-  return { react, apolloState, head }
+  return { react, apolloState, head, css }
 }

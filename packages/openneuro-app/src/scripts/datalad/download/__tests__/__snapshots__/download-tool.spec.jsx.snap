@@ -1,7 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dataset/download/DownloadTool renders successfully 1`] = `
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
+<div
+  className="tool"
+  role="presentation"
+>
+  <WarnButton
+    action={[Function]}
+    cancel={
+      <i
+        className="fa fa-times"
+      />
+    }
+    confirm={
+      <i
+        className="fa fa-check"
+      />
+    }
+    icon="fa-download"
+    message=""
+    tooltip="Download"
+    warn={false}
+  />
+</div>
 `;

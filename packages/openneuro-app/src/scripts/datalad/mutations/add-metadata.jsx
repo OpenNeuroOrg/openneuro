@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import MetadataForm from './metadata-form.jsx'
 import SubmitMetadata from './submit-metadata.jsx'
@@ -94,7 +94,9 @@ const runValidations = values =>
 const hasChanged = (errorsA, errorsB) =>
   JSON.stringify(errorsA) !== JSON.stringify(errorsB)
 
-const AddMetadata = ({ dataset, history, location }) => {
+const AddMetadata = ({ dataset }) => {
+  const history = useHistory()
+  const location = useLocation()
   const [cookies] = useCookies()
   const [values, setValues] = useState(compileMetadata(dataset))
   const [validationErrors, setValidationErrors] = useState([])
@@ -108,6 +110,7 @@ const AddMetadata = ({ dataset, history, location }) => {
     const errors = runValidations(newValues)
     if (hasChanged(errors, validationErrors)) setValidationErrors(errors)
   }
+  // @ts-expect-error Weak type definition for state
   const submitPath = location.state && location.state.submitPath
   const user = getProfile(cookies)
   const hasEdit =
@@ -154,4 +157,4 @@ AddMetadata.propTypes = {
   location: PropTypes.object,
 }
 
-export default withRouter(AddMetadata)
+export default AddMetadata

@@ -19,6 +19,18 @@ import * as auth from './libs/authentication/states.js'
 import * as doi from './handlers/doi'
 import { sitemapHandler } from './handlers/sitemap.js'
 
+const noCache = (req, res, next) => {
+  res.setHeader('Surrogate-Control', 'no-store')
+  res.setHeader(
+    'Cache-Control',
+    'no-store, no-cache, must-revalidate, proxy-revalidate',
+  )
+  res.setHeader('Pragma', 'no-cache')
+  res.setHeader('Expires', '0')
+
+  next()
+}
+
 const routes = [
   // Health check --------------------------------
   {
@@ -38,7 +50,7 @@ const routes = [
   {
     method: 'get',
     url: '/users/self',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [noCache, jwt.authenticate, auth.authenticated],
     handler: verifyUser,
   },
 
@@ -60,6 +72,7 @@ const routes = [
   {
     method: 'get',
     url: '/subscriptions/:datasetId/:userId',
+    middleware: [noCache],
     handler: subscriptions.checkUserSubscription,
   },
   {
@@ -98,7 +111,7 @@ const routes = [
   {
     method: 'post',
     url: '/keygen',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [noCache, jwt.authenticate, auth.authenticated],
     handler: users.createAPIKey,
   },
 
@@ -120,12 +133,13 @@ const routes = [
   {
     method: 'get',
     url: '/auth/google',
+    middleware: [noCache],
     handler: google.requestAuth,
   },
   {
     method: 'get',
     url: '/auth/google/callback',
-    middleware: [google.authCallback],
+    middleware: [noCache, google.authCallback],
     handler: jwt.authSuccessHandler,
   },
 
@@ -133,25 +147,13 @@ const routes = [
   {
     method: 'get',
     url: '/auth/orcid',
+    middlware: [noCache],
     handler: orcid.requestAuth,
   },
   {
     method: 'get',
     url: '/auth/orcid/callback',
-    middleware: [orcid.authCallback],
-    handler: jwt.authSuccessHandler,
-  },
-
-  // globus
-  {
-    method: 'get',
-    url: '/auth/globus',
-    handler: globus.requestAuth,
-  },
-  {
-    method: 'get',
-    url: '/auth/globus/callback',
-    middleware: [globus.authCallback],
+    middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
   // sitemap
