@@ -12,6 +12,16 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/actions.www-redirect: '{"Type": "redirect", "RedirectConfig": {"Host": "{{ .Values.hostname }}", "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/actions.redirect-to-mri-portal: >
+      '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "Path":"/search/modality/mri", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/actions.redirect-to-eeg-portal: >
+      '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "Path":"/search/modality/eeg", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/actions.redirect-to-ieeg-portal: >
+      '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "Path":"/search/modality/ieeg", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/actions.redirect-to-meg-portal: >
+      '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "Path":"/search/modality/meg", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/actions.redirect-to-pet-portal: >
+      '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "Path":"/search/modality/pet", "StatusCode": "HTTP_301"}}'
 spec:
   rules:
     - host: www.{{ .Values.hostname }}
@@ -89,3 +99,39 @@ spec:
                 name: {{ .Release.Name }}-web
                 port:
                   number: 80
+    # The following redirects correspond to records of the same name (eg. mri.openneuro.org) in Route 53.
+    - host: mri.{{ .Values.hostname }}
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: redirect-to-mri-portal
+              servicePort: use-annotation
+    - host: eeg.{{ .Values.hostname }}
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: redirect-to-eeg-portal
+              servicePort: use-annotation
+    - host: ieeg.{{ .Values.hostname }}
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: redirect-to-ieeg-portal
+              servicePort: use-annotation
+    - host: meg.{{ .Values.hostname }}
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: redirect-to-meg-portal
+              servicePort: use-annotation
+    - host: pet.{{ .Values.hostname }}
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: redirect-to-pet-portal
+              servicePort: use-annotation
