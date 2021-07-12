@@ -1,10 +1,10 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactElement } from 'react'
 import { useCookies } from 'react-cookie'
 
 interface FeatureToggleProps {
   feature: string
-  renderOnEnabled(): ReactNode
-  renderOnDisabled(): ReactNode
+  renderOnEnabled: ReactElement
+  renderOnDisabled: ReactElement
 }
 
 const FeatureToggle: FC<FeatureToggleProps> = ({
@@ -13,7 +13,7 @@ const FeatureToggle: FC<FeatureToggleProps> = ({
   renderOnDisabled,
 }) => {
   const [cookies] = useCookies()
-  return <>{cookies[feature] ? renderOnEnabled() : renderOnDisabled()}</>
+  return <>{cookies[feature] ? renderOnEnabled : renderOnDisabled}</>
 }
 
 export default FeatureToggle

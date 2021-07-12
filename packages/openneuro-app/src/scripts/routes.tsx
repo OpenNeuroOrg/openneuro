@@ -13,8 +13,8 @@ import ErrorRoute from './errors/errorRoute'
 import PETDummy from './pet/dummy'
 import Citation from './pages/citation-page'
 
-const PublicDashboard = () => <Dashboard public />
-const SavedDashboard = () => <Dashboard saved />
+const PublicDashboard = (): React.ReactElement => <Dashboard public />
+const SavedDashboard = (): React.ReactElement => <Dashboard saved />
 
 const appRoutes = () => (
   <Switch>

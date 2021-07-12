@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import snapshotVersion from '../snapshotVersion.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
@@ -9,7 +9,7 @@ import StarDataset from '../mutations/star.jsx'
 import ShareDatasetLink from '../fragments/share-dataset-button.jsx'
 import DatasetMetadata from './metadata-tool.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import DeletePage from '../dataset/delete-page.jsx'
+import DeletePage from '../dataset/delete-page'
 import AdminUser from '../../authentication/admin-user.jsx'
 import {
   getProfile,
@@ -36,7 +36,9 @@ const toolRedirect = (history, rootPath, path) => {
  *
  * Dataset is the API object for the context (dataset or snapshot)
  */
-const DatasetTools = ({ dataset, location, history }) => {
+const DatasetTools = ({ dataset }) => {
+  const history = useHistory()
+  const location = useLocation()
   const snapshot = snapshotVersion(location)
   const rootPath = snapshot
     ? `/datasets/${dataset.id}/versions/${snapshot}`
@@ -184,7 +186,5 @@ const DatasetTools = ({ dataset, location, history }) => {
 DatasetTools.propTypes = {
   dataset: PropTypes.object,
   edit: PropTypes.bool,
-  location: PropTypes.object,
-  history: PropTypes.object,
 }
-export default withRouter(DatasetTools)
+export default DatasetTools

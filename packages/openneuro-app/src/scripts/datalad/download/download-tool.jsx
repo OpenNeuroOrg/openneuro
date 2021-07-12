@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
 /**
@@ -21,16 +21,19 @@ const downloadRedirect = (history, datasetId, snapshotTag) => callback => {
 /**
  * Toolbar component to redirect to download modal page
  */
-const DownloadTool = ({ datasetId, snapshotTag, history }) => (
-  <div role="presentation" className="tool">
-    <WarnButton
-      tooltip="Download"
-      icon="fa-download"
-      warn={false}
-      action={downloadRedirect(history, datasetId, snapshotTag)}
-    />
-  </div>
-)
+const DownloadTool = ({ datasetId, snapshotTag }) => {
+  const history = useHistory()
+  return (
+    <div role="presentation" className="tool">
+      <WarnButton
+        tooltip="Download"
+        icon="fa-download"
+        warn={false}
+        action={downloadRedirect(history, datasetId, snapshotTag)}
+      />
+    </div>
+  )
+}
 
 DownloadTool.propTypes = {
   history: PropTypes.object,
@@ -38,4 +41,4 @@ DownloadTool.propTypes = {
   snapshotTag: PropTypes.string,
 }
 
-export default withRouter(DownloadTool)
+export default DownloadTool
