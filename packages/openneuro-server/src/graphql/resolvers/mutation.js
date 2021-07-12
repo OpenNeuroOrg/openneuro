@@ -11,8 +11,11 @@ import {
   trackAnalytics,
 } from './dataset.js'
 import { updateRef } from './draft.js'
-import { createSnapshot, deleteSnapshot } from './snapshots.js'
-import { deprecateSnapshot } from './deprecatedSnapshots.js'
+import {
+  createSnapshot,
+  deleteSnapshot,
+  deprecateSnapshot,
+} from './snapshots.js'
 import { removeUser, setAdmin, setBlocked } from './user.js'
 import { updateSummary } from './summary.js'
 import { revalidate, updateValidation } from './validation.js'
