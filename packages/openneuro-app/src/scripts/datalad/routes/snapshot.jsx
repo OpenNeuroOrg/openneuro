@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import semver from 'semver'
 import { Link } from 'react-router-dom'
-import SnapshotDataset from '../mutations/snapshot.jsx'
+import SnapshotDataset from '../mutations/snapshot'
 import ValidationStatus from '../validation/validation-status.jsx'
 import EditList from '../fragments/edit-list.jsx'
 

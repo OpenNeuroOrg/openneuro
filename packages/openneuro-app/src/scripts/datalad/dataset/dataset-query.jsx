@@ -19,7 +19,7 @@ import { DATASET_COMMENTS } from './comments-fragments.js'
 import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
-import DatasetRedirect from '../routes/dataset-redirect.jsx'
+import DatasetRedirect from '../routes/dataset-redirect'
 
 /**
  * Generate the dataset page query

@@ -19,7 +19,7 @@ import { DATASET_COMMENTS } from '../../datalad/dataset/comments-fragments.js'
 import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
-import DatasetRedirect from '../../datalad/routes/dataset-redirect.jsx'
+import DatasetRedirect from '../../datalad/routes/dataset-redirect'
 
 //TODO imports
 

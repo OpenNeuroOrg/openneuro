@@ -15,6 +15,7 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset'
 import Snapshot from '../models/snapshot'
+import User from '../models/user'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -233,28 +234,21 @@ export const deleteSnapshot = (datasetId, tag) => {
 /**
  * Get the contents of a snapshot (files, git metadata) from datalad-service
  * @param {string} datasetId Dataset accession number
- * @param {string} tag Tag name to retrieve
+ * @param {string} commitRef Tag name to retrieve
  * @returns {Promise<import('../models/snapshot').SnapshotDocument>}
  */
-export const getSnapshot = (datasetId, tag) => {
+export const getSnapshot = (datasetId, commitRef) => {
   const url = `${getDatasetWorker(
     datasetId,
-  )}/datasets/${datasetId}/snapshots/${tag}`
+  )}/datasets/${datasetId}/snapshots/${commitRef}`
   // Track a view for each snapshot query
-  trackAnalytics(datasetId, tag, 'views')
-  const cache = new CacheItem(redis, CacheType.snapshot, [datasetId, tag])
+  trackAnalytics(datasetId, commitRef, 'views')
+  const cache = new CacheItem(redis, CacheType.snapshot, [datasetId, commitRef])
   return cache.get(() =>
     request
       .get(url)
       .set('Accept', 'application/json')
-      .then(async ({ body }) => {
-        const { created, hexsha } = await Snapshot.findOne({
-          datasetId,
-          tag,
-        }).exec()
-        const snapshot = { ...body, created, hexsha }
-        return snapshot
-      }),
+      .then(({ body }) => body),
   )
 }
 

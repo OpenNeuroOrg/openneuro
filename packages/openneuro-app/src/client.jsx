@@ -37,7 +37,7 @@ if (
 
 gtag.initialize(config.analytics.trackingIds)
 
-ReactDOM.hydrate(
+ReactDOM.render(
   <App>
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {

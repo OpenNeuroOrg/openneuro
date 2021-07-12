@@ -25,6 +25,7 @@ import {
   domain_list,
   date_list,
 } from '../mock-content/facet-content'
+import { AggregateCount } from '../aggregate-count/AggregateCount'
 
 import './search-page.scss'
 
@@ -101,6 +102,12 @@ export const SearchPageContainerExample = ({
     <div>
       <SearchPage
         portalContent={portalContent}
+        renderAggregateCounts={() => (
+          <>
+            <AggregateCount count={100} type="publicDataset" />
+            <AggregateCount count={100} type="participants" />
+          </>
+        )}
         renderFilterBlock={() => (
           <>
             <FiltersBlock

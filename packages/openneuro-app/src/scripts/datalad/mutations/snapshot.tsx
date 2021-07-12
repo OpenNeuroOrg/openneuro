@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { gql, useMutation } from '@apollo/client'
-import { withRouter } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
 const CREATE_SNAPSHOT = gql`
@@ -29,7 +29,18 @@ const CreateSnapshotMutation = ({ history, datasetId, tag, changes }) => {
   )
 }
 
-const SnapshotDataset = ({ history, datasetId, tag, changes }) => (
+interface SnapshotDatasetProps extends RouteComponentProps {
+  datasetId: string
+  tag: string
+  changes: Array<string>
+}
+
+const SnapshotDataset = ({
+  history,
+  datasetId,
+  tag,
+  changes,
+}: SnapshotDatasetProps) => (
   <ErrorBoundary subject="error creating snapshot">
     <CreateSnapshotMutation
       history={history}

@@ -175,6 +175,8 @@ export const typeDefs = `
     reexportRemotes(datasetId: ID!): Boolean
     # Reset draft commit
     resetDraft(datasetId: ID!, ref: String!): Boolean
+    # Flag snapshot as deprecated
+    deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Boolean
   }
 
   input DeleteFile {
@@ -413,6 +415,20 @@ export const typeDefs = `
     readme: String @cacheControl(maxAge: 31536000, scope: PUBLIC)
     # The git hash associated with this snapshot
     hexsha: String
+    # Whether or not this snapshot has been deprecated (returns null if false)
+    deprecated: DeprecatedSnapshot
+  }
+
+  # Set on snapshots that have been deprecated
+  type DeprecatedSnapshot {
+    # hexsha of deprecated snapshots
+    id: ID!
+    # ID of user who flagged snapshot as deprecated
+    user: User
+    # Reason for deprecating snaphot
+    cause: String
+    # Timestamp of snapshot deprecation
+    timestamp: Date
   }
 
   # Contents of dataset_description.json

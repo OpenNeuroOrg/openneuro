@@ -35,7 +35,7 @@ const AggregateCountsContainer: React.FC<AggregateCountsContainerProps> = ({
         />
         <AggregateCount
           type="publicDataset"
-          count={publicDatasetsData.datasets.pageInfo.count}
+          count={publicDatasetsData.datasets?.pageInfo?.count || 0}
         />
       </>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion'
 import styled from '@emotion/styled'
 
@@ -91,7 +91,9 @@ const goToBrainlife = datasetId => {
 }
 
 // prominent link to dataset download page
-const ProminentLinks = ({ dataset, location, history }) => {
+const ProminentLinks = ({ dataset }) => {
+  const history = useHistory()
+  const location = useLocation()
   const snapshot = snapshotVersion(location)
   const rootPath = snapshot
     ? `/datasets/${dataset.id}/versions/${snapshot}`
@@ -124,4 +126,4 @@ ProminentLinks.propTypes = {
   history: PropTypes.object,
 }
 
-export default withRouter(ProminentLinks)
+export default ProminentLinks
