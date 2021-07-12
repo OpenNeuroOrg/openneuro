@@ -5174,10 +5174,12 @@ __metadata:
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
     "@openneuro/client": ^3.34.0-alpha.1
+    "@types/jsonwebtoken": ^8
     "@types/node": ^14.14.41
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
     core-js: ^3.10.1
+    jsonwebtoken: ^8.5.1
     ts-node: ^9.1.1
     typescript: 4.0.6
   bin:
@@ -7365,6 +7367,15 @@ __metadata:
   version: 7.0.8
   resolution: "@types/json-schema@npm:7.0.8"
   checksum: 435a3d18a88aeac7bc88c2cdd2c19466c62ce79303493edd72380cd4af9775c05f35d424d5e76ffe3f94575ebb535305c6cae928c5bfb9c39eafbfb6932520a1
+  languageName: node
+  linkType: hard
+
+"@types/jsonwebtoken@npm:^8":
+  version: 8.5.4
+  resolution: "@types/jsonwebtoken@npm:8.5.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: 605ab698b007f04a1d1665b6af0dd31b0787c700c44dbca4474cebff6ae0e8435cc1166ae7d6895de3b6241f5a9ab62bea154ae5fdc7ac09cb13ab59dea4864d
   languageName: node
   linkType: hard
 
@@ -22402,7 +22413,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:^8.2.0, jsonwebtoken@npm:^8.3.0":
+"jsonwebtoken@npm:^8.2.0, jsonwebtoken@npm:^8.3.0, jsonwebtoken@npm:^8.5.1":
   version: 8.5.1
   resolution: "jsonwebtoken@npm:8.5.1"
   dependencies:

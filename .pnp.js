@@ -9982,10 +9982,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/runtime-corejs3", "npm:7.14.7"],
             ["@elastic/elasticsearch", "npm:7.13.0"],
             ["@openneuro/client", "workspace:packages/openneuro-client"],
+            ["@types/jsonwebtoken", "npm:8.5.4"],
             ["@types/node", "npm:14.17.5"],
             ["@types/tsc-watch", "npm:4.2.0"],
             ["apollo-link-retry", "npm:2.2.16"],
             ["core-js", "npm:3.15.2"],
+            ["jsonwebtoken", "npm:8.5.1"],
             ["ts-node", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:9.1.1"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"]
           ],
@@ -13327,6 +13329,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-json-schema-npm-7.0.8-39e64e8908-435a3d18a8.zip/node_modules/@types/json-schema/",
           "packageDependencies": [
             ["@types/json-schema", "npm:7.0.8"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/jsonwebtoken", [
+        ["npm:8.5.4", {
+          "packageLocation": "./.yarn/cache/@types-jsonwebtoken-npm-8.5.4-b90b23f33f-605ab698b0.zip/node_modules/@types/jsonwebtoken/",
+          "packageDependencies": [
+            ["@types/jsonwebtoken", "npm:8.5.4"],
+            ["@types/node", "npm:16.3.1"]
           ],
           "linkType": "HARD",
         }]

@@ -31,11 +31,12 @@ export const decodeCursor = cursor => {
  * @param {array[object]} edges
  * @param {number} offset The leading edge of the pagination window as an offset
  */
-export const applyCursorToEdges = (edges, offset) =>
-  edges.map((edge, n) => ({
+export const applyCursorToEdges = (edges, offset) => {
+  return edges.map((edge, n) => ({
     cursor: apiCursor({ offset: offset + n }),
     node: edge,
   }))
+}
 
 // Limit to options.first in range 1 <= limit <= 100
 export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
@@ -173,7 +174,7 @@ export const datasetsConnection = options => presortAggregate => {
   const offset = getOffsetFromCursor(options)
   const realLimit = maxLimit(options.first)
   // One query for match -> count -> sort -> skip -> limit
-  return Dataset.aggregate([
+  const pipeline = [
     ...presortAggregate,
     ...sortAggregate(options),
     {
@@ -185,7 +186,8 @@ export const datasetsConnection = options => presortAggregate => {
         datasets: { $slice: ['$datasets', offset, realLimit] },
       },
     },
-  ])
+  ]
+  return Dataset.aggregate(pipeline)
     .exec()
     .then(results => {
       const result = results.pop()

@@ -2,6 +2,7 @@ import elasticClient from '../../elasticsearch/elastic-client'
 import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
+import Permission from '../../models/permission'
 
 const elasticIndex = 'datasets'
 
@@ -37,17 +38,21 @@ export const decodeCursor = cursor =>
 export const elasticRelayConnection = (
   { body },
   childResolvers = { dataset },
+  user = null,
+  userInfo = null,
 ) => {
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
   return {
-    edges: body.hits.hits.map(hit => ({
-      node: childResolvers.dataset(
-        null,
-        { id: hit._source.id },
-        { user: null, userInfo: null }, // All searches are anonymous
-      ),
-    })),
+    edges: body.hits.hits
+      .map(hit => ({
+        node: childResolvers.dataset(
+          null,
+          { id: hit._source.id },
+          { user, userInfo },
+        ),
+      }))
+      .filter(edge => edge !== null), // remove datasets that user does not have permissions for
     pageInfo: {
       count,
       endCursor: lastMatch
@@ -134,7 +139,36 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
     }
     addClause(query, 'filter', termsClause)
   } else if (datasetType === 'My Datasets') {
-    // TODO
+    const results = await Permission.find({ userId })
+    const bookmarkedDatasets = results.map(({ datasetId }) => datasetId)
+    const termsClause = {
+      terms: {
+        id: bookmarkedDatasets,
+      },
+    }
+    addClause(query, 'filter', termsClause)
+
+    if (datasetStatus === 'Public') {
+      addClause(query, 'filter', {
+        term: {
+          public: {
+            value: true,
+          },
+        },
+      })
+    } else if (datasetStatus === 'Shared with Me') {
+      addClause(query, 'filter', {
+        terms: {
+          ['permissions.userPermissions.level']: ['ro', 'rw'],
+        },
+      })
+    } else if (datasetStatus === 'Invalid') {
+      addClause(query, 'filter', {
+        term: {
+          ['draft.issues.severity']: 'error',
+        },
+      })
+    }
   }
   return query
 }
@@ -174,7 +208,7 @@ export const advancedDatasetSearchConnection = async (
     size: first,
     body: requestBody,
   })
-  return elasticRelayConnection(result)
+  return elasticRelayConnection(result, undefined, user, userInfo)
 }
 
 export const advancedDatasetSearch = {
