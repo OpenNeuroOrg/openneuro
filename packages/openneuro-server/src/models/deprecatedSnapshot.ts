@@ -3,32 +3,25 @@ const { Schema, model } = mongoose
 
 export interface DeprecatedSnapshotDocument extends Document {
   id: string // snapshot hexsha
-  deprecated: boolean
-  deprecatedBy: string // user
-  deprecatedAt: Date
-  deprecatedFor: string // cause
+  user: string
+  cause: string
+  timestamp: Date
 }
 
 const deprecatedSnapshotSchema = new Schema({
   id: { type: String, required: true },
-  deprecated: { type: Boolean, default: false, required: true },
-  deprecatedBy: {
+  user: {
     type: String,
-    required: function (): boolean {
-      return !!this.deprecated
-    },
+    required: true,
+    ref: 'User',
   },
-  deprecatedAt: {
+  cause: {
+    type: String,
+    required: true,
+  },
+  timestamp: {
     type: Date,
-    required: function (): boolean {
-      return !!this.deprecated
-    },
-  },
-  deprecatedFor: {
-    type: String,
-    required: function (): boolean {
-      return !!this.deprecated
-    },
+    required: true,
   },
 })
 
