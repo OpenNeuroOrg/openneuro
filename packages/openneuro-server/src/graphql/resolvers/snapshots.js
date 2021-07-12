@@ -8,7 +8,6 @@ import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
-import SnapshotModel from '../../models/snapshot'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -99,12 +98,20 @@ const sortSnapshots = (a, b) =>
 
 export const latestSnapshot = (obj, _, context) => {
   return datalad.getSnapshots(obj.id).then(snapshots => {
-    const sortedSnapshots = Array.prototype.sort.call(snapshots, sortSnapshots)
-    return snapshot(
-      obj,
-      { datasetId: obj.id, tag: sortedSnapshots[0].tag },
-      context,
-    )
+    if (snapshots.length) {
+      const sortedSnapshots = Array.prototype.sort.call(
+        snapshots,
+        sortSnapshots,
+      )
+      return snapshot(
+        obj,
+        { datasetId: obj.id, tag: sortedSnapshots[0].tag },
+        context,
+      )
+    } else {
+      // In the case where there are no real snapshots, return HEAD as a snapshot
+      return snapshot(obj, { datasetId: obj.id, tag: 'HEAD' }, context)
+    }
   })
 }
 

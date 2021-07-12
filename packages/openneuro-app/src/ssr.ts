@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
+import Cookies from 'universal-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
 const development = process.env.NODE_ENV === 'development'
@@ -102,6 +103,7 @@ async function createServer(): Promise<void> {
         head: '',
         react: '',
         apolloState: 'e30K',
+        css: '',
       }
 
       try {
@@ -131,7 +133,9 @@ async function createServer(): Promise<void> {
           // 4. render the app HTML. This assumes entry-server.js's exported `render`
           //    function calls appropriate framework SSR APIs,
           //    e.g. ReactDOMServer.renderToString()
-          interpolate = await render(url, req['universalCookies'])
+          const cookies = new Cookies(req['universalCookies'].getAll())
+          cookies.remove('accessToken')
+          interpolate = await render(url, cookies)
         } catch (e) {
           // no-cache on errors
           cacheControl = 'no-cache'

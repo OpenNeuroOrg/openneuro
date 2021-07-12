@@ -286,6 +286,8 @@ export const getDatasets = options => {
           )
         }
       })
+  } else if (options?.indexing) {
+    return connection([])
   } else {
     // Anonymous request implies public datasets only
     const match = { public: true }

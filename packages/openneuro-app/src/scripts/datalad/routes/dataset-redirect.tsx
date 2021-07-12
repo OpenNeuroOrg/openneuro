@@ -58,7 +58,7 @@ const replaceDatasetId = (path, newId) => {
 
 // redirects to specific error message OR redirects param datasetId if dataset id has changed
 const DatasetRedirect = () => {
-  const { datasetId } = useParams()
+  const { datasetId } = useParams() as { datasetId: string }
   const { pathname } = useLocation()
 
   if (redirectLib.hasOwnProperty(datasetId)) {

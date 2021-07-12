@@ -14,9 +14,16 @@ export const SearchResultsList = ({
 }: SearchResultsListProps) => {
   return (
     <div className="search-results">
-      {items.map(({ node }, index) => (
-        <SearchResultItem node={node} key={index} profile={profile} />
-      ))}
+      {items.map(data => {
+        if (data)
+          return (
+            <SearchResultItem
+              node={data.node}
+              key={data.node.id}
+              profile={profile}
+            />
+          )
+      })}
     </div>
   )
 }

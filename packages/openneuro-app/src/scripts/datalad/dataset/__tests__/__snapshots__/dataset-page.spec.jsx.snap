@@ -30,7 +30,7 @@ exports[`DatasetPage component renders with common props 1`] = `
         className="fa fa-angle-double-left"
       />
     </span>
-    <withRouter(DatasetTools)
+    <DatasetTools
       dataset={
         Object {
           "draft": Object {

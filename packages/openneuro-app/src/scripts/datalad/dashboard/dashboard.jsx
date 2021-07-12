@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Switch, NavLink, Redirect, Route, withRouter } from 'react-router-dom'
+import { Switch, NavLink, Redirect, Route } from 'react-router-dom'
 import DatasetQuery from './datasets/dataset-query.jsx'
 import styled from '@emotion/styled'
 
@@ -51,4 +51,4 @@ Dashboard.propTypes = {
   saved: PropTypes.bool,
 }
 
-export default withRouter(Dashboard)
+export default Dashboard

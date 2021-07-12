@@ -14,7 +14,7 @@ import Share from '../../datalad/routes/manage-permissions.jsx'
 import Snapshot from '../../datalad/routes/snapshot.jsx'
 import FileDisplay from '../../datalad/routes/file-display.jsx'
 import AddMetadata from '../../datalad/mutations/add-metadata.jsx'
-import DeletePage from '../../datalad/dataset/delete-page.jsx'
+import DeletePage from '../../datalad/dataset/delete-page'
 
 //TODO imports
 
@@ -89,7 +89,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         component={stubComponent}
       />
       <Route
-        name="fileDisplay"
         path="/datasets/:datasetId/file-display/:filePath"
         render={({
           match: {
@@ -101,7 +100,6 @@ const DatasetRoutes = ({ dataset, error }) => {
       />
       {/* Snapshot routes */}
       <Route
-        name="snapshot"
         exact
         path="/datasets/:datasetId/versions/:tag"
         render={({
@@ -119,7 +117,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         component={DownloadDataset}
       />
       <Route
-        name="snapshot-fileDisplay"
         path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"
         render={({
           match: {

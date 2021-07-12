@@ -15,7 +15,7 @@ pytest-xdist = "*"
 [packages]
 dnspython = "*"
 datalad = "==0.13.3"
-falcon = "*"
+falcon = "==2.0.0"
 redis = "*"
 requests = "*"
 GitPython = "*"
@@ -24,9 +24,13 @@ gunicorn = "*"
 gevent = "*"
 elastic-apm = "*"
 falcon-elastic-apm = "*"
-sentry-sdk = {extras = [ "falcon",],version = "==0.16.1"}
 boto3 = "*"
 elasticsearch = "*"
+pygit2 = "*"
 
 [requires]
 python_version = "3.8"
+
+[packages.sentry-sdk]
+extras = [ "falcon",]
+version = "==0.16.1"

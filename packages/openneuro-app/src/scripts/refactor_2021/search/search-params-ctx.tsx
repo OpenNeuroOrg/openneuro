@@ -25,9 +25,14 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
 }
 
 export const removeFilterItem = setSearchParams => (param, value) => {
+  const updatedParams = {}
   switch (param) {
-    case 'modality_selected':
+    /* Handle simple filter resets. */
     case 'datasetType_selected':
+      // when datasetType is unset, unset datasetStatus as well
+      updatedParams['datasetStatus_selected'] =
+        initialSearchParams['datasetStatus_selected']
+    case 'modality_selected':
     case 'datasetStatus_selected':
     case 'ageRange':
     case 'subjectCountRange':
@@ -37,11 +42,14 @@ export const removeFilterItem = setSearchParams => (param, value) => {
     case 'section_selected':
     case 'species_selected':
     case 'studyDomain_selected':
+      updatedParams[param] = initialSearchParams[param]
       setSearchParams(prevState => ({
         ...prevState,
-        [param]: initialSearchParams[param],
+        ...updatedParams,
       }))
       break
+
+    /* Handle removal of filters in arrays. */
     case 'keywords':
     case 'authors':
     case 'tasks':

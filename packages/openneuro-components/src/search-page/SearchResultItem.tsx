@@ -105,8 +105,8 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const heading = node.draft.description.Name
   const summary = node.draft.summary
   const datasetId = node.draft.id
-  const numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1
-  const numSubjects = summary.subjects.length > 0 ? summary.subjects.length : 1
+  const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
+  const numSubjects = summary?.subjects.length > 0 ? summary.subjects.length : 1
 
   const accessionNumber = (
     <span className="result-summary-meta">
@@ -138,13 +138,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const size = (
     <span className="result-summary-meta">
       <strong>Size: </strong>
-      <span>{bytes(summary.size)}</span>
+      <span>{bytes(summary?.size)}</span>
     </span>
   )
   const files = (
     <span className="result-summary-meta">
       <strong>Files: </strong>
-      <span>{summary.totalFiles.toLocaleString()}</span>
+      <span>{summary?.totalFiles.toLocaleString()}</span>
     </span>
   )
 
@@ -275,13 +275,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </div>
   )
 
-  const modalityList = summary.modalities.length ? (
+  const modalityList = summary?.modalities.length ? (
     <div className="modality-list">
-      {_list(<>Modalities</>, summary.modalities)}
+      {_list(<>Modalities</>, summary?.modalities)}
     </div>
   ) : null
-  const taskList = summary.tasks.length ? (
-    <div className="task-list">{_list(<>Tasks</>, summary.tasks)}</div>
+  const taskList = summary?.tasks.length ? (
+    <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
   ) : null
 
   return (

@@ -28,12 +28,7 @@ class Dashboard extends React.Component {
                 </li>
               </ul>
               <Switch>
-                <Redirect
-                  name="defaultPath"
-                  path="/admin"
-                  to="/admin/users"
-                  exact
-                />
+                <Redirect path="/admin" to="/admin/users" exact />
                 <Route
                   name="users"
                   path="/admin/users"
