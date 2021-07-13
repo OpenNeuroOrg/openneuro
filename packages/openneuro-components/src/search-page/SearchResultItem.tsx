@@ -107,6 +107,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const datasetId = node.draft.id
   const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
   const numSubjects = summary?.subjects.length > 0 ? summary.subjects.length : 1
+  const noSnapshots = !!node.snapshots
 
   const accessionNumber = (
     <span className="result-summary-meta">
@@ -150,24 +151,19 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
 
   const dateAdded = formatDate(node.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(node.created))
+  const date = noSnapshots
+    ? node.created
+    : node.snapshots[node.snapshots.length - 1].created
+  const dateUpdated = formatDate(date)
+  const dateUpdatedDifference = formatDistanceToNow(parseISO(date))
 
-  let lastUpdatedDate
-  if (node.snapshots.length) {
-    const dateUpdated = formatDate(
-      node.snapshots[node.snapshots.length - 1].created,
-    )
-    const dateUpdatedDifference = formatDistanceToNow(
-      parseISO(node.snapshots[node.snapshots.length - 1].created),
-    )
-
-    lastUpdatedDate = (
-      <div className="updated-date">
-        <span className="divider">|</span>
-        <span>Updated: </span>
-        {dateUpdated} - {dateUpdatedDifference} ago
-      </div>
-    )
-  }
+  const lastUpdatedDate = node.snapshots?.length ? (
+    <div className="updated-date">
+      <span className="divider">|</span>
+      <span>Updated: </span>
+      {dateUpdated} - {dateUpdatedDifference} ago
+    </div>
+  ) : null
 
   const uploader = (
     <div className="uploader">

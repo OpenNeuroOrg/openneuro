@@ -35,7 +35,7 @@ export const decodeCursor = cursor =>
  * Return a relay cursor from an elastic search result
  * @param {import ('@elastic/elasticsearch').ApiResponse} result
  */
-export const elasticRelayConnection = (
+export const elasticRelayConnection = async (
   { body },
   childResolvers = { dataset },
   user = null,
@@ -43,16 +43,19 @@ export const elasticRelayConnection = (
 ) => {
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
+  const edges = await Promise.all(
+    body.hits.hits.map(async hit => ({
+      node: await childResolvers.dataset(
+        null,
+        { id: hit._source.id },
+        { user, userInfo },
+        true,
+      ),
+    })),
+  )
+  const allowedEdges = edges.filter(edge => edge.node !== null) // remove datasets that user does not have permissions for
   return {
-    edges: body.hits.hits
-      .map(hit => ({
-        node: childResolvers.dataset(
-          null,
-          { id: hit._source.id },
-          { user, userInfo },
-        ),
-      }))
-      .filter(edge => edge !== null), // remove datasets that user does not have permissions for
+    edges: allowedEdges,
     pageInfo: {
       count,
       endCursor: lastMatch
