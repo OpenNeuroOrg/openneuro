@@ -105,33 +105,43 @@ spec:
         paths:
           - path: /*
             backend:
-              serviceName: redirect-to-mri-portal
-              servicePort: use-annotation
+              service:
+                name: redirect-to-mri-portal
+                port:
+                  name: use-annotation
     - host: eeg.{{ .Values.hostname }}
       http:
         paths:
           - path: /*
             backend:
-              serviceName: redirect-to-eeg-portal
-              servicePort: use-annotation
+              service:
+                name: redirect-to-eeg-portal
+                port:
+                  name: use-annotation
     - host: ieeg.{{ .Values.hostname }}
       http:
         paths:
           - path: /*
             backend:
-              serviceName: redirect-to-ieeg-portal
-              servicePort: use-annotation
+              service:
+                name: redirect-to-ieeg-portal
+                port:
+                  name: use-annotation
     - host: meg.{{ .Values.hostname }}
       http:
         paths:
           - path: /*
             backend:
-              serviceName: redirect-to-meg-portal
-              servicePort: use-annotation
+              service:
+                name: redirect-to-meg-portal
+                port:
+                  name: use-annotation
     - host: pet.{{ .Values.hostname }}
       http:
         paths:
           - path: /*
             backend:
-              serviceName: redirect-to-pet-portal
-              servicePort: use-annotation
+              service:
+                name: redirect-to-pet-portal
+                port:
+                  name: use-annotation
