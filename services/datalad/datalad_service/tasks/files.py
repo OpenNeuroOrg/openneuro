@@ -71,9 +71,8 @@ def get_untracked_files(store, dataset):
 def remove_files(store, dataset, files, name=None, email=None, cookies=None):
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
-        for filename in files:
-            ds.remove(filename, check=False)
-            update_head(ds, dataset, cookies)
+        ds.remove(files, check=False)
+        update_head(ds, dataset, cookies)
 
 def remove_annex_object(store, dataset, annex_key):
     """Remove an annex object by its key.
@@ -97,6 +96,5 @@ def remove_recursive(store, dataset, paths, name=None, email=None, cookies=None)
     """Remove a path within a dataset recursively."""
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, name, email):
-        for path in paths: 
-            ds.remove(path, recursive=True, check=False)
-            update_head(ds, dataset, cookies)
+        ds.remove(paths, recursive=True, check=False)
+        update_head(ds, dataset, cookies)
