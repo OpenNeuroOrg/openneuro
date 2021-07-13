@@ -46,6 +46,13 @@ const searchQuery = gql`
               size
               totalFiles
               dataProcessed
+              pet {
+                BodyPart
+                ScannerManufacturer
+                ScannerManufacturersModelName
+                TracerName
+                TracerRadionuclide
+              }
             }
             issues {
               severity
