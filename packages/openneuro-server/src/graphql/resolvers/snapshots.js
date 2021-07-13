@@ -8,6 +8,11 @@ import { snapshotIssues } from './issues.js'
 import { getFiles, filterFiles } from '../../datalad/files.js'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
+import DeprecatedSnapshot from '../../models/deprecatedSnapshot'
+import { checkDatasetAdmin } from '../permissions.js'
+import SnapshotModel from '../../models/snapshot'
+import User from '../../models/user'
+import * as Sentry from '@sentry/node'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -26,9 +31,38 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
           getFiles(datasetId, snapshot.hexsha)
             .then(filterFiles(prefix))
             .then(filterRemovedAnnexObjects(datasetId)),
+        deprecated: () => deprecated(snapshot),
       }))
     },
   )
+}
+
+export const deprecated = snapshot => {
+  return DeprecatedSnapshot.findOne({ id: snapshot.hexsha }).populate('user')
+}
+
+export const deprecateSnapshot = async (
+  obj,
+  { datasetId, tag, reason },
+  { user, userInfo },
+) => {
+  try {
+    await checkDatasetAdmin(datasetId, user, userInfo)
+    const [snapshot, userDoc] = await Promise.all([
+      SnapshotModel.findOne({ datasetId, tag }),
+      User.findOne({ id: user }),
+    ])
+    await DeprecatedSnapshot.create({
+      id: snapshot.hexsha,
+      user: userDoc._id,
+      cause: reason,
+      timestamp: new Date(),
+    })
+    return true
+  } catch (err) {
+    Sentry.captureException(err)
+    throw err
+  }
 }
 
 export const participantCount = async (obj, { modality }) => {

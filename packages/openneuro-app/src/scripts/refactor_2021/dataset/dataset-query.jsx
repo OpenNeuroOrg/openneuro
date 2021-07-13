@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/browser'
+import { apm } from '../../apm'
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery, gql } from '@apollo/client'
@@ -131,7 +131,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     if (error) {
       if (data.dataset) {
         // show dataset page
-        captureException(error)
+        apm.captureError(error)
       } else {
         // direct to freshdesk
         throw error

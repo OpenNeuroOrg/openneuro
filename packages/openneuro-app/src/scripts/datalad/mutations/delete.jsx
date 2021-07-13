@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 
-const DELETE_DATASET = gql`
+export const DELETE_DATASET = gql`
   mutation deleteDataset($id: ID!, $reason: String, $redirect: String) {
     deleteDataset(id: $id, reason: $reason, redirect: $redirect)
   }

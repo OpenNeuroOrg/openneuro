@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import { apm } from '../apm'
 import { toast } from 'react-toastify'
 import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'
@@ -213,7 +213,7 @@ export class UploadClient extends React.Component {
           })
         })
         .catch(error => {
-          Sentry.captureException(error)
+          apm.captureError(error)
           toast.error(
             <ToastContent
               title="Dataset creation failed"
@@ -291,7 +291,7 @@ export class UploadClient extends React.Component {
         this.uploadCompleteAction()
       }
     } catch (error) {
-      Sentry.captureException(error)
+      apm.captureError(error)
       const toastId = toast.error(
         <ToastContent
           title="Dataset upload failed"
@@ -315,7 +315,7 @@ export class UploadClient extends React.Component {
         try {
           this.state.xhr.abort()
         } catch (e) {
-          Sentry.captureException(e)
+          apm.captureError(e)
         }
       }
     }

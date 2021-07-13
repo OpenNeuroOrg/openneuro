@@ -1,7 +1,8 @@
 import React from 'react'
 import { StaticRouter as Router } from 'react-router-dom'
-import { mount } from 'enzyme'
+import { render, screen } from '@testing-library/react'
 import ProminentLinks from '../dataset-prominent-links.jsx'
+import '@testing-library/jest-dom/extend-expect'
 
 describe('DatasetAuthors component', () => {
   const minDataset = {
@@ -11,21 +12,21 @@ describe('DatasetAuthors component', () => {
 
   it('does render brainlife button when onBrainlife', () => {
     minDataset.onBrainlife = true
-    const wrapper = mount(
+    const wrapper = render(
       <Router initialEntries={['/']}>
         <ProminentLinks dataset={minDataset} />
       </Router>,
     )
-    expect(wrapper.find('.brainlife-link').length).toBeGreaterThan(0)
+    expect(screen.getByText('Analyze on brainlife.io')).toBeInTheDocument()
   })
 
   it('does not render brainlife button when not onBrainlife', () => {
     minDataset.onBrainlife = false
-    const wrapper = mount(
+    const wrapper = render(
       <Router initialEntries={['/']}>
         <ProminentLinks dataset={minDataset} />
       </Router>,
     )
-    expect(wrapper.find('.brainlife-link').length).toEqual(0)
+    expect(screen.queryByText('Analyze on brainlife.io')).toBeNull()
   })
 })

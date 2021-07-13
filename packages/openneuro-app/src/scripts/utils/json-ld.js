@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/browser'
-
 const formatAuthors = authorList => {
   if (authorList.length) {
     const authorsArray = []
@@ -55,7 +53,6 @@ const schemaGenerator = snapshot => {
     }
     return JSON.stringify(schema)
   } catch (err) {
-    Sentry.captureException(err)
     return null
   }
 }

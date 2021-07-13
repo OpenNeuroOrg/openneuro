@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/browser'
+import { apm } from '../apm'
 import React from 'react'
 import PropTypes from 'prop-types'
 import FreshdeskInterface from './freshdeskInterface.jsx'
@@ -35,13 +35,10 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, { componentStack }) {
     const message = String(error)
     error.componentStack = componentStack
-
-    Sentry.withScope(scope => {
-      scope.setTag('datasetId', this.props.datasetId)
-      this.setState({
-        eventId: Sentry.captureException(error),
-        message,
-      })
+    apm.setCustomContext({ datasetId: this.props.datasetId })
+    apm.captureError(error)
+    this.setState({
+      message,
     })
   }
 

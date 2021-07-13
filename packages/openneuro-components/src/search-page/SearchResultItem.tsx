@@ -102,7 +102,7 @@ export interface SearchResultItemProps {
 }
 
 export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
-  const heading = node.draft.description.Name
+  const heading = node.draft.description?.Name
   const summary = node.draft.summary
   const datasetId = node.draft.id
   const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
@@ -125,7 +125,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     <span className="result-summary-meta">
       <strong>Participants Ages: </strong>
       <span>
-        {node.metadata.ages ? 'N/A' : node.metadata.ages.toLocaleString()}
+        {node?.metadata?.ages ? node.metadata.ages.toLocaleString() : 'N/A'}
       </span>
     </span>
   )
@@ -150,20 +150,24 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
 
   const dateAdded = formatDate(node.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(node.created))
-  const dateUpdated = formatDate(
-    node.snapshots[node.snapshots.length - 1].created,
-  )
-  const dateUpdatedDifference = formatDistanceToNow(
-    parseISO(node.snapshots[node.snapshots.length - 1].created),
-  )
 
-  const lastUpdatedDate = node.snapshots.length ? (
-    <div className="updated-date">
-      <span className="divider">|</span>
-      <span>Updated: </span>
-      {dateUpdated} - {dateUpdatedDifference} ago
-    </div>
-  ) : null
+  let lastUpdatedDate
+  if (node.snapshots.length) {
+    const dateUpdated = formatDate(
+      node.snapshots[node.snapshots.length - 1].created,
+    )
+    const dateUpdatedDifference = formatDistanceToNow(
+      parseISO(node.snapshots[node.snapshots.length - 1].created),
+    )
+
+    lastUpdatedDate = (
+      <div className="updated-date">
+        <span className="divider">|</span>
+        <span>Updated: </span>
+        {dateUpdated} - {dateUpdatedDifference} ago
+      </div>
+    )
+  }
 
   const uploader = (
     <div className="uploader">
