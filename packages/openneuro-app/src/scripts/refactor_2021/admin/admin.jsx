@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
-import Users from '../../admin/users.jsx'
-import FlaggedFiles from '../../admin/flagged-files.jsx'
+import Users from './users.jsx'
+import FlaggedFiles from './flagged-files.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
 class Dashboard extends React.Component {
