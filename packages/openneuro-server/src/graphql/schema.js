@@ -189,10 +189,19 @@ export const typeDefs = `
     size: BigInt!
   }
 
+  input SummaryPetInput {
+    BodyPart: [String]
+    ScannerManufacturer: [String]
+    ScannerManufacturersModelName: [String]
+    TracerName: [String]
+    TracerRadionuclide: [String]
+  }
+
   input SummaryInput {
     id: ID! # Git reference for this summary
     datasetId: ID!
     modalities: [String]
+    secondaryModalities: [String]
     sessions: [String]
     subjects: [String]
     subjectMetadata: [SubjectMetadataInput]
@@ -200,6 +209,7 @@ export const typeDefs = `
     size: BigInt!
     totalFiles: Int!
     dataProcessed: Boolean
+    pet: SummaryPetInput
   }
 
   input SubjectMetadataInput {
