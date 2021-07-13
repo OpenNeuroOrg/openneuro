@@ -95,7 +95,7 @@ export const DatasetContent = ({ dataset }) => {
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
 
   return (
-    <>
+    <span className="is-dataset">
       <LoggedIn>
         <Helmet>
           <title>
@@ -186,7 +186,7 @@ export const DatasetContent = ({ dataset }) => {
           }`}
         />
       )}
-    </>
+    </span>
   )
 }
 

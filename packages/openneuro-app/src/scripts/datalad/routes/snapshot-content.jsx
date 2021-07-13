@@ -66,7 +66,7 @@ SnapshotContent.propTypes = {
 
 const SnapshotDetails = ({ dataset, snapshot }) => {
   return (
-    <span>
+    <span className="is-snapshot">
       <MobileClass>
         <Helmet>
           <title>

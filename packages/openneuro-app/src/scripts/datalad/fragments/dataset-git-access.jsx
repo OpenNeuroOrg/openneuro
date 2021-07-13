@@ -36,7 +36,7 @@ const DatasetGitAccess = ({ datasetId, worker }) => {
           <button
             className="warning btn-warn-component"
             onClick={() => copyToClipboard(url)}>
-            <i className="fa fa-clipboard" aria-hidden="true"></i>
+            <i className="fas fa-clipboard" aria-hidden="true"></i>
           </button>
         </Tooltip>{' '}
         <GitAccessUrl>{url}</GitAccessUrl>
