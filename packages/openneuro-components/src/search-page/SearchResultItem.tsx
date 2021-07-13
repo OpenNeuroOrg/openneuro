@@ -102,7 +102,7 @@ export interface SearchResultItemProps {
 }
 
 export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
-  const heading = node.draft.description.Name
+  const heading = node.draft.description?.Name
   const summary = node.draft.summary
   const datasetId = node.draft.id
   const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
