@@ -53,6 +53,68 @@ class Summary extends React.PureComponent {
         </span>
       )
 
+      let bodyPart,
+        scannerManufacturer,
+        scannerManufacturersModelName,
+        tracerName,
+        tracerRadionuclide
+      if (summary.pet) {
+        bodyPart = (
+          <span>
+            <strong>
+              {' '}
+              {pluralize('Target', summary.pet.BodyPart.length)}:{' '}
+            </strong>
+            {summary.pet.BodyPart.join(', ')}
+          </span>
+        )
+        scannerManufacturer = (
+          <span>
+            <strong>
+              {' '}
+              {pluralize(
+                'Scanner Manufacturer',
+                summary.pet.ScannerManufacturer.length,
+              )}
+              :{' '}
+            </strong>
+            {summary.pet.ScannerManufacturer.join(', ')}
+          </span>
+        )
+        scannerManufacturersModelName = (
+          <span>
+            <strong>
+              {' '}
+              {pluralize(
+                'Scanner Model',
+                summary.pet.ScannerManufacturersModelName.length,
+              )}
+              :{' '}
+            </strong>
+            {summary.pet.ScannerManufacturersModelName.join(', ')}
+          </span>
+        )
+        tracerName = (
+          <span>
+            <strong>
+              {' '}
+              {pluralize('Tracer', summary.pet.TracerName.length)}:{' '}
+            </strong>
+            {summary.pet.TracerName.join(', ')}
+          </span>
+        )
+        tracerRadionuclide = (
+          <span>
+            <strong>
+              {' '}
+              {pluralize('Radionuclide', summary.pet.TracerRadionuclide.length)}
+              :{' '}
+            </strong>
+            {summary.pet.TracerRadionuclide.join(', ')}
+          </span>
+        )
+      }
+
       if (minimal) {
         return (
           <div className="minimal-summary">
@@ -66,6 +128,17 @@ class Summary extends React.PureComponent {
             <div className="summary-data modalities">
               {this._list(<b>Modalities</b>, summary.modalities)}
             </div>
+            {summary.pet && (
+              <>
+                <div className="summary-data">{bodyPart}</div>
+                <div className="summary-data">{scannerManufacturer}</div>
+                <div className="summary-data">
+                  {scannerManufacturersModelName}
+                </div>
+                <div className="summary-data">{tracerName}</div>
+                <div className="summary-data">{tracerRadionuclide}</div>
+              </>
+            )}
           </div>
         )
       } else {
@@ -78,6 +151,15 @@ class Summary extends React.PureComponent {
             </h5>
             <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
             <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
+            {summary.pet && (
+              <>
+                <h5>{bodyPart}</h5>
+                <h5>{scannerManufacturer}</h5>
+                <h5>{scannerManufacturersModelName}</h5>
+                <h5>{tracerName}</h5>
+                <h5>{tracerRadionuclide}</h5>
+              </>
+            )}
           </div>
         )
       }
