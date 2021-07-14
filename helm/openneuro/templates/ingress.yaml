@@ -104,6 +104,7 @@ spec:
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: redirect-to-mri-portal
@@ -113,6 +114,7 @@ spec:
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: redirect-to-eeg-portal
@@ -122,6 +124,7 @@ spec:
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: redirect-to-ieeg-portal
@@ -131,6 +134,7 @@ spec:
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: redirect-to-meg-portal
@@ -140,6 +144,7 @@ spec:
       http:
         paths:
           - path: /*
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: redirect-to-pet-portal
