@@ -90,8 +90,12 @@ export const portalContent = {
     modality: 'PET', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: 'search-page-pet',
     portalName: 'OpenNeuro PET',
-    portalPrimary:
-      'OpenNeuro added support for PET datasets in 2021, when PET was incorporated into the BIDS standard.',
+    portalPrimary:  (
+      <>
+        OpenNeuro added support for PET datasets in 2021, when PET was incorporated into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+      </>
+    ),
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: pet,
