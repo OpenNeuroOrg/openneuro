@@ -499,10 +499,10 @@ export const typeDefs = `
     size: BigInt!
     totalFiles: Int!
     dataProcessed: Boolean
-    pet: PetSpecificFields
+    pet: SummaryPetFields
   }
 
-  type PetSpecificFields {
+  type SummaryPetFields {
     BodyPart: [String]
     ScannerManufacturer: [String]
     ScannerManufacturersModelName: [String]
