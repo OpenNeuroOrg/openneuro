@@ -21,7 +21,7 @@ type ModalityOption = {
   children?: ModalityOption[]
 }
 
-const modality_available: ModalityOption[] = [
+export const modality_available: ModalityOption[] = [
   {
     label: 'MRI',
     value: 'MRI',
@@ -148,6 +148,11 @@ export interface SearchParams {
   section_selected: string | null
   studyDomain_available: string[]
   studyDomain_selected: string | null
+  bodyParts: string[]
+  scannerManufacturers: string[]
+  scannerManufacturersModelNames: string[]
+  tracerNames: string[]
+  tracerRadionuclides: string[]
   sortBy_available
   sortBy_selected
 }
@@ -179,6 +184,11 @@ const initialSearchParams: SearchParams = {
   section_selected: null,
   studyDomain_available: [],
   studyDomain_selected: null,
+  bodyParts: [],
+  scannerManufacturers: [],
+  scannerManufacturersModelNames: [],
+  tracerNames: [],
+  tracerRadionuclides: [],
   sortBy_available: sortBy,
   sortBy_selected: sortBy[0],
 }
@@ -220,6 +230,11 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   section_selected: null,
   studyDomain_available: ['a', 'b', 'c'],
   studyDomain_selected: null,
+  bodyParts: [],
+  scannerManufacturers: [],
+  scannerManufacturersModelNames: [],
+  tracerNames: [],
+  tracerRadionuclides: [],
   sortBy_available: sortBy,
   sortBy_selected: sortBy[0],
 }

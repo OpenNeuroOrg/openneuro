@@ -21,6 +21,11 @@ export interface FiltersBlockProps {
   section_selected?: FacetSelectValueType
   species_selected?: FacetSelectValueType
   studyDomain_selected?: FacetSelectValueType
+  bodyParts?: string[]
+  scannerManufacturers?: string[]
+  scannerManufacturersModelNames?: string[]
+  tracerNames?: string[]
+  tracerRadionuclides?: string[]
   noFilters: boolean
   removeFilterItem?(isModality?: boolean): (key: string, value) => void
   removeAllFilters?(): void
@@ -42,6 +47,11 @@ export const FiltersBlock = ({
   species_selected,
   studyDomain_selected,
   date_selected,
+  bodyParts,
+  scannerManufacturers,
+  scannerManufacturersModelNames,
+  tracerNames,
+  tracerRadionuclides,
   noFilters,
   removeFilterItem,
   removeAllFilters,
@@ -169,6 +179,48 @@ export const FiltersBlock = ({
           <FilterListItem
             type="Publication Date "
             item={{ param: 'date_selected', value: date_selected }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+
+        {bodyParts && (
+          <TermListItem
+            type="Target"
+            item={{ param: 'bodyParts', values: bodyParts }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {scannerManufacturers && (
+          <TermListItem
+            type="Scanner Manufacturers"
+            item={{
+              param: 'scannerManufacturers',
+              values: scannerManufacturers,
+            }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {scannerManufacturersModelNames && (
+          <TermListItem
+            type="Scanner Model"
+            item={{
+              param: 'scannerManufacturersModelNames',
+              values: scannerManufacturersModelNames,
+            }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {tracerNames && (
+          <TermListItem
+            type="Tracer"
+            item={{ param: 'tracerNames', values: tracerNames }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {tracerRadionuclides && (
+          <TermListItem
+            type="Radionuclide"
+            item={{ param: 'tracerRadionuclides', values: tracerRadionuclides }}
             removeFilterItem={removeFilterItem()}
           />
         )}

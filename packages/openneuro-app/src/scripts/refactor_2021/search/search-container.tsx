@@ -20,6 +20,11 @@ import {
   SpeciesSelect,
   SectionSelect,
   StudyDomainSelect,
+  BodyPartsInput,
+  ScannerManufacturers,
+  ScannerManufacturersModelNames,
+  TracerNames,
+  TracerRadionuclides,
   SortBySelect,
 } from './inputs'
 import FiltersBlockContainer from './filters-block-container'
@@ -103,6 +108,16 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <SpeciesSelect />
           <SectionSelect />
           <StudyDomainSelect />
+          {(portalContent === undefined ||
+            portalContent.modality === 'PET') && (
+            <>
+              <BodyPartsInput />
+              <ScannerManufacturers />
+              <ScannerManufacturersModelNames />
+              <TracerNames />
+              <TracerRadionuclides />
+            </>
+          )}
         </>
       )}
       renderLoading={() =>
