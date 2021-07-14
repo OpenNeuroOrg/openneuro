@@ -27,6 +27,7 @@
           > .label,
           > .label span {
             color: var(--current-theme-primary);
+            font-weight: 600;
           }
         }
         .label {
@@ -48,7 +49,7 @@
       }
 
       > .label {
-        padding: 10px 10px 10px 30px;
+        padding: 10px 10px 10px 20px;
       }
     }
     .level-2 {
@@ -67,7 +68,7 @@
         }
         &:before {
           content: '-';
-          margin-left: 12px;
+          margin-left: 30px;
         }
       }
     }
@@ -79,10 +80,10 @@
     }
     &.selected-facet > .label {
       color: var(--current-theme-primary);
+      font-weight: 600;
 
       span {
         color: var(--current-theme-primary);
-        font-weight: 400;
       }
     }
     &.selected-facet:hover {
@@ -231,10 +232,9 @@
       }
       &.selected-facet > .label {
         color: var(--current-theme-primary);
-
+        font-weight: 600;
         span {
           color: var(--current-theme-primary);
-          font-weight: 400;
         }
       }
     }

@@ -18,6 +18,11 @@ header {
 
   position: relative;
   z-index: 100;
+
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 .svg-fill-on-dark-aqua {
   fill: $on-dark-aqua;
@@ -44,6 +49,9 @@ header {
 }
 
 .navbar-navigation {
+  @media (max-width: 800px) {
+    margin-top: 20px;
+  }
   ul {
     list-style: none;
     margin: 0;
@@ -109,7 +117,6 @@ header {
 }
 
 .navbar-account {
-  flex-basis: 300px;
   display: flex;
   justify-content: flex-end;
 }
@@ -161,12 +168,24 @@ header {
   }
 }
 
+.expaned-header .header-wrap .expaned-h-left {
+  @media (max-width: 1250px) {
+    flex-basis: 100%;
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
 .expaned-header {
   h2 {
     font-weight: 300;
     color: #fff;
     font-size: 29px;
     max-width: 90%;
+    @media (max-width: 1250px) {
+      max-width: 100%;
+      width: 100%;
+    }
     a {
       font-weight: 600;
       color: $on-light-aqua;
@@ -184,6 +203,15 @@ header {
       display: flex;
       justify-content: space-between;
       max-width: 90%;
+      @media (max-width: 1250px) {
+        max-width: 100%;
+        width: 100%;
+      }
+      @media (max-width: 767px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
       .aggregate-count {
         color: #fff;
         font-size: 23px;
@@ -199,6 +227,7 @@ header {
     .cube-wrap {
       flex-basis: 90%;
       max-width: 90%;
+
       margin: 0 auto;
       h2 {
         width: auto;
@@ -212,6 +241,10 @@ header {
   margin: 20px 0;
   display: flex;
   justify-content: space-between;
+  @media (max-width: 1250px) {
+    max-width: 100%;
+    width: 100%;
+  }
   .header-input {
     flex-grow: 1;
     input {
@@ -239,6 +272,10 @@ header {
 .header-modality-wrap {
   width: 90%;
   margin: 60px 0 20px;
+  @media (max-width: 1250px) {
+    max-width: 100%;
+    width: 100%;
+  }
   .facet-accordion.on-accordion-wrapper .accordion-title {
     padding: 15px 0;
   }

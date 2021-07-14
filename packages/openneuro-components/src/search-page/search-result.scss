@@ -58,8 +58,9 @@
 
   .result-meta-footer {
     display: flex;
+    flex-wrap: wrap;
     .result-summary-meta {
-      margin-right: 10px;
+      margin: 0 10px 10px 0;
       padding: 0 40px 0 0;
       font-size: 14px;
       font-weight: 600;
