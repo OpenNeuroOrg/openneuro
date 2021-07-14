@@ -10,7 +10,6 @@ import {
 } from '../permissions.js'
 import { user } from './user.js'
 import { permissions } from './permissions.js'
-import { states } from '../permissions.js'
 import { datasetComments } from './comment.js'
 import { metadata } from './metadata.js'
 import { history } from './history.js'
@@ -24,22 +23,10 @@ import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
 import { getFileName } from '../../datalad/files.js'
 
-export const dataset = async (
-  obj,
-  { id },
-  { user, userInfo },
-  ignoreInaccessibleDatasets = false,
-) => {
-  try {
-    return await checkDatasetRead(id, user, userInfo).then(() => {
-      return datalad.getDataset(id)
-    })
-  } catch (err) {
-    // Don't throw the error if this is for a dataset search.
-    if (ignoreInaccessibleDatasets && err.message === states.READ.errorMessage)
-      return null
-    else throw err
-  }
+export const dataset = async (obj, { id }, { user, userInfo }) => {
+  return await checkDatasetRead(id, user, userInfo).then(() => {
+    return datalad.getDataset(id)
+  })
 }
 
 export const datasets = (parent, args, { user, userInfo }) => {

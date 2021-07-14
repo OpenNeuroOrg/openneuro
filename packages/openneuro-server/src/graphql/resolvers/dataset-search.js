@@ -3,6 +3,7 @@ import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
 import Permission from '../../models/permission'
+import { states } from '../permissions.js'
 
 const elasticIndex = 'datasets'
 
@@ -44,16 +45,21 @@ export const elasticRelayConnection = async (
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
   const edges = await Promise.all(
-    body.hits.hits.map(async hit => ({
-      node: await childResolvers.dataset(
-        null,
-        { id: hit._source.id },
-        { user, userInfo },
-        true,
-      ),
-    })),
+    body.hits.hits.map(async hit => {
+      try {
+        const node = await childResolvers.dataset(
+          null,
+          { id: hit._source.id },
+          { user, userInfo },
+        )
+        return { node }
+      } catch (err) {
+        if (err.message === states.READ.errorMessage) return null
+        else throw err
+      }
+    }),
   )
-  const allowedEdges = edges.filter(edge => edge.node !== null) // remove datasets that user does not have permissions for
+  const allowedEdges = edges.filter(edge => edge !== null) // remove datasets that user does not have permissions for
   return {
     edges: allowedEdges,
     pageInfo: {
