@@ -7,9 +7,9 @@
     background-color: #fff;
     border-radius: $border-radius-default;
     width: 100%;
-    min-width: 200px;
-    right: -20px;
-    top: 30px;
+    min-width: 250px;
+    right: 0px;
+    top: 60px;
   }
 
   .user-menu-dropdown-list {
@@ -23,6 +23,9 @@
         &.dropdown-header {
           padding: 10px 0;
           font-size: 14px;
+          p:first-child {
+            margin-top: 0;
+          }
           span {
             color: #777;
             font-size: 12px;
@@ -53,4 +56,22 @@
       color: $on-light-aqua;
     }
   }
+}
+
+.header-account-btn {
+  display: flex;
+  align-items: center;
+  background: #eee;
+  border-radius: $border-radius-default;
+  button.on-no-background.icon-text {
+    color: $on-dark-aqua;
+    margin: 5px 20px 0;
+    font-size: 16px;
+  }
+}
+.header-account-btn .toggle {
+  color: #204e5a;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 20px 24px;
 }

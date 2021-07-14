@@ -281,7 +281,10 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
 
   const modalityList = summary?.modalities.length ? (
     <div className="modality-list">
-      {_list(<>Modalities</>, summary?.modalities)}
+      {_list(
+        <>{summary?.modalities.length === 1 ? 'Modality' : 'Modalities'}</>,
+        summary?.modalities,
+      )}
     </div>
   ) : null
   const taskList = summary?.tasks.length ? (

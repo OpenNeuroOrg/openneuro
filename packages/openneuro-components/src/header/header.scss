@@ -3,19 +3,6 @@ header {
   position: relative;
 }
 
-.header-account-btn {
-  display: flex;
-  align-items: center;
-  background: #eee;
-  padding: 10px 20px;
-  border-radius: $border-radius-default;
-  button.on-no-background.icon-text {
-    color: $on-dark-aqua;
-    margin: 5px 20px 0;
-    font-size: 16px;
-  }
-}
-
 .navbar-inner-wrap {
   display: flex;
   flex-wrap: wrap;

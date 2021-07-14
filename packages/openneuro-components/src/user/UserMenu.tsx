@@ -9,21 +9,35 @@ export interface UserMenuProps {
   profile: {
     name: string
     admin: boolean
+    email: string
+    provider: string
   }
   signOutAndRedirect: () => void
 }
 
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
+  console.log(profile)
   return (
     <Dropdown
       className={'user-menu-dropdown'}
-      label={<div className="user-menu-label">Account</div>}
+      label={<div className="user-menu-label">My Account</div>}
       children={
         <div className="user-menu-dropdown-list">
           <ul>
             <li className="dropdown-header">
-              <span>Hello</span> <br />
-              {profile.name}
+              <p>
+                <span>Hello</span> <br />
+                {profile.name}
+              </p>
+              <p>
+                <span>signed in as</span>
+                <br />
+                {profile.email}{' '}
+              </p>
+              <p>
+                <span>via</span>
+                <br /> {profile.provider}
+              </p>
             </li>
             <li className="user-menu-link">
               <Link to="/keygen"> Obtain an API Key </Link>
