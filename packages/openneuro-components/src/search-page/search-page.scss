@@ -3,6 +3,7 @@
 .search-page-portal-header {
   position: relative;
   color: #fff;
+  z-index: 1100;
   .hex-col {
     margin: 50px 0 -30px auto;
     position: relative;
@@ -184,7 +185,7 @@
   .show-filters-btn {
     display: block;
     position: absolute;
-    top: 0;
+    top: 40px;
     right: 0;
     background: none;
     border: 0;
@@ -235,6 +236,9 @@
   padding: 0 0 0 30px;
   position: relative;
   max-width: 100%;
+  @media (max-width: 980px) {
+    padding: 0;
+  }
   .search-results {
     border: 1px solid $newspaper;
     border-radius: $border-radius-default;
