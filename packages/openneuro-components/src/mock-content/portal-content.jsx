@@ -91,7 +91,7 @@ export const portalContent = {
     className: 'search-page-pet',
     portalName: 'OpenNeuro PET',
     portalPrimary:
-      'OpenNeuro added support for PET datasets in 2021.',
+      'OpenNeuro added support for PET datasets in 2021, when PET was incorporated into the BIDS standard.',
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: pet,
