@@ -59,9 +59,15 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const { loading, data, fetchMore, refetch, variables, error } =
     useSearchResults()
 
-  const numResultsShown = data?.datasets?.edges.length || 0
-  const numTotalResults = data?.datasets?.pageInfo.count || 0
-  const resultsList = data?.datasets?.edges || []
+  let numResultsShown = 0
+  let numTotalResults = 0
+  let resultsList = []
+  if (data?.datasets) {
+    const edges = data.datasets.edges.filter(edge => edge)
+    numResultsShown = edges.length
+    numTotalResults = data.datasets.pageInfo.count
+    resultsList = edges
+  }
   return (
     <SearchPage
       portalContent={portalContent}

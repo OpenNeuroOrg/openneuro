@@ -44,8 +44,8 @@ export const elasticRelayConnection = async (
 ) => {
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
-  const edges = await Promise.all(
-    body.hits.hits.map(async hit => {
+  return {
+    edges: body.hits.hits.map(async hit => {
       try {
         const node = await childResolvers.dataset(
           null,
@@ -58,10 +58,6 @@ export const elasticRelayConnection = async (
         else throw err
       }
     }),
-  )
-  const allowedEdges = edges.filter(edge => edge !== null) // remove datasets that user does not have permissions for
-  return {
-    edges: allowedEdges,
     pageInfo: {
       count,
       endCursor: lastMatch
