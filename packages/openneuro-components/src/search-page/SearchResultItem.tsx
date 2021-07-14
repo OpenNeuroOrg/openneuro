@@ -123,7 +123,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
 
   const ages = (
     <span className="result-summary-meta">
-      <strong>Participant's Ages: </strong>
+      <strong>Participants' Ages: </strong>
       <span>
         {node?.metadata?.ages ? node.metadata.ages.toLocaleString() : 'N/A'}
       </span>
