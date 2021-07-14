@@ -21,7 +21,7 @@ export const ModalityHeader = ({
     <section className="search-page-portal-header">
       <div className="container">
         <div className="grid grid-nogutter">
-          <div className="col col-7 ">
+          <div className="col col-7 portal-primary">
             <h1>{portalName}</h1>
             <div className="primary-content">{portalPrimary}</div>
             <div className="secondary-content">{renderAggregateCounts()}</div>
