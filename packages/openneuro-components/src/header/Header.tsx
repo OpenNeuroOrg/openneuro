@@ -21,6 +21,7 @@ export interface HeaderProps {
   toggleSupport: () => void
   renderOnExpanded: (profile) => React.ReactNode
   renderOnFreshDeskWidget: () => React.ReactNode
+  renderUploader: () => React.ReactNode
 }
 
 export const Header = ({
@@ -34,6 +35,7 @@ export const Header = ({
   toggleSupport,
   renderOnExpanded,
   renderOnFreshDeskWidget,
+  renderUploader,
 }: HeaderProps) => {
   return (
     <>
@@ -96,7 +98,7 @@ export const Header = ({
 
       {profile ? (
         <Modal isOpen={isOpenUpload} toggle={toggleUpload} closeText="Close">
-          Upload TODO
+          {renderUploader()}
         </Modal>
       ) : null}
     </>
