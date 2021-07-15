@@ -24,7 +24,7 @@
     "@openneuro/client": "^3.34.0-alpha.4",
     "@openneuro/components": "^3.34.0-alpha.4",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "npm:@squishymedia/bids-validator@1.7.2-3",
+    "bids-validator": "npm:@squishymedia/bids-validator@1.7.3",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "core-js": "^3.3.2",

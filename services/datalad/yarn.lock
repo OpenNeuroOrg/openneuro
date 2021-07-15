@@ -1062,9 +1062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.7.2":
-  version: 1.7.2
-  resolution: "bids-validator@npm:1.7.2"
+"bids-validator@npm:1.7.3":
+  version: 1.7.3
+  resolution: "bids-validator@npm:1.7.3"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -1073,7 +1073,7 @@ __metadata:
     cross-fetch: ^3.0.6
     date-fns: ^2.7.0
     esm: ^3.2.25
-    hed-validator: 3.0.5
+    hed-validator: ^3.2.1
     ignore: ^4.0.2
     is-utf8: ^0.2.1
     jshint: ^2.9.6
@@ -1082,13 +1082,13 @@ __metadata:
     p-limit: ^2.1.0
     pako: ^1.0.6
     path: ^0.12.7
-    pluralize: ^7.0.0
+    pluralize: ^8.0.0
     semver: ^7.3.2
     table: ^5.2.3
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 9a78a9943b8fd5ca7f6eed007639fcb963771511f3a2611b94afc456acf5603f4e73dc8c0fae93c119bd3868545dff4517f8b37058a27883bf6618c8898e3ce1
+  checksum: 00b21b3a5dba123a8f3c40d6c40c1d60371c5ac65be4111086a7504f8b99b3dd257f5a8a6a6c8d8c4f85596cd2953f050422bc7937bff8bdc68213a33f8368cf
   languageName: node
   linkType: hard
 
@@ -1676,9 +1676,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:3.0.5":
-  version: 3.0.5
-  resolution: "hed-validator@npm:3.0.5"
+"hed-validator@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "hed-validator@npm:3.2.1"
   dependencies:
     date-and-time: ^0.14.2
     date-fns: ^2.17.0
@@ -1686,7 +1686,7 @@ __metadata:
     semver: ^7.3.4
     then-request: ^6.0.2
     xml2js: ^0.4.23
-  checksum: ec4c4ab7162fe8196bcf5cd5ad24a081e04f4ba3558862545d9c7a1c168996df8a60aaf1137b87d4201f44cebcafbdb6696044db2d017c28ed4482fbd4649970
+  checksum: 4031101910c07e12caff31fc33301d01a6a67daac7c9a50922eb4ed17a14799f05e364d6af8c9afd4142a1bc3d31e90bf3c7ec35c7e8bbf2315dfff51d4076c6
   languageName: node
   linkType: hard
 
@@ -2196,13 +2196,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pluralize@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "pluralize@npm:7.0.0"
-  checksum: d35d8aeda1eb2f81123131e76ed0f2f48d681abfa4c46e4c6fdd6dca622650c8bd531aa0c5a3c7f779bd9660d08ceb51660e1f55def4bd14328ecfa76fe69962
-  languageName: node
-  linkType: hard
-
 "pluralize@npm:^8.0.0":
   version: 8.0.0
   resolution: "pluralize@npm:8.0.0"
@@ -2386,7 +2379,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    bids-validator: 1.7.2
+    bids-validator: 1.7.3
   languageName: unknown
   linkType: soft
 

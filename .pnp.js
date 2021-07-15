@@ -9897,7 +9897,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-runtime", "npm:6.26.0"],
             ["bids-validator", [
               "@squishymedia/bids-validator",
-              "npm:1.7.2-3"
+              "npm:1.7.3"
             ]],
             ["bytes", "npm:3.1.0"],
             ["comlink", "npm:4.3.1"],
@@ -9964,7 +9964,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],
             ["@types/mkdirp", "npm:1.0.2"],
             ["@types/node", "npm:14.17.5"],
-            ["bids-validator", "npm:1.7.2"],
+            ["bids-validator", "npm:1.7.3"],
             ["cli-progress", "npm:3.9.0"],
             ["commander", "npm:7.2.0"],
             ["core-js", "npm:3.15.2"],
@@ -10715,10 +10715,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@squishymedia/bids-validator", [
-        ["npm:1.7.2-3", {
-          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.2-3-dd0bb07bc3-50f419ca11.zip/node_modules/@squishymedia/bids-validator/",
+        ["npm:1.7.3", {
+          "packageLocation": "./.yarn/cache/@squishymedia-bids-validator-npm-1.7.3-f33509876e-949af4d9dd.zip/node_modules/@squishymedia/bids-validator/",
           "packageDependencies": [
-            ["@squishymedia/bids-validator", "npm:1.7.2-3"],
+            ["@squishymedia/bids-validator", "npm:1.7.3"],
             ["@aws-sdk/client-s3", "npm:3.21.0"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
@@ -10726,7 +10726,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cross-fetch", "npm:3.1.4"],
             ["date-fns", "npm:2.22.1"],
             ["events", "npm:3.3.0"],
-            ["hed-validator", "npm:3.0.5"],
+            ["hed-validator", "npm:3.2.1"],
             ["ignore", "npm:4.0.6"],
             ["is-utf8", "npm:0.2.1"],
             ["jshint", "npm:2.13.0"],
@@ -10735,7 +10735,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["p-limit", "npm:2.3.0"],
             ["pako", "npm:1.0.11"],
             ["path", "npm:0.12.7"],
-            ["pluralize", "npm:7.0.0"],
+            ["pluralize", "npm:8.0.0"],
             ["semver", "npm:7.3.5"],
             ["stream-browserify", "npm:3.0.0"],
             ["table", "npm:5.4.6"],
@@ -17628,10 +17628,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["bids-validator", [
-        ["npm:1.7.2", {
-          "packageLocation": "./.yarn/cache/bids-validator-npm-1.7.2-6f4a6de118-9a78a9943b.zip/node_modules/bids-validator/",
+        ["npm:1.7.3", {
+          "packageLocation": "./.yarn/cache/bids-validator-npm-1.7.3-c14bdf25ff-00b21b3a5d.zip/node_modules/bids-validator/",
           "packageDependencies": [
-            ["bids-validator", "npm:1.7.2"],
+            ["bids-validator", "npm:1.7.3"],
             ["@aws-sdk/client-s3", "npm:3.21.0"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
@@ -17639,7 +17639,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cross-fetch", "npm:3.1.4"],
             ["date-fns", "npm:2.22.1"],
             ["esm", "npm:3.2.25"],
-            ["hed-validator", "npm:3.0.5"],
+            ["hed-validator", "npm:3.2.1"],
             ["ignore", "npm:4.0.6"],
             ["is-utf8", "npm:0.2.1"],
             ["jshint", "npm:2.13.0"],
@@ -17648,7 +17648,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["p-limit", "npm:2.3.0"],
             ["pako", "npm:1.0.11"],
             ["path", "npm:0.12.7"],
-            ["pluralize", "npm:7.0.0"],
+            ["pluralize", "npm:8.0.0"],
             ["semver", "npm:7.3.5"],
             ["table", "npm:5.4.6"],
             ["yargs", "npm:16.2.0"]
@@ -27465,10 +27465,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["hed-validator", [
-        ["npm:3.0.5", {
-          "packageLocation": "./.yarn/cache/hed-validator-npm-3.0.5-6290226999-ec4c4ab716.zip/node_modules/hed-validator/",
+        ["npm:3.2.1", {
+          "packageLocation": "./.yarn/cache/hed-validator-npm-3.2.1-7b0c7240b1-4031101910.zip/node_modules/hed-validator/",
           "packageDependencies": [
-            ["hed-validator", "npm:3.0.5"],
+            ["hed-validator", "npm:3.2.1"],
             ["date-and-time", "npm:0.14.2"],
             ["date-fns", "npm:2.22.1"],
             ["pluralize", "npm:8.0.0"],
@@ -36327,13 +36327,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["pluralize", [
-        ["npm:7.0.0", {
-          "packageLocation": "./.yarn/cache/pluralize-npm-7.0.0-5e0212129c-d35d8aeda1.zip/node_modules/pluralize/",
-          "packageDependencies": [
-            ["pluralize", "npm:7.0.0"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:8.0.0", {
           "packageLocation": "./.yarn/cache/pluralize-npm-8.0.0-f5f044ed52-5251b470a0.zip/node_modules/pluralize/",
           "packageDependencies": [
