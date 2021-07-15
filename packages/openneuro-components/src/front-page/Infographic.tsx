@@ -21,7 +21,7 @@ export const Infographic: React.FC<InfographicProps> = ({}) => {
       ))}
       <div className="view-docs">
         <h3>Want to get started?</h3>
-        Checkout the{' '}
+        Check out the{' '}
         <a href="https://docs.openneuro.org/user-guide" target="_blank">
           OpenNeuro User Documentation
         </a>

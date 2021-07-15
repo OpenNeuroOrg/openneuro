@@ -2,7 +2,7 @@
  * Browser client entrypoint - see server.tsx for SSR entrypoint
  */
 import './scripts/utils/global-polyfill'
-import { setupApm } from './scripts/apm.js'
+import './scripts/apm.js'
 import { ApolloProvider, InMemoryCache } from '@apollo/client'
 import { createClient } from '@openneuro/client'
 import React from 'react'
@@ -14,26 +14,6 @@ import analyticsWrapper from './scripts/utils/analytics'
 import { version } from './lerna.json'
 import { config } from './scripts/config'
 import * as gtag from './scripts/utils/gtag'
-
-if (
-  config.sentry.environment === 'production' ||
-  config.sentry.environment === 'staging'
-) {
-  setupApm({
-    serverUrl: config.url,
-    serviceName: 'openneuro-app',
-    serviceVersion: version,
-    environment: config.sentry.environment,
-  })
-} else {
-  setupApm({
-    serverUrl: config.url,
-    serviceName: 'openneuro-app',
-    serviceVersion: version,
-    environment: config.sentry.environment,
-    active: false,
-  })
-}
 
 gtag.initialize(config.analytics.trackingIds)
 

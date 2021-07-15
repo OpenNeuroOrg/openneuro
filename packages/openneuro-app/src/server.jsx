@@ -1,6 +1,7 @@
 /**
  * Server entrypoint (CJS) - see client.tsx for browser entrypoint
  */
+import './scripts/apm.js'
 import React from 'react'
 import { StaticRouter } from 'react-router-dom'
 import Helmet from 'react-helmet'
