@@ -12,7 +12,7 @@ export interface FacetRangeProps {
   min: number
   max: number
   step: number
-  defaultValue: [number | null, number | null]
+  value: [number | null, number | null]
   onChange: (newvalue) => void
 }
 
@@ -24,7 +24,7 @@ export const FacetRange = ({
   min,
   max,
   step,
-  defaultValue,
+  value,
   onChange,
 }: FacetRangeProps) => {
   return (
@@ -39,7 +39,7 @@ export const FacetRange = ({
             min={min}
             max={max}
             step={step}
-            defaultValue={defaultValue}
+            value={value}
             onChange={onChange}
           />
         </div>

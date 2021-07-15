@@ -183,7 +183,7 @@ const initialSearchParams: SearchParams = {
   sortBy_selected: sortBy[0],
 }
 
-// TODO: delete and move to dynamically loaded initialSearchParams
+// TODO: (stretch) delete and move to dynamically loaded initialSearchParams
 const TEMPORARY_initialSearchParams: SearchParams = {
   keywords: [],
   datasetType_available,
