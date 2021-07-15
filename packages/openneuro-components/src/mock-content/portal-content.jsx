@@ -13,11 +13,9 @@ export const portalContent = {
     portalName: 'OpenNeuro MRI',
     portalPrimary: (
       <>
-        The OpenNeuro platform was developed by the Center for Reproducible
-        Neuroscience as a tool to encourage and enhance data sharing and
-        analysis of raw MRI data, using{' '}
-        <a href="https://bids.neuroimaging.io">BIDS</a> to organize and
-        standardize these data.
+        The OpenNeuro platform was developed by the{' '}
+        <a href="https://reproducibility.stanford.edu/">Center for Reproducible Neuroscience</a> as a tool to encourage and enhance data sharing and analysis of raw MRI data, using{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> to organize and standardize these data.
       </>
     ),
     publicDatasetStat: 100,
@@ -36,10 +34,8 @@ export const portalContent = {
     portalPrimary: (
       <>
         OpenNeuro added support for EEG datasets in 2019, when{' '}
-        <a href="https://www.nature.com/articles/s41597-019-0104-8">
-          EEG was incorporated
-        </a>{' '}
-        into the <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+        <a href="https://www.nature.com/articles/s41597-019-0104-8">EEG was incorporated</a> into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
     publicDatasetStat: 100,
@@ -58,10 +54,8 @@ export const portalContent = {
     portalPrimary: (
       <>
         OpenNeuro added support for iEEG datasets in 2019, when{' '}
-        <a href="https://www.nature.com/articles/s41597-019-0105-7">
-          iEEG was incorporated
-        </a>{' '}
-        into the <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+        <a href="https://www.nature.com/articles/s41597-019-0105-7">iEEG was incorporated</a> into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
     publicDatasetStat: 100,
@@ -80,10 +74,8 @@ export const portalContent = {
     portalPrimary: (
       <>
         OpenNeuro added support for MEG datasets in 2018, when{' '}
-        <a href="https://www.nature.com/articles/sdata2018110">
-          MEG was incorporated
-        </a>{' '}
-        into the <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+        <a href="https://www.nature.com/articles/sdata2018110">MEG was incorporated</a> into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
     publicDatasetStat: 100,
@@ -99,11 +91,10 @@ export const portalContent = {
     modality: 'PET', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: 'search-page-pet',
     portalName: 'OpenNeuro PET',
-    portalPrimary: (
+    portalPrimary:  (
       <>
-        OpenNeuro added support for PET datasets in 2021, when PET was
-        incorporated into the <a href="https://bids.neuroimaging.io">BIDS</a>{' '}
-        standard.
+        OpenNeuro added support for PET datasets in 2021, when PET was incorporated into the{' '}
+        <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
     publicDatasetStat: 100,
