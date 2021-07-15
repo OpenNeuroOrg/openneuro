@@ -45,18 +45,13 @@ export const elasticRelayConnection = async (
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
   return {
-    edges: body.hits.hits.map(async hit => {
-      try {
-        const node = await childResolvers.dataset(
-          null,
-          { id: hit._source.id },
-          { user, userInfo },
-        )
-        return { node }
-      } catch (err) {
-        if (err.message === states.READ.errorMessage) return null
-        else throw err
-      }
+    edges: body.hits.hits.map(hit => {
+      const node = childResolvers.dataset(
+        null,
+        { id: hit._source.id },
+        { user, userInfo },
+      )
+      return { node }
     }),
     pageInfo: {
       count,
