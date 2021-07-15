@@ -4,20 +4,6 @@ body {
   font-family: $font-sans;
 }
 
-.front-page section {
-  margin: 100px 0;
-  &:last-child {
-    margin-bottom: 0;
-  }
-  &.gray-bg {
-    margin: 0;
-    padding: 100px 0;
-    &:last-child {
-      padding-bottom: 0;
-    }
-  }
-}
-
 .contributors {
   h3 {
     margin: 20px 0 60px;
