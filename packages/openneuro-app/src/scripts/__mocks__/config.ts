@@ -2,7 +2,7 @@ export const config = {
   /**
    * CRN
    */
-  api: 'localhost:9876/crn/',
+  url: 'localhost:9876/crn/',
 
   graphql: {
     uri: 'http://server:8111',
