@@ -499,6 +499,15 @@ export const typeDefs = `
     size: BigInt!
     totalFiles: Int!
     dataProcessed: Boolean
+    pet: SummaryPetFields
+  }
+
+  type SummaryPetFields {
+    BodyPart: [String]
+    ScannerManufacturer: [String]
+    ScannerManufacturersModelName: [String]
+    TracerName: [String]
+    TracerRadionuclide: [String]
   }
 
   type SubjectMetadata {

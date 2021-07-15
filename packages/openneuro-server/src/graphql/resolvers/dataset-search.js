@@ -3,6 +3,7 @@ import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
 import Permission from '../../models/permission'
+import { states } from '../permissions.js'
 
 const elasticIndex = 'datasets'
 
@@ -35,7 +36,7 @@ export const decodeCursor = cursor =>
  * Return a relay cursor from an elastic search result
  * @param {import ('@elastic/elasticsearch').ApiResponse} result
  */
-export const elasticRelayConnection = (
+export const elasticRelayConnection = async (
   { body },
   childResolvers = { dataset },
   user = null,
@@ -44,15 +45,14 @@ export const elasticRelayConnection = (
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
   return {
-    edges: body.hits.hits
-      .map(hit => ({
-        node: childResolvers.dataset(
-          null,
-          { id: hit._source.id },
-          { user, userInfo },
-        ),
-      }))
-      .filter(edge => edge !== null), // remove datasets that user does not have permissions for
+    edges: body.hits.hits.map(hit => {
+      const node = childResolvers.dataset(
+        null,
+        { id: hit._source.id },
+        { user, userInfo },
+      )
+      return { node }
+    }),
     pageInfo: {
       count,
       endCursor: lastMatch
