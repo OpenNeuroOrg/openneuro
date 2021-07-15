@@ -7,16 +7,7 @@ import fromEntries from 'object.fromentries'
 import { jest } from '@jest/globals'
 import '@testing-library/jest-dom'
 import '@testing-library/jest-dom/extend-expect'
-import { setupApm } from './src/scripts/apm'
-
-setupApm({
-  serverUrl: 'localhost',
-  serviceName: 'openneuro-app',
-  serviceVersion: 'tests',
-  environment: 'tests',
-  active: false,
-  logLevel: 'error',
-})
+import './src/scripts/apm'
 
 Enzyme.configure({ adapter: new Adapter() })
 
