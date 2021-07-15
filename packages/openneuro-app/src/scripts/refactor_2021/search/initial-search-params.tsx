@@ -65,20 +65,6 @@ const modality_available: ModalityOption[] = [
     value: 'iEEG',
     portalPath: '/search/modality/ieeg',
     count: 303,
-    children: [
-      {
-        label: 'ECoG',
-        value: 'ECoG',
-        portalPath: '/search/modality/ieeg',
-        count: 300,
-      },
-      {
-        label: 'SEEG',
-        value: 'SEEG',
-        portalPath: '/search/modality/ieeg',
-        count: 200,
-      },
-    ],
   },
   {
     label: 'MEG',

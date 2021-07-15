@@ -37,18 +37,6 @@ export const modalities = [
     label: 'iEEG',
     value: 'iEEG',
     count: 303,
-    children: [
-      {
-        label: 'ECoG',
-        value: 'ECoG',
-        count: 300,
-      },
-      {
-        label: 'SEEG',
-        value: 'SEEG',
-        count: 200,
-      },
-    ],
   },
   {
     label: 'MEG',
