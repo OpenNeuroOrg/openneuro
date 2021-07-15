@@ -24,9 +24,8 @@ import { getDraftHead } from '../../datalad/dataset.js'
 import { getFileName } from '../../datalad/files.js'
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
-  return await checkDatasetRead(id, user, userInfo).then(() => {
-    return datalad.getDataset(id)
-  })
+  await checkDatasetRead(id, user, userInfo)
+  return datalad.getDataset(id)
 }
 
 export const datasets = (parent, args, { user, userInfo }) => {
