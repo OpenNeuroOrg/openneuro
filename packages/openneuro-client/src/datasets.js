@@ -38,6 +38,13 @@ export const getDataset = gql`
           size
           totalFiles
           dataProcessed
+          pet {
+            BodyPart
+            ScannerManufacturer
+            ScannerManufacturersModelName
+            TracerName
+            TracerRadionuclide
+          }
         }
         issues {
           key
@@ -143,6 +150,13 @@ export const getDatasets = gql`
               size
               totalFiles
               dataProcessed
+              pet {
+                BodyPart
+                ScannerManufacturer
+                ScannerManufacturersModelName
+                TracerName
+                TracerRadionuclide
+              }
             }
             issues {
               severity
@@ -241,13 +255,13 @@ export const deleteSnapshot = gql`
 `
 
 export const updatePublic = gql`
-  mutation($id: ID!, $publicFlag: Boolean!) {
+  mutation ($id: ID!, $publicFlag: Boolean!) {
     updatePublic(datasetId: $id, publicFlag: $publicFlag)
   }
 `
 
 export const updatePermissions = gql`
-  mutation($datasetId: ID!, $userEmail: String!, $level: String) {
+  mutation ($datasetId: ID!, $userEmail: String!, $level: String) {
     updatePermissions(
       datasetId: $datasetId
       userEmail: $userEmail
@@ -257,13 +271,13 @@ export const updatePermissions = gql`
 `
 
 export const removePermissions = gql`
-  mutation($datasetId: ID!, $userId: String!) {
+  mutation ($datasetId: ID!, $userId: String!) {
     removePermissions(datasetId: $datasetId, userId: $userId)
   }
 `
 
 export const trackAnalytics = gql`
-  mutation($datasetId: ID!, $tag: String, $type: AnalyticTypes!) {
+  mutation ($datasetId: ID!, $tag: String, $type: AnalyticTypes!) {
     trackAnalytics(datasetId: $datasetId, tag: $tag, type: $type)
   }
 `

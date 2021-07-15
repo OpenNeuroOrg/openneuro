@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { SearchParamsCtx } from './search-params-ctx'
+import { modality_available } from './initial-search-params'
 import {
   BoolQuery,
   simpleQueryString,
@@ -69,6 +70,13 @@ const searchQuery = gql`
               size
               totalFiles
               dataProcessed
+              pet {
+                BodyPart
+                ScannerManufacturer
+                ScannerManufacturersModelName
+                TracerName
+                TracerRadionuclide
+              }
             }
             issues {
               severity
@@ -132,6 +140,11 @@ export const useSearchResults = () => {
     species_selected,
     section_selected,
     studyDomain_selected,
+    bodyParts,
+    scannerManufacturers,
+    scannerManufacturersModelNames,
+    tracerNames,
+    tracerRadionuclides,
     sortBy_selected,
   } = searchParams
 
@@ -202,6 +215,43 @@ export const useSearchResults = () => {
       'filter',
       matchQuery('metadata.studyDomain', studyDomain_selected, 'AUTO'),
     )
+  if (modality_selected === 'PET' || modality_selected === null) {
+    if (bodyParts.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(bodyParts), [
+          'latestSnapshot.summary.pet.BodyPart',
+        ]),
+      )
+    if (scannerManufacturers.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(scannerManufacturers), [
+          'latestSnapshot.summary.pet.ScannerManufacturer',
+        ]),
+      )
+    if (scannerManufacturersModelNames.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(scannerManufacturersModelNames), [
+          'latestSnapshot.summary.pet.ScannerManufacturersModelName',
+        ]),
+      )
+    if (tracerNames.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(tracerNames), [
+          'latestSnapshot.summary.pet.TracerName',
+        ]),
+      )
+    if (tracerRadionuclides.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(tracerRadionuclides), [
+          'latestSnapshot.summary.pet.TracerRadionuclide',
+        ]),
+      )
+  }
 
   let sortField = 'created',
     order = 'desc'

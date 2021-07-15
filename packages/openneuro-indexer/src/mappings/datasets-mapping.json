@@ -43,6 +43,15 @@
                 "sex": { "type": "keyword" },
                 "age": { "type": "integer" }
               }
+            },
+            "pet": {
+              "properties": {
+                "BodyPart": { "type": "keyword" },
+                "ScannerManufacturer": { "type": "keyword" },
+                "ScannerManufacturersModelName": { "type": "keyword" },
+                "TracerName": { "type": "keyword" },
+                "TracerRadionuclide": { "type": "keyword" }
+              }
             }
           }
         },
