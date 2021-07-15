@@ -146,8 +146,7 @@ export interface SearchParams {
   species_selected: string | null
   section_available: string[]
   section_selected: string | null
-  studyDomain_available: string[]
-  studyDomain_selected: string | null
+  studyDomains: string[]
   bodyParts: string[]
   scannerManufacturers: string[]
   scannerManufacturersModelNames: string[]
@@ -182,8 +181,7 @@ const initialSearchParams: SearchParams = {
   species_selected: null,
   section_available: [],
   section_selected: null,
-  studyDomain_available: [],
-  studyDomain_selected: null,
+  studyDomains: [],
   bodyParts: [],
   scannerManufacturers: [],
   scannerManufacturersModelNames: [],
@@ -228,8 +226,7 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   species_selected: null,
   section_available: ['Cross-Sectional', 'Longitudinal', 'Other'],
   section_selected: null,
-  studyDomain_available: ['a', 'b', 'c'],
-  studyDomain_selected: null,
+  studyDomains: [],
   bodyParts: [],
   scannerManufacturers: [],
   scannerManufacturersModelNames: [],
