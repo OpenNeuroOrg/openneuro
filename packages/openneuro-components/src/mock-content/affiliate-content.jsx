@@ -36,20 +36,20 @@ export const affiliateContent = [
       </>
     ),
   },
-  {
-    logo: nihstanfordlogo,
-    header: 'The Community Trusts OpenNeuro',
-    contentOne: (
-      <>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut.
-      </>
-    ),
-    contentTwo: (
-      <>
-        View more information about{' '}
-        <a href="#">Stanford Center for Reproducible Neuroscience</a>
-      </>
-    ),
-  },
+  // {
+  //   logo: nihstanfordlogo,
+  //   header: 'The Community Trusts OpenNeuro',
+  //   contentOne: (
+  //     <>
+  //       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+  //       tempor incididunt ut.
+  //     </>
+  //   ),
+  //   contentTwo: (
+  //     <>
+  //       View more information about{' '}
+  //       <a href="#">Stanford Center for Reproducible Neuroscience</a>
+  //     </>
+  //   ),
+  // },
 ]
