@@ -200,9 +200,70 @@
 
 #hexGrid {
   padding: 40px 0 7.4%;
+
+  @media (max-width: 859px) {
+    height: auto;
+    display: block;
+    max-width: 100%;
+    .hex {
+      width: 100%;
+      margin: 0;
+      height: 220px;
+      .hexIn {
+        position: relative;
+        width: 100%;
+        transform: none;
+        overflow: visible;
+        outline: 0;
+        visibility: visible;
+        margin: 0;
+        padding: 0;
+        > div {
+          transform: none;
+          outline: 0;
+          position: relative;
+          overflow: visible;
+          .img {
+            position: relative;
+            height: 200px;
+            top: auto;
+            right: auto;
+            bottom: auto;
+            left: auto;
+            clip-path: none;
+            &:after {
+              opacity: 1;
+            }
+            &:before {
+              opacity: 0.8;
+            }
+            .modality-cube {
+              transform: none;
+              width: 100%;
+              margin: 0;
+              > .front,
+              > .top,
+              > .right {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .content1 {
+          opacity: 1;
+          transform: translateY(60px);
+        }
+        .content2 {
+          opacity: 1;
+          transform: translateY(110px);
+        }
+      }
+    }
+  }
 }
 .hex {
-  width: 30%;
+  width: 240px;
   margin: 0 10px;
 }
 

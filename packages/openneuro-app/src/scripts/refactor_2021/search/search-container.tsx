@@ -88,10 +88,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           {!portalContent ? (
             <ModalitySelect portalStyles={true} label="Modalities" />
           ) : (
-            <ModalitySelect
-              portalStyles={false}
-              label="Choose Modality"
-            />
+            <ModalitySelect portalStyles={false} label="Choose Modality" />
           )}
           <AgeRangeInput />
           <SubjectCountRangeInput />

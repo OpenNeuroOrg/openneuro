@@ -42,7 +42,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   return (
     <div className="expaned-header" style={{ minHeight: '720px' }}>
       <div className="container">
-        <div className="grid grid-between">
+        <div className="grid grid-between header-wrap">
           <div className="col expaned-h-left">
             {frontPage.pageDescription}
             <div className="header-aggregate">{aggregateCounts(null)}</div>

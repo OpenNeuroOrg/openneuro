@@ -11,6 +11,8 @@ export interface HeaderProps {
   profile?: {
     name: string
     admin: boolean
+    email: string
+    provider: string
   }
   expanded?: boolean
   isOpenSupport: boolean

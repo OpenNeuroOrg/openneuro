@@ -56,7 +56,10 @@ export const FiltersBlock = ({
     <div className="filters-block">
       <h4>
         {noFilters ? (
-          <b>Showing all available datasets</b>
+          <b>
+            Showing all available {modality_selected ? modality_selected : ''}{' '}
+            datasets
+          </b>
         ) : (
           <>
             These filters return <span>{numTotalResults}</span> datasets:{' '}
