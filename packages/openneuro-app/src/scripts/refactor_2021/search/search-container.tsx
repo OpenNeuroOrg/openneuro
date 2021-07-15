@@ -1,7 +1,6 @@
 import React, { FC, useContext, useEffect } from 'react'
 import {
   SearchPage,
-  sortBy,
   SearchResultsList,
   Button,
   Loading,
@@ -19,7 +18,7 @@ import {
   DateRadios,
   SpeciesSelect,
   SectionSelect,
-  StudyDomainSelect,
+  StudyDomainInput,
   BodyPartsInput,
   ScannerManufacturers,
   ScannerManufacturersModelNames,
@@ -110,7 +109,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <DateRadios />
           <SpeciesSelect />
           <SectionSelect />
-          <StudyDomainSelect />
+          <StudyDomainInput />
           {(portalContent === undefined ||
             portalContent.modality === 'PET') && (
             <>

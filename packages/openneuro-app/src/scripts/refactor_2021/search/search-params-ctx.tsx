@@ -41,7 +41,6 @@ export const removeFilterItem = setSearchParams => (param, value) => {
     case 'diagnosis_selected':
     case 'section_selected':
     case 'species_selected':
-    case 'studyDomain_selected':
       updatedParams[param] = initialSearchParams[param]
       setSearchParams(prevState => ({
         ...prevState,
@@ -58,6 +57,7 @@ export const removeFilterItem = setSearchParams => (param, value) => {
     case 'scannerManufacturersModelNames':
     case 'tracerNames':
     case 'tracerRadionuclides':
+    case 'studyDomains':
       setSearchParams(prevState => {
         const list = prevState[param]
         const i = list.indexOf(value)
@@ -90,7 +90,7 @@ export const getSelectParams = ({
   diagnosis_selected,
   section_selected,
   species_selected,
-  studyDomain_selected,
+  studyDomains,
   bodyParts,
   scannerManufacturers,
   scannerManufacturersModelNames,
@@ -110,7 +110,7 @@ export const getSelectParams = ({
   diagnosis_selected,
   section_selected,
   species_selected,
-  studyDomain_selected,
+  studyDomains,
   bodyParts,
   scannerManufacturers,
   scannerManufacturersModelNames,

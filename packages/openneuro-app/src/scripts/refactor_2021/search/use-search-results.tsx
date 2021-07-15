@@ -139,7 +139,7 @@ export const useSearchResults = () => {
     date_selected,
     species_selected,
     section_selected,
-    studyDomain_selected,
+    studyDomains,
     bodyParts,
     scannerManufacturers,
     scannerManufacturersModelNames,
@@ -210,10 +210,10 @@ export const useSearchResults = () => {
       'filter',
       matchQuery('metadata.studyLongitudinal', section_selected, 'AUTO'),
     )
-  if (studyDomain_selected)
+  if (studyDomains.length)
     boolQuery.addClause(
-      'filter',
-      matchQuery('metadata.studyDomain', studyDomain_selected, 'AUTO'),
+      'must',
+      matchQuery('metadata.studyDomain', joinWithOR(studyDomains)),
     )
   if (modality_selected === 'PET' || modality_selected === null) {
     if (bodyParts.length)
@@ -272,6 +272,7 @@ export const useSearchResults = () => {
       break
   }
   const sortBy = { [sortField]: order }
+  console.log(boolQuery.get())
 
   return useQuery(searchQuery, {
     variables: {

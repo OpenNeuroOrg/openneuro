@@ -20,7 +20,7 @@ export interface FiltersBlockProps {
   diagnosis_selected?: FacetSelectValueType
   section_selected?: FacetSelectValueType
   species_selected?: FacetSelectValueType
-  studyDomain_selected?: FacetSelectValueType
+  studyDomains?: string[]
   bodyParts?: string[]
   scannerManufacturers?: string[]
   scannerManufacturersModelNames?: string[]
@@ -45,7 +45,7 @@ export const FiltersBlock = ({
   diagnosis_selected,
   section_selected,
   species_selected,
-  studyDomain_selected,
+  studyDomains,
   date_selected,
   bodyParts,
   scannerManufacturers,
@@ -168,12 +168,12 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem()}
           />
         )}
-        {studyDomain_selected && (
-          <FilterListItem
+        {studyDomains && (
+          <TermListItem
             type="Ontology"
             item={{
-              param: 'studyDomain_selected',
-              value: studyDomain_selected,
+              param: 'studyDomains',
+              values: studyDomains,
             }}
             removeFilterItem={removeFilterItem()}
           />
