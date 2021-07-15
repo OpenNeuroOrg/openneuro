@@ -314,7 +314,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     <div className="tracers-list">
       {_list(
         <>{summary?.pet?.TracerName.length === 1 ? 'Tracer' : 'Tracers'}</>,
-        summary?.pet?.TracerName.join(', '),
+        summary?.pet?.TracerName,
       )}
     </div>
   ) : null
