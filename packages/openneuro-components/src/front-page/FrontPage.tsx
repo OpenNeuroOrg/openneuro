@@ -1,6 +1,21 @@
 import React from 'react'
+import styled from '@emotion/styled'
 
 import './front-page.scss'
+
+const FrontPageSection = styled.section`
+  margin: 100px 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &.gray-bg {
+    margin: 0;
+    padding: 100px 0;
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+`
 
 export interface FrontPageProps {
   renderAffiliateBlock: () => React.ReactNode
@@ -21,20 +36,24 @@ export const FrontPage: React.FC<FrontPageProps> = ({
 }) => (
   <>
     <div className={className + ' page'}>
-      <section>{renderAffiliateBlock()}</section>
-      <section>
+      <FrontPageSection>{renderAffiliateBlock()}</FrontPageSection>
+      <FrontPageSection>
         <div className="container">{renderInfographic()}</div>
-      </section>
-      <section className="front-page-activity">
+      </FrontPageSection>
+      <FrontPageSection className="front-page-activity">
         <div className="activity-swoop">
           <div></div>
         </div>
         <div className="swoop-content gray-bg">
           <div className="container">{renderActivitySliderFront()}</div>
         </div>
-      </section>
-      <section className="gray-bg">{renderGetUpdates()}</section>
-      <section className="gray-bg">{renderContributors()}</section>
+      </FrontPageSection>
+      <FrontPageSection className="gray-bg">
+        {renderGetUpdates()}
+      </FrontPageSection>
+      <FrontPageSection className="gray-bg">
+        {renderContributors()}
+      </FrontPageSection>
     </div>
   </>
 )

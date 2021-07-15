@@ -49,7 +49,7 @@ const VerticalDivider = styled.div({
 })
 
 const FrontPageStats = () => (
-  <StatsSection className="openneuro-stats">
+  <StatsSection>
     <StatsContainer>
       <Panel className="dataset-count">
         <Value>
