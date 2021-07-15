@@ -25,8 +25,6 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   value,
   onChange,
 }) => {
-  const minValRef = useRef(min)
-  const maxValRef = useRef(max)
   const range = useRef<HTMLDivElement>(null)
 
   // Convert to percentage
@@ -38,7 +36,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   // Set width of the range to decrease from the left side
   useEffect(() => {
     const minPercent = getPercent(value[0])
-    const maxPercent = getPercent(maxValRef.current)
+    const maxPercent = getPercent(value[1])
 
     if (range.current) {
       range.current.style.left = `${minPercent}%`
@@ -48,7 +46,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
 
   // Set width of the range to decrease from the right side
   useEffect(() => {
-    const minPercent = getPercent(minValRef.current)
+    const minPercent = getPercent(value[0])
     const maxPercent = getPercent(value[1])
 
     if (range.current) {
@@ -66,7 +64,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       Math.min(Number(changeEvent.target.value), value[1] - 1),
       step,
     )
-    minValRef.current = discreteValue
+    value[0] = discreteValue
     onChange([discreteValue, value[1]])
   }
   const maxChangeHandler = (
@@ -79,7 +77,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       Math.max(Number(changeEvent.target.value), value[0] + 1),
       step,
     )
-    maxValRef.current = discreteValue
+    value[1] = discreteValue
     onChange([value[0], discreteValue])
   }
   return (
