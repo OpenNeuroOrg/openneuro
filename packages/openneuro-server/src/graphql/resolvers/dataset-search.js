@@ -81,7 +81,7 @@ export const datasetSearchConnection = async (
   { q, after, first = 25 },
 ) => {
   const requestBody = {
-    sort: [{ _score: 'asc', id: 'desc' }],
+    sort: [{ _score: 'asc', 'id.keyword': 'desc' }],
   }
   if (after) {
     try {
@@ -93,7 +93,7 @@ export const datasetSearchConnection = async (
   const result = await elasticClient.search({
     index: elasticIndex,
     size: first,
-    q,
+    q: `${q} AND public:true`,
     body: requestBody,
   })
   return elasticRelayConnection(result)
