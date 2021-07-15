@@ -223,7 +223,7 @@ export const SearchPageContainerExample = ({
                 min={0}
                 max={100}
                 step={10}
-                defaultValue={[0, 20]}
+                value={[0, 20]}
                 onChange={setAgeRange}
               />
               <FacetRange
@@ -233,7 +233,7 @@ export const SearchPageContainerExample = ({
                 min={0}
                 max={100}
                 step={10}
-                defaultValue={[0, 20]}
+                value={[0, 20]}
                 onChange={setSubjectRange}
               />
               <FacetSelect

@@ -16,10 +16,11 @@ const SubjectCountRangeInput: FC = () => {
 
   const min = 0
   const max = 100
-  const defaultValue =
-    JSON.stringify(ageRange) === JSON.stringify(initialSearchParams.ageRange)
+  const value =
+    JSON.stringify(subjectCountRange) ===
+    JSON.stringify(initialSearchParams.subjectCountRange)
       ? [min, max]
-      : ageRange
+      : subjectCountRange
 
   return (
     <FacetRange
@@ -29,7 +30,7 @@ const SubjectCountRangeInput: FC = () => {
       min={min}
       max={max}
       step={10}
-      defaultValue={defaultValue}
+      value={value}
       onChange={setSubjectRange}
     />
   )

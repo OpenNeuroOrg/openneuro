@@ -15,7 +15,7 @@ const AgeRangeInput: FC = () => {
 
   const min = 0
   const max = 100
-  const defaultValue =
+  const value =
     JSON.stringify(ageRange) === JSON.stringify(initialSearchParams.ageRange)
       ? [min, max]
       : ageRange
@@ -28,7 +28,7 @@ const AgeRangeInput: FC = () => {
       min={min}
       max={max}
       step={10}
-      defaultValue={defaultValue}
+      value={value}
       onChange={setAgeRange}
     />
   )
