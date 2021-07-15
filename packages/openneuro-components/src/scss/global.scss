@@ -3,6 +3,8 @@
 @import './helper-classes';
 @import './flex-grid';
 
+@import './upload-modal';
+
 .sb-show-main.sb-main-padded {
   padding: 0 !important;
 }
@@ -41,7 +43,10 @@ a:link {
   z-index: 4;
 }
 
-div {
+div,
+span,
+input,
+textarea {
   box-sizing: border-box;
 }
 
