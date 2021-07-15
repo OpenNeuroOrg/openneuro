@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 const EditListButton = styled.button`
-  width: 6em;
+  min-width: 6em;
 `
 
 const EditListRow = styled.div`

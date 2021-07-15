@@ -7,7 +7,7 @@ import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
 import { FAQS } from '@openneuro/components'
 import FrontPageContainer from './containers/front-page-container'
-import Admin from '../admin/admin'
+import Admin from './admin/admin'
 import SearchRoutes from './search/search-routes'
 import APIKey from '../user/api.jsx'
 import ErrorRoute from '../errors/errorRoute'

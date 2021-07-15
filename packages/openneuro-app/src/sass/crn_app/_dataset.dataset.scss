@@ -151,9 +151,9 @@
 
 .cte-display {
   ul {
-    @extend .list-group;
+    @extend .list-group !optional;
     li {
-      @extend .list-group-item;
+      @extend .list-group-item !optional;
       display: inline-block;
       width: 100%;
     }
