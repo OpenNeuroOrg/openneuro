@@ -15,6 +15,7 @@ import { mediaStyle } from './scripts/styles/media'
 import { version } from './lerna.json'
 import redesignStyles from '@openneuro/components/page/page.scss'
 import classicStyles from './sass/main.scss'
+import { apm } from './scripts/apm.js'
 
 export async function render(url, cookies) {
   // Client must be created on every call to avoid mixing credentials
@@ -26,18 +27,24 @@ export async function render(url, cookies) {
   const css =
     cookies.get('redesign-2021') == 'true' ? redesignStyles : classicStyles
 
-  const react = await getDataFromTree(
-    <App cookies={cookies}>
-      <Helmet>
-        <style type="text/css">{mediaStyle}</style>
-      </Helmet>
-      <ApolloProvider client={client}>
-        <StaticRouter location={url}>
-          <Index />
-        </StaticRouter>
-      </ApolloProvider>
-    </App>,
-  )
+  let react = ''
+  try {
+    react = await getDataFromTree(
+      <App cookies={cookies}>
+        <Helmet>
+          <style type="text/css">{mediaStyle}</style>
+        </Helmet>
+        <ApolloProvider client={client}>
+          <StaticRouter location={url}>
+            <Index />
+          </StaticRouter>
+        </ApolloProvider>
+      </App>,
+    )
+  } catch (err) {
+    apm.captureError(err)
+    console.error(err)
+  }
 
   // Required for Helmet to work in SSR mode
   const helmet = Helmet.renderStatic()
