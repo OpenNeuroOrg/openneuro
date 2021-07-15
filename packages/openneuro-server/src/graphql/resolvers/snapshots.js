@@ -30,7 +30,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         files: ({ prefix }) =>
           getFiles(datasetId, snapshot.hexsha)
             .then(filterFiles(prefix))
-            .then(filterRemovedAnnexObjects(datasetId)),
+            .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
         deprecated: () => deprecated(snapshot),
       }))
     },

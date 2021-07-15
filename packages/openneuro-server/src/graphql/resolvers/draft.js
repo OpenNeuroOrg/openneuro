@@ -8,10 +8,10 @@ import { filterFiles } from '../../datalad/files.js'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 
 // A draft must have a dataset parent
-const draftFiles = (dataset, args) => {
+const draftFiles = (dataset, args, { userInfo }) => {
   return getDraftFiles(dataset.id, args)
     .then(filterFiles('prefix' in args && args.prefix))
-    .then(filterRemovedAnnexObjects(dataset.id))
+    .then(filterRemovedAnnexObjects(dataset.id, userInfo))
 }
 
 /**
