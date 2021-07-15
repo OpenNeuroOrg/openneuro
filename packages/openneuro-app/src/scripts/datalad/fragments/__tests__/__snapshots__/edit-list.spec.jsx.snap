@@ -20,7 +20,7 @@ exports[`EditList component renders with default props 1`] = `
         type="button"
       >
         <button
-          className="btn btn-default css-dhocte"
+          className="btn btn-default css-18r3ojf"
           onClick={[Function]}
           type="button"
         >
