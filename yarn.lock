@@ -1856,7 +1856,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-jsx@npm:^7.14.5, @babel/plugin-syntax-jsx@npm:^7.2.0":
+"@babel/plugin-syntax-jsx@npm:^7.12.13, @babel/plugin-syntax-jsx@npm:^7.14.5, @babel/plugin-syntax-jsx@npm:^7.2.0":
   version: 7.14.5
   resolution: "@babel/plugin-syntax-jsx@npm:7.14.5"
   dependencies:
@@ -2740,6 +2740,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/babel-plugin@npm:^11.3.0":
+  version: 11.3.0
+  resolution: "@emotion/babel-plugin@npm:11.3.0"
+  dependencies:
+    "@babel/helper-module-imports": ^7.12.13
+    "@babel/plugin-syntax-jsx": ^7.12.13
+    "@babel/runtime": ^7.13.10
+    "@emotion/hash": ^0.8.0
+    "@emotion/memoize": ^0.7.5
+    "@emotion/serialize": ^1.0.2
+    babel-plugin-macros: ^2.6.1
+    convert-source-map: ^1.5.0
+    escape-string-regexp: ^4.0.0
+    find-root: ^1.1.0
+    source-map: ^0.5.7
+    stylis: ^4.0.3
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 4c238862d08233b016e00ebc5e4421d085d66736f090e98bcee93cff39dd4a19a39e1f8913600919ccaf0879ad74a7c11098aa9214f667c072bd129b7820d598
+  languageName: node
+  linkType: hard
+
 "@emotion/babel-preset-css-prop@npm:^10.0.27":
   version: 10.2.1
   resolution: "@emotion/babel-preset-css-prop@npm:10.2.1"
@@ -2823,6 +2845,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/is-prop-valid@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@emotion/is-prop-valid@npm:1.1.0"
+  dependencies:
+    "@emotion/memoize": ^0.7.4
+  checksum: 3fd451e55fe40df4556ee4b1fc40a43e1f853b6082b540c68ae2b345f3eb928ba3c84356aecafa99ede5912c2c3bdc1325321470c740ee0d5f7ca793c8ee3bde
+  languageName: node
+  linkType: hard
+
 "@emotion/memoize@npm:0.7.4":
   version: 0.7.4
   resolution: "@emotion/memoize@npm:0.7.4"
@@ -2830,7 +2861,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/memoize@npm:^0.7.4":
+"@emotion/memoize@npm:^0.7.4, @emotion/memoize@npm:^0.7.5":
   version: 0.7.5
   resolution: "@emotion/memoize@npm:0.7.5"
   checksum: 09f5290283c50ae32f0808bebacf7eaac7ecdbd799a27698479bd03821f3acbd2ac512adcf0ae43394fed804007d6cd18de0c49475a14cd020d5f18fc7ab72bf
@@ -2925,6 +2956,28 @@ __metadata:
     "@emotion/core": ^10.0.27
     react: ">=16.3.0"
   checksum: 5ae549cbe564482b9277f8f4f53b404270d9c4d826c5396ca62d7d8d07d4a69ba1826f262f506e326df6409b4dfff738d02c0c09f840b603d8cbfaf109634b3c
+  languageName: node
+  linkType: hard
+
+"@emotion/styled@npm:^11.3.0":
+  version: 11.3.0
+  resolution: "@emotion/styled@npm:11.3.0"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@emotion/babel-plugin": ^11.3.0
+    "@emotion/is-prop-valid": ^1.1.0
+    "@emotion/serialize": ^1.0.2
+    "@emotion/utils": ^1.0.0
+  peerDependencies:
+    "@babel/core": ^7.0.0
+    "@emotion/react": ^11.0.0-rc.0
+    react: ">=16.8.0"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@types/react":
+      optional: true
+  checksum: 3eb9b591d061ab90b155a747c75ebda919ef78afa1f4b7b790561b324b9d25de776131a685040afdd63bb0cd070a66bd91af7eb891f057cc7aad77de0914568e
   languageName: node
   linkType: hard
 
@@ -4980,8 +5033,8 @@ __metadata:
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
     "@loadable/component": ^5.7.0
-    "@openneuro/client": ^3.34.0-alpha.2
-    "@openneuro/components": ^3.34.0-alpha.2
+    "@openneuro/client": ^3.34.0-alpha.3
+    "@openneuro/components": ^3.34.0-alpha.3
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -5056,7 +5109,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^3.34.0-alpha.2
+    "@openneuro/client": ^3.34.0-alpha.3
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
     bids-validator: 1.7.2
@@ -5081,14 +5134,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^3.34.0-alpha.2, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^3.34.0-alpha.3, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^3.34.0-alpha.2
+    "@openneuro/server": ^3.34.0-alpha.3
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -5098,11 +5151,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^3.34.0-alpha.2, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^3.34.0-alpha.3, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
     "@babel/runtime-corejs3": ^7.14.6
+    "@emotion/react": ^11.4.0
+    "@emotion/styled": ^11.3.0
     "@mdx-js/react": ^1.6.22
     "@storybook/addon-a11y": ^6.2.8
     "@storybook/addon-actions": ^6.2.8
@@ -5155,7 +5210,7 @@ __metadata:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
-    "@openneuro/client": ^3.34.0-alpha.2
+    "@openneuro/client": ^3.34.0-alpha.3
     "@types/jsonwebtoken": ^8
     "@types/node": ^14.14.41
     "@types/tsc-watch": ^4
@@ -5169,7 +5224,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^3.34.0-alpha.2, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^3.34.0-alpha.3, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -10069,7 +10124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-macros@npm:^2.0.0, babel-plugin-macros@npm:^2.8.0":
+"babel-plugin-macros@npm:^2.0.0, babel-plugin-macros@npm:^2.6.1, babel-plugin-macros@npm:^2.8.0":
   version: 2.8.0
   resolution: "babel-plugin-macros@npm:2.8.0"
   dependencies:
