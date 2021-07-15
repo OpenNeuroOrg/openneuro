@@ -111,7 +111,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     {
       variables: { datasetId },
       errorPolicy: 'all',
-      fetchPolicy: draft ? 'cache-and-network' : 'cache-first',
+      fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
     },
   )
