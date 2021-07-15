@@ -16,7 +16,6 @@ export interface UserMenuProps {
 }
 
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
-  console.log(profile)
   return (
     <Dropdown
       className={'user-menu-dropdown'}
