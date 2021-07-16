@@ -310,7 +310,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
   ) : null
 
-  const tracers = summary?.tasks.length ? (
+  const tracers = summary?.pet?.TracerName?.length ? (
     <div className="tracers-list">
       {_list(
         <>{summary?.pet?.TracerName.length === 1 ? 'Tracer' : 'Tracers'}</>,
