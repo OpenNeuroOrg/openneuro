@@ -97,6 +97,12 @@ async function createServer(): Promise<void> {
           })
           .end(configScript)
         return
+      } else if (url === '/robots.txt') {
+        res
+          .status(200)
+          .set({ 'Content-Type': 'text/plain' })
+          .send('User-agent: *\nAllow: /\n')
+        return
       }
 
       let interpolate = {
