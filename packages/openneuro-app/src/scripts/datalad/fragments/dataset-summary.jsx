@@ -66,9 +66,11 @@ class Summary extends React.PureComponent {
               {pluralize('Target', summary.pet.BodyPart.length)}:{' '}
             </strong>
             {summary.pet.BodyPart.join(', ')}
-            {summary.pet.BodyPart.length
-              ? summary.pet.BodyPart.join(', ')
-              : 'N/A'}
+            {summary.pet.BodyPart.length ? (
+              summary.pet.BodyPart.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         scannerManufacturer = (
@@ -81,9 +83,11 @@ class Summary extends React.PureComponent {
               )}
               :{' '}
             </strong>
-            {summary.pet.ScannerManufacturer.length
-              ? summary.pet.ScannerManufacturer.join(', ')
-              : 'N/A'}
+            {summary.pet.ScannerManufacturer.length ? (
+              summary.pet.ScannerManufacturer.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         scannerManufacturersModelName = (
@@ -96,9 +100,11 @@ class Summary extends React.PureComponent {
               )}
               :{' '}
             </strong>
-            {summary.pet.ScannerManufacturersModelName.length
-              ? summary.pet.ScannerManufacturersModelName.join(', ')
-              : 'N/A'}
+            {summary.pet.ScannerManufacturersModelName.length ? (
+              summary.pet.ScannerManufacturersModelName.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         tracerName = (
@@ -107,9 +113,11 @@ class Summary extends React.PureComponent {
               {' '}
               {pluralize('Tracer', summary.pet.TracerName.length)}:{' '}
             </strong>
-            {summary.pet.TracerName.length
-              ? summary.pet.TracerName.join(', ')
-              : 'N/A'}
+            {summary.pet.TracerName.length ? (
+              summary.pet.TracerName.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         tracerRadionuclide = (
@@ -119,9 +127,11 @@ class Summary extends React.PureComponent {
               {pluralize('Radionuclide', summary.pet.TracerRadionuclide.length)}
               :{' '}
             </strong>
-            {summary.pet.TracerRadionuclide.length
-              ? summary.pet.TracerRadionuclide.join(', ')
-              : 'N/A'}
+            {summary.pet.TracerRadionuclide.length ? (
+              summary.pet.TracerRadionuclide.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
       }
