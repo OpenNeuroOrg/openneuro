@@ -41,7 +41,7 @@
 
   &.hide-modal {
     opacity: 0;
-    transition-delay: 0;
+    transition-delay: 0.01s;
     animation: hideModal 0.4s 1;
     animation-fill-mode: forwards;
     .modal {
@@ -65,6 +65,6 @@
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-100vh);
+    transform: translateY(-150vh);
   }
 }

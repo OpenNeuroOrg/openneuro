@@ -29,6 +29,7 @@ export const Logo: React.FC<LogoProps> = ({
       className="logo-wrap"
       style={{
         width: width,
+        maxWidth: '100%',
       }}
       {...props}>
       <img

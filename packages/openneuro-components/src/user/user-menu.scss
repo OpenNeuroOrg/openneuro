@@ -63,9 +63,7 @@
   align-items: center;
   background: #eee;
   border-radius: $border-radius-default;
-  @media (max-width: 800px) {
-    margin-top: 20px;
-  }
+
   button.on-no-background.icon-text {
     color: $on-dark-aqua;
     margin: 5px 20px 0;

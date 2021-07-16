@@ -2,7 +2,9 @@
 header {
   position: relative;
 }
-
+.navbar-brand {
+  max-width: 100%;
+}
 .navbar-inner-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -119,6 +121,9 @@ header {
 .navbar-account {
   display: flex;
   justify-content: flex-end;
+  @media (max-width: 800px) {
+    margin-top: 20px;
+  }
 }
 
 .expaned-header {
@@ -161,10 +166,17 @@ header {
   > div {
     margin-right: 60px;
   }
-  .hero-sigin-label h3 {
-    font-size: 18px;
-    color: #fff;
-    margin: 0;
+  .hero-sigin-label {
+    @media (max-width: 800px) {
+      flex-basis: 100%;
+      min-width: 100%;
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-size: 18px;
+      color: #fff;
+      margin: 0;
+    }
   }
 }
 
@@ -173,6 +185,9 @@ header {
     flex-basis: 100%;
     width: 100%;
     min-width: 100%;
+  }
+  @media (max-width: 450px) {
+    padding: 0;
   }
 }
 
@@ -234,6 +249,17 @@ header {
       }
     }
   }
+  @media (max-width: 450px) {
+    .expaned-h-left,
+    .cube-wrap {
+      .header-aggregate .aggregate-count {
+        font-size: 15px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+    }
+  }
 }
 
 .header-input-wrap {
@@ -272,12 +298,26 @@ header {
 .header-modality-wrap {
   width: 90%;
   margin: 60px 0 20px;
+  z-index: 1;
   @media (max-width: 1250px) {
     max-width: 100%;
     width: 100%;
   }
-  .facet-accordion.on-accordion-wrapper .accordion-title {
-    padding: 15px 0;
+  .facet-accordion.on-accordion-wrapper {
+    .accordion-title {
+      padding: 15px 0;
+    }
+
+    @media (max-width: 450px) {
+      .level-1 > li {
+        > span.label {
+          padding: 10px 5px;
+        }
+      }
+      .level-2 > li:before {
+        display: none;
+      }
+    }
   }
 }
 

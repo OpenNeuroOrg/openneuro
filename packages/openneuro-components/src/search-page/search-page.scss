@@ -174,8 +174,14 @@
 }
 .search-heading {
   margin: 20px 0;
+  @media (max-width: 450px) {
+    margin-top: 40px;
+  }
   h1 {
     margin: 0;
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
   .go-back {
     font-size: 14px;
@@ -204,6 +210,14 @@
     padding: 0;
   }
 }
+
+@media (max-width: 450px) {
+  .close-filters-btn,
+  .show-filters-btn {
+    top: 0px;
+  }
+}
+
 .search-nav {
   flex: 0 0 auto;
   padding: 0;
