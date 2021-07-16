@@ -32,6 +32,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           toggleUpload={toggleUpload}
           profile={headerArgs.user}
           expanded={headerArgs.expanded}
+          renderUploader={() => <li>Upload</li>}
           renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
           renderOnExpanded={profile => (
             <LandingExpandedHeader
