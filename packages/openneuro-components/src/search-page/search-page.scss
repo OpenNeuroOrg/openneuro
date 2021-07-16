@@ -28,10 +28,17 @@
     a {
       color: #fff;
     }
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
   .secondary-content {
     margin: 25px 0 50px;
     display: flex;
+    @media (max-width: 450px) {
+      flex-direction: column;
+      font-size: 17px;
+    }
     .aggregate-count:first-child {
       margin-right: 60px;
     }
@@ -215,6 +222,8 @@
   .close-filters-btn,
   .show-filters-btn {
     top: 0px;
+    left: 0;
+    margin: 10px 0;
   }
 }
 

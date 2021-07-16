@@ -3,9 +3,19 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+
   .form-control {
     flex-grow: 1;
     margin-right: 10px;
+  }
+  @media (max-width: 450px) {
+    flex-wrap: wrap;
+    .on-button {
+      width: 100%;
+    }
+    .form-control {
+      margin: 0 0 10px;
+    }
   }
 }
 

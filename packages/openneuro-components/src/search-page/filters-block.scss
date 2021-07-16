@@ -10,6 +10,9 @@
     align-items: flex-end;
     line-height: 1;
     font-weight: 400;
+    @media (max-width: 450px) {
+      flex-wrap: wrap;
+    }
     span {
       color: #000;
       font-weight: 700;
@@ -26,6 +29,11 @@
       background: none;
       &:hover {
         color: #000;
+      }
+      @media (max-width: 450px) {
+        min-width: 100%;
+        margin-top: 20px;
+        text-align: left;
       }
     }
   }

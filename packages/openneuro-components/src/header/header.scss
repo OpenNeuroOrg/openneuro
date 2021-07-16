@@ -60,7 +60,7 @@ header {
     padding: 0;
     display: flex;
     justify-content: space-between;
-    @media (max-width: 300px) {
+    @media (max-width: 450px) {
       flex-wrap: wrap;
     }
     li {
@@ -70,6 +70,9 @@ header {
       display: flex;
       flex-direction: column;
       align-items: center;
+      @media (max-width: 800px) {
+        margin-bottom: 20px;
+      }
       a,
       span {
         color: #f4f4f4;
