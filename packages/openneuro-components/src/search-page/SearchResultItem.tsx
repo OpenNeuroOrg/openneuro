@@ -142,7 +142,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     <span className="result-summary-meta">
       <strong>
         {node?.metadata?.ages.length === 1
-          ? "Participant' Age"
+          ? "Participant's Age"
           : "Participants' Ages"}
         :{' '}
       </strong>
