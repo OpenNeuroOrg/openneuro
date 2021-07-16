@@ -1102,7 +1102,9 @@ $primary: $on-dark-aqua default;
       min-width: 100%;
     }
     > div.fresnel-at-small {
-      display: none;
+      @media (min-width: 768px) {
+        display: none;
+      }
     }
 
     &.is-dataset {
