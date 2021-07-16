@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   SearchPage,
   SearchResultsList,
@@ -38,22 +39,56 @@ export interface SearchContainerProps {
   portalContent?: Record<string, any>
 }
 
+/**
+ * Setup default search parameters based on URL and other state
+ */
+export const setDefaultSearch = (
+  modality: string,
+  searchParams: Record<string, any>,
+  setSearchParams: (newParams: Record<string, any>) => void,
+  query: URLSearchParams,
+): void => {
+  if (query.has('mydatasets')) {
+    setSearchParams(
+      (prevState: SearchParams): SearchParams => ({
+        ...prevState,
+        datasetType_selected: 'My Datasets',
+      }),
+    )
+  }
+  if (query.has('bookmarks')) {
+    setSearchParams(
+      (prevState: SearchParams): SearchParams => ({
+        ...prevState,
+        datasetType_selected: 'My Bookmarks',
+      }),
+    )
+  }
+  if (searchParams.modality_selected !== modality) {
+    setSearchParams(
+      (prevState: SearchParams): SearchParams => ({
+        ...prevState,
+        modality_selected: modality,
+      }),
+    )
+  }
+}
+
 const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
+  const location = useLocation()
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const modality = portalContent?.modality || null
   useEffect(() => {
-    if (searchParams.modality_selected !== modality) {
-      setSearchParams(
-        (prevState: SearchParams): SearchParams => ({
-          ...prevState,
-          modality_selected: modality,
-        }),
-      )
-    }
-  }, [modality, searchParams.modality_selected, setSearchParams])
+    setDefaultSearch(
+      modality,
+      searchParams,
+      setSearchParams,
+      new URLSearchParams(location.search),
+    )
+  }, [modality, searchParams.modality_selected, setSearchParams, location])
 
   const { loading, data, fetchMore, refetch, variables, error } =
     useSearchResults()

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 // TODO - Re-enable code splitting these when we can
 //import Dataset from './dataset/draft-snapshot-routes'
@@ -29,6 +29,9 @@ const Routes = () => (
     <Route name="error" path="/error" component={ErrorRoute} />
     <Route name="pet-landing" path="/pet" component={PETDummy} />
     <Route name="citation" path="/cite" component={Citation} />
+    <Redirect from="/public" to="/search" />
+    <Redirect from="/saved" to="/search?bookmarks" />
+    <Redirect from="/dashboard" to="/search?mydatasets" />
   </Switch>
 )
 
