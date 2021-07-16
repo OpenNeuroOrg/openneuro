@@ -22,7 +22,7 @@ export const Infographic: React.FC<InfographicProps> = ({}) => {
       <div className="view-docs">
         <h3>Want to get started?</h3>
         Check out the{' '}
-        <a href="https://docs.openneuro.org/user-guide" target="_blank">
+        <a href="https://docs.openneuro.org/user-guide">
           OpenNeuro User Documentation
         </a>
       </div>
