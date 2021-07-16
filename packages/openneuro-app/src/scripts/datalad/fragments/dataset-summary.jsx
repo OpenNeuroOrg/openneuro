@@ -63,11 +63,10 @@ class Summary extends React.PureComponent {
           <span>
             <strong>
               {' '}
-              {pluralize('Target', summary.pet.BodyPart.length)}:{' '}
+              {pluralize('Target', summary.pet.BodyPart?.length || 0)}:{' '}
             </strong>
-            {summary.pet.BodyPart.join(', ')}
-            {summary.pet.BodyPart.length ? (
-              summary.pet.BodyPart.join(', ')
+            {summary.pet.BodyPart?.length ? (
+              summary.pet.BodyPart?.join(', ')
             ) : (
               <>&mdash;</>
             )}
@@ -79,12 +78,12 @@ class Summary extends React.PureComponent {
               {' '}
               {pluralize(
                 'Scanner Manufacturer',
-                summary.pet.ScannerManufacturer.length,
+                summary.pet.ScannerManufacturer?.length || 0,
               )}
               :{' '}
             </strong>
-            {summary.pet.ScannerManufacturer.length ? (
-              summary.pet.ScannerManufacturer.join(', ')
+            {summary.pet.ScannerManufacturer?.length ? (
+              summary.pet.ScannerManufacturer?.join(', ')
             ) : (
               <>&mdash;</>
             )}
@@ -96,12 +95,12 @@ class Summary extends React.PureComponent {
               {' '}
               {pluralize(
                 'Scanner Model',
-                summary.pet.ScannerManufacturersModelName.length,
+                summary.pet.ScannerManufacturersModelName?.length || 0,
               )}
               :{' '}
             </strong>
-            {summary.pet.ScannerManufacturersModelName.length ? (
-              summary.pet.ScannerManufacturersModelName.join(', ')
+            {summary.pet.ScannerManufacturersModelName?.length ? (
+              summary.pet.ScannerManufacturersModelName?.join(', ')
             ) : (
               <>&mdash;</>
             )}
@@ -111,10 +110,10 @@ class Summary extends React.PureComponent {
           <span>
             <strong>
               {' '}
-              {pluralize('Tracer', summary.pet.TracerName.length)}:{' '}
+              {pluralize('Tracer', summary.pet.TracerName?.length) || 0}:{' '}
             </strong>
-            {summary.pet.TracerName.length ? (
-              summary.pet.TracerName.join(', ')
+            {summary.pet.TracerName?.length ? (
+              summary.pet.TracerName?.join(', ')
             ) : (
               <>&mdash;</>
             )}
@@ -124,11 +123,14 @@ class Summary extends React.PureComponent {
           <span>
             <strong>
               {' '}
-              {pluralize('Radionuclide', summary.pet.TracerRadionuclide.length)}
+              {pluralize(
+                'Radionuclide',
+                summary.pet.TracerRadionuclide?.length || 0,
+              )}
               :{' '}
             </strong>
-            {summary.pet.TracerRadionuclide.length ? (
-              summary.pet.TracerRadionuclide.join(', ')
+            {summary.pet.TracerRadionuclide?.length ? (
+              summary.pet.TracerRadionuclide?.join(', ')
             ) : (
               <>&mdash;</>
             )}
