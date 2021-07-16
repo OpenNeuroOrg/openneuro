@@ -135,7 +135,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
       if (ages.length === 0) return 'N/A'
       else if (ages.length === 1) return ages[0]
       else return `${Math.min(...ages)} - ${Math.max(...ages)}`
-    } else if (value === undefined) return 'N/A'
+    } else return 'N/A'
   }
 
   const agesRange = (
