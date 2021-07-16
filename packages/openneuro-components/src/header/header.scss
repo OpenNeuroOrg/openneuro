@@ -60,6 +60,9 @@ header {
     padding: 0;
     display: flex;
     justify-content: space-between;
+    @media (max-width: 300px) {
+      flex-wrap: wrap;
+    }
     li {
       margin: 0 10px -10px;
       text-align: center;
@@ -123,6 +126,9 @@ header {
   justify-content: flex-end;
   @media (max-width: 800px) {
     margin-top: 20px;
+    .on-button--large.on-button--navbar {
+      padding: 10px;
+    }
   }
 }
 
