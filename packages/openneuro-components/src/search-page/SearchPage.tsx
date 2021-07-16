@@ -25,6 +25,7 @@ export const SearchPage = ({
   renderLoading,
   renderAggregateCounts,
 }: SearchPageProps) => {
+  const [isOpen, setOpen] = React.useState(false)
   return (
     <>
       <section
@@ -57,7 +58,22 @@ export const SearchPage = ({
             </div>
 
             <div className="col col-12 search-wrapper">
-              <div className="search-nav search-facet-wrapper">
+              <button
+                className="show-filters-btn"
+                onClick={() => setOpen(!isOpen)}>
+                Show Filters
+              </button>
+              <div
+                className={
+                  isOpen
+                    ? 'search-nav search-facet-wrapper show-mobile-filters'
+                    : 'search-nav search-facet-wrapper'
+                }>
+                <button
+                  className="close-filters-btn"
+                  onClick={() => setOpen(!isOpen)}>
+                  Close Filters
+                </button>
                 {renderSearchFacets()}
               </div>
               <div className="search-content">

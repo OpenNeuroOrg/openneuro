@@ -13,11 +13,13 @@ export const portalContent = {
     portalName: 'OpenNeuro MRI',
     portalPrimary: (
       <>
-        The OpenNeuro platform was developed by the Center for Reproducible
-        Neuroscience as a tool to encourage and enhance data sharing and
-        analysis of raw MRI data, using{' '}
-        <a href="https://bids.neuroimaging.io">BIDS</a> to organize and
-        standardize these data.
+        The OpenNeuro platform was developed by the{' '}
+        <a href="https://reproducibility.stanford.edu/">
+          Center for Reproducible Neuroscience
+        </a>{' '}
+        as a tool to encourage and enhance data sharing and analysis of raw MRI
+        data, using <a href="https://bids.neuroimaging.io">BIDS</a> to organize
+        and standardize these data.
       </>
     ),
     publicDatasetStat: 100,

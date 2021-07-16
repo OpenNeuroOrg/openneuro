@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { SearchParamsCtx } from './search-params-ctx'
+import { modality_available } from './initial-search-params'
 import {
   BoolQuery,
   simpleQueryString,
@@ -69,6 +70,13 @@ const searchQuery = gql`
               size
               totalFiles
               dataProcessed
+              pet {
+                BodyPart
+                ScannerManufacturer
+                ScannerManufacturersModelName
+                TracerName
+                TracerRadionuclide
+              }
             }
             issues {
               severity
@@ -131,7 +139,12 @@ export const useSearchResults = () => {
     date_selected,
     species_selected,
     section_selected,
-    studyDomain_selected,
+    studyDomains,
+    bodyParts,
+    scannerManufacturers,
+    scannerManufacturersModelNames,
+    tracerNames,
+    tracerRadionuclides,
     sortBy_selected,
   } = searchParams
 
@@ -197,11 +210,48 @@ export const useSearchResults = () => {
       'filter',
       matchQuery('metadata.studyLongitudinal', section_selected, 'AUTO'),
     )
-  if (studyDomain_selected)
+  if (studyDomains.length)
     boolQuery.addClause(
-      'filter',
-      matchQuery('metadata.studyDomain', studyDomain_selected, 'AUTO'),
+      'must',
+      matchQuery('metadata.studyDomain', joinWithOR(studyDomains)),
     )
+  if (modality_selected === 'PET' || modality_selected === null) {
+    if (bodyParts.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(bodyParts), [
+          'latestSnapshot.summary.pet.BodyPart',
+        ]),
+      )
+    if (scannerManufacturers.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(scannerManufacturers), [
+          'latestSnapshot.summary.pet.ScannerManufacturer',
+        ]),
+      )
+    if (scannerManufacturersModelNames.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(scannerManufacturersModelNames), [
+          'latestSnapshot.summary.pet.ScannerManufacturersModelName',
+        ]),
+      )
+    if (tracerNames.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(tracerNames), [
+          'latestSnapshot.summary.pet.TracerName',
+        ]),
+      )
+    if (tracerRadionuclides.length)
+      boolQuery.addClause(
+        'must',
+        simpleQueryString(sqsJoinWithAND(tracerRadionuclides), [
+          'latestSnapshot.summary.pet.TracerRadionuclide',
+        ]),
+      )
+  }
 
   let sortField = 'created',
     order = 'desc'
@@ -222,6 +272,7 @@ export const useSearchResults = () => {
       break
   }
   const sortBy = { [sortField]: order }
+  console.log(boolQuery.get())
 
   return useQuery(searchQuery, {
     variables: {

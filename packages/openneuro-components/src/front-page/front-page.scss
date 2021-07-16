@@ -4,20 +4,6 @@ body {
   font-family: $font-sans;
 }
 
-.front-page section {
-  margin: 100px 0;
-  &:last-child {
-    margin-bottom: 0;
-  }
-  &.gray-bg {
-    margin: 0;
-    padding: 100px 0;
-    &:last-child {
-      padding-bottom: 0;
-    }
-  }
-}
-
 .contributors {
   h3 {
     margin: 20px 0 60px;
@@ -44,27 +30,7 @@ body {
     }
 
     &:nth-child(2) {
-      max-width: 250px;
-    }
-
-    @media (max-width: 1170px) {
-      max-width: 50%;
-      flex-basis: 50%;
-      a {
-        display: block;
-        text-align: center;
-        margin: 0 auto;
-        max-width: 250px;
-      }
-      &:nth-child(2) {
-        a {
-          max-width: 155px;
-        }
-      }
-    }
-    @media (max-width: $screen-md) {
-      max-width: 90%;
-      flex-basis: 90%;
+      max-width: 360px;
     }
   }
 }
@@ -108,6 +74,15 @@ body {
   border-radius: $border-radius-default;
   max-width: 960px;
   margin: 0 auto;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    .get-updates-label {
+      padding: 0 20px 20px;
+    }
+  }
   .get-updates-label,
   .get-updates-form {
     max-width: 50%;
@@ -227,7 +202,7 @@ body {
       margin-right: 0;
     }
   }
-  @media (max-width: $screen-lg) {
+  @media (max-width: 1250px) {
     &#get-data,
     &#share-data,
     &#use-data {
@@ -254,6 +229,7 @@ body {
 
 .front-infographic {
   width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
   .bg-circle {
     margin: 0 auto;
@@ -268,7 +244,7 @@ body {
     bottom: 0;
     left: 0;
     border-radius: 50%;
-    @media (max-width: $screen-lg) {
+    @media (max-width: 1250px) {
       display: none;
     }
   }

@@ -38,12 +38,12 @@
         padding: 6px 10px;
         color: #fff;
         border-radius: $border-radius-default;
-        background-color: #c83fad;
+        background-color: $chiclet-color;
         transition: background-color 0.3s;
         justify-content: center;
         cursor: pointer;
         &:hover {
-          background-color: darken(#c83fad, 10%);
+          background-color: darken($chiclet-color, 10%);
         }
         span {
           color: #fff;

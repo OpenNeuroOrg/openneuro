@@ -10,7 +10,12 @@ import GenderRadios from './gender-radios'
 import DateRadios from './date-radios'
 import SpeciesSelect from './species-select'
 import SectionSelect from './section-select'
-import StudyDomainSelect from './study-domain-select'
+import StudyDomainInput from './study-domain-input'
+import BodyPartsInput from './pet/bodyParts_input'
+import ScannerManufacturers from './pet/scannerManufacturers_input'
+import ScannerManufacturersModelNames from './pet/scannerManufacturersModelNames_input'
+import TracerNames from './pet/tracerNames_input'
+import TracerRadionuclides from './pet/tracerRadionuclides_input'
 import SortBySelect from './sort-by-select'
 
 export {
@@ -26,6 +31,11 @@ export {
   DateRadios,
   SpeciesSelect,
   SectionSelect,
-  StudyDomainSelect,
+  StudyDomainInput,
+  BodyPartsInput,
+  ScannerManufacturers,
+  ScannerManufacturersModelNames,
+  TracerNames,
+  TracerRadionuclides,
   SortBySelect,
 }

@@ -20,7 +20,12 @@ export interface FiltersBlockProps {
   diagnosis_selected?: FacetSelectValueType
   section_selected?: FacetSelectValueType
   species_selected?: FacetSelectValueType
-  studyDomain_selected?: FacetSelectValueType
+  studyDomains?: string[]
+  bodyParts?: string[]
+  scannerManufacturers?: string[]
+  scannerManufacturersModelNames?: string[]
+  tracerNames?: string[]
+  tracerRadionuclides?: string[]
   noFilters: boolean
   removeFilterItem?(isModality?: boolean): (key: string, value) => void
   removeAllFilters?(): void
@@ -40,8 +45,13 @@ export const FiltersBlock = ({
   diagnosis_selected,
   section_selected,
   species_selected,
-  studyDomain_selected,
+  studyDomains,
   date_selected,
+  bodyParts,
+  scannerManufacturers,
+  scannerManufacturersModelNames,
+  tracerNames,
+  tracerRadionuclides,
   noFilters,
   removeFilterItem,
   removeAllFilters,
@@ -56,7 +66,10 @@ export const FiltersBlock = ({
     <div className="filters-block">
       <h4>
         {noFilters ? (
-          <b>Showing all available datasets</b>
+          <b>
+            Showing all available {modality_selected ? modality_selected : ''}{' '}
+            datasets
+          </b>
         ) : (
           <>
             These filters return <span>{numTotalResults}</span> datasets:{' '}
@@ -155,12 +168,12 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem()}
           />
         )}
-        {studyDomain_selected && (
-          <FilterListItem
+        {studyDomains && (
+          <TermListItem
             type="Ontology"
             item={{
-              param: 'studyDomain_selected',
-              value: studyDomain_selected,
+              param: 'studyDomains',
+              values: studyDomains,
             }}
             removeFilterItem={removeFilterItem()}
           />
@@ -169,6 +182,48 @@ export const FiltersBlock = ({
           <FilterListItem
             type="Publication Date "
             item={{ param: 'date_selected', value: date_selected }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+
+        {bodyParts && (
+          <TermListItem
+            type="Target"
+            item={{ param: 'bodyParts', values: bodyParts }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {scannerManufacturers && (
+          <TermListItem
+            type="Scanner Manufacturers"
+            item={{
+              param: 'scannerManufacturers',
+              values: scannerManufacturers,
+            }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {scannerManufacturersModelNames && (
+          <TermListItem
+            type="Scanner Model"
+            item={{
+              param: 'scannerManufacturersModelNames',
+              values: scannerManufacturersModelNames,
+            }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {tracerNames && (
+          <TermListItem
+            type="Tracer"
+            item={{ param: 'tracerNames', values: tracerNames }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {tracerRadionuclides && (
+          <TermListItem
+            type="Radionuclide"
+            item={{ param: 'tracerRadionuclides', values: tracerRadionuclides }}
             removeFilterItem={removeFilterItem()}
           />
         )}

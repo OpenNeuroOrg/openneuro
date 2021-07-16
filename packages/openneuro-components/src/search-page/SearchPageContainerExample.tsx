@@ -67,8 +67,13 @@ export const SearchPageContainerExample = ({
     React.useState<FacetSelectValueType>()
   const [section_selected, setSection] = React.useState<FacetSelectValueType>()
   const [species_selected, setSpecies] = React.useState<FacetSelectValueType>()
-  const [studyDomain_selected, setDomain] =
-    React.useState<FacetSelectValueType>()
+  const [studyDomains, setStudyDomains] = React.useState([])
+  const [newDomain, setDomain] = React.useState('')
+  const pushNewDomain = (value: string) => {
+    setStudyDomains((prevState: string[]) => [...prevState, value])
+    setDomain('')
+  }
+
   const [date_selected, setDate] = React.useState('All Time')
 
   let filterBlockIsEmpty
@@ -84,7 +89,7 @@ export const SearchPageContainerExample = ({
     diagnosis_selected === undefined &&
     section_selected === undefined &&
     species_selected === undefined &&
-    studyDomain_selected === undefined &&
+    studyDomains === undefined &&
     allKeywords.length === 0 &&
     allTasks.length === 0 &&
     allAuthors.length === 0
@@ -123,7 +128,7 @@ export const SearchPageContainerExample = ({
               diagnosis_selected={diagnosis_selected}
               section_selected={section_selected}
               species_selected={species_selected}
-              studyDomain_selected={studyDomain_selected}
+              studyDomains={studyDomains}
               date_selected={date_selected}
               numTotalResults={numTotalResults}
               noFilters={filterBlockIsEmpty}
@@ -223,7 +228,7 @@ export const SearchPageContainerExample = ({
                 min={0}
                 max={100}
                 step={10}
-                defaultValue={[0, 20]}
+                value={[0, 20]}
                 onChange={setAgeRange}
               />
               <FacetRange
@@ -233,7 +238,7 @@ export const SearchPageContainerExample = ({
                 min={0}
                 max={100}
                 step={10}
-                defaultValue={[0, 20]}
+                value={[0, 20]}
                 onChange={setSubjectRange}
               />
               <FacetSelect
@@ -321,13 +326,24 @@ export const SearchPageContainerExample = ({
                 label="Section"
                 startOpen={false}
               />
-              <FacetSelect
-                selected={studyDomain_selected}
-                setSelected={setDomain}
-                items={domain_list}
+              <FacetSearch
                 accordionStyle="plain"
                 label="Ontology/Domain Studied"
                 startOpen={false}
+                className="search-authors"
+                type="text"
+                placeholder="eg. something here"
+                labelStyle="default"
+                name="default-example"
+                termValue={newDomain}
+                setTermValue={setDomain}
+                primary={true}
+                color="#fff"
+                icon="fas fa-plus"
+                iconSize="20px"
+                size="small"
+                pushTerm={setStudyDomains}
+                allTerms={studyDomains}
               />
             </FacetBlockContainerExample>
           </>

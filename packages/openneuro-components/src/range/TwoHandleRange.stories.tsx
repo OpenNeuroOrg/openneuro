@@ -12,7 +12,7 @@ const RangeTemplate: Story<TwoHandleRangeProps> = ({
   min,
   max,
   step,
-  defaultValue,
+  value,
 }) => {
   const setNewValue = (value: [number, number]) => {}
   return (
@@ -20,7 +20,7 @@ const RangeTemplate: Story<TwoHandleRangeProps> = ({
       min={min}
       max={max}
       step={step}
-      defaultValue={defaultValue}
+      value={value}
       onChange={setNewValue}
     />
   )
@@ -31,7 +31,7 @@ DefaultRange.args = {
   min: 0,
   max: 100,
   step: 10,
-  defaultValue: [0, 20],
+  value: [0, 20],
   marks: { 0: '0', 50: '50', 100: '100' },
 }
 DefaultRange.parameters = {

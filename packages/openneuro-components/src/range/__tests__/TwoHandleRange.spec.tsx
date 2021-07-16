@@ -20,7 +20,7 @@ describe('TwoHandleRange component', () => {
         min={0}
         max={100}
         step={10}
-        defaultValue={[0, 20]}
+        value={[0, 20]}
         onChange={onChange}
       />,
     )

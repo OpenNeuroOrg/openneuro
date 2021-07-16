@@ -33,6 +33,13 @@ export const DRAFT_FRAGMENT = gql`
         size
         totalFiles
         dataProcessed
+        pet {
+          BodyPart
+          ScannerManufacturer
+          ScannerManufacturersModelName
+          TracerName
+          TracerRadionuclide
+        }
       }
     }
   }
@@ -161,6 +168,13 @@ export const SNAPSHOT_FIELDS = gql`
       size
       totalFiles
       dataProcessed
+      pet {
+        BodyPart
+        ScannerManufacturer
+        ScannerManufacturersModelName
+        TracerName
+        TracerRadionuclide
+      }
     }
     analytics {
       downloads

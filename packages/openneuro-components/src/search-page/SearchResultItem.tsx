@@ -107,6 +107,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const datasetId = node.draft.id
   const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
   const numSubjects = summary?.subjects.length > 0 ? summary.subjects.length : 1
+  const noSnapshots = !!node.snapshots
 
   const accessionNumber = (
     <span className="result-summary-meta">
@@ -150,7 +151,6 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
 
   const dateAdded = formatDate(node.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(node.created))
-
   let lastUpdatedDate
   if (node.snapshots.length) {
     const dateUpdated = formatDate(
@@ -281,7 +281,10 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
 
   const modalityList = summary?.modalities.length ? (
     <div className="modality-list">
-      {_list(<>Modalities</>, summary?.modalities)}
+      {_list(
+        <>{summary?.modalities.length === 1 ? 'Modality' : 'Modalities'}</>,
+        summary?.modalities,
+      )}
     </div>
   ) : null
   const taskList = summary?.tasks.length ? (

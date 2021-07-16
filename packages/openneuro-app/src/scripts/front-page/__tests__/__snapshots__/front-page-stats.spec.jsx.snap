@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FrontPageTopStats renders container correctly 1`] = `
-<Styled(section)
-  className="openneuro-stats"
->
+<Styled(section)>
   <Styled(div)>
     <Styled(section)
       className="dataset-count"

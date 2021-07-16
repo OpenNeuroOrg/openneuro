@@ -52,6 +52,13 @@ export const indexQuery = gql`
                 age
               }
               subjects
+              pet {
+                BodyPart
+                ScannerManufacturer
+                ScannerManufacturersModelName
+                TracerName
+                TracerRadionuclide
+              }
             }
             readme
           }

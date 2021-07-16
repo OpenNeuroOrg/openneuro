@@ -13,7 +13,7 @@ export interface TwoHandleRangeProps {
   // Integer step for range values
   step: number
   // [min, max] starting values
-  defaultValue: [number, number]
+  value: [number, number]
   // Change event handler for either value changing, returns [minVal, maxVal]
   onChange: (value: [number, number]) => void
 }
@@ -22,13 +22,9 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   min,
   max,
   step,
-  defaultValue,
+  value,
   onChange,
 }) => {
-  const [minVal, setMinVal] = useState(defaultValue ? defaultValue[0] : min)
-  const [maxVal, setMaxVal] = useState(defaultValue ? defaultValue[1] : max)
-  const minValRef = useRef(min)
-  const maxValRef = useRef(max)
   const range = useRef<HTMLDivElement>(null)
 
   // Convert to percentage
@@ -39,24 +35,24 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
 
   // Set width of the range to decrease from the left side
   useEffect(() => {
-    const minPercent = getPercent(minVal)
-    const maxPercent = getPercent(maxValRef.current)
+    const minPercent = getPercent(value[0])
+    const maxPercent = getPercent(value[1])
 
     if (range.current) {
       range.current.style.left = `${minPercent}%`
       range.current.style.width = `${maxPercent - minPercent}%`
     }
-  }, [minVal, getPercent])
+  }, [value[0], getPercent])
 
   // Set width of the range to decrease from the right side
   useEffect(() => {
-    const minPercent = getPercent(minValRef.current)
-    const maxPercent = getPercent(maxVal)
+    const minPercent = getPercent(value[0])
+    const maxPercent = getPercent(value[1])
 
     if (range.current) {
       range.current.style.width = `${maxPercent - minPercent}%`
     }
-  }, [maxVal, getPercent])
+  }, [value[1], getPercent])
 
   const minChangeHandler = (
     event:
@@ -64,13 +60,12 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     const changeEvent = event as React.ChangeEvent<HTMLInputElement>
-    const value = stepping(
-      Math.min(Number(changeEvent.target.value), maxVal - 1),
+    const discreteValue = stepping(
+      Math.min(Number(changeEvent.target.value), value[1] - 1),
       step,
     )
-    setMinVal(value)
-    minValRef.current = value
-    onChange([value, maxVal])
+    value[0] = discreteValue
+    onChange([discreteValue, value[1]])
   }
   const maxChangeHandler = (
     event:
@@ -78,50 +73,48 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       | React.KeyboardEvent<HTMLInputElement>,
   ) => {
     const changeEvent = event as React.ChangeEvent<HTMLInputElement>
-    const value = stepping(
-      Math.max(Number(changeEvent.target.value), minVal + 1),
+    const discreteValue = stepping(
+      Math.max(Number(changeEvent.target.value), value[0] + 1),
       step,
     )
-    setMaxVal(value)
-    maxValRef.current = value
-    onChange([minVal, value])
+    value[1] = discreteValue
+    onChange([value[0], discreteValue])
   }
-
   return (
     <div className="formRange-inner">
       <input
         type="range"
         min={min}
         max={max}
-        value={minVal}
+        value={value[0]}
         step={step}
         onChange={minChangeHandler}
         onKeyDown={minChangeHandler}
         aria-valuemin={min}
         aria-valuemax={max}
-        aria-valuenow={minVal}
+        aria-valuenow={value[0]}
         className="thumb thumb--left"
-        style={{ zIndex: minVal > max - 100 && 5 }}
+        style={{ zIndex: value[0] > max - 100 && 5 }}
       />
       <input
         type="range"
         min={min}
         max={max}
-        value={maxVal}
+        value={value[1]}
         step={step}
         onChange={maxChangeHandler}
         onKeyDown={maxChangeHandler}
         aria-valuemin={min}
         aria-valuemax={max}
-        aria-valuenow={maxVal}
+        aria-valuenow={value[1]}
         className="thumb thumb--right"
       />
 
       <div className="slider">
         <div className="slider__track"></div>
         <div ref={range} className="slider__range"></div>
-        <div className="slider__left-value">{minVal}</div>
-        <div className="slider__right-value">{maxVal}</div>
+        <div className="slider__left-value">{value[0]}</div>
+        <div className="slider__right-value">{value[1]}</div>
       </div>
     </div>
   )
