@@ -66,6 +66,11 @@ class Summary extends React.PureComponent {
               {pluralize('Target', summary.pet.BodyPart.length)}:{' '}
             </strong>
             {summary.pet.BodyPart.join(', ')}
+            {summary.pet.BodyPart.length ? (
+              summary.pet.BodyPart.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         scannerManufacturer = (
@@ -78,7 +83,11 @@ class Summary extends React.PureComponent {
               )}
               :{' '}
             </strong>
-            {summary.pet.ScannerManufacturer.join(', ')}
+            {summary.pet.ScannerManufacturer.length ? (
+              summary.pet.ScannerManufacturer.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         scannerManufacturersModelName = (
@@ -91,7 +100,11 @@ class Summary extends React.PureComponent {
               )}
               :{' '}
             </strong>
-            {summary.pet.ScannerManufacturersModelName.join(', ')}
+            {summary.pet.ScannerManufacturersModelName.length ? (
+              summary.pet.ScannerManufacturersModelName.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         tracerName = (
@@ -100,7 +113,11 @@ class Summary extends React.PureComponent {
               {' '}
               {pluralize('Tracer', summary.pet.TracerName.length)}:{' '}
             </strong>
-            {summary.pet.TracerName.join(', ')}
+            {summary.pet.TracerName.length ? (
+              summary.pet.TracerName.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
         tracerRadionuclide = (
@@ -110,10 +127,18 @@ class Summary extends React.PureComponent {
               {pluralize('Radionuclide', summary.pet.TracerRadionuclide.length)}
               :{' '}
             </strong>
-            {summary.pet.TracerRadionuclide.join(', ')}
+            {summary.pet.TracerRadionuclide.length ? (
+              summary.pet.TracerRadionuclide.join(', ')
+            ) : (
+              <>&mdash;</>
+            )}
           </span>
         )
       }
+
+      //check for pet in modalities array
+      const isPet = element => element.toLowerCase() === 'pet'
+      const hasPet = summary.modalities.some(isPet)
 
       if (minimal) {
         return (
@@ -128,7 +153,7 @@ class Summary extends React.PureComponent {
             <div className="summary-data modalities">
               {this._list(<b>Modalities</b>, summary.modalities)}
             </div>
-            {summary.pet && (
+            {summary.pet && hasPet && (
               <>
                 <div className="summary-data">{bodyPart}</div>
                 <div className="summary-data">{scannerManufacturer}</div>
@@ -151,7 +176,7 @@ class Summary extends React.PureComponent {
             </h5>
             <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
             <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
-            {summary.pet && (
+            {summary.pet && hasPet && (
               <>
                 <h5>{bodyPart}</h5>
                 <h5>{scannerManufacturer}</h5>
