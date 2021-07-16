@@ -64,7 +64,7 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
-      <h4>
+      <h2>
         {noFilters ? (
           <b>
             Showing all available {modality_selected ? modality_selected : ''}{' '}
@@ -76,7 +76,7 @@ export const FiltersBlock = ({
             <Button label="Clear All" size="small" onClick={removeAllFilters} />
           </>
         )}
-      </h4>
+      </h2>
       <ul className="active-filters">
         {keywords && (
           <TermListItem
