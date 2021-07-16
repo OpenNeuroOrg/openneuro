@@ -2,6 +2,7 @@ export * from './facets'
 export * from './accordion'
 
 export * from './header/Header'
+export * from './footer/Footer'
 export * from './header/LandingExpandedHeader'
 export * from './input'
 export * from './faqs/FAQS'
