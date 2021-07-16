@@ -44,11 +44,18 @@ export interface SearchResultItemProps {
       ]
     }
     metadata: {
-      ages: number
+      ages: number[]
     }
     draft: {
       id: string
       summary: {
+        pet: {
+          BodyPart: string
+          ScannerManufacturer: string
+          ScannerManufacturersModelName: string
+          TracerName: string[]
+          TracerRadionuclide: string
+        }
         modalities: string[]
         sessions: []
         subjects: string[]
@@ -122,12 +129,24 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </span>
   )
 
-  const ages = (
+  const ages = value => {
+    if (value) {
+      const ages = value.filter(x => x)
+      if (ages.length === 0) return 'N/A'
+      else if (ages.length === 1) return ages[0]
+      else return `${Math.min(...ages)} - ${Math.max(...ages)}`
+    } else return 'N/A'
+  }
+
+  const agesRange = (
     <span className="result-summary-meta">
-      <strong>Participants' Ages: </strong>
-      <span>
-        {node?.metadata?.ages ? node.metadata.ages.toLocaleString() : 'N/A'}
-      </span>
+      <strong>
+        {node?.metadata?.ages?.length === 1
+          ? "Participant's Age"
+          : "Participants' Ages"}
+        :{' '}
+      </strong>
+      <span>{ages(node?.metadata?.ages)}</span>
     </span>
   )
   const subjects = (
@@ -291,6 +310,15 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
   ) : null
 
+  const tracers = summary?.pet?.TracerName?.length ? (
+    <div className="tracers-list">
+      {_list(
+        <>{summary?.pet?.TracerName.length === 1 ? 'Tracer' : 'Tracers'}</>,
+        summary?.pet?.TracerName,
+      )}
+    </div>
+  ) : null
+
   return (
     <>
       <div className="grid grid-nogutter search-result">
@@ -312,12 +340,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
         <div className="col col-12 result-meta-body">
           {modalityList}
           {taskList}
+          {tracers}
         </div>
         <div className="result-meta-footer">
           {accessionNumber}
           {sessions}
           {subjects}
-          {ages}
+          {agesRange}
           {size}
           {files}
         </div>
