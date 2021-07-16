@@ -125,8 +125,9 @@ class Summary extends React.PureComponent {
           </span>
         )
       }
-      const isPet = element => element === 'pet'
 
+      //check for pet in modalities array
+      const isPet = element => element.toLowerCase() === 'pet'
       const hasPet = summary.modalities.some(isPet)
 
       if (minimal) {
