@@ -290,7 +290,8 @@ export const getDatasets = options => {
     return connection([])
   } else {
     if (options?.myDatasets) {
-      return connection([])
+      // Return zero datasets for anonymous "myDatasets" request
+      return connection(filter({ id: false }))
     }
     // Anonymous request implies public datasets only
     const match = { public: true }
