@@ -139,12 +139,12 @@ export const species_list = [
     value: 'Human',
   },
   {
-    label: 'Pig',
-    value: 'Pig',
-  },
-  {
     label: 'Rat',
     value: 'Rat',
+  },
+  {
+    label: 'Mouse',
+    value: 'Mouse',
   },
   {
     label: 'Other',
