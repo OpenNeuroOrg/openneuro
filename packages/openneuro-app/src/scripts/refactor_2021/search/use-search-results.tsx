@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { SearchParamsCtx } from './search-params-ctx'
-import { modality_available } from './initial-search-params'
+import initialSearchParams from './initial-search-params'
 import {
   BoolQuery,
   simpleQueryString,
@@ -11,6 +11,7 @@ import {
   sqsJoinWithAND,
   joinWithOR,
 } from './es-query-builders'
+import { species_list } from '@openneuro/components'
 
 const searchQuery = gql`
   query advancedSearchDatasets(
@@ -117,11 +118,6 @@ const searchQuery = gql`
 
 const isActiveRange = range =>
   JSON.stringify(range) !== JSON.stringify([null, null])
-const range = ([min, max]: [Date, Date]) => {
-  const minISO = min === null ? '*' : min.toISOString()
-  const maxISO = max === null ? '*' : max.toISOString()
-  return `[${minISO} TO ${maxISO}]`
-}
 
 export const useSearchResults = () => {
   const { searchParams } = useContext(SearchParamsCtx)
@@ -200,11 +196,23 @@ export const useSearchResults = () => {
     }
     boolQuery.addClause('filter', rangeQuery('created', `now-${d}d/d`, 'now/d'))
   }
-  if (species_selected)
-    boolQuery.addClause(
-      'filter',
-      matchQuery('metadata.species', species_selected, 'AUTO'),
-    )
+  if (species_selected) {
+    if (species_selected === 'Other') {
+      // if species is 'Other', search for every species that isn't an available option
+      const species = initialSearchParams.species_available
+        .filter(s => s !== 'Other')
+        .join(' ')
+      boolQuery.addClause(
+        'must_not',
+        matchQuery('metadata.species', species, 'AUTO', 'OR'),
+      )
+    } else {
+      boolQuery.addClause(
+        'filter',
+        matchQuery('metadata.species', species_selected, 'AUTO'),
+      )
+    }
+  }
   if (section_selected)
     boolQuery.addClause(
       'filter',
@@ -272,7 +280,6 @@ export const useSearchResults = () => {
       break
   }
   const sortBy = { [sortField]: order }
-  console.log(boolQuery.get())
 
   return useQuery(searchQuery, {
     variables: {
