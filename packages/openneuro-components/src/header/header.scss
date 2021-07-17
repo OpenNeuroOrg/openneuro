@@ -154,12 +154,24 @@ header {
 .sign-in-modal-content {
   display: flex;
   justify-content: space-between;
+  @media (max-width: 450px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   > div {
     flex-basis: 50%;
     max-width: 50%;
     margin: 0 10px 0 0;
     &:last-child {
       margin: 0 0 0 10px;
+    }
+    @media (max-width: 450px) {
+      margin: 0 0 20px;
+      width: 100%;
+      &:last-child {
+        margin-left: 0;
+      }
     }
   }
   button {
