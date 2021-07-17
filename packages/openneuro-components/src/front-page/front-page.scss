@@ -80,9 +80,10 @@ body {
   margin: 0 auto;
   @media (max-width: 767px) {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     border-radius: 0;
+    padding: 20px 30px;
     .get-updates-label {
       padding: 0 20px 20px;
     }
@@ -123,6 +124,13 @@ body {
     }
     @media (max-width: 500px) {
       flex-direction: column;
+      .float-form-style.form-control {
+        min-width: 100%;
+      }
+      button {
+        margin: 20px 0 0;
+        min-width: 100%;
+      }
     }
   }
   .get-updates-label {

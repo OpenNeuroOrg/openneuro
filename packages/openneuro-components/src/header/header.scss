@@ -168,7 +168,8 @@ header {
     }
     @media (max-width: 450px) {
       margin: 0 0 20px;
-      width: 100%;
+      flex-basis: 100%;
+      min-width: 100%;
       &:last-child {
         margin-left: 0;
       }
