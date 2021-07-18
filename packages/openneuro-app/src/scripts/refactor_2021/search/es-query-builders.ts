@@ -1,10 +1,11 @@
 // Builds query components using the Elasticsearch Query DSL
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
 
+const emptyQuery = () => ({
+  bool: {},
+})
 export function BoolQuery() {
-  this.query = {
-    bool: {},
-  }
+  this.query = emptyQuery()
 }
 BoolQuery.prototype.addClause = function (type: string, query: object) {
   if (this.query.bool[type]) {
@@ -18,6 +19,9 @@ BoolQuery.prototype.get = function () {
 }
 BoolQuery.prototype.toString = function () {
   return JSON.stringify(this.query)
+}
+BoolQuery.prototype.isEmpty = function () {
+  return JSON.stringify(this.query) === JSON.stringify(emptyQuery())
 }
 
 export const simpleQueryString = (
