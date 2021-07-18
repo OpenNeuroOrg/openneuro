@@ -55,9 +55,7 @@ export const elasticRelayConnection = async (
     }),
     pageInfo: {
       count,
-      endCursor: lastMatch
-        ? encodeCursor([lastMatch._score, lastMatch._id])
-        : null,
+      endCursor: lastMatch ? encodeCursor(lastMatch.sort) : null,
       hasNextPage: Boolean(lastMatch),
       // Always null since only forward pagination is implemented
       startCursor: null,
@@ -190,7 +188,7 @@ export const advancedDatasetSearchConnection = async (
   { query, datasetType, datasetStatus, sortBy, after, first = 25 },
   { user, userInfo },
 ) => {
-  const sort = [{ _score: 'desc' }]
+  const sort = [{ _score: 'asc' }, { id: 'desc' }]
   if (sortBy) sort.unshift(sortBy)
   const requestBody = {
     sort,
