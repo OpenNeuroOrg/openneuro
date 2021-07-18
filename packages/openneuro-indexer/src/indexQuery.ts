@@ -75,6 +75,9 @@ export const indexQuery = gql`
               }
             }
           }
+          analytics {
+            downloads
+          }
         }
       }
       pageInfo {

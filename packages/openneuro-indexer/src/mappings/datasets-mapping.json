@@ -76,11 +76,22 @@
       }
     },
     "permissions": {
-      "userPermissions": {
-        "level": { "type": "keyword" },
-        "user": {
-          "id": { "type": "keyword" }
+      "properties": {
+        "userPermissions": {
+          "properties": {
+            "level": { "type": "keyword" },
+            "user": {
+              "properties": {
+                "id": { "type": "keyword" }
+              }
+            }
+          }
         }
+      }
+    },
+    "analytics": {
+      "properties": {
+        "downloads": { "type": "integer" }
       }
     }
   }

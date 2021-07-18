@@ -264,9 +264,8 @@ export const useSearchResults = () => {
     sortBy = { created: 'asc' }
   } else if (sortBy_selected.label === 'Activity') {
     // TODO: figure out
-    sortBy = null
+    sortBy = { 'analytics.downloads': 'desc' }
   }
-
   return useQuery(searchQuery, {
     variables: {
       query: boolQuery.get(),
