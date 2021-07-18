@@ -7,8 +7,6 @@ import { AccordionTab } from '../accordion/AccordionTab'
 
 import orcidIcon from '../assets/orcid_24x24.png'
 
-import '../header/header.scss'
-
 export interface UserLoginModalProps {
   isOpen: boolean
   toggle: () => void

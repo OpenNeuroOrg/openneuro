@@ -5,8 +5,6 @@ import { Logo } from '../logo/Logo'
 import { Modal } from '../modal/Modal'
 import { UserMenu } from '../user/UserMenu'
 
-import './header.scss'
-
 export interface HeaderProps {
   profile?: {
     name: string

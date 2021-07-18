@@ -11,7 +11,13 @@ export const Infographic: React.FC<InfographicProps> = ({}) => {
       {frontPage.infographic.map((item, index) => (
         <div key={index} className="infograph-block" id={item.htmlID}>
           <span>
-            <img src={item.image} alt="" />
+            <img
+              src={item.image}
+              alt=""
+              loading="lazy"
+              width="312"
+              height="349"
+            />
           </span>
           <div className="info-card">
             <h3>{item.name}</h3>

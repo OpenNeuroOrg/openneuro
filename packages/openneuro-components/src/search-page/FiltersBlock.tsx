@@ -4,7 +4,6 @@ import { FilterListItem } from './FilterListItem'
 import { FilterDateItem } from './FilterDateItem'
 import { TermListItem } from './TermListItem'
 import { FacetSelectValueType } from '../facets/FacetSelect'
-import './filters-block.scss'
 
 export interface FiltersBlockProps {
   keywords: string[]

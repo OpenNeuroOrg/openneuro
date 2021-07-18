@@ -1,5 +1,4 @@
 import React from 'react'
-import './logo.scss'
 
 import logodh from '../assets/on-dark-horz.svg'
 import logodv from '../assets/on-dark.svg'
@@ -34,6 +33,7 @@ export const Logo: React.FC<LogoProps> = ({
       {...props}>
       <img
         src={logoStyle}
+        loading="lazy"
         alt="box with connection dots and lines that says openneuro next to it "
       />
     </div>

@@ -1,7 +1,5 @@
 import React from 'react'
 import { Dropdown } from '../dropdown/Dropdown'
-import '../dropdown/dropdown.scss'
-import './search-sort.scss'
 
 export interface SearchSortProps {
   items: {
