@@ -13,6 +13,9 @@
     right: 0;
     background-color: #fff;
     border-radius: $border-radius-default;
+    @media (max-width: 800px) {
+      right: -75px;
+    }
     &.expanded {
       height: auto;
     }
