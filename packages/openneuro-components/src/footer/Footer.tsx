@@ -2,14 +2,16 @@ import React from 'react'
 import './footer.scss'
 import { frontPage } from '../mock-content/front-page-content'
 
-export interface FooterProps {}
+export interface FooterProps {
+  version: string
+}
 
-export const Footer: React.FC<FooterProps> = ({ ...props }) => {
+export const Footer: React.FC<FooterProps> = ({ version }) => {
   return (
-    <footer>
+    <footer className="on-foot">
       <div className="grid grid-between align-center">
         <div className="col col-4  version">
-          <span>OpenNeuro v{'1.1.1.TODO'}</span>
+          <span>OpenNeuro v{version}</span>
         </div>
         <div className="col col-4 privacy-policy">
           <span>
