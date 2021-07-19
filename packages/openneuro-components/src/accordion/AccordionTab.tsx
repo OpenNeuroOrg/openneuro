@@ -2,8 +2,6 @@ import React from 'react'
 
 import { Icon } from '../icon/Icon'
 
-import './accordion.scss'
-
 export type AccordionTabStyle = 'plain' | 'file-tree' | 'bids-wrapper'
 
 export interface AccordionTabProps {

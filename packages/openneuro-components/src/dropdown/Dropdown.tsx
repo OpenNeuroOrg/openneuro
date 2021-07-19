@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react'
-import './dropdown.scss'
 
 export interface DropdownProps {
   label: Record<string, any>

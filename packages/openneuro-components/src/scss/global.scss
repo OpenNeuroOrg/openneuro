@@ -41,6 +41,9 @@ a:link {
   margin: 0 auto;
   position: relative;
   z-index: 4;
+  @media (max-width: 767px) {
+    max-width: calc(100vw - 50px);
+  }
 }
 
 div,
@@ -48,6 +51,11 @@ span,
 input,
 textarea {
   box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 h1,

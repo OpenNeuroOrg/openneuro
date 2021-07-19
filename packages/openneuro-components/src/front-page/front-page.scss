@@ -1,4 +1,4 @@
-@import '../scss/variables';
+// @import '../scss/variables';
 
 body {
   font-family: $font-sans;
@@ -20,6 +20,10 @@ body {
   .contributor {
     text-align: center;
     margin: 0 45px 50px;
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 0 0 30px;
+    }
 
     img {
       max-width: 100%;
@@ -76,9 +80,10 @@ body {
   margin: 0 auto;
   @media (max-width: 767px) {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     border-radius: 0;
+    padding: 20px 30px;
     .get-updates-label {
       padding: 0 20px 20px;
     }
@@ -111,6 +116,22 @@ body {
         color: #fff;
       }
     }
+    @media (max-width: 767px) {
+      padding: 0;
+      max-width: 100%;
+      flex-basis: 100%;
+      min-width: 100%;
+    }
+    @media (max-width: 500px) {
+      flex-direction: column;
+      .float-form-style.form-control {
+        min-width: 100%;
+      }
+      button {
+        margin: 20px 0 0;
+        min-width: 100%;
+      }
+    }
   }
   .get-updates-label {
     padding-right: 80px;
@@ -121,6 +142,11 @@ body {
     h3 {
       font-weight: 400;
       font-size: 16px;
+    }
+    @media (max-width: 767px) {
+      padding: 0;
+      max-width: 100%;
+      flex-basis: 100%;
     }
   }
 }
@@ -222,6 +248,16 @@ body {
           max-width: 90%;
           margin: 0 auto;
         }
+      }
+    }
+  }
+  @media (max-width: 450px) {
+    &#get-data,
+    &#share-data,
+    &#use-data {
+      span {
+        background: none;
+        max-width: 100%;
       }
     }
   }

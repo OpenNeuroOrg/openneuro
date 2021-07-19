@@ -18,7 +18,7 @@ export const Contributors: React.FC<ContributersProps> = ({}) => {
           {frontPage.support.map((item, index) => (
             <div key={index} className="contributor">
               <a href={item.link} title={item.title}>
-                <img src={item.logo} alt={item.alt} />
+                <img src={item.logo} alt={item.alt} loading="lazy" />
               </a>
             </div>
           ))}

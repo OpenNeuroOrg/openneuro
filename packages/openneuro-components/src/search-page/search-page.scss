@@ -28,10 +28,17 @@
     a {
       color: #fff;
     }
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
   .secondary-content {
     margin: 25px 0 50px;
     display: flex;
+    @media (max-width: 450px) {
+      flex-direction: column;
+      font-size: 17px;
+    }
     .aggregate-count:first-child {
       margin-right: 60px;
     }
@@ -174,8 +181,14 @@
 }
 .search-heading {
   margin: 20px 0;
+  @media (max-width: 450px) {
+    margin-top: 40px;
+  }
   h1 {
     margin: 0;
+    @media (max-width: 450px) {
+      font-size: 20px;
+    }
   }
   .go-back {
     font-size: 14px;
@@ -204,6 +217,16 @@
     padding: 0;
   }
 }
+
+@media (max-width: 450px) {
+  .close-filters-btn,
+  .show-filters-btn {
+    top: 0px;
+    left: 0;
+    margin: 10px 0;
+  }
+}
+
 .search-nav {
   flex: 0 0 auto;
   padding: 0;

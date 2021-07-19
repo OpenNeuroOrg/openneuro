@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Icon } from '../icon/Icon'
 
-import './search-result.scss'
-
 import activityPulseIcon from '../assets/activity-icon.png'
 
 /**

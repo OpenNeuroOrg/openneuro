@@ -1,7 +1,6 @@
 import React from 'react'
 import { AccordionTab } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
-import './input.scss'
 
 export type InputPropsStyle = 'inline' | 'float' | 'default'
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import './logo.scss'
 
 import logodh from '../assets/on-dark-horz.svg'
 import logodv from '../assets/on-dark.svg'
@@ -29,10 +28,12 @@ export const Logo: React.FC<LogoProps> = ({
       className="logo-wrap"
       style={{
         width: width,
+        maxWidth: '100%',
       }}
       {...props}>
       <img
         src={logoStyle}
+        loading="lazy"
         alt="box with connection dots and lines that says openneuro next to it "
       />
     </div>

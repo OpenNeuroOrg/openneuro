@@ -6,8 +6,6 @@ import Carousel from 'react-multi-carousel'
 import { ArrowProps, ResponsiveType } from 'react-multi-carousel/lib/types'
 import 'react-multi-carousel/lib/styles.css'
 
-import './slider.scss'
-
 export interface ActivitySliderProps {
   className?: string
   showDots?: boolean

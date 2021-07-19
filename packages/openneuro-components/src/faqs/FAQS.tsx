@@ -1,5 +1,5 @@
 import React from 'react'
-import './faqs.scss'
+
 import Markdown from 'markdown-to-jsx'
 import { faq } from '../mock-content/faq-content'
 import { AccordionWrap } from '../accordion/AccordionWrap'

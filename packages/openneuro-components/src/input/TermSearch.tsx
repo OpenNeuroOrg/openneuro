@@ -1,7 +1,6 @@
 import React from 'react'
 import { Input, InputPropsStyle } from '../input/Input'
 import { Button, ButtonPropsSize } from '../button/Button'
-import './term-search.scss'
 
 export interface TermSearchProps {
   setTermValue: (string) => void

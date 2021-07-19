@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import './front-page.scss'
-
 const FrontPageSection = styled.section`
   margin: 100px 0;
   &:last-child {

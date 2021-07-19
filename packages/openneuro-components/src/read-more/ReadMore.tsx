@@ -1,7 +1,5 @@
 import React from 'react'
 
-import './read-more.scss'
-
 export interface ReadMoreProps {
   children: React.ReactNode
   id: string

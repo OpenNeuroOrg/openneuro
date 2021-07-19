@@ -1,7 +1,5 @@
 import React from 'react'
 
-import './select.scss'
-
 export interface SelectGroupProps {
   options: {
     label: string
