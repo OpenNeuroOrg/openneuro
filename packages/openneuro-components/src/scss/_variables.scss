@@ -7,7 +7,7 @@ $newspaper: #dfdfdf;
 $on-light-aqua: rgb(55, 188, 210);
 $on-dark-aqua: rgba(32, 78, 90, 1);
 $on-secondary: #196583;
-$on-dark-aqua-light: adjust-color($on-dark-aqua, $lightness: 45%);
+$on-dark-aqua-light: #e5f4f7;
 
 $mri-theme: rgba(109, 83, 156, 1);
 $mri-hover: adjust-color($mri-theme, $lightness: 10%);
@@ -31,7 +31,7 @@ $ieeg-theme: rgba(99, 121, 10, 1);
 $ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
 $ieeg-dark: darken($ieeg-theme, 25%);
 $ieeg-secondary: adjust-color($ieeg-theme, $lightness: 15%);
-$ieeg-light: adjust-color($ieeg-theme, $lightness: 45%);
+$ieeg-light: rgb(200, 212, 153);
 
 $meg-theme: rgba(234, 93, 11, 1);
 $meg-hover: adjust-color($meg-theme, $lightness: 10%);
