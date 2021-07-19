@@ -146,12 +146,16 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <SectionSelect />
           <StudyDomainInput />
           {(portalContent === undefined ||
-            portalContent.modality === 'PET') && (
+            portalContent?.modality === 'PET') && (
+            <>
+              <TracerNames />
+            </>
+          )}
+          {portalContent?.modality === 'PET' && (
             <>
               <BodyPartsInput />
               <ScannerManufacturers />
               <ScannerManufacturersModelNames />
-              <TracerNames />
               <TracerRadionuclides />
             </>
           )}

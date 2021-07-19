@@ -110,7 +110,8 @@ class Summary extends React.PureComponent {
           <span>
             <strong>
               {' '}
-              {pluralize('Tracer', summary.pet.TracerName?.length) || 0}:{' '}
+              {pluralize('Radiotracer', summary.pet.TracerName?.length) ||
+                0}:{' '}
             </strong>
             {summary.pet.TracerName?.length ? (
               summary.pet.TracerName?.join(', ')
