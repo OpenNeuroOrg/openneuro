@@ -1,6 +1,5 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-
 import { Header, HeaderProps } from './Header'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
 import { FrontFacetExample } from '../facets/Facet.stories'
@@ -29,6 +28,7 @@ const Template: Story<HeaderProps> = ({ profile, expanded }) => {
       toggleSupport={toggleSupport}
       toggleUpload={toggleUpload}
       renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
+      renderUploader={() => <li>Upload</li>}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}

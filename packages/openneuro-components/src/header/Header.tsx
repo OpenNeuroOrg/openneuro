@@ -23,6 +23,7 @@ export interface HeaderProps {
   toggleSupport: () => void
   renderOnExpanded: (profile) => React.ReactNode
   renderOnFreshDeskWidget: () => React.ReactNode
+  renderUploader: () => React.ReactNode
 }
 
 export const Header = ({
@@ -36,6 +37,7 @@ export const Header = ({
   toggleSupport,
   renderOnExpanded,
   renderOnFreshDeskWidget,
+  renderUploader,
 }: HeaderProps) => {
   return (
     <>
@@ -54,16 +56,14 @@ export const Header = ({
                 <NavLink to="/search">Search</NavLink>
               </li>
               <li>
-                <span onClick={toggleSupport}>Support</span>
+                <span className="no-a" onClick={toggleSupport}>
+                  Support
+                </span>
               </li>
               <li>
                 <NavLink to="/faq">FAQ</NavLink>
               </li>
-              {profile ? (
-                <li>
-                  <span onClick={toggleUpload}>Upload</span>
-                </li>
-              ) : null}
+              {profile ? <li>{renderUploader()}</li> : null}
             </ul>
           </div>
           <div className="navbar-account">
@@ -95,12 +95,6 @@ export const Header = ({
         closeText="Close">
         {renderOnFreshDeskWidget()}
       </Modal>
-
-      {profile ? (
-        <Modal isOpen={isOpenUpload} toggle={toggleUpload} closeText="Close">
-          Upload TODO
-        </Modal>
-      ) : null}
     </>
   )
 }

@@ -13,6 +13,7 @@ import { getUnexpiredProfile } from '../authentication/profile'
 import FreshdeskWidget from '../freshdesk-widget'
 import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
 import loginUrls from '../authentication/loginUrls'
+import UploaderView from '../uploader/uploader-view.jsx'
 
 const HeaderContainer: FC = () => {
   const history = useHistory()
@@ -70,6 +71,7 @@ const HeaderContainer: FC = () => {
       toggleUpload={toggleUpload}
       profile={profile}
       expanded={expanded}
+      renderUploader={() => <UploaderView />}
       renderOnFreshDeskWidget={() => <FreshdeskWidget />}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
