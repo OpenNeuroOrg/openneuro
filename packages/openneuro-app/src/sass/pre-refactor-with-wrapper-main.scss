@@ -438,7 +438,7 @@ $meg-light: adjust-color($meg-theme, $lightness: 45%);
 $on-light-green: #00eeb5;
 $on-light-red: #c00342;
 $primary: $on-dark-aqua default;
-@import 'react-toastify/dist/ReactToastify.css';
+
 @import 'react-virtualized/styles.css';
 @import './animate/properties';
 @import './font-awesome/font-awesome';

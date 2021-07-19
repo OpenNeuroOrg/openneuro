@@ -1,5 +1,7 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
+import UploaderContext from '../../uploader/uploader-context.js'
+import UploadProgress from '../../uploader/upload-progress.jsx'
 import { Header, LandingExpandedHeader } from '@openneuro/components'
 import ModalitySelect from '../search/inputs/modality-select'
 import { SearchParamsCtx } from '../search/search-params-ctx'
@@ -62,52 +64,67 @@ const HeaderContainer: FC = () => {
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
 
   return (
-    <Header
-      isOpenSupport={isOpenSupport}
-      isOpenUpload={isOpenUpload}
-      toggleLoginModal={toggleLoginModal}
-      signOutAndRedirect={signOutAndRedirect}
-      toggleSupport={toggleSupport}
-      toggleUpload={toggleUpload}
-      profile={profile}
-      expanded={expanded}
-      renderUploader={() => <UploaderView />}
-      renderOnFreshDeskWidget={() => <FreshdeskWidget />}
-      renderOnExpanded={profile => (
-        <LandingExpandedHeader
-          user={profile}
-          loginUrls={loginUrls}
-          renderAggregateCounts={(modality: string) => (
-            <AggregateCountsContainer modality={modality} />
-          )}
-          renderFacetSelect={() => (
-            <ModalitySelect
-              startOpen={false}
-              label="Browse by Modalities"
-              dropdown={true}
-            />
-          )}
-          renderSearchInput={() => (
-            <Input
-              placeholder="Search"
-              type="text"
-              name="front-page-search"
-              labelStyle="default"
-              value={newKeyword}
-              setValue={setNewKeyword}
-              onKeyDown={e => {
-                if (e.keyCode === 13) {
-                  handleSubmit()
-                }
-              }}
-            />
-          )}
-          onSearch={() => {
-            handleSubmit()
-          }}
-        />
-      )}
-    />
+    <>
+      <UploaderContext.Consumer>
+        {uploader => {
+          if (uploader?.uploading) {
+            return (
+              <span className="header-progress-wrap">
+                <UploadProgress progress={uploader.progress} />
+              </span>
+            )
+          } else {
+            return
+          }
+        }}
+      </UploaderContext.Consumer>
+      <Header
+        isOpenSupport={isOpenSupport}
+        isOpenUpload={isOpenUpload}
+        toggleLoginModal={toggleLoginModal}
+        signOutAndRedirect={signOutAndRedirect}
+        toggleSupport={toggleSupport}
+        toggleUpload={toggleUpload}
+        profile={profile}
+        expanded={expanded}
+        renderUploader={() => <UploaderView />}
+        renderOnFreshDeskWidget={() => <FreshdeskWidget />}
+        renderOnExpanded={profile => (
+          <LandingExpandedHeader
+            user={profile}
+            loginUrls={loginUrls}
+            renderAggregateCounts={(modality: string) => (
+              <AggregateCountsContainer modality={modality} />
+            )}
+            renderFacetSelect={() => (
+              <ModalitySelect
+                startOpen={false}
+                label="Browse by Modalities"
+                dropdown={true}
+              />
+            )}
+            renderSearchInput={() => (
+              <Input
+                placeholder="Search"
+                type="text"
+                name="front-page-search"
+                labelStyle="default"
+                value={newKeyword}
+                setValue={setNewKeyword}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) {
+                    handleSubmit()
+                  }
+                }}
+              />
+            )}
+            onSearch={() => {
+              handleSubmit()
+            }}
+          />
+        )}
+      />
+    </>
   )
 }
 
