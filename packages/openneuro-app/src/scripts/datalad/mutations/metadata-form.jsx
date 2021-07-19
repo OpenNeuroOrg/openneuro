@@ -49,7 +49,7 @@ const metadataFields = hasEdit => {
       label: 'Species',
       component: SelectInput,
       additionalProps: {
-        options: [{ value: 'Human' }],
+        options: [{ value: 'Human' }, { value: 'Rat' }, { value: 'Mouse' }],
         showOptionOther: true,
         required: false,
       },

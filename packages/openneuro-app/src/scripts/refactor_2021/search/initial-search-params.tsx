@@ -222,7 +222,7 @@ const TEMPORARY_initialSearchParams: SearchParams = {
     'Last 12 months',
   ],
   date_selected: 'All Time',
-  species_available: ['Human', 'Pig', 'Rat', 'Other'],
+  species_available: ['Human', 'Rat', 'Mouse', 'Other'],
   species_selected: null,
   section_available: ['Cross-Sectional', 'Longitudinal', 'Other'],
   section_selected: null,
