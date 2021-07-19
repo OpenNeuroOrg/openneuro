@@ -345,7 +345,8 @@ header {
 
 .freshdesk-support {
   .modal {
-    min-width: 770px;
+    width: 770px;
+    max-width: 100%;
   }
   .modal-body {
     margin-top: 30px;
