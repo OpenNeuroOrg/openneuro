@@ -168,7 +168,9 @@ export const FrontPageTopResult =
   }
 
 const FrontPageTopQuery = ({ query }) => {
-  const result = useQuery(query)
+  const result = useQuery(query, {
+    errorPolicy: 'all',
+  })
   return FrontPageTopResult(query)(result)
 }
 
