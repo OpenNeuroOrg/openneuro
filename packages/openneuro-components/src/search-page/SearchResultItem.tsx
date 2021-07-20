@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Icon } from '../icon/Icon'
 
-import './search-result.scss'
-
 import activityPulseIcon from '../assets/activity-icon.png'
 
 /**
@@ -313,7 +311,11 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const tracers = summary?.pet?.TracerName?.length ? (
     <div className="tracers-list">
       {_list(
-        <>{summary?.pet?.TracerName.length === 1 ? 'Tracer' : 'Tracers'}</>,
+        <>
+          {summary?.pet?.TracerName.length === 1
+            ? 'Radiotracer'
+            : 'Radiotracers'}
+        </>,
         summary?.pet?.TracerName,
       )}
     </div>

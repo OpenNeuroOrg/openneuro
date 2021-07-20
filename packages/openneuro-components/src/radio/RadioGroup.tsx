@@ -1,8 +1,6 @@
 import React from 'react'
 import { Radio } from './Radio'
 
-import './radio.scss'
-
 export interface RadioGroupProps {
   layout: string
   // if radioArr is string[]

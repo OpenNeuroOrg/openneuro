@@ -4,7 +4,6 @@ import { FilterListItem } from './FilterListItem'
 import { FilterDateItem } from './FilterDateItem'
 import { TermListItem } from './TermListItem'
 import { FacetSelectValueType } from '../facets/FacetSelect'
-import './filters-block.scss'
 
 export interface FiltersBlockProps {
   keywords: string[]
@@ -64,7 +63,7 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
-      <h4>
+      <h2>
         {noFilters ? (
           <b>
             Showing all available {modality_selected ? modality_selected : ''}{' '}
@@ -76,7 +75,7 @@ export const FiltersBlock = ({
             <Button label="Clear All" size="small" onClick={removeAllFilters} />
           </>
         )}
-      </h4>
+      </h2>
       <ul className="active-filters">
         {keywords && (
           <TermListItem
@@ -215,7 +214,7 @@ export const FiltersBlock = ({
         )}
         {tracerNames && (
           <TermListItem
-            type="Tracer"
+            type="Radiotracers"
             item={{ param: 'tracerNames', values: tracerNames }}
             removeFilterItem={removeFilterItem()}
           />

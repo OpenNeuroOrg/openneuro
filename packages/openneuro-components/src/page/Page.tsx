@@ -57,7 +57,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
         />
         {children}
         <div className="on-foot">
-          <Footer />
+          <Footer version="x.x.x" />
         </div>
       </article>
     </>

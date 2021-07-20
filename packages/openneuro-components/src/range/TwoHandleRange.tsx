@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
-import './TwoHandleRange.scss'
 
 export function stepping(value, step) {
   return Math.round(value / step) * step

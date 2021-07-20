@@ -1,15 +1,17 @@
-@import '../scss/variables';
-
 .filters-block {
   position: relative;
   border-bottom: 1px solid $newspaper;
   margin-bottom: 10px;
-  h4 {
+  h2 {
     margin: 0 0 20px;
     display: flex;
     align-items: flex-end;
     line-height: 1;
     font-weight: 400;
+    font-size: 18px;
+    @media (max-width: 450px) {
+      flex-wrap: wrap;
+    }
     span {
       color: #000;
       font-weight: 700;
@@ -26,6 +28,11 @@
       background: none;
       &:hover {
         color: #000;
+      }
+      @media (max-width: 450px) {
+        min-width: 100%;
+        margin-top: 20px;
+        text-align: left;
       }
     }
   }

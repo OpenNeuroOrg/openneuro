@@ -1,5 +1,4 @@
 import React from 'react'
-import './radio.scss'
 
 export interface RadioProps {
   label: string

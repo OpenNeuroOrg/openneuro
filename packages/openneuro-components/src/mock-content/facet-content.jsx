@@ -4,61 +4,61 @@ export const modalities = [
   {
     label: 'MRI',
     value: 'MRI',
-    count: 3000,
+    count: null,
     children: [
       {
         label: 'Functional',
         value: 'Functional',
-        count: 300,
+        count: null,
       },
       {
         label: 'Structural',
         value: 'Structural',
-        count: 200,
+        count: null,
       },
       {
         label: 'Diffusion',
         value: 'Diffusion',
-        count: 300,
+        count: null,
       },
       {
         label: 'ASL Perfusion',
         value: 'ASL Perfusion',
-        count: 150,
+        count: null,
+      },
+    ],
+  },
+  {
+    label: 'PET',
+    value: 'PET',
+    count: null,
+    children: [
+      {
+        label: 'Static',
+        value: 'Static',
+        count: null,
+      },
+      {
+        label: 'Dynamic',
+        value: 'Dynamic',
+        count: null,
       },
     ],
   },
   {
     label: 'EEG',
     value: 'EEG',
-    count: 303,
+    count: null,
   },
   {
     label: 'iEEG',
     value: 'iEEG',
-    count: 303,
+    count: null,
   },
   {
     label: 'MEG',
     value: 'MEG',
-    count: 330,
-  },
-  {
-    label: 'PET',
-    value: 'PET',
-    count: 30,
-    children: [
-      {
-        label: 'Static',
-        value: 'Static',
-        count: 300,
-      },
-      {
-        label: 'Dynamic',
-        value: 'Dynamic',
-        count: 200,
-      },
-    ],
+    count: null,
   },
 ]
 
@@ -139,12 +139,12 @@ export const species_list = [
     value: 'Human',
   },
   {
-    label: 'Pig',
-    value: 'Pig',
-  },
-  {
     label: 'Rat',
     value: 'Rat',
+  },
+  {
+    label: 'Mouse',
+    value: 'Mouse',
   },
   {
     label: 'Other',

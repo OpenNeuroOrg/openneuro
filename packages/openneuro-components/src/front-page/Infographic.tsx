@@ -11,7 +11,13 @@ export const Infographic: React.FC<InfographicProps> = ({}) => {
       {frontPage.infographic.map((item, index) => (
         <div key={index} className="infograph-block" id={item.htmlID}>
           <span>
-            <img src={item.image} alt="" />
+            <img
+              src={item.image}
+              alt=""
+              loading="lazy"
+              width="312"
+              height="349"
+            />
           </span>
           <div className="info-card">
             <h3>{item.name}</h3>
@@ -22,7 +28,7 @@ export const Infographic: React.FC<InfographicProps> = ({}) => {
       <div className="view-docs">
         <h3>Want to get started?</h3>
         Check out the{' '}
-        <a href="https://docs.openneuro.org/user-guide" target="_blank">
+        <a href="https://docs.openneuro.org/user-guide">
           OpenNeuro User Documentation
         </a>
       </div>

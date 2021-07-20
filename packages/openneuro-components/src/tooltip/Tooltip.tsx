@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import './tooltip.scss'
 
 export interface TooltipProps {
   tooltip: string

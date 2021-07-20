@@ -21,7 +21,7 @@ const TracerNamesInput: FC = () => {
   return (
     <FacetSearch
       accordionStyle="plain"
-      label="Tracer"
+      label="Radiotracers"
       startOpen={false}
       className="search-authors"
       type="text"

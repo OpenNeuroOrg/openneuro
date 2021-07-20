@@ -1,5 +1,4 @@
 import React from 'react'
-import '../input/input.scss'
 
 export interface TextareaProps {
   placeholder: string

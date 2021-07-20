@@ -1,7 +1,5 @@
 import React from 'react'
 
-import './loading.scss'
-
 export interface LoadingProps {}
 
 export const Loading: React.FC<LoadingProps> = ({}) => (

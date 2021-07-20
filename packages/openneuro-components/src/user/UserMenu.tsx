@@ -2,9 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Dropdown } from '../dropdown/Dropdown'
 
-import '../dropdown/dropdown.scss'
-import './user-menu.scss'
-
 export interface UserMenuProps {
   profile: {
     name: string
