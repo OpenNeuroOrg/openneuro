@@ -116,6 +116,7 @@
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
       "^.+\\.(scss)$": "babel-jest",
       "openneuro-content": "<rootDir>/__mocks__/contentMock.js",
+      "@openneuro/components/(.+)": "<rootDir>../openneuro-components/src/$1",
       "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
     },
     "transformIgnorePatterns": [
