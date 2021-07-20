@@ -162,7 +162,6 @@
 .dataset-status.facet-accordion.on-accordion-wrapper {
   border-bottom: 0;
 }
-
 .search-nav .facet-accordion.modality-facet {
   margin: 20px 0;
   border: 0;
@@ -204,9 +203,7 @@
         border-top: 1px solid $newspaper;
 
         > .label {
-          display: inline-block;
-          margin-bottom: 10px;
-          padding: 10px 10px 0;
+          padding: 10px;
         }
       }
       .level-2 {

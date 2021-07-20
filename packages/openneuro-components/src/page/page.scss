@@ -1,4 +1,12 @@
+@import 'react-toastify/dist/ReactToastify.css';
+
 @import '../scss/variables';
+
+@import '../scss//normalize';
+@import '../scss//helper-classes';
+@import '../scss//flex-grid';
+@import '../scss//upload-modal';
+@import '../scss/toasts.scss';
 
 @import '../scss/global.scss';
 

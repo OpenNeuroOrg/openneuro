@@ -11867,7 +11867,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.0.4":
+"clsx@npm:^1.0.4, clsx@npm:^1.1.1":
   version: 1.1.1
   resolution: "clsx@npm:1.1.1"
   checksum: d8ae10ac0546da19fe8c9516886f6582a64a382cf4d09ea7d36d5287cafbdab1192ab249adc2cdf0310e0b0aeac4f4142cf7c738c98d9cb68c19ba24b6f673d5
@@ -28693,6 +28693,18 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-toastify@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "react-toastify@npm:7.0.4"
+  dependencies:
+    clsx: ^1.1.1
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 20e82333a0e1235853734e3d190a61473f8b58736a1249079dba8f35154a3465dbb074a9f90ebb18dc34b9dbbde54280d956c6e8a02dbf68e723cd9fb5325bb9
+  languageName: node
+  linkType: hard
+
 "react-transition-group@npm:^2.0.0, react-transition-group@npm:^2.2.1":
   version: 2.9.0
   resolution: "react-transition-group@npm:2.9.0"
@@ -30021,6 +30033,7 @@ resolve@^2.0.0-next.3:
     prettier: ^2.2.1
     react: ^17.0.1
     react-dom: ^17.0.1
+    react-toastify: ^7.0.4
     ts-jest: ^27.0.3
     tsc-watch: ^4.2.9
     typescript: 4.0.6
