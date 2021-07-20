@@ -26,7 +26,7 @@ const searchQuery = gql`
       datasetType: $datasetType
       datasetStatus: $datasetStatus
       sortBy: $sortBy
-      first: 25
+      first: 5
       after: $cursor
     ) {
       id

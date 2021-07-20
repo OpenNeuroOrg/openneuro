@@ -22,8 +22,23 @@ ReactDOM.render(
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
-        // @ts-expect-error
-        cache: new InMemoryCache().restore(JSON.parse(window.__APOLLO_STATE__)),
+        cache: new InMemoryCache({
+          typePolicies: {
+            DatasetConnection: {
+              fields: {
+                edges: {
+                  keyArgs: ['query', 'datasetType', 'datasetStatus', 'sortBy'],
+                  merge: (existing = [], incoming, options) => {
+                    console.log('MERGE: DatasetConnection')
+                    console.log({ existing, incoming }, options)
+                    return [...existing, ...incoming]
+                  },
+                },
+              },
+            },
+          },
+          // @ts-expect-error
+        }).restore(JSON.parse(window.__APOLLO_STATE__)),
       })}>
       <BrowserRouter>
         <Route component={analyticsWrapper(Index)} />
