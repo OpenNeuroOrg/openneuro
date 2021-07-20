@@ -1,7 +1,5 @@
 import React from 'react'
 
-import './accordion.scss'
-
 export interface AccordionWrapProps {
   children: React.ReactNode
   className?: string

@@ -2,7 +2,6 @@ import React from 'react'
 import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { RadioGroup } from '../radio/RadioGroup'
-import './facet.scss'
 
 export interface FacetRadioProps {
   // if radioArr is string[]

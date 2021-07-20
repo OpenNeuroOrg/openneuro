@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
 import SearchContainer from './search-container'
-import { portalContent } from '@openneuro/components'
+import { portalContent } from '@openneuro/components/mock-content'
 
 const SearchRoutes: FC = () => {
   const { path }: { path: string } = useRouteMatch()

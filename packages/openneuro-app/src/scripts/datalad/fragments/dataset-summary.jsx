@@ -59,83 +59,94 @@ class Summary extends React.PureComponent {
         tracerName,
         tracerRadionuclide
       if (summary.pet) {
-        bodyPart = (
-          <span>
-            <strong>
-              {' '}
-              {pluralize('Target', summary.pet.BodyPart?.length || 0)}:{' '}
-            </strong>
-            {summary.pet.BodyPart?.length ? (
-              summary.pet.BodyPart?.join(', ')
-            ) : (
-              <>&mdash;</>
-            )}
-          </span>
-        )
-        scannerManufacturer = (
-          <span>
-            <strong>
-              {' '}
-              {pluralize(
-                'Scanner Manufacturer',
-                summary.pet.ScannerManufacturer?.length || 0,
+        if (summary.pet.BodyPart) {
+          bodyPart = (
+            <span>
+              <strong>
+                {' '}
+                {pluralize('Target', summary.pet.BodyPart?.length || 0)}:{' '}
+              </strong>
+              {summary.pet.BodyPart?.length ? (
+                summary.pet.BodyPart?.join(', ')
+              ) : (
+                <>&mdash;</>
               )}
-              :{' '}
-            </strong>
-            {summary.pet.ScannerManufacturer?.length ? (
-              summary.pet.ScannerManufacturer?.join(', ')
-            ) : (
-              <>&mdash;</>
-            )}
-          </span>
-        )
-        scannerManufacturersModelName = (
-          <span>
-            <strong>
-              {' '}
-              {pluralize(
-                'Scanner Model',
-                summary.pet.ScannerManufacturersModelName?.length || 0,
+            </span>
+          )
+        }
+        if (summary.pet.ScannerManufacturer) {
+          scannerManufacturer = (
+            <span>
+              <strong>
+                {' '}
+                {pluralize(
+                  'Scanner Manufacturer',
+                  summary.pet.ScannerManufacturer?.length || 0,
+                )}
+                :{' '}
+              </strong>
+              {summary.pet.ScannerManufacturer?.length ? (
+                summary.pet.ScannerManufacturer?.join(', ')
+              ) : (
+                <>&mdash;</>
               )}
-              :{' '}
-            </strong>
-            {summary.pet.ScannerManufacturersModelName?.length ? (
-              summary.pet.ScannerManufacturersModelName?.join(', ')
-            ) : (
-              <>&mdash;</>
-            )}
-          </span>
-        )
-        tracerName = (
-          <span>
-            <strong>
-              {' '}
-              {pluralize('Tracer', summary.pet.TracerName?.length) || 0}:{' '}
-            </strong>
-            {summary.pet.TracerName?.length ? (
-              summary.pet.TracerName?.join(', ')
-            ) : (
-              <>&mdash;</>
-            )}
-          </span>
-        )
-        tracerRadionuclide = (
-          <span>
-            <strong>
-              {' '}
-              {pluralize(
-                'Radionuclide',
-                summary.pet.TracerRadionuclide?.length || 0,
+            </span>
+          )
+        }
+        if (summary.pet.ScannerManufacturersModelName) {
+          scannerManufacturersModelName = (
+            <span>
+              <strong>
+                {' '}
+                {pluralize(
+                  'Scanner Model',
+                  summary.pet.ScannerManufacturersModelName?.length || 0,
+                )}
+                :{' '}
+              </strong>
+              {summary.pet.ScannerManufacturersModelName?.length ? (
+                summary.pet.ScannerManufacturersModelName?.join(', ')
+              ) : (
+                <>&mdash;</>
               )}
-              :{' '}
-            </strong>
-            {summary.pet.TracerRadionuclide?.length ? (
-              summary.pet.TracerRadionuclide?.join(', ')
-            ) : (
-              <>&mdash;</>
-            )}
-          </span>
-        )
+            </span>
+          )
+        }
+        if (summary.pet.TracerName) {
+          tracerName = (
+            <span>
+              <strong>
+                {' '}
+                {pluralize('Radiotracer', summary.pet.TracerName?.length) ||
+                  0}:{' '}
+              </strong>
+              {summary.pet.TracerName?.length ? (
+                summary.pet.TracerName?.join(', ')
+              ) : (
+                <>&mdash;</>
+              )}
+            </span>
+          )
+        }
+        if (summary.pet.TracerRadionuclide) {
+          tracerRadionuclide = (
+            <span>
+              <strong>
+                {' '}
+                {pluralize(
+                  'Radionuclide',
+                  summary.pet.TracerRadionuclide?.length || 0,
+                )}
+                :{' '}
+              </strong>
+              {summary.pet.TracerRadionuclide?.length ? (
+                summary.pet.TracerRadionuclide?.join(', ')
+              ) : (
+                <>&mdash;</>
+              )}
+            </span>
+          )
+        }
       }
 
       //check for pet in modalities array

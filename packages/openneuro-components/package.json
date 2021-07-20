@@ -6,7 +6,8 @@
   "browser": "src/index.js",
   "exports": {
     ".": "./src/index.ts",
-    "./page/page.scss": "./src/page/page.scss"
+    "./page/page.scss": "./src/page/page.scss",
+    "./*": "./src/*/index.ts"
   },
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",

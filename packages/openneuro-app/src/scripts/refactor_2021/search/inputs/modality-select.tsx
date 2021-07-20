@@ -2,7 +2,7 @@ import React, { FC, useContext } from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { SearchParams, flattenedModalities } from '../initial-search-params'
-import { FacetSelect } from '@openneuro/components'
+import { FacetSelect } from '@openneuro/components/facets'
 
 interface ModalitySelectProps {
   startOpen?: boolean

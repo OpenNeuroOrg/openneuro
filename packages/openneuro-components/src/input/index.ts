@@ -1,2 +1,3 @@
-export * from './Input'
-export * from './TermSearch'
+import { Input } from './Input'
+import { TermSearch } from './TermSearch'
+export { Input, TermSearch }

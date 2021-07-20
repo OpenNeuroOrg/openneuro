@@ -1,7 +1,5 @@
 import React from 'react'
 
-import './icon.scss'
-
 export interface IconProps {
   primary?: boolean
   secondary?: boolean
@@ -36,7 +34,7 @@ export const Icon: React.FC<IconProps> = ({
     <i style={{ fontSize: iconSize }} className={icon}></i>
   ) : null
   const imgIcon = imgSrc ? (
-    <img style={{ width: iconSize }} src={imgSrc} alt="" />
+    <img style={{ width: iconSize }} src={imgSrc} alt="" loading="lazy" />
   ) : null
   const wBackgroundColor = backgroundColor ? 'has-bg-color' : null
 

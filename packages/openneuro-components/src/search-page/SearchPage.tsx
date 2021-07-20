@@ -2,8 +2,6 @@ import React from 'react'
 import { ModalityHeader } from './ModalityHeader'
 import { CommunityHeader } from './CommunityHeader'
 
-import './search-page.scss'
-
 export interface SearchPageProps {
   portalContent?: Record<string, any>
   renderSearchFacets: () => React.ReactNode

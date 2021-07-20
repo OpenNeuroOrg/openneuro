@@ -1,7 +1,8 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { SearchParamsCtx, removeFilterItem } from '../../search-params-ctx'
-import { FacetSearch, Icon } from '@openneuro/components'
+import { FacetSearch } from '@openneuro/components/facets'
+import { Icon } from '@openneuro/components/icon'
 
 const TracerNamesInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -20,7 +21,7 @@ const TracerNamesInput: FC = () => {
   return (
     <FacetSearch
       accordionStyle="plain"
-      label="Tracer"
+      label="Radiotracers"
       startOpen={false}
       className="search-authors"
       type="text"

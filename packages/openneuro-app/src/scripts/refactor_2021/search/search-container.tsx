@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom'
 import {
   SearchPage,
   SearchResultsList,
-  Button,
-  Loading,
-} from '@openneuro/components'
+} from '@openneuro/components/search-page'
+import { Button } from '@openneuro/components/button'
+import { Loading } from '@openneuro/components/loading'
 import {
   KeywordInput,
   ModalitySelect,
@@ -146,12 +146,16 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <SectionSelect />
           <StudyDomainInput />
           {(portalContent === undefined ||
-            portalContent.modality === 'PET') && (
+            portalContent?.modality === 'PET') && (
+            <>
+              <TracerNames />
+            </>
+          )}
+          {portalContent?.modality === 'PET' && (
             <>
               <BodyPartsInput />
               <ScannerManufacturers />
               <ScannerManufacturersModelNames />
-              <TracerNames />
               <TracerRadionuclides />
             </>
           )}

@@ -1,5 +1,4 @@
 import React from 'react'
-import './button.scss'
 
 export type ButtonPropsSize = 'xsmall' | 'small' | 'medium' | 'large'
 

@@ -6,15 +6,13 @@ import { Mutation } from '@apollo/client/react/components'
 import {
   FrontPage,
   AffiliateBlock,
-  ActivitySlider,
   ActivityHeader,
   Contributors,
   GetUpdates,
   Infographic,
-  RecentData,
-  TopViewed,
-  Loading,
-} from '@openneuro/components'
+} from '@openneuro/components/front-page'
+import { Loading } from '@openneuro/components/loading'
+import { ActivitySlider } from '@openneuro/components/activity-slider'
 
 const SUBSCRIBE_TO_NEWSLETTER = gql`
   mutation subscribeToNewsletter($email: String!) {

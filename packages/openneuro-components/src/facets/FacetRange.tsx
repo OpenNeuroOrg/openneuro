@@ -2,7 +2,6 @@ import React from 'react'
 import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { TwoHandleRange } from '../range/TwoHandleRange'
-import './facet.scss'
 
 export interface FacetRangeProps {
   accordionStyle: AccordionTabStyle

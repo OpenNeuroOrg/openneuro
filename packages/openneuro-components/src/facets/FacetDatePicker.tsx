@@ -3,7 +3,6 @@ import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
 
-import './facet.scss'
 import { Icon } from '../icon/Icon'
 
 export interface FacetDatePickerProps {

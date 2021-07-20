@@ -1,11 +1,13 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
-import { Header, LandingExpandedHeader } from '@openneuro/components'
+import UploaderContext from '../../uploader/uploader-context.js'
+import UploadProgress from '../../uploader/upload-progress.jsx'
+import { Header, LandingExpandedHeader } from '@openneuro/components/header'
+import { Input } from '@openneuro/components/input'
 import ModalitySelect from '../search/inputs/modality-select'
 import { SearchParamsCtx } from '../search/search-params-ctx'
 import initialSearchParams from '../search/initial-search-params'
 import { UserModalOpenCtx } from '../user-login-modal-ctx'
-import { Input } from '@openneuro/components'
 import { useLocation, useHistory } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import signOut from '../authentication/signOut'
@@ -13,6 +15,7 @@ import { getUnexpiredProfile } from '../authentication/profile'
 import FreshdeskWidget from '../freshdesk-widget'
 import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
 import loginUrls from '../authentication/loginUrls'
+import UploaderView from '../uploader/uploader-view.jsx'
 
 const HeaderContainer: FC = () => {
   const history = useHistory()
@@ -61,51 +64,67 @@ const HeaderContainer: FC = () => {
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
 
   return (
-    <Header
-      isOpenSupport={isOpenSupport}
-      isOpenUpload={isOpenUpload}
-      toggleLoginModal={toggleLoginModal}
-      signOutAndRedirect={signOutAndRedirect}
-      toggleSupport={toggleSupport}
-      toggleUpload={toggleUpload}
-      profile={profile}
-      expanded={expanded}
-      renderOnFreshDeskWidget={() => <FreshdeskWidget />}
-      renderOnExpanded={profile => (
-        <LandingExpandedHeader
-          user={profile}
-          loginUrls={loginUrls}
-          renderAggregateCounts={(modality: string) => (
-            <AggregateCountsContainer modality={modality} />
-          )}
-          renderFacetSelect={() => (
-            <ModalitySelect
-              startOpen={false}
-              label="Browse by Modalities"
-              dropdown={true}
-            />
-          )}
-          renderSearchInput={() => (
-            <Input
-              placeholder="Search"
-              type="text"
-              name="front-page-search"
-              labelStyle="default"
-              value={newKeyword}
-              setValue={setNewKeyword}
-              onKeyDown={e => {
-                if (e.keyCode === 13) {
-                  handleSubmit()
-                }
-              }}
-            />
-          )}
-          onSearch={() => {
-            handleSubmit()
-          }}
-        />
-      )}
-    />
+    <>
+      <UploaderContext.Consumer>
+        {uploader => {
+          if (uploader?.uploading) {
+            return (
+              <span className="header-progress-wrap">
+                <UploadProgress progress={uploader.progress} />
+              </span>
+            )
+          } else {
+            return
+          }
+        }}
+      </UploaderContext.Consumer>
+      <Header
+        isOpenSupport={isOpenSupport}
+        isOpenUpload={isOpenUpload}
+        toggleLoginModal={toggleLoginModal}
+        signOutAndRedirect={signOutAndRedirect}
+        toggleSupport={toggleSupport}
+        toggleUpload={toggleUpload}
+        profile={profile}
+        expanded={expanded}
+        renderUploader={() => <UploaderView />}
+        renderOnFreshDeskWidget={() => <FreshdeskWidget />}
+        renderOnExpanded={profile => (
+          <LandingExpandedHeader
+            user={profile}
+            loginUrls={loginUrls}
+            renderAggregateCounts={(modality: string) => (
+              <AggregateCountsContainer modality={modality} />
+            )}
+            renderFacetSelect={() => (
+              <ModalitySelect
+                startOpen={false}
+                label="Browse by Modalities"
+                dropdown={true}
+              />
+            )}
+            renderSearchInput={() => (
+              <Input
+                placeholder="Search"
+                type="text"
+                name="front-page-search"
+                labelStyle="default"
+                value={newKeyword}
+                setValue={setNewKeyword}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) {
+                    handleSubmit()
+                  }
+                }}
+              />
+            )}
+            onSearch={() => {
+              handleSubmit()
+            }}
+          />
+        )}
+      />
+    </>
   )
 }
 

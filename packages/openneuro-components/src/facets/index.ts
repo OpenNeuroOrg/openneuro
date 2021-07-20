@@ -1,7 +1,8 @@
-export * from './FacetSelect'
-export * from './FacetRadio'
-export * from './FacetRange'
-export * from './FacetSearch'
+import { FacetSelect } from './FacetSelect'
+import { FacetRadio } from './FacetRadio'
+import { FacetRange } from './FacetRange'
+import { FacetSearch } from './FacetSearch'
+export { FacetSelect, FacetRadio, FacetRange, FacetSearch }
 
 // export * from './FacetDatePicker'
 

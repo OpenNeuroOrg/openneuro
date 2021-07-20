@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 //import Dataset from './dataset/draft-snapshot-routes'
 import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
-import { FAQS } from '@openneuro/components'
+import { FAQS } from '@openneuro/components/faqs'
 import FrontPageContainer from './containers/front-page-container'
 import Admin from './admin/admin'
 import SearchRoutes from './search/search-routes'

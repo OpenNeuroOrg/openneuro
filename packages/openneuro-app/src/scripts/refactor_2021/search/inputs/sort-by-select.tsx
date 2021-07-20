@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
-import { SearchSort } from '@openneuro/components'
+import { SearchSort } from '@openneuro/components/search-page'
 
 const SortBySelect: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

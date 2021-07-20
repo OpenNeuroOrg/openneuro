@@ -1,13 +1,24 @@
-export * from './MetaDataBlock'
-export * from './BrainLifeButton'
-export * from './ValidationBlock'
-export * from './CloneDropdown'
-export * from './DatasetHeader'
-export * from './DatasetAlert'
-export * from './DatasetHeaderMeta'
-export * from './DatasetPage'
-export * from './DatasetGitAccess'
-
-/* TEMPORARY EXPORTS */
+import { MetaDataBlock } from './MetaDataBlock'
+import { BrainLifeButton } from './BrainLifeButton'
+import { ValidationBlock } from './ValidationBlock'
+import { CloneDropdown } from './CloneDropdown'
+import { DatasetHeader } from './DatasetHeader'
+import { DatasetAlert } from './DatasetAlert'
+import { DatasetHeaderMeta } from './DatasetHeaderMeta'
+import { DatasetPage } from './DatasetPage'
+import { DatasetGitAccess } from './DatasetGitAccess'
 // TODO: remove
-export * from './VersionListContainerExample'
+import { VersionListContainerExample } from './VersionListContainerExample'
+
+export {
+  MetaDataBlock,
+  BrainLifeButton,
+  ValidationBlock,
+  CloneDropdown,
+  DatasetHeader,
+  DatasetAlert,
+  DatasetHeaderMeta,
+  DatasetPage,
+  DatasetGitAccess,
+  VersionListContainerExample,
+}

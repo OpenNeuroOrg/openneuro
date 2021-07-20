@@ -10,6 +10,7 @@ volumes:
   dist_components:
   dist_indexer:
   dist_server:
+  typescript_build_cache:
 
 services:
   # This dummy service provides shared configuration for all Node deps
@@ -24,13 +25,13 @@ services:
       retries: 60
     tmpfs:
       - /watch
-      - /srv/.build-cache:exec
     volumes:
-      - ./:/srv
+      - ./:/srv:cached
+      - typescript_build_cache:/srv/.build-cache
       - node_deps:/srv/.yarn
-      - ./.yarn/releases:/srv/.yarn/releases
-      - ./.yarn/plugins:/srv/.yarn/plugins
-      - dist:/src/dist
+      - ./.yarn/releases:/srv/.yarn/releases:cached
+      - ./.yarn/plugins:/srv/.yarn/plugins:cached
+      - dist:/srv/dist
       - dist_app:/srv/packages/openneuro-app/dist
       - dist_cli:/srv/packages/openneuro-cli/dist
       - dist_client:/srv/packages/openneuro-client/dist
@@ -43,8 +44,12 @@ services:
     extends:
       service: node
     command: bash -c 'yarn workspace @openneuro/app start'
+    healthcheck:
+      test: curl -f http://localhost/robots.txt || exit 1
+      interval: 5s
+      retries: 10
     ports:
-      - '8145:8145'
+      # HMR port
       - '9992:9992'
     environment:
       - NODE_ENV=development
@@ -85,18 +90,18 @@ services:
         condition: service_started
       node:
         condition: service_healthy
+      app:
+        condition: service_healthy
 
   # mongodb
   mongo:
     image: mongo:4.0
     volumes:
-      - ${PERSISTENT_DIR}/mongo:/data/db
+      - ${PERSISTENT_DIR}/mongo:/data/db:delegated
 
   # Redis
   redis:
     image: redis:alpine
-    volumes:
-      - ${PERSISTENT_DIR}/redis:/data
 
   # datalad Python backend
   datalad:
@@ -104,7 +109,7 @@ services:
       context: services/datalad
       target: base
     volumes:
-      - ${PERSISTENT_DIR}/datalad:/datalad
+      - ${PERSISTENT_DIR}/datalad:/datalad:delegated
       - ./services/datalad/datalad_service:/datalad_service:delegated
     env_file: ./config.env
     init: true
@@ -146,6 +151,8 @@ services:
         condition: service_healthy
       datalad:
         condition: service_healthy
+      app:
+        condition: service_healthy
 
   storybook:
     extends:
@@ -157,6 +164,8 @@ services:
       - NODE_ENV=development
     depends_on:
       node:
+        condition: service_healthy
+      app:
         condition: service_healthy
 
   elasticsearch:

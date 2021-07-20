@@ -1,7 +1,6 @@
 import React from 'react'
 import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
 import { AccordionWrap } from '../accordion/AccordionWrap'
-import './facet.scss'
 
 export type FacetSelectValueType =
   | { label: string; value: string }

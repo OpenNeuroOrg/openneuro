@@ -4,7 +4,6 @@ import { AccordionWrap } from '../accordion/AccordionWrap'
 import { TermSearch } from '../input/TermSearch'
 import { ButtonPropsSize } from '../button/Button'
 import { InputPropsStyle } from '../input/Input'
-import './facet.scss'
 
 export interface FacetSearchProps {
   accordionStyle: AccordionTabStyle

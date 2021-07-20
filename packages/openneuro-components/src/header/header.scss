@@ -1,8 +1,10 @@
-@import '../scss/variables';
+// @import '../scss/variables';
 header {
   position: relative;
 }
-
+.navbar-brand {
+  max-width: 100%;
+}
 .navbar-inner-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -17,7 +19,7 @@ header {
   );
 
   position: relative;
-  z-index: 100;
+  z-index: 4;
 
   @media (max-width: 800px) {
     display: flex;
@@ -58,6 +60,9 @@ header {
     padding: 0;
     display: flex;
     justify-content: space-between;
+    @media (max-width: 450px) {
+      flex-wrap: wrap;
+    }
     li {
       margin: 0 10px -10px;
       text-align: center;
@@ -65,13 +70,18 @@ header {
       display: flex;
       flex-direction: column;
       align-items: center;
+      @media (max-width: 800px) {
+        margin-bottom: 20px;
+      }
       a,
-      span {
+      .no-a {
         color: #f4f4f4;
         text-decoration: none;
         font-size: 14px;
         text-transform: uppercase;
         font-weight: 600;
+        .upload-progress-block {
+        }
 
         &:after {
           transition: width 0.5s;
@@ -119,6 +129,12 @@ header {
 .navbar-account {
   display: flex;
   justify-content: flex-end;
+  @media (max-width: 800px) {
+    margin-top: 20px;
+    .on-button--large.on-button--navbar {
+      padding: 10px;
+    }
+  }
 }
 
 .expaned-header {
@@ -140,12 +156,25 @@ header {
 .sign-in-modal-content {
   display: flex;
   justify-content: space-between;
+  @media (max-width: 450px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   > div {
     flex-basis: 50%;
     max-width: 50%;
     margin: 0 10px 0 0;
     &:last-child {
       margin: 0 0 0 10px;
+    }
+    @media (max-width: 450px) {
+      margin: 0 0 20px;
+      flex-basis: 100%;
+      min-width: 100%;
+      &:last-child {
+        margin-left: 0;
+      }
     }
   }
   button {
@@ -161,10 +190,17 @@ header {
   > div {
     margin-right: 60px;
   }
-  .hero-sigin-label h3 {
-    font-size: 18px;
-    color: #fff;
-    margin: 0;
+  .hero-sigin-label {
+    @media (max-width: 800px) {
+      flex-basis: 100%;
+      min-width: 100%;
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-size: 18px;
+      color: #fff;
+      margin: 0;
+    }
   }
 }
 
@@ -173,6 +209,9 @@ header {
     flex-basis: 100%;
     width: 100%;
     min-width: 100%;
+  }
+  @media (max-width: 450px) {
+    padding: 0;
   }
 }
 
@@ -234,6 +273,17 @@ header {
       }
     }
   }
+  @media (max-width: 450px) {
+    .expaned-h-left,
+    .cube-wrap {
+      .header-aggregate .aggregate-count {
+        font-size: 15px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+    }
+  }
 }
 
 .header-input-wrap {
@@ -272,18 +322,33 @@ header {
 .header-modality-wrap {
   width: 90%;
   margin: 60px 0 20px;
+  z-index: 1;
   @media (max-width: 1250px) {
     max-width: 100%;
     width: 100%;
   }
-  .facet-accordion.on-accordion-wrapper .accordion-title {
-    padding: 15px 0;
+  .facet-accordion.on-accordion-wrapper {
+    .accordion-title {
+      padding: 15px 0;
+    }
+
+    @media (max-width: 450px) {
+      .level-1 > li {
+        > span.label {
+          padding: 10px 5px;
+        }
+      }
+      .level-2 > li:before {
+        display: none;
+      }
+    }
   }
 }
 
 .freshdesk-support {
   .modal {
-    min-width: 770px;
+    width: 770px;
+    max-width: 100%;
   }
   .modal-body {
     margin-top: 30px;

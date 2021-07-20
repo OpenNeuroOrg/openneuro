@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
-import { FacetSelect } from '@openneuro/components'
+import { FacetSelect } from '@openneuro/components/facets'
 
 const SectionSelect: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

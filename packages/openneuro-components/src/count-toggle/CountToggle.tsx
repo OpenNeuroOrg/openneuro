@@ -1,5 +1,4 @@
 import React from 'react'
-import './count-toggle.scss'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
 
