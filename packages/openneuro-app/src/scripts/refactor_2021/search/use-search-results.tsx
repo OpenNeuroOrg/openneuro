@@ -11,7 +11,7 @@ import {
   sqsJoinWithAND,
   joinWithOR,
 } from './es-query-builders'
-import { species_list } from '@openneuro/components'
+import { species_list } from '@openneuro/components/mock-content'
 
 const searchQuery = gql`
   query advancedSearchDatasets(
