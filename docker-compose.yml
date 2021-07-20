@@ -44,8 +44,12 @@ services:
     extends:
       service: node
     command: bash -c 'yarn workspace @openneuro/app start'
+    healthcheck:
+      test: curl -f http://localhost/robots.txt || exit 1
+      interval: 5s
+      retries: 10
     ports:
-      - '8145:8145'
+      # HMR port
       - '9992:9992'
     environment:
       - NODE_ENV=development
@@ -86,6 +90,8 @@ services:
         condition: service_started
       node:
         condition: service_healthy
+      app:
+        condition: service_healthy
 
   # mongodb
   mongo:
@@ -103,7 +109,7 @@ services:
       context: services/datalad
       target: base
     volumes:
-      - ${PERSISTENT_DIR}/datalad:/datalad
+      - ${PERSISTENT_DIR}/datalad:/datalad:delegated
       - ./services/datalad/datalad_service:/datalad_service:delegated
     env_file: ./config.env
     init: true
@@ -145,6 +151,8 @@ services:
         condition: service_healthy
       datalad:
         condition: service_healthy
+      app:
+        condition: service_healthy
 
   storybook:
     extends:
@@ -156,6 +164,8 @@ services:
       - NODE_ENV=development
     depends_on:
       node:
+        condition: service_healthy
+      app:
         condition: service_healthy
 
   elasticsearch:
