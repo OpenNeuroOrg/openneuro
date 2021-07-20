@@ -261,25 +261,19 @@ export const useSearchResults = () => {
       )
   }
 
-  let sortField = 'created',
-    order = 'desc'
-  switch (sortBy_selected.label) {
-    case 'Activity':
-      // TODO: figure this out
-      break
-    case 'A-Z':
-      order = 'asc'
-    case 'Z-A':
-      sortField = 'latestSnapshot.description.Name.keyword'
-      break
-    case 'Oldest':
-      order = 'asc'
-      break
-    default:
-      // Newest
-      break
+  let sortBy
+  if (sortBy_selected.label === 'Relevance') {
+    // If filters are set, sort by relevance (default sort),
+    //   otherwise, sort from newest to oldest
+    sortBy = boolQuery.isEmpty() ? { created: 'desc' } : null
+  } else if (sortBy_selected.label === 'Newest') {
+    sortBy = { created: 'desc' }
+  } else if (sortBy_selected.label === 'Oldest') {
+    sortBy = { created: 'asc' }
+  } else if (sortBy_selected.label === 'Activity') {
+    // TODO: figure out
+    sortBy = { 'analytics.downloads': 'desc' }
   }
-  const sortBy = { [sortField]: order }
 
   return useQuery(searchQuery, {
     variables: {
