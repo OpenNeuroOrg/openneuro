@@ -12,6 +12,7 @@ import Snapshot from './snapshot.jsx'
 import FileDisplay from './file-display.jsx'
 import AddMetadata from '../mutations/add-metadata.jsx'
 import DeletePage from '../dataset/delete-page'
+import FourOFourPage from '../../errors/404page'
 
 const stubComponent = () => null
 
@@ -138,6 +139,16 @@ const DatasetRoutes = ({ dataset, error }) => {
         exact
         path="/datasets/:datasetId/delete"
         component={() => <DeletePage dataset={dataset} />}
+      />
+      <Route
+        path="*"
+        component={() => (
+          <FourOFourPage
+            redirectRoute={`/datasets/${dataset.id}`}
+            redirectRouteName="the dataset page"
+            theme="dataset"
+          />
+        )}
       />
     </Switch>
   )
