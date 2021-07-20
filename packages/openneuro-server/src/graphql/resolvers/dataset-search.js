@@ -3,6 +3,7 @@ import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
 import Permission from '../../models/permission'
+import { hashObject } from '../../libs/authentication/crypto'
 import { states } from '../permissions.js'
 
 const elasticIndex = 'datasets'
@@ -38,6 +39,7 @@ export const decodeCursor = cursor =>
  */
 export const elasticRelayConnection = async (
   { body },
+  id,
   childResolvers = { dataset },
   user = null,
   userInfo = null,
@@ -45,6 +47,7 @@ export const elasticRelayConnection = async (
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[body.hits.hits.length - 1]
   return {
+    id,
     edges: body.hits.hits.map(hit => {
       const node = childResolvers.dataset(
         null,
@@ -78,6 +81,7 @@ export const datasetSearchConnection = async (
   obj,
   { q, after, first = 25 },
 ) => {
+  const searchId = hashObject({ q })
   const requestBody = {
     sort: [{ _score: 'asc', 'id.keyword': 'desc' }],
   }
@@ -94,7 +98,7 @@ export const datasetSearchConnection = async (
     q: `${q} AND public:true`,
     body: requestBody,
   })
-  return elasticRelayConnection(result)
+  return elasticRelayConnection(result, searchId)
 }
 
 export const datasetSearch = {
@@ -188,6 +192,7 @@ export const advancedDatasetSearchConnection = async (
   { query, datasetType, datasetStatus, sortBy, after, first = 25 },
   { user, userInfo },
 ) => {
+  const searchId = hashObject({ query, datasetType, datasetStatus, sortBy })
   const sort = [{ _score: 'asc' }, { id: 'desc' }]
   if (sortBy) sort.unshift(sortBy)
   const requestBody = {
@@ -206,7 +211,7 @@ export const advancedDatasetSearchConnection = async (
     size: first,
     body: requestBody,
   })
-  return elasticRelayConnection(result, undefined, user, userInfo)
+  return elasticRelayConnection(result, searchId, undefined, user, userInfo)
 }
 
 export const advancedDatasetSearch = {

@@ -296,6 +296,8 @@ export const typeDefs = `
 
   # Connection for a list of datasets
   type DatasetConnection {
+    # A hash of the non-pagination search params
+    id: String!
     # A list of dataset edges
     edges: [DatasetEdge]
     # Pagination metadata

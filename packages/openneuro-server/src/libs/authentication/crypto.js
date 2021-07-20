@@ -36,3 +36,6 @@ export const decrypt = encryptedPackage => {
     decipher.update(encryptedText, 'hex', 'utf8') + decipher.final('utf8')
   return decryptedText
 }
+
+export const hashObject = object =>
+  crypto.createHash('sha1').update(JSON.stringify(object)).digest('hex')
