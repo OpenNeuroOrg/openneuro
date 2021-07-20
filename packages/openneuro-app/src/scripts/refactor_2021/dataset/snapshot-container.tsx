@@ -8,10 +8,6 @@ import parseISO from 'date-fns/parseISO'
 import Validation from '../validation/validation.jsx'
 
 import {
-  Icon,
-  Tooltip,
-  Modal,
-  ReadMore,
   MetaDataBlock,
   BrainLifeButton,
   ValidationBlock,
@@ -19,11 +15,15 @@ import {
   DatasetHeader,
   DatasetAlert,
   DatasetHeaderMeta,
-  CountToggle,
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
-} from '@openneuro/components'
+} from '@openneuro/components/dataset'
+import { Modal } from '@openneuro/components/modal'
+import { Icon } from '@openneuro/components/icon'
+import { Tooltip } from '@openneuro/components/tooltip'
+import { ReadMore } from '@openneuro/components/read-more'
+import { CountToggle } from '@openneuro/components/count-toggle'
 
 export interface SnapshotContainerProps {
   dataset

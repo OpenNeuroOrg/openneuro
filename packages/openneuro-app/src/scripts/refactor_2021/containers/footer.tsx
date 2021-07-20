@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { Footer } from '@openneuro/components'
+import { Footer } from '@openneuro/components/footer'
 import { version as openneuroVersion } from '../../../lerna.json'
 
 const FooterContainer: FC = () => {

@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
-import { FacetRadio } from '@openneuro/components'
+import { FacetRadio } from '@openneuro/components/facets'
 
 const GenderRadios: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

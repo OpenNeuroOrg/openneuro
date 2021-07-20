@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import initialSearchParams from '../initial-search-params'
-import { FacetRange } from '@openneuro/components'
+import { FacetRange } from '@openneuro/components/facets'
 
 const SubjectCountRangeInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
