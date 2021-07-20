@@ -2,21 +2,35 @@ import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 
-const Container = styled.div({
-  margin: '50px 25px',
+type ContainerProps = {
+  styleContext: string
+}
+const Container = styled.div<ContainerProps>(({ styleContext }) => {
+  switch (styleContext) {
+    case 'topLevel':
+      return {
+        margin: '50px 25px',
+      }
+    case 'dataset':
+      return {
+        margin: '20px 0',
+      }
+  }
 })
 
 interface FourOFourPageProps {
   redirectRoute?: string
   redirectRouteName?: string
+  theme?: string
 }
 
 const FourOFourPage: FC<FourOFourPageProps> = ({
   redirectRoute = '/',
   redirectRouteName = 'the home page',
+  theme = 'topLevel',
 }) => {
   return (
-    <Container>
+    <Container styleContext={theme}>
       <h3>404: The page you are looking for does not exist.</h3>
       <p>
         Click <Link to={redirectRoute}>here</Link> to go to

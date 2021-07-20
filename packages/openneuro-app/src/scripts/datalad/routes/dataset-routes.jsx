@@ -146,6 +146,7 @@ const DatasetRoutes = ({ dataset, error }) => {
           <FourOFourPage
             redirectRoute={`/datasets/${dataset.id}`}
             redirectRouteName="the dataset page"
+            theme="dataset"
           />
         )}
       />
