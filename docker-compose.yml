@@ -31,7 +31,7 @@ services:
       - node_deps:/srv/.yarn
       - ./.yarn/releases:/srv/.yarn/releases:cached
       - ./.yarn/plugins:/srv/.yarn/plugins:cached
-      - dist:/src/dist
+      - dist:/srv/dist
       - dist_app:/srv/packages/openneuro-app/dist
       - dist_cli:/srv/packages/openneuro-cli/dist
       - dist_client:/srv/packages/openneuro-client/dist
