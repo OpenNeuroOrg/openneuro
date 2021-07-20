@@ -214,7 +214,7 @@ export const FiltersBlock = ({
         )}
         {tracerNames && (
           <TermListItem
-            type="Tracer"
+            type="Radiotracers"
             item={{ param: 'tracerNames', values: tracerNames }}
             removeFilterItem={removeFilterItem()}
           />
