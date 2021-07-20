@@ -29,9 +29,6 @@ export const dataset = async (obj, { id }, { user, userInfo }) => {
 }
 
 export const datasets = (parent, args, { user, userInfo }) => {
-  console.log('* * * * *')
-  console.log('datasets resolver')
-  console.log('* * * * *')
   if (user) {
     return datalad.getDatasets({
       ...args,
@@ -89,8 +86,6 @@ export const createDataset = (
   { affirmedDefaced, affirmedConsent },
   { user, userInfo },
 ) => {
-  console.log('PRE IF/ELSE')
-  console.log({ user, userInfo })
   // Check for a valid login
   if (user) {
     if (affirmedDefaced || affirmedConsent) {
@@ -104,7 +99,6 @@ export const createDataset = (
       )
     }
   } else {
-    console.log('IN ELSE')
     throw new Error('You must be logged in to create a dataset.')
   }
 }
