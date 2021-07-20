@@ -29,6 +29,9 @@ export const dataset = async (obj, { id }, { user, userInfo }) => {
 }
 
 export const datasets = (parent, args, { user, userInfo }) => {
+  console.log('* * * * *')
+  console.log('datasets resolver')
+  console.log('* * * * *')
   if (user) {
     return datalad.getDatasets({
       ...args,

@@ -12,6 +12,7 @@
         "latestSnapshotCreatedAt": { "type": "date" },
         "ages": { "type": "float" },
         "modalities": { "type": "keyword" },
+        "secondaryModalities": { "type": "keyword" },
         "datasetId": { "type": "keyword" },
         "dxStatus": { "type": "keyword" },
         "trialCount": { "type": "long" },
