@@ -59,6 +59,7 @@ const searchQuery = gql`
             id
             summary {
               modalities
+              secondaryModalities
               sessions
               subjects
               subjectMetadata {
