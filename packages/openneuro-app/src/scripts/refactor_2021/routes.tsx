@@ -13,6 +13,7 @@ import APIKey from '../user/api.jsx'
 import ErrorRoute from '../errors/errorRoute'
 import PETDummy from '../pet/dummy'
 import Citation from '../pages/citation-page'
+import FourOFourPage from '../errors/404page'
 
 const Routes = () => (
   <Switch>
@@ -29,6 +30,7 @@ const Routes = () => (
     <Route name="error" path="/error" component={ErrorRoute} />
     <Route name="pet-landing" path="/pet" component={PETDummy} />
     <Route name="citation" path="/cite" component={Citation} />
+    <Route path="*" component={() => <FourOFourPage />} />
     <Redirect from="/public" to="/search" />
     <Redirect from="/saved" to="/search?bookmarks" />
     <Redirect from="/dashboard" to="/search?mydatasets" />

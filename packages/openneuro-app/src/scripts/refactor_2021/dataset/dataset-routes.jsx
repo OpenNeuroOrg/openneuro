@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import AdminDataset from '../../datalad/routes/admin-datalad.jsx'
 import AdminExports from '../../datalad/routes/admin-exports.jsx'
-
-import DatasetContent from '../../datalad/routes/dataset-content.jsx'
-import SnapshotContent from '../../datalad/routes/snapshot-content.jsx'
 
 import SnapshotContainer from './snapshot-container'
 import DownloadDataset from '../../datalad/download/download-dataset.jsx'
