@@ -289,6 +289,10 @@ export const getDatasets = options => {
   } else if (options?.indexing) {
     return connection([])
   } else {
+    if (options?.myDatasets) {
+      // Return zero datasets for anonymous "myDatasets" request
+      return connection(filter({ id: false }))
+    }
     // Anonymous request implies public datasets only
     const match = { public: true }
     // Anonymous requests can be cached

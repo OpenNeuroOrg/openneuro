@@ -56,33 +56,28 @@ const loadMoreRows = (data, fetchMore) => {
   return () => loadMoreInner(data.datasets.pageInfo.endCursor)
 }
 
-export const datasetQueryDisplay = (isPublic, isSaved) => ({
-  loading,
-  data,
-  fetchMore,
-  refetch,
-  variables,
-  error = null,
-}) => {
-  return (
-    <DatasetTab
-      loading={loading}
-      data={data}
-      error={error}
-      loadMoreRows={
-        loading
-          ? () => {
-              /* No op while loading */
-            }
-          : loadMoreRows(data, fetchMore)
-      }
-      refetch={refetch}
-      queryVariables={variables}
-      publicDashboard={isPublic}
-      savedDashboard={isSaved}
-    />
-  )
-}
+export const datasetQueryDisplay =
+  (isPublic, isSaved) =>
+  ({ loading, data, fetchMore, refetch, variables, error = null }) => {
+    return (
+      <DatasetTab
+        loading={loading}
+        data={data}
+        error={error}
+        loadMoreRows={
+          loading
+            ? () => {
+                /* No op while loading */
+              }
+            : loadMoreRows(data, fetchMore)
+        }
+        refetch={refetch}
+        queryVariables={variables}
+        publicDashboard={isPublic}
+        savedDashboard={isSaved}
+      />
+    )
+  }
 
 const DatasetQuery = ({ public: isPublic, saved: isSaved }) => (
   <ErrorBoundary subject="Error loading dashboard">
@@ -92,7 +87,9 @@ const DatasetQuery = ({ public: isPublic, saved: isSaved }) => (
         filterBy: { public: isPublic, starred: isSaved },
         myDatasets: !(isPublic || isSaved),
       }}
-      errorPolicy="all">
+      errorPolicy="all"
+      fetchPolicy="cache-and-network"
+      nextFetchPolicy="cache-first">
       {datasetQueryDisplay(isPublic, isSaved)}
     </Query>
   </ErrorBoundary>
