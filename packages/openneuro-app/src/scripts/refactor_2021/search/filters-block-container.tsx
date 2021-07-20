@@ -6,7 +6,7 @@ import {
   getSelectParams,
   useCheckIfParamsAreSelected,
 } from './search-params-ctx'
-import { FiltersBlock } from '@openneuro/components'
+import { FiltersBlock } from '@openneuro/components/search-page'
 import initialSearchParams from './initial-search-params'
 
 interface FiltersBlockContainerProps {

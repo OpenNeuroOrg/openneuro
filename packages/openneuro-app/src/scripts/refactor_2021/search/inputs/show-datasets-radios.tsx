@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
-import { RadioGroup, FacetSelect } from '@openneuro/components'
+import { RadioGroup } from '@openneuro/components/radio'
+import { FacetSelect } from '@openneuro/components/facets'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../../authentication/profile'
 

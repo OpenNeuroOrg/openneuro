@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
-import { AccordionTab, AccordionWrap } from '@openneuro/components'
+import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 import Issues from './validation-results.issues.jsx'
 

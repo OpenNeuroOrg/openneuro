@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
 import { SearchParamsCtx, removeFilterItem } from '../search-params-ctx'
-import { FacetSearch } from '@openneuro/components'
+import { FacetSearch } from '@openneuro/components/facets'
 
 const AuthorInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
