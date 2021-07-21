@@ -53,7 +53,10 @@ describe('dataset search resolvers', () => {
 
     it('returns a relay cursor for ApiResponse with results', async () => {
       const mockResolvers = {
-        dataset: jest.fn(),
+        dataset: jest.fn((...args) => {
+          console.log('============')
+          console.log(args)
+        }),
       }
 
       const expectedApiResponse = {
@@ -75,6 +78,7 @@ describe('dataset search resolvers', () => {
           mockResolvers.dataset.mockReturnValueOnce(hit._source)
           return {
             node: hit._source,
+            id: hit._source.id,
           }
         }),
         pageInfo: {

@@ -45,27 +45,33 @@ export const elasticRelayConnection = (
   user = null,
   userInfo = null,
 ) => {
-  const count = body.hits.total.value
-  const lastMatch = body.hits.hits[size - 1]
-  return {
-    id,
-    edges: body.hits.hits.map(hit => {
-      const node = childResolvers.dataset(
-        null,
-        { id: hit._source.id },
-        { user, userInfo },
-      )
-      return { id: hit._source.id, node }
-    }),
-    pageInfo: {
-      count,
-      endCursor: lastMatch ? encodeCursor(lastMatch.sort) : null,
-      hasNextPage: Boolean(lastMatch),
-      // Always null since only forward pagination is implemented
-      startCursor: null,
-      // Always false since only forward pagination is implemented
-      hasPreviousPage: false,
-    },
+  try {
+    const count = body.hits.total.value
+    const lastMatch = body.hits.hits[body.hits.hits.length - 1]
+    const hasNextPage = Boolean(body.hits.hits[size - 1])
+    return {
+      id,
+      edges: body.hits.hits.map(hit => {
+        const node = childResolvers.dataset(
+          null,
+          { id: hit._source.id },
+          { user, userInfo },
+        )
+        return { id: hit._source.id, node }
+      }),
+      pageInfo: {
+        count,
+        endCursor: lastMatch ? encodeCursor(lastMatch.sort) : null,
+        hasNextPage,
+        // Always null since only forward pagination is implemented
+        startCursor: null,
+        // Always false since only forward pagination is implemented
+        hasPreviousPage: false,
+      },
+    }
+  } catch (err) {
+    console.log('((((((()))))))')
+    console.log(err)
   }
 }
 
