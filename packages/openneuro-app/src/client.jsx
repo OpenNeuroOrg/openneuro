@@ -29,8 +29,6 @@ ReactDOM.render(
                 edges: {
                   keyArgs: ['query', 'datasetType', 'datasetStatus', 'sortBy'],
                   merge: (existing = [], incoming, options) => {
-                    console.log('MERGE: DatasetConnection')
-                    console.log({ existing, incoming }, options)
                     return [...existing, ...incoming]
                   },
                 },

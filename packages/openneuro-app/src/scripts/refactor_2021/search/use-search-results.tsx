@@ -26,7 +26,7 @@ const searchQuery = gql`
       datasetType: $datasetType
       datasetStatus: $datasetStatus
       sortBy: $sortBy
-      first: 5
+      first: 25
       after: $cursor
     ) {
       id
@@ -286,6 +286,7 @@ export const useSearchResults = () => {
     errorPolicy: 'ignore',
     // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)
     // TODO: find better solution
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   })
 }

@@ -92,7 +92,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
 
   const { loading, data, fetchMore, refetch, variables, error } =
     useSearchResults()
-  console.log({ fetchMore, data, variables })
   const loadMore = loading
     ? () => {}
     : () =>
@@ -114,6 +113,13 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     numTotalResults = data.datasets.pageInfo.count
     resultsList = edges
   }
+  console.log(
+    resultsList
+      .map(({ node }) => node.id.slice(-2))
+      .sort()
+      .join(', '),
+  )
+  console.log(resultsList.length)
   return (
     <SearchPage
       portalContent={portalContent}
@@ -188,7 +194,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <SearchResultsList items={resultsList} profile={profile} />
             {/* TODO: make div below into display component. */}
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
-              {resultsList.length == 0 || numResultsRecieved < 5 ? null : (
+              {resultsList.length == 0 || numResultsRecieved < 25 ? null : (
                 <div className="col col-12 load-more ">
                   <Button label="Load More" onClick={loadMore} />
                 </div>

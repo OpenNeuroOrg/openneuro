@@ -9,10 +9,6 @@ import ErrorBoundary from '../../../../scripts/errors/errorBoundary.jsx'
 export const updateQuery = (previousResult, { fetchMoreResult }) => {
   const newEdges = fetchMoreResult.datasets.edges
   const pageInfo = fetchMoreResult.datasets.pageInfo
-  console.log({
-    previousResult,
-    fetchMoreResult,
-  })
   return {
     datasets: {
       __typename: previousResult.datasets.__typename,

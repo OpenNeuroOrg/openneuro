@@ -202,10 +202,6 @@ export const advancedDatasetSearchConnection = async (
   if (after) {
     try {
       requestBody.search_after = decodeCursor(after)
-      console.log('==========')
-      console.log(after)
-      console.log(requestBody.search_after)
-      console.log('==========')
     } catch (err) {
       // Don't include search_after if parsing fails
     }
