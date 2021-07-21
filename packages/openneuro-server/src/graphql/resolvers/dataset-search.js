@@ -40,12 +40,14 @@ export const decodeCursor = cursor =>
 export const elasticRelayConnection = (
   { body },
   id,
+  size,
   childResolvers = { dataset },
   user = null,
   userInfo = null,
 ) => {
+  console.log(body)
   const count = body.hits.total.value
-  const lastMatch = body.hits.hits[body.hits.hits.length - 1]
+  const lastMatch = body.hits.hits[size - 1]
   return {
     id,
     edges: body.hits.hits.map(hit => {
@@ -98,7 +100,7 @@ export const datasetSearchConnection = async (
     q: `${q} AND public:true`,
     body: requestBody,
   })
-  return elasticRelayConnection(result, searchId)
+  return elasticRelayConnection(result, searchId, first)
 }
 
 export const datasetSearch = {
@@ -217,7 +219,14 @@ export const advancedDatasetSearchConnection = async (
     size: first,
     body: requestBody,
   })
-  return elasticRelayConnection(result, searchId, undefined, user, userInfo)
+  return elasticRelayConnection(
+    result,
+    searchId,
+    first,
+    undefined,
+    user,
+    userInfo,
+  )
 }
 
 export const advancedDatasetSearch = {
