@@ -45,7 +45,6 @@ export const elasticRelayConnection = (
   user = null,
   userInfo = null,
 ) => {
-  console.log(body)
   const count = body.hits.total.value
   const lastMatch = body.hits.hits[size - 1]
   return {
