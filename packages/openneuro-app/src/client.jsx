@@ -28,7 +28,14 @@ ReactDOM.render(
               fields: {
                 edges: {
                   keyArgs: ['query', 'datasetType', 'datasetStatus', 'sortBy'],
-                  merge: (existing = [], incoming, options) => {
+                  merge: (existing = [], incoming) => {
+                    existing = existing.filter(x => x)
+                    const existingIds = existing.map(({ node }) => node.__ref)
+                    incoming = incoming
+                      .filter(edge =>
+                        existingIds.includes(edge?.node.__ref) ? null : edge,
+                      )
+                      .filter(x => x)
                     return [...existing, ...incoming]
                   },
                 },

@@ -113,13 +113,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     numTotalResults = data.datasets.pageInfo.count
     resultsList = edges
   }
-  console.log(
-    resultsList
-      .map(({ node }) => node.id.slice(-2))
-      .sort()
-      .join(', '),
-  )
-  console.log(resultsList.length)
   return (
     <SearchPage
       portalContent={portalContent}
