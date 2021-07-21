@@ -28,9 +28,8 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
  * Load additional datasets based on next data cursor
  * @param {object} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
- * @param {number} version Apollo client version.
  */
-export const loadMoreRows = (data, fetchMore, version = 2) => {
+export const loadMoreRows = (data, fetchMore) => {
   // Last cursor loaded (the pending promise)
   let loadingCursor
   // Pending promise to chain to if we need to delay a load
@@ -43,7 +42,7 @@ export const loadMoreRows = (data, fetchMore, version = 2) => {
         variables: {
           cursor,
         },
-        updateQuery: version === 2 ? updateQuery : null,
+        updateQuery,
       })
       loadingCursor = cursor
       return loadingPromise
