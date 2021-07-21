@@ -29,8 +29,8 @@ const searchQuery = gql`
       first: 25
       after: $cursor
     ) {
-      id
       edges {
+        id
         node {
           id
           created

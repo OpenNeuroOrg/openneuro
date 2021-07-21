@@ -14,6 +14,7 @@ import analyticsWrapper from './scripts/utils/analytics'
 import { version } from './lerna.json'
 import { config } from './scripts/config'
 import * as gtag from './scripts/utils/gtag'
+import { relayStylePagination } from '@apollo/client/utilities'
 
 gtag.initialize(config.analytics.trackingIds)
 
@@ -24,21 +25,9 @@ ReactDOM.render(
         clientVersion: version,
         cache: new InMemoryCache({
           typePolicies: {
-            DatasetConnection: {
+            Query: {
               fields: {
-                edges: {
-                  keyArgs: ['query', 'datasetType', 'datasetStatus', 'sortBy'],
-                  merge: (existing = [], incoming) => {
-                    existing = existing.filter(x => x)
-                    const existingIds = existing.map(({ node }) => node.__ref)
-                    incoming = incoming
-                      .filter(edge =>
-                        existingIds.includes(edge?.node.__ref) ? null : edge,
-                      )
-                      .filter(x => x)
-                    return [...existing, ...incoming]
-                  },
-                },
+                advancedSearch: relayStylePagination(),
               },
             },
           },

@@ -37,7 +37,7 @@ export const decodeCursor = cursor =>
  * Return a relay cursor from an elastic search result
  * @param {import ('@elastic/elasticsearch').ApiResponse} result
  */
-export const elasticRelayConnection = async (
+export const elasticRelayConnection = (
   { body },
   id,
   childResolvers = { dataset },
@@ -54,7 +54,7 @@ export const elasticRelayConnection = async (
         { id: hit._source.id },
         { user, userInfo },
       )
-      return { node }
+      return { id: hit._source.id, node }
     }),
     pageInfo: {
       count,
