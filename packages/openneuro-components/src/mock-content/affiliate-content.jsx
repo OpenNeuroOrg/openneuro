@@ -10,7 +10,7 @@ export const affiliateContent = [
     contentOne: (
       <>
         The <a href="#">Brain Imaging Data Structure</a> (BIDS) is an
-        emergingstandard for the organisation of neuroimaging data.
+        emerging standard for the organization of neuroimaging data.
       </>
     ),
     contentTwo: (
