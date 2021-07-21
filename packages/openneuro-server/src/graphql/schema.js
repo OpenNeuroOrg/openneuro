@@ -304,6 +304,8 @@ export const typeDefs = `
 
   # One connected dataset
   type DatasetEdge {
+    # Edge identifier
+    id: String!
     # Connected dataset
     node: Dataset!
     # Pagination cursor

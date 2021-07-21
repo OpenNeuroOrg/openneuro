@@ -3,6 +3,7 @@ import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
 import Permission from '../../models/permission'
+import { hashObject } from '../../libs/authentication/crypto'
 import { states } from '../permissions.js'
 
 const elasticIndex = 'datasets'
@@ -36,34 +37,41 @@ export const decodeCursor = cursor =>
  * Return a relay cursor from an elastic search result
  * @param {import ('@elastic/elasticsearch').ApiResponse} result
  */
-export const elasticRelayConnection = async (
+export const elasticRelayConnection = (
   { body },
+  id,
+  size,
   childResolvers = { dataset },
   user = null,
   userInfo = null,
 ) => {
-  const count = body.hits.total.value
-  const lastMatch = body.hits.hits[body.hits.hits.length - 1]
-  return {
-    edges: body.hits.hits.map(hit => {
-      const node = childResolvers.dataset(
-        null,
-        { id: hit._source.id },
-        { user, userInfo },
-      )
-      return { node }
-    }),
-    pageInfo: {
-      count,
-      endCursor: lastMatch
-        ? encodeCursor([lastMatch._score, lastMatch._id])
-        : null,
-      hasNextPage: Boolean(lastMatch),
-      // Always null since only forward pagination is implemented
-      startCursor: null,
-      // Always false since only forward pagination is implemented
-      hasPreviousPage: false,
-    },
+  try {
+    const count = body.hits.total.value
+    const lastMatch = body.hits.hits[body.hits.hits.length - 1]
+    const hasNextPage = Boolean(body.hits.hits[size - 1])
+    return {
+      id,
+      edges: body.hits.hits.map(hit => {
+        const node = childResolvers.dataset(
+          null,
+          { id: hit._source.id },
+          { user, userInfo },
+        )
+        return { id: hit._source.id, node }
+      }),
+      pageInfo: {
+        count,
+        endCursor: lastMatch ? encodeCursor(lastMatch.sort) : null,
+        hasNextPage,
+        // Always null since only forward pagination is implemented
+        startCursor: null,
+        // Always false since only forward pagination is implemented
+        hasPreviousPage: false,
+      },
+    }
+  } catch (err) {
+    console.log('((((((()))))))')
+    console.log(err)
   }
 }
 
@@ -80,6 +88,7 @@ export const datasetSearchConnection = async (
   obj,
   { q, after, first = 25 },
 ) => {
+  const searchId = hashObject({ q })
   const requestBody = {
     sort: [{ _score: 'asc', 'id.keyword': 'desc' }],
   }
@@ -96,7 +105,7 @@ export const datasetSearchConnection = async (
     q: `${q} AND public:true`,
     body: requestBody,
   })
-  return elasticRelayConnection(result)
+  return elasticRelayConnection(result, searchId, first)
 }
 
 export const datasetSearch = {
@@ -190,7 +199,14 @@ export const advancedDatasetSearchConnection = async (
   { query, datasetType, datasetStatus, sortBy, after, first = 25 },
   { user, userInfo },
 ) => {
-  const sort = [{ _score: 'desc' }]
+  const searchId = hashObject({
+    query,
+    datasetType,
+    datasetStatus,
+    sortBy,
+    user,
+  })
+  const sort = [{ _score: 'asc' }, { id: 'desc' }]
   if (sortBy) sort.unshift(sortBy)
   const requestBody = {
     sort,
@@ -208,7 +224,14 @@ export const advancedDatasetSearchConnection = async (
     size: first,
     body: requestBody,
   })
-  return elasticRelayConnection(result, undefined, user, userInfo)
+  return elasticRelayConnection(
+    result,
+    searchId,
+    first,
+    undefined,
+    user,
+    userInfo,
+  )
 }
 
 export const advancedDatasetSearch = {

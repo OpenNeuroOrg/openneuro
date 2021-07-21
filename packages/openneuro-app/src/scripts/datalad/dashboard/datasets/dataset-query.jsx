@@ -29,7 +29,7 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
  * @param {object} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
-const loadMoreRows = (data, fetchMore) => {
+export const loadMoreRows = (data, fetchMore) => {
   // Last cursor loaded (the pending promise)
   let loadingCursor
   // Pending promise to chain to if we need to delay a load

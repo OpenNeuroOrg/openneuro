@@ -51,7 +51,7 @@ describe('dataset search resolvers', () => {
       expect(connection).toMatchObject(nullRelayConnection)
     })
 
-    it('returns a relay cursor for ApiResponse with results', async () => {
+    it('returns a relay cursor for ApiResponse with results', () => {
       const mockResolvers = {
         dataset: jest.fn(),
       }
@@ -62,7 +62,7 @@ describe('dataset search resolvers', () => {
             hits: [
               { _source: { id: 'testdataset1' } },
               { _source: { id: 'testdataset2' } },
-              { _source: { id: 'testdataset3' } },
+              { _source: { id: 'testdataset3' }, sort: [1] },
             ],
             total: { value: 10 },
           },
@@ -73,21 +73,25 @@ describe('dataset search resolvers', () => {
         edges: expectedApiResponse.body.hits.hits.map(hit => {
           // This skips the dataset resolver logic and passes this back
           mockResolvers.dataset.mockReturnValueOnce(hit._source)
-          return { node: hit._source }
+          return {
+            node: hit._source,
+            id: hit._source.id,
+          }
         }),
         pageInfo: {
           count: 10,
-          endCursor: 'W251bGwsbnVsbF0=',
+          endCursor: 'WzFd',
           hasNextPage: true,
           startCursor: null,
           hasPreviousPage: false,
         },
       }
-      const connection = await elasticRelayConnection(
+      const connection = elasticRelayConnection(
         expectedApiResponse,
+        'test',
+        3,
         mockResolvers,
       )
-      connection.edges = await Promise.all(connection.edges)
       expect(connection).toMatchObject(resultsRelayConnection)
     })
   })

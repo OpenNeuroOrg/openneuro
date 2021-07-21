@@ -14,6 +14,7 @@ import analyticsWrapper from './scripts/utils/analytics'
 import { version } from './lerna.json'
 import { config } from './scripts/config'
 import * as gtag from './scripts/utils/gtag'
+import { relayStylePagination } from '@apollo/client/utilities'
 
 gtag.initialize(config.analytics.trackingIds)
 
@@ -22,8 +23,16 @@ ReactDOM.render(
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
-        // @ts-expect-error
-        cache: new InMemoryCache().restore(JSON.parse(window.__APOLLO_STATE__)),
+        cache: new InMemoryCache({
+          typePolicies: {
+            Query: {
+              fields: {
+                advancedSearch: relayStylePagination(),
+              },
+            },
+          },
+          // @ts-expect-error
+        }).restore(JSON.parse(window.__APOLLO_STATE__)),
       })}>
       <BrowserRouter>
         <Route component={analyticsWrapper(Index)} />
