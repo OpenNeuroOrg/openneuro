@@ -66,7 +66,7 @@ export const setDefaultSearch = (
   }
 
   const modalitiesWithSecondaries = {
-    MRI: ['MRI', 'Diffusion', 'Structural', 'Functional', 'Perfusion'],
+    MRI: ['MRI', 'Diffusion', 'Structural', 'Functional', 'ASL Perfusion'],
     PET: ['PET', 'Static', 'Dynamic'],
     EEG: ['EEG'],
     iEEG: ['iEEG'],
