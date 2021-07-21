@@ -30,6 +30,7 @@ const searchQuery = gql`
       after: $cursor
     ) {
       edges {
+        id
         node {
           id
           created
@@ -285,6 +286,7 @@ export const useSearchResults = () => {
     errorPolicy: 'ignore',
     // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)
     // TODO: find better solution
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   })
 }

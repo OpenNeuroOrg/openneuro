@@ -11,6 +11,8 @@ volumes:
   dist_indexer:
   dist_server:
   typescript_build_cache:
+  node_modules_app:
+  node_modules_components:
 
 services:
   # This dummy service provides shared configuration for all Node deps
@@ -38,6 +40,8 @@ services:
       - dist_components:/srv/packages/openneuro-components/dist
       - dist_indexer:/srv/packages/openneuro-indexer/dist
       - dist_server:/srv/packages/openneuro-server/dist
+      - node_modules_app:/srv/packages/openneuro-app/node_modules
+      - node_modules_components:/srv/packages/openneuro-components/node_modules
 
   # web app bundle build
   app:
