@@ -30,7 +30,7 @@ export const frontPage = {
       <Link to="/search/modality/pet">PET</Link>,{' '}
       <Link to="/search/modality/meg">MEG</Link>,{' '}
       <Link to="/search/modality/eeg">EEG</Link>, and{' '}
-      <Link to="/search/modality/asl">iEEG</Link> data
+      <Link to="/search/modality/ieeg">iEEG</Link> data
     </h2>
   ),
   titlePanel: {
