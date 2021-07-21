@@ -148,11 +148,48 @@ export const useSearchResults = () => {
   const boolQuery = new BoolQuery()
   if (keywords.length)
     boolQuery.addClause('must', simpleQueryString(sqsJoinWithAND(keywords)))
-  if (modality_selected)
-    boolQuery.addClause(
-      'filter',
-      matchQuery('latestSnapshot.summary.modalities', modality_selected),
-    )
+  if (modality_selected) {
+    const secondaryModalities = {
+      Diffusion: {
+        secondary: 'MRI_Diffusion',
+        primary: 'MRI',
+      },
+      Structural: {
+        secondary: 'MRI_Structural',
+        primary: 'MRI',
+      },
+      Functional: {
+        secondary: 'MRI_Functional',
+        primary: 'MRI',
+      },
+      Perfusion: {
+        secondary: 'MRI_Perfusion',
+        primary: 'MRI',
+      },
+      Static: {
+        secondary: 'PET_Static',
+        primary: 'PET',
+      },
+      Dynamic: {
+        secondary: 'PET_Dynamic',
+        primary: 'PET',
+      },
+    }
+    if (Object.keys(secondaryModalities).includes(modality_selected)) {
+      boolQuery.addClause(
+        'filter',
+        matchQuery(
+          'latestSnapshot.summary.secondaryModalities',
+          secondaryModalities[modality_selected].secondary,
+        ),
+      )
+    } else {
+      boolQuery.addClause(
+        'filter',
+        matchQuery('latestSnapshot.summary.modalities', modality_selected),
+      )
+    }
+  }
   if (isActiveRange(ageRange))
     boolQuery.addClause('filter', rangeQuery('metadata.ages', ...ageRange))
   if (isActiveRange(subjectCountRange))
@@ -275,7 +312,6 @@ export const useSearchResults = () => {
     // TODO: figure out
     sortBy = { 'analytics.downloads': 'desc' }
   }
-
   return useQuery(searchQuery, {
     variables: {
       query: boolQuery.get(),
