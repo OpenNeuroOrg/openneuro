@@ -94,13 +94,14 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     useSearchResults()
   const loadMore = loading
     ? () => {}
-    : () =>
+    : () => {
         fetchMore({
           variables: {
             // ...variables,
             cursor: data?.datasets?.pageInfo.endCursor,
           },
-        }).then((...args) => console.log(args))
+        })
+      }
 
   let numResultsRecieved = 0
   let numResultsShown = 0
