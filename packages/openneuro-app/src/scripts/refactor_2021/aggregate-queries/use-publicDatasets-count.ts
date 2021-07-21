@@ -13,6 +13,7 @@ const PUBLIC_DATASETS_COUNT = gql`
 const usePublicDatasetsCount = (modality?: string) => {
   return useQuery(PUBLIC_DATASETS_COUNT, {
     variables: { modality },
+    errorPolicy: 'all',
   })
 }
 

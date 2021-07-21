@@ -9,6 +9,7 @@ const PARTICIPANT_COUNT = gql`
 const useParticipantCount = (modality?: string) => {
   return useQuery(PARTICIPANT_COUNT, {
     variables: { modality },
+    errorPolicy: 'all',
   })
 }
 

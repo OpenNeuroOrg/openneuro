@@ -21,6 +21,7 @@ export const DRAFT_FRAGMENT = gql`
       }
       summary {
         modalities
+        secondaryModalities
         sessions
         subjects
         subjectMetadata {
@@ -156,6 +157,7 @@ export const SNAPSHOT_FIELDS = gql`
     }
     summary {
       modalities
+      secondaryModalities
       sessions
       subjects
       subjectMetadata {

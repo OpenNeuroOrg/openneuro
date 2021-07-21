@@ -9965,7 +9965,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],
             ["@types/mkdirp", "npm:1.0.2"],
             ["@types/node", "npm:14.17.5"],
-            ["bids-validator", "npm:1.7.3"],
+            ["bids-validator", "npm:1.8.0"],
             ["cli-progress", "npm:3.9.0"],
             ["commander", "npm:7.2.0"],
             ["core-js", "npm:3.15.2"],
@@ -17629,10 +17629,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["bids-validator", [
-        ["npm:1.7.3", {
-          "packageLocation": "./.yarn/cache/bids-validator-npm-1.7.3-c14bdf25ff-00b21b3a5d.zip/node_modules/bids-validator/",
+        ["npm:1.8.0", {
+          "packageLocation": "./.yarn/cache/bids-validator-npm-1.8.0-3d0bb7f8ac-95a700253d.zip/node_modules/bids-validator/",
           "packageDependencies": [
-            ["bids-validator", "npm:1.7.3"],
+            ["bids-validator", "npm:1.8.0"],
             ["@aws-sdk/client-s3", "npm:3.21.0"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],

@@ -5112,7 +5112,7 @@ __metadata:
     "@openneuro/client": ^3.34.4
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
-    bids-validator: 1.7.3
+    bids-validator: 1.8.0
     cli-progress: ^3.8.2
     commander: 7.2.0
     core-js: ^3.10.1
@@ -10462,9 +10462,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.7.3":
-  version: 1.7.3
-  resolution: "bids-validator@npm:1.7.3"
+"bids-validator@npm:1.8.0":
+  version: 1.8.0
+  resolution: "bids-validator@npm:1.8.0"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -10488,7 +10488,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 00b21b3a5dba123a8f3c40d6c40c1d60371c5ac65be4111086a7504f8b99b3dd257f5a8a6a6c8d8c4f85596cd2953f050422bc7937bff8bdc68213a33f8368cf
+  checksum: 95a700253d11c482358b28fa5d1df95bbeee23758bc7042dfca857c656a7d30a393e3c7ed7d099f068ea1ccda4cd8c43bfd4da7c0ff21beb6c97e908602750a1
   languageName: node
   linkType: hard
 

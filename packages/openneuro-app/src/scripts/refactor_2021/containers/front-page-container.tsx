@@ -99,7 +99,9 @@ const responsive = {
 }
 
 export const FrontPageTopQuery = ({ query }) => {
-  const result = useQuery(query)
+  const result = useQuery(query, {
+    errorPolicy: 'all',
+  })
   if (result.loading) {
     return (
       <>
@@ -128,7 +130,9 @@ export const FrontPageTopQuery = ({ query }) => {
 }
 
 export const FrontPageNewQuery = ({ query }) => {
-  const result = useQuery(query)
+  const result = useQuery(query, {
+    errorPolicy: 'all',
+  })
   if (result.loading) {
     return <Loading />
   } else if (result.error || result.data.datasets == null) {

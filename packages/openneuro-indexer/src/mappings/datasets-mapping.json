@@ -35,6 +35,7 @@
           "properties": {
             "tasks": { "type": "keyword" },
             "modalities": { "type": "keyword" },
+            "secondaryModalities": { "type": "keyword" },
             "subjects": { "type": "keyword" },
             "subjectMetadata": {
               "properties": {

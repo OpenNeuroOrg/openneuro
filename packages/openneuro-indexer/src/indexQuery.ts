@@ -45,6 +45,7 @@ export const indexQuery = gql`
             summary {
               tasks
               modalities
+              secondaryModalities
               subjectMetadata {
                 participantId
                 group

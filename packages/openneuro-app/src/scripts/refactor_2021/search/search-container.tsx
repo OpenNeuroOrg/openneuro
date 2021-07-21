@@ -64,7 +64,20 @@ export const setDefaultSearch = (
       }),
     )
   }
-  if (searchParams.modality_selected !== modality) {
+
+  const modalitiesWithSecondaries = {
+    MRI: ['MRI', 'Diffusion', 'Structural', 'Functional', 'ASL Perfusion'],
+    PET: ['PET', 'Static', 'Dynamic'],
+    EEG: ['EEG'],
+    iEEG: ['iEEG'],
+    MEG: ['MEG'],
+  }
+  if (
+    modality &&
+    !modalitiesWithSecondaries[modality].includes(
+      searchParams.modality_selected,
+    )
+  ) {
     setSearchParams(
       (prevState: SearchParams): SearchParams => ({
         ...prevState,
