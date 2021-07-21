@@ -83,11 +83,13 @@ describe('dataset search resolvers', () => {
           hasPreviousPage: false,
         },
       }
-      const connection = await elasticRelayConnection(
+      const connection = elasticRelayConnection(
         expectedApiResponse,
         mockResolvers,
+        3,
       )
       connection.edges = await Promise.all(connection.edges)
+
       expect(connection).toMatchObject(resultsRelayConnection)
     })
   })
