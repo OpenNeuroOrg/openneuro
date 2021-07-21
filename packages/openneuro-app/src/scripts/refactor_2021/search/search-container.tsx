@@ -103,16 +103,14 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         })
       }
 
-  let numResultsRecieved = 0
-  let numResultsShown = 0
   let numTotalResults = 0
   let resultsList = []
+  let hasNextPage = false
   if (data?.datasets) {
-    numResultsRecieved = data.datasets?.edges.length || 0
     const edges = data.datasets.edges.filter(edge => edge)
-    numResultsShown = edges.length
     numTotalResults = data.datasets.pageInfo.count
     resultsList = edges
+    hasNextPage = data.datasets.pageInfo.hasNextPage
   }
   return (
     <SearchPage
@@ -188,7 +186,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <SearchResultsList items={resultsList} profile={profile} />
             {/* TODO: make div below into display component. */}
             <div className="grid grid-nogutter" style={{ width: '100%' }}>
-              {resultsList.length == 0 || numResultsRecieved < 25 ? null : (
+              {resultsList.length == 0 || !hasNextPage ? null : (
                 <div className="col col-12 load-more ">
                   <Button label="Load More" onClick={loadMore} />
                 </div>
