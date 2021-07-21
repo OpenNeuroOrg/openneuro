@@ -101,7 +101,7 @@ export const portalContent = {
     modality: 'PET', // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: 'search-page-pet',
     portalName: 'OpenNeuro PET',
-    portalPrimary: 'The PET portal of OpenNeuro is supported by a collaboration between Stanford university, NIH, MGH and the Neurobiology Research Unit (NRU) at Copenhagen University Hospital through the OpenNeuroPET project. The project is funded through the BRAIN initiative and the Novo Nordisk foundation. Besides developing data sharing, the OpenNeuroPET project also aims at developing user friendly tools for the BIDS based data curation of PET data as well as tools for automated QC and template building.',
+    portalPrimary: 'The PET portal of OpenNeuro is supported by a collaboration between Stanford University, NIH, MGH and the Neurobiology Research Unit (NRU) at Copenhagen University Hospital through the OpenNeuroPET project. The project is funded through the BRAIN Initiative and the Novo Nordisk Foundation. Besides developing data sharing, the OpenNeuroPET project also aims at developing user friendly tools for the BIDS based data curation of PET data as well as tools for automated QC and template building.',
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: pet,
