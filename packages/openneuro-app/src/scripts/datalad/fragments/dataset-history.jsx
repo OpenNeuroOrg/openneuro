@@ -42,6 +42,7 @@ const DatasetHistoryTable = styled.div`
 const DatasetHistory = ({ datasetId }) => {
   const { loading, data } = useQuery(GET_HISTORY, {
     variables: { datasetId },
+    errorPolicy: 'all',
   })
   if (loading) {
     return <div className="dataset-history">Loading...</div>

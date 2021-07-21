@@ -494,6 +494,7 @@ export const typeDefs = `
   type Summary {
     id: ID!
     modalities: [String]
+    secondaryModalities: [String]
     sessions: [String]
     subjects: [String]
     subjectMetadata: [SubjectMetadata]

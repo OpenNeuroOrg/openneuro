@@ -12,7 +12,7 @@ export async function* datasetGenerator(client, query = getDatasets) {
       const { data } = await client.query({
         query,
         variables: { cursor },
-        errorPolicy: 'ignore',
+        errorPolicy: 'all',
       })
       for (const edge of data.datasets.edges) {
         if (edge && edge.hasOwnProperty('node')) {

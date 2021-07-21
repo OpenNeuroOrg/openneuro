@@ -40,6 +40,7 @@ const SnapshotContent = ({ dataset, tag }) => {
       datasetId: dataset.id,
       tag,
     },
+    errorPolicy: 'all',
   })
   if (loading) {
     return <Spinner text="Loading Snapshot" active />

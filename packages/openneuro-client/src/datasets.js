@@ -26,6 +26,7 @@ export const getDataset = gql`
         }
         summary {
           modalities
+          secondaryModalities
           sessions
           subjects
           subjectMetadata {
@@ -138,6 +139,7 @@ export const getDatasets = gql`
             id
             summary {
               modalities
+              secondaryModalities
               sessions
               subjects
               subjectMetadata {
