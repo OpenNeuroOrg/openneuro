@@ -129,7 +129,15 @@ const addClause = (query, type, clause) => {
 }
 
 const parseQuery = async (query, datasetType, datasetStatus, userId) => {
-  if (datasetType === 'Following') {
+  if (datasetType === 'All Public') {
+    addClause(query, 'filter', {
+      term: {
+        public: {
+          value: true,
+        },
+      },
+    })
+  } else if (datasetType === 'Following') {
     const results = await Subscription.find({ userId })
     const followedDatasets = results.map(({ datasetId }) => datasetId)
     const termsClause = {
