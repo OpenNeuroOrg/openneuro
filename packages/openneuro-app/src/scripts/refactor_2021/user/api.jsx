@@ -5,7 +5,7 @@ import crn from '../../utils/crn.js'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings.js'
 import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
-import { Button } from '@openneuro/components/Button'
+import { Button } from '@openneuro/components/button'
 /**
  * Create API Key
  *
