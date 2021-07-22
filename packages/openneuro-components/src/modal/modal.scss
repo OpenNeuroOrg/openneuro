@@ -42,29 +42,17 @@
   &.hide-modal {
     opacity: 0;
     transition-delay: 0.01s;
-    animation: hideModal 0.4s 1;
     animation-fill-mode: forwards;
+    pointer-events: none;
     .modal {
       transform: translateY(-100vh);
     }
   }
   &.show-modal {
     opacity: 1;
-    transform: translateY(0);
+    pointer-events: auto;
     .modal {
       transform: translateY(0);
     }
-  }
-}
-
-@keyframes hideModal {
-  0% {
-    transform: translateY(0);
-  }
-  99% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-150vh);
   }
 }

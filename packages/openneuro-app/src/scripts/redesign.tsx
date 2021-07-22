@@ -10,9 +10,13 @@ const Redesign = (): React.ReactElement => (
   <Uploader>
     <SearchParamsProvider>
       <UserModalOpenProvider>
-        <HeaderContainer />
-        <Routes_REFACTOR />
-        <FooterContainer />
+        <div className="sticky-content">
+          <HeaderContainer />
+          <Routes_REFACTOR />
+        </div>
+        <div className="sticky-footer">
+          <FooterContainer />
+        </div>
       </UserModalOpenProvider>
     </SearchParamsProvider>
   </Uploader>

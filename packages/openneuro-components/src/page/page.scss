@@ -152,3 +152,35 @@
     }
   }
 }
+
+//api page
+
+.container.api {
+  width: 767px;
+  margin: 40px auto 80px;
+  max-width: 90%;
+  h2 {
+    text-align: center;
+  }
+  h3 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  pre {
+    white-space: normal;
+    word-break: break-all;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .copy-key.ck-wrap {
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  .on-button--primary.on-button {
+    margin: 10px auto;
+    display: block;
+  }
+}
