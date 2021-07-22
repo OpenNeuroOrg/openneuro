@@ -3,8 +3,7 @@ import logging
 import gevent
 import falcon
 
-from datalad_service.tasks.dataset import create_snapshot
-from datalad_service.tasks.snapshots import get_snapshot, get_snapshots
+from datalad_service.tasks.snapshots import SnapshotDescriptionException, create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.publish import publish_snapshot, monitor_remote_configs
 from datalad_service.common.git import delete_tag
@@ -57,10 +56,12 @@ class SnapshotResource(object):
                 # Publish after response
                 gevent.spawn(publish_snapshot, self.store,
                              dataset, req.cookies, snapshot)
-        except:
-            # TODO - This seems like an incorrect error path?
-            resp.media = {'error': 'tag already exists'}
+        except SnapshotExistsException as err:
+            resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_CONFLICT
+        except SnapshotDescriptionException as err:
+            resp.media = {'error': repr(err)}
+            resp.status = falcon.HTTP_BAD_REQUEST
 
     def on_delete(self, req, resp, dataset, snapshot):
         """Remove a tag on the dataset, which is equivalent to deleting a snapshot"""
