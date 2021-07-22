@@ -5,7 +5,18 @@ import re
 import pygit2
 
 from datalad_service.common.git import git_show, git_tag
+from datalad_service.tasks.description import update_description
 from datalad_service.tasks.files import commit_files
+
+
+class SnapshotExistsException(Exception):
+    """Snapshot conflicts with existing name."""
+    pass
+
+
+class SnapshotDescriptionException(Exception):
+    """An error processing the snapshot description"""
+    pass
 
 
 def get_snapshot(store, dataset, snapshot):
@@ -91,7 +102,7 @@ def write_new_changes(ds, tag, new_changes, date):
         changes_file.seek(0)
         changes_file_contents = changes_file.read()
         if changes.strip() != changes_file_contents.strip():
-            raise Exception('unexpected CHANGES content')
+            raise SnapshotDescriptionException('unexpected CHANGES content')
         # Now that we have the file, overwrite it with the new one
         changes_file.seek(0)
         changes_file.truncate(0)
@@ -109,3 +120,30 @@ def update_changes(store, dataset, tag, new_changes):
         return updated
     else:
         return get_head_changes(ds)
+
+
+def validate_snapshot_name(store, dataset, snapshot):
+    ds = store.get_dataset(dataset)
+    # Search for any existing tags
+    tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
+    if tagged:
+        raise SnapshotExistsException(
+            'Tag "{}" already exists, name conflict'.format(snapshot))
+
+
+def save_snapshot(store, dataset, snapshot):
+    ds = store.get_dataset(dataset)
+    ds.save(version_tag=snapshot)
+
+
+def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
+    """
+    Create a new snapshot (git tag).
+
+    Raises an exception if the tag already exists.
+    """
+    validate_snapshot_name(store, dataset, snapshot)
+    update_description(store, dataset, description_fields)
+    update_changes(store, dataset, snapshot, snapshot_changes)
+    save_snapshot(store, dataset, snapshot)
+    return get_snapshot(store, dataset, snapshot)
