@@ -16,6 +16,8 @@
     width: 500px;
     max-width: 90%;
     transition: transform 0.3s;
+    overflow: scroll;
+    max-height: 90vh;
   }
 
   .modal-close-x {
