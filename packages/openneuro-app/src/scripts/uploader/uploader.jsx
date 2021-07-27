@@ -96,12 +96,11 @@ export class UploadClient extends React.Component {
         .then(
           ({
             data: {
-              dataset: {
-                draft,
-                metadata: { affirmedDefaced, affirmedConsent },
-              },
+              dataset: { draft, metadata },
             },
           }) => {
+            const affirmedDefaced = metadata?.affirmedDefaced || null
+            const affirmedConsent = metadata?.affirmedConsent || null
             // Create a new array of files to upload
             const filesToUpload = []
             // Create hashmap of filename -> size
