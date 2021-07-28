@@ -37,7 +37,6 @@
     "express": "^4.17.1",
     "graphql": "14.7.0",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.21",
     "markdown-to-jsx": "^7.1.2",
     "md5": "^2.3.0",
     "os-browserify": "^0.3.0",

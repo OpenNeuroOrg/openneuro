@@ -184,3 +184,32 @@
     display: block;
   }
 }
+
+.feedback-form h3 {
+  margin: 30px 0 15px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #444;
+}
+
+.feedback-form .feedback-input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.feedback-input + label {
+  margin-right: 15px;
+}
+
+.open-feedback-modal-button {
+  position: fixed;
+  bottom: 59px;
+  right: 5px;
+  z-index: 9000;
+}
+
+.feedback-form.feedback-modal .grid.modal {
+  width: 670px;
+  max-height: 80%;
+}

@@ -1,6 +1,4 @@
 import React from 'react'
-import axios from 'axios'
-import queryString from 'query-string'
 import { Modal } from '@openneuro/components/modal'
 
 class ContactForm extends React.Component {
@@ -15,14 +13,16 @@ class ContactForm extends React.Component {
   myRequest = url => {
     let response
     try {
-      response = axios.post(url, null, null)
+      response = fetch(url, { method: 'POST' })
     } catch (e) {
       response = e
     }
     console.log(response)
   }
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value })
+    const entryFields = { ...this.state.entryFields }
+    entryFields[e.target.name] = e.target.value
+    this.setState({ entryFields })
   }
 
   handleCheckboxChange = e => {
@@ -35,38 +35,35 @@ class ContactForm extends React.Component {
       this.state.modalities.push(e.target.value)
     }
 
-    this.setState({ [e.target.name]: this.state.modalities })
+    const entryFields = { ...this.state.entryFields }
+    entryFields[e.target.name] = this.state.modalities.join()
+    this.setState({ entryFields })
   }
 
   handleSubmit = e => {
-    let data = {
-      ...this.state,
-    }
-    const id = '1GhgmqcdiPH1HPf8ZGqoQo33Lluds2IneAsn4U9Zv03M'
     e.preventDefault()
-    const formUrl = 'https://docs.google.com/forms/d/' + id + '/formResponse'
+    const id = '1GhgmqcdiPH1HPf8ZGqoQo33Lluds2IneAsn4U9Zv03M'
+    const formUrl = 'https://docs.google.com/forms/d/' + id + '/formResponse?'
 
-    const q = queryString.stringifyUrl({
-      url: formUrl,
-      query: data,
-    })
-    this.myRequest(q)
+    let q = new URLSearchParams(this.state.entryFields).toString()
+
+    this.myRequest(formUrl + q)
+    console.log(this.state.entryFields)
     this.setState({ formCompleted: true })
   }
 
   render() {
-    console.log(this.state.showFeedbackModal)
-
     return (
       <>
         {this.state.formCompleted ? null : (
           <button
+            className="on-button--small on-button on-button--primary open-feedback-modal-button"
             onClick={() =>
               this.setState({
                 showFeedbackModal: !this.state.showFeedbackModal,
               })
             }>
-            Give Redesign Feedback
+            Submit Redesign Feedback
           </button>
         )}
         <Modal
@@ -75,16 +72,20 @@ class ContactForm extends React.Component {
             this.setState({ showFeedbackModal: !this.state.showFeedbackModal })
           }
           closeText={'close'}
-          className="deprecated-modal">
-          <p>welcome to the modal feedback form</p>
+          className="feedback-form feedback-modal">
+          <h2>
+            {this.state.formCompleted
+              ? 'Thank you for your feedback'
+              : 'welcome to the modal feedback form'}
+          </h2>
 
           {this.state.formCompleted ? (
-            <>good work</>
+            'We appreciate the your time and feedback, it will help to create a better experience for you and others.'
           ) : (
             <form onSubmit={this.handleSubmit}>
               <div>
                 <input
-                  className="input"
+                  className="feedback-input"
                   type="text"
                   name="entry.355252395"
                   placeholder="Name"
@@ -93,7 +94,7 @@ class ContactForm extends React.Component {
               </div>
               <div>
                 <input
-                  className="input"
+                  className="feedback-input"
                   type="email"
                   name="entry.1195118106"
                   placeholder="Email"
@@ -102,13 +103,22 @@ class ContactForm extends React.Component {
                 />
               </div>
               <div>
-                <h3>
-                  <label htmlFor="entry.862044433">
-                    How would you rate the new design?
-                  </label>
-                </h3>
+                <input
+                  className="feedback-input"
+                  type="text"
+                  name="entry.1640248266"
+                  placeholder="Role/Title/Position"
+                  onChange={this.handleChange}
+                />
+              </div>
+              <h3>
+                <label htmlFor="entry.862044433">
+                  How would you rate the new design?
+                </label>
+              </h3>
+              <div className="on-select-wrapper">
                 <select
-                  className="input"
+                  className="feedback-input"
                   name="entry.862044433"
                   onChange={this.handleChange}
                   defaultValue="">
@@ -124,28 +134,30 @@ class ContactForm extends React.Component {
               </div>
               <div>
                 <div>
-                  <h3>
-                    <label htmlFor="entry.904614155">
+                  <span className="custom-radio">
+                    <h3>
                       When searching for a dataset where you able to find
                       relevant results?
-                    </label>
-                  </h3>
-                  <input
-                    className="input"
-                    type="radio"
-                    name="entry.904614155"
-                    onChange={this.handleChange}
-                    value="yes"
-                  />
-                  Yes
-                  <input
-                    className="input"
-                    type="radio"
-                    name="entry.904614155"
-                    onChange={this.handleChange}
-                    value="no"
-                  />
-                  No
+                    </h3>
+                    <input
+                      className="feedback-input"
+                      type="radio"
+                      name="entry.787827886"
+                      onChange={this.handleChange}
+                      value="yes"
+                      id="entry.787827886.yes"
+                    />
+                    <label htmlFor="entry.787827886.yes">Yes</label>
+                    <input
+                      className="feedback-input"
+                      type="radio"
+                      name="entry.787827886"
+                      onChange={this.handleChange}
+                      value="no"
+                      id="entry.787827886.no"
+                    />
+                    <label htmlFor="entry.787827886.no">No</label>
+                  </span>
                 </div>
                 <h3>
                   <label htmlFor="entry.1060778649">
@@ -153,61 +165,66 @@ class ContactForm extends React.Component {
                   </label>
                 </h3>
                 <textarea
-                  className="input"
-                  rows={12}
-                  cols={10}
+                  className="feedback-input"
+                  rows={8}
+                  cols={100}
                   name="entry.1060778649"
                   placeholder="If No"
                   onChange={this.handleChange}
                 />
               </div>
               <div>
-                <h3>
-                  <label htmlFor="entry.1855015875">
+                <span className="custom-checkbox">
+                  <h3>
                     Which modality or modalities are you most interested in?
                     (check all that apply)
-                  </label>
-                </h3>
-                <input
-                  className="input"
-                  type="checkbox"
-                  name="entry.1855015875"
-                  onChange={this.handleCheckboxChange}
-                  value="MRI"
-                />
-                MRI
-                <input
-                  className="input"
-                  type="checkbox"
-                  name="entry.1855015875"
-                  onChange={this.handleCheckboxChange}
-                  value="PET"
-                />
-                PET
-                <input
-                  className="input"
-                  type="checkbox"
-                  name="entry.1855015875"
-                  onChange={this.handleCheckboxChange}
-                  value="EEG"
-                />
-                EEG
-                <input
-                  className="input"
-                  type="checkbox"
-                  name="entry.1855015875"
-                  onChange={this.handleCheckboxChange}
-                  value="iEEG"
-                />
-                iEEG
-                <input
-                  className="input"
-                  type="checkbox"
-                  name="entry.1855015875"
-                  onChange={this.handleCheckboxChange}
-                  value="MEG"
-                />
-                MEG
+                  </h3>
+                  <input
+                    className="feedback-input"
+                    type="checkbox"
+                    name="entry.787827886"
+                    onChange={this.handleCheckboxChange}
+                    value="MRI"
+                    id="entry.787827886.mri"
+                  />
+                  <label htmlFor="entry.787827886.mri">MRI</label>
+                  <input
+                    className="feedback-input"
+                    type="checkbox"
+                    name="entry.787827886"
+                    onChange={this.handleCheckboxChange}
+                    value="PET"
+                    id="entry.787827886.pet"
+                  />
+                  <label htmlFor="entry.787827886.pet">PET</label>
+                  <input
+                    className="feedback-input"
+                    type="checkbox"
+                    name="entry.787827886"
+                    onChange={this.handleCheckboxChange}
+                    value="EEG"
+                    id="entry.787827886.eeg"
+                  />
+                  <label htmlFor="entry.787827886.eeg">EEG</label>
+                  <input
+                    className="feedback-input"
+                    type="checkbox"
+                    name="entry.787827886"
+                    onChange={this.handleCheckboxChange}
+                    value="iEEG"
+                    id="entry.787827886.ieeg"
+                  />
+                  <label htmlFor="entry.787827886.ieeg">iEEG</label>
+                  <input
+                    className="feedback-input"
+                    type="checkbox"
+                    name="entry.787827886"
+                    onChange={this.handleCheckboxChange}
+                    value="MEG"
+                    id="entry.787827886.meg"
+                  />
+                  <label htmlFor="entry.787827886.meg">MEG</label>
+                </span>
                 <h3>
                   <label htmlFor="entry.1316853220">
                     For each modality selected please specify if you went to
@@ -215,9 +232,9 @@ class ContactForm extends React.Component {
                   </label>
                 </h3>
                 <textarea
-                  className="input"
-                  rows={12}
-                  cols={10}
+                  className="feedback-input"
+                  rows={8}
+                  cols={100}
                   name="entry.1316853220"
                   placeholder="For Each"
                   onChange={this.handleChange}
@@ -230,15 +247,17 @@ class ContactForm extends React.Component {
                   </label>
                 </h3>
                 <textarea
-                  className="input"
-                  rows={12}
-                  cols={10}
+                  className="feedback-input"
+                  rows={8}
+                  cols={100}
                   name="entry.108518555"
                   placeholder="Other"
                   onChange={this.handleChange}
                 />
               </div>
-              <button className="button" type="submit">
+              <button
+                className="on-button--small on-button on-button--primary"
+                type="submit">
                 Submit
               </button>
             </form>
