@@ -9887,14 +9887,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.2.7"],
             ["@types/jest", "npm:26.0.24"],
             ["@types/jsdom", "npm:16.2.13"],
-            ["@types/lodash", "npm:4.14.171"],
             ["@types/node", "npm:14.17.5"],
             ["@types/react", "npm:17.0.14"],
             ["@types/react-dom", "npm:17.0.9"],
             ["@types/react-router-dom", "npm:5.1.8"],
             ["@types/testing-library__jest-dom", "npm:5.14.0"],
             ["@wojtekmaj/enzyme-adapter-react-17", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.6.2"],
-            ["axios", "npm:0.21.1"],
             ["babel-core", "virtual:8d3a83663eeb52526f1a370f37823b207ef94fd6f29876d8d32441147013da1c410e0af99127da61a03b76c1f782c4ec6a3e8818ca584076ab02a5fafc1465eb#npm:7.0.0-bridge.0"],
             ["babel-jest", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:24.9.0"],
             ["babel-runtime", "npm:6.26.0"],
@@ -9919,14 +9917,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-fetch-mock", "npm:1.7.5"],
             ["jsdom", "virtual:defa486869c88441047200a53b3aa18d79743b272095f3ee31b5b7b80b2c93d87f722added867470dcb94104504489a1a89040ea8fd89dffb9cfb1864d4bf54e#npm:16.6.0"],
             ["jwt-decode", "npm:2.2.0"],
-            ["lodash", "npm:4.17.21"],
             ["markdown-to-jsx", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:7.1.3"],
             ["md5", "npm:2.3.0"],
             ["object.fromentries", "npm:2.0.4"],
             ["os-browserify", "npm:0.3.0"],
             ["pluralize", "npm:8.0.0"],
             ["prop-types", "npm:15.7.2"],
-            ["query-string", "npm:7.0.1"],
             ["react", "npm:17.0.2"],
             ["react-addons-test-utils", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:15.6.2"],
             ["react-bootstrap", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.33.1"],
@@ -26279,7 +26275,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],
       ["git-win", [
         ["npm:2.3.0", {
-          "packageLocation": "./.yarn/unplugged/git-win-npm-2.3.0-b98f2b7122/node_modules/git-win/",
+          "packageLocation": "./.yarn/cache/git-win-npm-2.3.0-b98f2b7122-a273c79c22.zip/node_modules/git-win/",
           "packageDependencies": [
             ["git-win", "npm:2.3.0"],
             ["@babel/runtime", "npm:7.14.6"],
@@ -37698,17 +37694,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/query-string-npm-6.14.1-dad16e37e6-5d651ac420.zip/node_modules/query-string/",
           "packageDependencies": [
             ["query-string", "npm:6.14.1"],
-            ["decode-uri-component", "npm:0.2.0"],
-            ["filter-obj", "npm:1.1.0"],
-            ["split-on-first", "npm:1.1.0"],
-            ["strict-uri-encode", "npm:2.0.0"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:7.0.1", {
-          "packageLocation": "./.yarn/cache/query-string-npm-7.0.1-4631368591-0709d82a6d.zip/node_modules/query-string/",
-          "packageDependencies": [
-            ["query-string", "npm:7.0.1"],
             ["decode-uri-component", "npm:0.2.0"],
             ["filter-obj", "npm:1.1.0"],
             ["split-on-first", "npm:1.1.0"],

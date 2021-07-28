@@ -5039,14 +5039,12 @@ __metadata:
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
     "@types/jsdom": ^16
-    "@types/lodash": ^4
     "@types/node": ^14.14.37
     "@types/react": ^17.0.8
     "@types/react-dom": ^17.0.5
     "@types/react-router-dom": 5.1.8
     "@types/testing-library__jest-dom": ^5.14.0
     "@wojtekmaj/enzyme-adapter-react-17": ^0.6.1
-    axios: ^0.21.1
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^24.9.0
     babel-runtime: ^6.26.0
@@ -5068,14 +5066,12 @@ __metadata:
     jest-fetch-mock: ^1.4.1
     jsdom: ^16.5.3
     jwt-decode: ^2.2.0
-    lodash: ^4.17.21
     markdown-to-jsx: ^7.1.2
     md5: ^2.3.0
     object.fromentries: ^2.0.0
     os-browserify: ^0.3.0
     pluralize: 8.0.0
     prop-types: ^15.6.0
-    query-string: ^7.0.1
     react: ^17.0.1
     react-addons-test-utils: ^15.6.2
     react-bootstrap: 0.33.1
@@ -7442,7 +7438,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4, @types/lodash@npm:^4.14.92":
+"@types/lodash@npm:^4.14.92":
   version: 4.14.171
   resolution: "@types/lodash@npm:4.14.171"
   checksum: e48668fb030ad7d8c0c7751061bd332ad8704937d976bd4e24fd9e2128f80c17112be11e5c13d39f6a210336dc3549f7fb00eaebb56b94c2bfb89ad64c57d721
@@ -27824,18 +27820,6 @@ fsevents@^1.2.7:
     split-on-first: ^1.0.0
     strict-uri-encode: ^2.0.0
   checksum: 5d651ac420f5298baf00bb71228ffac32ed342c09836a7d2b1df3cdc7870313339cf6927827370c654cf73571bd639af497a0d9ef677a3a11b7396de2f761aa4
-  languageName: node
-  linkType: hard
-
-"query-string@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "query-string@npm:7.0.1"
-  dependencies:
-    decode-uri-component: ^0.2.0
-    filter-obj: ^1.1.0
-    split-on-first: ^1.0.0
-    strict-uri-encode: ^2.0.0
-  checksum: 0709d82a6dc332de978878b1bfe8de093b50527bcfcb2fd04e46f2d69c94bbad79e056a47e549b4ca5751cf624a03b27fb26ec3e29294a369e97be7d67279891
   languageName: node
   linkType: hard
 
