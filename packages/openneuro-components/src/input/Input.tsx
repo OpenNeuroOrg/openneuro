@@ -15,7 +15,6 @@ export interface InputProps {
   setValue?: (string) => void
   onKeyDown?(event): void
   tipContent?: React.ReactNode
-  autoComplete?: string
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -27,7 +26,6 @@ export const Input: React.FC<InputProps> = ({
   setValue,
   value,
   tipContent,
-  autoComplete,
   onKeyDown = () => {},
 }) => {
   return (
@@ -42,7 +40,6 @@ export const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             onChange={e => setValue(e.target.value)}
             onKeyDown={onKeyDown}
-            autoComplete={autoComplete}
           />
           {label ? (
             <label htmlFor={name}>
