@@ -11,13 +11,7 @@ class ContactForm extends React.Component {
     }
   }
   myRequest = url => {
-    let response
-    try {
-      response = fetch(url, { method: 'POST' })
-    } catch (e) {
-      response = e
-    }
-    console.log(response)
+    fetch(url, { method: 'POST' })
   }
   handleChange = e => {
     const entryFields = { ...this.state.entryFields }
