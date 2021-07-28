@@ -23,7 +23,6 @@
     "@loadable/component": "^5.7.0",
     "@openneuro/client": "^3.34.6",
     "@openneuro/components": "^3.34.6",
-    "axios": "^0.21.1",
     "babel-runtime": "^6.26.0",
     "bids-validator": "npm:@squishymedia/bids-validator@1.7.3",
     "bytes": "^3.0.0",
