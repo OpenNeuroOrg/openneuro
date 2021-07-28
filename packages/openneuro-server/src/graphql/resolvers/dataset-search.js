@@ -90,7 +90,7 @@ export const datasetSearchConnection = async (
 ) => {
   const searchId = hashObject({ q })
   const requestBody = {
-    sort: [{ _score: 'asc', 'id.keyword': 'desc' }],
+    sort: [{ _score: 'asc', id: 'desc' }],
   }
   if (after) {
     try {
