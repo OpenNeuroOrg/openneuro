@@ -42,7 +42,6 @@ class ContactForm extends React.Component {
     let q = new URLSearchParams(this.state.entryFields).toString()
 
     this.myRequest(formUrl + q)
-    console.log(this.state.entryFields)
     this.setState({ formCompleted: true })
   }
 
