@@ -127,30 +127,17 @@ class ContactForm extends React.Component {
               </div>
               <div>
                 <div>
-                  <span className="custom-radio">
-                    <h3>
-                      When searching for a dataset where you able to find
-                      relevant results?
-                    </h3>
-                    <input
-                      className="feedback-input"
-                      type="radio"
-                      name="entry.787827886"
-                      onChange={this.handleChange}
-                      value="yes"
-                      id="entry.787827886.yes"
-                    />
-                    <label htmlFor="entry.787827886.yes">Yes</label>
-                    <input
-                      className="feedback-input"
-                      type="radio"
-                      name="entry.787827886"
-                      onChange={this.handleChange}
-                      value="no"
-                      id="entry.787827886.no"
-                    />
-                    <label htmlFor="entry.787827886.no">No</label>
-                  </span>
+                  <h3>
+                    When searching for a dataset where you able to find relevant
+                    results?
+                  </h3>
+                  <input
+                    className="feedback-input"
+                    type="text"
+                    name="entry.904614155"
+                    onChange={this.handleChange}
+                    placeholder="yes/no"
+                  />
                 </div>
                 <h3>
                   <label htmlFor="entry.1060778649">
