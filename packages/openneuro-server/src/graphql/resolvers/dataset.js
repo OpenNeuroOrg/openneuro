@@ -145,9 +145,7 @@ export const deleteFiles = async (
     await checkDatasetWrite(datasetId, user, userInfo)
     const deletedFiles = await datalad
       .deleteFiles(datasetId, files, userInfo)
-      .then(filenames =>
-        Promise.all(filenames.map(filename => new UpdatedFile(filename))),
-      )
+      .then(filenames => filenames.map(filename => new UpdatedFile(filename)))
 
     await datalad.commitFiles(datasetId, userInfo)
     pubsub.publish('filesUpdated', {
