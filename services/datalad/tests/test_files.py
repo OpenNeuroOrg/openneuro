@@ -249,9 +249,25 @@ def test_delete_file(client, new_dataset):
     response = client.simulate_delete('/datasets/{}/files'.format(
         ds_id), body='{ "filenames": ["dataset_description.json", "CHANGES"] }')
     assert response.status == falcon.HTTP_OK
-    print(response.content)
     assert json.loads(response.content)['deleted'] == [
         'dataset_description.json', 'CHANGES']
+
+
+def test_delete_nested_file(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    response = client.simulate_post(
+        '/datasets/{}/files/derivatives:LICENSE'.format(ds_id), body='GPL V3.0')
+    assert response.status == falcon.HTTP_OK
+    # Commit new nested file
+    response = client.simulate_post(
+        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+    assert response.status == falcon.HTTP_OK
+    # Delete new nested file + an existing file
+    response = client.simulate_delete('/datasets/{}/files'.format(
+        ds_id), body='{ "filenames": ["derivatives:LICENSE", "CHANGES"] }')
+    assert response.status == falcon.HTTP_OK
+    assert json.loads(response.content)['deleted'] == [
+        'derivatives/LICENSE', 'CHANGES']
 
 
 def test_delete_non_existing_file(client, new_dataset):
@@ -259,6 +275,5 @@ def test_delete_non_existing_file(client, new_dataset):
     response = client.simulate_delete(
         '/datasets/{}/files'.format(ds_id), body='{ "filenames": ["fake", "test"]}')
     assert response.status == falcon.HTTP_OK
-    print(response.content)
     assert json.loads(response.content)[
         'error'] == 'the following files not found: fake, test'
