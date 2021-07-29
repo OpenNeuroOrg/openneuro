@@ -113,7 +113,8 @@ class FilesResource(object):
             files_to_delete = []
             dirs_to_delete = []
             paths_not_found = []
-            filenames = req.media['filenames']
+            filenames = [filename.replace(':', '/')
+                         for filename in req.media['filenames']]
             for filename in filenames:
                 file_path = os.path.join(ds_path, filename)
                 if os.path.exists(file_path):
