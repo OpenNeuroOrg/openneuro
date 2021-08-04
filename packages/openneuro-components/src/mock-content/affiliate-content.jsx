@@ -43,7 +43,7 @@ export const affiliateContent = [
         A data management solution built on{' '}
         <a href="https://github.com/">Git</a> and{' '}
         <a href="https://git-annex.branchable.com/">Git-annex</a>. Read more
-        about <a href="#">DataLad</a>
+        about <a href="https://www.datalad.org/">DataLad</a>
       </>
     ),
   },
