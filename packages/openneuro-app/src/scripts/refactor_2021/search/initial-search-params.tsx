@@ -46,12 +46,12 @@ export const modality_available: ModalityOption[] = [
         portalPath: '/search/modality/mri',
         count: null,
       },
-      {
-        label: 'ASL Perfusion',
-        value: 'ASL Perfusion',
-        portalPath: '/search/modality/mri',
-        count: null,
-      },
+      // {
+      //   label: 'ASL Perfusion',
+      //   value: 'ASL Perfusion',
+      //   portalPath: '/search/modality/mri',
+      //   count: null,
+      // },
     ],
   },
   {
