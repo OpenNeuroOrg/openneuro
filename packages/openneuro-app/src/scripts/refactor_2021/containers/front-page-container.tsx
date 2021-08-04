@@ -141,10 +141,11 @@ export const FrontPageNewQuery = ({ query }) => {
   } else {
     // Remove any edges which could not be loaded
     const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
+    console.log(edges)
     return (
       <ActivitySlider
         data={edges}
-        slideHeader="Newly Added"
+        slideHeader="Recently Published"
         showDots
         keyBoardControl
         containerClass="activity-slider recent-slider"
