@@ -59,6 +59,20 @@ export const modality_available: ModalityOption[] = [
     value: 'PET',
     portalPath: '/search/modality/pet',
     count: null,
+    // children: [
+    //   {
+    //     label: 'Static',
+    //     value: 'Static',
+    //     portalPath: '/search/modality/pet',
+    //     count: null,
+    //   },
+    //   {
+    //     label: 'Dynamic',
+    //     value: 'Dynamic',
+    //     portalPath: '/search/modality/pet',
+    //     count: null,
+    //   },
+    // ],
   },
   {
     label: 'EEG',
