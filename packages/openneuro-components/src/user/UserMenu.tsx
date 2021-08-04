@@ -35,6 +35,9 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
                 <br /> {profile.provider}
               </p>
             </li>
+            <li>
+              <Link to="/search?mydatasets">My Datasets</Link>
+            </li>
             <li className="user-menu-link">
               <Link to="/keygen"> Obtain an API Key </Link>
             </li>
