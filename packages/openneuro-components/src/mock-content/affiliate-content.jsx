@@ -9,14 +9,20 @@ export const affiliateContent = [
     header: 'Validation Using BIDS',
     contentOne: (
       <>
-        The <a href="#">Brain Imaging Data Structure</a> (BIDS) is an
-        emerging standard for the organization of neuroimaging data.
+        The{' '}
+        <a href="https://bids.neuroimaging.io/">Brain Imaging Data Structure</a>{' '}
+        (BIDS) is an emerging standard for the organization of neuroimaging
+        data.
       </>
     ),
     contentTwo: (
       <>
         Want to contribute to BIDS?
-        <br /> Visit the <a href="#">Google discussion group</a> to contribute.
+        <br /> Visit the{' '}
+        <a href="https://groups.google.com/g/bids-discussion">
+          Google discussion group
+        </a>{' '}
+        to contribute.
       </>
     ),
   },
@@ -26,13 +32,18 @@ export const affiliateContent = [
     contentOne: (
       <>
         Want to access OpenNeuro datasets with DataLad? Visit the{' '}
-        <a href="#">dataset collection on GitHub</a>.
+        <a href="https://github.com/OpenNeuroDatasets/">
+          dataset collection on GitHub
+        </a>
+        .
       </>
     ),
     contentTwo: (
       <>
-        A data management solution built on <a href="#">Git</a> and{' '}
-        <a href="#">Git-annex</a>. Read more about <a href="#">DataLad</a>
+        A data management solution built on{' '}
+        <a href="https://github.com/">Git</a> and{' '}
+        <a href="https://git-annex.branchable.com/">Git-annex</a>. Read more
+        about <a href="#">DataLad</a>
       </>
     ),
   },
