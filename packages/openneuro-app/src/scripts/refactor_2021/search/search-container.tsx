@@ -129,7 +129,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   return (
     <>
       <Helmet>
-        <title>OopenNeuro - {portalContent ? modality : ''} Search</title>
+        <title>OpenNeuro - {portalContent ? modality : ''} Search</title>
       </Helmet>
       <SearchPage
         portalContent={portalContent}
