@@ -18,8 +18,12 @@ export const compileMetadata = dataset => {
   const getFromDescription = key =>
     dataset.draft && dataset.draft.description && dataset.draft.description[key]
   const getSeniorAuthor = () => {
-    const authors = getFromMetadata('Authors')
-    return Array.isArray(authors) && authors[0]
+    const authors = dataset.draft.description.Authors
+    if (authors.length) {
+      return authors[authors.length - 1]
+    } else {
+      return 'authors not listed in description.json'
+    }
   }
   const getAgesFromSummary = () => {
     const subjectMetadata = getFromSummary('subjectMetadata')
@@ -62,7 +66,7 @@ export const compileMetadata = dataset => {
     // get from validator or description.json
     datasetName:
       getFromDescription('Name') || 'dataset unnamed in description.json',
-    seniorAuthor: getSeniorAuthor() || 'authors not listed in description.json',
+    seniorAuthor: getSeniorAuthor(),
     dataProcessed: getFromSummary('dataProcessed') || false,
     ages: getAgesFromSummary() || [],
     modalities: getFromSummary('modalities') || [],
