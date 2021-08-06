@@ -27,7 +27,7 @@ $pet-dark: darken($pet-theme, 25%);
 $pet-secondary: adjust-color($pet-theme, $lightness: 15%);
 $pet-light: adjust-color($pet-theme, $lightness: 45%);
 
-$ieeg-theme: rgba(99, 121, 10, 1);
+$ieeg-theme: rgba(19, 126, 71, 1);
 $ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
 $ieeg-dark: darken($ieeg-theme, 25%);
 $ieeg-secondary: adjust-color($ieeg-theme, $lightness: 15%);
