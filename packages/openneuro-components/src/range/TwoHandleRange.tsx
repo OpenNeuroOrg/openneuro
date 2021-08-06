@@ -15,6 +15,8 @@ export interface TwoHandleRangeProps {
   value: [number, number]
   // Change event handler for either value changing, returns [minVal, maxVal]
   onChange: (value: [number, number]) => void
+  // At max value interpret this as any value greater than min
+  uncappedMax?: boolean
 }
 
 export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
@@ -23,6 +25,7 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
   step,
   value,
   onChange,
+  uncappedMax = false,
 }) => {
   const range = useRef<HTMLDivElement>(null)
 
@@ -79,6 +82,12 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
     value[1] = discreteValue
     onChange([value[0], discreteValue])
   }
+
+  const leftValue = value[0]
+  const rightValue = uncappedMax
+    ? (value[1] === max && `${value[1]}+`) || value[1]
+    : value[1]
+
   return (
     <div className="formRange-inner">
       <input
@@ -112,8 +121,8 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       <div className="slider">
         <div className="slider__track"></div>
         <div ref={range} className="slider__range"></div>
-        <div className="slider__left-value">{value[0]}</div>
-        <div className="slider__right-value">{value[1]}</div>
+        <div className="slider__left-value">{leftValue}</div>
+        <div className="slider__right-value">{rightValue}</div>
       </div>
     </div>
   )

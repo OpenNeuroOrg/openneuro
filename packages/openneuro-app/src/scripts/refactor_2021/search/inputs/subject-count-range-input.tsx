@@ -4,23 +4,24 @@ import initialSearchParams from '../initial-search-params'
 import { FacetRange } from '@openneuro/components/facets'
 
 const SubjectCountRangeInput: FC = () => {
+  const min = 0
+  const max = 200
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-
-  const subjectCountRange = searchParams.subjectCountRange
   const setSubjectRange = subjectCountRange => {
     setSearchParams(prevState => ({
       ...prevState,
-      subjectCountRange,
+      subjectCountRange: [
+        (subjectCountRange[0] !== min && subjectCountRange[0]) || null,
+        (subjectCountRange[1] !== max && subjectCountRange[1]) || null,
+      ],
     }))
   }
 
-  const min = 0
-  const max = 100
-  const value =
-    JSON.stringify(subjectCountRange) ===
-    JSON.stringify(initialSearchParams.subjectCountRange)
-      ? [min, max]
-      : subjectCountRange
+  // Convert nulls to numeric values for TwoHandleRange
+  const value = [
+    searchParams.subjectCountRange[0] || min,
+    searchParams.subjectCountRange[1] || max,
+  ]
 
   return (
     <FacetRange
@@ -32,6 +33,7 @@ const SubjectCountRangeInput: FC = () => {
       step={10}
       value={value}
       onChange={setSubjectRange}
+      uncappedMax
     />
   )
 }

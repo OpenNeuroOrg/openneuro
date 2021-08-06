@@ -197,9 +197,9 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       'filter',
       rangeListLengthQuery(
-        'latestSnapshot.summary.subjects.keyword',
-        subjectCountRange[0],
-        subjectCountRange[1],
+        'latestSnapshot.summary.subjects',
+        subjectCountRange[0] || 0,
+        subjectCountRange[1] || Infinity,
       ),
     )
   if (diagnosis_selected)
