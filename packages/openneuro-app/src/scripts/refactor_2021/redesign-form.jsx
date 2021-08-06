@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from '@openneuro/components/modal'
-
+import { Helmet } from 'react-helmet'
 class ContactForm extends React.Component {
   constructor(props) {
     super(props)
@@ -50,7 +50,7 @@ class ContactForm extends React.Component {
       <>
         {this.state.formCompleted ? null : (
           <button
-            className="on-button--small on-button on-button--primary open-feedback-modal-button"
+            className="on-button--small on-button on-button--secondary open-feedback-modal-button"
             onClick={() =>
               this.setState({
                 showFeedbackModal: !this.state.showFeedbackModal,
@@ -69,7 +69,7 @@ class ContactForm extends React.Component {
           <h2>
             {this.state.formCompleted
               ? 'Thank you for your feedback'
-              : 'welcome to the modal feedback form'}
+              : 'Please provide feedback about the new OpenNeuro Search and redesign'}
           </h2>
 
           {this.state.formCompleted ? (
@@ -106,7 +106,7 @@ class ContactForm extends React.Component {
               </div>
               <h3>
                 <label htmlFor="entry.862044433">
-                  How would you rate the new design?
+                  How would you describe your experience with the new design?
                 </label>
               </h3>
               <div className="on-select-wrapper">
@@ -118,14 +118,36 @@ class ContactForm extends React.Component {
                   <option value="" disabled hidden>
                     Select an Option
                   </option>
-                  <option value="5">Great</option>
-                  <option value="4">Good</option>
-                  <option value="3">Ok</option>
-                  <option value="2">SoSo</option>
-                  <option value="1">Bad</option>
+                  <option value="Exciting and easy to navigate">
+                    Exciting and easy to navigate
+                  </option>
+                  <option value="Good overall experience">
+                    Good overall experience
+                  </option>
+                  <option value="Visually pleasing, not quite as intuitive">
+                    Visually pleasing, not quite as intuitive
+                  </option>
+                  <option value="Couldn’t achieve my goal">
+                    Couldn’t achieve my goal
+                  </option>
                 </select>
               </div>
               <div>
+                <div>
+                  <h3>
+                    <label htmlFor="entry.1308425561">
+                      Please provide more information for your choice above.
+                    </label>
+                  </h3>
+                  <textarea
+                    className="feedback-input"
+                    rows={8}
+                    cols={100}
+                    name="entry.1308425561"
+                    placeholder="Design Feedback"
+                    onChange={this.handleChange}
+                  />
+                </div>
                 <div>
                   <h3>
                     When searching for a dataset where you able to find relevant
@@ -138,10 +160,38 @@ class ContactForm extends React.Component {
                     onChange={this.handleChange}
                     placeholder="yes/no"
                   />
+                  <h3>
+                    <label htmlFor="entry.462214641">
+                      How would you rate the new search and portals?
+                    </label>
+                  </h3>
+                  <div className="on-select-wrapper">
+                    <select
+                      className="feedback-input"
+                      name="entry.462214641"
+                      onChange={this.handleChange}
+                      defaultValue="">
+                      <option value="" disabled hidden>
+                        Select an Option
+                      </option>
+                      <option value="Exciting and easy to navigate">
+                        Exciting and easy to navigate
+                      </option>
+                      <option value="Good overall experience">
+                        Good overall experience
+                      </option>
+                      <option value="Visually pleasing, not quite as intuitive">
+                        Visually pleasing, not quite as intuitive
+                      </option>
+                      <option value="Couldn’t achieve my goal">
+                        Couldn’t achieve my goal
+                      </option>
+                    </select>
+                  </div>
                 </div>
                 <h3>
                   <label htmlFor="entry.1060778649">
-                    If NO please provide more information?
+                    Please provide more information for your choice above.
                   </label>
                 </h3>
                 <textarea
@@ -149,7 +199,7 @@ class ContactForm extends React.Component {
                   rows={8}
                   cols={100}
                   name="entry.1060778649"
-                  placeholder="If No"
+                  placeholder="Search Feedback"
                   onChange={this.handleChange}
                 />
               </div>
@@ -207,8 +257,8 @@ class ContactForm extends React.Component {
                 </span>
                 <h3>
                   <label htmlFor="entry.1316853220">
-                    For each modality selected please specify if you went to
-                    search or directly to the modality portal?
+                    For each modality selected please specify if you first went
+                    to the global Search or directly to the modality portal?
                   </label>
                 </h3>
                 <textarea
