@@ -18,7 +18,7 @@ const SectionSelect: FC = () => {
       setSelected={setSection}
       items={section_available}
       accordionStyle="plain"
-      label="Section"
+      label="Study Type"
       startOpen={false}
     />
   )

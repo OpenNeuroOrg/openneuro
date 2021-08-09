@@ -144,7 +144,7 @@ export const FrontPageNewQuery = ({ query }) => {
     return (
       <ActivitySlider
         data={edges}
-        slideHeader="Newly Added"
+        slideHeader="Recently Published"
         showDots
         keyBoardControl
         containerClass="activity-slider recent-slider"

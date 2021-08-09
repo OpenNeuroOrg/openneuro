@@ -34,6 +34,7 @@ import { getUnexpiredProfile } from '../authentication/profile'
 import { useSearchResults } from './use-search-results'
 import { SearchParamsCtx } from './search-params-ctx'
 import { SearchParams } from './initial-search-params'
+import Helmet from 'react-helmet'
 
 export interface SearchContainerProps {
   portalContent?: Record<string, any>
@@ -126,89 +127,94 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     hasNextPage = data.datasets.pageInfo.hasNextPage
   }
   return (
-    <SearchPage
-      portalContent={portalContent}
-      renderAggregateCounts={() => (
-        <AggregateCountsContainer modality={portalContent.modality} />
-      )}
-      renderFilterBlock={() => (
-        <FiltersBlockContainer numTotalResults={numTotalResults} />
-      )}
-      renderSortBy={() => (
-        <>
-          {/* TODO: move wrapper div.col.search-sort into <SearchSort/> */}
-          <div className="col search-sort">
-            <SortBySelect />
-          </div>
-        </>
-      )}
-      renderSearchHeader={() => (
-        <>
-          {portalContent
-            ? 'Search ' + modality + ' Portal'
-            : 'Search All Datasets'}
-        </>
-      )}
-      renderSearchFacets={() => (
-        <>
-          <KeywordInput />
-          <ShowDatasetRadios />
-          {!portalContent ? (
-            <ModalitySelect portalStyles={true} label="Modalities" />
-          ) : (
-            <ModalitySelect portalStyles={false} label="Choose Modality" />
-          )}
-          <AgeRangeInput />
-          <SubjectCountRangeInput />
-          <DiagnosisSelect />
-          <TaskInput />
-          <AuthorInput />
-          <GenderRadios />
-          <DateRadios />
-          <SpeciesSelect />
-          <SectionSelect />
-          <StudyDomainInput />
-          {(portalContent === undefined ||
-            portalContent?.modality === 'PET') && (
-            <>
-              <TracerNames />
-            </>
-          )}
-          {portalContent?.modality === 'PET' && (
-            <>
-              <BodyPartsInput />
-              <ScannerManufacturers />
-              <ScannerManufacturersModelNames />
-              <TracerRadionuclides />
-            </>
-          )}
-        </>
-      )}
-      renderLoading={() =>
-        loading ? (
-          <div className="search-loading">
-            <Loading />
-          </div>
-        ) : null
-      }
-      renderSearchResultsList={() =>
-        numTotalResults === 0 ? (
-          <h3>No results: please broaden your search.</h3>
-        ) : (
+    <>
+      <Helmet>
+        <title>OpenNeuro - {portalContent ? modality : ''} Search</title>
+      </Helmet>
+      <SearchPage
+        portalContent={portalContent}
+        renderAggregateCounts={() => (
+          <AggregateCountsContainer modality={portalContent.modality} />
+        )}
+        renderFilterBlock={() => (
+          <FiltersBlockContainer numTotalResults={numTotalResults} />
+        )}
+        renderSortBy={() => (
           <>
-            <SearchResultsList items={resultsList} profile={profile} />
-            {/* TODO: make div below into display component. */}
-            <div className="grid grid-nogutter" style={{ width: '100%' }}>
-              {resultsList.length == 0 || !hasNextPage ? null : (
-                <div className="col col-12 load-more ">
-                  <Button label="Load More" onClick={loadMore} />
-                </div>
-              )}
+            {/* TODO: move wrapper div.col.search-sort into <SearchSort/> */}
+            <div className="col search-sort">
+              <SortBySelect />
             </div>
           </>
-        )
-      }
-    />
+        )}
+        renderSearchHeader={() => (
+          <>
+            {portalContent
+              ? 'Search ' + modality + ' Portal'
+              : 'Search All Datasets'}
+          </>
+        )}
+        renderSearchFacets={() => (
+          <>
+            <KeywordInput />
+            <ShowDatasetRadios />
+            {!portalContent ? (
+              <ModalitySelect portalStyles={true} label="Modalities" />
+            ) : (
+              <ModalitySelect portalStyles={false} label="Choose Modality" />
+            )}
+            <AgeRangeInput />
+            <SubjectCountRangeInput />
+            <DiagnosisSelect />
+            <TaskInput />
+            <AuthorInput />
+            <GenderRadios />
+            <DateRadios />
+            <SpeciesSelect />
+            <SectionSelect />
+            <StudyDomainInput />
+            {(portalContent === undefined ||
+              portalContent?.modality === 'PET') && (
+              <>
+                <TracerNames />
+              </>
+            )}
+            {portalContent?.modality === 'PET' && (
+              <>
+                <BodyPartsInput />
+                <ScannerManufacturers />
+                <ScannerManufacturersModelNames />
+                <TracerRadionuclides />
+              </>
+            )}
+          </>
+        )}
+        renderLoading={() =>
+          loading ? (
+            <div className="search-loading">
+              <Loading />
+            </div>
+          ) : null
+        }
+        renderSearchResultsList={() =>
+          numTotalResults === 0 ? (
+            <h3>No results: please broaden your search.</h3>
+          ) : (
+            <>
+              <SearchResultsList items={resultsList} profile={profile} />
+              {/* TODO: make div below into display component. */}
+              <div className="grid grid-nogutter" style={{ width: '100%' }}>
+                {resultsList.length == 0 || !hasNextPage ? null : (
+                  <div className="col col-12 load-more ">
+                    <Button label="Load More" onClick={loadMore} />
+                  </div>
+                )}
+              </div>
+            </>
+          )
+        }
+      />
+    </>
   )
 }
 
