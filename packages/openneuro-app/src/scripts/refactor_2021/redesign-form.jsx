@@ -106,7 +106,8 @@ class ContactForm extends React.Component {
               </div>
               <h3>
                 <label htmlFor="entry.862044433">
-                  How would you describe your experience with the new design?
+                  Which of the following best describes your experience with the
+                  new design?
                 </label>
               </h3>
               <div className="on-select-wrapper">
@@ -150,7 +151,7 @@ class ContactForm extends React.Component {
                 </div>
                 <div>
                   <h3>
-                    When searching for a dataset where you able to find relevant
+                    When searching for a dataset were you able to find relevant
                     results?
                   </h3>
                   <input
