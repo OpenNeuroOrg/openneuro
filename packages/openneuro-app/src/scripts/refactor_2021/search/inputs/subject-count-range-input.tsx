@@ -1,6 +1,5 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
-import initialSearchParams from '../initial-search-params'
 import { FacetRange } from '@openneuro/components/facets'
 
 const SubjectCountRangeInput: FC = () => {
@@ -18,7 +17,7 @@ const SubjectCountRangeInput: FC = () => {
   }
 
   // Convert nulls to numeric values for TwoHandleRange
-  const value = [
+  const value: [number, number] = [
     searchParams.subjectCountRange[0] || min,
     searchParams.subjectCountRange[1] || max,
   ]
