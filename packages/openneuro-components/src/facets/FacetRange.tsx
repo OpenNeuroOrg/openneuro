@@ -13,6 +13,7 @@ export interface FacetRangeProps {
   step: number
   value: [number | null, number | null]
   onChange: (newvalue) => void
+  uncappedMax?: boolean
 }
 
 export const FacetRange = ({
@@ -25,6 +26,7 @@ export const FacetRange = ({
   step,
   value,
   onChange,
+  uncappedMax,
 }: FacetRangeProps) => {
   return (
     <AccordionWrap className="facet-accordion">
@@ -40,6 +42,7 @@ export const FacetRange = ({
             step={step}
             value={value}
             onChange={onChange}
+            uncappedMax={uncappedMax}
           />
         </div>
       </AccordionTab>

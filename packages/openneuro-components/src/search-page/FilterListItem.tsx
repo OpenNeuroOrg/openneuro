@@ -9,6 +9,16 @@ type Item = {
   value: TextList | Text | OptionObject | NumberCouple
 }
 
+const rangeDisplay = range => {
+  if (range[0] === null) {
+    return `<= ${range[1]}`
+  } else if (range[1] === null) {
+    return `>= ${range[0]}`
+  } else {
+    return `${range[0]} - ${range[1]}`
+  }
+}
+
 export interface FilterListItemProps {
   item: Item
   type?: string
@@ -33,7 +43,7 @@ export const FilterListItem = ({
           <strong>{type}:</strong>
           <span>
             {type === 'Age' || type === 'Participants'
-              ? item.value[0] + ' - ' + item.value[1]
+              ? rangeDisplay(item.value)
               : item.value}
             <span onClick={() => removeFilterItem(item.param, item.value)}>
               &times;
