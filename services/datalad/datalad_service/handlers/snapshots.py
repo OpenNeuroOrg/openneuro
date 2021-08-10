@@ -66,8 +66,8 @@ class SnapshotResource(object):
     def on_delete(self, req, resp, dataset, snapshot):
         """Remove a tag on the dataset, which is equivalent to deleting a snapshot"""
         if snapshot:
-            ds = self.store.get_dataset(dataset)
-            delete_tag(ds.path, snapshot)
+            dataset_path = self.store.get_dataset_path(dataset)
+            delete_tag(dataset_path, snapshot)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         else:

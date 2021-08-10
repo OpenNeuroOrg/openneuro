@@ -1,9 +1,10 @@
 import os
 
-import gevent
 import subprocess
+import pygit2
 
 from datalad_service.common.annex import CommitInfo, get_repo_files
+from datalad_service.common.git import git_commit, git_commit_index, committer
 from datalad_service.common.draft import update_head
 from datalad_service.tasks.validator import validate_dataset
 
@@ -14,31 +15,20 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
 
     Returns the commit hash generated.
     """
-    ds = store.get_dataset(dataset)
-    with CommitInfo(ds, name, email):
-        if files:
-            for filename in files:
-                ds.save(filename)
-        else:
-            # If no list of paths, add all untracked files
-            ds.save('.')
-    ref = ds.repo.get_hexsha()
+    dataset_path = store.get_dataset_path(dataset)
+    repo = pygit2.Repository(dataset_path)
+    author = name and pygit2.Signature(name, email) or committer
+    ref = git_commit(repo, files, author)
     # Run the validator but don't block on the request
-    validate_dataset(dataset, ds.path, ref,
+    validate_dataset(dataset, dataset_path, ref,
                      cookies)
     return ref
 
 
-def unlock_files(store, dataset, files):
-    ds = store.get_dataset(dataset)
-    for filename in files:
-        ds.unlock(filename)
-
-
 def get_files(store, dataset, branch=None):
     """Get the working tree, optionally a branch tree."""
-    ds = store.get_dataset(dataset)
-    return get_repo_files(ds, branch)
+    dataset_path = store.get_dataset_path(dataset)
+    return get_repo_files(dataset_path, branch)
 
 
 def get_untracked_files(store, dataset):
@@ -68,11 +58,19 @@ def get_untracked_files(store, dataset):
     return fileMeta
 
 
-def remove_files(store, dataset, files, name=None, email=None, cookies=None):
-    ds = store.get_dataset(dataset)
-    with CommitInfo(ds, name, email):
-        ds.remove(files, check=False)
-        update_head(ds, dataset, cookies)
+def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
+    dataset_path = store.get_dataset_path(dataset)
+    repo = pygit2.Repository(dataset_path)
+    if name and email:
+        author = pygit2.Signature(name, email)
+    else:
+        author = None
+    repo.index.remove_all(paths)
+    repo.index.write()
+    hexsha = git_commit_index(repo, author,
+                              message="[OpenNeuro] Files removed")
+    update_head(dataset, dataset_path, hexsha, cookies)
+
 
 def remove_annex_object(store, dataset, annex_key):
     """Remove an annex object by its key.
@@ -91,10 +89,3 @@ def remove_annex_object(store, dataset, annex_key):
             if i == 0 and line[-2:] == 'ok':
                 return True
     return False
-
-def remove_recursive(store, dataset, paths, name=None, email=None, cookies=None):
-    """Remove a path within a dataset recursively."""
-    ds = store.get_dataset(dataset)
-    with CommitInfo(ds, name, email):
-        ds.remove(paths, recursive=True, check=False)
-        update_head(ds, dataset, cookies)

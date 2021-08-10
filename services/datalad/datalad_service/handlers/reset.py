@@ -13,9 +13,9 @@ class ResetResource(object):
         """Reset master to a given commit."""
         if dataset and hexsha.isalnum() and len(hexsha) == 40:
             try:
-                ds = self.store.get_dataset(dataset)
+                dataset_path = self.store.get_dataset_path(dataset)
                 gitProcess = subprocess.run(
-                    ['git', 'reset', '--hard', hexsha], check=True, cwd=ds.path)
+                    ['git', 'reset', '--hard', hexsha], check=True, cwd=dataset_path)
                 resp.status = falcon.HTTP_OK
             except subprocess.CalledProcessError:
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR

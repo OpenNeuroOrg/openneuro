@@ -4,7 +4,7 @@ import re
 
 import pygit2
 
-from datalad_service.common.git import git_show, git_tag
+from datalad_service.common.git import git_show, git_tag, committer
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.files import commit_files
 
@@ -30,7 +30,7 @@ def get_snapshot(store, dataset, snapshot):
 
 def get_snapshots(store, dataset):
     path = store.get_dataset_path(dataset)
-    repo_tags = git_tag(path)
+    repo_tags = git_tag(pygit2.Repository(path))
     # Include an extra id field to uniquely identify snapshots
     tags = [{'id': '{}:{}'.format(dataset, tag.shorthand), 'tag': tag.shorthand, 'hexsha': tag.target.hex, 'created': tag.peel().commit_time}
             for tag in repo_tags]
@@ -83,20 +83,20 @@ def edit_changes(changes, new_changes, tag, date):
     return '\n'.join(changelog_lines) + '\n'
 
 
-def get_head_changes(ds):
+def get_head_changes(dataset_path):
     try:
-        return git_show(ds.path, 'HEAD', 'CHANGES')
+        return git_show(dataset_path, 'HEAD', 'CHANGES')
     except KeyError:
         return None
 
 
-def write_new_changes(ds, tag, new_changes, date):
-    changes = get_head_changes(ds)
+def write_new_changes(dataset_path, tag, new_changes, date):
+    changes = get_head_changes(dataset_path)
     # Prevent adding the git error if the file does not exist in HEAD
     if not changes:
         changes = ''
     updated = edit_changes(changes, new_changes, tag, date)
-    path = os.path.join(ds.path, 'CHANGES')
+    path = os.path.join(dataset_path, 'CHANGES')
     with open(path, 'a+', encoding='utf-8') as changes_file:
         # Seek first, this is r+ but creates the file if needed
         changes_file.seek(0)
@@ -111,29 +111,30 @@ def write_new_changes(ds, tag, new_changes, date):
 
 
 def update_changes(store, dataset, tag, new_changes):
-    ds = store.get_dataset(dataset)
+    dataset_path = store.get_dataset_path(dataset)
     if new_changes is not None and len(new_changes) > 0:
         current_date = datetime.today().strftime('%Y-%m-%d')
-        updated = write_new_changes(ds, tag, new_changes, current_date)
+        updated = write_new_changes(
+            dataset_path, tag, new_changes, current_date)
         # Commit new content, run validator
         commit_files(store, dataset, ['CHANGES'])
         return updated
     else:
-        return get_head_changes(ds)
+        return get_head_changes(dataset_path)
 
 
 def validate_snapshot_name(store, dataset, snapshot):
-    ds = store.get_dataset(dataset)
+    tags = git_tag(pygit2.Repository(store.get_dataset_path(dataset)))
     # Search for any existing tags
-    tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
+    tagged = [tag for tag in tags if tag.name == snapshot]
     if tagged:
         raise SnapshotExistsException(
             'Tag "{}" already exists, name conflict'.format(snapshot))
 
 
 def save_snapshot(store, dataset, snapshot):
-    ds = store.get_dataset(dataset)
-    ds.save(version_tag=snapshot)
+    repo = pygit2.Repository(store.get_dataset_path(dataset))
+    repo.references.create(f'refs/tags/{snapshot}', repo.head.target.hex)
 
 
 def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):

@@ -1,7 +1,10 @@
+import sys
+
 import falcon
+import pygit2
 
 from datalad_service.common.user import get_user_info
-from datalad_service.tasks.files import commit_files
+from datalad_service.common.git import git_commit
 
 
 class DraftResource(object):
@@ -14,8 +17,9 @@ class DraftResource(object):
         """
         if dataset:
             # Maybe turn this into status?
-            ds = self.store.get_dataset(dataset)
-            resp.media = {'hexsha': ds.repo.get_hexsha()}
+            dataset_path = self.store.get_dataset_path(dataset)
+            repo = pygit2.Repository(dataset_path)
+            resp.media = {'hexsha': repo.head.target.hex}
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND
@@ -33,18 +37,19 @@ class DraftResource(object):
             if name and email:
                 media_dict['name'] = name
                 media_dict['email'] = email
-            if 'validate' in req.params and req.params['validate'] == 'false':
-                validate = False
-            else:
-                validate = True
             try:
-                commit = commit_files(self.store, dataset,
-                                      files=None, name=name, email=email, cookies=req.cookies)
-                # Attach the commit hash to response
-                media_dict['ref'] = commit
+                dataset_path = self.store.get_dataset_path(dataset)
+                repo = pygit2.Repository(dataset_path)
+                # Add all changes to the index
+                if name and email:
+                    author = pygit2.Signature(name, email)
+                    media_dict['ref'] = git_commit(repo, ['.'], author).hex
+                else:
+                    media_dict['ref'] = git_commit(repo, ['.']).hex
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             except:
+                raise
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
             resp.media = {

@@ -41,8 +41,8 @@ class GitAnnexResource(object):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
-        ds = self.store.get_dataset(dataset)
-        annex_object_path = os.path.join(ds.path, key_to_path(key))
+        dataset_path = self.store.get_dataset_path(dataset)
+        annex_object_path = os.path.join(dataset_path, key_to_path(key))
         if os.path.exists(annex_object_path):
             resp.status = falcon.HTTP_OK
         else:
@@ -52,8 +52,8 @@ class GitAnnexResource(object):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
-        ds = self.store.get_dataset(dataset)
-        annex_object_path = os.path.join(ds.path, key_to_path(key))
+        dataset_path = self.store.get_dataset_path(dataset)
+        annex_object_path = os.path.join(dataset_path, key_to_path(key))
         if os.path.exists(annex_object_path):
             resp.status = falcon.HTTP_OK
             fd = open(annex_object_path, 'rb')
@@ -66,8 +66,8 @@ class GitAnnexResource(object):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
-        ds = self.store.get_dataset(dataset)
-        annex_object_path = os.path.join(ds.path, key_to_path(key))
+        dataset_path = self.store.get_dataset_path(dataset)
+        annex_object_path = os.path.join(dataset_path, key_to_path(key))
         if os.path.exists(annex_object_path):
             # Don't allow objects to be replaced
             resp.status = falcon.HTTP_CONFLICT
@@ -82,8 +82,8 @@ class GitAnnexResource(object):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
-        ds = self.store.get_dataset(dataset)
-        annex_object_path = os.path.join(ds.path, key_to_path(key))
+        dataset_path = self.store.get_dataset_path(dataset)
+        annex_object_path = os.path.join(dataset_path, key_to_path(key))
         if os.path.exists(annex_object_path):
             os.remove(annex_object_path)
         resp.status = falcon.HTTP_NO_CONTENT

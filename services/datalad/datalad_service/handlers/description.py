@@ -27,7 +27,6 @@ class DescriptionResource(object):
                 resp.media = dataset_description
                 resp.status = falcon.HTTP_OK
             except:
-                raise
                 resp.media = {'error': 'dataset update failed'}
                 resp.status = falcon.HTTP_500
         else:

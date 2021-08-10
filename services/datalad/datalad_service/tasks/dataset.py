@@ -8,29 +8,35 @@ import stat
 
 import pygit2
 
-from datalad_service.common.annex import CommitInfo
+from datalad_service.common.annex import init_annex
+from datalad_service.common.git import git_commit, committer
 
 # A list of patterns to avoid annexing in BIDS datasets
-BIDS_NO_ANNEX = [
-    '*.tsv',
-    '*.json',
-    '*.bvec',
-    '*.bval',
-    'README',
-    'CHANGES',
-    '.bidsignore'
-]
+GIT_ATTRIBUTES = """* annex.backend=MD5E
+**/.git* annex.largefiles=nothing
+*.bval annex.largefiles=nothing
+*.bvec annex.largefiles=nothing
+*.json annex.largefiles=nothing
+*.tsv annex.largefiles=nothing
+.bidsignore annex.largefiles=nothing
+CHANGES annex.largefiles=nothing
+README annex.largefiles=nothing
+"""
 
 
-def create_dataset(store, dataset, name=None, email=None):
+def create_dataset(store, dataset, author=committer):
     """Create a DataLad git-annex repo for a new dataset."""
-    ds = store.get_dataset(dataset)
-    with CommitInfo(None, name, email, where='global'):
-        ds.create()
-        ds.no_annex(BIDS_NO_ANNEX)
-        if not ds.repo:
-            raise Exception('Repo creation failed.')
-        return ds.repo.get_hexsha()
+    dataset_path = store.get_dataset_path(dataset)
+    if os.path.isdir(dataset_path):
+        raise Exception('Dataset already exists')
+    repo = pygit2.init_repository(dataset_path, False)
+    init_annex(dataset_path)
+    # Setup .gitattributes to limit what files are annexed by default
+    with open(os.path.join(dataset_path, '.gitattributes'), 'w') as gitattributes:
+        gitattributes.write(GIT_ATTRIBUTES)
+    repo.index.add('.gitattributes')
+    git_commit(repo, ['.gitattributes'], author, '[OpenNeuro] Dataset created', parents=[])
+    return repo.head.target.hex
 
 
 def force_rmtree(root_dir):
@@ -53,5 +59,5 @@ def force_rmtree(root_dir):
 
 def delete_dataset(store, dataset):
     """Fully delete a given dataset. Removes all snapshots!"""
-    ds = store.get_dataset(dataset)
-    force_rmtree(ds.path)
+    dataset_path = store.get_dataset_path(dataset)
+    force_rmtree(dataset_path)

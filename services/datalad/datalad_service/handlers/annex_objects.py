@@ -17,8 +17,8 @@ class AnnexObjectsResource(object):
     def on_delete(self, req, resp, dataset, snapshot, annex_key):
         """Delete an existing annex_object on a dataset"""
         if annex_key:
-            ds = self.store.get_dataset(dataset)
-            files = get_repo_files(ds, snapshot)
+            dataset_path = self.store.get_dataset_path(dataset)
+            files = get_repo_files(dataset_path, snapshot)
             try:
                 file = next(f for f in files if annex_key == f.get('key'))
             except StopIteration:

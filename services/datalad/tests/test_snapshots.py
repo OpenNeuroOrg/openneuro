@@ -132,7 +132,7 @@ def test_description_update(client, new_dataset):
 
 def test_write_new_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
+    write_new_changes(new_dataset.path, '1.0.1', ['Some changes'], '2019-01-01')
     # Manually make the commit without validation
     new_dataset.save('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
@@ -148,7 +148,7 @@ def test_write_new_changes(datalad_store, new_dataset):
 def test_write_with_empty_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     new_dataset.remove('CHANGES')
-    write_new_changes(new_dataset, '1.0.1', ['Some changes'], '2019-01-01')
+    write_new_changes(new_dataset.path, '1.0.1', ['Some changes'], '2019-01-01')
     # Manually make the commit without validation
     new_dataset.save('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
