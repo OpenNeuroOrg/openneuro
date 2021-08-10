@@ -6,8 +6,6 @@ import subprocess
 
 from sentry_sdk import capture_exception
 
-from datalad.config import ConfigManager
-
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
@@ -208,21 +206,3 @@ def get_tag_info(dataset_path, tag):
     git_process = subprocess.run(['git-annex', 'info', '--json', tag],
                                  cwd=dataset_path, capture_output=True)
     return json.loads(git_process.stdout)
-
-
-class CommitInfo():
-    """Context manager for setting commit info on datalad operations that use it."""
-
-    def __init__(self, dataset, name=None, email=None, where='local'):
-        self.config_manager = ConfigManager(dataset)
-        self.email = email if email else SERVICE_EMAIL
-        self.name = name if name else SERVICE_USER
-        self.where = where
-
-    def __enter__(self):
-        self.config_manager.set('user.email', self.email, self.where)
-        self.config_manager.set('user.name', self.name, self.where)
-
-    def __exit__(self, exception_type, exception_value, traceback):
-        self.config_manager.set('user.email', SERVICE_EMAIL, self.where)
-        self.config_manager.set('user.name', SERVICE_USER, self.where)

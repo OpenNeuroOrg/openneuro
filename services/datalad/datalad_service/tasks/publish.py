@@ -1,7 +1,5 @@
-import requests
 import subprocess
 import re
-import json
 
 from datalad.api import create_sibling_github
 import pygit2

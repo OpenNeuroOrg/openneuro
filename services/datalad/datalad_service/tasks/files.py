@@ -3,7 +3,7 @@ import os
 import subprocess
 import pygit2
 
-from datalad_service.common.annex import CommitInfo, get_repo_files
+from datalad_service.common.annex import get_repo_files
 from datalad_service.common.git import git_commit, git_commit_index, committer
 from datalad_service.common.draft import update_head
 from datalad_service.tasks.validator import validate_dataset
