@@ -115,10 +115,12 @@ input[type='submit'] {
   }
   textarea,
   input {
+    &::-moz-placeholder,
     &::-webkit-input-placeholder {
       opacity: 0;
       transition: inherit;
     }
+    &:focus::-moz-placeholder,
     &:focus::-webkit-input-placeholder {
       opacity: 1;
     }
