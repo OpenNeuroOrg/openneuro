@@ -59,7 +59,8 @@
         "description": {
           "properties": {
             "Name": { "type": "keyword" },
-            "Authors": { "type": "keyword" }
+            "Authors": { "type": "keyword" },
+            "SeniorAuthor": { "type": "keyword" }
           }
         },
         "readme": {

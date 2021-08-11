@@ -3,6 +3,7 @@ import {
   getDescriptionObject,
   defaultDescription,
   repairDescriptionTypes,
+  appendSeniorAuthor,
 } from '../description.js'
 
 // Mock requests to Datalad service
@@ -10,6 +11,26 @@ jest.mock('superagent')
 jest.mock('../../config.js')
 
 describe('datalad dataset descriptions', () => {
+  describe('appendSeniorAuthor', () => {
+    it('returns author out of several', () => {
+      expect(
+        appendSeniorAuthor({
+          Authors: ['A. Bee', 'C. Dee', 'E. Eff'],
+          Name: 'test dataset',
+        }),
+      ).toHaveProperty('SeniorAuthor', 'E. Eff')
+    })
+    it('returns a description when no Authors array is provided', () => {
+      expect(
+        appendSeniorAuthor({ Authors: null, Name: 'test dataset' }),
+      ).toHaveProperty('Name', 'test dataset')
+    })
+    it('returns a description when no Authors array is empty', () => {
+      expect(
+        appendSeniorAuthor({ Authors: [], Name: 'test dataset' }),
+      ).toHaveProperty('Name', 'test dataset')
+    })
+  })
   describe('repairDescriptionTypes', () => {
     it('converts strings to one element arrays for array fields', () => {
       const description = {

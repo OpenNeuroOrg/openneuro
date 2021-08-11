@@ -41,6 +41,7 @@ export const indexQuery = gql`
             description {
               Name
               Authors
+              SeniorAuthor
             }
             summary {
               tasks
