@@ -455,6 +455,8 @@ export const typeDefs = `
     License: String
     # List of individuals who contributed to the creation/curation of the dataset
     Authors: [String]
+    # PI or senior author of this dataset
+    SeniorAuthor: String
     # Text acknowledging contributions of individuals or institutions beyond those listed in Authors or Funding.
     Acknowledgements: String
     # Instructions how researchers using this dataset should acknowledge the original authors. This field can also be used to define a publication that should be cited in publications that use the dataset.
