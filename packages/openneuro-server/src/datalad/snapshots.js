@@ -7,7 +7,10 @@ import { redis, redlock } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
-import { updateDatasetName } from '../graphql/resolvers/dataset.js'
+import {
+  updateDatasetName,
+  snapshotCreationComparison,
+} from '../graphql/resolvers/dataset.js'
 import { description } from '../graphql/resolvers/description.js'
 import doiLib from '../libs/doi/index.js'
 import { getFiles } from './files'
@@ -15,7 +18,6 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset'
 import Snapshot from '../models/snapshot'
-import User from '../models/user'
 import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -40,23 +42,6 @@ const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
     },
     { upsert: true },
   )
-}
-
-const getSnapshotMetadata = (datasetId, snapshots) => {
-  const tags = snapshots.map(s => s.tag)
-  return new Promise((resolve, reject) => {
-    Snapshot.find({ datasetId: datasetId, tag: { $in: tags } }).exec(
-      (err, metadata) => {
-        if (err) reject(err)
-        snapshots = snapshots.map(s => {
-          const matchMetadata = metadata.find(m => m.tag == s.tag)
-          s.created = matchMetadata ? matchMetadata.created : null
-          return s
-        })
-        resolve(snapshots)
-      },
-    )
-  })
 }
 
 const createIfNotExistsDoi = async (
@@ -117,9 +102,8 @@ export const getSnapshots = datasetId => {
     request
       .get(url)
       .set('Accept', 'application/json')
-      .then(async ({ body: { snapshots } }) => {
-        snapshots = await getSnapshotMetadata(datasetId, snapshots)
-        return snapshots
+      .then(({ body: { snapshots } }) => {
+        return snapshots.sort(snapshotCreationComparison)
       }),
   )
 }
