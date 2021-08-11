@@ -88,4 +88,4 @@ export const rangeListLengthQuery = (field, gte: number, lte: number) => {
 export const sqsJoinWithAND = (list: string[]) =>
   list.map(str => `${str}`).join(' + ')
 export const joinWithOR = (list: string[]) =>
-  list.map(str => `${str}`).join(' OR ')
+  list.map(str => `${str}`).join(' | ')
