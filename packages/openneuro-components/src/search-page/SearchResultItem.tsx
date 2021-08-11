@@ -44,6 +44,11 @@ export interface SearchResultItemProps {
     metadata: {
       ages: number[]
     }
+    latestSnapshot?: {
+      summary?: {
+        subjectMetadata?: [{ age?: number }]
+      }
+    }
     draft: {
       id: string
       summary: {
@@ -108,12 +113,14 @@ export interface SearchResultItemProps {
 
 export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const heading = node.draft.description?.Name
-  const summary = node.draft.summary
+  const draftSummary = node.draft.summary
+  const latestSnapshotSummary = node.latestSnapshot?.summary
   const datasetId = node.draft.id
-  const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
-  const numSubjects = summary?.subjects.length > 0 ? summary.subjects.length : 1
+  const numSessions =
+    draftSummary?.sessions.length > 0 ? draftSummary.sessions.length : 1
+  const numSubjects =
+    draftSummary?.subjects.length > 0 ? draftSummary.subjects.length : 1
   const noSnapshots = !!node.snapshots
-
   const accessionNumber = (
     <span className="result-summary-meta">
       <strong>Openneuro Accession Number:</strong>
@@ -144,7 +151,11 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
           : "Participants' Ages"}
         :{' '}
       </strong>
-      <span>{ages(node?.metadata?.ages)}</span>
+      <span>
+        {ages(
+          latestSnapshotSummary?.subjectMetadata?.map(subject => subject.age),
+        )}
+      </span>
     </span>
   )
   const subjects = (
@@ -156,13 +167,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const size = (
     <span className="result-summary-meta">
       <strong>Size: </strong>
-      <span>{bytes(summary?.size)}</span>
+      <span>{bytes(draftSummary?.size)}</span>
     </span>
   )
   const files = (
     <span className="result-summary-meta">
       <strong>Files: </strong>
-      <span>{summary?.totalFiles.toLocaleString()}</span>
+      <span>{draftSummary?.totalFiles.toLocaleString()}</span>
     </span>
   )
 
@@ -296,27 +307,29 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     </div>
   )
 
-  const modalityList = summary?.modalities.length ? (
+  const modalityList = draftSummary?.modalities.length ? (
     <div className="modality-list">
       {_list(
-        <>{summary?.modalities.length === 1 ? 'Modality' : 'Modalities'}</>,
-        summary?.modalities,
+        <>
+          {draftSummary?.modalities.length === 1 ? 'Modality' : 'Modalities'}
+        </>,
+        draftSummary?.modalities,
       )}
     </div>
   ) : null
-  const taskList = summary?.tasks.length ? (
-    <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
+  const taskList = draftSummary?.tasks.length ? (
+    <div className="task-list">{_list(<>Tasks</>, draftSummary?.tasks)}</div>
   ) : null
 
-  const tracers = summary?.pet?.TracerName?.length ? (
+  const tracers = draftSummary?.pet?.TracerName?.length ? (
     <div className="tracers-list">
       {_list(
         <>
-          {summary?.pet?.TracerName.length === 1
+          {draftSummary?.pet?.TracerName.length === 1
             ? 'Radiotracer'
             : 'Radiotracers'}
         </>,
-        summary?.pet?.TracerName,
+        draftSummary?.pet?.TracerName,
       )}
     </div>
   ) : null
