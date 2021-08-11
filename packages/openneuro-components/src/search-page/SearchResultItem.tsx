@@ -46,9 +46,7 @@ export interface SearchResultItemProps {
     }
     latestSnapshot: {
       summary?: {
-        subjectMetadata?: {
-          age?: number[]
-        }
+        subjectMetadata?: [{ age?: number }]
       }
     }
     draft: {
