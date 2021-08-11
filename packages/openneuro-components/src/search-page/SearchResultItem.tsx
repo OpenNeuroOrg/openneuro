@@ -44,7 +44,7 @@ export interface SearchResultItemProps {
     metadata: {
       ages: number[]
     }
-    latestSnapshot: {
+    latestSnapshot?: {
       summary?: {
         subjectMetadata?: [{ age?: number }]
       }
@@ -114,7 +114,7 @@ export interface SearchResultItemProps {
 export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
   const heading = node.draft.description?.Name
   const draftSummary = node.draft.summary
-  const latestSnapshotSummary = node.latestSnapshot.summary
+  const latestSnapshotSummary = node.latestSnapshot?.summary
   const datasetId = node.draft.id
   const numSessions =
     draftSummary?.sessions.length > 0 ? draftSummary.sessions.length : 1
