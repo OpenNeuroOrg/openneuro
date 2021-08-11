@@ -238,6 +238,7 @@ export const useSearchResults = () => {
       matchQuery(
         'latestSnapshot.description.SeniorAuthor',
         joinWithOR(authors),
+        '3',
       ),
     )
   if (gender_selected !== 'All')
