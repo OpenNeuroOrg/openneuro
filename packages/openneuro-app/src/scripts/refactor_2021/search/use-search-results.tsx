@@ -225,7 +225,7 @@ export const useSearchResults = () => {
   if (authors.length)
     boolQuery.addClause(
       'must',
-      matchQuery('latestSnapshot.description.Authors', joinWithOR(authors)),
+      matchQuery('latestSnapshot.description.SeniorAuthor', joinWithOR(authors)),
     )
   if (gender_selected !== 'All')
     boolQuery.addClause(
