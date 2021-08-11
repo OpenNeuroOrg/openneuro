@@ -153,7 +153,7 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
       </strong>
       <span>
         {ages(
-          latestSnapshotSummary.subjectMetadata?.map(subject => subject.age),
+          latestSnapshotSummary?.subjectMetadata?.map(subject => subject.age),
         )}
       </span>
     </span>
