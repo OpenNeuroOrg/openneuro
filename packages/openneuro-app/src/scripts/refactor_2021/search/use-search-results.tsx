@@ -207,7 +207,10 @@ export const useSearchResults = () => {
     }
   }
   if (isActiveRange(ageRange))
-    boolQuery.addClause('filter', rangeQuery('metadata.ages', ...ageRange))
+    boolQuery.addClause(
+      'filter',
+      rangeQuery('latestSnapshot.summary.subjectMetadata.age', ...ageRange),
+    )
   if (isActiveRange(subjectCountRange))
     boolQuery.addClause(
       'filter',
