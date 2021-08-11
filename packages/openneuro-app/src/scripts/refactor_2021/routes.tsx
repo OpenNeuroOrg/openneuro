@@ -30,10 +30,10 @@ const Routes = () => (
     <Route name="error" path="/error" component={ErrorRoute} />
     <Route name="pet-landing" path="/pet" component={PETDummy} />
     <Route name="citation" path="/cite" component={Citation} />
-    <Route path="*" component={() => <FourOFourPage />} />
     <Redirect from="/public" to="/search" />
     <Redirect from="/saved" to="/search?bookmarks" />
     <Redirect from="/dashboard" to="/search?mydatasets" />
+    <Route component={FourOFourPage} />
   </Switch>
 )
 
