@@ -56,6 +56,13 @@ const searchQuery = gql`
           metadata {
             ages
           }
+          latestSnapshot {
+            summary {
+              subjectMetadata {
+                age
+              }
+            }
+          }
           draft {
             id
             summary {
@@ -225,7 +232,10 @@ export const useSearchResults = () => {
   if (authors.length)
     boolQuery.addClause(
       'must',
-      matchQuery('latestSnapshot.description.SeniorAuthor', joinWithOR(authors)),
+      matchQuery(
+        'latestSnapshot.description.SeniorAuthor',
+        joinWithOR(authors),
+      ),
     )
   if (gender_selected !== 'All')
     boolQuery.addClause(
