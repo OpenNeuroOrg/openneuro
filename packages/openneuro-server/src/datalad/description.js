@@ -102,6 +102,18 @@ export const repairDescriptionTypes = description => {
 }
 
 /**
+ * Return the last author in dataset_description as the senior author if available
+ */
+export const appendSeniorAuthor = description => {
+  try {
+    const SeniorAuthor = description?.Authors[description.Authors.length - 1]
+    return { ...description, SeniorAuthor }
+  } catch (err) {
+    return description
+  }
+}
+
+/**
  * Get a parsed dataset_description.json
  * @param {object} obj dataset or snapshot object
  */
@@ -119,6 +131,7 @@ export const description = obj => {
         .then(uncachedDescription => ({ id: revision, ...uncachedDescription }))
     })
     .then(description => repairDescriptionTypes(description))
+    .then(description => appendSeniorAuthor(description))
 }
 
 export const setDescription = (datasetId, user, descriptionFieldUpdates) => {

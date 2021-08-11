@@ -86,6 +86,7 @@ const searchQuery = gql`
             }
             description {
               Name
+              Authors
             }
           }
           analytics {
@@ -148,7 +149,14 @@ export const useSearchResults = () => {
 
   const boolQuery = new BoolQuery()
   if (keywords.length)
-    boolQuery.addClause('must', simpleQueryString(sqsJoinWithAND(keywords)))
+    boolQuery.addClause(
+      'must',
+      simpleQueryString(sqsJoinWithAND(keywords), [
+        'latestSnapshot.readme',
+        'latestSnapshot.description.Name',
+        'latestSnapshot.description.Authors',
+      ]),
+    )
   if (modality_selected) {
     const secondaryModalities = {
       Diffusion: {
@@ -217,7 +225,7 @@ export const useSearchResults = () => {
   if (authors.length)
     boolQuery.addClause(
       'must',
-      matchQuery('metadata.seniorAuthor', joinWithOR(authors)),
+      matchQuery('latestSnapshot.description.SeniorAuthor', joinWithOR(authors)),
     )
   if (gender_selected !== 'All')
     boolQuery.addClause(
