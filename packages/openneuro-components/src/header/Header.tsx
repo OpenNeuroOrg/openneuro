@@ -91,6 +91,16 @@ export const Header = ({
         isOpen={isOpenSupport}
         toggle={toggleSupport}
         closeText="Close">
+        <h3>OpenNeuro Support</h3>
+        <p>
+          Please email issues or questions to
+          <br />
+          <a href={'mailto:support@openneuro.freshdesk.com'}>
+            support@openneuro.freshdesk.com
+          </a>
+          <br />
+          or use the form below.
+        </p>
         {renderOnFreshDeskWidget()}
       </Modal>
     </>
