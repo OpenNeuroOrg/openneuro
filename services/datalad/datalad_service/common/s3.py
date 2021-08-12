@@ -90,8 +90,15 @@ def update_s3_sibling(dataset_path, realm):
 def validate_s3_config(dataset_path, realm):
     """Checks that s3-PUBLIC annex-options match those set in setup_s3_siblings"""
     # get annex options for s3 bucket
-    remote_log = subprocess.run(['git', 'cat-file', '-p', 'git-annex:remote.log'],
-                               cwd=dataset_path, capture_output=True, check=True)
+    try:
+        remote_log = subprocess.run(['git', 'cat-file', '-p', 'git-annex:remote.log'],
+                                    cwd=dataset_path, capture_output=True, check=True)
+    except subprocess.CalledProcessError as err:
+        if err.returncode == 128:
+            # git-annex:remote.log is most likely not created yet, skip validation
+            return True
+        else:
+            raise
     options_line = ''
     for line in remote_log.stdout:
         if f'name={realm.s3_remote}' in line:
