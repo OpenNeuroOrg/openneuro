@@ -1,32 +1,32 @@
+import logging
 import subprocess
 import re
 
-from datalad.api import create_sibling_github
 import pygit2
+import boto3
+import gevent
+from github import Github
 
+import datalad_service.common.s3
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
-from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.common.annex import get_tag_info
 from datalad_service.common.openneuro import clear_dataset_cache
 from datalad_service.common.git import git_show, git_tag
-import datalad_service.common.s3
+from datalad_service.common.github import create_sibling_github
 from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
 from datalad_service.common.s3 import update_s3_sibling
-
-import boto3
-from github import Github
-import gevent
 from datalad_service.common.elasticsearch import ReexportLogger
 
-import logging
+
 logger = logging.getLogger('datalad_service.' + __name__)
 
-def create_github_repo(dataset, repo_name):
+
+def create_github_repo(dataset_path, dataset_id):
     """Setup a github sibling / remote."""
     try:
         # raise exception if github exports are not enabled
@@ -35,25 +35,20 @@ def create_github_repo(dataset, repo_name):
                 'DATALAD_GITHUB_EXPORTS_ENABLED must be defined to create remote repos')
 
         # this adds github remote to config and also creates repo
-        return create_sibling_github(repo_name,
-                                     github_login=DATALAD_GITHUB_LOGIN,
-                                     github_passwd=DATALAD_GITHUB_PASS,
-                                     github_organization=DATALAD_GITHUB_ORG,
-                                     dataset=dataset,
-                                     access_protocol='ssh')
+        return create_sibling_github(dataset_path, dataset_id)
     except KeyError:
         raise Exception(
             'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, and DATALAD_GITHUB_ORG must be defined to create remote repos')
 
 
-def github_sibling(dataset_path, repo_name, siblings):
+def github_sibling(dataset_path, dataset_id, siblings):
     """
     Find a GitHub remote or create a new repo and configure the remote.
     """
     try:
         return siblings['github']
     except KeyError:
-        create_github_repo(dataset_path, repo_name)
+        create_github_repo(dataset_path, dataset_id)
         return siblings['github']
 
 
@@ -75,7 +70,7 @@ def github_export(dataset, target):
     Publish GitHub repo and tags.
     """
     dataset.publish(to=target)
-    gitProcess = subprocess.check_call(
+    subprocess.check_call(
         ['git', 'push', '--tags', target], cwd=dataset.path)
 
 
@@ -110,13 +105,16 @@ def get_dataset_realm(siblings, realm=None):
 def publish_dataset(store, dataset, cookies=None, realm='PUBLIC'):
     def get_realm():
         return get_s3_realm(realm=realm)
+
     def should_export():
         return True
     export_all_tags(store, dataset, cookies, get_realm, should_export)
 
+
 def reexport_dataset(store, dataset, cookies=None, realm=None):
     def get_realm(siblings):
         return get_dataset_realm(siblings, realm)
+
     def should_export(dataset_path, tags):
         latest_tag = tags[-1:][0]
         # If remote has latest snapshot, do not reexport.
@@ -124,15 +122,18 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
         return not check_remote_has_version(dataset_path, DatasetRealm.PUBLIC.s3_remote, latest_tag)
     # logs to elasticsearch
     esLogger = ReexportLogger(dataset)
-    export_all_tags(store, dataset, cookies, get_realm, should_export, esLogger)
-        
+    export_all_tags(store, dataset, cookies,
+                    get_realm, should_export, esLogger)
+
+
 def publish_snapshot(store, dataset, cookies=None, snapshot=None, realm=None):
     def get_realm(siblings):
         return get_dataset_realm(siblings, realm)
+
     def should_export(ds, tags):
         return True
     export_all_tags(store, dataset, cookies, get_realm, should_export)
-    
+
 
 def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esLogger=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
@@ -162,14 +163,17 @@ def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esL
                 error = err
             finally:
                 if esLogger:
-                    esLogger.log(tag, s3_export_successful, github_export_successful, error)
+                    esLogger.log(tag, s3_export_successful,
+                                 github_export_successful, error)
         clear_dataset_cache(dataset, cookies)
+
 
 def check_remote_has_version(dataset_path, remote, tag):
     try:
         info = get_tag_info(dataset_path, tag)
         remotes = info.get('repositories containing these files', [])
-        remote_repo = [r for r in remotes if r.get('description') == f'[{remote}]']
+        remote_repo = [r for r in remotes if r.get(
+            'description') == f'[{remote}]']
         remote_id_A = remote_repo and remote_repo[0].get('uuid')
 
         # extract remote uuid and associated git tree id from `git show git-annex:export.log`
@@ -191,6 +195,7 @@ def check_remote_has_version(dataset_path, remote, tag):
     # if the remote uuids and tree ids exist and match, then
     # <tag> is the latest export to <remote>
     return remote_id_A == remote_id_B and tree_id_A == tree_id_B
+
 
 def delete_s3_sibling(dataset_id, siblings, realm):
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
@@ -219,6 +224,7 @@ def delete_s3_sibling(dataset_id, siblings, realm):
         except Exception as e:
             raise Exception(
                 f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
+
 
 def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
@@ -285,16 +291,18 @@ def remove_file_remotes(store, urls):
         else:
             logger.debug(f'url is not in S3')
 
+
 def remove_object_from_s3(url):
     m = re.match(r'.*?(?:s3\.amazonaws\.com\/)(.*?)\/(.*?)(?:\?|$)', url)
     bucket = m[1]
     filepath = m[2]
-    version_id = re.match(r'.*?[?&]versionId=([^&]+).*$', url)[1] if 'versionId=' in url else None
+    version_id = re.match(r'.*?[?&]versionId=([^&]+).*$',
+                          url)[1] if 'versionId=' in url else None
     client = boto3.client(
-                's3',
-                aws_access_key_id=AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            )
+        's3',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    )
     client.delete_object(
         Bucket=bucket,
         Key=filepath,
