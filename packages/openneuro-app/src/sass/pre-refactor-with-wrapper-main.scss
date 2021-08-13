@@ -1543,3 +1543,7 @@ $primary: $on-dark-aqua default;
     border-bottom-color: $tooltip-arrow-color;
   }
 }
+
+.tooltip.top {
+  z-index: 2000;
+}
