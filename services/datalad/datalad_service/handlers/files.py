@@ -9,8 +9,6 @@ from datalad_service.common.stream import update_file
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.files import get_untracked_files
 from datalad_service.tasks.files import remove_files
-from datalad_service.tasks.files import remove_recursive
-from datalad_service.tasks.files import unlock_files
 
 
 class FilesResource(object):
@@ -76,14 +74,12 @@ class FilesResource(object):
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
-                ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
                 # Record if this was done on behalf of a user
                 name, email = get_user_info(req)
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                unlock_files(self.store, dataset, files=[filename])
                 update_file(file_path, req.stream)
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
@@ -94,8 +90,6 @@ class FilesResource(object):
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     # Begin writing stream to disk
                     update_file(file_path, req.stream)
-                    # Add to dataset
-                    ds = self.store.get_dataset(dataset)
                     media_dict = {'created': filename}
                     resp.media = media_dict
                     resp.status = falcon.HTTP_OK
@@ -133,16 +127,17 @@ class FilesResource(object):
                     media_dict['email'] = email
                 try:
                     if len(dirs_to_delete) > 0:
-                        remove_recursive(
+                        remove_files(
                             self.store, dataset, dirs_to_delete, name=name, email=email, cookies=req.cookies)
                         resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
                     if len(files_to_delete) > 0:
-                        remove_files(self.store, dataset, files=files_to_delete,
+                        remove_files(self.store, dataset, files_to_delete,
                                      name=name, email=email, cookies=req.cookies)
                     resp.media = media_dict
                     resp.status = falcon.HTTP_OK
                 except:
                     resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+                    raise
             else:
                 resp.media = {
                     'error': f'the following files not found: {", ".join(paths_not_found)}'}

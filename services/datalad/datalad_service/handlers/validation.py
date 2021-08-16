@@ -18,9 +18,9 @@ class ValidationResource(object):
                 media_dict['name'] = name
                 media_dict['email'] = email
             try:
-                ds = self.store.get_dataset(dataset)
+                dataset_path = self.store.get_dataset_path(dataset)
                 # Run the validator but don't block on the request
-                validate_dataset(dataset, ds.path, hexsha, req.cookies, user=name)
+                validate_dataset(dataset, dataset_path, hexsha, req.cookies, user=name)
                 resp.status = falcon.HTTP_OK
             except:
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR

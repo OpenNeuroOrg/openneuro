@@ -1,4 +1,7 @@
 import falcon
+import pygit2
+
+from datalad_service.common.git import git_tag
 
 
 class HistoryResource(object):
@@ -10,20 +13,21 @@ class HistoryResource(object):
         Return dataset history (text format)
         """
         if dataset:
-            ds = self.store.get_dataset(dataset)
-            # Rare sequence used for delimiter
-            utf_delimiter = '!5$H%E^P&'
-            git_format = '%H{}%aI{}%cn{}%ce{}%d{}%s'.format(
-                *[utf_delimiter for x in range(5)])
-            log = ds.repo.get_revisions(fmt=git_format)
-            parsed_lines = []
-            for line in log:
-                values = line.split(utf_delimiter)
-                commit = {"id": values[0], "date": values[1],
-                          "authorName": values[2], "authorEmail": values[3],
-                          "references": values[4], "message": values[5]}
-                parsed_lines.append(commit)
-            resp.media = {'log': parsed_lines}
+            dataset_path = self.store.get_dataset_path(dataset)
+            repo = pygit2.Repository(dataset_path)
+            tags = git_tag(repo)
+            head = repo[repo.head.target]
+            log = []
+            for commit in repo.walk(head.id, pygit2.GIT_SORT_TIME):
+                references = []
+                for tag in tags:
+                    if tag.target.hex == commit.hex:
+                        references += tag.name
+                log.append({
+                    "id": commit.hex, "date": commit.commit_time,
+                    "authorName": commit.author.name, "authorEmail": commit.author.email,
+                    "message": commit.message, "references": ",".join(references)})
+            resp.media = {'log': log}
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND

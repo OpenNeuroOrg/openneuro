@@ -2,6 +2,7 @@ import os
 
 import falcon
 import gevent
+import pygit2
 
 from datalad_service.common.user import get_user_info
 from datalad_service.tasks.dataset import create_dataset
@@ -37,7 +38,11 @@ class DatasetResource(object):
         else:
             # Record if this was done on behalf of a user
             name, email = get_user_info(req)
-            hexsha = create_dataset(self.store, dataset, name, email)
+            if name and email:
+                author = pygit2.Signature(name, email)
+            else:
+                author = None
+            hexsha = create_dataset(self.store, dataset, author)
             resp.media = {'hexsha': hexsha}
             resp.status = falcon.HTTP_OK
 

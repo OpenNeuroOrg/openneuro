@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+datalad = "==0.13.3"
 codecov = "*"
 pytest = "*"
 coverage = "*"
@@ -14,7 +15,6 @@ pytest-xdist = "*"
 
 [packages]
 dnspython = "*"
-datalad = "==0.13.3"
 falcon = "==2.0.0"
 redis = "*"
 requests = "*"
@@ -28,9 +28,6 @@ boto3 = "*"
 elasticsearch = "*"
 pygit2 = "*"
 pygithub = "==1.54.1"
-
-[requires]
-python_version = "3.8"
 
 [packages.sentry-sdk]
 extras = [ "falcon",]

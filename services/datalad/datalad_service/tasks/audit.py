@@ -12,13 +12,13 @@ def audit_datasets(store):
     audit_remotes(store, dataset)
 
 
-def fsck_remote(ds, remote):
+def fsck_remote(dataset_path, remote):
     """Run fsck for one dataset remote"""
     # Run at most once per month per dataset
     annex_command = ("git-annex", "fsck", "--all", "--from={}".format(remote), "--fast", "--json",
                      "--json-error-messages", "--incremental", "--incremental-schedule=30d", "--time-limit=15m")
     annex_process = subprocess.Popen(
-        annex_command, cwd=ds.path, stdout=subprocess.PIPE, encoding='utf-8')
+        annex_command, cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')
     bad_files = []
     for annexed_file_json in annex_process.stdout:
         annexed_file = json.loads(annexed_file_json)
@@ -29,7 +29,7 @@ def fsck_remote(ds, remote):
         sentry_sdk.context.merge()
         with sentry_sdk.configure_scope() as scope:
             scope.set_context(
-                {'dataset': ds.path, 'remote': remote, bad_files: bad_files})
+                {'dataset': dataset_path, 'remote': remote, bad_files: bad_files})
         sentry_sdk.captureMessage(
             'Remote audit failed! Some expected annex keys were unavailable at this remote.')
 
@@ -43,9 +43,9 @@ def audit_remotes(store, dataset):
     Audits run on the publish worker for now. This introduces some delay publishing 
     but prevents deadlocks of the main dataset workers.
     """
-    ds = store.get_dataset(dataset)
-    ds.siblings()
-    for sib in ds.siblings():
+    dataset_path = store.get_dataset_path(dataset)
+    repo = pygit2.Repository(dataset_path)
+    for sib in repo.remotes:
         # Only check S3 remotes for now
-        if sib['name'].startswith('s3-'):
-            fsck_remote(ds, sib['name'])
+        if sib.name.startswith('s3-'):
+            fsck_remote(dataset_path, sib['name'])

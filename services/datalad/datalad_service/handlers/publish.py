@@ -1,7 +1,6 @@
 import falcon
 import gevent
 
-from datalad_service.common.user import get_user_info
 from datalad_service.tasks.publish import publish_dataset
 
 

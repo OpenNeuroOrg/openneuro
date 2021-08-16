@@ -1,19 +1,19 @@
 import hashlib
-from mmap import mmap
-import json
-import os
-import re
 import io
-import stat
+import json
+from mmap import mmap
 import subprocess
 
 from sentry_sdk import capture_exception
 
-from datalad.config import ConfigManager
-
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
+
+
+def init_annex(dataset_path):
+    """Setup git-annex within an existing git repo"""
+    subprocess.run(['git-annex', 'init', 'OpenNeuro'], check=True, cwd=dataset_path)
 
 
 def compute_git_hash(path, size):
@@ -168,10 +168,10 @@ def get_repo_urls(path, files):
     return files
 
 
-def get_repo_files(dataset, branch='HEAD'):
+def get_repo_files(dataset_path, branch='HEAD'):
     """Read all files in a repo at a given branch, tag, or commit hash."""
     gitProcess = subprocess.Popen(
-        ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset.path, stdout=subprocess.PIPE, encoding='utf-8')
+        ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')
     files = []
     symlinkFilenames = []
     symlinkObjects = []
@@ -183,7 +183,7 @@ def get_repo_files(dataset, branch='HEAD'):
     # This is about 100x faster than one call per file for annexed file heavy datasets
     catFileInput = '\n'.join(symlinkObjects)
     catFileProcess = subprocess.run(['git', 'cat-file', '--batch', '--buffer'],
-                                    cwd=dataset.path, stdout=subprocess.PIPE, input=catFileInput, encoding='utf-8')
+                                    cwd=dataset_path, stdout=subprocess.PIPE, input=catFileInput, encoding='utf-8')
     # Output looks like this:
     # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
     # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
@@ -198,22 +198,11 @@ def get_repo_files(dataset, branch='HEAD'):
             files.append({'filename': filename, 'size': int(
                 size), 'id': file_id, 'key': key, 'urls': [], 'annexed': True})
     # Now find URLs for each file if available
-    return get_repo_urls(dataset.path, files)
+    return get_repo_urls(dataset_path, files)
 
 
-class CommitInfo():
-    """Context manager for setting commit info on datalad operations that use it."""
-
-    def __init__(self, dataset, name=None, email=None, where='local'):
-        self.config_manager = ConfigManager(dataset)
-        self.email = email if email else SERVICE_EMAIL
-        self.name = name if name else SERVICE_USER
-        self.where = where
-
-    def __enter__(self):
-        self.config_manager.set('user.email', self.email, self.where)
-        self.config_manager.set('user.name', self.name, self.where)
-
-    def __exit__(self, exception_type, exception_value, traceback):
-        self.config_manager.set('user.email', SERVICE_EMAIL, self.where)
-        self.config_manager.set('user.name', SERVICE_USER, self.where)
+def get_tag_info(dataset_path, tag):
+    """`git annex info <tag>`"""
+    git_process = subprocess.run(['git-annex', 'info', '--json', tag],
+                                 cwd=dataset_path, capture_output=True)
+    return json.loads(git_process.stdout)

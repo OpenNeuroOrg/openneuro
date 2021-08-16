@@ -50,7 +50,7 @@ class GitRefsResource(object):
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         if dataset:
-            ds = self.store.get_dataset(dataset)
+            dataset_path = self.store.get_dataset_path(dataset)
             service = req.get_param('service', required=True)
             if service == 'git-receive-pack' or service == 'git-upload-pack':
                 # Prefix is line length as hex followed by service name to start
@@ -59,7 +59,7 @@ class GitRefsResource(object):
                 elif service == 'git-upload-pack':
                     prefix = b'001e# service=git-upload-pack\n0000'
                 # git-receive-pack or git-upload-pack handle the other requests
-                with subprocess.Popen([service, '--advertise-refs', '--stateless-rpc', ds.path], stdout=subprocess.PIPE) as process:
+                with subprocess.Popen([service, '--advertise-refs', '--stateless-rpc', dataset_path], stdout=subprocess.PIPE) as process:
                     resp.content_type = 'application/x-{}-advertisement'.format(
                         service)
                     resp.body = prefix + process.stdout.read()
@@ -85,13 +85,13 @@ class GitReceiveResource(object):
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         if dataset:
-            ds = self.store.get_dataset(dataset)
+            dataset_path = self.store.get_dataset_path(dataset)
             pre_receive_path = os.path.join(
-                ds.path, '.git', 'hooks', 'pre-receive')
+                dataset_path, '.git', 'hooks', 'pre-receive')
             if not os.path.islink(pre_receive_path):
                 os.symlink('/hooks/pre-receive', pre_receive_path)
             process = subprocess.Popen(
-                ['git-receive-pack', '--stateless-rpc', ds.path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                ['git-receive-pack', '--stateless-rpc', dataset_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             pipe_chunks(reader=req.bounded_stream, writer=process.stdin)
             process.stdin.flush()
             resp.status = falcon.HTTP_OK
@@ -115,9 +115,9 @@ class GitUploadResource(object):
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         if dataset:
-            ds = self.store.get_dataset(dataset)
+            dataset_path = self.store.get_dataset_path(dataset)
             process = subprocess.Popen(
-                ['git-upload-pack', '--stateless-rpc', ds.path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+                ['git-upload-pack', '--stateless-rpc', dataset_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             pipe_chunks(reader=req.bounded_stream, writer=process.stdin)
             process.stdin.flush()
             resp.status = falcon.HTTP_OK

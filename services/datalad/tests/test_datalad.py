@@ -2,6 +2,8 @@
 import os
 from mock import patch
 
+import pygit2
+
 from .dataset_fixtures import *
 from datalad_service.tasks.dataset import *
 from datalad_service.tasks.files import commit_files
@@ -9,7 +11,8 @@ from datalad_service.tasks.files import commit_files
 
 def test_create_dataset(datalad_store):
     ds_id = 'ds000002'
-    create_dataset(datalad_store, ds_id)
+    author = pygit2.Signature('test author', 'test@example.com')
+    create_dataset(datalad_store, ds_id, author)
     assert Dataset(os.path.join(
         datalad_store.annex_path, ds_id)).repo is not None
 
