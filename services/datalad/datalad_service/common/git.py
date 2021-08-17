@@ -29,7 +29,8 @@ def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded chan
     # Refresh index with git-annex specific handling
     annex_command = ["git-annex", "add"] + file_paths
     subprocess.run(annex_command, check=True, cwd=repo.workdir)
-    repo.index.read()
+    repo.index.add_all(file_paths)
+    repo.index.write()
     return git_commit_index(repo, author, message, parents)
 
 
