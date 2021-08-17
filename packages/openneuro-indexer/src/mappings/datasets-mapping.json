@@ -58,7 +58,7 @@
         },
         "description": {
           "properties": {
-            "Name": { "type": "keyword" },
+            "Name": { "type": "text" },
             "Authors": { "type": "keyword" },
             "SeniorAuthor": { "type": "text" }
           }
