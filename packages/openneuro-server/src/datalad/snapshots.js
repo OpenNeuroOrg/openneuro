@@ -97,15 +97,12 @@ const postSnapshot = async (
  */
 export const getSnapshots = datasetId => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
-  const cache = new CacheItem(redis, CacheType.snapshotIndex, [datasetId])
-  return cache.get(() =>
-    request
-      .get(url)
-      .set('Accept', 'application/json')
-      .then(({ body: { snapshots } }) => {
-        return snapshots.sort(snapshotCreationComparison)
-      }),
-  )
+  return request
+    .get(url)
+    .set('Accept', 'application/json')
+    .then(({ body: { snapshots } }) => {
+      return snapshots.sort(snapshotCreationComparison)
+    })
 }
 
 const announceNewSnapshot = async (snapshot, datasetId, user) => {
@@ -138,7 +135,6 @@ export const createSnapshot = async (
   descriptionFieldUpdates = {},
   snapshotChanges = [],
 ) => {
-  const indexCache = new CacheItem(redis, CacheType.snapshotIndex, [datasetId])
   const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
     datasetId,
     tag,
@@ -162,9 +158,6 @@ export const createSnapshot = async (
     snapshot.created = new Date()
     snapshot.files = await getFiles(datasetId, tag)
 
-    // Clear the index now that the new snapshot is ready
-    indexCache.drop()
-
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)
       updateDatasetRevision(datasetId, snapshot.hexsha),
@@ -182,7 +175,6 @@ export const createSnapshot = async (
   } catch (err) {
     // delete the keys if any step fails
     // this avoids inconsistent cache state after failures
-    indexCache.drop()
     snapshotCache.drop()
     snapshotLock.unlock()
     Sentry.captureException(err)
@@ -195,14 +187,10 @@ export const deleteSnapshot = (datasetId, tag) => {
     datasetId,
   )}/datasets/${datasetId}/snapshots/${tag}`
   return request.del(url).then(async ({ body }) => {
-    const indexCache = new CacheItem(redis, CacheType.snapshotIndex, [
-      datasetId,
-    ])
     const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
       datasetId,
       tag,
     ])
-    await indexCache.drop()
     await snapshotCache.drop()
     pubsub.publish('snapshotsUpdated', {
       datasetId,
