@@ -39,7 +39,7 @@ class UploadResource(object):
             gevent.sleep()
             move_files(upload_path, dataset_path)
             author = pygit2.Signature(name, email)
-            hexsha = git_commit(repo, unlock_files, author)
+            hexsha = git_commit(repo, unlock_files, author).hex
             update_head(dataset_id, dataset_path, hexsha, cookies)
             gevent.sleep()
             shutil.rmtree(upload_path)

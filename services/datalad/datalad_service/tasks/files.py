@@ -68,7 +68,7 @@ def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     repo.index.remove_all(paths)
     repo.index.write()
     hexsha = git_commit_index(repo, author,
-                              message="[OpenNeuro] Files removed")
+                              message="[OpenNeuro] Files removed").hex
     update_head(dataset, dataset_path, hexsha, cookies)
 
 
