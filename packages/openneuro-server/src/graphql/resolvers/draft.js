@@ -2,16 +2,17 @@ import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { description } from './description.js'
 import { readme } from './readme.js'
-import { getDraftFiles, updateDatasetRevision } from '../../datalad/draft.js'
+import { getDraftRevision, updateDatasetRevision } from '../../datalad/draft.js'
 import { checkDatasetWrite } from '../permissions.js'
-import { filterFiles } from '../../datalad/files.js'
+import { getFiles, filterFiles } from '../../datalad/files.js'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 
 // A draft must have a dataset parent
-const draftFiles = (dataset, args, { userInfo }) => {
-  return getDraftFiles(dataset.id, args)
-    .then(filterFiles('prefix' in args && args.prefix))
-    .then(filterRemovedAnnexObjects(dataset.id, userInfo))
+const draftFiles = async (dataset, args, { userInfo }) => {
+  const hexsha = await getDraftRevision(dataset.id)
+  const files = await getFiles(dataset.id, hexsha)
+  const prefixFiltered = filterFiles('prefix' in args && args.prefix)(files)
+  return filterRemovedAnnexObjects(dataset.id, userInfo)(prefixFiltered)
 }
 
 /**

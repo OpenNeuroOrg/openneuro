@@ -393,7 +393,7 @@ export const typeDefs = `
     # Validator issues
     issues: [ValidationIssue]
     # Committed files in the working tree
-    files(untracked: Boolean, prefix: String = ""): [DatasetFile]
+    files(prefix: String = ""): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Dataset README
