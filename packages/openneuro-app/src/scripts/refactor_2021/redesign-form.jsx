@@ -50,7 +50,7 @@ class ContactForm extends React.Component {
       <>
         {this.state.formCompleted ? null : (
           <button
-            className="on-button--medium on-button on-button--secondary open-feedback-modal-button"
+            className="on-button--large on-button on-button--secondary open-feedback-modal-button"
             onClick={() =>
               this.setState({
                 showFeedbackModal: !this.state.showFeedbackModal,
