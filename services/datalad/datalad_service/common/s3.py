@@ -92,7 +92,7 @@ def validate_s3_config(dataset_path, realm):
     # get annex options for s3 bucket
     try:
         remote_log = subprocess.run(['git', 'cat-file', '-p', 'git-annex:remote.log'],
-                                    cwd=dataset_path, capture_output=True, check=True)
+                                    cwd=dataset_path, capture_output=True, check=True, encoding='utf-8')
     except subprocess.CalledProcessError as err:
         if err.returncode == 128:
             # git-annex:remote.log is most likely not created yet, skip validation
