@@ -99,7 +99,7 @@ services:
 
   # mongodb
   mongo:
-    image: mongo:4.0
+    image: mongo:4.4
     volumes:
       - ${PERSISTENT_DIR}/mongo:/data/db:delegated
 
