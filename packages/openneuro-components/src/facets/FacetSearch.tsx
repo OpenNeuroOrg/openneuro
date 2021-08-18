@@ -6,10 +6,6 @@ import { ButtonPropsSize } from '../button/Button'
 import { InputPropsStyle } from '../input/Input'
 
 export interface FacetSearchProps {
-  accordionStyle: AccordionTabStyle
-  startOpen: boolean
-  label: string
-  dropdown?: boolean
   setTermValue: (string) => void
   pushTerm: React.Dispatch<React.SetStateAction<any[]>>
   allTerms: string[]
@@ -29,10 +25,6 @@ export interface FacetSearchProps {
 }
 
 export const FacetSearch = ({
-  startOpen,
-  label,
-  accordionStyle,
-  dropdown,
   className,
   termValue,
   setTermValue,
@@ -50,34 +42,26 @@ export const FacetSearch = ({
   removeFilterItem,
 }: FacetSearchProps) => {
   return (
-    <AccordionWrap className="facet-accordion">
-      <AccordionTab
-        accordionStyle={accordionStyle}
-        label={label}
-        startOpen={startOpen}
-        dropdown={dropdown}>
-        <div className="facet-search">
-          {helpText ? <div className="help-text">{helpText}</div> : null}
-          <TermSearch
-            className={className}
-            primary={true}
-            color={color}
-            icon={icon}
-            iconSize={iconSize}
-            size={size}
-            pushTerm={pushTerm}
-            type={type}
-            label={null}
-            placeholder={placeholder}
-            labelStyle={labelStyle}
-            name={name}
-            termValue={termValue}
-            setTermValue={setTermValue}
-            allTerms={allTerms}
-            removeFilterItem={removeFilterItem}
-          />
-        </div>
-      </AccordionTab>
-    </AccordionWrap>
+    <div className="facet-search">
+      {helpText ? <div className="help-text">{helpText}</div> : null}
+      <TermSearch
+        className={className}
+        primary={true}
+        color={color}
+        icon={icon}
+        iconSize={iconSize}
+        size={size}
+        pushTerm={pushTerm}
+        type={type}
+        label={null}
+        placeholder={placeholder}
+        labelStyle={labelStyle}
+        name={name}
+        termValue={termValue}
+        setTermValue={setTermValue}
+        allTerms={allTerms}
+        removeFilterItem={removeFilterItem}
+      />
+    </div>
   )
 }
