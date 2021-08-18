@@ -1,6 +1,4 @@
 import React from 'react'
-import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
-import { AccordionWrap } from '../accordion/AccordionWrap'
 import { TermSearch } from '../input/TermSearch'
 import { ButtonPropsSize } from '../button/Button'
 import { InputPropsStyle } from '../input/Input'
