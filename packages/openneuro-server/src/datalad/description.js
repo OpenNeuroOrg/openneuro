@@ -122,7 +122,7 @@ export const description = obj => {
   const { datasetId, revision } = datasetOrSnapshot(obj)
   const cache = new CacheItem(redis, CacheType.datasetDescription, [
     datasetId,
-    revision,
+    revision.substring(0, 7),
   ])
   return cache
     .get(() => {
