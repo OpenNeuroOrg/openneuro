@@ -12,9 +12,8 @@ class PublishResource(object):
         self.store = store
 
     def on_post(self, req, resp, dataset):
-        datalad = self.store.get_dataset(dataset)
+        dataset_path = self.store.get_dataset_path(dataset)
 
-        gevent.spawn(publish_dataset, self.store,
-                     dataset, cookies=req.cookies)
+        gevent.spawn(publish_dataset, dataset_path, cookies=req.cookies)
         resp.media = {}
         resp.status = falcon.HTTP_OK

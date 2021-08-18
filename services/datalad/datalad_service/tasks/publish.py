@@ -1,4 +1,5 @@
 import logging
+import os.path
 import subprocess
 import re
 
@@ -102,16 +103,16 @@ def get_dataset_realm(siblings, realm=None):
     return realm
 
 
-def publish_dataset(store, dataset, cookies=None, realm='PUBLIC'):
+def publish_dataset(dataset_path, cookies=None, realm='PUBLIC'):
     def get_realm():
         return get_s3_realm(realm=realm)
 
     def should_export():
         return True
-    export_all_tags(store, dataset, cookies, get_realm, should_export)
+    export_all_tags(dataset_path, cookies, get_realm, should_export)
 
 
-def reexport_dataset(store, dataset, cookies=None, realm=None):
+def reexport_dataset(dataset_path, cookies=None, realm=None):
     def get_realm(siblings):
         return get_dataset_realm(siblings, realm)
 
@@ -121,24 +122,23 @@ def reexport_dataset(store, dataset, cookies=None, realm=None):
         # Reexporting all snapshots could make a previous snapshot latest in s3.
         return not check_remote_has_version(dataset_path, DatasetRealm.PUBLIC.s3_remote, latest_tag)
     # logs to elasticsearch
-    esLogger = ReexportLogger(dataset)
-    export_all_tags(store, dataset, cookies,
+    esLogger = ReexportLogger(dataset_path)
+    export_all_tags(dataset_path, cookies,
                     get_realm, should_export, esLogger)
 
 
-def publish_snapshot(store, dataset, cookies=None, snapshot=None, realm=None):
+def publish_snapshot(dataset_path, cookies=None, snapshot=None, realm=None):
     def get_realm(siblings):
         return get_dataset_realm(siblings, realm)
 
     def should_export(ds, tags):
         return True
-    export_all_tags(store, dataset, cookies, get_realm, should_export)
+    export_all_tags(dataset_path, cookies, get_realm, should_export)
 
 
-def export_all_tags(store, dataset, cookies, get_realm, check_should_export, esLogger=None):
+def export_all_tags(dataset_path, cookies, get_realm, check_should_export, esLogger=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
-    dataset_id = dataset
-    dataset_path = store.get_dataset_path(dataset)
+    dataset = os.path.basename(dataset_path)
     repo = pygit2.Repository(dataset_path)
     tags = git_tag(repo)
     siblings = repo.remotes
