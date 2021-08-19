@@ -2,7 +2,6 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 import { Header, HeaderProps } from './Header'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
-import { FrontFacetExample } from '../facets/Facet.stories'
 import { Input } from '../input/Input'
 
 export default {
@@ -32,9 +31,7 @@ const Template: Story<HeaderProps> = ({ profile, expanded }) => {
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}
-          renderFacetSelect={() => (
-            <FrontFacetExample {...FrontFacetExample.args} />
-          )}
+          renderFacetSelect={() => <>front facet example</>}
           renderSearchInput={() => (
             <Input
               placeholder="Search"

@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Header } from '../header/Header'
 import { LandingExpandedHeader } from '../header/LandingExpandedHeader'
-import { FrontFacetExample } from '../facets/Facet.stories'
 import { Input } from '../input/Input'
 import { Footer } from '../footer/Footer'
 
@@ -37,9 +36,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           renderOnExpanded={profile => (
             <LandingExpandedHeader
               user={profile}
-              renderFacetSelect={() => (
-                <FrontFacetExample {...FrontFacetExample.args} />
-              )}
+              renderFacetSelect={() => <>front facet example</>}
               renderSearchInput={() => (
                 <Input
                   placeholder="Search"
