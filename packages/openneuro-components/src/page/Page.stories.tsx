@@ -3,7 +3,6 @@ import { Story, Meta } from '@storybook/react'
 
 import { Page, PageProps } from './Page'
 import { FrontPageContainerExample } from '../front-page/FrontPageContainerExample'
-import { SearchPageContainerExample } from '../search-page/SearchPageContainerExample'
 import { DraftDatasetPageExample } from '../dataset/DraftDatasetPageExample'
 import * as HeaderStories from '../header/Header.stories'
 
@@ -24,26 +23,6 @@ FrontPageExample.args = {
   children: <FrontPageContainerExample />,
   headerArgs: HeaderStories.FrontPage.args,
   className: 'front-page',
-}
-
-export const SearchPageExample = Template.bind({})
-SearchPageExample.args = {
-  children: (
-    <SearchPageContainerExample searchResults={mri.data.datasets.edges} />
-  ),
-  headerArgs: HeaderStories.LoggedOut.args,
-  className: 'search-page',
-}
-export const MRIPortalPageExample = Template.bind({})
-MRIPortalPageExample.args = {
-  children: (
-    <SearchPageContainerExample
-      searchResults={mri.data.datasets.edges}
-      portalContent={portalContent.mri}
-    />
-  ),
-  headerArgs: HeaderStories.LoggedOut.args,
-  className: 'search-page search-page-mri',
 }
 
 export const DatasetDraft = Template.bind({})

@@ -13,13 +13,7 @@ export default {
   component: FacetSelect,
 } as Meta
 
-const FacetSelectTemplate: Story<FacetSelectProps> = ({
-  items,
-  startOpen,
-  label,
-  accordionStyle,
-  dropdown,
-}) => {
+const FacetSelectTemplate: Story<FacetSelectProps> = ({ items, label }) => {
   const [selected, setSelected] = React.useState<FacetSelectValueType>()
 
   return (
@@ -28,10 +22,7 @@ const FacetSelectTemplate: Story<FacetSelectProps> = ({
         items={items}
         selected={selected}
         setSelected={setSelected}
-        startOpen={startOpen}
         label={label}
-        accordionStyle={accordionStyle}
-        dropdown={dropdown}
       />
     </div>
   )
@@ -40,16 +31,4 @@ const FacetSelectTemplate: Story<FacetSelectProps> = ({
 export const FacetExample = FacetSelectTemplate.bind({})
 FacetExample.args = {
   items: modalities,
-  accordionStyle: 'plain',
-  label: 'Modalities',
-  startOpen: true,
-}
-
-export const FrontFacetExample = FacetSelectTemplate.bind({})
-FrontFacetExample.args = {
-  items: modalities,
-  accordionStyle: 'plain',
-  label: 'Browse by Modalities',
-  startOpen: false,
-  dropdown: true,
 }
