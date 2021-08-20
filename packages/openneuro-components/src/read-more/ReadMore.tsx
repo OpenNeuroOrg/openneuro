@@ -13,12 +13,12 @@ export const ReadMore = ({
   expandLabel,
   collapseabel,
 }: ReadMoreProps) => {
-  const readmoreRef = useRef()
+  const readmoreRef = useRef<HTMLDivElement>()
   const [dimensions, setDimensions] = useState({ height: 0 })
   useEffect(() => {
     if (readmoreRef.current) {
       setDimensions({
-        height: readmoreRef.current?.offsetHeight,
+        height: readmoreRef.current.offsetHeight,
       })
     }
   }, [])
