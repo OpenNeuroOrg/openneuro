@@ -18,7 +18,7 @@ export const ReadMore = ({
   useEffect(() => {
     if (readmoreRef.current) {
       setDimensions({
-        height: readmoreRef.current.offsetHeight,
+        height: readmoreRef.current?.offsetHeight,
       })
     }
   }, [])
