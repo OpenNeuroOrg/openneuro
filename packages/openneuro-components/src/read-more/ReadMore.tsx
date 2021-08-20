@@ -13,19 +13,18 @@ export const ReadMore = ({
   expandLabel,
   collapseabel,
 }: ReadMoreProps) => {
-  const targetRef = useRef()
+  const readmoreRef = useRef()
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   useEffect(() => {
-    if (targetRef.current) {
+    if (readmoreRef.current) {
       setDimensions({
-        width: targetRef.current.offsetWidth,
-        height: targetRef.current.offsetHeight,
+        height: readmoreRef.current.offsetHeight,
       })
     }
   }, [])
 
   return (
-    <div ref={targetRef}>
+    <div ref={readmoreRef}>
       {dimensions.height > 400 ? (
         <article className="has-read-more">
           <input type="checkbox" className="show-more" id={id} />
