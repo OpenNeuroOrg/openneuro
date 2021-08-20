@@ -14,7 +14,7 @@ export const ReadMore = ({
   collapseabel,
 }: ReadMoreProps) => {
   const readmoreRef = useRef()
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [dimensions, setDimensions] = useState({ height: 0 })
   useEffect(() => {
     if (readmoreRef.current) {
       setDimensions({
