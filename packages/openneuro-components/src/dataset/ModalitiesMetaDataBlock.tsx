@@ -15,7 +15,6 @@ export const ModalitiesMetaDataBlock = ({
   className,
 }: ModalitiesMetaDataBlockProps) => {
   const arrayToMarkdown = arr => {
-    console.log(arr)
     return arr
       ? arr
           .map(
