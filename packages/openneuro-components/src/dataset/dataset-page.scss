@@ -278,11 +278,23 @@
       display: flex;
       flex-wrap: wrap;
       li {
-        margin-right: 5px;
-        border: 1px solid;
-        color: var(--current-theme-primary);
-        padding: 5px 8px;
-        border-radius: $border-radius-default;
+        a {
+          display: block;
+          text-transform: lowercase;
+          font-size: 12px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          margin-right: 5px;
+          border: 1px solid;
+          background: var(--current-theme-primary);
+          padding: 5px 12px;
+          color: #fff;
+          text-decoration: none;
+          border-radius: $border-radius-default;
+          &:hover {
+            background: var(--current-theme-primary-hover);
+          }
+        }
       }
     }
   }

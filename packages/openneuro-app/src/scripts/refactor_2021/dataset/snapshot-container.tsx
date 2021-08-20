@@ -8,6 +8,7 @@ import parseISO from 'date-fns/parseISO'
 import Validation from '../validation/validation.jsx'
 
 import {
+  ModalitiesMetaDataBlock,
   MetaDataBlock,
   BrainLifeButton,
   ValidationBlock,
@@ -229,7 +230,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             <>
               {summary && (
                 <>
-                  <MetaDataBlock
+                  <ModalitiesMetaDataBlock
                     heading="Available Modalities"
                     item={summary.modalities}
                     isMarkdown={true}
