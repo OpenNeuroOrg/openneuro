@@ -96,6 +96,8 @@ $warning-orange: #df7600;
 
   .warning-wrap {
     .accordion-title {
+      background: $warning-orange-cream;
+      color: $warning-orange;
       a {
         background: $warning-orange-cream;
         color: $warning-orange;
@@ -126,7 +128,7 @@ $warning-orange: #df7600;
       text-decoration: none;
       text-align: left;
       text-transform: initial;
-
+      width: 100%;
       &::after {
         content: '';
       }
