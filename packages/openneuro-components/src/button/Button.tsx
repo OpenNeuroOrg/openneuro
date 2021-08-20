@@ -8,6 +8,7 @@ export interface ButtonProps {
   backgroundColor?: string
   size?: ButtonPropsSize
   label: string
+  nobg?: boolean
   disabled?: boolean
   onClick?: () => void
   navbar?: boolean
@@ -29,6 +30,7 @@ export const Button = ({
   size = 'medium',
   backgroundColor,
   label,
+  nobg,
   navbar = false,
   icon,
   secondary,
@@ -47,8 +49,10 @@ export const Button = ({
       ? 'on-button--primary'
       : secondary && !navbar
       ? 'on-button--secondary'
-      : !navbar
+      : nobg && !navbar
       ? 'on-no-background'
+      : !navbar
+      ? 'on-button--default'
       : 'on-button--navbar'
   const iconWithText =
     icon && label && !iconOnly

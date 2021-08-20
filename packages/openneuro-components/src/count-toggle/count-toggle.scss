@@ -2,10 +2,11 @@
 
 .toggle-btn {
   border: 1px solid #aaa;
-  padding: 7px;
+  padding: 0 7px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: transparent;
   &:hover {
     text-decoration: none;
     background-color: #eee;

@@ -31,7 +31,12 @@ export const DatasetPage = ({
   modality,
 }: DatasetPageProps) => {
   return (
-    <div className={'dataset dataset-draft' + ' dataset-page-' + modality}>
+    <div
+      className={
+        'dataset dataset-draft' +
+        ' dataset-page dataset-page-' +
+        modality.toLowerCase()
+      }>
       {renderHeader()}
       {renderAlert()}
       <div className="container">

@@ -16,9 +16,12 @@
   .dataset-header-meta {
     margin: 40px 0;
     font-size: 14px;
-    > span {
-      margin: 0 2px 0 0;
+    span {
+      margin: 0 2px 0 10px;
       font-weight: bold;
+      &:first-child {
+        margin-left: 0;
+      }
     }
     .follow-bookmark {
       display: flex;
@@ -350,13 +353,15 @@
   background-color: #333;
 }
 
-.dataset-page-mri .dataset-header {
-  background-color: var(--current-theme-primary);
-  background: linear-gradient(
-    16deg,
-    var(--current-theme-primary-dark),
-    var(--current-theme-primary)
-  );
+.dataset-page {
+  .dataset-header {
+    background-color: var(--current-theme-header);
+    background: linear-gradient(
+      16deg,
+      var(--current-theme-header-dark),
+      var(--current-theme-header)
+    );
+  }
 }
 
 // Collapsable panels (aka, accordion)

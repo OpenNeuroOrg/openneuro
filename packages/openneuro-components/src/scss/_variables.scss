@@ -64,6 +64,8 @@ $chiclet-color: #a2059e;
   --current-theme-secondary: #{$on-secondary};
   --current-theme-primary-dark: #{$on-dark-aqua};
   --current-theme-primary-light: #{$on-dark-aqua-light};
+  --current-theme-header: #333;
+  --current-theme-header-dark: #333;
 }
 
 .mri-theme {
@@ -115,6 +117,8 @@ $border-radius-default: 4px;
   --current-theme-primary-dark: #{$mri-dark};
   --current-theme-secondary: #{$mri-secondary};
   --current-theme-primary-light: #{$mri-light};
+  --current-theme-header: #{$mri-theme};
+  --current-theme-header-dark: #{$mri-dark};
 }
 
 .search-page-eeg,
@@ -124,6 +128,8 @@ $border-radius-default: 4px;
   --current-theme-primary-dark: #{$eeg-dark};
   --current-theme-secondary: #{$eeg-secondary};
   --current-theme-primary-light: #{$eeg-light};
+  --current-theme-header: #{$eeg-theme};
+  --current-theme-header-dark: #{$eeg-dark};
 }
 
 .search-page-pet,
@@ -133,6 +139,8 @@ $border-radius-default: 4px;
   --current-theme-primary-dark: #{$pet-dark};
   --current-theme-secondary: #{$pet-secondary};
   --current-theme-primary-light: #{$pet-light};
+  --current-theme-header: #{$pet-theme};
+  --current-theme-header-dark: #{$pet-dark};
 }
 
 .search-page-ieeg,
@@ -142,6 +150,8 @@ $border-radius-default: 4px;
   --current-theme-primary-dark: #{$ieeg-dark};
   --current-theme-secondary: #{$ieeg-secondary};
   --current-theme-primary-light: #{$ieeg-light};
+  --current-theme-header: #{$ieeg-theme};
+  --current-theme-header-dark: #{$ieeg-dark};
 }
 
 .search-page-meg,
@@ -151,4 +161,6 @@ $border-radius-default: 4px;
   --current-theme-primary-dark: #{$meg-dark};
   --current-theme-secondary: #{$meg-secondary};
   --current-theme-primary-light: #{$meg-light};
+  --current-theme-header: #{$meg-theme};
+  --current-theme-header-dark: #{$meg-dark};
 }

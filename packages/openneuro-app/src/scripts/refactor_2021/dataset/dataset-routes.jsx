@@ -5,6 +5,7 @@ import AdminDataset from '../../datalad/routes/admin-datalad.jsx'
 import AdminExports from '../../datalad/routes/admin-exports.jsx'
 
 import SnapshotContainer from './snapshot-container'
+import DraftContainer from './draft-container'
 import DownloadDataset from '../../datalad/download/download-dataset.jsx'
 import Publish from '../../datalad/routes/publish.jsx'
 import Share from '../../datalad/routes/manage-permissions.jsx'
@@ -30,7 +31,7 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="dataset"
         exact
         path="/datasets/:datasetId"
-        render={() => <SnapshotContainer dataset={dataset} />}
+        render={() => <DraftContainer dataset={dataset} />}
       />
       <Route
         name="download"
