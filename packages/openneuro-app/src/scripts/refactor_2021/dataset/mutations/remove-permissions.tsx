@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
@@ -61,9 +61,8 @@ export const RemovePermissions: FC<RemovePermissionsProps> = ({
           message="Remove Permission"
           icon="fa-trash-o"
           disabled={false}
-          onConfirmedClick={async cb => {
+          onConfirmedClick={async () => {
             await removePermissions({ variables: { datasetId, userId } })
-            cb()
           }}
           tooltip="tooltip"
           displayOptions={displayOptions}
