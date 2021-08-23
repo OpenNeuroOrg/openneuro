@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 
 export interface ReadMoreProps {
   children: React.ReactNode
@@ -13,17 +13,35 @@ export const ReadMore = ({
   expandLabel,
   collapseabel,
 }: ReadMoreProps) => {
-  return (
-    <article className="has-read-more">
-      <input type="checkbox" className="show-more" id={id} />
+  const readmoreRef = useRef<HTMLDivElement>()
+  const [dimensions, setDimensions] = useState({ height: 0 })
+  useEffect(() => {
+    if (readmoreRef.current) {
+      setDimensions({
+        height: readmoreRef.current.offsetHeight,
+      })
+    }
+  }, [])
 
-      <section>
-        {children}
-        <label htmlFor={id}>
-          <span>{expandLabel}</span>
-          <span>{collapseabel}</span>
-        </label>
-      </section>
-    </article>
+  return (
+    <div ref={readmoreRef}>
+      {dimensions.height > 400 ? (
+        <article className="has-read-more">
+          <input type="checkbox" className="show-more" id={id} />
+
+          <section>
+            {children}
+            <label htmlFor={id}>
+              <span>{expandLabel}</span>
+              <span>{collapseabel}</span>
+            </label>
+          </section>
+        </article>
+      ) : (
+        <article>
+          <section>{children}</section>
+        </article>
+      )}
+    </div>
   )
 }
