@@ -1,37 +1,24 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Markdown from 'markdown-to-jsx'
 
 export interface ModalitiesMetaDataBlockProps {
-  heading: string
-  isMarkdown?: boolean
-  item: React.ReactNode | string[] | number
+  items: string[]
   className?: string
 }
 
 export const ModalitiesMetaDataBlock = ({
-  heading,
-  isMarkdown,
-  item,
+  items,
   className,
 }: ModalitiesMetaDataBlockProps) => {
-  const arrayToMarkdown = arr => {
-    return arr
-      ? arr
-          .map(
-            element =>
-              ` * <a href="/search/${element.toLowerCase()}">${element}</a>\n`,
-          )
-          .join('')
-      : ''
-  }
   return (
     <div className={'dataset-meta-block ' + className}>
-      <h2 className="dmb-heading">{heading}</h2>
-      {isMarkdown ? (
-        <Markdown>{arrayToMarkdown(item) || 'N/A'}</Markdown>
-      ) : (
-        item || 'N/A'
-      )}
+      <h2 className="dmb-heading">Available Modalities</h2>
+      {items.map((item, index) => (
+        <Link key={index} to={'/search/modality/' + item.toLowerCase()}>
+          {item}
+        </Link>
+      ))}
     </div>
   )
 }

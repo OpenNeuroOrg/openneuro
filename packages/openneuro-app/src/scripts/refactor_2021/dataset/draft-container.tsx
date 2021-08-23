@@ -231,9 +231,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               {summary && (
                 <>
                   <ModalitiesMetaDataBlock
-                    heading="Available Modalities"
-                    item={summary.modalities}
-                    isMarkdown={true}
+                    items={summary.modalities}
                     className="dmb-modalities"
                   />
                   <MetaDataBlock
