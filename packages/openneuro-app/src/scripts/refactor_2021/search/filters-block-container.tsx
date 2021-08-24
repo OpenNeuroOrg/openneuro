@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { useRouteMatch, useHistory } from 'react-router-dom'
+import { useRouteMatch, useLocation, useHistory } from 'react-router-dom'
 import {
   SearchParamsCtx,
   removeFilterItem,
@@ -21,6 +21,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
 
   const noFilters = !useCheckIfParamsAreSelected(['modality_selected'])
 
+  const location = useLocation()
   const history = useHistory()
   const { path } = useRouteMatch()
   const globalSearchPath = '/search'
@@ -28,6 +29,11 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   const removeFilter =
     (isModality: boolean) =>
     (param, value): void => {
+      if (param === 'datasetType_selected' && value === 'My Datasets') {
+        const query = new URLSearchParams(location.search)
+        query.delete('mydatasets')
+        history.replace(`${location.pathname}?${query.toString()}`)
+      }
       removeFilterItem(setSearchParams)(param, value)
       if (isModality) history.push(globalSearchPath)
     }
