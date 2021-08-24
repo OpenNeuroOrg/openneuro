@@ -8,6 +8,12 @@ import parseISO from 'date-fns/parseISO'
 import Validation from '../validation/validation.jsx'
 
 import {
+  getUnexpiredProfile,
+  hasEditPermissions,
+} from '../authentication/profile'
+import { useCookies } from 'react-cookie'
+
+import {
   MetaDataBlock,
   BrainLifeButton,
   ValidationBlock,
@@ -64,7 +70,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const summary = dataset.draft.summary
   const description = dataset.draft.description
   const datasetId = dataset.id
-  const isPublic = dataset.public === true
+
   const numSessions =
     summary && summary.sessions.length > 0 ? summary.sessions.length : 1
 
@@ -83,11 +89,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
   //TODO Setup hasEdit
-  const hasEdit = true
-  //TODO Setup profile - isloggedin
-  const profile = true
-  // (user && user.admin) ||
-  // hasEditPermissions(dataset.permissions, user && user.sub)
+  const isPublic = dataset.public === true
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+  const isAdmin = profile?.admin
+  const hasEdit =
+    hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
+
+  const hasDraftChanges =
+    dataset.snapshots.length === 0 ||
+    dataset.draft.head !==
+      dataset.snapshots[dataset.snapshots.length - 1].hexsha
   return (
     <>
       <DatasetPage
@@ -103,7 +115,13 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           </>
         )}
         renderAlert={() => (
-          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
+          <DatasetAlert
+            isPrivate={!dataset.public}
+            datasetId={dataset.id}
+            hasDraftChanges={hasDraftChanges}
+            hasSnapshot={!!dataset.snapshots.length}
+            rootPath={rootPath}
+          />
         )}
         renderHeaderMeta={() => (
           <>
@@ -121,7 +139,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             <CountToggle
               label="Follow"
               icon="fa-thumbtack"
-              disabled={profile ? false : true}
+              disabled={!profile}
               toggleClick={toggleBookmarkClick}
               tooltip="hello Tip"
               clicked={bookmarked}
@@ -131,7 +149,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             <CountToggle
               label="Bookmark"
               icon="fa-bookmark"
-              disabled={profile ? false : true}
+              disabled={!profile}
               toggleClick={toggleFollowedClick}
               tooltip="hello Tip"
               clicked={followed}
@@ -166,22 +184,30 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderToolButtons={() => (
           <>
-            <Tooltip tooltip="Publish the dataset publicly" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/publish'}>
-                <Icon icon="fa fa-globe" label="Publish" />
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Share this dataset with collaborators" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/share'}>
-                <Icon icon="fa fa-user" label="Share" />
-              </Link>
-            </Tooltip>
+            {hasEdit && (
+              <Tooltip tooltip="Publish the dataset publicly" flow="up">
+                <Link className="dataset-tool" to={rootPath + '/publish'}>
+                  <Icon icon="fa fa-globe" label="Publish" />
+                </Link>
+              </Tooltip>
+            )}
+            {hasEdit && (
+              <Tooltip
+                tooltip="Share this dataset with collaborators"
+                flow="up">
+                <Link className="dataset-tool" to={rootPath + '/share'}>
+                  <Icon icon="fa fa-user" label="Share" />
+                </Link>
+              </Tooltip>
+            )}
 
-            <Tooltip tooltip="Create a new version of the dataset" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" label="Snapshot" />
-              </Link>
-            </Tooltip>
+            {hasEdit && (
+              <Tooltip tooltip="Create a new version of the dataset" flow="up">
+                <Link className="dataset-tool" to={rootPath + '/snapshot'}>
+                  <Icon icon="fa fa-camera" label="Snapshot" />
+                </Link>
+              </Tooltip>
+            )}
             <span>
               <Link className="dataset-tool" to={rootPath + '/download'}>
                 <Icon icon="fa fa-download" label="Download" />
@@ -189,17 +215,23 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             </span>
             <Tooltip
               wrapText={true}
-              tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
+              tooltip={
+                hasEdit
+                  ? 'A form to describe your dataset (helps colleagues discover your dataset)'
+                  : 'View the dataset metadata'
+              }
               flow="up">
               <Link className="dataset-tool" to={rootPath + '/metadata'}>
                 <Icon icon="fa fa-file-code" label="Metadata" />
               </Link>
             </Tooltip>
-            <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/delete'}>
-                <Icon icon="fa fa-trash" label="Delete" />
-              </Link>
-            </Tooltip>
+            {hasEdit && (
+              <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
+                <Link className="dataset-tool" to={rootPath + '/delete'}>
+                  <Icon icon="fa fa-trash" label="Delete" />
+                </Link>
+              </Tooltip>
+            )}
           </>
         )}
         renderReadMe={() => (

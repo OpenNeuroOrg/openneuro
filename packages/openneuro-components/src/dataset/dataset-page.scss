@@ -45,12 +45,15 @@
 
   .dataset-tool-buttons {
     display: flex;
-    margin-bottom: 20px;
+
+    justify-content: flex-end;
+    flex-wrap: wrap;
     > span {
-      margin-right: auto;
-      &:last-child {
-        margin-right: 0;
-      }
+      display: flex;
+      flex: 1 1 auto;
+      max-width: 200px;
+      justify-content: center;
+      margin-bottom: 20px;
       .dataset-tool {
         color: var(--current-theme-primary);
         font-size: 17px;

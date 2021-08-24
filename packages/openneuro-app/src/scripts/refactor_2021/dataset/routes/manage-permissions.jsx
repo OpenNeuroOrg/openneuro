@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import UpdateDatasetPermissions from '../mutations/update-permissions.jsx'
+import { Button } from '@openneuro/components/button'
+
 import { RemovePermissions } from '../mutations/remove-permissions'
+import { UpdateDatasetPermissions } from '../mutations/update-permissions'
 
 const description = {
   admin: 'Edit dataset and edit permissions',
@@ -11,13 +13,20 @@ const description = {
 }
 
 export const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
-  <tr>
-    <td className="col-xs-4">{userEmail}</td>
-    <td className="col-xs-2">{description[access]}</td>
-    <td className="col-xs-2">
+  <div className="data-table-content">
+    <span>
+      <label>Email:</label>
+      <a href={`mailto:${userEmail}`}>{userEmail}</a>
+    </span>
+    <span>
+      <label>Access:</label>
+      {description[access]}
+    </span>
+    <span>
+      <label>Edit:</label>
       <RemovePermissions datasetId={datasetId} userId={userId} />
-    </td>
-  </tr>
+    </span>
+  </div>
 )
 
 PermissionRow.propTypes = {
@@ -28,26 +37,23 @@ PermissionRow.propTypes = {
 }
 
 export const ShareTable = ({ datasetId, permissions }) => (
-  <table className="table">
-    <thead>
-      <tr>
-        <th>Email</th>
-        <th>Access</th>
-        <th>Edit</th>
-      </tr>
-    </thead>
-    <tbody>
-      {permissions.userPermissions.map((perm, index) => (
-        <PermissionRow
-          datasetId={datasetId}
-          userId={perm.user.id}
-          userEmail={perm.user.email}
-          access={perm.level}
-          key={index}
-        />
-      ))}
-    </tbody>
-  </table>
+  <>
+    <div className="data-table-header">
+      <span>Email</span>
+      <span>Access</span>
+      <span>Edit</span>
+    </div>
+
+    {permissions.userPermissions.map((perm, index) => (
+      <PermissionRow
+        datasetId={datasetId}
+        userId={perm.user.id}
+        userEmail={perm.user.email}
+        access={perm.level}
+        key={index}
+      />
+    ))}
+  </>
 )
 
 ShareTable.propTypes = {
@@ -64,19 +70,19 @@ const Share = ({ datasetId, permissions }) => {
   const adminActive = access === 'admin' && 'active'
 
   return (
-    <div className="dataset-form">
-      <div className="col-xs-12 dataset-form-header">
+    <div className="dataset-share-form container">
+      <div className="dataset-form-header">
         <div className="form-group">
-          <label>Share Dataset</label>
+          <h2>Share Dataset</h2>
         </div>
         <hr />
-        <div className="col-xs-12 dataset-form-body">
-          <p>Dataset shared with:</p>
+        <div className="dataset-form-body">
+          <h3>Dataset shared with:</h3>
           <ShareTable datasetId={datasetId} permissions={permissions} />
           <p>
             Enter a user&#39;s email address and select access level to share
           </p>
-          <div className="input-group">
+          <div className="share-input-group">
             <input
               className="form-control"
               type="email"
@@ -84,36 +90,40 @@ const Share = ({ datasetId, permissions }) => {
               onChange={e => setUserEmail(e.target.value)}
             />
             <div className="input-group-btn">
-              <button
+              <Button
+                secondary={true}
+                label="Read"
+                size="xsmall"
                 className={`btn btn-default ${readActive}`}
-                onClick={() => setAccess('ro')}>
-                Read
-              </button>
-              <button
+                onClick={() => setAccess('ro')}
+              />
+              <Button
+                secondary={true}
+                label="Read and Write"
+                size="xsmall"
                 className={`btn btn-default ${writeActive}`}
-                onClick={() => setAccess('rw')}>
-                Read and Write
-              </button>
-              <button
+                onClick={() => setAccess('rw')}
+              />
+              <Button
+                secondary={true}
+                label="Admin"
+                size="xsmall"
                 className={`btn btn-default ${adminActive}`}
-                onClick={() => setAccess('admin')}>
-                Admin
-              </button>
+                onClick={() => setAccess('admin')}
+              />
             </div>
           </div>
         </div>
-        <div className="col-xs-12 dataset-form-controls">
-          <div className="col-xs-12 modal-actions">
-            <Link to={`/datasets/${datasetId}`}>
-              <button className="btn-admin-blue">Return to Dataset</button>
-            </Link>
-            <UpdateDatasetPermissions
-              datasetId={datasetId}
-              userEmail={userEmail}
-              metadata={access}
-              done={() => setUserEmail('')}
-            />
-          </div>
+        <div className="share-form-controls">
+          <UpdateDatasetPermissions
+            datasetId={datasetId}
+            userEmail={userEmail}
+            metadata={access}
+            done={() => setUserEmail('')}
+          />
+          <Link className="return-link" to={`/datasets/${datasetId}`}>
+            Return to Dataset
+          </Link>
         </div>
       </div>
     </div>
