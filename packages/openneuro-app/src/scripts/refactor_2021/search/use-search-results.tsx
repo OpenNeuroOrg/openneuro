@@ -236,7 +236,7 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       'must',
       matchQuery(
-        'latestSnapshot.description.SeniorAuthor',
+        'latestSnapshot.description.Authors',
         joinWithOR(authors),
         '3',
       ),

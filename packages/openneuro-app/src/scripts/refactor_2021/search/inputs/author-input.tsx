@@ -22,7 +22,7 @@ const AuthorInput: FC = () => {
     <AccordionWrap className="facet-accordion">
       <AccordionTab
         accordionStyle="plain"
-        label="Sr. Author / PI"
+        label="Authors / PI"
         className="search-facet"
         startOpen={false}>
         <FacetSearch
