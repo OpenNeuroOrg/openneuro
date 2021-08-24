@@ -11,21 +11,18 @@ export default {
 
 const Template: Story<HeaderProps> = ({ profile, expanded }) => {
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
-  const [isOpenUpload, setUploadIsOpen] = React.useState(false)
 
   const toggleLoginModal = () => alert('this is a context')
-  const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
     <Header
       profile={profile}
       expanded={expanded}
       isOpenSupport={isOpenSupport}
-      isOpenUpload={isOpenUpload}
       toggleLoginModal={toggleLoginModal}
       signOutAndRedirect={() => console.log('signed out')}
       toggleSupport={toggleSupport}
-      toggleUpload={toggleUpload}
+      navigateToNewSearch={() => console.log('navigate to /search')}
       renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
       renderUploader={() => <li>Upload</li>}
       renderOnExpanded={profile => (
