@@ -177,6 +177,17 @@ export const typeDefs = `
     resetDraft(datasetId: ID!, ref: String!): Boolean
     # Flag snapshot as deprecated
     deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Boolean
+    # Create anonymous read only reviewer
+    createReviewer(datasetId: ID!): DatasetReviewer
+  }
+
+  # Anonymous dataset reviewer
+  type DatasetReviewer {
+    id: ID!
+    # Dataset accession number
+    datasetId: ID!
+    # Login URL generated
+    url: String!
   }
 
   input DeleteFile {

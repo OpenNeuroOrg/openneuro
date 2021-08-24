@@ -57,6 +57,12 @@ export const checkDatasetExists = async datasetId => {
 export const checkDatasetRead = async (datasetId, userId, userInfo) => {
   // indexer has universal read access
   if (userInfo?.indexer) return true
+  // Reviewers are anonymous users with single dataset read access
+  if (userInfo?.reviewer) {
+    if (userInfo.datasetId === datasetId) {
+      return true
+    }
+  }
   // Check that dataset exists.
   await checkDatasetExists(datasetId)
   // Look for any matching datasets
