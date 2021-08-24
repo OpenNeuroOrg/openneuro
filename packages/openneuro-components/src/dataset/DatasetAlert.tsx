@@ -20,7 +20,10 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
   console.log('hasDraftChanges', hasDraftChanges)
   console.log('hasSnapshot', hasSnapshot)
   return (
-    <div className="dataset-header-alert">
+    <div
+      className={
+        isPrivate ? 'dataset-header-alert warning ' : 'dataset-header-alert '
+      }>
       {isPrivate ? (
         hasSnapshot ? (
           <>

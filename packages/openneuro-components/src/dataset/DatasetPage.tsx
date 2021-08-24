@@ -1,5 +1,4 @@
 import React from 'react'
-import './dataset-page.scss'
 
 export interface DatasetPageProps {
   renderSidebar: () => React.ReactNode

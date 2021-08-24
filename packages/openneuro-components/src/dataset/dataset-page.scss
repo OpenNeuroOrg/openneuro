@@ -35,11 +35,14 @@
   }
   .dataset-header-alert {
     padding: 10px 20px;
-    background: #f7e395;
+    background: #b5f1b5;
     display: flex;
     justify-content: center;
     a {
       margin: 0 5px;
+    }
+    &.warning {
+      background-color: #f7e395;
     }
   }
 
