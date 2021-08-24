@@ -3,12 +3,15 @@ import { SearchParamsCtx } from '../search-params-ctx'
 import { RadioGroup } from '@openneuro/components/radio'
 import { FacetSelect } from '@openneuro/components/facets'
 import { useCookies } from 'react-cookie'
+import { useLocation, useHistory } from 'react-router-dom'
 import { getUnexpiredProfile } from '../../authentication/profile'
 import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 const ShowDatasetsRadios: FC = () => {
   const [cookies] = useCookies()
   const loggedOut = !getUnexpiredProfile(cookies)
+  const location = useLocation()
+  const history = useHistory()
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
@@ -18,11 +21,24 @@ const ShowDatasetsRadios: FC = () => {
     datasetStatus_available,
     datasetStatus_selected,
   } = searchParams
-  const setShowSelected = datasetType_selected =>
+  const setShowSelected = datasetType_selected => {
+    const query = new URLSearchParams(location.search)
+    if (datasetType_selected === 'My Datasets') {
+      if (!query.has('mydatasets')) {
+        query.set('mydatasets', 'true')
+        history.replace(`${location.pathname}?${query.toString()}`)
+      }
+    } else {
+      if (query.has('mydatasets')) {
+        query.delete('mydatasets')
+        history.replace(`${location.pathname}?${query.toString()}`)
+      }
+    }
     setSearchParams(prevState => ({
       ...prevState,
       datasetType_selected,
     }))
+  }
   const setShowMyUploadsSelected = datasetStatus_selected =>
     setSearchParams(prevState => ({
       ...prevState,
