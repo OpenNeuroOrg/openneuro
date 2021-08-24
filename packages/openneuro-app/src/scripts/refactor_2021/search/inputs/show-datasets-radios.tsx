@@ -12,6 +12,7 @@ const ShowDatasetsRadios: FC = () => {
   const loggedOut = !getUnexpiredProfile(cookies)
   const location = useLocation()
   const history = useHistory()
+  const query = new URLSearchParams(location.search)
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
@@ -22,7 +23,6 @@ const ShowDatasetsRadios: FC = () => {
     datasetStatus_selected,
   } = searchParams
   const setShowSelected = datasetType_selected => {
-    const query = new URLSearchParams(location.search)
     if (datasetType_selected === 'My Datasets') {
       if (!query.has('mydatasets')) {
         query.set('mydatasets', 'true')
@@ -34,16 +34,28 @@ const ShowDatasetsRadios: FC = () => {
         history.replace(`${location.pathname}?${query.toString()}`)
       }
     }
+    if (datasetType_selected === 'My Bookmarks') {
+      if (!query.has('bookmarks')) {
+        query.set('bookmarks', 'true')
+        history.replace(`${location.pathname}?${query.toString()}`)
+      }
+    } else {
+      if (query.has('bookmarks')) {
+        query.delete('bookmarks')
+        history.replace(`${location.pathname}?${query.toString()}`)
+      }
+    }
     setSearchParams(prevState => ({
       ...prevState,
       datasetType_selected,
     }))
   }
-  const setShowMyUploadsSelected = datasetStatus_selected =>
+  const setShowMyUploadsSelected = datasetStatus_selected => {
     setSearchParams(prevState => ({
       ...prevState,
       datasetStatus_selected,
     }))
+  }
 
   return loggedOut ? null : (
     <>
