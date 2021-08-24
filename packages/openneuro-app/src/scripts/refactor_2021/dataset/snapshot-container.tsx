@@ -13,7 +13,6 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
-  DatasetAlert,
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
@@ -102,9 +101,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             )}
           </>
         )}
-        renderAlert={() => (
-          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
-        )}
+        renderAlert={() => null}
         renderHeaderMeta={() => (
           <>
             {summary && (
@@ -230,10 +227,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               {summary && (
                 <>
                   <MetaDataBlock
-                    heading="Available Modalities"
+                    heading="Avaiable Modalities"
                     item={summary.modalities}
                     isMarkdown={true}
-                    className="dmb-modalities"
+                    className="dmb-inline-list"
                   />
                   <MetaDataBlock
                     heading="Tasks"
