@@ -34,7 +34,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
         query.delete('mydatasets')
         history.replace(`${location.pathname}?${query.toString()}`)
       }
-      if (param === 'datasetStatus_selected' && value === 'My Bookmarks') {
+      if (param === 'datasetType_selected' && value === 'My Bookmarks') {
         const query = new URLSearchParams(location.search)
         query.delete('bookmarks')
         history.replace(`${location.pathname}?${query.toString()}`)
