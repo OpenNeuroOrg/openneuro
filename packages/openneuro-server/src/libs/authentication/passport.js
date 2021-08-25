@@ -131,6 +131,7 @@ export const setupPassportAuth = () => {
             admin: false,
             blocked: false,
             reviewer: true,
+            dataset: jwt.dataset,
           })
         } else {
           // A user must already exist to use a JWT to auth a request

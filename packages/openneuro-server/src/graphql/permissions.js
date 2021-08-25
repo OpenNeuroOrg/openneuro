@@ -59,7 +59,7 @@ export const checkDatasetRead = async (datasetId, userId, userInfo) => {
   if (userInfo?.indexer) return true
   // Reviewers are anonymous users with single dataset read access
   if (userInfo?.reviewer) {
-    if (userInfo.datasetId === datasetId) {
+    if (userInfo.dataset === datasetId) {
       return true
     }
   }
