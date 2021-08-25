@@ -14,7 +14,6 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
-  DatasetAlert,
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
@@ -102,9 +101,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               />
             )}
           </>
-        )}
-        renderAlert={() => (
-          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
         )}
         renderHeaderMeta={() => (
           <>
