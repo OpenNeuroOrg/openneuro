@@ -4,7 +4,7 @@ export interface DatasetPageProps {
   renderSidebar: () => React.ReactNode
   renderValidationBlock: () => React.ReactNode
   renderHeader: () => React.ReactNode
-  renderAlert: () => React.ReactNode
+  renderAlert?: () => React.ReactNode
   renderHeaderMeta: () => React.ReactNode
   renderToolButtons: () => React.ReactNode
   renderReadMe: () => React.ReactNode

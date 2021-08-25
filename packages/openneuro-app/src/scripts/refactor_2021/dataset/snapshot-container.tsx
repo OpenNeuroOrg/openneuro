@@ -102,7 +102,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             )}
           </>
         )}
-        renderAlert={() => null}
         renderHeaderMeta={() => (
           <>
             {summary && (

@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
+import { gql, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 import ToastContent from '../../common/partials/toast-content'
 import { validate as isValidEmail } from 'email-validator'
@@ -59,35 +58,32 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
   metadata,
   done,
 }) => {
-  //const [displayOptions, setDisplayOptions] = React.useState(false)
+  const [UpdateDatasetPermissions, { data, loading, error }] =
+    useMutation(UPDATE_PERMISSIONS)
   return (
-    <Mutation mutation={UPDATE_PERMISSIONS}>
-      {UpdateDatasetPermissions => (
-        <Button
-          className="btn-modal-action"
-          primary={true}
-          label="Share"
-          size="small"
-          onClick={async () => {
-            if (isValidEmail(userEmail)) {
-              try {
-                await UpdateDatasetPermissions({
-                  variables: { datasetId, userEmail, level: metadata },
-                })
-                done()
-              } catch (err) {
-                toast.error(
-                  <ToastContent body="A user with that email address does not exist" />,
-                )
-              }
-            } else {
-              toast.error(
-                <ToastContent body="Please enter a valid email address" />,
-              )
-            }
-          }}
-        />
-      )}
-    </Mutation>
+    <Button
+      className="btn-modal-action"
+      primary={true}
+      label="Share"
+      size="small"
+      onClick={async () => {
+        if (isValidEmail(userEmail)) {
+          try {
+            await UpdateDatasetPermissions({
+              variables: { datasetId, userEmail, level: metadata },
+            })
+            done()
+          } catch (err) {
+            toast.error(
+              <ToastContent body="A user with that email address does not exist" />,
+            )
+          }
+        } else {
+          toast.error(
+            <ToastContent body="Please enter a valid email address" />,
+          )
+        }
+      }}
+    />
   )
 }
