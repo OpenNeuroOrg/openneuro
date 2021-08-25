@@ -32,6 +32,8 @@ import { Tooltip } from '@openneuro/components/tooltip'
 import { ReadMore } from '@openneuro/components/read-more'
 import { CountToggle } from '@openneuro/components/count-toggle'
 
+import EditDescriptionField from './fragments/edit-description-field.jsx'
+
 export interface SnapshotContainerProps {
   dataset
   tag?: string
@@ -104,14 +106,20 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   return (
     <>
       <DatasetPage
-        modality={summary.modalities[0]}
+        modality={summary?.modalities[0]}
         renderHeader={() => (
           <>
             {summary && (
-              <DatasetHeader
-                pageHeading={description.Name}
-                modality={summary.modalities[0]}
-              />
+              <EditDescriptionField
+                datasetId={datasetId}
+                field="Name"
+                description={description.Name}
+                editMode={hasEdit}>
+                <DatasetHeader
+                  pageHeading={description.Name}
+                  modality={summary.modalities[0]}
+                />
+              </EditDescriptionField>
             )}
           </>
         )}
