@@ -58,8 +58,7 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
   metadata,
   done,
 }) => {
-  const [UpdateDatasetPermissions, { data, loading, error }] =
-    useMutation(UPDATE_PERMISSIONS)
+  const [UpdateDatasetPermissions] = useMutation(UPDATE_PERMISSIONS)
   return (
     <Button
       className="btn-modal-action"
