@@ -1,0 +1,74 @@
+@import '../scss/variables';
+//share table
+.dataset-share-form {
+  .data-table-header,
+  .data-table-content {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    @media (max-width: 767px) {
+      flex-wrap: wrap;
+    }
+    > span {
+      display: block;
+      min-width: 33.3333%;
+      margin-bottom: 11px;
+      label {
+        font-weight: bold;
+        font-size: 14px;
+        display: none;
+        @media (max-width: 767px) {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .data-table-content {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .data-table-header {
+    font-weight: bold;
+    font-size: 14px;
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  .share-input-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    input {
+      margin-right: 10px;
+      width: 400px;
+      max-width: 90%;
+    }
+    button {
+      margin-right: 10px;
+    }
+  }
+  .warn-btn .warn-btn-group button {
+    width: auto;
+  }
+  .warn-btn .btn-warn-component {
+    padding: 11px;
+  }
+  .return-link {
+    text-transform: uppercase;
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 40px;
+    font-size: 14px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .share-form-controls {
+    margin-top: 30px;
+  }
+}

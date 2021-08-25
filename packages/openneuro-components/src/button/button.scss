@@ -14,8 +14,14 @@
   color: #fff;
   background-color: var(--current-theme-primary);
   transition: background-color 0.3s;
+  border: 2px solid transparent;
   &:hover {
     background-color: var(--current-theme-primary-hover);
+  }
+  &.active {
+    background-color: transparent;
+    color: var(--current-theme-primary);
+    border-color: var(--current-theme-primary-hover);
   }
 }
 
@@ -24,8 +30,14 @@
   background-color: $on-light-green;
   transition: background-color 0.3s;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
+  border: 2px solid transparent;
   &:hover {
     background-color: darken($on-light-green, 5%);
+  }
+  &.active {
+    background-color: transparent;
+    color: $on-dark-aqua;
+    border-color: $on-light-green;
   }
 }
 
@@ -89,21 +101,21 @@
 
 .on-button--small {
   font-size: 12px;
-  padding: 13px 14px;
+  padding: 11px 14px;
 }
 
 .on-button--medium {
   font-size: 14px;
-  padding: 16px 20px;
+  padding: 14px 20px;
 }
 
 .on-button--large {
   font-size: 18px;
-  padding: 17px 24px;
+  padding: 15px 24px;
 
   &.on-button--navbar {
     font-size: 14px;
-    padding: 20px 24px;
+    padding: 18px 24px;
   }
 }
 
