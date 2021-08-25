@@ -89,6 +89,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
+
+  console.log(dataset)
+
   return (
     <>
       <DatasetPage
@@ -227,23 +230,12 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               isMarkdown={true}
               className="dmb-inline-list"
             />
-            <>
-              {summary && (
-                <>
-                  <ModalitiesMetaDataBlock
-                    items={summary.modalities}
-                    className="dmb-modalities"
-                  />
-                  <MetaDataBlock
-                    heading="Tasks"
-                    item={summary.tasks}
-                    isMarkdown={true}
-                    className="dmb-inline-list"
-                  />
-                </>
-              )}
-            </>
-
+            {summary && (
+              <ModalitiesMetaDataBlock
+                items={summary.modalities}
+                className="dmb-modalities"
+              />
+            )}
             <MetaDataBlock
               heading="Versions"
               item={
@@ -261,6 +253,64 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 </div>
               }
             />
+            {summary && (
+              <MetaDataBlock
+                heading="Tasks"
+                item={summary.tasks}
+                isMarkdown={true}
+                className="dmb-inline-list"
+              />
+            )}
+            {summary.modalities.includes('pet') ||
+              summary.modalities.includes('Pet') ||
+              (summary.modalities.includes('PET') && (
+                <>
+                  <MetaDataBlock
+                    heading={pluralize('Target', summary.pet?.BodyPart)}
+                    item={summary.pet?.BodyPart}
+                  />
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Scanner Manufacturer',
+                      summary.pet?.ScannerManufacturer,
+                    )}
+                    item={
+                      summary.pet?.ScannerManufacturer
+                        ? summary.pet?.ScannerManufacturer
+                        : 'N/A'
+                    }
+                  />
+
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Scanner Model',
+                      summary.pet?.ScannerManufacturersModelName,
+                    )}
+                    item={
+                      summary.pet?.ScannerManufacturersModelName
+                        ? summary.pet?.ScannerManufacturersModelName
+                        : 'N/A'
+                    }
+                  />
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Radionuclide',
+                      summary.pet?.TracerRadionuclide,
+                    )}
+                    item={
+                      summary.pet?.TracerRadionuclide
+                        ? summary.pet?.TracerRadionuclide
+                        : 'N/A'
+                    }
+                  />
+                  <MetaDataBlock
+                    heading={pluralize('Radiotracer', summary.pet?.TracerName)}
+                    item={
+                      summary.pet?.TracerName ? summary.pet?.TracerName : 'N/A'
+                    }
+                  />
+                </>
+              ))}
 
             <MetaDataBlock
               heading="Uploaded by"
@@ -272,7 +322,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               }
             />
 
-            {dataset.snapshots.length && (
+            {dataset.snapshots.length ? (
               <MetaDataBlock
                 heading="Last Updated"
                 item={
@@ -281,7 +331,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   </>
                 }
               />
-            )}
+            ) : null}
             <MetaDataBlock
               heading={pluralize('Session', numSessions)}
               item={numSessions}
