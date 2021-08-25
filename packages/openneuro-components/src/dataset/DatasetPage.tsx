@@ -1,11 +1,10 @@
 import React from 'react'
-import './dataset-page.scss'
 
 export interface DatasetPageProps {
   renderSidebar: () => React.ReactNode
   renderValidationBlock: () => React.ReactNode
   renderHeader: () => React.ReactNode
-  renderAlert: () => React.ReactNode
+  renderAlert?: () => React.ReactNode
   renderHeaderMeta: () => React.ReactNode
   renderToolButtons: () => React.ReactNode
   renderReadMe: () => React.ReactNode
@@ -38,7 +37,7 @@ export const DatasetPage = ({
         modality.toLowerCase()
       }>
       {renderHeader()}
-      {renderAlert()}
+      {renderAlert && renderAlert()}
       <div className="container">
         <div className="grid grid-between dataset-header-meta">
           <div className="col col-8">{renderHeaderMeta()}</div>
