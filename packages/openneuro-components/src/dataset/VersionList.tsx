@@ -46,7 +46,7 @@ export const VersionList = ({
     setSelected(itemTag)
     setDate(formatDate(itemCreated))
   }
-  console.log(datasetId)
+  console.log(items.length > 0)
   return (
     <>
       <div className="active-version">
@@ -54,64 +54,72 @@ export const VersionList = ({
         {selected === 'draft' ? 'Updated' : 'Created'}:{' '}
         {selected === 'draft' ? dateModified : date}
       </div>
-      <Dropdown
-        className={className}
-        label={
-          <div className="version-list-label">
-            <b>Versions</b>
-            <i className="fas fa-chevron-up" />
-            <i className="fas fa-chevron-down" />
-          </div>
-        }
-        children={
-          <div className="version-list-dropdow">
-            <ul>
-              <li
-                onClick={() => setVersion('draft', dateModified)}
-                className={selected === 'draft' ? 'selected' : ''}>
-                <Link className="dataset-tool" to={'/datasets/' + datasetId}>
-                  <span className="label">
-                    Draft
-                    <span className="active">
-                      {selected === 'draft' ? '*' : ''}
-                    </span>
-                  </span>
-                  {dateModified}
-                </Link>
-              </li>
-              {items.map((item, index) => (
+      {items.length ? (
+        <Dropdown
+          className={className}
+          label={
+            <div className="version-list-label">
+              <b>Versions</b>
+              <i className="fas fa-chevron-up" />
+              <i className="fas fa-chevron-down" />
+            </div>
+          }
+          children={
+            <div className="version-list-dropdow">
+              <ul>
                 <li
-                  key={index}
-                  onClick={
-                    item.deprecated === true
-                      ? () => deprecatedItem(item.tag, item.created)
-                      : () => setVersion(item.tag, formatDate(item.created))
-                  }
-                  className={selected === item.tag ? 'selected' : ''}>
-                  <Link
-                    className="dataset-tool"
-                    to={
-                      selected === 'draft'
-                        ? '/datasets/' + datasetId + '/versions/' + item.tag
-                        : item.tag
-                    }>
+                  onClick={() => setVersion('draft', dateModified)}
+                  className={selected === 'draft' ? 'selected' : ''}>
+                  <Link className="dataset-tool" to={'/datasets/' + datasetId}>
                     <span className="label">
-                      v{item.tag}
+                      Draft
                       <span className="active">
-                        {selected === item.tag ? '*' : ''}
-                      </span>
-                      <span className="deprecated">
-                        {item.deprecated === true ? 'Deprecated' : ''}
+                        {selected === 'draft' ? '*' : ''}
                       </span>
                     </span>
-                    {formatDate(item.created)}
+                    {dateModified}
                   </Link>
                 </li>
-              ))}
-            </ul>
-          </div>
-        }
-      />
+                {items.map((item, index) => (
+                  <li
+                    key={index}
+                    onClick={
+                      item.deprecated === true
+                        ? () => deprecatedItem(item.tag, item.created)
+                        : () => setVersion(item.tag, formatDate(item.created))
+                    }
+                    className={selected === item.tag ? 'selected' : ''}>
+                    <Link
+                      className="dataset-tool"
+                      to={
+                        selected === 'draft'
+                          ? '/datasets/' + datasetId + '/versions/' + item.tag
+                          : item.tag
+                      }>
+                      <span className="label">
+                        v{item.tag}
+                        <span className="active">
+                          {selected === item.tag ? '*' : ''}
+                        </span>
+                        <span className="deprecated">
+                          {item.deprecated === true ? 'Deprecated' : ''}
+                        </span>
+                      </span>
+                      {formatDate(item.created)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          }
+        />
+      ) : (
+        <Link
+          className="dataset-tool"
+          to={'/datasets/' + datasetId + '/snapshot'}>
+          Create Version
+        </Link>
+      )}
     </>
   )
 }

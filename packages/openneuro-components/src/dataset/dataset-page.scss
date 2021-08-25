@@ -334,6 +334,15 @@
       font-size: 16px;
     }
   }
+  .dataset-tool {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0 0 10px;
+    color: var(--current-theme-primary);
+    &:hover {
+      color: var(--current-theme-primary-hover);
+    }
+  }
 
   .version-dropdown {
     position: relative;

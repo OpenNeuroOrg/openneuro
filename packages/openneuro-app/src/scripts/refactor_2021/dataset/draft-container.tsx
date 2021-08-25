@@ -89,6 +89,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
+
   return (
     <>
       <DatasetPage
@@ -180,7 +181,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
 
             <Tooltip tooltip="Create a new version of the dataset" flow="up">
               <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" label="Snapshot" />
+                <Icon icon="fa fa-camera" label="Version" />
               </Link>
             </Tooltip>
             <span>
@@ -245,7 +246,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             </>
 
             <MetaDataBlock
-              heading="Versions"
+              heading={dataset.snapshots.length ? 'Versions' : 'Version'}
               item={
                 <div className="version-block">
                   <VersionListContainerExample
