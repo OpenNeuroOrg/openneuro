@@ -20,7 +20,7 @@ export interface VersionListProps {
   activeDataset: string
   dateModified: Date
   setDeprecatedModalIsOpen: (boolean) => void
-  rootPath?: string
+  datasetId?: string
 }
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -33,7 +33,7 @@ export const VersionList = ({
   setSelected,
   className,
   dateModified,
-  rootPath,
+  datasetId,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
   const [date, setDate] = React.useState(formatDate(new Date()))
@@ -46,7 +46,7 @@ export const VersionList = ({
     setSelected(itemTag)
     setDate(formatDate(itemCreated))
   }
-
+  console.log(datasetId)
   return (
     <>
       <div className="active-version">
@@ -69,7 +69,7 @@ export const VersionList = ({
               <li
                 onClick={() => setVersion('draft', dateModified)}
                 className={selected === 'draft' ? 'selected' : ''}>
-                <Link className="dataset-tool" to={rootPath}>
+                <Link className="dataset-tool" to={'/datasets/' + datasetId}>
                   <span className="label">
                     Draft
                     <span className="active">
@@ -90,7 +90,11 @@ export const VersionList = ({
                   className={selected === item.tag ? 'selected' : ''}>
                   <Link
                     className="dataset-tool"
-                    to={rootPath + '/versions/' + item.tag}>
+                    to={
+                      selected === 'draft'
+                        ? '/datasets/' + datasetId + '/versions/' + item.tag
+                        : item.tag
+                    }>
                     <span className="label">
                       v{item.tag}
                       <span className="active">

@@ -249,7 +249,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               item={
                 <div className="version-block">
                   <VersionListContainerExample
-                    rootPath={rootPath}
+                    datasetId={datasetId}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}

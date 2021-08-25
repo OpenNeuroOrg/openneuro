@@ -167,22 +167,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderToolButtons={() => (
           <>
-            <Tooltip tooltip="Publish the dataset publicly" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/publish'}>
-                <Icon icon="fa fa-globe" label="Publish" />
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Share this dataset with collaborators" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/share'}>
-                <Icon icon="fa fa-user" label="Share" />
-              </Link>
-            </Tooltip>
-
-            <Tooltip tooltip="Create a new version of the dataset" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" label="Snapshot" />
-              </Link>
-            </Tooltip>
             <span>
               <Link className="dataset-tool" to={rootPath + '/download'}>
                 <Icon icon="fa fa-download" label="Download" />
@@ -249,7 +233,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               item={
                 <div className="version-block">
                   <VersionListContainerExample
-                    rootPath={rootPath}
+                    datasetId={datasetId}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}
