@@ -1,4 +1,5 @@
 import { MetaDataBlock } from './MetaDataBlock'
+import { ModalitiesMetaDataBlock } from './ModalitiesMetaDataBlock'
 import { BrainLifeButton } from './BrainLifeButton'
 import { ValidationBlock } from './ValidationBlock'
 import { CloneDropdown } from './CloneDropdown'
@@ -21,4 +22,5 @@ export {
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
+  ModalitiesMetaDataBlock,
 }
