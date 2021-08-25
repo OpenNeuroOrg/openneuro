@@ -507,6 +507,7 @@ export const typeDefs = `
   type Summary {
     id: ID!
     modalities: [String]
+    primaryModality: String
     secondaryModalities: [String]
     sessions: [String]
     subjects: [String]
