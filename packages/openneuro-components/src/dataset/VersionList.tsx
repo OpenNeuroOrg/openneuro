@@ -46,7 +46,6 @@ export const VersionList = ({
     setSelected(itemTag)
     setDate(formatDate(itemCreated))
   }
-  console.log(items.length > 0)
   return (
     <>
       <div className="active-version">
@@ -63,56 +62,54 @@ export const VersionList = ({
               <i className="fas fa-chevron-up" />
               <i className="fas fa-chevron-down" />
             </div>
-          }
-          children={
-            <div className="version-list-dropdow">
-              <ul>
+          }>
+          <div className="version-list-dropdow">
+            <ul>
+              <li
+                onClick={() => setVersion('draft', dateModified)}
+                className={selected === 'draft' ? 'selected' : ''}>
+                <Link className="dataset-tool" to={'/datasets/' + datasetId}>
+                  <span className="label">
+                    Draft
+                    <span className="active">
+                      {selected === 'draft' ? '*' : ''}
+                    </span>
+                  </span>
+                  {dateModified}
+                </Link>
+              </li>
+              {items.map((item, index) => (
                 <li
-                  onClick={() => setVersion('draft', dateModified)}
-                  className={selected === 'draft' ? 'selected' : ''}>
-                  <Link className="dataset-tool" to={'/datasets/' + datasetId}>
+                  key={index}
+                  onClick={
+                    item.deprecated === true
+                      ? () => deprecatedItem(item.tag, item.created)
+                      : () => setVersion(item.tag, formatDate(item.created))
+                  }
+                  className={selected === item.tag ? 'selected' : ''}>
+                  <Link
+                    className="dataset-tool"
+                    to={
+                      selected === 'draft'
+                        ? '/datasets/' + datasetId + '/versions/' + item.tag
+                        : item.tag
+                    }>
                     <span className="label">
-                      Draft
+                      v{item.tag}
                       <span className="active">
-                        {selected === 'draft' ? '*' : ''}
+                        {selected === item.tag ? '*' : ''}
+                      </span>
+                      <span className="deprecated">
+                        {item.deprecated === true ? 'Deprecated' : ''}
                       </span>
                     </span>
-                    {dateModified}
+                    {formatDate(item.created)}
                   </Link>
                 </li>
-                {items.map((item, index) => (
-                  <li
-                    key={index}
-                    onClick={
-                      item.deprecated === true
-                        ? () => deprecatedItem(item.tag, item.created)
-                        : () => setVersion(item.tag, formatDate(item.created))
-                    }
-                    className={selected === item.tag ? 'selected' : ''}>
-                    <Link
-                      className="dataset-tool"
-                      to={
-                        selected === 'draft'
-                          ? '/datasets/' + datasetId + '/versions/' + item.tag
-                          : item.tag
-                      }>
-                      <span className="label">
-                        v{item.tag}
-                        <span className="active">
-                          {selected === item.tag ? '*' : ''}
-                        </span>
-                        <span className="deprecated">
-                          {item.deprecated === true ? 'Deprecated' : ''}
-                        </span>
-                      </span>
-                      {formatDate(item.created)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          }
-        />
+              ))}
+            </ul>
+          </div>
+        </Dropdown>
       ) : (
         <Link
           className="dataset-tool"

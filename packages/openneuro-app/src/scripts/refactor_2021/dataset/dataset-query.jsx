@@ -6,7 +6,7 @@ import { useQuery, gql } from '@apollo/client'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
 import DatasetContext from '../../datalad/dataset/dataset-context.js'
-import DatasetPage from './dataset-routes'
+import DatasetRoutes from './dataset-routes'
 import FilesSubscription from '../../datalad/subscriptions/files-subscription.jsx'
 import usePermissionsSubscription from '../../datalad/subscriptions/usePermissionsSubscription'
 import useSnapshotsUpdatedSubscriptions from '../../datalad/subscriptions/useSnapshotsUpdatedSubscriptions'
@@ -113,7 +113,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     {
       variables: { datasetId },
       errorPolicy: 'all',
-      fetchPolicy: draft ? 'cache-and-network' : 'cache-first',
+      fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
     },
   )
@@ -149,7 +149,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
             fetchMore,
             error,
           }}>
-          <DatasetPage dataset={data.dataset} />
+          <DatasetRoutes dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
       </ErrorBoundary>
