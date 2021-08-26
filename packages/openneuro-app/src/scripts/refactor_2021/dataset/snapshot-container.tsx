@@ -43,7 +43,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
   const [followed, showFollowed] = React.useState(false)
   const [followedCount, setFollowedCount] = React.useState(1)
-  console.log(dataset)
+
   //TODO hook up follow and bookmark
   const toggleBookmarkClick = () => {
     setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
