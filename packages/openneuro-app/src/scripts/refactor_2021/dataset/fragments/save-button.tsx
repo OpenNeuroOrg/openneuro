@@ -8,14 +8,5 @@ interface SaveButtonProps {
   action: () => void
 }
 export const SaveButton: FC<SaveButtonProps> = ({ action }) => {
-  return (
-    <Button
-      label="Save"
-      icon="fa-Save"
-      onClick={async cb => {
-        await action()
-        cb()
-      }}
-    />
-  )
+  return <Button label="Save" icon="fa-Save" onClick={() => action()} s />
 }
