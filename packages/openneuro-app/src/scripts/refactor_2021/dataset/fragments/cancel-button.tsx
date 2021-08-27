@@ -8,5 +8,12 @@ interface CancelButtonProps {
   action: () => void
 }
 export const CancelButton: FC<CancelButtonProps> = ({ action }) => {
-  return <Button label="Cancel" icon="fa-close" onClick={() => action()} />
+  return (
+    <Button
+      className="description-btn description-button-cancel"
+      label="Cancel"
+      icon="fas fa-times"
+      onClick={() => action()}
+    />
+  )
 }

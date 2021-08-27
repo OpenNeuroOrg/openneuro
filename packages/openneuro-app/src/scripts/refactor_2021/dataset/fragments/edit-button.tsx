@@ -8,5 +8,12 @@ interface EditButtonProps {
   action: () => void
 }
 export const EditButton: FC<EditButtonProps> = ({ action }) => {
-  return <Button label="Edit" icon="fa-edit" onClick={() => action()} />
+  return (
+    <Button
+      className="description-btn description-button-edit"
+      label="Edit"
+      icon="fas fa-edit"
+      onClick={() => action()}
+    />
+  )
 }

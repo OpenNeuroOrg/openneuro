@@ -14,8 +14,8 @@ import {
 import { useCookies } from 'react-cookie'
 
 import {
-  ModalitiesMetaDataBlock,
   MetaDataBlock,
+  ModalitiesMetaDataBlock,
   BrainLifeButton,
   ValidationBlock,
   CloneDropdown,
@@ -33,6 +33,7 @@ import { ReadMore } from '@openneuro/components/read-more'
 import { CountToggle } from '@openneuro/components/count-toggle'
 
 import EditDescriptionField from './fragments/edit-description-field.jsx'
+import EditDescriptionList from './fragments/edit-description-list.jsx'
 
 export interface SnapshotContainerProps {
   dataset
@@ -98,7 +99,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const isAdmin = profile?.admin
   const hasEdit =
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
-
   const hasDraftChanges =
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
@@ -106,21 +106,23 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   return (
     <>
       <DatasetPage
-        modality={summary?.modalities[0]}
+        modality={summary?.modalities[0] || ''}
         renderHeader={() => (
           <>
-            {summary && (
-              <EditDescriptionField
-                datasetId={datasetId}
-                field="Name"
-                description={description.Name}
-                editMode={hasEdit}>
-                <DatasetHeader
-                  pageHeading={description.Name}
-                  modality={summary.modalities[0]}
-                />
-              </EditDescriptionField>
-            )}
+            <DatasetHeader
+              pageHeading={description.Name}
+              modality={summary?.modalities[0] ? summary?.modalities[0] : null}
+              renderEditor={() => (
+                <EditDescriptionField
+                  datasetId={datasetId}
+                  field="Name"
+                  rows={2}
+                  description={description.Name}
+                  editMode={hasEdit}>
+                  {description.Name}
+                </EditDescriptionField>
+              )}
+            />
           </>
         )}
         renderAlert={() => (
@@ -246,27 +248,41 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         renderReadMe={() => (
           <MetaDataBlock
             heading="README"
-            item={
-              <ReadMore
-                id="readme"
-                expandLabel="Read More"
-                collapseabel="Collapse">
-                <Markdown>
-                  {dataset.draft.readme == null ? 'N/A' : dataset.draft.readme}
-                </Markdown>
-              </ReadMore>
-            }
             className="dataset-readme markdown-body"
+            item={dataset.draft.readme}
+            renderEditor={() => (
+              <EditDescriptionField
+                datasetId={datasetId}
+                field="readme"
+                rows={12}
+                description={dataset.draft.readme}
+                editMode={hasEdit}>
+                <ReadMore
+                  id="readme"
+                  expandLabel="Read More"
+                  collapseabel="Collapse">
+                  <Markdown>
+                    {dataset.draft.readme == null
+                      ? 'N/A'
+                      : dataset.draft.readme}
+                  </Markdown>
+                </ReadMore>
+              </EditDescriptionField>
+            )}
           />
         )}
         renderSidebar={() => (
           <>
-            <MetaDataBlock
-              heading="Authors"
-              item={description.Authors}
-              isMarkdown={true}
+            <EditDescriptionList
               className="dmb-inline-list"
-            />
+              datasetId={datasetId}
+              field="Authors"
+              heading="Authors"
+              description={description.Authors}
+              editMode={hasEdit}>
+              {description.Authors?.length ? description.Authors : ['N/A']}
+            </EditDescriptionList>
+
             <>
               {summary && (
                 <>
@@ -277,7 +293,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   <MetaDataBlock
                     heading="Tasks"
                     item={summary.tasks}
-                    isMarkdown={true}
                     className="dmb-inline-list"
                   />
                 </>
@@ -312,7 +327,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               }
             />
 
-            {dataset.snapshots.length && (
+            {dataset.snapshots?.length ? (
               <MetaDataBlock
                 heading="Last Updated"
                 item={
@@ -321,7 +336,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   </>
                 }
               />
-            )}
+            ) : null}
             <MetaDataBlock
               heading={pluralize('Session', numSessions)}
               item={numSessions}
@@ -344,34 +359,70 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               }
             />
             <MetaDataBlock heading="License" item={description.License} />
+
             <MetaDataBlock
               heading="Acknowledgements"
               item={description.Acknowledgements}
+              renderEditor={() => (
+                <EditDescriptionField
+                  datasetId={datasetId}
+                  field="Acknowledgements"
+                  rows={2}
+                  description={description.Acknowledgements}
+                  editMode={hasEdit}>
+                  <Markdown>{description.Acknowledgements || 'N/A'}</Markdown>
+                </EditDescriptionField>
+              )}
             />
+
             <MetaDataBlock
               heading="How to Acknowledge"
               item={description.HowToAcknowledge}
-            />
-            <MetaDataBlock
-              heading="Funding"
-              item={description.Funding}
-              isMarkdown={true}
-              className="dmb-list"
+              renderEditor={() => (
+                <EditDescriptionField
+                  datasetId={datasetId}
+                  field="HowToAcknowledge"
+                  rows={2}
+                  description={description.HowToAcknowledge}
+                  editMode={hasEdit}>
+                  <Markdown>{description.HowToAcknowledge || 'N/A'}</Markdown>
+                </EditDescriptionField>
+              )}
             />
 
-            <MetaDataBlock
+            <EditDescriptionList
+              className="dmb-list"
+              datasetId={datasetId}
+              field="Funding"
+              heading="Funding"
+              description={description.Funding}
+              editMode={hasEdit}>
+              {description.Funding?.length ? description.Funding : ['N/A']}
+            </EditDescriptionList>
+
+            <EditDescriptionList
+              className="dmb-list"
+              datasetId={datasetId}
+              field="ReferencesAndLinks"
               heading="References and Links"
-              item={description.ReferencesAndLinks}
-              isMarkdown={true}
-              className="dmb-list"
-            />
+              description={description.ReferencesAndLinks}
+              editMode={hasEdit}>
+              {description.ReferencesAndLinks?.length
+                ? description.ReferencesAndLinks
+                : ['N/A']}
+            </EditDescriptionList>
 
-            <MetaDataBlock
-              heading="Funding"
-              item={description.EthicsApprovals}
-              isMarkdown={true}
+            <EditDescriptionList
               className="dmb-list"
-            />
+              datasetId={datasetId}
+              field="EthicsApprovals"
+              heading="Ethics Approvals"
+              description={description.EthicsApprovals}
+              editMode={hasEdit}>
+              {description.EthicsApprovals?.length
+                ? description.EthicsApprovals
+                : ['N/A']}
+            </EditDescriptionList>
           </>
         )}
         renderDeprecatedModal={() => (

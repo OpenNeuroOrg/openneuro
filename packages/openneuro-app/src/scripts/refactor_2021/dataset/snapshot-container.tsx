@@ -233,7 +233,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   <MetaDataBlock
                     heading="Tasks"
                     item={summary.tasks}
-                    isMarkdown={true}
                     className="dmb-inline-list"
                   />
                 </>
@@ -301,17 +300,19 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             />
             <MetaDataBlock heading="License" item={description.License} />
             <MetaDataBlock
+              isMarkdown={true}
               heading="Acknowledgements"
               item={description.Acknowledgements}
             />
             <MetaDataBlock
+              isMarkdown={true}
               heading="How to Acknowledge"
               item={description.HowToAcknowledge}
             />
             <MetaDataBlock
+              isMarkdown={true}
               heading="Funding"
               item={description.Funding}
-              isMarkdown={true}
               className="dmb-list"
             />
 

@@ -105,7 +105,7 @@ const DatasetRoutes = ({ dataset, error }) => {
             params: { tag },
           },
         }) => {
-          return <SnapshotContainer dataset={dataset} tag={tag} />
+          return <DraftContainer dataset={dataset} tag={tag} />
         }}
       />
       <Route

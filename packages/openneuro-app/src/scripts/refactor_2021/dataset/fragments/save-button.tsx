@@ -8,5 +8,12 @@ interface SaveButtonProps {
   action: () => void
 }
 export const SaveButton: FC<SaveButtonProps> = ({ action }) => {
-  return <Button label="Save" icon="fa-Save" onClick={() => action()} s />
+  return (
+    <Button
+      className="description-btn description-button-save"
+      label="Save"
+      icon="fas fa-check"
+      onClick={() => action()}
+    />
+  )
 }
