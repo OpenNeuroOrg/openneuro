@@ -88,16 +88,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
+  console.log(description.Name)
   return (
     <>
       <DatasetPage
-        modality={summary.modalities[0]}
+        modality={summary?.modalities[0]}
         renderHeader={() => (
           <>
             {summary && (
               <DatasetHeader
                 pageHeading={description.Name}
-                modality={summary.modalities[0]}
+                modality={summary?.modalities[0]}
               />
             )}
           </>
@@ -211,7 +212,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               {summary && (
                 <>
                   <ModalitiesMetaDataBlock
-                    items={summary.modalities}
+                    items={summary?.modalities}
                     className="dmb-modalities"
                   />
                 </>
@@ -243,9 +244,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 className="dmb-inline-list"
               />
             )}
-            {summary.modalities.includes('pet') ||
-              summary.modalities.includes('Pet') ||
-              (summary.modalities.includes('PET') && (
+            {summary?.modalities.includes('pet') ||
+              summary?.modalities.includes('Pet') ||
+              (summary?.modalities.includes('PET') && (
                 <>
                   <MetaDataBlock
                     heading={pluralize('Target', summary.pet?.BodyPart)}

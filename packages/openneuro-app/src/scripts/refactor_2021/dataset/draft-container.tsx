@@ -287,7 +287,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               {summary && (
                 <>
                   <ModalitiesMetaDataBlock
-                    items={summary.modalities}
+                    items={summary?.modalities}
                     className="dmb-modalities"
                   />
                 </>
@@ -319,9 +319,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 className="dmb-inline-list"
               />
             )}
-            {summary.modalities.includes('pet') ||
-              summary.modalities.includes('Pet') ||
-              (summary.modalities.includes('PET') && (
+            {summary?.modalities.includes('pet') ||
+              summary?.modalities.includes('Pet') ||
+              (summary?.modalities.includes('PET') && (
                 <>
                   <MetaDataBlock
                     heading={pluralize('Target', summary.pet?.BodyPart)}
