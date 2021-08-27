@@ -290,21 +290,16 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                     items={summary.modalities}
                     className="dmb-modalities"
                   />
-                  <MetaDataBlock
-                    heading="Tasks"
-                    item={summary.tasks}
-                    className="dmb-inline-list"
-                  />
                 </>
               )}
             </>
 
             <MetaDataBlock
-              heading="Versions"
+              heading={dataset.snapshots.length ? 'Versions' : 'Version'}
               item={
                 <div className="version-block">
                   <VersionListContainerExample
-                    rootPath={rootPath}
+                    datasetId={datasetId}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}
@@ -316,6 +311,64 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 </div>
               }
             />
+            {summary && (
+              <MetaDataBlock
+                heading="Tasks"
+                item={summary.tasks}
+                isMarkdown={true}
+                className="dmb-inline-list"
+              />
+            )}
+            {summary.modalities.includes('pet') ||
+              summary.modalities.includes('Pet') ||
+              (summary.modalities.includes('PET') && (
+                <>
+                  <MetaDataBlock
+                    heading={pluralize('Target', summary.pet?.BodyPart)}
+                    item={summary.pet?.BodyPart}
+                  />
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Scanner Manufacturer',
+                      summary.pet?.ScannerManufacturer,
+                    )}
+                    item={
+                      summary.pet?.ScannerManufacturer
+                        ? summary.pet?.ScannerManufacturer
+                        : 'N/A'
+                    }
+                  />
+
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Scanner Model',
+                      summary.pet?.ScannerManufacturersModelName,
+                    )}
+                    item={
+                      summary.pet?.ScannerManufacturersModelName
+                        ? summary.pet?.ScannerManufacturersModelName
+                        : 'N/A'
+                    }
+                  />
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Radionuclide',
+                      summary.pet?.TracerRadionuclide,
+                    )}
+                    item={
+                      summary.pet?.TracerRadionuclide
+                        ? summary.pet?.TracerRadionuclide
+                        : 'N/A'
+                    }
+                  />
+                  <MetaDataBlock
+                    heading={pluralize('Radiotracer', summary.pet?.TracerName)}
+                    item={
+                      summary.pet?.TracerName ? summary.pet?.TracerName : 'N/A'
+                    }
+                  />
+                </>
+              ))}
 
             <MetaDataBlock
               heading="Uploaded by"
