@@ -7,7 +7,7 @@ export interface DatasetPageProps {
   renderAlert?: () => React.ReactNode
   renderHeaderMeta: () => React.ReactNode
   renderToolButtons: () => React.ReactNode
-  renderFileTree: () => React.ReactNode
+  renderFiles: () => React.ReactNode
   renderReadMe: () => React.ReactNode
   renderBrainLifeButton: () => React.ReactNode
   renderCloneDropdown: () => React.ReactNode
@@ -24,7 +24,7 @@ export const DatasetPage = ({
   renderAlert,
   renderHeaderMeta,
   renderToolButtons,
-  renderFileTree,
+  renderFiles,
   renderReadMe,
   renderBrainLifeButton,
   renderCloneDropdown,
@@ -57,7 +57,7 @@ export const DatasetPage = ({
               {renderCloneDropdown()}
             </div>
             <div className="dataset-tool-buttons">{renderToolButtons()}</div>
-            {renderFileTree()}
+            {renderFiles()}
             {renderReadMe()}
             {renderComments()}
           </div>

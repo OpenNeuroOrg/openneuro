@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import DatasetQueryContext from '../dataset-query-context.js'
+import DatasetQueryContext from '../../../datalad/dataset/dataset-query-context.js'
 import FileTreeLoading from './file-tree-loading.jsx'
 import { gql } from '@apollo/client'
 
