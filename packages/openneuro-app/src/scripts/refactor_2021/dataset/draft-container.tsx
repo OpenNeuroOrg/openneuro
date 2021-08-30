@@ -179,6 +179,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             isSnapshot={isSnapshot}
           />
         )}
+        renderFileTree={() => (
+          <h1>DRAFT FILETREE</h1>
+        )}
         renderReadMe={() => (
           <MetaDataBlock
             heading="README"
