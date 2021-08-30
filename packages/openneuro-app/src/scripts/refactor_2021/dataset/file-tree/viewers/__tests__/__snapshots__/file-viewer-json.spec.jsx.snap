@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`File Viewer - JSON renders with invalid JSON 1`] = `
+<Fragment>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Tree
+    </h3>
+    <hr />
+    1234;
+  </div>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Raw
+    </h3>
+    <hr />
+    <Styled(pre)>
+      1234;
+    </Styled(pre)>
+  </div>
+</Fragment>
+`;
+
+exports[`File Viewer - JSON renders with valid JSON 1`] = `
+<Fragment>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Tree
+    </h3>
+    <hr />
+    {"thing":1,"name":"string"}
+  </div>
+  <div
+    className="col-xs-6"
+  >
+    <h3>
+      Raw
+    </h3>
+    <hr />
+    <Styled(pre)>
+      {"thing":1,"name":"string"}
+    </Styled(pre)>
+  </div>
+</Fragment>
+`;
