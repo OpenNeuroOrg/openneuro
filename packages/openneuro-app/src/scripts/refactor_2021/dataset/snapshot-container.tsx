@@ -1,13 +1,17 @@
 import React from 'react'
+import { gql, useQuery } from '@apollo/client'
+import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
 import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
+import Files from './file-tree/files'
 import Validation from '../validation/validation.jsx'
 import { config } from '../../config'
 import Comments from './comments/comments.jsx'
+import Spinner from '../../common/partials/spinner.jsx'
 
 import {
   ModalitiesMetaDataBlock,
@@ -35,10 +39,7 @@ import { ReadMore } from '@openneuro/components/read-more'
 import { FollowDataset } from './mutations/follow'
 import { StarDataset } from './mutations/star'
 
-export interface SnapshotContainerProps {
-  dataset
-  tag?: string
-}
+import { SNAPSHOT_FIELDS } from './queries/dataset-query-fragments.js'
 
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -48,7 +49,24 @@ const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
-const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
+
+const getSnapshotDetails = gql`
+  query snapshot($datasetId: ID!, $tag: String!) {
+    snapshot(datasetId: $datasetId, tag: $tag) {
+      id
+      ...SnapshotFields
+    }
+  }
+  ${SNAPSHOT_FIELDS}
+`
+
+type SnapshotContainerProps = {
+  dataset
+  tag: string
+  snapshot
+}
+
+const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, snapshot }) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -56,8 +74,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
     React.useState(false)
 
-  const summary = dataset.draft.summary
-  const description = dataset.draft.description
+  const summary = snapshot.summary
+  const description = snapshot.description
   const datasetId = dataset.id
 
   const numSessions =
@@ -65,17 +83,13 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
 
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
-  const dateModified = formatDate(dataset.draft.modified)
+  const dateModified = formatDate(snapshot.created)
   const dateUpdatedDifference = formatDistanceToNow(
-    parseISO(dataset.draft.modified),
+    parseISO(snapshot.created),
   )
-  const isSnapshot = activeDataset !== 'draft'
-  const rootPath = isSnapshot
-    ? `/datasets/${datasetId}/versions/${activeDataset}`
-    : `/datasets/${datasetId}`
+  const rootPath = `/datasets/${datasetId}/versions/${activeDataset}`
 
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  const isPublic = dataset.public === true
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
@@ -85,6 +99,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
+  console.log(snapshot)
   return (
     <>
       <DatasetPage
@@ -146,7 +161,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderValidationBlock={() => (
           <ValidationBlock>
-            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+            <Validation datasetId={dataset.id} issues={snapshot.issues} />
           </ValidationBlock>
         )}
         renderCloneDropdown={() => (
@@ -156,7 +171,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 configUrl={config.url}
                 worker={dataset.worker}
                 datasetId={datasetId}
-                gitHash={dataset.draft.head}
+                gitHash={snapshot.hexsha}
               />
             }
           />
@@ -166,11 +181,18 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             rootPath={rootPath}
             hasEdit={hasEdit}
             isPublic={dataset.public}
-            isSnapshot={isSnapshot}
+            isSnapshot={true}
           />
         )}
-        renderFileTree={() => (
-          <h1>SNAPSHOT FILETREE</h1>
+        renderFiles={() => (
+          <Files
+            datasetId={datasetId}
+            snapshotTag={null}
+            datasetName={description.name}
+            files={snapshot.files}
+            editMode={false}
+            datasetPermissions={dataset.permissions}
+          />
         )}
         renderReadMe={() => (
           <MetaDataBlock
@@ -181,7 +203,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 expandLabel="Read More"
                 collapseabel="Collapse">
                 <Markdown>
-                  {dataset.draft.readme == null ? 'N/A' : dataset.draft.readme}
+                  {snapshot.readme == null ? 'N/A' : snapshot.readme}
                 </Markdown>
               </ReadMore>
             }
@@ -379,4 +401,35 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     </>
   )
 }
-export default SnapshotContainer
+
+export interface SnapshotLoaderProps {
+  dataset
+  tag: string
+}
+
+const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
+  const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
+    variables: {
+      datasetId: dataset.id,
+      tag,
+    },
+    errorPolicy: 'all',
+  })
+  if (loading) {
+    return <Spinner text="Loading Snapshot" active />
+  } else if (error) {
+    throw new Error(error.toString())
+  } else {
+    return (
+      <DatasetQueryContext.Provider
+        value={{
+          datasetId: dataset.id,
+          fetchMore,
+          error: null,
+        }}>
+        <SnapshotContainer dataset={dataset} tag={tag} snapshot={data.snapshot} />
+      </DatasetQueryContext.Provider>
+    )
+  }
+}
+export default SnapshotLoader
