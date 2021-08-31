@@ -17,7 +17,7 @@ export const MetaDataListBlock = ({
   return (
     <div className={'dataset-meta-block ' + className}>
       <h2 className="dmb-heading">{heading}</h2>
-      <>{fieldContent}</>
+      {fieldContent}
     </div>
   )
 }
