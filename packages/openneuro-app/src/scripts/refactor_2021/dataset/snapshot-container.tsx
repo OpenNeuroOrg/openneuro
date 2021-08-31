@@ -7,7 +7,7 @@ import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
-import Files from './file-tree/files'
+import Files from './files'
 import Validation from '../validation/validation.jsx'
 import { config } from '../../config'
 import Comments from './comments/comments.jsx'

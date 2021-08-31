@@ -6,7 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
-import Files from './file-tree/files'
+import Files from './files'
 import { config } from '../../config'
 import {
   getUnexpiredProfile,
