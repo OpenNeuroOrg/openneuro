@@ -111,7 +111,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <>
             <DatasetHeader
               pageHeading={description.Name}
-              modality={summary?.modalities[0] ? summary?.modalities[0] : null}
+              modality={summary?.modalities[0] || null}
               renderEditor={() => (
                 <EditDescriptionField
                   datasetId={datasetId}
