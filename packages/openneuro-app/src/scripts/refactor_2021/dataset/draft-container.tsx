@@ -283,16 +283,12 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               {description.Authors?.length ? description.Authors : ['N/A']}
             </EditDescriptionList>
 
-            <>
-              {summary && (
-                <>
-                  <ModalitiesMetaDataBlock
-                    items={summary?.modalities}
-                    className="dmb-modalities"
-                  />
-                </>
-              )}
-            </>
+            {summary && (
+              <ModalitiesMetaDataBlock
+                items={summary.modalities}
+                className="dmb-modalities"
+              />
+            )}
 
             <MetaDataBlock
               heading={dataset.snapshots.length ? 'Versions' : 'Version'}
