@@ -29,7 +29,7 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                   </div>
                 </div>
               </a>
-              {renderEditor ? renderEditor() : pageHeading}
+              {renderEditor?.() : pageHeading}
             </h1>
           </div>
         </div>
