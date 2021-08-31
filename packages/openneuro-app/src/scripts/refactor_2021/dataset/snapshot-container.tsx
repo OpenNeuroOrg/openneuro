@@ -88,7 +88,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const profile = true
   // (user && user.admin) ||
   // hasEditPermissions(dataset.permissions, user && user.sub)
-  console.log(description.Name)
   return (
     <>
       <DatasetPage
