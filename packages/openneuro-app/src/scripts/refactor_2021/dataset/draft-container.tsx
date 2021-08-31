@@ -262,9 +262,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   expandLabel="Read More"
                   collapseabel="Collapse">
                   <Markdown>
-                    {dataset.draft.readme == null
-                      ? 'N/A'
-                      : dataset.draft.readme}
+                    {dataset.draft.readme || 'N/A'}
                   </Markdown>
                 </ReadMore>
               </EditDescriptionField>
