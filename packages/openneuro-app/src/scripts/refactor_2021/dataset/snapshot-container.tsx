@@ -50,16 +50,6 @@ const snapshotVersion = location => {
   return matches && matches[1]
 }
 
-const getSnapshotDetails = gql`
-  query snapshot($datasetId: ID!, $tag: String!) {
-    snapshot(datasetId: $datasetId, tag: $tag) {
-      id
-      ...SnapshotFields
-    }
-  }
-  ${SNAPSHOT_FIELDS}
-`
-
 type SnapshotContainerProps = {
   dataset
   tag: string
@@ -99,7 +89,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, sna
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
-  console.log(snapshot)
   return (
     <>
       <DatasetPage
@@ -401,6 +390,16 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, sna
     </>
   )
 }
+
+const getSnapshotDetails = gql`
+  query snapshot($datasetId: ID!, $tag: String!) {
+    snapshot(datasetId: $datasetId, tag: $tag) {
+      id
+      ...SnapshotFields
+    }
+  }
+  ${SNAPSHOT_FIELDS}
+`
 
 export interface SnapshotLoaderProps {
   dataset
