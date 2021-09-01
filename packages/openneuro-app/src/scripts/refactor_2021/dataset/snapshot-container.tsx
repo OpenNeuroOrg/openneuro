@@ -209,12 +209,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             />
             <>
               {summary && (
-                <>
-                  <ModalitiesMetaDataBlock
-                    items={summary?.modalities}
-                    className="dmb-modalities"
-                  />
-                </>
+                <ModalitiesMetaDataBlock
+                  items={summary?.modalities}
+                  className="dmb-modalities"
+                />
               )}
             </>
 
