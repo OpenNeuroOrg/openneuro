@@ -5,6 +5,7 @@ import UpdateFile from '../mutations/update-file.jsx'
 import DeleteDir from '../mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 import { Media } from '../styles/media'
+import { AccordionTab } from '@openneuro/components/accordion'
 
 export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -28,93 +29,79 @@ const FileTree = ({
   isFileToBeDeleted,
   bulkDeleteButton,
 }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded)
   return (
-    <>
-      <button
-        className="btn-file-folder"
-        onClick={() => setExpanded(!expanded)}>
-        <i className={`type-icon fa fa-folder${expanded ? '-open' : ''}`} />{' '}
-        {name}
-        <i
-          className={`accordion-icon fa fa-caret${expanded ? '-up' : '-down'}`}
-        />
-      </button>
-      {expanded && (
-        <>
-          {editMode && (
-            <Media greaterThanOrEqual="medium">
-              <span className="filetree-editfile">
-                <UpdateFile
-                  datasetId={datasetId}
-                  path={unescapePath(path)}
-                  multiple>
-                  <i className="fa fa-plus" /> Add Files
-                </UpdateFile>
-                <UpdateFile
-                  datasetId={datasetId}
-                  path={unescapePath(path)}
-                  tooltip={`Choose a folder to be added to /${name}. Adding a folder with an existing name will overwrite that folder.`}
-                  directory>
-                  <i className="fa fa-plus" /> Add Directory
-                </UpdateFile>
-                {bulkDeleteButton || (
-                  <DeleteDir datasetId={datasetId} path={path} />
-                )}
-              </span>
-            </Media>
-          )}
-          <ul className="child-files">
-            {files.sort(sortByFilename).map((file, index) => (
+    <AccordionTab label={name} accordionStyle="file-tree">
+      {editMode && (
+        <Media greaterThanOrEqual="medium">
+          <span className="filetree-editfile">
+            <UpdateFile
+              datasetId={datasetId}
+              path={unescapePath(path)}
+              multiple>
+              <i className="fa fa-plus" /> Add Files
+            </UpdateFile>
+            <UpdateFile
+              datasetId={datasetId}
+              path={unescapePath(path)}
+              tooltip={`Choose a folder to be added to /${name}. Adding a folder with an existing name will overwrite that folder.`}
+              directory>
+              <i className="fa fa-plus" /> Add Directory
+            </UpdateFile>
+            {bulkDeleteButton || (
+              <DeleteDir datasetId={datasetId} path={path} />
+            )}
+          </span>
+        </Media>
+      )}
+      <ul className="child-files">
+        {files.sort(sortByFilename).map((file, index) => (
+          <li className="clearfix" key={index}>
+            <File
+              id={file.id}
+              datasetId={datasetId}
+              snapshotTag={snapshotTag}
+              path={path}
+              editMode={editMode}
+              toggleFileToDelete={toggleFileToDelete}
+              isFileToBeDeleted={isFileToBeDeleted}
+              {...file}
+              annexKey={file.key}
+              datasetPermissions={datasetPermissions}
+            />
+          </li>
+        ))}
+        {directories.sort(sortByName).map((dir, index) => {
+          if ('files' in dir || 'directories' in dir) {
+            // Loaded directory
+            return (
               <li className="clearfix" key={index}>
-                <File
-                  id={file.id}
+                <FileTree
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
-                  path={path}
                   editMode={editMode}
+                  defaultExpanded={isTopLevel(dir)}
+                  datasetPermissions={datasetPermissions}
                   toggleFileToDelete={toggleFileToDelete}
                   isFileToBeDeleted={isFileToBeDeleted}
-                  {...file}
-                  annexKey={file.key}
-                  datasetPermissions={datasetPermissions}
+                  {...dir}
                 />
               </li>
-            ))}
-            {directories.sort(sortByName).map((dir, index) => {
-              if ('files' in dir || 'directories' in dir) {
-                // Loaded directory
-                return (
-                  <li className="clearfix" key={index}>
-                    <FileTree
-                      datasetId={datasetId}
-                      snapshotTag={snapshotTag}
-                      editMode={editMode}
-                      defaultExpanded={isTopLevel(dir)}
-                      datasetPermissions={datasetPermissions}
-                      toggleFileToDelete={toggleFileToDelete}
-                      isFileToBeDeleted={isFileToBeDeleted}
-                      {...dir}
-                    />
-                  </li>
-                )
-              } else {
-                // Unloaded
-                return (
-                  <li className="clearfix" key={index}>
-                    <FileTreeUnloadedDirectory
-                      datasetId={datasetId}
-                      snapshotTag={snapshotTag}
-                      directory={dir}
-                    />
-                  </li>
-                )
-              }
-            })}
-          </ul>
-        </>
-      )}
-    </>
+            )
+          } else {
+            // Unloaded
+            return (
+              <li className="clearfix" key={index}>
+                <FileTreeUnloadedDirectory
+                  datasetId={datasetId}
+                  snapshotTag={snapshotTag}
+                  directory={dir}
+                />
+              </li>
+            )
+          }
+        })}
+      </ul>
+    </AccordionTab>
   )
 }
 

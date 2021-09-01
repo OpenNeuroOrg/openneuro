@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { Icon } from '../icon/Icon'
 
@@ -17,7 +17,7 @@ export interface AccordionTabProps {
 /**
  * Primary UI component for user interaction
  */
-export const AccordionTab = ({
+export const AccordionTab: FC<AccordionTabProps> = ({
   children,
   id,
   label,
@@ -25,15 +25,15 @@ export const AccordionTab = ({
   accordionStyle,
   startOpen,
   dropdown,
-}: AccordionTabProps) => {
+}) => {
   const [isOpen, setOpen] = React.useState(startOpen)
-  const fileTreeIcon = accordionStyle == 'file-tree' && (
+  const fileTreeIcon = accordionStyle == 'file-tree' ? (
     <Icon
       className="file-icon"
       icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
       label="directory"
     />
-  )
+  ) : null
 
   return (
     <>

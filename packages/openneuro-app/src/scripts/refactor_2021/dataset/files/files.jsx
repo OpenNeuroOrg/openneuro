@@ -5,6 +5,7 @@ import FileTree from './file-tree.jsx'
 import { Media } from '../styles/media'
 import { useMutation, gql } from '@apollo/client'
 import WarnButton from '../../../common/forms/warn-button.jsx'
+import { AccordionWrap } from '@openneuro/components/accordion'
 
 const DELETE_FILES = gql`
   mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
@@ -76,40 +77,39 @@ const Files = ({
       </span>
     ))
   return (
-    <ul className="top-level-item">
-      <li className="clearfix">
-        <Media at="small">
-          <FileTree
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-            path={''}
-            {...fileTree}
-            name={datasetName}
-            editMode={editMode}
-            defaultExpanded={false}
-            datasetPermissions={datasetPermissions}
-            toggleFileToDelete={toggleFileToDelete}
-            isFileToBeDeleted={isFileToBeDeleted}
-            bulkDeleteButton={bulkDeleteButton}
-          />
-        </Media>
-        <Media greaterThanOrEqual="medium">
-          <FileTree
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-            path={''}
-            {...fileTree}
-            name={datasetName}
-            editMode={editMode}
-            defaultExpanded={true}
-            datasetPermissions={datasetPermissions}
-            toggleFileToDelete={toggleFileToDelete}
-            isFileToBeDeleted={isFileToBeDeleted}
-            bulkDeleteButton={bulkDeleteButton}
-          />
-        </Media>
-      </li>
-    </ul>
+    <AccordionWrap className="filetree-wrapper">
+      <h3>{datasetName}</h3>
+      <Media at="small">
+        <FileTree
+          datasetId={datasetId}
+          snapshotTag={snapshotTag}
+          path={''}
+          {...fileTree}
+          name={datasetName}
+          editMode={editMode}
+          defaultExpanded={false}
+          datasetPermissions={datasetPermissions}
+          toggleFileToDelete={toggleFileToDelete}
+          isFileToBeDeleted={isFileToBeDeleted}
+          bulkDeleteButton={bulkDeleteButton}
+        />
+      </Media>
+      <Media greaterThanOrEqual="medium">
+        <FileTree
+          datasetId={datasetId}
+          snapshotTag={snapshotTag}
+          path={''}
+          {...fileTree}
+          name={datasetName}
+          editMode={editMode}
+          defaultExpanded={true}
+          datasetPermissions={datasetPermissions}
+          toggleFileToDelete={toggleFileToDelete}
+          isFileToBeDeleted={isFileToBeDeleted}
+          bulkDeleteButton={bulkDeleteButton}
+        />
+      </Media>
+    </AccordionWrap>
   )
 }
 

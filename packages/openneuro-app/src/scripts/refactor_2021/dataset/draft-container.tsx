@@ -184,7 +184,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <Files
             datasetId={datasetId}
             snapshotTag={null}
-            datasetName={dataset.draft.description.name}
+            datasetName={dataset.draft.description.Name}
             files={dataset.draft.files}
             editMode={hasEdit}
             datasetPermissions={dataset.permissions}

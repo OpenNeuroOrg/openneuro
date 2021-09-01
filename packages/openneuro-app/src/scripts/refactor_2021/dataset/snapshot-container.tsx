@@ -177,7 +177,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, sna
           <Files
             datasetId={datasetId}
             snapshotTag={null}
-            datasetName={description.name}
+            datasetName={description.Name}
             files={snapshot.files}
             editMode={false}
             datasetPermissions={dataset.permissions}
