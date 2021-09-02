@@ -12,6 +12,7 @@ export interface AccordionTabProps {
   startOpen?: boolean
   dropdown?: boolean
   accordionStyle: AccordionTabStyle
+  onClick?: (expanded?: boolean) => void
 }
 
 /**
@@ -25,13 +26,14 @@ export const AccordionTab: FC<AccordionTabProps> = ({
   accordionStyle,
   startOpen,
   dropdown,
+  onClick,
 }) => {
   const [isOpen, setOpen] = React.useState(startOpen)
   const fileTreeIcon = accordionStyle == 'file-tree' ? (
     <Icon
       className="file-icon"
       icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
-      label="directory"
+      // label="directory"
     />
   ) : null
 
@@ -42,7 +44,10 @@ export const AccordionTab: FC<AccordionTabProps> = ({
         id={id}>
         <div
           className={`accordion-title ${isOpen ? 'open' : ''}`}
-          onClick={() => setOpen(!isOpen)}>
+          onClick={() => {
+            onClick?.(!isOpen)
+            setOpen(!isOpen)
+          }}>
           {fileTreeIcon} {label}
         </div>
         <div

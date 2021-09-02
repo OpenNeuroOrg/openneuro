@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import DatasetQueryContext from '../../../datalad/dataset/dataset-query-context.js'
 import FileTreeLoading from './file-tree-loading.jsx'
 import { gql } from '@apollo/client'
+import { AccordionTab } from '@openneuro/components/accordion'
 
 export const DRAFT_FILES_QUERY = gql`
   query dataset($datasetId: ID!, $filePrefix: String!) {
@@ -83,19 +84,18 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
     }
   }, [loading])
   return (
-    <button
-      className="btn-file-folder"
+    <AccordionTab 
+      label={directory.filename}
+      accordionStyle="file-tree"
       onClick={() => {
         // Show a loading state while we wait on the directory to stream in
         setLoading(true)
         fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
         // No need to clear since this component is unmounted immediately
-      }}>
-      <i className={`type-icon fa fa-folder${loading ? '-open' : ''}`} />{' '}
-      {directory.filename}
-      <i className={`accordion-icon fa fa-caret${loading ? '-up' : '-down'}`} />
-      {displayLoading && <FileTreeLoading size={directory.size} />}
-    </button>
+      }}
+    >
+      <FileTreeLoading size={directory.size} />
+    </AccordionTab>
   )
 }
 
