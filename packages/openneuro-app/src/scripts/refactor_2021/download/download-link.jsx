@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { downloadNative } from './download-native.js'
 import { useApolloClient } from '@apollo/client'
+import { Button } from '@openneuro/components/button'
 
 const DownloadLink = ({ datasetId, snapshotTag }) => {
   const client = useApolloClient()
@@ -24,11 +25,12 @@ const DownloadLink = ({ datasetId, snapshotTag }) => {
         </li>
         <li>A notification will appear when complete.</li>
       </ol>
-      <button
-        className="btn-blue"
-        onClick={downloadNative(datasetId, snapshotTag, client)}>
-        <i className={'fa fa-download'} /> Download
-      </button>
+      <Button
+        primary={true}
+        label="Download"
+        onClick={downloadNative(datasetId, snapshotTag, client)}
+        icon="fa fa-download"
+      />
     </div>
   )
 }

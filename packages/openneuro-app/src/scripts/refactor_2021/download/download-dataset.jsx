@@ -19,37 +19,39 @@ const DownloadDataset = ({
   },
 }) => (
   <div>
-    <div className="col-xs-12">
-      <h3>How to Download</h3>
-      <hr className="modal-inner" />
-    </div>
-    <div className="col-xs-12">
-      <PaddedDiv className="col-xs-6">
-        {'showDirectoryPicker' in globalThis ? (
-          <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
-        ) : (
-          <DownloadCommandLine
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-          />
+    <div className="container">
+      <div className="grid grid-between">
+        <div className="col col-12">
+          <h3>How to Download</h3>
+        </div>
+        <div className="col ">
+          {'showDirectoryPicker' in globalThis ? (
+            <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
+          ) : (
+            <DownloadCommandLine
+              datasetId={datasetId}
+              snapshotTag={snapshotTag}
+            />
+          )}
+        </div>
+        <div className="col ">
+          <DownloadS3 datasetId={datasetId} />
+        </div>
+      </div>
+      <hr />
+      <div className="grid grid-between">
+        {'showDirectoryPicker' in globalThis && (
+          <div className="col">
+            <DownloadCommandLine
+              datasetId={datasetId}
+              snapshotTag={snapshotTag}
+            />
+          </div>
         )}
-      </PaddedDiv>
-      <PaddedDiv className="col-xs-6">
-        <DownloadS3 datasetId={datasetId} />
-      </PaddedDiv>
-    </div>
-    <div className="col-xs-12">
-      {'showDirectoryPicker' in globalThis && (
-        <PaddedDiv className="col-xs-6">
-          <DownloadCommandLine
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-          />
-        </PaddedDiv>
-      )}
-      <PaddedDiv className="col-xs-6">
-        <DownloadDatalad datasetId={datasetId} />
-      </PaddedDiv>
+        <div className="col">
+          <DownloadDatalad datasetId={datasetId} />
+        </div>
+      </div>
     </div>
   </div>
 )
