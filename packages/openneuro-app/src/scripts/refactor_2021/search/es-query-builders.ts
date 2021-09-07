@@ -71,7 +71,7 @@ export const rangeListLengthQuery = (field, gte: number, lte: number) => {
       script: {
         lang: 'painless',
         source: `
-          if (doc.containsKey(params.field)) {
+          if (doc[params.field].size() != 0) {
             return ( doc[params.field].value.length() >= params.gte && doc[params.field].value.length() <= params.lte )
           } else return false`,
         params: {
