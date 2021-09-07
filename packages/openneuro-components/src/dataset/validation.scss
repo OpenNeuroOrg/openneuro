@@ -283,7 +283,7 @@ $warning-orange: #df7600;
     border: 1px solid #ddd;
     &:after {
       position: absolute;
-      left: 170px;
+      left: 180px;
     }
     &.valid {
       cursor: default;
@@ -305,8 +305,7 @@ $warning-orange: #df7600;
       .dataset-status {
         min-height: 100%;
         background: none;
-        background-color: #333;
-        color: #fff;
+        color: #333;
         padding: 11px;
         display: flex;
         justify-content: space-between;
@@ -317,19 +316,19 @@ $warning-orange: #df7600;
         }
 
         &.ds-success {
-          background: $success;
+          color: $success;
         }
 
         &.ds-info {
-          background: $info;
+          color: $info;
         }
 
         &.ds-warning {
-          background: $warning;
+          color: $warning;
         }
 
         &.ds-danger {
-          background: $danger;
+          color: $danger;
         }
       }
 

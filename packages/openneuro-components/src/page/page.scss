@@ -216,3 +216,25 @@
   width: 670px;
   max-height: 80%;
 }
+
+.edit-description-field {
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+}
+
+.description-btn {
+  color: var(--current-theme-primary);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.dataset-header .description-btn {
+  color: var(--current-theme-primary-light);
+  // &.description-button-edit {
+  // }
+  // &.description-button-save {
+  // }
+  // &.description-button-cancel {
+  // }
+}

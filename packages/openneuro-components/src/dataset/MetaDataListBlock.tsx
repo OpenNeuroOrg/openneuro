@@ -1,26 +1,23 @@
-import Markdown from 'markdown-to-jsx'
 import React from 'react'
 
-export interface MetaDataBlockProps {
+export interface MetaDataListBlockProps {
   heading: string
   item: React.ReactNode | string[] | number
   className?: string
   renderEditor?: () => React.ReactNode
-  isMarkdown?: boolean
 }
 
-export const MetaDataBlock = ({
+export const MetaDataListBlock = ({
   heading,
   item,
   className,
-  isMarkdown,
   renderEditor,
-}: MetaDataBlockProps) => {
+}: MetaDataListBlockProps) => {
   const fieldContent = renderEditor ? renderEditor() : item
   return (
     <div className={'dataset-meta-block ' + className}>
       <h2 className="dmb-heading">{heading}</h2>
-      <>{isMarkdown ? <Markdown>fieldContent</Markdown> : fieldContent}</>
+      {fieldContent}
     </div>
   )
 }
