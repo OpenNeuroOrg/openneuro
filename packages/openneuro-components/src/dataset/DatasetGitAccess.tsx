@@ -8,7 +8,7 @@ function copyToClipboard(text) {
 
 export interface DatasetGitAccessProps {
   datasetId: string
-  worker: string
+  worker?: string
   configUrl: string
   gitHash: string
 }
@@ -19,7 +19,7 @@ export const DatasetGitAccess = ({
   configUrl,
   gitHash,
 }: DatasetGitAccessProps) => {
-  const workerId = worker.split('-').pop()
+  const workerId = worker?.split('-').pop()
   const url = `${configUrl}/git/${workerId}/${datasetId}`
   return (
     <div className="dataset-git-access">

@@ -126,13 +126,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           </>
         )}
         renderAlert={() => (
-          <DatasetAlert
-            isPrivate={!dataset.public}
-            datasetId={dataset.id}
-            hasDraftChanges={hasDraftChanges}
-            hasSnapshot={!!dataset.snapshots.length}
-            rootPath={rootPath}
-          />
+          <>
+            {hasEdit && (
+              <DatasetAlert
+                isPrivate={!dataset.public}
+                datasetId={dataset.id}
+                hasDraftChanges={hasDraftChanges}
+                hasSnapshot={!!dataset.snapshots.length}
+                rootPath={rootPath}
+              />
+            )}
+          </>
         )}
         renderHeaderMeta={() => (
           <>
