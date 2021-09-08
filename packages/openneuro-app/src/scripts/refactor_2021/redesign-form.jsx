@@ -58,7 +58,7 @@ class ContactForm extends React.Component {
             }>
             Submit Redesign Feedback
             <br />
-            Return to old site
+            Keep Using Other Site
           </button>
         )}
         <Modal
@@ -85,7 +85,7 @@ class ContactForm extends React.Component {
                 <br />
                 <br />
                 <a href="/crn/feature/redesign-2021/disable">
-                  RETURN TO THE OLD SITE DESIGN
+                  RETURN TO THE OTHER SITE DESIGN
                 </a>
               </p>
             </span>
