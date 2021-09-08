@@ -77,8 +77,8 @@ class ContactForm extends React.Component {
           {this.state.formCompleted ? (
             <span>
               <p>
-                We appreciate the your time and feedback, it will help to create
-                a better experience for you and others.
+                We appreciate your time and feedback, it will help to create a
+                better experience for you and others.
               </p>
               <p>
                 Feel free to continue to use the new design or
