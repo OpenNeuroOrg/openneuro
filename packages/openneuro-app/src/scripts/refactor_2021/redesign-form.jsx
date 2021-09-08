@@ -1,6 +1,5 @@
 import React from 'react'
 import { Modal } from '@openneuro/components/modal'
-import { Link } from 'react-router-dom'
 
 class ContactForm extends React.Component {
   constructor(props) {
@@ -85,9 +84,9 @@ class ContactForm extends React.Component {
                 Feel free to continue to use the new design or
                 <br />
                 <br />
-                <Link to="/crn/feature/redesign-2021/disable">
+                <a href="/crn/feature/redesign-2021/disable">
                   RETURN TO THE OLD SITE DESIGN
-                </Link>
+                </a>
               </p>
             </span>
           ) : (
