@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal } from '@openneuro/components/modal'
-import { Helmet } from 'react-helmet'
+import { Link } from 'react-router-dom'
+
 class ContactForm extends React.Component {
   constructor(props) {
     super(props)
@@ -57,6 +58,8 @@ class ContactForm extends React.Component {
               })
             }>
             Submit Redesign Feedback
+            <br />
+            Return to old site
           </button>
         )}
         <Modal
@@ -73,7 +76,20 @@ class ContactForm extends React.Component {
           </h2>
 
           {this.state.formCompleted ? (
-            'We appreciate the your time and feedback, it will help to create a better experience for you and others.'
+            <span>
+              <p>
+                We appreciate the your time and feedback, it will help to create
+                a better experience for you and others.
+              </p>
+              <p>
+                Feel free to continue to use the new design or
+                <br />
+                <br />
+                <Link to="/crn/feature/redesign-2021/disable">
+                  RETURN TO THE OLD SITE DESIGN
+                </Link>
+              </p>
+            </span>
           ) : (
             <form onSubmit={this.handleSubmit}>
               <div>
@@ -107,7 +123,7 @@ class ContactForm extends React.Component {
               <h3>
                 <label htmlFor="entry.862044433">
                   Which of the following best describes your experience with the
-                  new design?
+                  new design?<span className="required">*</span>
                 </label>
               </h3>
               <div className="on-select-wrapper">
@@ -115,7 +131,8 @@ class ContactForm extends React.Component {
                   className="feedback-input"
                   name="entry.862044433"
                   onChange={this.handleChange}
-                  defaultValue="">
+                  defaultValue=""
+                  required>
                   <option value="" disabled hidden>
                     Select an Option
                   </option>
@@ -131,6 +148,7 @@ class ContactForm extends React.Component {
                   <option value="Couldn’t achieve my goal">
                     Couldn’t achieve my goal
                   </option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
               <div>
@@ -164,6 +182,7 @@ class ContactForm extends React.Component {
                   <h3>
                     <label htmlFor="entry.462214641">
                       How would you rate the new search and portals?
+                      <span className="required">*</span>
                     </label>
                   </h3>
                   <div className="on-select-wrapper">
@@ -171,7 +190,8 @@ class ContactForm extends React.Component {
                       className="feedback-input"
                       name="entry.462214641"
                       onChange={this.handleChange}
-                      defaultValue="">
+                      defaultValue=""
+                      required>
                       <option value="" disabled hidden>
                         Select an Option
                       </option>
@@ -187,6 +207,7 @@ class ContactForm extends React.Component {
                       <option value="Couldn’t achieve my goal">
                         Couldn’t achieve my goal
                       </option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                 </div>
