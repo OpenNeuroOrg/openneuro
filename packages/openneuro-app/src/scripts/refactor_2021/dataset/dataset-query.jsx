@@ -3,7 +3,8 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery, gql } from '@apollo/client'
 
-import Spinner from '../../common/partials/spinner.jsx'
+import { Loading } from '@openneuro/components/loading'
+
 import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
 import DatasetContext from '../../datalad/dataset/dataset-context.js'
 import DatasetRoutes from './dataset-routes'
@@ -138,7 +139,13 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
       }
     }
   }, [error, data])
-  if (loading) return <Spinner text="Loading Dataset" active />
+  if (loading)
+    return (
+      <div className="loading-dataset">
+        <Loading />
+        Loading Dataset
+      </div>
+    )
 
   return (
     <DatasetContext.Provider value={data.dataset}>

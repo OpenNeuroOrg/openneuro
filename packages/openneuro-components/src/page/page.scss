@@ -63,6 +63,13 @@
 .page {
   min-height: 400px;
 }
+.loading-dataset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 70vh;
+}
 
 // admin page
 .admin.route-wrapper {
