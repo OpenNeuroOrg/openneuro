@@ -6,7 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
-
+import { config } from '../../config'
 import {
   getUnexpiredProfile,
   hasEditPermissions,
@@ -184,9 +184,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
-                //TODO add worker and configURL
-                configUrl="configurl"
-                worker="worker"
+                configUrl={config.url}
+                worker={dataset.worker}
                 datasetId={datasetId}
                 gitHash={dataset.draft.head}
               />
@@ -261,9 +260,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   id="readme"
                   expandLabel="Read More"
                   collapseabel="Collapse">
-                  <Markdown>
-                    {dataset.draft.readme || 'N/A'}
-                  </Markdown>
+                  <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
                 </ReadMore>
               </EditDescriptionField>
             )}

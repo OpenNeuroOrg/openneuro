@@ -6,6 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
+import { config } from '../../config'
 
 import {
   ModalitiesMetaDataBlock,
@@ -152,9 +153,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
-                //TODO add worker and configURL
-                configUrl="configurl"
-                worker="worker"
+                configUrl={config.url}
+                worker={dataset.worker}
                 datasetId={datasetId}
                 gitHash={dataset.draft.head}
               />
