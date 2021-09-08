@@ -17,7 +17,6 @@ const EditDescriptionList = ({
 }) => {
   const [editing, setEditing] = useState(false)
   const [rows, setRows] = useState(description || [])
-  console.log(children)
 
   if (editing) {
     return (

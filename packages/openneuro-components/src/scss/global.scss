@@ -89,3 +89,15 @@ blockquote {
 .sticky-footer {
   height: 30px;
 }
+
+pre {
+  border: 1px solid #eee;
+  padding: 5px;
+  background: #f4f4f4;
+  pre {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+}

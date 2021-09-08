@@ -12,6 +12,7 @@ export interface DatasetPageProps {
   renderCloneDropdown: () => React.ReactNode
   renderDeprecatedModal: () => React.ReactNode
   renderFollowBookmark: () => React.ReactNode
+  renderComments: () => React.ReactNode
   modality?: string
 }
 
@@ -27,6 +28,7 @@ export const DatasetPage = ({
   renderCloneDropdown,
   renderDeprecatedModal,
   renderFollowBookmark,
+  renderComments,
   modality,
 }: DatasetPageProps) => {
   return (
@@ -54,6 +56,7 @@ export const DatasetPage = ({
             </div>
             <div className="dataset-tool-buttons">{renderToolButtons()}</div>
             {renderReadMe()}
+            {renderComments()}
           </div>
           <div className="col sidebar"> {renderSidebar()}</div>
         </div>

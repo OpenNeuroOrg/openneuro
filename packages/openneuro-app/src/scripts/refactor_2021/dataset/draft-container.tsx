@@ -12,7 +12,7 @@ import {
   hasEditPermissions,
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
-
+import Comments from './comments/comments.jsx'
 import {
   MetaDataBlock,
   ModalitiesMetaDataBlock,
@@ -261,9 +261,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   id="readme"
                   expandLabel="Read More"
                   collapseabel="Collapse">
-                  <Markdown>
-                    {dataset.draft.readme || 'N/A'}
-                  </Markdown>
+                  <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
                 </ReadMore>
               </EditDescriptionField>
             )}
@@ -483,6 +481,13 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               does not recommend this specific version.
             </p>
           </Modal>
+        )}
+        renderComments={() => (
+          <Comments
+            datasetId={dataset.id}
+            uploader={dataset.uploader}
+            comments={dataset.comments}
+          />
         )}
       />
     </>

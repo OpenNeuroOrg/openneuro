@@ -1,0 +1,151 @@
+/*Globals*/
+.RichEditor-root {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.comment-reply .RichEditor-root {
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.RichEditor-editor {
+  cursor: text;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.RichEditor-editor .public-DraftEditorPlaceholder-root {
+  padding: 3px;
+  margin: 0 -10px;
+  background: #f9f9f9;
+  color: #000;
+  cursor: default;
+}
+.RichEditor-editor .public-DraftEditor-content {
+  min-height: 6em;
+  padding: 5px 3px;
+}
+
+.RichEditor-controls {
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+  text-align: left;
+  display: flex;
+}
+
+.RichEditor-styleButton {
+  color: #000;
+  cursor: pointer;
+  margin-right: 10px;
+  padding: 5px;
+  border: 2px solid transparent;
+  display: block;
+}
+
+.RichEditor-activeButton {
+  color: var(--current-theme-primary);
+  border-color: var(--current-theme-primary);
+}
+
+// updated
+.dataset-comments {
+  .comment-header {
+    label {
+      font-size: 18px;
+      color: #424242;
+      line-height: 10px;
+      padding: 0;
+    }
+  }
+}
+
+.comment-input {
+  width: 80%;
+}
+
+.deleted-comment {
+  padding: 15px;
+}
+
+.parent-comment {
+  margin-left: 0px;
+  padding-left: 0px;
+  border-left: none;
+}
+
+/*Editor Block*/
+.DraftEditor-root {
+  padding: 0px 10px 10px 10px;
+  min-height: 2em;
+}
+
+.RichEditor-root > .RichEditor-editor > .DraftEditor-root {
+  min-height: 6em;
+  background-color: white;
+  // &:focus-within {
+  //   box-shadow: inset 0px 0px 3px #666;
+  // }
+}
+
+.dataset-comments {
+  margin-bottom: 40px;
+  > .comment {
+    margin-top: 40px;
+  }
+  .comment {
+    border: 1px solid #eee;
+    border-bottom: 0;
+    background: white;
+    padding: 10px;
+    .comment-header {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .comment-controls {
+      font-size: 12px;
+      margin-top: 20px;
+    }
+  }
+
+  .replies {
+    background: white;
+
+    .replies {
+      border: 0;
+      border-top: 1px solid #eee;
+      border-left: 20px solid #eee;
+    }
+    .comment {
+      border: 0;
+      border-left: 20px solid #eee;
+    }
+  }
+  > .replies {
+    border: 1px solid #eee;
+    border-bottom: 0;
+  }
+}
+
+.dataset-owner-flag {
+  padding: 0px 2px;
+  background-color: red;
+
+  color: white;
+}
+
+.login-for-comments {
+  text-align: center;
+}
+
+.reply,
+.delete,
+.edit,
+.cancel-edit {
+  padding-left: 1em;
+}
