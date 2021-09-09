@@ -102,7 +102,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
 
-  console.log(hasDraftChanges)
   return (
     <>
       <DatasetPage
