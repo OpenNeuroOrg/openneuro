@@ -85,7 +85,7 @@ class ContactForm extends React.Component {
                 <br />
                 <br />
                 <a href="/crn/feature/redesign-2021/disable">
-                  RETURN TO THE OTHER SITE DESIGN
+                  RETURN TO THE ORIGINAL SITE DESIGN
                 </a>
               </p>
             </span>
