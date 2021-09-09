@@ -81,7 +81,7 @@ class ContactForm extends React.Component {
                 better experience for you and others.
               </p>
               <p>
-                Feel free to continue to use the new design or
+                Feel free to continue exploring and using the new design or
                 <br />
                 <br />
                 <a href="/crn/feature/redesign-2021/disable">
