@@ -10,6 +10,7 @@ export const VersionListContainerExample = ({
   setSelectedVersion,
   datasetId,
   setDeprecatedModalIsOpen,
+  hasEdit,
 }) => {
   return (
     <VersionList
@@ -21,6 +22,7 @@ export const VersionListContainerExample = ({
       activeDataset={activeDataset}
       dateModified={dateModified}
       setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
+      hasEdit={hasEdit}
     />
   )
 }

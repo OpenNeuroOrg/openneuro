@@ -90,9 +90,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
       ? `/datasets/${datasetId}/versions/${activeDataset}`
       : `/datasets/${datasetId}`
 
-  //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  //TODO Setup hasEdit
   const isPublic = dataset.public === true
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
@@ -103,6 +101,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
+
+  console.log(hasDraftChanges)
   return (
     <>
       <DatasetPage
@@ -133,7 +133,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 datasetId={dataset.id}
                 hasDraftChanges={hasDraftChanges}
                 hasSnapshot={!!dataset.snapshots.length}
-                rootPath={rootPath}
               />
             )}
           </>
@@ -295,6 +294,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 <div className="version-block">
                   <VersionListContainerExample
                     datasetId={datasetId}
+                    hasEdit={hasEdit}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}

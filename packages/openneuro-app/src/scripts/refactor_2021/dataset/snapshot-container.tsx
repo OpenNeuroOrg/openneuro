@@ -15,11 +15,17 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
+  DatasetAlert,
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
 } from '@openneuro/components/dataset'
+import {
+  getUnexpiredProfile,
+  hasEditPermissions,
+} from '../authentication/profile'
+import { useCookies } from 'react-cookie'
 import { Modal } from '@openneuro/components/modal'
 import { Icon } from '@openneuro/components/icon'
 import { Tooltip } from '@openneuro/components/tooltip'
@@ -65,7 +71,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const summary = dataset.draft.summary
   const description = dataset.draft.description
   const datasetId = dataset.id
-  const isPublic = dataset.public === true
+
   const numSessions =
     summary && summary.sessions.length > 0 ? summary.sessions.length : 1
 
@@ -81,14 +87,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
       ? `/datasets/${datasetId}/versions/${activeDataset}`
       : `/datasets/${datasetId}`
 
-  //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  //TODO Setup hasEdit
-  const hasEdit = true
-  //TODO Setup profile - isloggedin
-  const profile = true
-  // (user && user.admin) ||
-  // hasEditPermissions(dataset.permissions, user && user.sub)
+  const isPublic = dataset.public === true
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+  const isAdmin = profile?.admin
+  const hasEdit =
+    hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const hasDraftChanges =
+    dataset.snapshots.length === 0 ||
+    dataset.draft.head !==
+      dataset.snapshots[dataset.snapshots.length - 1].hexsha
   return (
     <>
       <DatasetPage
@@ -143,6 +152,18 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             datasetId={datasetId}
             onBrainlife={dataset.onBrainlife}
           />
+        )}
+        renderAlert={() => (
+          <>
+            {hasEdit && (
+              <DatasetAlert
+                isPrivate={!dataset.public}
+                datasetId={dataset.id}
+                hasDraftChanges={hasDraftChanges}
+                hasSnapshot={!!dataset.snapshots.length}
+              />
+            )}
+          </>
         )}
         renderValidationBlock={() => (
           <ValidationBlock>
