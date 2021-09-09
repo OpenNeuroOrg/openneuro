@@ -56,7 +56,7 @@ class ContactForm extends React.Component {
                 showFeedbackModal: !this.state.showFeedbackModal,
               })
             }>
-            Submit Redesign Feedback
+            Click HERE to Submit Redesign Feedback
             <br />
             or Visit the Original Site Design
           </button>
