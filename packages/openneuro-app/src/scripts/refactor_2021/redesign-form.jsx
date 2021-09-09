@@ -58,7 +58,7 @@ class ContactForm extends React.Component {
             }>
             Submit Redesign Feedback
             <br />
-            Keep Using Other Site
+            or Visit the Original Site Design
           </button>
         )}
         <Modal
