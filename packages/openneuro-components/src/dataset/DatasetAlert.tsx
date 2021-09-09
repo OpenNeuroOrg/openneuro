@@ -38,7 +38,7 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
             )}
           </>
         ) : (
-          <>
+          <span>
             <strong>This dataset has not been published!</strong>
             Before it can be published, please{' '}
             <Link
@@ -46,10 +46,10 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
               to={'/datasets/' + datasetId + '/snapshot'}>
               create a version
             </Link>
-          </>
+          </span>
         )
       ) : hasDraftChanges ? (
-        <>
+        <span>
           <strong>This dataset has been published!</strong> There are currently
           unsaved changes to this Draft. Changes made here become public when
           you{' '}
@@ -58,9 +58,9 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
             to={'/datasets/' + datasetId + '/snapshot'}>
             create a new version.
           </Link>
-        </>
+        </span>
       ) : (
-        <>
+        <span>
           <strong>This dataset has been published!</strong> You can make changes
           to this Draft page, then{' '}
           <Link
@@ -69,7 +69,7 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
             create a new version
           </Link>{' '}
           to make them public.
-        </>
+        </span>
       )}
     </div>
   )
