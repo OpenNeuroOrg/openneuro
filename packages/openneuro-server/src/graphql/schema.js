@@ -186,8 +186,10 @@ export const typeDefs = `
     id: ID!
     # Dataset accession number
     datasetId: ID!
-    # Login URL generated
+    # Login URL generated (only returned on creation)
     url: String!
+    # Expiration time
+    expiration: DateTime
   }
 
   input DeleteFile {
@@ -375,6 +377,8 @@ export const typeDefs = `
     history: [DatasetCommit]
     # Worker assignment
     worker: String
+    # Anonymous reviewers for this dataset
+    reviewers: [DatasetReviewer]
   }
 
   type DatasetCommit {
