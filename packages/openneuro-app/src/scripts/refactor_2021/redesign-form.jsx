@@ -168,17 +168,6 @@ class ContactForm extends React.Component {
                 </div>
                 <div>
                   <h3>
-                    When searching for a dataset were you able to find relevant
-                    results?
-                  </h3>
-                  <input
-                    className="feedback-input"
-                    type="text"
-                    name="entry.904614155"
-                    onChange={this.handleChange}
-                    placeholder="yes/no"
-                  />
-                  <h3>
                     <label htmlFor="entry.462214641">
                       How would you rate the new search and portals?
                       <span className="required">*</span>
@@ -223,6 +212,41 @@ class ContactForm extends React.Component {
                   placeholder="Search Feedback"
                   onChange={this.handleChange}
                 />
+                <h3>
+                  <label htmlFor="entry.904614155">
+                    When searching for a dataset were you able to find relevant
+                    results?
+                  </label>
+                </h3>
+                <div className="on-select-wrapper">
+                  <select
+                    className="feedback-input"
+                    name="entry.904614155"
+                    onChange={this.handleChange}
+                    defaultValue="">
+                    <option value="" disabled hidden>
+                      Select an Option
+                    </option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Not Applicable">Not Applicable</option>
+                  </select>
+                </div>
+                <div>
+                  <h3>
+                    <label htmlFor="entry.883106466">
+                      Please provide more information for your choice above.
+                    </label>
+                  </h3>
+                  <textarea
+                    className="feedback-input"
+                    rows={8}
+                    cols={100}
+                    name="entry.883106466"
+                    placeholder="Search Results"
+                    onChange={this.handleChange}
+                  />
+                </div>
               </div>
               <div>
                 <span className="custom-checkbox">
@@ -292,6 +316,86 @@ class ContactForm extends React.Component {
                 />
               </div>
               <div>
+                <h3>
+                  <label htmlFor="entry.813726139">
+                    When logged into the site, were you able to easily find your
+                    datasets?
+                  </label>
+                </h3>
+                <div className="on-select-wrapper">
+                  <select
+                    className="feedback-input"
+                    name="entry.813726139"
+                    onChange={this.handleChange}
+                    defaultValue="">
+                    <option value="" disabled hidden>
+                      Select an Option
+                    </option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Not Applicable">Not Applicable</option>
+                  </select>
+                </div>
+                <div>
+                  <h3>
+                    <label htmlFor="entry.1196128769">
+                      Please provide more information for your choice above.
+                    </label>
+                  </h3>
+                  <textarea
+                    className="feedback-input"
+                    rows={8}
+                    cols={100}
+                    name="entry.1196128769"
+                    placeholder="How was it finding your datasets"
+                    onChange={this.handleChange}
+                  />
+                </div>
+
+                <h3>
+                  <label htmlFor="entry.1753056808">
+                    Which best describes your experience with the new design of
+                    the dataset page:
+                  </label>
+                </h3>
+                <div className="on-select-wrapper">
+                  <select
+                    className="feedback-input"
+                    name="entry.1753056808"
+                    onChange={this.handleChange}
+                    defaultValue="">
+                    <option value="" disabled hidden>
+                      Select an Option
+                    </option>
+                    <option value="Intuitive and easy to navigate">
+                      Intuitive and easy to navigate
+                    </option>
+                    <option value="Intuitively formatted but couldn't achieve my goal">
+                      Intuitively formatted but couldn't achieve my goal
+                    </option>
+                    <option value="Difficult to navigate and couldn't achieve my goal">
+                      Difficult to navigate and couldn't achieve my goal
+                    </option>
+
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <h3>
+                    <label htmlFor="entry.211675296">
+                      Please provide more information for your choice above.
+                    </label>
+                  </h3>
+                  <textarea
+                    className="feedback-input"
+                    rows={8}
+                    cols={100}
+                    name="entry.211675296"
+                    placeholder="Dataset Design Feedback"
+                    onChange={this.handleChange}
+                  />
+                </div>
+
                 <h3>
                   <label htmlFor="entry.108518555">
                     Any other feedback you would like to give?
