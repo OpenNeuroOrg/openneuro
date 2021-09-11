@@ -336,21 +336,6 @@ class ContactForm extends React.Component {
                     <option value="Not Applicable">Not Applicable</option>
                   </select>
                 </div>
-                <div>
-                  <h3>
-                    <label htmlFor="entry.1196128769">
-                      Please provide more information for your choice above.
-                    </label>
-                  </h3>
-                  <textarea
-                    className="feedback-input"
-                    rows={8}
-                    cols={100}
-                    name="entry.1196128769"
-                    placeholder="How was it finding your datasets"
-                    onChange={this.handleChange}
-                  />
-                </div>
 
                 <h3>
                   <label htmlFor="entry.1753056808">
