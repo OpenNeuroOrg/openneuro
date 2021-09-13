@@ -1,13 +1,13 @@
 // @import '../scss/variables';
 
-.on-button  {
+.on-button {
   font-family: $font-sans;
   font-weight: 600;
   border: 0;
   border-radius: $border-radius-default;
   cursor: pointer;
   display: inline-block;
-  line-height: 1;
+  line-height: 1.4em;
 }
 
 .on-button--primary {
