@@ -14,7 +14,7 @@ import { generateReviewerToken } from '../../libs/authentication/jwt.js'
  */
 export async function createReviewer(obj, { datasetId }, { user, userInfo }) {
   await checkDatasetAdmin(datasetId, user, userInfo)
-  const reviewer = new Reviewer({ datasetId })
+  const reviewer = new Reviewer({ datasetId, creator: user })
   await reviewer.save()
   const token = generateReviewerToken(reviewer.id, datasetId)
   return {
@@ -22,4 +22,11 @@ export async function createReviewer(obj, { datasetId }, { user, userInfo }) {
     datasetId: datasetId,
     url: `${config.url}/crn/reviewer/${token}`,
   }
+}
+
+/**
+ * Resolver for dataset reviewers
+ */
+export function reviewers(obj, _, { user, userInfo }) {
+  return Reviewer.find({ datasetId: obj.id }).lean().exec()
 }
