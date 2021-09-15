@@ -81,6 +81,17 @@ const DatasetRoutes = ({ dataset, error }) => {
         )}
       />
       <Route
+        name="anonymous-reviewer"
+        exact
+        path="/datasets/:datasetId/anonymous-reviewer"
+        component={() => (
+          <AnonymousReviewer
+            datasetId={dataset.id}
+            reviewers={dataset.reviewers}
+          />
+        )}
+      />
+      <Route
         name="fileEdit"
         exact
         path="/datasets/:datasetId/file-edit"
