@@ -54,8 +54,8 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({
             </div>
             <small className="alert-color">
               Copy the reviewer link. This link will disappear when you leave
-              the page. The only way to get a link will be to click the create
-              link button below.
+              the page. The only way to get a new link will be to click the
+              create link button below.
             </small>
           </div>
         ) : null}
