@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetRange } from '@openneuro/components/facets'
+import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 const SubjectCountRangeInput: FC = () => {
   const min = 0
@@ -23,17 +24,21 @@ const SubjectCountRangeInput: FC = () => {
   ]
 
   return (
-    <FacetRange
-      startOpen={false}
-      label="Number of Participants"
-      accordionStyle="plain"
-      min={min}
-      max={max}
-      step={10}
-      value={value}
-      onChange={setSubjectRange}
-      uncappedMax
-    />
+    <AccordionWrap className="facet-accordion">
+      <AccordionTab
+        accordionStyle="plain"
+        label="Number of Participants"
+        startOpen={false}>
+        <FacetRange
+          min={min}
+          max={max}
+          step={10}
+          value={value}
+          onChange={setSubjectRange}
+          uncappedMax
+        />
+      </AccordionTab>
+    </AccordionWrap>
   )
 }
 
