@@ -33,7 +33,7 @@ import { prepareRepoAccess } from './git'
 import { cacheClear } from './cache'
 import { reexportRemotes } from './reexporter'
 import { resetDraft } from './reset'
-import { createReviewer } from './reviewer'
+import { createReviewer, deleteReviewer } from './reviewer'
 
 const Mutation = {
   createDataset,
@@ -73,6 +73,7 @@ const Mutation = {
   reexportRemotes,
   resetDraft,
   createReviewer,
+  deleteReviewer,
 }
 
 export default Mutation
