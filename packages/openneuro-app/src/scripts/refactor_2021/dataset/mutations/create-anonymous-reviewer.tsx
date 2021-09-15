@@ -11,6 +11,7 @@ const CREATE_LINK = gql`
     createReviewer(datasetId: $datasetId) {
       id
       datasetId
+      url
     }
   }
 `
