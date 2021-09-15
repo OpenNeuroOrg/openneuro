@@ -11,7 +11,6 @@ const CREATE_LINK = gql`
     createReviewer(datasetId: $datasetId) {
       id
       datasetId
-      url
     }
   }
 `
@@ -53,9 +52,8 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({
               <pre>{data.createReviewer.url}</pre>
             </div>
             <small className="alert-color">
-              Copy the reviewer link. This link will disappear when you leave
-              the page. The only way to get a new link will be to click the
-              create link button below.
+              Copy and save this reviewer link. It will disappear when you leave
+              the page. To get a new link click the Create Link button below.
             </small>
           </div>
         ) : null}

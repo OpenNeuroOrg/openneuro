@@ -21,6 +21,11 @@
         opacity: 0.8;
       }
     }
+    &.with-lable {
+      button {
+        width: auto;
+      }
+    }
   }
 }
 

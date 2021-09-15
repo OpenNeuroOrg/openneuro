@@ -29,7 +29,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
     ;[displayOptions, setDisplayOptions] = React.useState(false as boolean)
   }
   const viewAction = (
-    <div className="warn-btn-group " role="group">
+    <div className="warn-btn-group" role="group">
       <div className="slide-in">
         <Button
           className="btn-warn-component cancel"

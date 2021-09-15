@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-//import { RemoveReviewLink } from '../mutations/TODO'
+import { DeleteReviewerLink } from '../mutations/delete-anonymous-reviewer'
 import { CreateReviewLink } from '../mutations/create-anonymous-reviewer'
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -34,7 +34,9 @@ export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
             <div key={index} className="data-table-content">
               <span>ID: {item.id}</span>
               <span>Expiration: {formatDate(item.expiration)}</span>
-              <span>REMOVE TODO</span>
+              <span>
+                <DeleteReviewerLink datasetId={datasetId} id={item.id} />
+              </span>
             </div>
           ))}
         </div>
