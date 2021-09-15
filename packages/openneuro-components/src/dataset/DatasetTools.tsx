@@ -47,13 +47,6 @@ export const DatasetTools = ({
           )}
         </>
       )}
-      {hasEdit && hasSnapshots && !isSnapshot && (
-        <Tooltip tooltip="Anonymous review" flow="up">
-          <Link className="dataset-tool" to={rootPath + '/anonymous-reviewer'}>
-            <Icon icon="fa fa-eye" label="anonymous-reviewer" />
-          </Link>
-        </Tooltip>
-      )}
       {hasEdit && !isSnapshot && (
         <Tooltip tooltip="Share this dataset with collaborators" flow="up">
           <Link className="dataset-tool" to={`/datasets/${datasetId}/share`}>
