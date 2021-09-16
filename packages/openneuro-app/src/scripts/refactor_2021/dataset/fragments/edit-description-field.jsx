@@ -29,22 +29,24 @@ const EditDescriptionField = ({
           onChange={e => setValue(e.target.value)}
           value={value}
         />
-        {field == 'readme' ? (
-          <UpdateReadme
-            datasetId={datasetId}
-            value={value}
-            done={() => setEditing(false)}
-          />
-        ) : (
-          <UpdateDescription
-            datasetId={datasetId}
-            field={field}
-            value={value}
-            done={() => setEditing(false)}
-          />
-        )}
+        <div className="update-field-save">
+          {field == 'readme' ? (
+            <UpdateReadme
+              datasetId={datasetId}
+              value={value}
+              done={() => setEditing(false)}
+            />
+          ) : (
+            <UpdateDescription
+              datasetId={datasetId}
+              field={field}
+              value={value}
+              done={() => setEditing(false)}
+            />
+          )}
 
-        <CancelButton action={() => setEditing(false)} />
+          <CancelButton action={() => setEditing(false)} />
+        </div>
       </>
     )
   } else {

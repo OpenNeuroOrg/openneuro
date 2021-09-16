@@ -177,6 +177,19 @@ export const typeDefs = `
     resetDraft(datasetId: ID!, ref: String!): Boolean
     # Flag snapshot as deprecated
     deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Boolean
+    # Create anonymous read only reviewer
+    createReviewer(datasetId: ID!): DatasetReviewer
+  }
+
+  # Anonymous dataset reviewer
+  type DatasetReviewer {
+    id: ID!
+    # Dataset accession number
+    datasetId: ID!
+    # Login URL generated (only returned on creation)
+    url: String!
+    # Expiration time
+    expiration: DateTime
   }
 
   input DeleteFile {
@@ -364,6 +377,8 @@ export const typeDefs = `
     history: [DatasetCommit]
     # Worker assignment
     worker: String
+    # Anonymous reviewers for this dataset
+    reviewers: [DatasetReviewer]
   }
 
   type DatasetCommit {
@@ -496,6 +511,7 @@ export const typeDefs = `
   type Summary {
     id: ID!
     modalities: [String]
+    primaryModality: String
     secondaryModalities: [String]
     sessions: [String]
     subjects: [String]
