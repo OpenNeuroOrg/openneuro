@@ -10,7 +10,6 @@ export interface CountToggleProps {
   toggleClick?: () => void
   lock?: boolean
   clicked: boolean
-  showClicked: (boolean) => void
   count: number
 }
 export const CountToggle = ({

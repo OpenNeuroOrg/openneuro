@@ -66,6 +66,12 @@
 }
 .text-danger {
   color: $on-light-red;
+.loading-dataset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 70vh;
 }
 
 // admin page
@@ -191,6 +197,11 @@
   }
 }
 
+.feedback-form {
+  .required {
+    color: #f10;
+  }
+}
 .feedback-form h3 {
   margin: 30px 0 15px;
   font-size: 14px;

@@ -3,11 +3,17 @@ import Summary from '../../models/summary'
 /**
  * Summary resolver
  */
-export const summary = dataset => {
-  return Summary.findOne({
-    id: dataset.revision,
-    datasetId: dataset.id,
-  }).exec()
+export const summary = async dataset => {
+  const datasetSummary = (
+    await Summary.findOne({
+      id: dataset.revision,
+      datasetId: dataset.id,
+    }).exec()
+  ).toObject()
+  return {
+    ...datasetSummary,
+    primaryModality: datasetSummary?.modalities[0],
+  }
 }
 
 /**

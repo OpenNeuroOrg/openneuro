@@ -3,6 +3,7 @@ import { useRouteMatch, useHistory } from 'react-router-dom'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { SearchParams, flattenedModalities } from '../initial-search-params'
 import { FacetSelect } from '@openneuro/components/facets'
+import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 interface ModalitySelectProps {
   startOpen?: boolean
@@ -38,17 +39,31 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
   }
 
   return (
-    <FacetSelect
-      selected={modality_selected}
-      setSelected={setModality}
-      items={modality_available}
-      accordionStyle="plain"
-      label={label}
-      startOpen={portalStyles ? startOpen : false}
-      className={portalStyles ? 'modality-facet' : ''}
-      noAccordion={portalStyles}
-      dropdown={dropdown}
-    />
+    <>
+      {portalStyles ? (
+        <FacetSelect
+          className="modality-facet facet-open"
+          label={label}
+          selected={modality_selected}
+          setSelected={setModality}
+          items={modality_available}
+        />
+      ) : (
+        <AccordionWrap className="modality-facet facet-accordion">
+          <AccordionTab
+            accordionStyle="plain"
+            label={label}
+            startOpen={portalStyles ? startOpen : false}
+            dropdown={dropdown}>
+            <FacetSelect
+              selected={modality_selected}
+              setSelected={setModality}
+              items={modality_available}
+            />
+          </AccordionTab>
+        </AccordionWrap>
+      )}
+    </>
   )
 }
 

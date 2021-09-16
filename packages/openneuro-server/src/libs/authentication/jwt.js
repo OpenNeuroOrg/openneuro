@@ -28,10 +28,12 @@ export const buildToken = (config, user, expiresIn, options) => {
 }
 
 // Helper to generate a JWT containing user info
-export const addJWT = config => (user, expiration = 60 * 60 * 24 * 7) => {
-  const token = buildToken(config, user, expiration)
-  return Object.assign({}, user, { token })
-}
+export const addJWT =
+  config =>
+  (user, expiration = 60 * 60 * 24 * 7) => {
+    const token = buildToken(config, user, expiration)
+    return Object.assign({}, user, { token })
+  }
 
 /**
  * Generate an upload specific token
@@ -48,6 +50,28 @@ export function generateUploadToken(
     dataset: datasetId,
   }
   return buildToken(config, user, expiresIn, options)
+}
+
+/**
+ * Create a token that allows read only access to one dataset
+ */
+export function generateReviewerToken(
+  id,
+  datasetId,
+  expiresIn = 60 * 60 * 24 * 365,
+) {
+  const options = {
+    scopes: ['dataset:reviewer'],
+    dataset: datasetId,
+  }
+  const reviewer = {
+    id,
+    email: 'reviewer@openneuro.org',
+    provider: 'OpenNeuro',
+    name: 'Anonymous Reviewer',
+    admin: false,
+  }
+  return buildToken(config, reviewer, expiresIn, options)
 }
 
 /**

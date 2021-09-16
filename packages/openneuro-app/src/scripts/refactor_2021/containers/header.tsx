@@ -31,12 +31,12 @@ const HeaderContainer: FC = () => {
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
 
-  const handleSubmit = () => {
+  const handleSubmit = (resetSearchParams = false) => {
     // reset search params and set keyword to initiate new search, then navigate to global search page
-    if (newKeywordRef.current) {
+    if (newKeywordRef.current || resetSearchParams) {
       setSearchParams(() => ({
         ...initialSearchParams,
-        keywords: [newKeywordRef.current],
+        keywords: resetSearchParams ? [] : [newKeywordRef.current],
       }))
     }
     setNewKeyword('')
@@ -58,9 +58,7 @@ const HeaderContainer: FC = () => {
   }
 
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
-  const [isOpenUpload, setUploadIsOpen] = React.useState(false)
 
-  const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
 
   return (
@@ -80,13 +78,12 @@ const HeaderContainer: FC = () => {
       </UploaderContext.Consumer>
       <Header
         isOpenSupport={isOpenSupport}
-        isOpenUpload={isOpenUpload}
         toggleLoginModal={toggleLoginModal}
         signOutAndRedirect={signOutAndRedirect}
         toggleSupport={toggleSupport}
-        toggleUpload={toggleUpload}
         profile={profile}
         expanded={expanded}
+        navigateToNewSearch={handleSubmit}
         renderUploader={() => <UploaderView />}
         renderOnFreshDeskWidget={() => <FreshdeskWidget />}
         renderOnExpanded={profile => (

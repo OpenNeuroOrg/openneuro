@@ -18,6 +18,7 @@ import DatasetModel from '../../models/dataset'
 import Deletion from '../../models/deletion'
 import fetch from 'node-fetch'
 import * as Sentry from '@sentry/node'
+import { reviewers } from './reviewer'
 import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
@@ -325,6 +326,7 @@ const Dataset = {
   metadata,
   history,
   worker,
+  reviewers,
 }
 
 export default Dataset

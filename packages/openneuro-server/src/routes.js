@@ -13,11 +13,11 @@ import {
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
 import * as orcid from './libs/authentication/orcid.js'
-import * as globus from './libs/authentication/globus.js'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
 import * as doi from './handlers/doi'
 import { sitemapHandler } from './handlers/sitemap.js'
+import { reviewerHandler } from './handlers/reviewer'
 
 const noCache = (req, res, next) => {
   res.setHeader('Surrogate-Control', 'no-store')
@@ -155,6 +155,13 @@ const routes = [
     url: '/auth/orcid/callback',
     middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
+  },
+  // Anonymous reviewer access
+  {
+    method: 'get',
+    url: '/reviewer/:token',
+    middleware: [noCache],
+    handler: reviewerHandler,
   },
   // sitemap
   {
