@@ -34,7 +34,7 @@ export const DatasetPage = ({
       className={
         'dataset dataset-draft' +
         ' dataset-page dataset-page-' +
-        modality.toLowerCase()
+        modality?.toLowerCase()
       }>
       {renderHeader()}
       {renderAlert && renderAlert()}

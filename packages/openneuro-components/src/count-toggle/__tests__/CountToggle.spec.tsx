@@ -14,7 +14,6 @@ describe('CountToggle component', () => {
   it('calls toggleClick on toggle', async () => {
     const toggleClick = jest.fn()
     const clicked = false
-    const showClicked = jest.fn()
     const count = 3
     render(
       <CountToggle
@@ -23,7 +22,6 @@ describe('CountToggle component', () => {
         toggleClick={toggleClick}
         tooltip="test tip"
         clicked={clicked}
-        showClicked={showClicked}
         count={count}
       />,
     )

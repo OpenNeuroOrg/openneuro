@@ -63,6 +63,13 @@
 .page {
   min-height: 400px;
 }
+.loading-dataset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 70vh;
+}
 
 // admin page
 .admin.route-wrapper {
@@ -187,6 +194,11 @@
   }
 }
 
+.feedback-form {
+  .required {
+    color: #f10;
+  }
+}
 .feedback-form h3 {
   margin: 30px 0 15px;
   font-size: 14px;
@@ -215,4 +227,26 @@
 .feedback-form.feedback-modal .grid.modal {
   width: 670px;
   max-height: 80%;
+}
+
+.edit-description-field {
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+}
+
+.description-btn {
+  color: var(--current-theme-primary);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.dataset-header .description-btn {
+  color: var(--current-theme-primary-light);
+  // &.description-button-edit {
+  // }
+  // &.description-button-save {
+  // }
+  // &.description-button-cancel {
+  // }
 }

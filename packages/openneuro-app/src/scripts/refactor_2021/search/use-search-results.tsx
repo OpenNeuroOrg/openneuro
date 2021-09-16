@@ -217,7 +217,7 @@ export const useSearchResults = () => {
       rangeListLengthQuery(
         'latestSnapshot.summary.subjects',
         subjectCountRange[0] || 0,
-        subjectCountRange[1] || Infinity,
+        subjectCountRange[1] || 1000000,
       ),
     )
   if (diagnosis_selected)
@@ -236,7 +236,7 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       'must',
       matchQuery(
-        'latestSnapshot.description.SeniorAuthor',
+        'latestSnapshot.description.Authors',
         joinWithOR(authors),
         '3',
       ),

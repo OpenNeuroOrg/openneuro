@@ -14,11 +14,10 @@ export interface HeaderProps {
   }
   expanded?: boolean
   isOpenSupport: boolean
-  isOpenUpload: boolean
   toggleLoginModal: (userModalParams?: Record<string, any>) => void
   signOutAndRedirect: () => void
-  toggleUpload: () => void
   toggleSupport: () => void
+  navigateToNewSearch: (resetSearchParams?: boolean) => void
   renderOnExpanded: (profile) => React.ReactNode
   renderOnFreshDeskWidget: () => React.ReactNode
   renderUploader: () => React.ReactNode
@@ -28,11 +27,10 @@ export const Header = ({
   profile,
   expanded,
   isOpenSupport,
-  isOpenUpload,
   toggleLoginModal,
   signOutAndRedirect,
-  toggleUpload,
   toggleSupport,
+  navigateToNewSearch,
   renderOnExpanded,
   renderOnFreshDeskWidget,
   renderUploader,
@@ -51,7 +49,15 @@ export const Header = ({
             {/* TODO: convert Support to trigger support modal. */}
             <ul>
               <li>
-                <NavLink to="/search">Search</NavLink>
+                <NavLink
+                  to="/search"
+                  onClick={e => {
+                    console.log(e)
+                    e.preventDefault()
+                    navigateToNewSearch(true)
+                  }}>
+                  Search
+                </NavLink>
               </li>
               <li>
                 <span className="no-a" onClick={toggleSupport}>

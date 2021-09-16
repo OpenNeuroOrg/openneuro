@@ -14,8 +14,8 @@ import {
 import { useCookies } from 'react-cookie'
 
 import {
-  ModalitiesMetaDataBlock,
   MetaDataBlock,
+  ModalitiesMetaDataBlock,
   BrainLifeButton,
   ValidationBlock,
   CloneDropdown,
@@ -25,12 +25,16 @@ import {
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
+  DatasetTools,
 } from '@openneuro/components/dataset'
 import { Modal } from '@openneuro/components/modal'
-import { Icon } from '@openneuro/components/icon'
-import { Tooltip } from '@openneuro/components/tooltip'
 import { ReadMore } from '@openneuro/components/read-more'
-import { CountToggle } from '@openneuro/components/count-toggle'
+
+import { FollowDataset } from './mutations/follow'
+import { StarDataset } from './mutations/star'
+
+import EditDescriptionField from './fragments/edit-description-field.jsx'
+import EditDescriptionList from './fragments/edit-description-list.jsx'
 
 export interface SnapshotContainerProps {
   dataset
@@ -46,21 +50,6 @@ const snapshotVersion = location => {
   return matches && matches[1]
 }
 const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
-  const [bookmarked, showBookmarked] = React.useState(false)
-  const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
-  const [followed, showFollowed] = React.useState(false)
-  const [followedCount, setFollowedCount] = React.useState(1)
-
-  //TODO hook up follow and bookmark
-  const toggleBookmarkClick = () => {
-    setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
-    showBookmarked(!bookmarked)
-  }
-  const toggleFollowedClick = () => {
-    setFollowedCount(followedCount === 1 ? 2 : 1)
-    showFollowed(!followed)
-  }
-
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -81,11 +70,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const dateUpdatedDifference = formatDistanceToNow(
     parseISO(dataset.draft.modified),
   )
-
-  const rootPath =
-    activeDataset !== 'draft'
-      ? `/datasets/${datasetId}/versions/${activeDataset}`
-      : `/datasets/${datasetId}`
+  const isSnapshot = activeDataset !== 'draft'
+  const rootPath = isSnapshot
+    ? `/datasets/${datasetId}/versions/${activeDataset}`
+    : `/datasets/${datasetId}`
 
   //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
@@ -96,7 +84,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const isAdmin = profile?.admin
   const hasEdit =
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
-
   const hasDraftChanges =
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
@@ -104,15 +91,23 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   return (
     <>
       <DatasetPage
-        modality={summary.modalities[0]}
+        modality={summary?.modalities[0] || ''}
         renderHeader={() => (
           <>
-            {summary && (
-              <DatasetHeader
-                pageHeading={description.Name}
-                modality={summary.modalities[0]}
-              />
-            )}
+            <DatasetHeader
+              pageHeading={description.Name}
+              modality={summary?.modalities[0] || null}
+              renderEditor={() => (
+                <EditDescriptionField
+                  datasetId={datasetId}
+                  field="Name"
+                  rows={2}
+                  description={description.Name}
+                  editMode={hasEdit}>
+                  {description.Name}
+                </EditDescriptionField>
+              )}
+            />
           </>
         )}
         renderAlert={() => (
@@ -137,25 +132,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderFollowBookmark={() => (
           <>
-            <CountToggle
-              label="Follow"
-              icon="fa-thumbtack"
-              disabled={!profile}
-              toggleClick={toggleBookmarkClick}
-              tooltip="hello Tip"
-              clicked={bookmarked}
-              showClicked={showBookmarked}
-              count={bookmarkedCount}
+            <FollowDataset
+              profile={profile}
+              datasetId={dataset.id}
+              following={dataset.following}
+              followers={dataset.followers.length}
             />
-            <CountToggle
-              label="Bookmark"
-              icon="fa-bookmark"
-              disabled={!profile}
-              toggleClick={toggleFollowedClick}
-              tooltip="hello Tip"
-              clicked={followed}
-              showClicked={showFollowed}
-              count={followedCount}
+            <StarDataset
+              profile={profile}
+              datasetId={dataset.id}
+              starred={dataset.starred}
+              stars={dataset.stars.length}
             />
           </>
         )}
@@ -184,87 +171,54 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           />
         )}
         renderToolButtons={() => (
-          <>
-            {hasEdit && (
-              <Tooltip tooltip="Publish the dataset publicly" flow="up">
-                <Link className="dataset-tool" to={rootPath + '/publish'}>
-                  <Icon icon="fa fa-globe" label="Publish" />
-                </Link>
-              </Tooltip>
-            )}
-            {hasEdit && (
-              <Tooltip
-                tooltip="Share this dataset with collaborators"
-                flow="up">
-                <Link className="dataset-tool" to={rootPath + '/share'}>
-                  <Icon icon="fa fa-user" label="Share" />
-                </Link>
-              </Tooltip>
-            )}
-
-            {hasEdit && (
-              <Tooltip tooltip="Create a new version of the dataset" flow="up">
-                <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                  <Icon icon="fa fa-camera" label="Snapshot" />
-                </Link>
-              </Tooltip>
-            )}
-            <span>
-              <Link className="dataset-tool" to={rootPath + '/download'}>
-                <Icon icon="fa fa-download" label="Download" />
-              </Link>
-            </span>
-            <Tooltip
-              wrapText={true}
-              tooltip={
-                hasEdit
-                  ? 'A form to describe your dataset (helps colleagues discover your dataset)'
-                  : 'View the dataset metadata'
-              }
-              flow="up">
-              <Link className="dataset-tool" to={rootPath + '/metadata'}>
-                <Icon icon="fa fa-file-code" label="Metadata" />
-              </Link>
-            </Tooltip>
-            {hasEdit && (
-              <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-                <Link className="dataset-tool" to={rootPath + '/delete'}>
-                  <Icon icon="fa fa-trash" label="Delete" />
-                </Link>
-              </Tooltip>
-            )}
-          </>
+          <DatasetTools
+            rootPath={rootPath}
+            hasEdit={hasEdit}
+            isPublic={dataset.public}
+            isSnapshot={isSnapshot}
+          />
         )}
         renderReadMe={() => (
           <MetaDataBlock
             heading="README"
-            item={
-              <ReadMore
-                id="readme"
-                expandLabel="Read More"
-                collapseabel="Collapse">
-                <Markdown>
-                  {dataset.draft.readme == null ? 'N/A' : dataset.draft.readme}
-                </Markdown>
-              </ReadMore>
-            }
             className="dataset-readme markdown-body"
+            item={dataset.draft.readme}
+            renderEditor={() => (
+              <EditDescriptionField
+                datasetId={datasetId}
+                field="readme"
+                rows={12}
+                description={dataset.draft.readme}
+                editMode={hasEdit}>
+                <ReadMore
+                  id="readme"
+                  expandLabel="Read More"
+                  collapseabel="Collapse">
+                  <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
+                </ReadMore>
+              </EditDescriptionField>
+            )}
           />
         )}
         renderSidebar={() => (
           <>
-            <MetaDataBlock
-              heading="Authors"
-              item={description.Authors}
-              isMarkdown={true}
+            <EditDescriptionList
               className="dmb-inline-list"
-            />
+              datasetId={datasetId}
+              field="Authors"
+              heading="Authors"
+              description={description.Authors}
+              editMode={hasEdit}>
+              {description.Authors?.length ? description.Authors : ['N/A']}
+            </EditDescriptionList>
+
             {summary && (
               <ModalitiesMetaDataBlock
                 items={summary.modalities}
                 className="dmb-modalities"
               />
             )}
+
             <MetaDataBlock
               heading={dataset.snapshots.length ? 'Versions' : 'Version'}
               item={
@@ -290,9 +244,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 className="dmb-inline-list"
               />
             )}
-            {summary.modalities.includes('pet') ||
-              summary.modalities.includes('Pet') ||
-              (summary.modalities.includes('PET') && (
+            {summary?.modalities.includes('pet') ||
+              summary?.modalities.includes('Pet') ||
+              (summary?.modalities.includes('PET') && (
                 <>
                   <MetaDataBlock
                     heading={pluralize('Target', summary.pet?.BodyPart)}
@@ -351,7 +305,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               }
             />
 
-            {dataset.snapshots.length ? (
+            {dataset.snapshots?.length ? (
               <MetaDataBlock
                 heading="Last Updated"
                 item={
@@ -383,34 +337,70 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               }
             />
             <MetaDataBlock heading="License" item={description.License} />
+
             <MetaDataBlock
               heading="Acknowledgements"
               item={description.Acknowledgements}
+              renderEditor={() => (
+                <EditDescriptionField
+                  datasetId={datasetId}
+                  field="Acknowledgements"
+                  rows={2}
+                  description={description.Acknowledgements}
+                  editMode={hasEdit}>
+                  <Markdown>{description.Acknowledgements || 'N/A'}</Markdown>
+                </EditDescriptionField>
+              )}
             />
+
             <MetaDataBlock
               heading="How to Acknowledge"
               item={description.HowToAcknowledge}
-            />
-            <MetaDataBlock
-              heading="Funding"
-              item={description.Funding}
-              isMarkdown={true}
-              className="dmb-list"
+              renderEditor={() => (
+                <EditDescriptionField
+                  datasetId={datasetId}
+                  field="HowToAcknowledge"
+                  rows={2}
+                  description={description.HowToAcknowledge}
+                  editMode={hasEdit}>
+                  <Markdown>{description.HowToAcknowledge || 'N/A'}</Markdown>
+                </EditDescriptionField>
+              )}
             />
 
-            <MetaDataBlock
+            <EditDescriptionList
+              className="dmb-list"
+              datasetId={datasetId}
+              field="Funding"
+              heading="Funding"
+              description={description.Funding}
+              editMode={hasEdit}>
+              {description.Funding?.length ? description.Funding : ['N/A']}
+            </EditDescriptionList>
+
+            <EditDescriptionList
+              className="dmb-list"
+              datasetId={datasetId}
+              field="ReferencesAndLinks"
               heading="References and Links"
-              item={description.ReferencesAndLinks}
-              isMarkdown={true}
-              className="dmb-list"
-            />
+              description={description.ReferencesAndLinks}
+              editMode={hasEdit}>
+              {description.ReferencesAndLinks?.length
+                ? description.ReferencesAndLinks
+                : ['N/A']}
+            </EditDescriptionList>
 
-            <MetaDataBlock
-              heading="Funding"
-              item={description.EthicsApprovals}
-              isMarkdown={true}
+            <EditDescriptionList
               className="dmb-list"
-            />
+              datasetId={datasetId}
+              field="EthicsApprovals"
+              heading="Ethics Approvals"
+              description={description.EthicsApprovals}
+              editMode={hasEdit}>
+              {description.EthicsApprovals?.length
+                ? description.EthicsApprovals
+                : ['N/A']}
+            </EditDescriptionList>
           </>
         )}
         renderDeprecatedModal={() => (

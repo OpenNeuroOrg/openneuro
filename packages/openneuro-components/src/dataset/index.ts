@@ -1,4 +1,5 @@
 import { MetaDataBlock } from './MetaDataBlock'
+import { MetaDataListBlock } from './MetaDataListBlock'
 import { ModalitiesMetaDataBlock } from './ModalitiesMetaDataBlock'
 import { BrainLifeButton } from './BrainLifeButton'
 import { ValidationBlock } from './ValidationBlock'
@@ -8,6 +9,7 @@ import { DatasetAlert } from './DatasetAlert'
 import { DatasetHeaderMeta } from './DatasetHeaderMeta'
 import { DatasetPage } from './DatasetPage'
 import { DatasetGitAccess } from './DatasetGitAccess'
+import { DatasetTools } from './DatasetTools'
 // TODO: remove
 
 import { VersionListContainerExample } from './VersionListContainerExample'
@@ -23,5 +25,7 @@ export {
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
+  MetaDataListBlock,
   ModalitiesMetaDataBlock,
+  DatasetTools,
 }
