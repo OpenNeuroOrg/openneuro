@@ -6,6 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
+import Comments from './comments/comments.jsx'
 
 import {
   ModalitiesMetaDataBlock,
@@ -341,6 +342,13 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               does not recommend this specific version.
             </p>
           </Modal>
+        )}
+        renderComments={() => (
+          <Comments
+            datasetId={dataset.id}
+            uploader={dataset.uploader}
+            comments={dataset.comments}
+          />
         )}
       />
     </>
