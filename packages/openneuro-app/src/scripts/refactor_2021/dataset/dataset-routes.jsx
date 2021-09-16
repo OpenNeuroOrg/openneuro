@@ -6,7 +6,7 @@ import AdminExports from '../../datalad/routes/admin-exports.jsx'
 
 import SnapshotContainer from './snapshot-container'
 import DraftContainer from './draft-container'
-import DownloadDataset from '../../datalad/download/download-dataset.jsx'
+import DownloadDataset from '../download/download-dataset.jsx'
 import Publish from './routes/publish.jsx'
 import Share from './routes/manage-permissions.jsx'
 import Snapshot from '../../datalad/routes/snapshot.jsx'
