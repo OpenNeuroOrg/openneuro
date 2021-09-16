@@ -29,7 +29,9 @@ import {
 } from '@openneuro/components/dataset'
 import { Modal } from '@openneuro/components/modal'
 import { ReadMore } from '@openneuro/components/read-more'
-import { CountToggle } from '@openneuro/components/count-toggle'
+
+import { FollowDataset } from './mutations/follow'
+import { StarDataset } from './mutations/star'
 
 import EditDescriptionField from './fragments/edit-description-field.jsx'
 import EditDescriptionList from './fragments/edit-description-list.jsx'
@@ -48,21 +50,6 @@ const snapshotVersion = location => {
   return matches && matches[1]
 }
 const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
-  const [bookmarked, showBookmarked] = React.useState(false)
-  const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
-  const [followed, showFollowed] = React.useState(false)
-  const [followedCount, setFollowedCount] = React.useState(1)
-
-  //TODO hook up follow and bookmark
-  const toggleBookmarkClick = () => {
-    setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
-    showBookmarked(!bookmarked)
-  }
-  const toggleFollowedClick = () => {
-    setFollowedCount(followedCount === 1 ? 2 : 1)
-    showFollowed(!followed)
-  }
-
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -145,25 +132,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderFollowBookmark={() => (
           <>
-            <CountToggle
-              label="Follow"
-              icon="fa-thumbtack"
-              disabled={!profile}
-              toggleClick={toggleBookmarkClick}
-              tooltip="hello Tip"
-              clicked={bookmarked}
-              showClicked={showBookmarked}
-              count={bookmarkedCount}
+            <FollowDataset
+              profile={profile}
+              datasetId={dataset.id}
+              following={dataset.following}
+              followers={dataset.followers.length}
             />
-            <CountToggle
-              label="Bookmark"
-              icon="fa-bookmark"
-              disabled={!profile}
-              toggleClick={toggleFollowedClick}
-              tooltip="hello Tip"
-              clicked={followed}
-              showClicked={showFollowed}
-              count={followedCount}
+            <StarDataset
+              profile={profile}
+              datasetId={dataset.id}
+              starred={dataset.starred}
+              stars={dataset.stars.length}
             />
           </>
         )}
@@ -215,9 +194,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                   id="readme"
                   expandLabel="Read More"
                   collapseabel="Collapse">
-                  <Markdown>
-                    {dataset.draft.readme || 'N/A'}
-                  </Markdown>
+                  <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
                 </ReadMore>
               </EditDescriptionField>
             )}
