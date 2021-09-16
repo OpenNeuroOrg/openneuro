@@ -1,6 +1,5 @@
 import React from 'react'
-import { AccordionTab, AccordionTabStyle } from '../accordion/AccordionTab'
-import { AccordionWrap } from '../accordion/AccordionWrap'
+
 import { RadioGroup } from '../radio/RadioGroup'
 
 export interface FacetRadioProps {
@@ -16,10 +15,6 @@ export interface FacetRadioProps {
   )[]
   layout: string
   name: string
-  accordionStyle: AccordionTabStyle
-  startOpen: boolean
-  label: string
-  dropdown?: boolean
   selected: string
   setSelected: (value) => void
   className?: string
@@ -29,31 +24,19 @@ export const FacetRadio = ({
   radioArr,
   layout,
   name,
-  startOpen,
-  label,
-  accordionStyle,
-  dropdown,
   selected,
   setSelected,
   className,
 }: FacetRadioProps) => {
   return (
-    <AccordionWrap className={className + ' facet-accordion'}>
-      <AccordionTab
-        accordionStyle={accordionStyle}
-        label={label}
-        startOpen={startOpen}
-        dropdown={dropdown}>
-        <div className="facet-radio">
-          <RadioGroup
-            setSelected={setSelected}
-            selected={selected}
-            name={name}
-            radioArr={radioArr}
-            layout={layout}
-          />
-        </div>
-      </AccordionTab>
-    </AccordionWrap>
+    <div className="facet-radio">
+      <RadioGroup
+        setSelected={setSelected}
+        selected={selected}
+        name={name}
+        radioArr={radioArr}
+        layout={layout}
+      />
+    </div>
   )
 }

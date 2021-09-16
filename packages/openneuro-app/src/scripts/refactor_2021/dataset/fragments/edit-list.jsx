@@ -26,7 +26,7 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
 
   return (
     <>
-      <div className="input-group">
+      <div className="edit-list-group">
         <input
           type="text"
           className="form-control"
@@ -34,36 +34,30 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
           value={newElement}
           onChange={e => updateNewElement(e.target.value)}
         />
-        <span className="input-group-btn">
-          <Button
-            className="edit-list-add"
-            primary={true}
-            size="small"
-            label="Add"
-            onClick={() => {
-              updateElements()
-            }}
-          />
-        </span>
+        <Button
+          className="edit-list-add"
+          primary={true}
+          size="small"
+          label="Add"
+          onClick={() => {
+            updateElements()
+          }}
+        />
       </div>
       <div>
         {elements.map((element, index) => (
           <div key={index}>
-            <div className="input-group">
-              <span className="input-group-addon" style={{ width: '100%' }}>
-                {element}
-              </span>
-              <div className="input-group-btn">
-                <Button
-                  className="edit-list-add"
-                  nobg={true}
-                  size="xsmall"
-                  icon="fa fa-times"
-                  label="Remove"
-                  color="red"
-                  onClick={removeElement(index)}
-                />
-              </div>
+            <div className="edit-list-group-item">
+              {element}
+              <Button
+                className="edit-list-add"
+                nobg={true}
+                size="xsmall"
+                icon="fa fa-times"
+                label="Remove"
+                color="red"
+                onClick={removeElement(index)}
+              />
             </div>
           </div>
         ))}

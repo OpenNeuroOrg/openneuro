@@ -1,0 +1,41 @@
+@import '../scss/variables';
+.dataset-snapshot-form {
+  .data-table-header,
+  .data-table-content {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    @media (max-width: 767px) {
+      flex-wrap: wrap;
+    }
+    > span {
+      display: block;
+      min-width: 33.3333%;
+      margin-bottom: 11px;
+      label {
+        font-weight: bold;
+        font-size: 14px;
+        display: none;
+        @media (max-width: 767px) {
+          display: block;
+        }
+      }
+    }
+  }
+  .input-group-btn {
+    margin-left: 20px;
+  }
+  .snapshot-input-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    input {
+      margin-right: 10px;
+      width: 400px;
+      max-width: 90%;
+    }
+    button {
+      margin-right: 10px;
+    }
+  }
+}

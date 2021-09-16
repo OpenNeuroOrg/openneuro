@@ -17,7 +17,6 @@ const EditDescriptionList = ({
 }) => {
   const [editing, setEditing] = useState(false)
   const [rows, setRows] = useState(description || [])
-  console.log(children)
 
   if (editing) {
     return (
@@ -28,13 +27,15 @@ const EditDescriptionList = ({
           elements={rows}
           setElements={setRows}
         />
-        <UpdateDescription
-          datasetId={datasetId}
-          field={field}
-          value={rows}
-          done={() => setEditing(false)}
-        />
-        <CancelButton action={() => setEditing(false)} />
+        <div className="update-field-save">
+          <UpdateDescription
+            datasetId={datasetId}
+            field={field}
+            value={rows}
+            done={() => setEditing(false)}
+          />
+          <CancelButton action={() => setEditing(false)} />
+        </div>
       </div>
     )
   } else {

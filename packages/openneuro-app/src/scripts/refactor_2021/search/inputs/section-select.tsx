@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetSelect } from '@openneuro/components/facets'
+import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 const SectionSelect: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -13,14 +14,15 @@ const SectionSelect: FC = () => {
     }))
 
   return (
-    <FacetSelect
-      selected={section_selected}
-      setSelected={setSection}
-      items={section_available}
-      accordionStyle="plain"
-      label="Study Type"
-      startOpen={false}
-    />
+    <AccordionWrap className="modality-facet facet-accordion">
+      <AccordionTab accordionStyle="plain" label="Study Type" startOpen={false}>
+        <FacetSelect
+          selected={section_selected}
+          setSelected={setSection}
+          items={section_available}
+        />
+      </AccordionTab>
+    </AccordionWrap>
   )
 }
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 import { Header, HeaderProps } from './Header'
 import { LandingExpandedHeader } from './LandingExpandedHeader'
-import { FrontFacetExample } from '../facets/Facet.stories'
 import { Input } from '../input/Input'
 
 export default {
@@ -12,29 +11,24 @@ export default {
 
 const Template: Story<HeaderProps> = ({ profile, expanded }) => {
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
-  const [isOpenUpload, setUploadIsOpen] = React.useState(false)
 
   const toggleLoginModal = () => alert('this is a context')
-  const toggleUpload = () => setUploadIsOpen(prevIsOpen => !prevIsOpen)
   const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
   return (
     <Header
       profile={profile}
       expanded={expanded}
       isOpenSupport={isOpenSupport}
-      isOpenUpload={isOpenUpload}
       toggleLoginModal={toggleLoginModal}
       signOutAndRedirect={() => console.log('signed out')}
       toggleSupport={toggleSupport}
-      toggleUpload={toggleUpload}
+      navigateToNewSearch={() => console.log('navigate to /search')}
       renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
       renderUploader={() => <li>Upload</li>}
       renderOnExpanded={profile => (
         <LandingExpandedHeader
           user={profile}
-          renderFacetSelect={() => (
-            <FrontFacetExample {...FrontFacetExample.args} />
-          )}
+          renderFacetSelect={() => <>front facet example</>}
           renderSearchInput={() => (
             <Input
               placeholder="Search"

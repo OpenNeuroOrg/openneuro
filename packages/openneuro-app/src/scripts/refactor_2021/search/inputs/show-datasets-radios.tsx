@@ -4,6 +4,7 @@ import { RadioGroup } from '@openneuro/components/radio'
 import { FacetSelect } from '@openneuro/components/facets'
 import { useCookies } from 'react-cookie'
 import { getUnexpiredProfile } from '../../authentication/profile'
+import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 const ShowDatasetsRadios: FC = () => {
   const [cookies] = useCookies()
@@ -44,14 +45,18 @@ const ShowDatasetsRadios: FC = () => {
         />
       </div>
       {datasetType_selected == 'My Datasets' ? (
-        <FacetSelect
-          selected={datasetStatus_selected}
-          setSelected={setShowMyUploadsSelected}
-          items={datasetStatus_available}
-          accordionStyle="plain"
-          label="My Datasets Status"
-          startOpen={true}
-        />
+        <AccordionWrap className="modality-facet facet-accordion">
+          <AccordionTab
+            accordionStyle="plain"
+            label="My Datasets Status"
+            startOpen={true}>
+            <FacetSelect
+              selected={datasetStatus_selected}
+              setSelected={setShowMyUploadsSelected}
+              items={datasetStatus_available}
+            />
+          </AccordionTab>
+        </AccordionWrap>
       ) : null}
     </>
   )

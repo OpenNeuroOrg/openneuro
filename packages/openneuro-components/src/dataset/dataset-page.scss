@@ -303,6 +303,9 @@
     }
   }
   &.dmb-list {
+    a {
+      word-break: break-word;
+    }
   }
 }
 

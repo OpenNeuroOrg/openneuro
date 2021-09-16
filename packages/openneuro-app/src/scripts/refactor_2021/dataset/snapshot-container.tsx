@@ -7,6 +7,7 @@ import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
 import { config } from '../../config'
+import Comments from './comments/comments.jsx'
 
 import {
   ModalitiesMetaDataBlock,
@@ -20,6 +21,7 @@ import {
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
+  DatasetTools,
 } from '@openneuro/components/dataset'
 import {
   getUnexpiredProfile,
@@ -27,10 +29,11 @@ import {
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
 import { Modal } from '@openneuro/components/modal'
-import { Icon } from '@openneuro/components/icon'
-import { Tooltip } from '@openneuro/components/tooltip'
+
 import { ReadMore } from '@openneuro/components/read-more'
-import { CountToggle } from '@openneuro/components/count-toggle'
+
+import { FollowDataset } from './mutations/follow'
+import { StarDataset } from './mutations/star'
 
 export interface SnapshotContainerProps {
   dataset
@@ -46,21 +49,6 @@ const snapshotVersion = location => {
   return matches && matches[1]
 }
 const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
-  const [bookmarked, showBookmarked] = React.useState(false)
-  const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
-  const [followed, showFollowed] = React.useState(false)
-  const [followedCount, setFollowedCount] = React.useState(1)
-
-  //TODO hook up follow and bookmark
-  const toggleBookmarkClick = () => {
-    setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
-    showBookmarked(!bookmarked)
-  }
-  const toggleFollowedClick = () => {
-    setFollowedCount(followedCount === 1 ? 2 : 1)
-    showFollowed(!followed)
-  }
-
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -81,11 +69,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const dateUpdatedDifference = formatDistanceToNow(
     parseISO(dataset.draft.modified),
   )
-
-  const rootPath =
-    activeDataset !== 'draft'
-      ? `/datasets/${datasetId}/versions/${activeDataset}`
-      : `/datasets/${datasetId}`
+  const isSnapshot = activeDataset !== 'draft'
+  const rootPath = isSnapshot
+    ? `/datasets/${datasetId}/versions/${activeDataset}`
+    : `/datasets/${datasetId}`
 
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
   const isPublic = dataset.public === true
@@ -125,25 +112,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderFollowBookmark={() => (
           <>
-            <CountToggle
-              label="Follow"
-              icon="fa-thumbtack"
-              disabled={profile ? false : true}
-              toggleClick={toggleBookmarkClick}
-              tooltip="hello Tip"
-              clicked={bookmarked}
-              showClicked={showBookmarked}
-              count={bookmarkedCount}
+            <FollowDataset
+              profile={profile}
+              datasetId={dataset.id}
+              following={dataset.following}
+              followers={dataset.followers.length}
             />
-            <CountToggle
-              label="Bookmark"
-              icon="fa-bookmark"
-              disabled={profile ? false : true}
-              toggleClick={toggleFollowedClick}
-              tooltip="hello Tip"
-              clicked={followed}
-              showClicked={showFollowed}
-              count={followedCount}
+            <StarDataset
+              profile={profile}
+              datasetId={dataset.id}
+              starred={dataset.starred}
+              stars={dataset.stars.length}
             />
           </>
         )}
@@ -160,7 +139,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 isPrivate={!dataset.public}
                 datasetId={dataset.id}
                 hasDraftChanges={hasDraftChanges}
-                hasSnapshot={!!dataset.snapshots.length}
+                hasSnapshot={!dataset.snapshots.length}
               />
             )}
           </>
@@ -183,26 +162,12 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           />
         )}
         renderToolButtons={() => (
-          <>
-            <span>
-              <Link className="dataset-tool" to={rootPath + '/download'}>
-                <Icon icon="fa fa-download" label="Download" />
-              </Link>
-            </span>
-            <Tooltip
-              wrapText={true}
-              tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
-              flow="up">
-              <Link className="dataset-tool" to={rootPath + '/metadata'}>
-                <Icon icon="fa fa-file-code" label="Metadata" />
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/delete'}>
-                <Icon icon="fa fa-trash" label="Delete" />
-              </Link>
-            </Tooltip>
-          </>
+          <DatasetTools
+            rootPath={rootPath}
+            hasEdit={hasEdit}
+            isPublic={dataset.public}
+            isSnapshot={isSnapshot}
+          />
         )}
         renderReadMe={() => (
           <MetaDataBlock
@@ -399,6 +364,13 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               does not recommend this specific version.
             </p>
           </Modal>
+        )}
+        renderComments={() => (
+          <Comments
+            datasetId={dataset.id}
+            uploader={dataset.uploader}
+            comments={dataset.comments}
+          />
         )}
       />
     </>

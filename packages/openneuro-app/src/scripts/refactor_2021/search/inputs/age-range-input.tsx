@@ -2,6 +2,7 @@ import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import initialSearchParams from '../initial-search-params'
 import { FacetRange } from '@openneuro/components/facets'
+import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
 const AgeRangeInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -21,16 +22,20 @@ const AgeRangeInput: FC = () => {
       : ageRange
 
   return (
-    <FacetRange
-      startOpen={false}
-      label="Age of Participants"
-      accordionStyle="plain"
-      min={min}
-      max={max}
-      step={10}
-      value={value}
-      onChange={setAgeRange}
-    />
+    <AccordionWrap className="facet-accordion">
+      <AccordionTab
+        accordionStyle="plain"
+        label="Age of Participants"
+        startOpen={false}>
+        <FacetRange
+          min={min}
+          max={max}
+          step={10}
+          value={value}
+          onChange={setAgeRange}
+        />
+      </AccordionTab>
+    </AccordionWrap>
   )
 }
 
