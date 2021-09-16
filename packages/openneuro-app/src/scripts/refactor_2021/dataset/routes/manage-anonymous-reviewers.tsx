@@ -24,10 +24,7 @@ export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
           <h2>Create Anonymous Reviewer</h2>
         </div>
         <hr />
-        <CreateReviewLink
-          datasetId={datasetId}
-          done={() => console.log('done')}
-        />
+        <CreateReviewLink datasetId={datasetId} />
         <div className="dataset-form-body">
           <h3>Previous Review Links: </h3>
           <div className="data-table-header">

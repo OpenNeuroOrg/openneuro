@@ -18,16 +18,13 @@ const CREATE_LINK = gql`
 
 interface CreateReviewLinkProps {
   datasetId: string
-  done: () => void
 }
 
-export const CreateReviewLink: FC<CreateReviewLinkProps> = ({
-  datasetId,
-  done,
-}) => {
+export const CreateReviewLink: FC<CreateReviewLinkProps> = ({ datasetId }) => {
   function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
   }
+
   const [CreateReviewLink, { data, error }] = useMutation(CREATE_LINK)
   return (
     <>
@@ -63,16 +60,7 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({
           primary={true}
           label="Create Review Link"
           size="small"
-          onClick={async () => {
-            try {
-              await CreateReviewLink({
-                variables: { datasetId },
-              })
-              done()
-            } catch (err) {
-              toast.error(<ToastContent body="An error occured" />)
-            }
-          }}
+          onClick={() => CreateReviewLink({ variables: { datasetId } })}
         />
         <Link className="return-link" to={`/datasets/${datasetId}`}>
           Return to Dataset
