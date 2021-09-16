@@ -28,13 +28,15 @@ const EditDescriptionList = ({
           elements={rows}
           setElements={setRows}
         />
-        <UpdateDescription
-          datasetId={datasetId}
-          field={field}
-          value={rows}
-          done={() => setEditing(false)}
-        />
-        <CancelButton action={() => setEditing(false)} />
+        <div className="update-field-save">
+          <UpdateDescription
+            datasetId={datasetId}
+            field={field}
+            value={rows}
+            done={() => setEditing(false)}
+          />
+          <CancelButton action={() => setEditing(false)} />
+        </div>
       </div>
     )
   } else {
