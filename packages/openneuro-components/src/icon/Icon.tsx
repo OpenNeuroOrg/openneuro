@@ -4,7 +4,7 @@ export interface IconProps {
   primary?: boolean
   secondary?: boolean
   backgroundColor?: string
-  label: string
+  label?: string
   disabled?: boolean
   icon?: string
   color?: string
@@ -16,7 +16,7 @@ export interface IconProps {
 
 export const Icon: React.FC<IconProps> = ({
   backgroundColor,
-  label,
+  label='',
   icon,
   color,
   imgSrc,

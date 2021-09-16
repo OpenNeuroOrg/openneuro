@@ -11,9 +11,70 @@ import {
   getProfile,
   hasEditPermissions,
 } from '../../authentication/profile.js'
+import { Icon } from '@openneuro/components/icon'
 import { useCookies } from 'react-cookie'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
+
+const filetypeIcons = {
+  md: {
+    icon: 'fab fa-markdown',
+    color: 'deepskyblue',
+  },
+  json: {
+    icon: 'fab fa-node-js',
+    color: 'limegreen',
+  },
+  tsv: {
+    icon: 'fas fa-file-excel',
+    color: 'lightgreen',
+  },
+  csv: {
+    icon: 'fas fa-file-csv',
+    color: 'lightgreen',
+  },
+  nii: {
+    icon: 'fas fa-brain',
+    color: 'mediumpurple',
+  },
+  bval: {
+    icon: 'fas fa-file-alt',
+    color: 'cornflowerblue',
+  },
+  bvec: {
+    icon: 'fas fa-file-alt',
+    color: 'cornflowerblue',
+  },
+}
+const specialFileIcons = {
+  README: filetypeIcons.md,
+  CHANGES: {
+    icon: 'fas fa-file-alt',
+    color: 'orange',
+  },
+  LICENSE: {
+    icon: 'fas fa-file-alt',
+    color: 'darkslateblue',
+  },
+}
+const defaultFileIcon = {
+  icon: 'fas fa-file',
+  color: 'black',
+}
+
+const fileExtPattern = /\.([0-9a-z]+)(\.gz)?$/i
+
+const getFileIcon = filename => {
+  if (Object.keys(specialFileIcons).includes(filename)) {
+    return specialFileIcons[filename]
+  }
+  const extension = fileExtPattern.exec(filename)?.[1]
+  if (Object.keys(filetypeIcons).includes(extension)) {
+    return filetypeIcons[extension]
+  } else {
+    return defaultFileIcon
+  }
+}
 
 export const apiPath = (datasetId, snapshotTag, filePath) => {
   const snapshotPath = snapshotTag ? `/snapshots/${snapshotTag}` : ''
@@ -34,6 +95,7 @@ const File = ({
   toggleFileToDelete,
   isFileToBeDeleted,
 }) => {
+  const { icon, color } = getFileIcon(filename)
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
   const viewerPath = `/datasets/${datasetId}${snapshotVersionPath}/file-display/${filePath(
@@ -44,6 +106,7 @@ const File = ({
   const user = getProfile(cookies)
   return (
     <>
+      <Icon icon={`${icon}`} color={color}/>&nbsp;&nbsp;
       {filename}
       <span className="filetree-editfile">
         <Media greaterThanOrEqual="medium">
