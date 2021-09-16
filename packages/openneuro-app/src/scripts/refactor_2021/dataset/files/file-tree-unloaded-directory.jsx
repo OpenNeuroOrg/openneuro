@@ -85,6 +85,7 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
   }, [loading])
   return (
     <AccordionTab 
+      className="filetree-item"
       label={directory.filename}
       accordionStyle="file-tree"
       onClick={() => {

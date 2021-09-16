@@ -33,30 +33,28 @@ export const AccordionTab: FC<AccordionTabProps> = ({
     <Icon
       className="file-icon"
       icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
-      // label="directory"
+      label={label}
     />
   ) : null
 
   return (
-    <>
-      <span
-        className={`${accordionStyle}` + ' accordion ' + `${className}`}
-        id={id}>
-        <div
-          className={`accordion-title ${isOpen ? 'open' : ''}`}
-          onClick={() => {
-            onClick?.(!isOpen)
-            setOpen(!isOpen)
-          }}>
-          {fileTreeIcon} {label}
-        </div>
-        <div
-          className={`accordion-item ${!isOpen ? ' collapsed' : ''} ${
-            dropdown ? ' dropdown-style' : ''
-          }`}>
-          <div className="accordion-content">{children}</div>
-        </div>
-      </span>
-    </>
+    <article
+      className={`${accordionStyle || ''}` + ' accordion ' + `${className || ''}`}
+      id={id}>
+      <div
+        className={`accordion-title ${isOpen ? 'open' : ''}`}
+        onClick={() => {
+          onClick?.(!isOpen)
+          setOpen(!isOpen)
+        }}>
+        {fileTreeIcon || label}
+      </div>
+      <div
+        className={`accordion-item ${!isOpen ? ' collapsed' : ''} ${
+          dropdown ? ' dropdown-style' : ''
+        }`}>
+        <div className="accordion-content">{children}</div>
+      </div>
+    </article>
   )
 }

@@ -30,9 +30,14 @@ const FileTree = ({
   bulkDeleteButton,
 }) => {
   return (
-    <AccordionTab label={name} accordionStyle="file-tree">
+    <AccordionTab
+      className=""
+      label={name}
+      accordionStyle="file-tree"
+      startOpen={defaultExpanded}
+    >
       {editMode && (
-        <Media greaterThanOrEqual="medium">
+        <Media className="filetree-dir-tools" greaterThanOrEqual="medium">
           <span className="filetree-editfile">
             <UpdateFile
               datasetId={datasetId}
@@ -55,7 +60,7 @@ const FileTree = ({
       )}
       <ul className="child-files">
         {files.sort(sortByFilename).map((file, index) => (
-          <li className="clearfix" key={index}>
+          <li className="clearfix filetree-item filetree-file" key={index}>
             <File
               id={file.id}
               datasetId={datasetId}
@@ -74,7 +79,7 @@ const FileTree = ({
           if ('files' in dir || 'directories' in dir) {
             // Loaded directory
             return (
-              <li className="clearfix" key={index}>
+              <li className="clearfix filetree-item filetree-dir" key={index}>
                 <FileTree
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
@@ -90,7 +95,7 @@ const FileTree = ({
           } else {
             // Unloaded
             return (
-              <li className="clearfix" key={index}>
+              <li className="clearfix filetree-item filetree-dir" key={index}>
                 <FileTreeUnloadedDirectory
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
