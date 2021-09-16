@@ -34,7 +34,13 @@ export const getDatasetPage = gql`
       created
       public
       following
+      followers {
+        userId
+      }
       starred
+      stars {
+        userId
+      }
       ...DatasetDraft
       ...DatasetPermissions
       ...DatasetSnapshots
@@ -71,7 +77,13 @@ export const getDraftPage = gql`
       created
       public
       following
+      followers {
+        userId
+      }
       starred
+      stars {
+        userId
+      }
       worker
       ...DatasetDraft
       ...DatasetDraftFiles
