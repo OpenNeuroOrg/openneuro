@@ -6,7 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
-
+import { config } from '../../config'
 import {
   getUnexpiredProfile,
   hasEditPermissions,
@@ -75,9 +75,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     ? `/datasets/${datasetId}/versions/${activeDataset}`
     : `/datasets/${datasetId}`
 
-  //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  //TODO Setup hasEdit
   const isPublic = dataset.public === true
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
@@ -88,6 +86,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
+
   return (
     <>
       <DatasetPage
@@ -110,17 +109,18 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             />
           </>
         )}
-        renderAlert={() =>
-          hasEdit && (
-            <DatasetAlert
-              isPrivate={!dataset.public}
-              datasetId={dataset.id}
-              hasDraftChanges={hasDraftChanges}
-              hasSnapshot={!!dataset.snapshots.length}
-              rootPath={rootPath}
-            />
-          )
-        }
+        renderAlert={() => (
+          <>
+            {hasEdit && (
+              <DatasetAlert
+                isPrivate={!dataset.public}
+                datasetId={dataset.id}
+                hasDraftChanges={hasDraftChanges}
+                hasSnapshot={!dataset.snapshots.length}
+              />
+            )}
+          </>
+        )}
         renderHeaderMeta={() => (
           <>
             {summary && (
@@ -163,9 +163,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
-                //TODO add worker and configURL
-                configUrl="configurl"
-                worker="worker"
+                configUrl={config.url}
+                worker={dataset.worker}
                 datasetId={datasetId}
                 gitHash={dataset.draft.head}
               />
@@ -227,6 +226,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 <div className="version-block">
                   <VersionListContainerExample
                     datasetId={datasetId}
+                    hasEdit={hasEdit}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}

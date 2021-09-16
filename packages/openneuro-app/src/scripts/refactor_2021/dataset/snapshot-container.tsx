@@ -6,6 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
+import { config } from '../../config'
 import Comments from './comments/comments.jsx'
 
 import {
@@ -15,12 +16,18 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
+  DatasetAlert,
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
   DatasetTools,
 } from '@openneuro/components/dataset'
+import {
+  getUnexpiredProfile,
+  hasEditPermissions,
+} from '../authentication/profile'
+import { useCookies } from 'react-cookie'
 import { Modal } from '@openneuro/components/modal'
 
 import { ReadMore } from '@openneuro/components/read-more'
@@ -52,7 +59,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const summary = dataset.draft.summary
   const description = dataset.draft.description
   const datasetId = dataset.id
-  const isPublic = dataset.public === true
+
   const numSessions =
     summary && summary.sessions.length > 0 ? summary.sessions.length : 1
 
@@ -67,14 +74,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     ? `/datasets/${datasetId}/versions/${activeDataset}`
     : `/datasets/${datasetId}`
 
-  //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  //TODO Setup hasEdit
-  const hasEdit = true
-  //TODO Setup profile - isloggedin
-  const profile = true
-  // (user && user.admin) ||
-  // hasEditPermissions(dataset.permissions, user && user.sub)
+  const isPublic = dataset.public === true
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+  const isAdmin = profile?.admin
+  const hasEdit =
+    hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const hasDraftChanges =
+    dataset.snapshots.length === 0 ||
+    dataset.draft.head !==
+      dataset.snapshots[dataset.snapshots.length - 1].hexsha
   return (
     <>
       <DatasetPage
@@ -122,6 +132,18 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             onBrainlife={dataset.onBrainlife}
           />
         )}
+        renderAlert={() => (
+          <>
+            {hasEdit && (
+              <DatasetAlert
+                isPrivate={!dataset.public}
+                datasetId={dataset.id}
+                hasDraftChanges={hasDraftChanges}
+                hasSnapshot={!dataset.snapshots.length}
+              />
+            )}
+          </>
+        )}
         renderValidationBlock={() => (
           <ValidationBlock>
             <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
@@ -131,9 +153,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
-                //TODO add worker and configURL
-                configUrl="configurl"
-                worker="worker"
+                configUrl={config.url}
+                worker={dataset.worker}
                 datasetId={datasetId}
                 gitHash={dataset.draft.head}
               />
@@ -186,6 +207,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               item={
                 <div className="version-block">
                   <VersionListContainerExample
+                    hasEdit={hasEdit}
                     datasetId={datasetId}
                     items={dataset.snapshots}
                     className="version-dropdown"
