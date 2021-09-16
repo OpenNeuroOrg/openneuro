@@ -13,7 +13,7 @@ export interface VersionListProps {
     created: Date
     deprecated: boolean
   }[]
-
+  hasEdit: boolean
   selected: string
   setSelected: (selected: string) => void
   className: string
@@ -34,6 +34,7 @@ export const VersionList = ({
   className,
   dateModified,
   datasetId,
+  hasEdit,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
   const [date, setDate] = React.useState(formatDate(new Date()))
@@ -110,13 +111,13 @@ export const VersionList = ({
             </ul>
           </div>
         </Dropdown>
-      ) : (
+      ) : hasEdit ? (
         <Link
           className="dataset-tool"
           to={'/datasets/' + datasetId + '/snapshot'}>
           Create Version
         </Link>
-      )}
+      ) : null}
     </>
   )
 }

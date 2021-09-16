@@ -38,9 +38,8 @@
     background: #b5f1b5;
     display: flex;
     justify-content: center;
-    a {
-      margin: 0 5px;
-    }
+    flex-direction: column;
+    align-items: center;
     &.warning {
       background-color: #f7e395;
     }
@@ -104,8 +103,7 @@
         box-shadow: 0px 1px 5px -1px rgba(0, 0, 0, 51%);
         margin-top: 4px;
         .dataset-git-access {
-          width: 380px;
-
+          width: 450px;
           background: #fff;
           border-radius: $border-radius-default;
           padding: 20px;
@@ -346,7 +344,7 @@
   .dataset-tool {
     font-weight: 600;
     font-size: 14px;
-    margin: 0 0 10px;
+    margin: 0;
     color: var(--current-theme-primary);
     &:hover {
       color: var(--current-theme-primary-hover);

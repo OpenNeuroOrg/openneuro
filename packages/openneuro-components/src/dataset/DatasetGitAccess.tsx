@@ -8,7 +8,7 @@ function copyToClipboard(text) {
 
 export interface DatasetGitAccessProps {
   datasetId: string
-  worker: string
+  worker?: string
   configUrl: string
   gitHash: string
 }
@@ -19,7 +19,7 @@ export const DatasetGitAccess = ({
   configUrl,
   gitHash,
 }: DatasetGitAccessProps) => {
-  const workerId = worker.split('-').pop()
+  const workerId = worker?.split('-').pop()
   const url = `${configUrl}/git/${workerId}/${datasetId}`
   return (
     <div className="dataset-git-access">
@@ -30,16 +30,22 @@ export const DatasetGitAccess = ({
         </a>
       </span>
       <div className="git-url">
-        <Tooltip tooltip="Copy URL To Clipboard" flow="right">
-          <Button
-            onClick={() => copyToClipboard(url)}
-            icon="fas fa-clipboard"
-            size="small"
-            iconSize="18px"
-            label="copy git URL"
-          />
-        </Tooltip>
-        <div>{url}</div>
+        {workerId && (
+          <Tooltip tooltip="Copy URL To Clipboard" flow="right">
+            <Button
+              onClick={() => copyToClipboard(url)}
+              icon="fas fa-clipboard"
+              size="small"
+              iconSize="18px"
+              label="copy git URL"
+            />
+          </Tooltip>
+        )}
+        <div>
+          {workerId
+            ? url
+            : 'TODO - What happens when the workerID is undefined'}
+        </div>
       </div>
       <div className="git-hash">
         <Tooltip tooltip="Copy Git Hash to Clipboard" flow="right">
