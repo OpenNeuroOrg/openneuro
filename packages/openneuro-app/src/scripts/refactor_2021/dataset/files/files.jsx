@@ -9,21 +9,27 @@ import { AccordionWrap } from '@openneuro/components/accordion'
 import styled from '@emotion/styled'
 
 const StyleWrapper = styled.div`
-  div.filetree-wrapper > article.file-tree.accordion > .accordion-item {
-    overflow: visible;
-  }
   .filetree-wrapper {
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 0;
+    padding: 0 0 0 15px;
     margin-bottom: 25px;
 
+    .accordion-title {
+      margin: 5px 0;
+    }
     .accordion-content {
       margin: 0;
     }
+    .accordion-item {
+      overflow: visible;
+    }
+    .accordion-item.collapsed {
+      display: none;
+    }
     .filetree-header {
       margin: 0;
-      padding: 10px 15px;
+      padding: 10px 0;
       border-bottom: 1px solid #e3e3e3;
     }
     .filetree-item {
