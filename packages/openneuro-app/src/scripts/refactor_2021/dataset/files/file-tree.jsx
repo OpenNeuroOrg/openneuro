@@ -6,6 +6,8 @@ import DeleteDir from '../mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 import { Media } from '../styles/media'
 import { AccordionTab } from '@openneuro/components/accordion'
+import CopyTooltip from '../fragments/copyable-tooltip.jsx'
+import { Tooltip } from '@openneuro/components/tooltip'
 
 export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -53,7 +55,9 @@ const FileTree = ({
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
             {bulkDeleteButton || (
-              <DeleteDir datasetId={datasetId} path={path} />
+              <Tooltip tooltip="Delete" flow="down">
+                <DeleteDir datasetId={datasetId} path={path} />
+              </Tooltip>
             )}
           </span>
         </Media>

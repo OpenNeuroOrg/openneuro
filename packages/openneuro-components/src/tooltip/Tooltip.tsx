@@ -18,7 +18,7 @@ export const Tooltip = ({
   const wrap = wrapText && ' wrap-text'
   return (
     <span
-      className={wrap + ' ' + className}
+      className={(wrap || '') + ' ' + (className || '')}
       data-tooltip={tooltip}
       data-flow={flow}>
       {children}

@@ -12,6 +12,7 @@ import {
   hasEditPermissions,
 } from '../../authentication/profile.js'
 import { Icon } from '@openneuro/components/icon'
+import { Tooltip } from '@openneuro/components/tooltip'
 import { useCookies } from 'react-cookie'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
@@ -110,46 +111,56 @@ const File = ({
       {filename}
       <span className="filetree-editfile">
         <Media greaterThanOrEqual="medium">
-          <span className="edit-file download-file">
-            <a
-              href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
-              download>
-              <i className="fa fa-download" /> Download
-            </a>
-          </span>
+          <Tooltip tooltip="Download">
+            <span className="edit-file download-file">
+              <a
+                href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
+                download>
+                <i className="fa fa-download" />
+              </a>
+            </span>
+          </Tooltip>
         </Media>
-        <span className="edit-file view-file">
-          <Link to={viewerPath}>
-            <i className="fa fa-eye" /> View
-          </Link>
-        </span>
+        <Tooltip tooltip="View">
+          <span className="edit-file view-file">
+            <Link to={viewerPath}>
+              <i className="fa fa-eye" />
+            </Link>
+          </span>
+        </Tooltip>
         {editMode && (
           <Media greaterThanOrEqual="medium">
-            <UpdateFile datasetId={datasetId} path={path}>
-              <i className="fa fa-file-o" /> Update
-            </UpdateFile>
+            <Tooltip tooltip="Update">
+              <UpdateFile datasetId={datasetId} path={path}>
+                <i className="fa fa-file-o" />
+              </UpdateFile>
+            </Tooltip>
           </Media>
         )}
         {editMode && filename !== 'dataset_description.json' && (
           <>
             <Media greaterThanOrEqual="medium">
-              <DeleteFile
-                datasetId={datasetId}
-                path={path}
-                filename={filename}
-              />
+              <Tooltip tooltip="Delete">
+                <DeleteFile
+                  datasetId={datasetId}
+                  path={path}
+                  filename={filename}
+                />
+              </Tooltip>
             </Media>
-            <div className="bulk-delete-checkbox-group delete-file">
-              <input
-                id={'cb-' + filename}
-                type="checkbox"
-                checked={isFileToBeDeleted(id)}
-                onChange={() => toggleFileToDelete({ id, path, filename })}
-              />
-              <label htmlFor={'cb-' + filename}>
-                {isFileToBeDeleted(id) ? 'ADDED' : 'ADD TO BULK DELETE'}{' '}
-              </label>
-            </div>
+            <Tooltip tooltip={isFileToBeDeleted(id) ? 'Added to Bulk Delete' : 'Add to Bulk Delete'}>
+              <div className="bulk-delete-checkbox-group delete-file">
+                <input
+                  id={'cb-' + filename}
+                  type="checkbox"
+                  checked={isFileToBeDeleted(id)}
+                  onChange={() => toggleFileToDelete({ id, path, filename })}
+                />
+                <label htmlFor={'cb-' + filename}>
+                  <Icon icon="fas fa-dumpster" color="indianred" />
+                </label>
+              </div>
+            </Tooltip>
           </>
         )}
         {!isMobile &&

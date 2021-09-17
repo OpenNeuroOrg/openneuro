@@ -4,6 +4,7 @@ import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../../common/forms/warn-button.jsx'
 import { TooltipSpan } from '../fragments/copyable-tooltip.jsx'
+import { Tooltip } from '@openneuro/components/tooltip'
 
 const FLAG_ANNEX_OBJECT = gql`
   mutation flagAnnexObject(
@@ -25,11 +26,11 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
   <Mutation mutation={FLAG_ANNEX_OBJECT} awaitRefetchQueries={true}>
     {flagAnnexObject => (
       // fa-exclamation-triangle might be better
-      <TooltipSpan
+      <Tooltip
         className="flag-annex-object"
-        data-tip="Use this to alert site admins if this file has been found to contain subject sensitive data.">
+        tooltip="Flag: use this to alert site admins if this file has been found to contain subject sensitive data.">
         <WarnButton
-          message="Flag"
+          message=""
           icon="fa-exclamation-triangle"
           warn={true}
           className="edit-file"
@@ -46,7 +47,7 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
             })
           }}
         />
-      </TooltipSpan>
+      </Tooltip>
     )}
   </Mutation>
 )

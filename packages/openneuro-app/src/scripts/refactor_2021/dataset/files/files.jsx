@@ -34,6 +34,65 @@ const StyleWrapper = styled.div`
     .filetree-dir-tools {
       padding-bottom: 5px;
       border-bottom: 1px solid #e3e3e3;
+
+      .filetree-editfile span:last-child {
+        margin: 0 0 0 auto;
+      }
+    }
+    .filetree-editfile {
+      display: flex;
+      margin-left: auto;
+      margin-right: 15px;
+
+      i {
+        font-size: 16px;
+      }
+
+      .edit-file {
+        float: left;
+        margin-right: 5px;
+        text-align: center;
+        display: inline-block;
+        overflow: hidden;
+        font-size: 10px;
+        line-height: 10px;
+        margin: 0 5px 0 0;
+        width: auto;
+        position: relative;
+        padding: 3px 5px;
+        border: 0;
+        color: #007c92;
+        color: var(--secondary);
+      }
+      .delete-file {
+        margin-right: 10px;
+      }
+      .delete-file.bulk-delete button {
+        padding-right: 0;
+      }
+      .edit-file input, .delete-file input {
+        opacity: 0;
+        filter: alpha(opacity=0);
+        position: absolute;
+        cursor: pointer;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 100%;
+      }
+      div.bulk-delete-checkbox-group.delete-file {
+        input {
+          opacity: 1;
+          left: 4px;
+          top: 12px;
+        }
+      }
+      button.btn-warn-component {
+        border: none;
+        background: none;
+        color: indianred;
+      }
     }
     ul.child-files {
       margin: 0;
@@ -97,19 +156,19 @@ const Files = ({
     (isDeleting ? (
       <span>Deleting...</span>
     ) : (
-      <span className="delete-file">
+      <span className="delete-file bulk-delete">
         <WarnButton
           message="Bulk Delete"
-          icon="fa-trash"
+          icon="fas fa-dumpster"
           warn={true}
           className="edit-file"
           action={bulkDelete}
         />{' '}
         {diableBtn ? (
-          '0 files added'
+          '(none)'
         ) : (
           <>
-            {filesCount} file{filesCount > 1 ? 's' : ''} added
+            ({filesCount})
           </>
         )}
       </span>
