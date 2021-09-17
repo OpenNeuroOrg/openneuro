@@ -177,7 +177,8 @@ const Files = ({
     <StyleWrapper>
       <AccordionWrap className="filetree-wrapper">
         <h4 className="filetree-header">{datasetName}</h4>
-        <Media className="filetree-item" at="small">
+        {/* Both Media elements display (local, Chrome, any viewport) */}
+        {/* <Media className="filetree-item" at="small">
           <FileTree
             datasetId={datasetId}
             snapshotTag={snapshotTag}
@@ -191,8 +192,8 @@ const Files = ({
             isFileToBeDeleted={isFileToBeDeleted}
             bulkDeleteButton={bulkDeleteButton}
           />
-        </Media>
-        <Media className="filetree-item" greaterThanOrEqual="medium">
+        </Media> */}
+        {/* <Media className="filetree-item" greaterThanOrEqual="medium"> */}
           <FileTree
             datasetId={datasetId}
             snapshotTag={snapshotTag}
@@ -206,7 +207,7 @@ const Files = ({
             isFileToBeDeleted={isFileToBeDeleted}
             bulkDeleteButton={bulkDeleteButton}
           />
-        </Media>
+        {/* </Media> */}
       </AccordionWrap>
     </StyleWrapper>
   )
