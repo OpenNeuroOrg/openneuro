@@ -1,6 +1,6 @@
 import React from 'react'
 import { toast } from 'react-toastify'
-import ToastContent from '../common/partials/toast-content.jsx'
+import ToastContent from '../../common/partials/toast-content.jsx'
 
 /**
  * Write failures due to permissions (most likely)

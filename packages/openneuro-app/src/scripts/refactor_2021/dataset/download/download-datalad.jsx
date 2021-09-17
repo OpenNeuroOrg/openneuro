@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getConfig } from '../../config'
+import { getConfig } from '../../../config'
 import ShellExample from './shell-example.jsx'
 
 const DownloadDataladExample = ({ datasetId, githubOrganization }) => (

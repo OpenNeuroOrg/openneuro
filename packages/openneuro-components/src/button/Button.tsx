@@ -20,6 +20,7 @@ export interface ButtonProps {
   className?: string
   children?: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
+  form?: string
 }
 
 /**
@@ -42,6 +43,7 @@ export const Button = ({
   disabled,
   iconOnly,
   type,
+  form,
   ...props
 }: ButtonProps) => {
   const mode =
@@ -74,6 +76,7 @@ export const Button = ({
 
   return (
     <button
+      form={form}
       disabled={disabled}
       role="button"
       type={type ? type : 'button'}

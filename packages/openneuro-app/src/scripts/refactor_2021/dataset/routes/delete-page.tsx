@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
-import DeleteDatasetForm from './mutations/delete-dataset-form.jsx'
-import DeleteDataset from './mutations/delete.jsx'
-import LoggedIn from '../authentication/logged-in.jsx'
-import { hasEditPermissions, getProfile } from '../authentication/profile.js'
+import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
+import DeleteDataset from '../mutations/delete.jsx'
+import LoggedIn from '../../authentication/logged-in.jsx'
+import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
 import styled from '@emotion/styled'
 import { Button } from '@openneuro/components/button'
 
@@ -52,16 +52,14 @@ const DeletePage = ({
         </small>
       </p>
       <div className=" dataset-form-controls">
-        <div className=" modal-actions">
-          <LoggedIn>
-            <DeleteDataset datasetId={dataset.id} metadata={values} />
-          </LoggedIn>
-          <Button
-            nobg={true}
-            onClick={returnToDataset}
-            label="Return to Dataset"
-          />
-        </div>
+        <LoggedIn>
+          <DeleteDataset datasetId={dataset.id} metadata={values} />
+        </LoggedIn>
+        <Button
+          nobg={true}
+          onClick={returnToDataset}
+          label="Return to Dataset"
+        />
       </div>
     </div>
   )

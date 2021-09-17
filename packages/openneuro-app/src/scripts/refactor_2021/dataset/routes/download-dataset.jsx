@@ -3,10 +3,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import styled from '@emotion/styled'
-import DownloadLink from './download-link.jsx'
-import DownloadS3 from './download-s3.jsx'
-import DownloadCommandLine from './download-command-line.jsx'
-import DownloadDatalad from './download-datalad.jsx'
+import DownloadLink from '../download/download-link.jsx'
+import DownloadS3 from '../download/download-s3.jsx'
+import DownloadCommandLine from '../download/download-command-line.jsx'
+import DownloadDatalad from '../download/download-datalad.jsx'
 
 const PaddedDiv = styled.div`
   padding: 1em;
