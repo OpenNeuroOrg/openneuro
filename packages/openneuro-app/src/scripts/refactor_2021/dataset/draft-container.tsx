@@ -173,10 +173,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderToolButtons={() => (
           <DatasetTools
-            rootPath={`/datasets/${datasetId}`}
             hasEdit={hasEdit}
             isPublic={dataset.public}
             isSnapshot={isSnapshot}
+            datasetId={datasetId}
           />
         )}
         renderReadMe={() => (

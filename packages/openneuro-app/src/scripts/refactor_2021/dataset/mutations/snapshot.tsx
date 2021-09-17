@@ -15,19 +15,27 @@ const CREATE_SNAPSHOT = gql`
 `
 
 const CreateSnapshotMutation = ({ history, datasetId, tag, changes }) => {
-  const [snapshotDataset, { error }] = useMutation(CREATE_SNAPSHOT)
+  const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
   if (error) throw error
   return (
-    <Button
-      primary={true}
-      size="small"
-      onClick={() =>
-        snapshotDataset({ variables: { datasetId, tag, changes } }).then(() => {
-          history.push(`/datasets/${datasetId}/versions/${tag}`)
-        })
-      }
-      label="Create Snapshot"
-    />
+    <>
+      {loading ? (
+        <i className="fas fa-circle-notch fa-spin"></i>
+      ) : (
+        <Button
+          primary={true}
+          size="small"
+          onClick={() =>
+            snapshotDataset({ variables: { datasetId, tag, changes } }).then(
+              () => {
+                history.push(`/datasets/${datasetId}/versions/${tag}`)
+              },
+            )
+          }
+          label="Create Snapshot"
+        />
+      )}
+    </>
   )
 }
 

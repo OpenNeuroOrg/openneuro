@@ -1,6 +1,5 @@
 import React from 'react'
 
-import './validation.scss'
 export interface ValidationBlockProps {
   children?: React.ReactNode
 }

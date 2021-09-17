@@ -11,7 +11,11 @@ export const CloneDropdown: React.FC<CloneDropdownProps> = ({ gitAccess }) => {
     <div className="clone-dropdown">
       <Dropdown
         label={
-          <Button className="clone-link" primary={true} label="Clone">
+          <Button
+            className="clone-link"
+            primary={true}
+            size="small"
+            label="Clone">
             <i className="fas fa-caret-up"></i>
             <i className="fas fa-caret-down"></i>
           </Button>
