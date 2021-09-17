@@ -9,6 +9,9 @@ import { AccordionWrap } from '@openneuro/components/accordion'
 import styled from '@emotion/styled'
 
 const StyleWrapper = styled.div`
+  div.filetree-wrapper > article.file-tree.accordion > .accordion-item {
+    overflow: visible;
+  }
   .filetree-wrapper {
     border: 1px solid #ccc;
     border-radius: 4px;
