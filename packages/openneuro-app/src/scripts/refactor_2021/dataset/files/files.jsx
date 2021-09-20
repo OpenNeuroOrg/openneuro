@@ -25,7 +25,7 @@ const StyleWrapper = styled.div`
       display: none;
     }
     .filetree-header {
-      margin: 0;
+      margin: 0 0 5px;
       padding: 10px 0;
       border-bottom: 1px solid #e3e3e3;
     }
