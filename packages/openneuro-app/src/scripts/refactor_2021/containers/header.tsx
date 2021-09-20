@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import useState from 'react-usestateref'
-import UploaderContext from '../../uploader/uploader-context.js'
-import UploadProgress from '../../uploader/upload-progress.jsx'
+import UploaderContext from '../uploader/uploader-context.js'
+import UploadProgress from '../uploader/upload-progress.jsx'
 import { Header, LandingExpandedHeader } from '@openneuro/components/header'
 import { Input } from '@openneuro/components/input'
 import ModalitySelect from '../search/inputs/modality-select'
@@ -16,7 +16,8 @@ import FreshdeskWidget from '../freshdesk-widget'
 import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
 import loginUrls from '../authentication/loginUrls'
 import UploaderView from '../uploader/uploader-view.jsx'
-
+import UploadButton from '../uploader/upload-button.jsx'
+import UploadProgressButton from '../uploader/upload-progress-button.jsx'
 const HeaderContainer: FC = () => {
   const history = useHistory()
 
@@ -84,7 +85,21 @@ const HeaderContainer: FC = () => {
         profile={profile}
         expanded={expanded}
         navigateToNewSearch={handleSubmit}
-        renderUploader={() => <UploaderView />}
+        renderUploader={() => (
+          <UploaderContext.Consumer>
+            {uploader => {
+              if (uploader?.uploading) {
+                return <UploadProgressButton />
+              } else {
+                return (
+                  <UploadButton
+                    onClick={() => uploader.setLocation('/upload')}
+                  />
+                )
+              }
+            }}
+          </UploaderContext.Consumer>
+        )}
         renderOnFreshDeskWidget={() => <FreshdeskWidget />}
         renderOnExpanded={profile => (
           <LandingExpandedHeader
@@ -121,6 +136,9 @@ const HeaderContainer: FC = () => {
           />
         )}
       />
+      <UploaderContext.Consumer>
+        {uploader => <UploaderView uploader={uploader} />}
+      </UploaderContext.Consumer>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Uploader from './uploader/uploader.jsx'
+import Uploader from './refactor_2021/uploader/uploader.jsx'
 import Routes_REFACTOR from './refactor_2021/routes'
 import HeaderContainer from './refactor_2021/containers/header'
 import FooterContainer from './refactor_2021/containers/footer'

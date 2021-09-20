@@ -7,7 +7,8 @@ import TextArrayInput from '../fragments/text-array-input'
 import styled from '@emotion/styled'
 
 const Form = styled.form({
-  minWidth: '40rem',
+  width: '100%',
+  maxWidth: '700px',
   margin: '10px 0',
 })
 const InfoText = styled.p({
