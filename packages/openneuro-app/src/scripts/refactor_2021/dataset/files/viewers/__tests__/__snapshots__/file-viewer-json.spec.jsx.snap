@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`File Viewer - JSON renders with invalid JSON 1`] = `
-<Fragment>
+<Styled(div)>
   <div
-    className="col-xs-6"
+    className="column"
   >
     <h3>
       Tree
@@ -12,7 +12,7 @@ exports[`File Viewer - JSON renders with invalid JSON 1`] = `
     1234;
   </div>
   <div
-    className="col-xs-6"
+    className="column"
   >
     <h3>
       Raw
@@ -22,13 +22,13 @@ exports[`File Viewer - JSON renders with invalid JSON 1`] = `
       1234;
     </Styled(pre)>
   </div>
-</Fragment>
+</Styled(div)>
 `;
 
 exports[`File Viewer - JSON renders with valid JSON 1`] = `
-<Fragment>
+<Styled(div)>
   <div
-    className="col-xs-6"
+    className="column"
   >
     <h3>
       Tree
@@ -37,7 +37,7 @@ exports[`File Viewer - JSON renders with valid JSON 1`] = `
     {"thing":1,"name":"string"}
   </div>
   <div
-    className="col-xs-6"
+    className="column"
   >
     <h3>
       Raw
@@ -47,5 +47,5 @@ exports[`File Viewer - JSON renders with valid JSON 1`] = `
       {"thing":1,"name":"string"}
     </Styled(pre)>
   </div>
-</Fragment>
+</Styled(div)>
 `;

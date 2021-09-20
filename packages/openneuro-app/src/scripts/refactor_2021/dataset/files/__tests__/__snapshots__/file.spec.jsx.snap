@@ -2,6 +2,11 @@
 
 exports[`File component renders for dataset snapshots 1`] = `
 <Fragment>
+  <Icon
+    color="deepskyblue"
+    icon="fab fa-markdown"
+  />
+    
   README
   <span
     className="filetree-editfile"
@@ -10,38 +15,49 @@ exports[`File component renders for dataset snapshots 1`] = `
       className=""
       greaterThanOrEqual="medium"
     >
-      <span
-        className="edit-file download-file"
+      <Tooltip
+        tooltip="Download"
       >
-        <a
-          download={true}
-          href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+        <span
+          className="edit-file download-file"
+        >
+          <a
+            download={true}
+            href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+          >
+            <i
+              className="fa fa-download"
+            />
+          </a>
+        </span>
+      </Tooltip>
+    </Media>
+    <Tooltip
+      tooltip="View"
+    >
+      <span
+        className="edit-file view-file"
+      >
+        <Link
+          to="/datasets/ds001/versions/1.0.0/file-display/README"
         >
           <i
-            className="fa fa-download"
+            className="fa fa-eye"
           />
-           Download
-        </a>
+        </Link>
       </span>
-    </Media>
-    <span
-      className="edit-file view-file"
-    >
-      <Link
-        to="/datasets/ds001/versions/1.0.0/file-display/README"
-      >
-        <i
-          className="fa fa-eye"
-        />
-         View
-      </Link>
-    </span>
+    </Tooltip>
   </span>
 </Fragment>
 `;
 
 exports[`File component renders with common props 1`] = `
 <Fragment>
+  <Icon
+    color="deepskyblue"
+    icon="fab fa-markdown"
+  />
+    
   README
   <span
     className="filetree-editfile"
@@ -50,32 +66,38 @@ exports[`File component renders with common props 1`] = `
       className=""
       greaterThanOrEqual="medium"
     >
-      <span
-        className="edit-file download-file"
+      <Tooltip
+        tooltip="Download"
       >
-        <a
-          download={true}
-          href="/crn/datasets/ds001/files/README"
+        <span
+          className="edit-file download-file"
+        >
+          <a
+            download={true}
+            href="/crn/datasets/ds001/files/README"
+          >
+            <i
+              className="fa fa-download"
+            />
+          </a>
+        </span>
+      </Tooltip>
+    </Media>
+    <Tooltip
+      tooltip="View"
+    >
+      <span
+        className="edit-file view-file"
+      >
+        <Link
+          to="/datasets/ds001/file-display/README"
         >
           <i
-            className="fa fa-download"
+            className="fa fa-eye"
           />
-           Download
-        </a>
+        </Link>
       </span>
-    </Media>
-    <span
-      className="edit-file view-file"
-    >
-      <Link
-        to="/datasets/ds001/file-display/README"
-      >
-        <i
-          className="fa fa-eye"
-        />
-         View
-      </Link>
-    </span>
+    </Tooltip>
   </span>
 </Fragment>
 `;

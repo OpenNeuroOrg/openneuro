@@ -2,17 +2,59 @@
 
 exports[`FileTree component renders with default props 1`] = `
 <FileTree>
-  <button
-    className="btn-file-folder"
-    onClick={[Function]}
+  <AccordionTab
+    accordionStyle="file-tree"
+    className=""
+    label=""
+    startOpen={false}
   >
-    <i
-      className="type-icon fa fa-folder"
-    />
-     
-    <i
-      className="accordion-icon fa fa-caret-down"
-    />
-  </button>
+    <article
+      className="file-tree accordion "
+    >
+      <div
+        className="accordion-title "
+        onClick={[Function]}
+      >
+        <Icon
+          className="file-icon"
+          icon="fas fa-folder"
+          label=""
+        >
+          <span
+            aria-label="icon"
+            className="file-icon on-icon  "
+            role="img"
+            style={
+              Object {
+                "backgroundColor": undefined,
+                "color": undefined,
+              }
+            }
+            title=""
+          >
+            <i
+              className="fas fa-folder"
+              style={
+                Object {
+                  "fontSize": undefined,
+                }
+              }
+            />
+          </span>
+        </Icon>
+      </div>
+      <div
+        className="accordion-item  collapsed "
+      >
+        <div
+          className="accordion-content"
+        >
+          <ul
+            className="child-files"
+          />
+        </div>
+      </div>
+    </article>
+  </AccordionTab>
 </FileTree>
 `;
