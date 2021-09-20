@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
+import DatasetQueryContext from '../../../../datalad/dataset/dataset-query-context.js'
 import FileTreeUnloadedDirectory, {
   mergeNewFiles,
 } from '../file-tree-unloaded-directory.jsx'
@@ -24,7 +24,7 @@ describe('FileTreeUnloadedDirectory component', () => {
         <FileTreeUnloadedDirectory datasetId={'ds000001'} directory={dir} />
       </DatasetQueryContext.Provider>,
     )
-    wrapper.find('button').simulate('click')
+    wrapper.find('div.accordion-title').simulate('click')
     expect(fetchMore).toHaveBeenCalled()
   })
   describe('mergeNewFiles', () => {
