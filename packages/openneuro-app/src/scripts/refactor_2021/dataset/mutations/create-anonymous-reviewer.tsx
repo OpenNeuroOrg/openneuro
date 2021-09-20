@@ -1,7 +1,5 @@
 import React, { FC } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { toast } from 'react-toastify'
-import ToastContent from '../../common/partials/toast-content'
 import { Link } from 'react-router-dom'
 import { Tooltip } from '@openneuro/components/tooltip'
 import { Button } from '@openneuro/components/button'

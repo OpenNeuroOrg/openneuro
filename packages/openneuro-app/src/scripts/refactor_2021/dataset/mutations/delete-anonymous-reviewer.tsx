@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { toast } from 'react-toastify'
 import { WarnButton } from '@openneuro/components/warn-button'
 
 const DELETE_REVIEWER = gql`
