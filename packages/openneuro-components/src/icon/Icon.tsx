@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 export interface IconProps {
   primary?: boolean
   secondary?: boolean
   backgroundColor?: string
-  label?: string
+  label?: string | number | ReactNode
   disabled?: boolean
   icon?: string
   color?: string
@@ -46,7 +46,7 @@ export const Icon: React.FC<IconProps> = ({
       style={{ backgroundColor, color }}
       role="img"
       aria-label="icon"
-      title={label}>
+      title={label.toString()}>
       {imgIcon}
       {fontIcon}
       {iconOnly ? null : label}

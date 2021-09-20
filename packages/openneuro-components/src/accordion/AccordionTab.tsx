@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { Icon } from '../icon/Icon'
 
@@ -8,7 +8,7 @@ export interface AccordionTabProps {
   children: React.ReactNode
   id?: string
   className?: string
-  label: React.ReactNode
+  label: string | number | ReactNode
   startOpen?: boolean
   dropdown?: boolean
   accordionStyle: AccordionTabStyle
