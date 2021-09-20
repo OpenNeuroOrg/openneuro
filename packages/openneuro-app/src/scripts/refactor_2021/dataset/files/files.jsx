@@ -4,7 +4,7 @@ import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
 import { Media } from '../../../styles/media'
 import { useMutation, gql } from '@apollo/client'
-import WarnButton from '../../../common/forms/warn-button.jsx'
+import { WarnButton } from '@openneuro/components/warn-button'
 import { AccordionWrap } from '@openneuro/components/accordion'
 import styled from '@emotion/styled'
 
@@ -73,8 +73,11 @@ const StyleWrapper = styled.div`
       .delete-file {
         margin-right: 10px;
       }
-      .delete-file.bulk-delete button {
-        padding-right: 0;
+      .delete-file.bulk-delete {
+        display: flex;
+        button {
+          padding: 0 5px;
+        }
       }
       .edit-file input, .delete-file input {
         opacity: 0;
@@ -155,7 +158,7 @@ const Files = ({
   }
 
   const fileTree = flatToTree(files)
-  const diableBtn = Object.values(filesToDelete).length ? null : true
+  const disableBtn = Object.values(filesToDelete).length ? null : true
   const filesCount = Object.values(filesToDelete).length
   const bulkDeleteButton =
     editMode &&
@@ -166,17 +169,11 @@ const Files = ({
         <WarnButton
           message="Bulk Delete"
           icon="fas fa-dumpster"
-          warn={true}
           className="edit-file"
-          action={bulkDelete}
+          tooltip="Click the dumpster icon on files below to add them to the delete batch."
+          onConfirmedClick={bulkDelete}
         />{' '}
-        {diableBtn ? (
-          '(none)'
-        ) : (
-          <>
-            ({filesCount})
-          </>
-        )}
+        {disableBtn ? '(none)' : `(${filesCount})`}
       </span>
     ))
   return (
