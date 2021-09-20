@@ -10,13 +10,6 @@ const dir = {
 }
 
 describe('FileTreeUnloadedDirectory component', () => {
-  it('renders with default props', () => {
-    expect(
-      mount(
-        <FileTreeUnloadedDirectory datasetId={'ds000001'} directory={dir} />,
-      ),
-    ).toMatchSnapshot()
-  })
   it('calls fetchMoreDirectory when clicked', () => {
     const fetchMore = jest.fn()
     const wrapper = mount(
