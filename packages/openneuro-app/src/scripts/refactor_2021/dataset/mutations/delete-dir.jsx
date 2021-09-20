@@ -18,14 +18,12 @@ const DeleteDir = ({ datasetId, path }) => (
           message=""
           icon="fa-trash"
           className="edit-file"
-          onConfirmedClick={cb => {
+          onConfirmedClick={() => {
             deleteFiles({
               variables: {
                 datasetId,
                 files: [{ path }],
               },
-            }).then(() => {
-              cb()
             })
           }}
         />

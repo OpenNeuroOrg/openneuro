@@ -32,7 +32,7 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
           message=""
           icon="fa-exclamation-triangle"
           className="edit-file"
-          onConfirmedClick={cb => {
+          onConfirmedClick={() => {
             flagAnnexObject({
               variables: {
                 datasetId,
@@ -40,8 +40,6 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
                 filepath,
                 annexKey,
               },
-            }).then(() => {
-              cb()
             })
           }}
         />

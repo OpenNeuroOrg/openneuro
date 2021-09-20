@@ -18,11 +18,9 @@ const DeleteFile = ({ datasetId, path, filename }) => (
           message=""
           icon="fa-trash"
           className="edit-file"
-          onConfirmedClick={cb => {
+          onConfirmedClick={() => {
             deleteFiles({
               variables: { datasetId, files: [{ path, filename }] },
-            }).then(() => {
-              cb()
             })
           }}
         />
