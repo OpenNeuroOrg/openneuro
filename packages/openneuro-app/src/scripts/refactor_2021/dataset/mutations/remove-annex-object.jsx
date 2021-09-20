@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import WarnButton from '../../../common/forms/warn-button.jsx'
-import { TooltipSpan } from '../fragments/copyable-tooltip.jsx'
+import { Tooltip } from '@openneuro/components/tooltip'
 
 const REMOVE_ANNEX_OBJECT = gql`
   mutation removeAnnexObject(
@@ -33,9 +33,9 @@ const RemoveAnnexObject = ({
   <Mutation mutation={REMOVE_ANNEX_OBJECT} awaitRefetchQueries={true}>
     {removeAnnexObject => (
       // fa-exclamation-triangle might be better
-      <TooltipSpan
+      <Tooltip
         className="remove-annex-object"
-        data-tip="Purge: this admin tool will remove this file's annex objects.">
+        tooltip="Purge: this admin tool will remove this file's annex objects.">
         <WarnButton
           message=""
           icon="fa-frown-o"
@@ -55,7 +55,7 @@ const RemoveAnnexObject = ({
             })
           }}
         />
-      </TooltipSpan>
+      </Tooltip>
     )}
   </Mutation>
 )
