@@ -15,9 +15,6 @@ const StyleWrapper = styled.div`
     padding: 0 0 0 15px;
     margin-bottom: 25px;
 
-    .accordion-title {
-      margin: 5px 0;
-    }
     .accordion-content {
       margin: 0;
     }
