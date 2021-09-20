@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import WarnButton from '../../../common/forms/warn-button.jsx'
-import { TooltipSpan } from '../fragments/copyable-tooltip.jsx'
+import { WarnButton } from '@openneuro/components/warn-button'
 import { Tooltip } from '@openneuro/components/tooltip'
 
 const FLAG_ANNEX_OBJECT = gql`
@@ -32,9 +31,8 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
         <WarnButton
           message=""
           icon="fa-exclamation-triangle"
-          warn={true}
           className="edit-file"
-          action={cb => {
+          onConfirmedClick={cb => {
             flagAnnexObject({
               variables: {
                 datasetId,

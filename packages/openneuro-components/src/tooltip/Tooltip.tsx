@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { FC } from 'react'
 
 export interface TooltipProps {
   tooltip: string
@@ -8,13 +8,13 @@ export interface TooltipProps {
   wrapText?: boolean
 }
 
-export const Tooltip = ({
+export const Tooltip: FC<TooltipProps> = ({
   children,
   tooltip,
   flow = 'up',
   className,
   wrapText,
-}: TooltipProps) => {
+}) => {
   const wrap = wrapText && ' wrap-text'
   return (
     <span
