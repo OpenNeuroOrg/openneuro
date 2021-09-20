@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 
 export interface TooltipProps {
   tooltip: string
-  flow: 'up' | 'down' | 'left' | 'right'
+  flow?: 'up' | 'down' | 'left' | 'right'
   children: React.ReactNode
   className?: string
   wrapText?: boolean
@@ -11,7 +11,7 @@ export interface TooltipProps {
 export const Tooltip = ({
   children,
   tooltip,
-  flow,
+  flow = 'up',
   className,
   wrapText,
 }: TooltipProps) => {
