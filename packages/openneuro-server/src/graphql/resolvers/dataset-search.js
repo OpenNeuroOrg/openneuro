@@ -4,7 +4,6 @@ import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
 import Permission from '../../models/permission'
 import { hashObject } from '../../libs/authentication/crypto'
-import { states } from '../permissions.js'
 
 const elasticIndex = 'datasets'
 
@@ -70,8 +69,7 @@ export const elasticRelayConnection = (
       },
     }
   } catch (err) {
-    console.log('((((((()))))))')
-    console.log(err)
+    console.error(err)
   }
 }
 
@@ -214,7 +212,7 @@ export const advancedDatasetSearchConnection = async (
     sortBy,
     user,
   })
-  const sort = [{ _score: 'asc' }, { id: 'desc' }]
+  const sort = [{ _score: 'desc' }, { id: 'desc' }]
   if (sortBy) sort.unshift(sortBy)
   const requestBody = {
     sort,
