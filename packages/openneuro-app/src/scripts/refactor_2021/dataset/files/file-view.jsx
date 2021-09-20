@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Spinner from '../../../common/partials/spinner.jsx'
+import { Loading } from '@openneuro/components/loading'
 import { apiPath } from './file.jsx'
 import FileViewerType from './file-viewer-type.jsx'
 
@@ -22,7 +22,7 @@ const FileView = ({ datasetId, snapshotTag, path }) => {
   })
 
   if (loading) {
-    return <Spinner active text="Loading File" />
+    return <Loading />
   } else {
     return <FileViewerType path={path} url={url} data={data} />
   }
