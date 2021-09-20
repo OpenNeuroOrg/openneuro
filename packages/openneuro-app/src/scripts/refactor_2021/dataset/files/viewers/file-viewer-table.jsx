@@ -2,6 +2,7 @@ import React from 'react'
 import { AutoSizer, Column, Table } from 'react-virtualized'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import 'react-virtualized/styles.css'
 
 const HalfViewport = styled.div`
   height: 50vh;
