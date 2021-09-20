@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
-import { Media } from '../styles/media'
+import { Media } from '../../../styles/media'
 import { useMutation, gql } from '@apollo/client'
 import WarnButton from '../../../common/forms/warn-button.jsx'
 import { AccordionWrap } from '@openneuro/components/accordion'
@@ -25,7 +25,7 @@ const StyleWrapper = styled.div`
       display: none;
     }
     .filetree-header {
-      margin: 0 0 5px;
+      margin: 0;
       padding: 10px 0;
       border-bottom: 1px solid #e3e3e3;
     }
@@ -184,36 +184,40 @@ const Files = ({
       <AccordionWrap className="filetree-wrapper">
         <h4 className="filetree-header">{datasetName}</h4>
         {/* Both Media elements display (local, Chrome, any viewport) */}
-        {/* <Media className="filetree-item" at="small">
-          <FileTree
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-            path={''}
-            {...fileTree}
-            name={datasetName}
-            editMode={editMode}
-            defaultExpanded={false}
-            datasetPermissions={datasetPermissions}
-            toggleFileToDelete={toggleFileToDelete}
-            isFileToBeDeleted={isFileToBeDeleted}
-            bulkDeleteButton={bulkDeleteButton}
-          />
-        </Media> */}
-        {/* <Media className="filetree-item" greaterThanOrEqual="medium"> */}
-          <FileTree
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-            path={''}
-            {...fileTree}
-            name={datasetName}
-            editMode={editMode}
-            defaultExpanded={true}
-            datasetPermissions={datasetPermissions}
-            toggleFileToDelete={toggleFileToDelete}
-            isFileToBeDeleted={isFileToBeDeleted}
-            bulkDeleteButton={bulkDeleteButton}
-          />
-        {/* </Media> */}
+        <Media at="small">
+          <div className="filetree-item" >
+            <FileTree
+              datasetId={datasetId}
+              snapshotTag={snapshotTag}
+              path={''}
+              {...fileTree}
+              name={datasetName}
+              editMode={editMode}
+              defaultExpanded={false}
+              datasetPermissions={datasetPermissions}
+              toggleFileToDelete={toggleFileToDelete}
+              isFileToBeDeleted={isFileToBeDeleted}
+              bulkDeleteButton={bulkDeleteButton}
+            />
+          </div>
+        </Media>
+        <Media greaterThanOrEqual="medium">
+          <div className="filetree-item">
+            <FileTree
+              datasetId={datasetId}
+              snapshotTag={snapshotTag}
+              path={''}
+              {...fileTree}
+              name={datasetName}
+              editMode={editMode}
+              defaultExpanded={true}
+              datasetPermissions={datasetPermissions}
+              toggleFileToDelete={toggleFileToDelete}
+              isFileToBeDeleted={isFileToBeDeleted}
+              bulkDeleteButton={bulkDeleteButton}
+            />
+          </div>
+        </Media>
       </AccordionWrap>
     </StyleWrapper>
   )

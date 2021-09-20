@@ -4,9 +4,8 @@ import File from './file.jsx'
 import UpdateFile from '../mutations/update-file.jsx'
 import DeleteDir from '../mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
-import { Media } from '../styles/media'
+import { Media } from '../../../styles/media'
 import { AccordionTab } from '@openneuro/components/accordion'
-import CopyTooltip from '../fragments/copyable-tooltip.jsx'
 import { Tooltip } from '@openneuro/components/tooltip'
 
 export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
