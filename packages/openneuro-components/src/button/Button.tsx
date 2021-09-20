@@ -1,7 +1,13 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-const Icon: React.FC = ({ fontSize, className, ariaHidden }) => {
+type IconProps = {
+  fontSize?: string | number
+  className?: string
+  ariaHidden?: boolean | "false" | "true"
+}
+
+const Icon: React.FC<IconProps> = ({ fontSize, className, ariaHidden }) => {
   const I = styled.i({ fontSize })
   return <I className={className} aria-hidden={ariaHidden} />
 }
