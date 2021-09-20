@@ -42,19 +42,19 @@ describe('FileTree component', () => {
     )
     expect(
       wrapper
-        .find('button.btn-file-folder > i.type-icon')
+        .find('div.accordion-title i')
         .hasClass('fa-folder-open'),
     ).toBe(false)
-    wrapper.find('button').simulate('click')
+    wrapper.find('div.accordion-title').simulate('click')
     expect(
       wrapper
-        .find('button.btn-file-folder > i.type-icon')
+        .find('div.accordion-title i')
         .hasClass('fa-folder-open'),
     ).toBe(true)
-    wrapper.find('button').simulate('click')
+    wrapper.find('div.accordion-title').simulate('click')
     expect(
       wrapper
-        .find('button.btn-file-folder > i.type-icon')
+        .find('div.accordion-title i')
         .hasClass('fa-folder-open'),
     ).toBe(false)
   })
