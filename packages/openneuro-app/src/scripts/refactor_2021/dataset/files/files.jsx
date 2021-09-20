@@ -40,9 +40,14 @@ const StyleWrapper = styled.div`
     .filetree-dir-tools {
       padding-bottom: 5px;
       border-bottom: 1px solid #e3e3e3;
-
       .filetree-editfile span:last-child {
         margin: 0 0 0 auto;
+      }
+    }
+    button.btn-warn-component {
+      padding: 0;
+      i {
+        font-size: 16px;
       }
     }
     .filetree-editfile {
@@ -75,8 +80,9 @@ const StyleWrapper = styled.div`
       }
       .delete-file.bulk-delete {
         display: flex;
-        button {
-          padding: 0 5px;
+
+        span.bulk-delete-count {
+          margin-left: 5px;
         }
       }
       .edit-file input, .delete-file input {
@@ -173,7 +179,9 @@ const Files = ({
           tooltip="Click the dumpster icon on files below to add them to the delete batch."
           onConfirmedClick={bulkDelete}
         />{' '}
-        {disableBtn ? '(none)' : `(${filesCount})`}
+        <span className="bulk-delete-count">
+          {disableBtn ? '(none)' : `(${filesCount})`}
+        </span>
       </span>
     ))
   return (

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import WarnButton from '../../../common/forms/warn-button.jsx'
+import { WarnButton } from '@openneuro/components/warn-button'
 
 export const DELETE_FILES = gql`
   mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]!) {
@@ -17,9 +17,8 @@ const DeleteDir = ({ datasetId, path }) => (
         <WarnButton
           message=""
           icon="fa-trash"
-          warn={true}
           className="edit-file"
-          action={cb => {
+          onConfirmedClick={cb => {
             deleteFiles({
               variables: {
                 datasetId,
