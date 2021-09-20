@@ -183,7 +183,6 @@ const Files = ({
     <StyleWrapper>
       <AccordionWrap className="filetree-wrapper">
         <h4 className="filetree-header">{datasetName}</h4>
-        {/* Both Media elements display (local, Chrome, any viewport) */}
         <Media at="small">
           <div className="filetree-item" >
             <FileTree
