@@ -152,7 +152,12 @@ const File = ({
                   ? 'Added to Bulk Delete'
                   : 'Add to Bulk Delete'
               }>
-              <div className="bulk-delete-checkbox-group delete-file">
+              <div
+                className={
+                  isFileToBeDeleted(id)
+                    ? 'added-to-bd bulk-delete-checkbox-group delete-file'
+                    : 'bulk-delete-checkbox-group delete-file'
+                }>
                 <input
                   id={'cb-' + filename}
                   type="checkbox"
@@ -160,7 +165,10 @@ const File = ({
                   onChange={() => toggleFileToDelete({ id, path, filename })}
                 />
                 <label htmlFor={'cb-' + filename}>
-                  <Icon icon="fas fa-dumpster" color="indianred" />
+                  <Icon icon="fas fa-dumpster" />
+                  {isFileToBeDeleted(id) && (
+                    <span className="added-to-bulk">Added</span>
+                  )}
                 </label>
               </div>
             </Tooltip>

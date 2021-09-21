@@ -56,7 +56,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
                   onClick={() => onSearch()}
                   primary={true}
                   icon="fas fa-search"
-                  size="large"
+                  size="small"
                   iconOnly={true}
                   label="Search"
                 />

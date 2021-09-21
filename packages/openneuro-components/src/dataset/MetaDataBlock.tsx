@@ -6,14 +6,12 @@ export interface MetaDataBlockProps {
   item: React.ReactNode | string[] | number
   className?: string
   renderEditor?: () => React.ReactNode
-  isMarkdown?: boolean
 }
 
 export const MetaDataBlock = ({
   heading,
   item,
   className,
-  isMarkdown,
   renderEditor,
 }: MetaDataBlockProps) => {
   const fieldContent = renderEditor ? renderEditor() : item

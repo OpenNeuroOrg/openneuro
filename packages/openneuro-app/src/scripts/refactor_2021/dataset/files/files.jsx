@@ -7,129 +7,11 @@ import { useMutation, gql } from '@apollo/client'
 import { WarnButton } from '@openneuro/components/warn-button'
 import { AccordionWrap } from '@openneuro/components/accordion'
 import styled from '@emotion/styled'
+import { Tooltip } from '@openneuro/components/tooltip'
 
 const StyleWrapper = styled.div`
   .filetree-wrapper {
     border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0;
-    margin-bottom: 25px;
-
-    .accordion-content {
-      margin: 0;
-    }
-    .accordion-item {
-      overflow: visible;
-    }
-    .accordion-item.collapsed {
-      display: none;
-    }
-    .filetree-header {
-      margin: 0;
-      padding: 10px 0;
-      border-bottom: 1px solid #e3e3e3;
-    }
-    .filetree-item {
-      list-style-type: none;
-      padding: 5px 0 5px 15px;
-      border-left: 1px solid #e3e3e3;
-    }
-    > div > .filetree-item:first-of-type {
-      border-left: 0;
-      padding-right: 15px;
-    }
-    .filetree-item:not(:last-child) {
-      border-bottom: 1px solid #e3e3e3;
-    }
-    .filetree-dir-tools {
-      padding: 10px 0;
-      border-bottom: 1px solid #e3e3e3;
-    }
-    button.btn-warn-component {
-      padding: 0;
-      i {
-        font-size: 16px;
-      }
-    }
-    .filetree-editfile {
-      display: flex;
-      margin-left: auto;
-      justify-content: center;
-      line-height: 10px;
-      > div,
-      > span {
-        margin-left: 10px;
-        display: flex;
-        align-items: center;
-      }
-
-      i {
-        font-size: 16px;
-      }
-
-      .edit-file {
-        // float: left;
-        // margin-right: 5px;
-        text-align: center;
-        display: inline-block;
-        // overflow: hidden;
-        // font-size: 10px;
-        // line-height: 10px;
-        // margin: 0 5px 0 0;
-        width: auto;
-        position: relative;
-        // padding: 3px 5px;
-        // border: 0;
-        // color: #007c92;
-        // color: var(--secondary);
-      }
-      .delete-file {
-        // margin-right: 10px;
-      }
-      .delete-file.bulk-delete {
-        display: flex;
-
-        span.bulk-delete-count {
-          margin-left: 5px;
-        }
-      }
-      .edit-file input,
-      .delete-file input {
-        opacity: 0;
-        filter: alpha(opacity=0);
-        position: absolute;
-        cursor: pointer;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        width: 100%;
-      }
-      div.bulk-delete-checkbox-group.delete-file {
-        input {
-          // opacity: 1;
-          // left: 4px;
-          // top: 12px;
-        }
-      }
-      button.btn-warn-component.success,
-      button.btn-warn-component.cancel {
-        margin: 0 2px 0;
-        font-size: 10px;
-        height: 20px;
-        width: 20px;
-        i {
-          font-size: 11px;
-        }
-      }
-    }
-    ul.child-files {
-      margin: 0;
-      padding: 0;
-    }
-    .filetree-file {
-      display: flex;
-    }
   }
 `
 
@@ -186,23 +68,27 @@ const Files = ({
       <span>Deleting...</span>
     ) : (
       <span className="delete-file bulk-delete">
-        <WarnButton
-          message="Bulk Delete"
-          icon="fas fa-dumpster"
-          iconOnly={true}
-          className="edit-file"
-          tooltip="Click the dumpster icon on files below togit add them to the delete batch."
-          onConfirmedClick={bulkDelete}
-        />{' '}
         <span className="bulk-delete-count">
-          {disableBtn ? '(none)' : `(${filesCount})`}
+          {disableBtn ? (
+            <Tooltip tooltip="Click the dumpster icon to add files to Bulk Delete">
+              <b>Bulk Delete (0)</b>
+            </Tooltip>
+          ) : (
+            <WarnButton
+              message={'Bulk Delete (' + filesCount + ')'}
+              icon="fas fa-dumpster"
+              iconOnly={true}
+              className="edit-file"
+              tooltip={'Delete ' + filesCount}
+              onConfirmedClick={bulkDelete}
+            />
+          )}
         </span>
       </span>
     ))
   return (
     <StyleWrapper>
       <AccordionWrap className="filetree-wrapper">
-        <h4 className="filetree-header">{datasetName}</h4>
         <Media at="small">
           <div className="filetree-item">
             <FileTree
