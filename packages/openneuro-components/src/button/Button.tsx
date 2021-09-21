@@ -1,4 +1,16 @@
 import React from 'react'
+import styled from '@emotion/styled'
+
+type IconProps = {
+  fontSize?: string | number
+  className?: string
+  ariaHidden?: boolean | "false" | "true"
+}
+
+const Icon: React.FC<IconProps> = ({ fontSize, className, ariaHidden }) => {
+  const I = styled.i({ fontSize })
+  return <I className={className} aria-hidden={ariaHidden} />
+}
 
 export type ButtonPropsSize = 'xsmall' | 'small' | 'medium' | 'large'
 
@@ -61,7 +73,7 @@ export const Button = ({
       ? 'img-icon-text'
       : null
   const fontIcon = icon ? (
-    <i style={{ fontSize: iconSize }} className={icon} aria-hidden="true"></i>
+    <Icon fontSize={iconSize} className={icon} ariaHidden="true"/>
   ) : null
   const imgIcon = imgSrc ? (
     <img

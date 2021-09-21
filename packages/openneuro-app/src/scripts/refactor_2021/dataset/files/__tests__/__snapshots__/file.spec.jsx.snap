@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`File component renders for dataset snapshots 1`] = `
+<Fragment>
+  <Icon
+    color="deepskyblue"
+    icon="fab fa-markdown"
+  />
+    
+  README
+  <span
+    className="filetree-editfile"
+  >
+    <Media
+      className=""
+      greaterThanOrEqual="medium"
+    >
+      <Tooltip
+        tooltip="Download"
+      >
+        <span
+          className="edit-file download-file"
+        >
+          <a
+            download={true}
+            href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+          >
+            <i
+              className="fa fa-download"
+            />
+          </a>
+        </span>
+      </Tooltip>
+    </Media>
+    <Tooltip
+      tooltip="View"
+    >
+      <span
+        className="edit-file view-file"
+      >
+        <Link
+          to="/datasets/ds001/versions/1.0.0/file-display/README"
+        >
+          <i
+            className="fa fa-eye"
+          />
+        </Link>
+      </span>
+    </Tooltip>
+  </span>
+</Fragment>
+`;
+
+exports[`File component renders with common props 1`] = `
+<Fragment>
+  <Icon
+    color="deepskyblue"
+    icon="fab fa-markdown"
+  />
+    
+  README
+  <span
+    className="filetree-editfile"
+  >
+    <Media
+      className=""
+      greaterThanOrEqual="medium"
+    >
+      <Tooltip
+        tooltip="Download"
+      >
+        <span
+          className="edit-file download-file"
+        >
+          <a
+            download={true}
+            href="/crn/datasets/ds001/files/README"
+          >
+            <i
+              className="fa fa-download"
+            />
+          </a>
+        </span>
+      </Tooltip>
+    </Media>
+    <Tooltip
+      tooltip="View"
+    >
+      <span
+        className="edit-file view-file"
+      >
+        <Link
+          to="/datasets/ds001/file-display/README"
+        >
+          <i
+            className="fa fa-eye"
+          />
+        </Link>
+      </span>
+    </Tooltip>
+  </span>
+</Fragment>
+`;

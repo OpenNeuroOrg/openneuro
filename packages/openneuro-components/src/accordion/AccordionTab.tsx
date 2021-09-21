@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { Icon } from '../icon/Icon'
 
@@ -8,16 +8,17 @@ export interface AccordionTabProps {
   children: React.ReactNode
   id?: string
   className?: string
-  label: React.ReactNode
+  label: string | number | ReactNode
   startOpen?: boolean
   dropdown?: boolean
   accordionStyle: AccordionTabStyle
+  onClick?: (expanded?: boolean) => void
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const AccordionTab = ({
+export const AccordionTab: FC<AccordionTabProps> = ({
   children,
   id,
   label,
@@ -25,33 +26,35 @@ export const AccordionTab = ({
   accordionStyle,
   startOpen,
   dropdown,
-}: AccordionTabProps) => {
+  onClick,
+}) => {
   const [isOpen, setOpen] = React.useState(startOpen)
-  const fileTreeIcon = accordionStyle == 'file-tree' && (
+  const fileTreeIcon = accordionStyle == 'file-tree' ? (
     <Icon
       className="file-icon"
       icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
-      label="directory"
+      label={label}
     />
-  )
+  ) : null
 
   return (
-    <>
-      <span
-        className={`${accordionStyle}` + ' accordion ' + `${className}`}
-        id={id}>
-        <div
-          className={`accordion-title ${isOpen ? 'open' : ''}`}
-          onClick={() => setOpen(!isOpen)}>
-          {fileTreeIcon} {label}
-        </div>
-        <div
-          className={`accordion-item ${!isOpen ? ' collapsed' : ''} ${
-            dropdown ? ' dropdown-style' : ''
-          }`}>
-          <div className="accordion-content">{children}</div>
-        </div>
-      </span>
-    </>
+    <article
+      className={`${accordionStyle || ''}` + ' accordion ' + `${className || ''}`}
+      id={id}>
+      <div
+        className={`accordion-title ${isOpen ? 'open' : ''}`}
+        onClick={() => {
+          onClick?.(!isOpen)
+          setOpen(!isOpen)
+        }}>
+        {fileTreeIcon || label}
+      </div>
+      <div
+        className={`accordion-item ${!isOpen ? ' collapsed' : ''} ${
+          dropdown ? ' dropdown-style' : ''
+        }`}>
+        <div className="accordion-content">{children}</div>
+      </div>
+    </article>
   )
 }

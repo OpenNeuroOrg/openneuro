@@ -6,6 +6,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
 import Validation from '../validation/validation.jsx'
+import Files from './files'
 import { config } from '../../config'
 import {
   getUnexpiredProfile,
@@ -177,6 +178,16 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             hasEdit={hasEdit}
             isPublic={dataset.public}
             isSnapshot={isSnapshot}
+          />
+        )}
+        renderFiles={() => (
+          <Files
+            datasetId={datasetId}
+            snapshotTag={null}
+            datasetName={dataset.draft.description.Name}
+            files={dataset.draft.files}
+            editMode={hasEdit}
+            datasetPermissions={dataset.permissions}
           />
         )}
         renderReadMe={() => (
