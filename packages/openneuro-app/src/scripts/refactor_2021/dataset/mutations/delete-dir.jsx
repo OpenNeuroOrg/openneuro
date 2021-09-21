@@ -16,6 +16,7 @@ const DeleteDir = ({ datasetId, path }) => (
       <span className="delete-file">
         <WarnButton
           message=""
+          iconOnly={true}
           icon="fa-trash"
           className="edit-file"
           onConfirmedClick={() => {

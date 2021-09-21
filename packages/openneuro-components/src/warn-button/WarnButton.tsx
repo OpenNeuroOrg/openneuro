@@ -9,6 +9,7 @@ export interface WarnButtonProps {
   className?: string
   disabled?: boolean
   tooltip?: string
+  iconOnly?: boolean
   onConfirmedClick?: () => void
   displayOptions?: boolean
   setDisplayOptions?(cb: (currentState: boolean) => boolean): void
@@ -19,6 +20,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
   className,
   disabled,
   tooltip,
+  iconOnly,
   onConfirmedClick,
   displayOptions,
   setDisplayOptions,
@@ -32,6 +34,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
         <Button
           className="btn-warn-component cancel"
           iconSize="12px"
+          iconOnly={iconOnly}
           icon="fa fa-times"
           color="#fff"
           backgroundColor="#c00342"
@@ -45,6 +48,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
           iconSize="12px"
           icon="fa fa-check"
           color="#fff"
+          iconOnly={iconOnly}
           backgroundColor="#00b489"
           onClick={() => {
             onConfirmedClick()
@@ -73,7 +77,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
   const button = displayOptions ? viewAction : hideAction
 
   return (
-    <div className={'warn-btn' + (className || '')}>
+    <div className={'warn-btn ' + (className || '')}>
       {tooltip ? (
         <Tooltip flow="up" tooltip={tooltip}>
           {button}

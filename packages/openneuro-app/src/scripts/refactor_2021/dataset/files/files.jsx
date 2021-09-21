@@ -12,7 +12,7 @@ const StyleWrapper = styled.div`
   .filetree-wrapper {
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 0 0 0 15px;
+    padding: 0;
     margin-bottom: 25px;
 
     .accordion-content {
@@ -34,15 +34,16 @@ const StyleWrapper = styled.div`
       padding: 5px 0 5px 15px;
       border-left: 1px solid #e3e3e3;
     }
+    > div > .filetree-item:first-of-type {
+      border-left: 0;
+      padding-right: 15px;
+    }
     .filetree-item:not(:last-child) {
       border-bottom: 1px solid #e3e3e3;
     }
     .filetree-dir-tools {
-      padding-bottom: 5px;
+      padding: 10px 0;
       border-bottom: 1px solid #e3e3e3;
-      .filetree-editfile span:last-child {
-        margin: 0 0 0 auto;
-      }
     }
     button.btn-warn-component {
       padding: 0;
@@ -53,30 +54,37 @@ const StyleWrapper = styled.div`
     .filetree-editfile {
       display: flex;
       margin-left: auto;
-      margin-right: 15px;
+      justify-content: center;
+      line-height: 10px;
+      > div,
+      > span {
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+      }
 
       i {
         font-size: 16px;
       }
 
       .edit-file {
-        float: left;
-        margin-right: 5px;
+        // float: left;
+        // margin-right: 5px;
         text-align: center;
         display: inline-block;
-        overflow: hidden;
-        font-size: 10px;
-        line-height: 10px;
-        margin: 0 5px 0 0;
+        // overflow: hidden;
+        // font-size: 10px;
+        // line-height: 10px;
+        // margin: 0 5px 0 0;
         width: auto;
         position: relative;
-        padding: 3px 5px;
-        border: 0;
-        color: #007c92;
-        color: var(--secondary);
+        // padding: 3px 5px;
+        // border: 0;
+        // color: #007c92;
+        // color: var(--secondary);
       }
       .delete-file {
-        margin-right: 10px;
+        // margin-right: 10px;
       }
       .delete-file.bulk-delete {
         display: flex;
@@ -99,15 +107,20 @@ const StyleWrapper = styled.div`
       }
       div.bulk-delete-checkbox-group.delete-file {
         input {
-          opacity: 1;
-          left: 4px;
-          top: 12px;
+          // opacity: 1;
+          // left: 4px;
+          // top: 12px;
         }
       }
-      button.btn-warn-component {
-        border: none;
-        background: none;
-        color: indianred;
+      button.btn-warn-component.success,
+      button.btn-warn-component.cancel {
+        margin: 0 2px 0;
+        font-size: 10px;
+        height: 20px;
+        width: 20px;
+        i {
+          font-size: 11px;
+        }
       }
     }
     ul.child-files {
@@ -176,8 +189,9 @@ const Files = ({
         <WarnButton
           message="Bulk Delete"
           icon="fas fa-dumpster"
+          iconOnly={true}
           className="edit-file"
-          tooltip="Click the dumpster icon on files below to add them to the delete batch."
+          tooltip="Click the dumpster icon on files below togit add them to the delete batch."
           onConfirmedClick={bulkDelete}
         />{' '}
         <span className="bulk-delete-count">

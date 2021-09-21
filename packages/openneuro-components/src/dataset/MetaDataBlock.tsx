@@ -20,7 +20,7 @@ export const MetaDataBlock = ({
   return (
     <div className={'dataset-meta-block ' + className}>
       <h2 className="dmb-heading">{heading}</h2>
-      <>{isMarkdown ? <Markdown>fieldContent</Markdown> : fieldContent}</>
+      <>{fieldContent}</>
     </div>
   )
 }

@@ -53,7 +53,7 @@ const FileTree = ({
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
             {bulkDeleteButton || (
-              <Tooltip tooltip="Delete" flow="down">
+              <Tooltip tooltip="Delete" flow="up">
                 <DeleteDir datasetId={datasetId} path={path} />
               </Tooltip>
             )}
