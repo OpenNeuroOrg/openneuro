@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import './warn-button.scss'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
@@ -6,21 +6,26 @@ import { Button } from '../button/Button'
 export interface WarnButtonProps {
   message?: string
   icon?: string
+  className?: string
   disabled?: boolean
   tooltip?: string
   onConfirmedClick?: () => void
-  displayOptions: boolean
-  setDisplayOptions(cb: (currentState: boolean) => boolean): void
+  displayOptions?: boolean
+  setDisplayOptions?(cb: (currentState: boolean) => boolean): void
 }
-export const WarnButton = ({
+export const WarnButton: FC<WarnButtonProps> = ({
   message,
   icon,
+  className,
   disabled,
   tooltip,
   onConfirmedClick,
   displayOptions,
   setDisplayOptions,
-}: WarnButtonProps) => {
+}) => {
+  if (displayOptions === undefined || displayOptions === null) {
+    ;[displayOptions, setDisplayOptions] = React.useState(false as boolean)
+  }
   const viewAction = (
     <div className="warn-btn-group " role="group">
       <div className="slide-in">
@@ -68,7 +73,7 @@ export const WarnButton = ({
   const button = displayOptions ? viewAction : hideAction
 
   return (
-    <div className="warn-btn">
+    <div className={'warn-btn' + (className || '')}>
       {tooltip ? (
         <Tooltip flow="up" tooltip={tooltip}>
           {button}

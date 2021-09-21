@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileTree component renders with default props 1`] = `
+<FileTree>
+  <AccordionTab
+    accordionStyle="file-tree"
+    className=""
+    label=""
+    startOpen={false}
+  >
+    <article
+      className="file-tree accordion "
+    >
+      <div
+        className="accordion-title "
+        onClick={[Function]}
+      >
+        <Icon
+          className="file-icon"
+          icon="fas fa-folder"
+          label=""
+        >
+          <span
+            aria-label="icon"
+            className="file-icon on-icon  "
+            role="img"
+            style={
+              Object {
+                "backgroundColor": undefined,
+                "color": undefined,
+              }
+            }
+            title=""
+          >
+            <i
+              className="fas fa-folder"
+              style={
+                Object {
+                  "fontSize": undefined,
+                }
+              }
+            />
+          </span>
+        </Icon>
+      </div>
+      <div
+        className="accordion-item  collapsed "
+      >
+        <div
+          className="accordion-content"
+        >
+          <ul
+            className="child-files"
+          />
+        </div>
+      </div>
+    </article>
+  </AccordionTab>
+</FileTree>
+`;

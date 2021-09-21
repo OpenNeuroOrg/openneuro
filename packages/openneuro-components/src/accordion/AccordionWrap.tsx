@@ -14,7 +14,7 @@ export const AccordionWrap: React.FC<AccordionWrapProps> = ({
   ...props
 }) => {
   return (
-    <div className={className + ' on-accordion-wrapper'} {...props}>
+    <div className={`${className || ''}` + ' on-accordion-wrapper'} {...props}>
       {children}
     </div>
   )

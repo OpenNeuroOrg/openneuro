@@ -10,9 +10,9 @@ import DownloadDataset from './routes/download-dataset.jsx'
 import Publish from './routes/publish.jsx'
 import Share from './routes/manage-permissions.jsx'
 import Snapshot from './routes/snapshot.jsx'
-import FileDisplay from '../../datalad/routes/file-display.jsx'
 import AddMetadata from './routes/add-metadata.jsx'
 import DeletePage from './routes/delete-page'
+import { FileDisplay } from './files'
 
 //TODO imports
 
