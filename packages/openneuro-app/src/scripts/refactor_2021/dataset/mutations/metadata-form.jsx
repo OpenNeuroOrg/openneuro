@@ -363,7 +363,7 @@ const MetadataForm = ({
               name={key}
               label={label}
               hoverText={hoverText}
-              value={transformValue ? transformValue(values[key]) : values[key]}
+              value={transformValue ? transformValue(values?.[key]) : values?.[key]}
               onChange={onChange}
               {...additionalProps}
               key={i}
