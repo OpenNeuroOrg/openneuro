@@ -3,10 +3,11 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useQuery, gql } from '@apollo/client'
 
-import Spinner from '../../common/partials/spinner.jsx'
+import { Loading } from '@openneuro/components/loading'
+
 import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
 import DatasetContext from '../../datalad/dataset/dataset-context.js'
-import DatasetPage from './dataset-routes'
+import DatasetRoutes from './dataset-routes'
 import FilesSubscription from '../../datalad/subscriptions/files-subscription.jsx'
 import usePermissionsSubscription from '../../datalad/subscriptions/usePermissionsSubscription'
 import useSnapshotsUpdatedSubscriptions from '../../datalad/subscriptions/useSnapshotsUpdatedSubscriptions'
@@ -33,7 +34,13 @@ export const getDatasetPage = gql`
       created
       public
       following
+      followers {
+        userId
+      }
       starred
+      stars {
+        userId
+      }
       ...DatasetDraft
       ...DatasetPermissions
       ...DatasetSnapshots
@@ -70,7 +77,13 @@ export const getDraftPage = gql`
       created
       public
       following
+      followers {
+        userId
+      }
       starred
+      stars {
+        userId
+      }
       worker
       ...DatasetDraft
       ...DatasetDraftFiles
@@ -113,7 +126,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     {
       variables: { datasetId },
       errorPolicy: 'all',
-      fetchPolicy: draft ? 'cache-and-network' : 'cache-first',
+      fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
     },
   )
@@ -138,7 +151,13 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
       }
     }
   }, [error, data])
-  if (loading) return <Spinner text="Loading Dataset" active />
+  if (loading)
+    return (
+      <div className="loading-dataset">
+        <Loading />
+        Loading Dataset
+      </div>
+    )
 
   return (
     <DatasetContext.Provider value={data.dataset}>
@@ -149,7 +168,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
             fetchMore,
             error,
           }}>
-          <DatasetPage dataset={data.dataset} />
+          <DatasetRoutes dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
       </ErrorBoundary>

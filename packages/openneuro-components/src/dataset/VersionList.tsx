@@ -13,14 +13,14 @@ export interface VersionListProps {
     created: Date
     deprecated: boolean
   }[]
-
+  hasEdit: boolean
   selected: string
   setSelected: (selected: string) => void
   className: string
   activeDataset: string
   dateModified: Date
   setDeprecatedModalIsOpen: (boolean) => void
-  rootPath?: string
+  datasetId?: string
 }
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -33,7 +33,8 @@ export const VersionList = ({
   setSelected,
   className,
   dateModified,
-  rootPath,
+  datasetId,
+  hasEdit,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
   const [date, setDate] = React.useState(formatDate(new Date()))
@@ -46,7 +47,6 @@ export const VersionList = ({
     setSelected(itemTag)
     setDate(formatDate(itemCreated))
   }
-
   return (
     <>
       <div className="active-version">
@@ -54,22 +54,22 @@ export const VersionList = ({
         {selected === 'draft' ? 'Updated' : 'Created'}:{' '}
         {selected === 'draft' ? dateModified : date}
       </div>
-      <Dropdown
-        className={className}
-        label={
-          <div className="version-list-label">
-            <b>Versions</b>
-            <i className="fas fa-chevron-up" />
-            <i className="fas fa-chevron-down" />
-          </div>
-        }
-        children={
+      {items.length ? (
+        <Dropdown
+          className={className}
+          label={
+            <div className="version-list-label">
+              <b>Versions</b>
+              <i className="fas fa-chevron-up" />
+              <i className="fas fa-chevron-down" />
+            </div>
+          }>
           <div className="version-list-dropdow">
             <ul>
               <li
                 onClick={() => setVersion('draft', dateModified)}
                 className={selected === 'draft' ? 'selected' : ''}>
-                <Link className="dataset-tool" to={rootPath}>
+                <Link className="dataset-tool" to={'/datasets/' + datasetId}>
                   <span className="label">
                     Draft
                     <span className="active">
@@ -90,7 +90,11 @@ export const VersionList = ({
                   className={selected === item.tag ? 'selected' : ''}>
                   <Link
                     className="dataset-tool"
-                    to={rootPath + '/versions/' + item.tag}>
+                    to={
+                      selected === 'draft'
+                        ? '/datasets/' + datasetId + '/versions/' + item.tag
+                        : item.tag
+                    }>
                     <span className="label">
                       v{item.tag}
                       <span className="active">
@@ -106,8 +110,14 @@ export const VersionList = ({
               ))}
             </ul>
           </div>
-        }
-      />
+        </Dropdown>
+      ) : hasEdit ? (
+        <Link
+          className="dataset-tool"
+          to={'/datasets/' + datasetId + '/snapshot'}>
+          Create Version
+        </Link>
+      ) : null}
     </>
   )
 }

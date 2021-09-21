@@ -29,7 +29,6 @@ const CountToggleTemplate: Story<CountToggleProps> = ({
       toggleClick={toggleClick}
       tooltip={tooltip}
       clicked={clicked}
-      showClicked={showClicked}
       count={count}
     />
   )

@@ -1,18 +1,19 @@
 import React from 'react'
-import './dataset-page.scss'
 
 export interface DatasetPageProps {
   renderSidebar: () => React.ReactNode
   renderValidationBlock: () => React.ReactNode
   renderHeader: () => React.ReactNode
-  renderAlert: () => React.ReactNode
+  renderAlert?: () => React.ReactNode
   renderHeaderMeta: () => React.ReactNode
   renderToolButtons: () => React.ReactNode
+  renderFiles: () => React.ReactNode
   renderReadMe: () => React.ReactNode
   renderBrainLifeButton: () => React.ReactNode
   renderCloneDropdown: () => React.ReactNode
   renderDeprecatedModal: () => React.ReactNode
   renderFollowBookmark: () => React.ReactNode
+  renderComments: () => React.ReactNode
   modality?: string
 }
 
@@ -23,17 +24,24 @@ export const DatasetPage = ({
   renderAlert,
   renderHeaderMeta,
   renderToolButtons,
+  renderFiles,
   renderReadMe,
   renderBrainLifeButton,
   renderCloneDropdown,
   renderDeprecatedModal,
   renderFollowBookmark,
+  renderComments,
   modality,
 }: DatasetPageProps) => {
   return (
-    <div className={'dataset dataset-draft' + ' dataset-page-' + modality}>
+    <div
+      className={
+        'dataset dataset-draft' +
+        ' dataset-page dataset-page-' +
+        modality?.toLowerCase()
+      }>
       {renderHeader()}
-      {renderAlert()}
+      {renderAlert && renderAlert()}
       <div className="container">
         <div className="grid grid-between dataset-header-meta">
           <div className="col col-8">{renderHeaderMeta()}</div>
@@ -49,7 +57,9 @@ export const DatasetPage = ({
               {renderCloneDropdown()}
             </div>
             <div className="dataset-tool-buttons">{renderToolButtons()}</div>
+            {renderFiles()}
             {renderReadMe()}
+            {renderComments()}
           </div>
           <div className="col sidebar"> {renderSidebar()}</div>
         </div>

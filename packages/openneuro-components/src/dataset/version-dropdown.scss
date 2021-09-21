@@ -27,12 +27,13 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-    li {
+    li a {
       padding: 5px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid $newspaper;
+      text-decoration: none;
       &.selected {
         background-color: #f4f4f4;
       }

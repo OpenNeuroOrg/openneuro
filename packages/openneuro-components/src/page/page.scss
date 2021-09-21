@@ -1,65 +1,68 @@
 @import 'react-toastify/dist/ReactToastify.css';
 
 @import '../scss/variables';
-
 @import '../scss//normalize';
 @import '../scss//helper-classes';
 @import '../scss//flex-grid';
-@import '../scss//upload-modal';
 @import '../scss/toasts.scss';
-
 @import '../scss/global.scss';
 
 @import '../header/header.scss';
 @import '../footer/footer.scss';
 
 @import '../modality-cube/modality-cube.scss';
-
 @import '../accordion/accordion.scss';
-
 @import '../dropdown/dropdown.scss';
-
 @import '../button/button.scss';
-
 @import '../affiliate-article/affiliate.scss';
-
 @import '../activity-slider/slider.scss';
-
 @import '../user/user-menu.scss';
-
 @import '../tooltip/tooltip.scss';
-
 @import '../input/input.scss';
-
 @import '../input/term-search.scss';
-
 @import '../select/select.scss';
-
 @import '../read-more/read-more.scss';
-
 @import '../range/TwoHandleRange.scss';
-
 @import '../radio/radio.scss';
-
 @import '../modal/modal.scss';
-
 @import '../icon/icon.scss';
 
 @import '../loading/loading.scss';
-
+@import '../progress-bar/progress-bar.scss';
 @import '../count-toggle/count-toggle.scss';
-
 @import '../facets/facet.scss';
 
+@import '../scss/upload-modal';
 @import '../front-page/front-page.scss';
 @import '../faqs/faqs.scss';
 @import '../search-page/search-page.scss';
 @import '../search-page/search-result.scss';
 @import '../search-page/search-sort.scss';
 @import '../search-page/filters-block.scss';
+@import '../dataset/dataset-page.scss';
+@import '../dataset/share-tool.scss';
+@import '../dataset/comments.scss';
+@import '../dataset/snapshot-tool.scss';
+@import '../dataset/download-tool.scss';
+@import '../dataset/metadata-tool.scss';
+@import '../dataset/validation.scss';
 
 .page {
   min-height: 400px;
+}
+.text-danger {
+  color: $on-light-red;
+}
+.loading-dataset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 70vh;
+}
+
+.warning-text {
+  color: #f10;
 }
 
 // admin page
@@ -218,4 +221,54 @@
 .feedback-form.feedback-modal .grid.modal {
   width: 670px;
   max-height: 80%;
+}
+
+.edit-description-field {
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+}
+
+.description-btn {
+  color: var(--current-theme-primary);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.dataset-header .description-btn {
+  color: var(--current-theme-primary-light);
+  // &.description-button-edit {
+  // }
+  // &.description-button-save {
+  // }
+  // &.description-button-cancel {
+  // }
+}
+
+.edit-list-group-item,
+.edit-list-group {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  .on-button--small {
+    padding: 13px;
+    margin-left: 10px;
+  }
+}
+
+.edit-list-group-item {
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
+  .on-no-background.icon-text,
+  .on-no-background.img-icon-text {
+    padding: 0;
+    margin-left: 5px;
+  }
+}
+
+.update-field-save {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }

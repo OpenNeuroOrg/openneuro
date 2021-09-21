@@ -1,5 +1,5 @@
 import React from 'react'
-import UploaderContext from '../../uploader/uploader-context.js'
+import UploaderContext from './uploader-context.js'
 
 const UploadProgressButton = () => (
   <UploaderContext.Consumer>

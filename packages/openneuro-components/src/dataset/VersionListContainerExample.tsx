@@ -8,12 +8,13 @@ export const VersionListContainerExample = ({
   dateModified,
   selectedVersion,
   setSelectedVersion,
-  rootPath,
+  datasetId,
   setDeprecatedModalIsOpen,
+  hasEdit,
 }) => {
   return (
     <VersionList
-      rootPath={rootPath}
+      datasetId={datasetId}
       className={className}
       items={items}
       selected={selectedVersion}
@@ -21,6 +22,7 @@ export const VersionListContainerExample = ({
       activeDataset={activeDataset}
       dateModified={dateModified}
       setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
+      hasEdit={hasEdit}
     />
   )
 }

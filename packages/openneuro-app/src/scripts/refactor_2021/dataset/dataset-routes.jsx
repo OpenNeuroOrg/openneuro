@@ -5,13 +5,14 @@ import AdminDataset from '../../datalad/routes/admin-datalad.jsx'
 import AdminExports from '../../datalad/routes/admin-exports.jsx'
 
 import SnapshotContainer from './snapshot-container'
-import DownloadDataset from '../../datalad/download/download-dataset.jsx'
-import Publish from '../../datalad/routes/publish.jsx'
-import Share from '../../datalad/routes/manage-permissions.jsx'
-import Snapshot from '../../datalad/routes/snapshot.jsx'
-import FileDisplay from '../../datalad/routes/file-display.jsx'
-import AddMetadata from '../../datalad/mutations/add-metadata.jsx'
-import DeletePage from '../../datalad/dataset/delete-page'
+import DraftContainer from './draft-container'
+import DownloadDataset from './routes/download-dataset.jsx'
+import Publish from './routes/publish.jsx'
+import Share from './routes/manage-permissions.jsx'
+import Snapshot from './routes/snapshot.jsx'
+import AddMetadata from './routes/add-metadata.jsx'
+import DeletePage from './routes/delete-page'
+import { FileDisplay } from './files'
 
 //TODO imports
 
@@ -30,7 +31,7 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="dataset"
         exact
         path="/datasets/:datasetId"
-        render={() => <SnapshotContainer dataset={dataset} />}
+        render={() => <DraftContainer dataset={dataset} />}
       />
       <Route
         name="download"

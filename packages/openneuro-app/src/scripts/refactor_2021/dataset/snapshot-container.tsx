@@ -1,13 +1,20 @@
 import React from 'react'
+import { gql, useQuery } from '@apollo/client'
+import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
 import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
+import Files from './files'
 import Validation from '../validation/validation.jsx'
+import { config } from '../../config'
+import Comments from './comments/comments.jsx'
+import Spinner from '../../common/partials/spinner.jsx'
 
 import {
+  ModalitiesMetaDataBlock,
   MetaDataBlock,
   BrainLifeButton,
   ValidationBlock,
@@ -18,17 +25,21 @@ import {
   DatasetPage,
   DatasetGitAccess,
   VersionListContainerExample,
+  DatasetTools,
 } from '@openneuro/components/dataset'
+import {
+  getUnexpiredProfile,
+  hasEditPermissions,
+} from '../authentication/profile'
+import { useCookies } from 'react-cookie'
 import { Modal } from '@openneuro/components/modal'
-import { Icon } from '@openneuro/components/icon'
-import { Tooltip } from '@openneuro/components/tooltip'
-import { ReadMore } from '@openneuro/components/read-more'
-import { CountToggle } from '@openneuro/components/count-toggle'
 
-export interface SnapshotContainerProps {
-  dataset
-  tag?: string
-}
+import { ReadMore } from '@openneuro/components/read-more'
+
+import { FollowDataset } from './mutations/follow'
+import { StarDataset } from './mutations/star'
+
+import { SNAPSHOT_FIELDS } from './queries/dataset-query-fragments.js'
 
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -38,22 +49,18 @@ const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
-const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
-  const [bookmarked, showBookmarked] = React.useState(false)
-  const [bookmarkedCount, setBookmarkedCount] = React.useState(1)
-  const [followed, showFollowed] = React.useState(false)
-  const [followedCount, setFollowedCount] = React.useState(1)
 
-  //TODO hook up follow and bookmark
-  const toggleBookmarkClick = () => {
-    setBookmarkedCount(bookmarkedCount === 1 ? 2 : 1)
-    showBookmarked(!bookmarked)
-  }
-  const toggleFollowedClick = () => {
-    setFollowedCount(followedCount === 1 ? 2 : 1)
-    showFollowed(!followed)
-  }
+type SnapshotContainerProps = {
+  dataset
+  tag: string
+  snapshot
+}
 
+const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
+  dataset,
+  tag,
+  snapshot,
+}) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -61,48 +68,42 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
   const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
     React.useState(false)
 
-  const summary = dataset.draft.summary
-  const description = dataset.draft.description
+  const summary = snapshot.summary
+  const description = snapshot.description
   const datasetId = dataset.id
-  const isPublic = dataset.public === true
+
   const numSessions =
     summary && summary.sessions.length > 0 ? summary.sessions.length : 1
 
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
-  const dateModified = formatDate(dataset.draft.modified)
-  const dateUpdatedDifference = formatDistanceToNow(
-    parseISO(dataset.draft.modified),
-  )
+  const dateModified = formatDate(snapshot.created)
+  const dateUpdatedDifference = formatDistanceToNow(parseISO(snapshot.created))
+  const rootPath = `/datasets/${datasetId}/versions/${activeDataset}`
 
-  const rootPath =
-    activeDataset !== 'draft'
-      ? `/datasets/${datasetId}/versions/${activeDataset}`
-      : `/datasets/${datasetId}`
-
-  //TODO setup  Redirect, Errorboundry, and Edit functionality
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  //TODO Setup hasEdit
-  const hasEdit = true
-  //TODO Setup profile - isloggedin
-  const profile = true
-  // (user && user.admin) ||
-  // hasEditPermissions(dataset.permissions, user && user.sub)
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+  const isAdmin = profile?.admin
+  const hasEdit =
+    hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const hasDraftChanges =
+    dataset.snapshots.length === 0 ||
+    dataset.draft.head !==
+      dataset.snapshots[dataset.snapshots.length - 1].hexsha
   return (
     <>
       <DatasetPage
+        modality={summary?.modalities[0]}
         renderHeader={() => (
           <>
             {summary && (
               <DatasetHeader
                 pageHeading={description.Name}
-                modality={summary.modalities[0]}
+                modality={summary?.modalities[0]}
               />
             )}
           </>
-        )}
-        renderAlert={() => (
-          <>{isPublic ? <DatasetAlert rootPath={rootPath} /> : null}</>
         )}
         renderHeaderMeta={() => (
           <>
@@ -117,25 +118,17 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
         )}
         renderFollowBookmark={() => (
           <>
-            <CountToggle
-              label="Follow"
-              icon="fa-thumbtack"
-              disabled={profile ? false : true}
-              toggleClick={toggleBookmarkClick}
-              tooltip="hello Tip"
-              clicked={bookmarked}
-              showClicked={showBookmarked}
-              count={bookmarkedCount}
+            <FollowDataset
+              profile={profile}
+              datasetId={dataset.id}
+              following={dataset.following}
+              followers={dataset.followers.length}
             />
-            <CountToggle
-              label="Bookmark"
-              icon="fa-bookmark"
-              disabled={profile ? false : true}
-              toggleClick={toggleFollowedClick}
-              tooltip="hello Tip"
-              clicked={followed}
-              showClicked={showFollowed}
-              count={followedCount}
+            <StarDataset
+              profile={profile}
+              datasetId={dataset.id}
+              starred={dataset.starred}
+              stars={dataset.stars.length}
             />
           </>
         )}
@@ -145,61 +138,52 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             onBrainlife={dataset.onBrainlife}
           />
         )}
+        renderAlert={() => (
+          <>
+            {hasEdit && (
+              <DatasetAlert
+                isPrivate={!dataset.public}
+                datasetId={dataset.id}
+                hasDraftChanges={hasDraftChanges}
+                hasSnapshot={!dataset.snapshots.length}
+              />
+            )}
+          </>
+        )}
         renderValidationBlock={() => (
           <ValidationBlock>
-            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+            <Validation datasetId={dataset.id} issues={snapshot.issues} />
           </ValidationBlock>
         )}
         renderCloneDropdown={() => (
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
-                //TODO add worker and configURL
-                configUrl="configurl"
-                worker="worker"
+                configUrl={config.url}
+                worker={dataset.worker}
                 datasetId={datasetId}
-                gitHash={dataset.draft.head}
+                gitHash={snapshot.hexsha}
               />
             }
           />
         )}
         renderToolButtons={() => (
-          <>
-            <Tooltip tooltip="Publish the dataset publicly" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/publish'}>
-                <Icon icon="fa fa-globe" label="Publish" />
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Share this dataset with collaborators" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/share'}>
-                <Icon icon="fa fa-user" label="Share" />
-              </Link>
-            </Tooltip>
-
-            <Tooltip tooltip="Create a new version of the dataset" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/snapshot'}>
-                <Icon icon="fa fa-camera" label="Snapshot" />
-              </Link>
-            </Tooltip>
-            <span>
-              <Link className="dataset-tool" to={rootPath + '/download'}>
-                <Icon icon="fa fa-download" label="Download" />
-              </Link>
-            </span>
-            <Tooltip
-              wrapText={true}
-              tooltip="A form to describe your dataset (helps colleagues discover your dataset)"
-              flow="up">
-              <Link className="dataset-tool" to={rootPath + '/metadata'}>
-                <Icon icon="fa fa-file-code" label="Metadata" />
-              </Link>
-            </Tooltip>
-            <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-              <Link className="dataset-tool" to={rootPath + '/delete'}>
-                <Icon icon="fa fa-trash" label="Delete" />
-              </Link>
-            </Tooltip>
-          </>
+          <DatasetTools
+            hasEdit={hasEdit}
+            isPublic={dataset.public}
+            datasetId={datasetId}
+            isSnapshot={true}
+          />
+        )}
+        renderFiles={() => (
+          <Files
+            datasetId={datasetId}
+            snapshotTag={snapshot.tag}
+            datasetName={description.Name}
+            files={snapshot.files}
+            editMode={false}
+            datasetPermissions={dataset.permissions}
+          />
         )}
         renderReadMe={() => (
           <MetaDataBlock
@@ -210,7 +194,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 expandLabel="Read More"
                 collapseabel="Collapse">
                 <Markdown>
-                  {dataset.draft.readme == null ? 'N/A' : dataset.draft.readme}
+                  {snapshot.readme == null ? 'N/A' : snapshot.readme}
                 </Markdown>
               </ReadMore>
             }
@@ -227,20 +211,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             />
             <>
               {summary && (
-                <>
-                  <MetaDataBlock
-                    heading="Available Modalities"
-                    item={summary.modalities}
-                    isMarkdown={true}
-                    className="dmb-modalities"
-                  />
-                  <MetaDataBlock
-                    heading="Tasks"
-                    item={summary.tasks}
-                    isMarkdown={true}
-                    className="dmb-inline-list"
-                  />
-                </>
+                <ModalitiesMetaDataBlock
+                  items={summary?.modalities}
+                  className="dmb-modalities"
+                />
               )}
             </>
 
@@ -249,7 +223,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
               item={
                 <div className="version-block">
                   <VersionListContainerExample
-                    rootPath={rootPath}
+                    hasEdit={hasEdit}
+                    datasetId={datasetId}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}
@@ -261,6 +236,64 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
                 </div>
               }
             />
+            {summary && (
+              <MetaDataBlock
+                heading="Tasks"
+                item={summary.tasks}
+                isMarkdown={true}
+                className="dmb-inline-list"
+              />
+            )}
+            {summary?.modalities.includes('pet') ||
+              summary?.modalities.includes('Pet') ||
+              (summary?.modalities.includes('PET') && (
+                <>
+                  <MetaDataBlock
+                    heading={pluralize('Target', summary.pet?.BodyPart)}
+                    item={summary.pet?.BodyPart}
+                  />
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Scanner Manufacturer',
+                      summary.pet?.ScannerManufacturer,
+                    )}
+                    item={
+                      summary.pet?.ScannerManufacturer
+                        ? summary.pet?.ScannerManufacturer
+                        : 'N/A'
+                    }
+                  />
+
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Scanner Model',
+                      summary.pet?.ScannerManufacturersModelName,
+                    )}
+                    item={
+                      summary.pet?.ScannerManufacturersModelName
+                        ? summary.pet?.ScannerManufacturersModelName
+                        : 'N/A'
+                    }
+                  />
+                  <MetaDataBlock
+                    heading={pluralize(
+                      'Radionuclide',
+                      summary.pet?.TracerRadionuclide,
+                    )}
+                    item={
+                      summary.pet?.TracerRadionuclide
+                        ? summary.pet?.TracerRadionuclide
+                        : 'N/A'
+                    }
+                  />
+                  <MetaDataBlock
+                    heading={pluralize('Radiotracer', summary.pet?.TracerName)}
+                    item={
+                      summary.pet?.TracerName ? summary.pet?.TracerName : 'N/A'
+                    }
+                  />
+                </>
+              ))}
 
             <MetaDataBlock
               heading="Uploaded by"
@@ -305,17 +338,19 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             />
             <MetaDataBlock heading="License" item={description.License} />
             <MetaDataBlock
+              isMarkdown={true}
               heading="Acknowledgements"
               item={description.Acknowledgements}
             />
             <MetaDataBlock
+              isMarkdown={true}
               heading="How to Acknowledge"
               item={description.HowToAcknowledge}
             />
             <MetaDataBlock
+              isMarkdown={true}
               heading="Funding"
               item={description.Funding}
-              isMarkdown={true}
               className="dmb-list"
             />
 
@@ -346,8 +381,60 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             </p>
           </Modal>
         )}
+        renderComments={() => (
+          <Comments
+            datasetId={dataset.id}
+            uploader={dataset.uploader}
+            comments={dataset.comments}
+          />
+        )}
       />
     </>
   )
 }
-export default SnapshotContainer
+
+const getSnapshotDetails = gql`
+  query snapshot($datasetId: ID!, $tag: String!) {
+    snapshot(datasetId: $datasetId, tag: $tag) {
+      id
+      ...SnapshotFields
+    }
+  }
+  ${SNAPSHOT_FIELDS}
+`
+
+export interface SnapshotLoaderProps {
+  dataset
+  tag: string
+}
+
+const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
+  const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
+    variables: {
+      datasetId: dataset.id,
+      tag,
+    },
+    errorPolicy: 'all',
+  })
+  if (loading) {
+    return <Spinner text="Loading Snapshot" active />
+  } else if (error) {
+    throw new Error(error.toString())
+  } else {
+    return (
+      <DatasetQueryContext.Provider
+        value={{
+          datasetId: dataset.id,
+          fetchMore,
+          error: null,
+        }}>
+        <SnapshotContainer
+          dataset={dataset}
+          tag={tag}
+          snapshot={data.snapshot}
+        />
+      </DatasetQueryContext.Provider>
+    )
+  }
+}
+export default SnapshotLoader

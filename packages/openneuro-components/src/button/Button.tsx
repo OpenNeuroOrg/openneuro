@@ -1,4 +1,16 @@
 import React from 'react'
+import styled from '@emotion/styled'
+
+type IconProps = {
+  fontSize?: string | number
+  className?: string
+  ariaHidden?: boolean | 'false' | 'true'
+}
+
+const Icon: React.FC<IconProps> = ({ fontSize, className, ariaHidden }) => {
+  const I = styled.i({ fontSize })
+  return <I className={className} aria-hidden={ariaHidden} />
+}
 
 export type ButtonPropsSize = 'xsmall' | 'small' | 'medium' | 'large'
 
@@ -8,6 +20,7 @@ export interface ButtonProps {
   backgroundColor?: string
   size?: ButtonPropsSize
   label: string
+  nobg?: boolean
   disabled?: boolean
   onClick?: () => void
   navbar?: boolean
@@ -19,6 +32,7 @@ export interface ButtonProps {
   className?: string
   children?: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
+  form?: string
 }
 
 /**
@@ -29,6 +43,7 @@ export const Button = ({
   size = 'medium',
   backgroundColor,
   label,
+  nobg,
   navbar = false,
   icon,
   secondary,
@@ -40,6 +55,7 @@ export const Button = ({
   disabled,
   iconOnly,
   type,
+  form,
   ...props
 }: ButtonProps) => {
   const mode =
@@ -47,8 +63,10 @@ export const Button = ({
       ? 'on-button--primary'
       : secondary && !navbar
       ? 'on-button--secondary'
-      : !navbar
+      : nobg && !navbar
       ? 'on-no-background'
+      : !navbar
+      ? 'on-button--default'
       : 'on-button--navbar'
   const iconWithText =
     icon && label && !iconOnly
@@ -57,7 +75,7 @@ export const Button = ({
       ? 'img-icon-text'
       : null
   const fontIcon = icon ? (
-    <i style={{ fontSize: iconSize }} className={icon} aria-hidden="true"></i>
+    <Icon fontSize={iconSize} className={icon} ariaHidden="true" />
   ) : null
   const imgIcon = imgSrc ? (
     <img
@@ -70,6 +88,7 @@ export const Button = ({
 
   return (
     <button
+      form={form}
       disabled={disabled}
       role="button"
       type={type ? type : 'button'}
