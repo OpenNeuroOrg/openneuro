@@ -60,9 +60,14 @@
         color: var(--current-theme-primary);
         font-size: 17px;
         text-decoration: none;
+        font-weight: 400;
+        border-bottom: 2px solid transparent;
         i {
           margin-right: 6px;
           font-size: 15px;
+        }
+        &:hover {
+          border-bottom-color: var(--current-theme-primary);
         }
       }
     }

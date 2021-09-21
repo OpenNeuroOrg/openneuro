@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 const StyleWrapper = styled.div`
   div.papaya-wrap {
-    margin: auto
+    margin: auto;
   }
 `
 

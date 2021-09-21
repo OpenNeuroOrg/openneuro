@@ -7,10 +7,7 @@ import { Media } from '../../../styles/media'
 import RemoveAnnexObject from '../mutations/remove-annex-object.jsx'
 import FlagAnnexObject from '../mutations/flag-annex-object.jsx'
 import { isAdmin } from '../../authentication/admin-user.jsx'
-import {
-  getProfile,
-  hasEditPermissions,
-} from '../../authentication/profile.js'
+import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
 import { Icon } from '@openneuro/components/icon'
 import { Tooltip } from '@openneuro/components/tooltip'
 import { useCookies } from 'react-cookie'
@@ -107,7 +104,8 @@ const File = ({
   const user = getProfile(cookies)
   return (
     <>
-      <Icon icon={`${icon}`} color={color}/>&nbsp;&nbsp;
+      <Icon icon={`${icon}`} color={color} />
+      &nbsp;&nbsp;
       {filename}
       <span className="filetree-editfile">
         <Media greaterThanOrEqual="medium">
@@ -148,7 +146,12 @@ const File = ({
                 />
               </Tooltip>
             </Media>
-            <Tooltip tooltip={isFileToBeDeleted(id) ? 'Added to Bulk Delete' : 'Add to Bulk Delete'}>
+            <Tooltip
+              tooltip={
+                isFileToBeDeleted(id)
+                  ? 'Added to Bulk Delete'
+                  : 'Add to Bulk Delete'
+              }>
               <div className="bulk-delete-checkbox-group delete-file">
                 <input
                   id={'cb-' + filename}

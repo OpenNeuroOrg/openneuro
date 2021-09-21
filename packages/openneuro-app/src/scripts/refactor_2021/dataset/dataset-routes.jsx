@@ -6,13 +6,13 @@ import AdminExports from '../../datalad/routes/admin-exports.jsx'
 
 import SnapshotContainer from './snapshot-container'
 import DraftContainer from './draft-container'
-import DownloadDataset from '../download/download-dataset.jsx'
+import DownloadDataset from './routes/download-dataset.jsx'
 import Publish from './routes/publish.jsx'
 import Share from './routes/manage-permissions.jsx'
 import Snapshot from './routes/snapshot.jsx'
+import AddMetadata from './routes/add-metadata.jsx'
+import DeletePage from './routes/delete-page'
 import { FileDisplay } from './files'
-import AddMetadata from '../../datalad/mutations/add-metadata.jsx'
-import DeletePage from './delete-page'
 
 //TODO imports
 

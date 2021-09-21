@@ -56,7 +56,11 @@ type SnapshotContainerProps = {
   snapshot
 }
 
-const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, snapshot }) => {
+const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
+  dataset,
+  tag,
+  snapshot,
+}) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -74,9 +78,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, sna
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
   const dateModified = formatDate(snapshot.created)
-  const dateUpdatedDifference = formatDistanceToNow(
-    parseISO(snapshot.created),
-  )
+  const dateUpdatedDifference = formatDistanceToNow(parseISO(snapshot.created))
   const rootPath = `/datasets/${datasetId}/versions/${activeDataset}`
 
   //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
@@ -167,9 +169,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset, tag, sna
         )}
         renderToolButtons={() => (
           <DatasetTools
-            rootPath={rootPath}
             hasEdit={hasEdit}
             isPublic={dataset.public}
+            datasetId={datasetId}
             isSnapshot={true}
           />
         )}
@@ -426,7 +428,11 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
           fetchMore,
           error: null,
         }}>
-        <SnapshotContainer dataset={dataset} tag={tag} snapshot={data.snapshot} />
+        <SnapshotContainer
+          dataset={dataset}
+          tag={tag}
+          snapshot={data.snapshot}
+        />
       </DatasetQueryContext.Provider>
     )
   }

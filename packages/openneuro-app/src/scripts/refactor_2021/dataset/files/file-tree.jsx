@@ -35,8 +35,7 @@ const FileTree = ({
       className=""
       label={name}
       accordionStyle="file-tree"
-      startOpen={defaultExpanded}
-    >
+      startOpen={defaultExpanded}>
       {editMode && (
         <Media className="filetree-dir-tools" greaterThanOrEqual="medium">
           <span className="filetree-editfile">

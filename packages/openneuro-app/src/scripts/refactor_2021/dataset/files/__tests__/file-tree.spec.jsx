@@ -10,7 +10,7 @@ import FileTree, {
 // official Jest workaround for mocking methods not implemented in JSDOM
 window.matchMedia =
   window.matchMedia ||
-  function() {
+  function () {
     return {
       matches: false,
       addListener: jest.fn(),
@@ -41,21 +41,15 @@ describe('FileTree component', () => {
       </ApolloProvider>,
     )
     expect(
-      wrapper
-        .find('div.accordion-title i')
-        .hasClass('fa-folder-open'),
+      wrapper.find('div.accordion-title i').hasClass('fa-folder-open'),
     ).toBe(false)
     wrapper.find('div.accordion-title').simulate('click')
     expect(
-      wrapper
-        .find('div.accordion-title i')
-        .hasClass('fa-folder-open'),
+      wrapper.find('div.accordion-title i').hasClass('fa-folder-open'),
     ).toBe(true)
     wrapper.find('div.accordion-title').simulate('click')
     expect(
-      wrapper
-        .find('div.accordion-title i')
-        .hasClass('fa-folder-open'),
+      wrapper.find('div.accordion-title i').hasClass('fa-folder-open'),
     ).toBe(false)
   })
   describe('sortByFilename()', () => {

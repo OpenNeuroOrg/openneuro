@@ -60,29 +60,31 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
 }) => {
   const [UpdateDatasetPermissions] = useMutation(UPDATE_PERMISSIONS)
   return (
-    <Button
-      className="btn-modal-action"
-      primary={true}
-      label="Share"
-      size="small"
-      onClick={async () => {
-        if (isValidEmail(userEmail)) {
-          try {
-            await UpdateDatasetPermissions({
-              variables: { datasetId, userEmail, level: metadata },
-            })
-            done()
-          } catch (err) {
+    <>
+      <Button
+        className="btn-modal-action"
+        primary={true}
+        label="Share"
+        size="small"
+        onClick={async () => {
+          if (isValidEmail(userEmail)) {
+            try {
+              await UpdateDatasetPermissions({
+                variables: { datasetId, userEmail, level: metadata },
+              })
+              done()
+            } catch (err) {
+              toast.error(
+                <ToastContent body="A user with that email address does not exist" />,
+              )
+            }
+          } else {
             toast.error(
-              <ToastContent body="A user with that email address does not exist" />,
+              <ToastContent body="Please enter a valid email address" />,
             )
           }
-        } else {
-          toast.error(
-            <ToastContent body="Please enter a valid email address" />,
-          )
-        }
-      }}
-    />
+        }}
+      />
+    </>
   )
 }

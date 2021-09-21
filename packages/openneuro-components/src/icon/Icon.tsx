@@ -16,7 +16,7 @@ export interface IconProps {
 
 export const Icon: React.FC<IconProps> = ({
   backgroundColor,
-  label='',
+  label = '',
   icon,
   color,
   imgSrc,

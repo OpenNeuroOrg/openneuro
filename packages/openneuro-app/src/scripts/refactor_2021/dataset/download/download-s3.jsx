@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ShellExample from './shell-example.jsx'
-import { getConfig } from '../../config'
+import { getConfig } from '../../../config'
 
 export const DownloadSampleS3 = ({ datasetId, s3Bucket }) => (
   <ShellExample>

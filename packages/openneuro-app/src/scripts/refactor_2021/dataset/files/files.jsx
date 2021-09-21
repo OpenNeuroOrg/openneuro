@@ -85,7 +85,8 @@ const StyleWrapper = styled.div`
           margin-left: 5px;
         }
       }
-      .edit-file input, .delete-file input {
+      .edit-file input,
+      .delete-file input {
         opacity: 0;
         filter: alpha(opacity=0);
         position: absolute;
@@ -189,7 +190,7 @@ const Files = ({
       <AccordionWrap className="filetree-wrapper">
         <h4 className="filetree-header">{datasetName}</h4>
         <Media at="small">
-          <div className="filetree-item" >
+          <div className="filetree-item">
             <FileTree
               datasetId={datasetId}
               snapshotTag={snapshotTag}

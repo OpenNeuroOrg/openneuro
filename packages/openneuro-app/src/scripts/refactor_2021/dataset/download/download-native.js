@@ -9,7 +9,7 @@ import {
   downloadCompleteToast,
   requestFailureToast,
 } from './native-file-toast.jsx'
-import { apm } from '../../apm.js'
+import { apm } from '../../../apm.js'
 import { downloadDataset } from './download-query'
 
 /**

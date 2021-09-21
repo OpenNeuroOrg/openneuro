@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { downloadNative } from './download-native.js'
 import { useApolloClient } from '@apollo/client'
 import { Button } from '@openneuro/components/button'
+import { Link } from 'react-router-dom'
 
 const DownloadLink = ({ datasetId, snapshotTag }) => {
   const client = useApolloClient()
   return (
-    <div>
+    <div className="download-link">
       <h4>Download with your browser</h4>
       <p>
         This method is convenient and allows you to select a local directory to
@@ -25,12 +26,22 @@ const DownloadLink = ({ datasetId, snapshotTag }) => {
         </li>
         <li>A notification will appear when complete.</li>
       </ol>
-      <Button
-        primary={true}
-        label="Download"
-        onClick={downloadNative(datasetId, snapshotTag, client)}
-        icon="fa fa-download"
-      />
+      <div className="grid">
+        <div className="col-align-middle">
+          <Button
+            primary={true}
+            size="small"
+            label="Download"
+            onClick={downloadNative(datasetId, snapshotTag, client)}
+            icon="fa fa-download"
+          />
+        </div>
+        <div className="col-align-middle">
+          <Link className="return-link" to={`/datasets/${datasetId}`}>
+            Return to Dataset
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

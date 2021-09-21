@@ -37,29 +37,26 @@ export const SNAPSHOT_FILES_QUERY = gql`
   }
 `
 
-export const mergeNewFiles = (directory, snapshotTag) => (
-  past,
-  { fetchMoreResult },
-) => {
-  // Deep clone the old dataset object
-  const newDatasetObj = JSON.parse(JSON.stringify(past))
-  const mergeNewFileFilter = f => f.id !== directory.id
-  // Remove ourselves from the array
-  if (snapshotTag) {
-    newDatasetObj.snapshot.files = newDatasetObj.snapshot.files.filter(
-      mergeNewFileFilter,
-    )
-    newDatasetObj.snapshot.files.push(...fetchMoreResult.snapshot.files)
-  } else {
-    newDatasetObj.dataset.draft.files = newDatasetObj.dataset.draft.files.filter(
-      mergeNewFileFilter,
-    )
-    newDatasetObj.dataset.draft.files.push(
-      ...fetchMoreResult.dataset.draft.files,
-    )
+export const mergeNewFiles =
+  (directory, snapshotTag) =>
+  (past, { fetchMoreResult }) => {
+    // Deep clone the old dataset object
+    const newDatasetObj = JSON.parse(JSON.stringify(past))
+    const mergeNewFileFilter = f => f.id !== directory.id
+    // Remove ourselves from the array
+    if (snapshotTag) {
+      newDatasetObj.snapshot.files =
+        newDatasetObj.snapshot.files.filter(mergeNewFileFilter)
+      newDatasetObj.snapshot.files.push(...fetchMoreResult.snapshot.files)
+    } else {
+      newDatasetObj.dataset.draft.files =
+        newDatasetObj.dataset.draft.files.filter(mergeNewFileFilter)
+      newDatasetObj.dataset.draft.files.push(
+        ...fetchMoreResult.dataset.draft.files,
+      )
+    }
+    return newDatasetObj
   }
-  return newDatasetObj
-}
 
 export const fetchMoreDirectory = (
   fetchMore,
@@ -84,7 +81,7 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
     }
   }, [loading])
   return (
-    <AccordionTab 
+    <AccordionTab
       label={directory.filename}
       accordionStyle="file-tree"
       onClick={() => {
@@ -92,8 +89,7 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
         setLoading(true)
         fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
         // No need to clear since this component is unmounted immediately
-      }}
-    >
+      }}>
       <FileTreeLoading size={directory.size} />
     </AccordionTab>
   )

@@ -10,8 +10,10 @@ const Container = styled.div<TextInputContainerProps>(
   {
     position: 'relative',
     width: '100%',
-    borderRadius: '5px',
-    border: '2px inset #eee',
+    height: '3rem',
+    marginTop: '30px',
+    backgroundColor: 'white',
+    borderRadius: '4px',
   },
   ({ textarea }) =>
     textarea
@@ -21,7 +23,7 @@ const Container = styled.div<TextInputContainerProps>(
         },
 )
 const centerLabelStyles = {
-  top: '10px',
+  top: '13px',
   fontSize: '1em',
 }
 const pushedUpLabelStyles = {
@@ -53,13 +55,15 @@ const Label = styled.label<TextInputLabelProps>(
   }),
 )
 const DisabledIcon = styled.i({
-  position: 'absolute',
-  top: '0.4rem',
-  right: '0.4rem',
-  color: '#5cb85c',
+  '&&': {
+    position: 'absolute',
+    top: '0.4rem',
+    right: '0.4rem',
+    color: '#5cb85c',
+    fontSize: '8px',
+  },
 })
 const Input = styled.input({
-  border: 'none',
   width: '100%',
   height: '100%',
   padding: '13px',
@@ -67,7 +71,6 @@ const Input = styled.input({
 })
 const Textarea = styled.textarea({
   width: '100%',
-  border: '1px inset #eee',
   borderRadius: '5px',
   textAlign: 'left',
   padding: '13px',

@@ -15,7 +15,7 @@ const Container = styled.div({
 })
 const centerLabelStyles = {
   '&&': {
-    top: '1rem',
+    top: '13px',
     fontSize: '1em',
   },
 }
@@ -52,6 +52,7 @@ const DisabledIcon = styled.i({
     top: '0.4rem',
     right: '0.4rem',
     color: '#5cb85c',
+    fontSize: '8px',
   },
 })
 
@@ -121,7 +122,6 @@ const Option = styled.option({
 const OtherInputContainer = styled.div<ShowOtherProps>(
   {
     '&&': {
-      paddingTop: '24px',
       overflow: 'hidden',
       transition: 'opacity, transform, height',
       transitionDuration: '200ms',

@@ -44,76 +44,41 @@ $warning-orange: #df7600;
 
 // Grays
 
-$c-9e: #9e9e9e;
-$c-90: #909090;
-$c-99: #999;
-$c-77: #777;
-$c-66: #666;
-$c-56: #565656;
-$c-42: #424242;
-$c-4b: #4b4b4b;
-$c-33: #333;
-$c-44: #444;
-$c-21: #212121;
+.upload-modal.modal-wrapper {
+  // display: block;
+  // position: absolute;
+  // top: 0;
+  // z-index: 10000;
+  // background: #fff;
+  // left: 0;
+  // right: 0;
+  // width: 100%;
+  // margin: 0 auto;
+  // padding: 20px 30px;
+  // max-width: 900px;
+  // overflow: scroll;
+  // max-height: 90vh;
+  // &:focus-visible {
+  //   outline: none;
+  //   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  // }
 
-$aaa: #aaa;
-$a5: #a5a5a5;
-$bbb: #bbb;
-$ccc: #ccc;
-$c2: #c2c2c2;
-
-$ddd: #ddd;
-$d9: #d9d9d9;
-$de: #dedede;
-
-$eee: #eee;
-$e1: #e1e1e1;
-$e5: #e5e5e5;
-$e7: #e7e7e7;
-
-$f4: #f4f4f4;
-$f8: #f8f8f8;
-$f9: #f9f9f9;
-$fa: #fafafa;
-
-// Transparent
-
-$transparent: rgba(0, 0, 0, 0);
-$transparent1: rgba(0, 0, 0, 0.1);
-$transparent3: rgba(0, 0, 0, 0.3);
-$transparent5: rgba(0, 0, 0, 0.7);
-$transparent7: rgba(0, 0, 0, 0.7);
-$transparent8: rgba(0, 0, 0, 0.8);
-$transparent9: rgba(0, 0, 0, 0.9);
-
-$transparent1-w: rgba(255, 255, 255, 0.1);
-$transparent05-w: rgba(255, 255, 255, 0.05);
-
-.upload-modal {
-  display: block;
-  position: absolute;
-  top: 0;
-  z-index: 10000;
-  background: #fff;
-  left: 0;
-  right: 0;
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px 30px;
-  max-width: 900px;
-  overflow: scroll;
-  max-height: 90vh;
-  &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  .modal {
+    width: 720px;
+    .disclaimer label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 20px;
+      border-top: 1px solid;
+      padding-top: 10px;
+      color: $rock;
+    }
   }
   .modal-title {
     margin-top: 0px;
     font-size: 22px;
   }
-  hr.modal-inner {
-    display: none;
-  }
+
   button.close {
     border: 0;
     background: none;
@@ -246,6 +211,7 @@ $transparent05-w: rgba(255, 255, 255, 0.05);
   }
 
   .bids-link {
+    margin-top: 20px;
     width: 100%;
     text-align: center;
     display: block;
@@ -319,6 +285,25 @@ $transparent05-w: rgba(255, 255, 255, 0.05);
     margin: 20px 0;
     .pull-right {
       float: right;
+    }
+    > .upload-panel > .accordion-title {
+      z-index: 1400;
+      margin-top: 0;
+      border: 0;
+      padding: 10px 0;
+      display: block;
+      background: #ffe291;
+      color: #b17300;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin: 0;
+    }
+    > .upload-panel.error-wrap {
+      > .accordion-title {
+        background: #fadbd6;
+        color: #c82424;
+      }
     }
 
     .panel-collapse {

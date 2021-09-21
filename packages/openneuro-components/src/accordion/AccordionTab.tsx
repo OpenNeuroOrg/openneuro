@@ -29,17 +29,20 @@ export const AccordionTab: FC<AccordionTabProps> = ({
   onClick,
 }) => {
   const [isOpen, setOpen] = React.useState(startOpen)
-  const fileTreeIcon = accordionStyle == 'file-tree' ? (
-    <Icon
-      className="file-icon"
-      icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
-      label={label}
-    />
-  ) : null
+  const fileTreeIcon =
+    accordionStyle == 'file-tree' ? (
+      <Icon
+        className="file-icon"
+        icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
+        label={label}
+      />
+    ) : null
 
   return (
     <article
-      className={`${accordionStyle || ''}` + ' accordion ' + `${className || ''}`}
+      className={
+        `${accordionStyle || ''}` + ' accordion ' + `${className || ''}`
+      }
       id={id}>
       <div
         className={`accordion-title ${isOpen ? 'open' : ''}`}

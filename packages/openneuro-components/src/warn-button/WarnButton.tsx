@@ -24,7 +24,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
   setDisplayOptions,
 }) => {
   if (displayOptions === undefined || displayOptions === null) {
-    [displayOptions, setDisplayOptions] = React.useState(false as boolean)
+    ;[displayOptions, setDisplayOptions] = React.useState(false as boolean)
   }
   const viewAction = (
     <div className="warn-btn-group " role="group">
@@ -73,7 +73,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
   const button = displayOptions ? viewAction : hideAction
 
   return (
-    <div className={"warn-btn" + (className || '')}>
+    <div className={'warn-btn' + (className || '')}>
       {tooltip ? (
         <Tooltip flow="up" tooltip={tooltip}>
           {button}

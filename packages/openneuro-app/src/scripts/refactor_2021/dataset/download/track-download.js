@@ -1,5 +1,5 @@
-import { event } from '../utils/gtag'
-import datalad from '../utils/datalad'
+import { event } from '../../utils/gtag'
+import datalad from '../../utils/datalad'
 
 export const trackDownload = (datasetId, snapshotTag) => {
   event({
