@@ -3,6 +3,7 @@ import { gql, useMutation } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import { Tooltip } from '@openneuro/components/tooltip'
 import { Button } from '@openneuro/components/button'
+import { DATASET_REVIEWERS } from '../fragments/dataset-reviewers'
 
 const CREATE_LINK = gql`
   mutation createReviewer($datasetId: ID!) {
@@ -10,6 +11,7 @@ const CREATE_LINK = gql`
       id
       datasetId
       url
+      expiration
     }
   }
 `
@@ -23,7 +25,31 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({ datasetId }) => {
     navigator.clipboard.writeText(text)
   }
 
-  const [CreateReviewLink, { data, error }] = useMutation(CREATE_LINK)
+  const [CreateReviewLink, { data, error }] = useMutation(CREATE_LINK, {
+    update(cache, { data: { createReviewer: newReviewer } }) {
+      const { reviewers } = cache.readFragment({
+        id: `Dataset:${datasetId}`,
+        fragment: DATASET_REVIEWERS,
+      })
+      const updatedReviewers = [
+        ...reviewers,
+        {
+          __typename: newReviewer.__typename,
+          expiration: newReviewer.expiration,
+          id: newReviewer.id,
+        }
+      ]
+      cache.writeFragment({
+        id: `Dataset:${datasetId}`,
+        fragment: DATASET_REVIEWERS,
+        data: {
+          __typename: 'Dataset',
+          id: datasetId,
+          reviewers: updatedReviewers,
+        }
+      })
+    }
+  })
   return (
     <>
       <div className="share-form-controls">
