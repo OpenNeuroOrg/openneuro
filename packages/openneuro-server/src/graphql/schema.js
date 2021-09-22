@@ -138,7 +138,7 @@ export const typeDefs = `
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
-    followDataset(datasetId: ID!): Boolean
+    followDataset(datasetId: ID!): FollowDatasetResponse
     # Star dataset
     starDataset(datasetId: ID!): Boolean
     # Make a dataset public
@@ -536,6 +536,11 @@ export const typeDefs = `
     age: Int
     sex: String
     group: String
+  }
+
+  type FollowDatasetResponse {
+    following: Boolean
+    newFollower: Follower
   }
 
   # Dataset Followers

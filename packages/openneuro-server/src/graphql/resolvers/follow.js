@@ -5,11 +5,21 @@ export const followDataset = async (obj, { datasetId }, { user }) => {
     datasetId,
     userId: user,
   }).exec()
+  const newFollower = {
+    datasetId,
+    userId: user,
+  }
   if (following) {
     // unfollow
-    return following.remove().then(() => false)
+    return following.remove().then(() => ({
+      following: false,
+      newFollower,
+    }))
   } else {
     const following = new Subscription({ datasetId, userId: user })
-    return following.save().then(() => true)
+    return following.save().then(() => ({
+      following: true,
+      newFollower,
+    }))
   }
 }

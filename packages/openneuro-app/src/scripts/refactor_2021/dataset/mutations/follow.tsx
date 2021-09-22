@@ -6,7 +6,12 @@ import { CountToggle } from '@openneuro/components/count-toggle'
 
 const FOLLOW_DATASET = gql`
   mutation followDataset($datasetId: ID!) {
-    followDataset(datasetId: $datasetId)
+    followDataset(datasetId: $datasetId) {
+      following
+      newFollower {
+        userId
+      }
+    }
   }
 `
 
@@ -14,6 +19,15 @@ const USER_FOLLOWING = gql`
   fragment UserFollowing on Dataset {
     id
     following
+  }
+`
+
+const DATASET_FOLLOWERS = gql`
+  fragment DatasetFollowers on Dataset {
+    id
+    followers {
+      userId
+    }
   }
 `
 
@@ -33,16 +47,35 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
   return (
     <Mutation
       mutation={FOLLOW_DATASET}
-      update={(cache, { data: { followDataset } }) => {
+      update={(cache, { data }) => {
+        const { following, newFollower } = data.followDataset
+        // Update whether or not dataset is followed by user
         cache.writeFragment({
           id: datasetCacheId(datasetId),
           fragment: USER_FOLLOWING,
           data: {
             __typename: 'Dataset',
             id: datasetId,
-            following: followDataset,
+            following: following,
           },
         })
+        // Update dataset's list of followers
+        const { followers } = cache.readFragment({
+          id: datasetCacheId(datasetId),
+          fragment: DATASET_FOLLOWERS,
+        })
+        cache.writeFragment({
+          id: datasetCacheId(datasetId),
+          fragment: DATASET_FOLLOWERS,
+          data: {
+            __typename: 'Dataset',
+            id: datasetId,
+            followers: following
+              ? [...followers, newFollower]
+              : followers.filter(follower => follower.userId !== newFollower.userId),
+          },
+        })
+
       }}>
       {followDataset => (
         <CountToggle
