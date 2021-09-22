@@ -156,3 +156,46 @@
     }
   }
 }
+
+.datalad-dataset-form {
+  margin: 20px auto;
+  .actions {
+    align-items: center;
+    justify-content: flex-end;
+    button {
+      margin-left: 5px;
+      margin-bottom: 10px;
+    }
+  }
+  .dataset-form-controls {
+    margin-top: 20px;
+  }
+  .faux-table {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    label {
+      font-weight: 600;
+      display: none;
+    }
+    &:nth-child(even) {
+      background-color: #eee;
+    }
+  }
+  .col.commit {
+    word-break: break-all;
+  }
+  @media (max-width: 990px) {
+    .faux-table-header {
+      display: none;
+    }
+    .faux-table {
+      label {
+        margin-right: 5px;
+        display: inline-block;
+      }
+    }
+    .actions {
+      justify-content: flex-start;
+    }
+  }
+}

@@ -82,13 +82,13 @@ const AdminExports = ({ dataset }) => {
       </Helmet>
       <div className="dataset-form container">
         <div className="grid">
-          <div className="col col-12">
+          <div className="col col-12 grid m-t-10 m-b-20">
             <h3>Admin: Remote Exports</h3>
-            <Link className="return-link" to={`/datasets/${dataset.id}`}>
+            <Link
+              className="return-link col-middle"
+              to={`/datasets/${dataset.id}`}>
               Return to Dataset
             </Link>
-            <br />
-            <br />
           </div>
 
           <div className="col col-4">
@@ -101,7 +101,7 @@ const AdminExports = ({ dataset }) => {
                 <SuccessMessage>Your export has begun.</SuccessMessage>
               )}
               <NormalizedButton
-                className="btn-modal-action"
+                className="n-button on-button--primary"
                 onClick={() =>
                   reexportRemotes({ variables: { datasetId: dataset.id } })
                 }>
@@ -109,7 +109,7 @@ const AdminExports = ({ dataset }) => {
               </NormalizedButton>
               <Divider text="or" />
               <NormalizedButton
-                className="btn-blue"
+                className="on-button on-button--nobg"
                 onClick={() => {
                   window.open(reexporterLogsURL, '_blank')
                 }}>
