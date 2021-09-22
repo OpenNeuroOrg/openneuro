@@ -41,6 +41,7 @@ export const getDatasetPage = gql`
       stars {
         userId
       }
+      worker
       ...DatasetDraft
       ...DatasetPermissions
       ...DatasetSnapshots
