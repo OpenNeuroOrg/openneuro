@@ -140,7 +140,7 @@ export const typeDefs = `
     # Follow dataset
     followDataset(datasetId: ID!): FollowDatasetResponse
     # Star dataset
-    starDataset(datasetId: ID!): Boolean
+    starDataset(datasetId: ID!): StarDatasetResponse
     # Make a dataset public
     publishDataset(datasetId: ID!): Boolean
     # Update dataset_description.json scalar fields
@@ -547,6 +547,11 @@ export const typeDefs = `
   type Follower {
     userId: String
     datasetId: String
+  }
+
+  type StarDatasetResponse {
+    starred: Boolean
+    newStar: Star
   }
 
   # Dataset Stars

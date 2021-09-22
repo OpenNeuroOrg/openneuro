@@ -21,7 +21,6 @@ const USER_FOLLOWING = gql`
     following
   }
 `
-
 const DATASET_FOLLOWERS = gql`
   fragment DatasetFollowers on Dataset {
     id
@@ -75,7 +74,6 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
               : followers.filter(follower => follower.userId !== newFollower.userId),
           },
         })
-
       }}>
       {followDataset => (
         <CountToggle
