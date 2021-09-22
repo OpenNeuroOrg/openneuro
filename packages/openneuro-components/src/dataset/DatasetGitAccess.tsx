@@ -21,6 +21,8 @@ export const DatasetGitAccess = ({
 }: DatasetGitAccessProps) => {
   const workerId = worker?.split('-').pop()
   const url = `${configUrl}/git/${workerId}/${datasetId}`
+
+  console.log(workerId)
   return (
     <div className="dataset-git-access">
       <span>
@@ -42,9 +44,7 @@ export const DatasetGitAccess = ({
           </Tooltip>
         )}
         <div>
-          {workerId
-            ? url
-            : 'TODO - What happens when the workerID is undefined'}
+          {workerId ? url : 'You find the Datalad/Git URL from the draft page'}
         </div>
       </div>
       <div className="git-hash">
