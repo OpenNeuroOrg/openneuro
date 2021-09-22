@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import AdminDataset from '../../datalad/routes/admin-datalad.jsx'
-import AdminExports from '../../datalad/routes/admin-exports.jsx'
+import AdminDataset from './routes/admin-datalad.jsx'
+import AdminExports from './routes/admin-exports.jsx'
 
 import SnapshotContainer from './snapshot-container'
 import DraftContainer from './draft-container'

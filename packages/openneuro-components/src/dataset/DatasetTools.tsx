@@ -10,6 +10,7 @@ export interface DatasetToolsProps {
   isPublic: boolean
   isSnapshot: boolean
   datasetId: string
+  isAdmin: boolean
 }
 
 export const DatasetTools = ({
@@ -17,6 +18,7 @@ export const DatasetTools = ({
   isSnapshot,
   isPublic,
   datasetId,
+  isAdmin,
 }: DatasetToolsProps) => {
   const history = useHistory()
   const location = useLocation()
@@ -41,6 +43,24 @@ export const DatasetTools = ({
         <Tooltip tooltip="Create a new version of the dataset" flow="up">
           <Link className="dataset-tool" to={`/datasets/${datasetId}/snapshot`}>
             <Icon icon="fa fa-camera" label="Snapshot" />
+          </Link>
+        </Tooltip>
+      )}
+      {isAdmin && !isSnapshot && (
+        <Tooltip tooltip="Admin Datalad Tools" flow="up">
+          <Link
+            className="dataset-tool"
+            to={`/datasets/${datasetId}/admin-datalad`}>
+            <Icon icon="fa fa-magic" label="Datalad" />
+          </Link>
+        </Tooltip>
+      )}
+      {isAdmin && !isSnapshot && (
+        <Tooltip tooltip="Admin Remote Export Tools" flow="up">
+          <Link
+            className="dataset-tool"
+            to={`/datasets/${datasetId}/admin-exports`}>
+            <Icon icon="fa fa-cloud-upload" label="Export" />
           </Link>
         </Tooltip>
       )}

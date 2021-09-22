@@ -44,13 +44,13 @@ export const DatasetPage = ({
       {renderAlert && renderAlert()}
       <div className="container">
         <div className="grid grid-between dataset-header-meta">
-          <div className="col col-8">{renderHeaderMeta()}</div>
+          <div className="col col-8 col-lg">{renderHeaderMeta()}</div>
           <div className="col follow-bookmark">{renderFollowBookmark()}</div>
         </div>
       </div>
       <div className="container">
         <div className="grid grid-between">
-          <div className="col col-8">
+          <div className="col col-lg col-8">
             <div className="dataset-validation">
               {renderValidationBlock()}
               {renderBrainLifeButton()}

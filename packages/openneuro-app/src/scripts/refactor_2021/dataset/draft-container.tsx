@@ -178,6 +178,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             isPublic={dataset.public}
             isSnapshot={isSnapshot}
             datasetId={datasetId}
+            isAdmin={isAdmin}
           />
         )}
         renderFiles={() => (
