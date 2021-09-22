@@ -160,8 +160,8 @@ export const useSearchResults = () => {
       'must',
       simpleQueryString(sqsJoinWithAND(keywords), [
         'latestSnapshot.readme',
-        'latestSnapshot.description.Name',
-        'latestSnapshot.description.Authors',
+        'latestSnapshot.description.Name^6',
+        'latestSnapshot.description.Authors^3',
       ]),
     )
   if (modality_selected) {
