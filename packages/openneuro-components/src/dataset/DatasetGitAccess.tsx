@@ -1,6 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
+import { frontPage } from '../mock-content/front-page-content'
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text)
@@ -42,7 +44,14 @@ export const DatasetGitAccess = ({
           </Tooltip>
         )}
         <div>
-          {workerId ? url : 'You find the Datalad/Git URL from the draft page'}
+          {workerId ? (
+            url
+          ) : (
+            <>
+              You can find the Datalad/Git URL from the{' '}
+              <Link to={`/datasets/${datasetId}/`}>draft</Link> page
+            </>
+          )}
         </div>
       </div>
       <div className="git-hash">
