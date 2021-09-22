@@ -2,9 +2,11 @@ import React, {
   createContext,
   useState,
   useContext,
+  useEffect,
   FC,
   ReactNode,
 } from 'react'
+import { useHistory } from 'react-router-dom'
 import initialSearchParams from './initial-search-params'
 
 export const SearchParamsCtx = createContext(null)
@@ -17,6 +19,16 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
   children,
 }) => {
   const [searchParams, setSearchParams] = useState(initialSearchParams)
+  const history = useHistory()
+  useEffect(() => {
+    const unlisten = history.listen((location, action) => {
+      console.log({location, action})
+      if (action === 'PUSH') {
+        setSearchParams(initialSearchParams)
+      }
+    })
+    return unlisten
+  }, [])
   return (
     <SearchParamsCtx.Provider value={{ searchParams, setSearchParams }}>
       {children}
