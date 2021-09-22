@@ -206,7 +206,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             <MetaDataBlock
               heading="Authors"
               item={description.Authors}
-              isMarkdown={true}
               className="dmb-inline-list"
             />
             <>
@@ -239,8 +238,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             {summary && (
               <MetaDataBlock
                 heading="Tasks"
-                item={summary.tasks}
-                isMarkdown={true}
+                item={summary.tasks.length ? summary.tasks : 'N/A'}
                 className="dmb-inline-list"
               />
             )}
@@ -338,17 +336,14 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             />
             <MetaDataBlock heading="License" item={description.License} />
             <MetaDataBlock
-              isMarkdown={true}
               heading="Acknowledgements"
               item={description.Acknowledgements}
             />
             <MetaDataBlock
-              isMarkdown={true}
               heading="How to Acknowledge"
               item={description.HowToAcknowledge}
             />
             <MetaDataBlock
-              isMarkdown={true}
               heading="Funding"
               item={description.Funding}
               className="dmb-list"
@@ -357,14 +352,12 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             <MetaDataBlock
               heading="References and Links"
               item={description.ReferencesAndLinks}
-              isMarkdown={true}
               className="dmb-list"
             />
 
             <MetaDataBlock
               heading="Funding"
               item={description.EthicsApprovals}
-              isMarkdown={true}
               className="dmb-list"
             />
           </>

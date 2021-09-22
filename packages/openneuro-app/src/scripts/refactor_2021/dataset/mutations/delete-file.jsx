@@ -16,6 +16,7 @@ const DeleteFile = ({ datasetId, path, filename }) => (
       <span className="delete-file">
         <WarnButton
           message=""
+          iconOnly={true}
           icon="fa-trash"
           className="edit-file"
           onConfirmedClick={() => {

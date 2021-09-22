@@ -252,8 +252,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
             {summary && (
               <MetaDataBlock
                 heading="Tasks"
-                item={summary.tasks}
-                isMarkdown={true}
+                item={summary.tasks.length ? summary.tasks : 'N/A'}
                 className="dmb-inline-list"
               />
             )}

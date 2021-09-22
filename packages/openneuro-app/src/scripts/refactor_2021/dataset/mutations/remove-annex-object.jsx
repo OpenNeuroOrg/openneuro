@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import WarnButton from '../../../common/forms/warn-button.jsx'
+import { WarnButton } from '@openneuro/components/warn-button'
 import { Tooltip } from '@openneuro/components/tooltip'
 
 const REMOVE_ANNEX_OBJECT = gql`
@@ -38,10 +38,11 @@ const RemoveAnnexObject = ({
         tooltip="Purge: this admin tool will remove this file's annex objects.">
         <WarnButton
           message=""
+          iconOnly={true}
           icon="fa-frown-o"
-          warn={true}
           className="edit-file"
-          action={cb => {
+          tooltip={'Delete ' + name}
+          onConfirmedClick={() => {
             removeAnnexObject({
               variables: {
                 datasetId,
@@ -50,8 +51,6 @@ const RemoveAnnexObject = ({
                 path,
                 filename,
               },
-            }).then(() => {
-              cb()
             })
           }}
         />

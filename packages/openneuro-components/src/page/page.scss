@@ -62,7 +62,7 @@
 }
 
 .warning-text {
-  color: #f10;
+  color: $on-light-red;
 }
 
 // admin page
@@ -271,4 +271,239 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+//file tree
+
+.filetree-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0;
+  margin-bottom: 25px;
+
+  .accordion-content {
+    margin: 0;
+  }
+  .accordion-item {
+    overflow: visible;
+  }
+  .accordion-item.collapsed {
+    display: none;
+  }
+  // .filetree-header {
+  //   margin: 0 0 0 10px;
+  //   padding: 10px 0;
+  //   border-bottom: 1px solid #e3e3e3;
+  // }
+  .filetree-item {
+    list-style-type: none;
+    padding: 10px 0 10px 15px;
+    border-left: 1px solid #e3e3e3;
+    font-size: 14px;
+  }
+  > div > .filetree-item:first-of-type {
+    border-left: 0;
+    padding-right: 15px;
+  }
+
+  .filetree-dir .filetree-file:last-of-type {
+    padding-bottom: 0;
+  }
+  .filetree-item:not(:last-child) {
+    border-bottom: 1px solid #e3e3e3;
+  }
+  .filetree-dir-tools {
+    padding: 10px 0;
+    border-bottom: 1px solid #e3e3e3;
+  }
+  button.btn-warn-component {
+    padding: 0;
+    i {
+      font-size: 16px;
+    }
+  }
+
+  .filetree-dir {
+    display: flex;
+    margin-left: auto;
+    justify-content: flex-start;
+    line-height: 10px;
+    .file-tree {
+      width: 100%;
+    }
+    > span,
+    > div {
+      margin-left: 10px;
+      display: flex;
+      font-size: 12px;
+      text-align: center;
+      width: auto;
+      position: relative;
+      align-items: center;
+      cursor: pointer;
+      height: 20px;
+      i {
+        font-size: 12px;
+        margin-right: 5px;
+      }
+      &.delete-file {
+        margin-left: auto;
+      }
+      input {
+        opacity: 0;
+        filter: alpha(opacity=0);
+        position: absolute;
+        cursor: pointer;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 100%;
+      }
+      .warn-btn-click {
+        button {
+          font-size: 12px;
+        }
+      }
+    }
+
+    button.btn-warn-component.success,
+    button.btn-warn-component.cancel {
+      margin: 0 2px 0;
+      font-size: 10px;
+      height: 20px;
+      width: 20px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      i {
+        font-size: 11px;
+        color: #fff;
+        margin: 0;
+      }
+    }
+  }
+
+  .filetree-editfile {
+    display: flex;
+    margin-left: auto;
+    justify-content: flex-start;
+    line-height: 10px;
+    > div,
+    > span {
+      margin-left: 10px;
+      display: flex;
+      font-size: 12px;
+      text-align: center;
+      width: auto;
+      position: relative;
+      align-items: center;
+      cursor: pointer;
+      height: 20px;
+      i {
+        font-size: 12px;
+        margin-right: 0;
+      }
+      &.delete-file {
+        margin-left: auto;
+      }
+      input {
+        opacity: 0;
+        filter: alpha(opacity=0);
+        position: absolute;
+        cursor: pointer;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 100%;
+      }
+      .warn-btn-click {
+        button {
+          font-size: 12px;
+        }
+      }
+    }
+
+    // .delete-file.bulk-delete {
+    //   margin-left: auto;
+    //   display: flex;
+    //   .warn-btn-click button {
+    //     font-size: 14px;
+    //     i {
+    //       font-size: 14px;
+    //     }
+    //   }
+    //   span.bulk-delete-count {
+    //     margin-left: 5px;
+    //   }
+    // }
+    // .edit-file input,
+    // .delete-file input {
+    //   opacity: 0;
+    //   filter: alpha(opacity=0);
+    //   position: absolute;
+    //   cursor: pointer;
+    //   left: 0;
+    //   right: 0;
+    //   bottom: 0;
+    //   top: 0;
+    //   width: 100%;
+    // }
+    // div.bulk-delete-checkbox-group.delete-file {
+    //   input {
+    //     // opacity: 1;
+    //     // left: 4px;
+    //     // top: 12px;
+    //   }
+    // }
+    button.btn-warn-component.success,
+    button.btn-warn-component.cancel {
+      margin: 0 2px 0;
+      font-size: 10px;
+      height: 20px;
+      width: 20px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      i {
+        font-size: 11px;
+        color: #fff;
+        margin: 0;
+      }
+    }
+  }
+
+  ul.child-files {
+    margin: 0;
+    padding: 0;
+  }
+
+  .filetree-file {
+    display: flex;
+  }
+
+  .bulk-delete-checkbox-group,
+  .edit-file {
+    i {
+      color: var(--current-theme-primary);
+    }
+  }
+  .bulk-delete-checkbox-group {
+    label {
+      display: flex;
+      align-items: center;
+    }
+    &.added-to-bd {
+      i {
+        color: $on-light-red;
+      }
+    }
+  }
+  .added-to-bulk {
+    font-size: 10px;
+    margin-left: 10px;
+  }
 }

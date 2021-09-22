@@ -276,11 +276,13 @@ $warning-orange: #df7600;
     }
   }
 
-  > span > .accordion-title {
+  > span > .accordion-title,
+  > article > .accordion-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border: 1px solid #ddd;
+    background-color: #fff;
     &:after {
       position: absolute;
       left: 180px;

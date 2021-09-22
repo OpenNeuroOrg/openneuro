@@ -10,14 +10,16 @@ export const DELETE_FILES = gql`
   }
 `
 
-const DeleteDir = ({ datasetId, path }) => (
+const DeleteDir = ({ datasetId, path, name }) => (
   <Mutation mutation={DELETE_FILES} awaitRefetchQueries={true}>
     {deleteFiles => (
       <span className="delete-file">
         <WarnButton
           message=""
+          iconOnly={true}
           icon="fa-trash"
           className="edit-file"
+          tooltip={'Delete ' + name}
           onConfirmedClick={() => {
             deleteFiles({
               variables: {
@@ -35,6 +37,7 @@ const DeleteDir = ({ datasetId, path }) => (
 DeleteDir.propTypes = {
   datasetId: PropTypes.string,
   path: PropTypes.string,
+  name: PropTypes.string,
 }
 
 export default DeleteDir
