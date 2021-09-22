@@ -21,8 +21,6 @@ export const DatasetGitAccess = ({
 }: DatasetGitAccessProps) => {
   const workerId = worker?.split('-').pop()
   const url = `${configUrl}/git/${workerId}/${datasetId}`
-
-  console.log(workerId)
   return (
     <div className="dataset-git-access">
       <span>
