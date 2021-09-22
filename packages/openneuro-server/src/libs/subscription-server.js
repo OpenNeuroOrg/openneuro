@@ -8,6 +8,7 @@ const subscriptionServerFactory = httpserver =>
       execute,
       subscribe,
       schema,
+      keepAlive: 30000,
     },
     {
       server: httpserver,
