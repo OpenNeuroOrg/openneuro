@@ -43,16 +43,7 @@ export const DatasetGitAccess = ({
             />
           </Tooltip>
         )}
-        <div>
-          {workerId ? (
-            url
-          ) : (
-            <>
-              You can find the Datalad/Git URL from the{' '}
-              <Link to={`/datasets/${datasetId}/`}>draft</Link> page
-            </>
-          )}
-        </div>
+        <div>{url}</div>
       </div>
       <div className="git-hash">
         <Tooltip tooltip="Copy Git Hash to Clipboard" flow="right">
