@@ -206,7 +206,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             <MetaDataBlock
               heading="Authors"
               item={description.Authors}
-              isMarkdown={true}
               className="dmb-inline-list"
             />
             <>
