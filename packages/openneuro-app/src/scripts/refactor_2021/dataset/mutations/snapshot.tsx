@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { gql, useMutation } from '@apollo/client'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { gql, useMutation, useSubscription } from '@apollo/client'
+import { useHistory } from 'react-router-dom'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import { Button } from '@openneuro/components/button'
+import { SNAPSHOTS_UPDATED_SUBSCRIPTION } from '../../../datalad/subscriptions/useSnapshotsUpdatedSubscriptions'
 
 const CREATE_SNAPSHOT = gql`
   mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
@@ -14,58 +15,79 @@ const CREATE_SNAPSHOT = gql`
   }
 `
 
-const CreateSnapshotMutation = ({ history, datasetId, tag, changes }) => {
-  const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
-  if (error) throw error
-  return (
-    <>
-      {loading ? (
-        <i className="fas fa-circle-notch fa-spin"></i>
-      ) : (
-        <Button
-          primary={true}
-          size="small"
-          onClick={() =>
-            snapshotDataset({ variables: { datasetId, tag, changes } }).then(
-              () => {
-                history.push(`/datasets/${datasetId}/versions/${tag}`)
-              },
-            )
-          }
-          label="Create Snapshot"
-        />
-      )}
-    </>
-  )
-}
-
-interface SnapshotDatasetProps extends RouteComponentProps {
+interface CreateSnapshotMutationProps {
   datasetId: string
   tag: string
   changes: Array<string>
 }
 
-const SnapshotDataset = ({
-  history,
+const CreateSnapshotMutation = ({
   datasetId,
   tag,
   changes,
-}: SnapshotDatasetProps) => (
+}: CreateSnapshotMutationProps) => {
+  const history = useHistory()
+  const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
+  const [submitted, setSubmitted] = useState(false)
+  const { loading: subscriptionLoading } = useSubscription(
+    SNAPSHOTS_UPDATED_SUBSCRIPTION,
+    {
+      variables: { datasetId },
+      fetchPolicy: 'network-only',
+    },
+  )
+
+  if (error) throw error
+
+  if (submitted && subscriptionLoading) {
+    return (
+      <>
+        <i className="fas fa-circle-notch fa-spin"></i>Snapshot creation in
+        progress
+      </>
+    )
+  } else if (submitted && !subscriptionLoading) {
+    // TODO - We are sending the subscription too early because this requires a small but predictable delay
+    setTimeout(
+      () => history.push(`/datasets/${datasetId}/versions/${tag}`),
+      2000,
+    )
+  } else {
+    if (loading) {
+      return <i className="fas fa-circle-notch fa-spin"></i>
+    } else {
+      return (
+        <Button
+          primary={true}
+          size="small"
+          onClick={(): void => {
+            void snapshotDataset({
+              variables: { datasetId, tag, changes },
+            }).then(() => void setSubmitted(true))
+          }}
+          label="Create Snapshot"
+        />
+      )
+    }
+  }
+}
+
+interface SnapshotDatasetProps {
+  datasetId: string
+  tag: string
+  changes: Array<string>
+}
+
+const SnapshotDataset = ({ datasetId, tag, changes }: SnapshotDatasetProps) => (
   <ErrorBoundary subject="error creating snapshot">
-    <CreateSnapshotMutation
-      history={history}
-      datasetId={datasetId}
-      tag={tag}
-      changes={changes}
-    />
+    <CreateSnapshotMutation datasetId={datasetId} tag={tag} changes={changes} />
   </ErrorBoundary>
 )
 
 CreateSnapshotMutation.propTypes = SnapshotDataset.propTypes = {
   datasetId: PropTypes.string,
   tag: PropTypes.string,
-  history: PropTypes.object,
   changes: PropTypes.array,
 }
 
-export default withRouter(SnapshotDataset)
+export default SnapshotDataset
