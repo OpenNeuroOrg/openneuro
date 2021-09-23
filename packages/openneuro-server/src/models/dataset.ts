@@ -10,6 +10,8 @@ export interface DatasetDocument extends Document {
   publishDate: Date
   uploader: string
   name: string
+  downloads: number
+  views: number
   _conditions: any
 }
 

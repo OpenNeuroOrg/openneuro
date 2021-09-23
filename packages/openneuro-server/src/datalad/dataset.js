@@ -19,7 +19,6 @@ import Dataset from '../models/dataset'
 import Metadata from '../models/metadata'
 import Permission from '../models/permission'
 import Star from '../models/stars'
-import Analytics from '../models/analytics'
 import Subscription from '../models/subscription'
 import BadAnnexObject from '../models/badAnnexObject'
 import { trackAnalytics } from './analytics'
@@ -85,8 +84,6 @@ export const getDraftHead = async id => {
  * Fetch dataset document and related fields
  */
 export const getDataset = async id => {
-  // Track any queries for one dataset as a view
-  trackAnalytics(id, null, 'views')
   const dataset = await Dataset.findOne({ id }).lean()
   return {
     ...dataset,
@@ -499,38 +496,11 @@ export const updatePublic = (datasetId, publicFlag) =>
   ).exec()
 
 export const getDatasetAnalytics = (datasetId, tag) => {
-  const datasetQuery = tag
-    ? { datasetId: datasetId, tag: tag }
-    : { datasetId: datasetId }
-  return Analytics.aggregate([
-    {
-      $match: datasetQuery,
-    },
-    {
-      $group: {
-        _id: '$datasetId',
-        tag: { $first: '$tag' },
-        views: {
-          $sum: '$views',
-        },
-        downloads: {
-          $sum: '$downloads',
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        datasetId: '$_id',
-        tag: 1,
-        views: 1,
-        downloads: 1,
-      },
-    },
-  ]).then(results => {
-    results = results.length ? results[0] : {}
-    return results
-  })
+  return Dataset.findOne({ id: datasetId }).then(ds => ({
+    datasetId,
+    views: ds.views || 0,
+    downloads: ds.downloads || 0,
+  }))
 }
 
 export const getStars = datasetId => Star.find({ datasetId })

@@ -21,6 +21,7 @@ import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
 import DatasetRedirect from '../../datalad/routes/dataset-redirect'
+import datalad from '../../utils/datalad'
 
 //TODO imports
 
@@ -190,18 +191,28 @@ DatasetQueryHook.propTypes = {
  * @param {Object} props.draft Is this the draft page?
  * @param {Object} props.history React router history
  */
-const DatasetQuery = ({ match, history }) => (
-  <>
-    <DatasetRedirect />
-    <ErrorBoundaryAssertionFailureException subject={'error in dataset query'}>
-      <DatasetQueryHook
-        datasetId={match.params.datasetId}
-        draft={!match.params.snapshotId}
-        history={history}
-      />
-    </ErrorBoundaryAssertionFailureException>
-  </>
-)
+const DatasetQuery = ({ match, history }) => {
+  const datasetId = match.params.datasetId
+  const snapshotId = match.params.snapshotId
+  datalad.trackAnalytics(datasetId, {
+    snapshot: true,
+    tag: snapshotId,
+    type: 'views',
+  })
+  return (
+    <>
+      <DatasetRedirect />
+      <ErrorBoundaryAssertionFailureException
+        subject={'error in dataset query'}>
+        <DatasetQueryHook
+          datasetId={datasetId}
+          draft={!snapshotId}
+          history={history}
+        />
+      </ErrorBoundaryAssertionFailureException>
+    </>
+  )
+}
 
 DatasetQuery.propTypes = {
   match: PropTypes.object,
