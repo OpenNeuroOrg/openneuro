@@ -138,9 +138,9 @@ export const typeDefs = `
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
-    followDataset(datasetId: ID!): Boolean
+    followDataset(datasetId: ID!): FollowDatasetResponse
     # Star dataset
-    starDataset(datasetId: ID!): Boolean
+    starDataset(datasetId: ID!): StarDatasetResponse
     # Make a dataset public
     publishDataset(datasetId: ID!): Boolean
     # Update dataset_description.json scalar fields
@@ -538,10 +538,20 @@ export const typeDefs = `
     group: String
   }
 
+  type FollowDatasetResponse {
+    following: Boolean
+    newFollower: Follower
+  }
+
   # Dataset Followers
   type Follower {
     userId: String
     datasetId: String
+  }
+
+  type StarDatasetResponse {
+    starred: Boolean
+    newStar: Star
   }
 
   # Dataset Stars
