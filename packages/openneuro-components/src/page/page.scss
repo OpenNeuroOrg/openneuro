@@ -40,11 +40,9 @@
 @import '../search-page/search-sort.scss';
 @import '../search-page/filters-block.scss';
 @import '../dataset/dataset-page.scss';
-@import '../dataset/share-tool.scss';
+@import '../dataset/dataset-tool.scss';
 @import '../dataset/comments.scss';
-@import '../dataset/snapshot-tool.scss';
-@import '../dataset/download-tool.scss';
-@import '../dataset/metadata-tool.scss';
+
 @import '../dataset/validation.scss';
 
 .page {
@@ -300,6 +298,9 @@
     padding: 10px 0 10px 15px;
     border-left: 1px solid #e3e3e3;
     font-size: 14px;
+    > div {
+      margin-bottom: 10px;
+    }
   }
   > div > .filetree-item:first-of-type {
     border-left: 0;
