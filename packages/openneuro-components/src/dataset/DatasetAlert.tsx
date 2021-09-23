@@ -23,12 +23,12 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
         hasSnapshot ? (
           <>
             <span>
-              <strong>This dataset has not been published!</strong>{' '}
+              <strong>This dataset has not been published!&#32;</strong>
               <Link
                 className="dataset-tool"
                 to={'/datasets/' + datasetId + '/publish'}>
-                Publish this dataset
-              </Link>{' '}
+                Publish this dataset&#32;
+              </Link>
               to make all versions available publicly.
             </span>
             {hasDraftChanges && (
@@ -39,8 +39,8 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
           </>
         ) : (
           <span>
-            <strong>This dataset has not been published!</strong>
-            Before it can be published, please{' '}
+            <strong>This dataset has not been published!&#32;</strong>
+            Before it can be published, please&#32;
             <Link
               className="dataset-tool"
               to={'/datasets/' + datasetId + '/snapshot'}>
@@ -50,9 +50,9 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
         )
       ) : hasDraftChanges ? (
         <span>
-          <strong>This dataset has been published!</strong> There are currently
-          unsaved changes to this Draft. Changes made here become public when
-          you{' '}
+          <strong>This dataset has been published!&#32;</strong> There are
+          currently unsaved changes to this Draft. Changes made here become
+          public when you&#32;
           <Link
             className="dataset-tool"
             to={'/datasets/' + datasetId + '/snapshot'}>
@@ -61,13 +61,13 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
         </span>
       ) : (
         <span>
-          <strong>This dataset has been published!</strong> You can make changes
-          to this Draft page, then{' '}
+          <strong>This dataset has been published!&#32;</strong> You can make
+          changes to this Draft page, then&#32;
           <Link
             className="dataset-tool"
             to={'/datasets/' + datasetId + '/snapshot'}>
-            create a new version
-          </Link>{' '}
+            create a new version&#32;
+          </Link>
           to make them public.
         </span>
       )}

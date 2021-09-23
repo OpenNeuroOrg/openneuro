@@ -1,6 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
+import { frontPage } from '../mock-content/front-page-content'
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text)
@@ -41,11 +43,7 @@ export const DatasetGitAccess = ({
             />
           </Tooltip>
         )}
-        <div>
-          {workerId
-            ? url
-            : 'TODO - What happens when the workerID is undefined'}
-        </div>
+        <div>{url}</div>
       </div>
       <div className="git-hash">
         <Tooltip tooltip="Copy Git Hash to Clipboard" flow="right">
