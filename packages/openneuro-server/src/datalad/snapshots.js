@@ -18,7 +18,6 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset'
 import Snapshot from '../models/snapshot'
-import { trackAnalytics } from './analytics.js'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
 
