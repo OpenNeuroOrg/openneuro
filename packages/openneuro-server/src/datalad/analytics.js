@@ -8,17 +8,33 @@ import Dataset from '../models/dataset'
  * @param {'views'|'downloads'} type
  */
 export const trackAnalytics = async (datasetId, tag, type) => {
-  return Dataset.updateOne(
-    {
-      id: datasetId,
-    },
-    {
-      $inc: {
-        [type]: 1,
+  if (type === 'views') {
+    return Dataset.updateOne(
+      {
+        id: datasetId,
       },
-    },
-    {
-      upsert: true,
-    },
-  ).exec()
+      {
+        $inc: {
+          views: 1,
+        },
+      },
+      {
+        upsert: true,
+      },
+    ).exec()
+  } else if (type === 'downloads') {
+    return Dataset.updateOne(
+      {
+        id: datasetId,
+      },
+      {
+        $inc: {
+          downloads: 1,
+        },
+      },
+      {
+        upsert: true,
+      },
+    ).exec()
+  }
 }
