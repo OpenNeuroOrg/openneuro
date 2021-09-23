@@ -80,7 +80,7 @@ export const StarDataset: FC<StarDatasetProps> = ({
           icon="fa-bookmark"
           disabled={!profile}
           toggleClick={() => starDataset({ variables: { datasetId } })}
-          tooltip="hello Tip"
+          tooltip="Save to your bookmarked datasets"
           clicked={starred}
           count={stars}
         />
