@@ -21,7 +21,7 @@ export const FileViewerJsonRaw = ({ jsonRaw }) => {
   return (
     <div className="container">
       <div className="grid">
-        <div className="col">
+        <div className="col col-lg">
           <h3>Tree</h3>
           <hr />
           {jsonViewer}

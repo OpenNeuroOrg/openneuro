@@ -27,7 +27,9 @@ export const SearchPage = ({
   return (
     <>
       <section
-        className={`search search-page ${portalContent?.className || ''}`}>
+        className={`search search-page ${portalContent?.className || ' '} ${
+          isOpen ? ' search-filters-open' : ' '
+        }`}>
         {portalContent ? (
           <>
             {portalContent.portalName ? (

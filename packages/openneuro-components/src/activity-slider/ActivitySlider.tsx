@@ -38,6 +38,7 @@ export const ActivitySlider = ({
   containerClass,
   itemClass,
 }: ActivitySliderProps) => {
+  console.log(data)
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>

@@ -244,7 +244,6 @@
     opacity: 0;
     transition: opacity 0.3s;
     transform: translateX(-100vw);
-    position: absolute;
     background: white;
     z-index: 1000;
     top: 0;
@@ -252,13 +251,12 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    padding: 50px 0;
     height: 100vh;
     min-height: 100%;
     overflow: scroll;
     position: fixed;
-    z-index: 1101;
-    top: 90px;
+    z-index: 1200;
+    top: 0;
     padding: 80px 25px;
     &.show-mobile-filters {
       opacity: 1;
@@ -273,6 +271,12 @@
 
   .search-keyword {
     margin-bottom: 30px;
+  }
+}
+@media (max-width: 980px) {
+  .search-filters-open {
+    z-index: 1200;
+    position: relative;
   }
 }
 
