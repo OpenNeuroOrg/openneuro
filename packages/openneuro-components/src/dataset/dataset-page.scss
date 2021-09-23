@@ -52,12 +52,14 @@
 
   .dataset-tool-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
     > span {
       display: flex;
-      margin-bottom: 20px;
+      margin: 0 auto 20px;
       padding: 0 5px;
+      width: 100px;
+      justify-content: center;
       .dataset-tool {
         color: var(--current-theme-primary);
         font-size: 17px;
