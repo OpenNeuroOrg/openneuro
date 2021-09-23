@@ -80,7 +80,7 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
       {followDataset => (
         <CountToggle
           label={following ? 'Following' : 'Follow'}
-          icon="fa-bookmark"
+          icon="fa-star"
           disabled={!profile}
           toggleClick={() => followDataset({ variables: { datasetId } })}
           tooltip="Get notified on new versions/comments"
