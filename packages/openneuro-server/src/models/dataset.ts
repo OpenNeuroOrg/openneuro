@@ -24,6 +24,8 @@ const datasetSchema = new Schema<DatasetDocument>(
     publishDate: { type: Date, default: null },
     uploader: String,
     name: String,
+    downloads: Number,
+    views: Number,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 )
