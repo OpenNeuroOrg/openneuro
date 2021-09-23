@@ -1,10 +1,16 @@
 import Analytics from '../models/analytics'
+import Dataset from '../models/dataset'
 
-export const trackAnalytics = (datasetId, tag, type) => {
-  return Analytics.updateOne(
+/**
+ * Update a dataset's analytics count
+ * @param {string} datasetId
+ * @param {string} tag Deprecated
+ * @param {'views'|'downloads'} type
+ */
+export const trackAnalytics = async (datasetId, tag, type) => {
+  return Dataset.updateOne(
     {
-      datasetId: datasetId,
-      tag: tag,
+      id: datasetId,
     },
     {
       $inc: {

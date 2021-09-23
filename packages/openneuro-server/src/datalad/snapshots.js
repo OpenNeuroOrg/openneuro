@@ -213,8 +213,6 @@ export const getSnapshot = (datasetId, commitRef) => {
   const url = `${getDatasetWorker(
     datasetId,
   )}/datasets/${datasetId}/snapshots/${commitRef}`
-  // Track a view for each snapshot query
-  trackAnalytics(datasetId, commitRef, 'views')
   const cache = new CacheItem(redis, CacheType.snapshot, [datasetId, commitRef])
   return cache.get(() =>
     request
