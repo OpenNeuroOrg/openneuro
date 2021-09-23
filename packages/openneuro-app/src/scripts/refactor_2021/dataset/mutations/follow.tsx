@@ -71,7 +71,9 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
             id: datasetId,
             followers: following
               ? [...followers, newFollower]
-              : followers.filter(follower => follower.userId !== newFollower.userId),
+              : followers.filter(
+                  follower => follower.userId !== newFollower.userId,
+                ),
           },
         })
       }}>
@@ -81,7 +83,7 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
           icon="fa-bookmark"
           disabled={!profile}
           toggleClick={() => followDataset({ variables: { datasetId } })}
-          tooltip="hello Tip"
+          tooltip="Get notified on new versions/comments"
           clicked={following}
           count={followers}
         />
