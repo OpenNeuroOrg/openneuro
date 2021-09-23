@@ -2,7 +2,7 @@ import { useSubscription, gql } from '@apollo/client'
 
 import { DATASET_SNAPSHOTS } from '../dataset/dataset-query-fragments.js'
 
-const SNAPSHOTS_UPDATED_SUBSCRIPTION = gql`
+export const SNAPSHOTS_UPDATED_SUBSCRIPTION = gql`
   subscription snapshotsUpdated($datasetId: ID!) {
     snapshotsUpdated(datasetId: $datasetId) {
       id
