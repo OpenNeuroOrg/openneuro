@@ -18,7 +18,7 @@ import { relayStylePagination } from '@apollo/client/utilities'
 
 gtag.initialize(config.analytics.trackingIds)
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <App>
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
