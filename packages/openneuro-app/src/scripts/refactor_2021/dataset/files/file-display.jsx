@@ -1,14 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import FileView from './file-view.jsx'
 import { apiPath } from './file.jsx'
 import styled from '@emotion/styled'
 import { Media } from '../../../styles/media'
 
-const PathBreadcrumb = styled.span`
-  font-size: 18px;
-  color: #777;
+const PathBreadcrumb = styled.div`
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #333;
   text-transform: uppercase;
+  h2 {
+    margin-bottom: 10px;
+  }
+  .display-file {
+    margin-right: 10px;
+  }
 `
 
 /**
@@ -44,13 +52,13 @@ FileDisplayBreadcrumb.propTypes = {
 }
 
 const FileDisplay = ({ datasetId, snapshotTag = null, filePath }) => (
-  <div className="dataset-form display-file">
-    <div className="col-xs-12 display-file-content">
-      <div className="display-file-header">
+  <div className="dataset-form display-file container">
+    <div className="grid display-file-content">
+      <div className="display-file-header col col-12">
         <div className="form-group modal-title">
           <span className="ds-primary display-file-path">
             <PathBreadcrumb>
-              {datasetId}
+              <h2>{datasetId}</h2>
               <FileDisplayBreadcrumb filePath={filePath} />
             </PathBreadcrumb>
           </span>
@@ -59,12 +67,15 @@ const FileDisplay = ({ datasetId, snapshotTag = null, filePath }) => (
               <a href={apiPath(datasetId, snapshotTag, filePath)} download>
                 <i className="fa fa-download" /> Download
               </a>
+              <Link className="return-link" to={`/datasets/${datasetId}`}>
+                Return to dataset
+              </Link>
             </div>
           </Media>
           <hr />
         </div>
       </div>
-      <div className="display-file-body">
+      <div className="col col-12  display-file-body">
         <FileView
           datasetId={datasetId}
           snapshotTag={snapshotTag}
