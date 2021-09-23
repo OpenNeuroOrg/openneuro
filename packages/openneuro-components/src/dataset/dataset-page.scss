@@ -7,6 +7,11 @@
       display: flex;
       align-items: center;
       color: #fff;
+      @media (max-width: 767px) {
+        font-size: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
     }
     .hexagon-wrapper {
       margin-right: 10px;
@@ -80,9 +85,13 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
+    flex-wrap: wrap;
     .validation-accordion {
       flex-grow: 1;
       margin-right: 20px;
+      @media (max-width: 990px) {
+        margin-bottom: 20px;
+      }
     }
     .brainlife-block {
       margin-right: 20px;
@@ -348,6 +357,7 @@
   padding: 20px;
   border-radius: $border-radius-default;
   border: 1px solid $newspaper;
+  flex-wrap: wrap;
   .active-version {
     font-size: 14px;
     div {
@@ -368,7 +378,7 @@
   .version-dropdown {
     position: relative;
     .menu .version-list-dropdow {
-      min-width: 380px;
+      min-width: 290px;
       border: 1px solid $newspaper;
       border-radius: $border-radius-default;
     }

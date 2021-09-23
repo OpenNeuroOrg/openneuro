@@ -248,6 +248,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  flex-wrap: wrap;
   .on-button--small {
     padding: 13px;
     margin-left: 10px;
@@ -269,6 +270,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 //file tree
