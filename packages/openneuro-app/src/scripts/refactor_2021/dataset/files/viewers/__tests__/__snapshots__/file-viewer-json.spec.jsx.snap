@@ -8,7 +8,7 @@ exports[`File Viewer - JSON renders with invalid JSON 1`] = `
     className="grid"
   >
     <div
-      className="col"
+      className="col col-lg"
     >
       <h3>
         Tree
@@ -39,7 +39,7 @@ exports[`File Viewer - JSON renders with valid JSON 1`] = `
     className="grid"
   >
     <div
-      className="col"
+      className="col col-lg"
     >
       <h3>
         Tree

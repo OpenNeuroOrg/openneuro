@@ -131,6 +131,9 @@
           background: #fff;
           border-radius: $border-radius-default;
           padding: 20px;
+          @media (max-width: 800px) {
+            width: 100%;
+          }
           span {
             display: flex;
             justify-content: space-between;
@@ -148,6 +151,7 @@
             align-items: center;
             margin: 20px 0 0;
             font-size: 14px;
+            flex-wrap: wrap;
             > div {
               flex-grow: 1;
               padding: 5px;
@@ -394,6 +398,11 @@
       color: var(--current-theme-primary);
       &:hover {
         color: var(--current-theme-primary-hover);
+      }
+    }
+    @media (max-width: 435px) {
+      &.dropdown-wrapper .menu {
+        right: 0;
       }
     }
   }

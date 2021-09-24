@@ -46,7 +46,6 @@ export const Header = ({
             <h1 className="sr-only">OpenNeuro</h1>
           </div>
           <div className="navbar-navigation">
-            {/* TODO: convert Support to trigger support modal. */}
             <ul>
               <li>
                 <NavLink
