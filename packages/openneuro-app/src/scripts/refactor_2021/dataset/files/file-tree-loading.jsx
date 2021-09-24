@@ -19,13 +19,13 @@ const ProgressInner = styled(animated.div)`
 
 /**
  * Estimate time to fetch files
- * @param {Navigator} navigator
+ * @param {Navigator} [navigator]
  * @returns {(size: number) => number}
  */
 export const estimateDuration = navigator => size => {
   // One file is about 100 bytes
   const estimatedBytes = size * 100
-  if ('connection' in navigator) {
+  if (navigator && 'connection' in navigator) {
     // Estimate duration precisely if we can
     const downlink = navigator.connection.downlink
     return (estimatedBytes / (downlink * 1024)) * 1000 + 50
@@ -36,11 +36,12 @@ export const estimateDuration = navigator => size => {
 }
 
 const FileTreeLoading = ({ size }) => {
+  const navRef = typeof navigator === 'undefined' ? undefined : navigator
   const config = {
     mass: 5,
     tension: 2000,
     friction: 200,
-    duration: estimateDuration(navigator)(size),
+    duration: estimateDuration(navRef)(size),
   }
   const props = useSpring({
     config,
