@@ -150,7 +150,7 @@ export const datasetsFilter = options => match => {
         },
         {
           $match: {
-            $in: [options.modality, 'summaries.0.modalities'],
+            'summaries.0.modalities': options.modality,
           },
         },
       ],
