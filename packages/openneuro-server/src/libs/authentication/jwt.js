@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import { decrypt } from './crypto'
 import User from '../../models/user'
 import config from '../../config.js'
+import atob from 'atob'
 
 export const buildToken = (config, user, expiresIn, options) => {
   const fields = {
@@ -153,10 +154,13 @@ export const authenticate = (req, res, next) => {
 }
 
 export const authSuccessHandler = (req, res, next) => {
+  const redirectPath = req.query.state 
+    ? atob(req.query.state)
+    : '/'
   if (req.user) {
     // Set the JWT associated with this login on a cookie
     res.cookie('accessToken', req.user.token, { sameSite: 'Strict' })
-    res.redirect('/')
+    res.redirect(redirectPath)
   } else {
     res.status(401)
   }

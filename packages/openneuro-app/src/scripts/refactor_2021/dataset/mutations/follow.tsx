@@ -1,8 +1,10 @@
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
+import { useLocation } from 'react-router-dom'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { datasetCacheId } from '../../../datalad/mutations/cache-id.js'
 import { CountToggle } from '@openneuro/components/count-toggle'
+import { UserModalOpenCtx } from '../../user-login-modal-ctx'
 
 const FOLLOW_DATASET = gql`
   mutation followDataset($datasetId: ID!) {
@@ -43,6 +45,16 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
   profile,
   followers,
 }) => {
+  const { setUserModalOpen, setLoginOptions } = useContext(UserModalOpenCtx)
+  const location = useLocation()
+  const handleToggle = followDataset => () => {
+    if (!profile) {
+      setLoginOptions(prevState => ({ ...prevState, redirect: location.pathname}))
+      setUserModalOpen(true)
+    } else {
+      followDataset({ variables: { datasetId } })
+    }
+  }
   return (
     <Mutation
       mutation={FOLLOW_DATASET}
@@ -82,7 +94,7 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
           label={following ? 'Following' : 'Follow'}
           icon="fa-star"
           disabled={!profile}
-          toggleClick={() => followDataset({ variables: { datasetId } })}
+          toggleClick={handleToggle(followDataset)}
           tooltip="Get notified on new versions/comments"
           clicked={following}
           count={followers}

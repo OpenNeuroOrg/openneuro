@@ -21,7 +21,6 @@ export const CountToggle = ({
   clicked,
   count,
 }: CountToggleProps) => {
-  const toggleLogin = () => alert('TODO needs login modal')
   const toggleButton = (
     <span className="toggle-counter">
       <Button
@@ -40,7 +39,7 @@ export const CountToggle = ({
         className={clicked ? 'toggle-btn active' : 'toggle-btn'}
         iconSize="12px"
         icon={'fa ' + icon}
-        onClick={toggleLogin}
+        onClick={toggleClick}
         label={label}>
         <span className="count-span">{count}</span>
       </Button>

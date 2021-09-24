@@ -22,7 +22,7 @@ export interface ButtonProps {
   label: string
   nobg?: boolean
   disabled?: boolean
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
   navbar?: boolean
   iconOnly?: boolean
   icon?: string

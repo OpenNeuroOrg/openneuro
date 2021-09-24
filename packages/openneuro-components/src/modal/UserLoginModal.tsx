@@ -11,12 +11,14 @@ export interface UserLoginModalProps {
   isOpen: boolean
   toggle: () => void
   loginUrls: Record<string, string>
+  redirectPathParam: string
 }
 
 export const UserLoginModal = ({
   isOpen,
   toggle,
   loginUrls,
+  redirectPathParam = '',
 }: UserLoginModalProps) => {
   return (
     <>
@@ -27,18 +29,18 @@ export const UserLoginModal = ({
         </div>
         <div className="sign-in-modal-content">
           <div>
-            <a href={loginUrls.google}>
+            <a href={loginUrls.google + `${redirectPathParam ? `?redirectPath=${btoa(redirectPathParam)}` : ''}`}>
               <Button
                 className="login-button"
                 primary
                 label="Google"
                 icon="fab fa-google"
                 iconSize="23px"
-              />
+                />
             </a>
           </div>
           <div>
-            <a href={loginUrls.orcid}>
+            <a href={loginUrls.orcid + `${redirectPathParam ? `?redirectPath=${btoa(redirectPathParam)}` : ''}`}>
               <Button
                 className="login-button"
                 primary

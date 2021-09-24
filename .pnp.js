@@ -10090,6 +10090,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@elastic/elasticsearch", "npm:7.13.0"],
             ["@passport-next/passport-google-oauth2", "npm:1.0.0"],
             ["@sentry/node", "npm:4.6.6"],
+            ["@types/atob", "npm:2.1.2"],
             ["@types/draft-js", "npm:0.10.45"],
             ["@types/ioredis", "npm:4.26.5"],
             ["@types/jest", "npm:26.0.24"],
@@ -10099,6 +10100,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["apollo-server-cache-redis", "npm:1.4.0"],
             ["apollo-server-express", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.21.0"],
             ["async", "npm:2.6.3"],
+            ["atob", "npm:2.1.2"],
             ["babel-eslint", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:10.1.0"],
             ["base64url", "npm:3.0.1"],
             ["body-parser", "npm:1.19.0"],
@@ -12765,6 +12767,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-async-npm-2.4.2-cac7fe33a1-383b447a33.zip/node_modules/@types/async/",
           "packageDependencies": [
             ["@types/async", "npm:2.4.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/atob", [
+        ["npm:2.1.2", {
+          "packageLocation": "./.yarn/cache/@types-atob-npm-2.1.2-d1b3aa7dd7-df8e9efd3c.zip/node_modules/@types/atob/",
+          "packageDependencies": [
+            ["@types/atob", "npm:2.1.2"]
           ],
           "linkType": "HARD",
         }]
