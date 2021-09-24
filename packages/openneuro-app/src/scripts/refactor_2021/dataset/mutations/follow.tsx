@@ -50,6 +50,9 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
   const history = useHistory()
   const handleToggle = followDataset => () => {
     if (!profile) {
+      // if user is not logged in, give them the option to do so
+      // then redirect back to this page and auto toggle Follow
+      // with `handleAutoFollow`
       setLoginOptions(prevState => ({
         ...prevState,
         redirect: `${location.pathname}?follow=toggle`,
