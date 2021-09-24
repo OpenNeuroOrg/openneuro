@@ -49,12 +49,6 @@ datasetSchema.virtual('stars', {
   justOne: true,
 })
 
-datasetSchema.virtual('analytics', {
-  ref: 'Analytics',
-  localField: 'id',
-  foreignField: 'datasetId',
-})
-
 datasetSchema.virtual('subscriptions', {
   ref: 'Subscription',
   localField: 'id',

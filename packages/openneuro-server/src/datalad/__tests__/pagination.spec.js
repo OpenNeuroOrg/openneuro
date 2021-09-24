@@ -114,8 +114,6 @@ describe('pagination model operations', () => {
       const agg = pagination.sortAggregate({
         orderBy: { downloads: 'ascending' },
       })
-      expect(agg[0]).toHaveProperty('$lookup')
-      expect(agg[1]).not.toHaveProperty('$addFields')
       // Ends with count sort
       expect(agg.slice(-1)).toEqual([{ $sort: { downloads: 1 } }])
     })
@@ -123,8 +121,6 @@ describe('pagination model operations', () => {
       const agg = pagination.sortAggregate({
         orderBy: { views: 'ascending' },
       })
-      expect(agg[0]).toHaveProperty('$lookup')
-      expect(agg[1]).not.toHaveProperty('$addFields')
       // Ends with count sort
       expect(agg.slice(-1)).toEqual([{ $sort: { views: 1 } }])
     })
@@ -139,7 +135,7 @@ describe('pagination model operations', () => {
           subscriptions: 'ascending',
         },
       })
-      expect(agg).toHaveLength(9)
+      expect(agg).toHaveLength(6)
       // Final stage should always be a sort
       expect(agg.slice(-1)[0]).toHaveProperty('$sort')
     })
