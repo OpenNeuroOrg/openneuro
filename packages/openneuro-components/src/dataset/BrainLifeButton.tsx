@@ -22,6 +22,7 @@ export const BrainLifeButton: React.FC<BrainLifeButtonProps> = ({
             <Button
               className="brainlife-link"
               primary={true}
+              size="small"
               onClick={() => goToBrainlife(datasetId)}
               label="brainlife.io"
             />

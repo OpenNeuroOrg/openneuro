@@ -300,6 +300,10 @@ $warning-orange: #df7600;
       flex-grow: 1;
       flex-wrap: wrap;
 
+      @media (max-width: 480px) {
+        flex-direction: column;
+      }
+
       h3 {
         margin: 0;
         flex-grow: 1;

@@ -85,12 +85,18 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
-    flex-wrap: wrap;
+    @media (max-width: 767px) {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
     .validation-accordion {
       flex-grow: 1;
       margin-right: 20px;
       @media (max-width: 990px) {
         margin-bottom: 20px;
+      }
+      @media (max-width: 767px) {
+        min-width: 100%;
       }
     }
     .brainlife-block {
