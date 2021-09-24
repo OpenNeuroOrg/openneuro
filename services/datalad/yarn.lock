@@ -1062,18 +1062,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.7.3":
-  version: 1.7.3
-  resolution: "bids-validator@npm:1.7.3"
+"bids-validator@npm:1.8.4":
+  version: 1.8.4
+  resolution: "bids-validator@npm:1.8.4"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
     bytes: ^3.0.0
-    colors: ^1.3.1
+    colors: ^1.4.0
     cross-fetch: ^3.0.6
     date-fns: ^2.7.0
-    esm: ^3.2.25
-    hed-validator: ^3.2.1
+    events: ^3.3.0
+    hed-validator: ^3.4.0
     ignore: ^4.0.2
     is-utf8: ^0.2.1
     jshint: ^2.9.6
@@ -1084,11 +1084,12 @@ __metadata:
     path: ^0.12.7
     pluralize: ^8.0.0
     semver: ^7.3.2
+    stream-browserify: ^3.0.0
     table: ^5.2.3
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 00b21b3a5dba123a8f3c40d6c40c1d60371c5ac65be4111086a7504f8b99b3dd257f5a8a6a6c8d8c4f85596cd2953f050422bc7937bff8bdc68213a33f8368cf
+  checksum: ffdf0b938d8e6458f5dcf21557c944104b2175e9fc95a21a6d6bf34237c94dad302c05f48420c38950cdffafde49af85994fbf49bde01db09ccec051109044a8
   languageName: node
   linkType: hard
 
@@ -1232,10 +1233,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:^1.3.1":
-  version: 1.3.2
-  resolution: "colors@npm:1.3.2"
-  checksum: 54bccdbdca19191c29a34fdf235a4f269c761648c298c1fb7b8c0fed526cb8888ac54ac38e023520414e4dc337eaf3f3bd240effac8822decfdb7795a3fefe22
+"colors@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "colors@npm:1.4.0"
+  checksum: a0f266ac041a9774d92cc9624a984707678d2eeec125d54e8d8231075ce36c24c5352fb5d0f90c6ee420d0f63e354417cec716386ad341309334aad18e32b933
   languageName: node
   linkType: hard
 
@@ -1463,10 +1464,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esm@npm:^3.2.25":
-  version: 3.2.25
-  resolution: "esm@npm:3.2.25"
-  checksum: 12a0272aaa15ce4bc07e52cbb66d471cf56ad81ad1a3c1d9f6fa1e29e8c2712716333825e2572f9dbdfdc787e5717a75cb00ce2846e2a50e2bba6971c24402f3
+"events@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "events@npm:3.3.0"
+  checksum: 56fa12567013e85b98782a1d971442ea29df057129d8a94432711fd68303357594ea37bfbe234860e28581a7768f943a8bea88c16b48aa01b96acf804bc01d52
   languageName: node
   linkType: hard
 
@@ -1676,9 +1677,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "hed-validator@npm:3.2.1"
+"hed-validator@npm:^3.4.0":
+  version: 3.4.1
+  resolution: "hed-validator@npm:3.4.1"
   dependencies:
     date-and-time: ^0.14.2
     date-fns: ^2.17.0
@@ -1686,7 +1687,7 @@ __metadata:
     semver: ^7.3.4
     then-request: ^6.0.2
     xml2js: ^0.4.23
-  checksum: 4031101910c07e12caff31fc33301d01a6a67daac7c9a50922eb4ed17a14799f05e364d6af8c9afd4142a1bc3d31e90bf3c7ec35c7e8bbf2315dfff51d4076c6
+  checksum: 48c20ebbf6d054a692b2bc8fbf0a0a58bfc0d778f05ef60c4aada9f86fa8ab0c0e4887f3a89e81596575c5950ffdfec2f37557461272ad943a233ea6f168fce0
   languageName: node
   linkType: hard
 
@@ -2379,7 +2380,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    bids-validator: 1.7.3
+    bids-validator: 1.8.4
   languageName: unknown
   linkType: soft
 
@@ -2497,7 +2498,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stream-browserify@npm:*":
+"stream-browserify@npm:*, stream-browserify@npm:^3.0.0":
   version: 3.0.0
   resolution: "stream-browserify@npm:3.0.0"
   dependencies:
