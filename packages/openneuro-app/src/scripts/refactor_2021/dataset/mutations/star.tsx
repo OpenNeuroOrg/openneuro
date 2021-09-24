@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { datasetCacheId } from '../../../datalad/mutations/cache-id.js'
@@ -46,31 +46,17 @@ export const StarDataset: FC<StarDatasetProps> = ({
 }) => {
   const { setUserModalOpen, setLoginOptions } = useContext(UserModalOpenCtx)
   const location = useLocation()
-  const history = useHistory()
   const handleToggle = starDataset => () => {
     if (!profile) {
       // if user is not logged in, give them the option to do so
-      // then redirect back to this page and auto toggle Bookmark
-      // with `handleAutoStar`
+      // then redirect back to this page
       setLoginOptions(prevState => ({
         ...prevState,
-        redirect: `${location.pathname}?bookmark=toggle`,
+        redirect: `${location.pathname}`,
       }))
       setUserModalOpen(true)
     } else {
       starDataset({ variables: { datasetId } })
-    }
-  }
-  const handleAutoStar = starDataset => {
-    const queryParams = new URLSearchParams(location.search)
-    if (queryParams.has('bookmark') && queryParams.get('bookmark') === 'toggle') {
-      queryParams.delete('bookmark')
-      const queryString = queryParams.toString()
-      history.replace(`${location.pathname}${queryString ? `?${queryString}`: ''}`)
-      // pause for a bit so that the toggle is more noticable to users
-      setTimeout(() => {
-        starDataset({ variables: { datasetId }})
-      }, 500)
     }
   }
   return (
@@ -106,7 +92,6 @@ export const StarDataset: FC<StarDatasetProps> = ({
         })
       }}>
       {starDataset => (
-        handleAutoStar(starDataset),
         <CountToggle
           label={starred ? 'Bookmarked' : 'Bookmark'}
           icon="fa-bookmark"
