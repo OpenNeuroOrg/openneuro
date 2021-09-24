@@ -76,7 +76,7 @@ def setup_s3_sibling(dataset_path, realm):
     """Add a sibling for an S3 bucket publish."""
     annex_options = generate_s3_annex_options(dataset_path, realm)
     subprocess.run(['git-annex', 'initremote', realm.s3_remote] +
-                   annex_options, check=True, cwd=dataset_path)
+                   annex_options, cwd=dataset_path)
 
 
 def update_s3_sibling(dataset_path, realm):
