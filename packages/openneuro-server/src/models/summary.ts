@@ -18,6 +18,7 @@ export interface SummaryDocument extends Document {
   tasks: string[]
   modalities: string[]
   secondaryModalities: string[]
+  dataTypes: string[]
   totalFiles: number
   size: number
   dataProcessed: boolean
@@ -33,6 +34,7 @@ const summarySchema = new Schema({
   tasks: [String],
   modalities: [String],
   secondaryModalities: [String],
+  dataTypes: [String],
   totalFiles: Number,
   size: Number,
   dataProcessed: Boolean,

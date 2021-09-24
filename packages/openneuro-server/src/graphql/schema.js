@@ -215,6 +215,7 @@ export const typeDefs = `
     datasetId: ID!
     modalities: [String]
     secondaryModalities: [String]
+    dataTypes: [String]
     sessions: [String]
     subjects: [String]
     subjectMetadata: [SubjectMetadataInput]
