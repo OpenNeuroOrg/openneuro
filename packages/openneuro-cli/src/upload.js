@@ -7,7 +7,7 @@ import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
-import consoleFormat from 'bids-validator/utils/consoleFormat'
+import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
 
 /**
  * BIDS validator promise wrapper

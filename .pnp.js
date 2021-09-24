@@ -9896,7 +9896,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-core", "virtual:8d3a83663eeb52526f1a370f37823b207ef94fd6f29876d8d32441147013da1c410e0af99127da61a03b76c1f782c4ec6a3e8818ca584076ab02a5fafc1465eb#npm:7.0.0-bridge.0"],
             ["babel-jest", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:24.9.0"],
             ["babel-runtime", "npm:6.26.0"],
-            ["bids-validator", "npm:1.8.3"],
+            ["bids-validator", "npm:1.8.4"],
             ["bytes", "npm:3.1.0"],
             ["comlink", "npm:4.3.1"],
             ["connect-history-api-fallback", "npm:1.6.0"],
@@ -9962,7 +9962,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],
             ["@types/mkdirp", "npm:1.0.2"],
             ["@types/node", "npm:14.17.5"],
-            ["bids-validator", "npm:1.8.3"],
+            ["bids-validator", "npm:1.8.4"],
             ["cli-progress", "npm:3.9.0"],
             ["commander", "npm:7.2.0"],
             ["core-js", "npm:3.15.2"],
@@ -17596,10 +17596,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["bids-validator", [
-        ["npm:1.8.3", {
-          "packageLocation": "./.yarn/cache/bids-validator-npm-1.8.3-4af3f0ca53-32fda8b9ac.zip/node_modules/bids-validator/",
+        ["npm:1.8.4", {
+          "packageLocation": "./.yarn/cache/bids-validator-npm-1.8.4-c4deba6383-ffdf0b938d.zip/node_modules/bids-validator/",
           "packageDependencies": [
-            ["bids-validator", "npm:1.8.3"],
+            ["bids-validator", "npm:1.8.4"],
             ["@aws-sdk/client-s3", "npm:3.21.0"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],

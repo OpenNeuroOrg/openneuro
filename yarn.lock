@@ -5048,7 +5048,7 @@ __metadata:
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^24.9.0
     babel-runtime: ^6.26.0
-    bids-validator: 1.8.3
+    bids-validator: 1.8.4
     bytes: ^3.0.0
     comlink: ^4.0.5
     connect-history-api-fallback: ^1.5.0
@@ -5112,7 +5112,7 @@ __metadata:
     "@openneuro/client": ^3.36.1
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
-    bids-validator: 1.8.3
+    bids-validator: 1.8.4
     cli-progress: ^3.8.2
     commander: 7.2.0
     core-js: ^3.10.1
@@ -10462,9 +10462,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.8.3":
-  version: 1.8.3
-  resolution: "bids-validator@npm:1.8.3"
+"bids-validator@npm:1.8.4":
+  version: 1.8.4
+  resolution: "bids-validator@npm:1.8.4"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -10489,7 +10489,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 32fda8b9ac633451d2ef9a38de67103f74e51e7d9e45f6cac3f159f129eac9b6367487f2e740a06a849edc80fa5bdac5a1517e2ce70c9a9ed66829374cefbb8e
+  checksum: ffdf0b938d8e6458f5dcf21557c944104b2175e9fc95a21a6d6bf34237c94dad302c05f48420c38950cdffafde49af85994fbf49bde01db09ccec051109044a8
   languageName: node
   linkType: hard
 
