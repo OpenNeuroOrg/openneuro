@@ -137,7 +137,10 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           <AggregateCountsContainer modality={portalContent.modality} />
         )}
         renderFilterBlock={() => (
-          <FiltersBlockContainer numTotalResults={numTotalResults} />
+          <FiltersBlockContainer
+            loading={loading}
+            numTotalResults={numTotalResults}
+          />
         )}
         renderSortBy={() => (
           <>
@@ -205,7 +208,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
               {/* TODO: make div below into display component. */}
               <div className="grid grid-nogutter" style={{ width: '100%' }}>
                 {resultsList.length == 0 || !hasNextPage ? null : (
-                  <div className="col col-12 load-more ">
+                  <div className="col col-12 load-more m-t-10">
                     <Button label="Load More" onClick={loadMore} />
                   </div>
                 )}

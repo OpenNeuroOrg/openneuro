@@ -11,10 +11,12 @@ import initialSearchParams from './initial-search-params'
 
 interface FiltersBlockContainerProps {
   numTotalResults: number
+  loading: boolean
 }
 
 const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   numTotalResults,
+  loading,
 }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const selectedParams = getSelectParams(searchParams)
@@ -47,6 +49,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       removeAllFilters={removeAllFilters}
       numTotalResults={numTotalResults}
       {...selectedParams}
+      loading={loading}
     />
   )
 }

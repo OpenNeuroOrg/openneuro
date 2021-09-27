@@ -29,10 +29,12 @@ export interface FiltersBlockProps {
   removeFilterItem?(isModality?: boolean): (key: string, value) => void
   removeAllFilters?(): void
   numTotalResults: number
+  loading: boolean
 }
 
 export const FiltersBlock = ({
   keywords,
+  loading,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
@@ -71,7 +73,13 @@ export const FiltersBlock = ({
           </b>
         ) : (
           <>
-            These filters return <span>{numTotalResults}</span> datasets:{' '}
+            {loading ? (
+              ' Loading Results...'
+            ) : (
+              <>
+                These filters return <span>{numTotalResults}</span> datasets:{' '}
+              </>
+            )}
             <Button label="Clear All" size="small" onClick={removeAllFilters} />
           </>
         )}
