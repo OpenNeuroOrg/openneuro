@@ -9,7 +9,7 @@ export const summary = async dataset => {
       id: dataset.revision,
       datasetId: dataset.id,
     }).exec()
-  ).toObject()
+  )?.toObject()
   return {
     ...datasetSummary,
     primaryModality: datasetSummary?.modalities[0],
