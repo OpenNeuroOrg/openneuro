@@ -37,7 +37,6 @@ const TOP_VIEWED = gql`
             tag
             summary {
               primaryModality
-              modalities
             }
             description {
               Name
@@ -64,7 +63,6 @@ const RECENTLY_PUBLISHED = gql`
             tag
             summary {
               primaryModality
-              modalities
             }
             description {
               Name
