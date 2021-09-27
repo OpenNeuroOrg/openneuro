@@ -117,7 +117,11 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
             ) : null}
           </NoErrors>{' '}
           <Link to={`/datasets/${datasetId}`}>
-            <Button nobg={true} label="Return to Dataset" />
+            <Button
+              className="return-link"
+              nobg={true}
+              label="Return to Dataset"
+            />
           </Link>
         </div>
       </div>
