@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { datasetCacheId } from '../../../datalad/mutations/cache-id.js'
@@ -47,12 +47,28 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
 }) => {
   const { setUserModalOpen, setLoginOptions } = useContext(UserModalOpenCtx)
   const location = useLocation()
+  const history = useHistory()
   const handleToggle = followDataset => () => {
     if (!profile) {
-      setLoginOptions(prevState => ({ ...prevState, redirect: location.pathname}))
+      setLoginOptions(prevState => ({
+        ...prevState,
+        redirect: `${location.pathname}?follow=toggle`,
+      }))
       setUserModalOpen(true)
     } else {
       followDataset({ variables: { datasetId } })
+    }
+  }
+  const handleAutoFollow = followDataset => {
+    const queryParams = new URLSearchParams(location.search)
+    if (queryParams.has('follow') && queryParams.get('follow') === 'toggle') {
+      queryParams.delete('follow')
+      const queryString = queryParams.toString()
+      history.replace(`${location.pathname}${queryString ? `?${queryString}`: ''}`)
+      // pause for a bit so that the toggle is more noticable to users
+      setTimeout(() => {
+        followDataset({ variables: { datasetId }})
+      }, 500)
     }
   }
   return (
@@ -90,6 +106,7 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
         })
       }}>
       {followDataset => (
+        handleAutoFollow(followDataset),
         <CountToggle
           label={following ? 'Following' : 'Follow'}
           icon="fa-star"
