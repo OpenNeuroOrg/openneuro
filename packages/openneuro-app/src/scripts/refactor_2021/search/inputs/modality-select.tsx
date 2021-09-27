@@ -4,8 +4,10 @@ import { SearchParamsCtx } from '../search-params-ctx'
 import { SearchParams, flattenedModalities } from '../initial-search-params'
 import { FacetSelect } from '@openneuro/components/facets'
 import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import initialSearchParams from '../initial-search-params'
 
 interface ModalitySelectProps {
+  inHeader?: boolean
   startOpen?: boolean
   label?: string
   portalStyles?: boolean
@@ -13,13 +15,13 @@ interface ModalitySelectProps {
 }
 
 const ModalitySelect: FC<ModalitySelectProps> = ({
+  inHeader = false,
   startOpen = true,
   label,
   portalStyles = false,
   dropdown,
 }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-  const { path } = useRouteMatch()
   const history = useHistory()
 
   const { modality_available, modality_selected } = searchParams
@@ -28,7 +30,7 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
   ): ReturnType<typeof setSearchParams> => {
     setSearchParams(
       (prevState: SearchParams): SearchParams => ({
-        ...prevState,
+        ...(inHeader ? initialSearchParams : prevState),
         modality_selected,
       }),
     )
