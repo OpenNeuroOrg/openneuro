@@ -176,10 +176,11 @@ const File = ({
             </Media>
           </>
         )}
-        <Media greaterThanOrEqual="medium">
-          {!isMobile &&
-            annexed &&
-            (isAdmin() ? (
+
+        {!isMobile &&
+          annexed &&
+          (isAdmin() ? (
+            <Media greaterThanOrEqual="medium">
               <RemoveAnnexObject
                 datasetId={datasetId}
                 snapshot={snapshotTag}
@@ -187,15 +188,17 @@ const File = ({
                 path={path}
                 filename={filename}
               />
-            ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
+            </Media>
+          ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
+            <Media greaterThanOrEqual="medium">
               <FlagAnnexObject
                 datasetId={datasetId}
                 snapshot={snapshotTag}
                 filepath={filePath(path, filename)}
                 annexKey={annexKey}
               />
-            ) : null)}
-        </Media>
+            </Media>
+          ) : null)}
       </span>
     </>
   )
