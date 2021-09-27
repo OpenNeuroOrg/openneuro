@@ -54,7 +54,6 @@ export const ActivitySlider = ({
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-modality">
               <div className="hexagon-wrapper">
-                {console.log(node.latestSnapshot.summary.modalities)}
                 {node.latestSnapshot.summary.modalities !== null ? (
                   <>
                     {/* TODO GET the primary modality when available */}
