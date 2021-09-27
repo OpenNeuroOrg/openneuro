@@ -121,7 +121,7 @@ const AddMetadata = ({ dataset }) => {
   return (
     <div className="container metadata-form">
       <header>
-        <h1>Add Metadata</h1>
+        <h1>{hasEdit && 'Add '}Metadata</h1>
         <hr />
       </header>
       <MetadataForm
