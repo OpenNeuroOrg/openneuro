@@ -197,7 +197,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           ) : null
         }
         renderSearchResultsList={() =>
-          numTotalResults === 0 ? (
+          !loading && numTotalResults === 0 ? (
             <h3>No results: please broaden your search.</h3>
           ) : (
             <>
