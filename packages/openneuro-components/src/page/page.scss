@@ -405,7 +405,9 @@
       cursor: pointer;
       height: 20px;
       &.fresnel-greaterThanOrEqual-medium {
-        margin: 0;
+        @media (max-width: 767px) {
+          margin: 0;
+        }
       }
       i {
         font-size: 12px;
