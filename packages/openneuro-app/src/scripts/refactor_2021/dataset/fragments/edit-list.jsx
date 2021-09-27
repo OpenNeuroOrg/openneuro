@@ -22,7 +22,6 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
   }
 
   const updateElements = () => {
-    console.log(newElement)
     if (newElement === '') {
       updateWarnEmpty(true)
     } else {
