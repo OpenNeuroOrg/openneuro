@@ -23,36 +23,36 @@ type ModalityOption = {
 
 export const modality_available: ModalityOption[] = [
   {
-    label: 'MRI',
-    value: 'MRI',
+    label: 'MRI (Functional, Structural, and Diffusion)',
+    value: 'MRI (Functional, Structural, and Diffusion)',
     portalPath: '/search/modality/mri',
     count: null,
-    children: [
-      {
-        label: 'Functional',
-        value: 'Functional',
-        portalPath: '/search/modality/mri',
-        count: null,
-      },
-      {
-        label: 'Structural',
-        value: 'Structural',
-        portalPath: '/search/modality/mri',
-        count: null,
-      },
-      {
-        label: 'Diffusion',
-        value: 'Diffusion',
-        portalPath: '/search/modality/mri',
-        count: null,
-      },
-      // {
-      //   label: 'ASL Perfusion',
-      //   value: 'ASL Perfusion',
-      //   portalPath: '/search/modality/mri',
-      //   count: null,
-      // },
-    ],
+    // children: [
+    //   {
+    //     label: 'Functional',
+    //     value: 'Functional',
+    //     portalPath: '/search/modality/mri',
+    //     count: null,
+    //   },
+    //   {
+    //     label: 'Structural',
+    //     value: 'Structural',
+    //     portalPath: '/search/modality/mri',
+    //     count: null,
+    //   },
+    //   {
+    //     label: 'Diffusion',
+    //     value: 'Diffusion',
+    //     portalPath: '/search/modality/mri',
+    //     count: null,
+    //   },
+    //   {
+    //     label: 'ASL Perfusion',
+    //     value: 'ASL Perfusion',
+    //     portalPath: '/search/modality/mri',
+    //     count: null,
+    //   },
+    // ],
   },
   {
     label: 'PET',
