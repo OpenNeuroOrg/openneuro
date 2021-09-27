@@ -23,8 +23,8 @@ type ModalityOption = {
 
 export const modality_available: ModalityOption[] = [
   {
-    label: 'MRI (Functional, Structural, and Diffusion)',
-    value: 'MRI (Functional, Structural, and Diffusion)',
+    label: 'MRI',
+    value: 'MRI',
     portalPath: '/search/modality/mri',
     count: null,
     // children: [

@@ -14,7 +14,6 @@ export interface ActivitySliderProps {
   containerClass?: string
   itemClass?: string
   slideHeader?: React.ReactNode
-
   responsive: ResponsiveType
   data: Array<any>
 }
@@ -55,7 +54,8 @@ export const ActivitySlider = ({
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-modality">
               <div className="hexagon-wrapper">
-                {node.latestSnapshot.summary !== null ? (
+                {console.log(node.latestSnapshot.summary.modalities)}
+                {node.latestSnapshot.summary.modalities !== null ? (
                   <>
                     {/* TODO GET the primary modality when available */}
                     <div
