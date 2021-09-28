@@ -1,8 +1,10 @@
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
+import { useLocation } from 'react-router-dom'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { datasetCacheId } from '../../../datalad/mutations/cache-id.js'
 import { CountToggle } from '@openneuro/components/count-toggle'
+import { UserModalOpenCtx } from '../../user-login-modal-ctx'
 
 const STAR_DATASET = gql`
   mutation starDataset($datasetId: ID!) {
@@ -42,6 +44,21 @@ export const StarDataset: FC<StarDatasetProps> = ({
   profile,
   stars,
 }) => {
+  const { setUserModalOpen, setLoginOptions } = useContext(UserModalOpenCtx)
+  const location = useLocation()
+  const handleToggle = starDataset => () => {
+    if (!profile) {
+      // if user is not logged in, give them the option to do so
+      // then redirect back to this page
+      setLoginOptions(prevState => ({
+        ...prevState,
+        redirect: `${location.pathname}`,
+      }))
+      setUserModalOpen(true)
+    } else {
+      starDataset({ variables: { datasetId } })
+    }
+  }
   return (
     <Mutation
       mutation={STAR_DATASET}
@@ -57,7 +74,7 @@ export const StarDataset: FC<StarDatasetProps> = ({
             starred,
           },
         })
-        // Update dataset's list of followers
+        // Update dataset's list of stars
         const { stars } = cache.readFragment({
           id: datasetCacheId(datasetId),
           fragment: DATASET_STARS,
@@ -79,7 +96,7 @@ export const StarDataset: FC<StarDatasetProps> = ({
           label={starred ? 'Bookmarked' : 'Bookmark'}
           icon="fa-bookmark"
           disabled={!profile}
-          toggleClick={() => starDataset({ variables: { datasetId } })}
+          toggleClick={handleToggle(starDataset)}
           tooltip="Save to your bookmarked datasets"
           clicked={starred}
           count={stars}

@@ -12,16 +12,20 @@ export const UserModalOpenProvider: FC<UserModalOpenProviderProps> = ({
   children,
 }) => {
   const [userModalOpen, setUserModalOpen] = useState(false)
+  const [loginOptions, setLoginOptions] = useState({
+    redirect: null
+  })
   const toggle = (): void => {
     setUserModalOpen(prevState => !prevState)
   }
   return (
-    <UserModalOpenCtx.Provider value={{ userModalOpen, setUserModalOpen }}>
+    <UserModalOpenCtx.Provider value={{ userModalOpen, setUserModalOpen, setLoginOptions }}>
       {children}
       <UserLoginModal
         isOpen={userModalOpen}
         toggle={toggle}
         loginUrls={loginUrls}
+        redirectPathParam={loginOptions.redirect}
       />
     </UserModalOpenCtx.Provider>
   )

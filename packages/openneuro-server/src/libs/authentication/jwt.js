@@ -153,10 +153,13 @@ export const authenticate = (req, res, next) => {
 }
 
 export const authSuccessHandler = (req, res, next) => {
+  const redirectPath = req.query.state 
+    ? Buffer.from(req.query.state, 'base64').toString()
+    : '/'
   if (req.user) {
     // Set the JWT associated with this login on a cookie
     res.cookie('accessToken', req.user.token, { sameSite: 'Strict' })
-    res.redirect('/')
+    res.redirect(redirectPath)
   } else {
     res.status(401)
   }
