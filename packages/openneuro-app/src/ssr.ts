@@ -119,8 +119,14 @@ async function createServer(): Promise<void> {
           : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
+        // Authenticated page renders are private data
+        const cachePublic =
+          req.universalCookies.get('accessToken')
+            ? 'private'
+            : 'public'
         // Allow proxies to cache anonymous requests
-        let cacheControl = url === '/' ? 'no-cache' : 'public, max-age=86400'
+        let cacheControl =
+          url === '/' ? 'no-cache' : `${cachePublic}, max-age=3600`
 
         try {
           // 2. Apply vite HTML transforms. This injects the vite HMR client, and
@@ -139,9 +145,7 @@ async function createServer(): Promise<void> {
           // 4. render the app HTML. This assumes entry-server.js's exported `render`
           //    function calls appropriate framework SSR APIs,
           //    e.g. ReactDOMServer.renderToString()
-          const cookies = new Cookies(req['universalCookies'].getAll())
-          cookies.remove('accessToken')
-          interpolate = await render(url, cookies)
+          interpolate = await render(url, req.universalCookies)
         } catch (e) {
           // no-cache on errors
           cacheControl = 'no-cache'
