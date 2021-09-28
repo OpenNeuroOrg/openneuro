@@ -84,7 +84,7 @@ def update_s3_sibling(dataset_path, realm):
     annex_options = generate_s3_annex_options(dataset_path, realm)
     # note: enableremote command will only upsert config options, none are deleted
     subprocess.run(['git-annex', 'enableremote', realm.s3_remote] +
-                   annex_options, check=True, cwd=dataset_path)
+                   annex_options, cwd=dataset_path)
 
 
 def validate_s3_config(dataset_path, realm):
