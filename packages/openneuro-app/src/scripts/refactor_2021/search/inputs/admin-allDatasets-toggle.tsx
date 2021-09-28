@@ -7,6 +7,11 @@ const StyledButton = styled(Button)`
   width: 100%;
   padding: 6px 10px;
   margin-bottom: 20px;
+&.active{
+    background: #fff5f3;
+    border-color: #e68383;
+    color: #710000;
+    }
 `
 
 const TaskInput: FC = () => {
