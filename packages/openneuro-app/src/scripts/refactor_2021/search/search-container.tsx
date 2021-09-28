@@ -4,6 +4,10 @@ import {
   SearchPage,
   SearchResultsList,
 } from '@openneuro/components/search-page'
+import {
+  getUnexpiredProfile,
+  hasEditPermissions,
+} from '../authentication/profile'
 import { Button } from '@openneuro/components/button'
 import { Loading } from '@openneuro/components/loading'
 import {
@@ -31,7 +35,6 @@ import {
 import FiltersBlockContainer from './filters-block-container'
 import AggregateCountsContainer from '../aggregate-queries/aggregate-counts-container'
 import { useCookies } from 'react-cookie'
-import { getUnexpiredProfile } from '../authentication/profile'
 import { useSearchResults } from './use-search-results'
 import { SearchParamsCtx } from './search-params-ctx'
 import { SearchParams } from './initial-search-params'
@@ -118,7 +121,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           },
         })
       }
-
   let numTotalResults = 0
   let resultsList = []
   let hasNextPage = false
@@ -211,7 +213,11 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <h3>No results: please broaden your search.</h3>
           ) : (
             <>
-              <SearchResultsList items={resultsList} profile={profile} />
+              <SearchResultsList
+                items={resultsList}
+                profile={profile}
+                datasetTypeSelected={searchParams.datasetType_selected}
+              />
               {/* TODO: make div below into display component. */}
               <div className="grid grid-nogutter" style={{ width: '100%' }}>
                 {resultsList.length == 0 || !hasNextPage ? null : (

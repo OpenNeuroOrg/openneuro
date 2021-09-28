@@ -109,9 +109,14 @@ export interface SearchResultItemProps {
     ]
   }
   profile: Record<string, any>
+  datasetTypeSelected?: string
 }
 
-export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
+export const SearchResultItem = ({
+  node,
+  profile,
+  datasetTypeSelected,
+}: SearchResultItemProps) => {
   const heading = node.draft.description?.Name
   const draftSummary = node.draft.summary
   const latestSnapshotSummary = node.latestSnapshot?.summary
@@ -299,6 +304,21 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
     node.draft.issues.some(issue => issue.severity === 'error')
   const shared = !node.public && node.uploader.id !== profile.sub
 
+  const MyDatasetsPage = datasetTypeSelected === 'My Datasets'
+  const datasetPerms = node.permissions.userPermissions.map(item => {
+    if (item.user.id === profile?.sub && item.access !== null) {
+      if (item.access === 'ro') {
+        return 'Read Only'
+      } else if (item.access === 'rw') {
+        return 'Edit'
+      } else {
+        return 'Admin'
+      }
+    } else {
+      return null
+    }
+  })
+
   const datasetOwenerIcons = (
     <div className="owner-icon-wrap">
       {node.public ? publicIcon : null}
@@ -346,7 +366,13 @@ export const SearchResultItem = ({ node, profile }: SearchResultItemProps) => {
             {lastUpdatedDate}
           </div>
         </div>
+
         <div className="col col-3">
+          {MyDatasetsPage && (
+            <div className="dataset-permissions-tag">
+              <small>Access: {datasetPerms}</small>
+            </div>
+          )}
           <div className="result-icon-wrap">
             {datasetOwenerIcons}
             {activityIcon}
