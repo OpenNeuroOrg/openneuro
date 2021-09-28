@@ -23,6 +23,7 @@ import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
 import { getFileName } from '../../datalad/files.js'
+import semver from 'semver'
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
   await checkDatasetRead(id, user, userInfo)
@@ -41,8 +42,14 @@ export const datasets = (parent, args, { user, userInfo }) => {
   }
 }
 
-export const snapshotCreationComparison = ({ created: a }, { created: b }) => {
-  return new Date(a).getTime() - new Date(b).getTime()
+export const snapshotCreationComparison = (
+  { created: a, tag: a_tag },
+  { created: b, tag: b_tag },
+) => {
+  return (
+    new Date(a).getTime() - new Date(b).getTime() ||
+    semver.compare(a_tag, b_tag)
+  )
 }
 
 /**

@@ -27,16 +27,20 @@ describe('dataset resolvers', () => {
     })
   })
   describe('snapshotCreationComparison()', () => {
-    it('sorts array of objects by the "created" property', () => {
+    it('sorts array of objects by the "created" and "tag" properties', () => {
       const testArray = [
-        { id: 2, created: new Date('2018-11-20T00:05:43.473Z') },
-        { id: 1, created: new Date('2018-11-19T00:05:43.473Z') },
-        { id: 3, created: new Date('2018-11-23T00:05:43.473Z') },
+        { id: 2, created: new Date('2018-11-20T00:05:43.473Z'), tag: '1.0.0' },
+        { id: 1, created: new Date('2018-11-19T00:05:43.473Z'), tag: '1.0.1' },
+        { id: 3, created: new Date('2018-11-23T00:05:43.473Z'), tag: '1.0.2' },
+        { id: 5, created: new Date('2018-11-23T00:05:43.473Z'), tag: '1.0.10' },
+        { id: 4, created: new Date('2018-11-23T00:05:43.473Z'), tag: '1.0.3' },
       ]
       const sorted = testArray.sort(ds.snapshotCreationComparison)
       expect(sorted[0].id).toBe(1)
       expect(sorted[1].id).toBe(2)
       expect(sorted[2].id).toBe(3)
+      expect(sorted[3].id).toBe(4)
+      expect(sorted[4].id).toBe(5)
     })
     it('sorts array of objects by the "created" property as strings', () => {
       const testArray = [
@@ -60,18 +64,16 @@ describe('dataset resolvers', () => {
       mockingoose.Dataset.toReturn(true, 'count')
       // capture and check datalad delete request
       request.del = url => ({
-          set: (header1, headerValue1) => ({
+        set: (header1, headerValue1) => ({
           set: () => ({
-              send: ({ filenames}) => {
-              expect(url).toEqual(
-                'http://datalad-0/datasets/ds999999/files',
-              )
+            send: ({ filenames }) => {
+              expect(url).toEqual('http://datalad-0/datasets/ds999999/files')
               expect(filenames).toEqual([':sub-99'])
               expect(header1).toEqual('Cookie')
               expect(headerValue1).toMatch(/^accessToken=/)
-            }
-            }),
+            },
           }),
+        }),
       })
 
       ds.deleteFiles(

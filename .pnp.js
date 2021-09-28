@@ -10268,6 +10268,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/ioredis", "npm:4.27.4"],
             ["@types/jest", "npm:26.0.24"],
             ["@types/nodemailer", "npm:6.4.4"],
+            ["@types/semver", "npm:5.5.0"],
             ["apollo-link-schema", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.2.5"],
             ["apollo-server", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.21.0"],
             ["apollo-server-cache-redis", "npm:1.4.0"],
@@ -10317,6 +10318,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:17.0.2"],
             ["redlock", "npm:4.2.0"],
             ["request", "npm:2.88.2"],
+            ["semver", "npm:5.7.1"],
             ["sitemap", "npm:2.2.0"],
             ["subscriptions-transport-ws", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:0.9.18"],
             ["superagent", "npm:3.8.3"],
@@ -14013,6 +14015,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-scheduler-npm-0.16.2-ba3a7d8c68-e78d1bb50c.zip/node_modules/@types/scheduler/",
           "packageDependencies": [
             ["@types/scheduler", "npm:0.16.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/semver", [
+        ["npm:5.5.0", {
+          "packageLocation": "./.yarn/cache/@types-semver-npm-5.5.0-8c205b186f-df74589466.zip/node_modules/@types/semver/",
+          "packageDependencies": [
+            ["@types/semver", "npm:5.5.0"]
           ],
           "linkType": "HARD",
         }]
