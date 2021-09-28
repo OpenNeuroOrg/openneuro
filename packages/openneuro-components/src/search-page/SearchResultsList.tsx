@@ -7,10 +7,12 @@ import './search-page.scss'
 export interface SearchResultsListProps {
   items
   profile?: Record<string, any>
+  datasetTypeSelected: string
 }
 export const SearchResultsList = ({
   items,
   profile,
+  datasetTypeSelected,
 }: SearchResultsListProps) => {
   return (
     <div className="search-results">
@@ -21,6 +23,7 @@ export const SearchResultsList = ({
               node={data.node}
               key={data.node.id}
               profile={profile}
+              datasetTypeSelected={datasetTypeSelected}
             />
           )
       })}
