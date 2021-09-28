@@ -5138,8 +5138,8 @@ __metadata:
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
     "@loadable/component": ^5.7.0
-    "@openneuro/client": ^3.36.1
-    "@openneuro/components": ^3.36.1
+    "@openneuro/client": ^3.36.5
+    "@openneuro/components": ^3.36.5
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -5214,7 +5214,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^3.36.1
+    "@openneuro/client": ^3.36.5
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
     bids-validator: 1.8.4
@@ -5239,14 +5239,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^3.36.1, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^3.36.5, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.3.14
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^3.36.1
+    "@openneuro/server": ^3.36.5
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -5256,7 +5256,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^3.36.1, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^3.36.5, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5315,7 +5315,7 @@ __metadata:
     "@apollo/client": 3.3.14
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
-    "@openneuro/client": ^3.36.1
+    "@openneuro/client": ^3.36.5
     "@types/jsonwebtoken": ^8
     "@types/node": ^14.14.41
     "@types/tsc-watch": ^4
@@ -5329,7 +5329,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^3.36.1, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^3.36.5, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5343,7 +5343,6 @@ __metadata:
     "@elastic/elasticsearch": ^7.5.1
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
-    "@types/atob": ^2
     "@types/draft-js": ^0.10.43
     "@types/ioredis": ^4.17.1
     "@types/jest": ^26.0.23
@@ -5353,7 +5352,6 @@ __metadata:
     apollo-server-cache-redis: 1.4.0
     apollo-server-express: 2.21.0
     async: ^2.4.1
-    atob: ^2.1.2
     babel-eslint: ^10.1.0
     base64url: ^3.0.0
     body-parser: ^1.18.2
@@ -6970,13 +6968,6 @@ __metadata:
   version: 2.4.2
   resolution: "@types/async@npm:2.4.2"
   checksum: 383b447a33599cc08c825a476fb9cd78de4d5d0e077f77b92daab67429907a465652219fedab7623abcbd04f29f517b3e66213ab978e7cf0f1bc2d9aa93ef836
-  languageName: node
-  linkType: hard
-
-"@types/atob@npm:^2":
-  version: 2.1.2
-  resolution: "@types/atob@npm:2.1.2"
-  checksum: df8e9efd3c4f842a5183b9a11877adb96d78b1d1559280afa87bc2c77c04ef1abd0004ab1947de0265292ab032497c679b6c1b954efce5eb6b455fb2404ab348
   languageName: node
   linkType: hard
 
