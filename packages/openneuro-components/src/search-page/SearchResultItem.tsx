@@ -306,17 +306,13 @@ export const SearchResultItem = ({
 
   const MyDatasetsPage = datasetTypeSelected === 'My Datasets'
   const datasetPerms = node.permissions.userPermissions.map(item => {
-    if (item.user.id === profile?.sub) {
-      if (item.access !== null) {
-        if (item.access === 'ro') {
-          return 'Read Only'
-        } else if (item.access === 'rw') {
-          return 'Edit'
-        } else {
-          return 'Admin'
-        }
+    if (item.user.id === profile?.sub && item.access !== null) {
+      if (item.access === 'ro') {
+        return 'Read Only'
+      } else if (item.access === 'rw') {
+        return 'Edit'
       } else {
-        return item.access
+        return 'Admin'
       }
     } else {
       return null
