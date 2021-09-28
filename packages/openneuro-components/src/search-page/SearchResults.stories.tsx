@@ -13,7 +13,11 @@ const SearchResultsListTemplate: Story = ({ items, profile }) => {
   return (
     <div className="search-results">
       {items.map(({ node }) => (
-        <SearchResultItem node={node} profile={profile} />
+        <SearchResultItem
+          node={node}
+          profile={profile}
+          datasetTypeSelected={'Not My Datasets'}
+        />
       ))}
     </div>
   )
