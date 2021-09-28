@@ -110,6 +110,7 @@ const HeaderContainer: FC = () => {
             )}
             renderFacetSelect={() => (
               <ModalitySelect
+                inHeader={true}
                 startOpen={false}
                 label="Browse by Modalities"
                 dropdown={true}
