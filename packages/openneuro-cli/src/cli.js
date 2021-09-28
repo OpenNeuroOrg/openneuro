@@ -68,12 +68,17 @@ commander
     create()
   })
 
-commander.parse(process.argv)
+const processName = process.argv[1].endsWith('index.js')
+  ? process.env.npm_lifecycle_event
+  : process.argv[1]
 
-if (process.argv[1].endsWith('git-credential-openneuro')) {
+if (processName.endsWith('git-credential-openneuro')) {
   gitCredential()
-} else if (process.argv[1].endsWith('git-annex-remote-openneuro')) {
+} else if (processName.endsWith('git-annex-remote-openneuro')) {
   gitAnnexRemote()
-} else if (!process.argv.slice(2).length) {
-  commander.help()
+} else {
+  commander.parse(process.argv)
+  if (!process.argv.slice(2).length) {
+    commander.help()
+  }
 }

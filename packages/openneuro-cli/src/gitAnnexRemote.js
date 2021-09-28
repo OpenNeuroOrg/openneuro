@@ -58,6 +58,7 @@ export async function handleGitAnnexMessage(line, state) {
 
 /**
  * Stateful response handling for git annex protocol
+ * @returns {() => void}
  */
 export const response = () => {
   const state = {}
@@ -84,7 +85,7 @@ export async function gitAnnexRemote() {
       input: process.stdin,
     })
     console.log(GIT_ANNEX_VERSION)
-    rl.on('line', void response())
+    rl.on('line', response())
     await once(rl, 'close')
     process.exit(0)
   } catch (err) {
