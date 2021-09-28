@@ -15,7 +15,7 @@ from datalad_service.config import DATALAD_GITHUB_PASS
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
-from datalad_service.common.annex import get_tag_info
+from datalad_service.common.annex import get_tag_info, test_git_annex_remote
 from datalad_service.common.openneuro import clear_dataset_cache
 from datalad_service.common.git import git_show, git_tag
 from datalad_service.common.github import create_sibling_github
@@ -42,28 +42,22 @@ def create_github_repo(dataset_path, dataset_id):
             'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, and DATALAD_GITHUB_ORG must be defined to create remote repos')
 
 
-def github_sibling(dataset_path, dataset_id, siblings):
+def github_sibling(dataset_path, dataset_id):
     """
     Find a GitHub remote or create a new repo and configure the remote.
     """
-    try:
-        return siblings['github']
-    except KeyError:
+    if not test_git_annex_remote(dataset_path, 'github'):
         create_github_repo(dataset_path, dataset_id)
-        return siblings['github']
 
 
-def s3_sibling(dataset_path, siblings, realm=DatasetRealm.PRIVATE):
+def s3_sibling(dataset_path, realm=DatasetRealm.PRIVATE):
     """
     Setup a special remote for a versioned S3 remote.
 
     The bucket must already exist and be configured.
     """
-    try:
-        return siblings[realm.s3_remote]
-    except KeyError:
+    if not test_git_annex_remote(dataset_path, realm.s3_remote):
         datalad_service.common.s3.setup_s3_sibling(dataset_path, realm)
-        return siblings[realm.s3_remote]
 
 
 def github_export(dataset, target):
@@ -87,35 +81,29 @@ def publish_target(dataset, target, treeish):
         return s3_export(dataset, target, treeish)
 
 
-def get_dataset_realm(siblings, realm=None):
+def get_dataset_realm(dataset_path, realm=None):
     # if realm parameter is not included, find the best target
     if realm is None:
         # if the dataset has a public sibling, use this as the export target
         # otherwise, use the private as the export target
         public_bucket_name = DatasetRealm(DatasetRealm.PUBLIC).s3_remote
-        try:
-            has_public_bucket = siblings[public_bucket_name]
-            realm = DatasetRealm(DatasetRealm.PUBLIC)
-        except KeyError:
-            realm = DatasetRealm(DatasetRealm.PRIVATE)
+        if test_git_annex_remote(dataset_path, public_bucket_name):
+            return DatasetRealm(DatasetRealm.PUBLIC)
+        else:
+            return DatasetRealm(DatasetRealm.PRIVATE)
     else:
         realm = get_s3_realm(realm=realm)
     return realm
 
 
 def publish_dataset(dataset_path, cookies=None, realm='PUBLIC'):
-    def get_realm():
-        return get_s3_realm(realm=realm)
-
     def should_export():
         return True
-    export_all_tags(dataset_path, cookies, get_realm, should_export)
+    export_all_tags(dataset_path, cookies, get_dataset_realm(
+        dataset_path, realm), should_export)
 
 
 def reexport_dataset(dataset_path, cookies=None, realm=None):
-    def get_realm(siblings):
-        return get_dataset_realm(siblings, realm)
-
     def should_export(dataset_path, tags):
         latest_tag = tags[-1:][0]
         # If remote has latest snapshot, do not reexport.
@@ -124,26 +112,22 @@ def reexport_dataset(dataset_path, cookies=None, realm=None):
     # logs to elasticsearch
     esLogger = ReexportLogger(dataset_path)
     export_all_tags(dataset_path, cookies,
-                    get_realm, should_export, esLogger)
+                    get_dataset_realm(dataset_path, realm), should_export, esLogger)
 
 
 def publish_snapshot(dataset_path, cookies=None, snapshot=None, realm=None):
-    def get_realm(siblings):
-        return get_dataset_realm(siblings, realm)
-
     def should_export(ds, tags):
         return True
-    export_all_tags(dataset_path, cookies, get_realm, should_export)
+    export_all_tags(dataset_path, cookies, get_dataset_realm(
+        dataset_path, realm), should_export)
 
 
-def export_all_tags(dataset_path, cookies, get_realm, check_should_export, esLogger=None):
+def export_all_tags(dataset_path, cookies, realm, check_should_export, esLogger=None):
     """Migrate a dataset and all snapshots to an S3 bucket"""
     dataset = os.path.basename(dataset_path)
     repo = pygit2.Repository(dataset_path)
     tags = git_tag(repo)
-    siblings = repo.remotes
-    realm = get_realm(siblings)
-    s3_sibling(dataset_path, siblings, realm=realm)
+    s3_sibling(dataset_path, realm=realm)
     if check_should_export(dataset_path, tags):
         for tag in tags:
             s3_export_successful = False
@@ -155,7 +139,7 @@ def export_all_tags(dataset_path, cookies, get_realm, check_should_export, esLog
                 s3_export_successful = True
                 # Public publishes to GitHub
                 if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
-                    github_sibling(dataset_path, dataset_id, siblings)
+                    github_sibling(dataset_path, dataset)
                     publish_target(dataset_path, realm.github_remote, tag)
                     gevent.sleep()
                     github_export_successful = True
@@ -271,13 +255,9 @@ def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
     }
 
 
-def monitor_remote_configs(store, dataset, snapshot, realm=None):
+def monitor_remote_configs(dataset_path):
     """Check remote configs and correct invalidities."""
-    dataset_path = store.get_dataset_path(dataset)
-    repo = pygit2.Repository(dataset_path)
-    siblings = repo.remotes
-    realm = get_dataset_realm(siblings, realm)
-
+    realm = get_dataset_realm(dataset_path)
     s3_ok = datalad_service.common.s3.validate_s3_config(dataset_path, realm)
     if not s3_ok:
         update_s3_sibling(dataset_path, realm)

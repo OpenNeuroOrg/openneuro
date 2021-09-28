@@ -13,7 +13,8 @@ SERVICE_USER = 'Git Worker'
 
 def init_annex(dataset_path):
     """Setup git-annex within an existing git repo"""
-    subprocess.run(['git-annex', 'init', 'OpenNeuro'], check=True, cwd=dataset_path)
+    subprocess.run(['git-annex', 'init', 'OpenNeuro'],
+                   check=True, cwd=dataset_path)
 
 
 def compute_git_hash(path, size):
@@ -206,3 +207,18 @@ def get_tag_info(dataset_path, tag):
     git_process = subprocess.run(['git-annex', 'info', '--json', tag],
                                  cwd=dataset_path, capture_output=True)
     return json.loads(git_process.stdout)
+
+
+def test_git_annex_remote(dataset_path, remote):
+    """Test if a remote is a git-annex remote and active."""
+    remote_info = get_tag_info(dataset_path, remote)
+    if remote_info['success']:
+        # Exists and is a remote
+        if remote_info['remote'] == remote:
+            return True
+        else:
+            # Some other object likely matched
+            return False
+    else:
+        # Nothing like this exists
+        return False
