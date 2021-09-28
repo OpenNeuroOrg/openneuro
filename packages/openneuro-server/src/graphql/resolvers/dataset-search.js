@@ -194,6 +194,7 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
  * @param {any} obj
  * @param {object} args
  * @param {object} args.query Stringified Query (DSL) argument for ElasticSearch
+ * @param {boolean} args.allDatasets Admin option for returning all datasets (overrides datasetType and datasetStatus, but keeps other search parameters) (default = false)
  * @param {string} args.datasetType Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.datasetStatus Stringified Query (DSL) argument for ElasticSearch
  * @param {object} args.sortBy Stringified Query (DSL) argument for ElasticSearch
@@ -202,7 +203,7 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
  */
 export const advancedDatasetSearchConnection = async (
   obj,
-  { query, datasetType, datasetStatus, sortBy, after, first = 25 },
+  { query, allDatasets = false, datasetType, datasetStatus, sortBy, after, first = 25 },
   { user, userInfo },
 ) => {
   const searchId = hashObject({
@@ -216,7 +217,9 @@ export const advancedDatasetSearchConnection = async (
   if (sortBy) sort.unshift(sortBy)
   const requestBody = {
     sort,
-    query: await parseQuery(query, datasetType, datasetStatus, user),
+    query: allDatasets
+      ? query
+      : await parseQuery(query, datasetType, datasetStatus, user),
   }
   if (after) {
     try {
@@ -246,6 +249,7 @@ export const advancedDatasetSearch = {
     resolve: advancedDatasetSearchConnection,
     args: {
       query: { type: 'JSON!' },
+      allDatasets: { type: 'Boolean' },
       datasetType: { type: 'String' },
       datasetStatus: { type: 'String' },
       sortBy: { type: 'JSON' },

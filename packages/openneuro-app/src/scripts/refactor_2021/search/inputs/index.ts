@@ -1,4 +1,5 @@
 import KeywordInput from './keyword-input'
+import AllDatasetsToggle from './admin-allDatasets-toggle'
 import ModalitySelect from './modality-select'
 import ShowDatasetRadios from './show-datasets-radios'
 import AgeRangeInput from './age-range-input'
@@ -20,6 +21,7 @@ import SortBySelect from './sort-by-select'
 
 export {
   KeywordInput,
+  AllDatasetsToggle,
   ModalitySelect,
   ShowDatasetRadios,
   AgeRangeInput,

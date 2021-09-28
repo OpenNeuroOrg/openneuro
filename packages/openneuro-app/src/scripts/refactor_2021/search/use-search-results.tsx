@@ -17,12 +17,14 @@ const searchQuery = gql`
   query advancedSearchDatasets(
     $query: JSON!
     $cursor: String
+    $allDatasets: Boolean
     $datasetType: String
     $datasetStatus: String
     $sortBy: JSON
   ) {
     datasets: advancedSearch(
       query: $query
+      allDatasets: $allDatasets
       datasetType: $datasetType
       datasetStatus: $datasetStatus
       sortBy: $sortBy
@@ -133,6 +135,7 @@ export const useSearchResults = () => {
   const { searchParams } = useContext(SearchParamsCtx)
   const {
     keywords,
+    searchAllDatasets,
     datasetType_selected,
     datasetStatus_selected,
     modality_selected,
@@ -339,6 +342,7 @@ export const useSearchResults = () => {
     variables: {
       query: boolQuery.get(),
       sortBy,
+      allDatasets: searchAllDatasets,
       datasetType: datasetType_selected,
       datasetStatus: datasetStatus_selected,
     },

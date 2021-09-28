@@ -8,6 +8,7 @@ import { Button } from '@openneuro/components/button'
 import { Loading } from '@openneuro/components/loading'
 import {
   KeywordInput,
+  AllDatasetsToggle,
   ModalitySelect,
   ShowDatasetRadios,
   AgeRangeInput,
@@ -35,6 +36,7 @@ import { useSearchResults } from './use-search-results'
 import { SearchParamsCtx } from './search-params-ctx'
 import { SearchParams } from './initial-search-params'
 import Helmet from 'react-helmet'
+import AdminUser from '../../authentication/admin-user.jsx'
 
 export interface SearchContainerProps {
   portalContent?: Record<string, any>
@@ -160,7 +162,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         renderSearchFacets={() => (
           <>
             <KeywordInput />
-            <ShowDatasetRadios />
+            <AdminUser>
+              <AllDatasetsToggle />
+            </AdminUser>
+            {!searchParams.searchAllDatasets &&
+              <ShowDatasetRadios />
+            }
             {!portalContent ? (
               <ModalitySelect portalStyles={true} label="Modalities" />
             ) : (
