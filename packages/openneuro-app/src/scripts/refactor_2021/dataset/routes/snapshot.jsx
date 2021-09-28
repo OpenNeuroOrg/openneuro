@@ -59,7 +59,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
           <div className="alert-warning padded-message">
             <span>
               <strong>Notice:</strong>
-              {` the current license "${draftLicense}" will be updated to "CC0" when the Version is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
+              {` the current license "${draftLicense}" will be updated to "CC0" when the version is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
             </span>
           </div>
         )}
