@@ -43,8 +43,8 @@ class SnapshotResource(object):
             snapshot_changes = media.get('snapshot_changes')
             skip_publishing = media.get('skip_publishing')
 
-        monitor_remote_configs(
-            self.store, dataset, snapshot)
+        ds_path = self.store.get_dataset_path(dataset)
+        monitor_remote_configs(ds_path)
 
         try:
             created = create_snapshot(
