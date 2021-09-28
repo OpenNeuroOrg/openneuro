@@ -27,11 +27,13 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
       // fa-exclamation-triangle might be better
       <Tooltip
         className="flag-annex-object"
-        tooltip="Flag: use this to alert site admins if this file has been found to contain subject sensitive data.">
+        tooltip="Flag: use this to alert site admins if this file has been found to contain subject sensitive data."
+      >
         <WarnButton
           message=""
           icon="fa-exclamation-triangle"
           className="edit-file"
+          iconOnly={true}
           onConfirmedClick={() => {
             flagAnnexObject({
               variables: {
