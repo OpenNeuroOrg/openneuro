@@ -109,7 +109,7 @@ export interface SearchResultItemProps {
     ]
   }
   profile: Record<string, any>
-  datasetTypeSelected: string
+  datasetTypeSelected?: string
 }
 
 export const SearchResultItem = ({
