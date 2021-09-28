@@ -39,7 +39,7 @@ import { useSearchResults } from './use-search-results'
 import { SearchParamsCtx } from './search-params-ctx'
 import { SearchParams } from './initial-search-params'
 import Helmet from 'react-helmet'
-import AdminUser from '../../authentication/admin-user.jsx'
+import AdminUser from '../authentication/admin-user.jsx'
 
 export interface SearchContainerProps {
   portalContent?: Record<string, any>

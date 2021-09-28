@@ -13,7 +13,7 @@ export const isAdmin = () => {
 const AdminUser = ({ children }) => {
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
-  if (profile.admin) {
+  if (profile?.admin) {
     return children
   } else {
     return null
