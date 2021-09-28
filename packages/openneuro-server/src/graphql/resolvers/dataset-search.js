@@ -194,7 +194,7 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
  * @param {any} obj
  * @param {object} args
  * @param {object} args.query Stringified Query (DSL) argument for ElasticSearch
- * @param {boolean} args.allDatasets Admin option for returning all datasets (default = false)
+ * @param {boolean} args.allDatasets Admin option for returning all datasets (overrides datasetType and datasetStatus, but keeps other search parameters) (default = false)
  * @param {string} args.datasetType Stringified Query (DSL) argument for ElasticSearch
  * @param {string} args.datasetStatus Stringified Query (DSL) argument for ElasticSearch
  * @param {object} args.sortBy Stringified Query (DSL) argument for ElasticSearch

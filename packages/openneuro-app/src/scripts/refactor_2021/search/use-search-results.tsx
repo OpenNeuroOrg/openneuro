@@ -135,7 +135,7 @@ export const useSearchResults = () => {
   const { searchParams } = useContext(SearchParamsCtx)
   const {
     keywords,
-    allDatasets,
+    searchAllDatasets,
     datasetType_selected,
     datasetStatus_selected,
     modality_selected,
@@ -342,7 +342,7 @@ export const useSearchResults = () => {
     variables: {
       query: boolQuery.get(),
       sortBy,
-      allDatasets,
+      allDatasets: searchAllDatasets,
       datasetType: datasetType_selected,
       datasetStatus: datasetStatus_selected,
     },

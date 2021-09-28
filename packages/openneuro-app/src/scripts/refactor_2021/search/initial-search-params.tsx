@@ -125,7 +125,7 @@ type OptionalNumberRange = [number | null, number | null]
 
 export interface SearchParams {
   keywords: string[]
-  allDatasets: boolean
+  searchAllDatasets: boolean
   datasetType_available: typeof datasetType_available
   datasetType_selected: string | null
   datasetStatus_available: typeof datasetStatus_available
@@ -161,7 +161,7 @@ export interface SearchParams {
 //       and load dynamic options on mount
 const initialSearchParams: SearchParams = {
   keywords: [],
-  allDatasets: false,
+  searchAllDatasets: false,
   datasetType_available,
   datasetType_selected: null,
   datasetStatus_available,
@@ -196,7 +196,7 @@ const initialSearchParams: SearchParams = {
 // TODO: (stretch) delete and move to dynamically loaded initialSearchParams
 const TEMPORARY_initialSearchParams: SearchParams = {
   keywords: [],
-  allDatasets: false,
+  searchAllDatasets: false,
   datasetType_available,
   datasetType_selected: 'All Public',
   datasetStatus_available,
