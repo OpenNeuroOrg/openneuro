@@ -85,6 +85,7 @@ export const GetUpdates = ({ subscribe, initialMode = modes.GET }) => {
           )}
           <Button
             type="submit"
+            size="small"
             secondary
             label={buttonText}
             disabled={mode === modes.SUCCESS}
