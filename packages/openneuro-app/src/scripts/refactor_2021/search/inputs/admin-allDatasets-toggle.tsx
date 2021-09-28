@@ -4,20 +4,24 @@ import { Button } from '@openneuro/components/button'
 import styled from '@emotion/styled'
 
 const StyledButton = styled(Button)`
-  width: 100%;
+  width: auto;
   padding: 6px 10px;
   margin-bottom: 20px;
-&.active{
+  justify-content: flex-start;
+  &.active {
     background: #fff5f3;
     border-color: #e68383;
     color: #710000;
+    i {
+      color: #710000;
     }
+  }
 `
 
 const TaskInput: FC = () => {
   const {
     searchParams: { searchAllDatasets },
-    setSearchParams
+    setSearchParams,
   } = useContext(SearchParamsCtx)
 
   const toggleSearchAllDatasets = () =>
@@ -28,15 +32,14 @@ const TaskInput: FC = () => {
 
   return (
     <StyledButton
-      className={searchAllDatasets ? "active toggle-btn" : "toggle-btn"}
+      className={searchAllDatasets ? 'active toggle-btn' : 'toggle-btn'}
       onClick={toggleSearchAllDatasets}
-      icon={searchAllDatasets ? "fas fa-check-square" : "far fa-square" }
-      label={searchAllDatasets 
-        ? 'Admin: Searching All Datasets' 
-        : 'Admin: Search All Datasets'
-      }
-    >
-    </StyledButton>
+      icon={searchAllDatasets ? 'fas fa-check-square' : 'far fa-square'}
+      label={
+        searchAllDatasets
+          ? 'Admin: Searching All Datasets'
+          : 'Admin: Search All Datasets'
+      }></StyledButton>
   )
 }
 
