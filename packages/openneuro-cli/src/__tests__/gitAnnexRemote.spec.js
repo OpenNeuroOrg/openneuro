@@ -1,4 +1,5 @@
-import { handleGitAnnexMessage } from '../gitAnnexRemote.js'
+import event from 'events'
+import { gitAnnexRemote, handleGitAnnexMessage } from '../gitAnnexRemote.js'
 import { storeKey, retrieveKey, checkKey } from '../transferKey.js'
 
 jest.mock('../transferKey.js', () => {
@@ -16,6 +17,26 @@ const mockState = {
 }
 
 describe('gitAnnexRemote protocol implementation', () => {
+  describe('gitAnnexRemote() entrypoint', () => {
+    it('exits after readline.close()', () => {
+      const mockConsoleLog = jest
+        .spyOn(console, 'log')
+        .mockImplementation(() => {})
+      const mockOnce = jest
+        .spyOn(event, 'once')
+        .mockImplementation(() => Promise.resolve())
+      const mockExit = jest
+        .spyOn(process, 'exit')
+        .mockImplementationOnce(() => {})
+      // Test if the entrypoint function succeeds
+      gitAnnexRemote()
+      expect(mockOnce).toHaveBeenCalled()
+      expect(mockConsoleLog).toHaveBeenCalledWith('VERSION 1')
+      // Teardown mocks
+      mockOnce.mockReset()
+      mockExit.mockReset()
+    })
+  })
   describe('gitAnnexRemote handler', () => {
     it('accepts EXTENSIONS message', async () => {
       expect(await handleGitAnnexMessage('EXTENSIONS INFO ASYNC')).toEqual(
