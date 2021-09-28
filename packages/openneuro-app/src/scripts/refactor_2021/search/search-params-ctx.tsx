@@ -79,6 +79,7 @@ export const removeFilterItem = setSearchParams => (param, value) => {
 export const getSelectParams = ({
   keywords,
   modality_selected,
+  searchAllDatasets,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
@@ -99,6 +100,7 @@ export const getSelectParams = ({
 }) => ({
   keywords,
   modality_selected,
+  searchAllDatasets,
   datasetType_selected,
   datasetStatus_selected,
   ageRange,
