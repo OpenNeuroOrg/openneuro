@@ -28,7 +28,7 @@ const TaskInput: FC = () => {
 
   return (
     <StyledButton
-      className="toggle-btn active"
+      className={searchAllDatasets ? "active toggle-btn" : "toggle-btn"}
       onClick={toggleSearchAllDatasets}
       label={searchAllDatasets 
         ? 'Admin: Searching All Datasets' 
