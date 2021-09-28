@@ -30,6 +30,7 @@ const TaskInput: FC = () => {
     <StyledButton
       className={searchAllDatasets ? "active toggle-btn" : "toggle-btn"}
       onClick={toggleSearchAllDatasets}
+      icon={searchAllDatasets ? "fas fa-check-square" : "far fa-square" }
       label={searchAllDatasets 
         ? 'Admin: Searching All Datasets' 
         : 'Admin: Search All Datasets'
