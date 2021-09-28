@@ -10,9 +10,13 @@ export const summary = async dataset => {
       datasetId: dataset.id,
     }).exec()
   )?.toObject()
-  return {
-    ...datasetSummary,
-    primaryModality: datasetSummary?.modalities[0],
+  if (datasetSummary) {
+    return {
+      ...datasetSummary,
+      primaryModality: datasetSummary?.modalities[0],
+    }
+  } else {
+    return null
   }
 }
 
