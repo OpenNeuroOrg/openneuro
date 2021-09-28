@@ -65,7 +65,7 @@ const CreateSnapshotMutation = ({
               variables: { datasetId, tag, changes },
             }).then(() => void setSubmitted(true))
           }}
-          label="Create Snapshot"
+          label="Create Version"
         />
       )
     }
@@ -79,7 +79,7 @@ interface SnapshotDatasetProps {
 }
 
 const SnapshotDataset = ({ datasetId, tag, changes }: SnapshotDatasetProps) => (
-  <ErrorBoundary subject="error creating snapshot">
+  <ErrorBoundary subject="error creating version">
     <CreateSnapshotMutation datasetId={datasetId} tag={tag} changes={changes} />
   </ErrorBoundary>
 )

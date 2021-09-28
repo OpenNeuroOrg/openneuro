@@ -25,7 +25,7 @@ export const NoErrors = ({ issues, children }) => {
     if (!hasAuthor) includedMessages.push(noAuthorMessage)
     return (
       <span className="text-danger">
-        {`${includedMessages.join(' and ')} to create a snapshot`}
+        {`${includedMessages.join(' and ')} to create a version`}
       </span>
     )
   }
@@ -51,7 +51,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
   return (
     <div className="dataset-snapshot-form container">
       <div className="dataset-form-header">
-        <h3>Create Snapshot</h3>
+        <h3>Create Version</h3>
         <hr />
       </div>
       <div className="dataset-form-body">
@@ -59,7 +59,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
           <div className="alert-warning padded-message">
             <span>
               <strong>Notice:</strong>
-              {` the current license "${draftLicense}" will be updated to "CC0" when the snapshot is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
+              {` the current license "${draftLicense}" will be updated to "CC0" when the version is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
             </span>
           </div>
         )}
@@ -101,7 +101,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
       <NoErrors issues={issues}>
         {changes.length ? null : (
           <small className="text-danger">
-            You must add at least one change message to create a new snapshot
+            You must add at least one change message to create a new version
           </small>
         )}
       </NoErrors>
