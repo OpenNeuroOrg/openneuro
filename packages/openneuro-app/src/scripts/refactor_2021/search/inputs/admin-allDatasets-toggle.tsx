@@ -1,6 +1,13 @@
 import React, { FC, useContext } from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { Button } from '@openneuro/components/button'
+import styled from '@emotion/styled'
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 20px;
+`
 
 const TaskInput: FC = () => {
   const {
@@ -15,11 +22,15 @@ const TaskInput: FC = () => {
     }))
 
   return (
-    <Button
+    <StyledButton
       className="toggle-btn active"
       onClick={toggleSearchAllDatasets}
-      label={searchAllDatasets ? 'Searching All Datasets' : 'Search All Datasets'}>
-    </Button>
+      label={searchAllDatasets 
+        ? 'Admin: Searching All Datasets' 
+        : 'Admin: Search All Datasets'
+      }
+    >
+    </StyledButton>
   )
 }
 
