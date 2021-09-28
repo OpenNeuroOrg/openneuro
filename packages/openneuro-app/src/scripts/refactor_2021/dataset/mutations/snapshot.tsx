@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { gql, useMutation, useSubscription } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import { useHistory } from 'react-router-dom'
 import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import { Button } from '@openneuro/components/button'
-import { SNAPSHOTS_UPDATED_SUBSCRIPTION } from '../../../datalad/subscriptions/useSnapshotsUpdatedSubscriptions'
 
 const CREATE_SNAPSHOT = gql`
   mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
@@ -28,47 +27,24 @@ const CreateSnapshotMutation = ({
 }: CreateSnapshotMutationProps) => {
   const history = useHistory()
   const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
-  const [submitted, setSubmitted] = useState(false)
-  const { loading: subscriptionLoading } = useSubscription(
-    SNAPSHOTS_UPDATED_SUBSCRIPTION,
-    {
-      variables: { datasetId },
-      fetchPolicy: 'network-only',
-    },
-  )
 
   if (error) throw error
 
-  if (submitted && subscriptionLoading) {
-    return (
-      <>
-        <i className="fas fa-circle-notch fa-spin"></i>Snapshot creation in
-        progress
-      </>
-    )
-  } else if (submitted && !subscriptionLoading) {
-    // TODO - We are sending the subscription too early because this requires a small but predictable delay
-    setTimeout(
-      () => history.push(`/datasets/${datasetId}/versions/${tag}`),
-      2000,
-    )
+  if (loading) {
+    return <i className="fas fa-circle-notch fa-spin"></i>
   } else {
-    if (loading) {
-      return <i className="fas fa-circle-notch fa-spin"></i>
-    } else {
-      return (
-        <Button
-          primary={true}
-          size="small"
-          onClick={(): void => {
-            void snapshotDataset({
-              variables: { datasetId, tag, changes },
-            }).then(() => void setSubmitted(true))
-          }}
-          label="Create Version"
-        />
-      )
-    }
+    return (
+      <Button
+        primary={true}
+        size="small"
+        onClick={(): void => {
+          void snapshotDataset({
+            variables: { datasetId, tag, changes },
+          }).then(() => history.push(`/datasets/${datasetId}/versions/${tag}`))
+        }}
+        label="Create Version"
+      />
+    )
   }
 }
 
