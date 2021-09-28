@@ -4,6 +4,7 @@
 [data-tooltip] {
   position: relative;
   display: flex;
+  z-index: 1201;
 }
 
 /* Applies to all tooltips */
@@ -21,7 +22,7 @@
 [data-tooltip]::before {
   content: '';
   border: 5px solid transparent;
-  z-index: 1001;
+  z-index: 1201;
 }
 [data-tooltip]::after {
   content: attr(data-tooltip);
