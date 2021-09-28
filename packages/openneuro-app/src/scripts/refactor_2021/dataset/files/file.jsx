@@ -146,51 +146,58 @@ const File = ({
                 />
               </Tooltip>
             </Media>
-            <Tooltip
-              tooltip={
-                isFileToBeDeleted(id)
-                  ? 'Added to Bulk Delete'
-                  : 'Add to Bulk Delete'
-              }>
-              <div
-                className={
+            <Media greaterThanOrEqual="medium">
+              <Tooltip
+                tooltip={
                   isFileToBeDeleted(id)
-                    ? 'added-to-bd bulk-delete-checkbox-group delete-file'
-                    : 'bulk-delete-checkbox-group delete-file'
+                    ? 'Added to Bulk Delete'
+                    : 'Add to Bulk Delete'
                 }>
-                <input
-                  id={'cb-' + filename}
-                  type="checkbox"
-                  checked={isFileToBeDeleted(id)}
-                  onChange={() => toggleFileToDelete({ id, path, filename })}
-                />
-                <label htmlFor={'cb-' + filename}>
-                  <Icon icon="fas fa-dumpster" />
-                  {isFileToBeDeleted(id) && (
-                    <span className="added-to-bulk">Added</span>
-                  )}
-                </label>
-              </div>
-            </Tooltip>
+                <div
+                  className={
+                    isFileToBeDeleted(id)
+                      ? 'added-to-bd bulk-delete-checkbox-group delete-file'
+                      : 'bulk-delete-checkbox-group delete-file'
+                  }>
+                  <input
+                    id={'cb-' + filename}
+                    type="checkbox"
+                    checked={isFileToBeDeleted(id)}
+                    onChange={() => toggleFileToDelete({ id, path, filename })}
+                  />
+                  <label htmlFor={'cb-' + filename}>
+                    <Icon icon="fas fa-dumpster" />
+                    {isFileToBeDeleted(id) && (
+                      <span className="added-to-bulk">Added</span>
+                    )}
+                  </label>
+                </div>
+              </Tooltip>
+            </Media>
           </>
         )}
+
         {!isMobile &&
           annexed &&
           (isAdmin() ? (
-            <RemoveAnnexObject
-              datasetId={datasetId}
-              snapshot={snapshotTag}
-              annexKey={annexKey}
-              path={path}
-              filename={filename}
-            />
+            <Media greaterThanOrEqual="medium">
+              <RemoveAnnexObject
+                datasetId={datasetId}
+                snapshot={snapshotTag}
+                annexKey={annexKey}
+                path={path}
+                filename={filename}
+              />
+            </Media>
           ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
-            <FlagAnnexObject
-              datasetId={datasetId}
-              snapshot={snapshotTag}
-              filepath={filePath(path, filename)}
-              annexKey={annexKey}
-            />
+            <Media greaterThanOrEqual="medium">
+              <FlagAnnexObject
+                datasetId={datasetId}
+                snapshot={snapshotTag}
+                filepath={filePath(path, filename)}
+                annexKey={annexKey}
+              />
+            </Media>
           ) : null)}
       </span>
     </>

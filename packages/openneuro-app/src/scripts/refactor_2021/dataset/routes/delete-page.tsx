@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
@@ -10,14 +10,13 @@ import styled from '@emotion/styled'
 import { Button } from '@openneuro/components/button'
 
 interface DeletePageProps extends RouteComponentProps {
-  dataset: Record<string, any>
-  returnToDataset?: () => void
+  dataset: {
+    permissions: Record<string, any>
+    id: string
+  }
 }
 
-const DeletePage = ({
-  dataset,
-  returnToDataset,
-}: DeletePageProps): React.ReactElement => {
+const DeletePage = ({ dataset }: DeletePageProps): React.ReactElement => {
   const [values, setValues] = useState({
     reason: '',
     redirect: '',
@@ -34,7 +33,7 @@ const DeletePage = ({
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
-
+  const datasetId = dataset.id
   return (
     <div className="container">
       <h2>Delete Dataset</h2>
@@ -53,13 +52,11 @@ const DeletePage = ({
       </p>
       <div className=" dataset-form-controls">
         <LoggedIn>
-          <DeleteDataset datasetId={dataset.id} metadata={values} />
+          <DeleteDataset datasetId={datasetId} metadata={values} />
         </LoggedIn>
-        <Button
-          nobg={true}
-          onClick={returnToDataset}
-          label="Return to Dataset"
-        />
+        <Link className="return-link" to={`/datasets/${datasetId}`}>
+          Return to Dataset
+        </Link>
       </div>
     </div>
   )

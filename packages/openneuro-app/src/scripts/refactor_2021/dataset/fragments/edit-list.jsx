@@ -8,6 +8,8 @@ import { Button } from '@openneuro/components/button'
 const EditList = ({ placeholder, elements = [], setElements }) => {
   const [newElement, updateNewElement] = useState('')
 
+  const [warnEmpty, updateWarnEmpty] = useState(false)
+
   /**
    * Remove one element from list
    * @param {number} index Which entry to remove
@@ -20,8 +22,13 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
   }
 
   const updateElements = () => {
-    setElements([...elements, newElement])
-    updateNewElement('')
+    if (newElement === '') {
+      updateWarnEmpty(true)
+    } else {
+      setElements([...elements, newElement])
+      updateWarnEmpty(false)
+      updateNewElement('')
+    }
   }
 
   return (
@@ -45,6 +52,7 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
         />
       </div>
       <div>
+        {warnEmpty && <small>Your input was empty</small>}
         {elements.map((element, index) => (
           <div key={index}>
             <div className="edit-list-group-item">
