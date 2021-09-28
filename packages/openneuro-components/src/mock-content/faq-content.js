@@ -25,7 +25,7 @@ export const faq = [
       '* ' +
       'You agree that this dataset will become publicly available ' +
       'under a Creative Commons CC0 license after a grace period ' +
-      'of 36 months counted from the first successful snapshot of ' +
+      'of 36 months counted from the first successful version of ' +
       'the dataset.\n' +
       '* ' +
       'This dataset is not subject to GDPR protections.',
