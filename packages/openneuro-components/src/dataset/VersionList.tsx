@@ -18,7 +18,7 @@ export interface VersionListProps {
   setSelected: (selected: string) => void
   className: string
   activeDataset: string
-  dateModified: Date
+  dateModified: string
   setDeprecatedModalIsOpen: (boolean) => void
   datasetId?: string
 }
@@ -63,12 +63,14 @@ export const VersionList = ({
               <i className="fas fa-chevron-up" />
               <i className="fas fa-chevron-down" />
             </div>
-          }>
+          }
+        >
           <div className="version-list-dropdow">
             <ul>
               <li
                 onClick={() => setVersion('draft', dateModified)}
-                className={selected === 'draft' ? 'selected' : ''}>
+                className={selected === 'draft' ? 'selected' : ''}
+              >
                 <Link className="dataset-tool" to={'/datasets/' + datasetId}>
                   <span className="label">
                     Draft
@@ -87,14 +89,16 @@ export const VersionList = ({
                       ? () => deprecatedItem(item.tag, item.created)
                       : () => setVersion(item.tag, formatDate(item.created))
                   }
-                  className={selected === item.tag ? 'selected' : ''}>
+                  className={selected === item.tag ? 'selected' : ''}
+                >
                   <Link
                     className="dataset-tool"
                     to={
                       selected === 'draft'
                         ? '/datasets/' + datasetId + '/versions/' + item.tag
                         : item.tag
-                    }>
+                    }
+                  >
                     <span className="label">
                       v{item.tag}
                       <span className="active">
@@ -114,7 +118,8 @@ export const VersionList = ({
       ) : hasEdit ? (
         <Link
           className="dataset-tool"
-          to={'/datasets/' + datasetId + '/snapshot'}>
+          to={'/datasets/' + datasetId + '/snapshot'}
+        >
           Create Version
         </Link>
       ) : null}
