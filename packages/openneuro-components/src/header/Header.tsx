@@ -53,7 +53,7 @@ export const Header = ({
                   onClick={e => {
                     console.log(e)
                     e.preventDefault()
-                    navigateToNewSearch(true)
+                    navigateToNewSearch()
                   }}>
                   Search
                 </NavLink>
