@@ -189,6 +189,12 @@ header {
   align-items: center;
   > div {
     margin-right: 60px;
+    @media(max-width: 1420px){
+      margin-right: 20px;
+    }
+    @media(max-width: 1302px){
+      margin-right: 0;
+    }
   }
   .hero-sigin-label {
     @media (max-width: 800px) {
@@ -343,6 +349,10 @@ header {
         display: none;
       }
     }
+  }
+  .facet-accordion.on-accordion-wrapper .facet-list ul li.selected-facet > .label{
+    font-weight: 400;
+    color: #666;
   }
 }
 
