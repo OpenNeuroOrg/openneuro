@@ -344,6 +344,10 @@ header {
       }
     }
   }
+  .facet-accordion.on-accordion-wrapper .facet-list ul li.selected-facet > .label{
+    font-weight: 400;
+    color: #666;
+  }
 }
 
 .freshdesk-support {
