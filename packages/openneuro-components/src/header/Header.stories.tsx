@@ -40,6 +40,7 @@ const Template: Story<HeaderProps> = ({ profile, expanded }) => {
             />
           )}
           onSearch={() => console.log('User search by keyword.')}
+          clearSearchParams={() => () => {}}
         />
       )}
     />

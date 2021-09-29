@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 import { Button } from '../button/Button'
 import { ModalityCube } from '../modality-cube/ModalityCube'
@@ -10,10 +11,11 @@ import { frontPage } from '../mock-content/front-page-content.jsx'
 export interface LandingExpandedHeaderProps {
   user?: {}
   loginUrls?: Record<string, string>
-  renderAggregateCounts?: (label?: string) => React.ReactNode
+  renderAggregateCounts?: (modality?: string) => React.ReactNode
   renderFacetSelect: () => React.ReactNode
   renderSearchInput: () => React.ReactNode
   onSearch: () => void
+  clearSearchParams: () => void
 }
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
@@ -23,9 +25,11 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   renderFacetSelect,
   renderSearchInput,
   onSearch,
+  clearSearchParams,
 }) => {
   const aggregateCounts = (modality: string): React.ReactNode =>
     renderAggregateCounts ? renderAggregateCounts(modality) : null
+  const history = useHistory()
   const hexGrid = (
     <ul id="hexGrid">
       {cubeData.map((item, index) => (
@@ -34,6 +38,10 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           label={item.label}
           cubeImage={item.cubeImage}
           stats={aggregateCounts(item.label)}
+          onClick={redirectPath => e => {
+            clearSearchParams()
+            history.push(redirectPath)
+          }}
         />
       ))}
     </ul>

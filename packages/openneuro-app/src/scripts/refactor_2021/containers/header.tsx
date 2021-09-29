@@ -44,6 +44,8 @@ const HeaderContainer: FC = () => {
     history.push('/search')
   }
 
+  const clearSearchParams = () => setSearchParams(initialSearchParams)
+
   const toggleLoginModal = (): void => {
     setUserModalOpen(prevState => ({
       ...prevState,
@@ -134,6 +136,7 @@ const HeaderContainer: FC = () => {
             onSearch={() => {
               handleSubmit()
             }}
+            clearSearchParams={() => { clearSearchParams() }}
           />
         )}
       />
