@@ -8,6 +8,7 @@ import { FacetSelectValueType } from '../facets/FacetSelect'
 export interface FiltersBlockProps {
   keywords: string[]
   modality_selected?: FacetSelectValueType
+  searchAllDatasets: boolean
   datasetType_selected?: string
   datasetStatus_selected?: FacetSelectValueType
   ageRange?: [number, number]
@@ -35,6 +36,7 @@ export interface FiltersBlockProps {
 export const FiltersBlock = ({
   keywords,
   loading,
+  searchAllDatasets,
   modality_selected,
   datasetType_selected,
   datasetStatus_selected,
@@ -99,25 +101,29 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem(true)}
           />
         )}
-        {datasetType_selected && (
-          <FilterListItem
-            type="Type"
-            item={{
-              param: 'datasetType_selected',
-              value: datasetType_selected,
-            }}
-            removeFilterItem={removeFilterItem()}
-          />
-        )}
-        {datasetStatus_selected && (
-          <FilterListItem
-            type="Status"
-            item={{
-              param: 'datasetStatus_selected',
-              value: datasetStatus_selected,
-            }}
-            removeFilterItem={removeFilterItem()}
-          />
+        {!searchAllDatasets && (
+          <>
+            {datasetType_selected && (
+              <FilterListItem
+                type="Type"
+                item={{
+                  param: 'datasetType_selected',
+                  value: datasetType_selected,
+                }}
+                removeFilterItem={removeFilterItem()}
+              />
+            )}
+            {datasetStatus_selected && (
+              <FilterListItem
+                type="Status"
+                item={{
+                  param: 'datasetStatus_selected',
+                  value: datasetStatus_selected,
+                }}
+                removeFilterItem={removeFilterItem()}
+              />
+            )}
+          </>
         )}
         {!ageRangeIsNull && (
           <FilterListItem
