@@ -32,14 +32,12 @@ const HeaderContainer: FC = () => {
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
 
-  const handleSubmit = (resetSearchParams = false) => {
+  const handleSubmit = () => {
     // reset search params and set keyword to initiate new search, then navigate to global search page
-    if (newKeywordRef.current || resetSearchParams) {
-      setSearchParams(() => ({
-        ...initialSearchParams,
-        keywords: resetSearchParams ? [] : [newKeywordRef.current],
-      }))
-    }
+    setSearchParams(() => ({
+      ...initialSearchParams,
+      keywords: newKeywordRef.current ? [newKeywordRef.current] : [],
+    }))
     setNewKeyword('')
     history.push('/search')
   }
