@@ -164,8 +164,8 @@ const FrontPageContainer: React.FC = () => {
         renderActivitySliderFront={() => (
           <>
             <ActivityHeader />
-            <FrontPageTopQuery query={TOP_VIEWED} />
-            <FrontPageNewQuery query={RECENTLY_PUBLISHED} />
+            {/* <FrontPageTopQuery query={TOP_VIEWED} />
+            <FrontPageNewQuery query={RECENTLY_PUBLISHED} /> */}
           </>
         )}
         renderGetUpdates={() => (

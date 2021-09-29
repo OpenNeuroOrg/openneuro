@@ -146,14 +146,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             numTotalResults={numTotalResults}
           />
         )}
-        renderSortBy={() => (
-          <>
-            {/* TODO: move wrapper div.col.search-sort into <SearchSort/> */}
-            <div className="col search-sort">
-              <SortBySelect />
-            </div>
-          </>
-        )}
+        renderSortBy={() => <SortBySelect />}
         renderSearchHeader={() => (
           <>
             {portalContent
@@ -167,9 +160,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <AdminUser>
               <AllDatasetsToggle />
             </AdminUser>
-            {!searchParams.searchAllDatasets &&
-              <ShowDatasetRadios />
-            }
+            {!searchParams.searchAllDatasets && <ShowDatasetRadios />}
             {!portalContent ? (
               <ModalitySelect portalStyles={true} label="Modalities" />
             ) : (
