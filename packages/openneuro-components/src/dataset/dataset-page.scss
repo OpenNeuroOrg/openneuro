@@ -337,6 +337,14 @@
       word-break: break-word;
     }
   }
+
+  .cite-content-block {
+    background-color: #f6f6f6;
+    margin: 10px 0;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 10px;
+  }
 }
 
 .dataset-meta-block.dataset-readme {

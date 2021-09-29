@@ -203,7 +203,7 @@
   }
 }
 
-.btn-group-wrapper {
+.facet-radio.btn-group-wrapper {
   position: relative;
   margin: 0 0 10px;
   background-color: #f6f6f6;
@@ -212,6 +212,7 @@
   @media (max-width: 450px) {
     .on-radio-wrapper.btn-group {
       flex-direction: column;
+      button,
       .custom-radio {
         height: 50px;
         padding: 0;

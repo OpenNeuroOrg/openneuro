@@ -11,7 +11,7 @@ import Files from './files'
 import Validation from '../validation/validation.jsx'
 import { config } from '../../config'
 import Comments from './comments/comments.jsx'
-import Spinner from '../../common/partials/spinner.jsx'
+import DatasetCitation from './fragments/dataset-citation.jsx'
 
 import {
   ModalitiesMetaDataBlock,
@@ -27,6 +27,8 @@ import {
   VersionListContainerExample,
   DatasetTools,
 } from '@openneuro/components/dataset'
+import { Loading } from '@openneuro/components/loading'
+
 import {
   getUnexpiredProfile,
   hasEditPermissions,
@@ -333,6 +335,19 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               }
             />
             <MetaDataBlock heading="License" item={description.License} />
+
+            <MetaDataBlock
+              heading="How To Cite"
+              item={
+                <>
+                  <DatasetCitation snapshot={snapshot} />
+                  <h5>
+                    <Link to="/cite">More citation info</Link>
+                  </h5>
+                </>
+              }
+            />
+
             <MetaDataBlock
               heading="Acknowledgements"
               item={description.Acknowledgements}
@@ -409,7 +424,12 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
     errorPolicy: 'all',
   })
   if (loading) {
-    return <Spinner text="Loading Snapshot" active />
+    return (
+      <div className="loading-dataset">
+        <Loading />
+        Loading Dataset
+      </div>
+    )
   } else if (error) {
     throw new Error(error.toString())
   } else {
