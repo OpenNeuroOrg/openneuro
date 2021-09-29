@@ -189,6 +189,12 @@ header {
   align-items: center;
   > div {
     margin-right: 60px;
+    @media(max-width: 1420px){
+      margin-right: 20px;
+    }
+    @media(max-width: 1302px){
+      margin-right: 0;
+    }
   }
   .hero-sigin-label {
     @media (max-width: 800px) {
