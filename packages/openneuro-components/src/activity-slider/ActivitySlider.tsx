@@ -49,19 +49,22 @@ export const ActivitySlider = ({
         showDots={showDots}
         responsive={responsive}
         customLeftArrow={<LeftArrow />}
-        customRightArrow={<RightArrow />}>
+        customRightArrow={<RightArrow />}
+      >
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-modality">
               <div className="hexagon-wrapper">
-                {node.latestSnapshot.summary.primaryModality !== null ? (
+                {node.latestSnapshot.summary?.primaryModality !== null ? (
                   <>
                     <div
                       className={
-                        'hexagon ' + node.latestSnapshot.summary.primaryModality
-                      }></div>
+                        'hexagon ' +
+                        node.latestSnapshot.summary?.primaryModality
+                      }
+                    ></div>
                     <div className="label">
-                      {node.latestSnapshot.summary.primaryModality}
+                      {node.latestSnapshot.summary?.primaryModality}
                     </div>
                   </>
                 ) : (
@@ -80,7 +83,8 @@ export const ActivitySlider = ({
                     node.id +
                     '/versions/' +
                     node.latestSnapshot.tag
-                  }>
+                  }
+                >
                   {node.latestSnapshot.description.Name}
                 </Link>
               </h4>
