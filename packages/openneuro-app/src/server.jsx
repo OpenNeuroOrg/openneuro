@@ -28,6 +28,7 @@ export async function render(url, cookies) {
   const client = createClient(config.graphql.uri, {
     clientVersion: version,
     ssrMode: true,
+    getAuthorization: () => cookies.get('accessToken'),
   })
 
   const css =
