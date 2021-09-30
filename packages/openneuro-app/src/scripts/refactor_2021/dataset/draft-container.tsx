@@ -37,7 +37,7 @@ import { StarDataset } from './mutations/star'
 import EditDescriptionField from './fragments/edit-description-field.jsx'
 import EditDescriptionList from './fragments/edit-description-list.jsx'
 
-export interface SnapshotContainerProps {
+export interface DraftContainerProps {
   dataset
   tag?: string
 }
@@ -50,7 +50,7 @@ const snapshotVersion = location => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
-const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
+const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || 'draft'
 
@@ -445,4 +445,4 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({ dataset }) => {
     </>
   )
 }
-export default SnapshotContainer
+export default DraftContainer

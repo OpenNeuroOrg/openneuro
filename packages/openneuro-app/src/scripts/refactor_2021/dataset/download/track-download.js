@@ -1,5 +1,5 @@
 import { event } from '../../utils/gtag'
-import datalad from '../../utils/datalad'
+import { trackAnalytics } from '../../utils/datalad'
 
 export const trackDownload = (client, datasetId, snapshotTag) => {
   event({
@@ -7,7 +7,7 @@ export const trackDownload = (client, datasetId, snapshotTag) => {
     action: 'Started web download',
     label: snapshotTag ? `${datasetId}:${snapshotTag}` : datasetId,
   })
-  datalad.trackAnalytics(client, datasetId, {
+  trackAnalytics(client, datasetId, {
     snapshot: true,
     tag: snapshotTag,
     type: 'downloads',
