@@ -124,8 +124,7 @@ async function createServer(): Promise<void> {
           ? 'private'
           : 'public'
         // Allow proxies to cache anonymous requests
-        let cacheControl =
-          url === '/' ? 'no-cache' : `${cachePublic}, max-age=3600`
+        let cacheControl = `${cachePublic}, max-age=3600`
 
         try {
           // 2. Apply vite HTML transforms. This injects the vite HMR client, and
@@ -168,6 +167,7 @@ async function createServer(): Promise<void> {
           .set({
             'Content-Type': 'text/html',
             'Cache-Control': cacheControl,
+            Vary: 'Cookie',
           })
           .end(html)
       } catch (e) {
