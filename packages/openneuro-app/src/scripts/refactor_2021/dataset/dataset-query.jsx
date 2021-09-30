@@ -1,8 +1,7 @@
 import { apm } from '../../apm'
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useQuery, gql } from '@apollo/client'
-
+import { useQuery, gql, useApolloClient } from '@apollo/client'
 import { Loading } from '@openneuro/components/loading'
 
 import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
@@ -21,7 +20,7 @@ import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
 import DatasetRedirect from '../../datalad/routes/dataset-redirect'
-import datalad from '../../utils/datalad'
+import { trackAnalytics } from '../../utils/datalad'
 
 //TODO imports
 
@@ -169,7 +168,8 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
             datasetId,
             fetchMore,
             error,
-          }}>
+          }}
+        >
           <DatasetRoutes dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
@@ -194,7 +194,8 @@ DatasetQueryHook.propTypes = {
 const DatasetQuery = ({ match, history }) => {
   const datasetId = match.params.datasetId
   const snapshotId = match.params.snapshotId
-  datalad.trackAnalytics(datasetId, {
+  const client = useApolloClient()
+  trackAnalytics(client, datasetId, {
     snapshot: true,
     tag: snapshotId,
     type: 'views',
@@ -203,7 +204,8 @@ const DatasetQuery = ({ match, history }) => {
     <>
       <DatasetRedirect />
       <ErrorBoundaryAssertionFailureException
-        subject={'error in dataset query'}>
+        subject={'error in dataset query'}
+      >
         <DatasetQueryHook
           datasetId={datasetId}
           draft={!snapshotId}

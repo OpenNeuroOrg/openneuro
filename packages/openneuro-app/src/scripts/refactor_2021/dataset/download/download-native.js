@@ -53,7 +53,7 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
 
   // Try trackDownload but don't worry if it fails
   try {
-    trackDownload(datasetId, snapshotTag)
+    trackDownload(client, datasetId, snapshotTag)
   } catch (err) {
     apm.captureError(err)
   }
