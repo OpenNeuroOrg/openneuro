@@ -24,7 +24,7 @@ import {
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
-  VersionListContainerExample,
+  VersionList,
   DatasetTools,
 } from '@openneuro/components/dataset'
 import { Loading } from '@openneuro/components/loading'
@@ -225,15 +225,15 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               heading="Versions"
               item={
                 <div className="version-block">
-                  <VersionListContainerExample
+                  <VersionList
                     hasEdit={hasEdit}
                     datasetId={datasetId}
                     items={dataset.snapshots}
                     className="version-dropdown"
                     activeDataset={activeDataset}
                     dateModified={dateModified}
-                    selectedVersion={selectedVersion}
-                    setSelectedVersion={setSelectedVersion}
+                    selected={selectedVersion}
+                    setSelected={setSelectedVersion}
                     setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
                   />
                 </div>

@@ -10,9 +10,7 @@ import { DatasetHeaderMeta } from './DatasetHeaderMeta'
 import { DatasetPage } from './DatasetPage'
 import { DatasetGitAccess } from './DatasetGitAccess'
 import { DatasetTools } from './DatasetTools'
-// TODO: remove
-
-import { VersionListContainerExample } from './VersionListContainerExample'
+import { VersionList } from './VersionList'
 
 export {
   MetaDataBlock,
@@ -24,7 +22,7 @@ export {
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
-  VersionListContainerExample,
+  VersionList,
   MetaDataListBlock,
   ModalitiesMetaDataBlock,
   DatasetTools,
