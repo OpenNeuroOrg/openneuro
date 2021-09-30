@@ -17,6 +17,12 @@ import redesignStyles from '@openneuro/components/page/page.scss'
 import classicStyles from './sass/main.scss'
 import { apm } from './scripts/apm.js'
 
+const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
+}
+
 export async function render(url, cookies) {
   // Client must be created on every call to avoid mixing credentials
   const client = createClient(config.graphql.uri, {
@@ -29,18 +35,22 @@ export async function render(url, cookies) {
 
   let react = ''
   try {
-    react = await getDataFromTree(
-      <App cookies={cookies}>
-        <Helmet>
-          <style type="text/css">{mediaStyle}</style>
-        </Helmet>
-        <ApolloProvider client={client}>
-          <StaticRouter location={url}>
-            <Index />
-          </StaticRouter>
-        </ApolloProvider>
-      </App>,
-    )
+    // Return SSR render with data if complete in under 5 seconds
+    react = await Promise.race([
+      getDataFromTree(
+        <App cookies={cookies}>
+          <Helmet>
+            <style type="text/css">{mediaStyle}</style>
+          </Helmet>
+          <ApolloProvider client={client}>
+            <StaticRouter location={url}>
+              <Index />
+            </StaticRouter>
+          </ApolloProvider>
+        </App>,
+      ),
+      wait(5000),
+    ])
   } catch (err) {
     apm.captureError(err)
     console.error(err)
