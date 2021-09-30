@@ -158,6 +158,7 @@ export const createClient = (
     cache: cache || new InMemoryCache(),
     connectToDevTools: true,
     ssrMode,
+    ssrForceFetchDelay: 1000,
   }
 
   // TODO: Figure this out?
