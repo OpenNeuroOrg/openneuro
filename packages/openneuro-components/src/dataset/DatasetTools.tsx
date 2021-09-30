@@ -25,7 +25,7 @@ export const DatasetTools = ({
   return (
     <>
       {hasEdit && !isPublic && !isSnapshot && (
-        <Tooltip tooltip="Publish the dataset publicly" flow="up">
+        <Tooltip tooltip="Publicize the dataset" flow="up">
           <Link className="dataset-tool" to={`/datasets/${datasetId}/publish`}>
             <Icon icon="fa fa-globe" label="Publish" />
           </Link>
