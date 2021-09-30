@@ -23,11 +23,30 @@ const wait = timeout => {
   })
 }
 
+const RootComponent = ({ cookies, mediaStyle, client, url }) => (
+  <App cookies={cookies}>
+    <Helmet>
+      <style type="text/css">{mediaStyle}</style>
+    </Helmet>
+    <ApolloProvider client={client}>
+      <StaticRouter location={url}>
+        <Index />
+      </StaticRouter>
+    </ApolloProvider>
+  </App>
+)
+
 export async function render(url, cookies) {
   // Client must be created on every call to avoid mixing credentials
   const client = createClient(config.graphql.uri, {
     clientVersion: version,
     ssrMode: true,
+    getAuthorization: () => cookies.get('accessToken'),
+  })
+  // Backup render without data
+  const fallbackClient = createClient(config.graphql.uri, {
+    clientVersion: version,
+    ssrMode: false,
     getAuthorization: () => cookies.get('accessToken'),
   })
 
@@ -39,18 +58,23 @@ export async function render(url, cookies) {
     // Return SSR render with data if complete in under 5 seconds
     react = await Promise.race([
       getDataFromTree(
-        <App cookies={cookies}>
-          <Helmet>
-            <style type="text/css">{mediaStyle}</style>
-          </Helmet>
-          <ApolloProvider client={client}>
-            <StaticRouter location={url}>
-              <Index />
-            </StaticRouter>
-          </ApolloProvider>
-        </App>,
+        <RootComponent
+          cookies={cookies}
+          mediaStyle={mediaStyle}
+          client={client}
+          url={url}
+        />,
       ),
-      wait(5000),
+      wait(5000).then(() =>
+        getDataFromTree(
+          <RootComponent
+            cookies={cookies}
+            mediaStyle={mediaStyle}
+            client={fallbackClient}
+            url={url}
+          />,
+        ),
+      ),
     ])
   } catch (err) {
     apm.captureError(err)
