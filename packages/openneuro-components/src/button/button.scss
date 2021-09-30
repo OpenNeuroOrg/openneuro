@@ -125,3 +125,16 @@
   width: 100%;
   margin: 0 20px;
 }
+
+.button-group-wrapper {
+  position: relative;
+  .btn-group {
+    justify-content: flex-start;
+    button {
+      margin: 0 10px 0 0;
+    }
+    .tooltip {
+      display: inline-block;
+    }
+  }
+}
