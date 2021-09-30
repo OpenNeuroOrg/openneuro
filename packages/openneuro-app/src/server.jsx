@@ -17,11 +17,37 @@ import redesignStyles from '@openneuro/components/page/page.scss'
 import classicStyles from './sass/main.scss'
 import { apm } from './scripts/apm.js'
 
+const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
+}
+
+const RootComponent = ({ cookies, mediaStyle, client, url }) => (
+  <App cookies={cookies}>
+    <Helmet>
+      <style type="text/css">{mediaStyle}</style>
+    </Helmet>
+    <ApolloProvider client={client}>
+      <StaticRouter location={url}>
+        <Index />
+      </StaticRouter>
+    </ApolloProvider>
+  </App>
+)
+
 export async function render(url, cookies) {
   // Client must be created on every call to avoid mixing credentials
   const client = createClient(config.graphql.uri, {
     clientVersion: version,
     ssrMode: true,
+    getAuthorization: () => cookies.get('accessToken'),
+  })
+  // Backup render without data
+  const fallbackClient = createClient(config.graphql.uri, {
+    clientVersion: version,
+    ssrMode: false,
+    getAuthorization: () => cookies.get('accessToken'),
   })
 
   const css =
@@ -29,18 +55,27 @@ export async function render(url, cookies) {
 
   let react = ''
   try {
-    react = await getDataFromTree(
-      <App cookies={cookies}>
-        <Helmet>
-          <style type="text/css">{mediaStyle}</style>
-        </Helmet>
-        <ApolloProvider client={client}>
-          <StaticRouter location={url}>
-            <Index />
-          </StaticRouter>
-        </ApolloProvider>
-      </App>,
-    )
+    // Return SSR render with data if complete in under 5 seconds
+    react = await Promise.race([
+      getDataFromTree(
+        <RootComponent
+          cookies={cookies}
+          mediaStyle={mediaStyle}
+          client={client}
+          url={url}
+        />,
+      ),
+      wait(5000).then(() =>
+        getDataFromTree(
+          <RootComponent
+            cookies={cookies}
+            mediaStyle={mediaStyle}
+            client={fallbackClient}
+            url={url}
+          />,
+        ),
+      ),
+    ])
   } catch (err) {
     apm.captureError(err)
     console.error(err)

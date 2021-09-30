@@ -31,7 +31,7 @@ globalThis.OpenNeuroConfig = {
   ORCID_REDIRECT_URI: process.env.ORCID_REDIRECT_URI,
   GOOGLE_TRACKING_IDS: process.env.GOOGLE_TRACKING_IDS,
   ENVIRONMENT: process.env.ENVIRONMENT,
-  SUPPORT_URL: process.env.SUPPORT_URL,
+  SUPPORT_URL: process.env.FRESH_DESK_URL,
   DATALAD_GITHUB_ORG: process.env.DATALAD_GITHUB_ORG,
   AWS_S3_PUBLIC_BUCKET: process.env.AWS_S3_PUBLIC_BUCKET,
 }
@@ -120,13 +120,11 @@ async function createServer(): Promise<void> {
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
         // Authenticated page renders are private data
-        const cachePublic =
-          req.universalCookies.get('accessToken')
-            ? 'private'
-            : 'public'
+        const cachePublic = req.universalCookies.get('accessToken')
+          ? 'private'
+          : 'public'
         // Allow proxies to cache anonymous requests
-        let cacheControl =
-          url === '/' ? 'no-cache' : `${cachePublic}, max-age=3600`
+        let cacheControl = `${cachePublic}, max-age=3600`
 
         try {
           // 2. Apply vite HTML transforms. This injects the vite HMR client, and
@@ -169,6 +167,7 @@ async function createServer(): Promise<void> {
           .set({
             'Content-Type': 'text/html',
             'Cache-Control': cacheControl,
+            Vary: 'Cookie',
           })
           .end(html)
       } catch (e) {
