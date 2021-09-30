@@ -17,7 +17,7 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
         <div className="grid grid-between">
           <div className="col">
             <h1>
-              <a href={'/' + modality}>
+              <a href={'/search/modality/' + modality}>
                 <div className="hexagon-wrapper">
                   <div className="hexagon no-modality"></div>
                   <div className="label">
