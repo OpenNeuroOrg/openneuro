@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export interface DatasetHeaderProps {
   modality: string
@@ -17,7 +18,7 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
         <div className="grid grid-between">
           <div className="col">
             <h1>
-              <a href={'/' + modality}>
+              <Link to={'/search/modality/' + modality}>
                 <div className="hexagon-wrapper">
                   <div className="hexagon no-modality"></div>
                   <div className="label">
@@ -28,7 +29,7 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                     )}
                   </div>
                 </div>
-              </a>
+              </Link>
               {renderEditor?.() || pageHeading}
             </h1>
           </div>
