@@ -23,6 +23,7 @@ ReactDOM.hydrate(
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
+        enableWebsocket: true,
         cache: new InMemoryCache({
           typePolicies: {
             Query: {
@@ -33,7 +34,8 @@ ReactDOM.hydrate(
           },
           // @ts-expect-error
         }).restore(JSON.parse(window.__APOLLO_STATE__)),
-      })}>
+      })}
+    >
       <BrowserRouter>
         <Route component={analyticsWrapper(Index)} />
       </BrowserRouter>

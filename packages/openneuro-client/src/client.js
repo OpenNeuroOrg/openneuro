@@ -7,10 +7,12 @@ import {
   Observable,
   createHttpLink,
 } from '@apollo/client'
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { setContext } from '@apollo/client/link/context'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import semver from 'semver'
+import { sha256 } from 'crypto-hash'
 
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
@@ -95,40 +97,32 @@ const compareVersionsLink = clientVersion =>
       ),
   )
 
-const createLink = (uri, getAuthorization, fetch) => {
-  // We have to setup authLink to inject credentials here
+const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
+  // Use CDN compatible hashed query GET requests
+  const persistedQueryLink = createPersistedQueryLink({
+    sha256,
+    useGETForHashedQueries: true,
+  })
 
-  // server-side link
-  let link = middlewareAuthLink(uri, getAuthorization, fetch)
-  let ws
-
-  try {
-    // browser-side link
-    ws = typeof window !== 'undefined' ? wsLink(uri) : null
-  } catch (e) {
-    // Don't die when websocket setup fails
-  }
-  if (ws) {
-    link = split(
-      ({ query }) => {
-        /**
-         * Typescript complains because this can return
-         * FragmentDefinitionNode or OperationDefinitionNode
-         * so we cannot use a simple destructuring
-         * `const { kind, operation }`
-         **/
-        const definition = getMainDefinition(query)
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        )
-      },
-      ws,
-      middlewareAuthLink(uri, getAuthorization, fetch),
-    )
-  }
-
-  return link
+  return split(
+    ({ query }) => {
+      /**
+       * Typescript complains because this can return
+       * FragmentDefinitionNode or OperationDefinitionNode
+       * so we cannot use a simple destructuring
+       * `const { kind, operation }`
+       **/
+      const definition = getMainDefinition(query)
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
+    },
+    enableWebsocket
+      ? wsLink(uri)
+      : middlewareAuthLink(uri, getAuthorization, fetch),
+    persistedQueryLink.concat(middlewareAuthLink(uri, getAuthorization, fetch)),
+  )
 }
 
 /**
@@ -143,13 +137,14 @@ export const createClient = (
     links = [],
     ssrMode = false,
     cache = undefined,
+    enableWebsocket = false,
   } = {},
 ) => {
   // createLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),
     ...links,
-    createLink(uri, getAuthorization, fetch),
+    createLink(uri, getAuthorization, fetch, enableWebsocket),
   ])
 
   const apolloClientOptions = {
