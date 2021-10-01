@@ -10076,6 +10076,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["connect-history-api-fallback", "npm:1.6.0"],
             ["core-js", "npm:3.18.0"],
             ["cross-fetch", "npm:3.1.4"],
+            ["crypto-hash", "npm:1.3.0"],
             ["date-fns", "npm:2.24.0"],
             ["draft-js", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.7"],
             ["email-validator", "npm:2.0.4"],
@@ -10167,6 +10168,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["apollo-server", "virtual:86720daff6fa91ef488bb305b0b2c8253fb3fabde470b409f92b17f3b1d6203e3f6631585a5dc2cd5ccefab01339e6676f430f53e0206b9354f687fcc9c70489#npm:2.25.2"],
             ["core-js", "npm:3.18.0"],
             ["cross-fetch", "npm:3.1.4"],
+            ["crypto-hash", "npm:1.3.0"],
             ["graphql", "npm:14.7.0"],
             ["semver", "npm:5.7.1"],
             ["subscriptions-transport-ws", "virtual:97dccaff73165508c12f2d40feea1ff8717e10423a567c2ece21e61362bdf9f610ba446599f6020c727df6997ab189a775bc307c0a84173a7ff8b1f77a3b2979#npm:0.9.19"]
@@ -20440,6 +20442,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["public-encrypt", "npm:4.0.3"],
             ["randombytes", "npm:2.1.0"],
             ["randomfill", "npm:1.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["crypto-hash", [
+        ["npm:1.3.0", {
+          "packageLocation": "./.yarn/cache/crypto-hash-npm-1.3.0-8ec42184ed-3d0817091b.zip/node_modules/crypto-hash/",
+          "packageDependencies": [
+            ["crypto-hash", "npm:1.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -34276,6 +34287,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["nanocolors", "npm:0.1.12"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:0.2.12", {
+          "packageLocation": "./.yarn/cache/nanocolors-npm-0.2.12-f605aa543e-6f66a8cccb.zip/node_modules/nanocolors/",
+          "packageDependencies": [
+            ["nanocolors", "npm:0.2.12"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["nanoid", [
@@ -36665,6 +36683,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["postcss", "npm:8.3.7"],
             ["nanocolors", "npm:0.1.12"],
+            ["nanoid", "npm:3.1.25"],
+            ["source-map-js", "npm:0.6.2"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:8.3.8", {
+          "packageLocation": "./.yarn/cache/postcss-npm-8.3.8-adce56afd5-bea4f2f367.zip/node_modules/postcss/",
+          "packageDependencies": [
+            ["postcss", "npm:8.3.8"],
+            ["nanocolors", "npm:0.2.12"],
             ["nanoid", "npm:3.1.25"],
             ["source-map-js", "npm:0.6.2"]
           ],
@@ -45981,7 +46009,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["vite", "npm:2.3.1"],
             ["esbuild", "npm:0.11.23"],
             ["fsevents", "patch:fsevents@npm%3A2.3.2#builtin<compat/fsevents>::version=2.3.2&hash=11e9ea"],
-            ["postcss", "npm:8.3.7"],
+            ["postcss", "npm:8.3.8"],
             ["resolve", "patch:resolve@npm%3A1.20.0#builtin<compat/resolve>::version=1.20.0&hash=3388aa"],
             ["rollup", "npm:2.57.0"]
           ],
