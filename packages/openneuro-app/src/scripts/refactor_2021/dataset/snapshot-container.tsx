@@ -147,7 +147,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 isPrivate={!dataset.public}
                 datasetId={dataset.id}
                 hasDraftChanges={hasDraftChanges}
-                hasSnapshot={!dataset.snapshots.length}
+                hasSnapshot={dataset.snapshots.length !== 0}
               />
             )}
           </>
