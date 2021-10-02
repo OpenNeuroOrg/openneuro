@@ -11,6 +11,7 @@ export interface DatasetToolsProps {
   isSnapshot: boolean
   datasetId: string
   isAdmin: boolean
+  hasSnapshot?: boolean
 }
 
 export const DatasetTools = ({
@@ -19,17 +20,34 @@ export const DatasetTools = ({
   isPublic,
   datasetId,
   isAdmin,
+  hasSnapshot,
 }: DatasetToolsProps) => {
   const history = useHistory()
   const location = useLocation()
   return (
     <>
       {hasEdit && !isPublic && !isSnapshot && (
-        <Tooltip tooltip="Publicize the dataset" flow="up">
-          <Link className="dataset-tool" to={`/datasets/${datasetId}/publish`}>
-            <Icon icon="fa fa-globe" label="Publish" />
-          </Link>
-        </Tooltip>
+        <>
+          {hasSnapshot ? (
+            <Tooltip tooltip="Publicize the dataset" flow="up">
+              <Link
+                className="dataset-tool"
+                to={`/datasets/${datasetId}/publish`}
+              >
+                <Icon icon="fa fa-globe" label="Publish" />
+              </Link>
+            </Tooltip>
+          ) : (
+            <Tooltip tooltip="Create a version to publish" flow="up">
+              <Link
+                className="dataset-tool"
+                to={`/datasets/${datasetId}/snapshot`}
+              >
+                <Icon icon="fa fa-globe" label="Publish" />
+              </Link>
+            </Tooltip>
+          )}
+        </>
       )}
       {hasEdit && !isSnapshot && (
         <Tooltip tooltip="Share this dataset with collaborators" flow="up">

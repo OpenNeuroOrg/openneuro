@@ -180,6 +180,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             isSnapshot={isSnapshot}
             datasetId={datasetId}
             isAdmin={isAdmin}
+            hasSnapshot={dataset.snapshots.length !== 0}
           />
         )}
         renderFiles={() => (
