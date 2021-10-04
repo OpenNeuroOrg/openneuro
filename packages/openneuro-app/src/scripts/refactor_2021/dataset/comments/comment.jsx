@@ -46,7 +46,7 @@ const Comment = ({ datasetId, data, children }) => {
         <LoggedIn>
           <div className="row comment-controls grid grid-start">
             {editMode ? null : (
-              <div className="col col-1">
+              <div className="col col-fixed">
                 <a className="reply" onClick={() => setReplyMode(!replyMode)}>
                   {replyMode ? (
                     <Icon icon="fa fa-times" label="Close" />
@@ -57,7 +57,7 @@ const Comment = ({ datasetId, data, children }) => {
               </div>
             )}
             {replyMode ? null : (
-              <div className="col col-1">
+              <div className="col col-fixed">
                 <a className="edit" onClick={() => setEditMode(!editMode)}>
                   {editMode ? (
                     <Icon icon="fa fa-times" label="Close" />

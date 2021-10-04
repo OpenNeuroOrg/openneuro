@@ -68,6 +68,9 @@ blockquote {
   border-left: 10px solid #e2e2e2;
   display: block;
   padding: 0 0 0 30px;
+  @media (max-width: 480px) {
+    margin: 20px 10px;
+  }
 }
 
 .sr-only {

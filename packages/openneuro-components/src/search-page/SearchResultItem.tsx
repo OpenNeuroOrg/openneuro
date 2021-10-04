@@ -227,7 +227,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip={activtyTooltip}
       flow="up"
-      className="result-icon result-activity-icon">
+      className="result-icon result-activity-icon"
+    >
       <Icon
         imgSrc={activityPulseIcon}
         iconSize="22px"
@@ -241,7 +242,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Shared with me"
       flow="up"
-      className="result-icon result-shared-icon">
+      className="result-icon result-shared-icon"
+    >
       <Icon
         icon="fas fa-user"
         color="rgb(119,191,217)"
@@ -255,7 +257,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Visable to all viewers"
       flow="up"
-      className="result-icon result-publlic-icon">
+      className="result-icon result-publlic-icon"
+    >
       <Icon
         icon="fas fa-globe"
         color="rgb(116,181,105)"
@@ -270,7 +273,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Invalid"
       flow="up"
-      className="result-icon result-errors-icon">
+      className="result-icon result-errors-icon"
+    >
       <Icon
         icon="fas fa-exclamation-circle"
         color="rgb(202,97,86)"
@@ -367,7 +371,7 @@ export const SearchResultItem = ({
           </div>
         </div>
 
-        <div className="col col-3">
+        <div className="col col-3 col-sm">
           {MyDatasetsPage && (
             <div className="dataset-permissions-tag">
               <small>Access: {datasetPerms}</small>
