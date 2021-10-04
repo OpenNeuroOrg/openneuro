@@ -23,7 +23,9 @@ export const ModalitiesMetaDataBlock = ({
       <h2 className="dmb-heading">Available Modalities</h2>
       {items.map((item, index) => (
         <Link key={index} to={'/search/modality/' + item.toLowerCase()}>
-          {item in customCase ? customCase[item.toLowerCase()] : item}
+          {item.toLowerCase() in customCase
+            ? customCase[item.toLowerCase()]
+            : item}
         </Link>
       ))}
     </div>
