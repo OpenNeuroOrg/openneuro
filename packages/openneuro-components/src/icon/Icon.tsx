@@ -45,8 +45,8 @@ export const Icon: React.FC<IconProps> = ({
       )}
       style={{ backgroundColor, color }}
       role="img"
-      aria-label="icon"
-      title={label.toString()}>
+      aria-label={label.toString()}
+    >
       {imgIcon}
       {fontIcon}
       {iconOnly ? null : label}

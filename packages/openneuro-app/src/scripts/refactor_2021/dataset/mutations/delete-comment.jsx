@@ -49,9 +49,10 @@ const DeleteComment = ({ datasetId, commentId }) => {
             comments: nextCommentsState,
           },
         })
-      }}>
+      }}
+    >
       {deleteComment => (
-        <div className="col col-1">
+        <div className="col col-fixed">
           <a
             className="edit"
             onClick={async () => {
@@ -61,7 +62,8 @@ const DeleteComment = ({ datasetId, commentId }) => {
                   deleteChildren: true,
                 },
               })
-            }}>
+            }}
+          >
             <Icon icon="fa fa-trash" label="Delete" />
           </a>
         </div>
