@@ -102,7 +102,6 @@ const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
   const persistedQueryLink = createPersistedQueryLink({
     sha256,
     useGETForHashedQueries: true,
-    disable: () => true,
   })
 
   return split(
