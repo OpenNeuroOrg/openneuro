@@ -21,7 +21,7 @@ exports[`FileTree component renders with default props 1`] = `
           label=""
         >
           <span
-            aria-label="icon"
+            aria-label=""
             className="file-icon on-icon  "
             role="img"
             style={
@@ -30,7 +30,6 @@ exports[`FileTree component renders with default props 1`] = `
                 "color": undefined,
               }
             }
-            title=""
           >
             <i
               className="fas fa-folder"
