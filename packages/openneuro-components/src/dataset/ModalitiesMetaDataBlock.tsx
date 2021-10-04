@@ -11,12 +11,11 @@ export const ModalitiesMetaDataBlock = ({
   items,
   className,
 }: ModalitiesMetaDataBlockProps) => {
-  console.log(items)
   return (
     <div className={'dataset-meta-block ' + className}>
       <h2 className="dmb-heading">Available Modalities</h2>
       {items.map((item, index) => (
-        <Link key={index} to={'/search/modality/' + item}>
+        <Link key={index} to={'/search/modality/' + item.toLowerCase()}>
           {item}
         </Link>
       ))}
