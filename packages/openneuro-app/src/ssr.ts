@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
-import Cookies from 'universal-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
 const development = process.env.NODE_ENV === 'development'
@@ -119,13 +118,6 @@ async function createServer(): Promise<void> {
           : '../src/dist/client/index.html'
         let template = fs.readFileSync(path.resolve(__dirname, index), 'utf-8')
 
-        // Authenticated page renders are private data
-        const cachePublic = req.universalCookies.get('accessToken')
-          ? 'private'
-          : 'public'
-        // Allow proxies to cache anonymous requests
-        let cacheControl = `${cachePublic}, max-age=3600`
-
         try {
           // 2. Apply vite HTML transforms. This injects the vite HMR client, and
           //    also applies HTML transforms from Vite plugins, e.g. global preambles
@@ -145,8 +137,6 @@ async function createServer(): Promise<void> {
           //    e.g. ReactDOMServer.renderToString()
           interpolate = await render(url, req.universalCookies)
         } catch (e) {
-          // no-cache on errors
-          cacheControl = 'no-cache'
           // If an error is caught, let vite fix the stacktrace so it maps back to
           // your actual source code.
           if (development) {
@@ -166,8 +156,7 @@ async function createServer(): Promise<void> {
           .status(200)
           .set({
             'Content-Type': 'text/html',
-            'Cache-Control': cacheControl,
-            Vary: 'Cookie',
+            'Cache-Control': 'no-store',
           })
           .end(html)
       } catch (e) {
