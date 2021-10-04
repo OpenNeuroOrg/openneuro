@@ -60,7 +60,7 @@ $eeg-dark: darken($eeg-theme, 25%);
 $eeg-secondary: adjust-color($eeg-theme, $lightness: 15%);
 $eeg-light: adjust-color($eeg-theme, $lightness: 45%);
 
-$pet-theme: rgba(0, 139, 255, 1);
+$pet-theme: rgba(0, 105, 192, 1);
 $pet-hover: adjust-color($pet-theme, $lightness: 10%);
 $pet-dark: darken($pet-theme, 25%);
 $pet-secondary: adjust-color($pet-theme, $lightness: 15%);
