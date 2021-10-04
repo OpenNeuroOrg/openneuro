@@ -133,6 +133,9 @@ const refreshToken = async jwt => {
   }
 }
 
+// Shared options for Express response.cookie()
+const cookieOptions = { sameSite: 'Lax' }
+
 // attach user obj to request based on jwt
 // if user does not exist, continue
 export const authenticate = (req, res, next) => {
@@ -142,7 +145,7 @@ export const authenticate = (req, res, next) => {
       const token = await refreshToken(jwt)
       if (token) {
         req.cookies.accessToken = token
-        res.cookie('accessToken', token, { sameSite: 'Strict' })
+        res.cookie('accessToken', token, cookieOptions)
       }
     }
     passport.authenticate('jwt', { session: false }, (err, user) => {
@@ -153,12 +156,12 @@ export const authenticate = (req, res, next) => {
 }
 
 export const authSuccessHandler = (req, res, next) => {
-  const redirectPath = req.query.state 
+  const redirectPath = req.query.state
     ? Buffer.from(req.query.state, 'base64').toString()
     : '/'
   if (req.user) {
     // Set the JWT associated with this login on a cookie
-    res.cookie('accessToken', req.user.token, { sameSite: 'Strict' })
+    res.cookie('accessToken', req.user.token, cookieOptions)
     res.redirect(redirectPath)
   } else {
     res.status(401)
