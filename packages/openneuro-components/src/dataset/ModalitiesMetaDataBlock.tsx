@@ -11,7 +11,7 @@ export const ModalitiesMetaDataBlock = ({
   items,
   className,
 }: ModalitiesMetaDataBlockProps) => {
-  const uppercased = {
+  const customCase = {
     mri: 'MRI',
     ieeg: 'iEEG',
     pet: 'PET',
@@ -22,11 +22,8 @@ export const ModalitiesMetaDataBlock = ({
     <div className={'dataset-meta-block ' + className}>
       <h2 className="dmb-heading">Available Modalities</h2>
       {items.map((item, index) => (
-        <Link
-          key={index}
-          to={'/search/modality/' + uppercased[item.toLowerCase()]}
-        >
-          {item}
+        <Link key={index} to={'/search/modality/' + item.toLowerCase()}>
+          {item in customCase ? customCase[item.toLowerCase()] : item}
         </Link>
       ))}
     </div>
