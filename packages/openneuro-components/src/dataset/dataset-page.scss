@@ -377,6 +377,9 @@
   flex-wrap: wrap;
   .active-version {
     font-size: 14px;
+    @media (max-width: 320px) {
+      max-width: 110px;
+    }
     div {
       font-weight: bold;
       font-size: 16px;
@@ -398,6 +401,9 @@
       min-width: 290px;
       border: 1px solid $newspaper;
       border-radius: $border-radius-default;
+      @media (max-width: 350px) {
+        max-width: 220px;
+      }
     }
     .version-list-label {
       font-size: 14px;
@@ -410,6 +416,7 @@
     @media (max-width: 435px) {
       &.dropdown-wrapper .menu {
         right: 0;
+        left: auto;
       }
     }
   }

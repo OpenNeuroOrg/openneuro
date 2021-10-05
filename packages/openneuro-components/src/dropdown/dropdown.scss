@@ -18,8 +18,11 @@
       right: 0;
     }
     @media (max-width: 435px) {
-      right: auto;
-      left: -25vw;
+      right: 0;
+      left: 0;
+    }
+    @media (max-width: 350px) {
+      max-width: 220px;
     }
     &.expanded {
       height: auto;
