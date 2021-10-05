@@ -62,8 +62,7 @@
     > span {
       display: flex;
       margin: 0 auto 20px;
-      padding: 0 5px;
-      width: 100px;
+      min-width: 160px;
       justify-content: center;
       .dataset-tool {
         color: var(--current-theme-primary);
