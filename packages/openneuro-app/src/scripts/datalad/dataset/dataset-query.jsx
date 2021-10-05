@@ -20,6 +20,8 @@ import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../../errors/errorBoundary.jsx'
 import DatasetRedirect from '../routes/dataset-redirect'
+import FourOThreePage from '../../errors/403page'
+import FourOFourPage from '../../errors/404page'
 
 /**
  * Generate the dataset page query
@@ -110,7 +112,6 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     draft ? getDraftPage : getDatasetPage,
     {
       variables: { datasetId },
-      errorPolicy: 'all',
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
     },
@@ -125,18 +126,19 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   })
   useDraftSubscription(datasetId)
 
-  useEffect(() => {
-    if (error) {
-      if (data.dataset) {
-        // show dataset page
-        apm.captureError(error)
-      } else {
-        // direct to freshdesk
-        throw error
-      }
-    }
-  }, [error, data])
   if (loading) return <Spinner text="Loading Dataset" active />
+  if (error) {
+    if (error.message === 'You do not have access to read this dataset.') {
+      return <FourOThreePage />
+    } else {
+      try {
+        apm.captureError(error)
+      } catch (err) {
+        // Ignore failure to write to APM
+      }
+      return <FourOFourPage />
+    }
+  }
 
   return (
     <DatasetContext.Provider value={data.dataset}>
@@ -146,7 +148,8 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
             datasetId,
             fetchMore,
             error,
-          }}>
+          }}
+        >
           <DatasetPage dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
