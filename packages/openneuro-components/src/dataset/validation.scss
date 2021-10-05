@@ -286,6 +286,11 @@ $warning-orange: #df7600;
     &:after {
       position: absolute;
       left: 180px;
+      @media (max-width: 480px) {
+        left: auto;
+        right: 10px;
+        top: 10px;
+      }
     }
     &.valid {
       cursor: default;

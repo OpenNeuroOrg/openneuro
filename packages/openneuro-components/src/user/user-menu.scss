@@ -80,3 +80,9 @@
     padding: 10px;
   }
 }
+@media (max-width: 800px) {
+  .header-account-btn .dropdown-wrapper .menu {
+    right: -25vw;
+    left: -25vw;
+  }
+}

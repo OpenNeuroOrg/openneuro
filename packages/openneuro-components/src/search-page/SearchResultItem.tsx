@@ -194,11 +194,13 @@ export const SearchResultItem = ({
     )
 
     lastUpdatedDate = (
-      <div className="updated-date">
-        <span className="divider">|</span>
-        <span>Updated: </span>
-        {dateUpdated} - {dateUpdatedDifference} ago
-      </div>
+      <>
+        <span className="updated-divider">|</span>
+        <div className="updated-date">
+          <span>Updated: </span>
+          {dateUpdated} - {dateUpdatedDifference} ago
+        </div>
+      </>
     )
   }
 

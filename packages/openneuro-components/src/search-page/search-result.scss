@@ -15,6 +15,10 @@
   .owner-icon-wrap {
     display: flex;
     justify-content: flex-end;
+    @media (max-width: 480px) {
+      justify-content: flex-start;
+      margin-bottom: 10px;
+    }
     .result-icon {
       margin-left: 15px;
     }
@@ -74,15 +78,21 @@
     }
   }
 
-  .updated-date .divider {
+  .updated-divider {
     margin: 0 10px;
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
   .result-upload-info {
-    text-align: right;
+    text-align: left;
     font-size: 12px;
     margin: 0 0 20px;
     display: flex;
     justify-content: flex-start;
+    @media (max-width: 767px) {
+      flex-direction: column;
+    }
     span {
       color: #666;
     }
