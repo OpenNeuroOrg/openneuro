@@ -116,6 +116,11 @@ pre {
   &:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 480px) {
+    display: block !important;
+    margin: 30px 0 20px !important;
+  }
 }
 
 // should be deleted when we replace papaya

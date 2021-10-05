@@ -126,6 +126,9 @@
       .menu {
         box-shadow: 0px 1px 5px -1px rgba(0, 0, 0, 51%);
         margin-top: 4px;
+        @media (max-width: 767px) {
+          left: 0;
+        }
         .dataset-git-access {
           width: 450px;
           background: #fff;
@@ -364,54 +367,6 @@
 .dataset-meta-block.dataset-readme.markdown-body {
   h1 {
     font-size: 1.7em;
-  }
-}
-
-.version-block {
-  display: flex;
-  justify-content: space-between;
-  background-color: #eaeaea;
-  padding: 20px;
-  border-radius: $border-radius-default;
-  border: 1px solid $newspaper;
-  flex-wrap: wrap;
-  .active-version {
-    font-size: 14px;
-    div {
-      font-weight: bold;
-      font-size: 16px;
-    }
-  }
-  .dataset-tool {
-    font-weight: 600;
-    font-size: 14px;
-    margin: 0;
-    color: var(--current-theme-primary);
-    &:hover {
-      color: var(--current-theme-primary-hover);
-    }
-  }
-
-  .version-dropdown {
-    position: relative;
-    .menu .version-list-dropdow {
-      min-width: 290px;
-      border: 1px solid $newspaper;
-      border-radius: $border-radius-default;
-    }
-    .version-list-label {
-      font-size: 14px;
-      margin: 0 0 10px;
-      color: var(--current-theme-primary);
-      &:hover {
-        color: var(--current-theme-primary-hover);
-      }
-    }
-    @media (max-width: 435px) {
-      &.dropdown-wrapper .menu {
-        right: 0;
-      }
-    }
   }
 }
 

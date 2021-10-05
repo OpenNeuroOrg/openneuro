@@ -65,7 +65,7 @@ export const VersionList = ({
             </div>
           }
         >
-          <div className="version-list-dropdow">
+          <div className="version-list-dropdown">
             <ul>
               <li
                 onClick={() => setVersion('draft', dateModified)}
