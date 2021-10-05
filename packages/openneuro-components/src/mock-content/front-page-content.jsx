@@ -99,7 +99,6 @@ export const frontPage = {
       content: (
         <>
           <p>
-            {' '}
             Privately share your data so your colleagues can view and edit your
             work.
           </p>
@@ -117,17 +116,16 @@ export const frontPage = {
       content: (
         <>
           <p>
-            {' '}
             Create snapshots of your datasets to ensure past analyses remain
             reproducible as your datasets grow and change. Publish any of your
             snapshots while you continue work on your original data behind the
-            scenes.{' '}
+            scenes.
           </p>
           <p>
             Explore your published OpenNeuro dataset using{' '}
-            <a href="#">BrainLife's</a> computing network. Utilize their
-            community driven apps to run a variety of analysis and processing
-            applications in the browser.
+            <a href="https://brainlife.io/">BrainLife's</a> computing network.
+            Utilize their community driven apps to run a variety of analysis and
+            processing applications in the browser.
           </p>
         </>
       ),
