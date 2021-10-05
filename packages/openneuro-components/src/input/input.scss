@@ -4,7 +4,7 @@ fieldset {
   padding: 0;
   border-style: none;
 }
-
+input,
 input[type='text'],
 input[type='tel'],
 input[type='email'],
@@ -15,7 +15,7 @@ textarea {
   appearance: none;
   box-sizing: border-box;
   border-radius: 0;
-  border: 0.1rem solid $newspaper;
+  border: 1px solid $newspaper;
   padding: 10px 12px;
   max-width: 100%;
   line-height: 12px;
@@ -40,7 +40,9 @@ input[type='search'] {
 }
 
 select {
-  border-radius: 0;
+  border-radius: 4px;
+  -webkit-appearance: none;
+  border: 1px solid $newspaper;
 }
 
 textarea {
