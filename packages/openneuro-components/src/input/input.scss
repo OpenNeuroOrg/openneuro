@@ -4,7 +4,7 @@ fieldset {
   padding: 0;
   border-style: none;
 }
-input,
+input:not([type='range']),
 input[type='text'],
 input[type='tel'],
 input[type='email'],
