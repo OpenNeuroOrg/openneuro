@@ -60,14 +60,6 @@ const searchQuery = gql`
           }
           latestSnapshot {
             summary {
-              subjectMetadata {
-                age
-              }
-            }
-          }
-          draft {
-            id
-            summary {
               modalities
               secondaryModalities
               sessions
