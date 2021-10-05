@@ -158,6 +158,9 @@
             > div {
               flex-grow: 1;
               padding: 5px;
+              text-overflow: ellipsis;
+              max-width: 100%;
+              overflow: hidden;
             }
           }
         }
