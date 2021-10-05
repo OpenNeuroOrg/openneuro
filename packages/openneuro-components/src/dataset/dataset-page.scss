@@ -62,8 +62,8 @@
     > span {
       display: flex;
       margin: 0 auto 20px;
-      padding: 0 5px;
-      width: 100px;
+      flex-basis: auto;
+      padding: 0 15px;
       justify-content: center;
       .dataset-tool {
         color: var(--current-theme-primary);
@@ -158,6 +158,9 @@
             > div {
               flex-grow: 1;
               padding: 5px;
+              text-overflow: ellipsis;
+              max-width: 100%;
+              overflow: hidden;
             }
           }
         }
