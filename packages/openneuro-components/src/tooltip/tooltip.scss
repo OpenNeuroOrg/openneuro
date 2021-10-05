@@ -150,3 +150,10 @@
 [data-tooltip][data-flow^='right']:hover::after {
   animation: tooltips-horz 300ms ease-out forwards;
 }
+
+@media (max-width: 767px) {
+  [data-tooltip]::before,
+  [data-tooltip]::after {
+    display: none !important;
+  }
+}

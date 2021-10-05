@@ -227,7 +227,7 @@
 
 @media (max-width: 767px) {
   .sticky-footer {
-    margin-bottom: 80px;
+    margin-bottom: 120px;
   }
 }
 
@@ -506,6 +506,9 @@
 
   .filetree-file {
     display: flex;
+    @media (max-width: 480px) {
+      flex-wrap: wrap;
+    }
   }
 
   .bulk-delete-checkbox-group,

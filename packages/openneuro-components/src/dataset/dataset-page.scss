@@ -424,14 +424,3 @@
     }
   }
 }
-
-@media (max-width: 990px) {
-  .follow-bookmark {
-    [data-tooltip]:not([data-flow])::before,
-    [data-tooltip]:not([data-flow])::after,
-    [data-tooltip][data-flow^='up']::before,
-    [data-tooltip][data-flow^='up']::after {
-      left: 80%;
-    }
-  }
-}
