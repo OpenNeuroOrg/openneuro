@@ -7,12 +7,10 @@ import {
   Observable,
   createHttpLink,
 } from '@apollo/client'
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { setContext } from '@apollo/client/link/context'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import semver from 'semver'
-import { sha256 } from 'crypto-hash'
 
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
@@ -98,13 +96,6 @@ const compareVersionsLink = clientVersion =>
   )
 
 const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
-  // Use CDN compatible hashed query GET requests
-  const persistedQueryLink = createPersistedQueryLink({
-    sha256,
-    useGETForHashedQueries: true,
-    disable: () => true,
-  })
-
   return split(
     ({ query }) => {
       /**
@@ -122,7 +113,7 @@ const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
     enableWebsocket
       ? wsLink(uri)
       : middlewareAuthLink(uri, getAuthorization, fetch),
-    persistedQueryLink.concat(middlewareAuthLink(uri, getAuthorization, fetch)),
+    middlewareAuthLink(uri, getAuthorization, fetch),
   )
 }
 
