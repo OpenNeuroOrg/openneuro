@@ -1,10 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+
+const UploadAnchor = styled.a`
+  @media (max-width: 450px) {
+    display: none;
+  }
+`
 
 const UploadButton = ({ onClick }) => (
-  <a className="nav-link nl-upload" onClick={onClick}>
+  <UploadAnchor className="nav-link nl-upload" onClick={onClick}>
     Upload
-  </a>
+  </UploadAnchor>
 )
 
 UploadButton.propTypes = {
