@@ -186,6 +186,7 @@
   }
 }
 
+// TODO Delete feedback form stuff after release
 .feedback-form {
   .required {
     color: #f10;
@@ -214,6 +215,20 @@
   bottom: 59px;
   right: 5px;
   z-index: 9000;
+  @media (max-width: 767px) {
+    font-size: 14px;
+    padding: 8px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .sticky-footer {
+    margin-bottom: 80px;
+  }
 }
 
 .feedback-form.feedback-modal .grid.modal {
