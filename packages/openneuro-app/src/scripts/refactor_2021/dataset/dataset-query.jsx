@@ -21,8 +21,8 @@ import ErrorBoundary, {
 } from '../../errors/errorBoundary.jsx'
 import DatasetRedirect from '../../datalad/routes/dataset-redirect'
 import { trackAnalytics } from '../../utils/datalad'
-
-//TODO imports
+import FourOFourPage from '../../errors/404page'
+import FourOThreePage from '../../errors/403page'
 
 /**
  * Generate the dataset page query
@@ -126,7 +126,6 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
     draft ? getDraftPage : getDatasetPage,
     {
       variables: { datasetId },
-      errorPolicy: 'all',
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
     },
@@ -141,17 +140,6 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   })
   useDraftSubscription(datasetId)
 
-  useEffect(() => {
-    if (error) {
-      if (data.dataset) {
-        // show dataset page
-        apm.captureError(error)
-      } else {
-        // direct to freshdesk
-        throw error
-      }
-    }
-  }, [error, data])
   if (loading)
     return (
       <div className="loading-dataset">
@@ -159,6 +147,18 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
         Loading Dataset
       </div>
     )
+  if (error) {
+    if (error.message === 'You do not have access to read this dataset.') {
+      return <FourOThreePage />
+    } else {
+      try {
+        apm.captureError(error)
+      } catch (err) {
+        // Ignore failure to write to APM
+      }
+      return <FourOFourPage />
+    }
+  }
 
   return (
     <DatasetContext.Provider value={data.dataset}>
