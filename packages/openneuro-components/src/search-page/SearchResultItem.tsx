@@ -44,12 +44,7 @@ export interface SearchResultItemProps {
     metadata: {
       ages: number[]
     }
-    latestSnapshot?: {
-      summary?: {
-        subjectMetadata?: [{ age?: number }]
-      }
-    }
-    draft: {
+    latestSnapshot: {
       id: string
       summary: {
         pet: {
@@ -65,7 +60,7 @@ export interface SearchResultItemProps {
         subjectMetadata: [
           {
             participantId: string
-            age: number
+            age: [{ age?: number }]
             sex: string
             group: null
           },
@@ -117,15 +112,11 @@ export const SearchResultItem = ({
   profile,
   datasetTypeSelected,
 }: SearchResultItemProps) => {
-  const heading = node.draft.description?.Name
-  const draftSummary = node.draft.summary
-  const latestSnapshotSummary = node.latestSnapshot?.summary
-  const datasetId = node.draft.id
-  const numSessions =
-    draftSummary?.sessions.length > 0 ? draftSummary.sessions.length : 1
-  const numSubjects =
-    draftSummary?.subjects.length > 0 ? draftSummary.subjects.length : 1
-  const noSnapshots = !!node.snapshots
+  const heading = node.latestSnapshot.description?.Name
+  const summary = node.latestSnapshot?.summary
+  const datasetId = node.id
+  const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
+  const numSubjects = summary?.subjects.length > 0 ? summary.subjects.length : 1
   const accessionNumber = (
     <span className="result-summary-meta">
       <strong>Openneuro Accession Number:</strong>
@@ -156,11 +147,7 @@ export const SearchResultItem = ({
           : "Participants' Ages"}
         :{' '}
       </strong>
-      <span>
-        {ages(
-          latestSnapshotSummary?.subjectMetadata?.map(subject => subject.age),
-        )}
-      </span>
+      <span>{ages(summary?.subjectMetadata?.map(subject => subject.age))}</span>
     </span>
   )
   const subjects = (
@@ -172,13 +159,13 @@ export const SearchResultItem = ({
   const size = (
     <span className="result-summary-meta">
       <strong>Size: </strong>
-      <span>{bytes(draftSummary?.size)}</span>
+      <span>{bytes(summary?.size)}</span>
     </span>
   )
   const files = (
     <span className="result-summary-meta">
       <strong>Files: </strong>
-      <span>{draftSummary?.totalFiles.toLocaleString()}</span>
+      <span>{summary?.totalFiles.toLocaleString()}</span>
     </span>
   )
 
@@ -306,8 +293,8 @@ export const SearchResultItem = ({
     }
   }
   const invalid =
-    !node.draft.issues ||
-    node.draft.issues.some(issue => issue.severity === 'error')
+    !node.latestSnapshot.issues ||
+    node.latestSnapshot.issues.some(issue => issue.severity === 'error')
   const shared = !node.public && node.uploader.id !== profile.sub
 
   const MyDatasetsPage = datasetTypeSelected === 'My Datasets'
@@ -333,29 +320,27 @@ export const SearchResultItem = ({
     </div>
   )
 
-  const modalityList = draftSummary?.modalities.length ? (
+  const modalityList = summary?.modalities.length ? (
     <div className="modality-list">
       {_list(
-        <>
-          {draftSummary?.modalities.length === 1 ? 'Modality' : 'Modalities'}
-        </>,
-        draftSummary?.modalities,
+        <>{summary?.modalities.length === 1 ? 'Modality' : 'Modalities'}</>,
+        summary?.modalities,
       )}
     </div>
   ) : null
-  const taskList = draftSummary?.tasks.length ? (
-    <div className="task-list">{_list(<>Tasks</>, draftSummary?.tasks)}</div>
+  const taskList = summary?.tasks.length ? (
+    <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
   ) : null
 
-  const tracers = draftSummary?.pet?.TracerName?.length ? (
+  const tracers = summary?.pet?.TracerName?.length ? (
     <div className="tracers-list">
       {_list(
         <>
-          {draftSummary?.pet?.TracerName.length === 1
+          {summary?.pet?.TracerName.length === 1
             ? 'Radiotracer'
             : 'Radiotracers'}
         </>,
-        draftSummary?.pet?.TracerName,
+        summary?.pet?.TracerName,
       )}
     </div>
   ) : null
