@@ -48,7 +48,7 @@ export const snapshotCreationComparison = (
 ) => {
   return (
     new Date(a).getTime() - new Date(b).getTime() ||
-    semver.compare(a_tag, b_tag)
+    (semver.valid(a_tag) && semver.valid(b_tag) && semver.compare(a_tag, b_tag))
   )
 }
 

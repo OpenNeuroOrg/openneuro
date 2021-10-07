@@ -53,6 +53,44 @@ describe('dataset resolvers', () => {
       expect(sorted[1].id).toBe(2)
       expect(sorted[2].id).toBe(3)
     })
+    it('sorts non-semver tags mixed with semver tags', () => {
+      const testArray = [
+        { id: 2, created: new Date('2018-11-19T00:05:43.473Z'), tag: '1.0.2' },
+        {
+          id: 1,
+          created: new Date('2018-11-19T00:05:43.473Z'),
+          tag: '57fed018cce88d000ac1757f',
+        },
+        { id: 3, created: new Date('2018-11-19T00:05:43.473Z'), tag: '1.0.1' },
+      ]
+      const sorted = testArray.sort(ds.snapshotCreationComparison)
+      expect(sorted[0].id).toBe(2)
+      expect(sorted[1].id).toBe(1)
+      expect(sorted[2].id).toBe(3)
+    })
+    it('sorts snapshots with only non-semver tags', () => {
+      const testArray = [
+        {
+          id: 2,
+          created: new Date('2018-11-19T00:05:43.473Z'),
+          tag: '00001',
+        },
+        {
+          id: 1,
+          created: new Date('2018-11-19T00:05:43.473Z'),
+          tag: '57fed018cce88d000ac1757f',
+        },
+        {
+          id: 3,
+          created: new Date('2018-11-19T00:05:43.473Z'),
+          tag: '57fed018cce88d000ac1757f',
+        },
+      ]
+      const sorted = testArray.sort(ds.snapshotCreationComparison)
+      expect(sorted[0].id).toBe(2)
+      expect(sorted[1].id).toBe(1)
+      expect(sorted[2].id).toBe(3)
+    })
   })
   describe('deleteFiles', () => {
     beforeEach(() => {
