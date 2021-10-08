@@ -4,6 +4,15 @@ header {
 }
 .navbar-brand {
   max-width: 100%;
+
+  @media (max-width: 480px) {
+    width: 200px;
+    max-width: 100%;
+    margin-top: 13px;
+  }
+  @media (max-width: 380px) {
+    width: 150px;
+  }
 }
 .navbar-inner-wrap {
   display: flex;
@@ -17,14 +26,8 @@ header {
     darken($on-dark-aqua, 5%),
     adjust-color($on-dark-aqua, $lightness: 8%)
   );
-
   position: relative;
   z-index: 1199;
-
-  @media (max-width: 800px) {
-    display: flex;
-    flex-direction: column;
-  }
 }
 .svg-fill-on-dark-aqua {
   fill: $on-dark-aqua;
@@ -53,6 +56,8 @@ header {
 .navbar-navigation {
   @media (max-width: 800px) {
     margin-top: 20px;
+    margin-left: auto;
+    margin-right: 20px;
   }
   ul {
     list-style: none;
@@ -60,6 +65,17 @@ header {
     padding: 0;
     display: flex;
     justify-content: space-between;
+    @media (max-width: 800px) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      z-index: 2000;
+    }
     @media (max-width: 450px) {
       flex-wrap: wrap;
     }
@@ -102,11 +118,53 @@ header {
             width: 100%;
           }
         }
+        @media (max-width: 800px) {
+          color: $on-dark-aqua;
+          border-bottom: 2px solid transparent;
+          &:hover {
+            border-bottom-color: $on-dark-aqua;
+          }
+        }
       }
     }
   }
 }
-
+.mobile-nav-close-x,
+.mobile-collapse-toggle {
+  display: none;
+}
+@media (max-width: 800px) {
+  .mobile-collapse-toggle {
+    display: inline-block;
+    font-size: 29px;
+    span {
+      display: none;
+    }
+    i {
+      color: #fff;
+    }
+  }
+  .navbar-inner-wrap {
+    align-items: flex-start;
+    .mobile-nav-close-x {
+      display: inline-block;
+      font-size: 33px;
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
+    &.nav-open {
+      .navbar-navigation ul {
+        transform: translateY(0);
+      }
+    }
+    &.nav-closed {
+      .navbar-navigation ul {
+        transform: translateY(-500px);
+      }
+    }
+  }
+}
 #orcid-info-accordion {
   .accordion-title {
     color: $on-dark-aqua;
@@ -189,10 +247,10 @@ header {
   align-items: center;
   > div {
     margin-right: 60px;
-    @media(max-width: 1420px){
+    @media (max-width: 1420px) {
       margin-right: 20px;
     }
-    @media(max-width: 1302px){
+    @media (max-width: 1302px) {
       margin-right: 0;
     }
   }
@@ -350,7 +408,11 @@ header {
       }
     }
   }
-  .facet-accordion.on-accordion-wrapper .facet-list ul li.selected-facet > .label{
+  .facet-accordion.on-accordion-wrapper
+    .facet-list
+    ul
+    li.selected-facet
+    > .label {
     font-weight: 400;
     color: #666;
   }

@@ -35,10 +35,17 @@ export const Header = ({
   renderOnFreshDeskWidget,
   renderUploader,
 }: HeaderProps) => {
+  const [isOpen, setOpen] = React.useState(false)
   return (
     <>
       <header>
-        <div className="navbar-inner-wrap">
+        <div
+          className={
+            isOpen
+              ? 'navbar-inner-wrap nav-open'
+              : 'navbar-inner-wrap nav-closed'
+          }
+        >
           <div className="navbar-brand">
             <NavLink to="/">
               <Logo horizontal dark={false} />
@@ -46,7 +53,20 @@ export const Header = ({
             <h1 className="sr-only">OpenNeuro</h1>
           </div>
           <div className="navbar-navigation">
+            <span
+              className="mobile-collapse-toggle"
+              onClick={() => setOpen(prev => !prev)}
+            >
+              <i className="fas fa-bars"></i>
+              <span>menu bar</span>
+            </span>
             <ul>
+              <span
+                className="mobile-nav-close-x"
+                onClick={() => setOpen(prev => !prev)}
+              >
+                &times;
+              </span>
               <li>
                 <NavLink
                   to="/search"
@@ -54,7 +74,8 @@ export const Header = ({
                     console.log(e)
                     e.preventDefault()
                     navigateToNewSearch()
-                  }}>
+                  }}
+                >
                   Search
                 </NavLink>
               </li>
@@ -95,7 +116,8 @@ export const Header = ({
         className="freshdesk-support"
         isOpen={isOpenSupport}
         toggle={toggleSupport}
-        closeText="Close">
+        closeText="Close"
+      >
         <h3>OpenNeuro Support</h3>
         <p>
           Please email issues or questions to
