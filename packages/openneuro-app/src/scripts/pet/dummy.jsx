@@ -25,7 +25,9 @@ class PETDummy extends React.Component {
                 <h1 className="pet-header">Coming soon!</h1>
                 <h2>
                   A section of OpenNeuro dedicated entirely to PET scans is
-                  currently under development.{' '}
+                  currently under development.</div>
+                  This section is co-developped with <a href="https://openneuropet.github.io/"> Open NeuroPET </a> 
+                  a project dedicated in sharing and curating brain PET imging data. {' '}
                 </h2>
                 <h3>
                   In the meantime, feel free to explore{' '}
