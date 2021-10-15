@@ -55,12 +55,12 @@ export const ActivitySlider = ({
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-modality">
               <div className="hexagon-wrapper">
-                {node.latestSnapshot.summary?.primaryModality !== null ? (
+                {node.latestSnapshot.summary?.primaryModality ? (
                   <>
                     <div
                       className={
                         'hexagon ' +
-                        node.latestSnapshot.summary?.primaryModality
+                        node.latestSnapshot.summary?.primaryModality.toLowerCase()
                       }
                     ></div>
                     <div className="label">
