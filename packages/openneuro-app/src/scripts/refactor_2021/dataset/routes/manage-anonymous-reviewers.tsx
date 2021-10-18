@@ -25,27 +25,29 @@ export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
         </div>
         <hr />
         <CreateReviewLink datasetId={datasetId} />
-        <div className="dataset-form-body">
-          <h3>Previous Review Links: </h3>
-          <div className="data-table-header">
-            <span>ID</span>
-            <span>Expiration</span>
-            <span>Edit</span>
-          </div>
-          {reviewers?.map((item, index) => (
-            <div key={index} className="data-table-content">
-              <span>
-                <label>ID: </label> {item.id}
-              </span>
-              <span>
-                <label>Expiration: </label> {formatDate(item.expiration)}
-              </span>
-              <span>
-                <DeleteReviewerLink datasetId={datasetId} id={item.id} />
-              </span>
+        {reviewers.length ? (
+          <div className="dataset-form-body">
+            <h3>Previous Review Links: </h3>
+            <div className="data-table-header">
+              <span>ID</span>
+              <span>Expiration</span>
+              <span>Edit</span>
             </div>
-          ))}
-        </div>
+            {reviewers?.map((item, index) => (
+              <div key={index} className="data-table-content">
+                <span>
+                  <label>ID: </label> {item.id}
+                </span>
+                <span>
+                  <label>Expiration: </label> {formatDate(item.expiration)}
+                </span>
+                <span>
+                  <DeleteReviewerLink datasetId={datasetId} id={item.id} />
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   )

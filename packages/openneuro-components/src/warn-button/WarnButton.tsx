@@ -13,6 +13,7 @@ export interface WarnButtonProps {
   onConfirmedClick?: () => void
   displayOptions?: boolean
   setDisplayOptions?(cb: (currentState: boolean) => boolean): void
+  withLabel: boolean
 }
 export const WarnButton: FC<WarnButtonProps> = ({
   message,
@@ -24,12 +25,16 @@ export const WarnButton: FC<WarnButtonProps> = ({
   onConfirmedClick,
   displayOptions,
   setDisplayOptions,
+  withLabel,
 }) => {
   if (displayOptions === undefined || displayOptions === null) {
     ;[displayOptions, setDisplayOptions] = React.useState(false as boolean)
   }
   const viewAction = (
-    <div className="warn-btn-group" role="group">
+    <div
+      className={withLabel ? 'warn-btn-group with-label' : 'warn-btn-group'}
+      role="group"
+    >
       <div className="slide-in">
         <Button
           className="btn-warn-component cancel"

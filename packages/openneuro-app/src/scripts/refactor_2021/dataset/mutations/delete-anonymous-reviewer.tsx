@@ -48,6 +48,7 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
       icon="fa-trash-o"
       displayOptions={displayOptions}
       setDisplayOptions={setDisplayOptions}
+      withLabel={true}
       onConfirmedClick={() =>
         DeleteReviewerLink({ variables: { datasetId, id } })
       }
