@@ -27,7 +27,9 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
         id: `Dataset:${datasetId}`,
         fragment: DATASET_REVIEWERS,
       })
-      const updatedReviewers = reviewers.filter(reviewer => reviewer.id !== deleteReviewer.id)
+      const updatedReviewers = reviewers.filter(
+        reviewer => reviewer.id !== deleteReviewer.id,
+      )
       cache.writeFragment({
         id: `Dataset:${datasetId}`,
         fragment: DATASET_REVIEWERS,
@@ -35,9 +37,9 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
           __typename: 'Dataset',
           id: datasetId,
           reviewers: updatedReviewers,
-        }
+        },
       })
-    }
+    },
   })
   const [displayOptions, setDisplayOptions] = React.useState(false)
   return (
@@ -46,7 +48,6 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
       icon="fa-trash-o"
       displayOptions={displayOptions}
       setDisplayOptions={setDisplayOptions}
-      withLabel={true}
       onConfirmedClick={() =>
         DeleteReviewerLink({ variables: { datasetId, id } })
       }

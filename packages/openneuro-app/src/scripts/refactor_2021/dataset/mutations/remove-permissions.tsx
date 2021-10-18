@@ -29,7 +29,6 @@ export const RemovePermissions: FC<RemovePermissionsProps> = ({
         message="Remove Permission"
         icon="fa-trash-o"
         disabled={false}
-        withLabel={true}
         onConfirmedClick={() =>
           removePermissions({ variables: { datasetId, userId } })
         }
