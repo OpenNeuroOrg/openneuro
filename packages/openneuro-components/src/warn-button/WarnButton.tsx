@@ -13,7 +13,7 @@ export interface WarnButtonProps {
   onConfirmedClick?: () => void
   displayOptions?: boolean
   setDisplayOptions?(cb: (currentState: boolean) => boolean): void
-  withLabel: boolean
+  withLabel?: boolean
 }
 export const WarnButton: FC<WarnButtonProps> = ({
   message,
