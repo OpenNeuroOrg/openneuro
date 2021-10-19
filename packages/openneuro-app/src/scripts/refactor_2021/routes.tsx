@@ -11,7 +11,7 @@ import Admin from './admin/admin'
 import SearchRoutes from './search/search-routes'
 import APIKey from './user/api'
 import ErrorRoute from '../errors/errorRoute'
-import PETDummy from '../pet/dummy'
+import { PETRedirect } from '../pet/redirect'
 import Citation from '../pages/citation-page'
 import FourOFourPage from '../errors/404page'
 
@@ -24,7 +24,7 @@ const Routes = () => (
     <Route name="search" path="/search" component={SearchRoutes} />
     <Route name="admin" path="/admin" component={Admin} />
     <Route name="error" path="/error" component={ErrorRoute} />
-    <Route name="pet-landing" path="/pet" component={PETDummy} />
+    <Route name="pet-landing" path="/pet" component={PETRedirect} />
     <Route name="citation" path="/cite" component={Citation} />
     <Redirect from="/public" to="/search" />
     <Redirect from="/saved" to="/search?bookmarks" />
