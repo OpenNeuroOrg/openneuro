@@ -179,6 +179,8 @@ export const typeDefs = `
     deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Boolean
     # Create anonymous read only reviewer
     createReviewer(datasetId: ID!): DatasetReviewer
+    # Remove reviewer
+    deleteReviewer(datasetId: ID!, id: ID!): DatasetReviewer
   }
 
   # Anonymous dataset reviewer
@@ -186,10 +188,10 @@ export const typeDefs = `
     id: ID!
     # Dataset accession number
     datasetId: ID!
-    # Login URL generated (only returned on creation)
-    url: String!
     # Expiration time
     expiration: DateTime
+    # Login URL generated (only returned on creation)
+    url: String!
   }
 
   input DeleteFile {

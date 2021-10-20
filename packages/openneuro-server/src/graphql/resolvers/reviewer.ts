@@ -21,7 +21,17 @@ export async function createReviewer(obj, { datasetId }, { user, userInfo }) {
     id: reviewer.id,
     datasetId: datasetId,
     url: `${config.url}/crn/reviewer/${token}`,
+    expiration: reviewer.expiration,
   }
+}
+
+export async function deleteReviewer(
+  obj,
+  { datasetId, id },
+  { user, userInfo },
+) {
+  await checkDatasetAdmin(datasetId, user, userInfo)
+  return Reviewer.findOneAndDelete({ id }).lean().exec()
 }
 
 /**

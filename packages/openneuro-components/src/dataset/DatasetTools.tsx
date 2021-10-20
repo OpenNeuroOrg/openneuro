@@ -32,8 +32,7 @@ export const DatasetTools = ({
             <Tooltip tooltip="Publicize the dataset" flow="up">
               <Link
                 className="dataset-tool"
-                to={`/datasets/${datasetId}/publish`}
-              >
+                to={`/datasets/${datasetId}/publish`}>
                 <Icon icon="fa fa-globe" label="Publish" />
               </Link>
             </Tooltip>
@@ -41,8 +40,7 @@ export const DatasetTools = ({
             <Tooltip tooltip="Create a version to publish" flow="up">
               <Link
                 className="dataset-tool"
-                to={`/datasets/${datasetId}/snapshot`}
-              >
+                to={`/datasets/${datasetId}/snapshot`}>
                 <Icon icon="fa fa-globe" label="Publish" />
               </Link>
             </Tooltip>
@@ -68,8 +66,7 @@ export const DatasetTools = ({
         <Tooltip tooltip="Admin Datalad Tools" flow="up">
           <Link
             className="dataset-tool"
-            to={`/datasets/${datasetId}/admin-datalad`}
-          >
+            to={`/datasets/${datasetId}/admin-datalad`}>
             <Icon icon="fa fa-magic" label="Datalad" />
           </Link>
         </Tooltip>
@@ -78,8 +75,7 @@ export const DatasetTools = ({
         <Tooltip tooltip="Admin Remote Export Tools" flow="up">
           <Link
             className="dataset-tool"
-            to={`/datasets/${datasetId}/admin-exports`}
-          >
+            to={`/datasets/${datasetId}/admin-exports`}>
             <Icon icon="fa fa-cloud-upload" label="Export" />
           </Link>
         </Tooltip>
@@ -96,8 +92,7 @@ export const DatasetTools = ({
             ? 'A form to describe your dataset (helps colleagues discover your dataset)'
             : 'View the dataset metadata'
         }
-        flow="up"
-      >
+        flow="up">
         <Button
           icon="fa fa-file-code"
           label="Metadata"

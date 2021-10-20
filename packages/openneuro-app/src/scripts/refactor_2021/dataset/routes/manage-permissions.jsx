@@ -5,6 +5,7 @@ import { Button } from '@openneuro/components/button'
 
 import { RemovePermissions } from '../mutations/remove-permissions'
 import { UpdateDatasetPermissions } from '../mutations/update-permissions'
+import { AnonymousReviewer } from './manage-anonymous-reviewers'
 
 const description = {
   admin: 'Edit dataset and edit permissions',
@@ -61,7 +62,7 @@ ShareTable.propTypes = {
   permissions: PropTypes.object,
 }
 
-const Share = ({ datasetId, permissions }) => {
+const Share = ({ datasetId, permissions, reviewers }) => {
   const [userEmail, setUserEmail] = useState('')
   const [access, setAccess] = useState('ro')
 
@@ -70,63 +71,67 @@ const Share = ({ datasetId, permissions }) => {
   const adminActive = access === 'admin' && 'active'
 
   return (
-    <div className="dataset-share-form container">
-      <div className="dataset-form-header">
-        <div className="form-group">
-          <h2>Share Dataset</h2>
-        </div>
-        <hr />
-        <div className="dataset-form-body">
-          <h3>Dataset shared with:</h3>
-          <ShareTable datasetId={datasetId} permissions={permissions} />
-          <p>
-            Enter a user&#39;s email address and select access level to share
-          </p>
-          <div className="share-input-group">
-            <input
-              className="form-control"
-              type="email"
-              value={userEmail}
-              onChange={e => setUserEmail(e.target.value)}
-            />
-            <div className="input-group-btn">
-              <Button
-                secondary={true}
-                label="Read"
-                size="xsmall"
-                className={`btn btn-default ${readActive}`}
-                onClick={() => setAccess('ro')}
+    <>
+      <div className="dataset-share-form container">
+        <div className="dataset-form-header">
+          <div className="form-group">
+            <h2>Share Dataset</h2>
+          </div>
+          <hr />
+          <div className="dataset-form-body">
+            <h3>Dataset shared with:</h3>
+            <ShareTable datasetId={datasetId} permissions={permissions} />
+            <p>
+              Enter a user&#39;s email address and select access level to share
+            </p>
+            <div className="share-input-group">
+              <input
+                className="form-control"
+                type="email"
+                value={userEmail}
+                onChange={e => setUserEmail(e.target.value)}
               />
-              <Button
-                secondary={true}
-                label="Read and Write"
-                size="xsmall"
-                className={`btn btn-default ${writeActive}`}
-                onClick={() => setAccess('rw')}
-              />
-              <Button
-                secondary={true}
-                label="Admin"
-                size="xsmall"
-                className={`btn btn-default ${adminActive}`}
-                onClick={() => setAccess('admin')}
-              />
+              <div className="input-group-btn">
+                <Button
+                  secondary={true}
+                  label="Read"
+                  size="xsmall"
+                  className={`btn btn-default ${readActive}`}
+                  onClick={() => setAccess('ro')}
+                />
+                <Button
+                  secondary={true}
+                  label="Read and Write"
+                  size="xsmall"
+                  className={`btn btn-default ${writeActive}`}
+                  onClick={() => setAccess('rw')}
+                />
+                <Button
+                  secondary={true}
+                  label="Admin"
+                  size="xsmall"
+                  className={`btn btn-default ${adminActive}`}
+                  onClick={() => setAccess('admin')}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="share-form-controls">
-          <UpdateDatasetPermissions
-            datasetId={datasetId}
-            userEmail={userEmail}
-            metadata={access}
-            done={() => setUserEmail('')}
-          />
-          <Link className="return-link" to={`/datasets/${datasetId}`}>
-            Return to Dataset
-          </Link>
+          <div className="share-form-controls">
+            <UpdateDatasetPermissions
+              datasetId={datasetId}
+              userEmail={userEmail}
+              metadata={access}
+              done={() => setUserEmail('')}
+            />
+            <Link className="return-link" to={`/datasets/${datasetId}`}>
+              Return to Dataset
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+      <br />
+      <AnonymousReviewer datasetId={datasetId} reviewers={reviewers} />
+    </>
   )
 }
 

@@ -77,7 +77,11 @@ const DatasetRoutes = ({ dataset, error }) => {
         exact
         path="/datasets/:datasetId/share"
         component={() => (
-          <Share datasetId={dataset.id} permissions={dataset.permissions} />
+          <Share
+            datasetId={dataset.id}
+            permissions={dataset.permissions}
+            reviewers={dataset.reviewers}
+          />
         )}
       />
       <Route
