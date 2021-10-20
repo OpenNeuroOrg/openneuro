@@ -72,9 +72,9 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
               className="dataset-tool"
               to={'/datasets/' + datasetId + '/snapshot'}
             >
-              create a new version&#32;
+              create a new version
             </Link>
-            to make them public.
+            &#32;to make them public.
           </span>
         </div>
       )}
