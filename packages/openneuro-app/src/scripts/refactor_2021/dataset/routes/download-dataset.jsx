@@ -1,7 +1,7 @@
 /* global globalThis */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import styled from '@emotion/styled'
 import DownloadLink from '../download/download-link.jsx'
 import DownloadS3 from '../download/download-s3.jsx'
@@ -22,9 +22,14 @@ const DownloadDataset = ({
     <div className="container">
       <div className="grid grid-between">
         <div className="col col-12">
-          <h3>How to Download</h3>
+          <h3>
+            How to Download
+            <Link className="return-link" to={`/datasets/${datasetId}`}>
+              Return to Dataset
+            </Link>
+          </h3>
         </div>
-        <div className="col ">
+        <div className="col col-lg">
           {'showDirectoryPicker' in globalThis ? (
             <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
           ) : (
@@ -34,21 +39,21 @@ const DownloadDataset = ({
             />
           )}
         </div>
-        <div className="col ">
+        <div className="col col-lg">
           <DownloadS3 datasetId={datasetId} />
         </div>
       </div>
       <hr />
       <div className="grid grid-between">
         {'showDirectoryPicker' in globalThis && (
-          <div className="col">
+          <div className="col col-lg">
             <DownloadCommandLine
               datasetId={datasetId}
               snapshotTag={snapshotTag}
             />
           </div>
         )}
-        <div className="col">
+        <div className="col col-lg">
           <DownloadDatalad datasetId={datasetId} />
         </div>
       </div>

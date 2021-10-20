@@ -36,11 +36,6 @@ const DownloadLink = ({ datasetId, snapshotTag }) => {
             icon="fa fa-download"
           />
         </div>
-        <div className="col-align-middle">
-          <Link className="return-link" to={`/datasets/${datasetId}`}>
-            Return to Dataset
-          </Link>
-        </div>
       </div>
     </div>
   )
