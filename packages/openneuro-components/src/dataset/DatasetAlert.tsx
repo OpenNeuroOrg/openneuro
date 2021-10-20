@@ -25,9 +25,9 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
                 className="dataset-tool"
                 to={'/datasets/' + datasetId + '/publish'}
               >
-                Publish this dataset&#32;
+                Publish this dataset
               </Link>
-              to make all versions available publicly.
+              &#32; to make all versions available publicly.
             </span>
             {hasDraftChanges && (
               <small>
