@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import ReactJson from 'react-json-view-ssr'
 
 const WrappedPre = styled.pre`
   white-space: pre-wrap;
 `
 
 export const FileViewerJsonRaw = ({ jsonRaw }) => {
+  const jsonPretty = JSON.parse(jsonRaw)
   let jsonViewer
   try {
-    jsonViewer = jsonRaw
+    jsonViewer = <ReactJson src={jsonPretty} />
   } catch (e) {
     jsonViewer = (
       <>
