@@ -229,7 +229,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             {summary && (
               <MetaDataBlock
                 heading="Tasks"
-                item={summary.tasks.length ? summary.tasks : 'N/A'}
+                item={summary.tasks.length ? summary.tasks.join(', ') : 'N/A'}
                 className="dmb-inline-list"
               />
             )}
