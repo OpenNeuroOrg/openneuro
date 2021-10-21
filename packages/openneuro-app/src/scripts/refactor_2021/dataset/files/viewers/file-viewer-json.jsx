@@ -1,17 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import ReactJson from 'react-json-view-ssr'
+
+import JsonTree from 'js-json-tree'
 
 const WrappedPre = styled.pre`
   white-space: pre-wrap;
+`
+const JsonPrettyTree = styled.div`
+  .deleteIcon {
+    display: none;
+  }
 `
 
 export const FileViewerJsonRaw = ({ jsonRaw }) => {
   const jsonPretty = JSON.parse(jsonRaw)
   let jsonViewer
   try {
-    jsonViewer = <ReactJson src={jsonPretty} />
+    jsonViewer = <JsonTree resource={jsonPretty} />
   } catch (e) {
     jsonViewer = (
       <>
@@ -26,7 +32,7 @@ export const FileViewerJsonRaw = ({ jsonRaw }) => {
         <div className="col col-lg">
           <h3>Tree</h3>
           <hr />
-          {jsonViewer}
+          <JsonPrettyTree>{jsonViewer}</JsonPrettyTree>
         </div>
         <div className="col">
           <h3>Raw</h3>
