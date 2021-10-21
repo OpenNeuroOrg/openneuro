@@ -103,7 +103,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   field="Name"
                   rows={2}
                   description={description.Name}
-                  editMode={hasEdit}>
+                  editMode={hasEdit}
+                >
                   {description.Name}
                 </EditDescriptionField>
               )}
@@ -203,11 +204,13 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 field="readme"
                 rows={12}
                 description={dataset.draft.readme}
-                editMode={hasEdit}>
+                editMode={hasEdit}
+              >
                 <ReadMore
                   id="readme"
                   expandLabel="Read More"
-                  collapseabel="Collapse">
+                  collapseabel="Collapse"
+                >
                   <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
                 </ReadMore>
               </EditDescriptionField>
@@ -222,7 +225,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               field="Authors"
               heading="Authors"
               description={description.Authors}
-              editMode={hasEdit}>
+              editMode={hasEdit}
+            >
               {description.Authors?.length ? description.Authors : ['N/A']}
             </EditDescriptionList>
 
@@ -254,7 +258,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             {summary && (
               <MetaDataBlock
                 heading="Tasks"
-                item={summary.tasks.length ? summary.tasks : 'N/A'}
+                item={summary.tasks.length ? summary.tasks.join(', ') : 'N/A'}
                 className="dmb-inline-list"
               />
             )}
@@ -357,7 +361,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   field="Acknowledgements"
                   rows={2}
                   description={description.Acknowledgements}
-                  editMode={hasEdit}>
+                  editMode={hasEdit}
+                >
                   <Markdown>{description.Acknowledgements || 'N/A'}</Markdown>
                 </EditDescriptionField>
               )}
@@ -372,7 +377,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   field="HowToAcknowledge"
                   rows={2}
                   description={description.HowToAcknowledge}
-                  editMode={hasEdit}>
+                  editMode={hasEdit}
+                >
                   <Markdown>{description.HowToAcknowledge || 'N/A'}</Markdown>
                 </EditDescriptionField>
               )}
@@ -384,7 +390,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               field="Funding"
               heading="Funding"
               description={description.Funding}
-              editMode={hasEdit}>
+              editMode={hasEdit}
+            >
               {description.Funding?.length ? description.Funding : ['N/A']}
             </EditDescriptionList>
 
@@ -394,7 +401,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               field="ReferencesAndLinks"
               heading="References and Links"
               description={description.ReferencesAndLinks}
-              editMode={hasEdit}>
+              editMode={hasEdit}
+            >
               {description.ReferencesAndLinks?.length
                 ? description.ReferencesAndLinks
                 : ['N/A']}
@@ -406,7 +414,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               field="EthicsApprovals"
               heading="Ethics Approvals"
               description={description.EthicsApprovals}
-              editMode={hasEdit}>
+              editMode={hasEdit}
+            >
               {description.EthicsApprovals?.length
                 ? description.EthicsApprovals
                 : ['N/A']}
@@ -418,7 +427,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             isOpen={deprecatedmodalIsOpen}
             toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
             closeText={'close'}
-            className="deprecated-modal">
+            className="deprecated-modal"
+          >
             <p>
               You have selected a deprecated version. The author of the dataset
               does not recommend this specific version.
