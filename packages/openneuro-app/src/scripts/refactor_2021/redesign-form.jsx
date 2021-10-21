@@ -55,7 +55,8 @@ class ContactForm extends React.Component {
               this.setState({
                 showFeedbackModal: !this.state.showFeedbackModal,
               })
-            }>
+            }
+          >
             Click HERE to Submit Redesign Feedback
             <br />
             or Visit the Original Site Design
@@ -67,7 +68,8 @@ class ContactForm extends React.Component {
             this.setState({ showFeedbackModal: !this.state.showFeedbackModal })
           }
           closeText={'close'}
-          className="feedback-form feedback-modal">
+          className="feedback-form feedback-modal"
+        >
           <h2>
             {this.state.formCompleted
               ? 'Thank you for your feedback'
@@ -87,6 +89,15 @@ class ContactForm extends React.Component {
                 <a href="/crn/feature/redesign-2021/disable">
                   GO TO THE ORIGINAL SITE DESIGN
                 </a>
+                <br />
+                <p>
+                  <small>
+                    Please note that the redesign site will become the official
+                    landing site for OpenNeuro beginning November 17th, 2021.
+                    Therefore, users will be unable to visit the original site
+                    design after November 16th.
+                  </small>
+                </p>
               </p>
             </span>
           ) : (
@@ -131,7 +142,8 @@ class ContactForm extends React.Component {
                   name="entry.862044433"
                   onChange={this.handleChange}
                   defaultValue=""
-                  required>
+                  required
+                >
                   <option value="" disabled hidden>
                     Select an Option
                   </option>
@@ -179,7 +191,8 @@ class ContactForm extends React.Component {
                       name="entry.462214641"
                       onChange={this.handleChange}
                       defaultValue=""
-                      required>
+                      required
+                    >
                       <option value="" disabled hidden>
                         Select an Option
                       </option>
@@ -223,7 +236,8 @@ class ContactForm extends React.Component {
                     className="feedback-input"
                     name="entry.904614155"
                     onChange={this.handleChange}
-                    defaultValue="">
+                    defaultValue=""
+                  >
                     <option value="" disabled hidden>
                       Select an Option
                     </option>
@@ -327,7 +341,8 @@ class ContactForm extends React.Component {
                     className="feedback-input"
                     name="entry.813726139"
                     onChange={this.handleChange}
-                    defaultValue="">
+                    defaultValue=""
+                  >
                     <option value="" disabled hidden>
                       Select an Option
                     </option>
@@ -348,7 +363,8 @@ class ContactForm extends React.Component {
                     className="feedback-input"
                     name="entry.1753056808"
                     onChange={this.handleChange}
-                    defaultValue="">
+                    defaultValue=""
+                  >
                     <option value="" disabled hidden>
                       Select an Option
                     </option>
@@ -397,7 +413,8 @@ class ContactForm extends React.Component {
               </div>
               <button
                 className="on-button--small on-button on-button--primary"
-                type="submit">
+                type="submit"
+              >
                 Submit
               </button>
             </form>
