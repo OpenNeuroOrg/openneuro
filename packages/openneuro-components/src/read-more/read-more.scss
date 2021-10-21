@@ -10,6 +10,13 @@
     overflow: hidden;
     padding-bottom: 20px;
   }
+  &.readmore-file-tree {
+    margin-bottom: 80px;
+    section {
+      min-height: 975px;
+      max-height: 975px;
+    }
+  }
   label {
     position: absolute;
     bottom: -15px;
@@ -58,6 +65,11 @@
       span:first-child {
         display: none;
       }
+    }
+  }
+  &.readmore-file-tree {
+    input[type='checkbox']:checked + section {
+      max-height: 12000px;
     }
   }
 }
