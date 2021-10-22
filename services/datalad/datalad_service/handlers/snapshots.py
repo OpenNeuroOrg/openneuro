@@ -54,7 +54,7 @@ class SnapshotResource(object):
 
             if not skip_publishing:
                 # Publish after response
-                gevent.spawn(publish_snapshot, self.store,
+                gevent.spawn(publish_snapshot, ds_path,
                              dataset, req.cookies, snapshot)
         except SnapshotExistsException as err:
             resp.media = {'error': repr(err)}
