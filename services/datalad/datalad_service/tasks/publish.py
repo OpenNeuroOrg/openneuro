@@ -105,7 +105,7 @@ def publish_dataset(dataset_path, cookies=None, realm='PUBLIC'):
 
 def reexport_dataset(dataset_path, cookies=None, realm=None):
     def should_export(dataset_path, tags):
-        latest_tag = tags[-1:][0]
+        latest_tag = tags[-1:][0].name
         # If remote has latest snapshot, do not reexport.
         # Reexporting all snapshots could make a previous snapshot latest in s3.
         return not check_remote_has_version(dataset_path, DatasetRealm.PUBLIC.s3_remote, latest_tag)
@@ -134,13 +134,13 @@ def export_all_tags(dataset_path, cookies, realm, check_should_export, esLogger=
             github_export_successful = False
             error = None
             try:
-                publish_target(dataset_path, realm.s3_remote, tag)
+                publish_target(dataset_path, realm.s3_remote, tag.name)
                 gevent.sleep()
                 s3_export_successful = True
                 # Public publishes to GitHub
                 if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
                     github_sibling(dataset_path, dataset)
-                    publish_target(dataset_path, realm.github_remote, tag)
+                    publish_target(dataset_path, realm.github_remote, tag.name)
                     gevent.sleep()
                     github_export_successful = True
             except Exception as err:
