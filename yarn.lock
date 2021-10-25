@@ -5185,7 +5185,6 @@ __metadata:
     react-copy-to-clipboard: ^5.0.1
     react-dom: ^17.0.1
     react-helmet: 6.1.0
-    react-json-tree: ^0.15.0
     react-multi-carousel: ^2.6.3
     react-router: 5.2.0
     react-router-dom: 5.2.0
@@ -7031,13 +7030,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/base16@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@types/base16@npm:1.0.2"
-  checksum: 0befdc73be877d530dd9964c45e5ab55859ea08ed2f06caf2b51343ee2051f000c2814eeda6fa66359fc38a26f4163b752184d7ca606ebd9b71daea336965a23
-  languageName: node
-  linkType: hard
-
 "@types/body-parser@npm:*":
   version: 1.19.1
   resolution: "@types/body-parser@npm:1.19.1"
@@ -7573,22 +7565,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.curry@npm:^4.1.6":
-  version: 4.1.6
-  resolution: "@types/lodash.curry@npm:4.1.6"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 7e4e1dc62569c9c66a4b27c9d592af4264de47f94a89a3ccec518f97e6c1733c3f92aa1b5f06b5443d66c0e7ae9a316d3a97984226512e305deb3d2bf9b6040f
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
-  version: 4.14.176
-  resolution: "@types/lodash@npm:4.14.176"
-  checksum: cc3c9d7522a20814d1bbc5125a3d5a4a4eed72e7cf6a3b01b0810aa5dcff0cf23ab40ea4ab00fe2425dd0828cd915087d8d073757ab9c925e2872903dd3e15d0
-  languageName: node
-  linkType: hard
-
 "@types/lodash@npm:^4.14.92":
   version: 4.14.173
   resolution: "@types/lodash@npm:4.14.173"
@@ -7807,7 +7783,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*, @types/prop-types@npm:^15, @types/prop-types@npm:^15.7.3":
+"@types/prop-types@npm:*, @types/prop-types@npm:^15":
   version: 15.7.4
   resolution: "@types/prop-types@npm:15.7.4"
   checksum: ef15c425a944f6b13824a87854cccf238e1b4cd0350b3124f4938406fe758fbdd6fadb2480d1388a00daeab61ce9888be5ca2b73da275f5dbc977143ff98e1eb
@@ -10520,13 +10496,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base16@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "base16@npm:1.0.0"
-  checksum: adc3f12a6b363a2bfa4062d45e2782791737f7ceb0857c027486fc90fd3fc8eaf1829c55cc7a4afd6e482105282ffc18362bc10b2a4c788f3102de3054558eba
-  languageName: node
-  linkType: hard
-
 "base64-arraybuffer@npm:0.1.4":
   version: 0.1.4
   resolution: "base64-arraybuffer@npm:0.1.4"
@@ -12134,7 +12103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color@npm:^3.0.0, color@npm:^3.1.2":
+"color@npm:^3.0.0":
   version: 3.2.1
   resolution: "color@npm:3.2.1"
   dependencies:
@@ -22898,13 +22867,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash.curry@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "lodash.curry@npm:4.1.1"
-  checksum: 081f9214b5d65030e66d0219c330de5a07089096f20362fc965c671b70b2bdb7b8f4cbac45546f79afed3bf17ae46434ffea9db1dbcbe043a09b722e2834ac3d
-  languageName: node
-  linkType: hard
-
 "lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
@@ -28284,20 +28246,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-base16-styling@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "react-base16-styling@npm:0.8.0"
-  dependencies:
-    "@types/base16": ^1.0.2
-    "@types/lodash.curry": ^4.1.6
-    base16: ^1.0.0
-    color: ^3.1.2
-    csstype: ^3.0.2
-    lodash.curry: ^4.1.1
-  checksum: 1676a94077dbdd60bd5c7d7fbcf54be5b90fdcb7d0c03f0a27da51bc88348fa0aac45a6f6edaf0aec4fa480d2e9daaa036c33a7eaffda82fd414cf18f32c1cfc
-  languageName: node
-  linkType: hard
-
 "react-bootstrap@npm:0.33.1":
   version: 0.33.1
   resolution: "react-bootstrap@npm:0.33.1"
@@ -28694,20 +28642,6 @@ fsevents@^1.2.7:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 11bcf1267a314a522615f626f3ce3727a3a24cdbf61c4d452add3550a7875326669631326cfb1ba3e92b6f72244c32ffecf93ad21c0cad8455d3e169d0e3f060
-  languageName: node
-  linkType: hard
-
-"react-json-tree@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "react-json-tree@npm:0.15.0"
-  dependencies:
-    "@types/prop-types": ^15.7.3
-    prop-types: ^15.7.2
-    react-base16-styling: ^0.8.0
-  peerDependencies:
-    "@types/react": ^16.3.0 || ^17.0.0
-    react: ^16.3.0 || ^17.0.0
-  checksum: 0e509ee22408e64e69aad364d94548193ce7348c38c9a120244bc1172d787cbc2f39ff83f5154723002718fd22a66d9ae63dab778d79bab6630ebc3a5653de1f
   languageName: node
   linkType: hard
 

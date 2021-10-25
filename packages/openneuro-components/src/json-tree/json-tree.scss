@@ -1,0 +1,19 @@
+.json-container {
+  padding-top: 10px;
+  padding-left: 3px;
+  margin-left: 10px;
+  color: #666;
+  font-size: 16px;
+  .prop-name {
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .expand-prop-name {
+    color: #008080;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
