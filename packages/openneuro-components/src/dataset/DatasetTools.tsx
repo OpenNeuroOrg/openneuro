@@ -59,7 +59,7 @@ export const DatasetTools = ({
       {hasEdit && isSnapshot && (
         <Tooltip tooltip="View the Dataset Draft" flow="up">
           <Link className="dataset-tool" to={`/datasets/${datasetId}`}>
-            <Icon icon="fa fa-pencil" label="Draft" />
+            <Icon icon="fa fa-pencil" label="View Draft" />
           </Link>
         </Tooltip>
       )}
