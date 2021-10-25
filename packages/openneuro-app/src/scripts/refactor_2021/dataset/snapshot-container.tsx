@@ -166,14 +166,21 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
           />
         )}
         renderFiles={() => (
-          <Files
-            datasetId={datasetId}
-            snapshotTag={snapshot.tag}
-            datasetName={description.Name}
-            files={snapshot.files}
-            editMode={false}
-            datasetPermissions={dataset.permissions}
-          />
+          <ReadMore
+            fileTree={true}
+            id="collapse-tree"
+            expandLabel="Read More"
+            collapseabel="Collapse"
+          >
+            <Files
+              datasetId={datasetId}
+              snapshotTag={snapshot.tag}
+              datasetName={description.Name}
+              files={snapshot.files}
+              editMode={false}
+              datasetPermissions={dataset.permissions}
+            />
+          </ReadMore>
         )}
         renderReadMe={() => (
           <MetaDataBlock

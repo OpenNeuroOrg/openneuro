@@ -184,14 +184,21 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           />
         )}
         renderFiles={() => (
-          <Files
-            datasetId={datasetId}
-            snapshotTag={null}
-            datasetName={dataset.draft.description.Name}
-            files={dataset.draft.files}
-            editMode={hasEdit}
-            datasetPermissions={dataset.permissions}
-          />
+          <ReadMore
+            fileTree={true}
+            id="collapse-tree"
+            expandLabel="Expand File Tree"
+            collapseabel="Collapse File Tree"
+          >
+            <Files
+              datasetId={datasetId}
+              snapshotTag={null}
+              datasetName={dataset.draft.description.Name}
+              files={dataset.draft.files}
+              editMode={hasEdit}
+              datasetPermissions={dataset.permissions}
+            />
+          </ReadMore>
         )}
         renderReadMe={() => (
           <MetaDataBlock
