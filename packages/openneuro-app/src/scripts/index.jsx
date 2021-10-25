@@ -6,9 +6,9 @@ import Classic from './classic'
 const Index = () => {
   return (
     <FeatureToggle
-      feature="redesign-2021"
-      renderOnEnabled={<Redesign />}
-      renderOnDisabled={<Classic />}
+      feature="redesign-classic"
+      renderOnEnabled={<Classic />}
+      renderOnDisabled={<Redesign />}
     />
   )
 }

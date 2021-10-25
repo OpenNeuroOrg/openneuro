@@ -39,7 +39,7 @@ export async function render(url, cookies) {
   })
 
   const css =
-    cookies.get('redesign-2021') == 'true' ? redesignStyles : classicStyles
+    cookies.get('redesign-classic') == 'true' ? classicStyles : redesignStyles
 
   let react = ''
   try {

@@ -173,12 +173,12 @@ const routes = [
   {
     method: 'get',
     url: '/feature/redesign-2021/enable',
-    handler: setFlagRedesign2021,
+    handler: unsetFlagRedesign2021,
   },
   {
     method: 'get',
     url: '/feature/redesign-2021/disable',
-    handler: unsetFlagRedesign2021,
+    handler: setFlagRedesign2021,
   },
 ]
 
