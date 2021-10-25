@@ -262,6 +262,12 @@ export const useSearchResults = () => {
         'must_not',
         matchQuery('metadata.species', species, 'AUTO', 'OR'),
       )
+    } else if (species_selected === 'Human') {
+      // if species is 'Human', search for Human or null values (BIDS assumes human by default)
+      boolQuery.query.bool['should'] = [
+        matchQuery('metadata.species', 'Human', 'AUTO'),
+        { term: { _content: '' } },
+      ]
     } else {
       boolQuery.addClause(
         'filter',
