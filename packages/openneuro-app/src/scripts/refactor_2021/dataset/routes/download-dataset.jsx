@@ -22,12 +22,7 @@ const DownloadDataset = ({
     <div className="container">
       <div className="grid grid-between">
         <div className="col col-12">
-          <h3>
-            How to Download
-            <Link className="return-link" to={`/datasets/${datasetId}`}>
-              Return to Dataset
-            </Link>
-          </h3>
+          <h3>How to Download</h3>
         </div>
         <div className="col col-lg">
           {'showDirectoryPicker' in globalThis ? (
@@ -55,6 +50,13 @@ const DownloadDataset = ({
         )}
         <div className="col col-lg">
           <DownloadDatalad datasetId={datasetId} />
+        </div>
+      </div>
+      <div className="grid grid-between">
+        <div className="col">
+          <Link className="return-link m-l-0" to={`/datasets/${datasetId}`}>
+            Return to Dataset
+          </Link>
         </div>
       </div>
     </div>

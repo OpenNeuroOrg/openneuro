@@ -84,11 +84,6 @@ const AdminExports = ({ dataset }) => {
         <div className="grid">
           <div className="col col-12 grid m-t-10 m-b-20">
             <h3>Admin: Remote Exports</h3>
-            <Link
-              className="return-link col-middle"
-              to={`/datasets/${dataset.id}`}>
-              Return to Dataset
-            </Link>
           </div>
 
           <div className="col col-4">
@@ -104,7 +99,8 @@ const AdminExports = ({ dataset }) => {
                 className="n-button on-button--primary"
                 onClick={() =>
                   reexportRemotes({ variables: { datasetId: dataset.id } })
-                }>
+                }
+              >
                 Run Export
               </NormalizedButton>
               <Divider text="or" />
@@ -112,10 +108,16 @@ const AdminExports = ({ dataset }) => {
                 className="on-button on-button--nobg"
                 onClick={() => {
                   window.open(reexporterLogsURL, '_blank')
-                }}>
+                }}
+              >
                 View Export Logs
               </NormalizedButton>
             </ButtonsContainer>
+          </div>
+          <div className="col col-12 m-t-20">
+            <Link className="return-link m-l-0 " to={`/datasets/${dataset.id}`}>
+              Return to Dataset
+            </Link>
           </div>
         </div>
       </div>
