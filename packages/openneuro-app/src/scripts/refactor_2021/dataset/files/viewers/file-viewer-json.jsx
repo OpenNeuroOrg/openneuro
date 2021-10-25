@@ -8,10 +8,9 @@ const WrappedPre = styled.pre`
 `
 
 export const FileViewerJsonRaw = ({ jsonRaw }) => {
-  const jsonPretty = JSON.parse(jsonRaw)
   let jsonViewer
-
   try {
+    const jsonPretty = JSON.parse(jsonRaw)
     jsonViewer = (
       <RecursiveProperty
         property={jsonPretty}

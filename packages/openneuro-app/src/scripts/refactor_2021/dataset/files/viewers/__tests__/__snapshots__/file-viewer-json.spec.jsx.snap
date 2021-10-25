@@ -14,7 +14,12 @@ exports[`File Viewer - JSON renders with invalid JSON 1`] = `
         Tree
       </h3>
       <hr />
-      1234;
+      <p>
+        JSON failed to parse
+      </p>
+      <pre>
+        Unexpected token ; in JSON at position 4
+      </pre>
     </div>
     <div
       className="col"
@@ -45,7 +50,18 @@ exports[`File Viewer - JSON renders with valid JSON 1`] = `
         Tree
       </h3>
       <hr />
-      {"thing":1,"name":"string"}
+      <RecursiveProperty
+        emptyPropertyLabel="Property is empty"
+        property={
+          Object {
+            "name": "string",
+            "thing": 1,
+          }
+        }
+        propertyName="Root Property"
+        propertyNameProcessor={[Function]}
+        rootProperty={true}
+      />
     </div>
     <div
       className="col"
