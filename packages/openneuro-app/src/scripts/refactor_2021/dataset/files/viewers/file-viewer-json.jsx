@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { RecursiveProperty } from '@openneuro/components/json-tree'
 
 const WrappedPre = styled.pre`
   white-space: pre-wrap;
@@ -9,7 +10,14 @@ const WrappedPre = styled.pre`
 export const FileViewerJsonRaw = ({ jsonRaw }) => {
   let jsonViewer
   try {
-    jsonViewer = jsonRaw
+    const jsonPretty = JSON.parse(jsonRaw)
+    jsonViewer = (
+      <RecursiveProperty
+        property={jsonPretty}
+        propertyName="Root Property"
+        rootProperty={true}
+      />
+    )
   } catch (e) {
     jsonViewer = (
       <>
