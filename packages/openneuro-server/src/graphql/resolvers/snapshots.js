@@ -68,7 +68,6 @@ export const deprecateSnapshot = async (
 }
 
 export const participantCount = (obj, { modality }) => {
-  console.log(participantCount)
   const cache = new CacheItem(
     redis,
     CacheType.participantCount,
