@@ -105,13 +105,18 @@ export interface SearchResultItemProps {
   }
   profile: Record<string, any>
   datasetTypeSelected?: string
+  hasEditPermissions: (permissions: any, userId: any) => boolean
 }
 
 export const SearchResultItem = ({
   node,
   profile,
   datasetTypeSelected,
+  hasEditPermissions,
 }: SearchResultItemProps) => {
+  const isAdmin = profile?.admin
+  const hasEdit = hasEditPermissions(node.permissions, profile?.sub) || isAdmin
+
   const heading = node.latestSnapshot.description?.Name
   const summary = node.latestSnapshot?.summary
   const datasetId = node.id
@@ -258,7 +263,7 @@ export const SearchResultItem = ({
     </Tooltip>
   )
 
-  const errorsIcon = (
+  const errorsIcon = hasEdit && (
     <Tooltip
       tooltip="Invalid"
       flow="up"
