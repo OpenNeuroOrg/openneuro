@@ -1,6 +1,6 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, Redirect } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
@@ -90,6 +90,14 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
 
   return (
     <>
+      {dataset.snapshots && !hasEdit && (
+        <Redirect
+          to={`/datasets/${dataset.id}/versions/${
+            dataset.snapshots.length &&
+            dataset.snapshots[dataset.snapshots.length - 1].tag
+          }`}
+        />
+      )}
       <DatasetPage
         modality={summary?.modalities[0] || ''}
         renderHeader={() => (
