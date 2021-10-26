@@ -10,4 +10,5 @@ export enum CacheType {
   readme = 'readme',
   snapshot = 'snapshot',
   snapshotIndex = 'snapshotIndex',
+  participantCount = 'participantCount',
 }
