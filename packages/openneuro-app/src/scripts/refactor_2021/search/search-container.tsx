@@ -124,12 +124,14 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   let numTotalResults = 0
   let resultsList = []
   let hasNextPage = false
+
   if (data?.datasets) {
     const edges = data.datasets.edges.filter(edge => edge)
     numTotalResults = data.datasets.pageInfo.count
     resultsList = edges
     hasNextPage = data.datasets.pageInfo.hasNextPage
   }
+
   return (
     <>
       <Helmet>
@@ -205,6 +207,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           ) : (
             <>
               <SearchResultsList
+                hasEditPermissions={hasEditPermissions}
                 items={resultsList}
                 profile={profile}
                 datasetTypeSelected={searchParams.datasetType_selected}

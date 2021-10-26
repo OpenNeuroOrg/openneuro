@@ -8,11 +8,13 @@ export interface SearchResultsListProps {
   items
   profile?: Record<string, any>
   datasetTypeSelected: string
+  hasEditPermissions: (permissions: any, userId: any) => boolean
 }
 export const SearchResultsList = ({
   items,
   profile,
   datasetTypeSelected,
+  hasEditPermissions,
 }: SearchResultsListProps) => {
   return (
     <div className="search-results">
@@ -23,6 +25,7 @@ export const SearchResultsList = ({
               node={data.node}
               key={data.node.id}
               profile={profile}
+              hasEditPermissions={hasEditPermissions}
               datasetTypeSelected={datasetTypeSelected}
             />
           )
