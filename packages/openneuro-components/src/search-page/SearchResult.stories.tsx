@@ -13,7 +13,13 @@ const SearchResultItemTemplate: Story<SearchResultItemProps> = ({
   node,
   profile,
 }) => {
-  return <SearchResultItem node={node} profile={profile} />
+  return (
+    <SearchResultItem
+      node={node}
+      profile={profile}
+      hasEditPermissions={() => true}
+    />
+  )
 }
 
 export const Result = SearchResultItemTemplate.bind({})

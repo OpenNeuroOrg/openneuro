@@ -17,6 +17,7 @@ const SearchResultsListTemplate: Story = ({ items, profile }) => {
           node={node}
           profile={profile}
           datasetTypeSelected={'Not My Datasets'}
+          hasEditPermissions={() => true}
         />
       ))}
     </div>
