@@ -367,7 +367,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             />
 
             <MetaDataBlock
-              heading="Funding"
+              heading="Ethics Approvals"
               item={description.EthicsApprovals}
               className="dmb-list"
             />
