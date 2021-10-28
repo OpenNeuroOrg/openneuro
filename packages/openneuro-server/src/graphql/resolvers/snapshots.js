@@ -1,5 +1,5 @@
 import * as datalad from '../../datalad/snapshots.js'
-import { dataset, analytics } from './dataset.js'
+import { dataset, analytics, snapshotCreationComparison } from './dataset.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
@@ -135,15 +135,12 @@ export const participantCount = (obj, { modality }) => {
   })
 }
 
-const sortSnapshots = (a, b) =>
-  new Date(b.created).getTime() - new Date(a.created).getTime()
-
 export const latestSnapshot = (obj, _, context) => {
   return datalad.getSnapshots(obj.id).then(snapshots => {
     if (snapshots.length) {
       const sortedSnapshots = Array.prototype.sort.call(
         snapshots,
-        sortSnapshots,
+        snapshotCreationComparison,
       )
       return snapshot(
         obj,
