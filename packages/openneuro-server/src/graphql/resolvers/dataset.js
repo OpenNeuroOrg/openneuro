@@ -46,10 +46,11 @@ export const snapshotCreationComparison = (
   { created: a, tag: a_tag },
   { created: b, tag: b_tag },
 ) => {
-  return (
-    new Date(a).getTime() - new Date(b).getTime() ||
-    (semver.valid(a_tag) && semver.valid(b_tag) && semver.compare(a_tag, b_tag))
-  )
+  if (semver.valid(a_tag) && semver.valid(b_tag)) {
+    return semver.compare(a_tag, b_tag)
+  } else {
+    return new Date(a).getTime() - new Date(b).getTime()
+  }
 }
 
 /**
