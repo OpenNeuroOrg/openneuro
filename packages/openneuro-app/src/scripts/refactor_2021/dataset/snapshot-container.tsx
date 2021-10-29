@@ -41,6 +41,7 @@ import { FollowDataset } from './mutations/follow'
 import { StarDataset } from './mutations/star'
 
 import { SNAPSHOT_FIELDS } from './queries/dataset-query-fragments.js'
+import { DOILink } from './fragments/doi-link'
 
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -170,8 +171,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             fileTree={true}
             id="collapse-tree"
             expandLabel="Read More"
-            collapseabel="Collapse"
-          >
+            collapseabel="Collapse">
             <Files
               datasetId={datasetId}
               snapshotTag={snapshot.tag}
@@ -189,8 +189,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               <ReadMore
                 id="readme"
                 expandLabel="Read More"
-                collapseabel="Collapse"
-              >
+                collapseabel="Collapse">
                 <Markdown>
                   {snapshot.readme == null ? 'N/A' : snapshot.readme}
                 </Markdown>
@@ -327,10 +326,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
 
             <MetaDataBlock
               heading="Dataset DOI"
-              item={
-                description.DatasetDOI ||
-                'Create a new snapshot to obtain a DOI for the snapshot.'
-              }
+              item={<DOILink DOI={description.DatasetDOI} />}
             />
             <MetaDataBlock heading="License" item={description.License} />
 
@@ -378,8 +374,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             isOpen={deprecatedmodalIsOpen}
             toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
             closeText={'close'}
-            className="deprecated-modal"
-          >
+            className="deprecated-modal">
             <p>
               You have selected a deprecated version. The author of the dataset
               does not recommend this specific version.
@@ -437,8 +432,7 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
           datasetId: dataset.id,
           fetchMore,
           error: null,
-        }}
-      >
+        }}>
         <SnapshotContainer
           dataset={dataset}
           tag={tag}
