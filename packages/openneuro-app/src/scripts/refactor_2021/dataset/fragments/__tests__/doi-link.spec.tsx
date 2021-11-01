@@ -34,7 +34,7 @@ describe('DoiLink component', () => {
     )
   })
   it('Renders fallback text if no valid DOI string is found', () => {
-    render(<DOILink />, { wrapper: MemoryRouter })
+    render(<DOILink DOI={null} />, { wrapper: MemoryRouter })
     expect(screen.getByRole('link')).toHaveTextContent(
       'Create a new snapshot to obtain a DOI for the snapshot.',
     )
