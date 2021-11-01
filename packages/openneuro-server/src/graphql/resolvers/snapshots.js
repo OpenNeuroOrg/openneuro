@@ -15,6 +15,7 @@ import User from '../../models/user'
 import * as Sentry from '@sentry/node'
 import { redis } from '../../libs/redis'
 import CacheItem, { CacheType } from '../../cache/item'
+import { normalizeDOI } from '../../libs/doi/normalize'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -34,6 +35,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
             .then(filterFiles(prefix))
             .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
         deprecated: () => deprecated(snapshot),
+        relatedObjects: () => relatedObjects(snapshot),
       }))
     },
   )
@@ -41,6 +43,44 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
 
 export const deprecated = snapshot => {
   return DeprecatedSnapshot.findOne({ id: snapshot.hexsha }).populate('user')
+}
+
+/**
+ * Search snapshot data for related objects and return an array
+ * @param {*} snapshot
+ */
+export const relatedObjects = async snapshot => {
+  return matchKnownObjects(await description(snapshot))
+}
+
+export const matchKnownObjects = desc => {
+  if (desc?.ReferencesAndLinks) {
+    const objects = []
+    for (const item of desc.ReferencesAndLinks) {
+      try {
+        const rawDOI = normalizeDOI(item)
+        // NIMH Data Archive (NDA) 10.15154
+        if (rawDOI.startsWith('10.15154')) {
+          objects.push({
+            id: rawDOI,
+            source: 'NDA',
+            type: 'dataset',
+          })
+        } else {
+          objects.push({ id: rawDOI })
+        }
+      } catch (err) {
+        continue
+      }
+    }
+    if (objects.length) {
+      return objects
+    } else {
+      return null
+    }
+  } else {
+    return null
+  }
 }
 
 export const deprecateSnapshot = async (
