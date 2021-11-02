@@ -190,7 +190,7 @@
 .search-heading {
   margin: 20px 0;
   @media (max-width: 450px) {
-    margin-top: 40px;
+    margin-top: 60px;
   }
   h1 {
     margin: 0;
@@ -231,7 +231,13 @@
   .show-filters-btn {
     top: 0px;
     left: 0;
-    margin: 10px 0;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: block;
+  }
+  .close-filters-btn {
+    left: 20px;
   }
 }
 
@@ -381,5 +387,93 @@
     line-height: 1;
     background-color: var(--current-theme-primary);
     color: #fff;
+  }
+}
+
+@media (max-width: 480px) {
+  .modality-facet.facet-accordion.on-accordion-wrapper {
+    margin: 20px 0;
+    border: 0;
+    background: #e5f4f7;
+    border-radius: $border-radius-default;
+    padding: 10px;
+    .accordion-item.collapsed {
+      max-height: initial;
+    }
+    .accordion-title,
+    h2 {
+      margin: 10px 0 15px;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--current-theme-primary);
+    }
+    .accordion-title {
+      margin: 10px 0 15px 0;
+      padding: 0;
+      &:after {
+        display: none;
+      }
+    }
+    .facet-list {
+      padding: 0 0 10px;
+      color: var(--current-theme-primary);
+      ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        li {
+          cursor: pointer;
+        }
+      }
+      .label {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        span {
+          margin-left: 10px;
+          display: inline-block;
+          font-size: 14px;
+        }
+      }
+
+      .level-1 > li {
+        border-top: 1px solid $newspaper;
+
+        > .label {
+          padding: 10px;
+          font-weight: 500;
+          font-size: 16px;
+        }
+      }
+      .level-2 {
+        margin-bottom: 10px;
+        font-size: 14px;
+        > li {
+          display: flex;
+          justify-content: flex-start;
+
+          .label {
+            margin-left: 15px;
+          }
+          &:before {
+            content: '-';
+            margin-left: 12px;
+          }
+        }
+      }
+    }
+    .facet-list ul li {
+      > .label {
+        font-weight: 500;
+      }
+      &.selected-facet > .label {
+        color: var(--current-theme-primary);
+        font-weight: 600;
+        span {
+          color: var(--current-theme-primary);
+        }
+      }
+    }
   }
 }

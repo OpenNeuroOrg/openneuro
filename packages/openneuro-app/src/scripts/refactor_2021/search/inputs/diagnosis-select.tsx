@@ -14,7 +14,7 @@ const DiagnosisSelect: FC = () => {
     }))
 
   return (
-    <AccordionWrap className="modality-facet facet-accordion">
+    <AccordionWrap className="facet-accordion">
       <AccordionTab accordionStyle="plain" label="Diagnosis" startOpen={false}>
         <FacetSelect
           selected={diagnosis_selected}

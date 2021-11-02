@@ -14,7 +14,7 @@ const SpeciesSelect: FC = () => {
     }))
 
   return (
-    <AccordionWrap className="modality-facet facet-accordion">
+    <AccordionWrap className="facet-accordion">
       <AccordionTab accordionStyle="plain" label="Species" startOpen={false}>
         <FacetSelect
           selected={species_selected}
