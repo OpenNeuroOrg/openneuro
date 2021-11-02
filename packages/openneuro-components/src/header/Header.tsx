@@ -36,6 +36,7 @@ export const Header = ({
   renderUploader,
 }: HeaderProps) => {
   const [isOpen, setOpen] = React.useState(false)
+
   return (
     <>
       <header>
@@ -73,6 +74,7 @@ export const Header = ({
                   onClick={e => {
                     console.log(e)
                     e.preventDefault()
+                    setOpen(prev => !prev)
                     navigateToNewSearch()
                   }}
                 >
@@ -80,14 +82,26 @@ export const Header = ({
                 </NavLink>
               </li>
               <li>
-                <span className="no-a" onClick={toggleSupport}>
+                <span
+                  className="no-a"
+                  onClick={() => {
+                    setOpen(prev => !prev)
+                    toggleSupport()
+                  }}
+                >
                   Support
                 </span>
               </li>
               <li>
-                <NavLink to="/faq">FAQ</NavLink>
+                <NavLink to="/faq" onClick={() => setOpen(prev => !prev)}>
+                  FAQ
+                </NavLink>
               </li>
-              {profile ? <li>{renderUploader()}</li> : null}
+              {profile ? (
+                <li onClick={() => setOpen(prev => !prev)}>
+                  {renderUploader()}
+                </li>
+              ) : null}
             </ul>
           </div>
           <div className="navbar-account">
