@@ -1,6 +1,6 @@
 ---
 name: Git Access
-route: git
+route: /git
 ---
 
 # Git access to OpenNeuro datasets

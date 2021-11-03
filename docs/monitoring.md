@@ -1,6 +1,6 @@
 ---
 name: Kubernetes Monitoring
-route: monitoring
+route: /monitoring
 ---
 
 # Infrastructure Monitoring

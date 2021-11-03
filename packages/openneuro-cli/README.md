@@ -1,5 +1,6 @@
 ---
 name: Command Line Interface
+route: /cli
 ---
 
 # OpenNeuro command line interface

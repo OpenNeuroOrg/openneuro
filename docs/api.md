@@ -1,6 +1,6 @@
 ---
 name: GraphQL API
-route: api
+route: /api
 ---
 
 # API Examples
