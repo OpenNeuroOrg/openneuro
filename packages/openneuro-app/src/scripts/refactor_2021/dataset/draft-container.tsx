@@ -36,6 +36,7 @@ import { StarDataset } from './mutations/star'
 
 import EditDescriptionField from './fragments/edit-description-field.jsx'
 import EditDescriptionList from './fragments/edit-description-list.jsx'
+import { DOILink } from './fragments/doi-link'
 
 export interface DraftContainerProps {
   dataset
@@ -360,10 +361,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
 
             <MetaDataBlock
               heading="Dataset DOI"
-              item={
-                description.DatasetDOI ||
-                'Create a new snapshot to obtain a DOI for the snapshot.'
-              }
+              item={<DOILink DOI={description.DatasetDOI} />}
             />
             <MetaDataBlock heading="License" item={description.License} />
 

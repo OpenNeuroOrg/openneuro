@@ -58,7 +58,8 @@ const createIfNotExistsDoi = async (
         tag,
         oldDesc,
       )
-      if (snapshotDoi) descriptionFieldUpdates['DatasetDOI'] = snapshotDoi
+      if (snapshotDoi)
+        descriptionFieldUpdates['DatasetDOI'] = `doi:${snapshotDoi}`
     } catch (err) {
       Sentry.captureException(err)
       console.error(err)
