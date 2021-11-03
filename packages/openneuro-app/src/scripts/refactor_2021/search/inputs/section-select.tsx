@@ -14,7 +14,7 @@ const SectionSelect: FC = () => {
     }))
 
   return (
-    <AccordionWrap className="modality-facet facet-accordion">
+    <AccordionWrap className="facet-accordion">
       <AccordionTab accordionStyle="plain" label="Study Type" startOpen={false}>
         <FacetSelect
           selected={section_selected}

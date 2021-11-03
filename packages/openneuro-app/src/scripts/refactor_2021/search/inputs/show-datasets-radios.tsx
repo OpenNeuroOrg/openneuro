@@ -35,7 +35,8 @@ const ShowDatasetsRadios: FC = () => {
         className={
           datasetType_selected.replace(/\s/g, '') +
           ' btn-group-wrapper facet-radio'
-        }>
+        }
+      >
         <RadioGroup
           radioArr={datasetType_available}
           layout="btn-group"
@@ -45,11 +46,12 @@ const ShowDatasetsRadios: FC = () => {
         />
       </div>
       {datasetType_selected == 'My Datasets' ? (
-        <AccordionWrap className="modality-facet facet-accordion">
+        <AccordionWrap className="facet-accordion">
           <AccordionTab
             accordionStyle="plain"
             label="My Datasets Status"
-            startOpen={true}>
+            startOpen={true}
+          >
             <FacetSelect
               selected={datasetStatus_selected}
               setSelected={setShowMyUploadsSelected}
