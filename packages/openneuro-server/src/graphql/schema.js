@@ -447,6 +447,18 @@ export const typeDefs = `
     hexsha: String
     # Whether or not this snapshot has been deprecated (returns null if false)
     deprecated: DeprecatedSnapshot
+    # Related DOI references extracted from ReferencesAndLinks
+    relatedObjects: [ExternalDOI]
+  }
+
+  # DOI for an external object with the source if available
+  type ExternalDOI {
+    # DOI string in uri format
+    id: ID!
+    # Source if known
+    source: String
+    # Type if known
+    type: String
   }
 
   # Set on snapshots that have been deprecated
