@@ -1,6 +1,6 @@
 ---
 name: User Guide
-route: user-guide
+route: /user-guide
 ---
 
 # User Guide

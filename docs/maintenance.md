@@ -1,6 +1,6 @@
 ---
 name: Site Maintenance
-route: maintenance
+route: /maintenance
 ---
 
 ## Unpublishing a dataset
