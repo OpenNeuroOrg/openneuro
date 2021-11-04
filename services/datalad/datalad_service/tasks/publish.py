@@ -97,7 +97,7 @@ def get_dataset_realm(dataset_path, realm=None):
 
 
 def publish_dataset(dataset_path, cookies=None, realm='PUBLIC'):
-    def should_export():
+    def should_export(dataset_path, tags):
         return True
     export_all_tags(dataset_path, cookies, get_dataset_realm(
         dataset_path, realm), should_export)
@@ -116,7 +116,7 @@ def reexport_dataset(dataset_path, cookies=None, realm=None):
 
 
 def publish_snapshot(dataset_path, cookies=None, snapshot=None, realm=None):
-    def should_export(ds, tags):
+    def should_export(dataset_path, tags):
         return True
     export_all_tags(dataset_path, cookies, get_dataset_realm(
         dataset_path, realm), should_export)
