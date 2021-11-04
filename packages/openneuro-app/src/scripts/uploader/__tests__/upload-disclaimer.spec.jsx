@@ -39,16 +39,11 @@ describe('UploadDisclaimer component', () => {
     )
     expect(screen.getByText('I Agree')).toBeDisabled()
   })
-  it('enable the upload button when one box is checked for both sections', () => {
+  it('enable the upload button when one box is checked', () => {
     const { getByLabelText } = render(
       <UploaderContext.Provider value={{ uploader: jest.fn() }}>
         <UploadDisclaimer />
       </UploaderContext.Provider>,
-    )
-    fireEvent.click(
-      getByLabelText(
-        'This dataset will be exclusively made available on OpenNeuro as the repository of record and will not be uploaded to other repositories.',
-      ),
     )
     fireEvent.click(
       getByLabelText(
