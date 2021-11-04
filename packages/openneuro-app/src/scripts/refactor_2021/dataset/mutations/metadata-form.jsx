@@ -321,64 +321,64 @@ const MetadataForm = ({
   hasEdit,
   validationErrors = [],
 }) => (
-  <div className="grid grid-nogutter">
-    <Form id="metadata-form" className=" col col-6">
-      <InfoText>
-        Incomplete fields in this form will make it more difficult for users to
-        search for your dataset.
-        <br />
-        We recommend completing the applicable fields to improve your search
-        results.
-      </InfoText>
-      {!hideDisabled && (
-        <DisabledNote>
-          <i className="fa fa-asterisk" />
-          <p>
-            Some data is pulled from the dataset for you and cannot be edited
-            here.
-          </p>
-        </DisabledNote>
+  <Form id="metadata-form" className="col col-6">
+    <InfoText>
+      Incomplete fields in this form will make it more difficult for users to
+      search for your dataset.
+      <br />
+      We recommend completing the applicable fields to improve your search
+      results.
+    </InfoText>
+    {!hideDisabled && (
+      <DisabledNote>
+        <i className="fa fa-asterisk" />
+        <p>
+          Some data is pulled from the dataset for you and cannot be edited
+          here.
+        </p>
+      </DisabledNote>
+    )}
+    {metadataFields(hasEdit)
+      .filter(
+        // remove disabled fields when hideDisabled is true
+        field =>
+          !(hideDisabled && field.additionalProps.disabled) &&
+          !hiddenFields.includes(field.key),
+      )
+      .map(
+        (
+          {
+            key,
+            label,
+            hoverText,
+            component: FieldComponent,
+            additionalProps,
+            transformValue,
+          },
+          i,
+        ) => (
+          // @ts-expect-error
+          <FieldComponent
+            name={key}
+            label={label}
+            hoverText={hoverText}
+            value={
+              transformValue ? transformValue(values?.[key]) : values?.[key]
+            }
+            onChange={onChange}
+            {...additionalProps}
+            key={i}
+          />
+        ),
       )}
-      {metadataFields(hasEdit)
-        .filter(
-          // remove disabled fields when hideDisabled is true
-          field =>
-            !(hideDisabled && field.additionalProps.disabled) &&
-            !hiddenFields.includes(field.key),
-        )
-        .map(
-          (
-            {
-              key,
-              label,
-              hoverText,
-              component: FieldComponent,
-              additionalProps,
-              transformValue,
-            },
-            i,
-          ) => (
-            // @ts-expect-error
-            <FieldComponent
-              name={key}
-              label={label}
-              hoverText={hoverText}
-              value={transformValue ? transformValue(values?.[key]) : values?.[key]}
-              onChange={onChange}
-              {...additionalProps}
-              key={i}
-            />
-          ),
-        )}
-      {Boolean(validationErrors.length) &&
-        validationErrors.map((errorMessage, i) => (
-          <ValidationError key={i}>
-            <i className="fa fa-asterisk" />
-            <p>{errorMessage}</p>
-          </ValidationError>
-        ))}
-    </Form>
-  </div>
+    {Boolean(validationErrors.length) &&
+      validationErrors.map((errorMessage, i) => (
+        <ValidationError key={i}>
+          <i className="fa fa-asterisk" />
+          <p>{errorMessage}</p>
+        </ValidationError>
+      ))}
+  </Form>
 )
 
 MetadataForm.propTypes = {

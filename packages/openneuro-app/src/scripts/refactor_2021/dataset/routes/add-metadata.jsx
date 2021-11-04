@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import MetadataForm from '../mutations/metadata-form.jsx'
+import { DatasetRelations } from '../mutations/dataset-relations'
 import SubmitMetadata from '../mutations/submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
@@ -124,13 +125,20 @@ const AddMetadata = ({ dataset }) => {
         <h1>{hasEdit && 'Add '}Metadata</h1>
         <hr />
       </header>
-      <MetadataForm
-        values={values}
-        onChange={handleInputChange}
-        hideDisabled={false}
-        hasEdit={hasEdit}
-        validationErrors={validationErrors}
-      />
+      <div className="grid grid-nogutter">
+        <MetadataForm
+          values={values}
+          onChange={handleInputChange}
+          hideDisabled={false}
+          hasEdit={hasEdit}
+          validationErrors={validationErrors}
+        />
+        {hasEdit && (
+          <div className="col col-6">
+            <DatasetRelations datasetId={dataset.id} hasEdit={hasEdit} />
+          </div>
+        )}
+      </div>
       <div className="dataset-form-controls ">
         {hasEdit && (
           <LoggedIn>
