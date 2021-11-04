@@ -43,12 +43,14 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "graphql": "14.7.0",
     "husky": "5.1.1",
     "jest": "^26.6.3",
     "lerna": "3.20.2",
     "lint-staged": "^10.5.4",
     "pinst": "^2.1.6",
     "prettier": "^2.2.1",
+    "react": "17.0.2",
     "ts-jest": "^27.0.3",
     "tsc-watch": "^4.2.9",
     "typescript": "4.0.6"
@@ -80,13 +82,6 @@
     "moduleNameMapper": {
       "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
     }
-  },
-  "dependencies": {
-    "docz": "^2.3.1",
-    "gatsby-plugin-s3": "^0.3.3",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-toastify": "^7.0.4"
   },
   "dependenciesMeta": {
     "open@7.4.2": {
