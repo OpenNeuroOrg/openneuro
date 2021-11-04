@@ -34,6 +34,7 @@ import { cacheClear } from './cache'
 import { reexportRemotes } from './reexporter'
 import { resetDraft } from './reset'
 import { createReviewer, deleteReviewer } from './reviewer'
+import { createRelation, deleteRelation } from './relation'
 
 const Mutation = {
   createDataset,
@@ -74,6 +75,8 @@ const Mutation = {
   resetDraft,
   createReviewer,
   deleteReviewer,
+  createRelation,
+  deleteRelation,
 }
 
 export default Mutation
