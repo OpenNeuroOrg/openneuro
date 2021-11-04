@@ -35,7 +35,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
             .then(filterFiles(prefix))
             .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
         deprecated: () => deprecated(snapshot),
-        relatedObjects: () => relatedObjects(snapshot),
+        related: () => related(datasetId),
       }))
     },
   )
@@ -46,11 +46,12 @@ export const deprecated = snapshot => {
 }
 
 /**
- * Search snapshot data for related objects and return an array
- * @param {*} snapshot
+ * Search dataset metadeta for related objects and return an array
+ * @param {string} datasetId
  */
-export const relatedObjects = async snapshot => {
-  return matchKnownObjects(await description(snapshot))
+export const related = async datasetId => {
+  const dataset = await DatasetModel.findOne({ id: datasetId }).lean().exec()
+  return dataset.related
 }
 
 export const matchKnownObjects = desc => {

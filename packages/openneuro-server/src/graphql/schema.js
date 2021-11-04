@@ -181,6 +181,10 @@ export const typeDefs = `
     createReviewer(datasetId: ID!): DatasetReviewer
     # Remove reviewer
     deleteReviewer(datasetId: ID!, id: ID!): DatasetReviewer
+    # Add a relationship to an external DOI
+    createRelation(datasetId: ID!, doi: String!, relation: RelatedObjectRelation!, kind: RelatedObjectKind!, description: String): Dataset
+    # Remove a relationship to an external DOI
+    deleteRelation(datasetId: ID!, doi: String!): Dataset
   }
 
   # Anonymous dataset reviewer
@@ -447,18 +451,30 @@ export const typeDefs = `
     hexsha: String
     # Whether or not this snapshot has been deprecated (returns null if false)
     deprecated: DeprecatedSnapshot
-    # Related DOI references extracted from ReferencesAndLinks
-    relatedObjects: [ExternalDOI]
+    # Related DOI references
+    related: [RelatedObject]
   }
 
-  # DOI for an external object with the source if available
-  type ExternalDOI {
+  # RelatedObject nature of relationship
+  enum RelatedObjectRelation {
+    sameAs
+  }
+
+  # RelatedObject kind of target object
+  enum RelatedObjectKind {
+    Dataset
+  }
+
+  # DOI for an external object
+  type RelatedObject {
     # DOI string in uri format
     id: ID!
-    # Source if known
-    source: String
-    # Type if known
-    type: String
+    # The nature of the relationship
+    relation: RelatedObjectRelation!
+    # What kind of target object is it?
+    kind: RelatedObjectKind!
+    # Optional description
+    description: String
   }
 
   # Set on snapshots that have been deprecated

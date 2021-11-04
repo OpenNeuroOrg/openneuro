@@ -2,6 +2,21 @@ import mongoose, { Document } from 'mongoose'
 const { Schema, model } = mongoose
 import DatasetChange from './datasetChange'
 
+// External relations annotating the whole dataset
+export interface DatasetRelationDocument extends Document {
+  id: string // DOI
+  relation: 'sameAs'
+  kind: 'Dataset'
+  description: string
+}
+
+const RelationSchema = new Schema<DatasetRelationDocument>({
+  id: { type: String, required: true },
+  relation: { type: String, required: true },
+  kind: { type: String, required: true },
+  description: String,
+})
+
 export interface DatasetDocument extends Document {
   id: string
   created: Date
@@ -12,6 +27,7 @@ export interface DatasetDocument extends Document {
   name: string
   downloads: number
   views: number
+  related: [DatasetRelationDocument]
   _conditions: any
 }
 
@@ -26,6 +42,7 @@ const datasetSchema = new Schema<DatasetDocument>(
     name: String,
     downloads: Number,
     views: Number,
+    related: [RelationSchema],
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 )
