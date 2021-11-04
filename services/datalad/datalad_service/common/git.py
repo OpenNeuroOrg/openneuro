@@ -43,4 +43,7 @@ def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", 
     else:
         parent_commits = parents
     tree = repo.index.write_tree()
-    return repo.create_commit('refs/heads/master', author, committer, message, tree, parent_commits)
+    commit = repo.create_commit(
+        'refs/heads/master', author, committer, message, tree, parent_commits)
+    repo.head.set_target(commit)
+    return commit
