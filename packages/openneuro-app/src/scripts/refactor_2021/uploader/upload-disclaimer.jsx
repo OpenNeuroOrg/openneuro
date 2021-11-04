@@ -4,7 +4,6 @@ import UploaderContext from './uploader-context.js'
 const UploadDisclaimer = () => {
   const [affirmedDefaced, setAffirmedDefaced] = useState(false)
   const [affirmedConsent, setAffirmedConsent] = useState(false)
-  const [repositoryOfRecord, setRepositoryOfRecord] = useState(false)
   return (
     <UploaderContext.Consumer>
       {uploader => (
@@ -38,22 +37,10 @@ const UploadDisclaimer = () => {
           </p>
           <p>This dataset is not subject to GDPR protections.</p>
           <p>
-            To minimize the potential for confusion regarding dataset versioning
-            and availability from different sources, please only upload your
-            dataset to one data repository. Datasets uploaded to the NIMH Data
-            Archive or other public repositories should not be uploaded to
-            OpenNeuro.
+            If the dataset is being uploaded to another database (such as the
+            NIMH Data Archive), I agree to ensure that the datasets are
+            harmonized across archives.
           </p>
-          <label>
-            <input
-              type="checkbox"
-              onChange={() => setRepositoryOfRecord(!repositoryOfRecord)}
-              defaultChecked={repositoryOfRecord}
-            />
-            &nbsp; This dataset will be exclusively made available on OpenNeuro
-            as the repository of record and will not be uploaded to other
-            repositories.
-          </label>
           <p>Please affirm one of the following:</p>
           <label>
             <input
@@ -87,11 +74,11 @@ const UploadDisclaimer = () => {
               }}
               disabled={
                 !(
-                  ((affirmedDefaced && !affirmedConsent) ||
-                    (!affirmedDefaced && affirmedConsent)) &&
-                  repositoryOfRecord
+                  (affirmedDefaced && !affirmedConsent) ||
+                  (!affirmedDefaced && affirmedConsent)
                 )
-              }>
+              }
+            >
               I Agree
             </button>
           </span>
