@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 // See https://www.crossref.org/blog/dois-and-matching-regular-expressions/
-const DOIPattern = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i
+export const DOIPattern = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i
 
 export const DOILink = ({ DOI }) => {
   if (

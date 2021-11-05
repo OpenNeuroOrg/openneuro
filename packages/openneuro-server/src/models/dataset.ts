@@ -5,8 +5,8 @@ import DatasetChange from './datasetChange'
 // External relations annotating the whole dataset
 export interface DatasetRelationDocument extends Document {
   id: string // DOI
-  relation: 'sameAs'
-  kind: 'Dataset'
+  relation: 'sameAs' | 'source' | 'derivative'
+  kind: 'Dataset' | 'Article'
   description: string
 }
 

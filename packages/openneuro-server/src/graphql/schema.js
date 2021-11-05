@@ -458,11 +458,14 @@ export const typeDefs = `
   # RelatedObject nature of relationship
   enum RelatedObjectRelation {
     sameAs
+    derivative
+    source
   }
 
   # RelatedObject kind of target object
   enum RelatedObjectKind {
     Dataset
+    Article
   }
 
   # DOI for an external object
