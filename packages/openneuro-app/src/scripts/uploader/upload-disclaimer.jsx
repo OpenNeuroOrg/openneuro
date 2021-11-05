@@ -37,9 +37,10 @@ const UploadDisclaimer = () => {
           </p>
           <p>This dataset is not subject to GDPR protections.</p>
           <p>
-            If the dataset is being uploaded to another database (such as the
-            NIMH Data Archive), I agree to ensure that the datasets are
-            harmonized across archives.
+            Generally, data should only be uploaded to a single data archive. In
+            the rare cases where it is necessary to upload the data to two
+            databases (such as the NIMH Data Archive), I agree to ensure that
+            the datasets are harmonized across archives.
           </p>
           <p>Please affirm one of the following:</p>
           <label>
