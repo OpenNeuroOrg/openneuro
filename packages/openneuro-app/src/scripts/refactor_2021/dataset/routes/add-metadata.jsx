@@ -125,7 +125,7 @@ const AddMetadata = ({ dataset }) => {
         <h1>{hasEdit && 'Add '}Metadata</h1>
         <hr />
       </header>
-      <div className="grid grid-nogutter">
+      <div className="grid m-b-20">
         <MetadataForm
           values={values}
           onChange={handleInputChange}
