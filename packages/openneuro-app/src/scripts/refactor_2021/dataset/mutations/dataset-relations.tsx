@@ -136,7 +136,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
             <InputGroup>
               <TextInput
                 name="DOI"
-                label="DOI"
+                label="DOI of papers related to the dataset or linked datasets"
                 value={newRelation.doi}
                 onChange={(name, value) => {
                   setNewRelation({ ...newRelation, doi: value })
