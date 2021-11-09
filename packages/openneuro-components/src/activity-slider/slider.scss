@@ -21,6 +21,9 @@
       font-weight: 600;
       margin-bottom: 0;
       text-decoration: underline;
+      a {
+        word-break: break-word;
+      }
     }
     .ds-pub-views,
     .ds-pub-date {
