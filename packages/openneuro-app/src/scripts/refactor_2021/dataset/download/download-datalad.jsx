@@ -33,7 +33,7 @@ const DownloadDataladInstructions = ({ datasetId, githubOrganization }) => (
     />
     <p>
       Check out{' '}
-      <a href="http://handbook.datalad.org/r.html?openneuro">
+      <a href="https://handbook.datalad.org/en/latest/usecases/openneuro.html">
         getting started with DataLad
       </a>{' '}
       for more on how to use this download method.
