@@ -49,5 +49,8 @@ describe('snapshot resolvers', () => {
       ]
       expect(filterLatestSnapshot(testSnapshots)).toBe('1.0.1')
     })
+    it('returns null with no snapshots', () => {
+      expect(filterLatestSnapshot([])).toBeNull()
+    })
   })
 })
