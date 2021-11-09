@@ -69,7 +69,11 @@
   }
   &.readmore-file-tree {
     input[type='checkbox']:checked + section {
-      max-height: 12000px;
+      max-height: 40000px;
     }
+  }
+
+  .filetree-wrapper.on-accordion-wrapper .accordion-item {
+    max-height: 40000px;
   }
 }
