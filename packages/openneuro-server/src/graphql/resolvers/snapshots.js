@@ -176,23 +176,31 @@ export const participantCount = (obj, { modality }) => {
   })
 }
 
-export const latestSnapshot = (obj, _, context) => {
-  return datalad.getSnapshots(obj.id).then(snapshots => {
-    if (snapshots.length) {
-      const sortedSnapshots = Array.prototype.sort.call(
-        snapshots,
-        snapshotCreationComparison,
-      )
-      return snapshot(
-        obj,
-        { datasetId: obj.id, tag: sortedSnapshots[0].tag },
-        context,
-      )
-    } else {
-      // In the case where there are no real snapshots, return HEAD as a snapshot
-      return snapshot(obj, { datasetId: obj.id, tag: 'HEAD' }, context)
-    }
-  })
+/**
+ * Select the most recent snapshot from an array of snapshots
+ * @param {*} snapshots Array of snapshot objects from datalad.getSnapshots
+ */
+export const filterLatestSnapshot = snapshots => {
+  if (snapshots.length) {
+    const sortedSnapshots = Array.prototype.sort.call(
+      snapshots,
+      snapshotCreationComparison,
+    )
+    return sortedSnapshots[sortedSnapshots.length - 1].tag
+  } else {
+    return null
+  }
+}
+
+export const latestSnapshot = async (obj, _, context) => {
+  const snapshots = await datalad.getSnapshots(obj.id)
+  const snapshotTag = filterLatestSnapshot(snapshots)
+  if (snapshotTag) {
+    return await snapshot(obj, { datasetId: obj.id, tag: snapshotTag }, context)
+  } else {
+    // In the case where there are no real snapshots, return HEAD as a snapshot
+    return await snapshot(obj, { datasetId: obj.id, tag: 'HEAD' }, context)
+  }
 }
 
 /**

@@ -114,6 +114,35 @@ describe('dataset resolvers', () => {
       expect(sorted[1].id).toBe('ds002680:1.1.0')
       expect(sorted[2].id).toBe('ds002680:1.2.0')
     })
+    it('sorts 000002 (legacy snapshots) before 1.0.1 (current format)', () => {
+      const testSnapshots = [
+        {
+          id: 'ds000247:00002',
+          created: '2018-07-18T02:27:39.000Z',
+          tag: '00002',
+        },
+        {
+          id: 'ds000247:00001',
+          created: '2018-07-18T02:35:37.000Z',
+          tag: '00001',
+        },
+        {
+          id: 'ds000247:1.0.0',
+          created: '2021-07-05T15:58:18.000Z',
+          tag: '1.0.0',
+        },
+        {
+          id: 'ds000247:1.0.1',
+          created: '2021-08-25T23:37:53.000Z',
+          tag: '1.0.1',
+        },
+      ]
+      const sorted = testSnapshots.sort(ds.snapshotCreationComparison)
+      expect(sorted[0].id).toBe('ds000247:00002')
+      expect(sorted[1].id).toBe('ds000247:00001')
+      expect(sorted[2].id).toBe('ds000247:1.0.0')
+      expect(sorted[3].id).toBe('ds000247:1.0.1')
+    })
   })
   describe('deleteFiles', () => {
     beforeEach(() => {
