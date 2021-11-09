@@ -174,6 +174,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
+                hasEdit={hasEdit}
+                configGithub={config.github}
                 configUrl={config.url}
                 worker={dataset.worker}
                 datasetId={datasetId}

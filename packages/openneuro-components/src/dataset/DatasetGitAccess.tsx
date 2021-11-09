@@ -1,8 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Button } from '../button/Button'
-import { frontPage } from '../mock-content/front-page-content'
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text)
@@ -13,6 +11,8 @@ export interface DatasetGitAccessProps {
   worker?: string
   configUrl: string
   gitHash: string
+  configGithub?: string
+  hasEdit?: boolean
 }
 
 export const DatasetGitAccess = ({
@@ -20,9 +20,12 @@ export const DatasetGitAccess = ({
   worker,
   configUrl,
   gitHash,
+  configGithub,
+  hasEdit,
 }: DatasetGitAccessProps) => {
   const workerId = worker?.split('-').pop()
   const url = `${configUrl}/git/${workerId}/${datasetId}`
+  const readURL = `https://github.com/${configGithub}/${datasetId}.git`
   return (
     <div className="dataset-git-access">
       <span>
@@ -35,16 +38,33 @@ export const DatasetGitAccess = ({
         {workerId && (
           <Tooltip tooltip="Copy URL To Clipboard" flow="right">
             <Button
-              onClick={() => copyToClipboard(url)}
+              onClick={() => copyToClipboard(readURL)}
               icon="fas fa-clipboard"
               size="small"
               iconSize="18px"
-              label="copy git URL"
+              label="copy Github url"
             />
           </Tooltip>
         )}
-        <div>{url}</div>
+        <div>{readURL}</div>
       </div>
+      {hasEdit && (
+        <div className="git-url">
+          {workerId && (
+            <Tooltip tooltip="Copy URL To Clipboard" flow="right">
+              <Button
+                onClick={() => copyToClipboard(url)}
+                icon="fas fa-clipboard"
+                size="small"
+                iconSize="18px"
+                label="copy OpenNeuro url"
+              />
+            </Tooltip>
+          )}
+          <div>{url}</div>
+        </div>
+      )}
+
       <div className="git-hash">
         <Tooltip tooltip="Copy Git Hash to Clipboard" flow="right">
           <Button

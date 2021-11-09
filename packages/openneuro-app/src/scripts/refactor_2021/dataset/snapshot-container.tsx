@@ -149,6 +149,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
           <CloneDropdown
             gitAccess={
               <DatasetGitAccess
+                hasEdit={hasEdit}
+                configGithub={config.github}
                 configUrl={config.url}
                 worker={dataset.worker}
                 datasetId={datasetId}
@@ -171,7 +173,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             fileTree={true}
             id="collapse-tree"
             expandLabel="Read More"
-            collapseabel="Collapse">
+            collapseabel="Collapse"
+          >
             <Files
               datasetId={datasetId}
               snapshotTag={snapshot.tag}
@@ -189,7 +192,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               <ReadMore
                 id="readme"
                 expandLabel="Read More"
-                collapseabel="Collapse">
+                collapseabel="Collapse"
+              >
                 <Markdown>
                   {snapshot.readme == null ? 'N/A' : snapshot.readme}
                 </Markdown>
@@ -374,7 +378,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             isOpen={deprecatedmodalIsOpen}
             toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
             closeText={'close'}
-            className="deprecated-modal">
+            className="deprecated-modal"
+          >
             <p>
               You have selected a deprecated version. The author of the dataset
               does not recommend this specific version.
@@ -432,7 +437,8 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
           datasetId: dataset.id,
           fetchMore,
           error: null,
-        }}>
+        }}
+      >
         <SnapshotContainer
           dataset={dataset}
           tag={tag}
