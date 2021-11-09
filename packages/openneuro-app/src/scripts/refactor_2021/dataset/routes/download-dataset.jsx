@@ -17,54 +17,65 @@ const DownloadDataset = ({
     // snapshotId is widely used but snapshotTag is more accurate
     params: { datasetId, snapshotId: snapshotTag },
   },
-}) => (
-  <div>
-    <div className="container">
-      <div className="grid grid-between">
-        <div className="col col-12">
-          <h3>How to Download</h3>
-        </div>
-        <div className="col col-lg">
-          {'showDirectoryPicker' in globalThis ? (
-            <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
-          ) : (
-            <DownloadCommandLine
-              datasetId={datasetId}
-              snapshotTag={snapshotTag}
-            />
-          )}
-        </div>
-        <div className="col col-lg">
-          <DownloadS3 datasetId={datasetId} />
-        </div>
-      </div>
-      <hr />
-      <div className="grid grid-between">
-        {'showDirectoryPicker' in globalThis && (
+  worker,
+  datasetPermissions,
+}) => {
+  const workerId = worker?.split('-').pop()
+  return (
+    <div>
+      <div className="container">
+        <div className="grid grid-between">
+          <div className="col col-12">
+            <h3>How to Download</h3>
+          </div>
           <div className="col col-lg">
-            <DownloadCommandLine
+            {'showDirectoryPicker' in globalThis ? (
+              <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
+            ) : (
+              <DownloadCommandLine
+                datasetId={datasetId}
+                snapshotTag={snapshotTag}
+              />
+            )}
+          </div>
+          <div className="col col-lg">
+            <DownloadS3 datasetId={datasetId} />
+          </div>
+        </div>
+        <hr />
+        <div className="grid grid-between">
+          {'showDirectoryPicker' in globalThis && (
+            <div className="col col-lg">
+              <DownloadCommandLine
+                datasetId={datasetId}
+                snapshotTag={snapshotTag}
+              />
+            </div>
+          )}
+          <div className="col col-lg">
+            <DownloadDatalad
               datasetId={datasetId}
-              snapshotTag={snapshotTag}
+              workerId={workerId}
+              datasetPermissions={datasetPermissions}
             />
           </div>
-        )}
-        <div className="col col-lg">
-          <DownloadDatalad datasetId={datasetId} />
         </div>
-      </div>
-      <div className="grid grid-between">
-        <div className="col">
-          <Link className="return-link m-l-0" to={`/datasets/${datasetId}`}>
-            Return to Dataset
-          </Link>
+        <div className="grid grid-between">
+          <div className="col">
+            <Link className="return-link m-l-0" to={`/datasets/${datasetId}`}>
+              Return to Dataset
+            </Link>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 DownloadDataset.propTypes = {
   match: PropTypes.object,
+  worker: PropTypes.string,
+  datasetPermissions: PropTypes.object,
 }
 
 export default withRouter(DownloadDataset)

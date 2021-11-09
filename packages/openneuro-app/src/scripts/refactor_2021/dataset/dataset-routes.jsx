@@ -37,7 +37,12 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="download"
         exact
         path="/datasets/:datasetId/download"
-        component={DownloadDataset}
+        component={() => (
+          <DownloadDataset
+            worker={dataset.worker}
+            datasetPermissions={dataset.permissions}
+          />
+        )}
       />
       <Route
         name="admin"
