@@ -186,7 +186,7 @@ export const filterLatestSnapshot = snapshots => {
       snapshots,
       snapshotCreationComparison,
     )
-    return sortedSnapshots[0].tag
+    return sortedSnapshots[sortedSnapshots.length - 1].tag
   } else {
     return null
   }
