@@ -1,25 +1,21 @@
 /* global globalThis */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, withRouter } from 'react-router-dom'
-import styled from '@emotion/styled'
+import { Link, useRouteMatch } from 'react-router-dom'
 import DownloadLink from '../download/download-link.jsx'
 import DownloadS3 from '../download/download-s3.jsx'
 import DownloadCommandLine from '../download/download-command-line.jsx'
 import DownloadDatalad from '../download/download-datalad.jsx'
 
-const PaddedDiv = styled.div`
-  padding: 1em;
-`
+interface SnapshotRouteParams {
+  datasetId?: string
+  snapshotId?: string
+}
 
-const DownloadDataset = ({
-  match: {
-    // snapshotId is widely used but snapshotTag is more accurate
+const DownloadDataset = ({ worker, datasetPermissions }) => {
+  const {
     params: { datasetId, snapshotId: snapshotTag },
-  },
-  worker,
-  datasetPermissions,
-}) => {
+  } = useRouteMatch<SnapshotRouteParams>()
   const workerId = worker?.split('-').pop()
   return (
     <div>
@@ -73,9 +69,8 @@ const DownloadDataset = ({
 }
 
 DownloadDataset.propTypes = {
-  match: PropTypes.object,
   worker: PropTypes.string,
   datasetPermissions: PropTypes.object,
 }
 
-export default withRouter(DownloadDataset)
+export default DownloadDataset
