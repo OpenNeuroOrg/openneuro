@@ -121,7 +121,12 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="snapshot-download"
         exact
         path="/datasets/:datasetId/versions/:snapshotId/download"
-        component={DownloadDataset}
+        component={() => (
+          <DownloadDataset
+            worker={dataset.worker}
+            datasetPermissions={dataset.permissions}
+          />
+        )}
       />
       <Route
         path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"
