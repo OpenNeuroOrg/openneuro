@@ -4,7 +4,7 @@ WORKDIR /srv
 
 COPY . /srv
 
-RUN yarn install && yarn tsc -b
+RUN yarn install && yarn tsc -b && yarn codecov
 
 FROM dependencies as tests
 
