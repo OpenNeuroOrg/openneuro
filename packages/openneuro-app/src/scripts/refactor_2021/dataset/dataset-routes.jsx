@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import AdminDataset from './routes/admin-datalad.jsx'
 import AdminExports from './routes/admin-exports.jsx'
 
 import SnapshotContainer from './snapshot-container'
 import DraftContainer from './draft-container'
-import DownloadDataset from './routes/download-dataset.jsx'
+import DownloadDataset from './routes/download-dataset'
 import Publish from './routes/publish.jsx'
 import Share from './routes/manage-permissions.jsx'
 import Snapshot from './routes/snapshot.jsx'
@@ -37,7 +37,12 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="download"
         exact
         path="/datasets/:datasetId/download"
-        component={DownloadDataset}
+        component={() => (
+          <DownloadDataset
+            worker={dataset.worker}
+            datasetPermissions={dataset.permissions}
+          />
+        )}
       />
       <Route
         name="admin"
@@ -116,7 +121,12 @@ const DatasetRoutes = ({ dataset, error }) => {
         name="snapshot-download"
         exact
         path="/datasets/:datasetId/versions/:snapshotId/download"
-        component={DownloadDataset}
+        component={() => (
+          <DownloadDataset
+            worker={dataset.worker}
+            datasetPermissions={dataset.permissions}
+          />
+        )}
       />
       <Route
         path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"
