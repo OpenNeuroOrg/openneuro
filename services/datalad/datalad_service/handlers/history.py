@@ -22,7 +22,7 @@ class HistoryResource(object):
                 references = []
                 for tag in tags:
                     if tag.target.hex == commit.hex:
-                        references += tag.name
+                        references.append(tag.name)
                 log.append({
                     "id": commit.hex, "date": commit.commit_time,
                     "authorName": commit.author.name, "authorEmail": commit.author.email,
