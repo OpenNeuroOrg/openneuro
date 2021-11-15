@@ -3,9 +3,9 @@ import { useRouteMatch, useHistory } from 'react-router-dom'
 import {
   SearchParamsCtx,
   removeFilterItem,
-  getSelectParams,
   useCheckIfParamsAreSelected,
 } from './search-params-ctx'
+import { getSelectParams } from './search-state-reducer'
 import { FiltersBlock } from '@openneuro/components/search-page'
 import initialSearchParams from './initial-search-params'
 

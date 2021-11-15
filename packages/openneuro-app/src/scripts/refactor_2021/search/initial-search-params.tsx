@@ -190,7 +190,7 @@ const initialSearchParams: SearchParams = {
   tracerNames: [],
   tracerRadionuclides: [],
   sortBy_available: sortBy,
-  sortBy_selected: sortBy[0],
+  sortBy_selected: sortBy[1],
 }
 
 // TODO: (stretch) delete and move to dynamically loaded initialSearchParams
@@ -236,7 +236,7 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   tracerNames: [],
   tracerRadionuclides: [],
   sortBy_available: sortBy,
-  sortBy_selected: sortBy[0],
+  sortBy_selected: sortBy[1],
 }
 
 export default TEMPORARY_initialSearchParams

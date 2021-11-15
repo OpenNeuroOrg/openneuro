@@ -1,11 +1,12 @@
 import React, {
   createContext,
-  useState,
+  useReducer,
   useContext,
   FC,
   ReactNode,
 } from 'react'
 import initialSearchParams from './initial-search-params'
+import { searchStateCompare, searchStateReducer } from './search-state-reducer'
 
 export const SearchParamsCtx = createContext(null)
 
@@ -16,9 +17,13 @@ interface SearchParamsProviderProps {
 export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
   children,
 }) => {
-  const [searchParams, setSearchParams] = useState(initialSearchParams)
+  const [searchParams, dispatch] = useReducer(
+    searchStateReducer,
+    initialSearchParams,
+  )
   return (
-    <SearchParamsCtx.Provider value={{ searchParams, setSearchParams }}>
+    <SearchParamsCtx.Provider
+      value={{ searchParams, setSearchParams: dispatch }}>
       {children}
     </SearchParamsCtx.Provider>
   )
@@ -73,68 +78,9 @@ export const removeFilterItem = setSearchParams => (param, value) => {
 }
 
 /**
- * Takes an object with a superset of the following keys and
- * extracts them into a new object
- */
-export const getSelectParams = ({
-  keywords,
-  modality_selected,
-  searchAllDatasets,
-  datasetType_selected,
-  datasetStatus_selected,
-  ageRange,
-  subjectCountRange,
-  authors,
-  gender_selected,
-  date_selected,
-  tasks,
-  diagnosis_selected,
-  section_selected,
-  species_selected,
-  studyDomains,
-  bodyParts,
-  scannerManufacturers,
-  scannerManufacturersModelNames,
-  tracerNames,
-  tracerRadionuclides,
-}) => ({
-  keywords,
-  modality_selected,
-  searchAllDatasets,
-  datasetType_selected,
-  datasetStatus_selected,
-  ageRange,
-  subjectCountRange,
-  authors,
-  gender_selected,
-  date_selected,
-  tasks,
-  diagnosis_selected,
-  section_selected,
-  species_selected,
-  studyDomains,
-  bodyParts,
-  scannerManufacturers,
-  scannerManufacturersModelNames,
-  tracerNames,
-  tracerRadionuclides,
-})
-
-/**
  * Returns true if any search params (not in ignore) have changed from their default state.
  */
 export const useCheckIfParamsAreSelected = (ignore: string[]): boolean => {
   const { searchParams } = useContext(SearchParamsCtx)
-  const selectedParams = getSelectParams(searchParams)
-
-  const someParamsAreSelected = Object.keys(selectedParams).some(key => {
-    if (ignore.includes(key)) return false
-    // check if a search param has been changed from it's initial value
-    else
-      return (
-        JSON.stringify(selectedParams[key]) !==
-        JSON.stringify(initialSearchParams[key])
-      )
-  })
-  return someParamsAreSelected
+  return searchStateCompare(searchParams, initialSearchParams, ignore)
 }
