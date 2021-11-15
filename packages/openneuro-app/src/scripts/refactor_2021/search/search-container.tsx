@@ -148,7 +148,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             numTotalResults={numTotalResults}
           />
         )}
-        renderSortBy={() => <SortBySelect />}
+        renderSortBy={() => <SortBySelect variables={variables} />}
         renderSearchHeader={() => (
           <>
             {portalContent
