@@ -154,6 +154,7 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       'must',
       simpleQueryString(sqsJoinWithAND(keywords), [
+        'id^6',
         'latestSnapshot.readme',
         'latestSnapshot.description.Name^6',
         'latestSnapshot.description.Authors^3',
