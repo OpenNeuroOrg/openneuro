@@ -6,10 +6,6 @@ import * as datalad from './handlers/datalad'
 import * as comments from './handlers/comments'
 import { clientConfig } from './handlers/config.js'
 import * as subscriptions from './handlers/subscriptions'
-import {
-  setFlagRedesign2021,
-  unsetFlagRedesign2021,
-} from './handlers/feature-flags'
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
 import * as orcid from './libs/authentication/orcid.js'
@@ -168,17 +164,6 @@ const routes = [
     method: 'get',
     url: '/sitemap',
     handler: sitemapHandler,
-  },
-  // feature flag setters and unsetters
-  {
-    method: 'get',
-    url: '/feature/redesign-2021/enable',
-    handler: unsetFlagRedesign2021,
-  },
-  {
-    method: 'get',
-    url: '/feature/redesign-2021/disable',
-    handler: setFlagRedesign2021,
   },
 ]
 
