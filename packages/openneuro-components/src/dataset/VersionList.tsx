@@ -37,22 +37,18 @@ export const VersionList = ({
   hasEdit,
   setDeprecatedModalIsOpen,
 }: VersionListProps) => {
-  const [date, setDate] = React.useState(formatDate(new Date()))
   const deprecatedItem = (itemTag, itemCreated) => {
     setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)
     setSelected(itemTag)
-    setDate(formatDate(itemCreated))
   }
   const setVersion = (itemTag, itemCreated) => {
     setSelected(itemTag)
-    setDate(formatDate(itemCreated))
   }
   return (
     <>
       <div className="active-version">
         <div>{selected === 'draft' ? 'Draft' : selected}</div>
-        {selected === 'draft' ? 'Updated' : 'Created'}:{' '}
-        {selected === 'draft' ? dateModified : date}
+        {selected === 'draft' ? 'Updated' : 'Created'}: {dateModified}
       </div>
       {items.length ? (
         <Dropdown
