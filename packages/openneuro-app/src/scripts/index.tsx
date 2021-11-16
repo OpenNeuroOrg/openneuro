@@ -1,18 +1,18 @@
 import React from 'react'
 import Uploader from './refactor_2021/uploader/uploader.jsx'
-import Routes_REFACTOR from './refactor_2021/routes'
+import Routes from './refactor_2021/routes'
 import HeaderContainer from './refactor_2021/containers/header'
 import FooterContainer from './refactor_2021/containers/footer'
 import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
 import { UserModalOpenProvider } from './refactor_2021/user-login-modal-ctx'
 
-const Redesign = (): React.ReactElement => (
+const Index = (): React.ReactElement => (
   <Uploader>
     <SearchParamsProvider>
       <UserModalOpenProvider>
         <div className="sticky-content">
           <HeaderContainer />
-          <Routes_REFACTOR />
+          <Routes />
         </div>
         <div className="sticky-footer">
           <FooterContainer />
@@ -22,4 +22,4 @@ const Redesign = (): React.ReactElement => (
   </Uploader>
 )
 
-export default Redesign
+export default Index

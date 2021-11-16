@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
-import Cookies from 'universal-cookie'
 import cookiesMiddleware from 'universal-cookie-express'
 
 const development = process.env.NODE_ENV === 'development'
