@@ -23,7 +23,7 @@ const SortBySelect: FC<SortBySelectProps> = ({
     Object.keys(variables.query.bool).length === 0 ||
     (Object.keys(variables.query.bool).length === 1 &&
       variables.query.bool?.filter?.every(
-        f => f?.match['latestSnapshot.summary.modalities'],
+        f => f?.match?.['latestSnapshot.summary.modalities'],
       ))
   ) {
     const available = sortBy_available.filter(
