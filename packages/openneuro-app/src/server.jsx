@@ -14,7 +14,6 @@ import { config } from './scripts/config'
 import { mediaStyle } from './scripts/styles/media'
 import { version } from './lerna.json'
 import redesignStyles from '@openneuro/components/page/page.scss'
-import classicStyles from './sass/main.scss'
 import { apm } from './scripts/apm.js'
 
 const RootComponent = ({ cookies, mediaStyle, client, url }) => (
@@ -37,9 +36,6 @@ export async function render(url, cookies) {
     ssrMode: true,
     getAuthorization: () => cookies.get('accessToken'),
   })
-
-  const css =
-    cookies.get('redesign-classic') == 'true' ? classicStyles : redesignStyles
 
   let react = ''
   try {
@@ -65,5 +61,5 @@ export async function render(url, cookies) {
     'base64',
   )
 
-  return { react, apolloState, head, css }
+  return { react, apolloState, head, css: redesignStyles }
 }
