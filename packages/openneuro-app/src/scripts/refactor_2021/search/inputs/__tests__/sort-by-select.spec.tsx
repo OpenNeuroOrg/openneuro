@@ -53,4 +53,31 @@ describe('SortBySelect component', () => {
       'SORT BY: Relevance',
     )
   })
+  it('displays Relevance with age of participants set', () => {
+    searchRender(
+      <SortBySelect
+        variables={{
+          query: {
+            bool: {
+              filter: [
+                {
+                  range: {
+                    'latestSnapshot.summary.subjectMetadata.age': {
+                      gte: 10,
+                      lte: 100,
+                      relation: 'INTERSECTS',
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        }}
+      />,
+      { providerProps },
+    )
+    expect(screen.getByText('SORT BY:').closest('div')).toHaveTextContent(
+      'SORT BY: Relevance',
+    )
+  })
 })
