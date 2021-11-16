@@ -104,7 +104,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pinst", "npm:2.1.6"],
             ["prettier", "npm:2.4.1"],
             ["react", "npm:17.0.2"],
-            ["ts-jest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.5"],
+            ["ts-jest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.7"],
             ["tsc-watch", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.5.0"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"]
           ],
@@ -26480,6 +26480,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["lodash.memoize", [
+        ["npm:4.1.2", {
+          "packageLocation": "./.yarn/cache/lodash.memoize-npm-4.1.2-0e6250041f-080c1095b7.zip/node_modules/lodash.memoize/",
+          "packageDependencies": [
+            ["lodash.memoize", "npm:4.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["lodash.once", [
         ["npm:4.1.1", {
           "packageLocation": "./.yarn/cache/lodash.once-npm-4.1.1-d8ba329ead-236e00ca5f.zip/node_modules/lodash.once/",
@@ -32721,7 +32730,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["pinst", "npm:2.1.6"],
             ["prettier", "npm:2.4.1"],
             ["react", "npm:17.0.2"],
-            ["ts-jest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.5"],
+            ["ts-jest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.7"],
             ["tsc-watch", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.5.0"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"]
           ],
@@ -35277,17 +35286,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["ts-jest", [
-        ["npm:27.0.5", {
-          "packageLocation": "./.yarn/cache/ts-jest-npm-27.0.5-9336f30efa-0f7479a6c9.zip/node_modules/ts-jest/",
+        ["npm:27.0.7", {
+          "packageLocation": "./.yarn/cache/ts-jest-npm-27.0.7-ed0add2515-bfb3af9134.zip/node_modules/ts-jest/",
           "packageDependencies": [
-            ["ts-jest", "npm:27.0.5"]
+            ["ts-jest", "npm:27.0.7"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.5", {
-          "packageLocation": "./.yarn/$$virtual/ts-jest-virtual-dc380df70d/0/cache/ts-jest-npm-27.0.5-9336f30efa-0f7479a6c9.zip/node_modules/ts-jest/",
+        ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.7", {
+          "packageLocation": "./.yarn/$$virtual/ts-jest-virtual-9fa1731e5b/0/cache/ts-jest-npm-27.0.7-ed0add2515-bfb3af9134.zip/node_modules/ts-jest/",
           "packageDependencies": [
-            ["ts-jest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.5"],
+            ["ts-jest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:27.0.7"],
             ["@babel/core", "npm:7.15.5"],
             ["@types/babel-jest", null],
             ["@types/babel__core", "npm:7.1.16"],
@@ -35300,7 +35309,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest", "npm:26.6.3"],
             ["jest-util", "npm:27.2.0"],
             ["json5", "npm:2.2.0"],
-            ["lodash", "npm:4.17.21"],
+            ["lodash.memoize", "npm:4.1.2"],
             ["make-error", "npm:1.3.6"],
             ["semver", "npm:7.3.5"],
             ["typescript", "patch:typescript@npm%3A4.0.6#builtin<compat/typescript>::version=4.0.6&hash=a45b0e"],

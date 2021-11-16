@@ -10606,7 +10606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codecov@npm:^3.0.0":
+"codecov@npm:3.8.3":
   version: 3.8.3
   resolution: "codecov@npm:3.8.3"
   dependencies:
@@ -18568,6 +18568,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lodash.memoize@npm:4.x":
+  version: 4.1.2
+  resolution: "lodash.memoize@npm:4.1.2"
+  checksum: 080c1095b7795b293a06078737550dc0c8138192cadbafb4e4b1303357d367ac589a1a570fad8de154175b008ca7b2b48d6a7f1755a143e13b764e20a7104080
+  languageName: node
+  linkType: hard
+
 "lodash.once@npm:^4.0.0, lodash.once@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
@@ -18622,7 +18629,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.x, lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0, lodash@npm:~4.17.21":
+"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0, lodash@npm:~4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 4983720b9abca930a4a46f18db163d7dad8dd00dbed6db0cc7b499b33b717cce69f80928b27bbb1ff2cbd3b19d251ee90669a8b5ea466072ca81c2ebe91e7468
@@ -23732,7 +23739,7 @@ resolve@^2.0.0-next.3:
     "@typescript-eslint/eslint-plugin": ^4.19.0
     "@typescript-eslint/parser": ^4.19.0
     babel-eslint: 10.0.3
-    codecov: ^3.0.0
+    codecov: 3.8.3
     core-js: ^3.3.2
     eslint: 7.23.0
     eslint-config-prettier: ^8.1.0
@@ -23748,7 +23755,7 @@ resolve@^2.0.0-next.3:
     pinst: ^2.1.6
     prettier: ^2.2.1
     react: 17.0.2
-    ts-jest: ^27.0.3
+    ts-jest: ^27.0.7
     tsc-watch: ^4.2.9
     typescript: 4.0.6
   dependenciesMeta:
@@ -26029,15 +26036,15 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^27.0.3":
-  version: 27.0.5
-  resolution: "ts-jest@npm:27.0.5"
+"ts-jest@npm:^27.0.7":
+  version: 27.0.7
+  resolution: "ts-jest@npm:27.0.7"
   dependencies:
     bs-logger: 0.x
     fast-json-stable-stringify: 2.x
     jest-util: ^27.0.0
     json5: 2.x
-    lodash: 4.x
+    lodash.memoize: 4.x
     make-error: 1.x
     semver: 7.x
     yargs-parser: 20.x
@@ -26056,7 +26063,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: 0f7479a6c967f192d9be8bf8ac75498f41cc03964ed7fa6f3ae826080bf8ddb1e2f1e59cda34342a99c44c2fff4b7350019dd4f963fa059af694de4196054576
+  checksum: bfb3af9134f524a5307f7d02b49c3d77bf41b76d1d32bdc062c9bbbd62efe637e3a077178f23d18f850b291bcd7328f81b772245995de9c9cdf9edf0727795da
   languageName: node
   linkType: hard
 
