@@ -6,8 +6,8 @@ import { Query } from '@apollo/client/react/components'
 import { gql } from '@apollo/client'
 import parseISO from 'date-fns/parseISO'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import Input from '../../common/forms/input.jsx'
-import Spinner from '../../common/partials/spinner.jsx'
+import { Input } from '@openneuro/components/input'
+import { Loading } from '@openneuro/components/loading'
 import { formatDate } from '../../utils/date.js'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings.js'
@@ -25,7 +25,7 @@ export const GET_USERS = gql`
 
 export const UsersQueryResult = ({ loading, data, refetch }) => {
   if (loading) {
-    return <Spinner active message="Loading users" />
+    return <Loading />
   } else {
     return (
       <Users loading={loading} users={data.users || []} refetch={refetch} />
@@ -106,9 +106,10 @@ class Users extends React.Component {
             <h2>Current Users</h2>
 
             <Input
-              className="pull-right"
+              name="Search Name Or Email"
+              type="text"
               placeholder="Search Name or Email"
-              onChange={e => this.setState({ stringFilter: e.target.value })}
+              onKeyDown={e => this.setState({ stringFilter: e.target.value })}
             />
           </div>
 
@@ -167,11 +168,7 @@ class Users extends React.Component {
   // custom methods -----------------------------------------------------
 
   _noResults() {
-    return this.state.loading ? (
-      <Spinner active message="Loading users" />
-    ) : (
-      <h4>No Results Found</h4>
-    )
+    return this.state.loading ? <Loading /> : <h4>No Results Found</h4>
   }
 
   _userSummary(user) {

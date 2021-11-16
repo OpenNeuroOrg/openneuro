@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from 'react'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import WarnButton from '../../common/forms/warn-button.jsx'
+import { WarnButton } from '@openneuro/components/warn-button'
 import { getProfile } from '../authentication/profile.js'
 import { useCookies } from 'react-cookie'
 import { USER_FRAGMENT } from './user-fragment'
@@ -46,10 +46,9 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
                 <WarnButton
                   message="Admin"
                   icon={adminIcon}
-                  action={(cb): void => {
+                  onConfirmedClick={(): void => {
                     setAdmin().then(() => {
                       refetch()
-                      cb()
                     })
                   }}
                 />
@@ -64,10 +63,9 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
                 <WarnButton
                   message="Block"
                   icon={blacklistIcon}
-                  action={(cb): void => {
+                  onConfirmedClick={(): void => {
                     setBlocked().then(() => {
                       refetch()
-                      cb()
                     })
                   }}
                 />

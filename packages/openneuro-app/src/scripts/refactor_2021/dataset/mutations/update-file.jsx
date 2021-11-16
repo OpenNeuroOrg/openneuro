@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import UploaderContext from '../../uploader/uploader-context.js'
-import Tooltip from '../../../common/partials/tooltip.jsx'
+import { Tooltip } from '@openneuro/components/tooltip'
 
 const UpdateFile = ({
   datasetId,
