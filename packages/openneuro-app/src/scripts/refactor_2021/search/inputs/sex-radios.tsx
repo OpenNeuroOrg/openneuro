@@ -3,29 +3,29 @@ import { SearchParamsCtx } from '../search-params-ctx'
 import { FacetRadio } from '@openneuro/components/facets'
 import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 
-const GenderRadios: FC = () => {
+const SexRadios: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
-  const { gender_available, gender_selected } = searchParams
-  const setGender = gender_selected =>
+  const { sex_available, sex_selected } = searchParams
+  const setSex = sex_selected =>
     setSearchParams(prevState => ({
       ...prevState,
-      gender_selected,
+      sex_selected,
     }))
 
   return (
     <AccordionWrap className="facet-accordion">
-      <AccordionTab startOpen={false} label="Gender" accordionStyle="plain">
+      <AccordionTab startOpen={false} label="Sex" accordionStyle="plain">
         <FacetRadio
-          selected={gender_selected}
-          setSelected={setGender}
-          radioArr={gender_available}
+          selected={sex_selected}
+          setSelected={setSex}
+          radioArr={sex_available}
           layout="row"
-          name="Gender"
+          name="Sex"
         />
       </AccordionTab>
     </AccordionWrap>
   )
 }
 
-export default GenderRadios
+export default SexRadios

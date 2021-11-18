@@ -120,7 +120,7 @@ export const author_pi_list = [
   },
 ]
 
-export const gender_list = [
+export const sex_list = [
   { label: 'All', value: 'All' },
   { label: 'Male', value: 'Male' },
   { label: 'Female', value: 'Female' },

@@ -108,7 +108,7 @@ export const flattenedModalities = modality_available.reduce(
   [] as ModalityOption[],
 )
 
-export const gender_list = [
+export const sex_list = [
   { label: 'All', value: 'All' },
   { label: 'Male', value: 'Male' },
   { label: 'Female', value: 'Female' },
@@ -139,8 +139,8 @@ export interface SearchParams {
   tasks: string[]
   authors: string[]
   // more
-  gender_available: string[]
-  gender_selected: string | null
+  sex_available: string[]
+  sex_selected: string | null
   date_available: string[]
   date_selected: string | null
   species_available: string[]
@@ -175,8 +175,8 @@ const initialSearchParams: SearchParams = {
   tasks: [],
   authors: [],
   // more
-  gender_available: [],
-  gender_selected: null,
+  sex_available: [],
+  sex_selected: null,
   date_available: [],
   date_selected: null,
   species_available: [],
@@ -216,8 +216,8 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   tasks: [],
   authors: [],
   // more
-  gender_available: ['All', 'Male', 'Female'],
-  gender_selected: 'All',
+  sex_available: ['All', 'Male', 'Female'],
+  sex_selected: 'All',
   date_available: [
     'All Time',
     'Last 30 days',

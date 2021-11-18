@@ -7,7 +7,7 @@ import SubjectCountRangeInput from './subject-count-range-input'
 import DiagnosisSelect from './diagnosis-select'
 import TaskInput from './task-input'
 import AuthorInput from './author-input'
-import GenderRadios from './gender-radios'
+import SexRadios from './sex-radios'
 import DateRadios from './date-radios'
 import SpeciesSelect from './species-select'
 import SectionSelect from './section-select'
@@ -29,7 +29,7 @@ export {
   DiagnosisSelect,
   TaskInput,
   AuthorInput,
-  GenderRadios,
+  SexRadios,
   DateRadios,
   SpeciesSelect,
   SectionSelect,
