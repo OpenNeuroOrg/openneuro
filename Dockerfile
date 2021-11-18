@@ -5,7 +5,3 @@ WORKDIR /srv
 COPY . /srv
 
 RUN yarn install && yarn tsc -b
-
-FROM dependencies as tests
-
-RUN yarn test

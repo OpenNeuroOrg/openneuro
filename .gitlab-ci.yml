@@ -1,5 +1,6 @@
 variables:
   DOCKER_AUTH_CONFIG: '{ "auths": { "https://index.docker.io/v1/": { "auth": "$DOCKER_AUTH" } }}'
+  CODECOV_TOKEN: "e817c2c7-f6e8-4e04-a8a6-bb0929947f05"
 
 image: docker
 
@@ -9,6 +10,7 @@ services:
 stages:
   - dependencies
   - test
+  - package
   - deploy
 
 # Build base image for nodejs
@@ -17,12 +19,21 @@ setup_nodejs:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE/node:latest || true
-    - docker build --target tests --cache-from $CI_REGISTRY_IMAGE/node:latest --tag $CI_REGISTRY_IMAGE/node:latest --tag $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA .
+    - docker build --cache-from $CI_REGISTRY_IMAGE/node:latest --tag $CI_REGISTRY_IMAGE/node:latest --tag $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/node:latest
 
-build_server:
+test_nodejs:
   stage: test
+  needs: ["setup_nodejs"]
+  script:
+    - ci_env=$(/bin/sh ./scripts/codecov-env)
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/node:latest || true
+    - docker run $ci_env -e CI=true $CI_REGISTRY_IMAGE/node:$CI_COMMIT_SHA yarn ci-coverage
+
+build_server:
+  stage: package
   needs: ["setup_nodejs"]
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -34,7 +45,7 @@ build_server:
     - docker push $CI_REGISTRY_IMAGE/server:latest
 
 build_app:
-  stage: test
+  stage: package
   needs: ["setup_nodejs"]
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -46,7 +57,7 @@ build_app:
     - docker push $CI_REGISTRY_IMAGE/app:latest
 
 build_indexer:
-  stage: test
+  stage: package
   needs: ["setup_nodejs"]
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -58,19 +69,29 @@ build_indexer:
     - docker push $CI_REGISTRY_IMAGE/indexer:latest
 
 build_datalad_service:
-  stage: test
+  stage: dependencies
   needs: []
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cd services/datalad
     - docker pull $CI_REGISTRY_IMAGE/datalad-service:latest || true
-    - docker build --target tests --cache-from $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA .
+    - docker build --cache-from $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/datalad-service:latest
 
+test_datalad_service:
+  stage: test
+  needs: ["build_datalad_service"]
+  script:
+    - ci_env=$(/bin/sh ./scripts/codecov-env)
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA || true
+    - docker run $ci_env -e CI=true $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA /bin/sh -c "pipenv install --keep-outdated --dev && pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests && curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x ./codecov && ./codecov -f coverage.xml"
+
+
 deploy_docker_images:
   stage: deploy
-  needs: ["build_app", "build_indexer", "build_server", "build_datalad_service"]
+  needs: ["build_app", "build_indexer", "build_server", "build_datalad_service", "test_nodejs", "test_datalad_service"]
   only:
     - tags
   script:

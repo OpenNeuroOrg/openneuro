@@ -5,7 +5,6 @@ verify_ssl = true
 
 [dev-packages]
 datalad = "==0.13.3"
-codecov = "*"
 pytest = "*"
 coverage = "*"
 mock = "*"
@@ -28,6 +27,7 @@ boto3 = "*"
 elasticsearch = "*"
 pygit2 = "*"
 pygithub = "==1.54.1"
+codecov = "*"
 
 [packages.sentry-sdk]
 extras = [ "falcon",]
