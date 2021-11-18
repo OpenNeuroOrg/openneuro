@@ -36,7 +36,7 @@ export const removeFilterItem = setSearchParams => (param, value) => {
     case 'datasetStatus_selected':
     case 'ageRange':
     case 'subjectCountRange':
-    case 'sex_elected':
+    case 'sex_selected':
     case 'date_selected':
     case 'diagnosis_selected':
     case 'section_selected':
@@ -85,7 +85,7 @@ export const getSelectParams = ({
   ageRange,
   subjectCountRange,
   authors,
-  sex_elected,
+  sex_selected,
   date_selected,
   tasks,
   diagnosis_selected,
@@ -106,7 +106,7 @@ export const getSelectParams = ({
   ageRange,
   subjectCountRange,
   authors,
-  sex_elected,
+  sex_selected,
   date_selected,
   tasks,
   diagnosis_selected,
