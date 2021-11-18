@@ -14,7 +14,7 @@ export interface FiltersBlockProps {
   ageRange?: [number, number]
   subjectCountRange?: [number, number]
   authors: string[]
-  gender_selected?: string
+  sex_selected?: string
   date_selected?: string
   tasks: string[]
   diagnosis_selected?: FacetSelectValueType
@@ -43,7 +43,7 @@ export const FiltersBlock = ({
   ageRange,
   subjectCountRange,
   authors,
-  gender_selected,
+  sex_selected,
   tasks,
   diagnosis_selected,
   section_selected,
@@ -146,10 +146,10 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem()}
           />
         )}
-        {gender_selected && (
+        {sex_selected && (
           <FilterListItem
             type="Gender"
-            item={{ param: 'gender_selected', value: gender_selected }}
+            item={{ param: 'sex_selected', value: sex_selected }}
             removeFilterItem={removeFilterItem()}
           />
         )}

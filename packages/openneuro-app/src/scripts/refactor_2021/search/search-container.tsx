@@ -20,7 +20,7 @@ import {
   DiagnosisSelect,
   TaskInput,
   AuthorInput,
-  GenderRadios,
+  SexRadios,
   DateRadios,
   SpeciesSelect,
   SectionSelect,
@@ -173,7 +173,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <DiagnosisSelect />
             <TaskInput />
             <AuthorInput />
-            <GenderRadios />
+            <SexRadios />
             <DateRadios />
             <SpeciesSelect />
             <SectionSelect />

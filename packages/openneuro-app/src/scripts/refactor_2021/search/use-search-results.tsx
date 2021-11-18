@@ -136,7 +136,7 @@ export const useSearchResults = () => {
     diagnosis_selected,
     tasks,
     authors,
-    gender_selected,
+    sex_selected,
     date_selected,
     species_selected,
     section_selected,
@@ -237,10 +237,10 @@ export const useSearchResults = () => {
         '3',
       ),
     )
-  if (gender_selected !== 'All')
+  if (sex_selected !== 'All')
     boolQuery.addClause(
       'filter',
-      matchQuery('latestSnapshot.summary.subjectMetadata.sex', gender_selected),
+      matchQuery('latestSnapshot.summary.subjectMetadata.sex', sex_selected),
     )
   if (date_selected !== 'All Time') {
     let d: number
