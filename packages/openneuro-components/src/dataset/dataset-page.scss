@@ -15,6 +15,13 @@
     }
     .hexagon-wrapper {
       margin-right: 10px;
+      @media (max-width: 767px) {
+        width: 75px;
+        height: 75px;
+        div.label {
+          font-size: 20px;
+        }
+      }
     }
   }
 
