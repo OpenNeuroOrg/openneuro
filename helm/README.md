@@ -4,16 +4,17 @@ name: Kubernetes Deployment
 
 # OpenNeuro Kubernetes Deployment
 
-This chart is used to deploy a copy of OpenNeuro and all required services except for MongoDB.
+This chart is used to deploy a copy of OpenNeuro and all required services excluding any CDN, MongoDB, and ElasticSearch.
+
+On AWS, this chart is deployed using Amazon's managed Kubernetes service (EKS). An ingress creates the load balancer routing to backend services and this is fronted by CloudFront for caching.
 
 Written for Helm 3.0.0 or later
 
 ## Major components
 
-- API deployment - GraphQL service (openneuro-server npm package)
+- API deployment - GraphQL service (@openneuro/server npm package)
 - DataLad service deployment - Falcon server for microservice operations on datasets
-- Dataset worker - Celery workers responsible for read and write operations on datasets
-- Web deployment - static resources including the React application (openneuro-app npm package)
+- Web deployment - SSR and static resources including the React application (@openneuro/app npm package)
 
 ## Pre-requisites
 
