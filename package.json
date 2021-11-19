@@ -71,12 +71,13 @@
     "collectCoverageFrom": [
       "**/*.{js,jsx,ts,tsx}",
       "!**/papaya.js",
-      "!**/*.spec.js",
+      "!**/*.spec.{js,jsx,ts,tsx}",
       "!**/node_modules/**",
       "!**/vendor/**",
       "!**/.yarn/**",
       "!**/dist/**",
-      "!**/*.d.ts"
+      "!**/*.d.ts",
+      "!**/mock-content/**"
     ],
     "coverageProvider": "v8",
     "testPathIgnorePatterns": [
