@@ -8,7 +8,8 @@ import Helmet from 'react-helmet'
 import { Loading } from '@openneuro/components/loading'
 import { Link } from 'react-router-dom'
 import { pageTitle } from '../../resources/strings.js'
-import { unescapePath } from '../../file-tree/file-tree.jsx'
+
+export const unescapePath = path => path.replace(/:/g, '/')
 
 export const FLAGGED_FILES = gql`
   query flaggedFiles($flagged: Boolean, $deleted: Boolean) {
