@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateDatasetPermissions mutation renders with default props 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Share"
+    class="on-button on-button--small on-button--primary  btn-modal-action"
+    role="button"
+    type="button"
+  >
+    Share
+  </button>
+</DocumentFragment>
+`;
+
+exports[`UpdateDatasetPermissions mutation renders with typical props 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Share"
+    class="on-button on-button--small on-button--primary  btn-modal-action"
+    role="button"
+    type="button"
+  >
+    Share
+  </button>
+</DocumentFragment>
+`;

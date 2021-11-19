@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SaveButton component renders with default props 1`] = `
+<Button
+  className="description-btn description-button-save"
+  icon="fas fa-check"
+  label="Save"
+  onClick={[Function]}
+/>
+`;

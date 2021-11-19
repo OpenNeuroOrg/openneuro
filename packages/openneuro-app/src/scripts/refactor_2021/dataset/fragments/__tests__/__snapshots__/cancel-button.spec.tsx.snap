@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CancelButton component renders with default props 1`] = `
+<Button
+  className="description-btn description-button-cancel"
+  icon="fas fa-times"
+  label="Cancel"
+  onClick={[Function]}
+/>
+`;

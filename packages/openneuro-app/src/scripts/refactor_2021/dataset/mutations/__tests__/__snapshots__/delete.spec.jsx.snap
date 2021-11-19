@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeleteDataset mutation renders with common props 1`] = `
+<DocumentFragment>
+  <span>
+    <button
+      class="on-button on-button--primary on-button--small"
+    >
+      <i
+        class="fa fa-trash"
+      />
+       Delete Dataset
+    </button>
+  </span>
+</DocumentFragment>
+`;
+
+exports[`DeleteDir mutation renders with common props 1`] = `
+<DocumentFragment>
+  <span
+    class="delete-file"
+  >
+    <div
+      class="warn-btn edit-file"
+    >
+      <span
+        class=" "
+        data-flow="up"
+        data-tooltip="Delete undefined"
+      >
+        <span
+          class="warn-btn-click"
+        >
+          <button
+            aria-label=""
+            class="on-button on-button--medium on-button--default  btn-warn-component"
+            role="button"
+            type="button"
+          >
+            <i
+              aria-hidden="true"
+              class="fa fa-trash css-1qxtz39"
+            />
+          </button>
+        </span>
+      </span>
+    </div>
+  </span>
+</DocumentFragment>
+`;

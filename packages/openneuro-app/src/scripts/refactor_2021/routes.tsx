@@ -15,7 +15,7 @@ import { PETRedirect } from '../pet/redirect'
 import Citation from '../pages/citation-page'
 import FourOFourPage from '../errors/404page'
 
-const Routes = () => (
+const Routes: React.VoidFunctionComponent = () => (
   <Switch>
     <Route name="faq" exact path="/faq" component={FAQS} />
     <Route name="front-page" exact path="/" component={FrontPageContainer} />

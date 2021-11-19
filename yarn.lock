@@ -2545,7 +2545,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.15.4
   resolution: "@babel/runtime@npm:7.15.4"
   dependencies:
@@ -4349,19 +4349,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@loadable/component@npm:^5.7.0":
-  version: 5.15.0
-  resolution: "@loadable/component@npm:5.15.0"
-  dependencies:
-    "@babel/runtime": ^7.7.7
-    hoist-non-react-statics: ^3.3.1
-    react-is: ^16.12.0
-  peerDependencies:
-    react: ">=16.3.0"
-  checksum: 6512784fdb1e779e708b19078bebdb2cc716690a83814d69ce058253c9a48f5d264d73da01b48d38c94920e6a1004c9f5a8c141058c771622d3ef31af923976f
-  languageName: node
-  linkType: hard
-
 "@mdx-js/loader@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/loader@npm:1.6.22"
@@ -4643,7 +4630,6 @@ __metadata:
     "@emotion/styled": ^10.0.4
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
-    "@loadable/component": ^5.7.0
     "@openneuro/client": ^4.2.0
     "@openneuro/components": ^4.2.0
     "@testing-library/jest-dom": ^5.11.4
@@ -4662,10 +4648,8 @@ __metadata:
     bids-validator: 1.8.4
     bytes: ^3.0.0
     comlink: ^4.0.5
-    connect-history-api-fallback: ^1.5.0
     core-js: ^3.3.2
     cross-fetch: ^3.1.4
-    crypto-hash: ^1.3.0
     date-fns: ^2.16.1
     draft-js: ^0.11.7
     email-validator: ^2.0.4
@@ -4679,13 +4663,11 @@ __metadata:
     jsdom: ^16.5.3
     jwt-decode: ^2.2.0
     markdown-to-jsx: ^7.1.2
-    md5: ^2.3.0
     object.fromentries: ^2.0.0
     os-browserify: ^0.3.0
     pluralize: 8.0.0
     prop-types: ^15.6.0
     react: ^17.0.1
-    react-addons-test-utils: ^15.6.2
     react-cookie: 4.0.3
     react-copy-to-clipboard: ^5.0.1
     react-dom: ^17.0.1
@@ -4703,12 +4685,10 @@ __metadata:
     semver: ^5.5.0
     stream-browserify: ^3.0.0
     subscriptions-transport-ws: ^0.9.9
-    superagent: ^3.6.0
     typescript: 4.0.6
     universal-cookie: ^4.0.4
     universal-cookie-express: ^4.0.3
     url-search-params-polyfill: ^2.0.1
-    urlite: ^1.2.8
     vite: 2.3.1
     xmldoc: ^1.1.0
   languageName: unknown
@@ -4785,7 +4765,6 @@ __metadata:
     "@testing-library/react": ^11.1.0
     "@types/bytes": ^3
     "@types/jest": ^26.0.23
-    "@types/md5": ^2
     "@types/mdx-js__react": ^1
     "@types/prop-types": ^15
     "@types/react": ^17.0.11
@@ -4801,7 +4780,6 @@ __metadata:
     date-fns: ^2.21.1
     jest: ^27.0.4
     markdown-to-jsx: ^7.1.3
-    md5: ^2.3.0
     pluralize: ^8.0.0
     prop-types: ^15.7.2
     react: ^17.0.1
@@ -6862,15 +6840,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 9f2c38e9399e4de5c6114ed2c102b07cad38276f3ecdf527adad762daa173d065b21de1b6dca0d527167d386d1960632e5048b4740944eabf5c38e86a5bc61fe
-  languageName: node
-  linkType: hard
-
-"@types/md5@npm:^2":
-  version: 2.3.1
-  resolution: "@types/md5@npm:2.3.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: 984b07badf3d9f83120996d301f7b6cb861930cb9f9be66cdab30654fad73b307491a5038c4af319896cd1b36ed3d59e6ce49bb4c2287654ea14bab04b5a76c6
   languageName: node
   linkType: hard
 
@@ -10242,13 +10211,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"charenc@npm:0.0.2":
-  version: 0.0.2
-  resolution: "charenc@npm:0.0.2"
-  checksum: ff8199e90334dc7bb60a9fe0aa2bef3e72b1d125e801151459db1cf1c9b77c437ad4a5d9248ee0003720bcb537a90787a53f6e2e1613dbf5fba46f59d5547307
-  languageName: node
-  linkType: hard
-
 "cheerio-select@npm:^1.5.0":
   version: 1.5.0
   resolution: "cheerio-select@npm:1.5.0"
@@ -10851,13 +10813,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"connect-history-api-fallback@npm:^1.5.0":
-  version: 1.6.0
-  resolution: "connect-history-api-fallback@npm:1.6.0"
-  checksum: 298f60415d5f5480b76f98d8bf83737cae9f05921e3d3479452cae34ed3498fab35a1c4c8f19ca5b327bbbe759098f5f6e5fc097d829f607d0d642b075c93e21
-  languageName: node
-  linkType: hard
-
 "console-browserify@npm:1.1.x":
   version: 1.1.0
   resolution: "console-browserify@npm:1.1.0"
@@ -11323,13 +11278,6 @@ __metadata:
     shebang-command: ^1.2.0
     which: ^1.2.9
   checksum: 05fbbf957d9b81dc05fd799a238f6aacc2e7cc9783fff3f0e00439a97d6f269c90482571cbf1eeea17200fd119161a2d1f88aa49a8110b176e04f2a70825284f
-  languageName: node
-  linkType: hard
-
-"crypt@npm:0.0.2":
-  version: 0.0.2
-  resolution: "crypt@npm:0.0.2"
-  checksum: 1ad9c8439ad26eef21ca130df3e79fff4915e839167efde163891b935ffb41742bfbc359bb00ae8b1ff205db52e7fb0e32326b84b7f977cd6e6a279eed9dc742
   languageName: node
   linkType: hard
 
@@ -15983,7 +15931,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"is-buffer@npm:^1.1.5, is-buffer@npm:~1.1.6":
+"is-buffer@npm:^1.1.5":
   version: 1.1.6
   resolution: "is-buffer@npm:1.1.6"
   checksum: 336ec78f00e88efe6ff6f1aa08d06aadb942a6cd320e5f538ac00648378fb964743b3737c88ce7ce8741c067e4a3b78f596b83ee1a3c72dc2885ea0b03dc84f2
@@ -18953,17 +18901,6 @@ fsevents@^1.2.7:
     inherits: ^2.0.1
     safe-buffer: ^5.1.2
   checksum: ca0b260ea29746f1017ad16bc0e164299ae453d2d6a24d635cc6ec03e280f350b09faa4899bfed9387c81457ca55981e9a684336d89faa94b1d2a01903fae2ec
-  languageName: node
-  linkType: hard
-
-"md5@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "md5@npm:2.3.0"
-  dependencies:
-    charenc: 0.0.2
-    crypt: 0.0.2
-    is-buffer: ~1.1.6
-  checksum: ba00eaf2b7ca49bb7ba67b8ded5db45ecfba4e85694f30cb0b720051936af5337bbd350865357b91580ecb0f7053df658381d50cb689f22135dfa345c52d61cc
   languageName: node
   linkType: hard
 
@@ -22237,15 +22174,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-addons-test-utils@npm:^15.6.2":
-  version: 15.6.2
-  resolution: "react-addons-test-utils@npm:15.6.2"
-  peerDependencies:
-    react-dom: ^15.4.2
-  checksum: e60f9a8080747f8f8e6bbd70c35009e632b5a859e2e8682a7aa64905f665b7bcdb2d8c057805d488f9ba00b0ea5ac2c1a271bcace419a993546847f8b317e9e0
-  languageName: node
-  linkType: hard
-
 "react-calendar@npm:^3.3.1":
   version: 3.4.0
   resolution: "react-calendar@npm:3.4.0"
@@ -25214,7 +25142,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"superagent@npm:^3.6.0, superagent@npm:^3.8.2, superagent@npm:^3.8.3":
+"superagent@npm:^3.8.2, superagent@npm:^3.8.3":
   version: 3.8.3
   resolution: "superagent@npm:3.8.3"
   dependencies:
@@ -26692,13 +26620,6 @@ typescript@4.0.6:
   dependencies:
     fast-url-parser: ^1.1.3
   checksum: 162baa915f4e01bb2d9209580ccf5478e1f18769745751b4bd56ae11c4c02b8a915e907f548b1ee41a27a877f7a21f5f08b68345745b997591e256ed2fb4e464
-  languageName: node
-  linkType: hard
-
-"urlite@npm:^1.2.8":
-  version: 1.2.8
-  resolution: "urlite@npm:1.2.8"
-  checksum: 03a4ac0d01930fb5584bb1766a299b3ff5c34a0e97ce80613e92e45116db8a95ed8571ac31b6e338c56ec154b0fc304ef66205ae2c620d82d1ec97b625e1d66f
   languageName: node
   linkType: hard
 

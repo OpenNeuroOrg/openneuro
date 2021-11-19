@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`dataset/download/DownloadDataset renders successfully 1`] = `
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
-`;
