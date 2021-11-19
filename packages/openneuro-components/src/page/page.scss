@@ -187,51 +187,6 @@
   }
 }
 
-// TODO Delete feedback form stuff after release
-.feedback-form {
-  .required {
-    color: #f10;
-  }
-}
-.feedback-form h3 {
-  margin: 30px 0 15px;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  color: #444;
-}
-
-.feedback-form .feedback-input {
-  width: 100%;
-  margin-bottom: 10px;
-  line-height: 1.5;
-}
-
-.feedback-input + label {
-  margin-right: 15px;
-}
-
-.open-feedback-modal-button {
-  position: fixed;
-  bottom: 59px;
-  right: 5px;
-  z-index: 9000;
-  @media (max-width: 767px) {
-    font-size: 14px;
-    padding: 8px;
-    left: 0;
-    right: 0;
-    width: 100%;
-    bottom: 0;
-  }
-}
-
-@media (max-width: 767px) {
-  .sticky-footer {
-    margin-bottom: 120px;
-  }
-}
-
 .feedback-form.feedback-modal .grid.modal {
   width: 670px;
   max-height: 80%;
@@ -251,12 +206,6 @@
 }
 .dataset-header .description-btn {
   color: var(--current-theme-primary-light);
-  // &.description-button-edit {
-  // }
-  // &.description-button-save {
-  // }
-  // &.description-button-cancel {
-  // }
 }
 
 .edit-list-group-item,
@@ -306,11 +255,7 @@
   .accordion-item.collapsed {
     display: none;
   }
-  // .filetree-header {
-  //   margin: 0 0 0 10px;
-  //   padding: 10px 0;
-  //   border-bottom: 1px solid #e3e3e3;
-  // }
+
   .filetree-item {
     list-style-type: none;
     padding: 10px 0 10px 15px;
@@ -450,38 +395,6 @@
       }
     }
 
-    // .delete-file.bulk-delete {
-    //   margin-left: auto;
-    //   display: flex;
-    //   .warn-btn-click button {
-    //     font-size: 14px;
-    //     i {
-    //       font-size: 14px;
-    //     }
-    //   }
-    //   span.bulk-delete-count {
-    //     margin-left: 5px;
-    //   }
-    // }
-    // .edit-file input,
-    // .delete-file input {
-    //   opacity: 0;
-    //   filter: alpha(opacity=0);
-    //   position: absolute;
-    //   cursor: pointer;
-    //   left: 0;
-    //   right: 0;
-    //   bottom: 0;
-    //   top: 0;
-    //   width: 100%;
-    // }
-    // div.bulk-delete-checkbox-group.delete-file {
-    //   input {
-    //     // opacity: 1;
-    //     // left: 4px;
-    //     // top: 12px;
-    //   }
-    // }
     button.btn-warn-component.success,
     button.btn-warn-component.cancel {
       margin: 0 2px 0;
