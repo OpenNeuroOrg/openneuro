@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditList component renders with default props 1`] = `
+<DocumentFragment>
+  <div
+    class="edit-list-group"
+  >
+    <input
+      class="form-control"
+      type="text"
+      value=""
+    />
+    <button
+      aria-label="Add"
+      class="on-button on-button--small on-button--primary  edit-list-add"
+      role="button"
+      type="button"
+    >
+      Add
+    </button>
+  </div>
+  <div />
+</DocumentFragment>
+`;

@@ -1,19 +1,24 @@
 import React from 'react'
-import Spinner from '../../common/partials/spinner'
+import { Loading } from '@openneuro/components/loading'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import crn from '../../utils/crn.js'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../../resources/strings.js'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
 import { Button } from '@openneuro/components/button'
+import { config } from '../../config'
+
 /**
  * Create API Key
  *
  * Given the current user, creates an api key
  * for use with the standalone CLI
  */
-const createAPIKey = () => {
-  return crn.createAPIKey().then(res => (res && res.body ? res.body.key : null))
+export const createAPIKey = async () => {
+  const req = await fetch(`${config.api}keygen`, {
+    method: 'POST',
+    credentials: 'same-origin',
+  })
+  const res = await req.json()
+  return res?.key
 }
 
 class APIKeyGen extends React.Component {
@@ -51,7 +56,7 @@ class APIKeyGen extends React.Component {
 
   _loadingSpinner() {
     if (this.state.loading) {
-      return <Spinner active={true} />
+      return <Loading />
     } else {
       return null
     }
