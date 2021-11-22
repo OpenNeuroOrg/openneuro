@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dataset/download/ShellExample renders successfully 1`] = `
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
+<Fragment>
+  <Noop />
+  <pre
+    className="css-xak41w"
+  />
+</Fragment>
 `;
