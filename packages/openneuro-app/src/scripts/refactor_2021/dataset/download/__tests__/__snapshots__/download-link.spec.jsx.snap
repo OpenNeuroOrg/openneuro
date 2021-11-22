@@ -8,9 +8,9 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
         "addTypename": true,
         "config": Object {
           "addTypename": true,
+          "canonizeResults": false,
           "dataIdFromObject": [Function],
           "resultCaching": true,
-          "typePolicies": Object {},
         },
         "data": Root {
           "canRead": [Function],
@@ -23,6 +23,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "makeData": [Function],
               "weakness": true,
             },
+            "parent": null,
           },
           "policies": Policies {
             "cache": [Circular],
@@ -30,7 +31,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "cache": [Circular],
               "dataIdFromObject": [Function],
               "possibleTypes": undefined,
-              "typePolicies": Object {},
+              "typePolicies": undefined,
             },
             "fuzzySubtypes": Map {},
             "rootIdsByTypename": Object {
@@ -50,24 +51,68 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           },
           "refs": Object {},
           "rootIds": Object {},
-          "sharedLayerGroup": CacheGroup {
-            "caching": true,
-            "d": [Function],
-            "keyMaker": Trie {
-              "makeData": [Function],
-              "weakness": true,
-            },
-          },
           "storageTrie": Trie {
             "makeData": [Function],
             "weakness": true,
+          },
+          "stump": Stump {
+            "canRead": [Function],
+            "data": Object {},
+            "getFieldValue": [Function],
+            "group": CacheGroup {
+              "caching": true,
+              "d": [Function],
+              "keyMaker": Trie {
+                "makeData": [Function],
+                "weakness": true,
+              },
+              "parent": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": null,
+              },
+            },
+            "id": "EntityStore.Stump",
+            "parent": [Circular],
+            "policies": Policies {
+              "cache": [Circular],
+              "config": Object {
+                "cache": [Circular],
+                "dataIdFromObject": [Function],
+                "possibleTypes": undefined,
+                "typePolicies": undefined,
+              },
+              "fuzzySubtypes": Map {},
+              "rootIdsByTypename": Object {
+                "Mutation": "ROOT_MUTATION",
+                "Query": "ROOT_QUERY",
+                "Subscription": "ROOT_SUBSCRIPTION",
+              },
+              "rootTypenamesById": Object {
+                "ROOT_MUTATION": "Mutation",
+                "ROOT_QUERY": "Query",
+                "ROOT_SUBSCRIPTION": "Subscription",
+              },
+              "supertypeMap": Map {},
+              "toBeAdded": Object {},
+              "typePolicies": Object {},
+              "usingPossibleTypes": false,
+            },
+            "refs": Object {},
+            "replay": [Function],
+            "rootIds": Object {},
+            "toReference": [Function],
           },
           "toReference": [Function],
         },
         "getFragmentDoc": [Function],
         "makeVar": [Function],
         "maybeBroadcastWatch": [Function],
-        "optimisticData": Root {
+        "optimisticData": Stump {
           "canRead": [Function],
           "data": Object {},
           "getFieldValue": [Function],
@@ -78,6 +123,62 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "makeData": [Function],
               "weakness": true,
             },
+            "parent": CacheGroup {
+              "caching": true,
+              "d": [Function],
+              "keyMaker": Trie {
+                "makeData": [Function],
+                "weakness": true,
+              },
+              "parent": null,
+            },
+          },
+          "id": "EntityStore.Stump",
+          "parent": Root {
+            "canRead": [Function],
+            "data": Object {},
+            "getFieldValue": [Function],
+            "group": CacheGroup {
+              "caching": true,
+              "d": [Function],
+              "keyMaker": Trie {
+                "makeData": [Function],
+                "weakness": true,
+              },
+              "parent": null,
+            },
+            "policies": Policies {
+              "cache": [Circular],
+              "config": Object {
+                "cache": [Circular],
+                "dataIdFromObject": [Function],
+                "possibleTypes": undefined,
+                "typePolicies": undefined,
+              },
+              "fuzzySubtypes": Map {},
+              "rootIdsByTypename": Object {
+                "Mutation": "ROOT_MUTATION",
+                "Query": "ROOT_QUERY",
+                "Subscription": "ROOT_SUBSCRIPTION",
+              },
+              "rootTypenamesById": Object {
+                "ROOT_MUTATION": "Mutation",
+                "ROOT_QUERY": "Query",
+                "ROOT_SUBSCRIPTION": "Subscription",
+              },
+              "supertypeMap": Map {},
+              "toBeAdded": Object {},
+              "typePolicies": Object {},
+              "usingPossibleTypes": false,
+            },
+            "refs": Object {},
+            "rootIds": Object {},
+            "storageTrie": Trie {
+              "makeData": [Function],
+              "weakness": true,
+            },
+            "stump": [Circular],
+            "toReference": [Function],
           },
           "policies": Policies {
             "cache": [Circular],
@@ -85,7 +186,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "cache": [Circular],
               "dataIdFromObject": [Function],
               "possibleTypes": undefined,
-              "typePolicies": Object {},
+              "typePolicies": undefined,
             },
             "fuzzySubtypes": Map {},
             "rootIdsByTypename": Object {
@@ -104,19 +205,8 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             "usingPossibleTypes": false,
           },
           "refs": Object {},
+          "replay": [Function],
           "rootIds": Object {},
-          "sharedLayerGroup": CacheGroup {
-            "caching": true,
-            "d": [Function],
-            "keyMaker": Trie {
-              "makeData": [Function],
-              "weakness": true,
-            },
-          },
-          "storageTrie": Trie {
-            "makeData": [Function],
-            "weakness": true,
-          },
           "toReference": [Function],
         },
         "policies": Policies {
@@ -125,7 +215,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             "cache": [Circular],
             "dataIdFromObject": [Function],
             "possibleTypes": undefined,
-            "typePolicies": Object {},
+            "typePolicies": undefined,
           },
           "fuzzySubtypes": Map {},
           "rootIdsByTypename": Object {
@@ -144,9 +234,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           "usingPossibleTypes": false,
         },
         "storeReader": StoreReader {
+          "canon": ObjectCanon {
+            "empty": Object {},
+            "keysByJSON": Map {
+              "[]" => Object {
+                "json": "[]",
+                "sorted": Array [],
+              },
+            },
+            "known": WeakSet {},
+            "passes": WeakMap {},
+            "pool": Trie {
+              "data": Object {
+                "keys": Object {
+                  "json": "[]",
+                  "sorted": Array [],
+                },
+              },
+              "makeData": [Function],
+              "weak": WeakMap {},
+              "weakness": true,
+            },
+          },
           "config": Object {
             "addTypename": true,
             "cache": [Circular],
+            "canonizeResults": false,
           },
           "executeSelectionSet": [Function],
           "executeSubSelectedArray": [Function],
@@ -155,9 +268,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
         "storeWriter": StoreWriter {
           "cache": [Circular],
           "reader": StoreReader {
+            "canon": ObjectCanon {
+              "empty": Object {},
+              "keysByJSON": Map {
+                "[]" => Object {
+                  "json": "[]",
+                  "sorted": Array [],
+                },
+              },
+              "known": WeakSet {},
+              "passes": WeakMap {},
+              "pool": Trie {
+                "data": Object {
+                  "keys": Object {
+                    "json": "[]",
+                    "sorted": Array [],
+                  },
+                },
+                "makeData": [Function],
+                "weak": WeakMap {},
+                "weakness": true,
+              },
+            },
             "config": Object {
               "addTypename": true,
               "cache": [Circular],
+              "canonizeResults": false,
             },
             "executeSelectionSet": [Function],
             "executeSubSelectedArray": [Function],
@@ -166,7 +302,6 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
         },
         "txCount": 0,
         "typenameDocumentCache": Map {},
-        "watchDep": [Function],
         "watches": Set {},
       },
       "clearStoreCallbacks": Array [],
@@ -181,9 +316,9 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           "addTypename": true,
           "config": Object {
             "addTypename": true,
+            "canonizeResults": false,
             "dataIdFromObject": [Function],
             "resultCaching": true,
-            "typePolicies": Object {},
           },
           "data": Root {
             "canRead": [Function],
@@ -196,6 +331,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "makeData": [Function],
                 "weakness": true,
               },
+              "parent": null,
             },
             "policies": Policies {
               "cache": [Circular],
@@ -203,7 +339,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "cache": [Circular],
                 "dataIdFromObject": [Function],
                 "possibleTypes": undefined,
-                "typePolicies": Object {},
+                "typePolicies": undefined,
               },
               "fuzzySubtypes": Map {},
               "rootIdsByTypename": Object {
@@ -223,24 +359,68 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             },
             "refs": Object {},
             "rootIds": Object {},
-            "sharedLayerGroup": CacheGroup {
-              "caching": true,
-              "d": [Function],
-              "keyMaker": Trie {
-                "makeData": [Function],
-                "weakness": true,
-              },
-            },
             "storageTrie": Trie {
               "makeData": [Function],
               "weakness": true,
+            },
+            "stump": Stump {
+              "canRead": [Function],
+              "data": Object {},
+              "getFieldValue": [Function],
+              "group": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": CacheGroup {
+                  "caching": true,
+                  "d": [Function],
+                  "keyMaker": Trie {
+                    "makeData": [Function],
+                    "weakness": true,
+                  },
+                  "parent": null,
+                },
+              },
+              "id": "EntityStore.Stump",
+              "parent": [Circular],
+              "policies": Policies {
+                "cache": [Circular],
+                "config": Object {
+                  "cache": [Circular],
+                  "dataIdFromObject": [Function],
+                  "possibleTypes": undefined,
+                  "typePolicies": undefined,
+                },
+                "fuzzySubtypes": Map {},
+                "rootIdsByTypename": Object {
+                  "Mutation": "ROOT_MUTATION",
+                  "Query": "ROOT_QUERY",
+                  "Subscription": "ROOT_SUBSCRIPTION",
+                },
+                "rootTypenamesById": Object {
+                  "ROOT_MUTATION": "Mutation",
+                  "ROOT_QUERY": "Query",
+                  "ROOT_SUBSCRIPTION": "Subscription",
+                },
+                "supertypeMap": Map {},
+                "toBeAdded": Object {},
+                "typePolicies": Object {},
+                "usingPossibleTypes": false,
+              },
+              "refs": Object {},
+              "replay": [Function],
+              "rootIds": Object {},
+              "toReference": [Function],
             },
             "toReference": [Function],
           },
           "getFragmentDoc": [Function],
           "makeVar": [Function],
           "maybeBroadcastWatch": [Function],
-          "optimisticData": Root {
+          "optimisticData": Stump {
             "canRead": [Function],
             "data": Object {},
             "getFieldValue": [Function],
@@ -251,6 +431,62 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "makeData": [Function],
                 "weakness": true,
               },
+              "parent": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": null,
+              },
+            },
+            "id": "EntityStore.Stump",
+            "parent": Root {
+              "canRead": [Function],
+              "data": Object {},
+              "getFieldValue": [Function],
+              "group": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": null,
+              },
+              "policies": Policies {
+                "cache": [Circular],
+                "config": Object {
+                  "cache": [Circular],
+                  "dataIdFromObject": [Function],
+                  "possibleTypes": undefined,
+                  "typePolicies": undefined,
+                },
+                "fuzzySubtypes": Map {},
+                "rootIdsByTypename": Object {
+                  "Mutation": "ROOT_MUTATION",
+                  "Query": "ROOT_QUERY",
+                  "Subscription": "ROOT_SUBSCRIPTION",
+                },
+                "rootTypenamesById": Object {
+                  "ROOT_MUTATION": "Mutation",
+                  "ROOT_QUERY": "Query",
+                  "ROOT_SUBSCRIPTION": "Subscription",
+                },
+                "supertypeMap": Map {},
+                "toBeAdded": Object {},
+                "typePolicies": Object {},
+                "usingPossibleTypes": false,
+              },
+              "refs": Object {},
+              "rootIds": Object {},
+              "storageTrie": Trie {
+                "makeData": [Function],
+                "weakness": true,
+              },
+              "stump": [Circular],
+              "toReference": [Function],
             },
             "policies": Policies {
               "cache": [Circular],
@@ -258,7 +494,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "cache": [Circular],
                 "dataIdFromObject": [Function],
                 "possibleTypes": undefined,
-                "typePolicies": Object {},
+                "typePolicies": undefined,
               },
               "fuzzySubtypes": Map {},
               "rootIdsByTypename": Object {
@@ -277,19 +513,8 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "usingPossibleTypes": false,
             },
             "refs": Object {},
+            "replay": [Function],
             "rootIds": Object {},
-            "sharedLayerGroup": CacheGroup {
-              "caching": true,
-              "d": [Function],
-              "keyMaker": Trie {
-                "makeData": [Function],
-                "weakness": true,
-              },
-            },
-            "storageTrie": Trie {
-              "makeData": [Function],
-              "weakness": true,
-            },
             "toReference": [Function],
           },
           "policies": Policies {
@@ -298,7 +523,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "cache": [Circular],
               "dataIdFromObject": [Function],
               "possibleTypes": undefined,
-              "typePolicies": Object {},
+              "typePolicies": undefined,
             },
             "fuzzySubtypes": Map {},
             "rootIdsByTypename": Object {
@@ -317,9 +542,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             "usingPossibleTypes": false,
           },
           "storeReader": StoreReader {
+            "canon": ObjectCanon {
+              "empty": Object {},
+              "keysByJSON": Map {
+                "[]" => Object {
+                  "json": "[]",
+                  "sorted": Array [],
+                },
+              },
+              "known": WeakSet {},
+              "passes": WeakMap {},
+              "pool": Trie {
+                "data": Object {
+                  "keys": Object {
+                    "json": "[]",
+                    "sorted": Array [],
+                  },
+                },
+                "makeData": [Function],
+                "weak": WeakMap {},
+                "weakness": true,
+              },
+            },
             "config": Object {
               "addTypename": true,
               "cache": [Circular],
+              "canonizeResults": false,
             },
             "executeSelectionSet": [Function],
             "executeSubSelectedArray": [Function],
@@ -328,9 +576,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           "storeWriter": StoreWriter {
             "cache": [Circular],
             "reader": StoreReader {
+              "canon": ObjectCanon {
+                "empty": Object {},
+                "keysByJSON": Map {
+                  "[]" => Object {
+                    "json": "[]",
+                    "sorted": Array [],
+                  },
+                },
+                "known": WeakSet {},
+                "passes": WeakMap {},
+                "pool": Trie {
+                  "data": Object {
+                    "keys": Object {
+                      "json": "[]",
+                      "sorted": Array [],
+                    },
+                  },
+                  "makeData": [Function],
+                  "weak": WeakMap {},
+                  "weakness": true,
+                },
+              },
               "config": Object {
                 "addTypename": true,
                 "cache": [Circular],
+                "canonizeResults": false,
               },
               "executeSelectionSet": [Function],
               "executeSubSelectedArray": [Function],
@@ -339,7 +610,6 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           },
           "txCount": 0,
           "typenameDocumentCache": Map {},
-          "watchDep": [Function],
           "watches": Set {},
         },
         "client": [Circular],
@@ -353,9 +623,9 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           "addTypename": true,
           "config": Object {
             "addTypename": true,
+            "canonizeResults": false,
             "dataIdFromObject": [Function],
             "resultCaching": true,
-            "typePolicies": Object {},
           },
           "data": Root {
             "canRead": [Function],
@@ -368,6 +638,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "makeData": [Function],
                 "weakness": true,
               },
+              "parent": null,
             },
             "policies": Policies {
               "cache": [Circular],
@@ -375,7 +646,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "cache": [Circular],
                 "dataIdFromObject": [Function],
                 "possibleTypes": undefined,
-                "typePolicies": Object {},
+                "typePolicies": undefined,
               },
               "fuzzySubtypes": Map {},
               "rootIdsByTypename": Object {
@@ -395,24 +666,68 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             },
             "refs": Object {},
             "rootIds": Object {},
-            "sharedLayerGroup": CacheGroup {
-              "caching": true,
-              "d": [Function],
-              "keyMaker": Trie {
-                "makeData": [Function],
-                "weakness": true,
-              },
-            },
             "storageTrie": Trie {
               "makeData": [Function],
               "weakness": true,
+            },
+            "stump": Stump {
+              "canRead": [Function],
+              "data": Object {},
+              "getFieldValue": [Function],
+              "group": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": CacheGroup {
+                  "caching": true,
+                  "d": [Function],
+                  "keyMaker": Trie {
+                    "makeData": [Function],
+                    "weakness": true,
+                  },
+                  "parent": null,
+                },
+              },
+              "id": "EntityStore.Stump",
+              "parent": [Circular],
+              "policies": Policies {
+                "cache": [Circular],
+                "config": Object {
+                  "cache": [Circular],
+                  "dataIdFromObject": [Function],
+                  "possibleTypes": undefined,
+                  "typePolicies": undefined,
+                },
+                "fuzzySubtypes": Map {},
+                "rootIdsByTypename": Object {
+                  "Mutation": "ROOT_MUTATION",
+                  "Query": "ROOT_QUERY",
+                  "Subscription": "ROOT_SUBSCRIPTION",
+                },
+                "rootTypenamesById": Object {
+                  "ROOT_MUTATION": "Mutation",
+                  "ROOT_QUERY": "Query",
+                  "ROOT_SUBSCRIPTION": "Subscription",
+                },
+                "supertypeMap": Map {},
+                "toBeAdded": Object {},
+                "typePolicies": Object {},
+                "usingPossibleTypes": false,
+              },
+              "refs": Object {},
+              "replay": [Function],
+              "rootIds": Object {},
+              "toReference": [Function],
             },
             "toReference": [Function],
           },
           "getFragmentDoc": [Function],
           "makeVar": [Function],
           "maybeBroadcastWatch": [Function],
-          "optimisticData": Root {
+          "optimisticData": Stump {
             "canRead": [Function],
             "data": Object {},
             "getFieldValue": [Function],
@@ -423,6 +738,62 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "makeData": [Function],
                 "weakness": true,
               },
+              "parent": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": null,
+              },
+            },
+            "id": "EntityStore.Stump",
+            "parent": Root {
+              "canRead": [Function],
+              "data": Object {},
+              "getFieldValue": [Function],
+              "group": CacheGroup {
+                "caching": true,
+                "d": [Function],
+                "keyMaker": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "parent": null,
+              },
+              "policies": Policies {
+                "cache": [Circular],
+                "config": Object {
+                  "cache": [Circular],
+                  "dataIdFromObject": [Function],
+                  "possibleTypes": undefined,
+                  "typePolicies": undefined,
+                },
+                "fuzzySubtypes": Map {},
+                "rootIdsByTypename": Object {
+                  "Mutation": "ROOT_MUTATION",
+                  "Query": "ROOT_QUERY",
+                  "Subscription": "ROOT_SUBSCRIPTION",
+                },
+                "rootTypenamesById": Object {
+                  "ROOT_MUTATION": "Mutation",
+                  "ROOT_QUERY": "Query",
+                  "ROOT_SUBSCRIPTION": "Subscription",
+                },
+                "supertypeMap": Map {},
+                "toBeAdded": Object {},
+                "typePolicies": Object {},
+                "usingPossibleTypes": false,
+              },
+              "refs": Object {},
+              "rootIds": Object {},
+              "storageTrie": Trie {
+                "makeData": [Function],
+                "weakness": true,
+              },
+              "stump": [Circular],
+              "toReference": [Function],
             },
             "policies": Policies {
               "cache": [Circular],
@@ -430,7 +801,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "cache": [Circular],
                 "dataIdFromObject": [Function],
                 "possibleTypes": undefined,
-                "typePolicies": Object {},
+                "typePolicies": undefined,
               },
               "fuzzySubtypes": Map {},
               "rootIdsByTypename": Object {
@@ -449,19 +820,8 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "usingPossibleTypes": false,
             },
             "refs": Object {},
+            "replay": [Function],
             "rootIds": Object {},
-            "sharedLayerGroup": CacheGroup {
-              "caching": true,
-              "d": [Function],
-              "keyMaker": Trie {
-                "makeData": [Function],
-                "weakness": true,
-              },
-            },
-            "storageTrie": Trie {
-              "makeData": [Function],
-              "weakness": true,
-            },
             "toReference": [Function],
           },
           "policies": Policies {
@@ -470,7 +830,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "cache": [Circular],
               "dataIdFromObject": [Function],
               "possibleTypes": undefined,
-              "typePolicies": Object {},
+              "typePolicies": undefined,
             },
             "fuzzySubtypes": Map {},
             "rootIdsByTypename": Object {
@@ -489,9 +849,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             "usingPossibleTypes": false,
           },
           "storeReader": StoreReader {
+            "canon": ObjectCanon {
+              "empty": Object {},
+              "keysByJSON": Map {
+                "[]" => Object {
+                  "json": "[]",
+                  "sorted": Array [],
+                },
+              },
+              "known": WeakSet {},
+              "passes": WeakMap {},
+              "pool": Trie {
+                "data": Object {
+                  "keys": Object {
+                    "json": "[]",
+                    "sorted": Array [],
+                  },
+                },
+                "makeData": [Function],
+                "weak": WeakMap {},
+                "weakness": true,
+              },
+            },
             "config": Object {
               "addTypename": true,
               "cache": [Circular],
+              "canonizeResults": false,
             },
             "executeSelectionSet": [Function],
             "executeSubSelectedArray": [Function],
@@ -500,9 +883,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           "storeWriter": StoreWriter {
             "cache": [Circular],
             "reader": StoreReader {
+              "canon": ObjectCanon {
+                "empty": Object {},
+                "keysByJSON": Map {
+                  "[]" => Object {
+                    "json": "[]",
+                    "sorted": Array [],
+                  },
+                },
+                "known": WeakSet {},
+                "passes": WeakMap {},
+                "pool": Trie {
+                  "data": Object {
+                    "keys": Object {
+                      "json": "[]",
+                      "sorted": Array [],
+                    },
+                  },
+                  "makeData": [Function],
+                  "weak": WeakMap {},
+                  "weakness": true,
+                },
+              },
               "config": Object {
                 "addTypename": true,
                 "cache": [Circular],
+                "canonizeResults": false,
               },
               "executeSelectionSet": [Function],
               "executeSubSelectedArray": [Function],
@@ -511,7 +917,6 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
           },
           "txCount": 0,
           "typenameDocumentCache": Map {},
-          "watchDep": [Function],
           "watches": Set {},
         },
         "clientAwareness": Object {
@@ -529,9 +934,9 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             "addTypename": true,
             "config": Object {
               "addTypename": true,
+              "canonizeResults": false,
               "dataIdFromObject": [Function],
               "resultCaching": true,
-              "typePolicies": Object {},
             },
             "data": Root {
               "canRead": [Function],
@@ -544,6 +949,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                   "makeData": [Function],
                   "weakness": true,
                 },
+                "parent": null,
               },
               "policies": Policies {
                 "cache": [Circular],
@@ -551,7 +957,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                   "cache": [Circular],
                   "dataIdFromObject": [Function],
                   "possibleTypes": undefined,
-                  "typePolicies": Object {},
+                  "typePolicies": undefined,
                 },
                 "fuzzySubtypes": Map {},
                 "rootIdsByTypename": Object {
@@ -571,24 +977,68 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               },
               "refs": Object {},
               "rootIds": Object {},
-              "sharedLayerGroup": CacheGroup {
-                "caching": true,
-                "d": [Function],
-                "keyMaker": Trie {
-                  "makeData": [Function],
-                  "weakness": true,
-                },
-              },
               "storageTrie": Trie {
                 "makeData": [Function],
                 "weakness": true,
+              },
+              "stump": Stump {
+                "canRead": [Function],
+                "data": Object {},
+                "getFieldValue": [Function],
+                "group": CacheGroup {
+                  "caching": true,
+                  "d": [Function],
+                  "keyMaker": Trie {
+                    "makeData": [Function],
+                    "weakness": true,
+                  },
+                  "parent": CacheGroup {
+                    "caching": true,
+                    "d": [Function],
+                    "keyMaker": Trie {
+                      "makeData": [Function],
+                      "weakness": true,
+                    },
+                    "parent": null,
+                  },
+                },
+                "id": "EntityStore.Stump",
+                "parent": [Circular],
+                "policies": Policies {
+                  "cache": [Circular],
+                  "config": Object {
+                    "cache": [Circular],
+                    "dataIdFromObject": [Function],
+                    "possibleTypes": undefined,
+                    "typePolicies": undefined,
+                  },
+                  "fuzzySubtypes": Map {},
+                  "rootIdsByTypename": Object {
+                    "Mutation": "ROOT_MUTATION",
+                    "Query": "ROOT_QUERY",
+                    "Subscription": "ROOT_SUBSCRIPTION",
+                  },
+                  "rootTypenamesById": Object {
+                    "ROOT_MUTATION": "Mutation",
+                    "ROOT_QUERY": "Query",
+                    "ROOT_SUBSCRIPTION": "Subscription",
+                  },
+                  "supertypeMap": Map {},
+                  "toBeAdded": Object {},
+                  "typePolicies": Object {},
+                  "usingPossibleTypes": false,
+                },
+                "refs": Object {},
+                "replay": [Function],
+                "rootIds": Object {},
+                "toReference": [Function],
               },
               "toReference": [Function],
             },
             "getFragmentDoc": [Function],
             "makeVar": [Function],
             "maybeBroadcastWatch": [Function],
-            "optimisticData": Root {
+            "optimisticData": Stump {
               "canRead": [Function],
               "data": Object {},
               "getFieldValue": [Function],
@@ -599,6 +1049,62 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                   "makeData": [Function],
                   "weakness": true,
                 },
+                "parent": CacheGroup {
+                  "caching": true,
+                  "d": [Function],
+                  "keyMaker": Trie {
+                    "makeData": [Function],
+                    "weakness": true,
+                  },
+                  "parent": null,
+                },
+              },
+              "id": "EntityStore.Stump",
+              "parent": Root {
+                "canRead": [Function],
+                "data": Object {},
+                "getFieldValue": [Function],
+                "group": CacheGroup {
+                  "caching": true,
+                  "d": [Function],
+                  "keyMaker": Trie {
+                    "makeData": [Function],
+                    "weakness": true,
+                  },
+                  "parent": null,
+                },
+                "policies": Policies {
+                  "cache": [Circular],
+                  "config": Object {
+                    "cache": [Circular],
+                    "dataIdFromObject": [Function],
+                    "possibleTypes": undefined,
+                    "typePolicies": undefined,
+                  },
+                  "fuzzySubtypes": Map {},
+                  "rootIdsByTypename": Object {
+                    "Mutation": "ROOT_MUTATION",
+                    "Query": "ROOT_QUERY",
+                    "Subscription": "ROOT_SUBSCRIPTION",
+                  },
+                  "rootTypenamesById": Object {
+                    "ROOT_MUTATION": "Mutation",
+                    "ROOT_QUERY": "Query",
+                    "ROOT_SUBSCRIPTION": "Subscription",
+                  },
+                  "supertypeMap": Map {},
+                  "toBeAdded": Object {},
+                  "typePolicies": Object {},
+                  "usingPossibleTypes": false,
+                },
+                "refs": Object {},
+                "rootIds": Object {},
+                "storageTrie": Trie {
+                  "makeData": [Function],
+                  "weakness": true,
+                },
+                "stump": [Circular],
+                "toReference": [Function],
               },
               "policies": Policies {
                 "cache": [Circular],
@@ -606,7 +1112,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                   "cache": [Circular],
                   "dataIdFromObject": [Function],
                   "possibleTypes": undefined,
-                  "typePolicies": Object {},
+                  "typePolicies": undefined,
                 },
                 "fuzzySubtypes": Map {},
                 "rootIdsByTypename": Object {
@@ -625,19 +1131,8 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "usingPossibleTypes": false,
               },
               "refs": Object {},
+              "replay": [Function],
               "rootIds": Object {},
-              "sharedLayerGroup": CacheGroup {
-                "caching": true,
-                "d": [Function],
-                "keyMaker": Trie {
-                  "makeData": [Function],
-                  "weakness": true,
-                },
-              },
-              "storageTrie": Trie {
-                "makeData": [Function],
-                "weakness": true,
-              },
               "toReference": [Function],
             },
             "policies": Policies {
@@ -646,7 +1141,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
                 "cache": [Circular],
                 "dataIdFromObject": [Function],
                 "possibleTypes": undefined,
-                "typePolicies": Object {},
+                "typePolicies": undefined,
               },
               "fuzzySubtypes": Map {},
               "rootIdsByTypename": Object {
@@ -665,9 +1160,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
               "usingPossibleTypes": false,
             },
             "storeReader": StoreReader {
+              "canon": ObjectCanon {
+                "empty": Object {},
+                "keysByJSON": Map {
+                  "[]" => Object {
+                    "json": "[]",
+                    "sorted": Array [],
+                  },
+                },
+                "known": WeakSet {},
+                "passes": WeakMap {},
+                "pool": Trie {
+                  "data": Object {
+                    "keys": Object {
+                      "json": "[]",
+                      "sorted": Array [],
+                    },
+                  },
+                  "makeData": [Function],
+                  "weak": WeakMap {},
+                  "weakness": true,
+                },
+              },
               "config": Object {
                 "addTypename": true,
                 "cache": [Circular],
+                "canonizeResults": false,
               },
               "executeSelectionSet": [Function],
               "executeSubSelectedArray": [Function],
@@ -676,9 +1194,32 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             "storeWriter": StoreWriter {
               "cache": [Circular],
               "reader": StoreReader {
+                "canon": ObjectCanon {
+                  "empty": Object {},
+                  "keysByJSON": Map {
+                    "[]" => Object {
+                      "json": "[]",
+                      "sorted": Array [],
+                    },
+                  },
+                  "known": WeakSet {},
+                  "passes": WeakMap {},
+                  "pool": Trie {
+                    "data": Object {
+                      "keys": Object {
+                        "json": "[]",
+                        "sorted": Array [],
+                      },
+                    },
+                    "makeData": [Function],
+                    "weak": WeakMap {},
+                    "weakness": true,
+                  },
+                },
                 "config": Object {
                   "addTypename": true,
                   "cache": [Circular],
+                  "canonizeResults": false,
                 },
                 "executeSelectionSet": [Function],
                 "executeSubSelectedArray": [Function],
@@ -687,7 +1228,6 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
             },
             "txCount": 0,
             "typenameDocumentCache": Map {},
-            "watchDep": [Function],
             "watches": Set {},
           },
           "client": [Circular],
@@ -706,7 +1246,7 @@ exports[`dataset/download/DownloadLink renders successfully 1`] = `
       "resetStore": [Function],
       "resetStoreCallbacks": Array [],
       "typeDefs": undefined,
-      "version": "3.3.14",
+      "version": "3.4.17",
       "watchQuery": [Function],
     }
   }

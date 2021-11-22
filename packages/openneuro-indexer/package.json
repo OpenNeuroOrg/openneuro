@@ -12,7 +12,7 @@
   },
   "bin": "./src/index.ts",
   "dependencies": {
-    "@apollo/client": "3.3.14",
+    "@apollo/client": "3.4.17",
     "@elastic/elasticsearch": "^7.5.0",
     "@openneuro/client": "^4.2.0",
     "apollo-link-retry": "^2.2.16",

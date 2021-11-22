@@ -5,33 +5,32 @@ __metadata:
   version: 4
   cacheKey: 7
 
-"@apollo/client@npm:3.3.14":
-  version: 3.3.14
-  resolution: "@apollo/client@npm:3.3.14"
+"@apollo/client@npm:3.4.17":
+  version: 3.4.17
+  resolution: "@apollo/client@npm:3.4.17"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
-    "@types/zen-observable": ^0.8.0
     "@wry/context": ^0.6.0
-    "@wry/equality": ^0.4.0
-    fast-json-stable-stringify: ^2.0.0
-    graphql-tag: ^2.12.0
+    "@wry/equality": ^0.5.0
+    "@wry/trie": ^0.3.0
+    graphql-tag: ^2.12.3
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.15.0
+    optimism: ^0.16.1
     prop-types: ^15.7.2
-    symbol-observable: ^2.0.0
-    ts-invariant: ^0.7.0
-    tslib: ^1.10.0
-    zen-observable: ^0.8.14
+    symbol-observable: ^4.0.0
+    ts-invariant: ^0.9.0
+    tslib: ^2.3.0
+    zen-observable-ts: ~1.1.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
-    subscriptions-transport-ws: ^0.9.0
+    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
     react:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a08163a9982522dd7c4191e33ef086331de9c3d063438342863cf5ea44ad8baaa51ed4c77f2600620a5ec47dc4d1bd5b4b9a9f95e5cc0e17403d6a0b62c7994c
+  checksum: 9bfc7f8e8b4a847cb9f46bd4a2febd746c771980efea7f943e96b2bc84454e9d0d986973751303c498ccc3646540bd73a64824ab62d8d3962dc3d29db14105d0
   languageName: node
   linkType: hard
 
@@ -4602,7 +4601,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/app@workspace:packages/openneuro-app"
   dependencies:
-    "@apollo/client": 3.3.14
+    "@apollo/client": 3.4.17
     "@artsy/fresnel": ^1.3.1
     "@babel/core": ^7.6.4
     "@babel/plugin-proposal-class-properties": ^7.5.5
@@ -4688,7 +4687,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/cli@workspace:packages/openneuro-cli"
   dependencies:
-    "@apollo/client": 3.3.14
+    "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@openneuro/client": ^4.2.0
     "@types/mkdirp": ^1.0.1
@@ -4719,7 +4718,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
-    "@apollo/client": 3.3.14
+    "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
     "@openneuro/server": ^4.2.0
@@ -4788,7 +4787,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/indexer@workspace:packages/openneuro-indexer"
   dependencies:
-    "@apollo/client": 3.3.14
+    "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": ^7.5.0
     "@openneuro/client": ^4.2.0
@@ -4809,7 +4808,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
-    "@apollo/client": 3.3.14
+    "@apollo/client": 3.4.17
     "@babel/core": ^7.6.4
     "@babel/plugin-proposal-object-rest-spread": ^7.6.2
     "@babel/plugin-proposal-optional-chaining": ^7.6.0
@@ -7290,7 +7289,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zen-observable@npm:^0.8.0":
+"@types/zen-observable@npm:0.8.3":
   version: 0.8.3
   resolution: "@types/zen-observable@npm:0.8.3"
   checksum: ec75e17c7737e509e5b580fbeda853d8d54392281fba614be0fb86c97c517dc148ef8473b4cd45e547f2492af1c5104ce27fbd58dbded6e6e205122148e344d7
@@ -7654,12 +7653,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wry/equality@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@wry/equality@npm:0.4.0"
+"@wry/equality@npm:^0.5.0":
+  version: 0.5.2
+  resolution: "@wry/equality@npm:0.5.2"
   dependencies:
-    tslib: ^2.1.0
-  checksum: 87c2b705edf0cc81e8b034367765762f3d2a1a0bfd9163b70389398bc0fc0338e1f8d68b2eaa70b0f5101c455bf5d419ae4a4f03f7f7697803e34adb9ca86b72
+    tslib: ^2.3.0
+  checksum: cdc497fbc9bbb4de0bfd912f31c827111a52ef891e0bce555728fa3d10f551c70fc0e9fc36f124c7afe104688cfcee1cc56d18833e80f617c9b8e739b86e43a0
   languageName: node
   linkType: hard
 
@@ -14646,7 +14645,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.0":
+"graphql-tag@npm:^2.11.0":
   version: 2.12.5
   resolution: "graphql-tag@npm:2.12.5"
   dependencies:
@@ -14654,6 +14653,17 @@ fsevents@^1.2.7:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
   checksum: db324292677bfe1f14e29baea6a4953a756a633a20dfe73939b14bc5f647b981087acf1e8a61245480f57da6587b63bab3562f06bddfda59e6c8233f28042dad
+  languageName: node
+  linkType: hard
+
+"graphql-tag@npm:^2.12.3":
+  version: 2.12.6
+  resolution: "graphql-tag@npm:2.12.6"
+  dependencies:
+    tslib: ^2.1.0
+  peerDependencies:
+    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: c16d72fb7862aad149cf24d077de39da27de66242e340ff9ea48f9cffb8fc5160ad96220f656c791b85baabde02d54d261d09b0b0c6d1bd278f4d07785687572
   languageName: node
   linkType: hard
 
@@ -20473,13 +20483,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "optimism@npm:0.15.0"
+"optimism@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "optimism@npm:0.16.1"
   dependencies:
     "@wry/context": ^0.6.0
     "@wry/trie": ^0.3.0
-  checksum: a9152e33a27be9b2b4a441387061a7e8aff9877872169eba49c11c07fee19b7369efd48f7530f5a65e142f46b63ba3c8a56c9b893eaa696e143f1fdff33760a2
+  checksum: 760b1295525ba86592edf245736ed704670330a8997d91144c1b45bc9f76e392b53c170fb1eb3b265f67584a4f7e205bc777d0c8ed97774326dba9fbfe899e27
   languageName: node
   linkType: hard
 
@@ -25192,10 +25202,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"symbol-observable@npm:^2.0.0":
-  version: 2.0.3
-  resolution: "symbol-observable@npm:2.0.3"
-  checksum: c022177891e0aa3169bbaaed68d928ff7a2b5f5b1b2bf655b99804ecfabe280a6f1042dd3bda609475e637c57141d39b33e692b6f6b5fdb29ce7f61cf77be57f
+"symbol-observable@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "symbol-observable@npm:4.0.0"
+  checksum: 6d184cd370270ab53279d2737c6880d64bbe854dbdf3d759600efbc11bba3d006a9f805070c81c84fae949067c069cd001a1440295ca3b36f705b05293bf8e1e
   languageName: node
   linkType: hard
 
@@ -25812,12 +25822,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.7.0":
-  version: 0.7.5
-  resolution: "ts-invariant@npm:0.7.5"
+"ts-invariant@npm:^0.9.0":
+  version: 0.9.3
+  resolution: "ts-invariant@npm:0.9.3"
   dependencies:
     tslib: ^2.1.0
-  checksum: c0bf00844e3ef3486323944d1e24e7c06ccfe175e78311832b5cc57a632a4fef8cc1caa86a084ae1708e3150610f824efdb190ae87f39f2abb3f0270281a1f96
+  checksum: c3f21931f9deae9492d7033d5d3fae1fc6dc9f981ede8636b66f5954854539b78683d2e2d1f6f9fd7cc185d354e1cf5aefdbabd017a2abcce19fad01d08da8c8
   languageName: node
   linkType: hard
 
@@ -27642,7 +27652,17 @@ typescript@4.0.6:
   languageName: node
   linkType: hard
 
-"zen-observable@npm:^0.8.0, zen-observable@npm:^0.8.14":
+"zen-observable-ts@npm:~1.1.0":
+  version: 1.1.0
+  resolution: "zen-observable-ts@npm:1.1.0"
+  dependencies:
+    "@types/zen-observable": 0.8.3
+    zen-observable: 0.8.15
+  checksum: daae0a5afd658f699e0dca8ede85caad61a5aa42f39f8053beb940bd17dd60c0e63ffc90435ccea1bcd243a65aa3780d115482a3e025a9dd64bf18ee8eea52a7
+  languageName: node
+  linkType: hard
+
+"zen-observable@npm:0.8.15, zen-observable@npm:^0.8.0":
   version: 0.8.15
   resolution: "zen-observable@npm:0.8.15"
   checksum: 7d155f8a75b9314f9f31e70a31edcd897b0e8a1313737502ab84a573e49d2c333b738e415c156334a6e910c363ce546b59fa7921eff61440285caa99c843df74
