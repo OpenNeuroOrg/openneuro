@@ -42,4 +42,4 @@ For example, you can restart the server container with `docker-compose restart s
 
 ## OpenNeuro Command-line utility tool
 
-OpenNeuro supports a [CLI tool](cli.openneuro.org) based on [nodejs](https://nodejs.org/en/) for uploading and downloading OpenNeuro datasets.
+OpenNeuro supports a [CLI tool](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-cli) based on [nodejs](https://nodejs.org/en/) for uploading and downloading OpenNeuro datasets.
