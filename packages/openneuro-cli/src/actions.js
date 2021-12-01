@@ -8,6 +8,7 @@ import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
 import { configuredClient } from './configuredClient.js'
+import { validateApiKey } from './validateApiKey'
 
 /**
  * Login action to save an auth key locally
@@ -35,6 +36,7 @@ export const login = () => {
           type: 'password',
           name: 'apikey',
           message: `Enter your API key for OpenNeuro (get an API key from ${answers.url}keygen)`,
+          validate: validateApiKey,
         }),
       ),
     )
@@ -259,7 +261,13 @@ export const download = (datasetId, destination, cmd) => {
       if (data.dataset && data.dataset.snapshots) {
         const tags = data.dataset.snapshots.map(snap => snap.tag)
         return promptTags(tags).then(choices =>
-          getDownload(destination, datasetId, choices.tag, apmTransaction, client),
+          getDownload(
+            destination,
+            datasetId,
+            choices.tag,
+            apmTransaction,
+            client,
+          ),
         )
       }
     })
