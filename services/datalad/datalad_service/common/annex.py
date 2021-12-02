@@ -3,6 +3,7 @@ import io
 import json
 from mmap import mmap
 import subprocess
+import urllib.parse
 
 from sentry_sdk import capture_exception
 
@@ -116,6 +117,11 @@ def read_rmet_file(remote, catFile):
     return url
 
 
+def encode_remote_url(url):
+    """S3 requires some characters to be encoded"""
+    return urllib.parse.quote_plus(url, safe="/:?")
+
+
 def get_repo_urls(path, files):
     """For each file provided, obtain the rmet data and append URLs if possible."""
     # First obtain the git-annex branch objects
@@ -165,7 +171,8 @@ def get_repo_urls(path, files):
         for path in rmetPaths:
             url = read_rmet_file(remote, catFile)
             if url:
-                rmetFiles[path]['urls'].append(url)
+                encoded_url = encode_remote_url(url)
+                rmetFiles[path]['urls'].append(encoded_url)
     return files
 
 
