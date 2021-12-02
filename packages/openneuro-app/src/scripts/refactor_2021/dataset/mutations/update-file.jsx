@@ -30,8 +30,8 @@ const UpdateFile = ({
               webkitdirectory={directory && 'true'}
               multiple={multiple && true}
             />
+            {children}
           </Tooltip>
-          {children}
         </div>
       )}
     </UploaderContext.Consumer>
