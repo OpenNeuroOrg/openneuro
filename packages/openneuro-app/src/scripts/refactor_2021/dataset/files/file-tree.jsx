@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
 import UpdateFile from '../mutations/update-file.jsx'
@@ -41,13 +41,14 @@ const FileTree = ({
             <UpdateFile
               datasetId={datasetId}
               path={unescapePath(path)}
+              tooltip={`Choose one or more files to be added to ${name}.`}
               multiple>
               <i className="fa fa-plus" /> Add Files
             </UpdateFile>
             <UpdateFile
               datasetId={datasetId}
               path={unescapePath(path)}
-              tooltip={`Choose a folder to be added to /${name}. Adding a folder with an existing name will overwrite that folder.`}
+              tooltip={`Choose a folder to be added to ${name}. Adding a folder with an existing name will overwrite that folder.`}
               directory>
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
