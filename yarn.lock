@@ -4634,7 +4634,7 @@ __metadata:
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^24.9.0
     babel-runtime: ^6.26.0
-    bids-validator: 1.8.4
+    bids-validator: 1.8.5
     bytes: ^3.0.0
     comlink: ^4.0.5
     core-js: ^3.3.2
@@ -4692,7 +4692,7 @@ __metadata:
     "@openneuro/client": ^4.2.0
     "@types/mkdirp": ^1.0.1
     "@types/node": ^14.14.41
-    bids-validator: 1.8.4
+    bids-validator: 1.8.5
     cli-progress: ^3.8.2
     commander: 7.2.0
     core-js: ^3.10.1
@@ -9360,9 +9360,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.8.4":
-  version: 1.8.4
-  resolution: "bids-validator@npm:1.8.4"
+"bids-validator@npm:1.8.5":
+  version: 1.8.5
+  resolution: "bids-validator@npm:1.8.5"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -9371,10 +9371,11 @@ __metadata:
     cross-fetch: ^3.0.6
     date-fns: ^2.7.0
     events: ^3.3.0
-    hed-validator: ^3.4.0
+    hed-validator: ^3.5.0
     ignore: ^4.0.2
     is-utf8: ^0.2.1
     jshint: ^2.9.6
+    lodash: ^4.17.21
     minimatch: 3.0.4
     nifti-js: ^1.0.1
     p-limit: ^2.1.0
@@ -9384,10 +9385,11 @@ __metadata:
     semver: ^7.3.2
     stream-browserify: ^3.0.0
     table: ^5.2.3
+    yaml: ^1.10.2
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: ffdf0b938d8e6458f5dcf21557c944104b2175e9fc95a21a6d6bf34237c94dad302c05f48420c38950cdffafde49af85994fbf49bde01db09ccec051109044a8
+  checksum: 946581be78db9a258f93ce86773006aedbe24824524cc574f752fb73933e4beeb76a4e34bec310c7d91444768ad36941c72d1f8041c2f47ee36fc6bae5edb50b
   languageName: node
   linkType: hard
 
@@ -14999,17 +15001,18 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:^3.4.0":
-  version: 3.5.0
-  resolution: "hed-validator@npm:3.5.0"
+"hed-validator@npm:^3.5.0":
+  version: 3.6.0
+  resolution: "hed-validator@npm:3.6.0"
   dependencies:
     date-and-time: ^0.14.2
     date-fns: ^2.17.0
+    lodash: ^4.17.21
     pluralize: ^8.0.0
     semver: ^7.3.4
     then-request: ^6.0.2
     xml2js: ^0.4.23
-  checksum: a96b78179030deb6ce87de214448f438b7994a5cf1fc33026d9e134cbaf10e561001894ba96e2da8118a4ac726f8973a267766c377f5d2e3f9552c94b469ec83
+  checksum: cbf1df0b3895035a8110520f423c93877f8fc2427f8839a8177a928805f3602588d8a6e5ea0da1ba14e6301d01f3d77b9bcb58d619a76ef08096cc828a9cad06
   languageName: node
   linkType: hard
 
@@ -27526,7 +27529,7 @@ typescript@4.0.6:
   languageName: node
   linkType: hard
 
-"yaml@npm:^1.10.0, yaml@npm:^1.7.2":
+"yaml@npm:^1.10.0, yaml@npm:^1.10.2, yaml@npm:^1.7.2":
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 8d72062ea3dbfd8fae3d6ddd5b741c2aeb5835a31b0719bf14fac71dd84adde0829763d6fbac46387309da00af1440194c796da5efc349b0baf9de39d82ae69e

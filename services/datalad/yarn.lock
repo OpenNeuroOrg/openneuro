@@ -1062,9 +1062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.8.4":
-  version: 1.8.4
-  resolution: "bids-validator@npm:1.8.4"
+"bids-validator@npm:1.8.5":
+  version: 1.8.5
+  resolution: "bids-validator@npm:1.8.5"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -1073,10 +1073,11 @@ __metadata:
     cross-fetch: ^3.0.6
     date-fns: ^2.7.0
     events: ^3.3.0
-    hed-validator: ^3.4.0
+    hed-validator: ^3.5.0
     ignore: ^4.0.2
     is-utf8: ^0.2.1
     jshint: ^2.9.6
+    lodash: ^4.17.21
     minimatch: 3.0.4
     nifti-js: ^1.0.1
     p-limit: ^2.1.0
@@ -1086,10 +1087,11 @@ __metadata:
     semver: ^7.3.2
     stream-browserify: ^3.0.0
     table: ^5.2.3
+    yaml: ^1.10.2
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: ffdf0b938d8e6458f5dcf21557c944104b2175e9fc95a21a6d6bf34237c94dad302c05f48420c38950cdffafde49af85994fbf49bde01db09ccec051109044a8
+  checksum: 946581be78db9a258f93ce86773006aedbe24824524cc574f752fb73933e4beeb76a4e34bec310c7d91444768ad36941c72d1f8041c2f47ee36fc6bae5edb50b
   languageName: node
   linkType: hard
 
@@ -1677,17 +1679,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:^3.4.0":
-  version: 3.4.1
-  resolution: "hed-validator@npm:3.4.1"
+"hed-validator@npm:^3.5.0":
+  version: 3.6.0
+  resolution: "hed-validator@npm:3.6.0"
   dependencies:
     date-and-time: ^0.14.2
     date-fns: ^2.17.0
+    lodash: ^4.17.21
     pluralize: ^8.0.0
     semver: ^7.3.4
     then-request: ^6.0.2
     xml2js: ^0.4.23
-  checksum: 48c20ebbf6d054a692b2bc8fbf0a0a58bfc0d778f05ef60c4aada9f86fa8ab0c0e4887f3a89e81596575c5950ffdfec2f37557461272ad943a233ea6f168fce0
+  checksum: cbf1df0b3895035a8110520f423c93877f8fc2427f8839a8177a928805f3602588d8a6e5ea0da1ba14e6301d01f3d77b9bcb58d619a76ef08096cc828a9cad06
   languageName: node
   linkType: hard
 
@@ -1977,6 +1980,13 @@ __metadata:
   version: 4.17.19
   resolution: "lodash@npm:4.17.19"
   checksum: ff2b7a95f0129dba9101e346d44e0eda0f159d76bbbf23721eec1969b87a32bde3de0cfef0733218c64620e9be08040a973278d46a686540233b356115f3527c
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 4983720b9abca930a4a46f18db163d7dad8dd00dbed6db0cc7b499b33b717cce69f80928b27bbb1ff2cbd3b19d251ee90669a8b5ea466072ca81c2ebe91e7468
   languageName: node
   linkType: hard
 
@@ -2380,7 +2390,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    bids-validator: 1.8.4
+    bids-validator: 1.8.5
   languageName: unknown
   linkType: soft
 
@@ -2862,6 +2872,13 @@ __metadata:
   version: 4.0.0
   resolution: "yallist@npm:4.0.0"
   checksum: a2960ef879af6ee67a76cae29bac9d8bffeb6e9e366c217dbd21464e7fce071933705544724f47e90ba5209cf9c83c17d5582dd04415d86747a826b2a231efb8
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^1.10.2":
+  version: 1.10.2
+  resolution: "yaml@npm:1.10.2"
+  checksum: 8d72062ea3dbfd8fae3d6ddd5b741c2aeb5835a31b0719bf14fac71dd84adde0829763d6fbac46387309da00af1440194c796da5efc349b0baf9de39d82ae69e
   languageName: node
   linkType: hard
 
