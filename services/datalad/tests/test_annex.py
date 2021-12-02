@@ -1,7 +1,7 @@
 import io
 
 from .dataset_fixtures import *
-from datalad_service.common.annex import parse_ls_tree_line, read_ls_tree_line, compute_rmet, parse_remote_line, parse_rmet_line, read_rmet_file
+from datalad_service.common.annex import parse_ls_tree_line, read_ls_tree_line, compute_rmet, parse_remote_line, parse_rmet_line, read_rmet_file, encode_remote_url
 
 expected_file_object = {
     'filename': 'dataset_description.json',
@@ -122,3 +122,8 @@ def test_read_rmet_file():
     1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
     url = read_rmet_file(remote, catFile)
     assert url == 'http://openneuro.org.s3.amazonaws.com/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+
+
+def test_remote_url_encoding():
+    assert encode_remote_url(
+        "https://s3.amazonaws.com/openneuro.org/ds000248/derivatives/freesurfer/subjects/sub-01/mri/aparc+aseg.mgz?versionId=2Wx7w.fCYeGzGWLnW9sxWsPdztl.2HL0") == "https://s3.amazonaws.com/openneuro.org/ds000248/derivatives/freesurfer/subjects/sub-01/mri/aparc%2Baseg.mgz?versionId%3D2Wx7w.fCYeGzGWLnW9sxWsPdztl.2HL0"
