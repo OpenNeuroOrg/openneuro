@@ -1062,9 +1062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.8.5":
-  version: 1.8.5
-  resolution: "bids-validator@npm:1.8.5"
+"bids-validator@npm:1.8.6":
+  version: 1.8.6
+  resolution: "bids-validator@npm:1.8.6"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -1091,7 +1091,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: 946581be78db9a258f93ce86773006aedbe24824524cc574f752fb73933e4beeb76a4e34bec310c7d91444768ad36941c72d1f8041c2f47ee36fc6bae5edb50b
+  checksum: c7c21b3b7137cdd45b8c79e40885780dbffde77910920a4473480da30164b3bde812757ea2dbc86f5d94f1a4c1e080a6776e15e6cba69be81c2c969193208245
   languageName: node
   linkType: hard
 
@@ -2390,7 +2390,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    bids-validator: 1.8.5
+    bids-validator: 1.8.6
   languageName: unknown
   linkType: soft
 

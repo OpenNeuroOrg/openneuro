@@ -22,7 +22,7 @@
     "@openneuro/client": "^4.2.2",
     "@openneuro/components": "^4.2.2",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "1.8.5",
+    "bids-validator": "1.8.6",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "core-js": "^3.3.2",
