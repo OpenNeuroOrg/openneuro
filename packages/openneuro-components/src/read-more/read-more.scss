@@ -50,11 +50,11 @@
       display: none;
     }
   }
-  input {
+  input.show-more {
     display: none;
   }
 
-  input[type='checkbox']:checked + section {
+  input.show-more[type='checkbox']:checked + section {
     max-height: 9000px;
 
     label {
@@ -68,7 +68,7 @@
     }
   }
   &.readmore-file-tree {
-    input[type='checkbox']:checked + section {
+    input.show-more[type='checkbox']:checked + section {
       max-height: 40000px;
     }
   }

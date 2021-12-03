@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect'
 describe('ReadMore component', () => {
   it('renders children', async () => {
     render(
-      <ReadMore id="readmoretest" expandLabel="expand" collapseabel="hide">
+      <ReadMore id="readmoretest" expandLabel="expand" collapseLabel="hide">
         Hidden children
       </ReadMore>,
     )

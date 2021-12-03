@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react'
 export interface ReadMoreProps {
   children: React.ReactNode
   id: string
-  collapseabel: string
+  collapseLabel: string
   expandLabel: string
   fileTree?: boolean
 }
@@ -12,7 +12,7 @@ export const ReadMore = ({
   children,
   id,
   expandLabel,
-  collapseabel,
+  collapseLabel,
   fileTree,
 }: ReadMoreProps) => {
   const readmoreRef = useRef<HTMLDivElement>()
@@ -35,7 +35,7 @@ export const ReadMore = ({
             {children}
             <label htmlFor={id}>
               <span>{expandLabel}</span>
-              <span>{collapseabel}</span>
+              <span>{collapseLabel}</span>
             </label>
           </section>
         </article>
@@ -47,7 +47,7 @@ export const ReadMore = ({
             {children}
             <label htmlFor={id}>
               <span>{expandLabel}</span>
-              <span>{collapseabel}</span>
+              <span>{collapseLabel}</span>
             </label>
           </section>
         </article>
