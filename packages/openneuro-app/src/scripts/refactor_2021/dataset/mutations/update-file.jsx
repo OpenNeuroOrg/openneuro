@@ -1,37 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import UploaderContext from '../../uploader/uploader-context.js'
-import { Tooltip } from '@openneuro/components/tooltip'
 
 const UpdateFile = ({
   datasetId,
   directory = false,
   multiple = false,
   path = null,
-  tooltip = '',
   children,
 }) => {
   return (
     <UploaderContext.Consumer>
       {uploader => (
         <div className="edit-file">
-          <Tooltip tooltip={tooltip}>
-            <input
-              type="file"
-              className="update-file"
-              onChange={e => {
-                e.preventDefault()
-                uploader.resumeDataset(
-                  datasetId,
-                  path,
-                  false,
-                )({ files: e.target.files })
-              }}
-              webkitdirectory={directory && 'true'}
-              multiple={multiple && true}
-            />
-            {children}
-          </Tooltip>
+          <input
+            type="file"
+            className="update-file"
+            onChange={e => {
+              e.preventDefault()
+              uploader.resumeDataset(
+                datasetId,
+                path,
+                false,
+              )({ files: e.target.files })
+            }}
+            webkitdirectory={directory && 'true'}
+            multiple={multiple && true}
+          />
+          {children}
         </div>
       )}
     </UploaderContext.Consumer>
