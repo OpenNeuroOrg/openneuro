@@ -95,13 +95,22 @@ export const deprecateSnapshot = async (
       SnapshotModel.findOne({ datasetId, tag }),
       User.findOne({ id: user }),
     ])
+    const timestamp = new Date()
     await DeprecatedSnapshot.create({
       id: snapshot.hexsha,
       user: userDoc._id,
-      cause: reason,
-      timestamp: new Date(),
+      reason,
+      timestamp,
     })
-    return true
+    return {
+      id: snapshot.hexsha,
+      deprecated: {
+        id: snapshot.hexsha,
+        user: userDoc._id,
+        reason,
+        timestamp,
+      },
+    }
   } catch (err) {
     Sentry.captureException(err)
     throw err

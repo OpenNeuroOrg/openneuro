@@ -4,7 +4,7 @@ const { Schema, model } = mongoose
 export interface DeprecatedSnapshotDocument extends Document {
   id: string // snapshot hexsha
   user: string
-  cause: string
+  reason: string
   timestamp: Date
 }
 
@@ -15,7 +15,7 @@ const deprecatedSnapshotSchema = new Schema({
     required: true,
     ref: 'User',
   },
-  cause: {
+  reason: {
     type: String,
     required: true,
   },

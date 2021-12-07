@@ -56,8 +56,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const activeDataset = snapshotVersion(location) || 'draft'
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
-  const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
-    React.useState(false)
 
   const summary = dataset.draft.summary
   const description = dataset.draft.description
@@ -73,12 +71,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
     parseISO(dataset.draft.modified),
   )
   const isSnapshot = activeDataset !== 'draft'
-  const rootPath = isSnapshot
-    ? `/datasets/${datasetId}/versions/${activeDataset}`
-    : `/datasets/${datasetId}`
 
-  //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  const isPublic = dataset.public === true
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
@@ -263,7 +256,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     dateModified={dateModified}
                     selected={selectedVersion}
                     setSelected={setSelectedVersion}
-                    setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
                   />
                 </div>
               }
@@ -426,18 +418,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 : ['N/A']}
             </EditDescriptionList>
           </>
-        )}
-        renderDeprecatedModal={() => (
-          <Modal
-            isOpen={deprecatedmodalIsOpen}
-            toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
-            closeText={'close'}
-            className="deprecated-modal">
-            <p>
-              You have selected a deprecated version. The author of the dataset
-              does not recommend this specific version.
-            </p>
-          </Modal>
         )}
         renderComments={() => (
           <Comments

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import { DATASET_METADATA } from '../dataset-query-fragments.js'
+import { DATASET_METADATA } from '../../../datalad/dataset/dataset-query-fragments'
 import { datasetCacheId } from './cache-id.js'
 import { Button } from '@openneuro/components/button'
 

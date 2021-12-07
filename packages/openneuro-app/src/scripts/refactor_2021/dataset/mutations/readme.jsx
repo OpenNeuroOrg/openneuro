@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { SaveButton } from '../fragments/save-button'
-import { DRAFT_FRAGMENT } from '../queries/dataset-query-fragments.js'
+import { DRAFT_FRAGMENT } from '../../../datalad/dataset/dataset-query-fragments'
 import { datasetCacheId } from './cache-id.js'
 
 const UPDATE_README = gql`

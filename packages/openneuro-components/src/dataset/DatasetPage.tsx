@@ -11,7 +11,7 @@ export interface DatasetPageProps {
   renderReadMe: () => React.ReactNode
   renderBrainLifeButton: () => React.ReactNode
   renderCloneDropdown: () => React.ReactNode
-  renderDeprecatedModal: () => React.ReactNode
+  renderDeprecatedModal?: () => React.ReactNode
   renderFollowBookmark: () => React.ReactNode
   renderComments: () => React.ReactNode
   modality?: string
@@ -64,7 +64,7 @@ export const DatasetPage = ({
           <div className="col sidebar"> {renderSidebar()}</div>
         </div>
       </div>
-      {renderDeprecatedModal()}
+      {renderDeprecatedModal?.()}
     </div>
   )
 }

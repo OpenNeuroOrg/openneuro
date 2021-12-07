@@ -136,6 +136,14 @@ export const SNAPSHOT_FIELDS = gql`
     tag
     created
     readme
+    deprecated {
+      id
+      user {
+        id
+      }
+      reason
+      timestamp
+    }
     description {
       Name
       Authors

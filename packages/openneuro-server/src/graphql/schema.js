@@ -176,7 +176,7 @@ export const typeDefs = `
     # Reset draft commit
     resetDraft(datasetId: ID!, ref: String!): Boolean
     # Flag snapshot as deprecated
-    deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Boolean
+    deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Snapshot
     # Create anonymous read only reviewer
     createReviewer(datasetId: ID!): DatasetReviewer
     # Remove reviewer
@@ -487,7 +487,7 @@ export const typeDefs = `
     # ID of user who flagged snapshot as deprecated
     user: User
     # Reason for deprecating snaphot
-    cause: String
+    reason: String
     # Timestamp of snapshot deprecation
     timestamp: Date
   }

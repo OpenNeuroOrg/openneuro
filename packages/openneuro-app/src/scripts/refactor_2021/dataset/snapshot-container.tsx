@@ -40,7 +40,7 @@ import { ReadMore } from '@openneuro/components/read-more'
 import { FollowDataset } from './mutations/follow'
 import { StarDataset } from './mutations/star'
 
-import { SNAPSHOT_FIELDS } from './queries/dataset-query-fragments.js'
+import { SNAPSHOT_FIELDS } from '../../datalad/dataset/dataset-query-fragments.js'
 import { DOILink } from './fragments/doi-link'
 
 const formatDate = dateObject =>
@@ -67,8 +67,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const activeDataset = snapshotVersion(location) || 'draft'
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
-  const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
-    React.useState(false)
+  const [deprecatedModalIsOpen, setDeprecatedModalIsOpen] = React.useState(
+    snapshot.deprecated,
+  )
 
   const summary = snapshot.summary
   const description = snapshot.description
@@ -81,18 +82,13 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
   const dateModified = formatDate(snapshot.created)
   const dateUpdatedDifference = formatDistanceToNow(parseISO(snapshot.created))
-  const rootPath = `/datasets/${datasetId}/versions/${activeDataset}`
 
-  //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
   const hasEdit =
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
-  const hasDraftChanges =
-    dataset.snapshots.length === 0 ||
-    dataset.draft.head !==
-      dataset.snapshots[dataset.snapshots.length - 1].hexsha
+
   return (
     <>
       <DatasetPage
@@ -373,14 +369,15 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
         )}
         renderDeprecatedModal={() => (
           <Modal
-            isOpen={deprecatedmodalIsOpen}
+            isOpen={deprecatedModalIsOpen}
             toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
             closeText={'close'}
             className="deprecated-modal">
             <p>
               You have selected a deprecated version. The author of the dataset
-              does not recommend this specific version.
+              does not recommend this specific version. The reason provided:
             </p>
+            <p>{snapshot.deprecated.reason}</p>
           </Modal>
         )}
         renderComments={() => (
