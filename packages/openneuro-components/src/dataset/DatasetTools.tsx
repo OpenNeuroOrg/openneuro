@@ -114,14 +114,14 @@ export const DatasetTools = ({
           }
         />
       </Tooltip>
-      {isAdmin && !isSnapshot && (
+      {hasEdit && !isSnapshot && (
         <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
           <Link className="dataset-tool" to={`/datasets/${datasetId}/delete`}>
             <Icon icon="fa fa-trash" label="Delete" />
           </Link>
         </Tooltip>
       )}
-      {isAdmin && isSnapshot && (
+      {hasEdit && isSnapshot && (
         <Tooltip tooltip="Flag this version as deprecated" flow="up">
           <Link className="dataset-tool" to={`${location.pathname}/deprecate`}>
             <Icon icon="fa fa-remove" label="Deprecate Version" />
