@@ -80,6 +80,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
+  const isDatasetAdmin =
+    hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
 
   return (
     <>
@@ -183,6 +185,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             datasetId={datasetId}
             isAdmin={isAdmin}
             hasSnapshot={dataset.snapshots.length !== 0}
+            isDatasetAdmin={isDatasetAdmin}
           />
         )}
         renderFiles={() => (

@@ -32,9 +32,9 @@ import { Loading } from '@openneuro/components/loading'
 import {
   getUnexpiredProfile,
   hasEditPermissions,
+  hasDatasetAdminPermissions,
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
-import { Modal } from '@openneuro/components/modal'
 
 import { ReadMore } from '@openneuro/components/read-more'
 
@@ -86,6 +86,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const isAdmin = profile?.admin
   const hasEdit =
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const isDatasetAdmin =
+    hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
 
   return (
     <>
@@ -172,6 +174,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             datasetId={datasetId}
             isSnapshot={true}
             isAdmin={isAdmin}
+            isDatasetAdmin={isDatasetAdmin}
           />
         )}
         renderFiles={() => (

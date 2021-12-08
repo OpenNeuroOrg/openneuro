@@ -14,6 +14,7 @@ describe('DatasetTools component', () => {
         isSnapshot={false}
         datasetId={'test000001'}
         hasSnapshot={true}
+        isDatasetAdmin={true}
       />,
       { wrapper: MemoryRouter },
     )
@@ -35,6 +36,7 @@ describe('DatasetTools component', () => {
         isSnapshot={true}
         datasetId={'test000001'}
         hasSnapshot={true}
+        isDatasetAdmin={true}
       />,
       { wrapper: MemoryRouter },
     )
@@ -53,6 +55,7 @@ describe('DatasetTools component', () => {
         isSnapshot={false}
         datasetId={'test000001'}
         hasSnapshot={true}
+        isDatasetAdmin={false}
       />,
       { wrapper: MemoryRouter },
     )
@@ -71,6 +74,7 @@ describe('DatasetTools component', () => {
         isSnapshot={true}
         datasetId={'test000001'}
         hasSnapshot={true}
+        isDatasetAdmin={false}
       />,
       { wrapper: MemoryRouter },
     )

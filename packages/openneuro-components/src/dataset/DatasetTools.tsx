@@ -11,6 +11,7 @@ export interface DatasetToolsProps {
   isSnapshot: boolean
   datasetId: string
   isAdmin: boolean
+  isDatasetAdmin: boolean
   hasSnapshot?: boolean
 }
 
@@ -21,6 +22,7 @@ export const DatasetTools = ({
   datasetId,
   isAdmin,
   hasSnapshot,
+  isDatasetAdmin,
 }: DatasetToolsProps) => {
   const history = useHistory()
   const location = useLocation()
@@ -114,7 +116,7 @@ export const DatasetTools = ({
           }
         />
       </Tooltip>
-      {hasEdit && !isSnapshot && (
+      {isDatasetAdmin && !isSnapshot && (
         <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
           <Link className="dataset-tool" to={`/datasets/${datasetId}/delete`}>
             <Icon icon="fa fa-trash" label="Delete" />
