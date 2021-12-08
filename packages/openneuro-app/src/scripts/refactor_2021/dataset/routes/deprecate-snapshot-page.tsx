@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useRouteMatch, RouteComponentProps } from 'react-router-dom'
+import { Link, useRouteMatch } from 'react-router-dom'
 import { DeprecateSnapshot } from '../mutations/deprecate-snapshot'
 import { Input } from '@openneuro/components/input'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
-interface DeprecateSnapshotRouteParams extends RouteComponentProps {
+interface DeprecateSnapshotRouteParams {
   datasetId: string
   snapshotTag: string
 }
