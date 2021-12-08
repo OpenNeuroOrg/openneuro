@@ -112,7 +112,6 @@ const AddMetadata = ({ dataset }) => {
     const errors = runValidations(newValues)
     if (hasChanged(errors, validationErrors)) setValidationErrors(errors)
   }
-  // @ts-expect-error Weak type definition for state
   const submitPath = location.state && location.state.submitPath
   const user = getProfile(cookies)
   const hasEdit =

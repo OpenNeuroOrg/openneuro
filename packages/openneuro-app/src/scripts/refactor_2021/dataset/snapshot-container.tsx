@@ -12,6 +12,7 @@ import Validation from '../validation/validation.jsx'
 import { config } from '../../config'
 import Comments from './comments/comments.jsx'
 import DatasetCitation from './fragments/dataset-citation.jsx'
+import { DatasetAlertVersion } from './fragments/dataset-alert-version'
 
 import {
   ModalitiesMetaDataBlock,
@@ -67,9 +68,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const activeDataset = snapshotVersion(location) || 'draft'
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
-  const [deprecatedModalIsOpen, setDeprecatedModalIsOpen] = React.useState(
-    snapshot.deprecated,
-  )
 
   const summary = snapshot.summary
   const description = snapshot.description
@@ -99,6 +97,18 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               <DatasetHeader
                 pageHeading={description.Name}
                 modality={summary?.modalities[0]}
+              />
+            )}
+          </>
+        )}
+        renderAlert={() => (
+          <>
+            {snapshot?.deprecated && (
+              <DatasetAlertVersion
+                datasetId={dataset.id}
+                tag={snapshot.tag}
+                reason={snapshot.deprecated.reason}
+                hasEdit={hasEdit}
               />
             )}
           </>
@@ -229,7 +239,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                     dateModified={dateModified}
                     selected={selectedVersion}
                     setSelected={setSelectedVersion}
-                    setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
                   />
                 </div>
               }
@@ -366,19 +375,6 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               className="dmb-list"
             />
           </>
-        )}
-        renderDeprecatedModal={() => (
-          <Modal
-            isOpen={deprecatedModalIsOpen}
-            toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
-            closeText={'close'}
-            className="deprecated-modal">
-            <p>
-              You have selected a deprecated version. The author of the dataset
-              does not recommend this specific version. The reason provided:
-            </p>
-            <p>{snapshot.deprecated.reason}</p>
-          </Modal>
         )}
         renderComments={() => (
           <Comments

@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import { Button } from '@openneuro/components/button'
+import { useHistory } from 'react-router-dom'
 
-const DEPRECATE_SNAPSHOT = gql`
+export const DEPRECATE_SNAPSHOT = gql`
   mutation deprecateSnapshot($datasetId: ID!, $tag: String!, $reason: String!) {
     deprecateSnapshot(datasetId: $datasetId, tag: $tag, reason: $reason) {
       id
@@ -24,7 +25,8 @@ export const DeprecateSnapshot: FC<DeprecateSnapshotProps> = ({
   tag,
   reason,
 }) => {
-  const [DeprecateSnapshot, { data, error }] = useMutation(DEPRECATE_SNAPSHOT)
+  const history = useHistory()
+  const [DeprecateSnapshot] = useMutation(DEPRECATE_SNAPSHOT)
 
   return (
     <Button
@@ -35,6 +37,8 @@ export const DeprecateSnapshot: FC<DeprecateSnapshotProps> = ({
       onClick={() =>
         DeprecateSnapshot({
           variables: { datasetId, tag, reason },
+        }).then(() => {
+          history.push(`/datasets/${datasetId}/versions/${tag}`)
         })
       }
     />

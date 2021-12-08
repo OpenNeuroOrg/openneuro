@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DeprecateSnapshot mutation renders with typical props 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Deprecate Version"
+    class="on-button on-button--small on-button--primary  btn-modal-action"
+    role="button"
+    type="button"
+  >
+    Deprecate Version
+  </button>
+</DocumentFragment>
+`;

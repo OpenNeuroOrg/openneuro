@@ -14,6 +14,7 @@ import {
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
 import Comments from './comments/comments.jsx'
+import { DatasetAlertDraft } from './fragments/dataset-alert-draft'
 import {
   MetaDataBlock,
   ModalitiesMetaDataBlock,
@@ -21,14 +22,12 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
-  DatasetAlert,
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
   VersionList,
   DatasetTools,
 } from '@openneuro/components/dataset'
-import { Modal } from '@openneuro/components/modal'
 import { ReadMore } from '@openneuro/components/read-more'
 
 import { FollowDataset } from './mutations/follow'
@@ -115,7 +114,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
         renderAlert={() => (
           <>
             {hasEdit && (
-              <DatasetAlert
+              <DatasetAlertDraft
                 isPrivate={!dataset.public}
                 datasetId={dataset.id}
                 hasDraftChanges={hasDraftChanges}

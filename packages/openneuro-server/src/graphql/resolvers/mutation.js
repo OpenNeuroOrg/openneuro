@@ -15,6 +15,7 @@ import {
   createSnapshot,
   deleteSnapshot,
   deprecateSnapshot,
+  undoDeprecateSnapshot,
 } from './snapshots.js'
 import { removeUser, setAdmin, setBlocked } from './user.js'
 import { updateSummary } from './summary.js'
@@ -44,6 +45,7 @@ const Mutation = {
   flagAnnexObject,
   createSnapshot,
   deprecateSnapshot,
+  undoDeprecateSnapshot,
   deleteSnapshot,
   updateSummary,
   updateValidation,

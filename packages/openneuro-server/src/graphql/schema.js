@@ -177,6 +177,8 @@ export const typeDefs = `
     resetDraft(datasetId: ID!, ref: String!): Boolean
     # Flag snapshot as deprecated
     deprecateSnapshot(datasetId: ID!, tag: String!, reason: String!): Snapshot
+    # Unflag snapshot as deprecated
+    undoDeprecateSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Create anonymous read only reviewer
     createReviewer(datasetId: ID!): DatasetReviewer
     # Remove reviewer
@@ -485,7 +487,7 @@ export const typeDefs = `
     # hexsha of deprecated snapshots
     id: ID!
     # ID of user who flagged snapshot as deprecated
-    user: User
+    user: String
     # Reason for deprecating snaphot
     reason: String
     # Timestamp of snapshot deprecation

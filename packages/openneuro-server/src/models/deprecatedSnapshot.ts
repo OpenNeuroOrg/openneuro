@@ -13,7 +13,6 @@ const deprecatedSnapshotSchema = new Schema({
   user: {
     type: String,
     required: true,
-    ref: 'User',
   },
   reason: {
     type: String,

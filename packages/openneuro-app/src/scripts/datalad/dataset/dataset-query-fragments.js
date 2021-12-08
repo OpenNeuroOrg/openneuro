@@ -138,9 +138,7 @@ export const SNAPSHOT_FIELDS = gql`
     readme
     deprecated {
       id
-      user {
-        id
-      }
+      user
       reason
       timestamp
     }
