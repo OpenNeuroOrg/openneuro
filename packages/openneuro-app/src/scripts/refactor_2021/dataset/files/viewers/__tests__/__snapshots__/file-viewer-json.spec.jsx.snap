@@ -1,79 +1,104 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`File Viewer - JSON renders with invalid JSON 1`] = `
-<div
-  className="container"
->
+<DocumentFragment>
   <div
-    className="grid"
+    class="container"
   >
     <div
-      className="col col-lg"
+      class="grid"
     >
-      <h3>
-        Tree
-      </h3>
-      <hr />
-      <p>
-        JSON failed to parse
-      </p>
-      <pre>
-        Unexpected token ; in JSON at position 4
-      </pre>
-    </div>
-    <div
-      className="col"
-    >
-      <h3>
-        Raw
-      </h3>
-      <hr />
-      <Styled(pre)>
-        1234;
-      </Styled(pre)>
+      <div
+        class="col col-lg"
+      >
+        <h3>
+          Tree
+        </h3>
+        <hr />
+        <p>
+          JSON failed to parse
+        </p>
+        <pre>
+          Unexpected token ; in JSON at position 4
+        </pre>
+      </div>
+      <div
+        class="col"
+      >
+        <h3>
+          Raw
+        </h3>
+        <hr />
+        <pre
+          class="css-ffm88e"
+        >
+          1234;
+        </pre>
+      </div>
     </div>
   </div>
-</div>
+</DocumentFragment>
 `;
 
 exports[`File Viewer - JSON renders with valid JSON 1`] = `
-<div
-  className="container"
->
+<DocumentFragment>
   <div
-    className="grid"
+    class="container"
   >
     <div
-      className="col col-lg"
+      class="grid"
     >
-      <h3>
-        Tree
-      </h3>
-      <hr />
-      <RecursiveProperty
-        emptyPropertyLabel="Property is empty"
-        property={
-          Object {
-            "name": "string",
-            "thing": 1,
-          }
-        }
-        propertyName="Root Property"
-        propertyNameProcessor={[Function]}
-        rootProperty={true}
-      />
-    </div>
-    <div
-      className="col"
-    >
-      <h3>
-        Raw
-      </h3>
-      <hr />
-      <Styled(pre)>
-        {"thing":1,"name":"string"}
-      </Styled(pre)>
+      <div
+        class="col col-lg"
+      >
+        <h3>
+          Tree
+        </h3>
+        <hr />
+        <div
+          class="json-container"
+        >
+          <div
+            class="expand-prop-name"
+          >
+             Root  Property-
+          </div>
+          <div
+            class="json-container"
+          >
+            <span
+              class="prop-name"
+            >
+              Thing: 
+            </span>
+            1
+          </div>
+          <div
+            class="json-container"
+          >
+            <span
+              class="prop-name"
+            >
+              Name: 
+            </span>
+            string
+          </div>
+        </div>
+      </div>
+      <div
+        class="col"
+      >
+        <h3>
+          Raw
+        </h3>
+        <hr />
+        <pre
+          class="css-ffm88e"
+        >
+          {"thing":1,"name":"string"}
+        </pre>
+      </div>
     </div>
   </div>
-</div>
+</DocumentFragment>
 `;

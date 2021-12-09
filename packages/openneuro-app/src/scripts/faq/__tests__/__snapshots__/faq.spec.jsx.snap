@@ -1,256 +1,285 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`faq/faq/Faq renders successfully 1`] = `
-<Fragment>
-  <HelmetWrapper
-    defer={true}
-    encodeSpecialCharacters={true}
-  >
-    <title>
-      Frequently Asked Questions - 
-      OpenNeuro
-    </title>
-  </HelmetWrapper>
+<DocumentFragment>
   <div
-    className="container faqs"
+    class="container faqs"
   >
     <h1>
       FAQ's
     </h1>
     <div
-      className="panel"
-      key="0"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         How do I get started?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            Check out our [video tutorial](https://www.youtube.com/watch?v=FK_c1x1Pilk).
-          </Te>
+          <span>
+            Check out our 
+            <a
+              href="https://www.youtube.com/watch?v=FK_c1x1Pilk"
+            >
+              video tutorial
+            </a>
+            .
+          </span>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="1"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         Is this service free to use?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
+          <span>
             Yes!
-          </Te>
+          </span>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="2"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         Are there any restrictions on the uploaded data?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: 
-
-* You are the owner of this dataset and have any necessary ethics permissions to share the data publicly.
-* This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans, etc.).
-* You agree that this dataset will become publicly available under a Creative Commons CC0 license after a grace period of 36 months counted from the first successful snapshot of the dataset.
-* This dataset is not subject to GDPR protections.
-          </Te>
+          <div>
+            <p>
+              Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: 
+            </p>
+            <ul>
+              <li>
+                You are the owner of this dataset and have any necessary ethics permissions to share the data publicly.
+              </li>
+              <li>
+                This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans, etc.).
+              </li>
+              <li>
+                You agree that this dataset will become publicly available under a Creative Commons CC0 license after a grace period of 36 months counted from the first successful snapshot of the dataset.
+              </li>
+              <li>
+                This dataset is not subject to GDPR protections.
+              </li>
+            </ul>
+          </div>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="3"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         What if I will not be able to publish my paper in 36 months?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
+          <span>
             You can apply for up to two 6-month long extensions of the grace period. To apply please contact support. We encourage you to publish a preprint of your work to reduce the uncertainty of the publishing pipeline.
-          </Te>
+          </span>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="4"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         Are there consent form templates we can use in our study?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            Yes! We recommend using the Open Brain Consent - [Ultimate consent form](https://open-brain-consent.readthedocs.io/en/stable/ultimate.html).
-
-* For GDPR protected studies, they have a [Ultimate consent form GDPR edition](https://open-brain-consent.readthedocs.io/en/stable/gdpr/ultimate_gdpr.html).
-          </Te>
+          <div>
+            <p>
+              Yes! We recommend using the Open Brain Consent - 
+              <a
+                href="https://open-brain-consent.readthedocs.io/en/stable/ultimate.html"
+              >
+                Ultimate consent form
+              </a>
+              .
+            </p>
+            <ul>
+              <li>
+                For GDPR protected studies, they have a 
+                <a
+                  href="https://open-brain-consent.readthedocs.io/en/stable/gdpr/ultimate_gdpr.html"
+                >
+                  Ultimate consent form GDPR edition
+                </a>
+                .
+              </li>
+            </ul>
+          </div>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="5"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         Do I need to format my data in some special way before uploading it to OpenNeuro?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at [bids.neuroimaging.io](http://bids.neuroimaging.io/). If you have any questions about organizing your data please post them at [neurostars.org](https://neurostars.org/tags/bids).
-          </Te>
+          <span>
+            Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at 
+            <a
+              href="http://bids.neuroimaging.io/"
+            >
+              bids.neuroimaging.io
+            </a>
+            . If you have any questions about organizing your data please post them at 
+            <a
+              href="https://neurostars.org/tags/bids"
+            >
+              neurostars.org
+            </a>
+            .
+          </span>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="6"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         Do I need to remove facial features from structural images before uploading the data?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            OpenNeuro does not accept datasets that have not been defaced for privacy considerations. Datasets found to not have been defaced will be deleted and the dataset owner is invited to reupload their dataset with the defaced images. The dataset owner will be notified by the OpenNeuro team if an infringement has been detected. The only exception is explicit approval from the study participant(s).
-
-We recommend using [pydeface](https://pypi.python.org/pypi/pydeface) to deface your images. In the case that the dataset(s) is cited in publications, please notify the OpenNeuro team and we will direct the DOI and dataset links from the previous dataset to the new dataset. We suggest adding a note to the README of the reuploaded dataset to specify this change.
-
-For any questions or concerns please email Franklin: &lt;ffein@stanford.edu&gt;
-          </Te>
+          <div>
+            <p>
+              OpenNeuro does not accept datasets that have not been defaced for privacy considerations. Datasets found to not have been defaced will be deleted and the dataset owner is invited to reupload their dataset with the defaced images. The dataset owner will be notified by the OpenNeuro team if an infringement has been detected. The only exception is explicit approval from the study participant(s).
+            </p>
+            <p>
+              We recommend using 
+              <a
+                href="https://pypi.python.org/pypi/pydeface"
+              >
+                pydeface
+              </a>
+               to deface your images. In the case that the dataset(s) is cited in publications, please notify the OpenNeuro team and we will direct the DOI and dataset links from the previous dataset to the new dataset. We suggest adding a note to the README of the reuploaded dataset to specify this change.
+            </p>
+            <p>
+              For any questions or concerns please email Franklin: 
+              <a
+                href="mailto:ffein@stanford.edu"
+              >
+                ffein@stanford.edu
+              </a>
+            </p>
+          </div>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="7"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         How can I upload data onto OpenNeuro?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our [command-line utility tool](https://docs.openneuro.org/packages-openneuro-cli-readme)
-          </Te>
+          <span>
+            We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our 
+            <a
+              href="https://docs.openneuro.org/packages-openneuro-cli-readme"
+            >
+              command-line utility tool
+            </a>
+          </span>
         </span>
       </div>
     </div>
     <div
-      className="panel"
-      key="8"
+      class="panel"
     >
-      <Te
-        className="panel-heading"
-        options={
-          Object {
-            "forceBlock": true,
-          }
-        }
+      <p
+        class="panel-heading"
       >
         Why can I not use CC-BY (or other CC license)?
-      </Te>
+      </p>
       <div
-        className="panel-body"
+        class="panel-body"
       >
         <span>
-          <Te>
-            When OpenNeuro first began accepting data, we hosted datasets that were dedicated to the public domain (CC0 or PDDL) or released under the CC-BY license. The idea of accepting CC-BY licenses was to reflect the academic norm of citing sources, but it fails to achieve that goal. In [CC BY and data: Not always a good fit](https://osc.universityofcalifornia.edu/2016/09/cc-by-and-data-not-always-a-good-fit/), it is argued:
-
-&gt;  **CC licenses are not sufficient for ensuring proper attribution in many  cases because their restrictions — including attribution — do not apply to facts.**
-&gt; ...
-
-&gt; **CC licenses' attribution requirements aren't necessary because scholars have very good reasons to provide attribution that has nothing to do with copyright** [...] Data that comes from nowhere has little credibility. If someone wants to use data as persuasive evidence, they need to refer readers and reviewers back to its source: who it came from and how it was produced.
-
-CC-BY places an ambiguous legal hurdle between researchers and data they are considering using, even if only intended to enforce standard academic practice. To reduce uncertainty for data consumers, all newly published datasets are released under CC0, as are new versions of previously released datasets.  We do nonetheless want to encourage proper attribution of datasets hosted on OpenNeuro. Each version of a dataset is assigned a unique DOI, enabling researchers to cite the version of a dataset they analyzed. Additionally, all OpenNeuro datasets may include a ["HowToAcknowledge" field](https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson), in which dataset providers may provide specific instructions for users for what they consider an appropriate citation.
-          </Te>
+          <div>
+            <p>
+              When OpenNeuro first began accepting data, we hosted datasets that were dedicated to the public domain (CC0 or PDDL) or released under the CC-BY license. The idea of accepting CC-BY licenses was to reflect the academic norm of citing sources, but it fails to achieve that goal. In 
+              <a
+                href="https://osc.universityofcalifornia.edu/2016/09/cc-by-and-data-not-always-a-good-fit/"
+              >
+                CC BY and data: Not always a good fit
+              </a>
+              , it is argued:
+            </p>
+            <blockquote>
+              <p>
+                 
+                <strong>
+                  CC licenses are not sufficient for ensuring proper attribution in many  cases because their restrictions — including attribution — do not apply to facts.
+                </strong>
+                
+...
+              </p>
+              <p>
+                <strong>
+                  CC licenses' attribution requirements aren't necessary because scholars have very good reasons to provide attribution that has nothing to do with copyright
+                </strong>
+                 [...] Data that comes from nowhere has little credibility. If someone wants to use data as persuasive evidence, they need to refer readers and reviewers back to its source: who it came from and how it was produced.
+              </p>
+            </blockquote>
+            <p>
+              CC-BY places an ambiguous legal hurdle between researchers and data they are considering using, even if only intended to enforce standard academic practice. To reduce uncertainty for data consumers, all newly published datasets are released under CC0, as are new versions of previously released datasets.  We do nonetheless want to encourage proper attribution of datasets hosted on OpenNeuro. Each version of a dataset is assigned a unique DOI, enabling researchers to cite the version of a dataset they analyzed. Additionally, all OpenNeuro datasets may include a 
+              <a
+                href="https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson"
+              >
+                "HowToAcknowledge" field
+              </a>
+              , in which dataset providers may provide specific instructions for users for what they consider an appropriate citation.
+            </p>
+          </div>
         </span>
       </div>
     </div>
   </div>
-</Fragment>
+</DocumentFragment>
 `;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ShellExample from './shell-example.jsx'
 
 export const DownloadSampleCommand = ({ datasetId, snapshotTag }) => (
-  <ShellExample>
+  <ShellExample role="figure">
     openneuro download {snapshotTag ? `--snapshot ${snapshotTag}` : '--draft'}{' '}
     {datasetId} {datasetId}
     -download/

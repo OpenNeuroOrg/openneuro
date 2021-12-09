@@ -70,7 +70,7 @@ const Select = styled.select<ShowOtherProps>(
       height: '100%',
       color: 'rgba(0,0,0,0)',
       backgroundColor: 'rgba(0,0,0,0)',
-      '-moz-appearance': 'none',
+      MozAppearance: 'none',
     },
   },
   ({ showOther }) =>

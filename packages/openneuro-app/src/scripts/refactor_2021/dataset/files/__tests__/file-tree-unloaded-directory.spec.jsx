@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { render, screen, fireEvent } from '@testing-library/react'
 import DatasetQueryContext from '../../../../datalad/dataset/dataset-query-context.js'
 import FileTreeUnloadedDirectory, {
   mergeNewFiles,
@@ -12,12 +12,13 @@ const dir = {
 describe('FileTreeUnloadedDirectory component', () => {
   it('calls fetchMoreDirectory when clicked', () => {
     const fetchMore = jest.fn()
-    const wrapper = mount(
+    render(
       <DatasetQueryContext.Provider value={{ fetchMore }}>
         <FileTreeUnloadedDirectory datasetId={'ds000001'} directory={dir} />
       </DatasetQueryContext.Provider>,
     )
-    wrapper.find('div.accordion-title').simulate('click')
+    // Label is filename
+    fireEvent.click(screen.getByLabelText(dir.filename))
     expect(fetchMore).toHaveBeenCalled()
   })
   describe('mergeNewFiles', () => {

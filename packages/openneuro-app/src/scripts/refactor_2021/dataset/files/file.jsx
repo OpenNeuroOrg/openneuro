@@ -113,7 +113,8 @@ const File = ({
             <span className="edit-file download-file">
               <a
                 href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
-                download>
+                download
+                aria-label="download file">
                 <i className="fa fa-download" />
               </a>
             </span>
@@ -121,7 +122,7 @@ const File = ({
         </Media>
         <Tooltip tooltip="View">
           <span className="edit-file view-file">
-            <Link to={viewerPath}>
+            <Link to={viewerPath} aria-label="view file">
               <i className="fa fa-eye" />
             </Link>
           </span>

@@ -1,10 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditButton component renders with default props 1`] = `
-<Button
-  className="description-btn description-button-edit"
-  icon="fas fa-edit"
-  label="Edit"
-  onClick={[Function]}
-/>
+<DocumentFragment>
+  <button
+    aria-label="Edit"
+    class="on-button on-button--medium on-button--default icon-text description-btn description-button-edit"
+    role="button"
+    type="button"
+  >
+    <i
+      aria-hidden="true"
+      class="fas fa-edit css-0"
+    />
+    Edit
+  </button>
+</DocumentFragment>
 `;

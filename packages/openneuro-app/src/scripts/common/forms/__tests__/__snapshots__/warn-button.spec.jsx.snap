@@ -1,35 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`common/forms/WarnButton renders successfully 1`] = `
-<span
-  className=""
->
-  <button
-    className="btn-warn-component warning"
-    onClick={[Function]}
+<DocumentFragment>
+  <span
+    class=""
   >
-    <i
-      className="fa fa-trash-o"
-    />
-     
-    A Button!
-  </button>
-</span>
+    <button
+      class="btn-warn-component warning"
+    >
+      <i
+        class="fa fa-trash-o"
+      />
+       A Button!
+    </button>
+  </span>
+</DocumentFragment>
 `;
 
 exports[`common/forms/WarnButton renders with warnings disable 1`] = `
-<span
-  className=""
->
-  <button
-    className="btn-warn-component warning"
-    onClick={[Function]}
+<DocumentFragment>
+  <span
+    class=""
   >
-    <i
-      className="fa fa-trash-o"
-    />
-     
-    A Button!
-  </button>
-</span>
+    <button
+      class="btn-warn-component warning"
+    >
+      <i
+        class="fa fa-trash-o"
+      />
+       A Button!
+    </button>
+  </span>
+</DocumentFragment>
 `;

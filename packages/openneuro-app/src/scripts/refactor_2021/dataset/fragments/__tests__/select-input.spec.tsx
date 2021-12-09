@@ -1,10 +1,10 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render, fireEvent, screen } from '@testing-library/react'
 import SelectInput from '../select-input'
 
 describe('SelectInput', () => {
   it('handles display as disabled', () => {
-    const wrapper = shallow(
+    const { asFragment } = render(
       <SelectInput
         {...{
           name: 'Expected name',
@@ -16,10 +16,10 @@ describe('SelectInput', () => {
         }}
       />,
     )
-    expect(wrapper).toMatchSnapshot()
+    expect(asFragment()).toMatchSnapshot()
   })
   it('handles display as not disabled', () => {
-    const wrapper = shallow(
+    const { asFragment } = render(
       <SelectInput
         {...{
           name: 'Expected name',
@@ -31,10 +31,10 @@ describe('SelectInput', () => {
         }}
       />,
     )
-    expect(wrapper).toMatchSnapshot()
+    expect(asFragment()).toMatchSnapshot()
   })
   it('handles boolean display', () => {
-    const wrapper = shallow(
+    const { asFragment } = render(
       <SelectInput
         {...{
           name: 'Expected name',
@@ -50,12 +50,12 @@ describe('SelectInput', () => {
         }}
       />,
     )
-    expect(wrapper).toMatchSnapshot()
+    expect(asFragment()).toMatchSnapshot()
   })
   it('handles boolean values', () => {
     let _, value
     const onChange = (...args) => ([_, value] = args)
-    const wrapper = shallow(
+    render(
       <SelectInput
         {...{
           name: 'Expected name',
@@ -78,7 +78,7 @@ describe('SelectInput', () => {
       },
       target: { value: 'false' },
     }
-    wrapper.find('styledSelect[name="Expected name"]').simulate('change', event)
+    fireEvent.change(screen.getByRole('combobox'), event)
     expect(value).toBe(false)
   })
 })

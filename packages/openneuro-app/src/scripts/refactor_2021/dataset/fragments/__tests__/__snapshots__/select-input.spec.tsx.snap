@@ -1,154 +1,227 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SelectInput handles boolean display 1`] = `
-<Fragment>
-  <Styled(div)>
-    <Styled(label)
-      hasValue={true}
-      htmlFor="Expected name"
+<DocumentFragment>
+  <div
+    class="css-1e7yhge"
+  >
+    <label
+      class="css-xlyr96"
+      for="Expected name"
     >
       Expected label
-    </Styled(label)>
-    <Styled(i)
-      className="fa fa-asterisk"
+    </label>
+    <i
+      class="fa fa-asterisk css-1gx6zd3"
     />
-    <Styled(div)>
-      true
-      <SelectIcon />
-    </Styled(div)>
-    <styledSelect
-      disabled={true}
-      name="Expected name"
-      onChange={[Function]}
-      value="true"
+    <div
+      class="css-1y7plm6"
     >
-      <Styled(option)
-        disabled={true}
-        hidden={true}
+      true
+      <div
+        class="css-ul54qr"
+      >
+        <i
+          class="fa fa-caret-up"
+        />
+        <i
+          class="fa fa-caret-down"
+        />
+      </div>
+    </div>
+    <select
+      class="css-1m2rag2"
+      disabled=""
+      name="Expected name"
+    >
+      <option
+        class="css-1xu3tth"
+        disabled=""
+        hidden=""
         value=""
       />
-      <Styled(option)
-        key="0"
-        value={true}
+      <option
+        class="css-1xu3tth"
+        value="true"
       >
         true-label
-      </Styled(option)>
-      <Styled(option)
-        key="1"
-        value={false}
+      </option>
+      <option
+        class="css-1xu3tth"
+        value="false"
       >
         false-label
-      </Styled(option)>
-    </styledSelect>
-  </Styled(div)>
-  <Styled(div)>
-    <TextInput
-      disabled={true}
-      label="Other Expected label"
-      name="Expected name"
-      value="true"
-    />
-  </Styled(div)>
-</Fragment>
+      </option>
+    </select>
+  </div>
+  <div
+    class="css-vzng66"
+  >
+    <div
+      class="css-1k9o271"
+    >
+      <label
+        class="css-1y4orcj"
+        for="Expected name"
+      >
+        Other Expected label
+      </label>
+      <input
+        class="css-1v4xkzy"
+        disabled=""
+        name="Expected name"
+        value="true"
+      />
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`SelectInput handles display as disabled 1`] = `
-<Fragment>
-  <Styled(div)>
-    <Styled(label)
-      hasValue={true}
-      htmlFor="Expected name"
+<DocumentFragment>
+  <div
+    class="css-1e7yhge"
+  >
+    <label
+      class="css-xlyr96"
+      for="Expected name"
     >
       Expected label
-    </Styled(label)>
-    <Styled(i)
-      className="fa fa-asterisk"
+    </label>
+    <i
+      class="fa fa-asterisk css-1gx6zd3"
     />
-    <Styled(div)>
-      hi
-      <SelectIcon />
-    </Styled(div)>
-    <styledSelect
-      disabled={true}
-      name="Expected name"
-      onChange={[Function]}
-      value="hi"
+    <div
+      class="css-1y7plm6"
     >
-      <Styled(option)
-        disabled={true}
-        hidden={true}
+      hi
+      <div
+        class="css-ul54qr"
+      >
+        <i
+          class="fa fa-caret-up"
+        />
+        <i
+          class="fa fa-caret-down"
+        />
+      </div>
+    </div>
+    <select
+      class="css-1m2rag2"
+      disabled=""
+      name="Expected name"
+    >
+      <option
+        class="css-1xu3tth"
+        disabled=""
+        hidden=""
         value=""
       />
-      <Styled(option)
-        key="0"
+      <option
+        class="css-1xu3tth"
         value="hi"
       >
         hi
-      </Styled(option)>
-      <Styled(option)
-        key="1"
+      </option>
+      <option
+        class="css-1xu3tth"
         value="bye"
       >
         bye
-      </Styled(option)>
-    </styledSelect>
-  </Styled(div)>
-  <Styled(div)>
-    <TextInput
-      disabled={true}
-      label="Other Expected label"
-      name="Expected name"
-      value="hi"
-    />
-  </Styled(div)>
-</Fragment>
+      </option>
+    </select>
+  </div>
+  <div
+    class="css-vzng66"
+  >
+    <div
+      class="css-1k9o271"
+    >
+      <label
+        class="css-1y4orcj"
+        for="Expected name"
+      >
+        Other Expected label
+      </label>
+      <input
+        class="css-1v4xkzy"
+        disabled=""
+        name="Expected name"
+        value="hi"
+      />
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`SelectInput handles display as not disabled 1`] = `
-<Fragment>
-  <Styled(div)>
-    <Styled(label)
-      hasValue={true}
-      htmlFor="Expected name"
+<DocumentFragment>
+  <div
+    class="css-1e7yhge"
+  >
+    <label
+      class="css-xlyr96"
+      for="Expected name"
     >
       Expected label
-    </Styled(label)>
-    <Styled(div)>
-      hi
-      <SelectIcon />
-    </Styled(div)>
-    <styledSelect
-      disabled={false}
-      name="Expected name"
-      onChange={[Function]}
-      value="hi"
+    </label>
+    <div
+      class="css-1y7plm6"
     >
-      <Styled(option)
-        disabled={true}
-        hidden={true}
+      hi
+      <div
+        class="css-ul54qr"
+      >
+        <i
+          class="fa fa-caret-up"
+        />
+        <i
+          class="fa fa-caret-down"
+        />
+      </div>
+    </div>
+    <select
+      class="css-1m2rag2"
+      name="Expected name"
+    >
+      <option
+        class="css-1xu3tth"
+        disabled=""
+        hidden=""
         value=""
       />
-      <Styled(option)
-        key="0"
+      <option
+        class="css-1xu3tth"
         value="hi"
       >
         hi
-      </Styled(option)>
-      <Styled(option)
-        key="1"
+      </option>
+      <option
+        class="css-1xu3tth"
         value="bye"
       >
         bye
-      </Styled(option)>
-    </styledSelect>
-  </Styled(div)>
-  <Styled(div)>
-    <TextInput
-      disabled={false}
-      label="Other Expected label"
-      name="Expected name"
-      value="hi"
-    />
-  </Styled(div)>
-</Fragment>
+      </option>
+    </select>
+  </div>
+  <div
+    class="css-vzng66"
+  >
+    <div
+      class="css-1k9o271"
+    >
+      <label
+        class="css-1y4orcj"
+        for="Expected name"
+      >
+        Other Expected label
+      </label>
+      <input
+        class="css-1v4xkzy"
+        name="Expected name"
+        value="hi"
+      />
+    </div>
+  </div>
+</DocumentFragment>
 `;

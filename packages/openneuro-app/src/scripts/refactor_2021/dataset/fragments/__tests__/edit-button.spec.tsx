@@ -1,10 +1,10 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import { EditButton } from '../edit-button'
 
 describe('EditButton component', () => {
   it('renders with default props', () => {
-    const wrapper = shallow(<EditButton action={() => {}} />)
-    expect(wrapper).toMatchSnapshot()
+    const { asFragment } = render(<EditButton action={() => {}} />)
+    expect(asFragment()).toMatchSnapshot()
   })
 })

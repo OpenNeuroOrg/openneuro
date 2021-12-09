@@ -1,10 +1,10 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import { SaveButton } from '../save-button'
 
 describe('SaveButton component', () => {
   it('renders with default props', () => {
-    const wrapper = shallow(<SaveButton action={() => {}} />)
-    expect(wrapper).toMatchSnapshot()
+    const { asFragment } = render(<SaveButton action={() => {}} />)
+    expect(asFragment()).toMatchSnapshot()
   })
 })

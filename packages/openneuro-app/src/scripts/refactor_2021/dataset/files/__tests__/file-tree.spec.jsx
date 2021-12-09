@@ -1,6 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
-import { ApolloProvider } from '@apollo/client'
+import { render, screen, fireEvent } from '@testing-library/react'
+import { MockedProvider } from '@apollo/client/testing'
 import FileTree, {
   sortByFilename,
   sortByName,
@@ -30,27 +30,31 @@ jest.mock('react-spring', () => ({
 
 describe('FileTree component', () => {
   it('renders with default props', () => {
-    expect(mount(<FileTree />)).toMatchSnapshot()
+    const { asFragment } = render(<FileTree />)
+    expect(asFragment()).toMatchSnapshot()
   })
   it('expands and closes when clicked', () => {
-    // ApolloProvider isn't used in this test but must exist
-    // When enzyme supports hooks, this can be simplified
-    const wrapper = mount(
-      <ApolloProvider client={{}}>
+    render(
+      <MockedProvider>
         <FileTree name="Top Level" />
-      </ApolloProvider>,
+      </MockedProvider>,
     )
-    expect(
-      wrapper.find('div.accordion-title i').hasClass('fa-folder-open'),
-    ).toBe(false)
-    wrapper.find('div.accordion-title').simulate('click')
-    expect(
-      wrapper.find('div.accordion-title i').hasClass('fa-folder-open'),
-    ).toBe(true)
-    wrapper.find('div.accordion-title').simulate('click')
-    expect(
-      wrapper.find('div.accordion-title i').hasClass('fa-folder-open'),
-    ).toBe(false)
+    // Test the folder icon is closed
+    expect(screen.getByLabelText('Top Level').firstChild).toHaveClass(
+      'fa-folder',
+    )
+    expect(screen.getByLabelText('Top Level').firstChild).not.toHaveClass(
+      'fa-folder-open',
+    )
+    // Click it
+    fireEvent.click(screen.getByLabelText('Top Level'))
+    // Test that it is now open
+    expect(screen.getByLabelText('Top Level').firstChild).toHaveClass(
+      'fa-folder-open',
+    )
+    expect(screen.getByLabelText('Top Level').firstChild).not.toHaveClass(
+      'fa-folder',
+    )
   })
   describe('sortByFilename()', () => {
     it('sorts the expected filename properties', () => {
