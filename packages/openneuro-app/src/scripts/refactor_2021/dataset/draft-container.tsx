@@ -11,6 +11,7 @@ import { config } from '../../config'
 import {
   getUnexpiredProfile,
   hasEditPermissions,
+  hasDatasetAdminPermissions,
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
 import Comments from './comments/comments.jsx'

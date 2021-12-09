@@ -3,7 +3,7 @@ import { gql, useMutation } from '@apollo/client'
 import { Button } from '@openneuro/components/button'
 import { Tooltip } from '@openneuro/components/tooltip'
 
-const DEPRECATE_SNAPSHOT = gql`
+const UNDO_DEPRECATE_VERSION = gql`
   mutation undoDeprecateSnapshot($datasetId: ID!, $tag: String!) {
     undoDeprecateSnapshot(datasetId: $datasetId, tag: $tag) {
       id
@@ -23,7 +23,7 @@ export const UndoDeprecateVersion: FC<UndoDeprecateVersionProps> = ({
   datasetId,
   tag,
 }) => {
-  const [UndoDeprecateVersion] = useMutation(DEPRECATE_SNAPSHOT)
+  const [UndoDeprecateVersion] = useMutation(UNDO_DEPRECATE_VERSION)
 
   return (
     <Tooltip tooltip="Undo Deprecation" flow="right">

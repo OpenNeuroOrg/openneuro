@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
-import { DeprecateSnapshot } from '../mutations/deprecate-snapshot'
+import { DeprecateVersion } from '../mutations/deprecate-version'
 import { Input } from '@openneuro/components/input'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
@@ -31,7 +31,7 @@ export const DeprecateSnapshotPage = (): React.ReactElement => {
       <hr />
       <div className="dataset-form-controls">
         <LoggedIn>
-          <DeprecateSnapshot
+          <DeprecateVersion
             datasetId={datasetId}
             tag={snapshotTag}
             reason={reason}
