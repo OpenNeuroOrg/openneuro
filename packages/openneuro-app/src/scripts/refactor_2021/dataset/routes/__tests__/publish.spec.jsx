@@ -1,10 +1,10 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import Publish from '../publish.jsx'
 
 describe('Publish dataset route', () => {
   it('renders with common props', () => {
-    const wrapper = shallow(<Publish datasetId="ds00001" />)
-    expect(wrapper).toMatchSnapshot()
+    const { asFragment } = render(<Publish datasetId="ds00001" />)
+    expect(asFragment).toMatchSnapshot()
   })
 })
