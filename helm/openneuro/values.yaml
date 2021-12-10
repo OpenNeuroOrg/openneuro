@@ -34,6 +34,12 @@ contentTag: v1.0.6
 # Sentry DSN (non-secret version)
 sentryDsn: https://ba0c58863b3e40a2a412132bfd2711ea@o114074.ingest.sentry.io/251076
 
+# Elastic APM path
+apmServerUrl: https://b33224e4ded44efabb74f65de2f84f2e.apm.us-east-1.aws.found.io
+
+# Worker CPU requests
+workerCpuRequests: 0.2
+
 # Configure storage node EBS volumes
 # Workers are evenly distributed across available pools
 # Size in bytes
