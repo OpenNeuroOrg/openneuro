@@ -80,13 +80,6 @@ spec:
                 port:
                   number: 80
           {{- end }}
-          - path: /intake/*
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ .Release.Name }}-apm-server
-                port:
-                  number: 8200
           - path: /*
             pathType: ImplementationSpecific
             backend:
