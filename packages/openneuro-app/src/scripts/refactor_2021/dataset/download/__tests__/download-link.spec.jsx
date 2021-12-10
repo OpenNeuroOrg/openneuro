@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import DownloadLink from '../download-link.jsx'
 import { MockedProvider } from '@apollo/client/testing'
 const defProps = {
@@ -9,11 +9,11 @@ const defProps = {
 
 describe('dataset/download/DownloadLink', () => {
   it('renders successfully', () => {
-    const wrapper = shallow(
+    const { asFragment } = render(
       <MockedProvider>
         <DownloadLink {...defProps} />
       </MockedProvider>,
     )
-    expect(wrapper).toMatchSnapshot()
+    expect(asFragment()).toMatchSnapshot()
   })
 })

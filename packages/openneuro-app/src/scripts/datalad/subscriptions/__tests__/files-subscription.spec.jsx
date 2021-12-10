@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
+import { MockedProvider } from '@apollo/client/testing'
 import FilesSubscription, {
   deleteFilesReducer,
   updateFilesReducer,
@@ -7,8 +8,10 @@ import FilesSubscription, {
 
 describe('FilesSubscription', () => {
   it('renders with common props', () => {
-    const wrapper = shallow(<FilesSubscription datasetId="ds001" />)
-    expect(wrapper).toMatchSnapshot()
+    const { asFragment } = render(<FilesSubscription datasetId="ds001" />, {
+      wrapper: MockedProvider,
+    })
+    expect(asFragment()).toMatchSnapshot()
   })
 })
 

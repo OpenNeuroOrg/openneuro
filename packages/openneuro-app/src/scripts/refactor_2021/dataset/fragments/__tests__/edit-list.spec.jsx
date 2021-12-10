@@ -2,7 +2,6 @@ import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
 import EditList from '../edit-list.jsx'
 
-// Mount is used because enzyme does not yet support hooks
 describe('EditList component', () => {
   it('renders with default props', () => {
     const { asFragment } = render(<EditList />)

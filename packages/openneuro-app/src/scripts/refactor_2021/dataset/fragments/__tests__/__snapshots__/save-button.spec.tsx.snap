@@ -1,10 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SaveButton component renders with default props 1`] = `
-<Button
-  className="description-btn description-button-save"
-  icon="fas fa-check"
-  label="Save"
-  onClick={[Function]}
-/>
+<DocumentFragment>
+  <button
+    aria-label="Save"
+    class="on-button on-button--medium on-button--default icon-text description-btn description-button-save"
+    role="button"
+    type="button"
+  >
+    <i
+      aria-hidden="true"
+      class="fas fa-check css-0"
+    />
+    Save
+  </button>
+</DocumentFragment>
 `;

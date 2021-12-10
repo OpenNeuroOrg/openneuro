@@ -1,14 +1,16 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import WarnButton from '../warn-button'
 
 describe('common/forms/WarnButton', () => {
   it('renders successfully', () => {
-    const wrapper = shallow(<WarnButton message="A Button!" />)
-    expect(wrapper).toMatchSnapshot()
+    const { asFragment } = render(<WarnButton message="A Button!" />)
+    expect(asFragment()).toMatchSnapshot()
   })
   it('renders with warnings disable', () => {
-    const wrapper = shallow(<WarnButton message="A Button!" warn={false} />)
-    expect(wrapper).toMatchSnapshot()
+    const { asFragment } = render(
+      <WarnButton message="A Button!" warn={false} />,
+    )
+    expect(asFragment()).toMatchSnapshot()
   })
 })

@@ -1,10 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CancelButton component renders with default props 1`] = `
-<Button
-  className="description-btn description-button-cancel"
-  icon="fas fa-times"
-  label="Cancel"
-  onClick={[Function]}
-/>
+<DocumentFragment>
+  <button
+    aria-label="Cancel"
+    class="on-button on-button--medium on-button--default icon-text description-btn description-button-cancel"
+    role="button"
+    type="button"
+  >
+    <i
+      aria-hidden="true"
+      class="fas fa-times css-0"
+    />
+    Cancel
+  </button>
+</DocumentFragment>
 `;
