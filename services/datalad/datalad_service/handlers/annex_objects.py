@@ -26,8 +26,8 @@ class AnnexObjectsResource(object):
                 resp.status = falcon.HTTP_BAD_REQUEST
             urls = file.get('urls')
 
-            gevent.spawn(remove_file_remotes, self.store, urls)
-            gevent.spawn(remove_annex_object, self.store, ds, annex_key)
+            gevent.spawn(remove_file_remotes, urls)
+            gevent.spawn(remove_annex_object, dataset_path, annex_key)
         else:
             resp.media = {'error': 'annex-key is missing'}
             resp.status = falcon.HTTP_NOT_FOUND

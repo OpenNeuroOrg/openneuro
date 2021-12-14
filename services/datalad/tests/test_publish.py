@@ -1,25 +1,57 @@
 import os
-
 from .dataset_fixtures import *
+from unittest.mock import Mock, call
 
-from datalad_service.tasks.publish import publish_snapshot, create_github_repo
+import falcon
+
+from datalad_service.tasks.publish import export_dataset, create_remotes
+from datalad_service.common.annex import is_git_annex_remote
 
 
-def test_publish(s3_creds, datalad_store, new_dataset):
+def test_publish_dataset(no_init_remote, new_dataset):
+    """Verify remotes are created once a dataset is made public"""
+    create_remotes(new_dataset.path)
+    assert is_git_annex_remote(new_dataset.path, 's3-PUBLIC')
+
+
+def test_export_snapshots(no_init_remote, client, new_dataset):
+    """
+    Create some snapshots, make dataset public, and then make sure we have run an S3 export for each one
+
+    no_init_remote creates a directory remote for S3 and a non-existent GitHub remote
+    These are sufficient for testing that special remotes trigger the tests for those
+    """
     ds_id = os.path.basename(new_dataset.path)
-    publish_snapshot(
-        new_dataset.path, snapshot='test-version')
-
-
-def test_publish_private(s3_creds, datalad_store, new_dataset):
-    ds_id = os.path.basename(new_dataset.path)
-    publish_snapshot(
-        new_dataset.path, snapshot='test-version', cookies=None, realm='PRIVATE')
-
-
-def test_publish_public(s3_creds, monkeypatch, github_dryrun, datalad_store, new_dataset):
-    monkeypatch.setenv('DATALAD_GITHUB_ORG', 'test')
-    monkeypatch.setenv('DATALAD_GITHUB_LOGIN', 'user')
-    monkeypatch.setenv('DATALAD_GITHUB_PASS', 'password')
-    publish_snapshot(
-        new_dataset.path, snapshot='test-version', cookies=None, realm='PUBLIC')
+    # Create 1.0.0
+    response = client.simulate_post(
+        '/datasets/{}/snapshots/{}'.format(ds_id, '1.0.0'), body="")
+    assert response.status == falcon.HTTP_OK
+    # Update a file
+    file_data = json.dumps({
+        "BIDSVersion": "1.0.2",
+        "License": "CC0",
+        "Name": "Test fixture new dataset",
+        "Authors": ["Test Authors", "Please Ignore"],
+    }, indent=4)
+    response = client.simulate_post(
+        '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    # Create 2.0.0
+    response = client.simulate_post(
+        '/datasets/{}/snapshots/{}'.format(ds_id, '2.0.0'), body="")
+    assert response.status == falcon.HTTP_OK
+    # Make it public
+    create_remotes(new_dataset.path)
+    # Export
+    s3_export_mock = Mock()
+    github_export_mock = Mock()
+    export_dataset(new_dataset.path, s3_export=s3_export_mock,
+                   github_export=github_export_mock, github_enabled=True)
+    # Verify export calls were made
+    assert s3_export_mock.call_count == 2
+    expect_calls = [call(new_dataset.path, 's3-PUBLIC', 'refs/tags/1.0.0'),
+                    call(new_dataset.path, 's3-PUBLIC', 'refs/tags/2.0.0')]
+    s3_export_mock.assert_has_calls(expect_calls)
+    assert github_export_mock.call_count == 1
+    expect_calls = [call(new_dataset.path, 'refs/tags/2.0.0')]
+    github_export_mock.assert_has_calls(expect_calls)

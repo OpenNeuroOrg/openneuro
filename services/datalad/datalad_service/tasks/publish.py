@@ -1,154 +1,85 @@
 import logging
 import os.path
-import subprocess
 import re
 
+import elasticapm
 import pygit2
 import boto3
 import gevent
 from github import Github
 
 import datalad_service.common.s3
+import datalad_service.common.github
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
-from datalad_service.common.annex import get_tag_info, test_git_annex_remote
+from datalad_service.common.annex import get_tag_info, is_git_annex_remote
 from datalad_service.common.openneuro import clear_dataset_cache
 from datalad_service.common.git import git_show, git_tag
-from datalad_service.common.github import create_sibling_github
-from datalad_service.common.s3 import DatasetRealm, s3_export, get_s3_realm
-from datalad_service.common.s3 import update_s3_sibling
-from datalad_service.common.elasticsearch import ReexportLogger
-
+from datalad_service.common.github import github_export
+from datalad_service.common.s3 import s3_export, get_s3_remote, get_s3_bucket, update_s3_sibling
 
 logger = logging.getLogger('datalad_service.' + __name__)
-
-
-def create_github_repo(dataset_path, dataset_id):
-    """Setup a github sibling / remote."""
-    try:
-        # raise exception if github exports are not enabled
-        if not DATALAD_GITHUB_EXPORTS_ENABLED:
-            raise Exception(
-                'DATALAD_GITHUB_EXPORTS_ENABLED must be defined to create remote repos')
-
-        # this adds github remote to config and also creates repo
-        return create_sibling_github(dataset_path, dataset_id)
-    except KeyError:
-        raise Exception(
-            'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, and DATALAD_GITHUB_ORG must be defined to create remote repos')
 
 
 def github_sibling(dataset_path, dataset_id):
     """
     Find a GitHub remote or create a new repo and configure the remote.
     """
-    if not test_git_annex_remote(dataset_path, 'github'):
-        create_github_repo(dataset_path, dataset_id)
+    if not is_git_annex_remote(dataset_path, 'github'):
+        datalad_service.common.github.create_github_repo(
+            dataset_path, dataset_id)
 
 
-def s3_sibling(dataset_path, realm=DatasetRealm.PRIVATE):
+def s3_sibling(dataset_path):
     """
     Setup a special remote for a versioned S3 remote.
 
     The bucket must already exist and be configured.
     """
-    if not test_git_annex_remote(dataset_path, realm.s3_remote):
-        datalad_service.common.s3.setup_s3_sibling(dataset_path, realm)
+    if not is_git_annex_remote(dataset_path, get_s3_remote()):
+        datalad_service.common.s3.setup_s3_sibling(dataset_path)
 
 
-def github_export(dataset, target):
+def create_remotes_and_export(dataset_path, cookies=None):
     """
-    Publish GitHub repo and tags.
+    Create public S3 and GitHub remotes and export to them.
+
+    Called by publish handler to make a dataset public initially.
     """
-    dataset.publish(to=target)
-    subprocess.check_call(
-        ['git', 'push', '--tags', target], cwd=dataset.path)
+    create_remotes(dataset_path)
+    export_dataset(dataset_path, cookies)
 
 
-def publish_target(dataset, target, treeish):
-    """
-    Publish target of dataset.
-
-    This exists so the actual publish can be easily mocked.
-    """
-    if target == 'github':
-        return github_export(dataset, target)
-    else:
-        return s3_export(dataset, target, treeish)
-
-
-def get_dataset_realm(dataset_path, realm=None):
-    # if realm parameter is not included, find the best target
-    if realm is None:
-        # if the dataset has a public sibling, use this as the export target
-        # otherwise, use the private as the export target
-        public_bucket_name = DatasetRealm(DatasetRealm.PUBLIC).s3_remote
-        if test_git_annex_remote(dataset_path, public_bucket_name):
-            return DatasetRealm(DatasetRealm.PUBLIC)
-        else:
-            return DatasetRealm(DatasetRealm.PRIVATE)
-    else:
-        realm = get_s3_realm(realm=realm)
-    return realm
-
-
-def publish_dataset(dataset_path, cookies=None, realm='PUBLIC'):
-    def should_export(dataset_path, tags):
-        return True
-    export_all_tags(dataset_path, cookies, get_dataset_realm(
-        dataset_path, realm), should_export)
-
-
-def reexport_dataset(dataset_path, cookies=None, realm=None):
-    def should_export(dataset_path, tags):
-        latest_tag = tags[-1:][0].name
-        # If remote has latest snapshot, do not reexport.
-        # Reexporting all snapshots could make a previous snapshot latest in s3.
-        return not check_remote_has_version(dataset_path, DatasetRealm.PUBLIC.s3_remote, latest_tag)
-    # logs to elasticsearch
-    esLogger = ReexportLogger(dataset_path)
-    export_all_tags(dataset_path, cookies,
-                    get_dataset_realm(dataset_path, realm), should_export, esLogger)
-
-
-def publish_snapshot(dataset_path, cookies=None, snapshot=None, realm=None):
-    def should_export(dataset_path, tags):
-        return True
-    export_all_tags(dataset_path, cookies, get_dataset_realm(
-        dataset_path, realm), should_export)
-
-
-def export_all_tags(dataset_path, cookies, realm, check_should_export, esLogger=None):
-    """Migrate a dataset and all snapshots to an S3 bucket"""
+@elasticapm.capture_span()
+def create_remotes(dataset_path):
     dataset = os.path.basename(dataset_path)
-    repo = pygit2.Repository(dataset_path)
-    tags = git_tag(repo)
-    s3_sibling(dataset_path, realm=realm)
-    if check_should_export(dataset_path, tags):
+    s3_sibling(dataset_path)
+    github_sibling(dataset_path, dataset)
+
+
+@elasticapm.capture_span()
+def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_export=github_export, github_enabled=DATALAD_GITHUB_EXPORTS_ENABLED):
+    """
+    Export dataset to S3 and GitHub.
+
+    If the dataset has not been configured with public remotes, this is a noop.
+    """
+    if is_git_annex_remote(dataset_path, get_s3_remote()):
+        dataset = os.path.basename(dataset_path)
+        repo = pygit2.Repository(dataset_path)
+        tags = git_tag(repo)
+        # Iterate over all tags and push those
         for tag in tags:
-            s3_export_successful = False
-            github_export_successful = False
-            error = None
-            try:
-                publish_target(dataset_path, realm.s3_remote, tag.name)
-                gevent.sleep()
-                s3_export_successful = True
-                # Public publishes to GitHub
-                if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
-                    github_sibling(dataset_path, dataset)
-                    publish_target(dataset_path, realm.github_remote, tag.name)
-                    gevent.sleep()
-                    github_export_successful = True
-            except Exception as err:
-                error = err
-            finally:
-                if esLogger:
-                    esLogger.log(tag, s3_export_successful,
-                                 github_export_successful, error)
+            s3_export(dataset_path, get_s3_remote(), tag.name)
+        # Once all S3 tags are exported, update GitHub
+        if github_enabled:
+            # Perform all GitHub export steps
+            github_export(dataset_path, tag.name)
+        # Drop cache once all exports are complete
         clear_dataset_cache(dataset, cookies)
 
 
@@ -181,35 +112,34 @@ def check_remote_has_version(dataset_path, remote, tag):
     return remote_id_A == remote_id_B and tree_id_A == tree_id_B
 
 
-def delete_s3_sibling(dataset_id, siblings, realm):
-    sibling = get_sibling_by_name(realm.s3_remote, siblings)
-    if sibling:
-        try:
-            client = boto3.client(
-                's3',
-                aws_access_key_id=AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+def delete_s3_sibling(dataset_id):
+    try:
+        client = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        )
+        paginator = client.get_paginator('list_object_versions')
+        object_delete_list = []
+        for response in paginator.paginate(Bucket=get_s3_bucket(), Prefix=f'{dataset_id}/'):
+            versions = response.get('Versions', [])
+            versions.extend(response.get('DeleteMarkers', []))
+            object_delete_list.extend(
+                [{'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
+        for i in range(0, len(object_delete_list), 1000):
+            client.delete_objects(
+                Bucket=get_s3_bucket(),
+                Delete={
+                    'Objects': object_delete_list[i:i+1000],
+                    'Quiet': True
+                }
             )
-            paginator = client.get_paginator('list_object_versions')
-            object_delete_list = []
-            for response in paginator.paginate(Bucket=realm.s3_bucket, Prefix=f'{dataset_id}/'):
-                versions = response.get('Versions', [])
-                versions.extend(response.get('DeleteMarkers', []))
-                object_delete_list.extend(
-                    [{'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
-            for i in range(0, len(object_delete_list), 1000):
-                client.delete_objects(
-                    Bucket=realm.s3_bucket,
-                    Delete={
-                        'Objects': object_delete_list[i:i+1000],
-                        'Quiet': True
-                    }
-                )
-        except Exception as e:
-            raise Exception(
-                f'Attempt to delete dataset {dataset_id} from {realm.s3_remote} has failed. ({e})')
+    except Exception as e:
+        raise Exception(
+            f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})')
 
 
+@elasticapm.capture_span()
 def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
     org = ses.get_organization(DATALAD_GITHUB_ORG)
@@ -222,48 +152,26 @@ def delete_github_sibling(dataset_id):
             f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
 
 
-def delete_siblings(store, dataset_id):
-    ds = store.get_dataset(dataset_id)
+def delete_siblings(dataset_id):
+    try:
+        delete_s3_sibling(dataset_id)
+    except:
+        pass
 
-    siblings = ds.siblings()
-    delete_s3_sibling(dataset_id, siblings, DatasetRealm.PRIVATE)
-    delete_s3_sibling(dataset_id, siblings, DatasetRealm.PUBLIC)
-
-    remotes = ds.repo.get_remotes()
-    if DatasetRealm.PUBLIC.github_remote in remotes:
+    try:
         delete_github_sibling(dataset_id)
-
-    for remote in remotes:
-        ds.siblings('remove', remote)
-
-
-def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
-    """
-    Return the OpenNeuro mutation to update the file urls of a snapshot filetree
-    """
-    file_update = {
-        'datasetId': dataset_id,
-        'tag': snapshot_tag,
-        'files': file_urls
-    }
-    return {
-        'query': 'mutation ($files: FileUrls!) { updateSnapshotFileUrls(fileUrls: $files)}',
-        'variables':
-        {
-            'files': file_update
-        }
-    }
+    except:
+        pass
 
 
 def monitor_remote_configs(dataset_path):
     """Check remote configs and correct invalidities."""
-    realm = get_dataset_realm(dataset_path)
-    s3_ok = datalad_service.common.s3.validate_s3_config(dataset_path, realm)
+    s3_ok = datalad_service.common.s3.validate_s3_config(dataset_path)
     if not s3_ok:
-        update_s3_sibling(dataset_path, realm)
+        update_s3_sibling(dataset_path)
 
 
-def remove_file_remotes(store, urls):
+def remove_file_remotes(urls):
     """Removes the remotes for the file with the given annex key."""
     for url in urls:
         if 's3.amazonaws.com' in url:

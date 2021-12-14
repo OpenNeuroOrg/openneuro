@@ -73,7 +73,7 @@ def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     update_head(dataset, dataset_path, hexsha, cookies)
 
 
-def remove_annex_object(store, dataset, annex_key):
+def remove_annex_object(dataset_path, annex_key):
     """Remove an annex object by its key.
 
     :type annex_key: str
@@ -82,7 +82,7 @@ def remove_annex_object(store, dataset, annex_key):
     """
     with subprocess.Popen(
         ['git-annex', 'drop', '--force', f'--key={annex_key}'],
-        cwd=dataset._path,
+        cwd=dataset_path,
         stdout=subprocess.PIPE,
         encoding='utf-8'
     ) as drop_object:

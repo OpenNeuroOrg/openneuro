@@ -216,7 +216,7 @@ def get_tag_info(dataset_path, tag):
     return json.loads(git_process.stdout)
 
 
-def test_git_annex_remote(dataset_path, remote):
+def is_git_annex_remote(dataset_path, remote):
     """Test if a remote is a git-annex remote and active."""
     remote_info = get_tag_info(dataset_path, remote)
     if remote_info['success']:

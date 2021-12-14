@@ -1,12 +1,25 @@
-import os
-
 import falcon
 from falcon import testing
+import pygit2
 
 from .dataset_fixtures import *
+from datalad_service.common import git
 
 
 test_auth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1iMjFiLTQyMGItOTU1NS1hZjg1NmVmYzk0NTIiLCJlbWFpbCI6Im5lbGxAc3F1aXNoeW1lZGlhLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwibmFtZSI6Ik5lbGwgSGFyZGNhc3RsZSIsImFkbWluIjp0cnVlLCJzY29wZXMiOlsiZGF0YXNldDpnaXQiXSwiZGF0YXNldCI6ImRzMDAwMDAxIiwiaWF0IjoxNjA4NDEwNjEyLCJleHAiOjIxNDc0ODM2NDd9.0aA9cZWMieYr9zbmVrTeFEhpATqmT_X4tVX1VR1uabA"
+
+
+def test_git_show(new_dataset):
+    assert git.git_show(new_dataset.path, 'HEAD',
+                        'dataset_description.json') == '{"BIDSVersion": "1.0.2", "License": "This is not a real dataset", "Name": "Test fixture new dataset"}'
+
+
+def test_git_tag(new_dataset):
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_tag(repo) == []
+    # Create a tag and check again
+    repo.references.create('refs/tags/test-tag', repo.head.target.hex)
+    assert git.git_tag(repo)[0].name == 'refs/tags/test-tag'
 
 
 def test_git_refs_resource(client):

@@ -35,7 +35,8 @@ def create_dataset(store, dataset, author=committer):
     with open(os.path.join(dataset_path, '.gitattributes'), 'w') as gitattributes:
         gitattributes.write(GIT_ATTRIBUTES)
     repo.index.add('.gitattributes')
-    git_commit(repo, ['.gitattributes'], author, '[OpenNeuro] Dataset created', parents=[])
+    git_commit(repo, ['.gitattributes'], author,
+               '[OpenNeuro] Dataset created', parents=[])
     return repo.head.target.hex
 
 
@@ -57,7 +58,6 @@ def force_rmtree(root_dir):
     os.rmdir(root_dir)
 
 
-def delete_dataset(store, dataset):
+def delete_dataset(dataset_path):
     """Fully delete a given dataset. Removes all snapshots!"""
-    dataset_path = store.get_dataset_path(dataset)
     force_rmtree(dataset_path)

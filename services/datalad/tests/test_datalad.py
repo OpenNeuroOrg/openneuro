@@ -18,8 +18,7 @@ def test_create_dataset(datalad_store):
 
 
 def test_delete_dataset(datalad_store, new_dataset):
-    ds_id = os.path.basename(new_dataset.path)
-    delete_dataset(datalad_store, ds_id)
+    delete_dataset(new_dataset.path)
     assert not os.path.exists(new_dataset.path)
 
 
