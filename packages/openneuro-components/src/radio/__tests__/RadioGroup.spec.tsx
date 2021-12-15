@@ -17,7 +17,7 @@ describe('RadioGroup component', () => {
       <RadioGroup
         setSelected={setSelected}
         selected={'All Public'}
-        name={name}
+        name="name"
         radioArr={datasetType_available}
         layout="row"
       />,
