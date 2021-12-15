@@ -10,6 +10,7 @@
     "lint": "eslint --ext .jsx --ext .js --ext .ts --ext .tsx packages/*/src",
     "openneuro": "node packages/openneuro-cli/src",
     "_postinstall": "husky install",
+    "prepublish": "rm -fr packages/*/dist .build-cache/ && yarn build",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
