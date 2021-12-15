@@ -17,15 +17,15 @@ import FourOFourPage from '../errors/404page'
 
 const Routes: React.VoidFunctionComponent = () => (
   <Switch>
-    <Route name="faq" exact path="/faq" component={FAQS} />
-    <Route name="front-page" exact path="/" component={FrontPageContainer} />
-    <Route name="api-key" exact path="/keygen" component={APIKey} />
-    <Route name="dataset" path="/datasets" component={Dataset} />
-    <Route name="search" path="/search" component={SearchRoutes} />
-    <Route name="admin" path="/admin" component={Admin} />
-    <Route name="error" path="/error" component={ErrorRoute} />
-    <Route name="pet-landing" path="/pet" component={PETRedirect} />
-    <Route name="citation" path="/cite" component={Citation} />
+    <Route exact path="/faq" component={FAQS} />
+    <Route exact path="/" component={FrontPageContainer} />
+    <Route exact path="/keygen" component={APIKey} />
+    <Route path="/datasets" component={Dataset} />
+    <Route path="/search" component={SearchRoutes} />
+    <Route path="/admin" component={Admin} />
+    <Route path="/error" component={ErrorRoute} />
+    <Route path="/pet" component={PETRedirect} />
+    <Route path="/cite" component={Citation} />
     <Redirect from="/public" to="/search" />
     <Redirect from="/saved" to="/search?bookmarks" />
     <Redirect from="/dashboard" to="/search?mydatasets" />

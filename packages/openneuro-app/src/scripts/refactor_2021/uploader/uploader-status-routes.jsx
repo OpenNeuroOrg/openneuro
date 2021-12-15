@@ -9,12 +9,7 @@ const UploaderStatusRoutes = props => (
     <div className="tasks-col fade-in">
       <div id="upload-tabs" className="uploader">
         <Switch location={props.location}>
-          <Route
-            name="upload-status"
-            path="/upload"
-            exact
-            component={UploadStatus}
-          />
+          <Route path="/upload" exact component={UploadStatus} />
         </Switch>
       </div>
     </div>

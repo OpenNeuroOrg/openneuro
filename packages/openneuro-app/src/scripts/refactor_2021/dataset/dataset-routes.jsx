@@ -28,13 +28,11 @@ const DatasetRoutes = ({ dataset, error }) => {
   return (
     <Switch>
       <Route
-        name="dataset"
         exact
         path="/datasets/:datasetId"
         render={() => <DraftContainer dataset={dataset} />}
       />
       <Route
-        name="download"
         exact
         path="/datasets/:datasetId/download"
         component={() => (
@@ -45,19 +43,16 @@ const DatasetRoutes = ({ dataset, error }) => {
         )}
       />
       <Route
-        name="admin"
         exact
         path="/datasets/:datasetId/admin-datalad"
         component={() => <AdminDataset dataset={dataset} />}
       />
       <Route
-        name="admin"
         exact
         path="/datasets/:datasetId/admin-exports"
         component={() => <AdminExports dataset={dataset} />}
       />
       <Route
-        name="publish"
         exact
         path="/datasets/:datasetId/publish"
         component={() => (
@@ -65,7 +60,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         )}
       />
       <Route
-        name="snapshot-create"
         exact
         path="/datasets/:datasetId/snapshot"
         component={() => (
@@ -78,7 +72,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         )}
       />
       <Route
-        name="share"
         exact
         path="/datasets/:datasetId/share"
         component={() => (
@@ -90,7 +83,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         )}
       />
       <Route
-        name="fileEdit"
         exact
         path="/datasets/:datasetId/file-edit"
         component={stubComponent}
@@ -118,7 +110,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         }}
       />
       <Route
-        name="snapshot-download"
         exact
         path="/datasets/:datasetId/versions/:snapshotId/download"
         component={() => (
@@ -145,13 +136,11 @@ const DatasetRoutes = ({ dataset, error }) => {
         }}
       />
       <Route
-        name="metadata"
         exact
         path="/datasets/:datasetId/metadata"
         component={() => <AddMetadata dataset={dataset} />}
       />
       <Route
-        name="delete"
         exact
         path="/datasets/:datasetId/delete"
         component={() => <DeletePage dataset={dataset} />}

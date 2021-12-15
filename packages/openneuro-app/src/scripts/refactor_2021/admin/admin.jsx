@@ -29,14 +29,8 @@ class Dashboard extends React.Component {
               </ul>
               <Switch>
                 <Redirect path="/admin" to="/admin/users" exact />
+                <Route path="/admin/users" exact component={Users} />
                 <Route
-                  name="users"
-                  path="/admin/users"
-                  exact
-                  component={Users}
-                />
-                <Route
-                  name="flaggedFiles"
                   path="/admin/flagged-files"
                   exact
                   component={FlaggedFiles}

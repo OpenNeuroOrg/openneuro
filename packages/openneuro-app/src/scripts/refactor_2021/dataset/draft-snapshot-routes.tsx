@@ -6,15 +6,10 @@ const Dataset = () => {
   return (
     <Switch>
       <Route
-        name="datalad-snapshot"
         path="/datasets/:datasetId/versions/:snapshotId"
         component={DatasetQuery}
       />
-      <Route
-        name="datalad-dataset"
-        path="/datasets/:datasetId/"
-        component={DatasetQuery}
-      />
+      <Route path="/datasets/:datasetId/" component={DatasetQuery} />
     </Switch>
   )
 }
