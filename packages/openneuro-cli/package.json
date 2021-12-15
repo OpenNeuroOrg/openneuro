@@ -62,7 +62,7 @@
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
     "@types/mkdirp": "^1.0.1",
-    "@types/node": "^14.14.41",
+    "@types/node": "16.11.13",
     "core-js": "^3.10.1",
     "jest-fetch-mock": "^3.0.3",
     "metro-memory-fs": "0.61.0"
