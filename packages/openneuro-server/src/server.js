@@ -1,6 +1,6 @@
 /** Needs to run before the other imports in Node */
-import { start } from 'elastic-apm-node'
-start({
+import apm from 'elastic-apm-node'
+apm.start({
   serviceName: 'openneuro-server',
 })
 
