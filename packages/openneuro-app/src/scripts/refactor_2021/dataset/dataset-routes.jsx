@@ -12,6 +12,7 @@ import Share from './routes/manage-permissions.jsx'
 import Snapshot from './routes/snapshot.jsx'
 import AddMetadata from './routes/add-metadata.jsx'
 import DeletePage from './routes/delete-page'
+import { DeprecateSnapshotPage } from './routes/deprecate-snapshot-page'
 import { FileDisplay } from './files'
 
 //TODO imports
@@ -118,6 +119,12 @@ const DatasetRoutes = ({ dataset, error }) => {
             datasetPermissions={dataset.permissions}
           />
         )}
+      />
+      <Route
+        name="snapshot-deprecate"
+        exact
+        path="/datasets/:datasetId/versions/:snapshotTag/deprecate"
+        component={() => <DeprecateSnapshotPage />}
       />
       <Route
         path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"

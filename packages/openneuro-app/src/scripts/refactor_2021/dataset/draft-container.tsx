@@ -11,9 +11,11 @@ import { config } from '../../config'
 import {
   getUnexpiredProfile,
   hasEditPermissions,
+  hasDatasetAdminPermissions,
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
 import Comments from './comments/comments.jsx'
+import { DatasetAlertDraft } from './fragments/dataset-alert-draft'
 import {
   MetaDataBlock,
   ModalitiesMetaDataBlock,
@@ -21,14 +23,12 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
-  DatasetAlert,
   DatasetHeaderMeta,
   DatasetPage,
   DatasetGitAccess,
   VersionList,
   DatasetTools,
 } from '@openneuro/components/dataset'
-import { Modal } from '@openneuro/components/modal'
 import { ReadMore } from '@openneuro/components/read-more'
 
 import { FollowDataset } from './mutations/follow'
@@ -56,8 +56,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const activeDataset = snapshotVersion(location) || 'draft'
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
-  const [deprecatedmodalIsOpen, setDeprecatedModalIsOpen] =
-    React.useState(false)
 
   const summary = dataset.draft.summary
   const description = dataset.draft.description
@@ -73,12 +71,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
     parseISO(dataset.draft.modified),
   )
   const isSnapshot = activeDataset !== 'draft'
-  const rootPath = isSnapshot
-    ? `/datasets/${datasetId}/versions/${activeDataset}`
-    : `/datasets/${datasetId}`
 
-  //TODO deprecated needs to be added to the dataset snapshot obj and an admin needs to be able to say a version is deprecated somehow.
-  const isPublic = dataset.public === true
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
@@ -88,6 +81,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
     dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
+  const isDatasetAdmin =
+    hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
 
   return (
     <>
@@ -122,7 +117,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
         renderAlert={() => (
           <>
             {hasEdit && (
-              <DatasetAlert
+              <DatasetAlertDraft
                 isPrivate={!dataset.public}
                 datasetId={dataset.id}
                 hasDraftChanges={hasDraftChanges}
@@ -191,6 +186,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             datasetId={datasetId}
             isAdmin={isAdmin}
             hasSnapshot={dataset.snapshots.length !== 0}
+            isDatasetAdmin={isDatasetAdmin}
           />
         )}
         renderFiles={() => (
@@ -263,7 +259,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     dateModified={dateModified}
                     selected={selectedVersion}
                     setSelected={setSelectedVersion}
-                    setDeprecatedModalIsOpen={setDeprecatedModalIsOpen}
                   />
                 </div>
               }
@@ -426,18 +421,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 : ['N/A']}
             </EditDescriptionList>
           </>
-        )}
-        renderDeprecatedModal={() => (
-          <Modal
-            isOpen={deprecatedmodalIsOpen}
-            toggle={() => setDeprecatedModalIsOpen(prevIsOpen => !prevIsOpen)}
-            closeText={'close'}
-            className="deprecated-modal">
-            <p>
-              You have selected a deprecated version. The author of the dataset
-              does not recommend this specific version.
-            </p>
-          </Modal>
         )}
         renderComments={() => (
           <Comments

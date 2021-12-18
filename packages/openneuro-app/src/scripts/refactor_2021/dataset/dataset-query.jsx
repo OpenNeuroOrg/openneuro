@@ -172,8 +172,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
             datasetId,
             fetchMore,
             error,
-          }}
-        >
+          }}>
           <DatasetRoutes dataset={data.dataset} />
           <FilesSubscription datasetId={datasetId} />
         </DatasetQueryContext.Provider>
@@ -208,8 +207,7 @@ const DatasetQuery = ({ match, history }) => {
     <>
       <DatasetRedirect />
       <ErrorBoundaryAssertionFailureException
-        subject={'error in dataset query'}
-      >
+        subject={'error in dataset query'}>
         <DatasetQueryHook
           datasetId={datasetId}
           draft={!snapshotId}

@@ -60,6 +60,12 @@
     &.warning {
       background-color: #fff3c5;
     }
+    &.error {
+      background-color: #ff8686;
+    }
+    span[data-tooltip] {
+      display: inline;
+    }
   }
 
   .dataset-tool-buttons {

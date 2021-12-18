@@ -9,10 +9,6 @@ import { getFiles, filterFiles } from '../../datalad/files.js'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 import DeprecatedSnapshot from '../../models/deprecatedSnapshot'
-import { checkDatasetAdmin } from '../permissions.js'
-import SnapshotModel from '../../models/snapshot'
-import User from '../../models/user'
-import * as Sentry from '@sentry/node'
 import { redis } from '../../libs/redis'
 import CacheItem, { CacheType } from '../../cache/item'
 import { normalizeDOI } from '../../libs/doi/normalize'
@@ -34,15 +30,16 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
           getFiles(datasetId, snapshot.hexsha)
             .then(filterFiles(prefix))
             .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
-        deprecated: () => deprecated(snapshot),
+        deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
       }))
     },
   )
 }
 
-export const deprecated = snapshot => {
-  return DeprecatedSnapshot.findOne({ id: snapshot.hexsha }).populate('user')
+export const deprecated = ({ datasetId, tag }) => {
+  const id = `${datasetId}:${tag}`
+  return DeprecatedSnapshot.findOne({ id }).lean().exec()
 }
 
 /**
@@ -89,22 +86,41 @@ export const deprecateSnapshot = async (
   { datasetId, tag, reason },
   { user, userInfo },
 ) => {
-  try {
-    await checkDatasetAdmin(datasetId, user, userInfo)
-    const [snapshot, userDoc] = await Promise.all([
-      SnapshotModel.findOne({ datasetId, tag }),
-      User.findOne({ id: user }),
-    ])
-    await DeprecatedSnapshot.create({
-      id: snapshot.hexsha,
-      user: userDoc._id,
-      cause: reason,
-      timestamp: new Date(),
-    })
-    return true
-  } catch (err) {
-    Sentry.captureException(err)
-    throw err
+  const id = `${datasetId}:${tag}`
+  await checkDatasetWrite(datasetId, user, userInfo)
+  const timestamp = new Date()
+  await DeprecatedSnapshot.updateOne(
+    { id },
+    {
+      id,
+      user,
+      reason,
+      timestamp,
+    },
+    { upsert: true },
+  )
+  return {
+    id,
+    deprecated: {
+      id,
+      user,
+      reason,
+      timestamp,
+    },
+  }
+}
+
+export const undoDeprecateSnapshot = async (
+  obj,
+  { datasetId, tag },
+  { user, userInfo },
+) => {
+  const id = `${datasetId}:${tag}`
+  await checkDatasetWrite(datasetId, user, userInfo)
+  await DeprecatedSnapshot.findOneAndDelete({ id })
+  return {
+    id,
+    deprecated: null,
   }
 }
 
