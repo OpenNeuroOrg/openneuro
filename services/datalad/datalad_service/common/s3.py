@@ -17,13 +17,6 @@ def get_s3_bucket():
                    'AWS_S3_PUBLIC_BUCKET')
 
 
-def get_s3_url():
-    bucket = get_s3_bucket()
-    if not bucket:
-        raise S3ConfigException('S3 bucket configuration is missing.')
-    return 's3://{bucket}'.format(bucket=bucket)
-
-
 def generate_s3_annex_options(dataset_path):
     dataset_id = os.path.basename(dataset_path)
     annex_options = [
