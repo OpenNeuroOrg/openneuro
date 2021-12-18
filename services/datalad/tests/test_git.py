@@ -68,3 +68,11 @@ def test_git_receive_resource(client):
     response = client.simulate_post(
         '/git/0/{}/git-receive-pack'.format(ds_id), headers={"authorization": test_auth}, body=receive_pack_input)
     assert response.status == falcon.HTTP_OK
+
+
+def test_git_tag_tree(new_dataset):
+    tag = '1.0.0'
+    repo = pygit2.Repository(new_dataset.path)
+    # Create a tag
+    repo.references.create(f'refs/tags/{tag}', repo.head.target.hex)
+    assert git.git_tag_tree(repo, tag) == repo.get(repo.head.target).tree_id

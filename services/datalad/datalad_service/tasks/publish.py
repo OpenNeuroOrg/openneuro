@@ -18,7 +18,7 @@ from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.common.annex import get_tag_info, is_git_annex_remote
 from datalad_service.common.openneuro import clear_dataset_cache
-from datalad_service.common.git import git_show, git_tag
+from datalad_service.common.git import git_show, git_tag, git_tag_tree
 from datalad_service.common.github import github_export
 from datalad_service.common.s3 import s3_export, get_s3_remote, get_s3_bucket, update_s3_sibling
 
@@ -103,8 +103,7 @@ def check_remote_has_version(dataset_path, remote, tag):
 
         # extract git tree id of <tag> from git reference
         repo = pygit2.Repository(dataset_path)
-        tag_reference = repo.references[f'refs/tags/{tag}']
-        tree_id_B = tag_reference.tree_id
+        tree_id_B = git_tag_tree(repo, tag)
     except AttributeError:
         return False
     # if the remote uuids and tree ids exist and match, then
@@ -112,6 +111,7 @@ def check_remote_has_version(dataset_path, remote, tag):
     return remote_id_A == remote_id_B and tree_id_A == tree_id_B
 
 
+@elasticapm.capture_span()
 def delete_s3_sibling(dataset_id):
     try:
         client = boto3.client(
