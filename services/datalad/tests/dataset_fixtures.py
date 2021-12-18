@@ -118,11 +118,16 @@ def no_init_remote(monkeypatch, tmpdir_factory):
     def mock_s3_remote_setup(dataset_path):
         path = tmpdir_factory.mktemp('fake_s3_remote')
         subprocess.run(['git', 'annex', 'initremote', 's3-PUBLIC',
-                        'type=directory', f'directory={path}', 'encryption=none'], check=True, cwd=dataset_path)
+                        'type=directory', f'directory={path}', 'encryption=none', 'exporttree=yes'], check=True, cwd=dataset_path)
 
     def mock_github_remote_setup(dataset_path, dataset_id):
+        path = tmpdir_factory.mktemp('fake_github_remote')
+        # Setup our fake GitHub remote
+        subprocess.run(['git', 'init'], check=True, cwd=path)
+        subprocess.run(['git-annex', 'init'], check=True, cwd=path)
+        # Add it to the dataset repo
         subprocess.run(['git', 'remote', 'add', 'github',
-                        'ssh://localhost/not/a/real/repo'], check=True, cwd=dataset_path)
+                        f'file:///{path}'], check=True, cwd=dataset_path)
     monkeypatch.setattr(datalad_service.common.s3,
                         "setup_s3_sibling", mock_s3_remote_setup)
     monkeypatch.setattr(datalad_service.common.github,
