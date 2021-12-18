@@ -24,6 +24,12 @@ def git_tag(repo):
     return [repo.references[r] for r in repo.references if tag_ref.match(r)]
 
 
+def git_tag_tree(repo, tag):
+    """Return the tree object id for a local tag."""
+    tag_reference = repo.references[f'refs/tags/{tag}']
+    return repo.get(tag_reference.target).tree_id
+
+
 def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded changes", parents=None):
     """Commit array of paths at HEAD."""
     # Refresh index with git-annex specific handling

@@ -9,14 +9,12 @@ import fakeredis
 from falcon import testing
 import requests
 
-import datalad.api
 import datalad_service.common.s3
+import datalad_service.common.github
 from datalad.api import Dataset
 from datalad_service.app import create_app
 from datalad_service.datalad import DataladStore
 import datalad_service.tasks.publish
-from datalad_service.common.s3 import DatasetRealm
-from datalad.api import create_sibling_github
 
 
 # Test dataset to create
@@ -116,14 +114,24 @@ def no_posts(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def no_init_remote(monkeypatch):
-    def mock_remote_setup(dataset_path, realm):
-        subprocess.run(['git', 'remote', 'add', realm.s3_remote,
-                       'ssh://localhost/not/a/real/repo'], check=True, cwd=dataset_path)
+def no_init_remote(monkeypatch, tmpdir_factory):
+    def mock_s3_remote_setup(dataset_path):
+        path = tmpdir_factory.mktemp('fake_s3_remote')
+        subprocess.run(['git', 'annex', 'initremote', 's3-PUBLIC',
+                        'type=directory', f'directory={path}', 'encryption=none', 'exporttree=yes'], check=True, cwd=dataset_path)
+
+    def mock_github_remote_setup(dataset_path, dataset_id):
+        path = tmpdir_factory.mktemp('fake_github_remote')
+        # Setup our fake GitHub remote
+        subprocess.run(['git', 'init'], check=True, cwd=path)
+        subprocess.run(['git-annex', 'init'], check=True, cwd=path)
+        # Add it to the dataset repo
+        subprocess.run(['git', 'remote', 'add', 'github',
+                        f'file:///{path}'], check=True, cwd=dataset_path)
     monkeypatch.setattr(datalad_service.common.s3,
-                        "setup_s3_sibling", mock_remote_setup)
-    monkeypatch.setattr(datalad.api,
-                        "create_sibling_github", mock_remote_setup)
+                        "setup_s3_sibling", mock_s3_remote_setup)
+    monkeypatch.setattr(datalad_service.common.github,
+                        "create_github_repo", mock_github_remote_setup)
 
 
 def mock_create_github(dataset, repo_name):
@@ -140,17 +148,15 @@ def github_dryrun(monkeypatch):
 @pytest.fixture(autouse=True)
 def no_publish(monkeypatch):
     monkeypatch.setattr(datalad_service.tasks.publish,
-                        'github_export', lambda dataset, target, treeish: True)
+                        'github_export', lambda dataset, treeish: True)
     monkeypatch.setattr(datalad_service.common.s3,
                         's3_export', lambda dataset, target, treeish: True)
-    monkeypatch.setattr(datalad_service.common.s3, 'validate_s3_config', lambda dataset_path, realm: DatasetRealm.PUBLIC)
 
 
 @pytest.fixture
 def s3_creds(monkeypatch):
     monkeypatch.setenv('AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket')
     monkeypatch.setenv('AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
-
 
 
 @pytest.fixture(autouse=True)

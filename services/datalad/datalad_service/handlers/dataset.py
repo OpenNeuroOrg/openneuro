@@ -47,13 +47,15 @@ class DatasetResource(object):
             resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, dataset):
-        def run_delete_tasks(store, dataset):
-            delete_siblings(store, dataset)
+        dataset_path = self.store.get_dataset_path(dataset)
+
+        def run_delete_tasks():
+            delete_siblings(dataset)
             gevent.sleep()
-            delete_dataset(store, dataset)
+            delete_dataset(dataset_path)
 
         try:
-            gevent.spawn(run_delete_tasks, self.store, dataset)
+            gevent.spawn(run_delete_tasks)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         except:
