@@ -121,7 +121,6 @@ const DatasetRoutes = ({ dataset, error }) => {
         )}
       />
       <Route
-        name="snapshot-deprecate"
         exact
         path="/datasets/:datasetId/versions/:snapshotTag/deprecate"
         component={() => <DeprecateSnapshotPage />}
