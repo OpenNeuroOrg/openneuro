@@ -4876,7 +4876,6 @@ __metadata:
     mime-types: ^2.1.19
     mockingoose: 2.11.0
     moment: ^2.14.1
-    mongo-mock: 3.7.1
     mongoose: 5.12.3
     morgan: ^1.6.1
     node-fetch: ^2.6.0
@@ -9904,13 +9903,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bson-objectid@npm:^1.2.5":
-  version: 1.3.1
-  resolution: "bson-objectid@npm:1.3.1"
-  checksum: fb31b7c715fafd7ba4370f667fbdc3cf9226d8b9d115ac86d584053fe9350f73d24e0b6ddac388b3c408d91481f52a8ab7a8c103c4b8dbc659139c710689a7c0
-  languageName: node
-  linkType: hard
-
 "bson@npm:^1.1.4":
   version: 1.1.6
   resolution: "bson@npm:1.1.6"
@@ -10697,13 +10689,6 @@ __metadata:
   version: 1.0.4
   resolution: "clone@npm:1.0.4"
   checksum: d06418b7335897209e77bdd430d04f882189582e67bd1f75a04565f3f07f5b3f119a9d670c943b6697d0afb100f03b866b3b8a1f91d4d02d72c4ecf2bb64b5dd
-  languageName: node
-  linkType: hard
-
-"clone@npm:^2.1.1":
-  version: 2.1.2
-  resolution: "clone@npm:2.1.2"
-  checksum: aaf106e9bc025b21333e2f4c12da539b568db4925c0501a1bf4070836c9e848c892fa22c35548ce0d1132b08bbbfa17a00144fe58fccdab6fa900fec4250f67d
   languageName: node
   linkType: hard
 
@@ -11854,20 +11839,6 @@ __metadata:
   version: 0.7.0
   resolution: "dedent@npm:0.7.0"
   checksum: 87de191050d9a40dd70cad01159a0bcf05ecb59750951242070b6abf9569088684880d00ba92a955b4058804f16eeaf91d604f283929b4f614d181cd7ae633d2
-  languageName: node
-  linkType: hard
-
-"deep-equal@npm:^1.0.1":
-  version: 1.1.1
-  resolution: "deep-equal@npm:1.1.1"
-  dependencies:
-    is-arguments: ^1.0.4
-    is-date-object: ^1.0.1
-    is-regex: ^1.0.4
-    object-is: ^1.0.1
-    object-keys: ^1.1.1
-    regexp.prototype.flags: ^1.2.0
-  checksum: f92686f2c5bcdf714a75a5fa7a9e47cb374a8ec9307e717b8d1ce61f56a75aaebf5619c2a12b8087a705b5a2f60d0292c35f8b58cb1f72e3268a3a15cab9f78d
   languageName: node
   linkType: hard
 
@@ -16077,7 +16048,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"is-arguments@npm:^1.0.4, is-arguments@npm:^1.1.0":
+"is-arguments@npm:^1.1.0":
   version: 1.1.1
   resolution: "is-arguments@npm:1.1.1"
   dependencies:
@@ -16534,7 +16505,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"is-regex@npm:^1.0.4, is-regex@npm:^1.1.2, is-regex@npm:^1.1.4":
+"is-regex@npm:^1.1.2, is-regex@npm:^1.1.4":
   version: 1.1.4
   resolution: "is-regex@npm:1.1.4"
   dependencies:
@@ -19698,16 +19669,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"modifyjs@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "modifyjs@npm:0.3.1"
-  dependencies:
-    clone: ^2.1.1
-    deep-equal: ^1.0.1
-  checksum: 4dad273c8693141a1c360449367d9653fa8789a78471588ee5530bf82c1ca482a6233e4ad72ef2d225b8c09435b7299bb5318086520329c32cfb35b0bd804785
-  languageName: node
-  linkType: hard
-
 "module-details-from-path@npm:^1.0.3":
   version: 1.0.3
   resolution: "module-details-from-path@npm:1.0.3"
@@ -19719,20 +19680,6 @@ fsevents@^1.2.7:
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
-  languageName: node
-  linkType: hard
-
-"mongo-mock@npm:3.7.1":
-  version: 3.7.1
-  resolution: "mongo-mock@npm:3.7.1"
-  dependencies:
-    bson-objectid: ^1.2.5
-    debug: ^2.6.9
-    lodash: ^4.17.11
-    modifyjs: ^0.3.1
-    object-assign-deep: ^0.4.0
-    sift: ^3.1.1
-  checksum: 5356fbf1d30c290c5f570b8141691b5f9bf74a0e0c0c70cccf001a595a12922ad78400550474187ad54214ff45b12445eaa5d8e94af37b5a540a4fb9c3c6915d
   languageName: node
   linkType: hard
 
@@ -20467,13 +20414,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"object-assign-deep@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "object-assign-deep@npm:0.4.0"
-  checksum: 3c31920ca887e507253b71fe5d38ce752b47e8cbcd2cd9dc6e5909ae6ce05a31dbc64ba7bb46037c4f5ff449ec0199db247bd9d8d768574876ed7a79fa5810ab
-  languageName: node
-  linkType: hard
-
 "object-assign@npm:^4, object-assign@npm:^4.0.1, object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
@@ -20519,16 +20459,6 @@ fsevents@^1.2.7:
   version: 1.11.0
   resolution: "object-inspect@npm:1.11.0"
   checksum: 8c64f89ce3a7b96b6925879ad5f6af71d498abc217e136660efecd97452991216f375a7eb47cb1cb50643df939bf0c7cc391567b7abc6a924d04679705e58e27
-  languageName: node
-  linkType: hard
-
-"object-is@npm:^1.0.1":
-  version: 1.1.5
-  resolution: "object-is@npm:1.1.5"
-  dependencies:
-    call-bind: ^1.0.2
-    define-properties: ^1.1.3
-  checksum: 989b18c4cba258a6b74dc1d74a41805c1a1425bce29f6cabb50dcb1a6a651ea9104a1b07046739a49a5bb1bc49727bcb00efd5c55f932f6ea04ec8927a7901fe
   languageName: node
   linkType: hard
 
@@ -23219,7 +23149,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regexp.prototype.flags@npm:^1.2.0, regexp.prototype.flags@npm:^1.3.1":
+"regexp.prototype.flags@npm:^1.3.1":
   version: 1.3.1
   resolution: "regexp.prototype.flags@npm:1.3.1"
   dependencies:
@@ -24323,13 +24253,6 @@ resolve@^2.0.0-next.3:
   version: 7.0.1
   resolution: "sift@npm:7.0.1"
   checksum: 530df355c1c368e5b99735d34afefff82b6c638809f100d00940e7672ab550a42132f99271d54866a3e743a699e011e48d7bf07c44409c26cf722820f6ab0d1a
-  languageName: node
-  linkType: hard
-
-"sift@npm:^3.1.1":
-  version: 3.3.12
-  resolution: "sift@npm:3.3.12"
-  checksum: f1a0e86423ac2f10de6db32ce5b81a8712f6d6d961a85270ecae6ac54e23f006ac4ade06a7e30cec2df2384d1b301cad169cdf970bfb092cdd6f89b8306882f1
   languageName: node
   linkType: hard
 

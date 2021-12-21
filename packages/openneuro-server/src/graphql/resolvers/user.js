@@ -13,7 +13,9 @@ export const users = (obj, args, { userInfo }) => {
   if (userInfo.admin) {
     return User.find().exec()
   } else {
-    throw new Error('You must be a site admin to retrieve users')
+    return Promise.reject(
+      new Error('You must be a site admin to retrieve users'),
+    )
   }
 }
 
@@ -21,7 +23,7 @@ export const removeUser = (obj, { id }, { userInfo }) => {
   if (userInfo.admin) {
     return User.findByIdAndRemove(id).exec()
   } else {
-    throw new Error('You must be a site admin to remove users')
+    return Promise.reject(new Error('You must be a site admin to remove users'))
   }
 }
 
@@ -29,7 +31,9 @@ export const setAdmin = (obj, { id, admin }, { userInfo }) => {
   if (userInfo.admin) {
     return User.findOneAndUpdate({ id }, { admin }).exec()
   } else {
-    throw new Error('You must be a site admin to modify this value')
+    return Promise.reject(
+      new Error('You must be a site admin to modify this value'),
+    )
   }
 }
 
@@ -37,7 +41,7 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
   if (userInfo.admin) {
     return User.findOneAndUpdate({ id }, { blocked }).exec()
   } else {
-    throw new Error('You must be a site admin to block a user')
+    return Promise.reject(new Error('You must be a site admin to block a user'))
   }
 }
 
