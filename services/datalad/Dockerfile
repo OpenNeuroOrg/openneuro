@@ -12,7 +12,7 @@ COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
 # Install node the Dockery-but-hacky-way
-COPY --from=node:14.4.0-buster /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:16.13.1-buster /usr/local/bin/node /usr/local/bin/node
 
 RUN apt-get update \
   && node --version \
