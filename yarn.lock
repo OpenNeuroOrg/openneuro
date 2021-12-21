@@ -4667,7 +4667,7 @@ __metadata:
     esbuild-plugin-globals: ^0.1.1
     express: ^4.17.1
     graphql: 14.7.0
-    history: ^5.1.0
+    history: 5.2.0
     jest: ^26.6.3
     jest-fetch-mock: ^1.4.1
     jsdom: ^16.5.3
@@ -15239,6 +15239,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"history@npm:5.2.0":
+  version: 5.2.0
+  resolution: "history@npm:5.2.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: 2c6a05aa86793e0a0857013457f34474c17f81a012c6bdb00bf30862389ac6a8c2df113d82176f67af2fd534ea9dc4e1218470c5526355b6fc1aefcc971f2eb2
+  languageName: node
+  linkType: hard
+
 "history@npm:^4.9.0":
   version: 4.10.1
   resolution: "history@npm:4.10.1"
@@ -15250,15 +15259,6 @@ fsevents@^1.2.7:
     tiny-warning: ^1.0.0
     value-equal: ^1.0.1
   checksum: addd84bc4683929bae4400419b5af132ff4e4e9b311a0d4e224579ea8e184a6b80d7f72c55927e4fa117f69076a9e47ce082d8d0b422f1a9ddac7991490ca1d0
-  languageName: node
-  linkType: hard
-
-"history@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "history@npm:5.1.0"
-  dependencies:
-    "@babel/runtime": ^7.7.6
-  checksum: be7587c614078b6bc39bb3b8ae4da92f9d5d175bf1480c12119d056135eeb88c73589894451536be3d6a3ae250822cc5bf95a2cf5dca26d10b736ac70da0c56f
   languageName: node
   linkType: hard
 
@@ -23808,7 +23808,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-react: ^7.23.1
     eslint-plugin-react-hooks: ^4.2.0
     graphql: 14.7.0
-    history: ^5.1.0
+    history: 5.2.0
     husky: 5.1.1
     jest: ^26.6.3
     lerna: 3.20.2

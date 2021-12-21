@@ -32,7 +32,7 @@
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
     "graphql": "14.7.0",
-    "history": "^5.1.0",
+    "history": "5.2.0",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^7.1.2",
     "os-browserify": "^0.3.0",

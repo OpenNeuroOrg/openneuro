@@ -96,7 +96,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.26.0"],
             ["eslint-plugin-react-hooks", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.2.0"],
             ["graphql", "npm:14.7.0"],
-            ["history", "npm:5.1.0"],
+            ["history", "npm:5.2.0"],
             ["husky", "npm:5.1.1"],
             ["jest", "npm:26.6.3"],
             ["lerna", "npm:3.20.2"],
@@ -9244,7 +9244,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["esbuild-plugin-globals", "npm:0.1.1"],
             ["express", "npm:4.17.1"],
             ["graphql", "npm:14.7.0"],
-            ["history", "npm:5.1.0"],
+            ["history", "npm:5.2.0"],
             ["jest", "npm:26.6.3"],
             ["jest-fetch-mock", "npm:1.7.5"],
             ["jsdom", "virtual:defa486869c88441047200a53b3aa18d79743b272095f3ee31b5b7b80b2c93d87f722added867470dcb94104504489a1a89040ea8fd89dffb9cfb1864d4bf54e#npm:16.7.0"],
@@ -22931,10 +22931,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:5.1.0", {
-          "packageLocation": "./.yarn/cache/history-npm-5.1.0-312a8162fd-be7587c614.zip/node_modules/history/",
+        ["npm:5.2.0", {
+          "packageLocation": "./.yarn/cache/history-npm-5.2.0-de9a69e37c-2c6a05aa86.zip/node_modules/history/",
           "packageDependencies": [
-            ["history", "npm:5.1.0"],
+            ["history", "npm:5.2.0"],
             ["@babel/runtime", "npm:7.15.4"]
           ],
           "linkType": "HARD",
@@ -32788,7 +32788,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.26.0"],
             ["eslint-plugin-react-hooks", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.2.0"],
             ["graphql", "npm:14.7.0"],
-            ["history", "npm:5.1.0"],
+            ["history", "npm:5.2.0"],
             ["husky", "npm:5.1.1"],
             ["jest", "npm:26.6.3"],
             ["lerna", "npm:3.20.2"],
