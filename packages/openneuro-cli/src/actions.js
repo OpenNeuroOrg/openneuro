@@ -79,6 +79,8 @@ const uploadDataset = async (
       affirmedDefaced,
       affirmedConsent,
     })
+    // eslint-disable-next-line no-console
+    console.log(`"${datasetId}" created`)
     remoteFiles = [] // New dataset has no remote files
   }
   const apmPrepareUploadSpan =
