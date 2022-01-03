@@ -4,7 +4,6 @@ apm.start({
   serviceName: 'openneuro-server',
 })
 
-import * as Sentry from '@sentry/node'
 import { createServer } from 'http'
 import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
@@ -25,12 +24,6 @@ const redisConnectionSetup = async () => {
     process.exit(1)
   }
 }
-
-Sentry.init({
-  dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
-  release: version,
-  environment: config.sentry.ENVIRONMENT,
-})
 
 mongoose.connect(config.mongo.url, {
   useNewUrlParser: true,

@@ -17,7 +17,6 @@ import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset'
 import Deletion from '../../models/deletion'
 import fetch from 'node-fetch'
-import * as Sentry from '@sentry/node'
 import { reviewers } from './reviewer'
 import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
@@ -165,7 +164,6 @@ export const deleteFiles = async (
 
     return true
   } catch (err) {
-    Sentry.captureException(err)
     return false
   }
 }
@@ -187,7 +185,6 @@ export const removeAnnexObject = async (
     )
     return true
   } catch (err) {
-    Sentry.captureException(err)
     return false
   }
 }
@@ -208,7 +205,6 @@ export const flagAnnexObject = async (
     )
     return true
   } catch (err) {
-    Sentry.captureException(err)
     return false
   }
 }

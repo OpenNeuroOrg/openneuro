@@ -5,7 +5,6 @@
  * Express app setup
  */
 import express from 'express'
-import * as Sentry from '@sentry/node'
 import passport from 'passport'
 import config from './config'
 import routes from './routes'
@@ -28,9 +27,6 @@ export default test => {
 
   setupPassportAuth()
 
-  // Sentry must be first to work
-  test || app.use(Sentry.Handlers.requestHandler())
-
   app.use(passport.initialize())
 
   app.use((req, res, next) => {
@@ -48,8 +44,6 @@ export default test => {
   app.use(config.apiPrefix, routes)
 
   // error handling --------------------------------------------------\
-  // Sentry reporting passes to the next step
-  test || app.use(Sentry.Handlers.errorHandler())
 
   // Apollo engine setup
   const engineConfig = {

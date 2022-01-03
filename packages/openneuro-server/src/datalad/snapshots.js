@@ -1,7 +1,6 @@
 /**
  * Get snapshots from datalad-service tags
  */
-import * as Sentry from '@sentry/node'
 import request from 'superagent'
 import { redis, redlock } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
@@ -61,7 +60,6 @@ const createIfNotExistsDoi = async (
       if (snapshotDoi)
         descriptionFieldUpdates['DatasetDOI'] = `doi:${snapshotDoi}`
     } catch (err) {
-      Sentry.captureException(err)
       console.error(err)
       throw new Error('DOI minting failed.')
     }
@@ -177,7 +175,6 @@ export const createSnapshot = async (
     // this avoids inconsistent cache state after failures
     snapshotCache.drop()
     snapshotLock.unlock()
-    Sentry.captureException(err)
     return err
   }
 }

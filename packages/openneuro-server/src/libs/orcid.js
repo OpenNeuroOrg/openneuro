@@ -1,7 +1,6 @@
 // Camel case rule is disabled since ORCID API uses snake case variables
 import request from 'request'
 import xmldoc from 'xmldoc'
-import * as Sentry from '@sentry/node'
 import config from '../config'
 
 export default {
@@ -21,7 +20,6 @@ export default {
         },
         (err, res) => {
           if (err) {
-            Sentry.captureException(err)
             reject({
               message:
                 'An unexpected ORCID login failure occurred, please try again later.',
