@@ -119,7 +119,7 @@ def read_rmet_file(remote, catFile):
 
 def encode_remote_url(url):
     """S3 requires some characters to be encoded"""
-    return urllib.parse.quote_plus(url, safe="/:?")
+    return urllib.parse.quote_plus(url, safe="/:?=")
 
 
 def get_repo_urls(path, files):

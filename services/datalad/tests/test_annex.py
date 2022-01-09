@@ -126,4 +126,7 @@ def test_read_rmet_file():
 
 def test_remote_url_encoding():
     assert encode_remote_url(
-        "https://s3.amazonaws.com/openneuro.org/ds000248/derivatives/freesurfer/subjects/sub-01/mri/aparc+aseg.mgz?versionId=2Wx7w.fCYeGzGWLnW9sxWsPdztl.2HL0") == "https://s3.amazonaws.com/openneuro.org/ds000248/derivatives/freesurfer/subjects/sub-01/mri/aparc%2Baseg.mgz?versionId%3D2Wx7w.fCYeGzGWLnW9sxWsPdztl.2HL0"
+        "https://s3.amazonaws.com/openneuro.org/ds000248/derivatives/freesurfer/subjects/sub-01/mri/aparc+aseg.mgz?versionId=2Wx7w.fCYeGzGWLnW9sxWsPdztl.2HL0") == "https://s3.amazonaws.com/openneuro.org/ds000248/derivatives/freesurfer/subjects/sub-01/mri/aparc%2Baseg.mgz?versionId=2Wx7w.fCYeGzGWLnW9sxWsPdztl.2HL0"
+    assert encode_remote_url(
+        "https://s3.amazonaws.com/openneuro.org/ds000248/sub-01/anat/sub-01_T1w.nii.gz?versionId=8uTXIQ10Blcp2GeAVJJCHL5PimkSaQZL") == "https://s3.amazonaws.com/openneuro.org/ds000248/sub-01/anat/sub-01_T1w.nii.gz?versionId=8uTXIQ10Blcp2GeAVJJCHL5PimkSaQZL"
+    assert encode_remote_url("=") == '='
