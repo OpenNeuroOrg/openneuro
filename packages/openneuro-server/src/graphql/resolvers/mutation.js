@@ -36,6 +36,7 @@ import { reexportRemotes } from './reexporter'
 import { resetDraft } from './reset'
 import { createReviewer, deleteReviewer } from './reviewer'
 import { createRelation, deleteRelation } from './relation'
+import { importRemoteDataset } from './importRemoteDataset'
 
 const Mutation = {
   createDataset,
@@ -79,6 +80,7 @@ const Mutation = {
   deleteReviewer,
   createRelation,
   deleteRelation,
+  importRemoteDataset,
 }
 
 export default Mutation
