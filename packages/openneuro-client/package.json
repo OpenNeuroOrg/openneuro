@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/client",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "description": "OpenNeuro shared client library.",
   "main": "dist/index.js",
   "browser": "src/index.js",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.14.5",
     "@babel/runtime-corejs3": "^7.13.10",
-    "@openneuro/server": "^4.3.1",
+    "@openneuro/server": "^4.3.2",
     "apollo-server": "^2.23.0",
     "core-js": "^3.10.1"
   },
