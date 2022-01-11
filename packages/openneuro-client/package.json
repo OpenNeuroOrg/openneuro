@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "browser": "src/index.js",
   "exports": {
-    ".": "./src/index.js"
+    "import": "./src/index.js",
+    "require": "./dist/index.js"
   },
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
