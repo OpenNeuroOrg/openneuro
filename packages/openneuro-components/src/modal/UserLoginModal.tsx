@@ -4,6 +4,7 @@ import { Button } from '../button/Button'
 import { Logo } from '../logo/Logo'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { AccordionTab } from '../accordion/AccordionTab'
+import { useLocation } from 'react-router-dom'
 
 import orcidIcon from '../assets/orcid_24x24.png'
 
@@ -11,15 +12,14 @@ export interface UserLoginModalProps {
   isOpen: boolean
   toggle: () => void
   loginUrls: Record<string, string>
-  redirectPathParam: string
 }
 
 export const UserLoginModal = ({
   isOpen,
   toggle,
   loginUrls,
-  redirectPathParam = '',
 }: UserLoginModalProps) => {
+  const location = useLocation()
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
@@ -29,18 +29,24 @@ export const UserLoginModal = ({
         </div>
         <div className="sign-in-modal-content">
           <div>
-            <a href={loginUrls.google + `${redirectPathParam ? `?redirectPath=${btoa(redirectPathParam)}` : ''}`}>
+            <a
+              href={
+                loginUrls.google + `?redirectPath=${btoa(location.pathname)}`
+              }>
               <Button
                 className="login-button"
                 primary
                 label="Google"
                 icon="fab fa-google"
                 iconSize="23px"
-                />
+              />
             </a>
           </div>
           <div>
-            <a href={loginUrls.orcid + `${redirectPathParam ? `?redirectPath=${btoa(redirectPathParam)}` : ''}`}>
+            <a
+              href={
+                loginUrls.orcid + +`?redirectPath=${btoa(location.pathname)}`
+              }>
               <Button
                 className="login-button"
                 primary

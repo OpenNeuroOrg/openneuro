@@ -1,5 +1,4 @@
 import React, { FC, useContext } from 'react'
-import { useLocation } from 'react-router-dom'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { datasetCacheId } from '../../../datalad/mutations/cache-id.js'
@@ -44,16 +43,11 @@ export const StarDataset: FC<StarDatasetProps> = ({
   profile,
   stars,
 }) => {
-  const { setUserModalOpen, setLoginOptions } = useContext(UserModalOpenCtx)
-  const location = useLocation()
+  const { setUserModalOpen } = useContext(UserModalOpenCtx)
   const handleToggle = starDataset => () => {
     if (!profile) {
       // if user is not logged in, give them the option to do so
       // then redirect back to this page
-      setLoginOptions(prevState => ({
-        ...prevState,
-        redirect: `${location.pathname}`,
-      }))
       setUserModalOpen(true)
     } else {
       starDataset({ variables: { datasetId } })
