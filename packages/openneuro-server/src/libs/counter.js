@@ -15,7 +15,7 @@ export default {
   getNext(type, callback) {
     Counter.findOne({ _id: type }).then(found => {
       if (found) {
-        Counter.update({ _id: type }, { $inc: { sequence_value: 1 } }).then(
+        Counter.updateOne({ _id: type }, { $inc: { sequence_value: 1 } }).then(
           callback(found.sequence_value + 1),
         )
       } else {

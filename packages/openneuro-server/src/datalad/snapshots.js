@@ -28,7 +28,7 @@ const lockSnapshot = (datasetId, tag) => {
 }
 
 const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
-  return Snapshot.update(
+  return Snapshot.updateOne(
     { datasetId: datasetId, tag: tag },
     {
       $set: {
