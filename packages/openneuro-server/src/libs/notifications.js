@@ -60,21 +60,10 @@ const notifications = {
    */
   async snapshotCreated(datasetId, body, uploader) {
     const tag = body.tag
-    // if we still have a promise for the body files, await it
-    const files = await body.files
     const uploaderId = uploader ? uploader.id : null
-    const datasetDescription = files.find(
-      file => file.filename == 'dataset_description.json',
-    )
-    const datasetDescriptionId = datasetDescription
-      ? datasetDescription.id
-      : null
     const URI = getDatasetWorker(datasetId)
-    const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/objects/${datasetDescriptionId}`
-
-    const changesFile = files.find(file => file.filename == 'CHANGES')
-    const changesId = changesFile ? changesFile.id : null
-    const changesUrl = `${URI}/datasets/${datasetId}/objects/${changesId}`
+    const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/snapshots/${tag}/files/dataset_description.json`
+    const changesUrl = `${URI}/datasets/${datasetId}/snapshots/${tag}/files/CHANGES`
 
     // get the dataset description
     const descriptionResponse = await request.get(datasetDescriptionUrl)
