@@ -77,15 +77,17 @@ const notifications = {
     const changesUrl = `${URI}/datasets/${datasetId}/objects/${changesId}`
 
     // get the dataset description
-    let response = await request.get(datasetDescriptionUrl)
-    const description = response.body
+    const descriptionResponse = await request.get(datasetDescriptionUrl)
+    const description = descriptionResponse.body
     const datasetLabel = description.Name ? description.Name : 'Unnamed Dataset'
 
     // get the snapshot changelog
-    response = await request
+    const changesResponse = await request
       .get(changesUrl)
       .responseType('application/octet-stream')
-    const changelog = response.body ? response.body.toString() : null
+    const changelog = changesResponse.body
+      ? changesResponse.body.toString()
+      : null
     // get all users that are subscribed to the dataset
     const subscriptions = await Subscription.find({
       datasetId: datasetId,
