@@ -505,7 +505,7 @@ export const getDatasetAnalytics = (datasetId, tag) => {
 export const getStars = datasetId => Star.find({ datasetId })
 
 export const getUserStarred = (datasetId, userId) =>
-  Star.count({ datasetId, userId }).exec()
+  Star.countDocuments({ datasetId, userId }).exec()
 
 export const getFollowers = datasetId => {
   return Subscription.find({
