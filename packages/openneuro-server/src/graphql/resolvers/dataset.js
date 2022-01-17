@@ -83,7 +83,7 @@ export const datasetName = obj => {
  */
 export const updateDatasetName = datasetId =>
   datasetName({ id: datasetId }).then(name =>
-    DatasetModel.update({ id: datasetId }, { $set: { name } }).exec(),
+    DatasetModel.updateOne({ id: datasetId }, { $set: { name } }).exec(),
   )
 
 /**
