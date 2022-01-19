@@ -39,7 +39,7 @@ GOOGLE_CLIENT_SECRET=
 
 ```shell
 # This will run docker-compose in the background (-d flag is --detach)
-yarn start -d
+docker-compose up -d
 ```
 
 For example, you can restart the server container with `docker-compose restart server` or view logs with `docker-compose logs -f --tail=10 server`.
