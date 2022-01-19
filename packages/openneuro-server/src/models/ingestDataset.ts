@@ -1,16 +1,16 @@
 /**
  * Model for ingest of new datasets from a remote URL (zip/tarball)
  */
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document, ObjectId } from 'mongoose'
 const { Schema, model } = mongoose
 import { validateUrl } from '../utils/validateUrl'
 
 export interface IngestDatasetDocument extends Document {
+  _id: ObjectId
   datasetId: string
   userId: string
   url: string
   imported: boolean
-  notified: boolean
 }
 
 const ingestDatasetSchema = new Schema({
@@ -25,7 +25,6 @@ const ingestDatasetSchema = new Schema({
     },
   },
   imported: { type: Boolean, required: true, default: false },
-  notified: { type: Boolean, required: true, default: false },
 })
 
 const IngestDataset = model<IngestDatasetDocument>(

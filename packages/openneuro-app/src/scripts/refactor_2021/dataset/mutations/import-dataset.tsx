@@ -29,7 +29,7 @@ export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
       size="small"
       onClick={async () => {
         const createDatasetMutation = createDataset(apolloClient)
-        const datasetId = createDatasetMutation({
+        const datasetId = await createDatasetMutation({
           affirmedDefaced: true,
           affirmedConsent: false,
         })
@@ -61,8 +61,9 @@ export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
     status = (
       <p>
         An error was encountered importing this URL. This may indicate the URL
-        is inaccessible for not the correct zip format. Please contact support
-        if you have verified this and still experience this error.
+        is inaccessible or is not the correct zip format. Please contact support
+        if you have verified the bundle is correct and still experience this
+        error.
       </p>
     )
   }

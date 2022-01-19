@@ -187,8 +187,10 @@ export const typeDefs = `
     createRelation(datasetId: ID!, doi: String!, relation: RelatedObjectRelation!, kind: RelatedObjectKind!, description: String): Dataset
     # Remove a relationship to an external DOI
     deleteRelation(datasetId: ID!, doi: String!): Dataset
-    # Submit an import for a remote dataset, returns false if the URL was not accepted
-    importRemoteDataset(datasetId: ID!, url: String!): Boolean
+    # Submit an import for a remote dataset, returns id if the URL is accepted for import
+    importRemoteDataset(datasetId: ID!, url: String!): ID
+    # Finish and notify import is done, returns true if successful
+    finishImportRemoteDataset(id: ID!): Boolean
   }
 
   # Anonymous dataset reviewer
