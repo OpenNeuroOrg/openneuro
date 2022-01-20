@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import { gql, useMutation, useApolloClient } from '@apollo/client'
 import { Button } from '@openneuro/components/button'
 import { createDataset } from '../../uploader/upload-mutation'
+import styled from '@emotion/styled'
 
 export const IMPORT_DATASET = gql`
   mutation importRemoteDataset($datasetId: ID!, $url: String!) {
@@ -9,12 +10,26 @@ export const IMPORT_DATASET = gql`
   }
 `
 
+const StatusRow = styled.div`
+  margin-top: 1em;
+`
+
+const URLInput = styled.input`
+  width: 100%;
+`
+
 interface ImportDatasetMutationProps {
   url: string
+  affirmedDefaced: boolean
+  affirmedConsent: boolean
+  disabled?: boolean | null
 }
 
 export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
   url,
+  disabled,
+  affirmedDefaced,
+  affirmedConsent,
 }) => {
   const [importStarted, setImportStarted] = useState(false)
   const [importFailed, setImportFailed] = useState(false)
@@ -26,12 +41,13 @@ export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
       className="btn-modal-action"
       primary={true}
       label="Start Import"
-      size="small"
+      size="medium"
+      disabled={disabled}
       onClick={async () => {
         const createDatasetMutation = createDataset(apolloClient)
         const datasetId = await createDatasetMutation({
-          affirmedDefaced: true,
-          affirmedConsent: false,
+          affirmedDefaced,
+          affirmedConsent,
         })
         try {
           await ImportDataset({
@@ -70,8 +86,12 @@ export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
 
   return (
     <>
-      <input type="text" disabled value={url} />
-      {status}
+      <label>
+        Source URL
+        <URLInput type="text" disabled value={url} id="import-url" />
+      </label>
+
+      <StatusRow>{status}</StatusRow>
     </>
   )
 }
