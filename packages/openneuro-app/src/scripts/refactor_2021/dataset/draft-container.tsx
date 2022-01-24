@@ -182,7 +182,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           <DatasetTools
             hasEdit={hasEdit}
             isPublic={dataset.public}
-            isSnapshot={isSnapshot}
             datasetId={datasetId}
             isAdmin={isAdmin}
             hasSnapshot={dataset.snapshots.length !== 0}

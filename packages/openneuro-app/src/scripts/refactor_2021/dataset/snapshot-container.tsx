@@ -172,7 +172,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             hasEdit={hasEdit}
             isPublic={dataset.public}
             datasetId={datasetId}
-            isSnapshot={true}
+            snapshotId={snapshot.tag}
             isAdmin={isAdmin}
             isDatasetAdmin={isDatasetAdmin}
           />
