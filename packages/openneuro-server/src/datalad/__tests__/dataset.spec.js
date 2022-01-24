@@ -95,10 +95,16 @@ describe('dataset model operations', () => {
         expect(testBlacklist('.git', 'HEAD')).toBe(true)
       })
       it('returns true for root level .DS_Store files', () => {
-        expect(testBlacklist('', '.DS_Store'))
+        expect(testBlacklist('', '.DS_Store')).toBe(true)
       })
       it('returns true for nested .DS_Store files', () => {
-        expect(testBlacklist('sub-01/anat/', '.DS_Store'))
+        expect(testBlacklist('sub-01/anat/', '.DS_Store')).toBe(true)
+      })
+      // https://github.com/OpenNeuroOrg/openneuro/issues/2519
+      it('skips ._ prefixed files created by macOS', () => {
+        expect(testBlacklist('', '._.DS_Store')).toBe(true)
+        expect(testBlacklist('stimuli/', '._1002.png')).toBe(true)
+        expect(testBlacklist('stimuli/', 'test._1002.png')).toBe(false)
       })
     })
   })

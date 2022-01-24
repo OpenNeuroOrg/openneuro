@@ -298,7 +298,7 @@ export const getDatasets = options => {
 }
 
 // Files to skip in uploads
-const filenameBlacklist = new RegExp(/.DS_Store|Icon\r/)
+const filenameBlacklist = new RegExp(/.DS_Store|Icon\r|^\._/)
 const pathBlacklist = new RegExp(/^.git|^.gitattributes|^.datalad|^.heudiconv/)
 export const testBlacklist = (path, filename) =>
   filenameBlacklist.test(filename) || pathBlacklist.test(path)
