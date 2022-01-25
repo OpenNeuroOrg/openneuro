@@ -1,8 +1,10 @@
 import os
 import shutil
+import traceback
 
 import requests
 from datalad_service.handlers.upload import move_files_into_repo
+from datalad_service.config import GRAPHQL_ENDPOINT
 
 
 def download_file(url, destination_filename):
@@ -37,13 +39,35 @@ def remote_dataset_import(dataset_path, upload_path, import_id, url, name, email
     shutil.rmtree(upload_path)
 
 
-def notify_import_complete(dataset_path, import_id, cookies):
+def import_complete_mutation(import_id, success, message=''):
+    return {
+        'query': 'mutation ($id: ID!, $success: Boolean!, $message: String) { finishImportRemoteDataset(id: ID!, success: Boolean!, message: String) }',
+        'variables': {
+            'id': import_id,
+            'success': success,
+            'message': message,
+        }
+    }
+
+
+def notify_import_complete(import_id, success, message, cookies):
     """Update the API when an import is complete."""
-    pass
+    r = requests.post(
+        url=GRAPHQL_ENDPOINT, json=import_complete_mutation(import_id, success, message), cookies=cookies)
+    if r.status_code != 200:
+        raise Exception(r.text)
 
 
 def remote_import(dataset_path, upload_path, import_id, url, name, email, cookies):
     """Import a dataset bundle into an existing dataset and notify when complete."""
-    remote_dataset_import(dataset_path, upload_path,
-                          import_id, url, name, email, cookies)
-    notify_import_complete(dataset_path, import_id, cookies)
+    success = True
+    message = ''
+    try:
+        remote_dataset_import(dataset_path, upload_path,
+                              import_id, url, name, email, cookies)
+    except Exception as e:
+        success = False
+        message = ''.join(traceback.format_exception(
+            type(e), e, e.__traceback__))
+    finally:
+        notify_import_complete(import_id, success, message, cookies)

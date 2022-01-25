@@ -190,7 +190,7 @@ export const typeDefs = `
     # Submit an import for a remote dataset, returns id if the URL is accepted for import
     importRemoteDataset(datasetId: ID!, url: String!): ID
     # Finish and notify import is done, returns true if successful
-    finishImportRemoteDataset(id: ID!): Boolean
+    finishImportRemoteDataset(id: ID!, success: Boolean!, message: String): Boolean
   }
 
   # Anonymous dataset reviewer

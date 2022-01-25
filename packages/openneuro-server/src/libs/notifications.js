@@ -19,6 +19,8 @@ import { datasetDeleted } from '../libs/email/templates/dataset-deleted'
 import { ownerUnsubscribed } from '../libs/email/templates/owner-unsubscribed'
 import { snapshotCreated } from '../libs/email/templates/snapshot-created'
 import { snapshotReminder } from '../libs/email/templates/snapshot-reminder'
+import { datasetImportEmail } from '../libs/email/templates/dataset-imported'
+import { datasetImportFailed } from '../libs/email/templates/dataset-import-failed'
 
 function noop() {
   // No callback helper
@@ -340,6 +342,50 @@ const notifications = {
         })
       },
     )
+  },
+
+  /**
+   * Import of a remote resource finished
+   * @param {string} datasetId
+   * @param {string} userId
+   * @param {boolean} success
+   * @param {string} message
+   */
+  async datasetImported(datasetId, userId, success, message, retryUrl) {
+    const user = await User.findOne({ id: userId }).exec()
+    let html
+    if (success) {
+      html = datasetImportEmail({
+        name: user.name,
+        datasetId: datasetId,
+        siteUrl:
+          url.parse(config.url).protocol +
+          '//' +
+          url.parse(config.url).hostname,
+      })
+    } else {
+      html = datasetImportFailed({
+        name: user.name,
+        datasetId: datasetId,
+        message: success ? '' : message,
+        siteUrl:
+          url.parse(config.url).protocol +
+          '//' +
+          url.parse(config.url).hostname,
+        retryUrl: retryUrl,
+      })
+    }
+    const emailContent = {
+      _id: datasetId + '_' + user._id + '_' + 'dataset_imported',
+      type: 'email',
+      email: {
+        to: user.email,
+        subject: `Dataset Import ${success ? 'Success' : 'Failed'}`,
+        html: html,
+      },
+    }
+    // send the email to the notifications database for distribution
+    notifications.add(emailContent, noop)
   },
 
   initCron() {

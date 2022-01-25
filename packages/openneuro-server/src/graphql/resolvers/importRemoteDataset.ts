@@ -3,6 +3,7 @@ import IngestDataset from '../../models/ingestDataset'
 import { checkDatasetWrite } from '../permissions.js'
 import { getDatasetWorker } from '../../libs/datalad-service'
 import { generateDataladCookie } from '../../libs/authentication/jwt'
+import notifications from '../../libs/notifications'
 import config from '../../config'
 
 /**
@@ -38,12 +39,17 @@ export async function importRemoteDataset(
 
 export async function finishImportRemoteDataset(
   _: Record<string, unknown>,
-  { id }: { id: string },
+  { id, success, message }: { id: string; success: boolean; message: string },
   { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
 ): Promise<boolean> {
   const ingest = await IngestDataset.findById(id)
-  ingest.imported = true
+  ingest.imported = success
   await ingest.save()
-  // TODO - Send the notification here
+  await notifications.datasetImported(
+    ingest.datasetId,
+    ingest.userId,
+    success,
+    message,
+  )
   return true
 }
