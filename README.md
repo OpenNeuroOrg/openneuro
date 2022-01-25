@@ -16,29 +16,46 @@ OpenNeuro is a free and open platform for analyzing and sharing neuroimaging dat
 This project is managed with [Lerna](https://lernajs.io/) and [Yarn](https://yarnpkg.com/). To get started, install Yarn and bootstrap the repo.
 
 ```shell
-yarn install && yarn bootstrap
+yarn install
 ```
 
 You can run tests with `yarn test` at the top level of the project. For each package, `yarn test --watch` will interactively run the tests for changes since the last commit.
 
-Before starting up the services, you will need to copy the example `.env.example` file to `.env` and `config.env.example` to `config.env`. Many of the values are optional, and most that aren't have default values included in their `.example` file. The exception is `JWT_SECRET` in `config.env`, which you will need to set to a large random string.
+Before starting up the services, you will need to copy the example `.env.example` file to `.env` and `config.env.example` to `config.env`. Many of the values are optional, and most that aren't have default values included in their `.example` file. Required values below:
+
+- `JWT_SECRET` in `config.env` must be set to a large random string.
+- `PERSISTENT_DIR` in `.env` is an absolute path to a directory that will be used to store datasets. This should be a git-annex compatible filesystem and large enough to store some test datasets.
+
+To setup Google as an authentication provider, [register a new client app](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow) and set the following variables. For development use, you will create a new Google project with oauth credentials for a JavaScript client side app. "Authorized JavaScript Origins" is set to `http://localhost:9876` and "Authorized Redirect URIs" is set to `http://localhost:9876/crn/auth/google/callback` for a site accessible at `http://localhost:9876`.
+
+```
+# Ending in .apps.googleusercontent.com
+GOOGLE_CLIENT_ID=
+# 24 character secret string
+GOOGLE_CLIENT_SECRET=
+```
 
 [docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together.
 
 ```shell
 # This will run docker-compose in the background (-d flag is --detach)
-yarn start -d
+docker-compose up -d
 ```
 
 For example, you can restart the server container with `docker-compose restart server` or view logs with `docker-compose logs -f --tail=10 server`.
 
-## Components
+## Major Components
 
-- [OpenNeuro app](packages/openneuro-app) - React frontend.
-- [OpenNeuro server](packages/openneuro-server) - Node.js web backend.
-- [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) microservice.
-- [bids-app-host](https://github.com/OpenNeuroOrg/bids-app-host) - Docker wrapper for cloud hosted job execution.
-- [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library.
+- [OpenNeuro app](packages/openneuro-app) - React frontend
+- [OpenNeuro server](packages/openneuro-server) - Node.js GraphQL API
+- [OpenNeuro indexer](packages/openneuro-indexer) - ElasticSearch indexer
+- [OpenNeuro components](packages/openneuro-components) - ReactJS components library
+- [OpenNeuro CLI](packages/openneuro-cli) - Node.js command line tool
+- [OpenNeuro client](packages/openneuro-client) - JavaScript client library used in CLI and App
+- [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) compatible dataset worker microservice
+- [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library
+
+JavaScript packages are published in the `@openneuro` npm namespace.
 
 ## OpenNeuro Command-line utility tool
 
