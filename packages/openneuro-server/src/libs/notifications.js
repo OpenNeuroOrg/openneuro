@@ -60,32 +60,23 @@ const notifications = {
    */
   async snapshotCreated(datasetId, body, uploader) {
     const tag = body.tag
-    // if we still have a promise for the body files, await it
-    const files = await body.files
     const uploaderId = uploader ? uploader.id : null
-    const datasetDescription = files.find(
-      file => file.filename == 'dataset_description.json',
-    )
-    const datasetDescriptionId = datasetDescription
-      ? datasetDescription.id
-      : null
     const URI = getDatasetWorker(datasetId)
-    const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/objects/${datasetDescriptionId}`
-
-    const changesFile = files.find(file => file.filename == 'CHANGES')
-    const changesId = changesFile ? changesFile.id : null
-    const changesUrl = `${URI}/datasets/${datasetId}/objects/${changesId}`
+    const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/snapshots/${tag}/files/dataset_description.json`
+    const changesUrl = `${URI}/datasets/${datasetId}/snapshots/${tag}/files/CHANGES`
 
     // get the dataset description
-    let response = await request.get(datasetDescriptionUrl)
-    const description = response.body
+    const descriptionResponse = await request.get(datasetDescriptionUrl)
+    const description = descriptionResponse.body
     const datasetLabel = description.Name ? description.Name : 'Unnamed Dataset'
 
     // get the snapshot changelog
-    response = await request
+    const changesResponse = await request
       .get(changesUrl)
       .responseType('application/octet-stream')
-    const changelog = response.body ? response.body.toString() : null
+    const changelog = changesResponse.body
+      ? changesResponse.body.toString()
+      : null
     // get all users that are subscribed to the dataset
     const subscriptions = await Subscription.find({
       datasetId: datasetId,
