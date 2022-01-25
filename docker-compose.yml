@@ -111,7 +111,6 @@ services:
   datalad:
     build:
       context: services/datalad
-      target: base
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad:delegated
       - ./services/datalad/datalad_service:/datalad_service:delegated
