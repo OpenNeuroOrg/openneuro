@@ -8,8 +8,8 @@ import { Button } from '../button/Button'
 export interface DatasetToolsProps {
   hasEdit: boolean
   isPublic: boolean
-  isSnapshot: boolean
   datasetId: string
+  snapshotId?: string
   isAdmin: boolean
   isDatasetAdmin: boolean
   hasSnapshot?: boolean
@@ -17,15 +17,16 @@ export interface DatasetToolsProps {
 
 export const DatasetTools = ({
   hasEdit,
-  isSnapshot,
   isPublic,
   datasetId,
+  snapshotId,
   isAdmin,
   hasSnapshot,
   isDatasetAdmin,
 }: DatasetToolsProps) => {
   const history = useHistory()
   const location = useLocation()
+  const isSnapshot = snapshotId
   return (
     <>
       {hasEdit && !isPublic && !isSnapshot && (
@@ -89,7 +90,13 @@ export const DatasetTools = ({
         </Tooltip>
       )}
       <span>
-        <Link className="dataset-tool" to={`/datasets/${datasetId}/download`}>
+        <Link
+          className="dataset-tool"
+          to={
+            snapshotId
+              ? `/datasets/${datasetId}/versions/${snapshotId}/download`
+              : `/datasets/${datasetId}/download`
+          }>
           <Icon icon="fa fa-download" label="Download" />
         </Link>
       </span>
