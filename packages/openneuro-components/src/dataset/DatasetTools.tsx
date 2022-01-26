@@ -92,7 +92,11 @@ export const DatasetTools = ({
       <span>
         <Link
           className="dataset-tool"
-          to={`/datasets/${datasetId}/versions/${snapshotId}/download`}>
+          to={
+            snapshotId
+              ? `/datasets/${datasetId}/versions/${snapshotId}/download`
+              : `/datasets/${datasetId}/download`
+          }>
           <Icon icon="fa fa-download" label="Download" />
         </Link>
       </span>

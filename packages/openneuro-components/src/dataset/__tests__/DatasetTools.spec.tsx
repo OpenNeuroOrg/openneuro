@@ -82,4 +82,41 @@ describe('DatasetTools component', () => {
     expect(screen.queryByLabelText('Deprecate Version')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Delete')).not.toBeInTheDocument()
   })
+  it('links to draft page when snapshotId is undefined', () => {
+    render(
+      <DatasetTools
+        hasEdit={false}
+        isPublic={true}
+        isAdmin={false}
+        datasetId={'test000001'}
+        hasSnapshot={true}
+        isDatasetAdmin={false}
+      />,
+      { wrapper: MemoryRouter },
+    )
+    expect(screen.queryByLabelText('Download')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Download' })).toHaveAttribute(
+      'href',
+      '/datasets/test000001/download',
+    )
+  })
+  it('links to snapshot page when snapshotId is defined', () => {
+    render(
+      <DatasetTools
+        hasEdit={false}
+        isPublic={true}
+        isAdmin={false}
+        datasetId={'test000001'}
+        snapshotId={'1.0.0'}
+        hasSnapshot={true}
+        isDatasetAdmin={false}
+      />,
+      { wrapper: MemoryRouter },
+    )
+    expect(screen.queryByLabelText('Download')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Download' })).toHaveAttribute(
+      'href',
+      '/datasets/test000001/versions/1.0.0/download',
+    )
+  })
 })
