@@ -4871,6 +4871,7 @@ __metadata:
     ioredis: 4.17.3
     ioredis-mock: ^3.8.1
     jest: ^26.6.3
+    jest-fetch-mock: ^3.0.3
     jsdom: ^11.6.2
     jsonwebtoken: ^8.3.0
     mime-types: ^2.1.19

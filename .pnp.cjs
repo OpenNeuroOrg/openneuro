@@ -9452,6 +9452,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ioredis", "npm:4.17.3"],
             ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:3.14.3"],
             ["jest", "npm:26.6.3"],
+            ["jest-fetch-mock", "npm:3.0.3"],
             ["jsdom", "npm:11.12.0"],
             ["jsonwebtoken", "npm:8.5.1"],
             ["mime-types", "npm:2.1.32"],
