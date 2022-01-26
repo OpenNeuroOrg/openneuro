@@ -7,6 +7,29 @@ import notifications from '../../libs/notifications'
 import config from '../../config'
 
 /**
+ * Test if a URL is allowed to be imported
+ * @param raw String URL
+ * @returns {boolean}
+ */
+export function allowedImportUrl(raw: string): boolean {
+  let url
+  try {
+    url = new URL(raw)
+  } catch (_) {
+    return false
+  }
+  if (url.hostname === 'brainlife.io') {
+    return true
+  } else if (
+    url.hostname === 'openneuro-test-import-bucket.s3.us-west-2.amazonaws.com'
+  ) {
+    return true
+  } else {
+    return false
+  }
+}
+
+/**
  * Queue a bundle of files for import into an existing dataset
  */
 export async function importRemoteDataset(
@@ -14,8 +37,10 @@ export async function importRemoteDataset(
   { datasetId, url }: { datasetId: string; url: string },
   { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
 ): Promise<string | null> {
-  console.log(`import request for ${url} by ${JSON.stringify(userInfo)}`)
   await checkDatasetWrite(datasetId, user, userInfo)
+  if (!allowedImportUrl(url)) {
+    return
+  }
   const ingest = new IngestDataset({ datasetId, url, userId: user })
   // undefined validateSync() means no errors
   if (ingest.validateSync() == undefined) {
