@@ -41,7 +41,7 @@ def remote_dataset_import(dataset_path, upload_path, import_id, url, name, email
 
 def import_complete_mutation(import_id, success, message=''):
     return {
-        'query': 'mutation ($id: ID!, $success: Boolean!, $message: String) { finishImportRemoteDataset(id: ID!, success: Boolean!, message: String) }',
+        'query': 'mutation ($id: ID!, $success: Boolean!, $message: String) { finishImportRemoteDataset(id: $id, success: $success, message: $message) }',
         'variables': {
             'id': import_id,
             'success': success,
