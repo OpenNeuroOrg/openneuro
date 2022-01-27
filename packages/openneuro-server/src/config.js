@@ -46,6 +46,7 @@ const config = {
       user: process.env.CRN_SERVER_MAIL_USER,
       url: process.env.CRN_SERVER_MAIL_URL,
       pass: process.env.CRN_SERVER_MAIL_PASS,
+      from: process.env.CRN_SERVER_MAIL_FROM,
     },
   },
   sentry: {

@@ -371,6 +371,7 @@ const notifications = {
       type: 'email',
       email: {
         to: user.email,
+        from: config.notifications.email.from,
         subject: `Dataset Import ${success ? 'Success' : 'Failed'}`,
         html: html,
       },
