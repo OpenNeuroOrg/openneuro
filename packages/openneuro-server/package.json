@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/server",
-  "version": "4.4.0-alpha.1",
+  "version": "4.4.0-alpha.2",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "src/server.js",
@@ -105,5 +105,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "dbbc1c2c6a8ffbf82ce814bce981ccf9fde116fb"
+  "gitHead": "5ab5597628b6ffd1f1d540320e297af0b0625af3"
 }
