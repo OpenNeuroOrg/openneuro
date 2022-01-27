@@ -42,10 +42,8 @@ const config = {
   },
   notifications: {
     email: {
-      service: process.env.CRN_SERVER_MAIL_SERVICE,
-      user: process.env.CRN_SERVER_MAIL_USER,
-      url: process.env.CRN_SERVER_MAIL_URL,
-      pass: process.env.CRN_SERVER_MAIL_PASS,
+      apiKey: process.env.CRN_SERVER_MAIL_API_KEY,
+      secret: process.env.CRN_SERVER_MAIL_API_SECRET,
       from: process.env.CRN_SERVER_MAIL_FROM,
     },
   },
