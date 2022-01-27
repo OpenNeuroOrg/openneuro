@@ -75,6 +75,7 @@ export async function finishImportRemoteDataset(
     ingest.userId,
     success,
     message,
+    ingest.url,
   )
   return true
 }
