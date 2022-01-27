@@ -1,5 +1,4 @@
 import React, { FC, useContext } from 'react'
-import { useLocation } from 'react-router-dom'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { datasetCacheId } from '../../../datalad/mutations/cache-id.js'
@@ -45,16 +44,11 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
   profile,
   followers,
 }) => {
-  const { setUserModalOpen, setLoginOptions } = useContext(UserModalOpenCtx)
-  const location = useLocation()
+  const { setUserModalOpen } = useContext(UserModalOpenCtx)
   const handleToggle = followDataset => () => {
     if (!profile) {
       // if user is not logged in, give them the option to do so
       // then redirect back to this page
-      setLoginOptions(prevState => ({
-        ...prevState,
-        redirect: `${location.pathname}`,
-      }))
       setUserModalOpen(true)
     } else {
       followDataset({ variables: { datasetId } })

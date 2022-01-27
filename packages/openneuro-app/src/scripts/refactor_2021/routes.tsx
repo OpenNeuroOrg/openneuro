@@ -14,6 +14,7 @@ import ErrorRoute from '../errors/errorRoute'
 import { PETRedirect } from '../pet/redirect'
 import Citation from '../pages/citation-page'
 import FourOFourPage from '../errors/404page'
+import { ImportDataset } from '../pages/import-dataset'
 
 const Routes: React.VoidFunctionComponent = () => (
   <Switch>
@@ -26,6 +27,7 @@ const Routes: React.VoidFunctionComponent = () => (
     <Route path="/error" component={ErrorRoute} />
     <Route path="/pet" component={PETRedirect} />
     <Route path="/cite" component={Citation} />
+    <Route path="/import" component={ImportDataset} />
     <Redirect from="/public" to="/search" />
     <Redirect from="/saved" to="/search?bookmarks" />
     <Redirect from="/dashboard" to="/search?mydatasets" />

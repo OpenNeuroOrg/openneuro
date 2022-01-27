@@ -24,6 +24,7 @@ from datalad_service.handlers.git import GitRefsResource, GitReceiveResource, Gi
 from datalad_service.handlers.annex import GitAnnexResource
 from datalad_service.handlers.reexporter import ReexporterResource
 from datalad_service.handlers.reset import ResetResource
+from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 
 
@@ -74,6 +75,7 @@ def create_app(annex_path):
     dataset_git_annex_resource = GitAnnexResource(store)
     dataset_reexporter_resources = ReexporterResource(store)
     dataset_reset_resource = ResetResource(store)
+    dataset_remote_import_resource = RemoteImportResource(store)
 
     api.add_route('/heartbeat', heartbeat)
 
@@ -120,5 +122,8 @@ def create_app(annex_path):
                   dataset_git_upload_resource)
     api.add_route('/git/{worker}/{dataset}/annex/{key}',
                   dataset_git_annex_resource)
+
+    api.add_route('/datasets/{dataset}/import/{import_id}',
+                  dataset_remote_import_resource)
 
     return api

@@ -23,6 +23,18 @@ def move_files(upload_path, dataset_path):
             gevent.sleep()
 
 
+def move_files_into_repo(dataset_id, dataset_path, upload_path, name, email, cookies):
+    repo = pygit2.Repository(dataset_path)
+    unlock_files = [os.path.relpath(filename, start=upload_path) for filename in
+                    pathlib.Path(upload_path).glob('**/*') if os.path.islink(
+        os.path.join(dataset_path, os.path.relpath(filename, start=upload_path)))]
+    gevent.sleep()
+    move_files(upload_path, dataset_path)
+    author = pygit2.Signature(name, email)
+    hexsha = git_commit(repo, unlock_files, author).hex
+    update_head(dataset_id, dataset_path, hexsha, cookies)
+
+
 class UploadResource(object):
     def __init__(self, store):
         self.store = store
@@ -31,16 +43,9 @@ class UploadResource(object):
     def _finish_upload(self, dataset_id, upload, name, email, cookies):
         try:
             dataset_path = self.store.get_dataset_path(dataset_id)
-            repo = pygit2.Repository(dataset_path)
             upload_path = self.store.get_upload_path(dataset_id, upload)
-            unlock_files = [os.path.relpath(filename, start=upload_path) for filename in
-                            pathlib.Path(upload_path).glob('**/*') if os.path.islink(
-                os.path.join(dataset_path, os.path.relpath(filename, start=upload_path)))]
-            gevent.sleep()
-            move_files(upload_path, dataset_path)
-            author = pygit2.Signature(name, email)
-            hexsha = git_commit(repo, unlock_files, author).hex
-            update_head(dataset_id, dataset_path, hexsha, cookies)
+            move_files_into_repo(dataset_id, dataset_path, upload_path,
+                                 name, email, cookies)
             gevent.sleep()
             shutil.rmtree(upload_path)
         except:
