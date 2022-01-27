@@ -235,7 +235,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               heading="Authors"
               description={description.Authors}
               editMode={hasEdit}>
-              {description.Authors?.length ? description.Authors : ['N/A']}
+              {description?.Authors?.length ? description.Authors : ['N/A']}
             </EditDescriptionList>
 
             {summary && (
