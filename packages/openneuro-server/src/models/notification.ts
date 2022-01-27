@@ -9,6 +9,7 @@ export interface NotificationDocument extends Document {
     from: string
     subject: string
     template: string
+    html: string
     data: {
       name: string
       appName: string
@@ -43,6 +44,7 @@ const notificationSchema = new Schema({
     from: String,
     subject: String,
     template: String,
+    html: String,
     data: {
       name: String,
       appName: String,

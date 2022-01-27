@@ -26,7 +26,7 @@ export const send = (
 
   // configure mail options
   const mailOptions = {
-    from: '"OpenNeuro" <notifications@openneuro.org>',
+    from: `"OpenNeuro" <${config.notifications.email.from}>`,
     replyTo: from,
     to: email.to,
     subject: email.subject,

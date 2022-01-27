@@ -1,13 +1,9 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
-import toDate from 'date-fns/toDate'
-import subHours from 'date-fns/subHours'
 import config from '../config'
 import { send as emailSend } from './email'
 import request from 'superagent'
-import Notification from '../models/notification'
 import User from '../models/user'
 import Subscription from '../models/subscription'
-import MailgunIdentifier from '../models/mailgunIdentifier'
 import moment from 'moment'
 import url from 'url'
 import bidsId from './bidsId'
@@ -29,20 +25,6 @@ function noop() {
 // public api ---------------------------------------------
 
 const notifications = {
-  /**
-   * Add
-   *
-   * Takes a notification object and
-   * adds it to the database to be processed by
-   * the cron.
-   */
-  add(notification, callback) {
-    Notification.updateOne({ _id: notification._id }, notification, {
-      upsert: true,
-      new: true,
-    }).then(callback)
-  },
-
   /**
    * Send
    */
@@ -106,8 +88,8 @@ const notifications = {
             }),
           },
         }
-        // send the email to the notifications database for distribution
-        notifications.add(emailContent, noop)
+        // send the email
+        notifications.send(emailContent, noop)
       }
     })
   },
@@ -179,7 +161,7 @@ const notifications = {
                 },
               }
               // send each email to the notification database for distribution
-              notifications.add(emailContent, noop)
+              notifications.send(emailContent, noop)
             }
           })
       })
@@ -224,8 +206,7 @@ const notifications = {
                   }),
                 },
               }
-              // send each email to the notification database for distribution
-              notifications.add(emailContent, noop)
+              notifications.send(emailContent, noop)
             }
           })
       })
@@ -274,8 +255,7 @@ const notifications = {
                   }),
                 },
               }
-              // send each email to the notification database for distribution
-              notifications.add(emailContent, noop)
+              notifications.send(emailContent, noop)
             }
           })
       })
@@ -327,7 +307,7 @@ const notifications = {
                   },
                 }
                 // send each email to the notification database for distribution
-                notifications.add(emailContent, noop)
+                notifications.send(emailContent, noop)
               }
             })
         })
@@ -371,49 +351,12 @@ const notifications = {
       type: 'email',
       email: {
         to: user.email,
-        from: config.notifications.email.from,
         subject: `Dataset Import ${success ? 'Success' : 'Failed'}`,
         html: html,
       },
     }
     // send the email to the notifications database for distribution
-    notifications.add(emailContent, noop)
-  },
-
-  initCron() {
-    setInterval(() => {
-      // After one hour, retry a notification even if we have a lock
-      Notification.findOneAndUpdate(
-        { notificationLock: { $lte: toDate(subHours(Date.now(), 1)) } },
-        { $set: { notificationLock: new Date(Date.now()) } },
-      ).exec((err, notification) => {
-        if (err) {
-          console.log(
-            'NOTIFICATION ERROR - Could not find notifications collection',
-          )
-        } else {
-          if (notification) {
-            notifications.send(notification, (err, response) => {
-              if (!err) {
-                notification.remove()
-                if (response && response.messageId) {
-                  new MailgunIdentifier({
-                    messageId: response.messageId,
-                  }).save(err => {
-                    if (err) {
-                      throw `failed to save mailgunIdentifier ${response.messageId}`
-                    }
-                  })
-                }
-              } else {
-                console.log('NOTIFICATION ERROR ----------')
-                console.log(err)
-              }
-            })
-          }
-        }
-      })
-    }, 3600000)
+    notifications.send(emailContent, noop)
   },
 }
 
