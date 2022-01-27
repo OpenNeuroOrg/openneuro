@@ -3,14 +3,24 @@ import mailjetTransport from 'nodemailer-mailjet-transport'
 import config from '../../config'
 
 // setup email transporter
-const transporter = nodemailer.createTransport(
-  mailjetTransport({
-    auth: {
-      apiKey: config.notifications.email.apiKey,
-      secret: config.notifications.email.secret,
+let transporter
+try {
+  transporter = nodemailer.createTransport(
+    mailjetTransport({
+      auth: {
+        apiKey: config.notifications.email.apiKey,
+        secret: config.notifications.email.secret,
+      },
+    }),
+  )
+} catch (err) {
+  // Mailjet is not configured, instead log emails
+  transporter = {
+    sendMail: (mail, cb) => {
+      console.dir(mail)
     },
-  }),
-)
+  }
+}
 
 export const send = (
   email: Record<string, string>,
