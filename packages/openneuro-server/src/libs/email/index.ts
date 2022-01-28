@@ -10,7 +10,7 @@ try {
     mailjetTransport({
       auth: {
         apiKey: config.notifications.email.apiKey,
-        secret: config.notifications.email.secret,
+        apiSecret: config.notifications.email.secret,
       },
     }),
   )
