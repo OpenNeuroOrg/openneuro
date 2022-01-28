@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/indexer",
-  "version": "4.4.4",
+  "version": "4.4.5",
   "description": "OpenNeuro elastic search indexing tool",
   "main": "./dist/index.js",
   "types": "./src/index.d.ts",
@@ -14,7 +14,7 @@
   "dependencies": {
     "@apollo/client": "3.4.17",
     "@elastic/elasticsearch": "7.15.0",
-    "@openneuro/client": "^4.4.4",
+    "@openneuro/client": "^4.4.5",
     "apollo-link-retry": "^2.2.16",
     "jsonwebtoken": "^8.5.1",
     "ts-node": "^9.1.1",
