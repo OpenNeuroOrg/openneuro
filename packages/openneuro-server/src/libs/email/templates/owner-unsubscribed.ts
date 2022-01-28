@@ -44,7 +44,7 @@ export const ownerUnsubscribed = ({
 </head>
 <body>
 	<div class="top-bar">
-		<img src="${siteUrl}/assets/CRN-Logo-Placeholder.png" />
+		<img src="${siteUrl}/assets/email-header.1cb8bf76.png" />
 	</div>
 	<div class="content">
 		<h2>Hi, ${name}</h2>
