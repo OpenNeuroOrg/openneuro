@@ -57,7 +57,7 @@ exports[`email template -> comment created renders with expected arguments 1`] =
 </head>
 <body>
 	<div class=\\"top-bar\\">
-		<img src=\\"https://openneuro.org/assets/CRN-Logo-Placeholder.png\\" />
+		<img src=\\"https://openneuro.org/assets/email-header.1cb8bf76.png\\" />
 	</div>
 	<div class=\\"content\\">
 		<h2>Hi, J. Doe</h2>
