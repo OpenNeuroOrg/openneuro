@@ -1,10 +1,11 @@
 import nodemailer from 'nodemailer'
-import mailjetTransport from 'nodemailer-mailjet-transport'
+
 import config from '../../config'
 
 // setup email transporter
 let transporter
 try {
+  const mailjetTransport = require('nodemailer-mailjet-transport')
   transporter = nodemailer.createTransport(
     mailjetTransport({
       auth: {
