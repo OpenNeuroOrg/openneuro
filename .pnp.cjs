@@ -9425,7 +9425,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/draft-js", "npm:0.10.45"],
             ["@types/ioredis", "npm:4.27.4"],
             ["@types/jest", "npm:26.0.24"],
-            ["@types/nodemailer", "npm:6.4.4"],
+            ["@types/node-mailjet", "npm:3.3.8"],
             ["@types/semver", "npm:5.5.0"],
             ["apollo-link-schema", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.2.5"],
             ["apollo-server", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.25.3"],
@@ -9463,8 +9463,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mongoose", "npm:5.12.3"],
             ["morgan", "npm:1.10.0"],
             ["node-fetch", "npm:2.6.5"],
-            ["nodemailer", "npm:6.7.2"],
-            ["nodemailer-mailjet-transport", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.0.4"],
+            ["node-mailjet", "npm:3.3.5"],
             ["nodemon", "npm:2.0.13"],
             ["object-hash", "npm:2.1.1"],
             ["passport", "npm:0.4.1"],
@@ -12620,12 +12619,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@types/nodemailer", [
-        ["npm:6.4.4", {
-          "packageLocation": "./.yarn/cache/@types-nodemailer-npm-6.4.4-c5c500abe2-16ed1bad2c.zip/node_modules/@types/nodemailer/",
+      ["@types/node-mailjet", [
+        ["npm:3.3.8", {
+          "packageLocation": "./.yarn/cache/@types-node-mailjet-npm-3.3.8-d450dce0c1-1eaaccffc2.zip/node_modules/@types/node-mailjet/",
           "packageDependencies": [
-            ["@types/nodemailer", "npm:6.4.4"],
-            ["@types/node", "npm:16.9.6"]
+            ["@types/node-mailjet", "npm:3.3.8"]
           ],
           "linkType": "HARD",
         }]
@@ -13887,15 +13885,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["addressparser", [
-        ["npm:1.0.1", {
-          "packageLocation": "./.yarn/cache/addressparser-npm-1.0.1-e4aa0080cf-389051bc6a.zip/node_modules/addressparser/",
-          "packageDependencies": [
-            ["addressparser", "npm:1.0.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["after-all-results", [
         ["npm:2.0.0", {
           "packageLocation": "./.yarn/cache/after-all-results-npm-2.0.0-20af503b94-24de1c95b6.zip/node_modules/after-all-results/",
@@ -15132,13 +15121,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["async", "npm:2.6.3"],
             ["lodash", "npm:4.17.21"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:3.2.3", {
-          "packageLocation": "./.yarn/cache/async-npm-3.2.3-e9d6b79c88-c4bee57ab2.zip/node_modules/async/",
-          "packageDependencies": [
-            ["async", "npm:3.2.3"]
           ],
           "linkType": "HARD",
         }]
@@ -19366,13 +19348,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["dotenv", [
-        ["npm:10.0.0", {
-          "packageLocation": "./.yarn/cache/dotenv-npm-10.0.0-36b272df25-f412c5fe8c.zip/node_modules/dotenv/",
-          "packageDependencies": [
-            ["dotenv", "npm:10.0.0"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:6.2.0", {
           "packageLocation": "./.yarn/cache/dotenv-npm-6.2.0-72b7dafc27-d4aa189741.zip/node_modules/dotenv/",
           "packageDependencies": [
@@ -19817,15 +19792,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["encoding", "npm:0.1.13"],
             ["iconv-lite", "npm:0.6.3"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["encoding-japanese", [
-        ["npm:1.0.30", {
-          "packageLocation": "./.yarn/cache/encoding-japanese-npm-1.0.30-dd5644c2e4-ed14abf1e1.zip/node_modules/encoding-japanese/",
-          "packageDependencies": [
-            ["encoding-japanese", "npm:1.0.30"]
           ],
           "linkType": "HARD",
         }]
@@ -23483,14 +23449,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:0.6.2", {
-          "packageLocation": "./.yarn/cache/iconv-lite-npm-0.6.2-13e85ec7dc-03e03eb9fc.zip/node_modules/iconv-lite/",
-          "packageDependencies": [
-            ["iconv-lite", "npm:0.6.2"],
-            ["safer-buffer", "npm:2.1.2"]
-          ],
-          "linkType": "HARD",
-        }],
         ["npm:0.6.3", {
           "packageLocation": "./.yarn/cache/iconv-lite-npm-0.6.3-24b8aae27e-3f60d47a5c.zip/node_modules/iconv-lite/",
           "packageDependencies": [
@@ -26529,37 +26487,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["libbase64", [
-        ["npm:1.2.1", {
-          "packageLocation": "./.yarn/cache/libbase64-npm-1.2.1-a60f4837f4-891ed18fa0.zip/node_modules/libbase64/",
-          "packageDependencies": [
-            ["libbase64", "npm:1.2.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["libmime", [
-        ["npm:5.0.0", {
-          "packageLocation": "./.yarn/cache/libmime-npm-5.0.0-11203af1a0-ca7dd8b91d.zip/node_modules/libmime/",
-          "packageDependencies": [
-            ["libmime", "npm:5.0.0"],
-            ["encoding-japanese", "npm:1.0.30"],
-            ["iconv-lite", "npm:0.6.2"],
-            ["libbase64", "npm:1.2.1"],
-            ["libqp", "npm:1.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["libqp", [
-        ["npm:1.1.0", {
-          "packageLocation": "./.yarn/cache/libqp-npm-1.1.0-ddb0eb8f56-7baaec1dba.zip/node_modules/libqp/",
-          "packageDependencies": [
-            ["libqp", "npm:1.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["lines-and-columns", [
         ["npm:1.1.6", {
           "packageLocation": "./.yarn/cache/lines-and-columns-npm-1.1.6-23e74fab67-198a5436b1.zip/node_modules/lines-and-columns/",
@@ -28600,64 +28527,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["node.extend", "npm:2.0.2"],
             ["has", "npm:1.0.3"],
             ["is", "npm:3.3.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["nodemailer", [
-        ["npm:6.7.2", {
-          "packageLocation": "./.yarn/cache/nodemailer-npm-6.7.2-ba5500b754-3c37a40928.zip/node_modules/nodemailer/",
-          "packageDependencies": [
-            ["nodemailer", "npm:6.7.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["nodemailer-build-attachment", [
-        ["npm:3.0.0", {
-          "packageLocation": "./.yarn/cache/nodemailer-build-attachment-npm-3.0.0-b0ef0a94c0-c651ffbcf8.zip/node_modules/nodemailer-build-attachment/",
-          "packageDependencies": [
-            ["nodemailer-build-attachment", "npm:3.0.0"],
-            ["libbase64", "npm:1.2.1"],
-            ["libmime", "npm:5.0.0"],
-            ["nodemailer-fetch", "npm:2.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["nodemailer-fetch", [
-        ["npm:2.1.0", {
-          "packageLocation": "./.yarn/cache/nodemailer-fetch-npm-2.1.0-e76cf65a57-b255e411a3.zip/node_modules/nodemailer-fetch/",
-          "packageDependencies": [
-            ["nodemailer-fetch", "npm:2.1.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["nodemailer-mailjet-transport", [
-        ["npm:1.0.4", {
-          "packageLocation": "./.yarn/cache/nodemailer-mailjet-transport-npm-1.0.4-3b029fe574-9db904b48b.zip/node_modules/nodemailer-mailjet-transport/",
-          "packageDependencies": [
-            ["nodemailer-mailjet-transport", "npm:1.0.4"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.0.4", {
-          "packageLocation": "./.yarn/__virtual__/nodemailer-mailjet-transport-virtual-9680820f1b/0/cache/nodemailer-mailjet-transport-npm-1.0.4-3b029fe574-9db904b48b.zip/node_modules/nodemailer-mailjet-transport/",
-          "packageDependencies": [
-            ["nodemailer-mailjet-transport", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.0.4"],
-            ["@types/nodemailer", "npm:6.4.4"],
-            ["addressparser", "npm:1.0.1"],
-            ["async", "npm:3.2.3"],
-            ["bluebird", "npm:3.7.2"],
-            ["dotenv", "npm:10.0.0"],
-            ["node-mailjet", "npm:3.3.5"],
-            ["nodemailer", "npm:6.7.2"],
-            ["nodemailer-build-attachment", "npm:3.0.0"]
-          ],
-          "packagePeers": [
-            "@types/nodemailer",
-            "nodemailer"
           ],
           "linkType": "HARD",
         }]

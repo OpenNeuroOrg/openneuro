@@ -18,19 +18,15 @@ import { snapshotReminder } from '../libs/email/templates/snapshot-reminder'
 import { datasetImportEmail } from '../libs/email/templates/dataset-imported'
 import { datasetImportFailed } from '../libs/email/templates/dataset-import-failed'
 
-function noop() {
-  // No callback helper
-}
-
 // public api ---------------------------------------------
 
 const notifications = {
   /**
    * Send
    */
-  send(notification, callback) {
+  send(notification) {
     if (notification.type === 'email') {
-      emailSend(notification.email, callback)
+      emailSend(notification.email)
     }
   },
 
@@ -74,6 +70,7 @@ const notifications = {
           type: 'email',
           email: {
             to: user.email,
+            name: user.name,
             subject: 'Snapshot Created',
             html: snapshotCreated({
               name: user.name,
@@ -89,7 +86,7 @@ const notifications = {
           },
         }
         // send the email
-        notifications.send(emailContent, noop)
+        notifications.send(emailContent)
       }
     })
   },
@@ -138,6 +135,7 @@ const notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
+                  name: user.name,
                   from:
                     'reply-' +
                     encodeURIComponent(comment._id) +
@@ -161,7 +159,7 @@ const notifications = {
                 },
               }
               // send each email to the notification database for distribution
-              notifications.send(emailContent, noop)
+              notifications.send(emailContent)
             }
           })
       })
@@ -195,6 +193,7 @@ const notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
+                  name: user.name,
                   subject: 'Dataset Deleted',
                   html: datasetDeleted({
                     name: user.name,
@@ -206,7 +205,7 @@ const notifications = {
                   }),
                 },
               }
-              notifications.send(emailContent, noop)
+              notifications.send(emailContent)
             }
           })
       })
@@ -244,6 +243,7 @@ const notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
+                  name: user.name,
                   subject: 'Owner Unsubscribed',
                   html: ownerUnsubscribed({
                     name: user.name,
@@ -255,7 +255,7 @@ const notifications = {
                   }),
                 },
               }
-              notifications.send(emailContent, noop)
+              notifications.send(emailContent)
             }
           })
       })
@@ -294,6 +294,7 @@ const notifications = {
                   type: 'email',
                   email: {
                     to: user.email,
+                    name: user.name,
                     subject: 'Snapshot Reminder',
                     html: snapshotReminder({
                       name: user.name,
@@ -307,7 +308,7 @@ const notifications = {
                   },
                 }
                 // send each email to the notification database for distribution
-                notifications.send(emailContent, noop)
+                notifications.send(emailContent)
               }
             })
         })
@@ -351,12 +352,13 @@ const notifications = {
       type: 'email',
       email: {
         to: user.email,
+        name: user.name,
         subject: `Dataset Import ${success ? 'Success' : 'Failed'}`,
         html: html,
       },
     }
     // send the email to the notifications database for distribution
-    notifications.send(emailContent, noop)
+    notifications.send(emailContent)
   },
 }
 

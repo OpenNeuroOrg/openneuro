@@ -4642,8 +4642,8 @@ __metadata:
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
-    "@openneuro/client": ^4.4.0
-    "@openneuro/components": ^4.4.0
+    "@openneuro/client": ^4.4.2
+    "@openneuro/components": ^4.4.2
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -4710,7 +4710,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.4.0
+    "@openneuro/client": ^4.4.2
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
     bids-validator: 1.8.8
@@ -4735,14 +4735,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.4.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.4.2, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.4.0
+    "@openneuro/server": ^4.4.2
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4754,7 +4754,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.4.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.4.2, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -4813,7 +4813,7 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.4.0
+    "@openneuro/client": ^4.4.2
     "@types/jsonwebtoken": ^8
     "@types/node": 16.11.13
     "@types/tsc-watch": ^4
@@ -4827,7 +4827,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.4.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.4.2, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -4844,7 +4844,7 @@ __metadata:
     "@types/draft-js": ^0.10.43
     "@types/ioredis": ^4.17.1
     "@types/jest": ^26.0.23
-    "@types/nodemailer": ^6.4.1
+    "@types/node-mailjet": ^3
     "@types/semver": ^5
     apollo-link-schema: ^1.2.5
     apollo-server: 2.25.3
@@ -4882,8 +4882,7 @@ __metadata:
     mongoose: 5.12.3
     morgan: ^1.6.1
     node-fetch: ^2.6.0
-    nodemailer: ^6.7.2
-    nodemailer-mailjet-transport: ^1.0.4
+    node-mailjet: ^3.3.5
     nodemon: ^2.0.7
     object-hash: 2.1.1
     passport: ^0.4.0
@@ -6934,6 +6933,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-mailjet@npm:^3":
+  version: 3.3.8
+  resolution: "@types/node-mailjet@npm:3.3.8"
+  checksum: 1eaaccffc27e9bde9a0c0ebb11d4b1ce337b4d599613e31e88a0acb0f295b30c04467d19a30eaaad734f6c72459dc302d6fb66b16d4c6f8fb5ba8f30fc1da826
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:>= 8":
   version: 16.9.6
   resolution: "@types/node@npm:16.9.6"
@@ -6973,15 +6979,6 @@ __metadata:
   version: 8.10.66
   resolution: "@types/node@npm:8.10.66"
   checksum: c52039de862654a139abdc6a51de532a69dd80516ac35a959c3b3a2831ecbaaf065b0df5f9db943f5e28b544ebb9a891730d52b52f7a169b86a82bc060210000
-  languageName: node
-  linkType: hard
-
-"@types/nodemailer@npm:^6.4.1":
-  version: 6.4.4
-  resolution: "@types/nodemailer@npm:6.4.4"
-  dependencies:
-    "@types/node": "*"
-  checksum: 16ed1bad2cd8471fd3b026471e234da33ba3b65935dc44b31be3145eff7bdb067eb4d08ec4b41d23339b988075299abc1a0c0fe77b99f04ca235827bca95af81
   languageName: node
   linkType: hard
 
@@ -8035,13 +8032,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"addressparser@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "addressparser@npm:1.0.1"
-  checksum: 389051bc6a3a44082a6e7d6256c15e2aba55ae4799f1eed620e34f1c77ddf4dfe9baacc41c6ad25eb5f795195ff8a506dc07ef9e4bc033ee1ab3882edfed396d
-  languageName: node
-  linkType: hard
-
 "after-all-results@npm:^2.0.0":
   version: 2.0.0
   resolution: "after-all-results@npm:2.0.0"
@@ -9024,13 +9014,6 @@ __metadata:
   dependencies:
     lodash: ^4.17.14
   checksum: 5e5561ff8fca807e88738533d620488ac03a5c43fce6c937451f7e35f943d33ad06c24af3f681a48cca3d2b0002b3118faff0a128dc89438a9bf0226f712c499
-  languageName: node
-  linkType: hard
-
-"async@npm:^3.2.0":
-  version: 3.2.3
-  resolution: "async@npm:3.2.3"
-  checksum: c4bee57ab2249af3dc83ca3ef9acfa8e822c0d5e5aa41bae3eaf7f673648343cd64ecd7d26091ffd357f3f044428b17b5f00098494b6cf8b6b3e9681f0636ca1
   languageName: node
   linkType: hard
 
@@ -12414,13 +12397,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "dotenv@npm:10.0.0"
-  checksum: f412c5fe8c24fbe313d302d2500e247ba8a1946492db405a4de4d30dd0eb186a88a43f13c958c5a7de303938949c4231c56994f97d05c4bc1f22478d631b4005
-  languageName: node
-  linkType: hard
-
 "dotenv@npm:^6.2.0":
   version: 6.2.0
   resolution: "dotenv@npm:6.2.0"
@@ -12694,13 +12670,6 @@ __metadata:
   version: 1.0.2
   resolution: "encodeurl@npm:1.0.2"
   checksum: e50e3d508cdd9c4565ba72d2012e65038e5d71bdc9198cb125beb6237b5b1ade6c0d343998da9e170fb2eae52c1bed37d4d6d98a46ea423a0cddbed5ac3f780c
-  languageName: node
-  linkType: hard
-
-"encoding-japanese@npm:1.0.30":
-  version: 1.0.30
-  resolution: "encoding-japanese@npm:1.0.30"
-  checksum: ed14abf1e127944a133b1ae5739b110f266257a6b2ad6ac3f6e208bcc755a38c940d883ca70e399dad4be244daa2e58ad6fe894d7a981daeae889c0ae56eb00f
   languageName: node
   linkType: hard
 
@@ -15756,15 +15725,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.6.2":
-  version: 0.6.2
-  resolution: "iconv-lite@npm:0.6.2"
-  dependencies:
-    safer-buffer: ">= 2.1.2 < 3.0.0"
-  checksum: 03e03eb9fc003bc94f7956849f747258e57c162760259d76d1e67483058cad854a4b681b635e21e3ec41f4bd15ceed1b4a350f890565d680343442c5b139fa8a
-  languageName: node
-  linkType: hard
-
 "iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
@@ -18576,32 +18536,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"libbase64@npm:1.2.1, libbase64@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "libbase64@npm:1.2.1"
-  checksum: 891ed18fa0f0cd51a7a50d305dad03c3c35a077d46d23bd0a642a9710273294e331269ccf469a60e2191919f87fdf57c333d36bf4d33f176077c7cb3baf5c07c
-  languageName: node
-  linkType: hard
-
-"libmime@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "libmime@npm:5.0.0"
-  dependencies:
-    encoding-japanese: 1.0.30
-    iconv-lite: 0.6.2
-    libbase64: 1.2.1
-    libqp: 1.1.0
-  checksum: ca7dd8b91df1cef5045aa6c8365fa273f2defccabc42308a75464f477b01d76a2987f018a5486bf6e18a7b1a503123806fd0b6982e17a276096cd2dd45695f50
-  languageName: node
-  linkType: hard
-
-"libqp@npm:1.1.0":
-  version: 1.1.0
-  resolution: "libqp@npm:1.1.0"
-  checksum: 7baaec1dba8226bee0cfa48d29f2622a70d45057bdc8a3febb8b07d50ff20cce11c249e12724525f85f144fe964a35f007fc8007a52d714309d4d915ced7196a
-  languageName: node
-  linkType: hard
-
 "lines-and-columns@npm:^1.1.6":
   version: 1.1.6
   resolution: "lines-and-columns@npm:1.1.6"
@@ -20327,7 +20261,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-mailjet@npm:^3.3.4":
+"node-mailjet@npm:^3.3.5":
   version: 3.3.5
   resolution: "node-mailjet@npm:3.3.5"
   dependencies:
@@ -20375,47 +20309,6 @@ fsevents@^1.2.7:
     has: ^1.0.3
     is: ^3.2.1
   checksum: 1fe3a1ca7fc35392f169c8a46d889d07deb201bba3a20d17df23efab509698c9639737b0c235c9be772a34035e749bae5d477f74c9e26a1b67c78bd7d6dce8e4
-  languageName: node
-  linkType: hard
-
-"nodemailer-build-attachment@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "nodemailer-build-attachment@npm:3.0.0"
-  dependencies:
-    libbase64: ^1.2.1
-    libmime: ^5.0.0
-    nodemailer-fetch: ^2.1.0
-  checksum: c651ffbcf8f4132bbb0937edbc9e196e4eedaf2e5c46252c7511fd4dc93b7d1c9a61b1659f18f81d1e1fe8dc971da0822ecebcf6ddd1bc97822fe833eff2131b
-  languageName: node
-  linkType: hard
-
-"nodemailer-fetch@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "nodemailer-fetch@npm:2.1.0"
-  checksum: b255e411a3285664a6c5994a914802f9f42d7246253344fb3210fedb5f481876f852da8448072cfc05b68dbec61d9653e41dc977fcecadd4ebc00b86049fa81c
-  languageName: node
-  linkType: hard
-
-"nodemailer-mailjet-transport@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "nodemailer-mailjet-transport@npm:1.0.4"
-  dependencies:
-    addressparser: ^1.0.1
-    async: ^3.2.0
-    bluebird: ^3.7.2
-    dotenv: ^10.0.0
-    node-mailjet: ^3.3.4
-    nodemailer-build-attachment: ^3.0.0
-  peerDependencies:
-    nodemailer: ">=4.x"
-  checksum: 9db904b48bcb257f21b4154fa5bf73d9703163d208aa07fc5cc40e507e9af5acb219f522205727e9a1507d1cc340993cfc961cd4d2b17322f5f57c275a27770d
-  languageName: node
-  linkType: hard
-
-"nodemailer@npm:^6.7.2":
-  version: 6.7.2
-  resolution: "nodemailer@npm:6.7.2"
-  checksum: 3c37a40928448e2f5118a9f2f016c7a4f32228d0e6b7cc7d1834b8001374cc77280dc077a83239420f6daea4c898d9a1f336dfc2273bb7eddaf51a36bd126f72
   languageName: node
   linkType: hard
 
