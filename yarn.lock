@@ -4642,8 +4642,8 @@ __metadata:
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
-    "@openneuro/client": ^4.4.0-alpha.5
-    "@openneuro/components": ^4.4.0-alpha.5
+    "@openneuro/client": ^4.4.0
+    "@openneuro/components": ^4.4.0
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -4710,7 +4710,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.4.0-alpha.5
+    "@openneuro/client": ^4.4.0
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
     bids-validator: 1.8.8
@@ -4735,14 +4735,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.4.0-alpha.5, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.4.0, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.4.0-alpha.5
+    "@openneuro/server": ^4.4.0
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4754,7 +4754,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.4.0-alpha.5, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.4.0, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -4813,7 +4813,7 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.4.0-alpha.5
+    "@openneuro/client": ^4.4.0
     "@types/jsonwebtoken": ^8
     "@types/node": 16.11.13
     "@types/tsc-watch": ^4
@@ -4827,7 +4827,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.4.0-alpha.5, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.4.0, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
