@@ -45,7 +45,7 @@ export const UserLoginModal = ({
           <div>
             <a
               href={
-                loginUrls.orcid + +`?redirectPath=${btoa(location.pathname)}`
+                loginUrls.orcid + `?redirectPath=${btoa(location.pathname)}`
               }>
               <Button
                 className="login-button"
