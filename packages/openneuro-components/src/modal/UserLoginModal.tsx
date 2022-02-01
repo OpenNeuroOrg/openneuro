@@ -20,6 +20,7 @@ export const UserLoginModal = ({
   loginUrls,
 }: UserLoginModalProps) => {
   const location = useLocation()
+  const redirectPath = `${location.pathname}${location.search}`
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
@@ -29,10 +30,7 @@ export const UserLoginModal = ({
         </div>
         <div className="sign-in-modal-content">
           <div>
-            <a
-              href={
-                loginUrls.google + `?redirectPath=${btoa(location.pathname)}`
-              }>
+            <a href={loginUrls.google + `?redirectPath=${btoa(redirectPath)}`}>
               <Button
                 className="login-button"
                 primary
@@ -43,10 +41,7 @@ export const UserLoginModal = ({
             </a>
           </div>
           <div>
-            <a
-              href={
-                loginUrls.orcid + +`?redirectPath=${btoa(location.pathname)}`
-              }>
+            <a href={loginUrls.orcid + `?redirectPath=${btoa(redirectPath)}`}>
               <Button
                 className="login-button"
                 primary
