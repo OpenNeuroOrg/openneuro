@@ -13,13 +13,15 @@ const toggle = jest.fn()
 describe('UserLoginModal component', () => {
   it('Google login link has correctly formed auth URL', () => {
     render(
-      <MemoryRouter initialEntries={['/import']}>
+      <MemoryRouter initialEntries={['/import?url=https://example.com']}>
         <UserLoginModal isOpen={true} toggle={toggle} loginUrls={loginUrls} />
       </MemoryRouter>,
     )
     expect(
       screen.getByRole('link', { name: /google/i }).getAttribute('href'),
-    ).toBe('https://openneuro.org/crn/auth/google?redirectPath=L2ltcG9ydA==')
+    ).toBe(
+      'https://openneuro.org/crn/auth/google?redirectPath=L2ltcG9ydD91cmw9aHR0cHM6Ly9leGFtcGxlLmNvbQ==',
+    )
   })
   it('ORCID login link has correctly formed auth URL', () => {
     render(
