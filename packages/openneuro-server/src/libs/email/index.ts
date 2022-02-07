@@ -36,11 +36,12 @@ export const mailjetFormat = (email: Record<string, string>) => ({
  * @param email Nodemailer style email record
  */
 export const send = (email: Record<string, string>): Promise<Response> => {
-  // Mailjet is not configured, instead log emails
-  if (!perform_api_call) {
+  if (perform_api_call) {
+    return transport
+      .post('send', { version: 'v3.1', perform_api_call })
+      .request(mailjetFormat(email))
+  } else {
+    // Mailjet is not configured, instead log emails
     console.dir(email)
   }
-  return transport
-    .post('send', { version: 'v3.1', perform_api_call })
-    .request(mailjetFormat(email))
 }
