@@ -106,7 +106,6 @@ export const getDraftPage = gql`
         downloads
         views
       }
-      onBrainlife
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}

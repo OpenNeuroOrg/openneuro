@@ -1,5 +1,10 @@
 import * as datalad from '../../datalad/snapshots.js'
-import { dataset, analytics, snapshotCreationComparison } from './dataset.js'
+import {
+  dataset,
+  analytics,
+  snapshotCreationComparison,
+  onBrainlife,
+} from './dataset.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
@@ -32,6 +37,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
             .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
+        onBrainlife,
       }))
     },
   )

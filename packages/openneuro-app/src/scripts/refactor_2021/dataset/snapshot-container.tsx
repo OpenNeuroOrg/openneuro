@@ -145,7 +145,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
         renderBrainLifeButton={() => (
           <BrainLifeButton
             datasetId={datasetId}
-            onBrainlife={dataset.onBrainlife}
+            onBrainlife={snapshot.onBrainlife}
+            snapshotVersion={snapshot.tag}
           />
         )}
         renderValidationBlock={() => (
