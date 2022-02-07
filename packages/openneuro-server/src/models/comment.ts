@@ -2,6 +2,7 @@ import mongoose, { Document } from 'mongoose'
 const { Schema, model } = mongoose
 
 export interface CommentDocument extends Document {
+  _id: string
   createDate: Date
   datasetId: string
   datasetLabel: string
