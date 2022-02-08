@@ -28,7 +28,7 @@ describe('snapshot model operations', () => {
       // Setup a default sequence value to return for each test
       mockingoose.Counter.toReturn(
         { _id: 'dataset', sequence_value: 1 },
-        'findOneAndUpdate',
+        'findOne',
       )
     })
     it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {

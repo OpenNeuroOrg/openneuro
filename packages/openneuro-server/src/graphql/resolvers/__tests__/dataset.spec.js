@@ -12,7 +12,7 @@ describe('dataset resolvers', () => {
     mockingoose.resetAll()
     mockingoose.Counter.toReturn(
       { _id: 'dataset', sequence_value: 1 },
-      'findOneAndUpdate',
+      'findOne',
     )
   })
   describe('createDataset()', () => {
