@@ -4,16 +4,18 @@ import { Button } from '../button/Button'
 
 export interface BrainLifeButtonProps {
   datasetId: string
+  snapshotVersion?: string
   onBrainlife: boolean
 }
 
 export const BrainLifeButton: React.FC<BrainLifeButtonProps> = ({
   datasetId,
+  snapshotVersion,
   onBrainlife,
 }) => {
-  const goToBrainlife = datasetId => {
-    window.open(`https://brainlife.io/openneuro/${datasetId}`, '_blank')
-  }
+  const url = snapshotVersion
+    ? `https://brainlife.io/openneuro/${datasetId}/${snapshotVersion}`
+    : `https://brainlife.io/openneuro/${datasetId}`
   return (
     <>
       {onBrainlife && (
@@ -23,7 +25,9 @@ export const BrainLifeButton: React.FC<BrainLifeButtonProps> = ({
               className="brainlife-link"
               primary={true}
               size="small"
-              onClick={() => goToBrainlife(datasetId)}
+              onClick={() => {
+                window.open(url, '_blank')
+              }}
               label="brainlife.io"
             />
           </Tooltip>

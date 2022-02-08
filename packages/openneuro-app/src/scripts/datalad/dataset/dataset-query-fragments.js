@@ -190,6 +190,7 @@ export const SNAPSHOT_FIELDS = gql`
     }
     ...SnapshotIssues
     hexsha
+    onBrainlife
   }
   ${SNAPSHOT_ISSUES}
 `

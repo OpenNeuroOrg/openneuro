@@ -459,6 +459,8 @@ export const typeDefs = `
     deprecated: DeprecatedSnapshot
     # Related DOI references
     related: [RelatedObject]
+    # Is the snapshot available for analysis on Brainlife?
+    onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
   }
 
   # RelatedObject nature of relationship
