@@ -22,6 +22,7 @@ import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
 import { getFileName } from '../../datalad/files.js'
+import { onBrainlife } from './brainlife'
 import semver from 'semver'
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
@@ -283,35 +284,6 @@ export const starred = (obj, _, { user }) =>
   user
     ? datalad.getUserStarred(obj.id, user).then(res => (res ? true : false))
     : null
-
-/**
- * Is this dataset available on brainlife?
- */
-export const onBrainlife = async datasetOrSnapshot => {
-  try {
-    const find = {
-      removed: false,
-    }
-    if (datasetOrSnapshot.tag) {
-      find.path = { $regex: '^OpenNeuro/' + datasetOrSnapshot.id.split(':')[0] }
-      find.version = datasetOrSnapshot.tag
-    } else {
-      find.path = { $regex: '^OpenNeuro/' + datasetOrSnapshot.id }
-    }
-    const url = `https://brainlife.io/api/warehouse/datalad/datasets?find=${JSON.stringify(
-      find,
-    )}`
-    const res = await fetch(url)
-    const body = await res.json()
-    if (Array.isArray(body) && body.length) {
-      return true
-    } else {
-      return false
-    }
-  } catch (err) {
-    return false
-  }
-}
 
 const worker = obj => getDatasetWorker(obj.id)
 

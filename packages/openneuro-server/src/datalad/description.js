@@ -9,7 +9,7 @@ import { fileUrl, getFiles } from './files.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDatasetWorker } from '../libs/datalad-service'
 import CacheItem, { CacheType } from '../cache/item'
-import { datasetOrSnapshot } from './utils.js'
+import { datasetOrSnapshot } from '../utils/datasetOrSnapshot'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',

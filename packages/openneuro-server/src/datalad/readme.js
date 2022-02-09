@@ -3,7 +3,7 @@ import { addFileString, commitFiles } from './dataset'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { getDatasetWorker } from '../libs/datalad-service'
-import { datasetOrSnapshot } from './utils.js'
+import { datasetOrSnapshot } from '../utils/datasetOrSnapshot'
 
 export const readmeUrl = (datasetId, revision) => {
   return `http://${getDatasetWorker(

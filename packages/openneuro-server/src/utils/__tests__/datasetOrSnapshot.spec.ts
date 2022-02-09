@@ -1,4 +1,7 @@
-import { datasetOrSnapshot } from '../utils.js'
+import {
+  datasetOrSnapshot,
+  getDatasetFromSnapshotId,
+} from '../datasetOrSnapshot'
 
 describe('datasetOrSnapshot()', () => {
   it('resolves a dataset object correctly', () => {
@@ -37,6 +40,11 @@ describe('datasetOrSnapshot()', () => {
     expect(datasetOrSnapshot(snapshot)).toEqual({
       datasetId: 'ds000002',
       revision: '1.0.1',
+    })
+  })
+  describe('getDatasetFromSnapshotId', () => {
+    it('extracts the datasetId correctly', () => {
+      expect(getDatasetFromSnapshotId('ds000001:1.0.0')).toBe('ds000001')
     })
   })
 })
