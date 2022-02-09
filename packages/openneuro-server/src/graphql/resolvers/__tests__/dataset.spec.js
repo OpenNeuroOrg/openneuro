@@ -179,5 +179,4 @@ describe('dataset resolvers', () => {
       ).then(() => done())
     })
   })
-  describe('onBrainlife', () => {})
 })
