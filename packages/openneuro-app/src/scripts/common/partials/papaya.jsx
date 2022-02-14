@@ -25,6 +25,7 @@ class Papaya extends React.Component {
       allowScroll: false,
       fullScreenPadding: false,
       showControlBar: true,
+      showOrientation: true,
       images: [this.props.image],
       kioskMode: true,
     }
