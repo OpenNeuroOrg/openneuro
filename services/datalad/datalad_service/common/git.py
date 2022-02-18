@@ -5,7 +5,8 @@ import pygit2
 
 tag_ref = re.compile('^refs/tags/')
 
-committer = pygit2.Signature('Git Worker', 'git@openneuro.org')
+COMMITTER_NAME = 'Git Worker'
+COMMITTER_EMAIL = 'git@openneuro.org'
 
 
 def git_show(path, commitish, obj):
@@ -42,6 +43,7 @@ def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded chan
 
 def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", parents=None):
     """Commit any existing index changes."""
+    committer = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
     if not author:
         author = committer
     if parents is None:

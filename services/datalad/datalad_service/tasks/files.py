@@ -4,7 +4,7 @@ import subprocess
 import pygit2
 
 from datalad_service.common.annex import get_repo_files
-from datalad_service.common.git import git_commit, git_commit_index, committer
+from datalad_service.common.git import git_commit, git_commit_index, COMMITTER_EMAIL, COMMITTER_NAME
 from datalad_service.common.draft import update_head
 from datalad_service.tasks.validator import validate_dataset
 
@@ -17,7 +17,8 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     """
     dataset_path = store.get_dataset_path(dataset)
     repo = pygit2.Repository(dataset_path)
-    author = name and pygit2.Signature(name, email) or committer
+    author = name and pygit2.Signature(name, email) or pygit2.Signature(
+        COMMITTER_NAME, COMMITTER_EMAIL)
     ref = git_commit(repo, files, author)
     # Run the validator but don't block on the request
     validate_dataset(dataset, dataset_path, ref.hex,
