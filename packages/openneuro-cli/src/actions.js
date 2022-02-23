@@ -169,6 +169,7 @@ export const upload = (dir, cmd) => {
       ignoreNiftiHeaders: cmd.ignoreNiftiHeaders,
       ignoreSubjectConsistency: cmd.ignoreSubjectConsistency,
       verbose: cmd.verbose,
+      blacklistModalities: ['Microscopy'],
     }
     if (cmd.dataset) {
       // eslint-disable-next-line no-console

@@ -67,6 +67,7 @@ class UploadValidator extends React.Component {
       config: {
         error: ['NO_AUTHORS'],
         ignoreSubjectConsistency: true,
+        blacklistModalities: ['Microscopy'],
       },
     }
     validate(this.props.files, options).then(this.done)
