@@ -9253,7 +9253,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-core", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:7.0.0-bridge.0"],
             ["babel-jest", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:24.9.0"],
             ["babel-runtime", "npm:6.26.0"],
-            ["bids-validator", "npm:1.8.8"],
+            ["bids-validator", "npm:1.9.2"],
             ["bytes", "npm:3.1.0"],
             ["comlink", "npm:4.3.1"],
             ["core-js", "npm:3.18.0"],
@@ -9312,7 +9312,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],
             ["@types/mkdirp", "npm:1.0.2"],
             ["@types/node", "npm:16.11.13"],
-            ["bids-validator", "npm:1.8.8"],
+            ["bids-validator", "npm:1.9.2"],
             ["cli-progress", "npm:3.9.1"],
             ["commander", "npm:7.2.0"],
             ["core-js", "npm:3.18.0"],
@@ -13576,6 +13576,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@xmldom/xmldom", [
+        ["npm:0.7.5", {
+          "packageLocation": "./.yarn/cache/@xmldom-xmldom-npm-0.7.5-f6fb7cf202-8d7ec35c1e.zip/node_modules/@xmldom/xmldom/",
+          "packageDependencies": [
+            ["@xmldom/xmldom", "npm:0.7.5"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@xtuc/ieee754", [
         ["npm:1.2.0", {
           "packageLocation": "./.yarn/cache/@xtuc-ieee754-npm-1.2.0-ec0ce4e025-ac56d4ca6e.zip/node_modules/@xtuc/ieee754/",
@@ -16189,10 +16198,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["bids-validator", [
-        ["npm:1.8.8", {
-          "packageLocation": "./.yarn/cache/bids-validator-npm-1.8.8-668cb80dce-c5dca92a7e.zip/node_modules/bids-validator/",
+        ["npm:1.9.2", {
+          "packageLocation": "./.yarn/cache/bids-validator-npm-1.9.2-5cf9cf5cd6-2376ad5b27.zip/node_modules/bids-validator/",
           "packageDependencies": [
-            ["bids-validator", "npm:1.8.8"],
+            ["bids-validator", "npm:1.9.2"],
             ["@aws-sdk/client-s3", "npm:3.33.0"],
             ["ajv", "npm:6.12.6"],
             ["bytes", "npm:3.1.0"],
@@ -16200,6 +16209,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["cross-fetch", "npm:3.1.4"],
             ["date-fns", "npm:2.24.0"],
             ["events", "npm:3.3.0"],
+            ["exifreader", "npm:4.2.0"],
             ["hed-validator", "npm:3.6.0"],
             ["ignore", "npm:4.0.6"],
             ["is-utf8", "npm:0.2.1"],
@@ -16214,6 +16224,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["semver", "npm:7.3.5"],
             ["stream-browserify", "npm:3.0.0"],
             ["table", "npm:5.4.6"],
+            ["xml2js", "npm:0.4.23"],
             ["yaml", "npm:1.10.2"],
             ["yargs", "npm:16.2.0"]
           ],
@@ -20802,6 +20813,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["onetime", "npm:5.1.2"],
             ["signal-exit", "npm:3.0.4"],
             ["strip-final-newline", "npm:2.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["exifreader", [
+        ["npm:4.2.0", {
+          "packageLocation": "./.yarn/unplugged/exifreader-npm-4.2.0-89609c4f76/node_modules/exifreader/",
+          "packageDependencies": [
+            ["exifreader", "npm:4.2.0"],
+            ["@xmldom/xmldom", "npm:0.7.5"]
           ],
           "linkType": "HARD",
         }]

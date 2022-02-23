@@ -4674,7 +4674,7 @@ __metadata:
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^24.9.0
     babel-runtime: ^6.26.0
-    bids-validator: 1.8.8
+    bids-validator: 1.9.2
     bytes: ^3.0.0
     comlink: ^4.0.5
     core-js: ^3.3.2
@@ -4731,7 +4731,7 @@ __metadata:
     "@openneuro/client": ^4.4.9
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
-    bids-validator: 1.8.8
+    bids-validator: 1.9.2
     cli-progress: ^3.8.2
     commander: 7.2.0
     core-js: ^3.10.1
@@ -7743,6 +7743,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xmldom/xmldom@npm:^0.7.5":
+  version: 0.7.5
+  resolution: "@xmldom/xmldom@npm:0.7.5"
+  checksum: 8d7ec35c1ef6183b4f621df08e01d7e61f244fb964a4719025e65fe6ac06fac418919be64fb40fe5908e69158ef728f2d936daa082db326fe04603012b5f2a84
+  languageName: node
+  linkType: hard
+
 "@xtuc/ieee754@npm:^1.2.0":
   version: 1.2.0
   resolution: "@xtuc/ieee754@npm:1.2.0"
@@ -9593,9 +9600,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.8.8":
-  version: 1.8.8
-  resolution: "bids-validator@npm:1.8.8"
+"bids-validator@npm:1.9.2":
+  version: 1.9.2
+  resolution: "bids-validator@npm:1.9.2"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -9604,6 +9611,7 @@ __metadata:
     cross-fetch: ^3.0.6
     date-fns: ^2.7.0
     events: ^3.3.0
+    exifreader: ^4.1.0
     hed-validator: ^3.5.0
     ignore: ^4.0.2
     is-utf8: ^0.2.1
@@ -9618,11 +9626,12 @@ __metadata:
     semver: ^7.3.2
     stream-browserify: ^3.0.0
     table: ^5.2.3
+    xml2js: ^0.4.23
     yaml: ^1.10.2
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: c5dca92a7e59a979bff3ca516f4b45abb1280258847581ae91ddb97edd5d3186ad870f99200323a6bdb10d31a0947f8bb096e0949f3b78c891992d1ea300aa98
+  checksum: 2376ad5b27a2cec63b32889be2cd962eb35682f165f4e5aee6b31b7c49e7f58c5829049fb5709c63486d562465ce9f06ed74267f49e54d260995fac06cf67657
   languageName: node
   linkType: hard
 
@@ -13565,6 +13574,18 @@ __metadata:
     signal-exit: ^3.0.3
     strip-final-newline: ^2.0.0
   checksum: fba9022c8c8c15ed862847e94c252b3d946036d7547af310e344a527e59021fd8b6bb0723883ea87044dc4f0201f949046993124a42ccb0855cae5bf8c786343
+  languageName: node
+  linkType: hard
+
+"exifreader@npm:^4.1.0":
+  version: 4.2.0
+  resolution: "exifreader@npm:4.2.0"
+  dependencies:
+    "@xmldom/xmldom": ^0.7.5
+  dependenciesMeta:
+    "@xmldom/xmldom":
+      optional: true
+  checksum: 91bc2e263b5e8f856d7697bcae793a7de3a638efb2559ec4bb4f13a6fe90e9f7262c0480903ee842a42e1a2a0932aafe227f555b424798e99f475d6cbffd9313
   languageName: node
   linkType: hard
 

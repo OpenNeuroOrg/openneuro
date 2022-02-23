@@ -20,7 +20,7 @@
   "dependencies": {
     "@apollo/client": "3.4.17",
     "@openneuro/client": "^4.4.9",
-    "bids-validator": "1.8.8",
+    "bids-validator": "1.9.2",
     "cli-progress": "^3.8.2",
     "commander": "7.2.0",
     "cross-fetch": "^3.0.5",
