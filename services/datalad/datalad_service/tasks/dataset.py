@@ -9,7 +9,7 @@ import stat
 import pygit2
 
 from datalad_service.common.annex import init_annex
-from datalad_service.common.git import git_commit, committer
+from datalad_service.common.git import git_commit, COMMITTER_EMAIL, COMMITTER_NAME
 
 # A list of patterns to avoid annexing in BIDS datasets
 GIT_ATTRIBUTES = """* annex.backend=MD5E
@@ -24,11 +24,13 @@ README annex.largefiles=nothing
 """
 
 
-def create_dataset(store, dataset, author=committer):
+def create_dataset(store, dataset, author=None):
     """Create a DataLad git-annex repo for a new dataset."""
     dataset_path = store.get_dataset_path(dataset)
     if os.path.isdir(dataset_path):
         raise Exception('Dataset already exists')
+    if not author:
+        author = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
     repo = pygit2.init_repository(dataset_path, False)
     init_annex(dataset_path)
     # Setup .gitattributes to limit what files are annexed by default

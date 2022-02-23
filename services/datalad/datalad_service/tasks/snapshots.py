@@ -4,7 +4,7 @@ import re
 
 import pygit2
 
-from datalad_service.common.git import git_show, git_tag, committer
+from datalad_service.common.git import git_show, git_tag
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.files import commit_files
 
