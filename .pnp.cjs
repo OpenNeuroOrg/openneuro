@@ -9480,7 +9480,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mime-types", "npm:2.1.32"],
             ["mockingoose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.11.0"],
             ["moment", "npm:2.29.1"],
-            ["mongoose", "npm:6.2.0"],
+            ["mongoose", "npm:6.2.3"],
             ["morgan", "npm:1.10.0"],
             ["node-fetch", "npm:2.6.5"],
             ["node-mailjet", "npm:3.3.5"],
@@ -26416,10 +26416,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["kareem", [
-        ["npm:2.3.3", {
-          "packageLocation": "./.yarn/cache/kareem-npm-2.3.3-2eff8cf79b-6acbfeadce.zip/node_modules/kareem/",
+        ["npm:2.3.4", {
+          "packageLocation": "./.yarn/cache/kareem-npm-2.3.4-3a5c31ec37-e12d05e120.zip/node_modules/kareem/",
           "packageDependencies": [
-            ["kareem", "npm:2.3.3"]
+            ["kareem", "npm:2.3.4"]
           ],
           "linkType": "HARD",
         }]
@@ -28052,7 +28052,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["mockingoose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.11.0"],
             ["@types/mongoose", null],
-            ["mongoose", "npm:6.2.0"]
+            ["mongoose", "npm:6.2.3"]
           ],
           "packagePeers": [
             "@types/mongoose",
@@ -28114,18 +28114,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["mongoose", [
-        ["npm:6.2.0", {
-          "packageLocation": "./.yarn/cache/mongoose-npm-6.2.0-952348aad3-e5ebc256d7.zip/node_modules/mongoose/",
+        ["npm:6.2.3", {
+          "packageLocation": "./.yarn/cache/mongoose-npm-6.2.3-db94f4d7b7-d18ff711bf.zip/node_modules/mongoose/",
           "packageDependencies": [
-            ["mongoose", "npm:6.2.0"],
+            ["mongoose", "npm:6.2.3"],
             ["bson", "npm:4.6.1"],
-            ["kareem", "npm:2.3.3"],
+            ["kareem", "npm:2.3.4"],
             ["mongodb", "npm:4.3.1"],
             ["mpath", "npm:0.8.4"],
             ["mquery", "npm:4.0.2"],
-            ["ms", "npm:2.1.2"],
-            ["regexp-clone", "npm:1.0.0"],
-            ["sift", "npm:13.5.2"]
+            ["ms", "npm:2.1.3"],
+            ["sift", "npm:16.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -32382,15 +32381,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["regexp-clone", [
-        ["npm:1.0.0", {
-          "packageLocation": "./.yarn/cache/regexp-clone-npm-1.0.0-969a61b0d1-ca4960bbdc.zip/node_modules/regexp-clone/",
-          "packageDependencies": [
-            ["regexp-clone", "npm:1.0.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["regexp-to-ast", [
         ["npm:0.5.0", {
           "packageLocation": "./.yarn/cache/regexp-to-ast-npm-0.5.0-1e96b9f3a0-72e32f2a12.zip/node_modules/regexp-to-ast/",
@@ -33606,10 +33596,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["sift", [
-        ["npm:13.5.2", {
-          "packageLocation": "./.yarn/cache/sift-npm-13.5.2-5c93d55c77-31951836c4.zip/node_modules/sift/",
+        ["npm:16.0.0", {
+          "packageLocation": "./.yarn/cache/sift-npm-16.0.0-c5d447b898-88d5754afe.zip/node_modules/sift/",
           "packageDependencies": [
-            ["sift", "npm:13.5.2"]
+            ["sift", "npm:16.0.0"]
           ],
           "linkType": "HARD",
         }]
