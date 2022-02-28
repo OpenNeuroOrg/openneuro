@@ -7,7 +7,6 @@ import { CloneDropdown } from './CloneDropdown'
 import { DatasetHeader } from './DatasetHeader'
 import { DatasetAlert } from './DatasetAlert'
 import { DatasetHeaderMeta } from './DatasetHeaderMeta'
-import { DatasetPage } from './DatasetPage'
 import { DatasetGitAccess } from './DatasetGitAccess'
 import { DatasetTools } from './DatasetTools'
 import { VersionList } from './VersionList'
@@ -20,7 +19,6 @@ export {
   DatasetHeader,
   DatasetAlert,
   DatasetHeaderMeta,
-  DatasetPage,
   DatasetGitAccess,
   VersionList,
   MetaDataListBlock,

@@ -22,7 +22,6 @@ import {
   CloneDropdown,
   DatasetHeader,
   DatasetHeaderMeta,
-  DatasetPage,
   DatasetGitAccess,
   VersionList,
   DatasetTools,
@@ -88,35 +87,28 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
   const isDatasetAdmin =
     hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const modality: string = summary?.modalities[0] || ''
 
   return (
-    <>
-      <DatasetPage
-        modality={summary?.modalities[0]}
-        renderHeader={() => (
-          <>
-            {summary && (
-              <DatasetHeader
-                pageHeading={description.Name}
-                modality={summary?.modalities[0]}
-              />
-            )}
-          </>
-        )}
-        renderAlert={() => (
-          <>
-            {snapshot?.deprecated && (
-              <DatasetAlertVersion
-                datasetId={dataset.id}
-                tag={snapshot.tag}
-                reason={snapshot.deprecated.reason}
-                hasEdit={hasEdit}
-              />
-            )}
-          </>
-        )}
-        renderHeaderMeta={() => (
-          <>
+    <div
+      className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
+      {summary && (
+        <DatasetHeader
+          pageHeading={description.Name}
+          modality={summary?.modalities[0]}
+        />
+      )}
+      {snapshot?.deprecated && (
+        <DatasetAlertVersion
+          datasetId={dataset.id}
+          tag={snapshot.tag}
+          reason={snapshot.deprecated.reason}
+          hasEdit={hasEdit}
+        />
+      )}
+      <div className="container">
+        <div className="grid grid-between dataset-header-meta">
+          <div className="col col-8 col-lg">
             {summary && (
               <DatasetHeaderMeta
                 size={summary.size}
@@ -124,10 +116,8 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 datasetId={datasetId}
               />
             )}
-          </>
-        )}
-        renderFollowBookmark={() => (
-          <>
+          </div>
+          <div className="col follow-bookmark">
             <FollowDataset
               profile={profile}
               datasetId={dataset.id}
@@ -140,78 +130,79 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               starred={dataset.starred}
               stars={dataset.stars.length}
             />
-          </>
-        )}
-        renderBrainLifeButton={() => (
-          <BrainLifeButton
-            datasetId={datasetId}
-            onBrainlife={snapshot.onBrainlife}
-            snapshotVersion={snapshot.tag}
-          />
-        )}
-        renderValidationBlock={() => (
-          <ValidationBlock>
-            <Validation datasetId={dataset.id} issues={snapshot.issues} />
-          </ValidationBlock>
-        )}
-        renderCloneDropdown={() => (
-          <CloneDropdown
-            gitAccess={
-              <DatasetGitAccess
-                hasEdit={hasEdit}
-                configGithub={config.github}
-                configUrl={config.url}
-                worker={dataset.worker}
+          </div>
+        </div>
+      </div>
+      <div className="container">
+        <div className="grid grid-between">
+          <div className="col col-lg col-8">
+            <div className="dataset-validation">
+              <ValidationBlock>
+                <Validation datasetId={dataset.id} issues={snapshot.issues} />
+              </ValidationBlock>
+              <BrainLifeButton
                 datasetId={datasetId}
-                gitHash={snapshot.hexsha}
+                onBrainlife={snapshot.onBrainlife}
+                snapshotVersion={snapshot.tag}
               />
-            }
-          />
-        )}
-        renderToolButtons={() => (
-          <DatasetTools
-            hasEdit={hasEdit}
-            isPublic={dataset.public}
-            datasetId={datasetId}
-            snapshotId={snapshot.tag}
-            isAdmin={isAdmin}
-            isDatasetAdmin={isDatasetAdmin}
-          />
-        )}
-        renderFiles={() => (
-          <ReadMore
-            fileTree={true}
-            id="collapse-tree"
-            expandLabel="Read More"
-            collapseLabel="Collapse">
-            <Files
-              datasetId={datasetId}
-              snapshotTag={snapshot.tag}
-              datasetName={description.Name}
-              files={snapshot.files}
-              editMode={false}
-              datasetPermissions={dataset.permissions}
+              <CloneDropdown
+                gitAccess={
+                  <DatasetGitAccess
+                    hasEdit={hasEdit}
+                    configGithub={config.github}
+                    configUrl={config.url}
+                    worker={dataset.worker}
+                    datasetId={datasetId}
+                    gitHash={snapshot.hexsha}
+                  />
+                }
+              />
+            </div>
+            <div className="dataset-tool-buttons">
+              <DatasetTools
+                hasEdit={hasEdit}
+                isPublic={dataset.public}
+                datasetId={datasetId}
+                snapshotId={snapshot.tag}
+                isAdmin={isAdmin}
+                isDatasetAdmin={isDatasetAdmin}
+              />
+            </div>
+            <ReadMore
+              fileTree={true}
+              id="collapse-tree"
+              expandLabel="Read More"
+              collapseLabel="Collapse">
+              <Files
+                datasetId={datasetId}
+                snapshotTag={snapshot.tag}
+                datasetName={description.Name}
+                files={snapshot.files}
+                editMode={false}
+                datasetPermissions={dataset.permissions}
+              />
+            </ReadMore>
+            <MetaDataBlock
+              heading="README"
+              item={
+                <ReadMore
+                  id="readme"
+                  expandLabel="Read More"
+                  collapseLabel="Collapse">
+                  <Markdown>
+                    {snapshot.readme == null ? 'N/A' : snapshot.readme}
+                  </Markdown>
+                </ReadMore>
+              }
+              className="dataset-readme markdown-body"
             />
-          </ReadMore>
-        )}
-        renderReadMe={() => (
-          <MetaDataBlock
-            heading="README"
-            item={
-              <ReadMore
-                id="readme"
-                expandLabel="Read More"
-                collapseLabel="Collapse">
-                <Markdown>
-                  {snapshot.readme == null ? 'N/A' : snapshot.readme}
-                </Markdown>
-              </ReadMore>
-            }
-            className="dataset-readme markdown-body"
-          />
-        )}
-        renderSidebar={() => (
-          <>
+            <Comments
+              datasetId={dataset.id}
+              uploader={dataset.uploader}
+              comments={dataset.comments}
+            />
+          </div>
+          <div className="col sidebar">
             <MetaDataBlock
               heading="Authors"
               item={
@@ -378,17 +369,10 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               item={description.EthicsApprovals}
               className="dmb-list"
             />
-          </>
-        )}
-        renderComments={() => (
-          <Comments
-            datasetId={dataset.id}
-            uploader={dataset.uploader}
-            comments={dataset.comments}
-          />
-        )}
-      />
-    </>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
