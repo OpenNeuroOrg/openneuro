@@ -1,13 +1,13 @@
-import ljaf from '../../assets/ljaf.png'
-import nsf from '../../assets/nsf.png'
-import nih from '../../assets/nih.png'
-import squishymedia from '../../assets/squishymedia.png'
-import stanford from '../../assets/stanford.png'
-import logo_app from '../../assets/logo_app.png'
-import logo_cube from '../../assets/logo_cube.png'
-import logo_data from '../../assets/logo_data.png'
-import logo_users from '../../assets/logo_users.png'
-import brand_mark from '../../assets/brand_mark.png'
+import ljaf from '../../../assets/ljaf.png'
+import nsf from '../../../assets/nsf.png'
+import nih from '../../../assets/nih.png'
+import squishymedia from '../../../assets/squishymedia.png'
+import stanford from '../../../assets/stanford.png'
+import logo_app from '../../../assets/logo_app.png'
+import logo_cube from '../../../assets/logo_cube.png'
+import logo_data from '../../../assets/logo_data.png'
+import logo_users from '../../../assets/logo_users.png'
+import brand_mark from '../../../assets/brand_mark.png'
 
 export const frontPage = {
   pageTitle: 'OpenNeuro',

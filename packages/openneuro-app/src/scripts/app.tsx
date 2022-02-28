@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 import Helmet from 'react-helmet'
-import { frontPage } from './front-page/front-page-content'
+import { frontPage } from './pages/front-page/front-page-content'
 import { CookiesProvider, Cookies } from 'react-cookie'
 import { ToastContainer } from 'react-toastify'
 import { MediaContextProvider } from './styles/media'
