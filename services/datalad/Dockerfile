@@ -21,7 +21,7 @@ RUN apt-get update \
   && mkdir /yarn \
   && curl -L https://github.com/yarnpkg/yarn/releases/download/v1.22.5/yarn-v1.22.5.tar.gz | tar -C /yarn --strip-components 1 -xvz \
   && ln -sf /yarn/bin/yarn /usr/local/bin/yarn \
-  && [ $(uname -m ) = "aarch64" ] && curl -L http://archive.org/download/git-annex-builds/SHA256E-s56843093--0be241196d58d848f169c7cfc7094b7dc89d8ca373f86a17e85d5d52848281e7.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz || curl -L http://archive.org/download/git-annex-builds/SHA256E-s54746876--31525511e3aecfd77a0425f0c3ae3f52194e841288300ab04f2e60406619d225.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
+  && [ $(uname -m ) = "aarch64" ] && curl -L http://archive.org/download/git-annex-builds/SHA256E-s50441067--8d3a113faf5ffd8b30b8b7ff09586964e9a0b55dd9da8ed3cf11c6206b276cb8.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz || curl -L http://archive.org/download/git-annex-builds/SHA256E-s52034939--45cfaddc859d24f7e5e7eb3ab10c14a94d744705d365f26b54a50855ab1068f3.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
   && pip3 install 'pipenv==2020.6.2' \
   && pipenv install --deploy --system \
   && chmod 600 /root/.ssh/config \
