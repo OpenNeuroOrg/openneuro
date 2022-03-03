@@ -1,5 +1,5 @@
 import React from 'react'
-import { frontPage } from '../front-page/front-page-content'
+import { frontPage } from './front-page/front-page-content'
 import styled from '@emotion/styled'
 
 const CitationPageStyle = styled.div`

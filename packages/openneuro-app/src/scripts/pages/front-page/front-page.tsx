@@ -2,9 +2,9 @@ import { apm } from '../../apm'
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
+import styled from '@emotion/styled'
 
 import {
-  FrontPage,
   AffiliateBlock,
   ActivityHeader,
   Contributors,
@@ -154,37 +154,58 @@ export const FrontPageNewQuery = ({ query }) => {
     )
   }
 }
-const FrontPageContainer: React.FC = () => {
-  return (
-    <>
-      <FrontPage
-        className="front-page"
-        renderAffiliateBlock={() => <AffiliateBlock />}
-        renderInfographic={() => <Infographic />}
-        renderActivitySliderFront={() => (
-          <>
-            <ActivityHeader />
-            <FrontPageTopQuery query={TOP_VIEWED} />
-            <FrontPageNewQuery query={RECENTLY_PUBLISHED} />
-          </>
+
+const FrontPageSection = styled.section`
+  margin: 100px 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &.gray-bg {
+    margin: 0;
+    padding: 100px 0;
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+`
+
+const FrontPageContainer: React.FC = () => (
+  <div className="front-page page">
+    <FrontPageSection>
+      <AffiliateBlock />
+    </FrontPageSection>
+    <FrontPageSection>
+      <div className="container">
+        <Infographic />
+      </div>
+    </FrontPageSection>
+    <FrontPageSection className="front-page-activity">
+      <div className="activity-swoop">
+        <div></div>
+      </div>
+      <div className="swoop-content gray-bg">
+        <div className="container">
+          <ActivityHeader />
+          <FrontPageTopQuery query={TOP_VIEWED} />
+          <FrontPageNewQuery query={RECENTLY_PUBLISHED} />
+        </div>
+      </div>
+    </FrontPageSection>
+    <FrontPageSection className="gray-bg">
+      <Mutation mutation={SUBSCRIBE_TO_NEWSLETTER}>
+        {subscribeToNewsletter => (
+          <GetUpdates
+            subscribe={(email, cb) => {
+              subscribeToNewsletter({ variables: { email } }).then(cb).catch(cb)
+            }}
+          />
         )}
-        renderGetUpdates={() => (
-          <Mutation mutation={SUBSCRIBE_TO_NEWSLETTER}>
-            {subscribeToNewsletter => (
-              <GetUpdates
-                subscribe={(email, cb) => {
-                  subscribeToNewsletter({ variables: { email } })
-                    .then(cb)
-                    .catch(cb)
-                }}
-              />
-            )}
-          </Mutation>
-        )}
-        renderContributors={() => <Contributors />}
-      />
-    </>
-  )
-}
+      </Mutation>
+    </FrontPageSection>
+    <FrontPageSection className="gray-bg">
+      <Contributors />
+    </FrontPageSection>
+  </div>
+)
 
 export default FrontPageContainer

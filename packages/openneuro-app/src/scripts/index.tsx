@@ -1,6 +1,6 @@
 import React from 'react'
 import Uploader from './refactor_2021/uploader/uploader.jsx'
-import Routes from './refactor_2021/routes'
+import Routes from './routes'
 import HeaderContainer from './refactor_2021/containers/header'
 import FooterContainer from './refactor_2021/containers/footer'
 import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
