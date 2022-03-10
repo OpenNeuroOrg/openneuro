@@ -33,6 +33,14 @@ describe('DoiLink component', () => {
       'doi:10.18112/openneuro.ds000001.v1.0.0',
     )
   })
+  it('Renders fallback link with invalid DOI value', () => {
+    render(<DOILink DOI="doi:x" />, {
+      wrapper: MemoryRouter,
+    })
+    expect(screen.getByRole('link')).toHaveTextContent(
+      'Create a new snapshot to obtain a DOI for the snapshot.',
+    )
+  })
   it('Renders fallback text if no valid DOI string is found', () => {
     render(<DOILink DOI={null} />, { wrapper: MemoryRouter })
     expect(screen.getByRole('link')).toHaveTextContent(

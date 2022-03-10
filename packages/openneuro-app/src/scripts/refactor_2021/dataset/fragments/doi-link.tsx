@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom'
 // See https://www.crossref.org/blog/dois-and-matching-regular-expressions/
 export const DOIPattern = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i
 
+export const DOILinkFallback = () => (
+  <Link to="snapshot">
+    Create a new snapshot to obtain a DOI for the snapshot.
+  </Link>
+)
+
 export const DOILink = ({ DOI }) => {
   if (
     DOI &&
@@ -20,11 +26,8 @@ export const DOILink = ({ DOI }) => {
     if (DOI.startsWith('https://doi.org/')) {
       return <a href={DOI}>{`doi:${DOI.slice(16)}`}</a>
     }
+    return <DOILinkFallback />
   } else {
-    return (
-      <Link to="snapshot">
-        Create a new snapshot to obtain a DOI for the snapshot.
-      </Link>
-    )
+    return <DOILinkFallback />
   }
 }
