@@ -44,7 +44,9 @@ const publishPermissions = async datasetId => {
 export const updatePermissions = async (obj, args, { user, userInfo }) => {
   await checkDatasetAdmin(args.datasetId, user, userInfo)
   // get all users the the email specified by permissions arg
-  const users = await User.find({ email: args.userEmail }).exec()
+  const users = await User.find({ email: args.userEmail })
+    .collation({ locale: 'en', strength: 2 })
+    .exec()
 
   if (!users.length) {
     throw new Error('A user with that email address does not exist')
