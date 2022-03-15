@@ -345,7 +345,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               </>
               <MetaDataBlock
                 heading="Dataset DOI"
-                item={<DOILink DOI={description.DatasetDOI} />}
+                item={
+                  <DOILink DOI={description.DatasetDOI} datasetId={datasetId} />
+                }
               />
               <MetaDataBlock heading="License" item={description.License} />
               <MetaDataBlock

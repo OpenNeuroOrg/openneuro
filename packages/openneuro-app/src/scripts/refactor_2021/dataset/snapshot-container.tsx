@@ -328,7 +328,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
 
             <MetaDataBlock
               heading="Dataset DOI"
-              item={<DOILink DOI={description.DatasetDOI} />}
+              item={
+                <DOILink DOI={description.DatasetDOI} datasetId={datasetId} />
+              }
             />
             <MetaDataBlock heading="License" item={description.License} />
 

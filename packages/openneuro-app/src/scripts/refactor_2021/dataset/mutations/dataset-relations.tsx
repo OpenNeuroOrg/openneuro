@@ -96,7 +96,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
             return (
               <React.Fragment key={obj.id}>
                 <GridItem>
-                  <DOILink DOI={obj.id} />
+                  <DOILink DOI={obj.id} datasetId={datasetId} />
                 </GridItem>
                 <GridItem>{obj.description}</GridItem>
                 <GridItem>
@@ -107,8 +107,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
                         variables: { datasetId, doi: obj.id },
                       })
                       await refetch()
-                    }}
-                  >
+                    }}>
                     Delete
                   </button>
                 </GridItem>
