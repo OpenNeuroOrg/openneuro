@@ -29,6 +29,16 @@ const userSchema = new Schema({
 })
 
 userSchema.index({ id: 1, provider: 1 }, { unique: true })
+// Allow case insensitive email queries
+userSchema.index(
+  { email: 1 },
+  {
+    collation: {
+      locale: 'en',
+      strength: 2,
+    },
+  },
+)
 
 const User = model<UserDocument>('User', userSchema)
 
