@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
 import { WarnButton } from '@openneuro/components/warn-button'
-import { getProfile } from '../../refactor_2021/authentication/profile.js'
+import { getProfile } from '../../authentication/profile.js'
 import { useCookies } from 'react-cookie'
 import { USER_FRAGMENT } from './user-fragment'
 

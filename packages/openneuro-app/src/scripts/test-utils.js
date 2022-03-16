@@ -1,4 +1,4 @@
-import cookies from './refactor_2021/utils/cookies.js'
+import cookies from './utils/cookies.js'
 
 /**
  * Sets a login cookie during a test run
