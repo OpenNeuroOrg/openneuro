@@ -1,10 +1,10 @@
 import React from 'react'
-import Uploader from './refactor_2021/uploader/uploader.jsx'
+import Uploader from './uploader/uploader.jsx'
 import Routes from './routes'
-import HeaderContainer from './refactor_2021/containers/header'
-import FooterContainer from './refactor_2021/containers/footer'
-import { SearchParamsProvider } from './refactor_2021/search/search-params-ctx'
-import { UserModalOpenProvider } from './refactor_2021/user-login-modal-ctx'
+import HeaderContainer from './common/containers/header'
+import FooterContainer from './common/containers/footer'
+import { SearchParamsProvider } from './search/search-params-ctx'
+import { UserModalOpenProvider } from './utils/user-login-modal-ctx'
 
 import '../assets/email-header.png'
 

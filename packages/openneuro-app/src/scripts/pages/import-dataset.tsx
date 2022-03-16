@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { ImportDatasetMutation } from '../refactor_2021/dataset/mutations/import-dataset'
+import { ImportDatasetMutation } from '../dataset/mutations/import-dataset'
 import { useLocation } from 'react-router-dom'
-import LoggedIn from '../refactor_2021/authentication/logged-in'
-import LoggedOut from '../refactor_2021/authentication/logged-out'
-import { testAffirmed } from '../refactor_2021/uploader/upload-disclaimer'
-import { UploadDisclaimerInput } from '../refactor_2021/uploader/upload-disclaimer-input'
+import LoggedIn from '../authentication/logged-in'
+import LoggedOut from '../authentication/logged-out'
+import { testAffirmed } from '../uploader/upload-disclaimer'
+import { UploadDisclaimerInput } from '../uploader/upload-disclaimer-input'
 
 function useQuery() {
   const { search } = useLocation()
