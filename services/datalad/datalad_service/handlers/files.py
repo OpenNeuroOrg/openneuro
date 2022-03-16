@@ -7,7 +7,6 @@ from datalad_service.common.git import git_show
 from datalad_service.common.user import get_user_info
 from datalad_service.common.stream import update_file
 from datalad_service.tasks.files import get_files
-from datalad_service.tasks.files import get_untracked_files
 from datalad_service.tasks.files import remove_files
 
 
@@ -59,12 +58,8 @@ class FilesResource(object):
             # Return a list of file objects
             # {name, path, size}
             try:
-                if "untracked" in req.params:
-                    files = get_untracked_files(self.store, dataset)
-                    resp.media = {'files': files}
-                else:
-                    files = get_files(self.store, dataset, snapshot)
-                    resp.media = {'files': files}
+                files = get_files(self.store, dataset, snapshot)
+                resp.media = {'files': files}
             except:
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
 
