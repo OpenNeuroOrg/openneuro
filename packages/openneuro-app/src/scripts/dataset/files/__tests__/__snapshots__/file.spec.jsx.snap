@@ -22,7 +22,7 @@ exports[`File component renders for dataset snapshots 1`] = `
       <span
         class=" "
         data-flow="up"
-        data-tooltip="Download"
+        data-tooltip="Download: 500B"
       >
         <span
           class="edit-file download-file"
@@ -83,7 +83,7 @@ exports[`File component renders with common props 1`] = `
       <span
         class=" "
         data-flow="up"
-        data-tooltip="Download"
+        data-tooltip="Download: 500B"
       >
         <span
           class="edit-file download-file"
