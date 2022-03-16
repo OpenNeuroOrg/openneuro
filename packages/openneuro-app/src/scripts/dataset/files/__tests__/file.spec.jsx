@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import File from '../file.jsx'
+import File from '../file'
 
 describe('File component', () => {
   it('renders with common props', () => {
