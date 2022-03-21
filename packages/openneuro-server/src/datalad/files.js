@@ -52,6 +52,12 @@ export const filesUrl = datasetId =>
   `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}/files`
 
 /**
+ * Sum all file sizes for total dataset size
+ */
+export const computeTotalSize = files =>
+  files.reduce((size, f) => size + f.size, 0)
+
+/**
  * Get files for a specific revision
  * Similar to getDraftFiles but different cache key and fixed revisions
  * @param {string} datasetId - Dataset accession number
@@ -75,7 +81,11 @@ export const getFiles = (datasetId, hexsha) => {
           const {
             body: { files },
           } = response
-          return files.map(addFileUrl(datasetId, hexsha))
+          const size = computeTotalSize(files)
+          return {
+            files: files.map(addFileUrl(datasetId, hexsha)),
+            size,
+          }
         }
       }),
   )

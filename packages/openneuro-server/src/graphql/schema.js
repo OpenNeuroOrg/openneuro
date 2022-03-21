@@ -430,6 +430,8 @@ export const typeDefs = `
     uploads: [UploadMetadata]
     # Git commit hash
     head: String
+    # Total size in bytes of this draft
+    size: Int
   }
 
   # Tagged snapshot of a draft
@@ -461,6 +463,8 @@ export const typeDefs = `
     related: [RelatedObject]
     # Is the snapshot available for analysis on Brainlife?
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
+    # Total size in bytes of this snapshot
+    size: Int
   }
 
   # RelatedObject nature of relationship

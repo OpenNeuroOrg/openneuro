@@ -3,6 +3,7 @@ import {
   decodeFilePath,
   fileUrl,
   filterFiles,
+  computeTotalSize,
 } from '../files.js'
 
 jest.mock('../../config.js')
@@ -103,5 +104,17 @@ describe('datalad files', () => {
     it('works correctly for deeply nested files', () => {
       expect(filterFiles('sub-01/func')(mockFiles)).toEqual([mockSub01[1]])
     })
+  })
+  describe('computeTotalSize()', () => {
+    const mockFileSizes = [
+      { filename: 'README', size: 234 },
+      { filename: 'dataset_description.json', size: 432 },
+      { filename: 'sub-01/anat/sub-01_T1w.nii.gz', size: 10858 },
+      {
+        filename: 'sub-01/func/sub-01_task-onebacktask_run-01_bold.nii.gz',
+        size: 1945682,
+      },
+    ]
+    expect(computeTotalSize(mockFileSizes)).toBe(1957206)
   })
 })
