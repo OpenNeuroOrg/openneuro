@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import FileView from './file-view.jsx'
-import { apiPath } from './file.jsx'
+import { apiPath } from './file'
 import styled from '@emotion/styled'
 import { Media } from '../../styles/media'
 

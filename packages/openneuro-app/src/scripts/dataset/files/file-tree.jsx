@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import File from './file.jsx'
+import File from './file'
 import UpdateFile from '../mutations/update-file.jsx'
 import DeleteDir from '../mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
@@ -66,6 +66,7 @@ const FileTree = ({
               datasetId={datasetId}
               snapshotTag={snapshotTag}
               path={path}
+              size={file.size}
               editMode={editMode}
               toggleFileToDelete={toggleFileToDelete}
               isFileToBeDeleted={isFileToBeDeleted}

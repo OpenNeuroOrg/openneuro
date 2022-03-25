@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import bytes from 'bytes'
 import { Link } from 'react-router-dom'
 import UpdateFile from '../mutations/update-file.jsx'
 import DeleteFile from '../mutations/delete-file.jsx'
@@ -79,8 +79,33 @@ export const apiPath = (datasetId, snapshotTag, filePath) => {
   return `/crn/datasets/${datasetId}${snapshotPath}/files/${filePath}`
 }
 
+interface FileProps {
+  id: string
+  size: number
+  datasetId: string
+  path: string
+  filename: string
+  snapshotTag: string
+  editMode: boolean
+  isMobile: boolean
+  annexed: boolean
+  annexKey: string
+  datasetPermissions: string[]
+  toggleFileToDelete: ({
+    id,
+    path,
+    filename,
+  }: {
+    id: string
+    path: string
+    filename: string
+  }) => boolean
+  isFileToBeDeleted: (id: string) => boolean
+}
+
 const File = ({
   id,
+  size,
   datasetId,
   path,
   filename,
@@ -92,7 +117,7 @@ const File = ({
   datasetPermissions,
   toggleFileToDelete,
   isFileToBeDeleted,
-}) => {
+}: FileProps) => {
   const { icon, color } = getFileIcon(filename)
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
@@ -109,7 +134,7 @@ const File = ({
       {filename}
       <span className="filetree-editfile">
         <Media greaterThanOrEqual="medium">
-          <Tooltip tooltip="Download">
+          <Tooltip tooltip={`Download: ${bytes.format(size) as string}`}>
             <span className="edit-file download-file">
               <a
                 href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
@@ -131,7 +156,7 @@ const File = ({
           <Media greaterThanOrEqual="medium">
             <Tooltip tooltip="Update">
               <UpdateFile datasetId={datasetId} path={path}>
-                <i className="fa fa-file-o" />
+                <i className="fa fa-cloud-upload" />
               </UpdateFile>
             </Tooltip>
           </Media>
@@ -203,14 +228,6 @@ const File = ({
       </span>
     </>
   )
-}
-
-File.propTypes = {
-  datasetId: PropTypes.string,
-  path: PropTypes.string,
-  filename: PropTypes.string,
-  snapshotTag: PropTypes.string,
-  editMode: PropTypes.bool,
 }
 
 export default File
