@@ -193,57 +193,6 @@ def test_duplicate_file_id(client, new_dataset):
     assert file_one['id'] != file_two['id']
 
 
-def test_untracked_file_index(client, new_dataset):
-    ds_id = os.path.basename(new_dataset.path)
-    # Post test file
-    response = client.simulate_post(
-        '/datasets/{}/files/LICENSE'.format(ds_id), body='GPL V3.0')
-    assert response.status == falcon.HTTP_OK
-    # Don't commit and check index
-    response = client.simulate_get(
-        '/datasets/{}/files'.format(ds_id), params={"untracked": True})
-    assert response.status == falcon.HTTP_OK
-    assert 'files' in response.json
-    assert len(response.json['files']) == 3
-    for f in response.json['files']:
-        if f['filename'] == 'dataset_description.json':
-            assert f['size'] == 101
-        elif f['filename'] == 'LICENSE':
-            assert f['size'] == 8
-        elif f['filename'] == 'CHANGES':
-            assert f['size'] == 37
-        else:
-            assert False
-
-
-def test_untracked_dir_index(client, new_dataset):
-    ds_id = os.path.basename(new_dataset.path)
-    # Post test file
-    response = client.simulate_post(
-        '/datasets/{}/files/LICENSE'.format(ds_id), body='GPL V3.0')
-    assert response.status == falcon.HTTP_OK
-    # Post test directory and file
-    response = client.simulate_post(
-        '/datasets/{}/files/sub-01:anat:sub-01_T1w.nii.gz'.format(ds_id), body='fMRI data goes here')
-    # Don't commit and check index
-    response = client.simulate_get(
-        '/datasets/{}/files'.format(ds_id), params={"untracked": True})
-    assert response.status == falcon.HTTP_OK
-    assert 'files' in response.json
-    assert len(response.json['files']) == 4
-    for f in response.json['files']:
-        if f['filename'] == 'dataset_description.json':
-            assert f['size'] == 101
-        elif f['filename'] == 'LICENSE':
-            assert f['size'] == 8
-        elif f['filename'] == 'sub-01/anat/sub-01_T1w.nii.gz':
-            assert f['size'] == 19
-        elif f['filename'] == 'CHANGES':
-            assert f['size'] == 37
-        else:
-            assert False
-
-
 def test_delete_file(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     response = client.simulate_delete('/datasets/{}/files'.format(

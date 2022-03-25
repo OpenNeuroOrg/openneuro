@@ -32,33 +32,6 @@ def get_files(store, dataset, branch=None):
     return get_repo_files(dataset_path, branch)
 
 
-def get_untracked_files(store, dataset):
-    """Get file listing and size metadata for all files in the working tree."""
-    ds_path = store.get_dataset_path(dataset)
-    fileMeta = []
-    for root, dirs, files in os.walk(ds_path):
-        if '.git' in dirs:
-            dirs.remove('.git')
-        if '.datalad' in dirs:
-            dirs.remove('.datalad')
-        if '.gitattributes' in files:
-            files.remove('.gitattributes')
-        for filename in files:
-            path = os.path.join(root, filename)
-            rel_path = os.path.relpath(root, ds_path)
-            if (rel_path != '.'):
-                file_path = os.path.join(rel_path, filename)
-            else:
-                file_path = filename
-            # Get file size for the uploader
-            size = os.path.getsize(path)
-            # The id is just a composite of path/size for untracked files
-            file_id = '{}:{}'.format(file_path, size)
-            fileMeta.append(
-                {'filename': file_path, 'size': size, 'id': file_id})
-    return fileMeta
-
-
 def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     dataset_path = store.get_dataset_path(dataset)
     repo = pygit2.Repository(dataset_path)

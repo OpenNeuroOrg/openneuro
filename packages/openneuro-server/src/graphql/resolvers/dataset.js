@@ -16,9 +16,7 @@ import { history } from './history.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset'
 import Deletion from '../../models/deletion'
-import fetch from 'node-fetch'
 import { reviewers } from './reviewer'
-import { UpdatedFile } from '../utils/file.js'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
 import { getFileName } from '../../datalad/files.js'
@@ -152,9 +150,7 @@ export const deleteFiles = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFiles = await datalad
-      .deleteFiles(datasetId, files, userInfo)
-      .then(filenames => filenames.map(filename => new UpdatedFile(filename)))
+    const deletedFiles = await datalad.deleteFiles(datasetId, files, userInfo)
     pubsub.publish('filesUpdated', {
       datasetId,
       filesUpdated: {
