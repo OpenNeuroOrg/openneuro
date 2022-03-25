@@ -127,6 +127,7 @@ export const description = obj => {
   return cache
     .get(() => {
       return getFiles(datasetId, revision)
+        .then(response => response.files)
         .then(getDescriptionObject(datasetId))
         .then(uncachedDescription => ({ id: revision, ...uncachedDescription }))
     })

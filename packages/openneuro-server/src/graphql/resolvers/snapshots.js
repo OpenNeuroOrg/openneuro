@@ -29,8 +29,11 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
         files: ({ prefix }) =>
           getFiles(datasetId, snapshot.hexsha)
+            .then(response => response.files)
             .then(filterFiles(prefix))
             .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
+        size: () =>
+          getFiles(datasetId, snapshot.hexsha).then(response => response.size),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
