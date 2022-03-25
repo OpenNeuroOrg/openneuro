@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import FreshdeskWidget from '../datalad/fragments/freshdesk-widget.jsx'
+import FreshdeskWidget from './freshdesk-widget.jsx'
 import {
   Overlay,
   ModalContainer,
