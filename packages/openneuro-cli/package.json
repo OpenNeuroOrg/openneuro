@@ -5,11 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "engines": {
-    "node": ">=12.9.0"
+    "node": ">=16.0.0"
   },
-  "os": [
-    "!win32"
-  ],
   "author": "Squishymedia",
   "license": "MIT",
   "bin": {
