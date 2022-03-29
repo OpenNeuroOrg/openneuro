@@ -1,16 +1,14 @@
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
+import { DatasetPageTabContainer } from './styles/dataset-page-tab-container'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
-import Markdown from 'markdown-to-jsx'
 import { Link, useLocation } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
-import Files from './files'
 import Validation from '../validation/validation.jsx'
 import { config } from '../config'
-import Comments from './comments/comments.jsx'
 import DatasetCitation from './fragments/dataset-citation.jsx'
 import { DatasetAlertVersion } from './fragments/dataset-alert-version'
 
@@ -35,13 +33,12 @@ import {
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
 
-import { ReadMore } from '@openneuro/components/read-more'
-
 import { FollowDataset } from './mutations/follow'
 import { StarDataset } from './mutations/star'
 
 import { SNAPSHOT_FIELDS } from '../datalad/dataset/dataset-query-fragments.js'
 import { DOILink } from './fragments/doi-link'
+import { TabRoutesSnapshot } from './routes/tab-routes-snapshot'
 
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -168,39 +165,9 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 isDatasetAdmin={isDatasetAdmin}
               />
             </div>
-            <ReadMore
-              fileTree={true}
-              id="collapse-tree"
-              expandLabel="Read More"
-              collapseLabel="Collapse">
-              <Files
-                datasetId={datasetId}
-                snapshotTag={snapshot.tag}
-                datasetName={description.Name}
-                files={snapshot.files}
-                editMode={false}
-                datasetPermissions={dataset.permissions}
-              />
-            </ReadMore>
-            <MetaDataBlock
-              heading="README"
-              item={
-                <ReadMore
-                  id="readme"
-                  expandLabel="Read More"
-                  collapseLabel="Collapse">
-                  <Markdown>
-                    {snapshot.readme == null ? 'N/A' : snapshot.readme}
-                  </Markdown>
-                </ReadMore>
-              }
-              className="dataset-readme markdown-body"
-            />
-            <Comments
-              datasetId={dataset.id}
-              uploader={dataset.uploader}
-              comments={dataset.comments}
-            />
+            <DatasetPageTabContainer>
+              <TabRoutesSnapshot dataset={dataset} snapshot={snapshot} />
+            </DatasetPageTabContainer>
           </div>
           <div className="col sidebar">
             <MetaDataBlock
