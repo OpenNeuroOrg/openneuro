@@ -1,43 +1,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import DatasetHistory from '../fragments/dataset-history.jsx'
 import CacheClear from '../mutations/cache-clear.jsx'
+import AdminExports from '../mutations/admin-exports'
+import { DatasetPageBorder } from './styles/dataset-page-border'
+import { HeaderRow3, HeaderRow4 } from './styles/header-row'
 
 const AdminDataset = ({ dataset }) => (
-  <div className="datalad-dataset-form container">
-    <div className="grid">
-      <div className="col col-12">
-        <h2>Admin: Datalad Tools</h2>
-      </div>
-      <div className="col col-12">
-        <p>
-          Delete dataset cache drops all dataset caches (snapshot index,
-          draft/snapshot file listings, current dataset description) and the
-          cache is repopulated on the next API call.
-        </p>
-        <p>
-          Reset draft head will move the draft to a given commit and rerun
-          validation.
-        </p>
-      </div>
-      <div className="col col-12">
-        <h3>Draft Head</h3> {dataset.draft.head}
-      </div>
-      <DatasetHistory datasetId={dataset.id} />
-      <hr />
-      <div className="col col-12 dataset-form-controls">
-        <div className="grid">
-          <CacheClear datasetId={dataset.id} />
-          <Link
-            className="return-link col-middle"
-            to={`/datasets/${dataset.id}`}>
-            Return to Dataset
-          </Link>
-        </div>
-      </div>
+  <DatasetPageBorder className="datalad-dataset-form">
+    <HeaderRow3>Site Admin Tools</HeaderRow3>
+    <p>
+      Delete dataset cache drops this dataset's caches (snapshot index,
+      draft/snapshot file listings, current dataset description) and the cache
+      is repopulated on the next API call.
+    </p>
+    <div className="dataset-form-controls">
+      <CacheClear datasetId={dataset.id} />
     </div>
-  </div>
+    <hr />
+    <HeaderRow4>Rerun Exports</HeaderRow4>
+    <p>
+      Correct most temporary issues with a dataset export by reattempting to
+      push to S3 and GitHub.
+    </p>
+    <div className="dataset-form-controls">
+      <AdminExports />
+    </div>
+    <hr />
+    <HeaderRow4>Draft Head</HeaderRow4>
+    {dataset.draft.head}
+    <DatasetHistory datasetId={dataset.id} />
+  </DatasetPageBorder>
 )
 
 AdminDataset.propTypes = {

@@ -6,8 +6,8 @@ import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
-import styled from '@emotion/styled'
-import { Button } from '@openneuro/components/button'
+import { DatasetPageBorder } from './styles/dataset-page-border'
+import { HeaderRow3 } from './styles/header-row'
 
 interface DeletePageProps extends RouteComponentProps {
   dataset: {
@@ -35,9 +35,8 @@ const DeletePage = ({ dataset }: DeletePageProps): React.ReactElement => {
     hasEditPermissions(dataset.permissions, user && user.sub)
   const datasetId = dataset.id
   return (
-    <div className="container">
-      <h2>Delete Dataset</h2>
-      <hr />
+    <DatasetPageBorder>
+      <HeaderRow3>Delete Dataset</HeaderRow3>
       <DeleteDatasetForm
         values={values}
         onChange={handleInputChange}
@@ -54,11 +53,8 @@ const DeletePage = ({ dataset }: DeletePageProps): React.ReactElement => {
         <LoggedIn>
           <DeleteDataset datasetId={datasetId} metadata={values} />
         </LoggedIn>
-        <Link className="return-link" to={`/datasets/${datasetId}`}>
-          Return to Dataset
-        </Link>
       </div>
-    </div>
+    </DatasetPageBorder>
   )
 }
 

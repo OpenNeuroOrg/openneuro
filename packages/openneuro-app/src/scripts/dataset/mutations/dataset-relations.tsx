@@ -50,20 +50,9 @@ const deleteDatasetRelation = gql`
   }
 `
 
-const RightColumn = styled.div({
-  maxWidth: '700px',
-  float: 'right',
-})
-
-const InfoText = styled.p({
-  fontWeight: 100,
-  textAlign: 'right',
-})
-
 const TableContainer = styled.div({
   display: 'grid',
   gridTemplateColumns: '2fr 3fr 1fr',
-  textAlign: 'right',
 })
 
 const GridItem = styled.div({
@@ -120,15 +109,15 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
       loadedData = <p>No related DOIs have been added.</p>
     }
     return (
-      <RightColumn>
-        <InfoText>
+      <>
+        <p>
           Add a related DOI such as other repositories where this dataset can be
           found. DOI values should be formatted according to the{' '}
           <a href="https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#uniform-resource-indicator">
             BIDS recommended URI format
           </a>
           .
-        </InfoText>
+        </p>
         {loadedData}
         {hasEdit && (
           <div>
@@ -195,7 +184,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
             />
           </div>
         )}
-      </RightColumn>
+      </>
     )
   } else {
     return null

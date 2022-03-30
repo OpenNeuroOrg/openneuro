@@ -73,19 +73,8 @@ export const DatasetTools = ({
       )}
       {isAdmin && !isSnapshot && (
         <Tooltip tooltip="Admin Datalad Tools" flow="up">
-          <Link
-            className="dataset-tool"
-            to={`/datasets/${datasetId}/admin-datalad`}>
-            <Icon icon="fa fa-magic" label="Datalad" />
-          </Link>
-        </Tooltip>
-      )}
-      {isAdmin && !isSnapshot && (
-        <Tooltip tooltip="Admin Remote Export Tools" flow="up">
-          <Link
-            className="dataset-tool"
-            to={`/datasets/${datasetId}/admin-exports`}>
-            <Icon icon="fa fa-cloud-upload" label="Export" />
+          <Link className="dataset-tool" to={`/datasets/${datasetId}/admin`}>
+            <Icon icon="fa fa-magic" label="Admin" />
           </Link>
         </Tooltip>
       )}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
-import { DatasetPageTabContainer } from './styles/dataset-page-tab-container'
+import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
 import { Link, useLocation } from 'react-router-dom'
 import pluralize from 'pluralize'

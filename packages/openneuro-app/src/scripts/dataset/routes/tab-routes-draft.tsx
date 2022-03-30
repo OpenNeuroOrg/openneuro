@@ -2,7 +2,6 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { DatasetDefault } from './dataset-default'
 import AdminDataset from './admin-datalad'
-import AdminExports from './admin-exports'
 import DeletePage from './delete-page'
 import DownloadDataset from './download-dataset'
 import Publish from './publish'
@@ -36,13 +35,8 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
       />
       <Route
         exact
-        path="/datasets/:datasetId/admin-datalad"
+        path="/datasets/:datasetId/admin"
         component={() => <AdminDataset dataset={dataset} />}
-      />
-      <Route
-        exact
-        path="/datasets/:datasetId/admin-exports"
-        component={() => <AdminExports dataset={dataset} />}
       />
       <Route
         exact

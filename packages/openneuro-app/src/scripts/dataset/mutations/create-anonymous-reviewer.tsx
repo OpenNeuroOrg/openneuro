@@ -61,9 +61,6 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({ datasetId }) => {
           size="small"
           onClick={() => CreateReviewLink({ variables: { datasetId } })}
         />
-        <Link className="return-link" to={`/datasets/${datasetId}`}>
-          Return to Dataset
-        </Link>
       </div>
     </>
   )

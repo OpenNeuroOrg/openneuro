@@ -5,7 +5,7 @@ import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
-import { DatasetPageTabContainer } from './styles/dataset-page-tab-container'
+import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
 import Validation from '../validation/validation.jsx'
 import { config } from '../config'
 import {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import MetadataForm from '../mutations/metadata-form.jsx'
 import { DatasetRelations } from '../mutations/dataset-relations'
@@ -8,6 +8,8 @@ import SubmitMetadata from '../mutations/submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
 import { getDatasetUrl } from '../../utils/dataset-url'
+import { DatasetPageBorder } from './styles/dataset-page-border'
+import { HeaderRow3, HeaderRow4 } from './styles/header-row'
 
 export const compileMetadata = dataset => {
   const getFromMetadata = key => dataset.metadata && dataset.metadata[key]
@@ -119,25 +121,15 @@ const AddMetadata = ({ dataset }) => {
     hasEditPermissions(dataset.permissions, user && user.sub)
 
   return (
-    <div className="container metadata-form">
-      <header>
-        <h1>{hasEdit && 'Add '}Metadata</h1>
-        <hr />
-      </header>
-      <div className="grid m-b-20">
-        <MetadataForm
-          values={values}
-          onChange={handleInputChange}
-          hideDisabled={false}
-          hasEdit={hasEdit}
-          validationErrors={validationErrors}
-        />
-        {hasEdit && (
-          <div className="col col-6">
-            <DatasetRelations datasetId={dataset.id} hasEdit={hasEdit} />
-          </div>
-        )}
-      </div>
+    <DatasetPageBorder className="metadata-form">
+      <HeaderRow3>{hasEdit && 'Add '}Metadata</HeaderRow3>
+      <MetadataForm
+        values={values}
+        onChange={handleInputChange}
+        hideDisabled={false}
+        hasEdit={hasEdit}
+        validationErrors={validationErrors}
+      />
       <div className="dataset-form-controls ">
         {hasEdit && (
           <LoggedIn>
@@ -149,11 +141,15 @@ const AddMetadata = ({ dataset }) => {
             />
           </LoggedIn>
         )}
-        <Link className="return-link " to={`/datasets/${dataset.id}`}>
-          Return to Dataset
-        </Link>
       </div>
-    </div>
+      <hr />
+      {hasEdit && (
+        <>
+          <HeaderRow4>Relations</HeaderRow4>
+          <DatasetRelations datasetId={dataset.id} hasEdit={hasEdit} />
+        </>
+      )}
+    </DatasetPageBorder>
   )
 }
 

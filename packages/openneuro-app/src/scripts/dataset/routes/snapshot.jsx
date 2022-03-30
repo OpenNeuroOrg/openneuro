@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import semver from 'semver'
-import { Link } from 'react-router-dom'
 import SnapshotDataset from '../mutations/snapshot'
-import ValidationStatus from '../../validation/validation-status'
 import EditList from '../fragments/edit-list.jsx'
 import { Button } from '@openneuro/components/button'
+import { DatasetPageBorder } from './styles/dataset-page-border'
+import { HeaderRow4 } from './styles/header-row'
+import styled from '@emotion/styled'
+
+const FormRow = styled.div`
+  margin-top: 0;
+  margin-bottom: 1.3em;
+`
 
 export const NoErrors = ({ issues, children }) => {
   const noErrors =
@@ -49,83 +55,73 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
   const patchActive = semanticLevel === 'patch' && 'active'
 
   return (
-    <div className="dataset-snapshot-form container">
-      <div className="dataset-form-header">
-        <h3>Create Version</h3>
-        <hr />
-      </div>
-      <div className="dataset-form-body">
-        {updateToCC0 && (
-          <div className="alert-warning padded-message">
-            <span>
-              <strong>Notice:</strong>
-              {` the current license "${draftLicense}" will be updated to "CC0" when the version is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
-            </span>
-          </div>
-        )}
-        <ValidationStatus issues={issues} />
-        <h4>Version</h4>
-        <div className="snapshot-input-group">
-          {newVersion}
-          <div className="input-group-btn">
-            <Button
-              secondary={true}
-              label="Major"
-              size="xsmall"
-              className={`btn btn-default ${majorActive}`}
-              onClick={() => setSemanticLevel('major')}
-            />
-            <Button
-              secondary={true}
-              label="Minor"
-              size="xsmall"
-              className={`btn btn-default ${minorActive}`}
-              onClick={() => setSemanticLevel('minor')}
-            />
-            <Button
-              secondary={true}
-              label="Patch"
-              size="xsmall"
-              className={`btn btn-default ${patchActive}`}
-              onClick={() => setSemanticLevel('patch')}
-            />
-          </div>
-        </div>
-        <h4>Changelog</h4>
-        <EditList
-          placeholder="Enter new changes here..."
-          elements={changes}
-          setElements={setChanges}
-        />
-      </div>
-      <NoErrors issues={issues}>
-        {changes.length ? null : (
-          <small className="text-danger">
-            You must add at least one change message to create a new version
-          </small>
-        )}
-      </NoErrors>
-      <div className="col-xs-12 dataset-form-controls">
-        <div className="col-xs-12 modal-actions">
-          <NoErrors issues={issues}>
-            {changes.length ? (
-              <SnapshotDataset
-                datasetId={datasetId}
-                tag={newVersion}
-                changes={changes}
+    <DatasetPageBorder>
+      <div className="dataset-snapshot-form container">
+        <div className="dataset-form-body">
+          {updateToCC0 && (
+            <div className="alert-warning padded-message">
+              <span>
+                <strong>Notice:</strong>
+                {` the current license "${draftLicense}" will be updated to "CC0" when the version is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
+              </span>
+            </div>
+          )}
+          <HeaderRow4>Version</HeaderRow4>
+          <FormRow className="snapshot-input-group">
+            {newVersion}
+            <div className="input-group-btn">
+              <Button
+                secondary={true}
+                label="Major"
+                size="xsmall"
+                className={`btn btn-default ${majorActive}`}
+                onClick={() => setSemanticLevel('major')}
               />
-            ) : null}
-          </NoErrors>{' '}
-          <Link to={`/datasets/${datasetId}`}>
-            <Button
-              className="return-link"
-              nobg={true}
-              label="Return to Dataset"
-            />
-          </Link>
+              <Button
+                secondary={true}
+                label="Minor"
+                size="xsmall"
+                className={`btn btn-default ${minorActive}`}
+                onClick={() => setSemanticLevel('minor')}
+              />
+              <Button
+                secondary={true}
+                label="Patch"
+                size="xsmall"
+                className={`btn btn-default ${patchActive}`}
+                onClick={() => setSemanticLevel('patch')}
+              />
+            </div>
+          </FormRow>
+          <HeaderRow4>Changelog</HeaderRow4>
+          <EditList
+            placeholder="Enter new changes here..."
+            elements={changes}
+            setElements={setChanges}
+          />
+        </div>
+        <NoErrors issues={issues}>
+          {changes.length ? null : (
+            <small className="text-danger">
+              You must add at least one change message to create a new version
+            </small>
+          )}
+        </NoErrors>
+        <div className="col-xs-12 dataset-form-controls">
+          <div className="col-xs-12 modal-actions">
+            <NoErrors issues={issues}>
+              {changes.length ? (
+                <SnapshotDataset
+                  datasetId={datasetId}
+                  tag={newVersion}
+                  changes={changes}
+                />
+              ) : null}
+            </NoErrors>
+          </div>
         </div>
       </div>
-    </div>
+    </DatasetPageBorder>
   )
 }
 
