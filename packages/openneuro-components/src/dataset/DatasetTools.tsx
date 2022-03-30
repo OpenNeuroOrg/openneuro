@@ -132,7 +132,9 @@ export const DatasetTools = ({
       )}
       {hasEdit && isSnapshot && (
         <Tooltip tooltip="Flag this version as deprecated" flow="up">
-          <Link className="dataset-tool" to={`${location.pathname}/deprecate`}>
+          <Link
+            className="dataset-tool"
+            to={`/datasets/${datasetId}/versions/${snapshotId}/deprecate`}>
             <Icon icon="fa fa-remove" label="Deprecate Version" />
           </Link>
         </Tooltip>
