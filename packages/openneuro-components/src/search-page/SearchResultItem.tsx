@@ -165,7 +165,7 @@ export const SearchResultItem = ({
   const size = (
     <span className="result-summary-meta">
       <strong>Size: </strong>
-      <span>{bytes(node?.latestSnapshot?.size)}</span>
+      <span>{bytes(node?.latestSnapshot?.size) || "unknown" }</span>
     </span>
   )
   const files = (
