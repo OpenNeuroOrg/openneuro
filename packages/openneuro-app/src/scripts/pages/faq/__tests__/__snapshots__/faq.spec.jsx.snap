@@ -221,7 +221,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
           <span>
             We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our 
             <a
-              href="https://docs.openneuro.org/packages-openneuro-cli-readme"
+              href="https://docs.openneuro.org/openneuro-packages-openneuro-cli-readme"
             >
               command-line utility tool
             </a>

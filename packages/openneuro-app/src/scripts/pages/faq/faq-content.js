@@ -78,7 +78,7 @@ export const faq = [
     answer:
       'We offer two options for uploading data onto OpenNeuro. ' +
       'The first is to upload via the web interface. ' +
-      'The second is to upload via our [command-line utility tool](https://docs.openneuro.org/packages-openneuro-cli-readme)',
+      'The second is to upload via our [command-line utility tool](https://docs.openneuro.org/openneuro-packages-openneuro-cli-readme)',
   },
   {
     faq: 'Why can I not use CC-BY (or other CC license)?',
