@@ -68,32 +68,6 @@
     }
   }
 
-  .dataset-tool-buttons {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    > span {
-      display: flex;
-      margin: 0 auto 20px;
-      flex-basis: auto;
-      padding: 0 15px;
-      justify-content: center;
-      .dataset-tool {
-        color: var(--current-theme-primary);
-        font-size: 17px;
-        text-decoration: none;
-        font-weight: 400;
-        border-bottom: 2px solid transparent;
-        i {
-          margin-right: 6px;
-          font-size: 15px;
-        }
-        &:hover {
-          border-bottom-color: var(--current-theme-primary);
-        }
-      }
-    }
-  }
   .dataset-validation {
     display: flex;
     justify-content: space-between;

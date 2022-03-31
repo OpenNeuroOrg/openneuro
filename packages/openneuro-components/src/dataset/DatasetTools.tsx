@@ -1,9 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useLocation, useHistory } from 'react-router-dom'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Icon } from '../icon/Icon'
-import { Button } from '../button/Button'
+import { DatasetToolButton } from './DatasetToolButton'
+import styled from '@emotion/styled'
+
+export const DatasetToolStyle = styled.span`
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+`
 
 export interface DatasetToolsProps {
   hasEdit: boolean
@@ -24,110 +27,96 @@ export const DatasetTools = ({
   hasSnapshot,
   isDatasetAdmin,
 }: DatasetToolsProps) => {
-  const history = useHistory()
-  const location = useLocation()
   const isSnapshot = snapshotId
   return (
-    <>
+    <DatasetToolStyle>
       {hasEdit && !isPublic && !isSnapshot && (
         <>
           {hasSnapshot ? (
-            <Tooltip tooltip="Publicize the dataset" flow="up">
-              <Link
-                className="dataset-tool"
-                to={`/datasets/${datasetId}/publish`}>
-                <Icon icon="fa fa-globe" label="Publish" />
-              </Link>
-            </Tooltip>
+            <DatasetToolButton
+              tooltip="Publicize the dataset"
+              path={`/datasets/${datasetId}/publish`}
+              icon="fa-globe"
+              label="Publish"
+            />
           ) : (
-            <Tooltip tooltip="Create a version to publish" flow="up">
-              <Link
-                className="dataset-tool"
-                to={`/datasets/${datasetId}/snapshot`}>
-                <Icon icon="fa fa-globe" label="Publish" />
-              </Link>
-            </Tooltip>
+            <DatasetToolButton
+              tooltip="Create a version to publish"
+              path={`/datasets/${datasetId}/snapshot`}
+              icon="fa-globe"
+              label="Publish"
+            />
           )}
         </>
       )}
       {hasEdit && !isSnapshot && (
-        <Tooltip tooltip="Share this dataset with collaborators" flow="up">
-          <Link className="dataset-tool" to={`/datasets/${datasetId}/share`}>
-            <Icon icon="fa fa-user" label="Share" />
-          </Link>
-        </Tooltip>
+        <DatasetToolButton
+          tooltip="Share this dataset with collaborators"
+          path={`/datasets/${datasetId}/share`}
+          icon="fa-user"
+          label="Share"
+        />
       )}
       {hasEdit && isSnapshot && (
-        <Tooltip tooltip="View the Dataset Draft" flow="up">
-          <Link className="dataset-tool" to={`/datasets/${datasetId}`}>
-            <Icon icon="fa fa-pencil" label="View Draft" />
-          </Link>
-        </Tooltip>
+        <DatasetToolButton
+          tooltip="View the Dataset Draft"
+          path={`/datasets/${datasetId}`}
+          icon="fa-pencil"
+          label="View Draft"
+        />
       )}
       {hasEdit && !isSnapshot && (
-        <Tooltip tooltip="Create a new version of the dataset" flow="up">
-          <Link className="dataset-tool" to={`/datasets/${datasetId}/snapshot`}>
-            <Icon icon="fa fa-camera" label="Versioning" />
-          </Link>
-        </Tooltip>
+        <DatasetToolButton
+          tooltip="Create a new version of the dataset"
+          path={`/datasets/${datasetId}/snapshot`}
+          icon="fa-camera"
+          label="Versioning"
+        />
       )}
       {isAdmin && !isSnapshot && (
-        <Tooltip tooltip="Admin Datalad Tools" flow="up">
-          <Link className="dataset-tool" to={`/datasets/${datasetId}/admin`}>
-            <Icon icon="fa fa-magic" label="Admin" />
-          </Link>
-        </Tooltip>
+        <DatasetToolButton
+          tooltip="Admin Datalad Tools"
+          path={`/datasets/${datasetId}/admin`}
+          icon="fa-magic"
+          label="Admin"
+        />
       )}
-      <span>
-        <Link
-          className="dataset-tool"
-          to={
-            snapshotId
-              ? `/datasets/${datasetId}/versions/${snapshotId}/download`
-              : `/datasets/${datasetId}/download`
-          }>
-          <Icon icon="fa fa-download" label="Download" />
-        </Link>
-      </span>
-      <Tooltip
-        wrapText={true}
+      <DatasetToolButton
+        tooltip="How to Download"
+        path={
+          snapshotId
+            ? `/datasets/${datasetId}/versions/${snapshotId}/download`
+            : `/datasets/${datasetId}/download`
+        }
+        icon="fa-download"
+        label="Download"
+      />
+      <DatasetToolButton
         tooltip={
           hasEdit
             ? 'A form to describe your dataset (helps colleagues discover your dataset)'
             : 'View the dataset metadata'
         }
-        flow="up">
-        <Button
-          icon="fa fa-file-code"
-          label="Metadata"
-          className="dataset-tool"
-          nobg={true}
-          onClick={() =>
-            history.push({
-              pathname: `/datasets/${datasetId}/metadata`,
-              state: {
-                submitPath: location.pathname,
-              },
-            })
-          }
-        />
-      </Tooltip>
+        path={`/datasets/${datasetId}/metadata`}
+        icon="fa-file-code"
+        label="Metadata"
+      />
       {isDatasetAdmin && !isSnapshot && (
-        <Tooltip tooltip="Remove your dataset from OpenNeuro" flow="up">
-          <Link className="dataset-tool" to={`/datasets/${datasetId}/delete`}>
-            <Icon icon="fa fa-trash" label="Delete" />
-          </Link>
-        </Tooltip>
+        <DatasetToolButton
+          tooltip="Remove your dataset from OpenNeuro"
+          path={`/datasets/${datasetId}/delete`}
+          icon="fa-trash"
+          label="Delete"
+        />
       )}
       {hasEdit && isSnapshot && (
-        <Tooltip tooltip="Flag this version as deprecated" flow="up">
-          <Link
-            className="dataset-tool"
-            to={`/datasets/${datasetId}/versions/${snapshotId}/deprecate`}>
-            <Icon icon="fa fa-remove" label="Deprecate Version" />
-          </Link>
-        </Tooltip>
+        <DatasetToolButton
+          tooltip="Flag this version as deprecated"
+          path={`/datasets/${datasetId}/versions/${snapshotId}/deprecate`}
+          icon="fa-remove"
+          label="Deprecate Version"
+        />
       )}
-    </>
+    </DatasetToolStyle>
   )
 }
