@@ -56,17 +56,17 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
 
   return (
     <DatasetPageBorder>
-      <div className="dataset-snapshot-form container">
+      <div className="dataset-snapshot-form">
         <div className="dataset-form-body">
-          {updateToCC0 && (
-            <div className="alert-warning padded-message">
-              <span>
-                <strong>Notice:</strong>
-                {` the current license "${draftLicense}" will be updated to "CC0" when the version is created. Please see FAQ item "Are there any restrictions on the uploaded data?" for details.`}
-              </span>
-            </div>
-          )}
           <HeaderRow4>Version</HeaderRow4>
+          {updateToCC0 && (
+            <p>
+              <strong>Notice:</strong> The current license{' '}
+              <i>"{draftLicense}"</i> will be updated to "CC0" when the version
+              is created. Please see FAQ item "Are there any restrictions on the
+              uploaded data?" for details.
+            </p>
+          )}
           <FormRow className="snapshot-input-group">
             {newVersion}
             <div className="input-group-btn">
