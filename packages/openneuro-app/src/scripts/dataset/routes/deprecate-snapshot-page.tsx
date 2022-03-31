@@ -30,7 +30,7 @@ export const DeprecateSnapshotPage = (): React.ReactElement => {
         labelStyle="default"
         setValue={setReason}
       />
-      <hr />
+      <br />
       <div className="dataset-form-controls">
         <LoggedIn>
           <DeprecateVersion
