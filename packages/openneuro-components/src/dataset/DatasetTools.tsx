@@ -97,7 +97,11 @@ export const DatasetTools = ({
             ? 'A form to describe your dataset (helps colleagues discover your dataset)'
             : 'View the dataset metadata'
         }
-        path={`/datasets/${datasetId}/metadata`}
+        path={
+          snapshotId
+            ? `/datasets/${datasetId}/versions/${snapshotId}/metadata`
+            : `/datasets/${datasetId}/metadata`
+        }
         icon="fa-file-code"
         label="Metadata"
       />
