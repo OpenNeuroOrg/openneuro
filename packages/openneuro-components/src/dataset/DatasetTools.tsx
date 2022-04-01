@@ -30,6 +30,16 @@ export const DatasetTools = ({
   const isSnapshot = snapshotId
   return (
     <DatasetToolStyle>
+      <DatasetToolButton
+        tooltip={'View the dataset file tree'}
+        path={
+          snapshotId
+            ? `/datasets/${datasetId}/versions/${snapshotId}`
+            : `/datasets/${datasetId}`
+        }
+        icon="fa-folder"
+        label="Files"
+      />
       {hasEdit && !isPublic && !isSnapshot && (
         <>
           {hasSnapshot ? (
