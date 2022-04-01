@@ -23,7 +23,7 @@ export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
     <div className="dataset-anonymous-form">
       <div className="dataset-form-header">
         <div className="form-group">
-          <HeaderRow4>Create Anonymous Reviewer</HeaderRow4>
+          <HeaderRow4>Create Anonymous Reviewer Link</HeaderRow4>
           <p>
             Create an anonymous review link to share this dataset for anonymous
             access. A review user has read only access and tokens are valid for
