@@ -6,6 +6,7 @@ import EditList from '../fragments/edit-list.jsx'
 import { Button } from '@openneuro/components/button'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow4 } from './styles/header-row'
+import FileView from '../files/file-view'
 import styled from '@emotion/styled'
 
 const FormRow = styled.div`
@@ -58,15 +59,21 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
     <DatasetPageBorder>
       <div className="dataset-snapshot-form">
         <div className="dataset-form-body">
-          <HeaderRow4>Version</HeaderRow4>
+          <HeaderRow4>New Version</HeaderRow4>
           {updateToCC0 && (
             <p>
               <strong>Notice:</strong> The current license{' '}
-              <i>"{draftLicense}"</i> will be updated to "CC0" when the version
-              is created. Please see FAQ item "Are there any restrictions on the
-              uploaded data?" for details.
+              <i>&quote;{draftLicense}&quote;</i> will be updated to
+              &quote;CC0&quote; when the version is created. Please see FAQ item
+              &quote;Are there any restrictions on the uploaded data?&quote; for
+              details.
             </p>
           )}
+          <p>
+            Create a new version of this dataset for download and public access.
+            This will begin an export of this dataset to GitHub and S3 if it has
+            been made public.
+          </p>
           <FormRow className="snapshot-input-group">
             {newVersion}
             <div className="input-group-btn">
@@ -93,7 +100,18 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
               />
             </div>
           </FormRow>
-          <HeaderRow4>Changelog</HeaderRow4>
+          {latestSnapshot && (
+            <FormRow>
+              <HeaderRow4>Current Changelog</HeaderRow4>
+              <FileView
+                datasetId={datasetId}
+                snapshotTag={latestSnapshot.tag}
+                path="CHANGES"
+              />
+            </FormRow>
+          )}
+          <HeaderRow4>New Changelog</HeaderRow4>
+          <p>Add CHANGES file lines describing the new version.</p>
           <EditList
             placeholder="Enter new changes here..."
             elements={changes}
@@ -107,18 +125,13 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
             </small>
           )}
         </NoErrors>
-        <div className="col-xs-12 dataset-form-controls">
-          <div className="col-xs-12 modal-actions">
-            <NoErrors issues={issues}>
-              {changes.length ? (
-                <SnapshotDataset
-                  datasetId={datasetId}
-                  tag={newVersion}
-                  changes={changes}
-                />
-              ) : null}
-            </NoErrors>
-          </div>
+        <div className="dataset-form-controls">
+          <SnapshotDataset
+            datasetId={datasetId}
+            tag={newVersion}
+            changes={changes}
+            disabled={changes.length < 1}
+          />
         </div>
       </div>
     </DatasetPageBorder>
