@@ -53,24 +53,24 @@ const DatasetHistory = ({ datasetId }) => {
         <h4>Git History</h4>
         <DatasetHistoryTable>
           <div className="grid faux-table-header">
-            <h4 className="col-lg col col-4">Commit</h4>
-            <h4 className="col-lg col col-2">Date</h4>
-            <h4 className="col-lg col col-2">Author</h4>
+            <h4 className="col-lg col col-2">Commit</h4>
+            <h4 className="col-lg col col-3">Date</h4>
+            <h4 className="col-lg col col-3">Author</h4>
             <h4 className="col-lg col col-2">References</h4>
             <h4 className="col-lg col col-2 text--right">Action</h4>
           </div>
           {data.dataset.history.map(commit => (
             <React.Fragment key={commit.id}>
               <div className="grid faux-table">
-                <div className="commit col-lg col col-4">
+                <div className="commit col-lg col col-2">
                   <label>Commit: </label>
-                  {commit.id}
+                  {commit.id.slice(0, 8)}
                 </div>
-                <div className="col-lg col col-2">
+                <div className="col-lg col col-3">
                   <label>Date: </label>
                   {commit.date}
                 </div>
-                <div className="col-lg col col-2">
+                <div className="col-lg col col-3">
                   <label>Author: </label>
                   {commit.authorName} &lt;{commit.authorEmail}&gt;
                 </div>
