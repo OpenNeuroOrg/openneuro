@@ -17,10 +17,10 @@ describe('DatasetTools component', () => {
       />,
       { wrapper: MemoryRouter },
     )
+    expect(screen.queryByLabelText('Files')).toBeInTheDocument()
     expect(screen.queryByLabelText('Share')).toBeInTheDocument()
     expect(screen.queryByLabelText('Versioning')).toBeInTheDocument()
-    expect(screen.queryByLabelText('Datalad')).toBeInTheDocument()
-    expect(screen.queryByLabelText('Export')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Admin')).toBeInTheDocument()
     expect(screen.queryByLabelText('Download')).toBeInTheDocument()
     expect(screen.queryByLabelText('Metadata')).toBeInTheDocument()
     expect(screen.queryByLabelText('Delete')).toBeInTheDocument()
@@ -39,6 +39,7 @@ describe('DatasetTools component', () => {
       />,
       { wrapper: MemoryRouter },
     )
+    expect(screen.queryByLabelText('Files')).toBeInTheDocument()
     expect(screen.queryByLabelText('View Draft')).toBeInTheDocument()
     expect(screen.queryByLabelText('Download')).toBeInTheDocument()
     expect(screen.queryByLabelText('Metadata')).toBeInTheDocument()
@@ -57,6 +58,7 @@ describe('DatasetTools component', () => {
       />,
       { wrapper: MemoryRouter },
     )
+    expect(screen.queryByLabelText('Files')).toBeInTheDocument()
     expect(screen.queryByLabelText('View Draft')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Download')).toBeInTheDocument()
     expect(screen.queryByLabelText('Metadata')).toBeInTheDocument()
@@ -76,6 +78,7 @@ describe('DatasetTools component', () => {
       />,
       { wrapper: MemoryRouter },
     )
+    expect(screen.queryByLabelText('Files')).toBeInTheDocument()
     expect(screen.queryByLabelText('View Draft')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Download')).toBeInTheDocument()
     expect(screen.queryByLabelText('Metadata')).toBeInTheDocument()

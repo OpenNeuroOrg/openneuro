@@ -5,8 +5,8 @@ import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
 
+import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
 import Validation from '../validation/validation.jsx'
-import Files from './files'
 import { config } from '../config'
 import {
   getUnexpiredProfile,
@@ -14,7 +14,6 @@ import {
   hasDatasetAdminPermissions,
 } from '../authentication/profile'
 import { useCookies } from 'react-cookie'
-import Comments from './comments/comments.jsx'
 import { DatasetAlertDraft } from './fragments/dataset-alert-draft'
 import {
   MetaDataBlock,
@@ -28,7 +27,6 @@ import {
   VersionList,
   DatasetTools,
 } from '@openneuro/components/dataset'
-import { ReadMore } from '@openneuro/components/read-more'
 
 import { FollowDataset } from './mutations/follow'
 import { StarDataset } from './mutations/star'
@@ -36,6 +34,8 @@ import { StarDataset } from './mutations/star'
 import EditDescriptionField from './fragments/edit-description-field.jsx'
 import EditDescriptionList from './fragments/edit-description-list.jsx'
 import { DOILink } from './fragments/doi-link'
+
+import { TabRoutesDraft } from './routes/tab-routes-draft'
 
 export interface DraftContainerProps {
   dataset
@@ -169,55 +169,17 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   }
                 />
               </div>
-              <div className="dataset-tool-buttons">
-                <DatasetTools
-                  hasEdit={hasEdit}
-                  isPublic={dataset.public}
-                  datasetId={datasetId}
-                  isAdmin={isAdmin}
-                  hasSnapshot={dataset.snapshots.length !== 0}
-                  isDatasetAdmin={isDatasetAdmin}
-                />
-              </div>
-              <ReadMore
-                fileTree={true}
-                id="collapse-tree"
-                expandLabel="Expand File Tree"
-                collapseLabel="Collapse File Tree">
-                <Files
-                  datasetId={datasetId}
-                  snapshotTag={null}
-                  datasetName={dataset.draft.description.Name}
-                  files={dataset.draft.files}
-                  editMode={hasEdit}
-                  datasetPermissions={dataset.permissions}
-                />
-              </ReadMore>
-              <MetaDataBlock
-                heading="README"
-                className="dataset-readme markdown-body"
-                item={dataset.draft.readme}
-                renderEditor={() => (
-                  <EditDescriptionField
-                    datasetId={datasetId}
-                    field="readme"
-                    rows={12}
-                    description={dataset.draft.readme}
-                    editMode={hasEdit}>
-                    <ReadMore
-                      id="readme"
-                      expandLabel="Read More"
-                      collapseLabel="Collapse">
-                      <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
-                    </ReadMore>
-                  </EditDescriptionField>
-                )}
+              <DatasetTools
+                hasEdit={hasEdit}
+                isPublic={dataset.public}
+                datasetId={datasetId}
+                isAdmin={isAdmin}
+                hasSnapshot={dataset.snapshots.length !== 0}
+                isDatasetAdmin={isDatasetAdmin}
               />
-              <Comments
-                datasetId={dataset.id}
-                uploader={dataset.uploader}
-                comments={dataset.comments}
-              />
+              <DatasetPageTabContainer>
+                <TabRoutesDraft dataset={dataset} hasEdit={hasEdit} />
+              </DatasetPageTabContainer>
             </div>
             <div className="col sidebar">
               {' '}

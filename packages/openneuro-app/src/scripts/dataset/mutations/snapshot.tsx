@@ -18,12 +18,14 @@ interface CreateSnapshotMutationProps {
   datasetId: string
   tag: string
   changes: Array<string>
+  disabled: boolean
 }
 
 const CreateSnapshotMutation = ({
   datasetId,
   tag,
   changes,
+  disabled,
 }: CreateSnapshotMutationProps) => {
   const history = useHistory()
   const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
@@ -42,6 +44,7 @@ const CreateSnapshotMutation = ({
             variables: { datasetId, tag, changes },
           }).then(() => history.push(`/datasets/${datasetId}/versions/${tag}`))
         }}
+        disabled={disabled}
         label="Create Version"
       />
     )
@@ -52,11 +55,22 @@ interface SnapshotDatasetProps {
   datasetId: string
   tag: string
   changes: Array<string>
+  disabled: boolean
 }
 
-const SnapshotDataset = ({ datasetId, tag, changes }: SnapshotDatasetProps) => (
+const SnapshotDataset = ({
+  datasetId,
+  tag,
+  changes,
+  disabled,
+}: SnapshotDatasetProps) => (
   <ErrorBoundary subject="error creating version">
-    <CreateSnapshotMutation datasetId={datasetId} tag={tag} changes={changes} />
+    <CreateSnapshotMutation
+      datasetId={datasetId}
+      tag={tag}
+      changes={changes}
+      disabled={disabled}
+    />
   </ErrorBoundary>
 )
 

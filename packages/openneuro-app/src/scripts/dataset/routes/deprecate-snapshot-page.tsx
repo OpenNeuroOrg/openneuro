@@ -3,6 +3,8 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import { DeprecateVersion } from '../mutations/deprecate-version'
 import { Input } from '@openneuro/components/input'
 import LoggedIn from '../../authentication/logged-in.jsx'
+import { DatasetPageBorder } from './styles/dataset-page-border'
+import { HeaderRow3 } from './styles/header-row'
 
 interface DeprecateSnapshotRouteParams {
   datasetId: string
@@ -16,8 +18,8 @@ export const DeprecateSnapshotPage = (): React.ReactElement => {
   const [reason, setReason] = useState('')
 
   return (
-    <div className="container">
-      <h2>Deprecate Version</h2>
+    <DatasetPageBorder>
+      <HeaderRow3>Deprecate Version</HeaderRow3>
       <p>
         {`Deprecate ${datasetId} version ${snapshotTag} to let other users know about an issue with this version. The reason provided will be displayed for users visiting the version.`}
       </p>
@@ -28,7 +30,7 @@ export const DeprecateSnapshotPage = (): React.ReactElement => {
         labelStyle="default"
         setValue={setReason}
       />
-      <hr />
+      <br />
       <div className="dataset-form-controls">
         <LoggedIn>
           <DeprecateVersion
@@ -37,10 +39,7 @@ export const DeprecateSnapshotPage = (): React.ReactElement => {
             reason={reason}
           />
         </LoggedIn>
-        <Link className="return-link" to={`/datasets/${datasetId}`}>
-          Return to Dataset
-        </Link>
       </div>
-    </div>
+    </DatasetPageBorder>
   )
 }

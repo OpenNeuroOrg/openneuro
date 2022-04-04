@@ -6,6 +6,8 @@ import { Button } from '@openneuro/components/button'
 import { RemovePermissions } from '../mutations/remove-permissions'
 import { UpdateDatasetPermissions } from '../mutations/update-permissions'
 import { AnonymousReviewer } from './manage-anonymous-reviewers'
+import { DatasetPageBorder } from './styles/dataset-page-border'
+import { HeaderRow3 } from './styles/header-row'
 
 const description = {
   admin: 'Edit dataset and edit permissions',
@@ -71,15 +73,13 @@ const Share = ({ datasetId, permissions, reviewers }) => {
   const adminActive = access === 'admin' && 'active'
 
   return (
-    <>
-      <div className="dataset-share-form container">
+    <DatasetPageBorder>
+      <div className="dataset-share-form">
         <div className="dataset-form-header">
           <div className="form-group">
-            <h2>Share Dataset</h2>
+            <HeaderRow3>Share Dataset</HeaderRow3>
           </div>
-          <hr />
           <div className="dataset-form-body">
-            <h3>Dataset shared with:</h3>
             <ShareTable datasetId={datasetId} permissions={permissions} />
             <p>
               Enter a user&#39;s email address and select access level to share
@@ -123,15 +123,12 @@ const Share = ({ datasetId, permissions, reviewers }) => {
               metadata={access}
               done={() => setUserEmail('')}
             />
-            <Link className="return-link" to={`/datasets/${datasetId}`}>
-              Return to Dataset
-            </Link>
           </div>
         </div>
       </div>
-      <br />
+      <hr />
       <AnonymousReviewer datasetId={datasetId} reviewers={reviewers} />
-    </>
+    </DatasetPageBorder>
   )
 }
 

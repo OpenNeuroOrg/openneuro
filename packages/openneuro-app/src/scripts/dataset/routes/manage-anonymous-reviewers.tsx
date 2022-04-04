@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 
 import { DeleteReviewerLink } from '../mutations/delete-anonymous-reviewer'
 import { CreateReviewLink } from '../mutations/create-anonymous-reviewer'
+import { HeaderRow4 } from './styles/header-row'
+
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
 
@@ -18,12 +20,16 @@ export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
   reviewers,
 }) => {
   return (
-    <div className="dataset-anonymous-form container">
+    <div className="dataset-anonymous-form">
       <div className="dataset-form-header">
         <div className="form-group">
-          <h2>Create Anonymous Reviewer</h2>
+          <HeaderRow4>Create Anonymous Reviewer Link</HeaderRow4>
+          <p>
+            Create an anonymous review link to share this dataset for anonymous
+            access. A review user has read only access and tokens are valid for
+            one year or until they are removed.
+          </p>
         </div>
-        <hr />
         <CreateReviewLink datasetId={datasetId} />
         {reviewers.length ? (
           <div className="dataset-form-body">

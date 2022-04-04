@@ -321,7 +321,7 @@ const MetadataForm = ({
   hasEdit,
   validationErrors = [],
 }) => (
-  <Form id="metadata-form" className="col col-6">
+  <Form id="metadata-form">
     <InfoText>
       Incomplete fields in this form will make it more difficult for users to
       search for your dataset.
