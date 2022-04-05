@@ -2,6 +2,7 @@
  * Get snapshots from datalad-service tags
  */
 import request from 'superagent'
+import { reindexDataset } from '../elasticsearch/reindex-dataset'
 import { redis, redlock } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import config from '../config.js'
@@ -169,15 +170,17 @@ export const createSnapshot = async (
       updateDatasetName(datasetId),
     ])
 
-    snapshotLock.unlock()
+    await reindexDataset(datasetId)
+
     announceNewSnapshot(snapshot, datasetId, user)
     return snapshot
   } catch (err) {
     // delete the keys if any step fails
     // this avoids inconsistent cache state after failures
     snapshotCache.drop()
-    snapshotLock.unlock()
     return err
+  } finally {
+    snapshotLock.unlock()
   }
 }
 

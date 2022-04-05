@@ -1,4 +1,4 @@
-import { extractDatasetDocument } from '../indexDatasets'
+import { extractDatasetDocument } from '../query'
 
 describe('indexDatasets', () => {
   describe('extractDatasetDocument', () => {
