@@ -1,12 +1,10 @@
-import { createHttpLink } from '@apollo/client'
+import { indexQuery, indexingToken } from '@openneuro/search'
 import { setContext } from '@apollo/client/link/context'
 import { RetryLink } from 'apollo-link-retry'
 import { Client } from '@elastic/elasticsearch'
 import { createClient, datasetGenerator } from '@openneuro/client'
-import jwt from 'jsonwebtoken'
 import indexDatasets from './indexDatasets'
 import { createIndices } from './createIndices'
-import { indexQuery } from './indexQuery'
 
 /**
  * Indexer entrypoint
@@ -21,13 +19,7 @@ export default async function main(): Promise<void> {
     },
   })
 
-  const accessToken = jwt.sign(
-    {
-      scopes: ['dataset:indexing'],
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: 60 * 60 * 3 }, // 3 hours
-  )
+  const accessToken: string = indexingToken()
 
   const authLink = setContext((_, { headers }) => {
     return {

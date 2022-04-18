@@ -36,6 +36,7 @@
     { "path": "./packages/openneuro-cli" },
     { "path": "./packages/openneuro-client" },
     { "path": "./packages/openneuro-indexer" },
+    { "path": "./packages/openneuro-search" },
     { "path": "./packages/openneuro-server" }
   ]
 }

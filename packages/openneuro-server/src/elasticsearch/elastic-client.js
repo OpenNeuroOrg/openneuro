@@ -6,6 +6,6 @@ const elasticConfig = {
   maxRetries: 3,
 }
 
-const elasticClient = new Client(elasticConfig)
+export const elasticClient = new Client(elasticConfig)
 
 export default elasticClient

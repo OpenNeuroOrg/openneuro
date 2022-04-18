@@ -179,6 +179,7 @@ services:
       cluster.routing.allocation.disk.watermark.flood_stage: 1gb
       cluster.routing.allocation.disk.watermark.low: 10gb
       cluster.routing.allocation.disk.watermark.high: 5gb
+      ES_JAVA_OPTS: "-Xms750m -Xmx750m"
     ports:
       - '9200:9200'
       - '9300:9300'

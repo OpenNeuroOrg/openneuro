@@ -1,0 +1,35 @@
+{
+  "name": "@openneuro/search",
+  "version": "4.5.1",
+  "description": "OpenNeuro search client functions.",
+  "main": "dist/index.js",
+  "browser": "src/index.ts",
+  "exports": {
+    "import": "./src/index.js",
+    "require": "./dist/index.js"
+  },
+  "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
+  "author": "Stanford Center for Reproducible Neuroscience",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@apollo/client": "3.4.17",
+    "@elastic/elasticsearch": "7.15.0",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@babel/runtime-corejs3": "^7.13.10",
+    "@types/jsonwebtoken": "^8",
+    "@types/node": "16.11.13",
+    "core-js": "^3.10.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "5ab5597628b6ffd1f1d540320e297af0b0625af3"
+}

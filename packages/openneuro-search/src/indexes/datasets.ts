@@ -6,9 +6,9 @@ interface IndexDefinition {
   mapping: Record<string, unknown>
 }
 
-const Datasets: IndexDefinition = {
+export const DatasetsIndex: IndexDefinition = {
   name: elasticMappingName('datasets', datasetsMapping),
   mapping: datasetsMapping,
 }
 
-export default Datasets
+export default DatasetsIndex
