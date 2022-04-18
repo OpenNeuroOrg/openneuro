@@ -59,6 +59,7 @@ const searchQuery = gql`
             ages
           }
           latestSnapshot {
+            size
             summary {
               modalities
               secondaryModalities

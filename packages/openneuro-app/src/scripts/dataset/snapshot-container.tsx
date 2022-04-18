@@ -108,7 +108,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
           <div className="col col-8 col-lg">
             {summary && (
               <DatasetHeaderMeta
-                size={summary.size}
+                size={snapshot.size}
                 totalFiles={summary.totalFiles}
                 datasetId={datasetId}
               />

@@ -46,6 +46,7 @@ export interface SearchResultItemProps {
     }
     latestSnapshot: {
       id: string
+      size: number
       summary: {
         pet: {
           BodyPart: string
@@ -164,7 +165,7 @@ export const SearchResultItem = ({
   const size = (
     <span className="result-summary-meta">
       <strong>Size: </strong>
-      <span>{bytes(summary?.size)}</span>
+      <span>{bytes(node?.latestSnapshot?.size) || "unknown" }</span>
     </span>
   )
   const files = (
@@ -221,8 +222,7 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip={activtyTooltip}
       flow="up"
-      className="result-icon result-activity-icon"
-    >
+      className="result-icon result-activity-icon">
       <Icon
         imgSrc={activityPulseIcon}
         iconSize="22px"
@@ -236,8 +236,7 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Shared with me"
       flow="up"
-      className="result-icon result-shared-icon"
-    >
+      className="result-icon result-shared-icon">
       <Icon
         icon="fas fa-user"
         color="rgb(119,191,217)"
@@ -251,8 +250,7 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Visable to all viewers"
       flow="up"
-      className="result-icon result-publlic-icon"
-    >
+      className="result-icon result-publlic-icon">
       <Icon
         icon="fas fa-globe"
         color="rgb(116,181,105)"
@@ -267,8 +265,7 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Invalid"
       flow="up"
-      className="result-icon result-errors-icon"
-    >
+      className="result-icon result-errors-icon">
       <Icon
         icon="fas fa-exclamation-circle"
         color="rgb(202,97,86)"

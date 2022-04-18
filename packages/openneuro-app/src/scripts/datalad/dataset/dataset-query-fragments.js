@@ -8,6 +8,7 @@ export const DRAFT_FRAGMENT = gql`
       modified
       readme
       head
+      size
       description {
         Name
         Authors
@@ -136,6 +137,7 @@ export const SNAPSHOT_FIELDS = gql`
     tag
     created
     readme
+    size
     deprecated {
       id
       user

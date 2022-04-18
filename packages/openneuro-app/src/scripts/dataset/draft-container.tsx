@@ -120,7 +120,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             <div className="col col-8 col-lg">
               {summary && (
                 <DatasetHeaderMeta
-                  size={summary.size}
+                  size={dataset.draft.size}
                   totalFiles={summary.totalFiles}
                   datasetId={datasetId}
                 />
