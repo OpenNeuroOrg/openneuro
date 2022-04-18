@@ -41,7 +41,6 @@ const RemoveAnnexObject = ({
           iconOnly={true}
           icon="fa-frown-o"
           className="edit-file"
-          tooltip={'Delete ' + name}
           onConfirmedClick={() => {
             removeAnnexObject({
               variables: {
