@@ -100,7 +100,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
               />
             </div>
           </FormRow>
-          {latestSnapshot && (
+          {latestSnapshot ? (
             <FormRow>
               <HeaderRow4>Current Changelog</HeaderRow4>
               <FileView
@@ -109,7 +109,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
                 path="CHANGES"
               />
             </FormRow>
-          )}
+          ) : null}
           <HeaderRow4>New Changelog</HeaderRow4>
           <p>Add CHANGES file lines describing the new version.</p>
           <EditList
