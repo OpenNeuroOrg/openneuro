@@ -52,7 +52,7 @@ export const DatasetTools = ({
           ) : (
             <DatasetToolButton
               tooltip="Create a version to publish"
-              path={`/datasets/${datasetId}/snapshot`}
+              path={`/datasets/${datasetId}/snapshot?publish`}
               icon="fa-globe"
               label="Publish"
             />
