@@ -2,6 +2,7 @@
 import apm from 'elastic-apm-node'
 apm.start({
   serviceName: 'openneuro-server',
+  cloudProvider: 'none',
 })
 
 import { createServer } from 'http'
