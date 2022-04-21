@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/app",
-  "version": "4.6.0-alpha.3",
+  "version": "4.6.0",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "public/client.js",
@@ -19,8 +19,8 @@
     "@elastic/apm-rum": "5.9.1",
     "@emotion/react": "11.6.0",
     "@emotion/styled": "11.6.0",
-    "@openneuro/client": "^4.6.0-alpha.3",
-    "@openneuro/components": "^4.6.0-alpha.3",
+    "@openneuro/client": "^4.6.0",
+    "@openneuro/components": "^4.6.0",
     "babel-runtime": "^6.26.0",
     "bids-validator": "1.9.3",
     "bytes": "^3.0.0",
