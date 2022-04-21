@@ -4660,8 +4660,8 @@ __metadata:
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
-    "@openneuro/client": ^4.5.1
-    "@openneuro/components": ^4.5.1
+    "@openneuro/client": ^4.6.0-alpha.0
+    "@openneuro/components": ^4.6.0-alpha.0
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -4728,7 +4728,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.5.1
+    "@openneuro/client": ^4.6.0-alpha.0
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
     bids-validator: 1.9.3
@@ -4753,14 +4753,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.5.1, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.6.0-alpha.0, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.5.1
+    "@openneuro/server": ^4.6.0-alpha.0
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4772,7 +4772,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.5.1, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.6.0-alpha.0, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -4831,8 +4831,8 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.5.1
-    "@openneuro/search": ^4.5.1
+    "@openneuro/client": ^4.6.0-alpha.0
+    "@openneuro/search": ^4.6.0-alpha.0
     "@types/jsonwebtoken": ^8
     "@types/node": 16.11.13
     "@types/tsc-watch": ^4
@@ -4845,7 +4845,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.5.1, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.6.0-alpha.0, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -4859,7 +4859,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.5.1, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.6.0-alpha.0, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -4871,7 +4871,7 @@ __metadata:
     "@babel/preset-env": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/search": ^4.5.1
+    "@openneuro/search": ^4.6.0-alpha.0
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/draft-js": ^0.10.43
@@ -4893,7 +4893,7 @@ __metadata:
     date-fns: ^2.16.1
     draft-js: ^0.11.7
     draft-js-export-html: ^1.4.1
-    elastic-apm-node: ^3.28.0
+    elastic-apm-node: ^3.31.0
     express: ^4.17.1
     graphql: 14.7.0
     graphql-bigint: ^1.0.0
@@ -8121,6 +8121,17 @@ __metadata:
     depd: ^1.1.2
     humanize-ms: ^1.2.1
   checksum: d49c24d4b333e9507119385895a583872f4f53d62764a89be165926e824056a126955bae4a6d3c6f7cd26f4089621a40f7b27675f7868214d82118f744b9e82d
+  languageName: node
+  linkType: hard
+
+"agentkeepalive@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "agentkeepalive@npm:4.2.1"
+  dependencies:
+    debug: ^4.1.0
+    depd: ^1.1.2
+    humanize-ms: ^1.2.1
+  checksum: 39cb49ed8cf217fd6da058a92828a0a84e0b74c35550f82ee0a10e1ee403c4b78ade7948be2279b188b7a7303f5d396ea2738b134731e464bf28de00a4f72a18
   languageName: node
   linkType: hard
 
@@ -12572,10 +12583,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"elastic-apm-http-client@npm:^10.4.0":
-  version: 10.4.0
-  resolution: "elastic-apm-http-client@npm:10.4.0"
+"elastic-apm-http-client@npm:11.0.1":
+  version: 11.0.1
+  resolution: "elastic-apm-http-client@npm:11.0.1"
   dependencies:
+    agentkeepalive: ^4.2.1
     breadth-filter: ^2.0.0
     container-info: ^1.0.1
     end-of-stream: ^1.4.4
@@ -12585,7 +12597,7 @@ __metadata:
     readable-stream: ^3.4.0
     semver: ^6.3.0
     stream-chopper: ^3.0.1
-  checksum: fa812594041a350fd65ed8f2473303184c404ee1c78ebe42ad50c3cbd1d2796d9946ca30b0bab481a51aa1b07daa53e887f479ab159f7853c142402e82b10c72
+  checksum: 8a7531b2c4c290cff934fda5c66944e1fc1d885f4545e0e16d3b1d0260cb2459a712b1eea17a637987198b5edfca8d1fcb20298616251271f4ed8d8c534e7854
   languageName: node
   linkType: hard
 
@@ -12645,9 +12657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"elastic-apm-node@npm:^3.28.0":
-  version: 3.28.0
-  resolution: "elastic-apm-node@npm:3.28.0"
+"elastic-apm-node@npm:^3.31.0":
+  version: 3.31.0
+  resolution: "elastic-apm-node@npm:3.31.0"
   dependencies:
     "@elastic/ecs-pino-format": ^1.2.0
     after-all-results: ^2.0.0
@@ -12656,7 +12668,7 @@ __metadata:
     basic-auth: ^2.0.1
     cookie: ^0.4.0
     core-util-is: ^1.0.2
-    elastic-apm-http-client: ^10.4.0
+    elastic-apm-http-client: 11.0.1
     end-of-stream: ^1.4.4
     error-callsites: ^2.0.4
     error-stack-parser: ^2.0.6
@@ -12664,7 +12676,6 @@ __metadata:
     fast-safe-stringify: ^2.0.7
     http-headers: ^3.0.2
     is-native: ^1.0.1
-    load-source-map: ^2.0.0
     lru-cache: ^6.0.0
     measured-reporting: ^1.51.1
     monitor-event-loop-delay: ^1.0.0
@@ -12678,11 +12689,12 @@ __metadata:
     semver: ^6.3.0
     set-cookie-serde: ^1.0.0
     shallow-clone-shim: ^2.0.0
+    source-map: ^0.8.0-beta.0
     sql-summary: ^1.0.1
     traceparent: ^1.0.0
     traverse: ^0.6.6
     unicode-byte-truncate: ^1.0.0
-  checksum: dda7f195f7a330e96f05390eed12a4a7b515cb475e68c83021c11ba91d00f56dc376c661450398a6f4e341c62ab850b2a20a86f36576220458fc0f18ce1ca96d
+  checksum: 5153505d9694901f88708c5c85f7e7e9b23b363be010124a334e72276015a3df0b6cfa93209b0b4b5b858d87ac0cb429f898921881f4d28e895baea4ae6c6084
   languageName: node
   linkType: hard
 
@@ -18776,15 +18788,6 @@ fsevents@^1.2.7:
     semver: ^5.3.0
     source-map: ^0.5.6
   checksum: 11089439b9f6aec2e4f9a816315239548cff0f3b06f7c48380ee2c94b38ba518fb29ee4cd6fc96b94019ce5349062a02cff286dc06c750f261dfe8754391daf7
-  languageName: node
-  linkType: hard
-
-"load-source-map@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "load-source-map@npm:2.0.0"
-  dependencies:
-    source-map: ^0.7.3
-  checksum: 8d6bf762a1e1eda63ab03aafe9b30a5175987eadba9f0bb2a2b4b411f434e9e5bfc9d7019f09d028722cd4edf674417456bc134f8925e359daca65e5cff6c3a0
   languageName: node
   linkType: hard
 
@@ -24900,6 +24903,15 @@ resolve@^2.0.0-next.3:
   version: 0.7.3
   resolution: "source-map@npm:0.7.3"
   checksum: cd24efb3b8fa69b64bf28e3c1b1a500de77e84260c5b7f2b873f88284df17974157cc88d386ee9b6d081f08fdd8242f3fc05c953685a6ad81aad94c7393dedea
+  languageName: node
+  linkType: hard
+
+"source-map@npm:^0.8.0-beta.0":
+  version: 0.8.0-beta.0
+  resolution: "source-map@npm:0.8.0-beta.0"
+  dependencies:
+    whatwg-url: ^7.0.0
+  checksum: e94169be6461ab0ac0913313ad1719a14c60d402bd22b0ad96f4a6cffd79130d91ab5df0a5336a326b04d2df131c1409f563c9dc0d21a6ca6239a44b6c8dbd92
   languageName: node
   linkType: hard
 
