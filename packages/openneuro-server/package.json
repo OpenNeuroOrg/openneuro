@@ -18,7 +18,6 @@
   "dependencies": {
     "@apollo/client": "3.4.17",
     "@elastic/elasticsearch": "7.15.0",
-    "@openneuro/search": "^4.6.0-alpha.1",
     "@passport-next/passport-google-oauth2": "^1.0.0",
     "@sentry/node": "^4.5.3",
     "apollo-server": "2.25.3",
