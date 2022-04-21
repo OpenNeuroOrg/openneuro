@@ -13,6 +13,7 @@ COPY --from=build /srv/.yarnrc.yml /srv/.yarnrc.yml
 COPY --from=build /srv/.yarn /srv/.yarn
 COPY --from=build /srv/.pnp.cjs /srv/.pnp.cjs
 COPY --from=build /srv/.pnp.loader.mjs /srv/.pnp.loader.mjs
+COPY --from=build /srv/packages/openneuro-search /srv/packages/openneuro-search
 COPY --from=build /srv/packages/openneuro-server/dist /srv/packages/openneuro-server/dist
 
 HEALTHCHECK --interval=10s --retries=10 CMD curl -f 'http://localhost:8111' || exit 1
