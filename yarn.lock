@@ -4444,6 +4444,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@niivue/niivue@npm:^0.22.2":
+  version: 0.22.2
+  resolution: "@niivue/niivue@npm:0.22.2"
+  dependencies:
+    gl-matrix: ^3.4.3
+    nifti-reader-js: ^0.5.4
+    rxjs: ^7.4.0
+    uuid: ^8.3.2
+  checksum: 67afe46bc2fc00d2fcb9fa78414226ec028a609aba2034070656a914fd02265fbf4c33712eddfe54137f46cb9bbc776d789d2783874c09834f76878bc2acd731
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -4660,8 +4672,9 @@ __metadata:
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
-    "@openneuro/client": ^4.6.0
-    "@openneuro/components": ^4.6.0
+    "@niivue/niivue": ^0.22.2
+    "@openneuro/client": ^4.6.1
+    "@openneuro/components": ^4.6.1
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -4728,7 +4741,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.6.0
+    "@openneuro/client": ^4.6.1
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
     bids-validator: 1.9.3
@@ -4753,14 +4766,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.6.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.6.1, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.6.0
+    "@openneuro/server": ^4.6.1
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4772,7 +4785,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.6.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.6.1, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -4831,8 +4844,8 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.6.0
-    "@openneuro/search": ^4.6.0
+    "@openneuro/client": ^4.6.1
+    "@openneuro/search": ^4.6.1
     "@types/jsonwebtoken": ^8
     "@types/node": 16.11.13
     "@types/tsc-watch": ^4
@@ -4845,7 +4858,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.6.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.6.1, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -4859,7 +4872,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.6.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.6.1, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -4871,7 +4884,7 @@ __metadata:
     "@babel/preset-env": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/search": ^4.6.0
+    "@openneuro/search": ^4.6.1
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/draft-js": ^0.10.43
@@ -14801,6 +14814,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"gl-matrix@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "gl-matrix@npm:3.4.3"
+  checksum: c47830ba727f3d0fab635c48135af96aef66274079a3e0afd6f68b68c98eae9fc1bcfdc7312fe2301e4fd22dd24c5e0f1b5d025960a208e50d07101ed8d940f9
+  languageName: node
+  linkType: hard
+
 "glob-base@npm:^0.3.0":
   version: 0.3.0
   resolution: "glob-base@npm:0.3.0"
@@ -20264,6 +20284,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"nifti-reader-js@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "nifti-reader-js@npm:0.5.4"
+  dependencies:
+    pako: "*"
+  checksum: d5060d3fed833155186c89a375dc7bafe9a627899f0aa8a7db1e2b30a0f9d1e0f02582fe1b67359b08b4d06709f408c54ad2507e0224631b4603cad0bfbb587d
+  languageName: node
+  linkType: hard
+
 "no-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "no-case@npm:3.0.4"
@@ -21304,6 +21333,13 @@ fsevents@^1.2.7:
     registry-url: ^5.0.0
     semver: ^6.2.0
   checksum: cc9f890d3667d7610e6184decf543278b87f657d1ace0deb4a9c9155feca738ef88f660c82200763d3348010f4e42e9c7adc91e96ab0f86a770955995b5351e2
+  languageName: node
+  linkType: hard
+
+"pako@npm:*":
+  version: 2.0.4
+  resolution: "pako@npm:2.0.4"
+  checksum: 82b9b0b99dd830c9103856a6dbd10f0cb2c8c32b9768184727ea381a99666de9a47a069d2e6efe6acf09336f363956b50835c196ef9311b34b7274d420eb0d88
   languageName: node
   linkType: hard
 
@@ -24176,6 +24212,15 @@ resolve@^2.0.0-next.3:
   dependencies:
     tslib: ^1.9.0
   checksum: bc334edef1bb8bbf56590b0b25734ba0deaf8825b703256a93714308ea36dff8a11d25533671adf8e104e5e8f256aa6fdfe39b2e248cdbd7a5f90c260acbbd1b
+  languageName: node
+  linkType: hard
+
+"rxjs@npm:^7.4.0":
+  version: 7.5.5
+  resolution: "rxjs@npm:7.5.5"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: e034f60805210cce756dd2f49664a8108780b117cf5d0e2281506e9e6387f7b4f1532d974a8c8b09314fa7a16dd2f6cff3462072a5789672b5dcb45c4173f3c6
   languageName: node
   linkType: hard
 

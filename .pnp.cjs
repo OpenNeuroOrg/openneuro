@@ -8998,6 +8998,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@niivue/niivue", [
+        ["npm:0.22.2", {
+          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.22.2-9a98bf8e95-67afe46bc2.zip/node_modules/@niivue/niivue/",
+          "packageDependencies": [
+            ["@niivue/niivue", "npm:0.22.2"],
+            ["gl-matrix", "npm:3.4.3"],
+            ["nifti-reader-js", "npm:0.5.4"],
+            ["rxjs", "npm:7.5.5"],
+            ["uuid", "npm:8.3.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@nodelib/fs.scandir", [
         ["npm:2.1.5", {
           "packageLocation": "./.yarn/cache/@nodelib-fs.scandir-npm-2.1.5-89c67370dd-a970d595bd.zip/node_modules/@nodelib/fs.scandir/",
@@ -9244,6 +9257,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@emotion/styled", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],
             ["@jest/globals", "npm:26.6.2"],
             ["@loadable/babel-plugin", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:5.13.2"],
+            ["@niivue/niivue", "npm:0.22.2"],
             ["@openneuro/client", "workspace:packages/openneuro-client"],
             ["@openneuro/components", "workspace:packages/openneuro-components"],
             ["@testing-library/jest-dom", "npm:5.14.1"],
@@ -22304,6 +22318,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["gl-matrix", [
+        ["npm:3.4.3", {
+          "packageLocation": "./.yarn/cache/gl-matrix-npm-3.4.3-f2e6349faa-c47830ba72.zip/node_modules/gl-matrix/",
+          "packageDependencies": [
+            ["gl-matrix", "npm:3.4.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["glob", [
         ["npm:7.2.0", {
           "packageLocation": "./.yarn/cache/glob-npm-7.2.0-bb4644d239-78a8ea9423.zip/node_modules/glob/",
@@ -28450,6 +28473,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["nifti-reader-js", [
+        ["npm:0.5.4", {
+          "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.5.4-a0b6684508-d5060d3fed.zip/node_modules/nifti-reader-js/",
+          "packageDependencies": [
+            ["nifti-reader-js", "npm:0.5.4"],
+            ["pako", "npm:2.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["no-case", [
         ["npm:3.0.4", {
           "packageLocation": "./.yarn/cache/no-case-npm-3.0.4-12884c3d98-0b2ebc113d.zip/node_modules/no-case/",
@@ -29591,6 +29624,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/pako-npm-1.0.11-b8f1b69d3e-1be2bfa1f8.zip/node_modules/pako/",
           "packageDependencies": [
             ["pako", "npm:1.0.11"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.0.4", {
+          "packageLocation": "./.yarn/cache/pako-npm-2.0.4-1d4e28f3ac-82b9b0b99d.zip/node_modules/pako/",
+          "packageDependencies": [
+            ["pako", "npm:2.0.4"]
           ],
           "linkType": "HARD",
         }]
@@ -33150,6 +33190,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["rxjs", "npm:6.6.7"],
             ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:7.5.5", {
+          "packageLocation": "./.yarn/cache/rxjs-npm-7.5.5-d0546b1ccb-e034f60805.zip/node_modules/rxjs/",
+          "packageDependencies": [
+            ["rxjs", "npm:7.5.5"],
+            ["tslib", "npm:2.3.1"]
           ],
           "linkType": "HARD",
         }]

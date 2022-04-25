@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import FileView from './file-view.jsx'
 import { apiPath } from './file'
 import styled from '@emotion/styled'
 import { Media } from '../../styles/media'
+import { DatasetPageBorder } from '../routes/styles/dataset-page-border'
 
 const PathBreadcrumb = styled.div`
   font-size: 14px;
@@ -52,38 +52,27 @@ FileDisplayBreadcrumb.propTypes = {
 }
 
 const FileDisplay = ({ datasetId, snapshotTag = null, filePath }) => (
-  <div className="dataset-form display-file container">
-    <div className="grid display-file-content">
-      <div className="display-file-header col col-12">
-        <div className="form-group modal-title">
-          <span className="ds-primary display-file-path">
-            <PathBreadcrumb>
-              <h2>{datasetId}</h2>
-              <FileDisplayBreadcrumb filePath={filePath} />
-            </PathBreadcrumb>
-          </span>
-          <Media greaterThanOrEqual="medium">
-            <div className="modal-download btn-admin-blue">
-              <a href={apiPath(datasetId, snapshotTag, filePath)} download>
-                <i className="fa fa-download" /> Download
-              </a>
-              <Link className="return-link" to={`/datasets/${datasetId}`}>
-                Return to dataset
-              </Link>
-            </div>
-          </Media>
-          <hr />
-        </div>
-      </div>
-      <div className="col col-12  display-file-body">
-        <FileView
-          datasetId={datasetId}
-          snapshotTag={snapshotTag}
-          path={filePath}
-        />
-      </div>
+  <DatasetPageBorder className="dataset-form display-file">
+    <PathBreadcrumb>
+      <FileDisplayBreadcrumb filePath={filePath} />
+    </PathBreadcrumb>
+    <div className="display-file-body">
+      <FileView
+        datasetId={datasetId}
+        snapshotTag={snapshotTag}
+        path={filePath}
+      />
     </div>
-  </div>
+
+    <Media greaterThanOrEqual="medium">
+      <hr />
+      <div className="modal-download btn-admin-blue">
+        <a href={apiPath(datasetId, snapshotTag, filePath)} download>
+          <i className="fa fa-download" /> Download
+        </a>
+      </div>
+    </Media>
+  </DatasetPageBorder>
 )
 
 FileDisplay.propTypes = {
