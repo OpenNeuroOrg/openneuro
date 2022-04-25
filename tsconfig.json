@@ -23,7 +23,6 @@
     }
   },
   "exclude": [
-    "./packages/openneuro-app/src/assets/papaya.js",
     "**/dist/*",
     "node_modules",
     "**/__mocks__/*",

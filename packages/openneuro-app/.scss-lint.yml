@@ -10,7 +10,6 @@ exclude:
   - 'src/sass/_bootstrap-sprockets.scss'
   - 'src/sass/_bootstrap.scss'
   - 'src/sass/react-select.scss'
-  - 'src/sass/crn_app/_common.papaya.scss'
 
 linters:
   BorderZero:
