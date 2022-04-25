@@ -108,7 +108,7 @@
       "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
     },
     "transformIgnorePatterns": [
-      "/node_modules/(?!bids-validator).+\\.js$"
+      "/node_modules/(?!bids-validator|@niivue/niivue).+\\.js$"
     ],
     "testPathIgnorePatterns": [
       "dist"
