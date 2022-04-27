@@ -8999,10 +8999,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@niivue/niivue", [
-        ["npm:0.22.2", {
-          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.22.2-9a98bf8e95-67afe46bc2.zip/node_modules/@niivue/niivue/",
+        ["npm:0.23.0", {
+          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.23.0-2c3064c4a6-c3490e2f7a.zip/node_modules/@niivue/niivue/",
           "packageDependencies": [
-            ["@niivue/niivue", "npm:0.22.2"],
+            ["@niivue/niivue", "npm:0.23.0"],
+            ["daikon", "npm:1.2.42"],
+            ["fflate", "npm:0.7.3"],
+            ["gifti-reader-js", "npm:0.4.4"],
             ["gl-matrix", "npm:3.4.3"],
             ["nifti-reader-js", "npm:0.5.4"],
             ["rxjs", "npm:7.5.5"],
@@ -9257,7 +9260,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@emotion/styled", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],
             ["@jest/globals", "npm:26.6.2"],
             ["@loadable/babel-plugin", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:5.13.2"],
-            ["@niivue/niivue", "npm:0.22.2"],
+            ["@niivue/niivue", "npm:0.23.0"],
             ["@openneuro/client", "workspace:packages/openneuro-client"],
             ["@openneuro/components", "workspace:packages/openneuro-components"],
             ["@testing-library/jest-dom", "npm:5.14.1"],
@@ -18607,6 +18610,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["daikon", [
+        ["npm:1.2.42", {
+          "packageLocation": "./.yarn/cache/daikon-npm-1.2.42-2a9ce33f33-bee3f53856.zip/node_modules/daikon/",
+          "packageDependencies": [
+            ["daikon", "npm:1.2.42"],
+            ["jpeg-lossless-decoder-js", "https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"],
+            ["pako", "npm:1.0.11"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["dargs", [
         ["npm:4.1.0", {
           "packageLocation": "./.yarn/cache/dargs-npm-4.1.0-cce908ea5a-941e8fb09d.zip/node_modules/dargs/",
@@ -21263,6 +21277,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["fflate", [
+        ["npm:0.7.3", {
+          "packageLocation": "./.yarn/cache/fflate-npm-0.7.3-875c2ba15f-6d0908c546.zip/node_modules/fflate/",
+          "packageDependencies": [
+            ["fflate", "npm:0.7.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["figgy-pudding", [
         ["npm:3.5.2", {
           "packageLocation": "./.yarn/cache/figgy-pudding-npm-3.5.2-2f4e3e1305-4090bd6619.zip/node_modules/figgy-pudding/",
@@ -22238,6 +22261,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["getpass", "npm:0.1.7"],
             ["assert-plus", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["gifti-reader-js", [
+        ["npm:0.4.4", {
+          "packageLocation": "./.yarn/cache/gifti-reader-js-npm-0.4.4-b8fc8b4dd2-1ccc1be2f5.zip/node_modules/gifti-reader-js/",
+          "packageDependencies": [
+            ["gifti-reader-js", "npm:0.4.4"],
+            ["pako", "npm:2.0.4"],
+            ["sax", "npm:1.2.4"]
           ],
           "linkType": "HARD",
         }]
@@ -26089,6 +26123,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.9.6"],
             ["merge-stream", "npm:2.0.0"],
             ["supports-color", "npm:8.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["jpeg-lossless-decoder-js", [
+        ["https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867", {
+          "packageLocation": "./.yarn/cache/jpeg-lossless-decoder-js-https-fc38f07ffc-d1f6d6c693.zip/node_modules/jpeg-lossless-decoder-js/",
+          "packageDependencies": [
+            ["jpeg-lossless-decoder-js", "https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"]
           ],
           "linkType": "HARD",
         }]

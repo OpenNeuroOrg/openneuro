@@ -4444,15 +4444,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niivue/niivue@npm:^0.22.2":
-  version: 0.22.2
-  resolution: "@niivue/niivue@npm:0.22.2"
+"@niivue/niivue@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "@niivue/niivue@npm:0.23.0"
   dependencies:
+    daikon: ^1.2.42
+    fflate: ^0.7.3
+    gifti-reader-js: ^0.4.4
     gl-matrix: ^3.4.3
     nifti-reader-js: ^0.5.4
     rxjs: ^7.4.0
     uuid: ^8.3.2
-  checksum: 67afe46bc2fc00d2fcb9fa78414226ec028a609aba2034070656a914fd02265fbf4c33712eddfe54137f46cb9bbc776d789d2783874c09834f76878bc2acd731
+  checksum: c3490e2f7a20891e5cc9c86ddfff6b4c63c953fe8a166649debbcf08ca092fbf246964bc05070e89a5cd74d19197df58a9764d07b4df147a709ba4993adc5933
   languageName: node
   linkType: hard
 
@@ -4672,7 +4675,7 @@ __metadata:
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
-    "@niivue/niivue": ^0.22.2
+    "@niivue/niivue": ^0.23.0
     "@openneuro/client": ^4.6.1
     "@openneuro/components": ^4.6.1
     "@testing-library/jest-dom": ^5.11.4
@@ -11759,6 +11762,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"daikon@npm:^1.2.42":
+  version: 1.2.42
+  resolution: "daikon@npm:1.2.42"
+  dependencies:
+    jpeg-lossless-decoder-js: "git+https://github.com/rii-mango/JPEGLosslessDecoderJS.git"
+    pako: ^1.0.6
+  checksum: bee3f5385621df7d51ef6414a39e2101cc14d9ad02cb039cc6617da97dafcc86162278961011d57d2491cdcb53f00c7ccbc96b5421af253e6f9372a9e084031e
+  languageName: node
+  linkType: hard
+
 "dargs@npm:^4.0.1":
   version: 4.1.0
   resolution: "dargs@npm:4.1.0"
@@ -13984,6 +13997,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fflate@npm:^0.7.3":
+  version: 0.7.3
+  resolution: "fflate@npm:0.7.3"
+  checksum: 6d0908c54643d5f979c2ba84a0dab74d71755360731a3a3d43d6aeb81728836f086c4f4d62908e3c03d460f2ef95908daa3bfbb8527be56cac0025b96553ee64
+  languageName: node
+  linkType: hard
+
 "figgy-pudding@npm:^3.4.1, figgy-pudding@npm:^3.5.1":
   version: 3.5.2
   resolution: "figgy-pudding@npm:3.5.2"
@@ -14739,6 +14759,16 @@ fsevents@^1.2.7:
   dependencies:
     assert-plus: ^1.0.0
   checksum: ab18d55661db264e3eac6012c2d3daeafaab7a501c035ae0ccb193c3c23e9849c6e29b6ac762b9c2adae460266f925d55a3a2a3a3c8b94be2f222df94d70c046
+  languageName: node
+  linkType: hard
+
+"gifti-reader-js@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "gifti-reader-js@npm:0.4.4"
+  dependencies:
+    pako: "*"
+    sax: "*"
+  checksum: 1ccc1be2f5d510855464cfffb67fdc6a865d189520fe916e4e506a9501d9400c98db0a7a879dd3cca889705a2ad72b2d0a3c54671406d9d8e1724e62af270884
   languageName: node
   linkType: hard
 
@@ -18158,6 +18188,13 @@ fsevents@^1.2.7:
   bin:
     jest: bin/jest.js
   checksum: c9753ed1233c9318f9885e278924e15c018c50e5374b0e8d968cf652d6d1a2e86c53fa00cc01ce1bfaaffb762a48a7db9e7b98bcb28574493aeda5e852b35f5e
+  languageName: node
+  linkType: hard
+
+"jpeg-lossless-decoder-js@git+https://github.com/rii-mango/JPEGLosslessDecoderJS.git":
+  version: 2.0.4
+  resolution: "jpeg-lossless-decoder-js@https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"
+  checksum: d1f6d6c693500495e0e894e14f2dbb16137eaacc6d5d24951dc47526138657a47099c47adcf98452186ed5997db89a6aea0abb7789bfcae7b4fb5f908f813510
   languageName: node
   linkType: hard
 
@@ -24325,7 +24362,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sax@npm:>=0.6.0, sax@npm:^1.2.1, sax@npm:^1.2.4":
+"sax@npm:*, sax@npm:>=0.6.0, sax@npm:^1.2.1, sax@npm:^1.2.4":
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
   checksum: d3df7d32b897a2c2f28e941f732c71ba90e27c24f62ee918bd4d9a8cfb3553f2f81e5493c7f0be94a11c1911b643a9108f231dd6f60df3fa9586b5d2e3e9e1fe

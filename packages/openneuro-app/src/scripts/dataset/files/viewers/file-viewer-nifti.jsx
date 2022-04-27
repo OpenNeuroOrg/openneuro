@@ -8,13 +8,12 @@ const FileViewerNifti = ({ imageUrl }) => {
     const volumeList = [
       {
         url: imageUrl,
-        volume: { hdr: null, img: null },
         colorMap: 'gray',
         opacity: 1,
         visible: true,
       },
     ]
-    const nv = new Niivue()
+    const nv = new Niivue({ dragAndDropEnabled: false })
     nv.attachToCanvas(canvas.current)
     nv.loadVolumes(volumeList) // press the "v" key to cycle through volumes
   }, [imageUrl])
