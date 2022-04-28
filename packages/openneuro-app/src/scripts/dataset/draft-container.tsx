@@ -1,9 +1,11 @@
 import React from 'react'
 import Markdown from 'markdown-to-jsx'
+import Helmet from 'react-helmet'
 import { useLocation, Redirect } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
+import { pageTitle } from '../resources/strings.js'
 
 import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
 import Validation from '../validation/validation.jsx'
@@ -85,6 +87,11 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {description.Name} - {pageTitle}
+        </title>
+      </Helmet>
       {dataset.snapshots && !hasEdit && (
         <Redirect
           to={`/datasets/${dataset.id}/versions/${

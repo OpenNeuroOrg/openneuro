@@ -1,4 +1,5 @@
 import React from 'react'
+import Helmet from 'react-helmet'
 import { gql, useQuery } from '@apollo/client'
 import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
@@ -6,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
-
+import { pageTitle } from '../resources/strings.js'
 import Validation from '../validation/validation.jsx'
 import { config } from '../config'
 import DatasetCitation from './fragments/dataset-citation.jsx'
@@ -87,261 +88,273 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const modality: string = summary?.modalities[0] || ''
 
   return (
-    <div
-      className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
-      {summary && (
-        <DatasetHeader
-          pageHeading={description.Name}
-          modality={summary?.modalities[0]}
-        />
-      )}
-      {snapshot?.deprecated && (
-        <DatasetAlertVersion
-          datasetId={dataset.id}
-          tag={snapshot.tag}
-          reason={snapshot.deprecated.reason}
-          hasEdit={hasEdit}
-        />
-      )}
-      <div className="container">
-        <div className="grid grid-between dataset-header-meta">
-          <div className="col col-8 col-lg">
-            {summary && (
-              <DatasetHeaderMeta
-                size={snapshot.size}
-                totalFiles={summary.totalFiles}
-                datasetId={datasetId}
-              />
-            )}
-          </div>
-          <div className="col follow-bookmark">
-            <FollowDataset
-              profile={profile}
-              datasetId={dataset.id}
-              following={dataset.following}
-              followers={dataset.followers.length}
-            />
-            <StarDataset
-              profile={profile}
-              datasetId={dataset.id}
-              starred={dataset.starred}
-              stars={dataset.stars.length}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="container">
-        <div className="grid grid-between">
-          <div className="col col-lg col-8">
-            <div className="dataset-validation">
-              <ValidationBlock>
-                <Validation datasetId={dataset.id} issues={snapshot.issues} />
-              </ValidationBlock>
-              <BrainLifeButton
-                datasetId={datasetId}
-                onBrainlife={snapshot.onBrainlife}
-                snapshotVersion={snapshot.tag}
-              />
-              <CloneDropdown
-                gitAccess={
-                  <DatasetGitAccess
-                    hasEdit={hasEdit}
-                    configGithub={config.github}
-                    configUrl={config.url}
-                    worker={dataset.worker}
-                    datasetId={datasetId}
-                    gitHash={snapshot.hexsha}
-                  />
-                }
-              />
-            </div>
-            <div className="dataset-tool-buttons">
-              <DatasetTools
-                hasEdit={hasEdit}
-                isPublic={dataset.public}
-                datasetId={datasetId}
-                snapshotId={snapshot.tag}
-                isAdmin={isAdmin}
-                isDatasetAdmin={isDatasetAdmin}
-              />
-            </div>
-            <DatasetPageTabContainer>
-              <TabRoutesSnapshot dataset={dataset} snapshot={snapshot} />
-            </DatasetPageTabContainer>
-          </div>
-          <div className="col sidebar">
-            <MetaDataBlock
-              heading="Authors"
-              item={
-                description?.Authors?.length
-                  ? description.Authors.join(', ')
-                  : 'N/A'
-              }
-              className="dmb-inline-list"
-            />
-            <>
+    <>
+      <Helmet>
+        <title>
+          {description.Name} - {pageTitle}
+        </title>
+      </Helmet>
+      <div
+        className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
+        {summary && (
+          <DatasetHeader
+            pageHeading={description.Name}
+            modality={summary?.modalities[0]}
+          />
+        )}
+        {snapshot?.deprecated && (
+          <DatasetAlertVersion
+            datasetId={dataset.id}
+            tag={snapshot.tag}
+            reason={snapshot.deprecated.reason}
+            hasEdit={hasEdit}
+          />
+        )}
+        <div className="container">
+          <div className="grid grid-between dataset-header-meta">
+            <div className="col col-8 col-lg">
               {summary && (
-                <ModalitiesMetaDataBlock
-                  items={summary?.modalities}
-                  className="dmb-modalities"
+                <DatasetHeaderMeta
+                  size={snapshot.size}
+                  totalFiles={summary.totalFiles}
+                  datasetId={datasetId}
                 />
               )}
-            </>
-
-            <MetaDataBlock
-              heading="Versions"
-              item={
-                <div className="version-block">
-                  <VersionList
-                    hasEdit={hasEdit}
-                    datasetId={datasetId}
-                    items={dataset.snapshots}
-                    className="version-dropdown"
-                    activeDataset={activeDataset}
-                    dateModified={dateModified}
-                    selected={selectedVersion}
-                    setSelected={setSelectedVersion}
-                  />
-                </div>
-              }
-            />
-            {summary && (
+            </div>
+            <div className="col follow-bookmark">
+              <FollowDataset
+                profile={profile}
+                datasetId={dataset.id}
+                following={dataset.following}
+                followers={dataset.followers.length}
+              />
+              <StarDataset
+                profile={profile}
+                datasetId={dataset.id}
+                starred={dataset.starred}
+                stars={dataset.stars.length}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="container">
+          <div className="grid grid-between">
+            <div className="col col-lg col-8">
+              <div className="dataset-validation">
+                <ValidationBlock>
+                  <Validation datasetId={dataset.id} issues={snapshot.issues} />
+                </ValidationBlock>
+                <BrainLifeButton
+                  datasetId={datasetId}
+                  onBrainlife={snapshot.onBrainlife}
+                  snapshotVersion={snapshot.tag}
+                />
+                <CloneDropdown
+                  gitAccess={
+                    <DatasetGitAccess
+                      hasEdit={hasEdit}
+                      configGithub={config.github}
+                      configUrl={config.url}
+                      worker={dataset.worker}
+                      datasetId={datasetId}
+                      gitHash={snapshot.hexsha}
+                    />
+                  }
+                />
+              </div>
+              <div className="dataset-tool-buttons">
+                <DatasetTools
+                  hasEdit={hasEdit}
+                  isPublic={dataset.public}
+                  datasetId={datasetId}
+                  snapshotId={snapshot.tag}
+                  isAdmin={isAdmin}
+                  isDatasetAdmin={isDatasetAdmin}
+                />
+              </div>
+              <DatasetPageTabContainer>
+                <TabRoutesSnapshot dataset={dataset} snapshot={snapshot} />
+              </DatasetPageTabContainer>
+            </div>
+            <div className="col sidebar">
               <MetaDataBlock
-                heading="Tasks"
-                item={summary.tasks.length ? summary.tasks.join(', ') : 'N/A'}
+                heading="Authors"
+                item={
+                  description?.Authors?.length
+                    ? description.Authors.join(', ')
+                    : 'N/A'
+                }
                 className="dmb-inline-list"
               />
-            )}
-            {summary?.modalities.includes('pet') ||
-              summary?.modalities.includes('Pet') ||
-              (summary?.modalities.includes('PET') && (
-                <>
-                  <MetaDataBlock
-                    heading={pluralize('Target', summary.pet?.BodyPart)}
-                    item={summary.pet?.BodyPart}
+              <>
+                {summary && (
+                  <ModalitiesMetaDataBlock
+                    items={summary?.modalities}
+                    className="dmb-modalities"
                   />
-                  <MetaDataBlock
-                    heading={pluralize(
-                      'Scanner Manufacturer',
-                      summary.pet?.ScannerManufacturer,
-                    )}
-                    item={
-                      summary.pet?.ScannerManufacturer
-                        ? summary.pet?.ScannerManufacturer
-                        : 'N/A'
-                    }
-                  />
+                )}
+              </>
 
-                  <MetaDataBlock
-                    heading={pluralize(
-                      'Scanner Model',
-                      summary.pet?.ScannerManufacturersModelName,
-                    )}
-                    item={
-                      summary.pet?.ScannerManufacturersModelName
-                        ? summary.pet?.ScannerManufacturersModelName
-                        : 'N/A'
-                    }
-                  />
-                  <MetaDataBlock
-                    heading={pluralize(
-                      'Radionuclide',
-                      summary.pet?.TracerRadionuclide,
-                    )}
-                    item={
-                      summary.pet?.TracerRadionuclide
-                        ? summary.pet?.TracerRadionuclide
-                        : 'N/A'
-                    }
-                  />
-                  <MetaDataBlock
-                    heading={pluralize('Radiotracer', summary.pet?.TracerName)}
-                    item={
-                      summary.pet?.TracerName ? summary.pet?.TracerName : 'N/A'
-                    }
-                  />
-                </>
-              ))}
-
-            <MetaDataBlock
-              heading="Uploaded by"
-              item={
-                <>
-                  {dataset.uploader.name} on {dateAdded} - {dateAddedDifference}{' '}
-                  ago
-                </>
-              }
-            />
-
-            {dataset.snapshots.length && (
               <MetaDataBlock
-                heading="Last Updated"
+                heading="Versions"
+                item={
+                  <div className="version-block">
+                    <VersionList
+                      hasEdit={hasEdit}
+                      datasetId={datasetId}
+                      items={dataset.snapshots}
+                      className="version-dropdown"
+                      activeDataset={activeDataset}
+                      dateModified={dateModified}
+                      selected={selectedVersion}
+                      setSelected={setSelectedVersion}
+                    />
+                  </div>
+                }
+              />
+              {summary && (
+                <MetaDataBlock
+                  heading="Tasks"
+                  item={summary.tasks.length ? summary.tasks.join(', ') : 'N/A'}
+                  className="dmb-inline-list"
+                />
+              )}
+              {summary?.modalities.includes('pet') ||
+                summary?.modalities.includes('Pet') ||
+                (summary?.modalities.includes('PET') && (
+                  <>
+                    <MetaDataBlock
+                      heading={pluralize('Target', summary.pet?.BodyPart)}
+                      item={summary.pet?.BodyPart}
+                    />
+                    <MetaDataBlock
+                      heading={pluralize(
+                        'Scanner Manufacturer',
+                        summary.pet?.ScannerManufacturer,
+                      )}
+                      item={
+                        summary.pet?.ScannerManufacturer
+                          ? summary.pet?.ScannerManufacturer
+                          : 'N/A'
+                      }
+                    />
+
+                    <MetaDataBlock
+                      heading={pluralize(
+                        'Scanner Model',
+                        summary.pet?.ScannerManufacturersModelName,
+                      )}
+                      item={
+                        summary.pet?.ScannerManufacturersModelName
+                          ? summary.pet?.ScannerManufacturersModelName
+                          : 'N/A'
+                      }
+                    />
+                    <MetaDataBlock
+                      heading={pluralize(
+                        'Radionuclide',
+                        summary.pet?.TracerRadionuclide,
+                      )}
+                      item={
+                        summary.pet?.TracerRadionuclide
+                          ? summary.pet?.TracerRadionuclide
+                          : 'N/A'
+                      }
+                    />
+                    <MetaDataBlock
+                      heading={pluralize(
+                        'Radiotracer',
+                        summary.pet?.TracerName,
+                      )}
+                      item={
+                        summary.pet?.TracerName
+                          ? summary.pet?.TracerName
+                          : 'N/A'
+                      }
+                    />
+                  </>
+                ))}
+
+              <MetaDataBlock
+                heading="Uploaded by"
                 item={
                   <>
-                    {dateModified} - {dateUpdatedDifference} ago
+                    {dataset.uploader.name} on {dateAdded} -{' '}
+                    {dateAddedDifference} ago
                   </>
                 }
               />
-            )}
-            <MetaDataBlock heading="Sessions" item={numSessions} />
-            <>
-              {summary && (
+
+              {dataset.snapshots.length && (
                 <MetaDataBlock
-                  heading="Participants"
-                  item={summary.subjects.length}
+                  heading="Last Updated"
+                  item={
+                    <>
+                      {dateModified} - {dateUpdatedDifference} ago
+                    </>
+                  }
                 />
               )}
-            </>
+              <MetaDataBlock heading="Sessions" item={numSessions} />
+              <>
+                {summary && (
+                  <MetaDataBlock
+                    heading="Participants"
+                    item={summary.subjects.length}
+                  />
+                )}
+              </>
 
-            <MetaDataBlock
-              heading="Dataset DOI"
-              item={
-                <DOILink DOI={description.DatasetDOI} datasetId={datasetId} />
-              }
-            />
-            <MetaDataBlock heading="License" item={description.License} />
+              <MetaDataBlock
+                heading="Dataset DOI"
+                item={
+                  <DOILink DOI={description.DatasetDOI} datasetId={datasetId} />
+                }
+              />
+              <MetaDataBlock heading="License" item={description.License} />
 
-            <MetaDataBlock
-              heading="How To Cite"
-              item={
-                <>
-                  <DatasetCitation snapshot={snapshot} />
-                  <h5>
-                    <Link to="/cite">More citation info</Link>
-                  </h5>
-                </>
-              }
-            />
+              <MetaDataBlock
+                heading="How To Cite"
+                item={
+                  <>
+                    <DatasetCitation snapshot={snapshot} />
+                    <h5>
+                      <Link to="/cite">More citation info</Link>
+                    </h5>
+                  </>
+                }
+              />
 
-            <MetaDataBlock
-              heading="Acknowledgements"
-              item={description.Acknowledgements}
-            />
-            <MetaDataBlock
-              heading="How to Acknowledge"
-              item={description.HowToAcknowledge}
-            />
-            <MetaDataBlock
-              heading="Funding"
-              item={description.Funding}
-              className="dmb-list"
-            />
+              <MetaDataBlock
+                heading="Acknowledgements"
+                item={description.Acknowledgements}
+              />
+              <MetaDataBlock
+                heading="How to Acknowledge"
+                item={description.HowToAcknowledge}
+              />
+              <MetaDataBlock
+                heading="Funding"
+                item={description.Funding}
+                className="dmb-list"
+              />
 
-            <MetaDataBlock
-              heading="References and Links"
-              item={description.ReferencesAndLinks}
-              className="dmb-list"
-            />
+              <MetaDataBlock
+                heading="References and Links"
+                item={description.ReferencesAndLinks}
+                className="dmb-list"
+              />
 
-            <MetaDataBlock
-              heading="Ethics Approvals"
-              item={description.EthicsApprovals}
-              className="dmb-list"
-            />
+              <MetaDataBlock
+                heading="Ethics Approvals"
+                item={description.EthicsApprovals}
+                className="dmb-list"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
