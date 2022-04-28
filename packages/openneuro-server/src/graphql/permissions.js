@@ -1,5 +1,6 @@
 import Permission from '../models/permission'
 import Dataset from '../models/dataset'
+import Deletion from '../models/deletion'
 
 // Definitions for permission levels allowed
 // Admin is write + manage user permissions
@@ -50,6 +51,12 @@ export const checkPermissionLevel = (permission, state) => {
 }
 
 export const checkDatasetExists = async datasetId => {
+  const deleted = await Deletion.findOne({ datasetId }).exec()
+  if (deleted) {
+    throw new Error(
+      `Dataset ${datasetId} has been deleted. Reason: ${deleted.reason}.`,
+    )
+  }
   const found = await Dataset.countDocuments({ id: datasetId }).exec()
   if (!found) throw new Error(`Dataset ${datasetId} does not exist.`)
 }
