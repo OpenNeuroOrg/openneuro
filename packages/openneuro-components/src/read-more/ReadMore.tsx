@@ -33,7 +33,7 @@ export const ReadMore = ({
 
           <section>
             {children}
-            <label htmlFor={id}>
+            <label htmlFor={id} className="expand-collapse">
               <span>{expandLabel}</span>
               <span>{collapseLabel}</span>
             </label>
@@ -45,7 +45,7 @@ export const ReadMore = ({
 
           <section>
             {children}
-            <label htmlFor={id}>
+            <label htmlFor={id} className="expand-collapse">
               <span>{expandLabel}</span>
               <span>{collapseLabel}</span>
             </label>
