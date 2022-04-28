@@ -17,7 +17,7 @@
       max-height: 975px;
     }
   }
-  label {
+  label.expand-collapse {
     position: absolute;
     bottom: -15px;
     width: 100%;
@@ -57,7 +57,7 @@
   input.show-more[type='checkbox']:checked + section {
     max-height: 9000px;
 
-    label {
+    label.expand-collapse {
       background: none;
       span:last-child {
         display: inline;
