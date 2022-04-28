@@ -22,16 +22,19 @@ interface FourOFourPageProps {
   redirectRoute?: string
   redirectRouteName?: string
   theme?: string
+  message?: string
 }
 
 const FourOFourPage: FC<FourOFourPageProps> = ({
   redirectRoute = '/',
   redirectRouteName = 'the home page',
   theme = 'topLevel',
+  message = '',
 }) => {
   return (
     <Container styleContext={theme}>
       <h3>404: The page you are looking for does not exist.</h3>
+      {message && <p>{message}</p>}
       <p>
         Click <Link to={redirectRoute}>here</Link> to go to
         {' ' + redirectRouteName}.
