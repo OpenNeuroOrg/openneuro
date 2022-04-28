@@ -143,16 +143,11 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   })
   useDraftSubscription(datasetId)
 
-  if (loading || !data)
-    return (
-      <div className="loading-dataset">
-        <Loading />
-        Loading Dataset
-      </div>
-    )
   if (error) {
     if (error.message === 'You do not have access to read this dataset.') {
       return <FourOThreePage />
+    } else if (error.message.includes('has been deleted')) {
+      return <FourOFourPage message={error.message} />
     } else {
       try {
         apm.captureError(error)
@@ -161,6 +156,14 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
       }
       return <FourOFourPage />
     }
+  } else {
+    if (loading || !data)
+      return (
+        <div className="loading-dataset">
+          <Loading />
+          Loading Dataset
+        </div>
+      )
   }
 
   return (
