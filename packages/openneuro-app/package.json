@@ -36,6 +36,7 @@
     "history": "5.2.0",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^7.1.2",
+    "nifti-reader-js": "^0.5.4",
     "os-browserify": "^0.3.0",
     "pluralize": "8.0.0",
     "prop-types": "^15.6.0",
@@ -57,6 +58,7 @@
     "universal-cookie": "^4.0.4",
     "universal-cookie-express": "^4.0.3",
     "url-search-params-polyfill": "^2.0.1",
+    "uuid": "^8.3.2",
     "xmldoc": "^1.1.0"
   },
   "devDependencies": {
@@ -82,6 +84,7 @@
     "@types/react-dom": "^17.0.5",
     "@types/react-router-dom": "5.1.8",
     "@types/testing-library__jest-dom": "^5.14.0",
+    "@types/uuid": "^8",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
     "esbuild-plugin-globals": "^0.1.1",
@@ -89,11 +92,11 @@
     "jest-fetch-mock": "^1.4.1",
     "jsdom": "^16.5.3",
     "object.fromentries": "^2.0.0",
-    "rollup-plugin-polyfill-node": "^0.6.2",
+    "rollup-plugin-polyfill-node": "^0.9.0",
     "sass": "^1.32.8",
     "stream-browserify": "^3.0.0",
     "typescript": "4.5.4",
-    "vite": "2.3.1"
+    "vite": "2.9.6"
   },
   "jest": {
     "setupFilesAfterEnv": [
