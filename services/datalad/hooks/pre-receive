@@ -134,7 +134,7 @@ function main() {
 
     # Run validation (with .bidsignore if we found it above)
     { echo "${bidsignore}" && echo "0001" && git ls-tree --name-only -r "${newref}"; } | \
-      /node_modules/.bin/bids-validator --filenames -
+      /srv/node_modules/.bin/bids-validator --filenames -
     if [[ "$?" != 0 ]]; then
       echo ""
       echo "-------------------------------------------------------------------------"
