@@ -73,7 +73,6 @@
     ],
     "collectCoverageFrom": [
       "**/*.{js,jsx,ts,tsx}",
-      "!**/papaya.js",
       "!**/*.spec.{js,jsx,ts,tsx}",
       "!**/node_modules/**",
       "!**/vendor/**",

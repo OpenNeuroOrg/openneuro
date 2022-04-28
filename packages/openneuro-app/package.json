@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node --enable-source-maps ./dist/ssr.js",
-    "build": "yarn vite build --outDir dist/client && yarn vite build --outDir dist/server --ssr server.jsx && cp src/assets/papaya.js src/dist/client/assets"
+    "build": "yarn vite build --outDir dist/client && yarn vite build --outDir dist/server --ssr server.jsx"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -19,6 +19,7 @@
     "@elastic/apm-rum": "5.9.1",
     "@emotion/react": "11.6.0",
     "@emotion/styled": "11.6.0",
+    "@niivue/niivue": "^0.23.0",
     "@openneuro/client": "^4.6.1",
     "@openneuro/components": "^4.6.1",
     "babel-runtime": "^6.26.0",
@@ -107,7 +108,7 @@
       "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
     },
     "transformIgnorePatterns": [
-      "/node_modules/(?!bids-validator).+\\.js$"
+      "/node_modules/(?!bids-validator|@niivue/niivue).+\\.js$"
     ],
     "testPathIgnorePatterns": [
       "dist"

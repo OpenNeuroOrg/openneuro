@@ -1,19 +1,25 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import Papaya from '../../../common/partials/papaya.jsx'
-import styled from '@emotion/styled'
+import { Niivue } from '@niivue/niivue'
 
-const StyleWrapper = styled.div`
-  div.papaya-wrap {
-    margin: auto;
-  }
-`
+const FileViewerNifti = ({ imageUrl }) => {
+  const canvas = useRef()
+  useEffect(() => {
+    const volumeList = [
+      {
+        url: imageUrl,
+        colorMap: 'gray',
+        opacity: 1,
+        visible: true,
+      },
+    ]
+    const nv = new Niivue({ dragAndDropEnabled: false })
+    nv.attachToCanvas(canvas.current)
+    nv.loadVolumes(volumeList) // press the "v" key to cycle through volumes
+  }, [imageUrl])
 
-const FileViewerNifti = ({ imageUrl }) => (
-  <StyleWrapper>
-    <Papaya image={imageUrl} />
-  </StyleWrapper>
-)
+  return <canvas ref={canvas} height={800} />
+}
 
 FileViewerNifti.propTypes = {
   imageUrl: PropTypes.string,

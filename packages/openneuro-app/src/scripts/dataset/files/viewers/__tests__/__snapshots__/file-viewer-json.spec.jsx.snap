@@ -2,103 +2,71 @@
 
 exports[`File Viewer - JSON renders with invalid JSON 1`] = `
 <DocumentFragment>
-  <div
-    class="container"
+  <h3>
+    Tree
+  </h3>
+  <hr />
+  <p>
+    JSON failed to parse
+  </p>
+  <pre>
+    Unexpected token ; in JSON at position 4
+  </pre>
+  <h3>
+    Raw
+  </h3>
+  <hr />
+  <pre
+    class="css-ffm88e"
   >
-    <div
-      class="grid"
-    >
-      <div
-        class="col col-lg"
-      >
-        <h3>
-          Tree
-        </h3>
-        <hr />
-        <p>
-          JSON failed to parse
-        </p>
-        <pre>
-          Unexpected token ; in JSON at position 4
-        </pre>
-      </div>
-      <div
-        class="col"
-      >
-        <h3>
-          Raw
-        </h3>
-        <hr />
-        <pre
-          class="css-ffm88e"
-        >
-          1234;
-        </pre>
-      </div>
-    </div>
-  </div>
+    1234;
+  </pre>
 </DocumentFragment>
 `;
 
 exports[`File Viewer - JSON renders with valid JSON 1`] = `
 <DocumentFragment>
+  <h3>
+    Tree
+  </h3>
+  <hr />
   <div
-    class="container"
+    class="json-container"
   >
     <div
-      class="grid"
+      class="expand-prop-name"
     >
-      <div
-        class="col col-lg"
+       Root  Property-
+    </div>
+    <div
+      class="json-container"
+    >
+      <span
+        class="prop-name"
       >
-        <h3>
-          Tree
-        </h3>
-        <hr />
-        <div
-          class="json-container"
-        >
-          <div
-            class="expand-prop-name"
-          >
-             Root  Property-
-          </div>
-          <div
-            class="json-container"
-          >
-            <span
-              class="prop-name"
-            >
-              Thing: 
-            </span>
-            1
-          </div>
-          <div
-            class="json-container"
-          >
-            <span
-              class="prop-name"
-            >
-              Name: 
-            </span>
-            string
-          </div>
-        </div>
-      </div>
-      <div
-        class="col"
+        Thing: 
+      </span>
+      1
+    </div>
+    <div
+      class="json-container"
+    >
+      <span
+        class="prop-name"
       >
-        <h3>
-          Raw
-        </h3>
-        <hr />
-        <pre
-          class="css-ffm88e"
-        >
-          {"thing":1,"name":"string"}
-        </pre>
-      </div>
+        Name: 
+      </span>
+      string
     </div>
   </div>
+  <h3>
+    Raw
+  </h3>
+  <hr />
+  <pre
+    class="css-ffm88e"
+  >
+    {"thing":1,"name":"string"}
+  </pre>
 </DocumentFragment>
 `;
