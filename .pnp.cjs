@@ -9319,7 +9319,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"],
             ["universal-cookie", "npm:4.0.4"],
             ["universal-cookie-express", "npm:4.0.3"],
-            ["url-search-params-polyfill", "npm:2.0.3"],
             ["uuid", "npm:8.3.2"],
             ["vite", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:2.9.6"],
             ["xmldoc", "npm:1.1.2"]
@@ -37027,15 +37026,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["url-parse-lax", "npm:3.0.0"],
             ["prepend-http", "npm:2.0.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["url-search-params-polyfill", [
-        ["npm:2.0.3", {
-          "packageLocation": "./.yarn/cache/url-search-params-polyfill-npm-2.0.3-7f439371dc-d8b75aae05.zip/node_modules/url-search-params-polyfill/",
-          "packageDependencies": [
-            ["url-search-params-polyfill", "npm:2.0.3"]
           ],
           "linkType": "HARD",
         }]
