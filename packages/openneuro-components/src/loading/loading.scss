@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $spinner-base-value: 20px;
 $spinner-width: $spinner-base-value * 2 * 1.732;
 $spinner-height: $spinner-base-value * 2;
@@ -52,15 +54,15 @@ $spinner-hexagon-bg-color: var(--current-theme-primary);
 // wave stretch
 .cxq-spinner--waveStretchDelay .rects {
   width: $spinner-hexagon-width;
-  height: $spinner-hexagon-height / 3;
+  height: math.div($spinner-hexagon-height, 3);
   text-align: center;
   position: relative;
-  top: $spinner-hexagon-height * 1 /3;
+  top: $spinner-hexagon-height * math.div(1, 3);
 }
 .cxq-spinner--waveStretchDelay .rect {
   position: relative;
   height: 100%;
-  width: $spinner-base-value / 10;
+  width: math.div($spinner-base-value, 10);
   display: inline-block;
   background-color: $spinner-hexagon-bg-color;
   opacity: 1;
