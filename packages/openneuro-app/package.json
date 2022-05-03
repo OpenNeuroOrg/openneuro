@@ -19,7 +19,7 @@
     "@elastic/apm-rum": "5.9.1",
     "@emotion/react": "11.6.0",
     "@emotion/styled": "11.6.0",
-    "@niivue/niivue": "^0.23.0",
+    "@niivue/niivue": "0.23.1",
     "@openneuro/client": "^4.7.0-alpha.0",
     "@openneuro/components": "^4.7.0-alpha.0",
     "babel-runtime": "^6.26.0",
@@ -95,7 +95,7 @@
     "sass": "^1.32.8",
     "stream-browserify": "^3.0.0",
     "typescript": "4.5.4",
-    "vite": "2.9.6"
+    "vite": "2.9.7"
   },
   "jest": {
     "setupFilesAfterEnv": [

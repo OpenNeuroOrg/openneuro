@@ -47,7 +47,13 @@ async function createServer(): Promise<void> {
     // serving logic and let the parent server take control.
     vite = await createViteServer({
       root: path.resolve(__dirname, '../src'),
-      server: { middlewareMode: true, hmr: { port: 9992 } },
+      server: {
+        middlewareMode: true,
+        hmr: { port: 9992 },
+        watch: {
+          ignored: ['/proc/**'],
+        },
+      },
       resolve: {
         alias: [
           // Workaround UMD -> ESM issues in pluralize
@@ -58,7 +64,7 @@ async function createServer(): Promise<void> {
         ],
       },
       optimizeDeps: {
-        include: ['react-multi-carousel'],
+        include: ['react-multi-carousel', '@elastic/apm-rum', '@niivue/niivue'],
       },
     })
     // use vite's connect instance as middleware
