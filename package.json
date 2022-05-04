@@ -6,7 +6,7 @@
     "bootstrap": "lerna bootstrap",
     "test": "jest --maxWorkers=50%",
     "coverage": "jest --coverage",
-    "ci-coverage": "jest --coverage && codecov",
+    "ci-coverage": "jest --coverage --maxWorkers=2 --ci --maxConcurrency=2 && codecov",
     "lint": "eslint --ext .jsx --ext .js --ext .ts --ext .tsx packages/*/src",
     "openneuro": "node packages/openneuro-cli/src",
     "_postinstall": "husky install",
