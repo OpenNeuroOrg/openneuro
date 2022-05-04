@@ -55,7 +55,7 @@ const noDataResult = Promise.resolve({
 })
 
 describe('datasetGenerator()', () => {
-  it('returns paginated datasets', async done => {
+  it('returns paginated datasets', async () => {
     const mockQuery = {}
     // To keep this test from being tied to apollo-client, mock the query method
     const mockClient = {
@@ -85,6 +85,5 @@ describe('datasetGenerator()', () => {
     const { value: fifthDataset } = await dsGen.next()
     // Validate that the final result is null
     expect(fifthDataset).toBe(null)
-    done()
   })
 })

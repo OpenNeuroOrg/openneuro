@@ -60,7 +60,7 @@ describe('DeleteDir mutation', () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it('fires the correct mutation', async done => {
+  it('fires the correct mutation', done => {
     render(
       <MockedProvider mocks={[deleteDirMock]} addTypename={false}>
         <DeleteDir {...{ datasetId, path }} />

@@ -24,7 +24,7 @@ const UpdateFile = ({
                 false,
               )({ files: e.target.files })
             }}
-            webkitdirectory={directory && 'true'}
+            webkitdirectory={directory ? 'true' : undefined}
             multiple={multiple && true}
           />
           {children}

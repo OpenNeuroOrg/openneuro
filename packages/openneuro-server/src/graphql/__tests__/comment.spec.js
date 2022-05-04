@@ -17,7 +17,7 @@ describe('comment resolver helpers', () => {
     let aId
     let commentA
     let adminUser, nonAdminUser
-    beforeEach(async done => {
+    beforeEach(async () => {
       mockingoose.resetAll()
       adminUser = {
         user: 'userid',
@@ -35,10 +35,9 @@ describe('comment resolver helpers', () => {
       mockingoose.Comment.toReturn(commentA, 'findOne')
       aId = (await Comment.findById('just getting commentA here').exec())._id
       mockingoose.Comment.toReturn([], 'find')
-      done()
     })
 
-    it('returns an array of the deleted comment ids', async done => {
+    it('returns an array of the deleted comment ids', async () => {
       const deletedIds = (
         await deleteComment({}, { commentId: aId }, adminUser)
       ).map(id => id.toString())
@@ -46,7 +45,6 @@ describe('comment resolver helpers', () => {
       // mockingoose ids are sequential, and the documents returned from each query get new ids for some reason
       //   TODO: Replace mockingoose with better library
       expect(deletedIds[0].slice(-5)).toEqual(incrementHex(aId).slice(-5))
-      done()
     })
 
     it('prevents non-admin users from deleting comments', () => {

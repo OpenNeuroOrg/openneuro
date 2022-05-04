@@ -54,7 +54,7 @@
     "babel-jest": "^27.0.2",
     "core-js": "^3.14.0",
     "css-loader": "^5.2.1",
-    "jest": "^27.0.4",
+    "jest": "27.5.1",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
@@ -70,6 +70,7 @@
     "access": "public"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "testPathIgnorePatterns": [
       "dist"
     ],

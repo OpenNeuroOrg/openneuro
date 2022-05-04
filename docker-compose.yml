@@ -17,7 +17,7 @@ volumes:
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    image: node:16.13.1
+    image: node:18.1.0
     env_file: ./config.env
     working_dir: /srv
     command: bash -c 'yarn install && yarn tsc-watch -b --onSuccess "touch /watch/done"'
