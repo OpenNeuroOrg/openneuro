@@ -56,14 +56,13 @@ describe('pagination model operations', () => {
         'aggregate',
       )
     })
-    it('returns a connection shaped result', async done => {
+    it('returns a connection shaped result', async () => {
       const res = await pagination.datasetsConnection({
         orderBy: { created: 'ascending' },
         limit: 5,
       })([])
       expect(res).toHaveProperty('pageInfo')
       expect(res).toHaveProperty('edges')
-      done()
     })
   })
   describe('maxLimit()', () => {

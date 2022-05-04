@@ -19,16 +19,15 @@ describe('dataset model operations', () => {
         'findOne',
       )
     })
-    it('resolves to dataset id string', async done => {
+    it('resolves to dataset id string', async () => {
       const { id: dsId } = await createDataset(null, null, {
         affirmedDefaced: true,
         affirmedConsent: true,
       })
       expect(dsId).toHaveLength(8)
       expect(dsId.slice(0, 2)).toBe('ds')
-      done()
     })
-    it('posts to the DataLad /datasets/{dsId} endpoint', async done => {
+    it('posts to the DataLad /datasets/{dsId} endpoint', async () => {
       // Reset call count for request.post
       request.post.mockClear()
       const { id: dsId } = await createDataset(null, null, {
@@ -39,7 +38,6 @@ describe('dataset model operations', () => {
       expect(request.post).toHaveBeenCalledWith(
         expect.stringContaining(`${getDatasetWorker(dsId)}/datasets/`),
       )
-      done()
     })
   })
   describe('datasetsFilter()', () => {

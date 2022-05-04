@@ -87,7 +87,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.9.0",
     "esbuild-plugin-globals": "^0.1.1",
-    "jest": "^26.6.3",
+    "jest": "27.5.1",
     "jest-fetch-mock": "^1.4.1",
     "jsdom": "^16.5.3",
     "object.fromentries": "^2.0.0",
@@ -98,6 +98,7 @@
     "vite": "2.9.7"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [
       "./jestsetup.ts"
     ],

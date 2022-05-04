@@ -31,7 +31,7 @@ describe('snapshot model operations', () => {
         'findOne',
       )
     })
-    it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {
+    it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async () => {
       const tag = 'snapshot'
       const { id: dsId } = await createDataset(null, null, {
         affirmedDefaced: true,
@@ -47,7 +47,6 @@ describe('snapshot model operations', () => {
           `${getDatasetWorker(dsId)}/datasets/${dsId}/snapshots/${tag}`,
         ),
       )
-      done()
     })
   })
 })

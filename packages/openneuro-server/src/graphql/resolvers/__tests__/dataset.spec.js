@@ -16,14 +16,13 @@ describe('dataset resolvers', () => {
     )
   })
   describe('createDataset()', () => {
-    it('createDataset mutation succeeds', async done => {
+    it('createDataset mutation succeeds', async () => {
       const { id: dsId } = await ds.createDataset(
         null,
         { affirmedDefaced: true, affirmedConsent: false },
         { user: '123456', userInfo: {} },
       )
       expect(dsId).toEqual(expect.stringMatching(/^ds[0-9]{6}$/))
-      done()
     })
   })
   describe('snapshotCreationComparison()', () => {
