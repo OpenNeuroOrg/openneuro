@@ -78,6 +78,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.14.5"],\
             ["@babel/preset-typescript", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.15.0"],\
             ["@babel/runtime-corejs3", "npm:7.15.4"],\
+            ["@elastic/apm-rum-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:1.4.0"],\
             ["@loadable/babel-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:5.13.2"],\
             ["@sentry/cli", "npm:1.37.4"],\
             ["@testing-library/jest-dom", "npm:5.14.1"],\
@@ -7229,23 +7230,51 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@elastic/apm-rum", [\
-        ["npm:5.9.1", {\
-          "packageLocation": "./.yarn/cache/@elastic-apm-rum-npm-5.9.1-dd51d99b76-b5aadd9442.zip/node_modules/@elastic/apm-rum/",\
+        ["npm:5.11.0", {\
+          "packageLocation": "./.yarn/cache/@elastic-apm-rum-npm-5.11.0-59f277a042-d9269aeefc.zip/node_modules/@elastic/apm-rum/",\
           "packageDependencies": [\
-            ["@elastic/apm-rum", "npm:5.9.1"],\
-            ["@elastic/apm-rum-core", "npm:5.12.1"]\
+            ["@elastic/apm-rum", "npm:5.11.0"],\
+            ["@elastic/apm-rum-core", "npm:5.15.0"]\
           ],\
           "linkType": "HARD"\
         }]\
       ]],\
       ["@elastic/apm-rum-core", [\
-        ["npm:5.12.1", {\
-          "packageLocation": "./.yarn/cache/@elastic-apm-rum-core-npm-5.12.1-4192fb86fc-3d42a26466.zip/node_modules/@elastic/apm-rum-core/",\
+        ["npm:5.15.0", {\
+          "packageLocation": "./.yarn/cache/@elastic-apm-rum-core-npm-5.15.0-909c9d6b12-cb05f3aa7a.zip/node_modules/@elastic/apm-rum-core/",\
           "packageDependencies": [\
-            ["@elastic/apm-rum-core", "npm:5.12.1"],\
+            ["@elastic/apm-rum-core", "npm:5.15.0"],\
             ["error-stack-parser", "npm:1.3.6"],\
             ["opentracing", "npm:0.14.5"],\
             ["promise-polyfill", "npm:8.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@elastic/apm-rum-react", [\
+        ["npm:1.4.0", {\
+          "packageLocation": "./.yarn/cache/@elastic-apm-rum-react-npm-1.4.0-0cec89b301-1fb2ee9ec7.zip/node_modules/@elastic/apm-rum-react/",\
+          "packageDependencies": [\
+            ["@elastic/apm-rum-react", "npm:1.4.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:1.4.0", {\
+          "packageLocation": "./.yarn/__virtual__/@elastic-apm-rum-react-virtual-3c5863c3f7/0/cache/@elastic-apm-rum-react-npm-1.4.0-0cec89b301-1fb2ee9ec7.zip/node_modules/@elastic/apm-rum-react/",\
+          "packageDependencies": [\
+            ["@elastic/apm-rum-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:1.4.0"],\
+            ["@elastic/apm-rum", "npm:5.11.0"],\
+            ["@types/react", null],\
+            ["@types/react-router-dom", null],\
+            ["hoist-non-react-statics", "npm:3.3.2"],\
+            ["react", "npm:17.0.2"],\
+            ["react-router-dom", null]\
+          ],\
+          "packagePeers": [\
+            "@types/react-router-dom",\
+            "@types/react",\
+            "react-router-dom",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9594,7 +9623,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-typescript", "virtual:c19440c90f7b99e527e77946b65676b08d3eb2eae7c4dfe8fee3cd1fa1e3aa2a3a6ba303c137be761d59a459914d9aa3321b611956d01cf9a419c6f8ca8ce7b0#npm:7.15.0"],\
             ["@babel/runtime", "npm:7.15.4"],\
             ["@babel/runtime-corejs3", "npm:7.15.4"],\
-            ["@elastic/apm-rum", "npm:5.9.1"],\
+            ["@elastic/apm-rum", "npm:5.11.0"],\
             ["@emotion/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],\
             ["@emotion/styled", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],\
             ["@jest/globals", "npm:26.6.2"],\
@@ -33544,6 +33573,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.14.5"],\
             ["@babel/preset-typescript", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.15.0"],\
             ["@babel/runtime-corejs3", "npm:7.15.4"],\
+            ["@elastic/apm-rum-react", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:1.4.0"],\
             ["@loadable/babel-plugin", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:5.13.2"],\
             ["@sentry/cli", "npm:1.37.4"],\
             ["@testing-library/jest-dom", "npm:5.14.1"],\

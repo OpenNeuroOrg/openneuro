@@ -2867,23 +2867,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@elastic/apm-rum-core@npm:^5.12.1":
-  version: 5.12.1
-  resolution: "@elastic/apm-rum-core@npm:5.12.1"
+"@elastic/apm-rum-core@npm:^5.15.0":
+  version: 5.15.0
+  resolution: "@elastic/apm-rum-core@npm:5.15.0"
   dependencies:
     error-stack-parser: ^1.3.5
     opentracing: ^0.14.3
     promise-polyfill: ^8.1.3
-  checksum: 3d42a264661828fd1f8afd37242a01a845cabc16f9d4106c941d19bcd8048e9533ed34496932d25c4c21ba8eb394e04685f8bc6f816b58e8a7aa118350e539e3
+  checksum: cb05f3aa7a35021955557741c2917755dc2ce2b65eaaabdcd123bfc5fbf3497485c19d8ab59c85c8e9a78352f895224be76c6e3b21ba88021bb050b4e6fcf6e3
   languageName: node
   linkType: hard
 
-"@elastic/apm-rum@npm:5.9.1":
-  version: 5.9.1
-  resolution: "@elastic/apm-rum@npm:5.9.1"
+"@elastic/apm-rum-react@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@elastic/apm-rum-react@npm:1.4.0"
   dependencies:
-    "@elastic/apm-rum-core": ^5.12.1
-  checksum: b5aadd9442703655a765c243bc277fa42d8f4338d575eeeac3620cdec0b59b36bbe99e53478ec2e6d49bd5c2cc9bab739c4c1f20a40bad6bd0ff6521689a566f
+    "@elastic/apm-rum": ^5.11.0
+    hoist-non-react-statics: ^3.3.0
+  peerDependencies:
+    react: ">16.0.0"
+    react-router-dom: ">4.0.0"
+  checksum: 1fb2ee9ec74aa769fa1addf9a18d2f9c2b3106d2d3be03d3b00d8acb224136abeb2a022696b025344d283a026b250a763ba0ff567cc5f2a72e5d5c36cbb8baed
+  languageName: node
+  linkType: hard
+
+"@elastic/apm-rum@npm:5.11.0, @elastic/apm-rum@npm:^5.11.0":
+  version: 5.11.0
+  resolution: "@elastic/apm-rum@npm:5.11.0"
+  dependencies:
+    "@elastic/apm-rum-core": ^5.15.0
+  checksum: d9269aeefc5403c911064338af22768b419da33985c6972b4dbe0f24db01ba307ec21acec482223ee38165f2b83cf34bff0e41124b264f4fba5f961e085810aa
   languageName: node
   linkType: hard
 
@@ -4854,14 +4867,14 @@ __metadata:
     "@babel/preset-typescript": ^7.7.4
     "@babel/runtime": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
-    "@elastic/apm-rum": 5.9.1
+    "@elastic/apm-rum": 5.11.0
     "@emotion/react": 11.6.0
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@loadable/babel-plugin": ^5.10.3
     "@niivue/niivue": 0.23.1
-    "@openneuro/client": ^4.7.0-alpha.0
-    "@openneuro/components": ^4.7.0-alpha.0
+    "@openneuro/client": ^4.7.0
+    "@openneuro/components": ^4.7.0
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
@@ -4930,7 +4943,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.7.0-alpha.0
+    "@openneuro/client": ^4.7.0
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
     bids-validator: 1.9.3
@@ -4955,14 +4968,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.7.0-alpha.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.7.0, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.7.0-alpha.0
+    "@openneuro/server": ^4.7.0
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     cross-fetch: ^3.1.2
@@ -4974,7 +4987,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.7.0-alpha.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.7.0, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5033,8 +5046,8 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.7.0-alpha.0
-    "@openneuro/search": ^4.7.0-alpha.0
+    "@openneuro/client": ^4.7.0
+    "@openneuro/search": ^4.7.0
     "@types/jsonwebtoken": ^8
     "@types/node": 16.11.13
     "@types/tsc-watch": ^4
@@ -5047,7 +5060,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.7.0-alpha.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.7.0, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5061,7 +5074,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.7.0-alpha.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.7.0, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5073,7 +5086,7 @@ __metadata:
     "@babel/preset-env": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/search": ^4.7.0-alpha.0
+    "@openneuro/search": ^4.7.0
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/draft-js": ^0.10.43
@@ -24434,6 +24447,7 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": ^7.13.13
     "@babel/preset-typescript": ^7.13.0
     "@babel/runtime-corejs3": ^7.13.10
+    "@elastic/apm-rum-react": ^1.4.0
     "@loadable/babel-plugin": ^5.13.2
     "@sentry/cli": 1.37.4
     "@testing-library/jest-dom": ^5.14.1
