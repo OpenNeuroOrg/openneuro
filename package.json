@@ -97,5 +97,8 @@
   "resolutions": {
     "react-router-dom": "5.2.0"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "@elastic/apm-rum-react": "^1.4.0"
+  }
 }

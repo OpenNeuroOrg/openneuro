@@ -33,6 +33,7 @@ globalThis.OpenNeuroConfig = {
   SUPPORT_URL: process.env.FRESH_DESK_URL,
   DATALAD_GITHUB_ORG: process.env.DATALAD_GITHUB_ORG,
   AWS_S3_PUBLIC_BUCKET: process.env.AWS_S3_PUBLIC_BUCKET,
+  ELASTIC_APM_SERVER_URL: process.env.ELASTIC_APM_SERVER_URL,
 }
 
 const configScript = `window.OpenNeuroConfig = ${JSON.stringify(

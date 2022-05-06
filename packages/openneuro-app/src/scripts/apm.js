@@ -10,14 +10,14 @@ export function setupApm() {
     config.sentry.environment === 'staging'
   ) {
     apm = initApm({
-      serverUrl: config.url,
+      serverUrl: config.ELASTIC_APM_SERVER_URL,
       serviceName: 'openneuro-app',
       serviceVersion: version,
       environment: config.sentry.environment,
     })
   } else {
     apm = initApm({
-      serverUrl: config.url,
+      serverUrl: config.ELASTIC_APM_SERVER_URL,
       serviceName: 'openneuro-app',
       serviceVersion: version,
       environment: config.sentry.environment,
