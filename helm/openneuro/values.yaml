@@ -5,7 +5,7 @@ hostname: openneuro.staging.sqm.io
 url: https://openneuro.staging.sqm.io
 
 # GraphQL endpoint
-graphql: https://openneuro.staging.sqm.io/crn/graphql
+graphql: http://openneuro-staging-api:8111/crn/graphql
 
 # A unique string identifying this install of OpenNeuro
 environment: staging

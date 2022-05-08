@@ -5,7 +5,7 @@ hostname: openneuro.org
 url: https://openneuro.org
 
 # GraphQL endpoint
-graphql: https://openneuro.org/crn/graphql
+graphql: http://openneuro-prod-api:8111/crn/graphql
 
 # A unique string identifying this install of OpenNeuro
 environment: production
