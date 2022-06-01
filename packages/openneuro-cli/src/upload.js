@@ -150,42 +150,47 @@ export const uploadFiles = async ({
   })
   const rootUrl = getUrl()
   const controller = new AbortController()
-  const requests = files.map(file => {
-    // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
-    const encodedFilePath = uploads.encodeFilePath(file.filename)
-    const fileStream = createReadStream(file.path)
-    fileStream.on('error', err => {
-      console.error(err)
-      controller.abort()
-    })
-    fileStream.on('close', () => {
-      if (fileStream.bytesRead === 0) {
-        uploadProgress.stop()
-        console.error(
-          `Warning: "${file.filename}" read zero bytes - check that this file is readable and try again`,
-        )
+  // Limit open file handles for streams to avoid consuming extra file handles
+  const MAX_STREAM_HANDLES = 512
+  for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
+    const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
+    const requests = filesChunk.map(file => {
+      // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
+      const encodedFilePath = uploads.encodeFilePath(file.filename)
+      const fileStream = createReadStream(file.path)
+      fileStream.on('error', err => {
+        console.error(err)
         controller.abort()
-      }
-    })
-    return new Request(
-      `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
+      })
+      fileStream.on('close', () => {
+        if (fileStream.bytesRead === 0) {
+          uploadProgress.stop()
+          console.error(
+            `Warning: "${file.filename}" read zero bytes - check that this file is readable and try again`,
+          )
+          controller.abort()
+        }
+      })
+      return new Request(
+        `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: fileStream,
+          // @ts-expect-error - this is missing in the upstream type
+          signal: controller.signal,
         },
-        body: fileStream,
-        // @ts-expect-error - this is missing in the upstream type
-        signal: controller.signal,
-      },
+      )
+    })
+    await uploads.uploadParallel(
+      requests,
+      uploads.uploadSize(filesChunk),
+      uploadProgress,
+      fetch,
     )
-  })
-  await uploads.uploadParallel(
-    requests,
-    uploads.uploadSize(files),
-    uploadProgress,
-    fetch,
-  )
+  }
   uploadProgress.stop()
 }
 
