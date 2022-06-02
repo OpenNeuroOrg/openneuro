@@ -21,6 +21,7 @@ import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { getDraftHead } from '../../datalad/dataset.js'
 import { getFileName } from '../../datalad/files.js'
 import { onBrainlife } from './brainlife'
+import { derivatives } from './derivatives'
 import semver from 'semver'
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
@@ -304,6 +305,7 @@ const Dataset = {
   following,
   starred,
   onBrainlife,
+  derivatives,
   metadata,
   history,
   worker,
