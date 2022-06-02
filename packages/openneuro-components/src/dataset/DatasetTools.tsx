@@ -16,6 +16,7 @@ export interface DatasetToolsProps {
   isAdmin: boolean
   isDatasetAdmin: boolean
   hasSnapshot?: boolean
+  hasDerivatives?: boolean
 }
 
 export const DatasetTools = ({
@@ -26,6 +27,7 @@ export const DatasetTools = ({
   isAdmin,
   hasSnapshot,
   isDatasetAdmin,
+  hasDerivatives,
 }: DatasetToolsProps) => {
   const isSnapshot = snapshotId
   return (
@@ -101,6 +103,18 @@ export const DatasetTools = ({
         icon="fa-download"
         label="Download"
       />
+      {hasDerivatives && (
+        <DatasetToolButton
+          tooltip="Available Derivatives"
+          path={
+            snapshotId
+              ? `/datasets/${datasetId}/versions/${snapshotId}/derivatives`
+              : `/datasets/${datasetId}/derivatives`
+          }
+          icon="fa-cubes"
+          label="Derivatives"
+        />
+      )}
       <DatasetToolButton
         tooltip={
           hasEdit

@@ -5,6 +5,7 @@ import DownloadDataset from './download-dataset'
 import { DeprecateSnapshotPage } from './deprecate-snapshot-page'
 import FileDisplay from '../files/file-display'
 import AddMetadata from './add-metadata'
+import Derivatives from './derivatives'
 
 export const TabRoutesSnapshot = ({ dataset, snapshot }) => {
   return (
@@ -25,6 +26,11 @@ export const TabRoutesSnapshot = ({ dataset, snapshot }) => {
             datasetPermissions={dataset.permissions}
           />
         )}
+      />
+      <Route
+        exact
+        path="/datasets/:datasetId/versions/:snapshotId/derivatives"
+        component={() => <Derivatives derivatives={dataset.derivatives} />}
       />
       <Route
         exact

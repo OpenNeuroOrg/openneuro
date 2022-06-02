@@ -112,6 +112,12 @@ export const getDraftPage = gql`
         downloads
         views
       }
+      derivatives {
+        name
+        s3Url
+        dataladUrl
+        local
+      }
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}
