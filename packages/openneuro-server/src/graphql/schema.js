@@ -385,7 +385,7 @@ export const typeDefs = `
     # Is the dataset available for analysis on Brainlife?
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Available derivatives of this dataset
-    derivatives: [DatasetDerivatives]
+    derivatives: [DatasetDerivatives] @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Dataset Metadata
     metadata: Metadata
     # Return the version history for a dataset (git log)
