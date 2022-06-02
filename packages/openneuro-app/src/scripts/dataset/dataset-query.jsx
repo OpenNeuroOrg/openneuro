@@ -57,6 +57,12 @@ export const getDatasetPage = gql`
         downloads
         views
       }
+      derivatives {
+        name
+        s3Url
+        dataladUrl
+        local
+      }
       onBrainlife
     }
   }
