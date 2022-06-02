@@ -3,6 +3,7 @@ import {
   DatasetOrSnapshot,
   getDatasetFromSnapshotId,
 } from '../../utils/datasetOrSnapshot'
+import config from '../../config'
 
 const S3_BUCKET = 'openneuro-derivatives'
 const GITHUB_ORGANIZATION = 'OpenNeuroDerivatives'
@@ -31,7 +32,11 @@ export const githubDerivative = async (
 ): Promise<boolean> => {
   try {
     const url = githubDerivativeQuery(datasetId, derivative)
-    const res = await fetch(url.toString())
+    const res = await fetch(url.toString(), {
+      headers: {
+        Authorization: `token ${config.github.token}`,
+      },
+    })
     if (res.status === 200) {
       const body = await res.json()
       // Verify we aren't displaying a hidden repo

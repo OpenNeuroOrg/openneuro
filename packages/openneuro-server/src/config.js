@@ -64,6 +64,9 @@ const config = {
   elasticsearch: {
     connection: process.env.ELASTICSEARCH_CONNECTION,
   },
+  github: {
+    token: process.env.DATALAD_GITHUB_TOKEN,
+  },
 }
 
 export default config
