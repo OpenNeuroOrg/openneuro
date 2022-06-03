@@ -8,6 +8,7 @@ import Publish from './publish'
 import Share from './manage-permissions'
 import Snapshot from './snapshot'
 import AddMetadata from './add-metadata'
+import Derivatives from './derivatives'
 import FileDisplay from '../files/file-display'
 
 export const TabRoutesDraft = ({ dataset, hasEdit }) => {
@@ -27,6 +28,11 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
             datasetPermissions={dataset.permissions}
           />
         )}
+      />
+      <Route
+        exact
+        path="/datasets/:datasetId/derivatives"
+        component={() => <Derivatives derivatives={dataset.derivatives} />}
       />
       <Route
         exact

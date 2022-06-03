@@ -384,6 +384,8 @@ export const typeDefs = `
     publishDate: DateTime
     # Is the dataset available for analysis on Brainlife?
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
+    # Available derivatives of this dataset
+    derivatives: [DatasetDerivatives] @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Dataset Metadata
     metadata: Metadata
     # Return the version history for a dataset (git log)
@@ -392,6 +394,17 @@ export const typeDefs = `
     worker: String
     # Anonymous reviewers for this dataset
     reviewers: [DatasetReviewer]
+  }
+
+  type DatasetDerivatives {
+    # Remote reference to display
+    name: String
+    # Is this an OpenNeuro derivative?
+    local: Boolean
+    # S3-like URL if available
+    s3Url: String
+    # DataLad GitHub URL if available
+    dataladUrl: String
   }
 
   type DatasetCommit {

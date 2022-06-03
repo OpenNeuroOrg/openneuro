@@ -84,6 +84,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const isDatasetAdmin =
     hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
   const modality: string = summary?.modalities[0] || ''
+  const hasDerivatives = dataset?.derivatives.length > 0
 
   return (
     <>
@@ -183,6 +184,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 isAdmin={isAdmin}
                 hasSnapshot={dataset.snapshots.length !== 0}
                 isDatasetAdmin={isDatasetAdmin}
+                hasDerivatives={hasDerivatives}
               />
               <DatasetPageTabContainer>
                 <TabRoutesDraft dataset={dataset} hasEdit={hasEdit} />

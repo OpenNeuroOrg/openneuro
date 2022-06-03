@@ -86,6 +86,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const isDatasetAdmin =
     hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
   const modality: string = summary?.modalities[0] || ''
+  const hasDerivatives = dataset?.derivatives.length > 0
 
   return (
     <>
@@ -170,6 +171,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   snapshotId={snapshot.tag}
                   isAdmin={isAdmin}
                   isDatasetAdmin={isDatasetAdmin}
+                  hasDerivatives={hasDerivatives}
                 />
               </div>
               <DatasetPageTabContainer>
