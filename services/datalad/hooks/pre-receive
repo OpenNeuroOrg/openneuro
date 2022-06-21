@@ -13,40 +13,36 @@ readonly MAXSIZE="10485760" # 10MB
 readonly NULLSHA="0000000000000000000000000000000000000000"
 readonly EXIT_SUCCESS="0"
 readonly EXIT_FAILURE="1"
+readonly OUTPUT_HR="------------------------------------------------------------------------"
 
-readonly requiredGitAttributes=(
-  "* annex.largefiles=largerthan=1mb"
-  "*.bval annex.largefiles=nothing"
-  "*.bvec annex.largefiles=nothing"
-  "*.json annex.largefiles=nothing"
-  "*.tsv annex.largefiles=nothing"
-  ".bidsignore annex.largefiles=nothing"
-  "CHANGES annex.largefiles=nothing"
-  "README annex.largefiles=nothing"
-)
+readonly GIT_ATTRIBUTES="* annex.backend=SHA256E
+**/.git* annex.largefiles=nothing
+*.bval annex.largefiles=nothing
+*.bvec annex.largefiles=nothing
+*.json annex.largefiles=largerthan=1mb
+*.tsv annex.largefiles=largerthan=1mb
+dataset_description.json annex.largefiles=nothing
+.bidsignore annex.largefiles=nothing
+CHANGES annex.largefiles=nothing
+README annex.largefiles=nothing
+LICENSE annex.largefiles=nothing
+"
 
 function validateGitAttributes() {
-  local missingLines=()
-
   # Find .gitattributes file
   local gitAttributes=$(git show "${newref}:.gitattributes")
-  if [[ "$?" = 0 ]]; then
-    for line in "${requiredGitAttributes[@]}"; do
-      if [[ ! "$gitAttributes" == *"$line"* ]]; then 
-        missingLines+=( "$line" ) 
-      fi
-    done
-  fi
-
-  if [ ${#missingLines[@]} -gt 0 ]; then
+  if [[ "$?" -ne 0 ]]; then
     echo ""
-    echo "---------------------------------------------------------------------------------------"
-    echo "Your push was rejected because your .gitattributes file is missing the following lines:"
-    echo "---------------------------------------------------------------------------------------"
-    for missingLine in "${missingLines[@]}"; do
-      echo "  $missingLine"
-    done
-    exit 1
+    echo $OUTPUT_HR
+    echo "Your push was rejected because a .gitattributes file was not found."
+    echo ""
+    echo ".gitattributes is required to set git-annex defaults for DataLad or git-annex repos."
+    echo "See https://handbook.datalad.org/en/latest/basics/101-123-config2.html#gitattributes"
+    echo ""
+    echo "A suggested default .gitattributes file:"
+    echo $OUTPUT_HR
+    echo $GIT_ATTRIBUTES
+    exit $EXIT_FAILURE
   fi
 }
 
@@ -59,10 +55,10 @@ function filterDotFiles() {
     fi
     if [[ "$filename" =~ ^\..*|\/\..* ]]; then
       echo ""
-      echo "-------------------------------------------------------------------------"
+      echo $OUTPUT_HR
       echo "Filenames beginning with . except for .bidsignore or DataLad repo settings are not allowed"
-      echo "-------------------------------------------------------------------------"
-      exit 1
+      echo $OUTPUT_HR
+      exit $EXIT_FAILURE
     fi
   done
 }
@@ -86,21 +82,21 @@ function main() {
         branch=$(expr "$refname" : "refs/heads/\(.*\)")
         if ! [[ "$branch" == "master" || "$branch" == "git-annex" || "$branch" == "main" || "$branch" =~ "^synced\/.*$" ]]; then
           echo ""
-          echo "-------------------------------------------------------------------------"
+          echo $OUTPUT_HR
           echo "Only 'master', 'main', or 'git-annex' branches are accepted."
-          echo "-------------------------------------------------------------------------"
+          echo $OUTPUT_HR
           exit $EXIT_FAILURE
         fi
         ;;
       refs/tags/*)
         echo ""
-        echo "-------------------------------------------------------------------------"
+        echo $OUTPUT_HR
         echo "Git tags cannot be pushed to OpenNeuro."
         echo ""
         echo "To tag your dataset, please create a snapshot via the dataset's"
         echo "page at https://openneuro.org (recommended) or the GraphQL API"
         echo "(https://docs.openneuro.org/api#snapshot-creation)."
-        echo "-------------------------------------------------------------------------"
+        echo $OUTPUT_HR
         exit $EXIT_FAILURE
         ;;
     esac
