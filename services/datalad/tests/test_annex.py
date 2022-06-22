@@ -93,6 +93,12 @@ def test_compute_rmet_annex():
         'MD5E-s12102144--d614929593bf2a7cccea90bea67255f4.bdf') == '9ce/c07/MD5E-s12102144--d614929593bf2a7cccea90bea67255f4.bdf.log.rmet'
 
 
+def test_compute_rmet_sha256_annex():
+    # Test a git annex MD5E key
+    assert compute_rmet(
+        'SHA256E-s311112--c3527d7944a9619afb57863a34e6af7ec3fe4f108e56c860d9e700699ff806fb.nii.gz') == '2ed/6ea/SHA256E-s311112--c3527d7944a9619afb57863a34e6af7ec3fe4f108e56c860d9e700699ff806fb.nii.gz.log.rmet'
+
+
 def test_parse_remote_line():
     remote = parse_remote_line("""57894849-d0c8-4c62-8418-3627be18a196 autoenable=true bucket=openneuro.org datacenter=US encryption=none exporttree=yes fileprefix=ds002778/ host=s3.amazonaws.com name=s3-PUBLIC partsize=1GiB port=80 public=yes publicurl=http://openneuro.org.s3.amazonaws.com/ storageclass=STANDARD type=S3 versioning=yes timestamp=1588743361.538097946s""")
     assert remote == {'url': 'http://openneuro.org.s3.amazonaws.com/',
