@@ -21,7 +21,7 @@ GIT_ATTRIBUTES = """* annex.backend=SHA256E
 dataset_description.json annex.largefiles=nothing
 .bidsignore annex.largefiles=nothing
 CHANGES annex.largefiles=nothing
-README annex.largefiles=nothing
+README* annex.largefiles=nothing
 LICENSE annex.largefiles=nothing
 """
 
