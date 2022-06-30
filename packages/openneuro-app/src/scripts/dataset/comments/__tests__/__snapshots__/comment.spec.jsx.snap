@@ -23,9 +23,8 @@ Object {
               class="DraftEditor-editorContainer"
             >
               <div
-                class="notranslate public-DraftEditor-content"
-                contenteditable="true"
-                role="textbox"
+                class="public-DraftEditor-content"
+                contenteditable="false"
                 spellcheck="false"
                 style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
               >
@@ -85,9 +84,8 @@ Object {
             class="DraftEditor-editorContainer"
           >
             <div
-              class="notranslate public-DraftEditor-content"
-              contenteditable="true"
-              role="textbox"
+              class="public-DraftEditor-content"
+              contenteditable="false"
               spellcheck="false"
               style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
             >
