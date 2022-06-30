@@ -57,9 +57,9 @@ export async function render(url, cookies) {
   const head = `${helmet.title.toString()}${helmet.meta.toString()}${helmet.style.toString()}`
 
   // Prevent <script> tags from strings
-  const apolloState = Buffer.from(JSON.stringify(client.extract())).toString(
-    'base64',
-  )
+  const apolloState = Buffer.from(
+    encodeURIComponent(JSON.stringify(client.extract())),
+  ).toString('base64')
 
   return { react, apolloState, head, css: redesignStyles }
 }

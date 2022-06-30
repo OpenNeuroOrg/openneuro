@@ -21,7 +21,7 @@
 <body>
     <div id="main">${react}</div>
     <script src="/client.jsx" type="module"></script>
-    <script>window.__APOLLO_STATE__=atob("${apolloState}");</script>
+    <script>window.__APOLLO_STATE__=decodeURIComponent(atob("${apolloState}"));</script>
 </body>
 
 </html>
