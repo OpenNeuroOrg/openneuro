@@ -37,6 +37,7 @@ const Comment = ({ datasetId, data, children }) => {
             <Editor
               editorKey={data.id}
               editorState={editorState}
+              readOnly={true}
               onChange={() => {
                 /* Not editable, this shouldn't fire */
               }}
