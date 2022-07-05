@@ -33,7 +33,7 @@ DATALAD_CONFIG = """[datalad "dataset"]
 
 def create_datalad_config(dataset_path):
     config = DATALAD_CONFIG.format(str(uuid.uuid4()))
-    os.makedirs(os.path.join(dataset_path, '.datalad'))
+    os.makedirs(os.path.join(dataset_path, '.datalad'), exist_ok=True)
     with open(os.path.join(dataset_path, '.datalad/config'), 'w') as configfile:
         configfile.write(config)
 
