@@ -98,6 +98,7 @@ def new_dataset(datalad_store):
     with open(changes_path, 'w') as f:
         f.write(CHANGES)
     ds.save(changes_path)
+    ds.close()
     return ds
 
 
