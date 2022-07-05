@@ -50,6 +50,9 @@ def test_create_snapshot_no_config(datalad_store, client, new_dataset):
     assert response.status == falcon.HTTP_OK
     assert json.loads(response.content)['deleted'] == [
         '.datalad/config']
+    ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
+    assert ds.id is None
+    ds.close()
     # Try to snapshot now
     response = client.simulate_post(
         '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), body="")
