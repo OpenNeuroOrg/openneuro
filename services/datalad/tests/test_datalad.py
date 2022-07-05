@@ -13,8 +13,10 @@ def test_create_dataset(datalad_store):
     ds_id = 'ds000002'
     author = pygit2.Signature('test author', 'test@example.com')
     create_dataset(datalad_store, ds_id, author)
-    assert Dataset(os.path.join(
-        datalad_store.annex_path, ds_id)).repo is not None
+    ds = Dataset(os.path.join(
+        datalad_store.annex_path, ds_id))
+    assert ds.repo is not None
+    assert len(ds.id) == 36
 
 
 def test_delete_dataset(datalad_store, new_dataset):
