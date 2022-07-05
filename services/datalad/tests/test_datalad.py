@@ -16,6 +16,8 @@ def test_create_dataset(datalad_store):
     ds = Dataset(os.path.join(
         datalad_store.annex_path, ds_id))
     assert ds.repo is not None
+    # Verify the dataset is created with datalad config
+    assert ds.id is not None
     assert len(ds.id) == 36
 
 
