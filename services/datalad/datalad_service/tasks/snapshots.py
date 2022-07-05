@@ -5,6 +5,7 @@ import re
 import pygit2
 
 from datalad_service.common.git import git_show, git_tag
+from datalad_service.tasks.dataset import create_datalad_config
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.files import commit_files
 
@@ -132,6 +133,16 @@ def validate_snapshot_name(store, dataset, snapshot):
             'Tag "{}" already exists, name conflict'.format(snapshot))
 
 
+def validate_datalad_config(store, dataset):
+    """Add a .datalad/config file if one does not exist."""
+    dataset_path = store.get_dataset_path(dataset)
+    try:
+        git_show(dataset_path, 'HEAD', '.datalad/config')
+    except:
+        create_datalad_config(dataset_path)
+        commit_files(store, dataset, ['.datalad/config'])
+
+
 def save_snapshot(store, dataset, snapshot):
     repo = pygit2.Repository(store.get_dataset_path(dataset))
     repo.references.create(f'refs/tags/{snapshot}', repo.head.target.hex)
@@ -144,6 +155,7 @@ def create_snapshot(store, dataset, snapshot, description_fields, snapshot_chang
     Raises an exception if the tag already exists.
     """
     validate_snapshot_name(store, dataset, snapshot)
+    validate_datalad_config(store, dataset)
     update_description(store, dataset, description_fields)
     update_changes(store, dataset, snapshot, snapshot_changes)
     save_snapshot(store, dataset, snapshot)
