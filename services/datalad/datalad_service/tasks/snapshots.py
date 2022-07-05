@@ -138,7 +138,7 @@ def validate_datalad_config(store, dataset):
     dataset_path = store.get_dataset_path(dataset)
     try:
         git_show(dataset_path, 'HEAD', '.datalad/config')
-    except:
+    except KeyError:
         create_datalad_config(dataset_path)
         commit_files(store, dataset, ['.datalad/config'])
 
