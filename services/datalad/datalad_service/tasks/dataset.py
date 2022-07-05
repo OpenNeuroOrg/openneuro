@@ -34,8 +34,8 @@ DATALAD_CONFIG = """[datalad "dataset"]
 def create_datalad_config(dataset_path):
     config = DATALAD_CONFIG.format(str(uuid.uuid4()))
     os.makedirs(os.path.join(dataset_path, '.datalad'))
-    with open(os.path.join(dataset_path, '.datalad/config'), 'w') as gitattributes:
-        gitattributes.write(config)
+    with open(os.path.join(dataset_path, '.datalad/config'), 'w') as configfile:
+        configfile.write(config)
 
 
 def create_dataset(store, dataset, author=None):
