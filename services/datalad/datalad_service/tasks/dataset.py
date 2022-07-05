@@ -5,6 +5,7 @@ Any operations that affect an entire dataset (such as creating snapshots)
 """
 import os
 import stat
+import uuid
 
 import pygit2
 
@@ -25,6 +26,17 @@ README* annex.largefiles=nothing
 LICENSE annex.largefiles=nothing
 """
 
+DATALAD_CONFIG = """[datalad "dataset"]
+	id = {}
+"""
+
+
+def create_datalad_config(dataset_path):
+    config = DATALAD_CONFIG.format(str(uuid.uuid4()))
+    os.makedirs(os.path.join(dataset_path, '.datalad'), exist_ok=True)
+    with open(os.path.join(dataset_path, '.datalad/config'), 'w') as configfile:
+        configfile.write(config)
+
 
 def create_dataset(store, dataset, author=None):
     """Create a DataLad git-annex repo for a new dataset."""
@@ -39,7 +51,10 @@ def create_dataset(store, dataset, author=None):
     with open(os.path.join(dataset_path, '.gitattributes'), 'w') as gitattributes:
         gitattributes.write(GIT_ATTRIBUTES)
     repo.index.add('.gitattributes')
-    git_commit(repo, ['.gitattributes'], author,
+    # Set a datalad UUID
+    create_datalad_config(dataset_path)
+    repo.index.add('.datalad/config')
+    git_commit(repo, ['.gitattributes', '.datalad/config'], author,
                '[OpenNeuro] Dataset created', parents=[])
     return repo.head.target.hex
 

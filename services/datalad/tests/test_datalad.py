@@ -1,6 +1,7 @@
 """Test DataLad Celery tasks."""
 import os
 from mock import patch
+import uuid
 
 import pygit2
 
@@ -13,8 +14,15 @@ def test_create_dataset(datalad_store):
     ds_id = 'ds000002'
     author = pygit2.Signature('test author', 'test@example.com')
     create_dataset(datalad_store, ds_id, author)
-    assert Dataset(os.path.join(
-        datalad_store.annex_path, ds_id)).repo is not None
+    ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
+    assert ds.repo is not None
+    # Verify the dataset is created with datalad config
+    assert ds.id is not None
+    assert len(ds.id) == 36
+    try:
+        uuid.UUID(ds.id, version=4)
+    except ValueError:
+        assert False, "dataset datalad id is not a valid uuid4"
 
 
 def test_delete_dataset(datalad_store, new_dataset):
