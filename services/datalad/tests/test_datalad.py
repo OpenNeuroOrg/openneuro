@@ -14,8 +14,7 @@ def test_create_dataset(datalad_store):
     ds_id = 'ds000002'
     author = pygit2.Signature('test author', 'test@example.com')
     create_dataset(datalad_store, ds_id, author)
-    ds = Dataset(os.path.join(
-        datalad_store.annex_path, ds_id))
+    ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert ds.repo is not None
     # Verify the dataset is created with datalad config
     assert ds.id is not None
