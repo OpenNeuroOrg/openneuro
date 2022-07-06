@@ -1,5 +1,6 @@
 import os
 import json
+import uuid
 
 import falcon
 import pytest
@@ -37,6 +38,32 @@ def test_create_snapshot(client, new_dataset):
     response = client.simulate_post(
         '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), body="")
     assert response.status == falcon.HTTP_OK
+
+
+def test_create_snapshot_no_config(datalad_store, client, new_dataset):
+    """Validate adding a datalad config if one is missing during snapshot creation"""
+    ds_id = os.path.basename(new_dataset.path)
+    snapshot_id = '1'
+    # Delete the default config first
+    response = client.simulate_delete('/datasets/{}/files'.format(
+        ds_id), body='{ "filenames": [".datalad/config"] }')
+    assert response.status == falcon.HTTP_OK
+    assert json.loads(response.content)['deleted'] == [
+        '.datalad/config']
+    ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
+    assert ds.id is None
+    ds.close()
+    # Try to snapshot now
+    response = client.simulate_post(
+        '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), body="")
+    assert response.status == falcon.HTTP_OK
+    # Verify the dataset now has an ID
+    ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
+    assert ds.id is not None
+    try:
+        uuid.UUID(ds.id, version=4)
+    except ValueError:
+        assert False, "datalad id is not a valid uuid4"
 
 
 def test_pre_snapshot_edit(client, new_dataset):
