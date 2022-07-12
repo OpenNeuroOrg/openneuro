@@ -30,9 +30,7 @@ def test_update(client, new_dataset):
     assert ds_description[key] == value
 
 
-def post_and_check_description(client, new_dataset, base_description):
-    key = 'Name'
-    value = 'Guthrum'
+def post_and_check_description(client, new_dataset, base_description, key="Name", value="Guthrum"):
     body = json.dumps({
         'description_fields': {
             key: value
@@ -58,33 +56,53 @@ def post_and_check_description(client, new_dataset, base_description):
     check_response = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id))
     assert check_response.status == falcon.HTTP_OK
-    ds_description = json.loads(check_response.content)
-    assert ds_description[key] == value
+    return check_response.content
 
 
 def test_update_with_trailing_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n'
-    post_and_check_description(client, new_dataset, base_description)
+    content = post_and_check_description(client, new_dataset, base_description)
+    ds_description = json.loads(content)
+    assert ds_description["Name"] == "Uhtred"
 
 
 def test_update_with_trailing_double_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n\n'
-    post_and_check_description(client, new_dataset, base_description)
+    content = post_and_check_description(client, new_dataset, base_description)
+    ds_description = json.loads(content)
+    assert ds_description["Name"] == "Uhtred"
 
 
 def test_update_with_trailing_windows_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\r\n'
-    post_and_check_description(client, new_dataset, base_description)
+    content = post_and_check_description(client, new_dataset, base_description)
+    ds_description = json.loads(content)
+    assert ds_description["Name"] == "Uhtred"
 
 
 def test_update_with_trailing_mac_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\r'
-    post_and_check_description(client, new_dataset, base_description)
+    content = post_and_check_description(client, new_dataset, base_description)
+    ds_description = json.loads(content)
+    assert ds_description["Name"] == "Uhtred"
 
 
 def test_update_with_trailing_wat_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n\r'
-    post_and_check_description(client, new_dataset, base_description)
+    content = post_and_check_description(client, new_dataset, base_description)
+    ds_description = json.loads(content)
+    assert ds_description["Name"] == "Uhtred"
+
+
+def test_update_with_unicode_characters(client, new_dataset):
+    base_description = '{ "json stuff": "True", "Name": "Uhtred", "Authors": ["香母酢"] }\n'
+    content = post_and_check_description(
+        client, new_dataset, base_description, "Name", "柴犬").decode()
+    # Verify that escaped characters did not make it into the file
+    assert '\\u67f4' not in content
+    assert '\\u72ac' not in content
+    ds_description = json.loads(content)
+    assert ds_description["Authors"][0] == "香母酢"
 
 
 def test_description_formatting(client, new_dataset):
