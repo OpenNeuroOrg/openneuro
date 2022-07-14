@@ -63,35 +63,35 @@ def test_update_with_trailing_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n'
     content = post_and_check_description(client, new_dataset, base_description)
     ds_description = json.loads(content)
-    assert ds_description["Name"] == "Uhtred"
+    assert ds_description["Name"] == "Guthrum"
 
 
 def test_update_with_trailing_double_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n\n'
     content = post_and_check_description(client, new_dataset, base_description)
     ds_description = json.loads(content)
-    assert ds_description["Name"] == "Uhtred"
+    assert ds_description["Name"] == "Guthrum"
 
 
 def test_update_with_trailing_windows_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\r\n'
     content = post_and_check_description(client, new_dataset, base_description)
     ds_description = json.loads(content)
-    assert ds_description["Name"] == "Uhtred"
+    assert ds_description["Name"] == "Guthrum"
 
 
 def test_update_with_trailing_mac_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\r'
     content = post_and_check_description(client, new_dataset, base_description)
     ds_description = json.loads(content)
-    assert ds_description["Name"] == "Uhtred"
+    assert ds_description["Name"] == "Guthrum"
 
 
 def test_update_with_trailing_wat_newline(client, new_dataset):
     base_description = '{ "json stuff": "True", "Name": "Uhtred" }\n\r'
     content = post_and_check_description(client, new_dataset, base_description)
     ds_description = json.loads(content)
-    assert ds_description["Name"] == "Uhtred"
+    assert ds_description["Name"] == "Guthrum"
 
 
 def test_update_with_unicode_characters(client, new_dataset):
