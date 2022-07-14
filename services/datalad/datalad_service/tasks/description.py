@@ -30,7 +30,8 @@ def update_description(store, dataset, description_fields, name=None, email=None
                                 description, description_file_contents)
             description_file.seek(0)
             description_file.truncate(0)
-            description_file.write(json.dumps(updated, indent=4))
+            description_file.write(json.dumps(
+                updated, indent=4, ensure_ascii=False))
         # Commit new content, run validator
         commit_files(store, dataset, [
             'dataset_description.json'])
