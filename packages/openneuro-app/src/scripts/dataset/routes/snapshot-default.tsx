@@ -10,20 +10,14 @@ import Comments from '../comments/comments'
  */
 export const SnapshotDefault = ({ dataset, snapshot }) => (
   <>
-    <ReadMore
-      fileTree={true}
-      id="collapse-tree"
-      expandLabel="Read More"
-      collapseLabel="Collapse">
-      <Files
-        datasetId={dataset.id}
-        snapshotTag={snapshot.tag}
-        datasetName={snapshot.description.Name}
-        files={snapshot.files}
-        editMode={false}
-        datasetPermissions={dataset.permissions}
-      />
-    </ReadMore>
+    <Files
+      datasetId={dataset.id}
+      snapshotTag={snapshot.tag}
+      datasetName={snapshot.description.Name}
+      files={snapshot.files}
+      editMode={false}
+      datasetPermissions={dataset.permissions}
+    />
     <MetaDataBlock
       heading="README"
       item={
