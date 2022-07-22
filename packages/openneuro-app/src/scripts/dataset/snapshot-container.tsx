@@ -40,6 +40,7 @@ import { StarDataset } from './mutations/star'
 import { SNAPSHOT_FIELDS } from '../datalad/dataset/dataset-query-fragments.js'
 import { DOILink } from './fragments/doi-link'
 import { TabRoutesSnapshot } from './routes/tab-routes-snapshot'
+import schemaGenerator from '../utils/json-ld.js'
 
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -56,7 +57,7 @@ type SnapshotContainerProps = {
   snapshot
 }
 
-const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
+export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   dataset,
   tag,
   snapshot,
@@ -94,6 +95,7 @@ const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
         <title>
           {description.Name} - {pageTitle}
         </title>
+        <script type="application/ld+json">{schemaGenerator(snapshot)}</script>
       </Helmet>
       <div
         className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>

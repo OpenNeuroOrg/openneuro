@@ -1,0 +1,844 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SnapshotContainer component includes JSON-LD data in the header 1`] = `
+Object {
+  "baseTag": Array [],
+  "bodyAttributes": Object {},
+  "defer": true,
+  "encode": true,
+  "htmlAttributes": Object {},
+  "linkTags": Array [],
+  "metaTags": Array [],
+  "noscriptTags": Array [],
+  "onChangeClientState": [Function],
+  "scriptTags": Array [
+    Object {
+      "innerHTML": "{\\"@context\\":\\"http://schema.org\\",\\"@type\\":\\"Dataset\\",\\"name\\":\\"DS003-downsampled (only T1)\\",\\"author\\":[{\\"@type\\":\\"Person\\",\\"name\\":\\"J. Doe\\",\\"givenName\\":\\"J.\\",\\"familyName\\":\\"Doe\\"},{\\"@type\\":\\"Person\\",\\"name\\":\\"J. Doe\\",\\"givenName\\":\\"J.\\",\\"familyName\\":\\"Doe\\"},{\\"@type\\":\\"Person\\",\\"name\\":\\"J. Doe\\",\\"givenName\\":\\"J.\\",\\"familyName\\":\\"Doe\\"}],\\"datePublished\\":\\"2021-12-17T22:32:08.000Z\\",\\"dateModified\\":\\"2021-12-17T22:32:08.000Z\\",\\"license\\":\\"https://creativecommons.org/publicdomain/zero/1.0/\\",\\"publisher\\":{\\"@type\\":\\"Organization\\",\\"name\\":\\"OpenNeuro\\"},\\"description\\":\\"This dataset was obtained from the OpenfMRI project (http://www.openfmri.org).\\\\nAccession #: ds003\\\\nDescription: Rhyme judgment\\\\n\\\\nRelease history:\\\\n10/06/2011: initial release\\\\n3/21/2013: Updated release with QA information\\\\n\\\\nThis dataset is made available under the Public Domain Dedication and License \\\\nv1.0, whose full text can be found at \\\\nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \\\\nWe hope that all users will follow the ODC Attribution/Share-Alike \\\\nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \\\\nin particular, while not legally required, we hope that all users \\\\nof the data will acknowledge the OpenfMRI project and NSF Grant \\\\nOCI-1131441 (R. Poldrack, PI) in any publications.\\\\n\\",\\"version\\":\\"1.0.0\\",\\"url\\":\\"https://openneuro.org/datasets/ds001032/versions/1.0.0\\"}",
+      "type": "application/ld+json",
+    },
+  ],
+  "styleTags": Array [],
+  "title": Array [
+    "DS003-downsampled (only T1)",
+    " - ",
+    "OpenNeuro",
+  ],
+  "titleAttributes": Object {},
+}
+`;
+
+exports[`SnapshotContainer component renders successfully 1`] = `
+<DocumentFragment>
+  <div
+    class="dataset dataset-draft dataset-page dataset-page-mri"
+  >
+    <div
+      class="dataset-header"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="grid grid-between"
+        >
+          <div
+            class="col"
+          >
+            <h1>
+              <a
+                href="/search/modality/MRI"
+              >
+                <div
+                  class="hexagon-wrapper"
+                >
+                  <div
+                    class="hexagon no-modality"
+                  />
+                  <div
+                    class="label"
+                  >
+                    MRI
+                  </div>
+                </div>
+              </a>
+              DS003-downsampled (only T1)
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="container"
+    >
+      <div
+        class="grid grid-between dataset-header-meta"
+      >
+        <div
+          class="col col-8 col-lg"
+        >
+          <div>
+            <span>
+              OpenNeuro Accession Number:
+            </span>
+             ds001032
+            <span>
+              Files:
+            </span>
+             7
+            <span>
+              Size:
+            </span>
+             608.78KB
+          </div>
+        </div>
+        <div
+          class="col follow-bookmark"
+        >
+          <div
+            class="toggle-counter-wrap"
+          >
+            <span
+              class=" "
+              data-flow="up"
+              data-tooltip="Get notified on new versions/comments"
+            >
+              <span
+                class="toggle-counter disabled"
+              >
+                <button
+                  aria-label="Following"
+                  class="on-button on-button--medium on-button--default icon-text toggle-btn active"
+                  role="button"
+                  type="button"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="fa fa-star css-1qxtz39"
+                  />
+                  Following
+                  <span
+                    class="count-span"
+                  >
+                    1
+                  </span>
+                </button>
+              </span>
+            </span>
+          </div>
+          <div
+            class="toggle-counter-wrap"
+          >
+            <span
+              class=" "
+              data-flow="up"
+              data-tooltip="Save to your bookmarked datasets"
+            >
+              <span
+                class="toggle-counter disabled"
+              >
+                <button
+                  aria-label="Bookmark"
+                  class="on-button on-button--medium on-button--default icon-text toggle-btn"
+                  role="button"
+                  type="button"
+                >
+                  <i
+                    aria-hidden="true"
+                    class="fa fa-bookmark css-1qxtz39"
+                  />
+                  Bookmark
+                  <span
+                    class="count-span"
+                  >
+                    0
+                  </span>
+                </button>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="container"
+    >
+      <div
+        class="grid grid-between"
+      >
+        <div
+          class="col col-lg col-8"
+        >
+          <div
+            class="dataset-validation"
+          >
+            <div
+              class="validation-accordion"
+            >
+              <div
+                class="validation-wrap on-accordion-wrapper"
+              >
+                <article
+                  class="plain accordion status"
+                >
+                  <div
+                    class="accordion-title "
+                  >
+                    <div>
+                      <h3
+                        class="metaheader"
+                      >
+                        BIDS Validation
+                      </h3>
+                      <span
+                        class="label text-warning pull-right"
+                      >
+                        1 Warning
+                      </span>
+                      <span
+                        class="dataset-status ds-success"
+                      >
+                        <i
+                          class="fa fa-check-circle"
+                        />
+                         Valid
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    class="accordion-item  collapsed "
+                  >
+                    <div
+                      class="accordion-content"
+                    >
+                      <div>
+                        <span
+                          class="message error fade-in"
+                        >
+                          We found 
+                          <strong>
+                            1 Warning
+                          </strong>
+                           in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.
+                        </span>
+                      </div>
+                      <br />
+                      <div
+                        class="validation-messages on-accordion-wrapper"
+                      >
+                        <article
+                          class="plain accordion fade-in upload-panel warning-wrap"
+                        >
+                          <div
+                            class="accordion-title "
+                          >
+                            <span>
+                              view 1 warning in 1 file
+                            </span>
+                          </div>
+                          <div
+                            class="accordion-item  collapsed "
+                          >
+                            <div
+                              class="accordion-content"
+                            >
+                              <div
+                                class=" on-accordion-wrapper"
+                              >
+                                <article
+                                  class="plain accordion validation-error fade-in"
+                                >
+                                  <div
+                                    class="accordion-title "
+                                  >
+                                    <span
+                                      class="file-header"
+                                    >
+                                      <h4
+                                        class="em-header"
+                                      >
+                                        <strong
+                                          class="em-header "
+                                        >
+                                          Warning: 1
+                                        </strong>
+                                        <span
+                                          class="file-issue-count"
+                                        >
+                                          1 file
+                                        </span>
+                                      </h4>
+                                      Tabular file contains custom columns not described in a data dictionary
+                                    </span>
+                                  </div>
+                                  <div
+                                    class="accordion-item  collapsed "
+                                  >
+                                    <div
+                                      class="accordion-content"
+                                    >
+                                      <div
+                                        class="em-body"
+                                      >
+                                        <span
+                                          class="e-meta"
+                                        >
+                                          <span>
+                                            <label>
+                                              Location: 
+                                            </label>
+                                            <p>
+                                              /participants.tsv
+                                            </p>
+                                          </span>
+                                        </span>
+                                        <span
+                                          class="e-meta"
+                                        >
+                                          <label>
+                                            Reason: 
+                                          </label>
+                                          <p>
+                                            Tabular file contains custom columns not described in a data dictionary
+                                          </p>
+                                        </span>
+                                        <span
+                                          class="e-meta"
+                                        >
+                                          <label>
+                                            Evidence: 
+                                          </label>
+                                          <p>
+                                            Columns: sex, age not defined, please define in: /participants.json
+                                          </p>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </article>
+                              </div>
+                            </div>
+                          </div>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div
+              class="clone-dropdown"
+            >
+              <div
+                class="undefined dropdown-wrapper"
+              >
+                <div
+                  class="toggle "
+                >
+                  <span>
+                    <button
+                      aria-label="Clone"
+                      class="on-button on-button--small on-button--primary  clone-link"
+                      role="button"
+                      type="button"
+                    >
+                      Clone
+                      <i
+                        class="fas fa-caret-up"
+                      />
+                      <i
+                        class="fas fa-caret-down"
+                      />
+                    </button>
+                  </span>
+                </div>
+                <div
+                  class="menu collapsed"
+                >
+                  <div>
+                    <span>
+                      <div
+                        class="dataset-git-access"
+                      >
+                        <span>
+                          <h4>
+                            DataLad/Git URL
+                          </h4>
+                          <a
+                            href="https://docs.openneuro.org/git"
+                            target="_blank"
+                          >
+                            View Documentation
+                          </a>
+                        </span>
+                        <div
+                          class="git-url"
+                        >
+                          <span
+                            class=" "
+                            data-flow="right"
+                            data-tooltip="Copy URL To Clipboard"
+                          >
+                            <button
+                              aria-label="copy Github url"
+                              class="on-button on-button--small on-button--default icon-text undefined"
+                              role="button"
+                              type="button"
+                            >
+                              <i
+                                aria-hidden="true"
+                                class="fas fa-clipboard css-1flyc9m"
+                              />
+                              copy Github url
+                            </button>
+                          </span>
+                          <div>
+                            https://github.com/undefined/ds001032.git
+                          </div>
+                        </div>
+                        <div
+                          class="git-hash"
+                        >
+                          <span
+                            class=" "
+                            data-flow="right"
+                            data-tooltip="Copy Git Hash to Clipboard"
+                          >
+                            <button
+                              aria-label="copy git hash"
+                              class="on-button on-button--small on-button--default icon-text undefined"
+                              role="button"
+                              type="button"
+                            >
+                              <i
+                                aria-hidden="true"
+                                class="fas fa-clipboard css-1flyc9m"
+                              />
+                              copy git hash
+                            </button>
+                          </span>
+                          <div>
+                            Git Hash: d62fdc4
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dataset-tool-buttons"
+          >
+            <span
+              class="css-1dvuowd"
+            >
+              <span
+                class="css-iux6yt"
+              >
+                <span
+                  class=" "
+                  data-flow="up"
+                  data-tooltip="View the dataset file tree"
+                >
+                  <a
+                    href="/datasets/ds001032/versions/1.0.0"
+                  >
+                    <span
+                      aria-label="Files"
+                      class=" on-icon icon-text "
+                      role="img"
+                    >
+                      <i
+                        class="fa fa-folder"
+                      />
+                      Files
+                    </span>
+                  </a>
+                </span>
+              </span>
+              <span
+                class="css-iux6yt"
+              >
+                <span
+                  class=" "
+                  data-flow="up"
+                  data-tooltip="How to Download"
+                >
+                  <a
+                    href="/datasets/ds001032/versions/1.0.0/download"
+                  >
+                    <span
+                      aria-label="Download"
+                      class=" on-icon icon-text "
+                      role="img"
+                    >
+                      <i
+                        class="fa fa-download"
+                      />
+                      Download
+                    </span>
+                  </a>
+                </span>
+              </span>
+              <span
+                class="css-iux6yt"
+              >
+                <span
+                  class=" "
+                  data-flow="up"
+                  data-tooltip="View the dataset metadata"
+                >
+                  <a
+                    href="/datasets/ds001032/versions/1.0.0/metadata"
+                  >
+                    <span
+                      aria-label="Metadata"
+                      class=" on-icon icon-text "
+                      role="img"
+                    >
+                      <i
+                        class="fa fa-file-code"
+                      />
+                      Metadata
+                    </span>
+                  </a>
+                </span>
+              </span>
+            </span>
+          </div>
+          <div
+            class="css-1xk6djt"
+          />
+        </div>
+        <div
+          class="col sidebar"
+        >
+          <div
+            class="dataset-meta-block dmb-inline-list"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Authors
+            </h2>
+            J. Doe, J. Doe, J. Doe
+          </div>
+          <div
+            class="dataset-meta-block dmb-modalities"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Available Modalities
+            </h2>
+            <a
+              href="/search/modality/mri"
+            >
+              MRI
+            </a>
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Versions
+            </h2>
+            <div
+              class="version-block"
+            >
+              <div
+                class="active-version"
+              >
+                <div>
+                  Draft
+                </div>
+                Updated: 2021-12-17
+              </div>
+              <div
+                class="version-dropdown dropdown-wrapper"
+              >
+                <div
+                  class="toggle "
+                >
+                  <span>
+                    <div
+                      class="version-list-label"
+                    >
+                      <b>
+                        Versions
+                      </b>
+                      <i
+                        class="fas fa-chevron-up"
+                      />
+                      <i
+                        class="fas fa-chevron-down"
+                      />
+                    </div>
+                  </span>
+                </div>
+                <div
+                  class="menu collapsed"
+                >
+                  <div
+                    class="version-list-dropdown"
+                  >
+                    <ul>
+                      <li
+                        class="selected"
+                      >
+                        <a
+                          class="dataset-tool"
+                          href="/datasets/ds001032"
+                        >
+                          <span
+                            class="label"
+                          >
+                            Draft
+                            <span
+                              class="active"
+                            >
+                              *
+                            </span>
+                          </span>
+                          2021-12-17
+                        </a>
+                      </li>
+                      <li
+                        class=""
+                      >
+                        <a
+                          class="dataset-tool"
+                          href="/datasets/ds001032/versions/1.0.0"
+                        >
+                          <span
+                            class="label"
+                          >
+                            v1.0.0
+                            <span
+                              class="active"
+                            />
+                            <span
+                              class="deprecated"
+                            />
+                          </span>
+                          2021-12-17
+                        </a>
+                      </li>
+                      <li
+                        class=""
+                      >
+                        <a
+                          class="dataset-tool"
+                          href="/datasets/ds001032/versions/2.0.0"
+                        >
+                          <span
+                            class="label"
+                          >
+                            v2.0.0
+                            <span
+                              class="active"
+                            />
+                            <span
+                              class="deprecated"
+                            />
+                          </span>
+                          2021-12-17
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dataset-meta-block dmb-inline-list"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Tasks
+            </h2>
+            N/A
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Uploaded by
+            </h2>
+            Test User on 2021-12-17 - 7 months ago
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Last Updated
+            </h2>
+            2021-12-17 - 7 months ago
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Sessions
+            </h2>
+            1
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Participants
+            </h2>
+            2
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Dataset DOI
+            </h2>
+            <a
+              href="/datasets/ds001032/snapshot"
+            >
+              Create a new snapshot to obtain a DOI for the snapshot.
+            </a>
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              License
+            </h2>
+            CC0
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              How To Cite
+            </h2>
+            <div
+              class="button-group-wrapper"
+            >
+              <div
+                class="description-item btn-group"
+              >
+                <button
+                  aria-label="Text"
+                  class="on-button on-button--xsmall on-button--secondary  active"
+                  role="button"
+                  type="button"
+                >
+                  Text
+                </button>
+                <button
+                  aria-label="BibTeX"
+                  class="on-button on-button--xsmall on-button--secondary  "
+                  role="button"
+                  type="button"
+                >
+                  BibTeX
+                </button>
+                <span
+                  class=" tooltip"
+                  data-flow="up"
+                  data-tooltip="Copy Text to clipboard"
+                >
+                  <span
+                    class="on-button on-button--small on-button--nobg "
+                  >
+                    <i
+                      aria-hidden="true"
+                      class="fa fa-link"
+                    />
+                     
+                    <span>
+                      Copy
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <h5
+                class="cite-content-block"
+              >
+                J. Doe and J. Doe and J. Doe (2021). DS003-downsampled (only T1). OpenNeuro. [Dataset] doi: null
+              </h5>
+            </div>
+            <h5>
+              <a
+                href="/cite"
+              >
+                More citation info
+              </a>
+            </h5>
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Acknowledgements
+            </h2>
+          </div>
+          <div
+            class="dataset-meta-block undefined"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              How to Acknowledge
+            </h2>
+          </div>
+          <div
+            class="dataset-meta-block dmb-list"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Funding
+            </h2>
+          </div>
+          <div
+            class="dataset-meta-block dmb-list"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              References and Links
+            </h2>
+          </div>
+          <div
+            class="dataset-meta-block dmb-list"
+          >
+            <h2
+              class="dmb-heading"
+            >
+              Ethics Approvals
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
