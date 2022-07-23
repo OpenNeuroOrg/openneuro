@@ -31,7 +31,7 @@ chmod +x .git/hooks/post-rewrite
 COMMIT_TO_EDIT=$(git log --find-object=${1} --reverse --pretty=tformat:"%H" --topo-order | head -n1)
 SHORT_COMMIT=${COMMIT_TO_EDIT:0:7}
 # Automatically edit the right commit during the rebase
-GIT_SEQUENCE_EDITOR="sed -i 's/^pick ${SHORT_COMMIT}/edit ${SHORT_COMMIT}/;'"
+export GIT_SEQUENCE_EDITOR="sed -i 's/^pick ${SHORT_COMMIT}/edit ${SHORT_COMMIT}/;'"
 # --strategy-option theirs = accept the working tree (original) changes over any files edited in this rebase
 git rebase --strategy-option=theirs -i $COMMIT_TO_EDIT~1
 # Remove from commit index but keep file
