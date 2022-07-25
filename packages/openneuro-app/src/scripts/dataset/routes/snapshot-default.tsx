@@ -10,14 +10,6 @@ import Comments from '../comments/comments'
  */
 export const SnapshotDefault = ({ dataset, snapshot }) => (
   <>
-    <Files
-      datasetId={dataset.id}
-      snapshotTag={snapshot.tag}
-      datasetName={snapshot.description.Name}
-      files={snapshot.files}
-      editMode={false}
-      datasetPermissions={dataset.permissions}
-    />
     <MetaDataBlock
       heading="README"
       item={
@@ -28,6 +20,14 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
         </ReadMore>
       }
       className="dataset-readme markdown-body"
+    />
+    <Files
+      datasetId={dataset.id}
+      snapshotTag={snapshot.tag}
+      datasetName={snapshot.description.Name}
+      files={snapshot.files}
+      editMode={false}
+      datasetPermissions={dataset.permissions}
     />
     <Comments
       datasetId={dataset.id}
