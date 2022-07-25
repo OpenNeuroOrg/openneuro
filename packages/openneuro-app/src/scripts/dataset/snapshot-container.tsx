@@ -114,33 +114,6 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
           />
         )}
         <div className="container">
-          <div className="grid grid-between dataset-header-meta">
-            <div className="col col-8 col-lg">
-              {summary && (
-                <DatasetHeaderMeta
-                  size={snapshot.size}
-                  totalFiles={summary.totalFiles}
-                  datasetId={datasetId}
-                />
-              )}
-            </div>
-            <div className="col follow-bookmark">
-              <FollowDataset
-                profile={profile}
-                datasetId={dataset.id}
-                following={dataset.following}
-                followers={dataset.followers.length}
-              />
-              <StarDataset
-                profile={profile}
-                datasetId={dataset.id}
-                starred={dataset.starred}
-                stars={dataset.stars.length}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="container">
           <div className="grid grid-between">
             <div className="col col-lg col-8">
               <div className="dataset-validation">
@@ -181,6 +154,10 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               </DatasetPageTabContainer>
             </div>
             <div className="col sidebar">
+              <MetaDataBlock
+                heading="OpenNeuro Accession Number"
+                item={datasetId}
+              />
               <MetaDataBlock
                 heading="Authors"
                 item={
