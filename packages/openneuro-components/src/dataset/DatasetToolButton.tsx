@@ -12,7 +12,7 @@ interface DatasetToolStyleProps {
 export const DatasetToolStyle = styled.span<DatasetToolStyleProps>(
   props => `
   display: flex;
-  margin: 0 auto 20px;
+  margin: 0 auto 10px;
   flex-basis: auto;
   padding: 0 15px;
   justify-content: center;
