@@ -1,8 +1,6 @@
 @import '../scss/variables';
 .dataset {
   .dataset-header {
-    padding: 20px 0;
-    margin-bottom: 40px;
     h1 {
       display: flex;
       align-items: center;
@@ -26,10 +24,10 @@
   }
 
   .dataset-header-meta {
-    margin: 40px 0 0;
+    margin: 20px 0 0;
     font-size: 14px;
     .col {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
     span {
       margin: 0 2px 0 10px;
