@@ -8,6 +8,18 @@ import { WarnButton } from '@openneuro/components/warn-button'
 import { AccordionWrap } from '@openneuro/components/accordion'
 import styled from '@emotion/styled'
 import { Tooltip } from '@openneuro/components/tooltip'
+import bytes from 'bytes'
+
+const FileTreeMeta = styled.span`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+`
+
+const FileTreeMetaLabel = styled.label`
+  font-weight: bold;
+  padding-left: 1ch;
+`
 
 const StyleWrapper = styled.div`
   .filetree-wrapper {
@@ -28,6 +40,7 @@ const Files = ({
   files,
   editMode = false,
   datasetPermissions,
+  summary,
 }) => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
@@ -108,6 +121,14 @@ const Files = ({
         </Media>
         <Media greaterThanOrEqual="medium">
           <div className="filetree-item">
+            {summary && (
+              <FileTreeMeta>
+                <FileTreeMetaLabel>Files:</FileTreeMetaLabel>{' '}
+                {summary.totalFiles}{' '}
+                <FileTreeMetaLabel>Size:</FileTreeMetaLabel>{' '}
+                {bytes(summary.size)}
+              </FileTreeMeta>
+            )}
             <FileTree
               datasetId={datasetId}
               snapshotTag={snapshotTag}
@@ -136,6 +157,7 @@ Files.propTypes = {
   editMode: PropTypes.bool,
   fetchMore: PropTypes.func,
   datasetPermissions: PropTypes.object,
+  summary: PropTypes.object,
 }
 
 export default Files

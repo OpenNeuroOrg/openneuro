@@ -38,6 +38,7 @@ export const DatasetDefault = ({ dataset, hasEdit }) => (
       files={dataset.draft.files}
       editMode={hasEdit}
       datasetPermissions={dataset.permissions}
+      summary={dataset.draft?.summary}
     />
     <Comments
       datasetId={dataset.id}

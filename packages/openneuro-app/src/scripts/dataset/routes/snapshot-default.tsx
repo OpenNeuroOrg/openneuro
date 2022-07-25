@@ -28,6 +28,7 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       files={snapshot.files}
       editMode={false}
       datasetPermissions={dataset.permissions}
+      summary={snapshot?.summary}
     />
     <Comments
       datasetId={dataset.id}
