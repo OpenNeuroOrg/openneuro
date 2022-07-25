@@ -5,7 +5,6 @@ export interface ReadMoreProps {
   id: string
   collapseLabel: string
   expandLabel: string
-  fileTree?: boolean
 }
 
 export const ReadMore = ({
@@ -13,7 +12,6 @@ export const ReadMore = ({
   id,
   expandLabel,
   collapseLabel,
-  fileTree,
 }: ReadMoreProps) => {
   const readmoreRef = useRef<HTMLDivElement>()
   const [dimensions, setDimensions] = useState({ height: 0 })
@@ -27,19 +25,7 @@ export const ReadMore = ({
 
   return (
     <div ref={readmoreRef}>
-      {fileTree && dimensions.height > 990 ? (
-        <article className="has-read-more readmore-file-tree">
-          <input type="checkbox" className="show-more" id={id} />
-
-          <section>
-            {children}
-            <label htmlFor={id} className="expand-collapse">
-              <span>{expandLabel}</span>
-              <span>{collapseLabel}</span>
-            </label>
-          </section>
-        </article>
-      ) : !fileTree && dimensions.height > 400 ? (
+      {dimensions.height > 400 ? (
         <article className="has-read-more file-tree">
           <input type="checkbox" className="show-more" id={id} />
 
