@@ -5,12 +5,14 @@ export interface DatasetHeaderProps {
   modality: string
   pageHeading: string
   renderEditor?: () => React.ReactNode
+  children?: JSX.Element
 }
 
 export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   pageHeading,
   modality,
   renderEditor,
+  children,
 }) => {
   return (
     <div className="dataset-header">
@@ -31,6 +33,7 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                 </div>
               </Link>
               {renderEditor?.() || pageHeading}
+              {children}
             </h1>
           </div>
         </div>

@@ -24,7 +24,6 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
-  DatasetHeaderMeta,
   DatasetGitAccess,
   VersionList,
   DatasetTools,
@@ -38,6 +37,7 @@ import EditDescriptionList from './fragments/edit-description-list.jsx'
 import { DOILink } from './fragments/doi-link'
 
 import { TabRoutesDraft } from './routes/tab-routes-draft'
+import { FollowToggles } from './common/follow-toggles'
 
 export interface DraftContainerProps {
   dataset
@@ -107,14 +107,30 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           pageHeading={description.Name}
           modality={modality}
           renderEditor={() => (
-            <EditDescriptionField
-              datasetId={datasetId}
-              field="Name"
-              rows={2}
-              description={description.Name}
-              editMode={hasEdit}>
-              {description.Name}
-            </EditDescriptionField>
+            <>
+              <EditDescriptionField
+                datasetId={datasetId}
+                field="Name"
+                rows={2}
+                description={description.Name}
+                editMode={hasEdit}>
+                {description.Name}
+              </EditDescriptionField>
+              <FollowToggles>
+                <FollowDataset
+                  profile={profile}
+                  datasetId={dataset.id}
+                  following={dataset.following}
+                  followers={dataset.followers.length}
+                />
+                <StarDataset
+                  profile={profile}
+                  datasetId={dataset.id}
+                  starred={dataset.starred}
+                  stars={dataset.stars.length}
+                />
+              </FollowToggles>
+            </>
           )}
         />
         <DatasetAlertDraft
