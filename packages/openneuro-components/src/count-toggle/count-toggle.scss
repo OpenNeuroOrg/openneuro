@@ -6,10 +6,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: transparent;
+  background: #eee;
   &:hover {
     text-decoration: none;
-    background-color: #eee;
+    background-color: white;
   }
   i {
     margin: 2px 13px 0 5px;
@@ -21,9 +21,8 @@
 
     &.count-span {
       border-left: 1px solid #aaa;
-      margin-left: 30px;
-      padding: 7px 3px 7px 10px;
-      margin: -7px 0 -7px 12px;
+      margin-left: 14px;
+      padding: 3px 3px 3px 10px;
     }
   }
 

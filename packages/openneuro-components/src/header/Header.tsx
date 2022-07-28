@@ -45,8 +45,7 @@ export const Header = ({
             isOpen
               ? 'navbar-inner-wrap nav-open'
               : 'navbar-inner-wrap nav-closed'
-          }
-        >
+          }>
           <div className="navbar-brand">
             <NavLink to="/">
               <Logo horizontal dark={false} />
@@ -56,16 +55,14 @@ export const Header = ({
           <div className="navbar-navigation">
             <span
               className="mobile-collapse-toggle"
-              onClick={() => setOpen(prev => !prev)}
-            >
+              onClick={() => setOpen(prev => !prev)}>
               <i className="fas fa-bars"></i>
               <span>menu bar</span>
             </span>
             <ul>
               <span
                 className="mobile-nav-close-x"
-                onClick={() => setOpen(prev => !prev)}
-              >
+                onClick={() => setOpen(prev => !prev)}>
                 &times;
               </span>
               <li>
@@ -76,8 +73,7 @@ export const Header = ({
                     e.preventDefault()
                     setOpen(prev => !prev)
                     navigateToNewSearch()
-                  }}
-                >
+                  }}>
                   Search
                 </NavLink>
               </li>
@@ -87,8 +83,7 @@ export const Header = ({
                   onClick={() => {
                     setOpen(prev => !prev)
                     toggleSupport()
-                  }}
-                >
+                  }}>
                   Support
                 </span>
               </li>
@@ -130,8 +125,7 @@ export const Header = ({
         className="freshdesk-support"
         isOpen={isOpenSupport}
         toggle={toggleSupport}
-        closeText="Close"
-      >
+        closeText="Close">
         <h3>OpenNeuro Support</h3>
         <p>
           Please email issues or questions to

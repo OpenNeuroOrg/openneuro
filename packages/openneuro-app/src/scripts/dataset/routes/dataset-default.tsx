@@ -11,14 +11,6 @@ import EditDescriptionField from '../fragments/edit-description-field'
  */
 export const DatasetDefault = ({ dataset, hasEdit }) => (
   <>
-    <Files
-      datasetId={dataset.id}
-      snapshotTag={null}
-      datasetName={dataset.draft.description.Name}
-      files={dataset.draft.files}
-      editMode={hasEdit}
-      datasetPermissions={dataset.permissions}
-    />
     <MetaDataBlock
       heading="README"
       className="dataset-readme markdown-body"
@@ -38,6 +30,15 @@ export const DatasetDefault = ({ dataset, hasEdit }) => (
           </ReadMore>
         </EditDescriptionField>
       )}
+    />
+    <Files
+      datasetId={dataset.id}
+      snapshotTag={null}
+      datasetName={dataset.draft.description.Name}
+      files={dataset.draft.files}
+      editMode={hasEdit}
+      datasetPermissions={dataset.permissions}
+      summary={dataset.draft?.summary}
     />
     <Comments
       datasetId={dataset.id}

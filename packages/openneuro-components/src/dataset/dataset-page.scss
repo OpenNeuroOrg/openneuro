@@ -1,12 +1,11 @@
 @import '../scss/variables';
 .dataset {
   .dataset-header {
-    padding: 20px 0;
-    margin-bottom: 40px;
     h1 {
       display: flex;
       align-items: center;
       color: #fff;
+      font-size: 24px;
       @media (max-width: 767px) {
         font-size: 20px;
         flex-wrap: wrap;
@@ -16,8 +15,8 @@
     .hexagon-wrapper {
       margin-right: 10px;
       @media (max-width: 767px) {
-        width: 65px;
-        height: 65px;
+        width: 56px;
+        height: 56px;
         div.label {
           font-size: 17px;
         }
@@ -25,31 +24,6 @@
     }
   }
 
-  .dataset-header-meta {
-    margin: 40px 0 0;
-    font-size: 14px;
-    .col {
-      margin-bottom: 40px;
-    }
-    span {
-      margin: 0 2px 0 10px;
-      font-weight: bold;
-      &:first-child {
-        margin-left: 0;
-      }
-    }
-    .follow-bookmark {
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      .toggle-counter-wrap {
-        margin-bottom: 10px;
-        &:first-child {
-          margin-right: 30px;
-        }
-      }
-    }
-  }
   .dataset-header-alert {
     padding: 10px 20px;
     background: #b5f1b5;
@@ -68,10 +42,14 @@
     }
   }
 
+  .dataset-content {
+    margin-top: 25px;
+  }
+
   .dataset-validation {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     @media (max-width: 767px) {
       flex-wrap: wrap;
       justify-content: flex-start;

@@ -20,7 +20,6 @@ import {
   ValidationBlock,
   CloneDropdown,
   DatasetHeader,
-  DatasetHeaderMeta,
   DatasetGitAccess,
   VersionList,
   DatasetTools,
@@ -41,6 +40,7 @@ import { SNAPSHOT_FIELDS } from '../datalad/dataset/dataset-query-fragments.js'
 import { DOILink } from './fragments/doi-link'
 import { TabRoutesSnapshot } from './routes/tab-routes-snapshot'
 import schemaGenerator from '../utils/json-ld.js'
+import { FollowToggles } from './common/follow-toggles'
 
 const formatDate = dateObject =>
   new Date(dateObject).toISOString().split('T')[0]
@@ -100,10 +100,26 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
       <div
         className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
         {summary && (
-          <DatasetHeader
-            pageHeading={description.Name}
-            modality={summary?.modalities[0]}
-          />
+          <>
+            <DatasetHeader
+              pageHeading={description.Name}
+              modality={summary?.modalities[0]}>
+              <FollowToggles>
+                <FollowDataset
+                  profile={profile}
+                  datasetId={dataset.id}
+                  following={dataset.following}
+                  followers={dataset.followers.length}
+                />
+                <StarDataset
+                  profile={profile}
+                  datasetId={dataset.id}
+                  starred={dataset.starred}
+                  stars={dataset.stars.length}
+                />
+              </FollowToggles>
+            </DatasetHeader>
+          </>
         )}
         {snapshot?.deprecated && (
           <DatasetAlertVersion
@@ -113,34 +129,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             hasEdit={hasEdit}
           />
         )}
-        <div className="container">
-          <div className="grid grid-between dataset-header-meta">
-            <div className="col col-8 col-lg">
-              {summary && (
-                <DatasetHeaderMeta
-                  size={snapshot.size}
-                  totalFiles={summary.totalFiles}
-                  datasetId={datasetId}
-                />
-              )}
-            </div>
-            <div className="col follow-bookmark">
-              <FollowDataset
-                profile={profile}
-                datasetId={dataset.id}
-                following={dataset.following}
-                followers={dataset.followers.length}
-              />
-              <StarDataset
-                profile={profile}
-                datasetId={dataset.id}
-                starred={dataset.starred}
-                stars={dataset.stars.length}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="container">
+        <div className="dataset-content container">
           <div className="grid grid-between">
             <div className="col col-lg col-8">
               <div className="dataset-validation">
@@ -181,6 +170,10 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               </DatasetPageTabContainer>
             </div>
             <div className="col sidebar">
+              <MetaDataBlock
+                heading="OpenNeuro Accession Number"
+                item={datasetId}
+              />
               <MetaDataBlock
                 heading="Authors"
                 item={
