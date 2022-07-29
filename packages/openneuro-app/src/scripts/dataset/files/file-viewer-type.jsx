@@ -19,7 +19,7 @@ const FileViewerType = ({ path, url, data }) => {
     path.endsWith('.txt')
   ) {
     return <FileViewerText data={data} />
-  } else if (path.endsWith('.nii.gz') || path.endsWith('.nii')) {
+  } else if (path.endsWith('.nii.gz') || path.endsWith('.nii') || path.endsWith('.mgh') || path.endsWith('.mgz')) {
     return <FileViewerNifti imageUrl={url} />
   } else if (path.endsWith('.json')) {
     return <FileViewerJson data={data} />
