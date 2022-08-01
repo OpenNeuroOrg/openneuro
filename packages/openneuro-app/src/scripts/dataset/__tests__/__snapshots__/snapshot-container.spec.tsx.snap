@@ -656,7 +656,7 @@ exports[`SnapshotContainer component renders successfully 1`] = `
             >
               Uploaded by
             </h2>
-            Test User on 2021-12-17 - 7 months ago
+            Test User on 2021-12-17 - 8 months ago
           </div>
           <div
             class="dataset-meta-block undefined"
@@ -666,7 +666,7 @@ exports[`SnapshotContainer component renders successfully 1`] = `
             >
               Last Updated
             </h2>
-            2021-12-17 - 7 months ago
+            2021-12-17 - 8 months ago
           </div>
           <div
             class="dataset-meta-block undefined"
