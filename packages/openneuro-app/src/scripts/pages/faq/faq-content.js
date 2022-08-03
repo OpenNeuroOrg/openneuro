@@ -25,7 +25,7 @@ export const faq = [
       '* ' +
       'You agree that this dataset will become publicly available ' +
       'under a Creative Commons CC0 license after a grace period ' +
-      'of 36 months counted from the first successful snapshot of ' +
+      'of 36 months counted from the first successful version of ' +
       'the dataset.\n' +
       '* ' +
       'This dataset is not subject to GDPR protections.',
@@ -71,7 +71,7 @@ export const faq = [
       'OpenNeuro team and we will direct the DOI and dataset links from the ' +
       'previous dataset to the new dataset. We suggest adding a note to the ' +
       'README of the reuploaded dataset to specify this change.\n\n' +
-      'For any questions or concerns please email Franklin: <ffein@stanford.edu>',
+      'For any questions or concerns please submit a support request or email support@openneuro.freshdesk.com',
   },
   {
     faq: 'How can I upload data onto OpenNeuro?',

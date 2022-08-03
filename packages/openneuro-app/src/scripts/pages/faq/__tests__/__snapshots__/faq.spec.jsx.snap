@@ -3,282 +3,299 @@
 exports[`faq/faq/Faq renders successfully 1`] = `
 <DocumentFragment>
   <div
-    class="container faqs"
+    class="faqs-accordion on-accordion-wrapper"
   >
-    <h1>
-      FAQ's
-    </h1>
     <div
-      class="panel"
+      class="container faqs"
     >
-      <p
-        class="panel-heading"
+      <h1>
+        FAQ's
+      </h1>
+      <article
+        class="plain accordion faq-item"
       >
-        How do I get started?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <span>
-            Check out our 
-            <a
-              href="https://www.youtube.com/watch?v=FK_c1x1Pilk"
-            >
-              video tutorial
-            </a>
-            .
-          </span>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
-      >
-        Is this service free to use?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <span>
-            Yes!
-          </span>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
-      >
-        Are there any restrictions on the uploaded data?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <div>
-            <p>
-              Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: 
-            </p>
-            <ul>
-              <li>
-                You are the owner of this dataset and have any necessary ethics permissions to share the data publicly.
-              </li>
-              <li>
-                This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans, etc.).
-              </li>
-              <li>
-                You agree that this dataset will become publicly available under a Creative Commons CC0 license after a grace period of 36 months counted from the first successful snapshot of the dataset.
-              </li>
-              <li>
-                This dataset is not subject to GDPR protections.
-              </li>
-            </ul>
-          </div>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
-      >
-        What if I will not be able to publish my paper in 36 months?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <span>
-            You can apply for up to two 6-month long extensions of the grace period. To apply please contact support. We encourage you to publish a preprint of your work to reduce the uncertainty of the publishing pipeline.
-          </span>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
-      >
-        Are there consent form templates we can use in our study?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <div>
-            <p>
-              Yes! We recommend using the Open Brain Consent - 
+        <div
+          class="accordion-title open"
+        >
+          How do I get started?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <span>
+              Check out our 
               <a
-                href="https://open-brain-consent.readthedocs.io/en/stable/ultimate.html"
+                href="https://www.youtube.com/watch?v=FK_c1x1Pilk"
               >
-                Ultimate consent form
+                video tutorial
               </a>
               .
-            </p>
-            <ul>
-              <li>
-                For GDPR protected studies, they have a 
+            </span>
+          </div>
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
+      >
+        <div
+          class="accordion-title open"
+        >
+          Is this service free to use?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <span>
+              Yes!
+            </span>
+          </div>
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
+      >
+        <div
+          class="accordion-title open"
+        >
+          Are there any restrictions on the uploaded data?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <div>
+              <p>
+                Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: 
+              </p>
+              <ul>
+                <li>
+                  You are the owner of this dataset and have any necessary ethics permissions to share the data publicly.
+                </li>
+                <li>
+                  This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans, etc.).
+                </li>
+                <li>
+                  You agree that this dataset will become publicly available under a Creative Commons CC0 license after a grace period of 36 months counted from the first successful version of the dataset.
+                </li>
+                <li>
+                  This dataset is not subject to GDPR protections.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
+      >
+        <div
+          class="accordion-title open"
+        >
+          What if I will not be able to publish my paper in 36 months?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <span>
+              You can apply for up to two 6-month long extensions of the grace period. To apply please contact support. We encourage you to publish a preprint of your work to reduce the uncertainty of the publishing pipeline.
+            </span>
+          </div>
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
+      >
+        <div
+          class="accordion-title open"
+        >
+          Are there consent form templates we can use in our study?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <div>
+              <p>
+                Yes! We recommend using the Open Brain Consent - 
                 <a
-                  href="https://open-brain-consent.readthedocs.io/en/stable/gdpr/ultimate_gdpr.html"
+                  href="https://open-brain-consent.readthedocs.io/en/stable/ultimate.html"
                 >
-                  Ultimate consent form GDPR edition
+                  Ultimate consent form
                 </a>
                 .
-              </li>
-            </ul>
+              </p>
+              <ul>
+                <li>
+                  For GDPR protected studies, they have a 
+                  <a
+                    href="https://open-brain-consent.readthedocs.io/en/stable/gdpr/ultimate_gdpr.html"
+                  >
+                    Ultimate consent form GDPR edition
+                  </a>
+                  .
+                </li>
+              </ul>
+            </div>
           </div>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
       >
-        Do I need to format my data in some special way before uploading it to OpenNeuro?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <span>
-            Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at 
-            <a
-              href="http://bids.neuroimaging.io/"
-            >
-              bids.neuroimaging.io
-            </a>
-            . If you have any questions about organizing your data please post them at 
-            <a
-              href="https://neurostars.org/tags/bids"
-            >
-              neurostars.org
-            </a>
-            .
-          </span>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
-      >
-        Do I need to remove facial features from structural images before uploading the data?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <div>
-            <p>
-              OpenNeuro does not accept datasets that have not been defaced for privacy considerations. Datasets found to not have been defaced will be deleted and the dataset owner is invited to reupload their dataset with the defaced images. The dataset owner will be notified by the OpenNeuro team if an infringement has been detected. The only exception is explicit approval from the study participant(s).
-            </p>
-            <p>
-              We recommend using 
+        <div
+          class="accordion-title open"
+        >
+          Do I need to format my data in some special way before uploading it to OpenNeuro?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <span>
+              Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at 
               <a
-                href="https://pypi.python.org/pypi/pydeface"
+                href="http://bids.neuroimaging.io/"
               >
-                pydeface
+                bids.neuroimaging.io
               </a>
-               to deface your images. In the case that the dataset(s) is cited in publications, please notify the OpenNeuro team and we will direct the DOI and dataset links from the previous dataset to the new dataset. We suggest adding a note to the README of the reuploaded dataset to specify this change.
-            </p>
-            <p>
-              For any questions or concerns please email Franklin: 
+              . If you have any questions about organizing your data please post them at 
               <a
-                href="mailto:ffein@stanford.edu"
+                href="https://neurostars.org/tags/bids"
               >
-                ffein@stanford.edu
+                neurostars.org
               </a>
-            </p>
+              .
+            </span>
           </div>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
       >
-        How can I upload data onto OpenNeuro?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <span>
-            We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our 
-            <a
-              href="https://docs.openneuro.org/openneuro-packages-openneuro-cli-readme"
-            >
-              command-line utility tool
-            </a>
-          </span>
-        </span>
-      </div>
-    </div>
-    <div
-      class="panel"
-    >
-      <p
-        class="panel-heading"
-      >
-        Why can I not use CC-BY (or other CC license)?
-      </p>
-      <div
-        class="panel-body"
-      >
-        <span>
-          <div>
-            <p>
-              When OpenNeuro first began accepting data, we hosted datasets that were dedicated to the public domain (CC0 or PDDL) or released under the CC-BY license. The idea of accepting CC-BY licenses was to reflect the academic norm of citing sources, but it fails to achieve that goal. In 
-              <a
-                href="https://osc.universityofcalifornia.edu/2016/09/cc-by-and-data-not-always-a-good-fit/"
-              >
-                CC BY and data: Not always a good fit
-              </a>
-              , it is argued:
-            </p>
-            <blockquote>
+        <div
+          class="accordion-title open"
+        >
+          Do I need to remove facial features from structural images before uploading the data?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <div>
               <p>
-                 
-                <strong>
-                  CC licenses are not sufficient for ensuring proper attribution in many  cases because their restrictions — including attribution — do not apply to facts.
-                </strong>
-                
+                OpenNeuro does not accept datasets that have not been defaced for privacy considerations. Datasets found to not have been defaced will be deleted and the dataset owner is invited to reupload their dataset with the defaced images. The dataset owner will be notified by the OpenNeuro team if an infringement has been detected. The only exception is explicit approval from the study participant(s).
+              </p>
+              <p>
+                We recommend using 
+                <a
+                  href="https://pypi.python.org/pypi/pydeface"
+                >
+                  pydeface
+                </a>
+                 to deface your images. In the case that the dataset(s) is cited in publications, please notify the OpenNeuro team and we will direct the DOI and dataset links from the previous dataset to the new dataset. We suggest adding a note to the README of the reuploaded dataset to specify this change.
+              </p>
+              <p>
+                For any questions or concerns please submit a support request or email support@openneuro.freshdesk.com
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
+      >
+        <div
+          class="accordion-title open"
+        >
+          How can I upload data onto OpenNeuro?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <span>
+              We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our 
+              <a
+                href="https://docs.openneuro.org/openneuro-packages-openneuro-cli-readme"
+              >
+                command-line utility tool
+              </a>
+            </span>
+          </div>
+        </div>
+      </article>
+      <article
+        class="plain accordion faq-item"
+      >
+        <div
+          class="accordion-title open"
+        >
+          Why can I not use CC-BY (or other CC license)?
+        </div>
+        <div
+          class="accordion-item  "
+        >
+          <div
+            class="accordion-content"
+          >
+            <div>
+              <p>
+                When OpenNeuro first began accepting data, we hosted datasets that were dedicated to the public domain (CC0 or PDDL) or released under the CC-BY license. The idea of accepting CC-BY licenses was to reflect the academic norm of citing sources, but it fails to achieve that goal. In 
+                <a
+                  href="https://osc.universityofcalifornia.edu/2016/09/cc-by-and-data-not-always-a-good-fit/"
+                >
+                  CC BY and data: Not always a good fit
+                </a>
+                , it is argued:
+              </p>
+              <blockquote>
+                <p>
+                   
+                  <strong>
+                    CC licenses are not sufficient for ensuring proper attribution in many  cases because their restrictions — including attribution — do not apply to facts.
+                  </strong>
+                  
 ...
-              </p>
+                </p>
+                <p>
+                  <strong>
+                    CC licenses' attribution requirements aren't necessary because scholars have very good reasons to provide attribution that has nothing to do with copyright
+                  </strong>
+                   [...] Data that comes from nowhere has little credibility. If someone wants to use data as persuasive evidence, they need to refer readers and reviewers back to its source: who it came from and how it was produced.
+                </p>
+              </blockquote>
               <p>
-                <strong>
-                  CC licenses' attribution requirements aren't necessary because scholars have very good reasons to provide attribution that has nothing to do with copyright
-                </strong>
-                 [...] Data that comes from nowhere has little credibility. If someone wants to use data as persuasive evidence, they need to refer readers and reviewers back to its source: who it came from and how it was produced.
+                CC-BY places an ambiguous legal hurdle between researchers and data they are considering using, even if only intended to enforce standard academic practice. To reduce uncertainty for data consumers, all newly published datasets are released under CC0, as are new versions of previously released datasets.  We do nonetheless want to encourage proper attribution of datasets hosted on OpenNeuro. Each version of a dataset is assigned a unique DOI, enabling researchers to cite the version of a dataset they analyzed. Additionally, all OpenNeuro datasets may include a 
+                <a
+                  href="https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson"
+                >
+                  "HowToAcknowledge" field
+                </a>
+                , in which dataset providers may provide specific instructions for users for what they consider an appropriate citation.
               </p>
-            </blockquote>
-            <p>
-              CC-BY places an ambiguous legal hurdle between researchers and data they are considering using, even if only intended to enforce standard academic practice. To reduce uncertainty for data consumers, all newly published datasets are released under CC0, as are new versions of previously released datasets.  We do nonetheless want to encourage proper attribution of datasets hosted on OpenNeuro. Each version of a dataset is assigned a unique DOI, enabling researchers to cite the version of a dataset they analyzed. Additionally, all OpenNeuro datasets may include a 
-              <a
-                href="https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson"
-              >
-                "HowToAcknowledge" field
-              </a>
-              , in which dataset providers may provide specific instructions for users for what they consider an appropriate citation.
-            </p>
+            </div>
           </div>
-        </span>
-      </div>
+        </div>
+      </article>
     </div>
   </div>
 </DocumentFragment>

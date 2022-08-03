@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import Dataset from './dataset/draft-snapshot-routes'
 //import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
-import { FAQS } from '@openneuro/components/faqs'
+import FaqPage from './pages/faq/faq'
 import FrontPageContainer from './pages/front-page/front-page'
 import Admin from './pages/admin/admin'
 import SearchRoutes from './search/search-routes'
@@ -18,7 +18,7 @@ import { ImportDataset } from './pages/import-dataset'
 
 const Routes: React.VoidFunctionComponent = () => (
   <Switch>
-    <Route exact path="/faq" component={FAQS} />
+    <Route exact path="/faq" component={FaqPage} />
     <Route exact path="/" component={FrontPageContainer} />
     <Route exact path="/keygen" component={APIKey} />
     <Route path="/datasets" component={Dataset} />
