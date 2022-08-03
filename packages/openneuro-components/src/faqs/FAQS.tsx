@@ -1,16 +1,15 @@
 import React from 'react'
 
 import Markdown from 'markdown-to-jsx'
-import { faq } from '../mock-content/faq-content'
 import { AccordionWrap } from '../accordion/AccordionWrap'
 import { AccordionTab } from '../accordion/AccordionTab'
 
-export interface FAQSProps {}
+export interface FAQSProps {
+  content: Record<string, any>
+}
 
-export const FAQS: React.FC<FAQSProps> = ({}) => {
-  const faqsList = faq
-
-  const faqs = faqsList.map((item, index) => {
+export const FAQS: React.FC<FAQSProps> = ({ content }) => {
+  const faqs = content.map((item, index) => {
     return (
       <AccordionTab
         accordionStyle="plain"
