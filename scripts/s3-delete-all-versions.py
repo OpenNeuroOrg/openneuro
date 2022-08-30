@@ -7,6 +7,7 @@ def nuke_prefix():
     client = boto3.client('s3')
     paginator = client.get_paginator('list_object_versions')
     object_delete_list = []
+    print(f"Remove all objects prefixed with s3://{BUCKET_NAME}/{PREFIX}")
     for object_response_itr in paginator.paginate(Bucket=BUCKET_NAME, Prefix=PREFIX):
         if 'DeleteMarkers' in object_response_itr:
             for delete_marker in object_response_itr['DeleteMarkers']:
