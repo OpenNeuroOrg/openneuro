@@ -62,8 +62,6 @@ export default test => {
         }
       }
     },
-    // Disable engine in test suite
-    engine: test || !process.env.ENGINE_API_KEY ? false : engineConfig,
     // Always allow introspection - our schema is public
     introspection: true,
     // Enable authenticated queries in playground
