@@ -15,7 +15,7 @@ import { version } from './lerna.json'
 import { config } from './scripts/config'
 import * as gtag from './scripts/utils/gtag'
 import { relayStylePagination } from '@apollo/client/utilities'
-import redesignStyles from '@openneuro/components/page/page.scss'
+import '@openneuro/components/page/page.scss'
 
 gtag.initialize(config.analytics.trackingIds)
 
