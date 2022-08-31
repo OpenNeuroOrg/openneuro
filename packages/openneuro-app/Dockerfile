@@ -1,6 +1,9 @@
-FROM openneuro/node AS web
+FROM openneuro/node AS app
 
 WORKDIR /srv/packages/openneuro-app
-RUN yarn tsc -b && NODE_OPTIONS=--max_old_space_size=4096 yarn build && cp maintenance.html src/dist/client
+RUN NODE_OPTIONS=--max_old_space_size=4096 yarn build && cp maintenance.html src/dist && cp src/assets/favicon.ico src/dist
 
-CMD NODE_ENV=production yarn node dist/ssr.js
+FROM nginx:alpine AS web
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=app /srv/packages/openneuro-app/src/dist /srv/app/dist

@@ -31,15 +31,6 @@
   },
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.14.6",
-    "@storybook/addon-a11y": "^6.2.8",
-    "@storybook/addon-actions": "^6.2.8",
-    "@storybook/addon-docs": "^6.2.8",
-    "@storybook/addon-essentials": "^6.2.8",
-    "@storybook/addon-links": "^6.2.8",
-    "@storybook/addons": "^6.2.8",
-    "@storybook/preset-scss": "^1.0.3",
-    "@storybook/react": "^6.2.8",
-    "@storybook/theming": "^6.2.8",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
@@ -62,9 +53,7 @@
     "url-loader": "^1.0.1"
   },
   "scripts": {
-    "build": "tsc --build",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build": "tsc --build"
   },
   "publishConfig": {
     "access": "public"

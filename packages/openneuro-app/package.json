@@ -9,8 +9,8 @@
     "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "scripts": {
-    "start": "node --enable-source-maps ./dist/ssr.js",
-    "build": "yarn vite build --outDir dist/client && yarn vite build --outDir dist/server --ssr server.jsx"
+    "start": "vite",
+    "build": "vite build --outDir dist"
   },
   "author": "Squishymedia",
   "dependencies": {

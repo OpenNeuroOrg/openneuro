@@ -39,7 +39,7 @@ const routes = [
   // React config --------------------------------
   {
     method: 'get',
-    url: '/config.json',
+    url: '/config.js',
     handler: clientConfig,
   },
   // users ---------------------------------------
