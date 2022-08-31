@@ -24,7 +24,7 @@ ReactDOM.render(
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
-        enableWebsocket: false,
+        enableWebsocket: true,
         cache: new InMemoryCache({
           typePolicies: {
             Query: {
