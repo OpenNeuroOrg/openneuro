@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Interface describing the configuration object
  */
@@ -31,36 +33,36 @@ export interface OpenNeuroConfig {
 }
 
 export const config: OpenNeuroConfig = {
-  url: globalThis.OpenNeuroConfig.CRN_SERVER_URL,
-  api: `${globalThis.OpenNeuroConfig.CRN_SERVER_URL as string}/crn/`,
+  url: import.meta.env.VITE_CRN_SERVER_URL,
+  api: `${import.meta.env.VITE_CRN_SERVER_URL as string}/crn/`,
   graphql: {
-    uri: globalThis.OpenNeuroConfig.GRAPHQL_URI,
+    uri: import.meta.env.VITE_GRAPHQL_URI,
   },
   auth: {
     google: {
-      clientID: globalThis.OpenNeuroConfig.GOOGLE_CLIENT_ID,
+      clientID: import.meta.env.VITE_GOOGLE_CLIENT_ID,
     },
     globus: {
-      clientID: globalThis.OpenNeuroConfig.GLOBUS_CLIENT_ID,
+      clientID: import.meta.env.VITE_GLOBUS_CLIENT_ID,
     },
     orcid: {
-      clientID: globalThis.OpenNeuroConfig.ORCID_CLIENT_ID,
-      URI: globalThis.OpenNeuroConfig.ORCID_URI,
-      redirectURI: globalThis.OpenNeuroConfig.ORCID_REDIRECT_URI,
+      clientID: import.meta.env.VITE_ORCID_CLIENT_ID,
+      URI: import.meta.env.VITE_ORCID_URI,
+      redirectURI: import.meta.env.VITE_ORCID_REDIRECT_URI,
     },
   },
   analytics: {
-    trackingIds: globalThis.OpenNeuroConfig.GOOGLE_TRACKING_IDS.split(',').map(
-      id => {
+    trackingIds:
+      import.meta.env.VITE_GOOGLE_TRACKING_IDS &&
+      import.meta.env.VITE_GOOGLE_TRACKING_IDS.split(',').map(id => {
         return id.trim() as string
-      },
-    ),
+      }),
   },
-  sentry: { environment: globalThis.OpenNeuroConfig.ENVIRONMENT },
-  support: { url: globalThis.OpenNeuroConfig.SUPPORT_URL },
-  github: globalThis.OpenNeuroConfig.DATALAD_GITHUB_ORG,
-  publicBucket: globalThis.OpenNeuroConfig.AWS_S3_PUBLIC_BUCKET,
-  ELASTIC_APM_SERVER_URL: globalThis.OpenNeuroConfig.ELASTIC_APM_SERVER_URL,
+  sentry: { environment: import.meta.env.VITE_ENVIRONMENT },
+  support: { url: import.meta.env.VITE_SUPPORT_URL },
+  github: import.meta.env.VITE_DATALAD_GITHUB_ORG,
+  publicBucket: import.meta.env.VITE_AWS_S3_PUBLIC_BUCKET,
+  ELASTIC_APM_SERVER_URL: import.meta.env.VITE_ELASTIC_APM_SERVER_URL,
 }
 
 export const getConfig = (): OpenNeuroConfig => config

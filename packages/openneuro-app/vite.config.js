@@ -5,7 +5,8 @@ import nodePolyfills from 'rollup-plugin-polyfill-node'
 export default defineConfig({
   root: 'src',
   server: {
-    port: 9876,
+    port: 80,
+    host: '0.0.0.0',
   },
   build: {
     sourcemap: true,

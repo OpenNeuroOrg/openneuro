@@ -15,15 +15,16 @@ import { version } from './lerna.json'
 import { config } from './scripts/config'
 import * as gtag from './scripts/utils/gtag'
 import { relayStylePagination } from '@apollo/client/utilities'
+import redesignStyles from '@openneuro/components/page/page.scss'
 
 gtag.initialize(config.analytics.trackingIds)
 
-ReactDOM.hydrate(
+ReactDOM.render(
   <App>
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
         clientVersion: version,
-        enableWebsocket: true,
+        enableWebsocket: false,
         cache: new InMemoryCache({
           typePolicies: {
             Query: {
@@ -32,10 +33,8 @@ ReactDOM.hydrate(
               },
             },
           },
-          // @ts-expect-error
-        }).restore(JSON.parse(window.__APOLLO_STATE__)),
-      })}
-    >
+        }),
+      })}>
       <BrowserRouter>
         <Route component={analyticsWrapper(Index)} />
       </BrowserRouter>

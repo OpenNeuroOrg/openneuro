@@ -49,7 +49,7 @@ services:
       service: node
     command: bash -c 'yarn workspace @openneuro/app start'
     healthcheck:
-      test: curl -f http://localhost/robots.txt || exit 1
+      test: curl -f http://localhost/index.html || exit 1
       interval: 5s
       retries: 10
     ports:
@@ -153,20 +153,6 @@ services:
       server:
         condition: service_healthy
       datalad:
-        condition: service_healthy
-      app:
-        condition: service_healthy
-
-  storybook:
-    extends:
-      service: node
-    command: bash -c 'yarn workspace @openneuro/components storybook'
-    ports:
-      - '6006:6006'
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      node:
         condition: service_healthy
       app:
         condition: service_healthy
