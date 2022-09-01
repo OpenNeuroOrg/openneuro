@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import PublishDataset from '../mutations/publish.jsx'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3 } from './styles/header-row'
@@ -26,13 +26,10 @@ const Publish = ({ datasetId, metadata }) =>
       </div>
     </DatasetPageBorder>
   ) : (
-    <Redirect
-      to={{
-        pathname: `/datasets/${datasetId}/metadata`,
-        state: {
-          submitPath: `/datasets/${datasetId}/publish`,
-        },
-      }}
+    <Navigate
+      to={`/datasets/${datasetId}/metadata`}
+      state={{ submitPath: `/datasets/${datasetId}/publish` }}
+      replace
     />
   )
 

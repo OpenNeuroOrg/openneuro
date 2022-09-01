@@ -2,7 +2,7 @@
  * Route for nice display of backend errors
  */
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import OrcidGeneral from './orcid/general.jsx'
 import OrcidEmail from './orcid/email.jsx'
 import OrcidGiven from './orcid/given.jsx'
@@ -13,10 +13,12 @@ class ErrorRoute extends React.Component {
     return (
       <div className="container errors">
         <div className="panel">
-          <Route path="/error/orcid" component={OrcidGeneral} />
-          <Route exact path="/error/orcid/email" component={OrcidEmail} />
-          <Route exact path="/error/orcid/given" component={OrcidGiven} />
-          <Route exact path="/error/orcid/family" component={OrcidFamily} />
+          <Routes>
+            <Route path="/error/orcid" element={<OrcidGeneral />} />
+            <Route path="/error/orcid/email" element={<OrcidEmail />} />
+            <Route path="/error/orcid/given" element={<OrcidGiven />} />
+            <Route path="/error/orcid/family" element={<OrcidFamily />} />
+          </Routes>
         </div>
       </div>
     )

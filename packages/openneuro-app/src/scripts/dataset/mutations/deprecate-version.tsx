@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import { Button } from '@openneuro/components/button'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export const DEPRECATE_VERSION = gql`
   mutation deprecateSnapshot($datasetId: ID!, $tag: String!, $reason: String!) {
@@ -25,7 +25,7 @@ export const DeprecateVersion: FC<DeprecateVersionProps> = ({
   tag,
   reason,
 }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [DeprecateVersionMutation] = useMutation(DEPRECATE_VERSION)
 
   return (
@@ -38,7 +38,7 @@ export const DeprecateVersion: FC<DeprecateVersionProps> = ({
         DeprecateVersionMutation({
           variables: { datasetId, tag, reason },
         }).then(() => {
-          history.push(`/datasets/${datasetId}/versions/${tag}`)
+          navigate(`/datasets/${datasetId}/versions/${tag}`)
         })
       }
     />

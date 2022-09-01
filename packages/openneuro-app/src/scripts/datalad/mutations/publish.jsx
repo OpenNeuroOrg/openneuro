@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { datasetCacheId } from './cache-id.js'
 
 const PUBLISH_DATASET = gql`
@@ -19,7 +19,7 @@ const DATASET_PUBLISHED = gql`
 `
 
 const PublishDataset = ({ datasetId }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   return (
     <Mutation
       mutation={PUBLISH_DATASET}
@@ -39,7 +39,7 @@ const PublishDataset = ({ datasetId }) => {
           className="btn-modal-action"
           onClick={() =>
             publishDataset({ variables: { datasetId } }).then(() => {
-              history.push(`/datasets/${datasetId}`)
+              navigate(`/datasets/${datasetId}`)
             })
           }>
           Publish

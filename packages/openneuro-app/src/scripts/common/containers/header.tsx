@@ -8,7 +8,7 @@ import ModalitySelect from '../../search/inputs/modality-select'
 import { SearchParamsCtx } from '../../search/search-params-ctx'
 import initialSearchParams from '../../search/initial-search-params'
 import { UserModalOpenCtx } from '../../utils/user-login-modal-ctx'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import signOut from '../../authentication/signOut'
 import { getUnexpiredProfile } from '../../authentication/profile'
@@ -19,7 +19,7 @@ import UploaderView from '../../uploader/uploader-view.jsx'
 import UploadButton from '../../uploader/upload-button.jsx'
 import UploadProgressButton from '../../uploader/upload-progress-button.jsx'
 const HeaderContainer: FC = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { pathname: currentPath } = useLocation()
   const expanded = currentPath === '/'
@@ -39,7 +39,7 @@ const HeaderContainer: FC = () => {
       keywords: newKeywordRef.current ? [newKeywordRef.current] : [],
     }))
     setNewKeyword('')
-    history.push('/search')
+    navigate('/search')
   }
 
   const clearSearchParams = () => setSearchParams(initialSearchParams)

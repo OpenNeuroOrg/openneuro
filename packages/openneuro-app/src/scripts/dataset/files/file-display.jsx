@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useParams } from 'react-router-dom'
 import FileView from './file-view.jsx'
 import { apiPath } from './file'
 import styled from '@emotion/styled'
@@ -79,6 +80,10 @@ FileDisplay.propTypes = {
   datasetId: PropTypes.string,
   filePath: PropTypes.string,
   snapshotTag: PropTypes.string,
+}
+
+export const FileDisplayRoute = () => {
+  return <FileDisplay {...useParams()} />
 }
 
 export default FileDisplay

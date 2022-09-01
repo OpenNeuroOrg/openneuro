@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
+import { Navigate, Routes, Route, NavLink } from 'react-router-dom'
 import Users from './users.jsx'
 import FlaggedFiles from './flagged-files.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
@@ -27,15 +27,14 @@ class Dashboard extends React.Component {
                   </NavLink>
                 </li>
               </ul>
-              <Switch>
-                <Redirect path="/admin" to="/admin/users" exact />
-                <Route path="/admin/users" exact component={Users} />
+              <Routes>
+                <Route path="/users" element={<Users />} />
+                <Route path="/flagged-files" element={<FlaggedFiles />} />
                 <Route
-                  path="/admin/flagged-files"
-                  exact
-                  component={FlaggedFiles}
+                  path="/"
+                  element={<Navigate to="/admin/users" replace />}
                 />
-              </Switch>
+              </Routes>
             </div>
           </div>
         </div>

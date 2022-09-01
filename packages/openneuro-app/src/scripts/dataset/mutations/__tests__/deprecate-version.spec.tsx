@@ -1,20 +1,30 @@
 import React from 'react'
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
-import { Router } from 'react-router-dom'
+import {
+  Router,
+  unstable_HistoryRouter as HistoryRouter,
+} from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { DeprecateVersion, DEPRECATE_VERSION } from '../deprecate-version'
 
 describe('DeprecateVersion mutation', () => {
   it('renders with typical props', () => {
+    const datasetId = 'test00001'
+    const tag = '1.0.0'
+    const history = createMemoryHistory({
+      initialEntries: [`/datasets/${datasetId}/versions/${tag}/deprecate`],
+    })
     const { asFragment } = render(
-      <MockedProvider>
-        <DeprecateVersion
-          datasetId="test00001"
-          tag="1.0.0"
-          reason="This is a test suite."
-        />
-      </MockedProvider>,
+      <HistoryRouter history={history}>
+        <MockedProvider>
+          <DeprecateVersion
+            datasetId="test00001"
+            tag="1.0.0"
+            reason="This is a test suite."
+          />
+        </MockedProvider>
+      </HistoryRouter>,
     )
     expect(asFragment()).toMatchSnapshot()
   })
@@ -53,11 +63,11 @@ describe('DeprecateVersion mutation', () => {
     }
 
     render(
-      <Router history={history}>
+      <HistoryRouter history={history}>
         <MockedProvider mocks={[deprecateSnapshotMock]} addTypename={false}>
           <DeprecateVersion datasetId={datasetId} tag={tag} reason={reason} />
         </MockedProvider>
-      </Router>,
+      </HistoryRouter>,
     )
 
     fireEvent.click(screen.getByLabelText(/Deprecate Version/i))

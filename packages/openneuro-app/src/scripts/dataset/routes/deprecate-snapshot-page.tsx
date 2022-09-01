@@ -1,20 +1,13 @@
 import React, { useState } from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { DeprecateVersion } from '../mutations/deprecate-version'
 import { Input } from '@openneuro/components/input'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3 } from './styles/header-row'
 
-interface DeprecateSnapshotRouteParams {
-  datasetId: string
-  snapshotTag: string
-}
-
 export const DeprecateSnapshotPage = (): React.ReactElement => {
-  const {
-    params: { datasetId, snapshotTag },
-  } = useRouteMatch<DeprecateSnapshotRouteParams>()
+  const { datasetId, snapshotTag } = useParams()
   const [reason, setReason] = useState('')
 
   return (

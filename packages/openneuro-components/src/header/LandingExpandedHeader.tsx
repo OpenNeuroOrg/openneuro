@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '../button/Button'
 import { ModalityCube } from '../modality-cube/ModalityCube'
@@ -29,7 +29,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
 }) => {
   const aggregateCounts = (modality: string): React.ReactNode =>
     renderAggregateCounts ? renderAggregateCounts(modality) : null
-  const history = useHistory()
+  const navigate = useNavigate()
   const hexGrid = (
     <ul id="hexGrid">
       {cubeData.map((item, index) => (
@@ -40,7 +40,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           stats={aggregateCounts(item.label)}
           onClick={redirectPath => e => {
             clearSearchParams()
-            history.push(redirectPath)
+            navigate(redirectPath)
           }}
         />
       ))}

@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { useRouteMatch, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
   SearchParamsCtx,
   removeFilterItem,
@@ -23,15 +23,15 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
 
   const noFilters = !useCheckIfParamsAreSelected(['modality_selected'])
 
-  const history = useHistory()
-  const { path } = useRouteMatch()
+  const navigate = useNavigate()
+  const { path } = useParams()
   const globalSearchPath = '/search'
 
   const removeFilter =
     (isModality: boolean) =>
     (param, value): void => {
       removeFilterItem(setSearchParams)(param, value)
-      if (isModality) history.push(globalSearchPath)
+      if (isModality) navigate(globalSearchPath)
     }
 
   const removeAllFilters = (): void => {
@@ -40,7 +40,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
     }))
-    if (path !== globalSearchPath) history.push(globalSearchPath)
+    if (path !== globalSearchPath) navigate(globalSearchPath)
   }
   return (
     <FiltersBlock

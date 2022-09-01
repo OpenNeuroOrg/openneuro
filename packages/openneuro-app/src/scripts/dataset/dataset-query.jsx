@@ -1,6 +1,7 @@
 import { apm } from '../apm'
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery, gql, useApolloClient } from '@apollo/client'
 import { Loading } from '@openneuro/components/loading'
 
@@ -133,10 +134,10 @@ export const getDraftPage = gql`
  * Query to load and render dataset page - most dataset loading is done here
  * @param {Object} props
  * @param {Object} props.datasetId Accession number / id for dataset to query
- * @param {Object} props.draft Is this the draft page?
- * @param {Object} props.history React router history
+ * @param {Object} props.draft Draft object
  */
-export const DatasetQueryHook = ({ datasetId, draft, history }) => {
+export const DatasetQueryHook = ({ datasetId, draft }) => {
+  const navigate = useNavigate()
   const { data, loading, error, fetchMore } = useQuery(
     draft ? getDraftPage : getDatasetPage,
     {
@@ -149,7 +150,7 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
   useSnapshotsUpdatedSubscriptions(datasetId)
   useDatasetDeletedSubscription([datasetId], ({ data: subData }) => {
     if (subData && subData.datasetDeleted === datasetId) {
-      history.push('/dashboard/datasets')
+      navigate('/dashboard/datasets')
       datasetDeletedToast(datasetId, data?.dataset?.draft?.description?.Name)
     }
   })
@@ -198,19 +199,15 @@ export const DatasetQueryHook = ({ datasetId, draft, history }) => {
 DatasetQueryHook.propTypes = {
   datasetId: PropTypes.string,
   draft: PropTypes.bool,
-  history: PropTypes.object,
 }
 
 /**
  * Routing wrapper for dataset query
- * @param {Object} props
- * @param {Object} props.match React router match object
- * @param {Object} props.draft Is this the draft page?
- * @param {Object} props.history React router history
+ *
+ * Expects to be a child of a react-router Route component with datasetId and snapshotId params
  */
-const DatasetQuery = ({ match, history }) => {
-  const datasetId = match.params.datasetId
-  const snapshotId = match.params.snapshotId
+const DatasetQuery = () => {
+  const { datasetId, snapshotId } = useParams()
   const client = useApolloClient()
   trackAnalytics(client, datasetId, {
     snapshot: true,
@@ -222,11 +219,7 @@ const DatasetQuery = ({ match, history }) => {
       <DatasetRedirect />
       <ErrorBoundaryAssertionFailureException
         subject={'error in dataset query'}>
-        <DatasetQueryHook
-          datasetId={datasetId}
-          draft={!snapshotId}
-          history={history}
-        />
+        <DatasetQueryHook datasetId={datasetId} draft={!snapshotId} />
       </ErrorBoundaryAssertionFailureException>
     </>
   )

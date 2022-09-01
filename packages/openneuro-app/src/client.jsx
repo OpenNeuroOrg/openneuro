@@ -7,10 +7,9 @@ import { ApolloProvider, InMemoryCache } from '@apollo/client'
 import { createClient } from '@openneuro/client'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import App from './scripts/app'
 import Index from './scripts/index'
-import analyticsWrapper from './scripts/utils/analytics'
 import { version } from './lerna.json'
 import { config } from './scripts/config'
 import * as gtag from './scripts/utils/gtag'
@@ -36,7 +35,9 @@ ReactDOM.render(
         }),
       })}>
       <BrowserRouter>
-        <Route component={analyticsWrapper(Index)} />
+        <Routes>
+          <Route path="*" element={<Index />} />
+        </Routes>
       </BrowserRouter>
     </ApolloProvider>
   </App>,

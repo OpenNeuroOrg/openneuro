@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { gql, useQuery } from '@apollo/client'
 import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
 import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import pluralize from 'pluralize'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import parseISO from 'date-fns/parseISO'
@@ -367,10 +367,10 @@ const getSnapshotDetails = gql`
 
 export interface SnapshotLoaderProps {
   dataset
-  tag: string
 }
 
-const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset, tag }) => {
+const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
+  const { tag } = useParams()
   const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
     variables: {
       datasetId: dataset.id,

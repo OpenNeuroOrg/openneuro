@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { gql, useMutation } from '@apollo/client'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 
 const CREATE_SNAPSHOT = gql`
@@ -13,15 +13,16 @@ const CREATE_SNAPSHOT = gql`
   }
 `
 
-const CreateSnapshotMutation = ({ history, datasetId, tag, changes }) => {
+const CreateSnapshotMutation = ({ datasetId, tag, changes }) => {
   const [snapshotDataset, { error }] = useMutation(CREATE_SNAPSHOT)
+  const navigate = useNavigate()
   if (error) throw error
   return (
     <button
       className="btn-modal-action"
       onClick={() =>
         snapshotDataset({ variables: { datasetId, tag, changes } }).then(() => {
-          history.push(`/datasets/${datasetId}/versions/${tag}`)
+          navigate(`/datasets/${datasetId}/versions/${tag}`)
         })
       }>
       Create Snapshot
@@ -29,25 +30,15 @@ const CreateSnapshotMutation = ({ history, datasetId, tag, changes }) => {
   )
 }
 
-interface SnapshotDatasetProps extends RouteComponentProps {
+interface SnapshotDatasetProps {
   datasetId: string
   tag: string
   changes: Array<string>
 }
 
-const SnapshotDataset = ({
-  history,
-  datasetId,
-  tag,
-  changes,
-}: SnapshotDatasetProps) => (
+const SnapshotDataset = ({ datasetId, tag, changes }: SnapshotDatasetProps) => (
   <ErrorBoundary subject="error creating snapshot">
-    <CreateSnapshotMutation
-      history={history}
-      datasetId={datasetId}
-      tag={tag}
-      changes={changes}
-    />
+    <CreateSnapshotMutation datasetId={datasetId} tag={tag} changes={changes} />
   </ErrorBoundary>
 )
 
@@ -58,4 +49,4 @@ CreateSnapshotMutation.propTypes = SnapshotDataset.propTypes = {
   changes: PropTypes.array,
 }
 
-export default withRouter(SnapshotDataset)
+export default SnapshotDataset

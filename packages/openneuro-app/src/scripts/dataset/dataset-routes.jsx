@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import SnapshotContainer from './snapshot-container'
 import DraftContainer from './draft-container'
 
@@ -12,22 +12,13 @@ const DatasetRoutes = ({ dataset, error }) => {
   }, [dataset, error])
 
   return (
-    <Switch>
+    <Routes>
       <Route
-        path="/datasets/:datasetId/versions/:tag"
-        render={({
-          match: {
-            params: { tag },
-          },
-        }) => {
-          return <SnapshotContainer dataset={dataset} tag={tag} />
-        }}
+        path="versions/:tag/*"
+        element={<SnapshotContainer dataset={dataset} />}
       />
-      <Route
-        path="/datasets/:datasetId"
-        render={() => <DraftContainer dataset={dataset} />}
-      />
-    </Switch>
+      <Route path="*" element={<DraftContainer dataset={dataset} />} />
+    </Routes>
   )
 }
 
