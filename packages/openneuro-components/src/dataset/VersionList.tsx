@@ -81,11 +81,7 @@ export const VersionList = ({
                   className={selected === item.tag ? 'selected' : ''}>
                   <Link
                     className="dataset-tool"
-                    to={
-                      selected === 'draft'
-                        ? '/datasets/' + datasetId + '/versions/' + item.tag
-                        : item.tag
-                    }>
+                    to={'/datasets/' + datasetId + '/versions/' + item.tag}>
                     <span className="label">
                       v{item.tag}
                       <span className="active">

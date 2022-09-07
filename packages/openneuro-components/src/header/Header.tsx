@@ -69,7 +69,6 @@ export const Header = ({
                 <NavLink
                   to="/search"
                   onClick={e => {
-                    console.log(e)
                     e.preventDefault()
                     setOpen(prev => !prev)
                     navigateToNewSearch()

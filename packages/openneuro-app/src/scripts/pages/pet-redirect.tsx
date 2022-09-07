@@ -1,4 +1,4 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
-export const PETRedirect = () => <Redirect to="/search/modality/pet" />
+export const PETRedirect = () => <Navigate to="/search/modality/pet" replace />

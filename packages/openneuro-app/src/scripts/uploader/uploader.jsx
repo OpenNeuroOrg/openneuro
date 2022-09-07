@@ -10,7 +10,7 @@ import FileSelect from './file-select'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import { datasets, uploads } from '@openneuro/client'
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { uploadFiles } from './file-upload.js'
 import { UploadProgress } from './upload-progress-class'
 import { addPathToFiles } from './add-path-to-files.js'
@@ -329,7 +329,7 @@ export class UploadClient extends React.Component {
     })
     const datasetURL = `/datasets/${this.state.datasetId}`
     if (this.state.location.pathname !== locationFactory('/hidden').pathname) {
-      this.props.history.push(datasetURL)
+      this.props.navigate(datasetURL)
       this.setLocation('/hidden')
     } else {
       toast.success(
@@ -363,11 +363,23 @@ export class UploadClient extends React.Component {
 
 UploadClient.propTypes = {
   client: PropTypes.object,
-  history: PropTypes.object,
+  navigate: PropTypes.func,
   children: PropTypes.element,
 }
 
-const UploadClientWithRouter = withRouter(UploadClient)
+const UploadClientWithRouter = ({ client, children }) => {
+  const navigate = useNavigate()
+  return (
+    <UploadClient client={client} navigate={navigate}>
+      {children}
+    </UploadClient>
+  )
+}
+
+UploadClient.propTypes = {
+  client: PropTypes.object,
+  children: PropTypes.element,
+}
 
 const Uploader = ({ children }) => (
   <ApolloConsumer>

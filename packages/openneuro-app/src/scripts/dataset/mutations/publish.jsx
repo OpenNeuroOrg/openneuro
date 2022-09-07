@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { gql } from '@apollo/client'
 import { Mutation } from '@apollo/client/react/components'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { datasetCacheId } from './cache-id.js'
 import { Button } from '@openneuro/components/button'
 
@@ -20,7 +20,7 @@ const DATASET_PUBLISHED = gql`
 `
 
 const PublishDataset = ({ datasetId }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   return (
     <Mutation
       mutation={PUBLISH_DATASET}
@@ -42,7 +42,7 @@ const PublishDataset = ({ datasetId }) => {
           label="Publish"
           onClick={() =>
             publishDataset({ variables: { datasetId } }).then(() => {
-              history.push(`/datasets/${datasetId}`)
+              navigate(`/datasets/${datasetId}`)
             })
           }
         />

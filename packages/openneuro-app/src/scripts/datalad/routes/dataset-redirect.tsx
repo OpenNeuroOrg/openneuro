@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, useParams, useLocation } from 'react-router-dom'
+import { Navigate, useParams, useLocation } from 'react-router-dom'
 
 const redirectLib = {
   ds001167: 'ds003782',
@@ -64,7 +64,7 @@ const DatasetRedirect = () => {
 
   if (redirectLib.hasOwnProperty(datasetId)) {
     const newPath = replaceDatasetId(pathname, redirectLib[datasetId])
-    return <Redirect to={newPath} />
+    return <Navigate to={newPath} replace />
   } else {
     return null
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import UploaderModal from './uploader-modal.jsx'
 import UploadStep from './upload-step.jsx'
 import UploadSelect from './upload-select.jsx'
@@ -13,12 +13,12 @@ const UploaderSetupRoutes = props => (
     <UploadStep location={props.location} />
     <div className="tasks-col fade-in">
       <div id="upload-tabs" className="uploader">
-        <Switch location={props.location}>
-          <Route path="/upload" exact component={UploadSelect} />
-          <Route path="/upload/issues" exact component={UploadIssues} />
-          <Route path="/upload/metadata" exact component={UploadMetadata} />
-          <Route path="/upload/disclaimer" exact component={UploadDisclaimer} />
-        </Switch>
+        <Routes location={props.location}>
+          <Route path="/upload" element={<UploadSelect />} />
+          <Route path="/upload/issues" element={<UploadIssues />} />
+          <Route path="/upload/metadata" element={<UploadMetadata />} />
+          <Route path="/upload/disclaimer" element={<UploadDisclaimer />} />
+        </Routes>
       </div>
     </div>
   </UploaderModal>

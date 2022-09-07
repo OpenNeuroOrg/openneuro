@@ -1,54 +1,31 @@
 import React, { FC } from 'react'
-import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import SearchContainer from './search-container'
 import { portalContent } from '@openneuro/components/mock-content'
 
-const SearchRoutes: FC = () => {
-  const { path }: { path: string } = useRouteMatch()
-  return (
-    <Switch>
-      <Route exact path={path} component={SearchContainer} />
-      <Route
-        exact
-        path={`${path}/modality/mri`}
-        render={(): React.ReactElement => (
-          <SearchContainer portalContent={portalContent.mri} />
-        )}
-      />
-      <Route
-        exact
-        path={`${path}/modality/eeg`}
-        render={(): React.ReactElement => (
-          <SearchContainer portalContent={portalContent.eeg} />
-        )}
-      />
-      <Route
-        exact
-        path={`${path}/modality/ieeg`}
-        render={(): React.ReactElement => (
-          <SearchContainer portalContent={portalContent.ieeg} />
-        )}
-      />
-      <Route
-        exact
-        path={`${path}/modality/meg`}
-        render={(): React.ReactElement => (
-          <SearchContainer portalContent={portalContent.meg} />
-        )}
-      />
-      <Route
-        exact
-        path={`${path}/modality/pet`}
-        render={(): React.ReactElement => (
-          <SearchContainer portalContent={portalContent.pet} />
-        )}
-      />
-      <Route
-        component={(): React.ReactElement => (
-          <Redirect to={`${path}/modality/mri`} />
-        )}
-      />
-    </Switch>
-  )
-}
+const SearchRoutes: FC = () => (
+  <Routes>
+    <Route path="/" element={<SearchContainer />} />
+    <Route
+      path="modality/mri"
+      element={<SearchContainer portalContent={portalContent.mri} />}
+    />
+    <Route
+      path="modality/eeg"
+      element={<SearchContainer portalContent={portalContent.eeg} />}
+    />
+    <Route
+      path="modality/ieeg"
+      element={<SearchContainer portalContent={portalContent.ieeg} />}
+    />
+    <Route
+      path="modality/meg"
+      element={<SearchContainer portalContent={portalContent.meg} />}
+    />
+    <Route
+      path="modality/pet"
+      element={<SearchContainer portalContent={portalContent.pet} />}
+    />
+  </Routes>
+)
 export default SearchRoutes

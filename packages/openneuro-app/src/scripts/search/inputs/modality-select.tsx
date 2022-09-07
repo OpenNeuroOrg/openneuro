@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { useRouteMatch, useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { SearchParams, flattenedModalities } from '../initial-search-params'
 import { FacetSelect } from '@openneuro/components/facets'
@@ -22,7 +22,7 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
   dropdown,
 }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { modality_available, modality_selected } = searchParams
   const setModality = (
@@ -37,7 +37,7 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
     const modality_selected_path = flattenedModalities.find(modality => {
       return modality.label === modality_selected
     })?.portalPath
-    history.push(modality_selected_path)
+    navigate(modality_selected_path)
   }
 
   return (

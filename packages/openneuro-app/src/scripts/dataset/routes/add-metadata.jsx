@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import MetadataForm from '../mutations/metadata-form.jsx'
 import { DatasetRelations } from '../mutations/dataset-relations'
@@ -99,7 +99,7 @@ const hasChanged = (errorsA, errorsB) =>
   JSON.stringify(errorsA) !== JSON.stringify(errorsB)
 
 const AddMetadata = ({ dataset }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
   const [cookies] = useCookies()
   const [values, setValues] = useState(compileMetadata(dataset))
@@ -114,6 +114,7 @@ const AddMetadata = ({ dataset }) => {
     const errors = runValidations(newValues)
     if (hasChanged(errors, validationErrors)) setValidationErrors(errors)
   }
+  // @ts-ignore-next-line
   const submitPath = location.state && location.state.submitPath
   const user = getProfile(cookies)
   const hasEdit =
@@ -136,7 +137,7 @@ const AddMetadata = ({ dataset }) => {
             <SubmitMetadata
               datasetId={dataset.id}
               metadata={values}
-              done={() => submitPath && history.push(submitPath)} //TODO this isn't working
+              done={() => submitPath && navigate(submitPath)} //TODO this isn't working
               disabled={Boolean(validationErrors.length)}
             />
           </LoggedIn>

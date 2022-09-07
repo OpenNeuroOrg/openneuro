@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { gql, useMutation } from '@apollo/client'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { Button } from '@openneuro/components/button'
 
@@ -27,7 +27,7 @@ const CreateSnapshotMutation = ({
   changes,
   disabled,
 }: CreateSnapshotMutationProps) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
 
   if (error) throw error
@@ -42,7 +42,7 @@ const CreateSnapshotMutation = ({
         onClick={(): void => {
           void snapshotDataset({
             variables: { datasetId, tag, changes },
-          }).then(() => history.push(`/datasets/${datasetId}/versions/${tag}`))
+          }).then(() => navigate(`/datasets/${datasetId}/versions/${tag}`))
         }}
         disabled={disabled}
         label="Create Version"

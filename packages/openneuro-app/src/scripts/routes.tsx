@@ -1,8 +1,8 @@
 import React from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 
 // TODO - Re-enable code splitting these when we can
-import Dataset from './dataset/draft-snapshot-routes'
+import DatasetQuery from './dataset/dataset-query'
 //import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
 import FaqPage from './pages/faq/faq'
@@ -16,23 +16,29 @@ import Citation from './pages/citation-page'
 import FourOFourPage from './errors/404page'
 import { ImportDataset } from './pages/import-dataset'
 
-const Routes: React.VoidFunctionComponent = () => (
-  <Switch>
-    <Route exact path="/faq" component={FaqPage} />
-    <Route exact path="/" component={FrontPageContainer} />
-    <Route exact path="/keygen" component={APIKey} />
-    <Route path="/datasets" component={Dataset} />
-    <Route path="/search" component={SearchRoutes} />
-    <Route path="/admin" component={Admin} />
-    <Route path="/error" component={ErrorRoute} />
-    <Route path="/pet" component={PETRedirect} />
-    <Route path="/cite" component={Citation} />
-    <Route path="/import" component={ImportDataset} />
-    <Redirect from="/public" to="/search" />
-    <Redirect from="/saved" to="/search?bookmarks" />
-    <Redirect from="/dashboard" to="/search?mydatasets" />
-    <Route component={FourOFourPage} />
-  </Switch>
+const AppRoutes: React.VoidFunctionComponent = () => (
+  <Routes>
+    <Route path="/" element={<FrontPageContainer />} />
+    <Route path="/faq" element={<FaqPage />} />
+    <Route path="/keygen" element={<APIKey />} />
+    <Route path="/datasets/:datasetId/*" element={<DatasetQuery />} />
+    <Route path="/search/*" element={<SearchRoutes />} />
+    <Route path="/admin/*" element={<Admin />} />
+    <Route path="/error" element={<ErrorRoute />} />
+    <Route path="/pet" element={<PETRedirect />} />
+    <Route path="/cite" element={<Citation />} />
+    <Route path="/import" element={<ImportDataset />} />
+    <Route path="/public" element={<Navigate to="/search" replace />} />
+    <Route
+      path="/saved"
+      element={<Navigate to="/search?bookmarks" replace />}
+    />
+    <Route
+      path="/dashboard"
+      element={<Navigate to="/search?mydatasets" replace />}
+    />
+    <Route element={<FourOFourPage />} />
+  </Routes>
 )
 
-export default Routes
+export default AppRoutes

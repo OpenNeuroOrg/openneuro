@@ -1,7 +1,7 @@
 /* global globalThis */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useRouteMatch } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import DownloadLink from '../download/download-link.jsx'
 import DownloadS3 from '../download/download-s3.jsx'
 import DownloadCommandLine from '../download/download-command-line.jsx'
@@ -9,15 +9,8 @@ import DownloadDatalad from '../download/download-datalad.jsx'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3 } from './styles/header-row'
 
-interface SnapshotRouteParams {
-  datasetId?: string
-  snapshotId?: string
-}
-
 const DownloadDataset = ({ worker, datasetPermissions }) => {
-  const {
-    params: { datasetId, snapshotId: snapshotTag },
-  } = useRouteMatch<SnapshotRouteParams>()
+  const { datasetId, snapshotId: snapshotTag } = useParams()
   const workerId = worker?.split('-').pop()
   return (
     <DatasetPageBorder>
