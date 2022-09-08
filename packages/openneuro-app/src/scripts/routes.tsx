@@ -24,7 +24,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/datasets/:datasetId/*" element={<DatasetQuery />} />
     <Route path="/search/*" element={<SearchRoutes />} />
     <Route path="/admin/*" element={<Admin />} />
-    <Route path="/error" element={<ErrorRoute />} />
+    <Route path="/error/*" element={<ErrorRoute />} />
     <Route path="/pet" element={<PETRedirect />} />
     <Route path="/cite" element={<Citation />} />
     <Route path="/import" element={<ImportDataset />} />

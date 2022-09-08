@@ -14,10 +14,10 @@ class ErrorRoute extends React.Component {
       <div className="container errors">
         <div className="panel">
           <Routes>
-            <Route path="/error/orcid" element={<OrcidGeneral />} />
-            <Route path="/error/orcid/email" element={<OrcidEmail />} />
-            <Route path="/error/orcid/given" element={<OrcidGiven />} />
-            <Route path="/error/orcid/family" element={<OrcidFamily />} />
+            <Route path="orcid" element={<OrcidGeneral />} />
+            <Route path="orcid/email" element={<OrcidEmail />} />
+            <Route path="orcid/given" element={<OrcidGiven />} />
+            <Route path="orcid/family" element={<OrcidFamily />} />
           </Routes>
         </div>
       </div>
