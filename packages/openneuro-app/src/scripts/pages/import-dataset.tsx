@@ -58,3 +58,5 @@ export const ImportDataset: React.VoidFunctionComponent = () => {
     </ImportDatasetPageStyle>
   )
 }
+
+export default ImportDataset
