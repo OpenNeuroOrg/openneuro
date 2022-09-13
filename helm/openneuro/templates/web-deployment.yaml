@@ -27,12 +27,9 @@ spec:
         - name: {{ .Release.Name }}-web
           image: 'openneuro/app:v{{ .Chart.AppVersion }}'
           resources:
-            limits:
-              cpu: "1"
-              memory: "512Mi"
             requests:
-              cpu: ".25"
-              memory: "128Mi"
+              cpu: {{ .Values.webCpuRequests }}
+              memory: {{ .Values.webMemoryRequests }}
           ports:
             - containerPort: 80
           envFrom:

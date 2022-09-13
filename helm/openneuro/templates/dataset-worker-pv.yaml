@@ -1,0 +1,22 @@
+# The Worker PV matches GCP disks to statefulset claims (see dataset-worker-stateful-set)
+{{- $relname := .Release.Name -}}
+{{- range $index, $config := .Values.workerDiskSize }}
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: datasets-{{ $relname }}-dataset-worker-{{ $index }}
+spec:
+  storageClassName: {{ $relname }}-datasets
+  capacity:
+    storage: {{ $config.size }}
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    namespace: default
+    name: datasets-{{ $relname }}-dataset-worker-{{ $index }}
+  csi:
+    driver: pd.csi.storage.gke.io
+    volumeHandle: {{ $config.id }}
+    fsType: ext4
+---
+{{- end }}

@@ -1,12 +1,6 @@
 dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 10.6.17
-- name: aws-alb-ingress-controller
-  repository: https://kubernetes-charts-incubator.storage.googleapis.com/
-  version: 1.0.0
-- name: apm-server
-  repository: https://helm.elastic.co
-  version: 7.9.0
-digest: sha256:f90c303d40dcf002907179598ef0f1fda76b2edbc560f838910051aa9a2c21ab
-generated: "2020-08-21T14:22:28.124302759-07:00"
+  version: 17.1.4
+digest: sha256:7e7d63886296a858981054168160d78ed785ea99c89f2f04ad0f22b9447268fb
+generated: "2022-09-13T14:04:03.820425553-07:00"

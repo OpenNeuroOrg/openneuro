@@ -1,8 +1,8 @@
 # Root hostname
-hostname: openneuro.staging.sqm.io
+hostname: staging.openneuro.org
 
 # The FQDN URL for the site, optionally including port number
-url: https://openneuro.staging.sqm.io
+url: https://staging.openneuro.org
 
 # GraphQL endpoint
 graphql: http://openneuro-staging-api:8111/crn/graphql
@@ -28,77 +28,44 @@ apiReplicas: 2
 # Static service parallelism
 webReplicas: 2
 
-# Content container tag
-contentTag: v1.0.6
-
-# Sentry DSN (non-secret version)
-sentryDsn: https://ba0c58863b3e40a2a412132bfd2711ea@o114074.ingest.sentry.io/251076
-
 # Elastic APM path
 apmServerUrl: https://b33224e4ded44efabb74f65de2f84f2e.apm.us-east-1.aws.found.io
 
-# Worker CPU requests
-workerCpuRequests: 0.2
+# API resource configuration
+apiCpuRequests: 0.25
+apiMemoryRequests: 0.5Gi
 
-# Configure storage node EBS volumes
-# Workers are evenly distributed across available pools
-# Size in bytes
-storagePools:
-  # This is the size of the pool disks
-  stripeSize: 1099511627776
-  pools:
-    - name: a
-      size: 1099511627776
-    - name: b
-      size: 1099511627776
 
-# The underlying EFS volume should be created manually and configured here
-efs-provisioner:
-  efsProvisioner:
-    awsRegion: us-east-1
-    efsFileSystemId: fs-acb10b4f
-    path: /pv
-    storageClass:
-      name: efs
-      reclaimPolicy: Retain
+# Worker resource configuration
+workerCpuRequests: 0.25
+workerMemoryRequests: 1Gi
 
-# Load balancer / ingress config
-aws-alb-ingress-controller:
-  awsRegion: us-east-1
-  autoDiscoverAwsVpcID: true
-  clusterName: openneuro-staging
+# Nginx resource configuration
+webCpuRequests: 0.25
+webMemoryRequests: 0.5Gi
+
+# GCP zone for this set of workers
+workerZone: us-west1-b
+
+# Assigned volumes for each worker (max 64TB)
+workerDiskSize:
+  - id: projects/hs-openneuro/zones/us-west1-b/disks/openneuro-staging-datasets-0
+    size: 256Gi
+  - id: projects/hs-openneuro/zones/us-west1-b/disks/openneuro-staging-datasets-1
+    size: 256Gi
+  - id: projects/hs-openneuro/zones/us-west1-b/disks/openneuro-staging-datasets-2
+    size: 256Gi
+  - id: projects/hs-openneuro/zones/us-west1-b/disks/openneuro-staging-datasets-3
+    size: 256Gi
 
 # Disable Redis password for testing
 redis:
-  usePassword: false
+  architecture: standalone
+  auth:
+    enabled: false
   master:
     disableCommands: []
     resources:
-      limits:
-        cpu: '500m'
-        memory: '3Gi'
       requests:
-        cpu: '250m'
-        memory: '1.5Gi'
-  slave:
-    resources:
-      limits:
-        cpu: '250m'
-        memory: '3Gi'
-      requests:
-        cpu: '125m'
-        memory: '1.5Gi'
-
-apm-server:
-  apmConfig:
-    apm-server.yml: |
-      apm-server:
-        host: "0.0.0.0:8200"
-        rum.enabled: true
-      queue: {}
-      cloud:
-        id: "${ELASTICSEARCH_CLOUD_ID}"
-        auth: "${ELASTICSEARCH_CLOUD_AUTH}"
-  envFrom:
-    - secretRef:
-        name: openneuro-staging-secret
+        cpu: 0.25
+        memory: 1Gi
