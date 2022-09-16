@@ -4950,7 +4950,7 @@ __metadata:
     "@types/react-router-dom": 5.3.3
     "@types/testing-library__jest-dom": ^5.14.0
     babel-jest: 29.0.2
-    bids-validator: 1.9.3
+    bids-validator: 1.9.8
     bytes: ^3.0.0
     comlink: ^4.0.5
     core-js: 3.25.1
@@ -4998,7 +4998,7 @@ __metadata:
     "@openneuro/client": ^4.10.0
     "@types/mkdirp": ^1.0.1
     "@types/node": 16.11.13
-    bids-validator: 1.9.3
+    bids-validator: 1.9.8
     cli-progress: ^3.8.2
     commander: 7.2.0
     core-js: ^3.10.1
@@ -8082,9 +8082,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bids-validator@npm:1.9.3":
-  version: 1.9.3
-  resolution: "bids-validator@npm:1.9.3"
+"bids-validator@npm:1.9.8":
+  version: 1.9.8
+  resolution: "bids-validator@npm:1.9.8"
   dependencies:
     "@aws-sdk/client-s3": ^3.9.0
     ajv: ^6.5.2
@@ -8094,7 +8094,7 @@ __metadata:
     date-fns: ^2.7.0
     events: ^3.3.0
     exifreader: ^4.1.0
-    hed-validator: ^3.5.0
+    hed-validator: ^3.8.0
     ignore: ^4.0.2
     is-utf8: ^0.2.1
     jshint: ^2.9.6
@@ -8113,7 +8113,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     bids-validator: bin/bids-validator
-  checksum: f0e6713fe26f8ab8d539fed910a18d36cd051eca26bf84768ff664d95ae040653d5cbf8a5d33ccc3cd5721c7861eed10ecd2a879402482d366b4e6a428e1ce5a
+  checksum: 531d1d880e95981d77a0bc2b65a888e9fa676495ef15fc17defc6147087f2ae532929b6b26fa1649a8d3d37bc6b52d0777f81d42e156affd158e06cf55c3c364
   languageName: node
   linkType: hard
 
@@ -8338,7 +8338,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:*":
+"buffer@npm:*, buffer@npm:^6.0.3":
   version: 6.0.3
   resolution: "buffer@npm:6.0.3"
   dependencies:
@@ -12876,18 +12876,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:^3.5.0":
-  version: 3.6.0
-  resolution: "hed-validator@npm:3.6.0"
+"hed-validator@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "hed-validator@npm:3.8.0"
   dependencies:
+    buffer: ^6.0.3
     date-and-time: ^0.14.2
     date-fns: ^2.17.0
+    events: ^3.3.0
     lodash: ^4.17.21
+    path: ^0.12.7
     pluralize: ^8.0.0
     semver: ^7.3.4
     then-request: ^6.0.2
     xml2js: ^0.4.23
-  checksum: 1dad68474f66dfbc08ec3c93b1bf88aefe62b65edcc9f99b5b4f9c06bb4650b8c00bc62e6a63ca32a2ac07f040a9571acebc2ce7cf2f610f7ae21b3ab556611a
+  checksum: e2978e3155a02197378ffa2d2a7a85e297670bf17beb0fae1727141dae3806815bfb857b30911d6f24f1cbdce1e7fb1133f9ca470da6cd9eb55bc70c81131f54
   languageName: node
   linkType: hard
 
