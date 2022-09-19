@@ -35,7 +35,7 @@ gcloud config set project hs-openneuro
 ### Create a cluster
 
 ```bash
-gcloud container clusters create --region=us-west1
+gcloud container clusters create-auto openneuro-dev --region=us-west1
 ```
 
 This will configure the cluster and setup credentials and command context for later kubectl and helm commands. This requires IAM permissions for Kubernetes Engine.
