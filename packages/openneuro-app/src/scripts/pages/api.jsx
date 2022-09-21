@@ -4,6 +4,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import Helmet from 'react-helmet'
 import { pageTitle } from '../resources/strings.js'
 import { Button } from '@openneuro/components/button'
+import LoggedIn from '../authentication/logged-in'
+import LoggedOut from '../authentication/logged-out'
 import { config } from '../config'
 
 /**
@@ -122,10 +124,15 @@ class APIKeyGen extends React.Component {
             become invalid.
           </div>
 
-          <h3>{helperText}</h3>
-          {this._loadingSpinner()}
-          {this._key()}
-          {this._requestButton()}
+          <LoggedIn>
+            <h3>{helperText}</h3>
+            {this._loadingSpinner()}
+            {this._key()}
+            {this._requestButton()}
+          </LoggedIn>
+          <LoggedOut>
+            <h3>Please login to create an API key.</h3>
+          </LoggedOut>
         </div>
       </>
     )
