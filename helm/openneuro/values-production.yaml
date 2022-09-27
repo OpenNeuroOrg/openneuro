@@ -35,12 +35,12 @@ sentryDsn: https://ba0c58863b3e40a2a412132bfd2711ea@o114074.ingest.sentry.io/251
 apmServerUrl: https://17ae1d2cfa8f47f486b1b6fda3ed9f43.apm.us-west-2.aws.found.io
 
 # API resource configuration
-apiCpuRequests: 2
-apiMemoryRequests: 2Gi
+apiCpuRequests: 1.5
+apiMemoryRequests: 1.5Gi
 
 # Worker resource configuration
-workerCpuRequests: 2
-workerMemoryRequests: 4Gi
+workerCpuRequests: 1.5
+workerMemoryRequests: 8Gi
 
 # Nginx resource configuration
 webCpuRequests: 0.25
