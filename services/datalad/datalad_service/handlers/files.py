@@ -6,7 +6,6 @@ import falcon
 from datalad_service.common.git import git_show
 from datalad_service.common.user import get_user_info
 from datalad_service.common.stream import update_file
-from datalad_service.tasks.files import get_files
 from datalad_service.tasks.files import remove_files
 
 
@@ -16,52 +15,42 @@ class FilesResource(object):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, dataset, filename=None, snapshot='HEAD'):
+    def on_get(self, req, resp, dataset, filename, snapshot='HEAD'):
         ds_path = self.store.get_dataset_path(dataset)
-        if filename:
-            try:
-                file_content = git_show(ds_path, snapshot, filename)
-                # If the file begins with an annex path, return that path
-                if file_content[0:4096].find('.git/annex') != -1:
-                    # Resolve absolute path for annex target
-                    target_path = os.path.join(
-                        ds_path, os.path.dirname(filename), file_content)
-                    # Verify the annex path is within the dataset dir
-                    if ds_path == os.path.commonpath((ds_path, target_path)):
-                        fd = open(target_path, 'rb')
-                        resp.stream = fd
-                        resp.stream_len = os.fstat(fd.fileno()).st_size
-                        resp.status = falcon.HTTP_OK
-                    else:
-                        resp.media = {'error': 'file not found in git tree'}
-                        resp.status = falcon.HTTP_NOT_FOUND
-                else:
-                    resp.body = file_content
+        try:
+            file_content = git_show(ds_path, snapshot, filename)
+            # If the file begins with an annex path, return that path
+            if file_content[0:4096].find('.git/annex') != -1:
+                # Resolve absolute path for annex target
+                target_path = os.path.join(
+                    ds_path, os.path.dirname(filename), file_content)
+                # Verify the annex path is within the dataset dir
+                if ds_path == os.path.commonpath((ds_path, target_path)):
+                    fd = open(target_path, 'rb')
+                    resp.stream = fd
+                    resp.stream_len = os.fstat(fd.fileno()).st_size
                     resp.status = falcon.HTTP_OK
-            except KeyError:
-                # File is not present in tree
-                resp.media = {'error': 'file not found in git tree'}
-                resp.status = falcon.HTTP_NOT_FOUND
-            except IOError:
-                # File is not kept locally
-                resp.media = {'error': 'file not found'}
-                resp.status = falcon.HTTP_NOT_FOUND
-            except:
-                # Some unknown error
-                resp.media = {
-                    'error': 'an unknown error occurred accessing this file'}
-                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
-                self.logger.exception(
-                    'An unknown error processing file "{}"'.format(filename))
-        else:
-            # Request for index of files
-            # Return a list of file objects
-            # {name, path, size}
-            try:
-                files = get_files(self.store, dataset, snapshot)
-                resp.media = {'files': files}
-            except:
-                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+                else:
+                    resp.media = {'error': 'file not found in git tree'}
+                    resp.status = falcon.HTTP_NOT_FOUND
+            else:
+                resp.body = file_content
+                resp.status = falcon.HTTP_OK
+        except KeyError:
+            # File is not present in tree
+            resp.media = {'error': 'file not found in git tree'}
+            resp.status = falcon.HTTP_NOT_FOUND
+        except IOError:
+            # File is not kept locally
+            resp.media = {'error': 'file not found'}
+            resp.status = falcon.HTTP_NOT_FOUND
+        except:
+            # Some unknown error
+            resp.media = {
+                'error': 'an unknown error occurred accessing this file'}
+            resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+            self.logger.exception(
+                'An unknown error processing file "{}"'.format(filename))
 
     def on_post(self, req, resp, dataset, filename):
         """Post will create new files and adds them to the annex if they do not exist, else update existing files."""

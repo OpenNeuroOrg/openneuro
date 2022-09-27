@@ -4,7 +4,7 @@ import gevent
 import falcon
 
 from datalad_service.tasks.snapshots import SnapshotDescriptionException, create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
-from datalad_service.tasks.files import get_files
+from datalad_service.tasks.files import get_tree
 from datalad_service.tasks.publish import export_dataset, monitor_remote_configs
 from datalad_service.common.git import delete_tag
 
@@ -20,8 +20,7 @@ class SnapshotResource(object):
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
         if snapshot:
-            files = get_files(self.store, dataset,
-                              branch=snapshot)
+            files = get_tree(self.store, dataset, snapshot)
             response = get_snapshot(self.store, dataset, snapshot)
             response['files'] = files
             resp.media = response

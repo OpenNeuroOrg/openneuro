@@ -26,10 +26,10 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     return ref
 
 
-def get_files(store, dataset, branch=None):
+def get_tree(store, dataset, tree):
     """Get the working tree, optionally a branch tree."""
     dataset_path = store.get_dataset_path(dataset)
-    return get_repo_files(dataset_path, branch)
+    return get_repo_files(dataset_path, tree)
 
 
 def remove_files(store, dataset, paths, name=None, email=None, cookies=None):

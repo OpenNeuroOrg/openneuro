@@ -50,9 +50,9 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
     filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
         gitTreeLine)
     # Skip git / datalad files
-    if filename.startswith('.git/'):
+    if filename.startswith('.git'):
         return
-    if filename.startswith('.datalad/'):
+    if filename.startswith('.datalad'):
         return
     if filename == '.gitattributes':
         return
@@ -66,9 +66,14 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
         return
     else:
         # Immediately append regular files
-        file_id = compute_file_hash(obj_hash, filename)
-        files.append({'filename': filename, 'size': int(size),
-                      'id': file_id, 'key': obj_hash, 'urls': [], 'annexed': False})
+        if (size == '-'):
+            # Tree objects do not have sizes and are never annexed
+            files.append(
+                {'id': obj_hash, 'filename': filename, 'directory': True, 'annexed': False, 'size': 0, 'urls': []})
+        else:
+            file_id = compute_file_hash(obj_hash, filename)
+            files.append({'filename': filename, 'size': int(size),
+                          'id': file_id, 'key': obj_hash, 'urls': [], 'annexed': False})
 
 
 def compute_rmet(key):
@@ -176,10 +181,10 @@ def get_repo_urls(path, files):
     return files
 
 
-def get_repo_files(dataset_path, branch='HEAD'):
+def get_repo_files(dataset_path, tree):
     """Read all files in a repo at a given branch, tag, or commit hash."""
     gitProcess = subprocess.Popen(
-        ['git', 'ls-tree', '-l', '-r', branch], cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')
+        ['git', 'ls-tree', '-l', tree], cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')
     files = []
     symlinkFilenames = []
     symlinkObjects = []
