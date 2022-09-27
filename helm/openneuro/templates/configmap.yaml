@@ -14,7 +14,5 @@ data:
   REDIS_PORT: "6379"
   GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111/crn/graphql
   DATALAD_SERVICE_URI: {{ .Release.Name }}-dataset-worker
-  DATALAD_S3_PUBLIC_ON_EXPORT: "yes"
   LOCPATH: ""
-  SENTRY_DSN: {{ .Values.sentryDsn | quote }}
   ELASTIC_APM_SERVER_URL: {{ .Values.apmServerUrl }}

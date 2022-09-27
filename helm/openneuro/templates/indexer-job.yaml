@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ .Release.Name }}-indexer
@@ -17,12 +17,9 @@ spec:
           - name: openneuro-indexer
             image: 'openneuro/indexer:v{{ .Chart.AppVersion }}'
             resources:
-              limits:
-                cpu: ".5"
-                memory: "512Mi"
               requests:
-                cpu: ".1"
-                memory: "256Mi"
+                cpu: ".25"
+                memory: "512Mi"
             envFrom:
               - configMapRef:
                   name: {{ .Release.Name }}-configmap

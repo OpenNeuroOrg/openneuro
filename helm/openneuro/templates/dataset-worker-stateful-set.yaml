@@ -10,14 +10,13 @@ spec:
   replicas: {{ .Values.dataladWorkers }}
   volumeClaimTemplates:
     - metadata:
-        name: datasets-ebs
+        name: datasets
       spec:
-        storageClassName: {{ .Release.Name }}-datasets
         accessModes:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 1Pi
+            storage: 10Gi
   template:
     metadata:
       labels:
@@ -26,12 +25,8 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
-      tolerations:
-      - key: "storage"
-        operator: "Exists"
-        effect: "NoSchedule"
       nodeSelector:
-        role: storage
+        topology.kubernetes.io/zone: {{ .Values.workerZone }}
       volumes:
       - name: ssh-key
         secret:
@@ -45,12 +40,20 @@ spec:
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
         command: ["gunicorn", "--bind", "0.0.0.0:80", "--reload", "datalad_service.app:create_app('/datasets')", "--workers", "8", "--worker-class", "gevent", "--timeout", "60", "--keep-alive", "30"]
         resources:
-          limits:
-            cpu: "8"
-            memory: "12Gi"
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: "4Gi"
+            memory: {{ .Values.workerMemoryRequests }}
+        readinessProbe:
+          periodSeconds: 5
+          initialDelaySeconds: 15
+          httpGet:
+            path: /heartbeat
+            port: 80
+        livenessProbe:
+          periodSeconds: 60
+          httpGet:
+            path: /heartbeat
+            port: 80
         ports:
         - containerPort: 80
         envFrom:
@@ -59,7 +62,7 @@ spec:
         - secretRef:
             name: {{ .Release.Name }}-secret
         volumeMounts:
-        - name: datasets-ebs
+        - name: datasets
           mountPath: /datasets
         - name: ssh-key
           mountPath: /datalad-key

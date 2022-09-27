@@ -24,12 +24,9 @@ spec:
         - name: {{ .Release.Name }}-api
           image: 'openneuro/server:v{{ .Chart.AppVersion }}'
           resources:
-            limits:
-              cpu: "1.2"
-              memory: "2Gi"
             requests:
-              cpu: ".3"
-              memory: "768Mi"
+              cpu: {{ .Values.apiCpuRequests }}
+              memory: {{ .Values.apiMemoryRequests }}
           ports:
             - containerPort: 8111
           envFrom:
@@ -37,6 +34,12 @@ spec:
                 name: {{ .Release.Name }}-configmap
             - secretRef:
                 name: {{ .Release.Name }}-secret
+          readinessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            httpGet:
+              path: '/crn/'
+              port: 8111
           livenessProbe:
             initialDelaySeconds: 60
             periodSeconds: 30
