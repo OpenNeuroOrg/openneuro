@@ -1,4 +1,5 @@
 import React from 'react'
+import Helmet from 'react-helmet'
 import { frontPage } from './front-page/front-page-content'
 import styled from '@emotion/styled'
 
@@ -13,6 +14,13 @@ const CitationPageStyle = styled.div`
 
 const CitationPage: React.VoidFunctionComponent = () => (
   <CitationPageStyle>
+    <Helmet>
+      <title>How to Cite - {frontPage.pageTitle}</title>
+      <meta
+        name="description"
+        content="Citations for the OpenNeuro database and datasets"
+      />
+    </Helmet>
     <div className="container">
       <h2>How to Cite OpenNeuro</h2>
       <p>
