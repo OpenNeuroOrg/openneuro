@@ -43,6 +43,7 @@ spec:
           livenessProbe:
             initialDelaySeconds: 60
             periodSeconds: 30
+            timeoutSeconds: 10
             httpGet:
               path: '/crn/'
               port: 8111

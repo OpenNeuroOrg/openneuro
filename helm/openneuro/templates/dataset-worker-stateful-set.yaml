@@ -51,6 +51,7 @@ spec:
             port: 80
         livenessProbe:
           periodSeconds: 60
+          timeoutSeconds: 10
           httpGet:
             path: /heartbeat
             port: 80
