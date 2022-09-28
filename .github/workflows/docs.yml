@@ -1,0 +1,26 @@
+name: deploy-gh-pages
+
+on:
+  push: {branches: [main, sphinx]}
+  pull_request: {branches: [main]}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r docs/requirements.txt
+    - name: Build
+      run: make -C docs html
+    - uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/sphinx' }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html
