@@ -13,7 +13,7 @@ OpenNeuro is a free and open platform for analyzing and sharing neuroimaging dat
 
 ## Development setup
 
-This project is managed with [Lerna](https://lernajs.io/) and [Yarn](https://yarnpkg.com/). To get started, install Yarn and bootstrap the repo.
+This project is managed with [Lerna](https://lerna.js.org/) and [Yarn](https://yarnpkg.com/). To get started, install Yarn and bootstrap the repo.
 
 ```shell
 yarn install
