@@ -2,10 +2,11 @@
 ```
 
 ```{toctree}
+:hidden:
 
 user_guide
 api
 git
-monitoring
+architecture
 maintenance
 ```
