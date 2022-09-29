@@ -10,7 +10,7 @@ import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3 } from './styles/header-row'
 
 const DownloadDataset = ({ worker, datasetPermissions }) => {
-  const { datasetId, snapshotId: snapshotTag } = useParams()
+  const { datasetId, tag: snapshotTag } = useParams()
   const workerId = worker?.split('-').pop()
   return (
     <DatasetPageBorder>
