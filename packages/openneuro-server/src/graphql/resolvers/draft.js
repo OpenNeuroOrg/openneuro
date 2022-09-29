@@ -4,21 +4,20 @@ import { description } from './description.js'
 import { readme } from './readme.js'
 import { getDraftRevision, updateDatasetRevision } from '../../datalad/draft.js'
 import { checkDatasetWrite } from '../permissions.js'
-import { getFiles, filterFiles } from '../../datalad/files.js'
+import { getFiles } from '../../datalad/files.js'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 
 // A draft must have a dataset parent
 const draftFiles = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
-  const { files } = await getFiles(dataset.id, hexsha)
-  const prefixFiltered = filterFiles('prefix' in args && args.prefix)(files)
-  return filterRemovedAnnexObjects(dataset.id, userInfo)(prefixFiltered)
+  const { files } = await getFiles(dataset.id, args.tree || hexsha)
+  return filterRemovedAnnexObjects(dataset.id, userInfo)(files)
 }
 
 const draftSize = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
-  const { size } = await getFiles(dataset.id, hexsha)
-  return size
+  // TODO - Implement a different method for size
+  return 128
 }
 
 /**

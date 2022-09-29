@@ -61,19 +61,17 @@ export const computeTotalSize = files =>
  * Get files for a specific revision
  * Similar to getDraftFiles but different cache key and fixed revisions
  * @param {string} datasetId - Dataset accession number
- * @param {string} hexsha - Git treeish hexsha
+ * @param {string} treeish - Git treeish hexsha
  */
-export const getFiles = (datasetId, hexsha) => {
+export const getFiles = (datasetId, treeish) => {
   const cache = new CacheItem(redis, CacheType.commitFiles, [
     datasetId,
-    hexsha.substring(0, 7),
+    treeish.substring(0, 7),
   ])
   return cache.get(() =>
     request
       .get(
-        `${getDatasetWorker(
-          datasetId,
-        )}/datasets/${datasetId}/snapshots/${hexsha}/files`,
+        `${getDatasetWorker(datasetId)}/datasets/${datasetId}/tree/${treeish}`,
       )
       .set('Accept', 'application/json')
       .then(response => {
@@ -81,10 +79,9 @@ export const getFiles = (datasetId, hexsha) => {
           const {
             body: { files },
           } = response
-          const size = computeTotalSize(files)
           return {
-            files: files.map(addFileUrl(datasetId, hexsha)),
-            size,
+            files: files.map(addFileUrl(datasetId, treeish)),
+            size: 128,
           }
         }
       }),
