@@ -6,10 +6,10 @@ import { gql } from '@apollo/client'
 import { AccordionTab } from '@openneuro/components/accordion'
 
 export const DRAFT_FILES_QUERY = gql`
-  query dataset($datasetId: ID!, $filePrefix: String!) {
+  query dataset($datasetId: ID!, $tree: String!) {
     dataset(id: $datasetId) {
       draft {
-        files(prefix: $filePrefix) {
+        files(tree: $tree) {
           id
           key
           filename
@@ -23,9 +23,9 @@ export const DRAFT_FILES_QUERY = gql`
 `
 
 export const SNAPSHOT_FILES_QUERY = gql`
-  query snapshot($datasetId: ID!, $snapshotTag: String!, $filePrefix: String!) {
+  query snapshot($datasetId: ID!, $snapshotTag: String!, $tree: String!) {
     snapshot(datasetId: $datasetId, tag: $snapshotTag) {
-      files(prefix: $filePrefix) {
+      files(tree: $tree) {
         id
         key
         filename
@@ -37,24 +37,30 @@ export const SNAPSHOT_FILES_QUERY = gql`
   }
 `
 
+/**
+ * Prepend paths to the tree object returned to get absolute filenames
+ */
+export const nestFiles = path => file => ({
+  ...file,
+  filename: `${path}:${file.filename}`,
+})
+
+/**
+ * Merge cached dataset files with newly received data
+ */
 export const mergeNewFiles =
   (directory, snapshotTag) =>
   (past, { fetchMoreResult }) => {
     // Deep clone the old dataset object
+    const path = directory.filename
     const newDatasetObj = JSON.parse(JSON.stringify(past))
-    const mergeNewFileFilter = f => f.id !== directory.id
-    // Remove ourselves from the array
-    if (snapshotTag) {
-      newDatasetObj.snapshot.files =
-        newDatasetObj.snapshot.files.filter(mergeNewFileFilter)
-      newDatasetObj.snapshot.files.push(...fetchMoreResult.snapshot.files)
-    } else {
-      newDatasetObj.dataset.draft.files =
-        newDatasetObj.dataset.draft.files.filter(mergeNewFileFilter)
-      newDatasetObj.dataset.draft.files.push(
-        ...fetchMoreResult.dataset.draft.files,
-      )
-    }
+    const newFiles = snapshotTag
+      ? newDatasetObj.snapshot.files
+      : newDatasetObj.dataset.draft.files
+    const fetchMoreData = snapshotTag
+      ? fetchMoreResult.snapshot
+      : fetchMoreResult.dataset.draft
+    newFiles.push(...fetchMoreData.files.map(nestFiles(path)))
     return newDatasetObj
   }
 
@@ -66,7 +72,7 @@ export const fetchMoreDirectory = (
 ) =>
   fetchMore({
     query: snapshotTag ? SNAPSHOT_FILES_QUERY : DRAFT_FILES_QUERY,
-    variables: { datasetId, snapshotTag, filePrefix: directory.filename + '/' },
+    variables: { datasetId, snapshotTag, tree: directory.id },
     updateQuery: mergeNewFiles(directory, snapshotTag),
   })
 
@@ -82,7 +88,7 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
   }, [loading])
   return (
     <AccordionTab
-      label={directory.filename}
+      label={directory.filename.split(':').pop()}
       accordionStyle="file-tree"
       onClick={() => {
         // Show a loading state while we wait on the directory to stream in

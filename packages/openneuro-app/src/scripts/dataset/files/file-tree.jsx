@@ -7,13 +7,7 @@ import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 import { Media } from '../../styles/media'
 import { AccordionTab } from '@openneuro/components/accordion'
 
-export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
-
-export const sortByName = (a, b) => a.name.localeCompare(b.name)
-
 export const unescapePath = path => path.replace(/:/g, '/')
-
-const isTopLevel = dir => !dir.path.includes(':')
 
 const FileTree = ({
   datasetId,
@@ -21,7 +15,6 @@ const FileTree = ({
   path = '',
   name = '',
   files = [],
-  directories = [],
   editMode = false,
   defaultExpanded = false,
   datasetPermissions,
@@ -29,10 +22,33 @@ const FileTree = ({
   isFileToBeDeleted,
   bulkDeleteButton,
 }) => {
+  // Split files into a tree for this level and child levels
+  // Special cases for root (path === '')
+  const currentFiles = []
+  const childFiles = {}
+  for (const f of files) {
+    // Any paths in this filename below the current path value
+    const lowerPath = f.filename.substring(`${path}:`.length)
+    if (path === '' ? f.filename.includes(':') : lowerPath.includes(':')) {
+      // At the top level, use the directory component (first segment)
+      // Below that, use all paths before the filename (sub-01:anat) for (sub-01:anat:sub-01_T1w.nii.gz)
+      const childPath =
+        path === ''
+          ? f.filename.split(':')[0]
+          : f.filename.split(':').slice(0, -1).join(':')
+      if (childFiles.hasOwnProperty(childPath)) {
+        childFiles[childPath].push(f)
+      } else {
+        childFiles[childPath] = [f]
+      }
+    } else {
+      currentFiles.push(f)
+    }
+  }
   return (
     <AccordionTab
       className=""
-      label={name}
+      label={name || path.split(':').pop()}
       accordionStyle="file-tree"
       startOpen={defaultExpanded}>
       {editMode && (
@@ -59,48 +75,50 @@ const FileTree = ({
         </Media>
       )}
       <ul className="child-files">
-        {files.sort(sortByFilename).map((file, index) => (
-          <li className="clearfix filetree-item filetree-file" key={index}>
-            <File
-              id={file.id}
-              datasetId={datasetId}
-              snapshotTag={snapshotTag}
-              path={path}
-              size={file.size}
-              editMode={editMode}
-              toggleFileToDelete={toggleFileToDelete}
-              isFileToBeDeleted={isFileToBeDeleted}
-              {...file}
-              annexKey={file.key}
-              datasetPermissions={datasetPermissions}
-            />
-          </li>
-        ))}
-        {directories.sort(sortByName).map((dir, index) => {
-          if ('files' in dir || 'directories' in dir) {
-            // Loaded directory
+        {currentFiles.map((file, index) => {
+          if (file.directory) {
+            if (childFiles.hasOwnProperty(file.filename)) {
+              return (
+                <li className="clearfix filetree-item filetree-dir" key={index}>
+                  <FileTree
+                    datasetId={datasetId}
+                    snapshotTag={snapshotTag}
+                    editMode={editMode}
+                    defaultExpanded={true}
+                    datasetPermissions={datasetPermissions}
+                    toggleFileToDelete={toggleFileToDelete}
+                    isFileToBeDeleted={isFileToBeDeleted}
+                    files={childFiles[file.filename]}
+                    path={file.filename}
+                  />
+                </li>
+              )
+            } else {
+              return (
+                <li className="clearfix filetree-item filetree-dir" key={index}>
+                  <FileTreeUnloadedDirectory
+                    datasetId={datasetId}
+                    snapshotTag={snapshotTag}
+                    directory={file}
+                  />
+                </li>
+              )
+            }
+          } else {
             return (
-              <li className="clearfix filetree-item filetree-dir" key={index}>
-                <FileTree
+              <li className="clearfix filetree-item filetree-file" key={index}>
+                <File
+                  id={file.id}
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
+                  path={path}
+                  size={file.size}
                   editMode={editMode}
-                  defaultExpanded={isTopLevel(dir)}
-                  datasetPermissions={datasetPermissions}
                   toggleFileToDelete={toggleFileToDelete}
                   isFileToBeDeleted={isFileToBeDeleted}
-                  {...dir}
-                />
-              </li>
-            )
-          } else {
-            // Unloaded
-            return (
-              <li className="clearfix filetree-item filetree-dir" key={index}>
-                <FileTreeUnloadedDirectory
-                  datasetId={datasetId}
-                  snapshotTag={snapshotTag}
-                  directory={dir}
+                  filename={file.filename.split(':').pop()}
+                  annexKey={file.key}
+                  datasetPermissions={datasetPermissions}
                 />
               </li>
             )
@@ -117,10 +135,12 @@ FileTree.propTypes = {
   snapshotTag: PropTypes.string,
   path: PropTypes.string,
   name: PropTypes.string,
-  directories: PropTypes.array,
   editMode: PropTypes.bool,
   defaultExpanded: PropTypes.bool,
   datasetPermissions: PropTypes.object,
+  toggleFileToDelete: PropTypes.func,
+  isFileToBeDeleted: PropTypes.func,
+  bulkDeleteButton: PropTypes.func,
 }
 
 export default FileTree

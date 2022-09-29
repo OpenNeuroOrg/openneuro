@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
 import { Media } from '../../styles/media'
 import { useMutation, gql } from '@apollo/client'
@@ -32,6 +31,8 @@ const DELETE_FILES = gql`
     deleteFiles(datasetId: $datasetId, files: $files)
   }
 `
+export const sortByFilename = (a, b) =>
+  a.filename.localeCompare(b.filename, { numeric: true })
 
 const Files = ({
   datasetId,
@@ -72,7 +73,6 @@ const Files = ({
     }
   }
 
-  const fileTree = flatToTree(files)
   const disableBtn = Object.values(filesToDelete).length ? null : true
   const filesCount = Object.values(filesToDelete).length
   const bulkDeleteButton =
@@ -108,7 +108,7 @@ const Files = ({
               datasetId={datasetId}
               snapshotTag={snapshotTag}
               path={''}
-              {...fileTree}
+              files={[...files].sort(sortByFilename)}
               name={datasetName}
               editMode={editMode}
               defaultExpanded={false}
@@ -133,7 +133,7 @@ const Files = ({
               datasetId={datasetId}
               snapshotTag={snapshotTag}
               path={''}
-              {...fileTree}
+              files={files}
               name={datasetName}
               editMode={editMode}
               defaultExpanded={true}
