@@ -1,6 +1,6 @@
 // Temporary type representing the GraphQL DatasetFile type
 // TODO - Derive this from the GraphQL schema
-interface DatasetFile {
+export interface DatasetFile {
   id: string
   key?: string
   filename: string

@@ -99,7 +99,7 @@ interface FileProps {
     id: string
     path: string
     filename: string
-  }) => boolean
+  }) => void
   isFileToBeDeleted: (id: string) => boolean
 }
 

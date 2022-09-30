@@ -20,7 +20,7 @@ interface FileTreeProps {
   datasetPermissions: any
   toggleFileToDelete: ({ id, path, filename }) => void
   isFileToBeDeleted: (id: string) => boolean
-  bulkDeleteButton: React.ReactElement
+  bulkDeleteButton: JSX.Element
 }
 
 const FileTree = ({
@@ -35,7 +35,7 @@ const FileTree = ({
   toggleFileToDelete,
   isFileToBeDeleted,
   bulkDeleteButton,
-}: FileTreeProps): React.ReactElement => {
+}: FileTreeProps): JSX.Element => {
   // Split files into a tree for this level and child levels
   // Special cases for root (path === '')
   const currentFiles = []

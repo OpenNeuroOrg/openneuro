@@ -34,7 +34,7 @@ const DELETE_FILES = gql`
 `
 
 export const sortByFilename = (a: DatasetFile, b: DatasetFile): number =>
-  a.filename.localeCompare(b.filename, { numeric: true }) as number
+  a.filename.localeCompare(b.filename)
 
 interface FilesProps {
   datasetId: string
@@ -54,7 +54,7 @@ const Files = ({
   editMode = false,
   datasetPermissions,
   summary,
-}: FilesProps): React.ReactNode => {
+}: FilesProps): JSX.Element => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteFiles] = useMutation(DELETE_FILES)
