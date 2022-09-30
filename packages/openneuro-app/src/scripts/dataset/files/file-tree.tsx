@@ -62,7 +62,7 @@ const FileTree = ({
   return (
     <AccordionTab
       className=""
-      label={name || path.split(':').pop()}
+      label={name}
       accordionStyle="file-tree"
       startOpen={defaultExpanded}>
       {editMode && (
@@ -104,7 +104,7 @@ const FileTree = ({
                     isFileToBeDeleted={isFileToBeDeleted}
                     files={childFiles[file.filename]}
                     path={file.filename}
-                    name={file.filename}
+                    name={file.filename.split(':').pop()}
                     bulkDeleteButton={bulkDeleteButton}
                   />
                 </li>
