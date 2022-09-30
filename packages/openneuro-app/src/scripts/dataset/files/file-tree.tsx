@@ -5,6 +5,7 @@ import DeleteDir from '../mutations/delete-dir.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 import { Media } from '../../styles/media'
 import { AccordionTab } from '@openneuro/components/accordion'
+import { DatasetFile } from '../../types/dataset-file'
 
 export const unescapePath = (path: string): string => path.replace(/:/g, '/')
 
@@ -13,17 +14,12 @@ interface FileTreeProps {
   snapshotTag: string
   path: string
   name: string
-  files: Array<{
-    id: string
-    filename: string
-    key: string
-    size: number
-  }>
+  files: DatasetFile[]
   editMode: boolean
   defaultExpanded: boolean
   datasetPermissions: any
-  toggleFileToDelete: () => void
-  isFileToBeDeleted: boolean
+  toggleFileToDelete: ({ id, path, filename }) => void
+  isFileToBeDeleted: (id: string) => boolean
   bulkDeleteButton: React.ReactElement
 }
 
