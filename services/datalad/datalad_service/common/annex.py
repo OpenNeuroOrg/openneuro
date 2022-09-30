@@ -143,11 +143,12 @@ def get_repo_urls(path, files):
     rmetPaths = []
     rmetFiles = {}
     for f in files:
-        rmetPath = compute_rmet(f['key'])
-        if rmetPath in rmetObjects:
-            # Keep a reference to the files so we can add URLs later
-            rmetFiles[rmetPath] = f
-            rmetPaths.append(rmetPath)
+        if 'key' in f:
+            rmetPath = compute_rmet(f['key'])
+            if rmetPath in rmetObjects:
+                # Keep a reference to the files so we can add URLs later
+                rmetFiles[rmetPath] = f
+                rmetPaths.append(rmetPath)
     # Then read those objects with git cat-file --batch
     gitObjects = rmetObjects['remote.log'] + '\n' + \
         '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
