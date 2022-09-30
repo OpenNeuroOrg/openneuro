@@ -151,7 +151,7 @@ def test_file_indexing(client, new_dataset):
     assert anat_response.status == falcon.HTTP_OK
     anat_content = json.loads(anat_response.content)
     # Test sub-01/anat/sub-01_T1w.nii.gz file
-    assert {'filename': 'sub-01/anat/sub-01_T1w.nii.gz', 'size': 19,
+    assert {'filename': 'sub-01_T1w.nii.gz', 'size': 19,
             'id': 'e497096a2bce0d48b2761dade2b5c4e5a0f352bd',
             'key': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz',
             'urls': [], 'annexed': True} in anat_content['files']
