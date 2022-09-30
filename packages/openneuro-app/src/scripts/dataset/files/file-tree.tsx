@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import File from './file'
 import UpdateFile from '../mutations/update-file.jsx'
 import DeleteDir from '../mutations/delete-dir.jsx'
@@ -7,7 +6,26 @@ import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 import { Media } from '../../styles/media'
 import { AccordionTab } from '@openneuro/components/accordion'
 
-export const unescapePath = path => path.replace(/:/g, '/')
+export const unescapePath = (path: string): string => path.replace(/:/g, '/')
+
+interface FileTreeProps {
+  datasetId: string
+  snapshotTag: string
+  path: string
+  name: string
+  files: Array<{
+    id: string
+    filename: string
+    key: string
+    size: number
+  }>
+  editMode: boolean
+  defaultExpanded: boolean
+  datasetPermissions: any
+  toggleFileToDelete: () => void
+  isFileToBeDeleted: boolean
+  bulkDeleteButton: React.ReactElement
+}
 
 const FileTree = ({
   datasetId,
@@ -21,7 +39,7 @@ const FileTree = ({
   toggleFileToDelete,
   isFileToBeDeleted,
   bulkDeleteButton,
-}) => {
+}: FileTreeProps): React.ReactElement => {
   // Split files into a tree for this level and child levels
   // Special cases for root (path === '')
   const currentFiles = []
@@ -90,6 +108,8 @@ const FileTree = ({
                     isFileToBeDeleted={isFileToBeDeleted}
                     files={childFiles[file.filename]}
                     path={file.filename}
+                    name={file.filename}
+                    bulkDeleteButton={bulkDeleteButton}
                   />
                 </li>
               )
@@ -119,6 +139,8 @@ const FileTree = ({
                   filename={file.filename.split(':').pop()}
                   annexKey={file.key}
                   datasetPermissions={datasetPermissions}
+                  annexed={file.key}
+                  isMobile={false}
                 />
               </li>
             )
@@ -127,20 +149,6 @@ const FileTree = ({
       </ul>
     </AccordionTab>
   )
-}
-
-FileTree.propTypes = {
-  datasetId: PropTypes.string,
-  files: PropTypes.array,
-  snapshotTag: PropTypes.string,
-  path: PropTypes.string,
-  name: PropTypes.string,
-  editMode: PropTypes.bool,
-  defaultExpanded: PropTypes.bool,
-  datasetPermissions: PropTypes.object,
-  toggleFileToDelete: PropTypes.func,
-  isFileToBeDeleted: PropTypes.func,
-  bulkDeleteButton: PropTypes.func,
 }
 
 export default FileTree

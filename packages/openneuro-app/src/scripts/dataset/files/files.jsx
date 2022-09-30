@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import FileTree from './file-tree.jsx'
+import FileTree from './file-tree'
 import { Media } from '../../styles/media'
 import { useMutation, gql } from '@apollo/client'
 import { WarnButton } from '@openneuro/components/warn-button'
