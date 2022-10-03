@@ -32,37 +32,25 @@ describe('FileTreeUnloadedDirectory component', () => {
       const dir = { filename: 'sub-01', directory: true }
       const a = { id: '1234', filename: 'a', directory: false }
       const b = { id: '5678', filename: 'b', directory: false }
-      const c = { id: '91011', filename: 'sub-01/c', directory: false }
+      const c = { id: '91011', filename: 'c', directory: false }
       const defaultObj = { dataset: { draft: { files: [a, b] } } }
       const updatedObj = { dataset: { draft: { files: [c] } } }
       expect(
         mergeNewFiles(dir)(defaultObj, { fetchMoreResult: updatedObj }).dataset
           .draft.files,
-      ).toEqual([a, b, c])
-    })
-    it('removes the existing directory facade when merging lists', () => {
-      const dir = { filename: 'sub-01', directory: true }
-      const a = { id: '1234', filename: 'a', directory: false }
-      const b = { id: '5678', filename: 'b', directory: false }
-      const c = { id: '91011', filename: 'sub-01/c', directory: false }
-      const defaultObj = { dataset: { draft: { files: [dir, a, b] } } }
-      const updatedObj = { dataset: { draft: { files: [c] } } }
-      expect(
-        mergeNewFiles(dir)(defaultObj, { fetchMoreResult: updatedObj }).dataset
-          .draft.files,
-      ).toEqual([a, b, c])
+      ).toEqual([a, b, { ...c, filename: 'sub-01:c' }])
     })
     it('works with snapshots', () => {
       const dir = { filename: 'sub-01', directory: true }
       const a = { id: '1234', filename: 'a', directory: false }
       const b = { id: '5678', filename: 'b', directory: false }
-      const c = { id: '91011', filename: 'sub-01/c', directory: false }
+      const c = { id: '91011', filename: 'c', directory: false }
       const defaultObj = { snapshot: { files: [dir, a, b] } }
       const updatedObj = { snapshot: { files: [c] } }
       expect(
         mergeNewFiles(dir, '1.0.0')(defaultObj, { fetchMoreResult: updatedObj })
           .snapshot.files,
-      ).toEqual([a, b, c])
+      ).toEqual([dir, a, b, { ...c, filename: 'sub-01:c' }])
     })
   })
 })

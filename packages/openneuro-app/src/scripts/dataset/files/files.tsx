@@ -33,9 +33,6 @@ const DELETE_FILES = gql`
   }
 `
 
-export const sortByFilename = (a: DatasetFile, b: DatasetFile): number =>
-  a.filename.localeCompare(b.filename)
-
 interface FilesProps {
   datasetId: string
   snapshotTag: string
@@ -120,7 +117,7 @@ const Files = ({
               datasetId={datasetId}
               snapshotTag={snapshotTag}
               path={''}
-              files={[...files].sort(sortByFilename)}
+              files={files}
               name={datasetName}
               editMode={editMode}
               defaultExpanded={false}

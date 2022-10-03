@@ -624,86 +624,6 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                                 aria-label=""
                                 class=" on-icon  "
                                 role="img"
-                                style="color: limegreen;"
-                              >
-                                <i
-                                  class="fab fa-node-js"
-                                />
-                              </span>
-                                dataset_description.json
-                              <span
-                                class="filetree-editfile"
-                              >
-                                <div
-                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
-                                />
-                                <span
-                                  class=" "
-                                  data-flow="up"
-                                  data-tooltip="View"
-                                >
-                                  <span
-                                    class="edit-file view-file"
-                                  >
-                                    <a
-                                      aria-label="view file"
-                                      href="/datasets/ds001032/versions/1.0.0/file-display/dataset_description.json"
-                                    >
-                                      <i
-                                        class="fa fa-eye"
-                                      />
-                                    </a>
-                                  </span>
-                                </span>
-                              </span>
-                            </li>
-                            <li
-                              class="clearfix filetree-item filetree-file"
-                            >
-                              <span
-                                aria-label=""
-                                class=" on-icon  "
-                                role="img"
-                                style="color: lightgreen;"
-                              >
-                                <i
-                                  class="fas fa-file-excel"
-                                />
-                              </span>
-                                participants.tsv
-                              <span
-                                class="filetree-editfile"
-                              >
-                                <div
-                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
-                                />
-                                <span
-                                  class=" "
-                                  data-flow="up"
-                                  data-tooltip="View"
-                                >
-                                  <span
-                                    class="edit-file view-file"
-                                  >
-                                    <a
-                                      aria-label="view file"
-                                      href="/datasets/ds001032/versions/1.0.0/file-display/participants.tsv"
-                                    >
-                                      <i
-                                        class="fa fa-eye"
-                                      />
-                                    </a>
-                                  </span>
-                                </span>
-                              </span>
-                            </li>
-                            <li
-                              class="clearfix filetree-item filetree-file"
-                            >
-                              <span
-                                aria-label=""
-                                class=" on-icon  "
-                                role="img"
                                 style="color: deepskyblue;"
                               >
                                 <i
@@ -768,6 +688,86 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                                     <a
                                       aria-label="view file"
                                       href="/datasets/ds001032/versions/1.0.0/file-display/T1w.json"
+                                    >
+                                      <i
+                                        class="fa fa-eye"
+                                      />
+                                    </a>
+                                  </span>
+                                </span>
+                              </span>
+                            </li>
+                            <li
+                              class="clearfix filetree-item filetree-file"
+                            >
+                              <span
+                                aria-label=""
+                                class=" on-icon  "
+                                role="img"
+                                style="color: limegreen;"
+                              >
+                                <i
+                                  class="fab fa-node-js"
+                                />
+                              </span>
+                                dataset_description.json
+                              <span
+                                class="filetree-editfile"
+                              >
+                                <div
+                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
+                                />
+                                <span
+                                  class=" "
+                                  data-flow="up"
+                                  data-tooltip="View"
+                                >
+                                  <span
+                                    class="edit-file view-file"
+                                  >
+                                    <a
+                                      aria-label="view file"
+                                      href="/datasets/ds001032/versions/1.0.0/file-display/dataset_description.json"
+                                    >
+                                      <i
+                                        class="fa fa-eye"
+                                      />
+                                    </a>
+                                  </span>
+                                </span>
+                              </span>
+                            </li>
+                            <li
+                              class="clearfix filetree-item filetree-file"
+                            >
+                              <span
+                                aria-label=""
+                                class=" on-icon  "
+                                role="img"
+                                style="color: lightgreen;"
+                              >
+                                <i
+                                  class="fas fa-file-excel"
+                                />
+                              </span>
+                                participants.tsv
+                              <span
+                                class="filetree-editfile"
+                              >
+                                <div
+                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
+                                />
+                                <span
+                                  class=" "
+                                  data-flow="up"
+                                  data-tooltip="View"
+                                >
+                                  <span
+                                    class="edit-file view-file"
+                                  >
+                                    <a
+                                      aria-label="view file"
+                                      href="/datasets/ds001032/versions/1.0.0/file-display/participants.tsv"
                                     >
                                       <i
                                         class="fa fa-eye"
@@ -974,126 +974,6 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                                 aria-label=""
                                 class=" on-icon  "
                                 role="img"
-                                style="color: limegreen;"
-                              >
-                                <i
-                                  class="fab fa-node-js"
-                                />
-                              </span>
-                                dataset_description.json
-                              <span
-                                class="filetree-editfile"
-                              >
-                                <div
-                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
-                                >
-                                  <span
-                                    class=" "
-                                    data-flow="up"
-                                    data-tooltip="Download: 172B"
-                                  >
-                                    <span
-                                      class="edit-file download-file"
-                                    >
-                                      <a
-                                        aria-label="download file"
-                                        download=""
-                                        href="/crn/datasets/ds001032/snapshots/1.0.0/files/dataset_description.json"
-                                      >
-                                        <i
-                                          class="fa fa-download"
-                                        />
-                                      </a>
-                                    </span>
-                                  </span>
-                                </div>
-                                <span
-                                  class=" "
-                                  data-flow="up"
-                                  data-tooltip="View"
-                                >
-                                  <span
-                                    class="edit-file view-file"
-                                  >
-                                    <a
-                                      aria-label="view file"
-                                      href="/datasets/ds001032/versions/1.0.0/file-display/dataset_description.json"
-                                    >
-                                      <i
-                                        class="fa fa-eye"
-                                      />
-                                    </a>
-                                  </span>
-                                </span>
-                              </span>
-                            </li>
-                            <li
-                              class="clearfix filetree-item filetree-file"
-                            >
-                              <span
-                                aria-label=""
-                                class=" on-icon  "
-                                role="img"
-                                style="color: lightgreen;"
-                              >
-                                <i
-                                  class="fas fa-file-excel"
-                                />
-                              </span>
-                                participants.tsv
-                              <span
-                                class="filetree-editfile"
-                              >
-                                <div
-                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
-                                >
-                                  <span
-                                    class=" "
-                                    data-flow="up"
-                                    data-tooltip="Download: 36B"
-                                  >
-                                    <span
-                                      class="edit-file download-file"
-                                    >
-                                      <a
-                                        aria-label="download file"
-                                        download=""
-                                        href="/crn/datasets/ds001032/snapshots/1.0.0/files/participants.tsv"
-                                      >
-                                        <i
-                                          class="fa fa-download"
-                                        />
-                                      </a>
-                                    </span>
-                                  </span>
-                                </div>
-                                <span
-                                  class=" "
-                                  data-flow="up"
-                                  data-tooltip="View"
-                                >
-                                  <span
-                                    class="edit-file view-file"
-                                  >
-                                    <a
-                                      aria-label="view file"
-                                      href="/datasets/ds001032/versions/1.0.0/file-display/participants.tsv"
-                                    >
-                                      <i
-                                        class="fa fa-eye"
-                                      />
-                                    </a>
-                                  </span>
-                                </span>
-                              </span>
-                            </li>
-                            <li
-                              class="clearfix filetree-item filetree-file"
-                            >
-                              <span
-                                aria-label=""
-                                class=" on-icon  "
-                                role="img"
                                 style="color: deepskyblue;"
                               >
                                 <i
@@ -1198,6 +1078,126 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                                     <a
                                       aria-label="view file"
                                       href="/datasets/ds001032/versions/1.0.0/file-display/T1w.json"
+                                    >
+                                      <i
+                                        class="fa fa-eye"
+                                      />
+                                    </a>
+                                  </span>
+                                </span>
+                              </span>
+                            </li>
+                            <li
+                              class="clearfix filetree-item filetree-file"
+                            >
+                              <span
+                                aria-label=""
+                                class=" on-icon  "
+                                role="img"
+                                style="color: limegreen;"
+                              >
+                                <i
+                                  class="fab fa-node-js"
+                                />
+                              </span>
+                                dataset_description.json
+                              <span
+                                class="filetree-editfile"
+                              >
+                                <div
+                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
+                                >
+                                  <span
+                                    class=" "
+                                    data-flow="up"
+                                    data-tooltip="Download: 172B"
+                                  >
+                                    <span
+                                      class="edit-file download-file"
+                                    >
+                                      <a
+                                        aria-label="download file"
+                                        download=""
+                                        href="/crn/datasets/ds001032/snapshots/1.0.0/files/dataset_description.json"
+                                      >
+                                        <i
+                                          class="fa fa-download"
+                                        />
+                                      </a>
+                                    </span>
+                                  </span>
+                                </div>
+                                <span
+                                  class=" "
+                                  data-flow="up"
+                                  data-tooltip="View"
+                                >
+                                  <span
+                                    class="edit-file view-file"
+                                  >
+                                    <a
+                                      aria-label="view file"
+                                      href="/datasets/ds001032/versions/1.0.0/file-display/dataset_description.json"
+                                    >
+                                      <i
+                                        class="fa fa-eye"
+                                      />
+                                    </a>
+                                  </span>
+                                </span>
+                              </span>
+                            </li>
+                            <li
+                              class="clearfix filetree-item filetree-file"
+                            >
+                              <span
+                                aria-label=""
+                                class=" on-icon  "
+                                role="img"
+                                style="color: lightgreen;"
+                              >
+                                <i
+                                  class="fas fa-file-excel"
+                                />
+                              </span>
+                                participants.tsv
+                              <span
+                                class="filetree-editfile"
+                              >
+                                <div
+                                  class="fresnel-container fresnel-greaterThanOrEqual-medium "
+                                >
+                                  <span
+                                    class=" "
+                                    data-flow="up"
+                                    data-tooltip="Download: 36B"
+                                  >
+                                    <span
+                                      class="edit-file download-file"
+                                    >
+                                      <a
+                                        aria-label="download file"
+                                        download=""
+                                        href="/crn/datasets/ds001032/snapshots/1.0.0/files/participants.tsv"
+                                      >
+                                        <i
+                                          class="fa fa-download"
+                                        />
+                                      </a>
+                                    </span>
+                                  </span>
+                                </div>
+                                <span
+                                  class=" "
+                                  data-flow="up"
+                                  data-tooltip="View"
+                                >
+                                  <span
+                                    class="edit-file view-file"
+                                  >
+                                    <a
+                                      aria-label="view file"
+                                      href="/datasets/ds001032/versions/1.0.0/file-display/participants.tsv"
                                     >
                                       <i
                                         class="fa fa-eye"
@@ -1474,7 +1474,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             >
               Uploaded by
             </h2>
-            Test User on 2021-12-17 - 9 months ago
+            Test User on 2021-12-17 - 10 months ago
           </div>
           <div
             class="dataset-meta-block undefined"
@@ -1484,7 +1484,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             >
               Last Updated
             </h2>
-            2021-12-17 - 9 months ago
+            2021-12-17 - 10 months ago
           </div>
           <div
             class="dataset-meta-block undefined"

@@ -1,11 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
-import FileTree, {
-  sortByFilename,
-  sortByName,
-  unescapePath,
-} from '../file-tree.jsx'
+import FileTree, { unescapePath } from '../file-tree'
 
 // official Jest workaround for mocking methods not implemented in JSDOM
 window.matchMedia =
@@ -55,26 +51,6 @@ describe('FileTree component', () => {
     expect(screen.getByLabelText('Top Level').firstChild).not.toHaveClass(
       'fa-folder',
     )
-  })
-  describe('sortByFilename()', () => {
-    it('sorts the expected filename properties', () => {
-      expect(
-        sortByFilename(
-          { name: 'abc', filename: 'xyz' },
-          { name: 'xyz', filename: 'abc' },
-        ),
-      ).toBe(1)
-    })
-  })
-  describe('sortByName()', () => {
-    it('sorts the expected name properties', () => {
-      expect(
-        sortByName(
-          { name: 'abc', filename: 'xyz' },
-          { name: 'xyz', filename: 'abc' },
-        ),
-      ).toBe(-1)
-    })
   })
   describe('unescapePath()', () => {
     it('does not alter an already escaped path', () => {
