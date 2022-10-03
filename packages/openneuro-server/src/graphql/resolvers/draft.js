@@ -1,3 +1,4 @@
+import Summary from '../../models/summary'
 import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { description } from './description.js'
@@ -16,8 +17,10 @@ const draftFiles = async (dataset, args, { userInfo }) => {
 
 const draftSize = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
-  // TODO - Implement a different method for size
-  return 128
+  return Summary.findOne(
+    { datasetId: dataset.id, id: hexsha },
+    { size: 1 },
+  ).then(res => res.toObject().size)
 }
 
 /**

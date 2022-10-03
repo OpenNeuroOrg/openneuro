@@ -7,6 +7,7 @@ import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
 import { getFiles } from '../../datalad/files.js'
+import Summary from '../../models/summary'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 import DeprecatedSnapshot from '../../models/deprecatedSnapshot'
@@ -33,7 +34,10 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
             filterRemovedAnnexObjects(datasetId, context.userInfo),
           ),
         size: () =>
-          getFiles(datasetId, snapshot.hexsha).then(response => response.size),
+          Summary.findOne(
+            { datasetId: datasetId, id: snapshot.hexsha },
+            { size: 1 },
+          ).then(res => res.toObject().size),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
