@@ -15,8 +15,6 @@ export function setupApm() {
       serviceVersion: version,
       environment: config.sentry.environment,
     })
-  } else {
-    apm = {}
   }
 }
 
