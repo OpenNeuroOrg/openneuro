@@ -2,13 +2,9 @@ import 'cross-fetch/polyfill'
 import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
-import { getToken, getUrl } from './config.js'
+import cliProgress from 'cli-progress'
+import { getToken } from './config.js'
 import { downloadDataset } from './datasets'
-
-export const downloadUrl = (baseUrl, datasetId, tag) =>
-  tag
-    ? `${baseUrl}crn/datasets/${datasetId}/snapshots/${tag}/download`
-    : `${baseUrl}crn/datasets/${datasetId}/download`
 
 export const checkDestination = destination => {
   if (fs.existsSync(destination)) {
@@ -60,6 +56,7 @@ export const downloadFile = async (
   filename,
   fileUrl,
   apmTransaction,
+  downloadProgress,
 ) => {
   try {
     const fullPath = path.join(destination, filename)
@@ -76,6 +73,9 @@ export const downloadFile = async (
         // Setup end/error handler with Promise interface
         const responsePromise = new Promise((resolve, reject) => {
           stream.on('end', () => resolve())
+          stream.on('data', () => {
+            downloadProgress.update(writeStream.bytesWritten)
+          })
           stream.on('error', err => {
             if (apmTransaction) apmTransaction.captureError(err)
             reject(err)
@@ -104,30 +104,60 @@ export const getDownload = (
   tag,
   apmTransaction,
   client,
+  treePath = '',
+  tree = null,
 ) => {
-  const apmSetup = apmTransaction.startSpan('downloadDataset')
-  return downloadDataset(client)({ datasetId, tag }).then(async files => {
-    apmTransaction.addLabels({ datasetId, tag })
+  const apmSetup = apmTransaction.startSpan('getDownload')
+  return downloadDataset(client)({ datasetId, tag, tree }).then(async files => {
+    apmTransaction.addLabels({ datasetId, tag, tree })
     checkDestination(destination)
     apmSetup.end()
     for (const file of files) {
-      if (testFile(destination, file.filename, file.size)) {
-        // Now actually download
-        const apmDownload = apmTransaction.startSpan(
-          `download ${file.filename}:${file.size}`,
-        )
-        // eslint-disable-next-line no-console
-        console.log(`Downloading "${file.filename}" - size ${file.size} bytes`)
-        await downloadFile(
+      const downloadPath = path.join(treePath, file.filename)
+      if (file.directory) {
+        await getDownload(
           destination,
-          file.filename,
-          file.urls[file.urls.length - 1],
+          datasetId,
+          tag,
           apmTransaction,
+          client,
+          downloadPath,
+          file.id,
         )
-        if (apmDownload) apmDownload.end()
       } else {
-        // eslint-disable-next-line no-console
-        console.log(`Skipping present file "${file.filename}"`)
+        const downloadProgress = new cliProgress.SingleBar({
+          format:
+            ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | ' +
+            downloadPath,
+          clearOnComplete: false,
+          hideCursor: true,
+          position: 'center',
+          etaBuffer: 65536,
+          autopadding: true,
+        })
+        if (testFile(destination, downloadPath, file.size)) {
+          // Now actually download
+          const apmDownload = apmTransaction.startSpan(
+            `download ${downloadPath}:${file.size}`,
+          )
+          downloadProgress.start(file.size, 0)
+          try {
+            await downloadFile(
+              destination,
+              downloadPath,
+              file.urls[file.urls.length - 1],
+              apmTransaction,
+              downloadProgress,
+            )
+            downloadProgress.update(file.size)
+          } finally {
+            downloadProgress.stop()
+          }
+          if (apmDownload) apmDownload.end()
+        } else {
+          downloadProgress.start(file.size, file.size)
+          downloadProgress.stop()
+        }
       }
     }
   })

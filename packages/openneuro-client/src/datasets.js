@@ -80,12 +80,12 @@ export const getDataset = gql`
 
 // Get only working tree files
 export const getDraftFiles = gql`
-  query dataset($id: ID!) {
+  query dataset($id: ID!, $tree: String) {
     dataset(id: $id) {
       id
       draft {
         id
-        files(prefix: null) {
+        files(tree: $tree) {
           filename
           size
         }
@@ -285,13 +285,14 @@ export const trackAnalytics = gql`
 `
 
 export const downloadDataset = gql`
-  query dataset($datasetId: ID!) {
+  query downloadDraft($datasetId: ID!, $tree: String) {
     dataset(id: $datasetId) {
       id
       draft {
         id
-        files(prefix: null) {
+        files(tree: $tree) {
           id
+          directory
           filename
           size
           urls
@@ -302,11 +303,12 @@ export const downloadDataset = gql`
 `
 
 export const downloadSnapshot = gql`
-  query snapshot($datasetId: ID!, $tag: String!) {
+  query downloadSnapshot($datasetId: ID!, $tag: String!, $tree: String) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
-      files(prefix: null) {
+      files(tree: $tree) {
         id
+        directory
         filename
         size
         urls
