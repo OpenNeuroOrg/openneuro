@@ -156,8 +156,6 @@ export const createSnapshot = async (
     )
     snapshot.created = new Date()
     snapshot.files = await getFiles(datasetId, tag)
-    // TODO - Use a different path for size
-    snapshot.size = 128
 
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)
