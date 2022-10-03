@@ -17,10 +17,9 @@ const draftFiles = async (dataset, args, { userInfo }) => {
 
 const draftSize = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
-  return Summary.findOne(
-    { datasetId: dataset.id, id: hexsha },
-    { size: 1 },
-  ).then(res => res.toObject().size)
+  return Summary.findOne({ datasetId: dataset.id, id: hexsha })
+    .exec()
+    .then(res => res.toObject()?.size)
 }
 
 /**

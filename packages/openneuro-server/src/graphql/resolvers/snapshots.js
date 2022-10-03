@@ -34,10 +34,9 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
             filterRemovedAnnexObjects(datasetId, context.userInfo),
           ),
         size: () =>
-          Summary.findOne(
-            { datasetId: datasetId, id: snapshot.hexsha },
-            { size: 1 },
-          ).then(res => res.toObject().size),
+          Summary.findOne({ datasetId: datasetId, id: snapshot.hexsha })
+            .exec()
+            .then(res => res.toObject()?.size),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
