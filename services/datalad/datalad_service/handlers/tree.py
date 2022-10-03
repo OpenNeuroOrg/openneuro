@@ -2,6 +2,7 @@ import logging
 
 import falcon
 
+from datalad_service.common.bids import dataset_sort
 from datalad_service.tasks.files import get_tree
 
 
@@ -14,8 +15,6 @@ class TreeResource(object):
         # Request for index of files
         # Return a list of file objects
         # {name, path, size}
-        try:
-            files = get_tree(self.store, dataset, tree)
-            resp.media = {'files': files}
-        except:
-            resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+        files = get_tree(self.store, dataset, tree)
+        files.sort(key=dataset_sort)
+        resp.media = {'files': files}

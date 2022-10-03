@@ -73,7 +73,7 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
         else:
             file_id = compute_file_hash(obj_hash, filename)
             files.append({'filename': filename, 'size': int(size),
-                          'id': file_id, 'key': obj_hash, 'urls': [], 'annexed': False})
+                          'id': file_id, 'key': obj_hash, 'directory': False, 'urls': [], 'annexed': False})
 
 
 def compute_rmet(key):
@@ -210,7 +210,7 @@ def get_repo_files(dataset_path, tree):
             filename = symlinkFilenames[(index - 1) // 2]
             file_id = compute_file_hash(key, filename)
             files.append({'filename': filename, 'size': int(
-                size), 'id': file_id, 'key': key, 'urls': [], 'annexed': True})
+                size), 'id': file_id, 'key': key, 'urls': [], 'annexed': True, 'directory': False})
     # Now find URLs for each file if available
     return get_repo_urls(dataset_path, files)
 
