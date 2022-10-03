@@ -44,21 +44,6 @@ export const createDataset =
       })
   }
 
-export const downloadSnapshot = gql`
-  query downloadSnapshot($datasetId: ID!, $tag: String!, $tree: String) {
-    snapshot(datasetId: $datasetId, tag: $tag) {
-      id
-      files(tree: $tree) {
-        id
-        directory
-        filename
-        size
-        urls
-      }
-    }
-  }
-`
-
 export const downloadDataset =
   client =>
   async ({ datasetId, tag, tree }) => {
