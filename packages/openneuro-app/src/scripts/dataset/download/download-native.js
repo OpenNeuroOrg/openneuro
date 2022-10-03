@@ -42,13 +42,11 @@ class DownloadAbortError extends Error {
 
 let downloadCanceled
 
+/**
+ * Recursive download for file trees via browser file access API
+ */
 const downloadTree = async (
-  datasetId,
-  snapshotTag,
-  client,
-  apmTransaction,
-  dirHandle,
-  toastId,
+  { datasetId, snapshotTag, client, apmTransaction, dirHandle, toastId },
   path = '',
   tree = null,
 ) => {
@@ -58,16 +56,19 @@ const downloadTree = async (
     tree,
   })
   for (const [index, file] of filesToDownload.entries()) {
+    const downloadPath = path ? `${path}/${file.filename}` : file.filename
     if (file.directory) {
       // Next tree level
       await downloadTree(
-        datasetId,
-        snapshotTag,
-        client,
-        apmTransaction,
-        dirHandle,
-        toastId,
-        path ? `${path}/${file.filename}` : file.filename,
+        {
+          datasetId,
+          snapshotTag,
+          client,
+          apmTransaction,
+          dirHandle,
+          toastId,
+        },
+        downloadPath,
         file.id,
       )
     } else {
@@ -83,13 +84,25 @@ const downloadTree = async (
       if (fileHandle.size == file.size) continue
       const writable = await fileHandle.createWritable()
       const { body, status, statusText } = await fetch(file.urls.pop())
+      let loaded = 0
+      const progress = new TransformStream({
+        transform(chunk, controller) {
+          downloadToastUpdate(toastId, loaded / file.size, {
+            datasetId,
+            snapshotTag,
+            downloadPath,
+            dirName: dirHandle.name,
+          })
+          loaded += chunk.length
+          controller.enqueue(chunk)
+        },
+      })
       if (status === 200) {
-        await body.pipeTo(writable)
+        await body.pipeThrough(progress).pipeTo(writable)
       } else {
         apmTransaction.captureError(statusText)
         return requestFailureToast()
       }
-      downloadToastUpdate(toastId, index / filesToDownload.length)
     }
   }
 }
@@ -124,14 +137,14 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
       () => (downloadCanceled = true),
     )
     apmSelect && apmSelect.end()
-    await downloadTree(
+    await downloadTree({
       datasetId,
       snapshotTag,
       client,
       apmTransaction,
       dirHandle,
       toastId,
-    )
+    })
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
     if (err.name === 'AbortError') {
