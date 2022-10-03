@@ -155,8 +155,7 @@ export const createSnapshot = async (
       snapshotChanges,
     )
     snapshot.created = new Date()
-    const { files } = await getFiles(datasetId, tag)
-    snapshot.files = files
+    snapshot.files = await getFiles(datasetId, tag)
     // TODO - Use a different path for size
     snapshot.size = 128
 

@@ -79,10 +79,7 @@ export const getFiles = (datasetId, treeish) => {
           const {
             body: { files },
           } = response
-          return {
-            files: files.map(addFileUrl(datasetId, treeish)),
-            size: 128,
-          }
+          return files.map(addFileUrl(datasetId, treeish))
         }
       }),
   )

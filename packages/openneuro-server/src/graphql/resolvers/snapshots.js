@@ -28,11 +28,10 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         description: () => description(snapshot),
         readme: () => readme(snapshot),
         summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
-        files: ({ tree }) => {
-          getFiles(datasetId, tree || snapshot.hexsha)
-            .then(response => response.files)
-            .then(filterRemovedAnnexObjects(datasetId, context.userInfo))
-        },
+        files: ({ tree }) =>
+          getFiles(datasetId, tree || snapshot.hexsha).then(
+            filterRemovedAnnexObjects(datasetId, context.userInfo),
+          ),
         size: () =>
           getFiles(datasetId, snapshot.hexsha).then(response => response.size),
         deprecated: () => deprecated({ datasetId, tag }),

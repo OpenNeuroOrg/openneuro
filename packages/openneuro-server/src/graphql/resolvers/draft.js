@@ -10,7 +10,7 @@ import { filterRemovedAnnexObjects } from '../utils/file.js'
 // A draft must have a dataset parent
 const draftFiles = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
-  const { files } = await getFiles(dataset.id, args.tree || hexsha)
+  const files = await getFiles(dataset.id, args.tree || hexsha)
   return filterRemovedAnnexObjects(dataset.id, userInfo)(files)
 }
 
