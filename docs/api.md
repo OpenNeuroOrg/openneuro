@@ -92,3 +92,115 @@ mutation {
   }
 }
 ```
+
+### Obtain version file trees
+
+File trees are represented as git tree objects. There is a root tree that can be obtained by requesting the default file listing.
+
+```graphql
+query snapshotFiles {
+  snapshot(datasetId: "ds000001", tag: "1.0.0") {
+    files {
+      id
+      key
+      filename
+      size
+      directory
+      annexed
+    }
+  }
+}
+```
+
+This will return a listing of files at the top level of the dataset.
+
+```json
+{
+  "data": {
+    "snapshot": {
+      "files": [
+        {
+          "id": "92e695a42470f48ad581ac8dd0894c07ebc4a9b8",
+          "key": "87b0d1e84b52af82a50100edc269f5c24e4caba5",
+          "filename": "CHANGES",
+          "size": 273,
+          "directory": null,
+          "annexed": false
+        },
+        {
+          "id": "c1905b369e84cbb3016022ebf1ea1574087e20c2",
+          "key": "d8ced4c2adedad6d69c264f94a71df6be20a2241",
+          "filename": "README",
+          "size": 807,
+          "directory": null,
+          "annexed": false
+        },
+        {
+          "id": "7293821ae8d5c647351cb2a31484162097a442c4",
+          "key": "8f6598628c1e0938397e9a3994ba71416a674f9b",
+          "filename": "dataset_description.json",
+          "size": 150,
+          "directory": null,
+          "annexed": false
+        },
+        {
+          "id": "10834f1acb4897eaed5b29fc642718451100721b",
+          "key": null,
+          "filename": "sub-01",
+          "size": 0,
+          "directory": true,
+          "annexed": false
+        }
+      ]
+    }
+  }
+}
+```
+
+In this example, you can see that sub-01 has the `"directory": true`. This means the directory `id` field can be used to retrieve additional trees.
+
+```graphql
+query snapshotFiles {
+  snapshot(datasetId: "ds000001", tag: "1.0.0") {
+    files(tree: "10834f1acb4897eaed5b29fc642718451100721b") {
+      id
+      key
+      filename
+      size
+      directory
+      annexed
+    }
+  }
+}
+```
+
+This will return any files below sub-01 in the tree for this version.
+
+```json
+{
+  "data": {
+    "snapshot": {
+      "files": [
+        {
+          "id": "c63eeb1e0f41fea629f34269025f9d8225a2f3ff",
+          "key": null,
+          "filename": "anat",
+          "size": 0,
+          "directory": true,
+          "annexed": false
+        },
+        {
+          "id": "309cd8eae8896096c8734b024ac52be4743c9f44",
+          "key": null,
+          "filename": "func",
+          "size": 0,
+          "directory": true,
+          "annexed": false
+        }
+      ]
+    }
+  }
+}
+```
+
+The full tree can be retrieved by recursively following tree objects.
