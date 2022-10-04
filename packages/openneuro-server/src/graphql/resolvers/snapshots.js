@@ -36,7 +36,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         size: () =>
           Summary.findOne({ datasetId: datasetId, id: snapshot.hexsha })
             .exec()
-            .then(res => res.toObject()?.size),
+            .then(res => res?.toObject()?.size),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
