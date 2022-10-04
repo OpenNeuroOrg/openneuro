@@ -129,11 +129,11 @@ def test_file_indexing(client, new_dataset):
         {'filename': 'dataset_description.json', 'size': 101,
             'id': '43502da40903d08b18b533f8897330badd6e1da3',
             'key': '838d19644b3296cf32637bbdf9ae5c87db34842f',
-            'urls': [], 'annexed': False},
+            'urls': [], 'annexed': False, 'directory': False},
         {'filename': 'LICENSE', 'size': 8,
             'id': '8a6f5281317d8a8fb695d12c940b0ff7a7dee435',
             'key': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27',
-            'urls': [], 'annexed': True},
+            'urls': [], 'annexed': True, 'directory': False},
         {'id': '2f8451ae1016f936999aaacc0b3d79fb284ac3ea', 'filename': 'sub-01',
             'directory': True, 'annexed': False, 'size': 0, 'urls': []}
     ]:
@@ -154,7 +154,7 @@ def test_file_indexing(client, new_dataset):
     assert {'filename': 'sub-01_T1w.nii.gz', 'size': 19,
             'id': 'e497096a2bce0d48b2761dade2b5c4e5a0f352bd',
             'key': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz',
-            'urls': [], 'annexed': True} in anat_content['files']
+            'urls': [], 'annexed': True, 'directory': False} in anat_content['files']
 
 
 def test_empty_file(client, new_dataset):
@@ -175,10 +175,10 @@ def test_empty_file(client, new_dataset):
     # Check that all elements exist in both lists
     assert({'filename': 'LICENSE',
             'size': 0, 'id': '5bfdc52581371bfa051fa76825a0e1b5e5c3b4bf',
-            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'urls': [], 'annexed': True} in response_content['files'])
+            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'urls': [], 'annexed': True, 'directory': False} in response_content['files'])
     assert({'filename': 'dataset_description.json',
             'size': 101, 'id': '43502da40903d08b18b533f8897330badd6e1da3',
-            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'urls': [], 'annexed': False} in response_content['files'])
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'urls': [], 'annexed': False, 'directory': False} in response_content['files'])
 
 
 def test_duplicate_file_id(client, new_dataset):
