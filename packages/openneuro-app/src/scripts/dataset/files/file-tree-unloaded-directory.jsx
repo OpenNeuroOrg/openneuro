@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
-import FileTreeLoading from './file-tree-loading.jsx'
 import { gql } from '@apollo/client'
 import { AccordionTab } from '@openneuro/components/accordion'
 
@@ -77,26 +76,16 @@ export const fetchMoreDirectory = (
   })
 
 const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
-  const [loading, setLoading] = useState(false)
-  const [displayLoading, setDisplayLoading] = useState(false)
   const { fetchMore } = useContext(DatasetQueryContext)
-  useEffect(() => {
-    if (loading) {
-      const timer = setTimeout(() => setDisplayLoading(true), 150)
-      return () => clearTimeout(timer)
-    }
-  }, [loading])
   return (
     <AccordionTab
       label={directory.filename.split(':').pop()}
       accordionStyle="file-tree"
       onClick={() => {
-        // Show a loading state while we wait on the directory to stream in
-        setLoading(true)
         fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
         // No need to clear since this component is unmounted immediately
       }}>
-      <FileTreeLoading size={directory.size} />
+      <div>Loading...</div>
     </AccordionTab>
   )
 }

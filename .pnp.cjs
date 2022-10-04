@@ -8392,7 +8392,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:17.0.2"],\
             ["react-helmet", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.1.0"],\
             ["react-router-dom", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.3.0"],\
-            ["react-spring", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.0.27"],\
             ["react-toastify", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.0.9"],\
             ["react-usestateref", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:1.0.5"],\
             ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],\
@@ -24874,34 +24873,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "packagePeers": [\
             "@types/react",\
-            "react"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["react-spring", [\
-        ["npm:8.0.27", {\
-          "packageLocation": "./.yarn/cache/react-spring-npm-8.0.27-e2e99c79a8-4f306e30c3.zip/node_modules/react-spring/",\
-          "packageDependencies": [\
-            ["react-spring", "npm:8.0.27"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.0.27", {\
-          "packageLocation": "./.yarn/__virtual__/react-spring-virtual-641a2f11d7/0/cache/react-spring-npm-8.0.27-e2e99c79a8-4f306e30c3.zip/node_modules/react-spring/",\
-          "packageDependencies": [\
-            ["react-spring", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.0.27"],\
-            ["@babel/runtime", "npm:7.15.4"],\
-            ["@types/react", "npm:17.0.24"],\
-            ["@types/react-dom", "npm:17.0.9"],\
-            ["prop-types", "npm:15.7.2"],\
-            ["react", "npm:17.0.2"],\
-            ["react-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:17.0.2"]\
-          ],\
-          "packagePeers": [\
-            "@types/react-dom",\
-            "@types/react",\
-            "react-dom",\
             "react"\
           ],\
           "linkType": "HARD"\

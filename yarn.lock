@@ -2960,7 +2960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.15.4
   resolution: "@babel/runtime@npm:7.15.4"
   dependencies:
@@ -4974,7 +4974,6 @@ __metadata:
     react-dom: ^17.0.1
     react-helmet: 6.1.0
     react-router-dom: 6.3.0
-    react-spring: ^8.0.27
     react-toastify: 6.0.9
     react-usestateref: ^1.0.5
     react-virtualized: "remorses/react-virtualized-fixed-import.git#9.22.3"
@@ -18856,19 +18855,6 @@ __metadata:
   peerDependencies:
     react: ^16.3.0 || ^17.0.0
   checksum: 324511ea8f6669555e166b4af280cdf46034bf0e33c486711e3ce17f88f6f21fed17055098408be1347657d0cbcd614bca944cf9f8e4ecfa96a21d13893fe9fc
-  languageName: node
-  linkType: hard
-
-"react-spring@npm:^8.0.27":
-  version: 8.0.27
-  resolution: "react-spring@npm:8.0.27"
-  dependencies:
-    "@babel/runtime": ^7.3.1
-    prop-types: ^15.5.8
-  peerDependencies:
-    react: ">= 16.8.0"
-    react-dom: ">= 16.8.0"
-  checksum: 4f306e30c3a425fd2b11c265ca0a7c261de0f63c0250fa6fa19eddd58c50fc9eaa463927571ee1dec39659a1bf619aaacf3352602b7724695da240ec0bc106cf
   languageName: node
   linkType: hard
 

@@ -14,16 +14,6 @@ window.matchMedia =
     }
   }
 
-/* eslint-disable */
-jest.mock('react-spring', () => ({
-  useSpring: jest.fn().mockImplementation(() => [{ mockProp: 1 }, jest.fn()]),
-  animated: {
-    path: () => <path data-testid="ANIMATED-COMPONENT" />,
-    div: () => <div data-testid="ANIMATED-COMPONENT" />,
-  },
-}))
-/* eslint-enable */
-
 describe('FileTree component', () => {
   it('renders with default props', () => {
     const { asFragment } = render(<FileTree />)
