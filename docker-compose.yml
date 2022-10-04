@@ -113,7 +113,7 @@ services:
       context: services/datalad
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad:delegated
-      - ./services/datalad/datalad_service:/datalad_service:delegated
+      - ./services/datalad/datalad_service:/srv/datalad_service
     env_file: ./config.env
     init: true
     command:
