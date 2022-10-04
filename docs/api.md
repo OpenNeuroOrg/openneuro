@@ -93,9 +93,9 @@ mutation {
 }
 ```
 
-### Obtain version file trees
+### Obtain dataset file trees
 
-File trees are represented as git tree objects. There is a root tree that can be obtained by requesting the default file listing.
+File trees are represented as git tree objects. There is a root tree for each version (commit or tag) that can be obtained by requesting the default file listing.
 
 ```graphql
 query snapshotFiles {
@@ -124,7 +124,7 @@ This will return a listing of files at the top level of the dataset.
           "key": "87b0d1e84b52af82a50100edc269f5c24e4caba5",
           "filename": "CHANGES",
           "size": 273,
-          "directory": null,
+          "directory": false,
           "annexed": false
         },
         {
@@ -132,7 +132,7 @@ This will return a listing of files at the top level of the dataset.
           "key": "d8ced4c2adedad6d69c264f94a71df6be20a2241",
           "filename": "README",
           "size": 807,
-          "directory": null,
+          "directory": false,
           "annexed": false
         },
         {
@@ -140,7 +140,7 @@ This will return a listing of files at the top level of the dataset.
           "key": "8f6598628c1e0938397e9a3994ba71416a674f9b",
           "filename": "dataset_description.json",
           "size": 150,
-          "directory": null,
+          "directory": false,
           "annexed": false
         },
         {
