@@ -22,7 +22,7 @@
     "@niivue/niivue": "0.23.1",
     "@openneuro/client": "^4.10.0",
     "@openneuro/components": "^4.10.0",
-    "bids-validator": "1.9.8",
+    "bids-validator": "1.9.9",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "date-fns": "^2.16.1",
