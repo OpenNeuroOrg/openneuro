@@ -24,10 +24,10 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                 <div className="hexagon-wrapper">
                   <div className="hexagon no-modality"></div>
                   <div className="label">
-                    {modality === null ? (
-                      <i className="fa fa-circle-o-notch fa-spin"></i>
-                    ) : (
+                    {modality ? (
                       modality.substr(0, 4)
+                    ) : (
+                      <i className="fa fa-circle-o-notch fa-spin"></i>
                     )}
                   </div>
                 </div>
