@@ -12,7 +12,7 @@ import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
-import { updateDatasetRevision, expireDraftFiles } from './draft.js'
+import { updateDatasetRevision } from './draft.js'
 import { fileUrl, getFileName, encodeFilePath, filesUrl } from './files'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset'
@@ -309,7 +309,6 @@ export const testBlacklist = (path, filename) =>
 export const addFile = async (datasetId, path, file) => {
   try {
     const { filename, mimetype, createReadStream, capacitor } = await file
-    await expireDraftFiles(datasetId)
 
     // Apply blacklist to uploaded files
     if (testBlacklist(path, filename)) {
