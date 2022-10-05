@@ -26,7 +26,8 @@ def get_snapshot(store, dataset, snapshot):
     commit, _ = repo.resolve_refish(snapshot)
     hexsha = commit.hex
     created = commit.commit_time
-    return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha, 'created': created}
+    tree = commit.tree_id.hex
+    return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha, 'created': created, 'tree': tree}
 
 
 def get_snapshots(store, dataset):

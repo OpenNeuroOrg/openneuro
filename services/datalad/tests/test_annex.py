@@ -42,7 +42,8 @@ def test_get_ls_tree_line():
             'id': '78dd92373749f62af23f3ae499b7a8ac33418fff',
             'key': 'a786c385bd1812410d01177affb6ce834d85facd',
             'urls': [],
-            'annexed': False}]
+            'annexed': False,
+            'directory': False}]
     assert symlinkFilenames == []
     assert symlinkObjects == []
 

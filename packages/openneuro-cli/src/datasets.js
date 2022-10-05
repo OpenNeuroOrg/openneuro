@@ -46,13 +46,14 @@ export const createDataset =
 
 export const downloadDataset =
   client =>
-  async ({ datasetId, tag }) => {
+  async ({ datasetId, tag, tree }) => {
     if (tag) {
       const { data } = await client.query({
         query: datasets.downloadSnapshot,
         variables: {
           datasetId,
           tag,
+          tree,
         },
       })
       return data.snapshot.files
@@ -61,6 +62,7 @@ export const downloadDataset =
         query: datasets.downloadDataset,
         variables: {
           datasetId,
+          tree,
         },
       })
       return data.dataset.draft.files

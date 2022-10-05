@@ -41,10 +41,13 @@ export const nativeErrorToast = () => {
   )
 }
 
-export const requestFailureToast = () => {
+export const requestFailureToast = filename => {
   toast.error(
     <ToastContent title="Download Error" body="A file failed to download">
-      <p>You may not have access to download this dataset.</p>
+      <p>
+        {filename} failed. Retry your download to reattempt downloading this
+        file.
+      </p>
     </ToastContent>,
   )
 }
@@ -70,8 +73,8 @@ export const downloadCompleteToast = dirName => {
  */
 export const downloadToast = (dirName, datasetId, snapshotId, onClose) => {
   const downloadMessage = snapshotId
-    ? `Copying ${datasetId} snapshot ${snapshotId} to local folder ${dirName}`
-    : `Copying ${datasetId} to local folder ${dirName}`
+    ? `${datasetId} snapshot ${snapshotId} to local folder ${dirName}`
+    : `${datasetId} to local folder ${dirName}`
   return toast(
     <ToastContent title={'Downloading'} body={downloadMessage}></ToastContent>,
     {
@@ -84,7 +87,22 @@ export const downloadToast = (dirName, datasetId, snapshotId, onClose) => {
   )
 }
 
-export const downloadToastUpdate = (toastId, progress) =>
-  toast.update(toastId, { progress })
+export const downloadToastUpdate = (
+  toastId,
+  progress,
+  { datasetId, snapshotTag, downloadPath, dirName },
+) => {
+  const downloadMessage = snapshotTag
+    ? `${datasetId} snapshot ${snapshotTag} to local folder ${dirName}`
+    : `${datasetId} to local folder ${dirName}`
+  toast.update(toastId, {
+    render: (
+      <ToastContent title={'Downloading'} body={downloadMessage}>
+        {downloadPath}
+      </ToastContent>
+    ),
+    progress,
+  })
+}
 
 export const downloadToastDone = toastId => toast.done(toastId)

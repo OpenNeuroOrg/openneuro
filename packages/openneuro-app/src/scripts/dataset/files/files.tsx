@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { flatToTree } from './flat-to-tree.js'
-import FileTree from './file-tree.jsx'
+import FileTree from './file-tree'
 import { Media } from '../../styles/media'
 import { useMutation, gql } from '@apollo/client'
 import { WarnButton } from '@openneuro/components/warn-button'
 import { AccordionWrap } from '@openneuro/components/accordion'
 import styled from '@emotion/styled'
 import { Tooltip } from '@openneuro/components/tooltip'
+import { DatasetFile } from '../../types/dataset-file'
 import bytes from 'bytes'
 
 const FileTreeMeta = styled.span`
@@ -33,6 +33,16 @@ const DELETE_FILES = gql`
   }
 `
 
+interface FilesProps {
+  datasetId: string
+  snapshotTag: string
+  datasetName: string
+  files: DatasetFile[]
+  editMode: boolean
+  datasetPermissions: any
+  summary: any
+}
+
 const Files = ({
   datasetId,
   snapshotTag,
@@ -41,14 +51,14 @@ const Files = ({
   editMode = false,
   datasetPermissions,
   summary,
-}) => {
+}: FilesProps): JSX.Element => {
   const [filesToDelete, setFilesToDelete] = useState({})
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteFiles] = useMutation(DELETE_FILES)
 
-  const isFileToBeDeleted = id => id in filesToDelete
+  const isFileToBeDeleted = (id: string): boolean => id in filesToDelete
 
-  const toggleFileToDelete = ({ id, path, filename }) =>
+  const toggleFileToDelete = ({ id, path, filename }): void =>
     setFilesToDelete(prevFilesToDelete => {
       if (isFileToBeDeleted(id)) {
         delete prevFilesToDelete[id]
@@ -60,10 +70,10 @@ const Files = ({
       }
     })
 
-  const bulkDelete = () => {
+  const bulkDelete = (): void => {
     if (Object.values(filesToDelete).length) {
       setIsDeleting(true)
-      deleteFiles({
+      void deleteFiles({
         variables: { datasetId, files: Object.values(filesToDelete) },
       }).then(() => {
         setIsDeleting(false)
@@ -72,7 +82,6 @@ const Files = ({
     }
   }
 
-  const fileTree = flatToTree(files)
   const disableBtn = Object.values(filesToDelete).length ? null : true
   const filesCount = Object.values(filesToDelete).length
   const bulkDeleteButton =
@@ -88,11 +97,11 @@ const Files = ({
             </Tooltip>
           ) : (
             <WarnButton
-              message={'Bulk Delete (' + filesCount + ')'}
+              message={`Bulk Delete (${filesCount})`}
               icon="fas fa-dumpster"
               iconOnly={true}
               className="edit-file"
-              tooltip={'Delete ' + filesCount}
+              tooltip={`Delete ${filesCount}`}
               onConfirmedClick={bulkDelete}
             />
           )}
@@ -108,7 +117,7 @@ const Files = ({
               datasetId={datasetId}
               snapshotTag={snapshotTag}
               path={''}
-              {...fileTree}
+              files={files}
               name={datasetName}
               editMode={editMode}
               defaultExpanded={false}
@@ -133,7 +142,7 @@ const Files = ({
               datasetId={datasetId}
               snapshotTag={snapshotTag}
               path={''}
-              {...fileTree}
+              files={files}
               name={datasetName}
               editMode={editMode}
               defaultExpanded={true}

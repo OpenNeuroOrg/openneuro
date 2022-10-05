@@ -26,10 +26,10 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     return ref
 
 
-def get_files(store, dataset, branch=None):
+def get_tree(store, dataset, tree):
     """Get the working tree, optionally a branch tree."""
     dataset_path = store.get_dataset_path(dataset)
-    return get_repo_files(dataset_path, branch)
+    return get_repo_files(dataset_path, tree)
 
 
 def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
@@ -62,5 +62,13 @@ def remove_annex_object(dataset_path, annex_key):
     ) as drop_object:
         for i, line in enumerate(drop_object.stdout):
             if i == 0 and line[-2:] == 'ok':
+                # If successful, delete from s3-PUBLIC as well
+                subprocess.Popen(
+                    ['git-annex', 'drop', '--force',
+                        f'--key={annex_key}', '--from=s3-PUBLIC'],
+                    cwd=dataset_path,
+                    stdout=subprocess.PIPE,
+                    encoding='utf-8'
+                )
                 return True
     return False

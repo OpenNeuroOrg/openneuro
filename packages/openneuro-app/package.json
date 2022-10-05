@@ -39,7 +39,6 @@
     "react-dom": "^17.0.1",
     "react-helmet": "6.1.0",
     "react-router-dom": "6.3.0",
-    "react-spring": "^8.0.27",
     "react-toastify": "6.0.9",
     "react-usestateref": "^1.0.5",
     "react-virtualized": "remorses/react-virtualized-fixed-import.git#9.22.3",

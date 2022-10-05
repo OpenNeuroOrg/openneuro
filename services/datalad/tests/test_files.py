@@ -121,26 +121,40 @@ def test_file_indexing(client, new_dataset):
     response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
-    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
-    assert response.status == falcon.HTTP_OK
-    response_content = json.loads(response.content)
-    print('response content:', response_content['files'])
-    print('not annexed files:', new_dataset.repo.is_under_annex(
-        ['dataset_description.json']))
-    assert all(f in response_content['files'] for f in [
+    root_response = client.simulate_get(
+        '/datasets/{}/tree/{}'.format(ds_id, 'HEAD'))
+    assert root_response.status == falcon.HTTP_OK
+    root_content = json.loads(root_response.content)
+    for f in [
         {'filename': 'dataset_description.json', 'size': 101,
             'id': '43502da40903d08b18b533f8897330badd6e1da3',
             'key': '838d19644b3296cf32637bbdf9ae5c87db34842f',
-            'urls': [], 'annexed': False},
+            'urls': [], 'annexed': False, 'directory': False},
         {'filename': 'LICENSE', 'size': 8,
             'id': '8a6f5281317d8a8fb695d12c940b0ff7a7dee435',
             'key': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27',
-            'urls': [], 'annexed': True},
-        {'filename': 'sub-01/anat/sub-01_T1w.nii.gz', 'size': 19,
-            'id': '7fa0e07afaec0ff2cdf1bfc783596b4472df9b12',
+            'urls': [], 'annexed': True, 'directory': False},
+        {'id': '2f8451ae1016f936999aaacc0b3d79fb284ac3ea', 'filename': 'sub-01',
+            'directory': True, 'annexed': False, 'size': 0, 'urls': []}
+    ]:
+        assert f in root_content['files']
+    # Test sub-01 directory
+    sub_response = client.simulate_get(
+        '/datasets/{}/tree/{}'.format(ds_id, next(
+            (f['id'] for f in root_content['files'] if f['filename'] == 'sub-01'), None)))
+    assert sub_response.status == falcon.HTTP_OK
+    sub_content = json.loads(sub_response.content)
+    # Test sub-01/anat directory
+    anat_response = client.simulate_get(
+        '/datasets/{}/tree/{}'.format(ds_id, next(
+            (f['id'] for f in sub_content['files'] if f['filename'] == 'anat'), None)))
+    assert anat_response.status == falcon.HTTP_OK
+    anat_content = json.loads(anat_response.content)
+    # Test sub-01/anat/sub-01_T1w.nii.gz file
+    assert {'filename': 'sub-01_T1w.nii.gz', 'size': 19,
+            'id': 'e497096a2bce0d48b2761dade2b5c4e5a0f352bd',
             'key': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz',
-            'urls': [], 'annexed': True}
-    ])
+            'urls': [], 'annexed': True, 'directory': False} in anat_content['files']
 
 
 def test_empty_file(client, new_dataset):
@@ -155,16 +169,16 @@ def test_empty_file(client, new_dataset):
         '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
-    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    response = client.simulate_get('/datasets/{}/tree/HEAD'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     # Check that all elements exist in both lists
     assert({'filename': 'LICENSE',
             'size': 0, 'id': '5bfdc52581371bfa051fa76825a0e1b5e5c3b4bf',
-            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'urls': [], 'annexed': True} in response_content['files'])
+            'key': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e', 'urls': [], 'annexed': True, 'directory': False} in response_content['files'])
     assert({'filename': 'dataset_description.json',
             'size': 101, 'id': '43502da40903d08b18b533f8897330badd6e1da3',
-            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'urls': [], 'annexed': False} in response_content['files'])
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'urls': [], 'annexed': False, 'directory': False} in response_content['files'])
 
 
 def test_duplicate_file_id(client, new_dataset):
@@ -181,14 +195,20 @@ def test_duplicate_file_id(client, new_dataset):
     response = client.simulate_post(
         '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    response = client.simulate_get('/datasets/{}/tree/HEAD'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    response_content = json.loads(response.content)
+    derivatives_tree = next((f['id'] for f in response_content['files']
+                             if f['filename'] == 'derivatives'), None)
+    response = client.simulate_get(
+        '/datasets/{}/tree/{}'.format(ds_id, derivatives_tree))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     # Find each file in the results
     file_one = next(
-        (f for f in response_content['files'] if f['filename'] == 'derivatives/one.json'), None)
+        (f for f in response_content['files'] if f['filename'] == 'one.json'), None)
     file_two = next(
-        (f for f in response_content['files'] if f['filename'] == 'derivatives/two.json'), None)
+        (f for f in response_content['files'] if f['filename'] == 'two.json'), None)
     # Validate they have differing ids
     assert file_one['id'] != file_two['id']
 

@@ -6,7 +6,8 @@ import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
 import { snapshotIssues } from './issues.js'
-import { getFiles, filterFiles } from '../../datalad/files.js'
+import { getFiles } from '../../datalad/files.js'
+import Summary from '../../models/summary'
 import DatasetModel from '../../models/dataset'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 import DeprecatedSnapshot from '../../models/deprecatedSnapshot'
@@ -28,13 +29,14 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         description: () => description(snapshot),
         readme: () => readme(snapshot),
         summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
-        files: ({ prefix }) =>
-          getFiles(datasetId, snapshot.hexsha)
-            .then(response => response.files)
-            .then(filterFiles(prefix))
-            .then(filterRemovedAnnexObjects(datasetId, context.userInfo)),
+        files: ({ tree }) =>
+          getFiles(datasetId, tree || snapshot.hexsha).then(
+            filterRemovedAnnexObjects(datasetId, context.userInfo),
+          ),
         size: () =>
-          getFiles(datasetId, snapshot.hexsha).then(response => response.size),
+          Summary.findOne({ datasetId: datasetId, id: snapshot.hexsha })
+            .exec()
+            .then(res => res?.toObject()?.size),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),

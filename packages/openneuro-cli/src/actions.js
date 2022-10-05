@@ -263,6 +263,7 @@ export const download = (datasetId, destination, cmd) => {
     return getSnapshots(client)(datasetId).then(({ data }) => {
       if (data.dataset && data.dataset.snapshots) {
         const tags = data.dataset.snapshots.map(snap => snap.tag)
+        tags.reverse()
         return promptTags(tags).then(choices =>
           getDownload(
             destination,

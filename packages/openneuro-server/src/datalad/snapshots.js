@@ -155,9 +155,7 @@ export const createSnapshot = async (
       snapshotChanges,
     )
     snapshot.created = new Date()
-    const { files, size } = await getFiles(datasetId, tag)
-    snapshot.files = files
-    snapshot.size = size
+    snapshot.files = await getFiles(datasetId, tag)
 
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)

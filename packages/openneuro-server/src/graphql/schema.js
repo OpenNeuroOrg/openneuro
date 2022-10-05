@@ -434,7 +434,7 @@ export const typeDefs = `
     # Validator issues
     issues: [ValidationIssue]
     # Committed files in the working tree
-    files(prefix: String = ""): [DatasetFile]
+    files(tree: String): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Dataset README
@@ -461,7 +461,7 @@ export const typeDefs = `
     # bids-validator issues for this snapshot
     issues: [ValidationIssue]
     # Snapshot files
-    files(prefix: String = ""): [DatasetFile]
+    files(tree: String): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Snapshot usage and download statistics
@@ -689,7 +689,6 @@ export const typeDefs = `
     size: BigInt
     annexed: Boolean
     urls: [String]
-    objectpath: String
     # Return a flag if this is a directory which contains more files
     directory: Boolean
   }

@@ -40,30 +40,90 @@ class DownloadAbortError extends Error {
   }
 }
 
+let downloadCanceled
+
+/**
+ * Recursive download for file trees via browser file access API
+ */
+const downloadTree = async (
+  { datasetId, snapshotTag, client, apmTransaction, dirHandle, toastId },
+  path = '',
+  tree = null,
+) => {
+  const filesToDownload = await downloadDataset(client)({
+    datasetId,
+    snapshotTag,
+    tree,
+  })
+  for (const [index, file] of filesToDownload.entries()) {
+    const downloadPath = path ? `${path}/${file.filename}` : file.filename
+    if (file.directory) {
+      // Next tree level
+      await downloadTree(
+        {
+          datasetId,
+          snapshotTag,
+          client,
+          apmTransaction,
+          dirHandle,
+          toastId,
+        },
+        downloadPath,
+        file.id,
+      )
+    } else {
+      // Regular file
+      if (downloadCanceled) {
+        throw new DownloadAbortError('Download canceled by user request')
+      }
+      const fileHandle = await openFileTree(
+        dirHandle,
+        path ? `${path}/${file.filename}` : file.filename,
+      )
+      // Skip files which are already complete
+      if (fileHandle.size == file.size) continue
+      const writable = await fileHandle.createWritable()
+      const { body, status, statusText } = await fetch(file.urls.pop())
+      let loaded = 0
+      const progress = new TransformStream({
+        transform(chunk, controller) {
+          downloadToastUpdate(toastId, loaded / file.size, {
+            datasetId,
+            snapshotTag,
+            downloadPath,
+            dirName: dirHandle.name,
+          })
+          loaded += chunk.length
+          controller.enqueue(chunk)
+        },
+      })
+      if (status === 200) {
+        await body.pipeThrough(progress).pipeTo(writable)
+      } else {
+        apmTransaction.captureError(statusText)
+        return requestFailureToast(file.filename)
+      }
+    }
+  }
+}
+
 /**
  * Downloads a dataset via the native file API, skipping expensive compression if the browser supports it
  * @param {string} datasetId Accession number string for a dataset
  * @param {string} snapshotTag Snapshot tag name
  */
 export const downloadNative = (datasetId, snapshotTag, client) => async () => {
-  const filesToDownload = await downloadDataset(client)({
-    datasetId,
-    snapshotTag,
-  })
-
   // Try trackDownload but don't worry if it fails
   try {
     trackDownload(client, datasetId, snapshotTag)
   } catch (err) {
     apm.captureError(err)
   }
-  const apmTransaction = apm.startTransaction(
-    `download:${datasetId}`,
-    'download',
-  )
+  const apmTransaction =
+    apm && apm.startTransaction(`download:${datasetId}`, 'download')
   if (apmTransaction)
     apmTransaction.addLabels({ datasetId, snapshot: snapshotTag })
-  let downloadCanceled = false
+  downloadCanceled = false
   let toastId
   try {
     const apmSelect =
@@ -77,27 +137,14 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
       () => (downloadCanceled = true),
     )
     apmSelect && apmSelect.end()
-    for (const [index, file] of filesToDownload.entries()) {
-      const apmDownload =
-        apmTransaction &&
-        apmTransaction.startSpan(`download ${file.filename}:${file.size}`)
-      if (downloadCanceled) {
-        throw new DownloadAbortError('Download canceled by user request')
-      }
-      const fileHandle = await openFileTree(dirHandle, file.filename)
-      // Skip files which are already complete
-      if (fileHandle.size == file.size) continue
-      const writable = await fileHandle.createWritable()
-      const { body, status, statusText } = await fetch(file.urls.pop())
-      if (status === 200) {
-        await body.pipeTo(writable)
-      } else {
-        apmDownload && apmDownload.captureError(statusText)
-        return requestFailureToast()
-      }
-      apmDownload && apmDownload.end()
-      downloadToastUpdate(toastId, index / filesToDownload.length)
-    }
+    await downloadTree({
+      datasetId,
+      snapshotTag,
+      client,
+      apmTransaction,
+      dirHandle,
+      toastId,
+    })
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
     if (err.name === 'AbortError') {

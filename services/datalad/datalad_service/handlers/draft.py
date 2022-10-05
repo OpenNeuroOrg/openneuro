@@ -1,5 +1,3 @@
-import sys
-
 import falcon
 import pygit2
 
@@ -19,7 +17,9 @@ class DraftResource(object):
             # Maybe turn this into status?
             dataset_path = self.store.get_dataset_path(dataset)
             repo = pygit2.Repository(dataset_path)
-            resp.media = {'hexsha': repo.head.target.hex}
+            commit = repo.revparse_single('HEAD')
+            resp.media = {'hexsha': commit.hex,
+                          'tree': commit.tree_id.hex}
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND
