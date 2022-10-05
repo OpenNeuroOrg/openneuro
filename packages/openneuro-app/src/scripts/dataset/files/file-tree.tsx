@@ -135,7 +135,7 @@ const FileTree = ({
                   filename={file.filename.split(':').pop()}
                   annexKey={file.key}
                   datasetPermissions={datasetPermissions}
-                  annexed={file.key}
+                  annexed={file.annexed}
                   isMobile={false}
                 />
               </li>
