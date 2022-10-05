@@ -62,5 +62,13 @@ def remove_annex_object(dataset_path, annex_key):
     ) as drop_object:
         for i, line in enumerate(drop_object.stdout):
             if i == 0 and line[-2:] == 'ok':
+                # If successful, delete from s3-PUBLIC as well
+                subprocess.Popen(
+                    ['git-annex', 'drop', '--force',
+                        f'--key={annex_key}', '--from=s3-PUBLIC'],
+                    cwd=dataset_path,
+                    stdout=subprocess.PIPE,
+                    encoding='utf-8'
+                )
                 return True
     return False

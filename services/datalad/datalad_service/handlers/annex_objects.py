@@ -1,10 +1,7 @@
 import logging
-import gevent
 
 import falcon
 
-from datalad_service.common.annex import get_repo_files
-from datalad_service.tasks.publish import remove_file_remotes
 from datalad_service.tasks.files import remove_annex_object
 
 
@@ -18,16 +15,10 @@ class AnnexObjectsResource(object):
         """Delete an existing annex_object on a dataset"""
         if annex_key:
             dataset_path = self.store.get_dataset_path(dataset)
-            files = get_repo_files(dataset_path, snapshot)
-            try:
-                file = next(f for f in files if annex_key == f.get('key'))
-            except StopIteration:
+            if (not remove_annex_object(dataset_path, annex_key)):
+                # Failed to remove, the key most likely does not exist
                 resp.media = {'error': 'file does not exist'}
-                resp.status = falcon.HTTP_BAD_REQUEST
-            urls = file.get('urls')
-
-            gevent.spawn(remove_file_remotes, urls)
-            gevent.spawn(remove_annex_object, dataset_path, annex_key)
+                resp.status = falcon.HTTP_NOT_FOUND
         else:
             resp.media = {'error': 'annex-key is missing'}
-            resp.status = falcon.HTTP_NOT_FOUND
+            resp.status = falcon.HTTP_BAD_REQUEST
