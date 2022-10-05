@@ -23,19 +23,10 @@ interface FileTreeProps {
   bulkDeleteButton: JSX.Element
 }
 
-const FileTree = ({
-  datasetId,
-  snapshotTag = null,
-  path = '',
-  name = '',
-  files = [],
-  editMode = false,
-  defaultExpanded = false,
-  datasetPermissions,
-  toggleFileToDelete,
-  isFileToBeDeleted,
-  bulkDeleteButton,
-}: FileTreeProps): JSX.Element => {
+export function fileTreeLevels(
+  path: string,
+  files: DatasetFile[],
+): { currentFiles: DatasetFile[]; childFiles: Record<string, DatasetFile[]> } {
   // Split files into a tree for this level and child levels
   // Special cases for root (path === '')
   const currentFiles = []
@@ -59,6 +50,23 @@ const FileTree = ({
       currentFiles.push(f)
     }
   }
+  return { currentFiles, childFiles }
+}
+
+const FileTree = ({
+  datasetId,
+  snapshotTag = null,
+  path = '',
+  name = '',
+  files = [],
+  editMode = false,
+  defaultExpanded = false,
+  datasetPermissions,
+  toggleFileToDelete,
+  isFileToBeDeleted,
+  bulkDeleteButton,
+}: FileTreeProps): JSX.Element => {
+  const { childFiles, currentFiles } = fileTreeLevels(path, files)
   return (
     <AccordionTab
       className=""
