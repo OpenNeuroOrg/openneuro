@@ -81,7 +81,7 @@ export const apiPath = (datasetId, snapshotTag, filePath) => {
 
 interface FileProps {
   id: string
-  size: number
+  size: bigint
   datasetId: string
   path: string
   filename: string
