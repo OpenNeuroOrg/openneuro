@@ -101,7 +101,7 @@ const downloadTree = async (
         await body.pipeThrough(progress).pipeTo(writable)
       } else {
         apmTransaction.captureError(statusText)
-        return requestFailureToast()
+        return requestFailureToast(file.filename)
       }
     }
   }

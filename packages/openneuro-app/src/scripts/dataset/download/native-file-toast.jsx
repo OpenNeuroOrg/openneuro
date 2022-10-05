@@ -41,10 +41,13 @@ export const nativeErrorToast = () => {
   )
 }
 
-export const requestFailureToast = () => {
+export const requestFailureToast = filename => {
   toast.error(
     <ToastContent title="Download Error" body="A file failed to download">
-      <p>You may not have access to download this dataset.</p>
+      <p>
+        {filename} failed. Retry your download to reattempt downloading this
+        file.
+      </p>
     </ToastContent>,
   )
 }
