@@ -16,7 +16,6 @@ author = 'Stanford Center for Reproducible Neuroscience'
 extensions = [
     'myst_parser',
     'sphinx_copybutton',
-    'graphqllexer',
     'sphinxext.rediraffe',
 ]
 
