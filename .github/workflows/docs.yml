@@ -19,6 +19,8 @@ jobs:
         pip install -r docs/requirements.txt
     - name: Build
       run: make -C docs html
+      env:
+        SPHINXOPTS: "-W --keep-going"
     - uses: peaceiris/actions-gh-pages@v3
       if: ${{ github.ref == 'refs/heads/sphinx' }}
       with:
