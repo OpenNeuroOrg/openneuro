@@ -17,6 +17,7 @@ extensions = [
     'myst_parser',
     'sphinx_copybutton',
     'graphqllexer',
+    'sphinxext.rediraffe',
 ]
 
 templates_path = ['_templates']
@@ -36,3 +37,19 @@ html_theme_options = {
     'sidebar_hide_name': True,
 }
 
+# Translate routes without extensions to directories with index pages,
+# as Sphinx doesn't have a notion of generic routes.
+rediraffe_redirects = {
+    f'{route}/index.rst': f'{route.replace("-", "_")}.rst'
+    for route in (
+        'user-guide',
+        'api',
+        'git',
+        'monitoring', # Still rendered, but not in ToC
+        'maintenance',
+    )
+}
+rediraffe_redirects.update({
+    'openneuro-readme/index.rst': 'index.rst',
+    # 'openneuro-packages-openneuro-cli-readme/index.rst': TODO
+})

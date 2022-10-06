@@ -3,3 +3,4 @@ furo >=2022.9.15
 myst-parser >=0.18.1
 sphinx-copybutton >=0.5.0
 pygments-graphql-lexer >=0.1.0
+sphinxext-rediraffe >=0.2.7
