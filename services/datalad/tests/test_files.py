@@ -60,6 +60,9 @@ def test_add_file(client, datalad_store):
     response = client.simulate_post(
         '/datasets/{}/files/README'.format(ds_id), body=file_data)
     assert response.status == falcon.HTTP_OK
+    # Commit draft
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
     # Load the dataset to check for this file
     ds_obj = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     test_files = ds_obj.get('README')
