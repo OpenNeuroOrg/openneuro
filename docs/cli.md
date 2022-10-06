@@ -1,1 +1,0 @@
-../packages/openneuro-cli/README.md

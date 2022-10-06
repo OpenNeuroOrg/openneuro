@@ -6,7 +6,7 @@
 
 user_guide
 api
-cli
+packages/openneuro-cli
 git
 architecture
 maintenance

@@ -46,12 +46,12 @@ For example, you can restart the server container with `docker-compose restart s
 
 ## Major Components
 
-- [OpenNeuro app](packages/openneuro-app) - React frontend
-- [OpenNeuro server](packages/openneuro-server) - Node.js GraphQL API
-- [OpenNeuro indexer](packages/openneuro-indexer) - ElasticSearch indexer
-- [OpenNeuro components](packages/openneuro-components) - ReactJS components library
+- [OpenNeuro app](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-app) - React frontend
+- [OpenNeuro server](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-server) - Node.js GraphQL API
+- [OpenNeuro indexer](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-indexer) - ElasticSearch indexer
+- [OpenNeuro components](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-components) - ReactJS components library
 - [OpenNeuro CLI](packages/openneuro-cli) - Node.js command line tool
-- [OpenNeuro client](packages/openneuro-client) - JavaScript client library used in CLI and App
+- [OpenNeuro client](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-client) - JavaScript client library used in CLI and App
 - [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) compatible dataset worker microservice
 - [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library
 

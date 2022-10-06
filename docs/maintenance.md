@@ -3,7 +3,7 @@ name: Site Maintenance
 route: /maintenance
 ---
 
-## Unpublishing a dataset
+# Unpublishing a dataset
 
 To unpublish a dataset the database flag datasets.public can be set to false. Example query: `db.datasets.updateOne({id: "accession-number"}, {$set: {public: false}}`. This will hide the dataset on OpenNeuro but not remove it from any configured git-annex remotes.
 

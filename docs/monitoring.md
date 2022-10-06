@@ -1,6 +1,7 @@
 ---
 name: Kubernetes Monitoring
 route: /monitoring
+orphan: true
 ---
 
 # Infrastructure Monitoring

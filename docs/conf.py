@@ -23,7 +23,7 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-
+myst_heading_anchors = 3
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -51,5 +51,5 @@ rediraffe_redirects = {
 }
 rediraffe_redirects.update({
     'openneuro-readme/index.md': 'index.md',
-    'openneuro-packages-openneuro-cli-readme/index.md': 'cli.md',
+    'openneuro-packages-openneuro-cli-readme/index.md': 'packages/openneuro-cli.md',
 })
