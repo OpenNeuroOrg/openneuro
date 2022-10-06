@@ -40,7 +40,7 @@ html_theme_options = {
 # Translate routes without extensions to directories with index pages,
 # as Sphinx doesn't have a notion of generic routes.
 rediraffe_redirects = {
-    f'{route}/index.rst': f'{route.replace("-", "_")}.rst'
+    f'{route}/index.md': f'{route.replace("-", "_")}.md'
     for route in (
         'user-guide',
         'api',
@@ -50,6 +50,6 @@ rediraffe_redirects = {
     )
 }
 rediraffe_redirects.update({
-    'openneuro-readme/index.rst': 'index.rst',
-    # 'openneuro-packages-openneuro-cli-readme/index.rst': TODO
+    'openneuro-readme/index.md': 'index.md',
+    'openneuro-packages-openneuro-cli-readme/index.md': 'cli.md',
 })

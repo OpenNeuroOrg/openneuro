@@ -6,6 +6,7 @@
 
 user_guide
 api
+cli
 git
 architecture
 maintenance

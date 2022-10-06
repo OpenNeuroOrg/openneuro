@@ -7,7 +7,7 @@ route: /cli
 
 This tool allows you to upload and download [OpenNeuro.org](https://openneuro.org) datasets without a browser.
 
-# Install
+## Install
 
 1. Install [Node.js](https://nodejs.org) (version 16 or higher)
 2. In a terminal type: `npm install -g @openneuro/cli`
@@ -15,7 +15,7 @@ This tool allows you to upload and download [OpenNeuro.org](https://openneuro.or
 If you are using [yarn](https://yarnpkg.com/) you can also perform the installation with `yarn global add @openneuro/cli`
 (make sure the installation folder is part of your `PATH` by adding `export PATH="$(yarn global bin):$PATH"` to `~/.bashrc`)
 
-# Setup
+## Setup
 
 The setup step is needed for both uploading _and_ downloading data from OpenNeuro.
 
@@ -26,9 +26,9 @@ You can obtain an API key via a browser at https://openneuro.org/keygen after lo
 
 After successfully running `openneuro login`, you can manually configure custom servers by editing the `.openneuro` file.
 
-# Usage
+## Usage
 
-## Uploading datasets
+### Uploading datasets
 
 To upload a new dataset:
 
@@ -44,7 +44,7 @@ where <accession_number> is a unique dataset identifier that can be found in the
 
 This command will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.
 
-## Downloading datasets
+### Downloading datasets
 
 To download a snapshot:
 
