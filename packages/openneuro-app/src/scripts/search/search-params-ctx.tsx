@@ -17,7 +17,7 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
   try {
     const query = searchQuery.get('query')
     if (query) {
-      searchParams = JSON.parse(decodeURIComponent(query))
+      searchParams = JSON.parse(query)
     }
   } catch (err) {
     console.error(err)
@@ -27,7 +27,7 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
     const merged = { ...searchParams, ...newParamsCall(searchParams) }
     setSearch(
       {
-        query: encodeURIComponent(JSON.stringify(merged)),
+        query: JSON.stringify(merged),
       },
       { replace: true },
     )
