@@ -53,7 +53,7 @@
     "node-fetch": "^2.6.0",
     "node-mailjet": "^3.3.5",
     "object-hash": "2.1.1",
-    "passport": "^0.4.0",
+    "passport": "^0.6.0",
     "passport-globus": "^0.0.1",
     "passport-google-oauth20": "^1.0.0",
     "passport-jwt": "^4.0.0",
