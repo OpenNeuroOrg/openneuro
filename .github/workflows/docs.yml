@@ -1,0 +1,37 @@
+name: deploy-gh-pages
+
+on:
+  push: {branches: [master]}
+  pull_request: {branches: [master]}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: ['build', 'check']
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r docs/requirements.txt
+    - name: Set build options
+      run: echo 'SPHINXOPTS=-W --keep-going' >> $GITHUB_ENV
+      if: matrix.mode == 'check'
+    - name: Build
+      run: make -C docs html
+    - uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/master' && matrix.mode == 'build'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html

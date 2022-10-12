@@ -53,7 +53,7 @@ This will configure these options for one repository.
 
 To enable for all OpenNeuro repositories add this to your [git configuration file](https://git-scm.com/docs/git-config#FILES).
 
-```conf
+```cfg
 [credential "https://openneuro.org"]
   useHttpPath = true
   helper = "/path/to/openneuro git-credential"

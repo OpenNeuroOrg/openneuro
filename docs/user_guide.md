@@ -15,7 +15,8 @@ Signing up or signing in is easy with a Google or ORCID account. Simply hit the 
 
 ![Sign in actions](./assets/sign-in-actions.gif)
 
-Next, we'll take a look at the Public Dashboard and Dataset pages, including how to download a dataset. If you'd like to skip ahead to uploading your own dataset, [click here](#uploading-and-managing-your-datasets).
+Next, we'll take a look at the Public Dashboard and Dataset pages, including how to download a dataset.
+You can also skip ahead to [uploading your own dataset](#uploading-your-dataset).
 
 ## Browsing Public Datasets
 
@@ -111,7 +112,7 @@ The dataset toolbar will have a few new items, including:
 - Create Snapshot: Create a new version of this dataset with changes made to Draft.
 - View and Edit Metadata: If you didn't add the metadata on upload, you can fill it in here.
 
-Advanced users may wish to manage their datasets by other means. OpenNeuro datasets and features are available through its [GraphQL API](/api), the [openneuro-cli](/packages-openneuro-cli-readme), [DataLad](/services-datalad-readme), and [direct git access](/git).
+Advanced users may wish to manage their datasets by other means. OpenNeuro datasets and features are available through its [GraphQL API](/api), the [openneuro-cli](packages/openneuro-cli), DataLad, and [direct git access](/git).
 
 ## Support Channels
 
