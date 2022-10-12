@@ -21,7 +21,7 @@
     "@openneuro/search": "^4.12.0-alpha.1",
     "@passport-next/passport-google-oauth2": "^1.0.0",
     "@sentry/node": "^4.5.3",
-    "apollo-server": "2.25.3",
+    "apollo-server": "2.25.4",
     "apollo-server-cache-redis": "1.4.0",
     "apollo-server-express": "2.25.3",
     "async": "^2.4.1",
