@@ -1,0 +1,392 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Architecture" href="architecture.html" /><link rel="prev" title="OpenNeuro command line interface" href="packages/openneuro-cli.html" />
+
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+        <title>Git access to OpenNeuro datasets - OpenNeuro documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">OpenNeuro  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="_static/on-dark.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="_static/on-light.svg" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Git access to OpenNeuro datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Unpublishing a dataset</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="git-access-to-openneuro-datasets">
+<h1>Git access to OpenNeuro datasets<a class="headerlink" href="#git-access-to-openneuro-datasets" title="Permalink to this heading">#</a></h1>
+<p>The underlying format for dataset is a git-annex repo created with datalad. Every dataset tracks changes as commits and snapshots are stored as git tags.</p>
+<p>Datasets support clones, pushes, and other git operations. All datasets require authentication for access but public datasets will be available via anonymous clones in a future release.</p>
+<section id="repository-conventions">
+<h2>Repository conventions<a class="headerlink" href="#repository-conventions" title="Permalink to this heading">#</a></h2>
+<p>A dataset must always be present in the root level of the repository.</p>
+<p>OpenNeuro validates the size of regular git (non-annexed) files and a subset of bids-validation before accepting a git push. It is important to annex any large files in any commits before pushing. <code class="docutils literal notranslate"><span class="pre">.bidsignore</span></code> must always be a regular file. Some features are only available for regular files (such as diffing) and textual data is generally best kept as regular git objects.</p>
+<p>A recommended <code class="docutils literal notranslate"><span class="pre">.gitattributes</span></code> configuration for git-annex to automate annexing the correct files when using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> or <code class="docutils literal notranslate"><span class="pre">datalad</span> <span class="pre">save</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">largerthan</span><span class="o">=</span><span class="mi">1</span><span class="n">mb</span>
+<span class="o">*.</span><span class="n">bval</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="o">*.</span><span class="n">bvec</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="o">*.</span><span class="n">json</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="o">*.</span><span class="n">tsv</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="o">.</span><span class="n">bidsignore</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="n">CHANGES</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="n">README</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+</pre></div>
+</div>
+</section>
+<section id="credential-helper">
+<h2>Credential Helper<a class="headerlink" href="#credential-helper" title="Permalink to this heading">#</a></h2>
+<p>Using openneuro-cli, git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the <a class="reference external" href="https://git-scm.com/docs/gitcredentials">git credential helper</a> for your use case.</p>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h3>
+<p>Once you have openneuro-cli installed and you’ve logged in with <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, you can configure git to automatically use your login.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This allows the helper to identify which dataset you are accessing automatically and issue a key for that dataset</span>
+git config credential.useHttpPath <span class="nb">true</span>
+<span class="c1"># Point git at the openneuro-cli tool (this must be an absolute path)</span>
+git config credential.helper <span class="s2">&quot;/path/to/openneuro git-credential&quot;</span>
+</pre></div>
+</div>
+<p>Alternatively openneuro-cli can be given the name <code class="docutils literal notranslate"><span class="pre">git-credential-openneuro</span></code> and this shorter command will work.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git config credential.helper <span class="s2">&quot;openneuro&quot;</span>
+</pre></div>
+</div>
+<p>This will configure these options for one repository.</p>
+<p>To enable for all OpenNeuro repositories add this to your <a class="reference external" href="https://git-scm.com/docs/git-config#FILES">git configuration file</a>.</p>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[credential &quot;https://openneuro.org&quot;]</span><span class="w"></span>
+<span class="w">  </span><span class="na">useHttpPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span><span class="w"></span>
+<span class="w">  </span><span class="na">helper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/openneuro git-credential&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h3>
+<p>Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.</p>
+<p>To download a new dataset using the credential helper you can start with an empty repo and then configure that repo.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir ds000001
+<span class="nb">cd</span> ds0000001
+git init
+git remote add origin https://openneuro.org/git/0/ds0000001
+<span class="c1"># Follow the above steps to setup the credential helper</span>
+git pull origin master
+git pull origin git-annex:git-annex
+<span class="c1"># From here you can treat this like a datalad dataset and export back to OpenNeuro to deploy changes</span>
+</pre></div>
+</div>
+<p>When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro will reject some invalid pushes but cannot run the full bids-validator until after your changes have been pushed.</p>
+</section>
+<section id="advanced-authentication">
+<h3>Advanced authentication<a class="headerlink" href="#advanced-authentication" title="Permalink to this heading">#</a></h3>
+<p>If you cannot use the credential helper you can manually generate a short lived key and pass this as the password for git operations. Substitute path= with the repository path for the dataset being accessed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openneuro git-credential fill <span class="s">&lt;&lt;EOF</span>
+<span class="s">protocol=https</span>
+<span class="s">host=openneuro.org</span>
+<span class="s">path=/git/0/ds000001</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="snapshots">
+<h2>Snapshots<a class="headerlink" href="#snapshots" title="Permalink to this heading">#</a></h2>
+<p>Snapshots are represented as git tags. To use all OpenNeuro features, you must have at least one tag with a valid semantic versioning name. This is typically <code class="docutils literal notranslate"><span class="pre">1.0.0</span></code> but can be any valid numeric semantic version.</p>
+</section>
+<section id="git-annex-special-remote">
+<h2>git-annex special remote<a class="headerlink" href="#git-annex-special-remote" title="Permalink to this heading">#</a></h2>
+<p>Direct access can clone, push, and pull dataset contents but it does not transfer annexed objects on its own. For public datasets, the annexed objects are available with a preconfigured remote on S3 shortly after the dataset is made public or a new snapshot is created if the dataset is already public.</p>
+<p>For private datasets or to add new data with DataLad or git-annex, a special remote is available to push data directly to OpenNeuro.</p>
+<section id="configuring-openneuro-special-remote">
+<h3>Configuring OpenNeuro special remote<a class="headerlink" href="#configuring-openneuro-special-remote" title="Permalink to this heading">#</a></h3>
+<p>Obtain the URL from the dataset page and run initremote (or enableremote if you need to update it).</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure openneuro-cli is installed and available in your path</span>
+<span class="c1"># You should see &#39;VERSION 1&#39; &#39;EXTENSIONS&#39; if this is working</span>
+<span class="nb">echo</span> <span class="s2">&quot;EXTENSIONS&quot;</span> <span class="p">|</span> git-annex-remote-openneuro
+<span class="c1"># Configure the remote with the URL for your dataset</span>
+git annex initremote openneuro <span class="nv">type</span><span class="o">=</span>external <span class="nv">externaltype</span><span class="o">=</span>openneuro <span class="nv">encryption</span><span class="o">=</span>none <span class="nv">url</span><span class="o">=</span>https://openneuro.org/git/0/ds0000001
+</pre></div>
+</div>
+<p>After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># To upload any annexed objects to the remote</span>
+git annex copy --to openneuro
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="architecture.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Architecture</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="packages/openneuro-cli.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">OpenNeuro command line interface</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Stanford Center for Reproducible Neuroscience
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Git access to OpenNeuro datasets</a><ul>
+<li><a class="reference internal" href="#repository-conventions">Repository conventions</a></li>
+<li><a class="reference internal" href="#credential-helper">Credential Helper</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#advanced-authentication">Advanced authentication</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#snapshots">Snapshots</a></li>
+<li><a class="reference internal" href="#git-annex-special-remote">git-annex special remote</a><ul>
+<li><a class="reference internal" href="#configuring-openneuro-special-remote">Configuring OpenNeuro special remote</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    </body>
+</html>

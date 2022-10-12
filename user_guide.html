@@ -1,0 +1,392 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API Examples" href="api.html" /><link rel="prev" title="OpenNeuro" href="index.html" />
+
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+        <title>User Guide - OpenNeuro documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">OpenNeuro  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="_static/on-dark.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="_static/on-light.svg" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git.html">Git access to OpenNeuro datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Unpublishing a dataset</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this heading">#</a></h1>
+<p>Welcome to OpenNeuro! This guide is dedicated to new users to the site who would like to get started on using the <a class="reference external" href="https://openneuro.org/">OpenNeuro web platform</a> to freely store and share <a class="reference external" href="https://bids.neuroimaging.io/">Brain Imaging Data Structure (BIDS) datasets</a>.</p>
+<section id="signing-up">
+<h2>Signing Up<a class="headerlink" href="#signing-up" title="Permalink to this heading">#</a></h2>
+<p>OpenNeuro does not require you to have an account to browse and download public datasets, but having an account does allow you to save those that interest you or to subscribe to them for email updates. Naturally, you will also need an account if you plan to store or manage your own datasets.</p>
+<p>Signing up or signing in is easy with a Google or ORCID account. Simply hit the SIGN IN button in the top right of the page and choose your preferred account.</p>
+<p><img alt="Sign in actions" src="_images/sign-in-actions.gif" /></p>
+<p>Next, we’ll take a look at the Public Dashboard and Dataset pages, including how to download a dataset.
+You can also skip ahead to <a class="reference internal" href="#uploading-your-dataset"><span class="std std-doc">uploading your own dataset</span></a>.</p>
+</section>
+<section id="browsing-public-datasets">
+<h2>Browsing Public Datasets<a class="headerlink" href="#browsing-public-datasets" title="Permalink to this heading">#</a></h2>
+<p>To access public datasets, click on the PUBLIC DASHBOARD button in the navigation bar at the top of the page.</p>
+<p><img alt="navigation bar, logged in, public dashboard selected" src="_images/nav-bar-logged-in-public-dashboard.png" /></p>
+<p>On the Public Dashboard, datasets can be searched for by keyword or sorted by various criteria.</p>
+<p>Visible from the dashboard are each dataset’s high-level stats and information. To access a dataset’s landing page, click on its name.</p>
+<p><img alt="public dashboard, dataset item" src="_images/public-dashboard-dataset-item.png" /></p>
+</section>
+<section id="viewing-and-downloading-a-dataset">
+<h2>Viewing and Downloading a Dataset<a class="headerlink" href="#viewing-and-downloading-a-dataset" title="Permalink to this heading">#</a></h2>
+<p>A dataset’s landing page has four major sections: <a class="reference internal" href="#the-toolbar"><span class="std std-doc">a toolbar</span></a>, a <a class="reference internal" href="#dataset-versions"><span class="std std-doc">version manager</span></a>, the dataset’s <a class="reference internal" href="#dataset-snapshot"><span class="std std-doc">information and files</span></a>, and a comments section.</p>
+<section id="the-toolbar">
+<h3>The Toolbar<a class="headerlink" href="#the-toolbar" title="Permalink to this heading">#</a></h3>
+<p><img alt="dataset page toolbar" src="_images/dataset-page-toolbar.png" /></p>
+<p>Located at the top of the page, the toolbar contains the following options (icons left to right):</p>
+<ul class="simple">
+<li><p>Follow/Subscribe: Get email updates when a new version is posted.</p></li>
+<li><p>Like/Save: Add dataset to your Dashboard under Saved Datasets.</p></li>
+<li><p>View metadata: View data not necessarily contained within the dataset, including it’s DOI, OpenNeuro ID and URL, study type and design, number of trials, etc. This data helps make datasets searchable, and a compilation of the metadata of all datasets on OpenNeuro can be found at <a class="reference external" href="http://metadata.openneuro.org/">metadata.openneuro.org</a>.</p></li>
+</ul>
+<p>Datasets you own will have more items in their toolbar.</p>
+</section>
+<section id="dataset-versions">
+<h3>Dataset Versions<a class="headerlink" href="#dataset-versions" title="Permalink to this heading">#</a></h3>
+<p><img alt="dataset page versions" src="_images/dataset-page-versions.png" /></p>
+<p>This section is located to the left of the dataset’s information.</p>
+<p>Changes to dataset information are tracked in the dataset’s snapshots (versions). To view the dataset at a specific snapshot, simply select it from the Versions menu.</p>
+</section>
+<section id="dataset-snapshot">
+<h3>Dataset Snapshot<a class="headerlink" href="#dataset-snapshot" title="Permalink to this heading">#</a></h3>
+<p>This is the main section of the dataset landing page, containing almost all of its information and files at the given snapshot. Here, you can:</p>
+<ul class="simple">
+<li><p>View a dataset’s information (extracted from its README and description.json files).</p></li>
+<li><p>View and download individual files. The file viewer supports the following file extensions: csv, html, txt, json, tsv, nii, and nii.gz.</p></li>
+<li><p>Download the dataset via the browser.</p></li>
+<li><p>View instructions for downloading it from S3, or via DataLad or the openneuro-cli.</p></li>
+<li><p>View analyses of the dataset on BrainLife (if available).</p></li>
+<li><p>Check the dataset’s BIDS validation status.</p></li>
+<li><p>View the datasets git hash at this version.</p></li>
+<li><p>Generate a citation.</p></li>
+</ul>
+</section>
+</section>
+<section id="uploading-your-dataset">
+<h2>Uploading Your Dataset<a class="headerlink" href="#uploading-your-dataset" title="Permalink to this heading">#</a></h2>
+<p>Once you’ve signed into OpenNeuro, you’ll be able to upload your dataset by hitting the button at the top left of the page. This will open a window guiding you through the four step process of adding the dataset to OpenNeuro.</p>
+<p>There are a few things to keep in mind before uploading a dataset:</p>
+<ol class="arabic simple">
+<li><p>You must be the owner of the dataset and have the necessary ethics permissions to share the data publicly.</p></li>
+<li><p>The dataset may not be subject to GDPR protections.</p></li>
+<li><p>The dataset must follow <a class="reference external" href="https://bids.neuroimaging.io/">BIDS</a> specifications. Your dataset will be validated on upload, but if you want to check it for yourself, a web-based tool is available <a class="reference external" href="https://bids-standard.github.io/bids-validator/">here</a>, and a cli tool can be found <a class="reference external" href="https://github.com/bids-standard/bids-validator">here</a>.</p></li>
+<li><p>You will need to ensure that either all structural scans have been defaced (we recommend the <a class="reference external" href="https://github.com/poldracklab/pydeface">pydeface</a> tool) or that you have explicit participant consent and ethical authorization to publish without defacing.</p></li>
+<li><p>You must be willing that the dataset becomes publically available under the <a class="reference external" href="https://creativecommons.org/share-your-work/public-domain/cc0/">Creative Commons CC0 license</a> upon publishing or after a grace period of 36 months from the date of its first snapshot creation.</p></li>
+</ol>
+<p>The first upload prompt will ask you to select the dataset’s folder from your computer.</p>
+<p><img alt="upload dataset, select files" src="_images/upload-dataset-select-files.gif" /></p>
+<p>Once you’ve selected and uploaded the dataset, it will be checked by the BIDS validator. The dataset may be uploaded with warnings, but errors must be resolved before the upload can be finalized.</p>
+<p>The next step is to fill out the metadata form, which contains information not accessible from the dataset itself and is used to facilitate search results. This is optional, but highly recommended.</p>
+<p>Finally, you will need to accept the Terms and Conditions and affirm that the data has been either defaced or given consent to be made public otherwise. Once you have done so, the dataset will begin uploading in the background and you’ll be free to navigate the site (but don’t reload it or close the window, or the process will be cut short). When the dataset has finished uploading, you’ll see a notification pop up in the bottom-right corner of the page.</p>
+<p><img alt="upload complete notification" src="_images/upload-complete-notification.png" /></p>
+</section>
+<section id="managing-your-dataset">
+<h2>Managing Your Dataset<a class="headerlink" href="#managing-your-dataset" title="Permalink to this heading">#</a></h2>
+<p>Your dataset page will look very similar to the public dataset pages <a class="reference internal" href="#viewing-and-downloading-a-dataset"><span class="std std-doc">described earlier</span></a>, with several key new features.</p>
+<p><img alt="owned dataset page versions" src="_images/own-dataset-page-versions.png" /></p>
+<p>Draft is now available under the Versions sidebar. The draft page is where you can make edits to your dataset, published or not, without them being visible to the public.</p>
+<p>The draft page information is nearly identical to the snapshot pages, the differences being that most information fields have an edit option and files in the Dataset File Tree have options to add, update, and delete them.</p>
+<p><img alt="owned dataset page toolbar" src="_images/own-dataset-page-toolbar.png" /></p>
+<p>The dataset toolbar will have a few new items, including:</p>
+<ul class="simple">
+<li><p>Publish: Make your dataset public. This will make it available under the CC0 license.</p></li>
+<li><p>Delete: Permanently remove your dataset from OpenNeuro. If you are deleting the dataset to replace it, a redirect url can be submitted with the delete form.</p></li>
+<li><p>Manage Permissions: Add collaborators to the dataset and manage their read/write permissions.</p></li>
+<li><p>Create Snapshot: Create a new version of this dataset with changes made to Draft.</p></li>
+<li><p>View and Edit Metadata: If you didn’t add the metadata on upload, you can fill it in here.</p></li>
+</ul>
+<p>Advanced users may wish to manage their datasets by other means. OpenNeuro datasets and features are available through its <a class="reference internal" href="api.html"><span class="doc std std-doc">GraphQL API</span></a>, the <a class="reference internal" href="packages/openneuro-cli.html"><span class="doc std std-doc">openneuro-cli</span></a>, DataLad, and <a class="reference internal" href="git.html"><span class="doc std std-doc">direct git access</span></a>.</p>
+</section>
+<section id="support-channels">
+<h2>Support Channels<a class="headerlink" href="#support-channels" title="Permalink to this heading">#</a></h2>
+<p>If you’re running into complications, there are multiple means by which you can find a resolution.</p>
+<p>To start, OpenNeuro has a <a class="reference external" href="https://openneuro.org/faq">FAQ page</a> that might contain what you’re looking for.</p>
+<p>If you’re running into problems of a less general nature, we highly recommend looking to <a class="reference external" href="https://neurostars.org/">NeuroStars</a> for assistance. It is a public forum hosted by the International Neuroinformatics Coordinating Facility (INCF) and there you’ll be able to find experienced users of this and other related platforms.</p>
+<p>Finally, users logged into <a class="reference external" href="https://openneuro.org/">openneuro.org</a> can access the SUPPORT modal for issues regarding the site or a specific dataset.</p>
+<p><img alt="nav bar logged out support button" src="_images/nav-bar-logged-out-support.png" /></p>
+<p>As an aside, if you’d like to suggest a new feature, you can do so <a class="reference external" href="https://openneuro.featureupvote.com/">here</a>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="api.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">API Examples</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Stanford Center for Reproducible Neuroscience
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">User Guide</a><ul>
+<li><a class="reference internal" href="#signing-up">Signing Up</a></li>
+<li><a class="reference internal" href="#browsing-public-datasets">Browsing Public Datasets</a></li>
+<li><a class="reference internal" href="#viewing-and-downloading-a-dataset">Viewing and Downloading a Dataset</a><ul>
+<li><a class="reference internal" href="#the-toolbar">The Toolbar</a></li>
+<li><a class="reference internal" href="#dataset-versions">Dataset Versions</a></li>
+<li><a class="reference internal" href="#dataset-snapshot">Dataset Snapshot</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#uploading-your-dataset">Uploading Your Dataset</a></li>
+<li><a class="reference internal" href="#managing-your-dataset">Managing Your Dataset</a></li>
+<li><a class="reference internal" href="#support-channels">Support Channels</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    </body>
+</html>
