@@ -1,3 +1,4 @@
+import { gql } from '@apollo/client'
 import { datasets } from '@openneuro/client'
 
 /**
@@ -15,16 +16,61 @@ export const getDataset = (client, dir, datasetId) => {
     .then(() => datasetId)
 }
 
+// Get only working tree files
+export const getDraftFiles = gql`
+  query dataset($id: ID!, $tree: String) {
+    dataset(id: $id) {
+      id
+      draft {
+        id
+        files(tree: $tree) {
+          id
+          directory
+          filename
+          size
+        }
+      }
+      metadata {
+        affirmedDefaced
+        affirmedConsent
+      }
+    }
+  }
+`
+
 /**
  * Get an existing dataset's files
  * @param {object} client GraphQL client
  * @param {*} datasetId
  */
-export const getDatasetFiles = (client, datasetId) => {
-  return client.query({
-    query: datasets.getDraftFiles,
-    variables: { id: datasetId },
+export const getDatasetFiles = async (
+  client,
+  datasetId,
+  path = '',
+  tree = null,
+) => {
+  const files = []
+  const { data } = await client.query({
+    query: getDraftFiles,
+    variables: { id: datasetId, tree },
   })
+  for (const f of data.dataset.draft.files) {
+    if (f.directory) {
+      const nestedFiles = await getDatasetFiles(
+        client,
+        datasetId,
+        path ? `${path}/${f.filename}` : f.filename,
+        f.id,
+      )
+      files.push(...nestedFiles)
+    } else {
+      files.push({
+        ...f,
+        filename: path ? `${path}/${f.filename}` : f.filename,
+      })
+    }
+  }
+  return files
 }
 
 /**
