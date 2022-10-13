@@ -4,8 +4,8 @@ import { promisify } from 'util'
 import { CacheType } from './types'
 export { CacheType } from './types'
 
-const compress = promisify(zlib.brotliCompress)
-const decompress = promisify(zlib.brotliDecompress)
+const compress = promisify(zlib.gzip)
+const decompress = promisify(zlib.gunzip)
 
 /**
  * Given a set of values, produce a key which uniquely identifies them
