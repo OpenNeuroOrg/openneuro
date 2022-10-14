@@ -1,6 +1,6 @@
 import React, { createContext, useContext, FC, ReactNode } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import initialSearchParams from './initial-search-params'
+import initialSearchParams, { SearchParams } from './initial-search-params'
 
 export const SearchParamsCtx = createContext(null)
 
@@ -23,8 +23,13 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
     console.error(err)
   }
 
-  const setSearchParams = newParamsCall => {
-    const merged = { ...searchParams, ...newParamsCall(searchParams) }
+  const setSearchParams = (
+    newParams: SearchParams | ((prevState: SearchParams) => SearchParams),
+  ): void => {
+    const merged =
+      typeof newParams == 'function'
+        ? { ...searchParams, ...newParams(searchParams) }
+        : { ...searchParams, ...newParams }
     setSearch(
       {
         query: JSON.stringify(merged),
