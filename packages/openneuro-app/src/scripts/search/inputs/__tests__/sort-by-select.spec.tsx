@@ -1,6 +1,6 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
-import { searchRender } from '../../__tests__/search-params-ctx.spec'
+import { searchRender } from '../../__helpers__/search-render'
 import SortBySelect from '../sort-by-select'
 import initialSearchParams from '../../initial-search-params'
 
