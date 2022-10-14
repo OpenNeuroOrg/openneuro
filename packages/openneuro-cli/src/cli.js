@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import commander from 'commander'
 import { version } from './lerna.json'
-import { login, upload, download } from './actions.js'
+import { login, upload, download, ls } from './actions.js'
 import { gitCredential } from './gitCredential.js'
 import { gitAnnexRemote } from './gitAnnexRemote.js'
 import { create } from './createDataset.js'
@@ -67,6 +67,12 @@ commander
   .action(() => {
     create()
   })
+
+commander
+  .command('ls <datasetId>')
+  .description('Lists files from a snapshotted dataset version.')
+  .option('-s, --snapshot [snapshotVersion]')
+  .action(ls)
 
 const processName = process.argv[1].endsWith('index.js')
   ? process.env.npm_lifecycle_event
