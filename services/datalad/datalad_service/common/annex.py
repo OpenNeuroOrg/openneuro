@@ -76,9 +76,12 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
                           'id': file_id, 'key': obj_hash, 'directory': False, 'urls': [], 'annexed': False})
 
 
-def compute_rmet(key):
+def compute_rmet(key, legacy=False):
     if len(key) == 40:
-        key = 'SHA1--{}'.format(key)
+        if legacy:
+            key = 'SHA1--{}'.format(key)
+        else:
+            key = 'GIT--{}'.format(key)
     keyHash = hashlib.md5(key.encode()).hexdigest()
     return '{}/{}/{}.log.rmet'.format(keyHash[0:3], keyHash[3:6], key)
 
@@ -149,6 +152,12 @@ def get_repo_urls(path, files):
                 # Keep a reference to the files so we can add URLs later
                 rmetFiles[rmetPath] = f
                 rmetPaths.append(rmetPath)
+            else:
+                # Check for alternate path used by older versions of git-annex
+                rmetPath = compute_rmet(f['key'], legacy=True)
+                if rmetPath in rmetObjects:
+                    rmetFiles[rmetPath] = f
+                    rmetPaths.append(rmetPath)
     # Then read those objects with git cat-file --batch
     gitObjects = rmetObjects['remote.log'] + '\n' + \
         '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
