@@ -37,10 +37,11 @@ export function fileTreeLevels(
     if (path === '' ? f.filename.includes(':') : lowerPath.includes(':')) {
       // At the top level, use the directory component (first segment)
       // Below that, use all paths before the filename (sub-01:anat) for (sub-01:anat:sub-01_T1w.nii.gz)
+      const components = f.filename.split(':')
       const childPath =
         path === ''
-          ? f.filename.split(':')[0]
-          : f.filename.split(':').slice(0, -1).join(':')
+          ? components[0]
+          : components.slice(0, path.split(':').length + 1).join(':')
       if (childFiles.hasOwnProperty(childPath)) {
         childFiles[childPath].push(f)
       } else {
