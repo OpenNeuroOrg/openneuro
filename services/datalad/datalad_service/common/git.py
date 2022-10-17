@@ -16,6 +16,15 @@ def git_show(path, commitish, obj):
     return data
 
 
+def git_show_object(path, obj):
+    repo = pygit2.Repository(path)
+    git_obj = repo.get(obj)
+    if git_obj:
+        return git_obj.read_raw().decode()
+    else:
+        raise KeyError('object not found in repository')
+
+
 def delete_tag(path, tag):
     repo = pygit2.Repository(path)
     repo.references.delete(f'refs/tags/{tag}')

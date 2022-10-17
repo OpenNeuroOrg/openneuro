@@ -1,9 +1,7 @@
 import hashlib
 import logging
 import os
-import shutil
 import struct
-import tempfile
 
 import falcon
 
@@ -36,10 +34,10 @@ class GitAnnexResource(object):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_head(self, req, resp, worker, dataset, key):
+    def on_head(self, req, resp, dataset, key, worker=None):
         """HEAD requests check if objects exist already"""
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
-        if not _check_git_access(req, dataset):
+        if worker and not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         dataset_path = self.store.get_dataset_path(dataset)
         annex_object_path = os.path.join(dataset_path, key_to_path(key))
@@ -48,9 +46,9 @@ class GitAnnexResource(object):
         else:
             resp.status = falcon.HTTP_NOT_FOUND
 
-    def on_get(self, req, resp, worker, dataset, key):
+    def on_get(self, req, resp, dataset, key, worker=None):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
-        if not _check_git_access(req, dataset):
+        if worker and not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         dataset_path = self.store.get_dataset_path(dataset)
         annex_object_path = os.path.join(dataset_path, key_to_path(key))

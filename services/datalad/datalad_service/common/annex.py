@@ -7,6 +7,8 @@ import urllib.parse
 
 from sentry_sdk import capture_exception
 
+from datalad_service.config import CRN_SERVER_URL
+
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
@@ -191,7 +193,7 @@ def get_repo_urls(path, files):
     return files
 
 
-def get_repo_files(dataset_path, tree):
+def get_repo_files(dataset, dataset_path, tree):
     """Read all files in a repo at a given branch, tag, or commit hash."""
     gitProcess = subprocess.Popen(
         ['git', 'ls-tree', '-l', tree], cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')
@@ -221,7 +223,15 @@ def get_repo_files(dataset_path, tree):
             files.append({'filename': filename, 'size': int(
                 size), 'id': file_id, 'key': key, 'urls': [], 'annexed': True, 'directory': False})
     # Now find URLs for each file if available
-    return get_repo_urls(dataset_path, files)
+    files = get_repo_urls(dataset_path, files)
+    # Provide fallbacks for any URLs that did not match rmet exports
+    for f in files:
+        if not f['directory'] and len(f['urls']) == 0:
+            key = f['key']
+            fallback = f'{CRN_SERVER_URL}/crn/datasets/{dataset}/objects/{key}'
+            encoded_url = encode_remote_url(fallback)
+            f['urls'].append(encoded_url)
+    return files
 
 
 def get_tag_info(dataset_path, tag):

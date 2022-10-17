@@ -42,3 +42,8 @@ ELASTIC_APM_SERVER_URL = get_environ(
 # Elasticsearch URL
 ELASTICSEARCH_CONNECTION = get_environ(
     'ELASTICSEARCH_CONNECTION')
+
+# Site URL
+CRN_SERVER_URL = get_environ(
+    'CRN_SERVER_URL'
+)
