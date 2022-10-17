@@ -23,3 +23,26 @@ export const getFile = (req, res) => {
     : `${worker}/datasets/${datasetId}/files/${filename}`
   return request.get(uri).pipe(res)
 }
+
+/**
+ * Get a file from a dataset
+ */
+export const getObject = (req, res) => {
+  const { datasetId, key } = req.params
+  const worker = getDatasetWorker(datasetId)
+  // Backend depends on git object or git-annex key
+  if (key.length === 40) {
+    const uri = `${worker}/datasets/${datasetId}/objects/${key}`
+    res.set('Content-Type', 'application/octet-stream')
+    return request.get(uri).pipe(res)
+  } else if (key.startsWith('SHA256E-') || key.startsWith('MD5E-')) {
+    const uri = `${worker}/datasets/${datasetId}/annex/${key}`
+    res.set('Content-Type', 'application/octet-stream')
+    return request.get(uri).pipe(res)
+  } else {
+    res.set('Content-Type', 'application/json')
+    res.status(400).send({
+      error: 'Key must be a git object hash or git-annex key',
+    })
+  }
+}

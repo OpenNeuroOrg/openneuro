@@ -122,6 +122,11 @@ const routes = [
     url: '/datasets/:datasetId/snapshots/:snapshotId/files/:filename',
     handler: datalad.getFile,
   },
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/objects/:key',
+    handler: datalad.getObject,
+  },
 
   // Authentication routes
 

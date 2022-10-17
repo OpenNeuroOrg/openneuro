@@ -1,5 +1,4 @@
 import request from 'superagent'
-import { addFileUrl } from './utils'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import { getDatasetWorker } from '../libs/datalad-service'
@@ -79,7 +78,7 @@ export const getFiles = (datasetId, treeish) => {
           const {
             body: { files },
           } = response
-          return files.map(addFileUrl(datasetId, treeish))
+          return files
         }
       }),
   )
