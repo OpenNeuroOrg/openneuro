@@ -59,6 +59,7 @@ export const DRAFT_FILES_FRAGMENT = gql`
         size
         directory
         annexed
+        urls
       }
     }
   }
@@ -162,6 +163,7 @@ export const SNAPSHOT_FIELDS = gql`
       size
       directory
       annexed
+      urls
     }
     summary {
       modalities

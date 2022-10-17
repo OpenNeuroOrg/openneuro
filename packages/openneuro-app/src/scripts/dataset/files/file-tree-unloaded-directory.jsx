@@ -15,6 +15,7 @@ export const DRAFT_FILES_QUERY = gql`
           size
           directory
           annexed
+          urls
         }
       }
     }
@@ -31,6 +32,7 @@ export const SNAPSHOT_FILES_QUERY = gql`
         size
         directory
         annexed
+        urls
       }
     }
   }
