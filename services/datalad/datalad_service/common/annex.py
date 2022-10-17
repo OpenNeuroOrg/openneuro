@@ -7,7 +7,7 @@ import urllib.parse
 
 from sentry_sdk import capture_exception
 
-from datalad_service.config import CRN_SERVER_URL
+import datalad_service.config
 
 
 SERVICE_EMAIL = 'git@openneuro.org'
@@ -228,7 +228,7 @@ def get_repo_files(dataset, dataset_path, tree):
     for f in files:
         if not f['directory'] and len(f['urls']) == 0:
             key = f['key']
-            fallback = f'{CRN_SERVER_URL}/crn/datasets/{dataset}/objects/{key}'
+            fallback = f'{datalad_service.config.CRN_SERVER_URL}/crn/datasets/{dataset}/objects/{key}'
             encoded_url = encode_remote_url(fallback)
             f['urls'].append(encoded_url)
     return files

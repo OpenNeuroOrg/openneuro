@@ -165,6 +165,12 @@ def mock_jwt_secret(monkeypatch):
     monkeypatch.setenv('JWT_SECRET', 'test-secret-please-ignore')
 
 
+@pytest.fixture(autouse=True)
+def mock_server_url(monkeypatch):
+    monkeypatch.setattr(datalad_service.config,
+                        'CRN_SERVER_URL', 'http://localhost:9876')
+
+
 @pytest.fixture
 def client(datalad_store, monkeypatch):
     return testing.TestClient(create_app(datalad_store.annex_path))
