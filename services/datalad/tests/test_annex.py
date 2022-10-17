@@ -85,7 +85,13 @@ def test_get_ls_tree_line_submodule():
 def test_compute_rmet_git():
     # Test a git SHA1 key
     assert compute_rmet(
-        '99fe93bfea62c16a10488593da870df25d09be81') == '9e2/03e/SHA1--99fe93bfea62c16a10488593da870df25d09be81.log.rmet'
+        '99fe93bfea62c16a10488593da870df25d09be81') == '0f5/0b4/GIT--99fe93bfea62c16a10488593da870df25d09be81.log.rmet'
+
+
+def test_compute_rmet_git_legacy():
+    # Test a git SHA1 key
+    assert compute_rmet(
+        '99fe93bfea62c16a10488593da870df25d09be81', legacy=True) == '9e2/03e/SHA1--99fe93bfea62c16a10488593da870df25d09be81.log.rmet'
 
 
 def test_compute_rmet_annex():
