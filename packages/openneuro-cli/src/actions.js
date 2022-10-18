@@ -277,9 +277,15 @@ export const download = (datasetId, destination, cmd) => {
       }
     })
   } else if (cmd.snapshot) {
-    getDownload(destination, datasetId, cmd.snapshot, apmTransaction, client)
+    return getDownload(
+      destination,
+      datasetId,
+      cmd.snapshot,
+      apmTransaction,
+      client,
+    )
   } else {
-    getDownload(destination, datasetId, null, apmTransaction, client)
+    return getDownload(destination, datasetId, null, apmTransaction, client)
   }
   apmTransaction.end()
 }
