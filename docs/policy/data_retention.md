@@ -3,6 +3,28 @@
 OpenNeuro has a data retention policy in place to ensure the maintainability of
 and prevent abuse of the service.
 
+## Data Management Plan Boilerplate
+
+The following text may be used in data management plans for researchers intending to
+upload data to OpenNeuro:
+
+> Digital content ingested to OpenNeuro is replicated multiple times and stored in
+> geo-diverse locations on different media types.
+> Datasets are audited systematically to ensure that the bits are maintained exactly as deposited,
+> and a log of preservation actions is kept to help ensure the content's integrity.
+> The repository is built using widely-adopted and actively maintained open-source data
+> management tools.
+> These tools permit changes to content to be tracked and "snapshots" to be made that uniquely
+> identify specific points in the lifetime of each dataset.
+> After an optional 36-month embargo period, all datasets are published into the public domain.
+> Prior to being made public, access to a dataset is controlled through strict authentication
+> policies and an isolated storage backend to further guard against unintended access.
+> Metadata describing each dataset snapshot is indexed for searching,
+> and copies of ingested content are provided via persistent Digital Object Identifiers (DOIs)
+> minted for each version of a dataset.
+
+For further details, please consult the remainder of this page.
+
 ## Data storage
 
 OpenNeuro datasets are stored as git/git-annex repositories on Google Cloud storage
