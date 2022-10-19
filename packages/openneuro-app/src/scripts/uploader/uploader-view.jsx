@@ -1,6 +1,5 @@
 import React from 'react'
 import BlockNavigation from '../common/partials/block-navigation.jsx'
-import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
 

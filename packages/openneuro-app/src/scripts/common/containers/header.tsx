@@ -5,8 +5,6 @@ import UploadProgress from '../../uploader/upload-progress.jsx'
 import { Header, LandingExpandedHeader } from '@openneuro/components/header'
 import { Input } from '@openneuro/components/input'
 import ModalitySelect from '../../search/inputs/modality-select'
-import { SearchParamsCtx } from '../../search/search-params-ctx'
-import initialSearchParams from '../../search/initial-search-params'
 import { UserModalOpenCtx } from '../../utils/user-login-modal-ctx'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
@@ -18,7 +16,8 @@ import loginUrls from '../../authentication/loginUrls'
 import UploaderView from '../../uploader/uploader-view.jsx'
 import UploadButton from '../../uploader/upload-button.jsx'
 import UploadProgressButton from '../../uploader/upload-progress-button.jsx'
-const HeaderContainer: FC = () => {
+
+export const HeaderContainer: FC = () => {
   const navigate = useNavigate()
 
   const { pathname: currentPath } = useLocation()
@@ -27,22 +26,17 @@ const HeaderContainer: FC = () => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
 
-  const { setSearchParams } = useContext(SearchParamsCtx)
   const { userModalOpen, setUserModalOpen } = useContext(UserModalOpenCtx)
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
 
   const handleSubmit = () => {
-    // reset search params and set keyword to initiate new search, then navigate to global search page
-    setSearchParams(() => ({
-      ...initialSearchParams,
+    const query = JSON.stringify({
       keywords: newKeywordRef.current ? [newKeywordRef.current] : [],
-    }))
+    })
     setNewKeyword('')
-    navigate('/search')
+    navigate(`/search?query=${query}`)
   }
-
-  const clearSearchParams = () => setSearchParams(initialSearchParams)
 
   const toggleLoginModal = (): void => {
     setUserModalOpen(prevState => ({
@@ -133,9 +127,6 @@ const HeaderContainer: FC = () => {
             )}
             onSearch={() => {
               handleSubmit()
-            }}
-            clearSearchParams={() => {
-              clearSearchParams()
             }}
           />
         )}
