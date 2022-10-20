@@ -35,8 +35,8 @@ sentryDsn: https://ba0c58863b3e40a2a412132bfd2711ea@o114074.ingest.sentry.io/251
 apmServerUrl: https://17ae1d2cfa8f47f486b1b6fda3ed9f43.apm.us-west-2.aws.found.io
 
 # API resource configuration
-apiCpuRequests: 2
-apiMemoryRequests: 1Gi
+apiCpuRequests: 1
+apiMemoryRequests: 768Mi
 
 # Worker resource configuration
 workerCpuRequests: 2
@@ -44,7 +44,7 @@ workerMemoryRequests: 3Gi
 
 # Nginx resource configuration
 webCpuRequests: 0.25
-webMemoryRequests: 0.5Gi
+webMemoryRequests: 512Mi
 
 # GCP zone for this set of workers
 workerZone: us-west1-c
@@ -69,5 +69,5 @@ redis:
     disableCommands: []
     resources:
       requests:
-        cpu: "1"
-        memory: "8Gi"
+        cpu: "0.5"
+        memory: "2Gi"
