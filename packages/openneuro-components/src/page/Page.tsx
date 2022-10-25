@@ -46,7 +46,6 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
                 />
               )}
               onSearch={() => console.log('User search by keyword.')}
-              clearSearchParams={() => {}}
             />
           )}
         />

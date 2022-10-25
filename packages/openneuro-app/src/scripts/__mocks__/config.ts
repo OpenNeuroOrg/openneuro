@@ -23,4 +23,7 @@ export const config = {
   sentry: {
     environment: 'unit-tests',
   },
+  support: {
+    url: 'https://example.com/test-suite',
+  },
 }

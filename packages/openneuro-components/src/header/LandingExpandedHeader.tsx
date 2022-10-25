@@ -15,7 +15,6 @@ export interface LandingExpandedHeaderProps {
   renderFacetSelect: () => React.ReactNode
   renderSearchInput: () => React.ReactNode
   onSearch: () => void
-  clearSearchParams: () => void
 }
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
@@ -25,7 +24,6 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   renderFacetSelect,
   renderSearchInput,
   onSearch,
-  clearSearchParams,
 }) => {
   const aggregateCounts = (modality: string): React.ReactNode =>
     renderAggregateCounts ? renderAggregateCounts(modality) : null
@@ -39,7 +37,6 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           cubeImage={item.cubeImage}
           stats={aggregateCounts(item.label)}
           onClick={redirectPath => e => {
-            clearSearchParams()
             navigate(redirectPath)
           }}
         />
