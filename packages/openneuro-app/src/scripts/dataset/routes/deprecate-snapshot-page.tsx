@@ -6,8 +6,15 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3 } from './styles/header-row'
 
-export const DeprecateSnapshotPage = (): React.ReactElement => {
-  const { datasetId, snapshotTag } = useParams()
+interface DeprecateSnapshotProps {
+  datasetId: string
+  snapshotTag: string
+}
+
+export const DeprecateSnapshotPage = ({
+  datasetId,
+  snapshotTag,
+}: DeprecateSnapshotProps): React.ReactElement => {
   const [reason, setReason] = useState('')
 
   return (

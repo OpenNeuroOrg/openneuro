@@ -27,7 +27,15 @@ export const TabRoutesSnapshot = ({ dataset, snapshot }) => {
         path="derivatives"
         element={<Derivatives derivatives={dataset.derivatives} />}
       />
-      <Route path="deprecate" element={<DeprecateSnapshotPage />} />
+      <Route
+        path="deprecate"
+        element={
+          <DeprecateSnapshotPage
+            datasetId={dataset.id}
+            snapshotTag={snapshot.tag}
+          />
+        }
+      />
       <Route path="file-display/:filePath" element={<FileDisplayRoute />} />
       <Route path="metadata" element={<AddMetadata dataset={dataset} />} />
     </Routes>
