@@ -98,7 +98,7 @@ export const downloadFile = async (
   }
 }
 
-export const getDownload = (
+export const getDownload = async (
   destination,
   datasetId,
   tag,
@@ -107,58 +107,56 @@ export const getDownload = (
   treePath = '',
   tree = null,
 ) => {
-  const apmSetup = apmTransaction.startSpan('getDownload')
-  return downloadDataset(client)({ datasetId, tag, tree }).then(async files => {
-    apmTransaction.addLabels({ datasetId, tag, tree })
-    checkDestination(destination)
-    apmSetup.end()
-    for (const file of files) {
-      const downloadPath = path.join(treePath, file.filename)
-      if (file.directory) {
-        await getDownload(
-          destination,
-          datasetId,
-          tag,
-          apmTransaction,
-          client,
+  const files = await downloadDataset(client)({ datasetId, tag, tree })
+  checkDestination(destination)
+  for (const file of files) {
+    const downloadPath = path.join(treePath, file.filename)
+    if (file.directory) {
+      await getDownload(
+        destination,
+        datasetId,
+        tag,
+        apmTransaction,
+        client,
+        downloadPath,
+        file.id,
+      )
+    } else {
+      const downloadProgress = new cliProgress.SingleBar({
+        format:
+          ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | ' +
           downloadPath,
-          file.id,
+        clearOnComplete: false,
+        hideCursor: true,
+        position: 'center',
+        etaBuffer: 65536,
+        autopadding: true,
+      })
+      if (testFile(destination, downloadPath, file.size)) {
+        // Now actually download
+        const apmDownload = apmTransaction.startSpan(
+          `download ${downloadPath}:${file.size}`,
         )
-      } else {
-        const downloadProgress = new cliProgress.SingleBar({
-          format:
-            ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | ' +
+        downloadProgress.start(file.size, 0)
+        try {
+          await downloadFile(
+            destination,
             downloadPath,
-          clearOnComplete: false,
-          hideCursor: true,
-          position: 'center',
-          etaBuffer: 65536,
-          autopadding: true,
-        })
-        if (testFile(destination, downloadPath, file.size)) {
-          // Now actually download
-          const apmDownload = apmTransaction.startSpan(
-            `download ${downloadPath}:${file.size}`,
+            file.urls[file.urls.length - 1],
+            apmTransaction,
+            downloadProgress,
           )
-          downloadProgress.start(file.size, 0)
-          try {
-            await downloadFile(
-              destination,
-              downloadPath,
-              file.urls[file.urls.length - 1],
-              apmTransaction,
-              downloadProgress,
-            )
-            downloadProgress.update(file.size)
-          } finally {
-            downloadProgress.stop()
-          }
-          if (apmDownload) apmDownload.end()
-        } else {
-          downloadProgress.start(file.size, file.size)
+          downloadProgress.update(file.size)
+        } catch (err) {
+          console.error(err)
+        } finally {
           downloadProgress.stop()
         }
+        if (apmDownload) apmDownload.end()
+      } else {
+        downloadProgress.start(file.size, file.size)
+        downloadProgress.stop()
       }
     }
-  })
+  }
 }
