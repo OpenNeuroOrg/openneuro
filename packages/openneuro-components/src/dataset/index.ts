@@ -1,6 +1,7 @@
 import { MetaDataBlock } from './MetaDataBlock'
 import { MetaDataListBlock } from './MetaDataListBlock'
 import { ModalitiesMetaDataBlock } from './ModalitiesMetaDataBlock'
+import { NemarButton } from './NemarButton'
 import { BrainLifeButton } from './BrainLifeButton'
 import { ValidationBlock } from './ValidationBlock'
 import { CloneDropdown } from './CloneDropdown'
@@ -13,6 +14,7 @@ import { VersionList } from './VersionList'
 
 export {
   MetaDataBlock,
+  NemarButton,
   BrainLifeButton,
   ValidationBlock,
   CloneDropdown,
