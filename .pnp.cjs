@@ -302,7 +302,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["@apollo/protobufjs", [\
         ["npm:1.2.2", {\
-          "packageLocation": "./.yarn/unplugged/@apollo-protobufjs-npm-1.2.2-306a5b4ea3/node_modules/@apollo/protobufjs/",\
+          "packageLocation": "./.yarn/cache/@apollo-protobufjs-npm-1.2.2-306a5b4ea3-3f3ec1f428.zip/node_modules/@apollo/protobufjs/",\
           "packageDependencies": [\
             ["@apollo/protobufjs", "npm:1.2.2"],\
             ["@protobufjs/aspromise", "npm:1.1.2"],\
@@ -8795,7 +8795,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["@sentry/cli", [\
         ["npm:1.37.4", {\
-          "packageLocation": "./.yarn/unplugged/@sentry-cli-npm-1.37.4-40c8a697d6/node_modules/@sentry/cli/",\
+          "packageLocation": "./.yarn/cache/@sentry-cli-npm-1.37.4-40c8a697d6-4a775127e2.zip/node_modules/@sentry/cli/",\
           "packageDependencies": [\
             ["@sentry/cli", "npm:1.37.4"],\
             ["fs-copy-file-sync", "npm:1.1.1"],\
@@ -10249,10 +10249,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@xmldom/xmldom", [\
-        ["npm:0.7.5", {\
-          "packageLocation": "./.yarn/cache/@xmldom-xmldom-npm-0.7.5-f6fb7cf202-8d7ec35c1e.zip/node_modules/@xmldom/xmldom/",\
+        ["npm:0.7.8", {\
+          "packageLocation": "./.yarn/cache/@xmldom-xmldom-npm-0.7.8-a26f87a1cf-3bae232f9e.zip/node_modules/@xmldom/xmldom/",\
           "packageDependencies": [\
-            ["@xmldom/xmldom", "npm:0.7.5"]\
+            ["@xmldom/xmldom", "npm:0.7.8"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -14080,14 +14080,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["core-js", [\
         ["npm:3.18.0", {\
-          "packageLocation": "./.yarn/unplugged/core-js-npm-3.18.0-0e015720b9/node_modules/core-js/",\
+          "packageLocation": "./.yarn/cache/core-js-npm-3.18.0-0e015720b9-192c345eb0.zip/node_modules/core-js/",\
           "packageDependencies": [\
             ["core-js", "npm:3.18.0"]\
           ],\
           "linkType": "HARD"\
         }],\
         ["npm:3.25.1", {\
-          "packageLocation": "./.yarn/unplugged/core-js-npm-3.25.1-251219de39/node_modules/core-js/",\
+          "packageLocation": "./.yarn/cache/core-js-npm-3.25.1-251219de39-bfacb078e7.zip/node_modules/core-js/",\
           "packageDependencies": [\
             ["core-js", "npm:3.25.1"]\
           ],\
@@ -14115,7 +14115,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["core-js-pure", [\
         ["npm:3.18.0", {\
-          "packageLocation": "./.yarn/unplugged/core-js-pure-npm-3.18.0-4ecbd5a9b2/node_modules/core-js-pure/",\
+          "packageLocation": "./.yarn/cache/core-js-pure-npm-3.18.0-4ecbd5a9b2-18d81964d3.zip/node_modules/core-js-pure/",\
           "packageDependencies": [\
             ["core-js-pure", "npm:3.18.0"]\
           ],\
@@ -15741,7 +15741,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["esbuild", [\
         ["npm:0.15.7", {\
-          "packageLocation": "./.yarn/unplugged/esbuild-npm-0.15.7-9aee421406/node_modules/esbuild/",\
+          "packageLocation": "./.yarn/cache/esbuild-npm-0.15.7-9aee421406-54ddaa6cf9.zip/node_modules/esbuild/",\
           "packageDependencies": [\
             ["esbuild", "npm:0.15.7"],\
             ["@esbuild/linux-loong64", "npm:0.15.7"],\
@@ -16532,10 +16532,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["exifreader", [\
         ["npm:4.2.0", {\
-          "packageLocation": "./.yarn/unplugged/exifreader-npm-4.2.0-89609c4f76/node_modules/exifreader/",\
+          "packageLocation": "./.yarn/cache/exifreader-npm-4.2.0-89609c4f76-91bc2e263b.zip/node_modules/exifreader/",\
           "packageDependencies": [\
             ["exifreader", "npm:4.2.0"],\
-            ["@xmldom/xmldom", "npm:0.7.5"]\
+            ["@xmldom/xmldom", "npm:0.7.8"]\
           ],\
           "linkType": "HARD"\
         }]\
