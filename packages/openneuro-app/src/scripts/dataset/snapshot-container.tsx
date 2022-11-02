@@ -141,7 +141,8 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   datasetId={datasetId}
                   onNemar={
                     summary?.modalities.includes('EEG') ||
-                    summary?.modalities.includes('iEEG')
+                    summary?.modalities.includes('iEEG') ||
+                    summary?.modalities.includes('MEG')
                   }
                 />
                 <BrainLifeButton
