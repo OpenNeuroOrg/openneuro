@@ -16,6 +16,7 @@ import { DatasetAlertVersion } from './fragments/dataset-alert-version'
 import {
   ModalitiesMetaDataBlock,
   MetaDataBlock,
+  NemarButton,
   BrainLifeButton,
   ValidationBlock,
   CloneDropdown,
@@ -136,6 +137,14 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 <ValidationBlock>
                   <Validation datasetId={dataset.id} issues={snapshot.issues} />
                 </ValidationBlock>
+                <NemarButton
+                  datasetId={datasetId}
+                  onNemar={
+                    summary?.modalities.includes('EEG') ||
+                    summary?.modalities.includes('iEEG') ||
+                    summary?.modalities.includes('MEG')
+                  }
+                />
                 <BrainLifeButton
                   datasetId={datasetId}
                   onBrainlife={snapshot.onBrainlife}
