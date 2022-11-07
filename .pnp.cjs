@@ -8357,7 +8357,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.2.7"],\
             ["@types/jest", "npm:26.0.24"],\
             ["@types/jsdom", "npm:16.2.13"],\
-            ["@types/node", "npm:16.11.13"],\
+            ["@types/node", "npm:18.11.9"],\
             ["@types/react", "npm:17.0.24"],\
             ["@types/react-dom", "npm:17.0.9"],\
             ["@types/react-router-dom", "npm:5.3.3"],\
@@ -8411,15 +8411,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/runtime-corejs3", "npm:7.15.4"],\
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@types/mkdirp", "npm:1.0.2"],\
-            ["@types/node", "npm:16.11.13"],\
+            ["@types/node", "npm:18.11.9"],\
             ["bids-validator", "npm:1.9.9"],\
             ["cli-progress", "npm:3.9.1"],\
             ["commander", "npm:7.2.0"],\
             ["core-js", "npm:3.18.0"],\
-            ["cross-fetch", "npm:3.1.4"],\
             ["elastic-apm-node", "npm:3.12.1"],\
             ["esm", "npm:3.2.25"],\
-            ["fetch-h2", "npm:2.5.1"],\
             ["find-config", "npm:1.0.0"],\
             ["inquirer", "npm:5.2.0"],\
             ["jest-fetch-mock", "npm:3.0.3"],\
@@ -8442,7 +8440,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/server", "workspace:packages/openneuro-server"],\
             ["apollo-server", "virtual:86720daff6fa91ef488bb305b0b2c8253fb3fabde470b409f92b17f3b1d6203e3f6631585a5dc2cd5ccefab01339e6676f430f53e0206b9354f687fcc9c70489#npm:2.25.2"],\
             ["core-js", "npm:3.18.0"],\
-            ["cross-fetch", "npm:3.1.4"],\
             ["crypto-hash", "npm:1.3.0"],\
             ["graphql", "npm:14.7.0"],\
             ["react", "npm:17.0.2"],\
@@ -8508,7 +8505,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@openneuro/search", "workspace:packages/openneuro-search"],\
             ["@types/jsonwebtoken", "npm:8.5.5"],\
-            ["@types/node", "npm:16.11.13"],\
+            ["@types/node", "npm:18.11.9"],\
             ["@types/tsc-watch", "npm:4.2.0"],\
             ["apollo-link-retry", "npm:2.2.16"],\
             ["core-js", "npm:3.18.0"],\
@@ -8527,7 +8524,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/runtime-corejs3", "npm:7.15.4"],\
             ["@elastic/elasticsearch", "npm:7.15.0"],\
             ["@types/jsonwebtoken", "npm:8.5.5"],\
-            ["@types/node", "npm:16.11.13"],\
+            ["@types/node", "npm:18.11.9"],\
             ["core-js", "npm:3.18.0"],\
             ["jsonwebtoken", "npm:8.5.1"]\
           ],\
@@ -8590,7 +8587,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["moment", "npm:2.29.1"],\
             ["mongoose", "npm:6.2.3"],\
             ["morgan", "npm:1.10.0"],\
-            ["node-fetch", "npm:2.6.5"],\
             ["node-mailjet", "npm:3.3.5"],\
             ["nodemon", "npm:2.0.13"],\
             ["object-hash", "npm:2.1.1"],\
@@ -9607,17 +9603,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:16.11.13", {\
-          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.13-c2e2cce406-7c9d62c024.zip/node_modules/@types/node/",\
-          "packageDependencies": [\
-            ["@types/node", "npm:16.11.13"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:16.9.6", {\
           "packageLocation": "./.yarn/cache/@types-node-npm-16.9.6-c95978d15b-1c11ff4b58.zip/node_modules/@types/node/",\
           "packageDependencies": [\
             ["@types/node", "npm:16.9.6"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:18.11.9", {\
+          "packageLocation": "./.yarn/cache/@types-node-npm-18.11.9-d21dd6ec05-cc0aae109e.zip/node_modules/@types/node/",\
+          "packageDependencies": [\
+            ["@types/node", "npm:18.11.9"]\
           ],\
           "linkType": "HARD"\
         }],\
@@ -10698,16 +10694,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/ajv",\
             "ajv"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["already", [\
-        ["npm:1.13.2", {\
-          "packageLocation": "./.yarn/cache/already-npm-1.13.2-b8f772b061-c2c44dcc5c.zip/node_modules/already/",\
-          "packageDependencies": [\
-            ["already", "npm:1.13.2"],\
-            ["throat", "npm:5.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13122,15 +13108,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["caller-path", "npm:2.0.0"],\
             ["caller-callsite", "npm:2.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["callguard", [\
-        ["npm:2.0.0", {\
-          "packageLocation": "./.yarn/cache/callguard-npm-2.0.0-2a595eb843-0dccd585ff.zip/node_modules/callguard/",\
-          "packageDependencies": [\
-            ["callguard", "npm:2.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -16888,22 +16865,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/fbjs-css-vars-npm-1.0.2-c233f16598-72baf6d22c.zip/node_modules/fbjs-css-vars/",\
           "packageDependencies": [\
             ["fbjs-css-vars", "npm:1.0.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["fetch-h2", [\
-        ["npm:2.5.1", {\
-          "packageLocation": "./.yarn/cache/fetch-h2-npm-2.5.1-2d5f0c43d6-ec0f5a847f.zip/node_modules/fetch-h2/",\
-          "packageDependencies": [\
-            ["fetch-h2", "npm:2.5.1"],\
-            ["@types/tough-cookie", "npm:4.0.1"],\
-            ["already", "npm:1.13.2"],\
-            ["callguard", "npm:2.0.0"],\
-            ["get-stream", "npm:6.0.1"],\
-            ["through2", "npm:4.0.2"],\
-            ["to-arraybuffer", "npm:1.0.1"],\
-            ["tough-cookie", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -27883,13 +27844,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["throat", [\
-        ["npm:5.0.0", {\
-          "packageLocation": "./.yarn/cache/throat-npm-5.0.0-288ce6540a-031ff7f443.zip/node_modules/throat/",\
-          "packageDependencies": [\
-            ["throat", "npm:5.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:6.0.1", {\
           "packageLocation": "./.yarn/cache/throat-npm-6.0.1-1308a37a10-782d4171ee.zip/node_modules/throat/",\
           "packageDependencies": [\
@@ -27960,15 +27914,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/tmpl-npm-1.0.5-d399ba37e2-cd922d9b85.zip/node_modules/tmpl/",\
           "packageDependencies": [\
             ["tmpl", "npm:1.0.5"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["to-arraybuffer", [\
-        ["npm:1.0.1", {\
-          "packageLocation": "./.yarn/cache/to-arraybuffer-npm-1.0.1-a57b097c21-31433c10b3.zip/node_modules/to-arraybuffer/",\
-          "packageDependencies": [\
-            ["to-arraybuffer", "npm:1.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\

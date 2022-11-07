@@ -4938,13 +4938,13 @@ __metadata:
     "@emotion/styled": 11.6.0
     "@jest/globals": ^26.6.2
     "@niivue/niivue": 0.23.1
-    "@openneuro/client": ^4.12.5
-    "@openneuro/components": ^4.12.5
+    "@openneuro/client": ^4.12.6
+    "@openneuro/components": ^4.12.6
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jest": ^26.0.22
     "@types/jsdom": ^16
-    "@types/node": 16.11.13
+    "@types/node": 18.11.9
     "@types/react": ^17.0.8
     "@types/react-dom": ^17.0.5
     "@types/react-router-dom": 5.3.3
@@ -4994,17 +4994,15 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.12.5
+    "@openneuro/client": ^4.12.6
     "@types/mkdirp": ^1.0.1
-    "@types/node": 16.11.13
+    "@types/node": 18.11.9
     bids-validator: 1.9.9
     cli-progress: ^3.8.2
     commander: 7.2.0
     core-js: ^3.10.1
-    cross-fetch: ^3.0.5
     elastic-apm-node: 3.12.1
     esm: ^3.0.16
-    fetch-h2: ^2.5.1
     find-config: ^1.0.0
     inquirer: ^5.2.0
     jest-fetch-mock: ^3.0.3
@@ -5019,17 +5017,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.12.5, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.12.6, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.12.5
+    "@openneuro/server": ^4.12.6
     apollo-server: ^2.23.0
     core-js: ^3.10.1
-    cross-fetch: ^3.1.2
     crypto-hash: ^1.3.0
     graphql: 14.7.0
     react: ^17.0.1
@@ -5038,7 +5035,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.12.5, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.12.6, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5088,10 +5085,10 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.12.5
-    "@openneuro/search": ^4.12.5
+    "@openneuro/client": ^4.12.6
+    "@openneuro/search": ^4.12.6
     "@types/jsonwebtoken": ^8
-    "@types/node": 16.11.13
+    "@types/node": 18.11.9
     "@types/tsc-watch": ^4
     apollo-link-retry: ^2.2.16
     core-js: ^3.10.1
@@ -5102,7 +5099,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.12.5, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.12.6, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5110,13 +5107,13 @@ __metadata:
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
     "@types/jsonwebtoken": ^8
-    "@types/node": 16.11.13
+    "@types/node": 18.11.9
     core-js: ^3.10.1
     jsonwebtoken: ^8.5.1
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.12.5, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.12.6, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5128,7 +5125,7 @@ __metadata:
     "@babel/preset-env": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/search": ^4.12.5
+    "@openneuro/search": ^4.12.6
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/draft-js": ^0.10.43
@@ -5171,7 +5168,6 @@ __metadata:
     moment: ^2.14.1
     mongoose: ^6.2.3
     morgan: ^1.6.1
-    node-fetch: ^2.6.0
     node-mailjet: ^3.3.5
     nodemon: ^2.0.7
     object-hash: 2.1.1
@@ -6020,10 +6016,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.13":
-  version: 16.11.13
-  resolution: "@types/node@npm:16.11.13"
-  checksum: 7c9d62c024537d7c9f2229097b9e7a93a60bc60efbc9171977f172819e229b01d0b6ed276d335996d39b0096aed2cefa58c4a34b264d712ae3595449e8d96ab7
+"@types/node@npm:18.11.9":
+  version: 18.11.9
+  resolution: "@types/node@npm:18.11.9"
+  checksum: cc0aae109e9b7adefc32eecb838d6fad931663bb06484b5e9cbbbf74865c721b03d16fd8d74ad90e31dbe093d956a7c2c306ba5429ba0c00f3f7505103d7a496
   languageName: node
   linkType: hard
 
@@ -6258,7 +6254,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tough-cookie@npm:*, @types/tough-cookie@npm:^4.0.0":
+"@types/tough-cookie@npm:*":
   version: 4.0.1
   resolution: "@types/tough-cookie@npm:4.0.1"
   checksum: 7570c1c2d74201f4ead3512cf8e4c99e97d92ab8a02ae2fb987fd720ced0ca1a2baf250c98a861a170b86762606c9bf6d32207675f13dffc5ab75c08c96578d2
@@ -6919,15 +6915,6 @@ __metadata:
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
   checksum: 690ffb9408415fdab43686b3f92037ba0c8362f5d0709a123ba3fb546e6ad81414455f80a2b5cc432ce924afe9864671198f022bc331a19c072d4ede152ec3ca
-  languageName: node
-  linkType: hard
-
-"already@npm:^1.13.1":
-  version: 1.13.2
-  resolution: "already@npm:1.13.2"
-  dependencies:
-    throat: ^5.0.0
-  checksum: c2c44dcc5c00601be1b929d88121bb19b963d9c0bf1c925fd9834e3a4eb0c7324b1d126832f8f8ee49cbf11e35c9aa167330a2c4001fde678cadc8649e25cb94
   languageName: node
   linkType: hard
 
@@ -8669,13 +8656,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"callguard@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "callguard@npm:2.0.0"
-  checksum: 0dccd585ff46f89b64ce2cf212c6bb36d4ba6c681b1b811ed225f15e1fc6a458714dfd93c3e0c54790bb1da307a6223e51a6d1b589bc5a9a8b93d32cb77d756d
-  languageName: node
-  linkType: hard
-
 "callsites@npm:^2.0.0":
   version: 2.0.0
   resolution: "callsites@npm:2.0.0"
@@ -9646,7 +9626,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:^3.0.4, cross-fetch@npm:^3.0.5, cross-fetch@npm:^3.0.6, cross-fetch@npm:^3.1.2":
+"cross-fetch@npm:^3.0.4, cross-fetch@npm:^3.0.6":
   version: 3.1.4
   resolution: "cross-fetch@npm:3.1.4"
   dependencies:
@@ -11907,21 +11887,6 @@ __metadata:
     setimmediate: ^1.0.5
     ua-parser-js: ^0.7.18
   checksum: 449799568370c0350775e67a6b6d3f399a1b07df466f4ceb10a5d8ef238c26709fe7c1dac57578028c58496ffb797c119b0bea691e36a4e620f2130e7e90e3a3
-  languageName: node
-  linkType: hard
-
-"fetch-h2@npm:^2.5.1":
-  version: 2.5.1
-  resolution: "fetch-h2@npm:2.5.1"
-  dependencies:
-    "@types/tough-cookie": ^4.0.0
-    already: ^1.13.1
-    callguard: ^2.0.0
-    get-stream: ^6.0.0
-    through2: ^4.0.2
-    to-arraybuffer: ^1.0.1
-    tough-cookie: ^4.0.0
-  checksum: ec0f5a847f10ff9ef8fe9822ec97984a9868e7402c7154ad2157445ba5416f1cede4d910d2c817dcacba477165580fdb80a10dfeb5497d3cc701d2dc07a91c53
   languageName: node
   linkType: hard
 
@@ -16899,7 +16864,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.1.2, node-fetch@npm:^2.5.0, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1":
+"node-fetch@npm:^2.1.2, node-fetch@npm:^2.5.0, node-fetch@npm:^2.6.1":
   version: 2.6.5
   resolution: "node-fetch@npm:2.6.5"
   dependencies:
@@ -21510,13 +21475,6 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"throat@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "throat@npm:5.0.0"
-  checksum: 031ff7f4431618036c1dedd99c8aa82f5c33077320a8358ed829e84b320783781d1869fe58e8f76e948306803de966f5f7573766a437562c9f5c033297ad2fe2
-  languageName: node
-  linkType: hard
-
 "throat@npm:^6.0.1":
   version: 6.0.1
   resolution: "throat@npm:6.0.1"
@@ -21544,7 +21502,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"through2@npm:^4.0.0, through2@npm:^4.0.2":
+"through2@npm:^4.0.0":
   version: 4.0.2
   resolution: "through2@npm:4.0.2"
   dependencies:
@@ -21582,13 +21540,6 @@ resolve@^2.0.0-next.3:
   version: 1.0.5
   resolution: "tmpl@npm:1.0.5"
   checksum: cd922d9b853c00fe414c5a774817be65b058d54a2d01ebb415840960406c669a0fc632f66df885e24cb022ec812739199ccbdb8d1164c3e513f85bfca5ab2873
-  languageName: node
-  linkType: hard
-
-"to-arraybuffer@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "to-arraybuffer@npm:1.0.1"
-  checksum: 31433c10b388722729f5da04c6b2a06f40dc84f797bb802a5a171ced1e599454099c6c5bc5118f4b9105e7d049d3ad9d0f71182b77650e4fdb04539695489941
   languageName: node
   linkType: hard
 

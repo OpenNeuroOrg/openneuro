@@ -50,7 +50,6 @@
     "moment": "^2.14.1",
     "mongoose": "^6.2.3",
     "morgan": "^1.6.1",
-    "node-fetch": "^2.6.0",
     "node-mailjet": "^3.3.5",
     "object-hash": "2.1.1",
     "passport": "^0.6.0",
