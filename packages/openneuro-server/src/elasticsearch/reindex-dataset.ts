@@ -8,7 +8,6 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { HttpLink } from '@apollo/client/link/http'
-import fetch from 'node-fetch'
 
 /**
  * Setup SchemaLink based client for querying

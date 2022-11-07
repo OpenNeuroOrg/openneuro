@@ -1,7 +1,6 @@
 /**
  * Manage serving a Draft object based on DataLad working trees
  */
-import fetch from 'node-fetch'
 import request from 'superagent'
 import Dataset from '../models/dataset'
 import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'

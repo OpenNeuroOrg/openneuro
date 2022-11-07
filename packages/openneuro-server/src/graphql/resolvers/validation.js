@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import config from '../../config'
 import { generateDataladCookie } from '../../libs/authentication/jwt'
 import { getDatasetWorker } from '../../libs/datalad-service'

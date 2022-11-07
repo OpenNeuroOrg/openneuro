@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import IngestDataset from '../../models/ingestDataset'
 import { checkDatasetWrite } from '../permissions.js'
 import { getDatasetWorker } from '../../libs/datalad-service'

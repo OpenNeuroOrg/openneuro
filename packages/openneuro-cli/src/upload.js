@@ -1,8 +1,7 @@
-import { fetch, Request, AbortController } from 'fetch-h2'
 import cliProgress from 'cli-progress'
 import path from 'path'
 import inquirer from 'inquirer'
-import { createReadStream, promises as fs } from 'fs'
+import { promises as fs } from 'fs'
 import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
@@ -154,23 +153,10 @@ export const uploadFiles = async ({
   const MAX_STREAM_HANDLES = 512
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
-    const requests = filesChunk.map(file => {
+    const requests = filesChunk.map(async file => {
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
-      const fileStream = createReadStream(file.path)
-      fileStream.on('error', err => {
-        console.error(err)
-        controller.abort()
-      })
-      fileStream.on('close', () => {
-        if (fileStream.bytesRead === 0) {
-          uploadProgress.stop()
-          console.error(
-            `Warning: "${file.filename}" read zero bytes - check that this file is readable and try again`,
-          )
-          controller.abort()
-        }
-      })
+      const fileStream = await fs.open(file.path)
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
         {
@@ -178,18 +164,23 @@ export const uploadFiles = async ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: fileStream,
-          // @ts-expect-error - this is missing in the upstream type
+          body: fileStream.readableWebStream(),
           signal: controller.signal,
         },
       )
     })
-    await uploads.uploadParallel(
-      requests,
-      uploads.uploadSize(filesChunk),
-      uploadProgress,
-      fetch,
-    )
+    try {
+      await uploads.uploadParallel(
+        await Promise.all(requests),
+        uploads.uploadSize(filesChunk),
+        uploadProgress,
+        fetch,
+      )
+    } catch (err) {
+      console.error(
+        'Not all files could be opened for upload, check file access and permissions and try again.',
+      )
+    }
   }
   uploadProgress.stop()
 }

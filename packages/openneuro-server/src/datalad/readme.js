@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import { addFileString, commitFiles } from './dataset'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'

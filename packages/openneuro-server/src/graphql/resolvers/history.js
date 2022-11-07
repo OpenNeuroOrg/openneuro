@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 
 export const history = async obj => {
