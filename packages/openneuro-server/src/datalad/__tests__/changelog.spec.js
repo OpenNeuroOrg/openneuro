@@ -1,6 +1,6 @@
 import * as changelog from '../changelog.js'
 
-jest.mock('../../config.js')
+vi.mock('../../config.js')
 
 describe('changelog editing tools', () => {
   describe('findVersion()', () => {

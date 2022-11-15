@@ -1,4 +1,7 @@
 import { getKibanaURL } from '../kibana'
+import { vi } from 'vitest'
+
+vi.mock('../../config.ts')
 
 describe('getKibanaURL', () => {
   it('returns a valid url when env var ELASTICSEARCH_CLOUD_ID exists', () => {

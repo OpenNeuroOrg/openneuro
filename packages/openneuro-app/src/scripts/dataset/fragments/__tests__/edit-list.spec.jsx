@@ -9,7 +9,7 @@ describe('EditList component', () => {
   })
   it('calls setElements when an item is added', () => {
     const testText = 'this is a test entry'
-    const setElements = jest.fn()
+    const setElements = vi.fn()
     render(<EditList setElements={setElements} />)
     fireEvent.change(screen.getByRole('textbox'), {
       target: { value: testText },

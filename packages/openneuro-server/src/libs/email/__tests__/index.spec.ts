@@ -1,6 +1,6 @@
 import { mailjetFormat } from '../index'
 
-jest.mock('../../../config.js')
+vi.mock('../../../config.js')
 
 describe('Mailjet formatter', () => {
   it('formats a message', () => {

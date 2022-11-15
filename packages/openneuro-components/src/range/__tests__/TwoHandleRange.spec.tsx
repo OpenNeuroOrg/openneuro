@@ -14,7 +14,7 @@ describe('TwoHandleRange component', () => {
     })
   })
   it('fires event when changed', async () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(
       <TwoHandleRange
         min={0}

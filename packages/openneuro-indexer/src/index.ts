@@ -19,7 +19,9 @@ export default async function main(): Promise<void> {
     },
   })
 
-  const accessToken: string = indexingToken()
+  const accessToken: string = indexingToken(
+    process.env.JWT_SECRET || process.env.JEST_WORKER_ID,
+  )
 
   const authLink = setContext((_, { headers }) => {
     return {
@@ -31,7 +33,6 @@ export default async function main(): Promise<void> {
   })
 
   const apolloClient = createClient(process.env.GRAPHQL_URI, {
-    fetch,
     links: [retryLink, authLink],
   })
   const elasticClient = new Client({

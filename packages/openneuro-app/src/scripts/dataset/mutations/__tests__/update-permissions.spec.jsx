@@ -19,7 +19,7 @@ describe('UpdateDatasetPermissions mutation', () => {
           datasetId="ds000005"
           userEmail="test@example.com"
           access="ro"
-          done={jest.fn()}
+          done={vi.fn()}
         />
       </MockedProvider>,
     )

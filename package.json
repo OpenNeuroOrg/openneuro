@@ -4,9 +4,9 @@
     "start": "docker-compose up --build -V",
     "build": "yarn pnpify tsc -b",
     "bootstrap": "lerna bootstrap",
-    "test": "jest --maxWorkers=50%",
-    "coverage": "jest --coverage",
-    "ci-coverage": "jest --coverage --maxWorkers=2 --ci --maxConcurrency=2 && codecov",
+    "test": "vitest",
+    "coverage": "vitest --coverage",
+    "ci-coverage": "vitest --coverage && codecov",
     "lint": "eslint --ext .jsx --ext .js --ext .ts --ext .tsx packages/*/src",
     "openneuro": "node packages/openneuro-cli/src",
     "_postinstall": "husky install",
@@ -32,6 +32,7 @@
     "@types/babel__plugin-transform-runtime": "^7",
     "@types/babel__preset-env": "^7",
     "@types/jest": "^26.0.23",
+    "@types/jsdom": "^16",
     "@types/testing-library__jest-dom": "^5",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
@@ -48,15 +49,22 @@
     "graphql": "14.7.0",
     "history": "5.2.0",
     "husky": "5.1.1",
+    "ioredis": "4.27.9",
     "jest": "27.5.1",
+    "jsdom": "16.7.0",
     "lerna": "3.20.2",
     "lint-staged": "^10.5.4",
+    "mongoose": "6.2.3",
     "pinst": "^2.1.6",
     "prettier": "^2.2.1",
     "react": "17.0.2",
+    "sass": "^1.56.1",
     "ts-jest": "27.1.4",
     "tsc-watch": "^4.2.9",
-    "typescript": "4.5.4"
+    "typescript": "4.5.4",
+    "vite": "3.2.3",
+    "vitest": "0.25.2",
+    "vitest-fetch-mock": "0.2.1"
   },
   "workspaces": [
     "packages/*"
@@ -87,7 +95,10 @@
     ],
     "moduleNameMapper": {
       "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
-    }
+    },
+    "setupFiles": [
+      "./jest/setup.js"
+    ]
   },
   "dependenciesMeta": {
     "open@7.4.2": {

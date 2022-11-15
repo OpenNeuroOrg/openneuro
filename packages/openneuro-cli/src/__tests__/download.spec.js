@@ -1,13 +1,13 @@
 import { checkDestination } from '../download.js'
 
-jest.mock('../config.js')
+vi.mock('../config.js')
 
 let errorSpy
 let dirSpy
 
 beforeEach(() => {
-  errorSpy = jest.spyOn(console, 'error').mockImplementation()
-  dirSpy = jest.spyOn(console, 'dir').mockImplementation()
+  errorSpy = vi.spyOn(console, 'error').mockImplementation()
+  dirSpy = vi.spyOn(console, 'dir').mockImplementation()
 })
 afterEach(() => {
   errorSpy.mockRestore()

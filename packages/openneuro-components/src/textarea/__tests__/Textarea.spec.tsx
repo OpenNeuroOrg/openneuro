@@ -11,7 +11,7 @@ describe('Textarea component', () => {
         type="inline"
         name="inline test"
         label="in-label"
-        setValue={jest.fn()}
+        setValue={vi.fn()}
       />,
     )
     const textbox = screen.getByRole('textbox')
@@ -26,7 +26,7 @@ describe('Textarea component', () => {
         type="float"
         name="float test"
         label="float-label"
-        setValue={jest.fn()}
+        setValue={vi.fn()}
       />,
     )
     const textbox = screen.getByRole('textbox')

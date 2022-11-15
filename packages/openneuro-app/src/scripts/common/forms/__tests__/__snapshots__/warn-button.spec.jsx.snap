@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`common/forms/WarnButton renders successfully 1`] = `
+exports[`common/forms/WarnButton > renders successfully 1`] = `
 <DocumentFragment>
   <span
     class=""
@@ -17,7 +17,7 @@ exports[`common/forms/WarnButton renders successfully 1`] = `
 </DocumentFragment>
 `;
 
-exports[`common/forms/WarnButton renders with warnings disable 1`] = `
+exports[`common/forms/WarnButton > renders with warnings disable 1`] = `
 <DocumentFragment>
   <span
     class=""

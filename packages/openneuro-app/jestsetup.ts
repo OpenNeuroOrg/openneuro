@@ -12,4 +12,4 @@ if (!Object.fromEntries) {
   fromEntries.shim()
 }
 
-jest.mock('./src/scripts/config')
+vi.mock('./src/scripts/config')

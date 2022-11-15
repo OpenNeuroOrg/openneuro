@@ -4,8 +4,8 @@ import {
   elasticRelayConnection,
 } from '../dataset-search'
 
-jest.mock('../../../elasticsearch/elastic-client.js')
-jest.mock('../../../config.js')
+vi.mock('../../../elasticsearch/elastic-client.js')
+vi.mock('../../../config.js')
 
 describe('dataset search resolvers', () => {
   describe('encodeCursor()', () => {
@@ -46,14 +46,14 @@ describe('dataset search resolvers', () => {
         },
       }
       const connection = await elasticRelayConnection(emptyApiResponse, {
-        dataset: jest.fn(),
+        dataset: vi.fn(),
       })
       expect(connection).toMatchObject(nullRelayConnection)
     })
 
     it('returns a relay cursor for ApiResponse with results', () => {
       const mockResolvers = {
-        dataset: jest.fn(),
+        dataset: vi.fn(),
       }
 
       const expectedApiResponse = {

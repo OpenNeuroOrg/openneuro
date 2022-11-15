@@ -7,8 +7,8 @@ import {
 } from '../description.js'
 
 // Mock requests to Datalad service
-jest.mock('superagent')
-jest.mock('../../config.js')
+vi.mock('superagent')
+vi.mock('../../config.js')
 
 describe('datalad dataset descriptions', () => {
   describe('appendSeniorAuthor', () => {

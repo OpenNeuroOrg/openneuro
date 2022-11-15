@@ -1,13 +1,12 @@
-import fetchMock from 'jest-fetch-mock'
 import { importRemoteDataset, allowedImportUrl } from '../importRemoteDataset'
 import { checkDatasetWrite } from '../../permissions'
 
-jest.mock('../../../config')
-jest.mock('../../permissions')
+vi.mock('../../../config')
+vi.mock('../../permissions')
 
 describe('importRemoteDataset mutation', () => {
   it('given a user with access, it creates an import record for later processing', () => {
-    fetchMock.mockOnce(JSON.stringify(true))
+    fetch.mockOnce(JSON.stringify(true))
     importRemoteDataset(
       {},
       { datasetId: 'ds000000', url: '' },

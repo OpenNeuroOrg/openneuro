@@ -11,7 +11,7 @@ const dir = {
 
 describe('FileTreeUnloadedDirectory component', () => {
   it('calls fetchMoreDirectory when clicked', () => {
-    const fetchMore = jest.fn()
+    const fetchMore = vi.fn()
     render(
       <DatasetQueryContext.Provider value={{ fetchMore }}>
         <FileTreeUnloadedDirectory datasetId={'ds000001'} directory={dir} />

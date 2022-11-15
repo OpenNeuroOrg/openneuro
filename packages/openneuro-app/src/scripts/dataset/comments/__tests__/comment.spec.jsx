@@ -3,7 +3,7 @@ import { render } from '@testing-library/react'
 import Comment from '../comment.jsx'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
-jest.mock('date-fns/formatDistanceToNow')
+vi.mock('date-fns/formatDistanceToNow')
 
 const emptyState =
   '{"blocks":[{"key":"3sm42","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'

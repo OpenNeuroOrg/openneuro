@@ -9,8 +9,8 @@ window.matchMedia =
   function () {
     return {
       matches: false,
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
     }
   }
 

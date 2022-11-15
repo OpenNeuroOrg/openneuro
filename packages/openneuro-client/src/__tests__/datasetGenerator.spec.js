@@ -59,7 +59,7 @@ describe('datasetGenerator()', () => {
     const mockQuery = {}
     // To keep this test from being tied to apollo-client, mock the query method
     const mockClient = {
-      query: jest.fn(queryArgs => {
+      query: vi.fn(queryArgs => {
         const cursor = queryArgs.variables.cursor
         if (cursor === undefined) {
           return firstResult

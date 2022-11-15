@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`UpdateDatasetPermissions mutation renders with default props 1`] = `
+exports[`UpdateDatasetPermissions mutation > renders with default props 1`] = `
 <DocumentFragment>
   <button
     aria-label="Share"
@@ -13,7 +13,7 @@ exports[`UpdateDatasetPermissions mutation renders with default props 1`] = `
 </DocumentFragment>
 `;
 
-exports[`UpdateDatasetPermissions mutation renders with typical props 1`] = `
+exports[`UpdateDatasetPermissions mutation > renders with typical props 1`] = `
 <DocumentFragment>
   <button
     aria-label="Share"

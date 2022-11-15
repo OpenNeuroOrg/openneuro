@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import * as pagination from '../pagination.js'
 import { Types } from 'mongoose'

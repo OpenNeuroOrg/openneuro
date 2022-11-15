@@ -12,7 +12,7 @@ export const datasetType_available = [
 
 describe('RadioGroup component', () => {
   it('has selectable options', async () => {
-    const setSelected = jest.fn()
+    const setSelected = vi.fn()
     render(
       <RadioGroup
         setSelected={setSelected}

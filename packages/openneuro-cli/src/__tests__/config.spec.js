@@ -1,15 +1,16 @@
+import { vi } from 'vitest'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import mkdirp from 'mkdirp'
+import MemoryFs from 'metro-memory-fs'
 import { getConfig, saveConfig, getToken } from '../config'
 
+vi.mock('fs', () => new MemoryFs())
 const HOME = os.homedir()
 
-// Must be require for Jest's implementation
-jest.mock('fs', () => new (require('metro-memory-fs'))())
-beforeEach(() => {
-  require('fs').reset()
+beforeEach(async () => {
+  fs.reset()
+  const mkdirp = await vi.importActual('mkdirp')
   mkdirp.sync(HOME)
 })
 

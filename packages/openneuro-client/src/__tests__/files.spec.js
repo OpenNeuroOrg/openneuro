@@ -1,7 +1,7 @@
 import * as files from '../files'
 
-jest.mock('../client')
-jest.mock('../../../openneuro-server/src/config.js')
+vi.mock('../client')
+vi.mock('../../../openneuro-server/src/config.js')
 
 describe('files.js', () => {
   describe('sortFiles()', () => {

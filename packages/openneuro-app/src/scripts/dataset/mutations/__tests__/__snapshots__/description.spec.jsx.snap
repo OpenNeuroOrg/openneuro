@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`UpdateDescription mutation renders with common props 1`] = `
+exports[`UpdateDescription mutation > renders with common props 1`] = `
 <DocumentFragment>
   Mutation mock
 </DocumentFragment>

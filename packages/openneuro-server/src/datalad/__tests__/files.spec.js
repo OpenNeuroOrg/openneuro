@@ -6,7 +6,7 @@ import {
   computeTotalSize,
 } from '../files.js'
 
-jest.mock('../../config.js')
+vi.mock('../../config.js')
 
 const filename = 'sub-01/anat/sub-01_T1w.nii.gz'
 
@@ -106,15 +106,17 @@ describe('datalad files', () => {
     })
   })
   describe('computeTotalSize()', () => {
-    const mockFileSizes = [
-      { filename: 'README', size: 234 },
-      { filename: 'dataset_description.json', size: 432 },
-      { filename: 'sub-01/anat/sub-01_T1w.nii.gz', size: 10858 },
-      {
-        filename: 'sub-01/func/sub-01_task-onebacktask_run-01_bold.nii.gz',
-        size: 1945682,
-      },
-    ]
-    expect(computeTotalSize(mockFileSizes)).toBe(1957206)
+    it('computes the size correctly', () => {
+      const mockFileSizes = [
+        { filename: 'README', size: 234 },
+        { filename: 'dataset_description.json', size: 432 },
+        { filename: 'sub-01/anat/sub-01_T1w.nii.gz', size: 10858 },
+        {
+          filename: 'sub-01/func/sub-01_task-onebacktask_run-01_bold.nii.gz',
+          size: 1945682,
+        },
+      ]
+      expect(computeTotalSize(mockFileSizes)).toBe(1957206)
+    })
   })
 })

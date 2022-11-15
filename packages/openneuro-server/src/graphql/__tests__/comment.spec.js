@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import { deleteComment, flatten } from '../resolvers/comment'
 import Comment from '../../models/comment'
@@ -55,11 +57,13 @@ describe('comment resolver helpers', () => {
   })
 
   describe('flatten', () => {
-    const arrarr = [
-      [1, 2, 3],
-      [4, 5],
-    ]
-    const arr = flatten(arrarr)
-    expect(arr).toEqual([1, 2, 3, 4, 5])
+    it('unrolls an array', () => {
+      const arrarr = [
+        [1, 2, 3],
+        [4, 5],
+      ]
+      const arr = flatten(arrarr)
+      expect(arr).toEqual([1, 2, 3, 4, 5])
+    })
   })
 })

@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import request from 'superagent'
 import { createDataset } from '../dataset.js'
@@ -5,21 +7,21 @@ import { createSnapshot } from '../snapshots.js'
 import { getDatasetWorker } from '../../libs/datalad-service'
 
 // Mock requests to Datalad service
-jest.mock('superagent')
-jest.mock('../../libs/redis.js', () => ({
+vi.mock('superagent')
+vi.mock('../../libs/redis.js', () => ({
   redis: {
-    del: jest.fn(),
+    del: vi.fn(),
   },
   redlock: {
-    lock: jest.fn().mockImplementation(() => ({ unlock: jest.fn() })),
+    lock: vi.fn().mockImplementation(() => ({ unlock: vi.fn() })),
   },
 }))
 // Mock draft files calls
-jest.mock('../draft.js', () => ({
+vi.mock('../draft.js', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
-jest.mock('../../config.js')
-jest.mock('../../libs/notifications.js')
+vi.mock('../../config.js')
+vi.mock('../../libs/notifications.js')
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {

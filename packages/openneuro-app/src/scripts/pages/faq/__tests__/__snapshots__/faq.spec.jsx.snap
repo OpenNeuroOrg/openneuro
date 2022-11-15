@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`faq/faq/Faq renders successfully 1`] = `
+exports[`faq/faq/Faq > renders successfully 1`] = `
 <DocumentFragment>
   <div
     class="faqs-accordion on-accordion-wrapper"

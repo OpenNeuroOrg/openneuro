@@ -1,13 +1,15 @@
+import { vi } from 'vitest'
+globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import request from 'superagent'
 import { createDataset, datasetsFilter, testBlacklist } from '../dataset.js'
 import { getDatasetWorker } from '../../libs/datalad-service'
 
 // Mock requests to Datalad service
-jest.mock('superagent')
-jest.mock('../../libs/redis.js')
-jest.mock('../../config.js')
-jest.mock('../../libs/notifications.js')
+vi.mock('superagent')
+vi.mock('../../libs/redis.js')
+vi.mock('../../config.js')
+vi.mock('../../libs/notifications.js')
 
 describe('dataset model operations', () => {
   describe('createDataset()', () => {

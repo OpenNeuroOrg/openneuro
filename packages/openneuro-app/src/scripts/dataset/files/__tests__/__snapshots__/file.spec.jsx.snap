@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`File component renders for dataset snapshots 1`] = `
+exports[`File component > renders for dataset snapshots 1`] = `
 <DocumentFragment>
   <span
     aria-label=""
@@ -61,7 +61,7 @@ exports[`File component renders for dataset snapshots 1`] = `
 </DocumentFragment>
 `;
 
-exports[`File component renders with common props 1`] = `
+exports[`File component > renders with common props 1`] = `
 <DocumentFragment>
   <span
     aria-label=""

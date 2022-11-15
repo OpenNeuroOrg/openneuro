@@ -61,11 +61,10 @@ const checkVersions = (serverVersion, clientVersion) => {
   }
 }
 
-export const middlewareAuthLink = (uri, getAuthorization, fetch) => {
+export const middlewareAuthLink = (uri, getAuthorization) => {
   // We have to setup authLink to inject credentials here
   const httpLink = createHttpLink({
     uri,
-    fetch: fetch === null ? undefined : fetch,
     credentials: 'same-origin',
   })
   if (getAuthorization) {
@@ -94,7 +93,7 @@ const compareVersionsLink = clientVersion =>
       ),
   )
 
-const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
+const createLink = (uri, getAuthorization, enableWebsocket) => {
   return split(
     ({ query }) => {
       /**
@@ -109,10 +108,8 @@ const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
         definition.operation === 'subscription'
       )
     },
-    enableWebsocket
-      ? wsLink(uri)
-      : middlewareAuthLink(uri, getAuthorization, fetch),
-    middlewareAuthLink(uri, getAuthorization, fetch),
+    enableWebsocket ? wsLink(uri) : middlewareAuthLink(uri, getAuthorization),
+    middlewareAuthLink(uri, getAuthorization),
   )
 }
 
@@ -123,7 +120,6 @@ export const createClient = (
   uri,
   {
     getAuthorization = undefined,
-    fetch = undefined,
     clientVersion = undefined,
     links = [],
     ssrMode = false,
@@ -135,7 +131,7 @@ export const createClient = (
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),
     ...links,
-    createLink(uri, getAuthorization, fetch, enableWebsocket),
+    createLink(uri, getAuthorization, enableWebsocket),
   ])
 
   const apolloClientOptions = {

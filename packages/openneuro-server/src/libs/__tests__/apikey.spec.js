@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { apiKeyFactory } from '../apikey.js'
 import config from '../../config.js'
 
-jest.mock('../../config.js')
+vi.mock('../../config.js')
 
 const userMock = {
   id: '1337',

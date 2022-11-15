@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+
 // mock for superagent - __mocks__/superagent.js
 class MockResponse {
   status() {
@@ -10,14 +12,14 @@ class MockResponse {
     return {}
   }
   get() {
-    return jest.fn()
+    return vi.fn()
   }
   toError() {
-    return jest.fn()
+    return vi.fn()
   }
 }
 
-const createRequestStub = obj => jest.fn(() => obj)
+const createRequestStub = obj => vi.fn(() => obj)
 
 function Request() {
   this.mockResponse = new MockResponse()
@@ -40,7 +42,7 @@ function Request() {
       return resolve(cb(this.mockResponse))
     })
   }
-  this.end = jest.fn().mockImplementation(callback => {
+  this.end = vi.fn().mockImplementation(callback => {
     if (this.mockDelay) {
       this.delayTimer = setTimeout(
         callback,
@@ -66,4 +68,4 @@ function Request() {
   }
 }
 
-module.exports = new Request()
+export default new Request()

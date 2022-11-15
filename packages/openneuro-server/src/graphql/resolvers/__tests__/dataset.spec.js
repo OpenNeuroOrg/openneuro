@@ -1,11 +1,13 @@
+import { vi } from 'vitest'
+globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import request from 'superagent'
 import * as ds from '../dataset'
 
-jest.mock('superagent')
-jest.mock('ioredis')
-jest.mock('../../../config.js')
-jest.mock('../../../libs/notifications.js')
+vi.mock('superagent')
+vi.mock('ioredis')
+vi.mock('../../../config.js')
+vi.mock('../../../libs/notifications.js')
 
 describe('dataset resolvers', () => {
   beforeEach(() => {
@@ -148,7 +150,7 @@ describe('dataset resolvers', () => {
       mockingoose.resetAll()
       request.post.mockClear()
     })
-    it('makes correct delete call to datalad', done => {
+    it('makes correct delete call to datalad', () => {
       // pass checkDatasetExists()
       mockingoose.Dataset.toReturn(true, 'count')
       // capture and check datalad delete request
@@ -165,7 +167,7 @@ describe('dataset resolvers', () => {
         }),
       })
 
-      ds.deleteFiles(
+      return ds.deleteFiles(
         null,
         { datasetId: 'ds999999', files: [{ path: '/sub-99' }] },
         {
@@ -175,7 +177,7 @@ describe('dataset resolvers', () => {
             admin: true,
           },
         },
-      ).then(() => done())
+      )
     })
   })
 })

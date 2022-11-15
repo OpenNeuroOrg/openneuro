@@ -4,7 +4,7 @@ describe('SearchContainer component', () => {
   describe('setDefaultSearch', () => {
     it('updates default state when a modality is provided differing from the default', () => {
       const context = { modality_selected: 'MRI' }
-      const setContext = jest.fn()
+      const setContext = vi.fn()
       setDefaultSearch(
         'MRI',
         context,
@@ -25,7 +25,7 @@ describe('SearchContainer component', () => {
         modality_selected: 'MRI',
         datasetType_selected: 'All Public',
       }
-      const setContext = jest.fn().mockImplementation(arg => {
+      const setContext = vi.fn().mockImplementation(arg => {
         context = arg(context)
       })
       setDefaultSearch(
@@ -41,7 +41,7 @@ describe('SearchContainer component', () => {
         modality_selected: 'PET',
         datasetType_selected: 'All Public',
       }
-      const setContext = jest.fn().mockImplementation(arg => {
+      const setContext = vi.fn().mockImplementation(arg => {
         context = arg(context)
       })
       setDefaultSearch(

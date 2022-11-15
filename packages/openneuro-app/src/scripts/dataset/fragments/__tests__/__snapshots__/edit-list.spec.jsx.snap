@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`EditList component renders with default props 1`] = `
+exports[`EditList component > renders with default props 1`] = `
 <DocumentFragment>
   <div
     class="edit-list-group"

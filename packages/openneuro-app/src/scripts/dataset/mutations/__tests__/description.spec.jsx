@@ -7,9 +7,9 @@ import UpdateDescription, {
   UPDATE_DESCRIPTION_LIST,
 } from '../description.jsx'
 
-const mockMutation = jest.fn()
-jest.mock('@apollo/client/react/components', () => ({
-  ...jest.requireActual('@apollo/client/react/components'),
+const mockMutation = vi.fn()
+vi.mock('@apollo/client/react/components', () => ({
+  ...vi.importActual('@apollo/client/react/components'),
   Mutation: props => {
     mockMutation(props)
     return <>Mutation mock</>
@@ -23,7 +23,7 @@ describe('UpdateDescription mutation', () => {
         datasetId="ds001"
         field="Name"
         value="New Name"
-        done={jest.fn()}
+        done={vi.fn()}
       />,
       { wrapper: MockedProvider },
     )
@@ -35,7 +35,7 @@ describe('UpdateDescription mutation', () => {
         datasetId="ds001"
         field="Name"
         value="New Name"
-        done={jest.fn()}
+        done={vi.fn()}
       />,
       { wrapper: MockedProvider },
     )
@@ -49,7 +49,7 @@ describe('UpdateDescription mutation', () => {
         datasetId="ds001"
         field="Authors"
         value={['John Doe', 'Jane Doe']}
-        done={jest.fn()}
+        done={vi.fn()}
       />,
       { wrapper: MockedProvider },
     )

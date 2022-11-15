@@ -8,7 +8,7 @@ const loginUrls = {
   orcid: 'https://openneuro.org/crn/auth/orcid',
 }
 
-const toggle = jest.fn()
+const toggle = vi.fn()
 
 describe('UserLoginModal component', () => {
   it('Google login link has correctly formed auth URL', () => {

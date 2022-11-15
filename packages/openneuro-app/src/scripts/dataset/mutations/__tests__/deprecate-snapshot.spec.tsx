@@ -27,7 +27,7 @@ describe('DeprecateVersion mutation', () => {
     const history = createMemoryHistory({
       initialEntries: [`/datasets/${datasetId}/versions/${tag}/deprecate`],
     })
-    const historyPushSpy = jest.spyOn(history, 'push')
+    const historyPushSpy = vi.spyOn(history, 'push')
     const snapshotId = `${datasetId}:${tag}`
     const deprecateSnapshotMock = {
       request: {

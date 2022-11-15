@@ -1,3 +1,4 @@
+import config from '../config.js'
 import { indexDataset, queryForIndex, indexingToken } from '@openneuro/search'
 import { elasticClient } from './elastic-client'
 import {
@@ -13,7 +14,7 @@ import { HttpLink } from '@apollo/client/link/http'
  * Setup SchemaLink based client for querying
  */
 export const schemaLinkClient = (): ApolloClient<NormalizedCacheObject> => {
-  const accessToken = indexingToken()
+  const accessToken = indexingToken(config.auth.jwt.secret)
   const authLink = setContext((_, { headers }) => {
     return {
       headers: {
@@ -24,7 +25,6 @@ export const schemaLinkClient = (): ApolloClient<NormalizedCacheObject> => {
   })
   const httpLink = new HttpLink({
     uri: process.env.GRAPHQL_URI,
-    fetch,
   })
   return new ApolloClient({
     link: from([authLink, httpLink]),

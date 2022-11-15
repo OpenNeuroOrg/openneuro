@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`SaveButton component renders with default props 1`] = `
+exports[`SaveButton component > renders with default props 1`] = `
 <DocumentFragment>
   <button
     aria-label="Save"

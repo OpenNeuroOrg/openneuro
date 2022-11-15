@@ -25,7 +25,7 @@
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "1.0.4",
     "react": "^17.0.1"
   },
   "scripts": {
@@ -56,11 +56,11 @@
   },
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
-    "@types/mkdirp": "^1.0.1",
+    "@types/mkdirp": "1.0.2",
     "@types/node": "18.11.9",
     "core-js": "^3.10.1",
     "jest-fetch-mock": "^3.0.3",
-    "metro-memory-fs": "0.61.0"
+    "metro-memory-fs": "^0.73.3"
   },
   "publishConfig": {
     "access": "public"

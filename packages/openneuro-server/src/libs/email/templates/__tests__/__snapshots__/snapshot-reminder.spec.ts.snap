@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`email template -> comment created renders with expected arguments 1`] = `
+exports[`email template -> comment created > renders with expected arguments 1`] = `
 "<html>
 <head>
 <style>

@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import { getAccessionNumber } from '../dataset.js'
 

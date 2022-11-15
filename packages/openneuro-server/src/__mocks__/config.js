@@ -1,9 +1,25 @@
-const config = jest.genMockFromModule('../config.js').default
-
-config.auth.jwt.secret = '123456'
-config.datalad.uri = 'datalad'
-config.datalad.workers = 4
-config.mongo.url = 'mongodb://'
-config.notifications.email.from = 'notifications@example.com'
+const config = {
+  auth: {
+    jwt: {
+      secret: '123456',
+    },
+  },
+  datalad: {
+    uri: 'datalad',
+    workers: 4,
+  },
+  mongo: {
+    url: 'mongodb://',
+  },
+  notifications: {
+    email: {
+      from: 'notifications@example.com',
+    },
+  },
+  elasticsearch: {},
+  doi: {
+    username: '',
+  },
+}
 
 export default config

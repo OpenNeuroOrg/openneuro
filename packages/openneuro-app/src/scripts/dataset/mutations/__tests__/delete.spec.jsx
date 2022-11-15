@@ -15,7 +15,7 @@ const deleteDatasetMock = {
       reason: 'test suite delete',
     },
   },
-  newData: jest.fn(() => ({
+  newData: vi.fn(() => ({
     data: {},
   })),
 }
@@ -28,7 +28,7 @@ const deleteDirMock = {
       files: [{ path: 'sub-99' }],
     },
   },
-  newData: jest.fn(() => ({
+  newData: vi.fn(() => ({
     data: {},
   })),
 }
@@ -60,7 +60,7 @@ describe('DeleteDir mutation', () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it('fires the correct mutation', done => {
+  it('fires the correct mutation', async () => {
     render(
       <MockedProvider mocks={[deleteDirMock]} addTypename={false}>
         <DeleteDir {...{ datasetId, path }} />
@@ -68,11 +68,10 @@ describe('DeleteDir mutation', () => {
     )
 
     // click "Delete" button
-    fireEvent.click(screen.getByRole('button'))
+    await fireEvent.click(screen.getByRole('button'))
     // confirm delete
-    fireEvent.click(screen.getByLabelText('confirm'))
+    await fireEvent.click(screen.getByLabelText('confirm'))
 
     expect(deleteDirMock.newData).toHaveBeenCalled()
-    done()
   })
 })
