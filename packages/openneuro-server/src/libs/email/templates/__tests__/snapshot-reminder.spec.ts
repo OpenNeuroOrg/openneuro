@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { snapshotReminder } from '../snapshot-reminder'
 
 describe('email template -> comment created', () => {

@@ -7,9 +7,6 @@
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
   "license": "MIT",
-  "jest": {
-    "testEnvironment": "node"
-  },
   "bin": "./src/index.ts",
   "dependencies": {
     "@apollo/client": "3.4.17",
@@ -32,7 +29,8 @@
     "@types/jsonwebtoken": "^8",
     "@types/node": "18.11.9",
     "@types/tsc-watch": "^4",
-    "core-js": "^3.10.1"
+    "core-js": "^3.10.1",
+    "vitest": "^0.25.2"
   },
   "publishConfig": {
     "access": "public"

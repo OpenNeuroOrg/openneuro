@@ -35,31 +35,13 @@
     "prepack": "rm src/lerna.json && cp ../../lerna.json src/lerna.json",
     "postpack": "rm src/lerna.json && ln -sf ../../../lerna.json src/lerna.json"
   },
-  "jest": {
-    "setupFiles": [
-      "./jest.setup.js"
-    ],
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "**/*.js",
-      "!**/*.spec.js",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!bids-validator).+\\.js$"
-    ],
-    "moduleNameMapper": {
-      "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
-    }
-  },
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
     "@types/mkdirp": "1.0.2",
     "@types/node": "18.11.9",
     "core-js": "^3.10.1",
-    "jest-fetch-mock": "^3.0.3",
-    "metro-memory-fs": "^0.73.3"
+    "metro-memory-fs": "^0.73.3",
+    "vitest": "^0.25.2"
   },
   "publishConfig": {
     "access": "public"

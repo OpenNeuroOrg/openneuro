@@ -31,7 +31,6 @@
     "@types/babel__core": "^7",
     "@types/babel__plugin-transform-runtime": "^7",
     "@types/babel__preset-env": "^7",
-    "@types/jest": "^26.0.23",
     "@types/jsdom": "^16",
     "@types/testing-library__jest-dom": "^5",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
@@ -50,7 +49,6 @@
     "history": "5.2.0",
     "husky": "5.1.1",
     "ioredis": "4.27.9",
-    "jest": "27.5.1",
     "jsdom": "16.7.0",
     "lerna": "3.20.2",
     "lint-staged": "^10.5.4",
@@ -59,7 +57,6 @@
     "prettier": "^2.2.1",
     "react": "17.0.2",
     "sass": "^1.56.1",
-    "ts-jest": "27.1.4",
     "tsc-watch": "^4.2.9",
     "typescript": "4.5.4",
     "vite": "3.2.3",
@@ -72,32 +69,6 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
       "prettier --write"
-    ]
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "projects": [
-      "packages/*"
-    ],
-    "collectCoverageFrom": [
-      "**/*.{js,jsx,ts,tsx}",
-      "!**/*.spec.{js,jsx,ts,tsx}",
-      "!**/node_modules/**",
-      "!**/vendor/**",
-      "!**/.yarn/**",
-      "!**/dist/**",
-      "!**/*.d.ts",
-      "!**/mock-content/**"
-    ],
-    "coverageProvider": "v8",
-    "testPathIgnorePatterns": [
-      "dist"
-    ],
-    "moduleNameMapper": {
-      "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
-    },
-    "setupFiles": [
-      "./jest/setup.js"
     ]
   },
   "dependenciesMeta": {

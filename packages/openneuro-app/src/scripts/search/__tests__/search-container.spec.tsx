@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest'
 import { setDefaultSearch } from '../search-container'
 
 describe('SearchContainer component', () => {

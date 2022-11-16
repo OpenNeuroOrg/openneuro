@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { ownerUnsubscribed } from '../owner-unsubscribed'
 
 describe('email template -> comment created', () => {

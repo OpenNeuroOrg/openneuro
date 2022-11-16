@@ -1,12 +1,15 @@
+import { describe, it, expect, vi } from 'vitest'
 import { importRemoteDataset, allowedImportUrl } from '../importRemoteDataset'
-import { checkDatasetWrite } from '../../permissions'
+import createFetchMock from 'vitest-fetch-mock'
 
 vi.mock('../../../config')
 vi.mock('../../permissions')
 
 describe('importRemoteDataset mutation', () => {
   it('given a user with access, it creates an import record for later processing', () => {
-    fetch.mockOnce(JSON.stringify(true))
+    const fetchMock = createFetchMock(vi)
+    fetchMock.doMock()
+    fetchMock.mockOnce(JSON.stringify(true))
     importRemoteDataset(
       {},
       { datasetId: 'ds000000', url: '' },

@@ -10,6 +10,7 @@ vi.mock('../../../uploader/uploader-view.jsx', () => ({
   default: () => 'mocked UploaderView',
 }))
 vi.mock('react-router-dom', async () => ({
+  // @ts-ignore-check
   ...(await vi.importActual('react-router-dom')),
   useNavigate: () => navigate,
 }))
