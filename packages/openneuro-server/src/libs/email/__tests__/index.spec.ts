@@ -1,4 +1,3 @@
-import { describe, it, expect, vi } from 'vitest'
 import { mailjetFormat } from '../index'
 
 vi.mock('../../../config.js')

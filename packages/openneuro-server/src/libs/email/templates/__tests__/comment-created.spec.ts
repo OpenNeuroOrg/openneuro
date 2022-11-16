@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { commentCreated } from '../comment-created'
 
 describe('email template -> comment created', () => {

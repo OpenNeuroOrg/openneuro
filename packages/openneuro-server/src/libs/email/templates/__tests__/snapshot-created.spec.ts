@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { snapshotCreated } from '../snapshot-created'
 
 describe('email template -> comment created', () => {

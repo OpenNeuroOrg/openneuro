@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { datasetDeleted } from '../dataset-deleted'
 
 describe('email template -> comment created', () => {

@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { validateUrl } from '../validateUrl'
 
 describe('validateUrl', () => {

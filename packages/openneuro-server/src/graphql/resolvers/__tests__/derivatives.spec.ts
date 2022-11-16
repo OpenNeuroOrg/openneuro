@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { githubDerivativeQuery, derivativeObject } from '../derivatives'
 
 describe('GraphQL derivatives', () => {

@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { normalizeDOI } from '../normalize'
 
 describe('DOI normalize utility', () => {
