@@ -7,7 +7,6 @@ COPY package.json /srv/package.json
 COPY Pipfile /srv/Pipfile
 COPY Pipfile.lock /srv/Pipfile.lock
 COPY datalad_service /srv/datalad_service
-COPY hash-paths.js /hash-paths.js
 COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
