@@ -1,17 +1,27 @@
-import { vi } from 'vitest'
+import { vi, beforeEach } from 'vitest'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import MemoryFs from 'metro-memory-fs'
 import { getConfig, saveConfig, getToken } from '../config'
 
-vi.mock('fs', () => new MemoryFs())
-const HOME = os.homedir()
+const HOME = `${os.homedir()}`
+
+vi.mock('fs', () => {
+  return {
+    default: new (require('metro-memory-fs'))({
+      cwd: () => HOME,
+    }),
+  }
+})
 
 beforeEach(async () => {
   fs.reset()
-  const mkdirp = await vi.importActual('mkdirp')
-  mkdirp.sync(HOME)
+  // Create home path based on OS inside the memory fs
+  let paths = ''
+  for (const level of HOME.substring(1).split(path.sep)) {
+    paths = `${paths}${path.sep}${level}`
+    fs.mkdirSync(paths)
+  }
 })
 
 describe('config.js', () => {

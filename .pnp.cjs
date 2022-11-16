@@ -8720,7 +8720,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["core-js", "npm:3.18.0"],\
             ["elastic-apm-node", "npm:3.12.1"],\
             ["esm", "npm:3.2.25"],\
-            ["find-config", "npm:1.0.0"],\
             ["inquirer", "npm:5.2.0"],\
             ["jest-fetch-mock", "npm:3.0.3"],\
             ["jwt-decode", "npm:3.1.2"],\
@@ -17367,16 +17366,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["parseurl", "npm:1.3.3"],\
             ["statuses", "npm:1.5.0"],\
             ["unpipe", "npm:1.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["find-config", [\
-        ["npm:1.0.0", {\
-          "packageLocation": "./.yarn/cache/find-config-npm-1.0.0-4ba758cba6-446c8c1155.zip/node_modules/find-config/",\
-          "packageDependencies": [\
-            ["find-config", "npm:1.0.0"],\
-            ["user-home", "npm:2.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -29500,16 +29489,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/use-npm-3.1.1-7ba643714c-08a130289f.zip/node_modules/use/",\
           "packageDependencies": [\
             ["use", "npm:3.1.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["user-home", [\
-        ["npm:2.0.0", {\
-          "packageLocation": "./.yarn/cache/user-home-npm-2.0.0-a7b3877168-a3329faa95.zip/node_modules/user-home/",\
-          "packageDependencies": [\
-            ["user-home", "npm:2.0.0"],\
-            ["os-homedir", "npm:1.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\

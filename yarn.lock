@@ -5153,7 +5153,6 @@ __metadata:
     core-js: ^3.10.1
     elastic-apm-node: 3.12.1
     esm: ^3.0.16
-    find-config: ^1.0.0
     inquirer: ^5.2.0
     jest-fetch-mock: ^3.0.3
     jwt-decode: ^3.1.2
@@ -12213,15 +12212,6 @@ __metadata:
     statuses: ~1.5.0
     unpipe: ~1.0.0
   checksum: 617880460c5138dd7ccfd555cb5dde4d8f170f4b31b8bd51e4b646bb2946c30f7db716428a1f2882d730d2b72afb47d1f67cc487b874cb15426f95753a88965e
-  languageName: node
-  linkType: hard
-
-"find-config@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "find-config@npm:1.0.0"
-  dependencies:
-    user-home: ^2.0.0
-  checksum: 446c8c11551b4946ef8adaca00d595119826141c31d306f433a763d02162da4f4bc1de53ccbf2e0f6ccc76782951dca0c69b9a65c76a37bfbaa1705d0a1401b1
   languageName: node
   linkType: hard
 
@@ -22778,15 +22768,6 @@ resolve@^2.0.0-next.3:
   version: 3.1.1
   resolution: "use@npm:3.1.1"
   checksum: 08a130289f5238fcbf8f59a18951286a6e660d17acccc9d58d9b69dfa0ee19aa038e8f95721b00b432c36d1629a9e32a464bf2e7e0ae6a244c42ddb30bdd8b33
-  languageName: node
-  linkType: hard
-
-"user-home@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "user-home@npm:2.0.0"
-  dependencies:
-    os-homedir: ^1.0.0
-  checksum: a3329faa959fcd9e3e01a03347ca974f7f6b8896e6a634f29c61d8d5b61557d853c6fc5a6dff1a28e2da85b400d0e4490368a28de452ba8c41a2bf3a92cb110a
   languageName: node
   linkType: hard
 

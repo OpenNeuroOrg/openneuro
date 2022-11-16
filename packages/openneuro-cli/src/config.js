@@ -1,14 +1,21 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import findConfig from 'find-config'
 import jwtDecode from 'jwt-decode'
 
 /**
  * Get the nearest working configuration
  */
 export const getConfig = () => {
-  return findConfig('.openneuro')
+  const homePath = path.join(os.homedir(), '.openneuro')
+  const localPath = path.join(process.cwd(), '.openneuro')
+  if (fs.existsSync(homePath)) {
+    return homePath
+  } else if (fs.existsSync(localPath)) {
+    return localPath
+  } else {
+    return null
+  }
 }
 
 export const readConfig = () => {
