@@ -9,6 +9,7 @@ import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
 import { configuredClient } from './configuredClient.js'
 import { validateApiKey } from './validateApiKey'
+import { lsSnapshot } from './ls.js'
 
 /**
  * Login action to save an auth key locally
@@ -288,4 +289,27 @@ export const download = (datasetId, destination, cmd) => {
     return getDownload(destination, datasetId, null, apmTransaction, client)
   }
   apmTransaction.end()
+}
+
+/**
+ * List files for a snapshot
+ *
+ * @param {string} datasetId
+ * @param {object} cmd
+ */
+export const ls = (datasetId, cmd) => {
+  const client = configuredClient()
+  if (!cmd.snapshot) {
+    return getSnapshots(client)(datasetId).then(({ data }) => {
+      if (data.dataset && data.dataset.snapshots) {
+        const tags = data.dataset.snapshots.map(snap => snap.tag)
+        tags.reverse()
+        return promptTags(tags).then(choices => {
+          lsSnapshot(client, datasetId, choices.tag)
+        })
+      }
+    })
+  } else {
+    return lsSnapshot(client, datasetId, cmd.snapshot)
+  }
 }

@@ -50,21 +50,38 @@ export const getDatasetFiles = async (
   tree = null,
 ) => {
   const files = []
+  await _getDatasetFiles(client, datasetId, f => files.push(f), path, tree)
+  return files
+}
+
+/**
+ * Get an existing dataset's files
+ * @param {object} client GraphQL client
+ * @param {*} datasetId
+ */
+export const _getDatasetFiles = async (
+  client,
+  datasetId,
+  callback,
+  path = '',
+  tree = null,
+) => {
+  const files = []
   const { data } = await client.query({
     query: getDraftFiles,
     variables: { id: datasetId, tree },
   })
   for (const f of data.dataset.draft.files) {
     if (f.directory) {
-      const nestedFiles = await getDatasetFiles(
+      await _getDatasetFiles(
         client,
         datasetId,
+        callback,
         path ? `${path}/${f.filename}` : f.filename,
         f.id,
       )
-      files.push(...nestedFiles)
     } else {
-      files.push({
+      callback({
         ...f,
         filename: path ? `${path}/${f.filename}` : f.filename,
       })
