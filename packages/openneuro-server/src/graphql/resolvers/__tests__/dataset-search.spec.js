@@ -4,6 +4,7 @@ import {
   elasticRelayConnection,
 } from '../dataset-search'
 
+vi.mock('ioredis')
 vi.mock('../../../elasticsearch/elastic-client.js')
 vi.mock('../../../config.js')
 

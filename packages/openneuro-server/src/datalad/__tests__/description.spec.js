@@ -8,6 +8,7 @@ import {
 
 // Mock requests to Datalad service
 vi.mock('superagent')
+vi.mock('ioredis')
 vi.mock('../../config.js')
 
 describe('datalad dataset descriptions', () => {

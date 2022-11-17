@@ -1,6 +1,8 @@
 import { HasId } from '../../../utils/datasetOrSnapshot'
 import { brainlifeQuery } from '../brainlife'
 
+vi.mock('ioredis')
+
 describe('brainlife resolvers', () => {
   it('correctly queries drafts', () => {
     expect(brainlifeQuery({ id: 'ds000001' } as HasId).toString()).toEqual(

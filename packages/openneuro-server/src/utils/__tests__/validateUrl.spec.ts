@@ -1,5 +1,7 @@
 import { validateUrl } from '../validateUrl'
 
+vi.mock('ioredis')
+
 describe('validateUrl', () => {
   it('returns true for a regular HTTPS url', () => {
     expect(validateUrl('https://openneuro.org')).toBe(true)

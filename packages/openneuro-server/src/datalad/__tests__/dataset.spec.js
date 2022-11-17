@@ -7,6 +7,7 @@ import { getDatasetWorker } from '../../libs/datalad-service'
 
 // Mock requests to Datalad service
 vi.mock('superagent')
+vi.mock('ioredis')
 vi.mock('../../libs/redis.js')
 vi.mock('../../config.js')
 vi.mock('../../libs/notifications.js')

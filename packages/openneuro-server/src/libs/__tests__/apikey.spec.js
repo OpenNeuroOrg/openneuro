@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { apiKeyFactory } from '../apikey.js'
 import config from '../../config.js'
 
+vi.mock('ioredis')
 vi.mock('../../config.js')
 
 const userMock = {

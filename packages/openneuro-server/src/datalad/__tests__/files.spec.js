@@ -6,6 +6,7 @@ import {
   computeTotalSize,
 } from '../files.js'
 
+vi.mock('ioredis')
 vi.mock('../../config.js')
 
 const filename = 'sub-01/anat/sub-01_T1w.nii.gz'

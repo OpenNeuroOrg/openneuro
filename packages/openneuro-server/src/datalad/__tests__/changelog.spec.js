@@ -1,5 +1,6 @@
 import * as changelog from '../changelog.js'
 
+vi.mock('ioredis')
 vi.mock('../../config.js')
 
 describe('changelog editing tools', () => {

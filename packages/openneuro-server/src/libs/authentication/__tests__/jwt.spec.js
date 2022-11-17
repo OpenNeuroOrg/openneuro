@@ -1,6 +1,7 @@
 import User from '../../../models/user'
 import { addJWT } from '../jwt.js'
 
+vi.mock('ioredis')
 vi.mock('../../../config.js')
 vi.unmock('mongoose')
 

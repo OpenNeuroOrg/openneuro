@@ -3,6 +3,8 @@ globalThis.jest = vi
 import mockingoose from 'mockingoose'
 import { getAccessionNumber } from '../dataset.js'
 
+vi.mock('ioredis')
+
 describe('libs/dataset.js', () => {
   describe('getAccessionNumber', () => {
     beforeEach(() => {

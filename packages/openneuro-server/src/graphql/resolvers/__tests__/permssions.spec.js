@@ -1,5 +1,6 @@
 import { updatePermissions } from '../permissions'
 
+vi.mock('ioredis')
 vi.mock('../../permissions', () => ({
   checkDatasetAdmin: async () => Promise.resolve(),
 }))

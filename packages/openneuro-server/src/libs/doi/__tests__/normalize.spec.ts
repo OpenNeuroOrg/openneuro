@@ -1,5 +1,7 @@
 import { normalizeDOI } from '../normalize'
 
+vi.mock('ioredis')
+
 describe('DOI normalize utility', () => {
   it('returns null for non-DOI input', () => {
     expect(normalizeDOI('Sphinx of black quartz, judge my vow.')).toBe(null)

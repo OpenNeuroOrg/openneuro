@@ -4,6 +4,8 @@ import mockingoose from 'mockingoose'
 import { deleteComment, flatten } from '../resolvers/comment'
 import Comment from '../../models/comment'
 
+vi.mock('ioredis')
+
 const incrementHex = hex => {
   hex = hex.toString()
   const splitLen = 14

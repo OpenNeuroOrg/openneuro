@@ -1,5 +1,7 @@
 import IngestDataset from '../ingestDataset'
 
+vi.mock('ioredis')
+
 describe('IngestDataset model', () => {
   it('IngestDataset model fails if required fields are missing', () => {
     const model = new IngestDataset()

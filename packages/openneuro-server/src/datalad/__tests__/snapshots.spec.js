@@ -1,5 +1,6 @@
 import { vi } from 'vitest'
 globalThis.jest = vi
+vi.mock('ioredis')
 import mockingoose from 'mockingoose'
 import request from 'superagent'
 import { createDataset } from '../dataset.js'

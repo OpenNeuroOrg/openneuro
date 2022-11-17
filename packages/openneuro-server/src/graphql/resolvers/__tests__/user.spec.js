@@ -1,5 +1,7 @@
 import { users } from '../user.js'
 
+vi.mock('ioredis')
+
 describe('user resolvers', () => {
   describe('users()', () => {
     it('throws an error for non-admins', () => {

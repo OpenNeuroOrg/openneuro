@@ -3,6 +3,8 @@ import {
   getDatasetFromSnapshotId,
 } from '../datasetOrSnapshot'
 
+vi.mock('ioredis')
+
 describe('datasetOrSnapshot()', () => {
   it('resolves a dataset object correctly', () => {
     const dataset = {

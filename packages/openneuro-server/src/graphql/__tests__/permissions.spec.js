@@ -6,6 +6,8 @@ import {
   checkDatasetAdmin,
 } from '../permissions.js'
 
+vi.mock('ioredis')
+
 describe('resolver permissions helpers', () => {
   describe('datasetReadQuery()', () => {
     it('returns public for anonymous users', () => {
