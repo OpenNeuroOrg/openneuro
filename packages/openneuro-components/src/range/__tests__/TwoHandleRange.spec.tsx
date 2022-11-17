@@ -14,7 +14,7 @@ describe('TwoHandleRange component', () => {
       expect(stepping(99, 10)).toBe(100)
     })
   })
-  it('fires event when changed', async () => {
+  it('fires event when changed', () => {
     const onChange = vi.fn()
     render(
       <TwoHandleRange

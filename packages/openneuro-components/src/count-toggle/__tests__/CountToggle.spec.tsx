@@ -12,7 +12,7 @@ export const datasetType_available = [
 ]
 
 describe('CountToggle component', () => {
-  it('calls toggleClick on toggle', async () => {
+  it('calls toggleClick on toggle', () => {
     const toggleClick = vi.fn()
     const clicked = false
     const count = 3
