@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "tsBuildInfoFile": "../../.build-cache/server.tsbuildinfo"
+    "tsBuildInfoFile": "../../.build-cache/server.tsbuildinfo",
+    "types": ["vitest/globals"]
   },
   "include": ["./src"],
   "files": ["./src/lerna.json"],
