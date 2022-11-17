@@ -85,7 +85,6 @@
     "babel-eslint": "^10.1.0",
     "core-js": "^3.10.1",
     "ioredis-mock": "^8.2.2",
-    "mockingoose": "2.11.0",
     "nodemon": "^2.0.7",
     "supertest": "^3.0.0",
     "ts-node-dev": "1.1.6",

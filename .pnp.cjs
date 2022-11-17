@@ -8406,7 +8406,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jsdom", "npm:11.12.0"],\
             ["jsonwebtoken", "npm:8.5.1"],\
             ["mime-types", "npm:2.1.32"],\
-            ["mockingoose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.11.0"],\
             ["moment", "npm:2.29.1"],\
             ["mongoose", "npm:6.2.3"],\
             ["morgan", "npm:1.10.0"],\
@@ -21053,28 +21052,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["mkdirp-promise", "npm:5.0.1"],\
             ["mkdirp", "npm:1.0.4"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["mockingoose", [\
-        ["npm:2.11.0", {\
-          "packageLocation": "./.yarn/cache/mockingoose-npm-2.11.0-d2262672fc-13a11e5b34.zip/node_modules/mockingoose/",\
-          "packageDependencies": [\
-            ["mockingoose", "npm:2.11.0"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.11.0", {\
-          "packageLocation": "./.yarn/__virtual__/mockingoose-virtual-047f33f559/0/cache/mockingoose-npm-2.11.0-d2262672fc-13a11e5b34.zip/node_modules/mockingoose/",\
-          "packageDependencies": [\
-            ["mockingoose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.11.0"],\
-            ["@types/mongoose", null],\
-            ["mongoose", "npm:6.2.3"]\
-          ],\
-          "packagePeers": [\
-            "@types/mongoose",\
-            "mongoose"\
           ],\
           "linkType": "HARD"\
         }]\

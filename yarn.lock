@@ -5427,7 +5427,6 @@ __metadata:
     jsdom: ^11.6.2
     jsonwebtoken: ^8.3.0
     mime-types: ^2.1.19
-    mockingoose: 2.11.0
     moment: ^2.14.1
     mongoose: ^6.2.3
     morgan: ^1.6.1
@@ -16068,15 +16067,6 @@ fsevents@~2.3.2:
   bin:
     mkdirp: bin/cmd.js
   checksum: 3bce20ea525f9477befe458ab85284b0b66c8dc3812f94155af07c827175948cdd8114852ac6c6d82009b13c1048c37f6d98743eb019651ee25c39acc8aabe7d
-  languageName: node
-  linkType: hard
-
-"mockingoose@npm:2.11.0":
-  version: 2.11.0
-  resolution: "mockingoose@npm:2.11.0"
-  peerDependencies:
-    mongoose: ">=4.9.10"
-  checksum: 13a11e5b34f87a2c7cf61cd75496a745053232bfe3620d421763593a10c26b7b963a5f2dbdbbc68bd3366b664890bf4ba24765fd81186f32e0196e04f2487394
   languageName: node
   linkType: hard
 
