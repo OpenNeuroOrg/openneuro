@@ -1,11 +1,10 @@
 import { vi } from 'vitest'
-globalThis.jest = vi
 vi.mock('ioredis')
-import mockingoose from 'mockingoose'
 import request from 'superagent'
 import { createDataset } from '../dataset.js'
 import { createSnapshot } from '../snapshots.js'
 import { getDatasetWorker } from '../../libs/datalad-service'
+import { connect } from 'mongoose'
 
 // Mock requests to Datalad service
 vi.mock('superagent')
@@ -26,17 +25,11 @@ vi.mock('../../libs/notifications.js')
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {
-    beforeEach(() => {
-      mockingoose.resetAll()
-      // Setup a default sequence value to return for each test
-      mockingoose.Counter.toReturn(
-        { _id: 'dataset', sequence_value: 1 },
-        'findOne',
-      )
-    })
     it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async () => {
+      const user = { id: '1234' }
       const tag = 'snapshot'
-      const { id: dsId } = await createDataset(null, null, {
+      await connect(globalThis.__MONGO_URI__)
+      const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,
       })

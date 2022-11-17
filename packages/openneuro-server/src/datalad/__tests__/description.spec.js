@@ -90,37 +90,31 @@ describe('datalad dataset descriptions', () => {
       expect(Array.isArray(repaired.Funding)).toBe(true)
     })
   })
-  it('returns the parsed dataset_description.json object', end => {
+  it('returns the parsed dataset_description.json object', async () => {
     request.post.mockClear()
     request.__setMockResponse({
       body: { Name: 'Balloon Analog Risk-taking Task' },
       type: 'application/json',
     })
-    getDescriptionObject('ds000001')([
+    const description = await getDescriptionObject('ds000001')([
       { filename: 'dataset_description.json', id: '12345' },
-    ]).then(description => {
-      expect(description).toEqual({ Name: 'Balloon Analog Risk-taking Task' })
-      end()
-    })
+    ])
+    expect(description).toEqual({ Name: 'Balloon Analog Risk-taking Task' })
   })
-  it('handles a corrupted response', end => {
+  it('handles a corrupted response', async () => {
     request.post.mockClear()
     request.__setMockResponse({
       body: Buffer.from('0x5f3759df', 'hex'),
     })
-    getDescriptionObject('ds000001')([
+    const description = await getDescriptionObject('ds000001')([
       { filename: 'dataset_description.json', id: '12345' },
-    ]).then(description => {
-      expect(description).toEqual(defaultDescription)
-      end()
-    })
+    ])
+    expect(description).toEqual(defaultDescription)
   })
-  it('works without a dataset_description.json being present', end => {
-    getDescriptionObject('ds000001')([
+  it('works without a dataset_description.json being present', async () => {
+    const description = await getDescriptionObject('ds000001')([
       { filename: 'LICENSE', id: '12345' },
-    ]).then(description => {
-      expect(description).toEqual(defaultDescription)
-      end()
-    })
+    ])
+    expect(description).toEqual(defaultDescription)
   })
 })

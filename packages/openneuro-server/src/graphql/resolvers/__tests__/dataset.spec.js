@@ -1,6 +1,5 @@
 import { vi } from 'vitest'
-globalThis.jest = vi
-import mockingoose from 'mockingoose'
+import { connect } from 'mongoose'
 import request from 'superagent'
 import * as ds from '../dataset'
 
@@ -10,12 +9,8 @@ vi.mock('../../../config.js')
 vi.mock('../../../libs/notifications.js')
 
 describe('dataset resolvers', () => {
-  beforeEach(() => {
-    mockingoose.resetAll()
-    mockingoose.Counter.toReturn(
-      { _id: 'dataset', sequence_value: 1 },
-      'findOne',
-    )
+  beforeAll(() => {
+    connect(globalThis.__MONGO_URI__)
   })
   describe('createDataset()', () => {
     it('createDataset mutation succeeds', async () => {
@@ -147,12 +142,9 @@ describe('dataset resolvers', () => {
   })
   describe('deleteFiles', () => {
     beforeEach(() => {
-      mockingoose.resetAll()
       request.post.mockClear()
     })
     it('makes correct delete call to datalad', () => {
-      // pass checkDatasetExists()
-      mockingoose.Dataset.toReturn(true, 'count')
       // capture and check datalad delete request
       request.del = url => ({
         set: (header1, headerValue1) => ({

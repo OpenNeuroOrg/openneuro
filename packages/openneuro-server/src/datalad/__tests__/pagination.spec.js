@@ -1,9 +1,8 @@
 import { vi } from 'vitest'
-globalThis.jest = vi
 vi.mock('ioredis')
-import mockingoose from 'mockingoose'
 import * as pagination from '../pagination.js'
-import { Types } from 'mongoose'
+import { connect, Types } from 'mongoose'
+import Dataset from '../../models/dataset'
 const ObjectID = Types.ObjectId
 
 const base64 = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/
@@ -38,31 +37,23 @@ describe('pagination model operations', () => {
     })
   })
   describe('datasetsConnection()', () => {
-    beforeEach(() => {
-      mockingoose.resetAll()
-      mockingoose.Dataset.toReturn(
-        [
-          {
-            datasets: [
-              {
-                _id: ObjectID('5bef51a1ed211400c08e5524'),
-                id: 'ds001001',
-                created: new Date('2018-11-16T23:24:17.203Z'),
-                modified: new Date('2018-11-16T23:24:25.050Z'),
-                uploader: 'f8d5a57c-879a-40e6-b151-e34c4a28ff70',
-                revision: '262a8e610e32b5766cbf669acc71911c1ece7126',
-              },
-            ],
-            count: 1,
-          },
-        ],
-        'aggregate',
-      )
+    beforeAll(async () => {
+      await connect(globalThis.__MONGO_URI__)
+      const ds = new Dataset({
+        _id: ObjectID('5bef51a1ed211400c08e5524'),
+        id: 'ds001001',
+        created: new Date('2018-11-16T23:24:17.203Z'),
+        modified: new Date('2018-11-16T23:24:25.050Z'),
+        uploader: 'f8d5a57c-879a-40e6-b151-e34c4a28ff70',
+        revision: '262a8e610e32b5766cbf669acc71911c1ece7126',
+      })
+      await ds.save()
     })
     it('returns a connection shaped result', async () => {
       const res = await pagination.datasetsConnection({
         orderBy: { created: 'ascending' },
         limit: 5,
+        first: 10,
       })([])
       expect(res).toHaveProperty('pageInfo')
       expect(res).toHaveProperty('edges')
