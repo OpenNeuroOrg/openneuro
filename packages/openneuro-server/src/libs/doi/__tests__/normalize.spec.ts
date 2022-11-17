@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { normalizeDOI } from '../normalize'
 
 vi.mock('ioredis')

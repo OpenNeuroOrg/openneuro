@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import IngestDataset from '../ingestDataset'
 
 vi.mock('ioredis')

@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { validateUrl } from '../validateUrl'
 
 vi.mock('ioredis')

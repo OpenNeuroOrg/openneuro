@@ -32,6 +32,7 @@ export function keyRequest(state, key, options) {
  */
 export async function storeKey(state, key, file) {
   const f = await open(file, 'r')
+  // @ts-no-check
   const body = f.readableWebStream()
   const request = keyRequest(state, key, { body, method: 'POST' })
   const response = await fetch(request)
