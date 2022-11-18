@@ -1,5 +1,6 @@
-import fs from 'fs'
-import { fetch, Request, Headers } from 'fetch-h2'
+import { Readable } from 'stream'
+import { createWriteStream } from 'fs'
+import { open } from 'fs/promises'
 import { once } from 'events'
 
 /**
@@ -30,7 +31,9 @@ export function keyRequest(state, key, options) {
  * @param {string} file File path
  */
 export async function storeKey(state, key, file) {
-  const body = fs.createReadStream(file)
+  const f = await open(file, 'r')
+  // @ts-no-check
+  const body = f.readableWebStream()
   const request = keyRequest(state, key, { body, method: 'POST' })
   const response = await fetch(request)
   if (response.status === 200) {
@@ -53,8 +56,9 @@ export async function retrieveKey(state, key, file) {
     const request = keyRequest(state, key, { method: 'GET' })
     const response = await fetch(request)
     if (response.status === 200) {
-      const writable = fs.createWriteStream(file)
-      const readable = await response.readable()
+      const writable = createWriteStream(file)
+      // @ts-ignore-error ReadableStream<any> is more accurate here but response.body returns incompatible ReadableStream<Uint8Array>?
+      const readable = Readable.fromWeb(response.body)
       readable.pipe(writable)
       await once(readable, 'close')
       return true

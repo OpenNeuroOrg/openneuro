@@ -1,26 +1,25 @@
-import mockingoose from 'mockingoose'
+import { vi } from 'vitest'
 import request from 'superagent'
 import { createDataset, datasetsFilter, testBlacklist } from '../dataset.js'
 import { getDatasetWorker } from '../../libs/datalad-service'
+import { connect } from 'mongoose'
 
 // Mock requests to Datalad service
-jest.mock('superagent')
-jest.mock('../../libs/redis.js')
-jest.mock('../../config.js')
-jest.mock('../../libs/notifications.js')
+vi.mock('superagent')
+vi.mock('ioredis')
+vi.mock('../../libs/redis.js')
+vi.mock('../../config.js')
+vi.mock('../../libs/notifications.js')
 
 describe('dataset model operations', () => {
   describe('createDataset()', () => {
-    beforeEach(() => {
-      mockingoose.resetAll()
-      // Setup a default sequence value to return for each test
-      mockingoose.Counter.toReturn(
-        { _id: 'dataset', sequence_value: 1 },
-        'findOne',
-      )
+    beforeAll(() => {
+      // Setup MongoDB with mongodb-memory-server
+      connect(globalThis.__MONGO_URI__)
     })
     it('resolves to dataset id string', async () => {
-      const { id: dsId } = await createDataset(null, null, {
+      const user = { id: '1234' }
+      const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,
       })
@@ -28,9 +27,10 @@ describe('dataset model operations', () => {
       expect(dsId.slice(0, 2)).toBe('ds')
     })
     it('posts to the DataLad /datasets/{dsId} endpoint', async () => {
+      const user = { id: '1234' }
       // Reset call count for request.post
       request.post.mockClear()
-      const { id: dsId } = await createDataset(null, null, {
+      const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,
       })

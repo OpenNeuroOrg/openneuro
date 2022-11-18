@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import { getDatasetWorker } from '../libs/datalad-service'
 
 export const uploadUrl = (datasetId, uploadId) => {

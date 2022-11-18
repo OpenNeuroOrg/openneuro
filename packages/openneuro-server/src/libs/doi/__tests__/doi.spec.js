@@ -1,5 +1,7 @@
 import { template, formatBasicAuth } from '../index.js'
 
+vi.mock('ioredis')
+
 describe('DOI minting utils', () => {
   describe('auth()', () => {
     it('returns a base64 basic auth string', () => {

@@ -1,7 +1,9 @@
 import User from '../../../models/user'
 import { addJWT } from '../jwt.js'
 
-jest.mock('../../../config.js')
+vi.mock('ioredis')
+vi.mock('../../../config.js')
+vi.unmock('mongoose')
 
 describe('jwt auth', () => {
   describe('addJWT()', () => {

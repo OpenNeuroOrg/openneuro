@@ -34,39 +34,27 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
-    "@types/jest": "^26.0.23",
     "@types/mdx-js__react": "^1",
     "@types/prop-types": "^15",
     "@types/react-dom": "^17",
     "@types/react-router-dom": "5.3.3",
     "@types/react-slick": "^0",
     "@types/slick-carousel": "^1",
-    "@types/testing-library__jest-dom": "^5.14.0",
-    "babel-jest": "^27.0.2",
+    "@types/testing-library__jest-dom": "5.14.5",
     "core-js": "^3.14.0",
     "css-loader": "^5.2.1",
-    "jest": "27.5.1",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
     "typescript": "4.5.4",
-    "url-loader": "^1.0.1"
+    "url-loader": "^1.0.1",
+    "vitest": "^0.25.2"
   },
   "scripts": {
     "build": "tsc --build"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "testPathIgnorePatterns": [
-      "dist"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(css|less|scss|svg|png|jpg)$": "babel-jest",
-      "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
-    }
   },
   "gitHead": "5ab5597628b6ffd1f1d540320e297af0b0625af3"
 }

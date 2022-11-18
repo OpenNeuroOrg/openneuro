@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { UserLoginModal } from '../UserLoginModal'
@@ -8,7 +9,7 @@ const loginUrls = {
   orcid: 'https://openneuro.org/crn/auth/orcid',
 }
 
-const toggle = jest.fn()
+const toggle = vi.fn()
 
 describe('UserLoginModal component', () => {
   it('Google login link has correctly formed auth URL', () => {

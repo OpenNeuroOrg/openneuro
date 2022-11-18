@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { TwoHandleRange } from '../TwoHandleRange'
@@ -13,8 +14,8 @@ describe('TwoHandleRange component', () => {
       expect(stepping(99, 10)).toBe(100)
     })
   })
-  it('fires event when changed', async () => {
-    const onChange = jest.fn()
+  it('fires event when changed', () => {
+    const onChange = vi.fn()
     render(
       <TwoHandleRange
         min={0}

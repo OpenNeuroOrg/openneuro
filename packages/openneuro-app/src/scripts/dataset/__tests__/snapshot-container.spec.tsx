@@ -5,6 +5,9 @@ import '@testing-library/jest-dom/extend-expect'
 import { SnapshotContainer } from '../snapshot-container'
 import { MockAppWrapper } from '../../fixtures/mock-app-wrapper'
 import { dataset, snapshot } from '../../fixtures/dataset-query'
+import { vi } from 'vitest'
+
+vi.mock('../../config.ts')
 
 const defProps = {
   dataset,

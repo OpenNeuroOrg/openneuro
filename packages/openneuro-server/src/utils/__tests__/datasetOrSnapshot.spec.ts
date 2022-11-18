@@ -1,7 +1,10 @@
+import { vi } from 'vitest'
 import {
   datasetOrSnapshot,
   getDatasetFromSnapshotId,
 } from '../datasetOrSnapshot'
+
+vi.mock('ioredis')
 
 describe('datasetOrSnapshot()', () => {
   it('resolves a dataset object correctly', () => {

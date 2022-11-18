@@ -1,33 +1,33 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`SnapshotContainer component includes JSON-LD data in the header 1`] = `
-Object {
-  "baseTag": Array [],
-  "bodyAttributes": Object {},
+exports[`SnapshotContainer component > includes JSON-LD data in the header 1`] = `
+{
+  "baseTag": [],
+  "bodyAttributes": {},
   "defer": true,
   "encode": true,
-  "htmlAttributes": Object {},
-  "linkTags": Array [],
-  "metaTags": Array [],
-  "noscriptTags": Array [],
+  "htmlAttributes": {},
+  "linkTags": [],
+  "metaTags": [],
+  "noscriptTags": [],
   "onChangeClientState": [Function],
-  "scriptTags": Array [
-    Object {
+  "scriptTags": [
+    {
       "innerHTML": "{\\"@context\\":\\"http://schema.org\\",\\"@type\\":\\"Dataset\\",\\"name\\":\\"DS003-downsampled (only T1)\\",\\"author\\":[{\\"@type\\":\\"Person\\",\\"name\\":\\"J. Doe\\",\\"givenName\\":\\"J.\\",\\"familyName\\":\\"Doe\\"},{\\"@type\\":\\"Person\\",\\"name\\":\\"J. Doe\\",\\"givenName\\":\\"J.\\",\\"familyName\\":\\"Doe\\"},{\\"@type\\":\\"Person\\",\\"name\\":\\"J. Doe\\",\\"givenName\\":\\"J.\\",\\"familyName\\":\\"Doe\\"}],\\"datePublished\\":\\"2021-12-17T22:32:08.000Z\\",\\"dateModified\\":\\"2021-12-17T22:32:08.000Z\\",\\"license\\":\\"https://creativecommons.org/publicdomain/zero/1.0/\\",\\"publisher\\":{\\"@type\\":\\"Organization\\",\\"name\\":\\"OpenNeuro\\"},\\"description\\":\\"This dataset was obtained from the OpenfMRI project (http://www.openfmri.org).\\\\nAccession #: ds003\\\\nDescription: Rhyme judgment\\\\n\\\\nRelease history:\\\\n10/06/2011: initial release\\\\n3/21/2013: Updated release with QA information\\\\n\\\\nThis dataset is made available under the Public Domain Dedication and License \\\\nv1.0, whose full text can be found at \\\\nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \\\\nWe hope that all users will follow the ODC Attribution/Share-Alike \\\\nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \\\\nin particular, while not legally required, we hope that all users \\\\nof the data will acknowledge the OpenfMRI project and NSF Grant \\\\nOCI-1131441 (R. Poldrack, PI) in any publications.\\\\n\\",\\"version\\":\\"1.0.0\\",\\"url\\":\\"https://openneuro.org/datasets/ds001032/versions/1.0.0\\"}",
       "type": "application/ld+json",
     },
   ],
-  "styleTags": Array [],
-  "title": Array [
+  "styleTags": [],
+  "title": [
     "DS003-downsampled (only T1)",
     " - ",
     "OpenNeuro",
   ],
-  "titleAttributes": Object {},
+  "titleAttributes": {},
 }
 `;
 
-exports[`SnapshotContainer component renders successfully 1`] = `
+exports[`SnapshotContainer component > renders successfully 1`] = `
 <DocumentFragment>
   <div
     class="dataset dataset-draft dataset-page dataset-page-mri"

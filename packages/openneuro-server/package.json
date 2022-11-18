@@ -7,8 +7,7 @@
   "scripts": {
     "lint": "eslint src",
     "build": "tsc -b",
-    "start": "nodemon --watch ./dist --enable-source-maps ./dist/server.js",
-    "test": "yarn jest"
+    "start": "nodemon --watch ./dist --enable-source-maps ./dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -43,14 +42,12 @@
     "graphql-tools": "4.0.6",
     "immutable": "^3.8.2",
     "ioredis": "4.17.3",
-    "jest-fetch-mock": "^3.0.3",
     "jsdom": "^11.6.2",
     "jsonwebtoken": "^8.3.0",
     "mime-types": "^2.1.19",
     "moment": "^2.14.1",
     "mongoose": "^6.2.3",
     "morgan": "^1.6.1",
-    "node-fetch": "^2.6.0",
     "node-mailjet": "^3.3.5",
     "object-hash": "2.1.1",
     "passport": "^0.6.0",
@@ -82,25 +79,18 @@
     "@babel/runtime-corejs3": "^7.13.10",
     "@types/draft-js": "^0.10.43",
     "@types/ioredis": "^4.17.1",
-    "@types/jest": "^26.0.23",
     "@types/node-mailjet": "^3",
     "@types/semver": "^5",
     "apollo-link-schema": "^1.2.5",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.10.1",
-    "ioredis-mock": "^3.8.1",
-    "jest": "27.5.1",
-    "mockingoose": "2.11.0",
+    "ioredis-mock": "^8.2.2",
     "nodemon": "^2.0.7",
     "supertest": "^3.0.0",
     "ts-node-dev": "1.1.6",
-    "tsc-watch": "^4.2.9"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "dist"
-    ]
+    "tsc-watch": "^4.2.9",
+    "vitest": "^0.25.2",
+    "vitest-fetch-mock": "^0.2.1"
   },
   "publishConfig": {
     "access": "public"

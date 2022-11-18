@@ -1,19 +1,16 @@
-import mockingoose from 'mockingoose'
+import { vi } from 'vitest'
+import { connect } from 'mongoose'
 import request from 'superagent'
 import * as ds from '../dataset'
 
-jest.mock('superagent')
-jest.mock('ioredis')
-jest.mock('../../../config.js')
-jest.mock('../../../libs/notifications.js')
+vi.mock('superagent')
+vi.mock('ioredis')
+vi.mock('../../../config.js')
+vi.mock('../../../libs/notifications.js')
 
 describe('dataset resolvers', () => {
-  beforeEach(() => {
-    mockingoose.resetAll()
-    mockingoose.Counter.toReturn(
-      { _id: 'dataset', sequence_value: 1 },
-      'findOne',
-    )
+  beforeAll(() => {
+    connect(globalThis.__MONGO_URI__)
   })
   describe('createDataset()', () => {
     it('createDataset mutation succeeds', async () => {
@@ -145,12 +142,9 @@ describe('dataset resolvers', () => {
   })
   describe('deleteFiles', () => {
     beforeEach(() => {
-      mockingoose.resetAll()
       request.post.mockClear()
     })
-    it('makes correct delete call to datalad', done => {
-      // pass checkDatasetExists()
-      mockingoose.Dataset.toReturn(true, 'count')
+    it('makes correct delete call to datalad', () => {
       // capture and check datalad delete request
       request.del = url => ({
         set: (header1, headerValue1) => ({
@@ -165,7 +159,7 @@ describe('dataset resolvers', () => {
         }),
       })
 
-      ds.deleteFiles(
+      return ds.deleteFiles(
         null,
         { datasetId: 'ds999999', files: [{ path: '/sub-99' }] },
         {
@@ -175,7 +169,7 @@ describe('dataset resolvers', () => {
             admin: true,
           },
         },
-      ).then(() => done())
+      )
     })
   })
 })

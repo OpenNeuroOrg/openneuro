@@ -1,16 +1,26 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import mkdirp from 'mkdirp'
 import { getConfig, saveConfig, getToken } from '../config'
 
-const HOME = os.homedir()
+const HOME = `${os.homedir()}`
 
-// Must be require for Jest's implementation
-jest.mock('fs', () => new (require('metro-memory-fs'))())
-beforeEach(() => {
-  require('fs').reset()
-  mkdirp.sync(HOME)
+vi.mock('fs', () => {
+  return {
+    default: new (require('metro-memory-fs'))({
+      cwd: () => HOME,
+    }),
+  }
+})
+
+beforeEach(async () => {
+  fs.reset()
+  // Create home path based on OS inside the memory fs
+  let paths = ''
+  for (const level of HOME.substring(1).split(path.sep)) {
+    paths = `${paths}${path.sep}${level}`
+    fs.mkdirSync(paths)
+  }
 })
 
 describe('config.js', () => {

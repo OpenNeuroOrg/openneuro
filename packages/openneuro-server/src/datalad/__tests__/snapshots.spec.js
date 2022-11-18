@@ -1,39 +1,35 @@
-import mockingoose from 'mockingoose'
+import { vi } from 'vitest'
+vi.mock('ioredis')
 import request from 'superagent'
 import { createDataset } from '../dataset.js'
 import { createSnapshot } from '../snapshots.js'
 import { getDatasetWorker } from '../../libs/datalad-service'
+import { connect } from 'mongoose'
 
 // Mock requests to Datalad service
-jest.mock('superagent')
-jest.mock('../../libs/redis.js', () => ({
+vi.mock('superagent')
+vi.mock('../../libs/redis.js', () => ({
   redis: {
-    del: jest.fn(),
+    del: vi.fn(),
   },
   redlock: {
-    lock: jest.fn().mockImplementation(() => ({ unlock: jest.fn() })),
+    lock: vi.fn().mockImplementation(() => ({ unlock: vi.fn() })),
   },
 }))
 // Mock draft files calls
-jest.mock('../draft.js', () => ({
+vi.mock('../draft.js', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
-jest.mock('../../config.js')
-jest.mock('../../libs/notifications.js')
+vi.mock('../../config.js')
+vi.mock('../../libs/notifications.js')
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {
-    beforeEach(() => {
-      mockingoose.resetAll()
-      // Setup a default sequence value to return for each test
-      mockingoose.Counter.toReturn(
-        { _id: 'dataset', sequence_value: 1 },
-        'findOne',
-      )
-    })
     it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async () => {
+      const user = { id: '1234' }
       const tag = 'snapshot'
-      const { id: dsId } = await createDataset(null, null, {
+      await connect(globalThis.__MONGO_URI__)
+      const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,
       })

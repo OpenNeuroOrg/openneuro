@@ -1,5 +1,8 @@
+import { vi } from 'vitest'
 import { HasId } from '../../../utils/datasetOrSnapshot'
 import { brainlifeQuery } from '../brainlife'
+
+vi.mock('ioredis')
 
 describe('brainlife resolvers', () => {
   it('correctly queries drafts', () => {

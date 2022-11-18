@@ -1,12 +1,15 @@
-import fetchMock from 'jest-fetch-mock'
+import { vi } from 'vitest'
 import { importRemoteDataset, allowedImportUrl } from '../importRemoteDataset'
-import { checkDatasetWrite } from '../../permissions'
+import createFetchMock from 'vitest-fetch-mock'
 
-jest.mock('../../../config')
-jest.mock('../../permissions')
+vi.mock('ioredis')
+vi.mock('../../../config')
+vi.mock('../../permissions')
 
 describe('importRemoteDataset mutation', () => {
   it('given a user with access, it creates an import record for later processing', () => {
+    const fetchMock = createFetchMock(vi)
+    fetchMock.doMock()
     fetchMock.mockOnce(JSON.stringify(true))
     importRemoteDataset(
       {},

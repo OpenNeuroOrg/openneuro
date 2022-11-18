@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "author": "Squishymedia",
   "license": "MIT",
@@ -20,14 +20,11 @@
     "bids-validator": "1.9.9",
     "cli-progress": "^3.8.2",
     "commander": "7.2.0",
-    "cross-fetch": "^3.0.5",
     "elastic-apm-node": "3.12.1",
     "esm": "^3.0.16",
-    "fetch-h2": "^2.5.1",
-    "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "1.0.4",
     "react": "^17.0.1"
   },
   "scripts": {
@@ -38,31 +35,13 @@
     "prepack": "rm src/lerna.json && cp ../../lerna.json src/lerna.json",
     "postpack": "rm src/lerna.json && ln -sf ../../../lerna.json src/lerna.json"
   },
-  "jest": {
-    "setupFiles": [
-      "./jest.setup.js"
-    ],
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "**/*.js",
-      "!**/*.spec.js",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!bids-validator).+\\.js$"
-    ],
-    "moduleNameMapper": {
-      "@openneuro/(.+)": "<rootDir>../openneuro-$1/src"
-    }
-  },
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
-    "@types/mkdirp": "^1.0.1",
-    "@types/node": "16.11.13",
+    "@types/mkdirp": "1.0.2",
+    "@types/node": "18.11.9",
     "core-js": "^3.10.1",
-    "jest-fetch-mock": "^3.0.3",
-    "metro-memory-fs": "0.61.0"
+    "metro-memory-fs": "^0.73.3",
+    "vitest": "^0.25.2"
   },
   "publishConfig": {
     "access": "public"

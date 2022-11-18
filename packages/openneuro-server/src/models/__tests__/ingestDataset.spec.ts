@@ -1,14 +1,16 @@
+import { vi } from 'vitest'
 import IngestDataset from '../ingestDataset'
 
+vi.mock('ioredis')
+
 describe('IngestDataset model', () => {
-  it('IngestDataset model fails if required fields are missing', done => {
+  it('IngestDataset model fails if required fields are missing', () => {
     const model = new IngestDataset()
     model.validate(result => {
       expect(result.name).toEqual('ValidationError')
-      done()
     })
   })
-  it('IngestDataset model URL validation fails with a bad URL', done => {
+  it('IngestDataset model URL validation fails with a bad URL', async () => {
     const badUrlModel = new IngestDataset({
       datasetId: 'ds00000',
       userId: 'b3df6399-d1be-4e07-b997-9f7aa3ed1f8e',
@@ -16,12 +18,11 @@ describe('IngestDataset model', () => {
       imported: false,
       notified: false,
     })
-    badUrlModel.validate(result => {
+    await badUrlModel.validate(result => {
       expect(result.name).toEqual('ValidationError')
-      done()
     })
   })
-  it('IngestDataset model URL validation succeeds with a good URL', done => {
+  it('IngestDataset model URL validation succeeds with a good URL', async () => {
     const goodUrlModel = new IngestDataset({
       datasetId: 'ds00000',
       userId: 'b3df6399-d1be-4e07-b997-9f7aa3ed1f8e',
@@ -29,9 +30,8 @@ describe('IngestDataset model', () => {
       imported: false,
       notified: false,
     })
-    goodUrlModel.validate(result => {
+    await goodUrlModel.validate(result => {
       expect(result).toBe(undefined)
-      done()
     })
   })
 })

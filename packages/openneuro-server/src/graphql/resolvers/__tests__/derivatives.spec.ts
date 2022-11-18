@@ -1,4 +1,7 @@
+import { vi } from 'vitest'
 import { githubDerivativeQuery, derivativeObject } from '../derivatives'
+
+vi.mock('ioredis')
 
 describe('GraphQL derivatives', () => {
   describe('githubDerivativeQuery()', () => {

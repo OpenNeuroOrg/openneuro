@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { CountToggle } from '../CountToggle'
@@ -11,8 +12,8 @@ export const datasetType_available = [
 ]
 
 describe('CountToggle component', () => {
-  it('calls toggleClick on toggle', async () => {
-    const toggleClick = jest.fn()
+  it('calls toggleClick on toggle', () => {
+    const toggleClick = vi.fn()
     const clicked = false
     const count = 3
     render(

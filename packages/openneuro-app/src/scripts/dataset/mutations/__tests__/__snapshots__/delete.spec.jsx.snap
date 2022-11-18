@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`DeleteDataset mutation renders with common props 1`] = `
+exports[`DeleteDataset mutation > renders with common props 1`] = `
 <DocumentFragment>
   <span>
     <button
@@ -15,7 +15,7 @@ exports[`DeleteDataset mutation renders with common props 1`] = `
 </DocumentFragment>
 `;
 
-exports[`DeleteDir mutation renders with common props 1`] = `
+exports[`DeleteDir mutation > renders with common props 1`] = `
 <DocumentFragment>
   <span
     class="delete-file"

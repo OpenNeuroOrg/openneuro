@@ -1,5 +1,7 @@
 import { hashDatasetToRange } from '../datalad-service'
 
+vi.mock('ioredis')
+
 describe('datalad-service utils', () => {
   describe('hashDatasetToRange()', () => {
     it('is stable across a range of datasets', () => {

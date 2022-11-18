@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest'
 import React from 'react'
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
@@ -35,7 +36,7 @@ describe('DeprecateVersion mutation', () => {
     const history = createMemoryHistory({
       initialEntries: [`/datasets/${datasetId}/versions/${tag}/deprecate`],
     })
-    const historyPushSpy = jest.spyOn(history, 'push')
+    const historyPushSpy = vi.spyOn(history, 'push')
     const snapshotId = `${datasetId}:${tag}`
     const deprecateSnapshotMock = {
       request: {

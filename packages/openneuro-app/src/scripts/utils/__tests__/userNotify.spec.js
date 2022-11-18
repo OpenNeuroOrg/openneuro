@@ -1,15 +1,15 @@
 import { expiringBanner } from '../userNotify.js'
-const { toast } = jest.requireMock('react-toastify')
+import { toast } from 'react-toastify'
 
-jest.mock('react-toastify', () => ({
-  ...jest.requireActual('react-toastify'),
-  toast: { warn: jest.fn() },
+vi.mock('react-toastify', () => ({
+  ...vi.importActual('react-toastify'),
+  toast: { warn: vi.fn() },
 }))
 
 describe('userNotify.js', () => {
   describe('expiringBanner', () => {
     afterEach(() => {
-      jest.clearAllMocks()
+      vi.clearAllMocks()
     })
     it('is displayed before expiration time', () => {
       const future = new Date()

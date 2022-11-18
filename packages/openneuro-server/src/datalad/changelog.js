@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import format from 'date-fns/format'
 import { addFileString, commitFiles } from './dataset.js'
 import { getDatasetWorker } from '../libs/datalad-service'

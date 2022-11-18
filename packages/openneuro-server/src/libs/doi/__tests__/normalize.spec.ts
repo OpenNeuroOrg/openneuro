@@ -1,4 +1,7 @@
+import { vi } from 'vitest'
 import { normalizeDOI } from '../normalize'
+
+vi.mock('ioredis')
 
 describe('DOI normalize utility', () => {
   it('returns null for non-DOI input', () => {

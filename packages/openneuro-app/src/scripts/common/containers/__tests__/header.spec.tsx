@@ -1,22 +1,19 @@
+import { vi } from 'vitest'
 import React from 'react'
 import { MockAppShell } from '../../../__utils__/mock-app-shell'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { HeaderContainer } from '../header'
 
-jest.mock(
-  '../../../uploader/uploader-view.jsx',
-  () => () => 'mocked UploaderView',
-)
-
-const mockNavigate = jest.fn()
-
-jest.mock('react-router-dom', () => {
-  const reactRouterDom = jest.requireActual('react-router-dom')
-  return {
-    ...reactRouterDom,
-    useNavigate: () => mockNavigate,
-  }
-})
+const navigate = vi.fn()
+vi.mock('../../../config.ts')
+vi.mock('../../../uploader/uploader-view.jsx', () => ({
+  default: () => 'mocked UploaderView',
+}))
+vi.mock('react-router-dom', async () => ({
+  // @ts-ignore-check
+  ...(await vi.importActual('react-router-dom')),
+  useNavigate: () => navigate,
+}))
 
 describe('HeaderContainer component', () => {
   it('navigates prepopulated search when you use the home page search box', async () => {
@@ -26,7 +23,7 @@ describe('HeaderContainer component', () => {
     await fireEvent.change(searchbox, { target: { value: 'test argument' } })
     await fireEvent.click(button)
     await waitFor(() =>
-      expect(mockNavigate).toHaveBeenCalledWith(
+      expect(navigate).toHaveBeenCalledWith(
         '/search?query={"keywords":["test argument"]}',
       ),
     )

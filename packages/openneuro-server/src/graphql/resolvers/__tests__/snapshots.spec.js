@@ -1,5 +1,7 @@
-jest.mock('../../../config')
 import { matchKnownObjects, filterLatestSnapshot } from '../snapshots.js'
+
+vi.mock('ioredis')
+vi.mock('../../../config.js')
 
 describe('snapshot resolvers', () => {
   describe('matchKnownObjects()', () => {

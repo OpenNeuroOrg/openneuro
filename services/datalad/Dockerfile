@@ -7,12 +7,11 @@ COPY package.json /srv/package.json
 COPY Pipfile /srv/Pipfile
 COPY Pipfile.lock /srv/Pipfile.lock
 COPY datalad_service /srv/datalad_service
-COPY hash-paths.js /hash-paths.js
 COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
 # Install node the Dockery-but-hacky-way
-COPY --from=node:16.13.1-buster /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:18.12.0-buster /usr/local/bin/node /usr/local/bin/node
 
 RUN apt-get update \
   && node --version \

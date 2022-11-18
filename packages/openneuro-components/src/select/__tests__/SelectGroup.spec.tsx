@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SelectGroup } from '../SelectGroup'
@@ -13,7 +14,7 @@ const SelectContent = [
 
 describe('SelectGroup component', () => {
   it('renders options', async () => {
-    const setValue = jest.fn()
+    const setValue = vi.fn()
     render(
       <SelectGroup
         id="test-select"
@@ -26,7 +27,7 @@ describe('SelectGroup component', () => {
     expect(await screen.queryAllByRole('option')).toHaveLength(5)
   })
   it('is selectable', async () => {
-    const setValue = jest.fn()
+    const setValue = vi.fn()
     render(
       <SelectGroup
         id="test-select"

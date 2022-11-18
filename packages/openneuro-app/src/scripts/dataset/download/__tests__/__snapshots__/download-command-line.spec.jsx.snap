@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`dataset/download DownloadSampleCommand component renders successfully 1`] = `
+exports[`dataset/download > DownloadSampleCommand component > renders successfully 1`] = `
 <DocumentFragment>
   <pre
     class="css-xak41w"

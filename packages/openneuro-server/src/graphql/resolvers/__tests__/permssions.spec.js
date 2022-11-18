@@ -1,12 +1,13 @@
 import { updatePermissions } from '../permissions'
 
-jest.mock('../../permissions', () => ({
+vi.mock('ioredis')
+vi.mock('../../permissions', () => ({
   checkDatasetAdmin: async () => Promise.resolve(),
 }))
 
-const mockExec = jest.fn()
+const mockExec = vi.fn()
 
-jest.mock('../../../models/user', () => ({
+vi.mock('../../../models/user', () => ({
   find: () => ({
     exec: mockExec,
   }),

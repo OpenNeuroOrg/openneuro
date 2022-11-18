@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`Comments component recursively renders a tree of comments 1`] = `
+exports[`Comments component > recursively renders a tree of comments 1`] = `
 <DocumentFragment>
   <div
     class="dataset-comments"
@@ -15,7 +15,7 @@ exports[`Comments component recursively renders a tree of comments 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Comments component renders one top level comment 1`] = `
+exports[`Comments component > renders one top level comment 1`] = `
 <DocumentFragment>
   <div
     class="dataset-comments"

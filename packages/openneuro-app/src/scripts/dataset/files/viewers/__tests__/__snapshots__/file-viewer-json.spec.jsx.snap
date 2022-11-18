@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`File Viewer - JSON renders with invalid JSON 1`] = `
+exports[`File Viewer - JSON > renders with invalid JSON 1`] = `
 <DocumentFragment>
   <h3>
     Tree
@@ -24,7 +24,7 @@ exports[`File Viewer - JSON renders with invalid JSON 1`] = `
 </DocumentFragment>
 `;
 
-exports[`File Viewer - JSON renders with valid JSON 1`] = `
+exports[`File Viewer - JSON > renders with valid JSON 1`] = `
 <DocumentFragment>
   <h3>
     Tree

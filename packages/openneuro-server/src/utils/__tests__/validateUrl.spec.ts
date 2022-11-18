@@ -1,4 +1,7 @@
+import { vi } from 'vitest'
 import { validateUrl } from '../validateUrl'
+
+vi.mock('ioredis')
 
 describe('validateUrl', () => {
   it('returns true for a regular HTTPS url', () => {

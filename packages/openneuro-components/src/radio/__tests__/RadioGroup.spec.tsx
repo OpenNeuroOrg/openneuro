@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { RadioGroup } from '../RadioGroup'
@@ -12,7 +13,7 @@ export const datasetType_available = [
 
 describe('RadioGroup component', () => {
   it('has selectable options', async () => {
-    const setSelected = jest.fn()
+    const setSelected = vi.fn()
     render(
       <RadioGroup
         setSelected={setSelected}

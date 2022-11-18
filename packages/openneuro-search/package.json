@@ -22,11 +22,9 @@
   "devDependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
     "@types/jsonwebtoken": "^8",
-    "@types/node": "16.11.13",
-    "core-js": "^3.10.1"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "@types/node": "18.11.9",
+    "core-js": "^3.10.1",
+    "vitest": "^0.25.2"
   },
   "publishConfig": {
     "access": "public"

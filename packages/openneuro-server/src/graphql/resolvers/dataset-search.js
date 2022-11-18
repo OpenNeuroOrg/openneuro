@@ -1,4 +1,4 @@
-import elasticClient from '../../elasticsearch/elastic-client'
+import { elasticClient } from '../../elasticsearch/elastic-client'
 import { dataset } from './dataset'
 import Star from '../../models/stars'
 import Subscription from '../../models/subscription'
@@ -203,7 +203,15 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
  */
 export const advancedDatasetSearchConnection = async (
   obj,
-  { query, allDatasets = false, datasetType, datasetStatus, sortBy, after, first = 25 },
+  {
+    query,
+    allDatasets = false,
+    datasetType,
+    datasetStatus,
+    sortBy,
+    after,
+    first = 25,
+  },
   { user, userInfo },
 ) => {
   const searchId = hashObject({
