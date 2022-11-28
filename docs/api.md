@@ -225,6 +225,7 @@ mutation {
 ```
 
 To remove an entire folder use `""` for the `filename` argument:
+
 ```graphql
 mutation {
   deleteFiles(datasetId: "ds000001", files: [
