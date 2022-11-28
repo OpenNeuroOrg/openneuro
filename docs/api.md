@@ -77,22 +77,6 @@ query {
 }
 ```
 
-### Snapshot Creation
-
-You can create a snapshot of the current draft with a mutation. Each argument provided in the changes array will become a line in the CHANGES file entry for this new snapshot.
-
-```graphql
-mutation {
-  createSnapshot(
-    datasetId: "ds000001"
-    tag: "1.2.0"
-    changes: ["Added new subject", "Subject metadata corrections"]
-  ) {
-    id
-  }
-}
-```
-
 ### Obtain dataset file trees
 
 File trees are represented as git tree objects. There is a root tree for each version (commit or tag) that can be obtained by requesting the default file listing.
@@ -204,3 +188,61 @@ This will return any files below sub-01 in the tree for this version.
 ```
 
 The full tree can be retrieved by recursively following tree objects.
+
+## Example Mutations
+
+### Snapshot Creation
+
+You can create a snapshot of the current draft with a mutation. Each argument provided in the changes array will become a line in the CHANGES file entry for this new snapshot.
+
+```graphql
+mutation {
+  createSnapshot(
+    datasetId: "ds000001"
+    tag: "1.2.0"
+    changes: ["Added new subject", "Subject metadata corrections"]
+  ) {
+    id
+  }
+}
+```
+
+### Deleting Files/Folders
+
+You can remove files or folders from the currend draft with the `deleteFiles` mutation. Multiple
+arguments can be provided in the changes array for batch deletion of paths. Paths provided in 
+argument are relative to the dataset root, ommiting a filename a with `""` will delete the folder
+provided via the path argument. For examples see below:
+
+To remove a single file specify the path with respect to the dataset root.
+
+```graphql
+mutation {
+  deleteFiles(datasetId: "ds000001", files: [
+    {path: "sub-01", filename: "sub-01_recording-shouldnt-have-made-it-here.json"}
+  ])
+}
+```
+
+To remove an entire folder use `""` for the `filename` argument:
+
+```graphql
+mutation {
+  deleteFiles(datasetId: "ds000001", files: [
+    {path: "deravitives/freesurfer/sub-01", filename: ""}
+  ])
+}
+```
+
+Likewise, both file and folder deletion could be performed with a single api call via:
+
+```graphql
+mutation {
+  deleteFiles(datasetId: "ds000001", files: [
+    {path: "sub-01", filename: "sub-01_recording-shouldnt-have-made-it-here.json"},
+    {path: "deravitives/freesurfer/sub-01", filename: ""}
+  ])
+}
+```
+
+Changes will appear in the draft version of the dataset. 
