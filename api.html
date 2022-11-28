@@ -264,21 +264,6 @@
 </pre></div>
 </div>
 </section>
-<section id="snapshot-creation">
-<h3>Snapshot Creation<a class="headerlink" href="#snapshot-creation" title="Permalink to this heading">#</a></h3>
-<p>You can create a snapshot of the current draft with a mutation. Each argument provided in the changes array will become a line in the CHANGES file entry for this new snapshot.</p>
-<div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="kt">mutation</span> <span class="p">{</span>
-  <span class="k">createSnapshot</span><span class="p">(</span>
-    datasetId: <span class="s2">&quot;ds000001&quot;</span>
-    tag: <span class="s2">&quot;1.2.0&quot;</span>
-    changes: <span class="p">[</span><span class="s2">&quot;Added new subject&quot;, &quot;Subject metadata corrections&quot;</span><span class="p">]</span>
-  <span class="p">)</span> <span class="p">{</span>
-    <span class="k">id</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</section>
 <section id="obtain-dataset-file-trees">
 <h3>Obtain dataset file trees<a class="headerlink" href="#obtain-dataset-file-trees" title="Permalink to this heading">#</a></h3>
 <p>File trees are represented as git tree objects. There is a root tree for each version (commit or tag) that can be obtained by requesting the default file listing.</p>
@@ -384,6 +369,57 @@
 <p>The full tree can be retrieved by recursively following tree objects.</p>
 </section>
 </section>
+<section id="example-mutations">
+<h2>Example Mutations<a class="headerlink" href="#example-mutations" title="Permalink to this heading">#</a></h2>
+<section id="snapshot-creation">
+<h3>Snapshot Creation<a class="headerlink" href="#snapshot-creation" title="Permalink to this heading">#</a></h3>
+<p>You can create a snapshot of the current draft with a mutation. Each argument provided in the changes array will become a line in the CHANGES file entry for this new snapshot.</p>
+<div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="kt">mutation</span> <span class="p">{</span>
+  <span class="k">createSnapshot</span><span class="p">(</span>
+    datasetId: <span class="s2">&quot;ds000001&quot;</span>
+    tag: <span class="s2">&quot;1.2.0&quot;</span>
+    changes: <span class="p">[</span><span class="s2">&quot;Added new subject&quot;, &quot;Subject metadata corrections&quot;</span><span class="p">]</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="k">id</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="deleting-files-folders">
+<h3>Deleting Files/Folders<a class="headerlink" href="#deleting-files-folders" title="Permalink to this heading">#</a></h3>
+<p>You can remove files or folders from the currend draft with the <code class="docutils literal notranslate"><span class="pre">deleteFiles</span></code> mutation. Multiple
+arguments can be provided in the changes array for batch deletion of paths. Paths provided in
+argument are relative to the dataset root, ommiting a filename a with <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> will delete the folder
+provided via the path argument. For examples see below:</p>
+<p>To remove a single file specify the path with respect to the dataset root.</p>
+<div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="kt">mutation</span> <span class="p">{</span>
+  <span class="k">deleteFiles</span><span class="p">(</span>datasetId: <span class="s2">&quot;ds000001&quot;</span>, files: <span class="p">[</span>
+    <span class="p">{</span>path: <span class="s2">&quot;sub-01&quot;, filename: &quot;sub-01_recording-shouldnt-have-made-it-here.json&quot;</span><span class="p">}</span>
+  <span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To remove an entire folder use <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> for the <code class="docutils literal notranslate"><span class="pre">filename</span></code> argument:</p>
+<div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="kt">mutation</span> <span class="p">{</span>
+  <span class="k">deleteFiles</span><span class="p">(</span>datasetId: <span class="s2">&quot;ds000001&quot;</span>, files: <span class="p">[</span>
+    <span class="p">{</span>path: <span class="s2">&quot;deravitives/freesurfer/sub-01&quot;, filename: &quot;&quot;</span><span class="p">}</span>
+  <span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Likewise, both file and folder deletion could be performed with a single api call via:</p>
+<div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="kt">mutation</span> <span class="p">{</span>
+  <span class="k">deleteFiles</span><span class="p">(</span>datasetId: <span class="s2">&quot;ds000001&quot;</span>, files: <span class="p">[</span>
+    <span class="p">{</span>path: <span class="s2">&quot;sub-01&quot;, filename: &quot;sub-01_recording-shouldnt-have-made-it-here.json&quot;</span><span class="p">}</span>,
+    <span class="p">{</span>path: <span class="s2">&quot;deravitives/freesurfer/sub-01&quot;, filename: &quot;&quot;</span><span class="p">}</span>
+  <span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Changes will appear in the draft version of the dataset.</p>
+</section>
+</section>
 </section>
 
         </article>
@@ -448,8 +484,12 @@
 <li><a class="reference internal" href="#graphql-basics">GraphQL basics</a></li>
 <li><a class="reference internal" href="#example-queries">Example Queries</a><ul>
 <li><a class="reference internal" href="#query-dataset-information">Query dataset information</a></li>
-<li><a class="reference internal" href="#snapshot-creation">Snapshot Creation</a></li>
 <li><a class="reference internal" href="#obtain-dataset-file-trees">Obtain dataset file trees</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-mutations">Example Mutations</a><ul>
+<li><a class="reference internal" href="#snapshot-creation">Snapshot Creation</a></li>
+<li><a class="reference internal" href="#deleting-files-folders">Deleting Files/Folders</a></li>
 </ul>
 </li>
 </ul>
