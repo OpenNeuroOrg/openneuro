@@ -10067,10 +10067,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@xmldom/xmldom", [\
-        ["npm:0.7.5", {\
-          "packageLocation": "./.yarn/cache/@xmldom-xmldom-npm-0.7.5-f6fb7cf202-8d7ec35c1e.zip/node_modules/@xmldom/xmldom/",\
+        ["npm:0.7.9", {\
+          "packageLocation": "./.yarn/cache/@xmldom-xmldom-npm-0.7.9-89b068f3c8-66e37b7800.zip/node_modules/@xmldom/xmldom/",\
           "packageDependencies": [\
-            ["@xmldom/xmldom", "npm:0.7.5"]\
+            ["@xmldom/xmldom", "npm:0.7.9"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -16030,7 +16030,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/exifreader-npm-4.2.0-89609c4f76/node_modules/exifreader/",\
           "packageDependencies": [\
             ["exifreader", "npm:4.2.0"],\
-            ["@xmldom/xmldom", "npm:0.7.5"]\
+            ["@xmldom/xmldom", "npm:0.7.9"]\
           ],\
           "linkType": "HARD"\
         }]\
