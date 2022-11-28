@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { Readable } from 'stream'
 import mkdirp from 'mkdirp'
 import cliProgress from 'cli-progress'
 import { getToken } from './config.js'
@@ -67,7 +68,7 @@ export const downloadFile = async (
         headers: getFetchHeaders(),
       })
       /** @ts-expect-error @type {import('stream').Readable} */
-      const stream = response.body
+      const stream = Readable.fromWeb(response.body)
       if (response.status === 200) {
         // Setup end/error handler with Promise interface
         const responsePromise = new Promise((resolve, reject) => {
