@@ -82,8 +82,19 @@ FileDisplay.propTypes = {
   snapshotTag: PropTypes.string,
 }
 
-export const FileDisplayRoute = () => {
-  return <FileDisplay {...useParams()} />
+export const FileDisplayRoute = ({ datasetId, snapshotTag }) => {
+  return (
+    <FileDisplay
+      datasetId={datasetId}
+      snapshotTag={snapshotTag}
+      {...useParams()}
+    />
+  )
+}
+
+FileDisplayRoute.propTypes = {
+  datasetId: PropTypes.string,
+  snapshotTag: PropTypes.string,
 }
 
 export default FileDisplay
