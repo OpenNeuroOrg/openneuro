@@ -25,6 +25,7 @@ export default {
                 'An unexpected ORCID login failure occurred, please try again later.',
             })
           }
+          console.log(res.body)
           const doc = new xmldoc.XmlDocument(res.body)
           let name = doc.valueWithPath(
             'person:person.person:name.personal-details:credit-name',
