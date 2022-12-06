@@ -8417,7 +8417,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["passport-google-oauth20", "npm:1.0.0"],\
             ["passport-jwt", "npm:4.0.0"],\
             ["passport-oauth2-refresh", "npm:2.1.0"],\
-            ["passport-orcid", "npm:0.0.3"],\
+            ["passport-orcid", "npm:0.0.4"],\
             ["react", "npm:17.0.2"],\
             ["react-dom", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:17.0.2"],\
             ["redlock", "npm:4.2.0"],\
@@ -22598,6 +22598,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["utils-merge", "npm:1.0.1"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:1.6.1", {\
+          "packageLocation": "./.yarn/cache/passport-oauth2-npm-1.6.1-2799fe66c7-2a5b01a884.zip/node_modules/passport-oauth2/",\
+          "packageDependencies": [\
+            ["passport-oauth2", "npm:1.6.1"],\
+            ["base64url", "npm:3.0.1"],\
+            ["oauth", "npm:0.9.15"],\
+            ["passport-strategy", "npm:1.0.0"],\
+            ["uid2", "npm:0.0.4"],\
+            ["utils-merge", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["passport-oauth2-refresh", [\
@@ -22610,11 +22622,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["passport-orcid", [\
-        ["npm:0.0.3", {\
-          "packageLocation": "./.yarn/cache/passport-orcid-npm-0.0.3-2880e11551-86c016becc.zip/node_modules/passport-orcid/",\
+        ["npm:0.0.4", {\
+          "packageLocation": "./.yarn/cache/passport-orcid-npm-0.0.4-0865117888-92db3fdc36.zip/node_modules/passport-orcid/",\
           "packageDependencies": [\
-            ["passport-orcid", "npm:0.0.3"],\
-            ["passport-oauth2", "npm:1.6.0"]\
+            ["passport-orcid", "npm:0.0.4"],\
+            ["passport-oauth2", "npm:1.6.1"]\
           ],\
           "linkType": "HARD"\
         }]\

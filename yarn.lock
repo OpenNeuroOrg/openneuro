@@ -5207,8 +5207,8 @@ __metadata:
     "@emotion/react": 11.6.0
     "@emotion/styled": 11.6.0
     "@niivue/niivue": 0.23.1
-    "@openneuro/client": ^4.13.0
-    "@openneuro/components": ^4.13.0
+    "@openneuro/client": ^4.13.1-alpha.2
+    "@openneuro/components": ^4.13.1-alpha.2
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jsdom": ^16
@@ -5260,7 +5260,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.13.0
+    "@openneuro/client": ^4.13.1-alpha.2
     "@types/mkdirp": 1.0.2
     "@types/node": 18.11.9
     bids-validator: 1.9.9
@@ -5282,14 +5282,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.13.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.13.1-alpha.2, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.4.17
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.13.0
+    "@openneuro/server": ^4.13.1-alpha.2
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     crypto-hash: ^1.3.0
@@ -5301,7 +5301,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.13.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.13.1-alpha.2, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5349,8 +5349,8 @@ __metadata:
     "@apollo/client": 3.4.17
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.13.0
-    "@openneuro/search": ^4.13.0
+    "@openneuro/client": ^4.13.1-alpha.2
+    "@openneuro/search": ^4.13.1-alpha.2
     "@types/jsonwebtoken": ^8
     "@types/node": 18.11.9
     "@types/tsc-watch": ^4
@@ -5364,7 +5364,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.13.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.13.1-alpha.2, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5379,7 +5379,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.13.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.13.1-alpha.2, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5391,7 +5391,7 @@ __metadata:
     "@babel/preset-env": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/search": ^4.13.0
+    "@openneuro/search": ^4.13.1-alpha.2
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/draft-js": ^0.10.43
@@ -5438,7 +5438,7 @@ __metadata:
     passport-google-oauth20: ^1.0.0
     passport-jwt: ^4.0.0
     passport-oauth2-refresh: ^2.0.0
-    passport-orcid: ^0.0.3
+    passport-orcid: 0.0.4
     react: ^17.0.1
     react-dom: ^17.0.1
     redlock: ^4.0.0
@@ -17491,12 +17491,25 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"passport-orcid@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "passport-orcid@npm:0.0.3"
+"passport-oauth2@npm:^1.5.0":
+  version: 1.6.1
+  resolution: "passport-oauth2@npm:1.6.1"
   dependencies:
-    passport-oauth2: ^1.4.0
-  checksum: 86c016beccd4cd23fa55f480a11e66042a77bb37a4be397fface09ffa63a4ce573004ea57e195f424bd2b884e78998cce37e7a7d1c6c72a1a77d320d68339e74
+    base64url: 3.x.x
+    oauth: 0.9.x
+    passport-strategy: 1.x.x
+    uid2: 0.0.x
+    utils-merge: 1.x.x
+  checksum: 2a5b01a884ebade01770543d3b84fbdbc45c75ca13b320b88ae59e33388bb485a27c323c2d3904058dca57065bf0e2a78c645cbb62600ced2dcdd43094259f0e
+  languageName: node
+  linkType: hard
+
+"passport-orcid@npm:0.0.4":
+  version: 0.0.4
+  resolution: "passport-orcid@npm:0.0.4"
+  dependencies:
+    passport-oauth2: ^1.5.0
+  checksum: 92db3fdc36866b05e2b60cb337e9f790b49abb4136e1ebc111ce27271e4453b7d82926a9b06697bba14ff31019c5c88e8804a27a8eafe18bc5de0ed256d44d40
   languageName: node
   linkType: hard
 
