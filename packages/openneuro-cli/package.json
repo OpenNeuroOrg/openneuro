@@ -15,7 +15,7 @@
     "openneuro": "./src/index.js"
   },
   "dependencies": {
-    "@apollo/client": "3.4.17",
+    "@apollo/client": "3.7.2",
     "@openneuro/client": "^4.13.0",
     "bids-validator": "1.9.9",
     "cli-progress": "^3.8.2",
