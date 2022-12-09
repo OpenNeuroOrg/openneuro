@@ -28,7 +28,7 @@ services:
     tmpfs:
       - /watch
     volumes:
-      - ./:/srv:cached
+      - ./:/srv
       - typescript_build_cache:/srv/.build-cache
       - node_deps:/srv/.yarn
       - ./.yarn/releases:/srv/.yarn/releases:cached
