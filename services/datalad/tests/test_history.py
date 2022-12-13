@@ -2,7 +2,6 @@ import falcon
 import json
 import pygit2
 
-from .dataset_fixtures import *
 from datalad_service.handlers.history import HistoryResource
 
 
@@ -13,6 +12,7 @@ def test_history(client):
     history = json.loads(
         response.content) if response.content else None
     assert history is not None
+    print(history)
     assert len(history["log"]) == 4
     for entry in history["log"]:
         assert isinstance(entry["authorEmail"], str)

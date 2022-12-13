@@ -3,9 +3,8 @@ import json
 import uuid
 
 import falcon
-import pytest
+from datalad.api import Dataset
 
-from .dataset_fixtures import *
 from datalad_service.tasks.snapshots import write_new_changes
 from datalad_service.common.git import git_show
 
@@ -13,7 +12,7 @@ from datalad_service.common.git import git_show
 def test_get_snapshot(client):
     # The main test dataset has one revision we can fetch
     response = client.simulate_get(
-        '/datasets/{}/snapshots/{}'.format(DATASET_ID, SNAPSHOT_ID))
+        '/datasets/{}/snapshots/{}'.format('ds000001', '000001'))
     result_doc = json.loads(response.content)
 
     for f in result_doc['files']:
@@ -27,8 +26,8 @@ def test_get_snapshot(client):
          'key': '85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25', 'urls': ['http://localhost:9876/crn/datasets/ds000001/objects/85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25'],
          'annexed': False, 'directory': False}
     ]
-    assert result_doc['tag'] == SNAPSHOT_ID
-    assert result_doc['id'] == '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)
+    assert result_doc['tag'] == '000001'
+    assert result_doc['id'] == '{}:{}'.format('ds000001', '000001')
     assert type(result_doc['created']) == int
     assert type(result_doc['hexsha']) == str
     assert len(result_doc['hexsha']) == 40

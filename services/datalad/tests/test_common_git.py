@@ -1,8 +1,6 @@
 import pygit2
 from datalad_service.common.git import git_tag
 
-from .dataset_fixtures import *
-
 
 def test_git_tag(new_dataset):
     repo = pygit2.Repository(new_dataset.path)

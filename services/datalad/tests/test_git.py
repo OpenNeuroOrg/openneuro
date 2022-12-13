@@ -2,7 +2,6 @@ import falcon
 from falcon import testing
 import pygit2
 
-from .dataset_fixtures import *
 from datalad_service.common import git
 
 

@@ -1,6 +1,6 @@
-import pytest
+import subprocess
 
-from .dataset_fixtures import *
+import pytest
 
 import datalad_service.config
 from datalad_service.common.s3 import get_s3_remote, get_s3_bucket, generate_s3_annex_options, update_s3_sibling, validate_s3_config

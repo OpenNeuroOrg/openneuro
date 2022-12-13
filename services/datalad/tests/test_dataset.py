@@ -3,15 +3,13 @@ import json
 import falcon
 import pytest
 
-from .dataset_fixtures import *
-
 
 def test_get_dataset(client):
     doc = {
-        'accession_number': DATASET_ID
+        'accession_number': 'ds000001'
     }
 
-    response = client.simulate_get('/datasets/{}'.format(DATASET_ID))
+    response = client.simulate_get('/datasets/{}'.format('ds000001'))
     result_doc = json.loads(response.content)
 
     assert doc == result_doc

@@ -3,8 +3,6 @@ import pytest
 import os
 import json
 
-from .dataset_fixtures import *
-
 
 def test_update(client, new_dataset):
     key = 'Name'
