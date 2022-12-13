@@ -1,18 +1,20 @@
-import falcon
 import json
+import os
+
+import falcon
 import pygit2
 
 from datalad_service.handlers.history import HistoryResource
 
 
-def test_history(client):
+def test_history(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
     response = client.simulate_get(
-        '/datasets/{}/history'.format('ds000001'))
+        '/datasets/{}/history'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     history = json.loads(
         response.content) if response.content else None
     assert history is not None
-    print(history)
     assert len(history["log"]) == 4
     for entry in history["log"]:
         assert isinstance(entry["authorEmail"], str)
