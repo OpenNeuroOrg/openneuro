@@ -3,7 +3,6 @@ import refresh from 'passport-oauth2-refresh'
 import { Strategy as JwtStrategy } from 'passport-jwt'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as ORCIDStrategy } from 'passport-orcid'
-import { Strategy as GlobusStrategy } from 'passport-globus'
 import config from '../../config.js'
 import User from '../../models/user'
 import { encrypt } from './crypto'
@@ -13,7 +12,6 @@ import orcid from '../orcid.js'
 const PROVIDERS = {
   GOOGLE: 'google',
   ORCID: 'orcid',
-  GLOBUS: 'globus',
 }
 
 const loadProfile = profile => {
@@ -34,13 +32,6 @@ const loadProfile = profile => {
       name: profile.info.name,
       provider: profile.provider,
       providerId: profile.orcid,
-    }
-  } else if (profile.provider === PROVIDERS.GLOBUS) {
-    return {
-      email: profile.email,
-      name: profile.name,
-      provider: profile.provider,
-      providerId: profile.sub,
     }
   } else {
     // Some unknown profile type
@@ -90,25 +81,6 @@ export const verifyORCIDUser = (
         { upsert: true, new: true, setDefaultsOnInsert: true },
       ).then(user => done(null, addJWT(config)(user)))
     })
-    .catch(err => done(err, null))
-}
-
-export const verifyGlobusUser = (
-  accessToken,
-  refreshToken,
-  profile,
-  params,
-  done,
-) => {
-  const decodedProfile = decodeJWT(profile.id_token)
-  decodedProfile.provider = PROVIDERS.GLOBUS
-  const profileUpdate = loadProfile(decodedProfile)
-  User.findOneAndUpdate(
-    { providerId: decodedProfile.sub, provider: decodedProfile.provider },
-    profileUpdate,
-    { upsert: true, new: true, setDefaultsOnInsert: true },
-  )
-    .then(user => done(null, addJWT(config)(user)))
     .catch(err => done(err, null))
 }
 
@@ -178,18 +150,5 @@ export const setupPassportAuth = () => {
       verifyORCIDUser,
     )
     passport.use(PROVIDERS.ORCID, orcidStrategy)
-  }
-
-  // finally globus
-  if (config.auth.globus.clientID && config.auth.globus.clientSecret) {
-    const globusStrategy = new GlobusStrategy(
-      {
-        clientID: config.auth.globus.clientID,
-        clientSecret: config.auth.globus.clientSecret,
-        callbackURL: `${config.url + config.apiPrefix}auth/globus/callback`,
-      },
-      verifyGlobusUser,
-    )
-    passport.use(PROVIDERS.GLOBUS, globusStrategy)
   }
 }

@@ -5409,13 +5409,11 @@ __metadata:
     apollo-server: 2.25.4
     apollo-server-cache-redis: 1.4.0
     apollo-server-express: 2.25.3
-    async: ^2.4.1
     babel-eslint: ^10.1.0
     base64url: ^3.0.0
     body-parser: ^1.18.2
     cookie-parser: ^1.4.3
     core-js: ^3.10.1
-    crypto: ^1.0.1
     date-fns: ^2.16.1
     draft-js: ^0.11.7
     draft-js-export-html: ^1.4.1
@@ -5441,7 +5439,6 @@ __metadata:
     nodemon: ^2.0.7
     object-hash: 2.1.1
     passport: ^0.6.0
-    passport-globus: ^0.0.1
     passport-google-oauth20: ^1.0.0
     passport-jwt: ^4.0.0
     passport-oauth2-refresh: ^2.0.0
@@ -8085,15 +8082,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^2.4.1":
-  version: 2.6.3
-  resolution: "async@npm:2.6.3"
-  dependencies:
-    lodash: ^4.17.14
-  checksum: 5e5561ff8fca807e88738533d620488ac03a5c43fce6c937451f7e35f943d33ad06c24af3f681a48cca3d2b0002b3118faff0a128dc89438a9bf0226f712c499
-  languageName: node
-  linkType: hard
-
 "asynckit@npm:^0.4.0":
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
@@ -9879,13 +9867,6 @@ __metadata:
   version: 2.0.0
   resolution: "crypto-random-string@npm:2.0.0"
   checksum: 0283879f55e7c16fdceacc181f87a0a65c53bc16ffe1d58b9d19a6277adcd71900d02bb2c4843dd55e78c51e30e89b0fec618a7f170ebcc95b33182c28f05fd6
-  languageName: node
-  linkType: hard
-
-"crypto@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "crypto@npm:1.0.1"
-  checksum: 087fe3165bd94c333a49e6ed66a0193911f63eac38a24f379b3001a5fe260a59c413646e53a0f67875ba13902b2686d81dc703cb2c147a4ec727dcdc04e5645e
   languageName: node
   linkType: hard
 
@@ -17519,15 +17500,6 @@ fsevents@~2.3.2:
   version: 0.1.1
   resolution: "pascalcase@npm:0.1.1"
   checksum: f83681c3c8ff75fa473a2bb2b113289952f802ff895d435edd717e7cb898b0408cbdb247117a938edcbc5d141020909846cc2b92c47213d764e2a94d2ad2b925
-  languageName: node
-  linkType: hard
-
-"passport-globus@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "passport-globus@npm:0.0.1"
-  dependencies:
-    passport-oauth2: ^1.4.0
-  checksum: 3a23452dee6fc794d11e7a08dd4419180c007f84debacea044777b45ebd1f2c174ce6ca6fa546a67b603b85218b8651f01fe71a3b2abdc0feaca1ed9a252e251
   languageName: node
   linkType: hard
 
