@@ -4,7 +4,6 @@ import requests
 
 import gevent
 from gevent import subprocess
-import sentry_sdk
 
 from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.common.elasticsearch import ValidationLogger
@@ -29,10 +28,8 @@ def validate_dataset_sync(dataset_path, ref, esLogger):
         return json.loads(process.stdout)
     except subprocess.TimeoutExpired as err:
         esLogger.log(process.stdout, process.stderr, err)
-        sentry_sdk.capture_exception()
     except json.decoder.JSONDecodeError as err:
         esLogger.log(process.stdout, process.stderr, err)
-        sentry_sdk.capture_exception()
 
 
 def summary_mutation(dataset_id, ref, validator_output):

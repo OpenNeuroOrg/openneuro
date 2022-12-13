@@ -3,8 +3,6 @@ import os
 import subprocess
 import random
 
-import sentry_sdk
-
 
 def audit_datasets(store):
     dataset_dirs = os.listdir(store.annex_path)
@@ -25,13 +23,7 @@ def fsck_remote(dataset_path, remote):
         if not annexed_file.success:
             # Oops, log it!
             bad_files.append(annexed_file)
-    if len(bad_files) > 0:
-        sentry_sdk.context.merge()
-        with sentry_sdk.configure_scope() as scope:
-            scope.set_context(
-                {'dataset': dataset_path, 'remote': remote, bad_files: bad_files})
-        sentry_sdk.captureMessage(
-            'Remote audit failed! Some expected annex keys were unavailable at this remote.')
+    # TODO - Add an admin notification when this is reactivated
 
 
 def audit_remotes(store, dataset):
