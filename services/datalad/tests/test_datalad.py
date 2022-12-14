@@ -4,8 +4,8 @@ from mock import patch
 import uuid
 
 import pygit2
+from datalad.api import Dataset
 
-from .dataset_fixtures import *
 from datalad_service.tasks.dataset import *
 from datalad_service.tasks.files import commit_files
 

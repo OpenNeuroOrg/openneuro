@@ -1,7 +1,6 @@
 import falcon
 from falcon import testing
 
-from .dataset_fixtures import *
 from datalad_service.handlers.annex import hashdirmixed, key_to_path
 
 
@@ -28,6 +27,7 @@ def test_key_add_remove(client):
     response = client.simulate_get(url, headers={"authorization": test_auth})
     assert response.status == falcon.HTTP_OK
     assert response.content == random_value
+
 
 def test_key_get_head(client):
     ds_id = 'ds000001'

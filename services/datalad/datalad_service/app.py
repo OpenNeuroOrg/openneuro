@@ -1,8 +1,6 @@
 import logging
 
 import falcon
-import sentry_sdk
-from sentry_sdk.integrations.falcon import FalconIntegration
 from falcon_elastic_apm import ElasticApmMiddleware
 
 import datalad_service.config
@@ -42,11 +40,6 @@ def create_app(annex_path):
     gunicorn_logger = logging.getLogger('gunicorn.error')
     logging.basicConfig(handlers=gunicorn_logger.handlers,
                         level=gunicorn_logger.level)
-    if datalad_service.config.SENTRY_DSN:
-        sentry_sdk.init(
-            dsn=datalad_service.config.SENTRY_DSN,
-            integrations=[FalconIntegration()]
-        )
 
     middleware = [AuthenticateMiddleware()]
     if datalad_service.config.ELASTIC_APM_SERVER_URL:

@@ -1,6 +1,5 @@
 import io
 
-from .dataset_fixtures import *
 from datalad_service.common.annex import parse_ls_tree_line, read_ls_tree_line, compute_rmet, parse_remote_line, parse_rmet_line, read_rmet_file, encode_remote_url
 
 expected_file_object = {

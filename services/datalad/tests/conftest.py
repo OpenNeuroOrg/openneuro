@@ -174,17 +174,3 @@ def mock_server_url(monkeypatch):
 @pytest.fixture
 def client(datalad_store, monkeypatch):
     return testing.TestClient(create_app(datalad_store.annex_path))
-
-
-class FileWrapper(object):
-
-    def __init__(self, file_like, block_size=8192):
-        self.file_like = file_like
-        self.block_size = block_size
-
-    def __getitem__(self, key):
-        data = self.file_like.read(self.block_size)
-        if data:
-            return data
-
-        raise IndexError

@@ -3,7 +3,6 @@ import os
 import falcon
 from falcon import testing
 
-from .dataset_fixtures import *
 
 from datalad_service.handlers.upload_file import skip_invalid_files
 from datalad_service.handlers.upload import move_files

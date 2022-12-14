@@ -1,6 +1,5 @@
-import json
+import pytest
 
-from .dataset_fixtures import *
 from datalad_service.tasks.validator import validate_dataset_sync
 from unittest.mock import Mock
 from types import SimpleNamespace

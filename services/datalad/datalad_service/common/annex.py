@@ -5,8 +5,6 @@ from mmap import mmap
 import subprocess
 import urllib.parse
 
-from sentry_sdk import capture_exception
-
 import datalad_service.config
 
 
@@ -106,7 +104,6 @@ def parse_rmet_line(remote, rmetLine):
         s3version, path = remoteData.split('#')
         return '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
     except:
-        capture_exception()
         return None
 
 

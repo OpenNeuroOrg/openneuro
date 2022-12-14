@@ -5,7 +5,6 @@ import shutil
 
 import falcon
 import gevent
-import sentry_sdk
 import pygit2
 
 from datalad_service.common.git import git_commit
@@ -50,7 +49,6 @@ class UploadResource(object):
             shutil.rmtree(upload_path)
         except:
             self.logger.exception('Dataset upload could not be finalized')
-            sentry_sdk.capture_exception()
 
     def on_post(self, req, resp, dataset, upload):
         """Copy uploaded data into dataset"""

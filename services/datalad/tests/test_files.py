@@ -2,10 +2,21 @@ import os
 import falcon
 from falcon import testing
 import json
-import pytest
 from datalad.api import Dataset
 
-from .dataset_fixtures import *
+
+class FileWrapper(object):
+
+    def __init__(self, file_like, block_size=8192):
+        self.file_like = file_like
+        self.block_size = block_size
+
+    def __getitem__(self, key):
+        data = self.file_like.read(self.block_size)
+        if data:
+            return data
+
+        raise IndexError
 
 
 def test_get_file(client):
