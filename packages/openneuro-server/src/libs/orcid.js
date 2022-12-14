@@ -44,13 +44,13 @@ export default {
               reject({
                 type: 'given',
                 message:
-                  'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+                  'Your ORCID account does not have a given name, or it is not shared with trusted institutions. Please add a name to your ORCID profile and make it available to trusted institutions or public.',
               })
             } else if (!lastname) {
               reject({
                 type: 'family',
                 message:
-                  'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+                  'Your ORCID account does not have a family name, or it not shared with trusted institutions. Please add a name to your ORCID profile and make it available to trusted institutions or public.',
               })
             } else {
               name = `${firstname} ${lastname}`
@@ -61,7 +61,7 @@ export default {
             reject({
               type: 'email',
               message:
-                'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',
+                'Your ORCID profile does not include an email shared with trusted institutions. Please verify your ORCID profile email and share it with trusted institutions, OpenNeuro will use this email for important notices related to any datasets you upload.',
             })
           }
 
