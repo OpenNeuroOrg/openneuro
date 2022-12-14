@@ -20,7 +20,7 @@ RUN apt-get update \
   && mkdir /yarn \
   && curl -L https://github.com/yarnpkg/yarn/releases/download/v1.22.5/yarn-v1.22.5.tar.gz | tar -C /yarn --strip-components 1 -xvz \
   && ln -sf /yarn/bin/yarn /usr/local/bin/yarn \
-  && curl -L https://archive.org/download/git-annex-builds/SHA256E-s51600480--14e12b3b041d077e9198a60747fd04579e5613a15aadd385465220229b78eea9.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
+  && curl -L https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
   && pip3 install 'pipenv==2020.6.2' \
   && pipenv install --deploy --system \
   && chmod 600 /root/.ssh/config \
