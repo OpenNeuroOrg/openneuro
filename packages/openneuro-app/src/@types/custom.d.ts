@@ -5,6 +5,12 @@ declare module '*.png' {
   export = value
 }
 
+// Allow .svg imports
+declare module '*.svg' {
+  const value: string
+  export = value
+}
+
 // Allow .scss imports
 declare module '*.scss' {
   const value: string

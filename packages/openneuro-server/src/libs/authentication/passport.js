@@ -32,6 +32,7 @@ const loadProfile = profile => {
       name: profile.info.name,
       provider: profile.provider,
       providerId: profile.orcid,
+      orcid: profile.orcid,
     }
   } else {
     // Some unknown profile type

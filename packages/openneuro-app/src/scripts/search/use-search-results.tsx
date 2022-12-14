@@ -39,6 +39,7 @@ const searchQuery = gql`
           uploader {
             id
             name
+            orcid
           }
           public
           permissions {

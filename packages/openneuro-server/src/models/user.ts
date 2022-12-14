@@ -8,6 +8,7 @@ export interface UserDocument extends Document {
   name: string
   provider: StaticRangeInit
   providerId: string
+  orcid: string
   refresh: string
   admin: boolean
   blocked: boolean
@@ -21,6 +22,7 @@ const userSchema = new Schema({
   name: String,
   provider: String, // Login provider
   providerId: String, // Login provider unique id
+  orcid: String, // ORCID iD regardless of provider id
   refresh: String,
   admin: { type: Boolean, default: false },
   blocked: { type: Boolean, default: false },
