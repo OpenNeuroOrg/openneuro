@@ -10,6 +10,9 @@ def read_dataset_description(dataset_path, commit):
         return json.loads(raw_description)
     except json.decoder.JSONDecodeError:
         return None
+    except KeyError:
+        # dataset_description.json does not exist
+        return None
 
 
 def dataset_sort(file):
