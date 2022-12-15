@@ -304,6 +304,7 @@ export const typeDefs = `
     id: ID!
     provider: UserProvider
     avatar: String
+    orcid: String
     created: DateTime!
     modified: DateTime
     lastSeen: DateTime
@@ -317,7 +318,6 @@ export const typeDefs = `
   enum UserProvider {
     google
     orcid
-    globus
   }
 
   # Connection for a list of datasets

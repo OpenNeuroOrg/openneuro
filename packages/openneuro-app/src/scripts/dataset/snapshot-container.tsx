@@ -25,6 +25,7 @@ import {
   VersionList,
   DatasetTools,
 } from '@openneuro/components/dataset'
+import { Username } from '../users/username'
 import { Loading } from '@openneuro/components/loading'
 
 import {
@@ -285,7 +286,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="Uploaded by"
                 item={
                   <>
-                    {dataset.uploader.name} on {dateAdded} -{' '}
+                    <Username user={dataset.uploader} /> on {dateAdded} -{' '}
                     {dateAddedDifference} ago
                   </>
                 }

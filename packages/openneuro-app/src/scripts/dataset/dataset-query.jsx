@@ -53,6 +53,7 @@ export const getDatasetPage = gql`
         id
         name
         email
+        orcid
       }
       analytics {
         downloads
@@ -108,6 +109,7 @@ export const getDraftPage = gql`
         id
         name
         email
+        orcid
       }
       analytics {
         downloads

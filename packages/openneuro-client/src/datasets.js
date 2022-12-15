@@ -11,6 +11,7 @@ export const getDataset = gql`
         id
         name
         email
+        orcid
       }
       draft {
         id
@@ -119,6 +120,7 @@ export const getDatasets = gql`
           uploader {
             id
             name
+            orcid
           }
           public
           permissions {

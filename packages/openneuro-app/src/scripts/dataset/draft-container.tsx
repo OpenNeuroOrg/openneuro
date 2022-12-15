@@ -28,6 +28,7 @@ import {
   VersionList,
   DatasetTools,
 } from '@openneuro/components/dataset'
+import { Username } from '../users/username'
 
 import { FollowDataset } from './mutations/follow'
 import { StarDataset } from './mutations/star'
@@ -283,7 +284,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 heading="Uploaded by"
                 item={
                   <>
-                    {dataset.uploader.name} on {dateAdded} -{' '}
+                    <Username user={dataset.uploader} /> on {dateAdded} -{' '}
                     {dateAddedDifference} ago
                   </>
                 }
