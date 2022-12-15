@@ -88,8 +88,8 @@ def test_pre_snapshot_edit(client, new_dataset):
     response = client.simulate_post(
         '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), json={'skip_publishing': True})
     assert response.status == falcon.HTTP_OK
-    # Validate that create_snapshot has not moved master commit
-    with open(os.path.join(new_dataset.path, '.git/refs/heads/master')) as fd:
+    # Validate that create_snapshot has not moved main commit
+    with open(os.path.join(new_dataset.path, '.git/refs/heads/main')) as fd:
         current_ref = fd.read()[:-1]
         assert commit_ref == current_ref
 

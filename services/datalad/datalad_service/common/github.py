@@ -23,17 +23,30 @@ def create_github_repo(dataset_path, dataset_id):
             'DATALAD_GITHUB_TOKEN and DATALAD_GITHUB_ORG must be defined to create remote repos')
 
 
-def github_export(dataset_path, tag):
+def github_export(dataset_id, dataset_path, tag):
     """
     Publish GitHub repo and tags.
     """
     subprocess.check_call(
         ['git', 'push', 'github', f'{tag}:refs/heads/main'], cwd=dataset_path)
     subprocess.check_call(
+        ['git', 'push', 'github', f'{tag}:refs/heads/master'], cwd=dataset_path)
+    subprocess.check_call(
         ['git', 'push', 'github', 'git-annex:refs/heads/git-annex'], cwd=dataset_path)
     # Update tags
     subprocess.check_call(
         ['git', 'push', '--tags', 'github'], cwd=dataset_path)
+    # Make sure the default branch is correct
+    github_set_default_branch(dataset_id)
+
+
+def github_set_default_branch(dataset_id):
+    """Sets the repo default branch to 'main' and resets the description/homepage fields."""
+    ses = Github(DATALAD_GITHUB_TOKEN)
+    org = ses.get_organization(DATALAD_GITHUB_ORG)
+    repo = org.get_repo(dataset_id)
+    repo.edit(default_branch="main", description="OpenNeuro dataset",
+              homepage=f"https://openneuro.org/datasets/{dataset_id}")
 
 
 def create_sibling_github(dataset_path, dataset_id):
@@ -44,7 +57,8 @@ def create_sibling_github(dataset_path, dataset_id):
         dataset_id,
         allow_rebase_merge=True,
         auto_init=False,
-        description=f"OpenNeuro dataset available at https://openneuro.org/datasets/{dataset_id}",
+        description="OpenNeuro dataset",
+        homepage=f"https://openneuro.org/datasets/{dataset_id}",
         has_issues=False,
         has_projects=False,
         has_wiki=False,

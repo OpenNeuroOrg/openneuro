@@ -38,14 +38,18 @@ def create_datalad_config(dataset_path):
         configfile.write(config)
 
 
-def create_dataset(store, dataset, author=None):
-    """Create a DataLad git-annex repo for a new dataset."""
+def create_dataset(store, dataset, author=None, initial_head='main'):
+    """Create a DataLad git-annex repo for a new dataset.
+
+    initial_head is only meant for tests and is overridden by the implementation of git_commit
+    """
     dataset_path = store.get_dataset_path(dataset)
     if os.path.isdir(dataset_path):
         raise Exception('Dataset already exists')
     if not author:
         author = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
-    repo = pygit2.init_repository(dataset_path, False)
+    repo = pygit2.init_repository(
+        dataset_path, False, initial_head=initial_head)
     init_annex(dataset_path)
     # Setup .gitattributes to limit what files are annexed by default
     with open(os.path.join(dataset_path, '.gitattributes'), 'w') as gitattributes:

@@ -40,8 +40,22 @@ def git_tag_tree(repo, tag):
     return repo.get(tag_reference.target).tree_id
 
 
+def git_rename_master_to_main(repo):
+    # Make sure the main branch is used, update if needed
+    # Always update the symbolic reference for HEAD
+    repo.references['HEAD'].set_target('refs/heads/main')
+    master_branch = repo.branches.get('master')
+    if master_branch:
+        main_branch = master_branch.rename('main', True)
+        # Abort the commit if this didn't work
+        if not main_branch.is_head():
+            raise Exception('Unable to rename master branch to main')
+
+
 def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded changes", parents=None):
     """Commit array of paths at HEAD."""
+    # master -> main if required
+    git_rename_master_to_main(repo)
     # Refresh index with git-annex specific handling
     annex_command = ["git-annex", "add"] + file_paths
     subprocess.run(annex_command, check=True, cwd=repo.workdir)
@@ -61,6 +75,6 @@ def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", 
         parent_commits = parents
     tree = repo.index.write_tree()
     commit = repo.create_commit(
-        'refs/heads/master', author, committer, message, tree, parent_commits)
+        'refs/heads/main', author, committer, message, tree, parent_commits)
     repo.head.set_target(commit)
     return commit
