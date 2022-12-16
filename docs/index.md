@@ -5,6 +5,7 @@
 :hidden:
 
 user_guide
+policy/index
 api
 packages/openneuro-cli
 git
