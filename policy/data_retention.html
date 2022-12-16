@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Git access to OpenNeuro datasets" href="../git.html" /><link rel="prev" title="API Examples" href="../api.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Data Management Plans" href="data_management_plans.html" /><link rel="prev" title="OpenNeuro policies" href="index.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>OpenNeuro command line interface - OpenNeuro documentation</title>
+        <title>Data Retention Policies - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -160,13 +160,13 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../policy/index.html">OpenNeuro policies</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../policy/data_retention.html">Data Retention Policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../policy/data_management_plans.html">Data Management Plans</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">OpenNeuro policies</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Data Retention Policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_management_plans.html">Data Management Plans</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API Examples</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">OpenNeuro command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../git.html">Git access to OpenNeuro datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance.html">Unpublishing a dataset</a></li>
@@ -204,54 +204,66 @@
           </label>
         </div>
         <article role="main">
-          <section id="openneuro-command-line-interface">
-<h1>OpenNeuro command line interface<a class="headerlink" href="#openneuro-command-line-interface" title="Permalink to this heading">#</a></h1>
-<p>This tool allows you to upload and download <a class="reference external" href="https://openneuro.org">OpenNeuro.org</a> datasets without a browser.</p>
-<section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Install <a class="reference external" href="https://nodejs.org">Node.js</a> (version 16 or higher)</p></li>
-<li><p>In a terminal type: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">-g</span> <span class="pre">&#64;openneuro/cli</span></code></p></li>
-</ol>
-<p>If you are using <a class="reference external" href="https://yarnpkg.com/">yarn</a> you can also perform the installation with <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">global</span> <span class="pre">add</span> <span class="pre">&#64;openneuro/cli</span></code>
-(make sure the installation folder is part of your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> by adding <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PATH=&quot;$(yarn</span> <span class="pre">global</span> <span class="pre">bin):$PATH&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code>)</p>
-</section>
-<section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
-<p>The setup step is needed for both uploading <em>and</em> downloading data from OpenNeuro.</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code> to configure credentials.
-This prompts you for the required configuration fields and saves this to <code class="docutils literal notranslate"><span class="pre">.openneuro</span></code> in your home directory or profile.
-<code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code> will require you to enter an API key.
-You can obtain an API key via a browser at https://openneuro.org/keygen after logging to the OpenNeuro platform via one of the provided authentification services (for example ORCID).</p>
-<p>After successfully running <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, you can manually configure custom servers by editing the <code class="docutils literal notranslate"><span class="pre">.openneuro</span></code> file.</p>
-</section>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
-<section id="uploading-datasets">
-<h3>Uploading datasets<a class="headerlink" href="#uploading-datasets" title="Permalink to this heading">#</a></h3>
-<p>To upload a new dataset:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code></p>
-<p>Your dataset must pass validation to upload but warnings can be skipped with <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">-i</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code>. A default label is set using the directory name.</p>
-<p>To resume an interrupted upload or add files to an existing dataset:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">--dataset</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code></p>
-<p>where &lt;accession_number&gt; is a unique dataset identifier that can be found in the URL. For example accession number for <code class="docutils literal notranslate"><span class="pre">https://openneuro.org/datasets/ds001555</span></code> is <code class="docutils literal notranslate"><span class="pre">ds001555</span></code>.</p>
-<p>This command will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.</p>
-</section>
-<section id="downloading-datasets">
-<h3>Downloading datasets<a class="headerlink" href="#downloading-datasets" title="Permalink to this heading">#</a></h3>
-<p>To download a snapshot:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">download</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;destination</span> <span class="pre">directory&gt;</span></code></p>
-<p>To download the current draft files:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">download</span> <span class="pre">--draft</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;destination</span> <span class="pre">directory&gt;</span></code></p>
-<p>If the destination directory does not exist, it will be created. Any files from the dataset that are already present in the directory will be skipped, allowing you to resume an interrupted download.</p>
+          <section id="data-retention-policies">
+<h1>Data Retention Policies<a class="headerlink" href="#data-retention-policies" title="Permalink to this heading">#</a></h1>
+<p>OpenNeuro has a data retention policy in place to ensure the maintainability of
+and prevent abuse of the service.</p>
+<section id="data-storage">
+<h2>Data storage<a class="headerlink" href="#data-storage" title="Permalink to this heading">#</a></h2>
+<p>OpenNeuro datasets are stored as git/git-annex repositories on Google Cloud storage
+media. Small files are included as git objects, while large files are added to the
+annex. On each snapshot, a tag is made in the git repository, and copies of all files
+are synchronized to an Amazon Web Services S3 bucket. This S3 bucket is used as a
+remote for git-annex, ensuring high-availability access.</p>
+<section id="content-integrity-assurance">
+<h3>Content integrity assurance<a class="headerlink" href="#content-integrity-assurance" title="Permalink to this heading">#</a></h3>
+<p>Content integrity is assured through multiple mechanisms. The git and git-annex protocols
+use content-addressing to refer to each object in the dataset by its cryptographic hash,
+providing a first defense against accidental replacement of one file with another.</p>
+<p>Amazon S3 also provides checksums to ensure that uploaded data may be retrieved unchanged.</p>
+<p>Finally, incremental backups (see <a class="reference internal" href="#backups"><span class="std std-doc">Backups</span></a>) compare checksums to identify files
+that have changed from one day to the next, ensuring the recoverability of corrupted data.</p>
 </section>
 </section>
-<section id="errors">
-<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this heading">#</a></h2>
-<p>Package: OpenNeuro CLI download option</p>
-<p>Issue: <code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">path</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">string</span> <span class="pre">or</span> <span class="pre">Buffer</span></code></p>
-<p>Solution: This error is due to a failure to read the <code class="docutils literal notranslate"><span class="pre">~/.openneuro</span></code> configuration file.
-This file can be created with the command <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, see the “Setup” step above.</p>
+<section id="backups">
+<h2>Backups<a class="headerlink" href="#backups" title="Permalink to this heading">#</a></h2>
+<p>OpenNeuro uses daily incremental backups of all datasets to ensure integrity and
+availability.</p>
+</section>
+<section id="data-administration-and-deletion">
+<h2>Data administration and deletion<a class="headerlink" href="#data-administration-and-deletion" title="Permalink to this heading">#</a></h2>
+<p>In order to ensure the high availability of uploaded datasets and prevent abuse of the
+service, OpenNeuro may delete data under certain conditions.</p>
+<section id="automatic-deletion">
+<h3>Automatic deletion<a class="headerlink" href="#automatic-deletion" title="Permalink to this heading">#</a></h3>
+<p>OpenNeuro reservces the right to delete draft data following a 28-day grace period.</p>
+<p>Draft data is any data that is not included in a versioned snapshot. When a dataset
+is first uploaded, it is placed in draft status, and the entire dataset is subject
+to deletion until the first snapshot is made. If the first snapshot is not made within
+28 days, deleting draft data results in the entire dataset being deleted.</p>
+<p>After a snapshot, a dataset may be placed in draft status again by making changes to
+the dataset, including metadata changes that are encoded in <code class="docutils literal notranslate"><span class="pre">dataset_description.json</span></code>.
+If a new snapshot is not created within 28 days, then the dataset may be reverted to
+the most recent snapshot at any time.</p>
+<p>Only data included in a snapshot is guaranteed to be accessible. If a file is uploaded
+and deleted between snapshots, then it may become inaccessible at any time, even if it
+was temporarily accessible.</p>
+</section>
+<section id="manual-review-and-deletion">
+<h3>Manual review and deletion<a class="headerlink" href="#manual-review-and-deletion" title="Permalink to this heading">#</a></h3>
+<p>OpenNeuro makes use of a <code class="docutils literal notranslate"><span class="pre">.bidsignore</span></code> file to allow dataset owners to upload datasets
+that include files that are not standardized. This mechanism is intended to ensure that
+datasets may be uploaded with all available information despite gaps in definitions in
+the BIDS standard.</p>
+<p>However, this mechanism can potentially be used to store datasets that simply do not
+conform to the BIDS standard, which is an abuse of the terms of service.
+Any suspected abuse will be manually reviewed, and OpenNeuro may take steps to remediate
+the abuse.
+These steps may range from consultation with uploaders to correct the dataset to summary
+deletion of datasets.
+OpenNeuro may implement at any time mechanisms to automatically detect potential abuses
+and flag them for manual review and deletion.</p>
+</section>
 </section>
 </section>
 
@@ -260,23 +272,23 @@ This file can be created with the command <code class="docutils literal notransl
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../git.html">
+          <a class="next-page" href="data_management_plans.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Git access to OpenNeuro datasets</div>
+                <div class="title">Data Management Plans</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../api.html">
+          <a class="prev-page" href="index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">API Examples</div>
+                <div class="title">OpenNeuro policies</div>
                 
               </div>
             </a>
@@ -310,15 +322,17 @@ This file can be created with the command <code class="docutils literal notransl
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">OpenNeuro command line interface</a><ul>
-<li><a class="reference internal" href="#install">Install</a></li>
-<li><a class="reference internal" href="#setup">Setup</a></li>
-<li><a class="reference internal" href="#usage">Usage</a><ul>
-<li><a class="reference internal" href="#uploading-datasets">Uploading datasets</a></li>
-<li><a class="reference internal" href="#downloading-datasets">Downloading datasets</a></li>
+<li><a class="reference internal" href="#">Data Retention Policies</a><ul>
+<li><a class="reference internal" href="#data-storage">Data storage</a><ul>
+<li><a class="reference internal" href="#content-integrity-assurance">Content integrity assurance</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#errors">Errors</a></li>
+<li><a class="reference internal" href="#backups">Backups</a></li>
+<li><a class="reference internal" href="#data-administration-and-deletion">Data administration and deletion</a><ul>
+<li><a class="reference internal" href="#automatic-deletion">Automatic deletion</a></li>
+<li><a class="reference internal" href="#manual-review-and-deletion">Manual review and deletion</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
