@@ -8388,7 +8388,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jsonwebtoken", "npm:8.5.5"],\
             ["@types/node", "npm:18.11.9"],\
             ["core-js", "npm:3.18.0"],\
-            ["jsonwebtoken", "npm:8.5.1"],\
+            ["jsonwebtoken", "npm:9.0.0"],\
             ["vitest", "virtual:133165406520d697b59bfd8a87da656a1201b50380fa7b6c96355187dd672b60916478120380b134e3b9f4bd0e9b90596200bbcdd3d1635211c23f790d0912a9#npm:0.25.2"]\
           ],\
           "linkType": "SOFT"\
@@ -8439,7 +8439,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ioredis", "npm:4.17.3"],\
             ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:8.2.2"],\
             ["jsdom", "npm:11.12.0"],\
-            ["jsonwebtoken", "npm:8.5.1"],\
+            ["jsonwebtoken", "npm:9.0.0"],\
             ["mime-types", "npm:2.1.32"],\
             ["moment", "npm:2.29.1"],\
             ["mongoose", "npm:6.2.3"],\
@@ -19725,6 +19725,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lodash.once", "npm:4.1.1"],\
             ["ms", "npm:2.1.3"],\
             ["semver", "npm:5.7.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:9.0.0", {\
+          "packageLocation": "./.yarn/cache/jsonwebtoken-npm-9.0.0-36fd1594c0-b9181cecf9.zip/node_modules/jsonwebtoken/",\
+          "packageDependencies": [\
+            ["jsonwebtoken", "npm:9.0.0"],\
+            ["jws", "npm:3.2.2"],\
+            ["lodash", "npm:4.17.21"],\
+            ["ms", "npm:2.1.3"],\
+            ["semver", "npm:7.3.8"]\
           ],\
           "linkType": "HARD"\
         }]\

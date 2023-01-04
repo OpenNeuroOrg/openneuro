@@ -41,7 +41,7 @@
     "immutable": "^3.8.2",
     "ioredis": "4.17.3",
     "jsdom": "^11.6.2",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "mime-types": "^2.1.19",
     "moment": "^2.14.1",
     "mongoose": "^6.2.3",
