@@ -124,41 +124,45 @@ export async function retryDelay(step, request) {
  * @param {typeof fetch} fetch Fetch implementation to use - useful for environments without a native fetch
  * @returns {function (Request, number): Promise<Response|void>}
  */
-export const uploadFile = (uploadProgress, fetch) => (request, attempt = 1) => {
-  // Create a retry function with attempts incremented
-  const filename = parseFilename(request.url)
-  const handleFailure = async failure => {
-    // eslint-disable-next-line no-console
-    console.warn(`Retrying upload for ${filename}: ${failure}`)
-    try {
-      await retryDelay(attempt, request)
-      return uploadFile(uploadProgress, fetch)(request, attempt + 1)
-    } catch (err) {
-      if ('failUpload' in uploadProgress) {
-        uploadProgress.failUpload(filename)
-      }
-      throw err
-    }
-  }
-  // This is needed to cancel the request in case of client errors
-  if ('startUpload' in uploadProgress) {
-    uploadProgress.startUpload(filename)
-  }
-  return fetch(request)
-    .then(async response => {
-      if (response.status === 200) {
-        // We need to wait for the response body or fetch-h2 may leave the connection open
-        await response.json()
-        if ('finishUpload' in uploadProgress) {
-          uploadProgress.finishUpload(filename)
+export const uploadFile =
+  (uploadProgress, fetch) =>
+  (request, attempt = 1) => {
+    // Create a retry function with attempts incremented
+    const filename = parseFilename(request.url)
+    const handleFailure = async failure => {
+      // eslint-disable-next-line no-console
+      console.warn(`Retrying upload for ${filename}: ${failure}`)
+      try {
+        await retryDelay(attempt, request)
+        return uploadFile(uploadProgress, fetch)(request, attempt + 1)
+      } catch (err) {
+        if ('failUpload' in uploadProgress) {
+          uploadProgress.failUpload(filename)
         }
-        uploadProgress.increment()
-      } else {
-        await handleFailure(response.statusText)
+        throw err
       }
-    })
-    .catch(handleFailure)
-}
+    }
+    // This is needed to cancel the request in case of client errors
+    if ('startUpload' in uploadProgress) {
+      uploadProgress.startUpload(filename)
+    }
+    // Clone before using the request to allow retries to reuse the body
+    const cloneRequest = request.clone()
+    return fetch(cloneRequest)
+      .then(async response => {
+        if (response.status === 200) {
+          // We need to wait for the response body or fetch-h2 may leave the connection open
+          await response.json()
+          if ('finishUpload' in uploadProgress) {
+            uploadProgress.finishUpload(filename)
+          }
+          uploadProgress.increment()
+        } else {
+          await handleFailure(response.statusText)
+        }
+      })
+      .catch(handleFailure)
+  }
 
 /**
  * @param {Request[]} requests
