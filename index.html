@@ -215,7 +215,7 @@
 <section id="development-setup">
 <h2>Development setup<a class="headerlink" href="#development-setup" title="Permalink to this heading">#</a></h2>
 <p>This project is managed with <a class="reference external" href="https://lerna.js.org/">Lerna</a> and <a class="reference external" href="https://yarnpkg.com/">Yarn</a>. To get started, install Yarn and bootstrap the repo.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>yarn install
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>install
 </pre></div>
 </div>
 <p>You can run tests with <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">test</span></code> at the top level of the project. For each package, <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">test</span> <span class="pre">--watch</span></code> will interactively run the tests for changes since the last commit.</p>
@@ -233,7 +233,7 @@
 </div>
 <p><a class="reference external" href="https://docs.docker.com/compose/overview/">docker-compose</a> is used to run a local copy of all required services together.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This will run docker-compose in the background (-d flag is --detach)</span>
-docker-compose up -d
+docker-compose<span class="w"> </span>up<span class="w"> </span>-d
 </pre></div>
 </div>
 <p>For example, you can restart the server container with <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">restart</span> <span class="pre">server</span></code> or view logs with <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">logs</span> <span class="pre">-f</span> <span class="pre">--tail=10</span> <span class="pre">server</span></code>.</p>
