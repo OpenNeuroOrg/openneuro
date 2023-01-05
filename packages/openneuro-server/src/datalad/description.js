@@ -11,17 +11,16 @@ import { getDatasetWorker } from '../libs/datalad-service'
 import CacheItem, { CacheType } from '../cache/item'
 import { datasetOrSnapshot } from '../utils/datasetOrSnapshot'
 
-export const defaultDescription = {
-  Name: 'Unnamed Dataset',
-  BIDSVersion: '1.1.1',
-}
-
 /**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
  * @returns {(files: [Record<string, unknown>]) => Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
  */
 export const getDescriptionObject = datasetId => files => {
+  const defaultDescription = {
+    Name: datasetId,
+    BIDSVersion: '1.8.0',
+  }
   const file = files.find(f => f.filename === 'dataset_description.json')
   if (file) {
     return request
