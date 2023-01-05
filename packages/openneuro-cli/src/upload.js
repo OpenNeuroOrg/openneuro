@@ -2,6 +2,7 @@ import cliProgress from 'cli-progress'
 import path from 'path'
 import inquirer from 'inquirer'
 import { promises as fs } from 'fs'
+import { createReadStream } from 'fs'
 import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
@@ -153,10 +154,10 @@ export const uploadFiles = async ({
   const MAX_STREAM_HANDLES = 512
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
-    const requests = filesChunk.map(async file => {
+    const requests = filesChunk.map(file => {
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
-      const fileStream = await fs.open(file.path)
+      const fileStream = createReadStream(file.path)
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
         {
@@ -164,14 +165,15 @@ export const uploadFiles = async ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: fileStream.readableWebStream(),
+          // @ts-ignore Node 18+ actually supports this despite types not advertising it
+          body: fileStream,
           signal: controller.signal,
         },
       )
     })
     try {
       await uploads.uploadParallel(
-        await Promise.all(requests),
+        requests,
         uploads.uploadSize(filesChunk),
         uploadProgress,
         fetch,
