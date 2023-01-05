@@ -5,7 +5,7 @@ import config from '../config'
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { commitFiles } from './dataset.js'
-import { fileUrl, getFiles } from './files.js'
+import { fileUrl } from './files.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDatasetWorker } from '../libs/datalad-service'
 import CacheItem, { CacheType } from '../cache/item'
@@ -14,29 +14,24 @@ import { datasetOrSnapshot } from '../utils/datasetOrSnapshot'
 /**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
- * @returns {(files: [Record<string, unknown>]) => Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
+ * @returns {Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
  */
-export const getDescriptionObject = datasetId => files => {
+export const getDescriptionObject = (datasetId, revision) => {
   const defaultDescription = {
     Name: datasetId,
     BIDSVersion: '1.8.0',
   }
-  const file = files.find(f => f.filename === 'dataset_description.json')
-  if (file) {
-    return request
-      .get(fileUrl(datasetId, '', 'dataset_description.json'))
-      .then(({ body, type }) => {
-        // Guard against non-JSON responses
-        if (type === 'application/json') return body
-        else throw new Error('dataset_description.json is not JSON')
-      })
-      .catch(() => {
-        // dataset_description does not exist or is not JSON, return default fields
-        return defaultDescription
-      })
-  } else {
-    return Promise.resolve(defaultDescription)
-  }
+  return request
+    .get(fileUrl(datasetId, '', 'dataset_description.json', revision))
+    .then(({ body, type }) => {
+      // Guard against non-JSON responses
+      if (type === 'application/json') return body
+      else throw new Error('dataset_description.json is not JSON')
+    })
+    .catch(() => {
+      // dataset_description does not exist or is not JSON, return default fields
+      return defaultDescription
+    })
 }
 
 export const descriptionCacheKey = (datasetId, revision) => {
@@ -125,9 +120,9 @@ export const description = obj => {
   ])
   return cache
     .get(() => {
-      return getFiles(datasetId, revision)
-        .then(getDescriptionObject(datasetId))
-        .then(uncachedDescription => ({ id: revision, ...uncachedDescription }))
+      return getDescriptionObject(datasetId, revision).then(
+        uncachedDescription => ({ id: revision, ...uncachedDescription }),
+      )
     })
     .then(description => repairDescriptionTypes(description))
     .then(description => appendSeniorAuthor(description))

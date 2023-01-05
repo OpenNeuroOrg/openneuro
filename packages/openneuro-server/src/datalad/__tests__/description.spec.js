@@ -1,7 +1,6 @@
 import request from 'superagent'
 import {
   getDescriptionObject,
-  defaultDescription,
   repairDescriptionTypes,
   appendSeniorAuthor,
 } from '../description.js'
@@ -96,9 +95,7 @@ describe('datalad dataset descriptions', () => {
       body: { Name: 'Balloon Analog Risk-taking Task' },
       type: 'application/json',
     })
-    const description = await getDescriptionObject('ds000001')([
-      { filename: 'dataset_description.json', id: '12345' },
-    ])
+    const description = await getDescriptionObject('ds000001', '1.0.0')
     expect(description).toEqual({ Name: 'Balloon Analog Risk-taking Task' })
   })
   it('handles a corrupted response', async () => {
@@ -106,15 +103,11 @@ describe('datalad dataset descriptions', () => {
     request.__setMockResponse({
       body: Buffer.from('0x5f3759df', 'hex'),
     })
-    const description = await getDescriptionObject('ds000001')([
-      { filename: 'dataset_description.json', id: '12345' },
-    ])
-    expect(description).toEqual(defaultDescription)
+    const description = await getDescriptionObject('ds000001', '1.0.0')
+    expect(description).toEqual({ Name: 'ds000001', BIDSVersion: '1.8.0' })
   })
   it('works without a dataset_description.json being present', async () => {
-    const description = await getDescriptionObject('ds000001')([
-      { filename: 'LICENSE', id: '12345' },
-    ])
-    expect(description).toEqual(defaultDescription)
+    const description = await getDescriptionObject('ds000001', '1.0.0')
+    expect(description).toEqual({ Name: 'ds000001', BIDSVersion: '1.8.0' })
   })
 })
