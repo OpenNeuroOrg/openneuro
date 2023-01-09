@@ -34,13 +34,19 @@ export const getFileName = (path, filename) => {
  * @param {String} datasetId
  * @param {String} path - Relative path for the file
  * @param {String} filename
+ * @param {String} [revision] - Git hash of commit or tree owning this file
  */
-export const fileUrl = (datasetId, path, filename) => {
+export const fileUrl = (datasetId, path, filename, revision) => {
   const fileName = getFileName(path, filename)
-  const url = `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/files/${fileName}`
-  return url
+  if (revision) {
+    return `http://${getDatasetWorker(
+      datasetId,
+    )}/datasets/${datasetId}/snapshots/${revision}/files/${fileName}`
+  } else {
+    return `http://${getDatasetWorker(
+      datasetId,
+    )}/datasets/${datasetId}/files/${fileName}`
+  }
 }
 
 /**
