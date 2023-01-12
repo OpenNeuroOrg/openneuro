@@ -153,8 +153,8 @@ export const uploadFiles = async ({
   const controller = new AbortController()
   // Limit open file handles for streams to avoid consuming extra file handles
   const MAX_STREAM_HANDLES = 512
-  // Raise listeners to stream handles + 16 slots for downstream listeners
-  setMaxListeners(MAX_STREAM_HANDLES + 16, controller.signal)
+  // Raise listeners to stream handles * 2 for downstream listeners
+  setMaxListeners(MAX_STREAM_HANDLES * 2, controller.signal)
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
     const requests = filesChunk.map(file => {
