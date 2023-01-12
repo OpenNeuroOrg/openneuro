@@ -85,8 +85,8 @@ export function hashFileList(datasetId, files) {
 export function uploadParallelism(requests, bytes) {
   const averageSize = bytes / requests.length
   const parallelism = averageSize / 524288 // 512KB
-  if (parallelism > 16) {
-    return 16
+  if (parallelism > 8) {
+    return 8
   } else if (parallelism < 2) {
     return 2
   } else {
@@ -110,7 +110,7 @@ export function parseFilename(url) {
  */
 export async function retryDelay(step, request) {
   if (step <= 4) {
-    await new Promise(r => setTimeout(r, step ** 4))
+    await new Promise(r => setTimeout(r, step ** 2 * 1000))
   } else {
     throw new Error(
       `Failed to upload file after ${step} attempts - "${request.url}"`,
