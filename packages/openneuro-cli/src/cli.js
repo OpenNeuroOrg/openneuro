@@ -5,6 +5,10 @@ import { login, upload, download, ls } from './actions.js'
 import { gitCredential } from './gitCredential.js'
 import { gitAnnexRemote } from './gitAnnexRemote.js'
 import { create } from './createDataset.js'
+import dns from 'dns'
+
+// this fixes a bug in Node.js - it should be fixed _eventually_ and can be removed: https://github.com/nodejs/undici/issues/1248
+dns.setDefaultResultOrder('ipv4first')
 
 commander.version(version).description('OpenNeuro command line tools.')
 
