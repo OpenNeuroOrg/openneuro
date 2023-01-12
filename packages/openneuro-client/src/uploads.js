@@ -126,7 +126,7 @@ export async function retryDelay(step, request) {
  */
 export const uploadFile =
   (uploadProgress, fetch) =>
-  (request, attempt = 1) => {
+  async (request, attempt = 1) => {
     // Create a retry function with attempts incremented
     const filename = parseFilename(request.url)
     const handleFailure = async failure => {
@@ -147,21 +147,21 @@ export const uploadFile =
       uploadProgress.startUpload(filename)
     }
     // Clone before using the request to allow retries to reuse the body
-    const cloneRequest = request.clone()
-    return fetch(cloneRequest)
-      .then(async response => {
-        if (response.status === 200) {
-          // We need to wait for the response body or fetch-h2 may leave the connection open
-          await response.json()
-          if ('finishUpload' in uploadProgress) {
-            uploadProgress.finishUpload(filename)
-          }
-          uploadProgress.increment()
-        } else {
-          await handleFailure(response.statusText)
+    try {
+      const response = await fetch(request.clone())
+      if (response.status === 200) {
+        // We need to wait for the response body or fetch-h2 may leave the connection open
+        await response.json()
+        if ('finishUpload' in uploadProgress) {
+          uploadProgress.finishUpload(filename)
         }
-      })
-      .catch(handleFailure)
+        uploadProgress.increment()
+      } else {
+        await handleFailure(response.statusText)
+      }
+    } catch (err) {
+      await handleFailure(err)
+    }
   }
 
 /**
