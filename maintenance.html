@@ -170,6 +170,7 @@
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git access to OpenNeuro datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Unpublishing a dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#adjusting-worker-storage-size">Adjusting worker storage size</a></li>
 </ul>
 
 </div>
@@ -213,6 +214,23 @@ curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </s
 </pre></div>
 </div>
 <p>To make the dataset public again it can simply be republished by a dataset administrator. Any remotes which were altered will need to be updated manually.</p>
+</section>
+<section id="adjusting-worker-storage-size">
+<h1>Adjusting worker storage size<a class="headerlink" href="#adjusting-worker-storage-size" title="Permalink to this heading">#</a></h1>
+<p>Disks are managed as preallocated GCP volumes and assigned to Kubernetes persistent volumes. Worker file systems are ReadWriteOnce. Increasing storage capacity for a worker is done in two steps. Resize the GCP disk and update the persistent volume configuration to match.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get disk name</span>
+&gt;<span class="w"> </span>gcloud<span class="w"> </span>compute<span class="w"> </span>disks<span class="w"> </span>list
+NAME<span class="w">                                      </span>LOCATION<span class="w">    </span>LOCATION_SCOPE<span class="w">  </span>SIZE_GB<span class="w">  </span>TYPE<span class="w">         </span>STATUS
+openneuro-staging-datasets-0<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
+openneuro-staging-datasets-1<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
+openneuro-staging-datasets-2<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
+openneuro-staging-datasets-3<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
+<span class="c1"># Resize to 512GB</span>
+&gt;<span class="w"> </span>gcloud<span class="w"> </span>compute<span class="w"> </span>disks<span class="w"> </span>resize<span class="w"> </span>openneuro-staging-datasets-0<span class="w"> </span>--size<span class="o">=</span><span class="m">512</span>
+</pre></div>
+</div>
+<p>Make sure the resize operation has completed (status “READY”) and then update the worker configuration for the PV to match (see <code class="docutils literal notranslate"><span class="pre">helm/openneuro/values.yaml</span></code> key workerDiskSize) and upgrade to deploy the new helm configuration.</p>
+<p>If the configuration is updated prior to the disk being resized, the worker will need to be restarted to pick up the change. Verify the resize is complete with a shell on the worker or from the GCP console under pod statistics for the worker.</p>
 </section>
 
         </article>
