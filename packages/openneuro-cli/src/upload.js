@@ -181,12 +181,6 @@ export const uploadFiles = async ({
         uploadProgress,
         fetch,
       )
-      // Trigger earlier cleanup of requests once complete
-      for (const req of requests) {
-        req.body.destroy()
-      }
-      // Abort any lingering failed requests
-      controller.abort()
     } catch (err) {
       console.error(
         '\nNot all files could be opened for upload, check file access and permissions and try again.',
