@@ -25,7 +25,7 @@ export const login = () => {
       message: 'Choose an OpenNeuro instance to use.',
       choices: [
         'https://openneuro.org/',
-        'https://openneuro.staging.sqm.io/',
+        'https://staging.openneuro.org/',
         'http://localhost:9876/',
       ],
       default: 'https://openneuro.org/',
