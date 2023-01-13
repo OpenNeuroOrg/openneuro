@@ -189,8 +189,9 @@ export const uploadFiles = async ({
       controller.abort()
     } catch (err) {
       console.error(
-        'Not all files could be opened for upload, check file access and permissions and try again.',
+        '\nNot all files could be opened for upload, check file access and permissions and try again.',
       )
+      console.error(err)
     }
   }
   uploadProgress.stop()
