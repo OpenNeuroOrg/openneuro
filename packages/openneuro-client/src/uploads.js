@@ -130,11 +130,12 @@ export const uploadFile =
     // Create a retry function with attempts incremented
     const filename = parseFilename(request.url)
     const handleFailure = async failure => {
+      const retryClone = request.clone()
       // eslint-disable-next-line no-console
       console.warn(`\nRetrying upload for ${filename}: ${failure}`)
       try {
         await retryDelay(attempt, request)
-        return uploadFile(uploadProgress, fetch)(request, attempt + 1)
+        return uploadFile(uploadProgress, fetch)(retryClone, attempt + 1)
       } catch (err) {
         if ('failUpload' in uploadProgress) {
           uploadProgress.failUpload(filename)
@@ -148,7 +149,7 @@ export const uploadFile =
     }
     try {
       // Clone before using the request to allow retries to reuse the body
-      const response = await fetch(request.clone())
+      const response = await fetch(request)
       if (response.status === 200) {
         // We need to wait for the response body or fetch-h2 may leave the connection open
         await response.json()
