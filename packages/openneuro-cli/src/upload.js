@@ -183,7 +183,7 @@ export const uploadFiles = async ({
       )
       // Trigger earlier cleanup of requests once complete
       for (const req of requests) {
-        req.body.close()
+        req.body.destroy()
       }
       // Abort any lingering failed requests
       controller.abort()
