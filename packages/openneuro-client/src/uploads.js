@@ -131,7 +131,7 @@ export const uploadFile =
     const filename = parseFilename(request.url)
     const handleFailure = async failure => {
       // eslint-disable-next-line no-console
-      console.warn(`Retrying upload for ${filename}: ${failure}`)
+      console.warn(`\nRetrying upload for ${filename}: ${failure}`)
       try {
         await retryDelay(attempt, request)
         return uploadFile(uploadProgress, fetch)(request, attempt + 1)
