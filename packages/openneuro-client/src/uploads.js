@@ -146,8 +146,8 @@ export const uploadFile =
     if ('startUpload' in uploadProgress) {
       uploadProgress.startUpload(filename)
     }
-    // Clone before using the request to allow retries to reuse the body
     try {
+      // Clone before using the request to allow retries to reuse the body
       const response = await fetch(request.clone())
       if (response.status === 200) {
         // We need to wait for the response body or fetch-h2 may leave the connection open
