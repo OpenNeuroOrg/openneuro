@@ -16,22 +16,18 @@ import { datasetOrSnapshot } from '../utils/datasetOrSnapshot'
  * @param {string} datasetId
  * @returns {Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
  */
-export const getDescriptionObject = (datasetId, revision) => {
-  const defaultDescription = {
-    Name: datasetId,
-    BIDSVersion: '1.8.0',
+export const getDescriptionObject = async (datasetId, revision) => {
+  const res = await fetch(
+    fileUrl(datasetId, '', 'dataset_description.json', revision),
+  )
+  const contentType = res.headers.get('content-type')
+  if (res.status === 200 && contentType.includes('application/json')) {
+    return await res.json()
+  } else {
+    throw new Error(
+      `Backend request failed, dataset_description.json may not exist or may be non-JSON (type: ${contentType}, status: ${res.status})`,
+    )
   }
-  return request
-    .get(fileUrl(datasetId, '', 'dataset_description.json', revision))
-    .then(({ body, type }) => {
-      // Guard against non-JSON responses
-      if (type === 'application/json') return body
-      else throw new Error('dataset_description.json is not JSON')
-    })
-    .catch(() => {
-      // dataset_description does not exist or is not JSON, return default fields
-      return defaultDescription
-    })
 }
 
 export const descriptionCacheKey = (datasetId, revision) => {
@@ -111,21 +107,28 @@ export const appendSeniorAuthor = description => {
  * Get a parsed dataset_description.json
  * @param {object} obj dataset or snapshot object
  */
-export const description = obj => {
+export const description = async obj => {
   // Obtain datasetId from Dataset or Snapshot objects
   const { datasetId, revision } = datasetOrSnapshot(obj)
+  // Default fallback if dataset_description.json is not valid or missing
+  const defaultDescription = {
+    Name: datasetId,
+    BIDSVersion: '1.8.0',
+  }
   const cache = new CacheItem(redis, CacheType.datasetDescription, [
     datasetId,
     revision.substring(0, 7),
   ])
-  return cache
-    .get(() => {
+  try {
+    const datasetDescription = await cache.get(() => {
       return getDescriptionObject(datasetId, revision).then(
         uncachedDescription => ({ id: revision, ...uncachedDescription }),
       )
     })
-    .then(description => repairDescriptionTypes(description))
-    .then(description => appendSeniorAuthor(description))
+    return appendSeniorAuthor(repairDescriptionTypes(datasetDescription))
+  } catch (err) {
+    return defaultDescription
+  }
 }
 
 export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
