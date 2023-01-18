@@ -1,4 +1,3 @@
-import request from 'superagent'
 import {
   getDescriptionObject,
   repairDescriptionTypes,
@@ -6,7 +5,6 @@ import {
 } from '../description.js'
 
 // Mock requests to Datalad service
-vi.mock('superagent')
 vi.mock('ioredis')
 vi.mock('../../config.js')
 
@@ -89,25 +87,51 @@ describe('datalad dataset descriptions', () => {
       expect(Array.isArray(repaired.Funding)).toBe(true)
     })
   })
-  it('returns the parsed dataset_description.json object', async () => {
-    request.post.mockClear()
-    request.__setMockResponse({
-      body: { Name: 'Balloon Analog Risk-taking Task' },
-      type: 'application/json',
+  describe('getDescriptionObject()', () => {
+    beforeAll(() => {
+      global.fetch = vi.fn()
     })
-    const description = await getDescriptionObject('ds000001', '1.0.0')
-    expect(description).toEqual({ Name: 'Balloon Analog Risk-taking Task' })
-  })
-  it('handles a corrupted response', async () => {
-    request.post.mockClear()
-    request.__setMockResponse({
-      body: Buffer.from('0x5f3759df', 'hex'),
+    it('returns the parsed dataset_description.json object', async () => {
+      fetch.mockResolvedValue({
+        json: () =>
+          Promise.resolve({ Name: 'Balloon Analog Risk-taking Task' }),
+        headers: {
+          get: () => 'application/json',
+        },
+        status: 200,
+      })
+      const description = await getDescriptionObject('ds000001', '1.0.0')
+      expect(description).toEqual({ Name: 'Balloon Analog Risk-taking Task' })
     })
-    const description = await getDescriptionObject('ds000001', '1.0.0')
-    expect(description).toEqual({ Name: 'ds000001', BIDSVersion: '1.8.0' })
-  })
-  it('works without a dataset_description.json being present', async () => {
-    const description = await getDescriptionObject('ds000001', '1.0.0')
-    expect(description).toEqual({ Name: 'ds000001', BIDSVersion: '1.8.0' })
+    it('handles a corrupted response', async () => {
+      global.fetch = vi.fn()
+      fetch.mockResolvedValue({
+        json: () => Promise.reject('JSON could not be parsed'),
+        headers: {
+          get: () => 'application/json',
+        },
+        status: 400,
+      })
+      await expect(getDescriptionObject('ds000001', '1.0.0')).rejects.toEqual(
+        Error(
+          'Backend request failed, dataset_description.json may not exist or may be non-JSON (type: application/json, status: 400)',
+        ),
+      )
+    })
+    it('throws an error when nothing is returned', async () => {
+      global.fetch = vi.fn()
+      fetch.mockResolvedValue({
+        json: () => Promise.reject('JSON could not be parsed'),
+        headers: {
+          get: () => 'application/json',
+        },
+        status: 404,
+      })
+      await expect(getDescriptionObject('ds000001', '1.0.0')).rejects.toEqual(
+        Error(
+          'Backend request failed, dataset_description.json may not exist or may be non-JSON (type: application/json, status: 404)',
+        ),
+      )
+    })
   })
 })
