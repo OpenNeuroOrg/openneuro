@@ -8,6 +8,7 @@ import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
+import { setDuplexIfRequired } from './setDuplexIfRequired'
 import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
 
 /**
@@ -161,17 +162,19 @@ export const uploadFiles = async ({
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
       const fileStream = createReadStream(file.path)
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: fileStream,
+        signal: controller.signal,
+      }
+      setDuplexIfRequired(process.version, requestOptions)
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          // @ts-ignore Node 18+ actually supports this despite types not advertising it
-          body: fileStream,
-          signal: controller.signal,
-        },
+        // @ts-ignore Node 18+ actually supports this despite types not advertising it
+        requestOptions,
       )
     })
     try {
