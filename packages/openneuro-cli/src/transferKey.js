@@ -2,6 +2,7 @@ import { Readable } from 'stream'
 import { createWriteStream } from 'fs'
 import { open } from 'fs/promises'
 import { once } from 'events'
+import { setDuplexIfRequired } from './setDuplexIfRequired'
 
 /**
  * Create a Request object for this url and key
@@ -33,7 +34,12 @@ export function keyRequest(state, key, options) {
 export async function storeKey(state, key, file) {
   const f = await open(file, 'r')
   const body = f.readableWebStream()
-  const request = keyRequest(state, key, { body, method: 'POST' })
+  const requestOptions = {
+    body,
+    method: 'POST',
+  }
+  setDuplexIfRequired(process.version, requestOptions)
+  const request = keyRequest(state, key, requestOptions)
   const response = await fetch(request)
   if (response.status === 200) {
     return true
