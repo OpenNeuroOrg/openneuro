@@ -1,0 +1,71 @@
+name: Bug report
+description: File a report if you encountered a problem.
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Thanks for taking the time to fill out this bug report!
+        ### The following information will help us in getting your issue resolved.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What went wrong?
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: A list of steps taken to encounter the bug, add screenshots if necessary.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+  - type: textarea
+    id: desktop-env
+    attributes:
+      label: Desktop
+      description: |
+        Please provide the following information if using a desktop/laptop.
+
+        Example report
+        - OS: iOS
+        - Browser Chrome
+        - Version 22
+      value: |
+        - OS:
+        - Browser:
+        - Version:
+  - type: textarea
+    id: phone-env
+    attributes:
+      label: Phone
+      description: |
+        Please provide the following information if using a phone.
+
+        Example report
+        - Device: iPhone 12
+        - OS: iOS 15.1
+        - Browser stock browser, safari
+        - Version 22
+      value: |
+        - Device:
+        - OS:
+        - Browser:
+        - Version:
+  - type: textarea
+    id: addinfo
+    attributes:
+      label: Additional information
+      description: Add any other context about the problem here.
