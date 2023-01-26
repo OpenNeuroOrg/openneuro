@@ -39,8 +39,8 @@ apiCpuRequests: 3
 apiMemoryRequests: 1Gi
 
 # Worker resource configuration
-workerCpuRequests: 2
-workerMemoryRequests: 4Gi
+workerCpuRequests: 3
+workerMemoryRequests: 6Gi
 
 # Nginx resource configuration
 webCpuRequests: 0.25
