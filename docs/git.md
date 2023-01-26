@@ -122,5 +122,5 @@ git annex copy --to openneuro
 To download annexed objects from the remote, you may need to manually ask git-annex update the local state of the OpenNeuro remote. You can force this update for all files:
 
 ```shell
-git-annex fsck --fast --from openneuro
+git annex fsck --fast --from openneuro
 ```
