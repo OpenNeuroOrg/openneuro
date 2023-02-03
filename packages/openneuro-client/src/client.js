@@ -19,7 +19,7 @@ const authLink = getAuthorization =>
     if (token) {
       const tokenString = `accessToken=${token}`
       cookie = {
-        cookie: tokenString,
+        Authorization: `Bearer ${tokenString}`,
       }
     }
     return {
