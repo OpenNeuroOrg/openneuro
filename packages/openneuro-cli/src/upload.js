@@ -10,6 +10,7 @@ import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
 import { setDuplexIfRequired } from './setDuplexIfRequired'
 import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
+import fetch, { Request } from 'node-fetch'
 
 /**
  * BIDS validator promise wrapper

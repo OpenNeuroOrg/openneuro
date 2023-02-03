@@ -3,6 +3,7 @@ import { createWriteStream } from 'fs'
 import { open } from 'fs/promises'
 import { once } from 'events'
 import { setDuplexIfRequired } from './setDuplexIfRequired'
+import fetch, { Request } from 'node-fetch'
 
 /**
  * Create a Request object for this url and key
