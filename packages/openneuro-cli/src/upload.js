@@ -155,8 +155,6 @@ export const uploadFiles = async ({
   // Limit open file handles for streams to avoid consuming extra file handles
   const MAX_STREAM_HANDLES = 512
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
-    // Raise listeners to stream handles + 16 for downstream listeners
-    setMaxListeners(MAX_STREAM_HANDLES + 16, controller.signal)
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
     const requests = filesChunk.map(file => {
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
