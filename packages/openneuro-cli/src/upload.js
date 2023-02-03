@@ -9,7 +9,7 @@ import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
 import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
-import fetch, { Request } from 'node-fetch'
+import { fetch, Request, AbortController } from 'fetch-h2'
 
 /**
  * BIDS validator promise wrapper
@@ -162,6 +162,19 @@ export const uploadFiles = async ({
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
       const fileStream = createReadStream(file.path)
+      fileStream.on('error', err => {
+        console.error(err)
+        controller.abort()
+      })
+      fileStream.on('close', () => {
+        if (fileStream.bytesRead === 0) {
+          uploadProgress.stop()
+          console.error(
+            `Warning: "${file.filename}" read zero bytes - check that this file is readable and try again`,
+          )
+          controller.abort()
+        }
+      })
       const requestOptions = {
         method: 'POST',
         headers: {

@@ -8281,11 +8281,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["core-js", "npm:3.18.0"],\
             ["elastic-apm-node", "npm:3.12.1"],\
             ["esm", "npm:3.2.25"],\
+            ["fetch-h2", "npm:3.0.2"],\
             ["inquirer", "npm:5.2.0"],\
             ["jwt-decode", "npm:3.1.2"],\
             ["metro-memory-fs", "npm:0.73.3"],\
             ["mkdirp", "npm:1.0.4"],\
-            ["node-fetch", "virtual:90f6a129d8adfee793b93ece48b319375c46f70206be38f532b28e127912d214b54604b30e8cb269ad6cd82b0db01373baefbe471fefa8ff4f96f22e6afba034#npm:2.6.9"],\
             ["react", "npm:17.0.2"],\
             ["vitest", "virtual:133165406520d697b59bfd8a87da656a1201b50380fa7b6c96355187dd672b60916478120380b134e3b9f4bd0e9b90596200bbcdd3d1635211c23f790d0912a9#npm:0.25.2"]\
           ],\
@@ -9742,6 +9742,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/tough-cookie", "npm:4.0.1"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:4.0.2", {\
+          "packageLocation": "./.yarn/cache/@types-tough-cookie-npm-4.0.2-9e61f877e6-e055556ffd.zip/node_modules/@types/tough-cookie/",\
+          "packageDependencies": [\
+            ["@types/tough-cookie", "npm:4.0.2"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@types/treeify", [\
@@ -10575,6 +10582,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/ajv",\
             "ajv"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["already", [\
+        ["npm:2.2.1", {\
+          "packageLocation": "./.yarn/cache/already-npm-2.2.1-764d18dba8-34f16dd91d.zip/node_modules/already/",\
+          "packageDependencies": [\
+            ["already", "npm:2.2.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -12745,6 +12761,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["caller-path", "npm:2.0.0"],\
             ["caller-callsite", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["callguard", [\
+        ["npm:2.0.0", {\
+          "packageLocation": "./.yarn/cache/callguard-npm-2.0.0-2a595eb843-0dccd585ff.zip/node_modules/callguard/",\
+          "packageDependencies": [\
+            ["callguard", "npm:2.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -16460,6 +16485,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["fetch-h2", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/fetch-h2-npm-3.0.2-d066cbb0f9-7814fd95e5.zip/node_modules/fetch-h2/",\
+          "packageDependencies": [\
+            ["fetch-h2", "npm:3.0.2"],\
+            ["@types/tough-cookie", "npm:4.0.2"],\
+            ["already", "npm:2.2.1"],\
+            ["callguard", "npm:2.0.0"],\
+            ["get-stream", "npm:6.0.1"],\
+            ["through2", "npm:4.0.2"],\
+            ["to-arraybuffer", "npm:1.0.1"],\
+            ["tough-cookie", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["fflate", [\
         ["npm:0.7.3", {\
           "packageLocation": "./.yarn/cache/fflate-npm-0.7.3-875c2ba15f-6d0908c546.zip/node_modules/fflate/",\
@@ -17076,6 +17117,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["get-stream", "npm:5.2.0"],\
             ["pump", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:6.0.1", {\
+          "packageLocation": "./.yarn/cache/get-stream-npm-6.0.1-83e51a4642-e04ecece32.zip/node_modules/get-stream/",\
+          "packageDependencies": [\
+            ["get-stream", "npm:6.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -21533,27 +21581,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["node-fetch", "npm:2.6.5"],\
             ["whatwg-url", "npm:5.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:2.6.9", {\
-          "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.9-9fc9a54529-acb04f9ce7.zip/node_modules/node-fetch/",\
-          "packageDependencies": [\
-            ["node-fetch", "npm:2.6.9"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:90f6a129d8adfee793b93ece48b319375c46f70206be38f532b28e127912d214b54604b30e8cb269ad6cd82b0db01373baefbe471fefa8ff4f96f22e6afba034#npm:2.6.9", {\
-          "packageLocation": "./.yarn/__virtual__/node-fetch-virtual-e65c32dbfb/0/cache/node-fetch-npm-2.6.9-9fc9a54529-acb04f9ce7.zip/node_modules/node-fetch/",\
-          "packageDependencies": [\
-            ["node-fetch", "virtual:90f6a129d8adfee793b93ece48b319375c46f70206be38f532b28e127912d214b54604b30e8cb269ad6cd82b0db01373baefbe471fefa8ff4f96f22e6afba034#npm:2.6.9"],\
-            ["@types/encoding", null],\
-            ["encoding", null],\
-            ["whatwg-url", "npm:5.0.0"]\
-          ],\
-          "packagePeers": [\
-            "@types/encoding",\
-            "encoding"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -27067,6 +27094,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["tmp", "npm:0.2.1"],\
             ["rimraf", "npm:3.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["to-arraybuffer", [\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/cache/to-arraybuffer-npm-1.0.1-a57b097c21-31433c10b3.zip/node_modules/to-arraybuffer/",\
+          "packageDependencies": [\
+            ["to-arraybuffer", "npm:1.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
