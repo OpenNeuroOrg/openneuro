@@ -7,7 +7,7 @@ import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
-import { setupFetchH2, configuredClient } from './configuredClient.js'
+import { configuredClient } from './configuredClient.js'
 import { validateApiKey } from './validateApiKey'
 import { lsSnapshot } from './ls.js'
 
@@ -173,7 +173,6 @@ export const upload = (dir, cmd) => {
       verbose: cmd.verbose,
       blacklistModalities: ['Microscopy'],
     }
-    setupFetchH2()
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
@@ -261,7 +260,6 @@ export const download = (datasetId, destination, cmd) => {
   if (cmd.snapshot) {
     apmTransaction.addLabels({ snapshot: cmd.snapshot })
   }
-  setupFetchH2()
   const client = configuredClient()
   if (!cmd.draft && !cmd.snapshot) {
     return getSnapshots(client)(datasetId).then(({ data }) => {
@@ -300,7 +298,6 @@ export const download = (datasetId, destination, cmd) => {
  * @param {object} cmd
  */
 export const ls = (datasetId, cmd) => {
-  setupFetchH2()
   const client = configuredClient()
   if (!cmd.snapshot) {
     return getSnapshots(client)(datasetId).then(({ data }) => {
