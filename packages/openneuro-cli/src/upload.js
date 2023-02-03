@@ -151,10 +151,10 @@ export const uploadFiles = async ({
     speed: 'N/A',
   })
   const rootUrl = getUrl()
+  const controller = new AbortController()
   // Limit open file handles for streams to avoid consuming extra file handles
   const MAX_STREAM_HANDLES = 512
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
-    const controller = new AbortController()
     // Raise listeners to stream handles + 16 for downstream listeners
     setMaxListeners(MAX_STREAM_HANDLES + 16, controller.signal)
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
