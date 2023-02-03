@@ -5,6 +5,7 @@ import fetch from 'node-fetch'
 
 export const configuredClient = () => {
   return createClient(`${getUrl()}crn/graphql`, {
+    getAuthorization: getToken,
     clientVersion: version,
     fetch,
   })
