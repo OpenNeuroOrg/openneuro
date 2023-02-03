@@ -177,9 +177,6 @@ export const uploadFiles = async ({
       })
       const requestOptions = {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         body: fileStream,
         signal: controller.signal,
       }
