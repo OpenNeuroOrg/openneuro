@@ -7,7 +7,7 @@ export const configuredClient = () => {
   // fetch-h2 has its own method of setting cookies
   // Skip setting getAuthorization and set a cookie here instead
   const jar = new CookieJar()
-  jar.setCookie(getToken(), getUrl())
+  jar.setCookie(`accessToken=${getToken()}`, getUrl())
   setup({ cookieJar: jar })
   return createClient(`${getUrl()}crn/graphql`, {
     clientVersion: version,
