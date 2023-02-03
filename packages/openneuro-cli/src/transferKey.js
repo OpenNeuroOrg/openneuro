@@ -2,7 +2,6 @@ import { Readable } from 'stream'
 import { createWriteStream } from 'fs'
 import { open } from 'fs/promises'
 import { once } from 'events'
-import { setDuplexIfRequired } from './setDuplexIfRequired'
 import fetch, { Request } from 'node-fetch'
 
 /**
@@ -39,7 +38,6 @@ export async function storeKey(state, key, file) {
     body,
     method: 'POST',
   }
-  setDuplexIfRequired(process.version, requestOptions)
   const request = keyRequest(state, key, requestOptions)
   const response = await fetch(request)
   if (response.status === 200) {

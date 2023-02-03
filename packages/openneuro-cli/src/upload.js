@@ -8,7 +8,6 @@ import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
-import { setDuplexIfRequired } from './setDuplexIfRequired'
 import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
 import fetch, { Request } from 'node-fetch'
 
@@ -171,7 +170,6 @@ export const uploadFiles = async ({
         body: fileStream,
         signal: controller.signal,
       }
-      setDuplexIfRequired(process.version, requestOptions)
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
         // @ts-ignore Node 18+ actually supports this despite types not advertising it
