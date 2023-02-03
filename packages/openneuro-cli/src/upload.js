@@ -8,8 +8,8 @@ import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
-import { setDuplexIfRequired } from './setDuplexIfRequired'
 import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
+import { fetch, Request, AbortController } from 'fetch-h2'
 
 /**
  * BIDS validator promise wrapper
@@ -151,17 +151,28 @@ export const uploadFiles = async ({
     speed: 'N/A',
   })
   const rootUrl = getUrl()
+  const controller = new AbortController()
   // Limit open file handles for streams to avoid consuming extra file handles
   const MAX_STREAM_HANDLES = 512
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
-    const controller = new AbortController()
-    // Raise listeners to stream handles + 16 for downstream listeners
-    setMaxListeners(MAX_STREAM_HANDLES + 16, controller.signal)
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
     const requests = filesChunk.map(file => {
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
       const fileStream = createReadStream(file.path)
+      fileStream.on('error', err => {
+        console.error(err)
+        controller.abort()
+      })
+      fileStream.on('close', () => {
+        if (fileStream.bytesRead === 0) {
+          uploadProgress.stop()
+          console.error(
+            `Warning: "${file.filename}" read zero bytes - check that this file is readable and try again`,
+          )
+          controller.abort()
+        }
+      })
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -170,7 +181,6 @@ export const uploadFiles = async ({
         body: fileStream,
         signal: controller.signal,
       }
-      setDuplexIfRequired(process.version, requestOptions)
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
         // @ts-ignore Node 18+ actually supports this despite types not advertising it

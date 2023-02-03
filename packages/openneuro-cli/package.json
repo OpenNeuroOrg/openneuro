@@ -22,9 +22,11 @@
     "commander": "7.2.0",
     "elastic-apm-node": "3.12.1",
     "esm": "^3.0.16",
+    "fetch-h2": "^3.0.2",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "mkdirp": "1.0.4",
+    "node-fetch": "2.6.9",
     "react": "^17.0.1"
   },
   "scripts": {
