@@ -78,7 +78,7 @@ class ValidationResults extends React.Component {
   _countFiles(issues) {
     let numFiles = 0
     for (const issue of issues) {
-      numFiles += issue.files.length
+      numFiles += Array.from(issue.files).length
       if (issue.additionalFileCount) {
         numFiles += issue.additionalFileCount
       }
