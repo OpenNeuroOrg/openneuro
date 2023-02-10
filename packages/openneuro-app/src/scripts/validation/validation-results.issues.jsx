@@ -11,7 +11,7 @@ class Issues extends React.Component {
   render() {
     const issueFiles = this.props.issues
     const issues = issueFiles.map((issue, index) => {
-      let totalFiles = issue.files.length
+      let totalFiles = issue.files.length || issue.files.size
       if (issue.additionalFileCount) {
         totalFiles += issue.additionalFileCount
       }
@@ -32,7 +32,7 @@ class Issues extends React.Component {
       )
 
       // issue sub-errors
-      const subErrors = issue.files.map((error, index2) => {
+      const subErrors = Array.from(issue.files).map((error, index2) => {
         return error ? (
           <Issue
             type={this.props.issueType}
