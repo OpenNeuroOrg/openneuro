@@ -17,7 +17,7 @@ export async function runValidator(
     output.issues.warnings = issues.filter(
       issue => issue.severity === 'warning',
     )
-    output.issues.errors = issues.filter(issue => issue.severity === 'errors')
+    output.issues.errors = issues.filter(issue => issue.severity === 'error')
     output.summary = result.summary
     console.log(output)
   } catch (err) {
