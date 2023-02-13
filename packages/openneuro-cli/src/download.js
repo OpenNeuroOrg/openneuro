@@ -4,7 +4,7 @@ import mkdirp from 'mkdirp'
 import cliProgress from 'cli-progress'
 import { getToken } from './config.js'
 import { downloadDataset } from './datasets'
-import { fetch } from 'node-fetch'
+import fetch from 'node-fetch'
 
 export const checkDestination = destination => {
   if (fs.existsSync(destination)) {
