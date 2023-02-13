@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/client",
-  "version": "4.15.2-alpha.14",
+  "version": "4.15.2-alpha.15",
   "description": "OpenNeuro shared client library.",
   "main": "dist/index.js",
   "browser": "src/index.js",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.14.5",
     "@babel/runtime-corejs3": "^7.13.10",
-    "@openneuro/server": "^4.15.2-alpha.14",
+    "@openneuro/server": "^4.15.2-alpha.15",
     "apollo-server": "^2.23.0",
     "core-js": "^3.10.1",
     "vitest": "^0.25.2"
@@ -35,5 +35,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "fc6317d28f5ccb4e61d41d032640efc59607e7fe"
+  "gitHead": "931ff6023624a13b2a7268a2ad0f0127092992ca"
 }
