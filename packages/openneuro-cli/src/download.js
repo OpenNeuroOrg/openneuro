@@ -4,7 +4,7 @@ import mkdirp from 'mkdirp'
 import cliProgress from 'cli-progress'
 import { getToken } from './config.js'
 import { downloadDataset } from './datasets'
-import { fetch } from 'fetch-h2'
+import fetch from 'node-fetch'
 
 export const checkDestination = destination => {
   if (fs.existsSync(destination)) {
@@ -67,7 +67,6 @@ export const downloadFile = async (
       const response = await fetch(fileUrl, {
         headers: getFetchHeaders(),
       })
-      // @ts-expect-error This is defined?
       const stream = response.body
       if (response.status === 200) {
         // Setup end/error handler with Promise interface
