@@ -8227,7 +8227,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-dom", "npm:17.0.9"],\
             ["@types/react-router-dom", "npm:5.3.3"],\
             ["@types/testing-library__jest-dom", "npm:5.14.5"],\
-            ["bids-validator", "npm:1.9.9"],\
+            ["bids-validator", "npm:1.10.0"],\
             ["bytes", "npm:3.1.0"],\
             ["comlink", "npm:4.3.1"],\
             ["core-js", "npm:3.25.1"],\
@@ -8275,7 +8275,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@types/mkdirp", "npm:1.0.2"],\
             ["@types/node", "npm:18.11.9"],\
-            ["bids-validator", "npm:1.9.9"],\
+            ["bids-validator", "npm:1.10.0"],\
             ["cli-progress", "npm:3.9.1"],\
             ["commander", "npm:7.2.0"],\
             ["core-js", "npm:3.18.0"],\
@@ -12217,10 +12217,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["bids-validator", [\
-        ["npm:1.9.9", {\
-          "packageLocation": "./.yarn/cache/bids-validator-npm-1.9.9-84a56c12cb-a20e14ee67.zip/node_modules/bids-validator/",\
+        ["npm:1.10.0", {\
+          "packageLocation": "./.yarn/cache/bids-validator-npm-1.10.0-6d9bc27642-021e35fb6d.zip/node_modules/bids-validator/",\
           "packageDependencies": [\
-            ["bids-validator", "npm:1.9.9"],\
+            ["bids-validator", "npm:1.10.0"],\
             ["@aws-sdk/client-s3", "npm:3.33.0"],\
             ["ajv", "npm:6.12.6"],\
             ["bytes", "npm:3.1.0"],\
@@ -12234,7 +12234,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["is-utf8", "npm:0.2.1"],\
             ["jshint", "npm:2.13.1"],\
             ["lodash", "npm:4.17.21"],\
-            ["minimatch", "npm:3.0.4"],\
+            ["minimatch", "npm:3.0.5"],\
             ["nifti-js", "npm:1.0.1"],\
             ["p-limit", "npm:2.3.0"],\
             ["pako", "npm:1.0.11"],\
@@ -21001,6 +21001,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/minimatch-npm-3.0.4-6e76f51c23-66ac295f8a.zip/node_modules/minimatch/",\
           "packageDependencies": [\
             ["minimatch", "npm:3.0.4"],\
+            ["brace-expansion", "npm:1.1.11"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:3.0.5", {\
+          "packageLocation": "./.yarn/cache/minimatch-npm-3.0.5-a20094d35f-a3b84b426e.zip/node_modules/minimatch/",\
+          "packageDependencies": [\
+            ["minimatch", "npm:3.0.5"],\
             ["brace-expansion", "npm:1.1.11"]\
           ],\
           "linkType": "HARD"\
