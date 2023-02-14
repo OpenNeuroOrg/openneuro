@@ -31,7 +31,7 @@ describe('IngestDataset model', () => {
       notified: false,
     })
     await goodUrlModel.validate(result => {
-      expect(result).toBe(undefined)
+      expect(result).toBe(null)
     })
   })
 })
