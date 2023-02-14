@@ -1,4 +1,3 @@
-import { setMaxListeners } from 'events'
 import cliProgress from 'cli-progress'
 import path from 'path'
 import inquirer from 'inquirer'
