@@ -43,6 +43,31 @@ def test_get_annexed_file(client):
     assert result.content.decode() == file_data
 
 
+def test_get_nested_annexed_file(client):
+    # Test accessing a subdir annexed file in git history
+    ds_id = 'ds000001'
+    file_data = 'test image, please ignore'
+    # Add it
+    response = client.simulate_post(
+        '/datasets/{}/files/sub-01:anat:data.nii.gz'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    commit = json.loads(response.content)['ref']
+    assert response.status == falcon.HTTP_OK
+    # Delete it
+    response = client.simulate_delete('/datasets/{}/files'.format(
+        ds_id), body='{ "filenames": ["sub-01/anat/data.nii.gz"] }')
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    # Get it
+    result = client.simulate_get(
+        '/datasets/{}/snapshots/{}/files/sub-01:anat:data.nii.gz'.format(ds_id, commit), file_wrapper=FileWrapper)
+    content_len = int(result.headers['content-length'])
+    assert content_len == len(result.content)
+    assert result.content.decode() == file_data
+
+
 def test_get_annexed_file_nested(client):
     ds_id = 'ds000001'
     file_data = 'test image, please ignore'
