@@ -1,8 +1,6 @@
-import { Readable } from 'stream'
-import { createWriteStream } from 'fs'
-import { open } from 'fs/promises'
+import { createWriteStream, createReadStream } from 'fs'
 import { once } from 'events'
-import { setDuplexIfRequired } from './setDuplexIfRequired'
+import fetch, { Request } from 'node-fetch'
 
 /**
  * Create a Request object for this url and key
@@ -32,13 +30,11 @@ export function keyRequest(state, key, options) {
  * @param {string} file File path
  */
 export async function storeKey(state, key, file) {
-  const f = await open(file, 'r')
-  const body = f.readableWebStream()
+  const body = createReadStream(file)
   const requestOptions = {
     body,
     method: 'POST',
   }
-  setDuplexIfRequired(process.version, requestOptions)
   const request = keyRequest(state, key, requestOptions)
   const response = await fetch(request)
   if (response.status === 200) {
@@ -62,8 +58,7 @@ export async function retrieveKey(state, key, file) {
     const response = await fetch(request)
     if (response.status === 200) {
       const writable = createWriteStream(file)
-      // @ts-ignore-error ReadableStream<any> is more accurate here but response.body returns incompatible ReadableStream<Uint8Array>?
-      const readable = Readable.fromWeb(response.body)
+      const readable = await response.readable()
       readable.pipe(writable)
       await once(readable, 'close')
       return true
