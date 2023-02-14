@@ -1,6 +1,6 @@
 import { createWriteStream, createReadStream } from 'fs'
 import { once } from 'events'
-import { fetch, Request } from 'fetch-h2'
+import fetch, { Request } from 'node-fetch'
 
 /**
  * Create a Request object for this url and key
