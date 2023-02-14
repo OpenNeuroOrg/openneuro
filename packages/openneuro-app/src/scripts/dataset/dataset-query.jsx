@@ -162,6 +162,14 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
     if (error.message === 'You do not have access to read this dataset.') {
       return <FourOThreePage />
     } else if (error.message.includes('has been deleted')) {
+      for (const err of error.graphQLErrors) {
+        if (
+          err.extensions.code === 'DELETED_DATASET' &&
+          err.extensions.redirect
+        ) {
+          navigate(err.extensions.redirect)
+        }
+      }
       return <FourOFourPage message={error.message} />
     } else {
       try {

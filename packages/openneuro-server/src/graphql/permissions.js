@@ -1,3 +1,5 @@
+import config from '../config.js'
+import { ApolloError } from 'apollo-server'
 import Permission from '../models/permission'
 import Dataset from '../models/dataset'
 import Deletion from '../models/deletion'
@@ -50,12 +52,37 @@ export const checkPermissionLevel = (permission, state) => {
   }
 }
 
+export class DeletedDatasetError extends ApolloError {
+  constructor(datasetId, reason, redirect = undefined) {
+    let extension
+    if (redirect) {
+      try {
+        // Validate URL before we attach it to the API response
+        const canonical = new URL(config.url)
+        const url = new URL(redirect)
+        if (
+          url.hostname === canonical.hostname &&
+          url.pathname.startsWith('/datasets')
+        ) {
+          // Only return a relative path to avoid cross site risks
+          extension = { redirect: url.pathname }
+        }
+      } catch (err) {
+        // Do nothing
+      }
+    }
+    super(
+      `Dataset ${datasetId} has been deleted. Reason: ${reason}.`,
+      'DELETED_DATASET',
+      extension,
+    )
+  }
+}
+
 export const checkDatasetExists = async datasetId => {
   const deleted = await Deletion.findOne({ datasetId }).exec()
   if (deleted) {
-    throw new Error(
-      `Dataset ${datasetId} has been deleted. Reason: ${deleted.reason}.`,
-    )
+    throw new DeletedDatasetError(datasetId, deleted.reason, deleted.redirect)
   }
   const found = await Dataset.countDocuments({ id: datasetId }).exec()
   if (!found) throw new Error(`Dataset ${datasetId} does not exist.`)
