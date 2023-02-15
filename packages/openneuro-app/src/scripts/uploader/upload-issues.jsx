@@ -65,7 +65,7 @@ class UploadValidator extends React.Component {
     }
     const options = {
       config: {
-        error: ['NO_AUTHORS'],
+        error: ['NO_AUTHORS', 'EMPTY_DATASET_NAME'],
         ignoreSubjectConsistency: true,
         blacklistModalities: ['Microscopy'],
       },
