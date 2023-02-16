@@ -14,19 +14,24 @@ const DELETE_FILE = gql`
  */
 export function fileCacheDeleteFilter(file, path, filename, cachedFileObjects) {
   const fullPath = [path, filename].filter(Boolean).join(':')
-  if (file.directory) {
-    // Deleted directory, remove the directory
-    if (fullPath === path) {
-      return false
-    } else {
-      // Not the deleted directory, check if it's an orphan
-      const save = cachedFileObjects.some(f => {
-        return f.filename.startsWith(path)
-      })
-      return save
-    }
+  if (file.filename === fullPath) {
+    return false
   } else {
-    return file.filename !== fullPath
+    if (file.directory && fullPath.startsWith(file.filename)) {
+      // If a file other than the deletion target is removed
+      // And no other files match this directory prefix
+      for (const f of cachedFileObjects) {
+        if (f.directory || f.filename === fullPath) {
+          continue
+        } else {
+          if (f.filename.startsWith(path)) {
+            return true
+          }
+        }
+      }
+      return false
+    }
+    return true
   }
 }
 
