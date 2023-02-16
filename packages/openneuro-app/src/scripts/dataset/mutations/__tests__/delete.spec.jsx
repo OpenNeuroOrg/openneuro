@@ -2,10 +2,8 @@ import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
 import DeleteDataset, { DELETE_DATASET } from '../delete.jsx'
-import DeleteDir, { DELETE_FILES } from '../delete-dir.jsx'
 
 const datasetId = 'ds999999'
-const path = 'sub-99'
 
 const deleteDatasetMock = {
   request: {
@@ -13,19 +11,6 @@ const deleteDatasetMock = {
     variables: {
       id: datasetId,
       reason: 'test suite delete',
-    },
-  },
-  newData: vi.fn(() => ({
-    data: {},
-  })),
-}
-
-const deleteDirMock = {
-  request: {
-    query: DELETE_FILES,
-    variables: {
-      datasetId,
-      files: [{ path: 'sub-99' }],
     },
   },
   newData: vi.fn(() => ({
@@ -41,37 +26,5 @@ describe('DeleteDataset mutation', () => {
       </MockedProvider>,
     )
     expect(asFragment()).toMatchSnapshot()
-  })
-})
-
-describe('DeleteDir mutation', () => {
-  it('renders with common props', () => {
-    const { asFragment } = render(
-      <MockedProvider mocks={[deleteDirMock]} addTypename={false}>
-        <DeleteDir
-          datasetId="ds002"
-          fileTree={{
-            files: [],
-            directories: [],
-            path: '',
-          }}
-        />
-      </MockedProvider>,
-    )
-    expect(asFragment()).toMatchSnapshot()
-  })
-  it('fires the correct mutation', async () => {
-    render(
-      <MockedProvider mocks={[deleteDirMock]} addTypename={false}>
-        <DeleteDir {...{ datasetId, path }} />
-      </MockedProvider>,
-    )
-
-    // click "Delete" button
-    await fireEvent.click(screen.getByRole('button'))
-    // confirm delete
-    await fireEvent.click(screen.getByLabelText('confirm'))
-
-    expect(deleteDirMock.newData).toHaveBeenCalled()
   })
 })
