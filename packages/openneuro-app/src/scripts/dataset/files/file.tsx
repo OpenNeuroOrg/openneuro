@@ -117,7 +117,7 @@ const File = ({
   datasetPermissions,
   toggleFileToDelete,
   isFileToBeDeleted,
-}: FileProps) => {
+}: FileProps): React.ReactNode => {
   const { icon, color } = getFileIcon(filename)
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
