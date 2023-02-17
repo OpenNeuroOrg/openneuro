@@ -1,6 +1,13 @@
 /* eslint-env worker */
-import { validate, fileListToTree } from '../utils/schema-validator.js'
+import validate from 'bids-validator'
 import { BIDSValidatorIssues } from './worker-interface'
+
+const asyncValidateBIDS = (files, options): Promise<BIDSValidatorIssues> =>
+  new Promise(resolve => {
+    validate.BIDS(files, options, (issues, summary) =>
+      resolve({ issues, summary }),
+    )
+  })
 
 export async function runValidator(
   files,
@@ -8,18 +15,8 @@ export async function runValidator(
   cb,
 ): Promise<BIDSValidatorIssues> {
   let error, output: BIDSValidatorIssues
-  output = { issues: { errors: [], warnings: [] }, summary: {} }
   try {
-    const tree = await fileListToTree(files)
-    const result = await validate(tree, { json: true })
-    const issues = Array.from(result.issues, ([key, value]) => value)
-    console.log(issues)
-    output.issues.warnings = issues.filter(
-      issue => issue.severity === 'warning',
-    )
-    output.issues.errors = issues.filter(issue => issue.severity === 'error')
-    output.summary = result.summary
-    console.log(output)
+    output = await asyncValidateBIDS(files, options)
   } catch (err) {
     error = err
   }

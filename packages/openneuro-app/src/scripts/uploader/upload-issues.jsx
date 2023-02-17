@@ -5,6 +5,7 @@ import { Loading } from '@openneuro/components/loading'
 import Results from '../validation/validation-results.jsx'
 import UploaderContext from './uploader-context.js'
 import validate from '../workers/validate'
+import schemaValidate from '../workers/schema'
 
 const UploadValidatorStatus = ({ issues, next, reset }) => {
   const errorCount = issues.errors.length
@@ -70,7 +71,11 @@ class UploadValidator extends React.Component {
         blacklistModalities: ['Microscopy'],
       },
     }
-    validate(this.props.files, options).then(this.done)
+    if (this.props.schemaValidator) {
+      schemaValidate(this.props.files, options).then(this.done)
+    } else {
+      validate(this.props.files, options).then(this.done)
+    }
   }
 
   /**
@@ -115,12 +120,14 @@ UploadValidator.propTypes = {
   files: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   next: PropTypes.func,
   reset: PropTypes.func,
+  schemaValidator: PropTypes.bool,
 }
 
 const UploadIssues = () => (
   <UploaderContext.Consumer>
     {uploader => (
       <UploadValidator
+        schemaValidator={uploader.schemaValidator}
         files={uploader.selectedFiles}
         next={() => uploader.setLocation('/upload/metadata')}
         reset={() => uploader.setLocation('/upload')}
