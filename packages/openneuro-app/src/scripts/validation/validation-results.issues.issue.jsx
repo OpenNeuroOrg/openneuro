@@ -20,7 +20,7 @@ class Issue extends React.Component {
     if (error.character) {
       errLocation += 'Character: ' + error.character + ''
     }
-    if (errLocation == '' && error.evidence) {
+    if (errLocation === '' && error.evidence) {
       errLocation = 'Evidence: '
     }
     if (errLocation) {
