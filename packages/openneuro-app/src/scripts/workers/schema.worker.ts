@@ -16,13 +16,11 @@ export async function runValidator(
     const tree = await fileListToTree(files)
     const result = await validate(tree, { json: true })
     const issues = Array.from(result.issues, ([key, value]) => value)
-    console.log(issues)
     output.issues.warnings = issues.filter(
       issue => issue.severity === 'warning',
     )
     output.issues.errors = issues.filter(issue => issue.severity === 'error')
     output.summary = result.summary
-    console.log(output)
   } catch (err) {
     error = err
   }
