@@ -10,6 +10,7 @@ volumes:
   dist_components:
   dist_indexer:
   dist_server:
+  dist_search:
   typescript_build_cache:
   node_modules_app:
   node_modules_components:
@@ -38,6 +39,7 @@ services:
       - dist_cli:/srv/packages/openneuro-cli/dist
       - dist_client:/srv/packages/openneuro-client/dist
       - dist_components:/srv/packages/openneuro-components/dist
+      - dist_search:/srv/packages/openneuro-search/dist
       - dist_indexer:/srv/packages/openneuro-indexer/dist
       - dist_server:/srv/packages/openneuro-server/dist
       - node_modules_app:/srv/packages/openneuro-app/node_modules
