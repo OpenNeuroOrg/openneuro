@@ -4,13 +4,37 @@ version: '2.3'
 volumes:
   node_deps:
   dist:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_app:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_client:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_cli:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_components:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_indexer:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_server:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   dist_search:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
   typescript_build_cache:
   node_modules_app:
   node_modules_components:
@@ -28,10 +52,11 @@ services:
       retries: 60
     tmpfs:
       - /watch
+      - /srv/.build-cache
     volumes:
       - ./:/srv
-      - typescript_build_cache:/srv/.build-cache
       - node_deps:/srv/.yarn
+      - ./.yarn/cache:/srv/.yarn/cache:ro
       - ./.yarn/releases:/srv/.yarn/releases:cached
       - ./.yarn/plugins:/srv/.yarn/plugins:cached
       - dist:/srv/dist
