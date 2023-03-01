@@ -41,9 +41,14 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
             <li className="user-menu-link">
               <Link to="/keygen"> Obtain an API Key </Link>
             </li>
-            <li className="user-menu-link">
-              <a href="/crn/auth/orcid?link=true"> Link ORCID to my account </a>
-            </li>
+            {profile.provider !== 'orcid' && (
+              <li className="user-menu-link">
+                <a href="/crn/auth/orcid?link=true">
+                  {' '}
+                  Link ORCID to my account{' '}
+                </a>
+              </li>
+            )}
             {profile.admin && (
               <li className="user-menu-link">
                 <Link to="/admin">Admin</Link>
