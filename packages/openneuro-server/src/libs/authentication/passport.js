@@ -55,7 +55,7 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
       profileUpdate,
       { upsert: true, new: true, setDefaultsOnInsert: true },
     )
-      .then(user => done(null, addJWT(config)(user)))
+      .then(user => done(null, addJWT(config)(user.toObject())))
       .catch(err => done(err, null))
   } else {
     done(profileUpdate, null)
@@ -80,7 +80,7 @@ export const verifyORCIDUser = (
         { providerId: profile.orcid, provider: profile.provider },
         profileUpdate,
         { upsert: true, new: true, setDefaultsOnInsert: true },
-      ).then(user => done(null, addJWT(config)(user)))
+      ).then(user => done(null, addJWT(config)(user.toObject())))
     })
     .catch(err => done(err, null))
 }
@@ -110,7 +110,7 @@ export const setupPassportAuth = () => {
           // A user must already exist to use a JWT to auth a request
           User.findOne({ id: jwt.sub, provider: jwt.provider })
             .then(user => {
-              if (user) done(null, user)
+              if (user) done(null, user.toObject())
               else done(null, false)
             })
             .catch(done)
