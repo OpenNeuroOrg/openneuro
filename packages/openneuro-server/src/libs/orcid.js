@@ -20,12 +20,22 @@ export default {
         },
         (err, res) => {
           if (err) {
-            reject({
+            return reject({
               message:
                 'An unexpected ORCID login failure occurred, please try again later.',
             })
           }
-          const doc = new xmldoc.XmlDocument(res.body)
+          let doc
+          // Catch issues with parsing this response
+          try {
+            doc = new xmldoc.XmlDocument(res.body)
+          } catch (err) {
+            return reject({
+              type: 'config',
+              message:
+                'ORCID auth response invalid, most likely this is a misconfigured ORCID_API_ENDPOINT value',
+            })
+          }
           let name = doc.valueWithPath(
             'person:person.person:name.personal-details:credit-name',
           )
@@ -41,13 +51,13 @@ export default {
 
           if (!name) {
             if (!firstname) {
-              reject({
+              return reject({
                 type: 'given',
                 message:
                   'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
               })
             } else if (!lastname) {
-              reject({
+              return reject({
                 type: 'family',
                 message:
                   'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
@@ -58,7 +68,7 @@ export default {
           }
 
           if (!email) {
-            reject({
+            return reject({
               type: 'email',
               message:
                 'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',

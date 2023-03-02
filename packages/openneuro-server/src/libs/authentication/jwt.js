@@ -115,7 +115,7 @@ export const decodeJWT = token => {
   return jwt.decode(token)
 }
 
-const parsedJwtFromRequest = req => {
+export const parsedJwtFromRequest = req => {
   const jwt = jwtFromRequest(req)
   if (jwt) return decodeJWT(jwt)
   else return null
