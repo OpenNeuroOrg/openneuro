@@ -1,7 +1,7 @@
 import React from 'react'
 import File from './file'
 import UpdateFile from '../mutations/update-file.jsx'
-import DeleteDir from '../mutations/delete-dir.jsx'
+import DeleteFile from '../mutations/delete-file.jsx'
 import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
 import { Media } from '../../styles/media'
 import { AccordionTab } from '@openneuro/components/accordion'
@@ -91,8 +91,10 @@ const FileTree = ({
               directory>
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
-            {bulkDeleteButton || (
-              <DeleteDir datasetId={datasetId} path={path} name={name} />
+            {path === '' ? (
+              bulkDeleteButton
+            ) : (
+              <DeleteFile datasetId={datasetId} path={path} filename={name} />
             )}
           </span>
         </Media>
