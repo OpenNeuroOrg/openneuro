@@ -4,7 +4,7 @@ import ORCIDiDLogo from '../../assets/ORCIDiD_iconvector.svg'
 /**
  * Display component for usernames showing ORCID linking if connected
  */
-export const Username = ({ user }) => {
+export const Username = ({ user }): JSX.Element => {
   if (user.orcid) {
     return (
       <>
@@ -15,6 +15,6 @@ export const Username = ({ user }) => {
       </>
     )
   } else {
-    return user.name
+    return user.name as JSX.Element
   }
 }
