@@ -47,23 +47,23 @@ def git_tag_tree(repo, tag):
 def git_rename_master_to_main(repo):
     # Make sure the main branch is used, update if needed
     master_branch = repo.branches.get('master')
-    if repo.references['HEAD'].target == master_branch:
+    # Only rename master, don't update other branches if set to HEAD
+    if master_branch and repo.references['HEAD'].target == 'refs/heads/master':
         main_branch = master_branch.rename('main', True)
         # Abort the commit if this didn't work
         if not main_branch.is_head():
             raise Exception('Unable to rename master branch to main')
-    # Always update the symbolic reference for HEAD
-    repo.references['HEAD'].set_target('refs/heads/main')
+        repo.references['HEAD'].set_target('refs/heads/main')
 
 
 def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded changes", parents=None):
     """Commit array of paths at HEAD."""
-    # Early abort for this commit if HEAD is not main or master
-    if repo.references['HEAD'].target not in ['refs/heads/main', 'refs/heads/master']:
-        raise OpenNeuroGitError(
-            'HEAD points at invalid branch name and commit was aborted')
     # master -> main if required
     git_rename_master_to_main(repo)
+    # Early abort for this commit if HEAD is not main
+    if repo.references['HEAD'].target != 'refs/heads/main':
+        raise OpenNeuroGitError(
+            'HEAD points at invalid branch name ({}) and commit was aborted'.format(repo.references['HEAD'].target))
     # Refresh index with git-annex specific handling
     annex_command = ["git-annex", "add"] + file_paths
     subprocess.run(annex_command, check=True, cwd=repo.workdir)
