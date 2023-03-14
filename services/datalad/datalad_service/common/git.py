@@ -47,7 +47,7 @@ def git_tag_tree(repo, tag):
 def git_rename_master_to_main(repo):
     # Make sure the main branch is used, update if needed
     master_branch = repo.branches.get('master')
-    if master_branch:
+    if repo.references['HEAD'].target == master_branch:
         main_branch = master_branch.rename('main', True)
         # Abort the commit if this didn't work
         if not main_branch.is_head():
