@@ -9,6 +9,10 @@ COMMITTER_NAME = 'Git Worker'
 COMMITTER_EMAIL = 'git@openneuro.org'
 
 
+class OpenNeuroGitError(Exception):
+    """OpenNeuro git repo states that should not arise under normal use but may be a valid git operation in other contexts."""
+
+
 def git_show(path, commitish, obj):
     repo = pygit2.Repository(path)
     commit, _ = repo.resolve_refish(commitish)
@@ -54,6 +58,10 @@ def git_rename_master_to_main(repo):
 
 def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded changes", parents=None):
     """Commit array of paths at HEAD."""
+    # Early abort for this commit if HEAD is not main or master
+    if repo.references['HEAD'].target not in ['refs/heads/main', 'refs/heads/master']:
+        raise OpenNeuroGitError(
+            'HEAD points at invalid branch name and commit was aborted')
     # master -> main if required
     git_rename_master_to_main(repo)
     # Refresh index with git-annex specific handling

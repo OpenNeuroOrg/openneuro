@@ -1,13 +1,15 @@
-"""Test DataLad Celery tasks."""
+"""Test DataLad tasks."""
 import os
 from mock import patch
 import uuid
 
+import pytest
 import pygit2
 from datalad.api import Dataset
 
 from datalad_service.tasks.dataset import *
 from datalad_service.tasks.files import commit_files
+from datalad_service.common.git import OpenNeuroGitError
 
 
 def test_create_dataset(datalad_store):
@@ -40,6 +42,15 @@ def test_create_dataset_master(datalad_store):
         assert False, "dataset datalad id is not a valid uuid4"
     # Verify the branch is now set to main
     assert ds.repo.get_active_branch() == 'main'
+
+
+def test_create_dataset_unusual_default_branch(datalad_store):
+    ds_id = 'ds000026'
+    author = pygit2.Signature('test author', 'test@example.com')
+    # Create dataset will commit data and this should fail since HEAD is something 'unusual'
+    # (such as the git-annex branch as a plausible example)
+    with pytest.raises(OpenNeuroGitError) as e:
+        create_dataset(datalad_store, ds_id, author, 'unusual')
 
 
 def test_delete_dataset(datalad_store, new_dataset):
