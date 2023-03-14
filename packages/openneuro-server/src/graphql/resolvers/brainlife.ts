@@ -41,8 +41,11 @@ export const onBrainlife = async (
   dataset: DatasetOrSnapshot,
 ): Promise<boolean> => {
   try {
+    const abortController = new AbortController()
     const url = brainlifeQuery(dataset)
-    const res = await fetch(url.toString())
+    const timeout = setTimeout(() => abortController.abort(), 5000)
+    const res = await fetch(url.toString(), { signal: abortController.signal })
+    clearTimeout(timeout)
     const body = await res.json()
     if (Array.isArray(body) && body.length) {
       return true
