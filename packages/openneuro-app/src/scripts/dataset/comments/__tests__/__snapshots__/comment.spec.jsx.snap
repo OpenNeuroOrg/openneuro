@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`Comment component > renders with an empty comment 1`] = `
+exports[`Comment component > renders an ORCID user comment 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
@@ -11,7 +11,20 @@ exports[`Comment component > renders with an empty comment 1`] = `
         <div
           class="row comment-header"
         >
-          By example@example.com - almost 2 years ago
+          By 
+          Example Exampler
+           
+          <a
+            href="https://orcid.org/1234-5678-9101"
+          >
+            <img
+              alt="ORCID logo"
+              height="16"
+              src="/packages/openneuro-app/src/assets/ORCIDiD_iconvector.svg"
+              width="16"
+            />
+          </a>
+           - almost 2 years ago
         </div>
         <div
           class="row comment-body"
@@ -72,7 +85,203 @@ exports[`Comment component > renders with an empty comment 1`] = `
       <div
         class="row comment-header"
       >
-        By example@example.com - almost 2 years ago
+        By 
+        Example Exampler
+         
+        <a
+          href="https://orcid.org/1234-5678-9101"
+        >
+          <img
+            alt="ORCID logo"
+            height="16"
+            src="/packages/openneuro-app/src/assets/ORCIDiD_iconvector.svg"
+            width="16"
+          />
+        </a>
+         - almost 2 years ago
+      </div>
+      <div
+        class="row comment-body"
+      >
+        <div
+          class="DraftEditor-root"
+        >
+          <div
+            class="DraftEditor-editorContainer"
+          >
+            <div
+              class="public-DraftEditor-content"
+              contenteditable="false"
+              spellcheck="false"
+              style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
+            >
+              <div
+                data-contents="true"
+              >
+                <div
+                  class=""
+                  data-block="true"
+                  data-editor="9001"
+                  data-offset-key="3sm42-0-0"
+                >
+                  <div
+                    class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                    data-offset-key="3sm42-0-0"
+                  >
+                    <span
+                      data-offset-key="3sm42-0-0"
+                    >
+                      <br
+                        data-text="true"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row replies"
+    >
+      <div
+        class="comment-reply"
+      />
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Comment component > renders with an empty comment 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="comment"
+      >
+        <div
+          class="row comment-header"
+        >
+          By 
+          Example Exampler
+           - almost 2 years ago
+        </div>
+        <div
+          class="row comment-body"
+        >
+          <div
+            class="DraftEditor-root"
+          >
+            <div
+              class="DraftEditor-editorContainer"
+            >
+              <div
+                class="public-DraftEditor-content"
+                contenteditable="false"
+                spellcheck="false"
+                style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
+              >
+                <div
+                  data-contents="true"
+                >
+                  <div
+                    class=""
+                    data-block="true"
+                    data-editor="9001"
+                    data-offset-key="3sm42-0-0"
+                  >
+                    <div
+                      class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                      data-offset-key="3sm42-0-0"
+                    >
+                      <span
+                        data-offset-key="3sm42-0-0"
+                      >
+                        <br
+                          data-text="true"
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row replies"
+      >
+        <div
+          class="comment-reply"
+        />
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="comment"
+    >
+      <div
+        class="row comment-header"
+      >
+        By 
+        Example Exampler
+         - almost 2 years ago
       </div>
       <div
         class="row comment-body"

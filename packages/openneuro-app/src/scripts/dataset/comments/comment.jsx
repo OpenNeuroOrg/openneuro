@@ -11,6 +11,7 @@ import LoggedIn from '../../authentication/logged-in.jsx'
 import { toast } from 'react-toastify'
 import ToastContent from '../../common/partials/toast-content'
 import { Icon } from '@openneuro/components/icon'
+import { Username } from '../../users/username'
 
 const Comment = ({ datasetId, data, children }) => {
   const [replyMode, setReplyMode] = useState(false)
@@ -21,9 +22,8 @@ const Comment = ({ datasetId, data, children }) => {
     <>
       <div className="comment">
         <div className="row comment-header">
-          {`By ${data.user.email} - ${formatDistanceToNow(
-            parseISO(data.createDate),
-          )} ago`}
+          By <Username user={data.user} />
+          {` - ${formatDistanceToNow(parseISO(data.createDate))} ago`}
         </div>
         <div className="row comment-body">
           {editMode ? (
