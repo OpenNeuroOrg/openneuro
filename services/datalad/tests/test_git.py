@@ -33,7 +33,7 @@ def test_git_refs_resource(client):
     assert len(lines) == 6
     assert 'service=git-receive-pack' in lines[0]
     # Check master ref looks right
-    assert lines[3][0:4] == '003f'
+    assert lines[3][0:4] == '003d'
     assert lines[3][4:44].isalnum()  # 40 character sha256
     assert lines[3][44] == ' '  # delimiter
     assert lines[3][45:] == 'refs/heads/main'
