@@ -11,7 +11,7 @@ export const followDataset = async (obj, { datasetId }, { user }) => {
   }
   if (following) {
     // unfollow
-    return following.remove().then(() => ({
+    return following.deleteOne().then(() => ({
       following: false,
       newFollower,
     }))

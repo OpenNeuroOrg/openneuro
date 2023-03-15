@@ -20,7 +20,7 @@ describe('pagination model operations', () => {
   })
   describe('apiCursor()', () => {
     it('returns base64 string', () => {
-      expect(pagination.apiCursor(ObjectID(5))).toMatch(base64)
+      expect(pagination.apiCursor(new ObjectID(5))).toMatch(base64)
     })
   })
   describe('applyCursorToEdges()', () => {
@@ -40,7 +40,7 @@ describe('pagination model operations', () => {
     beforeAll(async () => {
       await connect(globalThis.__MONGO_URI__)
       const ds = new Dataset({
-        _id: ObjectID('5bef51a1ed211400c08e5524'),
+        _id: new ObjectID('5bef51a1ed211400c08e5524'),
         id: 'ds001001',
         created: new Date('2018-11-16T23:24:17.203Z'),
         modified: new Date('2018-11-16T23:24:25.050Z'),

@@ -8444,7 +8444,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jsonwebtoken", "npm:9.0.0"],\
             ["mime-types", "npm:2.1.32"],\
             ["moment", "npm:2.29.1"],\
-            ["mongoose", "npm:6.2.3"],\
+            ["mongoose", "npm:7.0.2"],\
             ["morgan", "npm:1.10.0"],\
             ["node-mailjet", "npm:3.3.5"],\
             ["nodemon", "npm:2.0.13"],\
@@ -12479,6 +12479,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["bson", "npm:4.7.0"],\
             ["buffer", "npm:5.7.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:5.0.1", {\
+          "packageLocation": "./.yarn/cache/bson-npm-5.0.1-b7a576e9c2-c8b028cdad.zip/node_modules/bson/",\
+          "packageDependencies": [\
+            ["bson", "npm:5.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -19853,6 +19860,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["kareem", "npm:2.3.4"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:2.5.1", {\
+          "packageLocation": "./.yarn/cache/kareem-npm-2.5.1-79134fb43e-b019a960a7.zip/node_modules/kareem/",\
+          "packageDependencies": [\
+            ["kareem", "npm:2.5.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["keyv", [\
@@ -21244,6 +21258,38 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["socks", "npm:2.6.2"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:5.1.0", {\
+          "packageLocation": "./.yarn/cache/mongodb-npm-5.1.0-2eee478213-993c14299a.zip/node_modules/mongodb/",\
+          "packageDependencies": [\
+            ["mongodb", "npm:5.1.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:a95eef7e574e0557cdb91d8bac3a12f3af46e705a34a820dfd2383c9d9a1aaf660b1f6388239a6ea03c9c26154fe86944eb7d54e2b02f1f5d77b8065bcc85352#npm:5.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/mongodb-virtual-64d5265661/0/cache/mongodb-npm-5.1.0-2eee478213-993c14299a.zip/node_modules/mongodb/",\
+          "packageDependencies": [\
+            ["mongodb", "virtual:a95eef7e574e0557cdb91d8bac3a12f3af46e705a34a820dfd2383c9d9a1aaf660b1f6388239a6ea03c9c26154fe86944eb7d54e2b02f1f5d77b8065bcc85352#npm:5.1.0"],\
+            ["@aws-sdk/credential-providers", null],\
+            ["@types/aws-sdk__credential-providers", null],\
+            ["@types/mongodb-client-encryption", null],\
+            ["@types/snappy", null],\
+            ["bson", "npm:5.0.1"],\
+            ["mongodb-client-encryption", null],\
+            ["mongodb-connection-string-url", "npm:2.6.0"],\
+            ["saslprep", "npm:1.0.3"],\
+            ["snappy", null],\
+            ["socks", "npm:2.7.1"]\
+          ],\
+          "packagePeers": [\
+            "@aws-sdk/credential-providers",\
+            "@types/aws-sdk__credential-providers",\
+            "@types/mongodb-client-encryption",\
+            "@types/snappy",\
+            "mongodb-client-encryption",\
+            "snappy"\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["mongodb-connection-string-url", [\
@@ -21260,6 +21306,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/mongodb-connection-string-url-npm-2.5.4-c420109e4e-9f431826b2.zip/node_modules/mongodb-connection-string-url/",\
           "packageDependencies": [\
             ["mongodb-connection-string-url", "npm:2.5.4"],\
+            ["@types/whatwg-url", "npm:8.2.1"],\
+            ["whatwg-url", "npm:11.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:2.6.0", {\
+          "packageLocation": "./.yarn/cache/mongodb-connection-string-url-npm-2.6.0-af011ba17f-1d662f0ecf.zip/node_modules/mongodb-connection-string-url/",\
+          "packageDependencies": [\
+            ["mongodb-connection-string-url", "npm:2.6.0"],\
             ["@types/whatwg-url", "npm:8.2.1"],\
             ["whatwg-url", "npm:11.0.0"]\
           ],\
@@ -21316,6 +21371,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sift", "npm:16.0.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:7.0.2", {\
+          "packageLocation": "./.yarn/cache/mongoose-npm-7.0.2-a95eef7e57-c3fe1d5e22.zip/node_modules/mongoose/",\
+          "packageDependencies": [\
+            ["mongoose", "npm:7.0.2"],\
+            ["bson", "npm:5.0.1"],\
+            ["kareem", "npm:2.5.1"],\
+            ["mongodb", "virtual:a95eef7e574e0557cdb91d8bac3a12f3af46e705a34a820dfd2383c9d9a1aaf660b1f6388239a6ea03c9c26154fe86944eb7d54e2b02f1f5d77b8065bcc85352#npm:5.1.0"],\
+            ["mpath", "npm:0.9.0"],\
+            ["mquery", "npm:5.0.0"],\
+            ["ms", "npm:2.1.3"],\
+            ["sift", "npm:16.0.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["monitor-event-loop-delay", [\
@@ -21363,6 +21432,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mpath", "npm:0.8.4"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:0.9.0", {\
+          "packageLocation": "./.yarn/cache/mpath-npm-0.9.0-e79cc94aea-1052f1f926.zip/node_modules/mpath/",\
+          "packageDependencies": [\
+            ["mpath", "npm:0.9.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["mquery", [\
@@ -21370,6 +21446,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/mquery-npm-4.0.2-72896d581b-39ac308294.zip/node_modules/mquery/",\
           "packageDependencies": [\
             ["mquery", "npm:4.0.2"],\
+            ["debug", "virtual:72896d581b79f60cab4f4385e42c2501d270c2f2299bdd8e4aff4d8d9a14cacc49ae898de11740f944fa2e8bde9074ea0e846fa0eda4dc9cb6324af21b0c72e0#npm:4.3.3"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:5.0.0", {\
+          "packageLocation": "./.yarn/cache/mquery-npm-5.0.0-e714f098ee-0617ead71e.zip/node_modules/mquery/",\
+          "packageDependencies": [\
+            ["mquery", "npm:5.0.0"],\
             ["debug", "virtual:72896d581b79f60cab4f4385e42c2501d270c2f2299bdd8e4aff4d8d9a14cacc49ae898de11740f944fa2e8bde9074ea0e846fa0eda4dc9cb6324af21b0c72e0#npm:4.3.3"]\
           ],\
           "linkType": "HARD"\
@@ -25635,6 +25719,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/sift-npm-16.0.0-c5d447b898-88d5754afe.zip/node_modules/sift/",\
           "packageDependencies": [\
             ["sift", "npm:16.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:16.0.1", {\
+          "packageLocation": "./.yarn/cache/sift-npm-16.0.1-ad548f4923-5fe18a517a.zip/node_modules/sift/",\
+          "packageDependencies": [\
+            ["sift", "npm:16.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
