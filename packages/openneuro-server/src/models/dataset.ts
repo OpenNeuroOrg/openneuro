@@ -74,13 +74,6 @@ datasetSchema.virtual('subscriptions', {
   justOne: true,
 })
 
-datasetSchema.post('save', dataset => {
-  return new DatasetChange({
-    datasetId: dataset.id,
-    created: true,
-  }).save()
-})
-
 datasetSchema.post('updateOne', function () {
   const datasetId = this.getQuery()?.['id']
   return new DatasetChange({
