@@ -23,8 +23,8 @@ def test_s3_annex_options(monkeypatch):
     options = generate_s3_annex_options(
         '/tmp/dataset/does/not/exist/test00001')
     assert 'type=S3' in options
-    # Verify always public
-    assert 'public=yes' in options
+    # Verify public=no (ACL deprecation)
+    assert 'public=no' in options
     # Verify autoenable=true (not yes)
     assert 'autoenable=true' in options
     # Check prefix and bucket strings are interpolated right

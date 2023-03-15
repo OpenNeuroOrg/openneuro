@@ -29,7 +29,7 @@ def generate_s3_annex_options(dataset_path):
         'fileprefix={}/'.format(dataset_id),
         'autoenable=true',
         'publicurl=https://s3.amazonaws.com/{}'.format(get_s3_bucket()),
-        'public=yes',
+        'public=no',
     ]
     return annex_options
 
