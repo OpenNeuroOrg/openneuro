@@ -9,6 +9,10 @@ COMMITTER_NAME = 'Git Worker'
 COMMITTER_EMAIL = 'git@openneuro.org'
 
 
+class OpenNeuroGitError(Exception):
+    """OpenNeuro git repo states that should not arise under normal use but may be a valid git operation in other contexts."""
+
+
 def git_show(path, commitish, obj):
     repo = pygit2.Repository(path)
     commit, _ = repo.resolve_refish(commitish)
@@ -40,8 +44,26 @@ def git_tag_tree(repo, tag):
     return repo.get(tag_reference.target).tree_id
 
 
+def git_rename_master_to_main(repo):
+    # Make sure the main branch is used, update if needed
+    master_branch = repo.branches.get('master')
+    # Only rename master, don't update other branches if set to HEAD
+    if master_branch and repo.references['HEAD'].target == 'refs/heads/master':
+        main_branch = master_branch.rename('main', True)
+        # Abort the commit if this didn't work
+        if not main_branch.is_head():
+            raise Exception('Unable to rename master branch to main')
+        repo.references['HEAD'].set_target('refs/heads/main')
+
+
 def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded changes", parents=None):
     """Commit array of paths at HEAD."""
+    # master -> main if required
+    git_rename_master_to_main(repo)
+    # Early abort for this commit if HEAD is not main
+    if repo.references['HEAD'].target != 'refs/heads/main':
+        raise OpenNeuroGitError(
+            'HEAD points at invalid branch name ({}) and commit was aborted'.format(repo.references['HEAD'].target))
     # Refresh index with git-annex specific handling
     annex_command = ["git-annex", "add"] + file_paths
     subprocess.run(annex_command, check=True, cwd=repo.workdir)
@@ -61,6 +83,6 @@ def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", 
         parent_commits = parents
     tree = repo.index.write_tree()
     commit = repo.create_commit(
-        'refs/heads/master', author, committer, message, tree, parent_commits)
+        'refs/heads/main', author, committer, message, tree, parent_commits)
     repo.head.set_target(commit)
     return commit

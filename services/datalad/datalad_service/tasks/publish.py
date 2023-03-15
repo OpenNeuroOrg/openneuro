@@ -69,7 +69,7 @@ def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_expor
     If the dataset has not been configured with public remotes, this is a noop.
     """
     if is_git_annex_remote(dataset_path, get_s3_remote()):
-        dataset = os.path.basename(dataset_path)
+        dataset_id = os.path.basename(dataset_path)
         repo = pygit2.Repository(dataset_path)
         tags = git_tag(repo)
         # Iterate over all tags and push those
@@ -78,9 +78,9 @@ def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_expor
         # Once all S3 tags are exported, update GitHub
         if github_enabled:
             # Perform all GitHub export steps
-            github_export(dataset_path, tag.name)
+            github_export(dataset_id, dataset_path, tag.name)
         # Drop cache once all exports are complete
-        clear_dataset_cache(dataset, cookies)
+        clear_dataset_cache(dataset_id, cookies)
 
 
 def check_remote_has_version(dataset_path, remote, tag):

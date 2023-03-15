@@ -57,7 +57,7 @@ def datalad_store(tmpdir_factory):
     ds_path = str(path.join(DATASET_ID))
     # Create an empty dataset for testing
     ds = Dataset(ds_path)
-    ds.create()
+    ds.create(initopts=['--initial-branch', 'main'])
     ds.no_annex(BIDS_NO_ANNEX)
 
     json_path = os.path.join(ds_path, 'dataset_description.json')

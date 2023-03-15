@@ -1,4 +1,9 @@
-from datalad_service.common.bids import dataset_sort
+import os
+
+from pygit2 import Repository
+
+from datalad_service.common.bids import dataset_sort, read_dataset_description
+from datalad_service.common.git import git_commit
 
 
 def test_sort_bids_top_level():
@@ -58,3 +63,21 @@ def test_sort_bids_top_level():
     assert sorted_files[0].get('filename') == 'CHANGES'
     assert sorted_files[1].get('filename') == 'README'
     assert sorted_files[2].get('filename') == 'dataset_description.json'
+
+
+def test_read_dataset_description(new_dataset):
+    description = read_dataset_description(new_dataset.path, 'HEAD')
+    assert description['Name'] == 'Test fixture new dataset'
+
+
+def test_read_dataset_description_invalid_json(new_dataset):
+    repo = Repository(new_dataset.path)
+    open(os.path.join(new_dataset.path, "dataset_description.json"), "w").close()
+    git_commit(repo, ['dataset_description.json'])
+    description = read_dataset_description(new_dataset.path, 'HEAD')
+    assert description is None
+
+
+def test_read_dataset_description_missing(new_dataset):
+    description = read_dataset_description(new_dataset.path, 'git-annex')
+    assert description is None
