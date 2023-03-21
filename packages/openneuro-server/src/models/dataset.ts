@@ -74,24 +74,17 @@ datasetSchema.virtual('subscriptions', {
   justOne: true,
 })
 
-datasetSchema.post('save', dataset => {
-  new DatasetChange({
-    datasetId: dataset.id,
-    created: true,
-  }).save()
-})
-
 datasetSchema.post('updateOne', function () {
-  const datasetId = this._conditions ? this._conditions.id : null
-  new DatasetChange({
+  const datasetId = this.getQuery()?.['id']
+  return new DatasetChange({
     datasetId,
     modified: true,
   }).save()
 })
 
 datasetSchema.post('deleteOne', function () {
-  const datasetId = this._conditions ? this._conditions.id : null
-  new DatasetChange({
+  const datasetId = this.getQuery()?.['id']
+  return new DatasetChange({
     datasetId,
     deleted: true,
   }).save()

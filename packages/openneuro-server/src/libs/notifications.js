@@ -116,54 +116,56 @@ const notifications = {
     const htmlContent = stateToHTML(contentState)
 
     // get all users that are subscribed to the dataset
-    Subscription.find({ datasetId: datasetId }).exec((err, subscriptions) => {
-      // create the email object for each user, using subscription userid and scitran
-      subscriptions.forEach(subscription => {
-        User.findOne({ id: subscription.userId })
-          .exec()
-          .then(user => {
-            if (user && user.email !== userId) {
-              const emailContent = {
-                _id:
-                  datasetId +
-                  '_' +
-                  subscription._id +
-                  '_' +
-                  comment._id +
-                  '_' +
-                  'comment_created',
-                type: 'email',
-                email: {
-                  to: user.email,
-                  name: user.name,
-                  from:
-                    'reply-' +
-                    encodeURIComponent(comment._id) +
-                    '-' +
-                    encodeURIComponent(user._id),
-                  subject: 'Comment Created',
-                  html: commentCreated({
+    Subscription.find({ datasetId: datasetId })
+      .exec()
+      .then(subscriptions => {
+        // create the email object for each user, using subscription userid and scitran
+        subscriptions.forEach(subscription => {
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user && user.email !== userId) {
+                const emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    comment._id +
+                    '_' +
+                    'comment_created',
+                  type: 'email',
+                  email: {
+                    to: user.email,
                     name: user.name,
-                    datasetName: bidsId.decodeId(datasetId),
-                    datasetLabel: datasetLabel,
-                    commentUserId: userId,
-                    commentId: commentId,
-                    dateCreated: moment(comment.createDate).format('MMMM Do'),
-                    commentContent: htmlContent,
-                    commentStatus: commentStatus,
-                    siteUrl:
-                      url.parse(config.url).protocol +
-                      '//' +
-                      url.parse(config.url).hostname,
-                  }),
-                },
+                    from:
+                      'reply-' +
+                      encodeURIComponent(comment._id) +
+                      '-' +
+                      encodeURIComponent(user._id),
+                    subject: 'Comment Created',
+                    html: commentCreated({
+                      name: user.name,
+                      datasetName: bidsId.decodeId(datasetId),
+                      datasetLabel: datasetLabel,
+                      commentUserId: userId,
+                      commentId: commentId,
+                      dateCreated: moment(comment.createDate).format('MMMM Do'),
+                      commentContent: htmlContent,
+                      commentStatus: commentStatus,
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                    }),
+                  },
+                }
+                // send each email to the notification database for distribution
+                notifications.send(emailContent)
               }
-              // send each email to the notification database for distribution
-              notifications.send(emailContent)
-            }
-          })
+            })
+        })
       })
-    })
   },
 
   /**
@@ -180,36 +182,42 @@ const notifications = {
     )
 
     // get all users that are subscribed to the dataset
-    Subscription.find({ datasetId: datasetId }).exec((err, subscriptions) => {
-      // create the email object for each user, using subscription userid and scitran
-      subscriptions.forEach(subscription => {
-        User.findOne({ id: subscription.userId })
-          .exec()
-          .then(user => {
-            if (user) {
-              const emailContent = {
-                _id:
-                  datasetId + '_' + subscription._id + '_' + 'dataset_deleted',
-                type: 'email',
-                email: {
-                  to: user.email,
-                  name: user.name,
-                  subject: 'Dataset Deleted',
-                  html: datasetDeleted({
+    Subscription.find({ datasetId: datasetId })
+      .exec()
+      .then(subscriptions => {
+        // create the email object for each user, using subscription userid and scitran
+        subscriptions.forEach(subscription => {
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user) {
+                const emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    'dataset_deleted',
+                  type: 'email',
+                  email: {
+                    to: user.email,
                     name: user.name,
-                    datasetName: bidsId.decodeId(datasetId),
-                    siteUrl:
-                      url.parse(config.url).protocol +
-                      '//' +
-                      url.parse(config.url).hostname,
-                  }),
-                },
+                    subject: 'Dataset Deleted',
+                    html: datasetDeleted({
+                      name: user.name,
+                      datasetName: bidsId.decodeId(datasetId),
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                    }),
+                  },
+                }
+                notifications.send(emailContent)
               }
-              notifications.send(emailContent)
-            }
-          })
+            })
+        })
       })
-    })
   },
 
   /**
@@ -226,40 +234,42 @@ const notifications = {
     )
 
     // get all users that are subscribed to the dataset
-    Subscription.find({ datasetId: datasetId }).exec((err, subscriptions) => {
-      // create the email object for each user, using subscription userid and scitran
-      subscriptions.forEach(subscription => {
-        User.findOne({ id: subscription.userId })
-          .exec()
-          .then(user => {
-            if (user) {
-              const emailContent = {
-                _id:
-                  datasetId +
-                  '_' +
-                  subscription._id +
-                  '_' +
-                  'owner_unsubscribed',
-                type: 'email',
-                email: {
-                  to: user.email,
-                  name: user.name,
-                  subject: 'Owner Unsubscribed',
-                  html: ownerUnsubscribed({
+    Subscription.find({ datasetId: datasetId })
+      .exec()
+      .then(subscriptions => {
+        // create the email object for each user, using subscription userid and scitran
+        subscriptions.forEach(subscription => {
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user) {
+                const emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    'owner_unsubscribed',
+                  type: 'email',
+                  email: {
+                    to: user.email,
                     name: user.name,
-                    datasetName: bidsId.decodeId(datasetId),
-                    siteUrl:
-                      url.parse(config.url).protocol +
-                      '//' +
-                      url.parse(config.url).hostname,
-                  }),
-                },
+                    subject: 'Owner Unsubscribed',
+                    html: ownerUnsubscribed({
+                      name: user.name,
+                      datasetName: bidsId.decodeId(datasetId),
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                    }),
+                  },
+                }
+                notifications.send(emailContent)
               }
-              notifications.send(emailContent)
-            }
-          })
+            })
+        })
       })
-    })
   },
 
   /**
@@ -276,8 +286,9 @@ const notifications = {
     )
 
     // get all users that are subscribed to the dataset
-    await Subscription.find({ datasetId: datasetId }).exec(
-      (err, subscriptions) => {
+    await Subscription.find({ datasetId: datasetId })
+      .exec()
+      .then(subscriptions => {
         // create the email object for each user, using subscription userid and scitran
         subscriptions.forEach(subscription => {
           User.findOne({ id: subscription.userId })
@@ -312,8 +323,7 @@ const notifications = {
               }
             })
         })
-      },
-    )
+      })
   },
 
   /**

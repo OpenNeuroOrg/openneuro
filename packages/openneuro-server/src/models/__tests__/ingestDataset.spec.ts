@@ -6,9 +6,8 @@ vi.mock('ioredis')
 describe('IngestDataset model', () => {
   it('IngestDataset model fails if required fields are missing', () => {
     const model = new IngestDataset()
-    model.validate(result => {
-      expect(result.name).toEqual('ValidationError')
-    })
+    const result = model.validateSync()
+    expect(result.name).toEqual('ValidationError')
   })
   it('IngestDataset model URL validation fails with a bad URL', async () => {
     const badUrlModel = new IngestDataset({
@@ -18,9 +17,8 @@ describe('IngestDataset model', () => {
       imported: false,
       notified: false,
     })
-    await badUrlModel.validate(result => {
-      expect(result.name).toEqual('ValidationError')
-    })
+    const result = badUrlModel.validateSync()
+    expect(result.name).toEqual('ValidationError')
   })
   it('IngestDataset model URL validation succeeds with a good URL', async () => {
     const goodUrlModel = new IngestDataset({
@@ -30,8 +28,7 @@ describe('IngestDataset model', () => {
       imported: false,
       notified: false,
     })
-    await goodUrlModel.validate(result => {
-      expect(result).toBe(undefined)
-    })
+    const result = goodUrlModel.validateSync()
+    expect(result).toBe(undefined)
   })
 })
