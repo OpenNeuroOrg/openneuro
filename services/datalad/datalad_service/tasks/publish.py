@@ -72,13 +72,13 @@ def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_expor
         dataset_id = os.path.basename(dataset_path)
         repo = pygit2.Repository(dataset_path)
         tags = git_tag(repo)
-        # Iterate over all tags and push those
-        for tag in tags:
-            s3_export(dataset_path, get_s3_remote(), tag.name)
-        # Once all S3 tags are exported, update GitHub
-        if github_enabled:
-            # Perform all GitHub export steps
-            github_export(dataset_id, dataset_path, tag.name)
+        # Push the most recent tag
+        if tags:
+            s3_export(dataset_path, get_s3_remote(), tags[-1].name)
+            # Once all S3 tags are exported, update GitHub
+            if github_enabled:
+                # Perform all GitHub export steps
+                github_export(dataset_id, dataset_path, tags[-1].name)
         # Drop cache once all exports are complete
         clear_dataset_cache(dataset_id, cookies)
 
