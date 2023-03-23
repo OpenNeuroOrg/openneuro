@@ -94,7 +94,7 @@ const FileTree = ({
             {path === '' ? (
               bulkDeleteButton
             ) : (
-              <DeleteFile datasetId={datasetId} path={path} filename={name} />
+              <DeleteFile datasetId={datasetId} path={path} />
             )}
           </span>
         </Media>
