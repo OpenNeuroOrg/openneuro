@@ -21,16 +21,16 @@ export const authCallback = (req, res, next) =>
     const existingAuth = parsedJwtFromRequest(req)
     if (existingAuth) {
       // Save ORCID to primary account
-      User.findOne({ id: existingAuth.sub }, (err, userModel) => {
-        if (err) {
-          return next(err)
-        } else {
+      User.findOne({ id: existingAuth.sub })
+        .then(userModel => {
           userModel.orcid = user.providerId
           return userModel.save().then(() => {
             res.redirect('/')
           })
-        }
-      })
+        })
+        .catch(err => {
+          return next(err)
+        })
     } else {
       // Complete login with ORCID as primary account
       req.logIn(user, { session: false }, err => {
