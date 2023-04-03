@@ -473,15 +473,8 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Total size in bytes of this snapshot
     size: BigInt
-    # URLs to download files in this snapshot
-    downloadUrls: [SnapshotDownloadFile]
-  }
-
-  # Subset of DatasetFile for downloading a snapshot
-  type SnapshotDownloadFile {
-    id: ID!
-    filename: String!
-    url: String!
+    # Single list of files to download this snapshot (only available on snapshots)
+    downloadFiles: [DatasetFile]
   }
 
   # RelatedObject nature of relationship
@@ -702,15 +695,6 @@ export const typeDefs = `
     datasetId: String
     action: String
     payload: [DatasetFile]
-  }
-
-  # Recent changes to datasets
-  type DatasetChange {
-    datasetId: String!
-    created: Boolean
-    modified: Boolean
-    deleted: Boolean
-    timestamp: DateTime
   }
 
   # Analytics for a dataset
