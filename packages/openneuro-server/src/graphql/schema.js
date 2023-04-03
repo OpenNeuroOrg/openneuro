@@ -90,11 +90,6 @@ export const typeDefs = `
     participantCount(modality: String): Int @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
-    # Get recent dataset changes (newest first)
-    datasetChanges(
-      "Limit results, default 100, max 1000"
-      limit: Int = 100
-    ): [DatasetChange]
     # Get annexed files that have been flagged or removed.
     flaggedFiles(
       "Get files that have been flagged, default true."
@@ -478,6 +473,15 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Total size in bytes of this snapshot
     size: BigInt
+    # URLs to download files in this snapshot
+    downloadUrls: [SnapshotDownloadFile]
+  }
+
+  # Subset of DatasetFile for downloading a snapshot
+  type SnapshotDownloadFile {
+    id: ID!
+    filename: String!
+    url: String!
   }
 
   # RelatedObject nature of relationship
