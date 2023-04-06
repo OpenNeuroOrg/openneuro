@@ -11,4 +11,5 @@ export enum CacheType {
   snapshot = 'snapshot',
   snapshotIndex = 'snapshotIndex',
   participantCount = 'participantCount',
+  snapshotDownload = 'download',
 }
