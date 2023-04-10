@@ -160,8 +160,8 @@ export const typeDefs = `
     prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata
     # Add files from a completed upload to the dataset draft
     finishUpload(uploadId: ID!): Boolean
-    # Drop caches for a given dataset - requires site admin access
-    cacheClear(datasetId: ID!): Boolean
+    # Drop download cache for a snapshot - requires site admin access
+    cacheClear(datasetId: ID!, tag: String!): Boolean
     # Rerun the latest validator on a given commit
     revalidate(datasetId: ID!, ref: String!): Boolean
     # Request a temporary token for git access
