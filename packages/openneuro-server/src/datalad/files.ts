@@ -40,7 +40,7 @@ export const fileUrl = (
   datasetId: string,
   path: string,
   filename: string,
-  revision: string,
+  revision?: string,
 ): string => {
   const fileName = getFileName(path, filename)
   if (revision) {
@@ -81,24 +81,27 @@ export const computeTotalSize = (files: [DatasetFile]): number =>
  * @param {string} datasetId - Dataset accession number
  * @param {string} treeish - Git treeish hexsha
  */
-export const getFiles = (datasetId, treeish) => {
+export const getFiles = (datasetId, treeish): Promise<[DatasetFile]> => {
   const cache = new CacheItem(redis, CacheType.commitFiles, [
     datasetId,
     treeish.substring(0, 7),
   ])
-  return cache.get(() =>
-    request
-      .get(
-        `${getDatasetWorker(datasetId)}/datasets/${datasetId}/tree/${treeish}`,
-      )
-      .set('Accept', 'application/json')
-      .then(response => {
-        if (response.status === 200) {
-          const {
-            body: { files },
-          } = response
-          return files
-        }
-      }),
+  return cache.get(
+    () =>
+      request
+        .get(
+          `${getDatasetWorker(
+            datasetId,
+          )}/datasets/${datasetId}/tree/${treeish}`,
+        )
+        .set('Accept', 'application/json')
+        .then(response => {
+          if (response.status === 200) {
+            const {
+              body: { files },
+            } = response
+            return files as [DatasetFile]
+          }
+        }) as Promise<[DatasetFile]>,
   )
 }

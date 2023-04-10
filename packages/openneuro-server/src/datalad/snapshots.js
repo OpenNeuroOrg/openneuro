@@ -20,6 +20,7 @@ import Dataset from '../models/dataset'
 import Snapshot from '../models/snapshot'
 import { updateDatasetRevision } from './draft.js'
 import { getDatasetWorker } from '../libs/datalad-service'
+import { join } from 'path'
 
 const lockSnapshot = (datasetId, tag) => {
   return redlock.lock(
@@ -263,4 +264,36 @@ export const getPublicSnapshots = () => {
         },
       ]).exec()
     })
+}
+
+/**
+ * For snapshots, precache all trees for downloads
+ */
+export const downloadFiles = (datasetId, tag) => {
+  const downloadCache = new CacheItem(redis, CacheType.snapshotDownload, [
+    datasetId,
+    tag,
+  ])
+  // Return an existing cache object if we have one
+  return downloadCache.get(async () => {
+    // If not, fetch all trees sequentially and cache the result (hopefully some or all trees are cached)
+    const files = await getFilesRecursive(datasetId, tag, '')
+    files.sort()
+    return files
+  })
+}
+
+export async function getFilesRecursive(datasetId, tree, path = '') {
+  const files = []
+  // Fetch files
+  const fileTree = await getFiles(datasetId, tree)
+  for (const file of fileTree) {
+    const absPath = join(path, file.filename)
+    if (file.directory) {
+      files.push(...(await getFilesRecursive(datasetId, file.id, absPath)))
+    } else {
+      files.push(file)
+    }
+  }
+  return files
 }

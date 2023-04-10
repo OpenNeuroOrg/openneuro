@@ -15,6 +15,7 @@ import { redis } from '../../libs/redis'
 import CacheItem, { CacheType } from '../../cache/item'
 import { normalizeDOI } from '../../libs/doi/normalize'
 import { getDraftHead } from '../../datalad/dataset'
+import { downloadFiles } from '../../datalad/snapshots'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -40,6 +41,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
+        downloadFiles: () => downloadFiles(datasetId, tag),
       }))
     },
   )
