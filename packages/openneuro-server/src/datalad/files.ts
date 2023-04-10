@@ -87,7 +87,7 @@ export const getFiles = (datasetId, treeish): Promise<[DatasetFile]> => {
     treeish.substring(0, 7),
   ])
   return cache.get(
-    () =>
+    doNotCache =>
       request
         .get(
           `${getDatasetWorker(
@@ -100,6 +100,13 @@ export const getFiles = (datasetId, treeish): Promise<[DatasetFile]> => {
             const {
               body: { files },
             } = response
+            for (const f of files) {
+              // Skip caching this tree if it doesn't contain S3 URLs - likely still exporting
+              if (!f.directory && !f.urls[0].includes('s3.amazonaws.com')) {
+                doNotCache(true)
+                break
+              }
+            }
             return files as [DatasetFile]
           }
         }) as Promise<[DatasetFile]>,
