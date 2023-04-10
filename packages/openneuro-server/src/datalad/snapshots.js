@@ -292,7 +292,7 @@ export async function getFilesRecursive(datasetId, tree, path = '') {
     if (file.directory) {
       files.push(...(await getFilesRecursive(datasetId, file.id, absPath)))
     } else {
-      files.push(file)
+      files.push({ ...file, filename: absPath })
     }
   }
   return files
