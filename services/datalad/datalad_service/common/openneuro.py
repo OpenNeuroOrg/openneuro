@@ -11,7 +11,7 @@ def cache_clear_mutation(dataset_id, tag):
     }
 
 
-def clear_dataset_cache(dataset, cookies={}):
+def clear_dataset_cache(dataset, tag, cookies={}):
     """Post a cacheClear event to OpenNeuro to allow the API to query new data after changes"""
     r = requests.post(url=GRAPHQL_ENDPOINT,
                       json=cache_clear_mutation(dataset, tag), cookies=cookies)
