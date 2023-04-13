@@ -1,4 +1,5 @@
 import request from 'superagent'
+import { Readable } from 'node:stream'
 import mime from 'mime-types'
 import { getDatasetWorker } from '../libs/datalad-service'
 
@@ -19,9 +20,22 @@ export const getFile = (req, res) => {
   const worker = getDatasetWorker(datasetId)
   res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
   const uri = snapshotId
-    ? `${worker}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
-    : `${worker}/datasets/${datasetId}/files/${filename}`
-  return request.get(uri).pipe(res)
+    ? `http://${worker}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
+    : `http://${worker}/datasets/${datasetId}/files/${filename}`
+  return (
+    fetch(uri)
+      .then(r => {
+        // Set the content length (allow clients to catch HTTP issues better)
+        res.setHeader('Content-Length', Number(r.headers.get('content-length')))
+        return r.body
+      })
+      // @ts-expect-error
+      .then(stream => Readable.fromWeb(stream).pipe(res))
+      .catch(err => {
+        console.error(err)
+        res.status(500).send('Internal error transferring requested file')
+      })
+  )
 }
 
 /**
