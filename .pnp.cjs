@@ -7957,17 +7957,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@niivue/niivue", [\
-        ["npm:0.23.1", {\
-          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.23.1-74b3b4604b-1db498c6e5.zip/node_modules/@niivue/niivue/",\
+        ["npm:0.33.1", {\
+          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.33.1-79086e822b-ee6b1dfbfa.zip/node_modules/@niivue/niivue/",\
           "packageDependencies": [\
-            ["@niivue/niivue", "npm:0.23.1"],\
-            ["daikon", "npm:1.2.42"],\
-            ["fflate", "npm:0.7.3"],\
-            ["gifti-reader-js", "npm:0.4.4"],\
+            ["@niivue/niivue", "npm:0.33.1"],\
+            ["@ungap/structured-clone", "npm:1.0.2"],\
+            ["daikon", "npm:1.2.43"],\
+            ["fflate", "npm:0.7.4"],\
             ["gl-matrix", "npm:3.4.3"],\
-            ["nifti-reader-js", "npm:0.5.4"],\
-            ["rxjs", "npm:7.5.5"],\
-            ["uuid", "npm:8.3.2"]\
+            ["nifti-reader-js", "npm:0.6.4"],\
+            ["rxjs", "npm:7.8.0"],\
+            ["uuid", "npm:9.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8216,7 +8216,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@elastic/apm-rum", "npm:5.11.0"],\
             ["@emotion/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],\
             ["@emotion/styled", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],\
-            ["@niivue/niivue", "npm:0.23.1"],\
+            ["@niivue/niivue", "npm:0.33.1"],\
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@openneuro/components", "workspace:packages/openneuro-components"],\
             ["@testing-library/jest-dom", "npm:5.14.1"],\
@@ -10017,6 +10017,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/visitor-keys", "npm:4.31.2"],\
             ["@typescript-eslint/types", "npm:4.31.2"],\
             ["eslint-visitor-keys", "npm:2.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@ungap/structured-clone", [\
+        ["npm:1.0.2", {\
+          "packageLocation": "./.yarn/cache/@ungap-structured-clone-npm-1.0.2-253adf5113-aaf0854a66.zip/node_modules/@ungap/structured-clone/",\
+          "packageDependencies": [\
+            ["@ungap/structured-clone", "npm:1.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -14024,10 +14033,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["daikon", [\
-        ["npm:1.2.42", {\
-          "packageLocation": "./.yarn/cache/daikon-npm-1.2.42-2a9ce33f33-bee3f53856.zip/node_modules/daikon/",\
+        ["npm:1.2.43", {\
+          "packageLocation": "./.yarn/cache/daikon-npm-1.2.43-0124071c6b-7e4be12538.zip/node_modules/daikon/",\
           "packageDependencies": [\
-            ["daikon", "npm:1.2.42"],\
+            ["daikon", "npm:1.2.43"],\
             ["jpeg-lossless-decoder-js", "https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"],\
             ["pako", "npm:1.0.11"]\
           ],\
@@ -16447,10 +16456,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["fflate", [\
-        ["npm:0.7.3", {\
-          "packageLocation": "./.yarn/cache/fflate-npm-0.7.3-875c2ba15f-6d0908c546.zip/node_modules/fflate/",\
+        ["npm:0.7.4", {\
+          "packageLocation": "./.yarn/cache/fflate-npm-0.7.4-df9245ab05-b812ab2604.zip/node_modules/fflate/",\
           "packageDependencies": [\
-            ["fflate", "npm:0.7.3"]\
+            ["fflate", "npm:0.7.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -17124,17 +17133,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["getpass", "npm:0.1.7"],\
             ["assert-plus", "npm:1.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["gifti-reader-js", [\
-        ["npm:0.4.4", {\
-          "packageLocation": "./.yarn/cache/gifti-reader-js-npm-0.4.4-b8fc8b4dd2-1ccc1be2f5.zip/node_modules/gifti-reader-js/",\
-          "packageDependencies": [\
-            ["gifti-reader-js", "npm:0.4.4"],\
-            ["pako", "npm:2.0.4"],\
-            ["sax", "npm:1.2.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -21548,11 +21546,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["nifti-reader-js", [\
-        ["npm:0.5.4", {\
-          "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.5.4-a0b6684508-d5060d3fed.zip/node_modules/nifti-reader-js/",\
+        ["npm:0.6.4", {\
+          "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.6.4-2e90d5d177-be7072b9bb.zip/node_modules/nifti-reader-js/",\
           "packageDependencies": [\
-            ["nifti-reader-js", "npm:0.5.4"],\
-            ["pako", "npm:2.0.4"]\
+            ["nifti-reader-js", "npm:0.6.4"],\
+            ["fflate", "npm:0.7.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -22556,13 +22554,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/pako-npm-1.0.11-b8f1b69d3e-1be2bfa1f8.zip/node_modules/pako/",\
           "packageDependencies": [\
             ["pako", "npm:1.0.11"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:2.0.4", {\
-          "packageLocation": "./.yarn/cache/pako-npm-2.0.4-1d4e28f3ac-82b9b0b99d.zip/node_modules/pako/",\
-          "packageDependencies": [\
-            ["pako", "npm:2.0.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -25179,10 +25170,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:7.5.5", {\
-          "packageLocation": "./.yarn/cache/rxjs-npm-7.5.5-d0546b1ccb-e034f60805.zip/node_modules/rxjs/",\
+        ["npm:7.8.0", {\
+          "packageLocation": "./.yarn/cache/rxjs-npm-7.8.0-722f1c7172-61b4d4fd32.zip/node_modules/rxjs/",\
           "packageDependencies": [\
-            ["rxjs", "npm:7.5.5"],\
+            ["rxjs", "npm:7.8.0"],\
             ["tslib", "npm:2.3.1"]\
           ],\
           "linkType": "HARD"\
@@ -28077,6 +28068,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/uuid-npm-8.3.2-eca0baba53-5575a8a75c.zip/node_modules/uuid/",\
           "packageDependencies": [\
             ["uuid", "npm:8.3.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:9.0.0", {\
+          "packageLocation": "./.yarn/cache/uuid-npm-9.0.0-46c41e3e43-8dd2c83c43.zip/node_modules/uuid/",\
+          "packageDependencies": [\
+            ["uuid", "npm:9.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\

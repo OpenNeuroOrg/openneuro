@@ -4984,18 +4984,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niivue/niivue@npm:0.23.1":
-  version: 0.23.1
-  resolution: "@niivue/niivue@npm:0.23.1"
+"@niivue/niivue@npm:0.33.1":
+  version: 0.33.1
+  resolution: "@niivue/niivue@npm:0.33.1"
   dependencies:
-    daikon: ^1.2.42
-    fflate: ^0.7.3
-    gifti-reader-js: ^0.4.4
+    "@ungap/structured-clone": ^1.0.2
+    daikon: ^1.2.43
+    fflate: ^0.7.4
     gl-matrix: ^3.4.3
-    nifti-reader-js: ^0.5.4
-    rxjs: ^7.4.0
-    uuid: ^8.3.2
-  checksum: 1db498c6e5d4964822b99b06050301b0a80b8766dfb1df6fa8b236426c088f06d3756685cdae0ef9683b75d71ce4553518525252083d3b5941f44574ed9edac1
+    nifti-reader-js: ^0.6.2
+    rxjs: ^7.8.0
+    uuid: ^9.0.0
+  checksum: ee6b1dfbfa18a1ab748b11cebcedb23c141f583d712dcd4cdf05e370979f00fb647d721ae5f23afd5162ea73276f8b1a8dccbee06ddff681c639035699c5ff73
   languageName: node
   linkType: hard
 
@@ -5213,7 +5213,7 @@ __metadata:
     "@elastic/apm-rum": 5.11.0
     "@emotion/react": 11.6.0
     "@emotion/styled": 11.6.0
-    "@niivue/niivue": 0.23.1
+    "@niivue/niivue": 0.33.1
     "@openneuro/client": ^4.17.2
     "@openneuro/components": ^4.17.2
     "@testing-library/jest-dom": ^5.11.4
@@ -6709,6 +6709,13 @@ __metadata:
     "@typescript-eslint/types": 4.31.2
     eslint-visitor-keys: ^2.0.0
   checksum: 5f3d16d3d282e9b4b02acd06e787e182e9afb9e0a1c42a19268d9f8e02895163ff81674281db27e4777cc239675d6be2abfab8129458f670fe0c17a0d19ad796
+  languageName: node
+  linkType: hard
+
+"@ungap/structured-clone@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@ungap/structured-clone@npm:1.0.2"
+  checksum: aaf0854a66b8a64db90b1ca211f6e7c8b54f15c6cc6f14bab5b509777c296ad4a8e83e057fc5d904060b264cd29eb4de6d8069db07304517da4303e222b358c2
   languageName: node
   linkType: hard
 
@@ -9995,13 +10002,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daikon@npm:^1.2.42":
-  version: 1.2.42
-  resolution: "daikon@npm:1.2.42"
+"daikon@npm:^1.2.43":
+  version: 1.2.43
+  resolution: "daikon@npm:1.2.43"
   dependencies:
     jpeg-lossless-decoder-js: "git+https://github.com/rii-mango/JPEGLosslessDecoderJS.git"
     pako: ^1.0.6
-  checksum: bee3f5385621df7d51ef6414a39e2101cc14d9ad02cb039cc6617da97dafcc86162278961011d57d2491cdcb53f00c7ccbc96b5421af253e6f9372a9e084031e
+  checksum: 7e4be1253850900da8b6be2c80c2dac9636e6d49ac5fdc4607ea6fff1f32fff7316bdb53fd545487bd344650771948d73dd31ba239edbeac7766ab437cd64d3f
   languageName: node
   linkType: hard
 
@@ -12011,10 +12018,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fflate@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "fflate@npm:0.7.3"
-  checksum: 6d0908c54643d5f979c2ba84a0dab74d71755360731a3a3d43d6aeb81728836f086c4f4d62908e3c03d460f2ef95908daa3bfbb8527be56cac0025b96553ee64
+"fflate@npm:*, fflate@npm:^0.7.4":
+  version: 0.7.4
+  resolution: "fflate@npm:0.7.4"
+  checksum: b812ab26047432db70ff4c73eb45ad53bd0774575b4818b9c61c2921e89ec65d1259f06ec1618f2ac55e6a2f2e29b6dc09173d213b46580bc69efae5344bf8f1
   languageName: node
   linkType: hard
 
@@ -12626,16 +12633,6 @@ fsevents@~2.3.2:
   dependencies:
     assert-plus: ^1.0.0
   checksum: ab18d55661db264e3eac6012c2d3daeafaab7a501c035ae0ccb193c3c23e9849c6e29b6ac762b9c2adae460266f925d55a3a2a3a3c8b94be2f222df94d70c046
-  languageName: node
-  linkType: hard
-
-"gifti-reader-js@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "gifti-reader-js@npm:0.4.4"
-  dependencies:
-    pako: "*"
-    sax: "*"
-  checksum: 1ccc1be2f5d510855464cfffb67fdc6a865d189520fe916e4e506a9501d9400c98db0a7a879dd3cca889705a2ad72b2d0a3c54671406d9d8e1724e62af270884
   languageName: node
   linkType: hard
 
@@ -16503,12 +16500,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"nifti-reader-js@npm:^0.5.4":
-  version: 0.5.4
-  resolution: "nifti-reader-js@npm:0.5.4"
+"nifti-reader-js@npm:^0.6.2":
+  version: 0.6.4
+  resolution: "nifti-reader-js@npm:0.6.4"
   dependencies:
-    pako: "*"
-  checksum: d5060d3fed833155186c89a375dc7bafe9a627899f0aa8a7db1e2b30a0f9d1e0f02582fe1b67359b08b4d06709f408c54ad2507e0224631b4603cad0bfbb587d
+    fflate: "*"
+  checksum: be7072b9bb06d76a10a75e9e3b409f70951406908432ab4ff64f24d98aeb11a1182ad3add45085f5bb2c55f509ee6631a22c3ac722d3d8863bcd7c9491fb2bd3
   languageName: node
   linkType: hard
 
@@ -17427,13 +17424,6 @@ fsevents@~2.3.2:
     registry-url: ^5.0.0
     semver: ^6.2.0
   checksum: cc9f890d3667d7610e6184decf543278b87f657d1ace0deb4a9c9155feca738ef88f660c82200763d3348010f4e42e9c7adc91e96ab0f86a770955995b5351e2
-  languageName: node
-  linkType: hard
-
-"pako@npm:*":
-  version: 2.0.4
-  resolution: "pako@npm:2.0.4"
-  checksum: 82b9b0b99dd830c9103856a6dbd10f0cb2c8c32b9768184727ea381a99666de9a47a069d2e6efe6acf09336f363956b50835c196ef9311b34b7274d420eb0d88
   languageName: node
   linkType: hard
 
@@ -19556,12 +19546,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.4.0":
-  version: 7.5.5
-  resolution: "rxjs@npm:7.5.5"
+"rxjs@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "rxjs@npm:7.8.0"
   dependencies:
     tslib: ^2.1.0
-  checksum: e034f60805210cce756dd2f49664a8108780b117cf5d0e2281506e9e6387f7b4f1532d974a8c8b09314fa7a16dd2f6cff3462072a5789672b5dcb45c4173f3c6
+  checksum: 61b4d4fd323c1043d8d6ceb91f24183b28bcf5def4f01ca111511d5c6b66755bc5578587fe714ef5d67cf4c9f2e26f4490d4e1d8cabf9bd5967687835e9866a2
   languageName: node
   linkType: hard
 
@@ -19653,7 +19643,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"sax@npm:*, sax@npm:>=0.6.0, sax@npm:^1.2.1, sax@npm:^1.2.4":
+"sax@npm:>=0.6.0, sax@npm:^1.2.1, sax@npm:^1.2.4":
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
   checksum: d3df7d32b897a2c2f28e941f732c71ba90e27c24f62ee918bd4d9a8cfb3553f2f81e5493c7f0be94a11c1911b643a9108f231dd6f60df3fa9586b5d2e3e9e1fe
@@ -22115,6 +22105,15 @@ resolve@^2.0.0-next.3:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 
