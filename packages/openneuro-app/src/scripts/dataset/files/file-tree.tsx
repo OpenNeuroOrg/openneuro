@@ -139,6 +139,7 @@ const FileTree = ({
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
                   path={path}
+                  urls={file.urls}
                   size={file.size}
                   editMode={editMode}
                   toggleFileToDelete={toggleFileToDelete}
