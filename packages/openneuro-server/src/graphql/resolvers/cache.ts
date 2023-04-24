@@ -1,21 +1,25 @@
 import { redis } from '../../libs/redis.js'
+import CacheItem from '../../cache/item'
+import { CacheType } from '../../cache/types'
 
+/**
+ * Clear the snapshotDownload cache after exports
+ */
 export async function cacheClear(
   obj: Record<string, unknown>,
-  { datasetId }: { datasetId: string },
+  { datasetId, tag }: { datasetId: string; tag: string },
   { userInfo }: { userInfo: { admin: boolean } },
 ): Promise<boolean> {
   // Check for admin and validate datasetId argument
   if (userInfo?.admin && datasetId.length == 8 && datasetId.startsWith('ds')) {
-    const keys = await redis.keys(`*${datasetId}*`)
-    if (keys.length) {
-      const transaction = redis.pipeline()
-      keys.forEach(key => {
-        transaction.unlink(key)
-      })
-      transaction.exec()
+    const downloadCache = new CacheItem(redis, CacheType.snapshotDownload, [
+      datasetId,
+      tag,
+    ])
+    try {
+      await downloadCache.drop()
       return true
-    } else {
+    } catch (err) {
       return false
     }
   } else {

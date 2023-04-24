@@ -80,7 +80,7 @@ def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_expor
                 # Perform all GitHub export steps
                 github_export(dataset_id, dataset_path, tags[-1].name)
         # Drop cache once all exports are complete
-        clear_dataset_cache(dataset_id, cookies)
+        clear_dataset_cache(dataset_id, tags[-1].name, cookies)
 
 
 def check_remote_has_version(dataset_path, remote, tag):

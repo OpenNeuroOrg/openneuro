@@ -70,19 +70,12 @@ export const filesUpdated = {
   },
 }
 
-export const datasetChanged = {
-  type: 'DatasetChange',
-  subscribe: () => pubsub.asyncIterator('datasetChanged'),
-  args: {},
-}
-
 const Subscription = {
   datasetDeleted,
   snapshotsUpdated,
   permissionsUpdated,
   draftUpdated,
   filesUpdated,
-  datasetChanged,
 }
 
 export default Subscription

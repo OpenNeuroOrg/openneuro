@@ -1,6 +1,5 @@
 import mongoose, { Document } from 'mongoose'
 const { Schema, model } = mongoose
-import DatasetChange from './datasetChange'
 
 // External relations annotating the whole dataset
 export interface DatasetRelationDocument extends Document {
@@ -72,22 +71,6 @@ datasetSchema.virtual('subscriptions', {
   foreignField: 'datasetId',
   count: true,
   justOne: true,
-})
-
-datasetSchema.post('updateOne', function () {
-  const datasetId = this.getQuery()?.['id']
-  return new DatasetChange({
-    datasetId,
-    modified: true,
-  }).save()
-})
-
-datasetSchema.post('deleteOne', function () {
-  const datasetId = this.getQuery()?.['id']
-  return new DatasetChange({
-    datasetId,
-    deleted: true,
-  }).save()
 })
 
 const Dataset = model<DatasetDocument>('Dataset', datasetSchema)

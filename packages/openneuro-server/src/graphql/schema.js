@@ -90,11 +90,6 @@ export const typeDefs = `
     participantCount(modality: String): Int @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
-    # Get recent dataset changes (newest first)
-    datasetChanges(
-      "Limit results, default 100, max 1000"
-      limit: Int = 100
-    ): [DatasetChange]
     # Get annexed files that have been flagged or removed.
     flaggedFiles(
       "Get files that have been flagged, default true."
@@ -165,8 +160,8 @@ export const typeDefs = `
     prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata
     # Add files from a completed upload to the dataset draft
     finishUpload(uploadId: ID!): Boolean
-    # Drop caches for a given dataset - requires site admin access
-    cacheClear(datasetId: ID!): Boolean
+    # Drop download cache for a snapshot - requires site admin access
+    cacheClear(datasetId: ID!, tag: String!): Boolean
     # Rerun the latest validator on a given commit
     revalidate(datasetId: ID!, ref: String!): Boolean
     # Request a temporary token for git access
@@ -478,6 +473,8 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Total size in bytes of this snapshot
     size: BigInt
+    # Single list of files to download this snapshot (only available on snapshots)
+    downloadFiles: [DatasetFile]
   }
 
   # RelatedObject nature of relationship
@@ -698,15 +695,6 @@ export const typeDefs = `
     datasetId: String
     action: String
     payload: [DatasetFile]
-  }
-
-  # Recent changes to datasets
-  type DatasetChange {
-    datasetId: String!
-    created: Boolean
-    modified: Boolean
-    deleted: Boolean
-    timestamp: DateTime
   }
 
   # Analytics for a dataset
