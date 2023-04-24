@@ -67,6 +67,7 @@ type DatasetFile = {
   filename: string
   directory: boolean
   size: number
+  urls: string[]
 }
 
 /**
