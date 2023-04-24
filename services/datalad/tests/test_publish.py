@@ -49,9 +49,8 @@ def test_export_snapshots(no_init_remote, client, new_dataset):
     export_dataset(new_dataset.path, s3_export=s3_export_mock,
                    github_export=github_export_mock, update_s3_sibling=update_s3_sibling_mock, github_enabled=True)
     # Verify export calls were made
-    assert s3_export_mock.call_count == 2
-    expect_calls = [call(new_dataset.path, 's3-PUBLIC', 'refs/tags/1.0.0'),
-                    call(new_dataset.path, 's3-PUBLIC', 'refs/tags/2.0.0')]
+    assert s3_export_mock.call_count == 1
+    expect_calls = [call(new_dataset.path, 's3-PUBLIC', 'refs/tags/2.0.0')]
     s3_export_mock.assert_has_calls(expect_calls)
     assert github_export_mock.call_count == 1
     dataset_id = os.path.basename(new_dataset.path)

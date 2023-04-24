@@ -5,7 +5,7 @@ import { description } from './description.js'
 import { readme } from './readme.js'
 import { getDraftRevision, updateDatasetRevision } from '../../datalad/draft.js'
 import { checkDatasetWrite } from '../permissions.js'
-import { getFiles } from '../../datalad/files.js'
+import { getFiles } from '../../datalad/files'
 import { filterRemovedAnnexObjects } from '../utils/file.js'
 
 // A draft must have a dataset parent

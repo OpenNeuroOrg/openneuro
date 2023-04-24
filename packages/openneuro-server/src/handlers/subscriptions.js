@@ -59,17 +59,21 @@ export const deleteAll = (req, res, next) => {
   notifications.datasetDeleted(datasetId)
   Subscription.find({
     datasetId: datasetId,
-  }).exec((err, subscriptions) => {
-    if (err) {
-      return next(err)
-    }
-    subscriptions.forEach(subscription => {
-      Subscription.deleteOne({
-        _id: new ObjectID(subscription._id),
-      })
-    })
-    return res.send()
   })
+    .exec()
+    .then(subscriptions => {
+      subscriptions.forEach(subscription => {
+        Subscription.deleteOne({
+          _id: new ObjectID(subscription._id),
+        })
+      })
+      return res.send()
+    })
+    .catch(err => {
+      if (err) {
+        return next(err)
+      }
+    })
 }
 
 // read
@@ -85,19 +89,23 @@ export const getSubscriptions = (req, res, next) => {
   if (datasetId) {
     Subscription.find({
       datasetId: datasetId,
-    }).exec((err, subscriptions) => {
-      if (err) {
-        return next(err)
-      }
-      res.send(subscriptions)
     })
+      .exec()
+      .then(subscriptions => {
+        res.send(subscriptions)
+      })
+      .catch(err => {
+        return next(err)
+      })
   } else {
-    Subscription.find().exec((err, subscriptions) => {
-      if (err) {
+    Subscription.find()
+      .exec()
+      .then(subscriptions => {
+        res.send(subscriptions)
+      })
+      .catch(err => {
         return next(err)
-      }
-      res.send(subscriptions)
-    })
+      })
   }
 }
 

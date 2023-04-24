@@ -18,19 +18,16 @@ export default {
     const datasetId = data.datasetId
     const userId = data.userId
 
-    Star.create(
-      {
-        datasetId: datasetId,
-        userId: userId,
-      },
-      (err, response) => {
-        if (err) {
-          return next(err)
-        } else {
-          return res.send(response.$op)
-        }
-      },
-    )
+    Star.create({
+      datasetId: datasetId,
+      userId: userId,
+    })
+      .then(response => {
+        return res.send(response.$op)
+      })
+      .catch(err => {
+        next(err)
+      })
   },
 
   /**
@@ -72,19 +69,23 @@ export default {
     if (datasetId) {
       Star.find({
         datasetId: datasetId,
-      }).exec((err, stars) => {
-        if (err) {
-          return next(err)
-        }
-        res.send(stars)
       })
+        .exec()
+        .then(stars => {
+          res.send(stars)
+        })
+        .catch(err => {
+          return next(err)
+        })
     } else {
-      Star.find().exec((err, stars) => {
-        if (err) {
+      Star.find()
+        .exec()
+        .then(stars => {
+          res.send(stars)
+        })
+        .catch(err => {
           return next(err)
-        }
-        res.send(stars)
-      })
+        })
     }
   },
 }

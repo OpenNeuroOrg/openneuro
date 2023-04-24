@@ -1,5 +1,7 @@
 import request from 'superagent'
+import { Readable } from 'node:stream'
 import mime from 'mime-types'
+import { getFiles } from '../datalad/files'
 import { getDatasetWorker } from '../libs/datalad-service'
 
 /**
@@ -14,14 +16,48 @@ import { getDatasetWorker } from '../libs/datalad-service'
 /**
  * Get a file from a dataset
  */
-export const getFile = (req, res) => {
+export const getFile = async (req, res) => {
   const { datasetId, snapshotId, filename } = req.params
   const worker = getDatasetWorker(datasetId)
-  res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
-  const uri = snapshotId
-    ? `${worker}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
-    : `${worker}/datasets/${datasetId}/files/${filename}`
-  return request.get(uri).pipe(res)
+  // Find the right tree
+  const pathComponents = filename.split(':')
+  let tree = snapshotId || 'HEAD'
+  let file
+  for (const level of pathComponents) {
+    const files = await getFiles(datasetId, tree)
+    if (level == pathComponents.slice(-1)) {
+      file = files.find(f => !f.directory && f.filename === level)
+    } else {
+      tree = files.find(f => f.directory && f.filename === level).id
+    }
+  }
+  // Get the file URL and redirect if external or serve if local
+  if (file && file.urls[0].startsWith('https://s3.amazonaws.com/')) {
+    res.redirect(file.urls[0])
+  } else {
+    // Serve the file directly
+    res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
+    const uri = snapshotId
+      ? `http://${worker}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
+      : `http://${worker}/datasets/${datasetId}/files/${filename}`
+    return (
+      fetch(uri)
+        .then(r => {
+          // Set the content length (allow clients to catch HTTP issues better)
+          res.setHeader(
+            'Content-Length',
+            Number(r.headers.get('content-length')),
+          )
+          return r.body
+        })
+        // @ts-expect-error
+        .then(stream => Readable.fromWeb(stream).pipe(res))
+        .catch(err => {
+          console.error(err)
+          res.status(500).send('Internal error transferring requested file')
+        })
+    )
+  }
 }
 
 /**

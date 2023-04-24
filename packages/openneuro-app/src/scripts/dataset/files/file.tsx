@@ -91,6 +91,7 @@ interface FileProps {
   annexed: boolean
   annexKey: string
   datasetPermissions: string[]
+  urls: string[]
   toggleFileToDelete: ({
     id,
     path,
@@ -117,6 +118,7 @@ const File = ({
   datasetPermissions,
   toggleFileToDelete,
   isFileToBeDeleted,
+  urls,
 }: FileProps): JSX.Element => {
   const { icon, color } = getFileIcon(filename)
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
@@ -137,7 +139,10 @@ const File = ({
           <Tooltip tooltip={`Download: ${bytes.format(size) as string}`}>
             <span className="edit-file download-file">
               <a
-                href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
+                href={
+                  urls?.[0] ||
+                  apiPath(datasetId, snapshotTag, filePath(path, filename))
+                }
                 download
                 aria-label="download file">
                 <i className="fa fa-download" />

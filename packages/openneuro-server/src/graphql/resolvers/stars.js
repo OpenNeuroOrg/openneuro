@@ -4,19 +4,19 @@ export const starDataset = async (obj, { datasetId }, { user }) => {
   const star = await Star.findOne({ datasetId, userId: user }).exec()
   const newStar = {
     datasetId,
-    userId: user
+    userId: user,
   }
   if (star) {
     // unstar
-    return star.remove().then(() => ({
+    return star.deleteOne().then(() => ({
       starred: false,
-      newStar
+      newStar,
     }))
   } else {
     const star = new Star({ datasetId, userId: user })
     return star.save().then(() => ({
       starred: true,
-      newStar
+      newStar,
     }))
   }
 }
