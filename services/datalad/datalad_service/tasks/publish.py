@@ -62,7 +62,7 @@ def create_remotes(dataset_path):
 
 
 @elasticapm.capture_span()
-def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_export=github_export, github_enabled=DATALAD_GITHUB_EXPORTS_ENABLED):
+def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_export=github_export, update_s3_sibling=update_s3_sibling, github_enabled=DATALAD_GITHUB_EXPORTS_ENABLED):
     """
     Export dataset to S3 and GitHub.
 
@@ -72,6 +72,8 @@ def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_expor
         dataset_id = os.path.basename(dataset_path)
         repo = pygit2.Repository(dataset_path)
         tags = git_tag(repo)
+        # Update configuration for the remote
+        update_s3_sibling(dataset_path)
         # Push the most recent tag
         if tags:
             s3_export(dataset_path, get_s3_remote(), tags[-1].name)
