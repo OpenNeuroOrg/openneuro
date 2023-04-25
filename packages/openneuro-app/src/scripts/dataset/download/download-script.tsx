@@ -8,7 +8,7 @@ function inlineDownload(filename, data): void {
   const element = document.createElement('a')
   element.setAttribute(
     'href',
-    'data:text/plain;charset=utf-8,' + encodeURIComponent(data),
+    'data:text/x-shellscript;charset=utf-8,' + encodeURIComponent(data),
   )
   element.setAttribute('download', filename)
 
