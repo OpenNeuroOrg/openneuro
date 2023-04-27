@@ -8,6 +8,7 @@ import DownloadCommandLine from '../download/download-command-line.jsx'
 import DownloadDatalad from '../download/download-datalad.jsx'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3 } from './styles/header-row'
+import { DownloadScript } from '../download/download-script'
 
 const DownloadDataset = ({ worker, datasetPermissions }) => {
   const { datasetId, tag: snapshotTag } = useParams()
@@ -34,6 +35,7 @@ const DownloadDataset = ({ worker, datasetPermissions }) => {
         workerId={workerId}
         datasetPermissions={datasetPermissions}
       />
+      <DownloadScript datasetId={datasetId} snapshotTag={snapshotTag} />
     </DatasetPageBorder>
   )
 }
