@@ -11,7 +11,7 @@ class Issues extends React.Component {
   render() {
     const issueFiles = this.props.issues
     const issues = issueFiles.map((issue, index) => {
-      let totalFiles = issue.files.length
+      let totalFiles = issue.files.length || issue.files.size
       if (issue.additionalFileCount) {
         totalFiles += issue.additionalFileCount
       }
@@ -32,16 +32,32 @@ class Issues extends React.Component {
       )
 
       // issue sub-errors
-      const subErrors = issue.files.map((error, index2) => {
-        return error ? (
-          <Issue
-            type={this.props.issueType}
-            file={issue.file}
-            error={error}
-            index={index2}
-            key={index2}
-          />
-        ) : null
+      const subErrors = Array.from(issue.files).map((error, index2) => {
+        // Schema validator returns multiple files here
+        // map those to the old sub-issue model to display them
+        if (error?.length) {
+          return error.filter(Boolean).map((i, index3) => {
+            return (
+              <Issue
+                type={this.props.issueType}
+                file={i.file}
+                error={i}
+                index={index3}
+                key={index3}
+              />
+            )
+          })
+        } else {
+          return error ? (
+            <Issue
+              type={this.props.issueType}
+              file={issue.file}
+              error={error}
+              index={index2}
+              key={index2}
+            />
+          ) : null
+        }
       })
 
       if (issue.additionalFileCount > 0) {

@@ -67,6 +67,10 @@ export class UploadClient extends React.Component {
       failedFiles: new Set(),
       // Abort controller for abandoning the upload
       abortController: null,
+      // Enable the new schema validator
+      schemaValidator: false,
+      // Toggle schemaValidator flag
+      toggleSchemaValidator: this.toggleSchemaValidator,
     }
   }
 
@@ -78,6 +82,13 @@ export class UploadClient extends React.Component {
   setLocation = path => {
     gtag.pageview(path)
     this.setState({ location: locationFactory(path) })
+  }
+
+  /**
+   * Enable or disable schema based validation
+   */
+  toggleSchemaValidator = () => {
+    this.setState({ schemaValidator: !this.state.schemaValidator })
   }
 
   /**
