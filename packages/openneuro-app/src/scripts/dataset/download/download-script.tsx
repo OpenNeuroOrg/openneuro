@@ -88,6 +88,8 @@ export const DownloadScript = ({
         </p>
       </div>
     )
+  } else {
+    return null
   }
 }
 
