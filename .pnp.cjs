@@ -8151,15 +8151,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@niivue/niivue", [\
-        ["npm:0.33.1", {\
-          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.33.1-79086e822b-ee6b1dfbfa.zip/node_modules/@niivue/niivue/",\
+        ["npm:0.34.0", {\
+          "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.34.0-2bae1d5f03-fa653c90a1.zip/node_modules/@niivue/niivue/",\
           "packageDependencies": [\
-            ["@niivue/niivue", "npm:0.33.1"],\
+            ["@niivue/niivue", "npm:0.34.0"],\
             ["@ungap/structured-clone", "npm:1.0.2"],\
             ["daikon", "npm:1.2.43"],\
             ["fflate", "npm:0.7.4"],\
             ["gl-matrix", "npm:3.4.3"],\
-            ["nifti-reader-js", "npm:0.6.4"],\
+            ["nifti-reader-js", "npm:0.6.6"],\
             ["rxjs", "npm:7.8.0"],\
             ["uuid", "npm:9.0.0"]\
           ],\
@@ -8410,7 +8410,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@elastic/apm-rum", "npm:5.11.0"],\
             ["@emotion/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],\
             ["@emotion/styled", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.6.0"],\
-            ["@niivue/niivue", "npm:0.33.1"],\
+            ["@niivue/niivue", "npm:0.34.0"],\
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@openneuro/components", "workspace:packages/openneuro-components"],\
             ["@testing-library/jest-dom", "npm:5.14.1"],\
@@ -21776,10 +21776,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["nifti-reader-js", [\
-        ["npm:0.6.4", {\
-          "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.6.4-2e90d5d177-be7072b9bb.zip/node_modules/nifti-reader-js/",\
+        ["npm:0.6.6", {\
+          "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.6.6-5c8b77cd0e-f42e27b2a7.zip/node_modules/nifti-reader-js/",\
           "packageDependencies": [\
-            ["nifti-reader-js", "npm:0.6.4"],\
+            ["nifti-reader-js", "npm:0.6.6"],\
             ["fflate", "npm:0.7.4"]\
           ],\
           "linkType": "HARD"\
