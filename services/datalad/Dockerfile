@@ -1,3 +1,4 @@
+FROM denoland/deno:bin-1.33.1 AS deno
 FROM python:3.10-slim as production
 
 WORKDIR /srv
@@ -10,8 +11,9 @@ COPY datalad_service /srv/datalad_service
 COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
-# Install node the Dockery-but-hacky-way
+# Install node and Deno the Dockery-but-hacky-way
 COPY --from=node:18.15.0-buster /usr/local/bin/node /usr/local/bin/node
+COPY --from=deno /deno /usr/local/bin/deno
 
 RUN apt-get update \
   && node --version \
