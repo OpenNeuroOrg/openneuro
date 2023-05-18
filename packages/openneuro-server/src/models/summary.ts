@@ -24,6 +24,10 @@ export interface SummaryDocument extends Document {
   size: number
   dataProcessed: boolean
   pet: SummaryPetField
+  validatorMetadata: {
+    type: string
+    version: string
+  }
 }
 
 const summarySchema = new Schema({
@@ -46,6 +50,10 @@ const summarySchema = new Schema({
     ScannerManufacturersModelName: [String],
     TracerName: [String],
     TracerRadionuclide: [String],
+  },
+  validatorMetadata: {
+    type: String,
+    version: String,
   },
 })
 

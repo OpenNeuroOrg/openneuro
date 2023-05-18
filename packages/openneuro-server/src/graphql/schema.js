@@ -219,6 +219,12 @@ export const typeDefs = `
     TracerRadionuclide: [String]
   }
 
+  # BIDS Validator metadata
+  input ValidatorMetadata {
+    type: String
+    version: String
+  }
+
   input SummaryInput {
     id: ID! # Git reference for this summary
     datasetId: ID!
@@ -233,6 +239,7 @@ export const typeDefs = `
     totalFiles: Int!
     dataProcessed: Boolean
     pet: SummaryPetInput
+    validatorMetadata: ValidatorMetadata
   }
 
   input SubjectMetadataInput {
@@ -246,6 +253,7 @@ export const typeDefs = `
     id: ID! # Git reference for this validation
     datasetId: ID!
     issues: [ValidationIssueInput]!
+    validatorMetadata: ValidatorMetadata
   }
 
   # Dataset Metadata
