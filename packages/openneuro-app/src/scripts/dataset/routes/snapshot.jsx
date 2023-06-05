@@ -63,9 +63,9 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
           {updateToCC0 && (
             <p>
               <strong>Notice:</strong> The current license{' '}
-              <i>&quote;{draftLicense}&quote;</i> will be updated to
-              &quote;CC0&quote; when the version is created. Please see FAQ item
-              &quote;Are there any restrictions on the uploaded data?&quote; for
+              <i>&quot;{draftLicense}&quot;</i> will be updated to
+              &quot;CC0&quot; when the version is created. Please see FAQ item
+              &quot;Are there any restrictions on the uploaded data?&quot; for
               details.
             </p>
           )}
