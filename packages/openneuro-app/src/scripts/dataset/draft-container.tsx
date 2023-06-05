@@ -76,6 +76,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
+  const isReviewer = profile?.scopes?.includes('dataset:reviewer')
   const hasEdit =
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
   const hasDraftChanges =
@@ -94,15 +95,17 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           {description.Name} - {pageTitle}
         </title>
       </Helmet>
-      {dataset.snapshots && !hasEdit && (
-        <Navigate
-          to={`/datasets/${dataset.id}/versions/${
-            dataset.snapshots.length &&
-            dataset.snapshots[dataset.snapshots.length - 1].tag
-          }`}
-          replace
-        />
-      )}
+      {!isReviewer &&
+        dataset.snapshots.length &&
+        dataset.snapshots[dataset.snapshots.length - 1].tag &&
+        !hasEdit && (
+          <Navigate
+            to={`/datasets/${dataset.id}/versions/${
+              dataset.snapshots[dataset.snapshots.length - 1].tag
+            }`}
+            replace
+          />
+        )}
       <div
         className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
         <DatasetHeader
