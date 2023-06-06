@@ -76,7 +76,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
-  const isReviewer = profile?.scopes?.includes('dataset:reviewer')
   const hasEdit =
     hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
   const hasDraftChanges =
@@ -95,8 +94,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           {description.Name} - {pageTitle}
         </title>
       </Helmet>
-      {!isReviewer &&
-        dataset.snapshots.length &&
+      {dataset.snapshots.length &&
         dataset.snapshots[dataset.snapshots.length - 1].tag &&
         !hasEdit && (
           <Navigate
