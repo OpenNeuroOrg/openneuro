@@ -61,7 +61,7 @@
     "sass": "^1.56.1",
     "tsc-watch": "^4.2.9",
     "typescript": "4.5.4",
-    "vite": "3.2.3",
+    "vite": "3.2.7",
     "vitest": "0.25.2",
     "vitest-fetch-mock": "0.2.1",
     "vitest-mongodb": "^0.0.4"
