@@ -94,7 +94,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           {description.Name} - {pageTitle}
         </title>
       </Helmet>
-      {dataset.snapshots.length &&
+      {dataset.snapshots.length !== 0 &&
         dataset.snapshots[dataset.snapshots.length - 1].tag &&
         !hasEdit && (
           <Navigate
