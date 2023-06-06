@@ -13,11 +13,13 @@ interface AnonymousReviewerProps {
     id: string
     expiration: Date
   }[]
+  hasSnapshot: boolean
 }
 
 export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
   datasetId,
   reviewers,
+  hasSnapshot,
 }) => {
   return (
     <div className="dataset-anonymous-form">
@@ -30,7 +32,13 @@ export const AnonymousReviewer: FC<AnonymousReviewerProps> = ({
             one year or until they are removed.
           </p>
         </div>
-        <CreateReviewLink datasetId={datasetId} />
+        {hasSnapshot ? (
+          <CreateReviewLink datasetId={datasetId} />
+        ) : (
+          <p className="text-danger">
+            Please create a dataset version before generating a reviewer link.
+          </p>
+        )}
         {reviewers.length ? (
           <div className="dataset-form-body">
             <h3>Previous Review Links: </h3>

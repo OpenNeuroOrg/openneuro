@@ -55,6 +55,7 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
             datasetId={dataset.id}
             permissions={dataset.permissions}
             reviewers={dataset.reviewers}
+            hasSnapshot={dataset.snapshots.length}
           />
         }
       />

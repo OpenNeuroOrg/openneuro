@@ -94,15 +94,16 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           {description.Name} - {pageTitle}
         </title>
       </Helmet>
-      {dataset.snapshots && !hasEdit && (
-        <Navigate
-          to={`/datasets/${dataset.id}/versions/${
-            dataset.snapshots.length &&
-            dataset.snapshots[dataset.snapshots.length - 1].tag
-          }`}
-          replace
-        />
-      )}
+      {dataset.snapshots.length !== 0 &&
+        dataset.snapshots[dataset.snapshots.length - 1].tag &&
+        !hasEdit && (
+          <Navigate
+            to={`/datasets/${dataset.id}/versions/${
+              dataset.snapshots[dataset.snapshots.length - 1].tag
+            }`}
+            replace
+          />
+        )}
       <div
         className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
         <DatasetHeader

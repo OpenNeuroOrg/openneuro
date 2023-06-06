@@ -64,7 +64,7 @@ ShareTable.propTypes = {
   permissions: PropTypes.object,
 }
 
-const Share = ({ datasetId, permissions, reviewers }) => {
+const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
   const [userEmail, setUserEmail] = useState('')
   const [access, setAccess] = useState('ro')
 
@@ -127,7 +127,11 @@ const Share = ({ datasetId, permissions, reviewers }) => {
         </div>
       </div>
       <hr />
-      <AnonymousReviewer datasetId={datasetId} reviewers={reviewers} />
+      <AnonymousReviewer
+        datasetId={datasetId}
+        reviewers={reviewers}
+        hasSnapshot={hasSnapshot}
+      />
     </DatasetPageBorder>
   )
 }
@@ -135,6 +139,8 @@ const Share = ({ datasetId, permissions, reviewers }) => {
 Share.propTypes = {
   datasetId: PropTypes.string,
   permissions: PropTypes.object,
+  reviewers: PropTypes.array,
+  hasSnapshot: PropTypes.boolean,
 }
 
 export default Share
