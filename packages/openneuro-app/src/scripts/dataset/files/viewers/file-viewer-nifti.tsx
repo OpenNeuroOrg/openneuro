@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Niivue } from '@niivue/niivue'
 
-const FileViewerNifti = ({ imageUrl }) => {
+const FileViewerNifti = ({
+  imageUrl,
+}: {
+  imageUrl: string
+}): React.ReactElement => {
   const canvas = useRef()
   useEffect(() => {
     const volumeList = [
@@ -15,6 +19,7 @@ const FileViewerNifti = ({ imageUrl }) => {
       },
     ]
     const nv = new Niivue({ dragAndDropEnabled: false })
+    ;(window as any).niivue = nv
     nv.attachToCanvas(canvas.current)
     nv.loadVolumes(volumeList) // press the "v" key to cycle through volumes
   }, [imageUrl])
