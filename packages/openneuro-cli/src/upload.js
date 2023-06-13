@@ -161,6 +161,7 @@ export const uploadFiles = async ({
       const fileStream = createReadStream(file.path)
       fileStream.on('error', err => {
         console.error(err)
+        fileStream.close()
         controller.abort()
       })
       fileStream.on('close', () => {
