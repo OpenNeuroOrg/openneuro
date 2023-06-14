@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose'
 const { Schema, model } = mongoose
 
 export interface MetadataDocument extends Document {
+  datasetId: string
   datasetName: string
   datasetUrl: string
   dataProcessed: boolean
@@ -10,7 +11,6 @@ export interface MetadataDocument extends Document {
   latestSnapshotCreatedAt: Date
   ages: number[]
   modalities: string[]
-  datasetId: string
   adminUsers: string[]
   dxStatus: string
   tasksCompleted: string[]
@@ -29,6 +29,7 @@ export interface MetadataDocument extends Document {
 }
 
 const metadataSchema = new Schema({
+  datasetId: { type: String, default: uuid.v4 }, // OpenNeuro id
   datasetName: String,
   datasetUrl: String, // @id type
   dataProcessed: Boolean, // 'true' | 'false' | 'user input string'
@@ -36,7 +37,6 @@ const metadataSchema = new Schema({
   latestSnapshotCreatedAt: Date,
   ages: [Number],
   modalities: [String],
-  datasetId: { type: String, default: uuid.v4 }, // OpenNeuro id
   adminUsers: [String], // email type (@id type?)
   dxStatus: String,
   tasksCompleted: [String],
