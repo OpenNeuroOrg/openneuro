@@ -415,6 +415,25 @@ export const typeDefs = `
     message: String
     # Associated commit references (tags or branches)
     references: String
+    # File changes in this commit
+    files: [DiffFiles]
+    # Files changed
+    filesChanged: Int
+    # Total number of insertions
+    insertions: Int
+    # Total number of deletions
+    deletions: Int
+  }
+
+  type DiffFiles {
+    # Status string (A = added, M = modified, D = deleted)
+    status: String
+    mode: Int
+    # Previous path
+    old: String
+    # New path
+    new: String
+    binary: Boolean
   }
 
   # Ephemeral draft or working tree for a dataset
