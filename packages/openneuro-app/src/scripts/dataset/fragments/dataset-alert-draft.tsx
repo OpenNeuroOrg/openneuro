@@ -53,7 +53,7 @@ export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
     if (hasDraftChanges) {
       return (
         <DatasetAlert alert="This dataset has been published!" level="warning">
-          There are currently unsaved changes to this Draft. Changes made here
+          There are currently unsaved changes to this draft. Changes made here
           become public when you&#32;
           <Link
             className="dataset-tool"
