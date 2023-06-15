@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FileViewerText from './viewers/file-viewer-text.jsx'
-import FileViewerNifti from './viewers/file-viewer-nifti.jsx'
+import FileViewerNifti from './viewers/file-viewer-nifti'
 import FileViewerJson from './viewers/file-viewer-json.jsx'
 import FileViewerTsv from './viewers/file-viewer-tsv.jsx'
 import FileViewerCsv from './viewers/file-viewer-csv.jsx'
@@ -19,7 +19,12 @@ const FileViewerType = ({ path, url, data }) => {
     path.endsWith('.txt')
   ) {
     return <FileViewerText data={data} />
-  } else if (path.endsWith('.nii.gz') || path.endsWith('.nii') || path.endsWith('.mgh') || path.endsWith('.mgz')) {
+  } else if (
+    path.endsWith('.nii.gz') ||
+    path.endsWith('.nii') ||
+    path.endsWith('.mgh') ||
+    path.endsWith('.mgz')
+  ) {
     return <FileViewerNifti imageUrl={url} />
   } else if (path.endsWith('.json')) {
     return <FileViewerJson data={data} />
