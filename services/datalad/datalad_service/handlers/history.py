@@ -23,10 +23,21 @@ class HistoryResource(object):
                 for tag in tags:
                     if tag.target.hex == commit.hex:
                         references.append(tag.name)
-                log.append({
+                file_changes = []
+                if commit.parents:
+                    diff = commit.tree.diff_to_tree(commit.parents[0].tree)
+                else:
+                    diff = commit.tree.diff_to_tree()
+                for delta in diff.deltas:
+                    changes = {"old": delta.old_file.path, "new": delta.new_file.path,
+                               "mode": delta.new_file.mode, "binary": delta.is_binary, "status": delta.status_char()}
+                    file_changes.append(changes)
+                new_log = {
                     "id": commit.hex, "date": commit.commit_time,
                     "authorName": commit.author.name, "authorEmail": commit.author.email,
-                    "message": commit.message, "references": ",".join(references)})
+                    "message": commit.message, "references": ",".join(references), "files": file_changes,
+                    "filesChanged": diff.stats.files_changed, "insertions": diff.stats.insertions, "deletions": diff.stats.deletions}
+                log.append(new_log)
             resp.media = {'log': log}
             resp.status = falcon.HTTP_OK
         else:
