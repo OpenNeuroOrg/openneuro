@@ -4984,18 +4984,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niivue/niivue@npm:0.33.1":
-  version: 0.33.1
-  resolution: "@niivue/niivue@npm:0.33.1"
+"@niivue/niivue@npm:0.34.0":
+  version: 0.34.0
+  resolution: "@niivue/niivue@npm:0.34.0"
   dependencies:
     "@ungap/structured-clone": ^1.0.2
     daikon: ^1.2.43
     fflate: ^0.7.4
     gl-matrix: ^3.4.3
-    nifti-reader-js: ^0.6.2
+    nifti-reader-js: ^0.6.4
     rxjs: ^7.8.0
     uuid: ^9.0.0
-  checksum: ee6b1dfbfa18a1ab748b11cebcedb23c141f583d712dcd4cdf05e370979f00fb647d721ae5f23afd5162ea73276f8b1a8dccbee06ddff681c639035699c5ff73
+  checksum: fa653c90a1df6ca62b0da0ad1ae3b04e239ac577c3dbce5a6afa60258133ae7e4b32584dc5835cb1601b626125056709645338832c1dc632ecb906c07119b765
   languageName: node
   linkType: hard
 
@@ -5213,7 +5213,7 @@ __metadata:
     "@elastic/apm-rum": 5.11.0
     "@emotion/react": 11.6.0
     "@emotion/styled": 11.6.0
-    "@niivue/niivue": 0.33.1
+    "@niivue/niivue": 0.34.0
     "@openneuro/client": ^4.18.1
     "@openneuro/components": ^4.18.1
     "@testing-library/jest-dom": ^5.11.4
@@ -16500,12 +16500,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"nifti-reader-js@npm:^0.6.2":
-  version: 0.6.4
-  resolution: "nifti-reader-js@npm:0.6.4"
+"nifti-reader-js@npm:^0.6.4":
+  version: 0.6.6
+  resolution: "nifti-reader-js@npm:0.6.6"
   dependencies:
     fflate: "*"
-  checksum: be7072b9bb06d76a10a75e9e3b409f70951406908432ab4ff64f24d98aeb11a1182ad3add45085f5bb2c55f509ee6631a22c3ac722d3d8863bcd7c9491fb2bd3
+  checksum: f42e27b2a74dbee5cefc6c05a80a9a92bf5b3dc4006cc70e9017d9697a1a045e98ad302b108d18aad100dbf177267e1157b4347036b755c07afa7080eaebbbd0
   languageName: node
   linkType: hard
 

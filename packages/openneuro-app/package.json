@@ -19,7 +19,7 @@
     "@elastic/apm-rum": "5.11.0",
     "@emotion/react": "11.6.0",
     "@emotion/styled": "11.6.0",
-    "@niivue/niivue": "0.33.1",
+    "@niivue/niivue": "0.34.0",
     "@openneuro/client": "^4.18.1",
     "@openneuro/components": "^4.18.1",
     "bids-validator": "1.10.0",

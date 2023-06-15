@@ -11,6 +11,7 @@ const FileViewerNifti = ({ imageUrl }) => {
         colorMap: 'gray',
         opacity: 1,
         visible: true,
+        limitFrames4D: 5,
       },
     ]
     const nv = new Niivue({ dragAndDropEnabled: false })
