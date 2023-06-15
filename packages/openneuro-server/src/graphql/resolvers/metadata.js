@@ -35,7 +35,7 @@ export const metadata = async (dataset, _, context) => {
     datasetId: dataset.id,
     datasetName: description.Name,
     tasksCompleted: summary.tasks,
-    seniorAuthor: description.Authors[0],
+    seniorAuthor: description.Authors[description.Authors.length - 1],
     adminUsers,
     firstSnapshotCreatedAt,
     latestSnapshotCreatedAt: snapshot.created,
