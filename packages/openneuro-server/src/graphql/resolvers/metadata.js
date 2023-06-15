@@ -8,12 +8,12 @@ import { permissions } from './permissions'
  *
  * User modified fields are queried from the Metadata model and dynamic metadata is updated from the latest snapshot
  */
-export const metadata = async (dataset, _, { user }) => {
+export const metadata = async (dataset, _, context) => {
   const record = await MetadataModel.findOne({
     datasetId: dataset.id,
   }).lean()
   // Replace dynamic fields with latest available
-  const snapshot = await latestSnapshot(dataset, null, user)
+  const snapshot = await latestSnapshot(dataset, null, context)
   const description = await snapshot.description()
   const summary = await snapshot.summary()
   // Find the users with admin access
