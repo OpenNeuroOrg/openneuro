@@ -22,7 +22,10 @@ export const metadata = async (dataset, _, context) => {
   const adminUsers = []
   const { userPermissions } = await permissions(dataset)
   for (const user of userPermissions) {
-    adminUsers.push((await user.user).email)
+    if (user.level === 'admin') {
+      const userObj = await user.user
+      adminUsers.push(userObj.email)
+    }
   }
   const firstSnapshot = await Snapshot.find({ datasetId: dataset.id }).sort({
     created: 1,
