@@ -33,15 +33,17 @@ export const metadata = async (dataset, _, context) => {
   return {
     ...record,
     datasetId: dataset.id,
-    datasetName: description.Name,
-    tasksCompleted: summary.tasks,
-    seniorAuthor: description.Authors[description.Authors.length - 1],
+    datasetName: description?.Name,
+    tasksCompleted: summary?.tasks || [],
+    seniorAuthor: description?.Authors
+      ? description.Authors[description.Authors.length - 1]
+      : null,
     adminUsers,
     firstSnapshotCreatedAt,
     latestSnapshotCreatedAt: snapshot.created,
     subjectAges: summary.subjectMetadata.map(s => s.age),
-    modalities: summary.modalities,
-    dataProcessed: summary.dataProcessed,
+    modalities: summary?.modalities || [],
+    dataProcessed: summary?.dataProcessed || null,
   }
 }
 
