@@ -61,14 +61,17 @@ export const validation = (dir, validatorOptions, apmTransaction) => {
  * @param {Object} options Query parameters for prepareUpload mutation
  * @param {string} options.datasetId Accession number
  * @param {Array<object>} options.remoteFiles An array of files available in HEAD, matching files are skipped
+ * @param {boolean} options.deleteRemote Toggle to enable deletion of files
  * @returns {Promise<Object|void>} prepareUpload mutation fields {id, token, files}
  */
 export const prepareUpload = async (
   client,
   dir,
-  { datasetId, remoteFiles },
+  { datasetId, remoteFiles, deleteRemote },
 ) => {
   const files = []
+  const deleteRemoteFiles = []
+  // Filter out unchanged files
   for await (const f of getFiles(dir)) {
     const rel = path.relative(dir, f)
     const remote = remoteFiles.find(remote => remote.filename === rel)
@@ -127,6 +130,7 @@ export const prepareUpload = async (
       datasetId: data.prepareUpload.datasetId,
       token: data.prepareUpload.token,
       files,
+      deleteRemoteFiles,
       endpoint: data.prepareUpload.endpoint,
     }
   }
@@ -202,6 +206,17 @@ export const uploadFiles = async ({
     }
   }
   uploadProgress.stop()
+}
+
+export const deleteRemoteFiles = async ({
+  id,
+  datasetId,
+  token,
+  files,
+  endpoint,
+}) => {
+  console.log('THESE FILES WILL BE DELETED')
+  console.log(files)
 }
 
 export const finishUpload = (client, uploadId) => {

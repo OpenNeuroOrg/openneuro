@@ -3,7 +3,13 @@ import fs from 'fs'
 import inquirer from 'inquirer'
 import { apm } from './apm.js'
 import { saveConfig, getUrl, getUser } from './config'
-import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
+import {
+  validation,
+  prepareUpload,
+  uploadFiles,
+  deleteRemoteFiles,
+  finishUpload,
+} from './upload'
 import { getDatasetFiles, createDataset } from './datasets'
 import { getSnapshots } from './snapshots.js'
 import { getDownload } from './download.js'
@@ -59,9 +65,10 @@ const uploadDataset = async (
   dir,
   datasetId,
   validatorOptions,
-  { affirmedDefaced, affirmedConsent } = {
+  { affirmedDefaced, affirmedConsent, deleteRemote } = {
     affirmedDefaced: null,
     affirmedConsent: null,
+    deleteRemote: false,
   },
 ) => {
   const apmTransaction = apm && apm.startTransaction('upload', 'custom')
@@ -90,9 +97,18 @@ const uploadDataset = async (
   const preparedUpload = await prepareUpload(client, dir, {
     datasetId,
     remoteFiles,
+    deleteRemote,
   })
   apmPrepareUploadSpan.end()
   if (preparedUpload) {
+    if (preparedUpload.deleteRemoteFiles.length > 1) {
+      // eslint-disable-next-line no-console
+      console.log('Removing remote files not present locally...')
+      const apmDeleteRemoteFiles =
+        apmTransaction && apmTransaction.startSpan('deleteRemoteFiles')
+      await deleteRemoteFiles(preparedUpload)
+      apmDeleteRemoteFiles.end()
+    }
     if (preparedUpload.files.length > 1) {
       const apmUploadFilesSpan =
         apmTransaction && apmTransaction.startSpan('uploadFiles')
@@ -174,9 +190,14 @@ export const upload = (dir, cmd) => {
       blacklistModalities: ['Microscopy'],
     }
     if (cmd.dataset) {
+      const deleteRemote = cmd.delete
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions).then(datasetId => {
+      uploadDataset(dir, cmd.dataset, validatorOptions, {
+        affirmedConsent: null,
+        affirmedDefaced: null,
+        deleteRemote,
+      }).then(datasetId => {
         if (datasetId) {
           notifyUploadComplete('update', cmd.dataset)
         }

@@ -39,6 +39,7 @@ commander
     'Skip checking that any given file for one subject is present for all other subjects',
   )
   .option('-v, --verbose', 'Verbose output')
+  .option('--delete', 'Delete remote files that do not exist in the local copy')
   .action(upload)
 
 commander
