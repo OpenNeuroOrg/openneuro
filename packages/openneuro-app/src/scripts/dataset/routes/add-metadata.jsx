@@ -7,72 +7,8 @@ import { DatasetRelations } from '../mutations/dataset-relations'
 import SubmitMetadata from '../mutations/submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
-import { getDatasetUrl } from '../../utils/dataset-url'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3, HeaderRow4 } from './styles/header-row'
-
-export const compileMetadata = dataset => {
-  const getFromMetadata = key => dataset.metadata && dataset.metadata[key]
-  const getFromSummary = key =>
-    dataset.draft && dataset.draft.summary && dataset.draft.summary[key]
-  const getFromDescription = key =>
-    dataset.draft && dataset.draft.description && dataset.draft.description[key]
-  const getSeniorAuthor = () => {
-    const authors = dataset.draft.description.Authors
-    if (authors.length) {
-      return authors[authors.length - 1]
-    } else {
-      return 'authors not listed in description.json'
-    }
-  }
-  const getAgesFromSummary = () => {
-    const subjectMetadata = getFromSummary('subjectMetadata')
-    return subjectMetadata && subjectMetadata.map(({ age }) => age)
-  }
-  return {
-    // get from form
-    associatedPaperDOI: getFromMetadata('associatedPaperDOI') || '',
-    species: getFromMetadata('species') || '',
-    studyLongitudinal: getFromMetadata('studyLongitudinal') || '',
-    studyDomain: getFromMetadata('studyDomain') || '',
-    trialCount: getFromMetadata('trialCount') || undefined,
-    studyDesign: getFromMetadata('studyDesign') || '',
-    openneuroPaperDOI: getFromMetadata('openneuroPaperDOI') || '',
-    dxStatus: getFromMetadata('dxStatus') || '',
-    grantFunderName: getFromMetadata('grantFunderName') || '',
-    grantIdentifier: getFromMetadata('grantIdentifier') || '',
-    affirmedDefaced: getFromMetadata('affirmedDefaced') || false,
-    affirmedConsent: getFromMetadata('affirmedConsent') || false,
-
-    // get from openneuro
-    datasetId: dataset.id || '',
-    datasetUrl: getDatasetUrl(dataset) || '',
-    firstSnapshotCreatedAt:
-      (Array.isArray(dataset.snapshots) &&
-        dataset.snapshots.length &&
-        dataset.snapshots[0].created) ||
-      null,
-    latestSnapshotCreatedAt:
-      (Array.isArray(dataset.snapshots) &&
-        dataset.snapshots.length &&
-        dataset.snapshots[dataset.snapshots.length - 1].created) ||
-      null,
-    adminUsers: (dataset.permissions &&
-      Array.isArray(dataset.permissions.userPermissions) &&
-      dataset.permissions.userPermissions
-        .filter(permission => permission.level === 'admin')
-        .map(({ user }) => user && user.email)) || ['dataset has no admins'],
-
-    // get from validator or description.json
-    datasetName:
-      getFromDescription('Name') || 'dataset unnamed in description.json',
-    seniorAuthor: getSeniorAuthor(),
-    dataProcessed: getFromSummary('dataProcessed') || false,
-    ages: getAgesFromSummary() || [],
-    modalities: getFromSummary('modalities') || [],
-    tasksCompleted: getFromSummary('tasks') || [],
-  }
-}
 
 const validations = [
   {
@@ -102,7 +38,9 @@ const AddMetadata = ({ dataset }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const [cookies] = useCookies()
-  const [values, setValues] = useState(compileMetadata(dataset))
+  const loadedMetadata = { ...dataset.metadata }
+  delete loadedMetadata.__typename
+  const [values, setValues] = useState(loadedMetadata)
   const [validationErrors, setValidationErrors] = useState([])
   const handleInputChange = (name, value) => {
     const newValues = {
