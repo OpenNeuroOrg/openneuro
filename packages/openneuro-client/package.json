@@ -21,7 +21,7 @@
     "crypto-hash": "^1.3.0",
     "graphql": "14.7.0",
     "react": "^17.0.1",
-    "semver": "^5.5.0",
+    "semver": "^7.5.2",
     "subscriptions-transport-ws": "^0.9.18"
   },
   "devDependencies": {

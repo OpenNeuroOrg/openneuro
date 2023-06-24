@@ -57,7 +57,7 @@
     "react-dom": "^17.0.1",
     "redlock": "^4.0.0",
     "request": "^2.83.0",
-    "semver": "^5.5.0",
+    "semver": "^7.5.2",
     "sitemap": "^2.1.0",
     "subscriptions-transport-ws": "0.9.18",
     "superagent": "^3.8.2",

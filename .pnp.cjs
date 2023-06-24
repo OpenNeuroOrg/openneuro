@@ -8254,7 +8254,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],\
             ["rollup-plugin-polyfill-node", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.9.0"],\
             ["sass", "npm:1.42.1"],\
-            ["semver", "npm:5.7.1"],\
+            ["semver", "npm:7.5.3"],\
             ["stream-browserify", "npm:3.0.0"],\
             ["subscriptions-transport-ws", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0"],\
             ["typescript", "patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=701156"],\
@@ -8307,7 +8307,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["crypto-hash", "npm:1.3.0"],\
             ["graphql", "npm:14.7.0"],\
             ["react", "npm:17.0.2"],\
-            ["semver", "npm:5.7.1"],\
+            ["semver", "npm:7.5.3"],\
             ["subscriptions-transport-ws", "virtual:24a6c968feec3e757062a165b75de8bf32e3a8f6fc5606dca5ef8c0466339f76cde04b14d9d2958f8ccdbed97f36bd01aa258a43caa3a07ee0dedfa7724317c5#npm:0.9.19"],\
             ["vitest", "virtual:133165406520d697b59bfd8a87da656a1201b50380fa7b6c96355187dd672b60916478120380b134e3b9f4bd0e9b90596200bbcdd3d1635211c23f790d0912a9#npm:0.25.2"]\
           ],\
@@ -8458,7 +8458,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:17.0.2"],\
             ["redlock", "npm:4.2.0"],\
             ["request", "npm:2.88.2"],\
-            ["semver", "npm:5.7.1"],\
+            ["semver", "npm:7.5.3"],\
             ["sitemap", "npm:2.2.0"],\
             ["subscriptions-transport-ws", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:0.9.18"],\
             ["superagent", "npm:3.8.3"],\
@@ -25380,6 +25380,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/semver-npm-7.3.8-25a996cb4f-ba9c7cbbf2.zip/node_modules/semver/",\
           "packageDependencies": [\
             ["semver", "npm:7.3.8"],\
+            ["lru-cache", "npm:6.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:7.5.3", {\
+          "packageLocation": "./.yarn/cache/semver-npm-7.5.3-275095dbf3-9d58db1652.zip/node_modules/semver/",\
+          "packageDependencies": [\
+            ["semver", "npm:7.5.3"],\
             ["lru-cache", "npm:6.0.0"]\
           ],\
           "linkType": "HARD"\

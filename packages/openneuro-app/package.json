@@ -42,7 +42,7 @@
     "react-toastify": "6.0.9",
     "react-usestateref": "^1.0.8",
     "react-virtualized": "remorses/react-virtualized-fixed-import.git#9.22.3",
-    "semver": "^5.5.0",
+    "semver": "^7.5.2",
     "subscriptions-transport-ws": "0.11.0",
     "universal-cookie": "^4.0.4"
   },
