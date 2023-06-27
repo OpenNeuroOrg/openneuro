@@ -36,7 +36,7 @@ apmServerUrl: https://17ae1d2cfa8f47f486b1b6fda3ed9f43.apm.us-west-2.aws.found.i
 
 # API resource configuration
 apiCpuRequests: 3
-apiMemoryRequests: 1Gi
+apiMemoryRequests: 2Gi
 
 # Worker resource configuration
 workerCpuRequests: 3
