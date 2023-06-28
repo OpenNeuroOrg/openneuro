@@ -74,17 +74,12 @@ commander
   .option('-s, --snapshot [snapshotVersion]')
   .action(ls)
 
-const processName = process.argv[1].endsWith('index.js')
-  ? process.env.npm_lifecycle_event
-  : process.argv[1]
+commander.parse(process.argv)
 
-if (processName.endsWith('git-credential-openneuro')) {
+if (process.argv[1].endsWith('git-credential-openneuro')) {
   gitCredential()
-} else if (processName.endsWith('git-annex-remote-openneuro')) {
+} else if (process.argv[1].endsWith('git-annex-remote-openneuro')) {
   gitAnnexRemote()
-} else {
-  commander.parse(process.argv)
-  if (!process.argv.slice(2).length) {
-    commander.help()
-  }
+} else if (!process.argv.slice(2).length) {
+  commander.help()
 }
