@@ -8251,7 +8251,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.3.0"],\
             ["react-toastify", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.0.9"],\
             ["react-usestateref", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.8"],\
-            ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],\
+            ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:9.22.5"],\
             ["rollup-plugin-polyfill-node", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.9.0"],\
             ["sass", "npm:1.42.1"],\
             ["semver", "npm:5.7.1"],\
@@ -24268,17 +24268,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["react-virtualized", [\
-        ["https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4", {\
-          "packageLocation": "./.yarn/cache/react-virtualized-https-146c5f0b1a-57ebda833e.zip/node_modules/react-virtualized/",\
+        ["npm:9.22.5", {\
+          "packageLocation": "./.yarn/cache/react-virtualized-npm-9.22.5-be95b8e1a8-01f5ed8d8d.zip/node_modules/react-virtualized/",\
           "packageDependencies": [\
-            ["react-virtualized", "https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"]\
+            ["react-virtualized", "npm:9.22.5"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4", {\
-          "packageLocation": "./.yarn/__virtual__/react-virtualized-virtual-aab6a2e618/0/cache/react-virtualized-https-146c5f0b1a-57ebda833e.zip/node_modules/react-virtualized/",\
+        ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:9.22.5", {\
+          "packageLocation": "./.yarn/__virtual__/react-virtualized-virtual-a83d35b343/0/cache/react-virtualized-npm-9.22.5-be95b8e1a8-01f5ed8d8d.zip/node_modules/react-virtualized/",\
           "packageDependencies": [\
-            ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],\
+            ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:9.22.5"],\
             ["@babel/runtime", "npm:7.15.4"],\
             ["@types/react", "npm:17.0.24"],\
             ["@types/react-dom", "npm:17.0.9"],\

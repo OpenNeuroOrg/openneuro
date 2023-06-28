@@ -5248,7 +5248,7 @@ __metadata:
     react-router-dom: 6.3.0
     react-toastify: 6.0.9
     react-usestateref: ^1.0.8
-    react-virtualized: "remorses/react-virtualized-fixed-import.git#9.22.3"
+    react-virtualized: 9.22.5
     rollup-plugin-polyfill-node: ^0.9.0
     sass: ^1.32.8
     semver: ^5.5.0
@@ -18700,9 +18700,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-virtualized@remorses/react-virtualized-fixed-import.git#9.22.3":
-  version: 9.22.3
-  resolution: "react-virtualized@https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"
+"react-virtualized@npm:9.22.5":
+  version: 9.22.5
+  resolution: "react-virtualized@npm:9.22.5"
   dependencies:
     "@babel/runtime": ^7.7.2
     clsx: ^1.0.4
@@ -18711,9 +18711,9 @@ fsevents@~2.3.2:
     prop-types: ^15.7.2
     react-lifecycles-compat: ^3.0.4
   peerDependencies:
-    react: ^15.3.0 || ^16.0.0-alpha
-    react-dom: ^15.3.0 || ^16.0.0-alpha
-  checksum: 57ebda833ec4424779288735b5753ae1cf2cf8765e1cee9821b4ef1051eb1ad70f8a954121368baf0cf8a95f8dce2f045be9b44898c87bf1df859bdf6274c48f
+    react: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0
+    react-dom: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0
+  checksum: 01f5ed8d8db7c831d592172946c2b61fcb409bf6cbc84500468f12d6cf9b7e60453e332fac02dd608480d23cb14421f7f17716393e623e83bb10a7763fad9e2c
   languageName: node
   linkType: hard
 
