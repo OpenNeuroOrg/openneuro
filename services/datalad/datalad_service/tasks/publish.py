@@ -71,7 +71,7 @@ def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_expor
     if is_git_annex_remote(dataset_path, get_s3_remote()):
         dataset_id = os.path.basename(dataset_path)
         repo = pygit2.Repository(dataset_path)
-        tags = git_tag(repo)
+        tags = sorted(git_tag(repo), key=lambda tag: tag.name)
         # Update configuration for the remote
         update_s3_sibling(dataset_path)
         # Push the most recent tag
