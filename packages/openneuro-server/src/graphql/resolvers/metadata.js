@@ -44,7 +44,7 @@ export const metadata = async (dataset, _, context) => {
     adminUsers,
     firstSnapshotCreatedAt,
     latestSnapshotCreatedAt: snapshot.created,
-    subjectAges: summary.subjectMetadata.map(s => s.age),
+    subjectAges: summary?.subjectMetadata?.map(s => s.age),
     modalities: summary?.modalities || [],
     dataProcessed: summary?.dataProcessed || null,
   }
