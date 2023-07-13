@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { frontPage } from '../mock-content/front-page-content.jsx'
+import { frontPage } from '../content/front-page-content.jsx'
 
 export interface InfographicProps {}
 

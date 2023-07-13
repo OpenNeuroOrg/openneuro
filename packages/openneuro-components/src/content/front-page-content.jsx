@@ -100,7 +100,7 @@ export const frontPage = {
         <>
           <p>
             Privately share your data so your colleagues can view and edit your
-            work.
+            work.
           </p>
           <p>
             Publish your dataset where anyone can view, download, and run

@@ -11,8 +11,7 @@ export const RecentData = {
             latestSnapshot: {
               tag: '1.0.0',
               description: {
-                Name:
-                  'Runabout: A mobile EEG study of auditory oddball processing in laboratory and real-world conditions',
+                Name: 'Runabout: A mobile EEG study of auditory oddball processing in laboratory and real-world conditions',
               },
               summary: {
                 modalities: ['channels', 'eeg', 'electrodes', 'events'],
@@ -57,8 +56,7 @@ export const RecentData = {
             latestSnapshot: {
               tag: '1.0.0',
               description: {
-                Name:
-                  'A longitudinal neuroimaging dataset on language processing in children ages 5, 7, and 9 years old',
+                Name: 'A longitudinal neuroimaging dataset on language processing in children ages 5, 7, and 9 years old',
               },
               summary: null,
             },
@@ -86,8 +84,7 @@ export const RecentData = {
             latestSnapshot: {
               tag: '1.0.0',
               description: {
-                Name:
-                  'Differences in Chemo-signaling Compound-Evoked Brain Activity in Male and Female Young Adults: A Pilot Study in the Role of Sexual Dimorphism in Olfactory Chemo-Signaling',
+                Name: 'Differences in Chemo-signaling Compound-Evoked Brain Activity in Male and Female Young Adults: A Pilot Study in the Role of Sexual Dimorphism in Olfactory Chemo-Signaling',
               },
               summary: {
                 modalities: ['T1w', 'bold', 'events'],
@@ -102,8 +99,7 @@ export const RecentData = {
             latestSnapshot: {
               tag: '1.0.0',
               description: {
-                Name:
-                  'Runabout: A mobile EEG study of auditory oddball processing in laboratory and real-world conditions',
+                Name: 'Runabout: A mobile EEG study of auditory oddball processing in laboratory and real-world conditions',
               },
               summary: {
                 modalities: ['channels', 'eeg', 'electrodes', 'events'],
@@ -159,8 +155,7 @@ export const TopViewed = {
             latestSnapshot: {
               tag: '1.0.0',
               description: {
-                Name:
-                  'UCLA Consortium for Neuropsychiatric Phenomics LA5c Study',
+                Name: 'UCLA Consortium for Neuropsychiatric Phenomics LA5c Study',
               },
               summary: {
                 modalities: ['T1w', 'beh', 'events', 'dwi', 'bold', 'physio'],
@@ -194,8 +189,7 @@ export const TopViewed = {
             latestSnapshot: {
               tag: '1.0.3',
               description: {
-                Name:
-                  'The Stockholm Sleepy Brain Study: Effects of Sleep Deprivation on Cognitive and Emotional Processing in Young and Old',
+                Name: 'The Stockholm Sleepy Brain Study: Effects of Sleep Deprivation on Cognitive and Emotional Processing in Young and Old',
               },
               summary: {
                 modalities: [

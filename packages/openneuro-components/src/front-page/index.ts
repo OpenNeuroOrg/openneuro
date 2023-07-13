@@ -3,7 +3,7 @@ import { Contributors } from './Contributors'
 import { GetUpdates } from './GetUpdates'
 import { Infographic } from './Infographic'
 import { ActivityHeader } from './ActivityHeader'
-import { RecentData, TopViewed } from '../mock-content/activity-slider-content'
+import { RecentData, TopViewed } from '../content/activity-slider-content'
 
 export {
   AffiliateBlock,
