@@ -5,6 +5,7 @@
 :hidden:
 
 user_guide
+faq
 policy/index
 api
 packages/openneuro-cli
