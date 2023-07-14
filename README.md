@@ -1,7 +1,3 @@
----
-name: Introduction
----
-
 # [OpenNeuro](https://openneuro.org)
 
 [![CodeCov Coverage Status](https://codecov.io/gh/OpenNeuroOrg/openneuro/branch/master/graph/badge.svg)](https://codecov.io/gh/OpenNeuroOrg/openneuro)

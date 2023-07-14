@@ -211,7 +211,7 @@ mutation {
 
 You can remove files or folders from the currend draft with the `deleteFiles` mutation. Multiple
 arguments can be provided in the changes array for batch deletion of paths. Paths provided in 
-argument are relative to the dataset root, ommiting a filename a with `""` will delete the folder
+argument are relative to the dataset root, omitting a filename a with `""` will delete the folder
 provided via the path argument. For examples see below:
 
 To remove a single file specify the path with respect to the dataset root.
@@ -245,4 +245,4 @@ mutation {
 }
 ```
 
-Changes will appear in the draft version of the dataset. 
+Changes will appear in the draft version of the dataset.

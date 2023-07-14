@@ -1,9 +1,6 @@
----
-name: Site Maintenance
-route: /maintenance
----
+# Maintenance
 
-# Unpublishing a dataset
+## Unpublishing a dataset
 
 To unpublish a dataset the database flag datasets.public can be set to false. Example query: `db.datasets.updateOne({id: "accession-number"}, {$set: {public: false}}`. This will hide the dataset on OpenNeuro but not remove it from any configured git-annex remotes.
 
@@ -16,7 +13,7 @@ curl -X DELETE "http://elastic-server/datasets/_doc/${ACCESSION_NUMBER}"
 
 To make the dataset public again it can simply be republished by a dataset administrator. Any remotes which were altered will need to be updated manually.
 
-# Adjusting worker storage size
+## Adjusting worker storage size
 
 Disks are managed as preallocated GCP volumes and assigned to Kubernetes persistent volumes. Worker file systems are ReadWriteOnce. Increasing storage capacity for a worker is done in two steps. Resize the GCP disk and update the persistent volume configuration to match.
 
