@@ -42,7 +42,7 @@ export async function createSnapshotDoi(req, res) {
   }
 }
 
-// Have seperate function to get Doi that does not require any authorization
+// Have separate function to get Doi that does not require any authorization
 export async function getDoi(req, res) {
   const datasetId = req.params.datasetId
   const snapshotId = req.params.snapshotId

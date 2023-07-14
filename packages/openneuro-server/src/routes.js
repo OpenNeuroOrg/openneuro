@@ -148,7 +148,7 @@ const routes = [
   {
     method: 'get',
     url: '/auth/orcid',
-    middlware: [noCache],
+    middleware: [noCache],
     handler: orcid.requestAuth,
   },
   {

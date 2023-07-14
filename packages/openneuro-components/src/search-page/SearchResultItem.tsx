@@ -248,7 +248,7 @@ export const SearchResultItem = ({
   )
   const publicIcon = (
     <Tooltip
-      tooltip="Visable to all viewers"
+      tooltip="Visible to all viewers"
       flow="up"
       className="result-icon result-publlic-icon">
       <Icon

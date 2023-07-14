@@ -12,7 +12,7 @@ export const encodeFilePath = (path: string): string => {
 }
 
 /**
- * Convert to from URL compatible path fo filepath
+ * Convert from URL compatible path to filepath
  * @param {String} path
  */
 export const decodeFilePath = (path: string): string => {

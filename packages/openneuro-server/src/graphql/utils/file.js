@@ -5,7 +5,7 @@ export const filterRemovedAnnexObjects =
     const removedAnnexObjectKeys = (
       await BadAnnexObject.find({ datasetId }).exec()
     ).map(({ annexKey }) => annexKey)
-    // keep files that havent had their annex objects removed
+    // keep files that haven't had their annex objects removed
     return userInfo?.admin
       ? files
       : files.filter(({ key }) => !removedAnnexObjectKeys.includes(key))

@@ -527,7 +527,7 @@ export const typeDefs = `
     id: ID!
     # ID of user who flagged snapshot as deprecated
     user: String
-    # Reason for deprecating snaphot
+    # Reason for deprecating snapshot
     reason: String
     # Timestamp of snapshot deprecation
     timestamp: Date
