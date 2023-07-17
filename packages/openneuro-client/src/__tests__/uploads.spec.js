@@ -18,7 +18,7 @@ describe('upload implementation', () => {
     it('returns a minimum of 2', () => {
       expect(uploadParallelism([{ size: 10 }], 10)).toBe(2)
     })
-    it('returns a maxium of 8', () => {
+    it('returns a maximum of 8', () => {
       expect(uploadParallelism([{ size: 1000000000000 }], 1000000000000)).toBe(
         8,
       )

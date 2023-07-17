@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 
 /**
- * Hash mappping objects to provide a stable index name if the mapping is unchanged
+ * Hash mapping objects to provide a stable index name if the mapping is unchanged
  * @param mapping ElasticSearch mapping object
  */
 export const hashElasticMapping = (mapping: Record<string, unknown>): string =>

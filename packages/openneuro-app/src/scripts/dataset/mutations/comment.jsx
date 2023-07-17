@@ -70,7 +70,7 @@ export const newCommentsReducer = (
 }
 
 /**
- * Modify an exsiting comment and return new state based on arguments
+ * Modify an existing comment and return new state based on arguments
  * @param {Object[]} comments
  * @param {Object} arguments
  * @param {string} arguments.commentId

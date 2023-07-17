@@ -22,7 +22,7 @@ The setup step is needed for both uploading _and_ downloading data from OpenNeur
 Run `openneuro login` to configure credentials.
 This prompts you for the required configuration fields and saves this to `.openneuro` in your home directory or profile.
 `openneuro login` will require you to enter an API key.
-You can obtain an API key via a browser at https://openneuro.org/keygen after logging to the OpenNeuro platform via one of the provided authentification services (for example ORCID).
+You can obtain an API key via a browser at https://openneuro.org/keygen after logging to the OpenNeuro platform via one of the provided authentication services (for example ORCID).
 
 After successfully running `openneuro login`, you can manually configure custom servers by editing the `.openneuro` file.
 
