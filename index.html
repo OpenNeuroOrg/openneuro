@@ -160,17 +160,24 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="policy/index.html">OpenNeuro policies</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of OpenNeuro policies</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="policy/data_retention.html">Data Retention Policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="policy/data_management_plans.html">Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
+<p class="caption" role="heading"><span class="caption-text">OpenNeuro polices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="policy/data_retention.html">Data Retention Policies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy/data_management_plans.html">Data Management Plans</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced usage</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git access to OpenNeuro datasets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer resources</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Unpublishing a dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maintenance.html#adjusting-worker-storage-size">Adjusting worker storage size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro">Source repository (GitHub)</a></li>
 </ul>
 
 </div>
@@ -205,58 +212,76 @@
           </label>
         </div>
         <article role="main">
-          <section id="openneuro">
-<h1><a class="reference external" href="https://openneuro.org">OpenNeuro</a><a class="headerlink" href="#openneuro" title="Permalink to this heading">#</a></h1>
-<p><a class="reference external" href="https://codecov.io/gh/OpenNeuroOrg/openneuro"><img alt="CodeCov Coverage Status" src="https://codecov.io/gh/OpenNeuroOrg/openneuro/branch/master/graph/badge.svg" /></a>
-<a class="reference external" href="https://github.com/prettier/prettier"><img alt="styled with prettier" src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" /></a></p>
-<section id="about">
-<h2>About<a class="headerlink" href="#about" title="Permalink to this heading">#</a></h2>
-<p>OpenNeuro is a free and open platform for analyzing and sharing neuroimaging data. It is based around the <a class="reference external" href="http://bids.neuroimaging.io/">Brain Imaging Data Structure specification</a>.</p>
+          <section id="openneuro-documentation">
+<h1>OpenNeuro Documentation<a class="headerlink" href="#openneuro-documentation" title="Permalink to this heading">#</a></h1>
+<p>Welcome to the OpenNeuro documentation site. OpenNeuro is a free and open platform
+for sharing neuroimaging data.</p>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h2>
+<p>If you are a looking for datasets, <a class="reference external" href="https://openneuro.org/search">OpenNeuro Search</a> allows you to search public
+datasets.</p>
+<p>If you are considering uploading datasets to OpenNeuro, or recommending OpenNeuro as
+an upload host, please review our <a class="reference internal" href="policy/data_retention.html"><span class="std std-doc">Data Retention Policies</span></a> and
+our <a class="reference internal" href="policy/data_management_plans.html"><span class="std std-doc">Data Management Plans</span></a>. When you
+are ready to upload, check out our <a class="reference internal" href="user_guide.html"><span class="std std-doc">User Guide</span></a>!</p>
 </section>
-<section id="development-setup">
-<h2>Development setup<a class="headerlink" href="#development-setup" title="Permalink to this heading">#</a></h2>
-<p>This project is managed with <a class="reference external" href="https://lerna.js.org/">Lerna</a> and <a class="reference external" href="https://yarnpkg.com/">Yarn</a>. To get started, install Yarn and bootstrap the repo.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>install
-</pre></div>
+<section id="getting-help">
+<h2>Getting help<a class="headerlink" href="#getting-help" title="Permalink to this heading">#</a></h2>
+<p>If you’re running into complications, we have several methods to help you resolve them.</p>
+<p>To start, check whether our <a class="reference internal" href="faq.html"><span class="std std-doc"><abbr title="Frequently Asked Questions">FAQ</abbr></span></a>
+contains what you’re looking for.</p>
+<p>For general problems that would benefit from community expertise and advice,
+we highly recommend looking to <a class="reference external" href="https://neurostars.org/">NeuroStars</a> for assistance.
+It is a public forum hosted by the
+<abbr title="International Neuroinformatics Coordinating Facility">INCF</abbr>
+and there you’ll be able to find experienced users of OpenNeuro and
+<abbr title="Brain Imaging Data Structure">BIDS</abbr>,
+as well as experts in nearly any topic in neuroscience.</p>
+<p>For problems with the site itself, or regarding potentially sensitive information,
+users may submit issues to a help desk, using the “Support” link at the top of every page.</p>
+<p><img alt="Navigation bar, showing SUPPORT link" src="_images/nav-bar-logged-out.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because support tickets require individual attention from a limited staff, and any resolution remains
+private, we may refer you to a public forum where a broader audience has the opportunity to respond
+and the results can be searched by future users with similar problems.</p>
 </div>
-<p>You can run tests with <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">test</span></code> at the top level of the project. For each package, <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">test</span> <span class="pre">--watch</span></code> will interactively run the tests for changes since the last commit.</p>
-<p>Before starting up the services, you will need to copy the example <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> file to <code class="docutils literal notranslate"><span class="pre">.env</span></code> and <code class="docutils literal notranslate"><span class="pre">config.env.example</span></code> to <code class="docutils literal notranslate"><span class="pre">config.env</span></code>. Many of the values are optional, and most that aren’t have default values included in their <code class="docutils literal notranslate"><span class="pre">.example</span></code> file. Required values below:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">JWT_SECRET</span></code> in <code class="docutils literal notranslate"><span class="pre">config.env</span></code> must be set to a large random string.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">PERSISTENT_DIR</span></code> in <code class="docutils literal notranslate"><span class="pre">.env</span></code> is an absolute path to a directory that will be used to store datasets. This should be a git-annex compatible filesystem and large enough to store some test datasets.</p></li>
-</ul>
-<p>To setup Google as an authentication provider, <a class="reference external" href="https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow">register a new client app</a> and set the following variables. For development use, you will create a new Google project with oauth credentials for a JavaScript client side app. “Authorized JavaScript Origins” is set to <code class="docutils literal notranslate"><span class="pre">http://localhost:9876</span></code> and “Authorized Redirect URIs” is set to <code class="docutils literal notranslate"><span class="pre">http://localhost:9876/crn/auth/google/callback</span></code> for a site accessible at <code class="docutils literal notranslate"><span class="pre">http://localhost:9876</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ending in .apps.googleusercontent.com</span>
-<span class="n">GOOGLE_CLIENT_ID</span><span class="o">=</span>
-<span class="c1"># 24 character secret string</span>
-<span class="n">GOOGLE_CLIENT_SECRET</span><span class="o">=</span>
-</pre></div>
-</div>
-<p><a class="reference external" href="https://docs.docker.com/compose/overview/">docker-compose</a> is used to run a local copy of all required services together.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This will run docker-compose in the background (-d flag is --detach)</span>
-docker-compose<span class="w"> </span>up<span class="w"> </span>-d
-</pre></div>
-</div>
-<p>For example, you can restart the server container with <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">restart</span> <span class="pre">server</span></code> or view logs with <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">logs</span> <span class="pre">-f</span> <span class="pre">--tail=10</span> <span class="pre">server</span></code>.</p>
-</section>
-<section id="major-components">
-<h2>Major Components<a class="headerlink" href="#major-components" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-app">OpenNeuro app</a> - React frontend</p></li>
-<li><p><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-server">OpenNeuro server</a> - Node.js GraphQL API</p></li>
-<li><p><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-indexer">OpenNeuro indexer</a> - ElasticSearch indexer</p></li>
-<li><p><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-components">OpenNeuro components</a> - ReactJS components library</p></li>
-<li><p><a class="reference internal" href="packages/openneuro-cli.html"><span class="doc std std-doc">OpenNeuro CLI</span></a> - Node.js command line tool</p></li>
-<li><p><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-client">OpenNeuro client</a> - JavaScript client library used in CLI and App</p></li>
-<li><p><a class="reference external" href="https://github.com/OpenNeuroOrg/datalad-service">DataLad service</a> - <a class="reference external" href="http://datalad.org/">DataLad</a> compatible dataset worker microservice</p></li>
-<li><p><a class="reference external" href="https://github.com/bids-standard/bids-validator">bids-validator</a> - BIDS validation library</p></li>
-</ul>
-<p>JavaScript packages are published in the <code class="docutils literal notranslate"><span class="pre">&#64;openneuro</span></code> npm namespace.</p>
-</section>
-<section id="openneuro-command-line-utility-tool">
-<h2>OpenNeuro Command-line utility tool<a class="headerlink" href="#openneuro-command-line-utility-tool" title="Permalink to this heading">#</a></h2>
-<p>OpenNeuro supports a <a class="reference external" href="https://docs.openneuro.org/openneuro-packages-openneuro-cli-readme">CLI tool</a> based on <a class="reference external" href="https://nodejs.org/en/">nodejs</a> for uploading and downloading OpenNeuro datasets.</p>
+<p>Finally, if you’d like to suggest a new feature for OpenNeuro, you can do so at
+<a class="reference external" href="https://openneuro.featureupvote.com/">OpenNeuro’s User Suggestions</a>.</p>
 <div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="advanced-usage">
+<h2>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading">#</a></h2>
+<p>In addition to the web interface, OpenNeuro provides three ways of interacting with the service:</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Advanced usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git.html">Git access to OpenNeuro datasets</a></li>
+</ul>
+</div>
+<p>The <abbr title="command-line interface">CLI</abbr> allows for data upload and download from the terminal,
+which can be particularly useful for large datasets or poor connections.</p>
+<p>The GraphQL API allows users to search for datasets or query metadata more flexibly than the web
+interface.</p>
+<p>We also provide direct <a class="reference external" href="https://www.git-scm.com/">git</a> endpoints to datasets,
+which enables working with private datasets with <a class="reference external" href="https://handbook.datalad.org/en/latest/usecases/openneuro.html">DataLad</a>.</p>
+</section>
+<section id="developer-resources">
+<h2>Developer resources<a class="headerlink" href="#developer-resources" title="Permalink to this heading">#</a></h2>
+<p>Developers interested in hosting an OpenNeuro instance or who are curious about the
+structure of our package and hosting setup may be interested in the following sections.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Developer resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro">Source repository (GitHub)</a></li>
+</ul>
 </div>
 </section>
 </section>
@@ -306,11 +331,13 @@ docker-compose<span class="w"> </span>up<span class="w"> </span>-d
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">OpenNeuro</a><ul>
-<li><a class="reference internal" href="#about">About</a></li>
-<li><a class="reference internal" href="#development-setup">Development setup</a></li>
-<li><a class="reference internal" href="#major-components">Major Components</a></li>
-<li><a class="reference internal" href="#openneuro-command-line-utility-tool">OpenNeuro Command-line utility tool</a></li>
+<li><a class="reference internal" href="#">OpenNeuro Documentation</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li><a class="reference internal" href="#getting-help">Getting help</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-usage">Advanced usage</a></li>
+<li><a class="reference internal" href="#developer-resources">Developer resources</a></li>
 </ul>
 </li>
 </ul>

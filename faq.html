@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Architecture" href="architecture.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Data Retention Policies" href="policy/data_retention.html" /><link rel="prev" title="User Guide" href="user_guide.html" />
 
     <!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20 -->
-        <title>Maintenance - OpenNeuro documentation</title>
+        <title>Frequently Asked Questions - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -158,9 +158,9 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Frequently Asked Questions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">OpenNeuro polices</span></p>
 <ul>
@@ -174,9 +174,9 @@
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git access to OpenNeuro datasets</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Developer resources</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro">Source repository (GitHub)</a></li>
 </ul>
 
@@ -212,34 +212,62 @@
           </label>
         </div>
         <article role="main">
-          <section id="maintenance">
-<h1>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this heading">#</a></h1>
-<section id="unpublishing-a-dataset">
-<h2>Unpublishing a dataset<a class="headerlink" href="#unpublishing-a-dataset" title="Permalink to this heading">#</a></h2>
-<p>To unpublish a dataset the database flag datasets.public can be set to false. Example query: <code class="docutils literal notranslate"><span class="pre">db.datasets.updateOne({id:</span> <span class="pre">&quot;accession-number&quot;},</span> <span class="pre">{$set:</span> <span class="pre">{public:</span> <span class="pre">false}}</span></code>. This will hide the dataset on OpenNeuro but not remove it from any configured git-annex remotes.</p>
-<p>After unpublishing a dataset like this the search index must either have the hidden dataset removed or the index needs to be rebuilt.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># One dataset can be removed like so</span>
-curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://elastic-server/datasets/_doc/</span><span class="si">${</span><span class="nv">ACCESSION_NUMBER</span><span class="si">}</span><span class="s2">&quot;</span>
-</pre></div>
-</div>
-<p>To make the dataset public again it can simply be republished by a dataset administrator. Any remotes which were altered will need to be updated manually.</p>
+          <section id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this heading">#</a></h1>
+<section id="how-do-i-get-started">
+<h2>How do I get started?<a class="headerlink" href="#how-do-i-get-started" title="Permalink to this heading">#</a></h2>
+<p>Check out our <a class="reference external" href="https://www.youtube.com/watch?v=FK_c1x1Pilk">video tutorial</a>.</p>
 </section>
-<section id="adjusting-worker-storage-size">
-<h2>Adjusting worker storage size<a class="headerlink" href="#adjusting-worker-storage-size" title="Permalink to this heading">#</a></h2>
-<p>Disks are managed as preallocated GCP volumes and assigned to Kubernetes persistent volumes. Worker file systems are ReadWriteOnce. Increasing storage capacity for a worker is done in two steps. Resize the GCP disk and update the persistent volume configuration to match.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get disk name</span>
-&gt;<span class="w"> </span>gcloud<span class="w"> </span>compute<span class="w"> </span>disks<span class="w"> </span>list
-NAME<span class="w">                                      </span>LOCATION<span class="w">    </span>LOCATION_SCOPE<span class="w">  </span>SIZE_GB<span class="w">  </span>TYPE<span class="w">         </span>STATUS
-openneuro-staging-datasets-0<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
-openneuro-staging-datasets-1<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
-openneuro-staging-datasets-2<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
-openneuro-staging-datasets-3<span class="w">              </span>us-west1-b<span class="w">  </span>zone<span class="w">            </span><span class="m">256</span><span class="w">      </span>pd-balanced<span class="w">  </span>READY
-<span class="c1"># Resize to 512GB</span>
-&gt;<span class="w"> </span>gcloud<span class="w"> </span>compute<span class="w"> </span>disks<span class="w"> </span>resize<span class="w"> </span>openneuro-staging-datasets-0<span class="w"> </span>--size<span class="o">=</span><span class="m">512</span>
-</pre></div>
-</div>
-<p>Make sure the resize operation has completed (status “READY”) and then update the worker configuration for the PV to match (see <code class="docutils literal notranslate"><span class="pre">helm/openneuro/values.yaml</span></code> key workerDiskSize) and upgrade to deploy the new helm configuration.</p>
-<p>If the configuration is updated prior to the disk being resized, the worker will need to be restarted to pick up the change. Verify the resize is complete with a shell on the worker or from the GCP console under pod statistics for the worker.</p>
+<section id="is-this-service-free-to-use">
+<h2>Is this service free to use?<a class="headerlink" href="#is-this-service-free-to-use" title="Permalink to this heading">#</a></h2>
+<p>Yes!</p>
+</section>
+<section id="are-there-any-restrictions-on-the-uploaded-data">
+<h2>Are there any restrictions on the uploaded data?<a class="headerlink" href="#are-there-any-restrictions-on-the-uploaded-data" title="Permalink to this heading">#</a></h2>
+<p>Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions:</p>
+<ul class="simple">
+<li><p>You are the owner of this dataset and have any necessary ethics permissions to share the data publicly.</p></li>
+<li><p>This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans, etc.).</p></li>
+<li><p>You agree that this dataset will become publicly available under a Creative Commons CC0 license after a grace period of 36 months counted from the first successful version of the dataset.</p></li>
+<li><p>This dataset is not subject to GDPR protections.</p></li>
+</ul>
+</section>
+<section id="what-if-i-will-not-be-able-to-publish-my-paper-in-36-months">
+<h2>What if I will not be able to publish my paper in 36 months?<a class="headerlink" href="#what-if-i-will-not-be-able-to-publish-my-paper-in-36-months" title="Permalink to this heading">#</a></h2>
+<p>You can apply for up to two 6-month long extensions of the grace period. To apply please contact support. We encourage you to publish a preprint of your work to reduce the uncertainty of the publishing pipeline.</p>
+</section>
+<section id="are-there-consent-form-templates-we-can-use-in-our-study">
+<h2>Are there consent form templates we can use in our study?<a class="headerlink" href="#are-there-consent-form-templates-we-can-use-in-our-study" title="Permalink to this heading">#</a></h2>
+<p>Yes! We recommend using the Open Brain Consent - <a class="reference external" href="https://open-brain-consent.readthedocs.io/en/stable/ultimate.html">Ultimate consent form</a>.</p>
+<ul class="simple">
+<li><p>For GDPR protected studies, they have a <a class="reference external" href="https://open-brain-consent.readthedocs.io/en/stable/gdpr/ultimate_gdpr.html">Ultimate consent form GDPR edition</a>.</p></li>
+</ul>
+</section>
+<section id="do-i-need-to-format-my-data-in-some-special-way-before-uploading-it-to-openneuro">
+<h2>Do I need to format my data in some special way before uploading it to OpenNeuro?<a class="headerlink" href="#do-i-need-to-format-my-data-in-some-special-way-before-uploading-it-to-openneuro" title="Permalink to this heading">#</a></h2>
+<p>Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at <a class="reference external" href="http://bids.neuroimaging.io/">bids.neuroimaging.io</a>. If you have any questions about organizing your data please post them at <a class="reference external" href="https://neurostars.org/tags/bids">neurostars.org</a>.</p>
+</section>
+<section id="do-i-need-to-remove-facial-features-from-structural-images-before-uploading-the-data">
+<h2>Do I need to remove facial features from structural images before uploading the data?<a class="headerlink" href="#do-i-need-to-remove-facial-features-from-structural-images-before-uploading-the-data" title="Permalink to this heading">#</a></h2>
+<p>OpenNeuro does not accept datasets that have not been defaced for privacy considerations. Datasets found to not have been defaced will be deleted and the dataset owner is invited to reupload their dataset with the defaced images. The dataset owner will be notified by the OpenNeuro team if an infringement has been detected. The only exception is explicit approval from the study participant(s).</p>
+<p>We recommend using <a class="reference external" href="https://pypi.python.org/pypi/pydeface">pydeface</a> to deface your images. In the case that the dataset(s) is cited in publications, please notify the OpenNeuro team and we will direct the DOI and dataset links from the previous dataset to the new dataset. We suggest adding a note to the README of the reuploaded dataset to specify this change.</p>
+<p>For any questions or concerns please email Franklin: <a class="reference external" href="mailto:ffein&#37;&#52;&#48;stanford&#46;edu">ffein<span>&#64;</span>stanford<span>&#46;</span>edu</a></p>
+</section>
+<section id="how-can-i-upload-data-onto-openneuro">
+<h2>How can I upload data onto OpenNeuro?<a class="headerlink" href="#how-can-i-upload-data-onto-openneuro" title="Permalink to this heading">#</a></h2>
+<p>We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our <a class="reference external" href="https://docs.openneuro.org/packages-openneuro-cli-readme">command-line utility tool</a></p>
+</section>
+<section id="why-can-i-not-use-cc-by-or-other-cc-license">
+<h2>Why can I not use CC-BY (or other CC license)?<a class="headerlink" href="#why-can-i-not-use-cc-by-or-other-cc-license" title="Permalink to this heading">#</a></h2>
+<p>When OpenNeuro first began accepting data, we hosted datasets that were dedicated to the public domain (CC0 or PDDL) or released under the CC-BY license. The idea of accepting CC-BY licenses was to reflect the academic norm of citing sources, but it fails to achieve that goal. In <a class="reference external" href="https://osc.universityofcalifornia.edu/2016/09/cc-by-and-data-not-always-a-good-fit/">CC BY and data: Not always a good fit</a>, it is argued:</p>
+<blockquote>
+<div><p><strong>CC licenses are not sufficient for ensuring proper attribution in many  cases because their restrictions — including attribution — do not apply to facts.</strong>
+…</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>CC licenses’ attribution requirements aren’t necessary because scholars have very good reasons to provide attribution that has nothing to do with copyright</strong> […] Data that comes from nowhere has little credibility. If someone wants to use data as persuasive evidence, they need to refer readers and reviewers back to its source: who it came from and how it was produced.</p>
+</div></blockquote>
+<p>CC-BY places an ambiguous legal hurdle between researchers and data they are considering using, even if only intended to enforce standard academic practice. To reduce uncertainty for data consumers, all newly published datasets are released under CC0, as are new versions of previously released datasets.  We do nonetheless want to encourage proper attribution of datasets hosted on OpenNeuro. Each version of a dataset is assigned a unique DOI, enabling researchers to cite the version of a dataset they analyzed. Additionally, all OpenNeuro datasets may include a <a class="reference external" href="https://bids-specification.readthedocs.io/en/stable/03-modality-agnostic-files.html#dataset_descriptionjson">“HowToAcknowledge” field</a>, in which dataset providers may provide specific instructions for users for what they consider an appropriate citation.</p>
 </section>
 </section>
 
@@ -248,15 +276,23 @@ openneuro-staging-datasets-3<span class="w">              </span>us-west1-b<span
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="architecture.html">
+          <a class="next-page" href="policy/data_retention.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Data Retention Policies</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="user_guide.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Architecture</div>
+                <div class="title">User Guide</div>
                 
               </div>
             </a>
@@ -290,9 +326,16 @@ openneuro-staging-datasets-3<span class="w">              </span>us-west1-b<span
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Maintenance</a><ul>
-<li><a class="reference internal" href="#unpublishing-a-dataset">Unpublishing a dataset</a></li>
-<li><a class="reference internal" href="#adjusting-worker-storage-size">Adjusting worker storage size</a></li>
+<li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#how-do-i-get-started">How do I get started?</a></li>
+<li><a class="reference internal" href="#is-this-service-free-to-use">Is this service free to use?</a></li>
+<li><a class="reference internal" href="#are-there-any-restrictions-on-the-uploaded-data">Are there any restrictions on the uploaded data?</a></li>
+<li><a class="reference internal" href="#what-if-i-will-not-be-able-to-publish-my-paper-in-36-months">What if I will not be able to publish my paper in 36 months?</a></li>
+<li><a class="reference internal" href="#are-there-consent-form-templates-we-can-use-in-our-study">Are there consent form templates we can use in our study?</a></li>
+<li><a class="reference internal" href="#do-i-need-to-format-my-data-in-some-special-way-before-uploading-it-to-openneuro">Do I need to format my data in some special way before uploading it to OpenNeuro?</a></li>
+<li><a class="reference internal" href="#do-i-need-to-remove-facial-features-from-structural-images-before-uploading-the-data">Do I need to remove facial features from structural images before uploading the data?</a></li>
+<li><a class="reference internal" href="#how-can-i-upload-data-onto-openneuro">How can I upload data onto OpenNeuro?</a></li>
+<li><a class="reference internal" href="#why-can-i-not-use-cc-by-or-other-cc-license">Why can I not use CC-BY (or other CC license)?</a></li>
 </ul>
 </li>
 </ul>

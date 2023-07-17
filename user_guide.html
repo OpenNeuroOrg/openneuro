@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="OpenNeuro policies" href="policy/index.html" /><link rel="prev" title="OpenNeuro" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Frequently Asked Questions" href="faq.html" /><link rel="prev" title="OpenNeuro Documentation" href="index.html" />
 
     <!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20 -->
         <title>User Guide - OpenNeuro documentation</title>
@@ -160,17 +160,24 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">User Guide</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="policy/index.html">OpenNeuro policies</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of OpenNeuro policies</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="policy/data_retention.html">Data Retention Policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="policy/data_management_plans.html">Data Management Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
+<p class="caption" role="heading"><span class="caption-text">OpenNeuro polices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="policy/data_retention.html">Data Retention Policies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy/data_management_plans.html">Data Management Plans</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced usage</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git access to OpenNeuro datasets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer resources</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Unpublishing a dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maintenance.html#adjusting-worker-storage-size">Adjusting worker storage size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro">Source repository (GitHub)</a></li>
 </ul>
 
 </div>
@@ -268,7 +275,7 @@ You can also skip ahead to <a class="reference internal" href="#uploading-your-d
 <li><p>The dataset may not be subject to GDPR protections.</p></li>
 <li><p>The dataset must follow <a class="reference external" href="https://bids.neuroimaging.io/">BIDS</a> specifications. Your dataset will be validated on upload, but if you want to check it for yourself, a web-based tool is available <a class="reference external" href="https://bids-standard.github.io/bids-validator/">here</a>, and a cli tool can be found <a class="reference external" href="https://github.com/bids-standard/bids-validator">here</a>.</p></li>
 <li><p>You will need to ensure that either all structural scans have been defaced (we recommend the <a class="reference external" href="https://github.com/poldracklab/pydeface">pydeface</a> tool) or that you have explicit participant consent and ethical authorization to publish without defacing.</p></li>
-<li><p>You must be willing that the dataset becomes publically available under the <a class="reference external" href="https://creativecommons.org/share-your-work/public-domain/cc0/">Creative Commons CC0 license</a> upon publishing or after a grace period of 36 months from the date of its first snapshot creation.</p></li>
+<li><p>You must be willing that the dataset becomes publicly available under the <a class="reference external" href="https://creativecommons.org/share-your-work/public-domain/cc0/">Creative Commons CC0 license</a> upon publishing or after a grace period of 36 months from the date of its first snapshot creation.</p></li>
 </ol>
 <p>The first upload prompt will ask you to select the dataset’s folder from your computer.</p>
 <p><img alt="upload dataset, select files" src="_images/upload-dataset-select-files.gif" /></p>
@@ -310,12 +317,12 @@ You can also skip ahead to <a class="reference internal" href="#uploading-your-d
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="policy/index.html">
+          <a class="next-page" href="faq.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">OpenNeuro policies</div>
+                <div class="title">Frequently Asked Questions</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
