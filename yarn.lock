@@ -5214,8 +5214,8 @@ __metadata:
     "@emotion/react": 11.6.0
     "@emotion/styled": 11.6.0
     "@niivue/niivue": 0.34.0
-    "@openneuro/client": ^4.19.0
-    "@openneuro/components": ^4.19.0
+    "@openneuro/client": ^4.19.1
+    "@openneuro/components": ^4.19.1
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@types/jsdom": ^16
@@ -5267,7 +5267,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.2
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/client": ^4.19.0
+    "@openneuro/client": ^4.19.1
     "@types/mkdirp": 1.0.2
     "@types/node": 18.11.9
     bids-validator: 1.10.0
@@ -5291,14 +5291,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.19.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.19.1, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.7.2
     "@babel/preset-typescript": ^7.14.5
     "@babel/runtime-corejs3": ^7.13.10
-    "@openneuro/server": ^4.19.0
+    "@openneuro/server": ^4.19.1
     apollo-server: ^2.23.0
     core-js: ^3.10.1
     crypto-hash: ^1.3.0
@@ -5310,7 +5310,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.19.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.19.1, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5358,8 +5358,8 @@ __metadata:
     "@apollo/client": 3.7.2
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.19.0
-    "@openneuro/search": ^4.19.0
+    "@openneuro/client": ^4.19.1
+    "@openneuro/search": ^4.19.1
     "@types/jsonwebtoken": ^8
     "@types/node": 18.11.9
     "@types/tsc-watch": ^4
@@ -5373,7 +5373,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.19.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.19.1, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5388,7 +5388,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.19.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.19.1, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5400,7 +5400,7 @@ __metadata:
     "@babel/preset-env": ^7.6.3
     "@babel/runtime-corejs3": ^7.13.10
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/search": ^4.19.0
+    "@openneuro/search": ^4.19.1
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/draft-js": ^0.10.43
@@ -19715,11 +19715,11 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "semver@npm:2 || 3 || 4 || 5, semver@npm:2.x || 3.x || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0, semver@npm:^5.7.0, semver@npm:^5.7.1":
-  version: 5.7.1
-  resolution: "semver@npm:5.7.1"
+  version: 5.7.2
+  resolution: "semver@npm:5.7.2"
   bin:
-    semver: ./bin/semver
-  checksum: 57fd0acfd0bac382ee87cd52cd0aaa5af086a7dc8d60379dfe65fea491fb2489b6016400813930ecd61fd0952dae75c115287a1b16c234b1550887117744dfaf
+    semver: bin/semver
+  checksum: fb4ab5e0dd1c22ce0c937ea390b4a822147a9c53dbd2a9a0132f12fe382902beef4fbf12cf51bb955248d8d15874ce8cd89532569756384f994309825f10b686
   languageName: node
   linkType: hard
 
@@ -19733,33 +19733,22 @@ resolve@^2.0.0-next.3:
   linkType: hard
 
 "semver@npm:^6.0.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.2.0, semver@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "semver@npm:6.3.0"
+  version: 6.3.1
+  resolution: "semver@npm:6.3.1"
   bin:
-    semver: ./bin/semver.js
-  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
+    semver: bin/semver.js
+  checksum: ae47d06de28836adb9d3e25f22a92943477371292d9b665fb023fae278d345d508ca1958232af086d85e0155aee22e313e100971898bbb8d5d89b8b1d4054ca2
   languageName: node
   linkType: hard
 
-"semver@npm:^7.1.2, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5":
-  version: 7.3.5
-  resolution: "semver@npm:7.3.5"
+"semver@npm:^7.1.2, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.8":
+  version: 7.5.4
+  resolution: "semver@npm:7.5.4"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: 5eafe6102bea2a7439897c1856362e31cc348ccf96efd455c8b5bc2c61e6f7e7b8250dc26b8828c1d76a56f818a7ee907a36ae9fb37a599d3d24609207001d60
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.3.8":
-  version: 7.3.8
-  resolution: "semver@npm:7.3.8"
-  dependencies:
-    lru-cache: ^6.0.0
-  bin:
-    semver: bin/semver.js
-  checksum: ba9c7cbbf2b7884696523450a61fee1a09930d888b7a8d7579025ad93d459b2d1949ee5bbfeb188b2be5f4ac163544c5e98491ad6152df34154feebc2cc337c1
+  checksum: 12d8ad952fa353b0995bf180cdac205a4068b759a140e5d3c608317098b3575ac2f1e09182206bf2eb26120e1c0ed8fb92c48c592f6099680de56bb071423ca3
   languageName: node
   linkType: hard
 
