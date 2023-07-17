@@ -1,8 +1,3 @@
----
-name: User Guide
-route: /user-guide
----
-
 # User Guide
 
 Welcome to OpenNeuro! This guide is dedicated to new users to the site who would like to get started on using the [OpenNeuro web platform](https://openneuro.org/) to freely store and share [Brain Imaging Data Structure (BIDS) datasets](https://bids.neuroimaging.io/).
@@ -79,7 +74,7 @@ There are a few things to keep in mind before uploading a dataset:
 
   4. You will need to ensure that either all structural scans have been defaced (we recommend the [pydeface](https://github.com/poldracklab/pydeface) tool) or that you have explicit participant consent and ethical authorization to publish without defacing.
 
-  5. You must be willing that the dataset becomes publically available under the [Creative Commons CC0 license](https://creativecommons.org/share-your-work/public-domain/cc0/) upon publishing or after a grace period of 36 months from the date of its first snapshot creation.
+  5. You must be willing that the dataset becomes publicly available under the [Creative Commons CC0 license](https://creativecommons.org/share-your-work/public-domain/cc0/) upon publishing or after a grace period of 36 months from the date of its first snapshot creation.
 
 The first upload prompt will ask you to select the dataset's folder from your computer.
 
