@@ -87,9 +87,7 @@ export const Header = ({
                 </span>
               </li>
               <li>
-                <NavLink to="/faq" onClick={() => setOpen(prev => !prev)}>
-                  FAQ
-                </NavLink>
+                <a href="https://docs.openneuro.org">Documentation</a>
               </li>
               {profile ? (
                 <li onClick={() => setOpen(prev => !prev)}>
