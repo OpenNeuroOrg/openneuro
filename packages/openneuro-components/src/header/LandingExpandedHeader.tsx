@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button } from '../button/Button'
 import { ModalityCube } from '../modality-cube/ModalityCube'
-import { cubeData } from '../mock-content/modality-cube-content.jsx'
+import { cubeData } from '../content/modality-cube-content.jsx'
 import orcidIcon from '../assets/orcid_24x24.png'
 
-import { frontPage } from '../mock-content/front-page-content.jsx'
+import { frontPage } from '../content/front-page-content.jsx'
 
 export interface LandingExpandedHeaderProps {
   user?: {}

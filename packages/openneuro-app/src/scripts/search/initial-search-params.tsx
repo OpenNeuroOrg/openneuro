@@ -1,4 +1,4 @@
-import { sortBy } from '@openneuro/components/mock-content'
+import { sortBy } from '@openneuro/components/content'
 
 const datasetType_available = [
   { label: 'All Public', value: 'All Public' },

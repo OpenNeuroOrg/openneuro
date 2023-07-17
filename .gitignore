@@ -7,7 +7,6 @@ lerna-debug.log
 .eslintcache
 coverage
 datalad-key
-content
 packages/openneuro-server/yarn.lock
 .docz
 dist

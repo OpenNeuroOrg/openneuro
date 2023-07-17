@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import SearchContainer from './search-container'
-import { portalContent } from '@openneuro/components/mock-content'
+import { portalContent } from '@openneuro/components/content'
 
 const SearchRoutes: FC = () => (
   <Routes>
