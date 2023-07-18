@@ -4,7 +4,7 @@ import {
   states,
   checkDatasetWrite,
   checkDatasetAdmin,
-} from '../permissions.js'
+} from '../permissions'
 
 vi.mock('ioredis')
 

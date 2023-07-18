@@ -18,9 +18,9 @@ import {
   undoDeprecateSnapshot,
 } from './snapshots.js'
 import { removeUser, setAdmin, setBlocked } from './user.js'
-import { updateSummary } from './summary.js'
+import { updateSummary } from './summary'
 import { revalidate, updateValidation } from './validation.js'
-import { updatePermissions, removePermissions } from './permissions.js'
+import { updatePermissions, removePermissions } from './permissions'
 import { followDataset } from './follow.js'
 import { starDataset } from './stars.js'
 import { publishDataset } from './publish.js'
