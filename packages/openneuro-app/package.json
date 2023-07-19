@@ -22,6 +22,7 @@
     "@niivue/niivue": "0.34.0",
     "@openneuro/client": "^4.19.2",
     "@openneuro/components": "^4.19.2",
+    "@tanstack/react-table": "^8.9.3",
     "bids-validator": "1.10.0",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
@@ -41,7 +42,6 @@
     "react-router-dom": "6.3.0",
     "react-toastify": "6.0.9",
     "react-usestateref": "^1.0.8",
-    "react-virtualized": "remorses/react-virtualized-fixed-import.git#9.22.3",
     "semver": "^5.5.0",
     "subscriptions-transport-ws": "0.11.0",
     "universal-cookie": "^4.0.4"

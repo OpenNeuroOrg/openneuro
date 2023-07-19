@@ -8219,6 +8219,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@niivue/niivue", "npm:0.34.0"],\
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@openneuro/components", "workspace:packages/openneuro-components"],\
+            ["@tanstack/react-table", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.9.3"],\
             ["@testing-library/jest-dom", "npm:5.14.1"],\
             ["@testing-library/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.2.7"],\
             ["@types/jsdom", "npm:16.2.13"],\
@@ -8251,7 +8252,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.3.0"],\
             ["react-toastify", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.0.9"],\
             ["react-usestateref", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.8"],\
-            ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],\
             ["rollup-plugin-polyfill-node", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.9.0"],\
             ["sass", "npm:1.42.1"],\
             ["semver", "npm:5.7.2"],\
@@ -8790,6 +8790,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@szmarczak/http-timer", "npm:4.0.6"],\
             ["defer-to-connect", "npm:2.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tanstack/react-table", [\
+        ["npm:8.9.3", {\
+          "packageLocation": "./.yarn/cache/@tanstack-react-table-npm-8.9.3-af8d0ec3fb-a71fbbc608.zip/node_modules/@tanstack/react-table/",\
+          "packageDependencies": [\
+            ["@tanstack/react-table", "npm:8.9.3"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.9.3", {\
+          "packageLocation": "./.yarn/__virtual__/@tanstack-react-table-virtual-9d74add251/0/cache/@tanstack-react-table-npm-8.9.3-af8d0ec3fb-a71fbbc608.zip/node_modules/@tanstack/react-table/",\
+          "packageDependencies": [\
+            ["@tanstack/react-table", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.9.3"],\
+            ["@tanstack/table-core", "npm:8.9.3"],\
+            ["@types/react", "npm:17.0.24"],\
+            ["@types/react-dom", "npm:17.0.9"],\
+            ["react", "npm:17.0.2"],\
+            ["react-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:17.0.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tanstack/table-core", [\
+        ["npm:8.9.3", {\
+          "packageLocation": "./.yarn/cache/@tanstack-table-core-npm-8.9.3-993026ff01-52c7e57daa.zip/node_modules/@tanstack/table-core/",\
+          "packageDependencies": [\
+            ["@tanstack/table-core", "npm:8.9.3"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13213,15 +13249,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["clone-response", "npm:1.0.2"],\
             ["mimic-response", "npm:1.0.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["clsx", [\
-        ["npm:1.1.1", {\
-          "packageLocation": "./.yarn/cache/clsx-npm-1.1.1-362bec0598-ff05265032.zip/node_modules/clsx/",\
-          "packageDependencies": [\
-            ["clsx", "npm:1.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -23979,15 +24006,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["react-lifecycles-compat", [\
-        ["npm:3.0.4", {\
-          "packageLocation": "./.yarn/cache/react-lifecycles-compat-npm-3.0.4-d5e285a39e-a904b0fc0a.zip/node_modules/react-lifecycles-compat/",\
-          "packageDependencies": [\
-            ["react-lifecycles-compat", "npm:3.0.4"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["react-multi-carousel", [\
         ["npm:2.6.5", {\
           "packageLocation": "./.yarn/cache/react-multi-carousel-npm-2.6.5-037d977936-2ba44029a8.zip/node_modules/react-multi-carousel/",\
@@ -24183,38 +24201,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "packagePeers": [\
             "@types/react",\
-            "react"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["react-virtualized", [\
-        ["https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4", {\
-          "packageLocation": "./.yarn/cache/react-virtualized-https-146c5f0b1a-57ebda833e.zip/node_modules/react-virtualized/",\
-          "packageDependencies": [\
-            ["react-virtualized", "https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4", {\
-          "packageLocation": "./.yarn/__virtual__/react-virtualized-virtual-aab6a2e618/0/cache/react-virtualized-https-146c5f0b1a-57ebda833e.zip/node_modules/react-virtualized/",\
-          "packageDependencies": [\
-            ["react-virtualized", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#https://github.com/remorses/react-virtualized-fixed-import.git#commit=6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"],\
-            ["@babel/runtime", "npm:7.15.4"],\
-            ["@types/react", "npm:17.0.24"],\
-            ["@types/react-dom", "npm:17.0.9"],\
-            ["clsx", "npm:1.1.1"],\
-            ["dom-helpers", "npm:5.2.1"],\
-            ["loose-envify", "npm:1.4.0"],\
-            ["prop-types", "npm:15.7.2"],\
-            ["react", "npm:17.0.2"],\
-            ["react-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:17.0.2"],\
-            ["react-lifecycles-compat", "npm:3.0.4"]\
-          ],\
-          "packagePeers": [\
-            "@types/react-dom",\
-            "@types/react",\
-            "react-dom",\
             "react"\
           ],\
           "linkType": "HARD"\
