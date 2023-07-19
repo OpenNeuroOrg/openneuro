@@ -1,17 +1,25 @@
-import User from '../../models/user'
-import Permission from '../../models/permission'
+import User, { UserDocument } from '../../models/user'
+import Permission, { PermissionDocument } from '../../models/permission'
 import { checkDatasetAdmin } from '../permissions'
 import { user } from './user'
 import pubsub from '../pubsub.js'
 
-export const permissions = async ds => {
+interface DatasetPermission {
+  id: string
+  userPermissions: (PermissionDocument & { user: Promise<UserDocument> })[]
+}
+
+export async function permissions(ds): Promise<DatasetPermission> {
   const permissions = await Permission.find({ datasetId: ds.id }).exec()
   return {
     id: ds.id,
-    userPermissions: permissions.map(userPermission => ({
-      ...userPermission.toJSON(),
-      user: user(ds, { id: userPermission.userId }),
-    })),
+    userPermissions: permissions.map(
+      userPermission =>
+        ({
+          ...userPermission.toJSON(),
+          user: user(ds, { id: userPermission.userId }),
+        } as PermissionDocument & { user: Promise<UserDocument> }),
+    ),
   }
 }
 
@@ -53,7 +61,7 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
   }
 
   const userPromises = users.map(user => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       Permission.updateOne(
         {
           datasetId: args.datasetId,

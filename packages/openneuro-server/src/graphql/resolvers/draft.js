@@ -1,5 +1,5 @@
 import Summary from '../../models/summary'
-import { summary } from './summary.js'
+import { summary } from './summary'
 import { issues } from './issues.js'
 import { description } from './description.js'
 import { readme } from './readme.js'

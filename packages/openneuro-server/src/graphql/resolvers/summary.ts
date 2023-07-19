@@ -1,9 +1,9 @@
-import Summary from '../../models/summary'
+import Summary, { SummaryDocument } from '../../models/summary'
 
 /**
  * Summary resolver
  */
-export const summary = async dataset => {
+export async function summary(dataset): Promise<Partial<SummaryDocument>> {
   const datasetSummary = (
     await Summary.findOne({
       id: dataset.revision,

@@ -17,6 +17,7 @@ export interface SummaryDocument extends Document {
   subjectMetadata: Record<string, any>
   tasks: string[]
   modalities: string[]
+  primaryModality: string
   secondaryModalities: string[]
   dataTypes: string[]
   totalFiles: number
@@ -33,6 +34,7 @@ const summarySchema = new Schema({
   subjectMetadata: Object,
   tasks: [String],
   modalities: [String],
+  primaryModality: String,
   secondaryModalities: [String],
   dataTypes: [String],
   totalFiles: Number,

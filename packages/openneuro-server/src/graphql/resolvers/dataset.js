@@ -7,9 +7,9 @@ import {
   checkDatasetRead,
   checkDatasetWrite,
   checkDatasetAdmin,
-} from '../permissions.js'
+} from '../permissions'
 import { user } from './user.js'
-import { permissions } from './permissions.js'
+import { permissions } from './permissions'
 import { datasetComments } from './comment.js'
 import { metadata } from './metadata.js'
 import { history } from './history.js'
