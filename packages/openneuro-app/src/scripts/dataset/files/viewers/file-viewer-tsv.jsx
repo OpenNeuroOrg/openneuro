@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import parseTabular from './parse-tabular.js'
-import FileViewerTable from './file-viewer-table.jsx'
+import FileViewerTable from './file-viewer-table'
 
 const FileViewerTsv = ({ data }) => {
   const decoder = new TextDecoder()
