@@ -11,6 +11,7 @@ import styled from '@emotion/styled'
 
 interface DataTableProps {
   data: any[]
+  hideColumns: string[]
 }
 
 const TH = styled.th`
@@ -26,14 +27,17 @@ const TR = styled.tr`
   margin-bottom: 0.8em;
 `
 
-export function DataTable<T>({ data }: DataTableProps): React.ReactElement {
+export function DataTable<T>({
+  data,
+  hideColumns,
+}: DataTableProps): React.ReactElement {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const columnHelper = createColumnHelper<T>()
   const columns = React.useMemo(
     () =>
-      Object.keys(data[0]).map(name =>
-        columnHelper.accessor(name as any, { header: name }),
-      ),
+      Object.keys(data[0])
+        .filter(name => !hideColumns.includes(name))
+        .map(name => columnHelper.accessor(name as any, { header: name })),
     [data, columnHelper],
   )
   const memoData = React.useMemo(() => data, [data])
