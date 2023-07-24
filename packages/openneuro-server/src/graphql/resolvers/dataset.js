@@ -11,7 +11,7 @@ import {
 import { user } from './user.js'
 import { permissions } from './permissions'
 import { datasetComments } from './comment.js'
-import { metadata } from './metadata.js'
+import { metadata } from './metadata'
 import { history } from './history.js'
 import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset'
