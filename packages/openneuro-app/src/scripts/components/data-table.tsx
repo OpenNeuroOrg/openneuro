@@ -33,10 +33,12 @@ const TD = styled.td`
   padding: 3px;
 `
 
-function cellFormat(props): any {
+function CellFormat(props): any {
   const value = props.getValue()
   if (typeof value === 'string' && isValid(parseISO(value))) {
     return format(parseISO(value), 'yyyy-MM-dd')
+  } else if (typeof value === 'string' && /^ds[0-9]{6}$/.exec(value)) {
+    return <a href={`/datasets/${value}`}>{value}</a>
   } else {
     return value
   }
@@ -58,7 +60,7 @@ export function DataTable<T>({
         .map(name =>
           columnHelper.accessor(name as any, {
             header: name,
-            cell: cellFormat,
+            cell: CellFormat,
           }),
         ),
     [data, columnHelper, hideColumns],
