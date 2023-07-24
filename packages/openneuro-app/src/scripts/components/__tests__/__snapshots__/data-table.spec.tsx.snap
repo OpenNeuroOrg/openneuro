@@ -14,7 +14,7 @@ exports[`DataTable component > renders a basic table 1`] = `
           <div
             class="cursor-pointer select-none"
           >
-            col1
+            col1 
           </div>
         </th>
         <th
@@ -24,7 +24,7 @@ exports[`DataTable component > renders a basic table 1`] = `
           <div
             class="cursor-pointer select-none"
           >
-            col2
+            col2 
           </div>
         </th>
         <th
@@ -34,7 +34,7 @@ exports[`DataTable component > renders a basic table 1`] = `
           <div
             class="cursor-pointer select-none"
           >
-            col3
+            col3 
           </div>
         </th>
       </tr>

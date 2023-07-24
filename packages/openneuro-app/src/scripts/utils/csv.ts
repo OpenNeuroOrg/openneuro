@@ -1,14 +1,20 @@
-/** Convert from array of objects to CSV */
+/**
+ * Convert from array of objects to CSV
+ * Filters out __typename columns as GraphQL responses will often include this but it is unwanted in CSV files saved
+ */
 export function convertArrayToCSV<T>(array: T[]): string {
   if (array.length === 0) {
     return ''
   }
 
-  const keys = Object.keys(array[0])
+  const keys = Object.keys(array[0]).filter(key => key !== '__typename')
   const headerRow = keys.join(',') + '\n'
   const dataRows = array.map(obj =>
     keys
-      .map(key => (obj[key] ? obj[key].toString().replace(/"/g, '""') : ''))
+      .map(
+        key =>
+          (obj[key] ? obj[key].toString().replace(/"/g, '""') : '') as string,
+      )
       .join(','),
   )
 
