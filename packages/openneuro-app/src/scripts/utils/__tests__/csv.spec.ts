@@ -7,7 +7,16 @@ describe('utils/csv', () => {
       { exampleCol: 'test4', exampleCol2: 'test3', __typename: 'example' },
     ]
     expect(convertArrayToCSV(obj)).toEqual(
-      'exampleCol,exampleCol2\ntest,test2\ntest4,test3',
+      'exampleCol,exampleCol2\n"test","test2"\n"test4","test3"',
+    )
+  })
+  it('escapes comma values correctly', () => {
+    const obj = [
+      { exampleCol: 'test', modalities: 'PET,MRI', __typename: 'example' },
+      { exampleCol: 'test4', modalities: 'MRI', __typename: 'example' },
+    ]
+    expect(convertArrayToCSV(obj)).toEqual(
+      'exampleCol,modalities\n"test","PET,MRI"\n"test4","MRI"',
     )
   })
 })

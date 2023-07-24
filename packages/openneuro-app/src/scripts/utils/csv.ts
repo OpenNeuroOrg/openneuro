@@ -11,9 +11,10 @@ export function convertArrayToCSV<T>(array: T[]): string {
   const headerRow = keys.join(',') + '\n'
   const dataRows = array.map(obj =>
     keys
-      .map(
-        key =>
-          (obj[key] ? obj[key].toString().replace(/"/g, '""') : '') as string,
+      .map(key =>
+        obj[key]
+          ? `"${obj[key].toString().replace(/"/g, '""') as string}"`
+          : '',
       )
       .join(','),
   )
