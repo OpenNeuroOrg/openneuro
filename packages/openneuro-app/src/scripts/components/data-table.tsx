@@ -11,7 +11,8 @@ import styled from '@emotion/styled'
 
 interface DataTableProps {
   data: any[]
-  hideColumns: string[]
+  downloadFilename?: string
+  hideColumns?: string[]
 }
 
 const TH = styled.th`
@@ -27,9 +28,12 @@ const TR = styled.tr`
   margin-bottom: 0.8em;
 `
 
+/**
+ * Take a general table-like array of objects (one object per row) and render as a simple table with sortable columns
+ */
 export function DataTable<T>({
   data,
-  hideColumns,
+  hideColumns = [],
 }: DataTableProps): React.ReactElement {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const columnHelper = createColumnHelper<T>()
@@ -70,9 +74,10 @@ export function DataTable<T>({
                       header.column.columnDef.header,
                       header.getContext(),
                     )}
+                    &nbsp;
                     {{
-                      asc: '🔼',
-                      desc: '🔽',
+                      asc: '▲',
+                      desc: '▼',
                     }[header.column.getIsSorted() as string] ?? null}
                   </div>
                 )}
