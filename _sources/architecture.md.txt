@@ -55,7 +55,7 @@ Authorization is the responsibility of other services but user information is pr
 
 ### Git Annex as a database
 
-Key to how OpenNeuro works with files is understanding the git and git-annex data model. In git, each file is hashed and kept on disk as an object referenced by that hash. A version or commit consists of a tree of those hashes. Git-annex extends this concept to large files by keeping storing the file hash as the content instead of the actual contents and coordinating this extra level of indirection on a special branch (named git-annex). The special branch does not share history with the content branches of the repo. Think of it as another repo that is bundled together.
+Key to how OpenNeuro works with files is understanding the git and git-annex data model. In git, each file is hashed and kept on disk as an object referenced by that hash. A version or commit consists of a tree of those hashes. Git-annex extends this concept to large files by storing the file hash as the content instead of the actual contents and coordinating this extra level of indirection on a special branch (named git-annex). The special branch does not share history with the content branches of the repo. Think of it as another repo that is bundled together.
 
 To retrieve information about a given tree (one commit within a dataset), we prefer to access this information by the hashed tree object. This provides stable results regardless of working tree state and avoids the high cost of file access across in many cases due to git's own optimization of packed content-hashes.
 
