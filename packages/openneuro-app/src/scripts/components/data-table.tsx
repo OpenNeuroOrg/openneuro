@@ -8,6 +8,7 @@ import {
   SortingState,
 } from '@tanstack/react-table'
 import styled from '@emotion/styled'
+import { format, parseISO, isValid } from 'date-fns'
 
 interface DataTableProps {
   data: any[]
@@ -28,6 +29,19 @@ const TR = styled.tr`
   margin-bottom: 0.8em;
 `
 
+const TD = styled.td`
+  padding: 3px;
+`
+
+function cellFormat(props): any {
+  const value = props.getValue()
+  if (typeof value === 'string' && isValid(parseISO(value))) {
+    return format(parseISO(value), 'yyyy-MM-dd')
+  } else {
+    return value
+  }
+}
+
 /**
  * Take a general table-like array of objects (one object per row) and render as a simple table with sortable columns
  */
@@ -41,8 +55,13 @@ export function DataTable<T>({
     () =>
       Object.keys(data[0])
         .filter(name => !hideColumns.includes(name))
-        .map(name => columnHelper.accessor(name as any, { header: name })),
-    [data, columnHelper],
+        .map(name =>
+          columnHelper.accessor(name as any, {
+            header: name,
+            cell: cellFormat,
+          }),
+        ),
+    [data, columnHelper, hideColumns],
   )
   const memoData = React.useMemo(() => data, [data])
   const table = useReactTable({
@@ -90,9 +109,9 @@ export function DataTable<T>({
         {table.getRowModel().rows.map(row => (
           <TR key={row.id}>
             {row.getVisibleCells().map(cell => (
-              <td key={cell.id}>
+              <TD key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
+              </TD>
             ))}
           </TR>
         ))}
