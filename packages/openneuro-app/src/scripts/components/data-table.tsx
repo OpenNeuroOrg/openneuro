@@ -39,6 +39,8 @@ function CellFormat(props): any {
     return format(parseISO(value), 'yyyy-MM-dd')
   } else if (typeof value === 'string' && /^ds[0-9]{6}$/.exec(value)) {
     return <a href={`/datasets/${value}`}>{value}</a>
+  } else if (Array.isArray(value)) {
+    return value.join(',')
   } else {
     return value
   }
