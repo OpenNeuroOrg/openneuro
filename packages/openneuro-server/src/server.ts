@@ -10,7 +10,7 @@ import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
 import { connect as redisConnect } from './libs/redis'
 import config from './config'
-import createApp from './app'
+import { expressApolloSetup } from './app'
 import { version } from './lerna.json'
 
 const redisConnectionSetup = async () => {
@@ -23,13 +23,13 @@ const redisConnectionSetup = async () => {
   }
 }
 
-mongoose.connect(config.mongo.url, {
+void mongoose.connect(config.mongo.url, {
   dbName: config.mongo.dbName,
   connectTimeoutMS: config.mongo.connectTimeoutMS,
 })
 
-redisConnectionSetup().then(() => {
-  const app = createApp(false)
+void redisConnectionSetup().then(async () => {
+  const app = await expressApolloSetup()
   const server = createServer(app)
   server.listen(config.port, () => {
     // eslint-disable-next-line no-console

@@ -4,12 +4,16 @@
 /**
  * Express app setup
  */
+import { createServer } from 'http'
+import { execute, subscribe } from 'graphql'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
 import express from 'express'
 import passport from 'passport'
 import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-express'
 import { BaseRedisCache } from 'apollo-server-cache-redis'
 import bodyParser from 'body-parser'
@@ -21,8 +25,7 @@ import { setupPassportAuth } from './libs/authentication/passport.js'
 import { redis } from './libs/redis'
 import { version } from './lerna.json'
 
-// test flag disables Sentry for tests
-export default test => {
+export async function expressApolloSetup() {
   const app = express()
 
   setupPassportAuth()
@@ -43,13 +46,6 @@ export default test => {
   app.use('/sitemap.xml', sitemapHandler)
   app.use(config.apiPrefix, routes)
 
-  // error handling --------------------------------------------------\
-
-  // Apollo engine setup
-  const engineConfig = {
-    privateVariables: ['files'],
-  }
-
   // Apollo server setup
   const apolloServer = new ApolloServer({
     schema,
@@ -64,28 +60,49 @@ export default test => {
     },
     // Always allow introspection - our schema is public
     introspection: true,
-    // Enable authenticated queries in playground
-    // Note - buggy at the moment
-    playground: {
-      settings: {
-        'request.credentials': 'same-origin',
-      },
-    },
-    // Enable cache options
-    tracing: true,
-    cacheControl: true,
-    // Don't limit the max size for dataset uploads
-    uploads: { maxFieldSize: Infinity },
     formatResponse: response => {
       return { ...response, extensions: { openneuro: { version } } }
     },
     cache: new BaseRedisCache({
       client: redis,
     }),
+    plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground({
+        settings: {
+          'request.credentials': 'same-origin',
+        },
+      }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              subscriptionServer.close()
+            },
+          }
+        },
+      },
+    ],
   })
+
+  // Apollo server 3.0 subscription support
+  const httpServer = createServer(app)
+  const subscriptionServer = SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+      validationRules: apolloServer.requestOptions.validationRules,
+    },
+    {
+      server: httpServer,
+      path: apolloServer.graphqlPath,
+    },
+  )
 
   // Setup pre-GraphQL middleware
   app.use('/crn/graphql', jwt.authenticate, auth.optional)
+
+  await apolloServer.start()
 
   // Inject Apollo Server
   apolloServer.applyMiddleware({ app, path: '/crn/graphql' })
