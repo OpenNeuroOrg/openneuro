@@ -5,6 +5,7 @@
  * Express app setup
  */
 import { createServer } from 'http'
+import cors from 'cors'
 import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import express from 'express'
@@ -14,7 +15,9 @@ import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer } from '@apollo/server'
+import { expressMiddleware } from '@apollo/server/express4'
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { BaseRedisCache } from 'apollo-server-cache-redis'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -24,6 +27,14 @@ import { sitemapHandler } from './handlers/sitemap.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 import { redis } from './libs/redis'
 import { version } from './lerna.json'
+
+interface OpenNeuroRequestContext {
+  user: string
+  isSuperUser: boolean
+  userInfo: {
+    id: string
+  }
+}
 
 export async function expressApolloSetup() {
   const app = express()
@@ -46,8 +57,10 @@ export async function expressApolloSetup() {
   app.use('/sitemap.xml', sitemapHandler)
   app.use(config.apiPrefix, routes)
 
+  const httpServer = createServer(app)
+
   // Apollo server setup
-  const apolloServer = new ApolloServer({
+  const apolloServer = new ApolloServer<OpenNeuroRequestContext>({
     schema,
     context: ({ req }) => {
       if (req.isAuthenticated()) {
@@ -81,11 +94,11 @@ export async function expressApolloSetup() {
           }
         },
       },
+      ApolloServerPluginDrainHttpServer({ httpServer }),
     ],
   })
 
   // Apollo server 3.0 subscription support
-  const httpServer = createServer(app)
   const subscriptionServer = SubscriptionServer.create(
     {
       schema,
@@ -99,13 +112,26 @@ export async function expressApolloSetup() {
     },
   )
 
-  // Setup pre-GraphQL middleware
-  app.use('/crn/graphql', jwt.authenticate, auth.optional)
-
   await apolloServer.start()
 
-  // Inject Apollo Server
-  apolloServer.applyMiddleware({ app, path: '/crn/graphql' })
+  // Setup GraphQL middleware
+  app.use(
+    ['/graphql', '/crn/graphql'],
+    cors<cors.CorsRequest>(),
+    jwt.authenticate,
+    auth.optional,
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => {
+        if (req.isAuthenticated()) {
+          return {
+            user: req.user.id,
+            isSuperUser: req.user.admin,
+            userInfo: req.user,
+          }
+        }
+      },
+    }),
+  )
 
   return app
 }
