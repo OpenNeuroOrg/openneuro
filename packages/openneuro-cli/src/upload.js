@@ -7,6 +7,7 @@ import { uploads } from '@openneuro/client'
 import validate from 'bids-validator'
 import { getFiles, bytesToSize } from './files'
 import { getUrl } from './config'
+// @ts-ignore
 import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
 import { fetch, Request, AbortController } from 'fetch-h2'
 

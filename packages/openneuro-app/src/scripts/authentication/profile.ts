@@ -1,5 +1,15 @@
 import jwtDecode from 'jwt-decode'
 
+interface OpenNeuroTokenProfile {
+  sub: string
+  email: string
+  provider: string
+  name: string
+  admin: boolean
+  iat: number
+  exp: number
+}
+
 /**
  * Read JSON object from JWT string
  * @param {string} token
@@ -9,7 +19,7 @@ export const parseJwt = jwtDecode
 /**
  * Retrieve the user profile from JWT cookie
  */
-export const getProfile = cookies => {
+export function getProfile(cookies): OpenNeuroTokenProfile {
   const accessToken = cookies['accessToken']
   return accessToken ? parseJwt(accessToken) : null
 }
@@ -28,7 +38,7 @@ export const getUnexpiredProfile = cookies => {
  * @param {object} profile A profile returned by getProfile()
  * @returns {boolean} False if expired
  */
-export const guardExpired = profile => {
+export const guardExpired = (profile: OpenNeuroTokenProfile): boolean => {
   const now = new Date().getTime() / 1000
   if (profile && now < profile.exp) {
     return true

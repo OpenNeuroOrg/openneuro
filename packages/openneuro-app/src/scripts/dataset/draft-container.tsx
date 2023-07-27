@@ -121,13 +121,13 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               </EditDescriptionField>
               <FollowToggles>
                 <FollowDataset
-                  profile={profile}
+                  profile={profile !== null}
                   datasetId={dataset.id}
                   following={dataset.following}
                   followers={dataset.followers.length}
                 />
                 <StarDataset
-                  profile={profile}
+                  profile={profile !== null}
                   datasetId={dataset.id}
                   starred={dataset.starred}
                   stars={dataset.stars.length}

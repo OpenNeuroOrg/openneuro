@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCookies } from 'react-cookie'
-import { getProfile } from './profile.js'
+import { getProfile } from './profile'
 
 interface RegularUserProps {
   children?: React.ReactNode

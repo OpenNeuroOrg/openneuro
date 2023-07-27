@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { Button } from '@openneuro/components/button'
 
 import { RemovePermissions } from '../mutations/remove-permissions'
@@ -140,7 +139,7 @@ Share.propTypes = {
   datasetId: PropTypes.string,
   permissions: PropTypes.object,
   reviewers: PropTypes.array,
-  hasSnapshot: PropTypes.boolean,
+  hasSnapshot: PropTypes.bool,
 }
 
 export default Share

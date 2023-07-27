@@ -1,4 +1,4 @@
-import { execute, subscribe } from 'graphql'
+/*import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import schema from '../graphql/schema.js'
 
@@ -17,3 +17,4 @@ const subscriptionServerFactory = httpserver =>
   )
 
 export default subscriptionServerFactory
+*/

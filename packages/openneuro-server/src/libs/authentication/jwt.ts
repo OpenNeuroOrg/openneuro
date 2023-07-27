@@ -5,8 +5,26 @@ import { decrypt } from './crypto'
 import User from '../../models/user'
 import config from '../../config.js'
 
-export const buildToken = (config, user, expiresIn, options) => {
-  const fields = {
+interface OpenNeuroTokenProfile {
+  sub: string
+  email: string
+  provider: string
+  name: string
+  admin: boolean
+  iat: number
+  exp: number
+  // Tokens may be scoped and limited to one dataset
+  scopes?: string[]
+  dataset?: string
+}
+
+export const buildToken = (
+  config,
+  user,
+  expiresIn,
+  options?: { scopes?: string[]; dataset?: string },
+): string => {
+  const fields: Omit<OpenNeuroTokenProfile, 'iat' | 'exp'> = {
     sub: user.id,
     email: user.email,
     provider: user.provider,
@@ -15,7 +33,7 @@ export const buildToken = (config, user, expiresIn, options) => {
   }
   // Allow extensions of the base token format
   if (options) {
-    if ('scopes' in options) {
+    if (options && 'scopes' in options) {
       fields.scopes = options.scopes
     }
     if ('dataset' in options) {
@@ -24,7 +42,7 @@ export const buildToken = (config, user, expiresIn, options) => {
   }
   return jwt.sign(fields, config.auth.jwt.secret, {
     expiresIn,
-  })
+  }) as string
 }
 
 // Helper to generate a JWT containing user info
@@ -111,8 +129,8 @@ export const jwtFromRequest = req => {
   }
 }
 
-export const decodeJWT = token => {
-  return jwt.decode(token)
+export const decodeJWT = (token: string): OpenNeuroTokenProfile => {
+  return jwt.decode(token) as OpenNeuroTokenProfile
 }
 
 export const parsedJwtFromRequest = req => {

@@ -7,11 +7,9 @@ apm.start({
 
 import { createServer } from 'http'
 import mongoose from 'mongoose'
-import subscriptionServerFactory from './libs/subscription-server.js'
 import { connect as redisConnect } from './libs/redis'
 import config from './config'
 import { expressApolloSetup } from './app'
-import { version } from './lerna.json'
 
 const redisConnectionSetup = async () => {
   try {
@@ -35,6 +33,6 @@ void redisConnectionSetup().then(async () => {
     // eslint-disable-next-line no-console
     console.log('Server is listening on port ' + config.port)
     // Setup GraphQL subscription transport
-    subscriptionServerFactory(server)
+    //subscriptionServerFactory(server)
   })
 })

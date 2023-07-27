@@ -6,20 +6,19 @@
  */
 import { createServer } from 'http'
 import cors from 'cors'
-import { execute, subscribe } from 'graphql'
-import { SubscriptionServer } from 'subscriptions-transport-ws'
-import express from 'express'
+import express, { urlencoded, json } from 'express'
 import passport from 'passport'
 import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import { ApolloServer } from '@apollo/server'
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import { BaseRedisCache } from 'apollo-server-cache-redis'
-import bodyParser from 'body-parser'
+import { KeyvAdapter } from '@apollo/utils.keyvadapter'
+import Keyv from 'keyv'
+import KeyvRedis from '@keyv/redis'
 import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
@@ -27,12 +26,15 @@ import { sitemapHandler } from './handlers/sitemap.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 import { redis } from './libs/redis'
 import { version } from './lerna.json'
+export { Express } from 'express-serve-static-core'
 
 interface OpenNeuroRequestContext {
   user: string
   isSuperUser: boolean
   userInfo: {
     id: string
+    exp: string
+    scopes: string[]
   }
 }
 
@@ -50,8 +52,8 @@ export async function expressApolloSetup() {
   })
   app.use(morgan('short'))
   app.use(cookieParser())
-  app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }))
-  app.use(bodyParser.json({ limit: '50mb' }))
+  app.use(urlencoded({ extended: false, limit: '50mb' }))
+  app.use(json({ limit: '50mb' }))
 
   // routing ---------------------------------------------------------
   app.use('/sitemap.xml', sitemapHandler)
@@ -62,55 +64,35 @@ export async function expressApolloSetup() {
   // Apollo server setup
   const apolloServer = new ApolloServer<OpenNeuroRequestContext>({
     schema,
-    context: ({ req }) => {
-      if (req.isAuthenticated()) {
-        return {
-          user: req.user.id,
-          isSuperUser: req.user.admin,
-          userInfo: req.user,
-        }
-      }
-    },
     // Always allow introspection - our schema is public
     introspection: true,
-    formatResponse: response => {
-      return { ...response, extensions: { openneuro: { version } } }
-    },
-    cache: new BaseRedisCache({
-      client: redis,
-    }),
+    cache: new KeyvAdapter(new Keyv({ store: new KeyvRedis(redis) })),
     plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground({
-        settings: {
-          'request.credentials': 'same-origin',
-        },
+      ApolloServerPluginLandingPageLocalDefault(),
+      ApolloServerPluginDrainHttpServer({
+        httpServer,
       }),
       {
-        async serverWillStart() {
+        async requestDidStart() {
           return {
-            async drainServer() {
-              subscriptionServer.close()
+            async willSendResponse(requestContext) {
+              const { response } = requestContext
+              if (
+                response.body.kind === 'single' &&
+                'data' in response.body.singleResult
+              ) {
+                response.body.singleResult.extensions = {
+                  ...response.body.singleResult.extensions,
+
+                  openneuro: { version },
+                }
+              }
             },
           }
         },
       },
-      ApolloServerPluginDrainHttpServer({ httpServer }),
     ],
   })
-
-  // Apollo server 3.0 subscription support
-  const subscriptionServer = SubscriptionServer.create(
-    {
-      schema,
-      execute,
-      subscribe,
-      validationRules: apolloServer.requestOptions.validationRules,
-    },
-    {
-      server: httpServer,
-      path: apolloServer.graphqlPath,
-    },
-  )
 
   await apolloServer.start()
 

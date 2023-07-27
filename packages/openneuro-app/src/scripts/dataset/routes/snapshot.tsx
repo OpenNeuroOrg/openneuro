@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import semver from 'semver'
+import semver, { ReleaseType } from 'semver'
 import SnapshotDataset from '../mutations/snapshot'
 import EditList from '../fragments/edit-list.jsx'
 import { Button } from '@openneuro/components/button'
@@ -38,7 +37,12 @@ export const NoErrors = ({ issues, children }) => {
   }
 }
 
-const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
+const SnapshotRoute = ({
+  datasetId,
+  snapshots,
+  issues,
+  description,
+}): React.ReactElement => {
   const [changes, setChanges] = useState([])
   const [semanticLevel, setSemanticLevel] = useState('patch')
   const draftLicense = (description && description.License) || 'none'
@@ -48,7 +52,7 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
   const latestSnapshot = snapshots.length && snapshots[snapshots.length - 1]
   const newVersion =
     snapshots.length && semver.valid(latestSnapshot.tag)
-      ? semver.inc(latestSnapshot.tag, semanticLevel)
+      ? semver.inc(latestSnapshot.tag, semanticLevel as ReleaseType)
       : '1.0.0'
 
   const majorActive = semanticLevel === 'major' && 'active'
@@ -136,13 +140,6 @@ const SnapshotRoute = ({ datasetId, snapshots, issues, description }) => {
       </div>
     </DatasetPageBorder>
   )
-}
-
-SnapshotRoute.propTypes = {
-  datasetId: PropTypes.string,
-  snapshots: PropTypes.array,
-  issues: PropTypes.array,
-  description: PropTypes.object,
 }
 
 export default SnapshotRoute

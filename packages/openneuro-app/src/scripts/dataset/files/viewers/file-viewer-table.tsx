@@ -34,7 +34,7 @@ const FileViewerTable = ({ tableData }): React.ReactElement => {
   const columns = React.useMemo(
     () =>
       Object.keys(tableData[0]).map(name =>
-        columnHelper.accessor(name, { header: name }),
+        columnHelper.accessor(name as any, { header: name }),
       ),
     [tableData, columnHelper],
   )
