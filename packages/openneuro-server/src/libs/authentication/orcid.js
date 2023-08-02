@@ -1,6 +1,6 @@
 import passport from 'passport'
 import User from '../../models/user'
-import { parsedJwtFromRequest } from './jwt.js'
+import { parsedJwtFromRequest } from './jwt'
 
 export const requestAuth = passport.authenticate('orcid', {
   session: false,

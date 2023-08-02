@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { SchemaLink } from '@apollo/client/link/schema'
-import { addMockFunctionsToSchema, makeExecutableSchema } from 'apollo-server'
+import { addMocksToSchema } from '@graphql-tools/mock'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 import { typeDefs } from '@openneuro/server/src/graphql/schema'
 import resolvers from '@openneuro/server/src/graphql/resolvers/index.js'
 
@@ -25,7 +26,7 @@ const schema = makeExecutableSchema({
   resolvers,
 })
 
-addMockFunctionsToSchema({
+addMocksToSchema({
   schema,
   mocks: {
     Dataset: (root, { id }) => ({
@@ -46,6 +47,12 @@ export const createClient = uri => {
   const cache = new InMemoryCache()
   const link = new SchemaLink({
     schema,
+    context: {
+      user: '1234',
+      userInfo: {
+        id: '1234',
+      },
+    },
   })
   // @ts-expect-error
   return new ApolloClient({ uri, link, cache })

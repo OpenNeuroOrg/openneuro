@@ -1,3 +1,3 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`download.js > checkDestination() > throws an error on existing directories 1`] = `"Target file \\"package.json\\" must be a directory"`;

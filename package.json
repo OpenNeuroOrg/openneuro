@@ -48,7 +48,7 @@
     "tsc-watch": "6.0.4",
     "typescript": "5.1.6",
     "vite": "3.2.7",
-    "vitest": "0.25.2",
+    "vitest": "0.33.0",
     "vitest-fetch-mock": "0.2.1",
     "vitest-mongodb": "^0.0.4"
   },

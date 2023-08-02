@@ -65,7 +65,7 @@
     "stream-browserify": "^3.0.0",
     "typescript": "5.1.6",
     "vite": "^3.2.7",
-    "vitest": "^0.25.2"
+    "vitest": "0.33.0"
   },
   "publishConfig": {
     "access": "public"

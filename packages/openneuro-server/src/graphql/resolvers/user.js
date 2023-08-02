@@ -45,4 +45,16 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
   }
 }
 
-export default user
+export default {
+  id: user,
+  provider: user,
+  avatar: user,
+  orcid: user,
+  created: user,
+  modified: user,
+  lastSeen: user,
+  email: user,
+  name: user,
+  admin: user,
+  blocked: user,
+}
