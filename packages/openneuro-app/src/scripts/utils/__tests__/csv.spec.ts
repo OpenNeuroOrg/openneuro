@@ -19,4 +19,23 @@ describe('utils/csv', () => {
       'exampleCol,modalities\n"test","PET,MRI"\n"test4","MRI"',
     )
   })
+  it('escapes double quotes', () => {
+    const obj = [
+      {
+        exampleCol: 'test',
+        modalities: 'PET,MRI',
+        name: 'A "Dataset"',
+        __typename: 'example',
+      },
+      {
+        exampleCol: 'test4',
+        modalities: 'MRI',
+        name: 'Another Dataset',
+        __typename: 'example',
+      },
+    ]
+    expect(convertArrayToCSV(obj)).toEqual(
+      'exampleCol,modalities,name\n"test","PET,MRI","A ""Dataset"""\n"test4","MRI","Another Dataset"',
+    )
+  })
 })
