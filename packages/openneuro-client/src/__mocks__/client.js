@@ -43,7 +43,7 @@ addMocksToSchema({
   },
 })
 
-export const createClient = uri => {
+export const createClient = () => {
   const cache = new InMemoryCache()
   const link = new SchemaLink({
     schema,
@@ -51,9 +51,9 @@ export const createClient = uri => {
       user: '1234',
       userInfo: {
         id: '1234',
+        email: '1234@example.com',
       },
     },
   })
-  // @ts-expect-error
-  return new ApolloClient({ uri, link, cache })
+  return new ApolloClient({ link, cache })
 }
