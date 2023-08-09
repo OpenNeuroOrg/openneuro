@@ -107,7 +107,7 @@ const TextInput = ({
   required,
   onChange,
 }): React.ReactElement => {
-  if (value === null) {
+  if (value === null || value === undefined) {
     if (nullMessage) value = nullMessage
     else value = ''
   } else value = value.toString()
