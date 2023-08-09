@@ -1,17 +1,20 @@
 // eslint-disable-next-line
-import { createClient, testDsId } from '../client'
 import { getDataset, getDatasets, createDataset } from '../datasets'
+import { createClient, testDsId } from '../__mocks__/client'
 
-vi.mock('../client')
+vi.mock('ioredis')
 vi.mock('../../../openneuro-server/src/config.js')
 
-const gqlClient = createClient('http://test-uri')
+const gqlClient = createClient()
 
 describe('datasets.js', () => {
   describe('getDataset query', () => {
     it('returns the expected dataset', () => {
       return gqlClient
-        .query({ query: getDataset, variables: { id: testDsId } })
+        .query({
+          query: getDataset,
+          variables: { id: testDsId },
+        })
         .then(({ data: { dataset } }) => {
           expect(dataset.id).toBe(testDsId)
         })
