@@ -1,10 +1,13 @@
 import argparse
+import logging
 
 import boto3
-
+boto3.set_stream_logger('boto3.resources', logging.INFO)
 
 def nuke_prefix():
-    client = boto3.client('s3')
+    client = boto3.client('s3',
+                          aws_access_key_id=AWS_ACCESS_KEY,
+                          aws_secret_access_key=AWS_SECRET_KEY)
     paginator = client.get_paginator('list_object_versions')
     object_delete_list = []
     print(f"Remove all objects prefixed with s3://{BUCKET_NAME}/{PREFIX}")
@@ -25,7 +28,7 @@ def nuke_prefix():
             Delete={
                 'Objects': object_delete_list[i:i+1000],
                 'Quiet': True
-            }
+            },
         )
         print(response)
 
