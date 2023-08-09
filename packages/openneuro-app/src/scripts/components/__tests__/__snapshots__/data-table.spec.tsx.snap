@@ -43,26 +43,38 @@ exports[`DataTable component > renders a basic table 1`] = `
       <tr
         class="css-lxeoei"
       >
-        <td>
+        <td
+          class="css-14o8u5y"
+        >
           text
         </td>
-        <td>
+        <td
+          class="css-14o8u5y"
+        >
           50
         </td>
-        <td>
+        <td
+          class="css-14o8u5y"
+        >
           string value
         </td>
       </tr>
       <tr
         class="css-lxeoei"
       >
-        <td>
+        <td
+          class="css-14o8u5y"
+        >
           more
         </td>
-        <td>
+        <td
+          class="css-14o8u5y"
+        >
           75
         </td>
-        <td>
+        <td
+          class="css-14o8u5y"
+        >
           more strings
         </td>
       </tr>
