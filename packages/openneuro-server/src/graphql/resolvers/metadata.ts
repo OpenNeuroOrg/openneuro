@@ -1,5 +1,7 @@
 import Snapshot from '../../models/snapshot'
-import MetadataModel from '../../models/metadata'
+import { LeanDocument } from 'mongoose'
+import DatasetModel from '../../models/dataset'
+import MetadataModel, { MetadataDocument } from '../../models/metadata'
 import { latestSnapshot } from './snapshots'
 import { permissions } from './permissions'
 
@@ -8,7 +10,11 @@ import { permissions } from './permissions'
  *
  * User modified fields are queried from the Metadata model and dynamic metadata is updated from the latest snapshot
  */
-export const metadata = async (dataset, _, context) => {
+export const metadata = async (
+  dataset,
+  _,
+  context,
+): Promise<LeanDocument<MetadataDocument>> => {
   const record = await MetadataModel.findOne({
     datasetId: dataset.id,
   }).lean()
@@ -24,7 +30,7 @@ export const metadata = async (dataset, _, context) => {
   for (const user of userPermissions) {
     if (user.level === 'admin') {
       const userObj = await user.user
-      adminUsers.push(userObj.email)
+      adminUsers.push(userObj.name)
     }
   }
   const firstSnapshot = await Snapshot.find({ datasetId: dataset.id }).sort({
@@ -44,7 +50,7 @@ export const metadata = async (dataset, _, context) => {
     adminUsers,
     firstSnapshotCreatedAt,
     latestSnapshotCreatedAt: snapshot.created,
-    subjectAges: summary?.subjectMetadata?.map(s => s.age),
+    ages: summary?.subjectMetadata?.map(s => s.age as number),
     modalities: summary?.modalities || [],
     dataProcessed: summary?.dataProcessed || null,
   }
@@ -59,4 +65,20 @@ export const addMetadata = async (obj, { datasetId, metadata }) => {
     upsert: true,
   })
   return result
+}
+
+/**
+ * Resolve all public datasets and return metadata
+ */
+export async function publicMetadata(
+  obj,
+): Promise<Array<LeanDocument<MetadataDocument>>> {
+  const datasets = await DatasetModel.find({
+    public: true,
+  }).lean()
+  const dsMetadata: LeanDocument<MetadataDocument>[] = []
+  for (const ds of datasets) {
+    dsMetadata.push(await metadata(ds, null, {}))
+  }
+  return dsMetadata
 }
