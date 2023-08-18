@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Data Management Plans" href="data_management_plans.html" /><link rel="prev" title="Frequently Asked Questions" href="../faq.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>Data Retention Policies - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -213,18 +213,18 @@
         </div>
         <article role="main">
           <section id="data-retention-policies">
-<h1>Data Retention Policies<a class="headerlink" href="#data-retention-policies" title="Permalink to this heading">#</a></h1>
+<h1>Data Retention Policies<a class="headerlink" href="#data-retention-policies" title="Link to this heading">#</a></h1>
 <p>OpenNeuro has a data retention policy in place to ensure the maintainability of
 and prevent abuse of the service.</p>
 <section id="data-storage">
-<h2>Data storage<a class="headerlink" href="#data-storage" title="Permalink to this heading">#</a></h2>
+<h2>Data storage<a class="headerlink" href="#data-storage" title="Link to this heading">#</a></h2>
 <p>OpenNeuro datasets are stored as git/git-annex repositories on Google Cloud storage
 media. Small files are included as git objects, while large files are added to the
 annex. On each snapshot, a tag is made in the git repository, and copies of all files
 are synchronized to an Amazon Web Services S3 bucket. This S3 bucket is used as a
 remote for git-annex, ensuring high-availability access.</p>
 <section id="content-integrity-assurance">
-<h3>Content integrity assurance<a class="headerlink" href="#content-integrity-assurance" title="Permalink to this heading">#</a></h3>
+<h3>Content integrity assurance<a class="headerlink" href="#content-integrity-assurance" title="Link to this heading">#</a></h3>
 <p>Content integrity is assured through multiple mechanisms. The git and git-annex protocols
 use content-addressing to refer to each object in the dataset by its cryptographic hash,
 providing a first defense against accidental replacement of one file with another.</p>
@@ -234,16 +234,16 @@ that have changed from one day to the next, ensuring the recoverability of corru
 </section>
 </section>
 <section id="backups">
-<h2>Backups<a class="headerlink" href="#backups" title="Permalink to this heading">#</a></h2>
+<h2>Backups<a class="headerlink" href="#backups" title="Link to this heading">#</a></h2>
 <p>OpenNeuro uses daily incremental backups of all datasets to ensure integrity and
 availability.</p>
 </section>
 <section id="data-administration-and-deletion">
-<h2>Data administration and deletion<a class="headerlink" href="#data-administration-and-deletion" title="Permalink to this heading">#</a></h2>
+<h2>Data administration and deletion<a class="headerlink" href="#data-administration-and-deletion" title="Link to this heading">#</a></h2>
 <p>In order to ensure the high availability of uploaded datasets and prevent abuse of the
 service, OpenNeuro may delete data under certain conditions.</p>
 <section id="automatic-deletion">
-<h3>Automatic deletion<a class="headerlink" href="#automatic-deletion" title="Permalink to this heading">#</a></h3>
+<h3>Automatic deletion<a class="headerlink" href="#automatic-deletion" title="Link to this heading">#</a></h3>
 <p>OpenNeuro reservces the right to delete draft data following a 28-day grace period.</p>
 <p>Draft data is any data that is not included in a versioned snapshot. When a dataset
 is first uploaded, it is placed in draft status, and the entire dataset is subject
@@ -258,7 +258,7 @@ and deleted between snapshots, then it may become inaccessible at any time, even
 was temporarily accessible.</p>
 </section>
 <section id="manual-review-and-deletion">
-<h3>Manual review and deletion<a class="headerlink" href="#manual-review-and-deletion" title="Permalink to this heading">#</a></h3>
+<h3>Manual review and deletion<a class="headerlink" href="#manual-review-and-deletion" title="Link to this heading">#</a></h3>
 <p>OpenNeuro makes use of a <code class="docutils literal notranslate"><span class="pre">.bidsignore</span></code> file to allow dataset owners to upload datasets
 that include files that are not standardized. This mechanism is intended to ensure that
 datasets may be uploaded with all available information despite gaps in definitions in
@@ -352,9 +352,9 @@ and flag them for manual review and deletion.</p>
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Architecture" href="architecture.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>Maintenance - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -213,9 +213,9 @@
         </div>
         <article role="main">
           <section id="maintenance">
-<h1>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this heading">#</a></h1>
+<h1>Maintenance<a class="headerlink" href="#maintenance" title="Link to this heading">#</a></h1>
 <section id="unpublishing-a-dataset">
-<h2>Unpublishing a dataset<a class="headerlink" href="#unpublishing-a-dataset" title="Permalink to this heading">#</a></h2>
+<h2>Unpublishing a dataset<a class="headerlink" href="#unpublishing-a-dataset" title="Link to this heading">#</a></h2>
 <p>To unpublish a dataset the database flag datasets.public can be set to false. Example query: <code class="docutils literal notranslate"><span class="pre">db.datasets.updateOne({id:</span> <span class="pre">&quot;accession-number&quot;},</span> <span class="pre">{$set:</span> <span class="pre">{public:</span> <span class="pre">false}}</span></code>. This will hide the dataset on OpenNeuro but not remove it from any configured git-annex remotes.</p>
 <p>After unpublishing a dataset like this the search index must either have the hidden dataset removed or the index needs to be rebuilt.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># One dataset can be removed like so</span>
@@ -225,7 +225,7 @@ curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </s
 <p>To make the dataset public again it can simply be republished by a dataset administrator. Any remotes which were altered will need to be updated manually.</p>
 </section>
 <section id="adjusting-worker-storage-size">
-<h2>Adjusting worker storage size<a class="headerlink" href="#adjusting-worker-storage-size" title="Permalink to this heading">#</a></h2>
+<h2>Adjusting worker storage size<a class="headerlink" href="#adjusting-worker-storage-size" title="Link to this heading">#</a></h2>
 <p>Disks are managed as preallocated GCP volumes and assigned to Kubernetes persistent volumes. Worker file systems are ReadWriteOnce. Increasing storage capacity for a worker is done in two steps. Resize the GCP disk and update the persistent volume configuration to match.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get disk name</span>
 &gt;<span class="w"> </span>gcloud<span class="w"> </span>compute<span class="w"> </span>disks<span class="w"> </span>list
@@ -304,9 +304,9 @@ openneuro-staging-datasets-3<span class="w">              </span>us-west1-b<span
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+</div><script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>

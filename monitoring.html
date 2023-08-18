@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>Infrastructure Monitoring - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -213,10 +213,10 @@
         </div>
         <article role="main">
           <section id="infrastructure-monitoring">
-<h1>Infrastructure Monitoring<a class="headerlink" href="#infrastructure-monitoring" title="Permalink to this heading">#</a></h1>
+<h1>Infrastructure Monitoring<a class="headerlink" href="#infrastructure-monitoring" title="Link to this heading">#</a></h1>
 <p>OpenNeuro is running Prometheus and Grafana for general monitoring and alerting. The Grafana dashboard is deployed at https://monitoring.openneuro.org and an account must be requested to access it.</p>
 <section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading">#</a></h2>
+<h2>Install<a class="headerlink" href="#install" title="Link to this heading">#</a></h2>
 <p>A preconfigured secret is required for SMTP credentials.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>--namespace<span class="w"> </span>monitoring<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>smtp-login<span class="w"> </span>--from-file<span class="o">=</span><span class="nv">user</span><span class="o">=</span>smtp-username.txt<span class="w"> </span>--from-file<span class="o">=</span><span class="nv">password</span><span class="o">=</span>smtp-password.txt
 </pre></div>
@@ -228,7 +228,7 @@ helm<span class="w"> </span>--namespace<span class="w"> </span>monitoring<span c
 </div>
 </section>
 <section id="upgrades">
-<h2>Upgrades<a class="headerlink" href="#upgrades" title="Permalink to this heading">#</a></h2>
+<h2>Upgrades<a class="headerlink" href="#upgrades" title="Link to this heading">#</a></h2>
 <p>To apply new configuration or update a service, run helm upgrade.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>--namespace<span class="w"> </span>monitoring<span class="w"> </span>upgrade<span class="w"> </span>grafana<span class="w"> </span>stable/grafana<span class="w"> </span>-f<span class="w"> </span>helm/grafana.yaml
 </pre></div>
@@ -287,9 +287,9 @@ helm<span class="w"> </span>--namespace<span class="w"> </span>monitoring<span c
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+</div><script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>

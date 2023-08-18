@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Git access to OpenNeuro datasets" href="git.html" /><link rel="prev" title="OpenNeuro command line interface" href="packages/openneuro-cli.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.17 -->
         <title>API Examples - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -213,21 +213,21 @@
         </div>
         <article role="main">
           <section id="api-examples">
-<h1>API Examples<a class="headerlink" href="#api-examples" title="Permalink to this heading">#</a></h1>
+<h1>API Examples<a class="headerlink" href="#api-examples" title="Link to this heading">#</a></h1>
 <section id="graphql-playground">
-<h2>GraphQL Playground<a class="headerlink" href="#graphql-playground" title="Permalink to this heading">#</a></h2>
+<h2>GraphQL Playground<a class="headerlink" href="#graphql-playground" title="Link to this heading">#</a></h2>
 <p>If you visit the <a class="reference external" href="https://openneuro.org/crn/graphql">OpenNeuro API endpoint</a> in a browser, you can write queries with an interactive tool. This will automatically use your OpenNeuro account for authentication if you have recently authenticated with OpenNeuro on the web.</p>
 </section>
 <section id="graphql-basics">
-<h2>GraphQL basics<a class="headerlink" href="#graphql-basics" title="Permalink to this heading">#</a></h2>
+<h2>GraphQL basics<a class="headerlink" href="#graphql-basics" title="Link to this heading">#</a></h2>
 <p>A basic introduction to GraphQL can be found in the <a class="reference external" href="https://graphql.org/learn/">official documentation</a>.</p>
 <p>GraphQL divides operations into queries, mutations, and a few more rarely used types like subscriptions. A query will return the same result if repeated, mutations will take some action that will be reflected in future queries.</p>
 <p>OpenNeuro has several top level types with many fields available to query. Most information is available under the Dataset and Snapshot types.</p>
 </section>
 <section id="example-queries">
-<h2>Example Queries<a class="headerlink" href="#example-queries" title="Permalink to this heading">#</a></h2>
+<h2>Example Queries<a class="headerlink" href="#example-queries" title="Link to this heading">#</a></h2>
 <section id="query-dataset-information">
-<h3>Query dataset information<a class="headerlink" href="#query-dataset-information" title="Permalink to this heading">#</a></h3>
+<h3>Query dataset information<a class="headerlink" href="#query-dataset-information" title="Link to this heading">#</a></h3>
 <p>For a specific dataset you can query fields available for the draft or snapshots programmically.</p>
 <div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="k">query</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">dataset</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ds000224&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -278,7 +278,7 @@
 </div>
 </section>
 <section id="obtain-dataset-file-trees">
-<h3>Obtain dataset file trees<a class="headerlink" href="#obtain-dataset-file-trees" title="Permalink to this heading">#</a></h3>
+<h3>Obtain dataset file trees<a class="headerlink" href="#obtain-dataset-file-trees" title="Link to this heading">#</a></h3>
 <p>File trees are represented as git tree objects. There is a root tree for each version (commit or tag) that can be obtained by requesting the default file listing.</p>
 <div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="k">query</span><span class="w"> </span><span class="nf">snapshotFiles</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">snapshot</span><span class="p">(</span><span class="n">datasetId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ds000001&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -383,9 +383,9 @@
 </section>
 </section>
 <section id="example-mutations">
-<h2>Example Mutations<a class="headerlink" href="#example-mutations" title="Permalink to this heading">#</a></h2>
+<h2>Example Mutations<a class="headerlink" href="#example-mutations" title="Link to this heading">#</a></h2>
 <section id="snapshot-creation">
-<h3>Snapshot Creation<a class="headerlink" href="#snapshot-creation" title="Permalink to this heading">#</a></h3>
+<h3>Snapshot Creation<a class="headerlink" href="#snapshot-creation" title="Link to this heading">#</a></h3>
 <p>You can create a snapshot of the current draft with a mutation. Each argument provided in the changes array will become a line in the CHANGES file entry for this new snapshot.</p>
 <div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="k">mutation</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">createSnapshot</span><span class="p">(</span>
@@ -400,7 +400,7 @@
 </div>
 </section>
 <section id="deleting-files-folders">
-<h3>Deleting Files/Folders<a class="headerlink" href="#deleting-files-folders" title="Permalink to this heading">#</a></h3>
+<h3>Deleting Files/Folders<a class="headerlink" href="#deleting-files-folders" title="Link to this heading">#</a></h3>
 <p>You can remove files or folders from the currend draft with the <code class="docutils literal notranslate"><span class="pre">deleteFiles</span></code> mutation. Multiple
 arguments can be provided in the changes array for batch deletion of paths. Paths provided in
 argument are relative to the dataset root, omitting a filename a with <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> will delete the folder
@@ -514,9 +514,9 @@ provided via the path argument. For examples see below:</p>
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+</div><script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
