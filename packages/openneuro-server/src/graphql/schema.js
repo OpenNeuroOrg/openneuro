@@ -653,7 +653,7 @@ export const typeDefs = `
   type ValidationIssue {
     severity: Severity!
     key: String!
-    code: Int!
+    code: Int
     reason: String!
     files: [ValidationIssueFile]
     additionalFileCount: Int
@@ -663,7 +663,7 @@ export const typeDefs = `
   input ValidationIssueInput {
     severity: Severity!
     key: String!
-    code: Int!
+    code: Int
     reason: String!
     files: [ValidationIssueFileInput]
     additionalFileCount: Int
@@ -672,7 +672,7 @@ export const typeDefs = `
 
   type ValidationIssueFile {
     key: String!
-    code: Int!
+    code: Int
     file: ValidationIssueFileDetail
     evidence: String
     line: Int
@@ -684,7 +684,7 @@ export const typeDefs = `
 
   input ValidationIssueFileInput {
     key: String!
-    code: Int!
+    code: Int
     file: ValidationIssueFileDetailInput
     evidence: String
     line: Int
