@@ -683,13 +683,13 @@ export const typeDefs = `
   }
 
   input ValidationIssueFileInput {
-    key: String!
+    key: String
     code: Int
     file: ValidationIssueFileDetailInput
     evidence: String
     line: Int
     character: Int
-    severity: Severity!
+    severity: Severity
     reason: String
     helpUrl: String
   }
