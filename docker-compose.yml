@@ -42,7 +42,7 @@ volumes:
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    image: node:18.15.0
+    image: node:18.17.1
     env_file: ./config.env
     working_dir: /srv
     command: bash -c 'yarn install && yarn tsc-watch -b --onSuccess "touch /watch/done"'
@@ -192,7 +192,7 @@ services:
       cluster.routing.allocation.disk.watermark.flood_stage: 1gb
       cluster.routing.allocation.disk.watermark.low: 10gb
       cluster.routing.allocation.disk.watermark.high: 5gb
-      ES_JAVA_OPTS: "-Xms750m -Xmx750m"
+      ES_JAVA_OPTS: '-Xms750m -Xmx750m'
     ports:
       - '9200:9200'
       - '9300:9300'
