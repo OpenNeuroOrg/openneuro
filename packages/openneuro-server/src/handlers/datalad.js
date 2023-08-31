@@ -40,23 +40,20 @@ export const getFile = async (req, res) => {
     const uri = snapshotId
       ? `http://${worker}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
       : `http://${worker}/datasets/${datasetId}/files/${filename}`
-    return (
-      fetch(uri)
-        .then(r => {
-          // Set the content length (allow clients to catch HTTP issues better)
-          res.setHeader(
-            'Content-Length',
-            Number(r.headers.get('content-length')),
-          )
-          return r.body
-        })
+    return fetch(uri)
+      .then(r => {
+        // Set the content length (allow clients to catch HTTP issues better)
+        res.setHeader('Content-Length', Number(r.headers.get('content-length')))
+        return r.body
+      })
+      .then(stream =>
         // @ts-expect-error
-        .then(stream => Readable.fromWeb(stream).pipe(res))
-        .catch(err => {
-          console.error(err)
-          res.status(500).send('Internal error transferring requested file')
-        })
-    )
+        Readable.fromWeb(stream, { highWaterMark: 4194304 }).pipe(res),
+      )
+      .catch(err => {
+        console.error(err)
+        res.status(500).send('Internal error transferring requested file')
+      })
   }
 }
 

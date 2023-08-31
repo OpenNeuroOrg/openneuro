@@ -15,6 +15,7 @@ import { PETRedirect } from './pages/pet-redirect'
 import Citation from './pages/citation-page'
 import FourOFourPage from './errors/404page'
 import { ImportDataset } from './pages/import-dataset'
+import { DatasetMetadata } from './pages/metadata/dataset-metadata'
 
 const AppRoutes: React.VoidFunctionComponent = () => (
   <Routes>
@@ -28,6 +29,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/pet" element={<PETRedirect />} />
     <Route path="/cite" element={<Citation />} />
     <Route path="/import" element={<ImportDataset />} />
+    <Route path="/metadata" element={<DatasetMetadata />} />
     <Route path="/public" element={<Navigate to="/search" replace />} />
     <Route
       path="/saved"

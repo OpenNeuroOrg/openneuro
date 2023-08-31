@@ -97,6 +97,8 @@ export const typeDefs = `
       "Get files that have already been deleted, default false."
       deleted: Boolean = false
     ): [FlaggedFile]
+    # All public dataset metadata
+    publicMetadata: [Metadata] @cacheControl(maxAge: 86400, scope: PUBLIC)
   }
 
   type Mutation {

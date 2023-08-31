@@ -1,0 +1,84 @@
+// Vitest Snapshot v1
+
+exports[`DataTable component > renders a basic table 1`] = `
+<DocumentFragment>
+  <table>
+    <thead>
+      <tr
+        class="css-lxeoei"
+      >
+        <th
+          class="css-ysxg9l"
+          colspan="1"
+        >
+          <div
+            class="cursor-pointer select-none"
+          >
+            col1 
+          </div>
+        </th>
+        <th
+          class="css-ysxg9l"
+          colspan="1"
+        >
+          <div
+            class="cursor-pointer select-none"
+          >
+            col2 
+          </div>
+        </th>
+        <th
+          class="css-ysxg9l"
+          colspan="1"
+        >
+          <div
+            class="cursor-pointer select-none"
+          >
+            col3 
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="css-lxeoei"
+      >
+        <td
+          class="css-14o8u5y"
+        >
+          text
+        </td>
+        <td
+          class="css-14o8u5y"
+        >
+          50
+        </td>
+        <td
+          class="css-14o8u5y"
+        >
+          string value
+        </td>
+      </tr>
+      <tr
+        class="css-lxeoei"
+      >
+        <td
+          class="css-14o8u5y"
+        >
+          more
+        </td>
+        <td
+          class="css-14o8u5y"
+        >
+          75
+        </td>
+        <td
+          class="css-14o8u5y"
+        >
+          more strings
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
