@@ -8,7 +8,8 @@ export const DATASET_COMMENTS = gql`
       text
       createDate
       user {
-        email
+        name
+        orcid
       }
       parent {
         id

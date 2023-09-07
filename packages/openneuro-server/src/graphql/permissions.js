@@ -1,5 +1,5 @@
 import config from '../config.js'
-import { ApolloError } from 'apollo-server'
+import { GraphQLError } from 'graphql'
 import Permission from '../models/permission'
 import Dataset from '../models/dataset'
 import Deletion from '../models/deletion'
@@ -52,9 +52,9 @@ export const checkPermissionLevel = (permission, state) => {
   }
 }
 
-export class DeletedDatasetError extends ApolloError {
+export class DeletedDatasetError extends GraphQLError {
   constructor(datasetId, reason, redirect = undefined) {
-    let extension
+    let extensions
     if (redirect) {
       try {
         // Validate URL before we attach it to the API response
@@ -65,17 +65,15 @@ export class DeletedDatasetError extends ApolloError {
           url.pathname.startsWith('/datasets')
         ) {
           // Only return a relative path to avoid cross site risks
-          extension = { redirect: url.pathname }
+          extensions = { code: 'DELETED_DATASET', redirect: url.pathname }
         }
       } catch (err) {
         // Do nothing
       }
     }
-    super(
-      `Dataset ${datasetId} has been deleted. Reason: ${reason}.`,
-      'DELETED_DATASET',
-      extension,
-    )
+    super(`Dataset ${datasetId} has been deleted. Reason: ${reason}.`, {
+      extensions,
+    })
   }
 }
 

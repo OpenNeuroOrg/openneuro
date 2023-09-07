@@ -1,5 +1,5 @@
 import User from '../../../models/user'
-import { addJWT } from '../jwt.js'
+import { addJWT } from '../jwt'
 
 vi.mock('ioredis')
 vi.mock('../../../config.js')

@@ -108,13 +108,13 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               modality={summary?.modalities[0]}>
               <FollowToggles>
                 <FollowDataset
-                  profile={profile}
+                  profile={profile !== null}
                   datasetId={dataset.id}
                   following={dataset.following}
                   followers={dataset.followers.length}
                 />
                 <StarDataset
-                  profile={profile}
+                  profile={profile !== null}
                   datasetId={dataset.id}
                   starred={dataset.starred}
                   stars={dataset.stars.length}

@@ -1,8 +1,10 @@
 import React from 'react'
 import { DatasetToolButton } from './DatasetToolButton'
-import styled from '@emotion/styled'
+import styled, { StyledComponent } from '@emotion/styled'
 
-export const DatasetToolStyle = styled.span`
+interface DatasetToolStyleProps {}
+
+export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled.span`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;

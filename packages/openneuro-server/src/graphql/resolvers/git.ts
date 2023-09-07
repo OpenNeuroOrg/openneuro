@@ -1,5 +1,5 @@
 import { checkDatasetWrite } from '../permissions.js'
-import { generateRepoToken } from '../../libs/authentication/jwt.js'
+import { generateRepoToken } from '../../libs/authentication/jwt'
 import { getDatasetEndpoint } from '../../libs/datalad-service.js'
 
 /**

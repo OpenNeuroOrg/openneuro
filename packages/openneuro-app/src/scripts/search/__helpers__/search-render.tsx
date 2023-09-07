@@ -1,6 +1,7 @@
 import React from 'react'
 import { SearchParamsCtx } from '../search-params-ctx'
 import { render } from '@testing-library/react'
+import { queries } from '@testing-library/dom'
 
 /**
  * Render with SearchParamsCtx state

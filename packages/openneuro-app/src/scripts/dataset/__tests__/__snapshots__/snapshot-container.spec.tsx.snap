@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`SnapshotContainer component > includes JSON-LD data in the header 1`] = `
 {
@@ -74,7 +74,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     data-tooltip="Get notified on new versions/comments"
                   >
                     <span
-                      class="toggle-counter disabled"
+                      class="toggle-counter"
                     >
                       <button
                         aria-label="Following"
@@ -105,7 +105,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     data-tooltip="Save to your bookmarked datasets"
                   >
                     <span
-                      class="toggle-counter disabled"
+                      class="toggle-counter"
                     >
                       <button
                         aria-label="Bookmark"

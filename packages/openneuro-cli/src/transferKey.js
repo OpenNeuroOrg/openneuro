@@ -58,6 +58,7 @@ export async function retrieveKey(state, key, file) {
     const response = await fetch(request)
     if (response.status === 200) {
       const writable = createWriteStream(file)
+      // @ts-expect-error
       const readable = await response.readable()
       readable.pipe(writable)
       await once(readable, 'close')

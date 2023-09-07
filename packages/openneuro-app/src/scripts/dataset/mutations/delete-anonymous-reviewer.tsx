@@ -20,10 +20,13 @@ interface DeleteReviewerLinkProps {
 export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
   datasetId,
   id,
+}: {
+  datasetId: string
+  id: string
 }) => {
   const [DeleteReviewerLink] = useMutation(DELETE_REVIEWER, {
     update(cache, { data: { deleteReviewer } }) {
-      const { reviewers } = cache.readFragment({
+      const { reviewers } = cache.readFragment<{ reviewers: any[] }>({
         id: `Dataset:${datasetId}`,
         fragment: DATASET_REVIEWERS,
       })

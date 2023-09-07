@@ -13,8 +13,8 @@
   "author": "Squishymedia",
   "license": "MIT",
   "dependencies": {
-    "@emotion/react": "11.6.0",
-    "@emotion/styled": "11.6.0",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
     "@mdx-js/react": "^1.6.22",
     "@types/react": "^17.0.11",
     "@wojtekmaj/react-daterange-picker": "^3.2.0",
@@ -30,7 +30,6 @@
     "react-usestateref": "^1.0.5"
   },
   "devDependencies": {
-    "@babel/runtime-corejs3": "^7.14.6",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@types/bytes": "^3",
@@ -42,13 +41,9 @@
     "@types/slick-carousel": "^1",
     "@types/testing-library__jest-dom": "5.14.5",
     "core-js": "^3.14.0",
-    "css-loader": "^5.2.1",
     "sass": "^1.32.8",
-    "sass-loader": "^10.1.1",
-    "style-loader": "^2.0.0",
-    "typescript": "4.5.4",
-    "url-loader": "^1.0.1",
-    "vitest": "^0.25.2"
+    "typescript": "5.1.6",
+    "vitest": "0.33.0"
   },
   "scripts": {
     "build": "tsc --build"

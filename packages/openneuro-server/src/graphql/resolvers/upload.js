@@ -1,6 +1,6 @@
 import Upload from '../../models/upload'
 import { checkDatasetWrite } from '../permissions.js'
-import { generateUploadToken } from '../../libs/authentication/jwt.js'
+import { generateUploadToken } from '../../libs/authentication/jwt'
 import { finishUploadRequest } from '../../datalad/upload.js'
 import { getDatasetEndpoint } from '../../libs/datalad-service.js'
 

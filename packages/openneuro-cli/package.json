@@ -23,6 +23,7 @@
     "elastic-apm-node": "^3.49.1",
     "esm": "^3.0.16",
     "fetch-h2": "^3.0.2",
+    "graphql": "16.6.0",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "mkdirp": "1.0.4",
@@ -38,12 +39,11 @@
     "postpack": "rm src/lerna.json && ln -sf ../../../lerna.json src/lerna.json"
   },
   "devDependencies": {
-    "@babel/runtime-corejs3": "^7.13.10",
     "@types/mkdirp": "1.0.2",
     "@types/node": "18.11.9",
     "core-js": "^3.10.1",
     "metro-memory-fs": "^0.73.3",
-    "vitest": "^0.25.2"
+    "vitest": "0.33.0"
   },
   "publishConfig": {
     "access": "public"

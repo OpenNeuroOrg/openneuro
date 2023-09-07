@@ -1,4 +1,6 @@
+import React from 'react'
 import styled from '@emotion/styled'
+import '@emotion/react'
 
 export const FollowToggles = styled.div`
   display: flex;

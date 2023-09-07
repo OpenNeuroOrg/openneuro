@@ -40,7 +40,6 @@ export const ActivitySlider = ({
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
-      {/** @ts-expect-error wrong module export but works */}
       <Carousel
         infinite={infinite}
         keyBoardControl={keyBoardControl}
@@ -49,8 +48,7 @@ export const ActivitySlider = ({
         showDots={showDots}
         responsive={responsive}
         customLeftArrow={<LeftArrow />}
-        customRightArrow={<RightArrow />}
-      >
+        customRightArrow={<RightArrow />}>
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-modality">
@@ -61,8 +59,7 @@ export const ActivitySlider = ({
                       className={
                         'hexagon ' +
                         node.latestSnapshot.summary?.primaryModality.toLowerCase()
-                      }
-                    ></div>
+                      }></div>
                     <div className="label">
                       {node.latestSnapshot.summary?.primaryModality}
                     </div>
@@ -83,8 +80,7 @@ export const ActivitySlider = ({
                     node.id +
                     '/versions/' +
                     node.latestSnapshot.tag
-                  }
-                >
+                  }>
                   {node.latestSnapshot.description.Name}
                 </Link>
               </h4>

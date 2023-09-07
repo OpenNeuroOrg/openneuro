@@ -6,7 +6,7 @@ import { Strategy as ORCIDStrategy } from 'passport-orcid'
 import config from '../../config.js'
 import User from '../../models/user'
 import { encrypt } from './crypto'
-import { addJWT, jwtFromRequest, decodeJWT } from './jwt.js'
+import { addJWT, jwtFromRequest } from './jwt'
 import orcid from '../orcid.js'
 
 const PROVIDERS = {

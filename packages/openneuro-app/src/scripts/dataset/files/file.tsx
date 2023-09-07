@@ -7,7 +7,7 @@ import { Media } from '../../styles/media'
 import RemoveAnnexObject from '../mutations/remove-annex-object.jsx'
 import FlagAnnexObject from '../mutations/flag-annex-object.jsx'
 import { isAdmin } from '../../authentication/admin-user.jsx'
-import { getProfile, hasEditPermissions } from '../../authentication/profile.js'
+import { getProfile, hasEditPermissions } from '../../authentication/profile'
 import { Icon } from '@openneuro/components/icon'
 import { Tooltip } from '@openneuro/components/tooltip'
 import { useCookies } from 'react-cookie'
@@ -136,7 +136,8 @@ const File = ({
       {filename}
       <span className="filetree-editfile">
         <Media greaterThanOrEqual="medium">
-          <Tooltip tooltip={`Download: ${bytes.format(size) as string}`}>
+          <Tooltip
+            tooltip={`Download: ${bytes.format(Number(size)) as string}`}>
             <span className="edit-file download-file">
               <a
                 href={

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import { useCookies } from 'react-cookie'
-import { getProfile, guardExpired } from './profile.js'
+import { getProfile, guardExpired } from './profile'
 
 const withProfile = WrappedComponent => {
   return props => {

@@ -6,7 +6,7 @@ import MetadataForm from '../mutations/metadata-form.jsx'
 import { DatasetRelations } from '../mutations/dataset-relations'
 import SubmitMetadata from '../mutations/submit-metadata.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
-import { hasEditPermissions, getProfile } from '../../authentication/profile.js'
+import { hasEditPermissions, getProfile } from '../../authentication/profile'
 import { DatasetPageBorder } from './styles/dataset-page-border'
 import { HeaderRow3, HeaderRow4 } from './styles/header-row'
 

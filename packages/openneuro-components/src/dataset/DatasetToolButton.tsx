@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from '@emotion/styled'
+import styled, { StyledComponent } from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import { Tooltip } from '../tooltip/Tooltip'
 import { Icon } from '../icon/Icon'
@@ -9,8 +9,9 @@ interface DatasetToolStyleProps {
   active: boolean
 }
 
-export const DatasetToolStyle = styled.span<DatasetToolStyleProps>(
-  props => `
+export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> =
+  styled.span<DatasetToolStyleProps>(
+    props => `
   display: flex;
   margin: 0 auto 10px;
   flex-basis: auto;
@@ -35,7 +36,7 @@ export const DatasetToolStyle = styled.span<DatasetToolStyleProps>(
     }
   }
 `,
-)
+  )
 
 export const DatasetToolButton = ({ path, icon, tooltip, label }) => {
   const location = useLocation()

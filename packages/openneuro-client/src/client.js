@@ -42,6 +42,7 @@ const wsLink = uri => {
 const hbar = '\n-----------------------------------------------------\n'
 const parse = version => [semver.major(version), semver.minor(version)]
 const checkVersions = (serverVersion, clientVersion) => {
+  // @ts-expect-error
   if ([serverVersion, clientVersion].every(semver.valid)) {
     const [serverMajor, serverMinor] = parse(serverVersion)
     const [clientMajor, clientMinor] = parse(clientVersion)
@@ -81,9 +82,7 @@ const compareVersionsLink = clientVersion =>
       new Observable(observer =>
         forward(operation).subscribe({
           next: result => {
-            // @ts-expect-error extensions exists but is not properly typed
             if (result.extensions) {
-              // @ts-expect-error extensions exists but is not properly typed
               const serverVersion = result.extensions.openneuro.version
               // alert user if major/minor versions are not in sync
               checkVersions(serverVersion, clientVersion)
