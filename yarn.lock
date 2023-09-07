@@ -130,9 +130,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/server@npm:4.8.1":
-  version: 4.8.1
-  resolution: "@apollo/server@npm:4.8.1"
+"@apollo/server@npm:4.9.3":
+  version: 4.9.3
+  resolution: "@apollo/server@npm:4.9.3"
   dependencies:
     "@apollo/cache-control-types": ^1.0.3
     "@apollo/server-gateway-interface": ^1.1.1
@@ -162,7 +162,7 @@ __metadata:
     whatwg-mimetype: ^3.0.0
   peerDependencies:
     graphql: ^16.6.0
-  checksum: b59c60b23b90aed9e2f74de1d16f4ac7582f16e2f98d830c85e1339525867786ab17a9295aadf53cdcfdfd0540f81273706e013aae9148ebc3e55e86c820b21c
+  checksum: 28537d7646669a5dc1302cfd75d8a9bf473459ee585c6b778d174628a2cfb3f89a5ac742eca7de2a779b6c9e3f30da509a8787a71227520d009ac190aa7a9207
   languageName: node
   linkType: hard
 
@@ -4185,7 +4185,7 @@ __metadata:
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
     "@apollo/client": 3.7.2
-    "@apollo/server": 4.8.1
+    "@apollo/server": 4.9.3
     "@apollo/utils.keyvadapter": 3.0.0
     "@elastic/elasticsearch": 7.15.0
     "@graphql-tools/schema": ^10.0.0
