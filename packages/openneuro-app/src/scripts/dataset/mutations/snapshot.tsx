@@ -4,12 +4,15 @@ import { gql, useMutation } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { Button } from '@openneuro/components/button'
+import { getDatasetPage, getDraftPage } from '../../queries/dataset'
 
 const CREATE_SNAPSHOT = gql`
   mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
     createSnapshot(datasetId: $datasetId, tag: $tag, changes: $changes) {
       id
       tag
+      created
+      hexsha
     }
   }
 `
@@ -28,7 +31,9 @@ const CreateSnapshotMutation = ({
   disabled,
 }: CreateSnapshotMutationProps) => {
   const navigate = useNavigate()
-  const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT)
+  const [snapshotDataset, { loading, error }] = useMutation(CREATE_SNAPSHOT, {
+    refetchQueries: [getDatasetPage, getDraftPage],
+  })
 
   if (error) throw error
 
@@ -42,7 +47,10 @@ const CreateSnapshotMutation = ({
         onClick={(): void => {
           void snapshotDataset({
             variables: { datasetId, tag, changes },
-          }).then(() => navigate(`/datasets/${datasetId}/versions/${tag}`))
+          }).then(data => {
+            console.log(data)
+            navigate(`/datasets/${datasetId}/versions/${tag}`)
+          })
         }}
         disabled={disabled}
         label="Create Version"

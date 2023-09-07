@@ -15,8 +15,7 @@ import useDatasetDeletedSubscription, {
   datasetDeletedToast,
 } from '../datalad/subscriptions/useDatasetDeletedSubscription.jsx'
 import useDraftSubscription from '../datalad/subscriptions/useDraftSubscription.js'
-import * as DatasetQueryFragments from '../datalad/dataset/dataset-query-fragments.js'
-import { DATASET_COMMENTS } from '../datalad/dataset/comments-fragments.js'
+
 import ErrorBoundary, {
   ErrorBoundaryAssertionFailureException,
 } from '../errors/errorBoundary.jsx'
@@ -24,113 +23,7 @@ import DatasetRedirect from '../datalad/routes/dataset-redirect'
 import { trackAnalytics } from '../utils/datalad'
 import FourOFourPage from '../errors/404page'
 import FourOThreePage from '../errors/403page'
-
-/**
- * Generate the dataset page query
- */
-export const getDatasetPage = gql`
-  query dataset($datasetId: ID!) {
-    dataset(id: $datasetId) {
-      id
-      created
-      public
-      following
-      followers {
-        userId
-      }
-      starred
-      stars {
-        userId
-      }
-      worker
-      ...DatasetDraft
-      ...DatasetPermissions
-      ...DatasetSnapshots
-      ...DatasetIssues
-      ...DatasetMetadata
-      ...DatasetComments
-      uploader {
-        id
-        name
-        email
-        orcid
-      }
-      analytics {
-        downloads
-        views
-      }
-      derivatives {
-        name
-        s3Url
-        dataladUrl
-        local
-      }
-      onBrainlife
-    }
-  }
-  ${DatasetQueryFragments.DRAFT_FRAGMENT}
-  ${DatasetQueryFragments.PERMISSION_FRAGMENT}
-  ${DatasetQueryFragments.DATASET_SNAPSHOTS}
-  ${DatasetQueryFragments.DATASET_ISSUES}
-  ${DatasetQueryFragments.DATASET_METADATA}
-  ${DATASET_COMMENTS}
-`
-
-/**
- * Add files fragment for draft route
- */
-export const getDraftPage = gql`
-  query dataset($datasetId: ID!) {
-    dataset(id: $datasetId) {
-      id
-      created
-      public
-      following
-      followers {
-        userId
-      }
-      starred
-      stars {
-        userId
-      }
-      reviewers {
-        id
-        expiration
-      }
-      worker
-      ...DatasetDraft
-      ...DatasetDraftFiles
-      ...DatasetPermissions
-      ...DatasetSnapshots
-      ...DatasetIssues
-      ...DatasetMetadata
-      ...DatasetComments
-      uploader {
-        id
-        name
-        email
-        orcid
-      }
-      analytics {
-        downloads
-        views
-      }
-      derivatives {
-        name
-        s3Url
-        dataladUrl
-        local
-      }
-    }
-  }
-  ${DatasetQueryFragments.DRAFT_FRAGMENT}
-  ${DatasetQueryFragments.DRAFT_FILES_FRAGMENT}
-  ${DatasetQueryFragments.PERMISSION_FRAGMENT}
-  ${DatasetQueryFragments.DATASET_SNAPSHOTS}
-  ${DatasetQueryFragments.DATASET_ISSUES}
-  ${DatasetQueryFragments.DATASET_METADATA}
-  ${DATASET_COMMENTS}
-`
+import { getDatasetPage, getDraftPage } from '../queries/dataset'
 
 /**
  * Query to load and render dataset page - most dataset loading is done here
