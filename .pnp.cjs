@@ -4972,7 +4972,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prop-types", "npm:15.7.2"],\
             ["react", "npm:17.0.2"],\
             ["react-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:17.0.2"],\
-            ["react-multi-carousel", "npm:2.6.5"],\
+            ["react-multi-carousel", "npm:2.8.4"],\
             ["react-router-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:6.3.0"],\
             ["react-usestateref", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:1.0.5"],\
             ["sass", "npm:1.42.1"],\
@@ -19245,10 +19245,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["react-multi-carousel", [\
-        ["npm:2.6.5", {\
-          "packageLocation": "./.yarn/cache/react-multi-carousel-npm-2.6.5-037d977936-2ba44029a8.zip/node_modules/react-multi-carousel/",\
+        ["npm:2.8.4", {\
+          "packageLocation": "./.yarn/cache/react-multi-carousel-npm-2.8.4-e0619af128-ed4d95630f.zip/node_modules/react-multi-carousel/",\
           "packageDependencies": [\
-            ["react-multi-carousel", "npm:2.6.5"],\
+            ["react-multi-carousel", "npm:2.8.4"],\
             ["react", "npm:17.0.2"]\
           ],\
           "linkType": "HARD"\
