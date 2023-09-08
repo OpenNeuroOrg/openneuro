@@ -42,7 +42,6 @@ const wsLink = uri => {
 const hbar = '\n-----------------------------------------------------\n'
 const parse = version => [semver.major(version), semver.minor(version)]
 const checkVersions = (serverVersion, clientVersion) => {
-  // @ts-expect-error
   if ([serverVersion, clientVersion].every(semver.valid)) {
     const [serverMajor, serverMinor] = parse(serverVersion)
     const [clientMajor, clientMinor] = parse(clientVersion)
