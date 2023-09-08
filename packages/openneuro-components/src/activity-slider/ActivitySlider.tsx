@@ -40,6 +40,7 @@ export const ActivitySlider = ({
   return (
     <div className={'activity-slider' + ' ' + className}>
       <h3>{slideHeader}</h3>
+      {/* @ts-expect-error */}
       <Carousel
         infinite={infinite}
         keyBoardControl={keyBoardControl}

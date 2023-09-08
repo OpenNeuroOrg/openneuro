@@ -57,7 +57,6 @@ const DeleteDatasetForm = ({ values, onChange, hasEdit }) => (
         },
         i,
       ) => (
-        // @ts-expect-error
         <FieldComponent
           name={key}
           label={label}

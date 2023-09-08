@@ -357,7 +357,6 @@ const MetadataForm = ({
           },
           i,
         ) => (
-          // @ts-expect-error
           <FieldComponent
             name={key}
             label={label}

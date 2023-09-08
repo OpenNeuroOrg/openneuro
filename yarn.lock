@@ -4135,7 +4135,7 @@ __metadata:
     prop-types: ^15.7.2
     react: ^17.0.1
     react-dom: ^17.0.2
-    react-multi-carousel: ^2.6.3
+    react-multi-carousel: ^2.8.4
     react-router-dom: 6.3.0
     react-usestateref: ^1.0.5
     sass: ^1.32.8
@@ -16508,10 +16508,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-multi-carousel@npm:^2.6.3":
-  version: 2.6.5
-  resolution: "react-multi-carousel@npm:2.6.5"
-  checksum: 2ba44029a8c197320e5e536ee341a5bff492761de6a82e7335a719a11bc56b1d8fee2aa0854de2bcad67e819a2cbd7bb15ebf6ae1db9caf5d056b3f04e917806
+"react-multi-carousel@npm:^2.8.4":
+  version: 2.8.4
+  resolution: "react-multi-carousel@npm:2.8.4"
+  checksum: ed4d95630f2a6c144f630874cc445e94678a9cfa4f1a2ebffe15b4f8317d3210f5141b64646f5b64689c18d11ebaeed008190ae864d7ee55193f12a9f1857542
   languageName: node
   linkType: hard
 
