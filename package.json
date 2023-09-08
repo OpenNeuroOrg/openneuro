@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@sentry/cli": "1.37.4",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "6.1.3",
     "@types/ioredis-mock": "^8.2.2",
     "@types/jsdom": "^16",
     "@types/testing-library__jest-dom": "5.14.5",
@@ -49,7 +49,7 @@
     "typescript": "5.1.6",
     "vite": "3.2.7",
     "vitest": "0.33.0",
-    "vitest-fetch-mock": "0.2.1",
+    "vitest-fetch-mock": "0.2.2",
     "vitest-mongodb": "^0.0.4"
   },
   "workspaces": [
