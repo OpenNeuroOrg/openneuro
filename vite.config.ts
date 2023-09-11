@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './test/setup.ts',
     clearMocks: true,
-    maxConcurrency: 24,
+    maxConcurrency: 16,
     isolate: true,
   },
 })

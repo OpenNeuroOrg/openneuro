@@ -5,6 +5,9 @@ import cliProgress from 'cli-progress'
 import { getToken } from './config.js'
 import { downloadDataset } from './datasets'
 import fetch from 'node-fetch'
+import nodeFetch, { Request, Response } from 'node-fetch'
+
+Object.assign(global, { fetch: nodeFetch, Request, Response })
 
 export const checkDestination = destination => {
   if (fs.existsSync(destination)) {

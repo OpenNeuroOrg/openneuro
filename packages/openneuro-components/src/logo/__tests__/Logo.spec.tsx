@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Logo } from '../Logo'
-import '@testing-library/jest-dom/extend-expect'
 
 describe('Logo component', () => {
   it('renders dark/horizontal', async () => {

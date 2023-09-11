@@ -4,7 +4,6 @@ import { SearchParamsProvider, SearchParamsCtx } from '../search-params-ctx'
 import AuthorInput from '../inputs/author-input'
 import initialSearchParams from '../initial-search-params'
 import { MemoryRouter } from 'react-router-dom'
-import '@testing-library/jest-dom'
 
 describe('SearchParamsProvider', () => {
   it('restores URL searchParams state', () => {

@@ -1,6 +1,5 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 import { DownloadSampleCommand } from '../download-command-line.jsx'
 
 const defProps = { datasetId: 'ds000001' }

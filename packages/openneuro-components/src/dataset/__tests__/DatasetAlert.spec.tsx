@@ -1,8 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
 import { DatasetAlert } from '../DatasetAlert'
-import '@testing-library/jest-dom/extend-expect'
 
 describe('DatasetAlert component', () => {
   it('all props are rendered', () => {
