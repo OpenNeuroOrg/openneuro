@@ -50,7 +50,7 @@
     "vite": "4.4.9",
     "vitest": "0.34.4",
     "vitest-fetch-mock": "0.2.2",
-    "vitest-mongodb": "^0.0.4"
+    "vitest-mongodb": "0.0.5"
   },
   "workspaces": [
     "packages/*"
