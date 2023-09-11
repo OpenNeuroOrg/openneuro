@@ -9,7 +9,6 @@ pytest = "*"
 coverage = "*"
 mock = "*"
 pytest-cov = "*"
-fakeredis = "*"
 pytest-xdist = "*"
 
 [packages]
