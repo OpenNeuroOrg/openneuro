@@ -2,7 +2,6 @@ import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { SelectGroup } from '../SelectGroup'
-import '@testing-library/jest-dom/extend-expect'
 
 const SelectContent = [
   { label: '--Select--', value: '' },

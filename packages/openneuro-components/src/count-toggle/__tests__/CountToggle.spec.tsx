@@ -2,7 +2,6 @@ import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { CountToggle } from '../CountToggle'
-import '@testing-library/jest-dom/extend-expect'
 
 export const datasetType_available = [
   { label: 'All Public', value: 'All Public' },

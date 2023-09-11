@@ -2,7 +2,6 @@ import { vi } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { TwoHandleRange } from '../TwoHandleRange'
-import '@testing-library/jest-dom/extend-expect'
 
 import { stepping } from '../TwoHandleRange'
 

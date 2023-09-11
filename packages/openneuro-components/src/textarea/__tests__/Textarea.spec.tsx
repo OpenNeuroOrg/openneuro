@@ -2,7 +2,6 @@ import { vi } from 'vitest'
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Textarea } from '../Textarea'
-import '@testing-library/jest-dom/extend-expect'
 
 describe('Textarea component', () => {
   it('supports inline type', () => {

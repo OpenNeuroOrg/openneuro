@@ -1,7 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import Helmet from 'react-helmet'
-import '@testing-library/jest-dom/extend-expect'
 import { SnapshotContainer } from '../snapshot-container'
 import { MockAppWrapper } from '../../fixtures/mock-app-wrapper'
 import { dataset, snapshot } from '../../fixtures/dataset-query'

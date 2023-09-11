@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { ReadMore } from '../ReadMore'
-import '@testing-library/jest-dom/extend-expect'
 
 describe('ReadMore component', () => {
   it('renders children', async () => {

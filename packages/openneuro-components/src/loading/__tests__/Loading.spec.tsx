@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Loading } from '../Loading'
-import '@testing-library/jest-dom/extend-expect'
 
 describe('Loading component', () => {
   it('loading animation is labeled alert and aria-busy', async () => {

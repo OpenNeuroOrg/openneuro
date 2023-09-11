@@ -2,7 +2,6 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { DatasetTools } from '../DatasetTools'
-import '@testing-library/jest-dom/extend-expect'
 
 describe('DatasetTools component', () => {
   it('provides expected tools for a draft (admin)', () => {
