@@ -12,7 +12,7 @@ from datalad_service.common.elasticsearch import ValidationLogger
 
 LEGACY_VALIDATOR_VERSION = json.load(
     open('/srv/package.json'))['dependencies']['bids-validator']
-DENO_VALIDATOR_VERSION = 'd1202edf63a866bfee7b6bc55a3b5158cadae14b'
+DENO_VALIDATOR_VERSION = 'v1.12.0'
 
 LEGACY_METADATA = {
     'type': 'legacy',
@@ -58,18 +58,11 @@ def validate_dataset_deno_sync(dataset_path, ref, esLogger):
 
     Runs the bids-validator process and installs node dependencies if needed.
     """
-
-    process = gevent.subprocess.run(
-        ['deno', 'run', '-A',
-         f'https://raw.githubusercontent.com/bids-standard/bids-validator/{DENO_VALIDATOR_VERSION}/bids-validator.js',
-         '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
-    print('stdout', process.stdout)
-    return json.loads(process.stdout)
     try:
         process = gevent.subprocess.run(
             ['deno', 'run', '-A',
-             f'https://raw.githubusercontent.com/bids-standard/bids-validator/{DENO_VALIDATOR_VERSION}/bids-validator.js',
-             '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
+            f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
+            '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
         return json.loads(escape_ansi(process.stdout.decode('utf-8')))
     except subprocess.TimeoutExpired as err:
         esLogger.log(process.stdout, process.stderr, err)
