@@ -42,7 +42,7 @@ volumes:
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    image: node:18.17.1
+    image: node:18.17.1-bullseye
     env_file: ./config.env
     working_dir: /srv
     command: bash -c 'yarn install && yarn pnpify tsc-watch -b --onSuccess "touch /watch/done"'
