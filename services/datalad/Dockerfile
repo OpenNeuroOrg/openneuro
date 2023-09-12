@@ -1,4 +1,4 @@
-FROM python:3.10-slim as production
+FROM python:3.11-slim as production
 
 WORKDIR /srv
 
