@@ -219,6 +219,14 @@ export const typeDefs = `
     TracerRadionuclide: [String]
   }
 
+  # BIDS Validator metadata
+  input ValidatorMetadata {
+    # Unique string identifying the type of BIDS validator software
+    validator: String
+    # Semantic versioning string for the version of the validation software
+    version: String
+  }
+
   input SummaryInput {
     id: ID! # Git reference for this summary
     datasetId: ID!
@@ -233,6 +241,10 @@ export const typeDefs = `
     totalFiles: Int!
     dataProcessed: Boolean
     pet: SummaryPetInput
+    # Metadata for validation software used
+    validatorMetadata: ValidatorMetadata
+    # BIDS Specification schema version
+    schemaVersion: String
   }
 
   input SubjectMetadataInput {
@@ -246,6 +258,7 @@ export const typeDefs = `
     id: ID! # Git reference for this validation
     datasetId: ID!
     issues: [ValidationIssueInput]!
+    validatorMetadata: ValidatorMetadata
   }
 
   # Dataset Metadata
@@ -598,6 +611,8 @@ export const typeDefs = `
     totalFiles: Int!
     dataProcessed: Boolean
     pet: SummaryPetFields
+    # BIDS Specification schema version
+    schemaVersion: String
   }
 
   type SummaryPetFields {
@@ -645,7 +660,7 @@ export const typeDefs = `
   type ValidationIssue {
     severity: Severity!
     key: String!
-    code: Int!
+    code: Int
     reason: String!
     files: [ValidationIssueFile]
     additionalFileCount: Int
@@ -655,7 +670,7 @@ export const typeDefs = `
   input ValidationIssueInput {
     severity: Severity!
     key: String!
-    code: Int!
+    code: Int
     reason: String!
     files: [ValidationIssueFileInput]
     additionalFileCount: Int
@@ -663,8 +678,10 @@ export const typeDefs = `
   }
 
   type ValidationIssueFile {
+    name: String
+    path: String
     key: String!
-    code: Int!
+    code: Int
     file: ValidationIssueFileDetail
     evidence: String
     line: Int
@@ -675,15 +692,19 @@ export const typeDefs = `
   }
 
   input ValidationIssueFileInput {
-    key: String!
-    code: Int!
+    name: String
+    path: String
+    key: String
+    code: Int
     file: ValidationIssueFileDetailInput
     evidence: String
     line: Int
     character: Int
-    severity: Severity!
+    severity: Severity
     reason: String
     helpUrl: String
+    # Temporary field for compatibility (remove after bids-validator@1.13.0)
+    _datasetAbsPath: String
   }
 
   type ValidationIssueFileDetail {
