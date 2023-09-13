@@ -12,14 +12,14 @@ from datalad_service.common.elasticsearch import ValidationLogger
 
 LEGACY_VALIDATOR_VERSION = json.load(
     open('/srv/package.json'))['dependencies']['bids-validator']
-DENO_VALIDATOR_VERSION = 'v1.12.0'
+DENO_VALIDATOR_VERSION = 'v1.13.0'
 
 LEGACY_METADATA = {
-    'type': 'legacy',
+    'validator': 'legacy',
     'version': LEGACY_VALIDATOR_VERSION
 }
 DENO_METADATA = {
-    'type': 'schema',
+    'validator': 'schema',
     'version': DENO_VALIDATOR_VERSION
 }
 
@@ -124,12 +124,12 @@ def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None, user
         if 'issues' in validator_output:
             r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, all_issues, LEGACY_METADATA), cookies=cookies)
-            if r.status_code != 200:
+            if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
         if 'summary' in validator_output:
             r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output, LEGACY_METADATA), cookies=cookies)
-            if r.status_code != 200:
+            if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
     else:
         raise Exception('Validation failed unexpectedly')
@@ -142,12 +142,12 @@ def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None, user
         if 'issues' in validator_output_deno:
             r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, validator_output_deno['issues'], DENO_METADATA), cookies=cookies)
-            if r.status_code != 200:
+            if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
         if 'summary' in validator_output_deno:
             r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output_deno, DENO_METADATA), cookies=cookies)
-            if r.status_code != 200:
+            if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
 
 
