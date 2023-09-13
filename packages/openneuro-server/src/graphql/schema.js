@@ -221,7 +221,9 @@ export const typeDefs = `
 
   # BIDS Validator metadata
   input ValidatorMetadata {
-    type: String
+    # Unique string identifying the type of BIDS validator software
+    validator: String
+    # Semantic versioning string for the version of the validation software
     version: String
   }
 
@@ -239,7 +241,10 @@ export const typeDefs = `
     totalFiles: Int!
     dataProcessed: Boolean
     pet: SummaryPetInput
+    # Metadata for validation software used
     validatorMetadata: ValidatorMetadata
+    # BIDS Specification schema version
+    schemaVersion: String
   }
 
   input SubjectMetadataInput {
@@ -606,6 +611,8 @@ export const typeDefs = `
     totalFiles: Int!
     dataProcessed: Boolean
     pet: SummaryPetFields
+    # BIDS Specification schema version
+    schemaVersion: String
   }
 
   type SummaryPetFields {
@@ -671,6 +678,8 @@ export const typeDefs = `
   }
 
   type ValidationIssueFile {
+    name: String
+    path: String
     key: String!
     code: Int
     file: ValidationIssueFileDetail
@@ -683,6 +692,8 @@ export const typeDefs = `
   }
 
   input ValidationIssueFileInput {
+    name: String
+    path: String
     key: String
     code: Int
     file: ValidationIssueFileDetailInput
@@ -692,6 +703,8 @@ export const typeDefs = `
     severity: Severity
     reason: String
     helpUrl: String
+    # Temporary field for compatibility (remove after bids-validator@1.13.0)
+    _datasetAbsPath: String
   }
 
   type ValidationIssueFileDetail {

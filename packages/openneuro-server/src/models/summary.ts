@@ -25,7 +25,7 @@ export interface SummaryDocument extends Document {
   dataProcessed: boolean
   pet: SummaryPetField
   validatorMetadata: {
-    type: string
+    validator: string
     version: string
   }
 }
@@ -52,7 +52,7 @@ const summarySchema = new Schema({
     TracerRadionuclide: [String],
   },
   validatorMetadata: {
-    type: String,
+    validator: String,
     version: String,
   },
 })

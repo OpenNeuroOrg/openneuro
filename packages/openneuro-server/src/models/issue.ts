@@ -6,7 +6,7 @@ export interface IssueDocument extends Document {
   datasetId: string
   issues: object
   validatorMetadata: {
-    type: string
+    validator: string
     version: string
   }
 }
@@ -16,7 +16,7 @@ const issueSchema = new Schema({
   datasetId: { type: String, required: true },
   issues: Object,
   validatorMetadata: {
-    type: String,
+    validator: String,
     version: String,
   },
 })
