@@ -17,7 +17,7 @@
   "dependencies": {
     "@apollo/client": "3.7.2",
     "@openneuro/client": "^4.20.0-alpha.3",
-    "bids-validator": "1.10.0",
+    "bids-validator": "1.13.0",
     "cli-progress": "^3.8.2",
     "commander": "7.2.0",
     "elastic-apm-node": "^3.49.1",
