@@ -119,7 +119,6 @@ def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None, user
     validator_output = validate_dataset_sync(dataset_path, ref, esLogger)
     all_issues = validator_output['issues']['warnings'] + \
         validator_output['issues']['errors']
-    print('LEGACY', all_issues)
     if validator_output:
         if 'issues' in validator_output:
             r = requests.post(
@@ -137,7 +136,6 @@ def _validate_dataset_eventlet(dataset_id, dataset_path, ref, cookies=None, user
     # New schema validator second in case of issues
     validator_output_deno = validate_dataset_deno_sync(
         dataset_path, ref, esLogger)
-    print('DENO', validator_output_deno['issues'])
     if validator_output_deno:
         if 'issues' in validator_output_deno:
             r = requests.post(
