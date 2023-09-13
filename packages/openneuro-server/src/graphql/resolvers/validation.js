@@ -12,7 +12,11 @@ import { redlock } from '../../libs/redis.js'
  */
 export const updateValidation = (obj, args) => {
   return Issue.updateOne(
-    { id: args.validation.id, datasetId: args.validation.datasetId },
+    {
+      id: args.validation.id,
+      datasetId: args.validation.datasetId,
+      validatorMetadata: args.validation.validatorMetadata,
+    },
     args.validation,
     {
       upsert: true,
