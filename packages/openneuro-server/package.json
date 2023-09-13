@@ -80,7 +80,6 @@
     "core-js": "^3.10.1",
     "ioredis-mock": "^8.8.1",
     "nodemon": "^2.0.7",
-    "supertest": "^3.0.0",
     "ts-node-dev": "1.1.6",
     "tsc-watch": "^4.2.9",
     "vitest": "0.34.4",

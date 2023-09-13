@@ -5127,7 +5127,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["semver", "npm:5.7.2"],\
             ["sitemap", "npm:2.2.0"],\
             ["superagent", "npm:3.8.3"],\
-            ["supertest", "npm:3.4.2"],\
             ["ts-node", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:9.1.1"],\
             ["ts-node-dev", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.1.6"],\
             ["tsc-watch", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
@@ -21488,17 +21487,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/superagent",\
             "superagent"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["supertest", [\
-        ["npm:3.4.2", {\
-          "packageLocation": "./.yarn/cache/supertest-npm-3.4.2-089ff49678-849f64dfdc.zip/node_modules/supertest/",\
-          "packageDependencies": [\
-            ["supertest", "npm:3.4.2"],\
-            ["methods", "npm:1.1.2"],\
-            ["superagent", "npm:3.8.3"]\
           ],\
           "linkType": "HARD"\
         }]\

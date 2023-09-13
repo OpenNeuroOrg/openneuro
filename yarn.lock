@@ -4282,7 +4282,6 @@ __metadata:
     semver: ^5.5.0
     sitemap: ^2.1.0
     superagent: ^3.8.2
-    supertest: ^3.0.0
     ts-node: 9.1.1
     ts-node-dev: 1.1.6
     tsc-watch: ^4.2.9
@@ -18400,7 +18399,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"superagent@npm:^3.8.2, superagent@npm:^3.8.3":
+"superagent@npm:^3.8.2":
   version: 3.8.3
   resolution: "superagent@npm:3.8.3"
   dependencies:
@@ -18434,16 +18433,6 @@ resolve@^2.0.0-next.3:
     readable-stream: ^3.6.0
     semver: ^7.3.2
   checksum: 32ca1bc9805679cddeffdf5cf369da47359a0d38ee45ea668bba4116e17c247739e4084db9cc88217dd594a816e766a3dbf2431de017fbac0bc80efd6af30c1d
-  languageName: node
-  linkType: hard
-
-"supertest@npm:^3.0.0":
-  version: 3.4.2
-  resolution: "supertest@npm:3.4.2"
-  dependencies:
-    methods: ^1.1.2
-    superagent: ^3.8.3
-  checksum: 849f64dfdc743292f7c40c47db73f5c79138adbfb15535222346204767c9077b56e2fed21ea902f86639503b3224ce6ccfa5b93633ebfe7b56cf1be42cc94b92
   languageName: node
   linkType: hard
 
