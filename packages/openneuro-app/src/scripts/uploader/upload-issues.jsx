@@ -74,7 +74,27 @@ class UploadValidator extends React.Component {
     if (this.props.schemaValidator) {
       schemaValidate(this.props.files, options).then(this.done)
     } else {
-      validate(this.props.files, options).then(this.done)
+      // Test for dataset_description.json and use the schemaValidator for DatasetType == 'derivative'
+      // Fall back if anything fails
+      const dsDescription = Array.from(this.props.files).find(
+        f => f.name === 'dataset_description.json',
+      )
+      if (dsDescription) {
+        dsDescription.text().then(dsDescriptionData => {
+          try {
+            const descriptionFields = JSON.parse(dsDescriptionData)
+            if (descriptionFields.DatasetType === 'derivative') {
+              schemaValidate(this.props.files, options).then(this.done)
+            } else {
+              validate(this.props.files, options).then(this.done)
+            }
+          } catch (err) {
+            validate(this.props.files, options).then(this.done)
+          }
+        })
+      } else {
+        validate(this.props.files, options).then(this.done)
+      }
     }
   }
 
