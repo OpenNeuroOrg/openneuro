@@ -4,7 +4,7 @@ import { send as emailSend } from './email'
 import request from 'superagent'
 import User from '../models/user'
 import Subscription from '../models/subscription'
-import moment from 'moment'
+import { format } from 'date-fns'
 import url from 'url'
 import bidsId from './bidsId'
 import { convertFromRaw, EditorState } from 'draft-js'
@@ -150,7 +150,7 @@ const notifications = {
                       datasetLabel: datasetLabel,
                       commentUserId: userId,
                       commentId: commentId,
-                      dateCreated: moment(comment.createDate).format('MMMM Do'),
+                      dateCreated: format(comment.createDate, 'MMMM Do'),
                       commentContent: htmlContent,
                       commentStatus: commentStatus,
                       siteUrl:

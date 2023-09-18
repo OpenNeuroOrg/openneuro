@@ -4874,8 +4874,8 @@ __metadata:
     "@emotion/react": 11.11.1
     "@emotion/styled": 11.11.0
     "@niivue/niivue": 0.34.0
-    "@openneuro/client": ^4.20.0-alpha.3
-    "@openneuro/components": ^4.20.0-alpha.3
+    "@openneuro/client": ^4.20.0-alpha.4
+    "@openneuro/components": ^4.20.0-alpha.4
     "@tanstack/react-table": ^8.9.3
     "@testing-library/jest-dom": 6.1.3
     "@testing-library/react": ^11.1.0
@@ -4926,7 +4926,7 @@ __metadata:
   resolution: "@openneuro/cli@workspace:packages/openneuro-cli"
   dependencies:
     "@apollo/client": 3.7.2
-    "@openneuro/client": ^4.20.0-alpha.3
+    "@openneuro/client": ^4.20.0-alpha.4
     "@types/mkdirp": 1.0.2
     "@types/node": 18.11.9
     bids-validator: 1.13.0
@@ -4951,14 +4951,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.20.0-alpha.3, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.20.0-alpha.4, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.7.2
     "@graphql-tools/mock": ^9.0.0
     "@graphql-tools/schema": ^10.0.0
-    "@openneuro/server": ^4.20.0-alpha.3
+    "@openneuro/server": ^4.20.0-alpha.4
     core-js: ^3.10.1
     crypto-hash: ^1.3.0
     graphql: 16.6.0
@@ -4970,7 +4970,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.20.0-alpha.3, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.20.0-alpha.4, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5012,8 +5012,8 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.2
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.20.0-alpha.3
-    "@openneuro/search": ^4.20.0-alpha.3
+    "@openneuro/client": ^4.20.0-alpha.4
+    "@openneuro/search": ^4.20.0-alpha.4
     "@types/jsonwebtoken": ^8
     "@types/node": 18.11.9
     "@types/tsc-watch": ^4
@@ -5027,7 +5027,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.20.0-alpha.3, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.20.0-alpha.4, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5042,7 +5042,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.20.0-alpha.3, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.20.0-alpha.4, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5052,7 +5052,7 @@ __metadata:
     "@elastic/elasticsearch": 7.15.0
     "@graphql-tools/schema": ^10.0.0
     "@keyv/redis": ^2.7.0
-    "@openneuro/search": ^4.20.0-alpha.3
+    "@openneuro/search": ^4.20.0-alpha.4
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/cors": ^2
@@ -5086,7 +5086,6 @@ __metadata:
     jsonwebtoken: ^9.0.0
     keyv: ^4.5.3
     mime-types: ^2.1.19
-    moment: ^2.14.1
     mongoose: ^6.11.3
     morgan: ^1.6.1
     node-mailjet: ^3.3.5
@@ -17392,13 +17391,6 @@ fsevents@~2.3.2:
   version: 1.0.3
   resolution: "module-details-from-path@npm:1.0.3"
   checksum: 378a8a26013889aa3086bfb0776b7860c5bb957336253e1ba5d779c2f239a218930b145ca76e52c1dd7c8079d52b2af64b8eec30822f81ffdb0dfa27d6fe6f33
-  languageName: node
-  linkType: hard
-
-"moment@npm:^2.14.1":
-  version: 2.29.1
-  resolution: "moment@npm:2.29.1"
-  checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
   languageName: node
   linkType: hard
 

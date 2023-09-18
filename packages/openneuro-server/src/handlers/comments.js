@@ -1,6 +1,6 @@
 // @ts-nocheck
 import notifications from '../libs/notifications.js'
-import moment from 'moment'
+import { format } from 'date-fns/format'
 import User from '../models/user'
 import Comment from '../models/comment'
 import MailgunIdentifier from '../models/mailgunIdentifier'
@@ -63,7 +63,7 @@ export async function reply(req, res, next) {
       parentId: parentId,
       text: text,
       user: flattenedUser,
-      createDate: moment().format(),
+      createDate: format(new Date()),
     }
     Comment.create(comment, (err, response) => {
       if (err) {
