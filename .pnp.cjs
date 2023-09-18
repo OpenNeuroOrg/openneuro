@@ -6442,7 +6442,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jsonwebtoken", "npm:9.0.0"],\
             ["keyv", "npm:4.5.3"],\
             ["mime-types", "npm:2.1.32"],\
-            ["moment", "npm:2.29.1"],\
             ["mongoose", "npm:6.11.4"],\
             ["morgan", "npm:1.10.0"],\
             ["node-mailjet", "npm:3.3.5"],\
@@ -20532,15 +20531,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/module-details-from-path-npm-1.0.3-396d5203b4-378a8a2601.zip/node_modules/module-details-from-path/",\
           "packageDependencies": [\
             ["module-details-from-path", "npm:1.0.3"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["moment", [\
-        ["npm:2.29.1", {\
-          "packageLocation": "./.yarn/cache/moment-npm-2.29.1-787d9fdafd-1e14d5f422.zip/node_modules/moment/",\
-          "packageDependencies": [\
-            ["moment", "npm:2.29.1"]\
           ],\
           "linkType": "HARD"\
         }]\
