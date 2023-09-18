@@ -32,6 +32,17 @@ Set the default project to use for gcloud commands.
 gcloud config set project hs-openneuro
 ```
 
+To authenticate and setup cluster access for an existing cluster.
+
+```bash
+# Authenticate with GCP account
+gcloud auth login
+# List clusters available
+gcloud container clusters list
+# Setup credentials for an existing cluster
+gcloud container clusters get-credentials openneuro-staging
+```
+
 ### Create a cluster
 
 ```bash
