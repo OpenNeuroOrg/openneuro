@@ -1,3 +1,4 @@
+import os
 import logging
 
 import gevent
@@ -19,7 +20,9 @@ class SnapshotResource(object):
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
-        if snapshot:
+        if not os.path.exists(self.store.get_dataset_path(dataset)):
+            resp.status = falcon.HTTP_NOT_FOUND
+        elif snapshot:
             files = get_tree(self.store, dataset, snapshot)
             response = get_snapshot(self.store, dataset, snapshot)
             response['files'] = files
