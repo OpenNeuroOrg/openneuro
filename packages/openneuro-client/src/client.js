@@ -2,13 +2,10 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloLink,
-  split,
   Observable,
   createHttpLink,
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { getMainDefinition } from '@apollo/client/utilities'
 import semver from 'semver'
 
 const authLink = getAuthorization =>
@@ -26,18 +23,6 @@ const authLink = getAuthorization =>
       headers: Object.assign(cookie, headers),
     }
   })
-
-const wsLink = uri => {
-  const root = uri.replace('http', 'ws').replace('/crn', '')
-  const subscriptions = '-subscriptions'
-  const link = root + subscriptions
-  return new WebSocketLink({
-    uri: link,
-    options: {
-      reconnect: true,
-    },
-  })
-}
 
 const hbar = '\n-----------------------------------------------------\n'
 const parse = version => [semver.major(version), semver.minor(version)]
@@ -94,28 +79,6 @@ const compareVersionsLink = clientVersion =>
       ),
   )
 
-const createLink = (uri, getAuthorization, fetch, enableWebsocket) => {
-  return split(
-    ({ query }) => {
-      /**
-       * Typescript complains because this can return
-       * FragmentDefinitionNode or OperationDefinitionNode
-       * so we cannot use a simple destructuring
-       * `const { kind, operation }`
-       **/
-      const definition = getMainDefinition(query)
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      )
-    },
-    enableWebsocket
-      ? wsLink(uri)
-      : middlewareAuthLink(uri, getAuthorization, fetch),
-    middlewareAuthLink(uri, getAuthorization, fetch),
-  )
-}
-
 /**
  * Setup a client for working with the OpenNeuro API
  */
@@ -128,14 +91,13 @@ export const createClient = (
     links = [],
     ssrMode = false,
     cache = undefined,
-    enableWebsocket = false,
   } = {},
 ) => {
-  // createLink must be last since it contains a terminating link
+  // middlewareAuthLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),
     ...links,
-    createLink(uri, getAuthorization, fetch, enableWebsocket),
+    middlewareAuthLink(uri, getAuthorization, fetch),
   ])
 
   const apolloClientOptions = {
