@@ -11,7 +11,7 @@ from datalad_service.common.elasticsearch import ValidationLogger
 
 
 LEGACY_VALIDATOR_VERSION = json.load(
-    open('/srv/package.json'))['dependencies']['bids-validator']
+    open('package.json'))['dependencies']['bids-validator']
 DENO_VALIDATOR_VERSION = 'v1.13.0'
 
 LEGACY_METADATA = {

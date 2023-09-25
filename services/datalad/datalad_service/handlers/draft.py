@@ -1,3 +1,5 @@
+import os
+
 import falcon
 import pygit2
 
@@ -13,9 +15,8 @@ class DraftResource(object):
         """
         Return draft state (other than files).
         """
-        if dataset:
-            # Maybe turn this into status?
-            dataset_path = self.store.get_dataset_path(dataset)
+        dataset_path = self.store.get_dataset_path(dataset)
+        if dataset and os.path.exists(dataset_path):
             repo = pygit2.Repository(dataset_path)
             commit = repo.revparse_single('HEAD')
             resp.media = {'hexsha': commit.hex,
