@@ -24,10 +24,17 @@ class SnapshotResource(object):
             resp.status = falcon.HTTP_NOT_FOUND
         elif snapshot:
             files = get_tree(self.store, dataset, snapshot)
-            response = get_snapshot(self.store, dataset, snapshot)
-            response['files'] = files
-            resp.media = response
-            resp.status = falcon.HTTP_OK
+            if files:
+                try:
+                    response = get_snapshot(self.store, dataset, snapshot)
+                    response['files'] = files
+                    resp.media = response
+                    resp.status = falcon.HTTP_OK
+                except KeyError:
+                    # Tree returned objects but does not exist?
+                    resp.status = falcon.HTTP_NOT_FOUND
+            else:
+                resp.status = falcon.HTTP_NOT_FOUND
         else:
             tags = get_snapshots(self.store,
                                  dataset)
