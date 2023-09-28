@@ -13,10 +13,6 @@ class ValidationResource(object):
         if dataset and hexsha:
             # Record if this was done on behalf of a user
             name, email = get_user_info(req)
-            media_dict = {}
-            if name and email:
-                media_dict['name'] = name
-                media_dict['email'] = email
             try:
                 dataset_path = self.store.get_dataset_path(dataset)
                 # Run the validator but don't block on the request

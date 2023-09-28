@@ -4,6 +4,8 @@ def get_user_info(req):
     email = None
     if 'user' in req.context and req.context['user']:
         user = req.context['user']
-        name = user['name']
-        email = user['email']
+        if 'name' in user:
+            name = user['name']
+        if 'email' in user:
+            email = user['email']
     return name, email
