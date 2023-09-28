@@ -28,7 +28,8 @@
     "**/__mocks__/*",
     "**/*.spec.js",
     "**/*.spec.jsx",
-    "coverage"
+    "coverage",
+    "cli"
   ],
   "references": [
     { "path": "./packages/openneuro-app" },
