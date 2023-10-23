@@ -30,7 +30,6 @@ const openneuroCommand = new Command()
     default: true,
   })
   .command('login', login)
-  .command('validate', validate)
   .command('upload', upload)
   .command('git-credential', gitCredential)
 

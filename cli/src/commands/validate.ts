@@ -1,6 +1,6 @@
-import { Command, bidsValidator } from '../deps.ts'
+import { Command } from '../deps.ts'
 
-const validateCommand = new Command()
+export const validateCommand = new Command()
   .name('bids-validator')
   .description(
     'This tool checks if a dataset in a given directory is compatible with the Brain Imaging Data Structure specification. To learn more about Brain Imaging Data Structure visit http://bids.neuroimaging.io',
