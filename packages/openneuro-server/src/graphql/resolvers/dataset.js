@@ -1,5 +1,4 @@
 import * as datalad from '../../datalad/dataset.js'
-import pubsub from '../pubsub.js'
 import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
@@ -134,10 +133,6 @@ export const deleteDataset = async (
     redirect,
     user: { _id: user },
   }).save()
-  await pubsub.publish('datasetDeleted', {
-    datasetId: id,
-    datasetDeleted: id,
-  })
   return deleted
 }
 
@@ -152,14 +147,6 @@ export const deleteFiles = async (
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
     const deletedFiles = await datalad.deleteFiles(datasetId, files, userInfo)
-    pubsub.publish('filesUpdated', {
-      datasetId,
-      filesUpdated: {
-        action: 'DELETE',
-        payload: deletedFiles,
-      },
-    })
-
     return true
   } catch (err) {
     return false

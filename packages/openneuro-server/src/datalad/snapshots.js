@@ -6,7 +6,6 @@ import { reindexDataset } from '../elasticsearch/reindex-dataset'
 import { redis, redlock } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
 import config from '../config.js'
-import pubsub from '../graphql/pubsub.js'
 import {
   updateDatasetName,
   snapshotCreationComparison,
@@ -109,14 +108,6 @@ const announceNewSnapshot = async (snapshot, datasetId, user) => {
   if (snapshot.files) {
     notifications.snapshotCreated(datasetId, snapshot, user) // send snapshot notification to subscribers
   }
-  pubsub.publish('snapshotsUpdated', {
-    datasetId,
-    snapshotsUpdated: {
-      id: datasetId,
-      snapshots: await getSnapshots(datasetId),
-      latestSnapshot: snapshot,
-    },
-  })
 }
 
 /**
@@ -193,13 +184,6 @@ export const deleteSnapshot = (datasetId, tag) => {
       tag,
     ])
     await snapshotCache.drop()
-    pubsub.publish('snapshotsUpdated', {
-      datasetId,
-      snapshotsUpdated: {
-        id: datasetId,
-        snapshots: await getSnapshots(datasetId),
-      },
-    })
     return body
   })
 }

@@ -2,7 +2,6 @@ import User, { UserDocument } from '../../models/user'
 import Permission, { PermissionDocument } from '../../models/permission'
 import { checkDatasetAdmin } from '../permissions'
 import { user } from './user'
-import pubsub from '../pubsub.js'
 
 interface DatasetPermission {
   id: string
@@ -40,10 +39,6 @@ const publishPermissions = async datasetId => {
       ),
     },
   }
-  pubsub.publish('permissionsUpdated', {
-    datasetId,
-    permissionsUpdated,
-  })
 }
 
 /**

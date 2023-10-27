@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { schemaComposer } from 'graphql-compose'
 import resolvers from './resolvers'
-import Subscription from './resolvers/subscriptions.js'
 import {
   datasetSearch,
   advancedDatasetSearch,
@@ -818,7 +817,6 @@ export const typeDefs = `
 
 schemaComposer.addTypeDefs(typeDefs)
 schemaComposer.addResolveMethods(resolvers)
-schemaComposer.Subscription.addFields(Subscription)
 schemaComposer.Query.addFields(datasetSearch)
 schemaComposer.Query.addFields(advancedDatasetSearch)
 
