@@ -4,7 +4,6 @@
 import { setDescription } from '../../datalad/description.js'
 import { checkDatasetWrite } from '../permissions.js'
 export { description } from '../../datalad/description.js'
-import pubsub from '../pubsub.js'
 
 export const updateDescription = (
   obj,
@@ -13,17 +12,7 @@ export const updateDescription = (
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo)
     .then(() => setDescription(datasetId, userInfo, { [field]: value }))
-    .then(description => {
-      pubsub.publish('draftUpdated', {
-        datasetId: description.id,
-        draftUpdated: {
-          draft: {
-            description,
-          },
-        },
-      })
-      return description
-    })
+    .then(description => description)
 }
 
 export const updateDescriptionList = updateDescription

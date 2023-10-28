@@ -6926,8 +6926,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["graphql-bigint", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.0.0"],\
             ["graphql-compose", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:9.0.10"],\
             ["graphql-iso-date", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:3.6.1"],\
-            ["graphql-redis-subscriptions", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.1.0"],\
-            ["graphql-subscriptions", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.2.1"],\
             ["graphql-tools", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:9.0.0"],\
             ["immutable", "npm:3.8.2"],\
             ["ioredis", "npm:4.17.3"],\
@@ -16790,53 +16788,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["graphql-redis-subscriptions", [\
-        ["npm:2.1.0", {\
-          "packageLocation": "./.yarn/cache/graphql-redis-subscriptions-npm-2.1.0-407e5680ee-d223fab4e7.zip/node_modules/graphql-redis-subscriptions/",\
-          "packageDependencies": [\
-            ["graphql-redis-subscriptions", "npm:2.1.0"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.1.0", {\
-          "packageLocation": "./.yarn/__virtual__/graphql-redis-subscriptions-virtual-f3e8bc7ac7/0/cache/graphql-redis-subscriptions-npm-2.1.0-407e5680ee-d223fab4e7.zip/node_modules/graphql-redis-subscriptions/",\
-          "packageDependencies": [\
-            ["graphql-redis-subscriptions", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:2.1.0"],\
-            ["@types/graphql-subscriptions", null],\
-            ["graphql-subscriptions", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.2.1"],\
-            ["ioredis", "npm:4.27.9"],\
-            ["iterall", "npm:1.3.0"]\
-          ],\
-          "packagePeers": [\
-            "@types/graphql-subscriptions",\
-            "graphql-subscriptions"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["graphql-subscriptions", [\
-        ["npm:1.2.1", {\
-          "packageLocation": "./.yarn/cache/graphql-subscriptions-npm-1.2.1-6f6629f38d-2b9533c677.zip/node_modules/graphql-subscriptions/",\
-          "packageDependencies": [\
-            ["graphql-subscriptions", "npm:1.2.1"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.2.1", {\
-          "packageLocation": "./.yarn/__virtual__/graphql-subscriptions-virtual-84d51b1f76/0/cache/graphql-subscriptions-npm-1.2.1-6f6629f38d-2b9533c677.zip/node_modules/graphql-subscriptions/",\
-          "packageDependencies": [\
-            ["graphql-subscriptions", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.2.1"],\
-            ["@types/graphql", null],\
-            ["graphql", "npm:16.6.0"],\
-            ["iterall", "npm:1.3.0"]\
-          ],\
-          "packagePeers": [\
-            "@types/graphql",\
-            "graphql"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["graphql-tag", [\
         ["npm:2.12.6", {\
           "packageLocation": "./.yarn/cache/graphql-tag-npm-2.12.6-99a5a7f6de-b15162a3d6.zip/node_modules/graphql-tag/",\
@@ -17829,24 +17780,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["lodash.defaults", "npm:4.2.0"],\
             ["lodash.flatten", "npm:4.4.0"],\
             ["redis-commands", "npm:1.5.0"],\
-            ["redis-errors", "npm:1.2.0"],\
-            ["redis-parser", "npm:3.0.0"],\
-            ["standard-as-callback", "npm:2.1.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:4.27.9", {\
-          "packageLocation": "./.yarn/cache/ioredis-npm-4.27.9-f47c6ecf1a-0472f20366.zip/node_modules/ioredis/",\
-          "packageDependencies": [\
-            ["ioredis", "npm:4.27.9"],\
-            ["cluster-key-slot", "npm:1.1.0"],\
-            ["debug", "virtual:428f325a939c2653ad822eb3d75efb02ac311523dd0d4f9645afc39ea00bd86eceac35a9d59c9b6977d76b670a4ef0ae057ea572338a44729aa592711a8c05a3#npm:4.3.2"],\
-            ["denque", "npm:1.5.1"],\
-            ["lodash.defaults", "npm:4.2.0"],\
-            ["lodash.flatten", "npm:4.4.0"],\
-            ["lodash.isarguments", "npm:3.1.0"],\
-            ["p-map", "npm:2.1.0"],\
-            ["redis-commands", "npm:1.7.0"],\
             ["redis-errors", "npm:1.2.0"],\
             ["redis-parser", "npm:3.0.0"],\
             ["standard-as-callback", "npm:2.1.0"]\
@@ -25222,13 +25155,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/redis-commands-npm-1.5.0-be476d36e6-a0718ab8bf.zip/node_modules/redis-commands/",\
           "packageDependencies": [\
             ["redis-commands", "npm:1.5.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:1.7.0", {\
-          "packageLocation": "./.yarn/cache/redis-commands-npm-1.7.0-528f61f9d8-d1ff7fbcb5.zip/node_modules/redis-commands/",\
-          "packageDependencies": [\
-            ["redis-commands", "npm:1.7.0"]\
           ],\
           "linkType": "HARD"\
         }]\
