@@ -50,6 +50,22 @@ export const matchQuery = (
   },
 })
 
+export const multiMatchQuery = (
+  field: string,
+  queryStrings: string[],
+  fuzziness?: string,
+  operator?: string,
+) => {
+  return {
+    bool: {
+      should: queryStrings.map(queryString =>
+        matchQuery(field, queryString, fuzziness, operator),
+      ),
+      minimum_should_match: 1,
+    },
+  }
+}
+
 export const rangeQuery = (
   field,
   gte?: number | string,
