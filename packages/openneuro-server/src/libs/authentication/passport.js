@@ -3,11 +3,11 @@ import refresh from 'passport-oauth2-refresh'
 import { Strategy as JwtStrategy } from 'passport-jwt'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as ORCIDStrategy } from 'passport-orcid'
-import config from '../../config.js'
+import config from '../../config'
 import User from '../../models/user'
 import { encrypt } from './crypto'
 import { addJWT, jwtFromRequest } from './jwt'
-import orcid from '../orcid.js'
+import orcid from '../orcid'
 
 const PROVIDERS = {
   GOOGLE: 'google',

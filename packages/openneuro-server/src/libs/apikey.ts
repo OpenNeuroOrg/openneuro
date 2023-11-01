@@ -1,5 +1,5 @@
 import Key from '../models/key'
-import { addJWT } from '../libs/authentication/jwt'
+import { addJWT } from './authentication/jwt'
 import config from '../config'
 
 export const apiKeyFactory = user => {
