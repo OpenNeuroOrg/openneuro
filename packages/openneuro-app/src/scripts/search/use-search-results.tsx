@@ -6,6 +6,7 @@ import {
   BoolQuery,
   simpleQueryString,
   matchQuery,
+  multiMatchQuery,
   rangeQuery,
   rangeListLengthQuery,
   sqsJoinWithAND,
@@ -239,11 +240,23 @@ export const useSearchResults = () => {
         '3',
       ),
     )
-  if (sex_selected !== 'All')
+  if (sex_selected !== 'All') {
+    // Possible values for this field are specified here:
+    // https://bids-specification.readthedocs.io/en/stable/glossary.html#objects.columns.sex
+    let queryStrings = []
+    if (sex_selected == 'Male') {
+      queryStrings = ['male', 'm', 'M', 'MALE', 'Male']
+    } else if (sex_selected == 'Female') {
+      queryStrings = ['female', 'f', 'F', 'FEMALE', 'Female']
+    }
     boolQuery.addClause(
       'filter',
-      matchQuery('latestSnapshot.summary.subjectMetadata.sex', sex_selected),
+      multiMatchQuery(
+        'latestSnapshot.summary.subjectMetadata.sex',
+        queryStrings,
+      ),
     )
+  }
   if (date_selected !== 'All Time') {
     let d: number
     if (date_selected === 'Last 30 days') {
