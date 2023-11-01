@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { template, formatBasicAuth } from '../index.js'
 
 vi.mock('ioredis')
