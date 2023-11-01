@@ -9,8 +9,8 @@ import config from '../config'
 import {
   updateDatasetName,
   snapshotCreationComparison,
-} from '../graphql/resolvers/dataset.js'
-import { description } from '../graphql/resolvers/description.js'
+} from '../graphql/resolvers/dataset'
+import { description } from '../graphql/resolvers/description'
 import doiLib from '../libs/doi/index'
 import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'

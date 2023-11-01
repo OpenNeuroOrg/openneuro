@@ -1,10 +1,10 @@
 import { vi } from 'vitest'
 import { connect } from 'mongoose'
-import { getAccessionNumber } from '../dataset.js'
+import { getAccessionNumber } from '../dataset'
 
 vi.mock('ioredis')
 
-describe('libs/dataset.js', () => {
+describe('libs/dataset', () => {
   describe('getAccessionNumber', () => {
     beforeAll(() => {
       connect(globalThis.__MONGO_URI__)

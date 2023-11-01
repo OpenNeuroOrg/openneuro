@@ -1,5 +1,5 @@
 import format from 'date-fns/format'
-import { addFileString, commitFiles } from './dataset.js'
+import { addFileString, commitFiles } from './dataset'
 import { getDatasetWorker } from '../libs/datalad-service'
 
 /**

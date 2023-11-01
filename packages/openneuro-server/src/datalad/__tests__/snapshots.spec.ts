@@ -1,9 +1,9 @@
 import { vi } from 'vitest'
 vi.mock('ioredis')
 import request from 'superagent'
-import { createDataset } from '../dataset.js'
-import { createSnapshot } from '../snapshots.js'
-import { getDatasetWorker } from '../../libs/datalad-service.js'
+import { createDataset } from '../dataset'
+import { createSnapshot } from '../snapshots'
+import { getDatasetWorker } from '../../libs/datalad-service'
 import { connect } from 'mongoose'
 
 // Mock requests to Datalad service
@@ -17,11 +17,11 @@ vi.mock('../../libs/redis.js', () => ({
   },
 }))
 // Mock draft files calls
-vi.mock('../draft.js', () => ({
+vi.mock('../draft.ts', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
 vi.mock('../../config.ts')
-vi.mock('../../libs/notifications.js')
+vi.mock('../../libs/notifications.ts')
 
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {

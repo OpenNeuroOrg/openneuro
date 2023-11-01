@@ -1,6 +1,6 @@
 import { vi } from 'vitest'
 import request from 'superagent'
-import { createDataset, datasetsFilter, testBlacklist } from '../dataset.js'
+import { createDataset, datasetsFilter, testBlacklist } from '../dataset'
 import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { connect } from 'mongoose'
 
