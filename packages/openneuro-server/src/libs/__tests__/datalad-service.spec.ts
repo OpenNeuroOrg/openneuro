@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { hashDatasetToRange } from '../datalad-service'
 
 vi.mock('ioredis')

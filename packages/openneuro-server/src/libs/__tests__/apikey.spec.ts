@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import jwt from 'jsonwebtoken'
 import { apiKeyFactory } from '../apikey.js'
 import config from '../../config.js'
