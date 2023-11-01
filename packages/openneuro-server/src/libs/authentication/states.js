@@ -3,7 +3,6 @@
 import Dataset from '../../models/dataset'
 import Permission from '../../models/permission'
 import Comment from '../../models/comment'
-import bidsId from '../bidsId'
 import mongoose from 'mongoose'
 const ObjectID = mongoose.Schema.Types.ObjectId
 
@@ -61,11 +60,9 @@ export const superuser = (req, res, next) => {
  * the request object.
  */
 export const datasetAccess = (req, res, next) => {
-  let datasetId = req.params.datasetId
+  const datasetId = req.params.datasetId
     ? req.params.datasetId
     : req.query.datasetId
-
-  datasetId = bidsId.decodeId(datasetId) // handle old dataset request methods that encode ids
 
   // check to make sure that the dataset exists
   return Dataset.findOne({ id: datasetId })

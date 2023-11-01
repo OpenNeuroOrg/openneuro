@@ -6,17 +6,16 @@ import User from '../models/user'
 import Subscription from '../models/subscription'
 import { format } from 'date-fns'
 import url from 'url'
-import bidsId from './bidsId'
 import { convertFromRaw, EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { getDatasetWorker } from '../libs/datalad-service'
-import { commentCreated } from '../libs/email/templates/comment-created'
-import { datasetDeleted } from '../libs/email/templates/dataset-deleted'
-import { ownerUnsubscribed } from '../libs/email/templates/owner-unsubscribed'
-import { snapshotCreated } from '../libs/email/templates/snapshot-created'
-import { snapshotReminder } from '../libs/email/templates/snapshot-reminder'
-import { datasetImportEmail } from '../libs/email/templates/dataset-imported'
-import { datasetImportFailed } from '../libs/email/templates/dataset-import-failed'
+import { getDatasetWorker } from './datalad-service'
+import { commentCreated } from './email/templates/comment-created'
+import { datasetDeleted } from './email/templates/dataset-deleted'
+import { ownerUnsubscribed } from './email/templates/owner-unsubscribed'
+import { snapshotCreated } from './email/templates/snapshot-created'
+import { snapshotReminder } from './email/templates/snapshot-reminder'
+import { datasetImportEmail } from './email/templates/dataset-imported'
+import { datasetImportFailed } from './email/templates/dataset-import-failed'
 
 // public api ---------------------------------------------
 
@@ -75,7 +74,7 @@ const notifications = {
             html: snapshotCreated({
               name: user.name,
               datasetLabel: datasetLabel,
-              datasetId: bidsId.decodeId(datasetId),
+              datasetId: datasetId,
               versionNumber: tag,
               changelog: changelog,
               siteUrl:
@@ -146,7 +145,7 @@ const notifications = {
                     subject: 'Comment Created',
                     html: commentCreated({
                       name: user.name,
-                      datasetName: bidsId.decodeId(datasetId),
+                      datasetName: datasetId,
                       datasetLabel: datasetLabel,
                       commentUserId: userId,
                       commentId: commentId,
@@ -176,10 +175,7 @@ const notifications = {
    * them that a the dataset has been deleted.
    */
   datasetDeleted(datasetId) {
-    console.log(
-      'datasetDeleted notification sent with datasetName:',
-      bidsId.decodeId(datasetId),
-    )
+    console.log('datasetDeleted notification sent with datasetName:', datasetId)
 
     // get all users that are subscribed to the dataset
     Subscription.find({ datasetId: datasetId })
@@ -205,7 +201,7 @@ const notifications = {
                     subject: 'Dataset Deleted',
                     html: datasetDeleted({
                       name: user.name,
-                      datasetName: bidsId.decodeId(datasetId),
+                      datasetName: datasetId,
                       siteUrl:
                         url.parse(config.url).protocol +
                         '//' +
@@ -230,7 +226,7 @@ const notifications = {
   ownerUnsubscribed(datasetId) {
     console.log(
       'ownerUnsubscribed notification sent with datasetName:',
-      bidsId.decodeId(datasetId),
+      datasetId,
     )
 
     // get all users that are subscribed to the dataset
@@ -257,7 +253,7 @@ const notifications = {
                     subject: 'Owner Unsubscribed',
                     html: ownerUnsubscribed({
                       name: user.name,
-                      datasetName: bidsId.decodeId(datasetId),
+                      datasetName: datasetId,
                       siteUrl:
                         url.parse(config.url).protocol +
                         '//' +
@@ -282,7 +278,7 @@ const notifications = {
   async snapshotReminder(datasetId) {
     console.log(
       'snapshotReminder notification sent with datasetName:',
-      bidsId.decodeId(datasetId),
+      datasetId,
     )
 
     // get all users that are subscribed to the dataset
@@ -309,7 +305,7 @@ const notifications = {
                     subject: 'Snapshot Reminder',
                     html: snapshotReminder({
                       name: user.name,
-                      datasetName: bidsId.decodeId(datasetId),
+                      datasetName: datasetId,
                       siteUrl:
                         url.parse(config.url).protocol +
                         '//' +
