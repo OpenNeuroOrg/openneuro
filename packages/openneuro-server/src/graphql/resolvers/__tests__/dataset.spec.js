@@ -5,8 +5,8 @@ import * as ds from '../dataset'
 
 vi.mock('superagent')
 vi.mock('ioredis')
-vi.mock('../../../config.js')
-vi.mock('../../../libs/notifications.js')
+vi.mock('../../../config.ts')
+vi.mock('../../../libs/notifications.ts')
 
 describe('dataset resolvers', () => {
   beforeAll(() => {

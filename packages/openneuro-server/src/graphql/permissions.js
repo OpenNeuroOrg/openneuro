@@ -1,4 +1,4 @@
-import config from '../config.js'
+import config from '../config'
 import { GraphQLError } from 'graphql'
 import Permission from '../models/permission'
 import Dataset from '../models/dataset'

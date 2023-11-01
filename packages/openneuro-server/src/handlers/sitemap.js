@@ -1,5 +1,5 @@
 import sitemap from 'sitemap'
-import config from '../config.js'
+import config from '../config'
 import Dataset from '../models/dataset'
 
 // Static URLs - manual for now, could be generated from routes

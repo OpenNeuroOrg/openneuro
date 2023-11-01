@@ -1,7 +1,7 @@
-import { matchKnownObjects, filterLatestSnapshot } from '../snapshots.js'
+import { matchKnownObjects, filterLatestSnapshot } from '../snapshots'
 
 vi.mock('ioredis')
-vi.mock('../../../config.js')
+vi.mock('../../../config.ts')
 
 describe('snapshot resolvers', () => {
   describe('matchKnownObjects()', () => {

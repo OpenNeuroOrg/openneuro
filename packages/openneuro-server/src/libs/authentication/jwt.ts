@@ -3,7 +3,7 @@ import refresh from 'passport-oauth2-refresh'
 import jwt from 'jsonwebtoken'
 import { decrypt } from './crypto'
 import User from '../../models/user'
-import config from '../../config.js'
+import config from '../../config'
 
 interface OpenNeuroTokenProfile {
   sub: string

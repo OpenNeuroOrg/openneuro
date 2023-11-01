@@ -1,9 +1,9 @@
 /**
  * Resolver implementation for dataset_description.json
  */
-import { setDescription } from '../../datalad/description.js'
+import { setDescription } from '../../datalad/description'
 import { checkDatasetWrite } from '../permissions.js'
-export { description } from '../../datalad/description.js'
+export { description } from '../../datalad/description'
 
 export const updateDescription = (
   obj,

@@ -1,4 +1,4 @@
-import { getDatasetWorker } from '../../libs/datalad-service.js'
+import { getDatasetWorker } from '../../libs/datalad-service'
 
 export const history = async obj => {
   const datasetId = obj.id

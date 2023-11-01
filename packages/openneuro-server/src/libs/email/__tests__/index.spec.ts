@@ -2,7 +2,7 @@ import { vi } from 'vitest'
 import { mailjetFormat } from '../index'
 
 vi.mock('ioredis')
-vi.mock('../../../config.js')
+vi.mock('../../../config.ts')
 
 describe('Mailjet formatter', () => {
   it('formats a message', () => {

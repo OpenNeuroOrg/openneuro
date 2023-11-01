@@ -5,13 +5,13 @@ import request from 'superagent'
 import { reindexDataset } from '../elasticsearch/reindex-dataset'
 import { redis, redlock } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
-import config from '../config.js'
+import config from '../config'
 import {
   updateDatasetName,
   snapshotCreationComparison,
 } from '../graphql/resolvers/dataset.js'
 import { description } from '../graphql/resolvers/description.js'
-import doiLib from '../libs/doi/index.js'
+import doiLib from '../libs/doi/index'
 import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'

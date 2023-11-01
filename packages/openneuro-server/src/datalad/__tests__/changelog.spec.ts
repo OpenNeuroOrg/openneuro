@@ -2,7 +2,7 @@ import { vi } from 'vitest'
 import * as changelog from '../changelog.js'
 
 vi.mock('ioredis')
-vi.mock('../../config.js')
+vi.mock('../../config.ts')
 
 describe('changelog editing tools', () => {
   describe('findVersion()', () => {

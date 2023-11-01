@@ -1,10 +1,10 @@
 import { vi } from 'vitest'
 import jwt from 'jsonwebtoken'
 import { apiKeyFactory } from '../apikey.js'
-import config from '../../config.js'
+import config from '../../config'
 
 vi.mock('ioredis')
-vi.mock('../../config.js')
+vi.mock('../../config.ts')
 
 const userMock = {
   id: '1337',

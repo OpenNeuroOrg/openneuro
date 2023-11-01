@@ -7,7 +7,7 @@ import {
 } from '../files'
 
 vi.mock('ioredis')
-vi.mock('../../config.js')
+vi.mock('../../config.ts')
 
 const filename = 'sub-01/anat/sub-01_T1w.nii.gz'
 

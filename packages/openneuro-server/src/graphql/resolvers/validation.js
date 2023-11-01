@@ -3,7 +3,7 @@ import { generateDataladCookie } from '../../libs/authentication/jwt'
 import { getDatasetWorker } from '../../libs/datalad-service'
 import Issue from '../../models/issue'
 import publishDraftUpdate from '../utils/publish-draft-update.js'
-import { redlock } from '../../libs/redis.js'
+import { redlock } from '../../libs/redis'
 
 /**
  * Save issues data returned by the datalad service

@@ -1,5 +1,5 @@
 import Comment from '../../models/comment'
-import notifications from '../../libs/notifications.js'
+import notifications from '../../libs/notifications'
 import { user } from './user.js'
 import { checkAdmin } from '../permissions'
 

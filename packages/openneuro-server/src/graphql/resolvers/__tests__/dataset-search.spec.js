@@ -6,7 +6,7 @@ import {
 
 vi.mock('ioredis')
 vi.mock('../../../elasticsearch/elastic-client.js')
-vi.mock('../../../config.js')
+vi.mock('../../../config.ts')
 
 describe('dataset search resolvers', () => {
   describe('encodeCursor()', () => {

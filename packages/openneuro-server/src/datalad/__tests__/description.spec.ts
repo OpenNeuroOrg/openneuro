@@ -7,7 +7,7 @@ import {
 
 // Mock requests to Datalad service
 vi.mock('ioredis')
-vi.mock('../../config.js')
+vi.mock('../../config.ts')
 
 describe('datalad dataset descriptions', () => {
   describe('appendSeniorAuthor', () => {

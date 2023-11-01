@@ -1,4 +1,4 @@
-import * as datalad from '../../datalad/dataset.js'
+import * as datalad from '../../datalad/dataset'
 import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
 import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
@@ -12,12 +12,11 @@ import { permissions } from './permissions'
 import { datasetComments } from './comment.js'
 import { metadata } from './metadata'
 import { history } from './history.js'
-import * as dataladAnalytics from '../../datalad/analytics.js'
+import * as dataladAnalytics from '../../datalad/analytics'
 import DatasetModel from '../../models/dataset'
 import Deletion from '../../models/deletion'
 import { reviewers } from './reviewer'
-import { getDatasetWorker } from '../../libs/datalad-service.js'
-import { getDraftHead } from '../../datalad/dataset.js'
+import { getDatasetWorker } from '../../libs/datalad-service'
 import { getFileName } from '../../datalad/files'
 import { onBrainlife } from './brainlife'
 import { derivatives } from './derivatives'
@@ -278,7 +277,7 @@ const Dataset = {
   uploader: ds => user(ds, { id: ds.uploader }),
   draft: async obj => ({
     id: obj.id,
-    revision: await getDraftHead(obj.id),
+    revision: await datalad.getDraftHead(obj.id),
     modified: obj.modified,
   }),
   snapshots,

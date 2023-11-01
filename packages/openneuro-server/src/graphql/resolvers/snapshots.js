@@ -1,4 +1,4 @@
-import * as datalad from '../../datalad/snapshots.js'
+import * as datalad from '../../datalad/snapshots'
 import { dataset, analytics, snapshotCreationComparison } from './dataset.js'
 import { onBrainlife } from './brainlife'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'

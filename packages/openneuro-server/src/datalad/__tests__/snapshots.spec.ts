@@ -20,7 +20,7 @@ vi.mock('../../libs/redis.js', () => ({
 vi.mock('../draft.js', () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
-vi.mock('../../config.js')
+vi.mock('../../config.ts')
 vi.mock('../../libs/notifications.js')
 
 describe('snapshot model operations', () => {
