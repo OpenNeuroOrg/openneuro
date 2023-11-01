@@ -7,12 +7,13 @@ import request from 'superagent'
 import requestNode from 'request'
 import objectHash from 'object-hash'
 import { Readable } from 'stream'
+import * as Mongoose from 'mongoose'
 import config from '../config'
 import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis'
 import CacheItem, { CacheType } from '../cache/item'
-import { updateDatasetRevision } from './draft.js'
+import { updateDatasetRevision } from './draft'
 import { fileUrl, getFileName, encodeFilePath, filesUrl } from './files'
 import { getAccessionNumber } from '../libs/dataset'
 import Dataset from '../models/dataset'
@@ -119,7 +120,7 @@ export const cacheDatasetConnection = options => connectionArguments => {
  * @param {object} match MongoDB $match aggregate
  * @returns {Array<object>} Array of MongoDB aggregate pipelines
  */
-const aggregateArraySetup = match => [{ $match: match }]
+const aggregateArraySetup = (match): Mongoose.Expression => [{ $match: match }]
 
 /**
  * Add any filter steps based on the filterBy options provided
@@ -157,7 +158,7 @@ export const datasetsFilter = options => match => {
     )
     return aggregates
   }
-  const filterMatch = {}
+  const filterMatch: Mongoose.Expression = {}
   if ('filterBy' in options) {
     const filters = options.filterBy
     if (

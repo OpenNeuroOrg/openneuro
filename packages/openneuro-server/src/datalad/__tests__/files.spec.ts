@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import {
   encodeFilePath,
   decodeFilePath,
@@ -69,6 +70,7 @@ describe('datalad files', () => {
           size: 1945682,
         },
       ]
+      // @ts-expect-error Test is mocking this
       expect(computeTotalSize(mockFileSizes)).toBe(1957206)
     })
   })

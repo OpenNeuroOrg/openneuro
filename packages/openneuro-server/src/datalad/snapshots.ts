@@ -16,8 +16,8 @@ import { getFiles } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import notifications from '../libs/notifications'
 import Dataset from '../models/dataset'
-import Snapshot from '../models/snapshot'
-import { updateDatasetRevision } from './draft.js'
+import Snapshot, { SnapshotDocument } from '../models/snapshot'
+import { updateDatasetRevision } from './draft'
 import { getDatasetWorker } from '../libs/datalad-service'
 import { join } from 'path'
 
@@ -94,7 +94,7 @@ const postSnapshot = async (
  * @param {string} datasetId Dataset accession number
  * @returns {Promise<import('../models/snapshot').SnapshotDocument[]>}
  */
-export const getSnapshots = datasetId => {
+export const getSnapshots = (datasetId): Promise<SnapshotDocument[]> => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
   return request
     .get(url)
@@ -194,7 +194,10 @@ export const deleteSnapshot = (datasetId, tag) => {
  * @param {string} commitRef Tag name to retrieve
  * @returns {Promise<import('../models/snapshot').SnapshotDocument>}
  */
-export const getSnapshot = (datasetId, commitRef) => {
+export const getSnapshot = (
+  datasetId,
+  commitRef,
+): Promise<SnapshotDocument> => {
   const url = `${getDatasetWorker(
     datasetId,
   )}/datasets/${datasetId}/snapshots/${commitRef}`

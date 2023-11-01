@@ -3,7 +3,7 @@ vi.mock('ioredis')
 import request from 'superagent'
 import { createDataset } from '../dataset.js'
 import { createSnapshot } from '../snapshots.js'
-import { getDatasetWorker } from '../../libs/datalad-service'
+import { getDatasetWorker } from '../../libs/datalad-service.js'
 import { connect } from 'mongoose'
 
 // Mock requests to Datalad service

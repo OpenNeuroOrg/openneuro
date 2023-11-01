@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import {
   getDescriptionObject,
   repairDescriptionTypes,
@@ -92,6 +93,7 @@ describe('datalad dataset descriptions', () => {
       global.fetch = vi.fn()
     })
     it('returns the parsed dataset_description.json object', async () => {
+      // @ts-expect-error Fetch mock includes mockResolvedValue
       fetch.mockResolvedValue({
         json: () =>
           Promise.resolve({ Name: 'Balloon Analog Risk-taking Task' }),
@@ -105,6 +107,7 @@ describe('datalad dataset descriptions', () => {
     })
     it('handles a corrupted response', async () => {
       global.fetch = vi.fn()
+      // @ts-expect-error Fetch mock includes mockResolvedValue
       fetch.mockResolvedValue({
         json: () => Promise.reject('JSON could not be parsed'),
         headers: {
@@ -120,6 +123,7 @@ describe('datalad dataset descriptions', () => {
     })
     it('throws an error when nothing is returned', async () => {
       global.fetch = vi.fn()
+      // @ts-expect-error Fetch mock includes mockResolvedValue
       fetch.mockResolvedValue({
         json: () => Promise.reject('JSON could not be parsed'),
         headers: {

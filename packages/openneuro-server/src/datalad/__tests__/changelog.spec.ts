@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import * as changelog from '../changelog.js'
 
 vi.mock('ioredis')
