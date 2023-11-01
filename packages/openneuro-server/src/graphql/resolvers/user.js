@@ -1,7 +1,5 @@
 /**
  * User resolvers
- *
- * These are passthroughs to SciTran until we have authentication working internally
  */
 import User from '../../models/user'
 
