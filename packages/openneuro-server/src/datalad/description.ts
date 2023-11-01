@@ -3,8 +3,8 @@
  */
 import config from '../config'
 import request from 'superagent'
-import { redis } from '../libs/redis.js'
-import { commitFiles } from './dataset.js'
+import { redis } from '../libs/redis'
+import { commitFiles } from './dataset'
 import { fileUrl } from './files'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDatasetWorker } from '../libs/datalad-service'

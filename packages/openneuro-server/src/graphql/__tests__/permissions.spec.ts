@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import {
   datasetReadQuery,
   checkPermissionLevel,
@@ -95,12 +96,17 @@ describe('resolver permissions helpers', () => {
   describe('checkDatasetAdmin()', () => {
     it('resolves to false for anonymous users', () => {
       return expect(
-        checkDatasetAdmin('ds000001', null, null, false),
+        checkDatasetAdmin('ds000001', null, null, { checkExists: false }),
       ).rejects.toThrowErrorMatchingSnapshot()
     })
     it('resolves to true for admins', () => {
       return expect(
-        checkDatasetAdmin('ds000001', '1234', { admin: true }, false),
+        checkDatasetAdmin(
+          'ds000001',
+          '1234',
+          { admin: true },
+          { checkExists: false },
+        ),
       ).resolves.toBe(true)
     })
   })

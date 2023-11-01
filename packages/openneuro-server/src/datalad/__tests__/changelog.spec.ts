@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import * as changelog from '../changelog.js'
+import * as changelog from '../changelog'
 
 vi.mock('ioredis')
 vi.mock('../../config.ts')

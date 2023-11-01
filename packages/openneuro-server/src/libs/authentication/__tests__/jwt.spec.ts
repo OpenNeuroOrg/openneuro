@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import User from '../../../models/user'
 import { addJWT } from '../jwt'
 

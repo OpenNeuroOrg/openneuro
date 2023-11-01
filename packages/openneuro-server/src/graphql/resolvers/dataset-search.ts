@@ -89,6 +89,7 @@ export const datasetSearchConnection = async (
   const searchId = hashObject({ q })
   const requestBody = {
     sort: [{ _score: 'asc', id: 'desc' }],
+    search_after: undefined,
   }
   if (after) {
     try {
@@ -228,6 +229,7 @@ export const advancedDatasetSearchConnection = async (
     query: allDatasets
       ? query
       : await parseQuery(query, datasetType, datasetStatus, user),
+    search_after: undefined,
   }
   if (after) {
     try {

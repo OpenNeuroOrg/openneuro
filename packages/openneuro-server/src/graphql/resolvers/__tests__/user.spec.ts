@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { users } from '../user.js'
 
 vi.mock('ioredis')

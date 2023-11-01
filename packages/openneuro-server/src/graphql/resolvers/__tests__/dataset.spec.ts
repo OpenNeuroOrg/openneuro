@@ -40,9 +40,9 @@ describe('dataset resolvers', () => {
     })
     it('sorts array of objects by the "created" property as strings', () => {
       const testArray = [
-        { id: 2, created: '2018-11-20T00:05:43.473Z' },
-        { id: 1, created: '2018-11-19T00:05:43.473Z' },
-        { id: 3, created: '2018-11-23T00:05:43.473Z' },
+        { id: 2, created: '2018-11-20T00:05:43.473Z', tag: '2.0.0' },
+        { id: 1, created: '2018-11-19T00:05:43.473Z', tag: '1.0.0' },
+        { id: 3, created: '2018-11-23T00:05:43.473Z', tag: '3.0.0' },
       ]
       const sorted = testArray.sort(ds.snapshotCreationComparison)
       expect(sorted[0].id).toBe(1)

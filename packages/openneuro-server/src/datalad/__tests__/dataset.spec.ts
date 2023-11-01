@@ -1,15 +1,15 @@
 import { vi } from 'vitest'
 import request from 'superagent'
 import { createDataset, datasetsFilter, testBlacklist } from '../dataset'
-import { getDatasetWorker } from '../../libs/datalad-service.js'
+import { getDatasetWorker } from '../../libs/datalad-service'
 import { connect } from 'mongoose'
 
 // Mock requests to Datalad service
 vi.mock('superagent')
 vi.mock('ioredis')
-vi.mock('../../libs/redis.js')
+vi.mock('../../libs/redis')
 vi.mock('../../config.ts')
-vi.mock('../../libs/notifications.js')
+vi.mock('../../libs/notifications')
 
 describe('dataset model operations', () => {
   describe('createDataset()', () => {

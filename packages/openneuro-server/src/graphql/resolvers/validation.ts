@@ -2,7 +2,6 @@ import config from '../../config'
 import { generateDataladCookie } from '../../libs/authentication/jwt'
 import { getDatasetWorker } from '../../libs/datalad-service'
 import Issue from '../../models/issue'
-import publishDraftUpdate from '../utils/publish-draft-update.js'
 import { redlock } from '../../libs/redis'
 
 /**
@@ -23,10 +22,7 @@ export const updateValidation = (obj, args) => {
     },
   )
     .exec()
-    .then(() => {
-      publishDraftUpdate(args.validation.datasetId, args.validation.id)
-      return true
-    })
+    .then(() => true)
 }
 
 export const validationUrl = (datasetId, ref) => {

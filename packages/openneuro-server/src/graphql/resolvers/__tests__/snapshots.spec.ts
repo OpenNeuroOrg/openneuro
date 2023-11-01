@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { matchKnownObjects, filterLatestSnapshot } from '../snapshots'
 
 vi.mock('ioredis')

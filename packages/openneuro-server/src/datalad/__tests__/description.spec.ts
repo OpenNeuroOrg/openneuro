@@ -3,7 +3,7 @@ import {
   getDescriptionObject,
   repairDescriptionTypes,
   appendSeniorAuthor,
-} from '../description.js'
+} from '../description'
 
 // Mock requests to Datalad service
 vi.mock('ioredis')

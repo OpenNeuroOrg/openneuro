@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import {
   encodeCursor,
   decodeCursor,
@@ -5,7 +6,7 @@ import {
 } from '../dataset-search'
 
 vi.mock('ioredis')
-vi.mock('../../../elasticsearch/elastic-client.js')
+vi.mock('../../../elasticsearch/elastic-client.ts')
 vi.mock('../../../config.ts')
 
 describe('dataset search resolvers', () => {
@@ -46,6 +47,7 @@ describe('dataset search resolvers', () => {
           hasPreviousPage: false,
         },
       }
+      // @ts-expect-error Mock version does not use all arguments
       const connection = await elasticRelayConnection(emptyApiResponse, {
         dataset: vi.fn(),
       })

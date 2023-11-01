@@ -3,7 +3,6 @@
  */
 import request from 'superagent'
 import Dataset from '../models/dataset'
-import publishDraftUpdate from '../graphql/utils/publish-draft-update.js'
 import { getDatasetWorker } from '../libs/datalad-service'
 
 export const getDraftRevision = async datasetId => {
@@ -19,9 +18,7 @@ export const updateDatasetRevision = (datasetId, gitRef) => {
   /**
    * Update the revision modified time in a draft on changes
    */
-  return Dataset.updateOne({ id: datasetId }, { modified: new Date() })
-    .exec()
-    .then(() => publishDraftUpdate(datasetId, gitRef))
+  return Dataset.updateOne({ id: datasetId }, { modified: new Date() }).exec()
 }
 
 /**

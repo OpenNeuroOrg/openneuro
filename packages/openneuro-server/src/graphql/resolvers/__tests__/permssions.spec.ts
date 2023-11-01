@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { updatePermissions } from '../permissions'
 
 vi.mock('ioredis')
@@ -22,7 +23,7 @@ describe('permissions resolvers', () => {
         await updatePermissions(
           {},
           { datasetId: 'ds01234', userEmail: 'fake@test.com' },
-          {},
+          { user: '1234', userInfo: { id: '1234' } },
         )
       } catch (err) {
         error = err

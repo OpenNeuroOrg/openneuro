@@ -1,17 +1,17 @@
 import * as datalad from '../../datalad/dataset'
-import { removeDatasetSearchDocument } from '../../graphql/resolvers/dataset-search.js'
-import { snapshots, latestSnapshot } from './snapshots.js'
-import { description } from './description.js'
+import { removeDatasetSearchDocument } from './dataset-search'
+import { snapshots, latestSnapshot } from './snapshots'
+import { description } from './description'
 import {
   checkDatasetRead,
   checkDatasetWrite,
   checkDatasetAdmin,
 } from '../permissions'
-import { user } from './user.js'
+import { user } from './user'
 import { permissions } from './permissions'
-import { datasetComments } from './comment.js'
+import { datasetComments } from './comment'
 import { metadata } from './metadata'
-import { history } from './history.js'
+import { history } from './history'
 import * as dataladAnalytics from '../../datalad/analytics'
 import DatasetModel from '../../models/dataset'
 import Deletion from '../../models/deletion'
