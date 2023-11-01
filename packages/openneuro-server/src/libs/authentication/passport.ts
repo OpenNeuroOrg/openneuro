@@ -14,7 +14,16 @@ const PROVIDERS = {
   ORCID: 'orcid',
 }
 
-const loadProfile = profile => {
+interface OauthProfile {
+  email: string
+  name: string
+  provider: string
+  providerId: string
+  orcid?: string
+  refresh?: string
+}
+
+const loadProfile = (profile): OauthProfile | Error => {
   if (profile.provider === PROVIDERS.GOOGLE) {
     // Get the account email from Google profile
     const primaryEmail = profile.emails
@@ -25,6 +34,7 @@ const loadProfile = profile => {
       name: profile.displayName,
       provider: profile.provider,
       providerId: profile.id,
+      refresh: undefined,
     }
   } else if (profile.provider === PROVIDERS.ORCID) {
     return {
@@ -33,6 +43,7 @@ const loadProfile = profile => {
       provider: profile.provider,
       providerId: profile.orcid,
       orcid: profile.orcid,
+      refresh: undefined,
     }
   } else {
     // Some unknown profile type
@@ -55,8 +66,12 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
       profileUpdate,
       { upsert: true, new: true, setDefaultsOnInsert: true },
     )
-      .then(user => done(null, addJWT(config)(user.toObject())))
-      .catch(err => done(err, null))
+      .then(user => {
+        done(null, addJWT(config)(user.toObject()))
+      })
+      .catch(err => {
+        done(err, null)
+      })
   } else {
     done(profileUpdate, null)
   }
