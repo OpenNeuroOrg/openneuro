@@ -27,7 +27,7 @@ jobs:
       - name: Install pipenv
         run: pip install 'pipenv==2023.7.23'
       - name: Install dependencies
-        run: pipenv install --keep-outdated --dev
+        run: pipenv install --dev
       - name: Run tests and collect coverage
         run: pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
       - name: Upload coverage to Codecov
