@@ -1,4 +1,4 @@
-import config from '../config.js'
+import config from '../config'
 import { indexDataset, queryForIndex, indexingToken } from '@openneuro/search'
 import { elasticClient } from './elastic-client'
 import {

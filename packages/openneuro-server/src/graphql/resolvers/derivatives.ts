@@ -49,7 +49,7 @@ export const githubDerivative = async (
   }
 }
 
-interface DatasetDerivatives {
+export interface DatasetDerivatives {
   name: string
   local: boolean
   s3Url: URL
