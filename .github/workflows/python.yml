@@ -32,6 +32,11 @@ jobs:
         run: pip install 'pipenv==2023.7.23'
       - name: Install dependencies
         run: pipenv install --dev
+      - name: Configure git defaults
+        run: |
+          git config --global user.name "Git Worker"
+          git config --global user.email "ci@openneuro.org"
+          git config --global receive.denyCurrentBranch updateInstead
       - name: Run tests and collect coverage
         run: pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
       - name: Upload coverage to Codecov
