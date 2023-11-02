@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { FileViewerJsonRaw } from '../file-viewer-json.jsx'
 
 describe('File Viewer - JSON', () => {
@@ -9,7 +9,7 @@ describe('File Viewer - JSON', () => {
     expect(asFragment()).toMatchSnapshot()
   })
   it('renders with invalid JSON', () => {
-    const { asFragment } = render(<FileViewerJsonRaw jsonRaw="1234;" />)
-    expect(asFragment()).toMatchSnapshot()
+    render(<FileViewerJsonRaw jsonRaw="1234;" />)
+    expect(screen.getByText('JSON failed to parse')).toBeInTheDocument()
   })
 })

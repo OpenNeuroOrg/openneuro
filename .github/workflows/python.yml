@@ -1,0 +1,45 @@
+name: Python tests and coverage
+
+on:
+  push: { branches: [master] }
+  pull_request: { branches: [master] }
+
+defaults:
+  run:
+    working-directory: ./services/datalad
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Setup Deno stable
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Install git-annex 
+        run: curl -L http://archive.org/download/git-annex-builds/SHA256E-s53868494--3400215acc1f7f052351d60d17603b36c1338d743b9d8a700eead3dfcd52ad92.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz
+      - name: Install pipenv
+        run: pip install 'pipenv==2023.7.23'
+      - name: Install dependencies
+        run: pipenv install --dev
+      - name: Configure git defaults
+        run: |
+          git config --global user.name "Git Worker"
+          git config --global user.email "ci@openneuro.org"
+          git config --global receive.denyCurrentBranch updateInstead
+      - name: Run tests and collect coverage
+        run: pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

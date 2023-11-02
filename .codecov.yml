@@ -1,2 +1,5 @@
 fixes:
   - "datalad_service/::services/datalad/datalad_service/"
+ignore:
+  - ".pnp.js"
+  - ".pnp.loader.mjs"
