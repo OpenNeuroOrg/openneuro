@@ -41,3 +41,5 @@ jobs:
         run: pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
