@@ -23,7 +23,7 @@
     "elastic-apm-node": "^3.49.1",
     "esm": "^3.0.16",
     "fetch-h2": "^3.0.2",
-    "graphql": "16.6.0",
+    "graphql": "16.8.1",
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "mkdirp": "1.0.4",

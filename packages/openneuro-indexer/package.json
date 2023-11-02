@@ -13,7 +13,7 @@
     "@elastic/elasticsearch": "7.15.0",
     "@openneuro/client": "^4.20.3",
     "@openneuro/search": "^4.20.3",
-    "graphql": "16.6.0",
+    "graphql": "16.8.1",
     "ts-node": "^9.1.1",
     "typescript": "5.1.6"
   },
