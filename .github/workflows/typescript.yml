@@ -1,4 +1,4 @@
-name: TypeScript build CI
+name: TypeScript tests and coverage
 
 on:
   push: { branches: [master] }
