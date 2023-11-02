@@ -4,6 +4,10 @@ on:
   push: { branches: [master] }
   pull_request: { branches: [master] }
 
+defaults:
+  run:
+    working-directory: ./services/datalad
+
 jobs:
   run:
     runs-on: ubuntu-latest
