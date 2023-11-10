@@ -13,6 +13,18 @@ export * as bidsValidator from 'https://deno.land/x/bids_validator@v1.13.1/main.
 //export { validateCommand } from 'https://deno.land/x/bids_validator@v1.13.1/setup/options.ts'
 export type { ValidatorOptions } from 'https://deno.land/x/bids_validator@v1.13.1/setup/options.ts'
 // Logging
+export {
+  Logger,
+  LogLevels,
+  error,
+  critical,
+  debug,
+  info,
+  setup,
+  warning,
+  handlers,
+  getLogger,
+} from 'https://deno.land/std@0.203.0/log/mod.ts'
 export * as log from 'https://deno.land/std@0.203.0/log/mod.ts'
 export { LogLevelNames } from 'https://deno.land/std@0.203.0/log/levels.ts'
 export type { LevelName } from 'https://deno.land/std@0.203.0/log/mod.ts'
