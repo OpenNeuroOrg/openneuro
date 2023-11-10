@@ -14,7 +14,6 @@ import { gitCredential } from './commands/git-credential.ts'
 export type OpenNeuroOptions = {
   localPath?: string
   validatorOptions?: ValidatorOptions
-  interactive: boolean
   debug: LevelName
 }
 
@@ -26,9 +25,6 @@ const openneuroCommand = new Command()
   )
   // TODO - Sync this with the node packages
   .version('4.20.0')
-  .option('--interactive', 'Ask instead of erroring on missing arguments', {
-    default: true,
-  })
   .command('login', login)
   .command('upload', upload)
   .command('git-credential', gitCredential)

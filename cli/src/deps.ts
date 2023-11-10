@@ -3,6 +3,11 @@ export {
   Command,
   EnumType,
 } from 'https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts'
+export {
+  Select,
+  Secret,
+  Confirm,
+} from 'https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts'
 // bids-validator
 export * as bidsValidator from 'https://deno.land/x/bids_validator@v1.13.1/main.ts'
 //export { validateCommand } from 'https://deno.land/x/bids_validator@v1.13.1/setup/options.ts'
