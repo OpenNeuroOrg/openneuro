@@ -18,6 +18,7 @@ GIT_ATTRIBUTES = """* annex.backend=SHA256E
 *.bval annex.largefiles=nothing
 *.bvec annex.largefiles=nothing
 *.json annex.largefiles=largerthan=1mb
+phenotype/*.tsv annex.largefiles=anything
 *.tsv annex.largefiles=largerthan=1mb
 dataset_description.json annex.largefiles=nothing
 .bidsignore annex.largefiles=nothing
