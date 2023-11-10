@@ -1,7 +1,7 @@
-import { Command } from '../deps.ts'
 import { validateCommand } from './validate.ts'
 import { LoginError, getConfig } from './login.ts'
 import { logger } from '../logger.ts'
+import { walk, resolve } from '../deps.ts'
 
 /**
  * Upload is validate extended with upload features
@@ -14,7 +14,7 @@ export const upload = validateCommand
     hidden: true,
     override: true,
   })
-  .action(({ json }, dataset_directory) => {
+  .action(async ({ json }, dataset_directory) => {
     let config
     try {
       config = getConfig()
@@ -29,5 +29,11 @@ export const upload = validateCommand
         3,
       )}...${config.token.slice(-3)}`,
     )
-    logger.info(`upload ${dataset_directory}`)
+    const dataset_directory_abs = resolve(dataset_directory)
+    logger.info(
+      `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
+    )
+    for await (const walkEntry of walk(dataset_directory)) {
+      logger.debug(JSON.stringify(walkEntry))
+    }
   })

@@ -29,3 +29,6 @@ export * as log from 'https://deno.land/std@0.203.0/log/mod.ts'
 export { LogLevelNames } from 'https://deno.land/std@0.203.0/log/levels.ts'
 export type { LevelName } from 'https://deno.land/std@0.203.0/log/mod.ts'
 export { TextLineStream } from 'https://deno.land/std@0.203.0/streams/mod.ts'
+// File handling
+export { walk } from 'https://deno.land/std@0.203.0/fs/walk.ts'
+export { resolve } from 'https://deno.land/std@0.203.0/path/resolve.ts'
