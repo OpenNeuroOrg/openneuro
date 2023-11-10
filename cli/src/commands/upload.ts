@@ -1,5 +1,7 @@
 import { Command } from '../deps.ts'
 import { validateCommand } from './validate.ts'
+import { LoginError, getConfig } from './login.ts'
+import { logger } from '../logger.ts'
 
 /**
  * Upload is validate extended with upload features
@@ -13,5 +15,19 @@ export const upload = validateCommand
     override: true,
   })
   .action(({ json }, dataset_directory) => {
-    console.log(`upload ${dataset_directory}`)
+    let config
+    try {
+      config = getConfig()
+    } catch (err) {
+      if (err instanceof LoginError) {
+        console.error('Run `openneuro login` before upload.')
+      }
+    }
+    logger.info(
+      `configured with URL "${config.url}" and token "${config.token.slice(
+        0,
+        3,
+      )}...${config.token.slice(-3)}`,
+    )
+    logger.info(`upload ${dataset_directory}`)
   })

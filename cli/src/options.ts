@@ -6,8 +6,8 @@ import {
   LogLevelNames,
 } from './deps.ts'
 
+import { setupLogging } from './logger.ts'
 import { login } from './commands/login.ts'
-import { validate } from './commands/validate.ts'
 import { upload } from './commands/upload.ts'
 import { gitCredential } from './commands/git-credential.ts'
 
@@ -19,12 +19,16 @@ export type OpenNeuroOptions = {
 
 const openneuroCommand = new Command()
   .name('openneuro')
-  .type('debugLevel', new EnumType(LogLevelNames))
   .description(
     'OpenNeuro command line tools for uploading, downloading, or syncing datasets. See https://docs.openneuro.org for detailed guides.',
   )
   // TODO - Sync this with the node packages
-  .version('4.20.0')
+  .version('4.20.4')
+  .globalType('debugLevel', new EnumType(LogLevelNames))
+  .globalEnv('LOG=<type:debugLevel>', 'Enable debug output.')
+  .globalAction(({ log }) => {
+    setupLogging(log ? log : 'ERROR')
+  })
   .command('login', login)
   .command('upload', upload)
   .command('git-credential', gitCredential)
@@ -41,6 +45,5 @@ export async function commandLine(
   return {
     datasetPath: args[0],
     ...options,
-    debug: options.debug as LevelName,
   }
 }

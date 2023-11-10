@@ -10,6 +10,33 @@ const messages = {
     'Enable error reporting. Errors and performance metrics are sent to the configured OpenNeuro instance.',
 }
 
+export interface Config {
+  url: string
+  token: string
+  errorReporting: boolean
+}
+
+export class LoginError extends Error {}
+
+/**
+ * Get credentials from local storage
+ */
+export function getConfig(): Config | LoginError {
+  const url = localStorage.getItem('url')
+  const token = localStorage.getItem('token')
+  const errorReporting = localStorage.getItem('errorReporting') === 'true'
+  if (url && token && errorReporting) {
+    const config: Config = {
+      url,
+      token,
+      errorReporting,
+    }
+    return config
+  } else {
+    throw new LoginError('Please configure ')
+  }
+}
+
 export const login = new Command()
   .name('login')
   .description(
