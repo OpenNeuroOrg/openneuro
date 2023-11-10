@@ -2420,18 +2420,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.23.0":
-  version: 7.23.0
-  resolution: "@babel/generator@npm:7.23.0"
-  dependencies:
-    "@babel/types": ^7.23.0
-    "@jridgewell/gen-mapping": ^0.3.2
-    "@jridgewell/trace-mapping": ^0.3.17
-    jsesc: ^2.5.1
-  checksum: 8efe24adad34300f1f8ea2add420b28171a646edc70f2a1b3e1683842f23b8b7ffa7e35ef0119294e1901f45bfea5b3dc70abe1f10a1917ccdfb41bed69be5f1
-  languageName: node
-  linkType: hard
-
 "@babel/helper-compilation-targets@npm:^7.22.15":
   version: 7.22.15
   resolution: "@babel/helper-compilation-targets@npm:7.22.15"
@@ -2445,13 +2433,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-environment-visitor@npm:^7.22.20":
-  version: 7.22.20
-  resolution: "@babel/helper-environment-visitor@npm:7.22.20"
-  checksum: d80ee98ff66f41e233f36ca1921774c37e88a803b2f7dca3db7c057a5fea0473804db9fb6729e5dbfd07f4bed722d60f7852035c2c739382e84c335661590b69
-  languageName: node
-  linkType: hard
-
 "@babel/helper-environment-visitor@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-environment-visitor@npm:7.22.5"
@@ -2459,13 +2440,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-function-name@npm:^7.23.0":
-  version: 7.23.0
-  resolution: "@babel/helper-function-name@npm:7.23.0"
+"@babel/helper-function-name@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/helper-function-name@npm:7.22.5"
   dependencies:
-    "@babel/template": ^7.22.15
-    "@babel/types": ^7.23.0
-  checksum: e44542257b2d4634a1f979244eb2a4ad8e6d75eb6761b4cfceb56b562f7db150d134bc538c8e6adca3783e3bc31be949071527aa8e3aab7867d1ad2d84a26e10
+    "@babel/template": ^7.22.5
+    "@babel/types": ^7.22.5
+  checksum: 6b1f6ce1b1f4e513bf2c8385a557ea0dd7fa37971b9002ad19268ca4384bbe90c09681fe4c076013f33deabc63a53b341ed91e792de741b4b35e01c00238177a
   languageName: node
   linkType: hard
 
@@ -2564,13 +2545,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-identifier@npm:^7.22.20":
-  version: 7.22.20
-  resolution: "@babel/helper-validator-identifier@npm:7.22.20"
-  checksum: 136412784d9428266bcdd4d91c32bcf9ff0e8d25534a9d94b044f77fe76bc50f941a90319b05aafd1ec04f7d127cd57a179a3716009ff7f3412ef835ada95bdc
-  languageName: node
-  linkType: hard
-
 "@babel/helper-validator-identifier@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-validator-identifier@npm:7.22.5"
@@ -2635,15 +2609,6 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: 944c756b5bdeb07b9fec16ecef6b3c61aff9d4c4b924abadcf01afa1840a740b8e2357ae00482b5b37daad6d2bfd848c947f27ad65138d687b6fdc924bc59edd
-  languageName: node
-  linkType: hard
-
-"@babel/parser@npm:^7.23.0":
-  version: 7.23.0
-  resolution: "@babel/parser@npm:7.23.0"
-  bin:
-    parser: ./bin/babel-parser.js
-  checksum: 453fdf8b9e2c2b7d7b02139e0ce003d1af21947bbc03eb350fb248ee335c9b85e4ab41697ddbdd97079698de825a265e45a0846bb2ed47a2c7c1df833f42a354
   languageName: node
   linkType: hard
 
@@ -2838,7 +2803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/template@npm:^7.22.15, @babel/template@npm:^7.3.3":
+"@babel/template@npm:^7.22.15, @babel/template@npm:^7.22.5, @babel/template@npm:^7.3.3":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
   dependencies:
@@ -2850,20 +2815,20 @@ __metadata:
   linkType: hard
 
 "@babel/traverse@npm:^7.22.15, @babel/traverse@npm:^7.22.17":
-  version: 7.23.2
-  resolution: "@babel/traverse@npm:7.23.2"
+  version: 7.22.17
+  resolution: "@babel/traverse@npm:7.22.17"
   dependencies:
     "@babel/code-frame": ^7.22.13
-    "@babel/generator": ^7.23.0
-    "@babel/helper-environment-visitor": ^7.22.20
-    "@babel/helper-function-name": ^7.23.0
+    "@babel/generator": ^7.22.15
+    "@babel/helper-environment-visitor": ^7.22.5
+    "@babel/helper-function-name": ^7.22.5
     "@babel/helper-hoist-variables": ^7.22.5
     "@babel/helper-split-export-declaration": ^7.22.6
-    "@babel/parser": ^7.23.0
-    "@babel/types": ^7.23.0
+    "@babel/parser": ^7.22.16
+    "@babel/types": ^7.22.17
     debug: ^4.1.0
     globals: ^11.1.0
-  checksum: 26a1eea0dde41ab99dde8b9773a013a0dc50324e5110a049f5d634e721ff08afffd54940b3974a20308d7952085ac769689369e9127dea655f868c0f6e1ab35d
+  checksum: 1153ca166a0a9b3fddf67f7f7c8c5b4f88aa2c2c00261ff2fc8424a63bc93250ed3fd08b04bd526ad19e797aeb6f22161120646a570cbfe5ff2a5d2f5d28af01
   languageName: node
   linkType: hard
 
@@ -2886,17 +2851,6 @@ __metadata:
     "@babel/helper-validator-identifier": ^7.22.5
     to-fast-properties: ^2.0.0
   checksum: c13a9c1dc7d2d1a241a2f8363540cb9af1d66e978e8984b400a20c4f38ba38ca29f06e26a0f2d49a70bad9e57615dac09c35accfddf1bb90d23cd3e0a0bab892
-  languageName: node
-  linkType: hard
-
-"@babel/types@npm:^7.23.0":
-  version: 7.23.0
-  resolution: "@babel/types@npm:7.23.0"
-  dependencies:
-    "@babel/helper-string-parser": ^7.22.5
-    "@babel/helper-validator-identifier": ^7.22.20
-    to-fast-properties: ^2.0.0
-  checksum: 215fe04bd7feef79eeb4d33374b39909ce9cad1611c4135a4f7fdf41fe3280594105af6d7094354751514625ea92d0875aba355f53e86a92600f290e77b0e604
   languageName: node
   linkType: hard
 
@@ -5432,8 +5386,8 @@ __metadata:
     "@emotion/react": 11.11.1
     "@emotion/styled": 11.11.0
     "@niivue/niivue": 0.34.0
-    "@openneuro/client": ^4.20.3
-    "@openneuro/components": ^4.20.3
+    "@openneuro/client": ^4.20.4
+    "@openneuro/components": ^4.20.4
     "@tanstack/react-table": ^8.9.3
     "@testing-library/jest-dom": 6.1.3
     "@testing-library/react": ^11.1.0
@@ -5451,7 +5405,7 @@ __metadata:
     draft-js: ^0.11.7
     email-validator: ^2.0.4
     esbuild-plugin-globals: ^0.1.1
-    graphql: 16.8.1
+    graphql: 16.6.0
     history: 5.3.0
     jsdom: ^16.5.3
     jwt-decode: ^2.2.0
@@ -5484,7 +5438,7 @@ __metadata:
   resolution: "@openneuro/cli@workspace:packages/openneuro-cli"
   dependencies:
     "@apollo/client": 3.7.2
-    "@openneuro/client": ^4.20.3
+    "@openneuro/client": ^4.20.4
     "@types/mkdirp": 1.0.2
     "@types/node": 18.11.9
     bids-validator: 1.10.0
@@ -5494,7 +5448,7 @@ __metadata:
     elastic-apm-node: ^3.49.1
     esm: ^3.0.16
     fetch-h2: ^3.0.2
-    graphql: 16.8.1
+    graphql: 16.6.0
     inquirer: ^5.2.0
     jwt-decode: ^3.1.2
     metro-memory-fs: ^0.73.3
@@ -5509,17 +5463,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@^4.20.3, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@^4.20.4, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": 3.7.2
     "@graphql-tools/mock": ^9.0.0
     "@graphql-tools/schema": ^10.0.0
-    "@openneuro/server": ^4.20.3
+    "@openneuro/server": ^4.20.4
     core-js: ^3.10.1
     crypto-hash: ^1.3.0
-    graphql: 16.8.1
+    graphql: 16.6.0
     ioredis-mock: ^8.8.1
     react: ^17.0.1
     semver: ^5.5.0
@@ -5528,7 +5482,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@^4.20.3, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@^4.20.4, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5570,13 +5524,13 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.2
     "@elastic/elasticsearch": 7.15.0
-    "@openneuro/client": ^4.20.3
-    "@openneuro/search": ^4.20.3
+    "@openneuro/client": ^4.20.4
+    "@openneuro/search": ^4.20.4
     "@types/jsonwebtoken": ^8
     "@types/node": 18.11.9
     "@types/tsc-watch": ^4
     core-js: ^3.10.1
-    graphql: 16.8.1
+    graphql: 16.6.0
     ts-node: ^9.1.1
     typescript: 5.1.6
     vitest: 0.34.4
@@ -5585,7 +5539,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@^4.20.3, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@^4.20.4, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5594,13 +5548,13 @@ __metadata:
     "@types/jsonwebtoken": ^8
     "@types/node": 18.11.9
     core-js: ^3.10.1
-    graphql: 16.8.1
+    graphql: 16.6.0
     jsonwebtoken: ^9.0.0
     vitest: 0.34.4
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@^4.20.3, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@^4.20.4, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5610,7 +5564,7 @@ __metadata:
     "@elastic/elasticsearch": 7.15.0
     "@graphql-tools/schema": ^10.0.0
     "@keyv/redis": ^2.7.0
-    "@openneuro/search": ^4.20.3
+    "@openneuro/search": ^4.20.4
     "@passport-next/passport-google-oauth2": ^1.0.0
     "@sentry/node": ^4.5.3
     "@types/cors": ^2
@@ -5630,10 +5584,12 @@ __metadata:
     draft-js-export-html: ^1.4.1
     elastic-apm-node: 3.49.1
     express: 4.18.2
-    graphql: 16.8.1
+    graphql: 16.6.0
     graphql-bigint: ^1.0.0
     graphql-compose: 9.0.10
     graphql-iso-date: ^3.6.1
+    graphql-redis-subscriptions: 2.1.0
+    graphql-subscriptions: ^1.1.0
     graphql-tools: 9.0.0
     immutable: ^3.8.2
     ioredis: 4.17.3
@@ -13649,9 +13605,9 @@ fsevents@~2.3.2:
   linkType: hard
 
 "get-func-name@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "get-func-name@npm:2.0.2"
-  checksum: 3f62f4c23647de9d46e6f76d2b3eafe58933a9b3830c60669e4180d6c601ce1b4aa310ba8366143f55e52b139f992087a9f0647274e8745621fa2af7e0acf13b
+  version: 2.0.0
+  resolution: "get-func-name@npm:2.0.0"
+  checksum: 8d82e69f3e7fab9e27c547945dfe5cc0c57fc0adf08ce135dddb01081d75684a03e7a0487466f478872b341d52ac763ae49e660d01ab83741f74932085f693c3
   languageName: node
   linkType: hard
 
@@ -14210,6 +14166,32 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"graphql-redis-subscriptions@npm:2.1.0":
+  version: 2.1.0
+  resolution: "graphql-redis-subscriptions@npm:2.1.0"
+  dependencies:
+    ioredis: ^4.6.3
+    iterall: ^1.2.2
+  peerDependencies:
+    graphql-subscriptions: ^1.0.0
+  dependenciesMeta:
+    ioredis:
+      optional: true
+  checksum: d223fab4e7d0a16dd4157c97dde0e621d8dbee5c71fad684ebd995e2a710d7f9845bc5be66493b2a8fd084a6f09dfca4084fa93fc5f1fb157bd7b390be94f209
+  languageName: node
+  linkType: hard
+
+"graphql-subscriptions@npm:^1.1.0":
+  version: 1.2.1
+  resolution: "graphql-subscriptions@npm:1.2.1"
+  dependencies:
+    iterall: ^1.3.0
+  peerDependencies:
+    graphql: ^0.10.5 || ^0.11.3 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+  checksum: 2b9533c6774e7be46acd6fbee528aab06429f15dc222eabd991e82c02bf74e390b638dffa1a3fd86c1e26212c40a42a0418d7f4a7c3a1edf0534978ef128e528
+  languageName: node
+  linkType: hard
+
 "graphql-tag@npm:^2.12.6":
   version: 2.12.6
   resolution: "graphql-tag@npm:2.12.6"
@@ -14246,10 +14228,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.8.1":
-  version: 16.8.1
-  resolution: "graphql@npm:16.8.1"
-  checksum: 8d304b7b6f708c8c5cc164b06e92467dfe36aff6d4f2cf31dd19c4c2905a0e7b89edac4b7e225871131fd24e21460836b369de0c06532644d15b461d55b1ccc0
+"graphql@npm:16.6.0":
+  version: 16.6.0
+  resolution: "graphql@npm:16.6.0"
+  checksum: bf1d9e3c1938ce3c1a81e909bd3ead1ae4707c577f91cff1ca2eca474bfbc7873d5d7b942e1e9777ff5a8304421dba57a4b76d7a29eb19de8711cb70e3c2415e
   languageName: node
   linkType: hard
 
@@ -15173,6 +15155,25 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"ioredis@npm:^4.6.3":
+  version: 4.27.9
+  resolution: "ioredis@npm:4.27.9"
+  dependencies:
+    cluster-key-slot: ^1.1.0
+    debug: ^4.3.1
+    denque: ^1.1.0
+    lodash.defaults: ^4.2.0
+    lodash.flatten: ^4.4.0
+    lodash.isarguments: ^3.1.0
+    p-map: ^2.1.0
+    redis-commands: 1.7.0
+    redis-errors: ^1.2.0
+    redis-parser: ^3.0.0
+    standard-as-callback: ^2.1.0
+  checksum: 0472f20366759fe17c71c42105869dbaba99ad54e3fc14428cd6e1d28f8767ff1aea03bfc0228b29bf6030d7ae1ac856941ab6698c850a9b27fd8a17328e7f9f
+  languageName: node
+  linkType: hard
+
 "ioredis@npm:^5.2.4":
   version: 5.2.4
   resolution: "ioredis@npm:5.2.4"
@@ -15952,7 +15953,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"iterall@npm:^1.2.1":
+"iterall@npm:^1.2.1, iterall@npm:^1.2.2, iterall@npm:^1.3.0":
   version: 1.3.0
   resolution: "iterall@npm:1.3.0"
   checksum: c78b99678f8c99be488cca7f33e4acca9b72c1326e050afbaf023f086e55619ee466af0464af94a0cb3f292e60cb5bac53a8fd86bd4249ecad26e09f17bb158b
@@ -21666,6 +21667,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"redis-commands@npm:1.7.0":
+  version: 1.7.0
+  resolution: "redis-commands@npm:1.7.0"
+  checksum: d1ff7fbcb5e54768c77f731f1d49679d2a62c3899522c28addb4e2e5813aea8bcac3f22519d71d330224c3f2937f935dfc3d8dc65e90db0f5fe22dc2c1515aa7
+  languageName: node
+  linkType: hard
+
 "redis-errors@npm:^1.0.0, redis-errors@npm:^1.2.0":
   version: 1.2.0
   resolution: "redis-errors@npm:1.2.0"
@@ -22243,7 +22251,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-prettier: ^3.3.1
     eslint-plugin-react: ^7.23.1
     eslint-plugin-react-hooks: ^4.2.0
-    graphql: 16.8.1
+    graphql: 16.6.0
     history: 5.2.0
     husky: 5.1.1
     ioredis: ^5.2.4

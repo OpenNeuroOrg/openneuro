@@ -75,14 +75,14 @@ commander
   .action(ls)
 
 function main(argv) {
-  if (argv.endsWith('git-credential-openneuro')) {
+  if (argv[1].endsWith('git-credential-openneuro')) {
     gitCredential()
-  } else if (argv.endsWith('git-annex-remote-openneuro')) {
+  } else if (argv[1].endsWith('git-annex-remote-openneuro')) {
     gitAnnexRemote()
-  } else if (!process.argv.slice(2).length) {
+  } else if (!argv.slice(2).length) {
     commander.help()
   } else {
-    commander.parse(process.argv)
+    commander.parse(argv)
   }
 }
 
