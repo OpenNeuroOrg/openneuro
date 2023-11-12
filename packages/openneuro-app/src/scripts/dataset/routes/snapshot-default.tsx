@@ -1,9 +1,9 @@
-import React from 'react'
-import Markdown from 'markdown-to-jsx'
-import { ReadMore } from '@openneuro/components/read-more'
-import { MetaDataBlock } from '@openneuro/components/dataset'
-import Files from '../files/files'
-import Comments from '../comments/comments'
+import React from "react"
+import Markdown from "markdown-to-jsx"
+import { ReadMore } from "@openneuro/components/read-more"
+import { MetaDataBlock } from "@openneuro/components/dataset"
+import Files from "../files/files"
+import Comments from "../comments/comments"
 
 /**
  * Default tab for snapshot pages
@@ -15,7 +15,7 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       item={
         <ReadMore id="readme" expandLabel="Read More" collapseLabel="Collapse">
           <Markdown>
-            {snapshot.readme == null ? 'N/A' : snapshot.readme}
+            {snapshot.readme == null ? "N/A" : snapshot.readme}
           </Markdown>
         </ReadMore>
       }

@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { DATASET_METADATA } from '../../datalad/dataset/dataset-query-fragments'
-import { datasetCacheId } from './cache-id.js'
-import { Button } from '@openneuro/components/button'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { DATASET_METADATA } from "../../datalad/dataset/dataset-query-fragments"
+import { datasetCacheId } from "./cache-id.js"
+import { Button } from "@openneuro/components/button"
 
 export const SUBMIT_METADATA = gql`
   mutation addMetadata($datasetId: ID!, $metadata: MetadataInput!) {
@@ -44,13 +44,14 @@ const SubmitMetadata = ({ datasetId, metadata, done, disabled }) => (
         id: datasetCacheId(datasetId),
         fragment: DATASET_METADATA,
         data: {
-          __typename: 'Dataset',
+          __typename: "Dataset",
           id: datasetId,
           metadata: addMetadata,
         },
       })
-    }}>
-    {submitMetadata => (
+    }}
+  >
+    {(submitMetadata) => (
       <Button
         className="btn-modal-action"
         primary={true}
@@ -59,7 +60,7 @@ const SubmitMetadata = ({ datasetId, metadata, done, disabled }) => (
         type="submit"
         form="metadata-form"
         disabled={disabled}
-        onClick={async e => {
+        onClick={async (e) => {
           e.preventDefault()
           await submitMetadata({
             variables: { datasetId, metadata },

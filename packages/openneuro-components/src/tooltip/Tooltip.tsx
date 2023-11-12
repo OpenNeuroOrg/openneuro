@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC } from "react"
 
 export interface TooltipProps {
   tooltip: string
-  flow?: 'up' | 'down' | 'left' | 'right'
+  flow?: "up" | "down" | "left" | "right"
   children: React.ReactNode
   className?: string
   wrapText?: boolean
@@ -11,16 +11,17 @@ export interface TooltipProps {
 export const Tooltip: FC<TooltipProps> = ({
   children,
   tooltip,
-  flow = 'up',
+  flow = "up",
   className,
   wrapText,
 }) => {
-  const wrap = wrapText && ' wrap-text'
+  const wrap = wrapText && " wrap-text"
   return (
     <span
-      className={(wrap || '') + ' ' + (className || '')}
+      className={(wrap || "") + " " + (className || "")}
       data-tooltip={tooltip}
-      data-flow={flow}>
+      data-flow={flow}
+    >
       {children}
     </span>
   )

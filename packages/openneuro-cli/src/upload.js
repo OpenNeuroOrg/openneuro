@@ -1,15 +1,15 @@
-import cliProgress from 'cli-progress'
-import path from 'path'
-import inquirer from 'inquirer'
-import { promises as fs } from 'fs'
-import { createReadStream } from 'fs'
-import { uploads } from '@openneuro/client'
-import validate from 'bids-validator'
-import { getFiles, bytesToSize } from './files'
-import { getUrl } from './config'
+import cliProgress from "cli-progress"
+import path from "path"
+import inquirer from "inquirer"
+import { promises as fs } from "fs"
+import { createReadStream } from "fs"
+import { uploads } from "@openneuro/client"
+import validate from "bids-validator"
+import { bytesToSize, getFiles } from "./files"
+import { getUrl } from "./config"
 // @ts-ignore
-import consoleFormat from 'bids-validator/dist/commonjs/utils/consoleFormat'
-import { fetch, Request, AbortController } from 'fetch-h2'
+import consoleFormat from "bids-validator/dist/commonjs/utils/consoleFormat"
+import { AbortController, fetch, Request } from "fetch-h2"
 
 /**
  * BIDS validator promise wrapper
@@ -43,15 +43,15 @@ const fatalError = (err, apmSpan) => {
  * @param {object} apmTransaction Elastic APM Transaction object
  */
 export const validation = (dir, validatorOptions, apmTransaction) => {
-  const apmValidatePromiseSpan =
-    apmTransaction && apmTransaction.startSpan('validatePromise')
+  const apmValidatePromiseSpan = apmTransaction &&
+    apmTransaction.startSpan("validatePromise")
   return validatePromise(dir, validatorOptions)
     .then(function ({ summary }) {
       // eslint-disable-next-line no-console
       console.log(consoleFormat.summary(summary))
       apmValidatePromiseSpan.end()
     })
-    .catch(err => fatalError(err, apmValidatePromiseSpan))
+    .catch((err) => fatalError(err, apmValidatePromiseSpan))
 }
 
 /**
@@ -72,7 +72,7 @@ export const prepareUpload = async (
   const files = []
   for await (const f of getFiles(dir)) {
     const rel = path.relative(dir, f)
-    const remote = remoteFiles.find(remote => remote.filename === rel)
+    const remote = remoteFiles.find((remote) => remote.filename === rel)
     const { size } = await fs.stat(f)
     if (remote) {
       if (remote.size !== size) {
@@ -83,33 +83,35 @@ export const prepareUpload = async (
     }
   }
   console.log(
-    '=======================================================================',
+    "=======================================================================",
   )
   if (files.length < 12) {
-    console.log('Files to be uploaded:')
+    console.log("Files to be uploaded:")
     for (const f of files) {
       console.log(`${f.filename} - ${bytesToSize(f.size)}`)
     }
   } else {
     const totalSize = uploads.uploadSize(files)
     console.log(
-      `${files.length} files to be uploaded with a total size of ${bytesToSize(
-        totalSize,
-      )}`,
+      `${files.length} files to be uploaded with a total size of ${
+        bytesToSize(
+          totalSize,
+        )
+      }`,
     )
   }
   const answer = await inquirer.prompt({
-    type: 'confirm',
-    name: 'start',
-    message: 'Begin upload?',
+    type: "confirm",
+    name: "start",
+    message: "Begin upload?",
     default: true,
   })
   if (answer.start) {
     console.log(
-      '=======================================================================',
+      "=======================================================================",
     )
     // Filter out local paths in mutation
-    const mutationFiles = files.map(f => ({
+    const mutationFiles = files.map((f) => ({
       filename: f.filename,
       size: f.size,
     }))
@@ -141,14 +143,14 @@ export const uploadFiles = async ({
   endpoint,
 }) => {
   const uploadProgress = new cliProgress.SingleBar({
-    format:
-      datasetId + ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
+    format: datasetId +
+      " [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}",
     clearOnComplete: false,
     hideCursor: true,
     etaBuffer: Math.round(files.length / 10) + 1, // More stable values for many small files
   })
   uploadProgress.start(files.length, 0, {
-    speed: 'N/A',
+    speed: "N/A",
   })
   const rootUrl = getUrl()
   const controller = new AbortController()
@@ -156,16 +158,16 @@ export const uploadFiles = async ({
   const MAX_STREAM_HANDLES = 512
   for (let n = 0; n < files.length; n += MAX_STREAM_HANDLES) {
     const filesChunk = files.slice(n, n + MAX_STREAM_HANDLES)
-    const requests = filesChunk.map(file => {
+    const requests = filesChunk.map((file) => {
       // http://localhost:9876/uploads/0/ds001024/0de963b9-1a2a-4bcc-af3c-fef0345780b0/dataset_description.json
       const encodedFilePath = uploads.encodeFilePath(file.filename)
       const fileStream = createReadStream(file.path)
-      fileStream.on('error', err => {
+      fileStream.on("error", (err) => {
         console.error(err)
         fileStream.close()
         controller.abort()
       })
-      fileStream.on('close', () => {
+      fileStream.on("close", () => {
         if (fileStream.bytesRead === 0) {
           uploadProgress.stop()
           console.error(
@@ -175,7 +177,7 @@ export const uploadFiles = async ({
         }
       })
       const requestOptions = {
-        method: 'POST',
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -197,7 +199,7 @@ export const uploadFiles = async ({
       )
     } catch (err) {
       console.error(
-        '\nNot all files could be opened for upload, check file access and permissions and try again.',
+        "\nNot all files could be opened for upload, check file access and permissions and try again.",
       )
       console.error(err)
     }

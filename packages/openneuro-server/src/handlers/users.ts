@@ -1,5 +1,5 @@
 // dependencies ------------------------------------------------------------
-import { generateApiKey } from '../libs/apikey'
+import { generateApiKey } from "../libs/apikey"
 
 // handlers ----------------------------------------------------------------
 
@@ -10,6 +10,6 @@ import { generateApiKey } from '../libs/apikey'
  */
 export function createAPIKey(req, res, next) {
   generateApiKey(req.user)
-    .then(key => res.send(key))
-    .catch(err => next(err))
+    .then((key) => res.send(key))
+    .catch((err) => next(err))
 }

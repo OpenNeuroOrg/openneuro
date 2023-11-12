@@ -1,6 +1,6 @@
-import React from 'react'
-import { DataTable } from '../../../components/data-table'
-import styled from '@emotion/styled'
+import React from "react"
+import { DataTable } from "../../../components/data-table"
+import styled from "@emotion/styled"
 
 const TableOverlow = styled.div`
   overflow-x: scroll;

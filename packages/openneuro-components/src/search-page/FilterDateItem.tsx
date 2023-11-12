@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 type DateRange = [Date | null, Date | null]
 type Item = {
@@ -26,7 +26,7 @@ export const FilterDateItem = ({
 
   if (dateIsNull) {
     return null
-  } else
+  } else {
     return (
       <>
         <li className={type}>
@@ -40,4 +40,5 @@ export const FilterDateItem = ({
         </li>
       </>
     )
+  }
 }

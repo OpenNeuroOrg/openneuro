@@ -1,14 +1,14 @@
-import { vi } from 'vitest'
-vi.mock('ioredis')
-import request from 'superagent'
-import { createDataset } from '../dataset'
-import { createSnapshot } from '../snapshots'
-import { getDatasetWorker } from '../../libs/datalad-service'
-import { connect } from 'mongoose'
+import { vi } from "vitest"
+vi.mock("ioredis")
+import request from "superagent"
+import { createDataset } from "../dataset"
+import { createSnapshot } from "../snapshots"
+import { getDatasetWorker } from "../../libs/datalad-service"
+import { connect } from "mongoose"
 
 // Mock requests to Datalad service
-vi.mock('superagent')
-vi.mock('../../libs/redis.js', () => ({
+vi.mock("superagent")
+vi.mock("../../libs/redis.js", () => ({
   redis: {
     del: vi.fn(),
   },
@@ -17,17 +17,17 @@ vi.mock('../../libs/redis.js', () => ({
   },
 }))
 // Mock draft files calls
-vi.mock('../draft.ts', () => ({
+vi.mock("../draft.ts", () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
-vi.mock('../../config.ts')
-vi.mock('../../libs/notifications.ts')
+vi.mock("../../config.ts")
+vi.mock("../../libs/notifications.ts")
 
-describe('snapshot model operations', () => {
-  describe('createSnapshot()', () => {
-    it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async () => {
-      const user = { id: '1234' }
-      const tag = 'snapshot'
+describe("snapshot model operations", () => {
+  describe("createSnapshot()", () => {
+    it("posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint", async () => {
+      const user = { id: "1234" }
+      const tag = "snapshot"
       await connect(globalThis.__MONGO_URI__)
       const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,

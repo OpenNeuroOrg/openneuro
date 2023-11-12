@@ -1,6 +1,6 @@
-import React, { createContext, useState, FC, ReactNode } from 'react'
-import { UserLoginModal } from '@openneuro/components/modal'
-import loginUrls from '../authentication/loginUrls'
+import React, { createContext, FC, ReactNode, useState } from "react"
+import { UserLoginModal } from "@openneuro/components/modal"
+import loginUrls from "../authentication/loginUrls"
 
 export const UserModalOpenCtx = createContext(null)
 
@@ -13,7 +13,7 @@ export const UserModalOpenProvider: FC<UserModalOpenProviderProps> = ({
 }) => {
   const [userModalOpen, setUserModalOpen] = useState(false)
   const toggle = (): void => {
-    setUserModalOpen(prevState => !prevState)
+    setUserModalOpen((prevState) => !prevState)
   }
   return (
     <UserModalOpenCtx.Provider value={{ userModalOpen, setUserModalOpen }}>

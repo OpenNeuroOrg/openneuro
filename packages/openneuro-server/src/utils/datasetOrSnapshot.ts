@@ -23,7 +23,7 @@ export type DatasetOrSnapshot = HasId | HasSnapshotId
 export function datasetOrSnapshot(
   obj: DatasetOrSnapshot,
 ): DatasetRevisionReference {
-  if ('tag' in obj) {
+  if ("tag" in obj) {
     return {
       datasetId: getDatasetFromSnapshotId(obj.id),
       revision: obj.hexsha || obj.tag,
@@ -38,5 +38,5 @@ export function datasetOrSnapshot(
  * @returns {string} Dataset id portion 'ds000001'
  */
 export function getDatasetFromSnapshotId(snapshotId: string): string {
-  return snapshotId.split(':')[0]
+  return snapshotId.split(":")[0]
 }

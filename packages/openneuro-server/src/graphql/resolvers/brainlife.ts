@@ -1,7 +1,7 @@
 import {
   DatasetOrSnapshot,
   getDatasetFromSnapshotId,
-} from '../../utils/datasetOrSnapshot'
+} from "../../utils/datasetOrSnapshot"
 
 interface BrainlifeFindQuery {
   removed: boolean
@@ -19,7 +19,7 @@ export function brainlifeQuery(dataset: DatasetOrSnapshot): URL {
     removed: false,
   }
 
-  if ('tag' in dataset) {
+  if ("tag" in dataset) {
     find.path = {
       $regex: `^OpenNeuro/${getDatasetFromSnapshotId(dataset.id)}`,
     }
@@ -28,8 +28,8 @@ export function brainlifeQuery(dataset: DatasetOrSnapshot): URL {
     find.path = { $regex: `^OpenNeuro/${dataset.id}` }
   }
 
-  const url = new URL('https://brainlife.io/api/warehouse/datalad/datasets')
-  url.searchParams.append('find', JSON.stringify(find))
+  const url = new URL("https://brainlife.io/api/warehouse/datalad/datasets")
+  url.searchParams.append("find", JSON.stringify(find))
 
   return url
 }

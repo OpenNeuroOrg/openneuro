@@ -1,5 +1,5 @@
-import uuid from 'uuid'
-import mongoose, { Document } from 'mongoose'
+import uuid from "uuid"
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface UploadDocument extends Document {
@@ -21,6 +21,6 @@ const uploadSchema = new Schema({
   complete: { type: Boolean, default: false, required: true },
 })
 
-const Upload = model<UploadDocument>('Upload', uploadSchema)
+const Upload = model<UploadDocument>("Upload", uploadSchema)
 
 export default Upload

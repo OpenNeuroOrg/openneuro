@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import TextInput from '../fragments/text-input'
-import SelectInput from '../fragments/select-input'
-import { DOILink, DOIPattern } from '../fragments/doi-link'
-import { useQuery, useMutation, gql, useApolloClient } from '@apollo/client'
-import styled from '@emotion/styled'
-import { Button } from '@openneuro/components/button'
+import React, { useState } from "react"
+import TextInput from "../fragments/text-input"
+import SelectInput from "../fragments/select-input"
+import { DOILink, DOIPattern } from "../fragments/doi-link"
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client"
+import styled from "@emotion/styled"
+import { Button } from "@openneuro/components/button"
 
 const getDatasetRelations = gql`
   query getDatasetRelations($datasetId: ID!) {
@@ -51,24 +51,24 @@ const deleteDatasetRelation = gql`
 `
 
 const TableContainer = styled.div({
-  display: 'grid',
-  gridTemplateColumns: '2fr 3fr 1fr',
+  display: "grid",
+  gridTemplateColumns: "2fr 3fr 1fr",
 })
 
 const GridItem = styled.div({
-  padding: '8px',
+  padding: "8px",
 })
 
 const InputGroup = styled.div({
-  paddingBottom: '8px',
+  paddingBottom: "8px",
 })
 
 export const DatasetRelations = ({ datasetId, hasEdit }) => {
   const [newRelation, setNewRelation] = useState({
-    doi: '',
-    description: '',
-    relation: 'sameAs',
-    kind: 'Dataset',
+    doi: "",
+    description: "",
+    relation: "sameAs",
+    kind: "Dataset",
   })
   const { data, loading, refetch } = useQuery(getDatasetRelations, {
     variables: { datasetId },
@@ -81,7 +81,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
     if (related) {
       loadedData = (
         <TableContainer>
-          {related.map(obj => {
+          {related.map((obj) => {
             return (
               <React.Fragment key={obj.id}>
                 <GridItem>
@@ -96,7 +96,8 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
                         variables: { datasetId, doi: obj.id },
                       })
                       await refetch()
-                    }}>
+                    }}
+                  >
                     Delete
                   </button>
                 </GridItem>
@@ -112,7 +113,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
       <>
         <p>
           Add a related DOI such as other repositories where this dataset can be
-          found. DOI values should be formatted according to the{' '}
+          found. DOI values should be formatted according to the{" "}
           <a href="https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#uniform-resource-indicator">
             BIDS recommended URI format
           </a>
@@ -146,9 +147,9 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
                   setNewRelation({ ...newRelation, relation: value })
                 }}
                 options={[
-                  { value: 'sameAs' },
-                  { value: 'source' },
-                  { value: 'derivative' },
+                  { value: "sameAs" },
+                  { value: "source" },
+                  { value: "derivative" },
                 ]}
               />
               <SelectInput
@@ -158,7 +159,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
                 onChange={(name, value) => {
                   setNewRelation({ ...newRelation, kind: value })
                 }}
-                options={[{ value: 'Dataset' }, { value: 'Article' }]}
+                options={[{ value: "Dataset" }, { value: "Article" }]}
               />
             </InputGroup>
             <Button
@@ -167,7 +168,7 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
               label="Add DOI Relation"
               size="small"
               type="submit"
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault()
                 await createRelation({
                   variables: { datasetId, ...newRelation },
@@ -175,12 +176,10 @@ export const DatasetRelations = ({ datasetId, hasEdit }) => {
                 await refetch()
               }}
               // Disable if DOI pattern does not match
-              disabled={
-                !(
-                  newRelation.doi.startsWith('doi:') &&
-                  DOIPattern.exec(newRelation.doi.slice(4))
-                )
-              }
+              disabled={!(
+                newRelation.doi.startsWith("doi:") &&
+                DOIPattern.exec(newRelation.doi.slice(4))
+              )}
             />
           </div>
         )}

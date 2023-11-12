@@ -1,61 +1,61 @@
-import React from 'react'
-import Markdown from 'markdown-to-jsx'
-import Helmet from 'react-helmet'
-import { useLocation, Navigate } from 'react-router-dom'
-import pluralize from 'pluralize'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import parseISO from 'date-fns/parseISO'
-import { pageTitle } from '../resources/strings.js'
+import React from "react"
+import Markdown from "markdown-to-jsx"
+import Helmet from "react-helmet"
+import { Navigate, useLocation } from "react-router-dom"
+import pluralize from "pluralize"
+import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import parseISO from "date-fns/parseISO"
+import { pageTitle } from "../resources/strings.js"
 
-import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
-import Validation from '../validation/validation.jsx'
-import { config } from '../config'
+import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-container"
+import Validation from "../validation/validation.jsx"
+import { config } from "../config"
 import {
   getUnexpiredProfile,
-  hasEditPermissions,
   hasDatasetAdminPermissions,
-} from '../authentication/profile'
-import { useCookies } from 'react-cookie'
-import { DatasetAlertDraft } from './fragments/dataset-alert-draft'
+  hasEditPermissions,
+} from "../authentication/profile"
+import { useCookies } from "react-cookie"
+import { DatasetAlertDraft } from "./fragments/dataset-alert-draft"
 import {
+  BrainLifeButton,
+  CloneDropdown,
+  DatasetGitAccess,
+  DatasetHeader,
+  DatasetTools,
   MetaDataBlock,
   ModalitiesMetaDataBlock,
-  BrainLifeButton,
   ValidationBlock,
-  CloneDropdown,
-  DatasetHeader,
-  DatasetGitAccess,
   VersionList,
-  DatasetTools,
-} from '@openneuro/components/dataset'
-import { Username } from '../users/username'
+} from "@openneuro/components/dataset"
+import { Username } from "../users/username"
 
-import { FollowDataset } from './mutations/follow'
-import { StarDataset } from './mutations/star'
+import { FollowDataset } from "./mutations/follow"
+import { StarDataset } from "./mutations/star"
 
-import EditDescriptionField from './fragments/edit-description-field.jsx'
-import EditDescriptionList from './fragments/edit-description-list.jsx'
-import { DOILink } from './fragments/doi-link'
+import EditDescriptionField from "./fragments/edit-description-field.jsx"
+import EditDescriptionList from "./fragments/edit-description-list.jsx"
+import { DOILink } from "./fragments/doi-link"
 
-import { TabRoutesDraft } from './routes/tab-routes-draft'
-import { FollowToggles } from './common/follow-toggles'
+import { TabRoutesDraft } from "./routes/tab-routes-draft"
+import { FollowToggles } from "./common/follow-toggles"
 
 export interface DraftContainerProps {
   dataset
   tag?: string
 }
 
-const formatDate = dateObject =>
-  new Date(dateObject).toISOString().split('T')[0]
+const formatDate = (dateObject) =>
+  new Date(dateObject).toISOString().split("T")[0]
 
 // Helper function for getting version from URL
-const snapshotVersion = location => {
+const snapshotVersion = (location) => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
 const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const location = useLocation()
-  const activeDataset = snapshotVersion(location) || 'draft'
+  const activeDataset = snapshotVersion(location) || "draft"
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
 
@@ -63,8 +63,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const description = dataset.draft.description
   const datasetId = dataset.id
 
-  const numSessions =
-    summary && summary.sessions.length > 0 ? summary.sessions.length : 1
+  const numSessions = summary && summary.sessions.length > 0
+    ? summary.sessions.length
+    : 1
 
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
@@ -76,15 +77,14 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
-  const hasEdit =
-    hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
-  const hasDraftChanges =
-    dataset.snapshots.length === 0 ||
+  const hasEdit = hasEditPermissions(dataset.permissions, profile?.sub) ||
+    isAdmin
+  const hasDraftChanges = dataset.snapshots.length === 0 ||
     dataset.draft.head !==
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
   const isDatasetAdmin =
     hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
-  const modality: string = summary?.modalities[0] || ''
+  const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
 
   return (
@@ -97,15 +97,16 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
       {dataset.snapshots.length !== 0 &&
         dataset.snapshots[dataset.snapshots.length - 1].tag &&
         !hasEdit && (
-          <Navigate
-            to={`/datasets/${dataset.id}/versions/${
-              dataset.snapshots[dataset.snapshots.length - 1].tag
-            }`}
-            replace
-          />
-        )}
+        <Navigate
+          to={`/datasets/${dataset.id}/versions/${
+            dataset.snapshots[dataset.snapshots.length - 1].tag
+          }`}
+          replace
+        />
+      )}
       <div
-        className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
+        className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}
+      >
         <DatasetHeader
           pageHeading={description.Name}
           modality={modality}
@@ -116,7 +117,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 field="Name"
                 rows={2}
                 description={description.Name}
-                editMode={hasEdit}>
+                editMode={hasEdit}
+              >
                 {description.Name}
               </EditDescriptionField>
               <FollowToggles>
@@ -193,8 +195,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 field="Authors"
                 heading="Authors"
                 description={description.Authors}
-                editMode={hasEdit}>
-                {description?.Authors?.length ? description.Authors : ['N/A']}
+                editMode={hasEdit}
+              >
+                {description?.Authors?.length ? description.Authors : ["N/A"]}
               </EditDescriptionList>
               {summary && (
                 <ModalitiesMetaDataBlock
@@ -203,7 +206,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 />
               )}
               <MetaDataBlock
-                heading={dataset.snapshots.length ? 'Versions' : 'Version'}
+                heading={dataset.snapshots.length ? "Versions" : "Version"}
                 item={
                   <div className="version-block">
                     <VersionList
@@ -222,62 +225,54 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               {summary && (
                 <MetaDataBlock
                   heading="Tasks"
-                  item={summary.tasks.length ? summary.tasks.join(', ') : 'N/A'}
+                  item={summary.tasks.length ? summary.tasks.join(", ") : "N/A"}
                   className="dmb-inline-list"
                 />
               )}
-              {summary?.modalities.includes('pet') ||
-                summary?.modalities.includes('Pet') ||
-                (summary?.modalities.includes('PET') && (
+              {summary?.modalities.includes("pet") ||
+                summary?.modalities.includes("Pet") ||
+                (summary?.modalities.includes("PET") && (
                   <>
                     <MetaDataBlock
-                      heading={pluralize('Target', summary.pet?.BodyPart)}
+                      heading={pluralize("Target", summary.pet?.BodyPart)}
                       item={summary.pet?.BodyPart}
                     />
                     <MetaDataBlock
                       heading={pluralize(
-                        'Scanner Manufacturer',
+                        "Scanner Manufacturer",
                         summary.pet?.ScannerManufacturer,
                       )}
-                      item={
-                        summary.pet?.ScannerManufacturer
-                          ? summary.pet?.ScannerManufacturer
-                          : 'N/A'
-                      }
+                      item={summary.pet?.ScannerManufacturer
+                        ? summary.pet?.ScannerManufacturer
+                        : "N/A"}
                     />
 
                     <MetaDataBlock
                       heading={pluralize(
-                        'Scanner Model',
+                        "Scanner Model",
                         summary.pet?.ScannerManufacturersModelName,
                       )}
-                      item={
-                        summary.pet?.ScannerManufacturersModelName
-                          ? summary.pet?.ScannerManufacturersModelName
-                          : 'N/A'
-                      }
+                      item={summary.pet?.ScannerManufacturersModelName
+                        ? summary.pet?.ScannerManufacturersModelName
+                        : "N/A"}
                     />
                     <MetaDataBlock
                       heading={pluralize(
-                        'Radionuclide',
+                        "Radionuclide",
                         summary.pet?.TracerRadionuclide,
                       )}
-                      item={
-                        summary.pet?.TracerRadionuclide
-                          ? summary.pet?.TracerRadionuclide
-                          : 'N/A'
-                      }
+                      item={summary.pet?.TracerRadionuclide
+                        ? summary.pet?.TracerRadionuclide
+                        : "N/A"}
                     />
                     <MetaDataBlock
                       heading={pluralize(
-                        'Radiotracer',
+                        "Radiotracer",
                         summary.pet?.TracerName,
                       )}
-                      item={
-                        summary.pet?.TracerName
-                          ? summary.pet?.TracerName
-                          : 'N/A'
-                      }
+                      item={summary.pet?.TracerName
+                        ? summary.pet?.TracerName
+                        : "N/A"}
                     />
                   </>
                 ))}
@@ -285,21 +280,23 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 heading="Uploaded by"
                 item={
                   <>
-                    <Username user={dataset.uploader} /> on {dateAdded} -{' '}
+                    <Username user={dataset.uploader} /> on {dateAdded} -{" "}
                     {dateAddedDifference} ago
                   </>
                 }
               />
-              {dataset.snapshots?.length ? (
-                <MetaDataBlock
-                  heading="Last Updated"
-                  item={
-                    <>
-                      {dateModified} - {dateUpdatedDifference} ago
-                    </>
-                  }
-                />
-              ) : null}
+              {dataset.snapshots?.length
+                ? (
+                  <MetaDataBlock
+                    heading="Last Updated"
+                    item={
+                      <>
+                        {dateModified} - {dateUpdatedDifference} ago
+                      </>
+                    }
+                  />
+                )
+                : null}
               <MetaDataBlock heading="Sessions" item={numSessions} />
               <>
                 {summary && (
@@ -325,8 +322,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     field="Acknowledgements"
                     rows={2}
                     description={description.Acknowledgements}
-                    editMode={hasEdit}>
-                    <Markdown>{description.Acknowledgements || 'N/A'}</Markdown>
+                    editMode={hasEdit}
+                  >
+                    <Markdown>{description.Acknowledgements || "N/A"}</Markdown>
                   </EditDescriptionField>
                 )}
               />
@@ -339,8 +337,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     field="HowToAcknowledge"
                     rows={2}
                     description={description.HowToAcknowledge}
-                    editMode={hasEdit}>
-                    <Markdown>{description.HowToAcknowledge || 'N/A'}</Markdown>
+                    editMode={hasEdit}
+                  >
+                    <Markdown>{description.HowToAcknowledge || "N/A"}</Markdown>
                   </EditDescriptionField>
                 )}
               />
@@ -350,8 +349,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 field="Funding"
                 heading="Funding"
                 description={description.Funding}
-                editMode={hasEdit}>
-                {description.Funding?.length ? description.Funding : ['N/A']}
+                editMode={hasEdit}
+              >
+                {description.Funding?.length ? description.Funding : ["N/A"]}
               </EditDescriptionList>
               <EditDescriptionList
                 className="dmb-list"
@@ -359,10 +359,11 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 field="ReferencesAndLinks"
                 heading="References and Links"
                 description={description.ReferencesAndLinks}
-                editMode={hasEdit}>
+                editMode={hasEdit}
+              >
                 {description.ReferencesAndLinks?.length
                   ? description.ReferencesAndLinks
-                  : ['N/A']}
+                  : ["N/A"]}
               </EditDescriptionList>
               <EditDescriptionList
                 className="dmb-list"
@@ -370,10 +371,11 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 field="EthicsApprovals"
                 heading="Ethics Approvals"
                 description={description.EthicsApprovals}
-                editMode={hasEdit}>
+                editMode={hasEdit}
+              >
                 {description.EthicsApprovals?.length
                   ? description.EthicsApprovals
-                  : ['N/A']}
+                  : ["N/A"]}
               </EditDescriptionList>
             </div>
           </div>

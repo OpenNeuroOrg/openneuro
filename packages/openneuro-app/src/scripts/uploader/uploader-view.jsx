@@ -1,7 +1,7 @@
-import React from 'react'
-import BlockNavigation from '../common/partials/block-navigation.jsx'
-import UploaderSetupRoutes from './uploader-setup-routes.jsx'
-import UploaderStatusRoutes from './uploader-status-routes.jsx'
+import React from "react"
+import BlockNavigation from "../common/partials/block-navigation.jsx"
+import UploaderSetupRoutes from "./uploader-setup-routes.jsx"
+import UploaderStatusRoutes from "./uploader-status-routes.jsx"
 
 const UploaderView = ({ uploader }) => {
   if (uploader.uploading) {

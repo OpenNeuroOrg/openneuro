@@ -1,32 +1,32 @@
-import { vi } from 'vitest'
+import { vi } from "vitest"
 import {
-  encodeCursor,
   decodeCursor,
   elasticRelayConnection,
-} from '../dataset-search'
+  encodeCursor,
+} from "../dataset-search"
 
-vi.mock('ioredis')
-vi.mock('../../../elasticsearch/elastic-client.ts')
-vi.mock('../../../config.ts')
+vi.mock("ioredis")
+vi.mock("../../../elasticsearch/elastic-client.ts")
+vi.mock("../../../config.ts")
 
-describe('dataset search resolvers', () => {
-  describe('encodeCursor()', () => {
-    it('returns an encoded string', () => {
-      expect(encodeCursor([2.513, 'ds00005'])).toEqual(
-        'WzIuNTEzLCJkczAwMDA1Il0=',
+describe("dataset search resolvers", () => {
+  describe("encodeCursor()", () => {
+    it("returns an encoded string", () => {
+      expect(encodeCursor([2.513, "ds00005"])).toEqual(
+        "WzIuNTEzLCJkczAwMDA1Il0=",
       )
     })
   })
-  describe('decodeCursor()', () => {
-    it('returns a decoded array', () => {
-      expect(decodeCursor('WzIuNTEzLCJkczAwMDA1Il0=')).toEqual([
+  describe("decodeCursor()", () => {
+    it("returns a decoded array", () => {
+      expect(decodeCursor("WzIuNTEzLCJkczAwMDA1Il0=")).toEqual([
         2.513,
-        'ds00005',
+        "ds00005",
       ])
     })
   })
-  describe('elasticRelayConnection()', () => {
-    it('returns a relay cursor for empty ApiResponse', async () => {
+  describe("elasticRelayConnection()", () => {
+    it("returns a relay cursor for empty ApiResponse", async () => {
       const emptyApiResponse = {
         body: {
           hits: {
@@ -54,7 +54,7 @@ describe('dataset search resolvers', () => {
       expect(connection).toMatchObject(nullRelayConnection)
     })
 
-    it('returns a relay cursor for ApiResponse with results', () => {
+    it("returns a relay cursor for ApiResponse with results", () => {
       const mockResolvers = {
         dataset: vi.fn(),
       }
@@ -63,9 +63,9 @@ describe('dataset search resolvers', () => {
         body: {
           hits: {
             hits: [
-              { _source: { id: 'testdataset1' } },
-              { _source: { id: 'testdataset2' } },
-              { _source: { id: 'testdataset3' }, sort: [1] },
+              { _source: { id: "testdataset1" } },
+              { _source: { id: "testdataset2" } },
+              { _source: { id: "testdataset3" }, sort: [1] },
             ],
             total: { value: 10 },
           },
@@ -73,7 +73,7 @@ describe('dataset search resolvers', () => {
       }
 
       const resultsRelayConnection = {
-        edges: expectedApiResponse.body.hits.hits.map(hit => {
+        edges: expectedApiResponse.body.hits.hits.map((hit) => {
           // This skips the dataset resolver logic and passes this back
           mockResolvers.dataset.mockReturnValueOnce(hit._source)
           return {
@@ -83,7 +83,7 @@ describe('dataset search resolvers', () => {
         }),
         pageInfo: {
           count: 10,
-          endCursor: 'WzFd',
+          endCursor: "WzFd",
           hasNextPage: true,
           startCursor: null,
           hasPreviousPage: false,
@@ -91,7 +91,7 @@ describe('dataset search resolvers', () => {
       }
       const connection = elasticRelayConnection(
         expectedApiResponse,
-        'test',
+        "test",
         3,
         mockResolvers,
       )

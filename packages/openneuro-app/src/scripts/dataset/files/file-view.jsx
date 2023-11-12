@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Loading } from '@openneuro/components/loading'
-import { apiPath } from './file'
-import FileViewerType from './file-viewer-type.jsx'
+import React, { useEffect, useState } from "react"
+import { Loading } from "@openneuro/components/loading"
+import { apiPath } from "./file"
+import FileViewerType from "./file-viewer-type.jsx"
 
 const FileView = ({ datasetId, snapshotTag, path }) => {
   const url = apiPath(datasetId, snapshotTag, path)

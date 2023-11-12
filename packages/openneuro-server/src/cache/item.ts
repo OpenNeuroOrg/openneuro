@@ -1,8 +1,8 @@
-import { Redis } from 'ioredis'
-import * as zlib from 'zlib'
-import { promisify } from 'util'
-import { CacheType } from './types'
-export { CacheType } from './types'
+import { Redis } from "ioredis"
+import * as zlib from "zlib"
+import { promisify } from "util"
+import { CacheType } from "./types"
+export { CacheType } from "./types"
 
 const compress = promisify(zlib.gzip)
 const decompress = promisify(zlib.gunzip)
@@ -15,7 +15,7 @@ export function cacheKey(
   type: CacheType,
   compositeKeys: Array<string>,
 ): string {
-  return `${type.toString()}:${compositeKeys.join(':')}`
+  return `${type.toString()}:${compositeKeys.join(":")}`
 }
 
 /**
@@ -27,7 +27,6 @@ class CacheItem {
   expiration = 0
   private redis: Redis
   /**
-   *
    * @param redis ioredis client
    * @param type A CacheType value
    * @param compositeKeys Values identifying this cache key

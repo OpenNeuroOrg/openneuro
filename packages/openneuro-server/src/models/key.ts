@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface KeyDocument extends Document {
@@ -11,6 +11,6 @@ const keySchema = new Schema({
   hash: String,
 })
 
-const Key = model<KeyDocument>('Key', keySchema)
+const Key = model<KeyDocument>("Key", keySchema)
 
 export default Key

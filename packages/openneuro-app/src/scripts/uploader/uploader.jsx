@@ -1,19 +1,19 @@
-import { apm } from '../apm'
-import { toast } from 'react-toastify'
-import ToastContent from '../common/partials/toast-content.jsx'
-import React from 'react'
-import PropTypes from 'prop-types'
-import { ApolloConsumer } from '@apollo/client'
-import * as gtag from '../utils/gtag'
-import UploaderContext from './uploader-context.js'
-import FileSelect from './file-select'
-import { locationFactory } from './uploader-location.js'
-import * as mutation from './upload-mutation.js'
-import { datasets, uploads } from '@openneuro/client'
-import { useNavigate } from 'react-router-dom'
-import { uploadFiles } from './file-upload.js'
-import { UploadProgress } from './upload-progress-class'
-import { addPathToFiles } from './add-path-to-files.js'
+import { apm } from "../apm"
+import { toast } from "react-toastify"
+import ToastContent from "../common/partials/toast-content.jsx"
+import React from "react"
+import PropTypes from "prop-types"
+import { ApolloConsumer } from "@apollo/client"
+import * as gtag from "../utils/gtag"
+import UploaderContext from "./uploader-context.js"
+import FileSelect from "./file-select"
+import { locationFactory } from "./uploader-location.js"
+import * as mutation from "./upload-mutation.js"
+import { datasets, uploads } from "@openneuro/client"
+import { useNavigate } from "react-router-dom"
+import { uploadFiles } from "./file-upload.js"
+import { UploadProgress } from "./upload-progress-class"
+import { addPathToFiles } from "./add-path-to-files.js"
 
 /**
  * Stateful uploader workflow and status
@@ -29,13 +29,13 @@ export class UploadClient extends React.Component {
       // An upload is processing
       uploading: false,
       // Which step in the modal
-      location: locationFactory('/hidden'),
+      location: locationFactory("/hidden"),
       // List of files being uploaded
       files: [],
       // Files selected, regardless of if they will be uploaded
       selectedFiles: {},
       // Relabel dataset during upload
-      name: '',
+      name: "",
       // Dataset description - null if it doesn't exist
       description: null,
       progress: 0,
@@ -79,7 +79,7 @@ export class UploadClient extends React.Component {
    *
    * @param {string} path Virtual router path for upload modal
    */
-  setLocation = path => {
+  setLocation = (path) => {
     gtag.pageview(path)
     this.setState({ location: locationFactory(path) })
   }
@@ -145,16 +145,16 @@ export class UploadClient extends React.Component {
    */
   selectFiles = ({ files }) => {
     // First get the name from dataset_description.json
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const descriptionFile = [...files].find(
-        f => f.name === 'dataset_description.json',
+        (f) => f.name === "dataset_description.json",
       )
       if (!descriptionFile) {
         // Use directory name if no dataset_description
-        resolve(files[0].webkitRelativePath.split('/')[0])
+        resolve(files[0].webkitRelativePath.split("/")[0])
       }
       const descriptionReader = new FileReader()
-      descriptionReader.onload = event => {
+      descriptionReader.onload = (event) => {
         try {
           // Read Name field from dataset_description.json
           const description = JSON.parse(event.target.result.toString())
@@ -163,25 +163,25 @@ export class UploadClient extends React.Component {
           resolve(description.Name)
         } catch (e) {
           // Fallback to directory name if JSON parse failed
-          resolve(files[0].webkitRelativePath.split('/')[0])
+          resolve(files[0].webkitRelativePath.split("/")[0])
         }
       }
       descriptionReader.readAsText(descriptionFile)
-    }).then(name => {
+    }).then((name) => {
       if (files.length > 0) {
         this.setState({
           files,
           selectedFiles: files,
           name,
         })
-        this.setLocation('/upload/issues')
+        this.setLocation("/upload/issues")
       } else {
-        throw new Error('No files selected')
+        throw new Error("No files selected")
       }
     })
   }
 
-  captureMetadata = metadata => {
+  captureMetadata = (metadata) => {
     this.setState({
       metadata,
     })
@@ -196,15 +196,15 @@ export class UploadClient extends React.Component {
   upload = ({ affirmedDefaced, affirmedConsent }) => {
     // Track the start of uploads
     gtag.event({
-      category: 'Upload',
-      action: 'Started web upload',
+      category: "Upload",
+      action: "Started web upload",
       label: this.state.datasetId,
     })
     this.setState({
       uploading: true,
       abortController: new AbortController(),
     })
-    this.setLocation('/hidden')
+    this.setLocation("/hidden")
     if (this.state.resume && this.state.datasetId) {
       // Just add files since this is an existing dataset
       this._addFiles()
@@ -215,14 +215,14 @@ export class UploadClient extends React.Component {
           affirmedDefaced,
           affirmedConsent,
         })
-        .then(datasetId => {
+        .then((datasetId) => {
           // Note chain to this._addFiles
           this.setState({ datasetId }, () => {
             this.uploadMetadata()
             this._addFiles()
           })
         })
-        .catch(error => {
+        .catch((error) => {
           apm.captureError(error)
           toast.error(
             <ToastContent
@@ -235,7 +235,7 @@ export class UploadClient extends React.Component {
             error,
             uploading: false,
           })
-          this.setLocation('/hidden')
+          this.setLocation("/hidden")
         })
     }
   }
@@ -246,17 +246,17 @@ export class UploadClient extends React.Component {
   _includeChanges() {
     const files = [...this.state.files]
     // Determine if the files list has a CHANGES file already
-    const hasChanges = files.some(f => f.name === 'CHANGES')
+    const hasChanges = files.some((f) => f.name === "CHANGES")
 
     // Do nothing if the file already exists
     if (hasChanges) return files
 
     // Construct the initial CHANGES file and add to the files array
     const initialChangesFile = new Blob([], {
-      type: 'text/plain',
+      type: "text/plain",
     })
-    initialChangesFile.name = 'CHANGES'
-    initialChangesFile.webkitRelativePath = '/CHANGES'
+    initialChangesFile.name = "CHANGES"
+    initialChangesFile.webkitRelativePath = "/CHANGES"
     files.push(initialChangesFile)
     return files
   }
@@ -305,9 +305,10 @@ export class UploadClient extends React.Component {
       const toastId = toast.error(
         <ToastContent
           title="Dataset upload failed"
-          body="Please check your connection">
+          body="Please check your connection"
+        >
           <FileSelect
-            onChange={event => {
+            onChange={(event) => {
               toast.dismiss(toastId)
               this.resumeDataset(this.state.datasetId)(event)
             }}
@@ -320,7 +321,7 @@ export class UploadClient extends React.Component {
         error,
         uploading: false,
       })
-      this.setLocation('/hidden')
+      this.setLocation("/hidden")
       if (this.state.xhr) {
         try {
           this.state.xhr.abort()
@@ -334,19 +335,20 @@ export class UploadClient extends React.Component {
   uploadCompleteAction = () => {
     // Record upload finished successfully with Google Analytics
     gtag.event({
-      category: 'Upload',
-      action: 'Finished web upload',
+      category: "Upload",
+      action: "Finished web upload",
       label: this.state.datasetId,
     })
     const datasetURL = `/datasets/${this.state.datasetId}`
-    if (this.state.location.pathname !== locationFactory('/hidden').pathname) {
+    if (this.state.location.pathname !== locationFactory("/hidden").pathname) {
       this.props.navigate(datasetURL)
-      this.setLocation('/hidden')
+      this.setLocation("/hidden")
     } else {
       toast.success(
         <ToastContent
           title="Upload complete"
-          body="Dataset successfully uploaded">
+          body="Dataset successfully uploaded"
+        >
           <a href={datasetURL}>Click here to browse your dataset.</a>
         </ToastContent>,
         { autoClose: false },
@@ -354,7 +356,7 @@ export class UploadClient extends React.Component {
     }
   }
 
-  uploadProgress = state => {
+  uploadProgress = (state) => {
     this.setState(state)
   }
 
@@ -394,7 +396,7 @@ UploadClient.propTypes = {
 
 const Uploader = ({ children }) => (
   <ApolloConsumer>
-    {client => (
+    {(client) => (
       <div className="uploader">
         <UploadClientWithRouter client={client}>
           {children}

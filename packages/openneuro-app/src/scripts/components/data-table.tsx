@@ -1,14 +1,14 @@
-import React from 'react'
+import React from "react"
 import {
+  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  useReactTable,
-  createColumnHelper,
   SortingState,
-} from '@tanstack/react-table'
-import styled from '@emotion/styled'
-import { format, parseISO, isValid } from 'date-fns'
+  useReactTable,
+} from "@tanstack/react-table"
+import styled from "@emotion/styled"
+import { format, isValid, parseISO } from "date-fns"
 
 interface DataTableProps {
   data: any[]
@@ -35,12 +35,12 @@ const TD = styled.td`
 
 function CellFormat(props): any {
   const value = props.getValue()
-  if (typeof value === 'string' && isValid(parseISO(value))) {
-    return format(parseISO(value), 'yyyy-MM-dd')
-  } else if (typeof value === 'string' && /^ds[0-9]{6}$/.exec(value)) {
+  if (typeof value === "string" && isValid(parseISO(value))) {
+    return format(parseISO(value), "yyyy-MM-dd")
+  } else if (typeof value === "string" && /^ds[0-9]{6}$/.exec(value)) {
     return <a href={`/datasets/${value}`}>{value}</a>
   } else if (Array.isArray(value)) {
-    return value.join(',')
+    return value.join(",")
   } else {
     return value
   }
@@ -58,12 +58,12 @@ export function DataTable<T>({
   const columns = React.useMemo(
     () =>
       Object.keys(data[0])
-        .filter(name => !hideColumns.includes(name))
-        .map(name =>
+        .filter((name) => !hideColumns.includes(name))
+        .map((name) =>
           columnHelper.accessor(name as any, {
             header: name,
             cell: CellFormat,
-          }),
+          })
         ),
     [data, columnHelper, hideColumns],
   )
@@ -81,26 +81,27 @@ export function DataTable<T>({
   return (
     <table>
       <thead>
-        {table.getHeaderGroups().map(headerGroup => (
+        {table.getHeaderGroups().map((headerGroup) => (
           <TR key={headerGroup.id}>
-            {headerGroup.headers.map(header => (
+            {headerGroup.headers.map((header) => (
               <TH key={header.id} colSpan={header.colSpan}>
                 {header.isPlaceholder ? null : (
                   <div
                     {...{
                       className: header.column.getCanSort()
-                        ? 'cursor-pointer select-none'
-                        : '',
+                        ? "cursor-pointer select-none"
+                        : "",
                       onClick: header.column.getToggleSortingHandler(),
-                    }}>
+                    }}
+                  >
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
                     )}
                     &nbsp;
                     {{
-                      asc: '▲',
-                      desc: '▼',
+                      asc: "▲",
+                      desc: "▼",
                     }[header.column.getIsSorted() as string] ?? null}
                   </div>
                 )}
@@ -110,9 +111,9 @@ export function DataTable<T>({
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map(row => (
+        {table.getRowModel().rows.map((row) => (
           <TR key={row.id}>
-            {row.getVisibleCells().map(cell => (
+            {row.getVisibleCells().map((cell) => (
               <TD key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TD>

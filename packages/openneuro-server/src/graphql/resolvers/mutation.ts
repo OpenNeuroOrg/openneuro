@@ -5,41 +5,41 @@ import {
   createDataset,
   deleteDataset,
   deleteFiles,
-  removeAnnexObject,
   flagAnnexObject,
-  updatePublic,
+  removeAnnexObject,
   trackAnalytics,
-} from './dataset.js'
-import { updateRef } from './draft.js'
+  updatePublic,
+} from "./dataset.js"
+import { updateRef } from "./draft.js"
 import {
   createSnapshot,
   deleteSnapshot,
   deprecateSnapshot,
   undoDeprecateSnapshot,
-} from './snapshots.js'
-import { removeUser, setAdmin, setBlocked } from './user.js'
-import { updateSummary } from './summary'
-import { revalidate, updateValidation } from './validation.js'
-import { updatePermissions, removePermissions } from './permissions'
-import { followDataset } from './follow.js'
-import { starDataset } from './stars.js'
-import { publishDataset } from './publish.js'
-import { updateDescription, updateDescriptionList } from './description.js'
-import { updateReadme } from './readme.js'
-import { addComment, editComment, deleteComment } from './comment.js'
-import { subscribeToNewsletter } from './newsletter'
-import { addMetadata } from './metadata'
-import { prepareUpload, finishUpload } from './upload.js'
-import { prepareRepoAccess } from './git'
-import { cacheClear } from './cache'
-import { reexportRemotes } from './reexporter'
-import { resetDraft } from './reset'
-import { createReviewer, deleteReviewer } from './reviewer'
-import { createRelation, deleteRelation } from './relation'
+} from "./snapshots.js"
+import { removeUser, setAdmin, setBlocked } from "./user.js"
+import { updateSummary } from "./summary"
+import { revalidate, updateValidation } from "./validation.js"
+import { removePermissions, updatePermissions } from "./permissions"
+import { followDataset } from "./follow.js"
+import { starDataset } from "./stars.js"
+import { publishDataset } from "./publish.js"
+import { updateDescription, updateDescriptionList } from "./description.js"
+import { updateReadme } from "./readme.js"
+import { addComment, deleteComment, editComment } from "./comment.js"
+import { subscribeToNewsletter } from "./newsletter"
+import { addMetadata } from "./metadata"
+import { finishUpload, prepareUpload } from "./upload.js"
+import { prepareRepoAccess } from "./git"
+import { cacheClear } from "./cache"
+import { reexportRemotes } from "./reexporter"
+import { resetDraft } from "./reset"
+import { createReviewer, deleteReviewer } from "./reviewer"
+import { createRelation, deleteRelation } from "./relation"
 import {
-  importRemoteDataset,
   finishImportRemoteDataset,
-} from './importRemoteDataset'
+  importRemoteDataset,
+} from "./importRemoteDataset"
 
 const Mutation = {
   createDataset,

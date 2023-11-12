@@ -1,10 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import ShellExample from './shell-example.jsx'
+import React from "react"
+import PropTypes from "prop-types"
+import ShellExample from "./shell-example.jsx"
 
 export const DownloadSampleCommand = ({ datasetId, snapshotTag }) => (
   <ShellExample role="figure">
-    openneuro download {snapshotTag ? `--snapshot ${snapshotTag}` : '--draft'}{' '}
+    openneuro download {snapshotTag ? `--snapshot ${snapshotTag}` : "--draft"}
+    {" "}
     {datasetId} {datasetId}
     -download/
   </ShellExample>
@@ -19,9 +20,10 @@ const DownloadCommandLine = ({ datasetId, snapshotTag }) => (
   <div>
     <h4>Download with Node.js</h4>
     <p>
-      Using{' '}
-      <a href="https://www.npmjs.com/package/@openneuro/cli">@openneuro/cli</a>{' '}
-      you can download this dataset from the command line using{' '}
+      Using{" "}
+      <a href="https://www.npmjs.com/package/@openneuro/cli">@openneuro/cli</a>
+      {" "}
+      you can download this dataset from the command line using{" "}
       <a href="https://nodejs.org/en/download/">Node.js</a>. This method is good
       for larger datasets or unstable connections, but has known issues on
       Windows.

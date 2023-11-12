@@ -1,26 +1,26 @@
-import * as datalad from '../../datalad/dataset'
-import { removeDatasetSearchDocument } from './dataset-search'
-import { snapshots, latestSnapshot } from './snapshots'
-import { description } from './description'
+import * as datalad from "../../datalad/dataset"
+import { removeDatasetSearchDocument } from "./dataset-search"
+import { latestSnapshot, snapshots } from "./snapshots"
+import { description } from "./description"
 import {
+  checkDatasetAdmin,
   checkDatasetRead,
   checkDatasetWrite,
-  checkDatasetAdmin,
-} from '../permissions'
-import { user } from './user'
-import { permissions } from './permissions'
-import { datasetComments } from './comment'
-import { metadata } from './metadata'
-import { history } from './history'
-import * as dataladAnalytics from '../../datalad/analytics'
-import DatasetModel from '../../models/dataset'
-import Deletion from '../../models/deletion'
-import { reviewers } from './reviewer'
-import { getDatasetWorker } from '../../libs/datalad-service'
-import { getFileName } from '../../datalad/files'
-import { onBrainlife } from './brainlife'
-import { derivatives } from './derivatives'
-import semver from 'semver'
+} from "../permissions"
+import { user } from "./user"
+import { permissions } from "./permissions"
+import { datasetComments } from "./comment"
+import { metadata } from "./metadata"
+import { history } from "./history"
+import * as dataladAnalytics from "../../datalad/analytics"
+import DatasetModel from "../../models/dataset"
+import Deletion from "../../models/deletion"
+import { reviewers } from "./reviewer"
+import { getDatasetWorker } from "../../libs/datalad-service"
+import { getFileName } from "../../datalad/files"
+import { onBrainlife } from "./brainlife"
+import { derivatives } from "./derivatives"
+import semver from "semver"
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
   await checkDatasetRead(id, user, userInfo)
@@ -54,21 +54,21 @@ export const snapshotCreationComparison = (
  * Find the canonical name for a dataset from snapshots and drafts
  * @param {object} obj Dataset object (at least {id: "datasetId"})
  */
-export const datasetName = obj => {
-  return snapshots(obj).then(results => {
+export const datasetName = (obj) => {
+  return snapshots(obj).then((results) => {
     if (results && results.length) {
       // Return the latest snapshot name
       const sortedSnapshots = results.sort(snapshotCreationComparison)
       return description({
         id: obj.id,
         revision: sortedSnapshots[0].hexsha,
-      }).then(desc => desc.Name)
+      }).then((desc) => desc.Name)
     } else if (obj.revision) {
       // Return the draft name or null
       return description({
         id: obj.id,
         revision: obj.revision,
-      }).then(desc => desc.Name)
+      }).then((desc) => desc.Name)
     } else {
       return null
     }
@@ -79,9 +79,9 @@ export const datasetName = obj => {
  * Resolve the best dataset name and cache in mongodb
  * @param {string} datasetId
  */
-export const updateDatasetName = datasetId =>
-  datasetName({ id: datasetId }).then(name =>
-    DatasetModel.updateOne({ id: datasetId }, { $set: { name } }).exec(),
+export const updateDatasetName = (datasetId) =>
+  datasetName({ id: datasetId }).then((name) =>
+    DatasetModel.updateOne({ id: datasetId }, { $set: { name } }).exec()
   )
 
 /**
@@ -101,11 +101,11 @@ export const createDataset = (
       })
     } else {
       throw new Error(
-        'New dataset must be defaced or have participant consent.',
+        "New dataset must be defaced or have participant consent.",
       )
     }
   } else {
-    throw new Error('You must be logged in to create a dataset.')
+    throw new Error("You must be logged in to create a dataset.")
   }
 }
 
@@ -209,7 +209,7 @@ export const updatePublic = (
 /**
  * Get analytics for a dataset or snapshot
  */
-export const analytics = async obj => {
+export const analytics = async (obj) => {
   // if the dataset field exists, the request is from a snapshot, and
   // we resolve the datasetId from the dataset snapshot field of context.
   // otherwise, just use the id field because the object is a dataset
@@ -235,7 +235,7 @@ export const trackAnalytics = (obj, { datasetId, tag, type }) => {
 /**
  * Get the star count for the dataset
  */
-export const stars = async obj => {
+export const stars = async (obj) => {
   const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
   return datalad.getStars(datasetId)
 }
@@ -243,7 +243,7 @@ export const stars = async obj => {
 /**
  * Get the follower count for the dataset
  */
-export const followers = async obj => {
+export const followers = async (obj) => {
   const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
   return datalad.getFollowers(datasetId)
 }
@@ -255,7 +255,7 @@ export const followers = async obj => {
  */
 export const following = (obj, _, { user }) =>
   user
-    ? datalad.getUserFollowed(obj.id, user).then(res => (res ? true : false))
+    ? datalad.getUserFollowed(obj.id, user).then((res) => (res ? true : false))
     : null
 
 /**
@@ -265,17 +265,17 @@ export const following = (obj, _, { user }) =>
  */
 export const starred = (obj, _, { user }) =>
   user
-    ? datalad.getUserStarred(obj.id, user).then(res => (res ? true : false))
+    ? datalad.getUserStarred(obj.id, user).then((res) => (res ? true : false))
     : null
 
-const worker = obj => getDatasetWorker(obj.id)
+const worker = (obj) => getDatasetWorker(obj.id)
 
 /**
  * Dataset object
  */
 const Dataset = {
-  uploader: ds => user(ds, { id: ds.uploader }),
-  draft: async obj => ({
+  uploader: (ds) => user(ds, { id: ds.uploader }),
+  draft: async (obj) => ({
     id: obj.id,
     revision: await datalad.getDraftHead(obj.id),
     modified: obj.modified,

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { pageview } from '../utils/gtag'
-import { useLocation } from 'react-router-dom'
+import React, { useEffect } from "react"
+import { pageview } from "../utils/gtag"
+import { useLocation } from "react-router-dom"
 
 export const useAnalytics = (): void => {
   const location = useLocation()

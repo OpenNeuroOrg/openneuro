@@ -1,6 +1,6 @@
-import { createWriteStream, createReadStream } from 'fs'
-import { once } from 'events'
-import fetch, { Request } from 'node-fetch'
+import { createReadStream, createWriteStream } from "fs"
+import { once } from "events"
+import fetch, { Request } from "node-fetch"
 
 /**
  * Create a Request object for this url and key
@@ -14,8 +14,8 @@ import fetch, { Request } from 'node-fetch'
 export function keyRequest(state, key, options) {
   const headers = new Headers()
   headers.set(
-    'Authorization',
-    'Basic ' + Buffer.from(`openneuro-cli:${state.token}`).toString('base64'),
+    "Authorization",
+    "Basic " + Buffer.from(`openneuro-cli:${state.token}`).toString("base64"),
   )
   const requestUrl = `${state.url}/annex/${key}`
   return new Request(requestUrl, { headers, ...options })
@@ -33,7 +33,7 @@ export async function storeKey(state, key, file) {
   const body = createReadStream(file)
   const requestOptions = {
     body,
-    method: 'POST',
+    method: "POST",
   }
   const request = keyRequest(state, key, requestOptions)
   const response = await fetch(request)
@@ -54,13 +54,13 @@ export async function storeKey(state, key, file) {
  */
 export async function retrieveKey(state, key, file) {
   try {
-    const request = keyRequest(state, key, { method: 'GET' })
+    const request = keyRequest(state, key, { method: "GET" })
     const response = await fetch(request)
     if (response.status === 200) {
       const writable = createWriteStream(file)
       const readable = await response.readable()
       readable.pipe(writable)
-      await once(readable, 'close')
+      await once(readable, "close")
       return true
     } else {
       return false
@@ -80,7 +80,7 @@ export async function retrieveKey(state, key, file) {
  * @returns {Promise<boolean>} True or false if key exists
  */
 export async function checkKey(state, key) {
-  const request = keyRequest(state, key, { method: 'HEAD' })
+  const request = keyRequest(state, key, { method: "HEAD" })
   const response = await fetch(request)
   if (response.status === 200) {
     return true
@@ -98,7 +98,7 @@ export async function checkKey(state, key) {
  * @returns {Promise<boolean>} True or false if key exists
  */
 export async function removeKey(state, key) {
-  const request = keyRequest(state, key, { method: 'DELETE' })
+  const request = keyRequest(state, key, { method: "DELETE" })
   const response = await fetch(request)
   if (response.status === 204) {
     return true

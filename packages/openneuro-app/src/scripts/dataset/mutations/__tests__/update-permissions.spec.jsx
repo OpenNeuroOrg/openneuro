@@ -1,10 +1,10 @@
-import React from 'react'
-import { render } from '@testing-library/react'
-import { MockedProvider } from '@apollo/client/testing'
-import { UpdateDatasetPermissions } from '../update-permissions'
+import React from "react"
+import { render } from "@testing-library/react"
+import { MockedProvider } from "@apollo/client/testing"
+import { UpdateDatasetPermissions } from "../update-permissions"
 
-describe('UpdateDatasetPermissions mutation', () => {
-  it('renders with default props', () => {
+describe("UpdateDatasetPermissions mutation", () => {
+  it("renders with default props", () => {
     const { asFragment } = render(
       <MockedProvider>
         <UpdateDatasetPermissions />
@@ -12,7 +12,7 @@ describe('UpdateDatasetPermissions mutation', () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it('renders with typical props', () => {
+  it("renders with typical props", () => {
     const { asFragment } = render(
       <MockedProvider>
         <UpdateDatasetPermissions

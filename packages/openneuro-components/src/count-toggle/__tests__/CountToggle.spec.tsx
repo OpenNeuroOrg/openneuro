@@ -1,17 +1,17 @@
-import { vi } from 'vitest'
-import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { CountToggle } from '../CountToggle'
+import { vi } from "vitest"
+import React from "react"
+import { fireEvent, render, screen } from "@testing-library/react"
+import { CountToggle } from "../CountToggle"
 
 export const datasetType_available = [
-  { label: 'All Public', value: 'All Public' },
-  { label: 'Following', value: 'Following' },
-  { label: 'My Datasets', value: 'My Datasets' },
-  { label: 'My Bookmarks', value: 'My Bookmarks' },
+  { label: "All Public", value: "All Public" },
+  { label: "Following", value: "Following" },
+  { label: "My Datasets", value: "My Datasets" },
+  { label: "My Bookmarks", value: "My Bookmarks" },
 ]
 
-describe('CountToggle component', () => {
-  it('calls toggleClick on toggle', () => {
+describe("CountToggle component", () => {
+  it("calls toggleClick on toggle", () => {
     const toggleClick = vi.fn()
     const clicked = false
     const count = 3
@@ -25,7 +25,7 @@ describe('CountToggle component', () => {
         count={count}
       />,
     )
-    fireEvent.click(screen.getByText('count toggle test'))
+    fireEvent.click(screen.getByText("count toggle test"))
     expect(toggleClick).toHaveBeenCalledTimes(1)
   })
 })

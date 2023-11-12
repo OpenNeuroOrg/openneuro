@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import UpdateDescription from '../mutations/description.jsx'
-import { CancelButton } from './cancel-button'
-import { EditButton } from './edit-button'
-import Markdown from 'markdown-to-jsx'
+import React, { useState } from "react"
+import UpdateDescription from "../mutations/description.jsx"
+import { CancelButton } from "./cancel-button"
+import { EditButton } from "./edit-button"
+import Markdown from "markdown-to-jsx"
 
-import EditList from './edit-list.jsx'
+import EditList from "./edit-list.jsx"
 
 const EditDescriptionList = ({
   datasetId,
@@ -20,7 +20,7 @@ const EditDescriptionList = ({
 
   if (editing) {
     return (
-      <div className={'dataset-meta-block ' + className}>
+      <div className={"dataset-meta-block " + className}>
         <h2 className="dmb-heading">{heading}</h2>
         <EditList
           placeholder="Add new item"
@@ -40,7 +40,7 @@ const EditDescriptionList = ({
     )
   } else {
     return (
-      <div className={'dataset-meta-block ' + className}>
+      <div className={"dataset-meta-block " + className}>
         <h2 className="dmb-heading">{heading}</h2>
 
         <ul>

@@ -1,2 +1,2 @@
-import { WarnButton } from './WarnButton'
+import { WarnButton } from "./WarnButton"
 export { WarnButton }

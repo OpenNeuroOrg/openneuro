@@ -1,10 +1,10 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import { Navigate, Routes, Route, NavLink } from 'react-router-dom'
-import Users from './users.jsx'
-import FlaggedFiles from './flagged-files.jsx'
-import AdminUser from '../../authentication/admin-user.jsx'
+import React from "react"
+import { Navigate, NavLink, Route, Routes } from "react-router-dom"
+import Users from "./users.jsx"
+import FlaggedFiles from "./flagged-files.jsx"
+import AdminUser from "../../authentication/admin-user.jsx"
 
 class Dashboard extends React.Component {
   // life cycle events --------------------------------------------------

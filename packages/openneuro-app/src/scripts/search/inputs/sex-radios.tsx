@@ -1,14 +1,14 @@
-import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from '../search-params-ctx'
-import { FacetRadio } from '@openneuro/components/facets'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React, { FC, useContext } from "react"
+import { SearchParamsCtx } from "../search-params-ctx"
+import { FacetRadio } from "@openneuro/components/facets"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 const SexRadios: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const { sex_available, sex_selected } = searchParams
-  const setSex = sex_selected =>
-    setSearchParams(prevState => ({
+  const setSex = (sex_selected) =>
+    setSearchParams((prevState) => ({
       ...prevState,
       sex_selected,
     }))

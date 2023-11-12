@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from "react"
 
 export interface ModalityHeaderProps {
   portalName: string
@@ -31,7 +31,8 @@ export const ModalityHeader = ({
               className="search-hexagon"
               style={{
                 backgroundImage: `url(${hexBackgroundImage})`,
-              }}>
+              }}
+            >
               <div className="hexTop"></div>
               <div className="hexBottom"></div>
             </div>

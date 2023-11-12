@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from '@emotion/styled'
+import React from "react"
+import styled from "@emotion/styled"
 
 const FrontPageSection = styled.section`
   margin: 100px 0;
@@ -33,7 +33,7 @@ export const FrontPage: React.FC<FrontPageProps> = ({
   className,
 }) => (
   <>
-    <div className={className + ' page'}>
+    <div className={className + " page"}>
       <FrontPageSection>{renderAffiliateBlock()}</FrontPageSection>
       <FrontPageSection>
         <div className="container">{renderInfographic()}</div>

@@ -1,9 +1,9 @@
-import React from 'react'
-import { gql, useMutation } from '@apollo/client'
-import PropTypes from 'prop-types'
-import { reexporterLogsURL } from '../../resources/kibana'
-import { Button } from '@openneuro/components/button'
-import styled from '@emotion/styled'
+import React from "react"
+import { gql, useMutation } from "@apollo/client"
+import PropTypes from "prop-types"
+import { reexporterLogsURL } from "../../resources/kibana"
+import { Button } from "@openneuro/components/button"
+import styled from "@emotion/styled"
 
 const ButtonRow = styled.div`
   display: grid;
@@ -13,13 +13,13 @@ const ButtonRow = styled.div`
 `
 
 const SuccessMessage = styled.p({
-  color: 'rgb(92, 184, 92)',
+  color: "rgb(92, 184, 92)",
 })
 const InProgressMessage = styled.p({
-  color: 'orange',
+  color: "orange",
 })
 const ErrorMessage = styled.p({
-  color: 'red',
+  color: "red",
 })
 
 const REEXPORT_REMOTES = gql`
@@ -29,8 +29,9 @@ const REEXPORT_REMOTES = gql`
 `
 
 const AdminExports = ({ dataset }) => {
-  const [reexportRemotes, { data, loading, error }] =
-    useMutation(REEXPORT_REMOTES)
+  const [reexportRemotes, { data, loading, error }] = useMutation(
+    REEXPORT_REMOTES,
+  )
   const success = data && data.reexportRemotes
   return (
     <div className="dataset-form">
@@ -55,7 +56,7 @@ const AdminExports = ({ dataset }) => {
           secondary={true}
           size="small"
           onClick={() => {
-            window.open(reexporterLogsURL, '_blank')
+            window.open(reexporterLogsURL, "_blank")
           }}
         />
       </ButtonRow>

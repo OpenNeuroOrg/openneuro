@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { Button } from '@openneuro/components/button'
-import { Tooltip } from '@openneuro/components/tooltip'
+import React, { FC } from "react"
+import { gql, useMutation } from "@apollo/client"
+import { Button } from "@openneuro/components/button"
+import { Tooltip } from "@openneuro/components/tooltip"
 
 const UNDO_DEPRECATE_VERSION = gql`
   mutation undoDeprecateSnapshot($datasetId: ID!, $tag: String!) {
@@ -35,8 +35,7 @@ export const UndoDeprecateVersion: FC<UndoDeprecateVersionProps> = ({
         onClick={() =>
           UndoDeprecateVersion({
             variables: { datasetId, tag },
-          })
-        }
+          })}
       />
     </Tooltip>
   )

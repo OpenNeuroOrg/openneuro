@@ -1,25 +1,25 @@
 /**
  * Get snapshots from datalad-service tags
  */
-import request from 'superagent'
-import { reindexDataset } from '../elasticsearch/reindex-dataset'
-import { redis, redlock } from '../libs/redis'
-import CacheItem, { CacheType } from '../cache/item'
-import config from '../config'
+import request from "superagent"
+import { reindexDataset } from "../elasticsearch/reindex-dataset"
+import { redis, redlock } from "../libs/redis"
+import CacheItem, { CacheType } from "../cache/item"
+import config from "../config"
 import {
-  updateDatasetName,
   snapshotCreationComparison,
-} from '../graphql/resolvers/dataset'
-import { description } from '../graphql/resolvers/description'
-import doiLib from '../libs/doi/index'
-import { getFiles } from './files'
-import { generateDataladCookie } from '../libs/authentication/jwt'
-import notifications from '../libs/notifications'
-import Dataset from '../models/dataset'
-import Snapshot, { SnapshotDocument } from '../models/snapshot'
-import { updateDatasetRevision } from './draft'
-import { getDatasetWorker } from '../libs/datalad-service'
-import { join } from 'path'
+  updateDatasetName,
+} from "../graphql/resolvers/dataset"
+import { description } from "../graphql/resolvers/description"
+import doiLib from "../libs/doi/index"
+import { getFiles } from "./files"
+import { generateDataladCookie } from "../libs/authentication/jwt"
+import notifications from "../libs/notifications"
+import Dataset from "../models/dataset"
+import Snapshot, { SnapshotDocument } from "../models/snapshot"
+import { updateDatasetRevision } from "./draft"
+import { getDatasetWorker } from "../libs/datalad-service"
+import { join } from "path"
 
 const lockSnapshot = (datasetId, tag) => {
   return redlock.lock(
@@ -52,17 +52,18 @@ const createIfNotExistsDoi = async (
     // Mint a DOI
     // Get the newest description
     try {
-      const oldDesc = await description({ id: datasetId, revision: 'HEAD' })
+      const oldDesc = await description({ id: datasetId, revision: "HEAD" })
       const snapshotDoi = await doiLib.registerSnapshotDoi(
         datasetId,
         tag,
         oldDesc,
       )
-      if (snapshotDoi)
-        descriptionFieldUpdates['DatasetDOI'] = `doi:${snapshotDoi}`
+      if (snapshotDoi) {
+        descriptionFieldUpdates["DatasetDOI"] = `doi:${snapshotDoi}`
+      }
     } catch (err) {
       console.error(err)
-      throw new Error('DOI minting failed.')
+      throw new Error("DOI minting failed.")
     }
   }
 }
@@ -80,8 +81,8 @@ const postSnapshot = async (
       description_fields: descriptionFieldUpdates,
       snapshot_changes: snapshotChanges,
     })
-    .set('Accept', 'application/json')
-    .set('Cookie', generateDataladCookie(config)(user))
+    .set("Accept", "application/json")
+    .set("Cookie", generateDataladCookie(config)(user))
 
   return response.body
 }
@@ -98,7 +99,7 @@ export const getSnapshots = (datasetId): Promise<SnapshotDocument[]> => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
   return request
     .get(url)
-    .set('Accept', 'application/json')
+    .set("Accept", "application/json")
     .then(({ body: { snapshots } }) => {
       return snapshots.sort(snapshotCreationComparison)
     })
@@ -137,9 +138,11 @@ export const createSnapshot = async (
   try {
     await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
 
-    const createSnapshotUrl = `${getDatasetWorker(
-      datasetId,
-    )}/datasets/${datasetId}/snapshots/${tag}`
+    const createSnapshotUrl = `${
+      getDatasetWorker(
+        datasetId,
+      )
+    }/datasets/${datasetId}/snapshots/${tag}`
     const snapshot = await postSnapshot(
       user,
       createSnapshotUrl,
@@ -175,9 +178,11 @@ export const createSnapshot = async (
 }
 
 export const deleteSnapshot = (datasetId, tag) => {
-  const url = `${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/snapshots/${tag}`
+  const url = `${
+    getDatasetWorker(
+      datasetId,
+    )
+  }/datasets/${datasetId}/snapshots/${tag}`
   return request.del(url).then(async ({ body }) => {
     const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
       datasetId,
@@ -198,15 +203,17 @@ export const getSnapshot = (
   datasetId,
   commitRef,
 ): Promise<SnapshotDocument> => {
-  const url = `${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/snapshots/${commitRef}`
+  const url = `${
+    getDatasetWorker(
+      datasetId,
+    )
+  }/datasets/${datasetId}/snapshots/${commitRef}`
   const cache = new CacheItem(redis, CacheType.snapshot, [datasetId, commitRef])
   return cache.get(() =>
     request
       .get(url)
-      .set('Accept', 'application/json')
-      .then(({ body }) => body),
+      .set("Accept", "application/json")
+      .then(({ body }) => body)
   )
 }
 
@@ -221,7 +228,7 @@ export const getSnapshot = (
 export const getSnapshotHexsha = (datasetId, tag) => {
   return Snapshot.findOne({ datasetId, tag }, { hexsha: true })
     .exec()
-    .then(result => (result ? result.hexsha : null))
+    .then((result) => (result ? result.hexsha : null))
 }
 
 /**
@@ -231,22 +238,22 @@ export const getSnapshotHexsha = (datasetId, tag) => {
  */
 export const getPublicSnapshots = () => {
   // query all publicly available dataset
-  return Dataset.find({ public: true }, 'id')
+  return Dataset.find({ public: true }, "id")
     .exec()
-    .then(datasets => {
-      const datasetIds = datasets.map(dataset => dataset.id)
+    .then((datasets) => {
+      const datasetIds = datasets.map((dataset) => dataset.id)
       return Snapshot.aggregate([
         { $match: { datasetId: { $in: datasetIds } } },
         { $sort: { created: -1 } },
         {
           $group: {
-            _id: '$datasetId',
-            snapshots: { $push: '$$ROOT' },
+            _id: "$datasetId",
+            snapshots: { $push: "$$ROOT" },
           },
         },
         {
           $replaceRoot: {
-            newRoot: { $arrayElemAt: ['$snapshots', 0] },
+            newRoot: { $arrayElemAt: ["$snapshots", 0] },
           },
         },
       ]).exec()
@@ -264,13 +271,13 @@ export const downloadFiles = (datasetId, tag) => {
   // Return an existing cache object if we have one
   return downloadCache.get(async () => {
     // If not, fetch all trees sequentially and cache the result (hopefully some or all trees are cached)
-    const files = await getFilesRecursive(datasetId, tag, '')
+    const files = await getFilesRecursive(datasetId, tag, "")
     files.sort()
     return files
   })
 }
 
-export async function getFilesRecursive(datasetId, tree, path = '') {
+export async function getFilesRecursive(datasetId, tree, path = "") {
   const files = []
   // Fetch files
   const fileTree = await getFiles(datasetId, tree)

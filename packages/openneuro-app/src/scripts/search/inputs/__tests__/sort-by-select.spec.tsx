@@ -1,23 +1,23 @@
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { searchRender } from '../../__helpers__/search-render'
-import SortBySelect from '../sort-by-select'
-import initialSearchParams from '../../initial-search-params'
+import React from "react"
+import { screen } from "@testing-library/react"
+import { searchRender } from "../../__helpers__/search-render"
+import SortBySelect from "../sort-by-select"
+import initialSearchParams from "../../initial-search-params"
 
 const providerProps = {
   value: { searchParams: { ...initialSearchParams } },
 }
 
-describe('SortBySelect component', () => {
-  it('displays Newest when parameters are set to default', () => {
+describe("SortBySelect component", () => {
+  it("displays Newest when parameters are set to default", () => {
     searchRender(<SortBySelect variables={{ query: { bool: {} } }} />, {
       providerProps,
     })
-    expect(screen.getByText('SORT BY:').closest('div')).toHaveTextContent(
-      'SORT BY: Newest',
+    expect(screen.getByText("SORT BY:").closest("div")).toHaveTextContent(
+      "SORT BY: Newest",
     )
   })
-  it('displays Newest when parameters are set to default and modality has changed', () => {
+  it("displays Newest when parameters are set to default and modality has changed", () => {
     searchRender(
       <SortBySelect
         variables={{
@@ -26,8 +26,8 @@ describe('SortBySelect component', () => {
               filter: [
                 {
                   match: {
-                    'latestSnapshot.summary.modalities': {
-                      query: 'MRI',
+                    "latestSnapshot.summary.modalities": {
+                      query: "MRI",
                     },
                   },
                 },
@@ -40,20 +40,20 @@ describe('SortBySelect component', () => {
         providerProps,
       },
     )
-    expect(screen.getByText('SORT BY:').closest('div')).toHaveTextContent(
-      'SORT BY: Newest',
+    expect(screen.getByText("SORT BY:").closest("div")).toHaveTextContent(
+      "SORT BY: Newest",
     )
   })
-  it('displays Relevance when any non-modality parameters are set away from default', () => {
+  it("displays Relevance when any non-modality parameters are set away from default", () => {
     searchRender(
-      <SortBySelect variables={{ query: { bool: { species: 'Human' } } }} />,
+      <SortBySelect variables={{ query: { bool: { species: "Human" } } }} />,
       { providerProps },
     )
-    expect(screen.getByText('SORT BY:').closest('div')).toHaveTextContent(
-      'SORT BY: Relevance',
+    expect(screen.getByText("SORT BY:").closest("div")).toHaveTextContent(
+      "SORT BY: Relevance",
     )
   })
-  it('displays Relevance with age of participants set', () => {
+  it("displays Relevance with age of participants set", () => {
     searchRender(
       <SortBySelect
         variables={{
@@ -62,10 +62,10 @@ describe('SortBySelect component', () => {
               filter: [
                 {
                   range: {
-                    'latestSnapshot.summary.subjectMetadata.age': {
+                    "latestSnapshot.summary.subjectMetadata.age": {
                       gte: 10,
                       lte: 100,
-                      relation: 'INTERSECTS',
+                      relation: "INTERSECTS",
                     },
                   },
                 },
@@ -76,8 +76,8 @@ describe('SortBySelect component', () => {
       />,
       { providerProps },
     )
-    expect(screen.getByText('SORT BY:').closest('div')).toHaveTextContent(
-      'SORT BY: Relevance',
+    expect(screen.getByText("SORT BY:").closest("div")).toHaveTextContent(
+      "SORT BY: Relevance",
     )
   })
 })

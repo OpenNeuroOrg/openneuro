@@ -1,11 +1,11 @@
 // dependencies -----------------------------------------------------------
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React from "react"
+import PropTypes from "prop-types"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
-import pluralize from 'pluralize'
-import Issue from './validation-results.issues.issue.jsx'
+import pluralize from "pluralize"
+import Issue from "./validation-results.issues.issue.jsx"
 
 class Issues extends React.Component {
   render() {
@@ -15,7 +15,7 @@ class Issues extends React.Component {
       if (issue.additionalFileCount) {
         totalFiles += issue.additionalFileCount
       }
-      const issueCount = pluralize('files', totalFiles)
+      const issueCount = pluralize("files", totalFiles)
 
       const header = (
         <span className="file-header">
@@ -48,15 +48,17 @@ class Issues extends React.Component {
             )
           })
         } else {
-          return error ? (
-            <Issue
-              type={this.props.issueType}
-              file={issue.file}
-              error={error}
-              index={index2}
-              key={index2}
-            />
-          ) : null
+          return error
+            ? (
+              <Issue
+                type={this.props.issueType}
+                file={issue.file}
+                error={error}
+                index={index2}
+                key={index2}
+              />
+            )
+            : null
         }
       })
 
@@ -64,8 +66,8 @@ class Issues extends React.Component {
         subErrors.push(
           <div className="em-body" key="additional-file-count">
             <span className="e-meta">
-              and {issue.additionalFileCount} more{' '}
-              {pluralize('files', issue.additionalFileCount)}
+              and {issue.additionalFileCount} more{" "}
+              {pluralize("files", issue.additionalFileCount)}
             </span>
           </div>,
         )

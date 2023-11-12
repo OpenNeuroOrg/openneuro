@@ -1,5 +1,5 @@
-import Markdown from 'markdown-to-jsx'
-import React from 'react'
+import Markdown from "markdown-to-jsx"
+import React from "react"
 
 export interface MetaDataBlockProps {
   heading: string
@@ -16,7 +16,7 @@ export const MetaDataBlock = ({
 }: MetaDataBlockProps) => {
   const fieldContent = renderEditor ? renderEditor() : item
   return (
-    <div className={'dataset-meta-block ' + className}>
+    <div className={"dataset-meta-block " + className}>
       <h2 className="dmb-heading">{heading}</h2>
       <>{fieldContent}</>
     </div>

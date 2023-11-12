@@ -1,13 +1,13 @@
 import {
-  Client as ElasticClient,
   // Interface of the generic API response
   ApiResponse,
-} from '@elastic/elasticsearch'
+  Client as ElasticClient,
+} from "@elastic/elasticsearch"
 import {
-  DatasetsIndex,
   DatasetQueryResult,
+  DatasetsIndex,
   indexDataset,
-} from '@openneuro/search'
+} from "@openneuro/search"
 
 /**
  * Point 'datasets' index at the new version
@@ -17,7 +17,7 @@ export const aliasDatasetsIndex = (
 ): Promise<ApiResponse> =>
   elasticClient.indices.updateAliases({
     body: {
-      actions: [{ add: { index: DatasetsIndex.name, alias: 'datasets' } }],
+      actions: [{ add: { index: DatasetsIndex.name, alias: "datasets" } }],
     },
   })
 

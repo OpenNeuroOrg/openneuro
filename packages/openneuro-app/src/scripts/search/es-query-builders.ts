@@ -30,7 +30,7 @@ export const simpleQueryString = (
   fuzzy = true,
 ) => ({
   simple_query_string: {
-    query: `${queryString}${fuzzy ? '~' : ''}`,
+    query: `${queryString}${fuzzy ? "~" : ""}`,
     fields,
   },
 })
@@ -58,8 +58,8 @@ export const multiMatchQuery = (
 ) => {
   return {
     bool: {
-      should: queryStrings.map(queryString =>
-        matchQuery(field, queryString, fuzziness, operator),
+      should: queryStrings.map((queryString) =>
+        matchQuery(field, queryString, fuzziness, operator)
       ),
       minimum_should_match: 1,
     },
@@ -70,7 +70,7 @@ export const rangeQuery = (
   field,
   gte?: number | string,
   lte?: number | string,
-  relation: string = 'INTERSECTS',
+  relation: string = "INTERSECTS",
 ) => ({
   range: {
     [field]: {
@@ -85,7 +85,7 @@ export const rangeListLengthQuery = (field, gte: number, lte: number) => {
   return {
     script: {
       script: {
-        lang: 'painless',
+        lang: "painless",
         source: `
           if (doc[params.field].size() != 0) {
             return ( doc[params.field].size() >= params.gte && doc[params.field].size() <= params.lte )
@@ -102,6 +102,6 @@ export const rangeListLengthQuery = (field, gte: number, lte: number) => {
 
 /** SimpleQueryString join multiple terms with and `+`. */
 export const sqsJoinWithAND = (list: string[]) =>
-  list.map(str => `${str}`).join(' + ')
+  list.map((str) => `${str}`).join(" + ")
 export const joinWithOR = (list: string[]) =>
-  list.map(str => `${str}`).join(' | ')
+  list.map((str) => `${str}`).join(" | ")

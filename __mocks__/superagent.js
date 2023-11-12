@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { vi } from "vitest"
 
 // mock for superagent - __mocks__/superagent.js
 class MockResponse {
@@ -19,7 +19,7 @@ class MockResponse {
   }
 }
 
-const createRequestStub = obj => vi.fn(() => obj)
+const createRequestStub = (obj) => vi.fn(() => obj)
 
 function Request() {
   this.mockResponse = new MockResponse()
@@ -34,7 +34,7 @@ function Request() {
   this.set = createRequestStub(this)
   this.accept = createRequestStub(this)
   this.timeout = createRequestStub(this)
-  this.then = cb => {
+  this.then = (cb) => {
     return new Promise((resolve, reject) => {
       if (this.mockError) {
         return reject(this.mockError)
@@ -42,7 +42,7 @@ function Request() {
       return resolve(cb(this.mockResponse))
     })
   }
-  this.end = vi.fn().mockImplementation(callback => {
+  this.end = vi.fn().mockImplementation((callback) => {
     if (this.mockDelay) {
       this.delayTimer = setTimeout(
         callback,
@@ -57,13 +57,13 @@ function Request() {
     callback(this.mockError, this.mockResponse)
   })
   //expose helper methods for tests to set
-  this.__setMockDelay = boolValue => {
+  this.__setMockDelay = (boolValue) => {
     this.mockDelay = boolValue
   }
-  this.__setMockResponse = mockRes => {
+  this.__setMockResponse = (mockRes) => {
     this.mockResponse = mockRes
   }
-  this.__setMockError = mockErr => {
+  this.__setMockError = (mockErr) => {
     this.mockError = mockErr
   }
 }

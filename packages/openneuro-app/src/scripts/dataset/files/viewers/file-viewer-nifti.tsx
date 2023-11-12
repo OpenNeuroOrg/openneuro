@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
-import { Niivue } from '@niivue/niivue'
+import React, { useEffect, useRef } from "react"
+import PropTypes from "prop-types"
+import { Niivue } from "@niivue/niivue"
 
 const FileViewerNifti = ({
   imageUrl,
@@ -12,7 +12,7 @@ const FileViewerNifti = ({
     const volumeList = [
       {
         url: imageUrl,
-        colorMap: 'gray',
+        colorMap: "gray",
         opacity: 1,
         visible: true,
         limitFrames4D: 5,

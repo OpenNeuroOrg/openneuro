@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface DeletionDocument extends Document {
@@ -18,9 +18,9 @@ const deletion = new Schema(
     reason: String,
     redirect: String,
   },
-  { timestamps: { createdAt: 'created_at' } },
+  { timestamps: { createdAt: "created_at" } },
 )
 
-const Deletion = model<DeletionDocument>('Deletion', deletion)
+const Deletion = model<DeletionDocument>("Deletion", deletion)
 
 export default Deletion

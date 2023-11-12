@@ -18,7 +18,8 @@ export const commentCreated = ({
   datasetName: string
   datasetLabel: string
   dateCreated: string
-}): string => `<html>
+}): string =>
+  `<html>
 <head>
 <style>
 	body {

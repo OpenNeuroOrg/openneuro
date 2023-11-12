@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { WarnButton } from '@openneuro/components/warn-button'
-import { Tooltip } from '@openneuro/components/tooltip'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { WarnButton } from "@openneuro/components/warn-button"
+import { Tooltip } from "@openneuro/components/tooltip"
 
 const FLAG_ANNEX_OBJECT = gql`
   mutation flagAnnexObject(
@@ -23,11 +23,12 @@ const FLAG_ANNEX_OBJECT = gql`
 
 const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
   <Mutation mutation={FLAG_ANNEX_OBJECT} awaitRefetchQueries={true}>
-    {flagAnnexObject => (
+    {(flagAnnexObject) => (
       // fa-exclamation-triangle might be better
       <Tooltip
         className="flag-annex-object"
-        tooltip="Flag: use this to alert site admins if this file has been found to contain subject sensitive data.">
+        tooltip="Flag: use this to alert site admins if this file has been found to contain subject sensitive data."
+      >
         <WarnButton
           message=""
           icon="fa-exclamation-triangle"
@@ -37,7 +38,7 @@ const FlagAnnexObject = ({ datasetId, snapshot, filepath, annexKey }) => (
             flagAnnexObject({
               variables: {
                 datasetId,
-                snapshot: snapshot || 'HEAD',
+                snapshot: snapshot || "HEAD",
                 filepath,
                 annexKey,
               },

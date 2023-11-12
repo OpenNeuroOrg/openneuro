@@ -1,17 +1,17 @@
-import React from 'react'
-import styled, { StyledComponent } from '@emotion/styled'
-import { Link } from 'react-router-dom'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Icon } from '../icon/Icon'
-import { useLocation } from 'react-router-dom'
+import React from "react"
+import styled, { StyledComponent } from "@emotion/styled"
+import { Link } from "react-router-dom"
+import { Tooltip } from "../tooltip/Tooltip"
+import { Icon } from "../icon/Icon"
+import { useLocation } from "react-router-dom"
 
 interface DatasetToolStyleProps {
   active: boolean
 }
 
-export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> =
-  styled.span<DatasetToolStyleProps>(
-    props => `
+export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
+  .span<DatasetToolStyleProps>(
+    (props) => `
   display: flex;
   margin: 0 auto 10px;
   flex-basis: auto;
@@ -25,7 +25,7 @@ export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> =
     padding: 4px;
     border-bottom: 2px solid transparent;
     border-bottom-color: ${
-      props.active ? 'var(--current-theme-primary)' : 'transparent'
+      props.active ? "var(--current-theme-primary)" : "transparent"
     };
     i {
       margin-right: 6px;

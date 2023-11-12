@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { toast } from 'react-toastify'
-import ToastContent from '../../common/partials/toast-content.jsx'
-import { validate as isValidEmail } from 'email-validator'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { toast } from "react-toastify"
+import ToastContent from "../../common/partials/toast-content.jsx"
+import { validate as isValidEmail } from "email-validator"
 
 const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(
@@ -30,15 +30,15 @@ export const mergeNewPermission = (
   metadata,
 ) => {
   return {
-    __typename: 'Dataset',
+    __typename: "Dataset",
     id: datasetId,
     permissions: {
       ...oldPermissions,
       userPermissions: [
         ...oldPermissions.userPermissions,
         {
-          __typename: 'Permission',
-          user: { __typename: 'User', ...userInfo },
+          __typename: "Permission",
+          user: { __typename: "User", ...userInfo },
           level: metadata,
         },
       ],
@@ -48,7 +48,7 @@ export const mergeNewPermission = (
 
 const UpdateDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
   <Mutation mutation={UPDATE_PERMISSIONS}>
-    {UpdateDatasetPermissions => (
+    {(UpdateDatasetPermissions) => (
       <button
         className="btn-modal-action"
         onClick={async () => {
@@ -68,7 +68,8 @@ const UpdateDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
               <ToastContent body="Please enter a valid email address" />,
             )
           }
-        }}>
+        }}
+      >
         Share
       </button>
     )}
@@ -78,7 +79,7 @@ const UpdateDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
 UpdateDatasetPermissions.propTypes = {
   datasetId: PropTypes.string,
   userEmail: PropTypes.string,
-  metadata: PropTypes.oneOf(['ro', 'rw', 'admin']),
+  metadata: PropTypes.oneOf(["ro", "rw", "admin"]),
   done: PropTypes.func,
 }
 

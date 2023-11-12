@@ -1,10 +1,10 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Tooltip } from '@openneuro/components/tooltip'
-import { toast } from 'react-toastify'
-import ToastContent from '../partials/toast-content.jsx'
+import React from "react"
+import PropTypes from "prop-types"
+import { Tooltip } from "@openneuro/components/tooltip"
+import { toast } from "react-toastify"
+import ToastContent from "../partials/toast-content.jsx"
 
 class WarnButton extends React.Component {
   constructor(props) {
@@ -49,7 +49,8 @@ class WarnButton extends React.Component {
         <a
           className="btn-warn-component success"
           onClick={this.toggle.bind(this, this.props.action)}
-          href={this.state.link}>
+          href={this.state.link}
+        >
           {confirm}
         </a>
       )
@@ -57,8 +58,9 @@ class WarnButton extends React.Component {
 
     const confirmBtn = (
       <button
-        className={'btn-warn-component success'}
-        onClick={this.toggle.bind(this, this.props.action)}>
+        className={"btn-warn-component success"}
+        onClick={this.toggle.bind(this, this.props.action)}
+      >
         {confirm}
       </button>
     )
@@ -67,7 +69,8 @@ class WarnButton extends React.Component {
       <span className="btn-group slide-in-right-fast" role="group">
         <button
           className="btn-warn-component cancel"
-          onClick={this.toggle.bind(this)}>
+          onClick={this.toggle.bind(this)}
+        >
           {cancel}
         </button>
         {link ? link : confirmBtn}
@@ -75,12 +78,13 @@ class WarnButton extends React.Component {
     )
 
     const hideAction = (
-      <span className={disabled ? ' disabled' : ''}>
+      <span className={disabled ? " disabled" : ""}>
         <button
           className="btn-warn-component warning"
           onClick={this.toggle.bind(this, this.props.action)}
-          disabled={this.props.lock}>
-          <i className={'fa ' + this.props.icon} /> {message}
+          disabled={this.props.lock}
+        >
+          <i className={"fa " + this.props.icon} /> {message}
         </button>
       </span>
     )
@@ -130,7 +134,7 @@ class WarnButton extends React.Component {
       // generate download links
       if (this.props.prepDownload) {
         this.setState({ loading: true })
-        this.props.prepDownload(link => {
+        this.props.prepDownload((link) => {
           this.setState({ displayOptions: true, link: link, loading: false })
         })
         return
@@ -154,9 +158,9 @@ class WarnButton extends React.Component {
       }
     }
 
-    if (typeof action === 'function') {
+    if (typeof action === "function") {
       this.setState({ loading: true })
-      action(e => {
+      action((e) => {
         if (e && e.error) {
           toast.error(<ToastContent title="Error" body={e.error} />)
         }
@@ -190,10 +194,10 @@ WarnButton.propTypes = {
 }
 
 WarnButton.defaultProps = {
-  message: '',
+  message: "",
   cancel: <i className="fa fa-times" />,
   confirm: <i className="fa fa-check" />,
-  icon: 'fa-trash-o',
+  icon: "fa-trash-o",
   warn: true,
   tooltip: null,
 }

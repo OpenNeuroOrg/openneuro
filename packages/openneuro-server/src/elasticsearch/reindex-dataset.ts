@@ -1,14 +1,14 @@
-import config from '../config'
-import { indexDataset, queryForIndex, indexingToken } from '@openneuro/search'
-import { elasticClient } from './elastic-client'
+import config from "../config"
+import { indexDataset, indexingToken, queryForIndex } from "@openneuro/search"
+import { elasticClient } from "./elastic-client"
 import {
-  from,
   ApolloClient,
+  from,
   InMemoryCache,
   NormalizedCacheObject,
-} from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
-import { HttpLink } from '@apollo/client/link/http'
+} from "@apollo/client"
+import { setContext } from "@apollo/client/link/context"
+import { HttpLink } from "@apollo/client/link/http"
 
 /**
  * Setup SchemaLink based client for querying

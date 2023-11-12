@@ -1,5 +1,5 @@
-import React from 'react'
-import { Radio } from './Radio'
+import React from "react"
+import { Radio } from "./Radio"
 
 export interface RadioGroupProps {
   layout: string
@@ -8,17 +8,17 @@ export interface RadioGroupProps {
   radioArr: (
     | string
     | {
-        label: string
-        onChange?: React.MouseEventHandler<HTMLInputElement>
-        value: string
-      }
+      label: string
+      onChange?: React.MouseEventHandler<HTMLInputElement>
+      value: string
+    }
   )[]
   name: string
   selected: string
   setSelected: (value) => void
 }
 
-const get = (obj, property) => (typeof obj === 'object' ? obj[property] : obj)
+const get = (obj, property) => (typeof obj === "object" ? obj[property] : obj)
 
 export const RadioGroup = ({
   radioArr,
@@ -28,15 +28,15 @@ export const RadioGroup = ({
   setSelected,
 }: RadioGroupProps) => {
   return (
-    <div className={'on-radio-wrapper' + ' ' + layout}>
+    <div className={"on-radio-wrapper" + " " + layout}>
       {radioArr.map((item, index) => (
         <Radio
           key={index}
           name={name}
-          value={get(item, 'value')}
-          label={get(item, 'label')}
-          checked={selected === get(item, 'value')}
-          onChange={e => setSelected(e.target.value)}
+          value={get(item, "value")}
+          label={get(item, "label")}
+          checked={selected === get(item, "value")}
+          onChange={(e) => setSelected(e.target.value)}
         />
       ))}
     </div>

@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import WarnButton from '../../common/forms/warn-button.jsx'
-import { datasetCacheId } from './cache-id.js'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import WarnButton from "../../common/forms/warn-button.jsx"
+import { datasetCacheId } from "./cache-id.js"
 
 const STAR_DATASET = gql`
   mutation starDataset($datasetId: ID!) {
@@ -26,18 +26,19 @@ const StarDataset = ({ datasetId, starred }) => (
         id: datasetCacheId(datasetId),
         fragment: USER_STARRED,
         data: {
-          __typename: 'Dataset',
+          __typename: "Dataset",
           id: datasetId,
           starred: starDataset,
         },
       })
-    }}>
-    {starDataset => (
+    }}
+  >
+    {(starDataset) => (
       <WarnButton
         tooltip="Save Dataset"
-        icon={starred ? 'fa-star icon-minus' : 'fa-star icon-plus'}
+        icon={starred ? "fa-star icon-minus" : "fa-star icon-plus"}
         warn={false}
-        action={cb => {
+        action={(cb) => {
           starDataset({ variables: { datasetId } }).then(() => cb())
         }}
       />

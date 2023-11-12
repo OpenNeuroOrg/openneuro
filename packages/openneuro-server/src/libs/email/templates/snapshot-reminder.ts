@@ -8,7 +8,8 @@ export const snapshotReminder = ({
   name: string
   datasetName: string
   datasetId: string
-}): string => `<html>
+}): string =>
+  `<html>
 <head>
 <style>
 	body {

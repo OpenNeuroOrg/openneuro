@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import DatasetHistory from '../fragments/dataset-history.jsx'
-import CacheClear from '../mutations/cache-clear.jsx'
-import AdminExports from '../mutations/admin-exports'
-import { DatasetPageBorder } from './styles/dataset-page-border'
-import { HeaderRow3, HeaderRow4 } from './styles/header-row'
+import React from "react"
+import PropTypes from "prop-types"
+import DatasetHistory from "../fragments/dataset-history.jsx"
+import CacheClear from "../mutations/cache-clear.jsx"
+import AdminExports from "../mutations/admin-exports"
+import { DatasetPageBorder } from "./styles/dataset-page-border"
+import { HeaderRow3, HeaderRow4 } from "./styles/header-row"
 
 const AdminDataset = ({ dataset }) => (
   <DatasetPageBorder className="datalad-dataset-form">

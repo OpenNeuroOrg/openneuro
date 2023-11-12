@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import './warn-button.scss'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Button } from '../button/Button'
+import React, { FC } from "react"
+import "./warn-button.scss"
+import { Tooltip } from "../tooltip/Tooltip"
+import { Button } from "../button/Button"
 
 export interface WarnButtonProps {
   message?: string
@@ -32,7 +32,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
   }
   const viewAction = (
     <div
-      className={withLabel ? 'warn-btn-group with-label' : 'warn-btn-group'}
+      className={withLabel ? "warn-btn-group with-label" : "warn-btn-group"}
       role="group"
     >
       <div className="slide-in">
@@ -43,7 +43,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
           icon="fa fa-times"
           color="#fff"
           backgroundColor="#c00342"
-          onClick={() => setDisplayOptions(currentState => !currentState)}
+          onClick={() => setDisplayOptions((currentState) => !currentState)}
           size="xsmall"
           label="cancel"
         />
@@ -57,7 +57,7 @@ export const WarnButton: FC<WarnButtonProps> = ({
           backgroundColor="#00b489"
           onClick={() => {
             onConfirmedClick()
-            setDisplayOptions(currentState => !currentState)
+            setDisplayOptions((currentState) => !currentState)
           }}
           size="xsmall"
           label="confirm"
@@ -67,13 +67,14 @@ export const WarnButton: FC<WarnButtonProps> = ({
   )
 
   const hideAction = (
-    <span className={disabled ? ' disabled warn-btn-click' : 'warn-btn-click'}>
+    <span className={disabled ? " disabled warn-btn-click" : "warn-btn-click"}>
       <Button
         className="btn-warn-component"
         iconSize="12px"
-        icon={'fa ' + icon}
+        icon={"fa " + icon}
         label={message}
-        onClick={() => setDisplayOptions(currentState => !currentState)}
+        onClick={() =>
+          setDisplayOptions((currentState) => !currentState)}
         disabled={disabled}
       />
     </span>
@@ -82,14 +83,14 @@ export const WarnButton: FC<WarnButtonProps> = ({
   const button = displayOptions ? viewAction : hideAction
 
   return (
-    <div className={'warn-btn ' + (className || '')}>
-      {tooltip ? (
-        <Tooltip flow="up" tooltip={tooltip}>
-          {button}
-        </Tooltip>
-      ) : (
-        button
-      )}
+    <div className={"warn-btn " + (className || "")}>
+      {tooltip
+        ? (
+          <Tooltip flow="up" tooltip={tooltip}>
+            {button}
+          </Tooltip>
+        )
+        : button}
     </div>
   )
 }

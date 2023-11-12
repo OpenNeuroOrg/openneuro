@@ -1,9 +1,9 @@
-import passport from 'passport'
-import refresh from 'passport-oauth2-refresh'
-import jwt from 'jsonwebtoken'
-import { decrypt } from './crypto'
-import User from '../../models/user'
-import config from '../../config'
+import passport from "passport"
+import refresh from "passport-oauth2-refresh"
+import jwt from "jsonwebtoken"
+import { decrypt } from "./crypto"
+import User from "../../models/user"
+import config from "../../config"
 
 interface OpenNeuroTokenProfile {
   sub: string
@@ -24,7 +24,7 @@ export const buildToken = (
   expiresIn,
   options?: { scopes?: string[]; dataset?: string },
 ): string => {
-  const fields: Omit<OpenNeuroTokenProfile, 'iat' | 'exp'> = {
+  const fields: Omit<OpenNeuroTokenProfile, "iat" | "exp"> = {
     sub: user.id,
     email: user.email,
     provider: user.provider,
@@ -33,10 +33,10 @@ export const buildToken = (
   }
   // Allow extensions of the base token format
   if (options) {
-    if (options && 'scopes' in options) {
+    if (options && "scopes" in options) {
       fields.scopes = options.scopes
     }
-    if ('dataset' in options) {
+    if ("dataset" in options) {
       fields.dataset = options.dataset
     }
   }
@@ -46,12 +46,10 @@ export const buildToken = (
 }
 
 // Helper to generate a JWT containing user info
-export const addJWT =
-  config =>
-  (user, expiration = 60 * 60 * 24 * 7) => {
-    const token = buildToken(config, user, expiration)
-    return Object.assign({}, user, { token })
-  }
+export const addJWT = (config) => (user, expiration = 60 * 60 * 24 * 7) => {
+  const token = buildToken(config, user, expiration)
+  return Object.assign({}, user, { token })
+}
 
 /**
  * Generate an upload specific token
@@ -64,7 +62,7 @@ export function generateUploadToken(
   expiresIn = 60 * 60 * 24 * 7,
 ) {
   const options = {
-    scopes: ['dataset:upload'],
+    scopes: ["dataset:upload"],
     dataset: datasetId,
   }
   return buildToken(config, user, expiresIn, options)
@@ -79,14 +77,14 @@ export function generateReviewerToken(
   expiresIn = 60 * 60 * 24 * 365,
 ) {
   const options = {
-    scopes: ['dataset:reviewer'],
+    scopes: ["dataset:reviewer"],
     dataset: datasetId,
   }
   const reviewer = {
     id,
-    email: 'reviewer@openneuro.org',
-    provider: 'OpenNeuro',
-    name: 'Anonymous Reviewer',
+    email: "reviewer@openneuro.org",
+    provider: "OpenNeuro",
+    name: "Anonymous Reviewer",
     admin: false,
   }
   return buildToken(config, reviewer, expiresIn, options)
@@ -99,7 +97,7 @@ export function generateReviewerToken(
  */
 export function generateRepoToken(user, datasetId, expiresIn = 60 * 60 * 24) {
   const options = {
-    scopes: ['dataset:git'],
+    scopes: ["dataset:git"],
     dataset: datasetId,
   }
   return buildToken(config, user, expiresIn, options)
@@ -121,7 +119,7 @@ const requestNewAccessToken = (jwtProvider, refreshToken) =>
  * Extract the JWT from a cookie
  * @param {Object} req
  */
-export const jwtFromRequest = req => {
+export const jwtFromRequest = (req) => {
   if (req.cookies && req.cookies.accessToken) {
     return req.cookies.accessToken
   } else {
@@ -133,13 +131,13 @@ export const decodeJWT = (token: string): OpenNeuroTokenProfile => {
   return jwt.decode(token) as OpenNeuroTokenProfile
 }
 
-export const parsedJwtFromRequest = req => {
+export const parsedJwtFromRequest = (req) => {
   const jwt = jwtFromRequest(req)
   if (jwt) return decodeJWT(jwt)
   else return null
 }
 
-const refreshToken = async jwt => {
+const refreshToken = async (jwt) => {
   const user = await User.findOne({ id: jwt.sub, provider: jwt.provider })
   if (user && user.refresh) {
     const refreshToken = decrypt(user.refresh)
@@ -152,7 +150,7 @@ const refreshToken = async jwt => {
 }
 
 // Shared options for Express response.cookie()
-const cookieOptions = { sameSite: 'Lax' }
+const cookieOptions = { sameSite: "Lax" }
 
 // attach user obj to request based on jwt
 // if user does not exist, continue
@@ -163,10 +161,10 @@ export const authenticate = (req, res, next) => {
       const token = await refreshToken(jwt)
       if (token) {
         req.cookies.accessToken = token
-        res.cookie('accessToken', token, cookieOptions)
+        res.cookie("accessToken", token, cookieOptions)
       }
     }
-    passport.authenticate('jwt', { session: false }, (err, user) => {
+    passport.authenticate("jwt", { session: false }, (err, user) => {
       req.login(user, { session: false }, () => next())
     })(req, res, next)
   }
@@ -175,11 +173,11 @@ export const authenticate = (req, res, next) => {
 
 export const authSuccessHandler = (req, res, next) => {
   const redirectPath = req.query.state
-    ? Buffer.from(req.query.state, 'base64').toString()
-    : '/'
+    ? Buffer.from(req.query.state, "base64").toString()
+    : "/"
   if (req.user) {
     // Set the JWT associated with this login on a cookie
-    res.cookie('accessToken', req.user.token, cookieOptions)
+    res.cookie("accessToken", req.user.token, cookieOptions)
     res.redirect(redirectPath)
   } else {
     res.status(401)
@@ -187,6 +185,6 @@ export const authSuccessHandler = (req, res, next) => {
   return next()
 }
 
-export const generateDataladCookie = config => user => {
-  return user ? `accessToken=${addJWT(config)(user).token}` : ''
+export const generateDataladCookie = (config) => (user) => {
+  return user ? `accessToken=${addJWT(config)(user).token}` : ""
 }

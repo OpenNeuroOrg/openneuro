@@ -1,24 +1,24 @@
-import { vi } from 'vitest'
-import User from '../../../models/user'
-import { addJWT } from '../jwt'
+import { vi } from "vitest"
+import User from "../../../models/user"
+import { addJWT } from "../jwt"
 
-vi.mock('ioredis')
-vi.mock('../../../config.ts')
-vi.unmock('mongoose')
+vi.mock("ioredis")
+vi.mock("../../../config.ts")
+vi.unmock("mongoose")
 
-describe('jwt auth', () => {
-  describe('addJWT()', () => {
-    it('Extends a User model with a valid token', () => {
+describe("jwt auth", () => {
+  describe("addJWT()", () => {
+    it("Extends a User model with a valid token", () => {
       const config = {
         auth: {
           jwt: {
-            secret: '1234',
+            secret: "1234",
           },
         },
       }
-      const user = User({ email: 'test@example.com' })
+      const user = User({ email: "test@example.com" })
       const obj = addJWT(config)(user)
-      expect(obj).toHaveProperty('token')
+      expect(obj).toHaveProperty("token")
     })
   })
 })

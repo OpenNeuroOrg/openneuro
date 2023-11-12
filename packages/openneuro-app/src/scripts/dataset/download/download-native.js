@@ -1,16 +1,16 @@
-import { trackDownload } from './track-download.js'
+import { trackDownload } from "./track-download.js"
 import {
-  downloadToast,
-  downloadToastUpdate,
-  downloadToastDone,
   downloadAbortToast,
+  downloadCompleteToast,
+  downloadToast,
+  downloadToastDone,
+  downloadToastUpdate,
   nativeErrorToast,
   permissionsToast,
-  downloadCompleteToast,
   requestFailureToast,
-} from './native-file-toast.jsx'
-import { apm } from '../../apm.js'
-import { downloadDataset } from './download-query'
+} from "./native-file-toast.jsx"
+import { apm } from "../../apm.js"
+import { downloadDataset } from "./download-query"
 
 /**
  * Given a file, create any missing parent directories, obtain directory handle, and return the file handle within that
@@ -20,7 +20,7 @@ import { downloadDataset } from './download-query'
 export const openFileTree = async (initialDirectoryHandle, path) => {
   let directoryHandle = initialDirectoryHandle
   // Get list of any parent directories
-  const pathTokens = path.split('/')
+  const pathTokens = path.split("/")
   const dirTokens = pathTokens.slice(0, -1)
   const filename = pathTokens.slice(-1)
   if (dirTokens.length > 0) {
@@ -36,7 +36,7 @@ export const openFileTree = async (initialDirectoryHandle, path) => {
 class DownloadAbortError extends Error {
   constructor(message) {
     super(message)
-    this.name = 'DownloadAbortError'
+    this.name = "DownloadAbortError"
   }
 }
 
@@ -47,7 +47,7 @@ let downloadCanceled
  */
 const downloadTree = async (
   { datasetId, snapshotTag, client, apmTransaction, dirHandle, toastId },
-  path = '',
+  path = "",
   tree = null,
 ) => {
   const filesToDownload = await downloadDataset(client)({
@@ -74,7 +74,7 @@ const downloadTree = async (
     } else {
       // Regular file
       if (downloadCanceled) {
-        throw new DownloadAbortError('Download canceled by user request')
+        throw new DownloadAbortError("Download canceled by user request")
       }
       const fileHandle = await openFileTree(
         dirHandle,
@@ -119,15 +119,16 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
   } catch (err) {
     apm.captureError(err)
   }
-  const apmTransaction =
-    apm && apm.startTransaction(`download:${datasetId}`, 'download')
-  if (apmTransaction)
+  const apmTransaction = apm &&
+    apm.startTransaction(`download:${datasetId}`, "download")
+  if (apmTransaction) {
     apmTransaction.addLabels({ datasetId, snapshot: snapshotTag })
+  }
   downloadCanceled = false
   let toastId
   try {
-    const apmSelect =
-      apmTransaction && apmTransaction.startSpan('showDirectoryPicker')
+    const apmSelect = apmTransaction &&
+      apmTransaction.startSpan("showDirectoryPicker")
     // Open user selected directory
     const dirHandle = await window.showDirectoryPicker()
     toastId = downloadToast(
@@ -147,11 +148,11 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
     })
     downloadCompleteToast(dirHandle.name)
   } catch (err) {
-    if (err.name === 'AbortError') {
+    if (err.name === "AbortError") {
       return
-    } else if (err.name === 'DownloadAbortError') {
+    } else if (err.name === "DownloadAbortError") {
       downloadAbortToast()
-    } else if (err.name === 'NotAllowedError') {
+    } else if (err.name === "NotAllowedError") {
       permissionsToast()
     } else {
       // Some unknown issue occurred (out of disk space, disk caught fire, etc...)

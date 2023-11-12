@@ -1,10 +1,10 @@
-import React from 'react'
-import styled from '@emotion/styled'
+import React from "react"
+import styled from "@emotion/styled"
 
 type IconProps = {
   fontSize?: string | number
   className?: string
-  ariaHidden?: boolean | 'false' | 'true'
+  ariaHidden?: boolean | "false" | "true"
 }
 
 const Icon: React.FC<IconProps> = ({ fontSize, className, ariaHidden }) => {
@@ -12,7 +12,7 @@ const Icon: React.FC<IconProps> = ({ fontSize, className, ariaHidden }) => {
   return <I className={className} aria-hidden={ariaHidden} />
 }
 
-export type ButtonPropsSize = 'xsmall' | 'small' | 'medium' | 'large'
+export type ButtonPropsSize = "xsmall" | "small" | "medium" | "large"
 
 export interface ButtonProps {
   primary?: boolean
@@ -31,7 +31,7 @@ export interface ButtonProps {
   iconSize?: string
   className?: string
   children?: React.ReactNode
-  type?: 'button' | 'submit' | 'reset'
+  type?: "button" | "submit" | "reset"
   form?: string
 }
 
@@ -40,7 +40,7 @@ export interface ButtonProps {
  */
 export const Button = ({
   primary,
-  size = 'medium',
+  size = "medium",
   backgroundColor,
   label,
   nobg,
@@ -58,50 +58,51 @@ export const Button = ({
   form,
   ...props
 }: ButtonProps) => {
-  const mode =
-    primary && !navbar
-      ? 'on-button--primary'
-      : secondary && !navbar
-      ? 'on-button--secondary'
-      : nobg && !navbar
-      ? 'on-no-background'
-      : !navbar
-      ? 'on-button--default'
-      : 'on-button--navbar'
-  const iconWithText =
-    icon && label && !iconOnly
-      ? 'icon-text'
-      : imgSrc && label
-      ? 'img-icon-text'
-      : null
-  const fontIcon = icon ? (
-    <Icon fontSize={iconSize} className={icon} ariaHidden="true" />
-  ) : null
-  const imgIcon = imgSrc ? (
-    <img
-      style={{ width: iconSize }}
-      src={imgSrc}
-      alt={label}
-      aria-hidden="true"
-    />
-  ) : null
+  const mode = primary && !navbar
+    ? "on-button--primary"
+    : secondary && !navbar
+    ? "on-button--secondary"
+    : nobg && !navbar
+    ? "on-no-background"
+    : !navbar
+    ? "on-button--default"
+    : "on-button--navbar"
+  const iconWithText = icon && label && !iconOnly
+    ? "icon-text"
+    : imgSrc && label
+    ? "img-icon-text"
+    : null
+  const fontIcon = icon
+    ? <Icon fontSize={iconSize} className={icon} ariaHidden="true" />
+    : null
+  const imgIcon = imgSrc
+    ? (
+      <img
+        style={{ width: iconSize }}
+        src={imgSrc}
+        alt={label}
+        aria-hidden="true"
+      />
+    )
+    : null
 
   return (
     <button
       form={form}
       disabled={disabled}
       role="button"
-      type={type ? type : 'button'}
+      type={type ? type : "button"}
       className={[
-        'on-button',
+        "on-button",
         `on-button--${size}`,
         mode,
         iconWithText,
         `${className}`,
-      ].join(' ')}
+      ].join(" ")}
       style={{ backgroundColor, color }}
       aria-label={label}
-      {...props}>
+      {...props}
+    >
       {imgIcon}
       {fontIcon}
       {iconOnly ? null : label}

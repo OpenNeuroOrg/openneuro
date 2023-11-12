@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useQuery } from "@apollo/client"
 
 const PUBLIC_DATASETS_COUNT = gql`
   query publicDatasetCount($modality: String) {
@@ -13,7 +13,7 @@ const PUBLIC_DATASETS_COUNT = gql`
 const usePublicDatasetsCount = (modality?: string) => {
   return useQuery(PUBLIC_DATASETS_COUNT, {
     variables: { modality },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
 }
 

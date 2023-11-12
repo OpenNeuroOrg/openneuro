@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react"
 
-import logodh from '../assets/on-dark-horz.svg'
-import logodv from '../assets/on-dark.svg'
-import logolh from '../assets/on-light-horz.svg'
-import logolv from '../assets/on-light.svg'
+import logodh from "../assets/on-dark-horz.svg"
+import logodv from "../assets/on-dark.svg"
+import logolh from "../assets/on-light-horz.svg"
+import logolv from "../assets/on-light.svg"
 
 export interface LogoProps {
   dark?: boolean
@@ -13,24 +13,30 @@ export interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({
   dark = true,
-  width = '300px',
+  width = "300px",
   horizontal = true,
   ...props
 }) => {
-  const colorMode = dark ? 'logo-dark' : 'logo-light'
-  const layoutMode = horizontal ? 'logo-horz' : 'logo-vert'
+  const colorMode = dark ? "logo-dark" : "logo-light"
+  const layoutMode = horizontal ? "logo-horz" : "logo-vert"
 
-  const logoStyle =
-    dark && horizontal ? logodh : horizontal ? logolh : dark ? logodv : logolv
+  const logoStyle = dark && horizontal
+    ? logodh
+    : horizontal
+    ? logolh
+    : dark
+    ? logodv
+    : logolv
 
   return (
     <div
       className="logo-wrap"
       style={{
         width: width,
-        maxWidth: '100%',
+        maxWidth: "100%",
       }}
-      {...props}>
+      {...props}
+    >
       <img
         src={logoStyle}
         loading="lazy"

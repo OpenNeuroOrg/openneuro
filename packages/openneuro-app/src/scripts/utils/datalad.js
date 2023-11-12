@@ -1,4 +1,4 @@
-import { datasets } from '@openneuro/client'
+import { datasets } from "@openneuro/client"
 
 export function trackAnalytics(client, datasetId, options) {
   options = options || {}

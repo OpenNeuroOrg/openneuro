@@ -1,3 +1,3 @@
-export const pageTitle = 'OpenNeuro'
+export const pageTitle = "OpenNeuro"
 export const pageDescription =
-  'A free and open platform for analyzing and sharing neuroimaging data'
+  "A free and open platform for analyzing and sharing neuroimaging data"

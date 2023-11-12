@@ -1,19 +1,19 @@
-import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
-import styled from '@emotion/styled'
+import React, { FC } from "react"
+import { Link } from "react-router-dom"
+import styled from "@emotion/styled"
 
 type ContainerProps = {
   styleContext: string
 }
 const Container = styled.div<ContainerProps>(({ styleContext }) => {
   switch (styleContext) {
-    case 'topLevel':
+    case "topLevel":
       return {
-        margin: '50px 25px',
+        margin: "50px 25px",
       }
-    case 'dataset':
+    case "dataset":
       return {
-        margin: '20px 0',
+        margin: "20px 0",
       }
   }
 })
@@ -25,9 +25,9 @@ interface FourOThreePageProps {
 }
 
 const FourOThreePage: FC<FourOThreePageProps> = ({
-  redirectRoute = '/',
-  redirectRouteName = 'the home page',
-  theme = 'topLevel',
+  redirectRoute = "/",
+  redirectRouteName = "the home page",
+  theme = "topLevel",
 }) => {
   return (
     <Container styleContext={theme}>
@@ -36,7 +36,7 @@ const FourOThreePage: FC<FourOThreePageProps> = ({
       </h3>
       <p>
         Click <Link to={redirectRoute}>here</Link> to go to
-        {' ' + redirectRouteName}.
+        {" " + redirectRouteName}.
       </p>
     </Container>
   )

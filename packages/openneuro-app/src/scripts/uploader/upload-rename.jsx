@@ -1,10 +1,10 @@
-import React from 'react'
-import Input from './input.jsx'
-import UploaderContext from './uploader-context.js'
+import React from "react"
+import Input from "./input.jsx"
+import UploaderContext from "./uploader-context.js"
 
 const UploadRename = () => (
   <UploaderContext.Consumer>
-    {uploader => (
+    {(uploader) => (
       <div className="message fade-in">
         Rename your dataset (optional)
         <div className="dir-name has-input clearfix fade-in">
@@ -22,7 +22,8 @@ const UploadRename = () => (
         <button
           className="fileupload-btn btn-blue"
           disabled={false}
-          onClick={() => uploader.setLocation('/upload/issues')}>
+          onClick={() => uploader.setLocation("/upload/issues")}
+        >
           Continue
         </button>
       </div>

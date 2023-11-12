@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client"
 
 export const DATASET_COMMENTS = gql`
   fragment DatasetComments on Dataset {

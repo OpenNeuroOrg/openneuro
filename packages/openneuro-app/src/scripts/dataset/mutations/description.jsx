@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { SaveButton } from '../fragments/save-button'
-import { DRAFT_FRAGMENT } from '../../datalad/dataset/dataset-query-fragments'
-import { datasetCacheId } from './cache-id.js'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { SaveButton } from "../fragments/save-button"
+import { DRAFT_FRAGMENT } from "../../datalad/dataset/dataset-query-fragments"
+import { datasetCacheId } from "./cache-id.js"
 
 export const UPDATE_DESCRIPTION = gql`
   mutation updateDescription(
@@ -56,7 +56,7 @@ export const mergeFieldValue = (
   updateDescription,
   updateDescriptionList,
 ) => ({
-  __typename: 'Dataset',
+  __typename: "Dataset",
   id: datasetId,
   draft: {
     ...draft,
@@ -95,8 +95,9 @@ const UpdateDescription = ({ datasetId, field, value, done }) => {
             updateDescriptionList,
           ),
         })
-      }}>
-      {updateDescription => (
+      }}
+    >
+      {(updateDescription) => (
         <SaveButton
           action={async () => {
             await updateDescription({ variables: { datasetId, field, value } })
@@ -111,16 +112,16 @@ const UpdateDescription = ({ datasetId, field, value, done }) => {
 UpdateDescription.propTypes = {
   datasetId: PropTypes.string,
   field: PropTypes.oneOf([
-    'Name',
-    'BIDSVersion',
-    'License',
-    'Authors',
-    'Acknowledgements',
-    'HowToAcknowledge',
-    'Funding',
-    'ReferencesAndLinks',
-    'DatasetDOI',
-    'EthicsApprovals',
+    "Name",
+    "BIDSVersion",
+    "License",
+    "Authors",
+    "Acknowledgements",
+    "HowToAcknowledge",
+    "Funding",
+    "ReferencesAndLinks",
+    "DatasetDOI",
+    "EthicsApprovals",
   ]),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   done: PropTypes.func,

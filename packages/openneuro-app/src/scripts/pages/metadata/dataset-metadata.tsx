@@ -1,9 +1,9 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { DataTable } from '../../components/data-table'
-import { gql, useQuery } from '@apollo/client'
-import { Loading } from '@openneuro/components/loading'
-import { makeCsv } from '../../utils/csv'
+import React from "react"
+import styled from "@emotion/styled"
+import { DataTable } from "../../components/data-table"
+import { gql, useQuery } from "@apollo/client"
+import { Loading } from "@openneuro/components/loading"
+import { makeCsv } from "../../utils/csv"
 
 const MetadataPageStyle = styled.div`
   background: white;
@@ -50,7 +50,7 @@ const METADATA_QUERY = gql`
 
 export function DatasetMetadata(): React.ReactElement {
   const { loading, error, data } = useQuery(METADATA_QUERY, {
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   if (loading || error) {
     return <Loading />
@@ -64,8 +64,8 @@ export function DatasetMetadata(): React.ReactElement {
             className="on-button on-button--small on-button--primary icon-text"
             aria-label="Download"
             onClick={() =>
-              makeCsv(data?.publicMetadata, 'openneuro-metadata.csv')
-            }>
+              makeCsv(data?.publicMetadata, "openneuro-metadata.csv")}
+          >
             <i className="fa fa-download css-0" aria-hidden="true"></i>Download
             CSV
           </MetadataPageButton>
@@ -75,11 +75,13 @@ export function DatasetMetadata(): React.ReactElement {
           data={data?.publicMetadata}
           downloadFilename="openneuro-metadata.csv"
           hideColumns={[
-            '__typename',
-            'datasetUrl',
-            'affirmedDefaced',
-            'affirmedConsent',
-          ]}></DataTable>
+            "__typename",
+            "datasetUrl",
+            "affirmedDefaced",
+            "affirmedConsent",
+          ]}
+        >
+        </DataTable>
       </MetadataPageStyle>
     )
   }

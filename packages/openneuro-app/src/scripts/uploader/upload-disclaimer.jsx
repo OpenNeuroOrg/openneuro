@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import UploaderContext from './uploader-context.js'
-import { UploadDisclaimerInput } from './upload-disclaimer-input'
+import React, { useState } from "react"
+import UploaderContext from "./uploader-context.js"
+import { UploadDisclaimerInput } from "./upload-disclaimer-input"
 
 /**
  * Defacing/consent input logic
@@ -16,7 +16,7 @@ const UploadDisclaimer = () => {
   const [affirmedConsent, setAffirmedConsent] = useState(false)
   return (
     <UploaderContext.Consumer>
-      {uploader => (
+      {(uploader) => (
         <div className="disclaimer fade-in">
           <UploadDisclaimerInput
             affirmedDefaced={affirmedDefaced}
@@ -37,7 +37,8 @@ const UploadDisclaimer = () => {
                 })
                 uploader.upload({ affirmedDefaced, affirmedConsent })
               }}
-              disabled={testAffirmed(affirmedDefaced, affirmedConsent)}>
+              disabled={testAffirmed(affirmedDefaced, affirmedConsent)}
+            >
               I Agree
             </button>
           </span>

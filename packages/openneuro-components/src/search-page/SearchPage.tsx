@@ -1,6 +1,6 @@
-import React from 'react'
-import { ModalityHeader } from './ModalityHeader'
-import { CommunityHeader } from './CommunityHeader'
+import React from "react"
+import { ModalityHeader } from "./ModalityHeader"
+import { CommunityHeader } from "./CommunityHeader"
 
 export interface SearchPageProps {
   portalContent?: Record<string, any>
@@ -27,30 +27,37 @@ export const SearchPage = ({
   return (
     <>
       <section
-        className={`search search-page ${portalContent?.className || ' '} ${
-          isOpen ? ' search-filters-open' : ' '
-        }`}>
-        {portalContent ? (
-          <>
-            {portalContent.portalName ? (
-              <ModalityHeader
-                portalName={portalContent.portalName}
-                portalPrimary={portalContent.portalPrimary}
-                publicDatasetStat={portalContent.publicDatasetStat}
-                participantsStat={portalContent.participantsStat}
-                hexBackgroundImage={portalContent.hexBackgroundImage}
-                renderAggregateCounts={renderAggregateCounts}
-              />
-            ) : null}
-            {portalContent.communityHeader ? (
-              <CommunityHeader
-                communityHeader={portalContent.communityHeader}
-                communityPrimary={portalContent.communityPrimary}
-                communitySecondary={portalContent.communitySecondary}
-              />
-            ) : null}
-          </>
-        ) : null}
+        className={`search search-page ${portalContent?.className || " "} ${
+          isOpen ? " search-filters-open" : " "
+        }`}
+      >
+        {portalContent
+          ? (
+            <>
+              {portalContent.portalName
+                ? (
+                  <ModalityHeader
+                    portalName={portalContent.portalName}
+                    portalPrimary={portalContent.portalPrimary}
+                    publicDatasetStat={portalContent.publicDatasetStat}
+                    participantsStat={portalContent.participantsStat}
+                    hexBackgroundImage={portalContent.hexBackgroundImage}
+                    renderAggregateCounts={renderAggregateCounts}
+                  />
+                )
+                : null}
+              {portalContent.communityHeader
+                ? (
+                  <CommunityHeader
+                    communityHeader={portalContent.communityHeader}
+                    communityPrimary={portalContent.communityPrimary}
+                    communitySecondary={portalContent.communitySecondary}
+                  />
+                )
+                : null}
+            </>
+          )
+          : null}
         <div className="container">
           <div className="grid grid-nogutter">
             <div className="col col-12 search-heading">
@@ -60,18 +67,19 @@ export const SearchPage = ({
             <div className="col col-12 search-wrapper">
               <button
                 className="show-filters-btn"
-                onClick={() => setOpen(!isOpen)}>
+                onClick={() => setOpen(!isOpen)}
+              >
                 Show Filters
               </button>
               <div
-                className={
-                  isOpen
-                    ? 'search-nav search-facet-wrapper show-mobile-filters'
-                    : 'search-nav search-facet-wrapper'
-                }>
+                className={isOpen
+                  ? "search-nav search-facet-wrapper show-mobile-filters"
+                  : "search-nav search-facet-wrapper"}
+              >
                 <button
                   className="close-filters-btn"
-                  onClick={() => setOpen(!isOpen)}>
+                  onClick={() => setOpen(!isOpen)}
+                >
                   Close Filters
                 </button>
                 {renderSearchFacets()}

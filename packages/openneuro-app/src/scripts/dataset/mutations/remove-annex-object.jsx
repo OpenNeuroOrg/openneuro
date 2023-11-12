@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { WarnButton } from '@openneuro/components/warn-button'
-import { Tooltip } from '@openneuro/components/tooltip'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { WarnButton } from "@openneuro/components/warn-button"
+import { Tooltip } from "@openneuro/components/tooltip"
 
 const REMOVE_ANNEX_OBJECT = gql`
   mutation removeAnnexObject(
@@ -31,11 +31,12 @@ const RemoveAnnexObject = ({
   filename,
 }) => (
   <Mutation mutation={REMOVE_ANNEX_OBJECT} awaitRefetchQueries={true}>
-    {removeAnnexObject => (
+    {(removeAnnexObject) => (
       // fa-exclamation-triangle might be better
       <Tooltip
         className="remove-annex-object"
-        tooltip="Purge: this admin tool will remove this file's annex objects.">
+        tooltip="Purge: this admin tool will remove this file's annex objects."
+      >
         <WarnButton
           message=""
           iconOnly={true}
@@ -45,7 +46,7 @@ const RemoveAnnexObject = ({
             removeAnnexObject({
               variables: {
                 datasetId,
-                snapshot: snapshot || 'HEAD',
+                snapshot: snapshot || "HEAD",
                 annexKey,
                 path,
                 filename,

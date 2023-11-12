@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client"
 
 export const createSnapshot = gql`
   mutation($datasetId: ID!, $tag: String!) {

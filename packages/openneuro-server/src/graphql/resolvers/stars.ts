@@ -1,4 +1,4 @@
-import Star from '../../models/stars'
+import Star from "../../models/stars"
 
 export const starDataset = async (obj, { datasetId }, { user }) => {
   const star = await Star.findOne({ datasetId, userId: user }).exec()

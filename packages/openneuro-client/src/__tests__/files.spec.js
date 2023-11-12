@@ -1,30 +1,30 @@
-import * as files from '../files'
+import * as files from "../files"
 
-vi.mock('../client')
-vi.mock('../../../openneuro-server/src/config.js')
+vi.mock("../client")
+vi.mock("../../../openneuro-server/src/config.js")
 
-describe('files.js', () => {
-  describe('sortFiles()', () => {
-    it('sorts dataset_description to the first element', () => {
+describe("files.js", () => {
+  describe("sortFiles()", () => {
+    it("sorts dataset_description to the first element", () => {
       const testFiles = [
-        { path: 'Dataset/a' },
-        { path: 'Dataset/b' },
-        { path: 'Dataset/dataset_description.json' },
-        { path: 'Dataset/c' },
+        { path: "Dataset/a" },
+        { path: "Dataset/b" },
+        { path: "Dataset/dataset_description.json" },
+        { path: "Dataset/c" },
       ]
       expect(files.sortFiles(testFiles)[0].path).toBe(
-        'Dataset/dataset_description.json',
+        "Dataset/dataset_description.json",
       )
     })
-    it('works with browser files', () => {
+    it("works with browser files", () => {
       const testFiles = [
-        { webkitRelativePath: 'Dataset/a' },
-        { webkitRelativePath: 'Dataset/b' },
-        { webkitRelativePath: 'Dataset/dataset_description.json' },
-        { webkitRelativePath: 'Dataset/c' },
+        { webkitRelativePath: "Dataset/a" },
+        { webkitRelativePath: "Dataset/b" },
+        { webkitRelativePath: "Dataset/dataset_description.json" },
+        { webkitRelativePath: "Dataset/c" },
       ]
       expect(files.sortFiles(testFiles)[0].webkitRelativePath).toBe(
-        'Dataset/dataset_description.json',
+        "Dataset/dataset_description.json",
       )
     })
   })

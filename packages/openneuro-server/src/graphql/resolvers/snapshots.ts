@@ -1,30 +1,30 @@
-import * as datalad from '../../datalad/snapshots'
-import { dataset, analytics, snapshotCreationComparison } from './dataset.js'
-import { onBrainlife } from './brainlife'
-import { checkDatasetRead, checkDatasetWrite } from '../permissions'
-import { readme } from './readme.js'
-import { description } from './description.js'
-import { summary } from './summary'
-import { snapshotIssues } from './issues.js'
-import { getFiles } from '../../datalad/files'
-import Summary from '../../models/summary'
-import DatasetModel from '../../models/dataset'
-import { filterRemovedAnnexObjects } from '../utils/file'
-import DeprecatedSnapshot from '../../models/deprecatedSnapshot'
-import { redis } from '../../libs/redis'
-import CacheItem, { CacheType } from '../../cache/item'
-import { normalizeDOI } from '../../libs/doi/normalize'
-import { getDraftHead } from '../../datalad/dataset'
-import { downloadFiles } from '../../datalad/snapshots'
+import * as datalad from "../../datalad/snapshots"
+import { analytics, dataset, snapshotCreationComparison } from "./dataset.js"
+import { onBrainlife } from "./brainlife"
+import { checkDatasetRead, checkDatasetWrite } from "../permissions"
+import { readme } from "./readme.js"
+import { description } from "./description.js"
+import { summary } from "./summary"
+import { snapshotIssues } from "./issues.js"
+import { getFiles } from "../../datalad/files"
+import Summary from "../../models/summary"
+import DatasetModel from "../../models/dataset"
+import { filterRemovedAnnexObjects } from "../utils/file"
+import DeprecatedSnapshot from "../../models/deprecatedSnapshot"
+import { redis } from "../../libs/redis"
+import CacheItem, { CacheType } from "../../cache/item"
+import { normalizeDOI } from "../../libs/doi/normalize"
+import { getDraftHead } from "../../datalad/dataset"
+import { downloadFiles } from "../../datalad/snapshots"
 
-export const snapshots = obj => {
+export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
 }
 
 export const snapshot = (obj, { datasetId, tag }, context) => {
   return checkDatasetRead(datasetId, context.user, context.userInfo).then(
     () => {
-      return datalad.getSnapshot(datasetId, tag).then(snapshot => ({
+      return datalad.getSnapshot(datasetId, tag).then((snapshot) => ({
         ...snapshot,
         dataset: () => dataset(snapshot, { id: datasetId }, context),
         description: () => description(snapshot),
@@ -37,7 +37,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         size: () =>
           Summary.findOne({ datasetId: datasetId, id: snapshot.hexsha })
             .exec()
-            .then(res => res?.toObject()?.size),
+            .then((res) => res?.toObject()?.size),
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
@@ -56,23 +56,23 @@ export const deprecated = ({ datasetId, tag }) => {
  * Search dataset metadeta for related objects and return an array
  * @param {string} datasetId
  */
-export const related = async datasetId => {
+export const related = async (datasetId) => {
   const dataset = await DatasetModel.findOne({ id: datasetId }).lean().exec()
   return dataset.related
 }
 
-export const matchKnownObjects = desc => {
+export const matchKnownObjects = (desc) => {
   if (desc?.ReferencesAndLinks) {
     const objects = []
     for (const item of desc.ReferencesAndLinks) {
       try {
         const rawDOI = normalizeDOI(item)
         // NIMH Data Archive (NDA) 10.15154
-        if (rawDOI.startsWith('10.15154')) {
+        if (rawDOI.startsWith("10.15154")) {
           objects.push({
             id: rawDOI,
-            source: 'NDA',
-            type: 'dataset',
+            source: "NDA",
+            type: "dataset",
           })
         } else {
           objects.push({ id: rawDOI })
@@ -138,24 +138,24 @@ export const participantCount = (obj, { modality }) => {
   const cache = new CacheItem(
     redis,
     CacheType.participantCount,
-    [modality || 'all'],
+    [modality || "all"],
     3600,
   )
   return cache.get(async () => {
     const queryHasSubjects = {
-      'summary.subjects': {
+      "summary.subjects": {
         $exists: true,
       },
     }
     const matchQuery = modality
       ? {
-          $and: [
-            queryHasSubjects,
-            {
-              'summary.modalities.0': modality,
-            },
-          ],
-        }
+        $and: [
+          queryHasSubjects,
+          {
+            "summary.modalities.0": modality,
+          },
+        ],
+      }
       : queryHasSubjects
     const aggregateResult = await DatasetModel.aggregate([
       {
@@ -165,24 +165,24 @@ export const participantCount = (obj, { modality }) => {
       },
       {
         $lookup: {
-          from: 'snapshots',
-          localField: 'id',
-          foreignField: 'datasetId',
-          as: 'snapshots',
+          from: "snapshots",
+          localField: "id",
+          foreignField: "datasetId",
+          as: "snapshots",
         },
       },
       {
         $project: {
-          id: '$id',
-          hexsha: { $arrayElemAt: ['$snapshots.hexsha', -1] },
+          id: "$id",
+          hexsha: { $arrayElemAt: ["$snapshots.hexsha", -1] },
         },
       },
       {
         $lookup: {
-          from: 'summaries',
-          localField: 'hexsha',
-          foreignField: 'id',
-          as: 'summary',
+          from: "summaries",
+          localField: "hexsha",
+          foreignField: "id",
+          as: "summary",
         },
       },
       {
@@ -192,7 +192,7 @@ export const participantCount = (obj, { modality }) => {
         $group: {
           _id: null,
           participantCount: {
-            $sum: { $size: { $arrayElemAt: ['$summary.subjects', 0] } },
+            $sum: { $size: { $arrayElemAt: ["$summary.subjects", 0] } },
           },
         },
       },
@@ -206,7 +206,7 @@ export const participantCount = (obj, { modality }) => {
  * Select the most recent snapshot from an array of snapshots
  * @param {*} snapshots Array of snapshot objects from datalad.getSnapshots
  */
-export const filterLatestSnapshot = snapshots => {
+export const filterLatestSnapshot = (snapshots) => {
   if (snapshots.length) {
     const sortedSnapshots = Array.prototype.sort.call(
       snapshots,
@@ -256,8 +256,8 @@ export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
 }
 
 const Snapshot = {
-  analytics: snapshot => analytics(snapshot),
-  issues: snapshot => snapshotIssues(snapshot),
+  analytics: (snapshot) => analytics(snapshot),
+  issues: (snapshot) => snapshotIssues(snapshot),
 }
 
 export default Snapshot

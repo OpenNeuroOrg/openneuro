@@ -1,10 +1,11 @@
-import React from 'react'
-import { DatasetToolButton } from './DatasetToolButton'
-import styled, { StyledComponent } from '@emotion/styled'
+import React from "react"
+import { DatasetToolButton } from "./DatasetToolButton"
+import styled, { StyledComponent } from "@emotion/styled"
 
 interface DatasetToolStyleProps {}
 
-export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled.span`
+export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
+  .span`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
@@ -35,32 +36,32 @@ export const DatasetTools = ({
   return (
     <DatasetToolStyle>
       <DatasetToolButton
-        tooltip={'View the dataset file tree'}
-        path={
-          snapshotId
-            ? `/datasets/${datasetId}/versions/${snapshotId}`
-            : `/datasets/${datasetId}`
-        }
+        tooltip={"View the dataset file tree"}
+        path={snapshotId
+          ? `/datasets/${datasetId}/versions/${snapshotId}`
+          : `/datasets/${datasetId}`}
         icon="fa-folder"
         label="Files"
       />
       {hasEdit && !isPublic && !isSnapshot && (
         <>
-          {hasSnapshot ? (
-            <DatasetToolButton
-              tooltip="Publicize the dataset"
-              path={`/datasets/${datasetId}/publish`}
-              icon="fa-globe"
-              label="Publish"
-            />
-          ) : (
-            <DatasetToolButton
-              tooltip="Create a version to publish"
-              path={`/datasets/${datasetId}/snapshot?publish`}
-              icon="fa-globe"
-              label="Publish"
-            />
-          )}
+          {hasSnapshot
+            ? (
+              <DatasetToolButton
+                tooltip="Publicize the dataset"
+                path={`/datasets/${datasetId}/publish`}
+                icon="fa-globe"
+                label="Publish"
+              />
+            )
+            : (
+              <DatasetToolButton
+                tooltip="Create a version to publish"
+                path={`/datasets/${datasetId}/snapshot?publish`}
+                icon="fa-globe"
+                label="Publish"
+              />
+            )}
         </>
       )}
       {hasEdit && !isSnapshot && (
@@ -97,37 +98,29 @@ export const DatasetTools = ({
       )}
       <DatasetToolButton
         tooltip="How to Download"
-        path={
-          snapshotId
-            ? `/datasets/${datasetId}/versions/${snapshotId}/download`
-            : `/datasets/${datasetId}/download`
-        }
+        path={snapshotId
+          ? `/datasets/${datasetId}/versions/${snapshotId}/download`
+          : `/datasets/${datasetId}/download`}
         icon="fa-download"
         label="Download"
       />
       {hasDerivatives && (
         <DatasetToolButton
           tooltip="Available Derivatives"
-          path={
-            snapshotId
-              ? `/datasets/${datasetId}/versions/${snapshotId}/derivatives`
-              : `/datasets/${datasetId}/derivatives`
-          }
+          path={snapshotId
+            ? `/datasets/${datasetId}/versions/${snapshotId}/derivatives`
+            : `/datasets/${datasetId}/derivatives`}
           icon="fa-cubes"
           label="Derivatives"
         />
       )}
       <DatasetToolButton
-        tooltip={
-          hasEdit
-            ? 'A form to describe your dataset (helps colleagues discover your dataset)'
-            : 'View the dataset metadata'
-        }
-        path={
-          snapshotId
-            ? `/datasets/${datasetId}/versions/${snapshotId}/metadata`
-            : `/datasets/${datasetId}/metadata`
-        }
+        tooltip={hasEdit
+          ? "A form to describe your dataset (helps colleagues discover your dataset)"
+          : "View the dataset metadata"}
+        path={snapshotId
+          ? `/datasets/${datasetId}/versions/${snapshotId}/metadata`
+          : `/datasets/${datasetId}/metadata`}
         icon="fa-file-code"
         label="Metadata"
       />

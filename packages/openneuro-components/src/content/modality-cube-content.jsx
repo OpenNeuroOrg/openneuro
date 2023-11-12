@@ -1,13 +1,13 @@
-import React from 'react'
-import petScan from '../assets/pet-scan.jpg'
-import eeg from '../assets/eeg.jpg'
-import ieeg from '../assets/ieeg.jpg'
-import mri from '../assets/mri.jpg'
-import meg from '../assets/meg.jpg'
+import React from "react"
+import petScan from "../assets/pet-scan.jpg"
+import eeg from "../assets/eeg.jpg"
+import ieeg from "../assets/ieeg.jpg"
+import mri from "../assets/mri.jpg"
+import meg from "../assets/meg.jpg"
 
 export const cubeData = [
   {
-    label: 'MRI',
+    label: "MRI",
     cubeImage: mri,
     stats: (
       <>
@@ -18,7 +18,7 @@ export const cubeData = [
     ),
   },
   {
-    label: 'PET',
+    label: "PET",
     cubeImage: petScan,
     stats: (
       <>
@@ -29,7 +29,7 @@ export const cubeData = [
     ),
   },
   {
-    label: 'MEG',
+    label: "MEG",
     cubeImage: meg,
     stats: (
       <>
@@ -40,7 +40,7 @@ export const cubeData = [
     ),
   },
   {
-    label: 'EEG',
+    label: "EEG",
     cubeImage: eeg,
     stats: (
       <>
@@ -51,7 +51,7 @@ export const cubeData = [
     ),
   },
   {
-    label: 'iEEG',
+    label: "iEEG",
     cubeImage: ieeg,
     stats: (
       <>

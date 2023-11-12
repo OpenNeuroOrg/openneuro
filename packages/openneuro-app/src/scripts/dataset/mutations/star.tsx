@@ -1,9 +1,9 @@
-import React, { FC, useContext } from 'react'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { datasetCacheId } from '../../datalad/mutations/cache-id.js'
-import { CountToggle } from '@openneuro/components/count-toggle'
-import { UserModalOpenCtx } from '../../utils/user-login-modal-ctx'
+import React, { FC, useContext } from "react"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { datasetCacheId } from "../../datalad/mutations/cache-id.js"
+import { CountToggle } from "@openneuro/components/count-toggle"
+import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx"
 
 const STAR_DATASET = gql`
   mutation starDataset($datasetId: ID!) {
@@ -44,7 +44,7 @@ export const StarDataset: FC<StarDatasetProps> = ({
   stars,
 }) => {
   const { setUserModalOpen } = useContext(UserModalOpenCtx)
-  const handleToggle = starDataset => () => {
+  const handleToggle = (starDataset) => () => {
     if (!profile) {
       // if user is not logged in, give them the option to do so
       // then redirect back to this page
@@ -63,7 +63,7 @@ export const StarDataset: FC<StarDatasetProps> = ({
           id: datasetCacheId(datasetId),
           fragment: USER_STARRED,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             starred,
           },
@@ -77,17 +77,18 @@ export const StarDataset: FC<StarDatasetProps> = ({
           id: datasetCacheId(datasetId),
           fragment: DATASET_STARS,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             stars: starred
               ? [...stars, newStar]
-              : stars.filter(star => star.userId !== newStar.userId),
+              : stars.filter((star) => star.userId !== newStar.userId),
           },
         })
-      }}>
-      {starDataset => (
+      }}
+    >
+      {(starDataset) => (
         <CountToggle
-          label={starred ? 'Bookmarked' : 'Bookmark'}
+          label={starred ? "Bookmarked" : "Bookmark"}
           icon="fa-bookmark"
           disabled={!profile}
           toggleClick={handleToggle(starDataset)}

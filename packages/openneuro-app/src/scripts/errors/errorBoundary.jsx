@@ -1,17 +1,18 @@
-import { apm } from '../apm'
-import React from 'react'
-import PropTypes from 'prop-types'
-import FreshdeskInterface from './freshdeskInterface.jsx'
+import { apm } from "../apm"
+import React from "react"
+import PropTypes from "prop-types"
+import FreshdeskInterface from "./freshdeskInterface.jsx"
 
 // raises error if catchErrorIf returns true
 const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
-  const raiseError =
-    typeof catchErrorIf === 'function' ? catchErrorIf(error) : true
+  const raiseError = typeof catchErrorIf === "function"
+    ? catchErrorIf(error)
+    : true
   return raiseError
-    ? // trigger error component
-      { hasError: true, supportModal: false, error: error }
-    : // don't show error handling component
-      { hasError: false, supportModal: false, error: error }
+    // trigger error component
+    ? { hasError: true, supportModal: false, error: error }
+    // don't show error handling component
+    : { hasError: false, supportModal: false, error: error }
 }
 
 class ErrorBoundary extends React.Component {
@@ -20,7 +21,7 @@ class ErrorBoundary extends React.Component {
     this.state = {
       hasError: false,
       eventId: null,
-      message: '',
+      message: "",
     }
   }
 
@@ -84,7 +85,7 @@ class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
     return getDerivedStateFromErrorOnCondition(
       error,
       // ErrorBoundary not triggered for "assertion failure"
-      error => error.toString() !== 'Error: assertion failure',
+      (error) => error.toString() !== "Error: assertion failure",
     )
   }
 }

@@ -1,12 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { getConfig, config } from '../../config'
-import ShellExample from './shell-example.jsx'
+import React from "react"
+import PropTypes from "prop-types"
+import { config, getConfig } from "../../config"
+import ShellExample from "./shell-example.jsx"
 import {
   getUnexpiredProfile,
   hasEditPermissions,
-} from '../../authentication/profile'
-import { useCookies } from 'react-cookie'
+} from "../../authentication/profile"
+import { useCookies } from "react-cookie"
 
 const DownloadDataladExample = ({
   datasetId,
@@ -17,8 +17,8 @@ const DownloadDataladExample = ({
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
-  const hasEdit =
-    hasEditPermissions(datasetPermissions, profile?.sub) || isAdmin
+  const hasEdit = hasEditPermissions(datasetPermissions, profile?.sub) ||
+    isAdmin
   return (
     <>
       <ShellExample>
@@ -51,9 +51,9 @@ const DownloadDataladInstructions = ({
   <div>
     <h4>Download with DataLad</h4>
     <p>
-      Public datasets can be downloaded with{' '}
-      <a href="https://www.datalad.org">DataLad</a> or{' '}
-      <a href="https://git-annex.branchable.com/">Git Annex</a> from{' '}
+      Public datasets can be downloaded with{" "}
+      <a href="https://www.datalad.org">DataLad</a> or{" "}
+      <a href="https://git-annex.branchable.com/">Git Annex</a> from{" "}
       <a href={`https://github.com/${githubOrganization}/${datasetId}`}>
         GitHub.
       </a>
@@ -65,10 +65,10 @@ const DownloadDataladInstructions = ({
       datasetPermissions={datasetPermissions}
     />
     <p>
-      Check out{' '}
+      Check out{" "}
       <a href="https://handbook.datalad.org/en/latest/usecases/openneuro.html">
         getting started with DataLad
-      </a>{' '}
+      </a>{" "}
       for more on how to use this download method.
     </p>
   </div>
@@ -81,13 +81,15 @@ DownloadDataladInstructions.propTypes = {
   datasetPermissions: PropTypes.object,
 }
 
-const DownloadDatalad = props =>
+const DownloadDatalad = (props) =>
   // TODO - don't depend on async config
-  getConfig().hasOwnProperty('github') ? (
-    <DownloadDataladInstructions
-      {...props}
-      githubOrganization={getConfig().github}
-    />
-  ) : null
+  getConfig().hasOwnProperty("github")
+    ? (
+      <DownloadDataladInstructions
+        {...props}
+        githubOrganization={getConfig().github}
+      />
+    )
+    : null
 
 export default DownloadDatalad

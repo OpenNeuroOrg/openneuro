@@ -1,12 +1,12 @@
-import React from 'react'
-import { Loading } from '@openneuro/components/loading'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import Helmet from 'react-helmet'
-import { pageTitle } from '../resources/strings.js'
-import { Button } from '@openneuro/components/button'
-import LoggedIn from '../authentication/logged-in'
-import LoggedOut from '../authentication/logged-out'
-import { config } from '../config'
+import React from "react"
+import { Loading } from "@openneuro/components/loading"
+import { CopyToClipboard } from "react-copy-to-clipboard"
+import Helmet from "react-helmet"
+import { pageTitle } from "../resources/strings.js"
+import { Button } from "@openneuro/components/button"
+import LoggedIn from "../authentication/logged-in"
+import LoggedOut from "../authentication/logged-out"
+import { config } from "../config"
 
 /**
  * Create API Key
@@ -16,8 +16,8 @@ import { config } from '../config'
  */
 export const createAPIKey = async () => {
   const req = await fetch(`${config.api}keygen`, {
-    method: 'POST',
-    credentials: 'same-origin',
+    method: "POST",
+    credentials: "same-origin",
   })
   const res = await req.json()
   return res?.key
@@ -36,7 +36,7 @@ class APIKeyGen extends React.Component {
   _requestKey() {
     this.setState({ loading: true })
     createAPIKey()
-      .then(key => {
+      .then((key) => {
         this.setState({ key, loading: false })
       })
       .catch(() => {
@@ -71,9 +71,10 @@ class APIKeyGen extends React.Component {
         <div className="copy-key ck-wrap">
           <CopyToClipboard
             text={this.state.key}
-            onCopy={this._onCopy.bind(this)}>
+            onCopy={this._onCopy.bind(this)}
+          >
             <span className="copy-key">
-              <i className="fa fa-link" aria-hidden="true" />{' '}
+              <i className="fa fa-link" aria-hidden="true" />{" "}
               {this._copyNotification()}
             </span>
           </CopyToClipboard>
@@ -88,9 +89,9 @@ class APIKeyGen extends React.Component {
   }
   _copyNotification() {
     const copyClass = this.state.linkCopied
-      ? 'copy-notification-active copy-notification-copied'
-      : 'copy-notification-active'
-    const copyText = this.state.linkCopied ? 'Copied!' : 'Copy key to clipboard'
+      ? "copy-notification-active copy-notification-copied"
+      : "copy-notification-active"
+    const copyText = this.state.linkCopied ? "Copied!" : "Copy key to clipboard"
     return (
       <span>
         <span className={copyClass}>{copyText}</span>
@@ -107,8 +108,8 @@ class APIKeyGen extends React.Component {
 
   render() {
     const helperText = this.state.key
-      ? 'Your API Key:'
-      : 'Click the button below to generate an API key'
+      ? "Your API Key:"
+      : "Click the button below to generate an API key"
     return (
       <>
         <Helmet>

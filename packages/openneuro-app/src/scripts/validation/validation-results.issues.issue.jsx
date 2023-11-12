@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react"
+import PropTypes from "prop-types"
 
 // component setup ----------------------------------------------------
 
@@ -12,16 +12,16 @@ class Issue extends React.Component {
     const error = this.props.error
     let fileInfo
     // build error location string
-    let errLocation = ''
+    let errLocation = ""
     let errorLocationMeta
     if (error.line) {
-      errLocation += 'Line: ' + error.line + ' '
+      errLocation += "Line: " + error.line + " "
     }
     if (error.character) {
-      errLocation += 'Character: ' + error.character + ''
+      errLocation += "Character: " + error.character + ""
     }
-    if (errLocation === '' && error.evidence) {
-      errLocation = 'Evidence: '
+    if (errLocation === "" && error.evidence) {
+      errLocation = "Evidence: "
     }
     if (errLocation) {
       errorLocationMeta = (
@@ -46,7 +46,7 @@ class Issue extends React.Component {
       <div className="em-body">
         {fileInfo}
         <span className="e-meta">
-          <label>Reason: </label>
+          <label>Reason:</label>
           <p>{error.reason}</p>
         </span>
         {errorLocationMeta}
@@ -60,7 +60,7 @@ class Issue extends React.Component {
     if (file && file.relativePath) {
       return (
         <span>
-          <label>Location: </label>
+          <label>Location:</label>
           <p>{file.relativePath}</p>
         </span>
       )

@@ -1,5 +1,5 @@
-import { useCookies } from 'react-cookie'
-import { getProfile } from './profile'
+import { useCookies } from "react-cookie"
+import { getProfile } from "./profile"
 
 export const isAdmin = () => {
   const [cookies] = useCookies()

@@ -2,10 +2,10 @@ export const config = {
   /**
    * CRN
    */
-  url: 'localhost:9876/crn/',
+  url: "localhost:9876/crn/",
 
   graphql: {
-    uri: 'http://server:8111',
+    uri: "http://server:8111",
   },
 
   /**
@@ -13,17 +13,17 @@ export const config = {
    */
   auth: {
     google: {
-      clientID: 'google-client-id',
+      clientID: "google-client-id",
     },
     orcid: {
-      clientID: 'orcid-client-id',
+      clientID: "orcid-client-id",
     },
   },
 
   sentry: {
-    environment: 'unit-tests',
+    environment: "unit-tests",
   },
   support: {
-    url: 'https://example.com/test-suite',
+    url: "https://example.com/test-suite",
   },
 }

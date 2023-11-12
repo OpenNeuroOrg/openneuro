@@ -1,5 +1,5 @@
-import uuid from 'uuid'
-import mongoose, { Document } from 'mongoose'
+import uuid from "uuid"
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface UserDocument extends Document {
@@ -36,12 +36,12 @@ userSchema.index(
   { email: 1 },
   {
     collation: {
-      locale: 'en',
+      locale: "en",
       strength: 2,
     },
   },
 )
 
-const User = model<UserDocument>('User', userSchema)
+const User = model<UserDocument>("User", userSchema)
 
 export default User

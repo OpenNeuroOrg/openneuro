@@ -50,8 +50,8 @@ export const config: OpenNeuroConfig = {
     },
   },
   analytics: {
-    trackingIds: globalThis.OpenNeuroConfig.GOOGLE_TRACKING_IDS.split(',').map(
-      id => {
+    trackingIds: globalThis.OpenNeuroConfig.GOOGLE_TRACKING_IDS.split(",").map(
+      (id) => {
         return id.trim() as string
       },
     ),

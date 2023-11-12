@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { Link } from 'react-router-dom'
-import { Tooltip } from '@openneuro/components/tooltip'
-import { Button } from '@openneuro/components/button'
+import React, { FC } from "react"
+import { gql, useMutation } from "@apollo/client"
+import { Link } from "react-router-dom"
+import { Tooltip } from "@openneuro/components/tooltip"
+import { Button } from "@openneuro/components/button"
 
 const CREATE_LINK = gql`
   mutation createReviewer($datasetId: ID!) {
@@ -28,32 +28,38 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({ datasetId }) => {
   return (
     <>
       <div className="share-form-controls">
-        {error ? (
-          'An Error Occured'
-        ) : data ? (
-          <div className="reviewer-link">
-            <div>
-              <Tooltip
-                tooltip="Click to copy URL to clipboard"
-                flow="right"
-                className="tooltip">
-                <Button
-                  onClick={() => copyToClipboard(data.createReviewer.url)}
-                  icon="fas fa-clipboard"
-                  size="small"
-                  nobg={true}
-                  iconSize="18px"
-                  label="copy anonymous URL"
-                />
-              </Tooltip>
-              <pre>{data.createReviewer.url}</pre>
+        {error
+          ? (
+            "An Error Occured"
+          )
+          : data
+          ? (
+            <div className="reviewer-link">
+              <div>
+                <Tooltip
+                  tooltip="Click to copy URL to clipboard"
+                  flow="right"
+                  className="tooltip"
+                >
+                  <Button
+                    onClick={() => copyToClipboard(data.createReviewer.url)}
+                    icon="fas fa-clipboard"
+                    size="small"
+                    nobg={true}
+                    iconSize="18px"
+                    label="copy anonymous URL"
+                  />
+                </Tooltip>
+                <pre>{data.createReviewer.url}</pre>
+              </div>
+              <small className="alert-color">
+                Copy and save this reviewer link. It will disappear when you
+                leave the page. To get a new link click the Create Link button
+                below.
+              </small>
             </div>
-            <small className="alert-color">
-              Copy and save this reviewer link. It will disappear when you leave
-              the page. To get a new link click the Create Link button below.
-            </small>
-          </div>
-        ) : null}
+          )
+          : null}
         <Button
           className="btn-modal-action"
           primary={true}

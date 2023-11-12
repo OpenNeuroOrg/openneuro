@@ -1,21 +1,21 @@
-import React, { FC, useContext } from 'react'
-import useState from 'react-usestateref'
-import { SearchParamsCtx, removeFilterItem } from '../search-params-ctx'
-import { FacetSearch } from '@openneuro/components/facets'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React, { FC, useContext } from "react"
+import useState from "react-usestateref"
+import { removeFilterItem, SearchParamsCtx } from "../search-params-ctx"
+import { FacetSearch } from "@openneuro/components/facets"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 const AuthorInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const authors = searchParams.authors
 
-  const [newAuthor, setNewAuthor, newAuthorRef] = useState('')
+  const [newAuthor, setNewAuthor, newAuthorRef] = useState("")
 
   const addAuthor = () => {
-    setSearchParams(prevState => ({
+    setSearchParams((prevState) => ({
       ...prevState,
       authors: [...authors, newAuthorRef.current],
     }))
-    setNewAuthor('')
+    setNewAuthor("")
   }
 
   return (
@@ -24,7 +24,8 @@ const AuthorInput: FC = () => {
         accordionStyle="plain"
         label="Authors / PI"
         className="search-facet"
-        startOpen={false}>
+        startOpen={false}
+      >
         <FacetSearch
           type="text"
           placeholder="Enter Name(s) to Search"
@@ -42,11 +43,13 @@ const AuthorInput: FC = () => {
           removeFilterItem={removeFilterItem(setSearchParams)}
           helpText={
             <>
-              Results on multiple inputs will include all datasets that have{' '}
+              Results on multiple inputs will include all datasets that have
+              {" "}
               <b>ANY</b> of the entered names
             </>
           }
-        />{' '}
+        />
+        {" "}
       </AccordionTab>
     </AccordionWrap>
   )

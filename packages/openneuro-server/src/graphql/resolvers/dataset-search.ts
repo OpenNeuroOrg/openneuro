@@ -1,11 +1,11 @@
-import { elasticClient } from '../../elasticsearch/elastic-client'
-import { dataset } from './dataset'
-import Star from '../../models/stars'
-import Subscription from '../../models/subscription'
-import Permission from '../../models/permission'
-import { hashObject } from '../../libs/authentication/crypto'
+import { elasticClient } from "../../elasticsearch/elastic-client"
+import { dataset } from "./dataset"
+import Star from "../../models/stars"
+import Subscription from "../../models/subscription"
+import Permission from "../../models/permission"
+import { hashObject } from "../../libs/authentication/crypto"
 
-const elasticIndex = 'datasets'
+const elasticIndex = "datasets"
 
 /**
  * Remove a dataset from the index, used when deleting datasets to clean up
@@ -13,7 +13,7 @@ const elasticIndex = 'datasets'
  * @param {string} id Dataset accession number id
  * @returns {Promise}
  */
-export const removeDatasetSearchDocument = id =>
+export const removeDatasetSearchDocument = (id) =>
   elasticClient.delete({ id, index: elasticIndex })
 
 /**
@@ -21,16 +21,16 @@ export const removeDatasetSearchDocument = id =>
  * @param {Array<*>} sort
  * @returns {string}
  */
-export const encodeCursor = sort =>
-  Buffer.from(JSON.stringify(sort)).toString('base64')
+export const encodeCursor = (sort) =>
+  Buffer.from(JSON.stringify(sort)).toString("base64")
 
 /**
  * Accepts a cursor and returns the deserialized elastic search search_after array
  * @param {string} cursor
  * @returns {Array<*>}
  */
-export const decodeCursor = cursor =>
-  JSON.parse(Buffer.from(cursor, 'base64').toString('utf-8'))
+export const decodeCursor = (cursor) =>
+  JSON.parse(Buffer.from(cursor, "base64").toString("utf-8"))
 
 /**
  * Return a relay cursor from an elastic search result
@@ -50,7 +50,7 @@ export const elasticRelayConnection = (
     const hasNextPage = Boolean(body.hits.hits[size - 1])
     return {
       id,
-      edges: body.hits.hits.map(hit => {
+      edges: body.hits.hits.map((hit) => {
         const node = childResolvers.dataset(
           null,
           { id: hit._source.id },
@@ -88,7 +88,7 @@ export const datasetSearchConnection = async (
 ) => {
   const searchId = hashObject({ q })
   const requestBody = {
-    sort: [{ _score: 'asc', id: 'desc' }],
+    sort: [{ _score: "asc", id: "desc" }],
     search_after: undefined,
   }
   if (after) {
@@ -109,12 +109,12 @@ export const datasetSearchConnection = async (
 
 export const datasetSearch = {
   search: {
-    type: 'DatasetConnection',
+    type: "DatasetConnection",
     resolve: datasetSearchConnection,
     args: {
-      q: { type: 'String!' },
-      after: { type: 'String' },
-      first: { type: 'Int' },
+      q: { type: "String!" },
+      after: { type: "String" },
+      first: { type: "Int" },
     },
   },
 }
@@ -128,15 +128,15 @@ const addClause = (query, type, clause) => {
 }
 
 const parseQuery = async (query, datasetType, datasetStatus, userId) => {
-  if (datasetType === 'All Public') {
-    addClause(query, 'filter', {
+  if (datasetType === "All Public") {
+    addClause(query, "filter", {
       term: {
         public: {
           value: true,
         },
       },
     })
-  } else if (datasetType === 'Following') {
+  } else if (datasetType === "Following") {
     const results = await Subscription.find({ userId })
     const followedDatasets = results.map(({ datasetId }) => datasetId)
     const termsClause = {
@@ -144,8 +144,8 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
         id: followedDatasets,
       },
     }
-    addClause(query, 'filter', termsClause)
-  } else if (datasetType === 'My Bookmarks') {
+    addClause(query, "filter", termsClause)
+  } else if (datasetType === "My Bookmarks") {
     const results = await Star.find({ userId })
     const bookmarkedDatasets = results.map(({ datasetId }) => datasetId)
     const termsClause = {
@@ -153,8 +153,8 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
         id: bookmarkedDatasets,
       },
     }
-    addClause(query, 'filter', termsClause)
-  } else if (datasetType === 'My Datasets') {
+    addClause(query, "filter", termsClause)
+  } else if (datasetType === "My Datasets") {
     const results = await Permission.find({ userId })
     const bookmarkedDatasets = results.map(({ datasetId }) => datasetId)
     const termsClause = {
@@ -162,26 +162,26 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
         id: bookmarkedDatasets,
       },
     }
-    addClause(query, 'filter', termsClause)
+    addClause(query, "filter", termsClause)
 
-    if (datasetStatus === 'Public') {
-      addClause(query, 'filter', {
+    if (datasetStatus === "Public") {
+      addClause(query, "filter", {
         term: {
           public: {
             value: true,
           },
         },
       })
-    } else if (datasetStatus === 'Shared with Me') {
-      addClause(query, 'filter', {
+    } else if (datasetStatus === "Shared with Me") {
+      addClause(query, "filter", {
         terms: {
-          ['permissions.userPermissions.level']: ['ro', 'rw'],
+          ["permissions.userPermissions.level"]: ["ro", "rw"],
         },
       })
-    } else if (datasetStatus === 'Invalid') {
-      addClause(query, 'filter', {
+    } else if (datasetStatus === "Invalid") {
+      addClause(query, "filter", {
         term: {
-          ['draft.issues.severity']: 'error',
+          ["draft.issues.severity"]: "error",
         },
       })
     }
@@ -222,7 +222,7 @@ export const advancedDatasetSearchConnection = async (
     sortBy,
     user,
   })
-  const sort = [{ _score: 'desc' }, { id: 'desc' }]
+  const sort = [{ _score: "desc" }, { id: "desc" }]
   if (sortBy) sort.unshift(sortBy)
   const requestBody = {
     sort,
@@ -255,16 +255,16 @@ export const advancedDatasetSearchConnection = async (
 
 export const advancedDatasetSearch = {
   advancedSearch: {
-    type: 'DatasetConnection',
+    type: "DatasetConnection",
     resolve: advancedDatasetSearchConnection,
     args: {
-      query: { type: 'JSON!' },
-      allDatasets: { type: 'Boolean' },
-      datasetType: { type: 'String' },
-      datasetStatus: { type: 'String' },
-      sortBy: { type: 'JSON' },
-      after: { type: 'String' },
-      first: { type: 'Int' },
+      query: { type: "JSON!" },
+      allDatasets: { type: "Boolean" },
+      datasetType: { type: "String" },
+      datasetStatus: { type: "String" },
+      sortBy: { type: "JSON" },
+      after: { type: "String" },
+      first: { type: "Int" },
     },
   },
 }

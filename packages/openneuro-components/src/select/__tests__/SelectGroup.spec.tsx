@@ -1,18 +1,18 @@
-import { vi } from 'vitest'
-import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { SelectGroup } from '../SelectGroup'
+import { vi } from "vitest"
+import React from "react"
+import { fireEvent, render, screen } from "@testing-library/react"
+import { SelectGroup } from "../SelectGroup"
 
 const SelectContent = [
-  { label: '--Select--', value: '' },
-  { label: 'Option-1', value: 'option1' },
-  { label: 'Option-2', value: 'option2' },
-  { label: 'Option-3', value: 'option3' },
-  { label: 'Option-4', value: 'option4' },
+  { label: "--Select--", value: "" },
+  { label: "Option-1", value: "option1" },
+  { label: "Option-2", value: "option2" },
+  { label: "Option-3", value: "option3" },
+  { label: "Option-4", value: "option4" },
 ]
 
-describe('SelectGroup component', () => {
-  it('renders options', async () => {
+describe("SelectGroup component", () => {
+  it("renders options", async () => {
     const setValue = vi.fn()
     render(
       <SelectGroup
@@ -23,9 +23,9 @@ describe('SelectGroup component', () => {
         setValue={setValue}
       />,
     )
-    expect(await screen.queryAllByRole('option')).toHaveLength(5)
+    expect(await screen.queryAllByRole("option")).toHaveLength(5)
   })
-  it('is selectable', async () => {
+  it("is selectable", async () => {
     const setValue = vi.fn()
     render(
       <SelectGroup
@@ -36,8 +36,8 @@ describe('SelectGroup component', () => {
         layout="inline"
       />,
     )
-    const select = await screen.getByRole('combobox')
-    fireEvent.change(select, { target: { value: 'option4' } })
-    expect(setValue).toHaveBeenCalledWith('option4')
+    const select = await screen.getByRole("combobox")
+    fireEvent.change(select, { target: { value: "option4" } })
+    expect(setValue).toHaveBeenCalledWith("option4")
   })
 })

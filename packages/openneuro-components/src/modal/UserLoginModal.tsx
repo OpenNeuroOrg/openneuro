@@ -1,12 +1,12 @@
-import React from 'react'
-import { Modal } from './Modal'
-import { Button } from '../button/Button'
-import { Logo } from '../logo/Logo'
-import { AccordionWrap } from '../accordion/AccordionWrap'
-import { AccordionTab } from '../accordion/AccordionTab'
-import { useLocation } from 'react-router-dom'
+import React from "react"
+import { Modal } from "./Modal"
+import { Button } from "../button/Button"
+import { Logo } from "../logo/Logo"
+import { AccordionWrap } from "../accordion/AccordionWrap"
+import { AccordionTab } from "../accordion/AccordionTab"
+import { useLocation } from "react-router-dom"
 
-import orcidIcon from '../assets/orcid_24x24.png'
+import orcidIcon from "../assets/orcid_24x24.png"
 
 export interface UserLoginModalProps {
   isOpen: boolean
@@ -58,7 +58,7 @@ export const UserLoginModal = ({
                   <>
                     ORCID users are identified and connected to their
                     contributions and affiliations, across disciplines, borders,
-                    and time.{' '}
+                    and time.{" "}
                     <a href="https://orcid.org/content/about-orcid">
                       Learn more
                     </a>

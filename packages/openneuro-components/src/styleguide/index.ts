@@ -1,2 +1,2 @@
-import { Typography } from './Typography'
+import { Typography } from "./Typography"
 export { Typography }

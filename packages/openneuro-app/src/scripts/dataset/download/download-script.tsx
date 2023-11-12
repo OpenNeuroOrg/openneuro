@@ -1,18 +1,18 @@
 /**
  * Generate a download script for this dataset
  */
-import React from 'react'
-import { useLazyQuery, gql } from '@apollo/client'
+import React from "react"
+import { gql, useLazyQuery } from "@apollo/client"
 
 function inlineDownload(filename, data): void {
-  const element = document.createElement('a')
+  const element = document.createElement("a")
   element.setAttribute(
-    'href',
-    'data:text/x-shellscript;charset=utf-8,' + encodeURIComponent(data),
+    "href",
+    "data:text/x-shellscript;charset=utf-8," + encodeURIComponent(data),
   )
-  element.setAttribute('download', filename)
+  element.setAttribute("download", filename)
 
-  element.style.display = 'none'
+  element.style.display = "none"
   document.body.appendChild(element)
 
   element.click()
@@ -21,7 +21,7 @@ function inlineDownload(filename, data): void {
 }
 
 function generateDownloadScript(data): string {
-  let script = '#!/bin/sh\n'
+  let script = "#!/bin/sh\n"
   for (const f of data.snapshot.downloadFiles) {
     script += `curl --create-dirs ${f.urls[0]} -o ${f.filename}\n`
   }
@@ -57,7 +57,7 @@ export const DownloadScript = ({
       datasetId: datasetId,
       tag: snapshotTag,
     },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   if (data) {
     const script = generateDownloadScript(data)
@@ -74,17 +74,20 @@ export const DownloadScript = ({
           Node.js.
         </p>
         <p>
-          {loading ? (
-            'Loading...'
-          ) : (
-            <a
-              href="#"
-              onClick={(): void => {
-                void getDownload()
-              }}>
-              Download shell script
-            </a>
-          )}
+          {loading
+            ? (
+              "Loading..."
+            )
+            : (
+              <a
+                href="#"
+                onClick={(): void => {
+                  void getDownload()
+                }}
+              >
+                Download shell script
+              </a>
+            )}
         </p>
       </div>
     )

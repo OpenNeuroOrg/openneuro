@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react"
 
-import { frontPage } from '../content/front-page-content.jsx'
+import { frontPage } from "../content/front-page-content.jsx"
 
 export interface InfographicProps {}
 
@@ -27,7 +27,7 @@ export const Infographic: React.FC<InfographicProps> = ({}) => {
       ))}
       <div className="view-docs">
         <h3>Want to get started?</h3>
-        Check out the{' '}
+        Check out the{" "}
         <a href="https://docs.openneuro.org/user-guide">
           OpenNeuro User Documentation
         </a>

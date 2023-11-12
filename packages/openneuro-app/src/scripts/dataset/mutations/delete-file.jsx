@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql, useMutation } from '@apollo/client'
-import { WarnButton } from '@openneuro/components/warn-button'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql, useMutation } from "@apollo/client"
+import { WarnButton } from "@openneuro/components/warn-button"
 
 const DELETE_FILE = gql`
   mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
@@ -13,7 +13,7 @@ const DELETE_FILE = gql`
  * Given a file object, path/filename for deletion, and a list of currently loaded files, filter any that will be deleted and orphan directories
  */
 export function fileCacheDeleteFilter(file, path, filename, cachedFileObjects) {
-  const fullPath = [path, filename].filter(Boolean).join(':')
+  const fullPath = [path, filename].filter(Boolean).join(":")
   if (file.filename === fullPath) {
     return false
   } else {
@@ -45,7 +45,7 @@ const DeleteFile = ({ datasetId, path, filename }) => {
           fields: {
             files(cachedFiles) {
               // Filter any removed files from the Draft.files cache
-              const cachedFileObjects = cachedFiles.map(f =>
+              const cachedFileObjects = cachedFiles.map((f) =>
                 cache.readFragment({
                   id: cache.identify(f),
                   fragment: gql`
@@ -56,9 +56,9 @@ const DeleteFile = ({ datasetId, path, filename }) => {
                       directory
                     }
                   `,
-                }),
+                })
               )
-              const remainingFiles = cachedFiles.filter(f => {
+              const remainingFiles = cachedFiles.filter((f) => {
                 // Get the cache key for each file we have loaded
                 const file = cache.readFragment({
                   id: cache.identify(f),

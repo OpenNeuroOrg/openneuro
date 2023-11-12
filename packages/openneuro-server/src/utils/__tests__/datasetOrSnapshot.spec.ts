@@ -1,53 +1,53 @@
-import { vi } from 'vitest'
+import { vi } from "vitest"
 import {
   datasetOrSnapshot,
   getDatasetFromSnapshotId,
-} from '../datasetOrSnapshot'
+} from "../datasetOrSnapshot"
 
-vi.mock('ioredis')
+vi.mock("ioredis")
 
-describe('datasetOrSnapshot()', () => {
-  it('resolves a dataset object correctly', () => {
+describe("datasetOrSnapshot()", () => {
+  it("resolves a dataset object correctly", () => {
     const dataset = {
-      id: 'ds000001',
-      revision: 'abcfdeg',
+      id: "ds000001",
+      revision: "abcfdeg",
       modified: new Date(),
       draft: {
-        id: 'abcfdeg',
+        id: "abcfdeg",
       },
     }
     expect(datasetOrSnapshot(dataset)).toEqual({
-      datasetId: 'ds000001',
-      revision: 'abcfdeg',
+      datasetId: "ds000001",
+      revision: "abcfdeg",
     })
   })
-  it('resolves snapshot objects correctly', () => {
+  it("resolves snapshot objects correctly", () => {
     const snapshot = {
-      id: 'ds000001:1.0.0',
-      tag: '1.0.0',
-      hexsha: 'abcfdeg',
+      id: "ds000001:1.0.0",
+      tag: "1.0.0",
+      hexsha: "abcfdeg",
       modified: new Date(),
-      files: [{ id: '1234', filename: 'dataset_description.json' }],
+      files: [{ id: "1234", filename: "dataset_description.json" }],
     }
     expect(datasetOrSnapshot(snapshot)).toEqual({
-      datasetId: 'ds000001',
-      revision: 'abcfdeg',
+      datasetId: "ds000001",
+      revision: "abcfdeg",
     })
   })
-  it('resolves the snapshot tag only corner case', () => {
+  it("resolves the snapshot tag only corner case", () => {
     const snapshot = {
-      id: 'ds000002:1.0.1',
-      tag: '1.0.1',
+      id: "ds000002:1.0.1",
+      tag: "1.0.1",
       modified: new Date(),
     }
     expect(datasetOrSnapshot(snapshot)).toEqual({
-      datasetId: 'ds000002',
-      revision: '1.0.1',
+      datasetId: "ds000002",
+      revision: "1.0.1",
     })
   })
-  describe('getDatasetFromSnapshotId', () => {
-    it('extracts the datasetId correctly', () => {
-      expect(getDatasetFromSnapshotId('ds000001:1.0.0')).toBe('ds000001')
+  describe("getDatasetFromSnapshotId", () => {
+    it("extracts the datasetId correctly", () => {
+      expect(getDatasetFromSnapshotId("ds000001:1.0.0")).toBe("ds000001")
     })
   })
 })

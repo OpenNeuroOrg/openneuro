@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import MetadataForm from '../dataset/mutations/metadata-form.jsx'
-import UploaderContext from './uploader-context.js'
-import styled from '@emotion/styled'
+import React, { useState } from "react"
+import MetadataForm from "../dataset/mutations/metadata-form.jsx"
+import UploaderContext from "./uploader-context.js"
+import styled from "@emotion/styled"
 
 const Container = styled.div`
   &.message.fade-in {
@@ -11,16 +11,16 @@ const Container = styled.div`
 
 const UploadMetadata = () => {
   const [values, setValues] = useState({
-    associatedPaperDOI: '',
-    species: '',
-    studyLongitudinal: '',
-    studyDomain: '',
+    associatedPaperDOI: "",
+    species: "",
+    studyLongitudinal: "",
+    studyDomain: "",
     trialCount: undefined,
-    studyDesign: '',
-    openneuroPaperDOI: '',
-    dxStatus: '',
-    grantFunderName: '',
-    grantIdentifier: '',
+    studyDesign: "",
+    openneuroPaperDOI: "",
+    dxStatus: "",
+    grantFunderName: "",
+    grantIdentifier: "",
   })
   const handleInputChange = (name, value) => {
     const newValues = {
@@ -32,13 +32,13 @@ const UploadMetadata = () => {
 
   return (
     <UploaderContext.Consumer>
-      {uploader => (
+      {(uploader) => (
         <Container className="message fade-in">
           <MetadataForm
             values={values}
             onChange={handleInputChange}
             hideDisabled={true}
-            hiddenFields={['affirmedConsent', 'affirmedDefaced']}
+            hiddenFields={["affirmedConsent", "affirmedDefaced"]}
             hasEdit={true}
           />
           <br />
@@ -47,8 +47,9 @@ const UploadMetadata = () => {
             disabled={false}
             onClick={() => {
               uploader.captureMetadata(values)
-              uploader.setLocation('/upload/disclaimer')
-            }}>
+              uploader.setLocation("/upload/disclaimer")
+            }}
+          >
             Continue
           </button>
         </Container>

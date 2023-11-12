@@ -1,26 +1,26 @@
-import React, { useState } from 'react'
-import TextInput from './text-input'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import React, { useState } from "react"
+import TextInput from "./text-input"
+import PropTypes from "prop-types"
+import styled from "@emotion/styled"
 
 const Container = styled.div({
-  '&&': {
-    position: 'relative',
-    width: '100%',
-    height: '3rem',
-    marginTop: '30px',
-    backgroundColor: 'white',
-    borderRadius: '4px',
+  "&&": {
+    position: "relative",
+    width: "100%",
+    height: "3rem",
+    marginTop: "30px",
+    backgroundColor: "white",
+    borderRadius: "4px",
   },
 })
 const centerLabelStyles = {
-  '&&': {
-    top: '13px',
-    fontSize: '1em',
+  "&&": {
+    top: "13px",
+    fontSize: "1em",
   },
 }
 const pushedUpLabelStyles = {
-  '&&': { top: '-17px', fontSize: '0.75em' },
+  "&&": { top: "-17px", fontSize: "0.75em" },
 }
 interface SelectInputLabelProps {
   hasValue: boolean
@@ -28,31 +28,31 @@ interface SelectInputLabelProps {
 
 const Label = styled.label<SelectInputLabelProps>(
   {
-    '&&': {
-      position: 'absolute',
-      left: '1rem',
-      right: '1rem',
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      color: '#999',
-      transition: 'top 100ms, font-size 100ms',
-      transitionTimingFunction: 'ease-out',
-      textAlign: 'left',
+    "&&": {
+      position: "absolute",
+      left: "1rem",
+      right: "1rem",
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+      color: "#999",
+      transition: "top 100ms, font-size 100ms",
+      transitionTimingFunction: "ease-out",
+      textAlign: "left",
     },
   },
   ({ hasValue }) => ({
     ...(hasValue ? pushedUpLabelStyles : centerLabelStyles),
-    ':focus': pushedUpLabelStyles,
+    ":focus": pushedUpLabelStyles,
   }),
 )
 const DisabledIcon = styled.i({
-  '&&': {
-    position: 'absolute',
-    top: '0.4rem',
-    right: '0.4rem',
-    color: '#5cb85c',
-    fontSize: '8px',
+  "&&": {
+    position: "absolute",
+    top: "0.4rem",
+    right: "0.4rem",
+    color: "#5cb85c",
+    fontSize: "8px",
   },
 })
 
@@ -61,53 +61,53 @@ interface ShowOtherProps {
 }
 const Select = styled.select<ShowOtherProps>(
   {
-    '&&': {
-      position: 'absolute',
+    "&&": {
+      position: "absolute",
       top: 0,
       left: 0,
       right: 0,
-      width: '100%',
-      height: '100%',
-      color: 'rgba(0,0,0,0)',
-      backgroundColor: 'rgba(0,0,0,0)',
-      MozAppearance: 'none',
+      width: "100%",
+      height: "100%",
+      color: "rgba(0,0,0,0)",
+      backgroundColor: "rgba(0,0,0,0)",
+      MozAppearance: "none",
     },
   },
   ({ showOther }) =>
     showOther
       ? {
-          borderBottomRightRadius: 0,
-          borderBottomLeftRadius: 0,
-        }
+        borderBottomRightRadius: 0,
+        borderBottomLeftRadius: 0,
+      }
       : {},
 )
-Select.displayName = 'styledSelect'
+Select.displayName = "styledSelect"
 const SelectValueDisplay = styled.div({
-  '&&': {
-    position: 'absolute',
+  "&&": {
+    position: "absolute",
     top: 0,
-    width: '100%',
-    height: '100%',
-    padding: '13px',
-    color: 'black',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    textAlign: 'left',
+    width: "100%",
+    height: "100%",
+    padding: "13px",
+    color: "black",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    textAlign: "left",
   },
 })
 const SelectIconContainer = styled.div({
-  '&&': {
-    position: 'absolute',
+  "&&": {
+    position: "absolute",
     top: 0,
     right: 0,
-    height: '100%',
-    width: '3rem',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: '#999',
+    height: "100%",
+    width: "3rem",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#999",
   },
 })
 const SelectIcon = (): React.ReactElement => (
@@ -117,15 +117,15 @@ const SelectIcon = (): React.ReactElement => (
   </SelectIconContainer>
 )
 const Option = styled.option({
-  color: 'black',
+  color: "black",
 })
 const OtherInputContainer = styled.div<ShowOtherProps>(
   {
-    '&&': {
-      overflow: 'hidden',
-      transition: 'opacity, transform, height',
-      transitionDuration: '200ms',
-      transitionTimingFunction: 'ease-out',
+    "&&": {
+      overflow: "hidden",
+      transition: "opacity, transform, height",
+      transitionDuration: "200ms",
+      transitionTimingFunction: "ease-out",
 
       input: {
         borderTopRightRadius: 0,
@@ -136,15 +136,15 @@ const OtherInputContainer = styled.div<ShowOtherProps>(
   ({ showOther }) =>
     showOther
       ? {
-          '&&': {
-            height: '5rem',
-            opacity: 1,
-            transform: 'translateY(0)',
-          },
-        }
-      : {
-          '&&': { height: 0, opacity: 0, transform: 'translateY(-4rem)' },
+        "&&": {
+          height: "5rem",
+          opacity: 1,
+          transform: "translateY(0)",
         },
+      }
+      : {
+        "&&": { height: 0, opacity: 0, transform: "translateY(-4rem)" },
+      },
 )
 const SelectInput = ({
   name,
@@ -155,19 +155,19 @@ const SelectInput = ({
   disabled,
   annotated,
   required,
-  warningOnChange = '',
+  warningOnChange = "",
   onChange,
   hasBooleanValues,
 }): React.ReactElement => {
-  if (hasBooleanValues && typeof value === 'boolean') {
+  if (hasBooleanValues && typeof value === "boolean") {
     value = value.toString()
   }
   const nothingSelected = !value
-  const otherOptionSelected = showOptionOther && value === 'Other'
+  const otherOptionSelected = showOptionOther && value === "Other"
 
   let selectValue
-  if (nothingSelected) selectValue = ''
-  else if (otherOptionSelected) selectValue = 'Other'
+  if (nothingSelected) selectValue = ""
+  else if (otherOptionSelected) selectValue = "Other"
   else selectValue = value
 
   const [changed, setChanged] = useState(false)
@@ -176,8 +176,8 @@ const SelectInput = ({
     const prevValue = value
     let newValue = e.target.value
     if (hasBooleanValues) {
-      if (newValue === 'true') newValue = true
-      else if (newValue === 'false') newValue = false
+      if (newValue === "true") newValue = true
+      else if (newValue === "false") newValue = false
     }
     if (prevValue != newValue) setChanged(true)
     onChange(e.target.name, newValue)
@@ -204,7 +204,8 @@ const SelectInput = ({
           disabled={disabled}
           onChange={handleChange}
           showOther={showOptionOther && otherOptionSelected}
-          required={required}>
+          required={required}
+        >
           <Option value="" disabled hidden />
           {options &&
             options.map((option, i) => (
@@ -219,7 +220,7 @@ const SelectInput = ({
         <TextInput
           name={name}
           label={`Other ${labelString}`}
-          value={value === 'Other' ? '' : value}
+          value={value === "Other" ? "" : value}
           disabled={disabled}
           onChange={onChange}
         />

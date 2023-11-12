@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react"
 
-import { affiliateContent } from '../content/affiliate-content.jsx'
+import { affiliateContent } from "../content/affiliate-content.jsx"
 
-import { AffiliateArticle } from '../affiliate-article/AffiliateArticle'
+import { AffiliateArticle } from "../affiliate-article/AffiliateArticle"
 
 export interface AffiliateBlockProps {}
 

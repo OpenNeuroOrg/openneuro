@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface StarDocument extends Document {
@@ -11,13 +11,13 @@ const starSchema = new Schema({
   userId: { type: String, required: true },
 })
 
-starSchema.virtual('user', {
-  ref: 'User',
-  localField: 'userId',
-  foreignField: 'id',
+starSchema.virtual("user", {
+  ref: "User",
+  localField: "userId",
+  foreignField: "id",
   justOne: true,
 })
 
-const Star = model<StarDocument>('Star', starSchema)
+const Star = model<StarDocument>("Star", starSchema)
 
 export default Star

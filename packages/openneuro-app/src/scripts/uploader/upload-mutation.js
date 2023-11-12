@@ -1,18 +1,17 @@
-import { datasets, uploads } from '@openneuro/client'
-import { SUBMIT_METADATA } from '../dataset/mutations/submit-metadata.jsx'
+import { datasets, uploads } from "@openneuro/client"
+import { SUBMIT_METADATA } from "../dataset/mutations/submit-metadata.jsx"
 
 /**
  * Create a dataset and update the label
  * @param {object} client Apollo client
  */
 export const createDataset =
-  client =>
-  ({ affirmedDefaced, affirmedConsent }) => {
+  (client) => ({ affirmedDefaced, affirmedConsent }) => {
     return client
       .mutate({
         mutation: datasets.createDataset,
         variables: { affirmedDefaced, affirmedConsent },
-        errorPolicy: 'all',
+        errorPolicy: "all",
       })
       .then(({ data }) => data.createDataset.id)
   }
@@ -21,20 +20,18 @@ export const createDataset =
  * Create a dataset and update the label
  * @param {object} client Apollo client
  */
-export const prepareUpload =
-  client =>
-  ({ datasetId, uploadId }) => {
-    return client.mutate({
-      mutation: uploads.prepareUpload,
-      variables: { datasetId, uploadId },
-    })
-  }
+export const prepareUpload = (client) => ({ datasetId, uploadId }) => {
+  return client.mutate({
+    mutation: uploads.prepareUpload,
+    variables: { datasetId, uploadId },
+  })
+}
 
 /**
  * Complete upload
  * @param {object} client Apollo client
  */
-export const finishUpload = client => uploadId => {
+export const finishUpload = (client) => (uploadId) => {
   return client.mutate({
     mutation: uploads.finishUpload,
     variables: { uploadId },
@@ -57,7 +54,7 @@ export const mkLevels = (file, parent, tokens) => {
     // Nodes are directories
     const dirName = tokens.shift()
     const dirIndex = parent.directories.findIndex(
-      dir => dir.name === `${parent.name}/${dirName}`,
+      (dir) => dir.name === `${parent.name}/${dirName}`,
     )
     if (dirIndex !== -1) {
       // Directory exists
@@ -79,12 +76,12 @@ export const mkLevels = (file, parent, tokens) => {
  * Convert from an file input list to a FileTreeInput object
  * @param {object} fileList Browser FileList from file input
  */
-export const treeFromList = fileList => {
-  const tree = { name: '', files: [], directories: [] }
+export const treeFromList = (fileList) => {
+  const tree = { name: "", files: [], directories: [] }
 
   for (const file of fileList) {
     if (file.webkitRelativePath) {
-      const tokens = file.webkitRelativePath.split('/')
+      const tokens = file.webkitRelativePath.split("/")
       // Skip the top level, it is created above
       tokens.shift()
       mkLevels(file, tree, tokens)
@@ -97,7 +94,7 @@ export const treeFromList = fileList => {
   return tree
 }
 
-export const submitMetadata = client => (datasetId, metadata) => {
+export const submitMetadata = (client) => (datasetId, metadata) => {
   return client.mutate({
     mutation: SUBMIT_METADATA,
     variables: {
@@ -107,6 +104,6 @@ export const submitMetadata = client => (datasetId, metadata) => {
         ...metadata,
       },
     },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
 }

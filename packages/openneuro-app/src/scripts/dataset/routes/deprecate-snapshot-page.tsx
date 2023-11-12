@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { DeprecateVersion } from '../mutations/deprecate-version'
-import { Input } from '@openneuro/components/input'
-import LoggedIn from '../../authentication/logged-in.jsx'
-import { DatasetPageBorder } from './styles/dataset-page-border'
-import { HeaderRow3 } from './styles/header-row'
+import React, { useState } from "react"
+import { useParams } from "react-router-dom"
+import { DeprecateVersion } from "../mutations/deprecate-version"
+import { Input } from "@openneuro/components/input"
+import LoggedIn from "../../authentication/logged-in.jsx"
+import { DatasetPageBorder } from "./styles/dataset-page-border"
+import { HeaderRow3 } from "./styles/header-row"
 
 interface DeprecateSnapshotProps {
   datasetId: string
@@ -15,7 +15,7 @@ export const DeprecateSnapshotPage = ({
   datasetId,
   snapshotTag,
 }: DeprecateSnapshotProps): React.ReactElement => {
-  const [reason, setReason] = useState('')
+  const [reason, setReason] = useState("")
 
   return (
     <DatasetPageBorder>

@@ -1,9 +1,9 @@
 /**
  * Top level dataset queries only, mutations may cause refetches of these
  */
-import { gql } from '@apollo/client'
-import * as DatasetQueryFragments from '../datalad/dataset/dataset-query-fragments.js'
-import { DATASET_COMMENTS } from '../datalad/dataset/comments-fragments.js'
+import { gql } from "@apollo/client"
+import * as DatasetQueryFragments from "../datalad/dataset/dataset-query-fragments.js"
+import { DATASET_COMMENTS } from "../datalad/dataset/comments-fragments.js"
 
 /**
  * Generate the dataset page query

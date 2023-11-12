@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { DatasetAlert } from '@openneuro/components/dataset'
+import React from "react"
+import { Link } from "react-router-dom"
+import { DatasetAlert } from "@openneuro/components/dataset"
 
 export interface DatasetAlertDraftProps {
   isPrivate: boolean
@@ -20,15 +20,15 @@ export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
       return (
         <DatasetAlert
           alert="This dataset has not been published!"
-          footer={
-            hasDraftChanges &&
-            '* There have been changes to the draft since your last version'
-          }
-          level="warning">
+          footer={hasDraftChanges &&
+            "* There have been changes to the draft since your last version"}
+          level="warning"
+        >
           <>
             <Link
               className="dataset-tool"
-              to={'/datasets/' + datasetId + '/publish'}>
+              to={"/datasets/" + datasetId + "/publish"}
+            >
               Publish this dataset
             </Link>
             &#32; to make all versions available publicly.
@@ -39,11 +39,13 @@ export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
       return (
         <DatasetAlert
           alert="This dataset has not been published!"
-          level="warning">
+          level="warning"
+        >
           Before it can be published, please&#32;
           <Link
             className="dataset-tool"
-            to={'/datasets/' + datasetId + '/snapshot'}>
+            to={"/datasets/" + datasetId + "/snapshot"}
+          >
             create a version
           </Link>
         </DatasetAlert>
@@ -57,7 +59,8 @@ export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
           become public when you&#32;
           <Link
             className="dataset-tool"
-            to={'/datasets/' + datasetId + '/snapshot'}>
+            to={"/datasets/" + datasetId + "/snapshot"}
+          >
             create a new version.
           </Link>
         </DatasetAlert>
@@ -68,7 +71,8 @@ export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
           You can make changes to this Draft page, then&#32;
           <Link
             className="dataset-tool"
-            to={'/datasets/' + datasetId + '/snapshot'}>
+            to={"/datasets/" + datasetId + "/snapshot"}
+          >
             create a new version
           </Link>
           &#32;to make them public.

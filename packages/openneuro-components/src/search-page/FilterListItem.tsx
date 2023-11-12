@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 type TextList = string[]
 type Text = string
@@ -9,7 +9,7 @@ type Item = {
   value: TextList | Text | OptionObject | NumberCouple
 }
 
-const rangeDisplay = range => {
+const rangeDisplay = (range) => {
   if (range[0] === null) {
     return `<= ${range[1]}`
   } else if (range[1] === null) {
@@ -30,19 +30,19 @@ export const FilterListItem = ({
   removeFilterItem = () => {},
 }: FilterListItemProps) => {
   if (
-    item.value === 'All' ||
-    item.value === 'All Public' ||
-    item.value === 'All Time' ||
+    item.value === "All" ||
+    item.value === "All Public" ||
+    item.value === "All Time" ||
     JSON.stringify(item.value) === JSON.stringify([null, null])
   ) {
     return null
-  } else
+  } else {
     return (
       <>
         <li className={type}>
           <strong>{type}:</strong>
           <span>
-            {type === 'Age' || type === 'Participants'
+            {type === "Age" || type === "Participants"
               ? rangeDisplay(item.value)
               : item.value}
             <span onClick={() => removeFilterItem(item.param, item.value)}>
@@ -52,4 +52,5 @@ export const FilterListItem = ({
         </li>
       </>
     )
+  }
 }

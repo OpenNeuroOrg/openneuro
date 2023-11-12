@@ -1,6 +1,6 @@
 /* eslint-env worker */
-import { validate, fileListToTree } from '../utils/schema-validator.js'
-import { BIDSValidatorIssues } from './worker-interface'
+import { fileListToTree, validate } from "../utils/schema-validator.js"
+import { BIDSValidatorIssues } from "./worker-interface"
 
 export async function runValidator(
   files,
@@ -17,9 +17,9 @@ export async function runValidator(
     const result = await validate(tree, { json: true })
     const issues = Array.from(result.issues, ([key, value]) => value)
     output.issues.warnings = issues.filter(
-      issue => issue.severity === 'warning',
+      (issue) => issue.severity === "warning",
     )
-    output.issues.errors = issues.filter(issue => issue.severity === 'error')
+    output.issues.errors = issues.filter((issue) => issue.severity === "error")
     output.summary = result.summary
   } catch (err) {
     error = err

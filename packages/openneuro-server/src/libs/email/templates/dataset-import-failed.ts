@@ -10,7 +10,8 @@ export const datasetImportFailed = ({
   datasetId: string
   message: string
   retryUrl: string
-}): string => `<html>
+}): string =>
+  `<html>
 <head>
 <style>
 	body {

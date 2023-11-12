@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import DatasetQueryContext from '../../datalad/dataset/dataset-query-context.js'
-import { gql } from '@apollo/client'
-import { AccordionTab } from '@openneuro/components/accordion'
+import React, { useContext, useEffect, useState } from "react"
+import PropTypes from "prop-types"
+import DatasetQueryContext from "../../datalad/dataset/dataset-query-context.js"
+import { gql } from "@apollo/client"
+import { AccordionTab } from "@openneuro/components/accordion"
 
 export const DRAFT_FILES_QUERY = gql`
   query dataset($datasetId: ID!, $tree: String!) {
@@ -41,7 +41,7 @@ export const SNAPSHOT_FILES_QUERY = gql`
 /**
  * Prepend paths to the tree object returned to get absolute filenames
  */
-export const nestFiles = path => file => ({
+export const nestFiles = (path) => (file) => ({
   ...file,
   filename: `${path}:${file.filename}`,
 })
@@ -50,8 +50,7 @@ export const nestFiles = path => file => ({
  * Merge cached dataset files with newly received data
  */
 export const mergeNewFiles =
-  (directory, snapshotTag) =>
-  (past, { fetchMoreResult }) => {
+  (directory, snapshotTag) => (past, { fetchMoreResult }) => {
     // Deep clone the old dataset object
     const path = directory.filename
     const newDatasetObj = JSON.parse(JSON.stringify(past))
@@ -81,12 +80,13 @@ const FileTreeUnloadedDirectory = ({ datasetId, snapshotTag, directory }) => {
   const { fetchMore } = useContext(DatasetQueryContext)
   return (
     <AccordionTab
-      label={directory.filename.split(':').pop()}
+      label={directory.filename.split(":").pop()}
       accordionStyle="file-tree"
       onClick={() => {
         fetchMoreDirectory(fetchMore, datasetId, snapshotTag, directory)
         // No need to clear since this component is unmounted immediately
-      }}>
+      }}
+    >
       <div>Loading...</div>
     </AccordionTab>
   )

@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import ShellExample from './shell-example.jsx'
-import { getConfig } from '../../config'
+import React from "react"
+import PropTypes from "prop-types"
+import ShellExample from "./shell-example.jsx"
+import { getConfig } from "../../config"
 
 export const DownloadSampleS3 = ({ datasetId, s3Bucket }) => (
   <ShellExample>
@@ -37,10 +37,10 @@ DownloadS3Instructions.propTypes = {
   s3Bucket: PropTypes.string,
 }
 
-const DownloadS3 = props =>
+const DownloadS3 = (props) =>
   // TODO - don't depend on async config
-  getConfig().hasOwnProperty('publicBucket') ? (
-    <DownloadS3Instructions {...props} s3Bucket={getConfig().publicBucket} />
-  ) : null
+  getConfig().hasOwnProperty("publicBucket")
+    ? <DownloadS3Instructions {...props} s3Bucket={getConfig().publicBucket} />
+    : null
 
 export default DownloadS3

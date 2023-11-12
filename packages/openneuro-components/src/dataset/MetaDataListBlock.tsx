@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 export interface MetaDataListBlockProps {
   heading: string
@@ -15,7 +15,7 @@ export const MetaDataListBlock = ({
 }: MetaDataListBlockProps) => {
   const fieldContent = renderEditor ? renderEditor() : item
   return (
-    <div className={'dataset-meta-block ' + className}>
+    <div className={"dataset-meta-block " + className}>
       <h2 className="dmb-heading">{heading}</h2>
       {fieldContent}
     </div>

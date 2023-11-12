@@ -1,18 +1,18 @@
-import React, { useContext } from 'react'
-import { gql, useQuery } from '@apollo/client'
-import { SearchParamsCtx } from './search-params-ctx'
-import initialSearchParams from './initial-search-params'
+import React, { useContext } from "react"
+import { gql, useQuery } from "@apollo/client"
+import { SearchParamsCtx } from "./search-params-ctx"
+import initialSearchParams from "./initial-search-params"
 import {
   BoolQuery,
-  simpleQueryString,
+  joinWithOR,
   matchQuery,
   multiMatchQuery,
-  rangeQuery,
   rangeListLengthQuery,
+  rangeQuery,
+  simpleQueryString,
   sqsJoinWithAND,
-  joinWithOR,
-} from './es-query-builders'
-import { species_list } from '@openneuro/components/content'
+} from "./es-query-builders"
+import { species_list } from "@openneuro/components/content"
 
 const searchQuery = gql`
   query advancedSearchDatasets(
@@ -123,7 +123,7 @@ const searchQuery = gql`
   }
 `
 
-const isActiveRange = range =>
+const isActiveRange = (range) =>
   JSON.stringify(range) !== JSON.stringify([null, null])
 
 export const useSearchResults = () => {
@@ -153,204 +153,217 @@ export const useSearchResults = () => {
   } = searchParams
 
   const boolQuery = new BoolQuery()
-  if (keywords.length)
+  if (keywords.length) {
     boolQuery.addClause(
-      'must',
+      "must",
       simpleQueryString(sqsJoinWithAND(keywords), [
-        'id^6',
-        'latestSnapshot.readme',
-        'latestSnapshot.description.Name^6',
-        'latestSnapshot.description.Authors^3',
+        "id^6",
+        "latestSnapshot.readme",
+        "latestSnapshot.description.Name^6",
+        "latestSnapshot.description.Authors^3",
       ]),
     )
+  }
   if (modality_selected) {
     const secondaryModalities = {
       Diffusion: {
-        secondary: 'MRI_Diffusion',
-        primary: 'MRI',
+        secondary: "MRI_Diffusion",
+        primary: "MRI",
       },
       Structural: {
-        secondary: 'MRI_Structural',
-        primary: 'MRI',
+        secondary: "MRI_Structural",
+        primary: "MRI",
       },
       Functional: {
-        secondary: 'MRI_Functional',
-        primary: 'MRI',
+        secondary: "MRI_Functional",
+        primary: "MRI",
       },
       Perfusion: {
-        secondary: 'MRI_Perfusion',
-        primary: 'MRI',
+        secondary: "MRI_Perfusion",
+        primary: "MRI",
       },
       Static: {
-        secondary: 'PET_Static',
-        primary: 'PET',
+        secondary: "PET_Static",
+        primary: "PET",
       },
       Dynamic: {
-        secondary: 'PET_Dynamic',
-        primary: 'PET',
+        secondary: "PET_Dynamic",
+        primary: "PET",
       },
     }
     if (Object.keys(secondaryModalities).includes(modality_selected)) {
       boolQuery.addClause(
-        'filter',
+        "filter",
         matchQuery(
-          'latestSnapshot.summary.secondaryModalities',
+          "latestSnapshot.summary.secondaryModalities",
           secondaryModalities[modality_selected].secondary,
         ),
       )
     } else {
       boolQuery.addClause(
-        'filter',
-        matchQuery('latestSnapshot.summary.modalities', modality_selected),
+        "filter",
+        matchQuery("latestSnapshot.summary.modalities", modality_selected),
       )
     }
   }
-  if (isActiveRange(ageRange))
+  if (isActiveRange(ageRange)) {
     boolQuery.addClause(
-      'filter',
-      rangeQuery('latestSnapshot.summary.subjectMetadata.age', ...ageRange),
+      "filter",
+      rangeQuery("latestSnapshot.summary.subjectMetadata.age", ...ageRange),
     )
-  if (isActiveRange(subjectCountRange))
+  }
+  if (isActiveRange(subjectCountRange)) {
     boolQuery.addClause(
-      'filter',
+      "filter",
       rangeListLengthQuery(
-        'latestSnapshot.summary.subjects',
+        "latestSnapshot.summary.subjects",
         subjectCountRange[0] || 0,
         subjectCountRange[1] || 1000000,
       ),
     )
-  if (diagnosis_selected)
+  }
+  if (diagnosis_selected) {
     boolQuery.addClause(
-      'filter',
-      matchQuery('metadata.dxStatus', diagnosis_selected),
+      "filter",
+      matchQuery("metadata.dxStatus", diagnosis_selected),
     )
-  if (tasks.length)
+  }
+  if (tasks.length) {
     boolQuery.addClause(
-      'must',
+      "must",
       simpleQueryString(sqsJoinWithAND(tasks), [
-        'latestSnapshot.summary.tasks',
+        "latestSnapshot.summary.tasks",
       ]),
     )
-  if (authors.length)
+  }
+  if (authors.length) {
     boolQuery.addClause(
-      'must',
+      "must",
       matchQuery(
-        'latestSnapshot.description.Authors',
+        "latestSnapshot.description.Authors",
         joinWithOR(authors),
-        '3',
+        "3",
       ),
     )
-  if (sex_selected !== 'All') {
+  }
+  if (sex_selected !== "All") {
     // Possible values for this field are specified here:
     // https://bids-specification.readthedocs.io/en/stable/glossary.html#objects.columns.sex
     let queryStrings = []
-    if (sex_selected == 'Male') {
-      queryStrings = ['male', 'm', 'M', 'MALE', 'Male']
-    } else if (sex_selected == 'Female') {
-      queryStrings = ['female', 'f', 'F', 'FEMALE', 'Female']
+    if (sex_selected == "Male") {
+      queryStrings = ["male", "m", "M", "MALE", "Male"]
+    } else if (sex_selected == "Female") {
+      queryStrings = ["female", "f", "F", "FEMALE", "Female"]
     }
     boolQuery.addClause(
-      'filter',
+      "filter",
       multiMatchQuery(
-        'latestSnapshot.summary.subjectMetadata.sex',
+        "latestSnapshot.summary.subjectMetadata.sex",
         queryStrings,
       ),
     )
   }
-  if (date_selected !== 'All Time') {
+  if (date_selected !== "All Time") {
     let d: number
-    if (date_selected === 'Last 30 days') {
+    if (date_selected === "Last 30 days") {
       d = 30
-    } else if (date_selected === 'Last 180 days') {
+    } else if (date_selected === "Last 180 days") {
       d = 180
     } else {
       d = 365
     }
-    boolQuery.addClause('filter', rangeQuery('created', `now-${d}d/d`, 'now/d'))
+    boolQuery.addClause("filter", rangeQuery("created", `now-${d}d/d`, "now/d"))
   }
   if (species_selected) {
-    if (species_selected === 'Other') {
+    if (species_selected === "Other") {
       // if species is 'Other', search for every species that isn't an available option
       const species = initialSearchParams.species_available
-        .filter(s => s !== 'Other')
-        .join(' ')
+        .filter((s) => s !== "Other")
+        .join(" ")
       boolQuery.addClause(
-        'must_not',
-        matchQuery('metadata.species', species, 'AUTO', 'OR'),
+        "must_not",
+        matchQuery("metadata.species", species, "AUTO", "OR"),
       )
-    } else if (species_selected === 'Human') {
+    } else if (species_selected === "Human") {
       // if species is 'Human', search for Human or null values (BIDS assumes human by default)
-      boolQuery.query.bool['should'] = [
-        matchQuery('metadata.species', 'Human', 'AUTO'),
-        { term: { _content: '' } },
+      boolQuery.query.bool["should"] = [
+        matchQuery("metadata.species", "Human", "AUTO"),
+        { term: { _content: "" } },
       ]
     } else {
       boolQuery.addClause(
-        'filter',
-        matchQuery('metadata.species', species_selected, 'AUTO'),
+        "filter",
+        matchQuery("metadata.species", species_selected, "AUTO"),
       )
     }
   }
-  if (section_selected)
+  if (section_selected) {
     boolQuery.addClause(
-      'filter',
-      matchQuery('metadata.studyLongitudinal', section_selected, 'AUTO'),
+      "filter",
+      matchQuery("metadata.studyLongitudinal", section_selected, "AUTO"),
     )
-  if (studyDomains.length)
+  }
+  if (studyDomains.length) {
     boolQuery.addClause(
-      'must',
-      matchQuery('metadata.studyDomain', joinWithOR(studyDomains)),
+      "must",
+      matchQuery("metadata.studyDomain", joinWithOR(studyDomains)),
     )
-  if (modality_selected === 'PET' || modality_selected === null) {
-    if (bodyParts.length)
+  }
+  if (modality_selected === "PET" || modality_selected === null) {
+    if (bodyParts.length) {
       boolQuery.addClause(
-        'must',
+        "must",
         simpleQueryString(sqsJoinWithAND(bodyParts), [
-          'latestSnapshot.summary.pet.BodyPart',
+          "latestSnapshot.summary.pet.BodyPart",
         ]),
       )
-    if (scannerManufacturers.length)
+    }
+    if (scannerManufacturers.length) {
       boolQuery.addClause(
-        'must',
+        "must",
         simpleQueryString(sqsJoinWithAND(scannerManufacturers), [
-          'latestSnapshot.summary.pet.ScannerManufacturer',
+          "latestSnapshot.summary.pet.ScannerManufacturer",
         ]),
       )
-    if (scannerManufacturersModelNames.length)
+    }
+    if (scannerManufacturersModelNames.length) {
       boolQuery.addClause(
-        'must',
+        "must",
         simpleQueryString(sqsJoinWithAND(scannerManufacturersModelNames), [
-          'latestSnapshot.summary.pet.ScannerManufacturersModelName',
+          "latestSnapshot.summary.pet.ScannerManufacturersModelName",
         ]),
       )
-    if (tracerNames.length)
+    }
+    if (tracerNames.length) {
       boolQuery.addClause(
-        'must',
+        "must",
         simpleQueryString(sqsJoinWithAND(tracerNames), [
-          'latestSnapshot.summary.pet.TracerName',
+          "latestSnapshot.summary.pet.TracerName",
         ]),
       )
-    if (tracerRadionuclides.length)
+    }
+    if (tracerRadionuclides.length) {
       boolQuery.addClause(
-        'must',
+        "must",
         simpleQueryString(sqsJoinWithAND(tracerRadionuclides), [
-          'latestSnapshot.summary.pet.TracerRadionuclide',
+          "latestSnapshot.summary.pet.TracerRadionuclide",
         ]),
       )
+    }
   }
 
   let sortBy
-  if (sortBy_selected.label === 'Relevance') {
+  if (sortBy_selected.label === "Relevance") {
     // If filters are set, sort by relevance (default sort),
     //   otherwise, sort from newest to oldest
-    sortBy = boolQuery.isEmpty() ? { created: 'desc' } : null
-  } else if (sortBy_selected.label === 'Newest') {
-    sortBy = { created: 'desc' }
-  } else if (sortBy_selected.label === 'Oldest') {
-    sortBy = { created: 'asc' }
-  } else if (sortBy_selected.label === 'Activity') {
+    sortBy = boolQuery.isEmpty() ? { created: "desc" } : null
+  } else if (sortBy_selected.label === "Newest") {
+    sortBy = { created: "desc" }
+  } else if (sortBy_selected.label === "Oldest") {
+    sortBy = { created: "asc" }
+  } else if (sortBy_selected.label === "Activity") {
     // TODO: figure out
-    sortBy = { 'analytics.downloads': 'desc' }
+    sortBy = { "analytics.downloads": "desc" }
   }
   return useQuery(searchQuery, {
     variables: {
@@ -360,10 +373,10 @@ export const useSearchResults = () => {
       datasetType: datasetType_selected,
       datasetStatus: datasetStatus_selected,
     },
-    errorPolicy: 'ignore',
+    errorPolicy: "ignore",
     // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)
     // TODO: find better solution
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
   })
 }

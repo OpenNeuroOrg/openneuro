@@ -1,6 +1,6 @@
-import React from 'react'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Button } from '../button/Button'
+import React from "react"
+import { Tooltip } from "../tooltip/Tooltip"
+import { Button } from "../button/Button"
 
 export interface BrainLifeButtonProps {
   datasetId: string
@@ -26,7 +26,7 @@ export const BrainLifeButton: React.FC<BrainLifeButtonProps> = ({
               primary={true}
               size="small"
               onClick={() => {
-                window.open(url, '_blank')
+                window.open(url, "_blank")
               }}
               label="brainlife.io"
             />

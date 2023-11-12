@@ -1,16 +1,16 @@
-import { sortBy } from '@openneuro/components/content'
+import { sortBy } from "@openneuro/components/content"
 
 const datasetType_available = [
-  { label: 'All Public', value: 'All Public' },
-  { label: 'Following', value: 'Following' },
-  { label: 'My Datasets', value: 'My Datasets' },
-  { label: 'My Bookmarks', value: 'My Bookmarks' },
+  { label: "All Public", value: "All Public" },
+  { label: "Following", value: "Following" },
+  { label: "My Datasets", value: "My Datasets" },
+  { label: "My Bookmarks", value: "My Bookmarks" },
 ]
 
 const datasetStatus_available = [
-  { label: 'Public', value: 'Public' },
-  { label: 'Shared with Me', value: 'Shared with Me' },
-  { label: 'Invalid', value: 'Invalid' },
+  { label: "Public", value: "Public" },
+  { label: "Shared with Me", value: "Shared with Me" },
+  { label: "Invalid", value: "Invalid" },
 ]
 
 type ModalityOption = {
@@ -23,9 +23,9 @@ type ModalityOption = {
 
 export const modality_available: ModalityOption[] = [
   {
-    label: 'MRI',
-    value: 'MRI',
-    portalPath: '/search/modality/mri',
+    label: "MRI",
+    value: "MRI",
+    portalPath: "/search/modality/mri",
     count: null,
     // children: [
     //   {
@@ -55,9 +55,9 @@ export const modality_available: ModalityOption[] = [
     // ],
   },
   {
-    label: 'PET',
-    value: 'PET',
-    portalPath: '/search/modality/pet',
+    label: "PET",
+    value: "PET",
+    portalPath: "/search/modality/pet",
     count: null,
     // children: [
     //   {
@@ -75,21 +75,21 @@ export const modality_available: ModalityOption[] = [
     // ],
   },
   {
-    label: 'EEG',
-    value: 'EEG',
-    portalPath: '/search/modality/eeg',
+    label: "EEG",
+    value: "EEG",
+    portalPath: "/search/modality/eeg",
     count: null,
   },
   {
-    label: 'iEEG',
-    value: 'iEEG',
-    portalPath: '/search/modality/ieeg',
+    label: "iEEG",
+    value: "iEEG",
+    portalPath: "/search/modality/ieeg",
     count: null,
   },
   {
-    label: 'MEG',
-    value: 'MEG',
-    portalPath: '/search/modality/meg',
+    label: "MEG",
+    value: "MEG",
+    portalPath: "/search/modality/meg",
     count: null,
   },
 ]
@@ -109,16 +109,16 @@ export const flattenedModalities = modality_available.reduce(
 )
 
 export const sex_list = [
-  { label: 'All', value: 'All' },
-  { label: 'Male', value: 'Male' },
-  { label: 'Female', value: 'Female' },
+  { label: "All", value: "All" },
+  { label: "Male", value: "Male" },
+  { label: "Female", value: "Female" },
 ]
 
 export const date_list = [
-  { label: 'All Time', value: 'All Time' },
-  { label: 'Last 30 days', value: 'Last 30 days' },
-  { label: 'Last 180 days', value: 'Last 180 days' },
-  { label: 'Last 12 months', value: 'Last 12 months' },
+  { label: "All Time", value: "All Time" },
+  { label: "Last 30 days", value: "Last 30 days" },
+  { label: "Last 180 days", value: "Last 180 days" },
+  { label: "Last 12 months", value: "Last 12 months" },
 ]
 
 type OptionalNumberRange = [number | null, number | null]
@@ -198,7 +198,7 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   keywords: [],
   searchAllDatasets: false,
   datasetType_available,
-  datasetType_selected: 'All Public',
+  datasetType_selected: "All Public",
   datasetStatus_available,
   datasetStatus_selected: null,
   modality_available,
@@ -206,28 +206,28 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   ageRange: [null, null],
   subjectCountRange: [null, null],
   diagnosis_available: [
-    'Healthy / Control',
-    'Schizophrenia',
-    'ADD/ADHD',
-    'Alzheimers',
-    'Other',
+    "Healthy / Control",
+    "Schizophrenia",
+    "ADD/ADHD",
+    "Alzheimers",
+    "Other",
   ],
   diagnosis_selected: null,
   tasks: [],
   authors: [],
   // more
-  sex_available: ['All', 'Male', 'Female'],
-  sex_selected: 'All',
+  sex_available: ["All", "Male", "Female"],
+  sex_selected: "All",
   date_available: [
-    'All Time',
-    'Last 30 days',
-    'Last 180 days',
-    'Last 12 months',
+    "All Time",
+    "Last 30 days",
+    "Last 180 days",
+    "Last 12 months",
   ],
-  date_selected: 'All Time',
-  species_available: ['Human', 'Rat', 'Mouse', 'Other'],
+  date_selected: "All Time",
+  species_available: ["Human", "Rat", "Mouse", "Other"],
   species_selected: null,
-  section_available: ['Cross-Sectional', 'Longitudinal', 'Other'],
+  section_available: ["Cross-Sectional", "Longitudinal", "Other"],
   section_selected: null,
   studyDomains: [],
   bodyParts: [],

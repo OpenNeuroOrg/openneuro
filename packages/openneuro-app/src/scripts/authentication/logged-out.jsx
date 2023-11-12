@@ -1,5 +1,5 @@
-import { useCookies } from 'react-cookie'
-import { loginCheck } from './loginCheck.js'
+import { useCookies } from "react-cookie"
+import { loginCheck } from "./loginCheck.js"
 
 /**
  * Render children if logged out

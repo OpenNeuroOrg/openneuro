@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 
-import { Button } from '../button/Button'
-import { Modal } from '../modal/Modal'
+import { Button } from "../button/Button"
+import { Modal } from "../modal/Modal"
 
 export interface ModalExampleProps {
   closeText: string

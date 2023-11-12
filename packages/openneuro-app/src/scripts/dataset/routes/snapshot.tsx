@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import semver, { ReleaseType } from 'semver'
-import SnapshotDataset from '../mutations/snapshot'
-import EditList from '../fragments/edit-list.jsx'
-import { Button } from '@openneuro/components/button'
-import { DatasetPageBorder } from './styles/dataset-page-border'
-import { HeaderRow4 } from './styles/header-row'
-import FileView from '../files/file-view'
-import styled from '@emotion/styled'
+import React, { useState } from "react"
+import semver, { ReleaseType } from "semver"
+import SnapshotDataset from "../mutations/snapshot"
+import EditList from "../fragments/edit-list.jsx"
+import { Button } from "@openneuro/components/button"
+import { DatasetPageBorder } from "./styles/dataset-page-border"
+import { HeaderRow4 } from "./styles/header-row"
+import FileView from "../files/file-view"
+import styled from "@emotion/styled"
 
 const FormRow = styled.div`
   margin-top: 0;
@@ -14,16 +14,16 @@ const FormRow = styled.div`
 `
 
 export const NoErrors = ({ issues, children }) => {
-  const noErrors =
-    issues && issues.filter(issue => issue.severity === 'error').length === 0
+  const noErrors = issues &&
+    issues.filter((issue) => issue.severity === "error").length === 0
   // zero authors will cause DOI minting to fail
-  const hasAuthor =
-    issues && issues.filter(issue => issue.code === 113).length === 0
+  const hasAuthor = issues &&
+    issues.filter((issue) => issue.code === 113).length === 0
   if (noErrors && hasAuthor) {
     return children
   } else {
     const correctErrorsMessage =
-      'BIDS validation must be complete and all errors corrected'
+      "BIDS validation must be complete and all errors corrected"
     const noAuthorMessage =
       '"Authors" must include at least one entry in dataset_description.json'
     const includedMessages = []
@@ -31,7 +31,7 @@ export const NoErrors = ({ issues, children }) => {
     if (!hasAuthor) includedMessages.push(noAuthorMessage)
     return (
       <span className="text-danger">
-        {`${includedMessages.join(' and ')} to create a version`}
+        {`${includedMessages.join(" and ")} to create a version`}
       </span>
     )
   }
@@ -44,20 +44,19 @@ const SnapshotRoute = ({
   description,
 }): React.ReactElement => {
   const [changes, setChanges] = useState([])
-  const [semanticLevel, setSemanticLevel] = useState('patch')
-  const draftLicense = (description && description.License) || 'none'
-  const requiredLicense = 'CC0'
+  const [semanticLevel, setSemanticLevel] = useState("patch")
+  const draftLicense = (description && description.License) || "none"
+  const requiredLicense = "CC0"
   const updateToCC0 = draftLicense !== requiredLicense
 
   const latestSnapshot = snapshots.length && snapshots[snapshots.length - 1]
-  const newVersion =
-    snapshots.length && semver.valid(latestSnapshot.tag)
-      ? semver.inc(latestSnapshot.tag, semanticLevel as ReleaseType)
-      : '1.0.0'
+  const newVersion = snapshots.length && semver.valid(latestSnapshot.tag)
+    ? semver.inc(latestSnapshot.tag, semanticLevel as ReleaseType)
+    : "1.0.0"
 
-  const majorActive = semanticLevel === 'major' && 'active'
-  const minorActive = semanticLevel === 'minor' && 'active'
-  const patchActive = semanticLevel === 'patch' && 'active'
+  const majorActive = semanticLevel === "major" && "active"
+  const minorActive = semanticLevel === "minor" && "active"
+  const patchActive = semanticLevel === "patch" && "active"
 
   return (
     <DatasetPageBorder>
@@ -66,11 +65,11 @@ const SnapshotRoute = ({
           <HeaderRow4>New Version</HeaderRow4>
           {updateToCC0 && (
             <p>
-              <strong>Notice:</strong> The current license{' '}
-              <i>&quot;{draftLicense}&quot;</i> will be updated to
-              &quot;CC0&quot; when the version is created. Please see FAQ item
-              &quot;Are there any restrictions on the uploaded data?&quot; for
-              details.
+              <strong>Notice:</strong> The current license{" "}
+              <i>&quot;{draftLicense}&quot;</i>{" "}
+              will be updated to &quot;CC0&quot; when the version is created.
+              Please see FAQ item &quot;Are there any restrictions on the
+              uploaded data?&quot; for details.
             </p>
           )}
           <p>
@@ -86,34 +85,36 @@ const SnapshotRoute = ({
                 label="Major"
                 size="xsmall"
                 className={`btn btn-default ${majorActive}`}
-                onClick={() => setSemanticLevel('major')}
+                onClick={() => setSemanticLevel("major")}
               />
               <Button
                 secondary={true}
                 label="Minor"
                 size="xsmall"
                 className={`btn btn-default ${minorActive}`}
-                onClick={() => setSemanticLevel('minor')}
+                onClick={() => setSemanticLevel("minor")}
               />
               <Button
                 secondary={true}
                 label="Patch"
                 size="xsmall"
                 className={`btn btn-default ${patchActive}`}
-                onClick={() => setSemanticLevel('patch')}
+                onClick={() => setSemanticLevel("patch")}
               />
             </div>
           </FormRow>
-          {latestSnapshot ? (
-            <FormRow>
-              <HeaderRow4>Current Changelog</HeaderRow4>
-              <FileView
-                datasetId={datasetId}
-                snapshotTag={latestSnapshot.tag}
-                path="CHANGES"
-              />
-            </FormRow>
-          ) : null}
+          {latestSnapshot
+            ? (
+              <FormRow>
+                <HeaderRow4>Current Changelog</HeaderRow4>
+                <FileView
+                  datasetId={datasetId}
+                  snapshotTag={latestSnapshot.tag}
+                  path="CHANGES"
+                />
+              </FormRow>
+            )
+            : null}
           <HeaderRow4>New Changelog</HeaderRow4>
           <p>Add CHANGES file lines describing the new version.</p>
           <EditList

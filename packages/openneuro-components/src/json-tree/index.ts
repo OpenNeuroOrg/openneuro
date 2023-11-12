@@ -1,3 +1,3 @@
-import { RecursiveProperty } from './RecursiveProperty'
+import { RecursiveProperty } from "./RecursiveProperty"
 
 export { RecursiveProperty }

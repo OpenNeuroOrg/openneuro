@@ -1,11 +1,11 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { SnapshotDefault } from './snapshot-default'
-import DownloadDataset from './download-dataset'
-import { DeprecateSnapshotPage } from './deprecate-snapshot-page'
-import { FileDisplayRoute } from '../files/file-display'
-import AddMetadata from './add-metadata'
-import Derivatives from './derivatives'
+import React from "react"
+import { Route, Routes } from "react-router-dom"
+import { SnapshotDefault } from "./snapshot-default"
+import DownloadDataset from "./download-dataset"
+import { DeprecateSnapshotPage } from "./deprecate-snapshot-page"
+import { FileDisplayRoute } from "../files/file-display"
+import AddMetadata from "./add-metadata"
+import Derivatives from "./derivatives"
 
 export const TabRoutesSnapshot = ({ dataset, snapshot }) => {
   return (

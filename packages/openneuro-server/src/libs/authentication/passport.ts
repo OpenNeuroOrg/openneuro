@@ -1,17 +1,17 @@
-import passport from 'passport'
-import refresh from 'passport-oauth2-refresh'
-import { Strategy as JwtStrategy } from 'passport-jwt'
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import { Strategy as ORCIDStrategy } from 'passport-orcid'
-import config from '../../config'
-import User from '../../models/user'
-import { encrypt } from './crypto'
-import { addJWT, jwtFromRequest } from './jwt'
-import orcid from '../orcid'
+import passport from "passport"
+import refresh from "passport-oauth2-refresh"
+import { Strategy as JwtStrategy } from "passport-jwt"
+import { Strategy as GoogleStrategy } from "passport-google-oauth20"
+import { Strategy as ORCIDStrategy } from "passport-orcid"
+import config from "../../config"
+import User from "../../models/user"
+import { encrypt } from "./crypto"
+import { addJWT, jwtFromRequest } from "./jwt"
+import orcid from "../orcid"
 
 const PROVIDERS = {
-  GOOGLE: 'google',
-  ORCID: 'orcid',
+  GOOGLE: "google",
+  ORCID: "orcid",
 }
 
 interface OauthProfile {
@@ -27,7 +27,7 @@ const loadProfile = (profile): OauthProfile | Error => {
   if (profile.provider === PROVIDERS.GOOGLE) {
     // Get the account email from Google profile
     const primaryEmail = profile.emails
-      .filter(email => email.verified === true)
+      .filter((email) => email.verified === true)
       .shift()
     return {
       email: primaryEmail.value,
@@ -47,16 +47,17 @@ const loadProfile = (profile): OauthProfile | Error => {
     }
   } else {
     // Some unknown profile type
-    return new Error('Unhandled profile type.')
+    return new Error("Unhandled profile type.")
   }
 }
 
 export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
   const profileUpdate = loadProfile(profile)
-  if (refreshToken && !(profileUpdate instanceof Error))
+  if (refreshToken && !(profileUpdate instanceof Error)) {
     profileUpdate.refresh = encrypt(refreshToken)
+  }
 
-  if ('email' in profileUpdate) {
+  if ("email" in profileUpdate) {
     // Look for an existing user
     User.findOneAndUpdate(
       {
@@ -66,10 +67,10 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
       profileUpdate,
       { upsert: true, new: true, setDefaultsOnInsert: true },
     )
-      .then(user => {
+      .then((user) => {
         done(null, addJWT(config)(user.toObject()))
       })
-      .catch(err => {
+      .catch((err) => {
         done(err, null)
       })
   } else {
@@ -87,7 +88,7 @@ export const verifyORCIDUser = (
   const token = `${profile.orcid}:${profile.access_token}`
   orcid
     .getProfile(token)
-    .then(info => {
+    .then((info) => {
       profile.info = info
       profile.provider = PROVIDERS.ORCID
       const profileUpdate = loadProfile(profile)
@@ -95,9 +96,9 @@ export const verifyORCIDUser = (
         { providerId: profile.orcid, provider: profile.provider },
         profileUpdate,
         { upsert: true, new: true, setDefaultsOnInsert: true },
-      ).then(user => done(null, addJWT(config)(user.toObject())))
+      ).then((user) => done(null, addJWT(config)(user.toObject())))
     })
-    .catch(err => done(err, null))
+    .catch((err) => done(err, null))
 }
 
 export const setupPassportAuth = () => {
@@ -108,13 +109,13 @@ export const setupPassportAuth = () => {
     const jwtStrategy = new JwtStrategy(
       { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
       (jwt, done) => {
-        if (jwt.scopes?.includes('dataset:indexing')) {
+        if (jwt.scopes?.includes("dataset:indexing")) {
           done(null, {
             admin: false,
             blocked: false,
             indexer: true,
           })
-        } else if (jwt.scopes?.includes('dataset:reviewer')) {
+        } else if (jwt.scopes?.includes("dataset:reviewer")) {
           done(null, {
             admin: false,
             blocked: false,
@@ -124,7 +125,7 @@ export const setupPassportAuth = () => {
         } else {
           // A user must already exist to use a JWT to auth a request
           User.findOne({ id: jwt.sub, provider: jwt.provider })
-            .then(user => {
+            .then((user) => {
               if (user) done(null, user.toObject())
               else done(null, false)
             })
@@ -134,7 +135,7 @@ export const setupPassportAuth = () => {
     )
     passport.use(jwtStrategy)
   } else {
-    throw new Error('JWT_SECRET must be configured to allow authentication.')
+    throw new Error("JWT_SECRET must be configured to allow authentication.")
   }
 
   // Google first
@@ -144,7 +145,7 @@ export const setupPassportAuth = () => {
         clientID: config.auth.google.clientID,
         clientSecret: config.auth.google.clientSecret,
         callbackURL: `${config.url + config.apiPrefix}auth/google/callback`,
-        userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
+        userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
       },
       verifyGoogleUser,
     )
@@ -156,9 +157,8 @@ export const setupPassportAuth = () => {
   if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
     const orcidStrategy = new ORCIDStrategy(
       {
-        sandbox:
-          config.auth.orcid.apiURI &&
-          config.auth.orcid.apiURI.includes('sandbox'),
+        sandbox: config.auth.orcid.apiURI &&
+          config.auth.orcid.apiURI.includes("sandbox"),
         clientID: config.auth.orcid.clientID,
         clientSecret: config.auth.orcid.clientSecret,
         callbackURL: `${config.url + config.apiPrefix}auth/orcid/callback`,

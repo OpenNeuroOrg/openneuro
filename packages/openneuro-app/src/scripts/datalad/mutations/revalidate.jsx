@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
 
 const REVALIDATE = gql`
   mutation revalidate($datasetId: ID!, $ref: String!) {
@@ -11,7 +11,7 @@ const REVALIDATE = gql`
 
 const Revalidate = ({ datasetId, revision }) => (
   <Mutation mutation={REVALIDATE}>
-    {revalidate => (
+    {(revalidate) => (
       <span>
         <button
           className="btn-admin-blue"
@@ -22,7 +22,8 @@ const Revalidate = ({ datasetId, revision }) => (
                 ref: revision,
               },
             })
-          }}>
+          }}
+        >
           <i className="fa fa-random" /> Revalidate Commit
         </button>
       </span>

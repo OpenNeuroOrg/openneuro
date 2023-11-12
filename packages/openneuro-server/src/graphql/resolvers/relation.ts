@@ -1,6 +1,6 @@
-import Dataset from '../../models/dataset'
-import { checkDatasetAdmin } from '../permissions'
-import { DOIPattern } from '../../libs/doi/normalize'
+import Dataset from "../../models/dataset"
+import { checkDatasetAdmin } from "../permissions"
+import { DOIPattern } from "../../libs/doi/normalize"
 
 export const createRelation = async (
   obj,
@@ -9,9 +9,9 @@ export const createRelation = async (
 ) => {
   await checkDatasetAdmin(datasetId, user, userInfo)
   // Validate the right DOI format
-  if (!doi.startsWith('doi:') || !doi.slice(4).match(DOIPattern)) {
+  if (!doi.startsWith("doi:") || !doi.slice(4).match(DOIPattern)) {
     throw new Error(
-      'DOI format must follow BIDS recommended format (see https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#uniform-resource-indicator)',
+      "DOI format must follow BIDS recommended format (see https://bids-specification.readthedocs.io/en/stable/02-common-principles.html#uniform-resource-indicator)",
     )
   }
   const dataset = await Dataset.findOneAndUpdate(

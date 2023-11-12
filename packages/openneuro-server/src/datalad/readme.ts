@@ -1,16 +1,18 @@
-import { addFileString, commitFiles } from './dataset'
-import { redis } from '../libs/redis'
-import CacheItem, { CacheType } from '../cache/item'
-import { getDatasetWorker } from '../libs/datalad-service'
-import { datasetOrSnapshot } from '../utils/datasetOrSnapshot'
+import { addFileString, commitFiles } from "./dataset"
+import { redis } from "../libs/redis"
+import CacheItem, { CacheType } from "../cache/item"
+import { getDatasetWorker } from "../libs/datalad-service"
+import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 
 export const readmeUrl = (datasetId, revision) => {
-  return `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/snapshots/${revision}/files/README`
+  return `http://${
+    getDatasetWorker(
+      datasetId,
+    )
+  }/datasets/${datasetId}/snapshots/${revision}/files/README`
 }
 
-export const readme = obj => {
+export const readme = (obj) => {
   const { datasetId, revision } = datasetOrSnapshot(obj)
   const cache = new CacheItem(redis, CacheType.readme, [
     datasetId,
@@ -33,7 +35,7 @@ export const readme = obj => {
 }
 
 export const setReadme = (datasetId, readme, user) => {
-  return addFileString(datasetId, 'README', 'text/plain', readme).then(() =>
-    commitFiles(datasetId, user),
+  return addFileString(datasetId, "README", "text/plain", readme).then(() =>
+    commitFiles(datasetId, user)
   )
 }

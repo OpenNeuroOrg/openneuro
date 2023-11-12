@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from "react"
 
 export function stepping(value, step) {
   return Math.round(value / step) * step

@@ -1,9 +1,9 @@
-import config from '../../config'
+import config from "../../config"
 
 let transport
 let perform_api_call = true
 try {
-  const mailjet = require('node-mailjet')
+  const mailjet = require("node-mailjet")
   transport = mailjet.connect(
     config.notifications.email.apiKey,
     config.notifications.email.secret,
@@ -17,7 +17,7 @@ export const mailjetFormat = (email: Record<string, string>) => ({
     {
       From: {
         Email: config.notifications.email.from,
-        Name: 'OpenNeuro',
+        Name: "OpenNeuro",
       },
       To: [
         {
@@ -38,7 +38,7 @@ export const mailjetFormat = (email: Record<string, string>) => ({
 export const send = (email: Record<string, string>): Promise<Response> => {
   if (perform_api_call) {
     return transport
-      .post('send', { version: 'v3.1', perform_api_call })
+      .post("send", { version: "v3.1", perform_api_call })
       .request(mailjetFormat(email))
   } else {
     // Mailjet is not configured, instead log emails

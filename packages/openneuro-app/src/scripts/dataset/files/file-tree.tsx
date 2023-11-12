@@ -1,13 +1,13 @@
-import React from 'react'
-import File from './file'
-import UpdateFile from '../mutations/update-file.jsx'
-import DeleteFile from '../mutations/delete-file.jsx'
-import FileTreeUnloadedDirectory from './file-tree-unloaded-directory.jsx'
-import { Media } from '../../styles/media'
-import { AccordionTab } from '@openneuro/components/accordion'
-import { DatasetFile } from '../../types/dataset-file'
+import React from "react"
+import File from "./file"
+import UpdateFile from "../mutations/update-file.jsx"
+import DeleteFile from "../mutations/delete-file.jsx"
+import FileTreeUnloadedDirectory from "./file-tree-unloaded-directory.jsx"
+import { Media } from "../../styles/media"
+import { AccordionTab } from "@openneuro/components/accordion"
+import { DatasetFile } from "../../types/dataset-file"
 
-export const unescapePath = (path: string): string => path.replace(/:/g, '/')
+export const unescapePath = (path: string): string => path.replace(/:/g, "/")
 
 interface FileTreeProps {
   datasetId: string
@@ -34,14 +34,13 @@ export function fileTreeLevels(
   for (const f of files) {
     // Any paths in this filename below the current path value
     const lowerPath = f.filename.substring(`${path}:`.length)
-    if (path === '' ? f.filename.includes(':') : lowerPath.includes(':')) {
+    if (path === "" ? f.filename.includes(":") : lowerPath.includes(":")) {
       // At the top level, use the directory component (first segment)
       // Below that, use all paths before the filename (sub-01:anat) for (sub-01:anat:sub-01_T1w.nii.gz)
-      const components = f.filename.split(':')
-      const childPath =
-        path === ''
-          ? components[0]
-          : components.slice(0, path.split(':').length + 1).join(':')
+      const components = f.filename.split(":")
+      const childPath = path === ""
+        ? components[0]
+        : components.slice(0, path.split(":").length + 1).join(":")
       if (childFiles.hasOwnProperty(childPath)) {
         childFiles[childPath].push(f)
       } else {
@@ -57,8 +56,8 @@ export function fileTreeLevels(
 const FileTree = ({
   datasetId,
   snapshotTag = null,
-  path = '',
-  name = '',
+  path = "",
+  name = "",
   files = [],
   editMode = false,
   defaultExpanded = false,
@@ -73,7 +72,8 @@ const FileTree = ({
       className=""
       label={name}
       accordionStyle="file-tree"
-      startOpen={defaultExpanded}>
+      startOpen={defaultExpanded}
+    >
       {editMode && (
         <Media className="filetree-dir-tools" greaterThanOrEqual="medium">
           <span className="filetree-dir">
@@ -81,21 +81,21 @@ const FileTree = ({
               datasetId={datasetId}
               path={unescapePath(path)}
               tooltip={`Choose one or more files to be added to ${name}.`}
-              multiple>
+              multiple
+            >
               <i className="fa fa-plus" /> Add Files
             </UpdateFile>
             <UpdateFile
               datasetId={datasetId}
               path={unescapePath(path)}
               tooltip={`Choose a folder to be added to ${name}. Adding a folder with an existing name will overwrite that folder.`}
-              directory>
+              directory
+            >
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
-            {path === '' ? (
-              bulkDeleteButton
-            ) : (
-              <DeleteFile datasetId={datasetId} path={path} />
-            )}
+            {path === ""
+              ? bulkDeleteButton
+              : <DeleteFile datasetId={datasetId} path={path} />}
           </span>
         </Media>
       )}
@@ -115,7 +115,7 @@ const FileTree = ({
                     isFileToBeDeleted={isFileToBeDeleted}
                     files={childFiles[file.filename]}
                     path={file.filename}
-                    name={file.filename.split(':').pop()}
+                    name={file.filename.split(":").pop()}
                     bulkDeleteButton={bulkDeleteButton}
                   />
                 </li>
@@ -144,7 +144,7 @@ const FileTree = ({
                   editMode={editMode}
                   toggleFileToDelete={toggleFileToDelete}
                   isFileToBeDeleted={isFileToBeDeleted}
-                  filename={file.filename.split(':').pop()}
+                  filename={file.filename.split(":").pop()}
                   annexKey={file.key}
                   datasetPermissions={datasetPermissions}
                   annexed={file.annexed}

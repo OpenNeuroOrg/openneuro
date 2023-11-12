@@ -1,9 +1,9 @@
-import { useSubscription, gql } from '@apollo/client'
+import { gql, useSubscription } from "@apollo/client"
 
 import {
-  DRAFT_FRAGMENT,
   DATASET_ISSUES,
-} from '../dataset/dataset-query-fragments.js'
+  DRAFT_FRAGMENT,
+} from "../dataset/dataset-query-fragments.js"
 
 const DRAFT_SUBSCRIPTION = gql`
   subscription draftUpdated($datasetId: ID!) {
@@ -17,7 +17,7 @@ const DRAFT_SUBSCRIPTION = gql`
   ${DATASET_ISSUES}
 `
 
-const useDraftSubscription = datasetId =>
+const useDraftSubscription = (datasetId) =>
   useSubscription(DRAFT_SUBSCRIPTION, {
     variables: { datasetId },
     shouldResubscribe: true,

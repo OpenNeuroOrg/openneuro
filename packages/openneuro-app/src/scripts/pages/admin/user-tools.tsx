@@ -1,10 +1,10 @@
-import React, { FC, ReactElement } from 'react'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { WarnButton } from '@openneuro/components/warn-button'
-import { getProfile } from '../../authentication/profile'
-import { useCookies } from 'react-cookie'
-import { USER_FRAGMENT } from './user-fragment'
+import React, { FC, ReactElement } from "react"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { WarnButton } from "@openneuro/components/warn-button"
+import { getProfile } from "../../authentication/profile"
+import { useCookies } from "react-cookie"
+import { USER_FRAGMENT } from "./user-fragment"
 
 interface UserToolsProps {
   user: Record<string, unknown>
@@ -31,8 +31,8 @@ export const SET_BLOCKED = gql`
 
 export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
   const [cookies] = useCookies()
-  const adminIcon = user.admin ? 'fa-check-square-o' : 'fa-square-o'
-  const blacklistIcon = user.blocked ? 'fa-check-square-o' : 'fa-square-o'
+  const adminIcon = user.admin ? "fa-check-square-o" : "fa-square-o"
+  const blacklistIcon = user.blocked ? "fa-check-square-o" : "fa-square-o"
 
   if (user.id !== getProfile(cookies).sub) {
     return (
@@ -41,7 +41,8 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
           <div className="tool">
             <Mutation
               mutation={SET_ADMIN}
-              variables={{ id: user.id, admin: !user.admin }}>
+              variables={{ id: user.id, admin: !user.admin }}
+            >
               {(setAdmin): ReactElement => (
                 <WarnButton
                   message="Admin"
@@ -58,7 +59,8 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
           <div className="tool">
             <Mutation
               mutation={SET_BLOCKED}
-              variables={{ id: user.id, blocked: !user.blocked }}>
+              variables={{ id: user.id, blocked: !user.blocked }}
+            >
               {(setBlocked): ReactElement => (
                 <WarnButton
                   message="Block"

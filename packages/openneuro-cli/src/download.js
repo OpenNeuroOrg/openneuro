@@ -1,15 +1,15 @@
-import fs from 'fs'
-import path from 'path'
-import mkdirp from 'mkdirp'
-import cliProgress from 'cli-progress'
-import { getToken } from './config.js'
-import { downloadDataset } from './datasets'
-import fetch from 'node-fetch'
-import nodeFetch, { Request, Response } from 'node-fetch'
+import fs from "fs"
+import path from "path"
+import mkdirp from "mkdirp"
+import cliProgress from "cli-progress"
+import { getToken } from "./config.js"
+import { downloadDataset } from "./datasets"
+import fetch from "node-fetch"
+import nodeFetch, { Request, Response } from "node-fetch"
 
 Object.assign(global, { fetch: nodeFetch, Request, Response })
 
-export const checkDestination = destination => {
+export const checkDestination = (destination) => {
   if (fs.existsSync(destination)) {
     // Exists, check if directory
     if (!fs.lstatSync(destination).isDirectory()) {
@@ -40,9 +40,9 @@ const getFetchHeaders = () => ({
   cookie: `accessToken=${getToken()}`,
 })
 
-const handleFetchReject = err => {
+const handleFetchReject = (err) => {
   console.error(
-    'Error starting download - please check your connection or try again later',
+    "Error starting download - please check your connection or try again later",
   )
   console.dir(err)
 }
@@ -74,11 +74,11 @@ export const downloadFile = async (
       if (response.status === 200) {
         // Setup end/error handler with Promise interface
         const responsePromise = new Promise((resolve, reject) => {
-          stream.on('end', () => resolve())
-          stream.on('data', () => {
+          stream.on("end", () => resolve())
+          stream.on("data", () => {
             downloadProgress.update(writeStream.bytesWritten)
           })
-          stream.on('error', err => {
+          stream.on("error", (err) => {
             if (apmTransaction) apmTransaction.captureError(err)
             reject(err)
           })
@@ -106,7 +106,7 @@ export const getDownload = async (
   tag,
   apmTransaction,
   client,
-  treePath = '',
+  treePath = "",
   tree = null,
 ) => {
   const files = await downloadDataset(client)({ datasetId, tag, tree })
@@ -125,12 +125,11 @@ export const getDownload = async (
       )
     } else {
       const downloadProgress = new cliProgress.SingleBar({
-        format:
-          ' [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | ' +
+        format: " [{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | " +
           downloadPath,
         clearOnComplete: false,
         hideCursor: true,
-        position: 'center',
+        position: "center",
         etaBuffer: 65536,
         autopadding: true,
       })

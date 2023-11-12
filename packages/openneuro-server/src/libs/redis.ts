@@ -1,14 +1,14 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 
 // dependencies --------------------------------------------------
-import Redis from 'ioredis'
-import Redlock from 'redlock'
+import Redis from "ioredis"
+import Redlock from "redlock"
 
 let redis = null
 let redlock = null
 
-const connect = async config => {
-  return new Promise(resolve => {
+const connect = async (config) => {
+  return new Promise((resolve) => {
     if (!redis) {
       console.log(
         'Connecting to Redis "redis://%s:%d/0"',
@@ -17,7 +17,7 @@ const connect = async config => {
       )
       redis = new Redis(config)
       redlock = new Redlock([redis])
-      redis.on('connect', () => {
+      redis.on("connect", () => {
         resolve(redis)
       })
     } else {
@@ -27,4 +27,4 @@ const connect = async config => {
 }
 
 export default { connect }
-export { redis, redlock, connect }
+export { connect, redis, redlock }

@@ -1,5 +1,5 @@
-import uuid from 'uuid'
-import mongoose, { Document } from 'mongoose'
+import uuid from "uuid"
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface ReviewerDocument extends Document {
@@ -19,13 +19,13 @@ const reviewerSchema = new Schema({
   creator: { type: String },
 })
 
-reviewerSchema.virtual('creatorUser', {
-  ref: 'User',
-  localField: 'creator',
-  foreignField: 'id',
+reviewerSchema.virtual("creatorUser", {
+  ref: "User",
+  localField: "creator",
+  foreignField: "id",
   justOne: true,
 })
 
-const Reviewer = model<ReviewerDocument>('Reviewer', reviewerSchema)
+const Reviewer = model<ReviewerDocument>("Reviewer", reviewerSchema)
 
 export default Reviewer

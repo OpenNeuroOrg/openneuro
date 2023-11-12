@@ -1,18 +1,18 @@
-import { apm } from '../../apm'
-import React from 'react'
-import { gql, useQuery } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import styled from '@emotion/styled'
+import { apm } from "../../apm"
+import React from "react"
+import { gql, useQuery } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import styled from "@emotion/styled"
 
 import {
-  AffiliateBlock,
   ActivityHeader,
+  AffiliateBlock,
   Contributors,
   GetUpdates,
   Infographic,
-} from '@openneuro/components/front-page'
-import { Loading } from '@openneuro/components/loading'
-import { ActivitySlider } from '@openneuro/components/activity-slider'
+} from "@openneuro/components/front-page"
+import { Loading } from "@openneuro/components/loading"
+import { ActivitySlider } from "@openneuro/components/activity-slider"
 
 const SUBSCRIBE_TO_NEWSLETTER = gql`
   mutation subscribeToNewsletter($email: String!) {
@@ -100,7 +100,7 @@ const responsive = {
 
 export const FrontPageTopQuery = ({ query }) => {
   const result = useQuery(query, {
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   if (result.loading) {
     return (
@@ -114,7 +114,9 @@ export const FrontPageTopQuery = ({ query }) => {
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
     // Remove any edges which could not be loaded
-    const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
+    const edges = result.data.datasets.edges.filter((dataset) =>
+      dataset !== null
+    )
     return (
       <ActivitySlider
         data={edges}
@@ -131,7 +133,7 @@ export const FrontPageTopQuery = ({ query }) => {
 
 export const FrontPageNewQuery = ({ query }) => {
   const result = useQuery(query, {
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   if (result.loading) {
     return <Loading />
@@ -140,7 +142,9 @@ export const FrontPageNewQuery = ({ query }) => {
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
     // Remove any edges which could not be loaded
-    const edges = result.data.datasets.edges.filter(dataset => dataset !== null)
+    const edges = result.data.datasets.edges.filter((dataset) =>
+      dataset !== null
+    )
     return (
       <ActivitySlider
         data={edges}
@@ -193,7 +197,7 @@ const FrontPageContainer: React.FC = () => (
     </FrontPageSection>
     <FrontPageSection className="gray-bg">
       <Mutation mutation={SUBSCRIBE_TO_NEWSLETTER}>
-        {subscribeToNewsletter => (
+        {(subscribeToNewsletter) => (
           <GetUpdates
             subscribe={(email, cb) => {
               subscribeToNewsletter({ variables: { email } }).then(cb).catch(cb)

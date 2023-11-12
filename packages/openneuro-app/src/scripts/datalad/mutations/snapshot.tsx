@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql, useMutation } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql, useMutation } from "@apollo/client"
+import { useNavigate } from "react-router-dom"
+import ErrorBoundary from "../../errors/errorBoundary.jsx"
 
 const CREATE_SNAPSHOT = gql`
   mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
@@ -23,8 +23,8 @@ const CreateSnapshotMutation = ({ datasetId, tag, changes }) => {
       onClick={() =>
         snapshotDataset({ variables: { datasetId, tag, changes } }).then(() => {
           navigate(`/datasets/${datasetId}/versions/${tag}`)
-        })
-      }>
+        })}
+    >
       Create Snapshot
     </button>
   )

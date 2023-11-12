@@ -1,10 +1,10 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
-import { DatasetHeader } from '../DatasetHeader'
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { MemoryRouter } from "react-router-dom"
+import { DatasetHeader } from "../DatasetHeader"
 
-describe('DatasetHeader component', () => {
-  it('renders with an undefined modality', () => {
+describe("DatasetHeader component", () => {
+  it("renders with an undefined modality", () => {
     render(
       <DatasetHeader
         pageHeading="test page"
@@ -13,6 +13,6 @@ describe('DatasetHeader component', () => {
       />,
       { wrapper: MemoryRouter },
     )
-    expect(screen.queryByRole('heading')).toBeInTheDocument()
+    expect(screen.queryByRole("heading")).toBeInTheDocument()
   })
 })

@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { Button } from '@openneuro/components/button'
-import { Tooltip } from '@openneuro/components/tooltip'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { Button } from "@openneuro/components/button"
+import { Tooltip } from "@openneuro/components/tooltip"
 
 const RESET_DRAFT = gql`
   mutation resetDraft($datasetId: ID!, $ref: String!) {
@@ -13,7 +13,7 @@ const RESET_DRAFT = gql`
 
 const UpdateRef = ({ datasetId, revision }) => (
   <Mutation mutation={RESET_DRAFT}>
-    {resetDraft => (
+    {(resetDraft) => (
       <Tooltip tooltip="Reset Draft Head">
         <Button
           iconOnly={true}

@@ -1,6 +1,6 @@
-import jwtDecode, { InvalidTokenError } from 'jwt-decode'
+import jwtDecode, { InvalidTokenError } from "jwt-decode"
 
-export const validateApiKey = key => {
+export const validateApiKey = (key) => {
   try {
     jwtDecode(key)
     return true

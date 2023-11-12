@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react"
 
-import { SearchResultItem } from './SearchResultItem'
+import { SearchResultItem } from "./SearchResultItem"
 
-import './search-page.scss'
+import "./search-page.scss"
 
 export interface SearchResultsListProps {
   items
@@ -18,8 +18,8 @@ export const SearchResultsList = ({
 }: SearchResultsListProps) => {
   return (
     <div className="search-results">
-      {items.map(data => {
-        if (data)
+      {items.map((data) => {
+        if (data) {
           return (
             <SearchResultItem
               node={data.node}
@@ -29,6 +29,7 @@ export const SearchResultsList = ({
               datasetTypeSelected={datasetTypeSelected}
             />
           )
+        }
       })}
     </div>
   )

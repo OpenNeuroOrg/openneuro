@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import { gql, useQuery } from '@apollo/client'
+import React from "react"
+import PropTypes from "prop-types"
+import styled from "@emotion/styled"
+import { gql, useQuery } from "@apollo/client"
 
-import Revalidate from '../mutations/revalidate.jsx'
-import UpdateRef from '../mutations/update-ref.jsx'
+import Revalidate from "../mutations/revalidate.jsx"
+import UpdateRef from "../mutations/update-ref.jsx"
 
 const GET_HISTORY = gql`
   query getHistory($datasetId: ID!) {
@@ -42,7 +42,7 @@ const DatasetHistoryTable = styled.div`
 const DatasetHistory = ({ datasetId }) => {
   const { loading, data } = useQuery(GET_HISTORY, {
     variables: { datasetId },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   if (loading) {
     return <div className="dataset-history">Loading...</div>
@@ -59,23 +59,23 @@ const DatasetHistory = ({ datasetId }) => {
             <h4 className="col-lg col col-2">References</h4>
             <h4 className="col-lg col col-2 text--right">Action</h4>
           </div>
-          {data.dataset.history.map(commit => (
+          {data.dataset.history.map((commit) => (
             <React.Fragment key={commit.id}>
               <div className="grid faux-table">
                 <div className="commit col-lg col col-2">
-                  <label>Commit: </label>
+                  <label>Commit:</label>
                   {commit.id.slice(0, 8)}
                 </div>
                 <div className="col-lg col col-3">
-                  <label>Date: </label>
+                  <label>Date:</label>
                   {commit.date}
                 </div>
                 <div className="col-lg col col-3">
-                  <label>Author: </label>
+                  <label>Author:</label>
                   {commit.authorName} &lt;{commit.authorEmail}&gt;
                 </div>
                 <div className="col-lg col col-2">
-                  <label>References: </label>
+                  <label>References:</label>
                   {commit.references}
                 </div>
                 <div className="col-lg col col-2 grid actions">

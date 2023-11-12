@@ -1,5 +1,5 @@
-import uuid from 'uuid'
-import mongoose, { Document } from 'mongoose'
+import uuid from "uuid"
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface MetadataDocument extends Document {
@@ -56,6 +56,6 @@ const metadataSchema = new Schema({
 
 metadataSchema.index({ datasetId: 1 }, { unique: true })
 
-const Metadata = model<MetadataDocument>('Metadata', metadataSchema)
+const Metadata = model<MetadataDocument>("Metadata", metadataSchema)
 
 export default Metadata

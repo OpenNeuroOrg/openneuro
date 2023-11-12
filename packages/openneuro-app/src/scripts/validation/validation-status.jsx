@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import pluralize from 'pluralize'
-import ValidationPanel from './validation-panel.jsx'
-import Results from './validation-results.jsx'
+import React from "react"
+import PropTypes from "prop-types"
+import pluralize from "pluralize"
+import ValidationPanel from "./validation-panel.jsx"
+import Results from "./validation-results.jsx"
 
 /**
  * These can't be React components due to legacy react-bootstrap
@@ -18,12 +18,12 @@ const validHeader = () => (
   </div>
 )
 
-const warningHeader = count => (
+const warningHeader = (count) => (
   <div>
     <h3 className="metaheader">BIDS Validation</h3>
 
     <span className="label text-warning pull-right">
-      {count} {pluralize('Warning', count)}
+      {count} {pluralize("Warning", count)}
     </span>
     <span className="dataset-status ds-success">
       <i className="fa fa-check-circle" /> Valid
@@ -31,12 +31,12 @@ const warningHeader = count => (
   </div>
 )
 
-const errorHeader = count => (
+const errorHeader = (count) => (
   <div>
     <h3 className="metaheader">BIDS Validation</h3>
 
     <span className="label text-warning pull-right">
-      {count} {pluralize('Error', count)}
+      {count} {pluralize("Error", count)}
     </span>
     <span className="dataset-status ds-danger">
       <i className="fa fa-exclamation-circle" /> Invalid
@@ -56,10 +56,10 @@ const Warnings = ({ errors, warnings }) => (
   <ValidationPanel heading={warningHeader(warnings.length)}>
     <div>
       <span className="message error fade-in">
-        We found{' '}
+        We found{" "}
         <strong>
-          {warnings.length + ' ' + pluralize('Warning', warnings.length)}
-        </strong>{' '}
+          {warnings.length + " " + pluralize("Warning", warnings.length)}
+        </strong>{" "}
         in your dataset. You are not required to fix warnings, but doing so will
         make your dataset more BIDS compliant.
       </span>
@@ -77,8 +77,9 @@ Warnings.propTypes = {
 const Errors = ({ errors, warnings }) => (
   <ValidationPanel heading={errorHeader(errors.length)}>
     <span className="message error fade-in">
-      Your dataset is no longer valid. You must fix the{' '}
-      <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong>{' '}
+      Your dataset is no longer valid. You must fix the{" "}
+      <strong>{errors.length + " " + pluralize("Error", errors.length)}</strong>
+      {" "}
       to use all of the site features.
     </span>
     <br />
@@ -93,8 +94,8 @@ Errors.propTypes = {
 
 const ValidationStatus = ({ issues }) => {
   if (issues) {
-    const warnings = issues.filter(issue => issue.severity === 'warning')
-    const errors = issues.filter(issue => issue.severity === 'error')
+    const warnings = issues.filter((issue) => issue.severity === "warning")
+    const errors = issues.filter((issue) => issue.severity === "error")
     if (errors.length) {
       return <Errors errors={errors} warnings={warnings} />
     } else if (warnings.length) {
@@ -112,7 +113,8 @@ const ValidationStatus = ({ issues }) => {
               Validation Pending
             </span>
           </div>
-        }>
+        }
+      >
         <br />
         <p className="ds-validation-pending-message">
           The BIDS validator is running. This may take several minutes.

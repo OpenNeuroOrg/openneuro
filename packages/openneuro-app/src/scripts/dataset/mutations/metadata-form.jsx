@@ -1,26 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import TextInput from '../fragments/text-input'
-import SelectInput from '../fragments/select-input'
-import NumberInput from '../fragments/number-input'
-import TextArrayInput from '../fragments/text-array-input'
-import styled from '@emotion/styled'
+import React from "react"
+import PropTypes from "prop-types"
+import TextInput from "../fragments/text-input"
+import SelectInput from "../fragments/select-input"
+import NumberInput from "../fragments/number-input"
+import TextArrayInput from "../fragments/text-array-input"
+import styled from "@emotion/styled"
 
 const Form = styled.form({
-  width: '100%',
-  maxWidth: '700px',
-  margin: '10px 0',
+  width: "100%",
+  maxWidth: "700px",
+  margin: "10px 0",
 })
 const InfoText = styled.p({
   fontWeight: 100,
-  textAlign: 'left',
+  textAlign: "left",
 })
 const DisabledNote = styled.div({
-  display: 'flex',
-  color: '#5cb85c',
-  alignItems: 'center',
+  display: "flex",
+  color: "#5cb85c",
+  alignItems: "center",
   i: {
-    marginRight: '0.5rem',
+    marginRight: "0.5rem",
   },
   p: {
     margin: 0,
@@ -28,57 +28,57 @@ const DisabledNote = styled.div({
 })
 
 const ValidationError = styled.div({
-  display: 'flex',
-  color: 'red',
+  display: "flex",
+  color: "red",
 
   i: {
-    marginRight: '0.5rem',
+    marginRight: "0.5rem",
   },
 })
 
-const metadataFields = hasEdit => {
+const metadataFields = (hasEdit) => {
   const fields = [
     {
-      key: 'associatedPaperDOI',
-      label: 'DOI of papers from the source data lab',
+      key: "associatedPaperDOI",
+      label: "DOI of papers from the source data lab",
       hoverText:
-        'Papers that were published from the Lab that collected this dataset',
+        "Papers that were published from the Lab that collected this dataset",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
     {
-      key: 'species',
-      label: 'Species',
+      key: "species",
+      label: "Species",
       component: SelectInput,
       additionalProps: {
-        options: [{ value: 'Human' }, { value: 'Rat' }, { value: 'Mouse' }],
+        options: [{ value: "Human" }, { value: "Rat" }, { value: "Mouse" }],
         showOptionOther: true,
         required: false,
       },
     },
     {
-      key: 'studyLongitudinal',
-      label: 'Study Type',
+      key: "studyLongitudinal",
+      label: "Study Type",
       component: SelectInput,
       additionalProps: {
-        options: [{ value: 'Longitudinal' }, { value: 'Cross-Sectional' }],
+        options: [{ value: "Longitudinal" }, { value: "Cross-Sectional" }],
         showOptionOther: true,
         required: false,
       },
     },
     {
-      key: 'studyDomain',
-      label: 'Domain Studied',
+      key: "studyDomain",
+      label: "Domain Studied",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
     {
-      key: 'trialCount',
-      label: 'Number of Trials (if applicable)',
+      key: "trialCount",
+      label: "Number of Trials (if applicable)",
       component: NumberInput,
       additionalProps: {
         min: -1,
@@ -86,40 +86,40 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'studyDesign',
-      label: 'Study Design',
+      key: "studyDesign",
+      label: "Study Design",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
     {
-      key: 'openneuroPaperDOI',
-      label: 'Papers published from this dataset',
-      hoverText: 'Papers that were published from downloading this dataset',
+      key: "openneuroPaperDOI",
+      label: "Papers published from this dataset",
+      hoverText: "Papers that were published from downloading this dataset",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
     {
-      key: 'dxStatus',
-      label: 'DX status(es)',
+      key: "dxStatus",
+      label: "DX status(es)",
       component: SelectInput,
       additionalProps: {
         options: [
-          { value: 'Healthy / Control' },
-          { value: 'Schizophrenia' },
-          { value: 'ADD/ADHD' },
-          { value: 'Alzheimers' },
+          { value: "Healthy / Control" },
+          { value: "Schizophrenia" },
+          { value: "ADD/ADHD" },
+          { value: "Alzheimers" },
         ],
         showOptionOther: true,
         required: false,
       },
     },
     {
-      key: 'tasksCompleted',
-      label: 'Tasks Completed',
+      key: "tasksCompleted",
+      label: "Tasks Completed",
       component: TextArrayInput,
       additionalProps: {
         disabled: true,
@@ -128,34 +128,24 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'grantFunderName',
-      label: 'Grant Funder Name',
+      key: "grantFunderName",
+      label: "Grant Funder Name",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
     {
-      key: 'grantIdentifier',
-      label: 'Grant Identifier',
+      key: "grantIdentifier",
+      label: "Grant Identifier",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
     {
-      key: 'datasetId',
-      label: 'Dataset ID',
-      component: TextInput,
-      additionalProps: {
-        disabled: true,
-        annotated: true,
-        required: false,
-      },
-    },
-    {
-      key: 'datasetUrl',
-      label: 'Dataset URL',
+      key: "datasetId",
+      label: "Dataset ID",
       component: TextInput,
       additionalProps: {
         disabled: true,
@@ -164,8 +154,8 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'datasetName',
-      label: 'Dataset Name',
+      key: "datasetUrl",
+      label: "Dataset URL",
       component: TextInput,
       additionalProps: {
         disabled: true,
@@ -174,10 +164,20 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'seniorAuthor',
-      label: 'Senior Author (Last, First)',
+      key: "datasetName",
+      label: "Dataset Name",
+      component: TextInput,
+      additionalProps: {
+        disabled: true,
+        annotated: true,
+        required: false,
+      },
+    },
+    {
+      key: "seniorAuthor",
+      label: "Senior Author (Last, First)",
       hoverText:
-        'Please list the senior author as the last author in the dataset_description.json file field Authors',
+        "Please list the senior author as the last author in the dataset_description.json file field Authors",
       component: TextInput,
       additionalProps: {
         disabled: true,
@@ -186,8 +186,8 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'adminUsers',
-      label: 'Admin Users (email)',
+      key: "adminUsers",
+      label: "Admin Users (email)",
       component: TextArrayInput,
       additionalProps: {
         disabled: true,
@@ -196,30 +196,30 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'firstSnapshotCreatedAt',
-      label: 'First Snapshot (Publish) Date',
+      key: "firstSnapshotCreatedAt",
+      label: "First Snapshot (Publish) Date",
       component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
-        nullMessage: 'dataset has no snapshots',
+        nullMessage: "dataset has no snapshots",
         required: false,
       },
     },
     {
-      key: 'latestSnapshotCreatedAt',
-      label: 'Most Recent Snapshot Date',
+      key: "latestSnapshotCreatedAt",
+      label: "Most Recent Snapshot Date",
       component: TextInput,
       additionalProps: {
         disabled: true,
         annotated: true,
-        nullMessage: 'dataset has no snapshots',
+        nullMessage: "dataset has no snapshots",
         required: false,
       },
     },
     {
-      key: 'ages',
-      label: 'Subject Age(s)',
+      key: "ages",
+      label: "Subject Age(s)",
       // text input because field is read-only
       component: TextInput,
       additionalProps: {
@@ -227,18 +227,18 @@ const metadataFields = hasEdit => {
         annotated: true,
         required: false,
       },
-      transformValue: value => {
+      transformValue: (value) => {
         if (Array.isArray(value)) {
-          const ages = value.filter(x => x)
-          if (ages.length === 0) return 'N/A'
+          const ages = value.filter((x) => x)
+          if (ages.length === 0) return "N/A"
           else if (ages.length === 1) return ages[0]
           else return `${Math.min(...ages)} - ${Math.max(...ages)}`
-        } else if (value === undefined) return 'N/A'
+        } else if (value === undefined) return "N/A"
       },
     },
     {
-      key: 'modalities',
-      label: 'Modalities Available',
+      key: "modalities",
+      label: "Modalities Available",
       component: TextArrayInput,
       additionalProps: {
         disabled: true,
@@ -247,8 +247,8 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'dataProcessed',
-      label: 'Has Processed Data',
+      key: "dataProcessed",
+      label: "Has Processed Data",
       component: TextInput,
       additionalProps: {
         disabled: true,
@@ -257,18 +257,18 @@ const metadataFields = hasEdit => {
       },
     },
     {
-      key: 'affirmedDefaced',
-      label: 'Uploader Affirmed Structural Scans Are Defaced',
+      key: "affirmedDefaced",
+      label: "Uploader Affirmed Structural Scans Are Defaced",
       component: SelectInput,
       additionalProps: {
         options: [
           {
             value: true,
-            text: 'true',
+            text: "true",
           },
           {
             value: false,
-            text: 'false',
+            text: "false",
           },
         ],
         hasBooleanValues: true,
@@ -277,22 +277,22 @@ const metadataFields = hasEdit => {
         annotated: false,
         required: false,
         warningOnChange:
-          'Details: Affirms or refutes that all structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.',
+          "Details: Affirms or refutes that all structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
       },
     },
     {
-      key: 'affirmedConsent',
-      label: 'Uploader Affirmed Consent To Publish Scans Without Defacing',
+      key: "affirmedConsent",
+      label: "Uploader Affirmed Consent To Publish Scans Without Defacing",
       component: SelectInput,
       additionalProps: {
         options: [
           {
             value: true,
-            text: 'true',
+            text: "true",
           },
           {
             value: false,
-            text: 'false',
+            text: "false",
           },
         ],
         hasBooleanValues: true,
@@ -301,16 +301,14 @@ const metadataFields = hasEdit => {
         annotated: false,
         required: false,
         warningOnChange:
-          'Details: Affirms or refutes that I have explicit participant consent and ethical authorization to publish structural scans without defacing',
+          "Details: Affirms or refutes that I have explicit participant consent and ethical authorization to publish structural scans without defacing",
       },
     },
   ]
-  return hasEdit
-    ? fields
-    : fields.map(field => {
-        field.additionalProps.disabled = true
-        return field
-      })
+  return hasEdit ? fields : fields.map((field) => {
+    field.additionalProps.disabled = true
+    return field
+  })
 }
 
 const MetadataForm = ({
@@ -341,8 +339,7 @@ const MetadataForm = ({
     {metadataFields(hasEdit)
       .filter(
         // remove disabled fields when hideDisabled is true
-        field =>
-          !(hideDisabled && field.additionalProps.disabled) &&
+        (field) => !(hideDisabled && field.additionalProps.disabled) &&
           !hiddenFields.includes(field.key),
       )
       .map(
@@ -361,9 +358,9 @@ const MetadataForm = ({
             name={key}
             label={label}
             hoverText={hoverText}
-            value={
-              transformValue ? transformValue(values?.[key]) : values?.[key]
-            }
+            value={transformValue
+              ? transformValue(values?.[key])
+              : values?.[key]}
             onChange={onChange}
             {...additionalProps}
             key={i}

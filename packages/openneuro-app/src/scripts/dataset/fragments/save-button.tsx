@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { Button } from '@openneuro/components/button'
+import React, { FC } from "react"
+import { Button } from "@openneuro/components/button"
 
 /**
  * An Save button, calls action when clicked

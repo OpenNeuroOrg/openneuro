@@ -1,54 +1,54 @@
-import React from 'react'
-import Helmet from 'react-helmet'
-import { gql, useQuery } from '@apollo/client'
-import { DatasetPageTabContainer } from './routes/styles/dataset-page-tab-container'
-import DatasetQueryContext from '../datalad/dataset/dataset-query-context.js'
-import { Link, useLocation, useParams } from 'react-router-dom'
-import pluralize from 'pluralize'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import parseISO from 'date-fns/parseISO'
-import { pageTitle } from '../resources/strings.js'
-import Validation from '../validation/validation.jsx'
-import { config } from '../config'
-import DatasetCitation from './fragments/dataset-citation.jsx'
-import { DatasetAlertVersion } from './fragments/dataset-alert-version'
+import React from "react"
+import Helmet from "react-helmet"
+import { gql, useQuery } from "@apollo/client"
+import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-container"
+import DatasetQueryContext from "../datalad/dataset/dataset-query-context.js"
+import { Link, useLocation, useParams } from "react-router-dom"
+import pluralize from "pluralize"
+import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import parseISO from "date-fns/parseISO"
+import { pageTitle } from "../resources/strings.js"
+import Validation from "../validation/validation.jsx"
+import { config } from "../config"
+import DatasetCitation from "./fragments/dataset-citation.jsx"
+import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
 
 import {
-  ModalitiesMetaDataBlock,
-  MetaDataBlock,
-  NemarButton,
   BrainLifeButton,
-  ValidationBlock,
   CloneDropdown,
-  DatasetHeader,
   DatasetGitAccess,
-  VersionList,
+  DatasetHeader,
   DatasetTools,
-} from '@openneuro/components/dataset'
-import { Username } from '../users/username'
-import { Loading } from '@openneuro/components/loading'
+  MetaDataBlock,
+  ModalitiesMetaDataBlock,
+  NemarButton,
+  ValidationBlock,
+  VersionList,
+} from "@openneuro/components/dataset"
+import { Username } from "../users/username"
+import { Loading } from "@openneuro/components/loading"
 
 import {
   getUnexpiredProfile,
-  hasEditPermissions,
   hasDatasetAdminPermissions,
-} from '../authentication/profile'
-import { useCookies } from 'react-cookie'
+  hasEditPermissions,
+} from "../authentication/profile"
+import { useCookies } from "react-cookie"
 
-import { FollowDataset } from './mutations/follow'
-import { StarDataset } from './mutations/star'
+import { FollowDataset } from "./mutations/follow"
+import { StarDataset } from "./mutations/star"
 
-import { SNAPSHOT_FIELDS } from '../datalad/dataset/dataset-query-fragments.js'
-import { DOILink } from './fragments/doi-link'
-import { TabRoutesSnapshot } from './routes/tab-routes-snapshot'
-import schemaGenerator from '../utils/json-ld.js'
-import { FollowToggles } from './common/follow-toggles'
+import { SNAPSHOT_FIELDS } from "../datalad/dataset/dataset-query-fragments.js"
+import { DOILink } from "./fragments/doi-link"
+import { TabRoutesSnapshot } from "./routes/tab-routes-snapshot"
+import schemaGenerator from "../utils/json-ld.js"
+import { FollowToggles } from "./common/follow-toggles"
 
-const formatDate = dateObject =>
-  new Date(dateObject).toISOString().split('T')[0]
+const formatDate = (dateObject) =>
+  new Date(dateObject).toISOString().split("T")[0]
 
 // Helper function for getting version from URL
-const snapshotVersion = location => {
+const snapshotVersion = (location) => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
@@ -65,7 +65,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   snapshot,
 }) => {
   const location = useLocation()
-  const activeDataset = snapshotVersion(location) || 'draft'
+  const activeDataset = snapshotVersion(location) || "draft"
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
 
@@ -73,8 +73,9 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const description = snapshot.description
   const datasetId = dataset.id
 
-  const numSessions =
-    summary && summary.sessions.length > 0 ? summary.sessions.length : 1
+  const numSessions = summary && summary.sessions.length > 0
+    ? summary.sessions.length
+    : 1
 
   const dateAdded = formatDate(dataset.created)
   const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
@@ -84,11 +85,11 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
   const isAdmin = profile?.admin
-  const hasEdit =
-    hasEditPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const hasEdit = hasEditPermissions(dataset.permissions, profile?.sub) ||
+    isAdmin
   const isDatasetAdmin =
     hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
-  const modality: string = summary?.modalities[0] || ''
+  const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
 
   return (
@@ -100,12 +101,14 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
         <script type="application/ld+json">{schemaGenerator(snapshot)}</script>
       </Helmet>
       <div
-        className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}>
+        className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}
+      >
         {summary && (
           <>
             <DatasetHeader
               pageHeading={description.Name}
-              modality={summary?.modalities[0]}>
+              modality={summary?.modalities[0]}
+            >
               <FollowToggles>
                 <FollowDataset
                   profile={profile !== null}
@@ -140,11 +143,9 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 </ValidationBlock>
                 <NemarButton
                   datasetId={datasetId}
-                  onNemar={
-                    summary?.modalities.includes('EEG') ||
-                    summary?.modalities.includes('iEEG') ||
-                    summary?.modalities.includes('MEG')
-                  }
+                  onNemar={summary?.modalities.includes("EEG") ||
+                    summary?.modalities.includes("iEEG") ||
+                    summary?.modalities.includes("MEG")}
                 />
                 <BrainLifeButton
                   datasetId={datasetId}
@@ -186,11 +187,9 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               />
               <MetaDataBlock
                 heading="Authors"
-                item={
-                  description?.Authors?.length
-                    ? description.Authors.join(', ')
-                    : 'N/A'
-                }
+                item={description?.Authors?.length
+                  ? description.Authors.join(", ")
+                  : "N/A"}
                 className="dmb-inline-list"
               />
               <>
@@ -222,62 +221,54 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               {summary && (
                 <MetaDataBlock
                   heading="Tasks"
-                  item={summary.tasks.length ? summary.tasks.join(', ') : 'N/A'}
+                  item={summary.tasks.length ? summary.tasks.join(", ") : "N/A"}
                   className="dmb-inline-list"
                 />
               )}
-              {summary?.modalities.includes('pet') ||
-                summary?.modalities.includes('Pet') ||
-                (summary?.modalities.includes('PET') && (
+              {summary?.modalities.includes("pet") ||
+                summary?.modalities.includes("Pet") ||
+                (summary?.modalities.includes("PET") && (
                   <>
                     <MetaDataBlock
-                      heading={pluralize('Target', summary.pet?.BodyPart)}
+                      heading={pluralize("Target", summary.pet?.BodyPart)}
                       item={summary.pet?.BodyPart}
                     />
                     <MetaDataBlock
                       heading={pluralize(
-                        'Scanner Manufacturer',
+                        "Scanner Manufacturer",
                         summary.pet?.ScannerManufacturer,
                       )}
-                      item={
-                        summary.pet?.ScannerManufacturer
-                          ? summary.pet?.ScannerManufacturer
-                          : 'N/A'
-                      }
+                      item={summary.pet?.ScannerManufacturer
+                        ? summary.pet?.ScannerManufacturer
+                        : "N/A"}
                     />
 
                     <MetaDataBlock
                       heading={pluralize(
-                        'Scanner Model',
+                        "Scanner Model",
                         summary.pet?.ScannerManufacturersModelName,
                       )}
-                      item={
-                        summary.pet?.ScannerManufacturersModelName
-                          ? summary.pet?.ScannerManufacturersModelName
-                          : 'N/A'
-                      }
+                      item={summary.pet?.ScannerManufacturersModelName
+                        ? summary.pet?.ScannerManufacturersModelName
+                        : "N/A"}
                     />
                     <MetaDataBlock
                       heading={pluralize(
-                        'Radionuclide',
+                        "Radionuclide",
                         summary.pet?.TracerRadionuclide,
                       )}
-                      item={
-                        summary.pet?.TracerRadionuclide
-                          ? summary.pet?.TracerRadionuclide
-                          : 'N/A'
-                      }
+                      item={summary.pet?.TracerRadionuclide
+                        ? summary.pet?.TracerRadionuclide
+                        : "N/A"}
                     />
                     <MetaDataBlock
                       heading={pluralize(
-                        'Radiotracer',
+                        "Radiotracer",
                         summary.pet?.TracerName,
                       )}
-                      item={
-                        summary.pet?.TracerName
-                          ? summary.pet?.TracerName
-                          : 'N/A'
-                      }
+                      item={summary.pet?.TracerName
+                        ? summary.pet?.TracerName
+                        : "N/A"}
                     />
                   </>
                 ))}
@@ -286,7 +277,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="Uploaded by"
                 item={
                   <>
-                    <Username user={dataset.uploader} /> on {dateAdded} -{' '}
+                    <Username user={dataset.uploader} /> on {dateAdded} -{" "}
                     {dateAddedDifference} ago
                   </>
                 }
@@ -386,7 +377,7 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
       datasetId: dataset.id,
       tag,
     },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   if (loading) {
     return (
@@ -404,7 +395,8 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
           datasetId: dataset.id,
           fetchMore,
           error: null,
-        }}>
+        }}
+      >
         <SnapshotContainer
           dataset={dataset}
           tag={tag}

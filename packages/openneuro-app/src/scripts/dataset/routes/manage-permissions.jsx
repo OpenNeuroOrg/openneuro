@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Button } from '@openneuro/components/button'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { Button } from "@openneuro/components/button"
 
-import { RemovePermissions } from '../mutations/remove-permissions'
-import { UpdateDatasetPermissions } from '../mutations/update-permissions'
-import { AnonymousReviewer } from './manage-anonymous-reviewers'
-import { DatasetPageBorder } from './styles/dataset-page-border'
-import { HeaderRow3 } from './styles/header-row'
+import { RemovePermissions } from "../mutations/remove-permissions"
+import { UpdateDatasetPermissions } from "../mutations/update-permissions"
+import { AnonymousReviewer } from "./manage-anonymous-reviewers"
+import { DatasetPageBorder } from "./styles/dataset-page-border"
+import { HeaderRow3 } from "./styles/header-row"
 
 const description = {
-  admin: 'Edit dataset and edit permissions',
-  rw: 'Edit dataset',
-  ro: 'View dataset',
+  admin: "Edit dataset and edit permissions",
+  rw: "Edit dataset",
+  ro: "View dataset",
 }
 
 export const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
@@ -35,7 +35,7 @@ PermissionRow.propTypes = {
   datasetId: PropTypes.string,
   userId: PropTypes.string,
   userEmail: PropTypes.string,
-  access: PropTypes.oneOf(['ro', 'rw', 'admin']),
+  access: PropTypes.oneOf(["ro", "rw", "admin"]),
 }
 
 export const ShareTable = ({ datasetId, permissions }) => (
@@ -64,12 +64,12 @@ ShareTable.propTypes = {
 }
 
 const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
-  const [userEmail, setUserEmail] = useState('')
-  const [access, setAccess] = useState('ro')
+  const [userEmail, setUserEmail] = useState("")
+  const [access, setAccess] = useState("ro")
 
-  const readActive = access === 'ro' && 'active'
-  const writeActive = access === 'rw' && 'active'
-  const adminActive = access === 'admin' && 'active'
+  const readActive = access === "ro" && "active"
+  const writeActive = access === "rw" && "active"
+  const adminActive = access === "admin" && "active"
 
   return (
     <DatasetPageBorder>
@@ -88,7 +88,7 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
                 className="form-control"
                 type="email"
                 value={userEmail}
-                onChange={e => setUserEmail(e.target.value)}
+                onChange={(e) => setUserEmail(e.target.value)}
               />
               <div className="input-group-btn">
                 <Button
@@ -96,21 +96,21 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
                   label="Read"
                   size="xsmall"
                   className={`btn btn-default ${readActive}`}
-                  onClick={() => setAccess('ro')}
+                  onClick={() => setAccess("ro")}
                 />
                 <Button
                   secondary={true}
                   label="Read and Write"
                   size="xsmall"
                   className={`btn btn-default ${writeActive}`}
-                  onClick={() => setAccess('rw')}
+                  onClick={() => setAccess("rw")}
                 />
                 <Button
                   secondary={true}
                   label="Admin"
                   size="xsmall"
                   className={`btn btn-default ${adminActive}`}
-                  onClick={() => setAccess('admin')}
+                  onClick={() => setAccess("admin")}
                 />
               </div>
             </div>
@@ -120,7 +120,7 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
               datasetId={datasetId}
               userEmail={userEmail}
               metadata={access}
-              done={() => setUserEmail('')}
+              done={() => setUserEmail("")}
             />
           </div>
         </div>

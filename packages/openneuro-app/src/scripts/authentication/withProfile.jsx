@@ -1,11 +1,11 @@
 /* eslint-disable */
-import React from 'react'
-import { useCookies } from 'react-cookie'
-import { getProfile, guardExpired } from './profile'
+import React from "react"
+import { useCookies } from "react-cookie"
+import { getProfile, guardExpired } from "./profile"
 
-const withProfile = WrappedComponent => {
-  return props => {
-    const [cookies] = useCookies(['accessToken'])
+const withProfile = (WrappedComponent) => {
+  return (props) => {
+    const [cookies] = useCookies(["accessToken"])
     const profile = getProfile(cookies)
     // If we have a profile and it is unexpired
     if (profile && guardExpired(profile)) {

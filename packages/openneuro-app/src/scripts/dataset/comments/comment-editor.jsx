@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Editor, EditorState, RichUtils } from 'draft-js'
-import CommentMutation from '../mutations/comment.jsx'
-import BlockStyleControls from './block-style-controls.jsx'
-import InlineStyleControls from './inline-style-controls.jsx'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { Editor, EditorState, RichUtils } from "draft-js"
+import CommentMutation from "../mutations/comment.jsx"
+import BlockStyleControls from "./block-style-controls.jsx"
+import InlineStyleControls from "./inline-style-controls.jsx"
 
-const getBlockStyle = block =>
-  block.getType() === 'blockquote' ? 'RichEditor-blockquote' : null
+const getBlockStyle = (block) =>
+  block.getType() === "blockquote" ? "RichEditor-blockquote" : null
 
 const CommentEditor = ({
   datasetId,
@@ -27,15 +27,13 @@ const CommentEditor = ({
     <div className="RichEditor-root">
       <BlockStyleControls
         editorState={editorState}
-        onToggle={blockType =>
-          setEditorState(RichUtils.toggleBlockType(editorState, blockType))
-        }
+        onToggle={(blockType) =>
+          setEditorState(RichUtils.toggleBlockType(editorState, blockType))}
       />
       <InlineStyleControls
         editorState={editorState}
-        onToggle={inlineStyle =>
-          setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle))
-        }
+        onToggle={(inlineStyle) =>
+          setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle))}
       />
       <div className="RichEditor-editor">
         <Editor
@@ -46,23 +44,25 @@ const CommentEditor = ({
           placeholder=""
           spellCheck
         />
-        {commentId ? (
-          <CommentMutation
-            datasetId={datasetId}
-            commentId={commentId}
-            comment={editorState.getCurrentContent()}
-            disabled={disabled}
-            done={doAfterSubmit}
-          />
-        ) : (
-          <CommentMutation
-            datasetId={datasetId}
-            parentId={parentId}
-            comment={editorState.getCurrentContent()}
-            disabled={disabled}
-            done={doAfterSubmit}
-          />
-        )}
+        {commentId
+          ? (
+            <CommentMutation
+              datasetId={datasetId}
+              commentId={commentId}
+              comment={editorState.getCurrentContent()}
+              disabled={disabled}
+              done={doAfterSubmit}
+            />
+          )
+          : (
+            <CommentMutation
+              datasetId={datasetId}
+              parentId={parentId}
+              comment={editorState.getCurrentContent()}
+              disabled={disabled}
+              done={doAfterSubmit}
+            />
+          )}
       </div>
     </div>
   )

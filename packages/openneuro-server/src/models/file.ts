@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface FileDocument extends Document {
@@ -13,6 +13,6 @@ const fileSchema = new Schema({
   files: Array,
 })
 
-const File = model<FileDocument>('File', fileSchema)
+const File = model<FileDocument>("File", fileSchema)
 
 export default File

@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useQuery } from "@apollo/client"
 
 const PARTICIPANT_COUNT = gql`
   query participantCount($modality: String) {
@@ -9,7 +9,7 @@ const PARTICIPANT_COUNT = gql`
 const useParticipantCount = (modality?: string) => {
   return useQuery(PARTICIPANT_COUNT, {
     variables: { modality },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
 }
 

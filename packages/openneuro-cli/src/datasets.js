@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client'
-import { datasets } from '@openneuro/client'
+import { gql } from "@apollo/client"
+import { datasets } from "@openneuro/client"
 
 /**
  * Check for an existing dataset
@@ -46,11 +46,11 @@ export const getDraftFiles = gql`
 export const getDatasetFiles = async (
   client,
   datasetId,
-  path = '',
+  path = "",
   tree = null,
 ) => {
   const files = []
-  await _getDatasetFiles(client, datasetId, f => files.push(f), path, tree)
+  await _getDatasetFiles(client, datasetId, (f) => files.push(f), path, tree)
   return files
 }
 
@@ -63,7 +63,7 @@ export const _getDatasetFiles = async (
   client,
   datasetId,
   callback,
-  path = '',
+  path = "",
   tree = null,
 ) => {
   const files = []
@@ -95,8 +95,7 @@ export const _getDatasetFiles = async (
  * @param {object} client
  */
 export const createDataset =
-  client =>
-  ({ affirmedDefaced, affirmedConsent }) => {
+  (client) => ({ affirmedDefaced, affirmedConsent }) => {
     return client
       .mutate({
         mutation: datasets.createDataset,
@@ -107,27 +106,25 @@ export const createDataset =
       })
   }
 
-export const downloadDataset =
-  client =>
-  async ({ datasetId, tag, tree }) => {
-    if (tag) {
-      const { data } = await client.query({
-        query: datasets.downloadSnapshot,
-        variables: {
-          datasetId,
-          tag,
-          tree,
-        },
-      })
-      return data.snapshot.files
-    } else {
-      const { data } = await client.query({
-        query: datasets.downloadDataset,
-        variables: {
-          datasetId,
-          tree,
-        },
-      })
-      return data.dataset.draft.files
-    }
+export const downloadDataset = (client) => async ({ datasetId, tag, tree }) => {
+  if (tag) {
+    const { data } = await client.query({
+      query: datasets.downloadSnapshot,
+      variables: {
+        datasetId,
+        tag,
+        tree,
+      },
+    })
+    return data.snapshot.files
+  } else {
+    const { data } = await client.query({
+      query: datasets.downloadDataset,
+      variables: {
+        datasetId,
+        tree,
+      },
+    })
+    return data.dataset.draft.files
   }
+}

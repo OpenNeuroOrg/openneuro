@@ -1,11 +1,11 @@
 // dependencies -----------------------------------------------------------
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import pluralize from 'pluralize'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React from "react"
+import PropTypes from "prop-types"
+import pluralize from "pluralize"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
-import Issues from './validation-results.issues.jsx'
+import Issues from "./validation-results.issues.jsx"
 
 // component setup --------------------------------------------------------
 
@@ -16,7 +16,7 @@ class ValidationResults extends React.Component {
     const errors = this.props.errors
     const warnings = this.props.warnings
 
-    if (errors === 'Invalid') {
+    if (errors === "Invalid") {
       return false
     }
 
@@ -26,8 +26,8 @@ class ValidationResults extends React.Component {
       const fileCount = this._countFiles(errors)
       const errorHeader = (
         <span>
-          view {errors.length} {pluralize('error', errors.length)} in{' '}
-          {fileCount} {pluralize('files', fileCount)}
+          view {errors.length} {pluralize("error", errors.length)} in{" "}
+          {fileCount} {pluralize("files", fileCount)}
         </span>
       )
       errorsWrap = (
@@ -48,8 +48,8 @@ class ValidationResults extends React.Component {
       const fileCount = this._countFiles(warnings)
       const warningHeader = (
         <span>
-          view {warnings.length} {pluralize('warning', warnings.length)} in{' '}
-          {fileCount} {pluralize('files', fileCount)}
+          view {warnings.length} {pluralize("warning", warnings.length)} in{" "}
+          {fileCount} {pluralize("files", fileCount)}
         </span>
       )
       warningWrap = (

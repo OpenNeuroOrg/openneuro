@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { useNavigate } from 'react-router-dom'
-import { datasetCacheId } from './cache-id.js'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { useNavigate } from "react-router-dom"
+import { datasetCacheId } from "./cache-id.js"
 
 const PUBLISH_DATASET = gql`
   mutation publishDataset($datasetId: ID!) {
@@ -23,25 +23,26 @@ const PublishDataset = ({ datasetId }) => {
   return (
     <Mutation
       mutation={PUBLISH_DATASET}
-      update={cache => {
+      update={(cache) => {
         cache.writeFragment({
           id: datasetCacheId(datasetId),
           fragment: DATASET_PUBLISHED,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             public: true,
           },
         })
-      }}>
-      {publishDataset => (
+      }}
+    >
+      {(publishDataset) => (
         <button
           className="btn-modal-action"
           onClick={() =>
             publishDataset({ variables: { datasetId } }).then(() => {
               navigate(`/datasets/${datasetId}`)
-            })
-          }>
+            })}
+        >
           Publish
         </button>
       )}

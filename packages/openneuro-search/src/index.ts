@@ -1,16 +1,16 @@
-import { DatasetsIndex } from './indexes/datasets'
+import { DatasetsIndex } from "./indexes/datasets"
 import {
   DatasetQueryResult,
   indexDataset,
   indexQuery,
   queryForIndex,
-} from './query'
-import { indexingToken } from './auth'
+} from "./query"
+import { indexingToken } from "./auth"
 export {
-  DatasetsIndex,
   DatasetQueryResult,
+  DatasetsIndex,
   indexDataset,
+  indexingToken,
   indexQuery,
   queryForIndex,
-  indexingToken,
 }

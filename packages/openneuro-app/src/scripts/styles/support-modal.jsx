@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled"
 
 //styled components for custom support modal
 const Overlay = styled.div`
@@ -40,4 +40,4 @@ const ExitButton = styled.a`
   z-index: 100;
 `
 
-export { Overlay, ModalContainer, ExitButton }
+export { ExitButton, ModalContainer, Overlay }

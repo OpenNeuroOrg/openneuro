@@ -1,18 +1,18 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Query } from '@apollo/client/react/components'
-import { gql } from '@apollo/client'
-import parseISO from 'date-fns/parseISO'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { Input } from '@openneuro/components/input'
-import { Loading } from '@openneuro/components/loading'
-import { formatDate } from '../../utils/date.js'
-import Helmet from 'react-helmet'
-import { pageTitle } from '../../resources/strings.js'
-import { UserTools } from './user-tools'
-import { USER_FRAGMENT } from './user-fragment'
+import React from "react"
+import PropTypes from "prop-types"
+import { Query } from "@apollo/client/react/components"
+import { gql } from "@apollo/client"
+import parseISO from "date-fns/parseISO"
+import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import { Input } from "@openneuro/components/input"
+import { Loading } from "@openneuro/components/loading"
+import { formatDate } from "../../utils/date.js"
+import Helmet from "react-helmet"
+import { pageTitle } from "../../resources/strings.js"
+import { UserTools } from "./user-tools"
+import { USER_FRAGMENT } from "./user-fragment"
 
 export const GET_USERS = gql`
   query {
@@ -56,8 +56,8 @@ class Users extends React.Component {
   // life cycle events --------------------------------------------------
   render() {
     const users = this.props.users.map((user, index) => {
-      const adminBadge = user.admin ? 'Admin' : null
-      const userEmail = user.hasOwnProperty('email') ? user.email : user.id
+      const adminBadge = user.admin ? "Admin" : null
+      const userEmail = user.hasOwnProperty("email") ? user.email : user.id
       if (this.state.adminFilter && !user.admin) {
         return null
       }
@@ -76,7 +76,7 @@ class Users extends React.Component {
         <div className="fade-in user-panel  panel panel-default" key={index}>
           <div className="user-col uc-name">
             <div>
-              {user.name}{' '}
+              {user.name}{" "}
               {adminBadge && <span className="badge">{adminBadge}</span>}
               <UserTools user={user} refetch={this.props.refetch} />
             </div>
@@ -109,7 +109,7 @@ class Users extends React.Component {
               name="Search Name Or Email"
               type="text"
               placeholder="Search Name or Email"
-              onKeyDown={e => this.setState({ stringFilter: e.target.value })}
+              onKeyDown={(e) => this.setState({ stringFilter: e.target.value })}
             />
           </div>
 
@@ -118,36 +118,32 @@ class Users extends React.Component {
               <div className="filters">
                 <label>Filter By:</label>
                 <button
-                  className={this.state.adminFilter ? 'active' : null}
+                  className={this.state.adminFilter ? "active" : null}
                   onClick={() =>
-                    this.setState({ adminFilter: !this.state.adminFilter })
-                  }>
+                    this.setState({ adminFilter: !this.state.adminFilter })}
+                >
                   <span className="filter-admin">
                     <i
-                      className={
-                        this.state.adminFilter
-                          ? 'fa fa-check-square-o'
-                          : 'fa fa-square-o'
-                      }
-                    />{' '}
+                      className={this.state.adminFilter
+                        ? "fa fa-check-square-o"
+                        : "fa fa-square-o"}
+                    />{" "}
                     Admin
                   </span>
                 </button>
                 <button
-                  className={this.state.blacklistFilter ? 'active' : null}
+                  className={this.state.blacklistFilter ? "active" : null}
                   onClick={() =>
                     this.setState({
                       blacklistFilter: !this.state.blacklistFilter,
-                    })
-                  }>
+                    })}
+                >
                   <span className="filter-admin">
                     <i
-                      className={
-                        this.state.blacklistFilter
-                          ? 'fa fa-check-square-o'
-                          : 'fa fa-square-o'
-                      }
-                    />{' '}
+                      className={this.state.blacklistFilter
+                        ? "fa fa-check-square-o"
+                        : "fa fa-square-o"}
+                    />{" "}
                     Blocked
                   </span>
                 </button>
@@ -157,7 +153,9 @@ class Users extends React.Component {
 
           <div>
             <div className="users-panel-wrap">
-              {users.filter(u => u !== null).length ? users : this._noResults()}
+              {users.filter((u) => u !== null).length
+                ? users
+                : this._noResults()}
             </div>
           </div>
         </div>
@@ -177,15 +175,16 @@ class Users extends React.Component {
     return (
       <>
         <div className="summary-data">
-          <b>Signed Up:</b>{' '}
+          <b>Signed Up:</b>{" "}
           <div>
             {formatDate(created)} - {formatDistanceToNow(parseISO(created))} ago
           </div>
         </div>
         <div className="summary-data">
-          <b>Last Signed In:</b>{' '}
+          <b>Last Signed In:</b>{" "}
           <div>
-            {formatDate(lastLogin)} - {formatDistanceToNow(parseISO(lastLogin))}{' '}
+            {formatDate(lastLogin)} - {formatDistanceToNow(parseISO(lastLogin))}
+            {" "}
             ago
           </div>
         </div>

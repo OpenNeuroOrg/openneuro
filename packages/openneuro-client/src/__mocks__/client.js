@@ -1,9 +1,9 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { SchemaLink } from '@apollo/client/link/schema'
-import { addMocksToSchema } from '@graphql-tools/mock'
-import { makeExecutableSchema } from '@graphql-tools/schema'
-import { typeDefs } from '@openneuro/server/src/graphql/schema'
-import resolvers from '@openneuro/server/src/graphql/resolvers/index.js'
+import { ApolloClient, InMemoryCache } from "@apollo/client"
+import { SchemaLink } from "@apollo/client/link/schema"
+import { addMocksToSchema } from "@graphql-tools/mock"
+import { makeExecutableSchema } from "@graphql-tools/schema"
+import { typeDefs } from "@openneuro/server/src/graphql/schema"
+import resolvers from "@openneuro/server/src/graphql/resolvers/index.js"
 
 /**
  * Generate sequential dataset ids for tests
@@ -11,7 +11,7 @@ import resolvers from '@openneuro/server/src/graphql/resolvers/index.js'
  */
 function* idGenerator(n = 0) {
   while (true) {
-    const idStr = String(++n).padStart(6, '0')
+    const idStr = String(++n).padStart(6, "0")
     yield `ds${idStr}`
   }
 }
@@ -48,10 +48,10 @@ export const createClient = () => {
   const link = new SchemaLink({
     schema,
     context: {
-      user: '1234',
+      user: "1234",
       userInfo: {
-        id: '1234',
-        email: '1234@example.com',
+        id: "1234",
+        email: "1234@example.com",
       },
     },
   })

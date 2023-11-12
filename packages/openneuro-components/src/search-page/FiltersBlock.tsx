@@ -1,9 +1,9 @@
-import React from 'react'
-import { Button } from '../button/Button'
-import { FilterListItem } from './FilterListItem'
-import { FilterDateItem } from './FilterDateItem'
-import { TermListItem } from './TermListItem'
-import { FacetSelectValueType } from '../facets/FacetSelect'
+import React from "react"
+import { Button } from "../button/Button"
+import { FilterListItem } from "./FilterListItem"
+import { FilterDateItem } from "./FilterDateItem"
+import { TermListItem } from "./TermListItem"
+import { FacetSelectValueType } from "../facets/FacetSelect"
 
 export interface FiltersBlockProps {
   keywords: string[]
@@ -68,36 +68,46 @@ export const FiltersBlock = ({
   return (
     <div className="filters-block">
       <h2>
-        {noFilters ? (
-          <b>
-            Showing all available {modality_selected ? modality_selected : ''}{' '}
-            datasets
-          </b>
-        ) : (
-          <>
-            {loading ? (
-              ' Loading Results...'
-            ) : (
-              <>
-                These filters return <span>{numTotalResults}</span> datasets:{' '}
-              </>
-            )}
-            <Button label="Clear All" size="small" onClick={removeAllFilters} />
-          </>
-        )}
+        {noFilters
+          ? (
+            <b>
+              Showing all available {modality_selected ? modality_selected : ""}
+              {" "}
+              datasets
+            </b>
+          )
+          : (
+            <>
+              {loading
+                ? (
+                  " Loading Results..."
+                )
+                : (
+                  <>
+                    These filters return <span>{numTotalResults}</span>{" "}
+                    datasets:{" "}
+                  </>
+                )}
+              <Button
+                label="Clear All"
+                size="small"
+                onClick={removeAllFilters}
+              />
+            </>
+          )}
       </h2>
       <ul className="active-filters">
         {keywords && (
           <TermListItem
             type="Keyword"
-            item={{ param: 'keywords', values: keywords }}
+            item={{ param: "keywords", values: keywords }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {modality_selected && (
           <FilterListItem
             type="Modality"
-            item={{ param: 'modality_selected', value: modality_selected }}
+            item={{ param: "modality_selected", value: modality_selected }}
             removeFilterItem={removeFilterItem(true)}
           />
         )}
@@ -107,7 +117,7 @@ export const FiltersBlock = ({
               <FilterListItem
                 type="Type"
                 item={{
-                  param: 'datasetType_selected',
+                  param: "datasetType_selected",
                   value: datasetType_selected,
                 }}
                 removeFilterItem={removeFilterItem()}
@@ -117,7 +127,7 @@ export const FiltersBlock = ({
               <FilterListItem
                 type="Status"
                 item={{
-                  param: 'datasetStatus_selected',
+                  param: "datasetStatus_selected",
                   value: datasetStatus_selected,
                 }}
                 removeFilterItem={removeFilterItem()}
@@ -128,56 +138,56 @@ export const FiltersBlock = ({
         {!ageRangeIsNull && (
           <FilterListItem
             type="Age"
-            item={{ param: 'ageRange', value: ageRange }}
+            item={{ param: "ageRange", value: ageRange }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {!subjectCountRangeIsNull && (
           <FilterListItem
             type="Participants"
-            item={{ param: 'subjectCountRange', value: subjectCountRange }}
+            item={{ param: "subjectCountRange", value: subjectCountRange }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {authors && (
           <TermListItem
             type="Authors/PI"
-            item={{ param: 'authors', values: authors }}
+            item={{ param: "authors", values: authors }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {sex_selected && (
           <FilterListItem
             type="Gender"
-            item={{ param: 'sex_selected', value: sex_selected }}
+            item={{ param: "sex_selected", value: sex_selected }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {tasks && (
           <TermListItem
             type="Task"
-            item={{ param: 'tasks', values: tasks }}
+            item={{ param: "tasks", values: tasks }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {diagnosis_selected && (
           <FilterListItem
             type="Diagnosis"
-            item={{ param: 'diagnosis_selected', value: diagnosis_selected }}
+            item={{ param: "diagnosis_selected", value: diagnosis_selected }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {section_selected && (
           <FilterListItem
             type="Section"
-            item={{ param: 'section_selected', value: section_selected }}
+            item={{ param: "section_selected", value: section_selected }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {species_selected && (
           <FilterListItem
             type="Species"
-            item={{ param: 'species_selected', value: species_selected }}
+            item={{ param: "species_selected", value: species_selected }}
             removeFilterItem={removeFilterItem()}
           />
         )}
@@ -185,7 +195,7 @@ export const FiltersBlock = ({
           <TermListItem
             type="Ontology"
             item={{
-              param: 'studyDomains',
+              param: "studyDomains",
               values: studyDomains,
             }}
             removeFilterItem={removeFilterItem()}
@@ -194,7 +204,7 @@ export const FiltersBlock = ({
         {date_selected && (
           <FilterListItem
             type="Publication Date "
-            item={{ param: 'date_selected', value: date_selected }}
+            item={{ param: "date_selected", value: date_selected }}
             removeFilterItem={removeFilterItem()}
           />
         )}
@@ -202,7 +212,7 @@ export const FiltersBlock = ({
         {bodyParts && (
           <TermListItem
             type="Target"
-            item={{ param: 'bodyParts', values: bodyParts }}
+            item={{ param: "bodyParts", values: bodyParts }}
             removeFilterItem={removeFilterItem()}
           />
         )}
@@ -210,7 +220,7 @@ export const FiltersBlock = ({
           <TermListItem
             type="Scanner Manufacturers"
             item={{
-              param: 'scannerManufacturers',
+              param: "scannerManufacturers",
               values: scannerManufacturers,
             }}
             removeFilterItem={removeFilterItem()}
@@ -220,7 +230,7 @@ export const FiltersBlock = ({
           <TermListItem
             type="Scanner Model"
             item={{
-              param: 'scannerManufacturersModelNames',
+              param: "scannerManufacturersModelNames",
               values: scannerManufacturersModelNames,
             }}
             removeFilterItem={removeFilterItem()}
@@ -229,14 +239,14 @@ export const FiltersBlock = ({
         {tracerNames && (
           <TermListItem
             type="Radiotracers"
-            item={{ param: 'tracerNames', values: tracerNames }}
+            item={{ param: "tracerNames", values: tracerNames }}
             removeFilterItem={removeFilterItem()}
           />
         )}
         {tracerRadionuclides && (
           <TermListItem
             type="Radionuclide"
-            item={{ param: 'tracerRadionuclides', values: tracerRadionuclides }}
+            item={{ param: "tracerRadionuclides", values: tracerRadionuclides }}
             removeFilterItem={removeFilterItem()}
           />
         )}

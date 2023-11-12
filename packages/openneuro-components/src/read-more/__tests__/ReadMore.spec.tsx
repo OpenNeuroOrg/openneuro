@@ -1,9 +1,9 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { ReadMore } from '../ReadMore'
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { ReadMore } from "../ReadMore"
 
-describe('ReadMore component', () => {
-  it('renders children', async () => {
+describe("ReadMore component", () => {
+  it("renders children", async () => {
     render(
       <ReadMore id="readmoretest" expandLabel="expand" collapseLabel="hide">
         Hidden children

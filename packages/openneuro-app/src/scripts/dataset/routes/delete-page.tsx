@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import { useCookies } from 'react-cookie'
-import DeleteDatasetForm from '../mutations/delete-dataset-form.jsx'
-import DeleteDataset from '../mutations/delete.jsx'
-import LoggedIn from '../../authentication/logged-in.jsx'
-import { getProfile } from '../../authentication/profile'
-import AdminUser from '../../authentication/admin-user.jsx'
-import { RegularUser } from '../../authentication/regular-user'
-import { DatasetPageBorder } from './styles/dataset-page-border'
-import { HeaderRow3 } from './styles/header-row'
+import React, { useState } from "react"
+import { useCookies } from "react-cookie"
+import DeleteDatasetForm from "../mutations/delete-dataset-form.jsx"
+import DeleteDataset from "../mutations/delete.jsx"
+import LoggedIn from "../../authentication/logged-in.jsx"
+import { getProfile } from "../../authentication/profile"
+import AdminUser from "../../authentication/admin-user.jsx"
+import { RegularUser } from "../../authentication/regular-user"
+import { DatasetPageBorder } from "./styles/dataset-page-border"
+import { HeaderRow3 } from "./styles/header-row"
 
 interface DeletePageProps {
   dataset: {
@@ -18,8 +18,8 @@ interface DeletePageProps {
 
 const DeletePage = ({ dataset }: DeletePageProps): React.ReactElement => {
   const [values, setValues] = useState({
-    reason: '',
-    redirect: '',
+    reason: "",
+    redirect: "",
   })
   const handleInputChange = (name, value) => {
     const newValues = {

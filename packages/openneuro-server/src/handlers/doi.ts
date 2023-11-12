@@ -1,7 +1,7 @@
-import config from '../config'
-import doi from '../libs/doi'
-import Doi from '../models/doi'
-import Snapshot from '../models/snapshot'
+import config from "../config"
+import doi from "../libs/doi"
+import Doi from "../models/doi"
+import Snapshot from "../models/snapshot"
 
 export async function createSnapshotDoi(req, res) {
   let doiRes = null
@@ -28,7 +28,7 @@ export async function createSnapshotDoi(req, res) {
     }
     await doi
       .registerSnapshotDoi(datasetId, snapshotId, oldDesc)
-      .then(doiRes => {
+      .then((doiRes) => {
         if (doiRes) {
           Doi.updateOne(
             { datasetId: datasetId, snapshotId: snapshotId },
@@ -51,7 +51,7 @@ export async function getDoi(req, res) {
       datasetId: datasetId,
       snapshotId: snapshotId,
     },
-    'doi',
+    "doi",
   ).exec()
   return res.send(doi)
 }

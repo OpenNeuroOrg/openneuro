@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import jwtDecode from "jwt-decode"
 
 interface OpenNeuroTokenProfile {
   sub: string
@@ -20,7 +20,7 @@ export const parseJwt = jwtDecode
  * Retrieve the user profile from JWT cookie
  */
 export function getProfile(cookies): OpenNeuroTokenProfile {
-  const accessToken = cookies['accessToken']
+  const accessToken = cookies["accessToken"]
   return accessToken ? parseJwt(accessToken) : null
 }
 
@@ -28,7 +28,7 @@ export function getProfile(cookies): OpenNeuroTokenProfile {
  * Return profile if token is not expired.
  * @param {*} cookies
  */
-export const getUnexpiredProfile = cookies => {
+export const getUnexpiredProfile = (cookies) => {
   const profile = getProfile(cookies)
   if (guardExpired(profile)) return profile
 }
@@ -51,10 +51,10 @@ export const guardExpired = (profile: OpenNeuroTokenProfile): boolean => {
  * Returns true if active user has at least one of the permissions in expectedLevels
  * @param {string[]} expectedLevels
  */
-const hasDatasetPermissions = expectedLevels => (permissions, userId) => {
+const hasDatasetPermissions = (expectedLevels) => (permissions, userId) => {
   if (userId) {
     const permission = permissions.userPermissions.find(
-      perm => perm.user.id === userId,
+      (perm) => perm.user.id === userId,
     )
     return (permission && expectedLevels.includes(permission.level)) || false
   }
@@ -62,7 +62,7 @@ const hasDatasetPermissions = expectedLevels => (permissions, userId) => {
 }
 
 // Return true if the active user has write permission
-export const hasEditPermissions = hasDatasetPermissions(['admin', 'rw'])
+export const hasEditPermissions = hasDatasetPermissions(["admin", "rw"])
 
 //
-export const hasDatasetAdminPermissions = hasDatasetPermissions(['admin'])
+export const hasDatasetAdminPermissions = hasDatasetPermissions(["admin"])

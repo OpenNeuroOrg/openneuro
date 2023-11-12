@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react"
+import { Link } from "react-router-dom"
 
 export interface ModalityCubeProps {
   label: string
@@ -15,12 +15,16 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
   onClick,
 }) => {
   return (
-    <li className="hex" onClick={onClick('search/modality/' + label.toLowerCase())}>
-      <div className={'hexIn ' + label.toLowerCase() + '-cube'}>
+    <li
+      className="hex"
+      onClick={onClick("search/modality/" + label.toLowerCase())}
+    >
+      <div className={"hexIn " + label.toLowerCase() + "-cube"}>
         <div>
           <div
             className="img"
-            style={{ backgroundImage: `url(${cubeImage})` }}>
+            style={{ backgroundImage: `url(${cubeImage})` }}
+          >
             <div className="modality-cube">
               <div className="front">
                 <span className="label">{label}</span>

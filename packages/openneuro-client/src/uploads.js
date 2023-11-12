@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client"
 
 export const prepareUpload = gql`
   mutation prepareUpload($datasetId: ID!, $uploadId: ID!) {
@@ -21,23 +21,23 @@ export const finishUpload = gql`
  * Convert to URL compatible path
  * @param {String} path
  */
-export const encodeFilePath = path => {
-  return path.replace(new RegExp('/', 'g'), ':')
+export const encodeFilePath = (path) => {
+  return path.replace(new RegExp("/", "g"), ":")
 }
 
 /**
  * Convert from a URL compatible path
  * @param {String} path
  */
-export const decodeFilePath = path => {
-  return path.replace(new RegExp(':', 'g'), '/')
+export const decodeFilePath = (path) => {
+  return path.replace(new RegExp(":", "g"), "/")
 }
 
 /**
  * Given a file list, calculate total size
  */
-export const uploadSize = files =>
-  files.map(f => f.size).reduce((a, b) => a + b)
+export const uploadSize = (files) =>
+  files.map((f) => f.size).reduce((a, b) => a + b)
 
 /**
  * Java hashcode implementation for browser and Node.js
@@ -45,7 +45,7 @@ export const uploadSize = files =>
  */
 function hashCode(str) {
   return str
-    .split('')
+    .split("")
     .reduce(
       (prevHash, currVal) =>
         ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
@@ -65,13 +65,13 @@ export function hashFileList(datasetId, files) {
       datasetId +
         files
           .map(
-            f =>
+            (f) =>
               `${
-                'webkitRelativePath' in f ? f.webkitRelativePath : f.filename
+                "webkitRelativePath" in f ? f.webkitRelativePath : f.filename
               }:${f.size}`,
           )
           .sort()
-          .join(':'),
+          .join(":"),
     ),
   ).toString(16)
 }
@@ -99,7 +99,7 @@ export function uploadParallelism(requests, bytes) {
  * @param {string} url .../a:path:to:a:file
  */
 export function parseFilename(url) {
-  const filePath = url.substring(url.lastIndexOf('/') + 1)
+  const filePath = url.substring(url.lastIndexOf("/") + 1)
   return decodeFilePath(filePath)
 }
 
@@ -110,7 +110,7 @@ export function parseFilename(url) {
  */
 export async function retryDelay(step, request) {
   if (step <= 4) {
-    await new Promise(r => setTimeout(r, step ** 2 * 1000))
+    await new Promise((r) => setTimeout(r, step ** 2 * 1000))
   } else {
     throw new Error(
       `Failed to upload file after ${step} attempts - "${request.url}"`,
@@ -125,11 +125,10 @@ export async function retryDelay(step, request) {
  * @returns {function (Request, number): Promise<Response|void>}
  */
 export const uploadFile =
-  (uploadProgress, fetch) =>
-  async (request, attempt = 1) => {
+  (uploadProgress, fetch) => async (request, attempt = 1) => {
     // Create a retry function with attempts incremented
     const filename = parseFilename(request.url)
-    const handleFailure = async failure => {
+    const handleFailure = async (failure) => {
       const retryClone = request.clone()
       // eslint-disable-next-line no-console
       console.warn(`\nRetrying upload for ${filename}: ${failure}`)
@@ -137,14 +136,14 @@ export const uploadFile =
         await retryDelay(attempt, request)
         return uploadFile(uploadProgress, fetch)(retryClone, attempt + 1)
       } catch (err) {
-        if ('failUpload' in uploadProgress) {
+        if ("failUpload" in uploadProgress) {
           uploadProgress.failUpload(filename)
         }
         throw err
       }
     }
     // This is needed to cancel the request in case of client errors
-    if ('startUpload' in uploadProgress) {
+    if ("startUpload" in uploadProgress) {
       uploadProgress.startUpload(filename)
     }
     try {
@@ -153,7 +152,7 @@ export const uploadFile =
       if (response.status === 200) {
         // We need to wait for the response body or fetch-h2 may leave the connection open
         await response.json()
-        if ('finishUpload' in uploadProgress) {
+        if ("finishUpload" in uploadProgress) {
           uploadProgress.finishUpload(filename)
         }
         uploadProgress.increment()

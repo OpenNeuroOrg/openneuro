@@ -1,18 +1,18 @@
-import { describe, it, expect, vi } from 'vitest'
-import React from 'react'
-import { render, fireEvent, screen, waitFor } from '@testing-library/react'
-import { MockedProvider } from '@apollo/client/testing'
+import { describe, expect, it, vi } from "vitest"
+import React from "react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { MockedProvider } from "@apollo/client/testing"
 import {
   Router,
   unstable_HistoryRouter as HistoryRouter,
-} from 'react-router-dom'
-import { createMemoryHistory } from 'history'
-import { DeprecateVersion, DEPRECATE_VERSION } from '../deprecate-version'
+} from "react-router-dom"
+import { createMemoryHistory } from "history"
+import { DEPRECATE_VERSION, DeprecateVersion } from "../deprecate-version"
 
-describe('DeprecateVersion mutation', () => {
-  it('renders with typical props', () => {
-    const datasetId = 'test00001'
-    const tag = '1.0.0'
+describe("DeprecateVersion mutation", () => {
+  it("renders with typical props", () => {
+    const datasetId = "test00001"
+    const tag = "1.0.0"
     const history = createMemoryHistory({
       initialEntries: [`/datasets/${datasetId}/versions/${tag}/deprecate`],
     })
@@ -29,14 +29,14 @@ describe('DeprecateVersion mutation', () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it('calls the DEPRECATE_VERSION mutation when clicked and navigates to the snapshot on success', async () => {
-    const datasetId = 'test00001'
-    const tag = '1.0.0'
-    const reason = 'This is a test suite.'
+  it("calls the DEPRECATE_VERSION mutation when clicked and navigates to the snapshot on success", async () => {
+    const datasetId = "test00001"
+    const tag = "1.0.0"
+    const reason = "This is a test suite."
     const history = createMemoryHistory({
       initialEntries: [`/datasets/${datasetId}/versions/${tag}/deprecate`],
     })
-    const historyPushSpy = vi.spyOn(history, 'push')
+    const historyPushSpy = vi.spyOn(history, "push")
     const snapshotId = `${datasetId}:${tag}`
     const deprecateSnapshotMock = {
       request: {
@@ -50,12 +50,12 @@ describe('DeprecateVersion mutation', () => {
       result: {
         data: {
           deprecateSnapshot: {
-            __typename: 'Snapshot',
+            __typename: "Snapshot",
             id: snapshotId,
             deprecated: {
-              __typename: 'DeprecatedSnapshot',
+              __typename: "DeprecatedSnapshot",
               id: snapshotId,
-              user: '1245',
+              user: "1245",
               reason,
             },
           },

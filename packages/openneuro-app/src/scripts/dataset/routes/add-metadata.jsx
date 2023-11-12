@@ -1,35 +1,35 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useCookies } from 'react-cookie'
-import MetadataForm from '../mutations/metadata-form.jsx'
-import { DatasetRelations } from '../mutations/dataset-relations'
-import SubmitMetadata from '../mutations/submit-metadata.jsx'
-import LoggedIn from '../../authentication/logged-in.jsx'
-import { hasEditPermissions, getProfile } from '../../authentication/profile'
-import { DatasetPageBorder } from './styles/dataset-page-border'
-import { HeaderRow3, HeaderRow4 } from './styles/header-row'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useCookies } from "react-cookie"
+import MetadataForm from "../mutations/metadata-form.jsx"
+import { DatasetRelations } from "../mutations/dataset-relations"
+import SubmitMetadata from "../mutations/submit-metadata.jsx"
+import LoggedIn from "../../authentication/logged-in.jsx"
+import { getProfile, hasEditPermissions } from "../../authentication/profile"
+import { DatasetPageBorder } from "./styles/dataset-page-border"
+import { HeaderRow3, HeaderRow4 } from "./styles/header-row"
 
 const validations = [
   {
-    fields: ['affirmedConsent', 'affirmedDefaced'],
+    fields: ["affirmedConsent", "affirmedDefaced"],
     check: ([affirmedConsent, affirmedDefaced]) =>
       affirmedConsent || affirmedDefaced,
     errorMessage:
-      'Uploader must affirm that structural scans are defaced or that they have consent to publish scans without defacing.',
+      "Uploader must affirm that structural scans are defaced or that they have consent to publish scans without defacing.",
   },
 ]
 
-const runValidations = values =>
+const runValidations = (values) =>
   validations
-    .map(validation => {
-      const relevantValues = validation.fields.map(key => values[key])
+    .map((validation) => {
+      const relevantValues = validation.fields.map((key) => values[key])
       // TODO - This doesn't seem necessary?
       // @ts-expect-error
       const isValid = validation.check(relevantValues)
       if (!isValid) return validation.errorMessage
     })
-    .filter(error => error)
+    .filter((error) => error)
 
 const hasChanged = (errorsA, errorsB) =>
   JSON.stringify(errorsA) !== JSON.stringify(errorsB)
@@ -55,13 +55,12 @@ const AddMetadata = ({ dataset }) => {
   // @ts-ignore-next-line
   const submitPath = location.state && location.state.submitPath
   const user = getProfile(cookies)
-  const hasEdit =
-    (user && user.admin) ||
+  const hasEdit = (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
 
   return (
     <DatasetPageBorder className="metadata-form">
-      <HeaderRow3>{hasEdit && 'Add '}Metadata</HeaderRow3>
+      <HeaderRow3>{hasEdit && "Add "}Metadata</HeaderRow3>
       <MetadataForm
         values={values}
         onChange={handleInputChange}

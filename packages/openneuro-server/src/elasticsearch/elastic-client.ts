@@ -1,8 +1,8 @@
-import config from '../config'
-import { Client } from '@elastic/elasticsearch'
+import config from "../config"
+import { Client } from "@elastic/elasticsearch"
 
 const elasticConfig = {
-  node: config.elasticsearch.connection || 'http://mock-client',
+  node: config.elasticsearch.connection || "http://mock-client",
   maxRetries: 3,
 }
 

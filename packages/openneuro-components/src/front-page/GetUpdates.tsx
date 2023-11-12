@@ -1,17 +1,17 @@
-import React from 'react'
-import { Button } from '../button/Button'
-import { Input } from '../input/Input'
+import React from "react"
+import { Button } from "../button/Button"
+import { Input } from "../input/Input"
 
 export const modes = {
   // display prompt / email input / submit button
-  GET: Symbol('get'),
+  GET: Symbol("get"),
   // display success message / done
-  SUCCESS: Symbol('success'),
+  SUCCESS: Symbol("success"),
   // display error message / try again button
-  ERROR: Symbol('error'),
+  ERROR: Symbol("error"),
 }
 
-export const submitHandler = (subscribe, mode, setMode, value) => e => {
+export const submitHandler = (subscribe, mode, setMode, value) => (e) => {
   e.preventDefault()
   switch (mode) {
     case modes.SUCCESS:
@@ -21,7 +21,7 @@ export const submitHandler = (subscribe, mode, setMode, value) => e => {
       break
     case modes.GET:
     default:
-      subscribe(value, result => {
+      subscribe(value, (result) => {
         if (result.data) {
           setMode(
             result.data.subscribeToNewsletter ? modes.SUCCESS : modes.ERROR,
@@ -32,34 +32,34 @@ export const submitHandler = (subscribe, mode, setMode, value) => e => {
   }
 }
 
-const getText = mode => {
+const getText = (mode) => {
   switch (mode) {
     case modes.ERROR:
       return {
-        headingText: 'Whoops.',
+        headingText: "Whoops.",
         messageText:
-          'We were unable to sign you up for updates. Please try again.',
-        buttonText: 'Try Again',
+          "We were unable to sign you up for updates. Please try again.",
+        buttonText: "Try Again",
       }
     case modes.SUCCESS:
       return {
-        headingText: 'Success!',
-        messageText: 'You are now signed up to receive news updates.',
-        buttonText: 'Done',
+        headingText: "Success!",
+        messageText: "You are now signed up to receive news updates.",
+        buttonText: "Done",
       }
     case modes.GET:
     default:
       return {
-        headingText: 'Get Updates',
-        buttonText: 'Subscribe',
-        messageText: 'Find out about new version and future releases',
+        headingText: "Get Updates",
+        buttonText: "Subscribe",
+        messageText: "Find out about new version and future releases",
       }
   }
 }
 
 export const GetUpdates = ({ subscribe, initialMode = modes.GET }) => {
   const [mode, setMode] = React.useState(initialMode)
-  const [value, setValue] = React.useState('')
+  const [value, setValue] = React.useState("")
   const { headingText, messageText, buttonText } = getText(mode)
   return (
     <div className="get-updates-bar">
@@ -69,7 +69,8 @@ export const GetUpdates = ({ subscribe, initialMode = modes.GET }) => {
       </div>
       <form
         onSubmit={submitHandler(subscribe, mode, setMode, value)}
-        className="get-updates-form">
+        className="get-updates-form"
+      >
         <>
           <div className="">{}</div>
           {mode === modes.GET && (

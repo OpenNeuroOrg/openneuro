@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React from "react"
+import PropTypes from "prop-types"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 class ValidationPanel extends React.Component {
   constructor(props) {

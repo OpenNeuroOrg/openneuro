@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface SubscriptionDocument extends Document {
@@ -12,7 +12,7 @@ const subscriptionSchema = new Schema({
 })
 
 const Subscription = model<SubscriptionDocument>(
-  'Subscription',
+  "Subscription",
   subscriptionSchema,
 )
 

@@ -1,6 +1,6 @@
-import React from 'react'
-import { toast } from 'react-toastify'
-import ToastContent from '../../common/partials/toast-content.jsx'
+import React from "react"
+import { toast } from "react-toastify"
+import ToastContent from "../../common/partials/toast-content.jsx"
 
 /**
  * Write failures due to permissions (most likely)
@@ -41,12 +41,12 @@ export const nativeErrorToast = () => {
   )
 }
 
-export const requestFailureToast = filename => {
+export const requestFailureToast = (filename) => {
   toast.error(
     <ToastContent title="Download Error" body="A file failed to download">
       <p>
-        {filename} failed. Retry your download to reattempt downloading this
-        file.
+        {filename}{" "}
+        failed. Retry your download to reattempt downloading this file.
       </p>
     </ToastContent>,
   )
@@ -56,11 +56,13 @@ export const requestFailureToast = filename => {
  * Let the user know their download is done
  * @param {string} dirName
  */
-export const downloadCompleteToast = dirName => {
+export const downloadCompleteToast = (dirName) => {
   toast.success(
     <ToastContent
       title="Download Complete"
-      body={`See "${dirName}" directory for downloaded files`}></ToastContent>,
+      body={`See "${dirName}" directory for downloaded files`}
+    >
+    </ToastContent>,
     { autoClose: false },
   )
 }
@@ -76,7 +78,7 @@ export const downloadToast = (dirName, datasetId, snapshotId, onClose) => {
     ? `${datasetId} snapshot ${snapshotId} to local folder ${dirName}`
     : `${datasetId} to local folder ${dirName}`
   return toast(
-    <ToastContent title={'Downloading'} body={downloadMessage}></ToastContent>,
+    <ToastContent title={"Downloading"} body={downloadMessage}></ToastContent>,
     {
       progress: 0,
       hideProgressBar: false,
@@ -97,7 +99,7 @@ export const downloadToastUpdate = (
     : `${datasetId} to local folder ${dirName}`
   toast.update(toastId, {
     render: (
-      <ToastContent title={'Downloading'} body={downloadMessage}>
+      <ToastContent title={"Downloading"} body={downloadMessage}>
         {downloadPath}
       </ToastContent>
     ),
@@ -105,4 +107,4 @@ export const downloadToastUpdate = (
   })
 }
 
-export const downloadToastDone = toastId => toast.done(toastId)
+export const downloadToastDone = (toastId) => toast.done(toastId)

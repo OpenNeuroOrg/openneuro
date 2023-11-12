@@ -1,6 +1,6 @@
-import React, { useState, createRef } from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import React, { createRef, useState } from "react"
+import PropTypes from "prop-types"
+import styled from "@emotion/styled"
 
 interface TextInputContainerProps {
   textarea: boolean
@@ -8,27 +8,25 @@ interface TextInputContainerProps {
 
 const Container = styled.div<TextInputContainerProps>(
   {
-    position: 'relative',
-    width: '100%',
-    height: '3rem',
-    marginTop: '30px',
-    backgroundColor: 'white',
-    borderRadius: '4px',
+    position: "relative",
+    width: "100%",
+    height: "3rem",
+    marginTop: "30px",
+    backgroundColor: "white",
+    borderRadius: "4px",
   },
   ({ textarea }) =>
-    textarea
-      ? {}
-      : {
-          height: '3rem',
-        },
+    textarea ? {} : {
+      height: "3rem",
+    },
 )
 const centerLabelStyles = {
-  top: '13px',
-  fontSize: '1em',
+  top: "13px",
+  fontSize: "1em",
 }
 const pushedUpLabelStyles = {
-  top: '-17px',
-  fontSize: '0.75em',
+  top: "-17px",
+  fontSize: "0.75em",
 }
 
 interface TextInputLabelProps {
@@ -38,42 +36,42 @@ interface TextInputLabelProps {
 
 const Label = styled.label<TextInputLabelProps>(
   {
-    position: 'absolute',
-    left: '1rem',
-    right: '1rem',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    color: '#999',
-    transition: 'top 100ms, font-size 100ms',
-    transitionTimingFunction: 'ease-out',
-    textAlign: 'left',
+    position: "absolute",
+    left: "1rem",
+    right: "1rem",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: "#999",
+    transition: "top 100ms, font-size 100ms",
+    transitionTimingFunction: "ease-out",
+    textAlign: "left",
   },
   ({ hasValue, hasFocus }) => ({
     ...(hasValue || hasFocus ? pushedUpLabelStyles : centerLabelStyles),
-    ':focus': pushedUpLabelStyles,
+    ":focus": pushedUpLabelStyles,
   }),
 )
 const DisabledIcon = styled.i({
-  '&&': {
-    position: 'absolute',
-    top: '0.4rem',
-    right: '0.4rem',
-    color: '#5cb85c',
-    fontSize: '8px',
+  "&&": {
+    position: "absolute",
+    top: "0.4rem",
+    right: "0.4rem",
+    color: "#5cb85c",
+    fontSize: "8px",
   },
 })
 const Input = styled.input({
-  width: '100%',
-  height: '100%',
-  padding: '13px',
-  textAlign: 'left',
+  width: "100%",
+  height: "100%",
+  padding: "13px",
+  textAlign: "left",
 })
 const Textarea = styled.textarea({
-  width: '100%',
-  borderRadius: '5px',
-  textAlign: 'left',
-  padding: '13px',
+  width: "100%",
+  borderRadius: "5px",
+  textAlign: "left",
+  padding: "13px",
 })
 const HoverMessage = styled.span`
   position: relative;
@@ -109,7 +107,7 @@ const TextInput = ({
 }): React.ReactElement => {
   if (value === null || value === undefined) {
     if (nullMessage) value = nullMessage
-    else value = ''
+    else value = ""
   } else value = value.toString()
   const [hasFocus, setHasFocus] = useState(false)
   const [isShown, setIsShown] = useState(false)
@@ -145,43 +143,46 @@ const TextInput = ({
         }}
         onMouseLeave={(): void => {
           setIsShown(false)
-        }}>
+        }}
+      >
         {label}
       </Label>
       {annotated && <DisabledIcon className="fa fa-asterisk" />}
-      {textarea ? (
-        <Textarea
-          ref={textAreaRef}
-          name={name}
-          value={value}
-          onFocus={focusInput}
-          onBlur={removeFocus}
-          onChange={handleChange}
-          onMouseEnter={(): void => {
-            setIsShown(true)
-          }}
-          onMouseLeave={(): void => {
-            setIsShown(false)
-          }}
-        />
-      ) : (
-        <Input
-          ref={inputRef}
-          name={name}
-          value={value}
-          disabled={disabled}
-          onFocus={focusInput}
-          onBlur={removeFocus}
-          onChange={handleChange}
-          required={required}
-          onMouseEnter={(): void => {
-            setIsShown(true)
-          }}
-          onMouseLeave={(): void => {
-            setIsShown(false)
-          }}
-        />
-      )}
+      {textarea
+        ? (
+          <Textarea
+            ref={textAreaRef}
+            name={name}
+            value={value}
+            onFocus={focusInput}
+            onBlur={removeFocus}
+            onChange={handleChange}
+            onMouseEnter={(): void => {
+              setIsShown(true)
+            }}
+            onMouseLeave={(): void => {
+              setIsShown(false)
+            }}
+          />
+        )
+        : (
+          <Input
+            ref={inputRef}
+            name={name}
+            value={value}
+            disabled={disabled}
+            onFocus={focusInput}
+            onBlur={removeFocus}
+            onChange={handleChange}
+            required={required}
+            onMouseEnter={(): void => {
+              setIsShown(true)
+            }}
+            onMouseLeave={(): void => {
+              setIsShown(false)
+            }}
+          />
+        )}
       {isShown && hoverText && <HoverMessage>{hoverText}</HoverMessage>}
     </Container>
   )

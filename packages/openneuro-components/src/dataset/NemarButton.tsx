@@ -1,6 +1,6 @@
-import React from 'react'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Button } from '../button/Button'
+import React from "react"
+import { Tooltip } from "../tooltip/Tooltip"
+import { Button } from "../button/Button"
 
 export interface NemarButtonProps {
   datasetId: string
@@ -22,7 +22,7 @@ export const NemarButton: React.FC<NemarButtonProps> = ({
               primary={true}
               size="small"
               onClick={() => {
-                window.open(url, '_blank')
+                window.open(url, "_blank")
               }}
               label="NEMAR"
             />

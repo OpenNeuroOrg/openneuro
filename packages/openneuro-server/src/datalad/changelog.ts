@@ -1,12 +1,13 @@
-import format from 'date-fns/format'
-import { addFileString, commitFiles } from './dataset'
-import { getDatasetWorker } from '../libs/datalad-service'
+import format from "date-fns/format"
+import { addFileString, commitFiles } from "./dataset"
+import { getDatasetWorker } from "../libs/datalad-service"
 
 /**
  * Matches a CPAN changelog version line
  * @param {string} line
  */
-export const matchCpanVersion = line => /^(\S+) (\d{4}-\d{2}-\d{2})$/.exec(line)
+export const matchCpanVersion = (line) =>
+  /^(\S+) (\d{4}-\d{2}-\d{2})$/.exec(line)
 
 /**
  * Returns start and end indexes for the version being modified
@@ -32,7 +33,7 @@ export const findVersion = (changeLines, tag) => {
     } else {
       // First version didn't match, try again excluding lines we've searched
       return findVersion(changeLines.slice(start + 1), tag).map(
-        x => x + start + 1,
+        (x) => x + start + 1,
       )
     }
   }
@@ -54,14 +55,14 @@ export const spliceChangelog = (changelog, tag, date, changes) => {
   // this way we can always add it back after editing
   const changelogLines = changelog ? changelog.trimRight().split(/\r?\n/) : []
   const [start, length] = findVersion(changelogLines, tag)
-  const formattedChanges = changes.map(change => `  - ${change}`)
+  const formattedChanges = changes.map((change) => `  - ${change}`)
   formattedChanges.unshift(`${tag} ${date}`)
-  if (typeof start !== 'undefined' && typeof length !== 'undefined') {
+  if (typeof start !== "undefined" && typeof length !== "undefined") {
     changelogLines.splice(start, length, ...formattedChanges)
   } else {
     changelogLines.unshift(...formattedChanges)
   }
-  return changelogLines.join('\n') + '\n'
+  return changelogLines.join("\n") + "\n"
 }
 
 /**
@@ -70,9 +71,11 @@ export const spliceChangelog = (changelog, tag, date, changes) => {
  * @param {string} revision Git name for the requested ref
  */
 export const changesUrl = (datasetId, revision) => {
-  return `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
+  return `http://${
+    getDatasetWorker(
+      datasetId,
+    )
+  }/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
 }
 
 /**
@@ -82,15 +85,15 @@ export const changesUrl = (datasetId, revision) => {
  * @param {string[]} changes
  */
 export const updateChanges = async (datasetId, tag, changes, user) => {
-  const currentChangesReq = await fetch(changesUrl(datasetId, 'HEAD'))
+  const currentChangesReq = await fetch(changesUrl(datasetId, "HEAD"))
   const currentChanges = await currentChangesReq.text()
-  const changeLogDate = format(new Date(), 'YYYY-MM-DD')
+  const changeLogDate = format(new Date(), "YYYY-MM-DD")
   const updatedChangelog = spliceChangelog(
     currentChanges,
     tag,
     changeLogDate,
     changes,
   )
-  await addFileString(datasetId, 'CHANGES', 'text/plain', updatedChangelog)
+  await addFileString(datasetId, "CHANGES", "text/plain", updatedChangelog)
   return commitFiles(datasetId, user)
 }

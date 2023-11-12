@@ -1,5 +1,5 @@
-import datasetsMapping from '../mappings/datasets-mapping.json'
-import { elasticMappingName } from '../names'
+import datasetsMapping from "../mappings/datasets-mapping.json"
+import { elasticMappingName } from "../names"
 
 interface IndexDefinition {
   name: string
@@ -7,7 +7,7 @@ interface IndexDefinition {
 }
 
 export const DatasetsIndex: IndexDefinition = {
-  name: elasticMappingName('datasets', datasetsMapping),
+  name: elasticMappingName("datasets", datasetsMapping),
   mapping: datasetsMapping,
 }
 

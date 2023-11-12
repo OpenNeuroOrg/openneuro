@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Subscription } from '@apollo/client/react/components'
-import { gql } from '@apollo/client'
-import { DRAFT_FILES_FRAGMENT } from '../dataset/dataset-query-fragments.js'
-import { datasetCacheId } from '../mutations/cache-id.js'
+import React from "react"
+import PropTypes from "prop-types"
+import { Subscription } from "@apollo/client/react/components"
+import { gql } from "@apollo/client"
+import { DRAFT_FILES_FRAGMENT } from "../dataset/dataset-query-fragments.js"
+import { datasetCacheId } from "../mutations/cache-id.js"
 // import { datasetCacheId } from '../mutations/cache-id.js'
 
 const FILES_SUBSCRIPTION = gql`
@@ -28,24 +28,24 @@ const FILES_SUBSCRIPTION = gql`
  */
 export const deleteFilesReducer = (files, draft) => {
   const pathMatch = files
-    .map(({ filename }) => filename.split(':').join('\\/'))
-    .join('|')
+    .map(({ filename }) => filename.split(":").join("\\/"))
+    .join("|")
   return {
     ...draft,
-    files: draft.files.filter(file => !file.filename.match(pathMatch)),
+    files: draft.files.filter((file) => !file.filename.match(pathMatch)),
   }
 }
 
 export const updateFilesReducer = (files, draft) => {
-  files = files.map(file => ({
+  files = files.map((file) => ({
     ...file,
-    filename: file.filename.split(':').join('/'),
+    filename: file.filename.split(":").join("/"),
   }))
   const newFiles = []
   const draftFiles = [...draft.files]
-  files.forEach(file => {
+  files.forEach((file) => {
     const updatedFileIndex = draftFiles.findIndex(
-      draftFile =>
+      (draftFile) =>
         draftFile.filename === file.filename || draftFile.id === file.id,
     )
     if (updatedFileIndex === -1) newFiles.push(file)
@@ -59,9 +59,9 @@ export const updateFilesReducer = (files, draft) => {
 
 export const draftReducer = (draft, action, payload) => {
   switch (action) {
-    case 'DELETE':
+    case "DELETE":
       return deleteFilesReducer(payload, draft)
-    case 'UPDATE':
+    case "UPDATE":
       return updateFilesReducer(payload, draft)
     default:
       return { ...draft }
@@ -87,7 +87,7 @@ const FilesSubscription = ({ datasetId }) => (
             id,
             fragment: DRAFT_FILES_FRAGMENT,
             data: {
-              __typename: 'Dataset',
+              __typename: "Dataset",
               id: datasetId,
               draft: updatedDraft,
             },

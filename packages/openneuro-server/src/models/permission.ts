@@ -1,18 +1,18 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface PermissionDocument extends Document {
   datasetId: string
   userId: string
-  level: 'ro' | 'rw' | 'admin'
+  level: "ro" | "rw" | "admin"
 }
 
 const permissionSchema = new Schema({
   datasetId: { type: String, required: true },
   userId: { type: String, required: true },
-  level: { type: String, required: true, enum: ['ro', 'rw', 'admin'] },
+  level: { type: String, required: true, enum: ["ro", "rw", "admin"] },
 })
 
-const Permission = model<PermissionDocument>('Permission', permissionSchema)
+const Permission = model<PermissionDocument>("Permission", permissionSchema)
 
 export default Permission

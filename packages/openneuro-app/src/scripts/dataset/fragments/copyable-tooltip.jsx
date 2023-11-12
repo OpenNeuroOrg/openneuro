@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import React from "react"
+import PropTypes from "prop-types"
+import styled from "@emotion/styled"
 
 export const TooltipSpan = styled.span`
   &::before {
@@ -31,25 +31,25 @@ export const TooltipSpan = styled.span`
     background-color: white;
   }
 `
-const CopyButton = styled('i')({
-  cursor: 'copy',
+const CopyButton = styled("i")({
+  cursor: "copy",
 })
 
 function fallbackCopyTextToClipboard(text) {
-  const textArea = document.createElement('textarea')
+  const textArea = document.createElement("textarea")
   textArea.value = text
-  textArea.style.position = 'fixed'
+  textArea.style.position = "fixed"
   document.body.appendChild(textArea)
   textArea.focus()
   textArea.select()
 
   try {
-    const success = document.execCommand('copy')
+    const success = document.execCommand("copy")
     console.log(
-      `Copying text command was ${success ? 'successful!' : 'unsuccessful.'}`,
+      `Copying text command was ${success ? "successful!" : "unsuccessful."}`,
     )
   } catch (err) {
-    console.error('Could not copy text: ', err)
+    console.error("Could not copy text: ", err)
   }
 
   document.body.removeChild(textArea)
@@ -57,11 +57,12 @@ function fallbackCopyTextToClipboard(text) {
 
 function copyTextToClipboard(text) {
   if (!navigator.clipboard) fallbackCopyTextToClipboard(text)
-  else
+  else {
     navigator.clipboard.writeText(text).then(
-      () => console.log('Copying to clipboard was successful!'),
-      err => console.error('Could not copy text: ', err),
+      () => console.log("Copying to clipboard was successful!"),
+      (err) => console.error("Could not copy text: ", err),
     )
+  }
 }
 
 const Tooltip = ({ text, tip }) => (

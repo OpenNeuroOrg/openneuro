@@ -1,45 +1,45 @@
-import React, { FC, useContext } from 'react'
-import useState from 'react-usestateref'
-import UploaderContext from '../../uploader/uploader-context.js'
-import UploadProgress from '../../uploader/upload-progress.jsx'
-import { Header, LandingExpandedHeader } from '@openneuro/components/header'
-import { Input } from '@openneuro/components/input'
-import ModalitySelect from '../../search/inputs/modality-select'
-import { UserModalOpenCtx } from '../../utils/user-login-modal-ctx'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useCookies } from 'react-cookie'
-import signOut from '../../authentication/signOut'
-import { getUnexpiredProfile } from '../../authentication/profile'
-import FreshdeskWidget from '../partials/freshdesk-widget'
-import AggregateCountsContainer from '../../pages/front-page/aggregate-queries/aggregate-counts-container'
-import loginUrls from '../../authentication/loginUrls'
-import UploaderView from '../../uploader/uploader-view.jsx'
-import UploadButton from '../../uploader/upload-button.jsx'
-import UploadProgressButton from '../../uploader/upload-progress-button.jsx'
+import React, { FC, useContext } from "react"
+import useState from "react-usestateref"
+import UploaderContext from "../../uploader/uploader-context.js"
+import UploadProgress from "../../uploader/upload-progress.jsx"
+import { Header, LandingExpandedHeader } from "@openneuro/components/header"
+import { Input } from "@openneuro/components/input"
+import ModalitySelect from "../../search/inputs/modality-select"
+import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useCookies } from "react-cookie"
+import signOut from "../../authentication/signOut"
+import { getUnexpiredProfile } from "../../authentication/profile"
+import FreshdeskWidget from "../partials/freshdesk-widget"
+import AggregateCountsContainer from "../../pages/front-page/aggregate-queries/aggregate-counts-container"
+import loginUrls from "../../authentication/loginUrls"
+import UploaderView from "../../uploader/uploader-view.jsx"
+import UploadButton from "../../uploader/upload-button.jsx"
+import UploadProgressButton from "../../uploader/upload-progress-button.jsx"
 
 export const HeaderContainer: FC = () => {
   const navigate = useNavigate()
 
   const { pathname: currentPath } = useLocation()
-  const expanded = currentPath === '/'
+  const expanded = currentPath === "/"
 
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
 
   const { userModalOpen, setUserModalOpen } = useContext(UserModalOpenCtx)
 
-  const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
+  const [newKeyword, setNewKeyword, newKeywordRef] = useState("")
 
   const handleSubmit = () => {
     const query = JSON.stringify({
       keywords: newKeywordRef.current ? [newKeywordRef.current] : [],
     })
-    setNewKeyword('')
+    setNewKeyword("")
     navigate(`/search?query=${query}`)
   }
 
   const toggleLoginModal = (): void => {
-    setUserModalOpen(prevState => ({
+    setUserModalOpen((prevState) => ({
       ...prevState,
       userModalOpen: !prevState.userModalOpen,
     }))
@@ -47,19 +47,19 @@ export const HeaderContainer: FC = () => {
 
   const signOutAndRedirect = () => {
     signOut()
-    const homepage = '/'
+    const homepage = "/"
     if (window.location.pathname === homepage) window.location.reload()
     else window.location.pathname = homepage
   }
 
   const [isOpenSupport, setSupportIsOpen] = React.useState(false)
 
-  const toggleSupport = () => setSupportIsOpen(prevIsOpen => !prevIsOpen)
+  const toggleSupport = () => setSupportIsOpen((prevIsOpen) => !prevIsOpen)
 
   return (
     <>
       <UploaderContext.Consumer>
-        {uploader => {
+        {(uploader) => {
           if (uploader?.uploading) {
             return (
               <span className="header-progress-wrap">
@@ -81,13 +81,13 @@ export const HeaderContainer: FC = () => {
         navigateToNewSearch={handleSubmit}
         renderUploader={() => (
           <UploaderContext.Consumer>
-            {uploader => {
+            {(uploader) => {
               if (uploader?.uploading) {
                 return <UploadProgressButton />
               } else {
                 return (
                   <UploadButton
-                    onClick={() => uploader.setLocation('/upload')}
+                    onClick={() => uploader.setLocation("/upload")}
                   />
                 )
               }
@@ -95,7 +95,7 @@ export const HeaderContainer: FC = () => {
           </UploaderContext.Consumer>
         )}
         renderOnFreshDeskWidget={() => <FreshdeskWidget />}
-        renderOnExpanded={profile => (
+        renderOnExpanded={(profile) => (
           <LandingExpandedHeader
             user={profile}
             loginUrls={loginUrls}
@@ -118,7 +118,7 @@ export const HeaderContainer: FC = () => {
                 labelStyle="default"
                 value={newKeyword}
                 setValue={setNewKeyword}
-                onKeyDown={e => {
+                onKeyDown={(e) => {
                   if (e.keyCode === 13) {
                     handleSubmit()
                   }
@@ -132,7 +132,7 @@ export const HeaderContainer: FC = () => {
         )}
       />
       <UploaderContext.Consumer>
-        {uploader => <UploaderView uploader={uploader} />}
+        {(uploader) => <UploaderView uploader={uploader} />}
       </UploaderContext.Consumer>
     </>
   )

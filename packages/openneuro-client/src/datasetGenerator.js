@@ -1,4 +1,4 @@
-import { getDatasets } from './datasets.js'
+import { getDatasets } from "./datasets.js"
 
 /**
  * Iterator over all public datasets associated with a client connection
@@ -12,10 +12,10 @@ export async function* datasetGenerator(client, query = getDatasets) {
       const { data } = await client.query({
         query,
         variables: { cursor },
-        errorPolicy: 'all',
+        errorPolicy: "all",
       })
       for (const edge of data.datasets.edges) {
-        if (edge && edge.hasOwnProperty('node')) {
+        if (edge && edge.hasOwnProperty("node")) {
           // Yield one dataset if it did not error
           yield edge.node
         } else {

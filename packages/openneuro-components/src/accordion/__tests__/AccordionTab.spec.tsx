@@ -1,16 +1,17 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { AccordionTab } from '../AccordionTab'
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { AccordionTab } from "../AccordionTab"
 
-describe('AccordionTab component', () => {
-  it('is open by default with startOpen prop', async () => {
+describe("AccordionTab component", () => {
+  it("is open by default with startOpen prop", async () => {
     render(
       <AccordionTab
         id="test"
         className=""
         label="test"
         startOpen
-        accordionStyle="plain">
+        accordionStyle="plain"
+      >
         Child Element Text
       </AccordionTab>,
     )
@@ -23,11 +24,12 @@ describe('AccordionTab component', () => {
         className=""
         label="test"
         startOpen
-        accordionStyle="file-tree">
+        accordionStyle="file-tree"
+      >
         Child Element Text
       </AccordionTab>,
     )
     expect(await screen.getByText(/Child Element Text/)).toBeInTheDocument()
-    expect(await screen.getByRole('img')).toBeInTheDocument()
+    expect(await screen.getByRole("img")).toBeInTheDocument()
   })
 })

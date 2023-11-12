@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react"
 
 export interface DatasetAlertProps {
   alert: string
   footer?: string
-  level?: 'warning' | 'error' | 'info'
+  level?: "warning" | "error" | "info"
 }
 
 export const DatasetAlert: React.FC<DatasetAlertProps> = ({
@@ -13,8 +13,9 @@ export const DatasetAlert: React.FC<DatasetAlertProps> = ({
   level,
 }) => (
   <div
-    className={level ? `dataset-header-alert ${level}` : 'dataset-header-alert'}
-    role="alert">
+    className={level ? `dataset-header-alert ${level}` : "dataset-header-alert"}
+    role="alert"
+  >
     <span>
       <strong>{alert}&#32;</strong>
       {children}

@@ -1,48 +1,48 @@
-import { vi } from 'vitest'
-import { connect } from 'mongoose'
-import { deleteComment, flatten } from '../resolvers/comment'
-import Comment from '../../models/comment'
+import { vi } from "vitest"
+import { connect } from "mongoose"
+import { deleteComment, flatten } from "../resolvers/comment"
+import Comment from "../../models/comment"
 
-vi.mock('ioredis')
+vi.mock("ioredis")
 
-describe('comment resolver helpers', () => {
-  describe('deleteComment', () => {
+describe("comment resolver helpers", () => {
+  describe("deleteComment", () => {
     let aId
     const adminUser = {
-      user: '1234',
+      user: "1234",
       userInfo: { admin: true },
     }
     const nonAdminUser = {
-      user: '5678',
+      user: "5678",
       userInfo: { admin: false },
     }
     beforeAll(async () => {
       await connect(globalThis.__MONGO_URI__)
       const comment = new Comment({
-        text: 'a',
+        text: "a",
         createDate: new Date().toISOString(),
-        user: { id: '5678' },
+        user: { id: "5678" },
       })
       await comment.save()
       aId = comment.id
     })
 
-    it('returns an array of the deleted comment ids', async () => {
+    it("returns an array of the deleted comment ids", async () => {
       const deletedIds = (
         await deleteComment({}, { commentId: aId }, adminUser)
-      ).map(id => id.toString())
+      ).map((id) => id.toString())
       expect(deletedIds[0]).toEqual(aId)
     })
 
-    it('prevents non-admin users from deleting comments', () => {
+    it("prevents non-admin users from deleting comments", () => {
       return expect(
         deleteComment({}, { commentId: aId }, nonAdminUser),
-      ).rejects.toMatch('You do not have admin access to this dataset.')
+      ).rejects.toMatch("You do not have admin access to this dataset.")
     })
   })
 
-  describe('flatten', () => {
-    it('unrolls an array', () => {
+  describe("flatten", () => {
+    it("unrolls an array", () => {
       const arrarr = [
         [1, 2, 3],
         [4, 5],

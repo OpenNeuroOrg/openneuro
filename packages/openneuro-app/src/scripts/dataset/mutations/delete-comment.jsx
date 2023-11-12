@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { DATASET_COMMENTS } from '../fragments/comments-fragments'
-import { datasetCacheId } from './cache-id.js'
-import { Icon } from '@openneuro/components/icon'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { DATASET_COMMENTS } from "../fragments/comments-fragments"
+import { datasetCacheId } from "./cache-id.js"
+import { Icon } from "@openneuro/components/icon"
 
 const deleteComment = gql`
   mutation deleteComment($commentId: ID!, $deleteChildren: Boolean) {
@@ -22,7 +22,7 @@ const deleteComment = gql`
 export const deleteCommentsReducer = (comments, { deletedCommentIds }) => {
   // Must copy with freezeResults enabled
   const nextCommentsState = [...comments].filter(
-    c => !deletedCommentIds.includes(c.id),
+    (c) => !deletedCommentIds.includes(c.id),
   )
   return nextCommentsState
 }
@@ -44,13 +44,14 @@ const DeleteComment = ({ datasetId, commentId }) => {
           id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             comments: nextCommentsState,
           },
         })
-      }}>
-      {deleteComment => (
+      }}
+    >
+      {(deleteComment) => (
         <div className="col col-fixed">
           <a
             className="edit"
@@ -61,7 +62,8 @@ const DeleteComment = ({ datasetId, commentId }) => {
                   deleteChildren: true,
                 },
               })
-            }}>
+            }}
+          >
             <Icon icon="fa fa-trash" label="Delete" />
           </a>
         </div>

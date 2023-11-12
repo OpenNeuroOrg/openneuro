@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { Route, Routes } from 'react-router-dom'
-import SnapshotContainer from './snapshot-container'
-import DraftContainer from './draft-container'
+import React, { useEffect } from "react"
+import PropTypes from "prop-types"
+import { Route, Routes } from "react-router-dom"
+import SnapshotContainer from "./snapshot-container"
+import DraftContainer from "./draft-container"
 
 const DatasetRoutes = ({ dataset, error }) => {
   useEffect(() => {

@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
-import FileView from './file-view.jsx'
-import { apiPath } from './file'
-import styled from '@emotion/styled'
-import { Media } from '../../styles/media'
-import { DatasetPageBorder } from '../routes/styles/dataset-page-border'
+import React from "react"
+import PropTypes from "prop-types"
+import { useParams } from "react-router-dom"
+import FileView from "./file-view.jsx"
+import { apiPath } from "./file"
+import styled from "@emotion/styled"
+import { Media } from "../../styles/media"
+import { DatasetPageBorder } from "../routes/styles/dataset-page-border"
 
 const PathBreadcrumb = styled.div`
   font-size: 14px;
@@ -24,21 +24,21 @@ const PathBreadcrumb = styled.div`
  * Create dataset -> dir -> filename breadcrumbs
  */
 export const FileDisplayBreadcrumb = ({ filePath }) => {
-  const tokens = filePath.split(':')
+  const tokens = filePath.split(":")
   return (
     <>
       {tokens.map((token, index) => {
         if (token === tokens.slice(-1)[0]) {
           return (
             <span className="display-file" key={index}>
-              {' '}
+              {" "}
               <i className="fa fa-file-o" /> {token}
             </span>
           )
         } else {
           return (
             <span className="display-file" key={index}>
-              {' '}
+              {" "}
               <i className="fa fa-folder-open-o" /> {token}
             </span>
           )

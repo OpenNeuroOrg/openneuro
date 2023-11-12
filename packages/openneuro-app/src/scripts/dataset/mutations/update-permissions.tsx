@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { toast } from 'react-toastify'
-import ToastContent from '../../common/partials/toast-content'
-import { validate as isValidEmail } from 'email-validator'
-import { Button } from '@openneuro/components/button'
+import React, { FC } from "react"
+import { gql, useMutation } from "@apollo/client"
+import { toast } from "react-toastify"
+import ToastContent from "../../common/partials/toast-content"
+import { validate as isValidEmail } from "email-validator"
+import { Button } from "@openneuro/components/button"
 
 const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(
@@ -29,15 +29,15 @@ export const mergeNewPermission = (
   metadata,
 ) => {
   return {
-    __typename: 'Dataset',
+    __typename: "Dataset",
     id: datasetId,
     permissions: {
       ...oldPermissions,
       userPermissions: [
         ...oldPermissions.userPermissions,
         {
-          __typename: 'Permission',
-          user: { __typename: 'User', ...userInfo },
+          __typename: "Permission",
+          user: { __typename: "User", ...userInfo },
           level: metadata,
         },
       ],

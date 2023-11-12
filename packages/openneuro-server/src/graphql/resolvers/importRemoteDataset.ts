@@ -1,9 +1,9 @@
-import IngestDataset from '../../models/ingestDataset'
-import { checkDatasetWrite } from '../permissions.js'
-import { getDatasetWorker } from '../../libs/datalad-service'
-import { generateDataladCookie } from '../../libs/authentication/jwt'
-import notifications from '../../libs/notifications'
-import config from '../../config'
+import IngestDataset from "../../models/ingestDataset"
+import { checkDatasetWrite } from "../permissions.js"
+import { getDatasetWorker } from "../../libs/datalad-service"
+import { generateDataladCookie } from "../../libs/authentication/jwt"
+import notifications from "../../libs/notifications"
+import config from "../../config"
 
 /**
  * Test if a URL is allowed to be imported
@@ -17,10 +17,10 @@ export function allowedImportUrl(raw: string): boolean {
   } catch (_) {
     return false
   }
-  if (url.hostname === 'brainlife.io') {
+  if (url.hostname === "brainlife.io") {
     return true
   } else if (
-    url.hostname === 'openneuro-test-import-bucket.s3.us-west-2.amazonaws.com'
+    url.hostname === "openneuro-test-import-bucket.s3.us-west-2.amazonaws.com"
   ) {
     return true
   } else {
@@ -46,11 +46,12 @@ export async function importRemoteDataset(
     await ingest.save()
     const importId = ingest._id.toString()
     const worker = getDatasetWorker(datasetId)
-    const importUrl = `http://${worker}/datasets/${datasetId}/import/${importId}`
+    const importUrl =
+      `http://${worker}/datasets/${datasetId}/import/${importId}`
     await fetch(importUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Cookie: generateDataladCookie(config)(userInfo),
       },
       body: JSON.stringify({ url }),

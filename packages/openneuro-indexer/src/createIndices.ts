@@ -1,5 +1,5 @@
-import { Client } from '@elastic/elasticsearch'
-import { DatasetsIndex } from '@openneuro/search'
+import { Client } from "@elastic/elasticsearch"
+import { DatasetsIndex } from "@openneuro/search"
 
 /**
  * Setup any indices and mappings in elasticsearch

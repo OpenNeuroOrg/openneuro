@@ -1,5 +1,5 @@
-import React from 'react'
-import { Dropdown } from '../dropdown/Dropdown'
+import React from "react"
+import { Dropdown } from "../dropdown/Dropdown"
 
 export interface SearchSortProps {
   items: {
@@ -32,7 +32,10 @@ export const SearchSort = ({
           <div className="search-sort-dropdown-list">
             <ul>
               {items.map((item, index) => (
-                <li key={index} onClick={() => setSelected(item)}>
+                <li
+                  key={index}
+                  onClick={() => setSelected(item)}
+                >
                   {selected.value === item.value && (
                     <i className="fas fa-check" />
                   )}

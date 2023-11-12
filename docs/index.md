@@ -5,7 +5,7 @@ for sharing neuroimaging data.
 
 ## Getting started
 
-If you are a looking for datasets, [OpenNeuro Search][] allows you to search public
+If you are a looking for datasets, [OpenNeuro Search][OpenNeuro Search] allows you to search public
 datasets.
 
 If you are considering uploading datasets to OpenNeuro, or recommending OpenNeuro as

@@ -12,7 +12,8 @@ export const snapshotCreated = ({
   datasetId: string
   versionNumber: string
   changelog: string
-}): string => `<html>
+}): string =>
+  `<html>
 <head>
 <style>
 	body {

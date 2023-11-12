@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface IssueDocument extends Document {
@@ -21,6 +21,6 @@ const issueSchema = new Schema({
   },
 })
 
-const Issue = model<IssueDocument>('Issue', issueSchema)
+const Issue = model<IssueDocument>("Issue", issueSchema)
 
 export default Issue

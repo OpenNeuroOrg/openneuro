@@ -1,14 +1,14 @@
 import {
   DatasetOrSnapshot,
   getDatasetFromSnapshotId,
-} from '../../utils/datasetOrSnapshot'
-import config from '../../config'
+} from "../../utils/datasetOrSnapshot"
+import config from "../../config"
 
-const S3_BUCKET = 'openneuro-derivatives'
-const GITHUB_ORGANIZATION = 'OpenNeuroDerivatives'
+const S3_BUCKET = "openneuro-derivatives"
+const GITHUB_ORGANIZATION = "OpenNeuroDerivatives"
 
 // Available derivatives at this time
-type GitHubDerivative = 'mriqc' | 'fmriprep'
+type GitHubDerivative = "mriqc" | "fmriprep"
 
 /**
  * Test for a derivative on GitHub via API
@@ -80,17 +80,17 @@ export const derivatives = async (
   dataset: DatasetOrSnapshot,
 ): Promise<Array<DatasetDerivatives>> => {
   let datasetId
-  if ('tag' in dataset) {
+  if ("tag" in dataset) {
     datasetId = getDatasetFromSnapshotId(dataset.id)
   } else {
     datasetId = dataset.id
   }
   const available: Array<DatasetDerivatives> = []
-  if (await githubDerivative(datasetId, 'mriqc')) {
-    available.push(derivativeObject(datasetId, 'mriqc'))
+  if (await githubDerivative(datasetId, "mriqc")) {
+    available.push(derivativeObject(datasetId, "mriqc"))
   }
-  if (await githubDerivative(datasetId, 'fmriprep')) {
-    available.push(derivativeObject(datasetId, 'fmriprep'))
+  if (await githubDerivative(datasetId, "fmriprep")) {
+    available.push(derivativeObject(datasetId, "fmriprep"))
   }
   return available
 }

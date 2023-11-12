@@ -1,7 +1,7 @@
-import React from 'react'
-import useParticipantCount from './use-participant-count'
-import usePublicDatasetsCount from './use-publicDatasets-count'
-import { AggregateCount } from '@openneuro/components/aggregate-count'
+import React from "react"
+import useParticipantCount from "./use-participant-count"
+import usePublicDatasetsCount from "./use-publicDatasets-count"
+import { AggregateCount } from "@openneuro/components/aggregate-count"
 
 export interface AggregateCountsContainerProps {
   modality?: string
@@ -26,7 +26,7 @@ const AggregateCountsContainer: React.FC<AggregateCountsContainerProps> = ({
 
   if (loading) return <>...</>
   else if (error) return null
-  else
+  else {
     return (
       <>
         <AggregateCount
@@ -39,6 +39,7 @@ const AggregateCountsContainer: React.FC<AggregateCountsContainerProps> = ({
         />
       </>
     )
+  }
 }
 
 export default AggregateCountsContainer

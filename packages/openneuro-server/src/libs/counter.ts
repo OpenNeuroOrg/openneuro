@@ -1,4 +1,4 @@
-import Counter from '../models/counter'
+import Counter from "../models/counter"
 
 /**
  * Counter

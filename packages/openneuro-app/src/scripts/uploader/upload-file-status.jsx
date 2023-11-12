@@ -1,12 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react"
+import PropTypes from "prop-types"
 
 const UploadFileStatus = ({ uploadingFiles, failedFiles }) => (
   <>
-    <p>{[...uploadingFiles].join(', ')}</p>
+    <p>{[...uploadingFiles].join(", ")}</p>
     <p>
       {failedFiles.size
-        ? `Too many failed attempts for '${[...failedFiles].join(', ')}'`
+        ? `Too many failed attempts for '${[...failedFiles].join(", ")}'`
         : null}
     </p>
   </>

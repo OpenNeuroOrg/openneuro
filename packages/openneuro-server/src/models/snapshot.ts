@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface SnapshotDocument extends Document {
@@ -19,6 +19,6 @@ const snapshotSchema = new Schema({
 snapshotSchema.index({ datasetId: 1, tag: 1 }, { unique: true })
 snapshotSchema.index({ datasetId: 1 })
 
-const Snapshot = model<SnapshotDocument>('Snapshot', snapshotSchema)
+const Snapshot = model<SnapshotDocument>("Snapshot", snapshotSchema)
 
 export default Snapshot

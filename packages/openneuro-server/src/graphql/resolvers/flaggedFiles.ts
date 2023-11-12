@@ -1,5 +1,5 @@
-import BadAnnexObject from '../../models/badAnnexObject'
-import { checkAdmin } from '../permissions'
+import BadAnnexObject from "../../models/badAnnexObject"
+import { checkAdmin } from "../permissions"
 
 export const flaggedFiles = async (
   obj,
@@ -8,6 +8,6 @@ export const flaggedFiles = async (
 ) => {
   await checkAdmin(user, userInfo)
   return BadAnnexObject.find({ flagged, removed: deleted })
-    .populate('flagger')
-    .populate('remover')
+    .populate("flagger")
+    .populate("remover")
 }

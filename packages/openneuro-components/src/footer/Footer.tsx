@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react"
 
-import { frontPage } from '../content/front-page-content'
+import { frontPage } from "../content/front-page-content"
 
 export interface FooterProps {
   version: string

@@ -1,7 +1,7 @@
-import User, { UserDocument } from '../../models/user'
-import Permission, { PermissionDocument } from '../../models/permission'
-import { checkDatasetAdmin } from '../permissions'
-import { user } from './user'
+import User, { UserDocument } from "../../models/user"
+import Permission, { PermissionDocument } from "../../models/permission"
+import { checkDatasetAdmin } from "../permissions"
+import { user } from "./user"
 
 interface DatasetPermission {
   id: string
@@ -13,16 +13,15 @@ export async function permissions(ds): Promise<DatasetPermission> {
   return {
     id: ds.id,
     userPermissions: permissions.map(
-      userPermission =>
-        ({
-          ...userPermission.toJSON(),
-          user: user(ds, { id: userPermission.userId }),
-        } as PermissionDocument & { user: Promise<UserDocument> }),
+      (userPermission) => ({
+        ...userPermission.toJSON(),
+        user: user(ds, { id: userPermission.userId }),
+      } as PermissionDocument & { user: Promise<UserDocument> }),
     ),
   }
 }
 
-const publishPermissions = async datasetId => {
+const publishPermissions = async (datasetId) => {
   // Create permissionsUpdated object with DatasetPermissions in Dataset
   // and resolve all promises before publishing
   const ds = { id: datasetId }
@@ -32,7 +31,7 @@ const publishPermissions = async datasetId => {
     permissions: {
       id,
       userPermissions: await Promise.all(
-        userPermissions.map(async userPermission => ({
+        userPermissions.map(async (userPermission) => ({
           ...userPermission,
           user: await user(ds, { id: userPermission.userId }),
         })),
@@ -48,14 +47,14 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
   await checkDatasetAdmin(args.datasetId, user, userInfo)
   // get all users the the email specified by permissions arg
   const users = await User.find({ email: args.userEmail })
-    .collation({ locale: 'en', strength: 2 })
+    .collation({ locale: "en", strength: 2 })
     .exec()
 
   if (!users.length) {
-    throw new Error('A user with that email address does not exist')
+    throw new Error("A user with that email address does not exist")
   }
 
-  const userPromises = users.map(user => {
+  const userPromises = users.map((user) => {
     return new Promise<void>((resolve, reject) => {
       Permission.updateOne(
         {
@@ -71,11 +70,11 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
       )
         .exec()
         .then(() => resolve())
-        .catch(err => reject(err))
+        .catch((err) => reject(err))
     })
   })
   return Promise.all(userPromises).then(() =>
-    publishPermissions(args.datasetId),
+    publishPermissions(args.datasetId)
   )
 }
 

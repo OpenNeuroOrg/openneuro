@@ -1,6 +1,6 @@
-import React from 'react'
-import { createMedia } from '@artsy/fresnel'
-import '@artsy/fresnel/dist/Media'
+import React from "react"
+import { createMedia } from "@artsy/fresnel"
+import "@artsy/fresnel/dist/Media"
 
 const AppMedia = createMedia({
   breakpoints: {

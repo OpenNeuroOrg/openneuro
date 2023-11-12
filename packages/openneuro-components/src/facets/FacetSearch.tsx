@@ -1,7 +1,7 @@
-import React from 'react'
-import { TermSearch } from '../input/TermSearch'
-import { ButtonPropsSize } from '../button/Button'
-import { InputPropsStyle } from '../input/Input'
+import React from "react"
+import { TermSearch } from "../input/TermSearch"
+import { ButtonPropsSize } from "../button/Button"
+import { InputPropsStyle } from "../input/Input"
 
 export interface FacetSearchProps {
   setTermValue: (string) => void

@@ -1,2 +1,2 @@
-import { ActivitySlider } from './ActivitySlider'
+import { ActivitySlider } from "./ActivitySlider"
 export { ActivitySlider }

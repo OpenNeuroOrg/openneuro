@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface SummaryPetField {
@@ -59,6 +59,6 @@ const summarySchema = new Schema({
 
 summarySchema.index({ id: 1 })
 
-const Summary = model<SummaryDocument>('Summary', summarySchema)
+const Summary = model<SummaryDocument>("Summary", summarySchema)
 
 export default Summary

@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import UploaderContext from '../../uploader/uploader-context.js'
+import React from "react"
+import PropTypes from "prop-types"
+import UploaderContext from "../../uploader/uploader-context.js"
 
 const UpdateFile = ({
   datasetId,
@@ -11,12 +11,12 @@ const UpdateFile = ({
 }) => {
   return (
     <UploaderContext.Consumer>
-      {uploader => (
+      {(uploader) => (
         <div className="edit-file">
           <input
             type="file"
             className="update-file"
-            onChange={e => {
+            onChange={(e) => {
               e.preventDefault()
               uploader.resumeDataset(
                 datasetId,
@@ -24,7 +24,7 @@ const UpdateFile = ({
                 false,
               )({ files: e.target.files })
             }}
-            webkitdirectory={directory ? 'true' : undefined}
+            webkitdirectory={directory ? "true" : undefined}
             multiple={multiple && true}
           />
           {children}

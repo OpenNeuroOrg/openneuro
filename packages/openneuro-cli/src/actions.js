@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
-import fs from 'fs'
-import inquirer from 'inquirer'
-import { apm } from './apm.js'
-import { saveConfig, getUrl, getUser } from './config'
-import { validation, prepareUpload, uploadFiles, finishUpload } from './upload'
-import { getDatasetFiles, createDataset } from './datasets'
-import { getSnapshots } from './snapshots.js'
-import { getDownload } from './download.js'
-import { configuredClient } from './configuredClient.js'
-import { validateApiKey } from './validateApiKey'
-import { lsSnapshot } from './ls.js'
+import fs from "fs"
+import inquirer from "inquirer"
+import { apm } from "./apm.js"
+import { getUrl, getUser, saveConfig } from "./config"
+import { finishUpload, prepareUpload, uploadFiles, validation } from "./upload"
+import { createDataset, getDatasetFiles } from "./datasets"
+import { getSnapshots } from "./snapshots.js"
+import { getDownload } from "./download.js"
+import { configuredClient } from "./configuredClient.js"
+import { validateApiKey } from "./validateApiKey"
+import { lsSnapshot } from "./ls.js"
 
 /**
  * Login action to save an auth key locally
@@ -20,37 +20,38 @@ import { lsSnapshot } from './ls.js'
 export const login = () => {
   return inquirer
     .prompt({
-      type: 'list',
-      name: 'url',
-      message: 'Choose an OpenNeuro instance to use.',
+      type: "list",
+      name: "url",
+      message: "Choose an OpenNeuro instance to use.",
       choices: [
-        'https://openneuro.org/',
-        'https://staging.openneuro.org/',
-        'http://localhost:9876/',
+        "https://openneuro.org/",
+        "https://staging.openneuro.org/",
+        "http://localhost:9876/",
       ],
-      default: 'https://openneuro.org/',
+      default: "https://openneuro.org/",
     })
-    .then(async answers =>
+    .then(async (answers) =>
       Object.assign(
         answers,
         await inquirer.prompt({
-          type: 'password',
-          name: 'apikey',
-          message: `Enter your API key for OpenNeuro (get an API key from ${answers.url}keygen)`,
+          type: "password",
+          name: "apikey",
+          message:
+            `Enter your API key for OpenNeuro (get an API key from ${answers.url}keygen)`,
           validate: validateApiKey,
         }),
-      ),
+      )
     )
-    .then(async answers =>
+    .then(async (answers) =>
       Object.assign(
         answers,
         await inquirer.prompt({
-          type: 'confirm',
-          name: 'errorReporting',
+          type: "confirm",
+          name: "errorReporting",
           message:
-            'Do you want to enable error reporting to help improve openneuro-cli?',
+            "Do you want to enable error reporting to help improve openneuro-cli?",
         }),
-      ),
+      )
     )
     .then(saveConfig)
 }
@@ -64,7 +65,7 @@ const uploadDataset = async (
     affirmedConsent: null,
   },
 ) => {
-  const apmTransaction = apm && apm.startTransaction('upload', 'custom')
+  const apmTransaction = apm && apm.startTransaction("upload", "custom")
   apmTransaction.addLabels({ datasetId })
   const client = configuredClient()
   await validation(dir, validatorOptions, apmTransaction)
@@ -73,7 +74,7 @@ const uploadDataset = async (
     // Check for dataset -> validation -> upload
     // Get remote files and filter successful files out
     // eslint-disable-next-line no-console
-    console.log('Checking remote files...')
+    console.log("Checking remote files...")
     remoteFiles = await getDatasetFiles(client, datasetId)
   } else {
     // Validation -> create dataset -> upload
@@ -85,8 +86,8 @@ const uploadDataset = async (
     console.log(`"${datasetId}" created`)
     remoteFiles = [] // New dataset has no remote files
   }
-  const apmPrepareUploadSpan =
-    apmTransaction && apmTransaction.startSpan('prepareUpload')
+  const apmPrepareUploadSpan = apmTransaction &&
+    apmTransaction.startSpan("prepareUpload")
   const preparedUpload = await prepareUpload(client, dir, {
     datasetId,
     remoteFiles,
@@ -94,16 +95,16 @@ const uploadDataset = async (
   apmPrepareUploadSpan.end()
   if (preparedUpload) {
     if (preparedUpload.files.length > 1) {
-      const apmUploadFilesSpan =
-        apmTransaction && apmTransaction.startSpan('uploadFiles')
+      const apmUploadFilesSpan = apmTransaction &&
+        apmTransaction.startSpan("uploadFiles")
       await uploadFiles(preparedUpload)
       apmUploadFilesSpan && apmUploadFilesSpan.end()
-      const apmFinishUploadSpan =
-        apmTransaction && apmTransaction.startSpan('finishUpload')
+      const apmFinishUploadSpan = apmTransaction &&
+        apmTransaction.startSpan("finishUpload")
       await finishUpload(client, preparedUpload.id)
       apmUploadFilesSpan && apmFinishUploadSpan.end()
     } else {
-      console.log('No files remaining to upload, exiting.')
+      console.log("No files remaining to upload, exiting.")
     }
     apmTransaction && apmTransaction.end()
     return datasetId
@@ -112,26 +113,26 @@ const uploadDataset = async (
 
 const notifyUploadComplete = (update, datasetId) => {
   console.log(
-    '=======================================================================',
+    "=======================================================================",
   )
-  console.log('Upload Complete')
+  console.log("Upload Complete")
   console.log(
     update
       ? `To publish the update go to ${getUrl()}datasets/${datasetId} and create a new snapshot`
       : `To publish your dataset go to ${getUrl()}datasets/${datasetId}`,
   )
   console.log(
-    '=======================================================================',
+    "=======================================================================",
   )
 }
 
 const specificErrorTest = (err, targetErrMessage) =>
   err.message &&
-  typeof err.message === 'string' &&
+  typeof err.message === "string" &&
   err.message.includes(targetErrMessage)
 
 function isNotLoggedInError(err) {
-  return specificErrorTest(err, 'You must be logged in to create a dataset.')
+  return specificErrorTest(err, "You must be logged in to create a dataset.")
 }
 
 function isMissingDotOpenneuroError(err) {
@@ -142,7 +143,7 @@ function isMissingDotOpenneuroError(err) {
 }
 
 function logSpecificError(errors) {
-  errors.forEach(err => {
+  errors.forEach((err) => {
     // eslint-disable-next-line no-console
     console.error(err)
   })
@@ -171,32 +172,32 @@ export const upload = (dir, cmd) => {
       ignoreNiftiHeaders: cmd.ignoreNiftiHeaders,
       ignoreSubjectConsistency: cmd.ignoreSubjectConsistency,
       verbose: cmd.verbose,
-      blacklistModalities: ['Microscopy'],
+      blacklistModalities: ["Microscopy"],
     }
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions).then(datasetId => {
+      uploadDataset(dir, cmd.dataset, validatorOptions).then((datasetId) => {
         if (datasetId) {
-          notifyUploadComplete('update', cmd.dataset)
+          notifyUploadComplete("update", cmd.dataset)
         }
       })
     } else {
       inquirer
         .prompt([
           {
-            type: 'confirm',
-            name: 'yes',
+            type: "confirm",
+            name: "yes",
             default: true,
-            message: 'This will create a new dataset, continue?',
+            message: "This will create a new dataset, continue?",
           },
           {
-            type: 'list',
-            name: 'affirmed',
-            message: 'Please affirm one of the following:',
+            type: "list",
+            name: "affirmed",
+            message: "Please affirm one of the following:",
             choices: [
-              'All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.',
-              'I have explicit participant consent and ethical authorization to publish structural scans without defacing.',
+              "All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
+              "I have explicit participant consent and ethical authorization to publish structural scans without defacing.",
             ],
           },
         ])
@@ -205,14 +206,14 @@ export const upload = (dir, cmd) => {
             return uploadDataset(dir, cmd.dataset, validatorOptions, {
               affirmedDefaced: !!affirmedDefaced,
               affirmedConsent: !!affirmedConsent,
-            }).then(datasetId => {
+            }).then((datasetId) => {
               if (datasetId) {
                 notifyUploadComplete(false, datasetId)
               }
             })
           }
         })
-        .catch(err => {
+        .catch((err) => {
           if (isNotLoggedInError(err)) {
             logSpecificError([
               err.message,
@@ -235,11 +236,11 @@ export const upload = (dir, cmd) => {
   }
 }
 
-const promptTags = snapshots =>
+const promptTags = (snapshots) =>
   inquirer.prompt({
-    type: 'list',
-    name: 'tag',
-    message: 'Choose a snapshot',
+    type: "list",
+    name: "tag",
+    message: "Choose a snapshot",
     choices: snapshots,
     default: snapshots[0],
   })
@@ -253,7 +254,7 @@ const promptTags = snapshots =>
 export const download = (datasetId, destination, cmd) => {
   const apmTransaction = apm.startTransaction(
     `download:${datasetId}`,
-    'download',
+    "download",
   )
   const { sub } = getUser()
   apmTransaction.addLabels({ datasetId, userId: sub })
@@ -264,16 +265,16 @@ export const download = (datasetId, destination, cmd) => {
   if (!cmd.draft && !cmd.snapshot) {
     return getSnapshots(client)(datasetId).then(({ data }) => {
       if (data.dataset && data.dataset.snapshots) {
-        const tags = data.dataset.snapshots.map(snap => snap.tag)
+        const tags = data.dataset.snapshots.map((snap) => snap.tag)
         tags.reverse()
-        return promptTags(tags).then(choices =>
+        return promptTags(tags).then((choices) =>
           getDownload(
             destination,
             datasetId,
             choices.tag,
             apmTransaction,
             client,
-          ),
+          )
         )
       }
     })
@@ -302,9 +303,9 @@ export const ls = (datasetId, cmd) => {
   if (!cmd.snapshot) {
     return getSnapshots(client)(datasetId).then(({ data }) => {
       if (data.dataset && data.dataset.snapshots) {
-        const tags = data.dataset.snapshots.map(snap => snap.tag)
+        const tags = data.dataset.snapshots.map((snap) => snap.tag)
         tags.reverse()
-        return promptTags(tags).then(choices => {
+        return promptTags(tags).then((choices) => {
           lsSnapshot(client, datasetId, choices.tag)
         })
       }

@@ -1,6 +1,6 @@
-import notifications from '../libs/notifications'
-import Subscription from '../models/subscription'
-import mongoose from 'mongoose'
+import notifications from "../libs/notifications"
+import Subscription from "../models/subscription"
+import mongoose from "mongoose"
 const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
@@ -24,8 +24,8 @@ export const create = (req, res, next) => {
   const userId = data.userId
 
   subscribe(datasetId, userId)
-    .then(response => res.send(response.$op))
-    .catch(err => next(err))
+    .then((response) => res.send(response.$op))
+    .catch((err) => next(err))
 }
 
 /**
@@ -43,7 +43,7 @@ export const deleteSubscription = (req, res, next) => {
   Subscription.deleteOne({
     datasetId: datasetId,
     userId: userId,
-  }).catch(err => {
+  }).catch((err) => {
     if (err) {
       return next(err)
     } else {
@@ -61,15 +61,15 @@ export const deleteAll = (req, res, next) => {
     datasetId: datasetId,
   })
     .exec()
-    .then(subscriptions => {
-      subscriptions.forEach(subscription => {
+    .then((subscriptions) => {
+      subscriptions.forEach((subscription) => {
         Subscription.deleteOne({
           _id: new ObjectID(subscription._id),
         })
       })
       return res.send()
     })
-    .catch(err => {
+    .catch((err) => {
       if (err) {
         return next(err)
       }
@@ -84,26 +84,27 @@ export const deleteAll = (req, res, next) => {
  * Returns a list of subscriptions that are associated with a dataset
  */
 export const getSubscriptions = (req, res, next) => {
-  const datasetId =
-    req.params.datasetId === 'undefined' ? null : req.params.datasetId
+  const datasetId = req.params.datasetId === "undefined"
+    ? null
+    : req.params.datasetId
   if (datasetId) {
     Subscription.find({
       datasetId: datasetId,
     })
       .exec()
-      .then(subscriptions => {
+      .then((subscriptions) => {
         res.send(subscriptions)
       })
-      .catch(err => {
+      .catch((err) => {
         return next(err)
       })
   } else {
     Subscription.find()
       .exec()
-      .then(subscriptions => {
+      .then((subscriptions) => {
         res.send(subscriptions)
       })
-      .catch(err => {
+      .catch((err) => {
         return next(err)
       })
   }
@@ -123,7 +124,7 @@ export const checkUserSubscription = (req, res) => {
     userId: userId,
   })
     .exec()
-    .then(resp => {
+    .then((resp) => {
       if (resp) {
         return res.send({ subscribed: true })
       } else {

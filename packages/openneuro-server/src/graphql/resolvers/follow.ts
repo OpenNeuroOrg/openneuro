@@ -1,4 +1,4 @@
-import Subscription from '../../models/subscription'
+import Subscription from "../../models/subscription"
 
 export const followDataset = async (obj, { datasetId }, { user }) => {
   const following = await Subscription.findOne({

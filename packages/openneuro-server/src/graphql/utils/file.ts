@@ -1,7 +1,7 @@
-import BadAnnexObject from '../../models/badAnnexObject'
+import BadAnnexObject from "../../models/badAnnexObject"
 
 export const filterRemovedAnnexObjects =
-  (datasetId, userInfo) => async files => {
+  (datasetId, userInfo) => async (files) => {
     const removedAnnexObjectKeys = (
       await BadAnnexObject.find({ datasetId }).exec()
     ).map(({ annexKey }) => annexKey)

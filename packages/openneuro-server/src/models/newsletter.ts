@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface NewsletterDocument extends Document {
@@ -10,12 +10,12 @@ export interface NewsletterDocument extends Document {
 const newsletterSchema = new Schema({
   created: { type: Date, default: Date.now },
   email: {
-    type: 'string',
+    type: "string",
     required: true,
     unique: true,
   },
 })
 
-const Newsletter = model<NewsletterDocument>('Newsletter', newsletterSchema)
+const Newsletter = model<NewsletterDocument>("Newsletter", newsletterSchema)
 
 export default Newsletter

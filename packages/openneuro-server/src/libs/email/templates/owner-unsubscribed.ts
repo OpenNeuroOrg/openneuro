@@ -6,7 +6,8 @@ export const ownerUnsubscribed = ({
   siteUrl: string
   name: string
   datasetName: string
-}): string => `<html>
+}): string =>
+  `<html>
 <head>
 <style>
 	body {

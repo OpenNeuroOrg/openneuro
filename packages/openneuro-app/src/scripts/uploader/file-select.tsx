@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react"
+import PropTypes from "prop-types"
 
 type UploadProps = {
   resume?: boolean
@@ -21,7 +21,7 @@ class Upload extends React.Component<UploadProps> {
       </span>
     )
     const icon = this.props.resume ? resumeIcon : null
-    const text = this.props.resume ? 'Resume' : 'Select folder'
+    const text = this.props.resume ? "Resume" : "Select folder"
 
     return (
       <div className="fileupload-btn">

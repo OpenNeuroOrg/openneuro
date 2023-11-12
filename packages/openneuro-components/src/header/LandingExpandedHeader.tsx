@@ -1,12 +1,12 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react"
+import { useNavigate } from "react-router-dom"
 
-import { Button } from '../button/Button'
-import { ModalityCube } from '../modality-cube/ModalityCube'
-import { cubeData } from '../content/modality-cube-content.jsx'
-import orcidIcon from '../assets/orcid_24x24.png'
+import { Button } from "../button/Button"
+import { ModalityCube } from "../modality-cube/ModalityCube"
+import { cubeData } from "../content/modality-cube-content.jsx"
+import orcidIcon from "../assets/orcid_24x24.png"
 
-import { frontPage } from '../content/front-page-content.jsx'
+import { frontPage } from "../content/front-page-content.jsx"
 
 export interface LandingExpandedHeaderProps {
   user?: {}
@@ -36,7 +36,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           label={item.label}
           cubeImage={item.cubeImage}
           stats={aggregateCounts(item.label)}
-          onClick={redirectPath => e => {
+          onClick={(redirectPath) => (e) => {
             navigate(redirectPath)
           }}
         />
@@ -45,7 +45,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   )
 
   return (
-    <div className="expaned-header" style={{ minHeight: '720px' }}>
+    <div className="expaned-header" style={{ minHeight: "720px" }}>
       <div className="container">
         <div className="grid grid-between header-wrap">
           <div className="col expaned-h-left">
@@ -68,33 +68,35 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
               </div>
             </div>
 
-            {!user ? (
-              <div className="grid  grid-start hero-signin">
-                <div className=" hero-sigin-label">
-                  <h3>SIGN IN</h3>
+            {!user
+              ? (
+                <div className="grid  grid-start hero-signin">
+                  <div className=" hero-sigin-label">
+                    <h3>SIGN IN</h3>
+                  </div>
+                  <div>
+                    <a href={loginUrls.google}>
+                      <Button
+                        label="Google"
+                        color="#fff"
+                        icon="fab fa-google"
+                        iconSize="23px"
+                      />
+                    </a>
+                  </div>
+                  <div>
+                    <a href={loginUrls.orcid}>
+                      <Button
+                        label="ORCID"
+                        color="#fff"
+                        imgSrc={orcidIcon}
+                        iconSize="23px"
+                      />
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <a href={loginUrls.google}>
-                    <Button
-                      label="Google"
-                      color="#fff"
-                      icon="fab fa-google"
-                      iconSize="23px"
-                    />
-                  </a>
-                </div>
-                <div>
-                  <a href={loginUrls.orcid}>
-                    <Button
-                      label="ORCID"
-                      color="#fff"
-                      imgSrc={orcidIcon}
-                      iconSize="23px"
-                    />
-                  </a>
-                </div>
-              </div>
-            ) : null}
+              )
+              : null}
           </div>
           {hexGrid}
         </div>

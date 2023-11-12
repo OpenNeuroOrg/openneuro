@@ -1,2 +1,2 @@
-import { AffiliateArticle } from './AffiliateArticle'
+import { AffiliateArticle } from "./AffiliateArticle"
 export { AffiliateArticle }

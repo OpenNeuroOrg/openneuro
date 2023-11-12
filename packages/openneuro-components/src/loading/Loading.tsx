@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 export interface LoadingProps {}
 
@@ -6,7 +6,8 @@ export const Loading: React.FC<LoadingProps> = ({}) => (
   <div
     className="cxq-spinner cxq-spinner--waveStretchDelay"
     role="alert"
-    aria-busy="true">
+    aria-busy="true"
+  >
     <div className="cxq-spinner-hexagon "></div>
     <div className="rects">
       <div className="rect rect1"></div>

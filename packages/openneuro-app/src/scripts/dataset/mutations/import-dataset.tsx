@@ -1,8 +1,8 @@
-import React, { FC, useState } from 'react'
-import { gql, useMutation, useApolloClient } from '@apollo/client'
-import { Button } from '@openneuro/components/button'
-import { createDataset } from '../../uploader/upload-mutation'
-import styled from '@emotion/styled'
+import React, { FC, useState } from "react"
+import { gql, useApolloClient, useMutation } from "@apollo/client"
+import { Button } from "@openneuro/components/button"
+import { createDataset } from "../../uploader/upload-mutation"
+import styled from "@emotion/styled"
 
 export const IMPORT_DATASET = gql`
   mutation importRemoteDataset($datasetId: ID!, $url: String!) {

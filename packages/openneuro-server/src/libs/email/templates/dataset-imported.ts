@@ -6,7 +6,8 @@ export const datasetImportEmail = ({
   siteUrl: string
   name: string
   datasetId: string
-}): string => `<html>
+}): string =>
+  `<html>
 <head>
 <style>
 	body {

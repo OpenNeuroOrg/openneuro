@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface DeprecatedSnapshotDocument extends Document {
@@ -27,7 +27,7 @@ const deprecatedSnapshotSchema = new Schema({
 deprecatedSnapshotSchema.index({ datasetId: 1 })
 
 const Snapshot = model<DeprecatedSnapshotDocument>(
-  'DeprecatedSnapshot',
+  "DeprecatedSnapshot",
   deprecatedSnapshotSchema,
 )
 

@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface DoiDocument extends Document {
@@ -13,6 +13,6 @@ const doiSchema = new Schema({
   doi: String,
 })
 
-const Doi = model<DoiDocument>('Doi', doiSchema)
+const Doi = model<DoiDocument>("Doi", doiSchema)
 
 export default Doi

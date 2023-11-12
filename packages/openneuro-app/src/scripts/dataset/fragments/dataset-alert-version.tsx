@@ -1,6 +1,6 @@
-import React from 'react'
-import { DatasetAlert } from '@openneuro/components/dataset'
-import { UndoDeprecateVersion } from '../mutations/undo-deprecate-version'
+import React from "react"
+import { DatasetAlert } from "@openneuro/components/dataset"
+import { UndoDeprecateVersion } from "../mutations/undo-deprecate-version"
 
 export interface DatasetAlertVersionProps {
   datasetId: string
@@ -18,7 +18,8 @@ export const DatasetAlertVersion: React.FC<DatasetAlertVersionProps> = ({
   <DatasetAlert
     alert="This version has been deprecated!"
     level="error"
-    footer={reason}>
+    footer={reason}
+  >
     {hasEdit && <UndoDeprecateVersion datasetId={datasetId} tag={tag} />}
   </DatasetAlert>
 )

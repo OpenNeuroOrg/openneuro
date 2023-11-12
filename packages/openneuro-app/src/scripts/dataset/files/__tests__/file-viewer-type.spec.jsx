@@ -1,9 +1,9 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import FileViewerType from '../file-viewer-type.jsx'
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import FileViewerType from "../file-viewer-type.jsx"
 
-describe('FileViewerType component', () => {
-  it('displays a fallback when an unknown file is specified', () => {
+describe("FileViewerType component", () => {
+  it("displays a fallback when an unknown file is specified", () => {
     const component = render(
       <FileViewerType
         path="unknown-file-extension.xyz"
@@ -12,6 +12,6 @@ describe('FileViewerType component', () => {
     )
     expect(
       screen.getByText(/this file must be downloaded to view it/i),
-    ).toHaveClass('file-viewer-fallback')
+    ).toHaveClass("file-viewer-fallback")
   })
 })

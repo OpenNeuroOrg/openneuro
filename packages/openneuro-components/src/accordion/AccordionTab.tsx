@@ -1,8 +1,8 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode } from "react"
 
-import { Icon } from '../icon/Icon'
+import { Icon } from "../icon/Icon"
 
-export type AccordionTabStyle = 'plain' | 'file-tree' | 'bids-wrapper'
+export type AccordionTabStyle = "plain" | "file-tree" | "bids-wrapper"
 
 export interface AccordionTabProps {
   children: React.ReactNode
@@ -29,33 +29,36 @@ export const AccordionTab: FC<AccordionTabProps> = ({
   onClick,
 }) => {
   const [isOpen, setOpen] = React.useState(startOpen)
-  const fileTreeIcon =
-    accordionStyle == 'file-tree' ? (
+  const fileTreeIcon = accordionStyle == "file-tree"
+    ? (
       <Icon
         className="file-icon"
-        icon={isOpen ? 'fas fa-folder-open' : 'fas fa-folder'}
+        icon={isOpen ? "fas fa-folder-open" : "fas fa-folder"}
         label={label}
       />
-    ) : null
+    )
+    : null
 
   return (
     <article
-      className={
-        `${accordionStyle || ''}` + ' accordion ' + `${className || ''}`
-      }
-      id={id}>
+      className={`${accordionStyle || ""}` + " accordion " +
+        `${className || ""}`}
+      id={id}
+    >
       <div
-        className={`accordion-title ${isOpen ? 'open' : ''}`}
+        className={`accordion-title ${isOpen ? "open" : ""}`}
         onClick={() => {
           onClick?.(!isOpen)
           setOpen(!isOpen)
-        }}>
+        }}
+      >
         {fileTreeIcon || label}
       </div>
       <div
-        className={`accordion-item ${!isOpen ? ' collapsed' : ''} ${
-          dropdown ? ' dropdown-style' : ''
-        }`}>
+        className={`accordion-item ${!isOpen ? " collapsed" : ""} ${
+          dropdown ? " dropdown-style" : ""
+        }`}
+      >
         <div className="accordion-content">{children}</div>
       </div>
     </article>

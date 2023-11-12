@@ -6,7 +6,7 @@
 export function validateUrl(value: string): boolean {
   try {
     const url = new URL(value)
-    return url.protocol === 'https:'
+    return url.protocol === "https:"
   } catch (err) {
     return false
   }

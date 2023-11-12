@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react"
 
-import { TwoHandleRange } from '../range/TwoHandleRange'
+import { TwoHandleRange } from "../range/TwoHandleRange"
 
 export interface FacetRangeProps {
   min: number

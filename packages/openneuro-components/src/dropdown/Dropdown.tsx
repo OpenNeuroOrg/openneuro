@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect, useRef } from "react"
 
 export interface DropdownProps {
   label: Record<string, any>
@@ -13,12 +13,12 @@ export const Dropdown = ({ children, label, className }: DropdownProps) => {
     useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          setIsOpen(prevIsOpen => false)
+          setIsOpen((prevIsOpen) => false)
         }
       }
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside)
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside)
+        document.removeEventListener("mousedown", handleClickOutside)
       }
     }, [ref])
   }
@@ -26,13 +26,14 @@ export const Dropdown = ({ children, label, className }: DropdownProps) => {
   removeIsOpen(wrapperRef)
 
   return (
-    <div className={className + ' dropdown-wrapper'} ref={wrapperRef}>
+    <div className={className + " dropdown-wrapper"} ref={wrapperRef}>
       <div
-        className={`toggle ${isOpen ? 'active' : ''}`}
-        onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)}>
+        className={`toggle ${isOpen ? "active" : ""}`}
+        onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
+      >
         <span>{label}</span>
       </div>
-      <div className={`menu ${isOpen ? 'expanded' : 'collapsed'}`}>
+      <div className={`menu ${isOpen ? "expanded" : "collapsed"}`}>
         {children}
       </div>
     </div>

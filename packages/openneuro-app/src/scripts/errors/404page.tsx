@@ -1,19 +1,19 @@
-import React, { FC } from 'react'
-import { Link } from 'react-router-dom'
-import styled from '@emotion/styled'
+import React, { FC } from "react"
+import { Link } from "react-router-dom"
+import styled from "@emotion/styled"
 
 type ContainerProps = {
   styleContext: string
 }
 const Container = styled.div<ContainerProps>(({ styleContext }) => {
   switch (styleContext) {
-    case 'topLevel':
+    case "topLevel":
       return {
-        margin: '50px 25px',
+        margin: "50px 25px",
       }
-    case 'dataset':
+    case "dataset":
       return {
-        margin: '20px 0',
+        margin: "20px 0",
       }
   }
 })
@@ -26,10 +26,10 @@ interface FourOFourPageProps {
 }
 
 const FourOFourPage: FC<FourOFourPageProps> = ({
-  redirectRoute = '/',
-  redirectRouteName = 'the home page',
-  theme = 'topLevel',
-  message = '',
+  redirectRoute = "/",
+  redirectRouteName = "the home page",
+  theme = "topLevel",
+  message = "",
 }) => {
   return (
     <Container styleContext={theme}>
@@ -37,7 +37,7 @@ const FourOFourPage: FC<FourOFourPageProps> = ({
       {message && <p>{message}</p>}
       <p>
         Click <Link to={redirectRoute}>here</Link> to go to
-        {' ' + redirectRouteName}.
+        {" " + redirectRouteName}.
       </p>
     </Container>
   )

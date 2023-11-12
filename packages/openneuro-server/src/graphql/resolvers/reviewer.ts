@@ -1,7 +1,7 @@
-import config from '../../config'
-import Reviewer from '../../models/reviewer'
-import { checkDatasetAdmin } from '../permissions.js'
-import { generateReviewerToken } from '../../libs/authentication/jwt'
+import config from "../../config"
+import Reviewer from "../../models/reviewer"
+import { checkDatasetAdmin } from "../permissions.js"
+import { generateReviewerToken } from "../../libs/authentication/jwt"
 
 /**
  * Create an anonymous read-only access key

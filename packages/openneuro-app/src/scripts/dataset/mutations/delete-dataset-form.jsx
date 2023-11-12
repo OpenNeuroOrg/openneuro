@@ -1,46 +1,44 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import TextInput from '../fragments/text-input'
-import SelectInput from '../fragments/select-input'
-import styled from '@emotion/styled'
+import React from "react"
+import PropTypes from "prop-types"
+import TextInput from "../fragments/text-input"
+import SelectInput from "../fragments/select-input"
+import styled from "@emotion/styled"
 
 const Form = styled.form({
-  width: '100%',
-  maxWidth: '700px',
-  margin: '10px 0',
+  width: "100%",
+  maxWidth: "700px",
+  margin: "10px 0",
 })
 
-const fields = hasEdit => {
+const fields = (hasEdit) => {
   const fields = [
     {
-      key: 'reason',
-      label: 'Reason',
+      key: "reason",
+      label: "Reason",
       component: SelectInput,
       additionalProps: {
         options: [
-          { value: 'subject privacy' },
-          { value: 'duplicate dataset' },
-          { value: 'abuse of service', admin: true },
+          { value: "subject privacy" },
+          { value: "duplicate dataset" },
+          { value: "abuse of service", admin: true },
         ],
         showOptionOther: true,
         required: false,
       },
     },
     {
-      key: 'redirect',
-      label: 'Superseded by (URL)',
+      key: "redirect",
+      label: "Superseded by (URL)",
       component: TextInput,
       additionalProps: {
         required: false,
       },
     },
   ]
-  return hasEdit
-    ? fields
-    : fields.map(field => {
-        field.additionalProps.disabled = true
-        return field
-      })
+  return hasEdit ? fields : fields.map((field) => {
+    field.additionalProps.disabled = true
+    return field
+  })
 }
 
 const DeleteDatasetForm = ({ values, onChange, hasEdit }) => (

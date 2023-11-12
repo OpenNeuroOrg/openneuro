@@ -4,29 +4,29 @@
 /**
  * Express app setup
  */
-import { createServer } from 'http'
-import cors from 'cors'
-import express, { urlencoded, json } from 'express'
-import passport from 'passport'
-import config from './config'
-import routes from './routes'
-import morgan from 'morgan'
-import schema from './graphql/schema'
-import { ApolloServer } from '@apollo/server'
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
-import { expressMiddleware } from '@apollo/server/express4'
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import { KeyvAdapter } from '@apollo/utils.keyvadapter'
-import Keyv from 'keyv'
-import KeyvRedis from '@keyv/redis'
-import cookieParser from 'cookie-parser'
-import * as jwt from './libs/authentication/jwt'
-import * as auth from './libs/authentication/states'
-import { sitemapHandler } from './handlers/sitemap'
-import { setupPassportAuth } from './libs/authentication/passport'
-import { redis } from './libs/redis'
-import { version } from './lerna.json'
-export { Express } from 'express-serve-static-core'
+import { createServer } from "http"
+import cors from "cors"
+import express, { json, urlencoded } from "express"
+import passport from "passport"
+import config from "./config"
+import routes from "./routes"
+import morgan from "morgan"
+import schema from "./graphql/schema"
+import { ApolloServer } from "@apollo/server"
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default"
+import { expressMiddleware } from "@apollo/server/express4"
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer"
+import { KeyvAdapter } from "@apollo/utils.keyvadapter"
+import Keyv from "keyv"
+import KeyvRedis from "@keyv/redis"
+import cookieParser from "cookie-parser"
+import * as jwt from "./libs/authentication/jwt"
+import * as auth from "./libs/authentication/states"
+import { sitemapHandler } from "./handlers/sitemap"
+import { setupPassportAuth } from "./libs/authentication/passport"
+import { redis } from "./libs/redis"
+import { version } from "./lerna.json"
+export { Express } from "express-serve-static-core"
 
 interface OpenNeuroRequestContext {
   user: string
@@ -47,16 +47,16 @@ export async function expressApolloSetup() {
 
   app.use((req, res, next) => {
     res.set(config.headers)
-    res.type('application/json')
+    res.type("application/json")
     next()
   })
-  app.use(morgan('short'))
+  app.use(morgan("short"))
   app.use(cookieParser())
-  app.use(urlencoded({ extended: false, limit: '50mb' }))
-  app.use(json({ limit: '50mb' }))
+  app.use(urlencoded({ extended: false, limit: "50mb" }))
+  app.use(json({ limit: "50mb" }))
 
   // routing ---------------------------------------------------------
-  app.use('/sitemap.xml', sitemapHandler)
+  app.use("/sitemap.xml", sitemapHandler)
   app.use(config.apiPrefix, routes)
 
   const httpServer = createServer(app)
@@ -78,8 +78,8 @@ export async function expressApolloSetup() {
             async willSendResponse(requestContext) {
               const { response } = requestContext
               if (
-                response.body.kind === 'single' &&
-                'data' in response.body.singleResult
+                response.body.kind === "single" &&
+                "data" in response.body.singleResult
               ) {
                 response.body.singleResult.extensions = {
                   ...response.body.singleResult.extensions,
@@ -98,7 +98,7 @@ export async function expressApolloSetup() {
 
   // Setup GraphQL middleware
   app.use(
-    ['/graphql', '/crn/graphql'],
+    ["/graphql", "/crn/graphql"],
     cors<cors.CorsRequest>(),
     jwt.authenticate,
     auth.optional,

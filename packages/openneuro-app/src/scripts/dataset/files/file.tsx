@@ -1,68 +1,68 @@
-import React from 'react'
-import bytes from 'bytes'
-import { Link } from 'react-router-dom'
-import UpdateFile from '../mutations/update-file.jsx'
-import DeleteFile from '../mutations/delete-file.jsx'
-import { Media } from '../../styles/media'
-import RemoveAnnexObject from '../mutations/remove-annex-object.jsx'
-import FlagAnnexObject from '../mutations/flag-annex-object.jsx'
-import { isAdmin } from '../../authentication/admin-user.jsx'
-import { getProfile, hasEditPermissions } from '../../authentication/profile'
-import { Icon } from '@openneuro/components/icon'
-import { Tooltip } from '@openneuro/components/tooltip'
-import { useCookies } from 'react-cookie'
+import React from "react"
+import bytes from "bytes"
+import { Link } from "react-router-dom"
+import UpdateFile from "../mutations/update-file.jsx"
+import DeleteFile from "../mutations/delete-file.jsx"
+import { Media } from "../../styles/media"
+import RemoveAnnexObject from "../mutations/remove-annex-object.jsx"
+import FlagAnnexObject from "../mutations/flag-annex-object.jsx"
+import { isAdmin } from "../../authentication/admin-user.jsx"
+import { getProfile, hasEditPermissions } from "../../authentication/profile"
+import { Icon } from "@openneuro/components/icon"
+import { Tooltip } from "@openneuro/components/tooltip"
+import { useCookies } from "react-cookie"
 
-const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
+const filePath = (path, filename) => `${(path && path + ":") || ""}${filename}`
 
 const filetypeIcons = {
   md: {
-    icon: 'fab fa-markdown',
-    color: 'deepskyblue',
+    icon: "fab fa-markdown",
+    color: "deepskyblue",
   },
   json: {
-    icon: 'fab fa-node-js',
-    color: 'limegreen',
+    icon: "fab fa-node-js",
+    color: "limegreen",
   },
   tsv: {
-    icon: 'fas fa-file-excel',
-    color: 'lightgreen',
+    icon: "fas fa-file-excel",
+    color: "lightgreen",
   },
   csv: {
-    icon: 'fas fa-file-csv',
-    color: 'lightgreen',
+    icon: "fas fa-file-csv",
+    color: "lightgreen",
   },
   nii: {
-    icon: 'fas fa-brain',
-    color: 'mediumpurple',
+    icon: "fas fa-brain",
+    color: "mediumpurple",
   },
   bval: {
-    icon: 'fas fa-file-alt',
-    color: 'cornflowerblue',
+    icon: "fas fa-file-alt",
+    color: "cornflowerblue",
   },
   bvec: {
-    icon: 'fas fa-file-alt',
-    color: 'cornflowerblue',
+    icon: "fas fa-file-alt",
+    color: "cornflowerblue",
   },
 }
 const specialFileIcons = {
   README: filetypeIcons.md,
   CHANGES: {
-    icon: 'fas fa-file-alt',
-    color: 'orange',
+    icon: "fas fa-file-alt",
+    color: "orange",
   },
   LICENSE: {
-    icon: 'fas fa-file-alt',
-    color: 'darkslateblue',
+    icon: "fas fa-file-alt",
+    color: "darkslateblue",
   },
 }
 const defaultFileIcon = {
-  icon: 'fas fa-file',
-  color: 'black',
+  icon: "fas fa-file",
+  color: "black",
 }
 
 const fileExtPattern = /\.([0-9a-z]+)(\.gz)?$/i
 
-const getFileIcon = filename => {
+const getFileIcon = (filename) => {
   if (Object.keys(specialFileIcons).includes(filename)) {
     return specialFileIcons[filename]
   }
@@ -75,7 +75,7 @@ const getFileIcon = filename => {
 }
 
 export const apiPath = (datasetId, snapshotTag, filePath) => {
-  const snapshotPath = snapshotTag ? `/snapshots/${snapshotTag}` : ''
+  const snapshotPath = snapshotTag ? `/snapshots/${snapshotTag}` : ""
   return `/crn/datasets/${datasetId}${snapshotPath}/files/${filePath}`
 }
 
@@ -121,12 +121,15 @@ const File = ({
   urls,
 }: FileProps): JSX.Element => {
   const { icon, color } = getFileIcon(filename)
-  const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
+  const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ""
   // React route to display the file
-  const viewerPath = `/datasets/${datasetId}${snapshotVersionPath}/file-display/${filePath(
-    path,
-    filename,
-  )}`
+  const viewerPath =
+    `/datasets/${datasetId}${snapshotVersionPath}/file-display/${
+      filePath(
+        path,
+        filename,
+      )
+    }`
   const [cookies] = useCookies()
   const user = getProfile(cookies)
   return (
@@ -137,15 +140,15 @@ const File = ({
       <span className="filetree-editfile">
         <Media greaterThanOrEqual="medium">
           <Tooltip
-            tooltip={`Download: ${bytes.format(Number(size)) as string}`}>
+            tooltip={`Download: ${bytes.format(Number(size)) as string}`}
+          >
             <span className="edit-file download-file">
               <a
-                href={
-                  urls?.[0] ||
-                  apiPath(datasetId, snapshotTag, filePath(path, filename))
-                }
+                href={urls?.[0] ||
+                  apiPath(datasetId, snapshotTag, filePath(path, filename))}
                 download
-                aria-label="download file">
+                aria-label="download file"
+              >
                 <i className="fa fa-download" />
               </a>
             </span>
@@ -167,7 +170,7 @@ const File = ({
             </Tooltip>
           </Media>
         )}
-        {editMode && filename !== 'dataset_description.json' && (
+        {editMode && filename !== "dataset_description.json" && (
           <>
             <Media greaterThanOrEqual="medium">
               <Tooltip tooltip="Delete">
@@ -180,24 +183,22 @@ const File = ({
             </Media>
             <Media greaterThanOrEqual="medium">
               <Tooltip
-                tooltip={
-                  isFileToBeDeleted(id)
-                    ? 'Added to Bulk Delete'
-                    : 'Add to Bulk Delete'
-                }>
+                tooltip={isFileToBeDeleted(id)
+                  ? "Added to Bulk Delete"
+                  : "Add to Bulk Delete"}
+              >
                 <div
-                  className={
-                    isFileToBeDeleted(id)
-                      ? 'added-to-bd bulk-delete-checkbox-group delete-file'
-                      : 'bulk-delete-checkbox-group delete-file'
-                  }>
+                  className={isFileToBeDeleted(id)
+                    ? "added-to-bd bulk-delete-checkbox-group delete-file"
+                    : "bulk-delete-checkbox-group delete-file"}
+                >
                   <input
-                    id={'cb-' + filename}
+                    id={"cb-" + filename}
                     type="checkbox"
                     checked={isFileToBeDeleted(id)}
                     onChange={() => toggleFileToDelete({ id, path, filename })}
                   />
-                  <label htmlFor={'cb-' + filename}>
+                  <label htmlFor={"cb-" + filename}>
                     <Icon icon="fas fa-dumpster" />
                     {isFileToBeDeleted(id) && (
                       <span className="added-to-bulk">Added</span>
@@ -211,26 +212,30 @@ const File = ({
 
         {!isMobile &&
           annexed &&
-          (isAdmin() ? (
-            <Media greaterThanOrEqual="medium">
-              <RemoveAnnexObject
-                datasetId={datasetId}
-                snapshot={snapshotTag}
-                annexKey={annexKey}
-                path={path}
-                filename={filename}
-              />
-            </Media>
-          ) : hasEditPermissions(datasetPermissions, user && user.sub) ? (
-            <Media greaterThanOrEqual="medium">
-              <FlagAnnexObject
-                datasetId={datasetId}
-                snapshot={snapshotTag}
-                filepath={filePath(path, filename)}
-                annexKey={annexKey}
-              />
-            </Media>
-          ) : null)}
+          (isAdmin()
+            ? (
+              <Media greaterThanOrEqual="medium">
+                <RemoveAnnexObject
+                  datasetId={datasetId}
+                  snapshot={snapshotTag}
+                  annexKey={annexKey}
+                  path={path}
+                  filename={filename}
+                />
+              </Media>
+            )
+            : hasEditPermissions(datasetPermissions, user && user.sub)
+            ? (
+              <Media greaterThanOrEqual="medium">
+                <FlagAnnexObject
+                  datasetId={datasetId}
+                  snapshot={snapshotTag}
+                  filepath={filePath(path, filename)}
+                  annexKey={annexKey}
+                />
+              </Media>
+            )
+            : null)}
       </span>
     </>
   )

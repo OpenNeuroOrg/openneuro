@@ -1,23 +1,23 @@
-import config from '../config'
-import { GraphQLError } from 'graphql'
-import Permission from '../models/permission'
-import Dataset from '../models/dataset'
-import Deletion from '../models/deletion'
+import config from "../config"
+import { GraphQLError } from "graphql"
+import Permission from "../models/permission"
+import Dataset from "../models/dataset"
+import Deletion from "../models/deletion"
 
 // Definitions for permission levels allowed
 // Admin is write + manage user permissions
 export const states = {
   READ: {
-    errorMessage: 'You do not have access to read this dataset.',
-    allowed: ['ro', 'rw', 'admin'],
+    errorMessage: "You do not have access to read this dataset.",
+    allowed: ["ro", "rw", "admin"],
   },
   WRITE: {
-    errorMessage: 'You do not have access to modify this dataset.',
-    allowed: ['rw', 'admin'],
+    errorMessage: "You do not have access to modify this dataset.",
+    allowed: ["rw", "admin"],
   },
   ADMIN: {
-    errorMessage: 'You do not have admin access to this dataset.',
-    allowed: ['admin'],
+    errorMessage: "You do not have admin access to this dataset.",
+    allowed: ["admin"],
   },
 }
 
@@ -62,10 +62,10 @@ export class DeletedDatasetError extends GraphQLError {
         const url = new URL(redirect)
         if (
           url.hostname === canonical.hostname &&
-          url.pathname.startsWith('/datasets')
+          url.pathname.startsWith("/datasets")
         ) {
           // Only return a relative path to avoid cross site risks
-          extensions = { code: 'DELETED_DATASET', redirect: url.pathname }
+          extensions = { code: "DELETED_DATASET", redirect: url.pathname }
         }
       } catch (err) {
         // Do nothing
@@ -77,7 +77,7 @@ export class DeletedDatasetError extends GraphQLError {
   }
 }
 
-export const checkDatasetExists = async datasetId => {
+export const checkDatasetExists = async (datasetId) => {
   const deleted = await Deletion.findOne({ datasetId }).exec()
   if (deleted) {
     throw new DeletedDatasetError(datasetId, deleted.reason, deleted.redirect)

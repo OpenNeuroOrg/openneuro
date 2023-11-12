@@ -1,12 +1,13 @@
-import React from 'react'
-import UploaderContext from './uploader-context.js'
+import React from "react"
+import UploaderContext from "./uploader-context.js"
 
 const UploadProgressButton = () => (
   <UploaderContext.Consumer>
-    {uploader => (
+    {(uploader) => (
       <a
         className="nav-link nl-upload nl-progress"
-        onClick={() => uploader.setLocation('/upload')}>
+        onClick={() => uploader.setLocation("/upload")}
+      >
         view details
       </a>
     )}

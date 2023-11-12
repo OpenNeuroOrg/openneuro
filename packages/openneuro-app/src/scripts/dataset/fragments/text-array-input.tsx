@@ -1,24 +1,24 @@
-import React, { useState, createRef } from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import React, { createRef, useState } from "react"
+import PropTypes from "prop-types"
+import styled from "@emotion/styled"
 
 const Container = styled.div({
-  position: 'relative',
-  width: '100%',
-  height: '3rem',
-  marginTop: '30px',
-  backgroundColor: 'white',
-  borderRadius: '4px',
+  position: "relative",
+  width: "100%",
+  height: "3rem",
+  marginTop: "30px",
+  backgroundColor: "white",
+  borderRadius: "4px",
   border: 0,
 })
 
 const centerLabelStyles = {
-  top: '1rem',
-  fontSize: '1em',
+  top: "1rem",
+  fontSize: "1em",
 }
 const pushedUpLabelStyles = {
-  top: '-17px',
-  fontSize: '0.75em',
+  top: "-17px",
+  fontSize: "0.75em",
 }
 
 interface TextArrayInputLabelProps {
@@ -28,36 +28,36 @@ interface TextArrayInputLabelProps {
 
 const Label = styled.label<TextArrayInputLabelProps>(
   {
-    position: 'absolute',
-    left: '1rem',
-    right: '1rem',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    color: '#999',
-    transition: 'top 100ms, font-size 100ms',
-    transitionTimingFunction: 'ease-out',
-    textAlign: 'left',
+    position: "absolute",
+    left: "1rem",
+    right: "1rem",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    color: "#999",
+    transition: "top 100ms, font-size 100ms",
+    transitionTimingFunction: "ease-out",
+    textAlign: "left",
   },
   ({ hasValue, hasFocus }) => ({
     ...(hasValue || hasFocus ? pushedUpLabelStyles : centerLabelStyles),
-    ':focus': pushedUpLabelStyles,
+    ":focus": pushedUpLabelStyles,
   }),
 )
 const DisabledIcon = styled.i({
-  '&&': {
-    position: 'absolute',
-    top: '0.4rem',
-    right: '0.4rem',
-    color: '#5cb85c',
-    fontSize: '8px',
+  "&&": {
+    position: "absolute",
+    top: "0.4rem",
+    right: "0.4rem",
+    color: "#5cb85c",
+    fontSize: "8px",
   },
 })
 const Input = styled.input({
-  width: '100%',
-  height: '100%',
-  padding: '13px',
-  textAlign: 'left',
+  width: "100%",
+  height: "100%",
+  padding: "13px",
+  textAlign: "left",
 })
 
 const TextArrayInput = ({
@@ -83,7 +83,7 @@ const TextArrayInput = ({
   }
 
   const handleChange = (e): void => {
-    onChange(e.target.name, e.target.value.split(','))
+    onChange(e.target.name, e.target.value.split(","))
   }
 
   return (
@@ -92,14 +92,15 @@ const TextArrayInput = ({
         htmlFor={name}
         hasValue={Boolean(value)}
         hasFocus={hasFocus}
-        onClick={focusInput}>
+        onClick={focusInput}
+      >
         {label}
       </Label>
       {annotated && <DisabledIcon className="fa fa-asterisk" />}
       <Input
         ref={input}
         name={name}
-        value={value.join(', ')}
+        value={value.join(", ")}
         disabled={disabled}
         required={required}
         onFocus={focusInput}

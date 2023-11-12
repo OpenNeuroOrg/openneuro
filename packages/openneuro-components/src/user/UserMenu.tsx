@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Dropdown } from '../dropdown/Dropdown'
+import React from "react"
+import { Link } from "react-router-dom"
+import { Dropdown } from "../dropdown/Dropdown"
 
 export interface UserMenuProps {
   profile: {
@@ -15,7 +15,7 @@ export interface UserMenuProps {
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
   return (
     <Dropdown
-      className={'user-menu-dropdown'}
+      className={"user-menu-dropdown"}
       label={<div className="user-menu-label">My Account</div>}
       children={
         <div className="user-menu-dropdown-list">
@@ -28,7 +28,8 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
               <p>
                 <span>signed in as</span>
                 <br />
-                {profile.email}{' '}
+                {profile.email}
+                {" "}
               </p>
               <p>
                 <span>via</span>
@@ -39,13 +40,13 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
               <Link to="/search?mydatasets">My Datasets</Link>
             </li>
             <li className="user-menu-link">
-              <Link to="/keygen"> Obtain an API Key </Link>
+              <Link to="/keygen">Obtain an API Key</Link>
             </li>
-            {profile.provider !== 'orcid' && (
+            {profile.provider !== "orcid" && (
               <li className="user-menu-link">
                 <a href="/crn/auth/orcid?link=true">
-                  {' '}
-                  Link ORCID to my account{' '}
+                  {" "}
+                  Link ORCID to my account{" "}
                 </a>
               </li>
             )}
@@ -57,7 +58,8 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
             <li className="user-menu-link">
               <a
                 onClick={() => signOutAndRedirect()}
-                className="btn-submit-other">
+                className="btn-submit-other"
+              >
                 Sign Out
               </a>
             </li>

@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
-import inquirer from 'inquirer'
-import { getUrl } from './config.js'
-import { configuredClient } from './configuredClient.js'
-import { apm } from './apm.js'
+import { gql } from "@apollo/client"
+import inquirer from "inquirer"
+import { getUrl } from "./config.js"
+import { configuredClient } from "./configuredClient.js"
+import { apm } from "./apm.js"
 
 const CREATE_DATASET = gql`
   mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
@@ -17,7 +17,7 @@ const CREATE_DATASET = gql`
 `
 
 export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
-  const apmTransaction = apm.startTransaction('createDataset', 'custom')
+  const apmTransaction = apm.startTransaction("createDataset", "custom")
   const url = getUrl()
   const client = configuredClient()
   try {
@@ -27,7 +27,7 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
     })
     const datasetId = data.createDataset.id
     // Full worker value is something like "openneuro-worker-2"
-    const worker = data.createDataset.worker.split('-').pop()
+    const worker = data.createDataset.worker.split("-").pop()
     console.log(`Dataset ${url}datasets/${datasetId} created.`)
     console.log(`Git remote: ${url}git/${worker}/${datasetId}`)
   } catch (err) {
@@ -41,18 +41,18 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
 export const create = () => {
   inquirer
     .prompt({
-      type: 'list',
-      name: 'affirmed',
-      message: 'Please affirm one of the following:',
+      type: "list",
+      name: "affirmed",
+      message: "Please affirm one of the following:",
       choices: [
-        'All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.',
-        'I have explicit participant consent and ethical authorization to publish structural scans without defacing.',
+        "All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
+        "I have explicit participant consent and ethical authorization to publish structural scans without defacing.",
       ],
     })
     .then(({ affirmed: [affirmedDefaced, affirmedConsent] }) =>
       createDataset({
         affirmedDefaced: !!affirmedDefaced,
         affirmedConsent: !!affirmedConsent,
-      }),
+      })
     )
 }

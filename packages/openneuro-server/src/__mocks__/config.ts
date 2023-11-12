@@ -1,24 +1,24 @@
 const config = {
   auth: {
     jwt: {
-      secret: '123456',
+      secret: "123456",
     },
   },
   datalad: {
-    uri: 'datalad',
+    uri: "datalad",
     workers: 4,
   },
   mongo: {
-    url: 'mongodb://',
+    url: "mongodb://",
   },
   notifications: {
     email: {
-      from: 'notifications@example.com',
+      from: "notifications@example.com",
     },
   },
   elasticsearch: {},
   doi: {
-    username: '',
+    username: "",
   },
 }
 

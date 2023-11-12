@@ -1,20 +1,20 @@
-import React from 'react'
-import bytes from 'bytes'
-import parseISO from 'date-fns/parseISO'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { Link } from 'react-router-dom'
+import React from "react"
+import bytes from "bytes"
+import parseISO from "date-fns/parseISO"
+import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import { Link } from "react-router-dom"
 
-import { Tooltip } from '../tooltip/Tooltip'
-import { Icon } from '../icon/Icon'
+import { Tooltip } from "../tooltip/Tooltip"
+import { Icon } from "../icon/Icon"
 
-import activityPulseIcon from '../assets/activity-icon.png'
+import activityPulseIcon from "../assets/activity-icon.png"
 
 /**
  * Return an equivalent to moment(date).format('L') without moment
  * @param {*} dateObject
  */
-export const formatDate = dateObject =>
-  new Date(dateObject).toISOString().split('T')[0]
+export const formatDate = (dateObject) =>
+  new Date(dateObject).toISOString().split("T")[0]
 
 export interface SearchResultItemProps {
   node: {
@@ -126,23 +126,23 @@ export const SearchResultItem = ({
   const accessionNumber = (
     <span className="result-summary-meta">
       <strong>Openneuro Accession Number:</strong>
-      <span> {node.id}</span>
+      <span>{node.id}</span>
     </span>
   )
   const sessions = (
     <span className="result-summary-meta">
-      <strong>Sessions: </strong>
+      <strong>Sessions:</strong>
       <span>{numSessions.toLocaleString()}</span>
     </span>
   )
 
-  const ages = value => {
+  const ages = (value) => {
     if (value) {
-      const ages = value.filter(x => x)
-      if (ages.length === 0) return 'N/A'
+      const ages = value.filter((x) => x)
+      if (ages.length === 0) return "N/A"
       else if (ages.length === 1) return ages[0]
       else return `${Math.min(...ages)} - ${Math.max(...ages)}`
-    } else return 'N/A'
+    } else return "N/A"
   }
 
   const agesRange = (
@@ -151,26 +151,28 @@ export const SearchResultItem = ({
         {node?.metadata?.ages?.length === 1
           ? "Participant's Age"
           : "Participants' Ages"}
-        :{' '}
+        :{" "}
       </strong>
-      <span>{ages(summary?.subjectMetadata?.map(subject => subject.age))}</span>
+      <span>
+        {ages(summary?.subjectMetadata?.map((subject) => subject.age))}
+      </span>
     </span>
   )
   const subjects = (
     <span className="result-summary-meta">
-      <strong> Participants: </strong>
+      <strong>Participants:</strong>
       <span>{numSubjects.toLocaleString()}</span>
     </span>
   )
   const size = (
     <span className="result-summary-meta">
-      <strong>Size: </strong>
-      <span>{bytes(node?.latestSnapshot?.size) || "unknown" }</span>
+      <strong>Size:</strong>
+      <span>{bytes(node?.latestSnapshot?.size) || "unknown"}</span>
     </span>
   )
   const files = (
     <span className="result-summary-meta">
-      <strong>Files: </strong>
+      <strong>Files:</strong>
       <span>{summary?.totalFiles.toLocaleString()}</span>
     </span>
   )
@@ -190,7 +192,7 @@ export const SearchResultItem = ({
       <>
         <span className="updated-divider">|</span>
         <div className="updated-date">
-          <span>Updated: </span>
+          <span>Updated:</span>
           {dateUpdated} - {dateUpdatedDifference} ago
         </div>
       </>
@@ -199,22 +201,22 @@ export const SearchResultItem = ({
 
   const uploader = (
     <div className="uploader">
-      <span>Uploaded by: </span>
+      <span>Uploaded by:</span>
       {node.uploader.name} on {dateAdded} - {dateAddedDifference} ago
     </div>
   )
   const downloads = node.analytics.downloads
-    ? node.analytics.downloads.toLocaleString() + ' Downloads \n'
-    : ''
+    ? node.analytics.downloads.toLocaleString() + " Downloads \n"
+    : ""
   const views = node.analytics.views
-    ? node.analytics.views.toLocaleString() + ' Views \n'
-    : ''
+    ? node.analytics.views.toLocaleString() + " Views \n"
+    : ""
   const following = node.followers.length
-    ? node.followers.length.toLocaleString() + ' Follower \n'
-    : ''
+    ? node.followers.length.toLocaleString() + " Follower \n"
+    : ""
   const stars = node.stars.length
-    ? node.stars.length.toLocaleString() + ' Bookmarked'
-    : ''
+    ? node.stars.length.toLocaleString() + " Bookmarked"
+    : ""
 
   const activtyTooltip = downloads + views + following + stars
 
@@ -222,7 +224,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip={activtyTooltip}
       flow="up"
-      className="result-icon result-activity-icon">
+      className="result-icon result-activity-icon"
+    >
       <Icon
         imgSrc={activityPulseIcon}
         iconSize="22px"
@@ -236,7 +239,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Shared with me"
       flow="up"
-      className="result-icon result-shared-icon">
+      className="result-icon result-shared-icon"
+    >
       <Icon
         icon="fas fa-user"
         color="rgb(119,191,217)"
@@ -250,7 +254,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Visible to all viewers"
       flow="up"
-      className="result-icon result-publlic-icon">
+      className="result-icon result-publlic-icon"
+    >
       <Icon
         icon="fas fa-globe"
         color="rgb(116,181,105)"
@@ -265,7 +270,8 @@ export const SearchResultItem = ({
     <Tooltip
       tooltip="Invalid"
       flow="up"
-      className="result-icon result-errors-icon">
+      className="result-icon result-errors-icon"
+    >
       <Icon
         icon="fas fa-exclamation-circle"
         color="rgb(202,97,86)"
@@ -294,20 +300,19 @@ export const SearchResultItem = ({
       return null
     }
   }
-  const invalid =
-    !node.latestSnapshot.issues ||
-    node.latestSnapshot.issues.some(issue => issue.severity === 'error')
+  const invalid = !node.latestSnapshot.issues ||
+    node.latestSnapshot.issues.some((issue) => issue.severity === "error")
   const shared = !node.public && node.uploader.id !== profile.sub
 
-  const MyDatasetsPage = datasetTypeSelected === 'My Datasets'
-  const datasetPerms = node.permissions.userPermissions.map(item => {
+  const MyDatasetsPage = datasetTypeSelected === "My Datasets"
+  const datasetPerms = node.permissions.userPermissions.map((item) => {
     if (item.user.id === profile?.sub && item.access !== null) {
-      if (item.access === 'ro') {
-        return 'Read Only'
-      } else if (item.access === 'rw') {
-        return 'Edit'
+      if (item.access === "ro") {
+        return "Read Only"
+      } else if (item.access === "rw") {
+        return "Edit"
       } else {
-        return 'Admin'
+        return "Admin"
       }
     } else {
       return null
@@ -322,37 +327,41 @@ export const SearchResultItem = ({
     </div>
   )
 
-  const modalityList = summary?.modalities.length ? (
-    <div className="modality-list">
-      {_list(
-        <>{summary?.modalities.length === 1 ? 'Modality' : 'Modalities'}</>,
-        summary?.modalities,
-      )}
-    </div>
-  ) : null
-  const taskList = summary?.tasks.length ? (
-    <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
-  ) : null
+  const modalityList = summary?.modalities.length
+    ? (
+      <div className="modality-list">
+        {_list(
+          <>{summary?.modalities.length === 1 ? "Modality" : "Modalities"}</>,
+          summary?.modalities,
+        )}
+      </div>
+    )
+    : null
+  const taskList = summary?.tasks.length
+    ? <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
+    : null
 
-  const tracers = summary?.pet?.TracerName?.length ? (
-    <div className="tracers-list">
-      {_list(
-        <>
-          {summary?.pet?.TracerName.length === 1
-            ? 'Radiotracer'
-            : 'Radiotracers'}
-        </>,
-        summary?.pet?.TracerName,
-      )}
-    </div>
-  ) : null
+  const tracers = summary?.pet?.TracerName?.length
+    ? (
+      <div className="tracers-list">
+        {_list(
+          <>
+            {summary?.pet?.TracerName.length === 1
+              ? "Radiotracer"
+              : "Radiotracers"}
+          </>,
+          summary?.pet?.TracerName,
+        )}
+      </div>
+    )
+    : null
 
   return (
     <>
       <div className="grid grid-nogutter search-result">
         <div className="col col-9">
           <h3>
-            <Link to={'/datasets/' + datasetId}>{heading}</Link>
+            <Link to={"/datasets/" + datasetId}>{heading}</Link>
           </h3>
           <div className="result-upload-info">
             {uploader}

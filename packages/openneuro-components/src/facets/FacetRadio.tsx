@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react"
 
-import { RadioGroup } from '../radio/RadioGroup'
+import { RadioGroup } from "../radio/RadioGroup"
 
 export interface FacetRadioProps {
   // if radioArr is string[]
@@ -8,10 +8,10 @@ export interface FacetRadioProps {
   radioArr: (
     | string
     | {
-        label: string
-        onChange?: React.MouseEventHandler<HTMLInputElement>
-        value: string
-      }
+      label: string
+      onChange?: React.MouseEventHandler<HTMLInputElement>
+      value: string
+    }
   )[]
   layout: string
   name: string

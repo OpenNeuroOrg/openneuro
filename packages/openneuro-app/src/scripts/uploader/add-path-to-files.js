@@ -7,13 +7,13 @@
  */
 export const addPathToFiles = (fileList, path) => {
   return path
-    ? Array.prototype.map.call(fileList, file => {
-        // Override webkitRelativePath with a new property
-        Object.defineProperty(file, 'webkitRelativePath', {
-          value: `/${path}/${file.webkitRelativePath}`,
-          writable: false,
-        })
-        return file
+    ? Array.prototype.map.call(fileList, (file) => {
+      // Override webkitRelativePath with a new property
+      Object.defineProperty(file, "webkitRelativePath", {
+        value: `/${path}/${file.webkitRelativePath}`,
+        writable: false,
       })
+      return file
+    })
     : fileList
 }

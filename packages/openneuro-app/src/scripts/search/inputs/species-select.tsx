@@ -1,14 +1,14 @@
-import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from '../search-params-ctx'
-import { FacetSelect } from '@openneuro/components/facets'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React, { FC, useContext } from "react"
+import { SearchParamsCtx } from "../search-params-ctx"
+import { FacetSelect } from "@openneuro/components/facets"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 const SpeciesSelect: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const { species_available, species_selected } = searchParams
-  const setSection = species_selected =>
-    setSearchParams(prevState => ({
+  const setSection = (species_selected) =>
+    setSearchParams((prevState) => ({
       ...prevState,
       species_selected,
     }))

@@ -1,9 +1,9 @@
-import Snapshot from '../../models/snapshot'
-import { LeanDocument } from 'mongoose'
-import DatasetModel from '../../models/dataset'
-import MetadataModel, { MetadataDocument } from '../../models/metadata'
-import { latestSnapshot } from './snapshots'
-import { permissions } from './permissions'
+import Snapshot from "../../models/snapshot"
+import { LeanDocument } from "mongoose"
+import DatasetModel from "../../models/dataset"
+import MetadataModel, { MetadataDocument } from "../../models/metadata"
+import { latestSnapshot } from "./snapshots"
+import { permissions } from "./permissions"
 
 /**
  * Summary resolver
@@ -28,7 +28,7 @@ export const metadata = async (
   const adminUsers = []
   const { userPermissions } = await permissions(dataset)
   for (const user of userPermissions) {
-    if (user.level === 'admin') {
+    if (user.level === "admin") {
       const userObj = await user.user
       adminUsers.push(userObj.name)
     }
@@ -50,7 +50,7 @@ export const metadata = async (
     adminUsers,
     firstSnapshotCreatedAt,
     latestSnapshotCreatedAt: snapshot.created,
-    ages: summary?.subjectMetadata?.map(s => s.age as number),
+    ages: summary?.subjectMetadata?.map((s) => s.age as number),
     modalities: summary?.modalities || [],
     dataProcessed: summary?.dataProcessed || null,
   }

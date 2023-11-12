@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import pluralize from 'pluralize'
-import { Loading } from '@openneuro/components/loading'
-import Results from '../validation/validation-results.jsx'
-import UploaderContext from './uploader-context.js'
-import validate from '../workers/validate'
-import schemaValidate from '../workers/schema'
+import React from "react"
+import PropTypes from "prop-types"
+import pluralize from "pluralize"
+import { Loading } from "@openneuro/components/loading"
+import Results from "../validation/validation-results.jsx"
+import UploaderContext from "./uploader-context.js"
+import validate from "../workers/validate"
+import schemaValidate from "../workers/schema"
 
 const UploadValidatorStatus = ({ issues, next, reset }) => {
   const errorCount = issues.errors.length
@@ -23,10 +23,10 @@ const UploadValidatorStatus = ({ issues, next, reset }) => {
   } else if (errorCount === 0 && warnCount > 0) {
     return (
       <div className="message warn fade-in">
-        We found {warnCount} {pluralize('warning', warnCount)} in your dataset.
-        You are not required to fix warnings, but doing so will make your
-        dataset more BIDS compliant. Continue or fix the issues and select
-        folder again.
+        We found {warnCount} {pluralize("warning", warnCount)}{" "}
+        in your dataset. You are not required to fix warnings, but doing so will
+        make your dataset more BIDS compliant. Continue or fix the issues and
+        select folder again.
         <button className="fileupload-btn btn-blue" onClick={next}>
           Continue
         </button>
@@ -35,19 +35,21 @@ const UploadValidatorStatus = ({ issues, next, reset }) => {
   } else {
     return (
       <div className="message error fade-in">
-        Your dataset is not a valid BIDS dataset. Fix the{' '}
+        Your dataset is not a valid BIDS dataset. Fix the{" "}
         <strong>
-          {errorCount} {pluralize('error', errorCount)}
-        </strong>{' '}
-        and{' '}
+          {errorCount} {pluralize("error", errorCount)}
+        </strong>{" "}
+        and{" "}
         <a
           href="#"
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault()
             reset()
-          }}>
+          }}
+        >
           select your folder again.
-        </a>{' '}
+        </a>
+        {" "}
       </div>
     )
   }
@@ -66,9 +68,9 @@ class UploadValidator extends React.Component {
     }
     const options = {
       config: {
-        error: ['NO_AUTHORS', 'EMPTY_DATASET_NAME'],
+        error: ["NO_AUTHORS", "EMPTY_DATASET_NAME"],
         ignoreSubjectConsistency: true,
-        blacklistModalities: ['Microscopy'],
+        blacklistModalities: ["Microscopy"],
       },
     }
     if (this.props.schemaValidator) {
@@ -77,13 +79,13 @@ class UploadValidator extends React.Component {
       // Test for dataset_description.json and use the schemaValidator for DatasetType == 'derivative'
       // Fall back if anything fails
       const dsDescription = Array.from(this.props.files).find(
-        f => f.name === 'dataset_description.json',
+        (f) => f.name === "dataset_description.json",
       )
       if (dsDescription) {
-        dsDescription.text().then(dsDescriptionData => {
+        dsDescription.text().then((dsDescriptionData) => {
           try {
             const descriptionFields = JSON.parse(dsDescriptionData)
-            if (descriptionFields.DatasetType === 'derivative') {
+            if (descriptionFields.DatasetType === "derivative") {
               schemaValidate(this.props.files, options).then(this.done)
             } else {
               validate(this.props.files, options).then(this.done)
@@ -121,11 +123,12 @@ class UploadValidator extends React.Component {
             warnings={this.state.issues.warnings}
           />
           <span className="bids-link">
-            Click to view details on{' '}
+            Click to view details on{" "}
             <a
               href="http://bids.neuroimaging.io"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               BIDS specification
             </a>
           </span>
@@ -145,12 +148,12 @@ UploadValidator.propTypes = {
 
 const UploadIssues = () => (
   <UploaderContext.Consumer>
-    {uploader => (
+    {(uploader) => (
       <UploadValidator
         schemaValidator={uploader.schemaValidator}
         files={uploader.selectedFiles}
-        next={() => uploader.setLocation('/upload/metadata')}
-        reset={() => uploader.setLocation('/upload')}
+        next={() => uploader.setLocation("/upload/metadata")}
+        reset={() => uploader.setLocation("/upload")}
       />
     )}
   </UploaderContext.Consumer>

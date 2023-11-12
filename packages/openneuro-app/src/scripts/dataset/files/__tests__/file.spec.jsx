@@ -1,17 +1,17 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
-import File from '../file'
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { MemoryRouter } from "react-router-dom"
+import File from "../file"
 
-describe('File component', () => {
-  it('renders with common props', () => {
+describe("File component", () => {
+  it("renders with common props", () => {
     const { asFragment } = render(
       <File datasetId="ds001" path="" filename="README" size={500} />,
       { wrapper: MemoryRouter },
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it('renders for dataset snapshots', () => {
+  it("renders for dataset snapshots", () => {
     const { asFragment } = render(
       <File
         datasetId="ds001"
@@ -24,16 +24,16 @@ describe('File component', () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it('generates correct download links for top level files', () => {
+  it("generates correct download links for top level files", () => {
     render(<File datasetId="ds001" path="" filename="README" size={500} />, {
       wrapper: MemoryRouter,
     })
-    expect(screen.getByRole('link', { name: 'download file' })).toHaveAttribute(
-      'href',
-      '/crn/datasets/ds001/files/README',
+    expect(screen.getByRole("link", { name: "download file" })).toHaveAttribute(
+      "href",
+      "/crn/datasets/ds001/files/README",
     )
   })
-  it('generates correct download links for nested files', () => {
+  it("generates correct download links for nested files", () => {
     render(
       <File
         datasetId="ds001"
@@ -43,9 +43,9 @@ describe('File component', () => {
       />,
       { wrapper: MemoryRouter },
     )
-    expect(screen.getByRole('link', { name: 'download file' })).toHaveAttribute(
-      'href',
-      '/crn/datasets/ds001/files/sub-01:anat:sub-01_T1w.nii.gz',
+    expect(screen.getByRole("link", { name: "download file" })).toHaveAttribute(
+      "href",
+      "/crn/datasets/ds001/files/sub-01:anat:sub-01_T1w.nii.gz",
     )
   })
 })

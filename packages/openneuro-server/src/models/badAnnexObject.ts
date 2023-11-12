@@ -1,5 +1,5 @@
-import mongoose, { Document } from 'mongoose'
-import { UserDocument } from './user'
+import mongoose, { Document } from "mongoose"
+import { UserDocument } from "./user"
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 export interface BadAnnexObject extends Document {
@@ -24,17 +24,17 @@ const badAnnexObject = new mongoose.Schema(
     filepath: String,
     annexKey: String,
     removed: { type: Boolean, default: false },
-    remover: { type: ObjectId, ref: 'User' },
+    remover: { type: ObjectId, ref: "User" },
     flagged: { type: Boolean, default: false },
-    flagger: { type: ObjectId, ref: 'User' },
+    flagger: { type: ObjectId, ref: "User" },
   },
-  { timestamps: { createdAt: 'created_at' } },
+  { timestamps: { createdAt: "created_at" } },
 )
 
 badAnnexObject.index({ datasetId: 1, annexKey: 1 }, { unique: true })
 
 const BadAnnexObject = mongoose.model<BadAnnexObject>(
-  'BadAnnexObject',
+  "BadAnnexObject",
   badAnnexObject,
 )
 

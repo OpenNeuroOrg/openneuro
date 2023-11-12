@@ -1,5 +1,5 @@
-import Files from './files'
-import FileDisplay from './file-display'
+import Files from "./files"
+import FileDisplay from "./file-display"
 
 export { FileDisplay }
 

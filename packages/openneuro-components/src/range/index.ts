@@ -1,3 +1,3 @@
-import { TwoHandleRange } from './TwoHandleRange'
+import { TwoHandleRange } from "./TwoHandleRange"
 
 export { TwoHandleRange }

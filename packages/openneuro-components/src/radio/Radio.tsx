@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 export interface RadioProps {
   label: string
@@ -15,7 +15,7 @@ export const Radio = ({
   checked,
   value,
 }: RadioProps) => {
-  const id = name + '-' + label
+  const id = name + "-" + label
   return (
     <span className="custom-radio">
       <input

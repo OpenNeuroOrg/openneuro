@@ -1,9 +1,9 @@
 /** Middleware to check for authorization states on top of authentication */
 
-import Dataset from '../../models/dataset'
-import Permission from '../../models/permission'
-import Comment from '../../models/comment'
-import mongoose from 'mongoose'
+import Dataset from "../../models/dataset"
+import Permission from "../../models/permission"
+import Comment from "../../models/comment"
+import mongoose from "mongoose"
 const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
@@ -16,7 +16,7 @@ export const authenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next()
   } else {
-    return res.status(401).send({ error: 'Not logged in.' })
+    return res.status(401).send({ error: "Not logged in." })
   }
 }
 
@@ -45,10 +45,10 @@ export const superuser = (req, res, next) => {
     if (req.user.admin) {
       return next()
     } else {
-      return res.status(401).send({ error: 'You do not have admin access.' })
+      return res.status(401).send({ error: "You do not have admin access." })
     }
   } else {
-    return res.status(401).send({ error: 'Not logged in.' })
+    return res.status(401).send({ error: "Not logged in." })
   }
 }
 
@@ -67,12 +67,12 @@ export const datasetAccess = (req, res, next) => {
   // check to make sure that the dataset exists
   return Dataset.findOne({ id: datasetId })
     .exec()
-    .then(dataset => {
+    .then((dataset) => {
       // if dataset does not exist, return 404 error
       if (!dataset) {
         return res
           .status(404)
-          .send({ error: 'The dataset you have requested does not exist.' })
+          .send({ error: "The dataset you have requested does not exist." })
       }
 
       // if there is no user option on the request,
@@ -89,19 +89,19 @@ export const datasetAccess = (req, res, next) => {
       // find permissions information for this user & dataset
       Permission.findOne({ datasetId: datasetId, userId: req.user.id })
         .exec()
-        .then(permission => {
+        .then((permission) => {
           if (permission) {
             req.hasAccess = true
             return next()
           } else {
             return res
               .status(401)
-              .send({ error: 'You do not have access to this dataset.' })
+              .send({ error: "You do not have access to this dataset." })
           }
         })
-        .catch(err => res.status(404).send(err))
+        .catch((err) => res.status(404).send(err))
     })
-    .catch(err => res.status(404).send(err))
+    .catch((err) => res.status(404).send(err))
 }
 
 /**
@@ -119,14 +119,14 @@ export const commentAccess = (req, res, next) => {
     _id: new ObjectID(commentId),
   })
     .exec()
-    .then(comment => {
+    .then((comment) => {
       if (comment.user._id === req.user.id) {
         return next()
       } else {
         return res
           .status(401)
-          .send({ error: 'You do not have access to this comment.' })
+          .send({ error: "You do not have access to this comment." })
       }
     })
-    .catch(err => res.status(404).send(err))
+    .catch((err) => res.status(404).send(err))
 }

@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
-import FreshdeskWidget from './freshdesk-widget.jsx'
+import React, { useState } from "react"
+import FreshdeskWidget from "./freshdesk-widget.jsx"
 import {
-  Overlay,
-  ModalContainer,
   ExitButton,
-} from '../styles/support-modal.jsx'
-import PropTypes from 'prop-types'
+  ModalContainer,
+  Overlay,
+} from "../styles/support-modal.jsx"
+import PropTypes from "prop-types"
 
-const FreshdeskInterface = props => {
+const FreshdeskInterface = (props) => {
   const [showModal, setShowModal] = useState(false)
   return (
     <>
       <p className="generic-error-message">
-        {props.message || 'An error has occurred.'}
+        {props.message || "An error has occurred."}
         <br />
-        Please support us by documenting the issue with{' '}
+        Please support us by documenting the issue with{" "}
         <a onClick={() => setShowModal(true)}>
           <u>FreshDesk</u>
         </a>

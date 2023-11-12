@@ -1,10 +1,10 @@
-import { vi } from 'vitest'
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { Textarea } from '../Textarea'
+import { vi } from "vitest"
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { Textarea } from "../Textarea"
 
-describe('Textarea component', () => {
-  it('supports inline type', () => {
+describe("Textarea component", () => {
+  it("supports inline type", () => {
     render(
       <Textarea
         placeholder="test"
@@ -14,12 +14,12 @@ describe('Textarea component', () => {
         setValue={vi.fn()}
       />,
     )
-    const textbox = screen.getByRole('textbox')
+    const textbox = screen.getByRole("textbox")
     expect(textbox).toBeInTheDocument()
-    expect(textbox.closest('div')).toHaveClass('inline')
-    expect(screen.getByText('in-label')).toBeInTheDocument()
+    expect(textbox.closest("div")).toHaveClass("inline")
+    expect(screen.getByText("in-label")).toBeInTheDocument()
   })
-  it('supports float type', () => {
+  it("supports float type", () => {
     render(
       <Textarea
         placeholder="test"
@@ -29,12 +29,12 @@ describe('Textarea component', () => {
         setValue={vi.fn()}
       />,
     )
-    const textbox = screen.getByRole('textbox')
+    const textbox = screen.getByRole("textbox")
     expect(textbox).toBeInTheDocument()
-    expect(textbox.closest('div')).toHaveClass('float-form-style')
-    expect(screen.getByText('float-label')).toBeInTheDocument()
+    expect(textbox.closest("div")).toHaveClass("float-form-style")
+    expect(screen.getByText("float-label")).toBeInTheDocument()
   })
-  it('supports default type', () => {
+  it("supports default type", () => {
     render(
       <Textarea
         name="default test"
@@ -43,11 +43,11 @@ describe('Textarea component', () => {
         setValue={() => {}}
       />,
     )
-    const textbox = screen.getByRole('textbox')
+    const textbox = screen.getByRole("textbox")
     expect(textbox).toBeInTheDocument()
-    expect(textbox.closest('div')).toHaveClass('form-control')
-    expect(textbox.closest('div')).not.toHaveClass('inline')
-    expect(textbox.closest('div')).not.toHaveClass('float-form-style')
-    expect(screen.getByText('default-label')).toBeInTheDocument()
+    expect(textbox.closest("div")).toHaveClass("form-control")
+    expect(textbox.closest("div")).not.toHaveClass("inline")
+    expect(textbox.closest("div")).not.toHaveClass("float-form-style")
+    expect(screen.getByText("default-label")).toBeInTheDocument()
   })
 })

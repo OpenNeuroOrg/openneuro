@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Button } from '@openneuro/components/button'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { Button } from "@openneuro/components/button"
 
 /**
  * Generic add/remove strings from an Array list
  */
 const EditList = ({ placeholder, elements = [], setElements }) => {
-  const [newElement, updateNewElement] = useState('')
+  const [newElement, updateNewElement] = useState("")
 
   const [warnEmpty, updateWarnEmpty] = useState(false)
 
@@ -14,7 +14,7 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
    * Remove one element from list
    * @param {number} index Which entry to remove
    */
-  const removeElement = index => () => {
+  const removeElement = (index) => () => {
     // Avoid mutating elements array directly
     const newElements = [...elements]
     newElements.splice(index, 1)
@@ -22,12 +22,12 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
   }
 
   const updateElements = () => {
-    if (newElement === '') {
+    if (newElement === "") {
       updateWarnEmpty(true)
     } else {
       setElements([...elements, newElement])
       updateWarnEmpty(false)
-      updateNewElement('')
+      updateNewElement("")
     }
   }
 
@@ -39,7 +39,7 @@ const EditList = ({ placeholder, elements = [], setElements }) => {
           className="form-control"
           placeholder={placeholder}
           value={newElement}
-          onChange={e => updateNewElement(e.target.value)}
+          onChange={(e) => updateNewElement(e.target.value)}
         />
         <Button
           className="edit-list-add"

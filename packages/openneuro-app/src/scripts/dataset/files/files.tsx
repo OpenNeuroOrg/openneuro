@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import FileTree from './file-tree'
-import { Media } from '../../styles/media'
-import { useMutation, gql } from '@apollo/client'
-import { WarnButton } from '@openneuro/components/warn-button'
-import { AccordionWrap } from '@openneuro/components/accordion'
-import styled from '@emotion/styled'
-import { Tooltip } from '@openneuro/components/tooltip'
-import { DatasetFile } from '../../types/dataset-file'
-import bytes from 'bytes'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import FileTree from "./file-tree"
+import { Media } from "../../styles/media"
+import { gql, useMutation } from "@apollo/client"
+import { WarnButton } from "@openneuro/components/warn-button"
+import { AccordionWrap } from "@openneuro/components/accordion"
+import styled from "@emotion/styled"
+import { Tooltip } from "@openneuro/components/tooltip"
+import { DatasetFile } from "../../types/dataset-file"
+import bytes from "bytes"
 
 const FileTreeMeta = styled.span`
   position: absolute;
@@ -59,7 +59,7 @@ const Files = ({
   const isFileToBeDeleted = (id: string): boolean => id in filesToDelete
 
   const toggleFileToDelete = ({ id, path, filename }): void =>
-    setFilesToDelete(prevFilesToDelete => {
+    setFilesToDelete((prevFilesToDelete) => {
       if (isFileToBeDeleted(id)) {
         delete prevFilesToDelete[id]
         return { ...prevFilesToDelete }
@@ -84,30 +84,31 @@ const Files = ({
 
   const disableBtn = Object.values(filesToDelete).length ? null : true
   const filesCount = Object.values(filesToDelete).length
-  const bulkDeleteButton =
-    editMode &&
-    (isDeleting ? (
-      <span>Deleting...</span>
-    ) : (
-      <span className="delete-file bulk-delete">
-        <span className="bulk-delete-count">
-          {disableBtn ? (
-            <Tooltip tooltip="Click the dumpster icon to add files to Bulk Delete">
-              <b>Bulk Delete (0)</b>
-            </Tooltip>
-          ) : (
-            <WarnButton
-              message={`Bulk Delete (${filesCount})`}
-              icon="fas fa-dumpster"
-              iconOnly={true}
-              className="edit-file"
-              tooltip={`Delete ${filesCount}`}
-              onConfirmedClick={bulkDelete}
-            />
-          )}
+  const bulkDeleteButton = editMode &&
+    (isDeleting
+      ? <span>Deleting...</span>
+      : (
+        <span className="delete-file bulk-delete">
+          <span className="bulk-delete-count">
+            {disableBtn
+              ? (
+                <Tooltip tooltip="Click the dumpster icon to add files to Bulk Delete">
+                  <b>Bulk Delete (0)</b>
+                </Tooltip>
+              )
+              : (
+                <WarnButton
+                  message={`Bulk Delete (${filesCount})`}
+                  icon="fas fa-dumpster"
+                  iconOnly={true}
+                  className="edit-file"
+                  tooltip={`Delete ${filesCount}`}
+                  onConfirmedClick={bulkDelete}
+                />
+              )}
+          </span>
         </span>
-      </span>
-    ))
+      ))
   return (
     <StyleWrapper>
       <AccordionWrap className="filetree-wrapper">
@@ -116,7 +117,7 @@ const Files = ({
             <FileTree
               datasetId={datasetId}
               snapshotTag={snapshotTag}
-              path={''}
+              path={""}
               files={files}
               name={datasetName}
               editMode={editMode}
@@ -132,16 +133,16 @@ const Files = ({
           <div className="filetree-item">
             {summary && (
               <FileTreeMeta>
-                <FileTreeMetaLabel>Files:</FileTreeMetaLabel>{' '}
-                {summary.totalFiles}{' '}
-                <FileTreeMetaLabel>Size:</FileTreeMetaLabel>{' '}
+                <FileTreeMetaLabel>Files:</FileTreeMetaLabel>{" "}
+                {summary.totalFiles}{" "}
+                <FileTreeMetaLabel>Size:</FileTreeMetaLabel>{" "}
                 {bytes(summary.size)}
               </FileTreeMeta>
             )}
             <FileTree
               datasetId={datasetId}
               snapshotTag={snapshotTag}
-              path={''}
+              path={""}
               files={files}
               name={datasetName}
               editMode={editMode}

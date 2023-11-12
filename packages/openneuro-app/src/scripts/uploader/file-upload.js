@@ -1,5 +1,5 @@
-import { config } from '../config'
-import { uploads } from '@openneuro/client'
+import { config } from "../config"
+import { uploads } from "@openneuro/client"
 
 /**
  * Trim the webkitRelativePath value to only include the dataset relative path
@@ -10,20 +10,20 @@ export const getRelativePath = (
   options = { stripRelativePath: true },
 ) => {
   const path = file.webkitRelativePath
-  const pathTokens = path.split('/')
+  const pathTokens = path.split("/")
   if (pathTokens.length === 1) {
     return path
   }
-  if (pathTokens[0] === '') {
+  if (pathTokens[0] === "") {
     pathTokens.shift()
   }
-  if (pathTokens[pathTokens.length - 1] === '') {
+  if (pathTokens[pathTokens.length - 1] === "") {
     pathTokens[pathTokens.length - 1] = file.name
   }
   if (options.stripRelativePath) {
-    return pathTokens.slice(1).join('/')
+    return pathTokens.slice(1).join("/")
   } else {
-    return pathTokens.join('/')
+    return pathTokens.join("/")
   }
 }
 
@@ -35,7 +35,7 @@ export const getRelativePath = (
  * @param {File} file
  * @param {object} options
  * @param {boolean} options.stripRelativePath
- **/
+ */
 export const encodeFilePath = (file, options = { stripRelativePath: false }) =>
   file.webkitRelativePath
     ? uploads.encodeFilePath(getRelativePath(file, options))
@@ -65,19 +65,20 @@ export async function uploadFiles({
 }) {
   // Maps FileAPI objects to Request with the correct URL and body
   let totalSize = 0
-  const requests = filesToUpload.map(f => {
+  const requests = filesToUpload.map((f) => {
     totalSize += f.size
     const encodedFilePath = encodeFilePath(f, {
       stripRelativePath,
     })
-    const fileUrl = `${config.url}/uploads/${endpoint}/${datasetId}/${uploadId}/${encodedFilePath}`
+    const fileUrl =
+      `${config.url}/uploads/${endpoint}/${datasetId}/${uploadId}/${encodedFilePath}`
     return new Request(fileUrl, {
-      method: 'POST',
+      method: "POST",
       body: f,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      credentials: 'omit',
+      credentials: "omit",
       signal: abortController.signal,
     })
   })

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 // Defaults are in the Uploader component
 const UploaderContext = React.createContext(undefined)

@@ -1,22 +1,22 @@
-import { vi } from 'vitest'
-import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { RadioGroup } from '../RadioGroup'
+import { vi } from "vitest"
+import React from "react"
+import { fireEvent, render, screen } from "@testing-library/react"
+import { RadioGroup } from "../RadioGroup"
 
 export const datasetType_available = [
-  { label: 'All Public', value: 'All Public' },
-  { label: 'Following', value: 'Following' },
-  { label: 'My Datasets', value: 'My Datasets' },
-  { label: 'My Bookmarks', value: 'My Bookmarks' },
+  { label: "All Public", value: "All Public" },
+  { label: "Following", value: "Following" },
+  { label: "My Datasets", value: "My Datasets" },
+  { label: "My Bookmarks", value: "My Bookmarks" },
 ]
 
-describe('RadioGroup component', () => {
-  it('has selectable options', async () => {
+describe("RadioGroup component", () => {
+  it("has selectable options", async () => {
     const setSelected = vi.fn()
     render(
       <RadioGroup
         setSelected={setSelected}
-        selected={'All Public'}
+        selected={"All Public"}
         name="name"
         radioArr={datasetType_available}
         layout="row"
@@ -24,8 +24,8 @@ describe('RadioGroup component', () => {
     )
     // Check an option is rendered
     expect(await screen.getByText(/Following/)).toBeInTheDocument()
-    const followingRadio = screen.getByText('Following')
+    const followingRadio = screen.getByText("Following")
     fireEvent.click(followingRadio)
-    expect(setSelected).toHaveBeenCalledWith('Following')
+    expect(setSelected).toHaveBeenCalledWith("Following")
   })
 })

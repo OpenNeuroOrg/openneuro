@@ -1,11 +1,11 @@
 // @ts-nocheck
-import notifications from '../libs/notifications.js'
-import { format } from 'date-fns/format'
-import User from '../models/user'
-import Comment from '../models/comment'
-import MailgunIdentifier from '../models/mailgunIdentifier'
-import { ContentState, convertFromHTML, convertToRaw } from 'draft-js'
-import mongoose from 'mongoose'
+import notifications from "../libs/notifications.js"
+import { format } from "date-fns/format"
+import User from "../models/user"
+import Comment from "../models/comment"
+import MailgunIdentifier from "../models/mailgunIdentifier"
+import { ContentState, convertFromHTML, convertToRaw } from "draft-js"
+import mongoose from "mongoose"
 const ObjectID = mongoose.Schema.Types.ObjectId
 
 /**
@@ -15,7 +15,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId
  * item that can be stored as if it came from
  * a client-side draft.js editor
  */
-const textToDraft = text => {
+const textToDraft = (text) => {
   return JSON.stringify(
     convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))),
   )
@@ -36,10 +36,10 @@ export async function reply(req, res, next) {
   const userId = req.params.userId
     ? decodeURIComponent(req.params.userId)
     : null
-  const text = textToDraft(req.body['stripped-text'])
-  const inReplyToRaw = req.body['In-Reply-To']
+  const text = textToDraft(req.body["stripped-text"])
+  const inReplyToRaw = req.body["In-Reply-To"]
   const inReplyTo = inReplyToRaw
-    ? inReplyToRaw.replace('<', '').replace('>', '')
+    ? inReplyToRaw.replace("<", "").replace(">", "")
     : null
   const messageId = inReplyTo
     ? await MailgunIdentifier.findOne({ messageId: inReplyTo }).exec()

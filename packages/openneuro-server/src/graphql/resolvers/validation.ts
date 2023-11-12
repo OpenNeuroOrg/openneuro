@@ -1,8 +1,8 @@
-import config from '../../config'
-import { generateDataladCookie } from '../../libs/authentication/jwt'
-import { getDatasetWorker } from '../../libs/datalad-service'
-import Issue from '../../models/issue'
-import { redlock } from '../../libs/redis'
+import config from "../../config"
+import { generateDataladCookie } from "../../libs/authentication/jwt"
+import { getDatasetWorker } from "../../libs/datalad-service"
+import Issue from "../../models/issue"
+import { redlock } from "../../libs/redis"
 
 /**
  * Save issues data returned by the datalad service
@@ -26,9 +26,11 @@ export const updateValidation = (obj, args) => {
 }
 
 export const validationUrl = (datasetId, ref) => {
-  return `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/validate/${ref}`
+  return `http://${
+    getDatasetWorker(
+      datasetId,
+    )
+  }/datasets/${datasetId}/validate/${ref}`
 }
 
 /**
@@ -43,7 +45,7 @@ export const revalidate = async (obj, { datasetId, ref }, { userInfo }) => {
     // Lock for five minutes to avoid stacking up multiple validation requests
     await redlock.lock(`openneuro:revalidate-lock:${datasetId}:${ref}`, 300000)
     const response = await fetch(validationUrl(datasetId, ref), {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({}),
       headers: {
         cookie: generateDataladCookie(config)(userInfo),

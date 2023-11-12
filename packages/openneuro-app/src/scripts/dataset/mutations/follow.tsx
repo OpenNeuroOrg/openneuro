@@ -1,9 +1,9 @@
-import React, { FC, useContext } from 'react'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { datasetCacheId } from '../../datalad/mutations/cache-id.js'
-import { CountToggle } from '@openneuro/components/count-toggle'
-import { UserModalOpenCtx } from '../../utils/user-login-modal-ctx'
+import React, { FC, useContext } from "react"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { datasetCacheId } from "../../datalad/mutations/cache-id.js"
+import { CountToggle } from "@openneuro/components/count-toggle"
+import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx"
 
 const FOLLOW_DATASET = gql`
   mutation followDataset($datasetId: ID!) {
@@ -45,7 +45,7 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
   followers,
 }) => {
   const { setUserModalOpen } = useContext(UserModalOpenCtx)
-  const handleToggle = followDataset => () => {
+  const handleToggle = (followDataset) => () => {
     if (!profile) {
       // if user is not logged in, give them the option to do so
       // then redirect back to this page
@@ -64,7 +64,7 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
           id: datasetCacheId(datasetId),
           fragment: USER_FOLLOWING,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             following: following,
           },
@@ -78,19 +78,20 @@ export const FollowDataset: FC<FollowDatasetProps> = ({
           id: datasetCacheId(datasetId),
           fragment: DATASET_FOLLOWERS,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             followers: following
               ? [...followers, newFollower]
               : followers.filter(
-                  follower => follower.userId !== newFollower.userId,
-                ),
+                (follower) => follower.userId !== newFollower.userId,
+              ),
           },
         })
-      }}>
-      {followDataset => (
+      }}
+    >
+      {(followDataset) => (
         <CountToggle
-          label={following ? 'Following' : 'Follow'}
+          label={following ? "Following" : "Follow"}
           icon="fa-star"
           disabled={!profile}
           toggleClick={handleToggle(followDataset)}

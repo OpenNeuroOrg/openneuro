@@ -1,15 +1,15 @@
 // dependencies -------------------------------------------------------
 
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { useQuery } from '@apollo/client'
-import { gql } from '@apollo/client'
-import Helmet from 'react-helmet'
-import { Loading } from '@openneuro/components/loading'
-import { Link } from 'react-router-dom'
-import { pageTitle } from '../../resources/strings.js'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { useQuery } from "@apollo/client"
+import { gql } from "@apollo/client"
+import Helmet from "react-helmet"
+import { Loading } from "@openneuro/components/loading"
+import { Link } from "react-router-dom"
+import { pageTitle } from "../../resources/strings.js"
 
-export const unescapePath = path => path.replace(/:/g, '/')
+export const unescapePath = (path) => path.replace(/:/g, "/")
 
 export const FLAGGED_FILES = gql`
   query flaggedFiles($flagged: Boolean, $deleted: Boolean) {
@@ -30,7 +30,7 @@ const FlaggedFilesContainer = () => {
   const [includeDeleted, setIncludeDeleted] = useState(false)
   const { data, loading, error } = useQuery(FLAGGED_FILES, {
     variables: { flagged: includeFlagged, deleted: includeDeleted },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
   return (
     <FlaggedFiles
@@ -68,26 +68,28 @@ const FlaggedFiles = ({
           <div className="filters">
             <label>Filter By:</label>
             <button
-              className={includeFlagged ? 'active' : null}
-              onClick={() => setIncludeFlagged(prev => !prev)}>
+              className={includeFlagged ? "active" : null}
+              onClick={() => setIncludeFlagged((prev) => !prev)}
+            >
               <span className="filter-flagged">
                 <i
-                  className={
-                    includeFlagged ? 'fa fa-check-square-o' : 'fa fa-square-o'
-                  }
-                />{' '}
+                  className={includeFlagged
+                    ? "fa fa-check-square-o"
+                    : "fa fa-square-o"}
+                />{" "}
                 Flagged
               </span>
             </button>
             <button
-              className={includeDeleted ? 'active' : null}
-              onClick={() => setIncludeDeleted(prev => !prev)}>
+              className={includeDeleted ? "active" : null}
+              onClick={() => setIncludeDeleted((prev) => !prev)}
+            >
               <span className="filter-deleted">
                 <i
-                  className={
-                    includeDeleted ? 'fa fa-check-square-o' : 'fa fa-square-o'
-                  }
-                />{' '}
+                  className={includeDeleted
+                    ? "fa fa-check-square-o"
+                    : "fa fa-square-o"}
+                />{" "}
                 Deleted
               </span>
             </button>
@@ -99,13 +101,13 @@ const FlaggedFiles = ({
         <div className="users-panel-wrap">
           {loading && <Loading />}
           {data &&
-            (data.flaggedFiles.length ? (
-              data.flaggedFiles.map((flaggedFile, key) => (
-                <FlaggedItem {...flaggedFile} key={key} />
-              ))
-            ) : (
-              <h4>No Results Found</h4>
-            ))}
+            (data.flaggedFiles.length
+              ? (
+                data.flaggedFiles.map((flaggedFile, key) => (
+                  <FlaggedItem {...flaggedFile} key={key} />
+                ))
+              )
+              : <h4>No Results Found</h4>)}
         </div>
       </div>
     </div>
@@ -122,7 +124,7 @@ FlaggedFiles.propTypes = {
 }
 
 const datasetUrlPath = (datasetId, snapshot) =>
-  `/datasets/${datasetId}${snapshot === 'HEAD' ? '' : `/versions/${snapshot}`}`
+  `/datasets/${datasetId}${snapshot === "HEAD" ? "" : `/versions/${snapshot}`}`
 
 const FlaggedItem = ({
   datasetId,
@@ -136,7 +138,7 @@ const FlaggedItem = ({
         <label>Dataset : Snapshot</label>
         <Link to={datasetUrlPath(datasetId, snapshot)}>
           {datasetId}
-          {' : '}
+          {" : "}
           {snapshot}
         </Link>
       </div>

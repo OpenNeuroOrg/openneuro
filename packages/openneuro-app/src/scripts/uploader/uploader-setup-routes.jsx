@@ -1,14 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Route, Routes } from 'react-router-dom'
-import UploaderModal from './uploader-modal.jsx'
-import UploadStep from './upload-step.jsx'
-import UploadSelect from './upload-select.jsx'
-import UploadIssues from './upload-issues.jsx'
-import UploadMetadata from './upload-metadata.jsx'
-import UploadDisclaimer from './upload-disclaimer.jsx'
+import React from "react"
+import PropTypes from "prop-types"
+import { Route, Routes } from "react-router-dom"
+import UploaderModal from "./uploader-modal.jsx"
+import UploadStep from "./upload-step.jsx"
+import UploadSelect from "./upload-select.jsx"
+import UploadIssues from "./upload-issues.jsx"
+import UploadMetadata from "./upload-metadata.jsx"
+import UploadDisclaimer from "./upload-disclaimer.jsx"
 
-const UploaderSetupRoutes = props => (
+const UploaderSetupRoutes = (props) => (
   <UploaderModal {...props}>
     <UploadStep location={props.location} />
     <div className="tasks-col fade-in">

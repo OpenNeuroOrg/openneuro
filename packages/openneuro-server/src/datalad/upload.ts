@@ -1,9 +1,11 @@
-import { getDatasetWorker } from '../libs/datalad-service'
+import { getDatasetWorker } from "../libs/datalad-service"
 
 export const uploadUrl = (datasetId, uploadId) => {
-  return `http://${getDatasetWorker(
-    datasetId,
-  )}/datasets/${datasetId}/upload/${uploadId}`
+  return `http://${
+    getDatasetWorker(
+      datasetId,
+    )
+  }/datasets/${datasetId}/upload/${uploadId}`
 }
 
 /**
@@ -19,7 +21,7 @@ export const finishUploadRequest = async (
   forwardToken,
 ) => {
   const response = await fetch(uploadUrl(datasetId, uploadId), {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({}),
     headers: {
       cookie: `accessToken=${forwardToken}`,

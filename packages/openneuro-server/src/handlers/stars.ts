@@ -1,5 +1,5 @@
 // dependencies ------------------------------------------------------------
-import Star from '../models/stars'
+import Star from "../models/stars"
 
 /**
  * Stars
@@ -22,10 +22,10 @@ export default {
       datasetId: datasetId,
       userId: userId,
     })
-      .then(response => {
+      .then((response) => {
         return res.send(response.$op)
       })
-      .catch(err => {
+      .catch((err) => {
         next(err)
       })
   },
@@ -46,7 +46,7 @@ export default {
     Star.deleteOne({
       datasetId: datasetId,
       userId: userId,
-    }).catch(err => {
+    }).catch((err) => {
       if (err) {
         return next(err)
       } else {
@@ -64,26 +64,27 @@ export default {
    */
 
   getStars(req, res, next) {
-    const datasetId =
-      req.params.datasetId === 'undefined' ? null : req.params.datasetId
+    const datasetId = req.params.datasetId === "undefined"
+      ? null
+      : req.params.datasetId
     if (datasetId) {
       Star.find({
         datasetId: datasetId,
       })
         .exec()
-        .then(stars => {
+        .then((stars) => {
           res.send(stars)
         })
-        .catch(err => {
+        .catch((err) => {
           return next(err)
         })
     } else {
       Star.find()
         .exec()
-        .then(stars => {
+        .then((stars) => {
           res.send(stars)
         })
-        .catch(err => {
+        .catch((err) => {
           return next(err)
         })
     }

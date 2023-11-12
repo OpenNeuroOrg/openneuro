@@ -1,14 +1,14 @@
-import request from 'superagent'
-import { redis } from '../libs/redis'
-import CacheItem, { CacheType } from '../cache/item'
-import { getDatasetWorker } from '../libs/datalad-service'
+import request from "superagent"
+import { redis } from "../libs/redis"
+import CacheItem, { CacheType } from "../cache/item"
+import { getDatasetWorker } from "../libs/datalad-service"
 
 /**
  * Convert to URL compatible path
  * @param {String} path
  */
 export const encodeFilePath = (path: string): string => {
-  return path.replace(new RegExp('/', 'g'), ':')
+  return path.replace(new RegExp("/", "g"), ":")
 }
 
 /**
@@ -16,7 +16,7 @@ export const encodeFilePath = (path: string): string => {
  * @param {String} path
  */
 export const decodeFilePath = (path: string): string => {
-  return path.replace(new RegExp(':', 'g'), '/')
+  return path.replace(new RegExp(":", "g"), "/")
 }
 
 /**
@@ -25,7 +25,7 @@ export const decodeFilePath = (path: string): string => {
  * @param {String} filename
  */
 export const getFileName = (path: string, filename: string): string => {
-  const filePath = path ? [path, filename].join('/') : filename
+  const filePath = path ? [path, filename].join("/") : filename
   return filename ? encodeFilePath(filePath) : encodeFilePath(path)
 }
 
@@ -44,13 +44,17 @@ export const fileUrl = (
 ): string => {
   const fileName = getFileName(path, filename)
   if (revision) {
-    return `http://${getDatasetWorker(
-      datasetId,
-    )}/datasets/${datasetId}/snapshots/${revision}/files/${fileName}`
+    return `http://${
+      getDatasetWorker(
+        datasetId,
+      )
+    }/datasets/${datasetId}/snapshots/${revision}/files/${fileName}`
   } else {
-    return `http://${getDatasetWorker(
-      datasetId,
-    )}/datasets/${datasetId}/files/${fileName}`
+    return `http://${
+      getDatasetWorker(
+        datasetId,
+      )
+    }/datasets/${datasetId}/files/${fileName}`
   }
 }
 
@@ -88,22 +92,24 @@ export const getFiles = (datasetId, treeish): Promise<[DatasetFile]> => {
     treeish.substring(0, 7),
   ])
   return cache.get(
-    doNotCache =>
+    (doNotCache) =>
       request
         .get(
-          `${getDatasetWorker(
-            datasetId,
-          )}/datasets/${datasetId}/tree/${treeish}`,
+          `${
+            getDatasetWorker(
+              datasetId,
+            )
+          }/datasets/${datasetId}/tree/${treeish}`,
         )
-        .set('Accept', 'application/json')
-        .then(response => {
+        .set("Accept", "application/json")
+        .then((response) => {
           if (response.status === 200) {
             const {
               body: { files },
             } = response
             for (const f of files) {
               // Skip caching this tree if it doesn't contain S3 URLs - likely still exporting
-              if (!f.directory && !f.urls[0].includes('s3.amazonaws.com')) {
+              if (!f.directory && !f.urls[0].includes("s3.amazonaws.com")) {
                 doNotCache(true)
                 break
               }

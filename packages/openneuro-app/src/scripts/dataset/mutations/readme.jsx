@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { SaveButton } from '../fragments/save-button'
-import { DRAFT_FRAGMENT } from '../../datalad/dataset/dataset-query-fragments'
-import { datasetCacheId } from './cache-id.js'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { SaveButton } from "../fragments/save-button"
+import { DRAFT_FRAGMENT } from "../../datalad/dataset/dataset-query-fragments"
+import { datasetCacheId } from "./cache-id.js"
 
 const UPDATE_README = gql`
   mutation updateReadme($datasetId: ID!, $value: String!) {
@@ -15,7 +15,7 @@ const UPDATE_README = gql`
 const UpdateReadme = ({ datasetId, value, done }) => (
   <Mutation
     mutation={UPDATE_README}
-    update={cache => {
+    update={(cache) => {
       const { draft } = cache.readFragment({
         id: datasetCacheId(datasetId),
         fragment: DRAFT_FRAGMENT,
@@ -24,7 +24,7 @@ const UpdateReadme = ({ datasetId, value, done }) => (
         id: datasetCacheId(datasetId),
         fragment: DRAFT_FRAGMENT,
         data: {
-          __typename: 'Dataset',
+          __typename: "Dataset",
           id: datasetId,
           draft: {
             ...draft,
@@ -32,8 +32,9 @@ const UpdateReadme = ({ datasetId, value, done }) => (
           },
         },
       })
-    }}>
-    {updateReadme => (
+    }}
+  >
+    {(updateReadme) => (
       <SaveButton
         action={async () => {
           await updateReadme({ variables: { datasetId, value } })

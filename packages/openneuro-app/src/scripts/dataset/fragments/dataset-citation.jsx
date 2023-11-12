@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import getYear from 'date-fns/getYear'
-import parseISO from 'date-fns/parseISO'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { Button } from '@openneuro/components/button'
-import { Tooltip } from '@openneuro/components/tooltip'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import getYear from "date-fns/getYear"
+import parseISO from "date-fns/parseISO"
+import { CopyToClipboard } from "react-copy-to-clipboard"
+import { Button } from "@openneuro/components/button"
+import { Tooltip } from "@openneuro/components/tooltip"
 
 export const formatCitation = (snapshot, style) => {
   const year = getYear(parseISO(snapshot.created))
   const authors = snapshot.description.Authors
-    ? snapshot.description.Authors.join(' and ')
-    : 'NO AUTHORS FOUND'
-  if (style === 'Text') {
+    ? snapshot.description.Authors.join(" and ")
+    : "NO AUTHORS FOUND"
+  if (style === "Text") {
     return `${authors} (${year}). ${snapshot.description.Name}. OpenNeuro. [Dataset] doi: ${snapshot.description.DatasetDOI}`
-  } else if (style === 'BibTeX') {
+  } else if (style === "BibTeX") {
     return `@dataset{${snapshot.id},
   author = {${authors}},
   title = {"${snapshot.description.Name}"},
@@ -25,7 +25,7 @@ export const formatCitation = (snapshot, style) => {
 }
 
 const DatasetCitation = ({ snapshot }) => {
-  const [style, setStyle] = useState('Text')
+  const [style, setStyle] = useState("Text")
   const [copied, setCopied] = useState(false)
   const copiedTimeout = () => {
     setCopied(true)
@@ -43,10 +43,10 @@ const DatasetCitation = ({ snapshot }) => {
             label="Text"
             size="xsmall"
             onClick={() => {
-              setStyle('Text')
+              setStyle("Text")
               setCopied(false)
             }}
-            className={style === 'Text' ? 'active' : ''}
+            className={style === "Text" ? "active" : ""}
           />
 
           <Button
@@ -54,27 +54,29 @@ const DatasetCitation = ({ snapshot }) => {
             label="BibTeX"
             size="xsmall"
             onClick={() => {
-              setStyle('BibTeX')
+              setStyle("BibTeX")
               setCopied(false)
             }}
-            className={style === 'BibTeX' ? 'active' : ''}
+            className={style === "BibTeX" ? "active" : ""}
           />
           <Tooltip
-            tooltip={'Copy ' + style + ' to clipboard'}
-            className="tooltip">
+            tooltip={"Copy " + style + " to clipboard"}
+            className="tooltip"
+          >
             <CopyToClipboard
               text={citation}
               onCopy={() => copiedTimeout()}
-              className="on-button on-button--small on-button--nobg ">
+              className="on-button on-button--small on-button--nobg "
+            >
               <span className="copy-key">
-                <i className="fa fa-link" aria-hidden="true" />{' '}
+                <i className="fa fa-link" aria-hidden="true" />{" "}
                 {copied ? <span>Copied to clipboard</span> : <span>Copy</span>}
               </span>
             </CopyToClipboard>
           </Tooltip>
         </div>
         <h5 className="cite-content-block">
-          {style === 'BibTeX' ? <pre>{citation}</pre> : citation}
+          {style === "BibTeX" ? <pre>{citation}</pre> : citation}
         </h5>
       </div>
     </>

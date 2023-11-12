@@ -1,6 +1,6 @@
-import React from 'react'
-import { Dropdown } from '../dropdown/Dropdown'
-import { Button } from '../button/Button'
+import React from "react"
+import { Dropdown } from "../dropdown/Dropdown"
+import { Button } from "../button/Button"
 
 export interface CloneDropdownProps {
   gitAccess: React.ReactNode
@@ -15,11 +15,13 @@ export const CloneDropdown: React.FC<CloneDropdownProps> = ({ gitAccess }) => {
             className="clone-link"
             primary={true}
             size="small"
-            label="Clone">
+            label="Clone"
+          >
             <i className="fas fa-caret-up"></i>
             <i className="fas fa-caret-down"></i>
           </Button>
-        }>
+        }
+      >
         <div>
           <span>{gitAccess}</span>
         </div>

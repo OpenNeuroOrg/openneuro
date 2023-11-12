@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { schemaComposer } from 'graphql-compose'
-import resolvers from './resolvers'
+import { schemaComposer } from "graphql-compose"
+import resolvers from "./resolvers"
 import {
-  datasetSearch,
   advancedDatasetSearch,
-} from './resolvers/dataset-search'
+  datasetSearch,
+} from "./resolvers/dataset-search"
 
 export const typeDefs = `
   scalar Date

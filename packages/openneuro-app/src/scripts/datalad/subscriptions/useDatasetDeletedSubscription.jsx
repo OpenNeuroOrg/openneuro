@@ -1,8 +1,8 @@
-import React from 'react'
-import { useSubscription, gql } from '@apollo/client'
+import React from "react"
+import { gql, useSubscription } from "@apollo/client"
 
-import { toast } from 'react-toastify'
-import ToastContent from '../../common/partials/toast-content.jsx'
+import { toast } from "react-toastify"
+import ToastContent from "../../common/partials/toast-content.jsx"
 
 const DATASET_DELETED_SUBSCRIPTION = gql`
   subscription datasetDeleted($datasetIds: [ID!]) {

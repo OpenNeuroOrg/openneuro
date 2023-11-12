@@ -1,10 +1,10 @@
-import { indexQuery, indexingToken } from '@openneuro/search'
-import { setContext } from '@apollo/client/link/context'
-import { RetryLink } from '@apollo/client/link/retry'
-import { Client } from '@elastic/elasticsearch'
-import { createClient, datasetGenerator } from '@openneuro/client'
-import indexDatasets from './indexDatasets'
-import { createIndices } from './createIndices'
+import { indexingToken, indexQuery } from "@openneuro/search"
+import { setContext } from "@apollo/client/link/context"
+import { RetryLink } from "@apollo/client/link/retry"
+import { Client } from "@elastic/elasticsearch"
+import { createClient, datasetGenerator } from "@openneuro/client"
+import indexDatasets from "./indexDatasets"
+import { createIndices } from "./createIndices"
 
 /**
  * Indexer entrypoint
@@ -43,7 +43,7 @@ export default async function main(): Promise<void> {
   try {
     await createIndices(elasticClient)
   } catch (err) {
-    console.error('Could not create indices, skipping indexing')
+    console.error("Could not create indices, skipping indexing")
     console.error(err)
   }
   const datasets = datasetGenerator(apolloClient, indexQuery)

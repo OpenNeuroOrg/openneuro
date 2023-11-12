@@ -1,73 +1,73 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import ljaf from '../assets/ljaf.png'
-import nihbi from '../assets/nih-bi-logo.png'
-import nsf from '../assets/nsf.png'
-import nimh from '../assets/nimh.png'
-import squishymedia from '../assets/sqm-logo.png'
-import novo from '../assets/novo-logo.png'
-import nru from '../assets/nru-logo.png'
-import stanford from '../assets/stanford.png'
-import logo_app from '../assets/logo_app.png'
-import logo_cube from '../assets/logo_cube.png'
-import logo_data from '../assets/logo_data.png'
-import logo_users from '../assets/logo_users.png'
-import brand_mark from '../assets/brand_mark.png'
+import React from "react"
+import { Link } from "react-router-dom"
+import ljaf from "../assets/ljaf.png"
+import nihbi from "../assets/nih-bi-logo.png"
+import nsf from "../assets/nsf.png"
+import nimh from "../assets/nimh.png"
+import squishymedia from "../assets/sqm-logo.png"
+import novo from "../assets/novo-logo.png"
+import nru from "../assets/nru-logo.png"
+import stanford from "../assets/stanford.png"
+import logo_app from "../assets/logo_app.png"
+import logo_cube from "../assets/logo_cube.png"
+import logo_data from "../assets/logo_data.png"
+import logo_users from "../assets/logo_users.png"
+import brand_mark from "../assets/brand_mark.png"
 
-import getImage from '../assets/cube-get.png'
-import shareImage from '../assets/cube-share.png'
-import useImage from '../assets/cube-use.png'
+import getImage from "../assets/cube-get.png"
+import shareImage from "../assets/cube-share.png"
+import useImage from "../assets/cube-use.png"
 
 export const frontPage = {
-  pageTitle: 'OpenNeuro',
+  pageTitle: "OpenNeuro",
   copyright: {
-    holder: 'Stanford Center for Reproducible Neuroscience',
+    holder: "Stanford Center for Reproducible Neuroscience",
   },
   pageDescription: (
     <h2>
-      A free and open platform for validating and sharing BIDS-compliant{' '}
-      <Link to="/search/modality/mri">MRI</Link>,{' '}
-      <Link to="/search/modality/pet">PET</Link>,{' '}
-      <Link to="/search/modality/meg">MEG</Link>,{' '}
-      <Link to="/search/modality/eeg">EEG</Link>, and{' '}
+      A free and open platform for validating and sharing BIDS-compliant{" "}
+      <Link to="/search/modality/mri">MRI</Link>,{" "}
+      <Link to="/search/modality/pet">PET</Link>,{" "}
+      <Link to="/search/modality/meg">MEG</Link>,{" "}
+      <Link to="/search/modality/eeg">EEG</Link>, and{" "}
       <Link to="/search/modality/ieeg">iEEG</Link> data
     </h2>
   ),
   titlePanel: {
     logos: [
       {
-        class: 'logo-layer-users',
+        class: "logo-layer-users",
         src: logo_users,
-        alt: 'OpenNeuro Logo',
+        alt: "OpenNeuro Logo",
       },
       {
-        class: 'logo-layer-cube',
+        class: "logo-layer-cube",
         src: logo_cube,
-        alt: 'OpenNeuro Logo',
+        alt: "OpenNeuro Logo",
       },
       {
-        class: 'logo-layer-app',
+        class: "logo-layer-app",
         src: logo_app,
-        alt: 'OpenNeuro Logo',
+        alt: "OpenNeuro Logo",
       },
       {
-        class: 'logo-layer-data',
+        class: "logo-layer-data",
         src: logo_data,
-        alt: 'OpenNeuro Logo',
+        alt: "OpenNeuro Logo",
       },
     ],
     logoText: true,
-    privacyDetail: '',
-    privacyLink: 'https://www.stanford.edu/site/privacy/',
+    privacyDetail: "",
+    privacyLink: "https://www.stanford.edu/site/privacy/",
   },
   navBar: {
     brand: {
       src: brand_mark,
-      alt: 'OpenNeuro Logo',
-      title: 'OpenNeuro Link to Home Page',
+      alt: "OpenNeuro Logo",
+      title: "OpenNeuro Link to Home Page",
       text: {
-        first: 'Open',
-        second: 'Neuro',
+        first: "Open",
+        second: "Neuro",
       },
     },
   },
@@ -75,9 +75,9 @@ export const frontPage = {
   collaborators: true,
   infographic: [
     {
-      name: 'Get Data',
+      name: "Get Data",
       image: getImage,
-      htmlID: 'get-data',
+      htmlID: "get-data",
       content: (
         <>
           <p>
@@ -93,9 +93,9 @@ export const frontPage = {
       ),
     },
     {
-      name: 'Share Data',
+      name: "Share Data",
       image: shareImage,
-      htmlID: 'share-data',
+      htmlID: "share-data",
       content: (
         <>
           <p>
@@ -110,9 +110,9 @@ export const frontPage = {
       ),
     },
     {
-      name: 'Use Data',
+      name: "Use Data",
       image: useImage,
-      htmlID: 'use-data',
+      htmlID: "use-data",
       content: (
         <>
           <p>
@@ -122,10 +122,10 @@ export const frontPage = {
             scenes.
           </p>
           <p>
-            Explore your published OpenNeuro dataset using{' '}
-            <a href="https://brainlife.io/">BrainLife's</a> computing network.
-            Utilize their community driven apps to run a variety of analysis and
-            processing applications in the browser.
+            Explore your published OpenNeuro dataset using{" "}
+            <a href="https://brainlife.io/">BrainLife's</a>{" "}
+            computing network. Utilize their community driven apps to run a
+            variety of analysis and processing applications in the browser.
           </p>
         </>
       ),
@@ -133,28 +133,28 @@ export const frontPage = {
   ],
   support: [
     {
-      title: 'NIH Brain Initiative',
-      alt: 'NIH Brain Initiative logo',
+      title: "NIH Brain Initiative",
+      alt: "NIH Brain Initiative logo",
       logo: nihbi,
-      link: 'https://braininitiative.nih.gov/',
+      link: "https://braininitiative.nih.gov/",
     },
     {
-      title: 'NSF',
-      alt: 'National Science Foundation',
+      title: "NSF",
+      alt: "National Science Foundation",
       logo: nsf,
-      link: 'https://www.nsf.gov/',
+      link: "https://www.nsf.gov/",
     },
     {
-      title: 'Stanford',
-      alt: 'Stanford',
+      title: "Stanford",
+      alt: "Stanford",
       logo: stanford,
-      link: 'https://www.stanford.edu',
+      link: "https://www.stanford.edu",
     },
     {
-      title: 'Arnold Foundation',
-      alt: 'Arnold Foundation',
+      title: "Arnold Foundation",
+      alt: "Arnold Foundation",
       logo: ljaf,
-      link: 'http://www.arnoldfoundation.org/',
+      link: "http://www.arnoldfoundation.org/",
     },
 
     // {
@@ -164,22 +164,22 @@ export const frontPage = {
     //   link: 'https://nih.gov',
     // },
     {
-      title: 'Squishymedia',
-      alt: 'Squishymedia',
+      title: "Squishymedia",
+      alt: "Squishymedia",
       logo: squishymedia,
-      link: 'https://squishymedia.com',
+      link: "https://squishymedia.com",
     },
     {
-      title: 'Novonor Disk Fonden',
-      alt: 'Novonor Disk Fonden logo',
+      title: "Novonor Disk Fonden",
+      alt: "Novonor Disk Fonden logo",
       logo: novo,
-      link: 'https://novonordiskfonden.dk/en/',
+      link: "https://novonordiskfonden.dk/en/",
     },
     {
-      title: 'Neurobiology Research Unit',
-      alt: 'Neurobiology Research Unit logo',
+      title: "Neurobiology Research Unit",
+      alt: "Neurobiology Research Unit logo",
       logo: nru,
-      link: 'https://nru.dk/',
+      link: "https://nru.dk/",
     },
   ],
 }

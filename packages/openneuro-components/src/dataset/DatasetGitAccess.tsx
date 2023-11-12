@@ -1,6 +1,6 @@
-import React from 'react'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Button } from '../button/Button'
+import React from "react"
+import { Tooltip } from "../tooltip/Tooltip"
+import { Button } from "../button/Button"
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text)
@@ -23,7 +23,7 @@ export const DatasetGitAccess = ({
   configGithub,
   hasEdit,
 }: DatasetGitAccessProps) => {
-  const workerId = worker?.split('-').pop()
+  const workerId = worker?.split("-").pop()
   const url = `${configUrl}/git/${workerId}/${datasetId}`
   const readURL = `https://github.com/${configGithub}/${datasetId}.git`
   return (

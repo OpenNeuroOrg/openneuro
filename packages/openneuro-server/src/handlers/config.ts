@@ -22,5 +22,5 @@ const config = {
 // Provide some environment variables to the client
 export const clientConfig = (req, res) => {
   const configScript = `window.OpenNeuroConfig = ${JSON.stringify(config)}`
-  res.type('text/javascript').send(configScript)
+  res.type("text/javascript").send(configScript)
 }

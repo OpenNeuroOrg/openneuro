@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client"
 
 const getSnapshotsQuery = gql`
   query dataset($id: ID!) {
@@ -16,7 +16,7 @@ const getSnapshotsQuery = gql`
   }
 `
 
-export const getSnapshots = client => datasetId =>
+export const getSnapshots = (client) => (datasetId) =>
   client.query({
     query: getSnapshotsQuery,
     variables: { id: datasetId },

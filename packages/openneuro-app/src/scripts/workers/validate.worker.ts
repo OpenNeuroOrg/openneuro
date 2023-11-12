@@ -1,11 +1,13 @@
 /* eslint-env worker */
-import validate from 'bids-validator'
-import { BIDSValidatorIssues } from './worker-interface'
+import validate from "bids-validator"
+import { BIDSValidatorIssues } from "./worker-interface"
 
 const asyncValidateBIDS = (files, options): Promise<BIDSValidatorIssues> =>
-  new Promise(resolve => {
-    validate.BIDS(files, options, (issues, summary) =>
-      resolve({ issues, summary }),
+  new Promise((resolve) => {
+    validate.BIDS(
+      files,
+      options,
+      (issues, summary) => resolve({ issues, summary }),
     )
   })
 

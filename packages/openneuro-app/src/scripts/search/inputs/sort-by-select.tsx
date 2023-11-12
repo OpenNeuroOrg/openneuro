@@ -1,6 +1,6 @@
-import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from '../search-params-ctx'
-import { SearchSort } from '@openneuro/components/search-page'
+import React, { FC, useContext } from "react"
+import { SearchParamsCtx } from "../search-params-ctx"
+import { SearchSort } from "@openneuro/components/search-page"
 
 interface SortBySelectProps {
   variables: any
@@ -12,8 +12,8 @@ const SortBySelect: FC<SortBySelectProps> = ({
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const { sortBy_available, sortBy_selected } = searchParams
-  const setSortBy = sortBy_selected =>
-    setSearchParams(prevState => ({
+  const setSortBy = (sortBy_selected) =>
+    setSearchParams((prevState) => ({
       ...prevState,
       sortBy_selected,
     }))
@@ -23,16 +23,15 @@ const SortBySelect: FC<SortBySelectProps> = ({
     Object.keys(variables.query.bool).length === 0 ||
     (Object.keys(variables.query.bool).length === 1 &&
       variables.query.bool?.filter?.every(
-        f => f?.match?.['latestSnapshot.summary.modalities'],
+        (f) => f?.match?.["latestSnapshot.summary.modalities"],
       ))
   ) {
     const available = sortBy_available.filter(
-      item => item.value !== 'relevance',
+      (item) => item.value !== "relevance",
     )
-    const selected =
-      sortBy_selected.value === 'relevance'
-        ? { label: 'Newest', value: 'newest' }
-        : sortBy_selected
+    const selected = sortBy_selected.value === "relevance"
+      ? { label: "Newest", value: "newest" }
+      : sortBy_selected
     return (
       <SearchSort
         items={available}

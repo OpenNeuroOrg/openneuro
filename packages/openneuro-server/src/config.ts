@@ -1,12 +1,12 @@
 const config = {
   url: process.env.CRN_SERVER_URL,
   port: 8111,
-  apiPrefix: '/crn/',
-  location: '/srv',
+  apiPrefix: "/crn/",
+  location: "/srv",
   headers: {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-    'Access-Control-Allow-Headers': 'content-type, Authorization',
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+    "Access-Control-Allow-Headers": "content-type, Authorization",
   },
   analysis: {
     enabled: process.env.ANALYSIS_ENABLED,
@@ -33,7 +33,7 @@ const config = {
   },
   mongo: {
     url: process.env.MONGO_URL,
-    dbName: 'crn',
+    dbName: "crn",
     connectTimeoutMS: 1000,
   },
   redis: {

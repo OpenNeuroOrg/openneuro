@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
 
 const CACHE_CLEAR = gql`
   mutation cacheClear($datasetId: ID!) {
@@ -11,7 +11,7 @@ const CACHE_CLEAR = gql`
 
 const CacheClear = ({ datasetId }) => (
   <Mutation mutation={CACHE_CLEAR}>
-    {cacheClear => (
+    {(cacheClear) => (
       <span>
         <button
           className="btn-admin-blue"
@@ -21,7 +21,8 @@ const CacheClear = ({ datasetId }) => (
                 datasetId,
               },
             })
-          }}>
+          }}
+        >
           <i className="fa fa-eraser" /> Delete Dataset Cache
         </button>
       </span>

@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface AnalyticsDocument extends Document {
@@ -17,6 +17,6 @@ const analyticsSchema = new Schema({
   views: { type: Number, required: false },
 })
 
-const Analytics = model<AnalyticsDocument>('Analytics', analyticsSchema)
+const Analytics = model<AnalyticsDocument>("Analytics", analyticsSchema)
 
 export default Analytics

@@ -1,12 +1,12 @@
 import {
+  // Interface of the generic API response
+  ApiResponse,
   Client as ElasticClient,
   // Object that contains the type definitions of every API method
   RequestParams,
-  // Interface of the generic API response
-  ApiResponse,
-} from '@elastic/elasticsearch'
-import { ApolloClient, gql, NormalizedCacheObject } from '@apollo/client'
-import { DatasetsIndex } from './indexes/datasets'
+} from "@elastic/elasticsearch"
+import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client"
+import { DatasetsIndex } from "./indexes/datasets"
 
 export const INDEX_DATASET_FRAGMENT = gql`
   fragment DatasetIndex on Dataset {
@@ -152,7 +152,7 @@ export function queryForIndex(
   return apolloClient.query({
     query: indexDatasetQuery,
     variables: { datasetId },
-    errorPolicy: 'all',
+    errorPolicy: "all",
   })
 }
 

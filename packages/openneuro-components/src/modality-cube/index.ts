@@ -1,2 +1,2 @@
-import { ModalityCube } from './ModalityCube'
+import { ModalityCube } from "./ModalityCube"
 export { ModalityCube }

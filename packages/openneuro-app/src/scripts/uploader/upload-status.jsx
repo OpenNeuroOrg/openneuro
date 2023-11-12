@@ -1,11 +1,11 @@
-import React from 'react'
-import UploaderContext from './uploader-context.js'
-import UploadProgress from './upload-progress.jsx'
-import UploadFileStatus from './upload-file-status.jsx'
+import React from "react"
+import UploaderContext from "./uploader-context.js"
+import UploadProgress from "./upload-progress.jsx"
+import UploadFileStatus from "./upload-file-status.jsx"
 
 const UploadStatus = () => (
   <UploaderContext.Consumer>
-    {uploader => (
+    {(uploader) => (
       <div>
         <h4>
           {uploader.name} - Uploading {uploader.files.length} files.

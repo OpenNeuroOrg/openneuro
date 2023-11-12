@@ -1,5 +1,5 @@
-import { checkDatasetWrite } from '../permissions'
-import { resetDraft as resetDraftTask } from '../../datalad/draft'
+import { checkDatasetWrite } from "../permissions"
+import { resetDraft as resetDraftTask } from "../../datalad/draft"
 
 /**
  * Mutation to move the draft HEAD reference forward or backward

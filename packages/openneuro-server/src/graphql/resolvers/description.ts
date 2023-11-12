@@ -1,9 +1,9 @@
 /**
  * Resolver implementation for dataset_description.json
  */
-import { setDescription } from '../../datalad/description'
-import { checkDatasetWrite } from '../permissions'
-export { description } from '../../datalad/description'
+import { setDescription } from "../../datalad/description"
+import { checkDatasetWrite } from "../permissions"
+export { description } from "../../datalad/description"
 
 export const updateDescription = (
   obj,
@@ -12,7 +12,7 @@ export const updateDescription = (
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo)
     .then(() => setDescription(datasetId, userInfo, { [field]: value }))
-    .then(description => description)
+    .then((description) => description)
 }
 
 export const updateDescriptionList = updateDescription

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from "react"
 
 export interface IconProps {
   primary?: boolean
@@ -16,7 +16,7 @@ export interface IconProps {
 
 export const Icon: React.FC<IconProps> = ({
   backgroundColor,
-  label = '',
+  label = "",
   icon,
   color,
   imgSrc,
@@ -24,24 +24,23 @@ export const Icon: React.FC<IconProps> = ({
   className,
   iconOnly,
 }) => {
-  const iconWithText =
-    icon && label && !iconOnly
-      ? 'icon-text'
-      : imgSrc && label
-      ? 'img-icon-text'
-      : null
-  const fontIcon = icon ? (
-    <i style={{ fontSize: iconSize }} className={icon}></i>
-  ) : null
-  const imgIcon = imgSrc ? (
-    <img style={{ width: iconSize }} src={imgSrc} alt="" loading="lazy" />
-  ) : null
-  const wBackgroundColor = backgroundColor ? 'has-bg-color' : null
+  const iconWithText = icon && label && !iconOnly
+    ? "icon-text"
+    : imgSrc && label
+    ? "img-icon-text"
+    : null
+  const fontIcon = icon
+    ? <i style={{ fontSize: iconSize }} className={icon}></i>
+    : null
+  const imgIcon = imgSrc
+    ? <img style={{ width: iconSize }} src={imgSrc} alt="" loading="lazy" />
+    : null
+  const wBackgroundColor = backgroundColor ? "has-bg-color" : null
 
   return (
     <span
-      className={[className, 'on-icon', iconWithText, wBackgroundColor].join(
-        ' ',
+      className={[className, "on-icon", iconWithText, wBackgroundColor].join(
+        " ",
       )}
       style={{ backgroundColor, color }}
       role="img"

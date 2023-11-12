@@ -1,5 +1,5 @@
-import elasticApm from 'elastic-apm-node'
-import { getErrorReporting } from './config.js'
+import elasticApm from "elastic-apm-node"
+import { getErrorReporting } from "./config.js"
 
 const url = getErrorReporting()
 
@@ -8,16 +8,14 @@ const url = getErrorReporting()
  * @param {boolean} active Enable or disable
  * @returns {typeof import('elastic-apm-node')}
  */
-const setupApm = active =>
-  elasticApm.isStarted()
-    ? elasticApm
-    : elasticApm.start({
-        serverUrl: url,
-        serviceName: 'openneuro-cli',
-        environment: 'production',
-        logLevel: 'fatal',
-        active,
-      })
+const setupApm = (active) =>
+  elasticApm.isStarted() ? elasticApm : elasticApm.start({
+    serverUrl: url,
+    serviceName: "openneuro-cli",
+    environment: "production",
+    logLevel: "fatal",
+    active,
+  })
 
 /**
  * @type {typeof import('elastic-apm-node')}

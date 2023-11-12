@@ -1,14 +1,14 @@
-import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from '../search-params-ctx'
-import { FacetSelect } from '@openneuro/components/facets'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React, { FC, useContext } from "react"
+import { SearchParamsCtx } from "../search-params-ctx"
+import { FacetSelect } from "@openneuro/components/facets"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 const DiagnosisSelect: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
 
   const { diagnosis_available, diagnosis_selected } = searchParams
-  const setDiagnosis = diagnosis_selected =>
-    setSearchParams(prevState => ({
+  const setDiagnosis = (diagnosis_selected) =>
+    setSearchParams((prevState) => ({
       ...prevState,
       diagnosis_selected,
     }))

@@ -1,10 +1,10 @@
-import React, { FC, useContext } from 'react'
-import { SearchParamsCtx } from '../search-params-ctx'
-import { RadioGroup } from '@openneuro/components/radio'
-import { FacetSelect } from '@openneuro/components/facets'
-import { useCookies } from 'react-cookie'
-import { getUnexpiredProfile } from '../../authentication/profile'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React, { FC, useContext } from "react"
+import { SearchParamsCtx } from "../search-params-ctx"
+import { RadioGroup } from "@openneuro/components/radio"
+import { FacetSelect } from "@openneuro/components/facets"
+import { useCookies } from "react-cookie"
+import { getUnexpiredProfile } from "../../authentication/profile"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 const ShowDatasetsRadios: FC = () => {
   const [cookies] = useCookies()
@@ -18,13 +18,13 @@ const ShowDatasetsRadios: FC = () => {
     datasetStatus_available,
     datasetStatus_selected,
   } = searchParams
-  const setShowSelected = datasetType_selected =>
-    setSearchParams(prevState => ({
+  const setShowSelected = (datasetType_selected) =>
+    setSearchParams((prevState) => ({
       ...prevState,
       datasetType_selected,
     }))
-  const setShowMyUploadsSelected = datasetStatus_selected =>
-    setSearchParams(prevState => ({
+  const setShowMyUploadsSelected = (datasetStatus_selected) =>
+    setSearchParams((prevState) => ({
       ...prevState,
       datasetStatus_selected,
     }))
@@ -32,10 +32,9 @@ const ShowDatasetsRadios: FC = () => {
   return loggedOut ? null : (
     <>
       <div
-        className={
-          datasetType_selected.replace(/\s/g, '') +
-          ' btn-group-wrapper facet-radio'
-        }>
+        className={datasetType_selected.replace(/\s/g, "") +
+          " btn-group-wrapper facet-radio"}
+      >
         <RadioGroup
           radioArr={datasetType_available}
           layout="btn-group"
@@ -44,20 +43,23 @@ const ShowDatasetsRadios: FC = () => {
           setSelected={setShowSelected}
         />
       </div>
-      {datasetType_selected == 'My Datasets' ? (
-        <AccordionWrap className="facet-accordion">
-          <AccordionTab
-            accordionStyle="plain"
-            label="My Datasets Status"
-            startOpen={true}>
-            <FacetSelect
-              selected={datasetStatus_selected}
-              setSelected={setShowMyUploadsSelected}
-              items={datasetStatus_available}
-            />
-          </AccordionTab>
-        </AccordionWrap>
-      ) : null}
+      {datasetType_selected == "My Datasets"
+        ? (
+          <AccordionWrap className="facet-accordion">
+            <AccordionTab
+              accordionStyle="plain"
+              label="My Datasets Status"
+              startOpen={true}
+            >
+              <FacetSelect
+                selected={datasetStatus_selected}
+                setSelected={setShowMyUploadsSelected}
+                items={datasetStatus_available}
+              />
+            </AccordionTab>
+          </AccordionWrap>
+        )
+        : null}
     </>
   )
 }

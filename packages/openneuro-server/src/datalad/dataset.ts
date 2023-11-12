@@ -3,31 +3,31 @@
  *
  * See resolvers for interaction with other data sources.
  */
-import request from 'superagent'
-import requestNode from 'request'
-import objectHash from 'object-hash'
-import { Readable } from 'stream'
-import * as Mongoose from 'mongoose'
-import config from '../config'
-import * as subscriptions from '../handlers/subscriptions'
-import { generateDataladCookie } from '../libs/authentication/jwt'
-import { redis } from '../libs/redis'
-import CacheItem, { CacheType } from '../cache/item'
-import { updateDatasetRevision } from './draft'
-import { fileUrl, getFileName, encodeFilePath, filesUrl } from './files'
-import { getAccessionNumber } from '../libs/dataset'
-import Dataset from '../models/dataset'
-import Metadata from '../models/metadata'
-import Permission from '../models/permission'
-import Star from '../models/stars'
-import Subscription from '../models/subscription'
-import BadAnnexObject from '../models/badAnnexObject'
-import { datasetsConnection } from './pagination'
-import { getDatasetWorker } from '../libs/datalad-service'
-import notifications from '../libs/notifications'
+import request from "superagent"
+import requestNode from "request"
+import objectHash from "object-hash"
+import { Readable } from "stream"
+import * as Mongoose from "mongoose"
+import config from "../config"
+import * as subscriptions from "../handlers/subscriptions"
+import { generateDataladCookie } from "../libs/authentication/jwt"
+import { redis } from "../libs/redis"
+import CacheItem, { CacheType } from "../cache/item"
+import { updateDatasetRevision } from "./draft"
+import { encodeFilePath, filesUrl, fileUrl, getFileName } from "./files"
+import { getAccessionNumber } from "../libs/dataset"
+import Dataset from "../models/dataset"
+import Metadata from "../models/metadata"
+import Permission from "../models/permission"
+import Star from "../models/stars"
+import Subscription from "../models/subscription"
+import BadAnnexObject from "../models/badAnnexObject"
+import { datasetsConnection } from "./pagination"
+import { getDatasetWorker } from "../libs/datalad-service"
+import notifications from "../libs/notifications"
 
 export const giveUploaderPermission = (datasetId, userId) => {
-  const permission = new Permission({ datasetId, userId, level: 'admin' })
+  const permission = new Permission({ datasetId, userId, level: "admin" })
   return permission.save()
 }
 
@@ -52,8 +52,8 @@ export const createDataset = async (
     const ds = new Dataset({ id: datasetId, uploader })
     await request
       .post(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
-      .set('Accept', 'application/json')
-      .set('Cookie', generateDataladCookie(config)(userInfo))
+      .set("Accept", "application/json")
+      .set("Cookie", generateDataladCookie(config)(userInfo))
     // Write the new dataset to mongo after creation
     await ds.save()
     const md = new Metadata({ datasetId, affirmedDefaced, affirmedConsent })
@@ -73,17 +73,17 @@ export const createDataset = async (
  * Return the latest commit
  * @param {string} id Dataset accession number
  */
-export const getDraftHead = async id => {
+export const getDraftHead = async (id) => {
   const draftRes = await request
     .get(`${getDatasetWorker(id)}/datasets/${id}/draft`)
-    .set('Accept', 'application/json')
+    .set("Accept", "application/json")
   return draftRes.body.hexsha
 }
 
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = async id => {
+export const getDataset = async (id) => {
   const dataset = await Dataset.findOne({ id }).lean()
   return {
     ...dataset,
@@ -94,7 +94,7 @@ export const getDataset = async id => {
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = id =>
+export const deleteDataset = (id) =>
   request
     .del(`${getDatasetWorker(id)}/datasets/${id}`)
     .then(() => Dataset.deleteOne({ id }).exec())
@@ -104,7 +104,7 @@ export const deleteDataset = id =>
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses
  * @param {object} options getDatasets options object
  */
-export const cacheDatasetConnection = options => connectionArguments => {
+export const cacheDatasetConnection = (options) => (connectionArguments) => {
   const connection = datasetsConnection(options)
   const cache = new CacheItem(
     redis,
@@ -127,31 +127,31 @@ const aggregateArraySetup = (match): Mongoose.Expression => [{ $match: match }]
  * @param {object} options GraphQL query parameters
  * @returns {(match: object) => Array<any>} Array of aggregate stages
  */
-export const datasetsFilter = options => match => {
+export const datasetsFilter = (options) => (match) => {
   const aggregates = aggregateArraySetup(match)
   if (options.modality) {
     aggregates.push(
       ...[
         {
           $lookup: {
-            from: 'snapshots',
-            localField: 'id',
-            foreignField: 'datasetId',
-            as: 'snapshots',
+            from: "snapshots",
+            localField: "id",
+            foreignField: "datasetId",
+            as: "snapshots",
           },
         },
-        { $addFields: { snapshots: { $slice: ['$snapshots', -1] } } },
+        { $addFields: { snapshots: { $slice: ["$snapshots", -1] } } },
         {
           $lookup: {
-            from: 'summaries',
-            localField: 'snapshots.0.hexsha',
-            foreignField: 'id',
-            as: 'summaries',
+            from: "summaries",
+            localField: "snapshots.0.hexsha",
+            foreignField: "id",
+            as: "summaries",
           },
         },
         {
           $match: {
-            'summaries.0.modalities': options.modality,
+            "summaries.0.modalities": options.modality,
           },
         },
       ],
@@ -159,95 +159,95 @@ export const datasetsFilter = options => match => {
     return aggregates
   }
   const filterMatch: Mongoose.Expression = {}
-  if ('filterBy' in options) {
+  if ("filterBy" in options) {
     const filters = options.filterBy
     if (
-      'admin' in options &&
+      "admin" in options &&
       options.admin &&
-      'all' in filters &&
+      "all" in filters &&
       filters.all
     ) {
       // For admins and {filterBy: all}, ignore any passed in matches
       aggregates.length = 0
     }
     // Apply any filters as needed
-    if ('public' in filters && filters.public) {
+    if ("public" in filters && filters.public) {
       filterMatch.public = true
     }
-    if ('saved' in filters && filters.saved) {
+    if ("saved" in filters && filters.saved) {
       aggregates.push({
         $lookup: {
-          from: 'stars',
-          let: { datasetId: '$id' },
+          from: "stars",
+          let: { datasetId: "$id" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$userId', options.userId] },
-                    { $eq: ['$datasetId', '$$datasetId'] },
+                    { $eq: ["$userId", options.userId] },
+                    { $eq: ["$datasetId", "$$datasetId"] },
                   ],
                 },
               },
             },
           ],
-          as: 'saved',
+          as: "saved",
         },
       })
       filterMatch.saved = { $exists: true, $ne: [] } // arr datasetIds
     }
 
-    if ('userId' in options && 'shared' in filters && filters.shared) {
+    if ("userId" in options && "shared" in filters && filters.shared) {
       filterMatch.uploader = { $ne: options.userId }
     }
-    if ('userId' in options && 'starred' in filters && filters.starred) {
+    if ("userId" in options && "starred" in filters && filters.starred) {
       aggregates.push({
         $lookup: {
-          from: 'stars',
-          let: { datasetId: '$id' },
+          from: "stars",
+          let: { datasetId: "$id" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$datasetId', '$$datasetId'] },
-                    { $eq: ['$userId', options.userId] },
+                    { $eq: ["$datasetId", "$$datasetId"] },
+                    { $eq: ["$userId", options.userId] },
                   ],
                 },
               },
             },
           ],
-          as: 'starred',
+          as: "starred",
         },
       })
       filterMatch.starred = { $exists: true, $ne: [] }
     }
-    if ('invalid' in filters && filters.invalid) {
+    if ("invalid" in filters && filters.invalid) {
       // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
       aggregates.push({
         $lookup: {
-          from: 'issues', //look at issues collection
-          let: { revision: '$revision' }, // find issue match revision datasets.revision
+          from: "issues", //look at issues collection
+          let: { revision: "$revision" }, // find issue match revision datasets.revision
           pipeline: [
-            { $unwind: '$issues' },
+            { $unwind: "$issues" },
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$id', '$$revision'] }, // JOIN CONSTRAINT  issues.id = datasets.revision
-                    { $eq: ['$issues.severity', 'error'] }, // WHERE severity = 'error'  issues.severity db
+                    { $eq: ["$id", "$$revision"] }, // JOIN CONSTRAINT  issues.id = datasets.revision
+                    { $eq: ["$issues.severity", "error"] }, // WHERE severity = 'error'  issues.severity db
                   ],
                 },
               },
             },
           ],
-          as: 'issues',
+          as: "issues",
         },
       })
       // Count how many error fields matched in previous step
       aggregates.push({
         $addFields: {
-          errorCount: { $size: '$issues' },
+          errorCount: { $size: "$issues" },
         },
       })
       // Filter any datasets with no errors
@@ -261,19 +261,19 @@ export const datasetsFilter = options => match => {
  * Fetch all datasets
  * @param {object} options {orderBy: {created: 'ascending'}, filterBy: {public: true}}
  */
-export const getDatasets = options => {
+export const getDatasets = (options) => {
   const filter = datasetsFilter(options)
   const connection = datasetsConnection(options)
-  if (options && 'userId' in options) {
+  if (options && "userId" in options) {
     // Authenticated request
     return Permission.find({ userId: options.userId })
       .exec()
-      .then(datasetsAllowed => {
+      .then((datasetsAllowed) => {
         const datasetIds = datasetsAllowed.map(
-          permission => permission.datasetId,
+          (permission) => permission.datasetId,
         )
         // Match allowed datasets
-        if ('myDatasets' in options && options.myDatasets) {
+        if ("myDatasets" in options && options.myDatasets) {
           // Exclude other users public datasets even though we have access to those
           return connection(filter({ id: { $in: datasetIds } }))
         } else {
@@ -331,18 +331,18 @@ export const addFile = async (datasetId, path, file) => {
       const downstreamRequest = requestNode(
         {
           url: fileUrl(datasetId, path, filename),
-          method: 'post',
-          headers: { 'Content-Type': mimetype },
+          method: "post",
+          headers: { "Content-Type": mimetype },
         },
-        err => (err ? reject(err) : resolve(responseFile)),
+        (err) => (err ? reject(err) : resolve(responseFile)),
       )
       // Attach error handler for incoming request and start feeding downstream
       stream
-        .on('data', chunk => {
+        .on("data", (chunk) => {
           responseFile.size += chunk.length
         })
-        .on('error', err => {
-          if (err.constructor.name === 'FileStreamDisconnectUploadError') {
+        .on("error", (err) => {
+          if (err.constructor.name === "FileStreamDisconnectUploadError") {
             // Catch client disconnects.
             // eslint-disable-next-line no-console
             console.warn(
@@ -357,7 +357,7 @@ export const addFile = async (datasetId, path, file) => {
         .pipe(downstreamRequest)
     })
   } catch (err) {
-    if (err.constructor.name === 'UploadPromiseDisconnectUploadError') {
+    if (err.constructor.name === "UploadPromiseDisconnectUploadError") {
       // Catch client aborts silently
     } else {
       // Raise any unknown errors
@@ -372,7 +372,7 @@ export const addFile = async (datasetId, path, file) => {
  * Used to mock the stream interface in addFile
  */
 export const addFileString = (datasetId, filename, mimetype, content) =>
-  addFile(datasetId, '', {
+  addFile(datasetId, "", {
     filename,
     mimetype,
     // Mock a stream so we can reuse addFile
@@ -402,9 +402,9 @@ export const commitFiles = (datasetId, user) => {
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/draft`
   return request
     .post(url)
-    .set('Cookie', generateDataladCookie(config)(user))
-    .set('Accept', 'application/json')
-    .then(res => {
+    .set("Cookie", generateDataladCookie(config)(user))
+    .set("Accept", "application/json")
+    .then((res) => {
       gitRef = res.body.ref
       return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
     })
@@ -415,12 +415,12 @@ export const commitFiles = (datasetId, user) => {
  */
 export const deleteFiles = (datasetId, files, user) => {
   const filenames = files.map(({ filename, path }) =>
-    filename ? getFileName(path, filename) : encodeFilePath(path),
+    filename ? getFileName(path, filename) : encodeFilePath(path)
   )
   return request
     .del(filesUrl(datasetId))
-    .set('Cookie', generateDataladCookie(config)(user))
-    .set('Accept', 'application/json')
+    .set("Cookie", generateDataladCookie(config)(user))
+    .set("Accept", "application/json")
     .send({ filenames })
     .then(() => filenames)
 }
@@ -436,15 +436,16 @@ export const removeAnnexObject = (
   user,
 ) => {
   const worker = getDatasetWorker(datasetId)
-  const url = `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
+  const url =
+    `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
   return request
     .del(url)
-    .set('Cookie', generateDataladCookie(config)(user))
-    .set('Accept', 'application/json')
+    .set("Cookie", generateDataladCookie(config)(user))
+    .set("Accept", "application/json")
     .then(async () => {
       const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
       if (existingBAO) {
-        existingBAO.forEach(bAO => {
+        existingBAO.forEach((bAO) => {
           bAO.remover = user._id
           bAO.removed = true
           bAO.save()
@@ -495,19 +496,19 @@ export const updatePublic = (datasetId, publicFlag) =>
   ).exec()
 
 export const getDatasetAnalytics = (datasetId, tag) => {
-  return Dataset.findOne({ id: datasetId }).then(ds => ({
+  return Dataset.findOne({ id: datasetId }).then((ds) => ({
     datasetId,
     views: ds.views || 0,
     downloads: ds.downloads || 0,
   }))
 }
 
-export const getStars = datasetId => Star.find({ datasetId })
+export const getStars = (datasetId) => Star.find({ datasetId })
 
 export const getUserStarred = (datasetId, userId) =>
   Star.countDocuments({ datasetId, userId }).exec()
 
-export const getFollowers = datasetId => {
+export const getFollowers = (datasetId) => {
   return Subscription.find({
     datasetId: datasetId,
   }).exec()

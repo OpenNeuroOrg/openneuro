@@ -1,27 +1,27 @@
-import React from 'react'
-import { render } from '@testing-library/react'
-import Helmet from 'react-helmet'
-import { SnapshotContainer } from '../snapshot-container'
-import { MockAppWrapper } from '../../fixtures/mock-app-wrapper'
-import { dataset, snapshot } from '../../fixtures/dataset-query'
-import { vi } from 'vitest'
+import React from "react"
+import { render } from "@testing-library/react"
+import Helmet from "react-helmet"
+import { SnapshotContainer } from "../snapshot-container"
+import { MockAppWrapper } from "../../fixtures/mock-app-wrapper"
+import { dataset, snapshot } from "../../fixtures/dataset-query"
+import { vi } from "vitest"
 
-vi.mock('../../config.ts')
+vi.mock("../../config.ts")
 
 const defProps = {
   dataset,
   snapshot,
-  tag: '1.0.0',
+  tag: "1.0.0",
 }
 
-describe('SnapshotContainer component', () => {
-  it('renders successfully', () => {
+describe("SnapshotContainer component", () => {
+  it("renders successfully", () => {
     const { asFragment } = render(<SnapshotContainer {...defProps} />, {
       wrapper: MockAppWrapper,
     })
     expect(asFragment()).toMatchSnapshot()
   })
-  it('includes JSON-LD data in the header', () => {
+  it("includes JSON-LD data in the header", () => {
     render(<SnapshotContainer {...defProps} />, {
       wrapper: MockAppWrapper,
     })

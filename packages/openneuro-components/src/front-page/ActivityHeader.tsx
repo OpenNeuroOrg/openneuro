@@ -1,6 +1,6 @@
-import React from 'react'
-import { Icon } from '../icon/Icon'
-import activityIcon from '../assets/activity-icon.png'
+import React from "react"
+import { Icon } from "../icon/Icon"
+import activityIcon from "../assets/activity-icon.png"
 
 export interface ActivityHeaderProps {}
 

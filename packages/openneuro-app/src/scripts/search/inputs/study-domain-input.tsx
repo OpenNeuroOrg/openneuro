@@ -1,22 +1,22 @@
-import React, { FC, useContext } from 'react'
-import useState from 'react-usestateref'
-import { SearchParamsCtx, removeFilterItem } from '../search-params-ctx'
-import { FacetSearch } from '@openneuro/components/facets'
-import { Icon } from '@openneuro/components/icon'
-import { AccordionTab, AccordionWrap } from '@openneuro/components/accordion'
+import React, { FC, useContext } from "react"
+import useState from "react-usestateref"
+import { removeFilterItem, SearchParamsCtx } from "../search-params-ctx"
+import { FacetSearch } from "@openneuro/components/facets"
+import { Icon } from "@openneuro/components/icon"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 
 const StudyDomainInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const studyDomains = searchParams.studyDomains
 
-  const [newStudyDomain, setNewStudyDomain, newStudyDomainRef] = useState('')
+  const [newStudyDomain, setNewStudyDomain, newStudyDomainRef] = useState("")
 
   const addStudyDomain = () => {
-    setSearchParams(prevState => ({
+    setSearchParams((prevState) => ({
       ...prevState,
       studyDomains: [...studyDomains, newStudyDomainRef.current],
     }))
-    setNewStudyDomain('')
+    setNewStudyDomain("")
   }
 
   return (
@@ -25,7 +25,8 @@ const StudyDomainInput: FC = () => {
         accordionStyle="plain"
         label="Study Domain"
         className="search-facet"
-        startOpen={false}>
+        startOpen={false}
+      >
         <FacetSearch
           type="text"
           placeholder="Enter Study Domain(s) to Search"
@@ -43,18 +44,19 @@ const StudyDomainInput: FC = () => {
           removeFilterItem={removeFilterItem(setSearchParams)}
           helpText={
             <span>
-              Each time the{' '}
-              <Icon icon="fas fa-plus" label="plus" iconOnly={true} /> button is
-              clicked, it will add a search filter. Multiple words in a filter
-              will return results containing any or all words. For advanced
-              filters use the{' '}
+              Each time the{" "}
+              <Icon icon="fas fa-plus" label="plus" iconOnly={true} />{" "}
+              button is clicked, it will add a search filter. Multiple words in
+              a filter will return results containing any or all words. For
+              advanced filters use the{" "}
               <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#simple-query-string-syntax">
                 simple query string syntax
               </a>
               .
             </span>
           }
-        />{' '}
+        />
+        {" "}
       </AccordionTab>
     </AccordionWrap>
   )

@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from "react"
+import PropTypes from "prop-types"
 
 // component setup ----------------------------------------------------
 
@@ -11,13 +11,13 @@ class Input extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: props.initialValue ? props.initialValue : '',
+      value: props.initialValue ? props.initialValue : "",
     }
   }
 
   static getDerivedStateFromProps(nextProps) {
     // Will reset value when prop changes
-    if ('value' in nextProps) {
+    if ("value" in nextProps) {
       return { value: nextProps.value }
     } else {
       return null
@@ -33,8 +33,9 @@ class Input extends React.Component {
     return (
       <div
         className={`form-group float-label-input ${
-          this.props.containerClass || ''
-        }`}>
+          this.props.containerClass || ""
+        }`}
+      >
         {value && value.length > 0 ? <label>{placeholder}</label> : null}
         {this._input(type, name, placeholder, value)}
       </div>
@@ -44,7 +45,7 @@ class Input extends React.Component {
   // custom methods -----------------------------------------------------
 
   _input(type, name, placeholder, value) {
-    if (type === 'textarea') {
+    if (type === "textarea") {
       return (
         <textarea
           name={name}

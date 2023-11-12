@@ -6,11 +6,11 @@ export const normalizeDOI = (doi: string): string | null => {
   if (doi.match(DOIPattern)) {
     return doi
   }
-  if (doi.toLowerCase().startsWith('doi:') && doi.slice(4).match(DOIPattern)) {
+  if (doi.toLowerCase().startsWith("doi:") && doi.slice(4).match(DOIPattern)) {
     return doi.slice(4)
   }
   if (
-    doi.toLowerCase().startsWith('https://doi.org/') &&
+    doi.toLowerCase().startsWith("https://doi.org/") &&
     doi.slice(16).match(DOIPattern)
   ) {
     return doi.slice(16)

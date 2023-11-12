@@ -1,14 +1,14 @@
 import {
   ApolloClient,
-  InMemoryCache,
   ApolloLink,
-  Observable,
   createHttpLink,
-} from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
-import semver from 'semver'
+  InMemoryCache,
+  Observable,
+} from "@apollo/client"
+import { setContext } from "@apollo/client/link/context"
+import semver from "semver"
 
-const authLink = getAuthorization =>
+const authLink = (getAuthorization) =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
     const token = getAuthorization()
@@ -24,8 +24,8 @@ const authLink = getAuthorization =>
     }
   })
 
-const hbar = '\n-----------------------------------------------------\n'
-const parse = version => [semver.major(version), semver.minor(version)]
+const hbar = "\n-----------------------------------------------------\n"
+const parse = (version) => [semver.major(version), semver.minor(version)]
 const checkVersions = (serverVersion, clientVersion) => {
   if ([serverVersion, clientVersion].every(semver.valid)) {
     const [serverMajor, serverMinor] = parse(serverVersion)
@@ -51,7 +51,7 @@ export const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   const httpLink = createHttpLink({
     uri,
     fetch: fetch === null ? undefined : fetch,
-    credentials: 'same-origin',
+    credentials: "same-origin",
   })
   if (getAuthorization) {
     return authLink(getAuthorization).concat(httpLink)
@@ -60,12 +60,12 @@ export const middlewareAuthLink = (uri, getAuthorization, fetch) => {
   }
 }
 
-const compareVersionsLink = clientVersion =>
+const compareVersionsLink = (clientVersion) =>
   new ApolloLink(
     (operation, forward) =>
-      new Observable(observer =>
+      new Observable((observer) =>
         forward(operation).subscribe({
-          next: result => {
+          next: (result) => {
             if (result.extensions) {
               const serverVersion = result.extensions.openneuro.version
               // alert user if major/minor versions are not in sync
@@ -75,7 +75,7 @@ const compareVersionsLink = clientVersion =>
           },
           error: console.error,
           complete: observer.complete.bind(observer),
-        }),
+        })
       ),
   )
 

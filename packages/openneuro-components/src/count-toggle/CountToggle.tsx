@@ -1,6 +1,6 @@
-import React from 'react'
-import { Tooltip } from '../tooltip/Tooltip'
-import { Button } from '../button/Button'
+import React from "react"
+import { Tooltip } from "../tooltip/Tooltip"
+import { Button } from "../button/Button"
 
 export interface CountToggleProps {
   label?: string
@@ -24,11 +24,12 @@ export const CountToggle = ({
   const toggleButton = (
     <span className="toggle-counter">
       <Button
-        className={clicked ? 'toggle-btn active' : 'toggle-btn'}
+        className={clicked ? "toggle-btn active" : "toggle-btn"}
         iconSize="12px"
-        icon={'fa ' + icon}
+        icon={"fa " + icon}
         onClick={toggleClick}
-        label={label}>
+        label={label}
+      >
         <span className="count-span">{count}</span>
       </Button>
     </span>
@@ -36,11 +37,12 @@ export const CountToggle = ({
   const disabledToggleButton = (
     <span className="toggle-counter disabled">
       <Button
-        className={clicked ? 'toggle-btn active' : 'toggle-btn'}
+        className={clicked ? "toggle-btn active" : "toggle-btn"}
         iconSize="12px"
-        icon={'fa ' + icon}
+        icon={"fa " + icon}
         onClick={toggleClick}
-        label={label}>
+        label={label}
+      >
         <span className="count-span">{count}</span>
       </Button>
     </span>
@@ -49,13 +51,13 @@ export const CountToggle = ({
   return (
     <>
       <div className="toggle-counter-wrap">
-        {tooltip ? (
-          <Tooltip flow="up" tooltip={tooltip}>
-            {button}
-          </Tooltip>
-        ) : (
-          button
-        )}
+        {tooltip
+          ? (
+            <Tooltip flow="up" tooltip={tooltip}>
+              {button}
+            </Tooltip>
+          )
+          : button}
       </div>
     </>
   )

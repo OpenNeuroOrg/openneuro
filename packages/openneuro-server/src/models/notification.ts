@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface NotificationDocument extends Document {
@@ -72,7 +72,7 @@ const notificationSchema = new Schema({
 })
 
 const Notification = model<NotificationDocument>(
-  'Notification',
+  "Notification",
   notificationSchema,
 )
 

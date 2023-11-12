@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface MailgunIdentifierDocument extends Document {
@@ -10,7 +10,7 @@ const mailgunIdentifierSchema = new Schema({
 })
 
 const MailgunIdentifier = model<MailgunIdentifierDocument>(
-  'MailgunIdentifier',
+  "MailgunIdentifier",
   mailgunIdentifierSchema,
 )
 

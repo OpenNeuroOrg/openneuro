@@ -1,21 +1,21 @@
-import React from 'react'
-import { Route, Routes, Navigate } from 'react-router-dom'
+import React from "react"
+import { Navigate, Route, Routes } from "react-router-dom"
 
 // TODO - Re-enable code splitting these when we can
-import DatasetQuery from './dataset/dataset-query'
+import DatasetQuery from "./dataset/dataset-query"
 //import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
-import FaqPage from './pages/faq/faq'
-import FrontPageContainer from './pages/front-page/front-page'
-import Admin from './pages/admin/admin'
-import SearchRoutes from './search/search-routes'
-import APIKey from './pages/api'
-import ErrorRoute from './errors/errorRoute'
-import { PETRedirect } from './pages/pet-redirect'
-import Citation from './pages/citation-page'
-import FourOFourPage from './errors/404page'
-import { ImportDataset } from './pages/import-dataset'
-import { DatasetMetadata } from './pages/metadata/dataset-metadata'
+import FaqPage from "./pages/faq/faq"
+import FrontPageContainer from "./pages/front-page/front-page"
+import Admin from "./pages/admin/admin"
+import SearchRoutes from "./search/search-routes"
+import APIKey from "./pages/api"
+import ErrorRoute from "./errors/errorRoute"
+import { PETRedirect } from "./pages/pet-redirect"
+import Citation from "./pages/citation-page"
+import FourOFourPage from "./errors/404page"
+import { ImportDataset } from "./pages/import-dataset"
+import { DatasetMetadata } from "./pages/metadata/dataset-metadata"
 
 const AppRoutes: React.VoidFunctionComponent = () => (
   <Routes>

@@ -1,9 +1,9 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { Tooltip } from '../Tooltip'
+import React from "react"
+import { render, screen } from "@testing-library/react"
+import { Tooltip } from "../Tooltip"
 
-describe('Tooltip component', () => {
-  it('renders children', async () => {
+describe("Tooltip component", () => {
+  it("renders children", async () => {
     render(
       <Tooltip tooltip="tooltiptest" flow="up">
         hover

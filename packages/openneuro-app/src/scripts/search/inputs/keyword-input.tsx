@@ -1,21 +1,21 @@
-import React, { FC, useContext } from 'react'
-import useState from 'react-usestateref'
-import { SearchParamsCtx, removeFilterItem } from '../search-params-ctx'
-import { TermSearch } from '@openneuro/components/input'
-import { Icon } from '@openneuro/components/icon'
+import React, { FC, useContext } from "react"
+import useState from "react-usestateref"
+import { removeFilterItem, SearchParamsCtx } from "../search-params-ctx"
+import { TermSearch } from "@openneuro/components/input"
+import { Icon } from "@openneuro/components/icon"
 
 const KeywordInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const keywords = searchParams.keywords
 
-  const [newKeyword, setNewKeyword, newKeywordRef] = useState('')
+  const [newKeyword, setNewKeyword, newKeywordRef] = useState("")
 
   const addKeyword = () => {
-    setSearchParams(prevState => ({
+    setSearchParams((prevState) => ({
       ...prevState,
       keywords: [...keywords, newKeywordRef.current],
     }))
-    setNewKeyword('')
+    setNewKeyword("")
   }
 
   return (
@@ -39,11 +39,11 @@ const KeywordInput: FC = () => {
         removeFilterItem={removeFilterItem(setSearchParams)}
         tipContent={
           <span>
-            Each time the{' '}
-            <Icon icon="fas fa-plus" label="plus" iconOnly={true} /> button is
-            clicked, it will add a search filter. Multiple words in a filter
-            will return results containing any or all words. For advanced
-            filters use the{' '}
+            Each time the{" "}
+            <Icon icon="fas fa-plus" label="plus" iconOnly={true} />{" "}
+            button is clicked, it will add a search filter. Multiple words in a
+            filter will return results containing any or all words. For advanced
+            filters use the{" "}
             <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#simple-query-string-syntax">
               simple query string syntax
             </a>

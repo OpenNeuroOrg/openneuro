@@ -1,13 +1,13 @@
-import React, { FC, useContext } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import React, { FC, useContext } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import {
-  SearchParamsCtx,
-  removeFilterItem,
   getSelectParams,
+  removeFilterItem,
+  SearchParamsCtx,
   useCheckIfParamsAreSelected,
-} from './search-params-ctx'
-import { FiltersBlock } from '@openneuro/components/search-page'
-import initialSearchParams from './initial-search-params'
+} from "./search-params-ctx"
+import { FiltersBlock } from "@openneuro/components/search-page"
+import initialSearchParams from "./initial-search-params"
 
 interface FiltersBlockContainerProps {
   numTotalResults: number
@@ -21,22 +21,20 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const selectedParams = getSelectParams(searchParams)
 
-  const noFilters = !useCheckIfParamsAreSelected(['modality_selected'])
+  const noFilters = !useCheckIfParamsAreSelected(["modality_selected"])
 
   const navigate = useNavigate()
   const { path } = useParams()
-  const globalSearchPath = '/search'
+  const globalSearchPath = "/search"
 
-  const removeFilter =
-    (isModality: boolean) =>
-    (param, value): void => {
-      removeFilterItem(setSearchParams)(param, value)
-      if (isModality) navigate(globalSearchPath)
-    }
+  const removeFilter = (isModality: boolean) => (param, value): void => {
+    removeFilterItem(setSearchParams)(param, value)
+    if (isModality) navigate(globalSearchPath)
+  }
 
   const removeAllFilters = (): void => {
     // reset params to default values
-    setSearchParams(prevState => ({
+    setSearchParams((prevState) => ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
     }))

@@ -1,13 +1,13 @@
-import React from 'react'
-import { render } from '@testing-library/react'
-import { MockedProvider } from '@apollo/client/testing'
+import React from "react"
+import { render } from "@testing-library/react"
+import { MockedProvider } from "@apollo/client/testing"
 import FilesSubscription, {
   deleteFilesReducer,
   updateFilesReducer,
-} from '../files-subscription.jsx'
+} from "../files-subscription.jsx"
 
-describe('FilesSubscription', () => {
-  it('renders with common props', () => {
+describe("FilesSubscription", () => {
+  it("renders with common props", () => {
     const { asFragment } = render(<FilesSubscription datasetId="ds001" />, {
       wrapper: MockedProvider,
     })
@@ -15,64 +15,64 @@ describe('FilesSubscription', () => {
   })
 })
 
-describe('deleteFilesReducer', () => {
+describe("deleteFilesReducer", () => {
   let draft, filesToDelete
   beforeEach(() => {
     draft = {
       a: 1,
       files: [
-        { filename: 'deleted/file.txt' },
-        { filename: 'another_deleted_file.txt' },
-        { filename: 'path/to/file.txt' },
-        { filename: 'deleted/file/again/here' },
+        { filename: "deleted/file.txt" },
+        { filename: "another_deleted_file.txt" },
+        { filename: "path/to/file.txt" },
+        { filename: "deleted/file/again/here" },
       ],
-      steak: 'sauce',
+      steak: "sauce",
     }
     filesToDelete = [
-      { filename: 'deleted' },
-      { filename: 'another_deleted_file.txt' },
+      { filename: "deleted" },
+      { filename: "another_deleted_file.txt" },
     ]
   })
-  it('removes files from draft', () => {
+  it("removes files from draft", () => {
     const output = deleteFilesReducer(filesToDelete, draft)
     expect(output).toEqual({
       a: 1,
-      files: [{ filename: 'path/to/file.txt' }],
-      steak: 'sauce',
+      files: [{ filename: "path/to/file.txt" }],
+      steak: "sauce",
     })
   })
 })
 
-describe('updateFilesReducer', () => {
+describe("updateFilesReducer", () => {
   let draft, filesToUpdate
   beforeEach(() => {
     draft = {
       a: 1,
       files: [
-        { filename: 'updated/file.txt', id: 'something' },
-        { filename: 'a.txt' },
-        { filename: 'b' },
+        { filename: "updated/file.txt", id: "something" },
+        { filename: "a.txt" },
+        { filename: "b" },
       ],
-      steak: 'sauce',
+      steak: "sauce",
     }
     filesToUpdate = [
-      { filename: 'updated:file.txt', id: 'somethingelse' },
-      { filename: 'new:file.txt', id: 'x' },
-      { filename: 'another:new:file', id: 'y' },
+      { filename: "updated:file.txt", id: "somethingelse" },
+      { filename: "new:file.txt", id: "x" },
+      { filename: "another:new:file", id: "y" },
     ]
   })
-  it('removes files from draft', () => {
+  it("removes files from draft", () => {
     const output = updateFilesReducer(filesToUpdate, draft)
     expect(output).toEqual({
       a: 1,
       files: [
-        { filename: 'updated/file.txt', id: 'somethingelse' },
-        { filename: 'a.txt' },
-        { filename: 'b' },
-        { filename: 'new/file.txt', id: 'x' },
-        { filename: 'another/new/file', id: 'y' },
+        { filename: "updated/file.txt", id: "somethingelse" },
+        { filename: "a.txt" },
+        { filename: "b" },
+        { filename: "new/file.txt", id: "x" },
+        { filename: "another/new/file", id: "y" },
       ],
-      steak: 'sauce',
+      steak: "sauce",
     })
   })
 })

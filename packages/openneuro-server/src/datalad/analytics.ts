@@ -1,5 +1,5 @@
-import Analytics from '../models/analytics'
-import Dataset from '../models/dataset'
+import Analytics from "../models/analytics"
+import Dataset from "../models/dataset"
 
 /**
  * Update a dataset's analytics count
@@ -8,7 +8,7 @@ import Dataset from '../models/dataset'
  * @param {'views'|'downloads'} type
  */
 export const trackAnalytics = async (datasetId, tag, type) => {
-  if (type === 'views') {
+  if (type === "views") {
     return Dataset.updateOne(
       {
         id: datasetId,
@@ -22,7 +22,7 @@ export const trackAnalytics = async (datasetId, tag, type) => {
         upsert: true,
       },
     ).exec()
-  } else if (type === 'downloads') {
+  } else if (type === "downloads") {
     return Dataset.updateOne(
       {
         id: datasetId,

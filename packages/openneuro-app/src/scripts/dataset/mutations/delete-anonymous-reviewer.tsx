@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { WarnButton } from '@openneuro/components/warn-button'
-import { DATASET_REVIEWERS } from '../fragments/dataset-reviewers'
+import React, { FC } from "react"
+import { gql, useMutation } from "@apollo/client"
+import { WarnButton } from "@openneuro/components/warn-button"
+import { DATASET_REVIEWERS } from "../fragments/dataset-reviewers"
 
 const DELETE_REVIEWER = gql`
   mutation deleteReviewer($datasetId: ID!, $id: ID!) {
@@ -31,13 +31,13 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
         fragment: DATASET_REVIEWERS,
       })
       const updatedReviewers = reviewers.filter(
-        reviewer => reviewer.id !== deleteReviewer.id,
+        (reviewer) => reviewer.id !== deleteReviewer.id,
       )
       cache.writeFragment({
         id: `Dataset:${datasetId}`,
         fragment: DATASET_REVIEWERS,
         data: {
-          __typename: 'Dataset',
+          __typename: "Dataset",
           id: datasetId,
           reviewers: updatedReviewers,
         },
@@ -53,8 +53,7 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
       setDisplayOptions={setDisplayOptions}
       withLabel={true}
       onConfirmedClick={() =>
-        DeleteReviewerLink({ variables: { datasetId, id } })
-      }
+        DeleteReviewerLink({ variables: { datasetId, id } })}
     />
   )
 }

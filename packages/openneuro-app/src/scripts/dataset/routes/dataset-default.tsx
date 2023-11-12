@@ -1,10 +1,10 @@
-import React from 'react'
-import Markdown from 'markdown-to-jsx'
-import { ReadMore } from '@openneuro/components/read-more'
-import { MetaDataBlock } from '@openneuro/components/dataset'
-import Files from '../files/files'
-import Comments from '../comments/comments'
-import EditDescriptionField from '../fragments/edit-description-field'
+import React from "react"
+import Markdown from "markdown-to-jsx"
+import { ReadMore } from "@openneuro/components/read-more"
+import { MetaDataBlock } from "@openneuro/components/dataset"
+import Files from "../files/files"
+import Comments from "../comments/comments"
+import EditDescriptionField from "../fragments/edit-description-field"
 
 /**
  * Default tab for dataset draft pages
@@ -21,12 +21,14 @@ export const DatasetDefault = ({ dataset, hasEdit }) => (
           field="readme"
           rows={12}
           description={dataset.draft.readme}
-          editMode={hasEdit}>
+          editMode={hasEdit}
+        >
           <ReadMore
             id="readme"
             expandLabel="Read More"
-            collapseLabel="Collapse">
-            <Markdown>{dataset.draft.readme || 'N/A'}</Markdown>
+            collapseLabel="Collapse"
+          >
+            <Markdown>{dataset.draft.readme || "N/A"}</Markdown>
           </ReadMore>
         </EditDescriptionField>
       )}

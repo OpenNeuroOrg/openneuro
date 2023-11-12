@@ -8,7 +8,7 @@
 
 const ids = {}
 
-export default (prefix = 'id') => {
+export default (prefix = "id") => {
   ids[prefix] = ids[prefix] ? ids[prefix] + 1 : 1
   return `${prefix}${ids[prefix]}`
 }

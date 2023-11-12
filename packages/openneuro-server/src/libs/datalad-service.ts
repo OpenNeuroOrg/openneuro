@@ -1,5 +1,5 @@
-import crypto from 'crypto'
-import config from '../config'
+import crypto from "crypto"
+import config from "../config"
 
 /**
  * Map dataset IDs to a normal distribution of backend workers
@@ -7,8 +7,8 @@ import config from '../config'
  * @param {number} range Integer bound for offset from hash
  */
 export function hashDatasetToRange(dataset, range) {
-  const hash = crypto.createHash('sha1').update(dataset, 'utf8')
-  const hexstring = hash.digest().toString('hex')
+  const hash = crypto.createHash("sha1").update(dataset, "utf8")
+  const hexstring = hash.digest().toString("hex")
   return parseInt(hexstring.substring(32, 40), 16) % range
 }
 

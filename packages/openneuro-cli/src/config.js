@@ -1,14 +1,14 @@
-import fs from 'fs'
-import os from 'os'
-import path from 'path'
-import jwtDecode from 'jwt-decode'
+import fs from "fs"
+import os from "os"
+import path from "path"
+import jwtDecode from "jwt-decode"
 
 /**
  * Get the nearest working configuration
  */
 export const getConfig = () => {
-  const homePath = path.join(os.homedir(), '.openneuro')
-  const localPath = path.join(process.cwd(), '.openneuro')
+  const homePath = path.join(os.homedir(), ".openneuro")
+  const localPath = path.join(process.cwd(), ".openneuro")
   if (fs.existsSync(homePath)) {
     return homePath
   } else if (fs.existsSync(localPath)) {
@@ -21,7 +21,7 @@ export const getConfig = () => {
 export const readConfig = () => {
   const config = getConfig()
   if (config) {
-    return fs.readFileSync(config, 'utf8')
+    return fs.readFileSync(config, "utf8")
   } else {
     return JSON.stringify({})
   }
@@ -34,9 +34,9 @@ export const readConfig = () => {
  *
  * @param {Object} config
  */
-export const saveConfig = config => {
+export const saveConfig = (config) => {
   const home = os.homedir()
-  const savePath = path.join(home, '.openneuro')
+  const savePath = path.join(home, ".openneuro")
   fs.writeFileSync(savePath, JSON.stringify(config))
 }
 
@@ -45,11 +45,11 @@ export const saveConfig = config => {
  */
 export const getToken = () => {
   const config = JSON.parse(readConfig())
-  if (config.hasOwnProperty('apikey')) {
+  if (config.hasOwnProperty("apikey")) {
     return config.apikey
   } else {
     throw new Error(
-      'You must have an API key configured to continue, try `openneuro login` first',
+      "You must have an API key configured to continue, try `openneuro login` first",
     )
   }
 }
@@ -65,11 +65,11 @@ export const getUser = () => {
 
 export const getUrl = () => {
   const config = JSON.parse(readConfig())
-  if (config.hasOwnProperty('url')) {
+  if (config.hasOwnProperty("url")) {
     return config.url
   } else {
     throw new Error(
-      'You must have a URL configured to continue, try `openneuro login` first',
+      "You must have a URL configured to continue, try `openneuro login` first",
     )
   }
 }
@@ -77,8 +77,8 @@ export const getUrl = () => {
 export const getErrorReporting = () => {
   const config = JSON.parse(readConfig())
   if (
-    config.hasOwnProperty('errorReporting') &&
-    config.hasOwnProperty('url') &&
+    config.hasOwnProperty("errorReporting") &&
+    config.hasOwnProperty("url") &&
     config.errorReporting
   ) {
     return config.url

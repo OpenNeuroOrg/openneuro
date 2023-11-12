@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql } from '@apollo/client'
-import { Mutation } from '@apollo/client/react/components'
-import { convertToRaw } from 'draft-js'
-import withProfile from '../../authentication/withProfile.jsx'
-import { DATASET_COMMENTS } from '../fragments/comments-fragments'
-import { datasetCacheId } from './cache-id.js'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql } from "@apollo/client"
+import { Mutation } from "@apollo/client/react/components"
+import { convertToRaw } from "draft-js"
+import withProfile from "../../authentication/withProfile.jsx"
+import { DATASET_COMMENTS } from "../fragments/comments-fragments"
+import { datasetCacheId } from "./cache-id.js"
 
 const NEW_COMMENT = gql`
   mutation addComment($datasetId: ID!, $parentId: ID, $comment: String!) {
@@ -30,12 +30,12 @@ const EDIT_COMMENT = gql`
  */
 export const commentStateFactory = (id, parentId, body, profile) => ({
   id,
-  parent: parentId ? { __typename: 'Comment', id: parentId } : null,
+  parent: parentId ? { __typename: "Comment", id: parentId } : null,
   text: JSON.stringify(convertToRaw(body)),
   createDate: new Date().toISOString(),
-  user: { __typename: 'User', ...profile },
+  user: { __typename: "User", ...profile },
   replies: [],
-  __typename: 'Comment',
+  __typename: "Comment",
 })
 
 /**
@@ -58,12 +58,12 @@ export const newCommentsReducer = (
   // If this is not a root level comment, add to replies
   if (parentId) {
     const parentIndex = nextCommentsState.findIndex(
-      comment => comment.id === parentId,
+      (comment) => comment.id === parentId,
     )
     const parentReplies = nextCommentsState[parentIndex].replies
     nextCommentsState[parentIndex] = {
       ...comments[parentIndex],
-      replies: [...parentReplies, { __typename: 'Comment', id: commentId }],
+      replies: [...parentReplies, { __typename: "Comment", id: commentId }],
     }
   }
   return nextCommentsState
@@ -81,7 +81,7 @@ export const modifyCommentsReducer = (comments, { commentId, comment }) => {
   // Must copy with freezeResults enabled
   const nextCommentsState = [...comments]
   const modifiedCommentIndex = nextCommentsState.findIndex(
-    c => c.id === commentId,
+    (c) => c.id === commentId,
   )
   const modifiedComment = nextCommentsState[modifiedCommentIndex]
   nextCommentsState[modifiedCommentIndex] = {
@@ -113,23 +113,24 @@ const CommentMutation = ({
         // Apply state reduction to cache for new comment changes
         const nextCommentsState = addComment
           ? newCommentsReducer(comments, {
-              parentId,
-              commentId: addComment,
-              comment,
-              profile,
-            })
+            parentId,
+            commentId: addComment,
+            comment,
+            profile,
+          })
           : modifyCommentsReducer(comments, { commentId, comment })
         cache.writeFragment({
           id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
           data: {
-            __typename: 'Dataset',
+            __typename: "Dataset",
             id: datasetId,
             comments: nextCommentsState,
           },
         })
-      }}>
-      {newComment => (
+      }}
+    >
+      {(newComment) => (
         <button
           className="on-button on-button--primary  on-button--small "
           disabled={disabled}
@@ -143,7 +144,8 @@ const CommentMutation = ({
               },
             })
             done()
-          }}>
+          }}
+        >
           Submit Comment
         </button>
       )}

@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { WarnButton } from '@openneuro/components/warn-button'
+import React, { FC } from "react"
+import { gql, useMutation } from "@apollo/client"
+import { WarnButton } from "@openneuro/components/warn-button"
 
 const REMOVE_PERMISSION = gql`
   mutation removePermissions($datasetId: ID!, $userId: String!) {
@@ -9,7 +9,7 @@ const REMOVE_PERMISSION = gql`
 `
 
 export const userPermissionsFilter = (userPermissions, userId) =>
-  userPermissions.filter(permission => permission.user.id !== userId)
+  userPermissions.filter((permission) => permission.user.id !== userId)
 
 interface RemovePermissionsProps {
   datasetId: string
@@ -30,8 +30,7 @@ export const RemovePermissions: FC<RemovePermissionsProps> = ({
         icon="fa-trash-o"
         disabled={false}
         onConfirmedClick={() =>
-          removePermissions({ variables: { datasetId, userId } })
-        }
+          removePermissions({ variables: { datasetId, userId } })}
         displayOptions={displayOptions}
         setDisplayOptions={setDisplayOptions}
       />

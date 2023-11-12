@@ -1,18 +1,18 @@
-import passport from 'passport'
+import passport from "passport"
 
 export const requestAuth = (req, res, next) =>
-  passport.authenticate('google', {
+  passport.authenticate("google", {
     scope: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
     ],
     session: false,
-    accessType: 'offline',
-    prompt: 'consent',
+    accessType: "offline",
+    prompt: "consent",
     state: req.query.redirectPath || null,
   })(req, res, next)
 
-export const authCallback = passport.authenticate('google', {
-  failureRedirect: '/',
+export const authCallback = passport.authenticate("google", {
+  failureRedirect: "/",
   session: false,
 })

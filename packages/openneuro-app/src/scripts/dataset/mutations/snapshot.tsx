@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { gql, useMutation } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
-import { Button } from '@openneuro/components/button'
-import { getDatasetPage, getDraftPage } from '../../queries/dataset'
+import React from "react"
+import PropTypes from "prop-types"
+import { gql, useMutation } from "@apollo/client"
+import { useNavigate } from "react-router-dom"
+import ErrorBoundary from "../../errors/errorBoundary.jsx"
+import { Button } from "@openneuro/components/button"
+import { getDatasetPage, getDraftPage } from "../../queries/dataset"
 
 const CREATE_SNAPSHOT = gql`
   mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
@@ -47,7 +47,7 @@ const CreateSnapshotMutation = ({
         onClick={(): void => {
           void snapshotDataset({
             variables: { datasetId, tag, changes },
-          }).then(data => {
+          }).then((data) => {
             console.log(data)
             navigate(`/datasets/${datasetId}/versions/${tag}`)
           })

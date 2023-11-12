@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface CommentDocument extends Document {
@@ -26,21 +26,21 @@ const commentSchema = new Schema(
 )
 
 // Foreign key virtuals
-commentSchema.virtual('poster', {
-  ref: 'User',
-  localField: 'user._id',
-  foreignField: 'id',
+commentSchema.virtual("poster", {
+  ref: "User",
+  localField: "user._id",
+  foreignField: "id",
   justOne: true,
 })
 
 // Foreign key virtuals
-commentSchema.virtual('parent', {
-  ref: 'Comment',
-  localField: 'parentId',
-  foreignField: '_id',
+commentSchema.virtual("parent", {
+  ref: "Comment",
+  localField: "parentId",
+  foreignField: "_id",
   justOne: true,
 })
 
-const Comment = model<CommentDocument>('Comment', commentSchema)
+const Comment = model<CommentDocument>("Comment", commentSchema)
 
 export default Comment

@@ -1,12 +1,12 @@
-import Summary from '../../models/summary'
-import { summary } from './summary'
-import { issues } from './issues.js'
-import { description } from './description.js'
-import { readme } from './readme.js'
-import { getDraftRevision, updateDatasetRevision } from '../../datalad/draft.js'
-import { checkDatasetWrite } from '../permissions.js'
-import { getFiles } from '../../datalad/files'
-import { filterRemovedAnnexObjects } from '../utils/file.js'
+import Summary from "../../models/summary"
+import { summary } from "./summary"
+import { issues } from "./issues.js"
+import { description } from "./description.js"
+import { readme } from "./readme.js"
+import { getDraftRevision, updateDatasetRevision } from "../../datalad/draft.js"
+import { checkDatasetWrite } from "../permissions.js"
+import { getFiles } from "../../datalad/files"
+import { filterRemovedAnnexObjects } from "../utils/file.js"
 
 // A draft must have a dataset parent
 const draftFiles = async (dataset, args, { userInfo }) => {
@@ -19,7 +19,7 @@ const draftSize = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
   return Summary.findOne({ datasetId: dataset.id, id: hexsha })
     .exec()
-    .then(res => res?.toObject()?.size)
+    .then((res) => res?.toObject()?.size)
 }
 
 /**
@@ -44,15 +44,15 @@ export const revalidate = async (obj, { datasetId }, { user, userInfo }) => {
 }
 
 const draft = {
-  id: obj => obj.id,
+  id: (obj) => obj.id,
   files: draftFiles,
   size: draftSize,
   summary,
   issues,
-  modified: obj => obj.modified,
+  modified: (obj) => obj.modified,
   description,
   readme,
-  head: obj => obj.revision,
+  head: (obj) => obj.revision,
 }
 
 export default draft

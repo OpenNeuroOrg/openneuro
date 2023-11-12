@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 export interface SelectGroupProps {
   options: {
@@ -9,7 +9,7 @@ export interface SelectGroupProps {
   setValue: (string) => void
   label?: string
   id: string
-  layout: 'inline' | 'stacked'
+  layout: "inline" | "stacked"
 }
 
 export const SelectGroup = ({
@@ -21,14 +21,16 @@ export const SelectGroup = ({
 }: SelectGroupProps) => {
   return (
     <span
-      className={
-        layout === 'stacked' ? 'on-select-wrapper stacked' : 'on-select-wrapper'
-      }>
+      className={layout === "stacked"
+        ? "on-select-wrapper stacked"
+        : "on-select-wrapper"}
+    >
       {label && <label htmlFor={id}>{label}</label>}
       <select
         className="on-select"
-        onChange={e => setValue(e.target.value)}
-        id={id}>
+        onChange={(e) => setValue(e.target.value)}
+        id={id}
+      >
         {options.map((item, index) => (
           <option key={index} label={item.label} value={item.value} />
         ))}
