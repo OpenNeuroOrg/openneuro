@@ -1,7 +1,7 @@
 /**
  * Configure credentials and other persistent settings for OpenNeuro
  */
-import { Command, Select, Secret, Confirm } from '../deps.ts'
+import { Command, Confirm, Secret, Select } from '../deps.ts'
 
 const messages = {
   url: 'URL for OpenNeuro instance to upload to (e.g. `https://openneuro.org`).',
@@ -37,6 +37,30 @@ export function getConfig(): Config | LoginError {
   }
 }
 
+async function loginAction(options) {
+  const url = options.url
+    ? options.url
+    : await Select.prompt({
+        message: 'Choose an OpenNeuro instance to use.',
+        options: [
+          'https://openneuro.org',
+          'https://staging.openneuro.org',
+          'http://localhost:9876',
+        ],
+      })
+  localStorage.setItem('url', url)
+  const token = options.token
+    ? options.token
+    : await Secret.prompt(
+        `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
+      )
+  localStorage.setItem('token', token)
+  const errorReporting = options.errorReporting
+    ? options.errorReporting
+    : await Confirm.prompt(messages.errorReporting)
+  localStorage.setItem('errorReporting', errorReporting)
+}
+
 export const login = new Command()
   .name('login')
   .description(
@@ -45,26 +69,4 @@ export const login = new Command()
   .option('-u, --url <url>', messages.url)
   .option('-t, --token <token>', messages.token)
   .option('-e, --error-reporting <boolean>', messages.errorReporting)
-  .action(async (options, ...args) => {
-    const url = options.url
-      ? options.url
-      : await Select.prompt({
-          message: 'Choose an OpenNeuro instance to use.',
-          options: [
-            'https://openneuro.org',
-            'https://staging.openneuro.org',
-            'http://localhost:9876',
-          ],
-        })
-    localStorage.setItem('url', url)
-    const token = options.token
-      ? options.token
-      : await Secret.prompt(
-          `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
-        )
-    localStorage.setItem('token', token)
-    const errorReporting = options.errorReporting
-      ? options.errorReporting
-      : await Confirm.prompt(messages.errorReporting)
-    localStorage.setItem('errorReporting', errorReporting)
-  })
+  .action(loginAction)
