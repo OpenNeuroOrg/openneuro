@@ -1,6 +1,6 @@
-import { setup, handlers, LevelName, getLogger, Logger } from './deps.ts'
+import { getLogger, handlers, LevelName, Logger, setup } from "./deps.ts"
 
-const loggerName = '@openneuro/cli'
+const loggerName = "@openneuro/cli"
 
 /**
  * Setup a console logger used with the --debug flag
@@ -12,18 +12,18 @@ export function setupLogging(level: LevelName) {
     },
 
     loggers: {
-      '@openneuro/cli': {
+      "@openneuro/cli": {
         level,
-        handlers: ['console'],
+        handlers: ["console"],
       },
     },
   })
 }
 
 export function parseStack(stack: string) {
-  const lines = stack.split('\n')
+  const lines = stack.split("\n")
   const caller = lines[2].trim()
-  const token = caller.split('at ')
+  const token = caller.split("at ")
   return token[1]
 }
 

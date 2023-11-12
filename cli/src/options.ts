@@ -1,15 +1,15 @@
 import {
   Command,
   EnumType,
-  ValidatorOptions,
   LevelName,
   LogLevelNames,
-} from './deps.ts'
+  ValidatorOptions,
+} from "./deps.ts"
 
-import { setupLogging } from './logger.ts'
-import { login } from './commands/login.ts'
-import { upload } from './commands/upload.ts'
-import { gitCredential } from './commands/git-credential.ts'
+import { setupLogging } from "./logger.ts"
+import { login } from "./commands/login.ts"
+import { upload } from "./commands/upload.ts"
+import { gitCredential } from "./commands/git-credential.ts"
 
 export type OpenNeuroOptions = {
   localPath?: string
@@ -18,20 +18,20 @@ export type OpenNeuroOptions = {
 }
 
 const openneuroCommand = new Command()
-  .name('openneuro')
+  .name("openneuro")
   .description(
-    'OpenNeuro command line tools for uploading, downloading, or syncing datasets. See https://docs.openneuro.org for detailed guides.',
+    "OpenNeuro command line tools for uploading, downloading, or syncing datasets. See https://docs.openneuro.org for detailed guides.",
   )
   // TODO - Sync this with the node packages
-  .version('4.20.4')
-  .globalType('debugLevel', new EnumType(LogLevelNames))
-  .globalEnv('LOG=<type:debugLevel>', 'Enable debug output.')
+  .version("4.20.4")
+  .globalType("debugLevel", new EnumType(LogLevelNames))
+  .globalEnv("LOG=<type:debugLevel>", "Enable debug output.")
   .globalAction(({ log }) => {
-    setupLogging(log ? log : 'ERROR')
+    setupLogging(log ? log : "ERROR")
   })
-  .command('login', login)
-  .command('upload', upload)
-  .command('git-credential', gitCredential)
+  .command("login", login)
+  .command("upload", upload)
+  .command("git-credential", gitCredential)
 
 /**
  * Parse command line options and return a OpenNeuroOptions config
