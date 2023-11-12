@@ -1,4 +1,4 @@
-import { ApolloClient, Query } from '@apollo/client'
+import { ApolloClient, Query } from "@apollo/client"
 
 export declare function createClient(
   uri: string,
@@ -10,9 +10,9 @@ export declare function createClient(
     ssrMode?: boolean
     cache?: ApolloCache
   },
-): ApolloClient<*>
+): ApolloClient<any>
 
-export declare async function* datasetGenerator(
+export async function* datasetGenerator(
   client: ApolloClient,
   query: Query,
 ): AsyncGenerator<any>
