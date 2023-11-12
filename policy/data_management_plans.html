@@ -253,16 +253,20 @@ for data repositories:</p>
 <dt><strong>Unique Persistent Identifiers</strong></dt><dd><blockquote>
 <div><p>Assigns datasets a citable, unique persistent identifier, such as a digital object identifier (DOI) or accession number, to support data discovery, reporting, and research assessment. The identifier points to a persistent landing page that remains accessible even if the dataset is de-accessioned or no longer available.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro:</p>
 <ul class="simple">
 <li><p>assigns internal accession numbers (for example, <code class="docutils literal notranslate"><span class="pre">ds000001</span></code>) on initial upload</p></li>
 <li><p>generates a <a class="reference external" href="https://www.doi.org/">DOI</a> for each version of a dataset</p></li>
 <li><p>maintains landing pages for published datasets that have been removed</p></li>
 </ul>
-</dd>
+<dl class="simple myst">
 <dt><strong>Long-Term Sustainability</strong></dt><dd><blockquote>
 <div><p>Has a plan for long-term management of data, including maintaining integrity, authenticity, and availability of datasets; building on a stable technical infrastructure and funding plans; and having contingency plans to ensure data are available and maintained during and after unforeseen events.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro’s <a class="reference internal" href="data_retention.html"><span class="std std-doc">Data Retention Policies</span></a> detail the technical approaches to maintaining integrity, authenticity
 and availability, including redundant distribution mechanisms that do not rely upon the availability of
 the primary website.
@@ -270,36 +274,44 @@ The source code and deployment specifications are maintained in public repositor
 using industry-standard technologies that are not tied to any one hosting provider.
 OpenNeuro is funded through an NIMH R24 grant, a five-year funding mechanism that enables long-term
 stability.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Metadata</strong></dt><dd><blockquote>
 <div><p>Ensures datasets are accompanied by metadata to enable discovery, reuse, and citation of datasets, using schema that are appropriate to, and ideally widely used across, the community(ies) the repository serves. Domain-specific repositories would generally have more detailed metadata than generalist repositories.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro requires all datasets be uploaded in <a class="reference external" href="https://bids.neuroimaging.io">BIDS</a> format, a community-developed
 standard for organizing data and metadata. OpenNeuro extracts metadata from the datasets
 to populate the dataset landing page and enable search queries.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Curation and Quality Assurance</strong></dt><dd><blockquote>
 <div><p>Provides, or has a mechanism for others to provide, expert curation and quality assurance to improve the accuracy and integrity of datasets and metadata.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro permits dataset owners to grant anonymous review access to private datasets,
 as well as write access to trusted users, if they wish to seek expert assistance.
 OpenNeuro <em>does not</em> currently provide curation assistance or a method for interested third
 parties to annotate datasets without the author’s consent.
 Users may leave comments on datasets.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Free and Easy Access</strong></dt><dd><blockquote>
 <div><p>Provides broad, equitable, and maximally open access to datasets and their metadata free of charge in a timely manner after submission, consistent with legal and ethical limits required to maintain privacy and confidentiality, Tribal sovereignty, and protection of other sensitive data.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro provides on-demand access to all published datasets through multiple download mechanisms,
 free of charge, over the Internet.
 All data and metadata are released into the Public Domain.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Broad and Measured Reuse</strong></dt><dd><blockquote>
 <div><p>Makes datasets and their metadata available with broadest possible terms of reuse; and provides the ability to measure attribution, citation, and reuse of data (i.e., through assignment of adequate metadata and unique PIDs).</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro is working toward providing mechanisms for measuring dataset downloads and
 linking to related digital objects like journal articles.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Clear Use Guidance</strong></dt><dd><blockquote>
 <div><p>Provides accompanying documentation describing terms of dataset access and use (e.g., particular licenses, need for approval by a data use committee).</p>
 </div></blockquote>
@@ -307,9 +319,11 @@ linking to related digital objects like journal articles.</p>
 <dt><strong>Security and Integrity</strong></dt><dd><blockquote>
 <div><p>Has documented measures in place to meet generally accepted criteria for preventing unauthorized access to, modification of, or release of data, with levels of security that are appropriate to the sensitivity of data.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>OpenNeuro currently only hosts datasets that do not require restricted access, as attested by
 the dataset uploader.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Confidentiality</strong></dt><dd><blockquote>
 <div><p>Has documented capabilities for ensuring that administrative, technical, and physical safeguards are employed to comply with applicable confidentiality, risk management, and continuous monitoring requirements for sensitive data.</p>
 </div></blockquote>
@@ -317,20 +331,24 @@ the dataset uploader.</p>
 <dt><strong>Common Format</strong></dt><dd><blockquote>
 <div><p>Allows datasets and metadata downloaded, accessed, or exported from the repository to be in widely used, preferably non-proprietary, formats consistent with those used in the community(ies) the repository serves.</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>All OpenNeuro datasets are formatted according to the <a class="reference external" href="https://bids.neuroimaging.io">BIDS</a> standard.
 The DataLad access mechanism retrieves the dataset in the form of a <a class="reference external" href="https://www.git-scm.com/">git</a>/<a class="reference external" href="https://git-annex.branchable.com/">git-annex</a> repository.</p>
-</dd>
+<dl class="simple myst">
 <dt><strong>Provenance</strong></dt><dd><blockquote>
 <div><p>Has mechanisms in place to record the origin, chain of custody, and any modifications to submitted datasets and metadata.</p>
 </div></blockquote>
-<p>All changes to datasets are recorded in the <a class="reference external" href="https://www.git-scm.com/">git</a> history of each dataset.</p>
 </dd>
+</dl>
+<p>All changes to datasets are recorded in the <a class="reference external" href="https://www.git-scm.com/">git</a> history of each dataset.</p>
+<dl class="simple myst">
 <dt><strong>Retention Policy</strong></dt><dd><blockquote>
 <div><p>Provides documentation on policies for data retention within the repository.</p>
 </div></blockquote>
-<p>These policies may be found at <a class="reference internal" href="data_retention.html"><span class="std std-doc">Data Retention Policies</span></a>.</p>
 </dd>
 </dl>
+<p>These policies may be found at <a class="reference internal" href="data_retention.html"><span class="std std-doc">Data Retention Policies</span></a>.</p>
 </section>
 </section>
 </section>

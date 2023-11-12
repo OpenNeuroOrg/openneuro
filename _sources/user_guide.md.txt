@@ -19,9 +19,9 @@ To access public datasets, click on the PUBLIC DASHBOARD button in the navigatio
 
 ![navigation bar, logged in, public dashboard selected](./assets/nav-bar-logged-in-public-dashboard.png)
 
-On the Public Dashboard, datasets can be searched for by keyword or sorted by various criteria. 
+On the Public Dashboard, datasets can be searched for by keyword or sorted by various criteria.
 
-Visible from the dashboard are each dataset's high-level stats and information. To access a dataset's landing page, click on its name. 
+Visible from the dashboard are each dataset's high-level stats and information. To access a dataset's landing page, click on its name.
 
 ![public dashboard, dataset item](./assets/public-dashboard-dataset-item.png)
 
@@ -34,6 +34,7 @@ A dataset's landing page has four major sections: [a toolbar](#the-toolbar), a [
 ![dataset page toolbar](./assets/dataset-page-toolbar.png)
 
 Located at the top of the page, the toolbar contains the following options (icons left to right):
+
 - Follow/Subscribe: Get email updates when a new version is posted.
 - Like/Save: Add dataset to your Dashboard under Saved Datasets.
 - View metadata: View data not necessarily contained within the dataset, including it's DOI, OpenNeuro ID and URL, study type and design, number of trials, etc. This data helps make datasets searchable, and a compilation of the metadata of all datasets on OpenNeuro can be found at [metadata.openneuro.org](http://metadata.openneuro.org/).
@@ -51,6 +52,7 @@ Changes to dataset information are tracked in the dataset's snapshots (versions)
 ### Dataset Snapshot
 
 This is the main section of the dataset landing page, containing almost all of its information and files at the given snapshot. Here, you can:
+
 - View a dataset's information (extracted from its README and description.json files).
 - View and download individual files. The file viewer supports the following file extensions: csv, html, txt, json, tsv, nii, and nii.gz.
 - Download the dataset via the browser.
@@ -66,15 +68,15 @@ Once you've signed into OpenNeuro, you'll be able to upload your dataset by hitt
 
 There are a few things to keep in mind before uploading a dataset:
 
-  1. You must be the owner of the dataset and have the necessary ethics permissions to share the data publicly.
+1. You must be the owner of the dataset and have the necessary ethics permissions to share the data publicly.
 
-  2. The dataset may not be subject to GDPR protections.
+2. The dataset may not be subject to GDPR protections.
 
-  3. The dataset must follow [BIDS](https://bids.neuroimaging.io/) specifications. Your dataset will be validated on upload, but if you want to check it for yourself, a web-based tool is available [here](https://bids-standard.github.io/bids-validator/), and a cli tool can be found [here](https://github.com/bids-standard/bids-validator).
+3. The dataset must follow [BIDS](https://bids.neuroimaging.io/) specifications. Your dataset will be validated on upload, but if you want to check it for yourself, a web-based tool is available [here](https://bids-standard.github.io/bids-validator/), and a cli tool can be found [here](https://github.com/bids-standard/bids-validator).
 
-  4. You will need to ensure that either all structural scans have been defaced (we recommend the [pydeface](https://github.com/poldracklab/pydeface) tool) or that you have explicit participant consent and ethical authorization to publish without defacing.
+4. You will need to ensure that either all structural scans have been defaced (we recommend the [pydeface](https://github.com/poldracklab/pydeface) tool) or that you have explicit participant consent and ethical authorization to publish without defacing.
 
-  5. You must be willing that the dataset becomes publicly available under the [Creative Commons CC0 license](https://creativecommons.org/share-your-work/public-domain/cc0/) upon publishing or after a grace period of 36 months from the date of its first snapshot creation.
+5. You must be willing that the dataset becomes publicly available under the [Creative Commons CC0 license](https://creativecommons.org/share-your-work/public-domain/cc0/) upon publishing or after a grace period of 36 months from the date of its first snapshot creation.
 
 The first upload prompt will ask you to select the dataset's folder from your computer.
 
@@ -82,7 +84,7 @@ The first upload prompt will ask you to select the dataset's folder from your co
 
 Once you've selected and uploaded the dataset, it will be checked by the BIDS validator. The dataset may be uploaded with warnings, but errors must be resolved before the upload can be finalized.
 
-The next step is to fill out the metadata form, which contains information not accessible from the dataset itself and is used to facilitate search results. This is optional, but highly recommended. 
+The next step is to fill out the metadata form, which contains information not accessible from the dataset itself and is used to facilitate search results. This is optional, but highly recommended.
 
 Finally, you will need to accept the Terms and Conditions and affirm that the data has been either defaced or given consent to be made public otherwise. Once you have done so, the dataset will begin uploading in the background and you'll be free to navigate the site (but don't reload it or close the window, or the process will be cut short). When the dataset has finished uploading, you'll see a notification pop up in the bottom-right corner of the page.
 
@@ -101,7 +103,8 @@ The draft page information is nearly identical to the snapshot pages, the differ
 ![owned dataset page toolbar](./assets/own-dataset-page-toolbar.png)
 
 The dataset toolbar will have a few new items, including:
-- Publish: Make your dataset public. This will make it available under the CC0 license. 
+
+- Publish: Make your dataset public. This will make it available under the CC0 license.
 - Delete: Permanently remove your dataset from OpenNeuro. If you are deleting the dataset to replace it, a redirect url can be submitted with the delete form.
 - Manage Permissions: Add collaborators to the dataset and manage their read/write permissions.
 - Create Snapshot: Create a new version of this dataset with changes made to Draft.
