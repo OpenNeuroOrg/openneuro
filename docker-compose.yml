@@ -1,48 +1,10 @@
 # docker compose versions
 version: '2.3'
 
-volumes:
-  node_deps:
-  dist:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_app:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_client:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_cli:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_components:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_indexer:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_server:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  dist_search:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  typescript_build_cache:
-  node_modules_app:
-  node_modules_components:
-
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    image: node:18.17.1-bullseye
+    image: docker.io/library/node:18.17.1-bullseye
     env_file: ./config.env
     working_dir: /srv
     command: bash -c 'yarn install && yarn pnpify tsc-watch -b --onSuccess "touch /watch/done"'
@@ -52,23 +14,10 @@ services:
       retries: 60
     tmpfs:
       - /watch
-      - /srv/.build-cache
     volumes:
-      - ./:/srv
-      - node_deps:/srv/.yarn
-      - ./.yarn/cache:/srv/.yarn/cache:ro
-      - ./.yarn/releases:/srv/.yarn/releases:cached
-      - ./.yarn/plugins:/srv/.yarn/plugins:cached
-      - dist:/srv/dist
-      - dist_app:/srv/packages/openneuro-app/dist
-      - dist_cli:/srv/packages/openneuro-cli/dist
-      - dist_client:/srv/packages/openneuro-client/dist
-      - dist_components:/srv/packages/openneuro-components/dist
-      - dist_search:/srv/packages/openneuro-search/dist
-      - dist_indexer:/srv/packages/openneuro-indexer/dist
-      - dist_server:/srv/packages/openneuro-server/dist
-      - node_modules_app:/srv/packages/openneuro-app/node_modules
-      - node_modules_components:/srv/packages/openneuro-components/node_modules
+      - ./:/srv:rw,z
+      - /srv/dist
+      - /srv/.build-cache
 
   # web app bundle build
   app:
@@ -126,13 +75,13 @@ services:
 
   # mongodb
   mongo:
-    image: mongo:5.0
+    image: docker.io/library/mongo:5.0
     volumes:
       - ${PERSISTENT_DIR}/mongo:/data/db:delegated
 
   # Redis
   redis:
-    image: redis:alpine
+    image: docker.io/library/redis:alpine
 
   # datalad Python backend
   datalad:
@@ -169,11 +118,10 @@ services:
 
   # nginx + app
   web:
-    image: nginx:1.16.1
+    image: docker.io/library/nginx:1.16.1
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - '80:80'
       - '8110:8110'
       - '9876:80'
     depends_on:
@@ -197,11 +145,3 @@ services:
       - '9200:9200'
       - '9300:9300'
 
-# comment out `x-disabled` to enable kibana service
-x-disabled:
-  kibana:
-    image: kibana:7.10.1
-    depends_on:
-      - elasticsearch
-    ports:
-      - '5601:5601'
