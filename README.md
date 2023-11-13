@@ -31,14 +31,14 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 ```
 
-[docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together.
+[podman-compose](https://github.com/containers/podman-compose) is used to run a local copy of all required services together.
 
 ```shell
-# This will run docker-compose in the background (-d flag is --detach)
-docker-compose up -d
+# This will run podman-compose in the background (-d flag is --detach)
+podman-compose up -d
 ```
 
-For example, you can restart the server container with `docker-compose restart server` or view logs with `docker-compose logs -f --tail=10 server`.
+For example, you can restart the server container with `podman-compose restart server` or view logs with `podman-compose logs -f --tail=10 server`.
 
 ## Major Components
 
