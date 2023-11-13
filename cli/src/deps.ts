@@ -8,6 +8,10 @@ export {
   Secret,
   Select,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts"
+export type {
+  ActionHandler,
+  CommandOptions,
+} from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts"
 // bids-validator
 export * as bidsValidator from "https://deno.land/x/bids_validator@v1.13.1/main.ts"
 //export { validateCommand } from 'https://deno.land/x/bids_validator@v1.13.1/setup/options.ts'
@@ -32,3 +36,13 @@ export { TextLineStream } from "https://deno.land/std@0.203.0/streams/mod.ts"
 // File handling
 export { walk } from "https://deno.land/std@0.203.0/fs/walk.ts"
 export { resolve } from "https://deno.land/std@0.203.0/path/resolve.ts"
+// Test suites
+export {
+  assert,
+  assertEquals,
+} from "https://deno.land/std@0.203.0/assert/mod.ts"
+export {
+  assertSpyCalls,
+  returnsNext,
+  stub,
+} from "https://deno.land/std@0.203.0/testing/mock.ts"

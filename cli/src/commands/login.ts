@@ -2,14 +2,7 @@
  * Configure credentials and other persistent settings for OpenNeuro
  */
 import { Command, Confirm, Secret, Select } from "../deps.ts"
-
-const messages = {
-  url:
-    "URL for OpenNeuro instance to upload to (e.g. `https://openneuro.org`).",
-  token: "API key for OpenNeuro. See https://openneuro.org/keygen",
-  errorReporting:
-    "Enable error reporting. Errors and performance metrics are sent to the configured OpenNeuro instance.",
-}
+import type { CommandOptions } from "../deps.ts"
 
 export interface Config {
   url: string
@@ -18,6 +11,14 @@ export interface Config {
 }
 
 export class LoginError extends Error {}
+
+const messages = {
+  url:
+    "URL for OpenNeuro instance to upload to (e.g. `https://openneuro.org`).",
+  token: "API key for OpenNeuro. See https://openneuro.org/keygen",
+  errorReporting:
+    "Enable error reporting. Errors and performance metrics are sent to the configured OpenNeuro instance.",
+}
 
 /**
  * Get credentials from local storage
@@ -38,7 +39,7 @@ export function getConfig(): Config | LoginError {
   }
 }
 
-async function loginAction(options) {
+export async function loginAction(options: CommandOptions) {
   const url = options.url ? options.url : await Select.prompt({
     message: "Choose an OpenNeuro instance to use.",
     options: [
@@ -52,10 +53,10 @@ async function loginAction(options) {
     `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
   )
   localStorage.setItem("token", token)
-  const errorReporting = options.errorReporting
+  const errorReporting = options.hasOwnProperty("errorReporting")
     ? options.errorReporting
     : await Confirm.prompt(messages.errorReporting)
-  localStorage.setItem("errorReporting", errorReporting)
+  localStorage.setItem("errorReporting", errorReporting.toString())
 }
 
 export const login = new Command()

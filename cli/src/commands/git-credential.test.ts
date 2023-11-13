@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.204.0/assert/mod.ts"
+import { assertEquals } from "../deps.ts"
 import { gitCredentialAction } from "./git-credential.ts"
 
 Deno.test("git-credential parses stdin correctly", async () => {
