@@ -77,7 +77,7 @@ services:
   mongo:
     image: docker.io/library/mongo:5.0
     volumes:
-      - ${PERSISTENT_DIR}/mongo:/data/db:delegated
+      - ${PERSISTENT_DIR}/mongo:/data/db:z
 
   # Redis
   redis:
@@ -88,7 +88,7 @@ services:
     build:
       context: services/datalad
     volumes:
-      - ${PERSISTENT_DIR}/datalad:/datalad:delegated
+      - ${PERSISTENT_DIR}/datalad:/datalad:z
       - ./services/datalad/datalad_service:/srv/datalad_service
     env_file: ./config.env
     init: true
