@@ -1,5 +1,5 @@
 import { validateCommand } from "./validate.ts"
-import { ClientConfig, getConfig, LoginError } from "./login.ts"
+import { ClientConfig, getConfig } from "./login.ts"
 import { logger } from "../logger.ts"
 import { resolve, walk } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
@@ -27,9 +27,16 @@ export async function uploadAction(
     `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
   )
   // TODO - call the validator here
+
   for await (const walkEntry of walk(dataset_directory)) {
     logger.debug(JSON.stringify(walkEntry))
   }
+}
+
+/**
+ * Given a path and context for the upload, add this file to an upload
+ */
+export async function uploadFile(path) {
 }
 
 /**
@@ -43,4 +50,5 @@ export const upload = validateCommand
     hidden: true,
     override: true,
   })
+  .option("-d, --dataset", "Specify an existing dataset to update.")
   .action(uploadAction)

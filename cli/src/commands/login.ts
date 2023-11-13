@@ -3,14 +3,13 @@
  */
 import { Command, Confirm, Secret, Select } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
+import { LoginError } from "../error.ts"
 
 export interface ClientConfig {
   url: string
   token: string
   errorReporting: boolean
 }
-
-export class LoginError extends Error {}
 
 const messages = {
   url:
