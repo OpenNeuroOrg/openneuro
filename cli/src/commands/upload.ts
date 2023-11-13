@@ -1,7 +1,36 @@
 import { validateCommand } from "./validate.ts"
-import { getConfig, LoginError } from "./login.ts"
+import { ClientConfig, getConfig, LoginError } from "./login.ts"
 import { logger } from "../logger.ts"
 import { resolve, walk } from "../deps.ts"
+import type { CommandOptions } from "../deps.ts"
+
+export function readConfig(): ClientConfig {
+  const config = getConfig()
+  logger.info(
+    `configured with URL "${config.url}" and token "${
+      config.token.slice(
+        0,
+        3,
+      )
+    }...${config.token.slice(-3)}`,
+  )
+  return config
+}
+
+export async function uploadAction(
+  options: CommandOptions,
+  dataset_directory: string,
+) {
+  const clientConfig = readConfig()
+  const dataset_directory_abs = resolve(dataset_directory)
+  logger.info(
+    `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
+  )
+  // TODO - call the validator here
+  for await (const walkEntry of walk(dataset_directory)) {
+    logger.debug(JSON.stringify(walkEntry))
+  }
+}
 
 /**
  * Upload is validate extended with upload features
@@ -14,28 +43,4 @@ export const upload = validateCommand
     hidden: true,
     override: true,
   })
-  .action(async ({ json }, dataset_directory) => {
-    let config
-    try {
-      config = getConfig()
-    } catch (err) {
-      if (err instanceof LoginError) {
-        console.error("Run `openneuro login` before upload.")
-      }
-    }
-    logger.info(
-      `configured with URL "${config.url}" and token "${
-        config.token.slice(
-          0,
-          3,
-        )
-      }...${config.token.slice(-3)}`,
-    )
-    const dataset_directory_abs = resolve(dataset_directory)
-    logger.info(
-      `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
-    )
-    for await (const walkEntry of walk(dataset_directory)) {
-      logger.debug(JSON.stringify(walkEntry))
-    }
-  })
+  .action(uploadAction)

@@ -4,7 +4,7 @@
 import { Command, Confirm, Secret, Select } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
 
-export interface Config {
+export interface ClientConfig {
   url: string
   token: string
   errorReporting: boolean
@@ -23,19 +23,19 @@ const messages = {
 /**
  * Get credentials from local storage
  */
-export function getConfig(): Config | LoginError {
+export function getConfig(): ClientConfig {
   const url = localStorage.getItem("url")
   const token = localStorage.getItem("token")
   const errorReporting = localStorage.getItem("errorReporting") === "true"
   if (url && token && errorReporting) {
-    const config: Config = {
+    const config: ClientConfig = {
       url,
       token,
       errorReporting,
     }
     return config
   } else {
-    throw new LoginError("Please configure ")
+    throw new LoginError("Run `openneuro login` before upload.")
   }
 }
 
