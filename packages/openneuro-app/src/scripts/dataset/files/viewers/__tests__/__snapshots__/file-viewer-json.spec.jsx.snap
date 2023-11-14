@@ -1,29 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`File Viewer - JSON > renders with invalid JSON 1`] = `
-<DocumentFragment>
-  <h3>
-    Tree
-  </h3>
-  <hr />
-  <p>
-    JSON failed to parse
-  </p>
-  <pre>
-    Unexpected token ; in JSON at position 4
-  </pre>
-  <h3>
-    Raw
-  </h3>
-  <hr />
-  <pre
-    class="css-ffm88e"
-  >
-    1234;
-  </pre>
-</DocumentFragment>
-`;
-
 exports[`File Viewer - JSON > renders with valid JSON 1`] = `
 <DocumentFragment>
   <h3>
