@@ -258,7 +258,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                                         >
                                           <span>
                                             <label>
-                                              Location: 
+                                              Location:
                                             </label>
                                             <p>
                                               /participants.tsv
@@ -269,7 +269,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                                           class="e-meta"
                                         >
                                           <label>
-                                            Reason: 
+                                            Reason:
                                           </label>
                                           <p>
                                             Tabular file contains custom columns not described in a data dictionary

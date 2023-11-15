@@ -16,7 +16,7 @@ describe("jwt auth", () => {
           },
         },
       }
-      const user = User({ email: "test@example.com" })
+      const user = new User({ email: "test@example.com" })
       const obj = addJWT(config)(user)
       expect(obj).toHaveProperty("token")
     })

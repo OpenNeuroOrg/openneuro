@@ -80,8 +80,7 @@ export function DatasetMetadata(): React.ReactElement {
             "affirmedDefaced",
             "affirmedConsent",
           ]}
-        >
-        </DataTable>
+        />
       </MetadataPageStyle>
     )
   }

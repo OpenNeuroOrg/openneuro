@@ -1,5 +1,5 @@
-FROM denoland/deno:bin-1.33.1 AS deno
-FROM python:3.11-slim as production
+FROM docker.io/denoland/deno:bin-1.33.1 AS deno
+FROM docker.io/library/python:3.11-slim as production
 
 WORKDIR /srv
 
