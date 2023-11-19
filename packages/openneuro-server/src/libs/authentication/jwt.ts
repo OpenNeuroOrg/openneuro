@@ -120,7 +120,16 @@ const requestNewAccessToken = (jwtProvider, refreshToken) =>
  * @param {Object} req
  */
 export const jwtFromRequest = (req) => {
-  if (req.cookies && req.cookies.accessToken) {
+  if (req.headers?.authorization) {
+    try {
+      return req.headers.authorization.substring(
+        7,
+        req.headers.authorization.length,
+      )
+    } catch (_err) {
+      return null
+    }
+  } else if (req.cookies && req.cookies.accessToken) {
     return req.cookies.accessToken
   } else {
     return null
