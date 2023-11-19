@@ -58,6 +58,7 @@ export async function expressApolloSetup() {
   // routing ---------------------------------------------------------
   app.use("/sitemap.xml", sitemapHandler)
   app.use(config.apiPrefix, routes)
+  app.use("/api/", routes)
 
   const httpServer = createServer(app)
 
@@ -98,7 +99,7 @@ export async function expressApolloSetup() {
 
   // Setup GraphQL middleware
   app.use(
-    ["/graphql", "/crn/graphql"],
+    ["/graphql", "/crn/graphql", "/api/graphql"],
     cors<cors.CorsRequest>(),
     jwt.authenticate,
     auth.optional,
