@@ -115,6 +115,20 @@ services:
         aliases:
           - datalad-0
           - datalad-1
+  
+  # Upload daemon
+  tusd:
+    image: docker.io/tusproject/tusd:v2.1.0
+    command:
+      [
+        'tusd',
+        '-hooks-http',
+        'http://server/api/tusd',
+        '-upload-dir',
+        '/datalad/datasets/tusd',
+      ]
+    volumes:
+    - ${PERSISTENT_DIR}/datalad:/datalad:z
 
   # nginx + app
   web:
