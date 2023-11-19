@@ -221,14 +221,18 @@
 <p>A dataset must always be present in the root level of the repository.</p>
 <p>OpenNeuro validates the size of regular git (non-annexed) files and a subset of bids-validation before accepting a git push. It is important to annex any large files in any commits before pushing. <code class="docutils literal notranslate"><span class="pre">.bidsignore</span></code> must always be a regular file. Some features are only available for regular files (such as diffing) and textual data is generally best kept as regular git objects.</p>
 <p>A recommended <code class="docutils literal notranslate"><span class="pre">.gitattributes</span></code> configuration for git-annex to automate annexing the correct files when using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> or <code class="docutils literal notranslate"><span class="pre">datalad</span> <span class="pre">save</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">largerthan</span><span class="o">=</span><span class="mi">1</span><span class="n">mb</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">annex</span><span class="o">.</span><span class="n">backend</span><span class="o">=</span><span class="n">SHA256E</span>
+<span class="o">**/.</span><span class="n">git</span><span class="o">*</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
 <span class="o">*.</span><span class="n">bval</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
 <span class="o">*.</span><span class="n">bvec</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
-<span class="o">*.</span><span class="n">json</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
-<span class="o">*.</span><span class="n">tsv</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="o">*.</span><span class="n">json</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">largerthan</span><span class="o">=</span><span class="mi">1</span><span class="n">mb</span>
+<span class="n">phenotype</span><span class="o">/*.</span><span class="n">tsv</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">anything</span>
+<span class="o">*.</span><span class="n">tsv</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">largerthan</span><span class="o">=</span><span class="mi">1</span><span class="n">mb</span>
+<span class="n">dataset_description</span><span class="o">.</span><span class="n">json</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
 <span class="o">.</span><span class="n">bidsignore</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
 <span class="n">CHANGES</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
-<span class="n">README</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="n">README</span><span class="o">*</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
+<span class="n">LICENSE</span> <span class="n">annex</span><span class="o">.</span><span class="n">largefiles</span><span class="o">=</span><span class="n">nothing</span>
 </pre></div>
 </div>
 </section>

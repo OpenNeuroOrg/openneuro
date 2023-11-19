@@ -18,14 +18,18 @@ OpenNeuro validates the size of regular git (non-annexed) files and a subset of 
 A recommended `.gitattributes` configuration for git-annex to automate annexing the correct files when using `git add` or `datalad save`
 
 ```
-* annex.largefiles=largerthan=1mb
+* annex.backend=SHA256E
+**/.git* annex.largefiles=nothing
 *.bval annex.largefiles=nothing
 *.bvec annex.largefiles=nothing
-*.json annex.largefiles=nothing
-*.tsv annex.largefiles=nothing
+*.json annex.largefiles=largerthan=1mb
+phenotype/*.tsv annex.largefiles=anything
+*.tsv annex.largefiles=largerthan=1mb
+dataset_description.json annex.largefiles=nothing
 .bidsignore annex.largefiles=nothing
 CHANGES annex.largefiles=nothing
-README annex.largefiles=nothing
+README* annex.largefiles=nothing
+LICENSE annex.largefiles=nothing
 ```
 
 ## Credential Helper
