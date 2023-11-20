@@ -1,3 +1,4 @@
+import { stat } from "fs/promises"
 import { createReadStream, createWriteStream } from "fs"
 import { once } from "events"
 import fetch, { Request } from "node-fetch"
@@ -32,9 +33,13 @@ export function keyRequest(state, key, options) {
  * @param {string} file File path
  */
 export async function storeKey(state, key, file) {
+  const fileStat = await stat(file)
   const body = createReadStream(file)
   const requestOptions = {
     method: "POST",
+    headers: {
+      "Content-Length": fileStat.size,
+    },
   }
   const request = keyRequest(state, key, requestOptions)
   const response = await fetch(request, { body })
