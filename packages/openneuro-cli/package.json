@@ -27,7 +27,7 @@
     "inquirer": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "mkdirp": "1.0.4",
-    "node-fetch": "2.6.9",
+    "node-fetch": "^3.3.2",
     "react": "^17.0.1"
   },
   "scripts": {
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@types/mkdirp": "1.0.2",
     "@types/node": "18.11.9",
+    "@types/node-fetch": "^2.6.9",
     "core-js": "^3.10.1",
     "metro-memory-fs": "^0.73.3",
     "vitest": "0.34.4"
