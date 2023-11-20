@@ -36,6 +36,7 @@ export { TextLineStream } from "https://deno.land/std@0.203.0/streams/mod.ts"
 // File handling
 export { walk } from "https://deno.land/std@0.203.0/fs/walk.ts"
 export { resolve } from "https://deno.land/std@0.203.0/path/resolve.ts"
+export { relative } from "https://deno.land/std@0.203.0/path/relative.ts"
 // Test suites
 export {
   assert,
@@ -46,3 +47,8 @@ export {
   returnsNext,
   stub,
 } from "https://deno.land/std@0.203.0/testing/mock.ts"
+// Uppy
+export {
+  Tus,
+  Uppy,
+} from "https://releases.transloadit.com/uppy/v3.18.1/uppy.min.mjs"

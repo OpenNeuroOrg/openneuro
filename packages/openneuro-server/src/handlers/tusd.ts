@@ -1,4 +1,3 @@
-import { decodeJWT } from "../libs/authentication/jwt"
 import { checkDatasetWrite } from "../graphql/permissions"
 // TODO - global.crypto.randomUUID exists on all platforms
 import { randomUUID } from "node:crypto"
@@ -7,7 +6,7 @@ export function acceptUpload(datasetId: string, uploaderId: string) {
   const uuid = randomUUID()
   return {
     "ChangeFileInfo": {
-      ID: `${datasetId}/${uuid}`,
+      ID: `${datasetId}-${uuid}`,
       MetaData: {
         datasetId,
         uploaderId,
@@ -30,21 +29,22 @@ export const rejectUpload = {
 
 export const tusdHandler = (req, res, next) => {
   try {
-    const token = req.params.token
-    const decodedToken = decodeJWT(token)
-    const userId = decodedToken?.sub
+    const userId = req.user.id
     const userInfo = {
-      id: decodedToken?.sub,
-      exp: decodedToken?.exp,
-      scopes: decodedToken?.scopes,
-      admin: decodedToken?.admin,
+      id: userId,
+      admin: req.user.admin,
     }
     if (req.body.Type === "pre-create") {
-      const datasetId = req.body.Event.MetaData.datasetId
-      if (checkDatasetWrite(datasetId, userId, userInfo)) {
-        res.json(acceptUpload(datasetId, userId))
-      } else {
-        res.json(rejectUpload)
+      try {
+        const datasetId = req.body.Event.Upload.MetaData.datasetId
+        if (checkDatasetWrite(datasetId, userId, userInfo)) {
+          res.json(acceptUpload(datasetId, userId))
+        } else {
+          res.json(rejectUpload)
+        }
+      } catch (_err) {
+        res.status(400)
+        res.send("`datasetId` MetaData parameter is required to upload")
       }
     }
   } catch (err) {

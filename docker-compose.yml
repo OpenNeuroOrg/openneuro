@@ -119,16 +119,17 @@ services:
   # Upload daemon
   tusd:
     image: docker.io/tusproject/tusd:v2.1.0
+    user: root
     command:
       [
-        'tusd',
-        '-hooks-http',
-        'http://server/api/tusd',
-        '-upload-dir',
-        '/datalad/datasets/tusd',
+        '--base-path=/tusd/files/',
+        '--hooks-http=http://server:8111/api/tusd',
+        '--behind-proxy',
+        '--hooks-http-forward-headers=authorization',
+        '--upload-dir=/datasets/tusd'
       ]
     volumes:
-    - ${PERSISTENT_DIR}/datalad:/datalad:z
+    - ${PERSISTENT_DIR}/datalad/tusd:/datasets/tusd:z
 
   # nginx + app
   web:
