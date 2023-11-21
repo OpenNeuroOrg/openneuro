@@ -15811,12 +15811,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:ffaff76449f02e83712a7d24e03c564489516739c78ebeffb0fbcdb3893ad9a0e48504f9acfa70fe6f16debe9c8dabde3679d63bf648278ea98a5ff38cf77a9e#npm:1.15.2", {\
-          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-c2d5794c26/0/cache/follow-redirects-npm-1.15.2-1ec1dd82be-faa66059b6.zip/node_modules/follow-redirects/",\
+        ["virtual:6f48908c3af8c754fea38f10057cfc0081ca24b9ec51933d35d3ad791bb3860f2b56d8b63b6851dbeaa8a9ef39ad5034c7710c92d6dad744acf332331717e74b#npm:1.15.3", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-12c73923b5/0/cache/follow-redirects-npm-1.15.3-ca69c47b72-584da22ec5.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
-            ["follow-redirects", "virtual:ffaff76449f02e83712a7d24e03c564489516739c78ebeffb0fbcdb3893ad9a0e48504f9acfa70fe6f16debe9c8dabde3679d63bf648278ea98a5ff38cf77a9e#npm:1.15.2"],\
+            ["follow-redirects", "virtual:6f48908c3af8c754fea38f10057cfc0081ca24b9ec51933d35d3ad791bb3860f2b56d8b63b6851dbeaa8a9ef39ad5034c7710c92d6dad744acf332331717e74b#npm:1.15.3"],\
             ["@types/debug", null],\
-            ["debug", null]\
+            ["debug", "virtual:58471071b1e0e7981e3318280660861b4dec874aaf0d60e144b70657cb5ce0af059ae16711a2af10f4d1ff0536527e350e6e47a8f79db2d8d37ff2ec84865bbc#npm:4.3.4"]\
           ],\
           "packagePeers": [\
             "@types/debug",\
@@ -15824,12 +15824,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["virtual:6f48908c3af8c754fea38f10057cfc0081ca24b9ec51933d35d3ad791bb3860f2b56d8b63b6851dbeaa8a9ef39ad5034c7710c92d6dad744acf332331717e74b#npm:1.15.3", {\
-          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-12c73923b5/0/cache/follow-redirects-npm-1.15.3-ca69c47b72-584da22ec5.zip/node_modules/follow-redirects/",\
+        ["virtual:ffaff76449f02e83712a7d24e03c564489516739c78ebeffb0fbcdb3893ad9a0e48504f9acfa70fe6f16debe9c8dabde3679d63bf648278ea98a5ff38cf77a9e#npm:1.15.2", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-c2d5794c26/0/cache/follow-redirects-npm-1.15.2-1ec1dd82be-faa66059b6.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
-            ["follow-redirects", "virtual:6f48908c3af8c754fea38f10057cfc0081ca24b9ec51933d35d3ad791bb3860f2b56d8b63b6851dbeaa8a9ef39ad5034c7710c92d6dad744acf332331717e74b#npm:1.15.3"],\
+            ["follow-redirects", "virtual:ffaff76449f02e83712a7d24e03c564489516739c78ebeffb0fbcdb3893ad9a0e48504f9acfa70fe6f16debe9c8dabde3679d63bf648278ea98a5ff38cf77a9e#npm:1.15.2"],\
             ["@types/debug", null],\
-            ["debug", "virtual:58471071b1e0e7981e3318280660861b4dec874aaf0d60e144b70657cb5ce0af059ae16711a2af10f4d1ff0536527e350e6e47a8f79db2d8d37ff2ec84865bbc#npm:4.3.4"]\
+            ["debug", null]\
           ],\
           "packagePeers": [\
             "@types/debug",\
