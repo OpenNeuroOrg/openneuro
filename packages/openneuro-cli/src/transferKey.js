@@ -13,13 +13,15 @@ import fetch, { Request } from "node-fetch"
  * @returns {Request} Configured fetch Request object
  */
 export function keyRequest(state, key, options) {
-  const headers = new Headers()
+  const headers = new Headers(
+    "headers" in options && options.headers || undefined,
+  )
   headers.set(
     "Authorization",
     "Basic " + Buffer.from(`openneuro-cli:${state.token}`).toString("base64"),
   )
   const requestUrl = `${state.url}/annex/${key}`
-  return new Request(requestUrl, { headers, ...options })
+  return new Request(requestUrl, { ...options, headers })
 }
 
 /**
