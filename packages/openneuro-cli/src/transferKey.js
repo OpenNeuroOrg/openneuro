@@ -32,11 +32,10 @@ export function keyRequest(state, key, options) {
 export async function storeKey(state, key, file) {
   const body = createReadStream(file)
   const requestOptions = {
-    body,
     method: "POST",
   }
   const request = keyRequest(state, key, requestOptions)
-  const response = await fetch(request)
+  const response = await fetch(request, { body })
   if (response.status === 200) {
     return true
   } else {
