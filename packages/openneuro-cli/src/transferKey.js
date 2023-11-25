@@ -1,3 +1,4 @@
+import { stat } from "fs/promises"
 import { createReadStream, createWriteStream } from "fs"
 import { once } from "events"
 import fetch, { Request } from "node-fetch"
@@ -12,13 +13,15 @@ import fetch, { Request } from "node-fetch"
  * @returns {Request} Configured fetch Request object
  */
 export function keyRequest(state, key, options) {
-  const headers = new Headers()
+  const headers = new Headers(
+    "headers" in options && options.headers || undefined,
+  )
   headers.set(
     "Authorization",
     "Basic " + Buffer.from(`openneuro-cli:${state.token}`).toString("base64"),
   )
   const requestUrl = `${state.url}/annex/${key}`
-  return new Request(requestUrl, { headers, ...options })
+  return new Request(requestUrl, { ...options, headers })
 }
 
 /**
@@ -30,13 +33,16 @@ export function keyRequest(state, key, options) {
  * @param {string} file File path
  */
 export async function storeKey(state, key, file) {
+  const fileStat = await stat(file)
   const body = createReadStream(file)
   const requestOptions = {
-    body,
     method: "POST",
+    headers: {
+      "Content-Length": fileStat.size,
+    },
   }
   const request = keyRequest(state, key, requestOptions)
-  const response = await fetch(request)
+  const response = await fetch(request, { body })
   if (response.status === 200) {
     return true
   } else {
@@ -58,9 +64,8 @@ export async function retrieveKey(state, key, file) {
     const response = await fetch(request)
     if (response.status === 200) {
       const writable = createWriteStream(file)
-      const readable = await response.readable()
-      readable.pipe(writable)
-      await once(readable, "close")
+      response.body.pipe(writable)
+      await once(response.body, "close")
       return true
     } else {
       return false
