@@ -1,12 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { render } from "@testing-library/react"
-import { useLocalStorage } from "../local-storage.tsx"
+import { LocalStorageProvider, useLocalStorage } from "../local-storage.tsx"
 
 const STORAGE_KEY = "tests"
 
-const TestComponent = ({ prop }) => {
-  const [value, setValue] = useLocalStorage(STORAGE_KEY, prop)
-  return value
+const TestComponent = () => {
+  const [value, setValue] = useLocalStorage(STORAGE_KEY)
+  useEffect(() => {
+    setValue("testing")
+  }, [value])
+  return null
 }
 
 describe("localStorage hooks", () => {
@@ -17,7 +20,13 @@ describe("localStorage hooks", () => {
     localStorage.clear()
   })
   it("sets and retrieves a value", () => {
-    render(<TestComponent prop="test-value" />)
-    expect(JSON.parse(localStorage.getItem(STORAGE_KEY))).toEqual("test-value")
+    render(
+      <LocalStorageProvider defaultValue={{}}>
+        <TestComponent />
+      </LocalStorageProvider>,
+    )
+    expect(JSON.parse(localStorage.getItem("openneuro")).tests).toEqual(
+      "testing",
+    )
   })
 })

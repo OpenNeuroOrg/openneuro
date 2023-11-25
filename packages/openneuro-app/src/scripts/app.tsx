@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { MediaContextProvider } from "./styles/media"
 import { Agreement } from "./components/agreement"
+import { LocalStorageProvider } from "./utils/local-storage"
 
 interface AppProps {
   children: ReactNode
@@ -20,17 +21,19 @@ const App: FC<AppProps> = ({
   children: ReactNode
 }) => {
   return (
-    <CookiesProvider cookies={cookies}>
-      <MediaContextProvider>
-        <Helmet>
-          <title>{frontPage.pageTitle}</title>
-          <meta name="description" content={frontPage.pageDescription} />
-        </Helmet>
-        {children}
-        <Agreement />
-        <ToastContainer position="bottom-right" />
-      </MediaContextProvider>
-    </CookiesProvider>
+    <LocalStorageProvider defaultValue={{ agreement: false }}>
+      <CookiesProvider cookies={cookies}>
+        <MediaContextProvider>
+          <Helmet>
+            <title>{frontPage.pageTitle}</title>
+            <meta name="description" content={frontPage.pageDescription} />
+          </Helmet>
+          {children}
+          <Agreement />
+          <ToastContainer position="bottom-right" />
+        </MediaContextProvider>
+      </CookiesProvider>
+    </LocalStorageProvider>
   )
 }
 

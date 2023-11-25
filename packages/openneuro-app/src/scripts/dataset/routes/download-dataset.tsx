@@ -14,7 +14,7 @@ import { STORAGE_KEY } from "../../components/agreement"
 
 const DownloadDataset = ({ worker, datasetPermissions }) => {
   const { datasetId, tag: snapshotTag } = useParams()
-  const [agreed, setAgreed] = useLocalStorage(STORAGE_KEY, false)
+  const [agreed] = useLocalStorage(STORAGE_KEY)
   // If the download page is directly visited without the agreement, return to the dataset page
   if (!agreed) {
     return <Navigate to={`/datasets/${datasetId}`} replace={true} />

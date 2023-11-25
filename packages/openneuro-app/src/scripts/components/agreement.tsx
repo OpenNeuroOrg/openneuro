@@ -2,7 +2,7 @@ import React from "react"
 import { useLocalStorage } from "../utils/local-storage"
 import styled from "@emotion/styled"
 
-export const STORAGE_KEY = "openneuro-terms"
+export const STORAGE_KEY = "agreement"
 
 const AgreementDiv = styled.div`
   overflow: hidden;
@@ -28,7 +28,7 @@ const AgreementButton = styled.div`
  * Floating agreement for data use that is only present if the user has not accepted this
  */
 export const Agreement = () => {
-  const [agreed, setAgreed] = useLocalStorage(STORAGE_KEY, false)
+  const [agreed, setAgreed] = useLocalStorage(STORAGE_KEY)
 
   if (agreed) {
     return null

@@ -1,4 +1,10 @@
-import { useEffect, useState } from "react"
+import React from "react"
+import { createContext, useContext, useEffect, useState } from "react"
+
+/** Shared context for all local storage updates */
+const LocalStorageContext = createContext()
+
+const LOCAL_STORAGE_KEY = "openneuro"
 
 function getStorageValue<T>(key: string, defaultValue: T): T {
   const saved = localStorage.getItem(key)
@@ -6,17 +12,42 @@ function getStorageValue<T>(key: string, defaultValue: T): T {
   else return defaultValue
 }
 
+/**
+ * Local storage hook that updates across components
+ * @param key Field name for localstorage object
+ */
 export function useLocalStorage<T>(
   key: string,
-  defaultValue: T,
 ): [T, (value: T) => void] {
-  const [value, setValue] = useState(() => {
-    return getStorageValue(key, defaultValue)
+  const {
+    localStorageValue,
+    setLocalStorageValue,
+  } = useContext(LocalStorageContext)
+  const setValue = (value: T) => {
+    const update = {}
+    update[key] = value
+    setLocalStorageValue(update)
+  }
+  return [localStorageValue[key], setValue]
+}
+
+export function LocalStorageProvider({ children, defaultValue }) {
+  const [localStorageValue, setLocalStorageValue] = useState(() => {
+    return getStorageValue(LOCAL_STORAGE_KEY, defaultValue)
   })
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value))
-  }, [key, value])
+    const val = localStorage.getItem(LOCAL_STORAGE_KEY)
+    const prev = val ? JSON.parse(val) : {}
+    const updateValue = { ...prev, ...defaultValue, ...localStorageValue }
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updateValue))
+  }, [localStorageValue])
 
-  return [value, setValue]
+  return (
+    <LocalStorageContext.Provider
+      value={{ localStorageValue, setLocalStorageValue }}
+    >
+      {children}
+    </LocalStorageContext.Provider>
+  )
 }
