@@ -2,7 +2,7 @@ import React from "react"
 import { useLocalStorage } from "../utils/local-storage"
 import styled from "@emotion/styled"
 
-const STORAGE_KEY = "openneuro-terms"
+export const STORAGE_KEY = "openneuro-terms"
 
 const AgreementDiv = styled.div`
   overflow: hidden;
