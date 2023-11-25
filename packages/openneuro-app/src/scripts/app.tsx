@@ -5,6 +5,7 @@ import { Cookies, CookiesProvider } from "react-cookie"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { MediaContextProvider } from "./styles/media"
+import { Agreement } from "./components/agreement"
 
 interface AppProps {
   children: ReactNode
@@ -26,6 +27,7 @@ const App: FC<AppProps> = ({
           <meta name="description" content={frontPage.pageDescription} />
         </Helmet>
         {children}
+        <Agreement />
         <ToastContainer position="bottom-right" />
       </MediaContextProvider>
     </CookiesProvider>
