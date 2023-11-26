@@ -19,16 +19,13 @@ function getStorageValue<T>(key: string, defaultValue: T): T {
 export function useLocalStorage<T>(
   key: string,
 ): [T, (value: T) => void] {
-  const {
-    localStorageValue,
-    setLocalStorageValue,
-  } = useContext(LocalStorageContext)
+  const context = useContext(LocalStorageContext)
   const setValue = (value: T) => {
     const update = {}
     update[key] = value
-    setLocalStorageValue(update)
+    context?.setLocalStorageValue(update)
   }
-  return [localStorageValue[key], setValue]
+  return [context?.localStorageValue[key], setValue]
 }
 
 export function LocalStorageProvider({ children, defaultValue }) {

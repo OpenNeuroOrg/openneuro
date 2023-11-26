@@ -56,6 +56,7 @@ export const Agreement = () => {
               <AgreementButton
                 className="on-button on-button--small on-button--primary"
                 onClick={() => setAgreed(true)}
+                role="button"
               >
                 I Agree
               </AgreementButton>

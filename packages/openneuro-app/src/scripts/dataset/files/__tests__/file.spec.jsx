@@ -1,13 +1,22 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
+import { LocalStorageProvider } from "../../../utils/local-storage.tsx"
 import File from "../file"
+
+const wrapper = ({ children }) => (
+  <MemoryRouter>
+    <LocalStorageProvider defaultValue={{ agreement: true }}>
+      {children}
+    </LocalStorageProvider>
+  </MemoryRouter>
+)
 
 describe("File component", () => {
   it("renders with common props", () => {
     const { asFragment } = render(
       <File datasetId="ds001" path="" filename="README" size={500} />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(asFragment()).toMatchSnapshot()
   })
@@ -20,13 +29,13 @@ describe("File component", () => {
         filename="README"
         size={500}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(asFragment()).toMatchSnapshot()
   })
   it("generates correct download links for top level files", () => {
     render(<File datasetId="ds001" path="" filename="README" size={500} />, {
-      wrapper: MemoryRouter,
+      wrapper,
     })
     expect(screen.getByRole("link", { name: "download file" })).toHaveAttribute(
       "href",
@@ -41,7 +50,7 @@ describe("File component", () => {
         filename="sub-01_T1w.nii.gz"
         size={2000000}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.getByRole("link", { name: "download file" })).toHaveAttribute(
       "href",
