@@ -1,0 +1,29 @@
+@import '../variables.scss';
+
+.dropdown-wrapper {
+  display: inline-block;
+  .toggle {
+    cursor: pointer;
+  }
+  .menu {
+    position: absolute;
+    overflow: hidden;
+    height: 0;
+    z-index: 9999;
+    right: 0;
+    background-color: #fff;
+    border-radius: $border-radius-default;
+    @media (max-width: 800px) {
+      width: 290px;
+      right: 0;
+    }
+    @media (max-width: 435px) {
+      right: 0;
+      left: 0;
+    }
+
+    &.expanded {
+      height: auto;
+    }
+  }
+}

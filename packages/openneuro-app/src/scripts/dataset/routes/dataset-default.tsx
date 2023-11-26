@@ -1,7 +1,7 @@
 import React from "react"
 import Markdown from "markdown-to-jsx"
 import { ReadMore } from "@openneuro/components/read-more"
-import { MetaDataBlock } from "@openneuro/components/dataset"
+import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"
 import Comments from "../comments/comments"
 import EditDescriptionField from "../fragments/edit-description-field"

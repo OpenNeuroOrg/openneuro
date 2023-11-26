@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { DatasetAlert } from "@openneuro/components/dataset"
+import { DatasetAlert } from "../components/DatasetAlert"
 
 export interface DatasetAlertDraftProps {
   isPrivate: boolean

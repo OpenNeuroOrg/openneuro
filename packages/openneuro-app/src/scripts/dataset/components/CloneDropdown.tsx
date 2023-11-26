@@ -1,6 +1,6 @@
 import React from "react"
-import { Dropdown } from "../dropdown/Dropdown"
-import { Button } from "../button/Button"
+import { Dropdown } from "@openneuro/components/dropdown"
+import { Button } from "@openneuro/components/button"
 
 export interface CloneDropdownProps {
   gitAccess: React.ReactNode

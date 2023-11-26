@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { MediaContextProvider } from "./styles/media"
 import { Agreement } from "./components/agreement"
 import { LocalStorageProvider } from "./utils/local-storage"
+import "./scss/index.scss"
 
 interface AppProps {
   children: ReactNode
