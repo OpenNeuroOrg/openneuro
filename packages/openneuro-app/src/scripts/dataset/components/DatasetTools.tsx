@@ -1,7 +1,7 @@
 import React from "react"
 import { DatasetToolButton } from "./DatasetToolButton"
 import styled, { StyledComponent } from "@emotion/styled"
-import { useAgreement } from "../../components/agreement.tsx"
+import { useAgreement } from "../../components/agreement"
 
 interface DatasetToolStyleProps {}
 

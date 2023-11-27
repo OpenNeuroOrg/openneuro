@@ -2,7 +2,10 @@ import React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 
 /** Shared context for all local storage updates */
-const LocalStorageContext = createContext()
+const LocalStorageContext = createContext({
+  localStorageValue: { agreement: false },
+  setLocalStorageValue: undefined,
+})
 
 const LOCAL_STORAGE_KEY = "openneuro"
 

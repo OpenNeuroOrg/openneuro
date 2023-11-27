@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { render } from "@testing-library/react"
-import { LocalStorageProvider, useLocalStorage } from "../local-storage.tsx"
+import { LocalStorageProvider, useLocalStorage } from "../local-storage"
 
 const STORAGE_KEY = "tests"
 
