@@ -9,12 +9,11 @@ import DownloadDatalad from "../download/download-datalad.jsx"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3 } from "./styles/header-row"
 import { DownloadScript } from "../download/download-script"
-import { useLocalStorage } from "../../utils/local-storage"
-import { STORAGE_KEY } from "../../components/agreement"
+import { useAgreement } from "../../components/agreement"
 
 const DownloadDataset = ({ worker, datasetPermissions }) => {
   const { datasetId, tag: snapshotTag } = useParams()
-  const [agreed] = useLocalStorage(STORAGE_KEY)
+  const [agreed] = useAgreement()
   // If the download page is directly visited without the agreement, return to the dataset page
   if (!agreed) {
     return <Navigate to={`/datasets/${datasetId}`} replace={true} />

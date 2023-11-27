@@ -11,8 +11,7 @@ import { getProfile, hasEditPermissions } from "../../authentication/profile"
 import { Icon } from "@openneuro/components/icon"
 import { Tooltip } from "@openneuro/components/tooltip"
 import { useCookies } from "react-cookie"
-import { useLocalStorage } from "../../utils/local-storage"
-import { STORAGE_KEY } from "../../components/agreement"
+import { useAgreement } from "../../components/agreement"
 
 const filePath = (path, filename) => `${(path && path + ":") || ""}${filename}`
 
@@ -132,7 +131,7 @@ const File = ({
         filename,
       )
     }`
-  const [agreed, setAgreed] = useLocalStorage(STORAGE_KEY)
+  const [agreed] = useAgreement()
   const [cookies] = useCookies()
   const user = getProfile(cookies)
   return (

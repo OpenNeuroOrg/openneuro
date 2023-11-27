@@ -25,10 +25,17 @@ const AgreementButton = styled.div`
 `
 
 /**
+ * Hook to use the download agreement state from localStorage
+ */
+export function useAgreement() {
+  return useLocalStorage(STORAGE_KEY)
+}
+
+/**
  * Floating agreement for data use that is only present if the user has not accepted this
  */
 export const Agreement = () => {
-  const [agreed, setAgreed] = useLocalStorage(STORAGE_KEY)
+  const [agreed, setAgreed] = useAgreement()
 
   if (agreed) {
     return null
