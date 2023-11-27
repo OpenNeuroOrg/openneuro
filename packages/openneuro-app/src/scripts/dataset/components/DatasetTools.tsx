@@ -1,6 +1,7 @@
 import React from "react"
 import { DatasetToolButton } from "./DatasetToolButton"
 import styled, { StyledComponent } from "@emotion/styled"
+import { useAgreement } from "../../components/agreement.tsx"
 
 interface DatasetToolStyleProps {}
 
@@ -32,6 +33,7 @@ export const DatasetTools = ({
   isDatasetAdmin,
   hasDerivatives,
 }: DatasetToolsProps) => {
+  const [agree] = useAgreement()
   const isSnapshot = snapshotId
   return (
     <DatasetToolStyle>
@@ -96,14 +98,16 @@ export const DatasetTools = ({
           label="Admin"
         />
       )}
-      <DatasetToolButton
-        tooltip="How to Download"
-        path={snapshotId
-          ? `/datasets/${datasetId}/versions/${snapshotId}/download`
-          : `/datasets/${datasetId}/download`}
-        icon="fa-download"
-        label="Download"
-      />
+      {agree && (
+        <DatasetToolButton
+          tooltip="How to Download"
+          path={snapshotId
+            ? `/datasets/${datasetId}/versions/${snapshotId}/download`
+            : `/datasets/${datasetId}/download`}
+          icon="fa-download"
+          label="Download"
+        />
+      )}
       {hasDerivatives && (
         <DatasetToolButton
           tooltip="Available Derivatives"
