@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/app",
-  "version": "4.21.0-alpha.2",
+  "version": "4.21.0-alpha.3",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "public/client.js",
@@ -20,8 +20,8 @@
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@niivue/niivue": "0.34.0",
-    "@openneuro/client": "^4.21.0-alpha.2",
-    "@openneuro/components": "^4.21.0-alpha.2",
+    "@openneuro/client": "^4.21.0-alpha.3",
+    "@openneuro/components": "^4.21.0-alpha.3",
     "@tanstack/react-table": "^8.9.3",
     "bids-validator": "1.13.0",
     "bytes": "^3.0.0",
@@ -70,5 +70,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "fc6317d28f5ccb4e61d41d032640efc59607e7fe"
+  "gitHead": "199d3ef81e7217a583f3417a49188f8fe141d7d9"
 }
