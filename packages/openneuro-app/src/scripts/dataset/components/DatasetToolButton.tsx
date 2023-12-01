@@ -4,9 +4,11 @@ import { Link } from "react-router-dom"
 import { Tooltip } from "@openneuro/components/tooltip"
 import { Icon } from "@openneuro/components/icon"
 import { useLocation } from "react-router-dom"
+import { string } from "https://deno.land/x/cliffy@v0.25.7/flags/types/string.ts"
 
 interface DatasetToolStyleProps {
   active: boolean
+  disable: boolean
 }
 
 export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
@@ -18,7 +20,10 @@ export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
   padding: 0 15px;
   justify-content: center;
   a {
-    color: var(--current-theme-primary);
+    pointer-events: ${props.disable ? "none" : "auto"};
+    color: ${
+      props.disable ? "rgba(0, 0, 0, 0.5);" : "var(--current-theme-primary);"
+    }
     font-size: 17px;
     text-decoration: none;
     font-weight: 400;
@@ -38,10 +43,20 @@ export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
 `,
   )
 
-export const DatasetToolButton = ({ path, icon, tooltip, label }) => {
+interface DatasetToolButtonProps {
+  path: string
+  label: string
+  tooltip: string
+  icon: string
+  disable?: boolean
+}
+
+export const DatasetToolButton = (
+  { path, icon, tooltip, label, disable = false }: DatasetToolButtonProps,
+) => {
   const location = useLocation()
   return (
-    <DatasetToolStyle active={location.pathname == path}>
+    <DatasetToolStyle active={location.pathname == path} disable={disable}>
       <Tooltip tooltip={tooltip} flow="up">
         <Link to={path}>
           <Icon icon={`fa ${icon}`} label={label} />
