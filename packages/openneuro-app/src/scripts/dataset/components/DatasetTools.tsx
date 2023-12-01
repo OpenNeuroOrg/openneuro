@@ -98,16 +98,15 @@ export const DatasetTools = ({
           label="Admin"
         />
       )}
-      {agree && (
-        <DatasetToolButton
-          tooltip="How to Download"
-          path={snapshotId
-            ? `/datasets/${datasetId}/versions/${snapshotId}/download`
-            : `/datasets/${datasetId}/download`}
-          icon="fa-download"
-          label="Download"
-        />
-      )}
+      <DatasetToolButton
+        tooltip="How to Download"
+        path={snapshotId
+          ? `/datasets/${datasetId}/versions/${snapshotId}/download`
+          : `/datasets/${datasetId}/download`}
+        icon="fa-download"
+        label="Download"
+        disable={!agree}
+      />
       {hasDerivatives && (
         <DatasetToolButton
           tooltip="Available Derivatives"

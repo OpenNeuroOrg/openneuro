@@ -408,7 +408,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
               class="css-1dvuowd"
             >
               <span
-                class="css-1an2ojl"
+                class="css-1mdlu11"
               >
                 <span
                   class=" "
@@ -432,7 +432,31 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 </span>
               </span>
               <span
-                class="css-1an2ojl"
+                class="css-aokf2s"
+              >
+                <span
+                  class=" "
+                  data-flow="up"
+                  data-tooltip="How to Download"
+                >
+                  <a
+                    href="/datasets/ds001032/versions/1.0.0/download"
+                  >
+                    <span
+                      aria-label="Download"
+                      class=" on-icon icon-text "
+                      role="img"
+                    >
+                      <i
+                        class="fa fa-download"
+                      />
+                      Download
+                    </span>
+                  </a>
+                </span>
+              </span>
+              <span
+                class="css-1mdlu11"
               >
                 <span
                   class=" "
