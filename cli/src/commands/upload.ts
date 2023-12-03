@@ -1,5 +1,4 @@
-import { XMLHttpRequest } from "https://deno.land/x/xhr@0.3.1/mod.ts"
-globalThis.XMLHttpRequest = XMLHttpRequest
+import { FetchHttpStack } from "../fetchHttpStack.ts"
 import { validateCommand } from "./validate.ts"
 import { ClientConfig, getConfig } from "./login.ts"
 import { logger } from "../logger.ts"
@@ -47,12 +46,11 @@ export async function uploadAction(
     // TODO Create dataset here
     datasetId = "ds001001"
   }
-  console.log(Object.keys(localStorage))
   // Setup upload
   const uppy = new Uppy({
     id: "@openneuro/cli",
     autoProceed: true,
-    debug: true,
+    debug: false,
   }).use(Tus, {
     endpoint: "http://localhost:9876/tusd/files/",
     chunkSize: 64000000, // ~64MB
@@ -60,12 +58,8 @@ export async function uploadAction(
     headers: {
       Authorization: `Bearer ${clientConfig.token}`,
     },
+    httpStack: new FetchHttpStack(),
   })
-
-  /** TODO - Remove this. */
-  Object.keys(localStorage)
-    .filter((x) => x.startsWith("tus"))
-    .forEach((x) => localStorage.removeItem(x))
 
   // Upload all files
   for await (
@@ -79,7 +73,7 @@ export async function uploadAction(
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
     const uppyFile = {
       name: walkEntry.name,
-      data: file,
+      data: file.readable.getReader(),
       meta: {
         datasetId,
         relativePath,
