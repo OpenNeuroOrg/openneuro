@@ -1,12 +1,13 @@
 import { checkDatasetWrite } from "../graphql/permissions"
-// TODO - global.crypto.randomUUID exists on all platforms
-import { randomUUID } from "node:crypto"
 
-export function acceptUpload(datasetId: string, uploaderId: string) {
-  const uuid = randomUUID()
+export function acceptUpload(
+  datasetId: string,
+  uploaderId: string,
+  path: string,
+) {
   return {
     "ChangeFileInfo": {
-      ID: `${datasetId}-${uuid}`,
+      ID: `${datasetId}:${uploaderId}:${path.replaceAll("/", ":")}`,
       MetaData: {
         datasetId,
         uploaderId,
@@ -38,7 +39,8 @@ export const tusdHandler = (req, res, next) => {
       try {
         const datasetId = req.body.Event.Upload.MetaData.datasetId
         if (checkDatasetWrite(datasetId, userId, userInfo)) {
-          res.json(acceptUpload(datasetId, userId))
+          const path = req.body.Event.Upload.MetaData.relativePath
+          res.json(acceptUpload(datasetId, userId, path))
         } else {
           res.json(rejectUpload)
         }
