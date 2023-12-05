@@ -11,6 +11,7 @@ import { getProfile, hasEditPermissions } from "../../authentication/profile"
 import { Icon } from "@openneuro/components/icon"
 import { Tooltip } from "@openneuro/components/tooltip"
 import { useCookies } from "react-cookie"
+import { useAgreement } from "../../components/agreement"
 
 const filePath = (path, filename) => `${(path && path + ":") || ""}${filename}`
 
@@ -130,6 +131,7 @@ const File = ({
         filename,
       )
     }`
+  const [agreed] = useAgreement()
   const [cookies] = useCookies()
   const user = getProfile(cookies)
   return (
@@ -138,29 +140,33 @@ const File = ({
       &nbsp;&nbsp;
       {filename}
       <span className="filetree-editfile">
-        <Media greaterThanOrEqual="medium">
-          <Tooltip
-            tooltip={`Download: ${bytes.format(Number(size)) as string}`}
-          >
-            <span className="edit-file download-file">
-              <a
-                href={urls?.[0] ||
-                  apiPath(datasetId, snapshotTag, filePath(path, filename))}
-                download
-                aria-label="download file"
-              >
-                <i className="fa fa-download" />
-              </a>
+        {agreed && (
+          <Media greaterThanOrEqual="medium">
+            <Tooltip
+              tooltip={`Download: ${bytes.format(Number(size)) as string}`}
+            >
+              <span className="edit-file download-file">
+                <a
+                  href={urls?.[0] ||
+                    apiPath(datasetId, snapshotTag, filePath(path, filename))}
+                  download
+                  aria-label="download file"
+                >
+                  <i className="fa fa-download" />
+                </a>
+              </span>
+            </Tooltip>
+          </Media>
+        )}
+        {agreed && (
+          <Tooltip tooltip="View">
+            <span className="edit-file view-file">
+              <Link to={viewerPath} aria-label="view file">
+                <i className="fa fa-eye" />
+              </Link>
             </span>
           </Tooltip>
-        </Media>
-        <Tooltip tooltip="View">
-          <span className="edit-file view-file">
-            <Link to={viewerPath} aria-label="view file">
-              <i className="fa fa-eye" />
-            </Link>
-          </span>
-        </Tooltip>
+        )}
         {editMode && (
           <Media greaterThanOrEqual="medium">
             <Tooltip tooltip="Update">

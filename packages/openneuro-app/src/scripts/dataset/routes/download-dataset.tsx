@@ -1,7 +1,7 @@
 /* global globalThis */
 import React from "react"
 import PropTypes from "prop-types"
-import { useParams } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import DownloadLink from "../download/download-link.jsx"
 import DownloadS3 from "../download/download-s3.jsx"
 import DownloadCommandLine from "../download/download-command-line.jsx"
@@ -9,9 +9,15 @@ import DownloadDatalad from "../download/download-datalad.jsx"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3 } from "./styles/header-row"
 import { DownloadScript } from "../download/download-script"
+import { useAgreement } from "../../components/agreement"
 
 const DownloadDataset = ({ worker, datasetPermissions }) => {
   const { datasetId, tag: snapshotTag } = useParams()
+  const [agreed] = useAgreement()
+  // If the download page is directly visited without the agreement, return to the dataset page
+  if (!agreed) {
+    return <Navigate to={`/datasets/${datasetId}`} replace={true} />
+  }
   const workerId = worker?.split("-").pop()
   return (
     <DatasetPageBorder>

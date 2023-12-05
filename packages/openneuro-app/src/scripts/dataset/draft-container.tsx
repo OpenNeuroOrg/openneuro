@@ -17,17 +17,15 @@ import {
 } from "../authentication/profile"
 import { useCookies } from "react-cookie"
 import { DatasetAlertDraft } from "./fragments/dataset-alert-draft"
-import {
-  BrainLifeButton,
-  CloneDropdown,
-  DatasetGitAccess,
-  DatasetHeader,
-  DatasetTools,
-  MetaDataBlock,
-  ModalitiesMetaDataBlock,
-  ValidationBlock,
-  VersionList,
-} from "@openneuro/components/dataset"
+import { BrainLifeButton } from "./components/BrainLifeButton"
+import { CloneDropdown } from "./components/CloneDropdown"
+import { DatasetGitAccess } from "./components/DatasetGitAccess"
+import { DatasetHeader } from "./components/DatasetHeader"
+import { DatasetTools } from "./components/DatasetTools"
+import { MetaDataBlock } from "./components/MetaDataBlock"
+import { ModalitiesMetaDataBlock } from "./components/ModalitiesMetaDataBlock"
+import { ValidationBlock } from "./components/ValidationBlock"
+import { VersionList } from "./components/VersionList"
 import { Username } from "../users/username"
 
 import { FollowDataset } from "./mutations/follow"

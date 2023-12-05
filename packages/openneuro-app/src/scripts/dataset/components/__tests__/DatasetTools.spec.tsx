@@ -2,6 +2,15 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { DatasetTools } from "../DatasetTools"
+import { LocalStorageProvider } from "../../../utils/local-storage"
+
+const wrapper = ({ children }) => (
+  <MemoryRouter>
+    <LocalStorageProvider defaultValue={{ agreement: true }}>
+      {children}
+    </LocalStorageProvider>
+  </MemoryRouter>
+)
 
 describe("DatasetTools component", () => {
   it("provides expected tools for a draft (admin)", () => {
@@ -14,7 +23,7 @@ describe("DatasetTools component", () => {
         hasSnapshot={true}
         isDatasetAdmin={true}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.queryByLabelText("Files")).toBeInTheDocument()
     expect(screen.queryByLabelText("Share")).toBeInTheDocument()
@@ -36,7 +45,7 @@ describe("DatasetTools component", () => {
         hasSnapshot={true}
         isDatasetAdmin={true}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.queryByLabelText("Files")).toBeInTheDocument()
     expect(screen.queryByLabelText("View Draft")).toBeInTheDocument()
@@ -55,7 +64,7 @@ describe("DatasetTools component", () => {
         hasSnapshot={true}
         isDatasetAdmin={false}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.queryByLabelText("Files")).toBeInTheDocument()
     expect(screen.queryByLabelText("View Draft")).not.toBeInTheDocument()
@@ -75,7 +84,7 @@ describe("DatasetTools component", () => {
         hasSnapshot={true}
         isDatasetAdmin={false}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.queryByLabelText("Files")).toBeInTheDocument()
     expect(screen.queryByLabelText("View Draft")).not.toBeInTheDocument()
@@ -94,7 +103,7 @@ describe("DatasetTools component", () => {
         hasSnapshot={true}
         isDatasetAdmin={false}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.queryByLabelText("Download")).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "Download" })).toHaveAttribute(
@@ -113,7 +122,7 @@ describe("DatasetTools component", () => {
         hasSnapshot={true}
         isDatasetAdmin={false}
       />,
-      { wrapper: MemoryRouter },
+      { wrapper },
     )
     expect(screen.queryByLabelText("Download")).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "Download" })).toHaveAttribute(

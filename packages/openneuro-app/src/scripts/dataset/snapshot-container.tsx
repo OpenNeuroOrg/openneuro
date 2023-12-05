@@ -13,18 +13,16 @@ import { config } from "../config"
 import DatasetCitation from "./fragments/dataset-citation.jsx"
 import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
 
-import {
-  BrainLifeButton,
-  CloneDropdown,
-  DatasetGitAccess,
-  DatasetHeader,
-  DatasetTools,
-  MetaDataBlock,
-  ModalitiesMetaDataBlock,
-  NemarButton,
-  ValidationBlock,
-  VersionList,
-} from "@openneuro/components/dataset"
+import { BrainLifeButton } from "./components/BrainLifeButton"
+import { CloneDropdown } from "./components/CloneDropdown"
+import { DatasetGitAccess } from "./components/DatasetGitAccess"
+import { DatasetHeader } from "./components/DatasetHeader"
+import { DatasetTools } from "./components/DatasetTools"
+import { MetaDataBlock } from "./components/MetaDataBlock"
+import { ModalitiesMetaDataBlock } from "./components/ModalitiesMetaDataBlock"
+import { ValidationBlock } from "./components/ValidationBlock"
+import { VersionList } from "./components/VersionList"
+import { NemarButton } from "./components/NemarButton"
 import { Username } from "../users/username"
 import { Loading } from "@openneuro/components/loading"
 

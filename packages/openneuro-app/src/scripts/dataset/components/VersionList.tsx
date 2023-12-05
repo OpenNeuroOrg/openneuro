@@ -1,8 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Dropdown } from "../dropdown/Dropdown"
-import "../dropdown/dropdown.scss"
-import "./version-dropdown.scss"
+import { Dropdown } from "@openneuro/components/dropdown"
 
 export interface VersionListProps {
   items: {

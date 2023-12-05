@@ -1,6 +1,6 @@
 import React from "react"
-import { Tooltip } from "../tooltip/Tooltip"
-import { Button } from "../button/Button"
+import { Tooltip } from "@openneuro/components/tooltip"
+import { Button } from "@openneuro/components/button"
 
 export interface NemarButtonProps {
   datasetId: string

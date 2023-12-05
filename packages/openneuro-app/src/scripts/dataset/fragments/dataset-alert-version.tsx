@@ -1,5 +1,5 @@
 import React from "react"
-import { DatasetAlert } from "@openneuro/components/dataset"
+import { DatasetAlert } from "../components/DatasetAlert"
 import { UndoDeprecateVersion } from "../mutations/undo-deprecate-version"
 
 export interface DatasetAlertVersionProps {
