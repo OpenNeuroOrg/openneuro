@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 import { Tooltip } from "@openneuro/components/tooltip"
 import { Icon } from "@openneuro/components/icon"
 import { useLocation } from "react-router-dom"
-import { string } from "https://deno.land/x/cliffy@v0.25.7/flags/types/string.ts"
 
 interface DatasetToolStyleProps {
   active: boolean

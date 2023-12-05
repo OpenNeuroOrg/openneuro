@@ -45,19 +45,14 @@ export const Agreement = () => {
         <div className="container">
           <div className="grid grid-between">
             <div className="col col-lg col-11">
-              The agreement text goes here. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Vivamus a condimentum nibh.
-              Pellentesque aliquet volutpat odio sit amet imperdiet. Praesent
-              erat lorem, varius in libero sit amet, pulvinar placerat enim. Sed
-              lacus nibh, dapibus vitae fermentum sit amet, volutpat at purus.
-              Cras accumsan, massa vitae sagittis cursus, magna lorem finibus
-              orci, sit amet sollicitudin arcu turpis quis mi. Aenean vel
-              feugiat arcu. Morbi congue nulla quam, eu hendrerit metus viverra
-              vel. Vestibulum non urna dignissim, tincidunt enim sit amet,
-              molestie nisi. Pellentesque sed lacus eu quam ultricies ultricies
-              at eu sem. Suspendisse sed eleifend lorem, vel fermentum odio.
-              Vivamus nunc lorem, ultricies vel tellus eget, molestie tristique
-              metus.
+              By clicking "I Agree", I affirm that I have the appropriate
+              institutional permissions to receive de-identified data for
+              secondary data analysis, and that neither I nor my collaborators
+              will attempt to reidentify individuals whose data are contained in
+              downloads from OpenNeuro. Further, if for any reason the identity
+              of participants contained in downloads from OpenNeuro become known
+              to me I will make no effort to recontact such participants and
+              will provide immediate notice to OpenNeuro staff.
             </div>
             <div className="col col-lg col-1">
               <AgreementButton
@@ -65,7 +60,7 @@ export const Agreement = () => {
                 onClick={() => setAgreed(true)}
                 role="button"
               >
-                I Agree
+                I&nbsp;Agree
               </AgreementButton>
             </div>
           </div>
