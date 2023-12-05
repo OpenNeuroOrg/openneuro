@@ -10,6 +10,7 @@ coverage = "*"
 mock = "*"
 pytest-cov = "*"
 pytest-xdist = "*"
+exceptiongroup = "*"
 
 [packages]
 dnspython = "*"
