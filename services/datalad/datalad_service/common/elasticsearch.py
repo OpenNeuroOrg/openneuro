@@ -5,7 +5,7 @@ from datalad_service.config import ELASTICSEARCH_CONNECTION
 
 class ValidationLogger:
     def __init__(self, dataset_id, user):
-        self.es = Elasticsearch([ELASTICSEARCH_CONNECTION])
+        self.es = Elasticsearch([ELASTICSEARCH_CONNECTION + ':9200'])
         self.dataset_id = dataset_id
         self.user = user
 
