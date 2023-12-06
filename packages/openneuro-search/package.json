@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/search",
-  "version": "4.21.0-alpha.7",
+  "version": "4.21.0-alpha.8",
   "description": "OpenNeuro search client functions.",
   "main": "dist/index.js",
   "browser": "src/index.ts",
@@ -29,5 +29,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "ce9fb08550a08bfbdb63c9f658c7caefe874cb29"
+  "gitHead": "eb54a256165f859aea99925587757a60477ce0ff"
 }

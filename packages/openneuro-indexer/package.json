@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/indexer",
-  "version": "4.21.0-alpha.7",
+  "version": "4.21.0-alpha.8",
   "description": "OpenNeuro elastic search indexing tool",
   "main": "./dist/index.js",
   "types": "./src/index.d.ts",
@@ -11,8 +11,8 @@
   "dependencies": {
     "@apollo/client": "3.7.2",
     "@elastic/elasticsearch": "^8.10.0",
-    "@openneuro/client": "^4.21.0-alpha.7",
-    "@openneuro/search": "^4.21.0-alpha.7",
+    "@openneuro/client": "^4.21.0-alpha.8",
+    "@openneuro/search": "^4.21.0-alpha.8",
     "graphql": "16.8.1",
     "ts-node": "^9.1.1",
     "typescript": "5.1.6"
@@ -34,5 +34,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "ce9fb08550a08bfbdb63c9f658c7caefe874cb29"
+  "gitHead": "eb54a256165f859aea99925587757a60477ce0ff"
 }
