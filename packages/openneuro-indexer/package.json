@@ -10,7 +10,7 @@
   "bin": "./src/index.ts",
   "dependencies": {
     "@apollo/client": "3.7.2",
-    "@elastic/elasticsearch": "^8.10.0",
+    "@elastic/elasticsearch": "7.15.0",
     "@openneuro/client": "^4.21.0-alpha.8",
     "@openneuro/search": "^4.21.0-alpha.8",
     "graphql": "16.8.1",
