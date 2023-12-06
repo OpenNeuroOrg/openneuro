@@ -102,10 +102,8 @@ export const datasetSearchConnection = async (
     index: elasticIndex,
     size: first,
     q: `${q} AND public:true`,
-    // @ts-expect-error Limitations of TypeScript definitions from @elastic/elasticsearch client
     body: requestBody,
   })
-  // @ts-expect-error Limitations of TypeScript definitions from @elastic/elasticsearch client
   return elasticRelayConnection(result, searchId, first)
 }
 
@@ -243,11 +241,9 @@ export const advancedDatasetSearchConnection = async (
   const result = await elasticClient.search({
     index: elasticIndex,
     size: first,
-    // @ts-expect-error Limitations of TypeScript definitions from @elastic/elasticsearch client
     body: requestBody,
   })
   return elasticRelayConnection(
-    // @ts-expect-error Limitations of TypeScript definitions from @elastic/elasticsearch client
     result,
     searchId,
     first,
