@@ -29,7 +29,7 @@ apiReplicas: 2
 webReplicas: 2
 
 # Elastic APM path
-apmServerUrl: https://b33224e4ded44efabb74f65de2f84f2e.apm.us-east-1.aws.found.io
+apmServerUrl: https://openneuro-staging.apm.us-west-2.aws.found.io
 
 # API resource configuration
 apiCpuRequests: 0.5
