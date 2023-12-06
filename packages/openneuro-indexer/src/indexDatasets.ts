@@ -1,8 +1,4 @@
-import {
-  // Interface of the generic API response
-  ApiResponse,
-  Client as ElasticClient,
-} from "@elastic/elasticsearch"
+import { Client as ElasticClient } from "@elastic/elasticsearch"
 import {
   DatasetQueryResult,
   DatasetsIndex,
@@ -14,7 +10,7 @@ import {
  */
 export const aliasDatasetsIndex = (
   elasticClient: ElasticClient,
-): Promise<ApiResponse> =>
+) =>
   elasticClient.indices.updateAliases({
     body: {
       actions: [{ add: { index: DatasetsIndex.name, alias: "datasets" } }],
