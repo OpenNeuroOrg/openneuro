@@ -3801,14 +3801,27 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@elastic/elasticsearch", [\
-        ["npm:7.15.0", {\
-          "packageLocation": "./.yarn/cache/@elastic-elasticsearch-npm-7.15.0-081267f0f5-e23a33469c.zip/node_modules/@elastic/elasticsearch/",\
+        ["npm:8.10.0", {\
+          "packageLocation": "./.yarn/cache/@elastic-elasticsearch-npm-8.10.0-1823c2212d-b980c2634b.zip/node_modules/@elastic/elasticsearch/",\
           "packageDependencies": [\
-            ["@elastic/elasticsearch", "npm:7.15.0"],\
-            ["debug", "virtual:428f325a939c2653ad822eb3d75efb02ac311523dd0d4f9645afc39ea00bd86eceac35a9d59c9b6977d76b670a4ef0ae057ea572338a44729aa592711a8c05a3#npm:4.3.2"],\
-            ["hpagent", "npm:0.1.2"],\
+            ["@elastic/elasticsearch", "npm:8.10.0"],\
+            ["@elastic/transport", "npm:8.3.4"],\
+            ["tslib", "npm:2.6.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@elastic/transport", [\
+        ["npm:8.3.4", {\
+          "packageLocation": "./.yarn/cache/@elastic-transport-npm-8.3.4-feabecce11-a5df199a46.zip/node_modules/@elastic/transport/",\
+          "packageDependencies": [\
+            ["@elastic/transport", "npm:8.3.4"],\
+            ["debug", "virtual:58471071b1e0e7981e3318280660861b4dec874aaf0d60e144b70657cb5ce0af059ae16711a2af10f4d1ff0536527e350e6e47a8f79db2d8d37ff2ec84865bbc#npm:4.3.4"],\
+            ["hpagent", "npm:1.2.0"],\
             ["ms", "npm:2.1.3"],\
-            ["secure-json-parse", "npm:2.4.0"]\
+            ["secure-json-parse", "npm:2.4.0"],\
+            ["tslib", "npm:2.6.1"],\
+            ["undici", "npm:5.28.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4307,6 +4320,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tar", "npm:4.4.19"],\
             ["unique-filename", "npm:1.1.1"],\
             ["which", "npm:1.3.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@fastify/busboy", [\
+        ["npm:2.1.0", {\
+          "packageLocation": "./.yarn/cache/@fastify-busboy-npm-2.1.0-960844a007-3233abd10f.zip/node_modules/@fastify/busboy/",\
+          "packageDependencies": [\
+            ["@fastify/busboy", "npm:2.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6859,7 +6881,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@openneuro/indexer", "workspace:packages/openneuro-indexer"],\
             ["@apollo/client", "virtual:e74940e35978632a0c14fa5497dc52825a9c66f5b1078eb2e64acf3c410407bb81bc4632771c0031555903c2ed0410b5bd9f7005884e1b336a14c40f1d7762b1#npm:3.7.2"],\
-            ["@elastic/elasticsearch", "npm:7.15.0"],\
+            ["@elastic/elasticsearch", "npm:8.10.0"],\
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@openneuro/search", "workspace:packages/openneuro-search"],\
             ["@types/jsonwebtoken", "npm:8.5.5"],\
@@ -6880,7 +6902,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@openneuro/search", "workspace:packages/openneuro-search"],\
             ["@apollo/client", "virtual:e74940e35978632a0c14fa5497dc52825a9c66f5b1078eb2e64acf3c410407bb81bc4632771c0031555903c2ed0410b5bd9f7005884e1b336a14c40f1d7762b1#npm:3.7.2"],\
-            ["@elastic/elasticsearch", "npm:7.15.0"],\
+            ["@elastic/elasticsearch", "npm:8.10.0"],\
             ["@types/jsonwebtoken", "npm:8.5.5"],\
             ["@types/node", "npm:18.11.9"],\
             ["core-js", "npm:3.18.0"],\
@@ -6899,7 +6921,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@apollo/client", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:3.7.2"],\
             ["@apollo/server", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.9.3"],\
             ["@apollo/utils.keyvadapter", "npm:3.0.0"],\
-            ["@elastic/elasticsearch", "npm:7.15.0"],\
+            ["@elastic/elasticsearch", "npm:8.10.0"],\
             ["@graphql-tools/schema", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:10.0.0"],\
             ["@keyv/redis", "npm:2.7.0"],\
             ["@openneuro/search", "workspace:packages/openneuro-search"],\
@@ -17171,10 +17193,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["hpagent", [\
-        ["npm:0.1.2", {\
-          "packageLocation": "./.yarn/cache/hpagent-npm-0.1.2-f4fe59bad9-1918518ab9.zip/node_modules/hpagent/",\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/hpagent-npm-1.2.0-0f725aa4fe-b029da695e.zip/node_modules/hpagent/",\
           "packageDependencies": [\
-            ["hpagent", "npm:0.1.2"]\
+            ["hpagent", "npm:1.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -28485,6 +28507,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/underscore-npm-1.13.1-5dc02ceeaa-69bb4e6dd9.zip/node_modules/underscore/",\
           "packageDependencies": [\
             ["underscore", "npm:1.13.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["undici", [\
+        ["npm:5.28.2", {\
+          "packageLocation": "./.yarn/cache/undici-npm-5.28.2-35e326d9a1-f9e9335803.zip/node_modules/undici/",\
+          "packageDependencies": [\
+            ["undici", "npm:5.28.2"],\
+            ["@fastify/busboy", "npm:2.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
