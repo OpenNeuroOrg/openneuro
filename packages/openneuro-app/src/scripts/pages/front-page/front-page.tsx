@@ -110,7 +110,9 @@ export const FrontPageTopQuery = ({ query }) => {
       </>
     )
   } else if (result.error || result.data.datasets == null) {
-    apm.captureError(result.error)
+    if (result?.error) {
+      apm.captureError(result?.error)
+    }
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
     // Remove any edges which could not be loaded
@@ -138,7 +140,9 @@ export const FrontPageNewQuery = ({ query }) => {
   if (result.loading) {
     return <Loading />
   } else if (result.error || result.data.datasets == null) {
-    apm.captureError(result.error)
+    if (result?.error) {
+      apm.captureError(result?.error)
+    }
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
     // Remove any edges which could not be loaded
