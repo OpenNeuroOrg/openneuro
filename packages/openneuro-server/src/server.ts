@@ -1,14 +1,17 @@
-/** Needs to run before the other imports in Node */
 import apm from "elastic-apm-node"
-apm.start({
-  serviceName: "openneuro-server",
-  cloudProvider: "none",
-})
-
+import config from "./config"
+/** Needs to run before the other imports in Node */
+if (config.elasticsearch.apmServerUrl) {
+  apm.start({
+    serverUrl: config.elasticsearch.apmServerUrl,
+    apiKey: config.elasticsearch.apmApiKey,
+    serviceName: "openneuro-server",
+    cloudProvider: "none",
+  })
+}
 import { createServer } from "http"
 import mongoose from "mongoose"
 import { connect as redisConnect } from "./libs/redis"
-import config from "./config"
 import { expressApolloSetup } from "./app"
 
 const redisConnectionSetup = async () => {
