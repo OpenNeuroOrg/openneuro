@@ -15,6 +15,11 @@ class TreeResource(object):
         # Request for index of files
         # Return a list of file objects
         # {name, path, size}
-        files = get_tree(self.store, dataset, tree)
-        files.sort(key=dataset_sort)
-        resp.media = {'files': files}
+        try:
+            files = get_tree(self.store, dataset, tree)
+            files.sort(key=dataset_sort)
+            resp.status = falcon.HTTP_OK
+            resp.media = {'files': files}
+        except FileNotFoundError:
+            resp.status = falcon.HTTP_NOT_FOUND
+            resp.media = {'error': 'Dataset does not exist'}
