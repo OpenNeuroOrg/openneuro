@@ -2,6 +2,7 @@ import logging
 import os
 
 import falcon
+import pygit2
 
 from datalad_service.common.git import git_show
 from datalad_service.common.user import get_user_info
@@ -18,24 +19,28 @@ class FilesResource(object):
     def on_get(self, req, resp, dataset, filename, snapshot='HEAD'):
         ds_path = self.store.get_dataset_path(dataset)
         try:
-            file_content = git_show(ds_path, snapshot, filename)
-            # If the file begins with an annex path, return that path
-            if file_content[0:4096].find('.git/annex') != -1:
-                # Resolve absolute path for annex target
-                target_path = os.path.normpath(os.path.join(
-                    ds_path, os.path.dirname(filename), file_content))
-                # Verify the annex path is within the dataset dir
-                if ds_path == os.path.commonpath((ds_path, target_path)):
-                    fd = open(target_path, 'rb')
-                    resp.stream = fd
-                    resp.stream_len = os.fstat(fd.fileno()).st_size
-                    resp.status = falcon.HTTP_OK
+            try:
+                file_content = git_show(ds_path, snapshot, filename)
+                # If the file begins with an annex path, return that path
+                if file_content[0:4096].find('.git/annex') != -1:
+                    # Resolve absolute path for annex target
+                    target_path = os.path.normpath(os.path.join(
+                        ds_path, os.path.dirname(filename), file_content))
+                    # Verify the annex path is within the dataset dir
+                    if ds_path == os.path.commonpath((ds_path, target_path)):
+                        fd = open(target_path, 'rb')
+                        resp.stream = fd
+                        resp.stream_len = os.fstat(fd.fileno()).st_size
+                        resp.status = falcon.HTTP_OK
+                    else:
+                        resp.media = {'error': 'file not found in git tree'}
+                        resp.status = falcon.HTTP_NOT_FOUND
                 else:
-                    resp.media = {'error': 'file not found in git tree'}
-                    resp.status = falcon.HTTP_NOT_FOUND
-            else:
-                resp.body = file_content
-                resp.status = falcon.HTTP_OK
+                    resp.body = file_content
+                    resp.status = falcon.HTTP_OK
+            except pygit2.GitError:
+                resp.status = falcon.HTTP_NOT_FOUND
+                resp.media = {'error': 'dataset repository does not exist or could not be opened'}
         except KeyError:
             # File is not present in tree
             resp.media = {'error': 'file not found in git tree'}

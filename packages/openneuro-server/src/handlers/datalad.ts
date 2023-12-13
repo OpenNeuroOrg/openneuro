@@ -44,12 +44,13 @@ export const getFile = async (req, res) => {
       .then((r) => {
         // Set the content length (allow clients to catch HTTP issues better)
         res.setHeader("Content-Length", Number(r.headers.get("content-length")))
-        return r.body
+        if (r.status === 404) {
+          res.status(404).send("Requested dataset or file cannot be found")
+        } else {
+          // @ts-expect-error
+          Readable.fromWeb(r.body, { highWaterMark: 4194304 }).pipe(res)
+        }
       })
-      .then((stream) =>
-        // @ts-expect-error
-        Readable.fromWeb(stream, { highWaterMark: 4194304 }).pipe(res)
-      )
       .catch((err) => {
         console.error(err)
         res.status(500).send("Internal error transferring requested file")
