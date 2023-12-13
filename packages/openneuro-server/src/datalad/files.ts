@@ -1,4 +1,3 @@
-import request from "superagent"
 import { redis } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import { getDatasetWorker } from "../libs/datalad-service"
@@ -86,36 +85,33 @@ export const computeTotalSize = (files: [DatasetFile]): number =>
  * @param {string} datasetId - Dataset accession number
  * @param {string} treeish - Git treeish hexsha
  */
-export const getFiles = (datasetId, treeish): Promise<[DatasetFile]> => {
+export const getFiles = (datasetId, treeish): Promise<[DatasetFile?]> => {
   const cache = new CacheItem(redis, CacheType.commitFiles, [
     datasetId,
     treeish.substring(0, 7),
   ])
   return cache.get(
-    (doNotCache) =>
-      request
-        .get(
-          `${
-            getDatasetWorker(
-              datasetId,
-            )
-          }/datasets/${datasetId}/tree/${treeish}`,
+    async (doNotCache): Promise<[DatasetFile?]> => {
+      const response = await fetch(`http://${
+        getDatasetWorker(
+          datasetId,
         )
-        .set("Accept", "application/json")
-        .then((response) => {
-          if (response.status === 200) {
-            const {
-              body: { files },
-            } = response
-            for (const f of files) {
-              // Skip caching this tree if it doesn't contain S3 URLs - likely still exporting
-              if (!f.directory && !f.urls[0].includes("s3.amazonaws.com")) {
-                doNotCache(true)
-                break
-              }
-            }
-            return files as [DatasetFile]
+      }/datasets/${datasetId}/tree/${treeish}`)
+      const body = await response.json()
+      const files = body?.files
+      if (files) {
+        for (const f of files) {
+          // Skip caching this tree if it doesn't contain S3 URLs - likely still exporting
+          if (!f.directory && !f.urls[0].includes("s3.amazonaws.com")) {
+            doNotCache(true)
+            break
           }
-        }) as Promise<[DatasetFile]>,
+        }
+        return files
+      } else {
+        // Possible to have zero files here, return an empty array
+        return []
+      }
+    },
   )
 }
