@@ -63,6 +63,8 @@ const config = {
   },
   elasticsearch: {
     connection: process.env.ELASTICSEARCH_CONNECTION,
+    apmServerUrl: process.env.ELASTIC_APM_SERVER_URL,
+    apmApiKey: process.env.ELASTIC_APM_API_KEY,
   },
   github: {
     token: process.env.DATALAD_GITHUB_TOKEN,
