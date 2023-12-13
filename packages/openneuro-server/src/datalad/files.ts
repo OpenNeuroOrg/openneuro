@@ -92,11 +92,16 @@ export const getFiles = (datasetId, treeish): Promise<[DatasetFile?]> => {
   ])
   return cache.get(
     async (doNotCache): Promise<[DatasetFile?]> => {
-      const response = await fetch(`http://${
-        getDatasetWorker(
-          datasetId,
-        )
-      }/datasets/${datasetId}/tree/${treeish}`)
+      const response = await fetch(
+        `http://${
+          getDatasetWorker(
+            datasetId,
+          )
+        }/datasets/${datasetId}/tree/${treeish}`,
+        {
+          signal: AbortSignal.timeout(10000),
+        },
+      )
       const body = await response.json()
       const files = body?.files
       if (files) {

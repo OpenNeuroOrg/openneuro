@@ -24,11 +24,27 @@ export const getFile = async (req, res) => {
   let tree = snapshotId || "HEAD"
   let file
   for (const level of pathComponents) {
-    const files = await getFiles(datasetId, tree)
-    if (level == pathComponents.slice(-1)) {
-      file = files.find((f) => !f.directory && f.filename === level)
-    } else {
-      tree = files.find((f) => f.directory && f.filename === level).id
+    try {
+      const files = await getFiles(datasetId, tree)
+      if (level == pathComponents.slice(-1)) {
+        file = files.find((f) => !f.directory && f.filename === level)
+      } else {
+        tree = files.find((f) => f.directory && f.filename === level).id
+      }
+    } catch (err) {
+      // ConnectTimeoutError is Node/Undici and TimeoutError is the standard DOMException name
+      if (
+        err?.cause?.name === "ConnectTimeoutError" ||
+        err?.name === "TimeoutError"
+      ) {
+        // Unreachable backend, forward this error
+        // Usually this is the service restarting due to node migrations or upgrades
+        res.status(503).send("Worker could not be reached")
+        return
+      } else {
+        // Unknown error should bubble up
+        throw err
+      }
     }
   }
   // Get the file URL and redirect if external or serve if local
