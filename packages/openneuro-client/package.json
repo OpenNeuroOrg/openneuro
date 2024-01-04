@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/client",
-  "version": "4.21.1",
+  "version": "4.21.2",
   "description": "OpenNeuro shared client library.",
   "main": "dist/index.js",
   "browser": "src/index.js",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@graphql-tools/schema": "^10.0.0",
-    "@openneuro/server": "^4.21.1",
+    "@openneuro/server": "^4.21.2",
     "core-js": "^3.10.1",
     "ioredis-mock": "^8.8.1",
     "vitest": "0.34.4"
