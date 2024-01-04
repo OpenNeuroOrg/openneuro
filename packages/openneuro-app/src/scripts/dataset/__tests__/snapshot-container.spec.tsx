@@ -15,6 +15,13 @@ const defProps = {
 }
 
 describe("SnapshotContainer component", () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2023-12-01"))
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
   it("renders successfully", () => {
     const { asFragment } = render(<SnapshotContainer {...defProps} />, {
       wrapper: MockAppWrapper,
