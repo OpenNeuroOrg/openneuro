@@ -1,9 +1,11 @@
+import os
+
 import falcon
 from falcon import testing
 import pygit2
 
 from datalad_service.common import git
-
+from datalad.api import Dataset
 
 test_auth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1iMjFiLTQyMGItOTU1NS1hZjg1NmVmYzk0NTIiLCJlbWFpbCI6Im5lbGxAc3F1aXNoeW1lZGlhLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwibmFtZSI6Ik5lbGwgSGFyZGNhc3RsZSIsImFkbWluIjp0cnVlLCJzY29wZXMiOlsiZGF0YXNldDpnaXQiXSwiZGF0YXNldCI6ImRzMDAwMDAxIiwiaWF0IjoxNjA4NDEwNjEyLCJleHAiOjIxNDc0ODM2NDd9.0aA9cZWMieYr9zbmVrTeFEhpATqmT_X4tVX1VR1uabA"
 
@@ -11,6 +13,26 @@ test_auth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1
 def test_git_show(new_dataset):
     assert git.git_show(new_dataset.path, 'HEAD',
                         'dataset_description.json') == '{"BIDSVersion": "1.0.2", "License": "This is not a real dataset", "Name": "Test fixture new dataset"}'
+
+
+non_utf8_events = b"""onset	duration	trial_type	stim_file
+6	90	Scramble Fix B\xff\xfd\xff\xfd	cond2_run-02.mp4
+105	90	Intact A	cond2_run-02.mp4
+204	90	Scramble Rnd C V3	cond2_run-02.mp4
+303	90	Intact A	cond2_run-02.mp4
+402	90	Scramble Fix B	cond2_run-02.mp4
+501	90	Scramble Rnd C V4	cond2_run-02.mp4"""
+
+
+def test_git_show_non_iso_test(new_dataset):
+    ds = Dataset(new_dataset.path)
+    events_path = os.path.join(ds.path, 'events.tsv')
+    with open(events_path, 'wb') as f:
+        f.write(non_utf8_events)
+    ds.save(events_path)
+    ds.close()
+    assert git.git_show(new_dataset.path, 'HEAD',
+                        'events.tsv') == non_utf8_events.decode('ISO-8859-1')
 
 
 def test_git_tag(new_dataset):
