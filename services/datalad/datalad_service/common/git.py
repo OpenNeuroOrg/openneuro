@@ -18,7 +18,7 @@ def git_show(path, commitish, obj):
     repo = pygit2.Repository(path)
     commit, _ = repo.resolve_refish(commitish)
     data_bytes = (commit.tree / obj).read_raw()
-    encoding = chardet.detect(data_bytes[0:4096])["encoding"]
+    encoding = chardet.detect(data_bytes[0:4096])["encoding"] or 'utf-8'
     return data_bytes.decode(encoding)
 
 
