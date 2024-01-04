@@ -5,8 +5,6 @@ import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-contai
 import DatasetQueryContext from "../datalad/dataset/dataset-query-context.js"
 import { Link, useLocation, useParams } from "react-router-dom"
 import pluralize from "pluralize"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import parseISO from "date-fns/parseISO"
 import { pageTitle } from "../resources/strings.js"
 import Validation from "../validation/validation.jsx"
 import { config } from "../config"
@@ -41,9 +39,7 @@ import { DOILink } from "./fragments/doi-link"
 import { TabRoutesSnapshot } from "./routes/tab-routes-snapshot"
 import schemaGenerator from "../utils/json-ld.js"
 import { FollowToggles } from "./common/follow-toggles"
-
-const formatDate = (dateObject) =>
-  new Date(dateObject).toISOString().split("T")[0]
+import { DateDistance } from "../components/date-distance"
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -74,11 +70,6 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const numSessions = summary && summary.sessions.length > 0
     ? summary.sessions.length
     : 1
-
-  const dateAdded = formatDate(dataset.created)
-  const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
-  const dateModified = formatDate(snapshot.created)
-  const dateUpdatedDifference = formatDistanceToNow(parseISO(snapshot.created))
 
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
@@ -209,7 +200,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                       items={dataset.snapshots}
                       className="version-dropdown"
                       activeDataset={activeDataset}
-                      dateModified={dateModified}
+                      dateModified={snapshot.created}
                       selected={selectedVersion}
                       setSelected={setSelectedVersion}
                     />
@@ -275,8 +266,8 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="Uploaded by"
                 item={
                   <>
-                    <Username user={dataset.uploader} /> on {dateAdded} -{" "}
-                    {dateAddedDifference} ago
+                    <Username user={dataset.uploader} /> on{" "}
+                    <DateDistance date={dataset.created} />
                   </>
                 }
               />
@@ -284,11 +275,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               {dataset.snapshots.length && (
                 <MetaDataBlock
                   heading="Last Updated"
-                  item={
-                    <>
-                      {dateModified} - {dateUpdatedDifference} ago
-                    </>
-                  }
+                  item={<DateDistance date={snapshot.created} />}
                 />
               )}
               <MetaDataBlock heading="Sessions" item={numSessions} />

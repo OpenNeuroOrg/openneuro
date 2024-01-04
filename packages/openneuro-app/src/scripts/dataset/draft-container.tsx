@@ -3,8 +3,6 @@ import Markdown from "markdown-to-jsx"
 import Helmet from "react-helmet"
 import { Navigate, useLocation } from "react-router-dom"
 import pluralize from "pluralize"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import parseISO from "date-fns/parseISO"
 import { pageTitle } from "../resources/strings.js"
 
 import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-container"
@@ -37,14 +35,12 @@ import { DOILink } from "./fragments/doi-link"
 
 import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
+import { DateDistance } from "../components/date-distance"
 
 export interface DraftContainerProps {
   dataset
   tag?: string
 }
-
-const formatDate = (dateObject) =>
-  new Date(dateObject).toISOString().split("T")[0]
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -64,13 +60,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const numSessions = summary && summary.sessions.length > 0
     ? summary.sessions.length
     : 1
-
-  const dateAdded = formatDate(dataset.created)
-  const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
-  const dateModified = formatDate(dataset.draft.modified)
-  const dateUpdatedDifference = formatDistanceToNow(
-    parseISO(dataset.draft.modified),
-  )
 
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
@@ -213,7 +202,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                       items={dataset.snapshots}
                       className="version-dropdown"
                       activeDataset={activeDataset}
-                      dateModified={dateModified}
+                      dateModified={dataset.draft.modified}
                       selected={selectedVersion}
                       setSelected={setSelectedVersion}
                     />
@@ -278,8 +267,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 heading="Uploaded by"
                 item={
                   <>
-                    <Username user={dataset.uploader} /> on {dateAdded} -{" "}
-                    {dateAddedDifference} ago
+                    <Username user={dataset.uploader} /> on{" "}
+                    <DateDistance date={dataset.created} />
                   </>
                 }
               />
@@ -289,7 +278,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     heading="Last Updated"
                     item={
                       <>
-                        {dateModified} - {dateUpdatedDifference} ago
+                        <DateDistance date={dataset.draft.modified} />
                       </>
                     }
                   />

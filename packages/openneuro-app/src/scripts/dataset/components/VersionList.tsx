@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { Dropdown } from "@openneuro/components/dropdown"
+import { formatDate } from "../../utils/date"
 
 export interface VersionListProps {
   items: {
@@ -19,9 +20,6 @@ export interface VersionListProps {
   dateModified: string
   datasetId?: string
 }
-const formatDate = (dateObject) =>
-  new Date(dateObject).toISOString().split("T")[0]
-
 export const VersionList = ({
   items,
   selected,
@@ -41,7 +39,8 @@ export const VersionList = ({
     <>
       <div className="active-version">
         <div>{selected === "draft" ? "Draft" : selected}</div>
-        {selected === "draft" ? "Updated" : "Created"}: {dateModified}
+        {selected === "draft" ? "Updated" : "Created"}:{" "}
+        {formatDate(dateModified)}
       </div>
       {items.length
         ? (
@@ -68,7 +67,7 @@ export const VersionList = ({
                         {selected === "draft" ? "*" : ""}
                       </span>
                     </span>
-                    {dateModified}
+                    {formatDate(dateModified)}
                   </Link>
                 </li>
                 {items.map((item, index) => (

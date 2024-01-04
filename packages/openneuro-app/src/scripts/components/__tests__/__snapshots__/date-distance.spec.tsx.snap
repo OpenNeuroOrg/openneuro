@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DataTable component > renders date distance components 1`] = `
+<DocumentFragment>
+  2022-02-04 - about 2 years ago
+</DocumentFragment>
+`;
