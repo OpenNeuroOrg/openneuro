@@ -2,6 +2,7 @@ import re
 import subprocess
 
 import pygit2
+import chardet
 
 tag_ref = re.compile('^refs/tags/')
 
@@ -16,8 +17,9 @@ class OpenNeuroGitError(Exception):
 def git_show(path, commitish, obj):
     repo = pygit2.Repository(path)
     commit, _ = repo.resolve_refish(commitish)
-    data = (commit.tree / obj).read_raw().decode()
-    return data
+    data_bytes = (commit.tree / obj).read_raw()
+    encoding = chardet.detect(data_bytes[0:4096])["encoding"]
+    return data_bytes.decode(encoding)
 
 
 def git_show_object(path, obj):
