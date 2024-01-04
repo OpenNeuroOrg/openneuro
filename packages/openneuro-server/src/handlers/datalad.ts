@@ -29,7 +29,10 @@ export const getFile = async (req, res) => {
       if (level == pathComponents.slice(-1)) {
         file = files.find((f) => !f.directory && f.filename === level)
       } else {
-        tree = files.find((f) => f.directory && f.filename === level).id
+        // This tree may exist but have no children
+        if (files) {
+          tree = files.find((f) => f.directory && f.filename === level).id
+        }
       }
     } catch (err) {
       // ConnectTimeoutError is Node/Undici and TimeoutError is the standard DOMException name
