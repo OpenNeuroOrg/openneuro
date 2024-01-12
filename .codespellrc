@@ -1,6 +1,6 @@
 # Ref: https://github.com/codespell-project/codespell#using-a-config-file
 [codespell]
-skip = .git,*.pdf,*.svg,go.sum,*.lock,.codespellrc,.yarn,node_modules,schema-validator.js
+skip = .git,*.pdf,*.svg,go.sum,*.lock,.codespellrc,.yarn,node_modules,schema-validator.js,.pnp.cjs
 check-hidden = true
 ignore-regex = ^.{300,}$|/((.*\|){4,}.*\))|\b(afterAll)\b
 ignore-words-list = chack
