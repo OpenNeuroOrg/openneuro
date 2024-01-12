@@ -30,7 +30,7 @@ export const CreateReviewLink: FC<CreateReviewLinkProps> = ({ datasetId }) => {
       <div className="share-form-controls">
         {error
           ? (
-            "An Error Occured"
+            "An Error Occurred"
           )
           : data
           ? (
