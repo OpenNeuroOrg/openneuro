@@ -31,6 +31,9 @@ const loggerProxyHandler = {
   // deno-lint-ignore no-explicit-any
   get: function (_: any, prop: keyof Logger) {
     const logger = getLogger(loggerName)
+    if (prop === "levelName" || prop === "level") {
+      return logger[prop]
+    }
     const stack = new Error().stack
     if (stack) {
       const callerLocation = parseStack(stack)

@@ -11,9 +11,9 @@ export function readConfig(): ClientConfig {
     `configured with URL "${config.url}" and token "${
       config.token.slice(
         0,
-        3,
+        4,
       )
-    }...${config.token.slice(-3)}`,
+    }...${config.token.slice(-4)}"`,
   )
   return config
 }
@@ -75,8 +75,9 @@ export async function uploadAction(
     "datasetId": datasetId,
     "sourcePath": dataset_directory_abs,
     "repoPath": repoPath,
-    "repoUrl": endpoint,
+    "repoEndpoint": `${clientConfig.url}/git/${endpoint}/${datasetId}`,
     "authorization": `Bearer ${token}`,
+    "logLevel": logger.levelName,
   })
 
   /*
@@ -89,26 +90,25 @@ export async function uploadAction(
   console.log(join(repoDir, datasetId))
   worker.postMessage({
     "command": "clone",
-    "url": "https://staging.openneuro.org/git/2/ds001130",
   })
 
   // Upload all files
   for await (
-    const walkEntry of walk(dataset_directory, {
+    const walkEntry of walk(dataset_directory_abs, {
       includeDirs: false,
       includeSymlinks: false,
     })
   ) {
-    //const file = await Deno.open(walkEntry.path)
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
-    /*worker.postMessage({
+    worker.postMessage({
       "command": "add",
       "path": walkEntry.path,
       "relativePath": relativePath,
-    })*/
+      "annexed": false,
+    })
   }
-
-  //worker.postMessage({ command: "close" })
+  // Close after all tasks are queued
+  worker.postMessage({ command: "close" })
 }
 
 /**

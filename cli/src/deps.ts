@@ -38,6 +38,7 @@ export { walk } from "https://deno.land/std@0.212.0/fs/walk.ts"
 export { resolve } from "https://deno.land/std@0.212.0/path/resolve.ts"
 export { relative } from "https://deno.land/std@0.212.0/path/relative.ts"
 export { join } from "https://deno.land/std@0.212.0/path/join.ts"
+export { ensureLink } from "https://deno.land/std@0.212.0/fs/ensure_link.ts"
 // Test suites
 export {
   assert,

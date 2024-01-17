@@ -37,7 +37,7 @@ export async function getRepoAccess(datasetId?: string) {
  */
 export async function gitCredentialAction(
   stdinReadable: ReadableStream<Uint8Array> = Deno.stdin.readable,
-  tokenGetter = getRepoToken,
+  tokenGetter = getRepoAccess,
 ) {
   let pipeOutput = ""
   const credential: Record<string, string | undefined> = {}
@@ -51,7 +51,7 @@ export async function gitCredentialAction(
   }
   if ("path" in credential && credential.path) {
     const datasetId = credential.path.split("/").pop()
-    const token = await tokenGetter(datasetId)
+    const { token } = await tokenGetter(datasetId)
     const output: Record<string, string> = {
       username: "@openneuro/cli",
       password: token,

@@ -12,6 +12,9 @@ Deno.test("git-credential parses stdin correctly", async () => {
       controller.close()
     },
   })
-  const output = await gitCredentialAction(stdin, () => "token")
+  const output = await gitCredentialAction(
+    stdin,
+    async () => ({ token: "token", endpoint: 2 }),
+  )
   assertEquals(output, "username=@openneuro/cli\npassword=token\n")
 })
