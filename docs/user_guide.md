@@ -2,9 +2,13 @@
 
 Welcome to OpenNeuro! This guide is dedicated to new users to the site who would like to get started on using the [OpenNeuro web platform](https://openneuro.org/) to freely store and share [Brain Imaging Data Structure (BIDS) datasets](https://bids.neuroimaging.io/).
 
-We hope that OpenNeuro would become a useful resource for your research projects well beyond being merely a dump of your data to satisfy mandates of the funding agencies.
-We invite you to e.g. review [ReproNim 5 Steps](https://www.repronim.org/5steps) and [OREONI](https://oreoni.github.io) for a guidance and motivation on how to make your neuroimaging research more efficient and reproducible.
+OpenNeuro is a data archive that follows the [FAIR principles for data management](https://www.go-fair.org/fair-principles/),
+and which we hope can be a useful resource for your research projects.
+In this guide, we describe browsing, downloading, uploading and managing OpenNeuro datasets.
 
+For additional guidance and motivation on reproducible neuroimaging research,
+we recommend the [Open and reproducible neuroimaging](https://oreoni.github.io/) guide
+and the [ReproNim 5 Steps](https://www.repronim.org/5steps).
 
 ## Signing Up
 
