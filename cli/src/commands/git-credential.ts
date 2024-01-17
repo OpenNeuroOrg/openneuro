@@ -1,4 +1,5 @@
 import { Command, TextLineStream } from "../deps.ts"
+import { getConfig } from "./login.ts"
 
 const prepareRepoAccess = `
   mutation prepareRepoAccess($datasetId: ID!) {
@@ -9,18 +10,26 @@ const prepareRepoAccess = `
   }
 `
 
-export function getRepoToken(datasetId?: string) {
-  /*
-  return client
-    .mutate({
-      mutation: prepareRepoAccess,
+export async function getRepoAccess(datasetId?: string) {
+  const config = getConfig()
+  const req = await fetch(`${config.url}/crn/graphql`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${config.token}`, // Long lived token
+    },
+    body: JSON.stringify({
+      query: prepareRepoAccess,
       variables: {
         datasetId,
       },
-    })
-    .then(({ data }) => data.prepareRepoAccess.token)
-    */
-  return "token"
+    }),
+  })
+  const { data } = await req.json()
+  return {
+    token: data.prepareRepoAccess.token, // Short lived repo access token
+    endpoint: data.prepareRepoAccess.endpoint,
+  }
 }
 
 /**

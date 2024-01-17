@@ -1,17 +1,9 @@
-import { FetchHttpStack } from "../fetchHttpStack.ts"
 import { validateCommand } from "./validate.ts"
 import { ClientConfig, getConfig } from "./login.ts"
 import { logger } from "../logger.ts"
-import {
-  Confirm,
-  ProgressBar,
-  relative,
-  resolve,
-  Tus,
-  Uppy,
-  walk,
-} from "../deps.ts"
+import { Confirm, join, ProgressBar, relative, resolve, walk } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
+import { getRepoAccess } from "./git-credential.ts"
 
 export function readConfig(): ClientConfig {
   const config = getConfig()
@@ -26,11 +18,25 @@ export function readConfig(): ClientConfig {
   return config
 }
 
+async function getRepoDir(url: URL): Promise<string> {
+  const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
+  const repoDir = localStorage.getItem(LOCAL_STORAGE_KEY)
+  if (repoDir) {
+    return repoDir
+  } else {
+    const tmpDir = await Deno.makeTempDir({ prefix: LOCAL_STORAGE_KEY })
+    localStorage.setItem(LOCAL_STORAGE_KEY, tmpDir)
+    return tmpDir
+  }
+}
+
 export async function uploadAction(
   options: CommandOptions,
   dataset_directory: string,
 ) {
   const clientConfig = readConfig()
+  const serverUrl = new URL(clientConfig.url)
+  const repoDir = await getRepoDir(serverUrl)
   const dataset_directory_abs = resolve(dataset_directory)
   logger.info(
     `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
@@ -38,7 +44,7 @@ export async function uploadAction(
 
   // TODO - call the validator here
 
-  let datasetId = "ds001001"
+  let datasetId = "ds001130"
   if (options.dataset) {
     datasetId = options.dataset
   } else {
@@ -52,30 +58,38 @@ export async function uploadAction(
       }
     }
     // TODO Create dataset here
-    datasetId = "ds001001"
+    datasetId = "ds001130"
   }
-  // Setup upload
-  const uppy = new Uppy({
-    id: "@openneuro/cli",
-    autoProceed: true,
-    debug: true,
-  }).use(Tus, {
-    endpoint: "http://localhost:9876/tusd/files/",
-    chunkSize: 64000000, // ~64MB
-    uploadLengthDeferred: true,
-    headers: {
-      Authorization: `Bearer ${clientConfig.token}`,
-    },
-    httpStack: new FetchHttpStack(),
+
+  // Create the git worker
+  const worker = new Worker(new URL("../worker/git.ts", import.meta.url).href, {
+    type: "module",
   })
 
+  const repoPath = join(repoDir, datasetId)
+  const { token, endpoint } = await getRepoAccess(datasetId)
+  await Deno.mkdir(repoPath, { recursive: true })
+  // Configure worker
+  worker.postMessage({
+    "command": "setContext",
+    "datasetId": datasetId,
+    "sourcePath": dataset_directory_abs,
+    "repoPath": repoPath,
+    "repoUrl": endpoint,
+    "authorization": `Bearer ${token}`,
+  })
+
+  /*
   const progressBar = new ProgressBar({
     title: "Upload",
     total: 100,
   })
-  progressBar.render(0)
-  uppy.on("progress", (progress) => {
-    progressBar.render(progress)
+  progressBar.render(0)*/
+
+  console.log(join(repoDir, datasetId))
+  worker.postMessage({
+    "command": "clone",
+    "url": "https://staging.openneuro.org/git/2/ds001130",
   })
 
   // Upload all files
@@ -85,19 +99,16 @@ export async function uploadAction(
       includeSymlinks: false,
     })
   ) {
-    const file = await Deno.open(walkEntry.path)
+    //const file = await Deno.open(walkEntry.path)
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
-    const uppyFile = {
-      name: walkEntry.name,
-      data: file.readable.getReader(),
-      meta: {
-        datasetId,
-        relativePath,
-      },
-    }
-    logger.debug(JSON.stringify({ name: uppyFile.name, meta: uppyFile.meta }))
-    uppy.addFile(uppyFile)
+    /*worker.postMessage({
+      "command": "add",
+      "path": walkEntry.path,
+      "relativePath": relativePath,
+    })*/
   }
+
+  //worker.postMessage({ command: "close" })
 }
 
 /**
