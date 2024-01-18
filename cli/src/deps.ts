@@ -43,6 +43,7 @@ export { ensureLink } from "https://deno.land/std@0.212.0/fs/ensure_link.ts"
 export {
   assert,
   assertEquals,
+  assertObjectMatch,
 } from "https://deno.land/std@0.212.0/assert/mod.ts"
 export {
   assertSpyCalls,
@@ -51,3 +52,5 @@ export {
 } from "https://deno.land/std@0.212.0/testing/mock.ts"
 // Progress bars
 export { default as ProgressBar } from "https://deno.land/x/progress@v1.3.9/mod.ts"
+// Ignore library
+export { default as ignore } from "npm:ignore@5.3.0"

@@ -1,8 +1,11 @@
+import { string } from "https://deno.land/x/cliffy@v1.0.0-rc.3/flags/types/string.ts"
+import { ignore } from "./deps.ts"
+
 /**
  * Git annex supports many backends, we support a limited subset used by OpenNeuro (for now)
  * https://git-annex.branchable.com/backends/
  */
-enum SupportedAnnexBackends {
+export enum SupportedAnnexBackends {
   MD5E = "MD5E",
   SHA256E = "SHA256E",
 }
@@ -10,15 +13,16 @@ enum SupportedAnnexBackends {
 /**
  * Annex attributes for one path
  */
-interface GitAnnexAttributeOptions {
+export interface GitAnnexAttributeOptions {
   largefiles?: number
   backend?: SupportedAnnexBackends
+  match: ignore.Ignore
 }
 
 /**
  * Minimal parsing of .gitattributes for uploader usage
  */
-type GitAnnexAttributes = Record<string, GitAnnexAttributeOptions>
+export type GitAnnexAttributes = Record<string, GitAnnexAttributeOptions>
 
 /**
  * Parse any relevant annex options from .gitattributes
@@ -31,7 +35,9 @@ export function parseGitAttributes(gitattributes: string): GitAnnexAttributes {
       continue
     }
     const [prefix, ...rest] = line.split(" ")
-    attributesObject[prefix] = {}
+    attributesObject[prefix] = {
+      match: ignore.default().add(prefix),
+    }
     for (const attr of rest) {
       const eqIndex = attr.indexOf("=")
       const key = attr.substring(0, eqIndex)
@@ -65,4 +71,30 @@ export function parseGitAttributes(gitattributes: string): GitAnnexAttributes {
     }
   }
   return attributesObject
+}
+
+interface MatchingAnnexAttributes {
+  backend?: SupportedAnnexBackends
+  largefiles?: number
+}
+
+/**
+ * Return any matching values merged for a given path
+ */
+export function matchGitAttributes(
+  attributes: GitAnnexAttributes,
+  path: string,
+) {
+  const matching: MatchingAnnexAttributes = {}
+  for (const [prefix, attr] of Object.entries(attributes)) {
+    if (attr.match.test(path).ignored == true) {
+      if ("backend" in attr) {
+        matching.backend = attr.backend
+      }
+      if ("largefiles" in attr) {
+        matching.largefiles = attr.largefiles
+      }
+    }
+  }
+  return matching
 }

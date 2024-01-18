@@ -3,6 +3,7 @@ import "https://deno.land/x/indexeddb@1.3.5/polyfill.ts"
 import git from "npm:isomorphic-git@1.25.3"
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
 import fs from "node:fs"
+import { GitAnnexAttributes, parseGitAttributes } from "../gitattributes.ts"
 import { ensureLink, join } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
 
@@ -75,10 +76,13 @@ async function update() {
   try {
     const oid = await git.resolveRef({ ...options, ref: "main" }) ||
       await git.resolveRef({ ...options, ref: "master" })
-    context.attributes = new TextDecoder().decode(
-      (await git.readBlob({ ...options, oid, filepath: ".gitattributes" }))
-        .blob,
-    )
+    const rawAttributes = await git.readBlob({
+      ...options,
+      oid,
+      filepath: ".gitattributes",
+    })
+    const stringAttributes = new TextDecoder().decode(rawAttributes.blob)
+    context.attributes = parseGitAttributes(stringAttributes)
   } catch (_err) {
     logger.error(
       "Dataset repository is missing .gitattributes and may be improperly initialized.",
@@ -100,7 +104,6 @@ async function add(event) {
       ...gitOptions(context.repoPath),
       filepath: event.data.relativePath,
     }
-    return
     // Hard link to the target location
     await ensureLink(
       event.data.path,

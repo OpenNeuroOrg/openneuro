@@ -104,7 +104,6 @@ export async function uploadAction(
       "command": "add",
       "path": walkEntry.path,
       "relativePath": relativePath,
-      "annexed": false,
     })
   }
   // Close after all tasks are queued
