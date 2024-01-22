@@ -28,7 +28,7 @@ def test_git_show_non_iso_test(new_dataset):
     ds = Dataset(new_dataset.path)
     events_path = os.path.join(ds.path, 'events.tsv')
     with open(events_path, 'wb') as f:
-        f.write(dataset_description_4096)
+        f.write(non_utf8_events)
     ds.save(events_path)
     ds.close()
     assert git.git_show(new_dataset.path, 'HEAD',
