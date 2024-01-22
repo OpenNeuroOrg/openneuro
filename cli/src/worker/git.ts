@@ -3,7 +3,11 @@ import "https://deno.land/x/indexeddb@1.3.5/polyfill.ts"
 import git from "npm:isomorphic-git@1.25.3"
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
 import fs from "node:fs"
-import { GitAnnexAttributes, parseGitAttributes } from "../gitattributes.ts"
+import {
+  GitAnnexAttributes,
+  matchGitAttributes,
+  parseGitAttributes,
+} from "../gitattributes.ts"
 import { ensureLink, join } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
 
@@ -26,11 +30,10 @@ interface GitContext {
   repoEndpoint: string
   // OpenNeuro git access short lived API key
   authorization: string
-  // .gitattributes
-  attributes?: GitAnnexAttributes
 }
 
 let context: GitContext
+let attributesCache: GitAnnexAttributes
 // Shut down if this is set
 let done = false
 
@@ -58,7 +61,7 @@ function gitOptions(dir) {
 async function update() {
   const options = gitOptions(context.repoPath)
   try {
-    await fs.promises.access(join(dir, ".git"))
+    await fs.promises.access(join(context.repoPath, ".git"))
     logger.info(
       `Fetching ${context.datasetId} draft from "${context.repoEndpoint}"`,
     )
@@ -73,30 +76,63 @@ async function update() {
       depth: 1,
     })
   }
-  try {
-    const oid = await git.resolveRef({ ...options, ref: "main" }) ||
-      await git.resolveRef({ ...options, ref: "master" })
-    const rawAttributes = await git.readBlob({
-      ...options,
-      oid,
-      filepath: ".gitattributes",
-    })
-    const stringAttributes = new TextDecoder().decode(rawAttributes.blob)
-    context.attributes = parseGitAttributes(stringAttributes)
-  } catch (_err) {
-    logger.error(
-      "Dataset repository is missing .gitattributes and may be improperly initialized.",
-    )
-    globalThis.close()
-  }
   logger.info(`${context.datasetId} draft fetched!`)
+}
+
+/**
+ * Load or return a cache copy of .gitattributes
+ */
+async function getGitAttributes(): Promise<GitAnnexAttributes> {
+  if (!attributesCache) {
+    const options = gitOptions(context.repoPath)
+    try {
+      const oid = await git.resolveRef({ ...options, ref: "main" }) ||
+        await git.resolveRef({ ...options, ref: "master" })
+      const rawAttributes = await git.readBlob({
+        ...options,
+        oid,
+        filepath: ".gitattributes",
+      })
+      const stringAttributes = new TextDecoder().decode(rawAttributes.blob)
+      attributesCache = parseGitAttributes(stringAttributes)
+    } catch (_err) {
+      logger.error(
+        "Dataset repository is missing .gitattributes and may be improperly initialized.",
+      )
+      globalThis.close()
+    }
+  }
+  return attributesCache
+}
+
+/**
+ * Decide if this incoming file is annexed or not
+ */
+async function shouldBeAnnexed(absolutePath: string, relativePath: string) {
+  const gitAttributes = await getGitAttributes()
+  const attributes = matchGitAttributes(gitAttributes, relativePath)
+  if (attributes.largefiles) {
+    const { size } = await Deno.stat(absolutePath)
+    if (size > attributes.largefiles) {
+      return true
+    } else {
+      return false
+    }
+  }
+  // No rules matched, default to annex
+  return true
 }
 
 /**
  * git-annex add equivalent
  */
 async function add(event) {
-  if (event.data.annexed) {
+  const annexed = await shouldBeAnnexed(
+    event.data.path,
+    event.data.relativePath,
+  )
+  console.log(event.data.path, annexed)
+  if (annexed) {
     // Compute hash and add link
   } else {
     // Simple add case
@@ -104,10 +140,13 @@ async function add(event) {
       ...gitOptions(context.repoPath),
       filepath: event.data.relativePath,
     }
+    const targetPath = join(context.repoPath, event.data.relativePath)
+    // Remove the target
+    await Deno.remove(targetPath)
     // Hard link to the target location
     await ensureLink(
       event.data.path,
-      join(context.repoPath, event.data.relativePath),
+      targetPath,
     )
     await git.add(options)
     logger.info(`Added ${event.data.relativePath}`)
