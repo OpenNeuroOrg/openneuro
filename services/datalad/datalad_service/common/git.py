@@ -2,7 +2,7 @@ import re
 import subprocess
 
 import pygit2
-import chardet
+from charset_normalizer import from_bytes
 
 tag_ref = re.compile('^refs/tags/')
 
@@ -18,8 +18,8 @@ def git_show(path, committish, obj):
     repo = pygit2.Repository(path)
     commit, _ = repo.resolve_refish(committish)
     data_bytes = (commit.tree / obj).read_raw()
-    encoding = chardet.detect(data_bytes[0:4096])["encoding"] or 'utf-8'
-    return data_bytes.decode(encoding)
+    result = from_bytes(data_bytes).best()
+    return str(result)
 
 
 def git_show_object(path, obj):

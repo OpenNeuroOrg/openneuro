@@ -32,7 +32,39 @@ def test_git_show_non_iso_test(new_dataset):
     ds.save(events_path)
     ds.close()
     assert git.git_show(new_dataset.path, 'HEAD',
-                        'events.tsv') == non_utf8_events.decode('ISO-8859-1')
+                        'events.tsv') == non_utf8_events.decode('cp852')
+
+dataset_description_4096 = """{
+    "Name": "Auditory Tones",
+    "BIDSVersion": "1.8.0",
+    "DatasetType": "raw",
+    "Authors": [
+        "Lonike K Faes",
+        "Agustin Lage-Castellanos",
+        "Giancarlo Valente",
+        "Zidan Yu",
+        "Martijn A. Cloos",
+        "Luca Vizioli",
+        "Steen Moeller",
+        "Essa Yacoub",
+        "Federico De Martino"
+    ],
+    "Funding": [
+        "National Institute of Health grant (RF1MH116978-01)",
+        "National Institute of Health grant (P41EB027061)",
+        "European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agreement No. 101001270)"
+    ]
+}""".encode('utf-8')
+
+def test_git_show_unicode_after_4096(new_dataset):
+    ds = Dataset(new_dataset.path)
+    desc_path = os.path.join(ds.path, 'dataset_description.json')
+    with open(desc_path, 'wb') as f:
+        f.write(dataset_description_4096)
+    ds.save(desc_path)
+    ds.close()
+    assert git.git_show(new_dataset.path, 'HEAD',
+                        'dataset_description.json') == dataset_description_4096.decode('utf-8')
 
 
 def test_git_tag(new_dataset):
