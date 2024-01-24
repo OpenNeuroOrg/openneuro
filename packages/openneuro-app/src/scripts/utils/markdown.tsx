@@ -6,6 +6,9 @@ interface MarkdownProps {
   children: string
 }
 
+// Closely aligned with GitHub Markdown
+// See https://github.com/gjtorikian/html-pipeline/blob/7e562219f9814777b73b48f32aece874452c0c5e/lib/html_pipeline/sanitization_filter.rb
+
 const ALLOWED_TAGS = [
   "h1",
   "h2",
@@ -147,6 +150,9 @@ const ALLOWED_ATTR = [
   "longdesc",
 ]
 
+/**
+ * Sanitize disallowed HTML tags and attributes and convert from Markdown to JSX
+ */
 export function Markdown({ children }: MarkdownProps) {
   const sanitizedMarkdown = DOMPurify.sanitize(children, {
     ALLOWED_TAGS,
