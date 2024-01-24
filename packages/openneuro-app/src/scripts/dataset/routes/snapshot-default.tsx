@@ -1,5 +1,5 @@
 import React from "react"
-import Markdown from "markdown-to-jsx"
+import { Markdown } from "../../utils/markdown"
 import { ReadMore } from "@openneuro/components/read-more"
 import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"

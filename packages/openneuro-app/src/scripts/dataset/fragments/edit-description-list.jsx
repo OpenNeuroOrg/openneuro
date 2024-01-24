@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import UpdateDescription from "../mutations/description.jsx"
 import { CancelButton } from "./cancel-button"
 import { EditButton } from "./edit-button"
-import Markdown from "markdown-to-jsx"
+import { Markdown } from "../../utils/markdown"
 
 import EditList from "./edit-list.jsx"
 
