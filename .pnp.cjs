@@ -6738,6 +6738,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tanstack/react-table", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.9.3"],\
             ["@testing-library/jest-dom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:6.1.3"],\
             ["@testing-library/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:11.2.7"],\
+            ["@types/dompurify", "npm:3.0.5"],\
             ["@types/jsdom", "npm:16.2.13"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/react", "npm:17.0.24"],\
@@ -6749,6 +6750,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["comlink", "npm:4.3.1"],\
             ["core-js", "npm:3.25.1"],\
             ["date-fns", "npm:2.24.0"],\
+            ["dompurify", "npm:3.0.8"],\
             ["draft-js", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.7"],\
             ["email-validator", "npm:2.0.4"],\
             ["esbuild-plugin-globals", "npm:0.1.1"],\
@@ -8784,6 +8786,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/dompurify", [\
+        ["npm:3.0.5", {\
+          "packageLocation": "./.yarn/cache/@types-dompurify-npm-3.0.5-1338d8e659-ffc34eca6a.zip/node_modules/@types/dompurify/",\
+          "packageDependencies": [\
+            ["@types/dompurify", "npm:3.0.5"],\
+            ["@types/trusted-types", "npm:2.0.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/draft-js", [\
         ["npm:0.10.45", {\
           "packageLocation": "./.yarn/cache/@types-draft-js-npm-0.10.45-f73c466fae-dead87d6c1.zip/node_modules/@types/draft-js/",\
@@ -9416,6 +9428,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-treeify-npm-1.0.0-b5e04e9cd3-1b2397030d.zip/node_modules/@types/treeify/",\
           "packageDependencies": [\
             ["@types/treeify", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/trusted-types", [\
+        ["npm:2.0.7", {\
+          "packageLocation": "./.yarn/cache/@types-trusted-types-npm-2.0.7-a07fc44f59-8e4202766a.zip/node_modules/@types/trusted-types/",\
+          "packageDependencies": [\
+            ["@types/trusted-types", "npm:2.0.7"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -13984,6 +14005,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["domhandler", "npm:2.3.0"],\
             ["domelementtype", "npm:1.3.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["dompurify", [\
+        ["npm:3.0.8", {\
+          "packageLocation": "./.yarn/cache/dompurify-npm-3.0.8-e32b43f220-cac660ccae.zip/node_modules/dompurify/",\
+          "packageDependencies": [\
+            ["dompurify", "npm:3.0.8"]\
           ],\
           "linkType": "HARD"\
         }]\
