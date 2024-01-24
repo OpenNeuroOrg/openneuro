@@ -46,7 +46,9 @@ const EditDescriptionList = ({
         <ul>
           {children.map((item, index) => (
             <li key={index}>
-              <Markdown>{item}</Markdown>
+              <Markdown options={{ disableParsingRawHTML: true }}>
+                {item}
+              </Markdown>
             </li>
           ))}
         </ul>

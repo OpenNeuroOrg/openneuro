@@ -1,4 +1,3 @@
-import Markdown from "markdown-to-jsx"
 import React from "react"
 
 export interface MetaDataBlockProps {

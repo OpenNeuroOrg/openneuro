@@ -311,7 +311,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     description={description.Acknowledgements}
                     editMode={hasEdit}
                   >
-                    <Markdown>{description.Acknowledgements || "N/A"}</Markdown>
+                    <Markdown options={{ disableParsingRawHTML: true }}>
+                      {description.Acknowledgements || "N/A"}
+                    </Markdown>
                   </EditDescriptionField>
                 )}
               />
@@ -326,7 +328,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     description={description.HowToAcknowledge}
                     editMode={hasEdit}
                   >
-                    <Markdown>{description.HowToAcknowledge || "N/A"}</Markdown>
+                    <Markdown options={{ disableParsingRawHTML: true }}>
+                      {description.HowToAcknowledge || "N/A"}
+                    </Markdown>
                   </EditDescriptionField>
                 )}
               />

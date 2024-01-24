@@ -28,7 +28,9 @@ export const DatasetDefault = ({ dataset, hasEdit }) => (
             expandLabel="Read More"
             collapseLabel="Collapse"
           >
-            <Markdown>{dataset.draft.readme || "N/A"}</Markdown>
+            <Markdown options={{ disableParsingRawHTML: true }}>
+              {dataset.draft.readme || "N/A"}
+            </Markdown>
           </ReadMore>
         </EditDescriptionField>
       )}
