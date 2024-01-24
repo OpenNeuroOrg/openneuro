@@ -14,7 +14,7 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       heading="README"
       item={
         <ReadMore id="readme" expandLabel="Read More" collapseLabel="Collapse">
-          <Markdown options={{ disableParsingRawHTML: true }}>
+          <Markdown>
             {snapshot.readme == null ? "N/A" : snapshot.readme}
           </Markdown>
         </ReadMore>
