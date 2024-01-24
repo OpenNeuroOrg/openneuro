@@ -31,7 +31,7 @@
     "email-validator": "^2.0.4",
     "graphql": "16.8.1",
     "jwt-decode": "^2.2.0",
-    "markdown-to-jsx": "^7.1.2",
+    "markdown-to-jsx": "^7.4.0",
     "pluralize": "8.0.0",
     "prop-types": "^15.6.0",
     "react": "^17.0.1",
