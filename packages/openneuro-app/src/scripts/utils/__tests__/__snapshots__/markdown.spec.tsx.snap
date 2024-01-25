@@ -13,8 +13,18 @@ exports[`Test <Markdown> component > allows a href with certain protocols 1`] = 
 exports[`Test <Markdown> component > does not allow href with unknown protocols 1`] = `
 <DocumentFragment>
   <a>
-    Example link that should work.
+    Example link that should not work.
   </a>
+</DocumentFragment>
+`;
+
+exports[`Test <Markdown> component > filters close-break tags 1`] = `
+<DocumentFragment>
+  <span>
+    <br />
+    sample text
+    <br />
+  </span>
 </DocumentFragment>
 `;
 
