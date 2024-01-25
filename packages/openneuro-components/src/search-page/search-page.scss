@@ -377,6 +377,17 @@
   }
 }
 
+.third-party {
+  margin: 10px 0;
+}
+
+.third-party .on-accordion-wrapper .keyword-accordion {
+  .accordion-title {
+    position: absolute;
+    left: 300px;
+  }
+}
+
 .facet-search .help-text {
   font-size: 12px;
   margin: 10px 0;

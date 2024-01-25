@@ -4,6 +4,9 @@ import { FilterListItem } from "./FilterListItem"
 import { FilterDateItem } from "./FilterDateItem"
 import { TermListItem } from "./TermListItem"
 import { FacetSelectValueType } from "../facets/FacetSelect"
+import { AccordionTab } from "../accordion/AccordionTab"
+import { AccordionWrap } from "../accordion/AccordionWrap"
+import { Icon } from "@openneuro/components/icon"
 
 export interface FiltersBlockProps {
   keywords: string[]
@@ -96,6 +99,32 @@ export const FiltersBlock = ({
             </>
           )}
       </h2>
+
+      <div className="third-party">
+        <a href="https://query.neurobagel.org/?node=OpenNeuro" target="_blank">
+          <Icon icon="fas fa-user" label="Try searching at the participant level" />
+        </a>        
+        <AccordionWrap>
+          <AccordionTab
+            accordionStyle="plain"
+            label="?"
+            className="keyword-accordion"
+          >
+            <span>
+              Search at the participant level is provided by{" "}
+              <a href="https://neurobagel.org" target="_blank">
+                Neurobagel
+              </a>
+              {", "}a third party project.
+
+              Neurobagel is a collection of tools for harmonizing phenotypic 
+              and imaging data descriptions, searching for participants across datasets, 
+              and constructing cohorts from multiple source datasets.
+            </span>
+          </AccordionTab>
+        </AccordionWrap>
+      </div>
+
       <ul className="active-filters">
         {keywords && (
           <TermListItem
