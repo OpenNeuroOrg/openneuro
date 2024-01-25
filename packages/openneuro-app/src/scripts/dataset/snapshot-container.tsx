@@ -17,6 +17,7 @@ import { DatasetGitAccess } from "./components/DatasetGitAccess"
 import { DatasetHeader } from "./components/DatasetHeader"
 import { DatasetTools } from "./components/DatasetTools"
 import { MetaDataBlock } from "./components/MetaDataBlock"
+import { MetaDataListBlock } from "./components/MetaDataListBlock"
 import { ModalitiesMetaDataBlock } from "./components/ModalitiesMetaDataBlock"
 import { ValidationBlock } from "./components/ValidationBlock"
 import { VersionList } from "./components/VersionList"
@@ -316,19 +317,19 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="How to Acknowledge"
                 item={description.HowToAcknowledge}
               />
-              <MetaDataBlock
+              <MetaDataListBlock
                 heading="Funding"
                 item={description.Funding}
                 className="dmb-list"
               />
 
-              <MetaDataBlock
+              <MetaDataListBlock
                 heading="References and Links"
                 item={description.ReferencesAndLinks}
                 className="dmb-list"
               />
 
-              <MetaDataBlock
+              <MetaDataListBlock
                 heading="Ethics Approvals"
                 item={description.EthicsApprovals}
                 className="dmb-list"
