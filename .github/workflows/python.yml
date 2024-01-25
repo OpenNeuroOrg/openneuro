@@ -27,7 +27,7 @@ jobs:
         with:
           deno-version: v1.x
       - name: Install git-annex 
-        run: curl -L http://archive.org/download/git-annex-builds/SHA256E-s53868494--3400215acc1f7f052351d60d17603b36c1338d743b9d8a700eead3dfcd52ad92.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz
+        run: curl -L http://archive.org/download/git-annex-builds/SHA256E-s53592796--6e0a3c16d50379f89d2064081376a3f7f6efa1a89eb1afc2a2335597e7cf9fac.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz
       - name: Install pipenv
         run: pip install 'pipenv==2023.7.23'
       - name: Install dependencies

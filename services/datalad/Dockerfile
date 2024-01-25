@@ -22,7 +22,7 @@ RUN apt-get update \
   && mkdir /yarn \
   && curl -L https://github.com/yarnpkg/yarn/releases/download/v1.22.5/yarn-v1.22.5.tar.gz | tar -C /yarn --strip-components 1 -xvz \
   && ln -sf /yarn/bin/yarn /usr/local/bin/yarn \
-  && curl -L http://archive.org/download/git-annex-builds/SHA256E-s53868494--3400215acc1f7f052351d60d17603b36c1338d743b9d8a700eead3dfcd52ad92.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
+  && curl -L http://archive.org/download/git-annex-builds/SHA256E-s53592796--6e0a3c16d50379f89d2064081376a3f7f6efa1a89eb1afc2a2335597e7cf9fac.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
   && pip3 install 'pipenv==2020.6.2' \
   && pipenv install --deploy --system \
   && chmod 600 /root/.ssh/config \
