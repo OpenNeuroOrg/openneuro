@@ -22478,7 +22478,7 @@ resolve@^2.0.0-next.3:
     sass: ^1.56.1
     tsc-watch: 6.0.4
     typescript: 5.1.6
-    vite: 4.4.12
+    vite: 4.5.2
     vitest: 0.34.4
     vitest-fetch-mock: 0.2.2
     vitest-mongodb: 0.0.5
@@ -25324,46 +25324,6 @@ resolve@^2.0.0-next.3:
   bin:
     vite-node: vite-node.mjs
   checksum: bcbba2f920e119aabe0a9e2d55f4f34e06651c09cc986f7caecb2e35acecf88137aa21c8bf6e0213cb9f011a5c8fd1487ce0d76cd604981b3af84fb7c8a59ab0
-  languageName: node
-  linkType: hard
-
-"vite@npm:4.4.12":
-  version: 4.4.12
-  resolution: "vite@npm:4.4.12"
-  dependencies:
-    esbuild: ^0.18.10
-    fsevents: ~2.3.2
-    postcss: ^8.4.27
-    rollup: ^3.27.1
-  peerDependencies:
-    "@types/node": ">= 14"
-    less: "*"
-    lightningcss: ^1.21.0
-    sass: "*"
-    stylus: "*"
-    sugarss: "*"
-    terser: ^5.4.0
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  peerDependenciesMeta:
-    "@types/node":
-      optional: true
-    less:
-      optional: true
-    lightningcss:
-      optional: true
-    sass:
-      optional: true
-    stylus:
-      optional: true
-    sugarss:
-      optional: true
-    terser:
-      optional: true
-  bin:
-    vite: bin/vite.js
-  checksum: 84049f6d8fb6955b48a2a77a6979b2876a06f1f4eda5f26da786cf8f97584a3d9bb00563f0746df97d62379c4739cd51127c086782df5c626d7fa1bb9aa9b7a8
   languageName: node
   linkType: hard
 
