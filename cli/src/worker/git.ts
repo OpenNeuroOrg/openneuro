@@ -5,19 +5,18 @@ import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
 import fs from "node:fs"
 import {
   GitAnnexAttributes,
+  GitAnnexBackend,
   matchGitAttributes,
   parseGitAttributes,
 } from "../gitattributes.ts"
-import { ensureLink, join } from "../deps.ts"
+import { extname, join } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
-
-// This error originates in isomorphic-git due to a bug in Deno 1.39.4
-// https://github.com/denoland/deno/issues/21795
-self.addEventListener("unhandledrejection", (e) => {
-  if (String(e?.reason)?.endsWith("readfile ''")) {
-    e.preventDefault()
-  }
-})
+import { PromiseQueue } from "./queue.ts"
+/**
+ * Why are we using hash wasm over web crypto?
+ * Web crypto cannot do streaming hashes of the common git-annex functions yet.
+ */
+import { createMD5, createSHA256 } from "npm:hash-wasm"
 
 interface GitContext {
   // Current working dataset
@@ -34,13 +33,9 @@ interface GitContext {
 
 let context: GitContext
 let attributesCache: GitAnnexAttributes
-// Shut down if this is set
-let done = false
 
-function shutdownIfDone() {
-  if (done) {
-    globalThis.close()
-  }
+async function done() {
+  await globalThis.close()
 }
 
 function gitOptions(dir) {
@@ -108,52 +103,76 @@ async function getGitAttributes(): Promise<GitAnnexAttributes> {
 /**
  * Decide if this incoming file is annexed or not
  */
-async function shouldBeAnnexed(absolutePath: string, relativePath: string) {
+async function shouldBeAnnexed(
+  relativePath: string,
+  size: number,
+): Promise<GitAnnexBackend> {
   const gitAttributes = await getGitAttributes()
   const attributes = matchGitAttributes(gitAttributes, relativePath)
   if (attributes.largefiles) {
-    const { size } = await Deno.stat(absolutePath)
-    if (size > attributes.largefiles) {
-      return true
+    if (size > attributes.largefiles && attributes.backend) {
+      return attributes.backend
     } else {
-      return false
+      return "GIT"
     }
   }
   // No rules matched, default to annex
-  return true
+  return "SHA256E"
 }
 
 /**
  * git-annex add equivalent
  */
 async function add(event) {
+  const { size } = await fs.promises.stat(event.data.path)
   const annexed = await shouldBeAnnexed(
-    event.data.path,
     event.data.relativePath,
+    size,
   )
   console.log(event.data.path, annexed)
-  if (annexed) {
-    // Compute hash and add link
-  } else {
+  if (annexed === "GIT") {
     // Simple add case
     const options = {
       ...gitOptions(context.repoPath),
       filepath: event.data.relativePath,
     }
     const targetPath = join(context.repoPath, event.data.relativePath)
-    // Remove the target
-    await Deno.remove(targetPath)
-    // Hard link to the target location
-    await ensureLink(
-      event.data.path,
-      targetPath,
-    )
+    // Copy non-annexed files for git index creation
+    await fs.promises.copyFile(event.data.path, targetPath)
     await git.add(options)
     logger.info(`Added ${event.data.relativePath}`)
+  } else {
+    // Compute hash and add link
+    const computeHash = annexed.startsWith("MD5")
+      ? await createMD5()
+      : await createSHA256()
+    // E in the backend means include the file extension
+    const extension = annexed.endsWith("E")
+      ? extname(event.data.relativePath)
+      : ""
+    computeHash.init()
+    const stream = fs.createReadStream(event.data.path, {
+      highWaterMark: 1024 * 1024 * 10,
+    })
+    for await (const data of stream) {
+      computeHash.update(data)
+    }
+    const digest = computeHash.digest("hex")
+    const annexKey = `${annexed}-${size}--${digest}${extension}`
+    console.log(annexKey)
   }
 }
 
-self.onmessage = async (event) => {
+/**
+ * `git commit` equivalent
+ */
+async function commit() {
+  console.log("Commit goes here")
+}
+
+const workQueue = new PromiseQueue()
+
+self.onmessage = (event) => {
   if (event.data.command === "setContext") {
     context = {
       datasetId: event.data.datasetId,
@@ -164,10 +183,12 @@ self.onmessage = async (event) => {
     }
     setupLogging(event.data.logLevel)
   } else if (event.data.command === "clone") {
-    await update()
+    workQueue.enqueue(update)
   } else if (event.data.command === "add") {
-    await add(event)
+    workQueue.enqueue(add, event)
+  } else if (event.data.command === "commit") {
+    workQueue.enqueue(commit)
   } else if (event.data.command === "done") {
-    done = true
+    workQueue.enqueue(done)
   }
 }

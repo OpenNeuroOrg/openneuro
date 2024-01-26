@@ -1,21 +1,17 @@
-import { string } from "https://deno.land/x/cliffy@v1.0.0-rc.3/flags/types/string.ts"
 import { ignore } from "./deps.ts"
 
 /**
  * Git annex supports many backends, we support a limited subset used by OpenNeuro (for now)
  * https://git-annex.branchable.com/backends/
  */
-export enum SupportedAnnexBackends {
-  MD5E = "MD5E",
-  SHA256E = "SHA256E",
-}
+export type GitAnnexBackend = "GIT" | "SHA256" | "SHA256E" | "MD5" | "MD5E"
 
 /**
  * Annex attributes for one path
  */
 export interface GitAnnexAttributeOptions {
   largefiles?: number
-  backend?: SupportedAnnexBackends
+  backend?: GitAnnexBackend
   match: ignore.Ignore
 }
 
@@ -66,7 +62,7 @@ export function parseGitAttributes(gitattributes: string): GitAnnexAttributes {
           }
         }
       } else if (key === "annex.backend") {
-        attributesObject[prefix].backend = value as SupportedAnnexBackends
+        attributesObject[prefix].backend = value as GitAnnexBackend
       }
     }
   }
@@ -74,7 +70,7 @@ export function parseGitAttributes(gitattributes: string): GitAnnexAttributes {
 }
 
 interface MatchingAnnexAttributes {
-  backend?: SupportedAnnexBackends
+  backend?: GitAnnexBackend
   largefiles?: number
 }
 

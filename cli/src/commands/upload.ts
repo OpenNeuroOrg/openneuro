@@ -106,6 +106,10 @@ export async function uploadAction(
       "relativePath": relativePath,
     })
   }
+
+  // Generate a commit
+  worker.postMessage({ command: "commit" })
+
   // Close after all tasks are queued
   worker.postMessage({ command: "close" })
 }
