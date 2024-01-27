@@ -9,7 +9,7 @@ import {
   matchGitAttributes,
   parseGitAttributes,
 } from "../gitattributes.ts"
-import { extname, join } from "../deps.ts"
+import { extname, join, LevelName } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 /**
@@ -30,6 +30,41 @@ interface GitContext {
   // OpenNeuro git access short lived API key
   authorization: string
 }
+
+/**
+ * Events with no arguments
+ */
+interface GitWorkerEventGeneric {
+  data: {
+    command: "clone" | "commit" | "done"
+  }
+}
+
+interface GitWorkerEventSetupData extends GitContext {
+  command: "setup"
+  logLevel: LevelName
+}
+
+/** Setup event to set dataset and repo state for commands until next call */
+interface GitWorkerEventSetup {
+  data: GitWorkerEventSetupData
+}
+
+/** Add event to add one file */
+interface GitWorkerEventAdd {
+  data: {
+    command: "add"
+    // Absolute path on the local system
+    path: string
+    // Dataset relative path
+    relativePath: string
+  }
+}
+
+type GitWorkerEvent =
+  | GitWorkerEventSetup
+  | GitWorkerEventGeneric
+  | GitWorkerEventAdd
 
 let context: GitContext
 let attributesCache: GitAnnexAttributes
@@ -123,7 +158,7 @@ async function shouldBeAnnexed(
 /**
  * git-annex add equivalent
  */
-async function add(event) {
+async function add(event: GitWorkerEventAdd) {
   const { size } = await fs.promises.stat(event.data.path)
   const annexed = await shouldBeAnnexed(
     event.data.relativePath,
@@ -172,8 +207,8 @@ async function commit() {
 
 const workQueue = new PromiseQueue()
 
-self.onmessage = (event) => {
-  if (event.data.command === "setContext") {
+self.onmessage = (event: GitWorkerEvent) => {
+  if (event.data.command === "setup") {
     context = {
       datasetId: event.data.datasetId,
       sourcePath: event.data.sourcePath,

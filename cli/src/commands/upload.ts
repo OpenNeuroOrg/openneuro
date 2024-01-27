@@ -71,7 +71,7 @@ export async function uploadAction(
   await Deno.mkdir(repoPath, { recursive: true })
   // Configure worker
   worker.postMessage({
-    "command": "setContext",
+    "command": "setup",
     "datasetId": datasetId,
     "sourcePath": dataset_directory_abs,
     "repoPath": repoPath,
