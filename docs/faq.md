@@ -41,7 +41,7 @@ For any questions or concerns please email Franklin: <ffein@stanford.edu>
 
 ## How can I upload data onto OpenNeuro?
 
-We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our [command-line utility tool](https://docs.openneuro.org/packages-openneuro-cli-readme)
+We offer two options for uploading data onto OpenNeuro. The first is to upload via the web interface. The second is to upload via our [command-line utility tool](https://docs.openneuro.org/packages/openneuro-cli.html).
 
 ## Why can I not use CC-BY (or other CC license)?
 
