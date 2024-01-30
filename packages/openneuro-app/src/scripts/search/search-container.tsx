@@ -10,6 +10,7 @@ import {
 } from "../authentication/profile"
 import { Button } from "@openneuro/components/button"
 import { Loading } from "@openneuro/components/loading"
+import { NeurobagelSearch } from "@openneuro/components/search-page"
 import {
   AgeRangeInput,
   AllDatasetsToggle,
@@ -156,7 +157,9 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         )}
         renderSearchFacets={() => (
           <>
+            {/* <NeurobagelSearch /> */}
             <KeywordInput />
+            {/* <NeurobagelSearch /> */}
             <AdminUser>
               <AllDatasetsToggle />
             </AdminUser>
@@ -188,6 +191,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 <TracerRadionuclides />
               </>
             )}
+            {/* <NeurobagelSearch /> */}
           </>
         )}
         renderLoading={() =>

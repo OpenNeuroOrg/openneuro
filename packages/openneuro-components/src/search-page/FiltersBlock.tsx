@@ -69,6 +69,7 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
+      <NeurobagelSearch />
       <h2>
         {noFilters
           ? (
@@ -98,7 +99,6 @@ export const FiltersBlock = ({
             </>
           )}
       </h2>
-      {/* <NeurobagelSearch /> */}
       <ul className="active-filters">
         {keywords && (
           <TermListItem
@@ -254,7 +254,6 @@ export const FiltersBlock = ({
           />
         )}
       </ul>
-      <NeurobagelSearch />
     </div>
   )
 }

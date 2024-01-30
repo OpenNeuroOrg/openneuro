@@ -1,11 +1,25 @@
 import React from "react"
+
+import NeurobagelLogo from "./neurobagel_logo.svg"
 import { AccordionTab } from "../accordion/AccordionTab"
 import { AccordionWrap } from "../accordion/AccordionWrap"
 import { Icon } from "@openneuro/components/icon"
 import styled from "@emotion/styled"
 
 const NeurobagelSearchDiv = styled.div`
-  padding-bottom: 10px;
+display: block;
+margin-left: auto;
+// margin-right: auto;
+width: 280px;
+// text-align: end;
+border: 0;
+border-radius: 0;
+padding: 0;
+background: none;
+  img.inline-icon {
+    height: 1.1em;
+    vertical-align: middle;
+  }
   .on-accordion-wrapper .keyword-accordion {
     .accordion-title {
         position: absolute;
@@ -13,7 +27,7 @@ const NeurobagelSearchDiv = styled.div`
         @media (max-width: 394px) {
           left: 115px;
         }
-        left: 350px;
+        left: 252px;
     }
   }
 `
@@ -21,8 +35,9 @@ const NeurobagelSearchDiv = styled.div`
 export const NeurobagelSearch = () => {
   return (
     <NeurobagelSearchDiv>
+      <img src={NeurobagelLogo} className="inline-icon"/>{" "}
       <a href="https://query.neurobagel.org/?node=OpenNeuro" target="_blank">
-        <Icon icon="fas fa-user" label="Search at participant level with Neurobagel" />
+        Neurobagel participant search
       </a>        
       <AccordionWrap>
         <AccordionTab

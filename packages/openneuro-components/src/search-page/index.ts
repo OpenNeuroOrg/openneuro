@@ -2,6 +2,7 @@ import { SearchResultsList } from "./SearchResultsList"
 import { FiltersBlock } from "./FiltersBlock"
 import { SearchPage } from "./SearchPage"
 import { SearchSort } from "./SearchSort"
+import { NeurobagelSearch } from "./NeurobagelSearch"
 
 /* TEMPORARY EXPORTS */
 // TODO: remove
@@ -15,4 +16,5 @@ export {
   SearchResultsList,
   SearchSort,
   SearchSortContainerExample,
+  NeurobagelSearch
 }
