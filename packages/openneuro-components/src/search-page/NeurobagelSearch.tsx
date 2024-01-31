@@ -3,19 +3,12 @@ import React from "react"
 import NeurobagelLogo from "./neurobagel_logo.svg"
 import { AccordionTab } from "../accordion/AccordionTab"
 import { AccordionWrap } from "../accordion/AccordionWrap"
-import { Icon } from "@openneuro/components/icon"
 import styled from "@emotion/styled"
 
 const NeurobagelSearchDiv = styled.div`
-display: block;
-margin-left: auto;
-// margin-right: auto;
-width: 280px;
-// text-align: end;
-border: 0;
-border-radius: 0;
-padding: 0;
-background: none;
+padding-bottom: 15px;
+border-bottom: 1px solid #dfdfdf; // $newspaper in _variables.scss
+margin-bottom: 10px;
   img.inline-icon {
     height: 1.1em;
     vertical-align: middle;
@@ -24,10 +17,13 @@ background: none;
     .accordion-title {
         position: absolute;
         top: -20px;
-        @media (max-width: 394px) {
-          left: 115px;
+        @media (max-width: 421px) {
+          left: 93px;
         }
-        left: 252px;
+        @media (max-width: 330px) {
+          left: 130px;
+        }
+        left: 375px;
     }
   }
 `
@@ -37,7 +33,7 @@ export const NeurobagelSearch = () => {
     <NeurobagelSearchDiv>
       <img src={NeurobagelLogo} className="inline-icon"/>{" "}
       <a href="https://query.neurobagel.org/?node=OpenNeuro" target="_blank">
-        Neurobagel participant search
+        Search at the participant-level with Neurobagel
       </a>        
       <AccordionWrap>
         <AccordionTab

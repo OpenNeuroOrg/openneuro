@@ -157,9 +157,8 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         )}
         renderSearchFacets={() => (
           <>
-            {/* <NeurobagelSearch /> */}
+            <NeurobagelSearch />
             <KeywordInput />
-            {/* <NeurobagelSearch /> */}
             <AdminUser>
               <AllDatasetsToggle />
             </AdminUser>
@@ -191,7 +190,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 <TracerRadionuclides />
               </>
             )}
-            {/* <NeurobagelSearch /> */}
           </>
         )}
         renderLoading={() =>

@@ -69,7 +69,7 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
-      <NeurobagelSearch />
+      {/* <NeurobagelSearch /> */}
       <h2>
         {noFilters
           ? (
