@@ -1,15 +1,14 @@
-// Might be useful if this is shared by the browser uploader at some point
-import "https://deno.land/x/indexeddb@1.3.5/polyfill.ts"
 import git from "npm:isomorphic-git@1.25.3"
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
 import fs from "node:fs"
+import { decode } from "https://deno.land/x/djwt@v3.0.1/mod.ts"
 import {
   GitAnnexAttributes,
   GitAnnexBackend,
   matchGitAttributes,
   parseGitAttributes,
 } from "../gitattributes.ts"
-import { extname, join, LevelName } from "../deps.ts"
+import { basename, dirname, join, LevelName, relative } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 /**
@@ -29,6 +28,10 @@ interface GitContext {
   repoEndpoint: string
   // OpenNeuro git access short lived API key
   authorization: string
+  // Author name
+  name: string
+  // Author email
+  email: string
 }
 
 /**
@@ -36,7 +39,7 @@ interface GitContext {
  */
 interface GitWorkerEventGeneric {
   data: {
-    command: "clone" | "commit" | "done"
+    command: "clone" | "commit" | "done" | "push"
   }
 }
 
@@ -69,18 +72,23 @@ type GitWorkerEvent =
 let context: GitContext
 let attributesCache: GitAnnexAttributes
 
+/**
+ * Paths to upload to the remote annex
+ */
+const annexKeys: Record<string, string> = {}
+
 async function done() {
   await globalThis.close()
 }
 
-function gitOptions(dir) {
+function gitOptions(dir: string) {
   return {
     fs,
     http,
     dir,
     url: context.repoEndpoint,
     headers: {
-      Authorization: context.authorization,
+      Authorization: `Bearer ${context.authorization}`,
     },
   }
 }
@@ -156,6 +164,47 @@ async function shouldBeAnnexed(
 }
 
 /**
+ * git-annex hashDirLower implementation based on https://git-annex.branchable.com/internals/hashing/
+ * Compute the directory path from a git-annex filename
+ */
+export async function hashDirLower(
+  annexKey: string,
+): Promise<[string, string]> {
+  const computeMD5 = await createMD5()
+  computeMD5.init()
+  computeMD5.update(annexKey)
+  const digest = computeMD5.digest("hex")
+  return [digest.slice(0, 3), digest.slice(3, 6)]
+}
+
+/**
+ * Return the relative path to the .git/annex directory from a repo relative path
+ *
+ * Used for symlink path creation
+ */
+export function annexRelativePath(path: string) {
+  return relative(dirname(join("/", path)), "/")
+}
+
+/**
+ * git-annex hashDirMixed implementation based on https://git-annex.branchable.com/internals/hashing/
+ */
+export async function hashDirMixed(
+  annexKey: string,
+): Promise<[string, string]> {
+  const computeMD5 = await createMD5()
+  computeMD5.init()
+  computeMD5.update(annexKey)
+  const digest = computeMD5.digest("binary")
+  const firstWord = new DataView(digest.buffer).getUint32(0, true)
+  const nums = Array.from({ length: 4 }, (_, i) => (firstWord >> (6 * i)) & 31)
+  const letters = nums.map(
+    (num) => "0123456789zqjxkmvwgpfZQJXKMVWGPF".charAt(num),
+  )
+  return [`${letters[1]}${letters[0]}`, `${letters[3]}${letters[2]}`]
+}
+
+/**
  * git-annex add equivalent
  */
 async function add(event: GitWorkerEventAdd) {
@@ -164,7 +213,6 @@ async function add(event: GitWorkerEventAdd) {
     event.data.relativePath,
     size,
   )
-  console.log(event.data.path, annexed)
   if (annexed === "GIT") {
     // Simple add case
     const options = {
@@ -175,16 +223,18 @@ async function add(event: GitWorkerEventAdd) {
     // Copy non-annexed files for git index creation
     await fs.promises.copyFile(event.data.path, targetPath)
     await git.add(options)
-    logger.info(`Added ${event.data.relativePath}`)
+    logger.info(`Add\t${event.data.relativePath}`)
   } else {
-    // Compute hash and add link
+    // E in the backend means include the file extension
+    let extension = ""
+    if (annexed.endsWith("E")) {
+      const filename = basename(event.data.relativePath)
+      extension = filename.substring(filename.indexOf("."))
+    }
+    // Compute hash
     const computeHash = annexed.startsWith("MD5")
       ? await createMD5()
       : await createSHA256()
-    // E in the backend means include the file extension
-    const extension = annexed.endsWith("E")
-      ? extname(event.data.relativePath)
-      : ""
     computeHash.init()
     const stream = fs.createReadStream(event.data.path, {
       highWaterMark: 1024 * 1024 * 10,
@@ -193,20 +243,106 @@ async function add(event: GitWorkerEventAdd) {
       computeHash.update(data)
     }
     const digest = computeHash.digest("hex")
-    const annexKey = `${annexed}-${size}--${digest}${extension}`
-    console.log(annexKey)
+    const annexKey = `${annexed}-s${size}--${digest}${extension}`
+    const annexPath = join(
+      ".git",
+      "annex",
+      "objects",
+      ...(await hashDirMixed(annexKey)),
+      annexKey,
+      annexKey,
+    )
+    // Path to this file in our repo
+    const fileRepoPath = join(context.repoPath, event.data.relativePath)
+
+    let link
+    let forceAdd = false
+    try {
+      // Test if the repo already has this object
+      link = await fs.promises.readlink(fileRepoPath)
+    } catch (_err) {
+      forceAdd = true
+    }
+
+    // Calculate the relative symlinks for our file
+    const symlinkTarget = join(
+      annexRelativePath(event.data.relativePath),
+      annexPath,
+    )
+
+    // Key has changed if the existing link points to another object
+    if (forceAdd || link !== symlinkTarget) {
+      // Upload this key after the git commit
+      annexKeys[annexKey] = event.data.path
+      // This object has a new annex hash, update the symlink and add it
+      const symlinkTarget = join(
+        annexRelativePath(event.data.relativePath),
+        annexPath,
+      )
+      // Verify parent directories exist
+      await fs.promises.mkdir(dirname(fileRepoPath), { recursive: true })
+      // Remove the existing symlink or git file
+      await fs.promises.rm(fileRepoPath, { force: true })
+      // Create our new symlink pointing at the right annex object
+      await fs.promises.symlink(symlinkTarget, fileRepoPath)
+      const options = {
+        ...gitOptions(context.repoPath),
+        filepath: event.data.relativePath,
+      }
+      await git.add(options)
+      logger.info(`Annexed\t${event.data.relativePath}`)
+    } else {
+      logger.info(`Unchanged\t${event.data.relativePath}`)
+    }
   }
+}
+
+/**
+ * Git repo specific token
+ */
+interface OpenNeuroGitToken {
+  sub: string
+  email: string
+  provider: string
+  name: string
+  admin: boolean
+  scopes: [string]
+  dataset: string
+  iat: number
+  exp: number
 }
 
 /**
  * `git commit` equivalent
  */
 async function commit() {
-  console.log("Commit goes here")
+  const options = gitOptions(context.repoPath)
+  const decodedToken = decode(context.authorization)
+  const { email, name } = decodedToken[1] as OpenNeuroGitToken
+  const commitHash = await git.commit({
+    ...options,
+    author: {
+      name,
+      email,
+    },
+    message: "[OpenNeuro] Added local files",
+  })
+  logger.info(`Committed as "${commitHash}"`)
 }
 
+/**
+ * `git push` and `git-annex copy --to=openneuro`
+ */
+async function push() {
+  await git.push(
+    gitOptions(context.repoPath),
+  )
+}
+
+// Queue of tasks to perform in order
 const workQueue = new PromiseQueue()
 
+// @ts-ignore Expected for workers
 self.onmessage = (event: GitWorkerEvent) => {
   if (event.data.command === "setup") {
     context = {
@@ -215,6 +351,8 @@ self.onmessage = (event: GitWorkerEvent) => {
       repoPath: event.data.repoPath,
       repoEndpoint: event.data.repoEndpoint,
       authorization: event.data.authorization,
+      name: event.data.name,
+      email: event.data.email,
     }
     setupLogging(event.data.logLevel)
   } else if (event.data.command === "clone") {
@@ -223,6 +361,8 @@ self.onmessage = (event: GitWorkerEvent) => {
     workQueue.enqueue(add, event)
   } else if (event.data.command === "commit") {
     workQueue.enqueue(commit)
+  } else if (event.data.command === "push") {
+    workQueue.enqueue(push)
   } else if (event.data.command === "done") {
     workQueue.enqueue(done)
   }

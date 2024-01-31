@@ -39,6 +39,8 @@ export { resolve } from "https://deno.land/std@0.212.0/path/resolve.ts"
 export { relative } from "https://deno.land/std@0.212.0/path/relative.ts"
 export { join } from "https://deno.land/std@0.212.0/path/join.ts"
 export { extname } from "https://deno.land/std@0.212.0/path/extname.ts"
+export { basename } from "https://deno.land/std@0.212.0/path/basename.ts"
+export { dirname } from "https://deno.land/std@0.212.0/path/dirname.ts"
 // Test suites
 export {
   assert,

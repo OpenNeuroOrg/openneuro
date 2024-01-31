@@ -76,7 +76,7 @@ export async function uploadAction(
     "sourcePath": dataset_directory_abs,
     "repoPath": repoPath,
     "repoEndpoint": `${clientConfig.url}/git/${endpoint}/${datasetId}`,
-    "authorization": `Bearer ${token}`,
+    "authorization": token,
     "logLevel": logger.levelName,
   })
 
