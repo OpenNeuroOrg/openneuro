@@ -31,11 +31,18 @@ export const HeaderContainer: FC = () => {
   const [newKeyword, setNewKeyword, newKeywordRef] = useState("")
 
   const handleSubmit = () => {
-    const query = JSON.stringify({
+    const newQuery = {
       keywords: newKeywordRef.current ? [newKeywordRef.current] : [],
-    })
+    }
+    const query = JSON.stringify(newQuery)
     setNewKeyword("")
-    navigate(`/search?query=${query}`)
+    if (
+      newQuery?.keywords?.length && newQuery.keywords[0].match(/^ds[0-9]{6,6}$/)
+    ) {
+      navigate(`/datasets/${newQuery.keywords[0]}`)
+    } else {
+      navigate(`/search?query=${query}`)
+    }
   }
 
   const toggleLoginModal = (): void => {
