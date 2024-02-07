@@ -1,4 +1,9 @@
-import { validateCommand } from "./validate.ts"
+import {
+  consoleFormat,
+  readFileTree,
+  validate,
+  validateCommand,
+} from "../bids_validator.ts"
 import { ClientConfig, getConfig } from "./login.ts"
 import { logger } from "../logger.ts"
 import { Confirm, join, ProgressBar, relative, resolve, walk } from "../deps.ts"
@@ -42,7 +47,19 @@ export async function uploadAction(
     `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
   )
 
-  // TODO - call the validator here
+  const schemaResult = await validate(
+    await readFileTree(dataset_directory_abs),
+    options,
+  )
+  console.log(consoleFormat(schemaResult))
+
+  for (const issue of schemaResult.issues.values()) {
+    if (issue.severity === "error") {
+      console.log("Please correct any errors before uploading.")
+      return
+    }
+  }
+  console.log("Validation complete, preparing upload.")
 
   let datasetId = "ds001130"
   if (options.dataset) {
@@ -87,7 +104,7 @@ export async function uploadAction(
   })
   progressBar.render(0)*/
 
-  console.log(join(repoDir, datasetId))
+  logger.info(`Repo path: ${join(repoDir, datasetId)}`)
   worker.postMessage({
     "command": "clone",
   })

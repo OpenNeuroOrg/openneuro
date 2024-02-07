@@ -12,5 +12,8 @@
       "services/datalad/tests/.pytest_cache",
       "**/__pycache/**"
     ]
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.214.0/"
   }
 }
