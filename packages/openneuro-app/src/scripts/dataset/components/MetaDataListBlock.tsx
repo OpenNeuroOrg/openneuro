@@ -1,4 +1,5 @@
 import React from "react"
+import { Markdown } from "../../utils/markdown"
 
 export interface MetaDataListBlockProps {
   heading: string
@@ -18,11 +19,13 @@ export const MetaDataListBlock = ({
     <div className={"dataset-meta-block " + className}>
       <h2 className="dmb-heading">{heading}</h2>
       <ul>
-        {fieldContent.map((item, index) => (
-          <li key={index}>
-            <Markdown>{item}</Markdown>
-          </li>
-        ))}
+        {Array.isArray(fieldContent)
+          ? fieldContent.map((item, index) => (
+            <li key={index}>
+              <Markdown>{item}</Markdown>
+            </li>
+          ))
+          : item}
       </ul>
     </div>
   )
