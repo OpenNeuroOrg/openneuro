@@ -1,4 +1,4 @@
-import git from "npm:isomorphic-git@1.25.3"
+import git, { STAGE, TREE } from "npm:isomorphic-git@1.25.3"
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
 import fs from "node:fs"
 import { decode } from "https://deno.land/x/djwt@v3.0.1/mod.ts"
@@ -319,15 +319,51 @@ async function commit() {
   const options = gitOptions(context.repoPath)
   const decodedToken = decode(context.authorization)
   const { email, name } = decodedToken[1] as OpenNeuroGitToken
-  const commitHash = await git.commit({
+  let generateCommit = false
+  let changes = 0
+  const tree = await git.walk({
     ...options,
-    author: {
-      name,
-      email,
+    trees: [TREE({ ref: "HEAD" }), STAGE()],
+    map: async function (filepath, [A, B]) {
+      if (await A?.type() === "blob" || await B?.type() === "blob") {
+        const Aoid = await A.oid()
+        const Boid = await B.oid()
+        let type = "equal"
+        if (Aoid !== Boid) {
+          logger.info(`modified:\t${filepath}`)
+          type = "modify"
+        }
+        if (Aoid === undefined) {
+          logger.info(`new file:\t${filepath}`)
+          type = "add"
+        }
+        if (Boid === undefined) {
+          logger.info(`deleted:\t${filepath}`)
+          type = "remove"
+        }
+        if (type !== "equal") {
+          generateCommit = true
+          changes += 1
+        }
+      }
     },
-    message: "[OpenNeuro] Added local files",
   })
-  logger.info(`Committed as "${commitHash}"`)
+  if (generateCommit) {
+    console.log(
+      `Detected ${changes} change${changes === 1 ? "" : "s"}.`,
+    )
+    const commitHash = await git.commit({
+      ...options,
+      author: {
+        name,
+        email,
+      },
+      message: "[OpenNeuro] Added local files",
+    })
+    logger.info(`Committed as "${commitHash}"`)
+  } else {
+    console.log("No changes found, not uploading.")
+  }
 }
 
 /**

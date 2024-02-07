@@ -55,7 +55,7 @@ export async function uploadAction(
 
   for (const issue of schemaResult.issues.values()) {
     if (issue.severity === "error") {
-      console.log("Please correct any errors before uploading.")
+      console.log("Please correct validation errors before uploading.")
       return
     }
   }
@@ -126,6 +126,9 @@ export async function uploadAction(
 
   // Generate a commit
   worker.postMessage({ command: "commit" })
+
+  // Push git/annexed data
+  worker.postMessage({ command: "push" })
 
   // Close after all tasks are queued
   worker.postMessage({ command: "close" })
