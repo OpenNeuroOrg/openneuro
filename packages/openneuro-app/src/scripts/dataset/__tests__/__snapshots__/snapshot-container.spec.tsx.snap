@@ -1279,6 +1279,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             >
               Funding
             </h2>
+            <ul />
           </div>
           <div
             class="dataset-meta-block dmb-list"
@@ -1288,6 +1289,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             >
               References and Links
             </h2>
+            <ul />
           </div>
           <div
             class="dataset-meta-block dmb-list"
@@ -1297,6 +1299,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             >
               Ethics Approvals
             </h2>
+            <ul />
           </div>
         </div>
       </div>
