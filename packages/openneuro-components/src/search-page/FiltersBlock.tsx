@@ -4,6 +4,8 @@ import { FilterListItem } from "./FilterListItem"
 import { FilterDateItem } from "./FilterDateItem"
 import { TermListItem } from "./TermListItem"
 import { FacetSelectValueType } from "../facets/FacetSelect"
+import { NeurobagelSearch } from "./NeurobagelSearch"
+
 
 export interface FiltersBlockProps {
   keywords: string[]
@@ -67,6 +69,7 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
+      {/* <NeurobagelSearch /> */}
       <h2>
         {noFilters
           ? (
