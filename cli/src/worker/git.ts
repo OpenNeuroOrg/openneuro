@@ -11,6 +11,8 @@ import {
 import { basename, dirname, join, LevelName, relative } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
+import { checkKey, storeKey } from "./transferKey.ts"
+
 /**
  * Why are we using hash wasm over web crypto?
  * Web crypto cannot do streaming hashes of the common git-annex functions yet.
@@ -326,8 +328,8 @@ async function commit() {
     trees: [TREE({ ref: "HEAD" }), STAGE()],
     map: async function (filepath, [A, B]) {
       if (await A?.type() === "blob" || await B?.type() === "blob") {
-        const Aoid = await A.oid()
-        const Boid = await B.oid()
+        const Aoid = await A?.oid()
+        const Boid = await B?.oid()
         let type = "equal"
         if (Aoid !== Boid) {
           logger.info(`modified:\t${filepath}`)
@@ -363,6 +365,7 @@ async function commit() {
     logger.info(`Committed as "${commitHash}"`)
   } else {
     console.log("No changes found, not uploading.")
+    self.close()
   }
 }
 
@@ -370,6 +373,33 @@ async function commit() {
  * `git push` and `git-annex copy --to=openneuro`
  */
 async function push() {
+  // Git-annex copy --to=openneuro
+  for (const [key, path] of Object.entries(annexKeys)) {
+    const checkKeyResult = await checkKey({
+      url: context.repoEndpoint,
+      token: context.authorization,
+    }, key)
+    if (checkKeyResult) {
+      logger.info(`Skipping key "${key}" present on remote`)
+    } else {
+      const storeKeyResult = await storeKey(
+        {
+          url: context.repoEndpoint,
+          token: context.authorization,
+        },
+        key,
+        path,
+      )
+      if (storeKeyResult === -1) {
+        logger.error(`Failed to transfer annex object "${key}"`)
+      } else {
+        logger.info(
+          `Stored ${storeKeyResult} bytes for key "${key}" from path "${path}"`,
+        )
+      }
+    }
+  }
+  // Git push
   await git.push(
     gitOptions(context.repoPath),
   )
