@@ -47,6 +47,7 @@ export const AccordionTab: FC<AccordionTabProps> = ({
     >
       <div
         className={`accordion-title ${isOpen ? "open" : ""}`}
+        role="switch"
         onClick={() => {
           onClick?.(!isOpen)
           setOpen(!isOpen)
