@@ -156,6 +156,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 >
                   <div
                     class="accordion-title "
+                    role="switch"
                   >
                     <div>
                       <h3
@@ -204,6 +205,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                         >
                           <div
                             class="accordion-title "
+                            role="switch"
                           >
                             <span>
                               view 1 warning in 1 file
@@ -223,6 +225,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                                 >
                                   <div
                                     class="accordion-title "
+                                    role="switch"
                                   >
                                     <span
                                       class="file-header"
@@ -556,6 +559,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                     >
                       <div
                         class="accordion-title "
+                        role="switch"
                       >
                         <span
                           aria-label="DS003-downsampled (only T1)"
@@ -675,6 +679,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                               >
                                 <div
                                   class="accordion-title "
+                                  role="switch"
                                 >
                                   <span
                                     aria-label="sub-01"
@@ -708,6 +713,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                               >
                                 <div
                                   class="accordion-title "
+                                  role="switch"
                                 >
                                   <span
                                     aria-label="sub-02"
@@ -766,6 +772,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                     >
                       <div
                         class="accordion-title open"
+                        role="switch"
                       >
                         <span
                           aria-label="DS003-downsampled (only T1)"
@@ -885,6 +892,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                               >
                                 <div
                                   class="accordion-title "
+                                  role="switch"
                                 >
                                   <span
                                     aria-label="sub-01"
@@ -918,6 +926,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                               >
                                 <div
                                   class="accordion-title "
+                                  role="switch"
                                 >
                                   <span
                                     aria-label="sub-02"
