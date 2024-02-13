@@ -3,13 +3,6 @@
  */
 import { Command, Confirm, Secret, Select } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
-import { LoginError } from "../error.ts"
-
-export interface ClientConfig {
-  url: string
-  token: string
-  errorReporting: boolean
-}
 
 const messages = {
   url:
@@ -17,25 +10,6 @@ const messages = {
   token: "API key for OpenNeuro. See https://openneuro.org/keygen",
   errorReporting:
     "Enable error reporting. Errors and performance metrics are sent to the configured OpenNeuro instance.",
-}
-
-/**
- * Get credentials from local storage
- */
-export function getConfig(): ClientConfig {
-  const url = localStorage.getItem("url")
-  const token = localStorage.getItem("token")
-  const errorReporting = localStorage.getItem("errorReporting") === "true"
-  if (url && token && errorReporting) {
-    const config: ClientConfig = {
-      url,
-      token,
-      errorReporting,
-    }
-    return config
-  } else {
-    throw new LoginError("Run `openneuro login` before upload.")
-  }
 }
 
 export async function loginAction(options: CommandOptions) {

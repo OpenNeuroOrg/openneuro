@@ -1,5 +1,5 @@
 import { Command, TextLineStream } from "../deps.ts"
-import { getConfig } from "./login.ts"
+import { getConfig } from "../config.ts"
 
 const prepareRepoAccess = `
   mutation prepareRepoAccess($datasetId: ID!) {

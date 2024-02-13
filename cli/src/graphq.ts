@@ -2,7 +2,7 @@
  * Minimalist OpenNeuro client with no dependencies
  */
 
-import { getConfig } from "./commands/login.ts"
+import { getConfig } from "./config.ts"
 import { QueryError } from "./error.ts"
 
 function request(query: string, variables = {}): Promise<Response> {

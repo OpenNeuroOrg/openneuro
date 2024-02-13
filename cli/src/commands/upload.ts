@@ -4,24 +4,11 @@ import {
   validate,
   validateCommand,
 } from "../bids_validator.ts"
-import { ClientConfig, getConfig } from "./login.ts"
 import { logger } from "../logger.ts"
 import { Confirm, join, ProgressBar, relative, resolve, walk } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
 import { getRepoAccess } from "./git-credential.ts"
-
-export function readConfig(): ClientConfig {
-  const config = getConfig()
-  logger.info(
-    `configured with URL "${config.url}" and token "${
-      config.token.slice(
-        0,
-        4,
-      )
-    }...${config.token.slice(-4)}"`,
-  )
-  return config
-}
+import { readConfig } from "../config.ts"
 
 async function getRepoDir(url: URL): Promise<string> {
   const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
