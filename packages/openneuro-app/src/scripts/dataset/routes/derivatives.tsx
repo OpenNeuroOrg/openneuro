@@ -1,8 +1,10 @@
 import React from "react"
+import { Navigate, useParams } from "react-router-dom"
 import DownloadS3Derivative from "../download/download-derivative-s3"
 import DownloadDataLadDerivative from "../download/download-derivative-datalad"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3 } from "./styles/header-row"
+import { useAgreement } from "../../components/agreement"
 
 interface DerivativeElementProps {
   name: string
@@ -38,6 +40,12 @@ interface DerivativesProps {
 }
 
 const Derivatives = ({ derivatives }: DerivativesProps): JSX.Element => {
+  const { datasetId, tag: snapshotTag } = useParams()
+  const [agreed] = useAgreement()
+  // If the derivatives page is directly visited without the agreement, return to the dataset page
+  if (!agreed) {
+    return <Navigate to={`/datasets/${datasetId}`} replace={true} />
+  }
   return (
     <DatasetPageBorder>
       <HeaderRow3>Available Derivatives</HeaderRow3>
