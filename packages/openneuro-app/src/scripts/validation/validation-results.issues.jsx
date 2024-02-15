@@ -31,23 +31,28 @@ class Issues extends React.Component {
         </span>
       )
 
-      // issue sub-errors
-      const subErrors = Array.from(issue.files).map((error, index2) => {
-        // Schema validator returns multiple files here
+      let subErrors = []
+      if (issue.files instanceof Map) {
+        // Schema validator returns multiple files here as a map
         // map those to the old sub-issue model to display them
-        if (error?.length) {
-          return error.filter(Boolean).map((i, index3) => {
-            return (
-              <Issue
-                type={this.props.issueType}
-                file={i.file}
-                error={i}
-                index={index3}
-                key={index3}
-              />
-            )
-          })
-        } else {
+        let index = 0
+        for (const [path, fObj] of issue.files) {
+          const error = {
+            reason: path,
+            file: fObj,
+          }
+          subErrors.push(
+            (<Issue
+              type={this.props.issueType}
+              error={error}
+              index={index}
+              key={index}
+            />),
+          )
+          index += 1
+        }
+      } else {
+        subErrors = Array.from(issue.files).map((error, index2) => {
           return error
             ? (
               <Issue
@@ -59,8 +64,8 @@ class Issues extends React.Component {
               />
             )
             : null
-        }
-      })
+        })
+      }
 
       if (issue.additionalFileCount > 0) {
         subErrors.push(
