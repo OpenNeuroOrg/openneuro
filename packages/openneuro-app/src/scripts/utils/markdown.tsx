@@ -159,9 +159,11 @@ export function Markdown({ children }: MarkdownProps) {
     ALLOWED_ATTR,
     ALLOW_ARIA_ATTR: false,
   })
+  /* Work around MarkdownToJsx inefficiency */
+  const trimmed = sanitizedMarkdown.replace(/ +$/gm, '')
   return (
     <>
-      <MarkdownToJsx>{sanitizedMarkdown}</MarkdownToJsx>
+      <MarkdownToJsx>{trimmed}</MarkdownToJsx>
     </>
   )
 }
