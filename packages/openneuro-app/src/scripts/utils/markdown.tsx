@@ -1,5 +1,5 @@
 import React from "react"
-import MarkdownToJsx from "markdown-to-jsx"
+import ReactMarkdown from "react-markdown"
 import DOMPurify from "dompurify"
 
 interface MarkdownProps {
@@ -161,7 +161,7 @@ export function Markdown({ children }: MarkdownProps) {
   })
   return (
     <>
-      <MarkdownToJsx>{sanitizedMarkdown}</MarkdownToJsx>
+      <ReactMarkdown>{sanitizedMarkdown}</ReactMarkdown>
     </>
   )
 }

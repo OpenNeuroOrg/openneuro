@@ -498,46 +498,30 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
               <div>
                 <article>
                   <section>
-                    <div>
-                      <p>
-                        This dataset was obtained from the OpenfMRI project (
-                        <a
-                          href="http://www.openfmri.org"
-                        >
-                          http://www.openfmri.org
-                        </a>
-                        ).
+                    <p>
+                      This dataset was obtained from the OpenfMRI project (http://www.openfmri.org).
 Accession #: ds003
 Description: Rhyme judgment
-                      </p>
-                      <p>
-                        Release history:
+                    </p>
+                    
+
+                    <p>
+                      Release history:
 10/06/2011: initial release
 3/21/2013: Updated release with QA information
-                      </p>
-                      <p>
-                        This dataset is made available under the Public Domain Dedication and License 
-v1.0, whose full text can be found at 
+                    </p>
+                    
 
-                        <a
-                          href="http://www.opendatacommons.org/licenses/pddl/1.0/"
-                        >
-                          http://www.opendatacommons.org/licenses/pddl/1.0/
-                        </a>
-                        . 
-We hope that all users will follow the ODC Attribution/Share-Alike 
-Community Norms (
-                        <a
-                          href="http://www.opendatacommons.org/norms/odc-by-sa/"
-                        >
-                          http://www.opendatacommons.org/norms/odc-by-sa/
-                        </a>
-                        ); 
-in particular, while not legally required, we hope that all users 
-of the data will acknowledge the OpenfMRI project and NSF Grant 
+                    <p>
+                      This dataset is made available under the Public Domain Dedication and License
+v1.0, whose full text can be found at
+http://www.opendatacommons.org/licenses/pddl/1.0/.
+We hope that all users will follow the ODC Attribution/Share-Alike
+Community Norms (http://www.opendatacommons.org/norms/odc-by-sa/);
+in particular, while not legally required, we hope that all users
+of the data will acknowledge the OpenfMRI project and NSF Grant
 OCI-1131441 (R. Poldrack, PI) in any publications.
-                      </p>
-                    </div>
+                    </p>
                   </section>
                 </article>
               </div>
