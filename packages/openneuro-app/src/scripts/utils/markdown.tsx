@@ -1,6 +1,8 @@
 import React from "react"
 import ReactMarkdown from "react-markdown"
 import DOMPurify from "dompurify"
+import rehypeRaw from "rehype-raw"
+import remarkGfm from "remark-gfm"
 
 interface MarkdownProps {
   children: string
@@ -161,7 +163,9 @@ export function Markdown({ children }: MarkdownProps) {
   })
   return (
     <>
-      <ReactMarkdown>{sanitizedMarkdown}</ReactMarkdown>
+      <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>
+        {sanitizedMarkdown}
+      </ReactMarkdown>
     </>
   )
 }
