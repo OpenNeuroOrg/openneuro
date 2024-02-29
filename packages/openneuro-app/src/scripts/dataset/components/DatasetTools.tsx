@@ -115,6 +115,7 @@ export const DatasetTools = ({
             : `/datasets/${datasetId}/derivatives`}
           icon="fa-cubes"
           label="Derivatives"
+          disable={!agree}
         />
       )}
       <DatasetToolButton
