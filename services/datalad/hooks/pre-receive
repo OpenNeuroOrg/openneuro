@@ -141,7 +141,7 @@ function main() {
 
     # Run validation (with .bidsignore if we found it above)
     { echo "${dataset_description}${bidsignore}" && echo "0001" && git ls-tree --name-only -r "${newref}"; } | \
-      /srv/node_modules/.bin/bids-validator --filenames -
+      /usr/local/bin/bst pre-receive-hook
     if [[ "$?" != 0 ]]; then
       echo ""
       echo "-------------------------------------------------------------------------"
