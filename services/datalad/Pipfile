@@ -29,3 +29,4 @@ pygit2 = "*"
 pygithub = "==1.54.1"
 greenlet = "*"
 charset-normalizer = "*"
+bidsschematools = {ref = "enh/git-receive-hook", git = "git+https://github.com/effigies/bids-specification.git", subdirectory = "tools/schemacode"}
