@@ -73,7 +73,7 @@ class Issue extends React.Component {
         <span className="e-meta">
           <label>File Metadata:</label>
           <p>
-            {file.size / 1000} KB | {file.type}
+            {file.size / 1000} KB {file.type ? ` | ${file.type}` : ""}
           </p>
         </span>
       )
