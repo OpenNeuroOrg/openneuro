@@ -21,5 +21,5 @@ jobs:
     - run: yarn test --coverage
     - name: Upload coverage reports to Codecov with GitHub Action
       uses: codecov/codecov-action@v4
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
