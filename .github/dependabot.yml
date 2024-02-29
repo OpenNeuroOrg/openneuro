@@ -8,7 +8,7 @@ updates:
       actions-infrastructure:
         patterns:
           - 'actions/*'
-  - package-ecosystem: 'pipenv'
+  - package-ecosystem: 'pip'
     directory: '/services/datalad'
     schedule:
       interval: 'monthly'
