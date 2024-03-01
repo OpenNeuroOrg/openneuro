@@ -55,8 +55,7 @@ class GitAnnexResource(object):
         if os.path.exists(annex_object_path):
             resp.status = falcon.HTTP_OK
             fd = open(annex_object_path, 'rb')
-            resp.stream = fd
-            resp.stream_len = os.fstat(fd.fileno()).st_size
+            resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
         else:
             resp.status = falcon.HTTP_NOT_FOUND
 
