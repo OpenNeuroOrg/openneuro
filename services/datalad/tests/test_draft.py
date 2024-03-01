@@ -18,7 +18,7 @@ def test_add_commit_info(client):
     }
     jwt_secret = 'shhhhh'
     os.environ['JWT_SECRET'] = jwt_secret
-    access_token = jwt.encode(user, jwt_secret).decode('utf-8')
+    access_token = jwt.encode(user, jwt_secret)
     cookie = 'accessToken={}'.format(access_token)
     headers = {
         'Cookie': cookie
