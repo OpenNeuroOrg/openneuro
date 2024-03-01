@@ -129,19 +129,15 @@ function main() {
       bidsignore=""
     fi
 
-    # For raw datasets, do not include dataset_description
-    # For derivative datasets, include with 0000 separator
-    # Once the shift to the schema validator is complete, this distinction can go away.
-    local dataset_description=$(git show "${newref}:dataset_description.json")
-    if [ -n "$(echo ${dataset_description} | grep DatasetType.*derivative )" ]; then
-      dataset_description="$dataset_description\n0000\n"
-    else
-      dataset_description=""
-    fi
+    # Run validation with bidsschematools
+    python -m bidsschematools pre-receive-hook <<END
+bids-hook-v2
+$( git show "${newref}:dataset_description.json" | tr -d '\r\n' )
+${bidsignore}
+0001
+$( git ls-tree --name-only -r "${newref}" )
+END
 
-    # Run validation (with .bidsignore if we found it above)
-    { echo "${dataset_description}${bidsignore}" && echo "0001" && git ls-tree --name-only -r "${newref}"; } | \
-      /usr/local/bin/bst pre-receive-hook
     if [[ "$?" != 0 ]]; then
       echo ""
       echo "-------------------------------------------------------------------------"
