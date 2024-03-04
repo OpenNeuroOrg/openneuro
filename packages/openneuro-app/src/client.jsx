@@ -6,7 +6,7 @@ import "./scripts/apm.js"
 import { ApolloProvider, InMemoryCache } from "@apollo/client"
 import { createClient } from "@openneuro/client"
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import App from "./scripts/app"
 import Index from "./scripts/index"
@@ -18,7 +18,9 @@ import "@openneuro/components/page/page.scss"
 
 gtag.initialize(config.analytics.trackingIds)
 
-ReactDOM.render(
+const mainElement = document.getElementById("main")
+const container = createRoot(mainElement)
+container.render(
   <App>
     <ApolloProvider
       client={createClient(`${config.url}/crn/graphql`, {
@@ -41,5 +43,4 @@ ReactDOM.render(
       </BrowserRouter>
     </ApolloProvider>
   </App>,
-  document.getElementById("main"),
 )

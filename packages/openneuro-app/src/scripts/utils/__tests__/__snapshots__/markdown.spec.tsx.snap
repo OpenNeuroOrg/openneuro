@@ -2,38 +2,46 @@
 
 exports[`Test <Markdown> component > allows a href with certain protocols 1`] = `
 <DocumentFragment>
-  <a
-    href="https://example.com"
-  >
-    Example link that should work.
-  </a>
+  <p>
+    <a
+      href="https://example.com"
+    >
+      Example link that should work.
+    </a>
+  </p>
 </DocumentFragment>
 `;
 
 exports[`Test <Markdown> component > does not allow href with unknown protocols 1`] = `
 <DocumentFragment>
-  <a>
-    Example link that should not work.
-  </a>
+  <p>
+    <a>
+      Example link that should not work.
+    </a>
+  </p>
 </DocumentFragment>
 `;
 
 exports[`Test <Markdown> component > filters close-break tags 1`] = `
 <DocumentFragment>
-  <span>
+  <p>
     <br />
     sample text
     <br />
-  </span>
+  </p>
 </DocumentFragment>
 `;
 
 exports[`Test <Markdown> component > filters out disallowed tags 1`] = `
 <DocumentFragment>
   <ul>
+    
+
     <li>
       Markdown document
     </li>
+    
+
   </ul>
 </DocumentFragment>
 `;
@@ -41,17 +49,21 @@ exports[`Test <Markdown> component > filters out disallowed tags 1`] = `
 exports[`Test <Markdown> component > safely handles broken HTML tags 1`] = `
 <DocumentFragment>
   <ul>
+    
+
     <li>
       Markdown document
 
       <br />
       <br />
-      <ul>
-        <li>
-          test content
-        </li>
-      </ul>
     </li>
+    
+
+    <li>
+      test content
+    </li>
+    
+
   </ul>
 </DocumentFragment>
 `;
