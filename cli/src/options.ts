@@ -9,6 +9,7 @@ import {
 import { setupLogging } from "./logger.ts"
 import { login } from "./commands/login.ts"
 import { upload } from "./commands/upload.ts"
+import { download } from "./commands/download.ts"
 import { gitCredential } from "./commands/git-credential.ts"
 
 export type OpenNeuroOptions = {
@@ -30,6 +31,7 @@ const openneuroCommand = new Command()
     setupLogging(log ? log : "ERROR")
   })
   .command("login", login)
+  .command("download", download)
   .command("upload", upload)
   .command("git-credential", gitCredential)
 

@@ -112,8 +112,6 @@ async function update() {
     )
     await git.clone({
       ...options,
-      singleBranch: true,
-      depth: 1,
     })
   }
   logger.info(`${context.datasetId} draft fetched!`)

@@ -1,14 +1,50 @@
 import { Command } from "../deps.ts"
 import { readConfig } from "../config.ts"
+import { logger } from "../logger.ts"
+import { getRepoAccess } from "./git-credential.ts"
 
 export const download = new Command()
   .name("download")
   .description("Download a dataset from OpenNeuro")
-  .arguments("<accession_number> <dataset_directory>")
+  .arguments("<accession_number> <download_directory>")
+  .option(
+    "-d, --draft",
+    "Download a draft instead of the latest version snapshot.",
+  )
+  .option(
+    "-v, --version",
+    "Download a specific version.",
+  )
+  .action(downloadAction)
 
 export async function downloadAction(
   options: CommandOptions,
-  dataset_directory: string,
+  accession_number: string,
+  download_directory: string,
 ) {
+  const datasetId = accession_number
   const clientConfig = readConfig()
+  const { token, endpoint } = await getRepoAccess(datasetId)
+
+  // Create the git worker
+  const worker = new Worker(new URL("../worker/git.ts", import.meta.url).href, {
+    type: "module",
+  })
+
+  // Configure worker
+  worker.postMessage({
+    "command": "setup",
+    "datasetId": datasetId,
+    "repoPath": download_directory,
+    "repoEndpoint": `${clientConfig.url}/git/${endpoint}/${datasetId}`,
+    "authorization": token,
+    "logLevel": logger.levelName,
+  })
+
+  worker.postMessage({
+    "command": "clone",
+  })
+
+  // Close after all tasks are queued
+  worker.postMessage({ command: "close" })
 }

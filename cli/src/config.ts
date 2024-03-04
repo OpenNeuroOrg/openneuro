@@ -1,3 +1,4 @@
+import { logger } from "./logger.ts"
 import { LoginError } from "./error.ts"
 
 export interface ClientConfig {
