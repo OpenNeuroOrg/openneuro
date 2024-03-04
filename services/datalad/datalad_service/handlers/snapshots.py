@@ -43,7 +43,7 @@ class SnapshotResource(object):
 
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        media = req.media
+        media = req.get_media(None)
         description_fields = {}
         snapshot_changes = []
         skip_publishing = False

@@ -29,8 +29,7 @@ class FilesResource(object):
                     # Verify the annex path is within the dataset dir
                     if ds_path == os.path.commonpath((ds_path, target_path)):
                         fd = open(target_path, 'rb')
-                        resp.stream = fd
-                        resp.stream_len = os.fstat(fd.fileno()).st_size
+                        resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
                         resp.status = falcon.HTTP_OK
                     else:
                         resp.media = {'error': 'file not found in git tree'}
