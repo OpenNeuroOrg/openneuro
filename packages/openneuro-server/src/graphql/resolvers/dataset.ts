@@ -20,11 +20,12 @@ import { getDatasetWorker } from "../../libs/datalad-service"
 import { getFileName } from "../../datalad/files"
 import { onBrainlife } from "./brainlife"
 import { derivatives } from "./derivatives"
+import { promiseTimeout } from "../../utils/promiseTimeout"
 import semver from "semver"
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
   await checkDatasetRead(id, user, userInfo)
-  return datalad.getDataset(id)
+  return promiseTimeout(datalad.getDataset(id), 30000)
 }
 
 export const datasets = (parent, args, { user, userInfo }) => {
