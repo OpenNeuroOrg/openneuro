@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import styled from "@emotion/styled"
-import { format, isValid, parseISO } from "date-fns"
+import { format, isValid, parse, parseISO } from "date-fns"
 
 interface DataTableProps {
   data: any[]
@@ -33,10 +33,32 @@ const TD = styled.td`
   padding: 3px;
 `
 
+function extractDateString(dateString) {
+  const formats = [
+    "yyyy-MM-dd", // ISO 8601
+    "yyyy-MM-ddTHH:mm:ss", // ISO 8601 with time
+    "MM/dd/yyyy", // US (M/D/YYYY)
+    "dd/MM/yyyy", // European (D/M/YYYY)
+  ]
+
+  for (const format of formats) {
+    const parsedDate = parse(dateString, format, new Date())
+    if (isValid(parsedDate)) {
+      return parsedDate
+    }
+  }
+
+  return false
+}
+
 function CellFormat(props): any {
   const value = props.getValue()
-  if (typeof value === "string" && isValid(parseISO(value))) {
-    return format(parseISO(value), "yyyy-MM-dd")
+  let extractedDate
+  if (typeof value === "string") {
+    extractedDate = extractDateString(value)
+  }
+  if (extractedDate instanceof Date) {
+    return format(extractedDate, "yyyy-MM-dd")
   } else if (typeof value === "string" && /^ds[0-9]{6}$/.exec(value)) {
     return <a href={`/datasets/${value}`}>{value}</a>
   } else if (Array.isArray(value)) {
