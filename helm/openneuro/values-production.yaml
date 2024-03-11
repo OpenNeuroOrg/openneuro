@@ -58,7 +58,7 @@ workerDiskSize:
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-2
     size: 22000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-3
-    size: 26000Gi
+    size: 30000Gi
 
 # Disable Redis password for testing
 redis:
