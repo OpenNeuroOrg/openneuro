@@ -5,10 +5,19 @@ import {
   validateCommand,
 } from "../bids_validator.ts"
 import { logger } from "../logger.ts"
-import { Confirm, join, ProgressBar, relative, resolve, walk } from "../deps.ts"
+import {
+  Confirm,
+  join,
+  ProgressBar,
+  prompt,
+  relative,
+  resolve,
+  walk,
+} from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
 import { getRepoAccess } from "./git-credential.ts"
 import { readConfig } from "../config.ts"
+import { createDataset } from "../graphq.ts"
 
 async function getRepoDir(url: URL): Promise<string> {
   const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
@@ -48,21 +57,54 @@ export async function uploadAction(
   }
   console.log("Validation complete, preparing upload.")
 
-  let datasetId = "ds001130"
+  let datasetId
   if (options.dataset) {
     datasetId = options.dataset
   } else {
     if (!options.create) {
-      const confirmation = await new Confirm(
-        "Confirm creation of a new dataset?",
-      )
-      if (!confirmation) {
+      const confirmation = await prompt([
+        {
+          name: "create",
+          message: "Create a new dataset?",
+          type: Confirm,
+        },
+      ])
+      if (!confirmation.create) {
         console.log("Specify --dataset to upload to an existing dataset.")
         return
       }
     }
-    // TODO Create dataset here
-    datasetId = "ds001130"
+    let affirmedDefaced = options.affirmDefaced
+    let affirmedConsent = options.affirmConsent
+    if (affirmedDefaced || affirmedConsent) {
+      datasetId = await createDataset(affirmedDefaced, affirmedConsent)
+    } else {
+      console.log("confirm")
+      const affirmed = await prompt([
+        {
+          name: "affirmedDefaced",
+          message:
+            "All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
+          type: Confirm,
+        },
+        {
+          name: "affirmedConsent",
+          message:
+            "I have explicit participant consent and ethical authorization to publish structural scans without defacing.",
+          type: Confirm,
+        },
+      ])
+      affirmedDefaced = affirmed.affirmedDefaced
+      affirmedConsent = affirmed.affirmedConsent
+      if (affirmedDefaced || affirmedConsent) {
+        datasetId = await createDataset(affirmedDefaced, affirmedConsent)
+      } else {
+        console.log(
+          "You must affirm defacing or consent to upload without defacing to continue.",
+        )
+        return
+      }
+    }
   }
 
   // Create the git worker
@@ -138,4 +180,14 @@ export const upload = validateCommand
   .option("-c, --create", "Skip confirmation to create a new dataset.", {
     conflicts: ["dataset"],
   })
+  .option(
+    "--affirmDefaced",
+    "All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
+    { default: false },
+  )
+  .option(
+    "--affirmConsent",
+    "I have explicit participant consent and ethical authorization to publish structural scans without defacing.",
+    { default: false },
+  )
   .action(uploadAction)

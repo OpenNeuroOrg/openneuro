@@ -7,7 +7,7 @@ import { QueryError } from "./error.ts"
 
 function request(query: string, variables = {}): Promise<Response> {
   const config = getConfig()
-  return fetch(config.url, {
+  return fetch(`${config.url}/crn/graphql`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${config.token}`,
