@@ -52,9 +52,9 @@ workerZone: us-west1-c
 # Assigned volumes for each worker (max 64TB)
 workerDiskSize:
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-0
-    size: 36000Gi
+    size: 38000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-1
-    size: 28000Gi
+    size: 29000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-2
     size: 22000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-3
