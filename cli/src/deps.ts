@@ -57,3 +57,4 @@ export {
 export { default as ProgressBar } from "https://deno.land/x/progress@v1.3.9/mod.ts"
 // Ignore library
 export { default as ignore } from "npm:ignore@5.3.0"
+export { encodeBase64 } from "https://deno.land/std@0.220.1/encoding/base64.ts"

@@ -13,7 +13,7 @@
       "**/__pycache/**"
     ]
   },
-  "imports": {
-    "std/": "https://deno.land/std@0.214.0/"
+  "tasks": {
+    "tests": "deno test cli/"
   }
 }

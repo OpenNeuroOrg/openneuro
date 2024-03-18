@@ -1,11 +1,18 @@
-import * as base64 from "std/encoding/base64.ts"
+import { encodeBase64 } from "../deps.ts"
 
 /** Deno port of transferKey from Node.js CLI */
+
 interface TransferKeyState {
   // Base URL
   url: string
   // Basic auth token for repos
   token: string
+}
+
+interface FetchOptions {
+  method?: "GET" | "POST" | "PUT" | "DELETE" | string
+  headers?: { [key: string]: string } | Headers // Key-value pairs for request headers
+  body?: BodyInit
 }
 
 /**
@@ -17,13 +24,17 @@ interface TransferKeyState {
  * @param {object} options fetch options
  * @returns {Request} Configured fetch Request object
  */
-export function keyRequest(state: TransferKeyState, key: string, options) {
+export function keyRequest(
+  state: TransferKeyState,
+  key: string,
+  options: FetchOptions,
+) {
   const headers = new Headers(
     "headers" in options && options.headers || undefined,
   )
   headers.set(
     "Authorization",
-    "Basic " + base64.encodeBase64(`openneuro-cli:${state.token}`),
+    "Basic " + encodeBase64(`openneuro-cli:${state.token}`),
   )
   const requestUrl = `${state.url}/annex/${key}`
   return new Request(requestUrl, { ...options, headers })
@@ -37,13 +48,17 @@ export function keyRequest(state: TransferKeyState, key: string, options) {
  * @param {string} key Git-annex key
  * @param {string} file File path
  */
-export async function storeKey(state: TransferKeyState, key: string, file) {
+export async function storeKey(
+  state: TransferKeyState,
+  key: string,
+  file: string,
+) {
   const fileHandle = await Deno.open(file)
   const fileStat = await fileHandle.stat()
   const requestOptions = {
     method: "POST",
     headers: {
-      "Content-Length": fileStat.size,
+      "Content-Length": fileStat.size.toString(),
     },
   }
   const request = keyRequest(state, key, requestOptions)
@@ -63,7 +78,11 @@ export async function storeKey(state: TransferKeyState, key: string, file) {
  * @param {string} key Git-annex key
  * @param {string} file File path
  */
-export async function retrieveKey(state: TransferKeyState, key: string, file) {
+export async function retrieveKey(
+  state: TransferKeyState,
+  key: string,
+  file: string,
+) {
   try {
     const request = keyRequest(state, key, { method: "GET" })
     const response = await fetch(request)
