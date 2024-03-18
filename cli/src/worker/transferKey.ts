@@ -2,14 +2,14 @@ import { encodeBase64 } from "../deps.ts"
 
 /** Deno port of transferKey from Node.js CLI */
 
-interface TransferKeyState {
+export interface TransferKeyState {
   // Base URL
   url: string
   // Basic auth token for repos
   token: string
 }
 
-interface FetchOptions {
+export interface FetchOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE" | string
   headers?: { [key: string]: string } | Headers // Key-value pairs for request headers
   body?: BodyInit
@@ -53,20 +53,25 @@ export async function storeKey(
   key: string,
   file: string,
 ) {
-  const fileHandle = await Deno.open(file)
-  const fileStat = await fileHandle.stat()
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Length": fileStat.size.toString(),
-    },
-  }
-  const request = keyRequest(state, key, requestOptions)
-  const response = await fetch(request, { body: fileHandle.readable })
-  if (response.status === 200) {
-    return fileStat.size
-  } else {
-    return -1
+  let fileHandle
+  try {
+    fileHandle = await Deno.open(file)
+    const fileStat = await fileHandle.stat()
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Length": fileStat.size.toString(),
+      },
+    }
+    const request = keyRequest(state, key, requestOptions)
+    const response = await fetch(request, { body: fileHandle.readable })
+    if (response.status === 200) {
+      return fileStat.size
+    } else {
+      return -1
+    }
+  } finally {
+    fileHandle?.close()
   }
 }
 

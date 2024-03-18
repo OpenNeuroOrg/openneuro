@@ -14,6 +14,6 @@
     ]
   },
   "tasks": {
-    "tests": "deno test cli/"
+    "tests": "deno test --allow-read --allow-write cli/"
   }
 }

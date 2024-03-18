@@ -47,9 +47,12 @@ export {
   assert,
   assertEquals,
   assertObjectMatch,
+  assertStrictEquals,
 } from "https://deno.land/std@0.212.0/assert/mod.ts"
 export {
+  assertSpyCallArgs,
   assertSpyCalls,
+  restore,
   returnsNext,
   stub,
 } from "https://deno.land/std@0.212.0/testing/mock.ts"
