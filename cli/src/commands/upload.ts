@@ -31,6 +31,31 @@ async function getRepoDir(url: URL): Promise<string> {
   }
 }
 
+/**
+ * Add all files to a setup git worker
+ * @param worker The worker to use for this
+ * @param dataset_directory_abs An absolute path on the local system to upload files from (dataset root)
+ */
+export async function addGitFiles(
+  worker: Worker,
+  dataset_directory_abs: string,
+) {
+  // Upload all files
+  for await (
+    const walkEntry of walk(dataset_directory_abs, {
+      includeDirs: false,
+      includeSymlinks: false,
+    })
+  ) {
+    const relativePath = relative(dataset_directory_abs, walkEntry.path)
+    worker.postMessage({
+      "command": "add",
+      "path": walkEntry.path,
+      "relativePath": relativePath,
+    })
+  }
+}
+
 export async function uploadAction(
   options: CommandOptions,
   dataset_directory: string,
@@ -139,19 +164,7 @@ export async function uploadAction(
   })
 
   // Upload all files
-  for await (
-    const walkEntry of walk(dataset_directory_abs, {
-      includeDirs: false,
-      includeSymlinks: false,
-    })
-  ) {
-    const relativePath = relative(dataset_directory_abs, walkEntry.path)
-    worker.postMessage({
-      "command": "add",
-      "path": walkEntry.path,
-      "relativePath": relativePath,
-    })
-  }
+  await addGitFiles(worker, dataset_directory_abs)
 
   // Generate a commit
   worker.postMessage({ command: "commit" })
@@ -160,7 +173,7 @@ export async function uploadAction(
   worker.postMessage({ command: "push" })
 
   // Close after all tasks are queued
-  worker.postMessage({ command: "close" })
+  worker.postMessage({ command: "done" })
 }
 
 /**

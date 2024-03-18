@@ -1,4 +1,4 @@
-import git, { STAGE, TREE } from "npm:isomorphic-git@1.25.3"
+import { git, STAGE, TREE } from "../deps.ts"
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
 import fs from "node:fs"
 import { decode } from "https://deno.land/x/djwt@v3.0.1/mod.ts"
@@ -80,6 +80,11 @@ let attributesCache: GitAnnexAttributes
 const annexKeys: Record<string, string> = {}
 
 async function done() {
+  logger.info("Git worker shutdown.")
+  // @ts-ignore
+  await globalThis.postMessage({
+    command: "closed",
+  })
   await globalThis.close()
 }
 
@@ -137,7 +142,7 @@ async function getGitAttributes(): Promise<GitAnnexAttributes> {
       logger.error(
         "Dataset repository is missing .gitattributes and may be improperly initialized.",
       )
-      globalThis.close()
+      await done()
     }
   }
   return attributesCache
@@ -329,7 +334,7 @@ async function commit() {
         const Aoid = await A?.oid()
         const Boid = await B?.oid()
         let type = "equal"
-        if (Aoid !== Boid) {
+        if (Aoid !== Boid && Aoid !== undefined && Boid !== undefined) {
           logger.info(`modified:\t${filepath}`)
           type = "modify"
         }
@@ -363,7 +368,7 @@ async function commit() {
     logger.info(`Committed as "${commitHash}"`)
   } else {
     console.log("No changes found, not uploading.")
-    self.close()
+    workQueue.enqueue(done)
   }
 }
 

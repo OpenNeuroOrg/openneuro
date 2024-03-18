@@ -45,6 +45,7 @@ export { dirname } from "https://deno.land/std@0.212.0/path/dirname.ts"
 // Test suites
 export {
   assert,
+  assertArrayIncludes,
   assertEquals,
   assertObjectMatch,
   assertStrictEquals,
@@ -61,3 +62,5 @@ export { default as ProgressBar } from "https://deno.land/x/progress@v1.3.9/mod.
 // Ignore library
 export { default as ignore } from "npm:ignore@5.3.0"
 export { encodeBase64 } from "https://deno.land/std@0.220.1/encoding/base64.ts"
+// Isomorphic git
+export { default as git, STAGE, TREE } from "npm:isomorphic-git@1.25.6"
