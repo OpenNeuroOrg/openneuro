@@ -1,3 +1,4 @@
+import { logger } from "../logger.ts"
 import { encodeBase64 } from "../deps.ts"
 
 /** Deno port of transferKey from Node.js CLI */
@@ -71,7 +72,13 @@ export async function storeKey(
       return -1
     }
   } finally {
-    fileHandle?.close()
+    try {
+      fileHandle?.close()
+    } catch (err) {
+      if (err.name !== "BadResource") {
+        logger.error(err)
+      }
+    }
   }
 }
 

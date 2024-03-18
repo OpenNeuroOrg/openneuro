@@ -376,6 +376,14 @@ async function commit() {
  * `git push` and `git-annex copy --to=openneuro`
  */
 async function push() {
+  const annexedObjects = Object.keys(annexKeys).length
+  if (annexedObjects > 0) {
+    console.log(
+      `Transferring ${annexedObjects} annexed file${
+        annexedObjects === 1 ? "" : "s"
+      }.`,
+    )
+  }
   // Git-annex copy --to=openneuro
   for (const [key, path] of Object.entries(annexKeys)) {
     const checkKeyResult = await checkKey({
@@ -402,10 +410,12 @@ async function push() {
       }
     }
   }
+  console.log("Pushing changes...")
   // Git push
   await git.push(
     gitOptions(context.repoPath),
   )
+  console.log("Upload complete.")
 }
 
 // Queue of tasks to perform in order

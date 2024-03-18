@@ -151,13 +151,6 @@ export async function uploadAction(
     "logLevel": logger.levelName,
   })
 
-  /*
-  const progressBar = new ProgressBar({
-    title: "Upload",
-    total: 100,
-  })
-  progressBar.render(0)*/
-
   logger.info(`Repo path: ${join(repoDir, datasetId)}`)
   worker.postMessage({
     "command": "clone",
