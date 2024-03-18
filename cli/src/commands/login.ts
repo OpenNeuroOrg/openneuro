@@ -22,11 +22,22 @@ export async function loginAction(options: CommandOptions) {
     ],
   })
   localStorage.setItem("url", url)
-  const token = options.token ? options.token : await Secret.prompt(
-    `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
-  )
+  let token
+  // Environment variable
+  if (options.openneuroApiKey) {
+    token = options.openneuroApiKey
+  }
+  // Command line
+  if (options.token) {
+    token = options.token
+  }
+  if (!token) {
+    token = await Secret.prompt(
+      `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
+    )
+  }
   localStorage.setItem("token", token)
-  const errorReporting = options.hasOwnProperty("errorReporting")
+  const errorReporting = Object.hasOwn(options, "errorReporting")
     ? options.errorReporting
     : await Confirm.prompt(messages.errorReporting)
   localStorage.setItem("errorReporting", errorReporting.toString())

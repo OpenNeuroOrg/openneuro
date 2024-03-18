@@ -26,10 +26,11 @@ const openneuroCommand = new Command()
   // TODO - Sync this with the node packages
   .version("4.20.4")
   .globalType("debugLevel", new EnumType(LogLevelNames))
-  .globalEnv("LOG=<type:debugLevel>", "Enable debug output.")
-  .globalAction(({ log }) => {
-    setupLogging(log ? log : "ERROR")
+  .globalEnv("OPENNEURO_LOG=<type:debugLevel>", "Enable debug output.")
+  .globalAction(({ openneuroLog }) => {
+    setupLogging(openneuroLog ? openneuroLog : "ERROR")
   })
+  .globalEnv("OPENNEURO_API_KEY=<key:string>", "Specify an OpenNeuro API key.")
   .command("login", login)
   .command("download", download)
   .command("upload", upload)

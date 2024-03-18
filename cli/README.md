@@ -23,7 +23,7 @@ You can also create an API key on [OpenNeuro](https://openneuro.org/keygen) and 
 
 ```shell
 # For scripts
-export OPENNEURO_TOKEN=<token>
+export OPENNEURO_API_KEY=<api_key>
 deno run -A cli/openneuro.ts login --error-reporting true
 ```
 
