@@ -429,7 +429,8 @@ async function push() {
   await git.push(
     gitOptions(context.repoPath),
   )
-  console.log("Upload complete.")
+  const url = new URL(context.repoEndpoint)
+  console.log(`Upload complete, visit your dataset at ${url.protocol}//${url.host}/datasets/${context.datasetId}`)
 }
 
 // Queue of tasks to perform in order
