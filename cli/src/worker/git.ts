@@ -210,6 +210,9 @@ export async function hashDirMixed(
   return [`${letters[1]}${letters[0]}`, `${letters[3]}${letters[2]}`]
 }
 
+const computeHashMD5 = await createMD5()
+const computeHashSHA256 = await createSHA256()
+
 /**
  * git-annex add equivalent
  */
@@ -239,8 +242,8 @@ async function add(event: GitWorkerEventAdd) {
     }
     // Compute hash
     const computeHash = annexed.startsWith("MD5")
-      ? await createMD5()
-      : await createSHA256()
+      ? computeHashMD5
+      : computeHashSHA256
     computeHash.init()
     const stream = fs.createReadStream(event.data.path, {
       highWaterMark: 1024 * 1024 * 10,
@@ -430,7 +433,9 @@ async function push() {
     gitOptions(context.repoPath),
   )
   const url = new URL(context.repoEndpoint)
-  console.log(`Upload complete, visit your dataset at ${url.protocol}//${url.host}/datasets/${context.datasetId}`)
+  console.log(
+    `Upload complete, visit your dataset at ${url.protocol}//${url.host}/datasets/${context.datasetId}`,
+  )
 }
 
 // Queue of tasks to perform in order
