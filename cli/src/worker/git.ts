@@ -12,6 +12,7 @@ import { basename, dirname, join, LevelName, relative } from "../deps.ts"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
+import { ProgressBar } from "../deps.ts"
 
 /**
  * Why are we using hash wasm over web crypto?
@@ -376,13 +377,14 @@ async function commit() {
  * `git push` and `git-annex copy --to=openneuro`
  */
 async function push() {
+  let completed = 0
   const annexedObjects = Object.keys(annexKeys).length
+  const progress = new ProgressBar({
+    title: `Transferring annexed files`,
+    total: annexedObjects,
+  })
   if (annexedObjects > 0) {
-    console.log(
-      `Transferring ${annexedObjects} annexed file${
-        annexedObjects === 1 ? "" : "s"
-      }.`,
-    )
+    await progress.render(completed)
   }
   // Git-annex copy --to=openneuro
   for (const [key, path] of Object.entries(annexKeys)) {
@@ -414,6 +416,8 @@ async function push() {
           `Failed to transfer annex object "${key}" after ${retries} attempts`,
         )
       } else {
+        completed += 1
+        await progress.render(completed)
         logger.info(
           `Stored ${storeKeyResult} bytes for key "${key}" from path "${path}"`,
         )
