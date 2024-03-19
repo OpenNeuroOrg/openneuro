@@ -14,6 +14,7 @@ import * as auth from "./libs/authentication/states"
 import * as doi from "./handlers/doi"
 import { sitemapHandler } from "./handlers/sitemap"
 import { reviewerHandler } from "./handlers/reviewer"
+import { tusdHandler } from "./handlers/tusd"
 
 const noCache = (req, res, next) => {
   res.setHeader("Surrogate-Control", "no-store")
@@ -169,6 +170,13 @@ const routes = [
     method: "get",
     url: "/sitemap",
     handler: sitemapHandler,
+  },
+  // tusd upload hooks
+  {
+    method: "post",
+    url: "/tusd",
+    middleware: [noCache, jwt.authenticate, auth.authenticated],
+    handler: tusdHandler,
   },
 ]
 

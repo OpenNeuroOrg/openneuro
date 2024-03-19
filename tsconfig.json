@@ -9,7 +9,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": ["es2020", "dom", "webworker"],
+    "lib": ["es2021", "dom", "webworker"],
     "skipLibCheck": true,
     "incremental": true,
     "composite": true,
