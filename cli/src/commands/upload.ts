@@ -8,7 +8,6 @@ import { logger } from "../logger.ts"
 import {
   Confirm,
   join,
-  ProgressBar,
   prompt,
   relative,
   resolve,
@@ -48,11 +47,15 @@ export async function addGitFiles(
     })
   ) {
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
-    worker.postMessage({
-      "command": "add",
-      "path": walkEntry.path,
-      "relativePath": relativePath,
-    })
+    if (relativePath === ".bidsignore" || relativePath === ".gitattributes" || !relativePath.startsWith(".")) {
+      worker.postMessage({
+        "command": "add",
+        "path": walkEntry.path,
+        "relativePath": relativePath,
+      })
+    } else {
+      logger.warn(`Skipped file "${relativePath}"`)
+    }
   }
 }
 
