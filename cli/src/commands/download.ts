@@ -41,10 +41,14 @@ export async function downloadAction(
     "logLevel": logger.levelName,
   })
 
+  console.log("Downloading...")
+
   worker.postMessage({
     "command": "clone",
   })
 
   // Close after all tasks are queued
-  worker.postMessage({ command: "close" })
+  worker.postMessage({ command: "done" })
+
+  console.log("Complete!")
 }
