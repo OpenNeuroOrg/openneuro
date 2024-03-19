@@ -393,16 +393,26 @@ async function push() {
     if (checkKeyResult) {
       logger.info(`Skipping key "${key}" present on remote`)
     } else {
-      const storeKeyResult = await storeKey(
-        {
-          url: context.repoEndpoint,
-          token: context.authorization,
-        },
-        key,
-        path,
-      )
+      let storeKeyResult = -1
+      let retries = 3
+      while (storeKeyResult === -1 && retries > 0) {
+        retries -= 1
+        storeKeyResult = await storeKey(
+          {
+            url: context.repoEndpoint,
+            token: context.authorization,
+          },
+          key,
+          path,
+        )
+        if (storeKeyResult === -1 && retries > 0) {
+          logger.warn(`Failed to transfer annex object "${key}" - retrying`)
+        }
+      }
       if (storeKeyResult === -1) {
-        logger.error(`Failed to transfer annex object "${key}"`)
+        logger.error(
+          `Failed to transfer annex object "${key}" after ${retries} attempts`,
+        )
       } else {
         logger.info(
           `Stored ${storeKeyResult} bytes for key "${key}" from path "${path}"`,
