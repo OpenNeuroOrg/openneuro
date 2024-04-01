@@ -1,10 +1,10 @@
 import { annexRelativePath, hashDirLower, hashDirMixed } from "./git.ts"
-import { assertArrayIncludes, assertEquals, git, join, walk } from "../deps.ts"
+import { assertArrayIncludes, assertEquals, git, join, walk, SEPARATOR } from "../deps.ts"
 import { addGitFiles } from "../commands/upload.ts"
 import fs from "node:fs"
 
 Deno.test("annexRelativePath() returns appropriate paths", () => {
-  assertEquals(annexRelativePath("sub-01/anat/sub-01_T1w.nii.gz"), "../..")
+  assertEquals(annexRelativePath("sub-01/anat/sub-01_T1w.nii.gz"), join('..', '..'))
 })
 
 Deno.test("hashDirLower() returns the correct key prefix", async () => {
@@ -124,13 +124,13 @@ LICENSE annex.largefiles=nothing`),
   await closedPromise
 
   const expectedFiles = [
-    ".git/refs/heads/main",
-    ".git/config",
-    ".git/HEAD",
-    ".git/index",
+    join(".git", "refs", "heads", "main"),
+    join(".git", "config"),
+    join(".git", "HEAD"),
+    join(".git", "index"),
     ".gitattributes",
     "dataset_description.json",
-    "sub-01/anat/sub-01_T1w.nii.gz",
+    join("sub-01", "anat", "sub-01_T1w.nii.gz")
   ]
   let gitObjects = 0
   for await (
@@ -139,8 +139,8 @@ LICENSE annex.largefiles=nothing`),
       includeSymlinks: true,
     })
   ) {
-    const relativePath = walkEntry.path.split(testRepo + "/")[1]
-    if (relativePath.startsWith(".git/objects/")) {
+    const relativePath = walkEntry.path.split(testRepo + SEPARATOR)[1]
+    if (relativePath.startsWith(`.git${SEPARATOR}objects${SEPARATOR}`)) {
       gitObjects += 1
     } else {
       assertArrayIncludes(expectedFiles, [relativePath])

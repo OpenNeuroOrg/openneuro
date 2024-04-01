@@ -42,6 +42,7 @@ export { join } from "https://deno.land/std@0.212.0/path/join.ts"
 export { extname } from "https://deno.land/std@0.212.0/path/extname.ts"
 export { basename } from "https://deno.land/std@0.212.0/path/basename.ts"
 export { dirname } from "https://deno.land/std@0.212.0/path/dirname.ts"
+export { SEPARATOR } from "https://deno.land/std@0.221.0/path/mod.ts"
 // Test suites
 export {
   assert,
