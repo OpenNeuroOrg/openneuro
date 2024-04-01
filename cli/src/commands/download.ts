@@ -50,5 +50,5 @@ export async function downloadAction(
   // Close after all tasks are queued
   worker.postMessage({ command: "done" })
 
-  console.log("Complete!")
+  console.log("Download complete. To download all data files, use `datalad get` or `git-annex get`.")
 }
