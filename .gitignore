@@ -20,3 +20,5 @@ dist
 !.yarn/versions
 .*.sw[po]
 .venv/
+coverage
+coverage.lcov
