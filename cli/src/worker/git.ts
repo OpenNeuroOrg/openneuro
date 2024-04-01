@@ -229,6 +229,8 @@ async function add(event: GitWorkerEventAdd) {
       filepath: event.data.relativePath,
     }
     const targetPath = join(context.repoPath, event.data.relativePath)
+    // Verify parent directories exist
+    await fs.promises.mkdir(dirname(targetPath), { recursive: true })
     // Copy non-annexed files for git index creation
     await fs.promises.copyFile(event.data.path, targetPath)
     await git.add(options)
