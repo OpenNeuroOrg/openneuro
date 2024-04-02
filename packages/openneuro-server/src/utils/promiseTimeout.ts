@@ -1,4 +1,4 @@
-import { PromiseTimeoutError } from "../types/promiseTimeoutError.ts"
+import { PromiseTimeoutError } from "../types/promiseTimeoutError"
 
 /**
  * Add a timeout to a promise and return null if timeout occurs before the promise resolves
@@ -19,7 +19,7 @@ export async function promiseTimeout<T>(
         )
       ),
     ])
-
+    // @ts-expect-error This does return the original promise except in failure cases where it returns the expected null
     return result
   } catch (error) {
     if (error instanceof PromiseTimeoutError) {
