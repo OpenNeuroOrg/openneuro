@@ -10,6 +10,16 @@ const prepareRepoAccess = `
   }
 `
 
+interface GraphQLError {
+  message: string
+  locations: { line: number, column: number }[]
+  path: string[]
+  extensions: {
+    code: string,
+    stacktrace: string[]
+  }
+}
+
 export async function getRepoAccess(datasetId?: string) {
   const config = getConfig()
   const req = await fetch(`${config.url}/crn/graphql`, {
@@ -27,7 +37,8 @@ export async function getRepoAccess(datasetId?: string) {
   })
   const response = await req.json()
   if (response.errors) {
-    throw Error(response.errors.map(error => error.message))
+    const errors: GraphQLError[] = response.errors
+    throw Error(errors.map(error => error.message).toString())
   } else {
     return {
       token: response.data.prepareRepoAccess.token, // Short lived repo access token
