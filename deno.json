@@ -12,5 +12,9 @@
       "services/datalad/tests/.pytest_cache",
       "**/__pycache/**"
     ]
+  },
+  "tasks": {
+    "tests": "deno test --allow-read --allow-write cli/",
+    "coverage": "deno test --allow-read --allow-write --coverage cli/ && deno coverage ./coverage --lcov > coverage.lcov"
   }
 }
