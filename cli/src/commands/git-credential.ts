@@ -25,10 +25,14 @@ export async function getRepoAccess(datasetId?: string) {
       },
     }),
   })
-  const { data } = await req.json()
-  return {
-    token: data.prepareRepoAccess.token, // Short lived repo access token
-    endpoint: data.prepareRepoAccess.endpoint,
+  const response = await req.json()
+  if (response.errors) {
+    throw Error(response.errors.map(error => error.message))
+  } else {
+    return {
+      token: response.data.prepareRepoAccess.token, // Short lived repo access token
+      endpoint: response.data.prepareRepoAccess.endpoint,
+    }
   }
 }
 
@@ -72,6 +76,7 @@ export const gitCredential = new Command()
   .description(
     "A git credentials helper for easier datalad or git-annex access to datasets.",
   )
-  .action(() => {
-    console.log(gitCredentialAction())
+  .command("fill")
+  .action(async () => {
+    console.log(await gitCredentialAction())
   })
