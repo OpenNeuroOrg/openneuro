@@ -15,6 +15,6 @@
   },
   "tasks": {
     "tests": "deno test --allow-read --allow-write cli/",
-    "coverage": "deno test --allow-read --allow-write --coverage cli/ && deno coverage ./coverage --lcov > coverage.lcov"
+    "coverage": "deno test --allow-read --allow-write --allow-net --coverage cli/ && deno coverage ./coverage --lcov > coverage.lcov"
   }
 }
