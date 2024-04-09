@@ -63,6 +63,15 @@ To enable for all OpenNeuro repositories add this to your [git configuration fil
   helper = "/path/to/openneuro git-credential"
 ```
 
+If you are using [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager) add the provider entry to avoid duplicating entries.
+
+```cfg
+[credential "https://openneuro.org"]
+  useHttpPath = true
+  provider = generic
+  helper = "/path/to/openneuro git-credential"
+```
+
 ### Usage
 
 Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.
