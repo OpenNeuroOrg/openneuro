@@ -259,6 +259,13 @@ git<span class="w"> </span>config<span class="w"> </span>credential.helper<span 
 <span class="w">  </span><span class="na">helper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/openneuro git-credential&quot;</span>
 </pre></div>
 </div>
+<p>If you are using <a class="reference external" href="https://github.com/git-ecosystem/git-credential-manager">Git Credential Manager</a> add the provider entry to avoid duplicating entries.</p>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[credential &quot;https://openneuro.org&quot;]</span>
+<span class="w">  </span><span class="na">useHttpPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">generic</span>
+<span class="w">  </span><span class="na">helper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/openneuro git-credential&quot;</span>
+</pre></div>
+</div>
 </section>
 <section id="usage">
 <h3>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h3>
