@@ -60,6 +60,14 @@ To enable for all OpenNeuro repositories add this to your [git configuration fil
 ```cfg
 [credential "https://openneuro.org"]
   useHttpPath = true
+  helper = "/path/to/openneuro git-credential"
+```
+
+If you are using [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager) add the provider entry to avoid duplicating entries.
+
+```cfg
+[credential "https://openneuro.org"]
+  useHttpPath = true
   provider = generic
   helper = "/path/to/openneuro git-credential"
 ```
