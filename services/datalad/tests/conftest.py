@@ -1,3 +1,4 @@
+import sys
 import string
 import os
 import json
@@ -15,6 +16,15 @@ from datalad_service.app import create_app
 from datalad_service.datalad import DataladStore
 import datalad_service.tasks.publish
 
+
+# boto has a hopelessly outdated vendored version of six that breaks
+# pytest imports. Until datalad removes boto, purge the six importer.
+boto_importers = [
+    importer for importer in sys.meta_path
+    if importer.__module__ == 'boto.vendored.six'
+]
+for importer in boto_importers:
+    sys.meta_path.remove(importer)
 
 # Test dataset to create
 DATASET_ID = 'ds000001'
