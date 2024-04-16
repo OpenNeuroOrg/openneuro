@@ -4,6 +4,8 @@
 # 2. find-large-objects.sh to find targets
 # 3. Run `remove-large-object.sh {object} {filename}` for each object to remove
 
+set -x
+
 # This hook rewrites the tags after the rebase - from https://ownyourbits.com/2017/08/14/rebasing-in-git-without-losing-tags/#comment-42731
 cat <<EOF > .git/hooks/post-rewrite
 #!/bin/bash
