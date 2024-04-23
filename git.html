@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Architecture" href="architecture.html" /><link rel="prev" title="API Examples" href="api.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
         <title>Git access to OpenNeuro datasets - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -213,11 +213,11 @@
         </div>
         <article role="main">
           <section id="git-access-to-openneuro-datasets">
-<h1>Git access to OpenNeuro datasets<a class="headerlink" href="#git-access-to-openneuro-datasets" title="Link to this heading">#</a></h1>
+<h1>Git access to OpenNeuro datasets<a class="headerlink" href="#git-access-to-openneuro-datasets" title="Link to this heading">¶</a></h1>
 <p>The underlying format for dataset is a git-annex repo created with datalad. Every dataset tracks changes as commits and snapshots are stored as git tags.</p>
 <p>Datasets support clones, pushes, and other git operations. All datasets require authentication for access but public datasets will be available via anonymous clones in a future release.</p>
 <section id="repository-conventions">
-<h2>Repository conventions<a class="headerlink" href="#repository-conventions" title="Link to this heading">#</a></h2>
+<h2>Repository conventions<a class="headerlink" href="#repository-conventions" title="Link to this heading">¶</a></h2>
 <p>A dataset must always be present in the root level of the repository.</p>
 <p>OpenNeuro validates the size of regular git (non-annexed) files and a subset of bids-validation before accepting a git push. It is important to annex any large files in any commits before pushing. <code class="docutils literal notranslate"><span class="pre">.bidsignore</span></code> must always be a regular file. Some features are only available for regular files (such as diffing) and textual data is generally best kept as regular git objects.</p>
 <p>A recommended <code class="docutils literal notranslate"><span class="pre">.gitattributes</span></code> configuration for git-annex to automate annexing the correct files when using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> or <code class="docutils literal notranslate"><span class="pre">datalad</span> <span class="pre">save</span></code></p>
@@ -237,10 +237,10 @@
 </div>
 </section>
 <section id="credential-helper">
-<h2>Credential Helper<a class="headerlink" href="#credential-helper" title="Link to this heading">#</a></h2>
+<h2>Credential Helper<a class="headerlink" href="#credential-helper" title="Link to this heading">¶</a></h2>
 <p>Using openneuro-cli, git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the <a class="reference external" href="https://git-scm.com/docs/gitcredentials">git credential helper</a> for your use case.</p>
 <section id="setup">
-<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h3>
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h3>
 <p>Once you have openneuro-cli installed and you’ve logged in with <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, you can configure git to automatically use your login.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This allows the helper to identify which dataset you are accessing automatically and issue a key for that dataset</span>
 git<span class="w"> </span>config<span class="w"> </span>credential.useHttpPath<span class="w"> </span><span class="nb">true</span>
@@ -268,7 +268,7 @@ git<span class="w"> </span>config<span class="w"> </span>credential.helper<span 
 </div>
 </section>
 <section id="usage">
-<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h3>
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h3>
 <p>Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.</p>
 <p>To download a new dataset using the credential helper you can start with an empty repo and then configure that repo.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>ds000001
@@ -284,7 +284,7 @@ git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </
 <p>When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro will reject some invalid pushes but cannot run the full bids-validator until after your changes have been pushed.</p>
 </section>
 <section id="advanced-authentication">
-<h3>Advanced authentication<a class="headerlink" href="#advanced-authentication" title="Link to this heading">#</a></h3>
+<h3>Advanced authentication<a class="headerlink" href="#advanced-authentication" title="Link to this heading">¶</a></h3>
 <p>If you cannot use the credential helper you can manually generate a short lived key and pass this as the password for git operations. Substitute path= with the repository path for the dataset being accessed.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openneuro<span class="w"> </span>git-credential<span class="w"> </span>fill<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
 <span class="s">protocol=https</span>
@@ -296,15 +296,15 @@ git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </
 </section>
 </section>
 <section id="snapshots">
-<h2>Snapshots<a class="headerlink" href="#snapshots" title="Link to this heading">#</a></h2>
+<h2>Snapshots<a class="headerlink" href="#snapshots" title="Link to this heading">¶</a></h2>
 <p>Snapshots are represented as git tags. To use all OpenNeuro features, you must have at least one tag with a valid semantic versioning name. This is typically <code class="docutils literal notranslate"><span class="pre">1.0.0</span></code> but can be any valid numeric semantic version.</p>
 </section>
 <section id="git-annex-special-remote">
-<h2>git-annex special remote<a class="headerlink" href="#git-annex-special-remote" title="Link to this heading">#</a></h2>
+<h2>git-annex special remote<a class="headerlink" href="#git-annex-special-remote" title="Link to this heading">¶</a></h2>
 <p>Direct access can clone, push, and pull dataset contents but it does not transfer annexed objects on its own. For public datasets, the annexed objects are available with a preconfigured remote on S3 shortly after the dataset is made public or a new snapshot is created if the dataset is already public.</p>
 <p>For private datasets or to add new data with DataLad or git-annex, a special remote is available to push data directly to OpenNeuro.</p>
 <section id="configuring-openneuro-special-remote">
-<h3>Configuring OpenNeuro special remote<a class="headerlink" href="#configuring-openneuro-special-remote" title="Link to this heading">#</a></h3>
+<h3>Configuring OpenNeuro special remote<a class="headerlink" href="#configuring-openneuro-special-remote" title="Link to this heading">¶</a></h3>
 <p>Obtain the URL from the dataset page and run initremote (or enableremote if you need to update it).</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure openneuro-cli is installed and available in your path</span>
 <span class="c1"># You should see &#39;VERSION 1&#39; &#39;EXTENSIONS&#39; if this is working</span>
@@ -406,7 +406,7 @@ git<span class="w"> </span>annex<span class="w"> </span>copy<span class="w"> </s
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>

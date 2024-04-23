@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="API Examples" href="../api.html" /><link rel="prev" title="Data Management Plans" href="../policy/data_management_plans.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
         <title>OpenNeuro command line interface - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -213,10 +213,10 @@
         </div>
         <article role="main">
           <section id="openneuro-command-line-interface">
-<h1>OpenNeuro command line interface<a class="headerlink" href="#openneuro-command-line-interface" title="Link to this heading">#</a></h1>
+<h1>OpenNeuro command line interface<a class="headerlink" href="#openneuro-command-line-interface" title="Link to this heading">¶</a></h1>
 <p>This tool allows you to upload and download <a class="reference external" href="https://openneuro.org">OpenNeuro.org</a> datasets without a browser.</p>
 <section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Link to this heading">#</a></h2>
+<h2>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Install <a class="reference external" href="https://nodejs.org">Node.js</a> (version 18 or higher)</p></li>
 <li><p>In a terminal type: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">-g</span> <span class="pre">&#64;openneuro/cli</span></code></p></li>
@@ -225,7 +225,7 @@
 (make sure the installation folder is part of your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> by adding <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PATH=&quot;$(yarn</span> <span class="pre">global</span> <span class="pre">bin):$PATH&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code>)</p>
 </section>
 <section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h2>
 <p>The setup step is needed for both uploading <em>and</em> downloading data from OpenNeuro.</p>
 <p>Run <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code> to configure credentials.
 This prompts you for the required configuration fields and saves this to <code class="docutils literal notranslate"><span class="pre">.openneuro</span></code> in your home directory or profile.
@@ -234,9 +234,9 @@ You can obtain an API key via a browser at https://openneuro.org/keygen after lo
 <p>After successfully running <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, you can manually configure custom servers by editing the <code class="docutils literal notranslate"><span class="pre">.openneuro</span></code> file.</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="uploading-datasets">
-<h3>Uploading datasets<a class="headerlink" href="#uploading-datasets" title="Link to this heading">#</a></h3>
+<h3>Uploading datasets<a class="headerlink" href="#uploading-datasets" title="Link to this heading">¶</a></h3>
 <p>To upload a new dataset:</p>
 <p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code></p>
 <p>Your dataset must pass validation to upload but warnings can be skipped with <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">-i</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code>. A default label is set using the directory name.</p>
@@ -246,7 +246,7 @@ You can obtain an API key via a browser at https://openneuro.org/keygen after lo
 <p>This command will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.</p>
 </section>
 <section id="downloading-datasets">
-<h3>Downloading datasets<a class="headerlink" href="#downloading-datasets" title="Link to this heading">#</a></h3>
+<h3>Downloading datasets<a class="headerlink" href="#downloading-datasets" title="Link to this heading">¶</a></h3>
 <p>To download a snapshot:</p>
 <p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">download</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;destination</span> <span class="pre">directory&gt;</span></code></p>
 <p>To download the current draft files:</p>
@@ -255,7 +255,7 @@ You can obtain an API key via a browser at https://openneuro.org/keygen after lo
 </section>
 </section>
 <section id="errors">
-<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">#</a></h2>
+<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">¶</a></h2>
 <p>Package: OpenNeuro CLI download option</p>
 <p>Issue: <code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">path</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">string</span> <span class="pre">or</span> <span class="pre">Buffer</span></code></p>
 <p>Solution: This error is due to a failure to read the <code class="docutils literal notranslate"><span class="pre">~/.openneuro</span></code> configuration file.
@@ -339,7 +339,7 @@ This file can be created with the command <code class="docutils literal notransl
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

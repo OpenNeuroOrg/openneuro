@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Maintenance" href="maintenance.html" /><link rel="prev" title="Git access to OpenNeuro datasets" href="git.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
         <title>Architecture - OpenNeuro documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -213,7 +213,7 @@
         </div>
         <article role="main">
           <section id="architecture">
-<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h1>
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h1>
 <p>This guide covers the software architecture of the OpenNeuro platform. It is meant as an introduction for new developers working on the platform or interested contributors wanting to gain a better understanding of advanced use cases with the tools provided.</p>
 <p>OpenNeuro is built around a GraphQL API gateway and microservices architecture. There are a small number of backend services and only one API fronting them. The &#64;openneuro/server npm package implements the GraphQL API using <a class="reference external" href="https://www.apollographql.com/docs/apollo-server/">Apollo Server</a>. This API core is written in JavaScript and TypeScript and is responsible for providing platform wide services such as authentication, persistent metadata, and aggregation of other services. All public APIs are provided by this gateway.</p>
 <p><a class="reference external" href="https://www.datalad.org/">DataLad</a> and <a class="reference external" href="https://git-annex.branchable.com/">git-annex</a> are the foundation for version control of datasets and are accessed via a Python service named datalad-service. This service has exclusive filesystem level access to datasets and handles read and write requests from the other services.</p>
@@ -222,33 +222,33 @@
 <p>&#64;openneuro/cli is a command line interface that provides higher level features for command line automation or use cases such as downloading datasets for processing on HPC resources.</p>
 <p>&#64;openneuro/ssr provides server side rendering of &#64;openneuro/app.</p>
 <section id="api-gateway">
-<h2>API Gateway<a class="headerlink" href="#api-gateway" title="Link to this heading">#</a></h2>
+<h2>API Gateway<a class="headerlink" href="#api-gateway" title="Link to this heading">¶</a></h2>
 <p>The &#64;openneuro/server package itself is stateless but accesses several stateful backend services. datalad-service for dataset content, MongoDB for models, and ElasticSearch for indexed information. Ephemeral caching is kept in Redis. This is implemented as an <a class="reference external" href="https://expressjs.com/">Express</a> server running <a class="reference external" href="https://www.apollographql.com/docs/apollo-server/">Apollo Server</a> middleware for most actions. OpenNeuro 1.0 used RESTful Express endpoints without Apollo and some API features are still implemented outside of the Apollo reducer tree for this reason.</p>
 <section id="databases">
-<h3>Databases<a class="headerlink" href="#databases" title="Link to this heading">#</a></h3>
+<h3>Databases<a class="headerlink" href="#databases" title="Link to this heading">¶</a></h3>
 <p>MongoDB provides an efficient geodistributed persistent key value store that is used to coordinate instances of &#64;openneuro/server. This provides quick access to metadata records and aggregations even when the raw dataset content is not local to the API. The server implements database collections with the <a class="reference external" href="https://mongoosejs.com/">Mongoose library</a>. MongoDB is used when the record must persist, requires atomic access, and does not belong within a dataset.</p>
 <p>Redis is used to provide ephemeral caching. Any data stored in Redis may be lost at any time as Redis caches are routinely dropped during updates or autoscaling changes. Use Redis when profiling has shown an opportunity for time/memory tradeoffs and the Apollo Server cache is not sufficiently granular (such as multiple resolvers sharing an expensive aggregation).</p>
 <p>datalad-service and git-annex can also be thought of as a content-addressible database for file records and more detail is provided below.</p>
 </section>
 <section id="authentication">
-<h3>Authentication<a class="headerlink" href="#authentication" title="Link to this heading">#</a></h3>
+<h3>Authentication<a class="headerlink" href="#authentication" title="Link to this heading">¶</a></h3>
 <p>Authentication follows the RESTFul OAuth model and abstracts authentication from the GraphQL resolver implementation. Resolvers receive user information as context. Authorization is handled by resolvers, in most cases gated by the dataset being accessed. The permission model is dataset wide, with users having administrator, editor, or read-only access to a dataset and all revisions of it.</p>
 <p>Authentication tokens are a JWT containing a copy of the user record or a scope and extensions related to that scope. These tokens are provided to the API as either a cookie named accessToken or an authorization bearer token header. Cookies are preferred for browser clients and bearer tokens for programmic clients.</p>
 <p>User records are created when a user initially authenticates via any supported OAuth provider. OpenNeuro assigns a user UUID and maps this to the original provider identifier. Providers must expose a preferred name and email field but may expose any additional metadata that is required to link or renew provider authorization. If provider authorization is valid, OpenNeuro generates a new JWT.</p>
 </section>
 <section id="graphql-server">
-<h3>GraphQL Server<a class="headerlink" href="#graphql-server" title="Link to this heading">#</a></h3>
+<h3>GraphQL Server<a class="headerlink" href="#graphql-server" title="Link to this heading">¶</a></h3>
 <p>With few exceptions, functionality is implemented as GraphQL queries and mutation resolvers. Websockets are used for pushing updates to subscribed clients on changes or after long running operations. Long running operations should return some initial state and either update clients with a subscription when complete or defer results until the next client request.</p>
 </section>
 </section>
 <section id="datalad-service">
-<h2>DataLad Service<a class="headerlink" href="#datalad-service" title="Link to this heading">#</a></h2>
+<h2>DataLad Service<a class="headerlink" href="#datalad-service" title="Link to this heading">¶</a></h2>
 <p>This <a class="reference external" href="https://falconframework.org/">Falcon</a> HTTP backend service provides OpenNeuro functionality on top of DataLad and git-annex. It is responsible for creating repositories, modifying them, generating tags, running BIDS-validator on dataset file trees, exporting datasets to external resources such as S3, and allowing git protocol access to datasets. It is specifically not responsible for authorization, indexing, or aggregation of datasets, this is handled by other services.</p>
 <p>Each dataset consists of a working tree git repo. HTTP requests are made to perform operations on a dataset. No caching is done at this level, if caching is required it is the responsibility of the GraphQL API. In some cases, memoization is done to prevent duplicate operations from interfering with long running tasks (exports or validation). POSIX locking is used to prevent conflicting git operations.</p>
 <p>Even though OpenNeuro now allows direct git access, we use working tree checkouts instead of bare repos to allow for BIDS-validator operate as normal on a dataset.</p>
 <p>Authorization is the responsibility of other services but user information is provided to annotate commit messages and associate results with the original user when data is sent back to another service.</p>
 <section id="git-annex-as-a-database">
-<h3>Git Annex as a database<a class="headerlink" href="#git-annex-as-a-database" title="Link to this heading">#</a></h3>
+<h3>Git Annex as a database<a class="headerlink" href="#git-annex-as-a-database" title="Link to this heading">¶</a></h3>
 <p>Key to how OpenNeuro works with files is understanding the git and git-annex data model. In git, each file is hashed and kept on disk as an object referenced by that hash. A version or commit consists of a tree of those hashes. Git-annex extends this concept to large files by storing the file hash as the content instead of the actual contents and coordinating this extra level of indirection on a special branch (named git-annex). The special branch does not share history with the content branches of the repo. Think of it as another repo that is bundled together.</p>
 <p>To retrieve information about a given tree (one commit within a dataset), we prefer to access this information by the hashed tree object. This provides stable results regardless of working tree state and avoids the high cost of file access across in many cases due to git’s own optimization of packed content-hashes.</p>
 <p>Annexed objects can be treated as regular git objects in many cases but if the actual contents are required, we use the annex key to access the file independent of the working tree.</p>
@@ -256,10 +256,10 @@
 </section>
 </section>
 <section id="clients">
-<h2>Clients<a class="headerlink" href="#clients" title="Link to this heading">#</a></h2>
+<h2>Clients<a class="headerlink" href="#clients" title="Link to this heading">¶</a></h2>
 <p>The &#64;openneuro/client npm package is provided to share common client implementations between different OpenNeuro API clients. The React app and CLI clients both use this to setup Apollo client and share some queries and mutations.</p>
 <section id="react">
-<h3>React<a class="headerlink" href="#react" title="Link to this heading">#</a></h3>
+<h3>React<a class="headerlink" href="#react" title="Link to this heading">¶</a></h3>
 <p>The React frontend &#64;openneuro/app package implements the majority of the web UI for OpenNeuro. A &#64;openneuro/components library package provides generic reusable components as a foundation for this case or embedding in other React projects using OpenNeuro data.</p>
 <p>The state management model used treats the Apollo Client cache as the client side state. Queries and mutations are expected to provide id keyed responses that allow for automatic cache updates as needed or implement their own cache updates. A general principal to follow is a given page route should aim for one primary request sufficient for getting the page to first contentful paint. Secondary queries should provide their own loading states and not block layout whenever possible.</p>
 </section>
@@ -348,7 +348,7 @@
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
