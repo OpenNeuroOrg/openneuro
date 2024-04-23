@@ -38,10 +38,10 @@ exports[`email template -> comment created > renders with expected arguments 1`]
 </style>
 </head>
 <body>
-	<div class=\\"top-bar\\">
-		<img src=\\"https://openneuro.org/assets/email-header.1cb8bf76.png\\" />
+	<div class="top-bar">
+		<img src="https://openneuro.org/assets/email-header.1cb8bf76.png" />
 	</div>
-	<div class=\\"content\\">
+	<div class="content">
 		<h2>Hi, J. Doe</h2>
 
 		<p>
@@ -53,7 +53,7 @@ exports[`email template -> comment created > renders with expected arguments 1`]
 			The CRN Team
 		</p>
 
-		<a class=\\"dataset-link\\" href=\\"https://openneuro.org/datasets/ds12345678/snapshot\\">Create a snapshot. &raquo;</a>
+		<a class="dataset-link" href="https://openneuro.org/datasets/ds12345678/snapshot">Create a snapshot. &raquo;</a>
 	</div>
 </body>
 <html>"

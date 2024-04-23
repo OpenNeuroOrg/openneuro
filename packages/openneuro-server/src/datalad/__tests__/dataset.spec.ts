@@ -3,6 +3,7 @@ import request from "superagent"
 import { createDataset, datasetsFilter, testBlacklist } from "../dataset"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { connect } from "mongoose"
+import { MongoMemoryServer } from "mongodb-memory-server"
 
 // Mock requests to Datalad service
 vi.mock("superagent")
@@ -13,9 +14,11 @@ vi.mock("../../libs/notifications")
 
 describe("dataset model operations", () => {
   describe("createDataset()", () => {
-    beforeAll(() => {
+    let mongod
+    beforeAll(async () => {
       // Setup MongoDB with mongodb-memory-server
-      connect(globalThis.__MONGO_URI__)
+      mongod = await MongoMemoryServer.create()
+      connect(mongod.getUri())
     })
     it("resolves to dataset id string", async () => {
       const user = { id: "1234" }

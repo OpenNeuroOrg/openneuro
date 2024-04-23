@@ -1,5 +1,6 @@
 import { vi } from "vitest"
 vi.mock("ioredis")
+import { MongoMemoryServer } from "mongodb-memory-server"
 import request from "superagent"
 import { createDataset } from "../dataset"
 import { createSnapshot } from "../snapshots"
@@ -25,10 +26,15 @@ vi.mock("../../libs/notifications.ts")
 
 describe("snapshot model operations", () => {
   describe("createSnapshot()", () => {
+    let mongod
+    beforeAll(async () => {
+      // Setup MongoDB with mongodb-memory-server
+      mongod = await MongoMemoryServer.create()
+      connect(mongod.getUri())
+    })
     it("posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint", async () => {
       const user = { id: "1234" }
       const tag = "snapshot"
-      await connect(globalThis.__MONGO_URI__)
       const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,

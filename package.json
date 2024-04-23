@@ -39,7 +39,7 @@
     "jsdom": "16.7.0",
     "lerna": "3.20.2",
     "lint-staged": "^10.5.4",
-    "mongoose": "6.11.3",
+    "mongoose": "6.12.8",
     "pinst": "^2.1.6",
     "prettier": "^2.2.1",
     "react": "18.2.0",
@@ -47,9 +47,8 @@
     "tsc-watch": "6.0.4",
     "typescript": "5.1.6",
     "vite": "4.5.3",
-    "vitest": "0.34.4",
-    "vitest-fetch-mock": "0.2.2",
-    "vitest-mongodb": "0.0.5"
+    "vitest": "1.5.0",
+    "vitest-fetch-mock": "0.2.2"
   },
   "workspaces": [
     "packages/*"
@@ -65,8 +64,7 @@
     }
   },
   "resolutions": {
-    "react-router-dom": "6.3.0",
-    "mongodb-memory-server": "9.2.0"
+    "react-router-dom": "6.3.0"
   },
   "packageManager": "yarn@3.6.3",
   "dependencies": {

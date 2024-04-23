@@ -1,13 +1,17 @@
 import { vi } from "vitest"
-import { connect } from "mongoose"
+import { MongoMemoryServer } from "mongodb-memory-server"
+import { connect, disconnect } from "mongoose"
 import { getAccessionNumber } from "../dataset"
 
 vi.mock("ioredis")
 
 describe("libs/dataset", () => {
   describe("getAccessionNumber", () => {
-    beforeAll(() => {
-      connect(globalThis.__MONGO_URI__)
+    let mongod
+    beforeAll(async () => {
+      // Setup MongoDB with mongodb-memory-server
+      mongod = await MongoMemoryServer.create()
+      await connect(mongod.getUri())
     })
     it('returns strings starting with "ds"', async () => {
       const ds = await getAccessionNumber()
