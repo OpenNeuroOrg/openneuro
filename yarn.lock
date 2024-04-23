@@ -5640,7 +5640,7 @@ __metadata:
     "@apollo/client": 3.7.2
     "@openneuro/client": ^4.23.0
     "@types/mkdirp": 1.0.2
-    "@types/node": 18.11.9
+    "@types/node": 20.12.7
     bids-validator: 1.10.0
     cli-progress: ^3.8.2
     commander: 7.2.0
@@ -5726,7 +5726,7 @@ __metadata:
     "@openneuro/client": ^4.23.0
     "@openneuro/search": ^4.23.0
     "@types/jsonwebtoken": ^8
-    "@types/node": 18.11.9
+    "@types/node": 20.12.7
     "@types/tsc-watch": ^4
     core-js: ^3.10.1
     graphql: 16.8.1
@@ -5745,7 +5745,7 @@ __metadata:
     "@apollo/client": 3.7.2
     "@elastic/elasticsearch": 7.15.0
     "@types/jsonwebtoken": ^8
-    "@types/node": 18.11.9
+    "@types/node": 20.12.7
     core-js: ^3.10.1
     graphql: 16.8.1
     jsonwebtoken: ^9.0.0
@@ -7878,6 +7878,15 @@ __metadata:
   version: 18.11.9
   resolution: "@types/node@npm:18.11.9"
   checksum: cc0aae109e9b7adefc32eecb838d6fad931663bb06484b5e9cbbbf74865c721b03d16fd8d74ad90e31dbe093d956a7c2c306ba5429ba0c00f3f7505103d7a496
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:20.12.7":
+  version: 20.12.7
+  resolution: "@types/node@npm:20.12.7"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 7cc979f7e2ca9a339ec71318c3901b9978555257929ef3666987f3e447123bc6dc92afcc89f6347e09e07d602fde7d51bcddea626c23aa2bb74aeaacfd1e1686
   languageName: node
   linkType: hard
 
@@ -26578,6 +26587,13 @@ resolve@^2.0.0-next.3:
   version: 1.13.1
   resolution: "underscore@npm:1.13.1"
   checksum: 69bb4e6dd92c387ad322dd5b105f496fa64896d92ff1eea987610920d452667a12bca0938def4c4d60acd12da62410540fd268e7ca4f2480d89324498382fcac
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
   languageName: node
   linkType: hard
 

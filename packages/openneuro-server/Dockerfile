@@ -4,7 +4,7 @@ FROM openneuro/node AS build
 WORKDIR /srv/packages/openneuro-server
 RUN yarn build
 
-FROM node:18.17.1-alpine
+FROM node:20.12.2-alpine
 
 WORKDIR /srv
 

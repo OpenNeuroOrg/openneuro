@@ -6971,7 +6971,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@apollo/client", "virtual:90f6a129d8adfee793b93ece48b319375c46f70206be38f532b28e127912d214b54604b30e8cb269ad6cd82b0db01373baefbe471fefa8ff4f96f22e6afba034#npm:3.7.2"],\
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@types/mkdirp", "npm:1.0.2"],\
-            ["@types/node", "npm:18.11.9"],\
+            ["@types/node", "npm:20.12.7"],\
             ["bids-validator", "npm:1.10.0"],\
             ["cli-progress", "npm:3.9.1"],\
             ["commander", "npm:7.2.0"],\
@@ -7059,7 +7059,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openneuro/client", "workspace:packages/openneuro-client"],\
             ["@openneuro/search", "workspace:packages/openneuro-search"],\
             ["@types/jsonwebtoken", "npm:8.5.5"],\
-            ["@types/node", "npm:18.11.9"],\
+            ["@types/node", "npm:20.12.7"],\
             ["@types/tsc-watch", "npm:4.2.0"],\
             ["core-js", "npm:3.18.0"],\
             ["graphql", "npm:16.8.1"],\
@@ -7078,7 +7078,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@apollo/client", "virtual:e74940e35978632a0c14fa5497dc52825a9c66f5b1078eb2e64acf3c410407bb81bc4632771c0031555903c2ed0410b5bd9f7005884e1b336a14c40f1d7762b1#npm:3.7.2"],\
             ["@elastic/elasticsearch", "npm:7.15.0"],\
             ["@types/jsonwebtoken", "npm:8.5.5"],\
-            ["@types/node", "npm:18.11.9"],\
+            ["@types/node", "npm:20.12.7"],\
             ["core-js", "npm:3.18.0"],\
             ["graphql", "npm:16.8.1"],\
             ["jsonwebtoken", "npm:9.0.0"],\
@@ -9502,6 +9502,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-18.11.9-d21dd6ec05-cc0aae109e.zip/node_modules/@types/node/",\
           "packageDependencies": [\
             ["@types/node", "npm:18.11.9"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:20.12.7", {\
+          "packageLocation": "./.yarn/cache/@types-node-npm-20.12.7-3bb3d3303d-7cc979f7e2.zip/node_modules/@types/node/",\
+          "packageDependencies": [\
+            ["@types/node", "npm:20.12.7"],\
+            ["undici-types", "npm:5.26.5"]\
           ],\
           "linkType": "HARD"\
         }],\
@@ -30436,6 +30444,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["undici-types", [\
+        ["npm:5.26.5", {\
+          "packageLocation": "./.yarn/cache/undici-types-npm-5.26.5-de4f7c7bb9-3192ef6f3f.zip/node_modules/undici-types/",\
+          "packageDependencies": [\
+            ["undici-types", "npm:5.26.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["unicode-byte-truncate", [\
         ["npm:1.0.0", {\
           "packageLocation": "./.yarn/cache/unicode-byte-truncate-npm-1.0.0-c2590eb130-285426ee94.zip/node_modules/unicode-byte-truncate/",\
@@ -31068,6 +31085,45 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
+        ["virtual:a6e03045de3341c1df9eb8aa587ab0db0091b8ef6e2a2d0be87b7bff73704f3c2f9aca4abcb239b86b606d16426fb58fd2deb1cb1cfdcea8450ff50168f467ca#npm:5.2.10", {\
+          "packageLocation": "./.yarn/__virtual__/vite-virtual-bece3053fc/0/cache/vite-npm-5.2.10-08834d3974-feb11be2b9.zip/node_modules/vite/",\
+          "packageDependencies": [\
+            ["vite", "virtual:a6e03045de3341c1df9eb8aa587ab0db0091b8ef6e2a2d0be87b7bff73704f3c2f9aca4abcb239b86b606d16426fb58fd2deb1cb1cfdcea8450ff50168f467ca#npm:5.2.10"],\
+            ["@types/less", null],\
+            ["@types/lightningcss", null],\
+            ["@types/node", "npm:18.11.9"],\
+            ["@types/sass", null],\
+            ["@types/stylus", null],\
+            ["@types/sugarss", null],\
+            ["@types/terser", null],\
+            ["esbuild", "npm:0.20.2"],\
+            ["fsevents", "patch:fsevents@npm%3A2.3.3#~builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"],\
+            ["less", null],\
+            ["lightningcss", null],\
+            ["postcss", "npm:8.4.38"],\
+            ["rollup", "npm:4.16.4"],\
+            ["sass", null],\
+            ["stylus", null],\
+            ["sugarss", null],\
+            ["terser", null]\
+          ],\
+          "packagePeers": [\
+            "@types/less",\
+            "@types/lightningcss",\
+            "@types/node",\
+            "@types/sass",\
+            "@types/stylus",\
+            "@types/sugarss",\
+            "@types/terser",\
+            "less",\
+            "lightningcss",\
+            "sass",\
+            "stylus",\
+            "sugarss",\
+            "terser"\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:4.5.3", {\
           "packageLocation": "./.yarn/__virtual__/vite-virtual-69c30fd9fd/0/cache/vite-npm-4.5.3-5cedc7cb8f-fd3f512ce4.zip/node_modules/vite/",\
           "packageDependencies": [\
@@ -31113,7 +31169,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["vite", "virtual:e4a08b73da670c68cb7a3768e16f6ce2a58f080cfde8336e7173026653fd7feaf33530c89e20db1262291397aa6d543f4b8f8e4dbb468bc965f0447b07d9f5fe#npm:5.2.10"],\
             ["@types/less", null],\
             ["@types/lightningcss", null],\
-            ["@types/node", "npm:18.11.9"],\
+            ["@types/node", "npm:20.12.7"],\
             ["@types/sass", null],\
             ["@types/stylus", null],\
             ["@types/sugarss", null],\
@@ -31201,7 +31257,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["strip-literal", "npm:2.1.0"],\
             ["tinybench", "npm:2.8.0"],\
             ["tinypool", "npm:0.8.4"],\
-            ["vite", "virtual:e4a08b73da670c68cb7a3768e16f6ce2a58f080cfde8336e7173026653fd7feaf33530c89e20db1262291397aa6d543f4b8f8e4dbb468bc965f0447b07d9f5fe#npm:5.2.10"],\
+            ["vite", "virtual:a6e03045de3341c1df9eb8aa587ab0db0091b8ef6e2a2d0be87b7bff73704f3c2f9aca4abcb239b86b606d16426fb58fd2deb1cb1cfdcea8450ff50168f467ca#npm:5.2.10"],\
             ["vite-node", "npm:1.5.0"],\
             ["why-is-node-running", "npm:2.2.2"]\
           ],\
@@ -31381,7 +31437,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/edge-runtime__vm", null],\
             ["@types/happy-dom", null],\
             ["@types/jsdom", null],\
-            ["@types/node", "npm:18.11.9"],\
+            ["@types/node", "npm:20.12.7"],\
             ["@types/vitest__browser", null],\
             ["@types/vitest__ui", null],\
             ["@vitest/browser", null],\

@@ -12,7 +12,7 @@ COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
 # Install node and Deno the Dockery-but-hacky-way
-COPY --from=node:18.17.1-buster /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:20.12.2-bullseye /usr/local/bin/node /usr/local/bin/node
 COPY --from=deno /deno /usr/local/bin/deno
 
 RUN apt-get update \
