@@ -32,6 +32,8 @@ jobs:
         run: pip install 'pipenv==2023.7.23'
       - name: Install dependencies
         run: pipenv install --dev
+      - name: Install bids-validator
+        run: npm install
       - name: Configure git defaults
         run: |
           git config --global user.name "Git Worker"
