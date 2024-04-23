@@ -39,7 +39,7 @@
     "graphql-tools": "9.0.0",
     "immutable": "^3.8.2",
     "ioredis": "4.17.3",
-    "jsdom": "^11.6.2",
+    "jsdom": "24.0.0",
     "jsonwebtoken": "^9.0.0",
     "keyv": "^4.5.3",
     "mime-types": "^2.1.19",
