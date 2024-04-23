@@ -13349,15 +13349,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fd-slicer@npm:~1.1.0":
-  version: 1.1.0
-  resolution: "fd-slicer@npm:1.1.0"
-  dependencies:
-    pend: ~1.2.0
-  checksum: c8585fd5713f4476eb8261150900d2cb7f6ff2d87f8feb306ccc8a1122efd152f1783bdb2b8dc891395744583436bfd8081d8e63ece0ec8687eeefea394d4ff2
-  languageName: node
-  linkType: hard
-
 "fengari-interop@npm:^0.1.3":
   version: 0.1.3
   resolution: "fengari-interop@npm:0.1.3"
@@ -13592,7 +13583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.0, follow-redirects@npm:^1.15.3":
+"follow-redirects@npm:^1.15.0, follow-redirects@npm:^1.15.6":
   version: 1.15.6
   resolution: "follow-redirects@npm:1.15.6"
   peerDependenciesMeta:
@@ -15144,13 +15135,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"https-proxy-agent@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "https-proxy-agent@npm:7.0.2"
+"https-proxy-agent@npm:^7.0.4":
+  version: 7.0.4
+  resolution: "https-proxy-agent@npm:7.0.4"
   dependencies:
     agent-base: ^7.0.2
     debug: 4
-  checksum: 088969a0dd476ea7a0ed0a2cf1283013682b08f874c3bc6696c83fa061d2c157d29ef0ad3eb70a2046010bb7665573b2388d10fdcb3e410a66995e5248444292
+  checksum: daaab857a967a2519ddc724f91edbbd388d766ff141b9025b629f92b9408fc83cee8a27e11a907aede392938e9c398e240d643e178408a59e4073539cde8cfe9
   languageName: node
   linkType: hard
 
@@ -19402,33 +19393,33 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mongodb-memory-server-core@npm:9.0.1":
-  version: 9.0.1
-  resolution: "mongodb-memory-server-core@npm:9.0.1"
+"mongodb-memory-server-core@npm:9.2.0":
+  version: 9.2.0
+  resolution: "mongodb-memory-server-core@npm:9.2.0"
   dependencies:
     async-mutex: ^0.4.0
     camelcase: ^6.3.0
     debug: ^4.3.4
     find-cache-dir: ^3.3.2
-    follow-redirects: ^1.15.3
-    https-proxy-agent: ^7.0.2
-    mongodb: ^5.9.0
+    follow-redirects: ^1.15.6
+    https-proxy-agent: ^7.0.4
+    mongodb: ^5.9.1
     new-find-package-json: ^2.0.0
-    semver: ^7.5.4
-    tar-stream: ^3.0.0
+    semver: ^7.6.0
+    tar-stream: ^3.1.7
     tslib: ^2.6.2
-    yauzl: ^2.10.0
-  checksum: 41ed9b1c6c3d56e637594e250ccd151cdf2b958b77551e9e8616f39f1d4ceb22376def390f3bbedff5417b3b448ec235a108e9022da1ab88458719baaf11d8c6
+    yauzl: ^3.1.3
+  checksum: 980a9a3bac6462f05ede9d1f5efee8c22e45b629ff2910e09743ae286580abd4e792e666410faa7a0718de55ea955736fb1b4ffbd139c88fd85d27dba60d96d5
   languageName: node
   linkType: hard
 
-"mongodb-memory-server@npm:9.0.1":
-  version: 9.0.1
-  resolution: "mongodb-memory-server@npm:9.0.1"
+"mongodb-memory-server@npm:9.2.0":
+  version: 9.2.0
+  resolution: "mongodb-memory-server@npm:9.2.0"
   dependencies:
-    mongodb-memory-server-core: 9.0.1
+    mongodb-memory-server-core: 9.2.0
     tslib: ^2.6.2
-  checksum: 0f54d26edde117a6e87423461445be094a6af6e7d87d3bf2c98607683c41bed4f2e5a0175dfa8ffd9b6d0bf6fcea11bf3a18aaf66f5ccc619a0a6a4417ebdfce
+  checksum: dd90fa12ded7614b8b88fbe68eb203c32bfc49fc27807163ace930b49a83ed2064a18bf53d0f60b21b06b7135ca87f7d7b8fabaff1db8b2111250399c0bd5bd8
   languageName: node
   linkType: hard
 
@@ -19450,9 +19441,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^5.9.0":
-  version: 5.9.1
-  resolution: "mongodb@npm:5.9.1"
+"mongodb@npm:^5.9.1":
+  version: 5.9.2
+  resolution: "mongodb@npm:5.9.2"
   dependencies:
     "@mongodb-js/saslprep": ^1.1.0
     bson: ^5.5.0
@@ -19478,7 +19469,7 @@ fsevents@~2.3.2:
       optional: true
     snappy:
       optional: true
-  checksum: a827937120cd7eecafc0ad5657b40536774f0b09582a9363db0a192149ba20eae80a33fccf573f5ce69a20aca6759c40b4961d9d1d4de2a350c543030055e0f6
+  checksum: fad5621f4a9764d71c48f2955be57925e506b14a4a63c5b9209ff733a58b2524cf9c87f216f2f02de092fab20eaa033ff5ade45c5cfa7f1c8c6bce114cb22e3f
   languageName: node
   linkType: hard
 
@@ -23753,6 +23744,17 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"semver@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "semver@npm:7.6.0"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 7427f05b70786c696640edc29fdd4bc33b2acf3bbe1740b955029044f80575fc664e1a512e4113c3af21e767154a94b4aa214bf6cd6e42a1f6dba5914e0b208c
+  languageName: node
+  linkType: hard
+
 "send@npm:0.18.0":
   version: 0.18.0
   resolution: "send@npm:0.18.0"
@@ -25128,14 +25130,14 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tar-stream@npm:^3.0.0":
-  version: 3.1.6
-  resolution: "tar-stream@npm:3.1.6"
+"tar-stream@npm:^3.1.7":
+  version: 3.1.7
+  resolution: "tar-stream@npm:3.1.7"
   dependencies:
     b4a: ^1.6.4
     fast-fifo: ^1.2.0
     streamx: ^2.15.0
-  checksum: f3627f918581976e954ff03cb8d370551053796b82564f8c7ca8fac84c48e4d042026d0854fc222171a34ff9c682b72fae91be9c9b0a112d4c54f9e4f443e9c5
+  checksum: 6393a6c19082b17b8dcc8e7fd349352bb29b4b8bfe1075912b91b01743ba6bb4298f5ff0b499a3bbaf82121830e96a1a59d4f21a43c0df339e54b01789cb8cc6
   languageName: node
   linkType: hard
 
@@ -27487,13 +27489,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"yauzl@npm:^2.10.0":
-  version: 2.10.0
-  resolution: "yauzl@npm:2.10.0"
+"yauzl@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "yauzl@npm:3.1.3"
   dependencies:
     buffer-crc32: ~0.2.3
-    fd-slicer: ~1.1.0
-  checksum: 7f21fe0bbad6e2cb130044a5d1d0d5a0e5bf3d8d4f8c4e6ee12163ce798fee3de7388d22a7a0907f563ac5f9d40f8699a223d3d5c1718da90b0156da6904022b
+    pend: ~1.2.0
+  checksum: 5b782f6e99361a9c715e7a82e7aae3d983b6ddff6ebe3a66d2dd3f4ee601ec41c55fa88587bf6de0acbc013aac0b2cac84f9f0cd48372fd5329ee5e273f46f2c
   languageName: node
   linkType: hard
 
