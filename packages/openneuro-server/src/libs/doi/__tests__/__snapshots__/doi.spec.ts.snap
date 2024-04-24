@@ -1,17 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`DOI minting utils > template() > accepts expected arguments 1`] = `
-"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
-<resource xmlns:xsi=\\"http://www.w3.org/2001/XMLSchema-instance\\" xmlns=\\"http://datacite.org/schema/kernel-4\\" xsi:schemaLocation=\\"http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd\\">
-  <identifier identifierType=\\"DOI\\">12345</identifier>
+"<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">
+  <identifier identifierType="DOI">12345</identifier>
   <creators>
   <creator><creatorName>A. User</creatorName></creator><creator><creatorName>B. User</creatorName></creator>
   </creators>
   <titles>
-    <title xml:lang=\\"en-us\\">Test Dataset</title>
+    <title xml:lang="en-us">Test Dataset</title>
   </titles>
   <publisher>Openneuro</publisher>
   <publicationYear>1999</publicationYear>
-  <resourceType resourceTypeGeneral=\\"Dataset\\">fMRI</resourceType>
+  <resourceType resourceTypeGeneral="Dataset">fMRI</resourceType>
 </resource>"
 `;

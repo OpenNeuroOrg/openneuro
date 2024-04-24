@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "author": "Squishymedia",
   "license": "MIT",
@@ -40,10 +40,10 @@
   },
   "devDependencies": {
     "@types/mkdirp": "1.0.2",
-    "@types/node": "18.11.9",
+    "@types/node": "20.12.7",
     "core-js": "^3.10.1",
     "metro-memory-fs": "^0.73.3",
-    "vitest": "0.34.4"
+    "vitest": "1.5.0"
   },
   "publishConfig": {
     "access": "public"

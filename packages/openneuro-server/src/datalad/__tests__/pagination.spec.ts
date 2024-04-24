@@ -1,5 +1,6 @@
 import { vi } from "vitest"
 vi.mock("ioredis")
+import { MongoMemoryServer } from "mongodb-memory-server"
 import * as pagination from "../pagination.js"
 import { connect, Types } from "mongoose"
 import Dataset from "../../models/dataset"
@@ -37,8 +38,11 @@ describe("pagination model operations", () => {
     })
   })
   describe("datasetsConnection()", () => {
+    let mongod
     beforeAll(async () => {
-      await connect(globalThis.__MONGO_URI__)
+      // Setup MongoDB with mongodb-memory-server
+      mongod = await MongoMemoryServer.create()
+      connect(mongod.getUri())
       const ds = new Dataset({
         _id: new ObjectID("5bef51a1ed211400c08e5524"),
         id: "ds001001",

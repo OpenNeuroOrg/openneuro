@@ -1,4 +1,5 @@
 import { vi } from "vitest"
+import { MongoMemoryServer } from "mongodb-memory-server"
 import { connect } from "mongoose"
 import request from "superagent"
 import * as ds from "../dataset"
@@ -9,8 +10,11 @@ vi.mock("../../../config.ts")
 vi.mock("../../../libs/notifications.ts")
 
 describe("dataset resolvers", () => {
-  beforeAll(() => {
-    connect(globalThis.__MONGO_URI__)
+  let mongod
+  beforeAll(async () => {
+    // Setup MongoDB with mongodb-memory-server
+    mongod = await MongoMemoryServer.create()
+    connect(mongod.getUri())
   })
   describe("createDataset()", () => {
     it("createDataset mutation succeeds", async () => {

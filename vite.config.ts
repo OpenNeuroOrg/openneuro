@@ -9,6 +9,6 @@ export default defineConfig({
     clearMocks: true,
     maxConcurrency: 16,
     isolate: true,
-    exclude: ["./cli", "./.yarn", "**/node_modules"],
+    exclude: ["./cli", "./.yarn", "**/node_modules", "**/dist"],
   },
 })

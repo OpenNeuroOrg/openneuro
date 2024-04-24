@@ -1,6 +1,7 @@
 import { vi } from "vitest"
 import { connect } from "mongoose"
 import { deleteComment, flatten } from "../resolvers/comment"
+import { MongoMemoryServer } from "mongodb-memory-server"
 import Comment from "../../models/comment"
 
 vi.mock("ioredis")
@@ -16,8 +17,11 @@ describe("comment resolver helpers", () => {
       user: "5678",
       userInfo: { admin: false },
     }
+    let mongod
     beforeAll(async () => {
-      await connect(globalThis.__MONGO_URI__)
+      // Setup MongoDB with mongodb-memory-server
+      mongod = await MongoMemoryServer.create()
+      connect(mongod.getUri())
       const comment = new Comment({
         text: "a",
         createDate: new Date().toISOString(),

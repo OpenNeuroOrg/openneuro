@@ -12,7 +12,7 @@ COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
 # Install node and Deno the Dockery-but-hacky-way
-COPY --from=node:18.17.1-buster /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:20.12.2-bullseye /usr/local/bin/node /usr/local/bin/node
 COPY --from=deno /deno /usr/local/bin/deno
 
 RUN apt-get update \
@@ -20,7 +20,7 @@ RUN apt-get update \
   && apt-get install -y curl openssh-client \
   && ssh-keyscan github.com >> /root/.ssh/known_hosts \
   && mkdir /yarn \
-  && curl -L https://github.com/yarnpkg/yarn/releases/download/v1.22.5/yarn-v1.22.5.tar.gz | tar -C /yarn --strip-components 1 -xvz \
+  && curl -L https://github.com/yarnpkg/yarn/releases/download/v1.22.22/yarn-v1.22.22.tar.gz | tar -C /yarn --strip-components 1 -xvz \
   && ln -sf /yarn/bin/yarn /usr/local/bin/yarn \
   && curl -L http://archive.org/download/git-annex-builds/SHA256E-s53592796--6e0a3c16d50379f89d2064081376a3f7f6efa1a89eb1afc2a2335597e7cf9fac.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
   && pip3 install 'pipenv==2020.6.2' \
