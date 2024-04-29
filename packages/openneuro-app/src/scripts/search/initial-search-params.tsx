@@ -155,6 +155,8 @@ export interface SearchParams {
   tracerRadionuclides: string[]
   sortBy_available
   sortBy_selected
+  bidsDatasetType_available: string[]
+  bidsDatasetType_selected: string | null
 }
 
 // TODO: move to this initial state
@@ -237,6 +239,8 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   tracerRadionuclides: [],
   sortBy_available: sortBy,
   sortBy_selected: sortBy[0],
+  bidsDatasetType_available: ["raw", "derivative"],
+  bidsDatasetType_selected: null,
 }
 
 export default TEMPORARY_initialSearchParams

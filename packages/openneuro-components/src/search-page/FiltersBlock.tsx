@@ -6,7 +6,6 @@ import { TermListItem } from "./TermListItem"
 import { FacetSelectValueType } from "../facets/FacetSelect"
 import { NeurobagelSearch } from "./NeurobagelSearch"
 
-
 export interface FiltersBlockProps {
   keywords: string[]
   modality_selected?: FacetSelectValueType
@@ -33,6 +32,7 @@ export interface FiltersBlockProps {
   removeAllFilters?(): void
   numTotalResults: number
   loading: boolean
+  bidsDatasetType_selected?: FacetSelectValueType
 }
 
 export const FiltersBlock = ({
@@ -61,6 +61,7 @@ export const FiltersBlock = ({
   removeFilterItem,
   removeAllFilters,
   numTotalResults,
+  bidsDatasetType_selected,
 }: FiltersBlockProps) => {
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
@@ -112,6 +113,16 @@ export const FiltersBlock = ({
             type="Modality"
             item={{ param: "modality_selected", value: modality_selected }}
             removeFilterItem={removeFilterItem(true)}
+          />
+        )}
+        {bidsDatasetType_selected && (
+          <FilterListItem
+            type="Dataset Type"
+            item={{
+              param: "bidsDatasetType_selected",
+              value: bidsDatasetType_selected,
+            }}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {!searchAllDatasets && (
