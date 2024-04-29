@@ -571,6 +571,8 @@ export const typeDefs = `
     ReferencesAndLinks: [String]
     # The Document Object Identifier of the dataset (not the corresponding paper).
     DatasetDOI: String
+    # The BIDS DatasetType defines as "raw" or "derivative"
+    DatasetType: String
     # List of ethics committee approvals of the research protocols and/or protocol identifiers.
     EthicsApprovals: [String]
   }
