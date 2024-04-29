@@ -88,6 +88,12 @@ export const repairDescriptionTypes = (description) => {
     newDescription.HowToAcknowledge =
       JSON.stringify(description.HowToAcknowledge) || ""
   }
+  if (
+    description.hasOwnProperty("DatasetType") &&
+    typeof description.DatasetType !== "string"
+  ) {
+    newDescription.DatasetType = "raw"
+  }
   return newDescription
 }
 
