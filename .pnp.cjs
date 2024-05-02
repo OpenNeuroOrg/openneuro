@@ -6436,7 +6436,7 @@ const RAW_RUNTIME_STATE =
           ["@nx/devkit", "virtual:0417054cc3013e68d78ec07693e07a290b4ebcac0f96f69ff3ffef8315c96b41388fb1d89fd7714c1ecbcb9825a3ba9f649219a76df658ce841266a03465d9fe#npm:16.8.1"],\
           ["@nrwl/devkit", "npm:16.8.1"],\
           ["@types/nx", null],\
-          ["ejs", "npm:3.1.9"],\
+          ["ejs", "npm:3.1.10"],\
           ["enquirer", "npm:2.3.6"],\
           ["ignore", "npm:5.2.4"],\
           ["nx", null],\
@@ -6456,7 +6456,7 @@ const RAW_RUNTIME_STATE =
           ["@nx/devkit", "virtual:27294a026b403a125127a01c506649a66f963443d98b165f595b35d84f3a7f3acf7257fab805d9a5c66db9a766498808df6100c11de52d69e5f1edabcba2aa61#npm:16.8.1"],\
           ["@nrwl/devkit", "npm:16.8.1"],\
           ["@types/nx", null],\
-          ["ejs", "npm:3.1.9"],\
+          ["ejs", "npm:3.1.10"],\
           ["enquirer", "npm:2.3.6"],\
           ["ignore", "npm:5.2.4"],\
           ["nx", "virtual:27294a026b403a125127a01c506649a66f963443d98b165f595b35d84f3a7f3acf7257fab805d9a5c66db9a766498808df6100c11de52d69e5f1edabcba2aa61#npm:16.8.1"],\
@@ -14494,10 +14494,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["ejs", [\
-      ["npm:3.1.9", {\
-        "packageLocation": "./.yarn/cache/ejs-npm-3.1.9-e201b2088c-71f56d3754.zip/node_modules/ejs/",\
+      ["npm:3.1.10", {\
+        "packageLocation": "./.yarn/cache/ejs-npm-3.1.10-4e8cf4bdc1-a9cb7d7cd1.zip/node_modules/ejs/",\
         "packageDependencies": [\
-          ["ejs", "npm:3.1.9"],\
+          ["ejs", "npm:3.1.10"],\
           ["jake", "npm:10.8.7"]\
         ],\
         "linkType": "HARD"\
