@@ -4,6 +4,7 @@ import ModalitySelect from "./modality-select"
 import ShowDatasetRadios from "./show-datasets-radios"
 import AgeRangeInput from "./age-range-input"
 import SubjectCountRangeInput from "./subject-count-range-input"
+import DatasetTypeSelect from "./dataset-type-select"
 import DiagnosisSelect from "./diagnosis-select"
 import TaskInput from "./task-input"
 import AuthorInput from "./author-input"
@@ -24,6 +25,7 @@ export {
   AllDatasetsToggle,
   AuthorInput,
   BodyPartsInput,
+  DatasetTypeSelect,
   DateRadios,
   DiagnosisSelect,
   KeywordInput,

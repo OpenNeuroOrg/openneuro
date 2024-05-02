@@ -123,6 +123,7 @@ export const getSelectParams = ({
   scannerManufacturersModelNames,
   tracerNames,
   tracerRadionuclides,
+  bidsDatasetType_selected,
 }) => ({
   keywords,
   modality_selected,
@@ -144,6 +145,7 @@ export const getSelectParams = ({
   scannerManufacturersModelNames,
   tracerNames,
   tracerRadionuclides,
+  bidsDatasetType_selected,
 })
 
 /**

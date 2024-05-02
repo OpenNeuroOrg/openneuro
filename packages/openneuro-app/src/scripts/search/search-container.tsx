@@ -16,6 +16,7 @@ import {
   AllDatasetsToggle,
   AuthorInput,
   BodyPartsInput,
+  DatasetTypeSelect,
   DateRadios,
   DiagnosisSelect,
   KeywordInput,
@@ -166,6 +167,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
+            <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />
             <DiagnosisSelect />
