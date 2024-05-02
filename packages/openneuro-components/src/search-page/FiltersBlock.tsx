@@ -122,7 +122,7 @@ export const FiltersBlock = ({
               param: "bidsDatasetType_selected",
               value: bidsDatasetType_selected,
             }}
-            removeFilterItem={removeFilterItem()}
+            removeFilterItem={removeFilterItem(true)}
           />
         )}
         {!searchAllDatasets && (
