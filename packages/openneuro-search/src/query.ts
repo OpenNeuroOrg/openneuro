@@ -43,6 +43,7 @@ export const INDEX_DATASET_FRAGMENT = gql`
         Name
         Authors
         SeniorAuthor
+        DatasetType
       }
       summary {
         tasks

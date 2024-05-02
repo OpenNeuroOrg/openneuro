@@ -60,7 +60,8 @@
           "properties": {
             "Name": { "type": "text" },
             "Authors": { "type": "text" },
-            "SeniorAuthor": { "type": "text" }
+            "SeniorAuthor": { "type": "text" },
+            "DatasetType": { "type": "keyword" }
           }
         },
         "readme": {
