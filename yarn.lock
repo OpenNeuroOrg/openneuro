@@ -3976,7 +3976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/gen-mapping@npm:^0.3.0, @jridgewell/gen-mapping@npm:^0.3.2":
+"@jridgewell/gen-mapping@npm:^0.3.0":
   version: 0.3.3
   resolution: "@jridgewell/gen-mapping@npm:0.3.3"
   dependencies:
@@ -3987,10 +3987,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/gen-mapping@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@jridgewell/gen-mapping@npm:0.3.2"
+  dependencies:
+    "@jridgewell/set-array": "npm:^1.0.1"
+    "@jridgewell/sourcemap-codec": "npm:^1.4.10"
+    "@jridgewell/trace-mapping": "npm:^0.3.9"
+  checksum: 10/7ba0070be1aeda7d7694b09d847c3b95879409b26559b9d7e97a88ec94b838fb380df43ae328ee2d2df4d79e75d7afe6ba315199d18d79aa20839ebdfb739420
+  languageName: node
+  linkType: hard
+
 "@jridgewell/resolve-uri@npm:3.1.0":
   version: 3.1.0
   resolution: "@jridgewell/resolve-uri@npm:3.1.0"
   checksum: 10/320ceb37af56953757b28e5b90c34556157676d41e3d0a3ff88769274d62373582bb0f0276a4f2d29c3f4fdd55b82b8be5731f52d391ad2ecae9b321ee1c742d
+  languageName: node
+  linkType: hard
+
+"@jridgewell/resolve-uri@npm:^3.0.3":
+  version: 3.0.6
+  resolution: "@jridgewell/resolve-uri@npm:3.0.6"
+  checksum: 10/dd3b09fc0fea87e03b879325922f90f289ad4f1e2742f6c3f2018bc074f3c8a106e67f6a60cadbc6995f5883477e423d55bfcc9e2467a01a6beab731dd78ff6f
   languageName: node
   linkType: hard
 
@@ -4032,7 +4050,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.18, @jridgewell/trace-mapping@npm:^0.3.9":
+"@jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.18":
   version: 0.3.19
   resolution: "@jridgewell/trace-mapping@npm:0.3.19"
   dependencies:
@@ -4049,6 +4067,16 @@ __metadata:
     "@jridgewell/resolve-uri": "npm:^3.1.0"
     "@jridgewell/sourcemap-codec": "npm:^1.4.14"
   checksum: 10/dced32160a44b49d531b80a4a2159dceab6b3ddf0c8e95a0deae4b0e894b172defa63d5ac52a19c2068e1fe7d31ea4ba931fbeec103233ecb4208953967120fc
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.9":
+  version: 0.3.9
+  resolution: "@jridgewell/trace-mapping@npm:0.3.9"
+  dependencies:
+    "@jridgewell/resolve-uri": "npm:^3.0.3"
+    "@jridgewell/sourcemap-codec": "npm:^1.4.10"
+  checksum: 10/83deafb8e7a5ca98993c2c6eeaa93c270f6f647a4c0dc00deb38c9cf9b2d3b7bf15e8839540155247ef034a052c0ec4466f980bf0c9e2ab63b97d16c0cedd3ff
   languageName: node
   linkType: hard
 
@@ -5805,7 +5833,7 @@ __metadata:
     passport-google-oauth20: "npm:^1.0.0"
     passport-jwt: "npm:^4.0.0"
     passport-oauth2-refresh: "npm:^2.0.0"
-    passport-orcid: "npm:^0.0.3"
+    passport-orcid: "npm:0.0.4"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     redlock: "npm:^4.0.0"
@@ -11120,10 +11148,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookiejar@npm:^2.1.0, cookiejar@npm:^2.1.2":
+"cookiejar@npm:^2.1.0":
   version: 2.1.4
   resolution: "cookiejar@npm:2.1.4"
   checksum: 10/4a184f5a0591df8b07d22a43ea5d020eacb4572c383e853a33361a99710437eaa0971716c688684075bbf695b484f5872e9e3f562382e46858716cb7fc8ce3f4
+  languageName: node
+  linkType: hard
+
+"cookiejar@npm:^2.1.2":
+  version: 2.1.3
+  resolution: "cookiejar@npm:2.1.3"
+  checksum: 10/431f1ec36e74a8f48fc0e60bb2a4e108f6bf9bc43e878e98aecb412633d3f9dd0615c9b4534c622fd19672a4deeec5bf8bf482e8e4fd527a26dfe89ee5a8486a
   languageName: node
   linkType: hard
 
@@ -14961,7 +14996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:^3.12.0, hed-validator@npm:^3.8.0":
+"hed-validator@npm:^3.12.0":
   version: 3.12.0
   resolution: "hed-validator@npm:3.12.0"
   dependencies:
@@ -14976,6 +15011,24 @@ __metadata:
     then-request: "npm:^6.0.2"
     xml2js: "npm:^0.5.0"
   checksum: 10/597f55385ac3246eccf3c5bf4d44db39550a6ebb35a2d439ee54093cc3ba8ed50e30a1b04ab3b56e2810f71ce809eb65b724d36c391a831b19f36741df569cdc
+  languageName: node
+  linkType: hard
+
+"hed-validator@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "hed-validator@npm:3.8.0"
+  dependencies:
+    buffer: "npm:^6.0.3"
+    date-and-time: "npm:^0.14.2"
+    date-fns: "npm:^2.17.0"
+    events: "npm:^3.3.0"
+    lodash: "npm:^4.17.21"
+    path: "npm:^0.12.7"
+    pluralize: "npm:^8.0.0"
+    semver: "npm:^7.3.4"
+    then-request: "npm:^6.0.2"
+    xml2js: "npm:^0.4.23"
+  checksum: 10/490800cfaa03501530caf52cc48fb7d55043325f7cfce7b1d4260d12e0c756dee38d6e73d8ae670f490265ed9e6281fd8cdda64184953d17a5ef81d4329ac819
   languageName: node
   linkType: hard
 
@@ -17183,7 +17236,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jshint@npm:^2.13.6, jshint@npm:^2.9.6":
+"jshint@npm:^2.13.6":
   version: 2.13.6
   resolution: "jshint@npm:2.13.6"
   dependencies:
@@ -17197,6 +17250,24 @@ __metadata:
   bin:
     jshint: bin/jshint
   checksum: 10/ead3bcd21c03e685babf69e5fa99ab05a859826dbab99d032089ef7d4fe11e464d292387594c58a8b1153ae5279eefba3af529cc65cdf071e3dc5731ed4a38d5
+  languageName: node
+  linkType: hard
+
+"jshint@npm:^2.9.6":
+  version: 2.13.1
+  resolution: "jshint@npm:2.13.1"
+  dependencies:
+    cli: "npm:~1.0.0"
+    console-browserify: "npm:1.1.x"
+    exit: "npm:0.1.x"
+    htmlparser2: "npm:3.8.x"
+    lodash: "npm:~4.17.21"
+    minimatch: "npm:~3.0.2"
+    shelljs: "npm:0.3.x"
+    strip-json-comments: "npm:1.0.x"
+  bin:
+    jshint: bin/jshint
+  checksum: 10/e517221a898963db03b8316ee3b4104153bc5244d069120b3f82c473505415f2564df14228b08d5bfd2456c767fbf1625f2896e183903c2d4c989812aa3b4ef5
   languageName: node
   linkType: hard
 
@@ -21358,7 +21429,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-oauth2@npm:1.x.x, passport-oauth2@npm:^1.4.0":
+"passport-oauth2@npm:1.x.x":
   version: 1.6.0
   resolution: "passport-oauth2@npm:1.6.0"
   dependencies:
@@ -21371,12 +21442,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-orcid@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "passport-orcid@npm:0.0.3"
+"passport-oauth2@npm:^1.5.0":
+  version: 1.6.1
+  resolution: "passport-oauth2@npm:1.6.1"
   dependencies:
-    passport-oauth2: "npm:^1.4.0"
-  checksum: 10/86c016beccd4cd23fa55f480a11e66042a77bb37a4be397fface09ffa63a4ce573004ea57e195f424bd2b884e78998cce37e7a7d1c6c72a1a77d320d68339e74
+    base64url: "npm:3.x.x"
+    oauth: "npm:0.9.x"
+    passport-strategy: "npm:1.x.x"
+    uid2: "npm:0.0.x"
+    utils-merge: "npm:1.x.x"
+  checksum: 10/a87279d0c98e5e09df1688aefc3bab890ccb7329568be59902a65caf0cdf7992763bedb3776a085c68f8fd920e678692d2aa3432c47d578b0537e54d545f8e1f
+  languageName: node
+  linkType: hard
+
+"passport-orcid@npm:0.0.4":
+  version: 0.0.4
+  resolution: "passport-orcid@npm:0.0.4"
+  dependencies:
+    passport-oauth2: "npm:^1.5.0"
+  checksum: 10/92db3fdc36866b05e2b60cb337e9f790b49abb4136e1ebc111ce27271e4453b7d82926a9b06697bba14ff31019c5c88e8804a27a8eafe18bc5de0ed256d44d40
   languageName: node
   linkType: hard
 
@@ -23755,7 +23839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.1.2, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4":
+"semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.7, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4":
   version: 7.5.4
   resolution: "semver@npm:7.5.4"
   dependencies:
@@ -23763,6 +23847,28 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10/985dec0d372370229a262c737063860fabd4a1c730662c1ea3200a2f649117761a42184c96df62a0e885e76fbd5dace41087d6c1ac0351b13c0df5d6bcb1b5ac
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.1.2, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5":
+  version: 7.3.5
+  resolution: "semver@npm:7.3.5"
+  dependencies:
+    lru-cache: "npm:^6.0.0"
+  bin:
+    semver: bin/semver.js
+  checksum: 10/22854378594943f2988ee853c02a7471dd02eba7bf75e286b98538114590a148dd59b22775edf42fcfb354438f304b8f32a53c136d228e99068ac52c60259324
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.3.8":
+  version: 7.3.8
+  resolution: "semver@npm:7.3.8"
+  dependencies:
+    lru-cache: "npm:^6.0.0"
+  bin:
+    semver: bin/semver.js
+  checksum: 10/c8c04a4d41d30cffa7277904e0ad6998623dd61e36bca9578b0128d8c683b705a3924beada55eae7fa004fb30a9359a53a4ead2b68468d778b602f3b1a28f8e3
   languageName: node
   linkType: hard
 
@@ -23900,6 +24006,15 @@ __metadata:
   version: 3.0.0
   resolution: "shebang-regex@npm:3.0.0"
   checksum: 10/1a2bcae50de99034fcd92ad4212d8e01eedf52c7ec7830eedcf886622804fe36884278f2be8be0ea5fde3fd1c23911643a4e0f726c8685b61871c8908af01222
+  languageName: node
+  linkType: hard
+
+"shelljs@npm:0.3.x":
+  version: 0.3.0
+  resolution: "shelljs@npm:0.3.0"
+  bin:
+    shjs: ./bin/shjs
+  checksum: 10/ad251c8cec955478d39ff6c066a2951af7dd873c6dec3a89403f40c7faa496b042e51edae72e4e00165e2c5432f269f3ed7d02837373399e1e6808c8f08c0db6
   languageName: node
   linkType: hard
 
@@ -27118,8 +27233,8 @@ __metadata:
   linkType: hard
 
 "ws@npm:^5.2.0 || ^6.0.0 || ^7.0.0":
-  version: 7.5.9
-  resolution: "ws@npm:7.5.9"
+  version: 7.5.5
+  resolution: "ws@npm:7.5.5"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ^5.0.2
@@ -27128,7 +27243,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 10/171e35012934bd8788150a7f46f963e50bac43a4dc524ee714c20f258693ac4d3ba2abadb00838fdac42a47af9e958c7ae7e6f4bc56db047ba897b8a2268cf7c
+  checksum: 10/2e91fd634b470f3a39bd6a9ada5e398a411bd9a32bd10d11c4ceabb2e4fd28835aeb5187fd2fc489c3e65bfdab4c29187f083d6672d7aeba014ab8a3f5f1ece2
   languageName: node
   linkType: hard
 
