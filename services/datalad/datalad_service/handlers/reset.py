@@ -5,7 +5,7 @@ from datalad_service.common.user import get_user_info
 from datalad_service.tasks.files import commit_files
 
 
-class ResetResource(object):
+class ResetResource:
     def __init__(self, store):
         self.store = store
 

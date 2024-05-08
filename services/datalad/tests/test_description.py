@@ -15,14 +15,14 @@ def test_update(client, new_dataset):
 
     ds_id = os.path.basename(new_dataset.path)
     update_response = client.simulate_post(
-        '/datasets/{}/description'.format(ds_id), body=body)
+        f'/datasets/{ds_id}/description', body=body)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
         update_response.content) if update_response.content else None
     assert updated_ds is not None
 
     check_response = client.simulate_get(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id))
+        f'/datasets/{ds_id}/files/dataset_description.json')
     assert check_response.status == falcon.HTTP_OK
     ds_description = json.loads(check_response.content)
     assert ds_description[key] == value
@@ -37,22 +37,22 @@ def post_and_check_description(client, new_dataset, base_description, key="Name"
 
     ds_id = os.path.basename(new_dataset.path)
     update_response = client.simulate_post(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id), body=base_description)
+        f'/datasets/{ds_id}/files/dataset_description.json', body=base_description)
     assert update_response.status == falcon.HTTP_OK
     # Commit files
     response = client.simulate_post(
-        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+        f'/datasets/{ds_id}/draft', params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
 
     update_response = client.simulate_post(
-        '/datasets/{}/description'.format(ds_id), body=body)
+        f'/datasets/{ds_id}/description', body=body)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
         update_response.content) if update_response.content else None
     assert updated_ds is not None
 
     check_response = client.simulate_get(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id))
+        f'/datasets/{ds_id}/files/dataset_description.json')
     assert check_response.status == falcon.HTTP_OK
     return check_response.content
 
@@ -114,14 +114,14 @@ def test_description_formatting(client, new_dataset):
 
     ds_id = os.path.basename(new_dataset.path)
     update_response = client.simulate_post(
-        '/datasets/{}/description'.format(ds_id), body=body)
+        f'/datasets/{ds_id}/description', body=body)
     assert update_response.status == falcon.HTTP_OK
     updated_ds = json.loads(
         update_response.content) if update_response.content else None
     assert updated_ds is not None
 
     check_response = client.simulate_get(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id))
+        f'/datasets/{ds_id}/files/dataset_description.json')
     assert check_response.status == falcon.HTTP_OK
     decoded_response = check_response.content.decode('utf-8')
     # Verify the 4 space indent in the encoded file

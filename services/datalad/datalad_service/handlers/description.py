@@ -4,7 +4,7 @@ import os
 from datalad_service.tasks.description import update_description
 
 
-class DescriptionResource(object):
+class DescriptionResource:
     def __init__(self, store):
         self.store = store
 

@@ -7,7 +7,7 @@ from datalad_service.common.user import get_user_info
 from datalad_service.common.git import git_commit
 
 
-class DraftResource(object):
+class DraftResource:
     def __init__(self, store):
         self.store = store
 

@@ -5,7 +5,7 @@ import falcon
 from datalad_service.tasks.files import remove_annex_object
 
 
-class AnnexObjectsResource(object):
+class AnnexObjectsResource:
 
     def __init__(self, store):
         self.store = store

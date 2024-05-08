@@ -7,7 +7,6 @@ verify_ssl = true
 datalad = "==1.0.2"
 pytest = "*"
 coverage = "*"
-mock = "*"
 pytest-cov = "*"
 pytest-xdist = "*"
 exceptiongroup = "*"

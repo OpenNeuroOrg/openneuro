@@ -23,7 +23,7 @@ def test_get_dataset_404(client):
 
 def test_create_dataset_duplicate(client, datalad_store):
     ds_id = 'ds000003'
-    first_response = client.simulate_post('/datasets/{}'.format(ds_id))
+    first_response = client.simulate_post(f'/datasets/{ds_id}')
     assert first_response.status == falcon.HTTP_OK
-    second_response = client.simulate_post('/datasets/{}'.format(ds_id))
+    second_response = client.simulate_post(f'/datasets/{ds_id}')
     assert second_response.status == falcon.HTTP_CONFLICT

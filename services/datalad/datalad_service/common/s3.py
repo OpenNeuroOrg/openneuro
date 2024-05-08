@@ -21,14 +21,14 @@ def generate_s3_annex_options(dataset_path):
     dataset_id = os.path.basename(dataset_path)
     annex_options = [
         'type=S3',
-        'bucket={}'.format(get_s3_bucket()),
+        f'bucket={get_s3_bucket()}',
         'exporttree=yes',
         'versioning=yes',
         'partsize=1GiB',
         'encryption=none',
-        'fileprefix={}/'.format(dataset_id),
+        f'fileprefix={dataset_id}/',
         'autoenable=true',
-        'publicurl=https://s3.amazonaws.com/{}'.format(get_s3_bucket()),
+        f'publicurl=https://s3.amazonaws.com/{get_s3_bucket()}',
         'public=no',
     ]
     return annex_options

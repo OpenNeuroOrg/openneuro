@@ -18,7 +18,7 @@ def parse_authorization_header(authorization):
         return None
 
 
-class AuthenticateMiddleware(object):
+class AuthenticateMiddleware:
     def process_request(self, req, resp):
         """Process the request before routing it for authentication.
 

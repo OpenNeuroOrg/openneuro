@@ -4,7 +4,7 @@ import gevent
 from datalad_service.tasks.publish import create_remotes_and_export
 
 
-class PublishResource(object):
+class PublishResource:
 
     """A Falcon API wrapper around underlying datalad/git-annex datasets."""
 

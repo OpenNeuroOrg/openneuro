@@ -5,7 +5,7 @@ import json
 from datalad.api import Dataset
 
 
-class FileWrapper(object):
+class FileWrapper:
 
     def __init__(self, file_like, block_size=8192):
         self.file_like = file_like
@@ -22,7 +22,7 @@ class FileWrapper(object):
 def test_get_file(client):
     ds_id = 'ds000001'
     result = client.simulate_get(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)
+        f'/datasets/{ds_id}/files/dataset_description.json', file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
@@ -32,12 +32,12 @@ def test_get_annexed_file(client):
     ds_id = 'ds000001'
     file_data = 'test image, please ignore'
     response = client.simulate_post(
-        '/datasets/{}/files/data.nii.gz'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/data.nii.gz', body=file_data)
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     result = client.simulate_get(
-        '/datasets/{}/files/data.nii.gz'.format(ds_id), file_wrapper=FileWrapper)
+        f'/datasets/{ds_id}/files/data.nii.gz', file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert result.content.decode() == file_data
@@ -49,20 +49,20 @@ def test_get_nested_annexed_file(client):
     file_data = 'test image, please ignore'
     # Add it
     response = client.simulate_post(
-        '/datasets/{}/files/sub-01:anat:data.nii.gz'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/sub-01:anat:data.nii.gz', body=file_data)
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     commit = json.loads(response.content)['ref']
     assert response.status == falcon.HTTP_OK
     # Delete it
     response = client.simulate_delete('/datasets/{}/files'.format(
         ds_id), body='{ "filenames": ["sub-01/anat/data.nii.gz"] }')
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     # Get it
     result = client.simulate_get(
-        '/datasets/{}/snapshots/{}/files/sub-01:anat:data.nii.gz'.format(ds_id, commit), file_wrapper=FileWrapper)
+        f'/datasets/{ds_id}/snapshots/{commit}/files/sub-01:anat:data.nii.gz', file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert result.content.decode() == file_data
@@ -72,12 +72,12 @@ def test_get_annexed_file_nested(client):
     ds_id = 'ds000001'
     file_data = 'test image, please ignore'
     response = client.simulate_post(
-        '/datasets/{}/files/sub-01:data.nii.gz'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/sub-01:data.nii.gz', body=file_data)
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     result = client.simulate_get(
-        '/datasets/{}/files/sub-01:data.nii.gz'.format(ds_id), file_wrapper=FileWrapper)
+        f'/datasets/{ds_id}/files/sub-01:data.nii.gz', file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert result.content.decode() == file_data
@@ -86,7 +86,7 @@ def test_get_annexed_file_nested(client):
 def test_get_missing_file(client):
     ds_id = 'ds000001'
     result = client.simulate_get(
-        '/datasets/{}/files/thisdoesnotexist.json'.format(ds_id), file_wrapper=FileWrapper)
+        f'/datasets/{ds_id}/files/thisdoesnotexist.json', file_wrapper=FileWrapper)
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
@@ -94,10 +94,10 @@ def test_add_file(client, datalad_store):
     ds_id = 'ds000001'
     file_data = 'Test dataset README'
     response = client.simulate_post(
-        '/datasets/{}/files/README'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/README', body=file_data)
     assert response.status == falcon.HTTP_OK
     # Commit draft
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     # Load the dataset to check for this file
     ds_obj = Dataset(os.path.join(datalad_store.annex_path, ds_id))
@@ -112,7 +112,7 @@ def test_add_existing_file(client):
     ds_id = 'ds000001'
     file_data = 'should update'
     response = client.simulate_post(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/dataset_description.json', body=file_data)
     assert response.status == falcon.HTTP_OK
 
 
@@ -120,7 +120,7 @@ def test_add_directory_path(client):
     ds_id = 'ds000001'
     file_data = 'complex path test'
     response = client.simulate_post(
-        '/datasets/{}/files/sub-01:fake-image.nii'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/sub-01:fake-image.nii', body=file_data)
     assert response.status == falcon.HTTP_OK
 
 
@@ -129,14 +129,14 @@ def test_update_file(client, datalad_store):
     file_data = 'Test dataset LICENSE'
     # First post a file
     response = client.simulate_post(
-        '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/LICENSE', body=file_data)
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     # Then update it
     file_data = 'New test LICENSE'
     response = client.simulate_post(
-        '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/LICENSE', body=file_data)
     assert response.status == falcon.HTTP_OK
     # Load the dataset to check for the updated file
     ds_obj = Dataset(os.path.join(datalad_store.annex_path, ds_id))
@@ -151,13 +151,13 @@ def test_file_indexing(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # First post a couple test files
     response = client.simulate_post(
-        '/datasets/{}/files/LICENSE'.format(ds_id), body='GPL V3.0')
+        f'/datasets/{ds_id}/files/LICENSE', body='GPL V3.0')
     assert response.status == falcon.HTTP_OK
     response = client.simulate_post(
-        '/datasets/{}/files/sub-01:anat:sub-01_T1w.nii.gz'.format(ds_id), body='fMRI data goes here')
+        f'/datasets/{ds_id}/files/sub-01:anat:sub-01_T1w.nii.gz', body='fMRI data goes here')
     assert response.status == falcon.HTTP_OK
     # Commit draft
-    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
     root_response = client.simulate_get(
@@ -201,14 +201,14 @@ def test_empty_file(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Post an empty file
     response = client.simulate_post(
-        '/datasets/{}/files/LICENSE'.format(ds_id), body='')
+        f'/datasets/{ds_id}/files/LICENSE', body='')
     assert response.status == falcon.HTTP_OK
     # Commit files
     response = client.simulate_post(
-        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+        f'/datasets/{ds_id}/draft', params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
-    response = client.simulate_get('/datasets/{}/tree/HEAD'.format(ds_id))
+    response = client.simulate_get(f'/datasets/{ds_id}/tree/HEAD')
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     # Check that all elements exist in both lists
@@ -226,22 +226,22 @@ def test_duplicate_file_id(client, new_dataset):
     file_body = '{}'
     # Post the same file in two paths
     response = client.simulate_post(
-        '/datasets/{}/files/derivatives:one.json'.format(ds_id), body=file_body)
+        f'/datasets/{ds_id}/files/derivatives:one.json', body=file_body)
     assert response.status == falcon.HTTP_OK
     response = client.simulate_post(
-        '/datasets/{}/files/derivatives:two.json'.format(ds_id), body=file_body)
+        f'/datasets/{ds_id}/files/derivatives:two.json', body=file_body)
     assert response.status == falcon.HTTP_OK
     # Commit files
     response = client.simulate_post(
-        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+        f'/datasets/{ds_id}/draft', params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_get('/datasets/{}/tree/HEAD'.format(ds_id))
+    response = client.simulate_get(f'/datasets/{ds_id}/tree/HEAD')
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     derivatives_tree = next((f['id'] for f in response_content['files']
                              if f['filename'] == 'derivatives'), None)
     response = client.simulate_get(
-        '/datasets/{}/tree/{}'.format(ds_id, derivatives_tree))
+        f'/datasets/{ds_id}/tree/{derivatives_tree}')
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     # Find each file in the results
@@ -265,11 +265,11 @@ def test_delete_file(client, new_dataset):
 def test_delete_nested_file(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     response = client.simulate_post(
-        '/datasets/{}/files/derivatives:LICENSE'.format(ds_id), body='GPL V3.0')
+        f'/datasets/{ds_id}/files/derivatives:LICENSE', body='GPL V3.0')
     assert response.status == falcon.HTTP_OK
     # Commit new nested file
     response = client.simulate_post(
-        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+        f'/datasets/{ds_id}/draft', params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
     # Delete new nested file + an existing file
     response = client.simulate_delete('/datasets/{}/files'.format(
@@ -282,7 +282,7 @@ def test_delete_nested_file(client, new_dataset):
 def test_delete_non_existing_file(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     response = client.simulate_delete(
-        '/datasets/{}/files'.format(ds_id), body='{ "filenames": ["fake", "test"]}')
+        f'/datasets/{ds_id}/files', body='{ "filenames": ["fake", "test"]}')
     assert response.status == falcon.HTTP_OK
     assert json.loads(response.content)[
         'error'] == 'the following files not found: fake, test'

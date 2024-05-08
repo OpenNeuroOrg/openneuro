@@ -10,7 +10,7 @@ from datalad_service.tasks.publish import export_dataset, monitor_remote_configs
 from datalad_service.common.git import delete_tag
 
 
-class SnapshotResource(object):
+class SnapshotResource:
 
     """Snapshots on top of DataLad datasets."""
 

@@ -34,7 +34,7 @@ def move_files_into_repo(dataset_id, dataset_path, upload_path, name, email, coo
     update_head(dataset_id, dataset_path, hexsha, cookies)
 
 
-class UploadResource(object):
+class UploadResource:
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)

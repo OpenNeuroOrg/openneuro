@@ -1,7 +1,7 @@
 import falcon
 
 
-class HeartbeatResource(object):
+class HeartbeatResource:
 
     def on_get(self, req, resp):
         resp.media = {

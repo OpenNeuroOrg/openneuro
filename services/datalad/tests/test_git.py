@@ -54,7 +54,7 @@ dataset_description_4096 = """{
         "National Institute of Health grant (P41EB027061)",
         "European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agreement No. 101001270)"
     ]
-}""".encode('utf-8')
+}""".encode()
 
 def test_git_show_unicode_after_4096(new_dataset):
     ds = Dataset(new_dataset.path)
@@ -78,7 +78,7 @@ def test_git_tag(new_dataset):
 def test_git_refs_resource(client):
     ds_id = 'ds000001'
     response = client.simulate_get(
-        '/git/0/{}/info/refs?service=git-receive-pack'.format(ds_id), headers={"authorization": test_auth})
+        f'/git/0/{ds_id}/info/refs?service=git-receive-pack', headers={"authorization": test_auth})
     assert response.status == falcon.HTTP_OK
     # A basic check for the terminator sequence at the end
     assert b'0000' == response.content[-4:]
@@ -96,7 +96,7 @@ def test_git_refs_resource(client):
 def test_git_upload_resource(client):
     ds_id = 'ds000001'
     get_response = client.simulate_get(
-        '/git/0/{}/info/refs?service=git-upload-pack'.format(ds_id), headers={"authorization": test_auth})
+        f'/git/0/{ds_id}/info/refs?service=git-upload-pack', headers={"authorization": test_auth})
     lines = get_response.content.decode().split('\n')
     # Grab two refs to ask for
     annex = lines[2][4:44]
@@ -105,7 +105,7 @@ def test_git_upload_resource(client):
         head, annex)
     # Ask for them
     response = client.simulate_post(
-        '/git/0/{}/git-upload-pack'.format(ds_id), headers={"authorization": test_auth}, body=upload_pack_input)
+        f'/git/0/{ds_id}/git-upload-pack', headers={"authorization": test_auth}, body=upload_pack_input)
     assert response.status == falcon.HTTP_OK
     # Just look for the start of a pack stream
     assert response.content[0:12] == b'0008NAK\nPACK'
@@ -114,12 +114,12 @@ def test_git_upload_resource(client):
 def test_git_receive_resource(client):
     ds_id = 'ds000001'
     get_response = client.simulate_get(
-        '/git/0/{}/info/refs?service=git-upload-pack'.format(ds_id), headers={"authorization": test_auth})
+        f'/git/0/{ds_id}/info/refs?service=git-upload-pack', headers={"authorization": test_auth})
     lines = get_response.content.decode().split('\n')
     # Just try a noop push to avoid changing the test dataset
     receive_pack_input = '0000'
     response = client.simulate_post(
-        '/git/0/{}/git-receive-pack'.format(ds_id), headers={"authorization": test_auth}, body=receive_pack_input)
+        f'/git/0/{ds_id}/git-receive-pack', headers={"authorization": test_auth}, body=receive_pack_input)
     assert response.status == falcon.HTTP_OK
 
 

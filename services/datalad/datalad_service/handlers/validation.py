@@ -4,7 +4,7 @@ from datalad_service.common.user import get_user_info
 from datalad_service.tasks.validator import validate_dataset
 
 
-class ValidationResource(object):
+class ValidationResource:
     def __init__(self, store):
         self.store = store
 

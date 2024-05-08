@@ -5,7 +5,7 @@ import gevent
 from datalad_service.tasks.publish import export_dataset
 
 
-class ReexporterResource(object):
+class ReexporterResource:
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
