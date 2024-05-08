@@ -35,6 +35,25 @@ def setup_validator():
         subprocess.run(['yarn'])
 
 
+def run_and_decode(args, timeout, esLogger):
+    """Run a subprocess and return the JSON output."""
+    process = gevent.subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        process.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        process.kill()
+
+    # Retrieve what we can from the process
+    stdout, stderr = process.communicate()
+
+    # If we have a whole JSON document from stdout, then return it
+    # Otherwise, log the error and return None
+    try:
+        return json.loads(escape_ansi(stdout.decode('utf-8')))
+    except json.decoder.JSONDecodeError as err:
+        esLogger.log(stdout, stderr, err)
+
+
 def validate_dataset_sync(dataset_path, ref, esLogger):
     """
     Synchronous dataset validation.
@@ -42,32 +61,26 @@ def validate_dataset_sync(dataset_path, ref, esLogger):
     Runs the bids-validator process and installs node dependencies if needed.
     """
     setup_validator()
-    try:
-        process = gevent.subprocess.run(
-            ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path], stdout=subprocess.PIPE, timeout=300)
-        return json.loads(process.stdout)
-    except subprocess.TimeoutExpired as err:
-        esLogger.log(process.stdout, process.stderr, err)
-    except json.decoder.JSONDecodeError as err:
-        esLogger.log(process.stdout, process.stderr, err)
+    return run_and_decode(
+        ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path],
+        timeout=300,
+        esLogger=esLogger,
+    )
 
 
 def validate_dataset_deno_sync(dataset_path, ref, esLogger):
     """
     Synchronous dataset validation.
 
-    Runs the bids-validator process and installs node dependencies if needed.
+    Runs the deno bids-validator process.
     """
-    try:
-        process = gevent.subprocess.run(
-            ['deno', 'run', '-A',
-            f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
-            '--json', dataset_path], stdout=subprocess.PIPE, timeout=300)
-        return json.loads(escape_ansi(process.stdout.decode('utf-8')))
-    except subprocess.TimeoutExpired as err:
-        esLogger.log(process.stdout, process.stderr, err)
-    except json.decoder.JSONDecodeError as err:
-        esLogger.log(process.stdout, process.stderr, err)
+    return run_and_decode(
+        ['deno', 'run', '-A',
+         f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
+         '--json', dataset_path],
+        timeout=300,
+        esLogger=esLogger,
+    )
 
 
 def summary_mutation(dataset_id, ref, validator_output, validator_metadata):
