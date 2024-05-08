@@ -21,8 +21,12 @@ def test_validator_error(new_dataset):
 @pytest.fixture
 def mock_validator_crash(monkeypatch):
     def return_bad_json(*args, **kwargs):
-        return SimpleNamespace(stdout='{invalidJson', stderr='')
-    monkeypatch.setattr(subprocess, 'run', return_bad_json)
+        return SimpleNamespace(
+            wait=lambda timeout=None: None,
+            kill=lambda: None,
+            communicate=lambda: (b'{invalidJson', b'')
+        )
+    monkeypatch.setattr(subprocess, 'Popen', return_bad_json)
 
 
 def test_validator_bad_json(new_dataset, mock_validator_crash):
