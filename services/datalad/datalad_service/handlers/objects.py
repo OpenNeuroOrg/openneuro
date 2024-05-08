@@ -5,7 +5,7 @@ import falcon
 from datalad_service.common.git import git_show_object
 
 
-class ObjectsResource(object):
+class ObjectsResource:
 
     def __init__(self, store):
         self.store = store
@@ -31,4 +31,4 @@ class ObjectsResource(object):
                 'error': 'an unknown error occurred accessing this file'}
             resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
             self.logger.exception(
-                'An unknown error processing object "{}"'.format(obj))
+                f'An unknown error processing object "{obj}"')

@@ -4,7 +4,7 @@ import pygit2
 from datalad_service.common.git import git_tag
 
 
-class HistoryResource(object):
+class HistoryResource:
     def __init__(self, store):
         self.store = store
 

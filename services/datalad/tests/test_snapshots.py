@@ -37,7 +37,7 @@ def test_create_snapshot(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '1'
     response = client.simulate_post(
-        '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), body="")
+        f'/datasets/{ds_id}/snapshots/{snapshot_id}', body="")
     assert response.status == falcon.HTTP_OK
 
 
@@ -56,7 +56,7 @@ def test_create_snapshot_no_config(datalad_store, client, new_dataset):
     ds.close()
     # Try to snapshot now
     response = client.simulate_post(
-        '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), body="")
+        f'/datasets/{ds_id}/snapshots/{snapshot_id}', body="")
     assert response.status == falcon.HTTP_OK
     # Verify the dataset now has an ID
     ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
@@ -77,16 +77,16 @@ def test_pre_snapshot_edit(client, new_dataset):
     }, indent=4)
     # Update a file
     response = client.simulate_post(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/dataset_description.json', body=file_data)
     assert response.status == falcon.HTTP_OK
     # Commit changes
     response = client.simulate_post(
-        '/datasets/{}/draft'.format(ds_id), params={"validate": "false"})
+        f'/datasets/{ds_id}/draft', params={"validate": "false"})
     assert response.status == falcon.HTTP_OK
     commit_ref = response.json['ref']
     # Make a snapshot
     response = client.simulate_post(
-        '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id), json={'skip_publishing': True})
+        f'/datasets/{ds_id}/snapshots/{snapshot_id}', json={'skip_publishing': True})
     assert response.status == falcon.HTTP_OK
     # Validate that create_snapshot has not moved main commit
     with open(os.path.join(new_dataset.path, '.git/refs/heads/main')) as fd:
@@ -101,11 +101,11 @@ def test_duplicate_snapshot(client, new_dataset):
     #     'snapshot_changes': ['test']
     # })
     response = client.simulate_post(
-        '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id))
+        f'/datasets/{ds_id}/snapshots/{snapshot_id}')
     assert response.status == falcon.HTTP_OK
     try:
         response = client.simulate_post(
-            '/datasets/{}/snapshots/{}'.format(ds_id, snapshot_id))
+            f'/datasets/{ds_id}/snapshots/{snapshot_id}')
         assert response.status == falcon.HTTP_CONFLICT
     except:
         # In eager mode, eat the exception
@@ -124,7 +124,7 @@ def test_get_snapshots(client, new_dataset):
         '/datasets/{}/snapshots/{}'.format(ds_id, 'v2.0.0'))
     assert response.status == falcon.HTTP_OK
     response = client.simulate_get(
-        '/datasets/{}/snapshots'.format(ds_id))
+        f'/datasets/{ds_id}/snapshots')
     result_doc = json.loads(response.content)
     assert response.status == falcon.HTTP_OK
     assert result_doc['snapshots'][0]['hexsha'] == result_doc['snapshots'][1]['hexsha']
@@ -152,7 +152,7 @@ def test_description_update(client, new_dataset):
     assert update_response.status == falcon.HTTP_OK
 
     check_response = client.simulate_get(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id))
+        f'/datasets/{ds_id}/files/dataset_description.json')
     assert check_response.status == falcon.HTTP_OK
     ds_description = json.loads(check_response.content)
     assert ds_description[key] == value

@@ -27,14 +27,14 @@ def get_snapshot(store, dataset, snapshot):
     hexsha = commit.hex
     created = commit.commit_time
     tree = commit.tree_id.hex
-    return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha, 'created': created, 'tree': tree}
+    return {'id': f'{dataset}:{snapshot}', 'tag': snapshot, 'hexsha': hexsha, 'created': created, 'tree': tree}
 
 
 def get_snapshots(store, dataset):
     path = store.get_dataset_path(dataset)
     repo_tags = git_tag(pygit2.Repository(path))
     # Include an extra id field to uniquely identify snapshots
-    tags = [{'id': '{}:{}'.format(dataset, tag.shorthand), 'tag': tag.shorthand, 'hexsha': tag.target.hex, 'created': tag.peel().commit_time}
+    tags = [{'id': f'{dataset}:{tag.shorthand}', 'tag': tag.shorthand, 'hexsha': tag.target.hex, 'created': tag.peel().commit_time}
             for tag in repo_tags]
     return tags
 
@@ -131,7 +131,7 @@ def validate_snapshot_name(store, dataset, snapshot):
     tagged = [tag for tag in tags if tag.name == snapshot]
     if tagged:
         raise SnapshotExistsException(
-            'Tag "{}" already exists, name conflict'.format(snapshot))
+            f'Tag "{snapshot}" already exists, name conflict')
 
 
 def validate_datalad_config(store, dataset):

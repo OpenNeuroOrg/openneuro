@@ -20,7 +20,7 @@ def test_key_add_remove(client):
     ds_id = 'ds000001'
     key = "MD5E-s24--e04bb0391ed06622b018aac26c736870.nii"
     random_value = b"ooQuieshaz4of2Aip3Niec2e"
-    url = '/git/0/{}/annex/{}'.format(ds_id, key)
+    url = f'/git/0/{ds_id}/annex/{key}'
     response = client.simulate_post(
         url, headers={"authorization": test_auth}, body=random_value)
     assert response.status == falcon.HTTP_OK
@@ -33,7 +33,7 @@ def test_key_get_head(client):
     ds_id = 'ds000001'
     key = "MD5E-s24--00e7097e83570b24b69cc509fc8f3cbf.nii"
     random_value = b"soo2aid1po5teiJoowufah4i"
-    url = '/git/0/{}/annex/{}'.format(ds_id, key)
+    url = f'/git/0/{ds_id}/annex/{key}'
     # Test failure first
     response = client.simulate_head(url, headers={"authorization": test_auth})
     assert response.status == falcon.HTTP_NOT_FOUND

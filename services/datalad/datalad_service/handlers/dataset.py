@@ -10,7 +10,7 @@ from datalad_service.tasks.dataset import delete_dataset
 from datalad_service.tasks.publish import delete_siblings
 
 
-class DatasetResource(object):
+class DatasetResource:
 
     """A Falcon API wrapper around underlying datalad/git-annex datasets."""
 

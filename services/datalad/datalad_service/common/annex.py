@@ -20,7 +20,7 @@ def init_annex(dataset_path):
 
 def compute_git_hash(path, size):
     """Given a path and size, generate the git blob hash for a file."""
-    git_obj_header = 'blob {}'.format(size).encode() + b'\x00'
+    git_obj_header = f'blob {size}'.encode() + b'\x00'
     blob_hash = hashlib.sha1()
     blob_hash.update(git_obj_header)
     # If size is zero, skip opening and mmap
@@ -35,7 +35,7 @@ def compute_git_hash(path, size):
 
 def compute_file_hash(git_hash, path):
     """Computes a unique hash for a given git path, based on the git hash and path values."""
-    return hashlib.sha1('{}:{}'.format(git_hash, path).encode()).hexdigest()
+    return hashlib.sha1(f'{git_hash}:{path}'.encode()).hexdigest()
 
 
 def parse_ls_tree_line(gitTreeLine):
@@ -79,11 +79,11 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
 def compute_rmet(key, legacy=False):
     if len(key) == 40:
         if legacy:
-            key = 'SHA1--{}'.format(key)
+            key = f'SHA1--{key}'
         else:
-            key = 'GIT--{}'.format(key)
+            key = f'GIT--{key}'
     keyHash = hashlib.md5(key.encode()).hexdigest()
-    return '{}/{}/{}.log.rmet'.format(keyHash[0:3], keyHash[3:6], key)
+    return f'{keyHash[0:3]}/{keyHash[3:6]}/{key}.log.rmet'
 
 
 def parse_remote_line(remoteLine,
@@ -161,7 +161,7 @@ def get_repo_urls(path, files):
     gitObjects = rmetObjects['remote.log'] + '\n' + \
         '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
     catFileProcess = subprocess.run(['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
-                                    cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, universal_newlines=True)
+                                    cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, text=True)
     catFile = io.StringIO(catFileProcess.stdout)
     # Read in remote.log first
     remoteLogMetadata = catFile.readline().rstrip()

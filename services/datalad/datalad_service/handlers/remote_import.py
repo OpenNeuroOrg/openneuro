@@ -6,7 +6,7 @@ from datalad_service.tasks.remote_import import remote_import
 from datalad_service.common.user import get_user_info
 
 
-class RemoteImportResource(object):
+class RemoteImportResource:
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)

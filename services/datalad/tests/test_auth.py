@@ -10,9 +10,9 @@ basic_token = base64.urlsafe_b64encode(
 
 def test_parse_authorization_header():
     assert parse_authorization_header(
-        'Basic {}'.format(basic_token)) == raw_token
+        f'Basic {basic_token}') == raw_token
     assert parse_authorization_header(
-        'Bearer {}'.format(raw_token)) == raw_token
+        f'Bearer {raw_token}') == raw_token
 
 
 def test_auth_middleware_bearer():
@@ -25,7 +25,7 @@ def test_auth_middleware_bearer():
         'SCRIPT_NAME': '',
         'PATH_INFO': '',
         'SERVER_PROTOCOL': 'HTTP/1.1',
-        'HTTP_AUTHORIZATION': 'Bearer {}'.format(raw_token)
+        'HTTP_AUTHORIZATION': f'Bearer {raw_token}'
     })
 
     resp = Response()
@@ -49,7 +49,7 @@ def test_auth_middleware_basic():
         'SCRIPT_NAME': '',
         'PATH_INFO': '',
         'SERVER_PROTOCOL': 'HTTP/1.1',
-        'HTTP_AUTHORIZATION': 'Basic {}'.format(basic_token)
+        'HTTP_AUTHORIZATION': f'Basic {basic_token}'
     })
 
     resp = Response()

@@ -1,6 +1,6 @@
 from os import path
 
-class DataladStore(object):
+class DataladStore:
     """Store for Datalad state accessed by resource handlers."""
 
     def __init__(self, annex_path):

@@ -28,14 +28,14 @@ def _handle_failed_access(req, resp):
     user = 'user' in req.context and req.context['user'] or None
     # No user = unauthorized, otherwise token is present with the wrong scope/grant
     if user == None:
-        resp.data = 'Authentication required for git access'.encode()
+        resp.data = b'Authentication required for git access'
         resp.status = falcon.HTTP_UNAUTHORIZED
     else:
-        resp.data = 'You do not have permission to access this dataset'.encode()
+        resp.data = b'You do not have permission to access this dataset'
         resp.status = falcon.HTTP_FORBIDDEN
 
 
-class GitRefsResource(object):
+class GitRefsResource:
     """/info/refs returns current state for either git-receive-pack or git-upload-pack"""
 
     def __init__(self, store):
@@ -70,7 +70,7 @@ class GitRefsResource(object):
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-class GitReceiveResource(object):
+class GitReceiveResource:
     """/git-receive-pack is used to receive pushes"""
 
     def __init__(self, store):
@@ -100,7 +100,7 @@ class GitReceiveResource(object):
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-class GitUploadResource(object):
+class GitUploadResource:
     """/git-upload-pack serves git fetch requests"""
 
     def __init__(self, store):

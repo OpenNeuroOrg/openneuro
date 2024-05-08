@@ -10,7 +10,7 @@ from datalad_service.handlers.history import HistoryResource
 def test_history(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     response = client.simulate_get(
-        '/datasets/{}/history'.format(ds_id))
+        f'/datasets/{ds_id}/history')
     assert response.status == falcon.HTTP_OK
     history = json.loads(
         response.content) if response.content else None

@@ -13,7 +13,7 @@ def audit_datasets(store):
 def fsck_remote(dataset_path, remote):
     """Run fsck for one dataset remote"""
     # Run at most once per month per dataset
-    annex_command = ("git-annex", "fsck", "--all", "--from={}".format(remote), "--fast", "--json",
+    annex_command = ("git-annex", "fsck", "--all", f"--from={remote}", "--fast", "--json",
                      "--json-error-messages", "--incremental", "--incremental-schedule=30d", "--time-limit=15m")
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')

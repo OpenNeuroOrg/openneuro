@@ -6,7 +6,7 @@ from datalad_service.common.bids import dataset_sort
 from datalad_service.tasks.files import get_tree
 
 
-class TreeResource(object):
+class TreeResource:
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)

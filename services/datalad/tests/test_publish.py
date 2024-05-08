@@ -34,7 +34,7 @@ def test_export_snapshots(no_init_remote, client, new_dataset):
         "Authors": ["Test Authors", "Please Ignore"],
     }, indent=4)
     response = client.simulate_post(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+        f'/datasets/{ds_id}/files/dataset_description.json', body=file_data)
     assert response.status == falcon.HTTP_OK
     # Create 2.0.0
     response = client.simulate_post(

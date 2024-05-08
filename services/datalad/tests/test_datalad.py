@@ -1,6 +1,6 @@
 """Test DataLad tasks."""
 import os
-from mock import patch
+from unittest.mock import patch
 import uuid
 
 import pytest
