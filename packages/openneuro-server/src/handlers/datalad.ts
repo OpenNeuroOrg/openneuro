@@ -3,6 +3,7 @@ import { Readable } from "node:stream"
 import mime from "mime-types"
 import { getFiles } from "../datalad/files"
 import { getDatasetWorker } from "../libs/datalad-service"
+import { getDraftRevision } from "../datalad/draft"
 
 /**
  * Handlers for datalad dataset manipulation
@@ -21,7 +22,9 @@ export const getFile = async (req, res) => {
   const worker = getDatasetWorker(datasetId)
   // Find the right tree
   const pathComponents = filename.split(":")
-  let tree = snapshotId || "HEAD"
+  // Get the draft commit for cache busting
+  const draftCommit = await getDraftRevision(datasetId)
+  let tree = snapshotId || draftCommit
   let file
   for (const level of pathComponents) {
     try {
