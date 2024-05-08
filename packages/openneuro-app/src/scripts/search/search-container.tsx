@@ -102,14 +102,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const modality = portalContent?.modality || null
-  useEffect(() => {
-    setDefaultSearch(
-      modality,
-      searchParams,
-      setSearchParams,
-      new URLSearchParams(location.search),
-    )
-  }, [modality, searchParams.modality_selected, setSearchParams, location])
+  setDefaultSearch(
+    modality,
+    searchParams,
+    setSearchParams,
+    new URLSearchParams(location.search),
+  )
 
   const { loading, data, fetchMore, refetch, variables, error } =
     useSearchResults()
