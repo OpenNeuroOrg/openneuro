@@ -16,7 +16,11 @@ export const NemarButton: React.FC<NemarButtonProps> = ({
     <>
       {onNemar && (
         <div className="brainlife-block">
-          <Tooltip tooltip="View and analyze on NEMAR" flow="up">
+          <Tooltip
+            tooltip="View and analyze this dataset on the NEMAR OpenNeuro portal for MEG, iEEG, and EEG data"
+            flow="up"
+            wrapText={true}
+          >
             <Button
               className="brainlife-link"
               primary={true}
