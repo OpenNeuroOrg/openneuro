@@ -23,7 +23,7 @@
     "@openneuro/client": "^4.23.0",
     "@openneuro/components": "^4.23.0",
     "@tanstack/react-table": "^8.9.3",
-    "bids-validator": "1.13.0",
+    "bids-validator": "1.14.6",
     "bytes": "^3.0.0",
     "comlink": "^4.0.5",
     "date-fns": "^2.16.1",
