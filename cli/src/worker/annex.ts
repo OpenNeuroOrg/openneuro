@@ -142,3 +142,20 @@ export async function annexAdd(
     return false
   }
 }
+
+export async function readAnnexPath(
+  logPath: string,
+  context: GitWorkerContext,
+): Promise<string> {
+  const options = {
+    ...context.config(),
+    ref: "git-annex",
+  }
+  const annexBranchOid = await git.resolveRef(options)
+  const { blob } = await git.readBlob({
+    ...options,
+    oid: annexBranchOid,
+    filepath: logPath,
+  })
+  return new TextDecoder().decode(blob)
+}
