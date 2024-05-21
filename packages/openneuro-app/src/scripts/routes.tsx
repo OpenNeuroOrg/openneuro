@@ -39,7 +39,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
       path="/dashboard"
       element={<Navigate to="/search?mydatasets" replace />}
     />
-    <Route element={<FourOFourPage />} />
+    <Route path="/*" element={<FourOFourPage />} />
   </Routes>
 )
 
