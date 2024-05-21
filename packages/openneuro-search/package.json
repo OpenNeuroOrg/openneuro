@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.2",
-    "@elastic/elasticsearch": "7.15.0",
+    "@elastic/elasticsearch": "8.13.1",
     "graphql": "16.8.1",
     "jsonwebtoken": "^9.0.0"
   },
