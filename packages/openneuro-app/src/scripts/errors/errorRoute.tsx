@@ -4,10 +4,7 @@
 import React from "react"
 import { Route, Routes } from "react-router-dom"
 import OrcidGeneral from "./orcid/general.jsx"
-import OrcidEmail from "./orcid/email.jsx"
-import OrcidGiven from "./orcid/given.jsx"
-import OrcidFamily from "./orcid/family.jsx"
-import FourOFourPage from "./404page"
+import FourOFourPage from "./404page.js"
 
 function ErrorRoute() {
   return (
@@ -15,9 +12,6 @@ function ErrorRoute() {
       <div className="panel">
         <Routes>
           <Route path="orcid" element={<OrcidGeneral />} />
-          <Route path="orcid/email" element={<OrcidEmail />} />
-          <Route path="orcid/given" element={<OrcidGiven />} />
-          <Route path="orcid/family" element={<OrcidFamily />} />
           <Route path="*" element={<FourOFourPage />} />
         </Routes>
       </div>
