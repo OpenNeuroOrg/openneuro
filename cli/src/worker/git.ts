@@ -183,7 +183,8 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         if (log && log.includes(uuid)) {
           continue
         } else {
-          const timestamp = performance.timeOrigin + performance.now()
+          const timestamp = (performance.timeOrigin + performance.now()) /
+            1000.0
           const newAnnexLog = `${timestamp}s 1 ${uuid}\n${log ? log : ""}`
           await context.fs.promises.mkdir(join(context.repoPath, hashDir), {
             recursive: true,
