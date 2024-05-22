@@ -37,7 +37,7 @@ export const decodeCursor = (cursor) =>
  * @param {import ('@elastic/elasticsearch').ApiResponse} result
  */
 export const elasticRelayConnection = (
-  { body },
+  body,
   id,
   size,
   childResolvers = { dataset },
@@ -102,9 +102,9 @@ export const datasetSearchConnection = async (
     index: elasticIndex,
     size: first,
     q: `${q} AND public:true`,
-    body: requestBody,
+    ...requestBody,
   })
-  return elasticRelayConnection(result, searchId, first)
+  return elasticRelayConnection(requestBody, searchId, first)
 }
 
 export const datasetSearch = {
@@ -238,13 +238,13 @@ export const advancedDatasetSearchConnection = async (
       // Don't include search_after if parsing fails
     }
   }
-  const result = await elasticClient.search({
+  await elasticClient.search({
     index: elasticIndex,
     size: first,
-    body: requestBody,
+    ...requestBody,
   })
   return elasticRelayConnection(
-    result,
+    requestBody,
     searchId,
     first,
     undefined,

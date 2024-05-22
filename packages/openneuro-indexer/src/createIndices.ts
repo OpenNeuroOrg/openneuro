@@ -8,7 +8,7 @@ export const createIndices = async (elasticClient: Client): Promise<void> => {
   const exists = await elasticClient.indices.exists({
     index: DatasetsIndex.name,
   })
-  if (exists.statusCode !== 200) {
+  if (exists) {
     await elasticClient.indices.create({
       index: DatasetsIndex.name,
       body: {

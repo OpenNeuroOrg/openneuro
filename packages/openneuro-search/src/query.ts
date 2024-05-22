@@ -1,10 +1,4 @@
-import {
-  // Interface of the generic API response
-  ApiResponse,
-  Client as ElasticClient,
-  // Object that contains the type definitions of every API method
-  RequestParams,
-} from "@elastic/elasticsearch"
+import { Client as ElasticClient } from "@elastic/elasticsearch"
 import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client"
 import { DatasetsIndex } from "./indexes/datasets"
 
@@ -131,8 +125,8 @@ export interface DatasetQueryResult {
  */
 export function extractDatasetDocument(
   datasetObj: DatasetQueryResult,
-): RequestParams.Index {
-  const dataset: RequestParams.Index = {
+) {
+  const dataset = {
     index: DatasetsIndex.name,
     id: datasetObj.id,
     body: {
@@ -165,10 +159,10 @@ export function queryForIndex(
 export async function indexDataset(
   elasticClient: ElasticClient,
   datasetObj: DatasetQueryResult,
-): Promise<ApiResponse> {
+) {
   try {
     console.log(`Indexing "${datasetObj.id}"`)
-    const response: ApiResponse = await elasticClient.index(
+    const response = await elasticClient.index(
       extractDatasetDocument(datasetObj),
     )
     return response

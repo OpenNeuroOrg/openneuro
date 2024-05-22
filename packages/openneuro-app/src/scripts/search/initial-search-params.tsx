@@ -159,44 +159,7 @@ export interface SearchParams {
   bidsDatasetType_selected: string | null
 }
 
-// TODO: move to this initial state
-//       and load dynamic options on mount
 const initialSearchParams: SearchParams = {
-  keywords: [],
-  searchAllDatasets: false,
-  datasetType_available,
-  datasetType_selected: null,
-  datasetStatus_available,
-  datasetStatus_selected: null,
-  modality_available,
-  modality_selected: null,
-  ageRange: [null, null],
-  subjectCountRange: [null, null],
-  diagnosis_available: [],
-  diagnosis_selected: null,
-  tasks: [],
-  authors: [],
-  // more
-  sex_available: [],
-  sex_selected: null,
-  date_available: [],
-  date_selected: null,
-  species_available: [],
-  species_selected: null,
-  section_available: [],
-  section_selected: null,
-  studyDomains: [],
-  bodyParts: [],
-  scannerManufacturers: [],
-  scannerManufacturersModelNames: [],
-  tracerNames: [],
-  tracerRadionuclides: [],
-  sortBy_available: sortBy,
-  sortBy_selected: sortBy[0],
-}
-
-// TODO: (stretch) delete and move to dynamically loaded initialSearchParams
-const TEMPORARY_initialSearchParams: SearchParams = {
   keywords: [],
   searchAllDatasets: false,
   datasetType_available,
@@ -243,4 +206,4 @@ const TEMPORARY_initialSearchParams: SearchParams = {
   bidsDatasetType_selected: null,
 }
 
-export default TEMPORARY_initialSearchParams
+export default initialSearchParams
