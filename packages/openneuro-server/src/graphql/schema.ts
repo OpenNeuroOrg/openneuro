@@ -317,8 +317,8 @@ export const typeDefs = `
     created: DateTime!
     modified: DateTime
     lastSeen: DateTime
-    email: String!
-    name: String!
+    email: String
+    name: String
     admin: Boolean
     blocked: Boolean
   }

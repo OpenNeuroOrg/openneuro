@@ -49,30 +49,12 @@ export default {
             "person:person.email:emails.email:email.email:email",
           )
 
-          if (!name) {
-            if (!firstname) {
-              return reject({
-                type: "given",
-                message:
-                  "Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.",
-              })
-            } else if (!lastname) {
-              return reject({
-                type: "family",
-                message:
-                  "Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.",
-              })
-            } else {
+          if (!name && firstname && lastname) {
+            if (firstname && lastname) {
               name = `${firstname} ${lastname}`
+            } else {
+              name = lastname || firstname
             }
-          }
-
-          if (!email) {
-            return reject({
-              type: "email",
-              message:
-                "Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.",
-            })
           }
 
           resolve({

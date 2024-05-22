@@ -23,7 +23,7 @@ interface OauthProfile {
   refresh?: string
 }
 
-const loadProfile = (profile): OauthProfile | Error => {
+export const loadProfile = (profile): OauthProfile | Error => {
   if (profile.provider === PROVIDERS.GOOGLE) {
     // Get the account email from Google profile
     const primaryEmail = profile.emails
@@ -31,15 +31,15 @@ const loadProfile = (profile): OauthProfile | Error => {
       .shift()
     return {
       email: primaryEmail.value,
-      name: profile.displayName,
+      name: profile?.displayName || "Anonymous User",
       provider: profile.provider,
       providerId: profile.id,
       refresh: undefined,
     }
   } else if (profile.provider === PROVIDERS.ORCID) {
     return {
-      email: profile.info.email,
-      name: profile.info.name,
+      email: profile?.info?.email,
+      name: profile?.info?.name || "Anonymous User",
       provider: profile.provider,
       providerId: profile.orcid,
       orcid: profile.orcid,
