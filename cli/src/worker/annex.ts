@@ -1,6 +1,5 @@
 import { GitWorkerContext } from "./types/git-context.ts"
 import { basename, dirname, git, join, relative } from "../deps.ts"
-import { logger } from "../logger.ts"
 
 /**
  * Why are we using hash wasm over web crypto?
