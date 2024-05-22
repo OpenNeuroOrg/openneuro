@@ -28,11 +28,9 @@ describe("dataset search resolvers", () => {
   describe("elasticRelayConnection()", () => {
     it("returns a relay cursor for empty ApiResponse", async () => {
       const emptyApiResponse = {
-        body: {
-          hits: {
-            hits: [],
-            total: { value: 0 },
-          },
+        hits: {
+          hits: [],
+          total: { value: 0 },
         },
       }
 
@@ -60,20 +58,18 @@ describe("dataset search resolvers", () => {
       }
 
       const expectedApiResponse = {
-        body: {
-          hits: {
-            hits: [
-              { _source: { id: "testdataset1" } },
-              { _source: { id: "testdataset2" } },
-              { _source: { id: "testdataset3" }, sort: [1] },
-            ],
-            total: { value: 10 },
-          },
+        hits: {
+          hits: [
+            { _source: { id: "testdataset1" } },
+            { _source: { id: "testdataset2" } },
+            { _source: { id: "testdataset3" }, sort: [1] },
+          ],
+          total: { value: 10 },
         },
       }
 
       const resultsRelayConnection = {
-        edges: expectedApiResponse.body.hits.hits.map((hit) => {
+        edges: expectedApiResponse.hits.hits.map((hit) => {
           // This skips the dataset resolver logic and passes this back
           mockResolvers.dataset.mockReturnValueOnce(hit._source)
           return {
