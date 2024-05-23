@@ -62,14 +62,15 @@ def validate_s3_config(dataset_path):
         else:
             raise
     options_line = ''
-    for line in remote_log.stdout:
+    for line in remote_log.stdout.split('\n'):
         if f'name={get_s3_remote()}' in line:
             options_line = line
-    # check that each of the expected annex options is what's actually configured
-    expected_options = generate_s3_annex_options(dataset_path)
-    for expected_option in expected_options:
-        if not expected_option in options_line:
-            return False
+    if options_line:
+        # check that each of the expected annex options is what's actually configured
+        expected_options = generate_s3_annex_options(dataset_path)
+        for expected_option in expected_options:
+            if not expected_option in options_line:
+                return False
     return True
 
 
