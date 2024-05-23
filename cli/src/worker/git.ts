@@ -280,12 +280,16 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         ...context.config(),
         ref: "main",
       })
-    } catch (_err) {
-      // Fallback to master and error if neither exists
-      await git.checkout({
-        ...context.config(),
-        ref: "master",
-      })
+    } catch (err) {
+      if (err.name === "NotFoundError") {
+        // Fallback to master and error if neither exists
+        await git.checkout({
+          ...context.config(),
+          ref: "master",
+        })
+      } else {
+        throw err
+      }
     }
   }
 }
