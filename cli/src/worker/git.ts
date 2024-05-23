@@ -167,9 +167,34 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
       }
     }
     if (uuid) {
+      // Add a remote.log entry if one does not exist
+      let remoteLog = ""
+      const newRemoteLog =
+        `${uuid} autoenable=true name=OpenNeuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
+      try {
+        remoteLog = await context.fs.promises.readFile(
+          join(context.repoPath, "remote.log"),
+          { encoding: "utf8" },
+        )
+      } catch (_err) {
+        if (_err.name !== "NotFound") {
+          throw _err
+        }
+      } finally {
+        // Add this remote if it's not already in remote.log
+        if (!remoteLog.includes(uuid)) {
+          // Continue if there's any errors and create remote.log
+          await context.fs.promises.writeFile(
+            join(context.repoPath, "remote.log"),
+            newRemoteLog + remoteLog,
+          )
+          await git.add({ ...context.config(), filepath: "remote.log" })
+        }
+      }
+      // Add logs for each annexed file
       for (const [key, _path] of Object.entries(annexKeys)) {
         const hashDir = join(...await hashDirLower(key))
-        const annexBranchPath = join(hashDir, key)
+        const annexBranchPath = join(hashDir, `${key}.log`)
         let log
         try {
           log = await readAnnexPath(annexBranchPath, context)
