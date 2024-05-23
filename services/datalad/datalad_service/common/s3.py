@@ -62,7 +62,7 @@ def validate_s3_config(dataset_path):
         else:
             raise
     options_line = ''
-    for line in remote_log.stdout:
+    for line in remote_log.stdout.split('\n'):
         if f'name={get_s3_remote()}' in line:
             options_line = line
     if options_line:
