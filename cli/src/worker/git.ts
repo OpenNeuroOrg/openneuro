@@ -148,18 +148,64 @@ async function add(event: GitWorkerEventAdd) {
 }
 
 /**
+ * Create the empty git-annex branch if needed
+ */
+async function createAnnexBranch() {
+  const now = new Date()
+  const timestamp = Math.floor(now.getTime() / 1000)
+  const timezoneOffset = now.getTimezoneOffset()
+  const commit = {
+    message: "[OpenNeuro CLI] branch created",
+    tree: "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+    parent: [],
+    author: {
+      ...context.author,
+      timestamp,
+      timezoneOffset,
+    },
+    committer: {
+      ...context.author,
+      timestamp,
+      timezoneOffset,
+    },
+  }
+  const object = await git.writeCommit({ ...context.config(), commit })
+  await git.branch({
+    ...context.config(),
+    ref: "git-annex",
+    checkout: true,
+    // Commit added above
+    object,
+  })
+}
+
+/**
  * Generate one commit for all pending git-annex branch changes
  */
 async function commitAnnexBranch(annexKeys: Record<string, string>) {
   // Find the UUID of this repository if it exists already
   const expectedRemote = "OpenNeuro" // TODO - This could be more flexible?
   let uuid
-  const uuidLog = await readAnnexPath("uuid.log", context)
+  let uuidLog = ""
   try {
-    await git.checkout({
-      ...context.config(),
-      ref: "git-annex",
-    })
+    uuidLog = await readAnnexPath("uuid.log", context)
+  } catch (err) {
+    if (err.name !== "NotFoundError") {
+      throw err
+    }
+  }
+  try {
+    try {
+      await git.checkout({
+        ...context.config(),
+        ref: "git-annex",
+      })
+    } catch (err) {
+      // Create the branch if it doesn't exist
+      if (err.name === "NotFoundError") {
+        await createAnnexBranch()
+      }
+    }
     for (const line of uuidLog.split(/\n/)) {
       if (line.includes(expectedRemote)) {
         const endUuid = line.indexOf(" ")
@@ -234,7 +280,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         ...context.config(),
         ref: "main",
       })
-    } catch (err) {
+    } catch (_err) {
       // Fallback to master and error if neither exists
       await git.checkout({
         ...context.config(),
