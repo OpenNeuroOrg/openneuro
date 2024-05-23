@@ -1,4 +1,11 @@
-import { assertArrayIncludes, assertEquals, git, join, walk, SEPARATOR } from "../deps.ts"
+import {
+  assertArrayIncludes,
+  assertEquals,
+  git,
+  join,
+  SEPARATOR,
+  walk,
+} from "../deps.ts"
 import { addGitFiles } from "../commands/upload.ts"
 import fs from "node:fs"
 
@@ -102,12 +109,13 @@ LICENSE annex.largefiles=nothing`),
 
   const expectedFiles = [
     join(".git", "refs", "heads", "main"),
+    join(".git", "refs", "heads", "git-annex"),
     join(".git", "config"),
     join(".git", "HEAD"),
     join(".git", "index"),
     ".gitattributes",
     "dataset_description.json",
-    join("sub-01", "anat", "sub-01_T1w.nii.gz")
+    join("sub-01", "anat", "sub-01_T1w.nii.gz"),
   ]
   let gitObjects = 0
   for await (
@@ -123,5 +131,5 @@ LICENSE annex.largefiles=nothing`),
       assertArrayIncludes(expectedFiles, [relativePath])
     }
   }
-  assertEquals(gitObjects, 9)
+  assertEquals(gitObjects, 10)
 })

@@ -1,4 +1,3 @@
-import { decode } from "https://deno.land/x/djwt@v3.0.1/mod.ts"
 import {
   GitAnnexAttributes,
   GitAnnexBackend,
@@ -10,7 +9,7 @@ import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
 import { ProgressBar } from "../deps.ts"
-import { annexAdd } from "./annex.ts"
+import { annexAdd, hashDirLower, readAnnexPath } from "./annex.ts"
 import { GitWorkerContext, GitWorkerEventAdd } from "./types/git-context.ts"
 
 let context: GitWorkerContext
@@ -18,6 +17,9 @@ let attributesCache: GitAnnexAttributes
 
 /**
  * Paths to upload to the remote annex
+ *
+ * Keys are the annex key
+ * Values are repo relative path
  */
 const annexKeys: Record<string, string> = {}
 
@@ -45,6 +47,16 @@ async function update() {
       `Cloning ${context.datasetId} draft from "${context.repoEndpoint}"`,
     )
     await git.clone(context.config())
+    await git.fetch({ ...context.config(), ref: "git-annex" })
+    try {
+      await git.branch({
+        ...context.config(),
+        object: "origin/git-annex",
+        ref: "git-annex",
+      })
+    } catch (_err) {
+      logger.info(`git-annex branch creation skipped, already present`)
+    }
   }
   logger.info(`${context.datasetId} draft fetched!`)
 }
@@ -136,18 +148,150 @@ async function add(event: GitWorkerEventAdd) {
 }
 
 /**
- * Git repo specific token
+ * Create the empty git-annex branch if needed
  */
-interface OpenNeuroGitToken {
-  sub: string
-  email: string
-  provider: string
-  name: string
-  admin: boolean
-  scopes: [string]
-  dataset: string
-  iat: number
-  exp: number
+async function createAnnexBranch() {
+  const now = new Date()
+  const timestamp = Math.floor(now.getTime() / 1000)
+  const timezoneOffset = now.getTimezoneOffset()
+  const commit = {
+    message: "[OpenNeuro CLI] branch created",
+    tree: "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+    parent: [],
+    author: {
+      ...context.author,
+      timestamp,
+      timezoneOffset,
+    },
+    committer: {
+      ...context.author,
+      timestamp,
+      timezoneOffset,
+    },
+  }
+  const object = await git.writeCommit({ ...context.config(), commit })
+  await git.branch({
+    ...context.config(),
+    ref: "git-annex",
+    checkout: true,
+    // Commit added above
+    object,
+  })
+}
+
+/**
+ * Generate one commit for all pending git-annex branch changes
+ */
+async function commitAnnexBranch(annexKeys: Record<string, string>) {
+  // Find the UUID of this repository if it exists already
+  const expectedRemote = "OpenNeuro" // TODO - This could be more flexible?
+  let uuid
+  let uuidLog = ""
+  try {
+    uuidLog = await readAnnexPath("uuid.log", context)
+  } catch (err) {
+    if (err.name !== "NotFoundError") {
+      throw err
+    }
+  }
+  try {
+    try {
+      await git.checkout({
+        ...context.config(),
+        ref: "git-annex",
+      })
+    } catch (err) {
+      // Create the branch if it doesn't exist
+      if (err.name === "NotFoundError") {
+        await createAnnexBranch()
+      }
+    }
+    for (const line of uuidLog.split(/\n/)) {
+      if (line.includes(expectedRemote)) {
+        const endUuid = line.indexOf(" ")
+        uuid = line.slice(0, endUuid)
+      }
+    }
+    if (uuid) {
+      // Add a remote.log entry if one does not exist
+      let remoteLog = ""
+      const newRemoteLog =
+        `${uuid} autoenable=true name=OpenNeuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
+      try {
+        remoteLog = await context.fs.promises.readFile(
+          join(context.repoPath, "remote.log"),
+          { encoding: "utf8" },
+        )
+      } catch (_err) {
+        if (_err.name !== "NotFound") {
+          throw _err
+        }
+      } finally {
+        // Add this remote if it's not already in remote.log
+        if (!remoteLog.includes(uuid)) {
+          // Continue if there's any errors and create remote.log
+          await context.fs.promises.writeFile(
+            join(context.repoPath, "remote.log"),
+            newRemoteLog + remoteLog,
+          )
+          await git.add({ ...context.config(), filepath: "remote.log" })
+        }
+      }
+      // Add logs for each annexed file
+      for (const [key, _path] of Object.entries(annexKeys)) {
+        const hashDir = join(...await hashDirLower(key))
+        const annexBranchPath = join(hashDir, `${key}.log`)
+        let log
+        try {
+          log = await readAnnexPath(annexBranchPath, context)
+        } catch (err) {
+          if (err.name === "NotFoundError") {
+            logger.debug(`Annex branch object "${annexBranchPath}" not found`)
+          } else {
+            throw err
+          }
+        }
+        if (log && log.includes(uuid)) {
+          continue
+        } else {
+          const timestamp = (performance.timeOrigin + performance.now()) /
+            1000.0
+          const newAnnexLog = `${timestamp}s 1 ${uuid}\n${log ? log : ""}`
+          await context.fs.promises.mkdir(join(context.repoPath, hashDir), {
+            recursive: true,
+          })
+          await context.fs.promises.writeFile(
+            join(context.repoPath, annexBranchPath),
+            newAnnexLog,
+          )
+          await git.add({ ...context.config(), filepath: annexBranchPath })
+        }
+      }
+      await git.commit({
+        ...context.config(),
+        message: "[OpenNeuro CLI] Added annexed objects",
+        author: context.author,
+      })
+    }
+  } finally {
+    try {
+      // Try main first
+      await git.checkout({
+        ...context.config(),
+        ref: "main",
+      })
+    } catch (err) {
+      if (err.name === "NotFoundError") {
+        // Fallback to master and error if neither exists
+        await git.checkout({
+          ...context.config(),
+          ref: "master",
+        })
+      } else {
+        throw err
+      }
+    }
+  }
 }
 
 /**
@@ -155,8 +299,6 @@ interface OpenNeuroGitToken {
  */
 async function commit() {
   const options = context.config()
-  const decodedToken = decode(context.authorization)
-  const { email, name } = decodedToken[1] as OpenNeuroGitToken
   let generateCommit = false
   let changes = 0
   const tree = await git.walk({
@@ -192,12 +334,10 @@ async function commit() {
     )
     const commitHash = await git.commit({
       ...options,
-      author: {
-        name,
-        email,
-      },
+      author: context.author,
       message: "[OpenNeuro] Added local files",
     })
+    await commitAnnexBranch(annexKeys)
     logger.info(`Committed as "${commitHash}"`)
   } else {
     console.log("No changes found, not uploading.")
@@ -260,6 +400,10 @@ async function push() {
   // Git push
   await git.push(
     context.config(),
+  )
+  // Git push git-annex
+  await git.push(
+    { ...context.config(), ref: "git-annex" },
   )
   const url = new URL(context.repoEndpoint)
   console.log(

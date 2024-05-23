@@ -1,6 +1,22 @@
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
+import { decode } from "https://deno.land/x/djwt@v3.0.1/mod.ts"
 import fs from "node:fs"
 import { LevelName } from "../../deps.ts"
+
+/**
+ * Git repo specific token
+ */
+interface OpenNeuroGitToken {
+  sub: string
+  email: string
+  provider: string
+  name: string
+  admin: boolean
+  scopes: [string]
+  dataset: string
+  iat: number
+  exp: number
+}
 
 export class GitWorkerContext {
   // Current working dataset ID
@@ -49,6 +65,12 @@ export class GitWorkerContext {
    */
   get http() {
     return http
+  }
+
+  get author(): { email: string; name: string } {
+    const decodedToken = decode(this.authorization)
+    const { email, name } = decodedToken[1] as OpenNeuroGitToken
+    return { email, name }
   }
 }
 
