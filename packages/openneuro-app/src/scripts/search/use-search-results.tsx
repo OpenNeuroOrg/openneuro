@@ -12,7 +12,6 @@ import {
   simpleQueryString,
   sqsJoinWithAND,
 } from "./es-query-builders"
-import { species_list } from "@openneuro/components/content"
 
 const searchQuery = gql`
   query advancedSearchDatasets(
