@@ -45,6 +45,7 @@ export default async function main(): Promise<void> {
   } catch (err) {
     console.error("Could not create indices, skipping indexing")
     console.error(err)
+    process.exit(1)
   }
   const datasets = datasetGenerator(apolloClient, indexQuery)
   try {
