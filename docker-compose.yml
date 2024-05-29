@@ -62,12 +62,12 @@ services:
   indexer:
     extends:
       service: node
-    command: bash -c 'yarn workspace @openneuro/indexer start'
+    command: bash -c 'sleep 10 && yarn workspace @openneuro/indexer start'
     depends_on:
       server:
         condition: service_healthy
       elasticsearch:
-        condition: service_started
+        condition: service_healthy
       node:
         condition: service_healthy
       app:
@@ -133,13 +133,15 @@ services:
         condition: service_healthy
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     environment:
       discovery.type: single-node
       cluster.routing.allocation.disk.threshold_enabled: 'true'
       cluster.routing.allocation.disk.watermark.flood_stage: 1gb
       cluster.routing.allocation.disk.watermark.low: 10gb
       cluster.routing.allocation.disk.watermark.high: 5gb
+      xpack.security.enabled: false
+      xpack.security.enrollment.enabled: false
       ES_JAVA_OPTS: '-Xms750m -Xmx750m'
     ports:
       - '9200:9200'
