@@ -17,9 +17,15 @@ spec:
           - name: openneuro-indexer
             image: 'openneuro/indexer:v{{ .Chart.AppVersion }}'
             resources:
+              limits:
+                cpu: ".5"
+                memory: "2048Mi"
               requests:
-                cpu: ".25"
-                memory: "512Mi"
+                cpu: ".5"
+                memory: "2048Mi"
+            env:
+              - name: NODE_OPTIONS
+                value: '--max_old_space_size=2048'
             envFrom:
               - configMapRef:
                   name: {{ .Release.Name }}-configmap
