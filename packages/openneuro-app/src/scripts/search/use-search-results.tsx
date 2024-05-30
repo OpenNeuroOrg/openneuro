@@ -149,6 +149,7 @@ export const useSearchResults = () => {
     tracerNames,
     tracerRadionuclides,
     sortBy_selected,
+    bidsDatasetType_selected,
   } = searchParams
 
   const boolQuery = new BoolQuery()
@@ -225,6 +226,15 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       "filter",
       matchQuery("metadata.dxStatus", diagnosis_selected),
+    )
+  }
+  if (bidsDatasetType_selected) {
+    boolQuery.addClause(
+      "filter",
+      matchQuery(
+        "latestSnapshot.description.DatasetType",
+        bidsDatasetType_selected,
+      ),
     )
   }
   if (tasks.length) {

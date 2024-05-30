@@ -66,6 +66,7 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
     case "diagnosis_selected":
     case "section_selected":
     case "species_selected":
+    case "bidsDatasetType_selected":
       updatedParams[param] = initialSearchParams[param]
       setSearchParams((prevState) => ({
         ...prevState,
