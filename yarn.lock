@@ -5253,7 +5253,6 @@ __metadata:
     commander: "npm:7.2.0"
     core-js: "npm:^3.10.1"
     elastic-apm-node: "npm:4.5.4"
-    esm: "npm:^3.0.16"
     fetch-h2: "npm:^3.0.2"
     graphql: "npm:16.8.1"
     inquirer: "npm:^5.2.0"
@@ -5264,9 +5263,9 @@ __metadata:
     react: "npm:^18.2.0"
     vitest: "npm:1.5.0"
   bin:
-    git-annex-remote-openneuro: ./src/index.js
-    git-credential-openneuro: ./src/index.js
-    openneuro: ./src/index.js
+    git-annex-remote-openneuro: ./dist/index.js
+    git-credential-openneuro: ./dist/index.js
+    openneuro: ./dist/index.js
   languageName: unknown
   linkType: soft
 
@@ -12082,13 +12081,6 @@ __metadata:
   bin:
     eslint: bin/eslint.js
   checksum: 10/992ee50cbf17f65fdfd87990073cf545043cc9977ab728d1cf1d6f93a04d192a2a9f8a6edea46342fa2a50a6c17ac196d68ac2189c04b7a69e65aed1f64ef783
-  languageName: node
-  linkType: hard
-
-"esm@npm:^3.0.16":
-  version: 3.2.25
-  resolution: "esm@npm:3.2.25"
-  checksum: 10/ee96b8202b76dd1841c55e8a066608d6f0ae0333012be5c77829ccadcd21114283b4d7bf9ac1b8c09853258829c7843e9c6d7e0594acbc5e813cb37d82728d4b
   languageName: node
   linkType: hard
 

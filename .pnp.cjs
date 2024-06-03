@@ -6648,7 +6648,6 @@ const RAW_RUNTIME_STATE =
           ["commander", "npm:7.2.0"],\
           ["core-js", "npm:3.18.0"],\
           ["elastic-apm-node", "npm:4.5.4"],\
-          ["esm", "npm:3.2.25"],\
           ["fetch-h2", "npm:3.0.2"],\
           ["graphql", "npm:16.8.1"],\
           ["inquirer", "npm:5.2.0"],\
@@ -14611,15 +14610,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/eslint-visitor-keys-npm-2.1.0-c31806b6b9-db4547eef5.zip/node_modules/eslint-visitor-keys/",\
         "packageDependencies": [\
           ["eslint-visitor-keys", "npm:2.1.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["esm", [\
-      ["npm:3.2.25", {\
-        "packageLocation": "./.yarn/cache/esm-npm-3.2.25-762b3ebd40-ee96b8202b.zip/node_modules/esm/",\
-        "packageDependencies": [\
-          ["esm", "npm:3.2.25"]\
         ],\
         "linkType": "HARD"\
       }]\
