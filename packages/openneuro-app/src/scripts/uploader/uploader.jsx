@@ -132,8 +132,9 @@ export class UploadClient extends React.Component {
               stripRelativePath,
               files: addPathToFiles(filesToUpload, path),
               selectedFiles: files,
+            }, () => {
+              this.upload({ affirmedDefaced, affirmedConsent })
             })
-            this.upload({ affirmedDefaced, affirmedConsent })
           },
         )
     }
