@@ -10,9 +10,9 @@
   "author": "Squishymedia",
   "license": "MIT",
   "bin": {
-    "git-annex-remote-openneuro": "./src/index.js",
-    "git-credential-openneuro": "./src/index.js",
-    "openneuro": "./src/index.js"
+    "git-annex-remote-openneuro": "./dist/index.js",
+    "git-credential-openneuro": "./dist/index.js",
+    "openneuro": "./dist/index.js"
   },
   "dependencies": {
     "@apollo/client": "3.7.2",
@@ -21,7 +21,6 @@
     "cli-progress": "^3.8.2",
     "commander": "7.2.0",
     "elastic-apm-node": "4.5.4",
-    "esm": "^3.0.16",
     "fetch-h2": "^3.0.2",
     "graphql": "16.8.1",
     "inquirer": "^5.2.0",

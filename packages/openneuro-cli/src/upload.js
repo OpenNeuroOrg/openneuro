@@ -7,8 +7,6 @@ import { uploads } from "@openneuro/client"
 import validate from "bids-validator"
 import { bytesToSize, getFiles } from "./files"
 import { getUrl } from "./config"
-// @ts-ignore
-import consoleFormat from "bids-validator/dist/commonjs/utils/consoleFormat"
 import { AbortController, fetch, Request } from "fetch-h2"
 
 /**
@@ -23,7 +21,7 @@ const validatePromise = (dir, options = {}) => {
       if (errors.length + warnings.length === 0) {
         resolve({ summary })
       } else {
-        reject(consoleFormat.issues({ errors, warnings }))
+        reject(validate.consoleFormat.issues({ errors, warnings }))
       }
     })
   })
@@ -48,7 +46,7 @@ export const validation = (dir, validatorOptions, apmTransaction) => {
   return validatePromise(dir, validatorOptions)
     .then(function ({ summary }) {
       // eslint-disable-next-line no-console
-      console.log(consoleFormat.summary(summary))
+      console.log(validate.consoleFormat.summary(summary))
       apmValidatePromiseSpan.end()
     })
     .catch((err) => fatalError(err, apmValidatePromiseSpan))
