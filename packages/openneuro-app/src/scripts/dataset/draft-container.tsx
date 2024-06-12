@@ -15,7 +15,6 @@ import {
 } from "../authentication/profile"
 import { useCookies } from "react-cookie"
 import { DatasetAlertDraft } from "./fragments/dataset-alert-draft"
-import { BrainLifeButton } from "./components/BrainLifeButton"
 import { CloneDropdown } from "./components/CloneDropdown"
 import { DatasetGitAccess } from "./components/DatasetGitAccess"
 import { DatasetHeader } from "./components/DatasetHeader"
@@ -141,10 +140,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                     issues={dataset.draft.issues}
                   />
                 </ValidationBlock>
-                <BrainLifeButton
-                  datasetId={datasetId}
-                  onBrainlife={dataset.onBrainlife}
-                />
                 <CloneDropdown
                   gitAccess={
                     <DatasetGitAccess
