@@ -24336,16 +24336,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["postcss", [\
-      ["npm:8.4.29", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.4.29-2319a64d31-cfde009612.zip/node_modules/postcss/",\
-        "packageDependencies": [\
-          ["postcss", "npm:8.4.29"],\
-          ["nanoid", "npm:3.3.6"],\
-          ["picocolors", "npm:1.0.0"],\
-          ["source-map-js", "npm:1.0.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:8.4.31", {\
         "packageLocation": "./.yarn/cache/postcss-npm-8.4.31-385051a82b-1a6653e721.zip/node_modules/postcss/",\
         "packageDependencies": [\
@@ -29715,7 +29705,7 @@ const RAW_RUNTIME_STATE =
           ["fsevents", "patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"],\
           ["less", null],\
           ["lightningcss", null],\
-          ["postcss", "npm:8.4.29"],\
+          ["postcss", "npm:8.4.38"],\
           ["rollup", "npm:3.29.1"],\
           ["sass", "npm:1.42.1"],\
           ["stylus", null],\
@@ -29754,7 +29744,7 @@ const RAW_RUNTIME_STATE =
           ["fsevents", "patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"],\
           ["less", null],\
           ["lightningcss", null],\
-          ["postcss", "npm:8.4.29"],\
+          ["postcss", "npm:8.4.38"],\
           ["rollup", "npm:3.29.1"],\
           ["sass", "npm:1.56.1"],\
           ["stylus", null],\
