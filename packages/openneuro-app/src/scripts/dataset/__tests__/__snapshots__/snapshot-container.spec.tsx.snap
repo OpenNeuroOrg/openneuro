@@ -330,6 +330,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 </div>
                 <div
                   class="menu collapsed"
+                  role="menu"
                 >
                   <div
                     class="dataset-git-access"
@@ -422,6 +423,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 </div>
                 <div
                   class="menu collapsed"
+                  role="menu"
                 >
                   <div>
                     <span>
@@ -1146,6 +1148,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                 </div>
                 <div
                   class="menu collapsed"
+                  role="menu"
                 >
                   <div
                     class="version-list-dropdown"
