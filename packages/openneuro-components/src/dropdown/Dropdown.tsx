@@ -33,7 +33,7 @@ export const Dropdown = ({ children, label, className }: DropdownProps) => {
       >
         <span>{label}</span>
       </div>
-      <div className={`menu ${isOpen ? "expanded" : "collapsed"}`}>
+      <div className={`menu ${isOpen ? "expanded" : "collapsed"}`} role="menu">
         {children}
       </div>
     </div>

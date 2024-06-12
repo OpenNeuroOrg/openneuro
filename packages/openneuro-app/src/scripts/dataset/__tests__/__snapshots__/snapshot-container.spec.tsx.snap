@@ -303,6 +303,99 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
               </div>
             </div>
             <div
+              class="clone-dropdown css-1jpt4j3"
+            >
+              <div
+                class="undefined dropdown-wrapper"
+              >
+                <div
+                  class="toggle "
+                >
+                  <span>
+                    <button
+                      aria-label="Analyze"
+                      class="on-button on-button--small on-button--primary  clone-link"
+                      role="button"
+                      type="button"
+                    >
+                      Analyze
+                      <i
+                        class="fas fa-caret-up"
+                      />
+                      <i
+                        class="fas fa-caret-down"
+                      />
+                    </button>
+                  </span>
+                </div>
+                <div
+                  class="menu collapsed"
+                  role="menu"
+                >
+                  <div
+                    class="dataset-git-access"
+                  >
+                    <span>
+                      <h4>
+                        Analyze this dataset
+                      </h4>
+                    </span>
+                    <p>
+                      Work with OpenNeuro datasets using any of these third-party tools.
+                    </p>
+                    <hr />
+                    <img
+                      height="16"
+                      src="/packages/openneuro-app/src/assets/external/brainlife.png"
+                      width="16"
+                    />
+                     
+                    <a
+                      href="https://brainlife.io/openneuro/ds001032/1.0.0"
+                      target="_blank"
+                    >
+                      View on Brainlife.io
+                    </a>
+                    <p>
+                      Brainlife.io is a free cloud platform for secure neuroscience data analysis.
+                    </p>
+                    <hr />
+                    <img
+                      height="16"
+                      src="/packages/openneuro-app/src/assets/external/nemar.png"
+                      width="16"
+                    />
+                     
+                    <a
+                      href="https://nemar.org/dataexplorer/detail?dataset_id=ds001032"
+                      target="_blank"
+                    >
+                      View on NEMAR
+                    </a>
+                    <p>
+                      View and analyze this dataset on the NEMAR OpenNeuro portal for MEG, iEEG, and EEG data.
+                    </p>
+                    <hr />
+                    <img
+                      height="16"
+                      src="/packages/openneuro-app/src/assets/external/cbrain.png"
+                      width="16"
+                    />
+                     
+                    <a
+                      href="https://portal.cbrain.mcgill.ca/openneuro/ds001032/versions/1.0.0"
+                      target="_blank"
+                    >
+                      View on CBRAIN
+                    </a>
+                    <p>
+                      CBRAIN is a web-based distributed computing platform for collaborative neuroimaging research.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
               class="clone-dropdown"
             >
               <div
@@ -330,6 +423,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 </div>
                 <div
                   class="menu collapsed"
+                  role="menu"
                 >
                   <div>
                     <span>
@@ -1054,6 +1148,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
                 </div>
                 <div
                   class="menu collapsed"
+                  role="menu"
                 >
                   <div
                     class="version-list-dropdown"

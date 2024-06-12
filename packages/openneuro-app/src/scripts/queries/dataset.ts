@@ -45,7 +45,6 @@ export const getDatasetPage = gql`
         dataladUrl
         local
       }
-      onBrainlife
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}

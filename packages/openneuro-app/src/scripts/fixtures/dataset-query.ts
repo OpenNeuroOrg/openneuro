@@ -153,7 +153,6 @@ export const dataset = {
     __typename: "Analytic",
   },
   derivatives: [],
-  onBrainlife: false,
 }
 
 export const snapshot = {
@@ -296,5 +295,4 @@ export const snapshot = {
   ],
   __typename: "Snapshot",
   hexsha: "d62fdc42e2a568a6f89e33d68d3ef343ff883e02",
-  onBrainlife: false,
 }
