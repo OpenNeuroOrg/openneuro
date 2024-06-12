@@ -2,6 +2,9 @@ import React from "react"
 import { Dropdown } from "@openneuro/components/dropdown"
 import { Button } from "@openneuro/components/button"
 import styled from "@emotion/styled"
+import BrainlifeIcon from "../../../assets/external/brainlife.png"
+import NemarIcon from "../../../assets/external/nemar.png"
+import CbrainIcon from "../../../assets/external/cbrain.png"
 
 export interface CloneDropdownProps {
   datasetId: string
@@ -45,7 +48,7 @@ export const AnalyzeDropdown: React.FC<CloneDropdownProps> = (
           </p>
           <hr />
           <img
-            src="https://brainlife.io/favicon.ico"
+            src={BrainlifeIcon}
             height="16"
             width="16"
           />{" "}
@@ -61,7 +64,7 @@ export const AnalyzeDropdown: React.FC<CloneDropdownProps> = (
           </p>
           <hr />
           <img
-            src="https://nemar.org/app/templates/nemar/favicon.ico"
+            src={NemarIcon}
             height="16"
             width="16"
           />{" "}
@@ -77,7 +80,7 @@ export const AnalyzeDropdown: React.FC<CloneDropdownProps> = (
           </p>
           <hr />
           <img
-            src="https://portal.cbrain.mcgill.ca/images/custom_logos/cb-small_white_blue.png"
+            src={CbrainIcon}
             height="16"
             width="16"
           />{" "}
