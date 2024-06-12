@@ -346,7 +346,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     <hr />
                     <img
                       height="16"
-                      src="https://brainlife.io/favicon.ico"
+                      src="/packages/openneuro-app/src/assets/external/brainlife.png"
                       width="16"
                     />
                      
@@ -362,7 +362,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     <hr />
                     <img
                       height="16"
-                      src="https://nemar.org/app/templates/nemar/favicon.ico"
+                      src="/packages/openneuro-app/src/assets/external/nemar.png"
                       width="16"
                     />
                      
@@ -378,7 +378,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     <hr />
                     <img
                       height="16"
-                      src="https://portal.cbrain.mcgill.ca/images/custom_logos/cb-small_white_blue.png"
+                      src="/packages/openneuro-app/src/assets/external/cbrain.png"
                       width="16"
                     />
                      
