@@ -24,7 +24,7 @@ export const BrainLifeButton: React.FC<BrainLifeButtonProps> = ({
             <Button
               className="brainlife-link"
               primary={true}
-              size="small"
+              size="large"
               onClick={() => {
                 window.open(url, "_blank")
               }}

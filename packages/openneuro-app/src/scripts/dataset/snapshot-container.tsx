@@ -10,8 +10,7 @@ import Validation from "../validation/validation.jsx"
 import { config } from "../config"
 import DatasetCitation from "./fragments/dataset-citation.jsx"
 import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
-
-import { BrainLifeButton } from "./components/BrainLifeButton"
+import { AnalyzeDropdown } from "./components/AnalyzeDropdown"
 import { CloneDropdown } from "./components/CloneDropdown"
 import { DatasetGitAccess } from "./components/DatasetGitAccess"
 import { DatasetHeader } from "./components/DatasetHeader"
@@ -21,7 +20,6 @@ import { MetaDataListBlock } from "./components/MetaDataListBlock"
 import { ModalitiesMetaDataBlock } from "./components/ModalitiesMetaDataBlock"
 import { ValidationBlock } from "./components/ValidationBlock"
 import { VersionList } from "./components/VersionList"
-import { NemarButton } from "./components/NemarButton"
 import { Username } from "../users/username"
 import { Loading } from "@openneuro/components/loading"
 
@@ -131,15 +129,8 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 <ValidationBlock>
                   <Validation datasetId={dataset.id} issues={snapshot.issues} />
                 </ValidationBlock>
-                <NemarButton
+                <AnalyzeDropdown
                   datasetId={datasetId}
-                  onNemar={summary?.modalities.includes("EEG") ||
-                    summary?.modalities.includes("iEEG") ||
-                    summary?.modalities.includes("MEG")}
-                />
-                <BrainLifeButton
-                  datasetId={datasetId}
-                  onBrainlife={snapshot.onBrainlife}
                   snapshotVersion={snapshot.tag}
                 />
                 <CloneDropdown
