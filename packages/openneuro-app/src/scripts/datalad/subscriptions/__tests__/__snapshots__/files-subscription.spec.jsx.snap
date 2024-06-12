@@ -1,3 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`FilesSubscription > renders with common props 1`] = `<DocumentFragment />`;
