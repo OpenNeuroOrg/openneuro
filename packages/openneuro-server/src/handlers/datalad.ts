@@ -39,9 +39,11 @@ export const getFile = async (req, res) => {
       }
     } catch (err) {
       // ConnectTimeoutError is Node/Undici and TimeoutError is the standard DOMException name
+      // "fetch failed" can mean the connection failed at setup (network is unavailable)
       if (
         err?.cause?.name === "ConnectTimeoutError" ||
-        err?.name === "TimeoutError"
+        err?.name === "TimeoutError" ||
+        err?.name === "TypeError" && err?.message.includes("fetch failed")
       ) {
         // Unreachable backend, forward this error
         // Usually this is the service restarting due to node migrations or upgrades
