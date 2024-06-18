@@ -27941,7 +27941,7 @@ const RAW_RUNTIME_STATE =
           ["graphql", "npm:16.8.1"],\
           ["iterall", "npm:1.3.0"],\
           ["symbol-observable", "npm:1.2.0"],\
-          ["ws", "virtual:0d009645becfea4d88882843f0423fcd82285d1b4ccc9cfa7930ffc912a0989555b0246969c43500aed09e6b607d4c48ed0781b1a3705352f665edbcf7185907#npm:7.5.9"]\
+          ["ws", "virtual:0d009645becfea4d88882843f0423fcd82285d1b4ccc9cfa7930ffc912a0989555b0246969c43500aed09e6b607d4c48ed0781b1a3705352f665edbcf7185907#npm:7.5.10"]\
         ],\
         "packagePeers": [\
           "@types/graphql",\
@@ -30556,10 +30556,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["ws", [\
-      ["npm:7.5.9", {\
-        "packageLocation": "./.yarn/cache/ws-npm-7.5.9-26f12a5ed6-171e350129.zip/node_modules/ws/",\
+      ["npm:7.5.10", {\
+        "packageLocation": "./.yarn/cache/ws-npm-7.5.10-878ccb886b-9c796b84ba.zip/node_modules/ws/",\
         "packageDependencies": [\
-          ["ws", "npm:7.5.9"]\
+          ["ws", "npm:7.5.10"]\
         ],\
         "linkType": "SOFT"\
       }],\
@@ -30587,10 +30587,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:0d009645becfea4d88882843f0423fcd82285d1b4ccc9cfa7930ffc912a0989555b0246969c43500aed09e6b607d4c48ed0781b1a3705352f665edbcf7185907#npm:7.5.9", {\
-        "packageLocation": "./.yarn/__virtual__/ws-virtual-50b2aec2bb/0/cache/ws-npm-7.5.9-26f12a5ed6-171e350129.zip/node_modules/ws/",\
+      ["virtual:0d009645becfea4d88882843f0423fcd82285d1b4ccc9cfa7930ffc912a0989555b0246969c43500aed09e6b607d4c48ed0781b1a3705352f665edbcf7185907#npm:7.5.10", {\
+        "packageLocation": "./.yarn/__virtual__/ws-virtual-70de7f155e/0/cache/ws-npm-7.5.10-878ccb886b-9c796b84ba.zip/node_modules/ws/",\
         "packageDependencies": [\
-          ["ws", "virtual:0d009645becfea4d88882843f0423fcd82285d1b4ccc9cfa7930ffc912a0989555b0246969c43500aed09e6b607d4c48ed0781b1a3705352f665edbcf7185907#npm:7.5.9"],\
+          ["ws", "virtual:0d009645becfea4d88882843f0423fcd82285d1b4ccc9cfa7930ffc912a0989555b0246969c43500aed09e6b607d4c48ed0781b1a3705352f665edbcf7185907#npm:7.5.10"],\
           ["@types/bufferutil", null],\
           ["@types/utf-8-validate", null],\
           ["bufferutil", null],\
