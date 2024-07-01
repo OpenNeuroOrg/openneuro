@@ -1,9 +1,18 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: {{ .Release.Name }}-datalad-worker
+spec:
+  timeoutSec: 600
+---
 {{- $relname := .Release.Name -}}
 {{- range until ( .Values.dataladWorkers | int ) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ $relname }}-dataset-worker-{{ . }}
+  annotations:
+    cloud.google.com/backend-config: '{"default": "'{{ $relname }}'-datalad-worker"}'
 spec:
   selector:
     statefulset.kubernetes.io/pod-name: {{ $relname }}-dataset-worker-{{ . }}
