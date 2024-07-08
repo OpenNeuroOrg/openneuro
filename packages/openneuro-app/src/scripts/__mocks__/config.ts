@@ -17,6 +17,7 @@ export const config = {
     },
     orcid: {
       clientID: "orcid-client-id",
+      ORCID_API_ENDPOINT: "https://api.sandbox.orcid.org",
     },
   },
 
