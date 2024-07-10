@@ -15,7 +15,7 @@ exports[`Comment component > renders an ORCID user comment 1`] = `
           Example Exampler
            
           <a
-            href="https://orcid.org/1234-5678-9101"
+            href="https://sandbox.orcid.org/1234-5678-9101"
           >
             <img
               alt="ORCID logo"
@@ -89,7 +89,7 @@ exports[`Comment component > renders an ORCID user comment 1`] = `
         Example Exampler
          
         <a
-          href="https://orcid.org/1234-5678-9101"
+          href="https://sandbox.orcid.org/1234-5678-9101"
         >
           <img
             alt="ORCID logo"

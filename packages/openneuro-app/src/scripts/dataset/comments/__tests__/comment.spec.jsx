@@ -4,6 +4,7 @@ import Comment from "../comment.jsx"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 
 vi.mock("date-fns/formatDistanceToNow")
+vi.mock("../../../config.ts")
 
 const emptyState =
   '{"blocks":[{"key":"3sm42","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'

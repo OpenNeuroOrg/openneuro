@@ -5411,7 +5411,7 @@ __metadata:
     passport-google-oauth20: "npm:^1.0.0"
     passport-jwt: "npm:^4.0.0"
     passport-oauth2-refresh: "npm:^2.0.0"
-    passport-orcid: "npm:^0.0.3"
+    passport-orcid: "npm:0.0.4"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     redlock: "npm:^4.0.0"
@@ -19756,6 +19756,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"oauth@npm:0.10.x":
+  version: 0.10.0
+  resolution: "oauth@npm:0.10.0"
+  checksum: 10/356808979911583a50b0caab49ed4eee532405fe582f673e3b404348f7ce32a58d25b34b1d531f8c850fac488151252c262d018efc9ce973892a36baa42ac01d
+  languageName: node
+  linkType: hard
+
 "oauth@npm:0.9.x":
   version: 0.9.15
   resolution: "oauth@npm:0.9.15"
@@ -20592,7 +20599,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-oauth2@npm:1.x.x, passport-oauth2@npm:^1.4.0":
+"passport-oauth2@npm:1.x.x":
   version: 1.6.0
   resolution: "passport-oauth2@npm:1.6.0"
   dependencies:
@@ -20605,12 +20612,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-orcid@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "passport-orcid@npm:0.0.3"
+"passport-oauth2@npm:^1.5.0":
+  version: 1.8.0
+  resolution: "passport-oauth2@npm:1.8.0"
   dependencies:
-    passport-oauth2: "npm:^1.4.0"
-  checksum: 10/86c016beccd4cd23fa55f480a11e66042a77bb37a4be397fface09ffa63a4ce573004ea57e195f424bd2b884e78998cce37e7a7d1c6c72a1a77d320d68339e74
+    base64url: "npm:3.x.x"
+    oauth: "npm:0.10.x"
+    passport-strategy: "npm:1.x.x"
+    uid2: "npm:0.0.x"
+    utils-merge: "npm:1.x.x"
+  checksum: 10/31af6c59686bdc0460f3099a857ae4243952b44ad1afc5a12779524711ea97266491e97f83671120f84575b2c6202f3cf0bb8500fdc5a6414e10ff45617454ca
+  languageName: node
+  linkType: hard
+
+"passport-orcid@npm:0.0.4":
+  version: 0.0.4
+  resolution: "passport-orcid@npm:0.0.4"
+  dependencies:
+    passport-oauth2: "npm:^1.5.0"
+  checksum: 10/92db3fdc36866b05e2b60cb337e9f790b49abb4136e1ebc111ce27271e4453b7d82926a9b06697bba14ff31019c5c88e8804a27a8eafe18bc5de0ed256d44d40
   languageName: node
   linkType: hard
 

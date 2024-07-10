@@ -29,8 +29,11 @@ def move_files_into_repo(dataset_id, dataset_path, upload_path, name, email, coo
         os.path.join(dataset_path, os.path.relpath(filename, start=upload_path)))]
     gevent.sleep()
     move_files(upload_path, dataset_path)
-    author = pygit2.Signature(name, email)
-    hexsha = git_commit(repo, unlock_files, author).hex
+    if name and email:
+        author = pygit2.Signature(name, email)
+        hexsha = git_commit(repo, unlock_files, author).hex
+    else:
+        hexsha = git_commit(repo, unlock_files).hex
     update_head(dataset_id, dataset_path, hexsha, cookies)
 
 

@@ -13,8 +13,7 @@ export interface OpenNeuroConfig {
     }
     orcid?: {
       clientID: string
-      URI: string
-      redirectURI: string
+      ORCID_API_ENDPOINT: string
     }
     globus?: {
       clientID: string
@@ -45,8 +44,7 @@ export const config: OpenNeuroConfig = {
     },
     orcid: {
       clientID: globalThis.OpenNeuroConfig.ORCID_CLIENT_ID,
-      URI: globalThis.OpenNeuroConfig.ORCID_URI,
-      redirectURI: globalThis.OpenNeuroConfig.ORCID_REDIRECT_URI,
+      ORCID_API_ENDPOINT: globalThis.OpenNeuroConfig.ORCID_API_ENDPOINT,
     },
   },
   analytics: {

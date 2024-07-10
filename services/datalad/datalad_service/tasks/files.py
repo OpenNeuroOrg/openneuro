@@ -15,7 +15,7 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     """
     dataset_path = store.get_dataset_path(dataset)
     repo = pygit2.Repository(dataset_path)
-    author = name and pygit2.Signature(name, email) or pygit2.Signature(
+    author = name and email and pygit2.Signature(name, email) or pygit2.Signature(
         COMMITTER_NAME, COMMITTER_EMAIL)
     ref = git_commit(repo, files, author)
     # Run the validator but don't block on the request

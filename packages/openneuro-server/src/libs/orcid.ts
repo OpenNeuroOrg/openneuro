@@ -20,22 +20,12 @@ export default {
         },
         (err, res) => {
           if (err) {
-            return reject({
+            reject({
               message:
                 "An unexpected ORCID login failure occurred, please try again later.",
             })
           }
-          let doc
-          // Catch issues with parsing this response
-          try {
-            doc = new xmldoc.XmlDocument(res.body)
-          } catch (err) {
-            return reject({
-              type: "config",
-              message:
-                "ORCID auth response invalid, most likely this is a misconfigured ORCID_API_ENDPOINT value",
-            })
-          }
+          const doc = new xmldoc.XmlDocument(res.body)
           let name = doc.valueWithPath(
             "person:person.person:name.personal-details:credit-name",
           )
@@ -49,30 +39,12 @@ export default {
             "person:person.email:emails.email:email.email:email",
           )
 
-          if (!name) {
-            if (!firstname) {
-              return reject({
-                type: "given",
-                message:
-                  "Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.",
-              })
-            } else if (!lastname) {
-              return reject({
-                type: "family",
-                message:
-                  "Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.",
-              })
-            } else {
+          if (!name && firstname && lastname) {
+            if (firstname && lastname) {
               name = `${firstname} ${lastname}`
+            } else {
+              name = lastname || firstname
             }
-          }
-
-          if (!email) {
-            return reject({
-              type: "email",
-              message:
-                "Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.",
-            })
           }
 
           resolve({
