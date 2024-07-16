@@ -92,7 +92,7 @@ class GitReceiveResource:
                 os.symlink('/hooks/pre-receive', pre_receive_path)
             process = subprocess.Popen(
                 ['git-receive-pack', '--stateless-rpc', dataset_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            pipe_chunks(reader=req.bounded_stream, writer=process.stdin)
+            pipe_chunks(reader=req.bounded_stream, writer=process.stdin, gzipped=req.get_header('content-encoding') == 'gzip')
             process.stdin.flush()
             resp.status = falcon.HTTP_OK
             resp.stream = process.stdout
@@ -118,7 +118,7 @@ class GitUploadResource:
             dataset_path = self.store.get_dataset_path(dataset)
             process = subprocess.Popen(
                 ['git-upload-pack', '--stateless-rpc', dataset_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            pipe_chunks(reader=req.bounded_stream, writer=process.stdin)
+            pipe_chunks(reader=req.bounded_stream, writer=process.stdin, gzipped=req.get_header('content-encoding') == 'gzip')
             process.stdin.flush()
             resp.status = falcon.HTTP_OK
             resp.stream = process.stdout

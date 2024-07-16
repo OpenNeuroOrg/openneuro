@@ -1,5 +1,6 @@
 import os
 import tempfile
+import zlib
 
 CHUNK_SIZE_BYTES = 2048
 
@@ -23,9 +24,13 @@ def update_file(path, stream):
             raise
 
 
-def pipe_chunks(reader, writer):
-    while True:
-        chunk = reader.read(CHUNK_SIZE_BYTES)
-        if not chunk:
-            break
-        writer.write(chunk)
+def pipe_chunks(reader, writer, gzipped=False):
+    # If gzipped, we have to read the entire request and write once
+    if gzipped:
+        writer.write(zlib.decompress(reader.read(), zlib.MAX_WBITS|32))
+    else:
+        while True:
+            chunk = reader.read(CHUNK_SIZE_BYTES)
+            if not chunk:
+                break
+            writer.write(chunk)
