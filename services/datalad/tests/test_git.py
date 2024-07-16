@@ -1,4 +1,5 @@
 import os
+import zlib
 
 import falcon
 from falcon import testing
@@ -6,6 +7,10 @@ import pygit2
 
 from datalad_service.common import git
 from datalad.api import Dataset
+
+
+gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+
 
 test_auth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1iMjFiLTQyMGItOTU1NS1hZjg1NmVmYzk0NTIiLCJlbWFpbCI6Im5lbGxAc3F1aXNoeW1lZGlhLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwibmFtZSI6Ik5lbGwgSGFyZGNhc3RsZSIsImFkbWluIjp0cnVlLCJzY29wZXMiOlsiZGF0YXNldDpnaXQiXSwiZGF0YXNldCI6ImRzMDAwMDAxIiwiaWF0IjoxNjA4NDEwNjEyLCJleHAiOjIxNDc0ODM2NDd9.0aA9cZWMieYr9zbmVrTeFEhpATqmT_X4tVX1VR1uabA"
 
@@ -110,6 +115,24 @@ def test_git_upload_resource(client):
     # Just look for the start of a pack stream
     assert response.content[0:12] == b'0008NAK\nPACK'
 
+
+def test_git_upload_resource_gzip(client):
+    ds_id = 'ds000001'
+    get_response = client.simulate_get(
+        f'/git/0/{ds_id}/info/refs?service=git-upload-pack', headers={"authorization": test_auth})
+    lines = get_response.content.decode().split('\n')
+    # Grab two refs to ask for
+    annex = lines[2][4:44]
+    head = lines[3][4:44]
+    upload_pack_input = "0032want {}\n0032want {}\n00000009done\n""".format(
+        head, annex)
+    gzipped_input = gzip_compress.compress(upload_pack_input.encode()) + gzip_compress.flush()
+    # Ask for them
+    response = client.simulate_post(
+        f'/git/0/{ds_id}/git-upload-pack', headers={"authorization": test_auth, "content-encoding": "gzip"}, body=gzipped_input)
+    assert response.status == falcon.HTTP_OK
+    # Just look for the start of a pack stream
+    assert response.content[0:12] == b'0008NAK\nPACK'
 
 def test_git_receive_resource(client):
     ds_id = 'ds000001'
