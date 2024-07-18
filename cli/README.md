@@ -16,7 +16,7 @@ To upload or download data from OpenNeuro, login with your account.
 
 ```shell
 # Run login and follow the prompts
-deno run -A cli/openneuto.ts login
+deno run -A https://deno.land/x/openneuro/openneuro.ts login
 ```
 
 You can also create an API key on [OpenNeuro](https://openneuro.org/keygen) and specify this as an option or environment variable.
@@ -24,20 +24,25 @@ You can also create an API key on [OpenNeuro](https://openneuro.org/keygen) and 
 ```shell
 # For scripts
 export OPENNEURO_API_KEY=<api_key>
-deno run -A cli/openneuro.ts login --error-reporting true
+deno run -A https://deno.land/x/openneuro/openneuro.ts login --error-reporting true
 ```
 
 ### Uploading
 
 ```shell
 # Path to the dataset root (directory containing dataset_description.json)
-deno run -A cli/openneuro.ts upload --affirmDefaced path/to/dataset
+deno run -A https://deno.land/x/openneuro/openneuro.ts upload --affirmDefaced path/to/dataset
+```
+
+```shell
+# Add files to an existing dataset
+deno run -A https://deno.land/x/openneuro/openneuro.ts upload --dataset ds000001 path/to/dataset
 ```
 
 ```shell
 # To debug issues - enable logging and provide this log to support or open a GitHub issue
 export OPENNEURO_LOG=INFO
-deno run -A cli/openneuro.ts upload --affirmDefaced path/to/dataset
+deno run -A https://deno.land/x/openneuro/openneuro.ts upload --affirmDefaced path/to/dataset
 ```
 
 ## Implementation Notes
