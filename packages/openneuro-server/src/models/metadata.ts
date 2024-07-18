@@ -1,4 +1,4 @@
-import uuid from "uuid"
+import { v4 as uuidv4 } from "uuid"
 import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
@@ -29,7 +29,7 @@ export interface MetadataDocument extends Document {
 }
 
 const metadataSchema = new Schema({
-  datasetId: { type: String, default: uuid.v4 }, // OpenNeuro id
+  datasetId: { type: String, default: uuidv4 }, // OpenNeuro id
   datasetName: String,
   datasetUrl: String, // @id type
   dataProcessed: Boolean, // 'true' | 'false' | 'user input string'

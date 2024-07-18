@@ -1,4 +1,4 @@
-import uuid from "uuid"
+import { v4 as uuidv4 } from "uuid"
 import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
@@ -10,7 +10,7 @@ export interface ReviewerDocument extends Document {
 }
 
 const reviewerSchema = new Schema({
-  id: { type: String, required: true, default: uuid.v4 },
+  id: { type: String, required: true, default: uuidv4 },
   datasetId: { type: String, required: true },
   expiration: {
     type: Date,
