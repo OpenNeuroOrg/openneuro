@@ -5,14 +5,7 @@ import {
   validateCommand,
 } from "../bids_validator.ts"
 import { logger } from "../logger.ts"
-import {
-  Confirm,
-  join,
-  prompt,
-  relative,
-  resolve,
-  walk,
-} from "../deps.ts"
+import { Confirm, join, prompt, relative, resolve, walk } from "../deps.ts"
 import type { CommandOptions } from "../deps.ts"
 import { getRepoAccess } from "./git-credential.ts"
 import { readConfig } from "../config.ts"
@@ -47,7 +40,10 @@ export async function addGitFiles(
     })
   ) {
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
-    if (relativePath === ".bidsignore" || relativePath === ".gitattributes" || !relativePath.startsWith(".")) {
+    if (
+      relativePath === ".bidsignore" || relativePath === ".gitattributes" ||
+      !relativePath.startsWith(".")
+    ) {
       worker.postMessage({
         "command": "add",
         "path": walkEntry.path,
@@ -183,9 +179,13 @@ export const upload = validateCommand
     hidden: true,
     override: true,
   })
-  .option("-d, --dataset", "Specify an existing dataset to update.", {
-    conflicts: ["create"],
-  })
+  .option(
+    "-d, --dataset [dataset:string]",
+    "Specify an existing dataset to update.",
+    {
+      conflicts: ["create"],
+    },
+  )
   .option("-c, --create", "Skip confirmation to create a new dataset.", {
     conflicts: ["dataset"],
   })
