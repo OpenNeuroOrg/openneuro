@@ -1,4 +1,4 @@
-import uuid from "uuid"
+import { v4 as uuidv4 } from "uuid"
 import mongoose, { Document } from "mongoose"
 const { Schema, model } = mongoose
 
@@ -17,7 +17,7 @@ export interface UserDocument extends Document {
 }
 
 const userSchema = new Schema({
-  id: { type: String, default: uuid.v4 }, // OpenNeuro id
+  id: { type: String, default: uuidv4 }, // OpenNeuro id
   email: String,
   name: String,
   provider: String, // Login provider
