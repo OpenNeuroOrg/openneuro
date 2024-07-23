@@ -6769,7 +6769,6 @@ const RAW_RUNTIME_STATE =
           ["@graphql-tools/schema", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:10.0.0"],\
           ["@keyv/redis", "npm:2.7.0"],\
           ["@openneuro/search", "workspace:packages/openneuro-search"],\
-          ["@passport-next/passport-google-oauth2", "npm:1.0.0"],\
           ["@sentry/node", "npm:4.6.6"],\
           ["@types/cors", "npm:2.8.13"],\
           ["@types/draft-js", "npm:0.10.45"],\
@@ -6806,10 +6805,10 @@ const RAW_RUNTIME_STATE =
           ["node-mailjet", "npm:3.3.5"],\
           ["nodemon", "npm:3.1.0"],\
           ["object-hash", "npm:2.1.1"],\
-          ["passport", "npm:0.6.0"],\
-          ["passport-google-oauth20", "npm:1.0.0"],\
-          ["passport-jwt", "npm:4.0.0"],\
-          ["passport-oauth2-refresh", "npm:2.1.0"],\
+          ["passport", "npm:0.7.0"],\
+          ["passport-google-oauth20", "npm:2.0.0"],\
+          ["passport-jwt", "npm:4.0.1"],\
+          ["passport-oauth2-refresh", "npm:2.2.0"],\
           ["passport-orcid", "npm:0.0.4"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:18.2.0"],\
@@ -6917,37 +6916,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@opentelemetry-semantic-conventions-npm-1.15.2-455630b2df-1f35515109.zip/node_modules/@opentelemetry/semantic-conventions/",\
         "packageDependencies": [\
           ["@opentelemetry/semantic-conventions", "npm:1.15.2"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@passport-next/passport-google-oauth2", [\
-      ["npm:1.0.0", {\
-        "packageLocation": "./.yarn/cache/@passport-next-passport-google-oauth2-npm-1.0.0-c8a64bfc30-b369a51d38.zip/node_modules/@passport-next/passport-google-oauth2/",\
-        "packageDependencies": [\
-          ["@passport-next/passport-google-oauth2", "npm:1.0.0"],\
-          ["@passport-next/passport-oauth2", "npm:1.7.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@passport-next/passport-oauth2", [\
-      ["npm:1.7.1", {\
-        "packageLocation": "./.yarn/cache/@passport-next-passport-oauth2-npm-1.7.1-bc9e3cb418-9f34c070f5.zip/node_modules/@passport-next/passport-oauth2/",\
-        "packageDependencies": [\
-          ["@passport-next/passport-oauth2", "npm:1.7.1"],\
-          ["@passport-next/passport-strategy", "npm:1.1.0"],\
-          ["lodash", "npm:4.17.21"],\
-          ["oauth", "npm:0.9.15"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@passport-next/passport-strategy", [\
-      ["npm:1.1.0", {\
-        "packageLocation": "./.yarn/cache/@passport-next-passport-strategy-npm-1.1.0-d883cf7577-48ea919461.zip/node_modules/@passport-next/passport-strategy/",\
-        "packageDependencies": [\
-          ["@passport-next/passport-strategy", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -19892,23 +19860,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["jsonwebtoken", [\
-      ["npm:8.5.1", {\
-        "packageLocation": "./.yarn/cache/jsonwebtoken-npm-8.5.1-c007670b76-a7b52ea570.zip/node_modules/jsonwebtoken/",\
-        "packageDependencies": [\
-          ["jsonwebtoken", "npm:8.5.1"],\
-          ["jws", "npm:3.2.2"],\
-          ["lodash.includes", "npm:4.3.0"],\
-          ["lodash.isboolean", "npm:3.0.3"],\
-          ["lodash.isinteger", "npm:4.0.4"],\
-          ["lodash.isnumber", "npm:3.0.3"],\
-          ["lodash.isplainobject", "npm:4.0.6"],\
-          ["lodash.isstring", "npm:4.0.1"],\
-          ["lodash.once", "npm:4.1.1"],\
-          ["ms", "npm:2.1.3"],\
-          ["semver", "npm:5.7.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:9.0.0", {\
         "packageLocation": "./.yarn/cache/jsonwebtoken-npm-9.0.0-36fd1594c0-769ea563e9.zip/node_modules/jsonwebtoken/",\
         "packageDependencies": [\
@@ -20430,15 +20381,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["lodash.includes", [\
-      ["npm:4.3.0", {\
-        "packageLocation": "./.yarn/cache/lodash.includes-npm-4.3.0-3a2f6fa22c-45e0a7c783.zip/node_modules/lodash.includes/",\
-        "packageDependencies": [\
-          ["lodash.includes", "npm:4.3.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["lodash.isarguments", [\
       ["npm:3.1.0", {\
         "packageLocation": "./.yarn/cache/lodash.isarguments-npm-3.1.0-9e74d350b8-e5186d5fe0.zip/node_modules/lodash.isarguments/",\
@@ -20448,56 +20390,11 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["lodash.isboolean", [\
-      ["npm:3.0.3", {\
-        "packageLocation": "./.yarn/cache/lodash.isboolean-npm-3.0.3-b575b41488-b70068b4a8.zip/node_modules/lodash.isboolean/",\
-        "packageDependencies": [\
-          ["lodash.isboolean", "npm:3.0.3"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["lodash.isinteger", [\
-      ["npm:4.0.4", {\
-        "packageLocation": "./.yarn/cache/lodash.isinteger-npm-4.0.4-42add9f4e1-c971f5a2d6.zip/node_modules/lodash.isinteger/",\
-        "packageDependencies": [\
-          ["lodash.isinteger", "npm:4.0.4"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["lodash.ismatch", [\
       ["npm:4.4.0", {\
         "packageLocation": "./.yarn/cache/lodash.ismatch-npm-4.4.0-e538fd6c3d-946a7176cd.zip/node_modules/lodash.ismatch/",\
         "packageDependencies": [\
           ["lodash.ismatch", "npm:4.4.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["lodash.isnumber", [\
-      ["npm:3.0.3", {\
-        "packageLocation": "./.yarn/cache/lodash.isnumber-npm-3.0.3-b3bb5f7347-913784275b.zip/node_modules/lodash.isnumber/",\
-        "packageDependencies": [\
-          ["lodash.isnumber", "npm:3.0.3"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["lodash.isplainobject", [\
-      ["npm:4.0.6", {\
-        "packageLocation": "./.yarn/cache/lodash.isplainobject-npm-4.0.6-d73937742f-29c6351f28.zip/node_modules/lodash.isplainobject/",\
-        "packageDependencies": [\
-          ["lodash.isplainobject", "npm:4.0.6"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["lodash.isstring", [\
-      ["npm:4.0.1", {\
-        "packageLocation": "./.yarn/cache/lodash.isstring-npm-4.0.1-721fee791c-eaac87ae96.zip/node_modules/lodash.isstring/",\
-        "packageDependencies": [\
-          ["lodash.isstring", "npm:4.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -24256,10 +24153,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["passport", [\
-      ["npm:0.6.0", {\
-        "packageLocation": "./.yarn/cache/passport-npm-0.6.0-0a57682d5b-5051e1d773.zip/node_modules/passport/",\
+      ["npm:0.7.0", {\
+        "packageLocation": "./.yarn/cache/passport-npm-0.7.0-df02531736-0ebd4de8e3.zip/node_modules/passport/",\
         "packageDependencies": [\
-          ["passport", "npm:0.6.0"],\
+          ["passport", "npm:0.7.0"],\
           ["passport-strategy", "npm:1.0.0"],\
           ["pause", "npm:0.0.1"],\
           ["utils-merge", "npm:1.0.1"]\
@@ -24268,21 +24165,21 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["passport-google-oauth20", [\
-      ["npm:1.0.0", {\
-        "packageLocation": "./.yarn/cache/passport-google-oauth20-npm-1.0.0-8653a5caa1-2ce0dc012c.zip/node_modules/passport-google-oauth20/",\
+      ["npm:2.0.0", {\
+        "packageLocation": "./.yarn/cache/passport-google-oauth20-npm-2.0.0-4187da29c8-bfd1316ec7.zip/node_modules/passport-google-oauth20/",\
         "packageDependencies": [\
-          ["passport-google-oauth20", "npm:1.0.0"],\
+          ["passport-google-oauth20", "npm:2.0.0"],\
           ["passport-oauth2", "npm:1.6.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["passport-jwt", [\
-      ["npm:4.0.0", {\
-        "packageLocation": "./.yarn/cache/passport-jwt-npm-4.0.0-1bcfa2e3a3-4fceeb0043.zip/node_modules/passport-jwt/",\
+      ["npm:4.0.1", {\
+        "packageLocation": "./.yarn/cache/passport-jwt-npm-4.0.1-2841eea09e-030ef53632.zip/node_modules/passport-jwt/",\
         "packageDependencies": [\
-          ["passport-jwt", "npm:4.0.0"],\
-          ["jsonwebtoken", "npm:8.5.1"],\
+          ["passport-jwt", "npm:4.0.1"],\
+          ["jsonwebtoken", "npm:9.0.0"],\
           ["passport-strategy", "npm:1.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -24315,10 +24212,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["passport-oauth2-refresh", [\
-      ["npm:2.1.0", {\
-        "packageLocation": "./.yarn/cache/passport-oauth2-refresh-npm-2.1.0-6653fa6fe0-e5a14d24c4.zip/node_modules/passport-oauth2-refresh/",\
+      ["npm:2.2.0", {\
+        "packageLocation": "./.yarn/cache/passport-oauth2-refresh-npm-2.2.0-d29b019af5-23499d5faa.zip/node_modules/passport-oauth2-refresh/",\
         "packageDependencies": [\
-          ["passport-oauth2-refresh", "npm:2.1.0"]\
+          ["passport-oauth2-refresh", "npm:2.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\

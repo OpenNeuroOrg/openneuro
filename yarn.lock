@@ -5189,8 +5189,8 @@ __metadata:
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.34.0"
-    "@openneuro/client": "npm:^4.26.0"
-    "@openneuro/components": "npm:^4.26.0"
+    "@openneuro/client": "npm:^4.26.1"
+    "@openneuro/components": "npm:^4.26.1"
     "@tanstack/react-table": "npm:^8.9.3"
     "@testing-library/jest-dom": "npm:6.4.2"
     "@testing-library/react": "npm:^14.2.1"
@@ -5245,7 +5245,7 @@ __metadata:
   resolution: "@openneuro/cli@workspace:packages/openneuro-cli"
   dependencies:
     "@apollo/client": "npm:3.7.2"
-    "@openneuro/client": "npm:^4.26.0"
+    "@openneuro/client": "npm:^4.26.1"
     "@types/mkdirp": "npm:1.0.2"
     "@types/node": "npm:20.12.7"
     bids-validator: "npm:1.14.6"
@@ -5269,14 +5269,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@npm:^4.26.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@npm:^4.26.1, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": "npm:3.7.2"
     "@graphql-tools/mock": "npm:^9.0.0"
     "@graphql-tools/schema": "npm:^10.0.0"
-    "@openneuro/server": "npm:^4.26.0"
+    "@openneuro/server": "npm:^4.26.1"
     core-js: "npm:^3.10.1"
     crypto-hash: "npm:^1.3.0"
     graphql: "npm:16.8.1"
@@ -5288,7 +5288,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@npm:^4.26.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@npm:^4.26.1, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -5329,8 +5329,8 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.7.2"
     "@elastic/elasticsearch": "npm:8.13.1"
-    "@openneuro/client": "npm:^4.26.0"
-    "@openneuro/search": "npm:^4.26.0"
+    "@openneuro/client": "npm:^4.26.1"
+    "@openneuro/search": "npm:^4.26.1"
     "@types/jsonwebtoken": "npm:^8"
     "@types/node": "npm:20.12.7"
     "@types/tsc-watch": "npm:^4"
@@ -5344,7 +5344,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@npm:^4.26.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@npm:^4.26.1, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -5359,7 +5359,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@npm:^4.26.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@npm:^4.26.1, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -5369,8 +5369,7 @@ __metadata:
     "@elastic/elasticsearch": "npm:8.13.1"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@keyv/redis": "npm:^2.7.0"
-    "@openneuro/search": "npm:^4.26.0"
-    "@passport-next/passport-google-oauth2": "npm:^1.0.0"
+    "@openneuro/search": "npm:^4.26.1"
     "@sentry/node": "npm:^4.5.3"
     "@types/cors": "npm:^2"
     "@types/draft-js": "npm:^0.10.43"
@@ -5407,10 +5406,10 @@ __metadata:
     node-mailjet: "npm:^3.3.5"
     nodemon: "npm:3.1.0"
     object-hash: "npm:2.1.1"
-    passport: "npm:^0.6.0"
-    passport-google-oauth20: "npm:^1.0.0"
-    passport-jwt: "npm:^4.0.0"
-    passport-oauth2-refresh: "npm:^2.0.0"
+    passport: "npm:0.7.0"
+    passport-google-oauth20: "npm:2.0.0"
+    passport-jwt: "npm:4.0.1"
+    passport-oauth2-refresh: "npm:2.2.0"
     passport-orcid: "npm:0.0.4"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -5478,33 +5477,6 @@ __metadata:
   version: 1.15.2
   resolution: "@opentelemetry/semantic-conventions@npm:1.15.2"
   checksum: 10/1f35515109ee8512d136256e78f81ad1334f9c5f5a5d9ceab9f472938e8e177745ac14a2790c819551243f81034d9b0f527b93da72a6929fef5358abd39216e0
-  languageName: node
-  linkType: hard
-
-"@passport-next/passport-google-oauth2@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@passport-next/passport-google-oauth2@npm:1.0.0"
-  dependencies:
-    "@passport-next/passport-oauth2": "npm:1.7.x"
-  checksum: 10/b369a51d38e5e74fe6531c0a11c2354f75a182496252a79ef9903a8349cfe76c53f28108db463afbb9d9cbd8a6c14744a1103949ec74022d0c04adf92bb96810
-  languageName: node
-  linkType: hard
-
-"@passport-next/passport-oauth2@npm:1.7.x":
-  version: 1.7.1
-  resolution: "@passport-next/passport-oauth2@npm:1.7.1"
-  dependencies:
-    "@passport-next/passport-strategy": "npm:1.1.x"
-    lodash: "npm:^4.17.11"
-    oauth: "npm:0.9.x"
-  checksum: 10/9f34c070f5c8a6c8dfc9b7f87b03636d52fa8bed6cb9443d22adde4cd3cc6c5f8a4ecc394f244dda0ba999ead15b450b61c20fba201113bfe081e98288555420
-  languageName: node
-  linkType: hard
-
-"@passport-next/passport-strategy@npm:1.1.x":
-  version: 1.1.0
-  resolution: "@passport-next/passport-strategy@npm:1.1.0"
-  checksum: 10/48ea919461fb901a9a08b892d517a5e408093156620f157efdd859fd8a5caf57cb423116ab23a50f812e34a3175037b0dbfd525cf1db11373f7449904b820c44
   languageName: node
   linkType: hard
 
@@ -16866,24 +16838,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:^8.2.0":
-  version: 8.5.1
-  resolution: "jsonwebtoken@npm:8.5.1"
-  dependencies:
-    jws: "npm:^3.2.2"
-    lodash.includes: "npm:^4.3.0"
-    lodash.isboolean: "npm:^3.0.3"
-    lodash.isinteger: "npm:^4.0.4"
-    lodash.isnumber: "npm:^3.0.3"
-    lodash.isplainobject: "npm:^4.0.6"
-    lodash.isstring: "npm:^4.0.1"
-    lodash.once: "npm:^4.0.0"
-    ms: "npm:^2.1.1"
-    semver: "npm:^5.6.0"
-  checksum: 10/a7b52ea570f70bea183ceca970c003f223d9d3425d72498002e9775485c7584bfa3751d1c7291dbb59738074cba288effe73591b87bec5d467622ab3a156fdb6
-  languageName: node
-  linkType: hard
-
 "jsonwebtoken@npm:^9.0.0":
   version: 9.0.0
   resolution: "jsonwebtoken@npm:9.0.0"
@@ -17364,31 +17318,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.includes@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "lodash.includes@npm:4.3.0"
-  checksum: 10/45e0a7c7838c931732cbfede6327da321b2b10482d5063ed21c020fa72b09ca3a4aa3bda4073906ab3f436cf36eb85a52ea3f08b7bab1e0baca8235b0e08fe51
-  languageName: node
-  linkType: hard
-
 "lodash.isarguments@npm:^3.1.0":
   version: 3.1.0
   resolution: "lodash.isarguments@npm:3.1.0"
   checksum: 10/e5186d5fe0384dcb0652501d9d04ebb984863ebc9c9faa2d4b9d5dfd81baef9ffe8e2887b9dc471d62ed092bc0788e5f1d42e45c72457a2884bbb54ac132ed92
-  languageName: node
-  linkType: hard
-
-"lodash.isboolean@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "lodash.isboolean@npm:3.0.3"
-  checksum: 10/b70068b4a8b8837912b54052557b21fc4774174e3512ed3c5b94621e5aff5eb6c68089d0a386b7e801d679cd105d2e35417978a5e99071750aa2ed90bffd0250
-  languageName: node
-  linkType: hard
-
-"lodash.isinteger@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "lodash.isinteger@npm:4.0.4"
-  checksum: 10/c971f5a2d67384f429892715550c67bac9f285604a0dd79275fd19fef7717aec7f2a6a33d60769686e436ceb9771fd95fe7fcb68ad030fc907d568d5a3b65f70
   languageName: node
   linkType: hard
 
@@ -17399,27 +17332,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.isnumber@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "lodash.isnumber@npm:3.0.3"
-  checksum: 10/913784275b565346255e6ae6a6e30b760a0da70abc29f3e1f409081585875105138cda4a429ff02577e1bc0a7ae2a90e0a3079a37f3a04c3d6c5aaa532f4cab2
-  languageName: node
-  linkType: hard
-
-"lodash.isplainobject@npm:^4.0.6":
-  version: 4.0.6
-  resolution: "lodash.isplainobject@npm:4.0.6"
-  checksum: 10/29c6351f281e0d9a1d58f1a4c8f4400924b4c79f18dfc4613624d7d54784df07efaff97c1ff2659f3e085ecf4fff493300adc4837553104cef2634110b0d5337
-  languageName: node
-  linkType: hard
-
-"lodash.isstring@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "lodash.isstring@npm:4.0.1"
-  checksum: 10/eaac87ae9636848af08021083d796e2eea3d02e80082ab8a9955309569cb3a463ce97fd281d7dc119e402b2e7d8c54a23914b15d2fc7fff56461511dc8937ba0
-  languageName: node
-  linkType: hard
-
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -17427,7 +17339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.once@npm:^4.0.0, lodash.once@npm:^4.1.1":
+"lodash.once@npm:^4.1.1":
   version: 4.1.1
   resolution: "lodash.once@npm:4.1.1"
   checksum: 10/202f2c8c3d45e401b148a96de228e50ea6951ee5a9315ca5e15733d5a07a6b1a02d9da1e7fdf6950679e17e8ca8f7190ec33cae47beb249b0c50019d753f38f3
@@ -17481,7 +17393,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.10, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.15, lodash@npm:^4.17.21, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:~4.17.21":
+"lodash@npm:^4.17.10, lodash@npm:^4.17.12, lodash@npm:^4.17.15, lodash@npm:^4.17.21, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:~4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10/c08619c038846ea6ac754abd6dd29d2568aa705feb69339e836dfa8d8b09abbb2f859371e86863eda41848221f9af43714491467b5b0299122431e202bb0c532
@@ -20967,29 +20879,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-google-oauth20@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "passport-google-oauth20@npm:1.0.0"
+"passport-google-oauth20@npm:2.0.0":
+  version: 2.0.0
+  resolution: "passport-google-oauth20@npm:2.0.0"
   dependencies:
     passport-oauth2: "npm:1.x.x"
-  checksum: 10/2ce0dc012c3e7e35867d6f9e0d0d1f3186482353f21588219dbca9163f7a1a13db557f23b57da3d1096744b12dc8ffc79e52701e2e3f720d8ead51d3255c4f57
+  checksum: 10/bfd1316ec7cbef5c25f41daa752eade509dffd3016cc962bf2935d577b3dcfa379d8f0d177e28dd1af03b443cc04382108956a505c0134973f85c155adfd8101
   languageName: node
   linkType: hard
 
-"passport-jwt@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "passport-jwt@npm:4.0.0"
+"passport-jwt@npm:4.0.1":
+  version: 4.0.1
+  resolution: "passport-jwt@npm:4.0.1"
   dependencies:
-    jsonwebtoken: "npm:^8.2.0"
+    jsonwebtoken: "npm:^9.0.0"
     passport-strategy: "npm:^1.0.0"
-  checksum: 10/4fceeb00436b0386fb2c046444439fae19f14a45fb143f87c6f7a74fd7704910422a19026fbde89392db0a5ae4f6fc3f585807f2dd3f335c67b43a8370ae2109
+  checksum: 10/030ef53632407ff7f4fcbe145b5664f30d5210d8c2834460fe626cca99ea004fd7997c76f1531a061c0f6185d18b2499c059f8933c8efdb51272103ffb6be45d
   languageName: node
   linkType: hard
 
-"passport-oauth2-refresh@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "passport-oauth2-refresh@npm:2.1.0"
-  checksum: 10/e5a14d24c4bd301dbf1bed6fa90f49503e12e4927e87494547fb898162c4fb9077ad2b4964a4f65ccf08121cae5b8f872b16ee5e1965fa0b6f4375ea632b03b2
+"passport-oauth2-refresh@npm:2.2.0":
+  version: 2.2.0
+  resolution: "passport-oauth2-refresh@npm:2.2.0"
+  checksum: 10/23499d5faaa3e03ab57fe1fdd2243a36e4cc2e7ce296f756d5fc0c50e4b519408ea77c3371a3bb1214dec3bb8d197d6cd806928b21c4786068c4dbdfb0b526f4
   languageName: node
   linkType: hard
 
@@ -21035,14 +20947,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "passport@npm:0.6.0"
+"passport@npm:0.7.0":
+  version: 0.7.0
+  resolution: "passport@npm:0.7.0"
   dependencies:
     passport-strategy: "npm:1.x.x"
     pause: "npm:0.0.1"
     utils-merge: "npm:^1.0.1"
-  checksum: 10/5051e1d773ac0d802d4d71315f5fee566b8765b9731396b60c1d6822b7983bef31ae2f51af94d973ade94fb040efae0816e736e534b55294d0fbd10efcdf2d36
+  checksum: 10/0ebd4de8e3cba6731b1fddd09b95b8332526f316afded9c9589ff68751e10001c9f1c007170a516e8c1909f9fafdc378c12feb82820241856775005924735b29
   languageName: node
   linkType: hard
 
