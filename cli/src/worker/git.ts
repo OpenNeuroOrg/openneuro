@@ -111,7 +111,9 @@ async function shouldBeAnnexed(
  * git-annex add equivalent
  */
 async function add(event: GitWorkerEventAdd) {
-  const { size } = await context.fs.promises.stat(event.data.path)
+  const statValue = await context.fs.promises.stat(event.data.path)
+  console.log(statValue)
+  const { size } = statValue
   const annexed = await shouldBeAnnexed(
     event.data.relativePath,
     size,
