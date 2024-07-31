@@ -1,7 +1,6 @@
 import asyncio
-import os.path
+import gzip
 import logging
-import subprocess
 
 import falcon
 
@@ -99,11 +98,15 @@ class GitReceiveResource:
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
-            while True:
-                chunk = await req.stream.read(CHUNK_SIZE_BYTES)
-                if not chunk:
-                    break
-                process.stdin.write(chunk)
+            # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
+            if req.get_header('content-encoding') == 'gzip':
+                process.stdin.write(gzip.decompress(await req.stream.read()))
+            else:
+                while True:
+                    chunk = await req.stream.read(CHUNK_SIZE_BYTES)
+                    if not chunk:
+                        break
+                    process.stdin.write(chunk)
             
             process.stdin.close()
             resp.stream = process.stdout
@@ -136,11 +139,15 @@ class GitUploadResource:
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
-            while True:
-                chunk = await req.stream.read(CHUNK_SIZE_BYTES)
-                if not chunk:
-                    break
-                process.stdin.write(chunk)
+            # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
+            if req.get_header('content-encoding') == 'gzip':
+                process.stdin.write(gzip.decompress(await req.stream.read()))
+            else:
+                while True:
+                    chunk = await req.stream.read(CHUNK_SIZE_BYTES)
+                    if not chunk:
+                        break
+                    process.stdin.write(chunk)
             
             process.stdin.close()
             resp.stream = process.stdout
