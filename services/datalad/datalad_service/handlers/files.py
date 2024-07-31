@@ -3,6 +3,7 @@ import os
 
 import falcon
 import pygit2
+import aiofiles
 
 from datalad_service.common.git import git_show
 from datalad_service.common.user import get_user_info
@@ -16,7 +17,7 @@ class FilesResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, dataset, filename, snapshot='HEAD'):
+    async def on_get(self, req, resp, dataset, filename, snapshot='HEAD'):
         ds_path = self.store.get_dataset_path(dataset)
         try:
             try:
@@ -28,14 +29,14 @@ class FilesResource:
                         ds_path, os.path.dirname(filename), file_content))
                     # Verify the annex path is within the dataset dir
                     if ds_path == os.path.commonpath((ds_path, target_path)):
-                        fd = open(target_path, 'rb')
+                        fd = await aiofiles.open(target_path, 'rb')
                         resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
                         resp.status = falcon.HTTP_OK
                     else:
                         resp.media = {'error': 'file not found in git tree'}
                         resp.status = falcon.HTTP_NOT_FOUND
                 else:
-                    resp.body = file_content
+                    resp.text = file_content
                     resp.status = falcon.HTTP_OK
             except pygit2.GitError:
                 resp.status = falcon.HTTP_NOT_FOUND
@@ -56,7 +57,7 @@ class FilesResource:
             self.logger.exception(
                 f'An unknown error processing file "{filename}"')
 
-    def on_post(self, req, resp, dataset, filename):
+    async def on_post(self, req, resp, dataset, filename):
         """Post will create new files and adds them to the annex if they do not exist, else update existing files."""
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
@@ -68,7 +69,7 @@ class FilesResource:
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                update_file(file_path, req.stream)
+                await update_file(file_path, req.stream)
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
@@ -77,7 +78,7 @@ class FilesResource:
 
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     # Begin writing stream to disk
-                    update_file(file_path, req.stream)
+                    await update_file(file_path, req.stream)
                     media_dict = {'created': filename}
                     resp.media = media_dict
                     resp.status = falcon.HTTP_OK
@@ -88,15 +89,16 @@ class FilesResource:
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
 
-    def on_delete(self, req, resp, dataset):
+    async def on_delete(self, req, resp, dataset):
         """Delete an existing file from a dataset"""
-        if req.media:
+        media = await req.get_media()
+        if media:
             ds_path = self.store.get_dataset_path(dataset)
             files_to_delete = []
             dirs_to_delete = []
             paths_not_found = []
             filenames = [filename.replace(':', '/')
-                         for filename in req.media['filenames']]
+                         for filename in media['filenames']]
             for filename in filenames:
                 file_path = os.path.join(ds_path, filename)
                 if os.path.exists(file_path):

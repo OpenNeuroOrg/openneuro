@@ -15,7 +15,7 @@ def test_parse_authorization_header():
         f'Bearer {raw_token}') == raw_token
 
 
-def test_auth_middleware_bearer():
+async def test_auth_middleware_bearer():
     middleware = AuthenticateMiddleware()
 
     req = Request({
@@ -30,7 +30,7 @@ def test_auth_middleware_bearer():
 
     resp = Response()
 
-    middleware.process_request(req, resp)
+    await middleware.process_request(req, resp)
 
     assert 'user' in req.context
     assert 'dataset' in req.context['user']
@@ -39,7 +39,7 @@ def test_auth_middleware_bearer():
     assert req.context['user']['sub'] == 'fd44f5c5-b21b-420b-9555-af856efc9452'
 
 
-def test_auth_middleware_basic():
+async def test_auth_middleware_basic():
     middleware = AuthenticateMiddleware()
 
     req = Request({
@@ -54,7 +54,7 @@ def test_auth_middleware_basic():
 
     resp = Response()
 
-    middleware.process_request(req, resp)
+    await middleware.process_request(req, resp)
 
     assert 'user' in req.context
     assert 'dataset' in req.context['user']

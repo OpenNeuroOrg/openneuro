@@ -1,5 +1,4 @@
 import requests
-import pygit2
 
 from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.tasks.validator import validate_dataset

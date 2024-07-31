@@ -17,7 +17,7 @@ class DatasetResource:
     def __init__(self, store):
         self.store = store
 
-    def on_get(self, req, resp, dataset):
+    async def on_get(self, req, resp, dataset):
         ds_path = self.store.get_dataset_path(dataset)
         if (os.path.isdir(ds_path)):
             dataset_description = {
@@ -30,7 +30,7 @@ class DatasetResource:
             resp.media = {'error': 'dataset not found'}
             resp.status = falcon.HTTP_NOT_FOUND
 
-    def on_post(self, req, resp, dataset):
+    async def on_post(self, req, resp, dataset):
         ds_path = self.store.get_dataset_path(dataset)
         if (os.path.isdir(ds_path)):
             resp.media = {'error': 'dataset already exists'}
@@ -46,7 +46,7 @@ class DatasetResource:
             resp.media = {'hexsha': hexsha}
             resp.status = falcon.HTTP_OK
 
-    def on_delete(self, req, resp, dataset):
+    async def on_delete(self, req, resp, dataset):
         dataset_path = self.store.get_dataset_path(dataset)
 
         def run_delete_tasks():

@@ -176,4 +176,6 @@ def mock_server_url(monkeypatch):
 
 @pytest.fixture
 def client(datalad_store, monkeypatch):
-    return testing.TestClient(create_app(datalad_store.annex_path))
+    monkeypatch.setenv('DATALAD_DATASET_PATH', str(datalad_store.annex_path))
+    monkeypatch.setattr(datalad_service.config, 'DATALAD_DATASET_PATH', str(datalad_store.annex_path))
+    return testing.TestClient(create_app())

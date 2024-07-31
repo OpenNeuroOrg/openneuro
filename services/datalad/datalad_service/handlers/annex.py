@@ -3,6 +3,7 @@ import logging
 import os
 import struct
 
+import aiofiles
 import falcon
 
 from datalad_service.common.stream import update_file
@@ -34,7 +35,7 @@ class GitAnnexResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_head(self, req, resp, dataset, key, worker=None):
+    async def on_head(self, req, resp, dataset, key, worker=None):
         """HEAD requests check if objects exist already"""
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if worker and not _check_git_access(req, dataset):
@@ -46,7 +47,7 @@ class GitAnnexResource:
         else:
             resp.status = falcon.HTTP_NOT_FOUND
 
-    def on_get(self, req, resp, dataset, key, worker=None):
+    async def on_get(self, req, resp, dataset, key, worker=None):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if worker and not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
@@ -54,12 +55,12 @@ class GitAnnexResource:
         annex_object_path = os.path.join(dataset_path, key_to_path(key))
         if os.path.exists(annex_object_path):
             resp.status = falcon.HTTP_OK
-            fd = open(annex_object_path, 'rb')
+            fd = await aiofiles.open(annex_object_path, 'rb')
             resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
         else:
             resp.status = falcon.HTTP_NOT_FOUND
 
-    def on_post(self, req, resp, worker, dataset, key):
+    async def on_post(self, req, resp, worker, dataset, key):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
@@ -72,10 +73,10 @@ class GitAnnexResource:
             os.makedirs(os.path.dirname(annex_object_path), exist_ok=True)
             # Begin writing stream to temp file and hard link once done
             # It should not be written unless the full request completes
-            update_file(annex_object_path, req.stream)
+            await update_file(annex_object_path, req.stream)
             resp.status = falcon.HTTP_OK
 
-    def on_delete(self, req, resp, worker, dataset, key):
+    async def on_delete(self, req, resp, worker, dataset, key):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)

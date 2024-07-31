@@ -11,7 +11,7 @@ class DraftResource:
     def __init__(self, store):
         self.store = store
 
-    def on_get(self, req, resp, dataset):
+    async def on_get(self, req, resp, dataset):
         """
         Return draft state (other than files).
         """
@@ -25,7 +25,7 @@ class DraftResource:
         else:
             resp.status = falcon.HTTP_NOT_FOUND
 
-    def on_post(self, req, resp, dataset):
+    async def on_post(self, req, resp, dataset):
         """
         Commit a draft change.
 

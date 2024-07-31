@@ -11,11 +11,11 @@ class RemoteImportResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp, dataset, import_id):
+    async def on_post(self, req, resp, dataset, import_id):
         name, email = get_user_info(req)
         dataset_path = self.store.get_dataset_path(dataset)
         upload_path = self.store.get_upload_path(dataset, import_id)
-        url = req.media.get('url')
+        url = (await req.get_media())['url']
         gevent.spawn(remote_import, dataset_path,
                      upload_path, import_id, url, name, email, req.cookies)
         resp.status = falcon.HTTP_OK

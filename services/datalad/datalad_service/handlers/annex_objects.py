@@ -11,7 +11,7 @@ class AnnexObjectsResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_delete(self, req, resp, dataset, snapshot, annex_key):
+    async def on_delete(self, req, resp, dataset, snapshot, annex_key):
         """Delete an existing annex_object on a dataset"""
         if annex_key:
             dataset_path = self.store.get_dataset_path(dataset)

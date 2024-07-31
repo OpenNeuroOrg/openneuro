@@ -11,7 +11,7 @@ class TreeResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, dataset, tree):
+    async def on_get(self, req, resp, dataset, tree):
         # Request for index of files
         # Return a list of file objects
         # {name, path, size}

@@ -8,7 +8,7 @@ class HistoryResource:
     def __init__(self, store):
         self.store = store
 
-    def on_get(self, req, resp, dataset):
+    async def on_get(self, req, resp, dataset):
         """
         Return dataset history (text format)
         """

@@ -18,7 +18,7 @@ class SnapshotResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, dataset, snapshot=None):
+    async def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
         if not os.path.exists(self.store.get_dataset_path(dataset)):
             resp.status = falcon.HTTP_NOT_FOUND
@@ -38,9 +38,9 @@ class SnapshotResource:
             resp.media = {'snapshots': tags}
             resp.status = falcon.HTTP_OK
 
-    def on_post(self, req, resp, dataset, snapshot):
+    async def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        media = req.get_media(None)
+        media = await req.get_media(None)
         description_fields = {}
         snapshot_changes = []
         skip_publishing = False
@@ -68,7 +68,7 @@ class SnapshotResource:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_BAD_REQUEST
 
-    def on_delete(self, req, resp, dataset, snapshot):
+    async def on_delete(self, req, resp, dataset, snapshot):
         """Remove a tag on the dataset, which is equivalent to deleting a snapshot"""
         if snapshot:
             dataset_path = self.store.get_dataset_path(dataset)

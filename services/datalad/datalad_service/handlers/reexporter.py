@@ -10,7 +10,7 @@ class ReexporterResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp, dataset):
+    async def on_post(self, req, resp, dataset):
         dataset_path = self.store.get_dataset_path(dataset)
         gevent.spawn(export_dataset, dataset_path, req.cookies)
         resp.status = falcon.HTTP_OK

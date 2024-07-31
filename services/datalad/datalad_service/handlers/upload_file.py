@@ -43,7 +43,7 @@ class UploadFileResource(UploadResource):
                 'error': 'You do not have permission to access this dataset'}
             resp.status = falcon.HTTP_FORBIDDEN
 
-    def on_post(self, req, resp, worker, dataset, upload, filename):
+    async def on_post(self, req, resp, worker, dataset, upload, filename):
         # Check that this request includes the correct token
         if self._check_access(req, dataset, upload):
             if skip_invalid_files(filename):
@@ -56,13 +56,13 @@ class UploadFileResource(UploadResource):
             file_path = os.path.join(upload_path, filename)
             # Make any missing parent directories
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            update_file(file_path, req.stream)
+            await update_file(file_path, req.stream)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         else:
             self._handle_failed_access(req, resp)
 
-    def on_get(self, req, resp, worker, dataset, upload):
+    async def on_get(self, req, resp, worker, dataset, upload):
         """Return the current upload state, files and sizes."""
         if self._check_access(req, dataset, upload):
             upload_path = self.store.get_upload_path(dataset, upload)
