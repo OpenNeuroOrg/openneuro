@@ -1,5 +1,3 @@
-import logging
-
 import falcon
 import falcon.asgi
 from falcon_elastic_apm import ElasticApmMiddleware
