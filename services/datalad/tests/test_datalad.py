@@ -60,8 +60,8 @@ def test_create_dataset_unusual_default_branch(datalad_store):
         create_dataset(datalad_store, ds_id, author, 'unusual')
 
 
-def test_delete_dataset(datalad_store, new_dataset):
-    delete_dataset(new_dataset.path)
+async def test_delete_dataset(datalad_store, new_dataset):
+    await delete_dataset(new_dataset.path)
     assert not os.path.exists(new_dataset.path)
 
 

@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os.path
 import re
@@ -113,7 +114,7 @@ def check_remote_has_version(dataset_path, remote, tag):
 
 
 @elasticapm.capture_span()
-def delete_s3_sibling(dataset_id):
+async def delete_s3_sibling(dataset_id):
     try:
         client = boto3.client(
             's3',
@@ -127,6 +128,8 @@ def delete_s3_sibling(dataset_id):
             versions.extend(response.get('DeleteMarkers', []))
             object_delete_list.extend(
                 [{'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
+            # Yield after each request
+            await asyncio.sleep(0)
         for i in range(0, len(object_delete_list), 1000):
             client.delete_objects(
                 Bucket=get_s3_bucket(),
@@ -135,32 +138,36 @@ def delete_s3_sibling(dataset_id):
                     'Quiet': True
                 }
             )
+            # Yield after each request
+            await asyncio.sleep(0)
     except Exception as e:
         raise Exception(
             f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})')
 
 
 @elasticapm.capture_span()
-def delete_github_sibling(dataset_id):
+async def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
     org = ses.get_organization(DATALAD_GITHUB_ORG)
     repos = org.get_repos()
     try:
         r = next(r for r in repos if r.name == dataset_id)
         r.delete()
+        # Yield between deletes
+        await asyncio.sleep(0)
     except StopIteration as e:
         raise Exception(
             f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
 
 
-def delete_siblings(dataset_id):
+async def delete_siblings(dataset_id):
     try:
-        delete_s3_sibling(dataset_id)
+        await delete_s3_sibling(dataset_id)
     except:
         pass
-
+    await asyncio.sleep(0)
     try:
-        delete_github_sibling(dataset_id)
+        await delete_github_sibling(dataset_id)
     except:
         pass
 

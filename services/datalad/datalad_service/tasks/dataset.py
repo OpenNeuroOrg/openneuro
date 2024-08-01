@@ -3,6 +3,7 @@ Dataset global tasks
 
 Any operations that affect an entire dataset (such as creating snapshots)
 """
+import asyncio
 import os
 import stat
 import uuid
@@ -64,7 +65,7 @@ def create_dataset(store, dataset, author=None, initial_head='main'):
     return repo.head.target.hex
 
 
-def force_rmtree(root_dir):
+async def force_rmtree(root_dir):
     """Delete a git tree no matter what. Be CAREFUL calling this!"""
     for root, dirs, files in os.walk(root_dir, topdown=False):
         for name in files:
@@ -75,13 +76,15 @@ def force_rmtree(root_dir):
                 os.remove(file_path)
             elif os.path.islink(file_path):
                 os.unlink(file_path)
+        await asyncio.sleep(0)
         for name in dirs:
             dir_path = os.path.join(root, name)
             os.chmod(dir_path, stat.S_IWUSR)
             os.rmdir(dir_path)
+        await asyncio.sleep(0)
     os.rmdir(root_dir)
 
 
-def delete_dataset(dataset_path):
+async def delete_dataset(dataset_path):
     """Fully delete a given dataset. Removes all snapshots!"""
-    force_rmtree(dataset_path)
+    await force_rmtree(dataset_path)

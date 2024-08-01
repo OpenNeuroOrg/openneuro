@@ -1,7 +1,7 @@
+import asyncio
 import os
 
 import falcon
-import gevent
 import pygit2
 
 from datalad_service.common.user import get_user_info
@@ -48,14 +48,13 @@ class DatasetResource:
 
     async def on_delete(self, req, resp, dataset):
         dataset_path = self.store.get_dataset_path(dataset)
-
-        def run_delete_tasks():
-            delete_siblings(dataset)
-            gevent.sleep()
-            delete_dataset(dataset_path)
+        async def async_delete():
+            await delete_siblings(dataset)
+            await delete_dataset(dataset_path)
 
         try:
-            gevent.spawn(run_delete_tasks)
+            # Don't block before responding
+            asyncio.run_task(async_delete())
             resp.media = {}
             resp.status = falcon.HTTP_OK
         except:
