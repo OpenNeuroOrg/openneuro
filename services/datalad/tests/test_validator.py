@@ -1,36 +1,40 @@
+import asyncio
+
 import pytest
 
-from datalad_service.tasks.validator import validate_dataset_sync
+from datalad_service.tasks.validator import validate_dataset_call
 from unittest.mock import Mock
 from types import SimpleNamespace
-from gevent import subprocess
-
 
 class MockLogger:
     pass
 
 
-def test_validator_error(new_dataset):
+async def test_validator_error(new_dataset):
     logger = MockLogger()
     logger.log = Mock()
-    validate_dataset_sync(new_dataset.path, 'HEAD', logger)
+    await validate_dataset_call(new_dataset.path, 'HEAD', logger)
     # new_dataset completes validation with errors, should not call logger
     assert not logger.log.called
 
 
 @pytest.fixture
 def mock_validator_crash(monkeypatch):
-    def return_bad_json(*args, **kwargs):
+    async def return_bad_json(*args, **kwargs):
+        async def noop():
+            pass
+        async def invalidJson():
+            return (b'{invalidJson', b'')
         return SimpleNamespace(
-            wait=lambda timeout=None: None,
-            kill=lambda: None,
-            communicate=lambda: (b'{invalidJson', b'')
+            wait=noop,
+            kill=noop,
+            communicate=invalidJson
         )
-    monkeypatch.setattr(subprocess, 'Popen', return_bad_json)
+    monkeypatch.setattr(asyncio, 'create_subprocess_exec', return_bad_json)
 
 
-def test_validator_bad_json(new_dataset, mock_validator_crash):
+async def test_validator_bad_json(new_dataset, mock_validator_crash):
     logger = MockLogger()
     logger.log = Mock()
-    validate_dataset_sync(new_dataset.path, 'HEAD', logger)
+    await validate_dataset_call(new_dataset.path, 'HEAD', logger)
     assert logger.log.called

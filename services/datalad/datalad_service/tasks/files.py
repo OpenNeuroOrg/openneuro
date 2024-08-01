@@ -1,3 +1,4 @@
+import asyncio
 import subprocess
 import pygit2
 
@@ -19,8 +20,7 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
         COMMITTER_NAME, COMMITTER_EMAIL)
     ref = git_commit(repo, files, author)
     # Run the validator but don't block on the request
-    validate_dataset(dataset, dataset_path, ref.hex,
-                     cookies)
+    asyncio.create_task(validate_dataset(dataset, dataset_path, ref.hex, cookies))
     return ref
 
 
@@ -42,7 +42,7 @@ def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     repo.checkout_index()
     hexsha = git_commit_index(repo, author,
                               message="[OpenNeuro] Files removed").hex
-    update_head(dataset, dataset_path, hexsha, cookies)
+    asyncio.create_task(update_head(dataset, dataset_path, hexsha, cookies))
 
 
 def remove_annex_object(dataset_path, annex_key):

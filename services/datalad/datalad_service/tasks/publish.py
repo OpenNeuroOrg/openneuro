@@ -5,7 +5,6 @@ import re
 import elasticapm
 import pygit2
 import boto3
-import gevent
 from github import Github
 
 import datalad_service.common.s3

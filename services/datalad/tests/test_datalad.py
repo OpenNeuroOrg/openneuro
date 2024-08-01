@@ -28,7 +28,7 @@ def test_create_dataset(datalad_store):
         assert False, "dataset datalad id is not a valid uuid4"
 
 
-def test_create_dataset_master(datalad_store):
+async def test_create_dataset_master(datalad_store):
     ds_id = 'ds000025'
     ds_path = os.path.join(datalad_store.annex_path, ds_id)
     repo = pygit2.init_repository(
@@ -65,7 +65,7 @@ def test_delete_dataset(datalad_store, new_dataset):
     assert not os.path.exists(new_dataset.path)
 
 
-def test_commit_file(datalad_store, new_dataset):
+async def test_commit_file(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Write some files into the dataset first
     file_path = os.path.join(new_dataset.path, 'LICENSE')
