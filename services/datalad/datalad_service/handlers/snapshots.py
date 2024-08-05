@@ -1,7 +1,7 @@
+import asyncio
 import os
 import logging
 
-import gevent
 import falcon
 
 from datalad_service.tasks.snapshots import SnapshotDescriptionException, create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
@@ -60,7 +60,8 @@ class SnapshotResource:
             if not skip_publishing:
                 monitor_remote_configs(ds_path)
                 # Publish after response
-                gevent.spawn(export_dataset, ds_path, req.cookies)
+                asyncio.get_event_loop().run_in_executor(None, export_dataset,
+                                                         ds_path, req.cookies)
         except SnapshotExistsException as err:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_CONFLICT
