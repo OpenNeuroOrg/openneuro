@@ -64,4 +64,4 @@ export { default as ProgressBar } from "https://deno.land/x/progress@v1.3.9/mod.
 export { default as ignore } from "npm:ignore@5.3.0"
 export { encodeBase64 } from "https://deno.land/std@0.220.1/encoding/base64.ts"
 // Isomorphic git
-export { default as git, STAGE, TREE } from "npm:isomorphic-git@1.25.6"
+export { default as git, STAGE, TREE } from "npm:isomorphic-git@1.27.1"

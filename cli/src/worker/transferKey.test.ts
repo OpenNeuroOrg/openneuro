@@ -65,12 +65,16 @@ Deno.test({
   name: "storeKey() handles upload failure",
   async fn() {
     const mocked = mockFetch(new Response("", { status: 500 }))
+    const testData = "test data here"
+    const tmpFilePath = await Deno.makeTempFile()
+    const textEncoder = new TextEncoder()
+    await Deno.writeFile(tmpFilePath, textEncoder.encode(testData))
 
     try {
       const result = await storeKey(
         { url: "http://localhost", token: "" },
         "key",
-        "./deno.json",
+        tmpFilePath,
       )
       assertEquals(result, -1)
     } finally {
