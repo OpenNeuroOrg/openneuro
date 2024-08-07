@@ -21,7 +21,7 @@ class HistoryResource:
             for commit in repo.walk(head.id, pygit2.GIT_SORT_TIME):
                 references = []
                 for tag in tags:
-                    if tag.target.hex == commit.hex:
+                    if str(tag.target) == str(commit.id):
                         references.append(tag.name)
                 file_changes = []
                 if commit.parents:
@@ -33,7 +33,7 @@ class HistoryResource:
                                "mode": delta.new_file.mode, "binary": delta.is_binary, "status": delta.status_char()}
                     file_changes.append(changes)
                 new_log = {
-                    "id": commit.hex, "date": commit.commit_time,
+                    "id": str(commit.id), "date": commit.commit_time,
                     "authorName": commit.author.name, "authorEmail": commit.author.email,
                     "message": commit.message, "references": ",".join(references), "files": file_changes,
                     "filesChanged": diff.stats.files_changed, "insertions": diff.stats.insertions, "deletions": diff.stats.deletions}

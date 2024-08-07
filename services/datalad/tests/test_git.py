@@ -76,7 +76,7 @@ def test_git_tag(new_dataset):
     repo = pygit2.Repository(new_dataset.path)
     assert git.git_tag(repo) == []
     # Create a tag and check again
-    repo.references.create('refs/tags/test-tag', repo.head.target.hex)
+    repo.references.create('refs/tags/test-tag', str(repo.head.target))
     assert git.git_tag(repo)[0].name == 'refs/tags/test-tag'
 
 
@@ -150,5 +150,5 @@ def test_git_tag_tree(new_dataset):
     tag = '1.0.0'
     repo = pygit2.Repository(new_dataset.path)
     # Create a tag
-    repo.references.create(f'refs/tags/{tag}', repo.head.target.hex)
+    repo.references.create(f'refs/tags/{tag}', str(repo.head.target))
     assert git.git_tag_tree(repo, tag) == repo.get(repo.head.target).tree_id

@@ -24,9 +24,9 @@ def get_snapshot(store, dataset, snapshot):
     # Get metadata for a snapshot (hexsha)
     repo = pygit2.Repository(store.get_dataset_path(dataset))
     commit, _ = repo.resolve_refish(snapshot)
-    hexsha = commit.hex
+    hexsha = str(commit.id)
     created = commit.commit_time
-    tree = commit.tree_id.hex
+    tree = str(commit.tree_id)
     return {'id': f'{dataset}:{snapshot}', 'tag': snapshot, 'hexsha': hexsha, 'created': created, 'tree': tree}
 
 
@@ -34,7 +34,7 @@ def get_snapshots(store, dataset):
     path = store.get_dataset_path(dataset)
     repo_tags = git_tag(pygit2.Repository(path))
     # Include an extra id field to uniquely identify snapshots
-    tags = [{'id': f'{dataset}:{tag.shorthand}', 'tag': tag.shorthand, 'hexsha': tag.target.hex, 'created': tag.peel().commit_time}
+    tags = [{'id': f'{dataset}:{tag.shorthand}', 'tag': tag.shorthand, 'hexsha': str(tag.target), 'created': tag.peel().commit_time}
             for tag in repo_tags]
     return tags
 
@@ -146,7 +146,7 @@ def validate_datalad_config(store, dataset):
 
 def save_snapshot(store, dataset, snapshot):
     repo = pygit2.Repository(store.get_dataset_path(dataset))
-    repo.references.create(f'refs/tags/{snapshot}', repo.head.target.hex)
+    repo.references.create(f'refs/tags/{snapshot}', str(repo.head.target))
 
 
 def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
