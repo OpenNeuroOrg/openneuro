@@ -4,7 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-datalad = "==1.0.2"
+datalad = "==1.1.2"
 pytest = "*"
 coverage = "*"
 pytest-cov = "*"
@@ -24,7 +24,7 @@ elastic-apm = "*"
 falcon-elastic-apm = "*"
 boto3 = "*"
 elasticsearch = "*"
-pygit2 = "==1.14.1"
+pygit2 = "==1.15.1"
 pygithub = "==2.3.0"
 greenlet = "*"
 charset-normalizer = "*"
