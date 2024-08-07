@@ -80,7 +80,7 @@ def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", 
     if not author:
         author = committer
     if parents is None:
-        parent_commits = [repo.head.target.hex]
+        parent_commits = [str(repo.head.target)]
     else:
         parent_commits = parents
     tree = repo.index.write_tree()

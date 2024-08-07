@@ -62,7 +62,7 @@ def create_dataset(store, dataset, author=None, initial_head='main'):
     repo.index.add('.datalad/config')
     git_commit(repo, ['.gitattributes', '.datalad/config'], author,
                '[OpenNeuro] Dataset created', parents=[])
-    return repo.head.target.hex
+    return str(repo.head.target)
 
 
 async def force_rmtree(root_dir):

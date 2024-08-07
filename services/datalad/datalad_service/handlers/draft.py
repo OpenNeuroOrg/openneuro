@@ -19,8 +19,8 @@ class DraftResource:
         if dataset and os.path.exists(dataset_path):
             repo = pygit2.Repository(dataset_path)
             commit = repo.revparse_single('HEAD')
-            resp.media = {'hexsha': commit.hex,
-                          'tree': commit.tree_id.hex}
+            resp.media = {'hexsha': str(commit.id),
+                          'tree': str(commit.tree_id)}
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND
@@ -44,9 +44,9 @@ class DraftResource:
                 # Add all changes to the index
                 if name and email:
                     author = pygit2.Signature(name, email)
-                    media_dict['ref'] = git_commit(repo, ['.'], author).hex
+                    media_dict['ref'] = str(git_commit(repo, ['.'], author))
                 else:
-                    media_dict['ref'] = git_commit(repo, ['.']).hex
+                    media_dict['ref'] = str(git_commit(repo, ['.']))
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             except:
