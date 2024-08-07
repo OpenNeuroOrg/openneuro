@@ -5,7 +5,6 @@ import requests
 import re
 
 from datalad_service.config import GRAPHQL_ENDPOINT
-from datalad_service.common.elasticsearch import ValidationLogger
 
 
 LEGACY_VALIDATOR_VERSION = json.load(
@@ -34,7 +33,7 @@ async def setup_validator():
         await process.wait()
 
 
-async def run_and_decode(args, timeout, esLogger):
+async def run_and_decode(args, timeout):
     """Run a subprocess and return the JSON output."""
     process = await asyncio.create_subprocess_exec(*args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     try:
@@ -53,7 +52,7 @@ async def run_and_decode(args, timeout, esLogger):
         esLogger.log(stdout, stderr, err)
 
 
-async def validate_dataset_call(dataset_path, ref, esLogger):
+async def validate_dataset_call(dataset_path, ref):
     """
     Synchronous dataset validation.
 
@@ -127,8 +126,7 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
 
 
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
-    esLogger = ValidationLogger(dataset_id, user)
-    validator_output = await validate_dataset_call(dataset_path, ref, esLogger)
+    validator_output = await validate_dataset_call(dataset_path, ref)
     all_issues = validator_output['issues']['warnings'] + \
         validator_output['issues']['errors']
     if validator_output:
@@ -146,7 +144,7 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
         raise Exception('Validation failed unexpectedly')
 
     # New schema validator second in case of issues
-    validator_output_deno = await validate_dataset_deno_call(dataset_path, ref, esLogger)
+    validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)
     if validator_output_deno:
         if 'issues' in validator_output_deno:
             r = requests.post(

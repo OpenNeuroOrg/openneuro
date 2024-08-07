@@ -1,6 +1,5 @@
 import falcon
 import falcon.asgi
-from falcon_elastic_apm import ElasticApmMiddleware
 
 import datalad_service.config
 from datalad_service.tasks.audit import audit_datasets
@@ -40,9 +39,6 @@ def create_app():
         raise Exception("Required DATALAD_DATASET_PATH environment variable is not defined")
 
     middleware = [AuthenticateMiddleware(), CustomErrorHandlerMiddleware()]
-    if datalad_service.config.ELASTIC_APM_SERVER_URL:
-        middleware.append(ElasticApmMiddleware(service_name='datalad-service',
-                                               server_url=datalad_service.config.ELASTIC_APM_SERVER_URL))
 
     app = falcon.asgi.App(middleware=middleware)
     app.router_options.converters['path'] = PathConverter
