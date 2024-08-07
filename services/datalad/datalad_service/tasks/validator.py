@@ -1,11 +1,14 @@
 import asyncio
 import json
+import logging
 import os
-import requests
 import re
+
+import requests
 
 from datalad_service.config import GRAPHQL_ENDPOINT
 
+logger = logging.getLogger('datalad_service.' + __name__)
 
 LEGACY_VALIDATOR_VERSION = json.load(
     open('package.json'))['dependencies']['bids-validator']
@@ -33,12 +36,13 @@ async def setup_validator():
         await process.wait()
 
 
-async def run_and_decode(args, timeout):
+async def run_and_decode(args, timeout, logger):
     """Run a subprocess and return the JSON output."""
     process = await asyncio.create_subprocess_exec(*args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     try:
         await asyncio.wait_for(process.wait(), timeout=timeout)
     except asyncio.TimeoutError:
+        logger.warning(f'Timed out while running `{" ".join(args)}`')
         process.kill()
 
     # Retrieve what we can from the process
@@ -49,10 +53,12 @@ async def run_and_decode(args, timeout):
     try:
         return json.loads(escape_ansi(stdout.decode('utf-8')))
     except json.decoder.JSONDecodeError as err:
-        esLogger.log(stdout, stderr, err)
+        logger.exception(err)
+        logger.info(stdout)
+        logger.error(stderr)
 
 
-async def validate_dataset_call(dataset_path, ref):
+async def validate_dataset_call(dataset_path, ref, logger=logger):
     """
     Synchronous dataset validation.
 
@@ -62,11 +68,11 @@ async def validate_dataset_call(dataset_path, ref):
     return await run_and_decode(
         ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path],
         timeout=300,
-        esLogger=esLogger,
+        logger=logger,
     )
 
 
-async def validate_dataset_deno_call(dataset_path, ref, esLogger):
+async def validate_dataset_deno_call(dataset_path, ref):
     """
     Synchronous dataset validation.
 
@@ -77,7 +83,6 @@ async def validate_dataset_deno_call(dataset_path, ref, esLogger):
          f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
          '--json', dataset_path],
         timeout=300,
-        esLogger=esLogger,
     )
 
 
