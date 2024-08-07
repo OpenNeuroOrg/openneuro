@@ -9,7 +9,7 @@ class ResetResource:
     def __init__(self, store):
         self.store = store
 
-    def on_post(self, req, resp, dataset, hexsha):
+    async def on_post(self, req, resp, dataset, hexsha):
         """Reset master to a given commit."""
         if dataset and hexsha.isalnum() and len(hexsha) == 40:
             try:

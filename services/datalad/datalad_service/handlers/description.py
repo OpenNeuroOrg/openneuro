@@ -8,13 +8,13 @@ class DescriptionResource:
     def __init__(self, store):
         self.store = store
 
-    def on_post(self, req, resp, dataset):
+    async def on_post(self, req, resp, dataset):
         """
         Commit a description change.
         Returns update dataset_description
         """
         if dataset:
-            description_fields = req.media.get('description_fields')
+            description_fields = (await req.get_media())['description_fields']
             if not any(description_fields):
                 resp.media = {
                     'error': 'Missing description field updates.'

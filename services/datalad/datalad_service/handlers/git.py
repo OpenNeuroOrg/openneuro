@@ -1,12 +1,10 @@
-import os.path
+import asyncio
+import gzip
 import logging
-import subprocess
 
 import falcon
 
-from datalad_service.common.stream import pipe_chunks
-from datalad_service.common.user import get_user_info
-from datalad_service.tasks.files import commit_files
+from datalad_service.common.const import CHUNK_SIZE_BYTES
 
 
 cache_control = ['no-cache', 'max-age=0', 'must-revalidate']
@@ -42,7 +40,7 @@ class GitRefsResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, worker, dataset):
+    async def on_get(self, req, resp, worker, dataset):
         # Make sure load balancers and other proxies do not cache this
         resp.cache_control = cache_control
         resp.set_header('Expires', expires)
@@ -59,11 +57,17 @@ class GitRefsResource:
                 elif service == 'git-upload-pack':
                     prefix = b'001e# service=git-upload-pack\n0000'
                 # git-receive-pack or git-upload-pack handle the other requests
-                with subprocess.Popen([service, '--advertise-refs', '--stateless-rpc', dataset_path], stdout=subprocess.PIPE) as process:
-                    resp.content_type = 'application/x-{}-advertisement'.format(
-                        service)
-                    resp.body = prefix + process.stdout.read()
-                    resp.status = falcon.HTTP_OK
+                process = await asyncio.create_subprocess_exec(
+                    service,
+                    '--advertise-refs',
+                    '--stateless-rpc',
+                    dataset_path,
+                    stdout=asyncio.subprocess.PIPE,
+                )
+                resp.content_type = 'application/x-{}-advertisement'.format(
+                    service)
+                resp.text = prefix + await process.stdout.read()
+                resp.status = falcon.HTTP_OK
             else:
                 resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
         else:
@@ -77,7 +81,7 @@ class GitReceiveResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp, worker, dataset):
+    async def on_post(self, req, resp, worker, dataset):
         resp.cache_control = cache_control
         resp.set_header('Expires', expires)
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
@@ -86,16 +90,27 @@ class GitReceiveResource:
             return _handle_failed_access(req, resp)
         if dataset:
             dataset_path = self.store.get_dataset_path(dataset)
-            pre_receive_path = os.path.join(
-                dataset_path, '.git', 'hooks', 'pre-receive')
-            if not os.path.islink(pre_receive_path):
-                os.symlink('/hooks/pre-receive', pre_receive_path)
-            process = subprocess.Popen(
-                ['git-receive-pack', '--stateless-rpc', dataset_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            pipe_chunks(reader=req.bounded_stream, writer=process.stdin, gzipped=req.get_header('content-encoding') == 'gzip')
-            process.stdin.flush()
-            resp.status = falcon.HTTP_OK
+            process = await asyncio.create_subprocess_exec(
+                'git-receive-pack', 
+                '--stateless-rpc', 
+                dataset_path,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
+            if req.get_header('content-encoding') == 'gzip':
+                process.stdin.write(gzip.decompress(await req.stream.read()))
+            else:
+                while True:
+                    chunk = await req.stream.read(CHUNK_SIZE_BYTES)
+                    if not chunk:
+                        break
+                    process.stdin.write(chunk)
+            
+            process.stdin.close()
             resp.stream = process.stdout
+            resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
@@ -107,7 +122,7 @@ class GitUploadResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_post(self, req, resp, worker, dataset):
+    async def on_post(self, req, resp, worker, dataset):
         resp.cache_control = cache_control
         resp.set_header('Expires', expires)
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
@@ -116,11 +131,26 @@ class GitUploadResource:
             return _handle_failed_access(req, resp)
         if dataset:
             dataset_path = self.store.get_dataset_path(dataset)
-            process = subprocess.Popen(
-                ['git-upload-pack', '--stateless-rpc', dataset_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            pipe_chunks(reader=req.bounded_stream, writer=process.stdin, gzipped=req.get_header('content-encoding') == 'gzip')
-            process.stdin.flush()
-            resp.status = falcon.HTTP_OK
+            process = await asyncio.create_subprocess_exec(
+                'git-upload-pack',
+                '--stateless-rpc',
+                dataset_path,  
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
+            if req.get_header('content-encoding') == 'gzip':
+                process.stdin.write(gzip.decompress(await req.stream.read()))
+            else:
+                while True:
+                    chunk = await req.stream.read(CHUNK_SIZE_BYTES)
+                    if not chunk:
+                        break
+                    process.stdin.write(chunk)
+            
+            process.stdin.close()
             resp.stream = process.stdout
+            resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

@@ -14,5 +14,6 @@ data:
   REDIS_PORT: "6379"
   GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111/crn/graphql
   DATALAD_SERVICE_URI: {{ .Release.Name }}-dataset-worker
+  DATALAD_DATASET_PATH: "/datasets"
   LOCPATH: ""
   ELASTIC_APM_SERVER_URL: {{ .Values.apmServerUrl }}

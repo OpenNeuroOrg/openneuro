@@ -1,6 +1,5 @@
-import logging
-
 import falcon
+import falcon.asgi
 from falcon_elastic_apm import ElasticApmMiddleware
 
 import datalad_service.config
@@ -26,6 +25,7 @@ from datalad_service.handlers.reexporter import ReexporterResource
 from datalad_service.handlers.reset import ResetResource
 from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
+from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
 
 class PathConverter(falcon.routing.converters.BaseConverter):
@@ -35,22 +35,19 @@ class PathConverter(falcon.routing.converters.BaseConverter):
         return value.replace(':', '/')
 
 
-def create_app(annex_path):
-    # If running under gunicorn, use that logger
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    logging.basicConfig(handlers=gunicorn_logger.handlers,
-                        level=gunicorn_logger.level)
+def create_app():
+    if not datalad_service.config.DATALAD_DATASET_PATH:
+        raise Exception("Required DATALAD_DATASET_PATH environment variable is not defined")
 
-    middleware = [AuthenticateMiddleware()]
+    middleware = [AuthenticateMiddleware(), CustomErrorHandlerMiddleware()]
     if datalad_service.config.ELASTIC_APM_SERVER_URL:
         middleware.append(ElasticApmMiddleware(service_name='datalad-service',
                                                server_url=datalad_service.config.ELASTIC_APM_SERVER_URL))
 
-    api = falcon.API(
-        middleware=middleware)
-    api.router_options.converters['path'] = PathConverter
+    app = falcon.asgi.App(middleware=middleware)
+    app.router_options.converters['path'] = PathConverter
 
-    store = DataladStore(annex_path)
+    store = DataladStore(datalad_service.config.DATALAD_DATASET_PATH)
 
     heartbeat = HeartbeatResource()
     datasets = DatasetResource(store)
@@ -74,58 +71,58 @@ def create_app(annex_path):
     dataset_reset_resource = ResetResource(store)
     dataset_remote_import_resource = RemoteImportResource(store)
 
-    api.add_route('/heartbeat', heartbeat)
+    app.add_route('/heartbeat', heartbeat)
 
-    api.add_route('/datasets', datasets)
-    api.add_route('/datasets/{dataset}', datasets)
+    app.add_route('/datasets', datasets)
+    app.add_route('/datasets/{dataset}', datasets)
 
-    api.add_route('/datasets/{dataset}/draft', dataset_draft)
-    api.add_route('/datasets/{dataset}/history', dataset_history)
-    api.add_route('/datasets/{dataset}/description', dataset_description)
-    api.add_route('/datasets/{dataset}/validate/{hexsha}', dataset_validation)
-    api.add_route('/datasets/{dataset}/reset/{hexsha}', dataset_reset_resource)
+    app.add_route('/datasets/{dataset}/draft', dataset_draft)
+    app.add_route('/datasets/{dataset}/history', dataset_history)
+    app.add_route('/datasets/{dataset}/description', dataset_description)
+    app.add_route('/datasets/{dataset}/validate/{hexsha}', dataset_validation)
+    app.add_route('/datasets/{dataset}/reset/{hexsha}', dataset_reset_resource)
 
-    api.add_route('/datasets/{dataset}/files', dataset_files)
-    api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)
-    api.add_route('/datasets/{dataset}/tree/{tree}', dataset_tree)
-    api.add_route('/datasets/{dataset}/objects/{obj}', dataset_objects)
+    app.add_route('/datasets/{dataset}/files', dataset_files)
+    app.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)
+    app.add_route('/datasets/{dataset}/tree/{tree}', dataset_tree)
+    app.add_route('/datasets/{dataset}/objects/{obj}', dataset_objects)
 
-    api.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
-    api.add_route(
+    app.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
+    app.add_route(
         '/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
-    api.add_route(
+    app.add_route(
         '/datasets/{dataset}/snapshots/{snapshot}/files', dataset_files)
-    api.add_route(
+    app.add_route(
         '/datasets/{dataset}/snapshots/{snapshot}/files/{filename:path}', dataset_files)
-    api.add_route(
+    app.add_route(
         '/datasets/{dataset}/snapshots/{snapshot}/annex-key/{annex_key}', dataset_annex_objects)
 
-    api.add_route(
+    app.add_route(
         '/datasets/{dataset}/publish', dataset_publish
     )
-    api.add_route('/datasets/{dataset}/reexport-remotes',
+    app.add_route('/datasets/{dataset}/reexport-remotes',
                   dataset_reexporter_resources)
 
-    api.add_route(
+    app.add_route(
         '/datasets/{dataset}/upload/{upload}', dataset_upload
     )
-    api.add_route(
+    app.add_route(
         '/uploads/{worker}/{dataset}/{upload}/{filename:path}', dataset_upload_file
     )
 
-    api.add_route('/git/{worker}/{dataset}/info/refs',
+    app.add_route('/git/{worker}/{dataset}/info/refs',
                   dataset_git_refs_resource)
-    api.add_route('/git/{worker}/{dataset}/git-receive-pack',
+    app.add_route('/git/{worker}/{dataset}/git-receive-pack',
                   dataset_git_receive_resource)
-    api.add_route('/git/{worker}/{dataset}/git-upload-pack',
+    app.add_route('/git/{worker}/{dataset}/git-upload-pack',
                   dataset_git_upload_resource)
-    api.add_route('/git/{worker}/{dataset}/annex/{key}',
+    app.add_route('/git/{worker}/{dataset}/annex/{key}',
                   dataset_git_annex_resource)
     # Serving keys internally as well (read only)
-    api.add_route('/datasets/{dataset}/annex/{key}',
+    app.add_route('/datasets/{dataset}/annex/{key}',
                   dataset_git_annex_resource)
 
-    api.add_route('/datasets/{dataset}/import/{import_id}',
+    app.add_route('/datasets/{dataset}/import/{import_id}',
                   dataset_remote_import_resource)
 
-    return api
+    return app

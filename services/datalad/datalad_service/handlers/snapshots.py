@@ -1,7 +1,7 @@
+import asyncio
 import os
 import logging
 
-import gevent
 import falcon
 
 from datalad_service.tasks.snapshots import SnapshotDescriptionException, create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
@@ -18,7 +18,7 @@ class SnapshotResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    def on_get(self, req, resp, dataset, snapshot=None):
+    async def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
         if not os.path.exists(self.store.get_dataset_path(dataset)):
             resp.status = falcon.HTTP_NOT_FOUND
@@ -38,9 +38,9 @@ class SnapshotResource:
             resp.media = {'snapshots': tags}
             resp.status = falcon.HTTP_OK
 
-    def on_post(self, req, resp, dataset, snapshot):
+    async def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        media = req.get_media(None)
+        media = await req.get_media(None)
         description_fields = {}
         snapshot_changes = []
         skip_publishing = False
@@ -60,7 +60,8 @@ class SnapshotResource:
             if not skip_publishing:
                 monitor_remote_configs(ds_path)
                 # Publish after response
-                gevent.spawn(export_dataset, ds_path, req.cookies)
+                asyncio.get_event_loop().run_in_executor(None, export_dataset,
+                                                         ds_path, req.cookies)
         except SnapshotExistsException as err:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_CONFLICT
@@ -68,7 +69,7 @@ class SnapshotResource:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_BAD_REQUEST
 
-    def on_delete(self, req, resp, dataset, snapshot):
+    async def on_delete(self, req, resp, dataset, snapshot):
         """Remove a tag on the dataset, which is equivalent to deleting a snapshot"""
         if snapshot:
             dataset_path = self.store.get_dataset_path(dataset)
