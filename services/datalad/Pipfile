@@ -4,7 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-datalad = "==1.0.2"
+datalad = "==1.1.2"
 pytest = "*"
 coverage = "*"
 pytest-cov = "*"
