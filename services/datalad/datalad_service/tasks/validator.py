@@ -1,12 +1,14 @@
 import asyncio
 import json
+import logging
 import os
-import requests
 import re
 
-from datalad_service.config import GRAPHQL_ENDPOINT
-from datalad_service.common.elasticsearch import ValidationLogger
+import requests
 
+from datalad_service.config import GRAPHQL_ENDPOINT
+
+logger = logging.getLogger('datalad_service.' + __name__)
 
 LEGACY_VALIDATOR_VERSION = json.load(
     open('package.json'))['dependencies']['bids-validator']
@@ -34,12 +36,13 @@ async def setup_validator():
         await process.wait()
 
 
-async def run_and_decode(args, timeout, esLogger):
+async def run_and_decode(args, timeout, logger):
     """Run a subprocess and return the JSON output."""
     process = await asyncio.create_subprocess_exec(*args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     try:
         await asyncio.wait_for(process.wait(), timeout=timeout)
     except asyncio.TimeoutError:
+        logger.warning(f'Timed out while running `{" ".join(args)}`')
         process.kill()
 
     # Retrieve what we can from the process
@@ -50,10 +53,12 @@ async def run_and_decode(args, timeout, esLogger):
     try:
         return json.loads(escape_ansi(stdout.decode('utf-8')))
     except json.decoder.JSONDecodeError as err:
-        esLogger.log(stdout, stderr, err)
+        logger.exception(err)
+        logger.info(stdout)
+        logger.error(stderr)
 
 
-async def validate_dataset_call(dataset_path, ref, esLogger):
+async def validate_dataset_call(dataset_path, ref, logger=logger):
     """
     Synchronous dataset validation.
 
@@ -63,11 +68,11 @@ async def validate_dataset_call(dataset_path, ref, esLogger):
     return await run_and_decode(
         ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path],
         timeout=300,
-        esLogger=esLogger,
+        logger=logger,
     )
 
 
-async def validate_dataset_deno_call(dataset_path, ref, esLogger):
+async def validate_dataset_deno_call(dataset_path, ref):
     """
     Synchronous dataset validation.
 
@@ -78,7 +83,6 @@ async def validate_dataset_deno_call(dataset_path, ref, esLogger):
          f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
          '--json', dataset_path],
         timeout=300,
-        esLogger=esLogger,
     )
 
 
@@ -127,8 +131,7 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
 
 
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
-    esLogger = ValidationLogger(dataset_id, user)
-    validator_output = await validate_dataset_call(dataset_path, ref, esLogger)
+    validator_output = await validate_dataset_call(dataset_path, ref)
     all_issues = validator_output['issues']['warnings'] + \
         validator_output['issues']['errors']
     if validator_output:
@@ -146,7 +149,7 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
         raise Exception('Validation failed unexpectedly')
 
     # New schema validator second in case of issues
-    validator_output_deno = await validate_dataset_deno_call(dataset_path, ref, esLogger)
+    validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)
     if validator_output_deno:
         if 'issues' in validator_output_deno:
             r = requests.post(

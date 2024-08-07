@@ -31,11 +31,5 @@ GRAPHQL_ENDPOINT = os.getenv('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql
 # Redis Host
 REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
 
-# The path to connect to Elastic APM server
-ELASTIC_APM_SERVER_URL = os.getenv('ELASTIC_APM_SERVER_URL')
-
-# Elasticsearch URL
-ELASTICSEARCH_CONNECTION = os.getenv('ELASTICSEARCH_CONNECTION')
-
 # Site URL
 CRN_SERVER_URL = os.getenv('CRN_SERVER_URL')

@@ -3,7 +3,6 @@ import logging
 import os.path
 import re
 
-import elasticapm
 import pygit2
 import boto3
 from github import Github
@@ -54,14 +53,12 @@ def create_remotes_and_export(dataset_path, cookies=None):
     export_dataset(dataset_path, cookies)
 
 
-@elasticapm.capture_span()
 def create_remotes(dataset_path):
     dataset = os.path.basename(dataset_path)
     s3_sibling(dataset_path)
     github_sibling(dataset_path, dataset)
 
 
-@elasticapm.capture_span()
 def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_export=github_export, update_s3_sibling=update_s3_sibling, github_enabled=DATALAD_GITHUB_EXPORTS_ENABLED):
     """
     Export dataset to S3 and GitHub.
@@ -113,7 +110,6 @@ def check_remote_has_version(dataset_path, remote, tag):
     return remote_id_A == remote_id_B and tree_id_A == tree_id_B
 
 
-@elasticapm.capture_span()
 async def delete_s3_sibling(dataset_id):
     try:
         client = boto3.client(
@@ -145,7 +141,6 @@ async def delete_s3_sibling(dataset_id):
             f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})')
 
 
-@elasticapm.capture_span()
 async def delete_github_sibling(dataset_id):
     ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
     org = ses.get_organization(DATALAD_GITHUB_ORG)

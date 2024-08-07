@@ -12,10 +12,12 @@ class MockLogger:
 
 async def test_validator_error(new_dataset):
     logger = MockLogger()
-    logger.log = Mock()
+    logger.info = Mock()
+    logger.error = Mock()
+    logger.exception = Mock()
     await validate_dataset_call(new_dataset.path, 'HEAD', logger)
     # new_dataset completes validation with errors, should not call logger
-    assert not logger.log.called
+    assert not logger.exception.called
 
 
 @pytest.fixture
@@ -35,6 +37,8 @@ def mock_validator_crash(monkeypatch):
 
 async def test_validator_bad_json(new_dataset, mock_validator_crash):
     logger = MockLogger()
-    logger.log = Mock()
+    logger.info = Mock()
+    logger.error = Mock()
+    logger.exception = Mock()
     await validate_dataset_call(new_dataset.path, 'HEAD', logger)
-    assert logger.log.called
+    assert logger.exception.called
