@@ -28,8 +28,5 @@ SENTRY_DSN = os.getenv('SENTRY_DSN')
 # GraphQL URL - override if not docker-compose
 GRAPHQL_ENDPOINT = os.getenv('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
 
-# Redis Host
-REDIS_HOST = os.getenv('REDIS_HOST', 'redis')
-
 # Site URL
 CRN_SERVER_URL = os.getenv('CRN_SERVER_URL')
