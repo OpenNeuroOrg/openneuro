@@ -17,3 +17,4 @@ data:
   DATALAD_DATASET_PATH: "/datasets"
   LOCPATH: ""
   ELASTIC_APM_SERVER_URL: {{ .Values.apmServerUrl }}
+  OPENNEURO_VERSION: {{ .Chart.AppVersion }}

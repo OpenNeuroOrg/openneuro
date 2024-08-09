@@ -1,5 +1,8 @@
+import socket
+
 import falcon
 import falcon.asgi
+import sentry_sdk
 
 import datalad_service.config
 from datalad_service.tasks.audit import audit_datasets
@@ -26,6 +29,20 @@ from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
+if datalad_service.config.OPENNEURO_VERSION:
+    release = "openneuro-datalad-service@{}".format(datalad_service.config.OPENNEURO_VERSION)
+
+sentry_sdk.init(
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+    release=release,
+    server_name=socket.gethostname(),
+)
 
 class PathConverter(falcon.routing.converters.BaseConverter):
     """: is used because it is human readable as a separator, disallowed in filenames on Windows, and very rare in Unix filenames."""
