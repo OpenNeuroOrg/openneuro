@@ -1,5 +1,5 @@
-import { apm } from "../../apm"
 import React from "react"
+import * as Sentry from "@sentry/react"
 import { gql, useQuery } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import styled from "@emotion/styled"
@@ -111,7 +111,7 @@ export const FrontPageTopQuery = ({ query }) => {
     )
   } else if (result.error || result.data.datasets == null) {
     if (result?.error) {
-      apm.captureError(result?.error)
+      Sentry.captureException(result?.error)
     }
     return <div>Failed to load top datasets, please try again later.</div>
   } else {
@@ -141,7 +141,7 @@ export const FrontPageNewQuery = ({ query }) => {
     return <Loading />
   } else if (result.error || result.data.datasets == null) {
     if (result?.error) {
-      apm.captureError(result?.error)
+      Sentry.captureException(result?.error)
     }
     return <div>Failed to load top datasets, please try again later.</div>
   } else {

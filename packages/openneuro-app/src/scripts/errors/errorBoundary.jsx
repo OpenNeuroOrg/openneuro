@@ -1,6 +1,6 @@
-import { apm } from "../apm"
 import React from "react"
 import PropTypes from "prop-types"
+import * as Sentry from "@sentry/react"
 import FreshdeskInterface from "./freshdeskInterface.jsx"
 
 // raises error if catchErrorIf returns true
@@ -36,8 +36,7 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, { componentStack }) {
     const message = String(error)
     error.componentStack = componentStack
-    apm.setCustomContext({ datasetId: this.props.datasetId })
-    apm.captureError(error)
+    Sentry.captureException(error)
     this.setState({
       message,
     })
