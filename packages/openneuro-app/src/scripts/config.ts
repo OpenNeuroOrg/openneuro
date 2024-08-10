@@ -29,7 +29,6 @@ export interface OpenNeuroConfig {
   }
   github?: string
   publicBucket?: string
-  ELASTIC_APM_SERVER_URL?: string
 }
 
 export const config: OpenNeuroConfig = {
@@ -64,7 +63,6 @@ export const config: OpenNeuroConfig = {
   support: { url: globalThis.OpenNeuroConfig.SUPPORT_URL },
   github: globalThis.OpenNeuroConfig.DATALAD_GITHUB_ORG,
   publicBucket: globalThis.OpenNeuroConfig.AWS_S3_PUBLIC_BUCKET,
-  ELASTIC_APM_SERVER_URL: globalThis.OpenNeuroConfig.ELASTIC_APM_SERVER_URL,
 }
 
 export const getConfig = (): OpenNeuroConfig => config
