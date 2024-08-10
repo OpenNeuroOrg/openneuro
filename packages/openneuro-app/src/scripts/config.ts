@@ -20,7 +20,10 @@ export interface OpenNeuroConfig {
     }
   }
   analytics?: { trackingIds: string }
-  sentry?: { environment: string }
+  sentry?: {
+    environment: string
+    dsn: string
+  }
   support?: {
     url: string
   }
@@ -54,7 +57,10 @@ export const config: OpenNeuroConfig = {
       },
     ),
   },
-  sentry: { environment: globalThis.OpenNeuroConfig.ENVIRONMENT },
+  sentry: {
+    environment: globalThis.OpenNeuroConfig.ENVIRONMENT,
+    dsn: globalThis.OpenNeuroConfig.SENTRY_DSN,
+  },
   support: { url: globalThis.OpenNeuroConfig.SUPPORT_URL },
   github: globalThis.OpenNeuroConfig.DATALAD_GITHUB_ORG,
   publicBucket: globalThis.OpenNeuroConfig.AWS_S3_PUBLIC_BUCKET,
