@@ -1,7 +1,6 @@
 import React from "react"
 import { gql, useMutation } from "@apollo/client"
 import PropTypes from "prop-types"
-import { reexporterLogsURL } from "../../resources/kibana"
 import { Button } from "@openneuro/components/button"
 import styled from "@emotion/styled"
 
@@ -48,15 +47,6 @@ const AdminExports = ({ dataset }) => {
           size="small"
           onClick={() => {
             reexportRemotes({ variables: { datasetId: dataset.id } })
-          }}
-        />
-        <Button
-          icon="fa fa-file-text"
-          label="View Export Logs"
-          secondary={true}
-          size="small"
-          onClick={() => {
-            window.open(reexporterLogsURL, "_blank")
           }}
         />
       </ButtonRow>
