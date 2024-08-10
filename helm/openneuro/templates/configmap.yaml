@@ -16,5 +16,5 @@ data:
   DATALAD_SERVICE_URI: {{ .Release.Name }}-dataset-worker
   DATALAD_DATASET_PATH: "/datasets"
   LOCPATH: ""
-  ELASTIC_APM_SERVER_URL: {{ .Values.apmServerUrl }}
   OPENNEURO_VERSION: {{ .Chart.AppVersion }}
+  SENTRY_DSN: {{ .Values.sentryDsn }}

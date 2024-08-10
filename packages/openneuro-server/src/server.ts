@@ -1,14 +1,5 @@
-import apm from "elastic-apm-node"
+import "./sentry"
 import config from "./config"
-/** Needs to run before the other imports in Node */
-if (config.elasticsearch.apmServerUrl) {
-  apm.start({
-    serverUrl: config.elasticsearch.apmServerUrl,
-    apiKey: config.elasticsearch.apmApiKey,
-    serviceName: "openneuro-server",
-    cloudProvider: "none",
-  })
-}
 import { createServer } from "http"
 import mongoose from "mongoose"
 import { connect as redisConnect } from "./libs/redis"
