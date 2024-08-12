@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react"
 import { trackDownload } from "./track-download.js"
 import {
   downloadAbortToast,
@@ -9,7 +10,6 @@ import {
   permissionsToast,
   requestFailureToast,
 } from "./native-file-toast.jsx"
-import { apm } from "../../apm.js"
 import { downloadDataset } from "./download-query"
 
 /**
@@ -46,7 +46,7 @@ let downloadCanceled
  * Recursive download for file trees via browser file access API
  */
 const downloadTree = async (
-  { datasetId, snapshotTag, client, apmTransaction, dirHandle, toastId },
+  { datasetId, snapshotTag, client, dirHandle, toastId },
   path = "",
   tree = null,
 ) => {
@@ -64,7 +64,6 @@ const downloadTree = async (
           datasetId,
           snapshotTag,
           client,
-          apmTransaction,
           dirHandle,
           toastId,
         },
@@ -100,7 +99,7 @@ const downloadTree = async (
       if (status === 200) {
         await body.pipeThrough(progress).pipeTo(writable)
       } else {
-        apmTransaction.captureError(statusText)
+        Sentry.captureException(statusText)
         return requestFailureToast(file.filename)
       }
     }
@@ -117,18 +116,13 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
   try {
     trackDownload(client, datasetId, snapshotTag)
   } catch (err) {
-    apm.captureError(err)
+    Sentry.captureException(err)
   }
-  const apmTransaction = apm &&
-    apm.startTransaction(`download:${datasetId}`, "download")
-  if (apmTransaction) {
-    apmTransaction.addLabels({ datasetId, snapshot: snapshotTag })
-  }
+  const scope = new Sentry.Scope()
+  scope.setContext("dataset", { datasetId, snapshot: snapshotTag })
   downloadCanceled = false
   let toastId
   try {
-    const apmSelect = apmTransaction &&
-      apmTransaction.startSpan("showDirectoryPicker")
     // Open user selected directory
     const dirHandle = await window.showDirectoryPicker()
     toastId = downloadToast(
@@ -137,12 +131,10 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
       snapshotTag,
       () => (downloadCanceled = true),
     )
-    apmSelect && apmSelect.end()
     await downloadTree({
       datasetId,
       snapshotTag,
       client,
-      apmTransaction,
       dirHandle,
       toastId,
     })
@@ -158,9 +150,9 @@ export const downloadNative = (datasetId, snapshotTag, client) => async () => {
       // Some unknown issue occurred (out of disk space, disk caught fire, etc...)
       nativeErrorToast()
     }
-    apm.captureError(err)
+    Sentry.captureException(err)
   } finally {
-    if (apmTransaction) apmTransaction.end()
     downloadToastDone(toastId)
+    Sentry.getCurrentScope().clear()
   }
 }
