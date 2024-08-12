@@ -1,3 +1,4 @@
+ARG LERNA_JSON
 FROM docker.io/denoland/deno:bin-1.33.1 AS deno
 FROM docker.io/library/python:3.11-slim as production
 
@@ -30,7 +31,8 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && git config --global user.name "Git Worker" \
   && git config --global user.email "git@openneuro.org" \
-  && git config --global receive.denyCurrentBranch updateInstead
+  && git config --global receive.denyCurrentBranch updateInstead \
+  && echo "$LERNA_JSON" > /srv/lerna.json
 
 HEALTHCHECK --interval=5s --timeout=30s --start-period=10s --retries=10 CMD [ "curl", "-f", "http://localhost/heartbeat" ]
 

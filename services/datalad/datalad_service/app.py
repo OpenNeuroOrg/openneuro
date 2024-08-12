@@ -1,7 +1,11 @@
+import socket
+
 import falcon
 import falcon.asgi
+import sentry_sdk
 
 import datalad_service.config
+import datalad_service.version
 from datalad_service.tasks.audit import audit_datasets
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
@@ -26,6 +30,24 @@ from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
+def before_send(event):
+    """Drop transactions that are marked as excluded."""
+    if event.get("transaction") == "excluded":
+        return None
+    return event
+
+sentry_sdk.init(
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+    release=f"openneuro-datalad-service@{datalad_service.version.get_version()}",
+    server_name=socket.gethostname(),
+    before_send=before_send,
+)
 
 class PathConverter(falcon.routing.converters.BaseConverter):
     """: is used because it is human readable as a separator, disallowed in filenames on Windows, and very rare in Unix filenames."""

@@ -22,9 +22,6 @@ AWS_S3_PRIVATE_BUCKET = os.getenv('AWS_S3_PRIVATE_BUCKET')
 AWS_S3_PUBLIC_BUCKET = os.getenv('AWS_S3_PUBLIC_BUCKET')
 JWT_SECRET = os.getenv('JWT_SECRET')
 
-# Sentry monitoring
-SENTRY_DSN = os.getenv('SENTRY_DSN')
-
 # GraphQL URL - override if not docker-compose
 GRAPHQL_ENDPOINT = os.getenv('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
 
