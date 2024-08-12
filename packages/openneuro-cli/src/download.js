@@ -52,13 +52,11 @@ const handleFetchReject = (err) => {
  * @param {string} destination Destination directory path
  * @param {string} filename
  * @param {string} fileUrl URL to download from
- * @param {object} apmTransaction Active APM transaction (optional)
  */
 export const downloadFile = async (
   destination,
   filename,
   fileUrl,
-  apmTransaction,
   downloadProgress,
 ) => {
   try {
@@ -79,7 +77,6 @@ export const downloadFile = async (
             downloadProgress.update(writeStream.bytesWritten)
           })
           stream.on("error", (err) => {
-            if (apmTransaction) apmTransaction.captureError(err)
             reject(err)
           })
         })
@@ -95,7 +92,6 @@ export const downloadFile = async (
       handleFetchReject(err)
     }
   } catch (err) {
-    if (apmTransaction) apmTransaction.captureError(err)
     throw err
   }
 }
@@ -104,7 +100,6 @@ export const getDownload = async (
   destination,
   datasetId,
   tag,
-  apmTransaction,
   client,
   treePath = "",
   tree = null,
@@ -118,7 +113,6 @@ export const getDownload = async (
         destination,
         datasetId,
         tag,
-        apmTransaction,
         client,
         downloadPath,
         file.id,
@@ -135,16 +129,12 @@ export const getDownload = async (
       })
       if (testFile(destination, downloadPath, file.size)) {
         // Now actually download
-        const apmDownload = apmTransaction.startSpan(
-          `download ${downloadPath}:${file.size}`,
-        )
         downloadProgress.start(file.size, 0)
         try {
           await downloadFile(
             destination,
             downloadPath,
             file.urls[file.urls.length - 1],
-            apmTransaction,
             downloadProgress,
           )
           downloadProgress.update(file.size)
@@ -153,7 +143,6 @@ export const getDownload = async (
         } finally {
           downloadProgress.stop()
         }
-        if (apmDownload) apmDownload.end()
       } else {
         downloadProgress.start(file.size, file.size)
         downloadProgress.stop()

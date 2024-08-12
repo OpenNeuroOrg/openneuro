@@ -5252,7 +5252,6 @@ __metadata:
     cli-progress: "npm:^3.8.2"
     commander: "npm:7.2.0"
     core-js: "npm:^3.10.1"
-    elastic-apm-node: "npm:4.5.4"
     fetch-h2: "npm:^3.0.2"
     graphql: "npm:16.8.1"
     inquirer: "npm:^5.2.0"

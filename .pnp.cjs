@@ -6647,7 +6647,6 @@ const RAW_RUNTIME_STATE =
           ["cli-progress", "npm:3.9.1"],\
           ["commander", "npm:7.2.0"],\
           ["core-js", "npm:3.18.0"],\
-          ["elastic-apm-node", "npm:4.5.4"],\
           ["fetch-h2", "npm:3.0.2"],\
           ["graphql", "npm:16.8.1"],\
           ["inquirer", "npm:5.2.0"],\
