@@ -5,6 +5,7 @@ import falcon.asgi
 import sentry_sdk
 
 import datalad_service.config
+import datalad_service.version
 from datalad_service.tasks.audit import audit_datasets
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
@@ -29,9 +30,6 @@ from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
-if datalad_service.config.OPENNEURO_VERSION:
-    release = "openneuro-datalad-service@{}".format(datalad_service.config.OPENNEURO_VERSION)
-
 sentry_sdk.init(
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
@@ -40,7 +38,7 @@ sentry_sdk.init(
     # of sampled transactions.
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
-    release=release,
+    release=f"openneuro-datalad-service@{datalad_service.version.get_version()}",
     server_name=socket.gethostname(),
 )
 

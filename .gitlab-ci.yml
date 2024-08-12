@@ -80,7 +80,7 @@ build_datalad_service:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - cd services/datalad
     - docker pull $CI_REGISTRY_IMAGE/datalad-service:latest || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA .
+    - docker build --build-arg LERNA_JSON="$(cat ../../lerna.json)" --cache-from $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:latest --tag $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE/datalad-service:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE/datalad-service:latest
 

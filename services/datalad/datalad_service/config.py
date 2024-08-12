@@ -27,6 +27,3 @@ GRAPHQL_ENDPOINT = os.getenv('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql
 
 # Site URL
 CRN_SERVER_URL = os.getenv('CRN_SERVER_URL')
-
-# Version deployed
-OPENNEURO_VERSION = os.getenv('OPENNEURO_VERSION')
