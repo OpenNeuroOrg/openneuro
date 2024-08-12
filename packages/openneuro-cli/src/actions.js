@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import fs from "fs"
 import inquirer from "inquirer"
-import { apm } from "./apm.js"
 import { getUrl, getUser, saveConfig } from "./config"
 import { finishUpload, prepareUpload, uploadFiles, validation } from "./upload"
 import { createDataset, getDatasetFiles } from "./datasets"
@@ -65,10 +64,8 @@ const uploadDataset = async (
     affirmedConsent: null,
   },
 ) => {
-  const apmTransaction = apm && apm.startTransaction("upload", "custom")
-  apmTransaction.addLabels({ datasetId })
   const client = configuredClient()
-  await validation(dir, validatorOptions, apmTransaction)
+  await validation(dir, validatorOptions)
   let remoteFiles = []
   if (datasetId) {
     // Check for dataset -> validation -> upload
@@ -86,27 +83,17 @@ const uploadDataset = async (
     console.log(`"${datasetId}" created`)
     remoteFiles = [] // New dataset has no remote files
   }
-  const apmPrepareUploadSpan = apmTransaction &&
-    apmTransaction.startSpan("prepareUpload")
   const preparedUpload = await prepareUpload(client, dir, {
     datasetId,
     remoteFiles,
   })
-  apmPrepareUploadSpan.end()
   if (preparedUpload) {
     if (preparedUpload.files.length > 1) {
-      const apmUploadFilesSpan = apmTransaction &&
-        apmTransaction.startSpan("uploadFiles")
       await uploadFiles(preparedUpload)
-      apmUploadFilesSpan && apmUploadFilesSpan.end()
-      const apmFinishUploadSpan = apmTransaction &&
-        apmTransaction.startSpan("finishUpload")
       await finishUpload(client, preparedUpload.id)
-      apmUploadFilesSpan && apmFinishUploadSpan.end()
     } else {
       console.log("No files remaining to upload, exiting.")
     }
-    apmTransaction && apmTransaction.end()
     return datasetId
   }
 }
@@ -252,15 +239,6 @@ const promptTags = (snapshots) =>
  * @param {Object} cmd
  */
 export const download = (datasetId, destination, cmd) => {
-  const apmTransaction = apm.startTransaction(
-    `download:${datasetId}`,
-    "download",
-  )
-  const { sub } = getUser()
-  apmTransaction.addLabels({ datasetId, userId: sub })
-  if (cmd.snapshot) {
-    apmTransaction.addLabels({ snapshot: cmd.snapshot })
-  }
   const client = configuredClient()
   if (!cmd.draft && !cmd.snapshot) {
     return getSnapshots(client)(datasetId).then(({ data }) => {
@@ -272,7 +250,6 @@ export const download = (datasetId, destination, cmd) => {
             destination,
             datasetId,
             choices.tag,
-            apmTransaction,
             client,
           )
         )
@@ -283,13 +260,11 @@ export const download = (datasetId, destination, cmd) => {
       destination,
       datasetId,
       cmd.snapshot,
-      apmTransaction,
       client,
     )
   } else {
-    return getDownload(destination, datasetId, null, apmTransaction, client)
+    return getDownload(destination, datasetId, null, client)
   }
-  apmTransaction.end()
 }
 
 /**

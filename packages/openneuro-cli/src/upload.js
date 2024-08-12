@@ -27,10 +27,9 @@ const validatePromise = (dir, options = {}) => {
   })
 }
 
-const fatalError = (err, apmSpan) => {
+const fatalError = (err) => {
   // eslint-disable-next-line no-console
   console.error(err)
-  apmSpan.end()
   process.exit(1)
 }
 
@@ -38,18 +37,14 @@ const fatalError = (err, apmSpan) => {
  * Runs validation, logs summary or exits if an error is encountered
  * @param {string} dir Directory to validate
  * @param {object} validatorOptions Options passed to the validator
- * @param {object} apmTransaction Elastic APM Transaction object
  */
-export const validation = (dir, validatorOptions, apmTransaction) => {
-  const apmValidatePromiseSpan = apmTransaction &&
-    apmTransaction.startSpan("validatePromise")
+export const validation = (dir, validatorOptions) => {
   return validatePromise(dir, validatorOptions)
     .then(function ({ summary }) {
       // eslint-disable-next-line no-console
       console.log(validate.consoleFormat.summary(summary))
-      apmValidatePromiseSpan.end()
     })
-    .catch((err) => fatalError(err, apmValidatePromiseSpan))
+    .catch((err) => fatalError(err))
 }
 
 /**

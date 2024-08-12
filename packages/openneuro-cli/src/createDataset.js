@@ -2,7 +2,6 @@ import { gql } from "@apollo/client"
 import inquirer from "inquirer"
 import { getUrl } from "./config.js"
 import { configuredClient } from "./configuredClient.js"
-import { apm } from "./apm.js"
 
 const CREATE_DATASET = gql`
   mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
@@ -17,7 +16,6 @@ const CREATE_DATASET = gql`
 `
 
 export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
-  const apmTransaction = apm.startTransaction("createDataset", "custom")
   const url = getUrl()
   const client = configuredClient()
   try {
@@ -35,7 +33,6 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
       'Dataset creation failed, you may need to rerun setup with "openneuro login" first',
     )
   }
-  apmTransaction.end()
 }
 
 export const create = () => {

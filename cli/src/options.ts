@@ -5,7 +5,7 @@ import {
   LogLevelNames,
   ValidatorOptions,
 } from "./deps.ts"
-
+import lernaJson from "../../lerna.json" with { type: "json" }
 import { setupLogging } from "./logger.ts"
 import { login } from "./commands/login.ts"
 import { upload } from "./commands/upload.ts"
@@ -24,7 +24,7 @@ const openneuroCommand = new Command()
     "OpenNeuro command line tools for uploading, downloading, or syncing datasets. See https://docs.openneuro.org for detailed guides.",
   )
   // TODO - Sync this with the node packages
-  .version("4.20.4")
+  .version(lernaJson.version)
   .globalType("debugLevel", new EnumType(LogLevelNames))
   .globalEnv("OPENNEURO_LOG=<type:debugLevel>", "Enable debug output.")
   .globalAction(({ openneuroLog }) => {
