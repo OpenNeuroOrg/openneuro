@@ -1,5 +1,5 @@
 import React from "react"
-
+import { Link } from "react-router-dom"
 import { frontPage } from "../content/front-page-content"
 
 export interface FooterProps {
@@ -16,9 +16,14 @@ export const Footer: React.FC<FooterProps> = ({ version }) => {
         <div className="col col-4 privacy-policy">
           <span>
             <a href={frontPage.titlePanel.privacyLink}>
-              {frontPage.pageTitle}
-              &#39;s Privacy Policy
+              Privacy Policy
             </a>
+          </span>{" "}
+          &{" "}
+          <span>
+            <Link to="/terms">
+              Terms
+            </Link>
           </span>
         </div>
         <div className="col col-4  copy">
