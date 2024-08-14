@@ -2,7 +2,7 @@
  * Browser client entrypoint - see server.tsx for SSR entrypoint
  */
 import "./scripts/utils/global-polyfill"
-import "./scripts/sentry.ts"
+import "./scripts/sentry"
 import { ApolloProvider, InMemoryCache } from "@apollo/client"
 import { createClient } from "@openneuro/client"
 import React from "react"
