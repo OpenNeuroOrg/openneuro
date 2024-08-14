@@ -8,6 +8,8 @@ export const sitemapStaticUrls = () => [
   { url: "/public/datasets", priority: 1.0, changefreq: "daily" },
   { url: "/faq", priority: 0.6, changefreq: "monthly" },
   { url: "/pet", priority: 0.5, changefreq: "monthly" },
+  { url: "/terms", priority: 0.5, changefreq: "monthly" },
+  { url: "/cite", priority: 0.4, changefreq: "monthly" },
   { url: "/public/jobs", priority: 0.5, changefreq: "monthly" },
   { url: "/crn/graphql", priority: 0.3 },
 ]
