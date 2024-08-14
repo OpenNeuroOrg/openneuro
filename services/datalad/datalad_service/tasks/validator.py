@@ -12,7 +12,7 @@ logger = logging.getLogger('datalad_service.' + __name__)
 
 LEGACY_VALIDATOR_VERSION = json.load(
     open('package.json'))['dependencies']['bids-validator']
-DENO_VALIDATOR_VERSION = 'v1.13.0'
+DENO_VALIDATOR_VERSION = 'v1.14.8'
 
 LEGACY_METADATA = {
     'validator': 'legacy',
