@@ -72,7 +72,7 @@ async def validate_dataset_call(dataset_path, ref, logger=logger):
     )
 
 
-async def validate_dataset_deno_call(dataset_path, ref):
+async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     """
     Synchronous dataset validation.
 
@@ -83,6 +83,7 @@ async def validate_dataset_deno_call(dataset_path, ref):
          f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
          '--json', dataset_path],
         timeout=300,
+        logger=logger
     )
 
 
