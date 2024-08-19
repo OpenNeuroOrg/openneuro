@@ -1,5 +1,5 @@
 ARG LERNA_JSON
-FROM docker.io/denoland/deno:bin-1.33.1 AS deno
+FROM docker.io/denoland/deno:bin-1.45.5 AS deno
 FROM docker.io/library/python:3.11-slim as production
 
 WORKDIR /srv
