@@ -152,7 +152,7 @@ export const participantCount = (obj, { modality }) => {
         $and: [
           queryHasSubjects,
           {
-            "summary.modalities.0": modality,
+            "summary.modalities": modality,
           },
         ],
       }
