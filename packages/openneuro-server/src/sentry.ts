@@ -14,4 +14,11 @@ Sentry.init({
   // Set sampling rate for profiling - this is relative to tracesSampleRate
   profilesSampleRate: 1.0,
   release: `openneuro-server@${version}`,
+  beforeSendTransaction(event) {
+    if (event.transaction === "/crn/") {
+      // Don't measure the healthcheck endpoint
+      return null
+    }
+    return event
+  },
 })
