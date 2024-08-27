@@ -8,7 +8,6 @@ import pygit2
 
 from datalad_service.common.git import git_commit
 from datalad_service.common.user import get_user_info
-from datalad_service.common.draft import update_head
 
 
 async def move_files(upload_path, dataset_path):
@@ -31,7 +30,6 @@ async def move_files_into_repo(dataset_id, dataset_path, upload_path, name, emai
         hexsha = git_commit(repo, unlock_files, author).hex
     else:
         hexsha = git_commit(repo, unlock_files).hex
-    update_head(dataset_id, dataset_path, hexsha, cookies)
 
 
 class UploadResource:
