@@ -1,6 +1,6 @@
 import asyncio
-import os
 
+import aiofiles.os
 import falcon
 import pygit2
 
@@ -19,7 +19,7 @@ class DatasetResource:
 
     async def on_get(self, req, resp, dataset):
         ds_path = self.store.get_dataset_path(dataset)
-        if (os.path.isdir(ds_path)):
+        if await aiofiles.os.path.isdir(ds_path):
             dataset_description = {
                 'accession_number': dataset,
             }
@@ -32,7 +32,7 @@ class DatasetResource:
 
     async def on_post(self, req, resp, dataset):
         ds_path = self.store.get_dataset_path(dataset)
-        if (os.path.isdir(ds_path)):
+        if await aiofiles.os.path.isdir(ds_path):
             resp.media = {'error': 'dataset already exists'}
             resp.status = falcon.HTTP_CONFLICT
         else:
@@ -48,15 +48,12 @@ class DatasetResource:
 
     async def on_delete(self, req, resp, dataset):
         dataset_path = self.store.get_dataset_path(dataset)
-        async def async_delete():
-            await delete_siblings(dataset)
-            await delete_dataset(dataset_path)
 
-        try:
-            # Don't block before responding
-            asyncio.run_task(async_delete())
+        if await aiofiles.os.path.exists(dataset_path):
+            await asyncio.gather(delete_siblings(dataset), delete_dataset(dataset_path))
+
             resp.media = {}
             resp.status = falcon.HTTP_OK
-        except:
-            resp.media = {'error': 'dataset not found'}
+        else:
+            resp.media = {'error': 'dataset does not exist'}
             resp.status = falcon.HTTP_NOT_FOUND
