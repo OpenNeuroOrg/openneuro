@@ -91,8 +91,8 @@ const Users = ({ users, refetch, loading }) => {
     .filter(
       (user) =>
         !stringFilter ||
-        user.email.toLowerCase().includes(stringFilter.toLowerCase()) ||
-        user.name.toLowerCase().includes(stringFilter.toLowerCase()),
+        user.email?.toLowerCase().includes(stringFilter.toLowerCase()) ||
+        user.name?.toLowerCase().includes(stringFilter.toLowerCase()),
     )
     .map((user, index) => {
       const adminBadge = user.admin ? "Admin" : null
