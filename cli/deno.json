@@ -1,0 +1,18 @@
+{
+  "name": "@openneuro/cli",
+  "version": "4.27.0",
+  "exports": "./mod.ts",
+  "publish": {
+    "include": [
+      "cli"
+    ]
+  },
+  "fmt": {
+    "semiColons": false,
+    "proseWrap": "preserve"
+  },
+  "tasks": {
+    "tests": "deno test --allow-read --allow-write --allow-env ./",
+    "coverage": "deno test --allow-read --allow-write --allow-net --allow-env --coverage ./ && deno coverage ./coverage --lcov > ./coverage.lcov"
+  }
+}
