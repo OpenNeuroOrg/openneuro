@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Navigate, NavLink, Route, Routes } from "react-router-dom"
-import Users from "./users.jsx"
+import Users from "./users.tsx"
 import FlaggedFiles from "./flagged-files.jsx"
 import AdminUser from "../../authentication/admin-user.jsx"
 
