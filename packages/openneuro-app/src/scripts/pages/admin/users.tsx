@@ -134,6 +134,7 @@ const Users = ({ users, refetch, loading }) => {
             type="text"
             placeholder="Search Name or Email"
             onKeyDown={(e) => setStringFilter(e.target.value)}
+            setValue={(_) => {}}
           />
         </div>
 
