@@ -4,7 +4,6 @@ import pygit2
 
 from datalad_service.common.annex import get_repo_files
 from datalad_service.common.git import git_commit, git_commit_index, COMMITTER_EMAIL, COMMITTER_NAME
-from datalad_service.common.draft import update_head
 from datalad_service.tasks.validator import validate_dataset
 
 
@@ -42,7 +41,6 @@ def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     repo.checkout_index()
     hexsha = str(git_commit_index(repo, author,
                               message="[OpenNeuro] Files removed"))
-    asyncio.create_task(update_head(dataset, dataset_path, hexsha, cookies))
 
 
 def remove_annex_object(dataset_path, annex_key):

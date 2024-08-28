@@ -11,13 +11,3 @@ def draft_revision_mutation(dataset_id, ref):
         'query': 'mutation ($datasetId: ID!, $ref: String!) { updateRef(datasetId: $datasetId, ref: $ref) }',
         'variables': {'datasetId': dataset_id, 'ref': ref}
     }
-
-
-async def update_head(dataset_id, dataset_path, hexsha, cookies=None):
-    """Pass HEAD commit references back to OpenNeuro"""
-    # We may want to detect if we need to run validation here?
-    asyncio.create_task(validate_dataset(dataset_id, dataset_path, hexsha))
-    r = requests.post(url=GRAPHQL_ENDPOINT,
-                      json=draft_revision_mutation(dataset_id, hexsha), cookies=cookies)
-    if r.status_code != 200:
-        raise Exception(r.text)
