@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os.path
 import re
+from concurrent.futures import ProcessPoolExecutor
 
 import pygit2
 import boto3
@@ -22,6 +23,9 @@ from datalad_service.common.github import github_export
 from datalad_service.common.s3 import s3_export, get_s3_remote, get_s3_bucket, update_s3_sibling
 
 logger = logging.getLogger('datalad_service.' + __name__)
+
+
+delete_executor = ProcessPoolExecutor(4)
 
 
 def github_sibling(dataset_path, dataset_id):
@@ -110,7 +114,13 @@ def check_remote_has_version(dataset_path, remote, tag):
     return remote_id_A == remote_id_B and tree_id_A == tree_id_B
 
 
-async def delete_s3_sibling(dataset_id):
+def delete_s3_sibling(dataset_id):
+    """Run S3 sibling deletion in another process to avoid blocking any callers"""
+    delete_executor.submit(delete_s3_sibling_executor, dataset_id)
+
+
+def delete_s3_sibling_executor(dataset_id):
+    """Delete all versions of a dataset from S3."""
     try:
         client = boto3.client(
             's3',
@@ -124,8 +134,6 @@ async def delete_s3_sibling(dataset_id):
             versions.extend(response.get('DeleteMarkers', []))
             object_delete_list.extend(
                 [{'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
-            # Yield after each request
-            await asyncio.sleep(0)
         for i in range(0, len(object_delete_list), 1000):
             client.delete_objects(
                 Bucket=get_s3_bucket(),
@@ -134,8 +142,6 @@ async def delete_s3_sibling(dataset_id):
                     'Quiet': True
                 }
             )
-            # Yield after each request
-            await asyncio.sleep(0)
     except Exception as e:
         raise Exception(
             f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})')
@@ -156,15 +162,8 @@ async def delete_github_sibling(dataset_id):
 
 
 async def delete_siblings(dataset_id):
-    try:
-        await delete_s3_sibling(dataset_id)
-    except:
-        pass
-    await asyncio.sleep(0)
-    try:
-        await delete_github_sibling(dataset_id)
-    except:
-        pass
+    delete_s3_sibling(dataset_id)
+    await delete_github_sibling(dataset_id)
 
 
 def monitor_remote_configs(dataset_path):

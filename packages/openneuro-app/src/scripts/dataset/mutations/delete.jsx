@@ -32,7 +32,7 @@ const DeleteDataset = ({ datasetId, metadata }) => {
                 },
               })
               window.location.replace(
-                `${window.location.origin}/dashboard/datasets`,
+                `${window.location.origin}/search`,
               )
             })}
           >
