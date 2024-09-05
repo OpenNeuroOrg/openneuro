@@ -133,10 +133,9 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
 
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
     validator_output = await validate_dataset_call(dataset_path, ref)
-    all_issues = validator_output['issues']['warnings'] + \
-        validator_output['issues']['errors']
     if validator_output:
         if 'issues' in validator_output:
+            all_issues = validator_output['issues']['warnings'] + validator_output['issues']['errors']
             r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, all_issues, LEGACY_METADATA), cookies=cookies)
             if r.status_code != 200 or 'errors' in r.json():
@@ -146,8 +145,6 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
                 url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output, LEGACY_METADATA), cookies=cookies)
             if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
-    else:
-        raise Exception('Validation failed unexpectedly')
 
     # New schema validator second in case of issues
     validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)
