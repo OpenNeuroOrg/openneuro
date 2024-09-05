@@ -1,5 +1,7 @@
-import { assertEquals, assertSpyCalls, Select, stub } from "../deps.ts"
 import { loginAction } from "./login.ts"
+import { Select } from "@cliffy/prompt"
+import { assertEquals } from "@std/assert/equals"
+import { assertSpyCalls, stub } from "@std/testing/mock"
 
 Deno.test("login action supports non-interactive mode if all options are provided", async () => {
   const SelectStub = stub(Select, "prompt", () => {

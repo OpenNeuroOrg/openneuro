@@ -1,4 +1,4 @@
-import { stub } from "../deps.ts"
+import { stub } from "@std/testing/mock"
 
 export function mockFetch(response: Response) {
   return stub(

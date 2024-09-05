@@ -1,6 +1,6 @@
-import { assertEquals } from "../deps.ts"
-import { assertSpyCallArgs, assertSpyCalls } from "../deps.ts"
 import { mockFetch } from "./fetch-stub.ts"
+import { assertEquals } from "@std/assert/equals"
+import { assertSpyCallArgs, assertSpyCalls } from "@std/testing/mock"
 
 Deno.test({
   name: "fetch test",

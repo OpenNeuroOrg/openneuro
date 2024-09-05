@@ -1,5 +1,5 @@
 import { logger } from "../logger.ts"
-import { encodeBase64 } from "../deps.ts"
+import { encodeBase64 } from "@std/encoding/base64"
 
 /** Deno port of transferKey from Node.js CLI */
 

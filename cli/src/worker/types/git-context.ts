@@ -1,7 +1,7 @@
 import http from "npm:isomorphic-git@1.25.3/http/node/index.js"
-import { decode } from "https://deno.land/x/djwt@v3.0.1/mod.ts"
+import { decode } from "@wok/djwt"
 import fs from "node:fs"
-import { LevelName } from "../../deps.ts"
+import type { LevelName } from "@std/log/levels"
 
 /**
  * Git repo specific token

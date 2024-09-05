@@ -1,0 +1,36 @@
+{
+  "name": "@openneuro/cli",
+  "license": "MIT",
+  "version": "4.27.0",
+  "exports": "./mod.ts",
+  "publish": {
+    "include": [
+      "."
+    ]
+  },
+  "fmt": {
+    "semiColons": false,
+    "proseWrap": "preserve"
+  },
+  "tasks": {
+    "tests": "deno test --allow-read --allow-write --allow-env ./",
+    "coverage": "deno test --allow-read --allow-write --allow-net --allow-env --coverage ./ && deno coverage ./coverage --lcov > ./coverage.lcov"
+  },
+  "imports": {
+    "@bids/validator": "jsr:@bids/validator@^1.14.12",
+    "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.5",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.5",
+    "@deno-library/progress": "jsr:@deno-library/progress@^1.4.9",
+    "@sentry/deno": "npm:@sentry/deno@^8.27.0",
+    "@std/assert": "jsr:@std/assert@^1.0.3",
+    "@std/encoding": "jsr:@std/encoding@^1.0.3",
+    "@std/fs": "jsr:@std/fs@^1.0.2",
+    "@std/log": "jsr:@std/log@^0.224.6",
+    "@std/path": "jsr:@std/path@^1.0.3",
+    "@std/streams": "jsr:@std/streams@^1.0.3",
+    "@std/testing": "jsr:@std/testing@^1.0.1",
+    "@wok/djwt": "jsr:@wok/djwt@^3.0.2",
+    "ignore": "npm:ignore@^5.3.0",
+    "isomorphic-git": "npm:isomorphic-git@^1.25.6"
+  }
+}

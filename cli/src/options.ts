@@ -1,11 +1,7 @@
-import {
-  Command,
-  EnumType,
-  LevelName,
-  LogLevelNames,
-  ValidatorOptions,
-} from "./deps.ts"
-import lernaJson from "../../lerna.json" with { type: "json" }
+import { Command, EnumType } from "@cliffy/command"
+import { type LevelName, LogLevelNames } from "@std/log"
+import type { ValidatorOptions } from "@bids/validator/options"
+import denoJson from "../deno.json" with { type: "json" }
 import { setupLogging } from "./logger.ts"
 import { login } from "./commands/login.ts"
 import { upload } from "./commands/upload.ts"
@@ -13,9 +9,10 @@ import { download } from "./commands/download.ts"
 import { gitCredential } from "./commands/git-credential.ts"
 
 export type OpenNeuroOptions = {
+  datasetPath: string
   localPath?: string
   validatorOptions?: ValidatorOptions
-  debug: LevelName
+  debug?: LevelName
 }
 
 const openneuroCommand = new Command()
@@ -23,8 +20,7 @@ const openneuroCommand = new Command()
   .description(
     "OpenNeuro command line tools for uploading, downloading, or syncing datasets. See https://docs.openneuro.org for detailed guides.",
   )
-  // TODO - Sync this with the node packages
-  .version(lernaJson.version)
+  .version(denoJson.version)
   .globalType("debugLevel", new EnumType(LogLevelNames))
   .globalEnv("OPENNEURO_LOG=<type:debugLevel>", "Enable debug output.")
   .globalAction(({ openneuroLog }) => {
@@ -46,7 +42,7 @@ export async function commandLine(
   const { args, options } = await openneuroCommand.parse(argumentOverride)
 
   return {
-    datasetPath: args[0],
+    datasetPath: args[0] as string,
     ...options,
   }
 }

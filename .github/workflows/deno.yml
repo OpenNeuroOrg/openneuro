@@ -20,7 +20,9 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-12]
       fail-fast: false
-
+    defaults:
+      run:
+        working-directory: ./cli
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1.1.2

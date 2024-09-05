@@ -1,4 +1,5 @@
-import { assertEquals, assertObjectMatch } from "./deps.ts"
+import { assertEquals } from "@std/assert/equals"
+import { assertObjectMatch } from "@std/assert/object-match"
 import { matchGitAttributes, parseGitAttributes } from "./gitattributes.ts"
 
 const testAttributes = `* annex.backend=SHA256E

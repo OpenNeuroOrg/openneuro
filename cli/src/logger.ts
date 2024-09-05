@@ -1,4 +1,10 @@
-import { getLogger, handlers, LevelName, Logger, setup } from "./deps.ts"
+import {
+  ConsoleHandler,
+  getLogger,
+  type LevelName,
+  type Logger,
+  setup,
+} from "@std/log"
 
 const loggerName = "@openneuro/cli"
 
@@ -8,7 +14,7 @@ const loggerName = "@openneuro/cli"
 export function setupLogging(level: LevelName) {
   setup({
     handlers: {
-      console: new handlers.ConsoleHandler(level),
+      console: new ConsoleHandler(level),
     },
 
     loggers: {
@@ -39,7 +45,7 @@ const loggerProxyHandler = {
       const callerLocation = parseStack(stack)
       logger.debug(`Logger invoked at "${callerLocation}"`)
     }
-    const logFunc = logger[prop] as typeof logger.warning
+    const logFunc = logger[prop] as typeof logger.warn
     return logFunc.bind(logger)
   },
 }

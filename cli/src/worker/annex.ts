@@ -1,5 +1,6 @@
-import { GitWorkerContext } from "./types/git-context.ts"
-import { basename, dirname, git, join, relative } from "../deps.ts"
+import type { GitWorkerContext } from "./types/git-context.ts"
+import { basename, dirname, join, relative } from "@std/path"
+import { default as git } from "npm:isomorphic-git"
 
 /**
  * Why are we using hash wasm over web crypto?
