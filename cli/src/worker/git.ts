@@ -4,13 +4,15 @@ import {
   matchGitAttributes,
   parseGitAttributes,
 } from "../gitattributes.ts"
-import { dirname, git, join, STAGE, TREE } from "../deps.ts"
+import { dirname, join } from "@std/path"
+import { default as git, STAGE, TREE } from "npm:isomorphic-git"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
-import { ProgressBar } from "../deps.ts"
+import ProgressBar from "@deno-library/progress"
 import { annexAdd, hashDirLower, readAnnexPath } from "./annex.ts"
-import { GitWorkerContext, GitWorkerEventAdd } from "./types/git-context.ts"
+import { GitWorkerContext } from "./types/git-context.ts"
+import type { GitWorkerEventAdd } from "./types/git-context.ts"
 
 let context: GitWorkerContext
 let attributesCache: GitAnnexAttributes

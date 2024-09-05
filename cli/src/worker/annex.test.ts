@@ -1,4 +1,5 @@
-import { assertEquals, join } from "../deps.ts"
+import { assertEquals } from "@std/assert/equals"
+import { join } from "@std/path/join"
 import { annexRelativePath, hashDirLower, hashDirMixed } from "./annex.ts"
 
 Deno.test("annexRelativePath() returns appropriate paths", () => {

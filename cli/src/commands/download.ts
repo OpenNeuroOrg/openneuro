@@ -1,4 +1,5 @@
-import { Command } from "../deps.ts"
+import { Command } from "@cliffy/command"
+import type { CommandOptions } from "@cliffy/command"
 import { readConfig } from "../config.ts"
 import { logger } from "../logger.ts"
 import { getRepoAccess } from "./git-credential.ts"
@@ -50,5 +51,7 @@ export async function downloadAction(
   // Close after all tasks are queued
   worker.postMessage({ command: "done" })
 
-  console.log("Download complete. To download all data files, use `datalad get` or `git-annex get`.")
+  console.log(
+    "Download complete. To download all data files, use `datalad get` or `git-annex get`.",
+  )
 }

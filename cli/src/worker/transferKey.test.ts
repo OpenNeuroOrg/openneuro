@@ -6,7 +6,8 @@ import {
   retrieveKey,
   storeKey,
 } from "./transferKey.ts"
-import { assertEquals, assertStrictEquals } from "../deps.ts"
+import { assertEquals } from "@std/assert/equals"
+import { assertStrictEquals } from "@std/assert/strict-equals"
 import { mockFetch } from "../tests/fetch-stub.ts"
 
 Deno.test({

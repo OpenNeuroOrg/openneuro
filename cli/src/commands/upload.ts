@@ -1,12 +1,13 @@
-import {
-  consoleFormat,
-  readFileTree,
-  validate,
-  validateCommand,
-} from "../bids_validator.ts"
+import { validate } from "@bids/validator/main"
+import { validateCommand } from "@bids/validator/options"
+import { readFileTree } from "@bids/validator/files"
+import { consoleFormat } from "@bids/validator/output"
 import { logger } from "../logger.ts"
-import { Confirm, join, prompt, relative, resolve, walk } from "../deps.ts"
-import type { CommandOptions } from "../deps.ts"
+import { prompt } from "@cliffy/prompt"
+import { join, relative, resolve } from "@std/path"
+import { walk } from "@std/fs/walk"
+import { Confirm } from "@cliffy/prompt"
+import type { CommandOptions } from "@cliffy/command"
 import { getRepoAccess } from "./git-credential.ts"
 import { readConfig } from "../config.ts"
 import { createDataset } from "../graphq.ts"
@@ -73,7 +74,7 @@ export async function uploadAction(
   )
   console.log(consoleFormat(schemaResult))
 
-  for (const issue of schemaResult.issues.values()) {
+  for (const issue of schemaResult.issues.issues) {
     if (issue.severity === "error") {
       console.log("Please correct validation errors before uploading.")
       return
@@ -85,7 +86,7 @@ export async function uploadAction(
   if (options.dataset) {
     datasetId = options.dataset
   } else {
-    if (!options.create) {
+    if (!options.new) {
       const confirmation = await prompt([
         {
           name: "create",
@@ -183,10 +184,10 @@ export const upload = validateCommand
     "-d, --dataset [dataset:string]",
     "Specify an existing dataset to update.",
     {
-      conflicts: ["create"],
+      conflicts: ["new"],
     },
   )
-  .option("-c, --create", "Skip confirmation to create a new dataset.", {
+  .option("-n, --new", "Skip confirmation to create a new dataset.", {
     conflicts: ["dataset"],
   })
   .option(

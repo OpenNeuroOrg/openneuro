@@ -1,8 +1,9 @@
 /**
  * Configure credentials and other persistent settings for OpenNeuro
  */
-import { Command, Confirm, Secret, Select } from "../deps.ts"
-import type { CommandOptions } from "../deps.ts"
+import { Command } from "@cliffy/command"
+import type { CommandOptions } from "@cliffy/command"
+import { Confirm, Secret, Select } from "@cliffy/prompt"
 
 const messages = {
   url:

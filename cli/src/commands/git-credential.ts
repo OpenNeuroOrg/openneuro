@@ -1,4 +1,5 @@
-import { Command, TextLineStream } from "../deps.ts"
+import { Command } from "@cliffy/command"
+import { TextLineStream } from "@std/streams"
 import { getConfig } from "../config.ts"
 
 const prepareRepoAccess = `
@@ -12,10 +13,10 @@ const prepareRepoAccess = `
 
 interface GraphQLError {
   message: string
-  locations: { line: number, column: number }[]
+  locations: { line: number; column: number }[]
   path: string[]
   extensions: {
-    code: string,
+    code: string
     stacktrace: string[]
   }
 }
@@ -38,7 +39,7 @@ export async function getRepoAccess(datasetId?: string) {
   const response = await req.json()
   if (response.errors) {
     const errors: GraphQLError[] = response.errors
-    throw Error(errors.map(error => error.message).toString())
+    throw Error(errors.map((error) => error.message).toString())
   } else {
     return {
       token: response.data.prepareRepoAccess.token, // Short lived repo access token

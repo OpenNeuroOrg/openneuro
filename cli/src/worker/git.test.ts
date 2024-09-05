@@ -1,11 +1,8 @@
-import {
-  assertArrayIncludes,
-  assertEquals,
-  git,
-  join,
-  SEPARATOR,
-  walk,
-} from "../deps.ts"
+import { join, SEPARATOR } from "@std/path"
+import { walk } from "@std/fs/walk"
+import { default as git } from "npm:isomorphic-git"
+import { assertEquals } from "@std/assert/equals"
+import { assertArrayIncludes } from "@std/assert/array-includes"
 import { addGitFiles } from "../commands/upload.ts"
 import fs from "node:fs"
 

@@ -1,4 +1,4 @@
-import { assertEquals } from "../deps.ts"
+import { assertEquals } from "@std/assert/equals"
 import { PromiseQueue } from "./queue.ts"
 
 Deno.test("PromiseQueue should execute promises in order", async () => {
