@@ -20,7 +20,6 @@ const openneuroCommand = new Command()
   .description(
     "OpenNeuro command line tools for uploading, downloading, or syncing datasets. See https://docs.openneuro.org for detailed guides.",
   )
-  // TODO - Sync this with the node packages
   .version(denoJson.version)
   .globalType("debugLevel", new EnumType(LogLevelNames))
   .globalEnv("OPENNEURO_LOG=<type:debugLevel>", "Enable debug output.")
