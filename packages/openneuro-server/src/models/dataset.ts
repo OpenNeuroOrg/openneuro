@@ -27,6 +27,7 @@ export interface DatasetDocument extends Document {
   downloads: number
   views: number
   related: [DatasetRelationDocument]
+  schemaValidator: boolean
   _conditions: any
 }
 
@@ -42,6 +43,7 @@ const datasetSchema = new Schema<DatasetDocument>(
     downloads: Number,
     views: Number,
     related: [RelationSchema],
+    schemaValidator: { type: Boolean, default: false },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 )
