@@ -10,6 +10,9 @@ Sentry.init({
 })
 import { commandLine } from "./src/options.ts"
 
+/**
+ * Entrypoint for running OpenNeuro command line tools
+ */
 export async function main() {
   await commandLine(Deno.args)
 }
