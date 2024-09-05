@@ -146,8 +146,6 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
                 url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output, LEGACY_METADATA), cookies=cookies)
             if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
-    else:
-        raise Exception('Validation failed unexpectedly')
 
     # New schema validator second in case of issues
     validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)
