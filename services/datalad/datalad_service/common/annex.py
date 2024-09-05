@@ -10,7 +10,7 @@ import datalad_service.config
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
-S3_BUCKETS_WHITELIST = ['openneuro.org', 'openneuro-dev-datalad-public', 'bobsrepository']
+S3_BUCKETS_WHITELIST = ['openneuro.org', 'openneuro-dev-datalad-public', 'openneuro-derivatives', 'bobsrepository']
 
 
 def init_annex(dataset_path):
