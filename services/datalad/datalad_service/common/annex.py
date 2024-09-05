@@ -10,6 +10,7 @@ import datalad_service.config
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
+S3_BUCKETS_WHITELIST = ['openneuro.org', 'openneuro-dev-datalad-public', 'bobsrepository']
 
 
 def init_annex(dataset_path):
@@ -86,11 +87,10 @@ def compute_rmet(key, legacy=False):
     return f'{keyHash[0:3]}/{keyHash[3:6]}/{key}.log.rmet'
 
 
-def parse_remote_line(remoteLine,
-                      preferredRemote='s3-PUBLIC'):
+def parse_remote_line(remoteLine):
     remoteConfig = dict(item.split('=')
                         for item in remoteLine[37:].split(' '))
-    if remoteConfig['name'] == preferredRemote:
+    if remoteConfig['type'] == 'S3' and remoteConfig['bucket'] in S3_BUCKETS_WHITELIST:
         remoteUuid = remoteLine[0:36]
         remoteUrl = remoteConfig['publicurl'] if 'publicurl' in remoteConfig else None
         return {'uuid': remoteUuid, 'url': remoteUrl}
