@@ -39,7 +39,7 @@ export const TabRoutesSnapshot = ({ dataset, snapshot }) => {
       <Route
         path="file-display/:filePath"
         element={
-          <FileDisplayRoute datasetId={dataset.id} snapshotTag={snapshot.tag} />
+          <FileDisplayRoute dataset={snapshot} snapshotTag={snapshot.tag} />
         }
       />
       <Route path="metadata" element={<AddMetadata dataset={dataset} />} />
