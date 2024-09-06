@@ -61,7 +61,7 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
       />
       <Route
         path="file-display/:filePath"
-        element={<FileDisplayRoute datasetId={dataset.id} />}
+        element={<FileDisplayRoute dataset={dataset} />}
       />
       <Route path="metadata" element={<AddMetadata dataset={dataset} />} />
     </Routes>

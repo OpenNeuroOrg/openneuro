@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { Loading } from "@openneuro/components/loading"
-import { apiPath } from "./file"
 import FileViewerType from "./file-viewer-type.jsx"
 
-const FileView = ({ datasetId, snapshotTag, path }) => {
-  const url = apiPath(datasetId, snapshotTag, path)
+const FileView = ({ url, path }) => {
   const [data, setData] = useState(new ArrayBuffer(0))
   const [loading, setLoading] = useState(true)
 

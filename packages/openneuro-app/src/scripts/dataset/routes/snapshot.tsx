@@ -7,6 +7,7 @@ import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow4 } from "./styles/header-row"
 import FileView from "../files/file-view"
 import styled from "@emotion/styled"
+import { apiPath } from "../files/file"
 
 const FormRow = styled.div`
   margin-top: 0;
@@ -108,8 +109,7 @@ const SnapshotRoute = ({
               <FormRow>
                 <HeaderRow4>Current Changelog</HeaderRow4>
                 <FileView
-                  datasetId={datasetId}
-                  snapshotTag={latestSnapshot.tag}
+                  url={apiPath(datasetId, latestSnapshot.tag, "CHANGES")}
                   path="CHANGES"
                 />
               </FormRow>
