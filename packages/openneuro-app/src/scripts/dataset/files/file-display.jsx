@@ -67,6 +67,7 @@ const FileDisplay = ({ dataset, snapshotTag = null, filePath }) => {
       const file = files.find((file) => file.filename === path)
       if (file && file.directory) {
         fetchMoreDirectory(fetchMore, dataset.id, snapshotTag, file)
+        break
       }
     }
     return (
