@@ -158,12 +158,25 @@ def get_repo_urls(path, files):
                     rmetFiles[rmetPath] = f
                     rmetPaths.append(rmetPath)
     # Then read those objects with git cat-file --batch
-    gitObjects = rmetObjects['remote.log'] + '\n' + \
-        '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
+    gitObjects = ''
+    if 'trust.log' in rmetObjects:
+        gitObjects += rmetObjects['trust.log'] + '\n'
+    gitObjects += rmetObjects['remote.log'] + '\n'
+    gitObjects += '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
     catFileProcess = subprocess.run(['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
                                     cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, text=True)
     catFile = io.StringIO(catFileProcess.stdout)
-    # Read in remote.log first
+    # Read in trust.log and remote.log first
+    trustLog = {}
+    if 'trust.log' in rmetObjects:
+        trustLogMetadata = catFile.readline().rstrip()
+        while True:
+            line = catFile.readline().rstrip()
+            if line == '':
+                break
+            else:
+                uuid, trust, timestamp = line.split(' ')
+                trustLog[uuid] = trust
     remoteLogMetadata = catFile.readline().rstrip()
     remote = None
     while True:
@@ -171,13 +184,12 @@ def get_repo_urls(path, files):
         if line == '':
             break
         else:
-            matched_remote = parse_remote_line(line)
-            if matched_remote:
-                remote = matched_remote
-                # Prefer the s3-PUBLIC remote if we find one
-                # TODO - Identify the best remote dynamically
-                if matched_remote['name'] == 's3-PUBLIC':
-                    break
+            matchedRemote = parse_remote_line(line)
+            # X remotes are dead
+            if matchedRemote and matchedRemote['uuid'] in trustLog and trustLog[matchedRemote['uuid']] == "X":
+                continue
+            if matchedRemote:
+                remote = matchedRemote
     # Check if we found a useful external remote
     if remote:
         # Read the rest of the files.
