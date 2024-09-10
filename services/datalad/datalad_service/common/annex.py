@@ -93,7 +93,7 @@ def parse_remote_line(remoteLine):
     if remoteConfig['type'] == 'S3' and remoteConfig['bucket'] in S3_BUCKETS_WHITELIST:
         remoteUuid = remoteLine[0:36]
         remoteUrl = remoteConfig['publicurl'] if 'publicurl' in remoteConfig else None
-        return {'uuid': remoteUuid, 'url': remoteUrl}
+        return {'uuid': remoteUuid, 'url': remoteUrl, 'name': remoteConfig['name']}
 
 
 def parse_rmet_line(remote, rmetLine):
@@ -174,6 +174,10 @@ def get_repo_urls(path, files):
             matched_remote = parse_remote_line(line)
             if matched_remote:
                 remote = matched_remote
+                # Prefer the s3-PUBLIC remote if we find one
+                # TODO - Identify the best remote dynamically
+                if matched_remote['name'] == 's3-PUBLIC':
+                    break
     # Check if we found a useful external remote
     if remote:
         # Read the rest of the files.
