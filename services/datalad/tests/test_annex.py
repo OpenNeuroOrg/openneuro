@@ -108,7 +108,8 @@ def test_compute_rmet_sha256_annex():
 def test_parse_remote_line():
     remote = parse_remote_line("""57894849-d0c8-4c62-8418-3627be18a196 autoenable=true bucket=openneuro.org datacenter=US encryption=none exporttree=yes fileprefix=ds002778/ host=s3.amazonaws.com name=s3-PUBLIC partsize=1GiB port=80 public=yes publicurl=http://openneuro.org.s3.amazonaws.com/ storageclass=STANDARD type=S3 versioning=yes timestamp=1588743361.538097946s""")
     assert remote == {'url': 'http://openneuro.org.s3.amazonaws.com/',
-                      'uuid': '57894849-d0c8-4c62-8418-3627be18a196'}
+                      'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
+                      'name': 's3-PUBLIC'}
 
 
 def test_parse_rmet_line():
