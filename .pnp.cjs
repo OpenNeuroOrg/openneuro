@@ -4272,7 +4272,7 @@ const RAW_RUNTIME_STATE =
           ["@graphql-tools/utils", "virtual:1728807850d6df0af9808e024ec3115cb3a28ce8c7ad87b1d3ee8124c91d8ff09a08592411c8193e2748c7895f1c61da00300feeec8e95b0ed1136d58819aba8#npm:10.0.4"],\
           ["@graphql-typed-document-node/core", "virtual:cfdc2dcb80f08569825aa9da650a9f11a47b99403260649433bef00e4fa87084ca3a233ec5c966b01f5ad14eba9ef3e7ac0288cee1ae3e3bcd59cdfe3e6941c5#npm:3.1.1"],\
           ["@types/graphql", null],\
-          ["dset", "npm:3.1.2"],\
+          ["dset", "npm:3.1.4"],\
           ["graphql", "npm:16.8.1"],\
           ["tslib", "npm:2.6.1"]\
         ],\
@@ -14658,10 +14658,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["dset", [\
-      ["npm:3.1.2", {\
-        "packageLocation": "./.yarn/cache/dset-npm-3.1.2-c711fbe49b-8af5554965.zip/node_modules/dset/",\
+      ["npm:3.1.4", {\
+        "packageLocation": "./.yarn/cache/dset-npm-3.1.4-f4959c71f7-6268c9e204.zip/node_modules/dset/",\
         "packageDependencies": [\
-          ["dset", "npm:3.1.2"]\
+          ["dset", "npm:3.1.4"]\
         ],\
         "linkType": "HARD"\
       }]\
