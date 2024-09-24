@@ -27280,10 +27280,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["rollup", [\
-      ["npm:3.29.1", {\
-        "packageLocation": "./.yarn/cache/rollup-npm-3.29.1-c6f1191ba8-34e19e5aa4.zip/node_modules/rollup/",\
+      ["npm:3.29.5", {\
+        "packageLocation": "./.yarn/cache/rollup-npm-3.29.5-4622371c71-5ce0e5f1d9.zip/node_modules/rollup/",\
         "packageDependencies": [\
-          ["rollup", "npm:3.29.1"],\
+          ["rollup", "npm:3.29.5"],\
           ["fsevents", "patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"]\
         ],\
         "linkType": "HARD"\
@@ -30811,7 +30811,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["postcss", "npm:8.4.38"],\
-          ["rollup", "npm:3.29.1"],\
+          ["rollup", "npm:3.29.5"],\
           ["sass", "npm:1.42.1"],\
           ["stylus", null],\
           ["sugarss", null],\
@@ -30850,7 +30850,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["postcss", "npm:8.4.38"],\
-          ["rollup", "npm:3.29.1"],\
+          ["rollup", "npm:3.29.5"],\
           ["sass", "npm:1.56.1"],\
           ["stylus", null],\
           ["sugarss", null],\
