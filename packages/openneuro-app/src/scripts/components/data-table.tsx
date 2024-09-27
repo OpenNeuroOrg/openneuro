@@ -33,7 +33,7 @@ const TD = styled.td`
   padding: 3px;
 `
 
-function extractDateString(dateString) {
+export function extractDateString(dateString) {
   const formats = [
     "yyyy-MM-dd", // ISO 8601
     "yyyy-MM-ddTHH:mm:ss", // ISO 8601 with time
@@ -42,9 +42,13 @@ function extractDateString(dateString) {
   ]
 
   for (const format of formats) {
-    const parsedDate = parse(dateString, format, new Date())
-    if (isValid(parsedDate)) {
-      return parsedDate
+    try {
+      const parsedDate = parse(dateString, format, new Date())
+      if (isValid(parsedDate)) {
+        return parsedDate
+      }
+    } catch (_err) {
+      continue
     }
   }
 
