@@ -11,6 +11,9 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    rollupOptions: {
+      external: "/crn/config.js",
+    },
   },
   optimizeDeps: {
     include: [

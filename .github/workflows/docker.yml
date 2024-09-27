@@ -1,0 +1,45 @@
+name: Build Docker Images
+on:
+  push: { branches: [master] }
+  pull_request: { branches: [master] }
+jobs:
+    build_server:
+      name: Server
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: build the docker image
+          id: build-docker-image
+          run: |
+            docker build -t openneuro/node:latest .
+            docker build -t openneuro/server:latest packages/openneuro-server
+    build_app:
+      name: App
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: build the docker image
+          id: build-docker-image
+          run: |
+            docker build -t openneuro/node:latest .
+            docker build -t openneuro/app:latest packages/openneuro-app
+    build_indexer:
+      name: Indexer
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: build the docker image
+          id: build-docker-image
+          run: |
+            docker build -t openneuro/node:latest .
+            docker build -t openneuro/indexer:latest packages/openneuro-indexer
+    build_datalad_service:
+      name: Datalad Service
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: build the docker image
+          id: build-docker-image
+          run: |
+            cd services/datalad
+            docker build --build-arg LERNA_JSON="$(cat ../../lerna.json)" -t openneuro/datalad-service:latest .
