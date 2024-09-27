@@ -116,6 +116,8 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
                 if f.get('file'):
                     if f['file'].get('stats'):
                         del f['file']['stats']
+                    if f['file'].get('hedIssue'):
+                        del f['file']['hedIssue']
     issues = {
         'datasetId': dataset_id,
         'id': ref,
