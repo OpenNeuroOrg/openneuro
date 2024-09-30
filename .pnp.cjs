@@ -5742,6 +5742,25 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@lukeed/csprng", [\
+      ["npm:1.1.0", {\
+        "packageLocation": "./.yarn/cache/@lukeed-csprng-npm-1.1.0-d28ed78cc2-926f5f7fc6.zip/node_modules/@lukeed/csprng/",\
+        "packageDependencies": [\
+          ["@lukeed/csprng", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@lukeed/uuid", [\
+      ["npm:2.0.1", {\
+        "packageLocation": "./.yarn/cache/@lukeed-uuid-npm-2.0.1-4e489a7764-f5e71e4da8.zip/node_modules/@lukeed/uuid/",\
+        "packageDependencies": [\
+          ["@lukeed/uuid", "npm:2.0.1"],\
+          ["@lukeed/csprng", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@mdx-js/react", [\
       ["npm:1.6.22", {\
         "packageLocation": "./.yarn/cache/@mdx-js-react-npm-1.6.22-57e4c05c2b-b4fc3b78ca.zip/node_modules/@mdx-js/react/",\
@@ -5876,17 +5895,19 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@niivue/niivue", [\
-      ["npm:0.34.0", {\
-        "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.34.0-2bae1d5f03-2f54e20a8e.zip/node_modules/@niivue/niivue/",\
+      ["npm:0.44.2", {\
+        "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.44.2-17f9bdf0e7-ae7ba8bcca.zip/node_modules/@niivue/niivue/",\
         "packageDependencies": [\
-          ["@niivue/niivue", "npm:0.34.0"],\
-          ["@ungap/structured-clone", "npm:1.0.2"],\
-          ["daikon", "npm:1.2.43"],\
-          ["fflate", "npm:0.7.4"],\
+          ["@niivue/niivue", "npm:0.44.2"],\
+          ["@lukeed/uuid", "npm:2.0.1"],\
+          ["@rollup/rollup-linux-x64-gnu", "npm:4.22.5"],\
+          ["@ungap/structured-clone", "npm:1.2.0"],\
+          ["array-equal", "npm:1.0.2"],\
+          ["daikon", "npm:1.2.46"],\
+          ["fflate", "npm:0.8.2"],\
           ["gl-matrix", "npm:3.4.3"],\
-          ["nifti-reader-js", "npm:0.6.6"],\
-          ["rxjs", "npm:7.8.0"],\
-          ["uuid", "npm:9.0.0"]\
+          ["nifti-reader-js", "npm:0.6.8"],\
+          ["rxjs", "npm:7.8.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6691,7 +6712,7 @@ const RAW_RUNTIME_STATE =
           ["@artsy/fresnel", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.9.0"],\
           ["@emotion/react", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.1"],\
           ["@emotion/styled", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.0"],\
-          ["@niivue/niivue", "npm:0.34.0"],\
+          ["@niivue/niivue", "npm:0.44.2"],\
           ["@openneuro/client", "workspace:packages/openneuro-client"],\
           ["@openneuro/components", "workspace:packages/openneuro-components"],\
           ["@sentry/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.25.0"],\
@@ -7816,6 +7837,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/unplugged/@rollup-rollup-linux-x64-gnu-npm-4.22.0-d31debec8d/node_modules/@rollup/rollup-linux-x64-gnu/",\
         "packageDependencies": [\
           ["@rollup/rollup-linux-x64-gnu", "npm:4.22.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.22.5", {\
+        "packageLocation": "./.yarn/unplugged/@rollup-rollup-linux-x64-gnu-npm-4.22.5-3a532366da/node_modules/@rollup/rollup-linux-x64-gnu/",\
+        "packageDependencies": [\
+          ["@rollup/rollup-linux-x64-gnu", "npm:4.22.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10198,13 +10226,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@ungap/structured-clone", [\
-      ["npm:1.0.2", {\
-        "packageLocation": "./.yarn/cache/@ungap-structured-clone-npm-1.0.2-253adf5113-6de0c7bdde.zip/node_modules/@ungap/structured-clone/",\
-        "packageDependencies": [\
-          ["@ungap/structured-clone", "npm:1.0.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.2.0", {\
         "packageLocation": "./.yarn/cache/@ungap-structured-clone-npm-1.2.0-648f0b82e0-c6fe89a505.zip/node_modules/@ungap/structured-clone/",\
         "packageDependencies": [\
@@ -10303,6 +10324,15 @@ const RAW_RUNTIME_STATE =
           ["estree-walker", "npm:3.0.3"],\
           ["loupe", "npm:2.3.7"],\
           ["pretty-format", "npm:29.7.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@wearemothership/dicom-character-set", [\
+      ["npm:1.0.4-opt.1", {\
+        "packageLocation": "./.yarn/cache/@wearemothership-dicom-character-set-npm-1.0.4-opt.1-06056d3e29-fea33412a2.zip/node_modules/@wearemothership/dicom-character-set/",\
+        "packageDependencies": [\
+          ["@wearemothership/dicom-character-set", "npm:1.0.4-opt.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11115,6 +11145,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/array-differ-npm-3.0.0-ddc0d89007-117edd9df5.zip/node_modules/array-differ/",\
         "packageDependencies": [\
           ["array-differ", "npm:3.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["array-equal", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "./.yarn/cache/array-equal-npm-1.0.2-eca0ba1949-5c37df0cad.zip/node_modules/array-equal/",\
+        "packageDependencies": [\
+          ["array-equal", "npm:1.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12984,6 +13023,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["commander", [\
+      ["npm:2.20.3", {\
+        "packageLocation": "./.yarn/cache/commander-npm-2.20.3-d8dcbaa39b-90c5b68986.zip/node_modules/commander/",\
+        "packageDependencies": [\
+          ["commander", "npm:2.20.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:6.2.1", {\
         "packageLocation": "./.yarn/cache/commander-npm-6.2.1-d5b635f237-25b88c2efd.zip/node_modules/commander/",\
         "packageDependencies": [\
@@ -13631,6 +13677,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["cssfilter", [\
+      ["npm:0.0.10", {\
+        "packageLocation": "./.yarn/cache/cssfilter-npm-0.0.10-28e06ce546-1e45182f42.zip/node_modules/cssfilter/",\
+        "packageDependencies": [\
+          ["cssfilter", "npm:0.0.10"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["cssstyle", [\
       ["npm:4.0.1", {\
         "packageLocation": "./.yarn/cache/cssstyle-npm-4.0.1-b3be47925f-180d4e6b40.zip/node_modules/cssstyle/",\
@@ -13670,12 +13725,15 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["daikon", [\
-      ["npm:1.2.43", {\
-        "packageLocation": "./.yarn/cache/daikon-npm-1.2.43-0124071c6b-3eb607c406.zip/node_modules/daikon/",\
+      ["npm:1.2.46", {\
+        "packageLocation": "./.yarn/cache/daikon-npm-1.2.46-320bb394fa-31583c6ac8.zip/node_modules/daikon/",\
         "packageDependencies": [\
-          ["daikon", "npm:1.2.43"],\
-          ["jpeg-lossless-decoder-js", "https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"],\
-          ["pako", "npm:1.0.11"]\
+          ["daikon", "npm:1.2.46"],\
+          ["@wearemothership/dicom-character-set", "npm:1.0.4-opt.1"],\
+          ["fflate", "npm:0.7.4"],\
+          ["jpeg-lossless-decoder-js", "npm:2.0.7"],\
+          ["pako", "npm:2.1.0"],\
+          ["xss", "npm:1.0.14"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -16243,6 +16301,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/fflate-npm-0.7.4-df9245ab05-27f61b3536.zip/node_modules/fflate/",\
         "packageDependencies": [\
           ["fflate", "npm:0.7.4"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:0.8.2", {\
+        "packageLocation": "./.yarn/cache/fflate-npm-0.8.2-5129f303f0-2bd26ba6d2.zip/node_modules/fflate/",\
+        "packageDependencies": [\
+          ["fflate", "npm:0.8.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -20233,10 +20298,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["jpeg-lossless-decoder-js", [\
-      ["https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867", {\
-        "packageLocation": "./.yarn/cache/jpeg-lossless-decoder-js-https-fc38f07ffc-89464957ac.zip/node_modules/jpeg-lossless-decoder-js/",\
+      ["npm:2.0.7", {\
+        "packageLocation": "./.yarn/cache/jpeg-lossless-decoder-js-npm-2.0.7-21416fc070-7ea182037a.zip/node_modules/jpeg-lossless-decoder-js/",\
         "packageDependencies": [\
-          ["jpeg-lossless-decoder-js", "https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"]\
+          ["jpeg-lossless-decoder-js", "npm:2.0.7"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -23151,10 +23216,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["nifti-reader-js", [\
-      ["npm:0.6.6", {\
-        "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.6.6-5c8b77cd0e-000e4edfb0.zip/node_modules/nifti-reader-js/",\
+      ["npm:0.6.8", {\
+        "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.6.8-e908ab4a03-965a99f64e.zip/node_modules/nifti-reader-js/",\
         "packageDependencies": [\
-          ["nifti-reader-js", "npm:0.6.6"],\
+          ["nifti-reader-js", "npm:0.6.8"],\
           ["fflate", "npm:0.7.4"]\
         ],\
         "linkType": "HARD"\
@@ -24569,6 +24634,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/pako-npm-1.0.11-b8f1b69d3e-1ad07210e8.zip/node_modules/pako/",\
         "packageDependencies": [\
           ["pako", "npm:1.0.11"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.1.0", {\
+        "packageLocation": "./.yarn/cache/pako-npm-2.1.0-78df11948c-38a04991d0.zip/node_modules/pako/",\
+        "packageDependencies": [\
+          ["pako", "npm:2.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -27450,14 +27522,6 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["rxjs", "npm:6.6.7"],\
           ["tslib", "npm:1.14.1"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:7.8.0", {\
-        "packageLocation": "./.yarn/cache/rxjs-npm-7.8.0-722f1c7172-ff9359cc78.zip/node_modules/rxjs/",\
-        "packageDependencies": [\
-          ["rxjs", "npm:7.8.0"],\
-          ["tslib", "npm:2.3.1"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -31823,6 +31887,17 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/xregexp-npm-2.0.0-147587b54c-4d0a653a91.zip/node_modules/xregexp/",\
         "packageDependencies": [\
           ["xregexp", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xss", [\
+      ["npm:1.0.14", {\
+        "packageLocation": "./.yarn/cache/xss-npm-1.0.14-eb6e57872e-dc97acaee3.zip/node_modules/xss/",\
+        "packageDependencies": [\
+          ["xss", "npm:1.0.14"],\
+          ["commander", "npm:2.20.3"],\
+          ["cssfilter", "npm:0.0.10"]\
         ],\
         "linkType": "HARD"\
       }]\

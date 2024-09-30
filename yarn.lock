@@ -4494,6 +4494,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lukeed/csprng@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@lukeed/csprng@npm:1.1.0"
+  checksum: 10/926f5f7fc629470ca9a8af355bfcd0271d34535f7be3890f69902432bddc3262029bb5dbe9025542cf6c9883d878692eef2815fc2f3ba5b92e9da1f9eba2e51b
+  languageName: node
+  linkType: hard
+
+"@lukeed/uuid@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@lukeed/uuid@npm:2.0.1"
+  dependencies:
+    "@lukeed/csprng": "npm:^1.1.0"
+  checksum: 10/f5e71e4da852dbff49b93cad27d5a2f61c2241e307bbe89b3b54b889ecb7927f2487246467f90ebb6cbdb7e0ac2a213e2e58b1182cb7990cef6e049aa7c39e7b
+  languageName: node
+  linkType: hard
+
 "@mdx-js/react@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/react@npm:1.6.22"
@@ -4592,18 +4608,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niivue/niivue@npm:0.34.0":
-  version: 0.34.0
-  resolution: "@niivue/niivue@npm:0.34.0"
+"@niivue/niivue@npm:0.44.2":
+  version: 0.44.2
+  resolution: "@niivue/niivue@npm:0.44.2"
   dependencies:
-    "@ungap/structured-clone": "npm:^1.0.2"
-    daikon: "npm:^1.2.43"
-    fflate: "npm:^0.7.4"
+    "@lukeed/uuid": "npm:^2.0.1"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.18.1"
+    "@ungap/structured-clone": "npm:^1.2.0"
+    array-equal: "npm:^1.0.2"
+    daikon: "npm:^1.2.46"
+    fflate: "npm:^0.8.2"
     gl-matrix: "npm:^3.4.3"
-    nifti-reader-js: "npm:^0.6.4"
-    rxjs: "npm:^7.8.0"
-    uuid: "npm:^9.0.0"
-  checksum: 10/2f54e20a8ed461d18830355eb4bdb88419d6a70e073ace5b478ce49146ac365752969f89c14d7aca0cc2e6c579bc8e0f250d0453eb3f2c911198c1e15337a81c
+    nifti-reader-js: "npm:^0.6.8"
+    rxjs: "npm:^7.8.1"
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
+  checksum: 10/ae7ba8bccaac311889e5ffefeb414eaaaf60a1e1e1f4d5fb89fa0f2706abe69a80e5e7187f7ca02fe592a34f3e82cee7488cdc0e76572f03f769994e1fbcf01b
   languageName: node
   linkType: hard
 
@@ -5286,7 +5307,7 @@ __metadata:
     "@artsy/fresnel": "npm:^1.3.1"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
-    "@niivue/niivue": "npm:0.34.0"
+    "@niivue/niivue": "npm:0.44.2"
     "@openneuro/client": "npm:^4.28.3"
     "@openneuro/components": "npm:^4.28.3"
     "@sentry/react": "npm:^8.25.0"
@@ -6058,6 +6079,13 @@ __metadata:
 "@rollup/rollup-linux-x64-gnu@npm:4.22.0":
   version: 4.22.0
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.22.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@rollup/rollup-linux-x64-gnu@npm:^4.18.1":
+  version: 4.22.5
+  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.22.5"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -8053,17 +8081,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ungap/structured-clone@npm:^1.0.0":
+"@ungap/structured-clone@npm:^1.0.0, @ungap/structured-clone@npm:^1.2.0":
   version: 1.2.0
   resolution: "@ungap/structured-clone@npm:1.2.0"
   checksum: 10/c6fe89a505e513a7592e1438280db1c075764793a2397877ff1351721fe8792a966a5359769e30242b3cd023f2efb9e63ca2ca88019d73b564488cc20e3eab12
-  languageName: node
-  linkType: hard
-
-"@ungap/structured-clone@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@ungap/structured-clone@npm:1.0.2"
-  checksum: 10/6de0c7bdde3b201fe627c57e4da58e6607d2046b5475f9ee94dfea01865c2398aa294dab70b0ea7cf00636725ec6da346685f0b5c864550e0f1b4f81a11809bb
   languageName: node
   linkType: hard
 
@@ -8141,6 +8162,13 @@ __metadata:
     loupe: "npm:^2.3.7"
     pretty-format: "npm:^29.7.0"
   checksum: 10/80c2d0d31328df212c1eb1416c308e6763a23d12aaafd9b350d3c853d0bd929706c56d30d1f53e50cfff2359770bd65c082c918c6d15db5f39cd72e64f79cda3
+  languageName: node
+  linkType: hard
+
+"@wearemothership/dicom-character-set@npm:^1.0.4-opt.1":
+  version: 1.0.4-opt.1
+  resolution: "@wearemothership/dicom-character-set@npm:1.0.4-opt.1"
+  checksum: 10/fea33412a245b8bfd7e66b3f1116a55a0b72b74a0dd2280ae732b72cf10ce692eaefd1fc06eba4cf1a202e21894bb6377ba4ba791dbc53f9825a419102be3e8a
   languageName: node
   linkType: hard
 
@@ -8865,6 +8893,13 @@ __metadata:
   version: 3.0.0
   resolution: "array-differ@npm:3.0.0"
   checksum: 10/117edd9df5c1530bd116c6e8eea891d4bd02850fd89b1b36e532b6540e47ca620a373b81feca1c62d1395d9ae601516ba538abe5e8172d41091da2c546b05fb7
+  languageName: node
+  linkType: hard
+
+"array-equal@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "array-equal@npm:1.0.2"
+  checksum: 10/5c37df0cad330516d1255663dfa4fa761fb0ea63878f535aa70dfefe5499853a8b372faf0a27b91781ca1230f4b4333bbeb751e9b1748527d96df2bee30032ea
   languageName: node
   linkType: hard
 
@@ -10511,6 +10546,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^2.20.3":
+  version: 2.20.3
+  resolution: "commander@npm:2.20.3"
+  checksum: 10/90c5b6898610cd075984c58c4f88418a4fb44af08c1b1415e9854c03171bec31b336b7f3e4cefe33de994b3f12b03c5e2d638da4316df83593b9e82554e7e95b
+  languageName: node
+  linkType: hard
+
 "commander@npm:^6.2.0":
   version: 6.2.1
   resolution: "commander@npm:6.2.1"
@@ -11098,6 +11140,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cssfilter@npm:0.0.10":
+  version: 0.0.10
+  resolution: "cssfilter@npm:0.0.10"
+  checksum: 10/1e45182f42de848f092f50a313113c28a88e4ac98333bf1603ee1c3b200384a3bc83c12e35cd61135e3b0f218295f600d51120ca1f926b7958b2d3262d711214
+  languageName: node
+  linkType: hard
+
 "cssstyle@npm:^4.0.1":
   version: 4.0.1
   resolution: "cssstyle@npm:4.0.1"
@@ -11130,13 +11179,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daikon@npm:^1.2.43":
-  version: 1.2.43
-  resolution: "daikon@npm:1.2.43"
+"daikon@npm:^1.2.46":
+  version: 1.2.46
+  resolution: "daikon@npm:1.2.46"
   dependencies:
-    jpeg-lossless-decoder-js: "git+https://github.com/rii-mango/JPEGLosslessDecoderJS.git"
-    pako: "npm:^1.0.6"
-  checksum: 10/3eb607c40677f09e25d1eb6f3a0c00cdfaaf5384118aae02852cdb0652fd64d20552ba46a8d18b26e4c241751716733070a12bb4dfe6e03c9b8b768f6e6107aa
+    "@wearemothership/dicom-character-set": "npm:^1.0.4-opt.1"
+    fflate: "npm:*"
+    jpeg-lossless-decoder-js: "npm:2.0.7"
+    pako: "npm:^2.1"
+    xss: "npm:1.0.14"
+  checksum: 10/31583c6ac8f874df6943e687d72dac19c5eba5a54fbbd69b28fb9a4c071abf8d18be925fb6cf2e1c962a4849b49c1fd406d404fe6088bd1f30af7dd7cfee69d6
   languageName: node
   linkType: hard
 
@@ -13352,10 +13404,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fflate@npm:*, fflate@npm:^0.7.4":
+"fflate@npm:*":
   version: 0.7.4
   resolution: "fflate@npm:0.7.4"
   checksum: 10/27f61b3536c3a23b0ccdab4b616103be0e8e7241924cda063486822c50ae11930eb1ce6e34dedbfccb2705d04a66380d04e28c67387e1dd48159d41ea14bfda5
+  languageName: node
+  linkType: hard
+
+"fflate@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "fflate@npm:0.8.2"
+  checksum: 10/2bd26ba6d235d428de793c6a0cd1aaa96a06269ebd4e21b46c8fd1bd136abc631acf27e188d47c3936db090bf3e1ede11d15ce9eae9bffdc4bfe1b9dc66ca9cb
   languageName: node
   linkType: hard
 
@@ -16934,10 +16993,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jpeg-lossless-decoder-js@git+https://github.com/rii-mango/JPEGLosslessDecoderJS.git":
-  version: 2.0.4
-  resolution: "jpeg-lossless-decoder-js@https://github.com/rii-mango/JPEGLosslessDecoderJS.git#commit=78fe90c7cae985b1a394a66f99c81633144bb867"
-  checksum: 10/89464957ac8b82c952f314ba8206a43e8c8aa4212d485be2e75b3fac4e7365272801607e04b62d167a9d9bac6015035ee50b3e7742d79638b70472f43c2e2073
+"jpeg-lossless-decoder-js@npm:2.0.7":
+  version: 2.0.7
+  resolution: "jpeg-lossless-decoder-js@npm:2.0.7"
+  checksum: 10/7ea182037a55981310744b34870c8093b168d6ecca1c9364d2df12b0f894192713d8b0b95e049cde4c4d5c1220bf09a91ac7fe72b24cd656cd8b89f885185785
   languageName: node
   linkType: hard
 
@@ -19663,12 +19722,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nifti-reader-js@npm:^0.6.4":
-  version: 0.6.6
-  resolution: "nifti-reader-js@npm:0.6.6"
+"nifti-reader-js@npm:^0.6.8":
+  version: 0.6.8
+  resolution: "nifti-reader-js@npm:0.6.8"
   dependencies:
     fflate: "npm:*"
-  checksum: 10/000e4edfb0c82627f6f01755e15f2f8bb22abc5748ed9f3d1126b05e14307efe5d41398420b1a191a028a4c3867ec2cae003d8f1e9be958651888b065401d49f
+  checksum: 10/965a99f64e0db3c91c6499f4c68a65129adc0a8e9199951b2b6bca3f46eb2b652d3b72981f61efe98f35e4b3475477d375c993da52acdce965bd07b6e4e9198e
   languageName: node
   linkType: hard
 
@@ -21003,6 +21062,13 @@ __metadata:
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 10/1ad07210e894472685564c4d39a08717e84c2a68a70d3c1d9e657d32394ef1670e22972a433cbfe48976cb98b154ba06855dcd3fcfba77f60f1777634bec48c0
+  languageName: node
+  linkType: hard
+
+"pako@npm:^2.1":
+  version: 2.1.0
+  resolution: "pako@npm:2.1.0"
+  checksum: 10/38a04991d0ec4f4b92794a68b8c92bf7340692c5d980255c92148da96eb3e550df7a86a7128b5ac0c65ecddfe5ef3bbe9c6dab13e1bc315086e759b18f7c1401
   languageName: node
   linkType: hard
 
@@ -23499,21 +23565,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:^7.5.5, rxjs@npm:^7.8.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
   dependencies:
     tslib: "npm:^2.1.0"
   checksum: 10/b10cac1a5258f885e9dd1b70d23c34daeb21b61222ee735d2ec40a8685bdca40429000703a44f0e638c27a684ac139e1c37e835d2a0dc16f6fc061a138ae3abb
-  languageName: node
-  linkType: hard
-
-"rxjs@npm:^7.8.0":
-  version: 7.8.0
-  resolution: "rxjs@npm:7.8.0"
-  dependencies:
-    tslib: "npm:^2.1.0"
-  checksum: 10/ff9359cc7875edecc8fc487481366b876b488901178cca8f2bdad03e00d2b5a19b01d2b02d3b4ebd47e574264db8460c6c2386076c3189b359b5e8c70a6e51e3
   languageName: node
   linkType: hard
 
@@ -27207,6 +27264,18 @@ __metadata:
   version: 2.0.0
   resolution: "xregexp@npm:2.0.0"
   checksum: 10/4d0a653a9142f92dbe0a5c4e97de68f9011a2d43b48d73cc23e6f907025185ae21d8ed2f3e7dff9662f0d28eaa16975082b05d1bbccd7344e9086fbdf0c6ff53
+  languageName: node
+  linkType: hard
+
+"xss@npm:1.0.14":
+  version: 1.0.14
+  resolution: "xss@npm:1.0.14"
+  dependencies:
+    commander: "npm:^2.20.3"
+    cssfilter: "npm:0.0.10"
+  bin:
+    xss: bin/xss
+  checksum: 10/dc97acaee35e5ed453fe5628841daf7b4aba5ed26b31ff4eadf831f42cded1ddebc218ff0db1d6a73e301bfada8a5236fec0c234233d66a20ecc319da542b357
   languageName: node
   linkType: hard
 
