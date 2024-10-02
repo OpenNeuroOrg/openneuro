@@ -10,5 +10,12 @@ export default defineConfig({
     maxConcurrency: 16,
     isolate: true,
     exclude: ["./cli", "./.yarn", "**/node_modules", "**/dist"],
+    server: {
+      deps: {
+        inline: [
+          "@niivue/niivue",
+        ],
+      },
+    },
   },
 })

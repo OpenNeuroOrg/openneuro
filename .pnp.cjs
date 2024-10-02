@@ -5749,6 +5749,25 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@lukeed/csprng", [\
+      ["npm:1.1.0", {\
+        "packageLocation": "./.yarn/cache/@lukeed-csprng-npm-1.1.0-d28ed78cc2-926f5f7fc6.zip/node_modules/@lukeed/csprng/",\
+        "packageDependencies": [\
+          ["@lukeed/csprng", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@lukeed/uuid", [\
+      ["npm:2.0.1", {\
+        "packageLocation": "./.yarn/cache/@lukeed-uuid-npm-2.0.1-4e489a7764-f5e71e4da8.zip/node_modules/@lukeed/uuid/",\
+        "packageDependencies": [\
+          ["@lukeed/uuid", "npm:2.0.1"],\
+          ["@lukeed/csprng", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@mdx-js/react", [\
       ["npm:1.6.22", {\
         "packageLocation": "./.yarn/cache/@mdx-js-react-npm-1.6.22-57e4c05c2b-b4fc3b78ca.zip/node_modules/@mdx-js/react/",\
@@ -5883,17 +5902,19 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@niivue/niivue", [\
-      ["npm:0.34.0", {\
-        "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.34.0-2bae1d5f03-2f54e20a8e.zip/node_modules/@niivue/niivue/",\
+      ["npm:0.45.1", {\
+        "packageLocation": "./.yarn/cache/@niivue-niivue-npm-0.45.1-b6a6b6d316-95ce1ed0ec.zip/node_modules/@niivue/niivue/",\
         "packageDependencies": [\
-          ["@niivue/niivue", "npm:0.34.0"],\
+          ["@niivue/niivue", "npm:0.45.1"],\
+          ["@lukeed/uuid", "npm:2.0.1"],\
+          ["@rollup/rollup-linux-x64-gnu", "npm:4.24.0"],\
           ["@ungap/structured-clone", "npm:1.2.0"],\
+          ["array-equal", "npm:1.0.2"],\
           ["daikon", "npm:1.2.46"],\
-          ["fflate", "npm:0.7.4"],\
+          ["fflate", "npm:0.8.2"],\
           ["gl-matrix", "npm:3.4.3"],\
           ["nifti-reader-js", "npm:0.6.8"],\
-          ["rxjs", "npm:7.8.1"],\
-          ["uuid", "npm:9.0.0"]\
+          ["rxjs", "npm:7.8.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6698,7 +6719,7 @@ const RAW_RUNTIME_STATE =
           ["@artsy/fresnel", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.9.0"],\
           ["@emotion/react", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.1"],\
           ["@emotion/styled", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.0"],\
-          ["@niivue/niivue", "npm:0.34.0"],\
+          ["@niivue/niivue", "npm:0.45.1"],\
           ["@openneuro/client", "workspace:packages/openneuro-client"],\
           ["@openneuro/components", "workspace:packages/openneuro-components"],\
           ["@sentry/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.25.0"],\
@@ -7823,6 +7844,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/unplugged/@rollup-rollup-linux-x64-gnu-npm-4.22.0-d31debec8d/node_modules/@rollup/rollup-linux-x64-gnu/",\
         "packageDependencies": [\
           ["@rollup/rollup-linux-x64-gnu", "npm:4.22.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.24.0", {\
+        "packageLocation": "./.yarn/unplugged/@rollup-rollup-linux-x64-gnu-npm-4.24.0-a67121f2c9/node_modules/@rollup/rollup-linux-x64-gnu/",\
+        "packageDependencies": [\
+          ["@rollup/rollup-linux-x64-gnu", "npm:4.24.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11237,6 +11265,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/array-differ-npm-3.0.0-ddc0d89007-117edd9df5.zip/node_modules/array-differ/",\
         "packageDependencies": [\
           ["array-differ", "npm:3.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["array-equal", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "./.yarn/cache/array-equal-npm-1.0.2-eca0ba1949-5c37df0cad.zip/node_modules/array-equal/",\
+        "packageDependencies": [\
+          ["array-equal", "npm:1.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -16438,6 +16475,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/fflate-npm-0.7.4-df9245ab05-27f61b3536.zip/node_modules/fflate/",\
         "packageDependencies": [\
           ["fflate", "npm:0.7.4"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:0.8.2", {\
+        "packageLocation": "./.yarn/cache/fflate-npm-0.8.2-5129f303f0-2bd26ba6d2.zip/node_modules/fflate/",\
+        "packageDependencies": [\
+          ["fflate", "npm:0.8.2"]\
         ],\
         "linkType": "HARD"\
       }]\

@@ -4501,6 +4501,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lukeed/csprng@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@lukeed/csprng@npm:1.1.0"
+  checksum: 10/926f5f7fc629470ca9a8af355bfcd0271d34535f7be3890f69902432bddc3262029bb5dbe9025542cf6c9883d878692eef2815fc2f3ba5b92e9da1f9eba2e51b
+  languageName: node
+  linkType: hard
+
+"@lukeed/uuid@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@lukeed/uuid@npm:2.0.1"
+  dependencies:
+    "@lukeed/csprng": "npm:^1.1.0"
+  checksum: 10/f5e71e4da852dbff49b93cad27d5a2f61c2241e307bbe89b3b54b889ecb7927f2487246467f90ebb6cbdb7e0ac2a213e2e58b1182cb7990cef6e049aa7c39e7b
+  languageName: node
+  linkType: hard
+
 "@mdx-js/react@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/react@npm:1.6.22"
@@ -4599,18 +4615,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@niivue/niivue@npm:0.34.0":
-  version: 0.34.0
-  resolution: "@niivue/niivue@npm:0.34.0"
+"@niivue/niivue@npm:0.45.1":
+  version: 0.45.1
+  resolution: "@niivue/niivue@npm:0.45.1"
   dependencies:
-    "@ungap/structured-clone": "npm:^1.0.2"
-    daikon: "npm:^1.2.43"
-    fflate: "npm:^0.7.4"
+    "@lukeed/uuid": "npm:^2.0.1"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.18.1"
+    "@ungap/structured-clone": "npm:^1.2.0"
+    array-equal: "npm:^1.0.2"
+    daikon: "npm:^1.2.46"
+    fflate: "npm:^0.8.2"
     gl-matrix: "npm:^3.4.3"
-    nifti-reader-js: "npm:^0.6.4"
-    rxjs: "npm:^7.8.0"
-    uuid: "npm:^9.0.0"
-  checksum: 10/2f54e20a8ed461d18830355eb4bdb88419d6a70e073ace5b478ce49146ac365752969f89c14d7aca0cc2e6c579bc8e0f250d0453eb3f2c911198c1e15337a81c
+    nifti-reader-js: "npm:^0.6.8"
+    rxjs: "npm:^7.8.1"
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
+  checksum: 10/95ce1ed0ec7ad3ce8bd6cd9827f87b90a1f09af0a0fe3ee137023dc46f31b125aa9193dafd7324d16a0b9ece2686e8bca561a91073214b74f2995f9b2c51f3b3
   languageName: node
   linkType: hard
 
@@ -5293,7 +5314,7 @@ __metadata:
     "@artsy/fresnel": "npm:^1.3.1"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
-    "@niivue/niivue": "npm:0.34.0"
+    "@niivue/niivue": "npm:0.45.1"
     "@openneuro/client": "npm:^4.28.3"
     "@openneuro/components": "npm:^4.28.3"
     "@sentry/react": "npm:^8.25.0"
@@ -6065,6 +6086,13 @@ __metadata:
 "@rollup/rollup-linux-x64-gnu@npm:4.22.0":
   version: 4.22.0
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.22.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@rollup/rollup-linux-x64-gnu@npm:^4.18.1":
+  version: 4.24.0
+  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.24.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -8060,7 +8088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ungap/structured-clone@npm:^1.0.0, @ungap/structured-clone@npm:^1.0.2":
+"@ungap/structured-clone@npm:^1.0.0, @ungap/structured-clone@npm:^1.2.0":
   version: 1.2.0
   resolution: "@ungap/structured-clone@npm:1.2.0"
   checksum: 10/c6fe89a505e513a7592e1438280db1c075764793a2397877ff1351721fe8792a966a5359769e30242b3cd023f2efb9e63ca2ca88019d73b564488cc20e3eab12
@@ -8954,6 +8982,13 @@ __metadata:
   version: 3.0.0
   resolution: "array-differ@npm:3.0.0"
   checksum: 10/117edd9df5c1530bd116c6e8eea891d4bd02850fd89b1b36e532b6540e47ca620a373b81feca1c62d1395d9ae601516ba538abe5e8172d41091da2c546b05fb7
+  languageName: node
+  linkType: hard
+
+"array-equal@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "array-equal@npm:1.0.2"
+  checksum: 10/5c37df0cad330516d1255663dfa4fa761fb0ea63878f535aa70dfefe5499853a8b372faf0a27b91781ca1230f4b4333bbeb751e9b1748527d96df2bee30032ea
   languageName: node
   linkType: hard
 
@@ -11260,7 +11295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daikon@npm:^1.2.43":
+"daikon@npm:^1.2.46":
   version: 1.2.46
   resolution: "daikon@npm:1.2.46"
   dependencies:
@@ -13504,10 +13539,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fflate@npm:*, fflate@npm:^0.7.4":
+"fflate@npm:*":
   version: 0.7.4
   resolution: "fflate@npm:0.7.4"
   checksum: 10/27f61b3536c3a23b0ccdab4b616103be0e8e7241924cda063486822c50ae11930eb1ce6e34dedbfccb2705d04a66380d04e28c67387e1dd48159d41ea14bfda5
+  languageName: node
+  linkType: hard
+
+"fflate@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "fflate@npm:0.8.2"
+  checksum: 10/2bd26ba6d235d428de793c6a0cd1aaa96a06269ebd4e21b46c8fd1bd136abc631acf27e188d47c3936db090bf3e1ede11d15ce9eae9bffdc4bfe1b9dc66ca9cb
   languageName: node
   linkType: hard
 
@@ -19833,7 +19875,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nifti-reader-js@npm:^0.6.4":
+"nifti-reader-js@npm:^0.6.8":
   version: 0.6.8
   resolution: "nifti-reader-js@npm:0.6.8"
   dependencies:
@@ -23683,7 +23725,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5, rxjs@npm:^7.8.0":
+"rxjs@npm:^7.5.5, rxjs@npm:^7.8.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
   dependencies:
