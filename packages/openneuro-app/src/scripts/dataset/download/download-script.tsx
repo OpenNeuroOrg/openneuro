@@ -20,10 +20,12 @@ function inlineDownload(filename, data): void {
   document.body.removeChild(element)
 }
 
-function generateDownloadScript(data): string {
+export function generateDownloadScript(data): string {
+  // ds000001:1.0.0 -> ds000001-1.0.0 for directories
+  const directory = data.snapshot.id.split(":").join("-")
   let script = "#!/bin/sh\n"
   for (const f of data.snapshot.downloadFiles) {
-    script += `curl --create-dirs ${f.urls[0]} -o ${f.filename}\n`
+    script += `curl --create-dirs ${f.urls[0]} -o ${directory}/${f.filename}\n`
   }
   return script
 }
@@ -33,7 +35,7 @@ interface DownloadS3DerivativesProps {
   snapshotTag: string
 }
 
-const getSnapshotDownload = gql`
+export const getSnapshotDownload = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
