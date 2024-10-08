@@ -4,6 +4,7 @@ from falcon import testing
 import json
 from datalad.api import Dataset
 
+from datalad_service.tasks.files import parse_s3_annex_url
 
 class FileWrapper:
 
@@ -286,3 +287,10 @@ def test_delete_non_existing_file(client, new_dataset):
     assert response.status == falcon.HTTP_OK
     assert json.loads(response.content)[
         'error'] == 'the following files not found: fake, test'
+
+
+def test_parse_s3_annex_url():
+    # 'ex' is an impossible bucket name for an example
+    parsed = parse_s3_annex_url('https://s3.amazonaws.com/ex/ds001077/sub-02/anat/sub-02_T1w.nii.gz?versionId=tMYX62XJtDqDw_0nfS0CUtRx4rrXn_OD', 'ex')
+    assert parsed['VersionId'] == 'tMYX62XJtDqDw_0nfS0CUtRx4rrXn_OD'
+    assert parsed['Key'] == 'ds001077/sub-02/anat/sub-02_T1w.nii.gz'

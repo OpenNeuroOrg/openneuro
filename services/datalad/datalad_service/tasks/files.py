@@ -1,10 +1,19 @@
 import asyncio
+import json
+import logging
 import subprocess
+from urllib.parse import urlparse, parse_qs
+
+import boto3
+import botocore
 import pygit2
 
 from datalad_service.common.annex import get_repo_files
 from datalad_service.common.git import git_commit, git_commit_index, COMMITTER_EMAIL, COMMITTER_NAME
 from datalad_service.tasks.validator import validate_dataset
+from datalad_service.config import AWS_ACCESS_KEY_ID
+from datalad_service.config import AWS_SECRET_ACCESS_KEY
+from datalad_service.config import AWS_S3_PUBLIC_BUCKET
 
 
 def commit_files(store, dataset, files, name=None, email=None, cookies=None):
@@ -43,6 +52,36 @@ def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
                               message="[OpenNeuro] Files removed"))
 
 
+def parse_s3_annex_url(url, bucket_name=AWS_S3_PUBLIC_BUCKET):
+    parsed = urlparse(url)
+    parse_qs(parsed.query)["versionId"].pop()
+    return {'VersionId': parse_qs(parsed.query)["versionId"].pop(), 'Key': parsed.path.removeprefix(f'/{bucket_name}/')}
+
+
+def remove_s3_annex_object(dataset_path, annex_key):
+    client = boto3.client(
+        's3',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+    p = subprocess.run(['git-annex', 'whereis', '--json', f'--key={annex_key}'],
+        cwd=dataset_path,
+        encoding='utf-8',
+        capture_output=True)
+    output = json.loads(p.stdout)
+    objects_to_remove = []
+    # There may be multiple remotes in the future here
+    for f in output["whereis"]:
+        # There should be one result but it's possible a key is manually exported to multiple versions
+        for url in f["urls"]:
+            objects_to_remove.append(parse_s3_annex_url(url))
+    client.delete_objects(
+        Bucket=AWS_S3_PUBLIC_BUCKET,
+        Delete={
+            'Objects': objects_to_remove,
+            'Quiet': True
+        })
+
+
 def remove_annex_object(dataset_path, annex_key):
     """Remove an annex object by its key.
 
@@ -50,21 +89,25 @@ def remove_annex_object(dataset_path, annex_key):
     :return: True if successful, false is the annex object does not exist.
     :rtype: bool
     """
-    with subprocess.Popen(
+    logger = logging.getLogger('datalad_service.' + __name__)
+    logger.info(f"Removing annex object: {annex_key}")
+    completed_process = subprocess.run(
         ['git-annex', 'drop', '--force', f'--key={annex_key}'],
         cwd=dataset_path,
         stdout=subprocess.PIPE,
         encoding='utf-8'
-    ) as drop_object:
-        for i, line in enumerate(drop_object.stdout):
-            if i == 0 and line[-2:] == 'ok':
-                # If successful, delete from s3-PUBLIC as well
-                subprocess.Popen(
-                    ['git-annex', 'drop', '--force',
-                        f'--key={annex_key}', '--from=s3-PUBLIC'],
-                    cwd=dataset_path,
-                    stdout=subprocess.PIPE,
-                    encoding='utf-8'
-                )
-                return True
+    )
+    if completed_process.returncode == 0:
+        # If successful, delete from s3-PUBLIC as well
+        try:
+            remove_s3_annex_object(dataset_path, annex_key)
+            return True
+        except botocore.exceptions.ClientError as error:
+            # Most likely this key has already been removed
+            logger.warning(f'Purge requested for annex key that is not present on S3: {annex_key}')
+            return False
+        except KeyError:
+            # Rarely no versionId exists and will raise KeyError
+            logger.warning(f'KeyError purging key: {annex_key}')
+            return False
     return False
