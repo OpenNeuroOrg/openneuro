@@ -69,15 +69,26 @@ export const createDataset = async (
   }
 }
 
+interface WorkerDraftFields {
+  // Commit id hash
+  ref: string
+  // Commit tree ref
+  tree: string
+  // Commit message
+  message: string
+  // Commit author time
+  modified: string
+}
+
 /**
  * Return the latest commit
  * @param {string} id Dataset accession number
  */
-export const getDraftHead = async (id) => {
+export const getDraftHead = async (id): Promise<WorkerDraftFields> => {
   const draftRes = await request
     .get(`${getDatasetWorker(id)}/datasets/${id}/draft`)
     .set("Accept", "application/json")
-  return draftRes.body.hexsha
+  return draftRes.body
 }
 
 /**
@@ -87,7 +98,7 @@ export const getDataset = async (id) => {
   const dataset = await Dataset.findOne({ id }).lean()
   return {
     ...dataset,
-    revision: await getDraftHead(id),
+    revision: (await getDraftHead(id)).ref,
   }
 }
 

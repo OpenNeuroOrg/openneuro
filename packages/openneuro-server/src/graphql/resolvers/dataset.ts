@@ -276,11 +276,14 @@ const worker = (obj) => getDatasetWorker(obj.id)
  */
 const Dataset = {
   uploader: (ds) => user(ds, { id: ds.uploader }),
-  draft: async (obj) => ({
-    id: obj.id,
-    revision: await datalad.getDraftHead(obj.id),
-    modified: obj.modified,
-  }),
+  draft: async (obj) => {
+    const draftHead = await datalad.getDraftHead(obj.id)
+    return {
+      id: obj.id,
+      revision: draftHead.ref,
+      modified: draftHead.modified,
+    }
+  },
   snapshots,
   latestSnapshot,
   analytics,

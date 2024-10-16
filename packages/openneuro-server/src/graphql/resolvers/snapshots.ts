@@ -227,7 +227,7 @@ export const latestSnapshot = async (obj, _, context) => {
     // In the case where there are no real snapshots, return most recent commit as snapshot
     return await snapshot(
       obj,
-      { datasetId: obj.id, tag: await getDraftHead(obj.id) },
+      { datasetId: obj.id, tag: (await getDraftHead(obj.id)).ref },
       context,
     )
   }
