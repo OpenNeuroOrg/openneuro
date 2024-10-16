@@ -27,9 +27,9 @@ async def move_files_into_repo(dataset_id, dataset_path, upload_path, name, emai
     await move_files(upload_path, dataset_path)
     if name and email:
         author = pygit2.Signature(name, email)
-        hexsha = git_commit(repo, unlock_files, author).hex
+        hexsha = str(git_commit(repo, unlock_files, author))
     else:
-        hexsha = git_commit(repo, unlock_files).hex
+        hexsha = str(git_commit(repo, unlock_files))
 
 
 class UploadResource:
