@@ -1,4 +1,5 @@
-import React, { FC, useContext, useEffect } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import {
   SearchPage,
@@ -39,7 +40,7 @@ import AggregateCountsContainer from "../pages/front-page/aggregate-queries/aggr
 import { useCookies } from "react-cookie"
 import { useSearchResults } from "./use-search-results"
 import { SearchParamsCtx } from "./search-params-ctx"
-import { SearchParams } from "./initial-search-params"
+import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
 import AdminUser from "../authentication/admin-user.jsx"
 

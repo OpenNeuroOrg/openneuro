@@ -1,6 +1,6 @@
 /* eslint-env worker */
 import { fileListToTree, validate } from "../utils/schema-validator.js"
-import { BIDSValidatorIssues } from "./worker-interface"
+import type { BIDSValidatorIssues } from "./worker-interface"
 
 export async function runValidator(
   files,

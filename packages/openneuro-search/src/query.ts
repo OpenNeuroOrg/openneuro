@@ -1,5 +1,6 @@
-import { Client as ElasticClient } from "@elastic/elasticsearch"
-import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client"
+import type { Client as ElasticClient } from "@elastic/elasticsearch"
+import type { ApolloClient, NormalizedCacheObject } from "@apollo/client"
+import { gql } from "@apollo/client"
 import { DatasetsIndex } from "./indexes/datasets"
 
 export const INDEX_DATASET_FRAGMENT = gql`

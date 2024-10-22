@@ -3,7 +3,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import parseISO from "date-fns/parseISO"
 import { Link } from "react-router-dom"
 import Carousel from "react-multi-carousel/lib/Carousel"
-import { ArrowProps, ResponsiveType } from "react-multi-carousel/lib/types"
+import type { ArrowProps, ResponsiveType } from "react-multi-carousel/lib/types"
 import "react-multi-carousel/lib/styles.css"
 
 export interface ActivitySliderProps {

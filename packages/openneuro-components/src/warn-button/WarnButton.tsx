@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import "./warn-button.scss"
 import { Tooltip } from "../tooltip/Tooltip"
 import { Button } from "../button/Button"

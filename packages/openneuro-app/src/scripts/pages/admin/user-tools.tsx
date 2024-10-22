@@ -1,4 +1,5 @@
-import React, { FC, ReactElement } from "react"
+import React from "react"
+import type { FC, ReactElement } from "react"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import { WarnButton } from "@openneuro/components/warn-button"

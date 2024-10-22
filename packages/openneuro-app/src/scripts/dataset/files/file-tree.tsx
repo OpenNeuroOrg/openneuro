@@ -5,7 +5,7 @@ import DeleteFile from "../mutations/delete-file.jsx"
 import FileTreeUnloadedDirectory from "./file-tree-unloaded-directory.jsx"
 import { Media } from "../../styles/media"
 import { AccordionTab } from "@openneuro/components/accordion"
-import { DatasetFile } from "../../types/dataset-file"
+import type { DatasetFile } from "../../types/dataset-file"
 
 export const unescapePath = (path: string): string => path.replace(/:/g, "/")
 

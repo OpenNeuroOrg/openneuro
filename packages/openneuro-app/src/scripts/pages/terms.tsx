@@ -1,4 +1,5 @@
-import React, { ReactElement } from "react"
+import React from "react"
+import type { ReactElement } from "react"
 import { Terms } from "../common/content/terms"
 import Helmet from "react-helmet"
 import { frontPage } from "./front-page/front-page-content"

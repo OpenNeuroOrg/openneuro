@@ -7,7 +7,7 @@ import { WarnButton } from "@openneuro/components/warn-button"
 import { AccordionWrap } from "@openneuro/components/accordion"
 import styled from "@emotion/styled"
 import { Tooltip } from "@openneuro/components/tooltip"
-import { DatasetFile } from "../../types/dataset-file"
+import type { DatasetFile } from "../../types/dataset-file"
 import bytes from "bytes"
 
 const FileTreeMeta = styled.span`

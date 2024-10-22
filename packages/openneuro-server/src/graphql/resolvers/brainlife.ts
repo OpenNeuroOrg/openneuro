@@ -1,7 +1,5 @@
-import {
-  DatasetOrSnapshot,
-  getDatasetFromSnapshotId,
-} from "../../utils/datasetOrSnapshot"
+import { getDatasetFromSnapshotId } from "../../utils/datasetOrSnapshot"
+import type { DatasetOrSnapshot } from "../../utils/datasetOrSnapshot"
 
 interface BrainlifeFindQuery {
   removed: boolean

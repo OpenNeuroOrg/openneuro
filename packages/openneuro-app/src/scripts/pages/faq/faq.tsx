@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 
 const Faq = (): React.ReactElement => {
   window.location.replace("https://docs.openneuro.org/faq")

@@ -1,10 +1,8 @@
 import React from "react"
 import { Button } from "../button/Button"
 import { FilterListItem } from "./FilterListItem"
-import { FilterDateItem } from "./FilterDateItem"
 import { TermListItem } from "./TermListItem"
-import { FacetSelectValueType } from "../facets/FacetSelect"
-import { NeurobagelSearch } from "./NeurobagelSearch"
+import type { FacetSelectValueType } from "../facets/FacetSelect"
 
 export interface FiltersBlockProps {
   keywords: string[]
@@ -70,7 +68,6 @@ export const FiltersBlock = ({
 
   return (
     <div className="filters-block">
-      {/* <NeurobagelSearch /> */}
       <h2>
         {noFilters
           ? (
