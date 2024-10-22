@@ -1,5 +1,5 @@
 // dependencies -------------------------------------------------------
-
+import * as Sentry from "@sentry/react"
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { useQuery } from "@apollo/client"
@@ -32,18 +32,23 @@ const FlaggedFilesContainer = () => {
     variables: { flagged: includeFlagged, deleted: includeDeleted },
     errorPolicy: "all",
   })
-  return (
-    <FlaggedFiles
-      {...{
-        includeFlagged,
-        setIncludeFlagged,
-        includeDeleted,
-        setIncludeDeleted,
-        loading,
-        data,
-      }}
-    />
-  )
+  if (error) {
+    Sentry.captureException(error)
+    return null
+  } else {
+    return (
+      <FlaggedFiles
+        {...{
+          includeFlagged,
+          setIncludeFlagged,
+          includeDeleted,
+          setIncludeDeleted,
+          loading,
+          data,
+        }}
+      />
+    )
+  }
 }
 
 const FlaggedFiles = ({
