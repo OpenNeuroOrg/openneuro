@@ -13,7 +13,7 @@ const decompress = promisify(zlib.gunzip)
  */
 export function cacheKey(
   type: CacheType,
-  compositeKeys: Array<string>,
+  compositeKeys: string[],
 ): string {
   return `${type.toString()}:${compositeKeys.join(":")}`
 }
@@ -35,7 +35,7 @@ class CacheItem {
   constructor(
     redis: Redis,
     type: CacheType,
-    compositeKeys?: Array<string>,
+    compositeKeys?: string[],
     expiration?: number,
   ) {
     this.redis = redis

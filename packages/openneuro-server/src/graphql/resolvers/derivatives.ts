@@ -76,14 +76,14 @@ export const derivativeObject = (
  */
 export const derivatives = async (
   dataset: DatasetOrSnapshot,
-): Promise<Array<DatasetDerivatives>> => {
+): Promise<DatasetDerivatives[]> => {
   let datasetId
   if ("tag" in dataset) {
     datasetId = getDatasetFromSnapshotId(dataset.id)
   } else {
     datasetId = dataset.id
   }
-  const available: Array<DatasetDerivatives> = []
+  const available: DatasetDerivatives[] = []
   if (await githubDerivative(datasetId, "mriqc")) {
     available.push(derivativeObject(datasetId, "mriqc"))
   }

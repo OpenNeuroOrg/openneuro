@@ -6,9 +6,9 @@ import "./search-page.scss"
 
 export interface SearchResultsListProps {
   items
-  profile?: Record<string, any>
+  profile?: Record<string, object>
   datasetTypeSelected: string
-  hasEditPermissions: (permissions: any, userId: any) => boolean
+  hasEditPermissions: (permissions: object, userId: string) => boolean
 }
 export const SearchResultsList = ({
   items,

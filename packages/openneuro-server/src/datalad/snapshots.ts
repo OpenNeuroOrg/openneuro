@@ -1,6 +1,7 @@
 /**
  * Get snapshots from datalad-service tags
  */
+import * as Sentry from "@sentry/node"
 import request from "superagent"
 import { reindexDataset } from "../elasticsearch/reindex-dataset"
 import { redis, redlock } from "../libs/redis"
@@ -16,7 +17,8 @@ import { getFiles } from "./files"
 import { generateDataladCookie } from "../libs/authentication/jwt"
 import notifications from "../libs/notifications"
 import Dataset from "../models/dataset"
-import Snapshot, { SnapshotDocument } from "../models/snapshot"
+import Snapshot from "../models/snapshot"
+import type { SnapshotDocument } from "../models/snapshot"
 import { updateDatasetRevision } from "./draft"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { join } from "path"
@@ -62,6 +64,8 @@ const createIfNotExistsDoi = async (
         descriptionFieldUpdates["DatasetDOI"] = `doi:${snapshotDoi}`
       }
     } catch (err) {
+      Sentry.captureException(err)
+      // eslint-disable-next-line no-console
       console.error(err)
       throw new Error("DOI minting failed.")
     }

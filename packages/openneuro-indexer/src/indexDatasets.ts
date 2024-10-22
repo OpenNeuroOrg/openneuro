@@ -25,6 +25,7 @@ export default async function indexDatasets(
     }
     await aliasDatasetsIndex(elasticClient)
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e)
   }
 }

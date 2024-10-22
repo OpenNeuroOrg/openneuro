@@ -125,6 +125,7 @@ export const deleteDataset = async (
     await removeDatasetSearchDocument(id)
   } catch (err) {
     // This likely means this dataset had not yet been indexed
+    /* eslint-disable-next-line no-console */
     console.error(err)
   }
   await new Deletion({
