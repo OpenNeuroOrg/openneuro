@@ -1,8 +1,6 @@
-import {
-  DatasetOrSnapshot,
-  getDatasetFromSnapshotId,
-} from "../../utils/datasetOrSnapshot"
+import { getDatasetFromSnapshotId } from "../../utils/datasetOrSnapshot"
 import config from "../../config"
+import type { DatasetOrSnapshot } from "../../utils/datasetOrSnapshot"
 
 const S3_BUCKET = "openneuro-derivatives"
 const GITHUB_ORGANIZATION = "OpenNeuroDerivatives"

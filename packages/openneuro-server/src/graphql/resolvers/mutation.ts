@@ -10,7 +10,6 @@ import {
   trackAnalytics,
   updatePublic,
 } from "./dataset.js"
-import { updateRef } from "./draft.js"
 import {
   createSnapshot,
   deleteSnapshot,
@@ -71,7 +70,6 @@ const Mutation = {
   deleteComment,
   subscribeToNewsletter,
   addMetadata,
-  updateRef,
   prepareUpload,
   finishUpload,
   cacheClear,
