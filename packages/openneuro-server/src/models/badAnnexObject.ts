@@ -1,4 +1,5 @@
-import mongoose, { Document } from "mongoose"
+import mongoose from "mongoose"
+import type { Document } from "mongoose"
 import { UserDocument } from "./user"
 const ObjectId = mongoose.Schema.Types.ObjectId
 

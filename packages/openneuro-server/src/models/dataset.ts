@@ -1,4 +1,5 @@
-import mongoose, { Document } from "mongoose"
+import mongoose from "mongoose"
+import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 // External relations annotating the whole dataset
