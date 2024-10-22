@@ -177,7 +177,7 @@ const routes = [
 const router = express.Router()
 
 for (const route of routes) {
-  const arr = route.hasOwnProperty("middleware") ? route.middleware : []
+  const arr = Object.hasOwn(route, "middleware") ? route.middleware : []
   arr.unshift(route.url)
   arr.push(route.handler)
   router[route.method](...arr)
