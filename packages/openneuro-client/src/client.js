@@ -8,6 +8,8 @@ import {
 import { setContext } from "@apollo/client/link/context"
 import semver from "semver"
 
+let versionsWarned = false
+
 const authLink = (getAuthorization) =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
@@ -31,17 +33,25 @@ const checkVersions = (serverVersion, clientVersion) => {
     const [serverMajor, serverMinor] = parse(serverVersion)
     const [clientMajor, clientMinor] = parse(clientVersion)
     if (serverMajor > clientMajor || serverMinor > clientMinor) {
-      console.warn(
-        `${hbar}Your OpenNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.${hbar}`,
-      )
+      if (!versionsWarned) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `${hbar}Your OpenNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.${hbar}`,
+        )
+        versionsWarned = true
+      }
     } else if (
       serverMajor < clientMajor ||
       (serverMajor === clientMajor && serverMinor < clientMinor)
     ) {
       // panic, then
-      console.warn(
-        `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.${hbar}`,
-      )
+      if (!versionsWarned) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.${hbar}`,
+        )
+        versionsWarned = true
+      }
     }
   }
 }
