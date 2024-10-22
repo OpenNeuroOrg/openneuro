@@ -71,12 +71,11 @@ export const getFile = async (req, res) => {
         if (r.status === 404) {
           res.status(404).send("Requested dataset or file cannot be found")
         } else {
-          // @ts-expect-error
+          // @ts-expect-error https://github.com/denoland/deno/issues/19620
           Readable.fromWeb(r.body, { highWaterMark: 4194304 }).pipe(res)
         }
       })
-      .catch((err) => {
-        console.error(err)
+      .catch((_err) => {
         res.status(500).send("Internal error transferring requested file")
       })
   }
