@@ -14,7 +14,7 @@ const CommentTree = ({ datasetId, uploader, comments, commentMap }) => (
     {comments.map((comment) => {
       if (!comment) return null
       // Join any replies
-      const nextLevel = comment.hasOwnProperty("replies")
+      const nextLevel = Object.hasOwn(comment, "replies")
         ? comment.replies.map((reply) => commentMap[reply.id])
         : []
       return (

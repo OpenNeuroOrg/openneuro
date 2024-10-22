@@ -45,7 +45,7 @@ export const saveConfig = (config) => {
  */
 export const getToken = () => {
   const config = JSON.parse(readConfig())
-  if (config.hasOwnProperty("apikey")) {
+  if (Object.hasOwn(config, "apikey")) {
     return config.apikey
   } else {
     throw new Error(
@@ -65,7 +65,7 @@ export const getUser = () => {
 
 export const getUrl = () => {
   const config = JSON.parse(readConfig())
-  if (config.hasOwnProperty("url")) {
+  if (Object.hasOwn(config, "url")) {
     return config.url
   } else {
     throw new Error(
@@ -77,8 +77,8 @@ export const getUrl = () => {
 export const getErrorReporting = () => {
   const config = JSON.parse(readConfig())
   if (
-    config.hasOwnProperty("errorReporting") &&
-    config.hasOwnProperty("url") &&
+    Object.hasOwn(config, "errorReporting") &&
+    Object.hasOwn(config, "url") &&
     config.errorReporting
   ) {
     return config.url

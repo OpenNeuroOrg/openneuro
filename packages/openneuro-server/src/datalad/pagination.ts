@@ -43,10 +43,10 @@ export const maxLimit = (limit) => Math.max(Math.min(limit, 100), 1)
 
 // Decode cursor from options object
 export const getOffsetFromCursor = (options) => {
-  if (options.hasOwnProperty("after") && options.after) {
+  if (Object.hasOwn(options, "after") && options.after) {
     return decodeCursor(options.after).offset
   }
-  if (options.hasOwnProperty("before") && options.before) {
+  if (Object.hasOwn(options, "before") && options.before) {
     return (
       decodeCursor(options.before).offset - Math.max(maxLimit(options.first), 0)
     )
@@ -63,7 +63,7 @@ export const getOffsetFromCursor = (options) => {
 export const sortAggregate = (options) => {
   const sortingStages = []
   const finalSort = {}
-  if (options.hasOwnProperty("orderBy")) {
+  if (Object.hasOwn(options, "orderBy")) {
     if ("created" in options.orderBy && options.orderBy.created) {
       finalSort["_id"] = sortEnumToInt(options.orderBy.created)
     }

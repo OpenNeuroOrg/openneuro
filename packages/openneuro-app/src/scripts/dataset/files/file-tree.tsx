@@ -41,7 +41,7 @@ export function fileTreeLevels(
       const childPath = path === ""
         ? components[0]
         : components.slice(0, path.split(":").length + 1).join(":")
-      if (childFiles.hasOwnProperty(childPath)) {
+      if (Object.hasOwn(childFiles, childPath)) {
         childFiles[childPath].push(f)
       } else {
         childFiles[childPath] = [f]
@@ -102,7 +102,7 @@ const FileTree = ({
       <ul className="child-files">
         {currentFiles.map((file, index) => {
           if (file.directory) {
-            if (childFiles.hasOwnProperty(file.filename)) {
+            if (Object.hasOwn(childFiles, file.filename)) {
               return (
                 <li className="clearfix filetree-item filetree-dir" key={index}>
                   <FileTree

@@ -38,58 +38,58 @@ export const repairDescriptionTypes = (description) => {
   const newDescription = { ...description }
   // Array types
   if (
-    description.hasOwnProperty("Authors") &&
+    Object.hasOwn(description, "Authors") &&
     !Array.isArray(description.Authors)
   ) {
     newDescription.Authors = [description.Authors]
   }
   if (
-    description.hasOwnProperty("ReferencesAndLinks") &&
+    Object.hasOwn(description, "ReferencesAndLinks") &&
     !Array.isArray(description.ReferencesAndLinks)
   ) {
     newDescription.ReferencesAndLinks = [description.ReferencesAndLinks]
   }
   if (
-    description.hasOwnProperty("Funding") &&
+    Object.hasOwn(description, "Funding") &&
     !Array.isArray(description.Funding)
   ) {
     newDescription.Funding = [description.Funding]
   }
   if (
-    description.hasOwnProperty("EthicsApprovals") &&
+    Object.hasOwn(description, "EthicsApprovals") &&
     !Array.isArray(description.EthicsApprovals)
   ) {
     newDescription.EthicsApprovals = [description.EthicsApprovals]
   }
   // String types
   if (
-    description.hasOwnProperty("Name") &&
+    Object.hasOwn(description, "Name") &&
     typeof description.Name !== "string"
   ) {
     newDescription.Name = JSON.stringify(description.Name) || ""
   }
   if (
-    description.hasOwnProperty("DatasetDOI") &&
+    Object.hasOwn(description, "DatasetDOI") &&
     typeof description.DatasetDOI !== "string"
   ) {
     newDescription.DatasetDOI = JSON.stringify(description.DatasetDOI) || ""
   }
   if (
-    description.hasOwnProperty("Acknowledgements") &&
+    Object.hasOwn(description, "Acknowledgements") &&
     typeof description.Acknowledgements !== "string"
   ) {
     newDescription.Acknowledgements =
       JSON.stringify(description.Acknowledgements) || ""
   }
   if (
-    description.hasOwnProperty("HowToAcknowledge") &&
+    Object.hasOwn(description, "HowToAcknowledge") &&
     typeof description.HowToAcknowledge !== "string"
   ) {
     newDescription.HowToAcknowledge =
       JSON.stringify(description.HowToAcknowledge) || ""
   }
   if (
-    description.hasOwnProperty("DatasetType") &&
+    Object.hasOwn(description, "DatasetType") &&
     typeof description.DatasetType !== "string"
   ) {
     newDescription.DatasetType = "raw"
@@ -104,7 +104,7 @@ export const appendSeniorAuthor = (description) => {
   try {
     const SeniorAuthor = description?.Authors[description.Authors.length - 1]
     return { ...description, SeniorAuthor }
-  } catch (err) {
+  } catch (_err) {
     return description
   }
 }
@@ -132,7 +132,7 @@ export const description = async (obj) => {
       )
     })
     return appendSeniorAuthor(repairDescriptionTypes(datasetDescription))
-  } catch (err) {
+  } catch (_err) {
     return defaultDescription
   }
 }

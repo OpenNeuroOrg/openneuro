@@ -62,7 +62,7 @@ const DatasetRedirect = () => {
   const { datasetId } = useParams() as { datasetId: string }
   const { pathname } = useLocation()
 
-  if (redirectLib.hasOwnProperty(datasetId)) {
+  if (Object.hasOwn(redirectLib, datasetId)) {
     const newPath = replaceDatasetId(pathname, redirectLib[datasetId])
     return <Navigate to={newPath} replace />
   } else {
