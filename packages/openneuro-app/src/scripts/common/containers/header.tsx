@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import useState from "react-usestateref"
 import UploaderContext from "../../uploader/uploader-context.js"
 import UploadProgress from "../../uploader/upload-progress.jsx"

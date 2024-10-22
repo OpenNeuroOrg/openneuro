@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { flattenedModalities, SearchParams } from "../initial-search-params"

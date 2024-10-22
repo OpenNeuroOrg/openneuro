@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
 import { WarnButton } from "@openneuro/components/warn-button"
 import { DATASET_REVIEWERS } from "../fragments/dataset-reviewers"

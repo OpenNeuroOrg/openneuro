@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { Button } from "@openneuro/components/button"
 import styled from "@emotion/styled"

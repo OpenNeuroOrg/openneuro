@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import { Link } from "react-router-dom"
 import styled from "@emotion/styled"
 

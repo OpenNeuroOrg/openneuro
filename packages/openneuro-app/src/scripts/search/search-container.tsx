@@ -110,8 +110,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     new URLSearchParams(location.search),
   )
 
-  const { loading, data, fetchMore, refetch, variables, error } =
-    useSearchResults()
+  const { loading, data, fetchMore, variables } = useSearchResults()
   const loadMore = loading ? () => {} : () => {
     fetchMore({
       variables: {
