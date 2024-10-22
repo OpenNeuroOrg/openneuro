@@ -58,7 +58,7 @@ const UpdateDatasetPermissions = ({ datasetId, userEmail, metadata, done }) => (
                 variables: { datasetId, userEmail, level: metadata },
               })
               done()
-            } catch (err) {
+            } catch (_err) {
               toast.error(
                 <ToastContent body="A user with that email address does not exist" />,
               )

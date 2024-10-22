@@ -115,7 +115,6 @@ export const prepareUpload = async (
       },
     })
     const id = data.prepareUpload.id
-    // eslint-disable-next-line no-console
     console.log(`Starting a new upload (${id}) to dataset: '${datasetId}'`)
     return {
       id,
@@ -178,7 +177,7 @@ export const uploadFiles = async ({
       }
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
-        // @ts-ignore Node 18+ actually supports this despite types not advertising it
+        // @ts-expect-error Node 18+ actually supports this despite types not advertising it
         requestOptions,
       )
     })

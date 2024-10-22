@@ -378,7 +378,6 @@ export const addFileString = (datasetId, filename, mimetype, content) =>
     // Mock a stream so we can reuse addFile
     createReadStream: () => {
       const stream = new Readable()
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       stream._read = () => {
         // Content is available already, _read does nothing
       }
@@ -406,7 +405,7 @@ export const commitFiles = (datasetId, user) => {
     .set("Accept", "application/json")
     .then((res) => {
       gitRef = res.body.ref
-      return updateDatasetRevision(datasetId, gitRef).then(() => gitRef)
+      return updateDatasetRevision(datasetId).then(() => gitRef)
     })
 }
 
@@ -495,7 +494,7 @@ export const updatePublic = (datasetId, publicFlag) =>
     { upsert: true },
   ).exec()
 
-export const getDatasetAnalytics = (datasetId, tag) => {
+export const getDatasetAnalytics = (datasetId, _tag) => {
   return Dataset.findOne({ id: datasetId }).then((ds) => ({
     datasetId,
     views: ds.views || 0,

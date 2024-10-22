@@ -13,7 +13,7 @@ export const resetDraft = async (
   try {
     await resetDraftTask(datasetId, ref)
     return true
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }

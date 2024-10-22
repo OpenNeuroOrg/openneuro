@@ -26,6 +26,7 @@ export const HeaderContainer: FC = () => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const { userModalOpen, setUserModalOpen } = useContext(UserModalOpenCtx)
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState("")

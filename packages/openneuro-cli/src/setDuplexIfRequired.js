@@ -3,7 +3,7 @@
  */
 export function setDuplexIfRequired(version, requestOptions) {
   const m = version.match(/(\d+)\.(\d+)\.(\d+)/)
-  const [major, minor, patch] = m.slice(1).map((_) => parseInt(_))
+  const [major, minor, _patch] = m.slice(1).map((_) => parseInt(_))
   if ((major >= 18 && minor >= 13) || (major >= 19 && minor >= 1)) {
     requestOptions.duplex = "half"
   }

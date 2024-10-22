@@ -162,7 +162,7 @@ export class UploadClient extends React.Component {
           // Save description to state for writing later
           this.setState({ description })
           resolve(description.Name)
-        } catch (e) {
+        } catch (_err) {
           // Fallback to directory name if JSON parse failed
           resolve(files[0].webkitRelativePath.split("/")[0])
         }

@@ -29,9 +29,11 @@ export const VersionList = ({
   datasetId,
   hasEdit,
 }: VersionListProps) => {
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const deprecatedItem = (itemTag, itemCreated) => {
     setSelected(itemTag)
   }
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const setVersion = (itemTag, itemCreated) => {
     setSelected(itemTag)
   }

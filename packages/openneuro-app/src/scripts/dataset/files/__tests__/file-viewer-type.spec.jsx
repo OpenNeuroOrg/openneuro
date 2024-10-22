@@ -4,7 +4,7 @@ import FileViewerType from "../file-viewer-type.jsx"
 
 describe("FileViewerType component", () => {
   it("displays a fallback when an unknown file is specified", () => {
-    const component = render(
+    render(
       <FileViewerType
         path="unknown-file-extension.xyz"
         data={new ArrayBuffer(128)}

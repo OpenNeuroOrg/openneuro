@@ -154,7 +154,7 @@ export const createSnapshot = async (
 
     await Promise.all([
       // Update the draft status in datasets collection in case any changes were made (DOI, License)
-      updateDatasetRevision(datasetId, snapshot.hexsha),
+      updateDatasetRevision(datasetId),
 
       // Update metadata in snapshots collection
       createSnapshotMetadata(datasetId, tag, snapshot.hexsha, snapshot.created),

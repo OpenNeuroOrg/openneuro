@@ -1,7 +1,6 @@
 import React from "react"
 import bidslogo from "../assets/bids.jpg"
 import dataladlogo from "../assets/datalad.jpg"
-import nihstanfordlogo from "../assets/nih-stanford.jpg"
 
 export const affiliateContent = [
   {
@@ -48,20 +47,4 @@ export const affiliateContent = [
       </>
     ),
   },
-  // {
-  //   logo: nihstanfordlogo,
-  //   header: 'The Community Trusts OpenNeuro',
-  //   contentOne: (
-  //     <>
-  //       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-  //       tempor incididunt ut.
-  //     </>
-  //   ),
-  //   contentTwo: (
-  //     <>
-  //       View more information about{' '}
-  //       <a href="#">Stanford Center for Reproducible Neuroscience</a>
-  //     </>
-  //   ),
-  // },
 ]

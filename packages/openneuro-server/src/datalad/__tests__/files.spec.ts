@@ -11,31 +11,6 @@ vi.mock("../../config.ts")
 
 const filename = "sub-01/anat/sub-01_T1w.nii.gz"
 
-const mockRootFiles = [
-  { filename: "README" },
-  { filename: "dataset_description.json" },
-]
-const mockSub01 = [
-  { filename: "sub-01/anat/sub-01_T1w.nii.gz" },
-  { filename: "sub-01/func/sub-01_task-onebacktask_run-01_bold.nii.gz" },
-]
-const mockSub02 = [
-  { filename: "sub-02/anat/sub-02_T1w.nii.gz" },
-  { filename: "sub-02/func/sub-02_task-onebacktask_run-01_bold.nii.gz" },
-]
-const mockSub03 = [
-  { filename: "sub-03/anat/sub-03_T1w.nii.gz" },
-  { filename: "sub-03/func/sub-03_task-onebacktask_run-01_bold.nii.gz" },
-]
-const mockDerivatives = [{ filename: "derivatives/groundbreaking_output.html" }]
-const mockFiles = [
-  ...mockRootFiles,
-  ...mockSub01,
-  ...mockSub02,
-  ...mockSub03,
-  ...mockDerivatives,
-]
-
 describe("datalad files", () => {
   describe("encodeFilePath()", () => {
     it("should encode a nested path", () => {

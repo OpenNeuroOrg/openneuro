@@ -38,5 +38,6 @@ export async function deleteReviewer(
  * Resolver for dataset reviewers
  */
 export function reviewers(obj, _, { user, userInfo }) {
+  /* eslint-disable-line @typescript-eslint/no-unused-vars */
   return Reviewer.find({ datasetId: obj.id }).lean().exec()
 }

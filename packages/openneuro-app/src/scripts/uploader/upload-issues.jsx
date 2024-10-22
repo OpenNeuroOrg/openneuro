@@ -90,7 +90,7 @@ class UploadValidator extends React.Component {
             } else {
               validate(this.props.files, options).then(this.done)
             }
-          } catch (err) {
+          } catch (_err) {
             validate(this.props.files, options).then(this.done)
           }
         })

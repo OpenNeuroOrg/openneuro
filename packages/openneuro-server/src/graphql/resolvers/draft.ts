@@ -15,6 +15,7 @@ const draftFiles = async (dataset, args, { userInfo }) => {
   return filterRemovedAnnexObjects(dataset.id, userInfo)(files)
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const draftSize = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
   return Summary.findOne({ datasetId: dataset.id, id: hexsha })
@@ -33,7 +34,7 @@ export const updateRef = async (
   { user, userInfo },
 ) => {
   await checkDatasetWrite(datasetId, user, userInfo)
-  await updateDatasetRevision(datasetId, ref)
+  await updateDatasetRevision(datasetId)
 }
 
 /**

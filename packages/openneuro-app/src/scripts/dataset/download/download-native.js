@@ -55,7 +55,7 @@ const downloadTree = async (
     snapshotTag,
     tree,
   })
-  for (const [index, file] of filesToDownload.entries()) {
+  for (const [_index, file] of filesToDownload.entries()) {
     const downloadPath = path ? `${path}/${file.filename}` : file.filename
     if (file.directory) {
       // Next tree level

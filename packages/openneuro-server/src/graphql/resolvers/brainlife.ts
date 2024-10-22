@@ -50,7 +50,7 @@ export const onBrainlife = async (
     } else {
       return false
     }
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }

@@ -4,8 +4,6 @@ import type { ReactNode } from "react"
 export interface ModalityHeaderProps {
   portalName: string
   portalPrimary: string | ReactNode
-  publicDatasetStat: number
-  participantsStat: number
   hexBackgroundImage: string
   renderAggregateCounts: () => ReactNode
 }
@@ -13,8 +11,6 @@ export interface ModalityHeaderProps {
 export const ModalityHeader = ({
   portalName,
   portalPrimary,
-  publicDatasetStat,
-  participantsStat,
   hexBackgroundImage,
   renderAggregateCounts,
 }: ModalityHeaderProps) => {

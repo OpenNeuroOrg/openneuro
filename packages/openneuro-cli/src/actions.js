@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from "fs"
 import inquirer from "inquirer"
-import { getUrl, getUser, saveConfig } from "./config"
+import { getUrl, saveConfig } from "./config"
 import { finishUpload, prepareUpload, uploadFiles, validation } from "./upload"
 import { createDataset, getDatasetFiles } from "./datasets"
 import { getSnapshots } from "./snapshots.js"

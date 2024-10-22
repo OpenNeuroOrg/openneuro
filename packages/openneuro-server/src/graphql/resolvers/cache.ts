@@ -19,7 +19,7 @@ export async function cacheClear(
     try {
       await downloadCache.drop()
       return true
-    } catch (err) {
+    } catch (_err) {
       return false
     }
   } else {

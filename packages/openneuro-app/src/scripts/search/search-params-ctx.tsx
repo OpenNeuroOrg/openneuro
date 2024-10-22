@@ -57,6 +57,7 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
       // when datasetType is unset, unset datasetStatus as well
       updatedParams["datasetStatus_selected"] =
         initialSearchParams["datasetStatus_selected"]
+      break
     case "modality_selected":
     case "datasetStatus_selected":
     case "ageRange":

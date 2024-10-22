@@ -21,7 +21,7 @@ export const getDraftRevision = async (datasetId) => {
   })
 }
 
-export const updateDatasetRevision = (datasetId, gitRef) => {
+export const updateDatasetRevision = (datasetId) => {
   /**
    * Update the revision modified time in a draft on changes
    */

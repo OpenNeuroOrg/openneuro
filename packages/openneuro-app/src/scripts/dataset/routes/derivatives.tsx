@@ -40,7 +40,7 @@ interface DerivativesProps {
 }
 
 const Derivatives = ({ derivatives }: DerivativesProps): JSX.Element => {
-  const { datasetId, tag: snapshotTag } = useParams()
+  const { datasetId } = useParams()
   const [agreed] = useAgreement()
   // If the derivatives page is directly visited without the agreement, return to the dataset page
   if (!agreed) {

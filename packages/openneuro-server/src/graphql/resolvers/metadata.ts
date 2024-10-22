@@ -72,7 +72,7 @@ export const addMetadata = async (obj, { datasetId, metadata }) => {
  * Resolve all public datasets and return metadata
  */
 export async function publicMetadata(
-  obj,
+  _obj,
 ): Promise<LeanDocument<MetadataDocument>[]> {
   const datasets = await DatasetModel.find({
     public: true,

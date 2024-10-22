@@ -70,7 +70,7 @@ export const response = () => {
         const datasetId = url.substring(url.lastIndexOf("/") + 1, url.length)
         state.url = url
         state.token = await getRepoToken(datasetId)
-      } catch (err) {
+      } catch (_err) {
         state.url = undefined
         state.token = undefined
       }

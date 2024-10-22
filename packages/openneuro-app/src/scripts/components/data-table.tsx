@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import styled from "@emotion/styled"
-import { format, isValid, parse, parseISO } from "date-fns"
+import { format, isValid, parse } from "date-fns"
 
 interface DataTableProps {
   data: any[]

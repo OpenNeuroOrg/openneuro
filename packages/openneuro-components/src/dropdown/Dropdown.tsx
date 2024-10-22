@@ -13,7 +13,7 @@ export const Dropdown = ({ children, label, className }: DropdownProps) => {
     useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          setIsOpen((prevIsOpen) => false)
+          setIsOpen((_prevIsOpen) => false)
         }
       }
       document.addEventListener("mousedown", handleClickOutside)

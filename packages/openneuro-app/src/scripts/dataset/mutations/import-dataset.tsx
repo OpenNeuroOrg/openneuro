@@ -54,7 +54,7 @@ export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
             variables: { datasetId, url },
           })
           setImportStarted(true)
-        } catch (err) {
+        } catch (_err) {
           setImportFailed(true)
         }
       }}

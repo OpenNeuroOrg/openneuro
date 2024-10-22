@@ -2,7 +2,7 @@ import React from "react"
 import * as Sentry from "@sentry/react"
 import PropTypes from "prop-types"
 import { useNavigate, useParams } from "react-router-dom"
-import { gql, useApolloClient, useQuery } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client"
 import { Loading } from "@openneuro/components/loading"
 
 import DatasetQueryContext from "../datalad/dataset/dataset-query-context.js"

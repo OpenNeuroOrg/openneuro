@@ -67,7 +67,7 @@ export class DeletedDatasetError extends GraphQLError {
           // Only return a relative path to avoid cross site risks
           extensions = { code: "DELETED_DATASET", redirect: url.pathname }
         }
-      } catch (err) {
+      } catch (_err) {
         // Do nothing
       }
     }

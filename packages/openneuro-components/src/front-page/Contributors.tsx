@@ -3,9 +3,7 @@ import { Logo } from "../logo/Logo"
 
 import { frontPage } from "../content/front-page-content.jsx"
 
-export interface ContributersProps {}
-
-export const Contributors: React.FC<ContributersProps> = ({}) => {
+export const Contributors: React.FC = ({}) => {
   return (
     <div className="contributors">
       <div className="container">

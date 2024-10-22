@@ -42,7 +42,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
                   labelStyle="default"
                   label="search"
                   value=""
-                  setValue={(value) => {}}
+                  setValue={(_) => {}}
                 />
               )}
               onSearch={() => console.log("User search by keyword.")}

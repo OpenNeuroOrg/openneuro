@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { useParams } from "react-router-dom"
 import { DeprecateVersion } from "../mutations/deprecate-version"
 import { Input } from "@openneuro/components/input"
 import LoggedIn from "../../authentication/logged-in.jsx"

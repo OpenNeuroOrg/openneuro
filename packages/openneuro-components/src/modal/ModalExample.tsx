@@ -11,7 +11,6 @@ export interface ModalExampleProps {
 export const ModalExample: React.FC<ModalExampleProps> = ({
   closeText,
   buttonText,
-  ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggle = () => setIsOpen(!isOpen)

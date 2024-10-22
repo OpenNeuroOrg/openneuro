@@ -40,6 +40,7 @@ const publishPermissions = async (datasetId) => {
       ),
     },
   }
+  return permissionsUpdated
 }
 
 /**

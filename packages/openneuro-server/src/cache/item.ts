@@ -2,7 +2,7 @@ import type { Redis } from "ioredis"
 import * as zlib from "zlib"
 import { promisify } from "util"
 import type { CacheType } from "./types"
-export type { CacheType } from "./types"
+export { CacheType } from "./types"
 
 const compress = promisify(zlib.gzip)
 const decompress = promisify(zlib.gunzip)

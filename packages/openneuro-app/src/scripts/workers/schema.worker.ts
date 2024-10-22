@@ -15,6 +15,7 @@ export async function runValidator(
   try {
     const tree = await fileListToTree(files)
     const result = await validate(tree, { json: true })
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     const issues = Array.from(result.issues, ([key, value]) => value)
     output.issues.warnings = issues.filter(
       (issue) => issue.severity === "warning",

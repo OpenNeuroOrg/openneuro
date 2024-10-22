@@ -2,10 +2,7 @@ import { describe, expect, it, vi } from "vitest"
 import React from "react"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
-import {
-  Router,
-  unstable_HistoryRouter as HistoryRouter,
-} from "react-router-dom"
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom"
 import { createMemoryHistory } from "history"
 import { DEPRECATE_VERSION, DeprecateVersion } from "../deprecate-version"
 

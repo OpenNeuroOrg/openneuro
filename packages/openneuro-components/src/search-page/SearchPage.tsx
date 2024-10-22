@@ -39,8 +39,6 @@ export const SearchPage = ({
                   <ModalityHeader
                     portalName={portalContent.portalName}
                     portalPrimary={portalContent.portalPrimary}
-                    publicDatasetStat={portalContent.publicDatasetStat}
-                    participantsStat={portalContent.participantsStat}
                     hexBackgroundImage={portalContent.hexBackgroundImage}
                     renderAggregateCounts={renderAggregateCounts}
                   />

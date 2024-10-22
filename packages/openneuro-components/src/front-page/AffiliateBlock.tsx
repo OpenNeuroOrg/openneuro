@@ -4,9 +4,7 @@ import { affiliateContent } from "../content/affiliate-content.jsx"
 
 import { AffiliateArticle } from "../affiliate-article/AffiliateArticle"
 
-export interface AffiliateBlockProps {}
-
-export const AffiliateBlock: React.FC<AffiliateBlockProps> = () => {
+export const AffiliateBlock: React.FC = () => {
   return (
     <div className=" affiliate-wrap">
       {affiliateContent.map((item, index) => (
