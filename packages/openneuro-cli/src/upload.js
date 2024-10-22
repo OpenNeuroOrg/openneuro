@@ -1,4 +1,4 @@
-// eslint-disable no-console
+/* eslint-disable no-console */
 import cliProgress from "cli-progress"
 import path from "path"
 import inquirer from "inquirer"

@@ -1,6 +1,5 @@
-// @ts-nocheck
 import notifications from "../libs/notifications.js"
-import { format } from "date-fns/format"
+import format from "date-fns/format"
 import User from "../models/user"
 import Comment from "../models/comment"
 import MailgunIdentifier from "../models/mailgunIdentifier"
@@ -28,7 +27,6 @@ const textToDraft = (text) => {
  * ** maybe returns the newly created comment id
  */
 export async function reply(req, res, next) {
-  /* eslint-disable no-console */
   let comment
   const parentId = req.params.commentId
     ? decodeURIComponent(req.params.commentId)
@@ -49,6 +47,7 @@ export async function reply(req, res, next) {
   }
   const user = await User.findOne({ id: userId }).exec()
   const originalComment = await Comment.findOne({
+    // @ts-expect-error This is needed as an object and also a type
     _id: ObjectID(parentId),
   }).exec()
   if (user && originalComment) {

@@ -1,4 +1,4 @@
-// eslint-disable no-console
+/* eslint-disable no-console */
 import { indexingToken, indexQuery } from "@openneuro/search"
 import { setContext } from "@apollo/client/link/context"
 import { RetryLink } from "@apollo/client/link/retry"
