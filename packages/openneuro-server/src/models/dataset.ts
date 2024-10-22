@@ -29,7 +29,7 @@ export interface DatasetDocument extends Document {
   views: number
   related: [DatasetRelationDocument]
   schemaValidator: boolean
-  _conditions: any
+  _conditions: object
 }
 
 const datasetSchema = new Schema<DatasetDocument>(

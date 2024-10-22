@@ -5,7 +5,7 @@ const { Schema, model } = mongoose
 export interface FileDocument extends Document {
   datasetId: string
   tag: string
-  files: any[]
+  files: object[]
 }
 
 const fileSchema = new Schema({

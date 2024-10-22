@@ -15,7 +15,7 @@ export interface SummaryDocument extends Document {
   datasetId: string
   sessions: string[]
   subjects: string[]
-  subjectMetadata: Record<string, any>
+  subjectMetadata: Record<string, object>
   tasks: string[]
   modalities: string[]
   primaryModality: string
