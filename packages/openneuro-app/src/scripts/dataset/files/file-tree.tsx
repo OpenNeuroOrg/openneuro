@@ -17,6 +17,7 @@ interface FileTreeProps {
   files: DatasetFile[]
   editMode: boolean
   defaultExpanded: boolean
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   datasetPermissions: any
   toggleFileToDelete: ({ id, path, filename }) => void
   isFileToBeDeleted: (id: string) => boolean

@@ -8,7 +8,6 @@ import { config } from "../config"
 export const Username = ({ user }): JSX.Element => {
   if (user.orcid) {
     let orcidURL = "https://orcid.org/"
-    console.log(config.auth.orcid)
     if (config.auth.orcid.ORCID_API_ENDPOINT.includes("sandbox")) {
       orcidURL = "https://sandbox.orcid.org/"
     }

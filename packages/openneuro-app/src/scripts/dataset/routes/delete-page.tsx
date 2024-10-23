@@ -11,7 +11,7 @@ import { HeaderRow3 } from "./styles/header-row"
 
 interface DeletePageProps {
   dataset: {
-    permissions: Record<string, any>
+    permissions: Record<string, object>
     id: string
   }
 }

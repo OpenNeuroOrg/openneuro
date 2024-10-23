@@ -1,5 +1,5 @@
 import notifications from "../libs/notifications.js"
-import format from "date-fns/format"
+import formatISO from "date-fns/formatISO"
 import User from "../models/user"
 import Comment from "../models/comment"
 import MailgunIdentifier from "../models/mailgunIdentifier"
@@ -14,9 +14,11 @@ const ObjectID = mongoose.Schema.Types.ObjectId
  * item that can be stored as if it came from
  * a client-side draft.js editor
  */
-const textToDraft = (text) => {
+const textToDraft = (text: string) => {
   return JSON.stringify(
-    convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))),
+    convertToRaw(
+      ContentState.createFromBlockArray(convertFromHTML(text).contentBlocks),
+    ),
   )
 }
 
@@ -62,7 +64,7 @@ export async function reply(req, res, next) {
       parentId: parentId,
       text: text,
       user: flattenedUser,
-      createDate: format(new Date()),
+      createDate: formatISO(new Date()),
     }
     Comment.create(comment, (err, response) => {
       if (err) {

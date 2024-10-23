@@ -30,6 +30,7 @@ export async function* datasetGenerator(client, query = getDatasets) {
         return null
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e)
       return null
     }

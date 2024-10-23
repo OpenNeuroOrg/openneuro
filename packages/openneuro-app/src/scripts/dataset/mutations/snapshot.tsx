@@ -20,7 +20,7 @@ const CREATE_SNAPSHOT = gql`
 interface CreateSnapshotMutationProps {
   datasetId: string
   tag: string
-  changes: Array<string>
+  changes: string[]
   disabled: boolean
 }
 
@@ -47,8 +47,7 @@ const CreateSnapshotMutation = ({
         onClick={(): void => {
           void snapshotDataset({
             variables: { datasetId, tag, changes },
-          }).then((data) => {
-            console.log(data)
+          }).then((_data) => {
             navigate(`/datasets/${datasetId}/versions/${tag}`)
           })
         }}
@@ -62,7 +61,7 @@ const CreateSnapshotMutation = ({
 interface SnapshotDatasetProps {
   datasetId: string
   tag: string
-  changes: Array<string>
+  changes: string[]
   disabled: boolean
 }
 

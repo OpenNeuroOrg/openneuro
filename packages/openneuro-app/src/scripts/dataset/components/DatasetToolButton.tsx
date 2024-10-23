@@ -1,5 +1,6 @@
 import React from "react"
-import styled, { StyledComponent } from "@emotion/styled"
+import styled from "@emotion/styled"
+import type { StyledComponent } from "@emotion/styled"
 import { Link } from "react-router-dom"
 import { Tooltip } from "@openneuro/components/tooltip"
 import { Icon } from "@openneuro/components/icon"

@@ -10,12 +10,18 @@ export interface SummaryPetField {
   TracerRadionuclide: string[]
 }
 
+export interface SummarySubjectMetadata {
+  participantId: string
+  age: number
+  sex: string
+}
+
 export interface SummaryDocument extends Document {
   id: string
   datasetId: string
   sessions: string[]
   subjects: string[]
-  subjectMetadata: Record<string, object>
+  subjectMetadata: SummarySubjectMetadata[]
   tasks: string[]
   modalities: string[]
   primaryModality: string

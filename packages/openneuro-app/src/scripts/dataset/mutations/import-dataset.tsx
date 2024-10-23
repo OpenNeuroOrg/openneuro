@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { useState } from "react"
 import { gql, useApolloClient, useMutation } from "@apollo/client"
 import { Button } from "@openneuro/components/button"
 import { createDataset } from "../../uploader/upload-mutation"
@@ -25,7 +25,7 @@ interface ImportDatasetMutationProps {
   disabled?: boolean | null
 }
 
-export const ImportDatasetMutation: FC<ImportDatasetMutationProps> = ({
+export const ImportDatasetMutation: React.FC<ImportDatasetMutationProps> = ({
   url,
   disabled,
   affirmedDefaced,

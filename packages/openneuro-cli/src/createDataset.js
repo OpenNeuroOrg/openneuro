@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { gql } from "@apollo/client"
 import inquirer from "inquirer"
 import { getUrl } from "./config.js"

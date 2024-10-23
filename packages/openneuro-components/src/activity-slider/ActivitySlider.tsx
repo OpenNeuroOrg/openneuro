@@ -15,7 +15,8 @@ export interface ActivitySliderProps {
   itemClass?: string
   slideHeader?: React.ReactNode
   responsive: ResponsiveType
-  data: Array<any>
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  data: any[]
 }
 
 const LeftArrow = ({ onClick }: ArrowProps) => (
@@ -46,7 +47,7 @@ export const ActivitySlider = ({
   return (
     <div className={"activity-slider" + " " + className}>
       <h3>{slideHeader}</h3>
-      {/* @ts-expect-error */}
+      {/* @ts-expect-error type issues with react-multi-carousel package */}
       <Carousel
         infinite={infinite}
         keyBoardControl={keyBoardControl}

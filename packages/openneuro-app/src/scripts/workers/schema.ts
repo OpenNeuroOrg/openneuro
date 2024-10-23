@@ -1,4 +1,4 @@
-import { runValidator } from "./schema.worker" // eslint-disable-line import/no-unresolved
+import { runValidator } from "./schema.worker"
 import type { BIDSValidatorIssues } from "./worker-interface"
 
 function init(files, options): Promise<BIDSValidatorIssues> {

@@ -2,7 +2,7 @@ import React from "react"
 
 import { frontPage } from "../content/front-page-content.jsx"
 
-export const Infographic: React.FC = ({}) => {
+export const Infographic: React.FC = () => {
   return (
     <div className="front-infographic">
       <span className="bg-circle"></span>

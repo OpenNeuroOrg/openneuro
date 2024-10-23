@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode"
 
-interface OpenNeuroTokenProfile {
+export interface OpenNeuroTokenProfile {
   sub: string
   email: string
   provider: string

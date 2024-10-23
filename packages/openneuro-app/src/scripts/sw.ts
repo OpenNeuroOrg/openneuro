@@ -5,6 +5,7 @@
  */
 export default null
 declare const self: ServiceWorkerGlobalScope
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const globalAny: any = global // Workaround for serviceWorkerOption type missing
 const CACHE_NAME = "openneuro"
 const CACHE_PATHS = globalAny.serviceWorkerOption.assets

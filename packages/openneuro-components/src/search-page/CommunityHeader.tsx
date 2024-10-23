@@ -3,7 +3,7 @@ import React from "react"
 export interface CommunityHeaderProps {
   communityHeader: string
   communityPrimary: string
-  communitySecondary: Record<string, object>
+  communitySecondary: React.ReactNode
 }
 
 export const CommunityHeader = ({

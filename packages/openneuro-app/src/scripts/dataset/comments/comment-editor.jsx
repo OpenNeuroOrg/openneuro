@@ -20,7 +20,7 @@ const CommentEditor = ({
   )
   const doAfterSubmit = () => {
     setEditorState(EditorState.createEmpty())
-    done && done()
+    if (done) done()
   }
   const disabled = editorState.getUndoStack().size === 0
   return (

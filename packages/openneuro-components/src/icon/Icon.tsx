@@ -1,10 +1,10 @@
-import React, { ReactNode } from "react"
+import React from "react"
 
 export interface IconProps {
   primary?: boolean
   secondary?: boolean
   backgroundColor?: string
-  label?: string | number | ReactNode
+  label?: string | number | React.ReactNode
   disabled?: boolean
   icon?: string
   color?: string

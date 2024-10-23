@@ -4,6 +4,7 @@ import { SearchParamsCtx } from "../search-params-ctx"
 import { SearchSort } from "@openneuro/components/search-page"
 
 interface SortBySelectProps {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   variables: any
 }
 

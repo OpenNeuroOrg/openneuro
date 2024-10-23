@@ -5,7 +5,7 @@ import type { InputPropsStyle } from "../input/Input"
 
 export interface FacetSearchProps {
   setTermValue: (string) => void
-  pushTerm: React.Dispatch<React.SetStateAction<any[]>>
+  pushTerm: React.Dispatch<React.SetStateAction<object[]>>
   allTerms: string[]
   className?: string
   type?: string

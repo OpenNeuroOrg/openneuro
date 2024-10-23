@@ -83,6 +83,7 @@ const compareVersionsLink = (clientVersion) =>
             }
             observer.next(result)
           },
+          /* eslint-disable-next-line no-console */
           error: console.error,
           complete: observer.complete.bind(observer),
         })

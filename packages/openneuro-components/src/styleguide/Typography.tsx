@@ -1,8 +1,6 @@
 import React from "react"
 
-export interface TypographyProps {}
-
-export const Typography: React.FC<TypographyProps> = ({}) => {
+export const Typography: React.FC = () => {
   return (
     <article>
       <div className="container">

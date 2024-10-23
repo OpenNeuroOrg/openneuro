@@ -13,6 +13,12 @@ const DELETE_REVIEWER = gql`
   }
 `
 
+// TODO - derive from GraphQL
+interface ReviewerUser {
+  id: string
+  email: string
+}
+
 interface DeleteReviewerLinkProps {
   datasetId: string
   id: string
@@ -27,7 +33,7 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
 }) => {
   const [DeleteReviewerLink] = useMutation(DELETE_REVIEWER, {
     update(cache, { data: { deleteReviewer } }) {
-      const { reviewers } = cache.readFragment<{ reviewers: any[] }>({
+      const { reviewers } = cache.readFragment<{ reviewers: ReviewerUser[] }>({
         id: `Dataset:${datasetId}`,
         fragment: DATASET_REVIEWERS,
       })

@@ -25,7 +25,7 @@ const runValidations = (values) =>
     .map((validation) => {
       const relevantValues = validation.fields.map((key) => values[key])
       // TODO - This doesn't seem necessary?
-      // @ts-expect-error
+      // @ts-expect-error this is a size 2 tuple but not checked due to jsx instead of tsx
       const isValid = validation.check(relevantValues)
       if (!isValid) return validation.errorMessage
     })
@@ -52,7 +52,7 @@ const AddMetadata = ({ dataset }) => {
     const errors = runValidations(newValues)
     if (hasChanged(errors, validationErrors)) setValidationErrors(errors)
   }
-  // @ts-ignore-next-line
+  // @ts-expect-error location.state is not fully typed
   const submitPath = location.state && location.state.submitPath
   const user = getProfile(cookies)
   const hasEdit = (user && user.admin) ||

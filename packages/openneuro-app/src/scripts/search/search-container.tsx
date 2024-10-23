@@ -45,6 +45,7 @@ import Helmet from "react-helmet"
 import AdminUser from "../authentication/admin-user.jsx"
 
 export interface SearchContainerProps {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   portalContent?: Record<string, any>
 }
 
@@ -53,7 +54,9 @@ export interface SearchContainerProps {
  */
 export const setDefaultSearch = (
   modality: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchParams: Record<string, any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSearchParams: (newParams: Record<string, any>) => void,
   query: URLSearchParams,
 ): void => {

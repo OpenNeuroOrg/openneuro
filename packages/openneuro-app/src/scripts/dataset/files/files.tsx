@@ -39,7 +39,9 @@ interface FilesProps {
   datasetName: string
   files: DatasetFile[]
   editMode: boolean
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   datasetPermissions: any
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   summary: any
 }
 

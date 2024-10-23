@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { stat } from "fs/promises"
 import { createReadStream, createWriteStream } from "fs"
 import { once } from "events"

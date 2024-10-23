@@ -3,7 +3,7 @@ import { Logo } from "../logo/Logo"
 
 import { frontPage } from "../content/front-page-content.jsx"
 
-export const Contributors: React.FC = ({}) => {
+export const Contributors: React.FC = () => {
   return (
     <div className="contributors">
       <div className="container">

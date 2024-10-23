@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import semver, { ReleaseType } from "semver"
+import semver from "semver"
+import type { ReleaseType } from "semver"
 import SnapshotDataset from "../mutations/snapshot"
 import EditList from "../fragments/edit-list.jsx"
 import { Button } from "@openneuro/components/button"

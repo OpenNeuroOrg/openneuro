@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node"
 import { elasticClient } from "../../elasticsearch/elastic-client"
 import { dataset } from "./dataset"
 import Star from "../../models/stars"
@@ -69,7 +70,7 @@ export const elasticRelayConnection = (
       },
     }
   } catch (err) {
-    console.error(err)
+    Sentry.captureException(err)
   }
 }
 
