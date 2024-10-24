@@ -54,7 +54,7 @@
   ],
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
-      "deno fmt"
+      "deno fmt *"
     ]
   },
   "dependenciesMeta": {
@@ -66,5 +66,5 @@
     "react-router-dom": "6.3.0",
     "rollup": "4.22.0"
   },
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.5.1"
 }
