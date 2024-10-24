@@ -47,6 +47,7 @@ rediraffe_redirects = {
         'user-guide',
         'api',
         'git',
+        'orcid',
         'monitoring', # Still rendered, but not in ToC
         'maintenance',
     )
