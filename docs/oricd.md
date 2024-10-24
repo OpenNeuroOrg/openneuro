@@ -8,7 +8,7 @@ To use all features of OpenNeuro, you must make at least one email address avail
 
 Visit [your ORCID profile](https://orcid.org/my-orcid) and add or modify an email.
 
-![ORICD profile emails list on left side of profile](./assets/orcid/step-1.png)
+![ORCID profile emails list on left side of profile](./assets/orcid/step-1.png)
 
 Ensure that at least one email address is visible to everyone or trusted parties, and has been verified with ORCID.
 
