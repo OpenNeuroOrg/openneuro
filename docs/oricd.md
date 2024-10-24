@@ -4,7 +4,7 @@ OpenNeuro supports account creation with [ORCID](https://orcid.org/). Creating a
 
 ## Enabling Trusted Access to Emails
 
-To use all features of OpenNeuro, you must make at least one email address available to OpenNeuro from your ORCID profile. The first email visible to OpenNeuro will be used for email notifications on your dataset and allows other users to associate permissions with your OpenNeuro account using this email address. OpenNeuro requires a minimum of trusted institutional access.
+To use all features of OpenNeuro, you must make at least one email address available to OpenNeuro from your ORCID profile. The first email visible to OpenNeuro will be used for email notifications on your dataset and allows other users to grant you permissions on their datasets by entering this email address. OpenNeuro requires a minimum of trusted institutional access.
 
 Visit [your ORCID profile](https://orcid.org/my-orcid) and add or modify an email.
 
