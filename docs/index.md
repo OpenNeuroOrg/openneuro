@@ -47,6 +47,7 @@ Finally, if you'd like to suggest a new feature for OpenNeuro, you can do so at
 
 user_guide
 faq
+orcid
 ```
 
 ```{toctree}
