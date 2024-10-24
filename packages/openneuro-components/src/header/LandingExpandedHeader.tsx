@@ -9,7 +9,7 @@ import orcidIcon from "../assets/orcid_24x24.png"
 import { frontPage } from "../content/front-page-content.jsx"
 
 export interface LandingExpandedHeaderProps {
-  user?: {}
+  user?: object
   loginUrls?: Record<string, string>
   renderAggregateCounts?: (modality?: string) => React.ReactNode
   renderFacetSelect: () => React.ReactNode
@@ -36,7 +36,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           label={item.label}
           cubeImage={item.cubeImage}
           stats={aggregateCounts(item.label)}
-          onClick={(redirectPath) => (e) => {
+          onClick={(redirectPath) => (_err) => {
             navigate(redirectPath)
           }}
         />

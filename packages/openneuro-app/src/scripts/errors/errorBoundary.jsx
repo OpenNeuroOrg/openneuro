@@ -74,7 +74,7 @@ ErrorBoundary.propTypes = {
 
 // specific use case
 // ignore error in apollo lib
-// @ts-expect-error
+// @ts-expect-error TODO - this is incorrectly extended but working
 class ErrorBoundaryAssertionFailureException extends ErrorBoundary {
   constructor(props) {
     super(props)
@@ -104,7 +104,6 @@ class ErrorBoundaryDeletePageException extends ErrorBoundary {
         const throwError = !/^\/datasets\/ds\d{6}\/delete$/.test(
           window.location.pathname,
         )
-        console.log(throwError)
         return throwError
       },
     )

@@ -1,4 +1,5 @@
-import mongoose, { Document } from "mongoose"
+import mongoose from "mongoose"
+import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface SummaryPetField {
@@ -9,12 +10,18 @@ export interface SummaryPetField {
   TracerRadionuclide: string[]
 }
 
+export interface SummarySubjectMetadata {
+  participantId: string
+  age: number
+  sex: string
+}
+
 export interface SummaryDocument extends Document {
   id: string
   datasetId: string
   sessions: string[]
   subjects: string[]
-  subjectMetadata: Record<string, any>
+  subjectMetadata: SummarySubjectMetadata[]
   tasks: string[]
   modalities: string[]
   primaryModality: string

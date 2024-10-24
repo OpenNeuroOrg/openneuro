@@ -1,9 +1,6 @@
-import { Client as ElasticClient } from "@elastic/elasticsearch"
-import {
-  DatasetQueryResult,
-  DatasetsIndex,
-  indexDataset,
-} from "@openneuro/search"
+import type { Client as ElasticClient } from "@elastic/elasticsearch"
+import { DatasetsIndex, indexDataset } from "@openneuro/search"
+import type { DatasetQueryResult } from "@openneuro/search"
 
 /**
  * Point 'datasets' index at the new version
@@ -28,6 +25,7 @@ export default async function indexDatasets(
     }
     await aliasDatasetsIndex(elasticClient)
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e)
   }
 }

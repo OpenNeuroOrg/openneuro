@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { schemaComposer } from "graphql-compose"
 import resolvers from "./resolvers"
 import {
@@ -155,8 +154,6 @@ export const typeDefs = `
     subscribeToNewsletter(email: String!): Boolean
     # Upserts dataset metadata
     addMetadata(datasetId: ID!, metadata: MetadataInput!): Metadata
-    # Update draft reference pointer
-    updateRef(datasetId: ID!, ref: String!): Boolean
     # Start an upload
     prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata
     # Add files from a completed upload to the dataset draft

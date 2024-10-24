@@ -14,7 +14,9 @@ export interface HeaderProps {
   }
   expanded?: boolean
   isOpenSupport: boolean
-  toggleLoginModal: (userModalParams?: Record<string, any>) => void
+  toggleLoginModal: (
+    userModalParams?: React.MouseEvent<Element, MouseEvent>,
+  ) => void
   signOutAndRedirect: () => void
   toggleSupport: () => void
   navigateToNewSearch: (resetSearchParams?: boolean) => void

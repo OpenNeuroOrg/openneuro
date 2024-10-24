@@ -104,9 +104,10 @@ export interface SearchResultItemProps {
       },
     ]
   }
-  profile: Record<string, any>
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  profile: Record<string, any> // TODO - Use the actual user type here
   datasetTypeSelected?: string
-  hasEditPermissions: (permissions: any, userId: any) => boolean
+  hasEditPermissions: (permissions: object, userId: string) => boolean
 }
 
 export const SearchResultItem = ({

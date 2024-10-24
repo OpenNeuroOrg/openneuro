@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
 import { Button } from "@openneuro/components/button"
 import { useNavigate } from "react-router-dom"

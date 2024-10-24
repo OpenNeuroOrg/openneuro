@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content"
@@ -73,7 +74,7 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
                 variables: { datasetId, userEmail, level: metadata },
               })
               done()
-            } catch (err) {
+            } catch (_err) {
               toast.error(
                 <ToastContent body="A user with that email address does not exist" />,
               )

@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import { Route, Routes } from "react-router-dom"
 import SearchContainer from "./search-container"
 import { portalContent } from "@openneuro/components/content"

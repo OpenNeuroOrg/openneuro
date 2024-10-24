@@ -1,4 +1,5 @@
-import React, { FC, useContext, useEffect } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import {
   SearchPage,
@@ -39,11 +40,12 @@ import AggregateCountsContainer from "../pages/front-page/aggregate-queries/aggr
 import { useCookies } from "react-cookie"
 import { useSearchResults } from "./use-search-results"
 import { SearchParamsCtx } from "./search-params-ctx"
-import { SearchParams } from "./initial-search-params"
+import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
 import AdminUser from "../authentication/admin-user.jsx"
 
 export interface SearchContainerProps {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   portalContent?: Record<string, any>
 }
 
@@ -52,7 +54,9 @@ export interface SearchContainerProps {
  */
 export const setDefaultSearch = (
   modality: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchParams: Record<string, any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSearchParams: (newParams: Record<string, any>) => void,
   query: URLSearchParams,
 ): void => {
@@ -109,8 +113,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     new URLSearchParams(location.search),
   )
 
-  const { loading, data, fetchMore, refetch, variables, error } =
-    useSearchResults()
+  const { loading, data, fetchMore, variables } = useSearchResults()
   const loadMore = loading ? () => {} : () => {
     fetchMore({
       variables: {

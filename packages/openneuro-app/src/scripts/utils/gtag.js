@@ -1,8 +1,8 @@
 /*global globalThis*/
 globalThis.dataLayer = globalThis.dataLayer || []
 
-function gtag() {
-  globalThis.dataLayer.push(arguments)
+function gtag(...args) {
+  globalThis.dataLayer.push(args)
 }
 
 gtag("js", new Date())

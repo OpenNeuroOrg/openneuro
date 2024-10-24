@@ -1,5 +1,7 @@
-import { Client as ElasticClient } from "@elastic/elasticsearch"
-import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client"
+/* eslint-disable no-console */
+import type { Client as ElasticClient } from "@elastic/elasticsearch"
+import type { ApolloClient, NormalizedCacheObject } from "@apollo/client"
+import { gql } from "@apollo/client"
 import { DatasetsIndex } from "./indexes/datasets"
 
 export const INDEX_DATASET_FRAGMENT = gql`
@@ -113,7 +115,9 @@ export const indexQuery = gql`
 // TODO: This would be better to generate from the GraphQL schema
 export interface DatasetQueryResult {
   id: string
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   metadata: Record<string, any>
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   latestSnapshot: Record<string, any>
   __typename: string
 }

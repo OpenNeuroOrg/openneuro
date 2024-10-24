@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 import ljaf from "../assets/ljaf.png"
 import nihbi from "../assets/nih-bi-logo.png"
 import nsf from "../assets/nsf.png"
-import nimh from "../assets/nimh.png"
 import squishymedia from "../assets/sqm-logo.png"
 import novo from "../assets/novo-logo.png"
 import nru from "../assets/nru-logo.png"
@@ -156,13 +155,6 @@ export const frontPage = {
       logo: ljaf,
       link: "http://www.arnoldfoundation.org/",
     },
-
-    // {
-    //   title: 'NIH',
-    //   alt: 'National Institute on Drug and Abuse',
-    //   logo: nih,
-    //   link: 'https://nih.gov',
-    // },
     {
       title: "Squishymedia",
       alt: "Squishymedia",

@@ -33,7 +33,7 @@ const CreateSnapshotMutation = ({ datasetId, tag, changes }) => {
 interface SnapshotDatasetProps {
   datasetId: string
   tag: string
-  changes: Array<string>
+  changes: string[]
 }
 
 const SnapshotDataset = ({ datasetId, tag, changes }: SnapshotDatasetProps) => (

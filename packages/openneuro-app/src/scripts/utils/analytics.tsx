@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { pageview } from "../utils/gtag"
 import { useLocation } from "react-router-dom"
 

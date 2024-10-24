@@ -1,7 +1,8 @@
 /**
  * Model for ingest of new datasets from a remote URL (zip/tarball)
  */
-import mongoose, { Document, ObjectId } from "mongoose"
+import mongoose from "mongoose"
+import type { Document, ObjectId } from "mongoose"
 const { Schema, model } = mongoose
 import { validateUrl } from "../utils/validateUrl"
 

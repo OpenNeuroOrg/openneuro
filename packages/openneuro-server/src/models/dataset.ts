@@ -1,4 +1,5 @@
-import mongoose, { Document } from "mongoose"
+import mongoose from "mongoose"
+import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 // External relations annotating the whole dataset
@@ -28,7 +29,7 @@ export interface DatasetDocument extends Document {
   views: number
   related: [DatasetRelationDocument]
   schemaValidator: boolean
-  _conditions: any
+  _conditions: object
 }
 
 const datasetSchema = new Schema<DatasetDocument>(

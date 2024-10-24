@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react"
 import React from "react"
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
@@ -44,12 +45,9 @@ function fallbackCopyTextToClipboard(text) {
   textArea.select()
 
   try {
-    const success = document.execCommand("copy")
-    console.log(
-      `Copying text command was ${success ? "successful!" : "unsuccessful."}`,
-    )
+    document.execCommand("copy")
   } catch (err) {
-    console.error("Could not copy text: ", err)
+    Sentry.captureException(err)
   }
 
   document.body.removeChild(textArea)
@@ -59,8 +57,8 @@ function copyTextToClipboard(text) {
   if (!navigator.clipboard) fallbackCopyTextToClipboard(text)
   else {
     navigator.clipboard.writeText(text).then(
-      () => console.log("Copying to clipboard was successful!"),
-      (err) => console.error("Could not copy text: ", err),
+      () => {},
+      (err) => Sentry.captureException(err),
     )
   }
 }

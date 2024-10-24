@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import { downloadNative } from "./download-native.js"
 import { useApolloClient } from "@apollo/client"
 import { Button } from "@openneuro/components/button"
-import { Link } from "react-router-dom"
 
 const DownloadLink = ({ datasetId, snapshotTag }) => {
   const client = useApolloClient()

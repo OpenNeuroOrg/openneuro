@@ -1,6 +1,6 @@
 import { vi } from "vitest"
 import { MongoMemoryServer } from "mongodb-memory-server"
-import { connect, disconnect } from "mongoose"
+import { connect } from "mongoose"
 import { getAccessionNumber } from "../dataset"
 
 vi.mock("ioredis")

@@ -1,14 +1,14 @@
 import config from "../../config"
+import mailjet from "node-mailjet"
 
 let transport
 let perform_api_call = true
 try {
-  const mailjet = require("node-mailjet")
   transport = mailjet.connect(
     config.notifications.email.apiKey,
     config.notifications.email.secret,
   )
-} catch (err) {
+} catch (_err) {
   perform_api_call = false
 }
 
@@ -42,6 +42,7 @@ export const send = (email: Record<string, string>): Promise<Response> => {
       .request(mailjetFormat(email))
   } else {
     // Mailjet is not configured, instead log emails
+    /* eslint-disable no-console */
     console.dir(email)
   }
 }

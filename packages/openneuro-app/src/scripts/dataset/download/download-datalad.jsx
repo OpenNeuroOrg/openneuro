@@ -83,7 +83,7 @@ DownloadDataladInstructions.propTypes = {
 
 const DownloadDatalad = (props) =>
   // TODO - don't depend on async config
-  getConfig().hasOwnProperty("github")
+  Object.hasOwn(getConfig(), "github")
     ? (
       <DownloadDataladInstructions
         {...props}

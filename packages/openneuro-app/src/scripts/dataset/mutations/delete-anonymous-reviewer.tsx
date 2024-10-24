@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import React from "react"
+import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
 import { WarnButton } from "@openneuro/components/warn-button"
 import { DATASET_REVIEWERS } from "../fragments/dataset-reviewers"
@@ -11,6 +12,12 @@ const DELETE_REVIEWER = gql`
     }
   }
 `
+
+// TODO - derive from GraphQL
+interface ReviewerUser {
+  id: string
+  email: string
+}
 
 interface DeleteReviewerLinkProps {
   datasetId: string
@@ -26,7 +33,7 @@ export const DeleteReviewerLink: FC<DeleteReviewerLinkProps> = ({
 }) => {
   const [DeleteReviewerLink] = useMutation(DELETE_REVIEWER, {
     update(cache, { data: { deleteReviewer } }) {
-      const { reviewers } = cache.readFragment<{ reviewers: any[] }>({
+      const { reviewers } = cache.readFragment<{ reviewers: ReviewerUser[] }>({
         id: `Dataset:${datasetId}`,
         fragment: DATASET_REVIEWERS,
       })

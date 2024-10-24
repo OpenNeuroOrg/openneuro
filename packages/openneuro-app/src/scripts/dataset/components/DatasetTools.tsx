@@ -1,11 +1,11 @@
 import React from "react"
 import { DatasetToolButton } from "./DatasetToolButton"
-import styled, { StyledComponent } from "@emotion/styled"
+import styled from "@emotion/styled"
+import type { StyledComponent } from "@emotion/styled"
 import { useAgreement } from "../../components/agreement"
 
-interface DatasetToolStyleProps {}
-
-export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export const DatasetToolStyle: StyledComponent<{}> = styled
   .span`
   display: flex;
   justify-content: flex-start;

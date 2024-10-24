@@ -1,14 +1,14 @@
-import React, { createContext, FC, ReactNode, useState } from "react"
+import React, { createContext, useState } from "react"
 import { UserLoginModal } from "@openneuro/components/modal"
 import loginUrls from "../authentication/loginUrls"
 
 export const UserModalOpenCtx = createContext(null)
 
 interface UserModalOpenProviderProps {
-  children: ReactNode
+  children: React.ReactNode
 }
 
-export const UserModalOpenProvider: FC<UserModalOpenProviderProps> = ({
+export const UserModalOpenProvider: React.FC<UserModalOpenProviderProps> = ({
   children,
 }) => {
   const [userModalOpen, setUserModalOpen] = useState(false)

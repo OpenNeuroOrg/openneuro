@@ -1,7 +1,8 @@
 import Snapshot from "../../models/snapshot"
-import { LeanDocument } from "mongoose"
+import type { LeanDocument } from "mongoose"
 import DatasetModel from "../../models/dataset"
-import MetadataModel, { MetadataDocument } from "../../models/metadata"
+import MetadataModel from "../../models/metadata"
+import type { MetadataDocument } from "../../models/metadata"
 import { latestSnapshot } from "./snapshots"
 import { permissions } from "./permissions"
 
@@ -71,8 +72,8 @@ export const addMetadata = async (obj, { datasetId, metadata }) => {
  * Resolve all public datasets and return metadata
  */
 export async function publicMetadata(
-  obj,
-): Promise<Array<LeanDocument<MetadataDocument>>> {
+  _obj,
+): Promise<LeanDocument<MetadataDocument>[]> {
   const datasets = await DatasetModel.find({
     public: true,
   }).lean()

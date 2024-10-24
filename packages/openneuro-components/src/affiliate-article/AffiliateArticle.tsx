@@ -3,8 +3,8 @@ import React from "react"
 export interface AffiliateArticleProps {
   logo?: string
   header?: string
-  contentOne?: Record<string, any>
-  contentTwo?: Record<string, any>
+  contentOne?: React.ReactNode
+  contentTwo?: React.ReactNode
 }
 
 export const AffiliateArticle: React.FC<AffiliateArticleProps> = ({

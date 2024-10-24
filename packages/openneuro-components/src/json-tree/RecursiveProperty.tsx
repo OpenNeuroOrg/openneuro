@@ -38,6 +38,7 @@ export const RecursiveProperty: React.FC<Props> = (props) => {
                 expanded={!!props.rootProperty}
               >
                 {Object.values(props.property).map(
+                  /* eslint-disable-next-line */
                   (property, index, { length }) => (
                     <RecursiveProperty
                       key={index}

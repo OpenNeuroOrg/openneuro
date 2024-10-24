@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import { useContext } from "react"
 import { gql, useQuery } from "@apollo/client"
 import { SearchParamsCtx } from "./search-params-ctx"
 import initialSearchParams from "./initial-search-params"

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react"
 
 import { Header } from "../header/Header"
@@ -42,7 +43,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
                   labelStyle="default"
                   label="search"
                   value=""
-                  setValue={(value) => {}}
+                  setValue={(_) => {}}
                 />
               )}
               onSearch={() => console.log("User search by keyword.")}

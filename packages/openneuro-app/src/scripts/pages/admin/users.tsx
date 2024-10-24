@@ -96,7 +96,7 @@ const Users = ({ users, refetch, loading }) => {
     )
     .map((user, index) => {
       const adminBadge = user.admin ? "Admin" : null
-      const userEmail = user.hasOwnProperty("email") ? user.email : user.id
+      const userEmail = Object.hasOwn(user, "email") ? user.email : user.id
       return (
         <div className="fade-in user-panel  panel panel-default" key={index}>
           <div className="user-col uc-name">

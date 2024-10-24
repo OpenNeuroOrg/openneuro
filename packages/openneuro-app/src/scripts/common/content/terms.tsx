@@ -1,7 +1,7 @@
-import React, { ReactElement } from "react"
+import React from "react"
 
 /** Terms and conditions content. */
-export function Terms(): ReactElement {
+export function Terms(): React.ReactElement {
   return (
     <>
       <p>

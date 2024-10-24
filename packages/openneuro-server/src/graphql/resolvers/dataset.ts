@@ -125,6 +125,7 @@ export const deleteDataset = async (
     await removeDatasetSearchDocument(id)
   } catch (err) {
     // This likely means this dataset had not yet been indexed
+    /* eslint-disable-next-line no-console */
     console.error(err)
   }
   await new Deletion({
@@ -146,9 +147,9 @@ export const deleteFiles = async (
 ) => {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
-    const deletedFiles = await datalad.deleteFiles(datasetId, files, userInfo)
+    await datalad.deleteFiles(datasetId, files, userInfo)
     return true
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }
@@ -169,7 +170,7 @@ export const removeAnnexObject = async (
       userInfo,
     )
     return true
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }
@@ -189,7 +190,7 @@ export const flagAnnexObject = async (
       userInfo,
     )
     return true
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }
@@ -228,7 +229,7 @@ export const trackAnalytics = (obj, { datasetId, tag, type }) => {
   try {
     dataladAnalytics.trackAnalytics(datasetId, tag, type)
     return true
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }

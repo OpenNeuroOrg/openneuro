@@ -1,5 +1,6 @@
-import mongoose, { Document } from "mongoose"
-import { UserDocument } from "./user"
+import mongoose from "mongoose"
+import type { Document } from "mongoose"
+import type { UserDocument } from "./user"
 const ObjectId = mongoose.Schema.Types.ObjectId
 
 export interface BadAnnexObject extends Document {

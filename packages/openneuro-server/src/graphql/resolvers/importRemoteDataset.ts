@@ -65,6 +65,7 @@ export async function importRemoteDataset(
 export async function finishImportRemoteDataset(
   _: Record<string, unknown>,
   { id, success, message }: { id: string; success: boolean; message: string },
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
 ): Promise<boolean> {
   const ingest = await IngestDataset.findById(id)

@@ -1,11 +1,11 @@
 import React from "react"
 import { TermSearch } from "../input/TermSearch"
-import { ButtonPropsSize } from "../button/Button"
-import { InputPropsStyle } from "../input/Input"
+import type { ButtonPropsSize } from "../button/Button"
+import type { InputPropsStyle } from "../input/Input"
 
 export interface FacetSearchProps {
   setTermValue: (string) => void
-  pushTerm: React.Dispatch<React.SetStateAction<any[]>>
+  pushTerm: React.Dispatch<React.SetStateAction<object[]>>
   allTerms: string[]
   className?: string
   type?: string

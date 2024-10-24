@@ -77,7 +77,7 @@ export const matchKnownObjects = (desc) => {
         } else {
           objects.push({ id: rawDOI })
         }
-      } catch (err) {
+      } catch (_err) {
         continue
       }
     }

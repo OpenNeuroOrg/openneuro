@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import fs from "fs"
 import inquirer from "inquirer"
-import { getUrl, getUser, saveConfig } from "./config"
+import { getUrl, saveConfig } from "./config"
 import { finishUpload, prepareUpload, uploadFiles, validation } from "./upload"
 import { createDataset, getDatasetFiles } from "./datasets"
 import { getSnapshots } from "./snapshots.js"
@@ -70,7 +70,6 @@ const uploadDataset = async (
   if (datasetId) {
     // Check for dataset -> validation -> upload
     // Get remote files and filter successful files out
-    // eslint-disable-next-line no-console
     console.log("Checking remote files...")
     remoteFiles = await getDatasetFiles(client, datasetId)
   } else {
@@ -79,7 +78,6 @@ const uploadDataset = async (
       affirmedDefaced,
       affirmedConsent,
     })
-    // eslint-disable-next-line no-console
     console.log(`"${datasetId}" created`)
     remoteFiles = [] // New dataset has no remote files
   }
@@ -131,15 +129,12 @@ function isMissingDotOpenneuroError(err) {
 
 function logSpecificError(errors) {
   errors.forEach((err) => {
-    // eslint-disable-next-line no-console
     console.error(err)
   })
 }
 
 function handleGenericErrors(err, dir) {
-  // eslint-disable-next-line no-console
   console.error(err)
-  // eslint-disable-next-line no-console
   console.error(`"${dir}" may not exist or is inaccessible`)
 }
 
@@ -162,7 +157,6 @@ export const upload = (dir, cmd) => {
       blacklistModalities: ["Microscopy"],
     }
     if (cmd.dataset) {
-      // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
       uploadDataset(dir, cmd.dataset, validatorOptions).then((datasetId) => {
         if (datasetId) {

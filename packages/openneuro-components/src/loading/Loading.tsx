@@ -1,8 +1,6 @@
 import React from "react"
 
-export interface LoadingProps {}
-
-export const Loading: React.FC<LoadingProps> = ({}) => (
+export const Loading: React.FC = () => (
   <div
     className="cxq-spinner cxq-spinner--waveStretchDelay"
     role="alert"

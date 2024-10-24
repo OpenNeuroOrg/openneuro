@@ -17,9 +17,6 @@ export const Logo: React.FC<LogoProps> = ({
   horizontal = true,
   ...props
 }) => {
-  const colorMode = dark ? "logo-dark" : "logo-light"
-  const layoutMode = horizontal ? "logo-horz" : "logo-vert"
-
   const logoStyle = dark && horizontal
     ? logodh
     : horizontal

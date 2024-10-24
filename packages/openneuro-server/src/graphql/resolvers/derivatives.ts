@@ -1,8 +1,6 @@
-import {
-  DatasetOrSnapshot,
-  getDatasetFromSnapshotId,
-} from "../../utils/datasetOrSnapshot"
+import { getDatasetFromSnapshotId } from "../../utils/datasetOrSnapshot"
 import config from "../../config"
+import type { DatasetOrSnapshot } from "../../utils/datasetOrSnapshot"
 
 const S3_BUCKET = "openneuro-derivatives"
 const GITHUB_ORGANIZATION = "OpenNeuroDerivatives"
@@ -44,7 +42,7 @@ export const githubDerivative = async (
       }
     }
     return false
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 }
@@ -78,14 +76,14 @@ export const derivativeObject = (
  */
 export const derivatives = async (
   dataset: DatasetOrSnapshot,
-): Promise<Array<DatasetDerivatives>> => {
+): Promise<DatasetDerivatives[]> => {
   let datasetId
   if ("tag" in dataset) {
     datasetId = getDatasetFromSnapshotId(dataset.id)
   } else {
     datasetId = dataset.id
   }
-  const available: Array<DatasetDerivatives> = []
+  const available: DatasetDerivatives[] = []
   if (await githubDerivative(datasetId, "mriqc")) {
     available.push(derivativeObject(datasetId, "mriqc"))
   }

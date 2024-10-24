@@ -7,7 +7,7 @@ import { WarnButton } from "@openneuro/components/warn-button"
 import { AccordionWrap } from "@openneuro/components/accordion"
 import styled from "@emotion/styled"
 import { Tooltip } from "@openneuro/components/tooltip"
-import { DatasetFile } from "../../types/dataset-file"
+import type { DatasetFile } from "../../types/dataset-file"
 import bytes from "bytes"
 
 const FileTreeMeta = styled.span`
@@ -39,7 +39,9 @@ interface FilesProps {
   datasetName: string
   files: DatasetFile[]
   editMode: boolean
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   datasetPermissions: any
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   summary: any
 }
 

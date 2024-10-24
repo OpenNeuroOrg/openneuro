@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 
 export function stepping(value, step) {
   return Math.round(value / step) * step
@@ -66,7 +66,6 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       Math.min(Number(changeEvent.target.value), value[1] - 1),
       step,
     )
-    value[0] = discreteValue
     onChange([discreteValue, value[1]])
   }
   const maxChangeHandler = (
@@ -79,7 +78,6 @@ export const TwoHandleRange: React.FC<TwoHandleRangeProps> = ({
       Math.max(Number(changeEvent.target.value), value[0] + 1),
       step,
     )
-    value[1] = discreteValue
     onChange([value[0], discreteValue])
   }
 

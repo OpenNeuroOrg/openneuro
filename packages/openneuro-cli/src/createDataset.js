@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { gql } from "@apollo/client"
 import inquirer from "inquirer"
 import { getUrl } from "./config.js"
@@ -28,7 +29,7 @@ export const createDataset = async ({ affirmedDefaced, affirmedConsent }) => {
     const worker = data.createDataset.worker.split("-").pop()
     console.log(`Dataset ${url}datasets/${datasetId} created.`)
     console.log(`Git remote: ${url}git/${worker}/${datasetId}`)
-  } catch (err) {
+  } catch (_err) {
     console.log(
       'Dataset creation failed, you may need to rerun setup with "openneuro login" first',
     )

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Workaround for incorrect global reference in draft.js via fbjs
 interface Object {
   // eslint-disable-next-line @typescript-eslint/ban-types

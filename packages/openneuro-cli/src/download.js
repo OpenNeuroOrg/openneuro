@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from "fs"
 import path from "path"
 import mkdirp from "mkdirp"
@@ -59,40 +60,36 @@ export const downloadFile = async (
   fileUrl,
   downloadProgress,
 ) => {
+  const fullPath = path.join(destination, filename)
+  // Create any needed parent dirs
+  mkdirp.sync(path.dirname(fullPath))
+  const writeStream = fs.createWriteStream(fullPath)
   try {
-    const fullPath = path.join(destination, filename)
-    // Create any needed parent dirs
-    mkdirp.sync(path.dirname(fullPath))
-    const writeStream = fs.createWriteStream(fullPath)
-    try {
-      const response = await fetch(fileUrl, {
-        headers: getFetchHeaders(),
-      })
-      const stream = response.body
-      if (response.status === 200) {
-        // Setup end/error handler with Promise interface
-        const responsePromise = new Promise((resolve, reject) => {
-          stream.on("end", () => resolve())
-          stream.on("data", () => {
-            downloadProgress.update(writeStream.bytesWritten)
-          })
-          stream.on("error", (err) => {
-            reject(err)
-          })
+    const response = await fetch(fileUrl, {
+      headers: getFetchHeaders(),
+    })
+    const stream = response.body
+    if (response.status === 200) {
+      // Setup end/error handler with Promise interface
+      const responsePromise = new Promise((resolve, reject) => {
+        stream.on("end", () => resolve())
+        stream.on("data", () => {
+          downloadProgress.update(writeStream.bytesWritten)
         })
-        // Start piping data
-        stream.pipe(writeStream)
-        return responsePromise
-      } else {
-        console.error(
-          `Error ${response.status} fetching "${filename}" - ${response.statusText}`,
-        )
-      }
-    } catch (err) {
-      handleFetchReject(err)
+        stream.on("error", (err) => {
+          reject(err)
+        })
+      })
+      // Start piping data
+      stream.pipe(writeStream)
+      return responsePromise
+    } else {
+      console.error(
+        `Error ${response.status} fetching "${filename}" - ${response.statusText}`,
+      )
     }
   } catch (err) {
-    throw err
+    handleFetchReject(err)
   }
 }
 

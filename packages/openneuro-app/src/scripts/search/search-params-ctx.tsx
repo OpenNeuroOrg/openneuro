@@ -1,14 +1,16 @@
-import React, { createContext, FC, ReactNode, useContext } from "react"
+import * as Sentry from "@sentry/react"
+import React, { createContext, useContext } from "react"
 import { useSearchParams } from "react-router-dom"
-import initialSearchParams, { SearchParams } from "./initial-search-params"
+import initialSearchParams from "./initial-search-params"
+import type { SearchParams } from "./initial-search-params"
 
 export const SearchParamsCtx = createContext(null)
 
 interface SearchParamsProviderProps {
-  children: ReactNode
+  children: React.ReactNode
 }
 
-export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
+export const SearchParamsProvider: React.FC<SearchParamsProviderProps> = ({
   children,
 }) => {
   const [searchQuery, setSearch] = useSearchParams()
@@ -20,7 +22,7 @@ export const SearchParamsProvider: FC<SearchParamsProviderProps> = ({
       searchParams = JSON.parse(query)
     }
   } catch (err) {
-    console.error(err)
+    Sentry.captureException(err)
   }
 
   const setSearchParams = (
@@ -57,6 +59,7 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
       // when datasetType is unset, unset datasetStatus as well
       updatedParams["datasetStatus_selected"] =
         initialSearchParams["datasetStatus_selected"]
+      break
     case "modality_selected":
     case "datasetStatus_selected":
     case "ageRange":

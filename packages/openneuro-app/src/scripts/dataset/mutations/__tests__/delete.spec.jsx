@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { render } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import DeleteDataset, { DELETE_DATASET } from "../delete.jsx"
 

@@ -1,4 +1,5 @@
-import { ApolloClient, Query } from "@apollo/client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ApolloClient, Query } from "@apollo/client"
 
 export declare function createClient(
   uri: string,
@@ -6,13 +7,13 @@ export declare function createClient(
     getAuthorization?: () => string
     fetch?: typeof fetch
     clientVersion?: string
-    links?: Array<ApolloLink>
+    links?: ApolloLink[]
     ssrMode?: boolean
     cache?: ApolloCache
   },
 ): ApolloClient<any>
 
-export async function* datasetGenerator(
+export declare function datasetGenerator(
   client: ApolloClient,
   query: Query,
 ): AsyncGenerator<any>

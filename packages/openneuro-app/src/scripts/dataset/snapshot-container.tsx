@@ -48,13 +48,11 @@ const snapshotVersion = (location) => {
 
 type SnapshotContainerProps = {
   dataset
-  tag: string
   snapshot
 }
 
 export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   dataset,
-  tag,
   snapshot,
 }) => {
   const location = useLocation()
@@ -376,7 +374,6 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
       >
         <SnapshotContainer
           dataset={dataset}
-          tag={tag}
           snapshot={data.snapshot}
         />
       </DatasetQueryContext.Provider>

@@ -4,7 +4,6 @@ import styled from "@emotion/styled"
 import { gql, useQuery } from "@apollo/client"
 
 import Revalidate from "../mutations/revalidate.jsx"
-import UpdateRef from "../mutations/update-ref.jsx"
 
 const GET_HISTORY = gql`
   query getHistory($datasetId: ID!) {
@@ -80,7 +79,6 @@ const DatasetHistory = ({ datasetId }) => {
                 </div>
                 <div className="col-lg col col-2 grid actions">
                   <Revalidate datasetId={datasetId} revision={commit.id} />
-                  <UpdateRef datasetId={datasetId} revision={commit.id} />
                 </div>
                 <div className="col-lg col col-12">{commit.message}</div>
               </div>

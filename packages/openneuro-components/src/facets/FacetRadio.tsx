@@ -28,8 +28,9 @@ export const FacetRadio = ({
   setSelected,
   className,
 }: FacetRadioProps) => {
+  const divClass = className ? `facet-radio ${className}` : "facet-radio"
   return (
-    <div className="facet-radio">
+    <div className={divClass}>
       <RadioGroup
         setSelected={setSelected}
         selected={selected}

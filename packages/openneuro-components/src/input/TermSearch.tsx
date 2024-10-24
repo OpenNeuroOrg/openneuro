@@ -1,9 +1,12 @@
 import React from "react"
-import { Input, InputPropsStyle } from "../input/Input"
-import { Button, ButtonPropsSize } from "../button/Button"
+import { Input } from "../input/Input"
+import type { InputPropsStyle } from "../input/Input"
+import { Button } from "../button/Button"
+import type { ButtonPropsSize } from "../button/Button"
 
 export interface TermSearchProps {
   setTermValue: (string) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pushTerm: React.Dispatch<React.SetStateAction<any[]>>
   allTerms: string[]
   className?: string
@@ -58,6 +61,7 @@ export const TermSearch = ({
           onKeyDown={(e) =>
             e.keyCode === 13 &&
             !disabled &&
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             pushTerm(termValue as React.SetStateAction<any>)}
         />
         <Button
@@ -68,6 +72,7 @@ export const TermSearch = ({
           iconOnly={true}
           iconSize={iconSize}
           size={size}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onClick={() => pushTerm(termValue as React.SetStateAction<any>)}
           label="Add Term"
         />

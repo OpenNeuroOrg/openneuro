@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import useState from "react-usestateref"
 import UploaderContext from "../../uploader/uploader-context.js"
 import UploadProgress from "../../uploader/upload-progress.jsx"
@@ -26,6 +27,7 @@ export const HeaderContainer: FC = () => {
   const [cookies] = useCookies()
   const profile = getUnexpiredProfile(cookies)
 
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const { userModalOpen, setUserModalOpen } = useContext(UserModalOpenCtx)
 
   const [newKeyword, setNewKeyword, newKeywordRef] = useState("")

@@ -4,13 +4,14 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table"
+import type { SortingState } from "@tanstack/react-table"
 import styled from "@emotion/styled"
-import { format, isValid, parse, parseISO } from "date-fns"
+import { format, isValid, parse } from "date-fns"
 
 interface DataTableProps {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   data: any[]
   downloadFilename?: string
   hideColumns?: string[]
@@ -55,6 +56,7 @@ export function extractDateString(dateString) {
   return false
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 function CellFormat(props): any {
   const value = props.getValue()
   let extractedDate
@@ -86,6 +88,7 @@ export function DataTable<T>({
       Object.keys(data[0])
         .filter((name) => !hideColumns.includes(name))
         .map((name) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           columnHelper.accessor(name as any, {
             header: name,
             cell: CellFormat,

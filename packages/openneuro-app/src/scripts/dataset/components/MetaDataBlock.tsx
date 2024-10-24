@@ -1,4 +1,3 @@
-import { Markdown } from "../../utils/markdown"
 import React from "react"
 
 export interface MetaDataBlockProps {

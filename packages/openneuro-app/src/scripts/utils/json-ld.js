@@ -52,7 +52,7 @@ const schemaGenerator = (snapshot) => {
       schema.identifier = [snapshot.description.DatasetDOI]
     }
     return JSON.stringify(schema)
-  } catch (err) {
+  } catch (_err) {
     return null
   }
 }

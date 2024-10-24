@@ -1,10 +1,10 @@
+import * as Sentry from "@sentry/node"
 import { elasticClient } from "../../elasticsearch/elastic-client"
 import { dataset } from "./dataset"
 import Star from "../../models/stars"
 import Subscription from "../../models/subscription"
 import Permission from "../../models/permission"
 import { hashObject } from "../../libs/authentication/crypto"
-import util from "util"
 
 const elasticIndex = "datasets"
 
@@ -70,7 +70,7 @@ export const elasticRelayConnection = (
       },
     }
   } catch (err) {
-    console.error(err)
+    Sentry.captureException(err)
   }
 }
 
@@ -95,11 +95,11 @@ export const datasetSearchConnection = async (
   if (after) {
     try {
       requestBody.search_after = decodeCursor(after)
-    } catch (err) {
+    } catch (_err) {
       // Don't include search_after if parsing fails
     }
   }
-  const result = await elasticClient.search({
+  await elasticClient.search({
     index: elasticIndex,
     size: first,
     q: `${q} AND public:true`,

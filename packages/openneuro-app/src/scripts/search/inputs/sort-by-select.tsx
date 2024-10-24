@@ -1,8 +1,10 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { SearchSort } from "@openneuro/components/search-page"
 
 interface SortBySelectProps {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   variables: any
 }
 

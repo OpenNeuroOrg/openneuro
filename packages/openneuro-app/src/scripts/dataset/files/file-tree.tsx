@@ -5,7 +5,7 @@ import DeleteFile from "../mutations/delete-file.jsx"
 import FileTreeUnloadedDirectory from "./file-tree-unloaded-directory.jsx"
 import { Media } from "../../styles/media"
 import { AccordionTab } from "@openneuro/components/accordion"
-import { DatasetFile } from "../../types/dataset-file"
+import type { DatasetFile } from "../../types/dataset-file"
 
 export const unescapePath = (path: string): string => path.replace(/:/g, "/")
 
@@ -17,6 +17,7 @@ interface FileTreeProps {
   files: DatasetFile[]
   editMode: boolean
   defaultExpanded: boolean
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   datasetPermissions: any
   toggleFileToDelete: ({ id, path, filename }) => void
   isFileToBeDeleted: (id: string) => boolean
@@ -41,7 +42,7 @@ export function fileTreeLevels(
       const childPath = path === ""
         ? components[0]
         : components.slice(0, path.split(":").length + 1).join(":")
-      if (childFiles.hasOwnProperty(childPath)) {
+      if (Object.hasOwn(childFiles, childPath)) {
         childFiles[childPath].push(f)
       } else {
         childFiles[childPath] = [f]
@@ -102,7 +103,7 @@ const FileTree = ({
       <ul className="child-files">
         {currentFiles.map((file, index) => {
           if (file.directory) {
-            if (childFiles.hasOwnProperty(file.filename)) {
+            if (Object.hasOwn(childFiles, file.filename)) {
               return (
                 <li className="clearfix filetree-item filetree-dir" key={index}>
                   <FileTree

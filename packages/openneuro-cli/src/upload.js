@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import cliProgress from "cli-progress"
 import path from "path"
 import inquirer from "inquirer"
@@ -28,7 +29,6 @@ const validatePromise = (dir, options = {}) => {
 }
 
 const fatalError = (err) => {
-  // eslint-disable-next-line no-console
   console.error(err)
   process.exit(1)
 }
@@ -41,7 +41,6 @@ const fatalError = (err) => {
 export const validation = (dir, validatorOptions) => {
   return validatePromise(dir, validatorOptions)
     .then(function ({ summary }) {
-      // eslint-disable-next-line no-console
       console.log(validate.consoleFormat.summary(summary))
     })
     .catch((err) => fatalError(err))
@@ -116,7 +115,6 @@ export const prepareUpload = async (
       },
     })
     const id = data.prepareUpload.id
-    // eslint-disable-next-line no-console
     console.log(`Starting a new upload (${id}) to dataset: '${datasetId}'`)
     return {
       id,
@@ -179,7 +177,7 @@ export const uploadFiles = async ({
       }
       return new Request(
         `${rootUrl}uploads/${endpoint}/${datasetId}/${id}/${encodedFilePath}`,
-        // @ts-ignore Node 18+ actually supports this despite types not advertising it
+        // @ts-expect-error Node 18+ actually supports this despite types not advertising it
         requestOptions,
       )
     })

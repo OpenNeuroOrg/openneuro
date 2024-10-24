@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { FacetSelect } from "@openneuro/components/facets"
 import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"

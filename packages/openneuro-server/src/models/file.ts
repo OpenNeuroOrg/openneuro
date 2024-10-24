@@ -1,10 +1,11 @@
-import mongoose, { Document } from "mongoose"
+import mongoose from "mongoose"
+import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface FileDocument extends Document {
   datasetId: string
   tag: string
-  files: any[]
+  files: object[]
 }
 
 const fileSchema = new Schema({

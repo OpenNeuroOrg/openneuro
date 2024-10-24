@@ -1,4 +1,5 @@
-import Summary, { SummaryDocument } from "../../models/summary"
+import Summary from "../../models/summary"
+import type { SummaryDocument } from "../../models/summary"
 import { datasetType } from "./datasetType"
 
 /**

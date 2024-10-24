@@ -74,7 +74,6 @@ describe("SelectInput", () => {
     )
     const event = {
       preventDefault() {
-        null
       },
       target: { value: "false" },
     }

@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import { datasetCacheId } from "../../datalad/mutations/cache-id.js"

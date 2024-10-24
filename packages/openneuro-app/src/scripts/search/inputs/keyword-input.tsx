@@ -1,4 +1,5 @@
-import React, { FC, useContext } from "react"
+import React, { useContext } from "react"
+import type { FC } from "react"
 import useState from "react-usestateref"
 import { removeFilterItem, SearchParamsCtx } from "../search-params-ctx"
 import { TermSearch } from "@openneuro/components/input"

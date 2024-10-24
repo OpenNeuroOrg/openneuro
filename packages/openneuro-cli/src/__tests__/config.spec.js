@@ -7,6 +7,7 @@ const HOME = `${os.homedir()}`
 
 vi.mock("fs", () => {
   return {
+    /* eslint-disable-next-line */
     default: new (require("metro-memory-fs"))({
       cwd: () => HOME,
     }),

@@ -2,8 +2,18 @@ import React from "react"
 import { ModalityHeader } from "./ModalityHeader"
 import { CommunityHeader } from "./CommunityHeader"
 
+export interface PortalContent {
+  className?: string
+  portalName?: string
+  portalPrimary?: string
+  hexBackgroundImage?: string
+  communityHeader?: string
+  communityPrimary?: string
+  communitySecondary?: string
+}
+
 export interface SearchPageProps {
-  portalContent?: Record<string, any>
+  portalContent?: PortalContent
   renderSearchFacets: () => React.ReactNode
   renderSearchResultsList: () => React.ReactNode
   renderSortBy: () => React.ReactNode
@@ -39,8 +49,6 @@ export const SearchPage = ({
                   <ModalityHeader
                     portalName={portalContent.portalName}
                     portalPrimary={portalContent.portalPrimary}
-                    publicDatasetStat={portalContent.publicDatasetStat}
-                    participantsStat={portalContent.participantsStat}
                     hexBackgroundImage={portalContent.hexBackgroundImage}
                     renderAggregateCounts={renderAggregateCounts}
                   />

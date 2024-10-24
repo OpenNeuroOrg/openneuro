@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import readline from "readline"
 import { configuredClient } from "./configuredClient.js"
 import { gql } from "@apollo/client"

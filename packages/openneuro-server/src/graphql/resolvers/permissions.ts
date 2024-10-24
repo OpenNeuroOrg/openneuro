@@ -1,5 +1,7 @@
-import User, { UserDocument } from "../../models/user"
-import Permission, { PermissionDocument } from "../../models/permission"
+import User from "../../models/user"
+import type { UserDocument } from "../../models/user"
+import Permission from "../../models/permission"
+import type { PermissionDocument } from "../../models/permission"
 import { checkDatasetAdmin } from "../permissions"
 import { user } from "./user"
 
@@ -38,6 +40,7 @@ const publishPermissions = async (datasetId) => {
       ),
     },
   }
+  return permissionsUpdated
 }
 
 /**

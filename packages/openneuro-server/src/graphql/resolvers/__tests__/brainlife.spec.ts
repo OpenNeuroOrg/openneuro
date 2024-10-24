@@ -1,5 +1,5 @@
 import { vi } from "vitest"
-import { HasId } from "../../../utils/datasetOrSnapshot"
+import type { HasId } from "../../../utils/datasetOrSnapshot"
 import { brainlifeQuery } from "../brainlife"
 
 vi.mock("ioredis")

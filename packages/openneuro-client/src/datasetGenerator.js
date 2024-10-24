@@ -15,7 +15,7 @@ export async function* datasetGenerator(client, query = getDatasets) {
         errorPolicy: "all",
       })
       for (const edge of data.datasets.edges) {
-        if (edge && edge.hasOwnProperty("node")) {
+        if (edge && Object.hasOwn(edge, "node")) {
           // Yield one dataset if it did not error
           yield edge.node
         } else {
@@ -30,6 +30,7 @@ export async function* datasetGenerator(client, query = getDatasets) {
         return null
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e)
       return null
     }

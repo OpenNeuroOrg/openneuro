@@ -3,7 +3,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import parseISO from "date-fns/parseISO"
 import { Link } from "react-router-dom"
 import Carousel from "react-multi-carousel/lib/Carousel"
-import { ArrowProps, ResponsiveType } from "react-multi-carousel/lib/types"
+import type { ArrowProps, ResponsiveType } from "react-multi-carousel/lib/types"
 import "react-multi-carousel/lib/styles.css"
 
 export interface ActivitySliderProps {
@@ -15,7 +15,8 @@ export interface ActivitySliderProps {
   itemClass?: string
   slideHeader?: React.ReactNode
   responsive: ResponsiveType
-  data: Array<any>
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  data: any[]
 }
 
 const LeftArrow = ({ onClick }: ArrowProps) => (
@@ -46,7 +47,7 @@ export const ActivitySlider = ({
   return (
     <div className={"activity-slider" + " " + className}>
       <h3>{slideHeader}</h3>
-      {/* @ts-expect-error */}
+      {/* @ts-expect-error type issues with react-multi-carousel package */}
       <Carousel
         infinite={infinite}
         keyBoardControl={keyBoardControl}

@@ -39,7 +39,7 @@ DownloadS3Instructions.propTypes = {
 
 const DownloadS3 = (props) =>
   // TODO - don't depend on async config
-  getConfig().hasOwnProperty("publicBucket")
+  Object.hasOwn(getConfig(), "publicBucket")
     ? <DownloadS3Instructions {...props} s3Bucket={getConfig().publicBucket} />
     : null
 
