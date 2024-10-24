@@ -186,6 +186,7 @@ export const uploadFiles = async ({
         requests,
         uploads.uploadSize(filesChunk),
         uploadProgress,
+        // @ts-expect-error The fetch-h2 interface doesn't match exactly but well enough for use here
         fetch,
       )
     } catch (err) {

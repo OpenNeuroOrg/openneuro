@@ -14,8 +14,8 @@
     "@openneuro/client": "^4.28.3",
     "@openneuro/search": "^4.28.3",
     "graphql": "16.8.1",
-    "ts-node": "^9.1.1",
-    "typescript": "5.1.6"
+    "ts-node": "10.9.2",
+    "typescript": "5.6.3"
   },
   "scripts": {
     "build": "tsc -b",

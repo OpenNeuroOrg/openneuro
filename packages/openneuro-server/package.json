@@ -59,8 +59,8 @@
     "semver": "^5.5.0",
     "sitemap": "^2.1.0",
     "superagent": "^3.8.2",
-    "ts-node": "9.1.1",
-    "typescript": "5.1.6",
+    "ts-node": "10.9.2",
+    "typescript": "5.6.3",
     "underscore": "^1.8.3",
     "uuid": "10.0.0",
     "xmldoc": "^1.1.0"
