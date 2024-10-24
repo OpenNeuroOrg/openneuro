@@ -7231,7 +7231,6 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "npm:18.2.19"],\
           ["@types/react-router-dom", "npm:5.3.3"],\
           ["@types/testing-library__jest-dom", "npm:5.14.5"],\
-          ["bids-validator", "npm:1.14.8"],\
           ["buffer", "npm:6.0.3"],\
           ["bytes", "npm:3.1.0"],\
           ["comlink", "npm:4.3.1"],\

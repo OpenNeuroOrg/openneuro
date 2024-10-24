@@ -4,7 +4,6 @@ import pluralize from "pluralize"
 import { Loading } from "@openneuro/components/loading"
 import Results from "../validation/validation-results.jsx"
 import UploaderContext from "./uploader-context.js"
-import validate from "../workers/validate"
 import schemaValidate from "../workers/schema"
 
 const UploadValidatorStatus = ({ issues, next, reset }) => {
@@ -73,31 +72,7 @@ class UploadValidator extends React.Component {
         blacklistModalities: ["Microscopy"],
       },
     }
-    if (this.props.schemaValidator) {
-      schemaValidate(this.props.files, options).then(this.done)
-    } else {
-      // Test for dataset_description.json and use the schemaValidator for DatasetType == 'derivative'
-      // Fall back if anything fails
-      const dsDescription = Array.from(this.props.files).find(
-        (f) => f.name === "dataset_description.json",
-      )
-      if (dsDescription) {
-        dsDescription.text().then((dsDescriptionData) => {
-          try {
-            const descriptionFields = JSON.parse(dsDescriptionData)
-            if (descriptionFields.DatasetType === "derivative") {
-              schemaValidate(this.props.files, options).then(this.done)
-            } else {
-              validate(this.props.files, options).then(this.done)
-            }
-          } catch (_err) {
-            validate(this.props.files, options).then(this.done)
-          }
-        })
-      } else {
-        validate(this.props.files, options).then(this.done)
-      }
-    }
+    schemaValidate(this.props.files, options).then(this.done)
   }
 
   /**

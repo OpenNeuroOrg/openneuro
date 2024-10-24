@@ -12,8 +12,6 @@ export default tseslint.config({
     ".pnp.cjs",
     ".pnp.loader.mjs",
     "**/coverage/**",
-    "packages/openneuro-app/pluralize-esm.js",
-    "packages/openneuro-app/src/scripts/utils/schema-validator.js",
   ],
 }, {
   files: [

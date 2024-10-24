@@ -1,4 +1,3 @@
-import path from "path"
 import { defineConfig } from "vite"
 import nodePolyfills from "rollup-plugin-polyfill-node"
 
@@ -38,11 +37,6 @@ export default defineConfig({
       { find: "buffer", replacement: "buffer/" },
       // bids-validator deno buffer
       { find: "node:buffer", replacement: "buffer/" },
-      // Workaround UMD -> ESM issues in pluralize
-      {
-        find: "pluralize",
-        replacement: path.resolve(__dirname, "./pluralize-esm.js"),
-      },
     ],
   },
   plugins: [nodePolyfills()],
