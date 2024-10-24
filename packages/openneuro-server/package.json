@@ -15,7 +15,7 @@
   },
   "author": "Squishymedia",
   "dependencies": {
-    "@apollo/client": "3.7.2",
+    "@apollo/client": "3.11.8",
     "@apollo/server": "4.9.3",
     "@apollo/utils.keyvadapter": "3.0.0",
     "@elastic/elasticsearch": "8.13.1",

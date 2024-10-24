@@ -1,5 +1,5 @@
 /* eslint-env worker */
-import { fileListToTree, validate } from "../utils/schema-validator.js"
+import { fileListToTree, validate } from "@bids/validator/main"
 import type { BIDSValidatorIssues } from "./worker-interface"
 
 export async function runValidator(
