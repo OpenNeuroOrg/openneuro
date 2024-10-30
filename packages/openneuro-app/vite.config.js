@@ -1,6 +1,22 @@
 import { defineConfig } from "vite"
 import nodePolyfills from "rollup-plugin-polyfill-node"
 
+/**
+ * Vite plugin to hack a bug injected by the default assetImportMetaUrlPlugin
+ */
+function workaroundAssetImportMetaUrlPluginBug() {
+  return {
+    name: "vite-workaround-import-glob",
+    transform(src, id) {
+      if (id.includes("@bids_validator_main.js")) {
+        return src.replace(", import.meta.url", "")
+      } else {
+        return null
+      }
+    },
+  }
+}
+
 export default defineConfig({
   root: "src",
   server: {
@@ -39,5 +55,5 @@ export default defineConfig({
       { find: "node:buffer", replacement: "buffer/" },
     ],
   },
-  plugins: [nodePolyfills()],
+  plugins: [workaroundAssetImportMetaUrlPluginBug(), nodePolyfills()],
 })
