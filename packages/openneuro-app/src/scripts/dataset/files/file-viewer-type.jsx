@@ -6,6 +6,7 @@ import FileViewerJson from "./viewers/file-viewer-json.jsx"
 import FileViewerTsv from "./viewers/file-viewer-tsv.jsx"
 import FileViewerCsv from "./viewers/file-viewer-csv.jsx"
 import FileViewerHtml from "./viewers/file-viewer-html.jsx"
+import { FileViewerEdf } from "./viewers/file-viewer-edf"
 
 /**
  * Choose the right viewer for each file type
@@ -34,6 +35,8 @@ const FileViewerType = ({ path, url, data }) => {
     return <FileViewerCsv data={data} />
   } else if (path.endsWith(".html")) {
     return <FileViewerHtml data={data} />
+  } else if (path.endsWith(".edf") || path.endsWith(".nwb")) {
+    return <FileViewerEdf url={url} />
   } else {
     return (
       <div className="file-viewer-fallback">
