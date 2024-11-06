@@ -142,6 +142,11 @@ services:
       xpack.security.enabled: false
       xpack.security.enrollment.enabled: false
       ES_JAVA_OPTS: "-Xms750m -Xmx750m"
+    healthcheck:
+      test: "curl -s -f http://localhost:9200 || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
     ports:
       - "9200:9200"
       - "9300:9300"
