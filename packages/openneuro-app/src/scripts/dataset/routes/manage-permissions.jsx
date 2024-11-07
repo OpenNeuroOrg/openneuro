@@ -15,9 +15,13 @@ const description = {
 }
 
 export const PermissionRow = (
-  { datasetId, userId, userEmail, userOrcid, access },
+  { datasetId, userId, userName, userEmail, userOrcid, access },
 ) => (
   <div className="data-table-content">
+    <span>
+      <label>User:</label>
+      {userName}
+    </span>
     {userOrcid
       ? (
         <span>
@@ -46,6 +50,7 @@ export const PermissionRow = (
 PermissionRow.propTypes = {
   datasetId: PropTypes.string,
   userId: PropTypes.string,
+  userName: PropTypes.string,
   userEmail: PropTypes.string,
   userOrcid: PropTypes.string,
   access: PropTypes.oneOf(["ro", "rw", "admin"]),
@@ -54,7 +59,8 @@ PermissionRow.propTypes = {
 export const ShareTable = ({ datasetId, permissions }) => (
   <>
     <div className="data-table-header">
-      <span>Email</span>
+      <span>Name</span>
+      <span>Reference</span>
       <span>Access</span>
       <span>Edit</span>
     </div>
@@ -63,6 +69,7 @@ export const ShareTable = ({ datasetId, permissions }) => (
       <PermissionRow
         datasetId={datasetId}
         userId={perm.user.id}
+        userName={perm.user.name}
         userEmail={perm.user.email}
         userOrcid={perm.user.orcid}
         access={perm.level}
