@@ -95,7 +95,8 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
           <div className="dataset-form-body">
             <ShareTable datasetId={datasetId} permissions={permissions} />
             <p>
-              Enter a user&#39;s email address and select access level to share
+              Enter a user&#39;s ORCID or email address and select access level
+              to share
             </p>
             <div className="share-input-group">
               <input
