@@ -14,12 +14,24 @@ const description = {
   ro: "View dataset",
 }
 
-export const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
+export const PermissionRow = (
+  { datasetId, userId, userEmail, userOrcid, access },
+) => (
   <div className="data-table-content">
-    <span>
-      <label>Email:</label>
-      <a href={`mailto:${userEmail}`}>{userEmail}</a>
-    </span>
+    {userOrcid
+      ? (
+        <span>
+          <label>ORCID:</label>
+          <a href={`https://orcid.org/${userOrcid}`}>{userOrcid}</a>
+        </span>
+      )
+      : (
+        <span>
+          <label>Email:</label>
+          <a href={`mailto:${userEmail}`}>{userEmail}</a>
+        </span>
+      )}
+
     <span>
       <label>Access:</label>
       {description[access]}
@@ -35,6 +47,7 @@ PermissionRow.propTypes = {
   datasetId: PropTypes.string,
   userId: PropTypes.string,
   userEmail: PropTypes.string,
+  userOrcid: PropTypes.string,
   access: PropTypes.oneOf(["ro", "rw", "admin"]),
 }
 
@@ -51,6 +64,7 @@ export const ShareTable = ({ datasetId, permissions }) => (
         datasetId={datasetId}
         userId={perm.user.id}
         userEmail={perm.user.email}
+        userOrcid={perm.user.orcid}
         access={perm.level}
         key={index}
       />

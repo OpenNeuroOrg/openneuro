@@ -74,6 +74,7 @@ export const PERMISSION_FRAGMENT = gql`
         user {
           id
           email
+          orcid
         }
         level
       }
