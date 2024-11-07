@@ -36,7 +36,8 @@ const UPDATE_PERMISSIONS = gql`
         user {
           id
           email
-          oricd
+          orcid
+          name
         }
       }
     }
@@ -63,6 +64,7 @@ const UPDATE_ORCID_PERMISSIONS = gql`
           id
           email
           orcid
+          name
         }
       }
     }
