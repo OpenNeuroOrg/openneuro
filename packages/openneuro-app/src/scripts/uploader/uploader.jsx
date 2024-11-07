@@ -3,17 +3,37 @@ import { toast } from "react-toastify"
 import ToastContent from "../common/partials/toast-content.jsx"
 import React from "react"
 import PropTypes from "prop-types"
-import { ApolloConsumer } from "@apollo/client"
+import { ApolloConsumer, gql } from "@apollo/client"
 import * as gtag from "../utils/gtag"
 import UploaderContext from "./uploader-context.js"
 import FileSelect from "./file-select"
 import { locationFactory } from "./uploader-location.js"
 import * as mutation from "./upload-mutation.js"
-import { datasets, uploads } from "@openneuro/client"
 import { useNavigate } from "react-router-dom"
 import { uploadFiles } from "./file-upload.js"
 import { UploadProgress } from "./upload-progress-class"
 import { addPathToFiles } from "./add-path-to-files.js"
+import { hashFileList } from "./hash-file-list"
+
+// Get only working tree files
+const GET_DRAFT_FILES = gql`
+  query dataset($id: ID!, $tree: String) {
+    dataset(id: $id) {
+      id
+      draft {
+        id
+        files(tree: $tree) {
+          filename
+          size
+        }
+      }
+      metadata {
+        affirmedDefaced
+        affirmedConsent
+      }
+    }
+  }
+`
 
 /**
  * Stateful uploader workflow and status
@@ -101,7 +121,7 @@ export class UploadClient extends React.Component {
     return ({ files }) => {
       this.props.client
         .query({
-          query: datasets.getDraftFiles,
+          query: GET_DRAFT_FILES,
           variables: { id: datasetId },
         })
         .then(
@@ -279,7 +299,7 @@ export class UploadClient extends React.Component {
       },
     } = await mutation.prepareUpload(this.props.client)({
       datasetId: this.state.datasetId,
-      uploadId: uploads.hashFileList(this.state.datasetId, filesToUpload),
+      uploadId: hashFileList(this.state.datasetId, filesToUpload),
     })
 
     try {

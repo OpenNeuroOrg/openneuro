@@ -1,5 +1,5 @@
 import { config } from "../config"
-import { uploads } from "@openneuro/client"
+import { uploadParallel } from "./file-upload-parallel"
 
 /**
  * Trim the webkitRelativePath value to only include the dataset relative path
@@ -38,7 +38,7 @@ export const getRelativePath = (
  */
 export const encodeFilePath = (file, options = { stripRelativePath: false }) =>
   file.webkitRelativePath
-    ? uploads.encodeFilePath(getRelativePath(file, options))
+    ? getRelativePath(file, options).replace(new RegExp("/", "g"), ":")
     : file.name
 
 /**
@@ -85,5 +85,5 @@ export async function uploadFiles({
 
   // No background fetch
   // Parallelism is handled by the client in this case
-  return uploads.uploadParallel(requests, totalSize, uploadProgress, fetch)
+  return uploadParallel(requests, totalSize, uploadProgress, fetch)
 }

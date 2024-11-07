@@ -1,5 +1,33 @@
-import { datasets, uploads } from "@openneuro/client"
+import { gql } from "@apollo/client"
 import { SUBMIT_METADATA } from "../dataset/mutations/submit-metadata.jsx"
+
+export const CREATE_DATASET = gql`
+  mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
+    createDataset(
+      affirmedDefaced: $affirmedDefaced
+      affirmedConsent: $affirmedConsent
+    ) {
+      id
+    }
+  }
+`
+
+export const PREPARE_UPLOAD = gql`
+  mutation prepareUpload($datasetId: ID!, $uploadId: ID!) {
+    prepareUpload(datasetId: $datasetId, uploadId: $uploadId) {
+      id
+      datasetId
+      token
+      endpoint
+    }
+  }
+`
+
+export const FINISH_UPLOAD = gql`
+  mutation finishUpload($uploadId: ID!) {
+    finishUpload(uploadId: $uploadId)
+  }
+`
 
 /**
  * Create a dataset and update the label
@@ -9,7 +37,7 @@ export const createDataset =
   (client) => ({ affirmedDefaced, affirmedConsent }) => {
     return client
       .mutate({
-        mutation: datasets.createDataset,
+        mutation: CREATE_DATASET,
         variables: { affirmedDefaced, affirmedConsent },
         errorPolicy: "all",
       })
@@ -22,7 +50,7 @@ export const createDataset =
  */
 export const prepareUpload = (client) => ({ datasetId, uploadId }) => {
   return client.mutate({
-    mutation: uploads.prepareUpload,
+    mutation: PREPARE_UPLOAD,
     variables: { datasetId, uploadId },
   })
 }
@@ -33,7 +61,7 @@ export const prepareUpload = (client) => ({ datasetId, uploadId }) => {
  */
 export const finishUpload = (client) => (uploadId) => {
   return client.mutate({
-    mutation: uploads.finishUpload,
+    mutation: FINISH_UPLOAD,
     variables: { uploadId },
   })
 }
