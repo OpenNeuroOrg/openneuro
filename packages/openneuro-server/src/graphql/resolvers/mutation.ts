@@ -19,7 +19,11 @@ import {
 import { removeUser, setAdmin, setBlocked } from "./user.js"
 import { updateSummary } from "./summary"
 import { revalidate, updateValidation } from "./validation.js"
-import { removePermissions, updatePermissions } from "./permissions"
+import {
+  removePermissions,
+  updateOrcidPermissions,
+  updatePermissions,
+} from "./permissions"
 import { followDataset } from "./follow.js"
 import { starDataset } from "./stars.js"
 import { publishDataset } from "./publish.js"
@@ -54,6 +58,7 @@ const Mutation = {
   updateValidation,
   updatePublic,
   updatePermissions,
+  updateOrcidPermissions,
   removePermissions,
   removeUser,
   setAdmin,

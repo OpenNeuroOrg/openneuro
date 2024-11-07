@@ -1,10 +1,21 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
+import type { ApolloError } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content"
 import { validate as isValidEmail } from "email-validator"
 import { Button } from "@openneuro/components/button"
+
+export function isValidOrcid(orcid: string) {
+  if (orcid) {
+    return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid)
+      ? true
+      : false
+  } else {
+    return false
+  }
+}
 
 const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(
@@ -18,7 +29,42 @@ const UPDATE_PERMISSIONS = gql`
       level: $level
     ) {
       id
-      email
+      userPermissions {
+        datasetId
+        userId
+        level
+        user {
+          id
+          email
+          oricd
+        }
+      }
+    }
+  }
+`
+
+const UPDATE_ORCID_PERMISSIONS = gql`
+  mutation updateOrcidPermissions(
+    $datasetId: ID!
+    $userOrcid: String!
+    $level: String!
+  ) {
+    updateOrcidPermissions(
+      datasetId: $datasetId
+      userOrcid: $userOrcid
+      level: $level
+    ) {
+      id
+      userPermissions {
+        datasetId
+        userId
+        level
+        user {
+          id
+          email
+          orcid
+        }
+      }
     }
   }
 `
@@ -53,13 +99,26 @@ interface UpdateDatasetPermissionsProps {
   done: () => void
 }
 
+function onError(err: ApolloError) {
+  toast.error(
+    <ToastContent body={err?.message} />,
+  )
+}
+
 export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
   datasetId,
   userEmail,
   metadata,
   done,
 }) => {
-  const [UpdateDatasetPermissions] = useMutation(UPDATE_PERMISSIONS)
+  const [updateDatasetPermissions] = useMutation(
+    UPDATE_PERMISSIONS,
+    { onError },
+  )
+  const [updateDatasetPermissionsOrcid] = useMutation(
+    UPDATE_ORCID_PERMISSIONS,
+    { onError },
+  )
   return (
     <>
       <Button
@@ -68,9 +127,14 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
         label="Share"
         size="small"
         onClick={async () => {
-          if (isValidEmail(userEmail)) {
+          if (isValidOrcid(userEmail)) {
+            await updateDatasetPermissionsOrcid({
+              variables: { datasetId, userOrcid: userEmail, level: metadata },
+            })
+            done()
+          } else if (isValidEmail(userEmail)) {
             try {
-              await UpdateDatasetPermissions({
+              await updateDatasetPermissions({
                 variables: { datasetId, userEmail, level: metadata },
               })
               done()
@@ -81,7 +145,7 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
             }
           } else {
             toast.error(
-              <ToastContent body="Please enter a valid email address" />,
+              <ToastContent body="Please enter a valid email address or ORCID" />,
             )
           }
         }}

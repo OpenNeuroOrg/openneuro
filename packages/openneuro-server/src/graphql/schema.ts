@@ -121,7 +121,9 @@ export const typeDefs = `
     # Update a draft with validation results
     updateValidation(validation: ValidationInput!): Boolean
     # Update a users's permissions on a dataset
-    updatePermissions(datasetId: ID!, userEmail: String!, level: String): User
+    updatePermissions(datasetId: ID!, userEmail: String!, level: String!): DatasetPermissions
+    # Update a users's permissions for a given ORCID
+    updateOrcidPermissions(datasetId: ID!, userOrcid: String!, level: String!): DatasetPermissions
     # Remove a users's permissions on a dataset
     removePermissions(datasetId: ID!, userId: String!): Boolean
     # Remove a user
