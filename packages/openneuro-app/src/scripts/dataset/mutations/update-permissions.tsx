@@ -17,7 +17,7 @@ export function isValidOrcid(orcid: string) {
   }
 }
 
-const UPDATE_PERMISSIONS = gql`
+export const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(
     $datasetId: ID!
     $userEmail: String!
@@ -44,7 +44,7 @@ const UPDATE_PERMISSIONS = gql`
   }
 `
 
-const UPDATE_ORCID_PERMISSIONS = gql`
+export const UPDATE_ORCID_PERMISSIONS = gql`
   mutation updateOrcidPermissions(
     $datasetId: ID!
     $userOrcid: String!
@@ -71,32 +71,9 @@ const UPDATE_ORCID_PERMISSIONS = gql`
   }
 `
 
-export const mergeNewPermission = (
-  datasetId,
-  oldPermissions,
-  userInfo,
-  metadata,
-) => {
-  return {
-    __typename: "Dataset",
-    id: datasetId,
-    permissions: {
-      ...oldPermissions,
-      userPermissions: [
-        ...oldPermissions.userPermissions,
-        {
-          __typename: "Permission",
-          user: { __typename: "User", ...userInfo },
-          level: metadata,
-        },
-      ],
-    },
-  }
-}
-
 interface UpdateDatasetPermissionsProps {
   datasetId: string
-  userEmail: string
+  userIdentifier: string
   metadata: string
   done: () => void
 }
@@ -107,9 +84,13 @@ function onError(err: ApolloError) {
   )
 }
 
+/**
+ * Add permissions to a dataset based on a value provided
+ * userIdentifier is either an email or ORCID
+ */
 export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
   datasetId,
-  userEmail,
+  userIdentifier,
   metadata,
   done,
 }) => {
@@ -129,15 +110,23 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
         label="Share"
         size="small"
         onClick={async () => {
-          if (isValidOrcid(userEmail)) {
+          if (isValidOrcid(userIdentifier)) {
             await updateDatasetPermissionsOrcid({
-              variables: { datasetId, userOrcid: userEmail, level: metadata },
+              variables: {
+                datasetId,
+                userOrcid: userIdentifier,
+                level: metadata,
+              },
             })
             done()
-          } else if (isValidEmail(userEmail)) {
+          } else if (isValidEmail(userIdentifier)) {
             try {
               await updateDatasetPermissions({
-                variables: { datasetId, userEmail, level: metadata },
+                variables: {
+                  datasetId,
+                  userEmail: userIdentifier,
+                  level: metadata,
+                },
               })
               done()
             } catch (_err) {

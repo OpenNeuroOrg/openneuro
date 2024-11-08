@@ -85,7 +85,7 @@ ShareTable.propTypes = {
 }
 
 const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
-  const [userEmail, setUserEmail] = useState("")
+  const [userIdentifier, setUserIdentifier] = useState("")
   const [access, setAccess] = useState("ro")
 
   const readActive = access === "ro" && "active"
@@ -109,8 +109,8 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
               <input
                 className="form-control"
                 type="email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
+                value={userIdentifier}
+                onChange={(e) => setUserIdentifier(e.target.value)}
               />
               <div className="input-group-btn">
                 <Button
@@ -140,9 +140,9 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
           <div className="share-form-controls">
             <UpdateDatasetPermissions
               datasetId={datasetId}
-              userEmail={userEmail}
+              userIdentifier={userIdentifier}
               metadata={access}
-              done={() => setUserEmail("")}
+              done={() => setUserIdentifier("")}
             />
           </div>
         </div>
