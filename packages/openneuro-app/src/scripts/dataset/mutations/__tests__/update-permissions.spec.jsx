@@ -1,7 +1,44 @@
 import React from "react"
-import { render } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
-import { isValidOrcid, UpdateDatasetPermissions } from "../update-permissions"
+import {
+  isValidOrcid,
+  UPDATE_ORCID_PERMISSIONS,
+  UPDATE_PERMISSIONS,
+  UpdateDatasetPermissions,
+} from "../update-permissions"
+
+function permissionMocksFactory(
+  updatePermissionsCalled,
+  updateOrcidPermissionsCalled,
+) {
+  return [
+    {
+      request: {
+        query: UPDATE_PERMISSIONS,
+
+        variables: {
+          datasetId: "ds000005",
+          userEmail: "test@example.com",
+          level: "ro",
+        },
+      },
+      newData: updatePermissionsCalled,
+    },
+    {
+      request: {
+        query: UPDATE_ORCID_PERMISSIONS,
+
+        variables: {
+          datasetId: "ds000005",
+          userOrcid: "0000-0002-1694-233X",
+          level: "ro",
+        },
+      },
+      newData: updateOrcidPermissionsCalled,
+    },
+  ]
+}
 
 describe("UpdateDatasetPermissions mutation", () => {
   it("renders with default props", () => {
@@ -12,18 +49,65 @@ describe("UpdateDatasetPermissions mutation", () => {
     )
     expect(asFragment()).toMatchSnapshot()
   })
-  it("renders with typical props", () => {
+  it("calls UPDATE_PERMISSIONS when clicked with an email address", async () => {
+    const updatePermissionsCalled = vi.fn()
+    const updateOrcidPermissionsCalled = vi.fn()
+    const mocks = permissionMocksFactory(
+      updatePermissionsCalled,
+      updateOrcidPermissionsCalled,
+    )
+    const done = vi.fn()
     const { asFragment } = render(
-      <MockedProvider>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <UpdateDatasetPermissions
           datasetId="ds000005"
-          userEmail="test@example.com"
-          access="ro"
-          done={vi.fn()}
+          userIdentifier="test@example.com"
+          metadata="ro"
+          done={done}
         />
       </MockedProvider>,
     )
-    expect(asFragment()).toMatchSnapshot()
+    const fragment = asFragment()
+    expect(fragment).toMatchSnapshot()
+    // Try clicking the button and make sure the right mutation runs
+    const button = screen.getByRole("button")
+    await fireEvent.click(button)
+    // Make sure it ran at all
+    await waitFor(() => expect(done).toHaveBeenCalled())
+    // Verify the expected query ran
+    await waitFor(() => expect(updatePermissionsCalled).toHaveBeenCalled())
+    await waitFor(() =>
+      expect(updateOrcidPermissionsCalled).not.toHaveBeenCalled()
+    )
+  })
+  it("calls UPDATE_ORCID_PERMISSIONS when clicked with an ORCID", async () => {
+    const updatePermissionsCalled = vi.fn()
+    const updateOrcidPermissionsCalled = vi.fn()
+    const mocks = permissionMocksFactory(
+      updatePermissionsCalled,
+      updateOrcidPermissionsCalled,
+    )
+    const done = vi.fn()
+    const { asFragment } = render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <UpdateDatasetPermissions
+          datasetId="ds000005"
+          userIdentifier="0000-0002-1694-233X"
+          metadata="ro"
+          done={done}
+        />
+      </MockedProvider>,
+    )
+    const fragment = asFragment()
+    expect(fragment).toMatchSnapshot()
+    // Try clicking the button and make sure the right mutation runs
+    const button = screen.getByRole("button")
+    await fireEvent.click(button)
+    // Make sure it ran at all
+    await waitFor(() => expect(done).toHaveBeenCalled())
+    // Verify the expected query ran
+    await waitFor(() => expect(updatePermissionsCalled).not.toHaveBeenCalled())
+    await waitFor(() => expect(updateOrcidPermissionsCalled).toHaveBeenCalled())
   })
   describe("isValidOrcid", () => {
     it("matches typical ORCID strings", () => {

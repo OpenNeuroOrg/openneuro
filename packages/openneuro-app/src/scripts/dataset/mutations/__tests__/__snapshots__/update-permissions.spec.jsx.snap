@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`UpdateDatasetPermissions mutation > renders with default props 1`] = `
+exports[`UpdateDatasetPermissions mutation > calls UPDATE_ORCID_PERMISSIONS when clicked with an ORCID 1`] = `
 <DocumentFragment>
   <button
     aria-label="Share"
@@ -13,7 +13,20 @@ exports[`UpdateDatasetPermissions mutation > renders with default props 1`] = `
 </DocumentFragment>
 `;
 
-exports[`UpdateDatasetPermissions mutation > renders with typical props 1`] = `
+exports[`UpdateDatasetPermissions mutation > calls UPDATE_PERMISSIONS when clicked with an email address 1`] = `
+<DocumentFragment>
+  <button
+    aria-label="Share"
+    class="on-button on-button--small on-button--primary  btn-modal-action"
+    role="button"
+    type="button"
+  >
+    Share
+  </button>
+</DocumentFragment>
+`;
+
+exports[`UpdateDatasetPermissions mutation > renders with default props 1`] = `
 <DocumentFragment>
   <button
     aria-label="Share"
