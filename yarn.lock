@@ -2725,11 +2725,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^1.14.14":
-  version: 1.14.14
-  resolution: "@jsr/bids__validator@npm:1.14.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F1.14.14.tgz"
+"@bids/nifti-reader-js@npm:0.6.9":
+  version: 0.6.9
+  resolution: "@bids/nifti-reader-js@npm:0.6.9"
   dependencies:
-    "@jsr/bids__schema": "npm:0.11.4-dev.6+d9c23eb0"
+    fflate: "npm:*"
+  checksum: 10/36e485e0d8ad368664a23110713b6dbf54059c78f722f129e6186b888544fde67566941cb1278550cdfaf523a5cb744229d1392c1c1b22365cc759da18b034b3
+  languageName: node
+  linkType: hard
+
+"@bids/validator@npm:@jsr/bids__validator@^1.15.0":
+  version: 1.15.0
+  resolution: "@jsr/bids__validator@npm:1.15.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F1.15.0.tgz"
+  dependencies:
+    "@bids/nifti-reader-js": "npm:0.6.9"
+    "@jsr/bids__schema": "npm:0.11.4-dev.8+6e2874ce"
     "@jsr/cliffy__command": "npm:1.0.0-rc.5"
     "@jsr/cliffy__table": "npm:1.0.0-rc.5"
     "@jsr/libs__xml": "npm:5.4.13"
@@ -2738,10 +2748,9 @@ __metadata:
     "@jsr/std__path": "npm:1.0.2"
     "@jsr/std__yaml": "npm:^1.0.4"
     ajv: "npm:8.16.0"
-    hed-validator: "npm:3.15.4"
+    hed-validator: "npm:3.15.5"
     ignore: "npm:5.3.2"
-    nifti-reader-js: "npm:0.6.8"
-  checksum: 10/33f41369bab98df3c513457d6889dde98e71a6e9bd7d973d707fc93a16419f79261890e9c6e472629ec9b222ca31db2ffe7cb6b35accb41f056d1df51fa60d54
+  checksum: 10/a909a6e98d1df459546eba41cc541ea44d1c7901ea8e85f6f73b0fbb5223645d657ee5a722fd4f65cfea5b6b9f5f88cc0e9bbabbd8bf50a096acdfcd2d848af5
   languageName: node
   linkType: hard
 
@@ -4056,10 +4065,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/bids__schema@npm:0.11.4-dev.6+d9c23eb0":
-  version: 0.11.4-dev.6+d9c23eb0
-  resolution: "@jsr/bids__schema@npm:0.11.4-dev.6+d9c23eb0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.4-dev.6%2Bd9c23eb0.tgz"
-  checksum: 10/f6e07f887acf3d5ceb42ac293bb49014cc2c4ca166eeb96b4b183193c1e347467cdbaa897ef06224a3be3cbb31eed3a6a50b4249348ac09d1f497e0c0dcfa62b
+"@jsr/bids__schema@npm:0.11.4-dev.8+6e2874ce":
+  version: 0.11.4-dev.8+6e2874ce
+  resolution: "@jsr/bids__schema@npm:0.11.4-dev.8+6e2874ce::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.4-dev.8%2B6e2874ce.tgz"
+  checksum: 10/b36664bffeab17bc7fe7d1410ab76a9292947e60427dfb63c670cabb86a25329eaa290a6824860bef94b3f4d38f24aee3a767e86bc8ddc98d655e1ab7852a940
   languageName: node
   linkType: hard
 
@@ -5912,7 +5921,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.11.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^1.14.14"
+    "@bids/validator": "npm:@jsr/bids__validator@^1.15.0"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.45.1"
@@ -15623,7 +15632,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hed-validator@npm:3.15.4, hed-validator@npm:^3.15.4":
+"hed-validator@npm:3.15.5":
+  version: 3.15.5
+  resolution: "hed-validator@npm:3.15.5"
+  dependencies:
+    buffer: "npm:^6.0.3"
+    cross-fetch: "npm:^4.0.0"
+    date-and-time: "npm:^3.1.1"
+    date-fns: "npm:^3.6.0"
+    events: "npm:^3.3.0"
+    lodash: "npm:^4.17.21"
+    path: "npm:^0.12.7"
+    pluralize: "npm:^8.0.0"
+    semver: "npm:^7.6.0"
+    string_decoder: "npm:^1.3.0"
+    unicode-name: "npm:^1.0.2"
+    xml2js: "npm:^0.6.2"
+  checksum: 10/a41bf4407b5ab0b60cdd4ff4050c59e615d4a5d8aaf6e2eeb9f6583d357c30eb04d3596add00585a0bdd8a0902c58efafc881bb2e5e83f1b2681d6d116ec4da8
+  languageName: node
+  linkType: hard
+
+"hed-validator@npm:^3.15.4":
   version: 3.15.4
   resolution: "hed-validator@npm:3.15.4"
   dependencies:
@@ -20520,7 +20549,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nifti-reader-js@npm:0.6.8, nifti-reader-js@npm:^0.6.8":
+"nifti-reader-js@npm:^0.6.8":
   version: 0.6.8
   resolution: "nifti-reader-js@npm:0.6.8"
   dependencies:
@@ -26894,6 +26923,13 @@ __metadata:
   dependencies:
     "@fastify/busboy": "npm:^2.0.0"
   checksum: 10/a666a9f5ac4270c659fafc33d78b6b5039a0adbae3e28f934774c85dcc66ea91da907896f12b414bd6f578508b44d5dc206fa636afa0e49a4e1c9e99831ff065
+  languageName: node
+  linkType: hard
+
+"unicode-name@npm:^1.0.2":
+  version: 1.0.4
+  resolution: "unicode-name@npm:1.0.4"
+  checksum: 10/f0880d8149a78ba80f7b30b9889632559c833c95886c294b63a3b5200e0a6a00b8d3c15f98a5282bc43e02570cd0cbeee8e8f75c64fbee217fec2aa2012d3301
   languageName: node
   linkType: hard
 
