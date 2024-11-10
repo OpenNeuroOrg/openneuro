@@ -6,7 +6,7 @@ import pluralize from "pluralize"
 import { pageTitle } from "../resources/strings.js"
 
 import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-container"
-import Validation from "../validation/validation.jsx"
+import Validation from "../validation-legacy/validation.jsx"
 import { config } from "../config"
 import {
   getUnexpiredProfile,

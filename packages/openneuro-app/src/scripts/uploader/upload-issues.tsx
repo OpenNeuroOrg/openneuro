@@ -1,14 +1,24 @@
 import React from "react"
-import PropTypes from "prop-types"
 import pluralize from "pluralize"
 import { Loading } from "@openneuro/components/loading"
-import Results from "../validation/validation-results.jsx"
+import { ValidationResults } from "../validation/validation-results"
 import UploaderContext from "./uploader-context.js"
-import schemaValidate from "../workers/schema"
+import { validation } from "../workers/schema.js"
+import type { ValidationResult } from "@bids/validator/main"
+import { DatasetIssues } from "@bids/validator/issues"
 
-const UploadValidatorStatus = ({ issues, next, reset }) => {
-  const errorCount = issues.errors.length
-  const warnCount = issues.warnings.length
+interface UploadValidationStatusProps {
+  issues: DatasetIssues
+  next: () => void
+  reset: () => void
+}
+
+const UploadValidatorStatus = (
+  { issues, next, reset }: UploadValidationStatusProps,
+) => {
+  const groupedIssues = issues.groupBy("severity")
+  const errorCount = groupedIssues.get("error")?.size || 0
+  const warnCount = groupedIssues.get("warning")?.size || 0
   const issuesCount = errorCount + warnCount
   if (issuesCount === 0) {
     return (
@@ -54,31 +64,34 @@ const UploadValidatorStatus = ({ issues, next, reset }) => {
   }
 }
 
-class UploadValidator extends React.Component {
+interface UploadValidatorProps {
+  files: FileList | File[]
+  next: () => void
+  reset: () => void
+}
+
+interface UploadValidatorState {
+  validating: boolean
+  issues: DatasetIssues
+  summary: {}
+}
+
+class UploadValidator
+  extends React.Component<UploadValidatorProps, UploadValidatorState> {
   constructor(props) {
     super(props)
     this.state = {
       validating: true,
-      issues: {
-        errors: [],
-        warnings: [],
-      },
+      issues: new DatasetIssues(),
       summary: {},
     }
-    const options = {
-      config: {
-        error: ["NO_AUTHORS", "EMPTY_DATASET_NAME"],
-        ignoreSubjectConsistency: true,
-        blacklistModalities: ["Microscopy"],
-      },
-    }
-    schemaValidate(this.props.files, options).then(this.done)
+    validation(Array.from(this.props.files)).then(this.done)
   }
 
   /**
    * Called when validation finishes
    */
-  done = ({ issues, summary }) => {
+  done = ({ issues, summary }: ValidationResult) => {
     this.setState({ issues, summary, validating: false })
   }
 
@@ -93,9 +106,8 @@ class UploadValidator extends React.Component {
             next={this.props.next}
             reset={this.props.reset}
           />
-          <Results
-            errors={this.state.issues.errors}
-            warnings={this.state.issues.warnings}
+          <ValidationResults
+            issues={this.state.issues}
           />
           <span className="bids-link">
             Click to view details on{" "}
@@ -113,20 +125,11 @@ class UploadValidator extends React.Component {
   }
 }
 
-UploadValidator.propTypes = {
-  // Files can be an FileList object or an array of File objects
-  files: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  next: PropTypes.func,
-  reset: PropTypes.func,
-  schemaValidator: PropTypes.bool,
-}
-
 const UploadIssues = () => (
   <UploaderContext.Consumer>
     {(uploader) => (
       <UploadValidator
-        schemaValidator={uploader.schemaValidator}
-        files={uploader.selectedFiles}
+        files={uploader.selectedFiles as FileList}
         next={() => uploader.setLocation("/upload/metadata")}
         reset={() => uploader.setLocation("/upload")}
       />

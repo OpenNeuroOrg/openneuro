@@ -1,7 +1,6 @@
 import React from "react"
 import FileSelect from "./file-select"
 import UploaderContext from "./uploader-context.js"
-import AdminUser from "../authentication/admin-user"
 
 const UploadSelect = () => (
   <div>
@@ -22,18 +21,6 @@ const UploadSelect = () => (
           </a>{" "}
           to upload
           <FileSelect onChange={uploader.selectFiles} />
-          <AdminUser>
-            <input
-              type="checkbox"
-              id="schema-validator-checkbox"
-              onChange={uploader.toggleSchemaValidator}
-              defaultChecked={uploader.schemaValidator}
-            />
-            <label htmlFor="schema-validator-checkbox">
-              {" "}
-              Use schema based validator
-            </label>
-          </AdminUser>
         </div>
       )}
     </UploaderContext.Consumer>

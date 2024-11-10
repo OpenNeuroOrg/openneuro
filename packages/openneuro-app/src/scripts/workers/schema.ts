@@ -1,13 +1,6 @@
 import { runValidator } from "./schema.worker"
-import type { BIDSValidatorIssues } from "./worker-interface"
+import { ValidationResult } from "@bids/validator/main"
 
-function init(files, options): Promise<BIDSValidatorIssues> {
-  return new Promise((resolve, reject) => {
-    void runValidator(files, options, ({ error, output }) => {
-      if (error) reject(error)
-      else resolve(output)
-    })
-  })
+export function validation(files): Promise<ValidationResult> {
+  return runValidator(files)
 }
-
-export default init

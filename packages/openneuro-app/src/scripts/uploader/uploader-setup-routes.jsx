@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import UploaderModal from "./uploader-modal.jsx"
 import UploadStep from "./upload-step.jsx"
 import UploadSelect from "./upload-select.jsx"
-import UploadIssues from "./upload-issues.jsx"
+import UploadIssues from "./upload-issues"
 import UploadMetadata from "./upload-metadata.jsx"
 import UploadDisclaimer from "./upload-disclaimer.jsx"
 
