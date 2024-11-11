@@ -73,7 +73,7 @@ interface UploadValidatorProps {
 interface UploadValidatorState {
   validating: boolean
   issues: DatasetIssues
-  summary: {}
+  summary: object
 }
 
 class UploadValidator

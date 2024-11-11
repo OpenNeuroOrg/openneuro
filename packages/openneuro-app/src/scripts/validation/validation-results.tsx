@@ -1,7 +1,7 @@
 import React from "react"
 import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 import { Issues } from "./validation-issues"
-import { Radio, RadioGroup } from "@openneuro/components/radio"
+import { RadioGroup } from "@openneuro/components/radio"
 import type { DatasetIssues } from "@bids/validator/issues"
 
 interface ValidationResultsProps {

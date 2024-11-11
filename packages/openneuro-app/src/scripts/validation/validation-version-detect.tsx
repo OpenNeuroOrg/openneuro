@@ -16,7 +16,6 @@ interface ValidationVersionDetectProps {
 export function ValidationVersionDetect(
   { datasetId, issues, validatorVersion }: ValidationVersionDetectProps,
 ) {
-  console.log(validatorVersion)
   if (!validatorVersion || semver.lt(validatorVersion, "1.14.14")) {
     return <LegacyValidation datasetId={datasetId} issues={issues} />
   } else {
