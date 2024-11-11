@@ -1,13 +1,7 @@
 import React from "react"
-import { ValidationPanel } from "./validation-panel"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 import { DatasetIssues } from "@bids/validator/issues"
 import type { Issue } from "@bids/validator/issues"
-import styled from "@emotion/styled"
-
-const Ul = styled.ul`
-  padding: 0;
-  list-style-type: none;
-`
 
 interface IssueProps {
   datasetIssues: DatasetIssues
@@ -69,8 +63,13 @@ export function Issues({ issues }: IssuesProps) {
         </span>
       )
       panels.push(
-        (<li key={location as string}>
-          <ValidationPanel heading={header}>
+        (
+          <AccordionTab
+            key={location as string}
+            label={header}
+            accordionStyle="plain"
+            className="validation-error fade-in"
+          >
             {issue.issues.map((issue) => {
               return (
                 <Issue
@@ -80,11 +79,11 @@ export function Issues({ issues }: IssuesProps) {
                 />
               )
             })}
-          </ValidationPanel>
-        </li>),
+          </AccordionTab>
+        ),
       )
     }
-    return <Ul>{panels}</Ul>
+    return <AccordionWrap>{panels}</AccordionWrap>
   }
   return null
 }
