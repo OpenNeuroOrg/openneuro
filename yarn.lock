@@ -5740,7 +5740,6 @@ __metadata:
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.45.1"
-    "@openneuro/client": "npm:^4.28.3"
     "@openneuro/components": "npm:^4.28.3"
     "@sentry/react": "npm:^8.25.0"
     "@tanstack/react-table": "npm:^8.9.3"

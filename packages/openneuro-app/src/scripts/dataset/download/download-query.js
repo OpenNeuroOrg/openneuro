@@ -1,10 +1,43 @@
-import { datasets } from "@openneuro/client"
+import { gql } from "@apollo/client"
+
+export const DOWNLOAD_DATASET = gql`
+query downloadDraft($datasetId: ID!, $tree: String) {
+  dataset(id: $datasetId) {
+    id
+    draft {
+      id
+      files(tree: $tree) {
+        id
+        directory
+        filename
+        size
+        urls
+      }
+    }
+  }
+}
+`
+
+export const DOWNLOAD_SNAPSHOT = gql`
+  query downloadSnapshot($datasetId: ID!, $tag: String!, $tree: String) {
+    snapshot(datasetId: $datasetId, tag: $tag) {
+      id
+      files(tree: $tree) {
+        id
+        directory
+        filename
+        size
+        urls
+      }
+    }
+  }
+`
 
 export const downloadDataset =
   (client) => async ({ datasetId, snapshotTag, tree = null }) => {
     if (snapshotTag) {
       const { data } = await client.query({
-        query: datasets.downloadSnapshot,
+        query: DOWNLOAD_SNAPSHOT,
         variables: {
           datasetId,
           tag: snapshotTag,
@@ -14,7 +47,7 @@ export const downloadDataset =
       return data.snapshot.files
     } else {
       const { data } = await client.query({
-        query: datasets.downloadDataset,
+        query: DOWNLOAD_DATASET,
         variables: {
           datasetId,
           tree,
