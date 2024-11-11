@@ -42,6 +42,10 @@ export const DRAFT_FRAGMENT = gql`
           TracerName
           TracerRadionuclide
         }
+        validatorMetadata {
+          validator
+          version
+        }
       }
     }
   }
@@ -188,6 +192,10 @@ export const SNAPSHOT_FIELDS = gql`
         ScannerManufacturersModelName
         TracerName
         TracerRadionuclide
+      }
+      validatorMetadata {
+        validator
+        version
       }
     }
     analytics {

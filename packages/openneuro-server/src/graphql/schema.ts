@@ -218,7 +218,15 @@ export const typeDefs = `
   }
 
   # BIDS Validator metadata
-  input ValidatorMetadata {
+  type ValidatorMetadata {
+    # Unique string identifying the type of BIDS validator software
+    validator: String
+    # Semantic versioning string for the version of the validation software
+    version: String
+  }
+
+  # BIDS Validator metadata
+  input ValidatorMetadataInput {
     # Unique string identifying the type of BIDS validator software
     validator: String
     # Semantic versioning string for the version of the validation software
@@ -240,7 +248,7 @@ export const typeDefs = `
     dataProcessed: Boolean
     pet: SummaryPetInput
     # Metadata for validation software used
-    validatorMetadata: ValidatorMetadata
+    validatorMetadata: ValidatorMetadataInput
     # BIDS Specification schema version
     schemaVersion: String
   }
@@ -256,7 +264,7 @@ export const typeDefs = `
     id: ID! # Git reference for this validation
     datasetId: ID!
     issues: [ValidationIssueInput]!
-    validatorMetadata: ValidatorMetadata
+    validatorMetadata: ValidatorMetadataInput
   }
 
   # Dataset Metadata
@@ -613,6 +621,8 @@ export const typeDefs = `
     pet: SummaryPetFields
     # BIDS Specification schema version
     schemaVersion: String
+    # Validator metadata
+    validatorMetadata: ValidatorMetadata
   }
 
   type SummaryPetFields {
