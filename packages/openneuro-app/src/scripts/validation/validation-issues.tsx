@@ -15,25 +15,24 @@ export function Issue({ datasetIssues, issue }: IssueProps) {
   return (
     <div className="em-body">
       <div className="e-meta">
-        <label>Code:</label>
-        {issue.code}
+        <label>{issue.code}</label>
+        <span>{issue.subCode ? ` - ${issue.subCode}` : ""}</span>
       </div>
-      {issue.subCode
-        ? (
-          <div className="e-meta">
-            <label>Subcode:</label>
-            {issue.subCode}
-          </div>
-        )
-        : null}
       <div className="e-meta">
-        <label>Rule:</label>
-        {issue.rule}
+        <label>Rule:</label> {issue.rule}
       </div>
       <div className="e-meta">
         <label>Messages:</label>
         <p>{datasetIssues.codeMessages.get(issue.code)}</p>
       </div>
+      {issue.suggestion
+        ? (
+          <div className="e-meta">
+            <label>Suggestion:</label>
+            <p>{issue.suggestion}</p>
+          </div>
+        )
+        : null}
     </div>
   )
 }
