@@ -6,18 +6,27 @@ import type { Issue } from "@bids/validator/issues"
 interface IssueProps {
   datasetIssues: DatasetIssues
   issue: Issue
+  groupBy: "location" | "code"
 }
 
 /**
  * One issue entry
  */
-export function Issue({ datasetIssues, issue }: IssueProps) {
+export function Issue({ datasetIssues, issue, groupBy }: IssueProps) {
   return (
     <div className="em-body">
-      <div className="e-meta">
-        <label>{issue.code}</label>
-        <span>{issue.subCode ? ` - ${issue.subCode}` : ""}</span>
-      </div>
+      {groupBy === "location"
+        ? (
+          <div className="e-meta">
+            <label>{issue.code}</label>
+            <span>{issue.subCode ? ` - ${issue.subCode}` : ""}</span>
+          </div>
+        )
+        : (
+          <div className="e-meta">
+            <label>{issue.location}</label>
+          </div>
+        )}
       <div className="e-meta">
         <label>Rule:</label> {issue.rule}
       </div>
@@ -39,21 +48,22 @@ export function Issue({ datasetIssues, issue }: IssueProps) {
 
 interface IssuesProps {
   issues: DatasetIssues
+  groupBy: "location" | "code"
 }
 
 /**
  * DatasetIssue grouped by severity and then location
  */
-export function Issues({ issues }: IssuesProps) {
+export function Issues({ issues, groupBy }: IssuesProps) {
   if (issues) {
-    const locations = issues.groupBy("location")
+    const groups = issues.groupBy(groupBy)
     const panels = []
-    for (const [location, issue] of locations.entries()) {
+    for (const [group, issue] of groups.entries()) {
       const header = (
         <span className="file-header">
           <h4 className="em-header">
             <strong className="em-header ">
-              {location}
+              {group}
             </strong>
             <span className="file-issue-count">
               {issue.size} {issues.size == 1 ? "issue" : "issues"}
@@ -64,7 +74,7 @@ export function Issues({ issues }: IssuesProps) {
       panels.push(
         (
           <AccordionTab
-            key={location as string}
+            key={group as string}
             label={header}
             accordionStyle="plain"
             className="validation-error fade-in"
@@ -75,6 +85,7 @@ export function Issues({ issues }: IssuesProps) {
                   datasetIssues={issues}
                   issue={issue}
                   key={issue.location + issue.code + issue.subCode}
+                  groupBy={groupBy}
                 />
               )
             })}

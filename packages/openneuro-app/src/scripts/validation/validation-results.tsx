@@ -14,7 +14,6 @@ interface ValidationResultsProps {
 export function ValidationResults(
   { issues }: ValidationResultsProps,
 ) {
-  console.log(issues)
   const groupedIssues = issues.groupBy("severity")
   const errors = groupedIssues.get("error")
   const warnings = groupedIssues.get("warning")
@@ -33,7 +32,7 @@ export function ValidationResults(
         label={errorHeader}
         accordionStyle="plain"
       >
-        <Issues issues={errors} issuesType="errors" />
+        <Issues issues={errors} groupBy="code" />
       </AccordionTab>
     )
   }
@@ -52,7 +51,7 @@ export function ValidationResults(
         label={warningHeader}
         accordionStyle="plain"
       >
-        <Issues issues={warnings} issueType="warning" />
+        <Issues issues={warnings} groupBy="code" />
       </AccordionTab>
     )
   }
