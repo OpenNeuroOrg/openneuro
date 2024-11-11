@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from datalad_service.tasks.validator import validate_dataset_call
+from datalad_service.tasks.validator import validate_dataset_deno_call
 from unittest.mock import Mock
 from types import SimpleNamespace
 
@@ -15,7 +15,7 @@ async def test_validator_error(new_dataset):
     logger.info = Mock()
     logger.error = Mock()
     logger.exception = Mock()
-    await validate_dataset_call(new_dataset.path, 'HEAD', logger)
+    await validate_dataset_deno_call(new_dataset.path, 'HEAD', logger)
     # new_dataset completes validation with errors, should not call logger
     assert not logger.exception.called
 
@@ -40,5 +40,5 @@ async def test_validator_bad_json(new_dataset, mock_validator_crash):
     logger.info = Mock()
     logger.error = Mock()
     logger.exception = Mock()
-    await validate_dataset_call(new_dataset.path, 'HEAD', logger)
+    await validate_dataset_deno_call(new_dataset.path, 'HEAD', logger)
     assert logger.exception.called

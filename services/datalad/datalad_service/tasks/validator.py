@@ -10,14 +10,8 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-LEGACY_VALIDATOR_VERSION = json.load(
-    open('package.json'))['dependencies']['bids-validator']
-DENO_VALIDATOR_VERSION = 'v1.14.8'
+DENO_VALIDATOR_VERSION = '1.15.0'
 
-LEGACY_METADATA = {
-    'validator': 'legacy',
-    'version': LEGACY_VALIDATOR_VERSION
-}
 DENO_METADATA = {
     'validator': 'schema',
     'version': DENO_VALIDATOR_VERSION
@@ -27,13 +21,6 @@ DENO_METADATA = {
 def escape_ansi(text):
     ansi_escape = re.compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]')
     return ansi_escape.sub('', text)
-
-
-async def setup_validator():
-    """Install nodejs deps if they do not exist."""
-    if not os.path.exists('./node_modules/.bin/bids-validator'):
-        process = await asyncio.create_subprocess_exec('yarn')
-        await process.wait()
 
 
 async def run_and_decode(args, timeout, logger):
@@ -58,19 +45,6 @@ async def run_and_decode(args, timeout, logger):
         logger.error(stderr)
 
 
-async def validate_dataset_call(dataset_path, ref, logger=logger):
-    """
-    Synchronous dataset validation.
-
-    Runs the bids-validator process and installs node dependencies if needed.
-    """
-    await setup_validator()
-    return await run_and_decode(
-        ['./node_modules/.bin/bids-validator', '--json', '--ignoreSubjectConsistency', dataset_path],
-        timeout=300,
-        logger=logger,
-    )
-
 
 async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     """
@@ -80,7 +54,7 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     """
     return await run_and_decode(
         ['deno', 'run', '-A',
-         f'https://deno.land/x/bids_validator@{DENO_VALIDATOR_VERSION}/bids-validator.ts',
+         f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
          '--json', dataset_path],
         timeout=300,
         logger=logger
@@ -132,20 +106,6 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
 
 
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
-    validator_output = await validate_dataset_call(dataset_path, ref)
-    if validator_output:
-        if 'issues' in validator_output:
-            all_issues = validator_output['issues']['warnings'] + validator_output['issues']['errors']
-            r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, all_issues, LEGACY_METADATA), cookies=cookies)
-            if r.status_code != 200 or 'errors' in r.json():
-                raise Exception(r.text)
-        if 'summary' in validator_output:
-            r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output, LEGACY_METADATA), cookies=cookies)
-            if r.status_code != 200 or 'errors' in r.json():
-                raise Exception(r.text)
-
     # New schema validator second in case of issues
     validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)
     if validator_output_deno:
@@ -159,6 +119,4 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
                 url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output_deno, DENO_METADATA), cookies=cookies)
             if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
-
-
 
