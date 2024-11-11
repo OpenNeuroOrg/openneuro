@@ -83,24 +83,18 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
     """
     Return the OpenNeuro mutation to update any validation issues.
     """
-    for issue in issues:
-        # Remove extra stats to keep collection size down
-        if 'files' in issue:
-            for f in issue['files']:
-                if f.get('file'):
-                    if f['file'].get('stats'):
-                        del f['file']['stats']
-    issues = {
+    validatorInput = {
         'datasetId': dataset_id,
         'id': ref,
-        'issues': issues,
+        'issues': issues["issues"],
+        'codeMessages': [{"code": key, "message": value} for key, value in issues["codeMessages"].items()],
         'validatorMetadata': validator_metadata
     }
     return {
-        'query': 'mutation ($issues: ValidationInput!) { updateValidation(validation: $issues) }',
+        'query': 'mutation ($issues: ValidatorInput!) { updateValidation(validation: $issues) }',
         'variables':
             {
-                'issues': issues,
+                'issues': validatorInput,
             }
     }
 

@@ -7,6 +7,7 @@ import { getDraftRevision } from "../../datalad/draft.js"
 import { checkDatasetWrite } from "../permissions.js"
 import { getFiles } from "../../datalad/files"
 import { filterRemovedAnnexObjects } from "../utils/file.js"
+import { validation } from "./validation"
 
 // A draft must have a dataset parent
 const draftFiles = async (dataset, args, { userInfo }) => {
@@ -36,6 +37,7 @@ const draft = {
   size: draftSize,
   summary,
   issues,
+  validation,
   modified: (obj) => obj.modified,
   description,
   readme,
