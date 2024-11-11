@@ -12,12 +12,10 @@ COPY datalad_service /srv/datalad_service
 COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 COPY tests /srv/tests
-# Install node and Deno the Dockery-but-hacky-way
-COPY --from=node:20.12.2-bullseye /usr/local/bin/node /usr/local/bin/node
+# Install Deno the Dockery-but-hacky-way
 COPY --from=deno /deno /usr/local/bin/deno
 
 RUN apt-get update \
-  && node --version \
   && apt-get install -y curl openssh-client \
   && ssh-keyscan github.com >> /root/.ssh/known_hosts \
   && mkdir /yarn \
@@ -36,6 +34,5 @@ RUN apt-get update \
 
 HEALTHCHECK --interval=5s --timeout=30s --start-period=10s --retries=10 CMD [ "curl", "-f", "http://localhost/heartbeat" ]
 
-ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV LOCPATH=""
 CMD ["uvicorn", "--host", "0.0.0.0", "--port", "80", "--factory", "datalad_service.app:create_app", "--workers", "8", "--timeout-keep-alive", "30"]
