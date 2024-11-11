@@ -1,12 +1,14 @@
 import React from "react"
-import pluralize from "pluralize"
 import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
-import type { DatasetIssues } from "@bids/validator/issues"
 import { Issues } from "./validation-issues"
+import { Radio, RadioGroup } from "@openneuro/components/radio"
+import type { DatasetIssues } from "@bids/validator/issues"
 
 interface ValidationResultsProps {
   issues: DatasetIssues
 }
+
+type ValidationGroupBy = "code" | "location"
 
 /**
  * Display ValidationResults with collapsing panels
@@ -14,6 +16,7 @@ interface ValidationResultsProps {
 export function ValidationResults(
   { issues }: ValidationResultsProps,
 ) {
+  const [groupBy, setGroupBy] = React.useState<ValidationGroupBy>("code")
   const groupedIssues = issues.groupBy("severity")
   const errors = groupedIssues.get("error")
   const warnings = groupedIssues.get("warning")
@@ -23,7 +26,7 @@ export function ValidationResults(
   if (errors?.size > 0) {
     const errorHeader = (
       <span>
-        view {errors.size} {pluralize("error", errors.size)}
+        view {errors.size} {errors.size === 1 ? "error" : "errors"}
       </span>
     )
     errorsWrap = (
@@ -32,7 +35,7 @@ export function ValidationResults(
         label={errorHeader}
         accordionStyle="plain"
       >
-        <Issues issues={errors} groupBy="code" />
+        <Issues issues={errors} groupBy={groupBy} />
       </AccordionTab>
     )
   }
@@ -42,7 +45,7 @@ export function ValidationResults(
   if (warnings?.size > 0) {
     const warningHeader = (
       <span>
-        view {warnings.size} {pluralize("warning", warnings.size)}
+        view {warnings.size} {warnings.size === 1 ? "warning" : "warnings"}
       </span>
     )
     warningWrap = (
@@ -51,17 +54,27 @@ export function ValidationResults(
         label={warningHeader}
         accordionStyle="plain"
       >
-        <Issues issues={warnings} groupBy="code" />
+        <Issues issues={warnings} groupBy={groupBy} />
       </AccordionTab>
     )
   }
 
   // validations errors and warning wraps
   return (
-    <AccordionWrap className="validation-messages">
-      {errorsWrap}
-      {warningWrap}
-    </AccordionWrap>
+    <>
+      <label title="show-datasets">Sort by:</label>
+      <RadioGroup
+        radioArr={["code", "location"]}
+        layout="row"
+        name="show-datasets"
+        selected={groupBy}
+        setSelected={setGroupBy}
+      />
+      <AccordionWrap className="validation-messages">
+        {errorsWrap}
+        {warningWrap}
+      </AccordionWrap>
+    </>
   )
 }
 
