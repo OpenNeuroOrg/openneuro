@@ -6,7 +6,7 @@ import pluralize from "pluralize"
 import { pageTitle } from "../resources/strings.js"
 
 import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-container"
-import Validation from "../validation-legacy/validation.jsx"
+import { ValidationVersionDetect } from "../validation/validation-version-detect"
 import { config } from "../config"
 import {
   getUnexpiredProfile,
@@ -135,9 +135,11 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
             <div className="col col-lg col-8">
               <div className="dataset-validation">
                 <ValidationBlock>
-                  <Validation
+                  <ValidationVersionDetect
                     datasetId={dataset.id}
                     issues={dataset.draft.issues}
+                    validatorVersion={dataset.draft?.summary?.validatorMetadata
+                      ?.version}
                   />
                 </ValidationBlock>
                 <CloneDropdown
