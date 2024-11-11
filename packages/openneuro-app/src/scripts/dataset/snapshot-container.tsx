@@ -6,7 +6,6 @@ import DatasetQueryContext from "../datalad/dataset/dataset-query-context.js"
 import { Link, useLocation, useParams } from "react-router-dom"
 import pluralize from "pluralize"
 import { pageTitle } from "../resources/strings.js"
-import { ValidationVersionDetect } from "../validation/validation-version-detect"
 import { config } from "../config"
 import DatasetCitation from "./fragments/dataset-citation.jsx"
 import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
@@ -124,14 +123,11 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
           <div className="grid grid-between">
             <div className="col col-lg col-8">
               <div className="dataset-validation">
-                <ValidationBlock>
-                  <ValidationVersionDetect
-                    datasetId={dataset.id}
-                    issues={snapshot.issues}
-                    validatorVersion={snapshot.summary?.validatorMetadata
-                      ?.version}
-                  />
-                </ValidationBlock>
+                <ValidationBlock
+                  datasetId={datasetId}
+                  issues={snapshot.issues}
+                  validation={snapshot.validation}
+                />
                 <AnalyzeDropdown
                   datasetId={datasetId}
                   snapshotVersion={snapshot.tag}

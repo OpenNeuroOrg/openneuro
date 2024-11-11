@@ -6,7 +6,6 @@ import pluralize from "pluralize"
 import { pageTitle } from "../resources/strings.js"
 
 import { DatasetPageTabContainer } from "./routes/styles/dataset-page-tab-container"
-import { ValidationVersionDetect } from "../validation/validation-version-detect"
 import { config } from "../config"
 import {
   getUnexpiredProfile,
@@ -134,14 +133,11 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           <div className="grid grid-between">
             <div className="col col-lg col-8">
               <div className="dataset-validation">
-                <ValidationBlock>
-                  <ValidationVersionDetect
-                    datasetId={dataset.id}
-                    issues={dataset.draft.issues}
-                    validatorVersion={dataset.draft?.summary?.validatorMetadata
-                      ?.version}
-                  />
-                </ValidationBlock>
+                <ValidationBlock
+                  datasetId={dataset.id}
+                  issues={dataset.draft.issues}
+                  validation={dataset.draft.validation}
+                />
                 <CloneDropdown
                   gitAccess={
                     <DatasetGitAccess

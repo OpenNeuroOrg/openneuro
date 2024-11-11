@@ -1,7 +1,7 @@
 import React from "react"
 import pluralize from "pluralize"
 import { ValidationPanel } from "./validation-panel"
-import Results from "./validation-results.tsx"
+import Results from "./validation-results"
 import type { DatasetIssues } from "@bids/validator/issues"
 
 /**
@@ -53,11 +53,10 @@ const Valid = () => (
 )
 
 interface WarningsProps {
-  errors: DatasetIssues
   warnings: DatasetIssues
 }
 
-const Warnings = ({ errors, warnings }: WarningsProps) => (
+const Warnings = ({ warnings }: WarningsProps) => (
   <ValidationPanel heading={warningHeader(warnings.size)}>
     <div>
       <span className="message error fade-in">
@@ -70,16 +69,15 @@ const Warnings = ({ errors, warnings }: WarningsProps) => (
       </span>
     </div>
     <br />
-    <Results errors={errors} warnings={warnings} />
+    <Results issues={warnings} />
   </ValidationPanel>
 )
 
 interface ErrorsProps {
   errors: DatasetIssues
-  warnings: DatasetIssues
 }
 
-const Errors = ({ errors, warnings }: ErrorsProps) => (
+const Errors = ({ errors }: ErrorsProps) => (
   <ValidationPanel heading={errorHeader(errors.size)}>
     <span className="message error fade-in">
       Your dataset is no longer valid. You must fix the{" "}
@@ -88,7 +86,7 @@ const Errors = ({ errors, warnings }: ErrorsProps) => (
       to use all of the site features.
     </span>
     <br />
-    <Results errors={errors} warnings={warnings} />
+    <Results issues={errors} />
   </ValidationPanel>
 )
 
@@ -101,10 +99,10 @@ export const Validation = ({ issues }: ValidationProps) => {
     const grouped = issues.groupBy("severity")
     const warnings = grouped.get("warning")
     const errors = grouped.get("errors")
-    if (errors.size) {
-      return <Errors errors={errors} warnings={warnings} />
-    } else if (warnings.size) {
-      return <Warnings errors={errors} warnings={warnings} />
+    if (errors?.size) {
+      return <Errors errors={errors} />
+    } else if (warnings?.size) {
+      return <Warnings warnings={warnings} />
     } else {
       return <Valid />
     }
