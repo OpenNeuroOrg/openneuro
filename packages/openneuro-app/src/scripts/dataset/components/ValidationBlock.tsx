@@ -41,7 +41,7 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   } else {
     // Reconstruct DatasetIssues from JSON
     const datasetIssues = new DatasetIssues()
-    // If data exists, populate this
+    // If data exists, populate this. Otherwise we show pending.
     if (validation?.issues) {
       datasetIssues.issues = validation.issues
       datasetIssues.codeMessages = validation.codeMessages.reduce(

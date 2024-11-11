@@ -3,6 +3,19 @@ import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 import { Issues } from "./validation-issues"
 import { RadioGroup } from "@openneuro/components/radio"
 import type { DatasetIssues } from "@bids/validator/issues"
+import styled from "@emotion/styled"
+
+const RadioSpan = styled.span`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  #sort-by-radio {
+    font-size: 14px;
+    line-height: 20px;
+    padding-right: 1em;
+  }
+`
 
 interface ValidationResultsProps {
   issues: DatasetIssues
@@ -62,14 +75,16 @@ export function ValidationResults(
   // validations errors and warning wraps
   return (
     <>
-      <label title="show-datasets">Sort by:</label>
-      <RadioGroup
-        radioArr={["code", "location"]}
-        layout="row"
-        name="show-datasets"
-        selected={groupBy}
-        setSelected={setGroupBy}
-      />
+      <RadioSpan>
+        <label id="sort-by-radio">Sort by:</label>
+        <RadioGroup
+          radioArr={["code", "location"]}
+          layout="row"
+          name="show-datasets"
+          selected={groupBy}
+          setSelected={setGroupBy}
+        />
+      </RadioSpan>
       <AccordionWrap className="validation-messages">
         {errorsWrap}
         {warningWrap}
