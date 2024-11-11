@@ -29,18 +29,33 @@ const publishPermissions = async (datasetId) => {
   const ds = { id: datasetId }
   const { id, userPermissions } = await permissions(ds)
   const permissionsUpdated = {
-    id: datasetId,
-    permissions: {
-      id,
-      userPermissions: await Promise.all(
-        userPermissions.map(async (userPermission) => ({
-          ...userPermission,
-          user: await user(ds, { id: userPermission.userId }),
-        })),
-      ),
-    },
+    id,
+    userPermissions: await Promise.all(
+      userPermissions.map(async (userPermission) => ({
+        ...userPermission,
+        user: await user(ds, { id: userPermission.userId }),
+      })),
+    ),
   }
   return permissionsUpdated
+}
+
+async function updateUsers(datasetId: string, level: string, users) {
+  for (const user of users) {
+    await Permission.updateOne(
+      {
+        datasetId: datasetId,
+        userId: user.id,
+      },
+      {
+        datasetId: datasetId,
+        userId: user.id,
+        level: level,
+      },
+      { upsert: true },
+    ).exec()
+  }
+  return publishPermissions(datasetId)
 }
 
 /**
@@ -57,28 +72,29 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
     throw new Error("A user with that email address does not exist")
   }
 
-  const userPromises = users.map((user) => {
-    return new Promise<void>((resolve, reject) => {
-      Permission.updateOne(
-        {
-          datasetId: args.datasetId,
-          userId: user.id,
-        },
-        {
-          datasetId: args.datasetId,
-          userId: user.id,
-          level: args.level,
-        },
-        { upsert: true },
-      )
-        .exec()
-        .then(() => resolve())
-        .catch((err) => reject(err))
-    })
+  return updateUsers(args.datasetId, args.level, users)
+}
+
+/**
+ * ORCID variant of updatePermissions
+ */
+export const updateOrcidPermissions = async (obj, args, { user, userInfo }) => {
+  await checkDatasetAdmin(args.datasetId, user, userInfo)
+  // Get all users associated with the ORCID provided
+  const users = await User.find({
+    "$or": [{ "orcid": args.userOrcid }, {
+      "providerId": args.userOrcid,
+      "provider": "orcid",
+    }],
   })
-  return Promise.all(userPromises).then(() =>
-    publishPermissions(args.datasetId)
-  )
+    .collation({ locale: "en", strength: 2 })
+    .exec()
+
+  if (!users.length) {
+    throw new Error("A user with that ORCID does not exist")
+  }
+
+  return updateUsers(args.datasetId, args.level, users)
 }
 
 /**

@@ -1,12 +1,23 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
+import type { ApolloError } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content"
 import { validate as isValidEmail } from "email-validator"
 import { Button } from "@openneuro/components/button"
 
-const UPDATE_PERMISSIONS = gql`
+export function isValidOrcid(orcid: string) {
+  if (orcid) {
+    return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid)
+      ? true
+      : false
+  } else {
+    return false
+  }
+}
+
+export const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(
     $datasetId: ID!
     $userEmail: String!
@@ -18,48 +29,79 @@ const UPDATE_PERMISSIONS = gql`
       level: $level
     ) {
       id
-      email
+      userPermissions {
+        datasetId
+        userId
+        level
+        user {
+          id
+          email
+          orcid
+          name
+        }
+      }
     }
   }
 `
 
-export const mergeNewPermission = (
-  datasetId,
-  oldPermissions,
-  userInfo,
-  metadata,
-) => {
-  return {
-    __typename: "Dataset",
-    id: datasetId,
-    permissions: {
-      ...oldPermissions,
-      userPermissions: [
-        ...oldPermissions.userPermissions,
-        {
-          __typename: "Permission",
-          user: { __typename: "User", ...userInfo },
-          level: metadata,
-        },
-      ],
-    },
+export const UPDATE_ORCID_PERMISSIONS = gql`
+  mutation updateOrcidPermissions(
+    $datasetId: ID!
+    $userOrcid: String!
+    $level: String!
+  ) {
+    updateOrcidPermissions(
+      datasetId: $datasetId
+      userOrcid: $userOrcid
+      level: $level
+    ) {
+      id
+      userPermissions {
+        datasetId
+        userId
+        level
+        user {
+          id
+          email
+          orcid
+          name
+        }
+      }
+    }
   }
-}
+`
 
 interface UpdateDatasetPermissionsProps {
   datasetId: string
-  userEmail: string
+  userIdentifier: string
   metadata: string
   done: () => void
 }
 
+function onError(err: ApolloError) {
+  toast.error(
+    <ToastContent body={err?.message} />,
+  )
+}
+
+/**
+ * Add permissions to a dataset based on a value provided
+ * userIdentifier is either an email or ORCID
+ */
 export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
   datasetId,
-  userEmail,
+  userIdentifier,
   metadata,
   done,
 }) => {
-  const [UpdateDatasetPermissions] = useMutation(UPDATE_PERMISSIONS)
+  const [updateDatasetPermissions] = useMutation(
+    UPDATE_PERMISSIONS,
+    { onError },
+  )
+  const [updateDatasetPermissionsOrcid] = useMutation(
+    UPDATE_ORCID_PERMISSIONS,
+    { onError },
+  )
   return (
     <>
       <Button
@@ -68,10 +110,23 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
         label="Share"
         size="small"
         onClick={async () => {
-          if (isValidEmail(userEmail)) {
+          if (isValidOrcid(userIdentifier)) {
+            await updateDatasetPermissionsOrcid({
+              variables: {
+                datasetId,
+                userOrcid: userIdentifier,
+                level: metadata,
+              },
+            })
+            done()
+          } else if (isValidEmail(userIdentifier)) {
             try {
-              await UpdateDatasetPermissions({
-                variables: { datasetId, userEmail, level: metadata },
+              await updateDatasetPermissions({
+                variables: {
+                  datasetId,
+                  userEmail: userIdentifier,
+                  level: metadata,
+                },
               })
               done()
             } catch (_err) {
@@ -81,7 +136,7 @@ export const UpdateDatasetPermissions: FC<UpdateDatasetPermissionsProps> = ({
             }
           } else {
             toast.error(
-              <ToastContent body="Please enter a valid email address" />,
+              <ToastContent body="Please enter a valid email address or ORCID" />,
             )
           }
         }}

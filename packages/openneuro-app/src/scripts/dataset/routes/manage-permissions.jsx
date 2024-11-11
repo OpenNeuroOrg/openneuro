@@ -14,12 +14,28 @@ const description = {
   ro: "View dataset",
 }
 
-export const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
+export const PermissionRow = (
+  { datasetId, userId, userName, userEmail, userOrcid, access },
+) => (
   <div className="data-table-content">
     <span>
-      <label>Email:</label>
-      <a href={`mailto:${userEmail}`}>{userEmail}</a>
+      <label>User:</label>
+      {userName}
     </span>
+    {userOrcid
+      ? (
+        <span>
+          <label>ORCID:</label>
+          <a href={`https://orcid.org/${userOrcid}`}>{userOrcid}</a>
+        </span>
+      )
+      : (
+        <span>
+          <label>Email:</label>
+          <a href={`mailto:${userEmail}`}>{userEmail}</a>
+        </span>
+      )}
+
     <span>
       <label>Access:</label>
       {description[access]}
@@ -34,14 +50,17 @@ export const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
 PermissionRow.propTypes = {
   datasetId: PropTypes.string,
   userId: PropTypes.string,
+  userName: PropTypes.string,
   userEmail: PropTypes.string,
+  userOrcid: PropTypes.string,
   access: PropTypes.oneOf(["ro", "rw", "admin"]),
 }
 
 export const ShareTable = ({ datasetId, permissions }) => (
   <>
     <div className="data-table-header">
-      <span>Email</span>
+      <span>Name</span>
+      <span>Reference</span>
       <span>Access</span>
       <span>Edit</span>
     </div>
@@ -50,7 +69,9 @@ export const ShareTable = ({ datasetId, permissions }) => (
       <PermissionRow
         datasetId={datasetId}
         userId={perm.user.id}
+        userName={perm.user.name}
         userEmail={perm.user.email}
+        userOrcid={perm.user.orcid}
         access={perm.level}
         key={index}
       />
@@ -64,7 +85,7 @@ ShareTable.propTypes = {
 }
 
 const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
-  const [userEmail, setUserEmail] = useState("")
+  const [userIdentifier, setUserIdentifier] = useState("")
   const [access, setAccess] = useState("ro")
 
   const readActive = access === "ro" && "active"
@@ -81,14 +102,15 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
           <div className="dataset-form-body">
             <ShareTable datasetId={datasetId} permissions={permissions} />
             <p>
-              Enter a user&#39;s email address and select access level to share
+              Enter a user&#39;s ORCID or email address and select access level
+              to share
             </p>
             <div className="share-input-group">
               <input
                 className="form-control"
                 type="email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
+                value={userIdentifier}
+                onChange={(e) => setUserIdentifier(e.target.value)}
               />
               <div className="input-group-btn">
                 <Button
@@ -118,9 +140,9 @@ const Share = ({ datasetId, permissions, reviewers, hasSnapshot }) => {
           <div className="share-form-controls">
             <UpdateDatasetPermissions
               datasetId={datasetId}
-              userEmail={userEmail}
+              userIdentifier={userIdentifier}
               metadata={access}
-              done={() => setUserEmail("")}
+              done={() => setUserIdentifier("")}
             />
           </div>
         </div>
