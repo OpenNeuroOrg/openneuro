@@ -22,7 +22,7 @@ export const validation = async (dataset, _, { userInfo }) => {
           { userInfo },
         )
       }
-      return data ? data.issues : null
+      return data
     })
 }
 
