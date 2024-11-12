@@ -1,0 +1,195 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Issue component > renders one issue 1`] = `
+<DocumentFragment>
+  <div
+    class="em-body"
+  >
+    <div
+      class="e-meta"
+    >
+      <label>
+        /dataset_description.json
+      </label>
+    </div>
+    <div
+      class="e-meta"
+    >
+      <label>
+        Rule:
+      </label>
+       rules.dataset_metadata.dataset_description
+    </div>
+    <div
+      class="e-meta"
+    >
+      <label>
+        Messages:
+      </label>
+      <p>
+        A JSON file is missing a key listed as recommended.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Issues component > renders multiple issues 1`] = `
+<DocumentFragment>
+  <div
+    class=" on-accordion-wrapper"
+  >
+    <article
+      class="plain accordion validation-error fade-in"
+    >
+      <div
+        class="accordion-title "
+        role="switch"
+      >
+        <span
+          class="file-header"
+        >
+          <h4
+            class="em-header"
+          >
+            <strong
+              class="em-header"
+            >
+              JSON_KEY_RECOMMENDED
+            </strong>
+            <span
+              class="file-issue-count"
+            >
+              4 issues
+            </span>
+          </h4>
+        </span>
+      </div>
+      <div
+        class="accordion-item  collapsed "
+      >
+        <div
+          class="accordion-content"
+        >
+          <div
+            class="em-body"
+          >
+            <div
+              class="e-meta"
+            >
+              <label>
+                /dataset_description.json
+              </label>
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Rule:
+              </label>
+               rules.dataset_metadata.dataset_description
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Messages:
+              </label>
+              <p>
+                A JSON file is missing a key listed as recommended.
+              </p>
+            </div>
+          </div>
+          <div
+            class="em-body"
+          >
+            <div
+              class="e-meta"
+            >
+              <label>
+                /dataset_description.json
+              </label>
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Rule:
+              </label>
+               rules.dataset_metadata.dataset_description
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Messages:
+              </label>
+              <p>
+                A JSON file is missing a key listed as recommended.
+              </p>
+            </div>
+          </div>
+          <div
+            class="em-body"
+          >
+            <div
+              class="e-meta"
+            >
+              <label>
+                /dataset_description.json
+              </label>
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Rule:
+              </label>
+               rules.dataset_metadata.dataset_description
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Messages:
+              </label>
+              <p>
+                A JSON file is missing a key listed as recommended.
+              </p>
+            </div>
+          </div>
+          <div
+            class="em-body"
+          >
+            <div
+              class="e-meta"
+            >
+              <label>
+                /dataset_description.json
+              </label>
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Rule:
+              </label>
+               rules.dataset_metadata.dataset_description
+            </div>
+            <div
+              class="e-meta"
+            >
+              <label>
+                Messages:
+              </label>
+              <p>
+                A JSON file is missing a key listed as recommended.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</DocumentFragment>
+`;
