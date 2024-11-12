@@ -13,7 +13,7 @@
     "prepublish": "rm -fr packages/*/dist .build-cache/ && yarn build",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
-    "version": "cat cli/deno.json | jq \".version = $(cat lerna.json | jq '.version')\" > cli/deno.json && git add cli/deno.json"
+    "version": "cat cli/deno.json | jq \".version = $(cat lerna.json | jq '.version')\" > cli/deno.json && git add cli/deno.json && yarn install && git stage yarn.lock"
   },
   "devDependencies": {
     "@elastic/apm-rum-react": "2.0.2",
