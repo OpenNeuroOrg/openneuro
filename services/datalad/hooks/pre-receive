@@ -129,9 +129,15 @@ function main() {
       bidsignore=""
     fi
 
-    # Run validation (with .bidsignore if we found it above)
-    { echo "${bidsignore}" && echo "0001" && git ls-tree --name-only -r "${newref}"; } | \
-      /srv/node_modules/.bin/bids-validator --filenames -
+    # Run validation with bidsschematools
+    python -m bidsschematools pre-receive-hook <<END
+bids-hook-v2
+$( git show "${newref}:dataset_description.json" | tr -d '\r\n' )
+${bidsignore}
+0001
+$( git ls-tree --name-only -r "${newref}" )
+END
+
     if [[ "$?" != 0 ]]; then
       echo ""
       echo "-------------------------------------------------------------------------"
