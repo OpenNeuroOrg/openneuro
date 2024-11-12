@@ -16,6 +16,7 @@ import CacheItem, { CacheType } from "../../cache/item"
 import { normalizeDOI } from "../../libs/doi/normalize"
 import { getDraftHead } from "../../datalad/dataset"
 import { downloadFiles } from "../../datalad/snapshots"
+import { snapshotValidation } from "./validation"
 
 export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
@@ -258,6 +259,7 @@ export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
 const Snapshot = {
   analytics: (snapshot) => analytics(snapshot),
   issues: (snapshot) => snapshotIssues(snapshot),
+  validation: (snapshot) => snapshotValidation(snapshot),
 }
 
 export default Snapshot

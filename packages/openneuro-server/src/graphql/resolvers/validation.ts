@@ -1,8 +1,43 @@
 import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
-import Issue from "../../models/issue"
+import Validation from "../../models/validation"
 import { redlock } from "../../libs/redis"
+
+/**
+ * Issues resolver for schema validator
+ */
+export const validation = async (dataset, _, { userInfo }) => {
+  return Validation.findOne({
+    id: dataset.revision,
+    datasetId: dataset.id,
+  })
+    .exec()
+    .then((data) => {
+      if (!data && userInfo) {
+        // If no results were found, acquire a lock and run validation
+        revalidate(
+          null,
+          { datasetId: dataset.id, ref: dataset.revision },
+          { userInfo },
+        )
+      }
+      return data
+    })
+}
+
+/**
+ * Snapshot issues resolver for schema validator
+ */
+export const snapshotValidation = async (snapshot) => {
+  const datasetId = snapshot.id.split(":")[0]
+  return Validation.findOne({
+    id: snapshot.hexsha,
+    datasetId,
+  })
+    .exec()
+    .then((data) => (data ? data.issues : null))
+}
 
 /**
  * Save issues data returned by the datalad service
@@ -10,7 +45,7 @@ import { redlock } from "../../libs/redis"
  * Returns only a boolean if successful or not
  */
 export const updateValidation = (obj, args) => {
-  return Issue.updateOne(
+  return Validation.updateOne(
     {
       id: args.validation.id,
       datasetId: args.validation.datasetId,

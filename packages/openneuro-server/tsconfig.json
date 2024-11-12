@@ -4,7 +4,9 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "tsBuildInfoFile": "../../.build-cache/server.tsbuildinfo",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "moduleResolution": "Node",
+    "module": "CommonJS"
   },
   "include": ["./src"],
   "files": ["./src/lerna.json"],

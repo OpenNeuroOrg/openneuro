@@ -1,6 +1,25 @@
-import path from "path"
 import { defineConfig } from "vite"
 import nodePolyfills from "rollup-plugin-polyfill-node"
+
+/**
+ * Vite plugin to hack a bug injected by the default assetImportMetaUrlPlugin
+ */
+function workaroundAssetImportMetaUrlPluginBug() {
+  return {
+    name: "vite-workaround-import-glob",
+    transform(src, id) {
+      if (
+        id.includes("@bids_validator_main.js") ||
+        id.includes("wasm_xml_parser.js")
+      ) {
+        const metaImport = /,.?import\.meta\.url/
+        return src.replace(metaImport, "")
+      } else {
+        return null
+      }
+    },
+  }
+}
 
 export default defineConfig({
   root: "src",
@@ -38,12 +57,7 @@ export default defineConfig({
       { find: "buffer", replacement: "buffer/" },
       // bids-validator deno buffer
       { find: "node:buffer", replacement: "buffer/" },
-      // Workaround UMD -> ESM issues in pluralize
-      {
-        find: "pluralize",
-        replacement: path.resolve(__dirname, "./pluralize-esm.js"),
-      },
     ],
   },
-  plugins: [nodePolyfills()],
+  plugins: [workaroundAssetImportMetaUrlPluginBug(), nodePolyfills()],
 })

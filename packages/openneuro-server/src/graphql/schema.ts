@@ -119,7 +119,7 @@ export const typeDefs = `
     # Update a draft summary
     updateSummary(summary: SummaryInput!): Summary
     # Update a draft with validation results
-    updateValidation(validation: ValidationInput!): Boolean
+    updateValidation(validation: ValidatorInput!): Boolean
     # Update a users's permissions on a dataset
     updatePermissions(datasetId: ID!, userEmail: String!, level: String!): DatasetPermissions
     # Update a users's permissions for a given ORCID
@@ -218,7 +218,15 @@ export const typeDefs = `
   }
 
   # BIDS Validator metadata
-  input ValidatorMetadata {
+  type ValidatorMetadata {
+    # Unique string identifying the type of BIDS validator software
+    validator: String
+    # Semantic versioning string for the version of the validation software
+    version: String
+  }
+
+  # BIDS Validator metadata
+  input ValidatorMetadataInput {
     # Unique string identifying the type of BIDS validator software
     validator: String
     # Semantic versioning string for the version of the validation software
@@ -240,7 +248,7 @@ export const typeDefs = `
     dataProcessed: Boolean
     pet: SummaryPetInput
     # Metadata for validation software used
-    validatorMetadata: ValidatorMetadata
+    validatorMetadata: ValidatorMetadataInput
     # BIDS Specification schema version
     schemaVersion: String
   }
@@ -252,11 +260,12 @@ export const typeDefs = `
     group: String
   }
 
-  input ValidationInput {
+  input ValidatorInput {
     id: ID! # Git reference for this validation
     datasetId: ID!
-    issues: [ValidationIssueInput]!
-    validatorMetadata: ValidatorMetadata
+    issues: [ValidatorIssueInput]!
+    codeMessages: [ValidatorCodeMessageInput]!
+    validatorMetadata: ValidatorMetadataInput!
   }
 
   # Dataset Metadata
@@ -284,13 +293,6 @@ export const typeDefs = `
     grantIdentifier: String
     affirmedDefaced: Boolean
     affirmedConsent: Boolean
-  }
-
-  # Validation updated message
-  type ValidationUpdate {
-    id: ID!
-    datasetId: ID!
-    issues: [ValidationIssue]
   }
 
   # Information for pagination in a connection.
@@ -449,6 +451,28 @@ export const typeDefs = `
     binary: Boolean
   }
 
+  type ValidatorCodeMessage {
+    code: String!
+    message: String!
+  }
+
+  # BIDS Validator (schema) issues
+  type ValidatorIssue {
+    code: String!
+    subCode: String
+    location: String
+    severity: Severity
+    rule: String
+  }
+
+  type DatasetValidation {
+    # Hash of the data validated
+    id: String
+    datasetId: String
+    issues: [ValidatorIssue]
+    codeMessages: [ValidatorCodeMessage]
+  }
+
   # Ephemeral draft or working tree for a dataset
   type Draft {
     id: ID
@@ -458,8 +482,10 @@ export const typeDefs = `
     modified: DateTime
     # Validator summary
     summary: Summary
-    # Validator issues
+    # Validator issues (legacy validator)
     issues: [ValidationIssue]
+    # Validator issues (schema validator)
+    validation: DatasetValidation
     # Committed files in the working tree
     files(tree: String): [DatasetFile]
     # dataset_description.json fields
@@ -485,8 +511,10 @@ export const typeDefs = `
     created: DateTime
     # bids-validator summary of this snapshot
     summary: Summary
-    # bids-validator issues for this snapshot
+    # Validator issues (legacy validator)
     issues: [ValidationIssue]
+    # Validator issues (schema validator)
+    validation: DatasetValidation
     # Snapshot files
     files(tree: String): [DatasetFile]
     # dataset_description.json fields
@@ -613,6 +641,8 @@ export const typeDefs = `
     pet: SummaryPetFields
     # BIDS Specification schema version
     schemaVersion: String
+    # Validator metadata
+    validatorMetadata: ValidatorMetadata
   }
 
   type SummaryPetFields {
@@ -667,14 +697,17 @@ export const typeDefs = `
     helpUrl: String
   }
 
-  input ValidationIssueInput {
-    severity: Severity!
-    key: String!
-    code: Int
-    reason: String!
-    files: [ValidationIssueFileInput]
-    additionalFileCount: Int
-    helpUrl: String
+  input ValidatorIssueInput {
+    code: String!
+    subCode: String
+    location: String
+    severity: Severity
+    rule: String
+  }
+
+  input ValidatorCodeMessageInput {
+    code: String!
+    message: String!
   }
 
   type ValidationIssueFile {
@@ -691,33 +724,10 @@ export const typeDefs = `
     helpUrl: String
   }
 
-  input ValidationIssueFileInput {
-    name: String
-    path: String
-    key: String
-    code: Int
-    file: ValidationIssueFileDetailInput
-    evidence: String
-    line: Int
-    character: Int
-    severity: Severity
-    reason: String
-    helpUrl: String
-    # Temporary field for compatibility (remove after bids-validator@1.13.0)
-    _datasetAbsPath: String
-  }
-
   type ValidationIssueFileDetail {
     name: String
     path: String
     relativePath: String
-  }
-
-  input ValidationIssueFileDetailInput {
-    name: String
-    path: String
-    relativePath: String
-    webkitRelativePath: String
   }
 
   # File metadata and link to contents

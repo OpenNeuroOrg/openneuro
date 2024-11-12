@@ -2,7 +2,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "tsBuildInfoFile": "../../.build-cache/search.tsbuildinfo"
+    "tsBuildInfoFile": "../../.build-cache/search.tsbuildinfo",
+    "moduleResolution": "Node",
+    "module": "CommonJS"
   },
   "extends": "../../tsconfig.json",
   "include": ["./src"],

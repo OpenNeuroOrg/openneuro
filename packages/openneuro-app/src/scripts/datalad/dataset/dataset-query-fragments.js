@@ -42,6 +42,10 @@ export const DRAFT_FRAGMENT = gql`
           TracerName
           TracerRadionuclide
         }
+        validatorMetadata {
+          validator
+          version
+        }
       }
     }
   }
@@ -95,6 +99,15 @@ export const DATASET_SNAPSHOTS = gql`
   }
 `
 
+// For the schema valdiator
+export const VALIDATION_FIELDS = `
+  code
+  location
+  rule
+  severity
+  subCode
+`
+
 export const ISSUE_FIELDS = `
   severity
   code
@@ -121,6 +134,15 @@ export const DATASET_ISSUES = gql`
       issues { 
         ${ISSUE_FIELDS}
       }
+      validation {
+        codeMessages {
+          code
+          message
+        }
+        issues {
+          ${VALIDATION_FIELDS}
+        }
+      }
     }
   }
 `
@@ -130,6 +152,15 @@ export const SNAPSHOT_ISSUES = gql`
     id
     issues {
       ${ISSUE_FIELDS}
+    }
+    validation {
+      codeMessages {
+        code
+        message
+      }
+      issues {
+        ${VALIDATION_FIELDS}
+      }
     }
   }
 `
@@ -188,6 +219,10 @@ export const SNAPSHOT_FIELDS = gql`
         ScannerManufacturersModelName
         TracerName
         TracerRadionuclide
+      }
+      validatorMetadata {
+        validator
+        version
       }
     }
     analytics {

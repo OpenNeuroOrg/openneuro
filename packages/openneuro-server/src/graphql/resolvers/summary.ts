@@ -1,6 +1,5 @@
 import Summary from "../../models/summary"
 import type { SummaryDocument } from "../../models/summary"
-import { datasetType } from "./datasetType"
 
 /**
  * Summary resolver
@@ -10,9 +9,9 @@ export async function summary(dataset): Promise<Partial<SummaryDocument>> {
     await Summary.findOne({
       id: dataset.revision,
       datasetId: dataset.id,
-      // Match if we have no validatorMetadata or the correct 'legacy' / 'schema' value if we do
       $or: [
-        { "validatorMetadata.validator": await datasetType(dataset) },
+        { "validatorMetadata.validator": "schema" },
+        { "validatorMetadata.validator": "legacy" },
         { validatorMetadata: { $exists: false } },
       ],
     }).exec()
