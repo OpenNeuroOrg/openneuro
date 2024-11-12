@@ -61,7 +61,7 @@ export function Issues({ issues, groupBy }: IssuesProps) {
       const header = (
         <span className="file-header">
           <h4 className="em-header">
-            <strong className="em-header ">
+            <strong className="em-header">
               {group}
             </strong>
             <span className="file-issue-count">
@@ -78,12 +78,12 @@ export function Issues({ issues, groupBy }: IssuesProps) {
             accordionStyle="plain"
             className="validation-error fade-in"
           >
-            {issue.issues.map((issue) => {
+            {issue.issues.map((issue, index) => {
               return (
                 <Issue
                   datasetIssues={issues}
                   issue={issue}
-                  key={issue.location + issue.code + issue.subCode}
+                  key={index}
                   groupBy={groupBy}
                 />
               )
