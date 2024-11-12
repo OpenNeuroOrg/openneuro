@@ -7,10 +7,13 @@ import nodePolyfills from "rollup-plugin-polyfill-node"
 function workaroundAssetImportMetaUrlPluginBug() {
   return {
     name: "vite-workaround-import-glob",
-    apply: "serve",
     transform(src, id) {
-      if (id.includes("@bids_validator_main.js")) {
-        return src.replace(", import.meta.url", "")
+      if (
+        id.includes("@bids_validator_main.js") ||
+        id.includes("wasm_xml_parser.js")
+      ) {
+        const metaImport = /,.?import\.meta\.url/
+        return src.replace(metaImport, "")
       } else {
         return null
       }
