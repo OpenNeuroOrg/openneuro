@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/client",
-  "version": "4.29.0-alpha.2",
+  "version": "4.29.0-alpha.3",
   "description": "OpenNeuro shared client library.",
   "main": "dist/index.js",
   "browser": "src/index.js",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@graphql-tools/schema": "^10.0.0",
-    "@openneuro/server": "^4.29.0-alpha.2",
+    "@openneuro/server": "^4.29.0-alpha.3",
     "core-js": "^3.10.1",
     "ioredis-mock": "^8.8.1",
     "vitest": "2.1.2"
@@ -35,5 +35,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "42faee5b457b9b55ec4f9997540393787a4b81bc"
+  "gitHead": "dc7f8bac5eeff214ca662961e4b0ba33dd596a61"
 }
