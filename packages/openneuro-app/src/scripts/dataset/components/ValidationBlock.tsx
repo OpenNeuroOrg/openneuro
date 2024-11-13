@@ -39,10 +39,10 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
       </div>
     )
   } else {
-    // Reconstruct DatasetIssues from JSON
-    const datasetIssues = new DatasetIssues()
     // If data exists, populate this. Otherwise we show pending.
     if (validation?.issues) {
+      // Reconstruct DatasetIssues from JSON
+      const datasetIssues = new DatasetIssues()
       datasetIssues.issues = validation.issues
       datasetIssues.codeMessages = validation.codeMessages.reduce(
         (acc, curr) => {
@@ -51,11 +51,17 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
         },
         new Map<string, string>(),
       )
+      return (
+        <div className="validation-accordion">
+          <Validation issues={datasetIssues} />
+        </div>
+      )
+    } else {
+      return (
+        <div className="validation-accordion">
+          <Validation issues={null} />
+        </div>
+      )
     }
-    return (
-      <div className="validation-accordion">
-        <Validation issues={datasetIssues} />
-      </div>
-    )
   }
 }
