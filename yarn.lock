@@ -5915,7 +5915,7 @@ __metadata:
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.45.1"
-    "@openneuro/components": "npm:^4.29.0"
+    "@openneuro/components": "npm:^4.29.1"
     "@sentry/react": "npm:^8.25.0"
     "@tanstack/react-table": "npm:^8.9.3"
     "@testing-library/jest-dom": "npm:6.4.2"
@@ -5971,7 +5971,7 @@ __metadata:
   resolution: "@openneuro/cli@workspace:packages/openneuro-cli"
   dependencies:
     "@apollo/client": "npm:3.11.8"
-    "@openneuro/client": "npm:^4.29.0"
+    "@openneuro/client": "npm:^4.29.1"
     "@types/mkdirp": "npm:1.0.2"
     "@types/node": "npm:20.12.7"
     bids-validator: "npm:1.14.8"
@@ -5994,14 +5994,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/client@npm:^4.29.0, @openneuro/client@workspace:packages/openneuro-client":
+"@openneuro/client@npm:^4.29.1, @openneuro/client@workspace:packages/openneuro-client":
   version: 0.0.0-use.local
   resolution: "@openneuro/client@workspace:packages/openneuro-client"
   dependencies:
     "@apollo/client": "npm:3.11.8"
     "@graphql-tools/mock": "npm:^9.0.0"
     "@graphql-tools/schema": "npm:^10.0.0"
-    "@openneuro/server": "npm:^4.29.0"
+    "@openneuro/server": "npm:^4.29.1"
     core-js: "npm:^3.10.1"
     crypto-hash: "npm:^1.3.0"
     graphql: "npm:16.8.1"
@@ -6013,7 +6013,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/components@npm:^4.29.0, @openneuro/components@workspace:packages/openneuro-components":
+"@openneuro/components@npm:^4.29.1, @openneuro/components@workspace:packages/openneuro-components":
   version: 0.0.0-use.local
   resolution: "@openneuro/components@workspace:packages/openneuro-components"
   dependencies:
@@ -6054,8 +6054,8 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.11.8"
     "@elastic/elasticsearch": "npm:8.13.1"
-    "@openneuro/client": "npm:^4.29.0"
-    "@openneuro/search": "npm:^4.29.0"
+    "@openneuro/client": "npm:^4.29.1"
+    "@openneuro/search": "npm:^4.29.1"
     "@types/jsonwebtoken": "npm:^8"
     "@types/node": "npm:20.12.7"
     "@types/tsc-watch": "npm:^4"
@@ -6069,7 +6069,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@npm:^4.29.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@npm:^4.29.1, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -6084,7 +6084,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/server@npm:^4.29.0, @openneuro/server@workspace:packages/openneuro-server":
+"@openneuro/server@npm:^4.29.1, @openneuro/server@workspace:packages/openneuro-server":
   version: 0.0.0-use.local
   resolution: "@openneuro/server@workspace:packages/openneuro-server"
   dependencies:
@@ -6094,7 +6094,7 @@ __metadata:
     "@elastic/elasticsearch": "npm:8.13.1"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@keyv/redis": "npm:^2.7.0"
-    "@openneuro/search": "npm:^4.29.0"
+    "@openneuro/search": "npm:^4.29.1"
     "@sentry/node": "npm:^8.25.0"
     "@sentry/profiling-node": "npm:^8.25.0"
     "@types/cors": "npm:^2"
