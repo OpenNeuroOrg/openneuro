@@ -24,4 +24,4 @@ uvicorn = {extras = ["standard"], version = "*"}
 aiofiles = "*"
 aioshutil = "*"
 sentry-sdk = {extras = ["falcon"], version = "*"}
-bidsschematools = {ref = "enh/git-receive-hook", git = "git+https://github.com/effigies/bids-specification.git", subdirectory = "tools/schemacode"}
+bidsschematools = "==0.11.3.post3"
