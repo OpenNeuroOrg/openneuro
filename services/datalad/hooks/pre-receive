@@ -124,10 +124,7 @@ function main() {
     filterDotFiles
 
     # Check if .bidsignore is in the new tree
-    local bidsignore=$(git show "${newref}:.bidsignore")
-    if [[ "$?" != 0 ]]; then
-      bidsignore=""
-    fi
+    local bidsignore=$(git show "${newref}:.bidsignore" 2> /dev/null)
 
     # Run validation with bidsschematools
     python -m bidsschematools pre-receive-hook <<END
