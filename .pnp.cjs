@@ -5312,94 +5312,105 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@jsr/bids__schema", [\
-      ["npm:0.11.4-dev.8+6e2874ce::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.4-dev.8%2B6e2874ce.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__schema-npm-0.11.4-dev.8-2621d4b177-b36664bffe.zip/node_modules/@jsr/bids__schema/",\
+      ["npm:0.11.3+2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.3%2B2.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__schema-npm-0.11.3-8ecadd86bf-2a41ed6133.zip/node_modules/@jsr/bids__schema/",\
         "packageDependencies": [\
-          ["@jsr/bids__schema", "npm:0.11.4-dev.8+6e2874ce::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.4-dev.8%2B6e2874ce.tgz"]\
+          ["@jsr/bids__schema", "npm:0.11.3+2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.3%2B2.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/bids__validator", [\
-      ["npm:1.15.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F1.15.0.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-1.15.0-ffbff64188-a909a6e98d.zip/node_modules/@jsr/bids__validator/",\
+      ["npm:2.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.0.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.0.0-7d51b31449-333fa806d9.zip/node_modules/@jsr/bids__validator/",\
         "packageDependencies": [\
-          ["@jsr/bids__validator", "npm:1.15.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F1.15.0.tgz"],\
+          ["@jsr/bids__validator", "npm:2.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.0.tgz"],\
           ["@bids/nifti-reader-js", "npm:0.6.9"],\
-          ["@jsr/bids__schema", "npm:0.11.4-dev.8+6e2874ce::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.4-dev.8%2B6e2874ce.tgz"],\
-          ["@jsr/cliffy__command", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__command%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/cliffy__table", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/libs__xml", "npm:5.4.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F5.4.13.tgz"],\
-          ["@jsr/std__fmt", "npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.0.tgz"],\
-          ["@jsr/std__log", "npm:0.224.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.5.tgz"],\
-          ["@jsr/std__path", "npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.2.tgz"],\
+          ["@jsr/bids__schema", "npm:0.11.3+2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F0.11.3%2B2.tgz"],\
+          ["@jsr/effigies__cliffy-command", "npm:1.0.0-dev.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-command%2F1.0.0-dev.8.tgz"],\
+          ["@jsr/effigies__cliffy-table", "npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz"],\
+          ["@jsr/libs__xml", "npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"],\
+          ["@jsr/std__log", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz"],\
+          ["@jsr/std__path", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"],\
           ["@jsr/std__yaml", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__yaml%2F1.0.5.tgz"],\
-          ["ajv", "npm:8.16.0"],\
+          ["ajv", "npm:8.17.1"],\
           ["hed-validator", "npm:3.15.5"],\
-          ["ignore", "npm:5.3.2"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["@jsr/cliffy__command", [\
-      ["npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__command%2F1.0.0-rc.5.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-cliffy__command-npm-1.0.0-rc.5-5d854e8474-d22ae49626.zip/node_modules/@jsr/cliffy__command/",\
-        "packageDependencies": [\
-          ["@jsr/cliffy__command", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__command%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/cliffy__flags", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__flags%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/cliffy__internal", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__internal%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/cliffy__table", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/std__fmt", "npm:0.225.6::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F0.225.6.tgz"],\
-          ["@jsr/std__text", "npm:1.0.0-rc.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.0-rc.1.tgz"]\
+          ["ignore", "npm:6.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/cliffy__flags", [\
-      ["npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__flags%2F1.0.0-rc.5.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-cliffy__flags-npm-1.0.0-rc.5-738af7c710-6870b1ee28.zip/node_modules/@jsr/cliffy__flags/",\
+      ["npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__flags%2F1.0.0-rc.7.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-cliffy__flags-npm-1.0.0-rc.7-3c01ce7138-2058ab03fb.zip/node_modules/@jsr/cliffy__flags/",\
         "packageDependencies": [\
-          ["@jsr/cliffy__flags", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__flags%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/std__text", "npm:1.0.0-rc.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.0-rc.1.tgz"]\
+          ["@jsr/cliffy__flags", "npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__flags%2F1.0.0-rc.7.tgz"],\
+          ["@jsr/std__text", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.8.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/cliffy__internal", [\
-      ["npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__internal%2F1.0.0-rc.5.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-cliffy__internal-npm-1.0.0-rc.5-2ca918d14b-19d131b178.zip/node_modules/@jsr/cliffy__internal/",\
+      ["npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__internal%2F1.0.0-rc.7.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-cliffy__internal-npm-1.0.0-rc.7-b904f381e2-b9588250f6.zip/node_modules/@jsr/cliffy__internal/",\
         "packageDependencies": [\
-          ["@jsr/cliffy__internal", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__internal%2F1.0.0-rc.5.tgz"]\
+          ["@jsr/cliffy__internal", "npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__internal%2F1.0.0-rc.7.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/cliffy__table", [\
-      ["npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.5.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-cliffy__table-npm-1.0.0-rc.5-0057832015-0dc17279cf.zip/node_modules/@jsr/cliffy__table/",\
+      ["npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.7.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-cliffy__table-npm-1.0.0-rc.7-a478eaa2ad-9b1d5d9283.zip/node_modules/@jsr/cliffy__table/",\
         "packageDependencies": [\
-          ["@jsr/cliffy__table", "npm:1.0.0-rc.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.5.tgz"],\
-          ["@jsr/std__cli", "npm:1.0.0-rc.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__cli%2F1.0.0-rc.2.tgz"],\
-          ["@jsr/std__fmt", "npm:0.225.6::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F0.225.6.tgz"]\
+          ["@jsr/cliffy__table", "npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.7.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@jsr/effigies__cliffy-command", [\
+      ["npm:1.0.0-dev.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-command%2F1.0.0-dev.8.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-effigies__cliffy-command-npm-1.0.0-dev.8-f80a4434c9-4b03369c6a.zip/node_modules/@jsr/effigies__cliffy-command/",\
+        "packageDependencies": [\
+          ["@jsr/effigies__cliffy-command", "npm:1.0.0-dev.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-command%2F1.0.0-dev.8.tgz"],\
+          ["@jsr/cliffy__flags", "npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__flags%2F1.0.0-rc.7.tgz"],\
+          ["@jsr/cliffy__internal", "npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__internal%2F1.0.0-rc.7.tgz"],\
+          ["@jsr/cliffy__table", "npm:1.0.0-rc.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fcliffy__table%2F1.0.0-rc.7.tgz"],\
+          ["@jsr/effigies__cliffy-table", "npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"],\
+          ["@jsr/std__text", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.8.tgz"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@jsr/effigies__cliffy-table", [\
+      ["npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-effigies__cliffy-table-npm-1.0.0-dev.5-2bca37e6df-d8ffd492d5.zip/node_modules/@jsr/effigies__cliffy-table/",\
+        "packageDependencies": [\
+          ["@jsr/effigies__cliffy-table", "npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/libs__typing", [\
-      ["npm:2.9.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F2.9.0.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-libs__typing-npm-2.9.0-a1415eb7f1-bd815984c8.zip/node_modules/@jsr/libs__typing/",\
+      ["npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-libs__typing-npm-3.1.0-37c46262d8-028f424260.zip/node_modules/@jsr/libs__typing/",\
         "packageDependencies": [\
-          ["@jsr/libs__typing", "npm:2.9.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F2.9.0.tgz"]\
+          ["@jsr/libs__typing", "npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/libs__xml", [\
-      ["npm:5.4.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F5.4.13.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-libs__xml-npm-5.4.13-ca0264d13e-250bf319c3.zip/node_modules/@jsr/libs__xml/",\
+      ["npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-libs__xml-npm-6.0.1-91e6c6df08-08e7d11127.zip/node_modules/@jsr/libs__xml/",\
         "packageDependencies": [\
-          ["@jsr/libs__xml", "npm:5.4.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F5.4.13.tgz"],\
-          ["@jsr/libs__typing", "npm:2.9.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F2.9.0.tgz"]\
+          ["@jsr/libs__xml", "npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz"],\
+          ["@jsr/libs__typing", "npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5413,30 +5424,7 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@jsr/std__cli", [\
-      ["npm:1.0.0-rc.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__cli%2F1.0.0-rc.2.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__cli-npm-1.0.0-rc.2-fb74f5637a-3ff3d87cf2.zip/node_modules/@jsr/std__cli/",\
-        "packageDependencies": [\
-          ["@jsr/std__cli", "npm:1.0.0-rc.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__cli%2F1.0.0-rc.2.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@jsr/std__fmt", [\
-      ["npm:0.225.6::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F0.225.6.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__fmt-npm-0.225.6-eec3639014-9e7dc3d169.zip/node_modules/@jsr/std__fmt/",\
-        "packageDependencies": [\
-          ["@jsr/std__fmt", "npm:0.225.6::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F0.225.6.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.0.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__fmt-npm-1.0.0-9aa6146e3c-398727dd48.zip/node_modules/@jsr/std__fmt/",\
-        "packageDependencies": [\
-          ["@jsr/std__fmt", "npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.0.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz", {\
         "packageLocation": "./.yarn/cache/@jsr-std__fmt-npm-1.0.3-d6ce779391-fd1b52db94.zip/node_modules/@jsr/std__fmt/",\
         "packageDependencies": [\
@@ -5456,48 +5444,48 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@jsr/std__io", [\
-      ["npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.224.9.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__io-npm-0.224.9-bb0a7462f6-978c9c51ed.zip/node_modules/@jsr/std__io/",\
+      ["npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__io-npm-0.225.0-f73f5b8c27-8584227176.zip/node_modules/@jsr/std__io/",\
         "packageDependencies": [\
-          ["@jsr/std__io", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.224.9.tgz"],\
+          ["@jsr/std__io", "npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz"],\
           ["@jsr/std__bytes", "npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.2.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__log", [\
-      ["npm:0.224.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.5.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__log-npm-0.224.5-b87a991009-e33176d483.zip/node_modules/@jsr/std__log/",\
+      ["npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__log-npm-0.224.9-ad681bd4fe-140f2a0ad7.zip/node_modules/@jsr/std__log/",\
         "packageDependencies": [\
-          ["@jsr/std__log", "npm:0.224.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.5.tgz"],\
+          ["@jsr/std__log", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz"],\
           ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"],\
           ["@jsr/std__fs", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.5.tgz"],\
-          ["@jsr/std__io", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.224.9.tgz"]\
+          ["@jsr/std__io", "npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__path", [\
-      ["npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.2.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__path-npm-1.0.2-49eaa49c0b-d754522fde.zip/node_modules/@jsr/std__path/",\
-        "packageDependencies": [\
-          ["@jsr/std__path", "npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.2.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.7.tgz", {\
         "packageLocation": "./.yarn/cache/@jsr-std__path-npm-1.0.7-d0dc222580-864199b8e7.zip/node_modules/@jsr/std__path/",\
         "packageDependencies": [\
           ["@jsr/std__path", "npm:1.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.7.tgz"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__path-npm-1.0.8-82e854bd09-4c09d127e8.zip/node_modules/@jsr/std__path/",\
+        "packageDependencies": [\
+          ["@jsr/std__path", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__text", [\
-      ["npm:1.0.0-rc.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.0-rc.1.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__text-npm-1.0.0-rc.1-703ac4e102-5862bc7491.zip/node_modules/@jsr/std__text/",\
+      ["npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.8.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__text-npm-1.0.8-49ac53fba0-dbf068da24.zip/node_modules/@jsr/std__text/",\
         "packageDependencies": [\
-          ["@jsr/std__text", "npm:1.0.0-rc.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.0-rc.1.tgz"]\
+          ["@jsr/std__text", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__text%2F1.0.8.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7433,7 +7421,7 @@ const RAW_RUNTIME_STATE =
           ["@artsy/fresnel", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.9.0"],\
           ["@bids/validator", [\
             "@jsr/bids__validator",\
-            "npm:1.15.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F1.15.0.tgz"\
+            "npm:2.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.0.tgz"\
           ]],\
           ["@emotion/react", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.1"],\
           ["@emotion/styled", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.0"],\
@@ -11820,14 +11808,14 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.16.0", {\
-        "packageLocation": "./.yarn/cache/ajv-npm-8.16.0-a048a92b27-9b4b380efa.zip/node_modules/ajv/",\
+      ["npm:8.17.1", {\
+        "packageLocation": "./.yarn/cache/ajv-npm-8.17.1-12ade7edc6-ee3c62162c.zip/node_modules/ajv/",\
         "packageDependencies": [\
-          ["ajv", "npm:8.16.0"],\
+          ["ajv", "npm:8.17.1"],\
           ["fast-deep-equal", "npm:3.1.3"],\
+          ["fast-uri", "npm:3.0.3"],\
           ["json-schema-traverse", "npm:1.0.0"],\
-          ["require-from-string", "npm:2.0.2"],\
-          ["uri-js", "npm:4.4.1"]\
+          ["require-from-string", "npm:2.0.2"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -16982,6 +16970,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["fast-uri", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/cache/fast-uri-npm-3.0.3-0874072625-92487c7584.zip/node_modules/fast-uri/",\
+        "packageDependencies": [\
+          ["fast-uri", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["fast-url-parser", [\
       ["npm:1.1.3", {\
         "packageLocation": "./.yarn/cache/fast-url-parser-npm-1.1.3-9be698120a-6d33f46ce9.zip/node_modules/fast-url-parser/",\
@@ -19170,10 +19167,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:5.3.2", {\
-        "packageLocation": "./.yarn/cache/ignore-npm-5.3.2-346d3ba017-cceb6a4570.zip/node_modules/ignore/",\
+      ["npm:6.0.2", {\
+        "packageLocation": "./.yarn/cache/ignore-npm-6.0.2-2a03f7d9be-af39e49996.zip/node_modules/ignore/",\
         "packageDependencies": [\
-          ["ignore", "npm:5.3.2"]\
+          ["ignore", "npm:6.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
