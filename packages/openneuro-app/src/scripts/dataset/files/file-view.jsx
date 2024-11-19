@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Loading } from "@openneuro/components/loading"
 import FileViewerType from "./file-viewer-type.jsx"
+import { isNifti, isNwb } from "./file-types"
 
 const FileView = ({ url, path }) => {
   const [data, setData] = useState(new ArrayBuffer(0))
@@ -15,7 +16,12 @@ const FileView = ({ url, path }) => {
 
   useEffect(() => {
     if (loading) {
-      fetchUrl()
+      // These viewers load their own data
+      if (isNifti(path) || isNwb(path)) {
+        setLoading(false)
+      } else {
+        fetchUrl()
+      }
     }
   })
 

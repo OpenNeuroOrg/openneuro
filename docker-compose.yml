@@ -33,8 +33,6 @@ services:
       - "9992:9992"
     environment:
       - NODE_ENV=development
-    volumes:
-      - ./:/srv:rw,z
     depends_on:
       node:
         condition: service_healthy
