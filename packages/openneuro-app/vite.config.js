@@ -27,6 +27,10 @@ export default defineConfig({
     port: 80,
     host: "0.0.0.0",
     cors: true,
+    watch: {
+      usePolling: true, // Enable polling for file watching
+      interval: 1000,   // Set polling interval to 1000ms (1 second)
+    },
   },
   build: {
     sourcemap: true,
