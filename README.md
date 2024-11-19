@@ -38,8 +38,7 @@ GOOGLE_CLIENT_SECRET=
 macOS Development Setup - If you're working on macOS and encounter issues with file watching in Vite, use the following environment variables (in config.env):
 
 ```
-export CHOKIDAR_USEPOLLING=true
-export CHOKIDAR_INTERVAL=1000
+CHOKIDAR_USEPOLLING=true
 ```
 
 ```shell
