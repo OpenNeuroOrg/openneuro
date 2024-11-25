@@ -23,15 +23,9 @@ def escape_ansi(text):
     return ansi_escape.sub('', text)
 
 
-async def run_and_decode(args, timeout, logger):
+async def run_and_decode(args, logger):
     """Run a subprocess and return the JSON output."""
     process = await asyncio.create_subprocess_exec(*args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-    try:
-        await asyncio.wait_for(process.wait(), timeout=timeout)
-    except asyncio.TimeoutError:
-        logger.warning(f'Timed out while running `{" ".join(args)}`')
-        process.kill()
-
     # Retrieve what we can from the process
     stdout, stderr = await process.communicate()
 
@@ -56,7 +50,6 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
         ['deno', 'run', '-A',
          f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
          '--json', dataset_path],
-        timeout=300,
         logger=logger
     )
 
