@@ -82,7 +82,7 @@ const downloadTree = async (
       // Skip files which are already complete
       if (fileHandle.size == file.size) continue
       const writable = await fileHandle.createWritable()
-      const { body, status, statusText } = await fetch(file.urls.pop())
+      const { body, status, statusText } = await fetch(file.urls[0])
       let loaded = 0
       const progress = new TransformStream({
         transform(chunk, controller) {
