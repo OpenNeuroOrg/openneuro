@@ -49,18 +49,22 @@
     display: flex;
     justify-content: space-between;
     align-content: center;
-    @media (max-width: 767px) {
+    @media (max-width: 990px) {
       flex-wrap: wrap;
     }
     > span {
       display: block;
-      min-width: 25%;
+      min-width: 23.333333%;
       margin-bottom: 11px;
+      &:nth-child(2){
+        min-width: 30%;
+        word-wrap: break-word;
+      }
       label {
         font-weight: bold;
         font-size: 14px;
         display: none;
-        @media (max-width: 767px) {
+        @media (max-width: 990px) {
           display: block;
         }
       }
@@ -75,7 +79,7 @@
   .data-table-header {
     font-weight: bold;
     font-size: 14px;
-    @media (max-width: 767px) {
+    @media (max-width: 990px) {
       display: none;
     }
   }
