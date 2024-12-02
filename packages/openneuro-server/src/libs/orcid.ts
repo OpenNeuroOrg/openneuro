@@ -2,6 +2,7 @@
 import request from "request"
 import xmldoc from "xmldoc"
 import config from "../config"
+import * as Sentry from "@sentry/node"
 
 export default {
   getProfile(token) {
@@ -20,6 +21,7 @@ export default {
         },
         (err, res) => {
           if (err) {
+            Sentry.captureException(err)
             reject({
               message:
                 "An unexpected ORCID login failure occurred, please try again later.",
