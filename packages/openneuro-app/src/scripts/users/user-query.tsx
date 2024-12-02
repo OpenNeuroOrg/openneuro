@@ -27,7 +27,6 @@ import FourOThreePage from '../errors/403page'
 export const UserQueryHook = ({ user }) => {
     let error = false
     let loading = false
-    let data = true
     const hasEdit = true
     const fakeuser = {
         avatar: null,
@@ -45,7 +44,7 @@ export const UserQueryHook = ({ user }) => {
             return <FourOFourPage />
         }
     } else {
-        if (loading || !data) {
+        if (loading || !user) {
             return (
                 <div className="loading-user">
                     <Loading />
