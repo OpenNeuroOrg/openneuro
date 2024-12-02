@@ -5,6 +5,8 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import DatasetQuery from "./dataset/dataset-query"
 //import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
+import UserAccount from "./users/user-query"
+
 import FaqPage from "./pages/faq/faq"
 import FrontPageContainer from "./pages/front-page/front-page"
 import Admin from "./pages/admin/admin"
@@ -33,6 +35,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/import" element={<ImportDataset />} />
     <Route path="/metadata" element={<DatasetMetadata />} />
     <Route path="/public" element={<Navigate to="/search" replace />} />
+    <Route path="/account/:orchid/*" element={<UserAccount/>} />
     <Route
       path="/saved"
       element={<Navigate to="/search?bookmarks" replace />}
