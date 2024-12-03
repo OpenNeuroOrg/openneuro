@@ -1,79 +1,66 @@
-import React from 'react'
-import * as Sentry from '@sentry/react'
-import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
-import { Loading } from '@openneuro/components/loading'
-import UserRoutes from './user-routes'
-import FourOFourPage from '../errors/404page'
-import FourOThreePage from '../errors/403page'
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { UserRoutes } from './user-routes';
+import FourOFourPage from '../errors/404page';
 
-/**
- * Query to load and render USER page - most USER loading is done here
- * @param {Object} props
- * @param {Object} props.user 
- * 
- * 
- * query ExampleQuery($userId: ID!) {
-  id
-  user(id: $userId) {
-    avatar
-    email
-    id
-    name
-    orcid
-  }
-}
- */
-export const UserQueryHook = ({ user }) => {
-    let error = false
-    let loading = false
-    const hasEdit = true
-    const fakeuser = {
-        avatar: null,
-        email: 'asdf@asd.com',
-        id: '000001',
+// ORCID validation regex pattern
+const orcidPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
+
+// Dummy user data
+const dummyUsers: Record<string, any> = {
+    '0000-0001-6755-0259': {
+        id: '1',
         name: 'Gregory Noack',
-        orcid: '0000-0000-0000-0001',
+        email: 'gregorynoack@thinknoack.com',
+        avatar: 'https://dummyimage.com/200x200/000/fff',
+        orcid: '0000-0001-6755-0259',
+    },
+    '0000-0002-1234-5678': {
+        id: '2',
+        name: 'Jane Doe',
+        email: 'janedoe@example.com',
+        avatar: 'https://dummyimage.com/200x200/000/fff',
+        orcid: '0000-0002-1234-5678',
+    },
+    '0000-0003-2345-6789': {
+        id: '3',
+        name: 'John Smith',
+        email: 'johnsmith@example.com',
+        avatar: 'https://dummyimage.com/200x200/000/fff',
+        orcid: '0000-0003-2345-6789',
+    },
+};
+
+// Default user data for invalid or unknown users
+const getDefaultUser = (orcid: string) => ({
+    id: 'unknown',
+    name: 'Unknown User',
+    email: 'unknown@example.com',
+    avatar: 'https://dummyimage.com/200x200/000/fff',
+    orcid,
+});
+
+// Function to get the user based on ORCID
+const getUserByOrcid = (orcid: string) => dummyUsers[orcid] || getDefaultUser(orcid);
+
+// Helper function to validate ORCID format
+const isValidOrcid = (orcid: string): boolean => orcidPattern.test(orcid);
+
+export const UserQuery: React.FC = () => {
+    const { orcid } = useParams<{ orcid: string }>();
+
+    // Validate ORCID and return 404 if invalid or missing
+    if (!orcid || !isValidOrcid(orcid)) {
+        console.error('Invalid or missing ORCID in route params.');
+        return <FourOFourPage />;
     }
-    user = fakeuser
-    if (error) {
-        if (error === 'something specific') {
-            return <FourOThreePage />
-        } else {
-            Sentry.captureException(error)
-            return <FourOFourPage />
-        }
-    } else {
-        if (loading || !user) {
-            return (
-                <div className="loading-user">
-                    <Loading />
-                    Loading User
-                </div>
-            )
-        }
-    }
 
-    return <UserRoutes user={user} hasEdit={hasEdit} />
-}
+    // Get the user data from dummy users based on ORCID
+    const user = getUserByOrcid(orcid);
 
-/**
- * Routing wrapper for USER query
- *
- * Expects to be a child of a react-router Route component with UserId
- */
-const UserQuery = () => {
-    const { user } = useParams()
-    return (
-        <>
-            <UserQueryHook user={user} />
-        </>
-    )
-}
+    // Mocked for now: Assuming the user cannot edit
+    const hasEdit = true;
 
-UserQuery.propTypes = {
-    match: PropTypes.object,
-    history: PropTypes.object,
-}
+    return <UserRoutes user={user} hasEdit={hasEdit} />;
+};
 
-export default UserQuery

@@ -1,29 +1,39 @@
-import React, { useEffect } from "react"
-import PropTypes from "prop-types"
-import { Route, Routes } from "react-router-dom"
-import UserAccountContainer from "./user-account-container"
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { UserAccountContainer } from "./user-account-container";
+import { UserAccountPage } from "./user-account-info";
+import { UserNotificationsPage } from "./user-notifications"
+import { UserDatasets } from "./user-datasets";
+import FourOFourPage from "../errors/404page";
+import FourOThreePage from "../errors/403page";
 
-const DatasetRoutes = ({ user, error }) => {
-  useEffect(() => {
+// Define types for the props
+interface UserRoutesProps {
+    user: any;
+    error?: Error;  // Optional error prop
+    hasEdit: boolean;
+}
+
+export const UserRoutes: React.FC<UserRoutesProps> = ({ user, error, hasEdit }) => {
     if (error) {
-      throw error
+        throw error; // Optionally, handle error more gracefully based on your use case
     }
-  }, [user, error])
 
-  return (
-    <Routes>
-    <Route
-        path="account"
-        element={<>test</>}
-      />
-      <Route path="*" element={<UserAccountContainer user={user} />} /> 
-    </Routes>
-  )
-}
-
-DatasetRoutes.propTypes = {
-  dataset: PropTypes.object,
-  error: PropTypes.object,
-}
-
-export default DatasetRoutes
+    return (
+        <Routes>
+            <Route path="/*" element={<FourOFourPage />} />
+            <Route path="*" element={<UserAccountContainer user={user} hasEdit={hasEdit} />}>
+                <Route path="" element={<UserDatasets user={user} />} />
+                <Route
+                    path="account"
+                    element={hasEdit ? <UserAccountPage user={user} /> : <FourOThreePage />}
+                />
+                <Route
+                    path="notifications"
+                    element={hasEdit ? <UserNotificationsPage user={user} /> : <FourOThreePage />}
+                />
+                <Route path="*" element={<FourOFourPage />} />
+            </Route>
+        </Routes>
+    );
+};
