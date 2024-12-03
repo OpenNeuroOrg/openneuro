@@ -10,15 +10,10 @@ import FourOThreePage from "../errors/403page";
 // Define types for the props
 interface UserRoutesProps {
     user: any;
-    error?: Error;  // Optional error prop
     hasEdit: boolean;
 }
 
-export const UserRoutes: React.FC<UserRoutesProps> = ({ user, error, hasEdit }) => {
-    if (error) {
-        throw error; // Optionally, handle error more gracefully based on your use case
-    }
-
+export const UserRoutes: React.FC<UserRoutesProps> = ({ user, hasEdit }) => {
     return (
         <Routes>
             <Route path="/*" element={<FourOFourPage />} />

@@ -31,7 +31,6 @@ const dummyUsers: Record<string, any> = {
     },
 };
 
-// Default user data for invalid or unknown users
 const getDefaultUser = (orcid: string) => ({
     id: 'unknown',
     name: 'Unknown User',
@@ -40,7 +39,6 @@ const getDefaultUser = (orcid: string) => ({
     orcid,
 });
 
-// Function to get the user based on ORCID
 const getUserByOrcid = (orcid: string) => dummyUsers[orcid] || getDefaultUser(orcid);
 
 // Helper function to validate ORCID format
