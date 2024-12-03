@@ -2,6 +2,7 @@ import type { Redis } from "ioredis"
 import * as zlib from "zlib"
 import { promisify } from "util"
 import type { CacheType } from "./types"
+import * as Sentry from "@sentry/node"
 export { CacheType } from "./types"
 
 const compress = promisify(zlib.gzip)
@@ -77,9 +78,10 @@ class CacheItem {
         }
         return data
       }
-    } catch {
+    } catch (err) {
+      Sentry.captureException(err)
       // Keep going as though we had a cache miss if there is a problem but don't cache it
-      return miss()
+      return miss((_doNotCache: boolean) => {})
     }
   }
   /**
