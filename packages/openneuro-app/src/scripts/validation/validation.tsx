@@ -98,11 +98,11 @@ export const Validation = ({ issues }: ValidationProps) => {
   if (issues) {
     const grouped = issues.groupBy("severity")
     const warnings = grouped.get("warning")
-    const errors = grouped.get("errors")
+    const errors = grouped.get("error")
     if (errors?.size) {
-      return <Errors errors={errors} />
+      return <Errors errors={issues} />
     } else if (warnings?.size) {
-      return <Warnings warnings={warnings} />
+      return <Warnings warnings={issues} />
     } else {
       return <Valid />
     }
