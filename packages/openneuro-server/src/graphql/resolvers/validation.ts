@@ -36,7 +36,6 @@ export const snapshotValidation = async (snapshot) => {
     datasetId,
   })
     .exec()
-    .then((data) => (data ? data.issues : null))
 }
 
 /**
