@@ -11,23 +11,32 @@ const dummyUsers: Record<string, any> = {
     '0000-0001-6755-0259': {
         id: '1',
         name: 'Gregory Noack',
+        location: 'Stanford, CA',
+        institution: 'Stanford University',
         email: 'gregorynoack@thinknoack.com',
         avatar: 'https://dummyimage.com/200x200/000/fff',
         orcid: '0000-0001-6755-0259',
+        links: ['onelink.com', 'https://www.twolink.com'],
     },
     '0000-0002-1234-5678': {
         id: '2',
         name: 'Jane Doe',
+        location: 'Stanford, CA',
+        institution: 'Stanford University',
         email: 'janedoe@example.com',
         avatar: 'https://dummyimage.com/200x200/000/fff',
         orcid: '0000-0002-1234-5678',
+        links: ['onelink.com', 'https://www.twolink.com'],
     },
     '0000-0003-2345-6789': {
         id: '3',
         name: 'John Smith',
+        location: 'Stanford, CA',
+        institution: 'Stanford University',
         email: 'johnsmith@example.com',
         avatar: 'https://dummyimage.com/200x200/000/fff',
         orcid: '0000-0003-2345-6789',
+        links: ['onelink.com', 'https://www.twolink.com'],
     },
 };
 
@@ -35,8 +44,11 @@ const getDefaultUser = (orcid: string) => ({
     id: 'unknown',
     name: 'Unknown User',
     email: 'unknown@example.com',
+    location: '',
+    institution: '',
     avatar: 'https://dummyimage.com/200x200/000/fff',
     orcid,
+    links: [],
 });
 
 const getUserByOrcid = (orcid: string) => dummyUsers[orcid] || getDefaultUser(orcid);

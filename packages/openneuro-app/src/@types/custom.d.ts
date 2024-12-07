@@ -11,6 +11,14 @@ declare module "*.svg" {
   export = value
 }
 
+
+
+// Allow custom scss modules
+declare module "*.module.scss" {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
 // Allow .scss imports
 declare module "*.scss" {
   const value: string

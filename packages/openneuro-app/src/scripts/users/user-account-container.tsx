@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { UserCard  } from "./user-card";
+import styles from "./scss/usercontainer.module.scss";
 
 export interface AccountContainerProps {
   user: any;
@@ -8,15 +10,9 @@ export interface AccountContainerProps {
 
 export const UserAccountContainer: React.FC<AccountContainerProps> = ({ user, hasEdit }) => {
   return (
-    <>
-      <div className="user-info">
-        <div className="user-account-card">
-          <h3>User ID: {user.id}</h3>
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email}</p>
-          <p>ORCID: {user.orcid}</p>
-          <img src={user.avatar} alt={user.name} />
-        </div>
+    <div className={styles.usercontainer}>
+      <div className={styles.userInfo}>
+      <UserCard user={user} /> 
         {hasEdit && (
           <div className="user-account-tab-links">
             <ul>
@@ -39,9 +35,9 @@ export const UserAccountContainer: React.FC<AccountContainerProps> = ({ user, ha
           </div>
         )}
       </div>
-      <div className="user-views">
+      <div className={styles.userViews}>
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };

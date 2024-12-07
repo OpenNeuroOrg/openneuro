@@ -1,0 +1,38 @@
+/* usercard.module.scss */
+.userCard {
+  background-color: lightblue;
+  padding: 20px;
+
+  .userWrap {
+    display: flex;
+    align-items: center;
+    .avatar {
+      border-radius: 50%;
+      margin-right: 10px;
+      width: 50px;
+      height: 50px;
+    }
+    .username {
+    }
+  }
+  ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li{
+      margin-bottom: 5px;
+      font-size: 14px;
+      i{
+        margin-right: 10px;
+        color: #666;
+       
+      }
+      &.orcid i{
+        color: green;
+      }
+      &:last-of-type{
+        margin-bottom: 0;
+      }
+    }
+  }
+}
