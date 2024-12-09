@@ -3,10 +3,8 @@ import styles from "./scss/usercard.module.scss";
 
 export interface User {
     location: string;
-    name: string;
     email: string;
     orcid: string;
-    avatar: string;
     institution: string;
     links: string[];
 }
@@ -16,14 +14,10 @@ export interface UserCardProps {
 }
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
-    const { location, institution, name, email, orcid, avatar, links } = user;
+    const { location, institution, email, orcid,  links } = user;
 
     return (
         <div className={styles.userCard}>
-            <div className={styles.userWrap}>
-                <img className={styles.avatar} src={avatar} alt={name} />
-                <h2 className={styles.username}>{name}</h2>
-            </div>
             <ul>
                 <li><i className="fa fa-building"></i>{institution}</li>
                 <li><i className="fas fa-map-marker-alt"></i>{location}</li>

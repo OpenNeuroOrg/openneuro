@@ -1,0 +1,65 @@
+.userAccountTabLinks {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      position: relative;
+  
+      &:before,
+      &:after {
+        content: "";
+        width: calc(100% - 60px);
+        height: 32px;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translateY(var(--active-offset, 0));
+        margin-left: 25px;
+        border-radius: 8px;
+        transition: transform 0.3s ease; /* Always apply transition */
+      }
+  
+      &:before {
+        background: #eee;
+        margin: 0 20px 0 35px;
+      }
+  
+      &:after {
+        height: 23px;
+        margin: 5px 0 0px 25px;
+        width: 5px;
+        background: #204e5b;
+      }
+  
+      &.clicked {
+        /* Apply animation when clicked */
+        &:before,
+        &:after {
+          transition: transform 0.3s ease; /* Ensure transition */
+        }
+      }
+  
+      li {
+        margin: 10px 25px;
+        position: relative;
+  
+        a {
+          padding: 5px 10px 5px 20px;
+          border-radius: 4px;
+          display: block;
+          text-decoration: none;
+          background-color: transparent;
+          transition: background-color 0.3s;
+          &.active {
+            font-weight: bold;
+            &:hover{
+                color: #204e5b;
+                cursor: default;
+            }
+          }
+        }
+      }
+    }
+  }
+  

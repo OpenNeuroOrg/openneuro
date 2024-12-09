@@ -14,14 +14,22 @@ export const UserAccountContainer: React.FC<AccountContainerProps> = ({
 	hasEdit,
 }) => {
 	return (
-		<div className={styles.usercontainer}>
-			<div className={styles.userInfo}>
-				<UserCard user={user} />
-				<UserAccountTabs hasEdit={hasEdit} />
+		<>
+			<div className='container'>
+				<header className={styles.userHeader}>
+					<img className={styles.avatar} src={user.avatar} alt={user.name} />
+					<h2 className={styles.username}>{user.name}</h2>
+				</header>
 			</div>
-			<div className={styles.userViews}>
-				<Outlet />
+			<div className={styles.usercontainer + ' container'}>
+				<section className={styles.userSidebar}>
+					<UserCard user={user} />
+					<UserAccountTabs hasEdit={hasEdit} />
+				</section>
+				<section className={styles.userViews}>
+					<Outlet />
+				</section>
 			</div>
-		</div>
+		</>
 	)
 }
