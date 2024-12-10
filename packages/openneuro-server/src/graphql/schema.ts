@@ -704,6 +704,7 @@ export const typeDefs = `
     severity: Severity
     rule: String
     issueMessage: String
+    affects: String
   }
 
   input ValidatorCodeMessageInput {
