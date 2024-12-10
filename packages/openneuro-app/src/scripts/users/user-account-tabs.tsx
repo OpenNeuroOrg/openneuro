@@ -9,7 +9,7 @@ export interface UserAccountTabsProps {
 export const UserAccountTabs: React.FC<UserAccountTabsProps> = ({ hasEdit }) => {
   const ulRef = useRef<HTMLUListElement>(null);
   const [activePosition, setActivePosition] = useState<number>(0);
-  const [clicked, setClicked] = useState(false); // Track click state
+  const [clicked, setClicked] = useState(false); 
   const location = useLocation();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = ({ hasEdit }) => 
     <div className={styles.userAccountTabLinks}>
       <ul
         ref={ulRef}
-        className={`${clicked ? styles.clicked : ""} ${styles.userAccountTabLinks}`}
+        className={`${clicked ? "clicked" : ""} ${styles.userAccountTabLinks}`}
         style={{ "--active-offset": `${activePosition}px` } as React.CSSProperties}
       >
         <li>

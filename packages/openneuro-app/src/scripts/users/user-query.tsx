@@ -12,6 +12,7 @@ const dummyUsers: Record<string, any> = {
         id: '1',
         name: 'Gregory Noack',
         location: 'Stanford, CA',
+        github: 'thinknoack',
         institution: 'Stanford University',
         email: 'gregorynoack@thinknoack.com',
         avatar: 'https://dummyimage.com/200x200/000/fff',
@@ -73,4 +74,6 @@ export const UserQuery: React.FC = () => {
 
     return <UserRoutes user={user} hasEdit={hasEdit} />;
 };
+
+
 

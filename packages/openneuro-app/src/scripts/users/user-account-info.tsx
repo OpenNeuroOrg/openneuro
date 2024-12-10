@@ -10,6 +10,7 @@ interface UserAccountPageProps {
     links: string[];
     location: string;
     institution: string;
+    github?: string;
   };
 }
 
@@ -17,6 +18,7 @@ export const UserAccountPage: React.FC<UserAccountPageProps> = ({ user }) => {
   const [userLinks, setLinks] = useState<string[]>(user.links || []);
   const [userLocation, setLocation] = useState<string>(user.location || "");
   const [userInstitution, setInstitution] = useState<string>(user.institution || "");
+  const [userGithub, setGithub] = useState<string>(user.github || "");
 
   return (
     <div className={styles.useraccountview}>
@@ -35,6 +37,12 @@ export const UserAccountPage: React.FC<UserAccountPageProps> = ({ user }) => {
           {user.orcid}
         </li>
       </ul>
+      <EditableContent 
+        editableContent={userGithub} 
+        setRows={setGithub} 
+        className="custom-class" 
+        heading="Github-need-oauth-here" 
+      />
       <EditableContent 
         editableContent={userLinks} 
         setRows={setLinks} 
