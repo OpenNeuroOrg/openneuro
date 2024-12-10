@@ -1,13 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import UserDatasetItem from './user-dataset-item';
+import { UserDatasetItem } from './user-dataset-item';
 
-const dummyUsers = [
-  { id: '1', name: 'Alice', email: 'alice@example.com' },
-  { id: '2', name: 'Bob', email: 'bob@example.com' },
-];
+interface User {
+  name: string;
+}
 
-const dummyDatasets = [
+interface Dataset {
+  id: string;
+  created: string;
+  ownerId: string;
+  name: string;
+  type: string;
+}
+
+interface UserDatasetsProps {
+  user: User;
+}
+
+const dummyDatasets: Dataset[] = [
   {
     id: 'ds00001',
     created: '2023-11-01T12:00:00Z',
@@ -23,27 +34,18 @@ const dummyDatasets = [
     type: 'private',
   },
 ];
-
-const UserDatasets = ({ user }) => {
-  const userDatasets = dummyDatasets.filter((dataset) => dataset.ownerId === user.id);
-
+// this is a placeholder for the user dataset page features. 
+export const UserDatasets: React.FC<UserDatasetsProps> = ({ user }) => {
   return (
     <div>
       <h1>{user.name}'s Datasets</h1>
       <div>
-        {userDatasets.map((dataset) => (
-          <UserDatasetItem key={dataset.id} dataset={dataset} user={user} />
+        {dummyDatasets.map((dataset) => (
+          <UserDatasetItem key={dataset.id} dataset={dataset} />
         ))}
       </div>
     </div>
   );
-};
-
-UserDatasets.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 export default UserDatasets;

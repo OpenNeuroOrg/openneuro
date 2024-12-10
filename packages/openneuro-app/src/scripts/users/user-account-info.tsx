@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditableContent from "./editable-content";
+import { EditableContent } from "./editable-content";
 import styles from './scss/useraccountview.module.scss'
 
 interface UserAccountPageProps {
@@ -18,7 +18,6 @@ export const UserAccountPage: React.FC<UserAccountPageProps> = ({ user }) => {
   const [userLinks, setLinks] = useState<string[]>(user.links || []);
   const [userLocation, setLocation] = useState<string>(user.location || "");
   const [userInstitution, setInstitution] = useState<string>(user.institution || "");
-  const [userGithub, setGithub] = useState<string>(user.github || "");
 
   return (
     <div className={styles.useraccountview}>
@@ -36,30 +35,26 @@ export const UserAccountPage: React.FC<UserAccountPageProps> = ({ user }) => {
           <span>ORCID:</span>
           {user.orcid}
         </li>
+        {user.github ? <li><span>github:</span>{user.github}</li> : <li>Connect your github</li>}
       </ul>
-      <EditableContent 
-        editableContent={userGithub} 
-        setRows={setGithub} 
-        className="custom-class" 
-        heading="Github-need-oauth-here" 
+
+      <EditableContent
+        editableContent={userLinks}
+        setRows={setLinks}
+        className="custom-class"
+        heading="Links"
       />
-      <EditableContent 
-        editableContent={userLinks} 
-        setRows={setLinks} 
-        className="custom-class" 
-        heading="Links" 
+      <EditableContent
+        editableContent={userLocation}
+        setRows={(newLocation: string) => setLocation(newLocation)}
+        className="custom-class"
+        heading="Location"
       />
-      <EditableContent 
-        editableContent={userLocation} 
-        setRows={(newLocation: string) => setLocation(newLocation)}  
-        className="custom-class" 
-        heading="Location" 
-      />
-      <EditableContent 
-        editableContent={userInstitution} 
-        setRows={(newInstitution: string) => setInstitution(newInstitution)}  
-        className="custom-class" 
-        heading="Institution" 
+      <EditableContent
+        editableContent={userInstitution}
+        setRows={(newInstitution: string) => setInstitution(newInstitution)}
+        className="custom-class"
+        heading="Institution"
       />
     </div>
   );

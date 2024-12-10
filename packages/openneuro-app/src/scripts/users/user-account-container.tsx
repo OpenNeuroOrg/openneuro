@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { UserCard } from './user-card'
 import { UserAccountTabs } from './user-account-tabs'
 import styles from './scss/usercontainer.module.scss'
