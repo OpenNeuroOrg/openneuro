@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@openneuro/components/button';
-import './scss/user-meta-blocks.scss';
+import '../scss/user-meta-blocks.scss';
 
 interface EditListProps {
   placeholder?: string;

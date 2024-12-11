@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { UserCard } from './user-card'
-import { UserAccountTabs } from './user-account-tabs'
+import { UserAccountTabs } from './user-tabs'
 import styles from './scss/usercontainer.module.scss'
 
 export interface AccountContainerProps {

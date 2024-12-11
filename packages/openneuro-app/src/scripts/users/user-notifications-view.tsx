@@ -1,9 +1,9 @@
 import React from "react";
 
-export const UserNotificationsPage = ({ user }) => {
+export const UserNotificationsView = ({ user }) => {
     // this is a placeholder for the user notification feature
     return (
-        <div className="test-view">
+        <div data-testid="user-notifications-view">
             <h3>UserNotificationsPAge for {user.name}</h3>
             <p>This should show user info</p>
         </div>

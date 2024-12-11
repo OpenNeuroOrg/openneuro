@@ -14,7 +14,7 @@ interface Dataset {
   type: string;
 }
 
-interface UserDatasetsProps {
+interface UserDatasetsViewProps {
   user: User;
 }
 
@@ -35,9 +35,9 @@ const dummyDatasets: Dataset[] = [
   },
 ];
 // this is a placeholder for the user dataset page features. 
-export const UserDatasets: React.FC<UserDatasetsProps> = ({ user }) => {
+export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
   return (
-    <div>
+    <div data-testid="user-datasets-view">
       <h1>{user.name}'s Datasets</h1>
       <div>
         {dummyDatasets.map((dataset) => (
@@ -48,4 +48,4 @@ export const UserDatasets: React.FC<UserDatasetsProps> = ({ user }) => {
   );
 };
 
-export default UserDatasets;
+export default UserDatasetsView;

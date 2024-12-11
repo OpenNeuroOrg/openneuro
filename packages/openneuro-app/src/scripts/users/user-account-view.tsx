@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { EditableContent } from "./editable-content";
+import { EditableContent } from "./components/editable-content";
 import styles from './scss/useraccountview.module.scss'
 
-interface UserAccountPageProps {
+interface UserAccountViewProps {
   user: {
     name: string;
     email: string;
@@ -14,13 +14,13 @@ interface UserAccountPageProps {
   };
 }
 
-export const UserAccountPage: React.FC<UserAccountPageProps> = ({ user }) => {
+export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
   const [userLinks, setLinks] = useState<string[]>(user.links || []);
   const [userLocation, setLocation] = useState<string>(user.location || "");
   const [userInstitution, setInstitution] = useState<string>(user.institution || "");
 
   return (
-    <div className={styles.useraccountview}>
+    <div data-testid="user-account-view" className={styles.useraccountview}>
       <h3>Account</h3>
       <ul className={styles.accountDetail}>
         <li>

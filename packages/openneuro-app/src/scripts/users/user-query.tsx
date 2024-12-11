@@ -41,19 +41,6 @@ const dummyUsers: Record<string, any> = {
   },
 };
 
-const getDefaultUser = (orcid: string) => ({
-  id: 'unknown',
-  name: 'Unknown User',
-  email: 'unknown@example.com',
-  location: '',
-  institution: '',
-  avatar: 'https://dummyimage.com/200x200/000/fff',
-  orcid,
-  links: [],
-});
-
-const getUserByOrcid = (orcid: string) => dummyUsers[orcid] || getDefaultUser(orcid);
-
 // Helper function to validate ORCID format
 const isValidOrcid = (orcid: string): boolean => orcidPattern.test(orcid);
 
@@ -66,14 +53,16 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />;
   }
 
-  // Get the user data from dummy users based on ORCID
-  const user = getUserByOrcid(orcid);
+  // Check if the user exists in the dummyUsers data
+  const user = dummyUsers[orcid];
+
+  if (!user) {
+    // If user is not found, render 404 page
+    return <FourOFourPage />;
+  }
 
   // Mocked for now: Assuming the user cannot edit
   const hasEdit = true;
 
   return <UserRoutes user={user} hasEdit={hasEdit} />;
 };
-
-
-

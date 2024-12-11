@@ -3,8 +3,8 @@ import { EditList } from "./edit-list";
 import { EditString } from "./edit-string";
 import { EditButton } from "./edit-button";
 import { CloseButton } from "./close-button";
-import { Markdown } from "../utils/markdown";
-import './scss/editable-content.scss'
+import { Markdown } from "../../utils/markdown";
+import '../scss/editable-content.scss'
 
 interface EditableContentProps {
   editableContent: string[] | string;

@@ -21,13 +21,9 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = ({ hasEdit }) => 
   }, [location]);
 
   const handleClick = () => {
-    // Reset clicked state to false to restart animation
-    setClicked(false);
 
-    // Wait for a short time before re-enabling the animation
-    setTimeout(() => {
       setClicked(true);
-    }, 50); // Small delay to trigger the animation
+
   };
 
   if (!hasEdit) return null;
@@ -51,6 +47,7 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = ({ hasEdit }) => 
         </li>
         <li>
           <NavLink
+            data-testid="user-notifications-tab"
             to="notifications"
             className={({ isActive }) => (isActive ? styles.active : "")}
             onClick={handleClick}
