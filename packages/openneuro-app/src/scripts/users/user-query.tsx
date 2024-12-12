@@ -61,7 +61,7 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />;
   }
 
-  // Mocked for now: Assuming the user cannot edit
+  // Mocked for now
   const hasEdit = true;
 
   return <UserRoutes user={user} hasEdit={hasEdit} />;

@@ -3,12 +3,12 @@ import styles from "./scss/usercard.module.scss";
 
 export interface User {
   name: string;
-  location?: string; // Made optional
+  location?: string;
   email: string;
   orcid: string;
-  institution?: string; // Made optional
-  links?: string[]; // Made optional
-  github?: string; // Already optional
+  institution?: string; 
+  links?: string[]; 
+  github?: string; 
 }
 
 export interface UserCardProps {
