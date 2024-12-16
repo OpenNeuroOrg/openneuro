@@ -4,9 +4,22 @@ import { UserCard } from './user-card'
 import { UserAccountTabs } from './user-tabs'
 import styles from './scss/usercontainer.module.scss'
 
-export interface AccountContainerProps {
-	user: any
-	hasEdit: boolean
+
+interface User {
+  id: string;
+  name: string;
+  location: string;
+  github?: string;
+  institution: string;
+  email: string;
+  avatar: string;
+  orcid: string;
+  links: string[];
+}
+
+interface AccountContainerProps {
+  user: User;
+  hasEdit: boolean;
 }
 
 export const UserAccountContainer: React.FC<AccountContainerProps> = ({
