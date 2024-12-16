@@ -2,12 +2,13 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserAccountContainer } from "./user-container";
 import { UserAccountView } from "./user-account-view";
-import { UserNotificationsView } from "./user-notifications-view"
+import { UserNotificationsView } from "./user-notifications-view";
 import { UserDatasetsView } from "./user-datasets-view";
 import FourOFourPage from "../errors/404page";
 import FourOThreePage from "../errors/403page";
+
 interface UserRoutesProps {
-  user: any;
+  user: User;
   hasEdit: boolean;
 }
 

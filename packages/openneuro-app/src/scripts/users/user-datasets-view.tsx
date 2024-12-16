@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { UserDatasetItem } from './user-dataset-item';
 
 interface User {
   name: string;
@@ -34,14 +32,18 @@ const dummyDatasets: Dataset[] = [
     type: 'private',
   },
 ];
-// this is a placeholder for the user dataset page features. 
+
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
   return (
     <div data-testid="user-datasets-view">
       <h1>{user.name}'s Datasets</h1>
       <div>
         {dummyDatasets.map((dataset) => (
-          <UserDatasetItem key={dataset.id} dataset={dataset} />
+          <div key={dataset.id} data-testid={`dataset-${dataset.id}`}>
+            <h2>{dataset.name}</h2>
+            <p>Type: {dataset.type}</p>
+            <p>Created: {dataset.created}</p>
+          </div>
         ))}
       </div>
     </div>

@@ -1,3 +1,5 @@
+// UserQuery.tsx
+
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { UserRoutes } from './user-routes';
@@ -7,7 +9,7 @@ import FourOFourPage from '../errors/404page';
 const orcidPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
 
 // Dummy user data
-const dummyUsers: Record<string, any> = {
+const dummyUsers: Record<string, User> = {
   '0000-0001-6755-0259': {
     id: '1',
     name: 'Gregory Noack',
@@ -44,12 +46,23 @@ const dummyUsers: Record<string, any> = {
 // Helper function to validate ORCID format
 const isValidOrcid = (orcid: string): boolean => orcidPattern.test(orcid);
 
+export interface User {
+  id: string;
+  name: string;
+  location: string;
+  github?: string;
+  institution: string;
+  email: string;
+  avatar: string;
+  orcid: string;
+  links: string[];
+}
+
 export const UserQuery: React.FC = () => {
   const { orcid } = useParams<{ orcid: string }>();
 
   // Validate ORCID and return 404 if invalid or missing
   if (!orcid || !isValidOrcid(orcid)) {
-    console.error('Invalid or missing ORCID in route params.');
     return <FourOFourPage />;
   }
 
