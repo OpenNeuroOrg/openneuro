@@ -2,21 +2,10 @@ import React from "react";
 import { render, screen, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { UserRoutes } from "../user-routes";
-
-export interface User {
-  id: string;
-  name: string;
-  location: string;
-  github?: string;
-  institution: string;
-  email: string;
-  avatar: string;
-  orcid: string;
-  links: string[];
-}
+import type { User } from "../user-routes"; 
 
 const defaultUser: User = {
-  id: "1", // Ensure this has a valid string ID
+  id: "1", 
   name: "John Doe",
   location: "Unknown",
   github: "",

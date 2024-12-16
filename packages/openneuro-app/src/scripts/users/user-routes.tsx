@@ -1,5 +1,3 @@
-// UserRoutes.tsx
-
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { UserAccountContainer } from "./user-container";
@@ -9,7 +7,7 @@ import { UserDatasetsView } from "./user-datasets-view";
 import FourOFourPage from "../errors/404page";
 import FourOThreePage from "../errors/403page";
 
-interface User {
+export interface User {
   id: string;
   name: string;
   location: string;
