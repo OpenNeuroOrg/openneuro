@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { UserCard, User } from "../user-card";
+import type { User } from "../user-card";
+import { UserCard } from "../user-card";
 
 describe("UserCard Component", () => {
   const baseUser: User = {
