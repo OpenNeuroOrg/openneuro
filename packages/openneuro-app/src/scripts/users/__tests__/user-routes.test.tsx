@@ -15,6 +15,17 @@ export interface User {
   links: string[];
 }
 
+const defaultUser: User = {
+  id: "1", // Ensure this has a valid string ID
+  name: "John Doe",
+  location: "Unknown",
+  github: "",
+  institution: "Unknown Institution",
+  email: "john.doe@example.com",
+  avatar: "https://dummyimage.com/200x200/000/fff",
+  orcid: "0000-0000-0000-0000",
+  links: [],
+};
 
 const renderWithRouter = (user: User, route: string, hasEdit: boolean) => {
   return render(
@@ -25,7 +36,7 @@ const renderWithRouter = (user: User, route: string, hasEdit: boolean) => {
 };
 
 describe("UserRoutes Component", () => {
-  const user: User = { name: "John Doe" };
+  const user: User = defaultUser;
 
   it("renders UserDatasetsView for the default route", async () => {
     renderWithRouter(user, "/", true);
