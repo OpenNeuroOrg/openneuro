@@ -3,8 +3,15 @@
  */
 import User from "../../models/user"
 
-export const user = (obj, { id }) => {
-  return User.findOne({ id }).exec()
+
+
+export const user = (obj, { id, orcid }) => {
+  if (id) {
+    return User.findOne(id).exec()
+  }
+  if (orcid) {
+    return User.findOne(orcid).exec()
+  }
 }
 
 export const users = (obj, args, { userInfo }) => {
