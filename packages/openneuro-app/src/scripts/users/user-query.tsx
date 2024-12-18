@@ -4,9 +4,9 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { UserRoutes } from './user-routes';
 import FourOFourPage from '../errors/404page';
+import { isValidOrcid } from "../../utils/validationUtils";
 
-// ORCID validation regex pattern
-const orcidPattern = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
+
 
 // Dummy user data
 const dummyUsers: Record<string, User> = {
@@ -43,8 +43,7 @@ const dummyUsers: Record<string, User> = {
   },
 };
 
-// Helper function to validate ORCID format
-const isValidOrcid = (orcid: string): boolean => orcidPattern.test(orcid);
+
 
 export interface User {
   id: string;
