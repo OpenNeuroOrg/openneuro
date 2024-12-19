@@ -76,6 +76,10 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
     """
     Return the OpenNeuro mutation to update any validation issues.
     """
+    # Workaround for bad "affects" values - drop them
+    for issue in issues["issues"]:
+        if "affects" in issue and not isinstance(issue["affects"], str):
+            del issue["affects"]
     validatorInput = {
         'datasetId': dataset_id,
         'id': ref,
