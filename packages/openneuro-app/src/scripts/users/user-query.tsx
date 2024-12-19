@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { UserRoutes } from './user-routes';
 import FourOFourPage from '../errors/404page';
-import { isValidOrcid } from "../../utils/validationUtils";
+import { isValidOrcid } from "../utils/validationUtils";
 
 
 
