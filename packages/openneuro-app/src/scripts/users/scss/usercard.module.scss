@@ -1,0 +1,24 @@
+/* usercard.module.scss */
+.userCard {
+  padding: 20px;
+  ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li{
+      margin-bottom: 5px;
+      font-size: 14px;
+      i{
+        margin-right: 10px;
+        color: #666;
+       
+      }
+      &.orcid i{
+        color: #a6cf39;
+      }
+      &:last-of-type{
+        margin-bottom: 0;
+      }
+    }
+  }
+}

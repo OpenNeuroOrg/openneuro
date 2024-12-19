@@ -2,11 +2,12 @@ import React from "react"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import {
-  isValidOrcid,
   UPDATE_ORCID_PERMISSIONS,
   UPDATE_PERMISSIONS,
   UpdateDatasetPermissions,
 } from "../update-permissions"
+
+import { isValidOrcid } from "../../../utils/validationUtils.ts";
 
 function permissionMocksFactory(
   updatePermissionsCalled,
