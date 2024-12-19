@@ -7,15 +7,7 @@ import ToastContent from "../../common/partials/toast-content"
 import { validate as isValidEmail } from "email-validator"
 import { Button } from "@openneuro/components/button"
 
-export function isValidOrcid(orcid: string) {
-  if (orcid) {
-    return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid)
-      ? true
-      : false
-  } else {
-    return false
-  }
-}
+import { isValidOrcid } from "../../utils/validationUtils";
 
 export const UPDATE_PERMISSIONS = gql`
   mutation updatePermissions(

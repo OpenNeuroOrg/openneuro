@@ -1,0 +1,38 @@
+.usercontainer {
+    display: flex;
+    min-height: calc(100vh - 350px);
+}
+
+.userHeader {
+  display: flex;
+  align-items: center;
+    margin: 10px 0 0;
+    height: 100px;
+  .avatar {
+    border-radius: 50%;
+    margin-right: 10px;
+    width: 60px;
+    height: 60px;
+  }
+  .username {
+  }
+  h2 {
+    font-size: 35px;
+    line-height: 38px;
+    font-weight: 400;
+  }
+}
+
+.userSidebar {
+  width: 350px;
+  flex: 0 0 auto;
+  padding: 0;
+  width: 430px;
+}
+.userViews {
+  border-left: 1px solid #e0e0e0;
+  flex: 1;
+  padding: 0 0 0 50px;
+  position: relative;
+  max-width: 100%;
+}
