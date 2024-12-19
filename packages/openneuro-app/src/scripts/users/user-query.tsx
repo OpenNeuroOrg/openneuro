@@ -1,49 +1,20 @@
-// UserQuery.tsx
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { UserRoutes } from './user-routes';
 import FourOFourPage from '../errors/404page';
 import { isValidOrcid } from "../utils/validationUtils";
+import { gql, useQuery } from "@apollo/client";
 
-
-
-// Dummy user data
-const dummyUsers: Record<string, User> = {
-  '0000-0001-6755-0259': {
-    id: '1',
-    name: 'Gregory Noack',
-    location: 'Stanford, CA',
-    github: 'thinknoack',
-    institution: 'Stanford University',
-    email: 'gregorynoack@thinknoack.com',
-    avatar: 'https://dummyimage.com/200x200/000/fff',
-    orcid: '0000-0001-6755-0259',
-    links: ['onelink.com', 'https://www.twolink.com'],
-  },
-  '0000-0002-1234-5678': {
-    id: '2',
-    name: 'Jane Doe',
-    location: 'Stanford, CA',
-    institution: 'Stanford University',
-    email: 'janedoe@example.com',
-    avatar: 'https://dummyimage.com/200x200/000/fff',
-    orcid: '0000-0002-1234-5678',
-    links: ['onelink.com', 'https://www.twolink.com'],
-  },
-  '0000-0003-2345-6789': {
-    id: '3',
-    name: 'John Smith',
-    location: 'Stanford, CA',
-    institution: 'Stanford University',
-    email: 'johnsmith@example.com',
-    avatar: 'https://dummyimage.com/200x200/000/fff',
-    orcid: '0000-0003-2345-6789',
-    links: ['onelink.com', 'https://www.twolink.com'],
-  },
-};
-
-
+// GraphQL query to fetch user by ORCID
+const GET_USER_BY_ORCID = gql`
+  query User($userId: ID!) {
+    user(id: $userId) {
+      id
+      name
+      orcid
+    }
+  }
+`;
 
 export interface User {
   id: string;
@@ -65,16 +36,20 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />;
   }
 
-  // Check if the user exists in the dummyUsers data
-  const user = dummyUsers[orcid];
+  // Fetch user data using GraphQL
+  const { data, loading, error } = useQuery(GET_USER_BY_ORCID, {
+    variables: { userId: orcid }
+  });
 
-  if (!user) {
-    // If user is not found, render 404 page
+  if (loading) return <div>Loading...</div>;
+  if (error) return <FourOFourPage />; // Handle error as 404 page
+
+  if (!data?.user) {
     return <FourOFourPage />;
   }
 
-  // Mocked for now
+  // Assuming hasEdit is a static boolean value for now
   const hasEdit = true;
 
-  return <UserRoutes user={user} hasEdit={hasEdit} />;
+  return <UserRoutes user={data.user} hasEdit={hasEdit} />;
 };
