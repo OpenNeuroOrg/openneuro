@@ -5,13 +5,18 @@ import User from "../../models/user"
 
 
 
-export const user = (obj, { id, orcid }) => {
-  if (id) {
-    return User.findOne(id).exec()
+export const user = (obj, { id }) => {
+  
+  function isValidOrcid(orcid: string): boolean {
+    return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || '');
   }
-  if (orcid) {
-    return User.findOne(orcid).exec()
+
+  if (isValidOrcid(id)) {
+    return User.findOne({ "orchid": id }).exec()
+  } else {
+    return User.findOne({ 'id': id }).exec()
   }
+
 }
 
 export const users = (obj, args, { userInfo }) => {
