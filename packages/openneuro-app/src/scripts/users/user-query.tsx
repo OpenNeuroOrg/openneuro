@@ -48,7 +48,7 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />;
   }
 
-  // Assuming hasEdit is a static boolean value for now
+  // Assuming hasEdit is a static boolean value for now need to check against logged in user
   const hasEdit = true;
 
   return <UserRoutes user={data.user} hasEdit={hasEdit} />;
