@@ -134,6 +134,8 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     environment:
+      ES_JAVA_OPTS: -XX:UseSVE=0
+      CLI_JAVA_OPTS: -XX:UseSVE=0
       discovery.type: single-node
       cluster.routing.allocation.disk.threshold_enabled: "true"
       cluster.routing.allocation.disk.watermark.flood_stage: 1gb
@@ -141,7 +143,6 @@ services:
       cluster.routing.allocation.disk.watermark.high: 5gb
       xpack.security.enabled: false
       xpack.security.enrollment.enabled: false
-      ES_JAVA_OPTS: "-Xms750m -Xmx750m"
     healthcheck:
       test: "curl -s -f http://localhost:9200 || exit 1"
       interval: 10s
