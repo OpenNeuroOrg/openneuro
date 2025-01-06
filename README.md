@@ -33,8 +33,6 @@ GOOGLE_CLIENT_SECRET=
 
 [podman-compose](https://github.com/containers/podman-compose) is used to run a local copy of all required services together.
 
-
-
 macOS Development Setup - If you're working on macOS and encounter issues with file watching in Vite, use the following environment variables (in config.env):
 
 ```
