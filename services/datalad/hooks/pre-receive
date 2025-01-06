@@ -121,29 +121,6 @@ function main() {
       continue
     fi
 
-    filterDotFiles
-
-    # Check if .bidsignore is in the new tree
-    local bidsignore=$(git show "${newref}:.bidsignore" 2> /dev/null)
-
-    # Run validation with bidsschematools
-    python -m bidsschematools pre-receive-hook <<END
-bids-hook-v2
-$( git show "${newref}:dataset_description.json" | tr -d '\r\n' )
-${bidsignore}
-0001
-$( git ls-tree --name-only -r "${newref}" )
-END
-
-    if [[ "$?" != 0 ]]; then
-      echo ""
-      echo "-------------------------------------------------------------------------"
-      echo "Your push was rejected because it failed validation."
-      echo "Please test with bids-validator locally to resolve any errors before pushing."
-      echo "-------------------------------------------------------------------------"
-      exit $EXIT_FAILURE
-    fi
-
     IFS=$'\n'
     for file in $large_files; do
       if [[ "$status" == 0 ]]; then
@@ -159,6 +136,37 @@ END
       echo " - ${file} (ref: ${refname})"
     done
     unset IFS
+
+    if [[ "$branch" == "git-annex" || "$branch" == "synced/git-annex" ]]; then
+      continue
+    fi
+    # Additional validation and filtering of main/master branches
+
+    filterDotFiles
+
+    # Check if .bidsignore is in the new tree
+    local bidsignore=$(git show "${newref}:.bidsignore" 2> /dev/null)
+
+    # Run validation with bidsschematools
+    python -m bidsschematools pre-receive-hook <<END
+bids-hook-v2
+$( git show "${newref}:dataset_description.json" | tr -d '\r\n' )
+.datalad/config
+.gitattributes
+.bidsignore
+${bidsignore}
+0001
+$( git ls-tree --name-only -r "${newref}" )
+END
+
+    if [[ "$?" != 0 ]]; then
+      echo ""
+      echo "-------------------------------------------------------------------------"
+      echo "Your push was rejected because it failed validation."
+      echo "Please test with bids-validator locally to resolve any errors before pushing."
+      echo "-------------------------------------------------------------------------"
+      exit $EXIT_FAILURE
+    fi
 
     validateGitAttributes
   done

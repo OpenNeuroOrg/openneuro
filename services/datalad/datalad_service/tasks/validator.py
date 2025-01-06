@@ -10,7 +10,7 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-DENO_VALIDATOR_VERSION = '2.0.0'
+DENO_VALIDATOR_VERSION = '2.0.1'
 
 DENO_METADATA = {
     'validator': 'schema',
@@ -76,6 +76,10 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
     """
     Return the OpenNeuro mutation to update any validation issues.
     """
+    # Workaround for bad "affects" values - drop them
+    for issue in issues["issues"]:
+        if "affects" in issue and not isinstance(issue["affects"], str):
+            del issue["affects"]
     validatorInput = {
         'datasetId': dataset_id,
         'id': ref,
