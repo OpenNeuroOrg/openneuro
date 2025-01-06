@@ -121,6 +121,27 @@ function main() {
       continue
     fi
 
+    IFS=$'\n'
+    for file in $large_files; do
+      if [[ "$status" == 0 ]]; then
+        echo ""
+        echo "-------------------------------------------------------------------------"
+        echo "Your push was rejected because it contains files larger than 10MB."
+        echo "Please use git-annex to store larger files."
+        echo "-------------------------------------------------------------------------"
+        echo ""
+        echo "Offending files:"
+        status="$EXIT_FAILURE"
+      fi
+      echo " - ${file} (ref: ${refname})"
+    done
+    unset IFS
+
+    if [[ "$branch" == "git-annex" || "$branch" == "synced/git-annex" ]]; then
+      continue
+    fi
+    # Additional validation and filtering of main/master branches
+
     filterDotFiles
 
     # Check if .bidsignore is in the new tree
@@ -146,22 +167,6 @@ END
       echo "-------------------------------------------------------------------------"
       exit $EXIT_FAILURE
     fi
-
-    IFS=$'\n'
-    for file in $large_files; do
-      if [[ "$status" == 0 ]]; then
-        echo ""
-        echo "-------------------------------------------------------------------------"
-        echo "Your push was rejected because it contains files larger than 10MB."
-        echo "Please use git-annex to store larger files."
-        echo "-------------------------------------------------------------------------"
-        echo ""
-        echo "Offending files:"
-        status="$EXIT_FAILURE"
-      fi
-      echo " - ${file} (ref: ${refname})"
-    done
-    unset IFS
 
     validateGitAttributes
   done
