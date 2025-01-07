@@ -43,7 +43,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
             {email}
           </a>
         </li>
-        <li className={styles.orcid}>
+        {orcid && (<li className={styles.orcid}>
           <i className="fab fa-orcid" aria-hidden="true"></i>
           <a
             href={`https://orcid.org/${orcid}`}
@@ -53,7 +53,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           >
             {orcid}
           </a>
-        </li>
+        </li>)}
         {github && (
           <li>
             <i className="fab fa-github"></i>

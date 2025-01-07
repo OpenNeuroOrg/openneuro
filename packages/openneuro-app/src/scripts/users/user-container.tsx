@@ -30,7 +30,7 @@ export const UserAccountContainer: React.FC<AccountContainerProps> = ({
 		<>
 			<div className='container'>
 				<header className={styles.userHeader}>
-					<img className={styles.avatar} src={user.avatar} alt={user.name} />
+					{user.avatar && (<img className={styles.avatar} src={user.avatar} alt={user.name} />)}
 					<h2 className={styles.username}>{user.name}</h2>
 				</header>
 			</div>
