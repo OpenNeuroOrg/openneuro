@@ -32,24 +32,18 @@ export interface User {
 
 export const UserQuery: React.FC = () => {
   const { orcid } = useParams();
-  
-  // Check if the ORCID is valid
-  if (!orcid || !isValidOrcid(orcid)) {
-    // ORCID is invalid or missing, immediately return 404
-    return <FourOFourPage />;
-  }
-  
-
-  
-
+  const isOrcidValid = orcid && isValidOrcid(orcid);
   const { data, loading, error } = useQuery(GET_USER_BY_ORCID, {
     variables: { userId: orcid },
-    skip: !orcid || !isValidOrcid(orcid),
+    skip: !isOrcidValid, 
   });
+
+  if (!isOrcidValid) {
+    return <FourOFourPage />;
+  }
 
   if (loading) return <div>Loading...</div>;
 
-  // If the query encounters an error or no user is found, return 404
   if (error || !data?.user || data.user.orcid !== orcid) return <FourOFourPage />;
 
   // Assuming 'hasEdit' is true for now (you can modify this based on your logic)
