@@ -3,18 +3,17 @@
  */
 import User from "../../models/user"
 
-export const user = (obj, { id, key }) => {
+export const user = (obj, { id }) => {
   function isValidOrcid(orcid: string): boolean {
     return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
   }
 
   if (isValidOrcid(id)) {
-    if (key === "orcid") {
-      return User.findOne({ "orcid": id }).exec()
-    } else {
-      return User.findOne({ "providerId": id }).exec()
-    }
+    return User.findOne({
+      $or: [{ "orcid": id }, { "providerId": id }],
+    }).exec()
   } else {
+    // If it's not a valid ORCID, fall back to querying by user id
     return User.findOne({ "id": id }).exec()
   }
 }
