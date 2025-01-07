@@ -6,7 +6,7 @@ import { isValidOrcid } from "../utils/validationUtils"; // Assume this checks l
 import { gql, useQuery } from "@apollo/client";
 
 // GraphQL query to fetch user by ORCID
-const GET_USER_BY_ORCID = gql`
+export const GET_USER_BY_ORCID = gql`
   query User($userId: ID!) {
     user(id: $userId) {
       id
