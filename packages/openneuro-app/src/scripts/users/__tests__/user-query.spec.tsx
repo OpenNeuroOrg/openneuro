@@ -1,11 +1,11 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { UserQuery } from '../user-query';
-import { GET_USER_BY_ORCID } from '../user-query';
+import React from "react"
+import { render, screen, waitFor } from "@testing-library/react"
+import { MockedProvider } from "@apollo/client/testing"
+import { MemoryRouter, Route, Routes } from "react-router-dom"
+import { UserQuery } from "../user-query"
+import { GET_USER_BY_ORCID } from "../user-query"
 
-const validOrcid = '0009-0001-9689-7232';
+const validOrcid = "0009-0001-9689-7232"
 
 const userMock = {
   request: {
@@ -15,21 +15,21 @@ const userMock = {
   result: {
     data: {
       user: {
-        __typename: 'User', // Add typename
-        id: '1',
-        name: 'Test User',
+        __typename: "User",
+        id: "1",
+        name: "Test User",
         orcid: validOrcid,
-        email: 'test@example.com',
-        avatar: 'http://example.com/avatar.png',
+        email: "test@example.com",
+        avatar: "http://example.com/avatar.png",
       },
     },
   },
-};
+}
 
-const mocks = [userMock];
+const mocks = [userMock]
 
-describe('UserQuery component', () => {
-  it('displays the ORCID on the page for a valid ORCID', async () => {
+describe("UserQuery component", () => {
+  it("displays the ORCID on the page for a valid ORCID", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={true}>
         <MemoryRouter initialEntries={[`/user/${validOrcid}`]}>
@@ -37,15 +37,17 @@ describe('UserQuery component', () => {
             <Route path="/user/:orcid" element={<UserQuery />} />
           </Routes>
         </MemoryRouter>
-      </MockedProvider>
-    );
+      </MockedProvider>,
+    )
 
-    await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument()
+    )
 
-    expect(screen.getByText(validOrcid)).toBeInTheDocument();
-  });
+    expect(screen.getByText(validOrcid)).toBeInTheDocument()
+  })
 
-  it('shows 404 page for invalid ORCID', async () => {
+  it("shows 404 page for invalid ORCID", async () => {
     render(
       <MockedProvider mocks={[]} addTypename={true}>
         <MemoryRouter initialEntries={[`/user/invalid-orcid`]}>
@@ -53,11 +55,11 @@ describe('UserQuery component', () => {
             <Route path="/user/:orcid" element={<UserQuery />} />
           </Routes>
         </MemoryRouter>
-      </MockedProvider>
-    );
+      </MockedProvider>,
+    )
 
-    await waitFor(() => screen.getByText(/404/i));
+    await waitFor(() => screen.getByText(/404/i))
 
-    expect(screen.getByText(/404/i)).toBeInTheDocument();
-  });
-});
+    expect(screen.getByText(/404/i)).toBeInTheDocument()
+  })
+})

@@ -1,9 +1,9 @@
-import React from "react";
-import { useParams } from 'react-router-dom';
-import { UserRoutes } from './user-routes';
-import FourOFourPage from '../errors/404page';
-import { isValidOrcid } from "../utils/validationUtils"; // Assume this checks length and format
-import { gql, useQuery } from "@apollo/client";
+import React from "react"
+import { useParams } from "react-router-dom"
+import { UserRoutes } from "./user-routes"
+import FourOFourPage from "../errors/404page"
+import { isValidOrcid } from "../utils/validationUtils"
+import { gql, useQuery } from "@apollo/client"
 
 // GraphQL query to fetch user by ORCID
 export const GET_USER_BY_ORCID = gql`
@@ -16,39 +16,41 @@ export const GET_USER_BY_ORCID = gql`
       avatar
     }
   }
-`;
+`
 
 export interface User {
-  id: string;
-  name: string;
-  location: string;
-  github?: string;
-  institution: string;
-  email: string;
-  avatar: string;
-  orcid: string;
-  links: string[];
+  id: string
+  name: string
+  location: string
+  github?: string
+  institution: string
+  email: string
+  avatar: string
+  orcid: string
+  links: string[]
 }
 
 export const UserQuery: React.FC = () => {
-  const { orcid } = useParams();
-  const isOrcidValid = orcid && isValidOrcid(orcid);
+  const { orcid } = useParams()
+  const isOrcidValid = orcid && isValidOrcid(orcid)
   const { data, loading, error } = useQuery(GET_USER_BY_ORCID, {
     variables: { userId: orcid },
-    skip: !isOrcidValid, 
-  });
+    skip: !isOrcidValid,
+  })
 
   if (!isOrcidValid) {
-    return <FourOFourPage />;
+    return <FourOFourPage />
   }
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>
 
-  if (error || !data?.user || data.user.orcid !== orcid) return <FourOFourPage />;
+  if (error || !data?.user || data.user.orcid !== orcid) {
+    return <FourOFourPage />
+  }
 
   // Assuming 'hasEdit' is true for now (you can modify this based on your logic)
-  const hasEdit = true;
+  const hasEdit = true
 
   // Render user data with UserRoutes
-  return <UserRoutes user={data.user} hasEdit={hasEdit} />;
-};
+  return <UserRoutes user={data.user} hasEdit={hasEdit} />
+}
