@@ -46,9 +46,6 @@ export const UserQuery: React.FC = () => {
     variables: { userId: orcid },
     skip: !orcid || !isValidOrcid(orcid),
   });
-  
-  console.log("Requested ORCID:", orcid);
-  console.log("Returned Data:", data);
 
   if (loading) return <div>Loading...</div>;
 
