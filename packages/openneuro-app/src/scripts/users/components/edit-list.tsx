@@ -1,41 +1,43 @@
-import React, { useState } from 'react';
-import { Button } from '@openneuro/components/button';
-import '../scss/user-meta-blocks.scss';
+import React, { useState } from "react"
+import { Button } from "@openneuro/components/button"
+import "../scss/user-meta-blocks.scss"
 
 interface EditListProps {
-  placeholder?: string;
-  elements?: string[];
-  setElements: (elements: string[]) => void;
+  placeholder?: string
+  elements?: string[]
+  setElements: (elements: string[]) => void
 }
 
 /**
  * EditList Component
  * Allows adding and removing strings from a list.
  */
-export const EditList: React.FC<EditListProps> = ({ placeholder = 'Enter item', elements = [], setElements }) => {
-  const [newElement, setNewElement] = useState<string>('');
-  const [warnEmpty, setWarnEmpty] = useState<boolean>(false);
+export const EditList: React.FC<EditListProps> = (
+  { placeholder = "Enter item", elements = [], setElements },
+) => {
+  const [newElement, setNewElement] = useState<string>("")
+  const [warnEmpty, setWarnEmpty] = useState<boolean>(false)
 
   /**
    * Remove an element from the list by index
    * @param index - The index of the element to remove
    */
   const removeElement = (index: number): void => {
-    setElements(elements.filter((_, i) => i !== index));
-  };
+    setElements(elements.filter((_, i) => i !== index))
+  }
 
   /**
    * Add a new element to the list
    */
   const addElement = (): void => {
     if (!newElement.trim()) {
-      setWarnEmpty(true);
+      setWarnEmpty(true)
     } else {
-      setElements([...elements, newElement.trim()]);
-      setWarnEmpty(false);
-      setNewElement('');
+      setElements([...elements, newElement.trim()])
+      setWarnEmpty(false)
+      setNewElement("")
     }
-  };
+  }
 
   return (
     <div className="edit-list-container">
@@ -55,7 +57,11 @@ export const EditList: React.FC<EditListProps> = ({ placeholder = 'Enter item', 
           onClick={addElement}
         />
       </div>
-      {warnEmpty && <small className="warning-text">Your input was empty</small>}
+      {warnEmpty && (
+        <small className="warning-text">
+          Your input was empty
+        </small>
+      )}
       <div className="edit-list-items">
         {elements.map((element, index) => (
           <div key={index} className="edit-list-group-item">
@@ -67,13 +73,12 @@ export const EditList: React.FC<EditListProps> = ({ placeholder = 'Enter item', 
               icon="fa fa-times"
               label="Remove"
               color="red"
-              onClick={() => removeElement(index)}
+              onClick={() =>
+                removeElement(index)}
             />
           </div>
         ))}
       </div>
     </div>
-  );
-};
-
-
+  )
+}

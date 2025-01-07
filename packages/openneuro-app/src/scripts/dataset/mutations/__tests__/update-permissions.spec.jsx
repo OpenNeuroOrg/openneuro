@@ -7,7 +7,7 @@ import {
   UpdateDatasetPermissions,
 } from "../update-permissions"
 
-import { isValidOrcid } from "../../../utils/validationUtils.ts";
+import { isValidOrcid } from "../../../utils/validationUtils.ts"
 
 function permissionMocksFactory(
   updatePermissionsCalled,

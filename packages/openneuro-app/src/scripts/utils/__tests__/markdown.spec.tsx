@@ -27,8 +27,7 @@ describe("Test <Markdown> component", () => {
     expect(asFragment()).toMatchSnapshot()
   })
   it("filters close-break tags", () => {
-    const hrefExample =
-      '<br>sample text</br>'
+    const hrefExample = "<br>sample text</br>"
     const { asFragment } = render(<Markdown>{hrefExample}</Markdown>)
     expect(asFragment()).toMatchSnapshot()
   })

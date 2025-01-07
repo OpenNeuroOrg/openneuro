@@ -1,22 +1,22 @@
-import React from "react";
-import styles from "./scss/usercard.module.scss";
+import React from "react"
+import styles from "./scss/usercard.module.scss"
 
 export interface User {
-  name: string;
-  location?: string;
-  email: string;
-  orcid: string;
-  institution?: string; 
-  links?: string[]; 
-  github?: string; 
+  name: string
+  location?: string
+  email: string
+  orcid: string
+  institution?: string
+  links?: string[]
+  github?: string
 }
 
 export interface UserCardProps {
-  user: User;
+  user: User
 }
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
-  const { location, institution, email, orcid, links = [], github, name } = user;
+  const { location, institution, email, orcid, links = [], github, name } = user
 
   return (
     <div className={styles.userCard}>
@@ -43,17 +43,19 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
             {email}
           </a>
         </li>
-        {orcid && (<li className={styles.orcid}>
-          <i className="fab fa-orcid" aria-hidden="true"></i>
-          <a
-            href={`https://orcid.org/${orcid}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`ORCID profile of ${name}`}
-          >
-            {orcid}
-          </a>
-        </li>)}
+        {orcid && (
+          <li className={styles.orcid}>
+            <i className="fab fa-orcid" aria-hidden="true"></i>
+            <a
+              href={`https://orcid.org/${orcid}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`ORCID profile of ${name}`}
+            >
+              {orcid}
+            </a>
+          </li>
+        )}
         {github && (
           <li>
             <i className="fab fa-github"></i>
@@ -80,5 +82,5 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
             ))}
       </ul>
     </div>
-  );
-};
+  )
+}

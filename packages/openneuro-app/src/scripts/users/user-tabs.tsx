@@ -1,39 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import styles from "./scss/usertabs.module.scss";
+import React, { useEffect, useRef, useState } from "react"
+import { NavLink, useLocation } from "react-router-dom"
+import styles from "./scss/usertabs.module.scss"
 
 export interface UserAccountTabsProps {
-  hasEdit: boolean;
+  hasEdit: boolean
 }
 
-export const UserAccountTabs: React.FC<UserAccountTabsProps> = ({ hasEdit }) => {
-  const ulRef = useRef<HTMLUListElement>(null);
-  const [activePosition, setActivePosition] = useState<number>(0);
-  const [clicked, setClicked] = useState(false); 
-  const location = useLocation();
+export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
+  { hasEdit },
+) => {
+  const ulRef = useRef<HTMLUListElement>(null)
+  const [activePosition, setActivePosition] = useState<number>(0)
+  const [clicked, setClicked] = useState(false)
+  const location = useLocation()
 
   useEffect(() => {
-    const activeLink = ulRef.current?.querySelector(`.${styles.active}`) as HTMLElement;
+    const activeLink = ulRef.current?.querySelector(
+      `.${styles.active}`,
+    ) as HTMLElement
     if (activeLink) {
-      const li = activeLink.parentElement as HTMLElement;
-      setActivePosition(li.offsetTop);
+      const li = activeLink.parentElement as HTMLElement
+      setActivePosition(li.offsetTop)
     }
-  }, [location]);
+  }, [location])
 
   const handleClick = () => {
+    setClicked(true)
+  }
 
-      setClicked(true);
-
-  };
-
-  if (!hasEdit) return null;
+  if (!hasEdit) return null
 
   return (
     <div className={styles.userAccountTabLinks}>
       <ul
         ref={ulRef}
         className={`${clicked ? "clicked" : ""} ${styles.userAccountTabLinks}`}
-        style={{ "--active-offset": `${activePosition}px` } as React.CSSProperties}
+        style={{
+          "--active-offset": `${activePosition}px`,
+        } as React.CSSProperties}
       >
         <li>
           <NavLink
@@ -66,5 +70,5 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = ({ hasEdit }) => 
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}

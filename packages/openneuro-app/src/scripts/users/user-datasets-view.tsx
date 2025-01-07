@@ -1,37 +1,37 @@
-import React from 'react';
+import React from "react"
 
 interface User {
-  name: string;
+  name: string
 }
 
 interface Dataset {
-  id: string;
-  created: string;
-  ownerId: string;
-  name: string;
-  type: string;
+  id: string
+  created: string
+  ownerId: string
+  name: string
+  type: string
 }
 
 interface UserDatasetsViewProps {
-  user: User;
+  user: User
 }
 
 const dummyDatasets: Dataset[] = [
   {
-    id: 'ds00001',
-    created: '2023-11-01T12:00:00Z',
-    ownerId: '1',
-    name: 'Dataset 1',
-    type: 'public',
+    id: "ds00001",
+    created: "2023-11-01T12:00:00Z",
+    ownerId: "1",
+    name: "Dataset 1",
+    type: "public",
   },
   {
-    id: 'ds00002',
-    created: '2023-11-02T12:00:00Z',
-    ownerId: '2',
-    name: 'Dataset 2',
-    type: 'private',
+    id: "ds00002",
+    created: "2023-11-02T12:00:00Z",
+    ownerId: "2",
+    name: "Dataset 2",
+    type: "private",
   },
-];
+]
 
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
   return (
@@ -47,7 +47,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserDatasetsView;
+export default UserDatasetsView

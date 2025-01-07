@@ -5,8 +5,6 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import DatasetQuery from "./dataset/dataset-query"
 //import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
 
-
-
 import FaqPage from "./pages/faq/faq"
 import FrontPageContainer from "./pages/front-page/front-page"
 import Admin from "./pages/admin/admin"

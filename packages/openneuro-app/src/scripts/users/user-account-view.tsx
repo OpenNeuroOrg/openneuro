@@ -1,23 +1,25 @@
-import React, { useState } from "react";
-import { EditableContent } from "./components/editable-content";
-import styles from './scss/useraccountview.module.scss'
+import React, { useState } from "react"
+import { EditableContent } from "./components/editable-content"
+import styles from "./scss/useraccountview.module.scss"
 
 interface UserAccountViewProps {
   user: {
-    name: string;
-    email: string;
-    orcid: string;
-    links: string[];
-    location: string;
-    institution: string;
-    github?: string;
-  };
+    name: string
+    email: string
+    orcid: string
+    links: string[]
+    location: string
+    institution: string
+    github?: string
+  }
 }
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
-  const [userLinks, setLinks] = useState<string[]>(user.links || []);
-  const [userLocation, setLocation] = useState<string>(user.location || "");
-  const [userInstitution, setInstitution] = useState<string>(user.institution || "");
+  const [userLinks, setLinks] = useState<string[]>(user.links || [])
+  const [userLocation, setLocation] = useState<string>(user.location || "")
+  const [userInstitution, setInstitution] = useState<string>(
+    user.institution || "",
+  )
 
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
@@ -35,7 +37,14 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
           <span>ORCID:</span>
           {user.orcid}
         </li>
-        {user.github ? <li><span>github:</span>{user.github}</li> : <li>Connect your github</li>}
+        {user.github
+          ? (
+            <li>
+              <span>github:</span>
+              {user.github}
+            </li>
+          )
+          : <li>Connect your github</li>}
       </ul>
 
       <EditableContent
@@ -46,17 +55,18 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
       />
       <EditableContent
         editableContent={userLocation}
-        setRows={(newLocation: string) => setLocation(newLocation)}
+        setRows={(newLocation: string) =>
+          setLocation(newLocation)}
         className="custom-class"
         heading="Location"
       />
       <EditableContent
         editableContent={userInstitution}
-        setRows={(newInstitution: string) => setInstitution(newInstitution)}
+        setRows={(newInstitution: string) =>
+          setInstitution(newInstitution)}
         className="custom-class"
         heading="Institution"
       />
     </div>
-  );
-};
-
+  )
+}
