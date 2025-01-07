@@ -83,7 +83,7 @@ const RAW_RUNTIME_STATE =
           ["jsdom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:24.0.0"],\
           ["lerna", "npm:3.20.2"],\
           ["lint-staged", "npm:10.5.4"],\
-          ["mongoose", "npm:6.12.8"],\
+          ["mongoose", "npm:6.13.5"],\
           ["pinst", "npm:2.1.6"],\
           ["prettier", "npm:2.4.1"],\
           ["react", "npm:18.2.0"],\
@@ -7643,7 +7643,7 @@ const RAW_RUNTIME_STATE =
           ["keyv", "npm:4.5.3"],\
           ["mime-types", "npm:2.1.32"],\
           ["mongodb-memory-server", "npm:9.2.0"],\
-          ["mongoose", "npm:6.12.8"],\
+          ["mongoose", "npm:6.13.5"],\
           ["morgan", "npm:1.10.0"],\
           ["node-mailjet", "npm:3.3.5"],\
           ["nodemon", "npm:3.1.0"],\
@@ -23804,10 +23804,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["mongoose", [\
-      ["npm:6.12.8", {\
-        "packageLocation": "./.yarn/cache/mongoose-npm-6.12.8-67020e538e-9285b0a60a.zip/node_modules/mongoose/",\
+      ["npm:6.13.5", {\
+        "packageLocation": "./.yarn/cache/mongoose-npm-6.13.5-9974435c8a-99c469b660.zip/node_modules/mongoose/",\
         "packageDependencies": [\
-          ["mongoose", "npm:6.12.8"],\
+          ["mongoose", "npm:6.13.5"],\
           ["bson", "npm:4.7.2"],\
           ["kareem", "npm:2.5.1"],\
           ["mongodb", "npm:4.17.2"],\
@@ -28321,7 +28321,7 @@ const RAW_RUNTIME_STATE =
           ["jsdom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:24.0.0"],\
           ["lerna", "npm:3.20.2"],\
           ["lint-staged", "npm:10.5.4"],\
-          ["mongoose", "npm:6.12.8"],\
+          ["mongoose", "npm:6.13.5"],\
           ["pinst", "npm:2.1.6"],\
           ["prettier", "npm:2.4.1"],\
           ["react", "npm:18.2.0"],\
