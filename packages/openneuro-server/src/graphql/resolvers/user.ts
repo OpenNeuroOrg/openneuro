@@ -3,13 +3,17 @@
  */
 import User from "../../models/user"
 
-export const user = (obj, { id }) => {
+export const user = (obj, { id, key }) => {
   function isValidOrcid(orcid: string): boolean {
     return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
   }
 
   if (isValidOrcid(id)) {
-    return User.findOne({ "orcid": id }).exec()
+    if (key === "orcid") {
+      return User.findOne({ "orcid": id }).exec()
+    } else {
+      return User.findOne({ "providerId": id }).exec()
+    }
   } else {
     return User.findOne({ "id": id }).exec()
   }
