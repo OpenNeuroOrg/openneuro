@@ -1,8 +1,8 @@
 name: deploy-gh-pages
 
 on:
-  push: {branches: [master]}
-  pull_request: {branches: [master]}
+  push: { branches: [master] }
+  pull_request: { branches: [master] }
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,25 +14,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: ['build', 'check']
+        mode: ["build", "check"]
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -r docs/requirements.txt
-    - name: Set build options
-      run: echo 'SPHINXOPTS=-W --keep-going' >> $GITHUB_ENV
-      if: matrix.mode == 'check'
-    - name: Build
-      run: make -C docs html
-    - uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/master' && matrix.mode == 'build'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/_build/html
-        cname: docs.openneuro.org
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r docs/requirements.txt
+      - name: Set build options
+        run: echo 'SPHINXOPTS=-W --keep-going' >> $GITHUB_ENV
+        if: matrix.mode == 'check'
+      - name: Build
+        run: make -C docs html
+      - uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/master' && matrix.mode == 'build'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+          cname: docs.openneuro.org

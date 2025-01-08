@@ -13,7 +13,7 @@ describe("user resolvers", () => {
           { userInfo: {} },
         ),
       ).rejects.toEqual(new Error("You must be a site admin to retrieve users"))
-    });
+    })
     it("throws an error for non-admins", () => {
       expect(
         users(
@@ -22,6 +22,6 @@ describe("user resolvers", () => {
           { userInfo: {} },
         ),
       ).rejects.toEqual(new Error("You must be a site admin to retrieve users"))
-    });
-  });
-});
+    })
+  })
+})

@@ -1,18 +1,18 @@
 version: 2
 updates:
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: 'monthly'
+      interval: "monthly"
     groups:
       actions-infrastructure:
         patterns:
-          - 'actions/*'
-  - package-ecosystem: 'pip'
-    directory: '/services/datalad'
+          - "actions/*"
+  - package-ecosystem: "pip"
+    directory: "/services/datalad"
     schedule:
-      interval: 'monthly'
+      interval: "monthly"
     groups:
       pipenv:
         patterns:
-          - '*'
+          - "*"

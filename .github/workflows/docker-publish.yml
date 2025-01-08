@@ -2,85 +2,85 @@ name: Publish Docker Images
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
 jobs:
-    build_server:
-      name: Server
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: login to docker hub
-          id: docker-hub
-          env:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_PASSWORD}}
-          run: |
-            docker login -u $username -p $password
-        - name: build the docker image
-          id: build-docker-image
-          run: |
-            docker build -t openneuro/node:latest .
-            docker build -t openneuro/server:${{ github.ref_name }} packages/openneuro-server
-        - name: push the docker image
-          id: push-docker-image
-          run: docker push openneuro/server:${{ github.ref_name }}
-    build_app:
-      name: App
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: login to docker hub
-          id: docker-hub
-          env:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_PASSWORD}}
-          run: |
-            docker login -u $username -p $password
-        - name: build the docker image
-          id: build-docker-image
-          run: |
-            docker build -t openneuro/node:latest .
-            docker build -t openneuro/app:${{ github.ref_name }} packages/openneuro-app
-        - name: push the docker image
-          id: push-docker-image
-          run: docker push openneuro/app:${{ github.ref_name }}
-    build_indexer:
-      name: Indexer
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: login to docker hub
-          id: docker-hub
-          env:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_PASSWORD}}
-          run: |
-            docker login -u $username -p $password
-        - name: build the docker image
-          id: build-docker-image
-          run: |
-            docker build -t openneuro/node:latest .
-            docker build -t openneuro/indexer:${{ github.ref_name }} packages/openneuro-indexer
-        - name: push the docker image
-          id: push-docker-image
-          run: docker push openneuro/indexer:${{ github.ref_name }}
-    build_datalad_service:
-      name: Datalad Service
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: login to docker hub
-          id: docker-hub
-          env:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_PASSWORD}}
-          run: |
-            docker login -u $username -p $password
-        - name: build the docker image
-          id: build-docker-image
-          run: |
-            cd services/datalad
-            docker build --build-arg LERNA_JSON="$(cat ../../lerna.json)" -t openneuro/datalad-service:${{ github.ref_name }} .
-        - name: push the docker image
-          id: push-docker-image
-          run: docker push openneuro/datalad-service:${{ github.ref_name }}
+  build_server:
+    name: Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: login to docker hub
+        id: docker-hub
+        env:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
+        run: |
+          docker login -u $username -p $password
+      - name: build the docker image
+        id: build-docker-image
+        run: |
+          docker build -t openneuro/node:latest .
+          docker build -t openneuro/server:${{ github.ref_name }} packages/openneuro-server
+      - name: push the docker image
+        id: push-docker-image
+        run: docker push openneuro/server:${{ github.ref_name }}
+  build_app:
+    name: App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: login to docker hub
+        id: docker-hub
+        env:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
+        run: |
+          docker login -u $username -p $password
+      - name: build the docker image
+        id: build-docker-image
+        run: |
+          docker build -t openneuro/node:latest .
+          docker build -t openneuro/app:${{ github.ref_name }} packages/openneuro-app
+      - name: push the docker image
+        id: push-docker-image
+        run: docker push openneuro/app:${{ github.ref_name }}
+  build_indexer:
+    name: Indexer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: login to docker hub
+        id: docker-hub
+        env:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
+        run: |
+          docker login -u $username -p $password
+      - name: build the docker image
+        id: build-docker-image
+        run: |
+          docker build -t openneuro/node:latest .
+          docker build -t openneuro/indexer:${{ github.ref_name }} packages/openneuro-indexer
+      - name: push the docker image
+        id: push-docker-image
+        run: docker push openneuro/indexer:${{ github.ref_name }}
+  build_datalad_service:
+    name: Datalad Service
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: login to docker hub
+        id: docker-hub
+        env:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
+        run: |
+          docker login -u $username -p $password
+      - name: build the docker image
+        id: build-docker-image
+        run: |
+          cd services/datalad
+          docker build --build-arg LERNA_JSON="$(cat ../../lerna.json)" -t openneuro/datalad-service:${{ github.ref_name }} .
+      - name: push the docker image
+        id: push-docker-image
+        run: docker push openneuro/datalad-service:${{ github.ref_name }}

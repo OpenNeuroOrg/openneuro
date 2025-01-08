@@ -31,26 +31,26 @@ margin-bottom: 10px;
 export const NeurobagelSearch = () => {
   return (
     <NeurobagelSearchDiv>
-      <img src={NeurobagelLogo} className="inline-icon"/>{" "}
+      <img src={NeurobagelLogo} className="inline-icon" />{" "}
       <a href="https://query.neurobagel.org/?node=OpenNeuro" target="_blank">
         Search at the participant-level with Neurobagel
-      </a>        
+      </a>
       <AccordionWrap>
         <AccordionTab
-        accordionStyle="plain"
-        label="?"
-        className="keyword-accordion"
+          accordionStyle="plain"
+          label="?"
+          className="keyword-accordion"
         >
           <span>
             Search at the participant level is provided by{" "}
             <a href="https://neurobagel.org" target="_blank">
-            Neurobagel
+              Neurobagel
             </a>
             {", "}a third party project.
 
-            Neurobagel is a collection of tools for harmonizing phenotypic 
-            and imaging data descriptions, searching for participants across datasets, 
-            and constructing cohorts from multiple source datasets.
+            Neurobagel is a collection of tools for harmonizing phenotypic and
+            imaging data descriptions, searching for participants across
+            datasets, and constructing cohorts from multiple source datasets.
           </span>
         </AccordionTab>
       </AccordionWrap>

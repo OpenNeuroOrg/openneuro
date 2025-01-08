@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
@@ -26,7 +26,7 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v1.x
-      - name: Install git-annex 
+      - name: Install git-annex
         run: curl -L http://archive.org/download/git-annex-builds/SHA256E-s53592796--6e0a3c16d50379f89d2064081376a3f7f6efa1a89eb1afc2a2335597e7cf9fac.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz
       - name: Install pipenv
         run: pip install 'pipenv==2023.7.23'

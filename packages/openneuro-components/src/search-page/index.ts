@@ -12,9 +12,9 @@ import { SearchSortContainerExample } from "./SearchSortContainerExample"
 export {
   FacetBlockContainerExample,
   FiltersBlock,
+  NeurobagelSearch,
   SearchPage,
   SearchResultsList,
   SearchSort,
   SearchSortContainerExample,
-  NeurobagelSearch
 }
