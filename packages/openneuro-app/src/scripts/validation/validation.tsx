@@ -31,12 +31,12 @@ const warningHeader = (count) => (
   </div>
 )
 
-const errorHeader = (count) => (
+const errorHeader = (errorCount) => (
   <div>
     <h3 className="metaheader">BIDS Validation</h3>
 
     <span className="label text-warning pull-right">
-      {count} {pluralize("Error", count)}
+      {errorCount} {pluralize("Error", errorCount)}
     </span>
     <span className="dataset-status ds-danger">
       <i className="fa fa-exclamation-circle" /> Invalid
@@ -53,10 +53,11 @@ const Valid = () => (
 )
 
 interface WarningsProps {
+  issues: DatasetIssues
   warnings: DatasetIssues
 }
 
-const Warnings = ({ warnings }: WarningsProps) => (
+const Warnings = ({ issues, warnings }: WarningsProps) => (
   <ValidationPanel heading={warningHeader(warnings.size)}>
     <div>
       <span className="message error fade-in">
@@ -69,15 +70,17 @@ const Warnings = ({ warnings }: WarningsProps) => (
       </span>
     </div>
     <br />
-    <Results issues={warnings} />
+    <Results issues={issues} />
   </ValidationPanel>
 )
 
 interface ErrorsProps {
+  issues: DatasetIssues
   errors: DatasetIssues
+  warnings: DatasetIssues
 }
 
-const Errors = ({ errors }: ErrorsProps) => (
+const Errors = ({ issues, errors }: ErrorsProps) => (
   <ValidationPanel heading={errorHeader(errors.size)}>
     <span className="message error fade-in">
       Your dataset is no longer valid. You must fix the{" "}
@@ -86,7 +89,7 @@ const Errors = ({ errors }: ErrorsProps) => (
       to use all of the site features.
     </span>
     <br />
-    <Results issues={errors} />
+    <Results issues={issues} />
   </ValidationPanel>
 )
 
@@ -100,9 +103,9 @@ export const Validation = ({ issues }: ValidationProps) => {
     const warnings = grouped.get("warning")
     const errors = grouped.get("error")
     if (errors?.size) {
-      return <Errors errors={issues} />
+      return <Errors issues={issues} errors={errors} warnings={warnings} />
     } else if (warnings?.size) {
-      return <Warnings warnings={issues} />
+      return <Warnings issues={issues} warnings={warnings} />
     } else {
       return <Valid />
     }
