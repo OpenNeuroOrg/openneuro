@@ -3,6 +3,7 @@
     "semiColons": false,
     "proseWrap": "preserve",
     "exclude": [
+      "helm/",
       ".yarn/",
       ".pnp.cjs",
       ".pnp.loader.mjs",
