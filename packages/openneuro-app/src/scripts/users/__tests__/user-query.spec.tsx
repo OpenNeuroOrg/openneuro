@@ -1,60 +1,65 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { UserQuery } from "../user-query";
-import FourOFourPage from "../../errors/404page";
+import React from "react"
+import { render, screen, waitFor } from "@testing-library/react"
+import { MockedProvider } from "@apollo/client/testing"
+import { MemoryRouter, Route, Routes } from "react-router-dom"
+import { UserQuery } from "../user-query"
+import { GET_USER_BY_ORCID } from "../user-query"
 
+const validOrcid = "0009-0001-9689-7232"
 
-// TODO update these once the correct query is in place and dummy data is not used.
-// maybe there is a better way to do this
-const VALID_ORCID = "0000-0001-6755-0259";
-const INVALID_ORCID = "0000-000X-1234-5678";
-const UNKNOWN_ORCID = "0000-0000-0000-0000";
+const userMock = {
+  request: {
+    query: GET_USER_BY_ORCID,
+    variables: { userId: validOrcid },
+  },
+  result: {
+    data: {
+      user: {
+        __typename: "User",
+        id: "1",
+        name: "Test User",
+        orcid: validOrcid,
+        email: "test@example.com",
+        avatar: "http://example.com/avatar.png",
+      },
+    },
+  },
+}
 
-const renderWithRouter = (orcid: string) => {
-  return render(
-    <MemoryRouter initialEntries={[`/user/${orcid}`]}>
-      <Routes>
-        <Route path="/user/:orcid" element={<UserQuery />} />
-        <Route path="*" element={<FourOFourPage />} />
-      </Routes>
-    </MemoryRouter>
-  );
-};
+const mocks = [userMock]
 
-describe("UserQuery Component", () => {
-  // TODO update these once the correct query is in place and dummy data is not used.
-  // maybe there is a better way to do this
-  it("renders UserRoutes for a valid ORCID", async () => {
-    renderWithRouter(VALID_ORCID);
-    const userName = await screen.findByText("Gregory Noack");
-    expect(userName).toBeInTheDocument();
+describe("UserQuery component", () => {
+  it("displays the ORCID on the page for a valid ORCID", async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <MemoryRouter initialEntries={[`/user/${validOrcid}`]}>
+          <Routes>
+            <Route path="/user/:orcid" element={<UserQuery />} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    )
 
-    const userLocation = screen.getByText("Stanford, CA");
-    expect(userLocation).toBeInTheDocument();
-  });
+    await waitFor(() =>
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument()
+    )
 
-  it("renders FourOFourPage for an invalid ORCID", async () => {
-    renderWithRouter(INVALID_ORCID);
-    const errorMessage = await screen.findByText(
-      /404: The page you are looking for does not exist./i
-    );
-    expect(errorMessage).toBeInTheDocument();
-  });
+    expect(screen.getByText(validOrcid)).toBeInTheDocument()
+  })
 
-  it("renders FourOFourPage for a missing ORCID", async () => {
-    renderWithRouter("");
-    const errorMessage = await screen.findByText(
-      /404: The page you are looking for does not exist./i
-    );
-    expect(errorMessage).toBeInTheDocument();
-  });
+  it("shows 404 page for invalid ORCID", async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={true}>
+        <MemoryRouter initialEntries={[`/user/invalid-orcid`]}>
+          <Routes>
+            <Route path="/user/:orcid" element={<UserQuery />} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    )
 
-  it("renders FourOFourPage for an unknown ORCID", async () => {
-    renderWithRouter(UNKNOWN_ORCID);
-    const errorMessage = await screen.findByText(
-      /404: The page you are looking for does not exist./i
-    );
-    expect(errorMessage).toBeInTheDocument();
-  });
-});
+    await waitFor(() => screen.getByText(/404/i))
+
+    expect(screen.getByText(/404/i)).toBeInTheDocument()
+  })
+})

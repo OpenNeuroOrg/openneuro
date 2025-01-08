@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
-import { Button } from '@openneuro/components/button';
-import '../scss/user-meta-blocks.scss';
+import React, { useState } from "react"
+import { Button } from "@openneuro/components/button"
+import "../scss/user-meta-blocks.scss"
 
 interface EditStringProps {
-  value?: string;
-  setValue: (value: string) => void;
-  placeholder?: string;
+  value?: string
+  setValue: (value: string) => void
+  placeholder?: string
 }
 
 /**
  * EditString Component
  * Allows editing a single string value.
  */
-export const EditString: React.FC<EditStringProps> = ({ value = '', setValue, placeholder = 'Enter text' }) => {
-  const [currentValue, setCurrentValue] = useState<string>(value);
-  const [warnEmpty, setWarnEmpty] = useState<boolean>(false);
+export const EditString: React.FC<EditStringProps> = (
+  { value = "", setValue, placeholder = "Enter text" },
+) => {
+  const [currentValue, setCurrentValue] = useState<string>(value)
+  const [warnEmpty, setWarnEmpty] = useState<boolean>(false)
 
   const handleSave = (): void => {
     if (!currentValue.trim()) {
-      setWarnEmpty(true);
+      setWarnEmpty(true)
     } else {
-      setWarnEmpty(false);
-      setValue(currentValue.trim());
+      setWarnEmpty(false)
+      setValue(currentValue.trim())
     }
-  };
+  }
 
   return (
     <div className="edit-string-container">
@@ -43,7 +45,9 @@ export const EditString: React.FC<EditStringProps> = ({ value = '', setValue, pl
           onClick={handleSave}
         />
       </div>
-      {warnEmpty && <small className="warning-text">The input cannot be empty</small>}
+      {warnEmpty && (
+        <small className="warning-text">The input cannot be empty</small>
+      )}
     </div>
-  );
-};
+  )
+}

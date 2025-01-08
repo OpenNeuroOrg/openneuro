@@ -1,80 +1,56 @@
-// UserQuery.tsx
+import React from "react"
+import { useParams } from "react-router-dom"
+import { UserRoutes } from "./user-routes"
+import FourOFourPage from "../errors/404page"
+import { isValidOrcid } from "../utils/validationUtils"
+import { gql, useQuery } from "@apollo/client"
 
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { UserRoutes } from './user-routes';
-import FourOFourPage from '../errors/404page';
-import { isValidOrcid } from "../utils/validationUtils";
-
-
-
-// Dummy user data
-const dummyUsers: Record<string, User> = {
-  '0000-0001-6755-0259': {
-    id: '1',
-    name: 'Gregory Noack',
-    location: 'Stanford, CA',
-    github: 'thinknoack',
-    institution: 'Stanford University',
-    email: 'gregorynoack@thinknoack.com',
-    avatar: 'https://dummyimage.com/200x200/000/fff',
-    orcid: '0000-0001-6755-0259',
-    links: ['onelink.com', 'https://www.twolink.com'],
-  },
-  '0000-0002-1234-5678': {
-    id: '2',
-    name: 'Jane Doe',
-    location: 'Stanford, CA',
-    institution: 'Stanford University',
-    email: 'janedoe@example.com',
-    avatar: 'https://dummyimage.com/200x200/000/fff',
-    orcid: '0000-0002-1234-5678',
-    links: ['onelink.com', 'https://www.twolink.com'],
-  },
-  '0000-0003-2345-6789': {
-    id: '3',
-    name: 'John Smith',
-    location: 'Stanford, CA',
-    institution: 'Stanford University',
-    email: 'johnsmith@example.com',
-    avatar: 'https://dummyimage.com/200x200/000/fff',
-    orcid: '0000-0003-2345-6789',
-    links: ['onelink.com', 'https://www.twolink.com'],
-  },
-};
-
-
+// GraphQL query to fetch user by ORCID
+export const GET_USER_BY_ORCID = gql`
+  query User($userId: ID!) {
+    user(id: $userId) {
+      id
+      name
+      orcid
+      email
+      avatar
+    }
+  }
+`
 
 export interface User {
-  id: string;
-  name: string;
-  location: string;
-  github?: string;
-  institution: string;
-  email: string;
-  avatar: string;
-  orcid: string;
-  links: string[];
+  id: string
+  name: string
+  location: string
+  github?: string
+  institution: string
+  email: string
+  avatar: string
+  orcid: string
+  links: string[]
 }
 
 export const UserQuery: React.FC = () => {
-  const { orcid } = useParams<{ orcid: string }>();
+  const { orcid } = useParams()
+  const isOrcidValid = orcid && isValidOrcid(orcid)
+  const { data, loading, error } = useQuery(GET_USER_BY_ORCID, {
+    variables: { userId: orcid },
+    skip: !isOrcidValid,
+  })
 
-  // Validate ORCID and return 404 if invalid or missing
-  if (!orcid || !isValidOrcid(orcid)) {
-    return <FourOFourPage />;
+  if (!isOrcidValid) {
+    return <FourOFourPage />
   }
 
-  // Check if the user exists in the dummyUsers data
-  const user = dummyUsers[orcid];
+  if (loading) return <div>Loading...</div>
 
-  if (!user) {
-    // If user is not found, render 404 page
-    return <FourOFourPage />;
+  if (error || !data?.user || data.user.orcid !== orcid) {
+    return <FourOFourPage />
   }
 
-  // Mocked for now
-  const hasEdit = true;
+  // Assuming 'hasEdit' is true for now (you can modify this based on your logic)
+  const hasEdit = true
 
-  return <UserRoutes user={user} hasEdit={hasEdit} />;
-};
+  // Render user data with UserRoutes
+  return <UserRoutes user={data.user} hasEdit={hasEdit} />
+}

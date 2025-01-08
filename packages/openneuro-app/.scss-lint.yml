@@ -1,15 +1,15 @@
-scss_files: 'src/sass/**/*.scss'
+scss_files: "src/sass/**/*.scss"
 
 exclude:
-  - 'src/sass/animate/**'
-  - 'src/sass/bootstrap/**'
-  - 'src/sass/font-awesome/**'
-  - 'src/sass/fonts/**'
-  - 'src/sass/_bootstrap-compass.scss'
-  - 'src/sass/_bootstrap-mincer.scss'
-  - 'src/sass/_bootstrap-sprockets.scss'
-  - 'src/sass/_bootstrap.scss'
-  - 'src/sass/react-select.scss'
+  - "src/sass/animate/**"
+  - "src/sass/bootstrap/**"
+  - "src/sass/font-awesome/**"
+  - "src/sass/fonts/**"
+  - "src/sass/_bootstrap-compass.scss"
+  - "src/sass/_bootstrap-mincer.scss"
+  - "src/sass/_bootstrap-sprockets.scss"
+  - "src/sass/_bootstrap.scss"
+  - "src/sass/react-select.scss"
 
 linters:
   BorderZero:

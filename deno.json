@@ -10,7 +10,8 @@
       "dist",
       "packages/**/dist",
       "services/datalad/tests/.pytest_cache",
-      "**/__pycache/**"
+      "**/__pycache/**",
+      "**/*.scss"
     ]
   }
 }
