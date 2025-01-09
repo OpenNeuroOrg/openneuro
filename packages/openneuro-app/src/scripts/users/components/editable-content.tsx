@@ -75,7 +75,6 @@ export const EditableContent: React.FC<EditableContentProps> = ({
                   }}
                   placeholder="Edit content"
                   closeEditing={closeEditing}
-                  warning={warning}
                 />
               )}
           </>
