@@ -54,7 +54,7 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
   }
 }
 
-const updateUser = async (obj, { id, location, institution, links }) => {
+export const updateUser = async (obj, { id, location, institution, links }) => {
   try {
     // Find the user by their ID or ORCID (similar to your existing logic)
     const user = await User.findOne({
@@ -91,7 +91,9 @@ const UserResolvers = {
   name: (obj) => obj.name,
   admin: (obj) => obj.admin,
   blocked: (obj) => obj.blocked,
-  updateUser,
+  location: (obj) => obj.location,
+  institution: (obj) => obj.institution,
+  links: (obj) => obj.links,
 }
 
 export default UserResolvers

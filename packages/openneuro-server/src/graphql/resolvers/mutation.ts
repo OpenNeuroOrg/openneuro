@@ -16,7 +16,7 @@ import {
   deprecateSnapshot,
   undoDeprecateSnapshot,
 } from "./snapshots.js"
-import { removeUser, setAdmin, setBlocked } from "./user.js"
+import { removeUser, setAdmin, setBlocked, updateUser } from "./user.js"
 import { updateSummary } from "./summary"
 import { revalidate, updateValidation } from "./validation.js"
 import {
@@ -88,6 +88,7 @@ const Mutation = {
   deleteRelation,
   importRemoteDataset,
   finishImportRemoteDataset,
+  updateUser,
 }
 
 export default Mutation
