@@ -15,6 +15,10 @@ export interface UserDocument extends Document {
   blocked: boolean
   created: Date
   lastSeen: Date
+  location: string
+  institution: string
+  github: string
+  links: string[]
 }
 
 const userSchema = new Schema({
@@ -29,10 +33,14 @@ const userSchema = new Schema({
   blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
   lastSeen: { type: Date, default: Date.now },
+  location: { type: String, default: "" },
+  institution: { type: String, default: "" },
+  github: { type: String, default: "" },
+  links: { type: [String], default: [] },
 })
 
 userSchema.index({ id: 1, provider: 1 }, { unique: true })
-// Allow case insensitive email queries
+// Allow case-insensitive email queries
 userSchema.index(
   { email: 1 },
   {

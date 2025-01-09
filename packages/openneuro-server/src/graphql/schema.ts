@@ -322,6 +322,10 @@ export const typeDefs = `
     name: String
     admin: Boolean
     blocked: Boolean
+    location: String
+    institution: String
+    github: String
+    links: [String]
   }
 
   # Which provider a user login comes from
