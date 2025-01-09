@@ -7,28 +7,26 @@ interface EditStringProps {
   setValue: (value: string) => void
   placeholder?: string
   closeEditing: () => void
-  validation?: RegExp // New validation prop
-  validationMessage?: string // New validation message prop
+  validation?: RegExp
+  validationMessage?: string
 }
 
-export const EditString: React.FC<EditStringProps> = (
-  {
-    value = "",
-    setValue,
-    placeholder = "Enter text",
-    closeEditing,
-    validation,
-    validationMessage,
-  },
-) => {
+export const EditString: React.FC<EditStringProps> = ({
+  value = "",
+  setValue,
+  placeholder = "Enter text",
+  closeEditing,
+  validation,
+  validationMessage,
+}) => {
   const [currentValue, setCurrentValue] = useState<string>(value)
   const [warnEmpty, setWarnEmpty] = useState<string | null>(null)
-  const [warnValidation, setWarnValidation] = useState<string | null>(null) // State for validation warning
+  const [warnValidation, setWarnValidation] = useState<string | null>(null)
 
   useEffect(() => {
-    if (value !== "" && currentValue === "") {
+    if (currentValue === "") {
       setWarnEmpty(
-        "Your input is empty. This will delete the previously saved value..",
+        "Your input is empty. This will delete the previously saved value.",
       )
     } else {
       setWarnEmpty(null)
@@ -39,16 +37,16 @@ export const EditString: React.FC<EditStringProps> = (
     } else {
       setWarnValidation(null)
     }
-  }, [currentValue, value, validation, validationMessage])
+  }, [currentValue, validation, validationMessage])
 
   const handleSave = (): void => {
-    if (!warnValidation && currentValue.trim() !== "") {
-      setValue(currentValue.trim())
+    // Allow saving even when the input is empty
+    if (!warnValidation) {
+      setValue(currentValue.trim()) // Trim whitespace but allow empty string
       closeEditing()
     }
   }
 
-  // Handle Enter key press for saving
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault()

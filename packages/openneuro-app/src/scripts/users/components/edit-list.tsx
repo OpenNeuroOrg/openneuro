@@ -6,8 +6,8 @@ interface EditListProps {
   placeholder?: string
   elements?: string[]
   setElements: (elements: string[]) => void
-  validation?: RegExp // Validation regex prop
-  validationMessage?: string // Validation message prop
+  validation?: RegExp
+  validationMessage?: string
 }
 
 /**
@@ -25,7 +25,7 @@ export const EditList: React.FC<EditListProps> = (
 ) => {
   const [newElement, setNewElement] = useState<string>("")
   const [warnEmpty, setWarnEmpty] = useState<boolean>(false)
-  const [warnValidation, setWarnValidation] = useState<string | null>(null) // Validation warning state
+  const [warnValidation, setWarnValidation] = useState<string | null>(null)
 
   const removeElement = (index: number): void => {
     setElements(elements.filter((_, i) => i !== index))
