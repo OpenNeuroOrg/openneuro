@@ -14,15 +14,20 @@ export const GET_USER_BY_ORCID = gql`
       orcid
       email
       avatar
+      location
+      institution
+      links
     }
   }
 `
 
 export const UPDATE_USER = gql`
-mutation updateUser($id: ID!, $location: String) {
-  updateUser(id: $id, location: $location) {
+mutation updateUser($id: ID!, $location: String, $links: [String], $institution: String) {
+  updateUser(id: $id, location: $location, links: $links, institution: $institution) {
     id
     location
+    links
+    institution
   }
 }
 `

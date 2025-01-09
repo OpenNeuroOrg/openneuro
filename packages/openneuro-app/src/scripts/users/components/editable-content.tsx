@@ -11,6 +11,8 @@ interface EditableContentProps {
   setRows: React.Dispatch<React.SetStateAction<string[] | string>>
   className: string
   heading: string
+  validation?: RegExp
+  validationMessage?: string
 }
 
 export const EditableContent: React.FC<EditableContentProps> = ({
@@ -18,15 +20,32 @@ export const EditableContent: React.FC<EditableContentProps> = ({
   setRows,
   className,
   heading,
+  validation,
+  validationMessage,
 }) => {
   const [editing, setEditing] = useState(false)
+  const [warning, setWarning] = useState<string | null>(null)
+  const closeEditing = () => {
+    setEditing(false)
+    setWarning(null)
+  }
+
+  // Function to handle validation of user input
+  const handleValidation = (value: string): boolean => {
+    if (validation && !validation.test(value)) {
+      setWarning(validationMessage || "Invalid input")
+      return false
+    }
+    setWarning(null)
+    return true
+  }
 
   return (
     <div className={`user-meta-block ${className}`}>
       <span className="umb-heading">
         <h4>{heading}</h4>
         {editing
-          ? <CloseButton action={() => setEditing(false)} />
+          ? <CloseButton action={closeEditing} />
           : <EditButton action={() => setEditing(true)} />}
       </span>
       {editing
@@ -40,15 +59,21 @@ export const EditableContent: React.FC<EditableContentProps> = ({
                   setElements={setRows as React.Dispatch<
                     React.SetStateAction<string[]>
                   >}
+                  validation={validation}
+                  validationMessage={validationMessage}
                 />
               )
               : (
                 <EditString
                   value={editableContent}
-                  setValue={setRows as React.Dispatch<
-                    React.SetStateAction<string>
-                  >}
+                  setValue={(newValue: string) => {
+                    if (handleValidation(newValue)) {
+                      setRows(newValue)
+                    }
+                  }}
                   placeholder="Edit content"
+                  closeEditing={closeEditing}
+                  warning={warning}
                 />
               )}
           </>
