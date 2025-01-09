@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
 import type { User } from "../user-routes"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "../user-query"
+import { UPDATE_USER } from "../user-query"
 
 const defaultUser: User = {
   id: "1",

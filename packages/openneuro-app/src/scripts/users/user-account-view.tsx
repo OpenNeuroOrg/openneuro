@@ -26,10 +26,8 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
 
   const handleLinksChange = async (newLinks: string[]) => {
     setLinks(newLinks)
-    console.log("Updating links:", newLinks)
-
     try {
-      const result = await updateUser({
+      await updateUser({
         variables: {
           id: user.orcid,
           links: newLinks,
@@ -41,18 +39,16 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
           },
         ],
       })
-      console.log("Links mutation result:", result)
-    } catch (error) {
-      console.error("Failed to update links:", error)
+    } catch {
+      // Error handling can be implemented here if needed
     }
   }
 
   const handleLocationChange = async (newLocation: string) => {
     setLocation(newLocation)
-    console.log("Updating location:", newLocation)
 
     try {
-      const result = await updateUser({
+      await updateUser({
         variables: {
           id: user.orcid,
           location: newLocation,
@@ -64,18 +60,16 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
           },
         ],
       })
-      console.log("Location mutation result:", result)
-    } catch (error) {
-      console.error("Failed to update location:", error)
+    } catch {
+      // Error handling can be implemented here if needed
     }
   }
 
   const handleInstitutionChange = async (newInstitution: string) => {
     setInstitution(newInstitution)
-    console.log("Updating institution:", newInstitution)
 
     try {
-      const result = await updateUser({
+      await updateUser({
         variables: {
           id: user.orcid,
           institution: newInstitution,
@@ -87,9 +81,8 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
           },
         ],
       })
-      console.log("Institution mutation result:", result)
-    } catch (error) {
-      console.error("Failed to update institution:", error)
+    } catch {
+      // Error handling can be implemented here if needed
     }
   }
 
@@ -124,6 +117,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         setRows={handleLinksChange}
         className="custom-class"
         heading="Links"
+        // eslint-disable-next-line no-useless-escape
         validation={/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/} // URL validation regex
         validationMessage="Invalid URL format. Please use a valid link."
         data-testid="links-section"
