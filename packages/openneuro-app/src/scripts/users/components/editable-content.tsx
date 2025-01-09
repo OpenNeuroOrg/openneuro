@@ -13,6 +13,7 @@ interface EditableContentProps {
   heading: string
   validation?: RegExp
   validationMessage?: string
+  "data-testid"?: string // Add the test ID prop to the interface
 }
 
 export const EditableContent: React.FC<EditableContentProps> = ({
@@ -22,6 +23,7 @@ export const EditableContent: React.FC<EditableContentProps> = ({
   heading,
   validation,
   validationMessage,
+  "data-testid": testId, // Destructure the data-testid prop
 }) => {
   const [editing, setEditing] = useState(false)
   const [warning, setWarning] = useState<string | null>(null)
@@ -41,7 +43,7 @@ export const EditableContent: React.FC<EditableContentProps> = ({
   }
 
   return (
-    <div className={`user-meta-block ${className}`}>
+    <div className={`user-meta-block ${className}`} data-testid={testId}>
       <span className="umb-heading">
         <h4>{heading}</h4>
         {editing

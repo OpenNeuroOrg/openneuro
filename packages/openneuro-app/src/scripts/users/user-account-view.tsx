@@ -126,6 +126,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         heading="Links"
         validation={/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/} // URL validation regex
         validationMessage="Invalid URL format. Please use a valid link."
+        data-testid="links-section"
       />
 
       <EditableContent
@@ -133,12 +134,14 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         setRows={handleLocationChange}
         className="custom-class"
         heading="Location"
+        data-testid="location-section"
       />
       <EditableContent
         editableContent={userInstitution}
         setRows={handleInstitutionChange}
         className="custom-class"
         heading="Institution"
+        data-testid="institution-section"
       />
     </div>
   )

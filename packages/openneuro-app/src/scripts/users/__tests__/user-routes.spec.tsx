@@ -1,8 +1,10 @@
 import React from "react"
 import { cleanup, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
+import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
 import type { User } from "../user-routes"
+import { GET_USER_BY_ORCID, UPDATE_USER } from "../user-query"
 
 const defaultUser: User = {
   id: "1",
@@ -16,11 +18,40 @@ const defaultUser: User = {
   links: [],
 }
 
+const mocks = [
+  {
+    request: {
+      query: UPDATE_USER,
+      variables: {
+        id: "1",
+        name: "John Doe",
+        location: "Unknown",
+        github: "",
+        institution: "Unknown Institution",
+        email: "john.doe@example.com",
+        avatar: "https://dummyimage.com/200x200/000/fff",
+        orcid: "0000-0000-0000-0000",
+        links: [],
+      },
+    },
+    result: {
+      data: {
+        updateUser: {
+          id: "1",
+          name: "John Doe",
+        },
+      },
+    },
+  },
+]
+
 const renderWithRouter = (user: User, route: string, hasEdit: boolean) => {
   return render(
-    <MemoryRouter initialEntries={[route]}>
-      <UserRoutes user={user} hasEdit={hasEdit} />
-    </MemoryRouter>,
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MemoryRouter initialEntries={[route]}>
+        <UserRoutes user={user} hasEdit={hasEdit} />
+      </MemoryRouter>
+    </MockedProvider>,
   )
 }
 
