@@ -18,6 +18,15 @@ export const GET_USER_BY_ORCID = gql`
   }
 `
 
+export const UPDATE_USER = gql`
+mutation updateUser($id: ID!, $location: String) {
+  updateUser(id: $id, location: $location) {
+    id
+    location
+  }
+}
+`
+
 export interface User {
   id: string
   name: string

@@ -1,6 +1,8 @@
 import React, { useState } from "react"
+import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
 import styles from "./scss/useraccountview.module.scss"
+import { GET_USER_BY_ORCID, UPDATE_USER } from "./user-query"
 
 interface UserAccountViewProps {
   user: {
@@ -20,6 +22,30 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
   const [userInstitution, setInstitution] = useState<string>(
     user.institution || "",
   )
+  const [updateUser] = useMutation(UPDATE_USER)
+
+  const handleLocationChange = async (newLocation: string) => {
+    setLocation(newLocation)
+    console.log("Updating location:", newLocation) // Log the location to check
+
+    try {
+      const result = await updateUser({
+        variables: {
+          id: user.orcid,
+          location: newLocation,
+        },
+        refetchQueries: [
+          {
+            query: GET_USER_BY_ORCID,
+            variables: { userId: user.orcid },
+          },
+        ],
+      })
+      console.log("Mutation result:", result) // Log mutation result
+    } catch (error) {
+      console.error("Failed to update user:", error)
+    }
+  }
 
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
@@ -55,8 +81,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
       />
       <EditableContent
         editableContent={userLocation}
-        setRows={(newLocation: string) =>
-          setLocation(newLocation)}
+        setRows={handleLocationChange}
         className="custom-class"
         heading="Location"
       />
