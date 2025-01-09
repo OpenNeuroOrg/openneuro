@@ -132,6 +132,8 @@ export const typeDefs = `
     setAdmin(id: ID!, admin: Boolean!): User
     # Sets a users admin status
     setBlocked(id: ID!, blocked: Boolean!): User
+    # Mutation for updating user data
+    updateUser(id: ID!, location: String, institution: String, links: [String]): User
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
@@ -836,5 +838,4 @@ schemaComposer.addTypeDefs(typeDefs)
 schemaComposer.addResolveMethods(resolvers)
 schemaComposer.Query.addFields(datasetSearch)
 schemaComposer.Query.addFields(advancedDatasetSearch)
-
 export default schemaComposer.buildSchema()

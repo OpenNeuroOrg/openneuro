@@ -54,6 +54,31 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
   }
 }
 
+const updateUser = async (obj, { id, location, institution, links }) => {
+  try {
+    // Find the user by their ID or ORCID (similar to your existing logic)
+    const user = await User.findOne({
+      $or: [{ "orcid": id }, { "providerId": id }],
+    }).exec()
+
+    if (!user) {
+      throw new Error("User not found")
+    }
+
+    // Update user fields (optional values based on provided inputs)
+    if (location !== undefined) user.location = location
+    if (institution !== undefined) user.institution = institution
+    if (links !== undefined) user.links = links
+
+    // Save the updated user
+    await user.save()
+
+    return user // Return the updated user object
+  } catch (err) {
+    throw new Error("Failed to update user: " + err.message)
+  }
+}
+
 const UserResolvers = {
   id: (obj) => obj.id,
   provider: (obj) => obj.provider,
@@ -66,6 +91,7 @@ const UserResolvers = {
   name: (obj) => obj.name,
   admin: (obj) => obj.admin,
   blocked: (obj) => obj.blocked,
+  updateUser,
 }
 
 export default UserResolvers
