@@ -2,12 +2,11 @@
  * User resolvers
  */
 import User from "../../models/user"
+function isValidOrcid(orcid: string): boolean {
+  return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
+}
 
 export const user = (obj, { id }) => {
-  function isValidOrcid(orcid: string): boolean {
-    return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
-  }
-
   if (isValidOrcid(id)) {
     return User.findOne({
       $or: [{ "orcid": id }, { "providerId": id }],
@@ -56,10 +55,15 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
 
 export const updateUser = async (obj, { id, location, institution, links }) => {
   try {
-    // Find the user by their ID or ORCID (similar to your existing logic)
-    const user = await User.findOne({
-      $or: [{ "orcid": id }, { "providerId": id }],
-    }).exec()
+    let user // Declare user outside the if block
+
+    if (isValidOrcid(id)) {
+      user = await User.findOne({
+        $or: [{ "orcid": id }, { "providerId": id }],
+      }).exec()
+    } else {
+      user = await User.findOne({ "id": id }).exec()
+    }
 
     if (!user) {
       throw new Error("User not found")
