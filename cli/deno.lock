@@ -20,9 +20,10 @@
     "jsr:@effigies/cliffy-command@1.0.0-dev.8": "1.0.0-dev.8",
     "jsr:@effigies/cliffy-table@1.0.0-dev.5": "1.0.0-dev.5",
     "jsr:@effigies/cliffy-table@^1.0.0-dev.5": "1.0.0-dev.5",
+    "jsr:@libs/typing@3": "3.1.0",
     "jsr:@libs/xml@6.0.1": "6.0.1",
     "jsr:@std/assert@1.0.0-rc.2": "1.0.0-rc.2",
-    "jsr:@std/assert@^1.0.3": "1.0.3",
+    "jsr:@std/assert@^1.0.3": "1.0.10",
     "jsr:@std/assert@~1.0.6": "1.0.10",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
     "jsr:@std/bytes@^1.0.3": "1.0.4",
@@ -30,7 +31,7 @@
     "jsr:@std/data-structures@^1.0.2": "1.0.2",
     "jsr:@std/encoding@0.221": "0.221.0",
     "jsr:@std/encoding@1.0.0-rc.2": "1.0.0-rc.2",
-    "jsr:@std/encoding@^1.0.3": "1.0.3",
+    "jsr:@std/encoding@^1.0.3": "1.0.6",
     "jsr:@std/encoding@~1.0.5": "1.0.6",
     "jsr:@std/fmt@0.221.0": "0.221.0",
     "jsr:@std/fmt@1.0.3": "1.0.3",
@@ -46,11 +47,13 @@
     "jsr:@std/fs@^1.0.4": "1.0.8",
     "jsr:@std/fs@^1.0.7": "1.0.8",
     "jsr:@std/internal@^1.0.2": "1.0.2",
+    "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/io@0.225": "0.225.0",
     "jsr:@std/io@~0.224.2": "0.224.7",
     "jsr:@std/io@~0.224.3": "0.224.7",
     "jsr:@std/io@~0.224.6": "0.224.6",
     "jsr:@std/io@~0.224.7": "0.224.7",
+    "jsr:@std/io@~0.224.9": "0.224.9",
     "jsr:@std/log@0.224.9": "0.224.9",
     "jsr:@std/log@~0.224.6": "0.224.12",
     "jsr:@std/path@1.0.0-rc.2": "1.0.0-rc.2",
@@ -115,7 +118,8 @@
       "integrity": "f71c921cce224c13d322e5cedba4f38e8f7354c7d855c9cb22729362a53f25aa",
       "dependencies": [
         "jsr:@cliffy/internal@1.0.0-rc.7",
-        "jsr:@std/encoding@~1.0.5"
+        "jsr:@std/encoding@~1.0.5",
+        "jsr:@std/io@~0.224.9"
       ]
     },
     "@cliffy/command@1.0.0-rc.5": {
@@ -183,6 +187,7 @@
         "jsr:@cliffy/keycode@1.0.0-rc.7",
         "jsr:@std/assert@~1.0.6",
         "jsr:@std/fmt@~1.0.2",
+        "jsr:@std/io@~0.224.9",
         "jsr:@std/path@~1.0.6",
         "jsr:@std/text@~1.0.7"
       ]
@@ -222,8 +227,14 @@
         "jsr:@std/fmt@~1.0.2"
       ]
     },
+    "@libs/typing@3.1.0": {
+      "integrity": "091b59f57a99f84c9fccf8f59534f77f177705ac25183b575c83fd7aa6dcfafe"
+    },
     "@libs/xml@6.0.1": {
-      "integrity": "64af4f93464c77c3e1158fb97c3657779ca554b14f38616b96cde31e22d8a309"
+      "integrity": "64af4f93464c77c3e1158fb97c3657779ca554b14f38616b96cde31e22d8a309",
+      "dependencies": [
+        "jsr:@libs/typing"
+      ]
     },
     "@std/assert@1.0.0-rc.2": {
       "integrity": "0484eab1d76b55fca1c3beaff485a274e67dd3b9f065edcbe70030dfc0b964d3"
@@ -231,11 +242,14 @@
     "@std/assert@1.0.3": {
       "integrity": "b0d03ce1ced880df67132eea140623010d415848df66f6aa5df76507ca7c26d8",
       "dependencies": [
-        "jsr:@std/internal"
+        "jsr:@std/internal@^1.0.2"
       ]
     },
     "@std/assert@1.0.10": {
-      "integrity": "59b5cbac5bd55459a19045d95cc7c2ff787b4f8527c0dd195078ff6f9481fbb3"
+      "integrity": "59b5cbac5bd55459a19045d95cc7c2ff787b4f8527c0dd195078ff6f9481fbb3",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.5"
+      ]
     },
     "@std/bytes@1.0.2": {
       "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
@@ -300,6 +314,9 @@
     "@std/internal@1.0.2": {
       "integrity": "f4cabe2021352e8bfc24e6569700df87bf070914fc38d4b23eddd20108ac4495"
     },
+    "@std/internal@1.0.5": {
+      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
+    },
     "@std/io@0.224.5": {
       "integrity": "cb84fe655d1273fca94efcff411465027a8b0b4225203f19d6ee98d9c8920a2d"
     },
@@ -308,6 +325,9 @@
     },
     "@std/io@0.224.7": {
       "integrity": "a70848793c44a7c100926571a8c9be68ba85487bfcd4d0540d86deabe1123dc9"
+    },
+    "@std/io@0.224.9": {
+      "integrity": "4414664b6926f665102e73c969cfda06d2c4c59bd5d0c603fd4f1b1c840d6ee3"
     },
     "@std/io@0.225.0": {
       "integrity": "c1db7c5e5a231629b32d64b9a53139445b2ca640d828c26bf23e1c55f8c079b3"
@@ -374,7 +394,7 @@
         "jsr:@std/assert@^1.0.3",
         "jsr:@std/data-structures",
         "jsr:@std/fs@^1.0.2",
-        "jsr:@std/internal",
+        "jsr:@std/internal@^1.0.2",
         "jsr:@std/path@^1.0.3"
       ]
     },
