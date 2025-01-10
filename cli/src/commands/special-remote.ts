@@ -4,16 +4,19 @@ import { once } from "node:events"
 import {
   checkKey,
   removeKey,
-  type RequestState,
   retrieveKey,
   storeKey,
-} from "../transferKey.ts"
+  type TransferKeyState,
+} from "../worker/transferKey.ts"
 import process from "node:process"
 import { getRepoAccess } from "./git-credential.ts"
 
 const GIT_ANNEX_VERSION = "VERSION 1"
 
-export async function handleGitAnnexMessage(line: string, state: RequestState) {
+export async function handleGitAnnexMessage(
+  line: string,
+  state: TransferKeyState,
+) {
   if (line.startsWith("EXTENSIONS")) {
     return "EXTENSIONS"
   } else if (line.startsWith("PREPARE")) {
@@ -69,7 +72,10 @@ export async function handleGitAnnexMessage(line: string, state: RequestState) {
  * @returns {() => void}
  */
 export const response = () => {
-  const state: RequestState = {}
+  const state: TransferKeyState = {
+    url: "",
+    token: "",
+  }
   return async (line: string) => {
     if (line.startsWith("VALUE ")) {
       try {
@@ -80,8 +86,8 @@ export const response = () => {
         const { token } = await getRepoAccess(datasetId)
         state.token = token
       } catch (_err) {
-        state.url = undefined
-        state.token = undefined
+        state.url = ""
+        state.token = ""
       }
     }
     console.log(await handleGitAnnexMessage(line, state))
@@ -110,5 +116,5 @@ export const specialRemote = new Command()
     "git-annex special remote for uploading or downloading from OpenNeuro",
   )
   .action(async () => {
-    console.log(await annexSpecialRemote())
+    await annexSpecialRemote()
   })
