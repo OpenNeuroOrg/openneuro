@@ -1,0 +1,3 @@
+#!/bin/sh
+# Use this script as your openneuro special remote when using datalad or git-annex to access annexed objects
+deno run -A jsr:@openneuro/cli special-remote
