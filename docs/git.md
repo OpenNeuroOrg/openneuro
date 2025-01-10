@@ -137,6 +137,11 @@ git annex fsck --fast --from openneuro
 After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.
 
 ```shell
+# Download any annexed objects
+datalad get .
+```
+
+```shell
 # To upload any annexed objects to the remote
 git annex copy --to openneuro
 ```
