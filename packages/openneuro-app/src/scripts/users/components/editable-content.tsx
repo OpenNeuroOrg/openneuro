@@ -13,7 +13,7 @@ interface EditableContentProps {
   heading: string
   validation?: RegExp
   validationMessage?: string
-  "data-testid"?: string // Add the test ID prop to the interface
+  "data-testid"?: string
 }
 
 export const EditableContent: React.FC<EditableContentProps> = ({
@@ -23,22 +23,19 @@ export const EditableContent: React.FC<EditableContentProps> = ({
   heading,
   validation,
   validationMessage,
-  "data-testid": testId, // Destructure the data-testid prop
+  "data-testid": testId,
 }) => {
   const [editing, setEditing] = useState(false)
-  const [warning, setWarning] = useState<string | null>(null)
+
   const closeEditing = () => {
     setEditing(false)
-    setWarning(null)
   }
 
   // Function to handle validation of user input
   const handleValidation = (value: string): boolean => {
     if (validation && !validation.test(value)) {
-      setWarning(validationMessage || "Invalid input")
       return false
     }
-    setWarning(null)
     return true
   }
 
@@ -75,6 +72,8 @@ export const EditableContent: React.FC<EditableContentProps> = ({
                   }}
                   placeholder="Edit content"
                   closeEditing={closeEditing}
+                  validation={validation}
+                  validationMessage={validationMessage}
                 />
               )}
           </>

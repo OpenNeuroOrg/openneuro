@@ -11,42 +11,59 @@ interface EditStringProps {
   validationMessage?: string
 }
 
-export const EditString: React.FC<EditStringProps> = ({
-  value = "",
-  setValue,
-  placeholder = "Enter text",
-  closeEditing,
-  validation,
-  validationMessage,
-}) => {
+import React, { useEffect, useState } from "react"
+import { Button } from "@openneuro/components/button"
+import "../scss/user-meta-blocks.scss"
+
+interface EditStringProps {
+  value?: string
+  setValue: (value: string) => void
+  placeholder?: string
+  closeEditing: () => void
+  validation?: RegExp
+  validationMessage?: string
+}
+
+export const EditString: React.FC<EditStringProps> = (
+  {
+    value = "",
+    setValue,
+    placeholder = "Enter text",
+    closeEditing,
+    validation,
+    validationMessage,
+  },
+) => {
   const [currentValue, setCurrentValue] = useState<string>(value)
   const [warnEmpty, setWarnEmpty] = useState<string | null>(null)
   const [warnValidation, setWarnValidation] = useState<string | null>(null)
 
   useEffect(() => {
-    if (currentValue === "") {
+    // Show warning only if there was an initial value and it was deleted
+    if (value !== "" && currentValue === "") {
       setWarnEmpty(
-        "Your input is empty. This will delete the previously saved value.",
+        "Your input is empty. This will delete the previously saved value..",
       )
     } else {
       setWarnEmpty(null)
     }
 
+    // Validation logic
     if (validation && currentValue && !validation.test(currentValue)) {
       setWarnValidation(validationMessage || "Invalid input")
     } else {
       setWarnValidation(null)
     }
-  }, [currentValue, validation, validationMessage])
+  }, [currentValue, value, validation, validationMessage])
 
   const handleSave = (): void => {
-    // Allow saving even when the input is empty
     if (!warnValidation) {
-      setValue(currentValue.trim()) // Trim whitespace but allow empty string
+      setValue(currentValue.trim())
       closeEditing()
     }
   }
 
+  // Handle Enter key press for saving
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault()
@@ -73,7 +90,7 @@ export const EditString: React.FC<EditStringProps> = ({
           onClick={handleSave}
         />
       </div>
-      {/* Show empty value warning */}
+      {/* Show empty value warning only if content was deleted */}
       {warnEmpty && currentValue === "" && (
         <small className="warning-text">{warnEmpty}</small>
       )}
