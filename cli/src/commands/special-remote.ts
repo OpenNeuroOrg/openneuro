@@ -97,7 +97,7 @@ export const response = () => {
 /**
  * Git annex special remote
  */
-async function annexSpecialRemote() {
+export async function annexSpecialRemote() {
   try {
     const rl = readline.createInterface({
       input: process.stdin,

@@ -9,12 +9,17 @@ Sentry.init({
   release: `openneuro-cli@${denoJson.version}`,
 })
 import { commandLine } from "./src/options.ts"
+import { annexSpecialRemote } from "./src/commands/special-remote.ts"
 
 /**
  * Entrypoint for running OpenNeuro command line tools
  */
 export async function main() {
-  await commandLine(Deno.args)
+  if (Deno.execPath().endsWith("git-annex-remote-openneuro")) {
+    await annexSpecialRemote()
+  } else {
+    await commandLine(Deno.args)
+  }
 }
 
 await main()
