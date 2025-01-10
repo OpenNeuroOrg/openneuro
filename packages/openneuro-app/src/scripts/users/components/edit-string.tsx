@@ -11,19 +11,6 @@ interface EditStringProps {
   validationMessage?: string
 }
 
-import React, { useEffect, useState } from "react"
-import { Button } from "@openneuro/components/button"
-import "../scss/user-meta-blocks.scss"
-
-interface EditStringProps {
-  value?: string
-  setValue: (value: string) => void
-  placeholder?: string
-  closeEditing: () => void
-  validation?: RegExp
-  validationMessage?: string
-}
-
 export const EditString: React.FC<EditStringProps> = (
   {
     value = "",
