@@ -75,7 +75,7 @@ export async function storeKey(
     try {
       fileHandle?.close()
     } catch (err) {
-      if (err.name !== "BadResource") {
+      if (err instanceof Error && err.name !== "BadResource") {
         logger.error(err)
       }
     }
