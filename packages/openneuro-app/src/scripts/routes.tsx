@@ -18,6 +18,7 @@ import { ImportDataset } from "./pages/import-dataset"
 import { DatasetMetadata } from "./pages/metadata/dataset-metadata"
 import { TermsPage } from "./pages/terms"
 import { UserQuery } from "./users/user-query"
+import LoggedIn from "../scripts/authentication/logged-in"
 
 const AppRoutes: React.VoidFunctionComponent = () => (
   <Routes>
@@ -34,7 +35,14 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/import" element={<ImportDataset />} />
     <Route path="/metadata" element={<DatasetMetadata />} />
     <Route path="/public" element={<Navigate to="/search" replace />} />
-    <Route path="/user/:orcid/*" element={<UserQuery />} />
+    <Route
+      path="/user/:orcid/*"
+      element={
+        <LoggedIn>
+          <UserQuery />
+        </LoggedIn>
+      }
+    />
     <Route
       path="/saved"
       element={<Navigate to="/search?bookmarks" replace />}

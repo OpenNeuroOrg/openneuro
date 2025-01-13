@@ -4,6 +4,9 @@ import { UserRoutes } from "./user-routes"
 import FourOFourPage from "../errors/404page"
 import { isValidOrcid } from "../utils/validationUtils"
 import { gql, useQuery } from "@apollo/client"
+import { isAdmin } from "../authentication/admin-user"
+import { useCookies } from "react-cookie"
+import { getProfile } from "../authentication/profile"
 
 // GraphQL query to fetch user by ORCID
 export const GET_USER_BY_ORCID = gql`
@@ -52,6 +55,9 @@ export const UserQuery: React.FC = () => {
     skip: !isOrcidValid,
   })
 
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
+
   if (!isOrcidValid) {
     return <FourOFourPage />
   }
@@ -62,8 +68,8 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />
   }
 
-  // Assuming 'hasEdit' is true for now (you can modify this based on your logic)
-  const hasEdit = true
+  // is admin or profile matches id from the user data being returned
+  const hasEdit = isAdmin || data.user.id !== profile.sub ? true : false
 
   // Render user data with UserRoutes
   return <UserRoutes user={data.user} hasEdit={hasEdit} />
