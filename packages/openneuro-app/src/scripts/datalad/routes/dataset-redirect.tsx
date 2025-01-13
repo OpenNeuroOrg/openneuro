@@ -49,6 +49,8 @@ const redirectLib = {
   ds002222: "ds002250",
   ds002245: "ds002345",
   ds001988: "ds001996",
+  ds004215: "ds005752",
+  ds004935: "ds005754",
 }
 
 const datasetIdPattern = /ds\d{6}/gim
