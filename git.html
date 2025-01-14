@@ -289,28 +289,21 @@
 </section>
 <section id="credential-helper">
 <h2>Credential Helper<a class="headerlink" href="#credential-helper" title="Link to this heading">¶</a></h2>
-<p>Using openneuro-cli, git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the <a class="reference external" href="https://git-scm.com/docs/gitcredentials">git credential helper</a> for your use case.</p>
+<p>Using <a class="reference external" href="https://jsr.io/&#64;openneuro/cli">&#64;openneuro/cli</a>, git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the <a class="reference external" href="https://git-scm.com/docs/gitcredentials">git credential helper</a> for your use case.</p>
 <section id="setup">
 <h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h3>
-<p>Once you have openneuro-cli installed and you’ve logged in with <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, you can configure git to automatically use your login.</p>
+<p>Once you have logged in with <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span></code>, you can configure git to automatically use your login.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This allows the helper to identify which dataset you are accessing automatically and issue a key for that dataset</span>
-git<span class="w"> </span>config<span class="w"> </span>credential.useHttpPath<span class="w"> </span><span class="nb">true</span>
-<span class="c1"># Point git at the openneuro-cli tool (this must be an absolute path)</span>
-git<span class="w"> </span>config<span class="w"> </span>credential.helper<span class="w"> </span><span class="s2">&quot;/path/to/openneuro git-credential&quot;</span>
-</pre></div>
-</div>
-<p>Alternatively openneuro-cli can be given the name <code class="docutils literal notranslate"><span class="pre">git-credential-openneuro</span></code> and this shorter command will work.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>credential.helper<span class="w"> </span><span class="s2">&quot;openneuro&quot;</span>
-</pre></div>
-</div>
-<p>This will configure these options for one repository.</p>
-<p>To enable for all OpenNeuro repositories add this to your <a class="reference external" href="https://git-scm.com/docs/git-config#FILES">git configuration file</a>.</p>
-<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[credential &quot;https://openneuro.org&quot;]</span>
-<span class="w">  </span><span class="na">useHttpPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
-<span class="w">  </span><span class="na">helper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/openneuro git-credential&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.useHttpPath<span class="w"> </span><span class="nb">true</span>
+<span class="c1"># Point git at the @openneuro/cli tool (this must be an absolute path)</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.helper<span class="w"> </span><span class="s2">&quot;/path/to/deno -A jsr:@openneuro/cli git-credential&quot;</span>
 </pre></div>
 </div>
 <p>If you are using <a class="reference external" href="https://github.com/git-ecosystem/git-credential-manager">Git Credential Manager</a> add the provider entry to avoid duplicating entries.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>config<span class="w"> </span>credential.https://openneuro.org.provider<span class="w"> </span>generic
+</pre></div>
+</div>
+<p>Or by modifying your .gitconfig:</p>
 <div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[credential &quot;https://openneuro.org&quot;]</span>
 <span class="w">  </span><span class="na">useHttpPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 <span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">generic</span>
@@ -321,18 +314,17 @@ git<span class="w"> </span>config<span class="w"> </span>credential.helper<span 
 <section id="usage">
 <h3>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h3>
 <p>Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.</p>
-<p>To download a new dataset using the credential helper you can start with an empty repo and then configure that repo.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>ds000001
+<p>Once the helper has been configured clone a repo:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can use git clone...</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://openneuro.org/git/0/ds0000001
+<span class="c1"># Or datalad install</span>
+datalad<span class="w"> </span>install<span class="w"> </span>https://openneuro.org/git/0/ds0000001
 <span class="nb">cd</span><span class="w"> </span>ds0000001
-git<span class="w"> </span>init
-git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://openneuro.org/git/0/ds0000001
-<span class="c1"># Follow the above steps to setup the credential helper</span>
-git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>master
-git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>git-annex:git-annex
 <span class="c1"># From here you can treat this like a datalad dataset and export back to OpenNeuro to deploy changes</span>
 </pre></div>
 </div>
-<p>When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro will reject some invalid pushes but cannot run the full bids-validator until after your changes have been pushed.</p>
+<p>When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro runs a limited version of BIDS validation on pushes and will reject datasets that cannot pass validation of the file tree. File contents are validated only after upload.</p>
+<p>To push annexed files, see <code class="docutils literal notranslate"><span class="pre">Configuring</span> <span class="pre">OpenNeuro</span> <span class="pre">special</span> <span class="pre">remote</span></code> below.</p>
 </section>
 <section id="advanced-authentication">
 <h3>Advanced authentication<a class="headerlink" href="#advanced-authentication" title="Link to this heading">¶</a></h3>
@@ -356,21 +348,35 @@ git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </
 <p>For private datasets or to add new data with DataLad or git-annex, a special remote is available to push data directly to OpenNeuro.</p>
 <section id="configuring-openneuro-special-remote">
 <h3>Configuring OpenNeuro special remote<a class="headerlink" href="#configuring-openneuro-special-remote" title="Link to this heading">¶</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># A script is provided to wrap the CLI as a special remote</span>
+curl<span class="w"> </span>https://raw.githubusercontent.com/OpenNeuroOrg/openneuro/refs/heads/master/bin/git-annex-remote-openneuro<span class="w"> </span>-o<span class="w"> </span>git-annex-remote-openneuro
+<span class="c1"># Make this executable and move this script to your path</span>
+chmod<span class="w"> </span>+x<span class="w"> </span>git-annex-remote-openneuro
+</pre></div>
+</div>
+<p>Deno compile can be used if a single binary without network access is needed:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This will create a `git-annex-remote-openneuro` executable you add to your path</span>
+deno<span class="w"> </span>compile<span class="w"> </span>-A<span class="w"> </span>--output<span class="w"> </span>git-annex-remote-openneuro<span class="w"> </span>jsr:@openneuro/cli
+</pre></div>
+</div>
 <p>Obtain the URL from the dataset page and run initremote (or enableremote if you need to update it).</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure openneuro-cli is installed and available in your path</span>
-<span class="c1"># You should see &#39;VERSION 1&#39; &#39;EXTENSIONS&#39; if this is working</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;EXTENSIONS&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>git-annex-remote-openneuro
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># You should see &#39;VERSION 1&#39; &#39;EXTENSIONS&#39; if this is working</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;EXTENSIONS&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>special-remote
 <span class="c1"># Configure the remote with the URL for your dataset</span>
 git<span class="w"> </span>annex<span class="w"> </span>initremote<span class="w"> </span>openneuro<span class="w"> </span><span class="nv">type</span><span class="o">=</span>external<span class="w"> </span><span class="nv">externaltype</span><span class="o">=</span>openneuro<span class="w"> </span><span class="nv">encryption</span><span class="o">=</span>none<span class="w"> </span><span class="nv">url</span><span class="o">=</span>https://openneuro.org/git/0/ds0000001
 </pre></div>
 </div>
-<p>After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># To upload any annexed objects to the remote</span>
-git<span class="w"> </span>annex<span class="w"> </span>copy<span class="w"> </span>--to<span class="w"> </span>openneuro
-</pre></div>
-</div>
 <p>To download annexed objects from the remote, you may need to manually ask git-annex update the local state of the OpenNeuro remote. You can force this update for all files:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>annex<span class="w"> </span>fsck<span class="w"> </span>--fast<span class="w"> </span>--from<span class="w"> </span>openneuro
+</pre></div>
+</div>
+<p>After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download any annexed objects</span>
+datalad<span class="w"> </span>get<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># To upload any annexed objects to the remote</span>
+git<span class="w"> </span>annex<span class="w"> </span>copy<span class="w"> </span>--to<span class="w"> </span>openneuro
 </pre></div>
 </div>
 </section>

@@ -34,36 +34,26 @@ LICENSE annex.largefiles=nothing
 
 ## Credential Helper
 
-Using openneuro-cli, git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the [git credential helper](https://git-scm.com/docs/gitcredentials) for your use case.
+Using [@openneuro/cli](https://jsr.io/@openneuro/cli), git can be configured to automatically use your OpenNeuro credentials to allow access to datasets. This is the preferred method for authenticating regular git access. An advanced method of issuing a key is documented below if you cannot use the [git credential helper](https://git-scm.com/docs/gitcredentials) for your use case.
 
 ### Setup
 
-Once you have openneuro-cli installed and you've logged in with `openneuro login`, you can configure git to automatically use your login.
+Once you have logged in with `deno run -A jsr:@openneuro/cli`, you can configure git to automatically use your login.
 
 ```shell
 # This allows the helper to identify which dataset you are accessing automatically and issue a key for that dataset
-git config credential.useHttpPath true
-# Point git at the openneuro-cli tool (this must be an absolute path)
-git config credential.helper "/path/to/openneuro git-credential"
-```
-
-Alternatively openneuro-cli can be given the name `git-credential-openneuro` and this shorter command will work.
-
-```shell
-git config credential.helper "openneuro"
-```
-
-This will configure these options for one repository.
-
-To enable for all OpenNeuro repositories add this to your [git configuration file](https://git-scm.com/docs/git-config#FILES).
-
-```cfg
-[credential "https://openneuro.org"]
-  useHttpPath = true
-  helper = "/path/to/openneuro git-credential"
+git config --global credential.https://openneuro.org.useHttpPath true
+# Point git at the @openneuro/cli tool (this must be an absolute path)
+git config --global credential.https://openneuro.org.helper "/path/to/deno -A jsr:@openneuro/cli git-credential"
 ```
 
 If you are using [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager) add the provider entry to avoid duplicating entries.
+
+```shell
+git config credential.https://openneuro.org.provider generic
+```
+
+Or by modifying your .gitconfig:
 
 ```cfg
 [credential "https://openneuro.org"]
@@ -76,20 +66,20 @@ If you are using [Git Credential Manager](https://github.com/git-ecosystem/git-c
 
 Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.
 
-To download a new dataset using the credential helper you can start with an empty repo and then configure that repo.
+Once the helper has been configured clone a repo:
 
 ```shell
-mkdir ds000001
+# You can use git clone...
+git clone https://openneuro.org/git/0/ds0000001
+# Or datalad install
+datalad install https://openneuro.org/git/0/ds0000001
 cd ds0000001
-git init
-git remote add origin https://openneuro.org/git/0/ds0000001
-# Follow the above steps to setup the credential helper
-git pull origin master
-git pull origin git-annex:git-annex
 # From here you can treat this like a datalad dataset and export back to OpenNeuro to deploy changes
 ```
 
-When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro will reject some invalid pushes but cannot run the full bids-validator until after your changes have been pushed.
+When you are ready to push changes, make sure to validate them before attempting to push. OpenNeuro runs a limited version of BIDS validation on pushes and will reject datasets that cannot pass validation of the file tree. File contents are validated only after upload.
+
+To push annexed files, see `Configuring OpenNeuro special remote` below.
 
 ### Advanced authentication
 
@@ -115,25 +105,43 @@ For private datasets or to add new data with DataLad or git-annex, a special rem
 
 ### Configuring OpenNeuro special remote
 
+```shell
+# A script is provided to wrap the CLI as a special remote
+curl https://raw.githubusercontent.com/OpenNeuroOrg/openneuro/refs/heads/master/bin/git-annex-remote-openneuro -o git-annex-remote-openneuro
+# Make this executable and move this script to your path
+chmod +x git-annex-remote-openneuro
+```
+
+Deno compile can be used if a single binary without network access is needed:
+
+```shell
+# This will create a `git-annex-remote-openneuro` executable you add to your path
+deno compile -A --output git-annex-remote-openneuro jsr:@openneuro/cli
+```
+
 Obtain the URL from the dataset page and run initremote (or enableremote if you need to update it).
 
 ```shell
-# Make sure openneuro-cli is installed and available in your path
 # You should see 'VERSION 1' 'EXTENSIONS' if this is working
-echo "EXTENSIONS" | git-annex-remote-openneuro
+echo "EXTENSIONS" | deno run -A jsr:@openneuro/cli special-remote
 # Configure the remote with the URL for your dataset
 git annex initremote openneuro type=external externaltype=openneuro encryption=none url=https://openneuro.org/git/0/ds0000001
-```
-
-After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.
-
-```shell
-# To upload any annexed objects to the remote
-git annex copy --to openneuro
 ```
 
 To download annexed objects from the remote, you may need to manually ask git-annex update the local state of the OpenNeuro remote. You can force this update for all files:
 
 ```shell
 git annex fsck --fast --from openneuro
+```
+
+After this you can use regular git-annex or datalad commands to upload or download any annexed files by using the openneuro remote.
+
+```shell
+# Download any annexed objects
+datalad get .
+```
+
+```shell
+# To upload any annexed objects to the remote
+git annex copy --to openneuro
 ```
