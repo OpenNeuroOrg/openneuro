@@ -88,7 +88,10 @@ export const gitCredential = new Command()
   .description(
     "A git credentials helper for easier datalad or git-annex access to datasets.",
   )
-  .command("fill")
+  // Credentials here are short lived so store is not useful
+  .command("store")
+  .action(() => {})
+  .command("get")
   .action(async () => {
     console.log(await gitCredentialAction())
   })

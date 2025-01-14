@@ -7,6 +7,7 @@ import { login } from "./commands/login.ts"
 import { upload } from "./commands/upload.ts"
 import { download } from "./commands/download.ts"
 import { gitCredential } from "./commands/git-credential.ts"
+import { specialRemote } from "./commands/special-remote.ts"
 
 export type OpenNeuroOptions = {
   datasetPath: string
@@ -29,8 +30,10 @@ const openneuroCommand = new Command()
   .globalEnv("OPENNEURO_API_KEY=<key:string>", "Specify an OpenNeuro API key.")
   .command("login", login)
   .command("download", download)
+  // @ts-expect-error This is typed correctly but not loaded from the dependency as expected
   .command("upload", upload)
   .command("git-credential", gitCredential)
+  .command("special-remote", specialRemote)
 
 /**
  * Parse command line options and return a OpenNeuroOptions config

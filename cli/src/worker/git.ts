@@ -192,7 +192,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
   try {
     uuidLog = await readAnnexPath("uuid.log", context)
   } catch (err) {
-    if (err.name !== "NotFoundError") {
+    if (err instanceof Error && err.name !== "NotFoundError") {
       throw err
     }
   }
@@ -204,7 +204,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
       })
     } catch (err) {
       // Create the branch if it doesn't exist
-      if (err.name === "NotFoundError") {
+      if (err instanceof Error && err.name === "NotFoundError") {
         await createAnnexBranch()
       }
     }
@@ -225,7 +225,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
           { encoding: "utf8" },
         )
       } catch (_err) {
-        if (_err.name !== "NotFound") {
+        if (_err instanceof Error && _err.name !== "NotFound") {
           throw _err
         }
       } finally {
@@ -247,7 +247,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         try {
           log = await readAnnexPath(annexBranchPath, context)
         } catch (err) {
-          if (err.name === "NotFoundError") {
+          if (err instanceof Error && err.name === "NotFoundError") {
             logger.debug(`Annex branch object "${annexBranchPath}" not found`)
           } else {
             throw err
@@ -283,7 +283,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         ref: "main",
       })
     } catch (err) {
-      if (err.name === "NotFoundError") {
+      if (err instanceof Error && err.name === "NotFoundError") {
         // Fallback to master and error if neither exists
         await git.checkout({
           ...context.config(),
