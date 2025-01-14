@@ -22,7 +22,7 @@ export function getConfig(): ClientConfig {
     }
     return config
   } else {
-    throw new LoginError("Run `openneuro login` before upload.")
+    throw new LoginError("Run `openneuro login` before running commands.")
   }
 }
 
