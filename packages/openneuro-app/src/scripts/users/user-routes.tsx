@@ -32,7 +32,10 @@ export const UserRoutes: React.FC<UserRoutesProps> = ({ user, hasEdit }) => {
         path="*"
         element={<UserAccountContainer user={user} hasEdit={hasEdit} />}
       >
-        <Route path="" element={<UserDatasetsView user={user} />} />
+        <Route
+          path=""
+          element={<UserDatasetsView user={user} hasEdit={hasEdit} />}
+        />
         <Route
           path="account"
           element={hasEdit

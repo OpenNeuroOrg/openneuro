@@ -1,0 +1,52 @@
+.userDsWrap{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.userDsCard{
+    background: #fff;
+    border: 1px solid #ddd;
+    width: calc(50% - 10px);
+    padding: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    h4{
+        margin: 0 0 30px;
+        font-size: 19px;
+    }
+
+    .userDsFooter{
+        display: flex;
+        justify-content: space-between;
+        .userMetawrap{
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            span{
+                color: #777;
+                b{
+                    color: #000;
+                }
+                &:first-child{
+                    font-size: 13px;
+                    margin-bottom: 10px;
+                }
+                &:last-child{
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    b{
+                        text-transform: none;
+                    }
+                }
+            }
+        }
+        .userIconwrap{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    }
+}
