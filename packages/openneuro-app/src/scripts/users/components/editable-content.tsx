@@ -11,6 +11,9 @@ interface EditableContentProps {
   setRows: React.Dispatch<React.SetStateAction<string[] | string>>
   className: string
   heading: string
+  validation?: RegExp
+  validationMessage?: string
+  "data-testid"?: string
 }
 
 export const EditableContent: React.FC<EditableContentProps> = ({
@@ -18,15 +21,30 @@ export const EditableContent: React.FC<EditableContentProps> = ({
   setRows,
   className,
   heading,
+  validation,
+  validationMessage,
+  "data-testid": testId,
 }) => {
   const [editing, setEditing] = useState(false)
 
+  const closeEditing = () => {
+    setEditing(false)
+  }
+
+  // Function to handle validation of user input
+  const handleValidation = (value: string): boolean => {
+    if (validation && !validation.test(value)) {
+      return false
+    }
+    return true
+  }
+
   return (
-    <div className={`user-meta-block ${className}`}>
+    <div className={`user-meta-block ${className}`} data-testid={testId}>
       <span className="umb-heading">
         <h4>{heading}</h4>
         {editing
-          ? <CloseButton action={() => setEditing(false)} />
+          ? <CloseButton action={closeEditing} />
           : <EditButton action={() => setEditing(true)} />}
       </span>
       {editing
@@ -40,15 +58,22 @@ export const EditableContent: React.FC<EditableContentProps> = ({
                   setElements={setRows as React.Dispatch<
                     React.SetStateAction<string[]>
                   >}
+                  validation={validation}
+                  validationMessage={validationMessage}
                 />
               )
               : (
                 <EditString
                   value={editableContent}
-                  setValue={setRows as React.Dispatch<
-                    React.SetStateAction<string>
-                  >}
+                  setValue={(newValue: string) => {
+                    if (handleValidation(newValue)) {
+                      setRows(newValue)
+                    }
+                  }}
                   placeholder="Edit content"
+                  closeEditing={closeEditing}
+                  validation={validation}
+                  validationMessage={validationMessage}
                 />
               )}
           </>
