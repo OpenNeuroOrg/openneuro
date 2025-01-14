@@ -14,7 +14,7 @@ export function getConfig(): ClientConfig {
   const url = localStorage.getItem("url")
   const token = localStorage.getItem("token")
   const errorReporting = localStorage.getItem("errorReporting") === "true"
-  if (url && token && errorReporting) {
+  if (url && token) {
     const config: ClientConfig = {
       url,
       token,
