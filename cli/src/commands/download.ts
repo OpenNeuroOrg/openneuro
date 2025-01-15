@@ -44,8 +44,14 @@ export async function downloadAction(
 
   console.log("Downloading...")
 
+  // Clone main/master and git-annex branches
   worker.postMessage({
     "command": "clone",
+  })
+
+  // Setup any git-annex remotes required for downloads
+  worker.postMessage({
+    "command": "remote-setup",
   })
 
   // Close after all tasks are queued
