@@ -29,6 +29,16 @@ README* annex.largefiles=nothing
 LICENSE annex.largefiles=nothing
 "
 
+# Acceptable dotfiles
+readonly WHITELIST=".bidsignore
+.gitattributes
+.gitignore
+.gitmodules
+**/.gitattributes
+**/.gitignore
+.datalad/.gitattributes
+.datalad/config"
+
 function validateGitAttributes() {
   # Find .gitattributes file
   local gitAttributes=$(git show "${newref}:.gitattributes")
@@ -51,7 +61,7 @@ function validateGitAttributes() {
 function filterDotFiles() {
   local newFiles=$(git diff --stat --name-only --diff-filter=ACMRT ${oldref}..${newref})
   for filename in $newFiles; do
-    if [[ "$filename" = ".bidsignore" ]] || [[ "$filename" =~ ".gitattributes" ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^.gitignore|\/\.gitignore ]] || [[ "$filename" =~ ^\.datalad ]]; then
+    if [[ "$filename" = ".bidsignore" ]] || [[ "$filename" =~ \.git(attributes|ignore)$ ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^\.datalad ]]; then
       continue
     fi
     if [[ "$filename" =~ ^\..*|\/\..* ]]; then
@@ -151,9 +161,7 @@ function main() {
     python -m bidsschematools pre-receive-hook <<END
 bids-hook-v2
 $( git show "${newref}:dataset_description.json" | tr -d '\r\n' )
-.datalad/config
-.gitattributes
-.bidsignore
+${WHITELIST}
 ${bidsignore}
 0001
 $( git ls-tree --name-only -r "${newref}" )
