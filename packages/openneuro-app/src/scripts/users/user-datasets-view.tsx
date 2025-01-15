@@ -75,7 +75,9 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
   const [publicFilter, setPublicFilter] = useState<string>("all")
   const [sortOrder, setSortOrder] = useState<string>("date-updated")
 
-  const { data, loading, error } = useQuery(DATASETS_QUERY)
+  const { data, loading, error } = useQuery(DATASETS_QUERY, {
+    variables: { first: 25 }, // Pass first: 25 to limit results
+  })
 
   if (loading) return <p>Loading datasets...</p>
   if (error) return <p>Failed to fetch datasets: {error.message}</p>
