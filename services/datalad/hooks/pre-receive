@@ -51,7 +51,7 @@ function validateGitAttributes() {
 function filterDotFiles() {
   local newFiles=$(git diff --stat --name-only --diff-filter=ACMRT ${oldref}..${newref})
   for filename in $newFiles; do
-    if [[ "$filename" = ".bidsignore" ]] || [[ "$filename" =~ ".gitattributes" ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^.gitignore|\/\.gitignore ]] || [[ "$filename" =~ ^\.datalad ]]; then
+    if [[ "$filename" = ".bidsignore" ]] || [ "$filename" = ".bids-validator-config.json" ] || [[ "$filename" =~ ".gitattributes" ]] || [[ "$filename" = ".gitmodules" ]] || [[ "$filename" =~ ^.gitignore|\/\.gitignore ]] || [[ "$filename" =~ ^\.datalad ]]; then
       continue
     fi
     if [[ "$filename" =~ ^\..*|\/\..* ]]; then
