@@ -33,9 +33,9 @@ interface UserDatasetsViewProps {
 }
 
 const DATASETS_QUERY = gql`
-  query GetDatasets {
-    datasets {
-     edges {
+  query GetDatasets($first: Int) {
+    datasets(first: $first) {
+      edges {
         node {
           id
           created
