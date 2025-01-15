@@ -1,13 +1,6 @@
 import React from "react"
 import styles from "../scss/datasetcard.module.scss"
 
-interface Dataset {
-  id: string
-  name: string
-  dateAdded: string
-  dateUpdated: string
-}
-
 interface UserDatasetFiltersProps {
   publicFilter: string
   setPublicFilter: React.Dispatch<React.SetStateAction<string>>
@@ -15,7 +8,6 @@ interface UserDatasetFiltersProps {
   setSortOrder: React.Dispatch<React.SetStateAction<string>>
   searchQuery: string
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>
-  datasets: Dataset[] // List of datasets
 }
 
 export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
@@ -25,7 +17,6 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
   setSortOrder,
   searchQuery,
   setSearchQuery,
-  datasets = [], // Default to empty array to prevent undefined
 }) => {
   const [isFilterOpen, setIsFilterOpen] = React.useState(false)
   const [isSortOpen, setIsSortOpen] = React.useState(false)
