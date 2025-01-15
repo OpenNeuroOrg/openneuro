@@ -140,7 +140,6 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
         setSortOrder={setSortOrder}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        datasets={filteredDatasets}
       />
 
       <div className={styles.userDsWrap}>
