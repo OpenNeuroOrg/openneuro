@@ -36,7 +36,7 @@ const checkVersions = (serverVersion, clientVersion) => {
       if (!versionsWarned) {
         // eslint-disable-next-line no-console
         console.warn(
-          `${hbar}Your OpenNeuro client is out of date (v${clientVersion}). We strongly recommend you update to the latest version (v${serverVersion}) for an optimal experience.${hbar}`,
+          `${hbar}Your OpenNeuro client is out of date (v${clientVersion}). We strongly recommend you update (e.g. via 'npm install -g @openneuro/cli') to the latest version (v${serverVersion}) for an optimal experience.${hbar}`,
         )
         versionsWarned = true
       }
@@ -48,7 +48,7 @@ const checkVersions = (serverVersion, clientVersion) => {
       if (!versionsWarned) {
         // eslint-disable-next-line no-console
         console.warn(
-          `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update to the most recent version for an optimal experience.${hbar}`,
+          `${hbar}Your OpenNeuro client is out of date. We strongly recommend you update (e.g. via 'npm install -g @openneuro/cli') to the most recent version for an optimal experience.${hbar}`,
         )
         versionsWarned = true
       }
