@@ -30,7 +30,6 @@ const openneuroCommand = new Command()
   .globalEnv("OPENNEURO_API_KEY=<key:string>", "Specify an OpenNeuro API key.")
   .command("login", login)
   .command("download", download)
-  // @ts-expect-error This is typed correctly but not loaded from the dependency as expected
   .command("upload", upload)
   .command("git-credential", gitCredential)
   .command("special-remote", specialRemote)
