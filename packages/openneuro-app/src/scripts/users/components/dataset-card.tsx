@@ -11,11 +11,17 @@ interface Dataset {
   name: string
   public: boolean
   analytics: {
-    downloads?: number
-    views?: number
+    views: number
+    downloads: number
   }
-  followers: [string]
-  stars: [string]
+  stars: [{ userId: string; datasetId: string }]
+  followers: [{ userId: string; datasetId: string }]
+  latestSnapshot?: {
+    id: string
+    size: number
+    issues: [{ severity: string }]
+    created?: string
+  }
 }
 
 interface DatasetCardProps {
