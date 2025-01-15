@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { DatasetCard } from "./components/dataset-card"
 import { UserDatasetFilters } from "./components/user-dataset-filters"
+import { gql, useQuery } from "@apollo/client"
 import styles from "./scss/datasetcard.module.scss"
 
 interface User {
@@ -10,7 +11,6 @@ interface User {
 interface Dataset {
   id: string
   created: string
-  ownerId: string
   name: string
   public: boolean
   analytics: {
@@ -23,7 +23,7 @@ interface Dataset {
     id: string
     size: number
     issues: Array<{ severity: string }>
-    created?: string // Added created date to latestSnapshot
+    created?: string
   }
 }
 
@@ -32,115 +32,58 @@ interface UserDatasetsViewProps {
   hasEdit: boolean
 }
 
-const dummyDatasets: Dataset[] = [
-  {
-    id: "ds00001",
-    created: "2023-11-01T12:00:00Z",
-    ownerId: "1",
-    name:
-      "[18F]SF51, a Novel 18F-labeled PET Radioligand for Translocator Protein 18kDa (TSPO) in Brain, Works Well in Monkeys but Fails in Humans",
-    public: true,
-    analytics: {
-      views: 123,
-      downloads: 132,
-    },
-    stars: [
-      {
-        userId: "string",
-        datasetId: "string",
-      },
-    ],
-    followers: [
-      {
-        userId: "string",
-        datasetId: "string",
-      },
-    ],
-    latestSnapshot: {
-      id: "string",
-      size: 123,
-      created: "2023-12-01T12:00:00Z", // Example created date for latest snapshot
-      issues: [
-        {
-          severity: "string",
-        },
-      ],
-    },
-  },
-  {
-    id: "ds00002",
-    created: "2023-11-02T12:00:00Z",
-    ownerId: "2",
-    name: "Dataset 2",
-    public: false,
-    analytics: {
-      views: 123,
-      downloads: 132,
-    },
-    stars: [
-      {
-        userId: "string",
-        datasetId: "string",
-      },
-    ],
-    followers: [
-      {
-        userId: "string",
-        datasetId: "string",
-      },
-    ],
-    latestSnapshot: {
-      id: "string",
-      size: 123,
-      created: "2023-11-15T12:00:00Z", // Example created date for latest snapshot
-      issues: [
-        {
-          severity: "string",
-        },
-      ],
-    },
-  },
-  {
-    id: "ds00003",
-    created: "2023-11-02T12:00:00Z",
-    ownerId: "2",
-    name: "Dataset 3",
-    public: true,
-    analytics: {
-      views: 123,
-      downloads: 132,
-    },
-    stars: [
-      {
-        userId: "string",
-        datasetId: "string",
-      },
-    ],
-    followers: [
-      {
-        userId: "string",
-        datasetId: "string",
-      },
-    ],
-    latestSnapshot: {
-      id: "string",
-      size: 123,
-      created: "2023-12-10T12:00:00Z", // Example created date for latest snapshot
-      issues: [
-        {
-          severity: "string",
-        },
-      ],
-    },
-  },
-]
+const DATASETS_QUERY = gql`
+  query GetDatasets {
+    datasets {
+     edges {
+        node {
+          id
+          created
+          name
+          public
+          analytics {
+            views
+            downloads
+          }
+          stars {
+            userId
+            datasetId
+          }
+          followers {
+            userId
+            datasetId
+          }
+          latestSnapshot {
+            id
+            size
+            created
+            issues {
+              severity
+            }
+            description {
+              Authors
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [publicFilter, setPublicFilter] = useState<string>("all")
-  const [sortOrder, setSortOrder] = useState<string>("date-updated") // Default sort by "date-updated"
+  const [sortOrder, setSortOrder] = useState<string>("date-updated")
 
-  const filteredDatasets = dummyDatasets
+  const { data, loading, error } = useQuery(DATASETS_QUERY)
+
+  if (loading) return <p>Loading datasets...</p>
+  if (error) return <p>Failed to fetch datasets: {error.message}</p>
+  // Extract nodes from edges
+  const datasets: Dataset[] =
+    data?.datasets?.edges?.map((edge: { node: Dataset }) => edge.node) || []
+
+  const filteredDatasets = datasets
     .filter((dataset) => {
       const matchesSearch =
         dataset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -153,15 +96,15 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
     .sort((a, b) => {
       switch (sortOrder) {
         case "name-asc":
-          return a.name.localeCompare(b.name) // A-Z by name
+          return a.name.localeCompare(b.name)
         case "name-desc":
-          return b.name.localeCompare(a.name) // Z-A by name
+          return b.name.localeCompare(a.name)
         case "date-newest":
-          return new Date(b.created).getTime() - new Date(a.created).getTime() // Newest first
+          return new Date(b.created).getTime() - new Date(a.created).getTime()
         case "date-updated":
           const aUpdated = a.latestSnapshot?.created || a.created
           const bUpdated = b.latestSnapshot?.created || b.created
-          return new Date(bUpdated).getTime() - new Date(aUpdated).getTime() // Most recently updated first
+          return new Date(bUpdated).getTime() - new Date(aUpdated).getTime()
         default:
           return 0
       }
@@ -171,7 +114,6 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
     <div data-testid="user-datasets-view">
       <h3>{user.name}'s Datasets</h3>
 
-      {/* Filters and Sort Component */}
       <UserDatasetFilters
         publicFilter={publicFilter}
         setPublicFilter={setPublicFilter}
@@ -179,7 +121,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
         setSortOrder={setSortOrder}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        datasets={filteredDatasets} // Pass filtered datasets
+        datasets={filteredDatasets}
       />
 
       <div className={styles.userDsWrap}>

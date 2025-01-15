@@ -83,7 +83,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({ dataset }) => {
         <a href={`/datasets/${dataset.id}`}>{dataset.name}</a>
       </h4>
       <div className={styles.userDsFooter}>
-        <div class={styles.userMetawrap}>
+        <div className={styles.userMetawrap}>
           <span>
             Added: <b>{dateAdded}</b> ({dateAddedDifference} ago)
           </span>
@@ -91,7 +91,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({ dataset }) => {
             OpenNeuro Accession Number: <b>{dataset.id}</b>
           </span>
         </div>
-        <div class={styles.userIconwrap}>
+        <div className={styles.userIconwrap}>
           {activityIcon}
           {publicIcon && <div className="owner-icon-wrap">{publicIcon}</div>}
         </div>
