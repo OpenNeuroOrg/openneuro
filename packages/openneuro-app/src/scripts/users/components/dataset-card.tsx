@@ -14,9 +14,8 @@ interface Dataset {
     downloads?: number
     views?: number
   }
-  followers: any[]
-  stars: any[]
-  user: Record<string, any> // TODO: Use the actual user type here
+  followers: [string]
+  stars: [string]
 }
 
 interface DatasetCardProps {

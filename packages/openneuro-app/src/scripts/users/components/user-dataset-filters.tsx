@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React from "react"
 import styles from "../scss/datasetcard.module.scss"
 
 interface Dataset {
@@ -35,40 +35,10 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
     : sortOrder === "name-desc"
     ? "Name (Z-A)"
     : sortOrder === "date-newest"
-    ? "Date Added (Newest)"
-    : "Date Updated (Newest)"
-
-  // Sort datasets based on the selected sort order
-  const sortedDatasets = useMemo(() => {
-    return datasets.sort((a, b) => {
-      switch (sortOrder) {
-        case "name-asc":
-          return a.name.localeCompare(b.name)
-        case "name-desc":
-          return b.name.localeCompare(a.name)
-        case "date-newest":
-          return new Date(b.dateAdded).getTime() -
-            new Date(a.dateAdded).getTime()
-        case "date-updated":
-          return new Date(b.dateUpdated).getTime() -
-            new Date(a.dateUpdated).getTime()
-        default:
-          return 0
-      }
-    })
-  }, [datasets, sortOrder])
-
-  // Filter datasets based on the search query
-  const filteredDatasets = useMemo(() => {
-    return sortedDatasets.filter((dataset) => {
-      // Filter by search query (name or ID)
-      const matchesSearchQuery = !searchQuery ||
-        dataset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        dataset.id.toLowerCase().includes(searchQuery.toLowerCase())
-
-      return matchesSearchQuery
-    })
-  }, [sortedDatasets, searchQuery])
+    ? "Added (Newest)"
+    : sortOrder === "date-oldest"
+    ? "Oldest"
+    : "Updated"
 
   return (
     <div className={styles.userDSfilters}>
@@ -87,7 +57,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
         onClick={() => setIsFilterOpen(!isFilterOpen)}
       >
         <span>
-          Filter by Visibility:{" "}
+          Filter by:{" "}
           <b>
             {publicFilter === "all"
               ? "All"
@@ -165,7 +135,16 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
                 }}
                 className={sortOrder === "date-newest" ? styles.active : ""}
               >
-                Date Added (Newest)
+                Added
+              </li>
+              <li
+                onClick={() => {
+                  setSortOrder("date-oldest")
+                  setIsSortOpen(false)
+                }}
+                className={sortOrder === "date-oldest" ? styles.active : ""}
+              >
+                Oldest
               </li>
               <li
                 onClick={() => {
@@ -174,7 +153,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
                 }}
                 className={sortOrder === "date-updated" ? styles.active : ""}
               >
-                Date Updated (Newest)
+                Updated
               </li>
             </ul>
           )}

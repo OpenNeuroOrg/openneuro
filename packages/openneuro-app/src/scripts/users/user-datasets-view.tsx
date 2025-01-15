@@ -17,12 +17,12 @@ interface Dataset {
     views: number
     downloads: number
   }
-  stars: Array<{ userId: string; datasetId: string }>
-  followers: Array<{ userId: string; datasetId: string }>
+  stars: [{ userId: string; datasetId: string }]
+  followers: [{ userId: string; datasetId: string }]
   latestSnapshot?: {
     id: string
     size: number
-    issues: Array<{ severity: string }>
+    issues: [{ severity: string }]
     created?: string
   }
 }
@@ -79,35 +79,54 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({ user }) => {
 
   if (loading) return <p>Loading datasets...</p>
   if (error) return <p>Failed to fetch datasets: {error.message}</p>
-  // Extract nodes from edges
+
   const datasets: Dataset[] =
     data?.datasets?.edges?.map((edge: { node: Dataset }) => edge.node) || []
 
   const filteredDatasets = datasets
     .filter((dataset) => {
-      const matchesSearch =
-        dataset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        dataset.id.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesSearch = (dataset.name &&
+        dataset.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (dataset.id &&
+          dataset.id.toLowerCase().includes(searchQuery.toLowerCase())) // Add check for dataset.id
       const matchesPublicFilter = publicFilter === "all" ||
         (publicFilter === "public" && dataset.public) ||
         (publicFilter === "private" && !dataset.public)
       return matchesSearch && matchesPublicFilter
     })
     .sort((a, b) => {
+      let result = 0
+
       switch (sortOrder) {
-        case "name-asc":
-          return a.name.localeCompare(b.name)
-        case "name-desc":
-          return b.name.localeCompare(a.name)
-        case "date-newest":
-          return new Date(b.created).getTime() - new Date(a.created).getTime()
-        case "date-updated":
+        case "name-asc": {
+          const aName = a.name || ""
+          const bName = b.name || ""
+          result = aName.localeCompare(bName)
+          break
+        }
+        case "name-desc": {
+          const aName = a.name || ""
+          const bName = b.name || ""
+          result = bName.localeCompare(aName)
+          break
+        }
+        case "date-newest": {
+          result = new Date(b.created).getTime() - new Date(a.created).getTime()
+          break
+        }
+        case "date-updated": {
           const aUpdated = a.latestSnapshot?.created || a.created
           const bUpdated = b.latestSnapshot?.created || b.created
-          return new Date(bUpdated).getTime() - new Date(aUpdated).getTime()
-        default:
-          return 0
+          result = new Date(bUpdated).getTime() - new Date(aUpdated).getTime()
+          break
+        }
+        default: {
+          result = 0
+          break
+        }
       }
+
+      return result
     })
 
   return (
