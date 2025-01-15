@@ -218,7 +218,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
       // Add a remote.log entry if one does not exist
       let remoteLog = ""
       const newRemoteLog =
-        `${uuid} autoenable=true name=OpenNeuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
+        `${uuid} autoenable=true name=openneuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
       try {
         remoteLog = await context.fs.promises.readFile(
           join(context.repoPath, "remote.log"),
