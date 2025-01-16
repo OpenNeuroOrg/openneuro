@@ -51,7 +51,7 @@ To upload a new dataset:
 deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
 ```
 
-Your dataset must pass validation to upload but warnings can be skipped with `deno run -A jsr:@openneuro/cli upload -i path/to/dataset`. A default label is set using the directory name.
+Your dataset must pass validation to upload but warnings can be skipped with `deno run -A jsr:@openneuro/cli upload --ignoreWarnings path/to/dataset`.
 
 To resume an interrupted upload or add files to an existing dataset:
 
