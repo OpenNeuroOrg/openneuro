@@ -9,22 +9,36 @@ This tool allows you to upload and download [OpenNeuro.org](https://openneuro.or
 
 ## Install
 
-1. Install [Node.js](https://nodejs.org) (version 18 or higher)
-2. In a terminal type: `npm install -g @openneuro/cli`
+1. Install [Deno] (https://deno.land/) via [any supported installation method](https://docs.deno.com/runtime/manual/getting_started/installation).
+2. In a terminal type: `deno run -A jsr:@openneuro/cli --help`
 
-If you are using [yarn](https://yarnpkg.com/) you can also perform the installation with `yarn global add @openneuro/cli`
-(make sure the installation folder is part of your `PATH` by adding `export PATH="$(yarn global bin):$PATH"` to `~/.bashrc`)
+To download annexed files, you will need the git-annex special remote for OpenNeuro.
+
+```shell
+# A script is provided to wrap the CLI as a special remote
+curl https://raw.githubusercontent.com/OpenNeuroOrg/openneuro/refs/heads/master/bin/git-annex-remote-openneuro -o git-annex-remote-openneuro
+# Make this executable and move this script to your path
+chmod +x git-annex-remote-openneuro
+```
 
 ## Setup
 
 The setup step is needed for both uploading _and_ downloading data from OpenNeuro.
 
-Run `openneuro login` to configure credentials.
-This prompts you for the required configuration fields and saves this to `.openneuro` in your home directory or profile.
-`openneuro login` will require you to enter an API key.
-You can obtain an API key via a browser at https://openneuro.org/keygen after logging to the OpenNeuro platform via one of the provided authentication services (for example ORCID).
+Run `deno run -A jsr:@openneuro/cli login` to configure credentials.
+This prompts you for the required configuration fields and these are saved in Deno's local storage.
 
-After successfully running `openneuro login`, you can manually configure custom servers by editing the `.openneuro` file.
+`deno run -A jsr:@openneuro/cli login` will require you to enter an API key.
+
+You can obtain an API key via a browser on [OpenNeuro](https://openneuro.org/keygen) after logging to the OpenNeuro platform via one of the provided authentication services (for example ORCID).
+
+You can also specify this as an option or environment variable.
+
+```shell
+# For scripts
+export OPENNEURO_API_KEY=<api_key>
+deno run -A jsr:@openneuro/cli login --error-reporting true
+```
 
 ## Usage
 
@@ -32,13 +46,19 @@ After successfully running `openneuro login`, you can manually configure custom 
 
 To upload a new dataset:
 
-`openneuro upload <dataset directory>`
+```shell
+# Path to the dataset root (directory containing dataset_description.json)
+deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
+```
 
-Your dataset must pass validation to upload but warnings can be skipped with `openneuro upload -i <dataset directory>`. A default label is set using the directory name.
+Your dataset must pass validation to upload but warnings can be skipped with `deno run -A jsr:@openneuro/cli upload --ignoreWarnings path/to/dataset`.
 
 To resume an interrupted upload or add files to an existing dataset:
 
-`openneuro upload --dataset <accession number> <dataset directory>`
+```shell
+# Add files to an existing dataset
+deno run -A jsr:@openneuro/cli upload --dataset ds000001 path/to/dataset
+```
 
 where <accession_number> is a unique dataset identifier that can be found in the URL. For example accession number for `https://openneuro.org/datasets/ds001555` is `ds001555`.
 
@@ -46,21 +66,40 @@ This command will add or replace any files in the dataset but does not delete an
 
 ### Downloading datasets
 
+Downloads using the CLI will create a DataLad dataset and configure a special remote to retrieve the larger annexed files from OpenNeuro.
+
 To download a snapshot:
 
-`openneuro download <accession number> <destination directory>`
+```shell
+deno run -A jsr:@openneuro/cli download <accession number> <destination directory>
+```
 
 To download the current draft files:
 
-`openneuro download --draft <accession number> <destination directory>`
+```shell
+deno run -A jsr:@openneuro/cli download --draft <accession number> <destination directory>
+```
 
-If the destination directory does not exist, it will be created. Any files from the dataset that are already present in the directory will be skipped, allowing you to resume an interrupted download.
+If the destination directory does not exist, it will be created.
 
-## Errors
+To download the annexed objects, use [DataLad](https://datalad.org/) or [git-annex](https://git-annex.branchable.com).
 
-Package: OpenNeuro CLI download option
+```shell
+cd ds000001
+# Make sure you have the `git-annex-remote-openneuro` script available in your path
+git-annex get <path or paths to download>
+# DataLad is supported as well
+datalad get <path or paths to download>
+```
 
-Issue: `TypeError: path must be a string or Buffer`
+### Debugging issues
 
-Solution: This error is due to a failure to read the `~/.openneuro` configuration file.
-This file can be created with the command `openneuro login`, see the "Setup" step above.
+```shell
+# To debug issues - enable logging and provide this log to support or open a GitHub issue
+export OPENNEURO_LOG=INFO
+deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
+```
+
+### Implementation Notes
+
+This tool uses isomorphic git to download, modify, and push datasets using OpenNeuro's [git interface](https://docs.openneuro.org/git.html). Other tools that support git and git-annex repositories such as [DataLad](https://www.datalad.org/) can also be used with the local copy.

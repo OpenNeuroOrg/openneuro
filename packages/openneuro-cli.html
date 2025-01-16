@@ -269,48 +269,82 @@
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Install <a class="reference external" href="https://nodejs.org">Node.js</a> (version 18 or higher)</p></li>
-<li><p>In a terminal type: <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">-g</span> <span class="pre">&#64;openneuro/cli</span></code></p></li>
+<li><p>Install [Deno] (https://deno.land/) via <a class="reference external" href="https://docs.deno.com/runtime/manual/getting_started/installation">any supported installation method</a>.</p></li>
+<li><p>In a terminal type: <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">--help</span></code></p></li>
 </ol>
-<p>If you are using <a class="reference external" href="https://yarnpkg.com/">yarn</a> you can also perform the installation with <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">global</span> <span class="pre">add</span> <span class="pre">&#64;openneuro/cli</span></code>
-(make sure the installation folder is part of your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> by adding <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">PATH=&quot;$(yarn</span> <span class="pre">global</span> <span class="pre">bin):$PATH&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code>)</p>
+<p>To download annexed files, you will need the git-annex special remote for OpenNeuro.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># A script is provided to wrap the CLI as a special remote</span>
+curl<span class="w"> </span>https://raw.githubusercontent.com/OpenNeuroOrg/openneuro/refs/heads/master/bin/git-annex-remote-openneuro<span class="w"> </span>-o<span class="w"> </span>git-annex-remote-openneuro
+<span class="c1"># Make this executable and move this script to your path</span>
+chmod<span class="w"> </span>+x<span class="w"> </span>git-annex-remote-openneuro
+</pre></div>
+</div>
 </section>
 <section id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h2>
 <p>The setup step is needed for both uploading <em>and</em> downloading data from OpenNeuro.</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code> to configure credentials.
-This prompts you for the required configuration fields and saves this to <code class="docutils literal notranslate"><span class="pre">.openneuro</span></code> in your home directory or profile.
-<code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code> will require you to enter an API key.
-You can obtain an API key via a browser at https://openneuro.org/keygen after logging to the OpenNeuro platform via one of the provided authentication services (for example ORCID).</p>
-<p>After successfully running <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, you can manually configure custom servers by editing the <code class="docutils literal notranslate"><span class="pre">.openneuro</span></code> file.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">login</span></code> to configure credentials.
+This prompts you for the required configuration fields and these are saved in Deno’s local storage.</p>
+<p><code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">login</span></code> will require you to enter an API key.</p>
+<p>You can obtain an API key via a browser on <a class="reference external" href="https://openneuro.org/keygen">OpenNeuro</a> after logging to the OpenNeuro platform via one of the provided authentication services (for example ORCID).</p>
+<p>You can also specify this as an option or environment variable.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># For scripts</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OPENNEURO_API_KEY</span><span class="o">=</span>&lt;api_key&gt;
+deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>login<span class="w"> </span>--error-reporting<span class="w"> </span><span class="nb">true</span>
+</pre></div>
+</div>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="uploading-datasets">
 <h3>Uploading datasets<a class="headerlink" href="#uploading-datasets" title="Link to this heading">¶</a></h3>
 <p>To upload a new dataset:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code></p>
-<p>Your dataset must pass validation to upload but warnings can be skipped with <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">-i</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code>. A default label is set using the directory name.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Path to the dataset root (directory containing dataset_description.json)</span>
+deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
+</pre></div>
+</div>
+<p>Your dataset must pass validation to upload but warnings can be skipped with <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">upload</span> <span class="pre">--ignoreWarnings</span> <span class="pre">path/to/dataset</span></code>.</p>
 <p>To resume an interrupted upload or add files to an existing dataset:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">upload</span> <span class="pre">--dataset</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;dataset</span> <span class="pre">directory&gt;</span></code></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add files to an existing dataset</span>
+deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--dataset<span class="w"> </span>ds000001<span class="w"> </span>path/to/dataset
+</pre></div>
+</div>
 <p>where &lt;accession_number&gt; is a unique dataset identifier that can be found in the URL. For example accession number for <code class="docutils literal notranslate"><span class="pre">https://openneuro.org/datasets/ds001555</span></code> is <code class="docutils literal notranslate"><span class="pre">ds001555</span></code>.</p>
 <p>This command will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.</p>
 </section>
 <section id="downloading-datasets">
 <h3>Downloading datasets<a class="headerlink" href="#downloading-datasets" title="Link to this heading">¶</a></h3>
+<p>Downloads using the CLI will create a DataLad dataset and configure a special remote to retrieve the larger annexed files from OpenNeuro.</p>
 <p>To download a snapshot:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">download</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;destination</span> <span class="pre">directory&gt;</span></code></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>download<span class="w"> </span>&lt;accession<span class="w"> </span>number&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>directory&gt;
+</pre></div>
+</div>
 <p>To download the current draft files:</p>
-<p><code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">download</span> <span class="pre">--draft</span> <span class="pre">&lt;accession</span> <span class="pre">number&gt;</span> <span class="pre">&lt;destination</span> <span class="pre">directory&gt;</span></code></p>
-<p>If the destination directory does not exist, it will be created. Any files from the dataset that are already present in the directory will be skipped, allowing you to resume an interrupted download.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>download<span class="w"> </span>--draft<span class="w"> </span>&lt;accession<span class="w"> </span>number&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>directory&gt;
+</pre></div>
+</div>
+<p>If the destination directory does not exist, it will be created.</p>
+<p>To download the annexed objects, use <a class="reference external" href="https://datalad.org/">DataLad</a> or <a class="reference external" href="https://git-annex.branchable.com">git-annex</a>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ds000001
+<span class="c1"># Make sure you have the `git-annex-remote-openneuro` script available in your path</span>
+git-annex<span class="w"> </span>get<span class="w"> </span>&lt;path<span class="w"> </span>or<span class="w"> </span>paths<span class="w"> </span>to<span class="w"> </span>download&gt;
+<span class="c1"># DataLad is supported as well</span>
+datalad<span class="w"> </span>get<span class="w"> </span>&lt;path<span class="w"> </span>or<span class="w"> </span>paths<span class="w"> </span>to<span class="w"> </span>download&gt;
+</pre></div>
+</div>
 </section>
+<section id="debugging-issues">
+<h3>Debugging issues<a class="headerlink" href="#debugging-issues" title="Link to this heading">¶</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># To debug issues - enable logging and provide this log to support or open a GitHub issue</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OPENNEURO_LOG</span><span class="o">=</span>INFO
+deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
+</pre></div>
+</div>
 </section>
-<section id="errors">
-<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">¶</a></h2>
-<p>Package: OpenNeuro CLI download option</p>
-<p>Issue: <code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">path</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">a</span> <span class="pre">string</span> <span class="pre">or</span> <span class="pre">Buffer</span></code></p>
-<p>Solution: This error is due to a failure to read the <code class="docutils literal notranslate"><span class="pre">~/.openneuro</span></code> configuration file.
-This file can be created with the command <code class="docutils literal notranslate"><span class="pre">openneuro</span> <span class="pre">login</span></code>, see the “Setup” step above.</p>
+<section id="implementation-notes">
+<h3>Implementation Notes<a class="headerlink" href="#implementation-notes" title="Link to this heading">¶</a></h3>
+<p>This tool uses isomorphic git to download, modify, and push datasets using OpenNeuro’s <a class="reference external" href="https://docs.openneuro.org/git.html">git interface</a>. Other tools that support git and git-annex repositories such as <a class="reference external" href="https://www.datalad.org/">DataLad</a> can also be used with the local copy.</p>
+</section>
 </section>
 </section>
 
@@ -375,9 +409,10 @@ This file can be created with the command <code class="docutils literal notransl
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#uploading-datasets">Uploading datasets</a></li>
 <li><a class="reference internal" href="#downloading-datasets">Downloading datasets</a></li>
+<li><a class="reference internal" href="#debugging-issues">Debugging issues</a></li>
+<li><a class="reference internal" href="#implementation-notes">Implementation Notes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#errors">Errors</a></li>
 </ul>
 </li>
 </ul>
