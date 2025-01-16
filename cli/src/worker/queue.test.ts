@@ -14,6 +14,7 @@ Deno.test("PromiseQueue should execute promises in order", async () => {
     order.push(2)
   })
   promiseQueue.enqueue(async () => {
+    await Promise.resolve()
     order.push(3)
   })
 
