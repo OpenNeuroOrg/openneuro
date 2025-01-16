@@ -9,7 +9,7 @@ This tool allows you to upload and download [OpenNeuro.org](https://openneuro.or
 
 ## Install
 
-1. Install [Deno] (https://deno.land/) via [any supported installation method](https://docs.deno.com/runtime/manual/getting_started/installation).
+1. Install [Deno](https://deno.land/) via [any supported installation method](https://docs.deno.com/runtime/manual/getting_started/installation).
 2. In a terminal type: `deno run -A jsr:@openneuro/cli --help`
 
 To download annexed files, you will need the git-annex special remote for OpenNeuro.
