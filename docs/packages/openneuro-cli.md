@@ -1,1 +1,1 @@
-../../packages/openneuro-cli/README.md
+../../cli/README.md
