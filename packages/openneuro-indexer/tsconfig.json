@@ -10,7 +10,6 @@
   "include": ["./src"],
   "exclude": ["node_modules", "**/*.spec.ts"],
   "references": [
-    { "path": "../openneuro-client" },
     { "path": "../openneuro-search" }
   ]
 }

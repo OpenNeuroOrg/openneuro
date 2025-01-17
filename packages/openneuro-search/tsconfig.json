@@ -9,6 +9,5 @@
   "extends": "../../tsconfig.json",
   "include": ["./src"],
   "exclude": ["node_modules", "**/*.spec.ts"],
-  "files": ["./src/mappings/datasets-mapping.json"],
-  "references": [{ "path": "../openneuro-client" }]
+  "files": ["./src/mappings/datasets-mapping.json"]
 }
