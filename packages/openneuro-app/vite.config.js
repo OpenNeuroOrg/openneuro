@@ -27,6 +27,7 @@ export default defineConfig({
     port: 80,
     host: "0.0.0.0",
     cors: true,
+    allowedHosts: ["app"],
   },
   build: {
     sourcemap: true,
