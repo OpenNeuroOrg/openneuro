@@ -8,7 +8,6 @@
   "include": ["./src"],
   "files": ["./src/lerna.json"],
   "references": [
-    { "path": "../openneuro-client" },
     { "path": "../openneuro-components" }
   ]
 }
