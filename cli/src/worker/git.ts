@@ -5,7 +5,7 @@ import {
   parseGitAttributes,
 } from "../gitattributes.ts"
 import { dirname, join } from "@std/path"
-import { default as git, STAGE, TREE } from "npm:isomorphic-git"
+import { default as git, STAGE, TREE } from "isomorphic-git"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"

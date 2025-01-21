@@ -74,6 +74,7 @@
     "npm:@types/node@*": "18.16.19",
     "npm:ajv@8.17.1": "8.17.1",
     "npm:hash-wasm@*": "4.11.0",
+    "npm:hash-wasm@^4.12.0": "4.12.0",
     "npm:hed-validator@3.15.5": "3.15.5",
     "npm:ignore@*": "5.3.2",
     "npm:ignore@5.3.0": "5.3.0",
@@ -506,6 +507,9 @@
     },
     "hash-wasm@4.11.0": {
       "integrity": "sha512-HVusNXlVqHe0fzIzdQOGolnFN6mX/fqcrSAOcTBXdvzrXVHwTz11vXeKRmkR5gTuwVpvHZEIyKoePDvuAR+XwQ=="
+    },
+    "hash-wasm@4.12.0": {
+      "integrity": "sha512-+/2B2rYLb48I/evdOIhP+K/DD2ca2fgBjp6O+GBEnCDk2e4rpeXIK8GvIyRPjTezgmWn9gmKwkQjjx6BtqDHVQ=="
     },
     "hed-validator@3.15.5": {
       "integrity": "sha512-os1Q2ecNT2QwVLHISjjHKvodW3cyuSnOKCadjggcMd7f6QmMwuSg1E4pyqOX2MxruMbAt4/K4Qiju+lIUm89iQ==",
@@ -1165,6 +1169,7 @@
       "jsr:@std/testing@^1.0.1",
       "jsr:@wok/djwt@^3.0.2",
       "npm:@sentry/deno@^8.27.0",
+      "npm:hash-wasm@^4.12.0",
       "npm:ignore@^5.3.0",
       "npm:isomorphic-git@1.27.1"
     ]
