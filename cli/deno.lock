@@ -6,14 +6,13 @@
     "jsr:@cliffy/ansi@1.0.0-rc.5": "1.0.0-rc.5",
     "jsr:@cliffy/ansi@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/command@1.0.0-rc.5": "1.0.0-rc.5",
-    "jsr:@cliffy/command@^1.0.0-rc.5": "1.0.0-rc.7",
     "jsr:@cliffy/flags@1.0.0-rc.5": "1.0.0-rc.5",
     "jsr:@cliffy/flags@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/internal@1.0.0-rc.5": "1.0.0-rc.5",
     "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/keycode@1.0.0-rc.5": "1.0.0-rc.5",
     "jsr:@cliffy/keycode@1.0.0-rc.7": "1.0.0-rc.7",
-    "jsr:@cliffy/prompt@^1.0.0-rc.5": "1.0.0-rc.7",
+    "jsr:@cliffy/prompt@^1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/table@1.0.0-rc.5": "1.0.0-rc.5",
     "jsr:@cliffy/table@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@deno-library/progress@^1.4.9": "1.4.9",
@@ -25,6 +24,7 @@
     "jsr:@std/assert@1.0.0-rc.2": "1.0.0-rc.2",
     "jsr:@std/assert@^1.0.3": "1.0.10",
     "jsr:@std/assert@~1.0.6": "1.0.10",
+    "jsr:@std/async@^1.0.4": "1.0.9",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
     "jsr:@std/bytes@^1.0.3": "1.0.4",
     "jsr:@std/cli@1.0.0-rc.2": "1.0.0-rc.2",
@@ -46,7 +46,7 @@
     "jsr:@std/fs@^1.0.3": "1.0.3",
     "jsr:@std/fs@^1.0.4": "1.0.8",
     "jsr:@std/fs@^1.0.7": "1.0.8",
-    "jsr:@std/internal@^1.0.2": "1.0.2",
+    "jsr:@std/internal@^1.0.2": "1.0.5",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/io@0.225": "0.225.0",
     "jsr:@std/io@~0.224.2": "0.224.7",
@@ -74,6 +74,7 @@
     "npm:@types/node@*": "18.16.19",
     "npm:ajv@8.17.1": "8.17.1",
     "npm:hash-wasm@*": "4.11.0",
+    "npm:hash-wasm@^4.12.0": "4.12.0",
     "npm:hed-validator@3.15.5": "3.15.5",
     "npm:ignore@*": "5.3.2",
     "npm:ignore@5.3.0": "5.3.0",
@@ -83,7 +84,7 @@
     "npm:isomorphic-git@*": "1.27.1",
     "npm:isomorphic-git@1.25.3": "1.25.3",
     "npm:isomorphic-git@1.25.6": "1.25.6",
-    "npm:isomorphic-git@^1.25.6": "1.27.1"
+    "npm:isomorphic-git@1.27.1": "1.27.1"
   },
   "jsr": {
     "@bids/schema@1.0.0": {
@@ -130,16 +131,6 @@
         "jsr:@cliffy/table@1.0.0-rc.5",
         "jsr:@std/fmt@~0.225.4",
         "jsr:@std/text@1.0.0-rc.1"
-      ]
-    },
-    "@cliffy/command@1.0.0-rc.7": {
-      "integrity": "1288808d7a3cd18b86c24c2f920e47a6d954b7e23cadc35c8cbd78f8be41f0cd",
-      "dependencies": [
-        "jsr:@cliffy/flags@1.0.0-rc.7",
-        "jsr:@cliffy/internal@1.0.0-rc.7",
-        "jsr:@cliffy/table@1.0.0-rc.7",
-        "jsr:@std/fmt@~1.0.2",
-        "jsr:@std/text@~1.0.7"
       ]
     },
     "@cliffy/flags@1.0.0-rc.5": {
@@ -216,6 +207,7 @@
       "dependencies": [
         "jsr:@cliffy/flags@1.0.0-rc.7",
         "jsr:@cliffy/internal@1.0.0-rc.7",
+        "jsr:@cliffy/table@1.0.0-rc.7",
         "jsr:@effigies/cliffy-table@^1.0.0-dev.5",
         "jsr:@std/fmt@~1.0.2",
         "jsr:@std/text@~1.0.7"
@@ -250,6 +242,9 @@
       "dependencies": [
         "jsr:@std/internal@^1.0.5"
       ]
+    },
+    "@std/async@1.0.9": {
+      "integrity": "c6472fd0623b3f3daae023cdf7ca5535e1b721dfbf376562c0c12b3fb4867f91"
     },
     "@std/bytes@1.0.2": {
       "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
@@ -392,6 +387,7 @@
       "integrity": "9c25841137ee818933e1722091bb9ed5fdc251c35e84c97979a52196bdb6c5c3",
       "dependencies": [
         "jsr:@std/assert@^1.0.3",
+        "jsr:@std/async",
         "jsr:@std/data-structures",
         "jsr:@std/fs@^1.0.2",
         "jsr:@std/internal@^1.0.2",
@@ -511,6 +507,9 @@
     },
     "hash-wasm@4.11.0": {
       "integrity": "sha512-HVusNXlVqHe0fzIzdQOGolnFN6mX/fqcrSAOcTBXdvzrXVHwTz11vXeKRmkR5gTuwVpvHZEIyKoePDvuAR+XwQ=="
+    },
+    "hash-wasm@4.12.0": {
+      "integrity": "sha512-+/2B2rYLb48I/evdOIhP+K/DD2ca2fgBjp6O+GBEnCDk2e4rpeXIK8GvIyRPjTezgmWn9gmKwkQjjx6BtqDHVQ=="
     },
     "hed-validator@3.15.5": {
       "integrity": "sha512-os1Q2ecNT2QwVLHISjjHKvodW3cyuSnOKCadjggcMd7f6QmMwuSg1E4pyqOX2MxruMbAt4/K4Qiju+lIUm89iQ==",
@@ -1158,9 +1157,9 @@
   "workspace": {
     "dependencies": [
       "jsr:@bids/validator@^2.0.1",
-      "jsr:@cliffy/command@^1.0.0-rc.5",
-      "jsr:@cliffy/prompt@^1.0.0-rc.5",
+      "jsr:@cliffy/prompt@^1.0.0-rc.7",
       "jsr:@deno-library/progress@^1.4.9",
+      "jsr:@effigies/cliffy-command@1.0.0-dev.8",
       "jsr:@std/assert@^1.0.3",
       "jsr:@std/encoding@^1.0.3",
       "jsr:@std/fs@^1.0.2",
@@ -1170,8 +1169,9 @@
       "jsr:@std/testing@^1.0.1",
       "jsr:@wok/djwt@^3.0.2",
       "npm:@sentry/deno@^8.27.0",
+      "npm:hash-wasm@^4.12.0",
       "npm:ignore@^5.3.0",
-      "npm:isomorphic-git@^1.25.6"
+      "npm:isomorphic-git@1.27.1"
     ]
   }
 }

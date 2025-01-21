@@ -38,12 +38,21 @@ export const snapshotValidation = async (snapshot) => {
     .exec()
 }
 
+export function validationSeveritySort(a, b) {
+  return a.severity.localeCompare(b.severity)
+}
+
 /**
  * Save issues data returned by the datalad service
  *
  * Returns only a boolean if successful or not
  */
 export const updateValidation = (obj, args) => {
+  // Limit to 50k issues with errors sorted first
+  if (args.validation.issues.length > 50000) {
+    args.validation.issues.sort(validationSeveritySort)
+    args.validation.issues = args.validation.issues.slice(0, 50000)
+  }
   return Validation.updateOne(
     {
       id: args.validation.id,

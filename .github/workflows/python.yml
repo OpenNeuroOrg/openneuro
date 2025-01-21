@@ -40,6 +40,6 @@ jobs:
       - name: Run tests and collect coverage
         run: pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

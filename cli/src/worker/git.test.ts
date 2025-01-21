@@ -1,6 +1,6 @@
 import { join, SEPARATOR } from "@std/path"
 import { walk } from "@std/fs/walk"
-import { default as git } from "npm:isomorphic-git"
+import { default as git } from "isomorphic-git"
 import { assertEquals } from "@std/assert/equals"
 import { assertArrayIncludes } from "@std/assert/array-includes"
 import { addGitFiles } from "../commands/upload.ts"

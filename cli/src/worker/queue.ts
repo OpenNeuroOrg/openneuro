@@ -3,7 +3,7 @@ export class PromiseQueue {
   private running = false
 
   enqueue(promiseFn: (...args: any[]) => Promise<any>, ...args: any[]) {
-    this.queue.push(async () => promiseFn(...args))
+    this.queue.push(() => promiseFn(...args))
     this.processQueue()
   }
 

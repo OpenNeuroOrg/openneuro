@@ -1,32 +1,38 @@
-# OpenNeuro CLI for Deno
+---
+name: Command Line Interface
+route: /cli
+---
 
-Command line tools for OpenNeuro. Upload and download support for working with OpenNeuro datasets from the command line.
+# OpenNeuro command line interface
+
+This tool allows you to upload and download [OpenNeuro.org](https://openneuro.org) datasets without a browser.
 
 ## Install
 
-Download deno via [any supported installation method](https://docs.deno.com/runtime/manual/getting_started/installation).
+1. Install [Deno](https://deno.land/) via [any supported installation method](https://docs.deno.com/runtime/manual/getting_started/installation).
+2. In a terminal type: `deno run -A jsr:@openneuro/cli --help`
 
-## Usage
-
-OpenNeuro CLI will validate your dataset with the [bids-validator](https://github.com/bids-standard/bids-validator/) and then allow you to upload to OpenNeuro. If you wish to make changes to a dataset, the CLI can download, allow you to make local changes, and reupload only the changes to OpenNeuro.
-
-```shell
-# Interactive help
-deno run -A jsr:@openneuro/cli --help
-# Available for each subcommand
-deno run -A jsr:@openneuro/cli upload --help
-```
-
-### Login
-
-To upload or download data from OpenNeuro, login with your account.
+To download annexed files, you will need the git-annex special remote for OpenNeuro.
 
 ```shell
-# Run login and follow the prompts
-deno run -A jsr:@openneuro/cli login
+# A script is provided to wrap the CLI as a special remote
+curl https://raw.githubusercontent.com/OpenNeuroOrg/openneuro/refs/heads/master/bin/git-annex-remote-openneuro -o git-annex-remote-openneuro
+# Make this executable and move this script to your path
+chmod +x git-annex-remote-openneuro
 ```
 
-You can also create an API key on [OpenNeuro](https://openneuro.org/keygen) and specify this as an option or environment variable.
+## Setup
+
+The setup step is needed for both uploading _and_ downloading data from OpenNeuro.
+
+Run `deno run -A jsr:@openneuro/cli login` to configure credentials.
+This prompts you for the required configuration fields and these are saved in Deno's local storage.
+
+`deno run -A jsr:@openneuro/cli login` will require you to enter an API key.
+
+You can obtain an API key via a browser on [OpenNeuro](https://openneuro.org/keygen) after logging to the OpenNeuro platform via one of the provided authentication services (for example ORCID).
+
+You can also specify this as an option or environment variable.
 
 ```shell
 # For scripts
@@ -34,17 +40,59 @@ export OPENNEURO_API_KEY=<api_key>
 deno run -A jsr:@openneuro/cli login --error-reporting true
 ```
 
-### Uploading
+## Usage
+
+### Uploading datasets
+
+To upload a new dataset:
 
 ```shell
 # Path to the dataset root (directory containing dataset_description.json)
 deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
 ```
 
+Your dataset must pass validation to upload but warnings can be skipped with `deno run -A jsr:@openneuro/cli upload --ignoreWarnings path/to/dataset`.
+
+To resume an interrupted upload or add files to an existing dataset:
+
 ```shell
 # Add files to an existing dataset
 deno run -A jsr:@openneuro/cli upload --dataset ds000001 path/to/dataset
 ```
+
+where <accession_number> is a unique dataset identifier that can be found in the URL. For example accession number for `https://openneuro.org/datasets/ds001555` is `ds001555`.
+
+This command will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.
+
+### Downloading datasets
+
+Downloads using the CLI will create a DataLad dataset and configure a special remote to retrieve the larger annexed files from OpenNeuro.
+
+To download a snapshot:
+
+```shell
+deno run -A jsr:@openneuro/cli download <accession number> <destination directory>
+```
+
+To download the current draft files:
+
+```shell
+deno run -A jsr:@openneuro/cli download --draft <accession number> <destination directory>
+```
+
+If the destination directory does not exist, it will be created.
+
+To download the annexed objects, use [DataLad](https://datalad.org/) or [git-annex](https://git-annex.branchable.com).
+
+```shell
+cd ds000001
+# Make sure you have the `git-annex-remote-openneuro` script available in your path
+git-annex get <path or paths to download>
+# DataLad is supported as well
+datalad get <path or paths to download>
+```
+
+### Debugging issues
 
 ```shell
 # To debug issues - enable logging and provide this log to support or open a GitHub issue
@@ -52,6 +100,6 @@ export OPENNEURO_LOG=INFO
 deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
 ```
 
-## Implementation Notes
+### Implementation Notes
 
 This tool uses isomorphic git to download, modify, and push datasets using OpenNeuro's [git interface](https://docs.openneuro.org/git.html). Other tools that support git and git-annex repositories such as [DataLad](https://www.datalad.org/) can also be used with the local copy.

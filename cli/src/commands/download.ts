@@ -44,14 +44,24 @@ export async function downloadAction(
 
   console.log("Downloading...")
 
+  // Clone main/master and git-annex branches
   worker.postMessage({
     "command": "clone",
+  })
+
+  // Setup any git-annex remotes required for downloads
+  worker.postMessage({
+    "command": "remote-setup",
   })
 
   // Close after all tasks are queued
   worker.postMessage({ command: "done" })
 
-  console.log(
-    "Download complete. To download all data files, use `datalad get` or `git-annex get`.",
-  )
+  worker.addEventListener("message", (event) => {
+    if (event.data.command === "closed") {
+      console.log(
+        "Download complete. To download all data files, use `datalad get` or `git-annex get`.",
+      )
+    }
+  })
 }

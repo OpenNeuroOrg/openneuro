@@ -5,7 +5,7 @@ import {
   parseGitAttributes,
 } from "../gitattributes.ts"
 import { dirname, join } from "@std/path"
-import { default as git, STAGE, TREE } from "npm:isomorphic-git"
+import { default as git, STAGE, TREE } from "isomorphic-git"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
@@ -182,6 +182,14 @@ async function createAnnexBranch() {
 }
 
 /**
+ * Generate a commit for remote.log updates if needed
+ */
+async function remoteSetup() {
+  const noAnnexKeys: Record<string, string> = {}
+  await commitAnnexBranch(noAnnexKeys)
+}
+
+/**
  * Generate one commit for all pending git-annex branch changes
  */
 async function commitAnnexBranch(annexKeys: Record<string, string>) {
@@ -218,14 +226,17 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
       // Add a remote.log entry if one does not exist
       let remoteLog = ""
       const newRemoteLog =
-        `${uuid} autoenable=true name=OpenNeuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
+        `${uuid} autoenable=true name=openneuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
       try {
         remoteLog = await context.fs.promises.readFile(
           join(context.repoPath, "remote.log"),
           { encoding: "utf8" },
         )
       } catch (_err) {
-        if (_err instanceof Error && _err.name !== "NotFound") {
+        // Continue if the error is remote.log is not found, otherwise throw it here
+        if (
+          !(_err instanceof Error && "code" in _err && _err.code === "ENOENT")
+        ) {
           throw _err
         }
       } finally {
@@ -269,11 +280,23 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
           await git.add({ ...context.config(), filepath: annexBranchPath })
         }
       }
-      await git.commit({
-        ...context.config(),
-        message: "[OpenNeuro CLI] Added annexed objects",
-        author: context.author,
-      })
+      // Show a better commit message for when only the remote is updated
+      if (Object.keys(annexKeys).length === 0) {
+        // Only generate a commit if needed
+        if (!remoteLog.includes(uuid)) {
+          await git.commit({
+            ...context.config(),
+            message: "[OpenNeuro CLI] Configured remote",
+            author: context.author,
+          })
+        }
+      } else {
+        await git.commit({
+          ...context.config(),
+          message: "[OpenNeuro CLI] Added annexed objects",
+          author: context.author,
+        })
+      }
     }
   } finally {
     try {
@@ -437,6 +460,8 @@ self.onmessage = (event: GitWorkerEvent) => {
     workQueue.enqueue(commit)
   } else if (event.data.command === "push") {
     workQueue.enqueue(push)
+  } else if (event.data.command === "remote-setup") {
+    workQueue.enqueue(remoteSetup)
   } else if (event.data.command === "done") {
     workQueue.enqueue(done)
   }
