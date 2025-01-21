@@ -1,12 +1,12 @@
 import type { GitWorkerContext } from "./types/git-context.ts"
 import { basename, dirname, join, relative } from "@std/path"
-import { default as git } from "npm:isomorphic-git"
+import { default as git } from "isomorphic-git"
 
 /**
  * Why are we using hash wasm over web crypto?
  * Web crypto cannot do streaming hashes of the common git-annex functions yet.
  */
-import { createMD5, createSHA256 } from "npm:hash-wasm"
+import { createMD5, createSHA256 } from "hash-wasm"
 
 /**
  * Reusable hash factories

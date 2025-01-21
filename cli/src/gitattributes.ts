@@ -1,4 +1,4 @@
-import ignore from "npm:ignore"
+import ignore from "ignore"
 /**
  * Git annex supports many backends, we support a limited subset used by OpenNeuro (for now)
  * https://git-annex.branchable.com/backends/
