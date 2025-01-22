@@ -1,47 +1,42 @@
 import React from "react"
 import { formatDistanceToNow, parseISO } from "date-fns"
-import activityPulseIcon from "../../../assets/activity-icon.png"
+import activityPulseIcon from "../../assets/activity-icon.png"
 import { Tooltip } from "@openneuro/components/tooltip"
 import { Icon } from "@openneuro/components/icon"
-import styles from "../scss/datasetcard.module.scss"
+import styles from "./scss/datasetcard.module.scss"
+import type { DatasetCardProps } from "../types/user-types"
 
-interface Dataset {
-  id: string
-  created: string
-  name: string
-  public: boolean
-  analytics: {
-    views: number
-    downloads: number
+export const DatasetCard: React.FC<DatasetCardProps> = (
+  { dataset, hasEdit },
+) => {
+  // Check visibility conditions
+  if (!dataset.public && !hasEdit) {
+    return null
   }
-  stars: [{ userId: string; datasetId: string }]
-  followers: [{ userId: string; datasetId: string }]
-  latestSnapshot?: {
-    id: string
-    size: number
-    issues: [{ severity: string }]
-    created?: string
-  }
-}
 
-interface DatasetCardProps {
-  dataset: Dataset
-}
-
-export const DatasetCard: React.FC<DatasetCardProps> = ({ dataset }) => {
   const dateAdded = new Date(dataset.created).toLocaleDateString()
-  const dateAddedDifference = formatDistanceToNow(parseISO(dataset.created))
 
-  const downloads = dataset.analytics.downloads
+  // Check if the created date is valid before formatting
+  const parsedCreatedDate = parseISO(dataset.created)
+  const dateAddedDifference = isNaN(parsedCreatedDate.getTime())
+    ? "Invalid date"
+    : formatDistanceToNow(parsedCreatedDate)
+
+  // Check if dataset.analytics exists before accessing its properties
+  const downloads = dataset.analytics?.downloads
     ? `${dataset.analytics.downloads.toLocaleString()} Downloads \n`
     : ""
-  const views = dataset.analytics.views
+  const views = dataset.analytics?.views
     ? `${dataset.analytics.views.toLocaleString()} Views \n`
     : ""
-  const following = dataset.followers.length
+
+  // Check if dataset.followers is an array and has length
+  const following = Array.isArray(dataset.followers) && dataset.followers.length
     ? `${dataset.followers.length.toLocaleString()} Follower \n`
     : ""
-  const stars = dataset.stars.length
+
+  // Check if dataset.stars is an array and has length
+  const stars = Array.isArray(dataset.stars) && dataset.stars.length
     ? `${dataset.stars.length.toLocaleString()} Bookmarked`
     : ""
 
@@ -78,6 +73,21 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({ dataset }) => {
     </Tooltip>
   )
 
+  const sizeInBytes = dataset.latestSnapshot?.size
+  let datasetSize = "Unknown size"
+
+  if (sizeInBytes) {
+    if (sizeInBytes >= 1024 ** 3) {
+      datasetSize = `${(sizeInBytes / (1024 ** 3)).toFixed(2)} GB`
+    } else if (sizeInBytes >= 1024 ** 2) {
+      datasetSize = `${(sizeInBytes / (1024 ** 2)).toFixed(2)} MB`
+    } else if (sizeInBytes >= 1024) {
+      datasetSize = `${(sizeInBytes / 1024).toFixed(2)} KB`
+    } else {
+      datasetSize = `${sizeInBytes} bytes`
+    }
+  }
+
   return (
     <div
       className={styles.userDsCard}
@@ -94,6 +104,9 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({ dataset }) => {
           </span>
           <span>
             OpenNeuro Accession Number: <b>{dataset.id}</b>
+          </span>
+          <span>
+            Dataset Size: <b>{datasetSize}</b>
           </span>
         </div>
         <div className={styles.userIconwrap}>

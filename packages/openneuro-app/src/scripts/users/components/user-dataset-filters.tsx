@@ -44,6 +44,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
 
       {/* Filter by Visibility */}
       <div
+        data-testid="public-filter"
         className={`${styles.filterDiv} ${isFilterOpen ? styles.open : ""}`}
         onClick={() => setIsFilterOpen(!isFilterOpen)}
       >
@@ -92,6 +93,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
 
       {/* Sort Options */}
       <div
+        data-testid="sort-order"
         className={`${styles.sortDiv} ${isSortOpen ? styles.open : ""}`}
         onClick={() => setIsSortOpen(!isSortOpen)}
       >
