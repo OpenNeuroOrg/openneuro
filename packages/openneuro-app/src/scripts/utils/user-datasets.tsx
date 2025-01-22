@@ -1,5 +1,4 @@
-import type { Dataset } from "./components/user-types"
-
+import type { Dataset } from "../types/user-types"
 export interface FilterOptions {
   searchQuery: string
   publicFilter: string
