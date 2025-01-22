@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/cli",
-  "version": "4.30.1",
+  "version": "4.30.2",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.11.8",
-    "@openneuro/client": "^4.30.1",
+    "@openneuro/client": "^4.30.2",
     "bids-validator": "1.14.8",
     "cli-progress": "^3.8.2",
     "commander": "7.2.0",
