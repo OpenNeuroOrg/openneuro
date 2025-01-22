@@ -58,6 +58,7 @@ export interface Dataset {
 
 export interface DatasetCardProps {
   dataset: Dataset
+  hasEdit: boolean
 }
 
 export interface UserDatasetsViewProps {

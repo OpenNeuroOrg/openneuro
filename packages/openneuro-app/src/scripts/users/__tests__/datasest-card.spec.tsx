@@ -13,12 +13,12 @@ const mockDatasets = [
       created: "2025-01-22T19:55:49.997Z",
       latestSnapshot: {
         id: "ds000001:1.0.0",
-        size: "6000",
+        size: 6000, // Size should be a number, not a string
         created: "2025-01-22T19:55:49.997Z",
         issues: [{ severity: "low" }],
         description: {
           Name: "DBS-FMRI",
-          Authors: "John Doe",
+          Authors: ["John Doe"],
           SeniorAuthor: "Dr. Smith",
           DatasetType: "fMRI",
         },
@@ -32,12 +32,12 @@ const mockDatasets = [
       created: "2025-01-22T19:55:49.997Z",
       latestSnapshot: {
         id: "ds000002:1.0.0",
-        size: "6000",
+        size: 6000, // Size should be a number, not a string
         created: "2025-01-22T19:55:49.997Z",
         issues: [{ severity: "medium" }],
         description: {
           Name: "DBS-FMRI 2",
-          Authors: "Jane Doe",
+          Authors: ["Jane Doe"],
           SeniorAuthor: "Dr. Johnson",
           DatasetType: "fMRI",
         },
