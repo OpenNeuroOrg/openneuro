@@ -3,18 +3,7 @@ import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
 import styles from "./scss/useraccountview.module.scss"
 import { GET_USER_BY_ORCID, UPDATE_USER } from "./user-query"
-
-interface UserAccountViewProps {
-  user: {
-    name: string
-    email: string
-    orcid: string
-    links: string[]
-    location: string
-    institution: string
-    github?: string
-  }
-}
+import type { UserAccountViewProps } from "../types/user-types"
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
   const [userLinks, setLinks] = useState<string[]>(user.links || [])

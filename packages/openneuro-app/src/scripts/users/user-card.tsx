@@ -1,19 +1,6 @@
 import React from "react"
 import styles from "./scss/usercard.module.scss"
-
-export interface User {
-  name: string
-  location?: string
-  email: string
-  orcid: string
-  institution?: string
-  links?: string[]
-  github?: string
-}
-
-export interface UserCardProps {
-  user: User
-}
+import type { UserCardProps } from "../types/user-types"
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const { location, institution, email, orcid, links = [], github, name } = user

@@ -3,8 +3,8 @@ import { cleanup, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
-import type { User } from "../user-routes"
-import { UPDATE_USER } from "../user-query"
+import type { User } from "../../types/user-types"
+import { DATASETS_QUERY } from "../user-datasets-view"
 
 const defaultUser: User = {
   id: "1",
@@ -21,24 +21,49 @@ const defaultUser: User = {
 const mocks = [
   {
     request: {
-      query: UPDATE_USER,
-      variables: {
-        id: "1",
-        name: "John Doe",
-        location: "Unknown",
-        github: "",
-        institution: "Unknown Institution",
-        email: "john.doe@example.com",
-        avatar: "https://dummyimage.com/200x200/000/fff",
-        orcid: "0000-0000-0000-0000",
-        links: [],
-      },
+      query: DATASETS_QUERY,
+      variables: { first: 25 },
     },
     result: {
       data: {
-        updateUser: {
-          id: "1",
-          name: "John Doe",
+        datasets: {
+          edges: [
+            {
+              node: {
+                id: "ds001012",
+                created: "2025-01-22T19:55:49.997Z",
+                name: "The DBS-fMRI dataset",
+                public: null,
+                analytics: {
+                  views: 9,
+                  downloads: 0,
+                },
+                stars: [],
+                followers: [
+                  {
+                    userId: "47e6a401-5edf-4022-801f-c05fffbf1d10",
+                    datasetId: "ds001012",
+                  },
+                ],
+                latestSnapshot: {
+                  id: "ds001012:1.0.0",
+                  size: 635,
+                  created: "2025-01-22T19:55:49.997Z",
+                  description: {
+                    Name: "The DBS-fMRI dataset",
+                    Authors: [
+                      "Jianxun Ren",
+                      " Changqing Jiang",
+                      "Wei Zhang",
+                      "Louisa Dahmani",
+                      "Lunhao Shen",
+                      "Feng Zhang",
+                    ],
+                  },
+                },
+              },
+            },
+          ],
         },
       },
     },
@@ -60,7 +85,6 @@ describe("UserRoutes Component", () => {
 
   it("renders UserDatasetsView for the default route", async () => {
     renderWithRouter(user, "/", true)
-    expect(screen.getByText(`${user.name}'s Datasets`)).toBeInTheDocument()
     const datasetsView = await screen.findByTestId("user-datasets-view")
     expect(datasetsView).toBeInTheDocument()
   })

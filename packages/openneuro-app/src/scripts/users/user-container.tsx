@@ -3,23 +3,7 @@ import { Outlet } from "react-router-dom"
 import { UserCard } from "./user-card"
 import { UserAccountTabs } from "./user-tabs"
 import styles from "./scss/usercontainer.module.scss"
-
-interface User {
-  id: string
-  name: string
-  location: string
-  github?: string
-  institution: string
-  email: string
-  avatar: string
-  orcid: string
-  links: string[]
-}
-
-interface AccountContainerProps {
-  user: User
-  hasEdit: boolean
-}
+import type { AccountContainerProps } from "../types/user-types"
 
 export const UserAccountContainer: React.FC<AccountContainerProps> = ({
   user,

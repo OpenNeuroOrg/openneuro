@@ -35,18 +35,6 @@ mutation updateUser($id: ID!, $location: String, $links: [String], $institution:
 }
 `
 
-export interface User {
-  id: string
-  name: string
-  location: string
-  github?: string
-  institution: string
-  email: string
-  avatar: string
-  orcid: string
-  links: string[]
-}
-
 export const UserQuery: React.FC = () => {
   const { orcid } = useParams()
   const isOrcidValid = orcid && isValidOrcid(orcid)
