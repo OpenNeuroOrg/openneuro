@@ -1,13 +1,13 @@
 export interface User {
   id: string
   name: string
-  location: string
+  location?: string
   github?: string
-  institution: string
+  institution?: string
   email: string
-  avatar: string
-  orcid: string
-  links: string[]
+  avatar?: string
+  orcid?: string
+  links?: string[]
 }
 
 export interface UserRoutesProps {
@@ -22,10 +22,10 @@ export interface UserAccountViewProps {
   user: {
     name: string
     email: string
-    orcid: string
-    links: string[]
-    location: string
-    institution: string
+    orcid?: string
+    links?: string[]
+    location?: string
+    institution?: string
     github?: string
   }
 }
@@ -39,12 +39,12 @@ export interface Dataset {
     views: number
     downloads: number
   }
-  stars: [{ userId: string; datasetId: string }]
-  followers: [{ userId: string; datasetId: string }]
+  stars?: { userId: string; datasetId: string }[]
+  followers?: { userId: string; datasetId: string }[]
   latestSnapshot?: {
     id: string
     size: number
-    issues: [{ severity: string }]
+    issues: { severity: string }[]
     created?: string
     description?: {
       Authors: string[]

@@ -11,11 +11,18 @@ const mockDatasets = [
       id: "ds000001",
       name: "The DBS-fMRI dataset",
       created: "2025-01-22T19:55:49.997Z",
+      followers: [
+        { userId: "user1", datasetId: "ds000001" },
+        { userId: "user2", datasetId: "ds000001" },
+      ],
+      stars: [
+        { userId: "user1", datasetId: "ds000001" },
+      ],
       latestSnapshot: {
         id: "ds000001:1.0.0",
-        size: 6000, // Size should be a number, not a string
+        size: 6000,
         created: "2025-01-22T19:55:49.997Z",
-        issues: [{ severity: "low" }],
+        issues: [{ severity: "low" }], // Ensure one issue here
         description: {
           Name: "DBS-FMRI",
           Authors: ["John Doe"],
@@ -30,11 +37,18 @@ const mockDatasets = [
       id: "ds000002",
       name: "The DBS-fMRI dataset 2",
       created: "2025-01-22T19:55:49.997Z",
+      followers: [
+        { userId: "user1", datasetId: "ds000002" },
+        { userId: "user2", datasetId: "ds000002" },
+      ],
+      stars: [
+        { userId: "user1", datasetId: "ds000002" },
+      ],
       latestSnapshot: {
         id: "ds000002:1.0.0",
-        size: 6000, // Size should be a number, not a string
+        size: 6000,
         created: "2025-01-22T19:55:49.997Z",
-        issues: [{ severity: "medium" }],
+        issues: [{ severity: "medium" }], // One issue here as well
         description: {
           Name: "DBS-FMRI 2",
           Authors: ["Jane Doe"],
@@ -46,12 +60,14 @@ const mockDatasets = [
   },
 ]
 
-vi.mock("../utils/user-datasets", () => ({
-  filterAndSortDatasets: vi.fn().mockImplementation((datasets) => datasets),
-}))
-
 describe("<UserDatasetsView />", () => {
-  const mockUser = { name: "John Doe" }
+  const mockUser = {
+    id: "user1",
+    name: "John Doe",
+    location: "Somewhere",
+    institution: "Some University",
+    email: "john.doe@example.com",
+  }
   const mockHasEdit = true
 
   it("renders loading state", () => {
@@ -154,10 +170,23 @@ const mockDataset = {
     downloads: 12345,
     views: 67890,
   },
-  followers: ["user1", "user2"],
-  stars: ["user1"],
+  followers: [
+    { userId: "user1", datasetId: "ds000001" },
+    { userId: "user2", datasetId: "ds000001" },
+  ],
+  stars: [
+    { userId: "user1", datasetId: "ds000001" },
+  ],
   latestSnapshot: {
-    size: 1024 ** 3, // 1 GB
+    id: "ds000001:1.0.0",
+    size: 1024 ** 3,
+    issues: [{ severity: "low" }],
+    created: "2025-01-01T00:00:00Z",
+    description: {
+      Authors: ["John Doe"],
+      SeniorAuthor: "Dr. Smith",
+      DatasetType: "fMRI",
+    },
   },
 }
 
