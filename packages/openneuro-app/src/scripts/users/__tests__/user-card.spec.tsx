@@ -16,7 +16,7 @@ interface User {
 
 describe("UserCard Component", () => {
   const baseUser: User = {
-    id: "123", // Add an id
+    id: "123",
     name: "John Doe",
     email: "johndoe@example.com",
     orcid: "0000-0001-2345-6789",
@@ -24,7 +24,7 @@ describe("UserCard Component", () => {
     institution: "University of California",
     links: ["https://example.com", "https://example.org"],
     github: "johndoe",
-    avatar: "https://example.com/avatar.jpg", // Add avatar
+    avatar: "https://example.com/avatar.jpg",
   }
 
   it("renders all user details when all data is provided", () => {
@@ -57,14 +57,14 @@ describe("UserCard Component", () => {
 
   it("renders without optional fields", () => {
     const minimalUser: User = {
-      id: "124", // Added id
+      id: "124",
       name: "Jane Doe",
       email: "janedoe@example.com",
       orcid: "0000-0002-3456-7890",
       links: [],
-      avatar: "https://example.com/avatar.jpg", // Added avatar
-      location: "", // Empty location
-      institution: "", // Empty institution
+      avatar: "https://example.com/avatar.jpg",
+      location: "",
+      institution: "",
     }
 
     render(<UserCard user={minimalUser} />)
@@ -87,12 +87,12 @@ describe("UserCard Component", () => {
 
   it("renders correctly when links are empty", () => {
     const userWithEmptyLinks: User = {
-      id: "125", // Added id
+      id: "125",
       name: "John Smith",
       email: "johnsmith@example.com",
       orcid: "0000-0003-4567-8901",
       links: [], // Empty links
-      avatar: "https://example.com/avatar.jpg", // Added avatar
+      avatar: "https://example.com/avatar.jpg",
       location: "New York, NY",
       institution: "NYU",
     }
@@ -107,14 +107,14 @@ describe("UserCard Component", () => {
 
   it("renders correctly when location and institution are missing", () => {
     const userWithoutLocationAndInstitution: User = {
-      id: "126", // Added id
+      id: "126",
       name: "Emily Doe",
       email: "emilydoe@example.com",
       orcid: "0000-0003-4567-8901",
       links: ["https://example.com"],
-      avatar: "https://example.com/avatar.jpg", // Added avatar
-      location: "", // Empty location
-      institution: "", // Empty institution
+      avatar: "https://example.com/avatar.jpg",
+      location: "",
+      institution: "",
     }
 
     render(<UserCard user={userWithoutLocationAndInstitution} />)

@@ -22,7 +22,7 @@ const mockDatasets = [
         id: "ds000001:1.0.0",
         size: 6000,
         created: "2025-01-22T19:55:49.997Z",
-        issues: [{ severity: "low" }], // Ensure one issue here
+        issues: [{ severity: "low" }],
         description: {
           Name: "DBS-FMRI",
           Authors: ["John Doe"],
@@ -48,7 +48,7 @@ const mockDatasets = [
         id: "ds000002:1.0.0",
         size: 6000,
         created: "2025-01-22T19:55:49.997Z",
-        issues: [{ severity: "medium" }], // One issue here as well
+        issues: [{ severity: "medium" }],
         description: {
           Name: "DBS-FMRI 2",
           Authors: ["Jane Doe"],

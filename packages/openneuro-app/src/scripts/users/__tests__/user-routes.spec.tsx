@@ -31,7 +31,7 @@ const mocks = [
             {
               node: {
                 id: "ds001012",
-                created: "2025-01-22T19:55:49.997Z", // Ensure valid date here
+                created: "2025-01-22T19:55:49.997Z",
                 name: "The DBS-fMRI dataset",
                 public: null,
                 analytics: {
@@ -48,7 +48,7 @@ const mocks = [
                 latestSnapshot: {
                   id: "ds001012:1.0.0",
                   size: 635,
-                  created: "2025-01-22T19:55:49.997Z", // Ensure valid date here
+                  created: "2025-01-22T19:55:49.997Z",
                   description: {
                     Name: "The DBS-fMRI dataset",
                     Authors: [
