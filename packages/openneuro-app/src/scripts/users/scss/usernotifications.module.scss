@@ -1,0 +1,63 @@
+.tabContainer {
+  position: relative;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 40px;
+  .tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+    li {
+      position: relative;
+      margin:0 20px 0 0;
+
+      a {
+        &.tabUnread,
+        &.tabSaved,
+        &.tabArchived {
+          display: flex;
+          text-decoration: none;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          position: relative;
+          z-index: 1;
+          .tabicon{
+            width: 20px;
+            margin-right: 5px;
+          }
+          &.tabUnread .tabicon{
+            width: 18px;
+          }
+          &.tabArchived .tabicon{
+            width: 16px;
+          }
+          span {
+            background-color: #eee;
+            padding: 2px 5px;
+            margin: 0 0 0 10px;
+            display: inline-block;
+            border-radius: 4px;
+            color: #000;
+            font-weight: normal;
+            transition: background-color .3s, color .3s;
+          }
+          &.active {
+            span {
+              color: #fff;
+              background-color: #B20000;
+            }
+          }
+
+          &:hover {
+            color: #555;
+          }
+        }
+      }
+    }
+  }
+}
