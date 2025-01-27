@@ -2306,7 +2306,7 @@ const RAW_RUNTIME_STATE =
           ["ms", "npm:2.1.3"],\
           ["secure-json-parse", "npm:2.4.0"],\
           ["tslib", "npm:2.6.1"],\
-          ["undici", "npm:5.28.4"]\
+          ["undici", "npm:5.28.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -24239,10 +24239,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["undici", [\
-      ["npm:5.28.4", {\
-        "packageLocation": "./.yarn/cache/undici-npm-5.28.4-63fa65e206-a666a9f5ac.zip/node_modules/undici/",\
+      ["npm:5.28.5", {\
+        "packageLocation": "./.yarn/cache/undici-npm-5.28.5-52b9d359fd-459cd84ab7.zip/node_modules/undici/",\
         "packageDependencies": [\
-          ["undici", "npm:5.28.4"],\
+          ["undici", "npm:5.28.5"],\
           ["@fastify/busboy", "npm:2.1.1"]\
         ],\
         "linkType": "HARD"\
