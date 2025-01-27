@@ -104,7 +104,6 @@ export async function uploadAction(
     if (affirmedDefaced || affirmedConsent) {
       datasetId = await createDataset(affirmedDefaced, affirmedConsent)
     } else {
-      console.log("confirm")
       const affirmed = await prompt([
         {
           name: "affirmedDefaced",
