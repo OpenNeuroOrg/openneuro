@@ -3,6 +3,7 @@ import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface SubscriptionDocument extends Document {
+  _id: string
   datasetId: string
   userId: string
 }

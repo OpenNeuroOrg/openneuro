@@ -29,7 +29,7 @@ export const users = (obj, args, { userInfo }) => {
 
 export const removeUser = (obj, { id }, { userInfo }) => {
   if (userInfo.admin) {
-    return User.findByIdAndRemove(id).exec()
+    return User.findByIdAndDelete(id).exec()
   } else {
     return Promise.reject(new Error("You must be a site admin to remove users"))
   }

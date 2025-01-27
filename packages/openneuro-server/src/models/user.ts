@@ -4,6 +4,7 @@ import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface UserDocument extends Document {
+  _id: string
   id: string
   email: string
   name: string

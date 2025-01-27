@@ -1,5 +1,5 @@
 import Snapshot from "../../models/snapshot"
-import type { LeanDocument } from "mongoose"
+import type { FlattenMaps } from "mongoose"
 import DatasetModel from "../../models/dataset"
 import MetadataModel from "../../models/metadata"
 import type { MetadataDocument } from "../../models/metadata"
@@ -15,7 +15,7 @@ export const metadata = async (
   dataset,
   _,
   context,
-): Promise<LeanDocument<MetadataDocument>> => {
+): Promise<FlattenMaps<MetadataDocument>> => {
   const record = await MetadataModel.findOne({
     datasetId: dataset.id,
   }).lean()
@@ -73,11 +73,11 @@ export const addMetadata = async (obj, { datasetId, metadata }) => {
  */
 export async function publicMetadata(
   _obj,
-): Promise<LeanDocument<MetadataDocument>[]> {
+): Promise<FlattenMaps<MetadataDocument>[]> {
   const datasets = await DatasetModel.find({
     public: true,
   }).lean()
-  const dsMetadata: LeanDocument<MetadataDocument>[] = []
+  const dsMetadata: FlattenMaps<MetadataDocument>[] = []
   for (const ds of datasets) {
     dsMetadata.push(await metadata(ds, null, {}))
   }
