@@ -1,5 +1,5 @@
 /**
- * Browser client entrypoint - see server.tsx for SSR entrypoint
+ * Browser client entrypoint
  */
 import "./scripts/utils/global-polyfill"
 import "./scripts/sentry"
