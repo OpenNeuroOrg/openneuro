@@ -56,7 +56,7 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
                   disabled={approval === "approved"}
                 >
                   <i className="fa fa-check"></i>{" "}
-                  {approval !== "approved" ? "Approved" : "Approve"}
+                  {approval === "approved" ? "Approved" : "Approve"}
                 </button>
               )}
 
