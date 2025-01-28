@@ -8,18 +8,17 @@ import iconArchived from "../../assets/icon-archived.png"
 export const NotificationAccordion = ({ notification, onUpdate }) => {
   const { id, title, content, status, type, approval } = notification
 
-  // Check if content is not empty or null
   const hasContent = content && content.trim().length > 0
 
   const [isOpen, setIsOpen] = useState(false)
   const toggleAccordion = () => setIsOpen(!isOpen)
 
   const handleApprovalChange = (approvalStatus) => {
-    onUpdate(id, { approval: approvalStatus }) // Only update the approval field
+    onUpdate(id, { approval: approvalStatus })
   }
 
   const handleStatusChange = (newStatus) => {
-    onUpdate(id, { status: newStatus }) // Only update the status field
+    onUpdate(id, { status: newStatus })
   }
 
   return (
@@ -48,28 +47,26 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
         <div className={styles.actions}>
           {type === "approval" && (
             <>
-              {/* Approve Button */}
               {(approval === "not provided" || approval === "approved") && (
                 <button
                   className={`${styles.notificationapprove} ${
                     approval === "approved" ? styles.active : ""
                   }`}
                   onClick={() => handleApprovalChange("approved")}
-                  disabled={approval === "approved"} // Disable if already approved
+                  disabled={approval === "approved"}
                 >
                   <i className="fa fa-check"></i>{" "}
                   {approval !== "approved" ? "Approved" : "Approve"}
                 </button>
               )}
 
-              {/* Deny Button */}
               {(approval === "not provided" || approval === "denied") && (
                 <button
                   className={`${styles.notificationdeny} ${
                     approval === "denied" ? styles.active : ""
                   }`}
                   onClick={() => handleApprovalChange("denied")}
-                  disabled={approval === "denied"} // Disable if already denied
+                  disabled={approval === "denied"}
                 >
                   <i className="fa fa-times"></i>{" "}
                   {approval === "denied" ? "Denied" : "Deny"}

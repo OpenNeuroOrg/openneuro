@@ -12,43 +12,40 @@ import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"
 
 export const UserNotificationsView = ({ user }) => {
-  const tabsRef = useRef(null)
+  const tabsRef = useRef<HTMLUListElement | null>(null)
   const { tab = "unread" } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [indicatorStyle, setIndicatorStyle] = useState({
+  // Explicitly define the type of indicatorStyle
+  const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
     width: "0px",
     transform: "translateX(0px)",
     position: "absolute",
-    bottom: "0",
+    bottom: "0px",
     height: "2px",
     backgroundColor: "#000",
     transition: "transform 0.3s ease, width 0.3s ease",
   })
 
-  // To store the active tab's offset
-  const [activePosition, setActivePosition] = useState(0)
-
   // Update the indicator position based on active tab whenever location changes
   useEffect(() => {
     const activeLink = tabsRef.current?.querySelector(`.${styles.active}`)
     if (activeLink) {
-      const li = activeLink.parentElement
+      const li = activeLink.parentElement as HTMLElement
       if (li) {
-        setActivePosition(li.offsetLeft)
         setIndicatorStyle({
           width: `${li.offsetWidth}px`,
           transform: `translateX(${li.offsetLeft}px)`,
           position: "absolute",
-          bottom: "0",
+          bottom: "0px",
           height: "2px",
           backgroundColor: "#000",
           transition: "transform 0.3s ease, width 0.3s ease",
         })
       }
     }
-  }, [location]) // Re-run whenever the location changes
+  }, [location])
 
   // Redirect to default tab if no tab is specified
   useEffect(() => {
