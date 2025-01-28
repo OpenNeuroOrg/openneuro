@@ -1,8 +1,9 @@
 /*global globalThis*/
 globalThis.dataLayer = globalThis.dataLayer || []
 
-function gtag(...args) {
-  globalThis.dataLayer.push(args)
+function gtag() {
+  // eslint-disable-next-line prefer-rest-params
+  globalThis.dataLayer.push(arguments)
 }
 
 gtag("js", new Date())

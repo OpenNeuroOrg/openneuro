@@ -37,7 +37,6 @@
     "jsdom": "24.0.0",
     "lerna": "3.20.2",
     "lint-staged": "^10.5.4",
-    "mongoose": "6.13.5",
     "pinst": "^2.1.6",
     "prettier": "^2.2.1",
     "react": "18.2.0",

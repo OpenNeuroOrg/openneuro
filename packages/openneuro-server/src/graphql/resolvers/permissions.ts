@@ -18,7 +18,7 @@ export async function permissions(ds): Promise<DatasetPermission> {
       (userPermission) => ({
         ...userPermission.toJSON(),
         user: user(ds, { id: userPermission.userId }),
-      } as PermissionDocument & { user: Promise<UserDocument> }),
+      } as unknown as PermissionDocument & { user: Promise<UserDocument> }),
     ),
   }
 }
