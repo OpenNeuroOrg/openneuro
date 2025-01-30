@@ -22,6 +22,7 @@ import {
   DiagnosisSelect,
   KeywordInput,
   ModalitySelect,
+  NIHSelect,
   ScannerManufacturers,
   ScannerManufacturersModelNames,
   SectionSelect,
@@ -168,6 +169,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
+            <NIHSelect portalStyles={true} />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />

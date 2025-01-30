@@ -66,6 +66,12 @@ $pet-dark: darken($pet-theme, 25%);
 $pet-secondary: adjust-color($pet-theme, $lightness: 15%);
 $pet-light: adjust-color($pet-theme, $lightness: 45%);
 
+$nih-theme: rgba(33, 85, 138, 1);
+$nih-hover: adjust-color($nih-theme, $lightness: 10%);
+$nih-dark: darken($nih-theme, 25%);
+$nih-secondary: adjust-color($nih-theme, $lightness: 15%);
+$nih-light: adjust-color($nih-theme, $lightness: 45%);
+
 $ieeg-theme: rgba(18, 109, 62, 1);
 $ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
 $ieeg-dark: darken($ieeg-theme, 25%);

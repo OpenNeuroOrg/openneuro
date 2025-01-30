@@ -34,6 +34,7 @@ export const SearchPage = ({
   renderAggregateCounts,
 }: SearchPageProps) => {
   const [isOpen, setOpen] = React.useState(false)
+  console.log(portalContent)
   return (
     <>
       <section

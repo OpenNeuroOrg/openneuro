@@ -66,6 +66,12 @@ $pet-dark: darken($pet-theme, 25%);
 $pet-secondary: adjust-color($pet-theme, $lightness: 15%);
 $pet-light: adjust-color($pet-theme, $lightness: 45%);
 
+$nih-theme: rgba(33, 85, 138, 1);
+$nih-hover: adjust-color($nih-theme, $lightness: 10%);
+$nih-dark: darken($nih-theme, 25%);
+$nih-secondary: adjust-color($nih-theme, $lightness: 15%);
+$nih-light: adjust-color($nih-theme, $lightness: 45%);
+
 $ieeg-theme: rgba(18, 109, 62, 1);
 $ieeg-hover: adjust-color($ieeg-theme, $lightness: 10%);
 $ieeg-dark: darken($ieeg-theme, 25%);
@@ -180,6 +186,16 @@ $border-radius-default: 4px;
   --current-theme-primary-light: #{$pet-light};
   --current-theme-header: #{$pet-theme};
   --current-theme-header-dark: #{$pet-dark};
+}
+
+.search-page-nihbrain {
+  --current-theme-primary: #{$nih-theme};
+  --current-theme-primary-hover: #{$nih-hover};
+  --current-theme-primary-dark: #{$nih-dark};
+  --current-theme-secondary: #{$nih-secondary};
+  --current-theme-primary-light: #{$nih-light};
+  --current-theme-header: #{$nih-theme};
+  --current-theme-header-dark: #{$nih-dark};
 }
 
 .search-page-ieeg,

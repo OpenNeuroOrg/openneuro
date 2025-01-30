@@ -301,6 +301,23 @@
   }
 }
 
+.nih-cube > div .img {
+  &:before {
+    background-color: $nih-theme;
+  }
+  .modality-cube > .front {
+    background-color: $nih-theme;
+  }
+}
+.ieeg-cube > div .img {
+  &:before {
+    background-color: $ieeg-theme;
+  }
+  .modality-cube > .front {
+    background-color: $ieeg-theme;
+  }
+}
+
 .meg-cube > div .img {
   &:before {
     background-color: $meg-theme;
