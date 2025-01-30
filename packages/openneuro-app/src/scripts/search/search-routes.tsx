@@ -27,6 +27,10 @@ const SearchRoutes: FC = () => (
       path="modality/pet"
       element={<SearchContainer portalContent={portalContent.pet} />}
     />
+    <Route
+      path="modality/nih"
+      element={<SearchContainer portalContent={portalContent.nih} />}
+    />
   </Routes>
 )
 export default SearchRoutes

@@ -22,6 +22,7 @@ import {
   DiagnosisSelect,
   KeywordInput,
   ModalitySelect,
+  NIHSelect,
   ScannerManufacturers,
   ScannerManufacturersModelNames,
   SectionSelect,
@@ -83,6 +84,7 @@ export const setDefaultSearch = (
     EEG: ["EEG"],
     iEEG: ["iEEG"],
     MEG: ["MEG"],
+    NIH: ["NIH"],
   }
   if (
     modality &&
@@ -168,6 +170,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
+            <NIHSelect portalStyles={true} label="NIH BRAIN Initiative" />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />
