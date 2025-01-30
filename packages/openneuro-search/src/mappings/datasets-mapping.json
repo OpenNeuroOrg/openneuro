@@ -61,7 +61,14 @@
             "Name": { "type": "text" },
             "Authors": { "type": "text" },
             "SeniorAuthor": { "type": "text" },
-            "DatasetType": { "type": "keyword" }
+            "DatasetType": { "type": "keyword" },
+            "License": { "type": "keyword" },
+            "Acknowledgements": { "type": "text" },
+            "HowToAcknowledge": { "type": "text" },
+            "Funding": { "type": "text" },
+            "EthicsApprovals": { "type": "text" },
+            "ReferencesAndLinks": { "type": "text" },
+            "DatasetDOI": { "type": "text" }
           }
         },
         "readme": {
