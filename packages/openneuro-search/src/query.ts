@@ -40,6 +40,13 @@ export const INDEX_DATASET_FRAGMENT = gql`
         Authors
         SeniorAuthor
         DatasetType
+        License
+        Acknowledgements
+        HowToAcknowledge
+        Funding
+        EthicsApprovals
+        ReferencesAndLinks
+        DatasetDOI
       }
       summary {
         tasks
