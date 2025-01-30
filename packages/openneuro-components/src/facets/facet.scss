@@ -235,6 +235,75 @@
     }
   }
 }
+.search-nav .facet-open.nih-facet {
+  margin: 20px 0;
+  border: 0;
+  border-radius: $border-radius-default;
+  padding: 0;
+  .single-select-list {
+    padding: 0;
+    color: var(--current-theme-primary);
+    margin: 0;
+    list-style: none;
+    li {
+      padding: 10px 20px;
+      cursor: pointer;
+      color: rgba(33, 85, 138, 1);
+      display: block;
+      background:rgba(155, 211, 221, 1);
+      border-radius: 4px;
+      &:hover{
+        background-color: lighten(rgba(155, 211, 221, 1), 5%);
+      }
+    }
+
+    .label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      span {
+        margin-left: 10px;
+        display: inline-block;
+        font-size: 14px;
+      }
+    }
+
+    .level-1 > li {
+      > .label {
+        padding: 10px;
+      }
+    }
+    .level-2 {
+      margin-bottom: 10px;
+      font-size: 14px;
+      > li {
+        display: flex;
+        justify-content: flex-start;
+
+        .label {
+          margin-left: 15px;
+        }
+        &:before {
+          content: '-';
+          margin-left: 12px;
+        }
+      }
+    }
+  }
+  .facet-list ul li {
+    > .label {
+      font-weight: 500;
+    }
+    &.selected-facet > .label {
+      color: var(--current-theme-primary);
+      font-weight: 600;
+      span {
+        color: var(--current-theme-primary);
+      }
+    }
+  }
+}
 
 .facet-search {
   padding-bottom: 30px;

@@ -169,7 +169,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
-            <NIHSelect portalStyles={true} />
+            <NIHSelect portalStyles={true} label="NIH Brain Initiative" />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />

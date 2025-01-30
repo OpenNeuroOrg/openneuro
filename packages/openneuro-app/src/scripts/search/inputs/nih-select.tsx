@@ -1,12 +1,10 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
-import type { FC } from "react"
 import { useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { flattenedModalities } from "../initial-search-params"
 import type { SearchParams } from "../initial-search-params"
-import { FacetSelect } from "@openneuro/components/facets"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { SingleSelect } from "@openneuro/components/facets"
 import initialSearchParams from "../initial-search-params"
 
 interface NIHSelectProps {
@@ -44,8 +42,8 @@ const NIHSelect: FC<NIHSelectProps> = ({
   }
   return (
     <>
-      <FacetSelect
-        className="modality-facet facet-open"
+      <SingleSelect
+        className="nih-facet facet-open"
         label={label}
         selected={modality_selected}
         setSelected={setModality}
