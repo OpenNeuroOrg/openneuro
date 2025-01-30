@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'OpenNeuro'
-copyright = '2022, Stanford Center for Reproducible Neuroscience'
+copyright = '2015-2025, Stanford Center for Reproducible Neuroscience'
 author = 'Stanford Center for Reproducible Neuroscience'
 
 # -- General configuration ---------------------------------------------------
