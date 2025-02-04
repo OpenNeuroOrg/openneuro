@@ -108,7 +108,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const modality = portalContent?.modality || null
-  const selected_grant = portalContent?.selected_grant || null
+  const selected_grant = portalContent.portalName || null
 
   // Use useEffect to run the default search setup
   useEffect(() => {
@@ -147,9 +147,10 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
       </Helmet>
       <SearchPage
         portalContent={portalContent}
-        renderAggregateCounts={() => (
-          <AggregateCountsContainer modality={portalContent.modality} />
-        )}
+        renderAggregateCounts={() =>
+          portalContent.modality
+            ? <AggregateCountsContainer modality={portalContent.modality} />
+            : null}
         renderFilterBlock={() => (
           <FiltersBlockContainer
             loading={loading}
@@ -160,12 +161,13 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         renderSearchHeader={() => (
           <>
             {portalContent
-              ? "Search " + modality + " Portal"
+              ? "Search " + (modality || selected_grant || "") + " Portal"
               : "Search All Datasets"}
           </>
         )}
         renderSearchFacets={() => (
           <>
+            <NIHSelect label={"Search NIH Brain Initiative Datasets"} />
             <NeurobagelSearch />
             <KeywordInput />
             <AdminUser>
@@ -175,7 +177,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
-            <NIHSelect label="NIH BRAIN Initiative" />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />
