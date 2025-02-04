@@ -157,6 +157,7 @@ export interface SearchParams {
   sortBy_selected
   bidsDatasetType_available: string[]
   bidsDatasetType_selected: string | null
+  selected_grant?: string | null
 }
 
 const initialSearchParams: SearchParams = {
@@ -204,6 +205,7 @@ const initialSearchParams: SearchParams = {
   sortBy_selected: sortBy[0],
   bidsDatasetType_available: ["raw", "derivative"],
   bidsDatasetType_selected: null,
+  selected_grant: null,
 }
 
 export default initialSearchParams

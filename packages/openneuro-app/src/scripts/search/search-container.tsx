@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import {
@@ -108,12 +108,17 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const modality = portalContent?.modality || null
-  setDefaultSearch(
-    modality,
-    searchParams,
-    setSearchParams,
-    new URLSearchParams(location.search),
-  )
+  const selected_grant = portalContent?.selected_grant || null
+
+  // Use useEffect to run the default search setup
+  useEffect(() => {
+    setDefaultSearch(
+      modality,
+      searchParams,
+      setSearchParams,
+      new URLSearchParams(location.search),
+    )
+  }, [modality, searchParams, setSearchParams, location.search]) // Add dependencies to avoid unnecessary calls
 
   const { loading, data, fetchMore, variables } = useSearchResults()
   const loadMore = loading ? () => {} : () => {
@@ -138,7 +143,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   return (
     <>
       <Helmet>
-        <title>OpenNeuro - {portalContent ? modality : ""} Search</title>
+        <title>OpenNeuro - {modality || selected_grant || ""} Search</title>
       </Helmet>
       <SearchPage
         portalContent={portalContent}
@@ -170,7 +175,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
-            <NIHSelect portalStyles={true} label="NIH BRAIN Initiative" />
+            <NIHSelect label="NIH BRAIN Initiative" />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />
