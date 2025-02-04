@@ -11,7 +11,6 @@ describe("SearchContainer component", () => {
         context,
         setContext,
         new URLSearchParams("/search"),
-        {},
       )
       expect(setContext).not.toHaveBeenCalled()
       setDefaultSearch(
@@ -19,7 +18,6 @@ describe("SearchContainer component", () => {
         context,
         setContext,
         new URLSearchParams("/search"),
-        {},
       )
       expect(setContext).toHaveBeenCalled()
     })
@@ -36,7 +34,6 @@ describe("SearchContainer component", () => {
         context,
         setContext,
         new URLSearchParams("mydatasets"),
-        {},
       )
       expect(context.datasetType_selected).toEqual("My Datasets")
     })
@@ -53,7 +50,6 @@ describe("SearchContainer component", () => {
         context,
         setContext,
         new URLSearchParams("bookmarks"),
-        {},
       )
       expect(context.datasetType_selected).toEqual("My Bookmarks")
     })
