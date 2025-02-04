@@ -52,13 +52,13 @@ workerZone: us-west1-c
 # Assigned volumes for each worker (max 64TB)
 workerDiskSize:
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-0
-    size: 47000Gi
+    size: 49000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-1
-    size: 40000Gi
+    size: 42000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-2
-    size: 31000Gi
+    size: 33000Gi
   - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-3
-    size: 35000Gi
+    size: 37000Gi
 
 # Disable Redis password for testing
 redis:
