@@ -1,0 +1,159 @@
+.tabContainer {
+  position: relative;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 40px;
+  .tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+    li {
+      position: relative;
+      margin: 0 20px 0 0;
+
+      a {
+        &.tabUnread,
+        &.tabSaved,
+        &.tabArchived {
+          display: flex;
+          text-decoration: none;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          position: relative;
+          z-index: 1;
+          .tabicon {
+            width: 20px;
+            margin-right: 5px;
+          }
+          &.tabUnread .tabicon {
+            width: 18px;
+          }
+          &.tabArchived .tabicon {
+            width: 16px;
+          }
+          span {
+            background-color: #eee;
+            padding: 2px 5px;
+            margin: 0 0 0 10px;
+            display: inline-block;
+            border-radius: 4px;
+            color: #000;
+            font-weight: normal;
+            transition: background-color 0.3s, color 0.3s;
+          }
+          &.active {
+            span {
+              color: #fff;
+              background-color: #b20000;
+            }
+          }
+
+          &:hover {
+            color: #555;
+          }
+        }
+      }
+    }
+  }
+}
+.notificationsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  .notificationAccordion {
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      
+      .accordiontitle{
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      h3 {
+        font-weight: normal;
+        margin: 0;
+      }
+      button {
+        margin: 0;
+        border: 0;
+        padding: 0;
+        background: none;
+        cursor: pointer;
+        h3 {
+          text-decoration: underline;
+          color: var(--on-dark-aqua);
+        }
+        &:disabled {
+          pointer-events: none;
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+      .readbutton{
+        color: var(--on-dark-aqua);
+        background-color:#f3fdff;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        font-size: 13px;
+        text-transform: uppercase;
+        margin-right: 5px;
+        > i {
+          margin-right: 5px;
+        }
+      }
+      .actions {
+        display: flex;
+        align-items: stretch;
+        .notificationdeny, .notificationapprove {
+          color: #127B22;
+          background-color: #F5FFF5;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          padding: 5px;
+          font-size: 13px;
+          text-transform: uppercase;
+          margin-right: 5px;
+          > i {
+            margin-right: 5px;
+          }
+        }
+        .notificationdeny {
+          color: #770D0D;
+          background-color: #FFF5F5;
+        }
+
+        .accordionicon {
+          max-width: 21px;
+          height: auto;
+          display: inline-block;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          padding: 5px;
+          margin-right: 5px;
+          &.archiveicon {
+            max-width: 18px;
+          }
+          &.saveicon {
+            max-width: 23px;
+          }
+        }
+      }
+    }
+    .accordionbody{
+      padding: 10px;
+      border-top: 1px solid #eee;
+    }
+  }
+}
