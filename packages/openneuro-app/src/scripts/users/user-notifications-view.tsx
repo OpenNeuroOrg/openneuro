@@ -57,7 +57,6 @@ export const UserNotificationsView = ({ user }) => {
   return (
     <div data-testid="user-notifications-view">
       <h3>Notifications for {user.name}</h3>
-
       <div className={styles.tabContainer}>
         <ul className={styles.tabs} ref={tabsRef}>
           <li>

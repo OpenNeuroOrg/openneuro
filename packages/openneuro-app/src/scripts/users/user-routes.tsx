@@ -12,22 +12,7 @@ import {
   UnreadNotifications,
 } from "./user-notifications-tab-content"
 
-export interface User {
-  id: string
-  name: string
-  location: string
-  github?: string
-  institution: string
-  email: string
-  avatar: string
-  orcid: string
-  links: string[]
-}
-
-interface UserRoutesProps {
-  user: User
-  hasEdit: boolean
-}
+import type { UserRoutesProps } from "../types/user-types"
 
 export const UserRoutes: React.FC<UserRoutesProps> = ({ user, hasEdit }) => {
   return (
@@ -37,7 +22,10 @@ export const UserRoutes: React.FC<UserRoutesProps> = ({ user, hasEdit }) => {
         path="*"
         element={<UserAccountContainer user={user} hasEdit={hasEdit} />}
       >
-        <Route path="" element={<UserDatasetsView user={user} />} />
+        <Route
+          path=""
+          element={<UserDatasetsView user={user} hasEdit={hasEdit} />}
+        />
         <Route
           path="account"
           element={hasEdit
