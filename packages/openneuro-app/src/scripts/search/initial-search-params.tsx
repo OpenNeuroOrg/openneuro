@@ -157,7 +157,7 @@ export interface SearchParams {
   sortBy_selected
   bidsDatasetType_available: string[]
   bidsDatasetType_selected: string | null
-  brain_initiative?: string | null
+  brain_initiative: string | null
 }
 
 const initialSearchParams: SearchParams = {
