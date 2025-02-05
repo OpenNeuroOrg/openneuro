@@ -26,6 +26,8 @@ describe("ValidationBlock component", () => {
       codeMessages: [
         { code: "JSON_KEY_RECOMMENDED", message: "message" },
       ],
+      warnings: 1,
+      errors: 0,
     }
     render(
       <ValidationBlock

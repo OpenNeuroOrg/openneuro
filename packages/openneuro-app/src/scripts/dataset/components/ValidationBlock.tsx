@@ -1,7 +1,6 @@
 import React from "react"
 import { Validation, ValidationPending } from "../../validation/validation"
 import LegacyValidation from "../../validation-legacy/validation.jsx"
-import { DatasetIssues } from "@bids/validator/issues"
 import type { Issue } from "@bids/validator/issues"
 
 // TODO - Generate from GraphQL

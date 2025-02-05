@@ -41,6 +41,9 @@ describe("SearchParamsProvider", () => {
       </SearchParamsCtx.Consumer>,
       { wrapper },
     )
+    // Open the author dropdown
+    const authorDropdown = screen.getByRole("switch")
+    fireEvent.click(authorDropdown)
     const textInput = screen.getByRole("textbox")
     const button = screen.getByRole("button")
     fireEvent.change(textInput, { target: { value: "New Author" } })
