@@ -43,17 +43,14 @@ export const snapshotValidation = async (snapshot) => {
     id: snapshot.hexsha,
     datasetId,
   }).exec()
-  //console.log(validation)
   // Return with errors and warning counts appended
-  const ret = {
+  return {
     ...validation.toObject(),
     errors:
       validation.issues.filter((issue) => issue.severity === "error").length,
     warnings:
       validation.issues.filter((issue) => issue.severity === "warning").length,
   }
-  console.log(ret)
-  return ret
 }
 
 export function validationSeveritySort(a, b) {
