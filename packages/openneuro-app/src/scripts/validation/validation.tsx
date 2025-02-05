@@ -2,12 +2,6 @@ import React from "react"
 import pluralize from "pluralize"
 import { ValidationPanel } from "./validation-panel"
 import Results from "./validation-results"
-import type { DatasetIssues } from "@bids/validator/issues"
-
-/**
- * These can't be React components due to legacy react-bootstrap
- * validHeader, warningHeader, errorHeader
- */
 
 const validHeader = () => (
   <div className="super-valid">
@@ -53,79 +47,94 @@ const Valid = () => (
 )
 
 interface WarningsProps {
-  issues: DatasetIssues
-  warnings: DatasetIssues
+  datasetId: string
+  version: string
+  warnings: number
 }
 
-const Warnings = ({ issues, warnings }: WarningsProps) => (
+const Warnings = ({ datasetId, version, warnings }: WarningsProps) => (
   <ValidationPanel heading={warningHeader(warnings.size)}>
     <div>
       <span className="message error fade-in">
         We found{" "}
         <strong>
-          {warnings.size + " " + pluralize("Warning", warnings.size)}
+          {warnings + " " + pluralize("warning", warnings)}
         </strong>{" "}
         in your dataset. You are not required to fix warnings, but doing so will
         make your dataset more BIDS compliant.
       </span>
     </div>
     <br />
-    <Results issues={issues} />
+    <Results datasetId={datasetId} version={version} />
   </ValidationPanel>
 )
 
 interface ErrorsProps {
-  issues: DatasetIssues
-  errors: DatasetIssues
-  warnings: DatasetIssues
+  datasetId: string
+  version: string
+  errors: number
+  warnings: number
 }
 
-const Errors = ({ issues, errors }: ErrorsProps) => (
-  <ValidationPanel heading={errorHeader(errors.size)}>
+const Errors = ({ datasetId, version, errors }: ErrorsProps) => (
+  <ValidationPanel heading={errorHeader(errors)}>
     <span className="message error fade-in">
       Your dataset is no longer valid. You must fix the{" "}
-      <strong>{errors.size + " " + pluralize("Error", errors.size)}</strong>
-      {" "}
+      <strong>{errors + " " + pluralize("error", errors)}</strong>{" "}
       to use all of the site features.
     </span>
     <br />
-    <Results issues={issues} />
+    <Results datasetId={datasetId} version={version} />
   </ValidationPanel>
 )
 
 interface ValidationProps {
-  issues: DatasetIssues
+  datasetId: string
+  version?: string
+  errors: number
+  warnings: number
 }
 
-export const Validation = ({ issues }: ValidationProps) => {
-  if (issues) {
-    const grouped = issues.groupBy("severity")
-    const warnings = grouped.get("warning")
-    const errors = grouped.get("error")
-    if (errors?.size) {
-      return <Errors issues={issues} errors={errors} warnings={warnings} />
-    } else if (warnings?.size) {
-      return <Warnings issues={issues} warnings={warnings} />
-    } else {
-      return <Valid />
-    }
-  } else {
+export const Validation = (
+  { datasetId, version, errors, warnings }: ValidationProps,
+) => {
+  if (errors > 0) {
     return (
-      <ValidationPanel
-        heading={
-          <div>
-            <span className="dataset-status ds-warning ds-validation-pending">
-              <i className="fa fa-circle-o-notch fa-spin" />
-              Validation Pending
-            </span>
-          </div>
-        }
-      >
-        <br />
-        <p className="ds-validation-pending-message">
-          The BIDS validator is running. This may take several minutes.
-        </p>
-      </ValidationPanel>
+      <Errors
+        datasetId={datasetId}
+        version={version}
+        errors={errors}
+        warnings={warnings}
+      />
     )
+  } else if (warnings > 0) {
+    return (
+      <Warnings datasetId={datasetId} version={version} warnings={warnings} />
+    )
+  } else {
+    return <Valid />
   }
+}
+
+/**
+ * Display validation as pending
+ */
+export function ValidationPending() {
+  return (
+    <ValidationPanel
+      heading={
+        <div>
+          <span className="dataset-status ds-warning ds-validation-pending">
+            <i className="fa fa-circle-o-notch fa-spin" />
+            Validation Pending
+          </span>
+        </div>
+      }
+    >
+      <br />
+      <p className="ds-validation-pending-message">
+        The BIDS validator is running. This may take several minutes.
+      </p>
+    </ValidationPanel>
+  )
 }

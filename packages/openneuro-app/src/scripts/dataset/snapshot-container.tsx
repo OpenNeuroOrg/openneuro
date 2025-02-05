@@ -125,6 +125,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               <div className="dataset-validation">
                 <ValidationBlock
                   datasetId={datasetId}
+                  version={snapshot.tag}
                   issues={snapshot.issues}
                   validation={snapshot.validation}
                 />

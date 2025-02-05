@@ -1,5 +1,5 @@
 import React from "react"
-import { Validation } from "../../validation/validation"
+import { Validation, ValidationPending } from "../../validation/validation"
 import LegacyValidation from "../../validation-legacy/validation.jsx"
 import { DatasetIssues } from "@bids/validator/issues"
 import type { Issue } from "@bids/validator/issues"
@@ -14,10 +14,13 @@ interface CodeMessageInput {
 interface ValidationFragment {
   issues: Issue[]
   codeMessages: CodeMessageInput[]
+  warnings: number
+  errors: number
 }
 
 export interface ValidationBlockProps {
   datasetId: string
+  version?: string
   issues?: object
   validation?: ValidationFragment
 }
@@ -29,6 +32,7 @@ export interface ValidationBlockProps {
  */
 export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   datasetId,
+  version,
   issues,
   validation,
 }) => {
@@ -40,26 +44,21 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
     )
   } else {
     // If data exists, populate this. Otherwise we show pending.
-    if (validation?.issues) {
-      // Reconstruct DatasetIssues from JSON
-      const datasetIssues = new DatasetIssues()
-      datasetIssues.issues = validation.issues
-      datasetIssues.codeMessages = validation.codeMessages.reduce(
-        (acc, curr) => {
-          acc.set(curr.code, curr.message)
-          return acc
-        },
-        new Map<string, string>(),
-      )
+    if (validation?.warnings + validation?.errors > 0) {
       return (
         <div className="validation-accordion">
-          <Validation issues={datasetIssues} />
+          <Validation
+            datasetId={datasetId}
+            version={version}
+            warnings={validation.warnings}
+            errors={validation.errors}
+          />
         </div>
       )
     } else {
       return (
         <div className="validation-accordion">
-          <Validation issues={null} />
+          <ValidationPending />
         </div>
       )
     }

@@ -135,13 +135,8 @@ export const DATASET_ISSUES = gql`
         ${ISSUE_FIELDS}
       }
       validation {
-        codeMessages {
-          code
-          message
-        }
-        issues {
-          ${VALIDATION_FIELDS}
-        }
+        errors
+        warnings
       }
     }
   }
@@ -154,13 +149,8 @@ export const SNAPSHOT_ISSUES = gql`
       ${ISSUE_FIELDS}
     }
     validation {
-      codeMessages {
-        code
-        message
-      }
-      issues {
-        ${VALIDATION_FIELDS}
-      }
+      errors
+      warnings
     }
   }
 `
