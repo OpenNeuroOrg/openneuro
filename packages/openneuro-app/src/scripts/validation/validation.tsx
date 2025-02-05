@@ -53,7 +53,7 @@ interface WarningsProps {
 }
 
 const Warnings = ({ datasetId, version, warnings }: WarningsProps) => (
-  <ValidationPanel heading={warningHeader(warnings.size)}>
+  <ValidationPanel heading={warningHeader(warnings)}>
     <div>
       <span className="message error fade-in">
         We found{" "}
