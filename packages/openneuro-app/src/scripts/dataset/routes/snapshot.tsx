@@ -15,12 +15,10 @@ const FormRow = styled.div`
   margin-bottom: 1.3em;
 `
 
-export const NoErrors = ({ issues, children }) => {
-  const noErrors = issues &&
-    issues.filter((issue) => issue.severity === "error").length === 0
+export const NoErrors = ({ validation, authors, children }) => {
+  const noErrors = validation?.errors === 0
   // zero authors will cause DOI minting to fail
-  const hasAuthor = issues &&
-    issues.filter((issue) => issue.code === 113).length === 0
+  const hasAuthor = authors.length > 0
   if (noErrors && hasAuthor) {
     return children
   } else {
@@ -42,7 +40,7 @@ export const NoErrors = ({ issues, children }) => {
 const SnapshotRoute = ({
   datasetId,
   snapshots,
-  issues,
+  validation,
   description,
 }): React.ReactElement => {
   const [changes, setChanges] = useState([])
@@ -124,21 +122,21 @@ const SnapshotRoute = ({
             setElements={setChanges}
           />
         </div>
-        <NoErrors issues={issues}>
+        <NoErrors validation={validation} authors={description.Authors}>
           {changes.length ? null : (
             <small className="text-danger">
               You must add at least one change message to create a new version
             </small>
           )}
+          <div className="dataset-form-controls">
+            <SnapshotDataset
+              datasetId={datasetId}
+              tag={newVersion}
+              changes={changes}
+              disabled={changes.length < 1}
+            />
+          </div>
         </NoErrors>
-        <div className="dataset-form-controls">
-          <SnapshotDataset
-            datasetId={datasetId}
-            tag={newVersion}
-            changes={changes}
-            disabled={changes.length < 1}
-          />
-        </div>
       </div>
     </DatasetPageBorder>
   )
