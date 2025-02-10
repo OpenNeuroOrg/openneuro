@@ -75,7 +75,6 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
       // Error handling can be implemented here if needed
     }
   }
-  console.log(user.githubSynced)
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
       <h3>Account</h3>

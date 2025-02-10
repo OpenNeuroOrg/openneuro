@@ -18,14 +18,14 @@ export const setupGitHubAuth = () => {
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
-        let token = jwtFromRequest(req)
-        let decoded = token ? jwt.verify(token, config.auth.jwt.secret) : null
+        const token = jwtFromRequest(req)
+        const decoded = token ? jwt.verify(token, config.auth.jwt.secret) : null
 
         if (!decoded || !decoded.sub) {
           return done(new Error("No authenticated ORCID user found"), null)
         }
 
-        let orcidUser = await User.findOne({
+        const orcidUser = await User.findOne({
           id: decoded.sub,
           provider: "orcid",
         })

@@ -182,8 +182,9 @@ const routes = [
     method: "get",
     url: "/auth/github/callback",
     handler: (req, res, next) => {
-      passport.authenticate("github", (err, user, info) => {
+      passport.authenticate("github", (err, user) => {
         if (err) {
+          // eslint-disable-next-line
           console.error("GitHub Auth Error:", err)
           return res.redirect("/login?error=github_auth_failed")
         }
