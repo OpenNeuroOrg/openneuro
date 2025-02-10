@@ -1,17 +1,21 @@
 import passport from "passport"
 import refresh from "passport-oauth2-refresh"
+import jwt from "jsonwebtoken"
 import { Strategy as JwtStrategy } from "passport-jwt"
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 import { Strategy as ORCIDStrategy } from "passport-orcid"
+import { Strategy as GitHubStrategy } from "passport-github2"
 import config from "../../config"
 import User from "../../models/user"
 import { encrypt } from "./crypto"
 import { addJWT, jwtFromRequest } from "./jwt"
 import orcid from "../orcid"
+import { setupGitHubAuth } from "./github"
 
 const PROVIDERS = {
   GOOGLE: "google",
   ORCID: "orcid",
+  GITHUB: "github",
 }
 
 interface OauthProfile {
@@ -21,14 +25,14 @@ interface OauthProfile {
   providerId: string
   orcid?: string
   refresh?: string
+  avatar?: string
 }
 
 export const loadProfile = (profile): OauthProfile | Error => {
   if (profile.provider === PROVIDERS.GOOGLE) {
-    // Get the account email from Google profile
-    const primaryEmail = profile.emails
-      .filter((email) => email.verified === true)
-      .shift()
+    const primaryEmail = profile.emails.filter((email) =>
+      email.verified === true
+    ).shift()
     return {
       email: primaryEmail.value,
       name: profile?.displayName || "Anonymous User",
@@ -45,8 +49,14 @@ export const loadProfile = (profile): OauthProfile | Error => {
       orcid: profile.orcid,
       refresh: undefined,
     }
+  } else if (profile.provider === PROVIDERS.GITHUB) {
+    return {
+      email: profile.emails ? profile.emails[0].value : "",
+      name: profile.displayName || profile.username,
+      provider: profile.provider,
+      providerId: profile.id,
+    }
   } else {
-    // Some unknown profile type
     return new Error("Unhandled profile type.")
   }
 }
@@ -58,7 +68,6 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
   }
 
   if ("email" in profileUpdate) {
-    // Look for an existing user
     User.findOneAndUpdate(
       {
         provider: profile.provider,
@@ -102,19 +111,12 @@ export const verifyORCIDUser = (
 }
 
 export const setupPassportAuth = () => {
-  // Setup all strategies here
-
-  // OpenNeuro JWT
   if (config.auth.jwt.secret) {
     const jwtStrategy = new JwtStrategy(
       { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
       (jwt, done) => {
         if (jwt.scopes?.includes("dataset:indexing")) {
-          done(null, {
-            admin: false,
-            blocked: false,
-            indexer: true,
-          })
+          done(null, { admin: false, blocked: false, indexer: true })
         } else if (jwt.scopes?.includes("dataset:reviewer")) {
           done(null, {
             admin: false,
@@ -123,12 +125,10 @@ export const setupPassportAuth = () => {
             dataset: jwt.dataset,
           })
         } else {
-          // A user must already exist to use a JWT to auth a request
           User.findOne({ id: jwt.sub, provider: jwt.provider })
-            .then((user) => {
-              if (user) done(null, user.toObject())
-              else done(null, false)
-            })
+            .then((
+              user,
+            ) => (user ? done(null, user.toObject()) : done(null, false)))
             .catch(done)
         }
       },
@@ -138,7 +138,6 @@ export const setupPassportAuth = () => {
     throw new Error("JWT_SECRET must be configured to allow authentication.")
   }
 
-  // Google first
   if (config.auth.google.clientID && config.auth.google.clientSecret) {
     const googleStrategy = new GoogleStrategy(
       {
@@ -153,7 +152,6 @@ export const setupPassportAuth = () => {
     refresh.use(PROVIDERS.GOOGLE, googleStrategy)
   }
 
-  // then ORCID
   if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
     const orcidStrategy = new ORCIDStrategy(
       {
@@ -168,4 +166,5 @@ export const setupPassportAuth = () => {
     )
     passport.use(PROVIDERS.ORCID, orcidStrategy)
   }
+  setupGitHubAuth()
 }

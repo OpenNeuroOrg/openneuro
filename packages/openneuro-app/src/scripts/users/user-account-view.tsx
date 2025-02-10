@@ -4,6 +4,7 @@ import { EditableContent } from "./components/editable-content"
 import styles from "./scss/useraccountview.module.scss"
 import { GET_USER_BY_ORCID, UPDATE_USER } from "./user-query"
 import type { UserAccountViewProps } from "../types/user-types"
+import { GitHubAuthButton } from "./github-auth-button"
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
   const [userLinks, setLinks] = useState<string[]>(user.links || [])
@@ -74,7 +75,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
       // Error handling can be implemented here if needed
     }
   }
-
+  console.log(user.githubSynced)
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
       <h3>Account</h3>
@@ -91,14 +92,16 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
           <span>ORCID:</span>
           {user.orcid}
         </li>
-        {user.github
-          ? (
+        {user.github &&
+          (
             <li>
               <span>GitHub:</span>
               {user.github}
             </li>
-          )
-          : <li>Connect your GitHub</li>}
+          )}
+        <li>
+          <GitHubAuthButton sync={user.githubSynced} />
+        </li>
       </ul>
 
       <EditableContent

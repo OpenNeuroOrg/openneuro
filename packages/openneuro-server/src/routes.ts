@@ -1,6 +1,7 @@
 // dependencies ------------------------------------
 
 import express from "express"
+import passport from "passport"
 import * as users from "./handlers/users"
 import * as datalad from "./handlers/datalad"
 import * as comments from "./handlers/comments"
@@ -24,6 +25,11 @@ const noCache = (req, res, next) => {
   res.setHeader("Pragma", "no-cache")
   res.setHeader("Expires", "0")
 
+  next()
+}
+// Middleware to store last visited page before authentication
+const storeRedirect = (req, res, next) => {
+  req.query.redirectTo = req.get("Referer") || "/"
   next()
 }
 
@@ -157,6 +163,47 @@ const routes = [
     middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
+
+  // GitHub authentication route
+  {
+    method: "get",
+    url: "/auth/github",
+    middleware: [storeRedirect],
+    handler: (req, res, next) => {
+      const redirectTo = req.query.redirectTo || "/"
+      passport.authenticate("github", {
+        state: encodeURIComponent(redirectTo),
+      })(req, res, next)
+    },
+  },
+
+  // GitHub OAuth callback route
+  {
+    method: "get",
+    url: "/auth/github/callback",
+    handler: (req, res, next) => {
+      passport.authenticate("github", (err, user, info) => {
+        if (err) {
+          console.error("GitHub Auth Error:", err)
+          return res.redirect("/login?error=github_auth_failed")
+        }
+        if (!user) return res.redirect("/login")
+
+        // Store JWT in a secure cookie
+        res.cookie("jwt", user.jwt, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+        })
+
+        const redirectTo = req.query.state
+          ? decodeURIComponent(req.query.state)
+          : "/"
+        res.redirect(redirectTo)
+      })(req, res, next)
+    },
+  },
+
   // Anonymous reviewer access
   {
     method: "get",

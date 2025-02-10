@@ -3276,6 +3276,7 @@ __metadata:
     nodemon: "npm:3.1.0"
     object-hash: "npm:2.1.1"
     passport: "npm:0.7.0"
+    passport-github2: "npm:^0.1.12"
     passport-google-oauth20: "npm:2.0.0"
     passport-jwt: "npm:4.0.1"
     passport-oauth2-refresh: "npm:2.2.0"
@@ -16016,6 +16017,15 @@ __metadata:
   version: 0.1.1
   resolution: "pascalcase@npm:0.1.1"
   checksum: 10/f83681c3c8ff75fa473a2bb2b113289952f802ff895d435edd717e7cb898b0408cbdb247117a938edcbc5d141020909846cc2b92c47213d764e2a94d2ad2b925
+  languageName: node
+  linkType: hard
+
+"passport-github2@npm:^0.1.12":
+  version: 0.1.12
+  resolution: "passport-github2@npm:0.1.12"
+  dependencies:
+    passport-oauth2: "npm:1.x.x"
+  checksum: 10/cf174d1738a2b1d398ec9f4ba2e1ca229214ef65cfd05f5754303f664d5cfd6e3bacbf49ece19fcd576be43bfcc1d3795541f50692148436b9e4ddbffbe625ac
   languageName: node
   linkType: hard
 
