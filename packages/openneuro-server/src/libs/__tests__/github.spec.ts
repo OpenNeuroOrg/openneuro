@@ -1,10 +1,7 @@
-import passport from "passport"
-import jwt from "jsonwebtoken"
-import { Strategy as GitHubStrategy } from "passport-github2"
-import { setupGitHubAuth } from "../authentication/github"
-import User from "../../models/user"
-import config from "../../config"
+import type { Strategy as GitHubStrategy } from "passport-github2"
 import { vi } from "vitest"
+import passport from "passport"
+import { setupGitHubAuth } from "../authentication/github"
 
 // Mock the necessary modules
 vi.mock("../../models/user")
