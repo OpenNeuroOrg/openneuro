@@ -31,7 +31,7 @@ const GithubSyncDiv = styled.div`
     .keyword-accordion {
       .accordion-title {
         position: absolute;
-        top: -20px;
+        top: -25px;
         left: 250px;
       }
       &.synced .accordion-title {
@@ -72,7 +72,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
       </a>
       <span>
         {lastSyncedText && (
-          <small className="synced-text">- {lastSyncedText}</small>
+          <small className="synced-text">{lastSyncedText}</small>
         )}
       </span>
       <AccordionWrap>
