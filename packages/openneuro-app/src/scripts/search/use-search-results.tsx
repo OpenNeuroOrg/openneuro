@@ -87,6 +87,10 @@ const searchQuery = gql`
             issues {
               severity
             }
+            validation {
+              errors
+              warnings
+            }
             description {
               Name
               Authors
