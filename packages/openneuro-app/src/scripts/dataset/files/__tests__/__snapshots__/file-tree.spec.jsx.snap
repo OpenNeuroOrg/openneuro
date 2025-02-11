@@ -21,15 +21,7 @@ exports[`FileTree component > renders with default props 1`] = `
     </div>
     <div
       class="accordion-item  collapsed "
-    >
-      <div
-        class="accordion-content"
-      >
-        <ul
-          class="child-files"
-        />
-      </div>
-    </div>
+    />
   </article>
 </DocumentFragment>
 `;

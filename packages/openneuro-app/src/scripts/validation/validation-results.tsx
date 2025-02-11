@@ -2,8 +2,10 @@ import React from "react"
 import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 import { Issues } from "./validation-issues"
 import { RadioGroup } from "@openneuro/components/radio"
-import type { DatasetIssues } from "@bids/validator/issues"
+import { Loading } from "@openneuro/components/loading"
 import styled from "@emotion/styled"
+import type { DatasetIssues } from "@bids/validator/issues"
+import { useValidationResults } from "./validation-results-query"
 
 const RadioSpan = styled.span`
   display: flex;
@@ -18,16 +20,18 @@ const RadioSpan = styled.span`
 `
 
 interface ValidationResultsProps {
-  issues: DatasetIssues
+  datasetId: string
+  version: string
 }
 
 type ValidationGroupBy = "code" | "location"
 
-/**
- * Display ValidationResults with collapsing panels
- */
-export function ValidationResults(
-  { issues }: ValidationResultsProps,
+interface ValidationResultsDisplayProps {
+  issues: DatasetIssues
+}
+
+export function ValidationResultsDisplay(
+  { issues }: ValidationResultsDisplayProps,
 ) {
   const [groupBy, setGroupBy] = React.useState<ValidationGroupBy>("code")
   const groupedIssues = issues.groupBy("severity")
@@ -91,6 +95,26 @@ export function ValidationResults(
       </AccordionWrap>
     </>
   )
+}
+
+/**
+ * Display ValidationResults with collapsing panels
+ */
+export function ValidationResults(
+  { datasetId, version }: ValidationResultsProps,
+) {
+  const { issues, loading } = useValidationResults(datasetId, version)
+
+  if (loading) {
+    return (
+      <>
+        <Loading />
+        <span className="message">Loading validation results...</span>
+      </>
+    )
+  } else {
+    return <ValidationResultsDisplay issues={issues} />
+  }
 }
 
 export default ValidationResults

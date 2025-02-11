@@ -76,6 +76,10 @@ export interface SearchResultItemProps {
           severity: string
         },
       ]
+      validation: {
+        errors: number
+        warnings: number
+      }
       description: {
         Name: string
       }
@@ -301,8 +305,17 @@ export const SearchResultItem = ({
       return null
     }
   }
-  const invalid = !node.latestSnapshot.issues ||
-    node.latestSnapshot.issues.some((issue) => issue.severity === "error")
+
+  let invalid = false
+  // Legacy issues still flagged
+  if (node.latestSnapshot.issues) {
+    invalid = node.latestSnapshot.issues.some((issue) =>
+      issue.severity === "error"
+    )
+  } else {
+    // Test if there's any schema validator errors
+    invalid = node.latestSnapshot.validation.errors > 0
+  }
   const shared = !node.public && node.uploader.id !== profile.sub
 
   const MyDatasetsPage = datasetTypeSelected === "My Datasets"

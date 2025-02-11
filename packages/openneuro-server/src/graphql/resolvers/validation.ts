@@ -22,7 +22,15 @@ export const validation = async (dataset, _, { userInfo }) => {
           { userInfo },
         )
       }
-      return data
+      // Return with errors and warning counts appended
+      return {
+        ...data.toObject(),
+        errors: data.issues.filter((issue) =>
+          issue.severity === "error"
+        ).length,
+        warnings:
+          data.issues.filter((issue) => issue.severity === "warning").length,
+      }
     })
 }
 
@@ -31,11 +39,18 @@ export const validation = async (dataset, _, { userInfo }) => {
  */
 export const snapshotValidation = async (snapshot) => {
   const datasetId = snapshot.id.split(":")[0]
-  return Validation.findOne({
+  const validation = await Validation.findOne({
     id: snapshot.hexsha,
     datasetId,
-  })
-    .exec()
+  }).exec()
+  // Return with errors and warning counts appended
+  return {
+    ...validation.toObject(),
+    errors:
+      validation.issues.filter((issue) => issue.severity === "error").length,
+    warnings:
+      validation.issues.filter((issue) => issue.severity === "warning").length,
+  }
 }
 
 export function validationSeveritySort(a, b) {

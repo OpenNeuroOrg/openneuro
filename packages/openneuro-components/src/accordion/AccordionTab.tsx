@@ -60,7 +60,7 @@ export const AccordionTab: React.FC<AccordionTabProps> = ({
           dropdown ? " dropdown-style" : ""
         }`}
       >
-        <div className="accordion-content">{children}</div>
+        {isOpen && <div className="accordion-content">{children}</div>}
       </div>
     </article>
   )

@@ -1,7 +1,7 @@
 import React from "react"
 import pluralize from "pluralize"
 import { Loading } from "@openneuro/components/loading"
-import { ValidationResults } from "../validation/validation-results"
+import { ValidationResultsDisplay } from "../validation/validation-results"
 import UploaderContext from "./uploader-context.js"
 import { validation } from "../workers/schema.js"
 import type { ValidationResult } from "@bids/validator/main"
@@ -106,7 +106,7 @@ class UploadValidator
             next={this.props.next}
             reset={this.props.reset}
           />
-          <ValidationResults
+          <ValidationResultsDisplay
             issues={this.state.issues}
           />
           <span className="bids-link">

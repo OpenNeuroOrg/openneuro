@@ -475,8 +475,13 @@ export const typeDefs = `
     # Hash of the data validated
     id: String
     datasetId: String
+    # Issue objects returned by BIDS validator
     issues: [ValidatorIssue]
     codeMessages: [ValidatorCodeMessage]
+    # Count of errors
+    errors: Int
+    # Count of warnings
+    warnings: Int
   }
 
   # Ephemeral draft or working tree for a dataset
