@@ -10,7 +10,7 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-DENO_VALIDATOR_VERSION = '2.0.1'
+DENO_VALIDATOR_VERSION = '2.0.2'
 
 DENO_METADATA = {
     'validator': 'schema',
