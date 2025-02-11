@@ -178,30 +178,44 @@ const routes = [
     },
   },
 
-  // GitHub OAuth callback route
   {
     method: "get",
     url: "/auth/github/callback",
     handler: (req, res, next) => {
-      passport.authenticate("github", (err, user) => {
+      passport.authenticate("github", (err, user, info) => {
         const redirectTo = req.query.state
           ? decodeURIComponent(req.query.state)
           : "/"
 
+        // Remove any existing query parameters
+        const cleanRedirectTo = redirectTo.split("?")[0]
+
         if (err) {
-          // Capture the error in Sentry
           Sentry.captureException(err)
           return res.redirect(
-            `${redirectTo}?error=github_auth_failed`,
+            `${cleanRedirectTo}?error=${
+              encodeURIComponent(err.message || "github_auth_failed")
+            }`,
           )
         }
 
-        if (!user) return res.redirect(redirectTo)
+        if (!user) {
+          Sentry.captureMessage(
+            `GitHub Auth Failed - Info: ${JSON.stringify(info)}`,
+            "warning",
+          )
+          return res.redirect(
+            `${cleanRedirectTo}?error=${
+              encodeURIComponent(info?.message || "github_auth_failed")
+            }`,
+          )
+        }
 
-        res.redirect(redirectTo)
+        return res.redirect(`${cleanRedirectTo}?success=github_auth_success`)
       })(req, res, next)
     },
   },
+
   // Anonymous reviewer access
   {
     method: "get",

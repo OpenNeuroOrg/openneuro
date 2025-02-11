@@ -1,18 +1,21 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { AccordionTab } from "@openneuro/components/accordion"
 import { AccordionWrap } from "@openneuro/components/accordion/"
 import styled from "@emotion/styled"
+import { toast } from "react-toastify"
+import { useSearchParams } from "react-router-dom" // React Router for URL parsing
+
 interface GitHubAuthButtonProps {
-  sync: Date | null // Define the sync prop type, assuming it's a Date or null
+  sync: Date | null
 }
 
 const GithubSyncDiv = styled.div`
-  .synced-btn{
+  .synced-btn {
     border: 1px solid var(--on-dark-aqua);
     padding: 3px 5px;
     border-radius: 4px;
     text-decoration: none;
-    &:hover{
+    &:hover {
       background: #efefef;
       color: #333;
     }
@@ -28,12 +31,11 @@ const GithubSyncDiv = styled.div`
       .accordion-title {
         position: absolute;
         top: -20px;
-        left: 300px;
-        
+        left: 250px;
       }
-        &.synced .accordion-title{
-          left: 435px;
-        }
+      &.synced .accordion-title {
+        left: 435px;
+      }
     }
   }
 `
@@ -41,10 +43,30 @@ const GithubSyncDiv = styled.div`
 export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
   const buttonText = sync ? "Re-sync" : "Sync"
   const lastSyncedText = sync ? `Last synced: ${sync.toLocaleString()}` : null
+  const [searchParams] = useSearchParams()
+
+  useEffect(() => {
+    const error = searchParams.get("error")
+
+    if (error === "orcid_required") {
+      toast.error("Please login with your ORCID account")
+    } else if (error) {
+      toast.error(error.replace(/_/g, " ")) // Replace underscores with spaces for readability
+    }
+
+    const success = searchParams.get("success")
+    if (success === "github_auth_success") {
+      toast.success("GitHub data successfully synced!")
+    }
+  }, [searchParams])
 
   return (
     <GithubSyncDiv>
-      <a href="/crn/auth/github" className="synced-btn">
+      <a
+        href="/crn/auth/github"
+        className="synced-btn"
+        data-testid="github-sync-button" // Added data-testid here
+      >
         {buttonText} user data from <i className="fab fa-github"></i> GitHub
       </a>
       <span>

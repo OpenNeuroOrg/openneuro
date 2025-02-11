@@ -32,29 +32,26 @@ export const setupGitHubAuth = () => {
         })
 
         if (!orcidUser) {
-          return done(
-            new Error("Authenticated ORCID user not found in database"),
-            null,
-          )
+          return done(null, false, {
+            message: "Please login with your ORCID account",
+          })
         }
 
-        // Always update GitHub username
+        // Updating GitHub info
         orcidUser.github = profile.username
+        orcidUser.avatar = profile._json.avatar_url
 
-        // Only update location if it is not already set
         if (!orcidUser.location && profile._json.location) {
           orcidUser.location = profile._json.location
         }
-
-        // Only update institution if it is not already set
         if (!orcidUser.institution && profile._json.company) {
           orcidUser.institution = profile._json.company
         }
 
-        // Always update avatar
-        orcidUser.avatar = profile._json.avatar_url
-
-        // Add GitHub profile URL to links if it's not already there
+        // Ensure links array exists before adding GitHub profile URL
+        if (!orcidUser.links) {
+          orcidUser.links = []
+        }
         if (
           profile.profileUrl && !orcidUser.links.includes(profile.profileUrl)
         ) {
@@ -62,14 +59,12 @@ export const setupGitHubAuth = () => {
         }
 
         orcidUser.githubSynced = new Date()
-
         await orcidUser.save()
-
-        return done(null, addJWT(config)(orcidUser.toObject()))
+        return done(null, addJWT(config)(orcidUser.toObject()), {
+          message: "GitHub sync successful",
+        })
       } catch (err) {
-        // Capture exception with Sentry
         Sentry.captureException(err)
-
         return done(err, null)
       }
     },
