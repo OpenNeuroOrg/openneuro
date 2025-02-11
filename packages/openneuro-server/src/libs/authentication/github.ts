@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 import { Strategy as GitHubStrategy } from "passport-github2"
 import config from "../../config"
 import User from "../../models/user"
+import * as Sentry from "@sentry/node"
 import { addJWT, jwtFromRequest } from "./jwt"
 
 export const setupGitHubAuth = () => {
@@ -50,11 +51,6 @@ export const setupGitHubAuth = () => {
           orcidUser.institution = profile._json.company
         }
 
-        // If email is empty, set it from GitHub
-        if (!orcidUser.email && profile.emails?.length > 0) {
-          orcidUser.email = profile.emails[0].value
-        }
-
         // Always update avatar
         orcidUser.avatar = profile._json.avatar_url
 
@@ -71,7 +67,16 @@ export const setupGitHubAuth = () => {
 
         return done(null, addJWT(config)(orcidUser.toObject()))
       } catch (err) {
-        return done(err, null)
+        // Capture exception with Sentry
+        Sentry.captureException(err)
+
+        // Return a generic error message to the user
+        return done(
+          new Error(
+            "An unexpected GitHub login failure occurred, please try again later.",
+          ),
+          null,
+        )
       }
     },
   )

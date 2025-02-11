@@ -15,6 +15,7 @@ import * as auth from "./libs/authentication/states"
 import * as doi from "./handlers/doi"
 import { sitemapHandler } from "./handlers/sitemap"
 import { reviewerHandler } from "./handlers/reviewer"
+import * as Sentry from "@sentry/node"
 
 const noCache = (req, res, next) => {
   res.setHeader("Surrogate-Control", "no-store")
@@ -183,28 +184,27 @@ const routes = [
     url: "/auth/github/callback",
     handler: (req, res, next) => {
       passport.authenticate("github", (err, user) => {
-        if (err) {
-          // eslint-disable-next-line
-          console.error("GitHub Auth Error:", err)
-          return res.redirect("/login?error=github_auth_failed")
-        }
-        if (!user) return res.redirect("/login")
-
-        // Store JWT in a secure cookie
-        res.cookie("jwt", user.jwt, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
-        })
-
         const redirectTo = req.query.state
           ? decodeURIComponent(req.query.state)
           : "/"
-        res.redirect(redirectTo)
+
+        if (err) {
+          // Capture the error in Sentry
+          Sentry.captureException(err)
+
+          // eslint-disable-next-line
+          console.error("GitHub Auth Error:", err)
+          return res.redirect(
+            `${encodeURIComponent(redirectTo)}?error=github_auth_failed`,
+          )
+        }
+
+        if (!user) return res.redirect(encodeURIComponent(redirectTo))
+
+        res.redirect(encodeURIComponent(redirectTo))
       })(req, res, next)
     },
   },
-
   // Anonymous reviewer access
   {
     method: "get",

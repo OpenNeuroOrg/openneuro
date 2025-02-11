@@ -1,7 +1,7 @@
 import crypto from "crypto"
 import config from "../../config"
 
-const secret = config.auth.jwt?.secret || ""
+const secret = config.auth.jwt?.secret
 const algorithm = "aes256"
 const key = crypto
   .createHash("sha256")
