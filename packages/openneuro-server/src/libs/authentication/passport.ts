@@ -28,6 +28,7 @@ interface OauthProfile {
 
 export const loadProfile = (profile): OauthProfile | Error => {
   if (profile.provider === PROVIDERS.GOOGLE) {
+    // Get the account email from Google profile
     const primaryEmail = profile.emails
       .filter((email) => email.verified === true)
       .shift()
@@ -141,6 +142,7 @@ export const setupPassportAuth = () => {
   } else {
     throw new Error("JWT_SECRET must be configured to allow authentication.")
   }
+
   // Google first
   if (config.auth.google.clientID && config.auth.google.clientSecret) {
     const googleStrategy = new GoogleStrategy(
@@ -155,6 +157,7 @@ export const setupPassportAuth = () => {
     passport.use(PROVIDERS.GOOGLE, googleStrategy)
     refresh.use(PROVIDERS.GOOGLE, googleStrategy)
   }
+
   // then ORCID
   if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
     const orcidStrategy = new ORCIDStrategy(
