@@ -45,6 +45,7 @@ export const UserQuery: React.FC = () => {
 
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
+  const isAdminUser = isAdmin()
 
   if (!isOrcidValid) {
     return <FourOFourPage />
@@ -57,7 +58,7 @@ export const UserQuery: React.FC = () => {
   }
 
   // is admin or profile matches id from the user data being returned
-  const hasEdit = isAdmin || data.user.id !== profile.sub ? true : false
+  const hasEdit = isAdminUser || data.user.id === profile.sub ? true : false
 
   // Render user data with UserRoutes
   return <UserRoutes user={data.user} hasEdit={hasEdit} />
