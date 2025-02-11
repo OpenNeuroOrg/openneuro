@@ -4,6 +4,7 @@ import type { UserCardProps } from "../types/user-types"
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const { location, institution, email, orcid, links = [], github, name } = user
+
   return (
     <div className={styles.userCard}>
       <ul>
@@ -21,11 +22,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
         )}
         <li>
           <i className="fas fa-envelope"></i>
-          <a
-            href={"mailto:" + email}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={"mailto:" + email} target="_blank" rel="noopener noreferrer">
             {email}
           </a>
         </li>
@@ -56,16 +53,14 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           </li>
         )}
         {links.length > 0 &&
-          links
-            .filter(Boolean)
-            .map((link, index) => (
-              <li key={index}>
-                <i className="fa fa-link"></i>
-                <a href={link} target="_blank" rel="noopener noreferrer">
-                  {link}
-                </a>
-              </li>
-            ))}
+          links.filter(Boolean).map((link, index) => (
+            <li key={index}>
+              <i className="fa fa-link"></i>
+              <a href={link} target="_blank" rel="noopener noreferrer">
+                {link}
+              </a>
+            </li>
+          ))}
       </ul>
     </div>
   )
