@@ -27,6 +27,7 @@ const GithubSyncDiv = styled.div`
   }
 
   .on-accordion-wrapper {
+    margin-top: 5px;
     .keyword-accordion {
       .accordion-title {
         position: absolute;
