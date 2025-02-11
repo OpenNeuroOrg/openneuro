@@ -19,6 +19,7 @@ import { reviewers } from "./reviewer"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { getFileName } from "../../datalad/files"
 import { onBrainlife } from "./brainlife"
+import { brainInitiative } from "./brainInitiative"
 import { derivatives } from "./derivatives"
 import { promiseTimeout } from "../../utils/promiseTimeout"
 import semver from "semver"
@@ -301,6 +302,7 @@ const Dataset = {
   history,
   worker,
   reviewers,
+  brainInitiative,
 }
 
 export default Dataset

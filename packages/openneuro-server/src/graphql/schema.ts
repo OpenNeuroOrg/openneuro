@@ -410,6 +410,8 @@ export const typeDefs = `
     worker: String
     # Anonymous reviewers for this dataset
     reviewers: [DatasetReviewer]
+    # Dataset belongs to Brain Initiative
+    brainInitiative: Boolean
   }
 
   type DatasetDerivatives {

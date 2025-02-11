@@ -9,6 +9,7 @@ export const INDEX_DATASET_FRAGMENT = gql`
     id
     created
     public
+    brainInitiative
     metadata {
       datasetName
       datasetUrl
