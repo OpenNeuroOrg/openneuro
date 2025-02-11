@@ -70,10 +70,10 @@ export const setupGitHubAuth = () => {
         // Capture exception with Sentry
         Sentry.captureException(err)
 
-        // Return a generic error message to the user
+        // Return a error message to the user
         return done(
           new Error(
-            "An unexpected GitHub login failure occurred, please try again later.",
+            "An unexpected login failure occurred, please try again later.",
           ),
           null,
         )
