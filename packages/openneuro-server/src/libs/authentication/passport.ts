@@ -28,9 +28,9 @@ interface OauthProfile {
 
 export const loadProfile = (profile): OauthProfile | Error => {
   if (profile.provider === PROVIDERS.GOOGLE) {
-    const primaryEmail = profile.emails.filter((email) =>
-      email.verified === true
-    ).shift()
+    const primaryEmail = profile.emails
+      .filter((email) => email.verified === true)
+      .shift()
     return {
       email: primaryEmail.value,
       name: profile?.displayName || "Anonymous User",
@@ -55,6 +55,7 @@ export const loadProfile = (profile): OauthProfile | Error => {
       providerId: profile.id,
     }
   } else {
+    // Some unknown profile type
     return new Error("Unhandled profile type.")
   }
 }
@@ -66,6 +67,7 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
   }
 
   if ("email" in profileUpdate) {
+    // Look for an existing user
     User.findOneAndUpdate(
       {
         provider: profile.provider,
@@ -109,6 +111,9 @@ export const verifyORCIDUser = (
 }
 
 export const setupPassportAuth = () => {
+  // Setup all strategies here
+
+  // OpenNeuro JWT
   if (config.auth.jwt.secret) {
     const jwtStrategy = new JwtStrategy(
       { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
@@ -123,10 +128,11 @@ export const setupPassportAuth = () => {
             dataset: jwt.dataset,
           })
         } else {
+          // A user must already exist to use a JWT to auth a request
           User.findOne({ id: jwt.sub, provider: jwt.provider })
-            .then((
-              user,
-            ) => (user ? done(null, user.toObject()) : done(null, false)))
+            .then((user) =>
+              user ? done(null, user.toObject()) : done(null, false)
+            )
             .catch(done)
         }
       },
@@ -135,7 +141,7 @@ export const setupPassportAuth = () => {
   } else {
     throw new Error("JWT_SECRET must be configured to allow authentication.")
   }
-
+  // Google first
   if (config.auth.google.clientID && config.auth.google.clientSecret) {
     const googleStrategy = new GoogleStrategy(
       {
@@ -149,7 +155,7 @@ export const setupPassportAuth = () => {
     passport.use(PROVIDERS.GOOGLE, googleStrategy)
     refresh.use(PROVIDERS.GOOGLE, googleStrategy)
   }
-
+  // then ORCID
   if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
     const orcidStrategy = new ORCIDStrategy(
       {
