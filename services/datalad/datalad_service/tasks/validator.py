@@ -1,7 +1,7 @@
 import asyncio
+from pathlib import Path
 import json
 import logging
-import os
 import re
 
 import requests
@@ -46,9 +46,13 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
 
     Runs the deno bids-validator process.
     """
+    # Sync to packages/openneuro-app/src/scripts/workers/schema.worker.ts
+    config_path = Path(__file__).parent / 'assets' / 'validator-config.json'
     return await run_and_decode(
         ['deno', 'run', '-A',
          f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
+         '--config', str(config_path),
+         '--blacklistModalities', 'micr',
          '--json', dataset_path],
         logger=logger
     )
