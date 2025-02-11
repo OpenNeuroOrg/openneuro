@@ -5,7 +5,7 @@ import { description } from "../../datalad/description"
 import Metadata from "../../models/metadata"
 import CacheItem, { CacheType } from "../../cache/item"
 import * as Sentry from "@sentry/node"
-import fundedAwards from "../../data/funded_awards.json" with { type: "json" }
+import fundedAwards from "../../data/funded_awards.json"
 
 const brainInitiativeMatch = new RegExp("brain.initiative", "i")
 
