@@ -63,7 +63,6 @@ export const UserQuery: React.FC = () => {
 
   // is admin or profile matches id from the user data being returned
   const hasEdit = isAdminUser || (data.user.id === profile?.sub) ? true : false
-  console.log(profile.sub)
   // Render user data with UserRoutes
   return <UserRoutes user={data.user} hasEdit={hasEdit} />
 }
