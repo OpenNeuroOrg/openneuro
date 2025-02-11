@@ -192,13 +192,13 @@ const routes = [
           // Capture the error in Sentry
           Sentry.captureException(err)
           return res.redirect(
-            `${encodeURIComponent(redirectTo)}?error=github_auth_failed`,
+            `${redirectTo}?error=github_auth_failed`,
           )
         }
 
-        if (!user) return res.redirect(encodeURIComponent(redirectTo))
+        if (!user) return res.redirect(redirectTo)
 
-        res.redirect(encodeURIComponent(redirectTo))
+        res.redirect(redirectTo)
       })(req, res, next)
     },
   },
