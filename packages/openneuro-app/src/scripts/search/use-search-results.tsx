@@ -247,7 +247,7 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       "filter",
       matchQuery(
-        "metadata.brain_initiative",
+        "brainInitiative",
         brain_initiative,
       ),
     )
