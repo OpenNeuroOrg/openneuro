@@ -191,9 +191,6 @@ const routes = [
         if (err) {
           // Capture the error in Sentry
           Sentry.captureException(err)
-
-          // eslint-disable-next-line
-          console.error("GitHub Auth Error:", err)
           return res.redirect(
             `${encodeURIComponent(redirectTo)}?error=github_auth_failed`,
           )
