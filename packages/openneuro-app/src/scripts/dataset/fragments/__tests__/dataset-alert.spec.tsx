@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
-import { DatasetAlertDraft } from "../dataset-alert-draft"
+import { DatasetAlertDraft } from "../dataset-alert"
 
 describe("DatasetAlertDraft component", () => {
   it("renders the correct text for private drafts with changes", () => {
