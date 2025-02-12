@@ -335,9 +335,15 @@ datalad<span class="w"> </span>get<span class="w"> </span>&lt;path<span class="w
 </section>
 <section id="debugging-issues">
 <h3>Debugging issues<a class="headerlink" href="#debugging-issues" title="Link to this heading">¶</a></h3>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># To debug issues - enable logging and provide this log to support or open a GitHub issue</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">OPENNEURO_LOG</span><span class="o">=</span>INFO
+<p>To debug issues - enable logging and provide this log to support or open a GitHub issue.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux or macOS</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OPENNEURO_LOG</span><span class="o">=</span>DEBUG
 deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
+</pre></div>
+</div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Windows with PowerShell</span>
+<span class="nv">$env:OPENNEURO_LOG</span><span class="p">=</span><span class="s2">&quot;DEBUG&quot;</span>
+<span class="n">deno</span> <span class="n">run</span> <span class="n">-A</span> <span class="n">jsr</span><span class="p">:</span><span class="nv">@openneuro</span><span class="p">/</span><span class="nb">cli </span><span class="n">upload</span> <span class="p">-</span><span class="n">-affirmDefaced</span> <span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">dataset</span>
 </pre></div>
 </div>
 </section>
