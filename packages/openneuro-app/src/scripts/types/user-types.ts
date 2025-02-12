@@ -8,6 +8,7 @@ export interface User {
   avatar?: string
   orcid?: string
   links?: string[]
+  githubSynced?: Date
 }
 
 export interface UserRoutesProps {
@@ -27,6 +28,7 @@ export interface UserAccountViewProps {
     location?: string
     institution?: string
     github?: string
+    githubSynced?: Date
   }
 }
 
