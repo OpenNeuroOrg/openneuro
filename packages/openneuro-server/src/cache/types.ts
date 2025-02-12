@@ -13,4 +13,5 @@ export enum CacheType {
   participantCount = "participantCount",
   snapshotDownload = "download",
   draftRevision = "revision",
+  brainInitiative = "brainInitiative"
 }

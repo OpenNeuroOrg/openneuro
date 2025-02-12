@@ -94,10 +94,18 @@ datalad get <path or paths to download>
 
 ### Debugging issues
 
-```shell
-# To debug issues - enable logging and provide this log to support or open a GitHub issue
-export OPENNEURO_LOG=INFO
+To debug issues - enable logging and provide this log to support or open a GitHub issue.
+
+```bash
+# Linux or macOS
+export OPENNEURO_LOG=DEBUG
 deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
+```
+
+```powershell
+# Windows with PowerShell
+$env:OPENNEURO_LOG="DEBUG"
+deno run -A jsr:@openneuro/cli upload --affirmDefaced path\to\dataset
 ```
 
 ### Implementation Notes

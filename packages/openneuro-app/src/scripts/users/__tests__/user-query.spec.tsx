@@ -4,6 +4,12 @@ import { MockedProvider } from "@apollo/client/testing"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { UserQuery } from "../user-query"
 import { GET_USER_BY_ORCID } from "../user-query"
+import * as ProfileUtils from "../../authentication/profile"
+
+Object.defineProperty(ProfileUtils, "getProfile", {
+  value: () => ({ sub: "1" }),
+  writable: true,
+})
 
 const validOrcid = "0009-0001-9689-7232"
 

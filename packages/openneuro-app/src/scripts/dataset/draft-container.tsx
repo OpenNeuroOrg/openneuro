@@ -135,6 +135,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               <div className="dataset-validation">
                 <ValidationBlock
                   datasetId={dataset.id}
+                  version={dataset.draft.head}
                   issues={dataset.draft.issues}
                   validation={dataset.draft.validation}
                 />

@@ -3,6 +3,7 @@
     "id": { "type": "keyword" },
     "created": { "type": "date" },
     "public": { "type": "boolean" },
+    "brainInitiative": { "type": "boolean" },
     "metadata": {
       "properties": {
         "datasetName": { "type": "keyword" },

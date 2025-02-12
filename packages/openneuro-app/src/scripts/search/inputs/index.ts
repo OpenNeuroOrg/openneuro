@@ -1,6 +1,7 @@
 import KeywordInput from "./keyword-input"
 import AllDatasetsToggle from "./admin-allDatasets-toggle"
 import ModalitySelect from "./modality-select"
+import NIHSelect from "./nih-select"
 import ShowDatasetRadios from "./show-datasets-radios"
 import AgeRangeInput from "./age-range-input"
 import SubjectCountRangeInput from "./subject-count-range-input"
@@ -30,6 +31,7 @@ export {
   DiagnosisSelect,
   KeywordInput,
   ModalitySelect,
+  NIHSelect,
   ScannerManufacturers,
   ScannerManufacturersModelNames,
   SectionSelect,

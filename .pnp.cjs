@@ -2556,31 +2556,32 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@jsr/bids__schema", [\
-      ["npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.0.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__schema-npm-1.0.0-bf859b3236-ac082a496f.zip/node_modules/@jsr/bids__schema/",\
+      ["npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__schema-npm-1.0.1-8b3144b4f2-fda8416854.zip/node_modules/@jsr/bids__schema/",\
         "packageDependencies": [\
-          ["@jsr/bids__schema", "npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.0.tgz"]\
+          ["@jsr/bids__schema", "npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/bids__validator", [\
-      ["npm:2.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.1.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.0.1-b6f6b5b40a-bc5857ffe4.zip/node_modules/@jsr/bids__validator/",\
+      ["npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.0.2-a8139db783-2e794422b0.zip/node_modules/@jsr/bids__validator/",\
         "packageDependencies": [\
-          ["@jsr/bids__validator", "npm:2.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.1.tgz"],\
+          ["@jsr/bids__validator", "npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz"],\
           ["@bids/nifti-reader-js", "npm:0.6.9"],\
-          ["@jsr/bids__schema", "npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.0.tgz"],\
+          ["@jsr/bids__schema", "npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz"],\
           ["@jsr/effigies__cliffy-command", "npm:1.0.0-dev.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-command%2F1.0.0-dev.8.tgz"],\
           ["@jsr/effigies__cliffy-table", "npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz"],\
           ["@jsr/libs__xml", "npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz"],\
           ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"],\
           ["@jsr/std__log", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz"],\
           ["@jsr/std__path", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"],\
+          ["@jsr/std__streams", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz"],\
           ["@jsr/std__yaml", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__yaml%2F1.0.5.tgz"],\
           ["ajv", "npm:8.17.1"],\
           ["hed-validator", "npm:3.15.5"],\
-          ["ignore", "npm:6.0.2"]\
+          ["ignore", "npm:7.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2666,6 +2667,13 @@ const RAW_RUNTIME_STATE =
           ["@jsr/std__bytes", "npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.2.tgz"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__bytes-npm-1.0.5-65ec6f83d6-5d2b562ccf.zip/node_modules/@jsr/std__bytes/",\
+        "packageDependencies": [\
+          ["@jsr/std__bytes", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__fmt", [\
@@ -2721,6 +2729,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@jsr-std__path-npm-1.0.8-82e854bd09-4c09d127e8.zip/node_modules/@jsr/std__path/",\
         "packageDependencies": [\
           ["@jsr/std__path", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@jsr/std__streams", [\
+      ["npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__streams-npm-1.0.8-5807589678-52639fad9b.zip/node_modules/@jsr/std__streams/",\
+        "packageDependencies": [\
+          ["@jsr/std__streams", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz"],\
+          ["@jsr/std__bytes", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3937,7 +3955,7 @@ const RAW_RUNTIME_STATE =
           ["@artsy/fresnel", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.9.0"],\
           ["@bids/validator", [\
             "@jsr/bids__validator",\
-            "npm:2.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.1.tgz"\
+            "npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz"\
           ]],\
           ["@emotion/react", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.1"],\
           ["@emotion/styled", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.0"],\
@@ -14243,10 +14261,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:6.0.2", {\
-        "packageLocation": "./.yarn/cache/ignore-npm-6.0.2-2a03f7d9be-af39e49996.zip/node_modules/ignore/",\
+      ["npm:7.0.3", {\
+        "packageLocation": "./.yarn/cache/ignore-npm-7.0.3-6ded2ddf1c-ce5e812af3.zip/node_modules/ignore/",\
         "packageDependencies": [\
-          ["ignore", "npm:6.0.2"]\
+          ["ignore", "npm:7.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\

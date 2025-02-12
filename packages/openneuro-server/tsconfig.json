@@ -9,7 +9,7 @@
     "module": "CommonJS"
   },
   "include": ["./src"],
-  "files": ["./src/lerna.json"],
+  "files": ["./src/lerna.json", "./src/data/funded_awards.json"],
   "references": [
     { "path": "../openneuro-search" }
   ]
