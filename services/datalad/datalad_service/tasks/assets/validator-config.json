@@ -2,7 +2,8 @@
   "error": [
     { "code": "NO_AUTHORS" },
     { "code": "SUBJECT_FOLDERS" },
-    { "code": "EMPTY_DATASET_NAME" }
+    { "code": "EMPTY_DATASET_NAME" },
+    { "code": "EVENTS_TSV_MISSING" }
   ],
   "warning": [
     { "code": "PARTICIPANT_ID_MISMATCH" }
