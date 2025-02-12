@@ -52,8 +52,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
         ['deno', 'run', '-A',
          f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
          '--config', str(config_path),
-         '--blacklistModalities', 'micr',
-         '--json', dataset_path],
+         '--json', dataset_path,
+         '--blacklistModalities', 'micr'],
         logger=logger
     )
 
