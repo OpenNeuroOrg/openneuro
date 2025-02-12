@@ -18,24 +18,24 @@ export const DatasetAlertPrivate: React.FC<DatasetAlertPrivateProps> = ({
   datasetId,
   hasDraftChanges,
 }) => {
-    return (
-      <DatasetAlert
-        alert="This dataset has not been published!"
-        footer={hasDraftChanges &&
-          "* There have been changes to the draft since your last version"}
-        level="warning"
-      >
-        <>
-          <Link
-            className="dataset-tool"
-            to={"/datasets/" + datasetId + "/publish"}
-          >
-            Publish this dataset
-          </Link>
-          &#32; to make all versions available publicly.
-        </>
-      </DatasetAlert>
-    )
+  return (
+    <DatasetAlert
+      alert="This dataset has not been published!"
+      footer={hasDraftChanges &&
+        "* There have been changes to the draft since your last version"}
+      level="warning"
+    >
+      <>
+        <Link
+          className="dataset-tool"
+          to={"/datasets/" + datasetId + "/publish"}
+        >
+          Publish this dataset
+        </Link>
+        &#32; to make all versions available publicly.
+      </>
+    </DatasetAlert>
+  )
 }
 
 export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
