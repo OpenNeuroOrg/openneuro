@@ -11,6 +11,7 @@ import type { CommandOptions } from "@cliffy/command"
 import { getRepoAccess } from "./git-credential.ts"
 import { readConfig } from "../config.ts"
 import { createDataset } from "../graphq.ts"
+import validatorConfig from "../validator-config.json" with { type: "json" }
 
 async function getRepoDir(url: URL): Promise<string> {
   const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
@@ -71,6 +72,7 @@ export async function uploadAction(
   const schemaResult = await validate(
     await readFileTree(dataset_directory_abs),
     options,
+    validatorConfig,
   )
   console.log(consoleFormat(schemaResult))
 
