@@ -390,6 +390,24 @@
   }
 }
 
+.nih-facet{
+  ul{
+    list-style: none;
+    margin:0;
+    padding:0;
+    li{
+      margin: 0 0 20px 0;
+      background-color: rgba(155, 211, 221, 1);
+      padding: 10px;
+      cursor: pointer;
+      border-radius: $border-radius-default;
+      &:hover{
+        background-color: darken(rgba(155, 211, 221, 1), 10%);
+      }
+    }
+  }
+}
+
 @media (max-width: 980px) {
   .search-facet-wrapper {
     .modality-facet.facet-accordion.on-accordion-wrapper {

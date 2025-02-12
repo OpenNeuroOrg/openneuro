@@ -5,6 +5,7 @@ import { CommunityHeader } from "./CommunityHeader"
 export interface PortalContent {
   className?: string
   portalName?: string
+  pageBrand?: string
   portalPrimary?: string
   hexBackgroundImage?: string
   communityHeader?: string
@@ -47,6 +48,7 @@ export const SearchPage = ({
               {portalContent.portalName
                 ? (
                   <ModalityHeader
+                    pageBrand={portalContent.pageBrand}
                     portalName={portalContent.portalName}
                     portalPrimary={portalContent.portalPrimary}
                     hexBackgroundImage={portalContent.hexBackgroundImage}

@@ -154,6 +154,7 @@ export const useSearchResults = () => {
     tracerRadionuclides,
     sortBy_selected,
     bidsDatasetType_selected,
+    brain_initiative,
   } = searchParams
 
   const boolQuery = new BoolQuery()
@@ -210,6 +211,7 @@ export const useSearchResults = () => {
       )
     }
   }
+
   if (isActiveRange(ageRange)) {
     boolQuery.addClause(
       "filter",
@@ -238,6 +240,15 @@ export const useSearchResults = () => {
       matchQuery(
         "latestSnapshot.description.DatasetType",
         bidsDatasetType_selected,
+      ),
+    )
+  }
+  if (brain_initiative) {
+    boolQuery.addClause(
+      "filter",
+      matchQuery(
+        "brainInitiative",
+        brain_initiative,
       ),
     )
   }

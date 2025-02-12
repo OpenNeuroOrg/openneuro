@@ -128,6 +128,7 @@ export const getSelectParams = ({
   tracerNames,
   tracerRadionuclides,
   bidsDatasetType_selected,
+  brain_initiative,
 }) => ({
   keywords,
   modality_selected,
@@ -150,6 +151,7 @@ export const getSelectParams = ({
   tracerNames,
   tracerRadionuclides,
   bidsDatasetType_selected,
+  brain_initiative,
 })
 
 /**

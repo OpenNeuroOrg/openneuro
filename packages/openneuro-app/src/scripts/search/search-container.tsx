@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import {
@@ -22,6 +22,7 @@ import {
   DiagnosisSelect,
   KeywordInput,
   ModalitySelect,
+  NIHSelect,
   ScannerManufacturers,
   ScannerManufacturersModelNames,
   SectionSelect,
@@ -83,6 +84,7 @@ export const setDefaultSearch = (
     EEG: ["EEG"],
     iEEG: ["iEEG"],
     MEG: ["MEG"],
+    NIH: ["NIH"],
   }
   if (
     modality &&
@@ -106,12 +108,16 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const modality = portalContent?.modality || null
-  setDefaultSearch(
-    modality,
-    searchParams,
-    setSearchParams,
-    new URLSearchParams(location.search),
-  )
+  const selected_grant = portalContent?.portalName || null
+
+  useEffect(() => {
+    setDefaultSearch(
+      modality,
+      searchParams,
+      setSearchParams,
+      new URLSearchParams(location.search),
+    )
+  }, [modality, searchParams, setSearchParams, location.search])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
   const loadMore = loading ? () => {} : () => {
@@ -136,13 +142,14 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   return (
     <>
       <Helmet>
-        <title>OpenNeuro - {portalContent ? modality : ""} Search</title>
+        <title>OpenNeuro - {modality || selected_grant || ""} Search</title>
       </Helmet>
       <SearchPage
         portalContent={portalContent}
-        renderAggregateCounts={() => (
-          <AggregateCountsContainer modality={portalContent.modality} />
-        )}
+        renderAggregateCounts={() =>
+          portalContent.modality
+            ? <AggregateCountsContainer modality={portalContent.modality} />
+            : null}
         renderFilterBlock={() => (
           <FiltersBlockContainer
             loading={loading}
@@ -153,12 +160,13 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         renderSearchHeader={() => (
           <>
             {portalContent
-              ? "Search " + modality + " Portal"
+              ? "Search " + (modality || selected_grant || "") + " Portal"
               : "Search All Datasets"}
           </>
         )}
         renderSearchFacets={() => (
           <>
+            <NIHSelect label={"Search NIH Brain Initiative Datasets"} />
             <NeurobagelSearch />
             <KeywordInput />
             <AdminUser>
