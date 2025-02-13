@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/components",
-  "version": "4.31.0-alpha.1",
+  "version": "4.31.0",
   "description": "OpenNeuro component library and Storybook configuration",
   "main": "dist/index.js",
   "browser": "src/index.js",
