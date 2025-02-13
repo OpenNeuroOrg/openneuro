@@ -31,7 +31,10 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
         path="derivatives"
         element={<Derivatives derivatives={dataset.derivatives} />}
       />
-      <Route path="delete" element={<DeletePage dataset={dataset} />} />
+      <Route
+        path="delete"
+        element={<DeletePage dataset={dataset} hasEdit={hasEdit} />}
+      />
       <Route path="admin" element={<AdminDataset dataset={dataset} />} />
       <Route
         path="publish"
