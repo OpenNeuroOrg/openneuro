@@ -74,8 +74,8 @@ const SnapshotRoute = ({
           )}
           <p>
             Create a new version of this dataset for download and public access.
-            This will begin an export of this dataset to GitHub and S3 if it has
-            been made public.
+            DOIs are assigned to versions created. This will begin an export of
+            this dataset to GitHub and S3 if it has been made public.
           </p>
           <FormRow className="snapshot-input-group">
             {newVersion}
@@ -128,6 +128,14 @@ const SnapshotRoute = ({
               You must add at least one change message to create a new version
             </small>
           )}
+          {snapshots.length === 0
+            ? (
+              <p>
+                Once a version has been created and DOI assigned, the dataset
+                can no longer be deleted.
+              </p>
+            )
+            : null}
           <div className="dataset-form-controls">
             <SnapshotDataset
               datasetId={datasetId}
