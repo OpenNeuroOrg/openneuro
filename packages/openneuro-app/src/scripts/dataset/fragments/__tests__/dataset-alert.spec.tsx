@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
-import { DatasetAlertDraft } from "../dataset-alert-draft"
+import { DatasetAlertDraft, DatasetAlertPrivate } from "../dataset-alert"
 
 describe("DatasetAlertDraft component", () => {
   it("renders the correct text for private drafts with changes", () => {
@@ -66,6 +66,38 @@ describe("DatasetAlertDraft component", () => {
 
     expect(
       screen.queryByText(/you can make changes to this draft page/i),
+    ).toBeInTheDocument()
+  })
+})
+
+describe("DatasetAlertPrivate component", () => {
+  it("renders the correct text for private snapshots with no changes", () => {
+    render(
+      <DatasetAlertPrivate
+        datasetId="test00001"
+        hasDraftChanges={false}
+      />,
+      { wrapper: MemoryRouter },
+    )
+
+    expect(
+      screen.queryByText(/this dataset has not been published/i),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(/there have been changes to the draft/i),
+    ).not.toBeInTheDocument()
+  })
+  it("renders the correct text for private snapshots with changes", () => {
+    render(
+      <DatasetAlertPrivate
+        datasetId="test00001"
+        hasDraftChanges
+      />,
+      { wrapper: MemoryRouter },
+    )
+
+    expect(
+      screen.queryByText(/there have been changes to the draft/i),
     ).toBeInTheDocument()
   })
 })

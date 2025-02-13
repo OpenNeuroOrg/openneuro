@@ -9,6 +9,7 @@ import { pageTitle } from "../resources/strings.js"
 import { config } from "../config"
 import DatasetCitation from "./fragments/dataset-citation.jsx"
 import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
+import { DatasetAlertPrivate } from "./fragments/dataset-alert"
 import { AnalyzeDropdown } from "./components/AnalyzeDropdown"
 import { CloneDropdown } from "./components/CloneDropdown"
 import { DatasetGitAccess } from "./components/DatasetGitAccess"
@@ -74,6 +75,9 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
     isAdmin
   const isDatasetAdmin =
     hasDatasetAdminPermissions(dataset.permissions, profile?.sub) || isAdmin
+  const hasDraftChanges = dataset.snapshots.length === 0 ||
+    dataset.draft.head !==
+      dataset.snapshots[dataset.snapshots.length - 1].hexsha
   const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
 
@@ -110,6 +114,12 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               </FollowToggles>
             </DatasetHeader>
           </>
+        )}
+        {!dataset.public && isDatasetAdmin && (
+          <DatasetAlertPrivate
+            datasetId={dataset.id}
+            hasDraftChanges={hasDraftChanges}
+          />
         )}
         {snapshot?.deprecated && (
           <DatasetAlertVersion

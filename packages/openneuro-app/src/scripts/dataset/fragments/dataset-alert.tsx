@@ -2,11 +2,40 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { DatasetAlert } from "../components/DatasetAlert"
 
+export interface DatasetAlertPrivateProps {
+  datasetId: string
+  hasDraftChanges: boolean
+}
+
 export interface DatasetAlertDraftProps {
   isPrivate: boolean
   datasetId: string
   hasDraftChanges: boolean
   hasSnapshot: boolean
+}
+
+export const DatasetAlertPrivate: React.FC<DatasetAlertPrivateProps> = ({
+  datasetId,
+  hasDraftChanges,
+}) => {
+  return (
+    <DatasetAlert
+      alert="This dataset has not been published!"
+      footer={hasDraftChanges &&
+        "* There have been changes to the draft since your last version"}
+      level="warning"
+    >
+      <>
+        <Link
+          className="dataset-tool"
+          to={"/datasets/" + datasetId + "/publish"}
+        >
+          Publish this dataset
+        </Link>
+        &#32; to make all versions available publicly.
+      </>
+    </DatasetAlert>
+  )
 }
 
 export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
@@ -17,24 +46,7 @@ export const DatasetAlertDraft: React.FC<DatasetAlertDraftProps> = ({
 }) => {
   if (isPrivate) {
     if (hasSnapshot) {
-      return (
-        <DatasetAlert
-          alert="This dataset has not been published!"
-          footer={hasDraftChanges &&
-            "* There have been changes to the draft since your last version"}
-          level="warning"
-        >
-          <>
-            <Link
-              className="dataset-tool"
-              to={"/datasets/" + datasetId + "/publish"}
-            >
-              Publish this dataset
-            </Link>
-            &#32; to make all versions available publicly.
-          </>
-        </DatasetAlert>
-      )
+      return DatasetAlertPrivate({ datasetId, hasDraftChanges })
     } else {
       return (
         <DatasetAlert
