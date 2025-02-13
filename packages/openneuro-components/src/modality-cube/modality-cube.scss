@@ -309,3 +309,12 @@
     background-color: $meg-theme;
   }
 }
+
+.nirs-cube > div .img {
+  &:before {
+    background-color: $nirs-theme;
+  }
+  .modality-cube > .front {
+    background-color: $nirs-theme;
+  }
+}

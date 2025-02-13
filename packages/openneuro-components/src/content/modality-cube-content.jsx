@@ -4,6 +4,7 @@ import eeg from "../assets/eeg.jpg"
 import ieeg from "../assets/ieeg.jpg"
 import mri from "../assets/mri.jpg"
 import meg from "../assets/meg.jpg"
+import nirs from "../assets/nirs.jpg"
 
 export const cubeData = [
   {
@@ -53,6 +54,17 @@ export const cubeData = [
   {
     label: "iEEG",
     cubeImage: ieeg,
+    stats: (
+      <>
+        200 Datasets
+        <br />
+        200 Participants
+      </>
+    ),
+  },
+  {
+    label: "NIRS",
+    cubeImage: nirs,
     stats: (
       <>
         200 Datasets

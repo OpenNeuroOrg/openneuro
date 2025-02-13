@@ -58,6 +58,11 @@ export const modalities = [
     value: "MEG",
     count: null,
   },
+  {
+    label: "NIRS",
+    value: "NIRS",
+    count: null,
+  },
 ]
 
 export const datasetType_available = [

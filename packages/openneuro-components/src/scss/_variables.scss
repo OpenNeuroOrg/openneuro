@@ -84,6 +84,13 @@ $meg-dark: darken($meg-theme, 25%);
 $meg-secondary: adjust-color($meg-theme, $lightness: 15%);
 $meg-light: adjust-color($meg-theme, $lightness: 45%);
 
+
+$nirs-theme: rgb(4, 85, 96);
+$nirs-hover: adjust-color($nirs-theme, $lightness: 10%);
+$nirs-dark: darken($nirs-theme, 25%);
+$nirs-secondary: adjust-color($nirs-theme, $lightness: 15%);
+$nirs-light: adjust-color($nirs-theme, $lightness: 45%);
+
 $on-light-green: #00eeb5;
 $on-light-red: #c00342;
 $on-light-orange: rgb(255, 110, 43);
@@ -99,6 +106,7 @@ $chiclet-color: #a2059e;
   --pet-theme: #{$pet-theme};
   --ieeg-theme: #{$ieeg-theme};
   --meg-theme: #{$meg-theme};
+  --nirs-theme: #{$nirs-theme};
 
   --on-light-aqua: #{$on-light-aqua};
   --on-dark-aqua: #{$on-dark-aqua};

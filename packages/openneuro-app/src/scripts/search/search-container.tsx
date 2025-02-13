@@ -84,6 +84,7 @@ export const setDefaultSearch = (
     EEG: ["EEG"],
     iEEG: ["iEEG"],
     MEG: ["MEG"],
+    NIRS: ["NIRS"],
     NIH: ["NIH"],
   }
   if (
