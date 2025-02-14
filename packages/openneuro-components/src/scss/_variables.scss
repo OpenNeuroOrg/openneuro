@@ -227,3 +227,14 @@ $border-radius-default: 4px;
   --current-theme-header: #{$meg-theme};
   --current-theme-header-dark: #{$meg-dark};
 }
+
+.search-page-nirs,
+.dataset-page-nirs {
+  --current-theme-primary: #{$nirs-theme};
+  --current-theme-primary-hover: #{$nirs-hover};
+  --current-theme-primary-dark: #{$nirs-dark};
+  --current-theme-secondary: #{$nirs-secondary};
+  --current-theme-primary-light: #{$nirs-light};
+  --current-theme-header: #{$nirs-theme};
+  --current-theme-header-dark: #{$nirs-dark};
+}

@@ -130,14 +130,18 @@ export const portalContent = {
     portalName: "OpenNeuro NIRS",
     portalPrimary: (
       <>
-        NIRS
+        OpenNeuro added support for NIRS datasets in 2022 when{" "}
+        <a href="https://www.nature.com/articles/s41597-024-04136-9">
+          NIRS was incorporated
+        </a>{" "}
+        into the <a href="https://bids.neuroimaging.io">BIDS</a> standard.
       </>
     ),
     publicDatasetStat: 100,
     participantsStat: 1100,
     hexBackgroundImage: nirs,
-    swoopBackgroundColorLight: "rgba(109,83,156,1)",
-    swoopBackgroundColorDark: "rgba(45,34,64,1)",
+    swoopBackgroundColorLight: " rgb(68, 114, 143)",
+    swoopBackgroundColorDark: " rgb(36, 80, 108)",
     communityHeader: null,
     communityPrimary: null,
     communitySecondary: null,
