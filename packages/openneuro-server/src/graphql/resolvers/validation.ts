@@ -22,14 +22,19 @@ export const validation = async (dataset, _, { userInfo }) => {
           { userInfo },
         )
       }
-      // Return with errors and warning counts appended
-      return {
-        ...data.toObject(),
-        errors: data.issues.filter((issue) =>
-          issue.severity === "error"
-        ).length,
-        warnings:
-          data.issues.filter((issue) => issue.severity === "warning").length,
+      if (data) {
+        // Return with errors and warning counts appended
+        return {
+          ...data.toObject(),
+          errors: data.issues.filter((issue) =>
+            issue.severity === "error"
+          ).length,
+          warnings: data.issues.filter((issue) =>
+            issue.severity === "warning"
+          ).length,
+        }
+      } else {
+        return null
       }
     })
 }
@@ -43,13 +48,19 @@ export const snapshotValidation = async (snapshot) => {
     id: snapshot.hexsha,
     datasetId,
   }).exec()
-  // Return with errors and warning counts appended
-  return {
-    ...validation.toObject(),
-    errors:
-      validation.issues.filter((issue) => issue.severity === "error").length,
-    warnings:
-      validation.issues.filter((issue) => issue.severity === "warning").length,
+  if (validation) {
+    // Return with errors and warning counts appended
+    return {
+      ...validation.toObject(),
+      errors: validation.issues.filter((issue) =>
+        issue.severity === "error"
+      ).length,
+      warnings:
+        validation.issues.filter((issue) => issue.severity === "warning")
+          .length,
+    }
+  } else {
+    return null
   }
 }
 
