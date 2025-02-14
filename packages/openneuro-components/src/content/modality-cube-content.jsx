@@ -64,6 +64,7 @@ export const cubeData = [
   },
   {
     label: "NIH",
+    portal: true,
     cubeImage: nih,
     stats: (
       <>

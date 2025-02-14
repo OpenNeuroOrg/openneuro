@@ -55,6 +55,8 @@ export interface SearchContainerProps {
  */
 export const setDefaultSearch = (
   modality: string,
+  grant: string,
+  is_grant_portal: boolean,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchParams: Record<string, any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,18 +88,28 @@ export const setDefaultSearch = (
     MEG: ["MEG"],
     NIH: ["NIH"],
   }
+
   if (
     modality &&
-    !modalitiesWithSecondaries[modality].includes(
+    !modalitiesWithSecondaries[modality]?.includes(
       searchParams.modality_selected,
     )
   ) {
-    setSearchParams(
-      (prevState: SearchParams): SearchParams => ({
-        ...prevState,
-        modality_selected: modality,
-      }),
-    )
+    setSearchParams((prevState) => ({
+      ...prevState,
+      modality_selected: modality,
+    }))
+  }
+
+  // Check for grant-related conditions
+  if (
+    is_grant_portal && grant === "nih" &&
+    searchParams.brain_initiative !== "true"
+  ) {
+    setSearchParams((prevState) => ({
+      ...prevState,
+      brain_initiative: "true",
+    }))
   }
 }
 
@@ -109,15 +121,26 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const modality = portalContent?.modality || null
   const selected_grant = portalContent?.portalName || null
+  const is_grant_portal = portalContent?.portal || false
+  const grant = portalContent?.grant || null
 
   useEffect(() => {
     setDefaultSearch(
       modality,
+      grant,
+      is_grant_portal,
       searchParams,
       setSearchParams,
       new URLSearchParams(location.search),
     )
-  }, [modality, searchParams, setSearchParams, location.search])
+  }, [
+    modality,
+    grant,
+    is_grant_portal,
+    searchParams,
+    setSearchParams,
+    location.search,
+  ])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
   const loadMore = loading ? () => {} : () => {
