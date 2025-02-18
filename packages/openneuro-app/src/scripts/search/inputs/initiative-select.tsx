@@ -7,10 +7,9 @@ import { SingleSelect } from "@openneuro/components/facets"
 
 interface InitiativeSelectProps {
   label: string
-  portalName: string
 }
 
-const InitiativeSelect: FC<InitiativeSelectProps> = ({ label, portalName }) => {
+const InitiativeSelect: FC<InitiativeSelectProps> = ({ label }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const navigate = useNavigate()
   const location = useLocation()
@@ -62,10 +61,10 @@ const InitiativeSelect: FC<InitiativeSelectProps> = ({ label, portalName }) => {
         >
           <SingleSelect
             className="nih-facet facet-open"
-            label={portalName}
             selected={brain_initiative === "true" ? "NIH" : ""}
             setSelected={setBrainInitiative}
             items={["NIH"]}
+            label="NIH BRAIN Initiative"
           />
         </AccordionTab>
       </AccordionWrap>

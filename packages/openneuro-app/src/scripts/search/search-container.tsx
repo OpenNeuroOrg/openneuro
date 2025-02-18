@@ -198,7 +198,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
-            <InitiativeSelect label="Initiatives" portalName={selected_grant} />
+            <InitiativeSelect label="Initiatives" />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />
