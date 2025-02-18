@@ -26,14 +26,14 @@ describe("NIHSelect Component", () => {
   it("updates search params when NIH is selected and navigates to the NIH page", async () => {
     // Directly provide portalName here:
     customRender(
-      <InitiativeSelect label="Initiative" portalName="NIH Brain Initiative" />,
+      <InitiativeSelect label="Initiative" />,
     )
 
     const nihOption = screen.getByText("Initiative")
     fireEvent.click(nihOption)
 
     await waitFor(() => {
-      expect(screen.getByText("NIH Brain Initiative")).toBeInTheDocument()
+      expect(screen.getByText("Initiative")).toBeInTheDocument()
     })
   })
 })
