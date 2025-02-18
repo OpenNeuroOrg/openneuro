@@ -14,6 +14,7 @@ describe("SingleSelect Component", () => {
     render(
       <SingleSelect
         items={items}
+        label="test"
         selected={selectedValue}
         setSelected={mockSetSelected}
       />,
