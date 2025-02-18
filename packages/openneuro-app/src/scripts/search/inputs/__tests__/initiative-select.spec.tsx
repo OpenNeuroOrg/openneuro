@@ -24,7 +24,6 @@ const customRender = (
 
 describe("NIHSelect Component", () => {
   it("updates search params when NIH is selected and navigates to the NIH page", async () => {
-    // Directly provide portalName here:
     customRender(
       <InitiativeSelect label="Initiative" />,
     )
