@@ -1,37 +1,114 @@
-//@import '../scss/variables';
+// Variables for hexagonal grid and cube sizes
+$hex-width: 240px;
+$hex-height: 450px; // Height for the hex grid
+$hex-padding: 2%; // Margin padding for hexagon inside
+$hex-grid-width: 1020px; // Width for the hex grid
+$modality-cube-width: 69%; // Modality cube width
+$modality-cube-height: 60%; // Modality cube height
+$gridbreakpoint: calc($hex-grid-width + 500px); // single col
 
 #hexGrid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 800px;
-  height: 450px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($hex-width, 1fr)); // Dynamic columns
+  justify-items: center;
+  width: 100%;
+  max-width: $hex-grid-width;
   margin: 0 auto;
   overflow: hidden;
   font-family: sans-serif;
-  list-style-type: none;
+  list-style: none;
+  padding: 40px 0 7.4%;
+  gap: 20px;
+
+  @media (max-width: $gridbreakpoint) {
+    grid-template-columns: repeat(3, $hex-width); // Switch to 3 columns
+    margin: 0 auto;
+    flex-basis: 100%;
+    justify-content: center;
+  }
 }
 
 .hex {
   position: relative;
   visibility: hidden;
-  outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+  outline: 1px solid transparent;
   backface-visibility: hidden;
-
+  width: $hex-width;
+  margin: 0 10px;
   &::after {
     content: '';
     display: block;
-    padding-bottom: 86.602%; /* =  100 / tan(60) * 1.5 */
+    padding-bottom: 86.602%; // Maintain hexagonal aspect ratio
+  }
+
+  // Default: Shift every second row in the 4-column layout
+  &:nth-child(8n + 5),
+  &:nth-child(8n + 6),
+  &:nth-child(8n + 7),
+  &:nth-child(8n + 8) {
+    left: calc($hex-width / 2 + 10px); // Staggered shift for items in the 4-column layout
+  }
+
+  // Ensure items 8, 9, 10, and 11 are in the third row with no shift
+  &:nth-child(8) {
+    grid-row: 3;  // Place item 8 in the third row
+    left: 0; // Remove the left shift
+  }
+
+  &:nth-child(9),
+  &:nth-child(10),
+  &:nth-child(11) {
+    grid-row: 3;  // Ensure items 9, 10, and 11 are in the same row (3rd)
+    left: 0;  // Remove the left shift
+  }
+
+  @media (max-width: $gridbreakpoint) {
+    // Reset positioning for smaller screens
+    &:nth-child(n) {
+      left: 0;
+    }
+
+    // Set 3-column layout for smaller screens
+    display: grid;
+    grid-template-columns: repeat(3, $hex-width); // 3 columns for smaller screens
+    gap: 20px; // Maintain grid gap
+
+    // Adjust placement of items to ensure 3-column layout is respected
+    &:nth-child(1), &:nth-child(2), &:nth-child(3) {
+      grid-row: 1; // First row
+    }
+
+    &:nth-child(4), &:nth-child(5) {
+      grid-row: 2; // Second row
+      left: calc($hex-width / 2 + 10px); // Shift right for 4th and 5th items
+    }
+
+    &:nth-child(6), &:nth-child(7), &:nth-child(8) {
+      grid-row: 3; // Third row
+      left: 0; // No shift
+    }
+
+    &:nth-child(9), &:nth-child(10) {
+      grid-row: 4; // Fourth row
+      left: calc($hex-width / 2 + 10px); // Shift right for 9th and 10th items
+    }
+
+    &:nth-child(11) {
+      grid-row: 5; // Fifth row
+      left: 0; // No shift for item 11
+    }
   }
 }
+
+// styling for the single hex items - contains the cube faces
 .hexIn {
   position: absolute;
   width: 96%;
-  padding-bottom: 110.851%; /* =  width / sin(60) */
-  margin: 2%;
+  padding-bottom: 110.851%; // Maintain hexagonal aspect ratio
+  margin: $hex-padding; 
   overflow: hidden;
   visibility: hidden;
-  outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+  outline: 1px solid transparent;
   transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
 
   > div {
@@ -45,14 +122,15 @@
     position: absolute;
     visibility: visible;
     outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
+    
     .img {
       position: absolute;
       visibility: visible;
       outline: 1px solid transparent; /* fix for jagged edges in FF on hover transition */
 
       .modality-cube {
-        height: 60%;
-        width: 69%;
+        height: $modality-cube-height; 
+        width: $modality-cube-width; 
         margin: 20px 0 0;
         z-index: 1000;
         position: relative;
@@ -60,6 +138,8 @@
         transform-style: preserve-3d;
         transform: scale3d(1.05, 1.04, 1.04) rotateX(-36deg) rotateY(-45deg)
           rotateZ(0deg) translate3d(0px, 0px, 0px) skew(0deg, 0deg);
+
+        // Adjust the faces for correct positioning
         > .front,
         > .top,
         > .right {
@@ -73,22 +153,25 @@
           opacity: 1;
           transition: opacity 0.8s;
         }
+
         > .front {
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
           font-size: 30px;
-          transform: translate3d(-30px, 93px, 0);
+          transform: translate3d(-30px, 93px, 0) rotateY(0deg);
           span.label {
             color: #fff;
           }
         }
+
         > .top {
           transform-origin: top center;
           background-color: rgba(0, 0, 0, 0.1);
           transform: rotateX(-270deg) translate3d(62px, -69px, 0);
         }
+
         > .right {
           transform-origin: top right;
           background-color: rgba(0, 0, 0, 0.4);
@@ -97,6 +180,7 @@
       }
     }
   }
+  
   > div .img .modality-cube > .front {
     background-color: rgba(0, 0, 0, 0.4);
   }
@@ -198,114 +282,20 @@
   }
 }
 
-#hexGrid {
-  padding: 40px 0 7.4%;
-
-  @media (max-width: 859px) {
-    height: auto;
-    display: block;
-    max-width: 100%;
-    .hex {
-      width: 100%;
-      margin: 0;
-      height: 220px;
-      .hexIn {
-        position: relative;
-        width: 100%;
-        transform: none;
-        overflow: visible;
-        outline: 0;
-        visibility: visible;
-        margin: 0;
-        padding: 0;
-        > div {
-          transform: none;
-          outline: 0;
-          position: relative;
-          overflow: visible;
-          .img {
-            position: relative;
-            height: 200px;
-            top: auto;
-            right: auto;
-            bottom: auto;
-            left: auto;
-            clip-path: none;
-            &:after {
-              opacity: 1;
-            }
-            &:before {
-              opacity: 0.8;
-            }
-            .modality-cube {
-              transform: none;
-              width: 100%;
-              margin: 0;
-              > .front,
-              > .top,
-              > .right {
-                display: none;
-              }
-            }
-          }
-        }
-
-        .content1 {
-          opacity: 1;
-          transform: translateY(60px);
-        }
-        .content2 {
-          opacity: 1;
-          transform: translateY(110px);
-        }
-      }
+// theme color vars
+// Theme color variables
+@mixin modality-theme($theme) {
+  & > div .img {
+    &:before,
+    .modality-cube > .front {
+      background-color: $theme;
     }
   }
 }
-.hex {
-  width: 240px;
-  margin: 0 10px;
-}
 
-.mri-cube > div .img {
-  &:before {
-    background-color: $mri-theme;
-  }
-  .modality-cube > .front {
-    background-color: $mri-theme;
-  }
-}
-.eeg-cube > div .img {
-  &:before {
-    background-color: $eeg-theme;
-  }
-  .modality-cube > .front {
-    background-color: $eeg-theme;
-  }
-}
-
-.pet-cube > div .img {
-  &:before {
-    background-color: $pet-theme;
-  }
-  .modality-cube > .front {
-    background-color: $pet-theme;
-  }
-}
-.ieeg-cube > div .img {
-  &:before {
-    background-color: $ieeg-theme;
-  }
-  .modality-cube > .front {
-    background-color: $ieeg-theme;
-  }
-}
-
-.meg-cube > div .img {
-  &:before {
-    background-color: $meg-theme;
-  }
-  .modality-cube > .front {
-    background-color: $meg-theme;
-  }
-}
+.mri-cube {@include modality-theme($mri-theme);}
+.eeg-cube {@include modality-theme($eeg-theme);}
+.pet-cube {@include modality-theme($pet-theme);}
+.ieeg-cube {@include modality-theme($ieeg-theme);}
+.meg-cube {@include modality-theme($meg-theme);}
+.nih-cube {@include modality-theme($nih-theme);}

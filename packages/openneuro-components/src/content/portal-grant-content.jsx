@@ -7,7 +7,7 @@ export const portalGrantContent = {
     portal: true,
     grant: "nih", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-nih",
-    portalName: "NIH Brain Initiative",
+    portalName: "NIH BRAIN Initiative",
     portalPrimary: (
       <>
         The Brain Research Through Advancing Innovative Neurotechnologies®

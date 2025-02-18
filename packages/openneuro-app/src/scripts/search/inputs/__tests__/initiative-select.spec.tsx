@@ -2,7 +2,7 @@ import React from "react"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { SearchParamsCtx } from "../../search-params-ctx"
-import NIHSelect from "../nih-select"
+import InitiativeSelect from "../initiative-select"
 
 const customRender = (
   ui,
@@ -24,9 +24,12 @@ const customRender = (
 
 describe("NIHSelect Component", () => {
   it("updates search params when NIH is selected and navigates to the NIH page", async () => {
-    customRender(<NIHSelect label="NIH Funding" />)
+    // Directly provide portalName here:
+    customRender(
+      <InitiativeSelect label="Initiative" portalName="NIH Brain Initiative" />,
+    )
 
-    const nihOption = screen.getByText("NIH Funding")
+    const nihOption = screen.getByText("Initiative")
     fireEvent.click(nihOption)
 
     await waitFor(() => {

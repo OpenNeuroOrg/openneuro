@@ -3,7 +3,7 @@ import React from "react"
 export interface SingleSelectProps {
   items: string[]
   className?: string
-  label?: string
+  label: string
   selected: string | null
   setSelected: (selected: string | null) => void
 }

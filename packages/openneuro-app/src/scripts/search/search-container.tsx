@@ -20,9 +20,9 @@ import {
   DatasetTypeSelect,
   DateRadios,
   DiagnosisSelect,
+  InitiativeSelect,
   KeywordInput,
   ModalitySelect,
-  NIHSelect,
   ScannerManufacturers,
   ScannerManufacturersModelNames,
   SectionSelect,
@@ -189,7 +189,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         )}
         renderSearchFacets={() => (
           <>
-            <NIHSelect label={"Search NIH Brain Initiative Datasets"} />
             <NeurobagelSearch />
             <KeywordInput />
             <AdminUser>
@@ -199,6 +198,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}
+            <InitiativeSelect label="Initiatives" portalName={selected_grant} />
             <DatasetTypeSelect />
             <AgeRangeInput />
             <SubjectCountRangeInput />

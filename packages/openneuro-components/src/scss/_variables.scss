@@ -141,6 +141,10 @@ $chiclet-color: #a2059e;
   background-color: $meg-theme;
 }
 
+.nih-theme  {
+  background: $nih-theme;
+}
+
 .gray-bg {
   background: #f3f3f3;
 }
@@ -188,7 +192,8 @@ $border-radius-default: 4px;
   --current-theme-header-dark: #{$pet-dark};
 }
 
-.search-page-nih{
+.search-page-nih,
+.dataset-page-nih{
   --current-theme-primary: #{$nih-theme};
   --current-theme-primary-hover: #{$nih-hover};
   --current-theme-primary-dark: #{$nih-dark};
