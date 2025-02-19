@@ -1,5 +1,6 @@
 import React from "react"
 import petScan from "../assets/pet-scan.jpg"
+import nih from "../assets/nih_cube.jpg"
 import eeg from "../assets/eeg.jpg"
 import ieeg from "../assets/ieeg.jpg"
 import mri from "../assets/mri.jpg"
@@ -65,6 +66,18 @@ export const cubeData = [
   {
     label: "NIRS",
     cubeImage: nirs,
+    stats: (
+      <>
+        200 Datasets
+        <br />
+        200 Participants
+      </>
+    ),
+  },
+  {
+    label: "NIH",
+    portal: true,
+    cubeImage: nih,
     stats: (
       <>
         200 Datasets
