@@ -84,6 +84,13 @@ $meg-dark: darken($meg-theme, 25%);
 $meg-secondary: adjust-color($meg-theme, $lightness: 15%);
 $meg-light: adjust-color($meg-theme, $lightness: 45%);
 
+
+$nirs-theme: rgb(166 21 40);
+$nirs-hover: adjust-color($nirs-theme, $lightness: 10%);
+$nirs-dark: darken($nirs-theme, 25%);
+$nirs-secondary: adjust-color($nirs-theme, $lightness: 15%);
+$nirs-light: adjust-color($nirs-theme, $lightness: 45%);
+
 $on-light-green: #00eeb5;
 $on-light-red: #c00342;
 $on-light-orange: rgb(255, 110, 43);
@@ -99,6 +106,7 @@ $chiclet-color: #a2059e;
   --pet-theme: #{$pet-theme};
   --ieeg-theme: #{$ieeg-theme};
   --meg-theme: #{$meg-theme};
+  --nirs-theme: #{$nirs-theme};
 
   --on-light-aqua: #{$on-light-aqua};
   --on-dark-aqua: #{$on-dark-aqua};
@@ -139,6 +147,10 @@ $chiclet-color: #a2059e;
 
 .meg-theme {
   background-color: $meg-theme;
+}
+
+.nih-theme  {
+  background: $nih-theme;
 }
 
 .gray-bg {
@@ -188,7 +200,8 @@ $border-radius-default: 4px;
   --current-theme-header-dark: #{$pet-dark};
 }
 
-.search-page-nih{
+.search-page-nih,
+.dataset-page-nih{
   --current-theme-primary: #{$nih-theme};
   --current-theme-primary-hover: #{$nih-hover};
   --current-theme-primary-dark: #{$nih-dark};
@@ -218,4 +231,15 @@ $border-radius-default: 4px;
   --current-theme-primary-light: #{$meg-light};
   --current-theme-header: #{$meg-theme};
   --current-theme-header-dark: #{$meg-dark};
+}
+
+.search-page-nirs,
+.dataset-page-nirs {
+  --current-theme-primary: #{$nirs-theme};
+  --current-theme-primary-hover: #{$nirs-hover};
+  --current-theme-primary-dark: #{$nirs-dark};
+  --current-theme-secondary: #{$nirs-secondary};
+  --current-theme-primary-light: #{$nirs-light};
+  --current-theme-header: #{$nirs-theme};
+  --current-theme-header-dark: #{$nirs-dark};
 }

@@ -1,6 +1,7 @@
 import React from "react"
 import bidslogo from "../assets/bids.jpg"
 import dataladlogo from "../assets/datalad.jpg"
+import nihlogo from "../assets/nih-bi-logo.png"
 
 export const affiliateContent = [
   {
@@ -44,6 +45,27 @@ export const affiliateContent = [
         <a href="https://github.com/">Git</a> and{" "}
         <a href="https://git-annex.branchable.com/">Git-annex</a>. Read more
         about <a href="https://www.datalad.org/">DataLad</a>.
+      </>
+    ),
+  },
+  {
+    logo: nihlogo,
+    header: "The BRAIN Initiative supports OpenNeuro",
+    contentOne: (
+      <>
+        Want to learn more about OpenNeuro and BRAIN Initiative? Visit the{" "}
+        <a href="https://braininitiative.nih.gov/">
+          initiative page
+        </a>
+        .
+      </>
+    ),
+    contentTwo: (
+      <>
+        View the collection of{" "}
+        <a href="http://localhost:9876/search/nih?query=%7B%22brain_initiative%22%3A%22true%22%7D">
+          BRAIN Initiative datasets
+        </a>
       </>
     ),
   },

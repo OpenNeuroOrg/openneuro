@@ -17,6 +17,7 @@ import FourOFourPage from "./errors/404page"
 import { ImportDataset } from "./pages/import-dataset"
 import { DatasetMetadata } from "./pages/metadata/dataset-metadata"
 import { TermsPage } from "./pages/terms"
+import { ImageAttribution } from "./pages/image-attribution"
 import { UserQuery } from "./users/user-query"
 import LoggedIn from "../scripts/authentication/logged-in"
 import LoggedOut from "../scripts/authentication/logged-out"
@@ -34,6 +35,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/pet" element={<PETRedirect />} />
     <Route path="/cite" element={<Citation />} />
     <Route path="/terms" element={<TermsPage />} />
+    <Route path="/image-attribution" element={<ImageAttribution />} />
     <Route path="/import" element={<ImportDataset />} />
     <Route path="/metadata" element={<DatasetMetadata />} />
     <Route path="/public" element={<Navigate to="/search" replace />} />

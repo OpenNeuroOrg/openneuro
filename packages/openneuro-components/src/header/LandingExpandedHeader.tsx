@@ -32,6 +32,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
     <ul id="hexGrid">
       {cubeData.map((item, index) => (
         <ModalityCube
+          portal={item.portal}
           key={index}
           label={item.label}
           cubeImage={item.cubeImage}

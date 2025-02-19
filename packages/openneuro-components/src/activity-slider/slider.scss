@@ -108,6 +108,9 @@
       &.eeg {
         background-color: $on-light-green;
       }
+      &.nirs{
+        background-color: $nirs-theme;
+      }
     }
   }
 }

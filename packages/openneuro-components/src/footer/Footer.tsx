@@ -18,11 +18,18 @@ export const Footer: React.FC<FooterProps> = ({ version }) => {
             <a href={frontPage.titlePanel.privacyLink}>
               Privacy Policy
             </a>
-          </span>{" "}
-          &{" "}
+          </span>
+          {", "}
           <span>
             <Link to="/terms">
               Terms
+            </Link>
+          </span>
+          {", "}
+          &{" "}
+          <span>
+            <Link to="/image-attribution">
+              Image Attribution
             </Link>
           </span>
         </div>

@@ -2,13 +2,14 @@ import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 import { SingleSelect } from "@openneuro/components/facets"
 
-interface NIHSelectProps {
-  label?: string
+interface InitiativeSelectProps {
+  label: string
 }
 
-const NIHSelect: FC<NIHSelectProps> = ({ label }) => {
+const InitiativeSelect: FC<InitiativeSelectProps> = ({ label }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const navigate = useNavigate()
   const location = useLocation()
@@ -50,14 +51,25 @@ const NIHSelect: FC<NIHSelectProps> = ({ label }) => {
   }, [brain_initiative, location.search, navigate])
 
   return (
-    <SingleSelect
-      className="nih-facet facet-open"
-      label={label}
-      selected={brain_initiative === "true" ? "NIH" : ""}
-      setSelected={setBrainInitiative}
-      items={["NIH"]}
-    />
+    <>
+      <AccordionWrap className="modality-facet facet-accordion">
+        <AccordionTab
+          accordionStyle="plain"
+          label={label}
+          startOpen={false}
+          dropdown={false}
+        >
+          <SingleSelect
+            className="nih-facet facet-open"
+            selected={brain_initiative === "true" ? "NIH" : ""}
+            setSelected={setBrainInitiative}
+            items={["NIH"]}
+            label="NIH BRAIN Initiative"
+          />
+        </AccordionTab>
+      </AccordionWrap>
+    </>
   )
 }
 
-export default NIHSelect
+export default InitiativeSelect
