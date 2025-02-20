@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import nirs from "../../../../../openneuro-components/src/assets/nirs.jpg"
 import nih from "../../../../../openneuro-components/src/assets/nih_cube.jpg"
 
-/** Terms and conditions content. */
+/** Image attribution content. */
 export function Attribution(): React.ReactElement {
   const AtributionBlock = styled.div`
     display: flex;
