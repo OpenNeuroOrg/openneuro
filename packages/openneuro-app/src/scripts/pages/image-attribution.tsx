@@ -17,7 +17,7 @@ export function ImageAttribution(): ReactElement {
   return (
     <ImageAttributionStyle>
       <Helmet>
-        <title>Terms and Conditions - {frontPage.pageTitle}</title>
+        <title>Image Attribution - {frontPage.pageTitle}</title>
         <meta
           name="description"
           content={`Image Attribution of the ${frontPage.pageTitle} data archive`}
