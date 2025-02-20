@@ -52,7 +52,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
     }
 
   const removeAllFilters = (): void => {
-    // Reset params to default values
+    // reset params to default values
     setSearchParams((prevState) => ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
