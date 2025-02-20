@@ -10,16 +10,12 @@ export const portalGrantContent = {
     portalName: "NIH BRAIN Initiative",
     portalPrimary: (
       <>
-        The Brain Research Through Advancing Innovative Neurotechnologies®
-        Initiative, or{" "}
+        The BRAIN Initiative, or{" "}
         <a href="https://braininitiative.nih.gov/">The BRAIN Initiative®</a>, is
-        a partnership between Federal and non-Federal partners with a common
-        goal of accelerating the development of innovative neurotechnologies.
-        Through the application and dissemination of these scientific
-        advancements, researchers will be able to produce a revolutionary new
-        dynamic picture of the brain that, for the first time, shows how
-        individual cells and complex neural circuits interact in both time and
-        space.
+        public-private research initiative with a common goal of accelerating
+        the development of innovative neurotechnologies. In 2019, OpenNeuro was
+        designated a BRAIN Initiative data archive. The datasets below were
+        collected under BRAIN Initiative-sponsored grants.
       </>
     ),
     publicDatasetStat: 100,
