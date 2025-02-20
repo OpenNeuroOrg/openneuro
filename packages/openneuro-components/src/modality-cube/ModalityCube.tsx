@@ -4,7 +4,8 @@ export interface ModalityCubeProps {
   label: string
   stats: React.ReactNode
   portal: boolean
-  cubeImage: string
+  cubeImage?: string
+  cubeFaceImage: string
   onClick: (redirectPath: string) => (e: React.MouseEvent) => void
 }
 
@@ -13,6 +14,7 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
   stats,
   portal = false,
   cubeImage,
+  cubeFaceImage,
   onClick,
 }) => {
   return (
@@ -30,7 +32,11 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
           >
             <div className="modality-cube">
               <div className="front">
-                <span className="label">{label}</span>
+                <span className="label">
+                  {cubeFaceImage
+                    ? <img style={{ maxWidth: "120px" }} src={cubeFaceImage} />
+                    : label}
+                </span>
               </div>
               <div className="top"></div>
               <div className="right"></div>

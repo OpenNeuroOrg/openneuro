@@ -6,6 +6,7 @@ import ieeg from "../assets/ieeg.jpg"
 import mri from "../assets/mri.jpg"
 import meg from "../assets/meg.jpg"
 import nirs from "../assets/nirs.jpg"
+import nih_logo from "../assets/nih-bi-brand.png"
 
 export const cubeData = [
   {
@@ -78,6 +79,7 @@ export const cubeData = [
     label: "NIH",
     portal: true,
     cubeImage: nih,
+    cubeFaceImage: nih_logo,
     stats: (
       <>
         200 Datasets
