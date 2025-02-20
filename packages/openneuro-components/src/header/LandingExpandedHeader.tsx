@@ -36,6 +36,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           key={index}
           label={item.label}
           cubeImage={item.cubeImage}
+          altText={item.altText}
           cubeFaceImage={item.cubeFaceImage}
           stats={aggregateCounts(item.label)}
           onClick={(redirectPath) => (_err) => {

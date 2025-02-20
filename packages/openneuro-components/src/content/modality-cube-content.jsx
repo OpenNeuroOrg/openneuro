@@ -77,6 +77,7 @@ export const cubeData = [
   },
   {
     label: "NIH",
+    altText: "NIH BRAIN Initiative",
     portal: true,
     cubeImage: nih,
     cubeFaceImage: nih_logo,
