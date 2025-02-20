@@ -10,7 +10,6 @@ export const portalGrantContent = {
     portalName: "NIH BRAIN Initiative",
     portalPrimary: (
       <>
-        The BRAIN Initiative, or{" "}
         <a href="https://braininitiative.nih.gov/">The BRAIN Initiative®</a>, is
         public-private research initiative with a common goal of accelerating
         the development of innovative neurotechnologies. In 2019, OpenNeuro was
