@@ -50,14 +50,14 @@ export const affiliateContent = [
   },
   {
     logo: nihlogo,
-    header: "The BRAIN Initiative supports OpenNeuro",
+    header: "OpenNeuro is a BRAIN Initiative designated data archive",
     contentOne: (
       <>
-        Want to learn more about OpenNeuro and BRAIN Initiative? Visit the{" "}
+        Data collected under{" "}
         <a href="https://braininitiative.nih.gov/">
-          initiative page
+          BRAIN Initiative
         </a>
-        .
+        -funded grants may be uploaded to OpenNeuro.
       </>
     ),
     contentTwo: (
