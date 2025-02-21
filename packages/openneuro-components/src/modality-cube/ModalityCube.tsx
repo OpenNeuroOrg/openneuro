@@ -3,20 +3,28 @@ import React from "react"
 export interface ModalityCubeProps {
   label: string
   stats: React.ReactNode
-  cubeImage: string
+  portal: boolean
+  cubeImage?: string
+  altText?: string
+  cubeFaceImage: string
   onClick: (redirectPath: string) => (e: React.MouseEvent) => void
 }
 
 export const ModalityCube: React.FC<ModalityCubeProps> = ({
   label,
   stats,
+  portal = false,
   cubeImage,
+  altText,
+  cubeFaceImage,
   onClick,
 }) => {
   return (
     <li
       className="hex"
-      onClick={onClick("search/modality/" + label.toLowerCase())}
+      onClick={portal
+        ? onClick("search/" + label.toLowerCase())
+        : onClick("search/modality/" + label.toLowerCase())}
     >
       <div className={"hexIn " + label.toLowerCase() + "-cube"}>
         <div>
@@ -26,7 +34,17 @@ export const ModalityCube: React.FC<ModalityCubeProps> = ({
           >
             <div className="modality-cube">
               <div className="front">
-                <span className="label">{label}</span>
+                <span className="label">
+                  {cubeFaceImage
+                    ? (
+                      <img
+                        style={{ maxWidth: "120px" }}
+                        src={cubeFaceImage}
+                        alt={altText}
+                      />
+                    )
+                    : label}
+                </span>
               </div>
               <div className="top"></div>
               <div className="right"></div>

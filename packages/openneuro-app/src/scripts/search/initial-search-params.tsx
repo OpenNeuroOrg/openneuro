@@ -92,6 +92,12 @@ export const modality_available: ModalityOption[] = [
     portalPath: "/search/modality/meg",
     count: null,
   },
+  {
+    label: "NIRS",
+    value: "NIRS",
+    portalPath: "/search/modality/nirs",
+    count: null,
+  },
 ]
 
 export const flattenedModalities = modality_available.reduce(

@@ -5,6 +5,7 @@ import eeg from "../assets/eeg.jpg"
 import ieeg from "../assets/ieeg.jpg"
 import mri from "../assets/mri.jpg"
 import meg from "../assets/meg.jpg"
+import nirs from "../assets/nirs.jpg"
 
 export const portalContent = {
   mri: {
@@ -119,6 +120,28 @@ export const portalContent = {
     hexBackgroundImage: pet,
     swoopBackgroundColorLight: "rgba(109,83,156,1)",
     swoopBackgroundColorDark: "rgba(45,34,64,1)",
+    communityHeader: null,
+    communityPrimary: null,
+    communitySecondary: null,
+  },
+  nirs: {
+    modality: "NIRS", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    className: "search-page-nirs",
+    portalName: "OpenNeuro NIRS",
+    portalPrimary: (
+      <>
+        OpenNeuro added support for NIRS datasets in 2022 when{" "}
+        <a href="https://www.nature.com/articles/s41597-024-04136-9">
+          NIRS was incorporated
+        </a>{" "}
+        into the <a href="https://bids.neuroimaging.io">BIDS</a> standard.
+      </>
+    ),
+    publicDatasetStat: 100,
+    participantsStat: 1100,
+    hexBackgroundImage: nirs,
+    swoopBackgroundColorLight: " rgb(68, 114, 143)",
+    swoopBackgroundColorDark: " rgb(36, 80, 108)",
     communityHeader: null,
     communityPrimary: null,
     communitySecondary: null,
