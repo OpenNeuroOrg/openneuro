@@ -25,15 +25,42 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const selectedParams = getSelectParams(searchParams)
 
-  const noFilters = !useCheckIfParamsAreSelected(["modality_selected"])
+  const noFilters = !useCheckIfParamsAreSelected([
+    "modality_selected",
+    "brain_initiative",
+  ])
 
   const navigate = useNavigate()
   const { path } = useParams()
   const globalSearchPath = "/search"
 
+  const pattern = "/search/modality/*"
+
+  const convertWildcardToRegex = (pattern) => {
+    const escapedPattern = pattern.replace(/[|\\{}()[\]^$+?.]/g, "\\$&")
+    const regexPattern = "^" + escapedPattern.replace(/\*/g, ".*") + "$"
+    return new RegExp(regexPattern)
+  }
+
+  const regex = convertWildcardToRegex(pattern)
+  const isModalityPath = regex.test(location.pathname)
+
   const removeFilter =
     (isModality?: boolean) => (param: string, value: FilterValue): void => {
       if (isModality && param === "modality_selected") {
+        removeFilterItem(setSearchParams)(param, value)
+        const queryParams = new URLSearchParams(location.search)
+        const query = queryParams.get("query")
+        if (query) {
+          try {
+            navigate(`${globalSearchPath}?${queryParams.toString()}`, {
+              replace: true,
+            })
+          } catch (error) {
+            Sentry.captureException(error)
+          }
+        }
+      } else if (!isModalityPath && param === "brain_initiative") {
         removeFilterItem(setSearchParams)(param, value)
         const queryParams = new URLSearchParams(location.search)
         const query = queryParams.get("query")
@@ -68,6 +95,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       numTotalResults={numTotalResults}
       {...selectedParams}
       loading={loading}
+      brain_initiative={searchParams.brain_initiative}
     />
   )
 }

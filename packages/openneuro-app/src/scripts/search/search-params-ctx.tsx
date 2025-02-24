@@ -20,6 +20,10 @@ export const SearchParamsProvider: React.FC<SearchParamsProviderProps> = ({
     const query = searchQuery.get("query")
     if (query) {
       searchParams = JSON.parse(query)
+    } else {
+      Sentry.captureException(
+        "No query found in URL. Using initialSearchParams.",
+      )
     }
   } catch (err) {
     Sentry.captureException(err)
@@ -28,21 +32,37 @@ export const SearchParamsProvider: React.FC<SearchParamsProviderProps> = ({
   const setSearchParams = (
     newParams: SearchParams | ((prevState: SearchParams) => SearchParams),
   ): void => {
-    const merged = typeof newParams == "function"
-      ? { ...searchParams, ...newParams(searchParams) }
-      : { ...searchParams, ...newParams }
+    let computedNewParams
+    if (typeof newParams === "function") {
+      computedNewParams = newParams(searchParams)
+    } else {
+      computedNewParams = newParams
+    }
+    const merged = { ...searchParams, ...computedNewParams }
+
+    // Filter out keys that match the defaults from initialSearchParams
+    const filtered = Object.keys(merged).reduce((acc, key) => {
+      if (
+        JSON.stringify(merged[key]) !== JSON.stringify(initialSearchParams[key])
+      ) {
+        acc[key] = merged[key]
+      }
+      return acc
+    }, {} as Record<string, unknown>)
+
     setSearch(
       {
-        query: JSON.stringify(merged),
+        query: JSON.stringify(filtered),
       },
       { replace: true },
     )
   }
 
+  const finalSearchParams = { ...initialSearchParams, ...searchParams }
   return (
     <SearchParamsCtx.Provider
       value={{
-        searchParams: { ...initialSearchParams, ...searchParams },
+        searchParams: finalSearchParams,
         setSearchParams,
       }}
     >
@@ -61,6 +81,7 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
         initialSearchParams["datasetStatus_selected"]
       break
     case "modality_selected":
+    case "brain_initiative":
     case "datasetStatus_selected":
     case "ageRange":
     case "subjectCountRange":
