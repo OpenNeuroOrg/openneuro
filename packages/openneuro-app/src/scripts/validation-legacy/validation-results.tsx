@@ -1,29 +1,51 @@
 // dependencies -----------------------------------------------------------
 
 import React from "react"
-import PropTypes from "prop-types"
 import pluralize from "pluralize"
 import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
-
 import Issues from "./validation-results.issues.jsx"
+import { useLegacyValidationResults } from "./validation-legacy-query.js"
+import { Loading } from "@openneuro/components/loading"
 
-// component setup --------------------------------------------------------
-
-class ValidationResults extends React.Component {
-  // life cycle events ------------------------------------------------------
-
-  render() {
-    const errors = this.props.errors
-    const warnings = this.props.warnings
-
-    if (errors === "Invalid") {
-      return false
+function countFiles(issues) {
+  let numFiles = 0
+  for (const issue of issues) {
+    numFiles += Array.from(issue.files).length
+    if (issue.additionalFileCount) {
+      numFiles += issue.additionalFileCount
     }
+  }
+  return numFiles
+}
+
+interface ValidationResultsProp {
+  datasetId: string
+  version: string
+}
+
+export function ValidationResults(
+  { datasetId, version }: ValidationResultsProp,
+) {
+  const { loading, issues, error } = useLegacyValidationResults(
+    datasetId,
+    version,
+  )
+
+  if (loading || error) {
+    return (
+      <>
+        <Loading />
+        <span className="message">Loading validation results...</span>
+      </>
+    )
+  } else {
+    const warnings = issues.filter((issue) => issue.severity === "warning")
+    const errors = issues.filter((issue) => issue.severity === "error")
 
     // errors
     let errorsWrap
     if (errors.length > 0) {
-      const fileCount = this._countFiles(errors)
+      const fileCount = countFiles(errors)
       const errorHeader = (
         <span>
           view {errors.length} {pluralize("error", errors.length)} in{" "}
@@ -45,7 +67,7 @@ class ValidationResults extends React.Component {
     //warnings
     let warningWrap
     if (warnings && warnings.length > 0) {
-      const fileCount = this._countFiles(warnings)
+      const fileCount = countFiles(warnings)
       const warningHeader = (
         <span>
           view {warnings.length} {pluralize("warning", warnings.length)} in{" "}
@@ -72,29 +94,6 @@ class ValidationResults extends React.Component {
       </AccordionWrap>
     )
   }
-
-  // custom methods ---------------------------------------------------------
-
-  _countFiles(issues) {
-    let numFiles = 0
-    for (const issue of issues) {
-      numFiles += Array.from(issue.files).length
-      if (issue.additionalFileCount) {
-        numFiles += issue.additionalFileCount
-      }
-    }
-    return numFiles
-  }
-}
-
-ValidationResults.Props = {
-  errors: [],
-  warnings: [],
-}
-
-ValidationResults.propTypes = {
-  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
-  warnings: PropTypes.array,
 }
 
 export default ValidationResults
