@@ -13,8 +13,8 @@
     "proseWrap": "preserve"
   },
   "tasks": {
-    "tests": "deno test --allow-read --allow-write --allow-env ./",
-    "coverage": "deno test --allow-read --allow-write --allow-net --allow-env --coverage ./ && deno coverage ./coverage --lcov > ./coverage.lcov"
+    "tests": "deno test --allow-read --allow-write --allow-env --allow-sys ./",
+    "coverage": "deno test --allow-read --allow-write --allow-net --allow-env --allow-sys --coverage ./ && deno coverage ./coverage --lcov > ./coverage.lcov"
   },
   "imports": {
     "@bids/validator": "jsr:@bids/validator@^2.0.2",

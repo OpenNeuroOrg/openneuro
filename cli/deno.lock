@@ -19,9 +19,10 @@
     "jsr:@effigies/cliffy-command@1.0.0-dev.8": "1.0.0-dev.8",
     "jsr:@effigies/cliffy-table@1.0.0-dev.5": "1.0.0-dev.5",
     "jsr:@effigies/cliffy-table@^1.0.0-dev.5": "1.0.0-dev.5",
+    "jsr:@libs/typing@3": "3.1.2",
     "jsr:@libs/xml@6.0.1": "6.0.1",
     "jsr:@std/assert@1.0.0-rc.2": "1.0.0-rc.2",
-    "jsr:@std/assert@^1.0.3": "1.0.10",
+    "jsr:@std/assert@^1.0.3": "1.0.11",
     "jsr:@std/assert@~1.0.6": "1.0.11",
     "jsr:@std/async@^1.0.4": "1.0.9",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
@@ -224,8 +225,14 @@
         "jsr:@std/fmt@~1.0.2"
       ]
     },
+    "@libs/typing@3.1.2": {
+      "integrity": "72342a0eaedcc1f3f3ec18f8f9573759011c68f135e2ec6c7282c59843f7a37e"
+    },
     "@libs/xml@6.0.1": {
-      "integrity": "64af4f93464c77c3e1158fb97c3657779ca554b14f38616b96cde31e22d8a309"
+      "integrity": "64af4f93464c77c3e1158fb97c3657779ca554b14f38616b96cde31e22d8a309",
+      "dependencies": [
+        "jsr:@libs/typing"
+      ]
     },
     "@std/assert@1.0.0-rc.2": {
       "integrity": "0484eab1d76b55fca1c3beaff485a274e67dd3b9f065edcbe70030dfc0b964d3"
@@ -243,7 +250,10 @@
       ]
     },
     "@std/assert@1.0.11": {
-      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1"
+      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.5"
+      ]
     },
     "@std/async@1.0.9": {
       "integrity": "c6472fd0623b3f3daae023cdf7ca5535e1b721dfbf376562c0c12b3fb4867f91"
