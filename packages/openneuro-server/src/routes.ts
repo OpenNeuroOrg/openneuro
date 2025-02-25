@@ -1,6 +1,7 @@
 // dependencies ------------------------------------
 
 import express from "express"
+import passport from "passport"
 import * as users from "./handlers/users"
 import * as datalad from "./handlers/datalad"
 import * as comments from "./handlers/comments"
@@ -14,6 +15,7 @@ import * as auth from "./libs/authentication/states"
 import * as doi from "./handlers/doi"
 import { sitemapHandler } from "./handlers/sitemap"
 import { reviewerHandler } from "./handlers/reviewer"
+import * as Sentry from "@sentry/node"
 
 const noCache = (req, res, next) => {
   res.setHeader("Surrogate-Control", "no-store")
@@ -24,6 +26,11 @@ const noCache = (req, res, next) => {
   res.setHeader("Pragma", "no-cache")
   res.setHeader("Expires", "0")
 
+  next()
+}
+// Middleware to store last visited page before authentication
+const storeRedirect = (req, res, next) => {
+  req.query.redirectTo = req.get("Referer") || "/"
   next()
 }
 
@@ -157,6 +164,58 @@ const routes = [
     middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
+
+  // GitHub authentication route
+  {
+    method: "get",
+    url: "/auth/github",
+    middleware: [storeRedirect],
+    handler: (req, res, next) => {
+      const redirectTo = req.query.redirectTo || "/"
+      passport.authenticate("github", {
+        state: encodeURIComponent(redirectTo),
+      })(req, res, next)
+    },
+  },
+
+  {
+    method: "get",
+    url: "/auth/github/callback",
+    handler: (req, res, next) => {
+      passport.authenticate("github", (err, user, info) => {
+        const redirectTo = req.query.state
+          ? decodeURIComponent(req.query.state)
+          : "/"
+
+        // Remove any existing query parameters
+        const cleanRedirectTo = redirectTo.split("?")[0]
+
+        if (err) {
+          Sentry.captureException(err)
+          return res.redirect(
+            `${cleanRedirectTo}?error=${
+              encodeURIComponent(err.message || "github_auth_failed")
+            }`,
+          )
+        }
+
+        if (!user) {
+          Sentry.captureMessage(
+            `GitHub Auth Failed - Info: ${JSON.stringify(info)}`,
+            "warning",
+          )
+          return res.redirect(
+            `${cleanRedirectTo}?error=${
+              encodeURIComponent(info?.message || "github_auth_failed")
+            }`,
+          )
+        }
+
+        return res.redirect(`${cleanRedirectTo}?success=github_auth_success`)
+      })(req, res, next)
+    },
+  },
+
   // Anonymous reviewer access
   {
     method: "get",

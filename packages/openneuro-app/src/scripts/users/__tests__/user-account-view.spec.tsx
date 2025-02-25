@@ -9,6 +9,7 @@ import {
 } from "@testing-library/react"
 import { UserAccountView } from "../user-account-view"
 import { GET_USER_BY_ORCID, UPDATE_USER } from "../user-query"
+import { MemoryRouter } from "react-router-dom"
 
 const baseUser = {
   id: "1",
@@ -19,6 +20,7 @@ const baseUser = {
   institution: "University of California",
   links: ["https://example.com", "https://example.org"],
   github: "johndoe",
+  githubSynced: new Date(),
 }
 
 const mocks = [
@@ -60,7 +62,9 @@ describe("<UserAccountView />", () => {
   it("should render the user details correctly", () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <MemoryRouter>
+          <UserAccountView user={baseUser} />
+        </MemoryRouter>
       </MockedProvider>,
     )
     expect(screen.getByText("Name:")).toBeInTheDocument()
@@ -76,7 +80,9 @@ describe("<UserAccountView />", () => {
   it("should render location with EditableContent", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <MemoryRouter>
+          <UserAccountView user={baseUser} />
+        </MemoryRouter>
       </MockedProvider>,
     )
     const locationSection = within(screen.getByTestId("location-section"))
@@ -95,7 +101,9 @@ describe("<UserAccountView />", () => {
   it("should render institution with EditableContent", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <MemoryRouter>
+          <UserAccountView user={baseUser} />
+        </MemoryRouter>
       </MockedProvider>,
     )
     const institutionSection = within(screen.getByTestId("institution-section"))
@@ -114,7 +122,9 @@ describe("<UserAccountView />", () => {
   it("should render links with EditableContent and validation", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <MemoryRouter>
+          <UserAccountView user={baseUser} />
+        </MemoryRouter>
       </MockedProvider>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
@@ -133,7 +143,9 @@ describe("<UserAccountView />", () => {
   it("should show an error message when invalid URL is entered in links section", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <MemoryRouter>
+          <UserAccountView user={baseUser} />
+        </MemoryRouter>
       </MockedProvider>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
@@ -147,6 +159,26 @@ describe("<UserAccountView />", () => {
       expect(
         linksSection.getByText("Invalid URL format. Please use a valid link."),
       ).toBeInTheDocument()
+    })
+  })
+
+  it("should render GitHub sync button and handle sync", async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter>
+          <UserAccountView user={baseUser} />
+        </MemoryRouter>
+      </MockedProvider>,
+    )
+
+    const githubButton = await screen.findByTestId("github-sync-button")
+    expect(githubButton).toBeInTheDocument()
+
+    fireEvent.click(githubButton)
+
+    await waitFor(() => {
+      const syncedText = screen.getByText(/Last synced:/)
+      expect(syncedText).toBeInTheDocument()
     })
   })
 })
