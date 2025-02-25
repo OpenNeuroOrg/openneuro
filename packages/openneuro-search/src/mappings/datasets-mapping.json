@@ -77,15 +77,6 @@
         }
       }
     },
-    "draft": {
-      "properties": {
-        "issues": {
-          "properties": {
-            "severity": { "type": "keyword" }
-          }
-        }
-      }
-    },
     "permissions": {
       "properties": {
         "userPermissions": {
