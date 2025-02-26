@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import pluralize from "pluralize"
 import ValidationPanel from "./validation-panel.jsx"
-import Results from "./validation-results.jsx"
+import Results from "./validation-results"
 
 /**
  * These can't be React components due to legacy react-bootstrap
@@ -52,54 +52,68 @@ const Valid = () => (
   </div>
 )
 
-const Warnings = ({ errors, warnings }) => (
-  <ValidationPanel heading={warningHeader(warnings.length)}>
+const Warnings = ({ datasetId, version, issuesStatus }) => (
+  <ValidationPanel heading={warningHeader(issuesStatus.warnings)}>
     <div>
       <span className="message error fade-in">
         We found{" "}
         <strong>
-          {warnings.length + " " + pluralize("Warning", warnings.length)}
+          {issuesStatus.warnings + " " +
+            pluralize("Warning", issuesStatus.warnings)}
         </strong>{" "}
         in your dataset. You are not required to fix warnings, but doing so will
         make your dataset more BIDS compliant.
       </span>
     </div>
     <br />
-    <Results errors={errors} warnings={warnings} />
+    <Results datasetId={datasetId} version={version} />
   </ValidationPanel>
 )
 
 Warnings.propTypes = {
-  errors: PropTypes.array,
-  warnings: PropTypes.array,
+  issuesStatus: PropTypes.object,
+  datasetId: PropTypes.string,
+  version: PropTypes.string,
 }
 
-const Errors = ({ errors, warnings }) => (
-  <ValidationPanel heading={errorHeader(errors.length)}>
+const Errors = ({ datasetId, version, issuesStatus }) => (
+  <ValidationPanel heading={errorHeader(issuesStatus.errors)}>
     <span className="message error fade-in">
       Your dataset is no longer valid. You must fix the{" "}
-      <strong>{errors.length + " " + pluralize("Error", errors.length)}</strong>
-      {" "}
+      <strong>
+        {issuesStatus.errors + " " + pluralize("Error", issuesStatus.errors)}
+      </strong>{" "}
       to use all of the site features.
     </span>
     <br />
-    <Results errors={errors} warnings={warnings} />
+    <Results datasetId={datasetId} version={version} />
   </ValidationPanel>
 )
 
 Errors.propTypes = {
-  errors: PropTypes.array,
-  warnings: PropTypes.array,
+  issuesStatus: PropTypes.object,
+  datasetId: PropTypes.string,
+  version: PropTypes.string,
 }
 
-const ValidationStatus = ({ issues }) => {
-  if (issues) {
-    const warnings = issues.filter((issue) => issue.severity === "warning")
-    const errors = issues.filter((issue) => issue.severity === "error")
-    if (errors.length) {
-      return <Errors errors={errors} warnings={warnings} />
-    } else if (warnings.length) {
-      return <Warnings errors={errors} warnings={warnings} />
+const ValidationStatus = ({ issuesStatus, datasetId, version }) => {
+  if (issuesStatus) {
+    if (issuesStatus.errors > 0) {
+      return (
+        <Errors
+          issuesStatus={issuesStatus}
+          datasetId={datasetId}
+          version={version}
+        />
+      )
+    } else if (issuesStatus.warnings > 0) {
+      return (
+        <Warnings
+          issuesStatus={issuesStatus}
+          datasetId={datasetId}
+          version={version}
+        />
+      )
     } else {
       return <Valid />
     }

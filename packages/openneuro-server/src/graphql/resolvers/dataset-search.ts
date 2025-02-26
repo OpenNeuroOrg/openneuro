@@ -181,8 +181,10 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
       })
     } else if (datasetStatus === "Invalid") {
       addClause(query, "filter", {
-        term: {
-          ["draft.issues.severity"]: "error",
+        range: {
+          "latestSnapshot.validation.errors": {
+            gt: 0,
+          },
         },
       })
     }

@@ -813,24 +813,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^2.0.2":
-  version: 2.0.2
-  resolution: "@jsr/bids__validator@npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^2.0.3":
+  version: 2.0.3
+  resolution: "@jsr/bids__validator@npm:2.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.3.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:0.6.9"
-    "@jsr/bids__schema": "npm:1.0.1"
+    "@jsr/bids__schema": "npm:1.0.3"
     "@jsr/effigies__cliffy-command": "npm:1.0.0-dev.8"
     "@jsr/effigies__cliffy-table": "npm:1.0.0-dev.5"
-    "@jsr/libs__xml": "npm:6.0.1"
-    "@jsr/std__fmt": "npm:1.0.3"
-    "@jsr/std__log": "npm:0.224.9"
+    "@jsr/libs__xml": "npm:6.0.4"
+    "@jsr/std__fmt": "npm:1.0.5"
+    "@jsr/std__log": "npm:0.224.14"
     "@jsr/std__path": "npm:1.0.8"
-    "@jsr/std__streams": "npm:1.0.8"
-    "@jsr/std__yaml": "npm:^1.0.4"
+    "@jsr/std__streams": "npm:1.0.9"
+    "@jsr/std__yaml": "npm:^1.0.5"
     ajv: "npm:8.17.1"
     hed-validator: "npm:3.15.5"
     ignore: "npm:7.0.3"
-  checksum: 10/2e794422b02b8abfb527461cc8ef896fa890dd30fb5cc945def0c1a8c3ea1d317716a27cbe810102daacd66c17ff2a96145a0bc91b7a016846a9f6e30f21ecc9
+  checksum: 10/c7534d4d38b0f5528ea1979d5e5e9342571c10c5d7bef034ad6c7343183655d848c0d4fa720f44d57c041c6ce93c1e0819f8428a945892d5033bd814bee77ab4
   languageName: node
   linkType: hard
 
@@ -1859,10 +1859,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/bids__schema@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@jsr/bids__schema@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz"
-  checksum: 10/fda8416854f8db1c7311f7cba8b19ea886e1b4fe0e016676d2e3a00bcb1b9b8538c95862c93a152134013838deda1c6402dce52dbffed359e0bd561846743896
+"@jsr/bids__schema@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@jsr/bids__schema@npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.3.tgz"
+  checksum: 10/ecea4bd4a3248667e2343be985e172d2e99983558bf5c9eb1f7042e7e77478ac28ffc7420824bd9c11b4fcd2e2abd330b2267b9ca4f81801c875ae790dd86928
   languageName: node
   linkType: hard
 
@@ -1916,92 +1916,76 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/libs__typing@npm:3":
-  version: 3.1.0
-  resolution: "@jsr/libs__typing@npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz"
-  checksum: 10/028f4242606abf654fd83de4364a78a025239869e60bca123425ebd261558fd370d1b7c91f51480cc902d93a32f8a51da9c013b694d6657872265486da1ba6aa
+"@jsr/libs__xml@npm:6.0.4":
+  version: 6.0.4
+  resolution: "@jsr/libs__xml@npm:6.0.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.4.tgz"
+  checksum: 10/9e17a8e322efb2ec058637cb94d5e46456c536c95736be089f678be74093271bf3a54dd88861db83f0263cee8009887ddba61b4bba32b83a77d37460081bba0a
   languageName: node
   linkType: hard
 
-"@jsr/libs__xml@npm:6.0.1":
-  version: 6.0.1
-  resolution: "@jsr/libs__xml@npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz"
-  dependencies:
-    "@jsr/libs__typing": "npm:3"
-  checksum: 10/08e7d11127d3757986a0bff5fa60a0c4b5c3addd061aa808f19568578eb78f82993528ef49de367b1ca10855cfb75a4d2305d255b5864bce84b30ce0d6614eab
-  languageName: node
-  linkType: hard
-
-"@jsr/std__bytes@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@jsr/std__bytes@npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.2.tgz"
-  checksum: 10/984b7d08a798a16fbdc2ee193c3452ee51a8f016c72d4cd079bfddae71a25f892b1af7f0db48a769b98921ce75a68e7e2bd966087193e1d2ffde4f40ffc9fc18
-  languageName: node
-  linkType: hard
-
-"@jsr/std__bytes@npm:^1.0.3":
+"@jsr/std__bytes@npm:^1.0.5":
   version: 1.0.5
   resolution: "@jsr/std__bytes@npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz"
   checksum: 10/5d2b562ccf0fb053a8ef6687010ae968818f244d08c5370dd95662aa6a4206e6c94f008ce0e5be022da817ef4481f8dc7e8025b0a49ebf064725b20796039517
   languageName: node
   linkType: hard
 
-"@jsr/std__fmt@npm:1.0.3, @jsr/std__fmt@npm:^1.0.2, @jsr/std__fmt@npm:~1.0.2":
+"@jsr/std__fmt@npm:1.0.5, @jsr/std__fmt@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@jsr/std__fmt@npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.5.tgz"
+  checksum: 10/a0b62adda7d7ed24093577a3d75820a7adc73d448a669a46cab8435d1c9645ea67d5e0356da4d91c6bf02c3cedb6e9df7faa0a3d7b8569864bad2b5a039f2c7f
+  languageName: node
+  linkType: hard
+
+"@jsr/std__fmt@npm:~1.0.2":
   version: 1.0.3
   resolution: "@jsr/std__fmt@npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"
   checksum: 10/fd1b52db949e984af78949854602bdcd5d1e5de3178b8ae0f8fdb2f6b3fc6518f7b6b7cabd8cf9456cc434573a13fc97b16fbd592a750dbb2db950ad96546e5a
   languageName: node
   linkType: hard
 
-"@jsr/std__fs@npm:^1.0.4":
-  version: 1.0.5
-  resolution: "@jsr/std__fs@npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.5.tgz"
+"@jsr/std__fs@npm:^1.0.11":
+  version: 1.0.13
+  resolution: "@jsr/std__fs@npm:1.0.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.13.tgz"
   dependencies:
-    "@jsr/std__path": "npm:^1.0.7"
-  checksum: 10/6aee865377ade075693e3c19bd7b1ca70f8a7dd1e87697a760211aaff97e3038ad4f946fc9e32b8bb8726e0d7450d0818832be0fdea02d52426e307df4256478
+    "@jsr/std__path": "npm:^1.0.8"
+  checksum: 10/e7bbe177fcbe017320f079510c10cf0011ae343a087a74d08ec86f997070ad0a904f0dae875967673225c16c73a5e8501b569b21a1796dbc92fc9f76bbac1c42
   languageName: node
   linkType: hard
 
-"@jsr/std__io@npm:^0.225.0":
-  version: 0.225.0
-  resolution: "@jsr/std__io@npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz"
+"@jsr/std__io@npm:^0.225.2":
+  version: 0.225.2
+  resolution: "@jsr/std__io@npm:0.225.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.2.tgz"
   dependencies:
-    "@jsr/std__bytes": "npm:^1.0.2"
-  checksum: 10/8584227176044d0bc656d41f0f1f794c5d4d4a1cd975cf82f9f6fe5f73f293c707fe8fdda9d211c87ae6565fb862f57cd178c31da2b1cc62130a53369ac2bf3a
+    "@jsr/std__bytes": "npm:^1.0.5"
+  checksum: 10/a3049a93ef6fa6961824e50dde055ff5599d170d508e34bde9660327bdeeea76b96553903d97ffcc859b411e9f3650677cda658a7736df65a10caf7a422f180d
   languageName: node
   linkType: hard
 
-"@jsr/std__log@npm:0.224.9":
-  version: 0.224.9
-  resolution: "@jsr/std__log@npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz"
+"@jsr/std__log@npm:0.224.14":
+  version: 0.224.14
+  resolution: "@jsr/std__log@npm:0.224.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.14.tgz"
   dependencies:
-    "@jsr/std__fmt": "npm:^1.0.2"
-    "@jsr/std__fs": "npm:^1.0.4"
-    "@jsr/std__io": "npm:^0.225.0"
-  checksum: 10/140f2a0ad787dab48458c1aa7f3d20b96950061e81becd7211e2988f81de18d8dfb2dececb0341e1b590854cd3b403410ae92b187581d7b13f5cde5b62ec1ddf
+    "@jsr/std__fmt": "npm:^1.0.5"
+    "@jsr/std__fs": "npm:^1.0.11"
+    "@jsr/std__io": "npm:^0.225.2"
+  checksum: 10/9593a70d8067fd454a60d3021639f18646c9c3d257eaa66991cf814ead23a500ece010493ca532b28c7c5394dcf17094994d868fa91d930042866ae7980ba889
   languageName: node
   linkType: hard
 
-"@jsr/std__path@npm:1.0.8":
+"@jsr/std__path@npm:1.0.8, @jsr/std__path@npm:^1.0.8":
   version: 1.0.8
   resolution: "@jsr/std__path@npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"
   checksum: 10/4c09d127e85fb7836c1dea934f3eb3ea30408a766c44f8a9ec86f03582242e761e8aafe7fd7ed963022845e0c920ca04bdc89bbc34a82f6d3ef130f017db1bfa
   languageName: node
   linkType: hard
 
-"@jsr/std__path@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "@jsr/std__path@npm:1.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.7.tgz"
-  checksum: 10/864199b8e7ad97ce74b169e6187983192f51b429ead3b3fc8859b4f8255f16f6d015ac47d98392089211e2e8e02652596443ddf4384e1987e8b93a8ac913de8d
-  languageName: node
-  linkType: hard
-
-"@jsr/std__streams@npm:1.0.8":
-  version: 1.0.8
-  resolution: "@jsr/std__streams@npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz"
+"@jsr/std__streams@npm:1.0.9":
+  version: 1.0.9
+  resolution: "@jsr/std__streams@npm:1.0.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.9.tgz"
   dependencies:
-    "@jsr/std__bytes": "npm:^1.0.3"
-  checksum: 10/52639fad9bb72b2434e7b7b6f316adc6b5c47f1872661f61f2766bac2403b3b99f7a395ceb486124bbe939ef8f03604d8decf87fc506928967d511de527ecd9a
+    "@jsr/std__bytes": "npm:^1.0.5"
+  checksum: 10/ea744fbd589296c13f4f10dce352bed38eabdb777ff09548b2339c3e4c665031d5867cdc8a72ead8c9903d1f73b8122d1ace566b394d99a36c820965f294baf7
   languageName: node
   linkType: hard
 
@@ -2012,7 +1996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/std__yaml@npm:^1.0.4":
+"@jsr/std__yaml@npm:^1.0.5":
   version: 1.0.5
   resolution: "@jsr/std__yaml@npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__yaml%2F1.0.5.tgz"
   checksum: 10/4073d72d1d1c5fcd0dcecb5aa42189b6147add2bb23843f00931f341e0f427c0397a8b4adc5e3e1f0cf77eb7712a2f1499f2a289b3eef4ed4ce1810f6e2973ca
@@ -3104,7 +3088,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.11.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^2.0.2"
+    "@bids/validator": "npm:@jsr/bids__validator@^2.0.3"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.45.1"
@@ -5450,7 +5434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/trusted-types@npm:*":
+"@types/trusted-types@npm:*, @types/trusted-types@npm:^2.0.7":
   version: 2.0.7
   resolution: "@types/trusted-types@npm:2.0.7"
   checksum: 10/8e4202766a65877efcf5d5a41b7dd458480b36195e580a3b1085ad21e948bc417d55d6f8af1fd2a7ad008015d4117d5fdfe432731157da3c68678487174e4ba3
@@ -8781,9 +8765,14 @@ __metadata:
   linkType: hard
 
 "dompurify@npm:^3.0.8":
-  version: 3.1.6
-  resolution: "dompurify@npm:3.1.6"
-  checksum: 10/036844bc9b717b172ba27f5863b56f950289a05d8eebfb702d6953bbf80bd021e480ce4217bd084567186f2d0ada13358ce5556963492cfe402d774e8667f120
+  version: 3.2.4
+  resolution: "dompurify@npm:3.2.4"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10/98570c53385518a2f9b617f796926338856acfdd3369c88b5905bddf96bd7d391bf8a5433127155e0046e6faa2bfb767185fcd571b865dfabe624c099e2537f5
   languageName: node
   linkType: hard
 

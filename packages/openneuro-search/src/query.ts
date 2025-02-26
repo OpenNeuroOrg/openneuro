@@ -49,6 +49,9 @@ export const INDEX_DATASET_FRAGMENT = gql`
         ReferencesAndLinks
         DatasetDOI
       }
+      validation {
+        errors
+      }
       summary {
         tasks
         modalities
@@ -69,11 +72,6 @@ export const INDEX_DATASET_FRAGMENT = gql`
         }
       }
       readme
-    }
-    draft {
-      issues {
-        severity
-      }
     }
     permissions {
       userPermissions {

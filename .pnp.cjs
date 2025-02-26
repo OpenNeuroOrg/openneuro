@@ -2556,28 +2556,28 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@jsr/bids__schema", [\
-      ["npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__schema-npm-1.0.1-8b3144b4f2-fda8416854.zip/node_modules/@jsr/bids__schema/",\
+      ["npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.3.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__schema-npm-1.0.3-54f42d9b06-ecea4bd4a3.zip/node_modules/@jsr/bids__schema/",\
         "packageDependencies": [\
-          ["@jsr/bids__schema", "npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz"]\
+          ["@jsr/bids__schema", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.3.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/bids__validator", [\
-      ["npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.0.2-a8139db783-2e794422b0.zip/node_modules/@jsr/bids__validator/",\
+      ["npm:2.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.3.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.0.3-10dcb2410c-c7534d4d38.zip/node_modules/@jsr/bids__validator/",\
         "packageDependencies": [\
-          ["@jsr/bids__validator", "npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz"],\
+          ["@jsr/bids__validator", "npm:2.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.3.tgz"],\
           ["@bids/nifti-reader-js", "npm:0.6.9"],\
-          ["@jsr/bids__schema", "npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.1.tgz"],\
+          ["@jsr/bids__schema", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.0.3.tgz"],\
           ["@jsr/effigies__cliffy-command", "npm:1.0.0-dev.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-command%2F1.0.0-dev.8.tgz"],\
           ["@jsr/effigies__cliffy-table", "npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz"],\
-          ["@jsr/libs__xml", "npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz"],\
-          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"],\
-          ["@jsr/std__log", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz"],\
+          ["@jsr/libs__xml", "npm:6.0.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.4.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.5.tgz"],\
+          ["@jsr/std__log", "npm:0.224.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.14.tgz"],\
           ["@jsr/std__path", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"],\
-          ["@jsr/std__streams", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz"],\
+          ["@jsr/std__streams", "npm:1.0.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.9.tgz"],\
           ["@jsr/std__yaml", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__yaml%2F1.0.5.tgz"],\
           ["ajv", "npm:8.17.1"],\
           ["hed-validator", "npm:3.15.5"],\
@@ -2641,33 +2641,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@jsr/libs__typing", [\
-      ["npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-libs__typing-npm-3.1.0-37c46262d8-028f424260.zip/node_modules/@jsr/libs__typing/",\
-        "packageDependencies": [\
-          ["@jsr/libs__typing", "npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@jsr/libs__xml", [\
-      ["npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-libs__xml-npm-6.0.1-91e6c6df08-08e7d11127.zip/node_modules/@jsr/libs__xml/",\
+      ["npm:6.0.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.4.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-libs__xml-npm-6.0.4-2a1d53ca29-9e17a8e322.zip/node_modules/@jsr/libs__xml/",\
         "packageDependencies": [\
-          ["@jsr/libs__xml", "npm:6.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.1.tgz"],\
-          ["@jsr/libs__typing", "npm:3.1.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__typing%2F3.1.0.tgz"]\
+          ["@jsr/libs__xml", "npm:6.0.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.4.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__bytes", [\
-      ["npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.2.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__bytes-npm-1.0.2-0331192b89-984b7d08a7.zip/node_modules/@jsr/std__bytes/",\
-        "packageDependencies": [\
-          ["@jsr/std__bytes", "npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.2.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz", {\
         "packageLocation": "./.yarn/cache/@jsr-std__bytes-npm-1.0.5-65ec6f83d6-5d2b562ccf.zip/node_modules/@jsr/std__bytes/",\
         "packageDependencies": [\
@@ -2683,48 +2666,48 @@ const RAW_RUNTIME_STATE =
           ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.5.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__fmt-npm-1.0.5-7c6a2d928d-a0b62adda7.zip/node_modules/@jsr/std__fmt/",\
+        "packageDependencies": [\
+          ["@jsr/std__fmt", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.5.tgz"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__fs", [\
-      ["npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.5.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__fs-npm-1.0.5-2fd5d12c3f-6aee865377.zip/node_modules/@jsr/std__fs/",\
+      ["npm:1.0.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.13.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__fs-npm-1.0.13-564bc8219e-e7bbe177fc.zip/node_modules/@jsr/std__fs/",\
         "packageDependencies": [\
-          ["@jsr/std__fs", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.5.tgz"],\
-          ["@jsr/std__path", "npm:1.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.7.tgz"]\
+          ["@jsr/std__fs", "npm:1.0.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.13.tgz"],\
+          ["@jsr/std__path", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__io", [\
-      ["npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__io-npm-0.225.0-f73f5b8c27-8584227176.zip/node_modules/@jsr/std__io/",\
+      ["npm:0.225.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.2.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__io-npm-0.225.2-e8a5700834-a3049a93ef.zip/node_modules/@jsr/std__io/",\
         "packageDependencies": [\
-          ["@jsr/std__io", "npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz"],\
-          ["@jsr/std__bytes", "npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.2.tgz"]\
+          ["@jsr/std__io", "npm:0.225.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.2.tgz"],\
+          ["@jsr/std__bytes", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__log", [\
-      ["npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__log-npm-0.224.9-ad681bd4fe-140f2a0ad7.zip/node_modules/@jsr/std__log/",\
+      ["npm:0.224.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.14.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__log-npm-0.224.14-1fcc727069-9593a70d80.zip/node_modules/@jsr/std__log/",\
         "packageDependencies": [\
-          ["@jsr/std__log", "npm:0.224.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.9.tgz"],\
-          ["@jsr/std__fmt", "npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.3.tgz"],\
-          ["@jsr/std__fs", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.5.tgz"],\
-          ["@jsr/std__io", "npm:0.225.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.0.tgz"]\
+          ["@jsr/std__log", "npm:0.224.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.14.tgz"],\
+          ["@jsr/std__fmt", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.5.tgz"],\
+          ["@jsr/std__fs", "npm:1.0.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fs%2F1.0.13.tgz"],\
+          ["@jsr/std__io", "npm:0.225.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__io%2F0.225.2.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@jsr/std__path", [\
-      ["npm:1.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.7.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__path-npm-1.0.7-d0dc222580-864199b8e7.zip/node_modules/@jsr/std__path/",\
-        "packageDependencies": [\
-          ["@jsr/std__path", "npm:1.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.7.tgz"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.0.8.tgz", {\
         "packageLocation": "./.yarn/cache/@jsr-std__path-npm-1.0.8-82e854bd09-4c09d127e8.zip/node_modules/@jsr/std__path/",\
         "packageDependencies": [\
@@ -2734,10 +2717,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@jsr/std__streams", [\
-      ["npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-std__streams-npm-1.0.8-5807589678-52639fad9b.zip/node_modules/@jsr/std__streams/",\
+      ["npm:1.0.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.9.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__streams-npm-1.0.9-8c2768dc60-ea744fbd58.zip/node_modules/@jsr/std__streams/",\
         "packageDependencies": [\
-          ["@jsr/std__streams", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.8.tgz"],\
+          ["@jsr/std__streams", "npm:1.0.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.9.tgz"],\
           ["@jsr/std__bytes", "npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz"]\
         ],\
         "linkType": "HARD"\
@@ -3955,7 +3938,7 @@ const RAW_RUNTIME_STATE =
           ["@artsy/fresnel", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.9.0"],\
           ["@bids/validator", [\
             "@jsr/bids__validator",\
-            "npm:2.0.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.2.tgz"\
+            "npm:2.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.3.tgz"\
           ]],\
           ["@emotion/react", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.1"],\
           ["@emotion/styled", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:11.11.0"],\
@@ -3977,7 +3960,7 @@ const RAW_RUNTIME_STATE =
           ["comlink", "npm:4.3.1"],\
           ["core-js", "npm:3.25.1"],\
           ["date-fns", "npm:2.24.0"],\
-          ["dompurify", "npm:3.1.6"],\
+          ["dompurify", "npm:3.2.4"],\
           ["draft-js", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.7"],\
           ["email-validator", "npm:2.0.4"],\
           ["esbuild-plugin-globals", "npm:0.1.1"],\
@@ -11145,10 +11128,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["dompurify", [\
-      ["npm:3.1.6", {\
-        "packageLocation": "./.yarn/cache/dompurify-npm-3.1.6-344fd47e23-036844bc9b.zip/node_modules/dompurify/",\
+      ["npm:3.2.4", {\
+        "packageLocation": "./.yarn/cache/dompurify-npm-3.2.4-d8ea6c7c6a-98570c5338.zip/node_modules/dompurify/",\
         "packageDependencies": [\
-          ["dompurify", "npm:3.1.6"]\
+          ["dompurify", "npm:3.2.4"],\
+          ["@types/trusted-types", "npm:2.0.7"]\
         ],\
         "linkType": "HARD"\
       }]\

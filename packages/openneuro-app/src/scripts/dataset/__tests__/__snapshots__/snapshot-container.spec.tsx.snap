@@ -159,23 +159,13 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     role="switch"
                   >
                     <div>
-                      <h3
-                        class="metaheader"
-                      >
-                        BIDS Validation
-                      </h3>
                       <span
-                        class="label text-warning pull-right"
-                      >
-                        1 Warning
-                      </span>
-                      <span
-                        class="dataset-status ds-success"
+                        class="dataset-status ds-warning ds-validation-pending"
                       >
                         <i
-                          class="fa fa-check-circle"
+                          class="fa fa-circle-o-notch fa-spin"
                         />
-                         Valid
+                        Validation Pending
                       </span>
                     </div>
                   </div>
