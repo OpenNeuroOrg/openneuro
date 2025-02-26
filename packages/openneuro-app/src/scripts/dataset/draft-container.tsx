@@ -136,7 +136,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 <ValidationBlock
                   datasetId={dataset.id}
                   version={dataset.draft.head}
-                  issues={dataset.draft.issues}
+                  issuesStatus={dataset.draft.issuesStatus}
                   validation={dataset.draft.validation}
                 />
                 <CloneDropdown

@@ -20,7 +20,10 @@ interface ValidationFragment {
 export interface ValidationBlockProps {
   datasetId: string
   version?: string
-  issues?: object
+  issuesStatus?: {
+    errors: number
+    warnings: number
+  }
   validation?: ValidationFragment
 }
 
@@ -32,13 +35,17 @@ export interface ValidationBlockProps {
 export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   datasetId,
   version,
-  issues,
+  issuesStatus,
   validation,
 }) => {
-  if (issues) {
+  if (issuesStatus) {
     return (
       <div className="validation-accordion">
-        <LegacyValidation datasetId={datasetId} issues={issues} />
+        <LegacyValidation
+          datasetId={datasetId}
+          version={version}
+          issuesStatus={issuesStatus}
+        />
       </div>
     )
   } else {

@@ -46,3 +46,42 @@ export const snapshotIssues = async (snapshot) => {
     .exec()
     .then((data) => (data ? data.issues : null))
 }
+
+/**
+ * Resolver implementation for legacy validator status summary
+ */
+export async function issuesStatus(datasetId, version) {
+  const data = await Issue.findOne({
+    id: version,
+    datasetId,
+  }).exec()
+  if (data) {
+    const warnings = data.issues.filter((issue) =>
+      issue.severity === "warning"
+    ).length
+    const errors = data.issues.filter((issue) =>
+      issue.severity === "error"
+    ).length
+    return {
+      errors,
+      warnings,
+    }
+  } else {
+    return null
+  }
+}
+
+/**
+ * Draft specific issues status resolver
+ */
+export function issuesDraftStatus(dataset) {
+  return issuesStatus(dataset.id, dataset.revision)
+}
+
+/**
+ * Draft specific issues status resolver
+ */
+export function issuesSnapshotStatus(snapshot) {
+  const datasetId = snapshot.id.split(":")[0]
+  return issuesStatus(datasetId, snapshot.hexsha)
+}

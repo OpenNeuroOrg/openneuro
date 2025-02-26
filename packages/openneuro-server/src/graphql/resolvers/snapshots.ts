@@ -5,7 +5,7 @@ import { checkDatasetRead, checkDatasetWrite } from "../permissions"
 import { readme } from "./readme.js"
 import { description } from "./description.js"
 import { summary } from "./summary"
-import { snapshotIssues } from "./issues.js"
+import { issuesSnapshotStatus, snapshotIssues } from "./issues.js"
 import { getFiles } from "../../datalad/files"
 import Summary from "../../models/summary"
 import DatasetModel from "../../models/dataset"
@@ -259,6 +259,7 @@ export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
 const Snapshot = {
   analytics: (snapshot) => analytics(snapshot),
   issues: (snapshot) => snapshotIssues(snapshot),
+  issuesStatus: (snapshot) => issuesSnapshotStatus(snapshot),
   validation: (snapshot) => snapshotValidation(snapshot),
 }
 

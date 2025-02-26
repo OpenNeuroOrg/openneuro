@@ -136,7 +136,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 <ValidationBlock
                   datasetId={datasetId}
                   version={snapshot.tag}
-                  issues={snapshot.issues}
+                  issuesStatus={snapshot.issuesStatus}
                   validation={snapshot.validation}
                 />
                 <AnalyzeDropdown

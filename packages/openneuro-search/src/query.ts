@@ -73,11 +73,6 @@ export const INDEX_DATASET_FRAGMENT = gql`
       }
       readme
     }
-    draft {
-      issues {
-        severity
-      }
-    }
     permissions {
       userPermissions {
         level

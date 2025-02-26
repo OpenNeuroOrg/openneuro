@@ -497,6 +497,8 @@ export const typeDefs = `
     summary: Summary
     # Validator issues (legacy validator)
     issues: [ValidationIssue]
+    # Validator issues status (legacy validator)
+    issuesStatus: ValidationIssueStatus
     # Validator issues (schema validator)
     validation: DatasetValidation
     # Committed files in the working tree
@@ -526,6 +528,8 @@ export const typeDefs = `
     summary: Summary
     # Validator issues (legacy validator)
     issues: [ValidationIssue]
+    # Validator issues status (legacy validator)
+    issuesStatus: ValidationIssueStatus
     # Validator issues (schema validator)
     validation: DatasetValidation
     # Snapshot files
@@ -708,6 +712,12 @@ export const typeDefs = `
     files: [ValidationIssueFile]
     additionalFileCount: Int
     helpUrl: String
+  }
+
+  # Legacy validator count of errors and warnings
+  type ValidationIssueStatus {
+    errors: Int
+    warnings: Int
   }
 
   input ValidatorIssueInput {

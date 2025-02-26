@@ -1,6 +1,6 @@
 import Summary from "../../models/summary"
 import { summary } from "./summary"
-import { issues } from "./issues.js"
+import { issues, issuesDraftStatus } from "./issues.js"
 import { description } from "./description.js"
 import { readme } from "./readme.js"
 import { getDraftRevision } from "../../datalad/draft.js"
@@ -37,6 +37,7 @@ const draft = {
   size: draftSize,
   summary,
   issues,
+  issuesStatus: issuesDraftStatus,
   validation,
   modified: (obj) => obj.modified,
   description,
