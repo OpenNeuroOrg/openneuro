@@ -39,10 +39,8 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   const { path } = useParams()
   const globalSearchPath = "/search"
 
-  // Use useMatch to identify modality paths directly
   const isModalityPath = useMatch("/search/modality/*")
 
-  // Use useSearchParams to access query params directly
   const [searchParamsObj, setSearchParamsObj] = useSearchParams()
 
   const removeFilter =
@@ -50,9 +48,22 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       if (isModality && param === "modality_selected") {
         removeFilterItem(setSearchParams)(param, value)
 
-        // Access query params via searchParamsObj
+        // Remove the modality_selected filter directly
         searchParamsObj.delete("modality_selected")
-        searchParamsObj.set("query", "{}")
+
+        // Modify `query` if we need to remove the filter from it
+        const query = searchParamsObj.get("query")
+        if (query) {
+          try {
+            const queryObj = JSON.parse(query)
+            delete queryObj["modality_selected"]
+            searchParamsObj.set("query", JSON.stringify(queryObj))
+          } catch (error) {
+            Sentry.captureException(error)
+            // fallback
+            searchParamsObj.delete("query")
+          }
+        }
 
         try {
           setSearchParamsObj(searchParamsObj)
@@ -65,8 +76,22 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       } else if (!isModalityPath && param === "brain_initiative") {
         removeFilterItem(setSearchParams)(param, value)
 
+        // Remove the brain_initiative filter directly
         searchParamsObj.delete("brain_initiative")
-        searchParamsObj.set("query", "{}")
+
+        // Modify `query` if we need to remove the filter from it
+        const query = searchParamsObj.get("query")
+        if (query) {
+          try {
+            const queryObj = JSON.parse(query)
+            delete queryObj["brain_initiative"]
+            searchParamsObj.set("query", JSON.stringify(queryObj))
+          } catch (error) {
+            Sentry.captureException(error)
+            // fallback
+            searchParamsObj.delete("query")
+          }
+        }
 
         try {
           setSearchParamsObj(searchParamsObj)
@@ -77,12 +102,13 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
           Sentry.captureException(error)
         }
       } else {
+        // For other filters, just remove them normally
         removeFilterItem(setSearchParams)(param, value)
       }
     }
 
   const removeAllFilters = (): void => {
-    // reset params to default values
+    // Reset params to default values, preserving other query params
     setSearchParams((prevState) => ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
