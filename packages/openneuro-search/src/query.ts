@@ -49,7 +49,7 @@ export const INDEX_DATASET_FRAGMENT = gql`
         ReferencesAndLinks
         DatasetDOI
       }
-      validation{
+      validation {
         errors
       }
       summary {
