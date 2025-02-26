@@ -57,6 +57,11 @@
             }
           }
         },
+        "validation": {
+          "properties": {
+            "errors": { "type": "integer" }
+          }
+        },
         "description": {
           "properties": {
             "Name": { "type": "text" },

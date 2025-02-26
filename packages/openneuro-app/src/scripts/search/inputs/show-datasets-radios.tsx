@@ -19,16 +19,23 @@ const ShowDatasetsRadios: FC = () => {
     datasetStatus_available,
     datasetStatus_selected,
   } = searchParams
-  const setShowSelected = (datasetType_selected) =>
+
+  const setShowSelected = (datasetType_selected) => {
     setSearchParams((prevState) => ({
       ...prevState,
       datasetType_selected,
+      datasetStatus_selected: datasetType_selected === "My Datasets"
+        ? prevState.datasetStatus_selected
+        : undefined,
     }))
-  const setShowMyUploadsSelected = (datasetStatus_selected) =>
+  }
+
+  const setShowMyUploadsSelected = (datasetStatus_selected) => {
     setSearchParams((prevState) => ({
       ...prevState,
       datasetStatus_selected,
     }))
+  }
 
   return loggedOut ? null : (
     <>
@@ -44,23 +51,21 @@ const ShowDatasetsRadios: FC = () => {
           setSelected={setShowSelected}
         />
       </div>
-      {datasetType_selected == "My Datasets"
-        ? (
-          <AccordionWrap className="facet-accordion">
-            <AccordionTab
-              accordionStyle="plain"
-              label="My Datasets Status"
-              startOpen={true}
-            >
-              <FacetSelect
-                selected={datasetStatus_selected}
-                setSelected={setShowMyUploadsSelected}
-                items={datasetStatus_available}
-              />
-            </AccordionTab>
-          </AccordionWrap>
-        )
-        : null}
+      {datasetType_selected === "My Datasets" && (
+        <AccordionWrap className="facet-accordion">
+          <AccordionTab
+            accordionStyle="plain"
+            label="My Datasets Status"
+            startOpen={true}
+          >
+            <FacetSelect
+              selected={datasetStatus_selected}
+              setSelected={setShowMyUploadsSelected}
+              items={datasetStatus_available}
+            />
+          </AccordionTab>
+        </AccordionWrap>
+      )}
     </>
   )
 }
