@@ -21,9 +21,11 @@ export const SearchParamsProvider: React.FC<SearchParamsProviderProps> = ({
     if (query) {
       searchParams = JSON.parse(query)
     } else {
-      Sentry.captureException(
-        "No query found in URL. Using initialSearchParams.",
-      )
+      Sentry.addBreadcrumb({
+        category: "routing",
+        message: "No query found in URL. Using initialSearchParams.",
+        level: "info"
+      })
     }
   } catch (err) {
     Sentry.captureException(err)
