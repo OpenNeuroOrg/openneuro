@@ -1,7 +1,5 @@
-import {
-  createDatasetAffirmed,
-  CreateDatasetAffirmedError,
-} from "./create-dataset.ts"
+import { createDatasetAffirmed } from "./create-dataset.ts"
+import { CreateDatasetAffirmedError } from "../error.ts"
 import { assertEquals, assertRejects } from "@std/assert"
 
 Deno.test("createDatasetAffirmed - with affirmed options", async () => {

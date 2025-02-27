@@ -3,17 +3,12 @@ import type { CommandOptions } from "@cliffy/command"
 import { Command } from "@cliffy/command"
 import { createDataset } from "../graphq.ts"
 import { getConfig } from "../config.ts"
+import { CreateDatasetAffirmedError } from "../error.ts"
 
 interface CreateDatasetOptions {
   affirmDefaced?: boolean
   affirmConsent?: boolean
   [otherOptions: string]: unknown
-}
-
-/**
- * Expected errors for createDatasetAffirmed
- */
-export class CreateDatasetAffirmedError extends Error {
 }
 
 /**
