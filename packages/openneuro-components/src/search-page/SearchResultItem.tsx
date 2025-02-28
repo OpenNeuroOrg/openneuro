@@ -314,7 +314,7 @@ export const SearchResultItem = ({
     )
   } else {
     // Test if there's any schema validator errors
-    invalid = node.latestSnapshot.validation.errors > 0
+    invalid = node.latestSnapshot.validation?.errors > 0
   }
   const shared = !node.public && node.uploader.id !== profile.sub
 
