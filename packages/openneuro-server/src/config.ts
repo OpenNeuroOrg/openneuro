@@ -27,6 +27,10 @@ const config = {
       clientID: process.env.GLOBUS_CLIENT_ID,
       clientSecret: process.env.GLOBUS_CLIENT_SECRET,
     },
+    github: {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    },
     jwt: {
       secret: process.env.JWT_SECRET,
     },
