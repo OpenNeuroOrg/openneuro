@@ -142,6 +142,10 @@ services:
       cluster.routing.allocation.disk.watermark.high: 5gb
       xpack.security.enabled: false
       xpack.security.enrollment.enabled: false
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS}
+    mem_limit: ${MEM_LIMIT}
+    security_opt:
+      - seccomp=${SECOMP}
     healthcheck:
       test: "curl -s -f http://localhost:9200 || exit 1"
       interval: 10s
