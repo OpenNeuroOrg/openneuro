@@ -50,7 +50,7 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
     )
   } else {
     // If data exists, populate this. Otherwise we show pending.
-    if (validation?.warnings + validation?.errors > 0) {
+    if (validation) {
       return (
         <div className="validation-accordion">
           <Validation
