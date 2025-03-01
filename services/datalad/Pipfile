@@ -18,10 +18,10 @@ requests = "*"
 PyJWT = ">=2"
 boto3 = "*"
 pygit2 = "==1.17.0"
-pygithub = "==2.5.0"
+pygithub = "==2.6.1"
 charset-normalizer = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 aiofiles = "*"
 aioshutil = "*"
 sentry-sdk = {extras = ["falcon"], version = "*"}
-bidsschematools = "==1.0.0"
+bidsschematools = "==1.0.3"
