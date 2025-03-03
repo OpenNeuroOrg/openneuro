@@ -7,10 +7,13 @@ vi.mock("../../../config.ts")
 
 describe("ValidationBlock component", () => {
   it("renders legacy validation if issues prop is present", () => {
-    const issues = [
-      {},
-    ]
-    render(<ValidationBlock datasetId="ds000031" issues={issues} />)
+    render(
+      <ValidationBlock
+        datasetId="ds000031"
+        issuesStatus={{ warnings: 3, errors: 0 }}
+        version="1.0.0"
+      />,
+    )
     expect(screen.getByText("BIDS Validation")).toBeInTheDocument()
   })
   it("renders schema validation if validation prop is present", () => {
@@ -40,5 +43,15 @@ describe("ValidationBlock component", () => {
   it("renders pending validation if neither issues nor validation props are present", () => {
     render(<ValidationBlock datasetId="ds000031" />)
     expect(screen.getByText("Validation Pending")).toBeInTheDocument()
+  })
+  it("renders validation if `validation` is present but errors and warnings are zero", () => {
+    render(
+      <ValidationBlock
+        datasetId="ds000031"
+        validation={{ errors: 0, warnings: 0, issues: [], codeMessages: [] }}
+      />,
+    )
+    expect(screen.getByText("Valid")).toBeInTheDocument()
+    expect(screen.queryByText("Validation Pending")).not.toBeInTheDocument()
   })
 })

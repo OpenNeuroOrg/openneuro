@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import * as Sentry from "@sentry/react"
 import type { FC } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
@@ -15,6 +16,8 @@ interface FiltersBlockContainerProps {
   loading: boolean
 }
 
+type FilterValue = string | number | boolean | string[] | number[]
+
 const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   numTotalResults,
   loading,
@@ -28,10 +31,25 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   const { path } = useParams()
   const globalSearchPath = "/search"
 
-  const removeFilter = (isModality: boolean) => (param, value): void => {
-    removeFilterItem(setSearchParams)(param, value)
-    if (isModality) navigate(globalSearchPath)
-  }
+  const removeFilter =
+    (isModality?: boolean) => (param: string, value: FilterValue): void => {
+      if (isModality && param === "modality_selected") {
+        removeFilterItem(setSearchParams)(param, value)
+        const queryParams = new URLSearchParams(location.search)
+        const query = queryParams.get("query")
+        if (query) {
+          try {
+            navigate(`${globalSearchPath}?${queryParams.toString()}`, {
+              replace: true,
+            })
+          } catch (error) {
+            Sentry.captureException(error)
+          }
+        }
+      } else {
+        removeFilterItem(setSearchParams)(param, value)
+      }
+    }
 
   const removeAllFilters = (): void => {
     // reset params to default values
@@ -39,8 +57,9 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
     }))
-    if (path !== globalSearchPath) navigate(globalSearchPath)
+    if (path !== globalSearchPath) navigate(globalSearchPath, { replace: true })
   }
+
   return (
     <FiltersBlock
       noFilters={noFilters}

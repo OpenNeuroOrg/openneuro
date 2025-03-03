@@ -13,7 +13,7 @@ import {
   hasEditPermissions,
 } from "../authentication/profile"
 import { useCookies } from "react-cookie"
-import { DatasetAlertDraft } from "./fragments/dataset-alert-draft"
+import { DatasetAlertDraft } from "./fragments/dataset-alert"
 import { CloneDropdown } from "./components/CloneDropdown"
 import { DatasetGitAccess } from "./components/DatasetGitAccess"
 import { DatasetHeader } from "./components/DatasetHeader"
@@ -136,7 +136,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 <ValidationBlock
                   datasetId={dataset.id}
                   version={dataset.draft.head}
-                  issues={dataset.draft.issues}
+                  issuesStatus={dataset.draft.issuesStatus}
                   validation={dataset.draft.validation}
                 />
                 <CloneDropdown

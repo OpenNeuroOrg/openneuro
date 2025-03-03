@@ -5,12 +5,19 @@ import Dataset from "../models/dataset"
 // Static URLs - manual for now, could be generated from routes
 export const sitemapStaticUrls = () => [
   { url: "/", priority: 0.9, changefreq: "weekly" },
-  { url: "/public/datasets", priority: 1.0, changefreq: "daily" },
+  { url: "/search", priority: 0.8, changefreq: "daily" },
+  { url: "/search/modality/mri", priority: 0.7, changefreq: "daily" },
+  { url: "/search/modality/pet", priority: 0.7, changefreq: "daily" },
+  { url: "/search/modality/meg", priority: 0.7, changefreq: "daily" },
+  { url: "/search/modality/eeg", priority: 0.7, changefreq: "daily" },
+  { url: "/search/modality/ieeg", priority: 0.7, changefreq: "daily" },
+  { url: "/search/modality/nirs", priority: 0.7, changefreq: "daily" },
+  { url: "/search/nih", priority: 0.7, changefreq: "daily" },
   { url: "/faq", priority: 0.6, changefreq: "monthly" },
   { url: "/pet", priority: 0.5, changefreq: "monthly" },
   { url: "/terms", priority: 0.5, changefreq: "monthly" },
   { url: "/cite", priority: 0.4, changefreq: "monthly" },
-  { url: "/public/jobs", priority: 0.5, changefreq: "monthly" },
+  { url: "/image-attribution", priority: 0.4, changefreq: "monthly" },
   { url: "/crn/graphql", priority: 0.3 },
 ]
 

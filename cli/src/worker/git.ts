@@ -1,9 +1,6 @@
-import {
-  GitAnnexAttributes,
-  GitAnnexBackend,
-  matchGitAttributes,
-  parseGitAttributes,
-} from "../gitattributes.ts"
+import type { GitWorkerEventAdd } from "./types/git-context.ts"
+import type { GitAnnexAttributes, GitAnnexBackend } from "../gitattributes.ts"
+import { matchGitAttributes, parseGitAttributes } from "../gitattributes.ts"
 import { dirname, join } from "@std/path"
 import { default as git, STAGE, TREE } from "isomorphic-git"
 import { logger, setupLogging } from "../logger.ts"
@@ -12,7 +9,8 @@ import { checkKey, storeKey } from "./transferKey.ts"
 import ProgressBar from "@deno-library/progress"
 import { annexAdd, hashDirLower, readAnnexPath } from "./annex.ts"
 import { GitWorkerContext } from "./types/git-context.ts"
-import type { GitWorkerEventAdd } from "./types/git-context.ts"
+import { resetWorktree } from "./resetWorktree.ts"
+import { getDefault } from "./getDefault.ts"
 
 let context: GitWorkerContext
 let attributesCache: GitAnnexAttributes
@@ -43,6 +41,9 @@ async function update() {
     logger.info(
       `Fetching ${context.datasetId} draft from "${context.repoEndpoint}"`,
     )
+    // Reset first to be sure that an interrupted run didn't create untracked files
+    await resetWorktree(context, await getDefault(context))
+    // Now fetch and checkout the default branch
     await git.fetch(context.config())
   } catch (_err) {
     logger.info(
@@ -70,8 +71,8 @@ async function getGitAttributes(): Promise<GitAnnexAttributes> {
   if (!attributesCache) {
     const options = context.config()
     try {
-      const oid = await git.resolveRef({ ...options, ref: "main" }) ||
-        await git.resolveRef({ ...options, ref: "master" })
+      const defaultBranch = await getDefault(context)
+      const oid = await git.resolveRef({ ...options, ref: defaultBranch })
       const rawAttributes = await git.readBlob({
         ...options,
         oid,
@@ -299,23 +300,11 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
       }
     }
   } finally {
-    try {
-      // Try main first
-      await git.checkout({
-        ...context.config(),
-        ref: "main",
-      })
-    } catch (err) {
-      if (err instanceof Error && err.name === "NotFoundError") {
-        // Fallback to master and error if neither exists
-        await git.checkout({
-          ...context.config(),
-          ref: "master",
-        })
-      } else {
-        throw err
-      }
-    }
+    const defaultBranch = await getDefault(context)
+    await git.checkout({
+      ...context.config(),
+      ref: defaultBranch,
+    })
   }
 }
 

@@ -57,6 +57,11 @@
             }
           }
         },
+        "validation": {
+          "properties": {
+            "errors": { "type": "integer" }
+          }
+        },
         "description": {
           "properties": {
             "Name": { "type": "text" },
@@ -74,15 +79,6 @@
         },
         "readme": {
           "type": "text"
-        }
-      }
-    },
-    "draft": {
-      "properties": {
-        "issues": {
-          "properties": {
-            "severity": { "type": "keyword" }
-          }
         }
       }
     },

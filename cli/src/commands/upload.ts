@@ -3,14 +3,15 @@ import { validateCommand } from "@bids/validator/options"
 import { readFileTree } from "@bids/validator/files"
 import { consoleFormat } from "@bids/validator/output"
 import { logger } from "../logger.ts"
-import { prompt } from "@cliffy/prompt"
+import { Confirm, prompt } from "@cliffy/prompt"
 import { join, relative, resolve } from "@std/path"
 import { walk } from "@std/fs/walk"
-import { Confirm } from "@cliffy/prompt"
 import type { CommandOptions } from "@cliffy/command"
 import { getRepoAccess } from "./git-credential.ts"
 import { readConfig } from "../config.ts"
-import { createDataset } from "../graphq.ts"
+import { createDatasetAffirmed } from "./create-dataset.ts"
+import { CreateDatasetAffirmedError } from "../error.ts"
+import validatorConfig from "../validator-config.json" with { type: "json" }
 
 async function getRepoDir(url: URL): Promise<string> {
   const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
@@ -71,6 +72,7 @@ export async function uploadAction(
   const schemaResult = await validate(
     await readFileTree(dataset_directory_abs),
     options,
+    validatorConfig,
   )
   console.log(consoleFormat(schemaResult))
 
@@ -99,33 +101,11 @@ export async function uploadAction(
         return
       }
     }
-    let affirmedDefaced = options.affirmDefaced
-    let affirmedConsent = options.affirmConsent
-    if (affirmedDefaced || affirmedConsent) {
-      datasetId = await createDataset(affirmedDefaced, affirmedConsent)
-    } else {
-      const affirmed = await prompt([
-        {
-          name: "affirmedDefaced",
-          message:
-            "All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
-          type: Confirm,
-        },
-        {
-          name: "affirmedConsent",
-          message:
-            "I have explicit participant consent and ethical authorization to publish structural scans without defacing.",
-          type: Confirm,
-        },
-      ])
-      affirmedDefaced = affirmed.affirmedDefaced
-      affirmedConsent = affirmed.affirmedConsent
-      if (affirmedDefaced || affirmedConsent) {
-        datasetId = await createDataset(affirmedDefaced, affirmedConsent)
-      } else {
-        console.log(
-          "You must affirm defacing or consent to upload without defacing to continue.",
-        )
+    try {
+      datasetId = await createDatasetAffirmed(options)
+    } catch (err) {
+      if (err instanceof CreateDatasetAffirmedError) {
+        console.log(err.message)
         return
       }
     }

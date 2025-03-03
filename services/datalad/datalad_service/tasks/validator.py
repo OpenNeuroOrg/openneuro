@@ -1,7 +1,7 @@
 import asyncio
+from pathlib import Path
 import json
 import logging
-import os
 import re
 
 import requests
@@ -10,7 +10,7 @@ from datalad_service.config import GRAPHQL_ENDPOINT
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-DENO_VALIDATOR_VERSION = '2.0.2'
+DENO_VALIDATOR_VERSION = '2.0.3'
 
 DENO_METADATA = {
     'validator': 'schema',
@@ -46,10 +46,14 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
 
     Runs the deno bids-validator process.
     """
+    # Sync to packages/openneuro-app/src/scripts/workers/schema.worker.ts
+    config_path = Path(__file__).parent / 'assets' / 'validator-config.json'
     return await run_and_decode(
         ['deno', 'run', '-A',
          f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
-         '--json', dataset_path],
+         '--config', str(config_path),
+         '--json', dataset_path,
+         '--blacklistModalities', 'micr'],
         logger=logger
     )
 

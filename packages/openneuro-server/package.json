@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/server",
-  "version": "4.30.2",
+  "version": "4.33.0",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "src/server.js",
@@ -21,7 +21,7 @@
     "@elastic/elasticsearch": "8.13.1",
     "@graphql-tools/schema": "^10.0.0",
     "@keyv/redis": "^2.7.0",
-    "@openneuro/search": "^4.30.2",
+    "@openneuro/search": "^4.33.0",
     "@sentry/node": "^8.25.0",
     "@sentry/profiling-node": "^8.25.0",
     "base64url": "^3.0.0",
@@ -86,5 +86,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "dc7f8bac5eeff214ca662961e4b0ba33dd596a61"
+  "gitHead": "760dc8c0771dd7353f8b68ff5e0f912a24ad2130"
 }

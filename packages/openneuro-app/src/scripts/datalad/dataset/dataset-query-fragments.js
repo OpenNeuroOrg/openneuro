@@ -131,8 +131,9 @@ export const DATASET_ISSUES = gql`
     id
     draft {
       id
-      issues { 
-        ${ISSUE_FIELDS}
+      issuesStatus {
+        errors
+        warnings
       }
       validation {
         errors
@@ -145,8 +146,9 @@ export const DATASET_ISSUES = gql`
 export const SNAPSHOT_ISSUES = gql`
   fragment SnapshotIssues on Snapshot {
     id
-    issues {
-      ${ISSUE_FIELDS}
+    issuesStatus {
+      errors
+      warnings
     }
     validation {
       errors

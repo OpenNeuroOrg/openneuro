@@ -8,6 +8,8 @@ describe("SearchContainer component", () => {
       const setContext = vi.fn()
       setDefaultSearch(
         "MRI",
+        "",
+        false,
         context,
         setContext,
         new URLSearchParams("/search"),
@@ -15,6 +17,8 @@ describe("SearchContainer component", () => {
       expect(setContext).not.toHaveBeenCalled()
       setDefaultSearch(
         "PET",
+        "",
+        false,
         context,
         setContext,
         new URLSearchParams("/search"),
@@ -31,6 +35,8 @@ describe("SearchContainer component", () => {
       })
       setDefaultSearch(
         "MRI",
+        "",
+        false,
         context,
         setContext,
         new URLSearchParams("mydatasets"),
@@ -47,6 +53,8 @@ describe("SearchContainer component", () => {
       })
       setDefaultSearch(
         "MRI",
+        "",
+        false,
         context,
         setContext,
         new URLSearchParams("bookmarks"),

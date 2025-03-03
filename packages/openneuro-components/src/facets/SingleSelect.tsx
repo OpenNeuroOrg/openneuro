@@ -2,16 +2,16 @@ import React from "react"
 
 export interface SingleSelectProps {
   items: string[]
-  className?: string
   label?: string
+  className?: string
   selected: string | null
   setSelected: (selected: string | null) => void
 }
 
 export const SingleSelect = ({
   items,
-  className,
   label,
+  className,
   selected,
   setSelected,
 }: SingleSelectProps) => {
