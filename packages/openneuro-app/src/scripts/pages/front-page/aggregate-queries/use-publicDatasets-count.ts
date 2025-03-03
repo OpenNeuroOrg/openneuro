@@ -10,9 +10,31 @@ const PUBLIC_DATASETS_COUNT = gql`
   }
 `
 
+const BRAIN_INITIATIVE_COUNT = gql`
+  query AdvancedSearch($query: JSON!, $datasetType: String!) {
+    advancedSearch(query: $query, datasetType: $datasetType) {
+      pageInfo {
+        count
+      }
+    }
+  }
+`
+
 const usePublicDatasetsCount = (modality?: string) => {
-  return useQuery(PUBLIC_DATASETS_COUNT, {
-    variables: { modality },
+  const isNIH = modality === "NIH"
+
+  const query = isNIH ? BRAIN_INITIATIVE_COUNT : PUBLIC_DATASETS_COUNT
+  const variables = isNIH
+    ? {
+      query: {
+        bool: { filter: [{ match: { brainInitiative: { query: "true" } } }] },
+      },
+      datasetType: "public",
+    }
+    : { modality }
+
+  return useQuery(query, {
+    variables,
     errorPolicy: "all",
   })
 }
