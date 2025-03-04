@@ -10,6 +10,8 @@ export function modalityShortMapping(modality) {
       return "Behavioral"
     case "motion":
       return "Motion"
+    case "micro":
+      return "Microscopy"
     case undefined:
       return undefined
     case null:
