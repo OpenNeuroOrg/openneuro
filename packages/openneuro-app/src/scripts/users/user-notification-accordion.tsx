@@ -84,7 +84,7 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
                 >
                   <img
                     className={`${styles.accordionicon} ${styles.saveicon}`}
-                    src={iconSaved}
+                    src={iconUnread}
                     alt=""
                   />
                   <span className="sr-only">Save</span>
@@ -114,7 +114,7 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
                 >
                   <img
                     className={`${styles.accordionicon} ${styles.unreadicon}`}
-                    src={iconUnread}
+                    src={iconSaved}
                     alt=""
                   />
                   <span className="sr-only">Mark as Unread</span>
