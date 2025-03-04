@@ -1,0 +1,33 @@
+// Toasts
+
+.Toastify__toast {
+  text-align: center;
+  background: #fff;
+  color: #000;
+  padding: 1em;
+  .Toastify__close-button--error {
+    color: #000;
+  }
+  .Toastify__progress-bar {
+    background: #eee;
+  }
+}
+
+.Toastify__toast--default {
+  border-top: 4px solid #333;
+  .Toastify__progress-bar {
+    background: var(--current-theme-primary);
+  }
+}
+
+.Toastify__toast--success {
+  border-top: 4px solid $on-light-green;
+}
+
+.Toastify__toast--warning {
+  border-top: 4px solid $on-light-orange;
+}
+
+.Toastify__toast--error {
+  border-top: 4px solid $on-light-red;
+}
