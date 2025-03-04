@@ -18,18 +18,24 @@
     }
     .count{
       position: absolute;
-      background-color: red;
-      font-size: 12px;
+      background-color: #B20001;
+      font-size: 11px;
+      font-family: $font-sans;
+      line-height: 11px;
       border-radius: 50%;
       padding: 2px 3px;
-      width: 19px;
-      height: 18px;
+      min-width: 15px;
+      min-height: 15px;
       top: -5px;
       right: -5px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
+      vertical-align: middle;
+      span > span{
+        font-size: 10px;
+      }
     }
   }
 }

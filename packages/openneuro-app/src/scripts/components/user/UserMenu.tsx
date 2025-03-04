@@ -16,13 +16,24 @@ export interface UserMenuProps {
 }
 
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
+  let inboxCount = 32
   return (
     <span className="user-menu-wrap">
       {profile.orcid && (
         <span className="notifications-link">
           <Link to={`/user/${profile.orcid}/notifications/unread`}>
             <i className="fa fa-inbox">
-              <span className="count">99+</span>
+              {inboxCount > 0 && (
+                <span className="count">
+                  {inboxCount > 99
+                    ? (
+                      <span>
+                        99<span>+</span>
+                      </span>
+                    )
+                    : inboxCount}
+                </span>
+              )}
             </i>
             <span className="sr-only">Account Info</span>
           </Link>
