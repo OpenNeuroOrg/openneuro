@@ -1,7 +1,7 @@
 export const modalities = [
   {
     label: "MRI",
-    value: "MRI",
+    value: "mri",
     count: null,
     children: [
       {
@@ -28,7 +28,7 @@ export const modalities = [
   },
   {
     label: "PET",
-    value: "PET",
+    value: "pet",
     count: null,
     children: [
       {
@@ -45,22 +45,22 @@ export const modalities = [
   },
   {
     label: "EEG",
-    value: "EEG",
+    value: "eeg",
     count: null,
   },
   {
     label: "iEEG",
-    value: "iEEG",
+    value: "ieeg",
     count: null,
   },
   {
     label: "MEG",
-    value: "MEG",
+    value: "meg",
     count: null,
   },
   {
     label: "NIRS",
-    value: "NIRS",
+    value: "nirs",
     count: null,
   },
 ]
