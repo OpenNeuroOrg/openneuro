@@ -39,7 +39,6 @@ export const Header = ({
   renderUploader,
 }: HeaderProps) => {
   const [isOpen, setOpen] = React.useState(false)
-  console.log(profile)
   return (
     <>
       <header>

@@ -16,7 +16,7 @@ export interface UserMenuProps {
 }
 
 export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
-  let inboxCount = 32
+  const inboxCount = 99
   return (
     <span className="user-menu-wrap">
       {profile.orcid && (
