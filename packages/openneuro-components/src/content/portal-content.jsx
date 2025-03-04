@@ -9,7 +9,7 @@ import nirs from "../assets/nirs.jpg"
 
 export const portalContent = {
   mri: {
-    modality: "MRI", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    modality: "mri", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-mri",
     portalName: "OpenNeuro MRI",
     portalPrimary: (
@@ -33,7 +33,7 @@ export const portalContent = {
     communitySecondary: null,
   },
   eeg: {
-    modality: "EEG", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    modality: "eeg", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-eeg",
     portalName: "OpenNeuro EEG",
     portalPrimary: (
@@ -55,7 +55,7 @@ export const portalContent = {
     communitySecondary: null,
   },
   ieeg: {
-    modality: "iEEG", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    modality: "ieeg", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-ieeg",
     portalName: "OpenNeuro iEEG",
     portalPrimary: (
@@ -77,7 +77,7 @@ export const portalContent = {
     communitySecondary: null,
   },
   meg: {
-    modality: "MEG", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    modality: "meg", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-meg",
     portalName: "OpenNeuro MEG",
     portalPrimary: (
@@ -99,7 +99,7 @@ export const portalContent = {
     communitySecondary: null,
   },
   pet: {
-    modality: "PET", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    modality: "pet", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-pet",
     portalName: "OpenNeuro PET",
     portalPrimary: (
@@ -125,7 +125,7 @@ export const portalContent = {
     communitySecondary: null,
   },
   nirs: {
-    modality: "NIRS", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
+    modality: "nirs", // corresponds to values in `modality_available` in (packages/openneuro-app/src/scripts/refactor_2021/search/initial-search-params.tsx)
     className: "search-page-nirs",
     portalName: "OpenNeuro NIRS",
     portalPrimary: (

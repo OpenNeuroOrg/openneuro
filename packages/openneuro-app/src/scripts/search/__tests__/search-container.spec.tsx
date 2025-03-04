@@ -4,10 +4,10 @@ import { setDefaultSearch } from "../search-container"
 describe("SearchContainer component", () => {
   describe("setDefaultSearch", () => {
     it("updates default state when a modality is provided differing from the default", () => {
-      const context = { modality_selected: "MRI" }
+      const context = { modality_selected: "mri" }
       const setContext = vi.fn()
       setDefaultSearch(
-        "MRI",
+        "mri",
         "",
         false,
         context,
@@ -16,7 +16,7 @@ describe("SearchContainer component", () => {
       )
       expect(setContext).not.toHaveBeenCalled()
       setDefaultSearch(
-        "PET",
+        "pet",
         "",
         false,
         context,
@@ -27,14 +27,14 @@ describe("SearchContainer component", () => {
     })
     it('sets datasetType_select to my datasets with "mydatasets" parameter', () => {
       let context = {
-        modality_selected: "MRI",
+        modality_selected: "mri",
         datasetType_selected: "All Public",
       }
       const setContext = vi.fn().mockImplementation((arg) => {
         context = arg(context)
       })
       setDefaultSearch(
-        "MRI",
+        "mri",
         "",
         false,
         context,
@@ -45,14 +45,14 @@ describe("SearchContainer component", () => {
     })
     it('sets datasetType_select to my datasets with "bookmarks" parameter', () => {
       let context = {
-        modality_selected: "PET",
+        modality_selected: "pet",
         datasetType_selected: "All Public",
       }
       const setContext = vi.fn().mockImplementation((arg) => {
         context = arg(context)
       })
       setDefaultSearch(
-        "MRI",
+        "pet",
         "",
         false,
         context,
