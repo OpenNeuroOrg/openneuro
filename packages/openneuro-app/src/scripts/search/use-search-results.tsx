@@ -172,27 +172,27 @@ export const useSearchResults = () => {
   if (modality_selected) {
     const secondaryModalities = {
       Diffusion: {
-        secondary: "MRI_Diffusion",
+        secondary: "mri_diffusion",
         primary: "mri",
       },
       Structural: {
-        secondary: "MRI_Structural",
+        secondary: "mri_structural",
         primary: "mri",
       },
       Functional: {
-        secondary: "MRI_Functional",
+        secondary: "mri_functional",
         primary: "mri",
       },
       Perfusion: {
-        secondary: "MRI_Perfusion",
+        secondary: "mri_perfusion",
         primary: "mri",
       },
       Static: {
-        secondary: "PET_Static",
+        secondary: "pet_static",
         primary: "pet",
       },
       Dynamic: {
-        secondary: "PET_Dynamic",
+        secondary: "pet_dynamic",
         primary: "pet",
       },
     }
