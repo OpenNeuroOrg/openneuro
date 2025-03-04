@@ -1,15 +1,48 @@
 @import '../scss/variables';
 
+.user-menu-wrap{
+  display: flex;
+  align-items: center;
+  .notifications-link a{
+    display: block;
+    color: #fff;
+    font-size: 20px;
+    margin-right: 15px;
+    padding: 5px 8px;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: $border-radius-default;
+    transition: background-color .2s;
+    position: relative;
+    &:hover{
+      background-color: rgba(255,255,255,.5);
+    }
+    .count{
+      position: absolute;
+      background-color: red;
+      font-size: 12px;
+      border-radius: 50%;
+      padding: 2px 3px;
+      width: 19px;
+      height: 18px;
+      top: -5px;
+      right: -5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+}
 .user-menu-dropdown {
   position: relative;
   .menu {
-    box-shadow: 0px 0px 5px -4px black;
     background-color: #fff;
     border-radius: $border-radius-default;
     width: 100%;
     min-width: 250px;
-    right: 0px;
-    top: 60px;
+    right: -10px;
+    top: 50px;
+    box-shadow: 1px 2px 11px -5px rgba(0, 0, 0, .5)
   }
 
   .user-menu-dropdown-list {
@@ -60,11 +93,6 @@
 }
 
 .header-account-btn {
-  display: flex;
-  align-items: center;
-  background: #eee;
-  border-radius: $border-radius-default;
-
   button.on-no-background.icon-text {
     color: $on-dark-aqua;
     margin: 5px 20px 0;
@@ -72,12 +100,25 @@
   }
 }
 .header-account-btn .toggle {
-  color: #204e5a;
-  font-weight: bold;
-  font-size: 14px;
-  padding: 20px 24px;
-  @media (max-width: 800px) {
-    padding: 10px;
+  .user-menu-label{
+    color: #204e5a;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 11px 10px;
+    display: flex;
+    align-items: center;
+    background: #eee;
+    border-radius: $border-radius-default;
+    @media (max-width: 800px) {
+      padding: 10px;
+    }
+  
+    &.avatar{
+      background-color: transparent;
+      border-radius: 50%;
+      padding: 0;
+      max-width: 40px;
+    }
   }
 }
 @media (max-width: 800px) {

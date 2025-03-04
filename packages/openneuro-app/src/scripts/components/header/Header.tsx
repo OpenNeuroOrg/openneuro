@@ -39,7 +39,7 @@ export const Header = ({
   renderUploader,
 }: HeaderProps) => {
   const [isOpen, setOpen] = React.useState(false)
-
+  console.log(profile)
   return (
     <>
       <header>
@@ -120,7 +120,7 @@ export const Header = ({
                     navbar
                     onClick={toggleLoginModal}
                     label="Sign in"
-                    size="large"
+                    size="small"
                   />
                 </>
               )}
