@@ -19,7 +19,12 @@ export async function summary(dataset): Promise<Partial<SummaryDocument>> {
   if (datasetSummary) {
     return {
       ...datasetSummary,
-      primaryModality: datasetSummary?.modalities[0],
+      // Lowercase all modality fields
+      modalities: datasetSummary?.modalities?.map((str) => str.toLowerCase()),
+      secondaryModalities: datasetSummary?.secondaryModalities?.map(
+        (str) => str.toLowerCase(),
+      ),
+      primaryModality: datasetSummary?.modalities[0]?.toLowerCase(),
     }
   } else {
     return null
