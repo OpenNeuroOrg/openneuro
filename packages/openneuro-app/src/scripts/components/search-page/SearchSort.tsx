@@ -1,5 +1,6 @@
 import React from "react"
-import { Dropdown } from "../dropdown/Dropdown"
+import { Dropdown } from "@openneuro/components/dropdown"
+import "./search-sort.scss"
 
 export interface SearchSortProps {
   items: {

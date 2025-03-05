@@ -1,6 +1,7 @@
 import React from "react"
 import { ModalityHeader } from "./ModalityHeader"
 import { CommunityHeader } from "./CommunityHeader"
+import "./search-page.scss"
 
 export interface PortalContent {
   className?: string
