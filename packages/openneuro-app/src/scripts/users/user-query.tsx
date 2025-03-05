@@ -61,10 +61,14 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />
   }
   // is admin or profile matches id from the user data being returned
+  const isUser = (data.user.id === profile?.sub) ||
+      (data.user.orcid === profile.orcid)
+    ? true
+    : false
   const hasEdit = isAdminUser || (data.user.id === profile?.sub) ||
       (data.user.orcid === profile.orcid)
     ? true
     : false
   // Render user data with UserRoutes
-  return <UserRoutes user={data.user} hasEdit={hasEdit} />
+  return <UserRoutes user={data.user} hasEdit={hasEdit} isUser={isUser} />
 }
