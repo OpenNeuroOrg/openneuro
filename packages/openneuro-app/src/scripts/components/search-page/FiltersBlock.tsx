@@ -1,8 +1,9 @@
 import React from "react"
-import { Button } from "../button/Button"
+import { Button } from "@openneuro/components/button"
 import { FilterListItem } from "./FilterListItem"
 import { TermListItem } from "./TermListItem"
-import type { FacetSelectValueType } from "../facets/FacetSelect"
+import type { FacetSelectValueType } from "@openneuro/components/facets/FacetSelect"
+import "./filters-block.scss"
 
 export interface FiltersBlockProps {
   keywords: string[]
