@@ -25,6 +25,7 @@ import BadAnnexObject from "../models/badAnnexObject"
 import { datasetsConnection } from "./pagination"
 import { getDatasetWorker } from "../libs/datalad-service"
 import notifications from "../libs/notifications"
+import { createEvent, updateEvent } from "../libs/events"
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: "admin" })
@@ -42,12 +43,18 @@ export const giveUploaderPermission = (datasetId, userId) => {
  * @returns {Promise} Resolves to {id: accessionNumber} for the new dataset
  */
 export const createDataset = async (
-  uploader,
+  uploader: string,
   userInfo,
   { affirmedDefaced, affirmedConsent },
 ) => {
   // Obtain an accession number
   const datasetId = await getAccessionNumber()
+  // Generate the created event
+  const event = await createEvent(
+    datasetId,
+    uploader,
+    { type: "created" },
+  )
   try {
     const ds = new Dataset({ id: datasetId, uploader })
     await request
@@ -59,6 +66,8 @@ export const createDataset = async (
     const md = new Metadata({ datasetId, affirmedDefaced, affirmedConsent })
     await md.save()
     await giveUploaderPermission(datasetId, uploader)
+    // Creation is complete here, mark successful
+    await updateEvent(event)
     await subscriptions.subscribe(datasetId, uploader)
     await notifications.snapshotReminder(datasetId)
     return ds
