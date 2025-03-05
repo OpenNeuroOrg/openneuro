@@ -40,7 +40,7 @@ export function Attribution(): React.ReactElement {
               OpenNeuro
             </Link>
             {", "}
-            <Link to="/search/modality/nirs?query=%7B%22modality_selected%22%3A%22NIRS%22%7D">
+            <Link to="/search/modality/nirs?query=%7B%22modality_selected%22%3A%22nirs%22%7D">
               NIRS Modality Search
             </Link>
           </div>

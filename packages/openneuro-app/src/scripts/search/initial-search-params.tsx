@@ -24,7 +24,7 @@ type ModalityOption = {
 export const modality_available: ModalityOption[] = [
   {
     label: "MRI",
-    value: "MRI",
+    value: "mri",
     portalPath: "/search/modality/mri",
     count: null,
     // children: [
@@ -56,7 +56,7 @@ export const modality_available: ModalityOption[] = [
   },
   {
     label: "PET",
-    value: "PET",
+    value: "pet",
     portalPath: "/search/modality/pet",
     count: null,
     // children: [
@@ -76,25 +76,25 @@ export const modality_available: ModalityOption[] = [
   },
   {
     label: "EEG",
-    value: "EEG",
+    value: "eeg",
     portalPath: "/search/modality/eeg",
     count: null,
   },
   {
     label: "iEEG",
-    value: "iEEG",
+    value: "ieeg",
     portalPath: "/search/modality/ieeg",
     count: null,
   },
   {
     label: "MEG",
-    value: "MEG",
+    value: "meg",
     portalPath: "/search/modality/meg",
     count: null,
   },
   {
     label: "NIRS",
-    value: "NIRS",
+    value: "nirs",
     portalPath: "/search/modality/nirs",
     count: null,
   },

@@ -30,7 +30,7 @@ const ModalitySelect: React.FC<ModalitySelectProps> = ({
     }))
 
     const modality_selected_path = flattenedModalities.find(
-      (modality) => modality.label === modality_selected,
+      (modality) => modality.value === modality_selected,
     )?.portalPath
 
     const currentParams = new URLSearchParams(location.search)

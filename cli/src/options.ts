@@ -8,6 +8,7 @@ import { upload } from "./commands/upload.ts"
 import { download } from "./commands/download.ts"
 import { gitCredential } from "./commands/git-credential.ts"
 import { specialRemote } from "./commands/special-remote.ts"
+import { createDatasetCommand } from "./commands/create-dataset.ts"
 
 export type OpenNeuroOptions = {
   datasetPath: string
@@ -33,6 +34,7 @@ const openneuroCommand = new Command()
   .command("upload", upload)
   .command("git-credential", gitCredential)
   .command("special-remote", specialRemote)
+  .command("create", createDatasetCommand)
 
 /**
  * Parse command line options and return a OpenNeuroOptions config

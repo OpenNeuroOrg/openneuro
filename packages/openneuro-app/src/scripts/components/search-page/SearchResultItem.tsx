@@ -4,10 +4,12 @@ import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 
-import { Tooltip } from "../tooltip/Tooltip"
-import { Icon } from "../icon/Icon"
+import { Tooltip } from "@openneuro/components/tooltip"
+import { Icon } from "@openneuro/components/icon"
 
-import activityPulseIcon from "../assets/activity-icon.png"
+import "./search-result.scss"
+import activityPulseIcon from "../../../assets/activity-icon.png"
+import { ModalityLabel } from "../../components/formatting/modality-label"
 
 /**
  * Return an equivalent to moment(date).format('L') without moment
@@ -314,7 +316,7 @@ export const SearchResultItem = ({
     )
   } else {
     // Test if there's any schema validator errors
-    invalid = node.latestSnapshot.validation.errors > 0
+    invalid = node.latestSnapshot.validation?.errors > 0
   }
   const shared = !node.public && node.uploader.id !== profile.sub
 
@@ -346,7 +348,9 @@ export const SearchResultItem = ({
       <div className="modality-list">
         {_list(
           <>{summary?.modalities.length === 1 ? "Modality" : "Modalities"}</>,
-          summary?.modalities,
+          summary?.modalities.map((modality) => (
+            <ModalityLabel key={modality} modality={modality} />
+          )),
         )}
       </div>
     )

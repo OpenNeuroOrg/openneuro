@@ -172,28 +172,28 @@ export const useSearchResults = () => {
   if (modality_selected) {
     const secondaryModalities = {
       Diffusion: {
-        secondary: "MRI_Diffusion",
-        primary: "MRI",
+        secondary: "mri_diffusion",
+        primary: "mri",
       },
       Structural: {
-        secondary: "MRI_Structural",
-        primary: "MRI",
+        secondary: "mri_structural",
+        primary: "mri",
       },
       Functional: {
-        secondary: "MRI_Functional",
-        primary: "MRI",
+        secondary: "mri_functional",
+        primary: "mri",
       },
       Perfusion: {
-        secondary: "MRI_Perfusion",
-        primary: "MRI",
+        secondary: "mri_perfusion",
+        primary: "mri",
       },
       Static: {
-        secondary: "PET_Static",
-        primary: "PET",
+        secondary: "pet_static",
+        primary: "pet",
       },
       Dynamic: {
-        secondary: "PET_Dynamic",
-        primary: "PET",
+        secondary: "pet_dynamic",
+        primary: "pet",
       },
     }
     if (Object.keys(secondaryModalities).includes(modality_selected)) {
@@ -333,7 +333,7 @@ export const useSearchResults = () => {
       matchQuery("metadata.studyDomain", joinWithOR(studyDomains)),
     )
   }
-  if (modality_selected === "PET" || modality_selected === null) {
+  if (modality_selected === "pet" || modality_selected === null) {
     if (bodyParts.length) {
       boolQuery.addClause(
         "must",

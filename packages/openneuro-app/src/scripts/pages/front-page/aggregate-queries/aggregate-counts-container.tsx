@@ -29,13 +29,16 @@ const AggregateCountsContainer: React.FC<AggregateCountsContainerProps> = ({
   else {
     return (
       <>
-        <AggregateCount
-          type="participants"
-          count={participantData.participantCount}
-        />
+        {participantData.participantCount > 0 && (
+          <AggregateCount
+            type="participants"
+            count={participantData.participantCount}
+          />
+        )}
         <AggregateCount
           type="publicDataset"
-          count={publicDatasetsData.datasets?.pageInfo?.count || 0}
+          count={publicDatasetsData.datasets?.pageInfo?.count ||
+            publicDatasetsData.advancedSearch?.pageInfo.count || 0}
         />
       </>
     )
