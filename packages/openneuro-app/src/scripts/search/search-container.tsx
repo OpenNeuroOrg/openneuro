@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import { SearchPage } from "../components/search-page/SearchPage"
@@ -142,13 +142,14 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   ])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
-  const loadMore = loading ? () => {} : () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const loadMore = () => {
+    setIsLoading(true)
     fetchMore({
       variables: {
-        // ...variables,
         cursor: data?.datasets?.pageInfo.endCursor,
       },
-    })
+    }).finally(() => setIsLoading(false))
   }
   let numTotalResults = 0
   let resultsList = []
@@ -226,7 +227,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           </>
         )}
         renderLoading={() =>
-          loading
+          (loading || isLoading) // Show loading spinner based on the custom isLoading state
             ? (
               <div className="search-loading">
                 <Loading />
