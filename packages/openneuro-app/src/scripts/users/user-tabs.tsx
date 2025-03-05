@@ -57,7 +57,7 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
             className={({ isActive }) => (isActive ? styles.active : "")}
             onClick={handleClick}
           >
-            User Notifications
+            Notifications
           </NavLink>
         </li>
         <li>
