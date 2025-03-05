@@ -1,7 +1,10 @@
 import mongoose from "mongoose"
 import { MongoMemoryServer } from "mongodb-memory-server"
-import DatasetEvent, { DatasetEventTypes } from "../datasetEvents"
-import { createEvent } from "../../libs/events"
+import DatasetEvent, {
+  DatasetEventDocument,
+  DatasetEventType,
+} from "../datasetEvents"
+import { OpenNeuroUserId } from "../../types/user"
 
 describe("DatasetEvent Model", () => {
   let mongoServer: MongoMemoryServer
@@ -21,124 +24,85 @@ describe("DatasetEvent Model", () => {
     await DatasetEvent.deleteMany({})
   })
 
-  it("should create a new dataset event", async () => {
-    const datasetId = "ds000001"
-    const type: DatasetEventTypes = "created"
-    const user = "user123"
-    const description = "Dataset created"
-    const note = "Initial creation"
+  it("should create a new DatasetEvent", async () => {
+    const eventData: Partial<DatasetEventDocument> = {
+      datasetId: "ds000001",
+      timestamp: new Date(),
+      user: "user123" as OpenNeuroUserId,
+      event: {
+        type: "created",
+      },
+      success: true,
+      note: "Dataset created successfully",
+    }
 
-    const event = new DatasetEvent({
-      datasetId,
-      type,
-      user,
-      description,
-      note,
-    })
+    const datasetEvent = new DatasetEvent(eventData)
+    const savedDatasetEvent = await datasetEvent.save()
 
-    const savedEvent = await event.save()
-
-    expect(savedEvent.datasetId).toBe(datasetId)
-    expect(savedEvent.type).toBe(type)
-    expect(savedEvent.user).toBe(user)
-    expect(savedEvent.description).toBe(description)
-    expect(savedEvent.note).toBe(note)
-    expect(savedEvent.timestamp).toBeInstanceOf(Date)
+    expect(savedDatasetEvent._id).toBeDefined()
+    expect(savedDatasetEvent.datasetId).toBe("ds000001")
+    expect(savedDatasetEvent.user).toBe("user123")
+    expect(savedDatasetEvent.event.type).toBe("created")
+    expect(savedDatasetEvent.success).toBe(true)
+    expect(savedDatasetEvent.note).toBe("Dataset created successfully")
+    expect(savedDatasetEvent.timestamp).toBeInstanceOf(Date)
   })
 
-  it("should create a new dataset event using createEvent helper", async () => {
-    const datasetId = "ds000002"
-    const type: DatasetEventTypes = "versioned"
-    const user = "user456"
-    const description = "Dataset versioned"
-    const note = ""
+  it("should create a DatasetEvent with default values", async () => {
+    const eventData: Partial<DatasetEventDocument> = {
+      datasetId: "ds000002",
+      timestamp: new Date(),
+      user: "user456" as OpenNeuroUserId,
+      event: {
+        type: "versioned",
+        version: "1.0.0",
+      },
+    }
 
-    const savedEvent = await createEvent(datasetId, type, user, description)
+    const datasetEvent = new DatasetEvent(eventData)
+    const savedDatasetEvent = await datasetEvent.save()
 
-    expect(savedEvent.datasetId).toBe(datasetId)
-    expect(savedEvent.type).toBe(type)
-    expect(savedEvent.user).toBe(user)
-    expect(savedEvent.description).toBe(description)
-    expect(savedEvent.note).toBe(note)
-    expect(savedEvent.timestamp).toBeInstanceOf(Date)
+    expect(savedDatasetEvent._id).toBeDefined()
+    expect(savedDatasetEvent.success).toBe(false)
+    expect(savedDatasetEvent.note).toBe("")
   })
 
-  it("should have a default empty description if not provided", async () => {
-    const datasetId = "ds000003"
-    const type: DatasetEventTypes = "deleted"
-    const user = "user789"
+  it("should require datasetId, timestamp, user, and event", async () => {
+    const eventData = {}
 
-    const event = new DatasetEvent({
-      datasetId,
-      type,
-      user,
-    })
+    const datasetEvent = new DatasetEvent(eventData)
 
-    const savedEvent = await event.save()
-    expect(savedEvent.description).toBe("")
+    await expect(datasetEvent.save()).rejects.toThrow()
   })
 
-  it("should have a default empty note if not provided", async () => {
-    const datasetId = "ds000004"
-    const type: DatasetEventTypes = "published"
-    const user = "user101112"
-    const description = "Dataset published"
+  it("should handle different event types", async () => {
+    const events: DatasetEventType[] = [
+      { type: "created" },
+      { type: "versioned", version: "1.0.0" },
+      { type: "deleted" },
+      { type: "published", public: true },
+      {
+        type: "permissionChange",
+        target: "user789" as OpenNeuroUserId,
+        level: "admin",
+      },
+      { type: "git", ref: "main", message: "Initial commit" },
+      { type: "upload" },
+      { type: "note", admin: false },
+    ]
 
-    const event = new DatasetEvent({
-      datasetId,
-      type,
-      user,
-      description,
-    })
-
-    const savedEvent = await event.save()
-    expect(savedEvent.note).toBe("")
-  })
-
-  it("should have a default timestamp", async () => {
-    const datasetId = "ds000005"
-    const type: DatasetEventTypes = "permissionChange"
-    const user = "user131415"
-    const description = "Dataset permissions modified"
-
-    const event = new DatasetEvent({
-      datasetId,
-      type,
-      user,
-      description,
-    })
-
-    const savedEvent = await event.save()
-    expect(savedEvent.timestamp).toBeInstanceOf(Date)
-  })
-
-  it("should require datasetId, type, and user", async () => {
-    const event = new DatasetEvent({})
-
-    await expect(event.save()).rejects.toThrow()
-
-    const eventNoType = new DatasetEvent({ datasetId: "test", user: "test" })
-    await expect(eventNoType.save()).rejects.toThrow()
-
-    const eventNoUser = new DatasetEvent({ datasetId: "test", type: "created" })
-    await expect(eventNoUser.save()).rejects.toThrow()
-
-    const eventNoDatasetId = new DatasetEvent({ type: "created", user: "test" })
-    await expect(eventNoDatasetId.save()).rejects.toThrow()
-  })
-
-  it("should only accept valid types", async () => {
-    const datasetId = "ds000006"
-    const user = "user161718"
-    const description = "Invalid event type"
-
-    const eventInvalidType = new DatasetEvent({
-      datasetId,
-      type: "invalidType",
-      user,
-      description,
-    })
-
-    await expect(eventInvalidType.save()).rejects.toThrow()
+    for (const event of events) {
+      const eventData: Partial<DatasetEventDocument> = {
+        datasetId: "ds000003",
+        timestamp: new Date(),
+        user: "user101" as OpenNeuroUserId,
+        event: event,
+        success: true,
+        note: "Testing different event types",
+      }
+      const datasetEvent = new DatasetEvent(eventData)
+      const savedDatasetEvent = await datasetEvent.save()
+      expect(savedDatasetEvent.event.type).toBe(event.type)
+    }
   })
 })

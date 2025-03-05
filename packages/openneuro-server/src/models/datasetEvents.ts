@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import type { Document } from "mongoose"
+import type { OpenNeuroUserId } from "../types/user"
 const { Schema, model } = mongoose
 
 const datasetEventTypes = [
@@ -11,7 +12,7 @@ const datasetEventTypes = [
   "git",
   "upload",
   "note",
-]
+] as const
 
 /**
  * Various events that occur affecting one dataset
@@ -25,7 +26,66 @@ const datasetEventTypes = [
  * upload - A non-git upload occurred (typically one file changed)
  * note - A note unrelated to another event
  */
-export type DatasetEventTypes = typeof datasetEventTypes[number]
+export type DatasetEventName = typeof datasetEventTypes[number]
+
+export type DatasetEventCommon = {
+  type: DatasetEventName
+}
+
+export type DatasetEventCreated = DatasetEventCommon & {
+  type: "created"
+}
+
+export type DatasetEventVersioned = DatasetEventCommon & {
+  type: "versioned"
+  version: string
+}
+
+export type DatasetEventDeleted = DatasetEventCommon & {
+  type: "deleted"
+}
+
+export type DatasetEventPublished = DatasetEventCommon & {
+  type: "published"
+  // True if made public, false if made private
+  public: boolean
+}
+
+export type DatasetEventPermissionChange = DatasetEventCommon & {
+  type: "permissionChange"
+  // User with the permission being changed
+  target: OpenNeuroUserId
+  level: string
+}
+
+export type DatasetEventGit = DatasetEventCommon & {
+  type: "git"
+  ref: string
+  message: string
+}
+
+export type DatasetEventUpload = DatasetEventCommon & {
+  type: "upload"
+}
+
+export type DatasetEventNote = DatasetEventCommon & {
+  type: "note"
+  // Is this note visible only to site admins?
+  admin: boolean
+}
+
+/**
+ * Description of a dataset event
+ */
+export type DatasetEventType =
+  | DatasetEventCreated
+  | DatasetEventVersioned
+  | DatasetEventDeleted
+  | DatasetEventPublished
+  | DatasetEventPermissionChange
+  | DatasetEventGit
+  | DatasetEventUpload
+  | DatasetEventNote
 
 /**
  * Dataset events log changes to a dataset
@@ -35,12 +95,12 @@ export interface DatasetEventDocument extends Document {
   datasetId: string
   // Timestamp of the event
   timestamp: Date
-  // Event types
-  type: DatasetEventTypes
   // User that triggered the event
   user: string
   // A description of the event, optional but recommended to provide context
-  description: string
+  event: DatasetEventType
+  // Did the action logged succeed?
+  success: boolean
   // Admin notes
   note: string
 }
@@ -48,9 +108,12 @@ export interface DatasetEventDocument extends Document {
 const datasetEventSchema = new Schema<DatasetEventDocument>({
   datasetId: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
-  type: { type: String, required: true, enum: datasetEventTypes },
   user: { type: String, required: true },
-  description: { type: String, default: "" },
+  event: {
+    type: Object,
+    required: true,
+  },
+  success: { type: Boolean, default: false },
   note: { type: String, default: "" },
 })
 

@@ -1,5 +1,6 @@
-import DatasetEvent from "../models/datasetEvents"
-import { DatasetEventTypes } from "../models/datasetEvents"
+import { updateChanges } from "../datalad/changelog"
+import DatasetEvent, { DatasetEventDocument } from "../models/datasetEvents"
+import { DatasetEventType } from "../models/datasetEvents"
 import * as Sentry from "@sentry/node"
 
 /**
@@ -7,31 +8,42 @@ import * as Sentry from "@sentry/node"
  */
 export async function createEvent(
   datasetId: string,
-  type: DatasetEventTypes,
   user: string,
-  description: string,
+  event: DatasetEventType,
   note: string = "",
-) {
+): Promise<DatasetEventDocument> {
   // Save a Sentry breadcrumb to help debug complex server events
   const breadcrumb: Sentry.Breadcrumb = {
     category: "dataset-event",
-    message: `${type} event for dataset ${datasetId}`,
+    message: `${event.type} event created for dataset ${datasetId}`,
     level: "info",
     data: {
       datasetId,
-      type,
       user,
-      description,
+      event,
       note,
     },
   }
   Sentry.addBreadcrumb(breadcrumb)
-  const event = new DatasetEvent({
+  const created = new DatasetEvent({
     datasetId,
-    type,
     user,
-    description,
+    event,
     note,
+    // Initially create the event as failed - update to success on successful state
+    success: false,
   })
-  return event.save()
+  await created.save()
+  return created
+}
+
+/**
+ * Call when event is finished to mark complete or add failure info
+ */
+export async function updateEvent(
+  event: DatasetEventDocument,
+  success: boolean = true,
+) {
+  event.success = success
+  await event.save()
 }
