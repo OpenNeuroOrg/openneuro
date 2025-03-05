@@ -14,13 +14,17 @@ import {
 
 import type { UserRoutesProps } from "../types/user-types"
 
-export const UserRoutes: React.FC<UserRoutesProps> = ({ user, hasEdit }) => {
+export const UserRoutes: React.FC<UserRoutesProps> = (
+  { user, hasEdit, isUser },
+) => {
   return (
     <Routes>
       <Route path="/*" element={<FourOFourPage />} />
       <Route
         path="*"
-        element={<UserAccountContainer user={user} hasEdit={hasEdit} />}
+        element={
+          <UserAccountContainer user={user} hasEdit={hasEdit} isUser={isUser} />
+        }
       >
         <Route
           path=""
