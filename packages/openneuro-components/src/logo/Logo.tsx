@@ -13,7 +13,7 @@ export interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({
   dark = true,
-  width = "300px",
+  width = "225px",
   horizontal = true,
   ...props
 }) => {
