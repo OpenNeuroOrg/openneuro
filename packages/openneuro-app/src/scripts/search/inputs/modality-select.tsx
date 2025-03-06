@@ -37,7 +37,7 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
       }),
     )
     const modality_selected_path = flattenedModalities.find((modality) => {
-      return modality.label === modality_selected
+      return modality.value === modality_selected
     })?.portalPath
     navigate(modality_selected_path)
   }

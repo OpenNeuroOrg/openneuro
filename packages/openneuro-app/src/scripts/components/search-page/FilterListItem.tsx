@@ -1,4 +1,5 @@
 import React from "react"
+import { ModalityLabel } from "../formatting/modality-label"
 
 type TextList = string[]
 type Text = string
@@ -37,14 +38,19 @@ export const FilterListItem = ({
   ) {
     return null
   } else {
+    let value: string | TextList | OptionObject | NumberCouple | JSX.Element =
+      item.value
+    if (type === "Modality" && typeof item.value === "string") {
+      value = <ModalityLabel modality={item.value} />
+    } else if (type === "Age" || type === "Participants") {
+      value = rangeDisplay(item.value)
+    }
     return (
       <>
         <li className={type}>
           <strong>{type}:</strong>
           <span>
-            {type === "Age" || type === "Participants"
-              ? rangeDisplay(item.value)
-              : item.value}
+            {value}
             <span onClick={() => removeFilterItem(item.param, item.value)}>
               &times;
             </span>

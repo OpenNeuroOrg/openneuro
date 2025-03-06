@@ -1,17 +1,15 @@
 import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation } from "react-router-dom"
-import {
-  SearchPage,
-  SearchResultsList,
-} from "@openneuro/components/search-page"
+import { SearchPage } from "../components/search-page/SearchPage"
+import { SearchResultsList } from "../components/search-page/SearchResultsList"
+import { NeurobagelSearch } from "../components/search-page/NeurobagelSearch"
 import {
   getUnexpiredProfile,
   hasEditPermissions,
 } from "../authentication/profile"
 import { Button } from "@openneuro/components/button"
 import { Loading } from "@openneuro/components/loading"
-import { NeurobagelSearch } from "@openneuro/components/search-page"
 import {
   AgeRangeInput,
   AllDatasetsToggle,
@@ -81,13 +79,13 @@ export const setDefaultSearch = (
   }
 
   const modalitiesWithSecondaries = {
-    MRI: ["MRI", "Diffusion", "Structural", "Functional", "ASL Perfusion"],
-    PET: ["PET", "Static", "Dynamic"],
-    EEG: ["EEG"],
-    iEEG: ["iEEG"],
-    MEG: ["MEG"],
-    NIRS: ["NIRS"],
-    NIH: ["NIH"],
+    mri: ["mri", "Diffusion", "Structural", "Functional", "ASL Perfusion"],
+    pet: ["pet", "Static", "Dynamic"],
+    eeg: ["eeg"],
+    ieeg: ["ieeg"],
+    meg: ["meg"],
+    nirs: ["nirs"],
+    nih: ["nih"],
   }
 
   if (

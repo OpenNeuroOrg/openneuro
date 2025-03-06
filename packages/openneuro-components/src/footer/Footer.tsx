@@ -7,14 +7,16 @@ export interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ version }) => {
+  const versionLink =
+    `https://github.com/OpenNeuroOrg/openneuro/releases/tag/v${version}`
   return (
     <footer className="on-foot">
       <div className="grid grid-between align-center">
         <div className="col col-4  version">
           <span>
             OpenNeuro
-            <a href="https://github.com/OpenNeuroOrg/openneuro/releases/tag/v{version}">
-              v{version}
+            <a href={versionLink}>
+              {" "}v{version}
             </a>
           </span>
         </div>

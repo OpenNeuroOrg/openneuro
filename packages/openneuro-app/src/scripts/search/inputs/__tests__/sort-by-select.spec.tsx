@@ -27,7 +27,7 @@ describe("SortBySelect component", () => {
                 {
                   match: {
                     "latestSnapshot.summary.modalities": {
-                      query: "MRI",
+                      query: "mri",
                     },
                   },
                 },
