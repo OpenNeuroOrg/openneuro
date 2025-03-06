@@ -20,6 +20,8 @@ export interface UserDocument extends Document {
   institution: string
   github: string
   links: string[]
+  avatar: string
+  githubSynced: Date
 }
 
 const userSchema = new Schema({
@@ -30,6 +32,7 @@ const userSchema = new Schema({
   providerId: String, // Login provider unique id
   orcid: String, // ORCID iD regardless of provider id
   refresh: String,
+  avatar: String,
   admin: { type: Boolean, default: false },
   blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
@@ -37,6 +40,7 @@ const userSchema = new Schema({
   location: { type: String, default: "" },
   institution: { type: String, default: "" },
   github: { type: String, default: "" },
+  githubSynced: { type: Date },
   links: { type: [String], default: [] },
 })
 
