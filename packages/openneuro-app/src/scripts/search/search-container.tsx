@@ -142,14 +142,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   ])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
-  const [isLoading, setIsLoading] = useState(false)
   const loadMore = () => {
-    setIsLoading(true)
     fetchMore({
       variables: {
         cursor: data?.datasets?.pageInfo.endCursor,
       },
-    }).finally(() => setIsLoading(false))
+    })
   }
   let numTotalResults = 0
   let resultsList = []
@@ -227,7 +225,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           </>
         )}
         renderLoading={() =>
-          (loading || isLoading) // Show loading spinner based on the custom isLoading state
+          loading
             ? (
               <div className="search-loading">
                 <Loading />
@@ -247,7 +245,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 />
                 {/* TODO: make div below into display component. */}
                 <div className="grid grid-nogutter" style={{ width: "100%" }}>
-                  {resultsList.length == 0 || !hasNextPage
+                  {resultsList.length > 0 || !hasNextPage
                     ? null
                     : (
                       <div className="col col-12 load-more m-t-10">
