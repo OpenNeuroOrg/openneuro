@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import { SearchPage } from "../components/search-page/SearchPage"
