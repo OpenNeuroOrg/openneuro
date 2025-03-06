@@ -1,12 +1,9 @@
 import React, { useContext } from "react"
-import type { FC } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { flattenedModalities } from "../initial-search-params"
-import type { SearchParams } from "../initial-search-params"
 import { FacetSelect } from "@openneuro/components/facets"
 import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
-import initialSearchParams from "../initial-search-params"
 
 interface ModalitySelectProps {
   inHeader?: boolean
@@ -16,8 +13,7 @@ interface ModalitySelectProps {
   dropdown?: boolean
 }
 
-const ModalitySelect: FC<ModalitySelectProps> = ({
-  inHeader = false,
+const ModalitySelect: React.FC<ModalitySelectProps> = ({
   startOpen = true,
   label,
   portalStyles = false,
@@ -25,21 +21,26 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
 }) => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const { modality_available, modality_selected } = searchParams
-  const setModality = (
-    modality_selected: string,
-  ): ReturnType<typeof setSearchParams> => {
-    setSearchParams(
-      (prevState: SearchParams): SearchParams => ({
-        ...(inHeader ? initialSearchParams : prevState),
-        modality_selected,
-      }),
-    )
-    const modality_selected_path = flattenedModalities.find((modality) => {
-      return modality.label === modality_selected
-    })?.portalPath
-    navigate(modality_selected_path)
+  const setModality = (modality_selected: string) => {
+    setSearchParams((prevState) => ({
+      ...prevState,
+      modality_selected,
+    }))
+
+    const modality_selected_path = flattenedModalities.find(
+      (modality) => modality.value === modality_selected,
+    )?.portalPath
+
+    const currentParams = new URLSearchParams(location.search)
+    currentParams.set("modality_selected", modality_selected)
+    const newQueryString = currentParams.toString()
+
+    navigate({
+      pathname: modality_selected_path,
+      search: newQueryString ? `?${newQueryString}` : "",
+    })
   }
 
   return (
@@ -49,9 +50,9 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
           <FacetSelect
             className="modality-facet facet-open"
             label={label}
-            selected={modality_selected}
+            selected={searchParams.modality_selected}
             setSelected={setModality}
-            items={modality_available}
+            items={searchParams.modality_available}
           />
         )
         : (
@@ -63,9 +64,9 @@ const ModalitySelect: FC<ModalitySelectProps> = ({
               dropdown={dropdown}
             >
               <FacetSelect
-                selected={modality_selected}
+                selected={searchParams.modality_selected}
                 setSelected={setModality}
-                items={modality_available}
+                items={searchParams.modality_available}
               />
             </AccordionTab>
           </AccordionWrap>

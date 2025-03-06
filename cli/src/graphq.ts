@@ -3,7 +3,7 @@
  */
 
 import { getConfig } from "./config.ts"
-import { QueryError } from "./error.ts"
+import { QueryError, ResponseError } from "./error.ts"
 
 function request(query: string, variables = {}): Promise<Response> {
   const config = getConfig()
@@ -31,9 +31,12 @@ interface CreateDatasetMutationResponse {
       id: string
     }
   }
-  error?: {
+  errors?: {
     message: string
-  }
+    locations: { line: number; column: number }[]
+    path: string[]
+    extensions: unknown
+  }[]
 }
 
 /**
@@ -51,8 +54,8 @@ export async function createDataset(
     affirmedConsent,
   })
   const body: CreateDatasetMutationResponse = await res.json()
-  if (body.error) {
-    throw new QueryError(JSON.stringify(body.error))
+  if (body.errors) {
+    throw new ResponseError(JSON.stringify(body.errors))
   }
   if (body.data) {
     return body?.data?.createDataset?.id

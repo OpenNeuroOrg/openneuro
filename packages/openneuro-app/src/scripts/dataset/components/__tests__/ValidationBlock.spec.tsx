@@ -44,4 +44,14 @@ describe("ValidationBlock component", () => {
     render(<ValidationBlock datasetId="ds000031" />)
     expect(screen.getByText("Validation Pending")).toBeInTheDocument()
   })
+  it("renders validation if `validation` is present but errors and warnings are zero", () => {
+    render(
+      <ValidationBlock
+        datasetId="ds000031"
+        validation={{ errors: 0, warnings: 0, issues: [], codeMessages: [] }}
+      />,
+    )
+    expect(screen.getByText("Valid")).toBeInTheDocument()
+    expect(screen.queryByText("Validation Pending")).not.toBeInTheDocument()
+  })
 })
