@@ -1,7 +1,12 @@
 import React, { useContext } from "react"
 import * as Sentry from "@sentry/react"
 import type { FC } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import {
+  useMatch,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom"
 import {
   getSelectParams,
   removeFilterItem,
@@ -25,34 +30,85 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
   const selectedParams = getSelectParams(searchParams)
 
-  const noFilters = !useCheckIfParamsAreSelected(["modality_selected"])
+  const noFilters = !useCheckIfParamsAreSelected([
+    "modality_selected",
+    "brain_initiative",
+  ])
 
   const navigate = useNavigate()
   const { path } = useParams()
   const globalSearchPath = "/search"
 
+  const isModalityPath = useMatch("/search/modality/*")
+
+  const [searchParamsObj, setSearchParamsObj] = useSearchParams()
+
   const removeFilter =
     (isModality?: boolean) => (param: string, value: FilterValue): void => {
       if (isModality && param === "modality_selected") {
         removeFilterItem(setSearchParams)(param, value)
-        const queryParams = new URLSearchParams(location.search)
-        const query = queryParams.get("query")
+
+        // Remove the modality_selected filter directly
+        searchParamsObj.delete("modality_selected")
+
+        // Modify `query` if we need to remove the filter from it
+        const query = searchParamsObj.get("query")
         if (query) {
           try {
-            navigate(`${globalSearchPath}?${queryParams.toString()}`, {
-              replace: true,
-            })
+            const queryObj = JSON.parse(query)
+            delete queryObj["modality_selected"]
+            searchParamsObj.set("query", JSON.stringify(queryObj))
           } catch (error) {
             Sentry.captureException(error)
+            // fallback
+            searchParamsObj.delete("query")
           }
         }
+
+        try {
+          setSearchParamsObj(searchParamsObj)
+          navigate(`${globalSearchPath}?${searchParamsObj.toString()}`, {
+            replace: true,
+          })
+        } catch (error) {
+          Sentry.captureException(error)
+        }
+      } else if (!isModalityPath && param === "brain_initiative") {
+        removeFilterItem(setSearchParams)(param, value)
+
+        // Remove the brain_initiative filter directly
+        searchParamsObj.delete("brain_initiative")
+
+        // Modify `query` if we need to remove the filter from it
+        const query = searchParamsObj.get("query")
+        if (query) {
+          try {
+            const queryObj = JSON.parse(query)
+            delete queryObj["brain_initiative"]
+            searchParamsObj.set("query", JSON.stringify(queryObj))
+          } catch (error) {
+            Sentry.captureException(error)
+            // fallback
+            searchParamsObj.delete("query")
+          }
+        }
+
+        try {
+          setSearchParamsObj(searchParamsObj)
+          navigate(`${globalSearchPath}?${searchParamsObj.toString()}`, {
+            replace: true,
+          })
+        } catch (error) {
+          Sentry.captureException(error)
+        }
       } else {
+        // For other filters, just remove them normally
         removeFilterItem(setSearchParams)(param, value)
       }
     }
 
   const removeAllFilters = (): void => {
-    // reset params to default values
+    // Reset params to default values, preserving other query params
     setSearchParams((prevState) => ({
       ...prevState,
       ...getSelectParams(initialSearchParams),
@@ -68,6 +124,7 @@ const FiltersBlockContainer: FC<FiltersBlockContainerProps> = ({
       numTotalResults={numTotalResults}
       {...selectedParams}
       loading={loading}
+      brain_initiative={searchParams.brain_initiative}
     />
   )
 }
