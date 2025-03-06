@@ -136,20 +136,23 @@ export const undoDeprecateSnapshot = async (
 }
 
 export const participantCount = (obj, { modality }) => {
+  const cacheKey = modality === "NIH" ? "NIH" : modality || "all"
   const cache = new CacheItem(
     redis,
     CacheType.participantCount,
-    [modality || "all"],
-    3600,
+    [cacheKey],
+    3600, // Cache for 1 hour
   )
+
   return cache.get(async () => {
     const queryHasSubjects = {
-      "summary.subjects": {
-        $exists: true,
-      },
+      "summary.subjects": { $exists: true },
     }
-    const matchQuery = modality
-      ? {
+
+    let matchQuery: Record<string, any> = queryHasSubjects
+
+    if (modality && modality !== "NIH") {
+      matchQuery = {
         $and: [
           queryHasSubjects,
           {
@@ -157,7 +160,19 @@ export const participantCount = (obj, { modality }) => {
           },
         ],
       }
-      : queryHasSubjects
+    } else if (modality === "NIH") {
+      // When modality is 'NIH', we don't filter by a specific modality.
+      // Instead, we query for datasets that have any modality within the NIH portal
+      matchQuery = {
+        $and: [
+          queryHasSubjects,
+          {
+            "summary.modalities": { $exists: true },
+          },
+        ],
+      }
+    }
+
     const aggregateResult = await DatasetModel.aggregate([
       {
         $match: {
@@ -198,8 +213,12 @@ export const participantCount = (obj, { modality }) => {
         },
       },
     ]).exec()
-    if (aggregateResult.length) return aggregateResult[0].participantCount
-    else return 0
+
+    if (aggregateResult.length) {
+      return aggregateResult[0].participantCount
+    } else {
+      return 0
+    }
   })
 }
 
