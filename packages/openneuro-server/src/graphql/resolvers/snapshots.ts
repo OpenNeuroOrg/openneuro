@@ -141,7 +141,7 @@ export const participantCount = (obj, { modality }) => {
     redis,
     CacheType.participantCount,
     [cacheKey],
-    3600, // Cache for 1 hour
+    3600,
   )
 
   return cache.get(async () => {
