@@ -188,6 +188,8 @@ export const typeDefs = `
     importRemoteDataset(datasetId: ID!, url: String!): ID
     # Finish and notify import is done, returns true if successful
     finishImportRemoteDataset(id: ID!, success: Boolean!, message: String): Boolean
+    # Create or update an admin note on a dataset
+    saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
   }
 
   # Anonymous dataset reviewer
