@@ -22,6 +22,7 @@ import { onBrainlife } from "./brainlife"
 import { brainInitiative } from "./brainInitiative"
 import { derivatives } from "./derivatives"
 import { promiseTimeout } from "../../utils/promiseTimeout"
+import { datasetEvents } from "./datasetEvents"
 import semver from "semver"
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
@@ -303,6 +304,7 @@ const Dataset = {
   worker,
   reviewers,
   brainInitiative,
+  events: datasetEvents,
 }
 
 export default Dataset
