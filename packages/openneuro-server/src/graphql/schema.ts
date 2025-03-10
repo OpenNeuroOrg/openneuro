@@ -188,6 +188,8 @@ export const typeDefs = `
     importRemoteDataset(datasetId: ID!, url: String!): ID
     # Finish and notify import is done, returns true if successful
     finishImportRemoteDataset(id: ID!, success: Boolean!, message: String): Boolean
+    # Create or update an admin note on a dataset
+    saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
   }
 
   # Anonymous dataset reviewer
@@ -412,6 +414,8 @@ export const typeDefs = `
     reviewers: [DatasetReviewer]
     # Dataset belongs to Brain Initiative
     brainInitiative: Boolean
+    # Log of events associated with this dataset
+    events: [DatasetEvent]
   }
 
   type DatasetDerivatives {
@@ -848,6 +852,32 @@ export const typeDefs = `
     flagged: Boolean
     flagger: User
     createdAt: DateTime
+  }
+
+  type DatasetEventDescription {
+    type: String
+    version: String
+    public: Boolean
+    target: User
+    level: String
+    ref: String
+    message: String
+  }
+
+  # Dataset events
+  type DatasetEvent {
+    # Unique identifier for the event
+    id: ID
+    # Timestamp of the event
+    timestamp: DateTime
+    # User associated with the event
+    user: User
+    # Event description object
+    event: DatasetEvent
+    # True if the event succeeded
+    success: Boolean
+    # Notes associated with the event
+    note: String
   }
 `
 

@@ -1,6 +1,8 @@
 import mongoose from "mongoose"
 import type { Document } from "mongoose"
 import type { OpenNeuroUserId } from "../types/user"
+import { v4 as uuidv4 } from "uuid"
+import { UserDocument } from "./user"
 const { Schema, model } = mongoose
 
 const datasetEventTypes = [
@@ -91,12 +93,16 @@ export type DatasetEventType =
  * Dataset events log changes to a dataset
  */
 export interface DatasetEventDocument extends Document {
+  // Unique id for the event
+  id: string
   // Affected dataset
   datasetId: string
   // Timestamp of the event
   timestamp: Date
+  // User id that triggered the event
+  userId: string
   // User that triggered the event
-  user: string
+  user: UserDocument
   // A description of the event, optional but recommended to provide context
   event: DatasetEventType
   // Did the action logged succeed?
@@ -106,9 +112,10 @@ export interface DatasetEventDocument extends Document {
 }
 
 const datasetEventSchema = new Schema<DatasetEventDocument>({
+  id: { type: String, required: true, default: uuidv4 },
   datasetId: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
-  user: { type: String, required: true },
+  userId: { type: String, required: true },
   event: {
     type: Object,
     required: true,
@@ -117,9 +124,9 @@ const datasetEventSchema = new Schema<DatasetEventDocument>({
   note: { type: String, default: "" },
 })
 
-datasetEventSchema.virtual("eventUser", {
+datasetEventSchema.virtual("user", {
   ref: "User",
-  localField: "user",
+  localField: "userId",
   foreignField: "id",
   justOne: true,
 })

@@ -27,7 +27,7 @@ export async function createEvent(
   Sentry.addBreadcrumb(breadcrumb)
   const created = new DatasetEvent({
     datasetId,
-    user,
+    userId: user,
     event,
     note,
     // Initially create the event as failed - update to success on successful state
