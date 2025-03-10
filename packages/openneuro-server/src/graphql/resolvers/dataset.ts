@@ -120,7 +120,7 @@ export const deleteDataset = async (
   { user, userInfo },
 ) => {
   await checkDatasetWrite(id, user, userInfo)
-  const deleted = await datalad.deleteDataset(id)
+  const deleted = await datalad.deleteDataset(id, userInfo)
   // Remove from the current version of the Elastic index
   try {
     await removeDatasetSearchDocument(id)

@@ -114,11 +114,18 @@ export const getDataset = async (id) => {
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = (id) =>
-  request
-    .del(`${getDatasetWorker(id)}/datasets/${id}`)
-    .then(() => Dataset.deleteOne({ id }).exec())
-    .then(() => true)
+export const deleteDataset = async (datasetId, user) => {
+  const event = await createEvent(
+    datasetId,
+    user.id,
+    { type: "deleted" },
+  )
+  await request
+    .del(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
+  await Dataset.deleteOne({ datasetId }).exec()
+  await updateEvent(event)
+  return true
+}
 
 /**
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses
