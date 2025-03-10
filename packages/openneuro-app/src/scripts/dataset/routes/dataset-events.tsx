@@ -35,7 +35,6 @@ const dummyEvents = [
 ]
 
 export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
-  // States for the events, the new event form, and the visibility of the form
   const [events, setEvents] = useState(
     dummyEvents.filter((event) => event.datasetId === datasetId),
   )
@@ -44,17 +43,14 @@ export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
     note: "",
     success: true,
   })
-  const [showForm, setShowForm] = useState(false) // State to control form visibility
+  const [showForm, setShowForm] = useState(false)
 
-  // Filter events by datasetId
   const filteredEvents = events.filter((event) => event.datasetId === datasetId)
 
-  // Handle the addition of a new event
   const handleAddEvent = () => {
     if (newEvent.event && newEvent.note) {
-      // Create a new event (in a real-world case, this would be an API call or GraphQL mutation)
       const newEventObj = {
-        id: String(events.length + 1), // Simple ID generation
+        id: String(events.length + 1),
         datasetId,
         user: "user999", // Dummy user for now
         event: newEvent.event,
@@ -79,7 +75,6 @@ export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
     }
   }
 
-  // Toggle the visibility of the form
   const toggleForm = () => {
     setShowForm((prevState) => !prevState)
   }
