@@ -1,76 +1,82 @@
 import React, { useState } from "react"
+import { gql, useMutation, useQuery } from "@apollo/client"
 import styles from "./scss/dataset-events.module.scss"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
+import { getUnexpiredProfile } from "../../../scripts/authentication/profile"
+import { useCookies } from "react-cookie"
 
-// Dummy data for dataset events
-const dummyEvents = [
-  {
-    id: "1",
-    datasetId: "ds001",
-    user: "user123",
-    event: "Dataset Created",
-    note: "Initial dataset creation",
-    success: true,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    datasetId: "ds001",
-    user: "user456",
-    event: "Dataset Updated",
-    note: "Updated metadata",
-    success: false,
-    createdAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-  },
-  {
-    id: "3",
-    datasetId: "ds001",
-    user: "user789",
-    event: "Snapshot Created",
-    note:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    success: true,
-    createdAt: new Date(Date.now() - 7200000).toISOString(), // 2 hours ago
-  },
-]
+// Query to fetch events for the given dataset
+const GET_DATASET_EVENTS = gql`
+  query GetDatasetEvents($datasetId: ID!) {
+    dataset(id: $datasetId) {
+      events {
+        id
+        note
+        success
+        timestamp
+        user {
+          email
+        }
+      }
+    }
+  }
+`
+
+const SAVE_ADMIN_NOTE_MUTATION = gql`
+  mutation SaveAdminNote($datasetId: ID!, $note: String!) {
+    saveAdminNote(datasetId: $datasetId, note: $note) {
+      id
+      note
+      success
+      timestamp
+      user
+    }
+  }
+`
 
 export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
-  const [events, setEvents] = useState(
-    dummyEvents.filter((event) => event.datasetId === datasetId),
-  )
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+
+  const { data, loading, error } = useQuery(GET_DATASET_EVENTS, {
+    variables: { datasetId },
+  })
   const [newEvent, setNewEvent] = useState({
-    event: "",
     note: "",
-    success: true,
   })
   const [showForm, setShowForm] = useState(false)
 
-  const filteredEvents = events.filter((event) => event.datasetId === datasetId)
+  const [saveAdminNote] = useMutation(SAVE_ADMIN_NOTE_MUTATION, {
+    onCompleted: (data) => {
+      toast.success(<ToastContent title="Admin note added successfully" />)
+      setNewEvent({ note: "" })
+      setShowForm(false)
+    },
+    onError: (error) => {
+      toast.error(
+        <ToastContent
+          title="Failed to add admin note"
+          body="An error occurred while saving the admin note"
+        />,
+      )
+    },
+  })
 
   const handleAddEvent = () => {
-    if (newEvent.event && newEvent.note) {
-      const newEventObj = {
-        id: String(events.length + 1),
-        datasetId,
-        user: "user999", // Dummy user for now
-        event: newEvent.event,
-        note: newEvent.note,
-        success: newEvent.success,
-        createdAt: new Date().toISOString(),
-      }
-
-      setEvents([...events, newEventObj])
-
-      setNewEvent({ event: "", note: "", success: true })
-
-      setShowForm(false)
-      toast.success(<ToastContent title="Event creation Success" />)
+    if (newEvent.note) {
+      saveAdminNote({
+        variables: {
+          datasetId,
+          note: newEvent.note,
+          user: profile,
+        },
+      })
     } else {
       toast.error(
         <ToastContent
-          title="Event creation failed"
-          body="Please fill in both the event type and note"
+          title="Failed to add admin note"
+          body="Please fill in the note"
         />,
       )
     }
@@ -80,68 +86,69 @@ export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
     setShowForm((prevState) => !prevState)
   }
 
-  if (filteredEvents.length === 0) {
-    return <p>No events found for this dataset.</p>
-  }
+  if (loading) return <p>Loading events...</p>
+  if (error) return <p>Error fetching events</p>
+
+  const events = data?.dataset?.events || []
 
   return (
     <div className={styles.datasetEvents}>
       <div className={styles.datasetEventHeader}>
         <h4>Dataset Events</h4>
         <span
-          className={styles.addEventBtn +
-            " on-button on-button--small on-button--primary icon-text"}
+          className={`${styles.addEventBtn} on-button on-button--small on-button--primary icon-text`}
           onClick={toggleForm}
         >
-          {showForm ? "Cancel" : "Add New Event"}
+          {showForm ? "Cancel" : "Add Admin Note"}
         </span>
       </div>
 
-      {/* Add new event form */}
+      {/* Add new admin note form */}
       {showForm && (
         <div className={styles.addEventForm}>
-          <input
-            type="text"
-            placeholder="Event type"
-            value={newEvent.event}
-            onChange={(e) =>
-              setNewEvent({ ...newEvent, event: e.target.value })}
-          />
           <textarea
-            placeholder="Event note"
+            placeholder="Admin note"
             value={newEvent.note}
-            onChange={(e) => setNewEvent({ ...newEvent, note: e.target.value })}
+            onChange={(e) => setNewEvent({ note: e.target.value })}
           />
           <button
             className="on-button on-button--small on-button--primary"
             onClick={handleAddEvent}
           >
-            Add Event
+            Save Admin Note
           </button>
         </div>
       )}
 
       {/* Event list */}
-      <div className="grid faux-table-header">
-        <h4 className="col-lg col col-5">Note</h4>
-        <h4 className="col-lg col col-3">Date</h4>
-        <h4 className="col-lg col col-2">Author</h4>
-        <h4 className="col-lg col col-2">Type</h4>
-      </div>
-      <ul>
-        {filteredEvents.map((event) => (
-          <li key={event.id}>
-            <div className="grid faux-table">
-              <div className="col-lg col col-5">{event.note}</div>
-              <div className="col-lg col col-3">
-                {new Date(event.createdAt).toLocaleString()}
-              </div>
-              <div className="col-lg col col-2">{event.user}</div>
-              <div className="col-lg col col-2">{event.event}</div>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {events.length === 0 ? <p>No events found for this dataset.</p> : (
+        <>
+          <div className="grid faux-table-header">
+            <h4 className="col-lg col col-5">Note</h4>
+            <h4 className="col-lg col col-3">Date</h4>
+            <h4 className="col-lg col col-2">Author</h4>
+            <h4 className="col-lg col col-2">Type</h4>
+          </div>
+          <ul>
+            {events.map((event) => (
+              <li key={event.id}>
+                <div className="grid faux-table">
+                  <div className="col-lg col col-5">{event.note}</div>
+                  <div className="col-lg col col-3">
+                    {new Date(event.timestamp).toLocaleString()}
+                  </div>
+                  <div className="col-lg col col-2">
+                    {event.user?.email || "Unknown"}
+                  </div>
+                  <div className="col-lg col col-2">
+                    {event.success ? "Success" : "Failure"}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   )
 }
