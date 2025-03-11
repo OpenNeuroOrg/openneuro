@@ -28,7 +28,7 @@ describe("DatasetEvent Model", () => {
     const eventData: Partial<DatasetEventDocument> = {
       datasetId: "ds000001",
       timestamp: new Date(),
-      userId: "user123" as OpenNeuroUserId,
+      user: "user123" as OpenNeuroUserId,
       event: {
         type: "created",
       },
@@ -52,7 +52,7 @@ describe("DatasetEvent Model", () => {
     const eventData: Partial<DatasetEventDocument> = {
       datasetId: "ds000002",
       timestamp: new Date(),
-      userId: "user456" as OpenNeuroUserId,
+      user: "user456" as OpenNeuroUserId,
       event: {
         type: "versioned",
         version: "1.0.0",
@@ -95,7 +95,7 @@ describe("DatasetEvent Model", () => {
       const eventData: Partial<DatasetEventDocument> = {
         datasetId: "ds000003",
         timestamp: new Date(),
-        userId: "user101" as OpenNeuroUserId,
+        user: "user101" as OpenNeuroUserId,
         event: event,
         success: true,
         note: "Testing different event types",
