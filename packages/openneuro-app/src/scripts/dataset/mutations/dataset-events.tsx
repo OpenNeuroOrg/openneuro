@@ -33,7 +33,6 @@ const SAVE_ADMIN_NOTE_MUTATION = gql`
     ) {
       note
       success
-      timestamp
     }
   }
 `
