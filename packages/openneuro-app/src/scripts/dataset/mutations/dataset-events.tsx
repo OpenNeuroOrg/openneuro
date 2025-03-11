@@ -126,8 +126,7 @@ export const DatasetEvents = ({ datasetId }) => {
           <div className="grid faux-table-header">
             <h4 className="col-lg col col-5">Note</h4>
             <h4 className="col-lg col col-3">Date</h4>
-            <h4 className="col-lg col col-2">Author</h4>
-            <h4 className="col-lg col col-2">Type</h4>
+            <h4 className="col-lg col col-4">Author</h4>
           </div>
           <ul>
             {events.map((event) => (
@@ -137,11 +136,8 @@ export const DatasetEvents = ({ datasetId }) => {
                   <div className="col-lg col col-3">
                     {new Date(event.timestamp).toLocaleString()}
                   </div>
-                  <div className="col-lg col col-2">
+                  <div className="col-lg col col-4">
                     {event.user?.email || "Unknown"}
-                  </div>
-                  <div className="col-lg col col-2">
-                    {event.success ? "Success" : "Failure"}
                   </div>
                 </div>
               </li>
