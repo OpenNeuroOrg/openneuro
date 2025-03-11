@@ -53,7 +53,7 @@ export const DatasetEvents = ({ datasetId }) => {
       const cacheId = cache.identify({ __typename: "Dataset", id: datasetId })
 
       if (!cacheId) {
-        console.error("Cache ID not found for dataset:", datasetId)
+        Sentry.captureException("Cache ID not found for dataset:", datasetId)
         return
       }
 
@@ -70,9 +70,10 @@ export const DatasetEvents = ({ datasetId }) => {
       toast.success(<ToastContent title="Admin note added successfully" />)
       setNewEvent({ note: "" })
       setShowForm(false)
+      refetch()
     },
     onError: (error) => {
-      console.error("Mutation error:", error)
+      Sentry.captureException(error)
     },
   })
 
