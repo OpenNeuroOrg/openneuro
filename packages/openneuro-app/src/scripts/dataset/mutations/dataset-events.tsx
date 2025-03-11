@@ -40,27 +40,39 @@ const SAVE_ADMIN_NOTE_MUTATION = gql`
 `
 
 export const DatasetEvents = ({ datasetId }) => {
-  const { data, loading, error } = useQuery(GET_DATASET_EVENTS, {
+  const { data, loading, error, refetch } = useQuery(GET_DATASET_EVENTS, {
     variables: { datasetId },
+    fetchPolicy: "network-only",
   })
+
   const [newEvent, setNewEvent] = useState({ note: "" })
   const [showForm, setShowForm] = useState(false)
 
   const [saveAdminNote] = useMutation(SAVE_ADMIN_NOTE_MUTATION, {
+    update(cache, { data: { saveAdminNote } }) {
+      const cacheId = cache.identify({ __typename: "Dataset", id: datasetId })
+
+      if (!cacheId) {
+        console.error("Cache ID not found for dataset:", datasetId)
+        return
+      }
+
+      cache.modify({
+        id: cacheId,
+        fields: {
+          events(existingEvents = []) {
+            return [...existingEvents, saveAdminNote] // Append the new event
+          },
+        },
+      })
+    },
     onCompleted: () => {
       toast.success(<ToastContent title="Admin note added successfully" />)
       setNewEvent({ note: "" })
       setShowForm(false)
     },
     onError: (error) => {
-      Sentry.captureException(error)
-      console.log(error)
-      toast.error(
-        <ToastContent
-          title="Failed to add admin note"
-          body="An error occurred while saving the admin note"
-        />,
-      )
+      console.error("Mutation error:", error)
     },
   })
 
