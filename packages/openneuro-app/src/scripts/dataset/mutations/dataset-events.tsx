@@ -16,6 +16,7 @@ const GET_DATASET_EVENTS = gql`
         timestamp
         user {
           email
+          name
         }
       }
     }
@@ -32,7 +33,6 @@ const SAVE_ADMIN_NOTE_MUTATION = gql`
       note: $note
     ) {
       note
-      success
     }
   }
 `
@@ -118,20 +118,24 @@ export const DatasetEvents = ({ datasetId }) => {
       {events.length === 0 ? <p>No events found for this dataset.</p> : (
         <>
           <div className="grid faux-table-header">
-            <h4 className="col-lg col col-5">Note</h4>
+            <h4 className="col-lg col col-6">Note</h4>
             <h4 className="col-lg col col-3">Date</h4>
-            <h4 className="col-lg col col-4">Author</h4>
+            <h4 className="col-lg col col-3">Author</h4>
           </div>
           <ul>
             {events.map((event) => (
               <li key={event.id}>
                 <div className="grid faux-table">
-                  <div className="col-lg col col-5">{event.note}</div>
+                  <div className="col-lg col col-6">{event.note}</div>
                   <div className="col-lg col col-3">
                     {new Date(event.timestamp).toLocaleString()}
                   </div>
-                  <div className="col-lg col col-4">
-                    {event.user?.email || "Unknown"}
+                  <div className="col-lg col col-3">
+                    {event.user?.name
+                      ? event.user.name
+                      : event.user?.email
+                      ? event.user.email
+                      : "Unknown"}
                   </div>
                 </div>
               </li>
