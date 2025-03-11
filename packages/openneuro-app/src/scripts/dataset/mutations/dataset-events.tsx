@@ -31,7 +31,6 @@ const SAVE_ADMIN_NOTE_MUTATION = gql`
       datasetId: $datasetId
       note: $note
     ) {
-      id
       note
       success
       timestamp
