@@ -35,25 +35,26 @@ export async function saveAdminNote(
   if (!userInfo?.admin) {
     throw new Error("Not authorized")
   }
-
-  const datasetEvent = await DatasetEvent.findOneAndUpdate({ id }, {
-    id,
-    datasetId,
-    userId: user,
-    event: {
-      type: "note",
-      admin: true,
-    },
-    success: true,
-    note,
-  }, {
-    upsert: true,
-    setDefaultsOnInsert: true,
-    new: true,
-  }).populate("user")
-  if (datasetEvent) {
-    return datasetEvent
+  if (id) {
+    const event = await DatasetEvent.findOne({ id, datasetId })
+    event.note = note
+    await event.save()
+    await event.populate("user")
+    return event
   } else {
-    return null
+    const event = new DatasetEvent({
+      id,
+      datasetId,
+      userId: user,
+      event: {
+        type: "note",
+        admin: true,
+      },
+      success: true,
+      note,
+    })
+    await event.save()
+    await event.populate("user")
+    return event
   }
 }
