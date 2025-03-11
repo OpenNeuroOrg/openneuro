@@ -514,12 +514,19 @@ export const flagAnnexObject = (
 /**
  * Update public state
  */
-export const updatePublic = (datasetId, publicFlag) =>
-  Dataset.updateOne(
+export async function updatePublic(datasetId, publicFlag, user) {
+  const event = await createEvent(
+    datasetId,
+    user.id,
+    { type: "published", public: publicFlag },
+  )
+  await Dataset.updateOne(
     { id: datasetId },
     { public: publicFlag, publishDate: new Date() },
     { upsert: true },
   ).exec()
+  await updateEvent(event)
+}
 
 export const getDatasetAnalytics = (datasetId, _tag) => {
   return Dataset.findOne({ id: datasetId }).then((ds) => ({

@@ -4,6 +4,7 @@ import Permission from "../../models/permission"
 import type { PermissionDocument } from "../../models/permission"
 import { checkDatasetAdmin } from "../permissions"
 import { user } from "./user"
+import { createEvent, updateEvent } from "../../libs/events"
 
 interface DatasetPermission {
   id: string
@@ -40,8 +41,16 @@ const publishPermissions = async (datasetId) => {
   return permissionsUpdated
 }
 
+/**
+ * Apply permission updates to a list of users
+ */
 async function updateUsers(datasetId: string, level: string, users) {
   for (const user of users) {
+    const event = await createEvent(datasetId, user, {
+      type: "permissionChange",
+      target: user.id,
+      level: level,
+    })
     await Permission.updateOne(
       {
         datasetId: datasetId,
@@ -54,6 +63,7 @@ async function updateUsers(datasetId: string, level: string, users) {
       },
       { upsert: true },
     ).exec()
+    await updateEvent(event)
   }
   return publishPermissions(datasetId)
 }
