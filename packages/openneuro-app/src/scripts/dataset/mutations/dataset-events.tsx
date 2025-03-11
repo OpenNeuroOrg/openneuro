@@ -61,7 +61,7 @@ export const DatasetEvents = ({ datasetId }) => {
         id: cacheId,
         fields: {
           events(existingEvents = []) {
-            return [...existingEvents, saveAdminNote] // Append the new event
+            return [...existingEvents, saveAdminNote]
           },
         },
       })
