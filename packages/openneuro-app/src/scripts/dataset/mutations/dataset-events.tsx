@@ -53,7 +53,7 @@ export const DatasetEvents = ({ datasetId }) => {
       toast.success(<ToastContent title="Admin note added successfully" />)
       setNewEvent({ note: "" })
       setShowForm(false)
-      refetch() // Ensure the latest events are fetched
+      refetch()
     },
     onError: (error) => {
       Sentry.captureException(error)
