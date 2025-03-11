@@ -49,28 +49,11 @@ export const DatasetEvents = ({ datasetId }) => {
   const [showForm, setShowForm] = useState(false)
 
   const [saveAdminNote] = useMutation(SAVE_ADMIN_NOTE_MUTATION, {
-    update(cache, { data: { saveAdminNote } }) {
-      const cacheId = cache.identify({ __typename: "Dataset", id: datasetId })
-
-      if (!cacheId) {
-        Sentry.captureException("Cache ID not found for dataset:", datasetId)
-        return
-      }
-
-      cache.modify({
-        id: cacheId,
-        fields: {
-          events(existingEvents = []) {
-            return [...existingEvents, saveAdminNote]
-          },
-        },
-      })
-    },
     onCompleted: () => {
       toast.success(<ToastContent title="Admin note added successfully" />)
       setNewEvent({ note: "" })
       setShowForm(false)
-      refetch()
+      refetch() // Ensure the latest events are fetched
     },
     onError: (error) => {
       Sentry.captureException(error)
