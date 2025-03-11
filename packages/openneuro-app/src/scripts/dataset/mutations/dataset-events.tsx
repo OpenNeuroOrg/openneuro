@@ -3,6 +3,8 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import styles from "./scss/dataset-events.module.scss"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
+import { getUnexpiredProfile } from "../../../scripts/authentication/profile"
+import { useCookies } from "react-cookie"
 import * as Sentry from "@sentry/react"
 
 // Query to fetch events for the given dataset
@@ -23,20 +25,31 @@ const GET_DATASET_EVENTS = gql`
 `
 
 const SAVE_ADMIN_NOTE_MUTATION = gql`
-  mutation SaveAdminNote($datasetId: ID!, $note: String!) {
-    saveAdminNote(datasetId: $datasetId, note: $note) {
+  mutation SaveAdminNote(
+    $datasetId: ID!
+    $note: String!
+    $user: String!
+    $timestamp: String!
+  ) {
+    saveAdminNote(
+      datasetId: $datasetId
+      note: $note
+      user: $user
+      timestamp: $timestamp
+    ) {
       id
       note
       success
       timestamp
-      user {
-        email
-      }
+      user
     }
   }
 `
 
-export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
+export const DatasetEvents = ({ datasetId }) => {
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+  console.log(profile)
   const { data, loading, error } = useQuery(GET_DATASET_EVENTS, {
     variables: { datasetId },
   })
@@ -51,6 +64,7 @@ export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
     },
     onError: (error) => {
       Sentry.captureException(error)
+      console.log(error)
       toast.error(
         <ToastContent
           title="Failed to add admin note"
@@ -60,7 +74,29 @@ export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
     },
   })
 
-  const toggleForm = () => setShowForm((prev) => !prev)
+  const handleAddEvent = () => {
+    if (newEvent.note) {
+      saveAdminNote({
+        variables: {
+          datasetId,
+          note: newEvent.note,
+          //user: JSON.stringify(profile),
+          timestamp: new Date().toISOString(),
+        },
+      })
+    } else {
+      toast.error(
+        <ToastContent
+          title="Failed to add admin note"
+          body="Please fill in the note"
+        />,
+      )
+    }
+  }
+
+  const toggleForm = () => {
+    setShowForm((prevState) => !prevState)
+  }
 
   if (loading) return <p>Loading events...</p>
   if (error) return <p>Error fetching events</p>
@@ -89,18 +125,7 @@ export const DatasetEvents = ({ datasetId }: { datasetId: string }) => {
           />
           <button
             className="on-button on-button--small on-button--primary"
-            onClick={() => {
-              if (newEvent.note) {
-                saveAdminNote({ variables: { datasetId, note: newEvent.note } })
-              } else {
-                toast.error(
-                  <ToastContent
-                    title="Failed to add admin note"
-                    body="Please fill in the note"
-                  />,
-                )
-              }
-            }}
+            onClick={handleAddEvent}
           >
             Save Admin Note
           </button>
