@@ -18,20 +18,30 @@ const GET_DATASET_EVENTS = gql`
           email
           name
         }
+        event {
+          type
+        }
       }
     }
   }
 `
 
 const SAVE_ADMIN_NOTE_MUTATION = gql`
+  mutation SaveAdminNote($datasetId: ID!, $note: String!) {
+    saveAdminNote(datasetId: $datasetId, note: $note) {
+      note
+    }
+  }
+`
+
+const UPDATE_ADMIN_NOTE_MUTATION = gql`
   mutation SaveAdminNote(
-    $datasetId: ID!
     $note: String!
+    $datasetId: ID!
+    $saveAdminNoteId: ID
   ) {
-    saveAdminNote(
-      datasetId: $datasetId
-      note: $note
-    ) {
+    saveAdminNote(note: $note, datasetId: $datasetId, id: $saveAdminNoteId) {
+      id
       note
     }
   }
@@ -45,12 +55,26 @@ export const DatasetEvents = ({ datasetId }) => {
 
   const [newEvent, setNewEvent] = useState({ note: "" })
   const [showForm, setShowForm] = useState(false)
+  const [editingNoteId, setEditingNoteId] = useState(null)
+  const [updatedNote, setUpdatedNote] = useState("")
 
   const [saveAdminNote] = useMutation(SAVE_ADMIN_NOTE_MUTATION, {
     onCompleted: () => {
       toast.success(<ToastContent title="Admin note added successfully" />)
       setNewEvent({ note: "" })
       setShowForm(false)
+      refetch()
+    },
+    onError: (error) => {
+      Sentry.captureException(error)
+    },
+  })
+
+  const [updateAdminNote] = useMutation(UPDATE_ADMIN_NOTE_MUTATION, {
+    onCompleted: () => {
+      toast.success(<ToastContent title="Admin note updated successfully" />)
+      setEditingNoteId(null)
+      setUpdatedNote("")
       refetch()
     },
     onError: (error) => {
@@ -76,8 +100,27 @@ export const DatasetEvents = ({ datasetId }) => {
     }
   }
 
+  const handleUpdateNote = () => {
+    if (updatedNote) {
+      updateAdminNote({
+        variables: {
+          datasetId,
+          note: updatedNote,
+          saveAdminNoteId: editingNoteId,
+        },
+      })
+    } else {
+      toast.error("Please fill in the updated note")
+    }
+  }
+
   const toggleForm = () => {
     setShowForm((prevState) => !prevState)
+  }
+
+  const startEditingNote = (eventId, note) => {
+    setEditingNoteId(eventId)
+    setUpdatedNote(note)
   }
 
   if (loading) return <p>Loading events...</p>
@@ -118,15 +161,32 @@ export const DatasetEvents = ({ datasetId }) => {
       {events.length === 0 ? <p>No events found for this dataset.</p> : (
         <>
           <div className="grid faux-table-header">
-            <h4 className="col-lg col col-6">Note</h4>
+            <h4 className="col-lg col col-5">Note</h4>
             <h4 className="col-lg col col-3">Date</h4>
             <h4 className="col-lg col col-3">Author</h4>
+            <h4 className="col-lg col col-1">Action</h4>
           </div>
           <ul>
             {events.map((event) => (
               <li key={event.id}>
                 <div className="grid faux-table">
-                  <div className="col-lg col col-6">{event.note}</div>
+                  <div className="col-lg col col-5">
+                    {editingNoteId === event.id
+                      ? (
+                        <textarea
+                          className={styles.dse_inlineForm}
+                          value={updatedNote}
+                          onChange={(e) => setUpdatedNote(e.target.value)}
+                        />
+                      )
+                      : event.event.type === "note"
+                      ? (
+                        event.note
+                      )
+                      : (
+                        event.event.type
+                      )}
+                  </div>
                   <div className="col-lg col col-3">
                     {new Date(event.timestamp).toLocaleString()}
                   </div>
@@ -136,6 +196,25 @@ export const DatasetEvents = ({ datasetId }) => {
                       : event.user?.email
                       ? event.user.email
                       : "Unknown"}
+                  </div>
+                  <div className="col-lg col col-1">
+                    {event.event.type === "note" &&
+                      editingNoteId !== event.id && (
+                      <button
+                        onClick={() => startEditingNote(event.id, event.note)}
+                        className="on-button on-button--small on-button--primary"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {editingNoteId === event.id && (
+                      <button
+                        onClick={handleUpdateNote}
+                        className="on-button on-button--small on-button--primary"
+                      >
+                        Save
+                      </button>
+                    )}
                   </div>
                 </div>
               </li>

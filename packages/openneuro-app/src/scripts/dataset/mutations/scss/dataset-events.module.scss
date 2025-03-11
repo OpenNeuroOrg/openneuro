@@ -9,7 +9,7 @@
     padding: 0;
     margin: 0;
     li {
-      padding: 10px;
+      padding: 0;
       &:nth-child(odd) {
         background-color: #f4f4f4;
       }
@@ -32,12 +32,9 @@
   }
 }
 
-.dse_meta {
-  .event_type {
-    font-weight: bold;
-    margin-right: 10px;
+.dse_inlineForm{
+    width: 100%;
+    margin:0 0 0 -20px;
+    padding: 10px 20px;
   }
-  .event_note {
-    margin-right: auto;
-  }
-}
+
