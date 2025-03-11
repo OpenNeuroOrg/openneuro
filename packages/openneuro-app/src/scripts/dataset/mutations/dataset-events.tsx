@@ -3,8 +3,6 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import styles from "./scss/dataset-events.module.scss"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
-import { getUnexpiredProfile } from "../../../scripts/authentication/profile"
-import { useCookies } from "react-cookie"
 import * as Sentry from "@sentry/react"
 
 // Query to fetch events for the given dataset
@@ -28,28 +26,20 @@ const SAVE_ADMIN_NOTE_MUTATION = gql`
   mutation SaveAdminNote(
     $datasetId: ID!
     $note: String!
-    $user: String!
-    $timestamp: String!
   ) {
     saveAdminNote(
       datasetId: $datasetId
       note: $note
-      user: $user
-      timestamp: $timestamp
     ) {
       id
       note
       success
       timestamp
-      user
     }
   }
 `
 
 export const DatasetEvents = ({ datasetId }) => {
-  const [cookies] = useCookies()
-  const profile = getUnexpiredProfile(cookies)
-  console.log(profile)
   const { data, loading, error } = useQuery(GET_DATASET_EVENTS, {
     variables: { datasetId },
   })
@@ -80,8 +70,6 @@ export const DatasetEvents = ({ datasetId }) => {
         variables: {
           datasetId,
           note: newEvent.note,
-          //user: JSON.stringify(profile),
-          timestamp: new Date().toISOString(),
         },
       })
     } else {
