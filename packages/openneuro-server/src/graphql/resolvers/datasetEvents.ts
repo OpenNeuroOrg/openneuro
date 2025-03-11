@@ -1,4 +1,5 @@
 import DatasetEvent from "../../models/datasetEvents"
+import { checkDatasetWrite } from "../permissions"
 
 /**
  * Get all events for a dataset
@@ -28,8 +29,13 @@ export function datasetEvents(obj, _, { userInfo }) {
 export async function saveAdminNote(
   obj,
   { id, datasetId, note },
-  { user },
+  { user, userInfo },
 ) {
+  // Only site admin users can create an admin note
+  if (!userInfo?.admin) {
+    throw new Error("Not authorized")
+  }
+
   const datasetEvent = await DatasetEvent.findOneAndUpdate({ id }, {
     id,
     datasetId,
