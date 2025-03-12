@@ -90,6 +90,7 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad:z
       - ./services/datalad/datalad_service:/srv/datalad_service
+      - ./datalad-key:/datalad-key
     env_file: ./config.env
     init: true
     command:
