@@ -1,9 +1,10 @@
 import React, { useState } from "react"
 import { gql, useMutation, useQuery } from "@apollo/client"
-import styles from "./scss/dataset-events.module.scss"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
 import * as Sentry from "@sentry/react"
+import { DatasetEventItem } from "../components/DatasetEventItem"
+import styles from "../components/scss/dataset-events.module.scss"
 
 // Query to fetch events for the given dataset
 const GET_DATASET_EVENTS = gql`
@@ -168,56 +169,15 @@ export const DatasetEvents = ({ datasetId }) => {
           </div>
           <ul>
             {events.map((event) => (
-              <li key={event.id}>
-                <div className="grid faux-table">
-                  <div className="col-lg col col-5">
-                    {editingNoteId === event.id
-                      ? (
-                        <textarea
-                          className={styles.dse_inlineForm}
-                          value={updatedNote}
-                          onChange={(e) => setUpdatedNote(e.target.value)}
-                        />
-                      )
-                      : event.event.type === "note"
-                      ? (
-                        event.note
-                      )
-                      : (
-                        event.event.type
-                      )}
-                  </div>
-                  <div className="col-lg col col-3">
-                    {new Date(event.timestamp).toLocaleString()}
-                  </div>
-                  <div className="col-lg col col-3">
-                    {event.user?.name
-                      ? event.user.name
-                      : event.user?.email
-                      ? event.user.email
-                      : "Unknown"}
-                  </div>
-                  <div className="col-lg col col-1">
-                    {event.event.type === "note" &&
-                      editingNoteId !== event.id && (
-                      <button
-                        onClick={() => startEditingNote(event.id, event.note)}
-                        className="on-button on-button--small on-button--primary"
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {editingNoteId === event.id && (
-                      <button
-                        onClick={handleUpdateNote}
-                        className="on-button on-button--small on-button--primary"
-                      >
-                        Save
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </li>
+              <DatasetEventItem
+                key={event.id}
+                event={event}
+                editingNoteId={editingNoteId}
+                updatedNote={updatedNote}
+                startEditingNote={startEditingNote}
+                handleUpdateNote={handleUpdateNote}
+                setUpdatedNote={setUpdatedNote}
+              />
             ))}
           </ul>
         </>

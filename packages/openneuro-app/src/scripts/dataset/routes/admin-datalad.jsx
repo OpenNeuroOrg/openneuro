@@ -30,9 +30,10 @@ const AdminDataset = ({ dataset }) => (
     <hr />
     <HeaderRow4>Draft Head</HeaderRow4>
     {dataset.draft.head}
-    <DatasetHistory datasetId={dataset.id} />
     <hr />
     <DatasetEvents datasetId={dataset.id} />
+    <hr />
+    <DatasetHistory datasetId={dataset.id} />
   </DatasetPageBorder>
 )
 
