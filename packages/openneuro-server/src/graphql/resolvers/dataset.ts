@@ -206,7 +206,7 @@ export const updatePublic = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    return datalad.updatePublic(datasetId, publicFlag)
+    return datalad.updatePublic(datasetId, publicFlag, user)
   })
 }
 

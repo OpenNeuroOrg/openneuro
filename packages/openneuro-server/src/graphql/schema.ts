@@ -873,7 +873,7 @@ export const typeDefs = `
     # User associated with the event
     user: User
     # Event description object
-    event: DatasetEvent
+    event: DatasetEventDescription
     # True if the event succeeded
     success: Boolean
     # Notes associated with the event
