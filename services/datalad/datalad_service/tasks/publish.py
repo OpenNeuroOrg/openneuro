@@ -11,8 +11,7 @@ from github import Github
 import datalad_service.common.s3
 import datalad_service.common.github
 from datalad_service.config import DATALAD_GITHUB_ORG
-from datalad_service.config import DATALAD_GITHUB_LOGIN
-from datalad_service.config import DATALAD_GITHUB_PASS
+from datalad_service.config import DATALAD_GITHUB_TOKEN
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
@@ -148,7 +147,7 @@ def delete_s3_sibling_executor(dataset_id):
 
 
 async def delete_github_sibling(dataset_id):
-    ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
+    ses = Github(DATALAD_GITHUB_TOKEN)
     org = ses.get_organization(DATALAD_GITHUB_ORG)
     repos = org.get_repos()
     try:
