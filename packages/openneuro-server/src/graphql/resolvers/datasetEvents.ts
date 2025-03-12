@@ -1,5 +1,4 @@
 import DatasetEvent from "../../models/datasetEvents"
-import { checkDatasetWrite } from "../permissions"
 
 /**
  * Get all events for a dataset
