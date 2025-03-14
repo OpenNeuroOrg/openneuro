@@ -4,6 +4,8 @@ import DeleteDataset from "../mutations/delete.jsx"
 import LoggedIn from "../../authentication/logged-in.jsx"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3 } from "./styles/header-row"
+import { useCookies } from "react-cookie"
+import { getUnexpiredProfile } from "../../authentication/profile.js"
 
 interface DeletePageAction {
   datasetId: string
@@ -87,13 +89,15 @@ interface DeletePageProps {
 const DeletePage = (
   { dataset, hasEdit }: DeletePageProps,
 ): React.ReactElement => {
-  const datasetId = dataset.id
-  const canBeDeleted = dataset.snapshots.length === 0 && hasEdit
+  const [cookies] = useCookies()
+  const profile = getUnexpiredProfile(cookies)
+  const canBeDeleted = profile?.admin ||
+    (dataset.snapshots.length === 0 && hasEdit)
   return (
     <DatasetPageBorder>
       <HeaderRow3>Delete Dataset</HeaderRow3>
       {canBeDeleted
-        ? <DeletePageAction datasetId={datasetId} hasEdit={hasEdit} />
+        ? <DeletePageAction datasetId={dataset.id} hasEdit={hasEdit} />
         : <DeletePageMessage hasEdit={hasEdit} />}
     </DatasetPageBorder>
   )
