@@ -8,6 +8,7 @@ import type { AccountContainerProps } from "../types/user-types"
 export const UserAccountContainer: React.FC<AccountContainerProps> = ({
   user,
   hasEdit,
+  isUser,
 }) => {
   return (
     <>
@@ -22,7 +23,7 @@ export const UserAccountContainer: React.FC<AccountContainerProps> = ({
       <div className={styles.usercontainer + " container"}>
         <section className={styles.userSidebar}>
           <UserCard user={user} />
-          <UserAccountTabs hasEdit={hasEdit} />
+          <UserAccountTabs hasEdit={hasEdit} isUser={isUser} />
         </section>
         <section className={styles.userViews}>
           <Outlet />
