@@ -20,6 +20,8 @@ export const GET_USER_BY_ORCID = gql`
       location
       institution
       links
+      github
+      githubSynced
     }
   }
 `
