@@ -50,7 +50,8 @@ class DatasetResource:
         dataset_path = self.store.get_dataset_path(dataset)
 
         if await aiofiles.os.path.exists(dataset_path):
-            await asyncio.gather(delete_siblings(dataset), delete_dataset(dataset_path))
+            await delete_siblings(dataset)
+            await delete_dataset(dataset_path)
 
             resp.media = {}
             resp.status = falcon.HTTP_OK
