@@ -14,9 +14,21 @@ expires = 'Fri, 01 Jan 1980 00:00:00 GMT'
 
 def _parse_commit(chunk):
     """Read the commit and reference being updated from git-receive-pack."""
-    header = chunk[:chunk.find(b"\x00")]
-    _, target, reference = header.split(b" ")
-    return target.decode('utf-8'), reference.decode('utf-8')
+    references = []
+    for line in chunk.splitlines():
+        if line[:4] == b'0000':
+            break
+        terminator_position = line.find(b'\x00')
+        if terminator_position != -1:
+            data = line[:terminator_position]
+        else:
+            data = line
+        _, target, reference = data.split(b" ")
+        references.append((target.decode(), reference.decode()))
+        if line.find(b'0000') != -1:
+            break
+    return references
+
 
 def _check_git_access(req, dataset):
     """Validate HTTP token has access to the requested dataset."""
@@ -93,6 +105,7 @@ class GitReceiveResource:
         resp.set_header('Expires', expires)
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         resp.content_type = 'application/x-git-receive-pack-result'
+        refs_updated = []
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         if dataset:
@@ -105,18 +118,18 @@ class GitReceiveResource:
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
-            new_commit = None
-            new_ref = None
             # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
             if req.get_header('content-encoding') == 'gzip':
                 data = gzip.decompress(await req.stream.read())
-                new_commit, new_ref = _parse_commit(data)
+                refs_updated = _parse_commit(data)
                 process.stdin.write(data)
             else:
+                first_iteration = True
                 while True:
                     chunk = await req.stream.read(CHUNK_SIZE_BYTES)
-                    if not new_commit:
-                        new_commit, new_ref =_parse_commit(chunk)
+                    if first_iteration:
+                        refs_updated =_parse_commit(chunk)
+                        first_iteration = False
                     if not chunk:
                         break
                     process.stdin.write(chunk)
@@ -125,7 +138,8 @@ class GitReceiveResource:
             resp.status = falcon.HTTP_OK
             # After this request finishes successfully, log it to the OpenNeuro API
             def schedule_git_event():
-                log_git_event(dataset, new_commit, new_ref, req.context["token"])
+                for new_commit, new_ref in refs_updated:
+                    log_git_event(dataset, new_commit, new_ref, req.context["token"])
             resp.schedule_sync(schedule_git_event)
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -150,7 +164,7 @@ class GitUploadResource:
             process = await asyncio.create_subprocess_exec(
                 'git-upload-pack',
                 '--stateless-rpc',
-                dataset_path,  
+                dataset_path,
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
