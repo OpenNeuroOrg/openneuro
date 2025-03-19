@@ -23,6 +23,7 @@ vi.mock("../draft.ts", () => ({
 }))
 vi.mock("../../config.ts")
 vi.mock("../../libs/notifications.ts")
+vi.mock("../../libs/events.ts")
 
 describe("snapshot model operations", () => {
   describe("createSnapshot()", () => {

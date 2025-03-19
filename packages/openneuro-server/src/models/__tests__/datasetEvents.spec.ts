@@ -28,7 +28,7 @@ describe("DatasetEvent Model", () => {
     const eventData: Partial<DatasetEventDocument> = {
       datasetId: "ds000001",
       timestamp: new Date(),
-      user: "user123" as OpenNeuroUserId,
+      userId: "user123" as OpenNeuroUserId,
       event: {
         type: "created",
       },
@@ -41,7 +41,7 @@ describe("DatasetEvent Model", () => {
 
     expect(savedDatasetEvent._id).toBeDefined()
     expect(savedDatasetEvent.datasetId).toBe("ds000001")
-    expect(savedDatasetEvent.user).toBe("user123")
+    expect(savedDatasetEvent.userId).toBe("user123")
     expect(savedDatasetEvent.event.type).toBe("created")
     expect(savedDatasetEvent.success).toBe(true)
     expect(savedDatasetEvent.note).toBe("Dataset created successfully")
@@ -52,7 +52,7 @@ describe("DatasetEvent Model", () => {
     const eventData: Partial<DatasetEventDocument> = {
       datasetId: "ds000002",
       timestamp: new Date(),
-      user: "user456" as OpenNeuroUserId,
+      userId: "user456" as OpenNeuroUserId,
       event: {
         type: "versioned",
         version: "1.0.0",
@@ -86,7 +86,7 @@ describe("DatasetEvent Model", () => {
         target: "user789" as OpenNeuroUserId,
         level: "admin",
       },
-      { type: "git", ref: "main", message: "Initial commit" },
+      { type: "git", reference: "head/refs/main", commit: "12345667" },
       { type: "upload" },
       { type: "note", admin: false },
     ]
@@ -95,7 +95,7 @@ describe("DatasetEvent Model", () => {
       const eventData: Partial<DatasetEventDocument> = {
         datasetId: "ds000003",
         timestamp: new Date(),
-        user: "user101" as OpenNeuroUserId,
+        userId: "user101" as OpenNeuroUserId,
         event: event,
         success: true,
         note: "Testing different event types",
