@@ -62,8 +62,8 @@ export type DatasetEventPermissionChange = DatasetEventCommon & {
 
 export type DatasetEventGit = DatasetEventCommon & {
   type: "git"
-  ref: string
-  message: string
+  commit: string
+  reference: string
 }
 
 export type DatasetEventUpload = DatasetEventCommon & {

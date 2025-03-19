@@ -44,6 +44,7 @@ import {
   importRemoteDataset,
 } from "./importRemoteDataset"
 import { saveAdminNote } from "./datasetEvents"
+import { createGitEvent } from "./gitEvents"
 
 const Mutation = {
   createDataset,
@@ -91,6 +92,7 @@ const Mutation = {
   finishImportRemoteDataset,
   updateUser,
   saveAdminNote,
+  createGitEvent,
 }
 
 export default Mutation

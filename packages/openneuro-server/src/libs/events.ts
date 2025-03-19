@@ -1,4 +1,3 @@
-import { updateChanges } from "../datalad/changelog"
 import DatasetEvent, { DatasetEventDocument } from "../models/datasetEvents"
 import { DatasetEventType } from "../models/datasetEvents"
 import * as Sentry from "@sentry/node"
@@ -11,6 +10,7 @@ export async function createEvent(
   user: string,
   event: DatasetEventType,
   note: string = "",
+  success: boolean = false,
 ): Promise<DatasetEventDocument> {
   // Save a Sentry breadcrumb to help debug complex server events
   const breadcrumb: Sentry.Breadcrumb = {
@@ -31,7 +31,7 @@ export async function createEvent(
     event,
     note,
     // Initially create the event as failed - update to success on successful state
-    success: false,
+    success,
   })
   await created.save()
   return created

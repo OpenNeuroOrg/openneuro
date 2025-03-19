@@ -190,6 +190,8 @@ export const typeDefs = `
     finishImportRemoteDataset(id: ID!, success: Boolean!, message: String): Boolean
     # Create or update an admin note on a dataset
     saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
+    # Create a git event log for dataset changes
+    createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
   }
 
   # Anonymous dataset reviewer

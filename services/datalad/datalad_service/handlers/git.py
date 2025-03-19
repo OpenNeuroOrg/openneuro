@@ -4,12 +4,19 @@ import logging
 
 import falcon
 
+from datalad_service.common.events import log_git_event
 from datalad_service.common.const import CHUNK_SIZE_BYTES
 
 
 cache_control = ['no-cache', 'max-age=0', 'must-revalidate']
 expires = 'Fri, 01 Jan 1980 00:00:00 GMT'
 
+
+def _parse_commit(chunk):
+    """Read the commit and reference being updated from git-receive-pack."""
+    header = chunk[:chunk.find(b"\x00")]
+    _, target, reference = header.split(b" ")
+    return target.decode('utf-8'), reference.decode('utf-8')
 
 def _check_git_access(req, dataset):
     """Validate HTTP token has access to the requested dataset."""
@@ -98,19 +105,28 @@ class GitReceiveResource:
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
+            new_commit = None
+            new_ref = None
             # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
             if req.get_header('content-encoding') == 'gzip':
-                process.stdin.write(gzip.decompress(await req.stream.read()))
+                data = gzip.decompress(await req.stream.read())
+                new_commit, new_ref = _parse_commit(data)
+                process.stdin.write(data)
             else:
                 while True:
                     chunk = await req.stream.read(CHUNK_SIZE_BYTES)
+                    if not new_commit:
+                        new_commit, new_ref =_parse_commit(chunk)
                     if not chunk:
                         break
                     process.stdin.write(chunk)
-            
             process.stdin.close()
             resp.stream = process.stdout
             resp.status = falcon.HTTP_OK
+            # After this request finishes successfully, log it to the OpenNeuro API
+            def schedule_git_event():
+                log_git_event(dataset, new_commit, new_ref, req.context["token"])
+            resp.schedule_sync(schedule_git_event)
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
