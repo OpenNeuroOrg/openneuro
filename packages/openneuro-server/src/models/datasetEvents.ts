@@ -2,10 +2,10 @@ import mongoose from "mongoose"
 import type { Document } from "mongoose"
 import type { OpenNeuroUserId } from "../types/user"
 import { v4 as uuidv4 } from "uuid"
-import { UserDocument } from "./user"
+import type { UserDocument } from "./user"
 const { Schema, model } = mongoose
 
-const datasetEventTypes = [
+const _datasetEventTypes = [
   "created",
   "versioned",
   "deleted",
@@ -28,7 +28,7 @@ const datasetEventTypes = [
  * upload - A non-git upload occurred (typically one file changed)
  * note - A note unrelated to another event
  */
-export type DatasetEventName = typeof datasetEventTypes[number]
+export type DatasetEventName = typeof _datasetEventTypes[number]
 
 export type DatasetEventCommon = {
   type: DatasetEventName

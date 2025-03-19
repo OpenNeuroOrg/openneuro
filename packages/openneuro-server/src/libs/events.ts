@@ -1,7 +1,9 @@
-import DatasetEvent, { DatasetEventDocument } from "../models/datasetEvents"
-import { DatasetEventType } from "../models/datasetEvents"
+import DatasetEvent from "../models/datasetEvents"
+import type {
+  DatasetEventDocument,
+  DatasetEventType,
+} from "../models/datasetEvents"
 import * as Sentry from "@sentry/node"
-
 /**
  * Create a new dataset event
  */

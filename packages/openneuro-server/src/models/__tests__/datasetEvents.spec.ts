@@ -1,10 +1,8 @@
 import mongoose from "mongoose"
 import { MongoMemoryServer } from "mongodb-memory-server"
-import DatasetEvent, {
-  DatasetEventDocument,
-  DatasetEventType,
-} from "../datasetEvents"
-import { OpenNeuroUserId } from "../../types/user"
+import DatasetEvent from "../datasetEvents"
+import type { DatasetEventDocument, DatasetEventType } from "../datasetEvents"
+import type { OpenNeuroUserId } from "../../types/user"
 
 describe("DatasetEvent Model", () => {
   let mongoServer: MongoMemoryServer
