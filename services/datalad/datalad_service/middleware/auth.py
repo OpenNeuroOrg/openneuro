@@ -37,6 +37,7 @@ class AuthenticateMiddleware:
                 elif 'accessToken' in req.cookies:
                     token = req.cookies['accessToken']
                 try:
+                    req.context['token'] = token
                     req.context['user'] = jwt.decode(
                         token, key=os.environ['JWT_SECRET'], algorithms=["HS256"])
                 except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError):
