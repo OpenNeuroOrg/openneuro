@@ -4,11 +4,30 @@ import logging
 
 import falcon
 
+from datalad_service.common.events import log_git_event
 from datalad_service.common.const import CHUNK_SIZE_BYTES
 
 
 cache_control = ['no-cache', 'max-age=0', 'must-revalidate']
 expires = 'Fri, 01 Jan 1980 00:00:00 GMT'
+
+
+def _parse_commit(chunk):
+    """Read the commit and reference being updated from git-receive-pack."""
+    references = []
+    for line in chunk.splitlines():
+        if line[:4] == b'0000':
+            break
+        terminator_position = line.find(b'\x00')
+        if terminator_position != -1:
+            data = line[:terminator_position]
+        else:
+            data = line
+        _, target, reference = data.split(b" ")
+        references.append((target.decode(), reference.decode()))
+        if line.find(b'0000') != -1:
+            break
+    return references
 
 
 def _check_git_access(req, dataset):
@@ -86,6 +105,7 @@ class GitReceiveResource:
         resp.set_header('Expires', expires)
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         resp.content_type = 'application/x-git-receive-pack-result'
+        refs_updated = []
         if not _check_git_access(req, dataset):
             return _handle_failed_access(req, resp)
         if dataset:
@@ -100,17 +120,27 @@ class GitReceiveResource:
             )
             # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
             if req.get_header('content-encoding') == 'gzip':
-                process.stdin.write(gzip.decompress(await req.stream.read()))
+                data = gzip.decompress(await req.stream.read())
+                refs_updated = _parse_commit(data)
+                process.stdin.write(data)
             else:
+                first_iteration = True
                 while True:
                     chunk = await req.stream.read(CHUNK_SIZE_BYTES)
+                    if first_iteration:
+                        refs_updated =_parse_commit(chunk)
+                        first_iteration = False
                     if not chunk:
                         break
                     process.stdin.write(chunk)
-            
             process.stdin.close()
             resp.stream = process.stdout
             resp.status = falcon.HTTP_OK
+            # After this request finishes successfully, log it to the OpenNeuro API
+            def schedule_git_event():
+                for new_commit, new_ref in refs_updated:
+                    log_git_event(dataset, new_commit, new_ref, req.context["token"])
+            resp.schedule_sync(schedule_git_event)
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 
@@ -134,7 +164,7 @@ class GitUploadResource:
             process = await asyncio.create_subprocess_exec(
                 'git-upload-pack',
                 '--stateless-rpc',
-                dataset_path,  
+                dataset_path,
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,

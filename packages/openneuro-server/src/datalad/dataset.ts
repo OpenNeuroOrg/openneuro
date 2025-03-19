@@ -25,6 +25,7 @@ import BadAnnexObject from "../models/badAnnexObject"
 import { datasetsConnection } from "./pagination"
 import { getDatasetWorker } from "../libs/datalad-service"
 import notifications from "../libs/notifications"
+import { createEvent, updateEvent } from "../libs/events"
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: "admin" })
@@ -42,12 +43,18 @@ export const giveUploaderPermission = (datasetId, userId) => {
  * @returns {Promise} Resolves to {id: accessionNumber} for the new dataset
  */
 export const createDataset = async (
-  uploader,
+  uploader: string,
   userInfo,
   { affirmedDefaced, affirmedConsent },
 ) => {
   // Obtain an accession number
   const datasetId = await getAccessionNumber()
+  // Generate the created event
+  const event = await createEvent(
+    datasetId,
+    uploader,
+    { type: "created" },
+  )
   try {
     const ds = new Dataset({ id: datasetId, uploader })
     await request
@@ -59,6 +66,8 @@ export const createDataset = async (
     const md = new Metadata({ datasetId, affirmedDefaced, affirmedConsent })
     await md.save()
     await giveUploaderPermission(datasetId, uploader)
+    // Creation is complete here, mark successful
+    await updateEvent(event)
     await subscriptions.subscribe(datasetId, uploader)
     await notifications.snapshotReminder(datasetId)
     return ds
@@ -105,11 +114,18 @@ export const getDataset = async (id) => {
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = (id) =>
-  request
-    .del(`${getDatasetWorker(id)}/datasets/${id}`)
-    .then(() => Dataset.deleteOne({ id }).exec())
-    .then(() => true)
+export const deleteDataset = async (datasetId, user) => {
+  const event = await createEvent(
+    datasetId,
+    user.id,
+    { type: "deleted" },
+  )
+  await request
+    .del(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
+  await Dataset.deleteOne({ datasetId }).exec()
+  await updateEvent(event)
+  return true
+}
 
 /**
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses
@@ -498,12 +514,19 @@ export const flagAnnexObject = (
 /**
  * Update public state
  */
-export const updatePublic = (datasetId, publicFlag) =>
-  Dataset.updateOne(
+export async function updatePublic(datasetId, publicFlag, user) {
+  const event = await createEvent(
+    datasetId,
+    user.id,
+    { type: "published", public: publicFlag },
+  )
+  await Dataset.updateOne(
     { id: datasetId },
     { public: publicFlag, publishDate: new Date() },
     { upsert: true },
   ).exec()
+  await updateEvent(event)
+}
 
 export const getDatasetAnalytics = (datasetId, _tag) => {
   return Dataset.findOne({ id: datasetId }).then((ds) => ({

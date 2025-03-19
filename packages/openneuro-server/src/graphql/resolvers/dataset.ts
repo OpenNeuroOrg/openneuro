@@ -22,6 +22,7 @@ import { onBrainlife } from "./brainlife"
 import { brainInitiative } from "./brainInitiative"
 import { derivatives } from "./derivatives"
 import { promiseTimeout } from "../../utils/promiseTimeout"
+import { datasetEvents } from "./datasetEvents"
 import semver from "semver"
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
@@ -120,7 +121,7 @@ export const deleteDataset = async (
   { user, userInfo },
 ) => {
   await checkDatasetWrite(id, user, userInfo)
-  const deleted = await datalad.deleteDataset(id)
+  const deleted = await datalad.deleteDataset(id, userInfo)
   // Remove from the current version of the Elastic index
   try {
     await removeDatasetSearchDocument(id)
@@ -205,7 +206,7 @@ export const updatePublic = (
   { user, userInfo },
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    return datalad.updatePublic(datasetId, publicFlag)
+    return datalad.updatePublic(datasetId, publicFlag, user)
   })
 }
 
@@ -303,6 +304,7 @@ const Dataset = {
   worker,
   reviewers,
   brainInitiative,
+  events: datasetEvents,
 }
 
 export default Dataset

@@ -6,6 +6,7 @@ from falcon import testing
 import pygit2
 
 from datalad_service.common import git
+from datalad_service.handlers.git import _parse_commit
 from datalad.api import Dataset
 
 
@@ -145,6 +146,13 @@ def test_git_receive_resource(client):
         f'/git/0/{ds_id}/git-receive-pack', headers={"authorization": test_auth}, body=receive_pack_input)
     assert response.status == falcon.HTTP_OK
 
+def test_parse_commit():
+    noop = b'0000'
+    single = b'00677d1665144a3a975c05f1f43902ddaf084e784dbe 74730d410fcb6603ace96f1dc55ea6196122532d refs/heads/debug\x00 report-status-v20000PACK\x00\x00\x00\x02'
+    multiple = b'00677d1665144a3a975c05f1f43902ddaf084e784dbe 74730d410fcb6603ace96f1dc55ea6196122532d refs/heads/debug\n006874730d410fcb6603ace96f1dc55ea6196122532d 5a3f6be755bbb7deae50065988cbfa1ffa9ab68a refs/heads/master\n0000\nextra data\n'
+    assert _parse_commit(noop) == []
+    assert _parse_commit(single) == [("74730d410fcb6603ace96f1dc55ea6196122532d", "refs/heads/debug")]
+    assert _parse_commit(multiple) == [("74730d410fcb6603ace96f1dc55ea6196122532d", "refs/heads/debug"), ("5a3f6be755bbb7deae50065988cbfa1ffa9ab68a", "refs/heads/master")]
 
 def test_git_tag_tree(new_dataset):
     tag = '1.0.0'

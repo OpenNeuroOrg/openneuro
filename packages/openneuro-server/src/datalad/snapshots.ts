@@ -22,6 +22,7 @@ import type { SnapshotDocument } from "../models/snapshot"
 import { updateDatasetRevision } from "./draft"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { join } from "path"
+import { createEvent, updateEvent } from "../libs/events"
 
 const lockSnapshot = (datasetId, tag) => {
   return redlock.lock(
@@ -140,6 +141,11 @@ export const createSnapshot = async (
   const snapshotLock = await lockSnapshot(datasetId, tag)
 
   try {
+    // Create a version attempt event
+    const event = await createEvent(datasetId, user.id, {
+      type: "versioned",
+      version: tag,
+    })
     await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
 
     const createSnapshotUrl = `${
@@ -167,6 +173,10 @@ export const createSnapshot = async (
       updateDatasetName(datasetId),
     ])
 
+    // Version is created here and event is updated
+    await updateEvent(event)
+
+    // Immediate indexing for new snapshots
     await reindexDataset(datasetId)
 
     announceNewSnapshot(snapshot, datasetId, user)
