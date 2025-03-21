@@ -19,7 +19,8 @@ const FileViewerType = ({ path, url, data }) => {
     path.endsWith("CHANGES") ||
     path.endsWith(".bidsignore") ||
     path.endsWith(".gitignore") ||
-    path.endsWith(".txt")
+    path.endsWith(".txt") ||
+    path.endsWith(".rst")
   ) {
     return <FileViewerText data={data} />
   } else if (
