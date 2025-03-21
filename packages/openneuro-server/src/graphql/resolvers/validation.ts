@@ -2,7 +2,7 @@ import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import Validation from "../../models/validation"
-import { redlock } from "../../libs/redis"
+import { redis, redlock } from "../../libs/redis"
 
 /**
  * Issues resolver for schema validator
@@ -91,7 +91,21 @@ export const updateValidation = (obj, args) => {
     },
   )
     .exec()
-    .then(() => true)
+    .then(() => {
+      const message = JSON.stringify({
+        datasetId: args.validation.datasetId,
+        version: args.validation.id,
+      })
+
+      // Log before publishing to Redis
+      console.log(`[Validation] Publishing validation-completed: ${message}`)
+      // Publish a message to a Redis channel
+      redis.publish("validation-completed", message)
+      // Log after publishing to Redis
+      console.log(`[Validation] Published validation-completed: ${message}`)
+
+      return true
+    })
 }
 
 export const validationUrl = (datasetId, ref) => {

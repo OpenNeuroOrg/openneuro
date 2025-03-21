@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Validation, ValidationPending } from "../../validation/validation"
 import LegacyValidation from "../../validation-legacy/validation.jsx"
 import type { Issue } from "@bids/validator/issues"
+import { useValidationResults } from "../../validation/validation-results-query"
 
 // TODO - Generate from GraphQL
 interface CodeMessageInput {
@@ -27,17 +28,71 @@ export interface ValidationBlockProps {
   validation?: ValidationFragment
 }
 
-/**
- * Display validation output from both validators
- * issues - legacy validator object
- * validation - OpenNeuro schema validator GraphQL type
- */
 export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   datasetId,
   version,
   issuesStatus,
-  validation,
 }) => {
+  const [reloadComponent, setReloadComponent] = useState(false)
+  const { loading, error, issues, refetch } = useValidationResults(
+    datasetId,
+    version,
+  ) // Correct destructuring
+  const [validationData, setValidationData] = useState<
+    { errors: number; warnings: number } | null
+  >(null)
+
+  useEffect(() => {
+    if (issues && issues.issues) {
+      const errors = issues.issues.filter((issue) =>
+        issue.severity === "error"
+      ).length
+      const warnings = issues.issues.filter((issue) =>
+        issue.severity === "warning"
+      ).length
+      setValidationData({ errors, warnings })
+    }
+  }, [issues])
+
+  useEffect(() => {
+    console.log("ValidationBlock useEffect called")
+    const ws = new WebSocket(`ws://${window.location.hostname}:8111`)
+
+    ws.onopen = () => {
+      console.log("WebSocket connection opened in ValidationBlock.")
+    }
+
+    ws.onerror = (error) => {
+      console.error("WebSocket Error in ValidationBlock:", error)
+      ws.close()
+    }
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      console.log("WebSocket Message Received in ValidationBlock:", data)
+      if (data.datasetId === datasetId && data.version === version) {
+        console.log(
+          "Validation Completed (WebSocket) in ValidationBlock:",
+          data,
+        )
+        refetch()
+        ws.close()
+      }
+    }
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed in ValidationBlock.")
+    }
+
+    return () => {
+      ws.close()
+    }
+  }, [datasetId, version, refetch])
+
+  useEffect(() => {
+    console.log("reloadComponent updated:", reloadComponent)
+  }, [reloadComponent])
+
   if (issuesStatus) {
     return (
       <div className="validation-accordion">
@@ -50,15 +105,27 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
     )
   } else {
     // If data exists, populate this. Otherwise we show pending.
-    if (validation) {
+    if (validationData) {
       return (
         <div className="validation-accordion">
           <Validation
             datasetId={datasetId}
             version={version}
-            warnings={validation.warnings}
-            errors={validation.errors}
+            warnings={validationData.warnings}
+            errors={validationData.errors}
           />
+        </div>
+      )
+    } else if (loading) {
+      return (
+        <div className="validation-accordion">
+          <ValidationPending />
+        </div>
+      )
+    } else if (error) {
+      return (
+        <div className="validation-accordion">
+          <div>Error loading validation data.</div>
         </div>
       )
     } else {

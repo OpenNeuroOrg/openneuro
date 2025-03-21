@@ -3250,6 +3250,7 @@ __metadata:
     "@types/ioredis-mock": "npm:^8.2.2"
     "@types/node-mailjet": "npm:^3"
     "@types/semver": "npm:^5"
+    "@types/ws": "npm:^8.18.0"
     base64url: "npm:^3.0.0"
     cookie-parser: "npm:^1.4.6"
     core-js: "npm:^3.10.1"
@@ -3296,6 +3297,7 @@ __metadata:
     uuid: "npm:10.0.0"
     vitest: "npm:2.1.2"
     vitest-fetch-mock: "npm:0.3.0"
+    ws: "npm:^8.18.1"
     xmldoc: "npm:^1.1.0"
   languageName: unknown
   linkType: soft
@@ -5487,6 +5489,15 @@ __metadata:
     "@types/node": "npm:*"
     "@types/webidl-conversions": "npm:*"
   checksum: 10/975987a9ca14a8d5a883523acb4fa0df7760cd8ca8dee56cd57753821e56060bfbead94df84f4504fe0b4270776d81cbb40fcd1f8643dab86da3a9abe926fb5c
+  languageName: node
+  linkType: hard
+
+"@types/ws@npm:^8.18.0":
+  version: 8.18.0
+  resolution: "@types/ws@npm:8.18.0"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/2a3bbf27690532627bfde8a215c0cf3a56680f339f972785b30d0b4665528275b9270c0a0839244610b0a3f2da4218c6dd741ceba1d173fde5c5091f2034b823
   languageName: node
   linkType: hard
 
@@ -21423,6 +21434,21 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10/7c511c59e979bd37b63c3aea4a8e4d4163204f00bd5633c053b05ed67835481995f61a523b0ad2b603566f9a89b34cb4965cb9fab9649fbfebd8f740cea57f17
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.18.1":
+  version: 8.18.1
+  resolution: "ws@npm:8.18.1"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 10/3f38e9594f2af5b6324138e86b74df7d77bbb8e310bf8188679dd80bac0d1f47e51536a1923ac3365f31f3d8b25ea0b03e4ade466aa8292a86cd5defca64b19b
   languageName: node
   linkType: hard
 

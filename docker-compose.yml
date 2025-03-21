@@ -46,6 +46,8 @@ services:
       test: curl -f http://localhost:8111/crn || exit 1
       interval: 5s
       retries: 10
+    ports:
+      - "8111:8111" # Add this line
     depends_on:
       redis:
         condition: service_started
