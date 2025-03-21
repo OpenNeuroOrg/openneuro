@@ -14,8 +14,8 @@ class OpenNeuroGitError(Exception):
     """OpenNeuro git repo states that should not arise under normal use but may be a valid git operation in other contexts."""
 
 
-def git_show(path, committish, obj):
-    repo = pygit2.Repository(path)
+def git_show(repo, committish, obj):
+    """Equivalent to `git show <committish>:<obj>` on `repo` repository."""
     commit, _ = repo.resolve_refish(committish)
     data_bytes = (commit.tree / obj).read_raw()
     result = from_bytes(data_bytes).best()

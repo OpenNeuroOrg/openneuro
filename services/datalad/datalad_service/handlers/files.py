@@ -21,7 +21,8 @@ class FilesResource:
         ds_path = self.store.get_dataset_path(dataset)
         try:
             try:
-                file_content = git_show(ds_path, snapshot, filename)
+                repo = self.store.get_dataset_repo(dataset)
+                file_content = git_show(repo, snapshot, filename)
                 # If the file begins with an annex path, return that path
                 if file_content[0:4096].find('.git/annex') != -1:
                     # Resolve absolute path for annex target

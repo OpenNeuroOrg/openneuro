@@ -95,7 +95,8 @@ def check_remote_has_version(dataset_path, remote, tag):
 
         # extract remote uuid and associated git tree id from `git show git-annex:export.log`
         # this command only logs the latest export. previously exported tags will not show
-        export_log = git_show(dataset_path, 'git-annex', 'export.log')
+        repo = pygit2.Repository(dataset_path)
+        export_log = git_show(repo, 'git-annex', 'export.log')
         log_remote_id_pattern = re.compile(':(.+) .+$')
         match = log_remote_id_pattern.search(export_log)
         remote_id_B = match.group(1)

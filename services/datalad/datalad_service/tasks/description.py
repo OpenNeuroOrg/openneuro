@@ -12,9 +12,9 @@ def edit_description(description, new_fields):
 
 
 def update_description(store, dataset, description_fields, name=None, email=None):
-    dataset_path = store.get_dataset_path(dataset)
+    repo = store.get_dataset_repo(dataset)
     description = git_show(
-        dataset_path, 'HEAD', 'dataset_description.json')
+        repo, 'HEAD', 'dataset_description.json')
     description_json = json.loads(description)
     if description_json.get('License') != 'CC0':
         description_fields = edit_description(
