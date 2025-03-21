@@ -37,7 +37,7 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   const { loading, error, issues, refetch } = useValidationResults(
     datasetId,
     version,
-  ) // Correct destructuring
+  )
   const [validationData, setValidationData] = useState<
     { errors: number; warnings: number } | null
   >(null)
