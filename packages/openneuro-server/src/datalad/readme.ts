@@ -34,8 +34,8 @@ export const readme = (obj) => {
   })
 }
 
-export const setReadme = (datasetId, readme, user) => {
-  return addFileString(datasetId, "README", "text/plain", readme).then(() =>
+export const setReadme = (datasetId, readme, filename, user) => {
+  return addFileString(datasetId, filename, "text/plain", readme).then(() =>
     commitFiles(datasetId, user)
   )
 }
