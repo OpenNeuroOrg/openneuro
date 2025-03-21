@@ -47,7 +47,7 @@ services:
       interval: 5s
       retries: 10
     ports:
-      - "8111:8111" # Add this line
+      - "8111:8111" 
     depends_on:
       redis:
         condition: service_started
