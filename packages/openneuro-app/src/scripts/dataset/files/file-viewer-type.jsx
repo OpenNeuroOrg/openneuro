@@ -8,6 +8,7 @@ import FileViewerCsv from "./viewers/file-viewer-csv.jsx"
 import FileViewerHtml from "./viewers/file-viewer-html.jsx"
 import { FileViewerNeurosift } from "./viewers/file-viewer-neurosift"
 import { isNifti } from "./file-types"
+import FileViewerMarkdown from "./viewers/file-viewer-markdown"
 
 /**
  * Choose the right viewer for each file type
@@ -25,6 +26,8 @@ const FileViewerType = ({ path, url, data }) => {
     isNifti(path)
   ) {
     return <FileViewerNifti imageUrl={url} />
+  } else if (path.endsWith(".md")) {
+    return <FileViewerMarkdown data={data} />
   } else if (path.endsWith(".json")) {
     return <FileViewerJson data={data} />
   } else if (path.endsWith(".tsv")) {
