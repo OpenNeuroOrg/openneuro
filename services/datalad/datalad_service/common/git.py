@@ -22,8 +22,7 @@ def git_show(repo, committish, obj):
     return str(result)
 
 
-def git_show_object(path, obj):
-    repo = pygit2.Repository(path)
+def git_show_object(repo, obj):
     git_obj = repo.get(obj)
     if git_obj:
         return git_obj.read_raw().decode()
