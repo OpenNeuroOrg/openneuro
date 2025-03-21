@@ -1,3 +1,4 @@
+import pathlib
 import re
 import subprocess
 
@@ -28,6 +29,16 @@ def git_show_object(repo, obj):
         return git_obj.read_raw().decode()
     else:
         raise KeyError('object not found in repository')
+
+
+def git_tree(repo, committish, filepath):
+    """Retrieve the tree parent for a given commit and filename."""
+    path = pathlib.Path(filepath)
+    commit, _ = repo.resolve_refish(committish)
+    tree = commit.tree
+    for part in path.parts[:-1]:
+        tree = tree / part
+    return tree
 
 
 def delete_tag(path, tag):
