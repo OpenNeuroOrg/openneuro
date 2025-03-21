@@ -87,7 +87,8 @@ def edit_changes(changes, new_changes, tag, date):
 
 def get_head_changes(dataset_path):
     try:
-        return git_show(dataset_path, 'HEAD', 'CHANGES')
+        repo = pygit2.Repository(dataset_path)
+        return git_show(repo, 'HEAD', 'CHANGES')
     except KeyError:
         return None
 
@@ -137,8 +138,9 @@ def validate_snapshot_name(store, dataset, snapshot):
 def validate_datalad_config(store, dataset):
     """Add a .datalad/config file if one does not exist."""
     dataset_path = store.get_dataset_path(dataset)
+    repo = store.get_dataset_repo(dataset)
     try:
-        git_show(dataset_path, 'HEAD', '.datalad/config')
+        git_show(repo, 'HEAD', '.datalad/config')
     except KeyError:
         create_datalad_config(dataset_path)
         commit_files(store, dataset, ['.datalad/config'])

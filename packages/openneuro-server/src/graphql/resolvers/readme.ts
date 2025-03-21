@@ -5,10 +5,29 @@
 import { setReadme } from "../../datalad/readme"
 import { checkDatasetWrite } from "../permissions"
 export { readme } from "../../datalad/readme"
+import { draftFiles } from "./draft"
 
-export const updateReadme = (obj, { datasetId, value }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    // Save to backend
-    return setReadme(datasetId, value, userInfo).then(() => true)
+export async function updateReadme(
+  obj,
+  { datasetId, value },
+  { user, userInfo },
+) {
+  await checkDatasetWrite(datasetId, user, userInfo)
+  const files = await draftFiles({ id: datasetId }, { tree: "HEAD" }, {
+    userInfo,
   })
+  // Default to README.md if none exists
+  let filename = "README.md"
+  for (const file of files) {
+    if (
+      file.filename === "README.md" || file.filename === "README.rst" ||
+      file.filename === "README"
+    ) {
+      filename = file.filename
+      break
+    }
+  }
+  // Save to backend
+  await setReadme(datasetId, value, filename, userInfo)
+  return true
 }

@@ -12,10 +12,10 @@ class ObjectsResource:
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
     async def on_get(self, req, resp, dataset, obj):
-        ds_path = self.store.get_dataset_path(dataset)
+        repo = self.store.get_dataset_repo(dataset)
         try:
             if len(obj) == 40:
-                resp.text = git_show_object(ds_path, obj)
+                resp.text = git_show_object(repo, obj)
                 resp.status = falcon.HTTP_OK
             else:
                 resp.media = {

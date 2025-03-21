@@ -17,7 +17,8 @@ test_auth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1
 
 
 def test_git_show(new_dataset):
-    assert git.git_show(new_dataset.path, 'HEAD',
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_show(repo, 'HEAD',
                         'dataset_description.json') == '{"BIDSVersion": "1.0.2", "License": "This is not a real dataset", "Name": "Test fixture new dataset"}'
 
 
@@ -37,7 +38,8 @@ def test_git_show_non_iso_test(new_dataset):
         f.write(non_utf8_events)
     ds.save(events_path)
     ds.close()
-    assert git.git_show(new_dataset.path, 'HEAD',
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_show(repo, 'HEAD',
                         'events.tsv') == non_utf8_events.decode('cp852')
 
 dataset_description_4096 = """{
@@ -69,7 +71,8 @@ def test_git_show_unicode_after_4096(new_dataset):
         f.write(dataset_description_4096)
     ds.save(desc_path)
     ds.close()
-    assert git.git_show(new_dataset.path, 'HEAD',
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_show(repo, 'HEAD',
                         'dataset_description.json') == dataset_description_4096.decode('utf-8')
 
 
@@ -160,3 +163,9 @@ def test_git_tag_tree(new_dataset):
     # Create a tag
     repo.references.create(f'refs/tags/{tag}', str(repo.head.target))
     assert git.git_tag_tree(repo, tag) == repo.get(repo.head.target).tree_id
+
+
+def test_git_tree(new_dataset):
+    repo = pygit2.Repository(new_dataset.path)
+    tree = git.git_tree(repo, str(repo.head.target), "dataset_description.json")
+    assert tree.id == repo.get(repo.head.target).tree_id

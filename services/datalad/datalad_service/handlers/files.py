@@ -1,11 +1,12 @@
 import logging
 import os
+from pathlib import Path
 
 import falcon
 import pygit2
 import aiofiles
 
-from datalad_service.common.git import git_show
+from datalad_service.common.git import git_show, git_tree
 from datalad_service.common.user import get_user_info
 from datalad_service.common.stream import update_file
 from datalad_service.tasks.files import remove_files
@@ -21,7 +22,16 @@ class FilesResource:
         ds_path = self.store.get_dataset_path(dataset)
         try:
             try:
-                file_content = git_show(ds_path, snapshot, filename)
+                repo = self.store.get_dataset_repo(dataset)
+                tree = git_tree(repo, snapshot, filename)
+                # Look for any files that only differ by extension
+                path = Path(filename)
+                if path.name not in tree:
+                    for obj in tree:
+                        if Path(obj.name).stem == path.name:
+                            filename = obj.name
+                            break
+                file_content = git_show(repo, snapshot, filename)
                 # If the file begins with an annex path, return that path
                 if file_content[0:4096].find('.git/annex') != -1:
                     # Resolve absolute path for annex target

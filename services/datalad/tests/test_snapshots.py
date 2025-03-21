@@ -167,7 +167,8 @@ def test_write_new_changes(datalad_store, new_dataset):
     # Get a fresh dataset object and verify correct CHANGES
     dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
-    assert git_show(dataset.path, 'HEAD', 'CHANGES') == '''1.0.1 2019-01-01
+    repo = datalad_store.get_dataset_repo(ds_id)
+    assert git_show(repo, 'HEAD', 'CHANGES') == '''1.0.1 2019-01-01
   - Some changes
 1.0.0 2018-01-01
   - Initial version
@@ -184,6 +185,7 @@ def test_write_with_empty_changes(datalad_store, new_dataset):
     # Get a fresh dataset object and verify correct CHANGES
     dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
-    assert git_show(dataset.path, 'HEAD', 'CHANGES') == '''1.0.1 2019-01-01
+    repo = datalad_store.get_dataset_repo(ds_id)
+    assert git_show(repo, 'HEAD', 'CHANGES') == '''1.0.1 2019-01-01
   - Some changes
 '''
