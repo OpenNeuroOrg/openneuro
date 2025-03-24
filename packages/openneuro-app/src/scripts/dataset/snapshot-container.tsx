@@ -382,6 +382,7 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
           datasetId: dataset.id,
           fetchMore,
           error: null,
+          stopPolling: () => {},
         }}
       >
         <SnapshotContainer

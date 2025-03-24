@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Validation, ValidationPending } from "../../validation/validation"
 import LegacyValidation from "../../validation-legacy/validation.jsx"
 import type { Issue } from "@bids/validator/issues"
+import DatasetQueryContext from "../../datalad/dataset/dataset-query-context.js"
 
 // TODO - Generate from GraphQL
 interface CodeMessageInput {
@@ -38,6 +39,34 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   issuesStatus,
   validation,
 }) => {
+  const { stopPolling } = useContext(DatasetQueryContext)
+
+  console.log("ValidationBlock stopPolling:", typeof stopPolling) // Debug 3
+
+  // Function to stop polling if issuesStatus or validation exists
+  const stopPollingValidation = () => {
+    if (issuesStatus || validation) {
+      if (typeof stopPolling === "function") {
+        try {
+          stopPolling()
+          console.log(
+            "Polling stopped - issuesStatus or validation data available.",
+          )
+          console.log("stopPolling called from ValidationBlock")
+        } catch (error) {
+          console.error("Error stopping polling:", error)
+        }
+      } else {
+        console.error("stopPolling is not a function")
+      }
+    }
+  }
+
+  // Stop polling on render if validation or issuesStatus exists.
+  React.useEffect(() => {
+    stopPollingValidation()
+  }, [issuesStatus, validation, stopPolling])
+
   if (issuesStatus) {
     return (
       <div className="validation-accordion">
@@ -49,7 +78,6 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
       </div>
     )
   } else {
-    // If data exists, populate this. Otherwise we show pending.
     if (validation) {
       return (
         <div className="validation-accordion">
