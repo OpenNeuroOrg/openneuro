@@ -35,9 +35,6 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
         pollInterval: 500,
       },
     )
-
-  console.log("DatasetQueryHook stopPolling:", typeof stopPolling)
-
   if (error) {
     if (error.message === "You do not have access to read this dataset.") {
       return <FourOThreePage />
@@ -57,7 +54,6 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
     }
   } else {
     if (loading || !data) {
-      console.log(loading)
       return (
         <div className="loading-dataset">
           <Loading />
@@ -66,7 +62,6 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
       )
     }
   }
-  console.log("DatasetQueryContext.Provider stopPolling:", typeof stopPolling)
   return (
     <DatasetContext.Provider value={data.dataset}>
       <ErrorBoundary subject={"error in dataset page"}>
