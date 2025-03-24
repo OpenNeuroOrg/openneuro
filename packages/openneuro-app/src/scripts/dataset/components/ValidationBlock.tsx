@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import * as Sentry from "@sentry/react"
 import { Validation, ValidationPending } from "../../validation/validation"
 import LegacyValidation from "../../validation-legacy/validation.jsx"
 import type { Issue } from "@bids/validator/issues"
@@ -41,24 +42,15 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
 }) => {
   const { stopPolling, startPolling } = useContext(DatasetQueryContext)
 
-  console.log("ValidationBlock stopPolling:", typeof stopPolling)
-  console.log("ValidationBlock startPolling:", typeof startPolling)
-
   // Function to stop polling if issuesStatus or validation exists
   const stopPollingValidation = () => {
     if (issuesStatus || validation) {
       if (typeof stopPolling === "function") {
         try {
           stopPolling()
-          console.log(
-            "Polling stopped - issuesStatus or validation data available.",
-          )
-          console.log("stopPolling called from ValidationBlock")
         } catch (error) {
-          console.error("Error stopping polling:", error)
+          Sentry.captureException(error)
         }
-      } else {
-        console.error("stopPolling is not a function")
       }
     }
   }
@@ -69,13 +61,9 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
       if (typeof startPolling === "function") {
         try {
           startPolling(500) // 500ms poll interval
-          console.log("Polling started - ValidationPending shown.")
-          console.log("startPolling called from ValidationBlock")
         } catch (error) {
-          console.error("Error starting polling:", error)
+          Sentry.captureException(error)
         }
-      } else {
-        console.error("startPolling is not a function")
       }
     }
   }
@@ -83,7 +71,7 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   // Stop polling on render if validation or issuesStatus exists.
   React.useEffect(() => {
     stopPollingValidation()
-    startPollingValidation() // Start polling if pending
+    startPollingValidation()
   }, [issuesStatus, validation, stopPolling, startPolling])
 
   if (issuesStatus) {
