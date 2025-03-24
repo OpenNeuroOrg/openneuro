@@ -29,6 +29,16 @@ def test_get_file(client):
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
 
 
+def test_get_file_extensionless(client):
+    ds_id = 'ds000001'
+    result = client.simulate_get(
+        f'/datasets/{ds_id}/files/dataset_description', file_wrapper=FileWrapper)
+    content_len = int(result.headers['content-length'])
+    assert content_len == len(result.content)
+    print(result.content)
+    assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
+
+
 def test_get_annexed_file(client):
     ds_id = 'ds000001'
     file_data = 'test image, please ignore'
