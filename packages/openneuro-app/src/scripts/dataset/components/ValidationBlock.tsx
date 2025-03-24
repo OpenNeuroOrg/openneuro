@@ -39,9 +39,10 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   issuesStatus,
   validation,
 }) => {
-  const { stopPolling } = useContext(DatasetQueryContext)
+  const { stopPolling, startPolling } = useContext(DatasetQueryContext)
 
-  console.log("ValidationBlock stopPolling:", typeof stopPolling) // Debug 3
+  console.log("ValidationBlock stopPolling:", typeof stopPolling)
+  console.log("ValidationBlock startPolling:", typeof startPolling)
 
   // Function to stop polling if issuesStatus or validation exists
   const stopPollingValidation = () => {
@@ -62,10 +63,28 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
     }
   }
 
+  // Function to start polling if ValidationPending is shown.
+  const startPollingValidation = () => {
+    if (!issuesStatus && !validation) {
+      if (typeof startPolling === "function") {
+        try {
+          startPolling(500) // 500ms poll interval
+          console.log("Polling started - ValidationPending shown.")
+          console.log("startPolling called from ValidationBlock")
+        } catch (error) {
+          console.error("Error starting polling:", error)
+        }
+      } else {
+        console.error("startPolling is not a function")
+      }
+    }
+  }
+
   // Stop polling on render if validation or issuesStatus exists.
   React.useEffect(() => {
     stopPollingValidation()
-  }, [issuesStatus, validation, stopPolling])
+    startPollingValidation() // Start polling if pending
+  }, [issuesStatus, validation, stopPolling, startPolling])
 
   if (issuesStatus) {
     return (

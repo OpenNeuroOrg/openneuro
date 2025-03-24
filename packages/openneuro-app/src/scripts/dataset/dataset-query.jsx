@@ -25,15 +25,16 @@ import { getDatasetPage, getDraftPage } from "../queries/dataset"
  */
 export const DatasetQueryHook = ({ datasetId, draft }) => {
   const navigate = useNavigate()
-  const { data, loading, error, fetchMore, stopPolling } = useQuery(
-    draft ? getDraftPage : getDatasetPage,
-    {
-      variables: { datasetId },
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
-      pollInterval: 500,
-    },
-  )
+  const { data, loading, error, fetchMore, stopPolling, startPolling } =
+    useQuery(
+      draft ? getDraftPage : getDatasetPage,
+      {
+        variables: { datasetId },
+        fetchPolicy: "cache-and-network",
+        nextFetchPolicy: "cache-first",
+        pollInterval: 500,
+      },
+    )
 
   console.log("DatasetQueryHook stopPolling:", typeof stopPolling)
 
@@ -56,6 +57,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
     }
   } else {
     if (loading || !data) {
+      console.log(loading)
       return (
         <div className="loading-dataset">
           <Loading />
@@ -74,6 +76,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
             fetchMore,
             error,
             stopPolling,
+            startPolling,
           }}
         >
           <DatasetRoutes dataset={data.dataset} />

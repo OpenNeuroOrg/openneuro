@@ -5,7 +5,8 @@ const DatasetQueryContext = React.createContext({
   datasetId: null,
   fetchMore: null,
   error: null,
-  stopPolling: () => {},
+  stopPolling: null,
+  startPolling: null,
 })
 
 export default DatasetQueryContext

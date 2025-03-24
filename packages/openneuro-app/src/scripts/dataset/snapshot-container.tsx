@@ -359,16 +359,17 @@ export interface SnapshotLoaderProps {
 
 const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
   const { tag } = useParams()
-  const { loading, error, data, fetchMore, stopPolling } = useQuery(
-    getSnapshotDetails,
-    {
-      variables: {
-        datasetId: dataset.id,
-        tag,
+  const { loading, error, data, fetchMore, stopPolling, startPolling } =
+    useQuery(
+      getSnapshotDetails,
+      {
+        variables: {
+          datasetId: dataset.id,
+          tag,
+        },
+        errorPolicy: "all",
       },
-      errorPolicy: "all",
-    },
-  )
+    )
   if (loading) {
     return (
       <div className="loading-dataset">
@@ -386,6 +387,7 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
           fetchMore,
           error: null,
           stopPolling,
+          startPolling,
         }}
       >
         <SnapshotContainer
