@@ -38,6 +38,7 @@ import { DateDistance } from "../components/date-distance"
 export interface DraftContainerProps {
   dataset
   tag?: string
+  stopPolling: () => void
 }
 
 // Helper function for getting version from URL
@@ -45,7 +46,9 @@ const snapshotVersion = (location) => {
   const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
   return matches && matches[1]
 }
-const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
+const DraftContainer: React.FC<DraftContainerProps> = (
+  { dataset, stopPolling },
+) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || "draft"
 
@@ -138,6 +141,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   version={dataset.draft.head}
                   issuesStatus={dataset.draft.issuesStatus}
                   validation={dataset.draft.validation}
+                  stopPolling={stopPolling}
                 />
                 <CloneDropdown
                   gitAccess={

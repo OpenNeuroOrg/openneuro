@@ -49,11 +49,13 @@ const snapshotVersion = (location) => {
 type SnapshotContainerProps = {
   dataset
   snapshot
+  stopPolling: () => void
 }
 
 export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   dataset,
   snapshot,
+  stopPolling,
 }) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || "draft"
@@ -138,6 +140,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   version={snapshot.tag}
                   issuesStatus={snapshot.issuesStatus}
                   validation={snapshot.validation}
+                  stopPolling={stopPolling}
                 />
                 <AnalyzeDropdown
                   datasetId={datasetId}
@@ -355,9 +358,12 @@ const getSnapshotDetails = gql`
 
 export interface SnapshotLoaderProps {
   dataset
+  stopPolling: () => void
 }
 
-const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
+const SnapshotLoader: React.FC<SnapshotLoaderProps> = (
+  { dataset, stopPolling },
+) => {
   const { tag } = useParams()
   const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
     variables: {
@@ -382,11 +388,13 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
           datasetId: dataset.id,
           fetchMore,
           error: null,
+          stopPolling: stopPolling,
         }}
       >
         <SnapshotContainer
           dataset={dataset}
           snapshot={data.snapshot}
+          stopPolling={stopPolling}
         />
       </DatasetQueryContext.Provider>
     )

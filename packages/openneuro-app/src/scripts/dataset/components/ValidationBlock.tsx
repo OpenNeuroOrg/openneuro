@@ -1,4 +1,5 @@
 import React from "react"
+import * as Sentry from "@sentry/react"
 import { Validation, ValidationPending } from "../../validation/validation"
 import LegacyValidation from "../../validation-legacy/validation.jsx"
 import type { Issue } from "@bids/validator/issues"
@@ -25,6 +26,7 @@ export interface ValidationBlockProps {
     warnings: number
   }
   validation?: ValidationFragment
+  stopPolling: () => void
 }
 
 /**
@@ -37,36 +39,41 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
   version,
   issuesStatus,
   validation,
+  stopPolling,
 }) => {
-  if (issuesStatus) {
+  if (issuesStatus || validation) {
+    if (typeof stopPolling === "function") {
+      try {
+        stopPolling()
+      } catch (error) {
+        Sentry.captureException(error)
+      }
+    }
     return (
       <div className="validation-accordion">
-        <LegacyValidation
-          datasetId={datasetId}
-          version={version}
-          issuesStatus={issuesStatus}
-        />
+        {issuesStatus
+          ? (
+            <LegacyValidation
+              datasetId={datasetId}
+              version={version}
+              issuesStatus={issuesStatus}
+            />
+          )
+          : validation && (
+            <Validation
+              datasetId={datasetId}
+              version={version}
+              warnings={validation.warnings}
+              errors={validation.errors}
+            />
+          )}
       </div>
     )
   } else {
-    // If data exists, populate this. Otherwise we show pending.
-    if (validation) {
-      return (
-        <div className="validation-accordion">
-          <Validation
-            datasetId={datasetId}
-            version={version}
-            warnings={validation.warnings}
-            errors={validation.errors}
-          />
-        </div>
-      )
-    } else {
-      return (
-        <div className="validation-accordion">
-          <ValidationPending />
-        </div>
-      )
-    }
+    return (
+      <div className="validation-accordion">
+        <ValidationPending />
+      </div>
+    )
   }
 }

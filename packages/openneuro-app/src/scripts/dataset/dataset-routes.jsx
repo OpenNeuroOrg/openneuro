@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import SnapshotContainer from "./snapshot-container"
 import DraftContainer from "./draft-container"
 
-const DatasetRoutes = ({ dataset, error }) => {
+const DatasetRoutes = ({ dataset, error, stopPolling }) => {
   useEffect(() => {
     if (error) {
       throw error
@@ -15,9 +15,14 @@ const DatasetRoutes = ({ dataset, error }) => {
     <Routes>
       <Route
         path="versions/:tag/*"
-        element={<SnapshotContainer dataset={dataset} />}
+        element={
+          <SnapshotContainer dataset={dataset} stopPolling={stopPolling} />
+        }
       />
-      <Route path="*" element={<DraftContainer dataset={dataset} />} />
+      <Route
+        path="*"
+        element={<DraftContainer dataset={dataset} stopPolling={stopPolling} />}
+      />
     </Routes>
   )
 }
