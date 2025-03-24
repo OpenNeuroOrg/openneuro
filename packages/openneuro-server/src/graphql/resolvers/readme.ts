@@ -21,6 +21,7 @@ export async function updateReadme(
   for (const file of files) {
     if (
       file.filename === "README.md" || file.filename === "README.rst" ||
+      file.filename === "README.txt" ||
       file.filename === "README"
     ) {
       filename = file.filename
