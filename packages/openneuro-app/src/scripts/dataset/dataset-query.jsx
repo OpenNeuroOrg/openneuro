@@ -73,7 +73,7 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
             datasetId,
             fetchMore,
             error,
-            stopPolling: () => {},
+            stopPolling,
           }}
         >
           <DatasetRoutes dataset={data.dataset} />
