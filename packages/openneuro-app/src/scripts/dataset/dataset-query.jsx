@@ -32,7 +32,6 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
         variables: { datasetId },
         fetchPolicy: "cache-and-network",
         nextFetchPolicy: "cache-first",
-        pollInterval: 500,
       },
     )
   if (error) {
