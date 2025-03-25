@@ -25,15 +25,15 @@ import { getDatasetPage, getDraftPage } from "../queries/dataset"
  */
 export const DatasetQueryHook = ({ datasetId, draft }) => {
   const navigate = useNavigate()
-  const { data, loading, error, fetchMore } = useQuery(
-    draft ? getDraftPage : getDatasetPage,
-    {
-      variables: { datasetId },
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
-    },
-  )
-
+  const { data, loading, error, fetchMore, stopPolling, startPolling } =
+    useQuery(
+      draft ? getDraftPage : getDatasetPage,
+      {
+        variables: { datasetId },
+        fetchPolicy: "cache-and-network",
+        nextFetchPolicy: "cache-first",
+      },
+    )
   if (error) {
     if (error.message === "You do not have access to read this dataset.") {
       return <FourOThreePage />
@@ -61,7 +61,6 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
       )
     }
   }
-
   return (
     <DatasetContext.Provider value={data.dataset}>
       <ErrorBoundary subject={"error in dataset page"}>
@@ -70,6 +69,8 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
             datasetId,
             fetchMore,
             error,
+            stopPolling,
+            startPolling,
           }}
         >
           <DatasetRoutes dataset={data.dataset} />
