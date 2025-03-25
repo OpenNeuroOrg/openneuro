@@ -149,7 +149,7 @@ export const participantCount = (obj, { modality }) => {
       "summary.subjects": { $exists: true },
     }
 
-    let matchQuery: Record<string, any> = queryHasSubjects
+    let matchQuery: Record<string, unknown> = queryHasSubjects
 
     if (modality && modality !== "NIH") {
       matchQuery = {
