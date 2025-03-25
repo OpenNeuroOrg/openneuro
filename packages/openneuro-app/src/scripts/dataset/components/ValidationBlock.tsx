@@ -60,7 +60,7 @@ export const ValidationBlock: React.FC<ValidationBlockProps> = ({
     if (!issuesStatus && !validation) {
       if (typeof startPolling === "function") {
         try {
-          startPolling(500) // 500ms poll interval
+          startPolling(10000) // 10s poll interval
         } catch (error) {
           Sentry.captureException(error)
         }
