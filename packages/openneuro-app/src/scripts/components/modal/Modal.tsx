@@ -1,5 +1,6 @@
 import React from "react"
-import { Button } from "../button/Button"
+import { Button } from "@openneuro/components/button"
+import "./modal.scss"
 
 export interface ModalProps {
   children?: React.ReactNode

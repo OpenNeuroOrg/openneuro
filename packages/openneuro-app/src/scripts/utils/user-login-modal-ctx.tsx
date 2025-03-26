@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react"
-import { UserLoginModal } from "@openneuro/components/modal"
+import { UserLoginModal } from "../components/modal/UserLoginModal"
 import loginUrls from "../authentication/loginUrls"
 
 export const UserModalOpenCtx = createContext(null)

@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import React from "react"
 
-import { Header } from "../header/Header"
-import { LandingExpandedHeader } from "../header/LandingExpandedHeader"
+import { Header } from "/var/home/nell/git/openneuro/packages/openneuro-app/src/scripts/components/header/Header"
+import { LandingExpandedHeader } from "/var/home/nell/git/openneuro/packages/openneuro-app/src/scripts/components/header/LandingExpandedHeader"
 import { Input } from "../input/Input"
 import { Footer } from "../footer/Footer"
 

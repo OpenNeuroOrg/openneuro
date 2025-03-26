@@ -1,12 +1,11 @@
 import React from "react"
 import { Modal } from "./Modal"
-import { Button } from "../button/Button"
-import { Logo } from "../logo/Logo"
-import { AccordionWrap } from "../accordion/AccordionWrap"
-import { AccordionTab } from "../accordion/AccordionTab"
+import { Button } from "@openneuro/components/button"
+import { Logo } from "@openneuro/components/logo"
+import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
 import { useLocation } from "react-router-dom"
 
-import orcidIcon from "../assets/orcid_24x24.png"
+import orcidIcon from "../../../assets/orcid_24x24.png"
 
 export interface UserLoginModalProps {
   isOpen: boolean

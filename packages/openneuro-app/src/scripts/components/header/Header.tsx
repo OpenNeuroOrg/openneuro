@@ -1,9 +1,10 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import { Button } from "../button/Button"
-import { Logo } from "../logo/Logo"
+import { Button } from "@openneuro/components/button"
+import { Logo } from "@openneuro/components/logo"
 import { Modal } from "../modal/Modal"
-import { UserMenu } from "../user/UserMenu"
+import { UserMenu } from "@openneuro/components/user"
+import "./header.scss"
 
 export interface HeaderProps {
   profile?: {
