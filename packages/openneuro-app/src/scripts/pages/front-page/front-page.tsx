@@ -179,6 +179,12 @@ const FrontPageSection = styled.section`
 
 const FrontPageContainer: React.FC = () => (
   <div className="front-page page">
+    <div className="container view-docs">
+      <span>
+        This repository is under review for potential modification in compliance
+        with Administration directives.
+      </span>
+    </div>
     <FrontPageSection>
       <AffiliateBlock />
     </FrontPageSection>
