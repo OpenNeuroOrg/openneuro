@@ -8,7 +8,7 @@
 
 TAG=$1
 
-set -x
+set -ex
 
 # This hook rewrites the tags after the rebase - from https://ownyourbits.com/2017/08/14/rebasing-in-git-without-losing-tags/#comment-42731
 cat <<EOF > .git/hooks/post-rewrite
@@ -34,7 +34,7 @@ chmod +x .git/hooks/post-rewrite
 
 FIND_ADD="echo NOMATCH*NOMATCH; git diff-tree --no-commit-id --name-only -r --diff-filter=AMT HEAD"
 REMOVE_FROM_STDIN="git rm --cached --ignore-unmatch --pathspec-from-file=-"
-EXEC="(${FIND_ADDITIONS}) | ${REMOVE_FROM_STDIN}; git annex add .; git commit --amend --no-edit"
+EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && git commit --amend --no-edit"
 
 # Find object will return two commits, where this object was created and changed
 # Reverse topological order should return the initial creation to filter
