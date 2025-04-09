@@ -1,7 +1,7 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
-import { WarnButton } from "@openneuro/components/warn-button"
+import { WarnButton } from "../../components/warn-button/WarnButton"
 import { DATASET_REVIEWERS } from "../fragments/dataset-reviewers"
 
 const DELETE_REVIEWER = gql`

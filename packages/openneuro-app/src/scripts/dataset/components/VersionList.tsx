@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Dropdown } from "@openneuro/components/dropdown"
+import { Dropdown } from "../../components/dropdown/Dropdown"
 import { formatDate } from "../../utils/date"
 
 export interface VersionListProps {

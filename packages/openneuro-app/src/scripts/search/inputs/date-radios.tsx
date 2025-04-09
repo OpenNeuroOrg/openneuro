@@ -1,8 +1,9 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { FacetRadio } from "@openneuro/components/facets"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { FacetRadio } from "../../components/facets/FacetRadio"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 
 const DateRadios: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

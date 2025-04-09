@@ -1,11 +1,10 @@
-// dependencies -----------------------------------------------------------
-
 import React from "react"
 import pluralize from "pluralize"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { AccordionTab } from "../components/accordion/AccordionTab"
+import { AccordionWrap } from "../components/accordion/AccordionWrap"
 import Issues from "./validation-results.issues.jsx"
 import { useLegacyValidationResults } from "./validation-legacy-query.js"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../components/loading/Loading"
 
 function countFiles(issues) {
   let numFiles = 0

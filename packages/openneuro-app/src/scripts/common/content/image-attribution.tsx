@@ -2,8 +2,8 @@ import React from "react"
 import styled from "@emotion/styled"
 import { Link } from "react-router-dom"
 
-import nirs from "../../../../../openneuro-components/src/assets/nirs.jpg"
-import nih from "../../../../../openneuro-components/src/assets/nih_cube.jpg"
+import nirs from "./assets/modality-cubes/nirs.jpg"
+import nih from "./assets/modality-cubes/nih_cube.jpg"
 
 /** Image attribution content. */
 export function Attribution(): React.ReactElement {

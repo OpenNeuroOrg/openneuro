@@ -4,7 +4,7 @@ import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import { DATASET_METADATA } from "../../datalad/dataset/dataset-query-fragments"
 import { datasetCacheId } from "./cache-id.js"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 
 export const SUBMIT_METADATA = gql`
   mutation addMetadata($datasetId: ID!, $metadata: MetadataInput!) {

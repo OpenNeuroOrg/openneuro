@@ -1,8 +1,8 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
-import { Tooltip } from "@openneuro/components/tooltip"
-import { Button } from "@openneuro/components/button"
+import { Tooltip } from "../../components/tooltip/Tooltip"
+import { Button } from "../../components/button/Button"
 
 const CREATE_LINK = gql`
   mutation createReviewer($datasetId: ID!) {

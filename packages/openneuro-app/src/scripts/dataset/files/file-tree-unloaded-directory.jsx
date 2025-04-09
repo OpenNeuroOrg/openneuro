@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import PropTypes from "prop-types"
 import DatasetQueryContext from "../../datalad/dataset/dataset-query-context.js"
 import { gql } from "@apollo/client"
-import { AccordionTab } from "@openneuro/components/accordion"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
 
 export const DRAFT_FILES_QUERY = gql`
   query dataset($datasetId: ID!, $tree: String!) {

@@ -4,7 +4,7 @@ import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import { DATASET_COMMENTS } from "../fragments/comments-fragments"
 import { datasetCacheId } from "./cache-id.js"
-import { Icon } from "@openneuro/components/icon"
+import { Icon } from "../../components/icon/Icon"
 
 const deleteComment = gql`
   mutation deleteComment($commentId: ID!, $deleteChildren: Boolean) {

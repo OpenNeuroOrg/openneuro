@@ -10,7 +10,7 @@ import AdminUser from "../../authentication/admin-user.jsx"
 import LoggedIn from "../../authentication/logged-in.jsx"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content"
-import { Icon } from "@openneuro/components/icon"
+import { Icon } from "../../components/icon/Icon"
 import { Username } from "../../users/username"
 
 const Comment = ({ datasetId, data, children }) => {

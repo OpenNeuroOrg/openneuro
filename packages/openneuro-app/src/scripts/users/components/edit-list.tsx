@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import "../scss/user-meta-blocks.scss"
 
 interface EditListProps {

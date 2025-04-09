@@ -1,0 +1,147 @@
+@import '../scss/variables';
+
+form,
+fieldset {
+  margin: 0;
+  padding: 0;
+  border-style: none;
+}
+input:not([type='range'], [type='checkbox'], [type='radio']),
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='search'],
+input[type='password'],
+textarea {
+  display: inline-block;
+  appearance: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid $newspaper;
+  padding: 10px 12px;
+  max-width: 100%;
+  line-height: 12px;
+  &:focus {
+    border-color: rgb(76, 104, 230);
+  }
+
+  &::placeholder {
+    color: rgb(160, 160, 160);
+    opacity: 1; /* Firefox */
+  }
+}
+
+input[type='search'] {
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    background: url('../assets/close-button.png') no-repeat center;
+    background-size: contain;
+    height: 10px;
+    width: 10px;
+  }
+}
+
+select {
+  border-radius: 4px;
+  -webkit-appearance: none;
+  border: 1px solid $newspaper;
+}
+
+textarea {
+  resize: vertical;
+  vertical-align: top;
+}
+
+input[type='button'],
+input[type='reset'],
+input[type='file'],
+input[type='submit'] {
+  appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  label {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+}
+
+.form-control.inline {
+  display: flex;
+  flex-direction: row;
+  label {
+    padding: 12px 10px 0 0;
+    min-width: 100px;
+    text-align: right;
+  }
+}
+
+.float-form-style.form-control {
+  display: flex;
+  flex-flow: column-reverse;
+  margin-bottom: 1em;
+
+  label,
+  input,
+  textarea {
+    transition: all 0.2s;
+    touch-action: manipulation;
+  }
+
+  input,
+  textarea {
+    border-radius: 0;
+    cursor: text;
+    z-index: 2;
+    background: none;
+  }
+
+  label {
+    z-index: 1;
+  }
+
+  textarea:placeholder-shown,
+  input:placeholder-shown {
+    + label {
+      cursor: text;
+      max-width: 66.66%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transform-origin: left bottom;
+      transform: translate(12px, 36px) scale(1.5);
+      font-size: 13px;
+    }
+  }
+  textarea,
+  input {
+    &::-moz-placeholder {
+      opacity: 0;
+      transition: inherit;
+    }
+    &::-webkit-input-placeholder {
+      opacity: 0;
+      transition: inherit;
+    }
+    &:focus::-moz-placeholder {
+      opacity: 1;
+    }
+    &:focus::-webkit-input-placeholder {
+      opacity: 1;
+    }
+  }
+  textarea:not(:placeholder-shown),
+  textarea:focus,
+  input:not(:placeholder-shown),
+  input:focus {
+    + label {
+      transform: translate(0, 0) scale(1);
+      font-size: 13px;
+      cursor: pointer;
+    }
+  }
+}

@@ -8,7 +8,7 @@ import { Media } from "../../styles/media"
 import { DatasetPageBorder } from "../routes/styles/dataset-page-border"
 import DatasetQueryContext from "../../datalad/dataset/dataset-query-context"
 import { fetchMoreDirectory } from "./file-tree-unloaded-directory.jsx"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../../components/loading/Loading"
 
 const PathBreadcrumb = styled.div`
   font-size: 14px;

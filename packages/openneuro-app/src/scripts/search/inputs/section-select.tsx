@@ -1,8 +1,9 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { FacetSelect } from "@openneuro/components/facets"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { FacetSelect } from "../../components/facets/FacetSelect"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 
 const SectionSelect: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

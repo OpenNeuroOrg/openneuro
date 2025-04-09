@@ -4,7 +4,7 @@ import SelectInput from "../fragments/select-input"
 import { DOILink, DOIPattern } from "../fragments/doi-link"
 import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client"
 import styled from "@emotion/styled"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 
 const getDatasetRelations = gql`
   query getDatasetRelations($datasetId: ID!) {

@@ -2,8 +2,8 @@ import React from "react"
 import PropTypes from "prop-types"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
-import { Button } from "@openneuro/components/button"
-import { Tooltip } from "@openneuro/components/tooltip"
+import { Button } from "../../components/button/Button"
+import { Tooltip } from "../../components/tooltip/Tooltip"
 
 const REVALIDATE = gql`
   mutation revalidate($datasetId: ID!, $ref: String!) {

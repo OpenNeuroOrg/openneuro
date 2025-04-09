@@ -2,8 +2,8 @@ import React, { useContext } from "react"
 import type { FC } from "react"
 import useState from "react-usestateref"
 import { removeFilterItem, SearchParamsCtx } from "../search-params-ctx"
-import { TermSearch } from "@openneuro/components/input"
-import { Icon } from "@openneuro/components/icon"
+import { TermSearch } from "../../components/input/TermSearch"
+import { Icon } from "../../components/icon/Icon"
 
 const KeywordInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

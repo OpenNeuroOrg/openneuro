@@ -4,8 +4,8 @@ import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 
-import { Tooltip } from "@openneuro/components/tooltip"
-import { Icon } from "@openneuro/components/icon"
+import { Tooltip } from "../../components/tooltip/Tooltip"
+import { Icon } from "../../components/icon/Icon"
 
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"

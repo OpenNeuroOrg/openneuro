@@ -1,6 +1,6 @@
 import React from "react"
 import type { FC } from "react"
-import { Footer } from "@openneuro/components/footer"
+import { Footer } from "../../components/footer/Footer"
 import { version as openneuroVersion } from "../../../lerna.json"
 
 const FooterContainer: FC = () => {

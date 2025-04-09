@@ -1,6 +1,6 @@
 import React from "react"
 import { Markdown } from "../../utils/markdown"
-import { ReadMore } from "@openneuro/components/read-more"
+import { ReadMore } from "../../components/read-more/ReadMore"
 import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"
 import Comments from "../comments/comments"

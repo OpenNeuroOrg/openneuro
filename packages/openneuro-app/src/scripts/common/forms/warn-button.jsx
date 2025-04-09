@@ -2,7 +2,7 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { Tooltip } from "@openneuro/components/tooltip"
+import { Tooltip } from "../../components/tooltip/Tooltip"
 import { toast } from "react-toastify"
 import ToastContent from "../partials/toast-content.jsx"
 

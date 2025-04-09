@@ -1,7 +1,7 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
-import { WarnButton } from "@openneuro/components/warn-button"
+import { WarnButton } from "../../components/warn-button/WarnButton"
 
 const REMOVE_PERMISSION = gql`
   mutation removePermissions($datasetId: ID!, $userId: String!) {
