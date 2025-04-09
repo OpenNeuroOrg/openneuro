@@ -203,8 +203,7 @@ header {
     align-items: center;
   }
   > div {
-    flex-basis: 50%;
-    max-width: 50%;
+    flex-basis: 100%;
     margin: 0 10px 0 0;
     &:last-child {
       margin: 0 0 0 10px;

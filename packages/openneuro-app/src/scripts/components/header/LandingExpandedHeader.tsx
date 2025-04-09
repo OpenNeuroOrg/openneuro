@@ -81,21 +81,21 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
                     <h3>SIGN IN</h3>
                   </div>
                   <div>
-                    <a href={loginUrls.google}>
-                      <Button
-                        label="Google"
-                        color="#fff"
-                        icon="fab fa-google"
-                        iconSize="23px"
-                      />
-                    </a>
-                  </div>
-                  <div>
                     <a href={loginUrls.orcid}>
                       <Button
                         label="ORCID"
                         color="#fff"
                         imgSrc={orcidIcon}
+                        iconSize="23px"
+                      />
+                    </a>
+                  </div>
+                  <div>
+                    <a href={loginUrls.google}>
+                      <Button
+                        label="Google"
+                        color="#fff"
+                        icon="fab fa-google"
                         iconSize="23px"
                       />
                     </a>
