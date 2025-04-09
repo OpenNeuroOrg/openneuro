@@ -38,9 +38,11 @@ COMMIT_IF_NEEDED="git diff --cached --quiet || git commit --amend --no-edit"
 EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && (${COMMIT_IF_NEEDED})"
 
 # --strategy-option theirs = accept the working tree (original) changes over any files edited in this rebase
-# Remove empty commits while we're here
 # Find any added or changed files in the commit, remove and add with git-annex
-git rebase --strategy-option=theirs --no-keep-empty --exec "$EXEC" $TAG
+# Keep empty to avoid required interaction when fixing a commit reverts its parent
+git rebase --committer-date-is-author-date --strategy-option=theirs --keep-empty --exec "$EXEC" $TAG
+# Clean up empty files
+git rebase --committer-date-is-author-date --no-keep-empty $TAG
 
 # Cleanup our hook
 rm .git/hooks/post-rewrite
