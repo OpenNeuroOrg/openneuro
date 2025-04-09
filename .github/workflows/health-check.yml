@@ -1,6 +1,8 @@
 name: Check public datasets
 
 on:
+  push:
+    branches: ['feat/health-check']
   schedule:
     # 8am PST / 9am PDT Mondays
     - cron: '0 16 * * 1'
