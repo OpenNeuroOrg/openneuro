@@ -1,11 +1,12 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { RadioGroup } from "@openneuro/components/radio"
-import { FacetSelect } from "@openneuro/components/facets"
+import { RadioGroup } from "../../components/radio/RadioGroup"
+import { FacetSelect } from "../../components/facets/FacetSelect"
 import { useCookies } from "react-cookie"
 import { getUnexpiredProfile } from "../../authentication/profile"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 
 const ShowDatasetsRadios: FC = () => {
   const [cookies] = useCookies()

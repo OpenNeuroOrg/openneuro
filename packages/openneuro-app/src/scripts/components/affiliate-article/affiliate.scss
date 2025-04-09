@@ -1,0 +1,32 @@
+.affiliate-card {
+  padding: 0 30px;
+  flex: 1 1 200px;
+  img {
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+  }
+  h2 {
+    font-size: 18px;
+  }
+  > div {
+    margin: 0 0 20px;
+    font-size: 18px;
+  }
+  > span {
+    font-size: 15px;
+  }
+}
+
+.affiliate-wrap {
+  display: flex;
+  max-width: 980px;
+  margin: 0 auto;
+  
+  @media (max-width: 980px) {
+    display: block;
+    .affiliate-card {
+      margin-bottom: 50px;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+@import "../scss/variables";
+
+.term-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .form-control {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  @media (max-width: 450px) {
+    flex-wrap: wrap;
+    .on-button {
+      width: 100%;
+    }
+    .form-control {
+      margin: 0 0 10px;
+    }
+  }
+}
+
+.term-block {
+  margin: 0 0 30px;
+  position: relative;
+  .active-search-terms {
+    padding: 0;
+    margin: 0 20px 0 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    li {
+      margin-right: 10px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      line-height: 1.7em;
+      &:last-child {
+        margin-right: 0;
+      }
+      strong {
+        margin-right: 10px;
+        text-transform: uppercase;
+        color: #777;
+      }
+      > span {
+        word-break: break-word;
+        display: flex;
+        padding: 6px 10px;
+        color: #fff;
+        border-radius: $border-radius-default;
+        background-color: $chiclet-color;
+        transition: background-color 0.3s;
+        justify-content: center;
+        cursor: pointer;
+        &:hover {
+          background-color: darken($chiclet-color, 10%);
+        }
+        span {
+          color: #fff;
+          font-size: 22px;
+          margin-left: 8px;
+          margin-top: -1px;
+        }
+      }
+    }
+  }
+}

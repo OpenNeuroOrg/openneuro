@@ -1,8 +1,9 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { FacetRange } from "@openneuro/components/facets"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { FacetRange } from "../../components/facets/FacetRange"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 
 const SubjectCountRangeInput: FC = () => {
   const min = 0

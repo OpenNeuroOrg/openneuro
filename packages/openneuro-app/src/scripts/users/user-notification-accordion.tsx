@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import styles from "./scss/usernotifications.module.scss"
-import { Tooltip } from "@openneuro/components/tooltip"
+import { Tooltip } from "../components/tooltip/Tooltip"
 import iconUnread from "../../assets/icon-unread.png"
 import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"

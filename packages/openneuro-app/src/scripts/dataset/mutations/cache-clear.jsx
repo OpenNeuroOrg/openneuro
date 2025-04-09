@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 const CACHE_CLEAR = gql`
   mutation cacheClear($datasetId: ID!) {
     cacheClear(datasetId: $datasetId)

@@ -3,8 +3,8 @@ import PropTypes from "prop-types"
 import getYear from "date-fns/getYear"
 import parseISO from "date-fns/parseISO"
 import { CopyToClipboard } from "react-copy-to-clipboard"
-import { Button } from "@openneuro/components/button"
-import { Tooltip } from "@openneuro/components/tooltip"
+import { Button } from "../../components/button/Button"
+import { Tooltip } from "../../components/tooltip/Tooltip"
 
 export const formatCitation = (snapshot, style) => {
   const year = getYear(parseISO(snapshot.created))

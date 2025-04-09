@@ -1,7 +1,7 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import { useNavigate } from "react-router-dom"
 
 export const DEPRECATE_VERSION = gql`

@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import styled from "@emotion/styled"
 
 const StyledButton = styled(Button)`

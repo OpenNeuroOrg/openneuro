@@ -1,0 +1,79 @@
+@import '../scss/variables';
+.has-read-more {
+  position: relative;
+
+  section {
+    height: auto;
+    min-height: 300px;
+    max-height: 300px;
+    transition: max-height 0.4s;
+    overflow: hidden;
+    padding-bottom: 20px;
+  }
+  &.readmore-file-tree {
+    margin-bottom: 80px;
+    section {
+      min-height: 975px;
+      max-height: 975px;
+    }
+  }
+  label.expand-collapse {
+    position: absolute;
+    bottom: -15px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    margin: 0;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 1)
+    );
+    padding-bottom: 50px;
+    display: block;
+    span {
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: var(--current-theme-primary);
+      display: block;
+      position: relative;
+      top: 38px;
+      &:hover {
+        color: var(--current-theme-primary-hover);
+      }
+    }
+    span:first-child {
+      display: inline;
+    }
+    span:last-child {
+      display: none;
+    }
+  }
+  input.show-more {
+    display: none;
+  }
+
+  input.show-more[type='checkbox']:checked + section {
+    max-height: 9000px;
+
+    label.expand-collapse {
+      background: none;
+      span:last-child {
+        display: inline;
+      }
+      span:first-child {
+        display: none;
+      }
+    }
+  }
+  &.readmore-file-tree {
+    input.show-more[type='checkbox']:checked + section {
+      max-height: 40000px;
+    }
+  }
+
+  .filetree-wrapper.on-accordion-wrapper .accordion-item {
+    max-height: 40000px;
+  }
+}

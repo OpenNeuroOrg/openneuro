@@ -3126,6 +3126,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-helmet: "npm:6.1.0"
     react-markdown: "npm:^9.0.1"
+    react-multi-carousel: "npm:^2.8.5"
     react-router-dom: "npm:6.3.0"
     react-toastify: "npm:6.0.9"
     react-usestateref: "npm:^1.0.8"
@@ -17187,6 +17188,13 @@ __metadata:
   version: 2.8.4
   resolution: "react-multi-carousel@npm:2.8.4"
   checksum: 10/ea27341613bfa509b231919c090da42196573bc701a105db15bebd5aeff16d598f0d704f421dec4c94d995f1b59be3912c07f35a13ab18b1e38e246354e2896c
+  languageName: node
+  linkType: hard
+
+"react-multi-carousel@npm:^2.8.5":
+  version: 2.8.5
+  resolution: "react-multi-carousel@npm:2.8.5"
+  checksum: 10/d0db687a2f9687fb6712ae536458ac36f17e965d93e8e7a8f56619dfc57db7bd8350e74174c10d7e2a82e17c7d40acdab84e20d0d3267c1c775e76eae94cd866
   languageName: node
   linkType: hard
 

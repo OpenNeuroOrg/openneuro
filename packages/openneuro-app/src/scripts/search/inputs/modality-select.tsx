@@ -2,8 +2,9 @@ import React, { useContext } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
 import { flattenedModalities } from "../initial-search-params"
-import { FacetSelect } from "@openneuro/components/facets"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { FacetSelect } from "../../components/facets/FacetSelect"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 
 interface ModalitySelectProps {
   inHeader?: boolean

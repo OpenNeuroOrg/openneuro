@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
-import { SingleSelect } from "@openneuro/components/facets"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
+import { SingleSelect } from "../../components/facets/SingleSelect"
 
 interface InitiativeSelectProps {
   label: string

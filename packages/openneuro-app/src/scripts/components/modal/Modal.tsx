@@ -1,5 +1,5 @@
 import React from "react"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../button/Button"
 import "./modal.scss"
 
 export interface ModalProps {

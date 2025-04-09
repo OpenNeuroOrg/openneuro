@@ -3977,6 +3977,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:18.2.0"],\
           ["react-helmet", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.1.0"],\
           ["react-markdown", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:9.0.1"],\
+          ["react-multi-carousel", "npm:2.8.5"],\
           ["react-router-dom", "virtual:bb4ed02b339ed801b02d2ec15b42a5aa7b1afdaf44119aefaab128a59d6e16cc6018880c169f24bf2107550e914562ee9e1780db01a12e1bc3c492ad0a049c36#npm:6.3.0"],\
           ["react-toastify", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.0.9"],\
           ["react-usestateref", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.0.8"],\
@@ -20595,6 +20596,14 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/react-multi-carousel-npm-2.8.4-e0619af128-ea27341613.zip/node_modules/react-multi-carousel/",\
         "packageDependencies": [\
           ["react-multi-carousel", "npm:2.8.4"],\
+          ["react", "npm:17.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.8.5", {\
+        "packageLocation": "./.yarn/cache/react-multi-carousel-npm-2.8.5-deb66f82c0-d0db687a2f.zip/node_modules/react-multi-carousel/",\
+        "packageDependencies": [\
+          ["react-multi-carousel", "npm:2.8.5"],\
           ["react", "npm:17.0.2"]\
         ],\
         "linkType": "HARD"\

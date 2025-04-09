@@ -8,8 +8,8 @@ import {
   getUnexpiredProfile,
   hasEditPermissions,
 } from "../authentication/profile"
-import { Button } from "@openneuro/components/button"
-import { Loading } from "@openneuro/components/loading"
+import { Button } from "../components/button/Button"
+import { Loading } from "../components/loading/Loading"
 import {
   AgeRangeInput,
   AllDatasetsToggle,

@@ -1,6 +1,6 @@
 import React from "react"
-import { Dropdown } from "@openneuro/components/dropdown"
-import { Button } from "@openneuro/components/button"
+import { Dropdown } from "../../components/dropdown/Dropdown"
+import { Button } from "../../components/button/Button"
 import styled from "@emotion/styled"
 import BrainlifeIcon from "../../../assets/external/brainlife.png"
 import NemarIcon from "../../../assets/external/nemar.png"

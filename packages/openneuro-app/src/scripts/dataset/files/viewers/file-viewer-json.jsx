@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import styled from "@emotion/styled"
-import { RecursiveProperty } from "@openneuro/components/json-tree"
+import { RecursiveProperty } from "../../../components/json-tree/RecursiveProperty"
 
 const WrappedPre = styled.pre`
   white-space: pre-wrap;

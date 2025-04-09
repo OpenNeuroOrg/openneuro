@@ -2,8 +2,9 @@ import React, { useContext } from "react"
 import type { FC } from "react"
 import useState from "react-usestateref"
 import { removeFilterItem, SearchParamsCtx } from "../search-params-ctx"
-import { FacetSearch } from "@openneuro/components/facets"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { FacetSearch } from "../../components/facets/FacetSearch"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 
 const AuthorInput: FC = () => {
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)

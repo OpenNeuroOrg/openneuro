@@ -3,7 +3,7 @@ import type { FC } from "react"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import { datasetCacheId } from "../../datalad/mutations/cache-id.js"
-import { CountToggle } from "@openneuro/components/count-toggle"
+import { CountToggle } from "../../components/count-toggle/CountToggle"
 import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx"
 
 const STAR_DATASET = gql`

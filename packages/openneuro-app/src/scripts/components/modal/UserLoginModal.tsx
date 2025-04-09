@@ -1,8 +1,9 @@
 import React from "react"
 import { Modal } from "./Modal"
-import { Button } from "@openneuro/components/button"
-import { Logo } from "@openneuro/components/logo"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { Button } from "../button/Button"
+import { Logo } from "../logo/Logo"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 import { useLocation } from "react-router-dom"
 
 import orcidIcon from "../../../assets/orcid_24x24.png"

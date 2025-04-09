@@ -2,8 +2,8 @@ import React from "react"
 import styled from "@emotion/styled"
 import type { StyledComponent } from "@emotion/styled"
 import { Link } from "react-router-dom"
-import { Tooltip } from "@openneuro/components/tooltip"
-import { Icon } from "@openneuro/components/icon"
+import { Tooltip } from "../../components/tooltip/Tooltip"
+import { Icon } from "../../components/icon/Icon"
 import { useLocation } from "react-router-dom"
 
 interface DatasetToolStyleProps {

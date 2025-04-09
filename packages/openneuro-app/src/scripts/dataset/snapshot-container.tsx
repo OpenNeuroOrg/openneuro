@@ -21,7 +21,7 @@ import { ModalitiesMetaDataBlock } from "./components/ModalitiesMetaDataBlock"
 import { ValidationBlock } from "./components/ValidationBlock"
 import { VersionList } from "./components/VersionList"
 import { Username } from "../users/username"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../components/loading/Loading"
 
 import {
   getUnexpiredProfile,

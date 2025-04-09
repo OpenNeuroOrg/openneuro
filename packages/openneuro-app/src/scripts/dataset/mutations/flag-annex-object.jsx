@@ -2,8 +2,8 @@ import React from "react"
 import PropTypes from "prop-types"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
-import { WarnButton } from "@openneuro/components/warn-button"
-import { Tooltip } from "@openneuro/components/tooltip"
+import { WarnButton } from "../../components/warn-button/WarnButton"
+import { Tooltip } from "../../components/tooltip/Tooltip"
 
 const FLAG_ANNEX_OBJECT = gql`
   mutation flagAnnexObject(

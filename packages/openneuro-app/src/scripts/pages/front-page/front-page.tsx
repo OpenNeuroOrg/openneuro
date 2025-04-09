@@ -4,15 +4,13 @@ import { gql, useQuery } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import styled from "@emotion/styled"
 
-import {
-  ActivityHeader,
-  AffiliateBlock,
-  Contributors,
-  GetUpdates,
-  Infographic,
-} from "@openneuro/components/front-page"
-import { Loading } from "@openneuro/components/loading"
-import { ActivitySlider } from "@openneuro/components/activity-slider"
+import { ActivityHeader } from "../../components/front-page/ActivityHeader"
+import { AffiliateBlock } from "../../components/front-page/AffiliateBlock"
+import { Contributors } from "../../components/front-page/Contributors"
+import { GetUpdates } from "../../components/front-page/GetUpdates"
+import { Infographic } from "../../components/front-page/Infographic"
+import { Loading } from "../../components/loading/Loading"
+import { ActivitySlider } from "../../components/activity-slider/ActivitySlider"
 
 const SUBSCRIBE_TO_NEWSLETTER = gql`
   mutation subscribeToNewsletter($email: String!) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 
 import { RemovePermissions } from "../mutations/remove-permissions"
 import { UpdateDatasetPermissions } from "../mutations/update-permissions"

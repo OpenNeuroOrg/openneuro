@@ -1,9 +1,10 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Button } from "@openneuro/components/button"
-import { ModalityCube } from "@openneuro/components/modality-cube"
-import { cubeData, frontPage } from "@openneuro/components/content"
+import { Button } from "../button/Button"
+import { ModalityCube } from "../modality-cube/ModalityCube"
+import { frontPage } from "../../common/content/front-page-content"
+import { cubeData } from "../../common/content/modality-cube-content"
 import orcidIcon from "../../../assets/orcid_24x24.png"
 
 import "./header.scss"

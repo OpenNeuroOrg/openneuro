@@ -1,6 +1,6 @@
 import React from "react"
-import { Tooltip } from "@openneuro/components/tooltip"
-import { Button } from "@openneuro/components/button"
+import { Tooltip } from "../../components/tooltip/Tooltip"
+import { Button } from "../../components/button/Button"
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text)

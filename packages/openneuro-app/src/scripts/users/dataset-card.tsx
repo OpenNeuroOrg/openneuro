@@ -1,8 +1,8 @@
 import React from "react"
 import { formatDistanceToNow, parseISO } from "date-fns"
 import activityPulseIcon from "../../assets/activity-icon.png"
-import { Tooltip } from "@openneuro/components/tooltip"
-import { Icon } from "@openneuro/components/icon"
+import { Tooltip } from "../components/tooltip/Tooltip"
+import { Icon } from "../components/icon/Icon"
 import styles from "./scss/datasetcard.module.scss"
 import type { DatasetCardProps } from "../types/user-types"
 

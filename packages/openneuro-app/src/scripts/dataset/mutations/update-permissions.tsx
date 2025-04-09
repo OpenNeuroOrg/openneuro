@@ -5,7 +5,7 @@ import type { ApolloError } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content"
 import { validate as isValidEmail } from "email-validator"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 
 import { isValidOrcid } from "../../utils/validationUtils"
 

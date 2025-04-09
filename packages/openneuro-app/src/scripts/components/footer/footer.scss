@@ -1,0 +1,20 @@
+@import '../scss/variables';
+
+footer {
+  background: $charcoal;
+  color: #ffffff;
+  padding: 10px;
+  a,
+  a:link {
+    color: $on-light-aqua;
+  }
+  .grid {
+    font-size: 12px;
+    .col:nth-child(2) {
+      text-align: center;
+    }
+    .col:last-child {
+      text-align: right;
+    }
+  }
+}
