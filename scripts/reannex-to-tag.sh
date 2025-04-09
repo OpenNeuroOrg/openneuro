@@ -34,14 +34,13 @@ chmod +x .git/hooks/post-rewrite
 
 FIND_ADD="echo NOMATCH*NOMATCH; git diff-tree --no-commit-id --name-only -r --diff-filter=AMT HEAD"
 REMOVE_FROM_STDIN="git rm --cached --ignore-unmatch --pathspec-from-file=-"
-COMMIT_IF_NEEDED="git diff --cached --quiet || git commit --amend --no-edit"
+COMMIT_IF_NEEDED="git diff --cached --quiet || git commit --allow-empty --amend --no-edit"
 EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && (${COMMIT_IF_NEEDED})"
 
 # --strategy-option theirs = accept the working tree (original) changes over any files edited in this rebase
 # Find any added or changed files in the commit, remove and add with git-annex
-# Keep empty to avoid required interaction when fixing a commit reverts its parent
-git rebase --committer-date-is-author-date --strategy-option=theirs --keep-empty --exec "$EXEC" $TAG
-# Clean up empty files
+git rebase --committer-date-is-author-date --strategy-option=theirs --exec "$EXEC" $TAG
+# Clean up any newly empty commits
 git rebase --committer-date-is-author-date --no-keep-empty $TAG
 
 # Cleanup our hook
