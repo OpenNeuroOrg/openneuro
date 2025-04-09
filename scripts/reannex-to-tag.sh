@@ -34,14 +34,9 @@ chmod +x .git/hooks/post-rewrite
 
 FIND_ADD="echo NOMATCH*NOMATCH; git diff-tree --no-commit-id --name-only -r --diff-filter=AMT HEAD"
 REMOVE_FROM_STDIN="git rm --cached --ignore-unmatch --pathspec-from-file=-"
-EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && git commit --amend --no-edit"
+COMMIT_IF_NEEDED="git diff --cached --quiet || git commit --amend --no-edit"
+EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && (${COMMIT_IF_NEEDED})"
 
-# Find object will return two commits, where this object was created and changed
-# Reverse topological order should return the initial creation to filter
-COMMIT_TO_EDIT=$(git log --find-object=${1} --reverse --pretty=tformat:"%H" --topo-order | head -n1)
-SHORT_COMMIT=${COMMIT_TO_EDIT:0:7}
-# Automatically edit the right commit during the rebase
-export GIT_SEQUENCE_EDITOR="sed -i 's/^pick ${SHORT_COMMIT}/edit ${SHORT_COMMIT}/;'"
 # --strategy-option theirs = accept the working tree (original) changes over any files edited in this rebase
 # Remove empty commits while we're here
 # Find any added or changed files in the commit, remove and add with git-annex
