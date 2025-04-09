@@ -40,6 +40,19 @@ EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && (${COMMIT_IF_NE
 # --strategy-option theirs = accept the working tree (original) changes over any files edited in this rebase
 # Find any added or changed files in the commit, remove and add with git-annex
 git rebase --committer-date-is-author-date --strategy-option=theirs --exec "$EXEC" $TAG
+
+# The above rebase can pause, which ends this script.
+# If that happens, then everything after this should be run manually.
+#
+# The main reason for pauses is that we fix a file in an earlier commit
+# and a later commit deletes it. To preserve author intent, we need to
+# delete these files:
+#
+#   git rm $(git diff --name-only --diff-filter=U) && git commit --no-edit && git rebase --continue
+#
+# I haven't figured out how to automate this, but that line does the job for now.
+
+
 # Clean up any newly empty commits
 git rebase --committer-date-is-author-date --no-keep-empty $TAG
 
