@@ -87,6 +87,25 @@ describe("datalad dataset descriptions", () => {
       expect(Array.isArray(repaired.ReferencesAndLinks)).toBe(true)
       expect(Array.isArray(repaired.Funding)).toBe(true)
     })
+    it("converts array of objects to empty array for Funding", () => {
+      const description = {
+        Funding: [{ grant: "123" }, { grant: "456" }],
+      }
+      const repaired = repairDescriptionTypes(description)
+      expect(repaired.Funding).toEqual([])
+    })
+    it("sets DatasetType to 'raw' if not a string", () => {
+      const description = {
+        DatasetType: 123,
+      }
+      const repaired = repairDescriptionTypes(description)
+      expect(repaired.DatasetType).toEqual("raw")
+    })
+    it("sets BIDSVersion to '1.8.0' if missing", () => {
+      const description = {}
+      const repaired = repairDescriptionTypes(description)
+      expect(repaired.BIDSVersion).toEqual("1.8.0")
+    })
   })
   describe("getDescriptionObject()", () => {
     beforeAll(() => {
