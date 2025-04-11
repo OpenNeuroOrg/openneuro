@@ -42,9 +42,13 @@ interface Blob {
   name: string
   webkitRelativePath: string
 }
+interface CoralEmbedConfig {
+  storyID?: string
+}
 
 interface Window {
   showDirectoryPicker: any
+  Coral?: Coral
 }
 
 interface Navigator {
