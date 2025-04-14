@@ -89,7 +89,7 @@ export const repairDescriptionTypes = (description) => {
               ? JSON.stringify(description[field])
               : String(description[field])
             newDescription[field] = stringified || ""
-          } catch (e) {
+          } catch (_err) {
             newDescription[field] = "" // Fallback to empty string on error
           }
         }
