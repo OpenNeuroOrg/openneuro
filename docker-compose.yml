@@ -156,7 +156,7 @@ services:
       - "9200:9200"
       - "9300:9300"
 
-  # Coral Project Talk 
+  # Coral Project Talk
   coral:
     image: coralproject/talk:7
     restart: always
