@@ -1,28 +1,45 @@
-import React, { useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 
-interface CoralEmbedConfig {
-  datasetId?: string
+declare global {
+  interface Window {
+    Coral?: {
+      createStreamEmbed: (config: any) => void
+    }
+  }
 }
 
-export const CoralEmbed: React.FC<CoralEmbedConfig> = ({ datasetId }) => {
+export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
   const coralContainerRef = useRef<HTMLDivElement>(null)
-  const currentURL = window.location.href
+  const [coralInitialized, setCoralInitialized] = useState(false)
 
-  useEffect(() => {
-    console.log("CoralEmbed useEffect triggered")
-    console.log("containerRef.current:", coralContainerRef.current)
-    console.log("window.Coral:", window.Coral)
-
+  const initializeCoralEmbed = useCallback(() => {
     if (coralContainerRef.current && window.Coral) {
-      console.log("Initializing Coral Embed")
+      console.log("Initializing Coral Embed (button)")
       window.Coral.createStreamEmbed({
         id: coralContainerRef.current.id,
         autoRender: true,
-        rootURL: "http://localhost:3000",
-        storyID: `${datasetId}`,
-        storyURL: currentURL,
+        rootURL: "http://localhost:5001",
+        storyID: storyID,
+        storyURL: window.location.href,
       })
+      setCoralInitialized(true)
+    } else {
+      console.log("Coral object not available or ref missing on button click")
     }
-  }, [datasetId, currentURL, coralContainerRef])
-  return <div id="coral_thread" ref={coralContainerRef}></div>
+  }, [storyID])
+
+  useEffect(() => {
+    // No automatic initialization on mount
+    console.log("CoralEmbed component mounted.")
+  }, [])
+
+  return (
+    <div>
+      <div id="coral_thread" ref={coralContainerRef}></div>
+      {!coralInitialized && (
+        <button onClick={initializeCoralEmbed}>Initialize Coral Embed</button>
+      )}
+      {coralInitialized && <p>Coral Embed Initialized</p>}
+    </div>
+  )
 }

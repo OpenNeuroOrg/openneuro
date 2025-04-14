@@ -155,3 +155,17 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+
+  # Coral Project Talk 
+  coral:
+    image: coralproject/talk:7
+    restart: always
+    ports:
+      - "5001:5000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/coral
+      - REDIS_URI=redis://redis:6379
+      - SIGNING_SECRET=${CORAL_SIGNING_SECRET}

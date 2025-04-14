@@ -45,7 +45,6 @@ interface Blob {
 
 interface Window {
   showDirectoryPicker: any
-  Coral?: Coral
 }
 
 interface Navigator {

@@ -49,7 +49,7 @@ export const DatasetDefault = ({ dataset, hasEdit }) => {
         uploader={dataset.uploader}
         comments={dataset.comments}
       />
-      <CoralEmbed datasetId={dataset.id} />
+      <CoralEmbed storyID={dataset.id} />
     </>
   )
 }
