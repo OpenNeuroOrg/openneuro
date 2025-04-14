@@ -29,6 +29,7 @@ export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
   }, [storyID])
 
   useEffect(() => {
+    console.log(window.Coral)
     // No automatic initialization on mount
     console.log("CoralEmbed component mounted.")
   }, [])
