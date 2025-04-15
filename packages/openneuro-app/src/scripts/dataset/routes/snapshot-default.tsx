@@ -30,10 +30,12 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       datasetPermissions={dataset.permissions}
       summary={snapshot?.summary}
     />
-    <Comments
+    {
+      /* <Comments
       datasetId={dataset.id}
       uploader={dataset.uploader}
       comments={dataset.comments}
-    />
+    /> */
+    }
   </>
 )
