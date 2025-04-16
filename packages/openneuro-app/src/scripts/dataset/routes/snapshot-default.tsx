@@ -4,6 +4,7 @@ import { ReadMore } from "../../components/read-more/ReadMore"
 import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"
 import Comments from "../comments/comments"
+import { CoralEmbed } from "../comments/coral-embed"
 
 /**
  * Default tab for snapshot pages
@@ -36,6 +37,7 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       uploader={dataset.uploader}
       comments={dataset.comments}
     /> */
+      <CoralEmbed storyID={dataset.id} />
     }
   </>
 )
