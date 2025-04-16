@@ -12,6 +12,15 @@ import CacheItem, { CacheType } from "../cache/item"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 
 /**
+ * Checks if all elements in an array are strings.
+ * @param arr The array to check.
+ * @returns True if all elements are strings, false otherwise.
+ */
+const isArrayOfStrings = (arr: unknown): arr is string[] => {
+  return Array.isArray(arr) && arr.every((item) => typeof item === "string")
+}
+
+/**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
  * @returns {Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
@@ -36,64 +45,65 @@ export const descriptionCacheKey = (datasetId, revision) => {
 
 export const repairDescriptionTypes = (description) => {
   const newDescription = { ...description }
-  // Array types
-  if (
-    Object.hasOwn(description, "Authors") &&
-    !Array.isArray(description.Authors)
-  ) {
-    newDescription.Authors = [description.Authors]
+
+  // Define fields that should be arrays of strings
+  const arrayStringFields = [
+    "Authors",
+    "ReferencesAndLinks",
+    "Funding",
+    "EthicsApprovals",
+  ]
+
+  // Repair array types - ensure they are arrays of strings
+  for (const field of arrayStringFields) {
+    if (Object.hasOwn(description, field)) {
+      if (!isArrayOfStrings(description[field])) {
+        // If it's not an array of strings (or not an array at all), replace with an empty array
+        newDescription[field] = []
+      }
+      // If it is already a valid array of strings, no change is needed.
+    }
+    // If the field doesn't exist, we don't add it.
   }
-  if (
-    Object.hasOwn(description, "ReferencesAndLinks") &&
-    !Array.isArray(description.ReferencesAndLinks)
-  ) {
-    newDescription.ReferencesAndLinks = [description.ReferencesAndLinks]
+
+  // Define fields that should be strings
+  const stringFields = [
+    "Name",
+    "DatasetDOI",
+    "Acknowledgements",
+    "HowToAcknowledge",
+    "DatasetType",
+  ]
+
+  // Repair string types - ensure they are strings
+  for (const field of stringFields) {
+    if (Object.hasOwn(description, field)) {
+      if (typeof description[field] !== "string") {
+        // Attempt to stringify non-string types, default to empty string or specific default
+        if (field === "DatasetType") {
+          newDescription[field] = "raw" // Specific default for DatasetType
+        } else {
+          try {
+            // Use JSON.stringify for complex types, otherwise just convert
+            const stringified = typeof description[field] === "object"
+              ? JSON.stringify(description[field])
+              : String(description[field])
+            newDescription[field] = stringified || ""
+          } catch (_err) {
+            newDescription[field] = "" // Fallback to empty string on error
+          }
+        }
+      }
+      // If it's already a string, no change needed.
+    }
+    // If the field doesn't exist, we don't add it.
   }
-  if (
-    Object.hasOwn(description, "Funding") &&
-    !Array.isArray(description.Funding)
-  ) {
-    newDescription.Funding = [description.Funding]
+
+  // Ensure BIDSVersion is present if missing (common default)
+  if (!Object.hasOwn(newDescription, "BIDSVersion")) {
+    newDescription.BIDSVersion = "1.8.0" // Or your desired default BIDS version
   }
-  if (
-    Object.hasOwn(description, "EthicsApprovals") &&
-    !Array.isArray(description.EthicsApprovals)
-  ) {
-    newDescription.EthicsApprovals = [description.EthicsApprovals]
-  }
-  // String types
-  if (
-    Object.hasOwn(description, "Name") &&
-    typeof description.Name !== "string"
-  ) {
-    newDescription.Name = JSON.stringify(description.Name) || ""
-  }
-  if (
-    Object.hasOwn(description, "DatasetDOI") &&
-    typeof description.DatasetDOI !== "string"
-  ) {
-    newDescription.DatasetDOI = JSON.stringify(description.DatasetDOI) || ""
-  }
-  if (
-    Object.hasOwn(description, "Acknowledgements") &&
-    typeof description.Acknowledgements !== "string"
-  ) {
-    newDescription.Acknowledgements =
-      JSON.stringify(description.Acknowledgements) || ""
-  }
-  if (
-    Object.hasOwn(description, "HowToAcknowledge") &&
-    typeof description.HowToAcknowledge !== "string"
-  ) {
-    newDescription.HowToAcknowledge =
-      JSON.stringify(description.HowToAcknowledge) || ""
-  }
-  if (
-    Object.hasOwn(description, "DatasetType") &&
-    typeof description.DatasetType !== "string"
-  ) {
-    newDescription.DatasetType = "raw"
-  }
+
   return newDescription
 }
 
