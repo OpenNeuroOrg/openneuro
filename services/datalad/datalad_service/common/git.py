@@ -1,6 +1,8 @@
 import pathlib
 import re
 import subprocess
+import logging
+import sentry_sdk
 
 import pygit2
 from charset_normalizer import from_bytes
@@ -10,6 +12,7 @@ tag_ref = re.compile('^refs/tags/')
 COMMITTER_NAME = 'Git Worker'
 COMMITTER_EMAIL = 'git@openneuro.org'
 
+logger = logging.getLogger(__name__)
 
 class OpenNeuroGitError(Exception):
     """OpenNeuro git repo states that should not arise under normal use but may be a valid git operation in other contexts."""
@@ -78,9 +81,22 @@ def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded chan
             'HEAD points at invalid branch name ({}) and commit was aborted'.format(repo.references['HEAD'].target))
     # Refresh index with git-annex specific handling
     annex_command = ["git-annex", "add"] + file_paths
-    subprocess.run(annex_command, check=True, cwd=repo.workdir)
-    repo.index.add_all(file_paths)
-    repo.index.write()
+    try:
+        subprocess.run(annex_command, check=True, cwd=repo.workdir)
+    except subprocess.CalledProcessError as e:
+        sentry_sdk.capture_exception(e)
+        logger.error(f"Error running git-annex add for paths {file_paths}: {e}")
+        logger.error(f"Stderr: {e.stderr}")
+        logger.error(f"Stdout: {e.stdout}")
+        raise OpenNeuroGitError(f"git-annex add failed: {e.stderr}") from e
+    # git-annex add updates the index, make sure we reload it
+    try:
+        repo.index.read(force=True)
+        logger.debug("Reloaded index after git-annex add.")
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.error(f"Failed to read index after git-annex add: {e}")
+        raise OpenNeuroGitError(f"Failed to read index: {e}") from e
     return git_commit_index(repo, author, message, parents)
 
 
