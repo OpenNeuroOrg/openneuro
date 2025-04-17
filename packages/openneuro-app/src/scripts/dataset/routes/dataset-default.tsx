@@ -1,9 +1,8 @@
-import React, { useRef } from "react"
+import React from "react"
 import { Markdown } from "../../utils/markdown"
 import { ReadMore } from "../../components/read-more/ReadMore"
 import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"
-import Comments from "../comments/comments"
 import EditDescriptionField from "../fragments/edit-description-field"
 import { CoralEmbed } from "../comments/coral-embed"
 

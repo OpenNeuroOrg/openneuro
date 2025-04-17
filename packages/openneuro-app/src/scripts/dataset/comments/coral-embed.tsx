@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react"
+import * as Sentry from "@sentry/react"
 
 export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
   const coralContainerRef = useRef<HTMLDivElement>(null)
@@ -16,20 +17,15 @@ export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
       try {
         const response = await fetch("/api/auth/coral-sso", { headers })
         const data = await response.json()
-        console.log("Coral SSO token fetched:", data.token)
         initializeCoralEmbed(data.token)
       } catch (error) {
-        console.error("Error fetching Coral SSO token:", error)
+        Sentry.captureException(error)
         initializeCoralEmbed(undefined)
       }
     }
 
     const initializeCoralEmbed = (token: string | undefined) => {
       if (coralContainerRef.current && window.Coral) {
-        console.log(
-          "Initializing Coral Embed with token:",
-          token || "undefined",
-        )
         window.Coral.createStreamEmbed({
           id: coralContainerRef.current.id,
           autoRender: true,
