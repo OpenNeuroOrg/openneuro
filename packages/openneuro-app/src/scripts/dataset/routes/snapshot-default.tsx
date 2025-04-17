@@ -31,13 +31,6 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       datasetPermissions={dataset.permissions}
       summary={snapshot?.summary}
     />
-    {
-      /* <Comments
-      datasetId={dataset.id}
-      uploader={dataset.uploader}
-      comments={dataset.comments}
-    /> */
-      <CoralEmbed storyID={dataset.id} />
-    }
+    <CoralEmbed storyID={dataset.id} />
   </>
 )
