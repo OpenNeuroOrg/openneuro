@@ -82,7 +82,7 @@ def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded chan
     # Refresh index with git-annex specific handling
     annex_command = ["git-annex", "add"] + file_paths
     try:
-        subprocess.run(annex_command, check=True, cwd=repo.workdir)
+        subprocess.run(annex_command, check=True, capture_output=True, cwd=repo.workdir)
     except subprocess.CalledProcessError as e:
         sentry_sdk.capture_exception(e)
         logger.error(f"Error running git-annex add for paths {file_paths}: {e}")
