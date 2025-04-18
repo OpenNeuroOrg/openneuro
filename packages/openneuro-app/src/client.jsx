@@ -1,7 +1,6 @@
 /**
  * Browser client entrypoint
  */
-import "./scripts/utils/global-polyfill"
 import "./scripts/sentry"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
 import React from "react"
