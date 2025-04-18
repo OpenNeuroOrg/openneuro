@@ -31,7 +31,7 @@ describe("UserLoginModal component", () => {
       </MemoryRouter>,
     )
     expect(
-      screen.getByRole("link", { name: /orcid/i }).getAttribute("href"),
+      screen.getByRole("link", { name: "ORCID" }).getAttribute("href"),
     ).toBe("https://openneuro.org/crn/auth/orcid?redirectPath=L2ltcG9ydA==")
   })
 })
