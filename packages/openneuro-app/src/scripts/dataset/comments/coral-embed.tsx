@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from "react"
+import React, { useContext, useEffect, useRef } from "react"
 import * as Sentry from "@sentry/react"
+import { isAdmin } from "../../authentication/admin-user"
+import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx" // Import your context
 
 export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
   const coralContainerRef = useRef<HTMLDivElement>(null)
+  const isAdminUser = isAdmin()
+  const { setUserModalOpen } = useContext(UserModalOpenCtx)
 
   useEffect(() => {
     const fetchAndInitializeCoral = async () => {
@@ -33,11 +37,17 @@ export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
           storyID: storyID,
           storyURL: window.location.href,
           accessToken: token,
+          role: isAdminUser ? "ADMIN" : "COMMENTER",
+          events: function (events) {
+            events.on("loginPrompt", function () {
+              setUserModalOpen(true)
+            })
+          },
         })
       }
     }
     fetchAndInitializeCoral()
-  }, [storyID])
+  }, [storyID, isAdminUser, setUserModalOpen])
 
   return <div id="coral_thread" ref={coralContainerRef}></div>
 }
