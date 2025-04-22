@@ -30,9 +30,6 @@ export const generateCoralSSOToken = async (req, res) => {
         id: req.user.id,
         email: req.user.email,
         username: req.user.name,
-        // badges: [], // Optional: Add user badges here
-        // role: 'COMMENTER', // Optional: Set user role
-        // url: '...', // Optional: User account URL
       },
     }
 
