@@ -3,7 +3,10 @@ import * as Sentry from "@sentry/react"
 import { isAdmin } from "../../authentication/admin-user"
 import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx" // Import your context
 
-export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
+export const CoralEmbed: React.FC<{ storyID: string; modalities: [] }> = (
+  { storyID, modalities },
+) => {
+  console.log(modalities)
   const coralContainerRef = useRef<HTMLDivElement>(null)
   const isAdminUser = isAdmin()
   const { setUserModalOpen } = useContext(UserModalOpenCtx)
@@ -38,6 +41,7 @@ export const CoralEmbed: React.FC<{ storyID: string }> = ({ storyID }) => {
           storyURL: window.location.href,
           accessToken: token,
           role: isAdminUser ? "ADMIN" : "COMMENTER",
+          containerClassName: modalities,
           events: function (events) {
             events.on("loginPrompt", function () {
               setUserModalOpen(true)

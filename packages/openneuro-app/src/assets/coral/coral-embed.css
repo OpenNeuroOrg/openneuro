@@ -1,0 +1,60 @@
+#coral {
+  --palette-primary-200: #b5cbd3;     
+  --palette-primary-400: #377ed2;
+  --palette-primary-500: #1c4550;
+  --palette-primary-700: #163a45;
+  --palette-primary-800: #102f38;
+  --palette-primary-900: #0b252c;
+
+  --palette-error-600: #cc322f;
+  --palette-error-700: #b32c29;
+  --palette-error-800: #992523;
+  --palette-error-900: #7f1f1d;
+
+  --palette-success-600: #28b463;
+  --palette-success-700: #239b56;
+  --palette-success-800: #1d8348;
+  --palette-success-900: #186a3b;
+
+  /* FONTS */
+  --font-family-primary: 'Open Sans', sans-serif;
+  --font-family-secondary: 'Nunito', sans-serif;
+
+  --font-weight-primary-bold: 700;
+  --font-weight-primary-semi-bold: 600;
+  --font-weight-primary-regular: 500;
+
+  --font-weight-secondary-bold: 700;
+  --font-weight-secondary-regular: 500;
+
+  /* SHADOWS */
+  --shadow-popover: 1px 0px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+#coral .coral.coral-viewerBox{
+  display: none;
+}
+
+#coral{
+    --palette-primary-500: #1c4550;
+}
+
+#coral.meg{
+  --palette-primary-500:rgba(156, 57, 0, 1);
+}
+
+ #coral.eeg{
+    --palette-primary-500:rgba(134, 31, 55, 1);
+}
+
+ #coral.pet{
+    --palette-primary-500:rgba(0, 105, 192, 1);
+}
+
+ #coral.ieeg{
+    --palette-primary-500:rgba(18, 109, 62, 1);
+}
+#coral.mri{
+  --palette-primary-500:rgba(79, 51, 130, 1);
+}
