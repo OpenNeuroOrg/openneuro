@@ -6,7 +6,7 @@ exports[`dataset/download > DownloadSampleCommand component > renders successful
     class="css-xak41w"
     role="figure"
   >
-    openneuro download --draft ds000001 ds000001-download/
+    deno run -A jsr:@openneuro/cli download --draft ds000001 ds000001-download/
   </pre>
 </DocumentFragment>
 `;

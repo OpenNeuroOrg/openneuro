@@ -4,9 +4,9 @@ import ShellExample from "./shell-example.jsx"
 
 export const DownloadSampleCommand = ({ datasetId, snapshotTag }) => (
   <ShellExample role="figure">
-    openneuro download {snapshotTag ? `--snapshot ${snapshotTag}` : "--draft"}
-    {" "}
-    {datasetId} {datasetId}
+    deno run -A jsr:@openneuro/cli download{" "}
+    {snapshotTag ? `--version ${snapshotTag}` : "--draft"} {datasetId}{" "}
+    {datasetId}
     -download/
   </ShellExample>
 )
@@ -18,15 +18,14 @@ DownloadSampleCommand.propTypes = {
 
 const DownloadCommandLine = ({ datasetId, snapshotTag }) => (
   <div>
-    <h4>Download with Node.js</h4>
+    <h4>Download with Deno</h4>
     <p>
-      Using{" "}
-      <a href="https://www.npmjs.com/package/@openneuro/cli">@openneuro/cli</a>
-      {" "}
+      Using <a href="https://jsr.io/@openneuro/cli">@openneuro/cli</a>{" "}
       you can download this dataset from the command line using{" "}
-      <a href="https://nodejs.org/en/download/">Node.js</a>. This method is good
-      for larger datasets or unstable connections, but has known issues on
-      Windows.
+      <a href="https://docs.deno.com/runtime/getting_started/installation/">
+        Deno
+      </a>. This method is good for larger datasets or unstable connections, but
+      has known issues on Windows.
     </p>
     <DownloadSampleCommand datasetId={datasetId} snapshotTag={snapshotTag} />
     <p>
