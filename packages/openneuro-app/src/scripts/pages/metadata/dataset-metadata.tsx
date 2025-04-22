@@ -9,7 +9,7 @@ const MetadataPageStyle = styled.div`
   background: white;
   overflow-x: scroll;
   padding: 1em;
-  height: calc(100vh - 152px);
+  height: calc(100vh - 125px);
   white-space: nowrap;
 `
 

@@ -17,7 +17,7 @@ const ImportDatasetPageStyle = styled.div`
 
   .container {
     max-width: 60em;
-    min-height: calc(100vh - 152px);
+    min-height: calc(100vh - 125px);
   }
 `
 
