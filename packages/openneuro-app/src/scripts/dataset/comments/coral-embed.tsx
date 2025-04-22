@@ -6,7 +6,6 @@ import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx" // Import yo
 export const CoralEmbed: React.FC<{ storyID: string; modalities: [] }> = (
   { storyID, modalities },
 ) => {
-  console.log(modalities)
   const coralContainerRef = useRef<HTMLDivElement>(null)
   const isAdminUser = isAdmin()
   const { setUserModalOpen } = useContext(UserModalOpenCtx)
