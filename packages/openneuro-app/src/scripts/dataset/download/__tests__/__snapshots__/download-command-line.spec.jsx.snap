@@ -6,6 +6,12 @@ exports[`dataset/download > DownloadSampleCommand component > renders successful
     class="css-xak41w"
     role="figure"
   >
+    # Login by following the prompts
+    <br />
+    deno run -A jsr:@openneuro/cli login
+    <br />
+    # Download the repository
+    <br />
     deno run -A jsr:@openneuro/cli download --draft ds000001 ds000001-download/
   </pre>
 </DocumentFragment>

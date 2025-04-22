@@ -4,6 +4,9 @@ import ShellExample from "./shell-example.jsx"
 
 export const DownloadSampleCommand = ({ datasetId, snapshotTag }) => (
   <ShellExample role="figure">
+    # Login by following the prompts<br />
+    deno run -A jsr:@openneuro/cli login<br />
+    # Download the repository<br />
     deno run -A jsr:@openneuro/cli download{" "}
     {snapshotTag ? `--version ${snapshotTag}` : "--draft"} {datasetId}{" "}
     {datasetId}
@@ -24,15 +27,17 @@ const DownloadCommandLine = ({ datasetId, snapshotTag }) => (
       you can download this dataset from the command line using{" "}
       <a href="https://docs.deno.com/runtime/getting_started/installation/">
         Deno
-      </a>. This method is good for larger datasets or unstable connections, but
-      has known issues on Windows.
+      </a>.
     </p>
     <DownloadSampleCommand datasetId={datasetId} snapshotTag={snapshotTag} />
     <p>
       This will download to {datasetId}
-      -download/ in the current directory. If your download is interrupted and
-      you need to retry, rerun the command to resume the download.
+      -download/ in the current directory. To download data files, use datalad
+      or git-annex.
     </p>
+    <ShellExample>
+      cd {datasetId}-download && datalad get [PATH]
+    </ShellExample>
   </div>
 )
 
