@@ -27,9 +27,12 @@ const DownloadDataladExample = ({
         .git
       </ShellExample>
       {hasEdit && (
-        <ShellExample>
-          datalad install {config.url}/git/{workerId}/{datasetId}
-        </ShellExample>
+        <>
+          <p>Directly from OpenNeuro:</p>
+          <ShellExample>
+            datalad install {config.url}/git/{workerId}/{datasetId}
+          </ShellExample>
+        </>
       )}
     </>
   )

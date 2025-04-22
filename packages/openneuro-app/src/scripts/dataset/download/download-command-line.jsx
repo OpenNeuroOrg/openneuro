@@ -31,9 +31,9 @@ const DownloadCommandLine = ({ datasetId, snapshotTag }) => (
     </p>
     <DownloadSampleCommand datasetId={datasetId} snapshotTag={snapshotTag} />
     <p>
-      This will download to {datasetId}
-      -download/ in the current directory. To download data files, use datalad
-      or git-annex.
+      This will download a DataLad dataset to {datasetId}
+      -download/ in the current directory. To download annexed files, use
+      datalad or git-annex.
     </p>
     <ShellExample>
       cd {datasetId}-download && datalad get [PATH]
