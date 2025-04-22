@@ -43,7 +43,10 @@ export const DatasetDefault = ({ dataset, hasEdit }) => {
         datasetPermissions={dataset.permissions}
         summary={dataset.draft?.summary}
       />
-      <CoralEmbed storyID={dataset.id} />
+      <CoralEmbed
+        storyID={dataset.id}
+        modalities={dataset.draft.summary.modalities}
+      />
     </>
   )
 }

@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/react"
 import { isAdmin } from "../../authentication/admin-user"
 import { UserModalOpenCtx } from "../../utils/user-login-modal-ctx"
 
-export const CoralEmbed: React.FC<{ storyID: string; modalities: [] }> = (
+export const CoralEmbed: React.FC<{ storyID: string; modalities: string[] }> = (
   { storyID, modalities },
 ) => {
   const coralContainerRef = useRef<HTMLDivElement>(null)
