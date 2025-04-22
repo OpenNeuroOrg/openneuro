@@ -13,11 +13,11 @@ describe("dataset/download", () => {
     it("drafts show draft flag", () => {
       render(<DownloadSampleCommand {...defProps} />)
       expect(screen.getByRole("figure")).toHaveTextContent("--draft")
-      expect(screen.queryByText("--snapshot")).not.toBeInTheDocument()
+      expect(screen.queryByText("--version")).not.toBeInTheDocument()
     })
     it("snapshots show snapshot flag", () => {
       render(<DownloadSampleCommand {...defProps} snapshotTag="1.0.0" />)
-      expect(screen.getByRole("figure")).toHaveTextContent("--snapshot")
+      expect(screen.getByRole("figure")).toHaveTextContent("--version")
       expect(screen.queryByText("--draft")).not.toBeInTheDocument()
     })
   })
