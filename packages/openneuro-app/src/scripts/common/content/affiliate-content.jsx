@@ -63,7 +63,7 @@ export const affiliateContent = [
     contentTwo: (
       <>
         View the collection of{" "}
-        <a href="http://localhost:9876/search/nih?query=%7B%22brain_initiative%22%3A%22true%22%7D">
+        <a href="/search/nih?query=%7B%22brain_initiative%22%3A%22true%22%7D">
           BRAIN Initiative datasets
         </a>
       </>
