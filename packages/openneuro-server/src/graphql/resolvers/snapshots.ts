@@ -192,7 +192,7 @@ export const participantCount = (obj, { modality }) => {
       matchQuery = {
         $expr: { $in: ["$id", nihDatasets] },
       }
-    } else {
+    } else if (modality) {
       matchQuery = {
         $and: [
           queryHasSubjects,
