@@ -39,7 +39,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
           cubeImage={item.cubeImage}
           altText={item.altText}
           cubeFaceImage={item.cubeFaceImage}
-          stats={aggregateCounts(item.label)}
+          stats={aggregateCounts(item.label.toLowerCase())}
           onClick={(redirectPath) => (_err) => {
             navigate(redirectPath)
           }}

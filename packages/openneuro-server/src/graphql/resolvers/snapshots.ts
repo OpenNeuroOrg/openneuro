@@ -136,7 +136,7 @@ export const undoDeprecateSnapshot = async (
 }
 
 export const participantCount = (obj, { modality }) => {
-  const cacheKey = modality === "NIH" ? "NIH" : modality || "all"
+  const cacheKey = modality === "nih" ? "nih" : modality || "all"
   const cache = new CacheItem(
     redis,
     CacheType.participantCount,
@@ -151,7 +151,7 @@ export const participantCount = (obj, { modality }) => {
 
     let matchQuery: Record<string, unknown> = queryHasSubjects
 
-    if (modality && modality !== "NIH") {
+    if (modality && modality !== "nih") {
       matchQuery = {
         $and: [
           queryHasSubjects,
@@ -160,7 +160,7 @@ export const participantCount = (obj, { modality }) => {
           },
         ],
       }
-    } else if (modality === "NIH") {
+    } else if (modality === "nih") {
       // When modality is 'NIH', we don't filter by a specific modality.
       // Instead, we query for datasets that have any modality within the NIH portal
       matchQuery = {
