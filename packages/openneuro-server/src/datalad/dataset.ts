@@ -178,7 +178,7 @@ export const datasetsFilter = (options) => (match) => {
         },
         {
           $match: {
-            "summaries.0.modalities": options.modality,
+            "summaries.0.modalities": new RegExp(`^${options.modality}$`, "i"),
           },
         },
       ],

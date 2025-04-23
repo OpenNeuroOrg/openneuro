@@ -17,6 +17,7 @@ import { normalizeDOI } from "../../libs/doi/normalize"
 import { getDraftHead } from "../../datalad/dataset"
 import { downloadFiles } from "../../datalad/snapshots"
 import { snapshotValidation } from "./validation"
+import { advancedDatasetSearchConnection } from "./dataset-search"
 
 export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
@@ -135,13 +136,28 @@ export const undoDeprecateSnapshot = async (
   }
 }
 
+/** Query used to run a search for NIH datasets */
+const brainInitiativeQuery = {
+  "bool": {
+    "filter": [
+      {
+        "match": {
+          "brainInitiative": {
+            "query": "true",
+          },
+        },
+      },
+    ],
+  },
+}
+
 export const participantCount = (obj, { modality }) => {
-  const cacheKey = modality === "nih" ? "nih" : modality || "all"
+  const cacheKey = modality || "all"
   const cache = new CacheItem(
     redis,
     CacheType.participantCount,
     [cacheKey],
-    3600,
+    86400,
   )
 
   return cache.get(async () => {
@@ -151,23 +167,37 @@ export const participantCount = (obj, { modality }) => {
 
     let matchQuery: Record<string, unknown> = queryHasSubjects
 
-    if (modality && modality !== "nih") {
-      matchQuery = {
-        $and: [
-          queryHasSubjects,
-          {
-            "summary.modalities": modality,
-          },
-        ],
+    if (modality === "nih") {
+      // For "nih" portal, we need to search for any relevant datasets first
+      const nihDatasets = []
+      while (true) {
+        let after = ""
+        const results = await advancedDatasetSearchConnection(null, {
+          query: brainInitiativeQuery,
+          datasetType: "All Public",
+          datasetStatus: "",
+          sortBy: "",
+          after,
+          first: 100,
+        }, { user: null, userInfo: {} })
+        nihDatasets.push(...results.edges.map((edge) => edge.id))
+        if (!results.pageInfo.hasNextPage) {
+          break
+        } else {
+          after = results.pageInfo.endCursor
+        }
       }
-    } else if (modality === "nih") {
       // When modality is 'NIH', we don't filter by a specific modality.
       // Instead, we query for datasets that have any modality within the NIH portal
       matchQuery = {
+        $expr: { $in: ["$id", nihDatasets] },
+      }
+    } else {
+      matchQuery = {
         $and: [
           queryHasSubjects,
           {
-            "summary.modalities": { $exists: true },
+            "summary.modalities": new RegExp(`^${modality}$`, "i"),
           },
         ],
       }
