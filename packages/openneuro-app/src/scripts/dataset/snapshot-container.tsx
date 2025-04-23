@@ -80,7 +80,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
   const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
-  const isAnonymousReviewer = profile?.name === "Anonymous Reviewer"
+  const isAnonymousReviewer = profile?.scopes?.includes("dataset:reviewer")
   return (
     <>
       <Helmet>

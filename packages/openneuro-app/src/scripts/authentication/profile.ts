@@ -8,6 +8,7 @@ export interface OpenNeuroTokenProfile {
   admin: boolean
   iat: number
   exp: number
+  scopes?: string[]
 }
 
 /**
