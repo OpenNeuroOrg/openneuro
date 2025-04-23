@@ -21,7 +21,7 @@ const BRAIN_INITIATIVE_COUNT = gql`
 `
 
 const usePublicDatasetsCount = (modality?: string) => {
-  const isNIH = modality === "NIH"
+  const isNIH = modality === "nih"
 
   const query = isNIH ? BRAIN_INITIATIVE_COUNT : PUBLIC_DATASETS_COUNT
   const variables = isNIH
