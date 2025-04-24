@@ -5,6 +5,21 @@ import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
 import type { User } from "../../types/user-types"
 import { DATASETS_QUERY } from "../user-datasets-view"
+import { vi } from "vitest"
+
+vi.mock("../../config", () => ({
+  config: {
+    url: "http://localhost:8111",
+    api: "http://localhost:8111/crn/",
+    graphql: { uri: "/graphql" },
+    auth: {
+      orcid: {
+        clientID: "test-orcid-client-id",
+        ORCID_API_ENDPOINT: "https://orcid.org/",
+      },
+    },
+  },
+}))
 
 const defaultUser: User = {
   id: "1",
