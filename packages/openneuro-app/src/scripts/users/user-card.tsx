@@ -1,10 +1,14 @@
 import React from "react"
 import styles from "./scss/usercard.module.scss"
 import type { UserCardProps } from "../types/user-types"
+import { config } from "../config"
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const { location, institution, email, orcid, links = [], github, name } = user
-
+  let orcidURL = "https://orcid.org/"
+  if (config.auth.orcid.ORCID_API_ENDPOINT.includes("sandbox")) {
+    orcidURL = "https://sandbox.orcid.org/"
+  }
   return (
     <div className={styles.userCard}>
       <ul>
@@ -34,7 +38,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           <li className={styles.orcid}>
             <i className="fab fa-orcid" aria-hidden="true"></i>
             <a
-              href={`https://orcid.org/${orcid}`}
+              href={`${orcidURL}${orcid}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`ORCID profile of ${name}`}
