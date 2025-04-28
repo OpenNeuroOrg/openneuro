@@ -6,6 +6,7 @@ from falcon import testing
 import pygit2
 
 from datalad_service.common import git
+from datalad_service.handlers.git import _parse_commit
 from datalad.api import Dataset
 
 
@@ -16,7 +17,8 @@ test_auth = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1
 
 
 def test_git_show(new_dataset):
-    assert git.git_show(new_dataset.path, 'HEAD',
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_show(repo, 'HEAD',
                         'dataset_description.json') == '{"BIDSVersion": "1.0.2", "License": "This is not a real dataset", "Name": "Test fixture new dataset"}'
 
 
@@ -36,7 +38,8 @@ def test_git_show_non_iso_test(new_dataset):
         f.write(non_utf8_events)
     ds.save(events_path)
     ds.close()
-    assert git.git_show(new_dataset.path, 'HEAD',
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_show(repo, 'HEAD',
                         'events.tsv') == non_utf8_events.decode('cp852')
 
 dataset_description_4096 = """{
@@ -68,7 +71,8 @@ def test_git_show_unicode_after_4096(new_dataset):
         f.write(dataset_description_4096)
     ds.save(desc_path)
     ds.close()
-    assert git.git_show(new_dataset.path, 'HEAD',
+    repo = pygit2.Repository(new_dataset.path)
+    assert git.git_show(repo, 'HEAD',
                         'dataset_description.json') == dataset_description_4096.decode('utf-8')
 
 
@@ -145,6 +149,13 @@ def test_git_receive_resource(client):
         f'/git/0/{ds_id}/git-receive-pack', headers={"authorization": test_auth}, body=receive_pack_input)
     assert response.status == falcon.HTTP_OK
 
+def test_parse_commit():
+    noop = b'0000'
+    single = b'00677d1665144a3a975c05f1f43902ddaf084e784dbe 74730d410fcb6603ace96f1dc55ea6196122532d refs/heads/debug\x00 report-status-v20000PACK\x00\x00\x00\x02'
+    multiple = b'00677d1665144a3a975c05f1f43902ddaf084e784dbe 74730d410fcb6603ace96f1dc55ea6196122532d refs/heads/debug\n006874730d410fcb6603ace96f1dc55ea6196122532d 5a3f6be755bbb7deae50065988cbfa1ffa9ab68a refs/heads/master\n0000\nextra data\n'
+    assert _parse_commit(noop) == []
+    assert _parse_commit(single) == [("74730d410fcb6603ace96f1dc55ea6196122532d", "refs/heads/debug")]
+    assert _parse_commit(multiple) == [("74730d410fcb6603ace96f1dc55ea6196122532d", "refs/heads/debug"), ("5a3f6be755bbb7deae50065988cbfa1ffa9ab68a", "refs/heads/master")]
 
 def test_git_tag_tree(new_dataset):
     tag = '1.0.0'
@@ -152,3 +163,9 @@ def test_git_tag_tree(new_dataset):
     # Create a tag
     repo.references.create(f'refs/tags/{tag}', str(repo.head.target))
     assert git.git_tag_tree(repo, tag) == repo.get(repo.head.target).tree_id
+
+
+def test_git_tree(new_dataset):
+    repo = pygit2.Repository(new_dataset.path)
+    tree = git.git_tree(repo, str(repo.head.target), "dataset_description.json")
+    assert tree.id == repo.get(repo.head.target).tree_id

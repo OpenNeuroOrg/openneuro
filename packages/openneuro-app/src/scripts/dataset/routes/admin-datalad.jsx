@@ -5,6 +5,7 @@ import CacheClear from "../mutations/cache-clear.jsx"
 import AdminExports from "../mutations/admin-exports"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3, HeaderRow4 } from "./styles/header-row"
+import { DatasetEvents } from "../mutations/dataset-events"
 
 const AdminDataset = ({ dataset }) => (
   <DatasetPageBorder className="datalad-dataset-form">
@@ -29,6 +30,9 @@ const AdminDataset = ({ dataset }) => (
     <hr />
     <HeaderRow4>Draft Head</HeaderRow4>
     {dataset.draft.head}
+    <hr />
+    <DatasetEvents datasetId={dataset.id} />
+    <hr />
     <DatasetHistory datasetId={dataset.id} />
   </DatasetPageBorder>
 )

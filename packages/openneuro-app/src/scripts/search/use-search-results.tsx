@@ -402,5 +402,6 @@ export const useSearchResults = () => {
     // TODO: find better solution
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-first",
+    notifyOnNetworkStatusChange: true,
   })
 }

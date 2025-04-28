@@ -1,6 +1,6 @@
 import React from "react"
 import pluralize from "pluralize"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../components/loading/Loading"
 import { ValidationResultsDisplay } from "../validation/validation-results"
 import UploaderContext from "./uploader-context.js"
 import { validation } from "../workers/schema.js"

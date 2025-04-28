@@ -1,8 +1,8 @@
 import React from "react"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import { FilterListItem } from "./FilterListItem"
 import { TermListItem } from "./TermListItem"
-import type { FacetSelectValueType } from "@openneuro/components/facets/FacetSelect"
+import type { FacetSelectValueType } from "../../components/facets/FacetSelect"
 import "./filters-block.scss"
 
 export interface FiltersBlockProps {
@@ -32,6 +32,7 @@ export interface FiltersBlockProps {
   numTotalResults: number
   loading: boolean
   bidsDatasetType_selected?: FacetSelectValueType
+  brain_initiative: string
 }
 
 export const FiltersBlock = ({
@@ -61,6 +62,7 @@ export const FiltersBlock = ({
   removeAllFilters,
   numTotalResults,
   bidsDatasetType_selected,
+  brain_initiative,
 }: FiltersBlockProps) => {
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
@@ -113,6 +115,13 @@ export const FiltersBlock = ({
             removeFilterItem={removeFilterItem(true)}
           />
         )}
+        {brain_initiative && (
+          <FilterListItem
+            type="Initiative"
+            item={{ param: "brain_initiative", value: "NIH BRAIN Initiative" }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
         {bidsDatasetType_selected && (
           <FilterListItem
             type="Dataset Type"
@@ -120,7 +129,7 @@ export const FiltersBlock = ({
               param: "bidsDatasetType_selected",
               value: bidsDatasetType_selected,
             }}
-            removeFilterItem={removeFilterItem(true)}
+            removeFilterItem={removeFilterItem()}
           />
         )}
         {!searchAllDatasets && (

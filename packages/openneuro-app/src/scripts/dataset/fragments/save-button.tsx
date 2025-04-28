@@ -1,6 +1,6 @@
 import React from "react"
 import type { FC } from "react"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 
 /**
  * An Save button, calls action when clicked

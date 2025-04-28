@@ -2,7 +2,7 @@ import React from "react"
 import styled from "@emotion/styled"
 import { DataTable } from "../../components/data-table"
 import { gql, useQuery } from "@apollo/client"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../../components/loading/Loading"
 import { makeCsv } from "../../utils/csv"
 
 const MetadataPageStyle = styled.div`

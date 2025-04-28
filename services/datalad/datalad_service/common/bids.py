@@ -1,12 +1,15 @@
 import json
 
+import pygit2
+
 from datalad_service.common.git import git_show
 
 
 def read_dataset_description(dataset_path, commit):
     try:
+        repo = pygit2.Repository(dataset_path)
         raw_description = git_show(
-            dataset_path, commit, 'dataset_description.json')
+            repo, commit, 'dataset_description.json')
         return json.loads(raw_description)
     except json.decoder.JSONDecodeError:
         return None

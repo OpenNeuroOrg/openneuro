@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { gql, useApolloClient, useMutation } from "@apollo/client"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import { createDataset } from "../../uploader/upload-mutation"
 import styled from "@emotion/styled"
 

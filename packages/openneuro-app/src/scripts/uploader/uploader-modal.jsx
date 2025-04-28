@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Modal } from "@openneuro/components/modal"
+import { Modal } from "../components/modal/Modal"
 
 // Show is always {true} because the router unmounts this otherwise
 const UploaderModal = ({ setLocation, location, children, footer }) => (

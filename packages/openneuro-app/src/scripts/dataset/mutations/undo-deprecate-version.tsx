@@ -1,8 +1,8 @@
 import React from "react"
 import type { FC } from "react"
 import { gql, useMutation } from "@apollo/client"
-import { Button } from "@openneuro/components/button"
-import { Tooltip } from "@openneuro/components/tooltip"
+import { Button } from "../../components/button/Button"
+import { Tooltip } from "../../components/tooltip/Tooltip"
 
 const UNDO_DEPRECATE_VERSION = gql`
   mutation undoDeprecateSnapshot($datasetId: ID!, $tag: String!) {

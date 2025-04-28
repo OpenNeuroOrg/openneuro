@@ -4,7 +4,7 @@ import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
 import { useNavigate } from "react-router-dom"
 import { datasetCacheId } from "./cache-id.js"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 
 const PUBLISH_DATASET = gql`
   mutation publishDataset($datasetId: ID!) {

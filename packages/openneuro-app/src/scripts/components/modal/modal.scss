@@ -1,0 +1,60 @@
+@import '../scss/variables';
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  transition: opacity 0.3s;
+  z-index: 9000;
+  .modal {
+    background-color: #fff;
+    width: 500px;
+    max-width: 90%;
+    transition: transform 0.3s;
+    overflow: scroll;
+    max-height: 90vh;
+  }
+
+  .modal-close-x {
+    position: absolute;
+    right: 7px;
+    top: 4px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  .modal-body {
+    margin: 0 0 30px;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 10, 10, 75%);
+  }
+
+  &.hide-modal {
+    opacity: 0;
+    transition-delay: 0.01s;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    .modal {
+      transform: translateY(-100vh);
+    }
+  }
+  &.show-modal {
+    opacity: 1;
+    pointer-events: auto;
+    .modal {
+      transform: translateY(0);
+    }
+  }
+}

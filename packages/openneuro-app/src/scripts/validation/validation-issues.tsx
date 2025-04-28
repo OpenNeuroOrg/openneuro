@@ -1,5 +1,6 @@
 import React from "react"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { AccordionTab } from "../components/accordion/AccordionTab"
+import { AccordionWrap } from "../components/accordion/AccordionWrap"
 import type { DatasetIssues, Issue } from "@bids/validator/issues"
 
 interface IssueProps {

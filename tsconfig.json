@@ -18,7 +18,6 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@openneuro/components/*": ["./packages/openneuro-components/src/*"],
       "*": ["./packages/*/src"]
     }
   },

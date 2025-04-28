@@ -21,7 +21,7 @@ import { ModalitiesMetaDataBlock } from "./components/ModalitiesMetaDataBlock"
 import { ValidationBlock } from "./components/ValidationBlock"
 import { VersionList } from "./components/VersionList"
 import { Username } from "../users/username"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../components/loading/Loading"
 
 import {
   getUnexpiredProfile,
@@ -80,7 +80,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
       dataset.snapshots[dataset.snapshots.length - 1].hexsha
   const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
-
+  const isAnonymousReviewer = profile?.scopes?.includes("dataset:reviewer")
   return (
     <>
       <Helmet>
@@ -263,16 +263,18 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                     />
                   </>
                 ))}
-
-              <MetaDataBlock
-                heading="Uploaded by"
-                item={
-                  <>
-                    <Username user={dataset.uploader} /> on{" "}
-                    <DateDistance date={dataset.created} />
-                  </>
-                }
-              />
+              {!isAnonymousReviewer &&
+                (
+                  <MetaDataBlock
+                    heading="Uploaded by"
+                    item={
+                      <>
+                        <Username user={dataset.uploader} /> on{" "}
+                        <DateDistance date={dataset.created} />
+                      </>
+                    }
+                  />
+                )}
 
               {dataset.snapshots.length && (
                 <MetaDataBlock
@@ -359,13 +361,17 @@ export interface SnapshotLoaderProps {
 
 const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
   const { tag } = useParams()
-  const { loading, error, data, fetchMore } = useQuery(getSnapshotDetails, {
-    variables: {
-      datasetId: dataset.id,
-      tag,
-    },
-    errorPolicy: "all",
-  })
+  const { loading, error, data, fetchMore, stopPolling, startPolling } =
+    useQuery(
+      getSnapshotDetails,
+      {
+        variables: {
+          datasetId: dataset.id,
+          tag,
+        },
+        errorPolicy: "all",
+      },
+    )
   if (loading) {
     return (
       <div className="loading-dataset">
@@ -382,6 +388,8 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
           datasetId: dataset.id,
           fetchMore,
           error: null,
+          stopPolling,
+          startPolling,
         }}
       >
         <SnapshotContainer

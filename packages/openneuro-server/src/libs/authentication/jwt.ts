@@ -95,7 +95,11 @@ export function generateReviewerToken(
  *
  * Similarly to the upload token, this shorter lived token is specific to git access
  */
-export function generateRepoToken(user, datasetId, expiresIn = 60 * 60 * 24) {
+export function generateRepoToken(
+  user,
+  datasetId,
+  expiresIn = 7 * 60 * 60 * 24,
+) {
   const options = {
     scopes: ["dataset:git"],
     dataset: datasetId,

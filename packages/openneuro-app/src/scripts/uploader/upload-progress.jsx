@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { ProgressBar } from "@openneuro/components/progress-bar"
+import { ProgressBar } from "../components/progress-bar/ProgressBar"
 
 const UploadProgress = ({ progress }) => {
   return (

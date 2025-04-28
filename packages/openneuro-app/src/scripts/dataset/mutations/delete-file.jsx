@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { gql, useMutation } from "@apollo/client"
-import { WarnButton } from "@openneuro/components/warn-button"
+import { WarnButton } from "../../components/warn-button/WarnButton"
 
 const DELETE_FILE = gql`
   mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {

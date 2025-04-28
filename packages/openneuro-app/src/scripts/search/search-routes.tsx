@@ -2,10 +2,8 @@ import React from "react"
 import type { FC } from "react"
 import { Route, Routes } from "react-router-dom"
 import SearchContainer from "./search-container"
-import {
-  portalContent,
-  portalGrantContent,
-} from "@openneuro/components/content"
+import { portalContent } from "../common/content/portal-content"
+import { portalGrantContent } from "../common/content/portal-grant-content"
 
 const SearchRoutes: FC = () => (
   <Routes>

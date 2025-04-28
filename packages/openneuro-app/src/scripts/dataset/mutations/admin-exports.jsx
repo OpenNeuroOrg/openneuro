@@ -1,7 +1,7 @@
 import React from "react"
 import { gql, useMutation } from "@apollo/client"
 import PropTypes from "prop-types"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import styled from "@emotion/styled"
 
 const ButtonRow = styled.div`

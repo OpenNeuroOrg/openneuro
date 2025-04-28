@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/react"
 import PropTypes from "prop-types"
 import { useNavigate, useParams } from "react-router-dom"
 import { useApolloClient, useQuery } from "@apollo/client"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../components/loading/Loading"
 
 import DatasetQueryContext from "../datalad/dataset/dataset-query-context.js"
 import DatasetContext from "../datalad/dataset/dataset-context.js"
@@ -25,15 +25,15 @@ import { getDatasetPage, getDraftPage } from "../queries/dataset"
  */
 export const DatasetQueryHook = ({ datasetId, draft }) => {
   const navigate = useNavigate()
-  const { data, loading, error, fetchMore } = useQuery(
-    draft ? getDraftPage : getDatasetPage,
-    {
-      variables: { datasetId },
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
-    },
-  )
-
+  const { data, loading, error, fetchMore, stopPolling, startPolling } =
+    useQuery(
+      draft ? getDraftPage : getDatasetPage,
+      {
+        variables: { datasetId },
+        fetchPolicy: "cache-and-network",
+        nextFetchPolicy: "cache-first",
+      },
+    )
   if (error) {
     if (error.message === "You do not have access to read this dataset.") {
       return <FourOThreePage />
@@ -61,7 +61,6 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
       )
     }
   }
-
   return (
     <DatasetContext.Provider value={data.dataset}>
       <ErrorBoundary subject={"error in dataset page"}>
@@ -70,6 +69,8 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
             datasetId,
             fetchMore,
             error,
+            stopPolling,
+            startPolling,
           }}
         >
           <DatasetRoutes dataset={data.dataset} />

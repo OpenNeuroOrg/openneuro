@@ -8,8 +8,8 @@ import {
   getUnexpiredProfile,
   hasEditPermissions,
 } from "../authentication/profile"
-import { Button } from "@openneuro/components/button"
-import { Loading } from "@openneuro/components/loading"
+import { Button } from "../components/button/Button"
+import { Loading } from "../components/loading/Loading"
 import {
   AgeRangeInput,
   AllDatasetsToggle,
@@ -142,10 +142,9 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   ])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
-  const loadMore = loading ? () => {} : () => {
+  const loadMore = () => {
     fetchMore({
       variables: {
-        // ...variables,
         cursor: data?.datasets?.pageInfo.endCursor,
       },
     })
@@ -246,7 +245,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 />
                 {/* TODO: make div below into display component. */}
                 <div className="grid grid-nogutter" style={{ width: "100%" }}>
-                  {resultsList.length == 0 || !hasNextPage
+                  {resultsList.length > 0 || !hasNextPage
                     ? null
                     : (
                       <div className="col col-12 load-more m-t-10">

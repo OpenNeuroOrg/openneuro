@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Loading } from "@openneuro/components/loading"
+import { Loading } from "../../components/loading/Loading"
 import FileViewerType from "./file-viewer-type.jsx"
 import { isNifti, isNwb } from "./file-types"
 

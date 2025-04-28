@@ -11,8 +11,7 @@ from github import Github
 import datalad_service.common.s3
 import datalad_service.common.github
 from datalad_service.config import DATALAD_GITHUB_ORG
-from datalad_service.config import DATALAD_GITHUB_LOGIN
-from datalad_service.config import DATALAD_GITHUB_PASS
+from datalad_service.config import DATALAD_GITHUB_TOKEN
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
@@ -96,7 +95,8 @@ def check_remote_has_version(dataset_path, remote, tag):
 
         # extract remote uuid and associated git tree id from `git show git-annex:export.log`
         # this command only logs the latest export. previously exported tags will not show
-        export_log = git_show(dataset_path, 'git-annex', 'export.log')
+        repo = pygit2.Repository(dataset_path)
+        export_log = git_show(repo, 'git-annex', 'export.log')
         log_remote_id_pattern = re.compile(':(.+) .+$')
         match = log_remote_id_pattern.search(export_log)
         remote_id_B = match.group(1)
@@ -148,7 +148,7 @@ def delete_s3_sibling_executor(dataset_id):
 
 
 async def delete_github_sibling(dataset_id):
-    ses = Github(DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS)
+    ses = Github(DATALAD_GITHUB_TOKEN)
     org = ses.get_organization(DATALAD_GITHUB_ORG)
     repos = org.get_repos()
     try:

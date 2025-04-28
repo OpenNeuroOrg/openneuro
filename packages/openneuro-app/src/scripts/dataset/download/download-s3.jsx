@@ -25,10 +25,6 @@ const DownloadS3Instructions = ({ datasetId, s3Bucket }) => (
       uses <a href="https://aws.amazon.com/cli/">AWS CLI.</a>
     </p>
     <DownloadSampleS3 datasetId={datasetId} s3Bucket={s3Bucket} />
-    <p>
-      To download unpublished datasets or older snapshots, see advanced methods
-      below.
-    </p>
   </div>
 )
 

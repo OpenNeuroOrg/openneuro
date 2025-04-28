@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from "react"
 import type { FC } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
-import { SingleSelect } from "@openneuro/components/facets"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
+import { SingleSelect } from "../../components/facets/SingleSelect"
 
 interface InitiativeSelectProps {
   label: string
@@ -19,7 +20,6 @@ const InitiativeSelect: FC<InitiativeSelectProps> = ({ label }) => {
   const setBrainInitiative = (selectedValue: string): void => {
     const newSelectedFunding = selectedValue === "NIH" ? "true" : ""
 
-    // Update only brain_initiative in the search params context
     setSearchParams((prevState) => ({
       ...prevState,
       brain_initiative: newSelectedFunding,
@@ -35,8 +35,10 @@ const InitiativeSelect: FC<InitiativeSelectProps> = ({ label }) => {
     } else {
       params.delete("query")
     }
-
-    navigate(`/search/nih?${params.toString()}`, { replace: true })
+    // Check if the URL contains 'modality_selected' before navigating
+    if (!location.search.includes("modality_selected")) {
+      navigate(`/search/nih?${params.toString()}`, { replace: true })
+    }
   }
 
   useEffect(() => {
@@ -46,7 +48,11 @@ const InitiativeSelect: FC<InitiativeSelectProps> = ({ label }) => {
     ) {
       const params = new URLSearchParams(location.search)
       params.set("query", JSON.stringify({ brain_initiative: "true" }))
-      navigate(`/search/nih?${params.toString()}`, { replace: true })
+
+      // Check if the URL contains 'modality_selected' before navigating
+      if (!location.search.includes("modality_selected")) {
+        navigate(`/search/nih?${params.toString()}`, { replace: true })
+      }
     }
   }, [brain_initiative, location.search, navigate])
 

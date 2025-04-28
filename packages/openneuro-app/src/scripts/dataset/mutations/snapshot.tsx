@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import { gql, useMutation } from "@apollo/client"
 import { useNavigate } from "react-router-dom"
 import ErrorBoundary from "../../errors/errorBoundary.jsx"
-import { Button } from "@openneuro/components/button"
+import { Button } from "../../components/button/Button"
 import { getDatasetPage, getDraftPage } from "../../queries/dataset"
 
 const CREATE_SNAPSHOT = gql`

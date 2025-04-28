@@ -12,7 +12,8 @@ import Index from "./scripts/index"
 import { config } from "./scripts/config"
 import * as gtag from "./scripts/utils/gtag"
 import { relayStylePagination } from "@apollo/client/utilities"
-import "@openneuro/components/page/page.scss"
+// TODO - This should be a global SCSS?
+import "./scripts/components/page/page.scss"
 
 gtag.initialize(config.analytics.trackingIds)
 

@@ -60,7 +60,6 @@ For example, you can restart the server container with `podman-compose restart s
 - [OpenNeuro app](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-app) - React frontend
 - [OpenNeuro server](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-server) - Node.js GraphQL API
 - [OpenNeuro indexer](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-indexer) - ElasticSearch indexer
-- [OpenNeuro components](https://github.com/OpenNeuroOrg/openneuro/tree/master/packages/openneuro-components) - ReactJS components library
 - [OpenNeuro command line tools](https://github.com/OpenNeuroOrg/openneuro/tree/master/cli) - Deno command line tools for uploading and downloading datasets
 - [DataLad service](https://github.com/OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) compatible dataset worker microservice
 - [bids-validator](https://github.com/bids-standard/bids-validator) - BIDS validation library

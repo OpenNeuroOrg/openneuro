@@ -1,7 +1,8 @@
 import React from "react"
 
 import NeurobagelLogo from "./neurobagel_logo.svg"
-import { AccordionTab, AccordionWrap } from "@openneuro/components/accordion"
+import { AccordionTab } from "../../components/accordion/AccordionTab"
+import { AccordionWrap } from "../../components/accordion/AccordionWrap"
 import styled from "@emotion/styled"
 
 const NeurobagelSearchDiv = styled.div`

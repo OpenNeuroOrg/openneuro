@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { DeprecateVersion } from "../mutations/deprecate-version"
-import { Input } from "@openneuro/components/input"
+import { Input } from "../../components/input/Input"
 import LoggedIn from "../../authentication/logged-in.jsx"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3 } from "./styles/header-row"
