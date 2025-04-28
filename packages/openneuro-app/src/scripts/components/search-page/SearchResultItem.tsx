@@ -122,18 +122,18 @@ export const SearchResultItem = ({
 }: SearchResultItemProps) => {
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
-  const userId = profile?.sub
+  const profileSub = profile?.sub
 
   const { data: userData, loading: userLoading, error: userError } = useQuery(
     GET_USER,
     {
-      variables: { userId: userId },
-      skip: !userId,
+      variables: { userId: profileSub },
+      skip: !profileSub,
     },
   )
   const user = userData?.user
   const isAdmin = user?.admin
-  const hasEdit = hasEditPermissions(node.permissions, profile?.sub) || isAdmin
+  const hasEdit = hasEditPermissions(node.permissions, profileSub) || isAdmin
 
   const heading = node.latestSnapshot.description?.Name
   const summary = node.latestSnapshot?.summary
@@ -328,11 +328,11 @@ export const SearchResultItem = ({
     // Test if there's any schema validator errors
     invalid = node.latestSnapshot.validation?.errors > 0
   }
-  const shared = !node.public && node.uploader.id !== user.sub
+  const shared = !node.public && node.uploader.id !== profileSub
 
   const MyDatasetsPage = datasetTypeSelected === "My Datasets"
   const datasetPerms = node.permissions.userPermissions.map((item) => {
-    if (item.user.id === user?.sub && item.access !== null) {
+    if (item.user.id === profileSub && item.access !== null) {
       if (item.access === "ro") {
         return "Read Only"
       } else if (item.access === "rw") {
