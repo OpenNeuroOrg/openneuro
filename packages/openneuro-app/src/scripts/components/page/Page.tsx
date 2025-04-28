@@ -34,7 +34,6 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
           renderOnExpanded={(profile) => (
             <LandingExpandedHeader
-              user={profile}
               renderFacetSelect={() => <>front facet example</>}
               renderSearchInput={() => (
                 <Input

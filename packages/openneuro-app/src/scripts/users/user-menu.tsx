@@ -15,15 +15,15 @@ export const UserMenu = (
   { signOutAndRedirect }: UserMenuProps,
 ) => {
   const [cookies] = useCookies()
-  const currentProfile = getProfile(cookies)
-  const userId = currentProfile?.sub
+  const profile = getProfile(cookies)
+  const profileSub = profile?.sub
   const inboxCount = 99
 
   const { data: userData, loading: userLoading, error: userError } = useQuery(
     GET_USER,
     {
-      variables: { userId: userId },
-      skip: !userId,
+      variables: { userId: profileSub },
+      skip: !profileSub,
     },
   )
   const user = userData?.user

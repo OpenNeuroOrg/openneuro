@@ -20,7 +20,6 @@ export const UserQuery: React.FC = () => {
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
   const isAdminUser = isAdmin()
-  console.log(data)
   if (!isOrcidValid) {
     return <FourOFourPage />
   }

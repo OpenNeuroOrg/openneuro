@@ -1,8 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
+import { useQuery } from "@apollo/client"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../../authentication/profile"
 import { config } from "../../config"
+import { GET_USER } from "../../queries/user"
 
 const buildCustomQuery = (customText, prepopulatedFields) => {
   const customizerQueries = [
@@ -31,8 +33,18 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     screenshot: "No",
     captcha: "yes",
   }
+  const profileSub = profile?.sub
+  const { data: userData, loading: userLoading, error: userError } = useQuery(
+    GET_USER,
+    {
+      variables: { userId: profileSub },
+      skip: !profileSub,
+    },
+  )
+  console.log(userData)
+  const user = userData?.user
   const prepopulatedFields = {
-    requester: profile && profile.email,
+    requester: profile && user?.email,
     subject,
     description: joinedDescription,
   }
