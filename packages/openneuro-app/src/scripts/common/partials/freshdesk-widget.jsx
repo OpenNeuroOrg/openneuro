@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import * as Sentry from "@sentry/react"
 import { useQuery } from "@apollo/client"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../../authentication/profile"
@@ -34,20 +35,29 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     captcha: "yes",
   }
   const profileSub = profile?.sub
-  const { data: userData, loading: userLoading, error: userError } = useQuery(
+  const { data: userData, loading: loading, error: e } = useQuery(
     GET_USER,
     {
       variables: { userId: profileSub },
       skip: !profileSub,
     },
   )
-  console.log(userData)
   const user = userData?.user
   const prepopulatedFields = {
     requester: profile && user?.email,
     subject,
     description: joinedDescription,
   }
+
+  if (loading) {
+    return <div>Loading support freshdesk</div>
+  }
+
+  if (e) {
+    Sentry.captureException(e)
+    return
+  }
+
   return (
     <>
       <script
