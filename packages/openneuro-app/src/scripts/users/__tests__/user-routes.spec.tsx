@@ -74,7 +74,7 @@ const renderWithRouter = (user: User, route: string, hasEdit: boolean) => {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <MemoryRouter initialEntries={[route]}>
-        <UserRoutes user={user} hasEdit={hasEdit} />
+        <UserRoutes user={user} hasEdit={hasEdit} isUser={true} />
       </MemoryRouter>
     </MockedProvider>,
   )
