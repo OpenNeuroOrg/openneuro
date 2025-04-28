@@ -7,9 +7,9 @@ import config from "../../config"
 
 interface OpenNeuroTokenProfile {
   sub: string
-  email: string
-  provider: string
-  name: string
+  email?: string
+  provider?: string
+  name?: string
   admin: boolean
   iat: number
   exp: number
