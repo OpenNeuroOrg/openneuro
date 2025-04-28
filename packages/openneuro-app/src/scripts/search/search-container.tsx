@@ -240,7 +240,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 <SearchResultsList
                   hasEditPermissions={hasEditPermissions}
                   items={resultsList}
-                  profile={profile}
                   datasetTypeSelected={searchParams.datasetType_selected}
                 />
                 {/* TODO: make div below into display component. */}
