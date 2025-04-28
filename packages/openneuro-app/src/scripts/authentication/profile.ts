@@ -1,28 +1,11 @@
 import jwtDecode from "jwt-decode"
-import { gql, useQuery } from "@apollo/client"
 
 export interface OpenNeuroTokenProfile {
   sub: string
-  email: string
-  provider: string
-  name: string
-  admin: boolean
   iat: number
   exp: number
   scopes?: string[]
-  avatar?: string
-  orcid?: string
 }
-
-// GraphQL query to fetch user avatar
-const GET_ADDITIONAL_USER_DATA = gql`
-  query User($userId: ID!) {
-    user(id: $userId) {
-      avatar
-      orcid
-    }
-  }
-`
 
 /**
  * Read JSON object from JWT string
@@ -31,7 +14,7 @@ const GET_ADDITIONAL_USER_DATA = gql`
 export const parseJwt = jwtDecode
 
 /**
- * Retrieve the user profile from JWT cookie, including the avatar.
+ * Retrieve the user profile from JWT cookie
  */
 export function getProfile(cookies): OpenNeuroTokenProfile {
   const accessToken = cookies["accessToken"]
@@ -39,18 +22,8 @@ export function getProfile(cookies): OpenNeuroTokenProfile {
 
   // Decode the JWT token
   const decoded = parseJwt(accessToken) as OpenNeuroTokenProfile
-
-  // Fetch avatar and ORCID from GraphQL
-  const { data } = useQuery(GET_ADDITIONAL_USER_DATA, {
-    variables: { userId: decoded.sub },
-    skip: !decoded.sub,
-  })
-
-  // Merge avatar and ORCID into profile
   return {
     ...decoded,
-    avatar: data?.user?.avatar || null,
-    orcid: data?.user?.orcid || null,
   }
 }
 /**
