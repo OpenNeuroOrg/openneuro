@@ -35,7 +35,7 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     captcha: "yes",
   }
   const profileSub = profile?.sub
-  const { data: userData, loading: loading, error: e } = useQuery(
+  const { data: userData, loading: userLoading, error: userError } = useQuery(
     GET_USER,
     {
       variables: { userId: profileSub },
@@ -49,12 +49,12 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     description: joinedDescription,
   }
 
-  if (loading) {
-    return <div>Loading support freshdesk</div>
+  if (userLoading) {
+    return <div>Loading Email</div>
   }
 
-  if (e) {
-    Sentry.captureException(e)
+  if (userError) {
+    Sentry.captureException(userError)
     return
   }
 
