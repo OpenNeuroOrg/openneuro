@@ -50,8 +50,7 @@ export const UserMenu = (
     },
   )
 
-  const profile = userData?.user || initialProfile
-  const userName = userData?.user?.name || initialProfile.name
+  const user = userData?.user || initialProfile
 
   const inboxCount = 99
 
@@ -66,9 +65,9 @@ export const UserMenu = (
 
   return (
     <span className="user-menu-wrap">
-      {profile.orcid && (
+      {user.orcid && (
         <span className="notifications-link">
-          <Link to={`/user/${profile.orcid}/notifications/unread`}>
+          <Link to={`/user/${user.orcid}/notifications/unread`}>
             <i className="fa fa-inbox">
               {inboxCount > 0 && (
                 <span className="count">
@@ -88,11 +87,11 @@ export const UserMenu = (
       )}
       <Dropdown
         className={"user-menu-dropdown"}
-        label={profile?.avatar
+        label={user?.avatar
           ? (
             <img
               className="user-menu-label avatar"
-              src={profile.avatar}
+              src={user.avatar}
               alt="User Avatar"
             />
           )
@@ -103,22 +102,22 @@ export const UserMenu = (
               <li className="dropdown-header">
                 <p>
                   <span>Hello</span> <br />
-                  {userName} <br />
-                  {profile?.email}
+                  {user?.name} <br />
+                  {user?.email}
                 </p>
                 <p>
-                  <span>signed in via {profile?.provider}</span>
+                  <span>signed in via {user?.provider}</span>
                 </p>
               </li>
               <li>
-                {profile?.orcid
-                  ? <Link to={`/user/${profile.orcid}`}>My Datasets</Link>
+                {user?.orcid
+                  ? <Link to={`/user/${user.orcid}`}>My Datasets</Link>
                   : <Link to="/search?mydatasets">My Datasets</Link>}
               </li>
 
-              {profile?.orcid && (
+              {user?.orcid && (
                 <li>
-                  <Link to={`/user/${profile.orcid}/account`}>
+                  <Link to={`/user/${user.orcid}/account`}>
                     Account Info
                   </Link>
                 </li>
@@ -127,14 +126,14 @@ export const UserMenu = (
               <li className="user-menu-link">
                 <Link to="/keygen">Obtain an API Key</Link>
               </li>
-              {profile?.provider !== "orcid" && (
+              {user?.provider !== "orcid" && (
                 <li className="user-menu-link">
                   <a href="/crn/auth/orcid?link=true">
                     Link ORCID to my account
                   </a>
                 </li>
               )}
-              {profile?.admin && (
+              {user?.admin && (
                 <li className="user-menu-link">
                   <Link to="/admin">Admin</Link>
                 </li>
