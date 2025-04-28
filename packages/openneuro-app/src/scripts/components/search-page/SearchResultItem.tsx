@@ -3,7 +3,6 @@ import bytes from "bytes"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
-import { OpenNeuroTokenProfile } from "../../authentication/profile"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { Icon } from "../../components/icon/Icon"
 import { useQuery } from "@apollo/client"
@@ -13,7 +12,7 @@ import { GET_USER } from "../../queries/user"
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { ModalityLabel } from "../../components/formatting/modality-label"
-
+import { hasEditPermissions } from "../../authentication/profile"
 /**
  * Return an equivalent to moment(date).format('L') without moment
  * @param {*} dateObject
@@ -115,17 +114,15 @@ export interface SearchResultItemProps {
   }
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   datasetTypeSelected?: string
-  hasEditPermissions: (permissions: object, userId: string) => boolean
 }
 
 export const SearchResultItem = ({
   node,
   datasetTypeSelected,
-  hasEditPermissions,
 }: SearchResultItemProps) => {
   const [cookies] = useCookies()
-  const currentProfile = getProfile(cookies)
-  const userId = currentProfile?.sub
+  const profile = getProfile(cookies)
+  const userId = profile?.sub
 
   const { data: userData, loading: userLoading, error: userError } = useQuery(
     GET_USER,
@@ -136,7 +133,7 @@ export const SearchResultItem = ({
   )
   const user = userData?.user
   const isAdmin = user?.admin
-  const hasEdit = hasEditPermissions(node.permissions, user?.sub) || isAdmin
+  const hasEdit = hasEditPermissions(node.permissions, profile?.sub) || isAdmin
 
   const heading = node.latestSnapshot.description?.Name
   const summary = node.latestSnapshot?.summary

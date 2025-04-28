@@ -4,10 +4,6 @@ import { useLocation } from "react-router-dom"
 import { SearchPage } from "../components/search-page/SearchPage"
 import { SearchResultsList } from "../components/search-page/SearchResultsList"
 import { NeurobagelSearch } from "../components/search-page/NeurobagelSearch"
-import {
-  getUnexpiredProfile,
-  hasEditPermissions,
-} from "../authentication/profile"
 import { Button } from "../components/button/Button"
 import { Loading } from "../components/loading/Loading"
 import {
@@ -113,8 +109,6 @@ export const setDefaultSearch = (
 }
 
 const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
-  const [cookies] = useCookies()
-  const profile = getUnexpiredProfile(cookies)
   const location = useLocation()
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -238,7 +232,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             : (
               <>
                 <SearchResultsList
-                  hasEditPermissions={hasEditPermissions}
                   items={resultsList}
                   datasetTypeSelected={searchParams.datasetType_selected}
                 />
