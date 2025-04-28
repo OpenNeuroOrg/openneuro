@@ -3,10 +3,13 @@ import bytes from "bytes"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
-
+import { OpenNeuroTokenProfile } from "../../authentication/profile"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { Icon } from "../../components/icon/Icon"
-
+import { useQuery } from "@apollo/client"
+import { useCookies } from "react-cookie"
+import { getProfile } from "../../authentication/profile"
+import { GET_USER } from "../../queries/user"
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { ModalityLabel } from "../../components/formatting/modality-label"
@@ -111,19 +114,29 @@ export interface SearchResultItemProps {
     ]
   }
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  profile: Record<string, any> // TODO - Use the actual user type here
   datasetTypeSelected?: string
   hasEditPermissions: (permissions: object, userId: string) => boolean
 }
 
 export const SearchResultItem = ({
   node,
-  profile,
   datasetTypeSelected,
   hasEditPermissions,
 }: SearchResultItemProps) => {
-  const isAdmin = profile?.admin
-  const hasEdit = hasEditPermissions(node.permissions, profile?.sub) || isAdmin
+  const [cookies] = useCookies()
+  const currentProfile = getProfile(cookies)
+  const userId = currentProfile?.sub
+
+  const { data: userData, loading: userLoading, error: userError } = useQuery(
+    GET_USER,
+    {
+      variables: { userId: userId },
+      skip: !userId,
+    },
+  )
+  const user = userData?.user
+  const isAdmin = user?.admin
+  const hasEdit = hasEditPermissions(node.permissions, user?.sub) || isAdmin
 
   const heading = node.latestSnapshot.description?.Name
   const summary = node.latestSnapshot?.summary
@@ -318,11 +331,11 @@ export const SearchResultItem = ({
     // Test if there's any schema validator errors
     invalid = node.latestSnapshot.validation?.errors > 0
   }
-  const shared = !node.public && node.uploader.id !== profile.sub
+  const shared = !node.public && node.uploader.id !== user.sub
 
   const MyDatasetsPage = datasetTypeSelected === "My Datasets"
   const datasetPerms = node.permissions.userPermissions.map((item) => {
-    if (item.user.id === profile?.sub && item.access !== null) {
+    if (item.user.id === user?.sub && item.access !== null) {
       if (item.access === "ro") {
         return "Read Only"
       } else if (item.access === "rw") {

@@ -1,19 +1,8 @@
 import React from "react"
-
 import { SearchResultItem } from "./SearchResultItem"
+import { OpenNeuroTokenProfile } from "../../authentication/profile"
 
 import "./search-page.scss"
-
-// TODO - unify this type with the one in the app package
-export interface OpenNeuroTokenProfile {
-  sub: string
-  email: string
-  provider: string
-  name: string
-  admin: boolean
-  iat: number
-  exp: number
-}
 
 export interface SearchResultsListProps {
   items
@@ -28,6 +17,7 @@ export const SearchResultsList = ({
   datasetTypeSelected,
   hasEditPermissions,
 }: SearchResultsListProps) => {
+  console.log("rpofile", profile)
   return (
     <div className="search-results">
       {items.map((data) => {
@@ -36,7 +26,6 @@ export const SearchResultsList = ({
             <SearchResultItem
               node={data.node}
               key={data.node.id}
-              profile={profile}
               hasEditPermissions={hasEditPermissions}
               datasetTypeSelected={datasetTypeSelected}
             />

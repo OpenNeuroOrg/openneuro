@@ -8,7 +8,7 @@ import {
   within,
 } from "@testing-library/react"
 import { UserAccountView } from "../user-account-view"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "../user-query"
+import { GET_USER, UPDATE_USER } from "../../queries/user"
 
 const baseUser = {
   id: "1",
@@ -24,7 +24,7 @@ const baseUser = {
 const mocks = [
   {
     request: {
-      query: GET_USER_BY_ORCID,
+      query: GET_USER,
       variables: { userId: baseUser.id },
     },
     result: {

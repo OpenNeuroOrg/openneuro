@@ -1,58 +1,32 @@
 import React from "react"
 import * as Sentry from "@sentry/react"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../authentication/profile"
 import { Link } from "react-router-dom"
 import { Dropdown } from "../components/dropdown/Dropdown"
+import { GET_USER } from "../queries/user"
 import "./scss/user-menu.scss"
 export interface UserMenuProps {
-  profile: {
-    name: string
-    admin: boolean
-    email: string
-    provider: string
-    avatar?: string
-    orcid?: string
-  }
   signOutAndRedirect: () => void
 }
 
-// GraphQL query to fetch user data
-const GET_CURRENT_USER = gql`
-  query GetUser($id: ID!) {
-    user(id: $id) {
-      id
-      name
-      admin
-      email
-      provider
-      avatar
-      orcid
-    }
-  }
-`
-
 export const UserMenu = (
-  { profile: initialProfile, signOutAndRedirect }: UserMenuProps,
+  { signOutAndRedirect }: UserMenuProps,
 ) => {
   const [cookies] = useCookies()
   const currentProfile = getProfile(cookies)
-
-  // profile.sub for query
   const userId = currentProfile?.sub
+  const inboxCount = 99
 
   const { data: userData, loading: userLoading, error: userError } = useQuery(
-    GET_CURRENT_USER,
+    GET_USER,
     {
-      variables: { id: userId },
+      variables: { userId: userId },
       skip: !userId,
     },
   )
-
-  const user = userData?.user || initialProfile
-
-  const inboxCount = 99
+  const user = userData?.user
 
   if (userLoading) {
     return <span>Loading Account Info...</span>

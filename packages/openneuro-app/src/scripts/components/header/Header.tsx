@@ -4,15 +4,11 @@ import { Button } from "../button/Button"
 import { Logo } from "../logo/Logo"
 import { Modal } from "../modal/Modal"
 import { UserMenu } from "../../users/user-menu"
+import { OpenNeuroTokenProfile } from "../../authentication/profile"
 import "./header.scss"
 
 export interface HeaderProps {
-  profile?: {
-    name: string
-    admin: boolean
-    email: string
-    provider: string
-  }
+  profile?: OpenNeuroTokenProfile
   expanded?: boolean
   isOpenSupport: boolean
   toggleLoginModal: (
@@ -108,7 +104,6 @@ export const Header = ({
               ? (
                 <div className="header-account-btn">
                   <UserMenu
-                    profile={profile}
                     signOutAndRedirect={signOutAndRedirect}
                   />
                 </div>

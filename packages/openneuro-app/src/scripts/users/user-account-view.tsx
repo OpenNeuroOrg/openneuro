@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
 import styles from "./scss/useraccountview.module.scss"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "./user-query"
+import { GET_USER, UPDATE_USER } from "../queries/user"
 import type { UserAccountViewProps } from "../types/user-types"
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
@@ -23,7 +23,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
+            query: GET_USER,
             variables: { id: user.orcid },
           },
         ],
@@ -44,7 +44,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
+            query: GET_USER,
             variables: { id: user.orcid },
           },
         ],
@@ -65,7 +65,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
+            query: GET_USER,
             variables: { id: user.orcid },
           },
         ],
