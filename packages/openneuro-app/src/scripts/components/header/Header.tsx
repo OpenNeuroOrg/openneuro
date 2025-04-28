@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 import { Button } from "../button/Button"
 import { Logo } from "../logo/Logo"
 import { Modal } from "../modal/Modal"
-import { UserMenu } from "../user/UserMenu"
+import { UserMenu } from "../../users/user-menu"
 import "./header.scss"
 
 export interface HeaderProps {

@@ -1,8 +1,11 @@
 import React from "react"
+import * as Sentry from "@sentry/react"
+import { gql, useQuery } from "@apollo/client"
+import { useCookies } from "react-cookie"
+import { getProfile } from "../authentication/profile"
 import { Link } from "react-router-dom"
-import { Dropdown } from "../dropdown/Dropdown"
-import "./user-menu.scss"
-
+import { Dropdown } from "../components/dropdown/Dropdown"
+import "./scss/user-menu.scss"
 export interface UserMenuProps {
   profile: {
     name: string
@@ -15,8 +18,52 @@ export interface UserMenuProps {
   signOutAndRedirect: () => void
 }
 
-export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
+// GraphQL query to fetch user data
+const GET_CURRENT_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      admin
+      email
+      provider
+      avatar
+      orcid
+    }
+  }
+`
+
+export const UserMenu = (
+  { profile: initialProfile, signOutAndRedirect }: UserMenuProps,
+) => {
+  const [cookies] = useCookies()
+  const currentProfile = getProfile(cookies)
+
+  // profile.sub for query
+  const userId = currentProfile?.sub
+
+  const { data: userData, loading: userLoading, error: userError } = useQuery(
+    GET_CURRENT_USER,
+    {
+      variables: { id: userId },
+      skip: !userId,
+    },
+  )
+
+  const profile = userData?.user || initialProfile
+  const userName = userData?.user?.name || initialProfile.name
+
   const inboxCount = 99
+
+  if (userLoading) {
+    return <span>Loading Account Info...</span>
+  }
+
+  if (userError) {
+    Sentry.captureException(userError)
+    return
+  }
+
   return (
     <span className="user-menu-wrap">
       {profile.orcid && (
@@ -41,8 +88,14 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
       )}
       <Dropdown
         className={"user-menu-dropdown"}
-        label={profile.avatar
-          ? <img className="user-menu-label avatar" src={profile.avatar} />
+        label={profile?.avatar
+          ? (
+            <img
+              className="user-menu-label avatar"
+              src={profile.avatar}
+              alt="User Avatar"
+            />
+          )
           : <div className="user-menu-label">My Account</div>}
         children={
           <div className="user-menu-dropdown-list">
@@ -50,20 +103,20 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
               <li className="dropdown-header">
                 <p>
                   <span>Hello</span> <br />
-                  {profile.name} <br />
-                  {profile.email}
+                  {userName} <br />
+                  {profile?.email}
                 </p>
                 <p>
-                  <span>signed in via {profile.provider}</span>
+                  <span>signed in via {profile?.provider}</span>
                 </p>
               </li>
               <li>
-                {profile.orcid
+                {profile?.orcid
                   ? <Link to={`/user/${profile.orcid}`}>My Datasets</Link>
                   : <Link to="/search?mydatasets">My Datasets</Link>}
               </li>
 
-              {profile.orcid && (
+              {profile?.orcid && (
                 <li>
                   <Link to={`/user/${profile.orcid}/account`}>
                     Account Info
@@ -74,15 +127,14 @@ export const UserMenu = ({ profile, signOutAndRedirect }: UserMenuProps) => {
               <li className="user-menu-link">
                 <Link to="/keygen">Obtain an API Key</Link>
               </li>
-              {profile.provider !== "orcid" && (
+              {profile?.provider !== "orcid" && (
                 <li className="user-menu-link">
                   <a href="/crn/auth/orcid?link=true">
-                    {" "}
-                    Link ORCID to my account{" "}
+                    Link ORCID to my account
                   </a>
                 </li>
               )}
-              {profile.admin && (
+              {profile?.admin && (
                 <li className="user-menu-link">
                   <Link to="/admin">Admin</Link>
                 </li>
