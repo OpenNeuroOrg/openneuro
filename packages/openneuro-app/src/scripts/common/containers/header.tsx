@@ -105,7 +105,7 @@ export const HeaderContainer: FC = () => {
           </UploaderContext.Consumer>
         )}
         renderOnFreshDeskWidget={() => <FreshdeskWidget />}
-        renderOnExpanded={(profile) => (
+        renderOnExpanded={() => (
           <LandingExpandedHeader
             loginUrls={loginUrls}
             renderAggregateCounts={(modality: string) => (

@@ -1,11 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
-import * as Sentry from "@sentry/react"
-import { useQuery } from "@apollo/client"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../../authentication/profile"
 import { config } from "../../config"
-import { GET_USER } from "../../queries/user"
+import { useUser } from "../../queries/user"
 
 const buildCustomQuery = (customText, prepopulatedFields) => {
   const customizerQueries = [
@@ -34,28 +32,12 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     screenshot: "No",
     captcha: "yes",
   }
-  const profileSub = profile?.sub
-  const { data: userData, loading: userLoading, error: userError } = useQuery(
-    GET_USER,
-    {
-      variables: { userId: profileSub },
-      skip: !profileSub,
-    },
-  )
-  const user = userData?.user
+  const { user } = useUser()
+
   const prepopulatedFields = {
     requester: profile && user?.email,
     subject,
     description: joinedDescription,
-  }
-
-  if (userLoading) {
-    return <div>Loading Email</div>
-  }
-
-  if (userError) {
-    Sentry.captureException(userError)
-    return
   }
 
   return (

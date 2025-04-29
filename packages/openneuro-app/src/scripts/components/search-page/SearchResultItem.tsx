@@ -5,10 +5,9 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { Icon } from "../../components/icon/Icon"
-import { useQuery } from "@apollo/client"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../../authentication/profile"
-import { GET_USER } from "../../queries/user"
+import { useUser } from "../../queries/user"
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { ModalityLabel } from "../../components/formatting/modality-label"
@@ -112,7 +111,6 @@ export interface SearchResultItemProps {
       },
     ]
   }
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   datasetTypeSelected?: string
 }
 
@@ -120,18 +118,11 @@ export const SearchResultItem = ({
   node,
   datasetTypeSelected,
 }: SearchResultItemProps) => {
+  const { user } = useUser()
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
   const profileSub = profile?.sub
 
-  const { data: userData, loading: userLoading, error: userError } = useQuery(
-    GET_USER,
-    {
-      variables: { userId: profileSub },
-      skip: !profileSub,
-    },
-  )
-  const user = userData?.user
   const isAdmin = user?.admin
   const hasEdit = hasEditPermissions(node.permissions, profileSub) || isAdmin
 
@@ -219,7 +210,7 @@ export const SearchResultItem = ({
   const uploader = (
     <div className="uploader">
       <span>Uploaded by:</span>
-      {node.uploader.name} on {dateAdded} - {dateAddedDifference} ago
+      {node.uploader?.name} on {dateAdded} - {dateAddedDifference} ago
     </div>
   )
   const downloads = node.analytics.downloads
@@ -328,7 +319,7 @@ export const SearchResultItem = ({
     // Test if there's any schema validator errors
     invalid = node.latestSnapshot.validation?.errors > 0
   }
-  const shared = !node.public && node.uploader.id !== profileSub
+  const shared = !node.public && node.uploader?.id !== profileSub
 
   const MyDatasetsPage = datasetTypeSelected === "My Datasets"
   const datasetPerms = node.permissions.userPermissions.map((item) => {

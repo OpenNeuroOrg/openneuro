@@ -1,12 +1,9 @@
 import React from "react"
-import * as Sentry from "@sentry/react"
-import { useQuery } from "@apollo/client"
-import { useCookies } from "react-cookie"
-import { getProfile } from "../authentication/profile"
 import { Link } from "react-router-dom"
 import { Dropdown } from "../components/dropdown/Dropdown"
-import { GET_USER } from "../queries/user"
+import { useUser } from "../queries/user"
 import "./scss/user-menu.scss"
+
 export interface UserMenuProps {
   signOutAndRedirect: () => void
 }
@@ -14,34 +11,16 @@ export interface UserMenuProps {
 export const UserMenu = (
   { signOutAndRedirect }: UserMenuProps,
 ) => {
-  const [cookies] = useCookies()
-  const profile = getProfile(cookies)
-  const profileSub = profile?.sub
-  const inboxCount = 99
+  //const inboxCount = 99
 
-  const { data: userData, loading: userLoading, error: userError } = useQuery(
-    GET_USER,
-    {
-      variables: { userId: profileSub },
-      skip: !profileSub,
-    },
-  )
-  const user = userData?.user
-
-  if (userLoading) {
-    return <span>Loading Account Info...</span>
-  }
-
-  if (userError) {
-    Sentry.captureException(userError)
-    return
-  }
+  const { user } = useUser()
 
   return (
     <span className="user-menu-wrap">
-      {user.orcid && (
+      {
+        /* {user?.orcid && (
         <span className="notifications-link">
-          <Link to={`/user/${user.orcid}/notifications/unread`}>
+          <Link to={`/user/${user?.orcid}/notifications/unread`}>
             <i className="fa fa-inbox">
               {inboxCount > 0 && (
                 <span className="count">
@@ -58,14 +37,15 @@ export const UserMenu = (
             <span className="sr-only">Account Info</span>
           </Link>
         </span>
-      )}
+      )} */
+      }
       <Dropdown
         className={"user-menu-dropdown"}
         label={user?.avatar
           ? (
             <img
               className="user-menu-label avatar"
-              src={user.avatar}
+              src={user?.avatar}
               alt="User Avatar"
             />
           )
@@ -84,18 +64,23 @@ export const UserMenu = (
                 </p>
               </li>
               <li>
-                {user?.orcid
-                  ? <Link to={`/user/${user.orcid}`}>My Datasets</Link>
-                  : <Link to="/search?mydatasets">My Datasets</Link>}
+                {
+                  /* {user?.orcid
+                  ? <Link to={`/user/${user?.orcid}`}>My Datasets</Link>
+                  : <Link to="/search?mydatasets">My Datasets</Link>} */
+                }
+                <Link to="/search?mydatasets">My Datasets</Link>
               </li>
 
-              {user?.orcid && (
+              {
+                /* {user?.orcid && (
                 <li>
-                  <Link to={`/user/${user.orcid}/account`}>
+                  <Link to={`/user/${user?.orcid}/account`}>
                     Account Info
                   </Link>
                 </li>
-              )}
+              )} */
+              }
 
               <li className="user-menu-link">
                 <Link to="/keygen">Obtain an API Key</Link>

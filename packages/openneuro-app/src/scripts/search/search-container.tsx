@@ -32,7 +32,6 @@ import {
 } from "./inputs"
 import FiltersBlockContainer from "./filters-block-container"
 import AggregateCountsContainer from "../pages/front-page/aggregate-queries/aggregate-counts-container"
-import { useCookies } from "react-cookie"
 import { useSearchResults } from "./use-search-results"
 import { SearchParamsCtx } from "./search-params-ctx"
 import type { SearchParams } from "./initial-search-params"

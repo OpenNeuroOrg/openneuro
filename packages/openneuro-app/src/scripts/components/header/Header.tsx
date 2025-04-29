@@ -4,11 +4,11 @@ import { Button } from "../button/Button"
 import { Logo } from "../logo/Logo"
 import { Modal } from "../modal/Modal"
 import { UserMenu } from "../../users/user-menu"
-import { OpenNeuroTokenProfile } from "../../authentication/profile"
+import type { OpenNeuroTokenProfile } from "../../authentication/profile"
 import "./header.scss"
 
 export interface HeaderProps {
-  profile?: OpenNeuroTokenProfile
+  profile: OpenNeuroTokenProfile
   expanded?: boolean
   isOpenSupport: boolean
   toggleLoginModal: (

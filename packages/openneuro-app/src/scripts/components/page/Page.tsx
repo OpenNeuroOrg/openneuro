@@ -32,7 +32,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           navigateToNewSearch={() => console.log("go to /search")}
           renderUploader={() => <li>Upload</li>}
           renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
-          renderOnExpanded={(profile) => (
+          renderOnExpanded={() => (
             <LandingExpandedHeader
               renderFacetSelect={() => <>front facet example</>}
               renderSearchInput={() => (
