@@ -24,12 +24,6 @@ const baseUser: User = {
   links: [],
 }
 
-const mockUseUser = () => ({
-  user: baseUser,
-  loading: false,
-  error: undefined,
-})
-
 vi.mock("../../queries/user", async () => {
   const actual = await vi.importActual("../../queries/user")
   return {
