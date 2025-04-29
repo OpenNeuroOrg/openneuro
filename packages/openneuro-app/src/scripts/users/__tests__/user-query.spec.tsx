@@ -16,7 +16,7 @@ const validOrcid = "0009-0001-9689-7232"
 const userMock = {
   request: {
     query: GET_USER,
-    variables: { userId: validOrcid },
+    variables: { userId: "1" },
   },
   result: {
     data: {

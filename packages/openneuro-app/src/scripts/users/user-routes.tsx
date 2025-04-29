@@ -32,9 +32,7 @@ export const UserRoutes: React.FC<UserRoutesProps> = (
         />
         <Route
           path="account"
-          element={hasEdit
-            ? <UserAccountView user={user} />
-            : <FourOThreePage />}
+          element={hasEdit ? <UserAccountView /> : <FourOThreePage />}
         />
         <Route
           path="notifications/*"
