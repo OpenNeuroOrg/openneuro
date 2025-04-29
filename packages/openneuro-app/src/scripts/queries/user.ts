@@ -1,7 +1,6 @@
 import { gql } from "@apollo/client"
 
 // GraphQL query to fetch user data
-// GraphQL query to fetch user by ORCID
 export const GET_USER = gql`
   query User($userId: ID!) {
     user(id: $userId) {
