@@ -3,8 +3,6 @@ import * as Sentry from "@sentry/node"
 import User from "../../models/user"
 import { PROVIDERS } from "./passport"
 import { userMigration } from "./user-migration"
-import { authCallback as orcidAuthCallback } from "./orcid"
-import { parsedJwtFromRequest } from "./jwt"
 
 const loginErrorHandler = (next) => (loginErr) => {
   if (loginErr) {
@@ -31,7 +29,7 @@ export const authCallback = async (req, res, next) => {
   return passport.authenticate(
     PROVIDERS.GOOGLE,
     { session: false },
-    async (err, user, info) => {
+    async (err, user, _info) => {
       // First we check if an ORCID user exists for this login
       let orcidUser
       if (user?.orcid) {

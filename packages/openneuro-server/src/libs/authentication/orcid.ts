@@ -1,5 +1,4 @@
 import passport from "passport"
-import User from "../../models/user"
 import { parsedJwtFromRequest } from "./jwt"
 import * as Sentry from "@sentry/node"
 import { userMigration } from "./user-migration"

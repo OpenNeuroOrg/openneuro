@@ -178,7 +178,7 @@ const router = express.Router()
 
 for (const route of routes) {
   const arr = Object.hasOwn(route, "middleware") ? route.middleware : []
-  // @ts-expect-error
+  // @ts-expect-error This is actually working.
   arr.unshift(route.url)
   arr.push(route.handler)
   router[route.method](...arr)
