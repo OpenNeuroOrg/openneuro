@@ -91,6 +91,8 @@ export async function userMigration(orcid: string, userId: string) {
           orcidUser.blocked = true
         }
         await orcidUser.save({ session })
+        // Save the orcid value that was actually used for future logins
+        googleUser.orcid = orcidUser.providerId
         googleUser.migrated = true
         await googleUser.save({ session })
         // Save success

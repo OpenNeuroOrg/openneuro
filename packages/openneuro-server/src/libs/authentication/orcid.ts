@@ -21,6 +21,7 @@ export const authCallback = (req, res, next) =>
     if (!user) {
       return res.redirect("/")
     }
+    // Google user
     const existingAuth = parsedJwtFromRequest(req)
     if (existingAuth) {
       // Migrate Google to ORCID
