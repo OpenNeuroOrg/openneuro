@@ -2,9 +2,6 @@ import jwtDecode from "jwt-decode"
 
 export interface OpenNeuroTokenProfile {
   sub: string
-  email: string
-  provider: string
-  name: string
   admin: boolean
   iat: number
   exp: number
@@ -22,9 +19,9 @@ export const parseJwt = jwtDecode
  */
 export function getProfile(cookies): OpenNeuroTokenProfile {
   const accessToken = cookies["accessToken"]
-  return accessToken ? parseJwt(accessToken) : null
+  if (!accessToken) return null
+  return parseJwt(accessToken) as OpenNeuroTokenProfile
 }
-
 /**
  * Return profile if token is not expired.
  * @param {*} cookies

@@ -1,3 +1,4 @@
+import { vi } from "vitest"
 import React from "react"
 import { MockedProvider } from "@apollo/client/testing"
 import {
@@ -8,24 +9,38 @@ import {
   within,
 } from "@testing-library/react"
 import { UserAccountView } from "../user-account-view"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "../user-query"
+import type { User } from "../../types/user-types"
+import * as userQueries from "../../queries/user"
 
-const baseUser = {
+const baseUser: User = {
   id: "1",
   name: "John Doe",
-  email: "johndoe@example.com",
-  orcid: "0000-0001-2345-6789",
-  location: "San Francisco, CA",
-  institution: "University of California",
-  links: ["https://example.com", "https://example.org"],
-  github: "johndoe",
+  location: "Unknown",
+  github: "",
+  institution: "Unknown Institution",
+  email: "john.doe@example.com",
+  avatar: "https://dummyimage.com/200x200/000/fff",
+  orcid: "0000-0000-0000-0000",
+  links: [],
 }
+
+vi.mock("../../queries/user", async () => {
+  const actual = await vi.importActual("../../queries/user")
+  return {
+    ...actual,
+    useUser: () => ({
+      user: baseUser,
+      loading: false,
+      error: undefined,
+    }),
+  }
+})
 
 const mocks = [
   {
     request: {
-      query: GET_USER_BY_ORCID,
-      variables: { userId: baseUser.id },
+      query: userQueries.GET_USER,
+      variables: { id: baseUser.orcid },
     },
     result: {
       data: {
@@ -35,9 +50,9 @@ const mocks = [
   },
   {
     request: {
-      query: UPDATE_USER,
+      query: userQueries.UPDATE_USER,
       variables: {
-        id: baseUser.id,
+        id: baseUser.orcid,
         location: "Marin, CA",
         links: ["https://newlink.com"],
         institution: "New University",
@@ -46,7 +61,7 @@ const mocks = [
     result: {
       data: {
         updateUser: {
-          id: baseUser.id,
+          id: baseUser.orcid,
           location: "Marin, CA",
           links: ["https://newlink.com"],
           institution: "New University",
@@ -60,23 +75,22 @@ describe("<UserAccountView />", () => {
   it("should render the user details correctly", () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <UserAccountView />
       </MockedProvider>,
     )
     expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("John Doe")).toBeInTheDocument()
     expect(screen.getByText("Email:")).toBeInTheDocument()
-    expect(screen.getByText("johndoe@example.com")).toBeInTheDocument()
+    expect(screen.getByText("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByText("ORCID:")).toBeInTheDocument()
-    expect(screen.getByText("0000-0001-2345-6789")).toBeInTheDocument()
-    expect(screen.getByText("GitHub:")).toBeInTheDocument()
-    expect(screen.getByText("johndoe")).toBeInTheDocument()
+    expect(screen.getByText("0000-0000-0000-0000")).toBeInTheDocument()
+    expect(screen.getByText("Connect your GitHub")).toBeInTheDocument()
   })
 
   it("should render location with EditableContent", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <UserAccountView />
       </MockedProvider>,
     )
     const locationSection = within(screen.getByTestId("location-section"))
@@ -95,7 +109,7 @@ describe("<UserAccountView />", () => {
   it("should render institution with EditableContent", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <UserAccountView />
       </MockedProvider>,
     )
     const institutionSection = within(screen.getByTestId("institution-section"))
@@ -114,7 +128,7 @@ describe("<UserAccountView />", () => {
   it("should render links with EditableContent and validation", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <UserAccountView />
       </MockedProvider>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
@@ -133,7 +147,7 @@ describe("<UserAccountView />", () => {
   it("should show an error message when invalid URL is entered in links section", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
+        <UserAccountView />
       </MockedProvider>,
     )
     const linksSection = within(screen.getByTestId("links-section"))

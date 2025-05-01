@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { UserQuery } from "../user-query"
-import { GET_USER_BY_ORCID } from "../user-query"
+import { GET_USER } from "../../queries/user"
 import * as ProfileUtils from "../../authentication/profile"
 
 Object.defineProperty(ProfileUtils, "getProfile", {
@@ -15,8 +15,8 @@ const validOrcid = "0009-0001-9689-7232"
 
 const userMock = {
   request: {
-    query: GET_USER_BY_ORCID,
-    variables: { userId: validOrcid },
+    query: GET_USER,
+    variables: { userId: "1" },
   },
   result: {
     data: {

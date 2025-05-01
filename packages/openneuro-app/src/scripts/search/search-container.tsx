@@ -4,10 +4,6 @@ import { useLocation } from "react-router-dom"
 import { SearchPage } from "../components/search-page/SearchPage"
 import { SearchResultsList } from "../components/search-page/SearchResultsList"
 import { NeurobagelSearch } from "../components/search-page/NeurobagelSearch"
-import {
-  getUnexpiredProfile,
-  hasEditPermissions,
-} from "../authentication/profile"
 import { Button } from "../components/button/Button"
 import { Loading } from "../components/loading/Loading"
 import {
@@ -36,7 +32,6 @@ import {
 } from "./inputs"
 import FiltersBlockContainer from "./filters-block-container"
 import AggregateCountsContainer from "../pages/front-page/aggregate-queries/aggregate-counts-container"
-import { useCookies } from "react-cookie"
 import { useSearchResults } from "./use-search-results"
 import { SearchParamsCtx } from "./search-params-ctx"
 import type { SearchParams } from "./initial-search-params"
@@ -113,8 +108,6 @@ export const setDefaultSearch = (
 }
 
 const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
-  const [cookies] = useCookies()
-  const profile = getUnexpiredProfile(cookies)
   const location = useLocation()
 
   const { searchParams, setSearchParams } = useContext(SearchParamsCtx)
@@ -238,9 +231,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             : (
               <>
                 <SearchResultsList
-                  hasEditPermissions={hasEditPermissions}
                   items={resultsList}
-                  profile={profile}
                   datasetTypeSelected={searchParams.datasetType_selected}
                 />
                 {/* TODO: make div below into display component. */}
