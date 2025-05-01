@@ -23,14 +23,22 @@ export async function userMigration(orcid: string, userId: string) {
     await session.withTransaction(async () => {
       try {
         // Load both original records
-        const orcidUser = await User.findOne({
-          providerId: orcid,
-          provider: "orcid",
-        })
-        const googleUser = await User.findOne({
-          id: userId,
-          provider: "google",
-        })
+        const orcidUser = await User.findOne(
+          {
+            providerId: orcid,
+            provider: "orcid",
+          },
+          null,
+          { session },
+        )
+        const googleUser = await User.findOne(
+          {
+            id: userId,
+            provider: "google",
+          },
+          null,
+          { session },
+        )
 
         // Save the original user records
         const migration = new UserMigration({ session })
@@ -39,7 +47,7 @@ export async function userMigration(orcid: string, userId: string) {
         await migration.save({ session })
 
         // Migrate dataset ownership
-        const datasets = await Dataset.find({ uploader: googleUser.id }, {
+        const datasets = await Dataset.find({ uploader: googleUser.id }, null, {
           session,
         })
         for (const dataset of datasets) {
@@ -50,9 +58,13 @@ export async function userMigration(orcid: string, userId: string) {
         }
 
         // Migrate dataset permissions
-        const permissions = await Permission.find({ userId: googleUser.id }, {
-          session,
-        })
+        const permissions = await Permission.find(
+          { userId: googleUser.id },
+          null,
+          {
+            session,
+          },
+        )
         for (const permission of permissions) {
           permission.userId = orcidUser.id
           // Record this permission as migrated
@@ -61,7 +73,7 @@ export async function userMigration(orcid: string, userId: string) {
         }
 
         // Migrate dataset deletions
-        const deletions = await Deletion.find({ userId: googleUser.id }, {
+        const deletions = await Deletion.find({ userId: googleUser.id }, null, {
           session,
         })
         for (const deletion of deletions) {
@@ -72,7 +84,7 @@ export async function userMigration(orcid: string, userId: string) {
         }
 
         // Migrate comments
-        const comments = await Comment.find({ userId: googleUser.id }, {
+        const comments = await Comment.find({ userId: googleUser.id }, null, {
           session,
         })
         for (const comment of comments) {
