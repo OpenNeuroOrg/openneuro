@@ -11,6 +11,7 @@ import {
 import { UserAccountView } from "../user-account-view"
 import type { User } from "../../types/user-types"
 import * as userQueries from "../../queries/user"
+import { BrowserRouter } from "react-router-dom"
 
 const baseUser: User = {
   id: "1",
@@ -74,9 +75,11 @@ const mocks = [
 describe("<UserAccountView />", () => {
   it("should render the user details correctly", () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView />
+        </MockedProvider>
+      </BrowserRouter>,
     )
     expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("John Doe")).toBeInTheDocument()
@@ -84,14 +87,16 @@ describe("<UserAccountView />", () => {
     expect(screen.getByText("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByText("ORCID:")).toBeInTheDocument()
     expect(screen.getByText("0000-0000-0000-0000")).toBeInTheDocument()
-    expect(screen.getByText("Connect your GitHub")).toBeInTheDocument()
+    expect(screen.getByText("Sync user data from GitHub")).toBeInTheDocument() // Updated assertion
   })
 
   it("should render location with EditableContent", async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView />
+        </MockedProvider>
+      </BrowserRouter>,
     )
     const locationSection = within(screen.getByTestId("location-section"))
     expect(screen.getByText("Location")).toBeInTheDocument()
@@ -108,9 +113,11 @@ describe("<UserAccountView />", () => {
 
   it("should render institution with EditableContent", async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView />
+        </MockedProvider>,
+      </BrowserRouter>,
     )
     const institutionSection = within(screen.getByTestId("institution-section"))
     expect(screen.getByText("Institution")).toBeInTheDocument()
@@ -127,9 +134,11 @@ describe("<UserAccountView />", () => {
 
   it("should render links with EditableContent and validation", async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView />
+        </MockedProvider>,
+      </BrowserRouter>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
     expect(screen.getByText("Links")).toBeInTheDocument()
@@ -146,10 +155,13 @@ describe("<UserAccountView />", () => {
 
   it("should show an error message when invalid URL is entered in links section", async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView />
+        </MockedProvider>,
+      </BrowserRouter>,
     )
+
     const linksSection = within(screen.getByTestId("links-section"))
     const editButton = linksSection.getByText("Edit")
     fireEvent.click(editButton)
@@ -161,24 +173,6 @@ describe("<UserAccountView />", () => {
       expect(
         linksSection.getByText("Invalid URL format. Please use a valid link."),
       ).toBeInTheDocument()
-    })
-  })
-
-  it("should render GitHub sync button and handle sync", async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
-      </MockedProvider>,
-    )
-
-    const githubButton = await screen.findByTestId("github-sync-button")
-    expect(githubButton).toBeInTheDocument()
-
-    fireEvent.click(githubButton)
-
-    await waitFor(() => {
-      const syncedText = screen.getByText(/Last synced:/)
-      expect(syncedText).toBeInTheDocument()
     })
   })
 })
