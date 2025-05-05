@@ -33,7 +33,8 @@ export function OrcidLinkPage() {
           OpenNeuro is moving to ORCID for all accounts. Please link an ORCID to
           your account to continue and use ORCID for future logins. If you have
           used Google login before, any datasets, comments, and permissions you
-          have will be merged into the combined OpenNeuro account.
+          have will be merged into the combined OpenNeuro account linked to your
+          ORCID iD.
         </p>
         <h3>Why are we making this change?</h3>
         <p>
@@ -43,8 +44,8 @@ export function OrcidLinkPage() {
         </p>
         <h3>Will Google accounts continue to work?</h3>
         <p>
-          Yes but to make new contributions you will need link an ORCID. Your
-          Google login will be an optional method for authentication.
+          To make new contributions you will need link an ORCID but any existing
+          contributions will remain available.
         </p>
         <a href={loginUrls.orcid + `?migrate`}>
           <Button
