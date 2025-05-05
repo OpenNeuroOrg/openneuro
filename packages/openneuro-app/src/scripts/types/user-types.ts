@@ -14,6 +14,7 @@ export interface User {
 export interface UserRoutesProps {
   user: User
   hasEdit: boolean
+  isUser: boolean
 }
 export interface UserCardProps {
   user: User
@@ -71,4 +72,5 @@ export interface UserDatasetsViewProps {
 export interface AccountContainerProps {
   user: User
   hasEdit: boolean
+  isUser: boolean
 }

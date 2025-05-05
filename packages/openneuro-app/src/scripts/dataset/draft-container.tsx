@@ -50,7 +50,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const activeDataset = snapshotVersion(location) || "draft"
 
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
-
   const summary = dataset.draft.summary
   const description = dataset.draft.description
   const datasetId = dataset.id

@@ -6,11 +6,12 @@ import { ModalityCube } from "../modality-cube/ModalityCube"
 import { frontPage } from "../../common/content/front-page-content"
 import { cubeData } from "../../common/content/modality-cube-content"
 import orcidIcon from "../../../assets/orcid_24x24.png"
+import { loginCheck } from "../../authentication/loginCheck"
+import { useCookies } from "react-cookie"
 
 import "./header.scss"
 
 export interface LandingExpandedHeaderProps {
-  user?: object
   loginUrls?: Record<string, string>
   renderAggregateCounts?: (modality?: string) => React.ReactNode
   renderFacetSelect: () => React.ReactNode
@@ -19,7 +20,6 @@ export interface LandingExpandedHeaderProps {
 }
 
 export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
-  user,
   loginUrls,
   renderAggregateCounts,
   renderFacetSelect,
@@ -29,6 +29,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
   const aggregateCounts = (modality: string): React.ReactNode =>
     renderAggregateCounts ? renderAggregateCounts(modality) : null
   const navigate = useNavigate()
+  const [cookies] = useCookies()
   const hexGrid = (
     <ul id="hexGrid">
       {cubeData.map((item, index) => (
@@ -47,6 +48,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
       ))}
     </ul>
   )
+  const isLoggedIn = loginCheck(cookies)
 
   return (
     <div className="expaned-header" style={{ minHeight: "720px" }}>
@@ -72,7 +74,7 @@ export const LandingExpandedHeader: React.FC<LandingExpandedHeaderProps> = ({
               </div>
             </div>
 
-            {!user
+            {!isLoggedIn
               ? (
                 <div className="grid  grid-start hero-signin">
                   <div className=" hero-sigin-label">

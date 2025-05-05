@@ -1,16 +1,18 @@
 import React, { useState } from "react"
+import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
+import { GET_USER, UPDATE_USER, useUser } from "../queries/user"
 import styles from "./scss/useraccountview.module.scss"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "./user-query"
-import type { UserAccountViewProps } from "../types/user-types"
 import { GitHubAuthButton } from "./github-auth-button"
 
-export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
-  const [userLinks, setLinks] = useState<string[]>(user.links || [])
-  const [userLocation, setLocation] = useState<string>(user.location || "")
+export const UserAccountView: React.FC = () => {
+  const { user, loading, error } = useUser()
+
+  const [userLinks, setLinks] = useState<string[]>(user?.links || [])
+  const [userLocation, setLocation] = useState<string>(user?.location || "")
   const [userInstitution, setInstitution] = useState<string>(
-    user.institution || "",
+    user?.institution || "",
   )
   const [updateUser] = useMutation(UPDATE_USER)
 
@@ -19,18 +21,18 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
     try {
       await updateUser({
         variables: {
-          id: user.orcid,
+          id: user?.orcid,
           links: newLinks,
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
-            variables: { id: user.orcid },
+            query: GET_USER,
+            variables: { id: user?.orcid },
           },
         ],
       })
-    } catch {
-      // Error handling can be implemented here if needed
+    } catch (error) {
+      Sentry.captureException(error)
     }
   }
 
@@ -40,18 +42,18 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
     try {
       await updateUser({
         variables: {
-          id: user.orcid,
+          id: user?.orcid,
           location: newLocation,
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
-            variables: { id: user.orcid },
+            query: GET_USER,
+            variables: { id: user?.orcid },
           },
         ],
       })
-    } catch {
-      // Error handling can be implemented here if needed
+    } catch (error) {
+      Sentry.captureException(error)
     }
   }
 
@@ -61,19 +63,31 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
     try {
       await updateUser({
         variables: {
-          id: user.orcid,
+          id: user?.orcid,
           institution: newInstitution,
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
-            variables: { id: user.orcid },
+            query: GET_USER,
+            variables: { id: user?.orcid },
           },
         ],
       })
-    } catch {
-      // Error handling can be implemented here if needed
+    } catch (error) {
+      Sentry.captureException(error)
     }
+  }
+
+  if (loading) {
+    return <div>Loading Account Information...</div>
+  }
+
+  if (error) {
+    return <div>Error loading account information. Please try again.</div>
+  }
+
+  if (!user) {
+    return <div>Could not load account information.</div>
   }
 
   return (
