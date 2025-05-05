@@ -45,7 +45,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
   const buttonText = sync ? "Re-sync" : "Sync"
   const lastSyncedText = sync ? `Last synced: ${sync.toLocaleString()}` : null
   const [searchParams] = useSearchParams()
-
+  console.log(sync)
   useEffect(() => {
     const error = searchParams.get("error")
 
