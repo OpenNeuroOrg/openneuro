@@ -4,39 +4,83 @@ export const INDEX_DATASET_FRAGMENT = gql`
   fragment DatasetIndex on Dataset {
     id
     created
-    name
+    uploader {
+      id
+      name
+      orcid
+    }
     public
-    analytics {
-        views
-        downloads
-    }
-    stars {
+    permissions {
+      id
+      userPermissions {
         userId
-        datasetId
+        level
+        access: level
+        user {
+          id
+          name
+          email
+          provider
+        }
+      }
     }
-    followers {
-        userId
-        datasetId
+    metadata {
+      ages
     }
     latestSnapshot {
-        id
-        size
-        created
-        issues {
-        severity
+      id
+      size
+      summary {
+        modalities
+        secondaryModalities
+        sessions
+        subjects
+        subjectMetadata {
+          participantId
+          age
+          sex
+          group
         }
-        description {
+        tasks
+        size
+        totalFiles
+        dataProcessed
+        pet {
+          BodyPart
+          ScannerManufacturer
+          ScannerManufacturersModelName
+          TracerName
+          TracerRadionuclide
+        }
+      }
+      issues {
+        severity
+      }
+      validation {
+        errors
+        warnings
+      }
+      description {
         Name
         Authors
-        SeniorAuthor
-        DatasetType
-        }
+      }
     }
-    draft {
-        id
+    analytics {
+      views
+      downloads
     }
-    uploader {
-        id
+    stars {
+      userId
+      datasetId
+    }
+    followers {
+      userId
+      datasetId
+    }
+    snapshots {
+      id
+      created
+      tag
     }
   }
 `
