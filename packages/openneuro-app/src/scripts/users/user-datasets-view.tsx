@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react"
+import { useQuery } from "@apollo/client"
+import * as Sentry from "@sentry/react"
 import { DatasetCard } from "./dataset-card"
 import { UserDatasetFilters } from "./components/user-dataset-filters"
-import { useQuery } from "@apollo/client"
 import { ADVANCED_SEARCH_DATASETS_QUERY } from "../queries/user"
-import styles from "./scss/datasetcard.module.scss"
-import type { Dataset, UserDatasetsViewProps } from "../types/user-types"
 import { Button } from "../components/button/Button"
 import { Loading } from "../components/loading/Loading"
+import type { Dataset, UserDatasetsViewProps } from "../types/user-types"
+import styles from "./scss/datasetcard.module.scss"
 
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   orcidUser,
@@ -110,6 +111,9 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
         setVisibleDatasets(initialDatasets)
         setCursor(initialData?.datasets?.pageInfo?.endCursor || null)
         setHasNextPage(initialData?.datasets?.pageInfo?.hasNextPage || false)
+      },
+      onError: (err) => {
+        Sentry.captureException(err)
       },
       errorPolicy: "ignore",
       fetchPolicy: "cache-and-network",
