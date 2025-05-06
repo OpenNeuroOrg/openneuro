@@ -8,6 +8,7 @@ interface UserDatasetFiltersProps {
   setSortOrder: React.Dispatch<React.SetStateAction<string>>
   onSearch: (query: string, publicFilter: string) => void
   currentSearchTerm: string
+  hasEdit: boolean
 }
 
 export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
@@ -17,6 +18,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
   setSortOrder,
   onSearch,
   currentSearchTerm,
+  hasEdit,
 }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isSortOpen, setIsSortOpen] = useState(false)
@@ -101,53 +103,50 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
 
       <div className={styles.userDSfilters}>
         {/* Filter by Visibility */}
-        <div
-          data-testid="public-filter"
-          className={`${styles.filterDiv} ${isFilterOpen ? styles.open : ""}`}
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-        >
-          <span>
-            Filter by:{" "}
-            <b>
-              {publicFilter === "all"
-                ? "All"
-                : publicFilter.charAt(0).toUpperCase() + publicFilter.slice(1)}
-            </b>
-          </span>
-          <div className={styles.filterDropdown}>
-            {isFilterOpen && (
-              <ul>
-                <li
-                  onClick={() => {
-                    setPublicFilter("all")
-                    setIsFilterOpen(false)
-                  }}
-                  className={publicFilter === "all" ? styles.active : ""}
-                >
-                  All
-                </li>
-                <li
-                  onClick={() => {
-                    setPublicFilter("public")
-                    setIsFilterOpen(false)
-                  }}
-                  className={publicFilter === "public" ? styles.active : ""}
-                >
-                  Public
-                </li>
-                <li
-                  onClick={() => {
-                    setPublicFilter("private")
-                    setIsFilterOpen(false)
-                  }}
-                  className={publicFilter === "private" ? styles.active : ""}
-                >
-                  Private
-                </li>
-              </ul>
-            )}
-          </div>
-        </div>
+        {hasEdit &&
+          (
+            <div
+              data-testid="public-filter"
+              className={`${styles.filterDiv} ${
+                isFilterOpen ? styles.open : ""
+              }`}
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+            >
+              <span>
+                Filter by:{" "}
+                <b>
+                  {publicFilter === "all"
+                    ? "All"
+                    : publicFilter.charAt(0).toUpperCase() +
+                      publicFilter.slice(1)}
+                </b>
+              </span>
+              <div className={styles.filterDropdown}>
+                {isFilterOpen && (
+                  <ul>
+                    <li
+                      onClick={() => {
+                        setPublicFilter("all")
+                        setIsFilterOpen(false)
+                      }}
+                      className={publicFilter === "all" ? styles.active : ""}
+                    >
+                      All
+                    </li>
+                    <li
+                      onClick={() => {
+                        setPublicFilter("public")
+                        setIsFilterOpen(false)
+                      }}
+                      className={publicFilter === "public" ? styles.active : ""}
+                    >
+                      Public
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+          )}
 
         {/* Sort Options */}
         <div

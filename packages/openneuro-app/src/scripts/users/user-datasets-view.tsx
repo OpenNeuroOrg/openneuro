@@ -1,142 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { DatasetCard } from "./dataset-card"
 import { UserDatasetFilters } from "./components/user-dataset-filters"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
+import { ADVANCED_SEARCH_DATASETS_QUERY } from "../queries/user"
 import styles from "./scss/datasetcard.module.scss"
 import type { Dataset, UserDatasetsViewProps } from "../types/user-types"
-import { INDEX_DATASET_FRAGMENT } from "./fragments/query"
-import { filterAndSortDatasets } from "../utils/user-datasets"
-
-export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
-  query advancedSearchDatasets(
-    $query: JSON!
-    $cursor: String
-    $allDatasets: Boolean
-    $datasetType: String
-    $datasetStatus: String
-    $sortBy: JSON
-  ) {
-    datasets: advancedSearch(
-      query: $query
-      allDatasets: $allDatasets
-      datasetType: $datasetType
-      datasetStatus: $datasetStatus
-      sortBy: $sortBy
-      first: 25
-      after: $cursor
-    ) {
-      edges {
-        id
-        node {
-          id
-          created
-          name
-          uploader {
-            id
-            name
-            orcid
-          }
-          public
-          permissions {
-            id
-            userPermissions {
-              userId
-              level
-              access: level
-              user {
-                id
-                name
-                email
-                provider
-              }
-            }
-          }
-          metadata {
-            ages
-          }
-          latestSnapshot {
-            size
-            summary {
-              modalities
-              secondaryModalities
-              sessions
-              subjects
-              subjectMetadata {
-                participantId
-                age
-                sex
-                group
-              }
-              tasks
-              size
-              totalFiles
-              dataProcessed
-              pet {
-                BodyPart
-                ScannerManufacturer
-                ScannerManufacturersModelName
-                TracerName
-                TracerRadionuclide
-              }
-            }
-            issues {
-              severity
-            }
-            validation {
-              errors
-              warnings
-            }
-            description {
-              Name
-              Authors
-            }
-          }
-          analytics {
-            views
-            downloads
-          }
-          stars {
-            userId
-            datasetId
-          }
-          followers {
-            userId
-            datasetId
-          }
-          snapshots {
-            id
-            created
-            tag
-          }
-        }
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasPreviousPage
-        hasNextPage
-        count
-      }
-    }
-  }
-`
+import { Button } from "../components/button/Button"
+import { Loading } from "../components/loading/Loading"
 
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
-  user,
+  orcidUser,
   hasEdit,
 }) => {
-  console.log("User ID Prop:", user?.id)
   const [searchQuery, setSearchQuery] = useState("")
   const [publicFilter, setPublicFilter] = useState<string>("all")
   const [sortOrder, setSortOrder] = useState<string>("date-updated")
   const [visibleDatasets, setVisibleDatasets] = useState<Dataset[]>([])
   const [loadMoreLoading, setLoadMoreLoading] = useState(false)
-  const [allFetchedDatasets, setAllFetchedDatasets] = useState<Dataset[]>([])
   const [cursor, setCursor] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState(false)
   const [sortBy, setSortBy] = useState<any>(null)
-
-  const initialLoadCount = 25
+  const loadAmount = 26
 
   const generateElasticsearchQuery = useCallback(
     (currentSearchQuery: string, currentPublicFilter: string) => {
@@ -147,18 +31,20 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
         },
       }
 
-      if (user?.id) {
+      if (orcidUser?.id) {
         baseQuery.bool.filter.push({
           terms: {
-            "permissions.userPermissions.user.id": [user.id],
+            "permissions.userPermissions.user.id": [orcidUser.id],
           },
         })
       }
 
-      if (currentPublicFilter === "public") {
+      if (hasEdit) {
+        if (currentPublicFilter === "public") {
+          baseQuery.bool.filter.push({ term: { public: true } })
+        }
+      } else {
         baseQuery.bool.filter.push({ term: { public: true } })
-      } else if (currentPublicFilter === "private") {
-        baseQuery.bool.filter.push({ term: { public: false } })
       }
 
       if (currentSearchQuery) {
@@ -200,7 +86,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
 
       return baseQuery
     },
-    [user?.id],
+    [orcidUser?.id, hasEdit],
   )
 
   const [elasticsearchQuery, setElasticsearchQuery] = useState(() =>
@@ -211,25 +97,19 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     ADVANCED_SEARCH_DATASETS_QUERY,
     {
       variables: {
-        first: initialLoadCount,
+        first: loadAmount,
         query: elasticsearchQuery,
         sortBy: sortBy,
         cursor: null,
         allDatasets: true,
-        datasetType: undefined,
         datasetStatus: undefined,
       },
       onCompleted: (initialData) => {
         const initialEdges = initialData?.datasets?.edges || []
         const initialDatasets = initialEdges.map((edge) => edge.node)
-        setAllFetchedDatasets(initialDatasets)
         setVisibleDatasets(initialDatasets)
         setCursor(initialData?.datasets?.pageInfo?.endCursor || null)
         setHasNextPage(initialData?.datasets?.pageInfo?.hasNextPage || false)
-        console.log("Initial Data (onCompleted):", initialData)
-        if (initialDatasets.length > 0) {
-          console.log("First Initial Dataset:", initialDatasets[0])
-        }
       },
       errorPolicy: "ignore",
       fetchPolicy: "cache-and-network",
@@ -241,22 +121,10 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   useEffect(() => {
     if (data?.datasets?.edges) {
       const fetched = data.datasets.edges.map((edge) => edge.node)
-      setAllFetchedDatasets(fetched)
       setVisibleDatasets(fetched)
+      setHasNextPage(data?.datasets?.pageInfo?.hasNextPage || false)
     }
-  }, [data])
-
-  console.log(
-    "Elasticsearch Query:",
-    JSON.stringify(elasticsearchQuery, null, 2),
-  )
-  console.log("Render:", {
-    hasNextPage: hasNextPage,
-    allFetchedLength: allFetchedDatasets.length,
-    visibleLength: visibleDatasets.length,
-    loading: loading,
-    cursor: cursor,
-  })
+  }, [data, hasEdit, loadAmount])
 
   const handleSearch = useCallback(
     (newSearchQuery: string, currentPublicFilter: string) => {
@@ -266,14 +134,13 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
         newSearchQuery,
         currentPublicFilter,
       )
-
-      console.log(
-        "Search Query being sent:",
-        JSON.stringify(newElasticsearchQuery, null, 2),
-      )
-
       setElasticsearchQuery(newElasticsearchQuery)
-      refetch({ query: newElasticsearchQuery, cursor: null, sortBy: sortBy })
+      refetch({
+        query: newElasticsearchQuery,
+        cursor: null,
+        sortBy: sortBy,
+        datasetStatus: undefined,
+      })
     },
     [
       generateElasticsearchQuery,
@@ -282,55 +149,71 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
       setPublicFilter,
       setElasticsearchQuery,
       sortBy,
+      hasEdit,
+      orcidUser?.id,
     ],
   )
 
-  const handlePublicFilterChange = useCallback((newPublicFilter) => {
-    setPublicFilter(newPublicFilter)
-    const newElasticsearchQuery = generateElasticsearchQuery(
+  const handlePublicFilterChange = useCallback(
+    (newPublicFilter) => {
+      setPublicFilter(newPublicFilter)
+      const newElasticsearchQuery = generateElasticsearchQuery(
+        searchQuery,
+        newPublicFilter,
+      )
+      setElasticsearchQuery(newElasticsearchQuery)
+      refetch({
+        query: newElasticsearchQuery,
+        cursor: null,
+        sortBy: sortBy,
+        datasetStatus: undefined,
+      })
+    },
+    [
+      setPublicFilter,
+      generateElasticsearchQuery,
+      refetch,
       searchQuery,
-      newPublicFilter,
-    )
-    setElasticsearchQuery(newElasticsearchQuery)
-    refetch({ query: newElasticsearchQuery, cursor: null, sortBy: sortBy })
-  }, [
-    setPublicFilter,
-    generateElasticsearchQuery,
-    refetch,
-    searchQuery,
-    sortBy,
-  ])
+      sortBy,
+      hasEdit,
+      orcidUser?.id,
+    ],
+  )
 
-  const handleSortOrderChange = useCallback((newSortOrder) => {
-    setSortOrder(newSortOrder)
-    let newSortBy = null
-    switch (newSortOrder) {
-      case "name-asc":
-        newSortBy = { "metadata.datasetName": "asc" }
-        break
-      case "name-desc":
-        newSortBy = { "metadata.datasetName": "desc" }
-        break
-      case "date-newest":
-        newSortBy = { created: "desc" }
-        break
-      case "date-oldest":
-        newSortBy = { created: "asc" }
-        break
-      case "date-updated":
-        newSortBy = { "metadata.latestSnapshotCreatedAt": "desc" }
-        break
-      default:
-        newSortBy = null
-    }
-    setSortBy(newSortBy)
-    refetch({
-      sortBy: newSortBy,
-      first: 25,
-      cursor: null,
-      query: elasticsearchQuery,
-    })
-  }, [setSortOrder, refetch, setSortBy, elasticsearchQuery])
+  const handleSortOrderChange = useCallback(
+    (newSortOrder) => {
+      setSortOrder(newSortOrder)
+      let newSortBy = null
+      switch (newSortOrder) {
+        case "name-asc":
+          newSortBy = { "metadata.datasetName": "asc" }
+          break
+        case "name-desc":
+          newSortBy = { "metadata.datasetName": "desc" }
+          break
+        case "date-newest":
+          newSortBy = { created: "desc" }
+          break
+        case "date-oldest":
+          newSortBy = { created: "asc" }
+          break
+        case "date-updated":
+          newSortBy = { "metadata.latestSnapshotCreatedAt": "desc" }
+          break
+        default:
+          newSortBy = null
+      }
+      setSortBy(newSortBy)
+      refetch({
+        sortBy: newSortBy,
+        first: loadAmount,
+        cursor: null,
+        query: elasticsearchQuery,
+        datasetStatus: undefined,
+      })
+    },
+    [setSortOrder, refetch, setSortBy, elasticsearchQuery, hasEdit],
+  )
 
   const handleLoadMore = useCallback(() => {
     if (!hasNextPage || loadMoreLoading || !cursor) {
@@ -340,12 +223,11 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     setLoadMoreLoading(true)
     fetchMore({
       variables: {
-        first: 100,
+        first: loadAmount,
         cursor: cursor,
         query: elasticsearchQuery,
         sortBy: sortBy,
         allDatasets: true,
-        datasetType: undefined,
         datasetStatus: undefined,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -358,13 +240,8 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
         const newCursor = fetchMoreResult.datasets.pageInfo.endCursor
         const newHasNextPage = fetchMoreResult.datasets.pageInfo.hasNextPage
 
-        setAllFetchedDatasets((prev) => [...prev, ...newNodes])
         setCursor(newCursor)
         setHasNextPage(newHasNextPage)
-        console.log("Fetch More Result:", fetchMoreResult)
-        if (newNodes.length > 0) {
-          console.log("First New Dataset (Load More):", newNodes[0])
-        }
 
         return {
           datasets: {
@@ -388,6 +265,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     cursor,
     elasticsearchQuery,
     sortBy,
+    hasEdit,
   ])
 
   useEffect(() => {
@@ -400,18 +278,25 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
 
   useEffect(() => {
     if (elasticsearchQuery) {
-      refetch({ query: elasticsearchQuery, cursor: null, sortBy: sortBy }) // Initial refetch with sort
+      refetch({
+        query: elasticsearchQuery,
+        cursor: null,
+        sortBy: sortBy,
+        datasetStatus: undefined,
+      })
     }
-  }, [elasticsearchQuery, refetch, sortBy])
+  }, [elasticsearchQuery, refetch, sortBy, hasEdit])
 
-  if (loading) return <p>Loading datasets...</p>
+  if (loading) return <Loading />
   if (error) return <p>Failed to fetch datasets: {error.message}</p>
 
   const visibleToRender = visibleDatasets
-
   return (
-    <div data-testid="user-datasets-view">
-      <h3>{user.name}'s Datasets</h3>
+    <div
+      className={styles.userDatasetsWrapper}
+      data-testid="user-datasets-view"
+    >
+      <h3>{orcidUser.name}'s Datasets</h3>
 
       <UserDatasetFilters
         publicFilter={publicFilter}
@@ -420,6 +305,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
         setSortOrder={handleSortOrderChange}
         onSearch={handleSearch}
         currentSearchTerm={searchQuery}
+        hasEdit={hasEdit}
       />
 
       <div className={styles.userDsWrap}>
@@ -436,10 +322,11 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
           : <p>No datasets found.</p>}
       </div>
 
-      {hasNextPage && (
-        <button onClick={handleLoadMore} disabled={loadMoreLoading}>
-          {loadMoreLoading ? "Loading more..." : "Load More"}
-        </button>
+      {visibleToRender.length >= loadAmount && !loadMoreLoading &&
+        hasNextPage && (
+        <div className="load-more">
+          <Button label="Load More" onClick={handleLoadMore} />
+        </div>
       )}
     </div>
   )
