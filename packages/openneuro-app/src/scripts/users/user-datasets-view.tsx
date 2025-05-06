@@ -9,6 +9,38 @@ import { Loading } from "../components/loading/Loading"
 import type { Dataset, UserDatasetsViewProps } from "../types/user-types"
 import styles from "./scss/datasetcard.module.scss"
 
+type SortByType = {
+  [key: string]: "asc" | "desc"
+} | null
+
+interface ElasticsearchQuery {
+  bool: {
+    filter: (
+      | { terms: { "permissions.userPermissions.user.id": string[] } }
+      | { term: { public: boolean | null } }
+    )[]
+    must: (
+      | {
+        bool: {
+          should: (
+            | {
+              multi_match: {
+                query: string
+                fields: string[]
+                fuzziness: number
+              }
+            }
+            | { prefix: { name: string } }
+            | { prefix: { "description.Name": string } }
+          )[]
+          minimum_should_match: number
+        }
+      }
+      | { match_all: Record<string, never> }
+    )[]
+  }
+}
+
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   orcidUser,
   hasEdit,
@@ -20,12 +52,15 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   const [loadMoreLoading, setLoadMoreLoading] = useState(false)
   const [cursor, setCursor] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState(false)
-  const [sortBy, setSortBy] = useState<any>(null)
+  const [sortBy, setSortBy] = useState<SortByType>(null)
   const loadAmount = 26
 
   const generateElasticsearchQuery = useCallback(
-    (currentSearchQuery: string, currentPublicFilter: string) => {
-      const baseQuery: any = {
+    (
+      currentSearchQuery: string,
+      currentPublicFilter: string,
+    ): ElasticsearchQuery => {
+      const baseQuery: ElasticsearchQuery = {
         bool: {
           filter: [],
           must: [],
@@ -232,7 +267,6 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
         }
 
         const newEdges = fetchMoreResult.datasets.edges
-        const newNodes = newEdges.map((edge) => edge.node)
         const newCursor = fetchMoreResult.datasets.pageInfo.endCursor
         const newHasNextPage = fetchMoreResult.datasets.pageInfo.hasNextPage
 

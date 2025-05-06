@@ -87,7 +87,6 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
       datasetSize = `${sizeInBytes} bytes`
     }
   }
-  console.log(dataset)
   return (
     <div
       className={styles.userDsCard}
