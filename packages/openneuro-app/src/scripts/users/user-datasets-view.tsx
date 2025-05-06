@@ -122,14 +122,6 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     },
   )
 
-  useEffect(() => {
-    if (data?.datasets?.edges) {
-      const fetched = data.datasets.edges.map((edge) => edge.node)
-      setVisibleDatasets(fetched)
-      setHasNextPage(data?.datasets?.pageInfo?.hasNextPage || false)
-    }
-  }, [data, hasEdit, loadAmount])
-
   const handleSearch = useCallback(
     (newSearchQuery: string, currentPublicFilter: string) => {
       setSearchQuery(newSearchQuery)
@@ -273,6 +265,14 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   ])
 
   useEffect(() => {
+    if (data?.datasets?.edges) {
+      const fetched = data.datasets.edges.map((edge) => edge.node)
+      setVisibleDatasets(fetched)
+      setHasNextPage(data?.datasets?.pageInfo?.hasNextPage || false)
+    }
+  }, [data, hasEdit, loadAmount])
+
+  useEffect(() => {
     const newElasticsearchQuery = generateElasticsearchQuery(
       searchQuery,
       publicFilter,
@@ -292,7 +292,14 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   }, [elasticsearchQuery, refetch, sortBy, hasEdit])
 
   if (loading) return <Loading />
-  if (error) return <p>Failed to fetch datasets: {error.message}</p>
+  if (error) {
+    return (
+      <p>
+        Failed to load datasets. Please contact an administrator if the error
+        persists.
+      </p>
+    )
+  }
 
   const visibleToRender = visibleDatasets
   return (
