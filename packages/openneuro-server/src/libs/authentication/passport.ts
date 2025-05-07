@@ -9,7 +9,7 @@ import { encrypt } from "./crypto"
 import { addJWT, jwtFromRequest } from "./jwt"
 import orcid from "../orcid"
 
-const PROVIDERS = {
+export const PROVIDERS = {
   GOOGLE: "google",
   ORCID: "orcid",
 }
