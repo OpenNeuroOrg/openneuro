@@ -24,7 +24,7 @@ export const SearchParamsProvider: React.FC<SearchParamsProviderProps> = ({
       Sentry.addBreadcrumb({
         category: "routing",
         message: "No query found in URL. Using initialSearchParams.",
-        level: "info"
+        level: "info",
       })
     }
   } catch (err) {
@@ -81,6 +81,11 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
       // when datasetType is unset, unset datasetStatus as well
       updatedParams["datasetStatus_selected"] =
         initialSearchParams["datasetStatus_selected"]
+      updatedParams[param] = initialSearchParams[param]
+      setSearchParams((prevState) => ({
+        ...prevState,
+        ...updatedParams,
+      }))
       break
     case "modality_selected":
     case "brain_initiative":
