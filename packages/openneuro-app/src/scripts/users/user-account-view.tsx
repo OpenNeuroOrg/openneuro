@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
 import { GET_USER, UPDATE_USER, useUser } from "../queries/user"
 import styles from "./scss/useraccountview.module.scss"
+import { GitHubAuthButton } from "./github-auth-button"
 
 export const UserAccountView: React.FC = () => {
   const { user, loading, error } = useUser()
@@ -105,14 +106,16 @@ export const UserAccountView: React.FC = () => {
           <span>ORCID:</span>
           {user.orcid}
         </li>
-        {user.github
-          ? (
+        {user.github &&
+          (
             <li>
               <span>GitHub:</span>
               {user.github}
             </li>
-          )
-          : <li>Connect your GitHub</li>}
+          )}
+        <li>
+          <GitHubAuthButton sync={user.githubSynced} />
+        </li>
       </ul>
 
       <EditableContent
