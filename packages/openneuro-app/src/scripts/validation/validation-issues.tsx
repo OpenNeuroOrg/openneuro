@@ -18,15 +18,19 @@ export function Issue({ datasetIssues, issue, groupBy }: IssueProps) {
       {groupBy === "location"
         ? (
           <div className="e-meta">
-            <label>{issue.code}</label>
-            <span>{issue.subCode ? ` - ${issue.subCode}` : ""}</span>
+            <label>Code:</label> {issue.code}
           </div>
         )
         : (
           <div className="e-meta">
-            <label>{issue.location}</label>
+            <label>Location:</label> {issue.location}
           </div>
         )}
+      {issue.subCode && (
+        <div className="e-meta">
+          <label>Subcode:</label> {issue.subCode}
+        </div>
+      )}
       <div className="e-meta">
         <label>Rule:</label> {issue.rule}
       </div>
