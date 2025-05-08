@@ -9,8 +9,17 @@ exports[`Issue component > renders one issue 1`] = `
       class="e-meta"
     >
       <label>
-        /dataset_description.json
+        Location:
       </label>
+       /dataset_description.json
+    </div>
+    <div
+      class="e-meta"
+    >
+      <label>
+        Subcode:
+      </label>
+       DatasetType
     </div>
     <div
       class="e-meta"
