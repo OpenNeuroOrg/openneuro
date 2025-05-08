@@ -270,7 +270,7 @@
 <h2>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Install <a class="reference external" href="https://deno.land/">Deno</a> via <a class="reference external" href="https://docs.deno.com/runtime/manual/getting_started/installation">any supported installation method</a>.</p></li>
-<li><p>In a terminal type: <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">--help</span></code></p></li>
+<li><p>Install with <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">install</span> <span class="pre">-A</span> <span class="pre">--global</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">-n</span> <span class="pre">openneuro</span></code></p></li>
 </ol>
 <p>To download annexed files, you will need the git-annex special remote for OpenNeuro.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># A script is provided to wrap the CLI as a special remote</span>
@@ -290,7 +290,7 @@ This prompts you for the required configuration fields and these are saved in De
 <p>You can also specify this as an option or environment variable.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># For scripts</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">OPENNEURO_API_KEY</span><span class="o">=</span>&lt;api_key&gt;
-deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>login<span class="w"> </span>--error-reporting<span class="w"> </span><span class="nb">true</span>
+openneuro<span class="w"> </span>login<span class="w"> </span>--error-reporting<span class="w"> </span><span class="nb">true</span>
 </pre></div>
 </div>
 </section>
@@ -300,13 +300,13 @@ deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span
 <h3>Uploading datasets<a class="headerlink" href="#uploading-datasets" title="Link to this heading">¶</a></h3>
 <p>To upload a new dataset:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Path to the dataset root (directory containing dataset_description.json)</span>
-deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
+openneuro<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
 </pre></div>
 </div>
 <p>Your dataset must pass validation to upload but warnings can be skipped with <code class="docutils literal notranslate"><span class="pre">deno</span> <span class="pre">run</span> <span class="pre">-A</span> <span class="pre">jsr:&#64;openneuro/cli</span> <span class="pre">upload</span> <span class="pre">--ignoreWarnings</span> <span class="pre">path/to/dataset</span></code>.</p>
 <p>To resume an interrupted upload or add files to an existing dataset:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add files to an existing dataset</span>
-deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--dataset<span class="w"> </span>ds000001<span class="w"> </span>path/to/dataset
+openneuro<span class="w"> </span>upload<span class="w"> </span>--dataset<span class="w"> </span>ds000001<span class="w"> </span>path/to/dataset
 </pre></div>
 </div>
 <p>where &lt;accession_number&gt; is a unique dataset identifier that can be found in the URL. For example accession number for <code class="docutils literal notranslate"><span class="pre">https://openneuro.org/datasets/ds001555</span></code> is <code class="docutils literal notranslate"><span class="pre">ds001555</span></code>.</p>
@@ -316,11 +316,11 @@ deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span
 <h3>Downloading datasets<a class="headerlink" href="#downloading-datasets" title="Link to this heading">¶</a></h3>
 <p>Downloads using the CLI will create a DataLad dataset and configure a special remote to retrieve the larger annexed files from OpenNeuro.</p>
 <p>To download a snapshot:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>download<span class="w"> </span>&lt;accession<span class="w"> </span>number&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>directory&gt;
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>openneuro<span class="w"> </span>download<span class="w"> </span>&lt;accession<span class="w"> </span>number&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>directory&gt;
 </pre></div>
 </div>
 <p>To download the current draft files:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>download<span class="w"> </span>--draft<span class="w"> </span>&lt;accession<span class="w"> </span>number&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>directory&gt;
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>openneuro<span class="w"> </span>download<span class="w"> </span>--draft<span class="w"> </span>&lt;accession<span class="w"> </span>number&gt;<span class="w"> </span>&lt;destination<span class="w"> </span>directory&gt;
 </pre></div>
 </div>
 <p>If the destination directory does not exist, it will be created.</p>
@@ -338,12 +338,12 @@ datalad<span class="w"> </span>get<span class="w"> </span>&lt;path<span class="w
 <p>To debug issues - enable logging and provide this log to support or open a GitHub issue.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux or macOS</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">OPENNEURO_LOG</span><span class="o">=</span>DEBUG
-deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
+deno<span class="w"> </span>run<span class="w"> </span>--reload<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>upload<span class="w"> </span>--affirmDefaced<span class="w"> </span>path/to/dataset
 </pre></div>
 </div>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Windows with PowerShell</span>
 <span class="nv">$env:OPENNEURO_LOG</span><span class="p">=</span><span class="s2">&quot;DEBUG&quot;</span>
-<span class="n">deno</span> <span class="n">run</span> <span class="n">-A</span> <span class="n">jsr</span><span class="p">:</span><span class="nv">@openneuro</span><span class="p">/</span><span class="nb">cli </span><span class="n">upload</span> <span class="p">-</span><span class="n">-affirmDefaced</span> <span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">dataset</span>
+<span class="n">deno</span> <span class="n">run</span> <span class="p">-</span><span class="n">-reload</span> <span class="n">-A</span> <span class="n">jsr</span><span class="p">:</span><span class="nv">@openneuro</span><span class="p">/</span><span class="nb">cli </span><span class="n">upload</span> <span class="p">-</span><span class="n">-affirmDefaced</span> <span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">dataset</span>
 </pre></div>
 </div>
 </section>
