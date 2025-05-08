@@ -79,12 +79,10 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
     /* Handle simple filter resets. */
     case "datasetType_selected":
       // when datasetType is unset, unset datasetStatus as well
-      updatedParams["datasetStatus_selected"] =
-        initialSearchParams["datasetStatus_selected"]
-      updatedParams[param] = initialSearchParams[param]
       setSearchParams((prevState) => ({
         ...prevState,
-        ...updatedParams,
+        [param]: initialSearchParams[param],
+        "datasetStatus_selected": initialSearchParams["datasetStatus_selected"],
       }))
       break
     case "modality_selected":
