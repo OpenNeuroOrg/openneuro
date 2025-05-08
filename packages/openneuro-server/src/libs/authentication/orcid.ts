@@ -1,7 +1,7 @@
 import passport from "passport"
-import User from "../../models/user"
 import { parsedJwtFromRequest } from "./jwt"
 import * as Sentry from "@sentry/node"
+import { userMigration } from "./user-migration"
 
 export const requestAuth = passport.authenticate("orcid", {
   session: false,
@@ -20,19 +20,18 @@ export const authCallback = (req, res, next) =>
     if (!user) {
       return res.redirect("/")
     }
+    // Google user
     const existingAuth = parsedJwtFromRequest(req)
     if (existingAuth) {
-      // Save ORCID to primary account
-      User.findOne({ id: existingAuth.sub })
-        .then((userModel) => {
-          userModel.orcid = user.providerId
-          return userModel.save().then(() => {
-            res.redirect("/")
+      // Migrate Google to ORCID
+      if (existingAuth.provider === "google") {
+        return userMigration(user.providerId, existingAuth.sub).then(() => {
+          // Complete login with ORCID as primary account
+          req.logIn(user, { session: false }, (err) => {
+            return next(err)
           })
         })
-        .catch((err) => {
-          return next(err)
-        })
+      }
     } else {
       // Complete login with ORCID as primary account
       req.logIn(user, { session: false }, (err) => {

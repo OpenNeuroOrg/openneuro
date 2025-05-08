@@ -10,7 +10,7 @@ This tool allows you to upload and download [OpenNeuro.org](https://openneuro.or
 ## Install
 
 1. Install [Deno](https://deno.land/) via [any supported installation method](https://docs.deno.com/runtime/manual/getting_started/installation).
-2. In a terminal type: `deno run -A jsr:@openneuro/cli --help`
+2. Install with `deno install -A --global jsr:@openneuro/cli -n openneuro`
 
 To download annexed files, you will need the git-annex special remote for OpenNeuro.
 
@@ -37,7 +37,7 @@ You can also specify this as an option or environment variable.
 ```shell
 # For scripts
 export OPENNEURO_API_KEY=<api_key>
-deno run -A jsr:@openneuro/cli login --error-reporting true
+openneuro login --error-reporting true
 ```
 
 ## Usage
@@ -48,7 +48,7 @@ To upload a new dataset:
 
 ```shell
 # Path to the dataset root (directory containing dataset_description.json)
-deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
+openneuro upload --affirmDefaced path/to/dataset
 ```
 
 Your dataset must pass validation to upload but warnings can be skipped with `deno run -A jsr:@openneuro/cli upload --ignoreWarnings path/to/dataset`.
@@ -57,7 +57,7 @@ To resume an interrupted upload or add files to an existing dataset:
 
 ```shell
 # Add files to an existing dataset
-deno run -A jsr:@openneuro/cli upload --dataset ds000001 path/to/dataset
+openneuro upload --dataset ds000001 path/to/dataset
 ```
 
 where <accession_number> is a unique dataset identifier that can be found in the URL. For example accession number for `https://openneuro.org/datasets/ds001555` is `ds001555`.
@@ -71,13 +71,13 @@ Downloads using the CLI will create a DataLad dataset and configure a special re
 To download a snapshot:
 
 ```shell
-deno run -A jsr:@openneuro/cli download <accession number> <destination directory>
+openneuro download <accession number> <destination directory>
 ```
 
 To download the current draft files:
 
 ```shell
-deno run -A jsr:@openneuro/cli download --draft <accession number> <destination directory>
+openneuro download --draft <accession number> <destination directory>
 ```
 
 If the destination directory does not exist, it will be created.
@@ -99,13 +99,13 @@ To debug issues - enable logging and provide this log to support or open a GitHu
 ```bash
 # Linux or macOS
 export OPENNEURO_LOG=DEBUG
-deno run -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
+deno run --reload -A jsr:@openneuro/cli upload --affirmDefaced path/to/dataset
 ```
 
 ```powershell
 # Windows with PowerShell
 $env:OPENNEURO_LOG="DEBUG"
-deno run -A jsr:@openneuro/cli upload --affirmDefaced path\to\dataset
+deno run --reload -A jsr:@openneuro/cli upload --affirmDefaced path\to\dataset
 ```
 
 ### Implementation Notes

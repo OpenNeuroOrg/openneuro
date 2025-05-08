@@ -10,7 +10,7 @@ import { addJWT, jwtFromRequest } from "./jwt"
 import orcid from "../orcid"
 import { setupGitHubAuth } from "./github"
 
-const PROVIDERS = {
+export const PROVIDERS = {
   GOOGLE: "google",
   ORCID: "orcid",
   GITHUB: "github",

@@ -30,17 +30,6 @@ export const UserLoginModal = ({
         </div>
         <div className="sign-in-modal-content">
           <div>
-            <a href={loginUrls.google + `?redirectPath=${btoa(redirectPath)}`}>
-              <Button
-                className="login-button"
-                primary
-                label="Google"
-                icon="fab fa-google"
-                iconSize="23px"
-              />
-            </a>
-          </div>
-          <div>
             <a href={loginUrls.orcid + `?redirectPath=${btoa(redirectPath)}`}>
               <Button
                 className="login-button"
@@ -66,6 +55,18 @@ export const UserLoginModal = ({
                 }
               />
             </AccordionWrap>
+            <div>
+              <a
+                href={loginUrls.google + `?redirectPath=${btoa(redirectPath)}`}
+              >
+                <Button
+                  className="login-button"
+                  label="Migrate Google to ORCID"
+                  icon="fab fa-google"
+                  iconSize="23px"
+                />
+              </a>
+            </div>
           </div>
         </div>
       </Modal>
