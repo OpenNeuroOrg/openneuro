@@ -42,10 +42,9 @@ const GithubSyncDiv = styled.div`
 `
 
 export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
-  const buttonText = sync ? "Re-sync" : "Sync"
+  const buttonText = sync ? "Re-sync" : "Link"
   const lastSyncedText = sync ? `Last synced: ${sync.toLocaleString()}` : null
   const [searchParams] = useSearchParams()
-  console.log(sync)
   useEffect(() => {
     const error = searchParams.get("error")
 
@@ -57,7 +56,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
 
     const success = searchParams.get("success")
     if (success === "github_auth_success") {
-      toast.success("GitHub data successfully synced!")
+      toast.success("GitHub linked!")
     }
   }, [searchParams])
 
@@ -84,7 +83,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
             : "keyword-accordion"}
         >
           <span>
-            Here is some text for a description and/or policy for syncing data
+            Sync profile data from GitHub (avatar, institution, or location).
           </span>
         </AccordionTab>
       </AccordionWrap>

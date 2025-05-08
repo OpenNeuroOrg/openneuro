@@ -4,7 +4,7 @@ import type { UserCardProps } from "../types/user-types"
 
 export const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const { location, institution, email, orcid, links = [], github, name } = user
-
+  console.log(user)
   return (
     <div className={styles.userCard}>
       <ul>

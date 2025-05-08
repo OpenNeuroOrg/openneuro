@@ -5,12 +5,14 @@ import React from "react"
 import { Route, Routes } from "react-router-dom"
 import OrcidGeneral from "./orcid/general.jsx"
 import FourOFourPage from "./404page.js"
+import FourOThreePage from "./403page.js"
 
 function ErrorRoute() {
   return (
     <div className="container errors">
       <div className="panel">
         <Routes>
+          <Route path="github" element={<FourOThreePage />} />
           <Route path="orcid" element={<OrcidGeneral />} />
           <Route path="*" element={<FourOFourPage />} />
         </Routes>
