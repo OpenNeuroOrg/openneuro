@@ -11,7 +11,7 @@ import { useUser } from "../queries/user"
 export const UserQuery: React.FC = () => {
   const { orcid } = useParams()
   const isOrcidValid = orcid && isValidOrcid(orcid)
-  const { user, loading, error } = useUser()
+  const { user, loading, error } = useUser(orcid)
 
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
@@ -23,7 +23,7 @@ export const UserQuery: React.FC = () => {
 
   if (loading) return <div>Loading...</div>
 
-  if (error || !user || user?.orcid !== orcid) {
+  if (error || !user) {
     return <FourOFourPage />
   }
 
@@ -34,5 +34,5 @@ export const UserQuery: React.FC = () => {
   const isUser = (user?.id === profile?.sub) ? true : false
   const hasEdit = isAdminUser || (user?.id === profile?.sub) ? true : false
   // Render user data with UserRoutes
-  return <UserRoutes user={user} hasEdit={hasEdit} isUser={isUser} />
+  return <UserRoutes orcidUser={user} hasEdit={hasEdit} isUser={isUser} />
 }
