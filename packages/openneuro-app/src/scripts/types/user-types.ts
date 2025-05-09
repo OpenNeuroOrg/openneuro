@@ -8,6 +8,7 @@ export interface User {
   avatar?: string
   orcid?: string
   links?: string[]
+  admin?: boolean
 }
 
 export interface UserRoutesProps {

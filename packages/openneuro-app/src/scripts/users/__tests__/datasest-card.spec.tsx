@@ -1,170 +1,11 @@
 import React from "react"
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
-//import { DATASETS_QUERY, UserDatasetsView } from "../user-datasets-view"
-import { MockedProvider } from "@apollo/client/testing"
+import { render, screen } from "@testing-library/react"
 import DatasetCard from "../dataset-card"
-
-// Mocked datasets
-const mockDatasets = [
-  {
-    node: {
-      id: "ds000001",
-      name: "The DBS-fMRI dataset",
-      created: "2025-01-22T19:55:49.997Z",
-      followers: [
-        { userId: "user1", datasetId: "ds000001" },
-        { userId: "user2", datasetId: "ds000001" },
-      ],
-      stars: [
-        { userId: "user1", datasetId: "ds000001" },
-      ],
-      latestSnapshot: {
-        id: "ds000001:1.0.0",
-        size: 6000,
-        created: "2025-01-22T19:55:49.997Z",
-        issues: [{ severity: "low" }],
-        description: {
-          Name: "DBS-FMRI",
-          Authors: ["John Doe"],
-          SeniorAuthor: "Dr. Smith",
-          DatasetType: "fMRI",
-        },
-      },
-    },
-  },
-  {
-    node: {
-      id: "ds000002",
-      name: "The DBS-fMRI dataset 2",
-      created: "2025-01-22T19:55:49.997Z",
-      followers: [
-        { userId: "user1", datasetId: "ds000002" },
-        { userId: "user2", datasetId: "ds000002" },
-      ],
-      stars: [
-        { userId: "user1", datasetId: "ds000002" },
-      ],
-      latestSnapshot: {
-        id: "ds000002:1.0.0",
-        size: 6000,
-        created: "2025-01-22T19:55:49.997Z",
-        issues: [{ severity: "medium" }],
-        description: {
-          Name: "DBS-FMRI 2",
-          Authors: ["Jane Doe"],
-          SeniorAuthor: "Dr. Johnson",
-          DatasetType: "fMRI",
-        },
-      },
-    },
-  },
-]
-
-describe("<UserDatasetsView />", () => {
-  const mockUser = {
-    id: "user1",
-    name: "John Doe",
-    location: "Somewhere",
-    institution: "Some University",
-    email: "john.doe@example.com",
-  }
-  const mockHasEdit = true
-
-  // it("renders loading state", () => {
-  //   const mockLoadingQuery = {
-  //     request: {
-  //       query: DATASETS_QUERY,
-  //       variables: { first: 25 },
-  //     },
-  //     result: { data: { datasets: { edges: [] } } },
-  //   }
-
-  //   render(
-  //     <MockedProvider mocks={[mockLoadingQuery]} addTypename={false}>
-  //       <UserDatasetsView user={mockUser} hasEdit={mockHasEdit} />
-  //     </MockedProvider>,
-  //   )
-
-  //   expect(screen.getByText("Loading datasets...")).toBeInTheDocument()
-  // })
-
-  // it("renders error state", async () => {
-  //   const mockErrorQuery = {
-  //     request: {
-  //       query: DATASETS_QUERY,
-  //       variables: { first: 25 },
-  //     },
-  //     error: new Error("Failed to fetch datasets"),
-  //   }
-
-  //   render(
-  //     <MockedProvider mocks={[mockErrorQuery]} addTypename={false}>
-  //       <UserDatasetsView user={mockUser} hasEdit={mockHasEdit} />
-  //     </MockedProvider>,
-  //   )
-
-  //   await waitFor(() => {
-  //     expect(
-  //       screen.getByText("Failed to fetch datasets: Failed to fetch datasets"),
-  //     ).toBeInTheDocument()
-  //   })
-  // })
-
-  // it("filters datasets by public filter", async () => {
-  //   const mockDatasetQuery = {
-  //     request: {
-  //       query: DATASETS_QUERY,
-  //       variables: { first: 25 },
-  //     },
-  //     result: { data: { datasets: { edges: mockDatasets } } },
-  //   }
-
-  //   render(
-  //     <MockedProvider mocks={[mockDatasetQuery]} addTypename={false}>
-  //       <UserDatasetsView user={mockUser} hasEdit={mockHasEdit} />
-  //     </MockedProvider>,
-  //   )
-
-  //   await waitFor(() => screen.getByTestId("public-filter"))
-  //   fireEvent.click(screen.getByTestId("public-filter"))
-  //   await waitFor(() => screen.getByText("Public"))
-  //   fireEvent.click(screen.getByText("Public"))
-
-  //   expect(screen.getByTestId("public-filter")).toHaveTextContent(
-  //     "Filter by: Public",
-  //   )
-  // })
-
-  // it("handles sorting datasets", async () => {
-  //   const mockDatasetQuery = {
-  //     request: {
-  //       query: DATASETS_QUERY,
-  //       variables: { first: 25 },
-  //     },
-  //     result: { data: { datasets: { edges: mockDatasets } } },
-  //   }
-
-  //   render(
-  //     <MockedProvider mocks={[mockDatasetQuery]} addTypename={false}>
-  //       <UserDatasetsView user={mockUser} hasEdit={mockHasEdit} />
-  //     </MockedProvider>,
-  //   )
-
-  //   await waitFor(() => screen.queryByText(mockDatasets[0].node.name))
-
-  //   fireEvent.click(screen.getByTestId("sort-order"))
-  //   await waitFor(() => screen.getByText("Name (A-Z)"))
-  //   fireEvent.click(screen.getByText("Name (Z-A)"))
-
-  //   expect(screen.getByTestId("sort-order")).toHaveTextContent("Name (Z-A)")
-  // })
-})
 
 const mockDataset = {
   id: "ds000001",
   name: "Test Dataset",
   created: "2025-01-01T00:00:00Z",
-  date: "2025-01-01T00:00:00Z",
   public: true,
   analytics: {
     downloads: 12345,
@@ -183,19 +24,115 @@ const mockDataset = {
     issues: [{ severity: "low" }],
     created: "2025-01-01T00:00:00Z",
     description: {
+      Name: "Test Dataset Description",
       Authors: ["John Doe"],
       SeniorAuthor: "Dr. Smith",
       DatasetType: "fMRI",
     },
+    summary: {
+      modalities: ["fMRI"],
+      secondaryModalities: [],
+      sessions: 1,
+      subjects: 1,
+      subjectMetadata: [],
+      tasks: ["rest"],
+      size: 1024 ** 3,
+      totalFiles: 10,
+      dataProcessed: true,
+      pet: null,
+    },
+    validation: {
+      errors: [],
+      warnings: [],
+    },
   },
+  uploader: {
+    id: "uploaderId123",
+    name: "Uploader Name",
+    orcid: "1234-5678-9012-3456",
+  },
+  permissions: {
+    id: "somePermId",
+    userPermissions: [
+      {
+        userId: "someUserId",
+        level: "admin",
+        access: "admin",
+        user: {
+          id: "someUser",
+          name: "Some User",
+          email: "some@user.com",
+          provider: "github",
+        },
+      },
+    ],
+  },
+  metadata: { ages: [20] },
+  snapshots: [
+    {
+      id: "ds000001:1.0.0",
+      created: "2025-01-01T00:00:00Z",
+      tag: "1.0.0",
+    },
+  ],
 }
 
 describe("DatasetCard", () => {
-  // it("should render dataset information correctly", () => {
-  //   render(<DatasetCard dataset={mockDataset} hasEdit={false} />)
+  it("should render dataset information correctly", () => {
+    render(<DatasetCard dataset={mockDataset} hasEdit={false} />)
+    expect(screen.getByText("Test Dataset")).toBeInTheDocument()
+    expect(screen.getByText("ds000001")).toBeInTheDocument()
 
-  //   expect(screen.getByText("Test Dataset")).toBeInTheDocument()
-  //   expect(screen.getByText("ds000001")).toBeInTheDocument()
-  //   expect(screen.getByText("1.00 GB")).toBeInTheDocument()
-  // })
+    expect(screen.getByText((content, element) => {
+      const isDateSpan = element?.tagName.toLowerCase() === "span" &&
+        element.textContent?.includes("Added:")
+      if (!isDateSpan) return false
+      const expectedDatePart = "12/31/2024"
+      const expectedAgoPart = "4 months ago"
+
+      return element.textContent?.includes(`Added: ${expectedDatePart}`) &&
+        element.textContent?.includes(`(${expectedAgoPart})`)
+    })).toBeInTheDocument()
+  })
+
+  it("should hide the dataset if not public and hasEdit is false", () => {
+    const privateDataset = { ...mockDataset, public: false }
+    const { container } = render(
+      <DatasetCard dataset={privateDataset} hasEdit={false} />,
+    )
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  it("should show the dataset if not public but hasEdit is true", () => {
+    const privateDataset = { ...mockDataset, public: false }
+    render(<DatasetCard dataset={privateDataset} hasEdit={true} />)
+    expect(screen.getByText("Test Dataset")).toBeInTheDocument()
+  })
+
+  it("should render activity details correctly", () => {
+    render(<DatasetCard dataset={mockDataset} hasEdit={false} />)
+    expect(screen.getByRole("img", { name: /activity/i })).toBeInTheDocument()
+  })
+
+  it("should render public icon if dataset is public", () => {
+    render(<DatasetCard dataset={mockDataset} hasEdit={false} />)
+    expect(screen.getByLabelText("Public")).toBeInTheDocument()
+  })
+
+  it("should not render public icon if dataset is not public", () => {
+    const privateDataset = { ...mockDataset, public: false }
+    render(<DatasetCard dataset={privateDataset} hasEdit={true} />)
+    expect(screen.queryByLabelText("Public")).not.toBeInTheDocument()
+  })
+
+  it("should display 'Unknown size' if latestSnapshot or size is missing", () => {
+    const datasetWithoutSize = {
+      ...mockDataset,
+      latestSnapshot: { ...mockDataset.latestSnapshot, size: undefined },
+    }
+    render(<DatasetCard dataset={datasetWithoutSize} hasEdit={false} />)
+    expect(screen.getByText("Dataset Size:")).toHaveTextContent(
+      "Dataset Size: Unknown size",
+    )
+  })
 })
