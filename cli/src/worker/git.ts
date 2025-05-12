@@ -8,11 +8,11 @@ import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
 import ProgressBar from "@deno-library/progress"
 import { annexAdd, hashDirLower, readAnnexPath } from "./annex.ts"
-import { GitWorkerContext } from "./types/git-context.ts"
+import { GitContext } from "./types/git-context.ts"
 import { resetWorktree } from "./resetWorktree.ts"
 import { getDefault } from "./getDefault.ts"
 
-let context: GitWorkerContext
+let context: GitContext
 let attributesCache: GitAnnexAttributes
 
 /**
@@ -35,7 +35,7 @@ async function done() {
 /**
  * Clone or fetch the draft
  */
-async function update() {
+async function update(context: GitContext) {
   try {
     await context.fs.promises.access(join(context.repoPath, ".git"))
     logger.info(
@@ -67,7 +67,9 @@ async function update() {
 /**
  * Load or return a cache copy of .gitattributes
  */
-async function getGitAttributes(): Promise<GitAnnexAttributes> {
+async function getGitAttributes(
+  context: GitContext,
+): Promise<GitAnnexAttributes> {
   if (!attributesCache) {
     const options = context.config()
     try {
@@ -94,10 +96,11 @@ async function getGitAttributes(): Promise<GitAnnexAttributes> {
  * Decide if this incoming file is annexed or not
  */
 async function shouldBeAnnexed(
+  context: GitContext,
   relativePath: string,
   size: number,
 ): Promise<GitAnnexBackend> {
-  const gitAttributes = await getGitAttributes()
+  const gitAttributes = await getGitAttributes(context)
   const attributes = matchGitAttributes(gitAttributes, relativePath)
   if (attributes.largefiles) {
     if (size > attributes.largefiles && attributes.backend) {
@@ -113,9 +116,10 @@ async function shouldBeAnnexed(
 /**
  * git-annex add equivalent
  */
-async function add(event: GitWorkerEventAdd) {
+async function add(context: GitContext, event: GitWorkerEventAdd) {
   const { size } = await context.fs.promises.stat(event.data.path)
   const annexed = await shouldBeAnnexed(
+    context,
     event.data.relativePath,
     size,
   )
@@ -135,12 +139,12 @@ async function add(event: GitWorkerEventAdd) {
   } else {
     if (
       await annexAdd(
+        context,
         annexKeys,
         annexed,
         event.data.path,
         event.data.relativePath,
         size,
-        context,
       )
     ) {
       logger.info(`Annexed\t${event.data.relativePath}`)
@@ -199,7 +203,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
   let uuid
   let uuidLog = ""
   try {
-    uuidLog = await readAnnexPath("uuid.log", context)
+    uuidLog = await readAnnexPath(context, "uuid.log")
   } catch (err) {
     if (err instanceof Error && err.name !== "NotFoundError") {
       throw err
@@ -257,7 +261,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         const annexBranchPath = join(hashDir, `${key}.log`)
         let log
         try {
-          log = await readAnnexPath(annexBranchPath, context)
+          log = await readAnnexPath(context, annexBranchPath)
         } catch (err) {
           if (err instanceof Error && err.name === "NotFoundError") {
             logger.debug(`Annex branch object "${annexBranchPath}" not found`)
@@ -311,7 +315,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
 /**
  * `git commit` equivalent
  */
-async function commit() {
+async function commit(context: GitContext) {
   const options = context.config()
   let generateCommit = false
   let changes = 0
@@ -362,7 +366,7 @@ async function commit() {
 /**
  * `git push` and `git-annex copy --to=openneuro`
  */
-async function push() {
+async function push(context: GitContext) {
   let completed = 0
   const annexedObjects = Object.keys(annexKeys).length
   const progress = new ProgressBar({
@@ -431,7 +435,7 @@ const workQueue = new PromiseQueue()
 // @ts-ignore Expected for workers
 self.onmessage = (event: GitWorkerEvent) => {
   if (event.data.command === "setup") {
-    context = new GitWorkerContext(
+    context = new GitContext(
       event.data.datasetId,
       event.data.sourcePath,
       event.data.repoPath,
@@ -442,15 +446,15 @@ self.onmessage = (event: GitWorkerEvent) => {
     )
     setupLogging(event.data.logLevel)
   } else if (event.data.command === "clone") {
-    workQueue.enqueue(update)
+    workQueue.enqueue(update, context)
   } else if (event.data.command === "add") {
-    workQueue.enqueue(add, event)
+    workQueue.enqueue(add, context, event)
   } else if (event.data.command === "commit") {
-    workQueue.enqueue(commit)
+    workQueue.enqueue(commit, context)
   } else if (event.data.command === "push") {
-    workQueue.enqueue(push)
+    workQueue.enqueue(push, context)
   } else if (event.data.command === "remote-setup") {
-    workQueue.enqueue(remoteSetup)
+    workQueue.enqueue(remoteSetup, context)
   } else if (event.data.command === "done") {
     workQueue.enqueue(done)
   }

@@ -1,4 +1,4 @@
-import type { GitWorkerContext } from "./types/git-context.ts"
+import type { GitContext } from "./types/git-context.ts"
 import { basename, dirname, join, relative } from "@std/path"
 import { default as git } from "isomorphic-git"
 
@@ -57,20 +57,20 @@ export function annexRelativePath(path: string) {
 
 /**
  * Add a file to a configured annex
+ * @param context GitWorkerContext objects
  * @param annexKeys Object with key to
  * @param hash Git annex hash string (e.g. MD5E or SHA256)
  * @param path Absolute path to the file being added
  * @param relativePath Repo relative path for file being added
  * @param size File size (to avoid additional stat call)
- * @param context GitWorkerContext objects
  */
 export async function annexAdd(
+  context: GitContext,
   annexKeys: Record<string, string>,
   hash: string,
   path: string,
   relativePath: string,
   size: number,
-  context: GitWorkerContext,
 ): Promise<boolean> {
   // E in the backend means include the file extension
   let extension = ""
@@ -144,8 +144,8 @@ export async function annexAdd(
 }
 
 export async function readAnnexPath(
+  context: GitContext,
   logPath: string,
-  context: GitWorkerContext,
 ): Promise<string> {
   const options = {
     ...context.config(),

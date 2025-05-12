@@ -1,10 +1,10 @@
 import { default as git } from "isomorphic-git"
-import type { GitWorkerContext } from "./types/git-context.ts"
+import type { GitContext } from "./types/git-context.ts"
 
 /**
  * Determine if the default branch is main or master
  */
-export async function getDefault(context: GitWorkerContext): Promise<string> {
+export async function getDefault(context: GitContext): Promise<string> {
   try {
     await git.resolveRef({ ...context.config(), ref: "main" })
     return "main"

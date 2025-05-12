@@ -1,5 +1,5 @@
 import { join } from "@std/path/join"
-import type { GitWorkerContext } from "./types/git-context.ts"
+import type { GitContext } from "./types/git-context.ts"
 import { default as git } from "isomorphic-git"
 
 // Status Matrix Row Indexes
@@ -11,7 +11,7 @@ const STAGE = 3
 /**
  * Ensure clean worktree state before updates
  */
-export async function resetWorktree(context: GitWorkerContext, branch: string) {
+export async function resetWorktree(context: GitContext, branch: string) {
   // Status Matrix State
   const UNCHANGED = 1
 

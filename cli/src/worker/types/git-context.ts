@@ -18,7 +18,7 @@ interface OpenNeuroGitToken {
   exp: number
 }
 
-export class GitWorkerContext {
+export class GitContext {
   // Current working dataset ID
   constructor(
     public datasetId: string,
@@ -83,7 +83,7 @@ export interface GitWorkerEventGeneric {
   }
 }
 
-export interface GitWorkerEventSetupData extends GitWorkerContext {
+export interface GitWorkerEventSetupData extends GitContext {
   command: "setup"
   logLevel: LevelName
 }

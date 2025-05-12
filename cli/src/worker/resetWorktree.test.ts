@@ -1,12 +1,12 @@
 import { assertEquals } from "@std/assert"
 import { resetWorktree } from "./resetWorktree.ts"
-import { GitWorkerContext } from "./types/git-context.ts"
+import { GitContext } from "./types/git-context.ts"
 import { join } from "@std/path"
 import { default as git } from "isomorphic-git"
 
 Deno.test("resetWorktree()", async (t) => {
   const testDir = await Deno.makeTempDir()
-  const context = new GitWorkerContext(
+  const context = new GitContext(
     "ds000000",
     testDir,
     testDir,
