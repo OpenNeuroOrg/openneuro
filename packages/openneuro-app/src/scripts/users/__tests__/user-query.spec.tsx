@@ -13,13 +13,6 @@ import { useCookies } from "react-cookie"
 import { useUser } from "../../queries/user"
 import type { User } from "../../types/user-types"
 
-// Import types
-import type * as ValidationUtils from "../../utils/validationUtils"
-import type * as ReactCookie from "react-cookie"
-import type * as AuthenticationProfile from "../../authentication/profile"
-import type * as AdminUser from "../../authentication/admin-user"
-import type * as UserQueries from "../../queries/user"
-
 // --- generate a random valid ORCID - maybe unnecessary ---
 const generateRandomValidOrcid = (): string => {
   const segments = Array.from(
@@ -41,7 +34,9 @@ vi.mock("./user-routes", () => ({
 }))
 
 vi.mock("../../utils/validationUtils", async (importOriginal) => {
-  const actual = await importOriginal<ValidationUtils.TypeofValidationUtils>()
+  const actual = await importOriginal<
+    typeof import("../../utils/validationUtils")
+  >()
   return {
     ...actual,
     isValidOrcid: vi.fn(),
@@ -49,7 +44,7 @@ vi.mock("../../utils/validationUtils", async (importOriginal) => {
 })
 
 vi.mock("react-cookie", async (importOriginal) => {
-  const actual = await importOriginal<ReactCookie.TypeofReactCookie>()
+  const actual = await importOriginal<typeof import("react-cookie")>()
   return {
     ...actual,
     useCookies: vi.fn(),
@@ -58,7 +53,7 @@ vi.mock("react-cookie", async (importOriginal) => {
 
 vi.mock("../../authentication/profile", async (importOriginal) => {
   const actual = await importOriginal<
-    AuthenticationProfile.TypeofAuthenticationProfile
+    typeof import("../../authentication/profile")
   >()
   return {
     ...actual,
@@ -67,7 +62,9 @@ vi.mock("../../authentication/profile", async (importOriginal) => {
 })
 
 vi.mock("../../authentication/admin-user", async (importOriginal) => {
-  const actual = await importOriginal<AdminUser.TypeofAdminUser>()
+  const actual = await importOriginal<
+    typeof import("../../authentication/admin-user")
+  >()
   return {
     ...actual,
     isAdmin: vi.fn(),
@@ -75,7 +72,7 @@ vi.mock("../../authentication/admin-user", async (importOriginal) => {
 })
 
 vi.mock("../../queries/user", async (importOriginal) => {
-  const actual = await importOriginal<UserQueries.TypeofUserQueries>()
+  const actual = await importOriginal<typeof import("../../queries/user")>()
   return {
     ...actual,
     useUser: vi.fn(),
