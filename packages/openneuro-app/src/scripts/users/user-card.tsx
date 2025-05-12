@@ -2,8 +2,9 @@ import React from "react"
 import styles from "./scss/usercard.module.scss"
 import type { UserCardProps } from "../types/user-types"
 
-export const UserCard: React.FC<UserCardProps> = ({ user }) => {
-  const { location, institution, email, orcid, links = [], github, name } = user
+export const UserCard: React.FC<UserCardProps> = ({ orcidUser }) => {
+  const { location, institution, email, orcid, links = [], github, name } =
+    orcidUser
 
   return (
     <div className={styles.userCard}>

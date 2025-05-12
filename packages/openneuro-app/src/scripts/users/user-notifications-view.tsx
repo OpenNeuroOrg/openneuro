@@ -11,7 +11,7 @@ import iconUnread from "../../assets/icon-unread.png"
 import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"
 
-export const UserNotificationsView = ({ user }) => {
+export const UserNotificationsView = ({ orcidUser }) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
   const { tab = "unread" } = useParams()
   const navigate = useNavigate()
@@ -50,18 +50,20 @@ export const UserNotificationsView = ({ user }) => {
   // Redirect to default tab if no tab is specified
   useEffect(() => {
     if (!["unread", "saved", "archived"].includes(tab)) {
-      navigate(`/user/${user.orcid}/notifications/unread`, { replace: true })
+      navigate(`/user/${orcidUser.orcid}/notifications/unread`, {
+        replace: true,
+      })
     }
-  }, [tab, user.orcid, navigate])
+  }, [tab, orcidUser.orcid, navigate])
 
   return (
     <div data-testid="user-notifications-view">
-      <h3>Notifications for {user.name}</h3>
+      <h3>Notifications for {orcidUser.name}</h3>
       <div className={styles.tabContainer}>
         <ul className={styles.tabs} ref={tabsRef}>
           <li>
             <NavLink
-              to={`/user/${user.orcid}/notifications/unread`}
+              to={`/user/${orcidUser.orcid}/notifications/unread`}
               className={({ isActive }) =>
                 isActive
                   ? `${styles.active} ${styles.tabUnread}`
@@ -73,7 +75,7 @@ export const UserNotificationsView = ({ user }) => {
           </li>
           <li>
             <NavLink
-              to={`/user/${user.orcid}/notifications/saved`}
+              to={`/user/${orcidUser.orcid}/notifications/saved`}
               className={({ isActive }) =>
                 isActive
                   ? `${styles.active} ${styles.tabSaved}`
@@ -85,7 +87,7 @@ export const UserNotificationsView = ({ user }) => {
           </li>
           <li>
             <NavLink
-              to={`/user/${user.orcid}/notifications/archived`}
+              to={`/user/${orcidUser.orcid}/notifications/archived`}
               className={({ isActive }) =>
                 isActive
                   ? `${styles.active} ${styles.tabArchived}`

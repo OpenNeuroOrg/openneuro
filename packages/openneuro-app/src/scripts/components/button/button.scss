@@ -138,3 +138,17 @@
     }
   }
 }
+
+.load-more {
+  .on-button {
+    display: block;
+    border: 1px solid;
+    width: 100%;
+    background-color: #fff;
+    transition: background-color 0.3s;
+    &:hover {
+      text-decoration: none;
+      background-color: $newspaper;
+    }
+  }
+}
