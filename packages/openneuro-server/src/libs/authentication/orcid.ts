@@ -8,6 +8,27 @@ export const requestAuth = passport.authenticate("orcid", {
   session: false,
 })
 
+/**
+ * Complete a successful login
+ */
+export function completeRequestLogin(req, res, next, user) {
+  return req.logIn(user, { session: false }, (err) => {
+    if (err) {
+      Sentry.captureException(err)
+      return next(err)
+    }
+    // If no email is provided for a logged in user, warn the user
+    if (!req.user.email && req.user && req.user.token) {
+      // Set the access token manually and redirect
+      res.cookie("accessToken", req.user.token, { sameSite: "Lax" as const })
+      res.redirect("/error/email-warning")
+    } else {
+      // Login normally
+      return next()
+    }
+  })
+}
+
 export const authCallback = (req, res, next) =>
   passport.authenticate("orcid", async (err: any, user: any) => {
     if (err) {
@@ -36,16 +57,10 @@ export const authCallback = (req, res, next) =>
       // Migrate Google to ORCID
       if (existingAuth.provider === "google") {
         return userMigration(user.providerId, existingAuth.sub).then(() => {
-          // Complete login with ORCID as primary account
-          req.logIn(user, { session: false }, (err) => {
-            return next(err)
-          })
+          return completeRequestLogin(req, res, next, user)
         })
       }
     } else {
-      // Complete login with ORCID as primary account
-      req.logIn(user, { session: false }, (err) => {
-        return next(err)
-      })
+      return completeRequestLogin(req, res, next, user)
     }
   })(req, res, next)
