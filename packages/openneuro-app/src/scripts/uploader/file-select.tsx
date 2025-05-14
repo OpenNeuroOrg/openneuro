@@ -24,7 +24,9 @@ class Upload extends React.Component<UploadProps> {
     const text = this.props.resume ? "Resume" : "Select folder"
 
     return (
-      <div className="fileupload-btn">
+      <div
+        className={"fileupload-btn" + (this.props.disabled ? " disabled" : "")}
+      >
         <span>
           {icon}
           {text}

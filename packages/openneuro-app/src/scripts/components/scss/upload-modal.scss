@@ -146,6 +146,12 @@
     &:hover {
       background-color: var(--current-theme-primary-hover);
     }
+    &.disabled {
+      background-color: $rock;
+      &:hover {
+        background-color: $rock;
+      }
+    }
   }
   .fileupload-btn .multifile-select-btn {
     opacity: 0;
