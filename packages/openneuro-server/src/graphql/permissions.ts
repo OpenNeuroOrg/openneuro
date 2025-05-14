@@ -138,6 +138,9 @@ export const checkDatasetWrite = async (
     // Quick path for anonymous writes
     throw new Error(state.errorMessage)
   }
+  if (userId && !(userInfo.email)) {
+    throw new Error("Connect an email to make contributions to OpenNeuro.")
+  }
   if (userId && userInfo.admin) {
     // Always allow site admins
     return true
