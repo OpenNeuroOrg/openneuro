@@ -1,10 +1,8 @@
-// UserSummary.js
-
 import React from "react"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { formatDate } from "../../utils/date.js" // Adjust the import path
-import { User } from "../../types/user-types" // Adjust the import path
+import { formatDate } from "../../utils/date.js"
+import { User } from "../../types/user-types"
 import styles from "./users.module.scss"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 
@@ -15,7 +13,7 @@ interface UserSummaryProps {
 const UserSummary = ({ user }: UserSummaryProps) => {
   const adminBadge = user.admin
     ? (
-      <Tooltip tooltip="ADMIN">
+      <Tooltip tooltip="Admin">
         <span className={`${styles.badge} ${styles.admin}`}>
           <i className="fa fa-star"></i>
         </span>
@@ -42,12 +40,13 @@ const UserSummary = ({ user }: UserSummaryProps) => {
   return (
     <>
       <h3>
-        {user.name}
+        {user.name}: {user.provider}
         {adminBadge && adminBadge}
         {blockedBadge}
       </h3>
-      {user.provider}:{" "}
-      {user.email ? userEmail : user.orcid ? userOrcid : <span>{user.id}</span>}
+
+      {user.email && userEmail}
+      {user.orcid && userOrcid}
       <br />
       <br />
       <div className={styles.summaryFooter}>

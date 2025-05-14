@@ -1,13 +1,13 @@
 import { vi } from "vitest"
 import { users } from "../user.js"
-import { UserInfo } from "../user.js" // Import your UserInfo interface
+import { UserInfo } from "../user.js"
 
 vi.mock("ioredis")
 
 describe("user resolvers", () => {
   describe("users()", () => {
     it("throws an error for non-admins when no filter is provided", () => {
-      const mockUserInfo: UserInfo = { userId: "testId", admin: false } // Provide a non-admin userInfo
+      const mockUserInfo: UserInfo = { userId: "testId", admin: false }
 
       expect(
         users(
@@ -19,7 +19,7 @@ describe("user resolvers", () => {
     })
 
     it("throws an error for non-admins when a filter is provided", () => {
-      const mockUserInfo: UserInfo = { userId: "testId", admin: false } // Provide a non-admin userInfo
+      const mockUserInfo: UserInfo = { userId: "testId", admin: false }
 
       expect(
         users(
@@ -31,9 +31,8 @@ describe("user resolvers", () => {
     })
 
     it("allows admins to retrieve users", () => {
-      const mockAdminInfo: UserInfo = { userId: "adminId", admin: true } // Provide an admin userInfo
+      const mockAdminInfo: UserInfo = { userId: "adminId", admin: true }
 
-      // Mock the User.find().exec() to return a dummy array of users
       const mockFind = vi.fn().mockReturnValue({
         exec: vi.fn().mockResolvedValue([{ id: "1" }, { id: "2" }]),
       })
@@ -49,7 +48,6 @@ describe("user resolvers", () => {
         ),
       ).resolves.toEqual([{ id: "1" }, { id: "2" }])
 
-      // Restore the original mock
       vi.restoreAllMocks()
     })
   })

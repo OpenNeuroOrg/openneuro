@@ -54,7 +54,7 @@ const userSchema = new Schema({
   admin: { type: Boolean, default: false },
   blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
-  lastSeen: { type: Date, default: Date.now }, // use updatedAt for client, maybe remove this
+  lastSeen: { type: Date, default: Date.now },
   location: { type: String, default: "" },
   institution: { type: String, default: "" },
   github: { type: String, default: "" },

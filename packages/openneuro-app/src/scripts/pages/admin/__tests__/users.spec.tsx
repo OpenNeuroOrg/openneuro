@@ -3,7 +3,8 @@ import { fireEvent, render, screen } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import { vi } from "vitest"
 import { UserQuery } from "../../../users/user-query"
-import { GET_USERS } from "../../../queries/users" // Adjust the import path
+import { GET_USERS } from "../../../queries/users"
+
 // Mock admin login
 vi.mock("../../../authentication/profile", (_importOriginal) => {
   return {

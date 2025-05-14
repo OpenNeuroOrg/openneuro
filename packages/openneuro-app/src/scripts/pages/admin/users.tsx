@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react" // Import useEffect
+import React, { useCallback, useEffect, useState } from "react"
 import { gql, useQuery } from "@apollo/client"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
@@ -37,7 +37,7 @@ interface UsersProps {
   ) => void
   filters: { admin: boolean | null; blocked: boolean | null }
   onSearchChange: (searchValue: string | undefined) => void
-  currentSearchTerm: string | undefined // Prop to receive the current search term
+  currentSearchTerm: string | undefined
 }
 
 const Users = ({
@@ -46,10 +46,10 @@ const Users = ({
   loading,
   onSortChange,
   sortConfig,
-  onFilterChange,
+  onFilterChange, // This prop handles all filters
   filters,
   onSearchChange,
-  currentSearchTerm, // Receive the prop
+  currentSearchTerm,
 }: UsersProps) => {
   const hasUsers = users && users.length > 0
   const [searchTerm, setSearchTerm] = useState<string | undefined>(
@@ -57,24 +57,42 @@ const Users = ({
   )
 
   useEffect(() => {
-    setSearchTerm(currentSearchTerm) // Update local state when prop changes
+    setSearchTerm(currentSearchTerm)
   }, [currentSearchTerm])
 
-  const handleFieldChange = useCallback((e) => {
-    onSortChange(e.target.value, sortConfig.order)
-  }, [onSortChange, sortConfig.order])
+  // Handler for sorting by field (from select dropdown, if you still have it)
+  const handleFieldChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onSortChange(e.target.value, sortConfig.order)
+    },
+    [onSortChange, sortConfig.order],
+  )
 
-  const handleOrderChange = useCallback((e) => {
-    onSortChange(sortConfig.field, e.target.value as "ascending" | "descending")
-  }, [onSortChange, sortConfig.field])
+  // Handler for sorting order (from select dropdown, if you still have it)
+  const handleOrderChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onSortChange(
+        sortConfig.field,
+        e.target.value as "ascending" | "descending",
+      )
+    },
+    [onSortChange, sortConfig.field],
+  )
 
-  const handleAdminFilterChange = useCallback((e) => {
-    onFilterChange("admin", e.target.checked)
-  }, [onFilterChange])
+  // IMPORTANT: Use the onFilterChange prop directly for the checkboxes
+  const handleAdminFilterCheckboxChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onFilterChange("admin", e.target.checked)
+    },
+    [onFilterChange],
+  )
 
-  const handleBlockedFilterChange = useCallback((e) => {
-    onFilterChange("blocked", e.target.checked)
-  }, [onFilterChange])
+  const handleBlockedFilterCheckboxChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onFilterChange("blocked", e.target.checked)
+    },
+    [onFilterChange],
+  )
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,8 +107,29 @@ const Users = ({
 
   const handleClearSearch = useCallback(() => {
     setSearchTerm(undefined)
-    onSearchChange(undefined) // Trigger search with empty term
+    onSearchChange(undefined)
   }, [onSearchChange, setSearchTerm])
+
+  const handleSortButtonClick = useCallback(
+    (field: string) => {
+      let newOrder: "ascending" | "descending" = "ascending"
+
+      if (sortConfig.field === field) {
+        newOrder = sortConfig.order === "ascending" ? "descending" : "ascending"
+      } else {
+        // Determine default sort direction
+        if (field === "name" || field === "email" || field === "orcid") {
+          newOrder = "ascending"
+        } else if (
+          field === "created" || field === "lastSeen" || field === "modified"
+        ) {
+          newOrder = "descending"
+        }
+      }
+      onSortChange(field, newOrder)
+    },
+    [onSortChange, sortConfig],
+  )
 
   return (
     <>
@@ -107,7 +146,7 @@ const Users = ({
               <input
                 type="checkbox"
                 checked={filters.admin === true}
-                onChange={handleAdminFilterChange}
+                onChange={handleAdminFilterCheckboxChange} // Use the correct handler
               />
             </label>
             <label>
@@ -115,7 +154,7 @@ const Users = ({
               <input
                 type="checkbox"
                 checked={filters.blocked === true}
-                onChange={handleBlockedFilterChange}
+                onChange={handleBlockedFilterCheckboxChange} // Use the correct handler
               />
             </label>
           </div>
@@ -125,6 +164,7 @@ const Users = ({
               <option value="">-- Select Field --</option>
               <option value="name">Name</option>
               <option value="email">Email</option>
+              <option value="orcid">ORCID</option>
               <option value="created">Created</option>
               <option value="lastSeen">Last Seen</option>
               <option value="modified">Modified</option>
@@ -140,13 +180,12 @@ const Users = ({
             </select>
           </div>
           <div className={styles.searchControl}>
-            {/* New search input */}
             <span>Search:</span>
             <div className={styles.searchInputWrapper}>
               <input
                 type="text"
                 placeholder="Search name or email"
-                value={searchTerm || ""} // Bind value to state
+                value={searchTerm || ""}
                 onChange={handleInputChange}
               />
               {searchTerm && (
@@ -154,8 +193,7 @@ const Users = ({
                   className={styles.clearSearchButton}
                   onClick={handleClearSearch}
                 >
-                  &#x2715;{" "}
-                  {/* Unicode for multiplication sign (looks like an X) */}
+                  &#x2715;
                 </button>
               )}
             </div>
@@ -164,6 +202,62 @@ const Users = ({
         </div>
 
         <div>
+          <div className={styles.gridHead}>
+            <button
+              className={`${styles.sortButton} ${
+                sortConfig.field === "name" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("name")}
+            >
+              Name {sortConfig.field === "name" &&
+                (sortConfig.order === "ascending" ? "▲" : "▼")}
+            </button>
+            <button
+              className={`${styles.sortButton} ${
+                sortConfig.field === "email" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("email")}
+            >
+              Email {sortConfig.field === "email" &&
+                (sortConfig.order === "ascending" ? "▲" : "▼")}
+            </button>
+            <button
+              className={`${styles.sortButton} ${
+                sortConfig.field === "orcid" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("orcid")}
+            >
+              ORCID {sortConfig.field === "orcid" &&
+                (sortConfig.order === "ascending" ? "▲" : "▼")}
+            </button>
+            <button
+              className={`${styles.sortButton} ${
+                sortConfig.field === "created" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("created")}
+            >
+              Joined {sortConfig.field === "created" &&
+                (sortConfig.order === "ascending" ? "▲" : "▼")}
+            </button>
+            <button
+              className={`${styles.sortButton} ${
+                sortConfig.field === "lastSeen" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("lastSeen")}
+            >
+              Login {sortConfig.field === "lastSeen" &&
+                (sortConfig.order === "ascending" ? "▲" : "▼")}
+            </button>
+            <button
+              className={`${styles.sortButton} ${
+                sortConfig.field === "modified" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("modified")}
+            >
+              Modified {sortConfig.field === "modified" &&
+                (sortConfig.order === "ascending" ? "▲" : "▼")}
+            </button>
+          </div>
           <ul className={styles.usersWrap}>
             {hasUsers
               ? (
@@ -191,7 +285,7 @@ const Users = ({
 export const UsersPage = () => {
   const [sortConfig, setSortConfig] = useState<
     { field: string | null; order: "ascending" | "descending" }
-  >({ field: "created", order: "descending" })
+  >({ field: "name", order: "ascending" }) // Default sort by name ascending
   const [filters, setFilters] = useState<
     { admin: boolean | null; blocked: boolean | null }
   >({ admin: null, blocked: null })
@@ -227,6 +321,7 @@ export const UsersPage = () => {
 
   console.log("Current filters in UsersPage:", filters)
   console.log("Current search in UsersPage:", search)
+  console.log("Current sortConfig in UsersPage:", sortConfig)
 
   if (loading) {
     return <Loading />
@@ -244,10 +339,10 @@ export const UsersPage = () => {
       loading={loading}
       onSortChange={handleSortChange}
       sortConfig={sortConfig}
-      onFilterChange={handleFilterChange}
+      onFilterChange={handleFilterChange} // Pass the main filter handler
       filters={filters}
       onSearchChange={handleSearchChange}
-      currentSearchTerm={search} // Pass the search state as a prop
+      currentSearchTerm={search}
     />
   )
 }
