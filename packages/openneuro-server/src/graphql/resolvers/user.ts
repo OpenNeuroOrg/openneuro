@@ -1,9 +1,18 @@
 /**
  * User resolvers
  */
-import User from "../../models/user"
+import User from "../../models/user" // Your existing User model
+import UserMigration from "../../models/userMigration"
+import { v4 as uuidv4 } from "uuid"
+
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
+}
+
+function isValidUUID(uuid: string): boolean {
+  // Regex for standard UUID v4 format
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    .test(uuid)
 }
 
 export const user = (obj, { id }) => {
@@ -42,6 +51,7 @@ export const users = (
   },
   context: GraphQLContext,
 ) => {
+  console.log("usersqueried")
   if (!context.userInfo?.admin) {
     return Promise.reject(
       new Error("You must be a site admin to retrieve users"),
@@ -75,6 +85,58 @@ export const users = (
   query = query.sort(sort)
 
   return query.exec()
+}
+
+// Query a list of migrated users
+export const userMigrations = async (
+  obj: any,
+  args: {},
+  context: GraphQLContext,
+) => {
+  if (!context.userInfo?.admin) {
+    return Promise.reject(
+      new Error("You must be an admin to view user migrations."),
+    )
+  }
+
+  try {
+    const migrations = await UserMigration.find({}).exec()
+    return migrations // Return the actual data!
+  } catch (error: any) {
+    throw new Error("Failed to retrieve user migration records.")
+  }
+}
+
+// Query a migrated user by ID or orcid
+export const userMigration = async (
+  obj: any,
+  { id }: { id: string },
+  context: GraphQLContext,
+) => {
+  if (!context.userInfo?.admin) {
+    return Promise.reject(
+      new Error("You must be an admin to view user migration records."),
+    )
+  }
+
+  let query
+  if (isValidUUID(id)) {
+    query = UserMigration.findOne({ id }).exec()
+  } else if (isValidOrcid(id)) {
+    query = UserMigration.findOne({ "users.orcid": id }).exec()
+  } else {
+    throw new Error("Invalid ID format. Please provide a valid UUID or ORCID.")
+  }
+
+  try {
+    const migration = await query
+    if (!migration) {
+      console.log(`UserMigration not found for ID/ORCID: ${id}`)
+    }
+    return migration
+  } catch (error: any) {
+    throw new Error("Failed to retrieve user migration record.")
+  }
 }
 
 export const removeUser = (obj, { id }, { userInfo }) => {

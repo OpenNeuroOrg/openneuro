@@ -146,7 +146,7 @@ const Users = ({
               <input
                 type="checkbox"
                 checked={filters.admin === true}
-                onChange={handleAdminFilterCheckboxChange} // Use the correct handler
+                onChange={handleAdminFilterCheckboxChange}
               />
             </label>
             <label>
@@ -154,7 +154,7 @@ const Users = ({
               <input
                 type="checkbox"
                 checked={filters.blocked === true}
-                onChange={handleBlockedFilterCheckboxChange} // Use the correct handler
+                onChange={handleBlockedFilterCheckboxChange}
               />
             </label>
           </div>
@@ -285,17 +285,17 @@ const Users = ({
 export const UsersPage = () => {
   const [sortConfig, setSortConfig] = useState<
     { field: string | null; order: "ascending" | "descending" }
-  >({ field: "name", order: "ascending" }) // Default sort by name ascending
+  >({ field: "name", order: "ascending" })
   const [filters, setFilters] = useState<
     { admin: boolean | null; blocked: boolean | null }
   >({ admin: null, blocked: null })
-  const [search, setSearch] = useState<string | undefined>(undefined) // New search state
+  const [search, setSearch] = useState<string | undefined>(undefined)
   const { users, loading, error, refetch } = useUsers({
     orderBy: sortConfig,
     isAdmin: filters.admin,
     isBlocked: filters.blocked,
     search: search,
-  }) // Pass search to useUsers
+  })
 
   const handleSortChange = useCallback(
     (field: string | null, order: "ascending" | "descending") => {
@@ -316,7 +316,7 @@ export const UsersPage = () => {
   )
 
   const handleSearchChange = useCallback((searchValue: string | undefined) => {
-    setSearch(searchValue) // Update search state directly
+    setSearch(searchValue)
   }, [setSearch])
 
   console.log("Current filters in UsersPage:", filters)
@@ -339,7 +339,7 @@ export const UsersPage = () => {
       loading={loading}
       onSortChange={handleSortChange}
       sortConfig={sortConfig}
-      onFilterChange={handleFilterChange} // Pass the main filter handler
+      onFilterChange={handleFilterChange}
       filters={filters}
       onSearchChange={handleSearchChange}
       currentSearchTerm={search}
