@@ -2,13 +2,14 @@ import passport from "passport"
 import { parsedJwtFromRequest } from "./jwt"
 import * as Sentry from "@sentry/node"
 import { userMigration } from "./user-migration"
+import User from "../../models/user"
 
 export const requestAuth = passport.authenticate("orcid", {
   session: false,
 })
 
 export const authCallback = (req, res, next) =>
-  passport.authenticate("orcid", (err, user) => {
+  passport.authenticate("orcid", async (err: any, user: any) => {
     if (err) {
       Sentry.captureException(err)
       if (err.type) {
@@ -20,6 +21,15 @@ export const authCallback = (req, res, next) =>
     if (!user) {
       return res.redirect("/")
     }
+
+    try {
+      await User.findByIdAndUpdate(user._id, { lastSeen: new Date() })
+    } catch (error) {
+      console.error("Error updating lastSeen:", error)
+      Sentry.captureException(error)
+      // Don't block the login flow
+    }
+
     // Google user
     const existingAuth = parsedJwtFromRequest(req)
     if (existingAuth) {

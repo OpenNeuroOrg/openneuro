@@ -1,124 +1,96 @@
-import React, { useState } from "react"
-import { Query } from "@apollo/client/react/components"
-import { gql } from "@apollo/client"
+import React, { useCallback, useEffect, useState } from "react" // Import useEffect
+import { gql, useQuery } from "@apollo/client"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { Input } from "../../components/input/Input"
 import { Loading } from "../../components/loading/Loading"
 import { formatDate } from "../../utils/date.js"
 import Helmet from "react-helmet"
 import { pageTitle } from "../../resources/strings.js"
 import { UserTools } from "./user-tools.js"
-import { USER_FRAGMENT } from "./user-fragment.js"
+import { User } from "../../types/user-types"
+import styles from "./users.module.scss"
+import { useUsers } from "../../queries/users"
+import UserSummary from "./user-summary"
+import * as Sentry from "@sentry/react"
 
-export const GET_USERS = gql`
-  query {
-    users {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
-
-// TODO - Use the GraphQL type
-export interface User {
-  id: string
-  name: string
-  admin: boolean
-  blocked: boolean
-  email?: string
-  provider: string
-  lastSeen?: string
-  created: string
-}
-
-interface UsersQueryResultProps {
-  loading: boolean
-  data: { users: User[] }
-  refetch: () => void
-}
-
-export const UsersQueryResult = (
-  { loading, data, refetch }: UsersQueryResultProps,
-) => {
-  if (loading) {
-    return <Loading />
-  } else {
-    return (
-      <Users loading={loading} users={data.users || []} refetch={refetch} />
-    )
-  }
-}
-
-export const UsersQuery = () => (
-  <Query query={GET_USERS}>{UsersQueryResult}</Query>
+const noResults = (loading: boolean) => (
+  loading ? <Loading /> : <h3>No Results Found</h3>
 )
 
-const userSummary = (user) => {
-  const lastLogin = user.lastlogin ? user.lastlogin : user.created
-  const created = user.created
-  return (
-    <>
-      <div className="summary-data">
-        <b>Signed Up:</b>{" "}
-        <div>
-          {formatDate(created)} - {formatDistanceToNow(parseISO(created))} ago
-        </div>
-      </div>
-      <div className="summary-data">
-        <b>Last Signed In:</b>{" "}
-        <div>
-          {formatDate(lastLogin)} - {formatDistanceToNow(parseISO(lastLogin))}
-          {" "}
-          ago
-        </div>
-      </div>
-    </>
+interface SortConfig {
+  field: string | null
+  order: "ascending" | "descending"
+}
+
+interface UsersProps {
+  users: User[]
+  refetch: (variables?: Record<string, any>) => void
+  loading: boolean
+  onSortChange: (
+    field: string | null,
+    order: "ascending" | "descending",
+  ) => void
+  sortConfig: SortConfig
+  onFilterChange: (
+    filterType: "admin" | "blocked" | null,
+    value: boolean | null,
+  ) => void
+  filters: { admin: boolean | null; blocked: boolean | null }
+  onSearchChange: (searchValue: string | undefined) => void
+  currentSearchTerm: string | undefined // Prop to receive the current search term
+}
+
+const Users = ({
+  users,
+  refetch,
+  loading,
+  onSortChange,
+  sortConfig,
+  onFilterChange,
+  filters,
+  onSearchChange,
+  currentSearchTerm, // Receive the prop
+}: UsersProps) => {
+  const hasUsers = users && users.length > 0
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(
+    currentSearchTerm,
   )
-}
 
-const noResults = (loading) => {
-  return loading ? <Loading /> : <h4>No Results Found</h4>
-}
+  useEffect(() => {
+    setSearchTerm(currentSearchTerm) // Update local state when prop changes
+  }, [currentSearchTerm])
 
-const Users = ({ users, refetch, loading }) => {
-  const [stringFilter, setStringFilter] = useState(null)
-  const [adminFilter, setAdminFilter] = useState(false)
-  const [blacklistFilter, setBlacklistFilter] = useState(false)
+  const handleFieldChange = useCallback((e) => {
+    onSortChange(e.target.value, sortConfig.order)
+  }, [onSortChange, sortConfig.order])
 
-  const filteredUsers = users
-    .filter((user) => !adminFilter || user.admin)
-    .filter(
-      (user) =>
-        !stringFilter ||
-        user.email?.toLowerCase().includes(stringFilter.toLowerCase()) ||
-        user.name?.toLowerCase().includes(stringFilter.toLowerCase()),
-    )
-    .map((user, index) => {
-      const adminBadge = user.admin ? "Admin" : null
-      const userEmail = Object.hasOwn(user, "email") ? user.email : user.id
-      return (
-        <div className="fade-in user-panel  panel panel-default" key={index}>
-          <div className="user-col uc-name">
-            <div>
-              {user.name}{" "}
-              {adminBadge && <span className="badge">{adminBadge}</span>}
-              <UserTools user={user} refetch={refetch} />
-            </div>
-          </div>
-          <div className="user-col user-panel-inner">
-            <div className=" user-col uc-email">
-              {userEmail}
-              <div className=" uc-provider">
-                <b>Provider:</b> {user.provider}
-              </div>
-            </div>
+  const handleOrderChange = useCallback((e) => {
+    onSortChange(sortConfig.field, e.target.value as "ascending" | "descending")
+  }, [onSortChange, sortConfig.field])
 
-            <div className=" user-col uc-summary">{userSummary(user)}</div>
-          </div>
-        </div>
-      )
-    })
+  const handleAdminFilterChange = useCallback((e) => {
+    onFilterChange("admin", e.target.checked)
+  }, [onFilterChange])
+
+  const handleBlockedFilterChange = useCallback((e) => {
+    onFilterChange("blocked", e.target.checked)
+  }, [onFilterChange])
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value || undefined)
+    },
+    [setSearchTerm],
+  )
+
+  const handleSearchSubmit = useCallback(() => {
+    onSearchChange(searchTerm)
+  }, [onSearchChange, searchTerm])
+
+  const handleClearSearch = useCallback(() => {
+    setSearchTerm(undefined)
+    onSearchChange(undefined) // Trigger search with empty term
+  }, [onSearchChange, setSearchTerm])
 
   return (
     <>
@@ -128,58 +100,156 @@ const Users = ({ users, refetch, loading }) => {
       <div className="admin-users">
         <div className="header-wrap ">
           <h2>Current Users</h2>
+          <div className={styles.filterControls}>
+            <span>Filter:</span>
+            <label>
+              Admin:
+              <input
+                type="checkbox"
+                checked={filters.admin === true}
+                onChange={handleAdminFilterChange}
+              />
+            </label>
+            <label>
+              Blocked:
+              <input
+                type="checkbox"
+                checked={filters.blocked === true}
+                onChange={handleBlockedFilterChange}
+              />
+            </label>
+          </div>
+          <div className={styles.sortControls}>
+            <span>Sort By:</span>
+            <select value={sortConfig.field || ""} onChange={handleFieldChange}>
+              <option value="">-- Select Field --</option>
+              <option value="name">Name</option>
+              <option value="email">Email</option>
+              <option value="created">Created</option>
+              <option value="lastSeen">Last Seen</option>
+              <option value="modified">Modified</option>
+            </select>
 
-          <Input
-            name="Search Name Or Email"
-            type="text"
-            placeholder="Search Name or Email"
-            onKeyDown={(e) => setStringFilter(e.target.value)}
-            setValue={(_) => {}}
-          />
-        </div>
-
-        <div className="filters-sort-wrap ">
-          <span>
-            <div className="filters">
-              <label>Filter By:</label>
-              <button
-                className={adminFilter ? "active" : null}
-                onClick={() => setAdminFilter(!adminFilter)}
-              >
-                <span className="filter-admin">
-                  <i
-                    className={adminFilter
-                      ? "fa fa-check-square-o"
-                      : "fa fa-square-o"}
-                  />{" "}
-                  Admin
-                </span>
-              </button>
-              <button
-                className={blacklistFilter ? "active" : null}
-                onClick={() => setBlacklistFilter(!blacklistFilter)}
-              >
-                <span className="filter-admin">
-                  <i
-                    className={blacklistFilter
-                      ? "fa fa-check-square-o"
-                      : "fa fa-square-o"}
-                  />{" "}
-                  Blocked
-                </span>
-              </button>
+            <select
+              id="sortOrder"
+              value={sortConfig.order}
+              onChange={handleOrderChange}
+            >
+              <option value="ascending">Ascending</option>
+              <option value="descending">Descending</option>
+            </select>
+          </div>
+          <div className={styles.searchControl}>
+            {/* New search input */}
+            <span>Search:</span>
+            <div className={styles.searchInputWrapper}>
+              <input
+                type="text"
+                placeholder="Search name or email"
+                value={searchTerm || ""} // Bind value to state
+                onChange={handleInputChange}
+              />
+              {searchTerm && (
+                <button
+                  className={styles.clearSearchButton}
+                  onClick={handleClearSearch}
+                >
+                  &#x2715;{" "}
+                  {/* Unicode for multiplication sign (looks like an X) */}
+                </button>
+              )}
             </div>
-          </span>
+            <button onClick={handleSearchSubmit}>Search</button>
+          </div>
         </div>
 
         <div>
-          <div className="users-panel-wrap">
-            {filteredUsers.length ? filteredUsers : noResults(loading)}
-          </div>
+          <ul className={styles.usersWrap}>
+            {hasUsers
+              ? (
+                users.map((user, index) => (
+                  <li
+                    className={styles.userPanel +
+                      " panel panel-default fade-in"}
+                    key={index}
+                  >
+                    <UserTools user={user} refetch={refetch} />
+                    <UserSummary user={user} />
+                  </li>
+                ))
+              )
+              : (
+                noResults(loading)
+              )}
+          </ul>
         </div>
       </div>
     </>
   )
 }
 
-export default UsersQuery
+export const UsersPage = () => {
+  const [sortConfig, setSortConfig] = useState<
+    { field: string | null; order: "ascending" | "descending" }
+  >({ field: "created", order: "descending" })
+  const [filters, setFilters] = useState<
+    { admin: boolean | null; blocked: boolean | null }
+  >({ admin: null, blocked: null })
+  const [search, setSearch] = useState<string | undefined>(undefined) // New search state
+  const { users, loading, error, refetch } = useUsers({
+    orderBy: sortConfig,
+    isAdmin: filters.admin,
+    isBlocked: filters.blocked,
+    search: search,
+  }) // Pass search to useUsers
+
+  const handleSortChange = useCallback(
+    (field: string | null, order: "ascending" | "descending") => {
+      setSortConfig({ field, order })
+    },
+    [setSortConfig],
+  )
+
+  const handleFilterChange = useCallback(
+    (filterType: "admin" | "blocked" | null, value: boolean) => {
+      console.log("handleFilterChange called:", filterType, value)
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterType]: value ? true : null,
+      }))
+    },
+    [setFilters],
+  )
+
+  const handleSearchChange = useCallback((searchValue: string | undefined) => {
+    setSearch(searchValue) // Update search state directly
+  }, [setSearch])
+
+  console.log("Current filters in UsersPage:", filters)
+  console.log("Current search in UsersPage:", search)
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error) {
+    Sentry.captureException(error)
+    return <p>Error loading users...</p>
+  }
+
+  return (
+    <Users
+      users={users || []}
+      refetch={refetch}
+      loading={loading}
+      onSortChange={handleSortChange}
+      sortConfig={sortConfig}
+      onFilterChange={handleFilterChange}
+      filters={filters}
+      onSearchChange={handleSearchChange}
+      currentSearchTerm={search} // Pass the search state as a prop
+    />
+  )
+}
+
+export default UsersPage

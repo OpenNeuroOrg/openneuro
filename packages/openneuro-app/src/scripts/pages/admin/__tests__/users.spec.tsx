@@ -1,9 +1,9 @@
 import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
-import { GET_USERS, UsersQuery } from "../users"
 import { vi } from "vitest"
-
+import { UserQuery } from "../../../users/user-query"
+import { GET_USERS } from "../../../queries/users" // Adjust the import path
 // Mock admin login
 vi.mock("../../../authentication/profile", (_importOriginal) => {
   return {
@@ -44,7 +44,7 @@ describe("Users", () => {
 
     render(
       <MockedProvider mocks={mocks}>
-        <UsersQuery />
+        <UserQuery />
       </MockedProvider>,
     )
 
@@ -75,7 +75,7 @@ describe("Users", () => {
 
     render(
       <MockedProvider mocks={mocks}>
-        <UsersQuery />
+        <UserQuery />
       </MockedProvider>,
     )
 

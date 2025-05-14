@@ -6,10 +6,12 @@ import { WarnButton } from "../../components/warn-button/WarnButton"
 import { getProfile } from "../../authentication/profile"
 import { useCookies } from "react-cookie"
 import { USER_FRAGMENT } from "./user-fragment"
+import { User } from "../../types/user-types"
+import styles from "./users.module.scss"
 
 interface UserToolsProps {
-  user: Record<string, unknown>
-  refetch: () => Record<string, unknown>
+  user: User
+  refetch: (variables?: Record<string, any>) => void
 }
 
 export const SET_ADMIN = gql`
@@ -38,7 +40,7 @@ export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
   if (user.id !== getProfile(cookies).sub) {
     return (
       <div className="dataset-tools-wrap-admin">
-        <div className="tools clearfix">
+        <div className={styles.tools}>
           <div className="tool">
             <Mutation
               mutation={SET_ADMIN}

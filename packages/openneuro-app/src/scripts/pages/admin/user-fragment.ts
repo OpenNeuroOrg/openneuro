@@ -4,11 +4,18 @@ export const USER_FRAGMENT = gql`
   fragment userFields on User {
     id
     name
+    admin
+    blocked
     email
     provider
-    admin
-    created
     lastSeen
-    blocked
+    created
+    avatar
+    github
+    institution
+    location
+    modified
+    orcid
+  
   }
 `

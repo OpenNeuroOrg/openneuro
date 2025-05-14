@@ -1,0 +1,77 @@
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  position: relative; 
+}
+
+.clearSearchButton {
+  position: absolute;
+  right: 5px; 
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8em;
+  color: #888;
+
+  &:hover {
+    color: #333;
+  }
+}
+
+.searchControl input[type="text"] {
+  padding-right: 25px;
+
+}
+
+.badge {
+  font-size: 10px;
+  padding: 4px;
+  border-radius: 5px;
+  background: blue;
+  color: #fff;;
+  &.admin{background: #127d00;}
+  &.blocked{ background:rgb(192, 3, 66);}
+
+
+}
+
+.user-panel-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.usersWrap {
+  .userPanel {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    list-style: none;
+    h3{
+      margin: 0;
+      [data-tooltip] {
+        display: inline;
+        font-size: 10px;
+      }
+    }
+
+    .tools {
+      display: flex;
+      button {
+        background-color: transparent;
+        border: 0;
+        outline: 0;
+        font-size: 12px;
+        width: auto; 
+        height: auto;
+      }
+    }
+  }
+}
+
+.summaryFooter{
+  display: flex;
+  justify-content: space-between;
+}
