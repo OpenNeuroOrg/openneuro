@@ -37,6 +37,8 @@ export interface UserDocument extends Document {
   github: string
   // User profile links
   links: string[]
+  avatar: string
+  githubSynced: Date
 }
 
 const userSchema = new Schema({
@@ -49,6 +51,7 @@ const userSchema = new Schema({
   google: String, // Google ID if this is an ORCID account with a Google account linked
   migrated: { type: Boolean, default: false },
   refresh: String,
+  avatar: String,
   admin: { type: Boolean, default: false },
   blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
@@ -56,6 +59,7 @@ const userSchema = new Schema({
   location: { type: String, default: "" },
   institution: { type: String, default: "" },
   github: { type: String, default: "" },
+  githubSynced: { type: Date },
   links: { type: [String], default: [] },
 })
 
