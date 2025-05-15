@@ -1,7 +1,7 @@
 /**
  * User resolvers
  */
-import User from "../../models/user" // Your existing User model
+import User from "../../models/user"
 import UserMigration from "../../models/userMigration"
 import { v4 as uuidv4 } from "uuid"
 
@@ -101,7 +101,7 @@ export const userMigrations = async (
 
   try {
     const migrations = await UserMigration.find({}).exec()
-    return migrations // Return the actual data!
+    return migrations
   } catch (error: any) {
     throw new Error("Failed to retrieve user migration records.")
   }
