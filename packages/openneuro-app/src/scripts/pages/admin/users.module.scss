@@ -1,12 +1,12 @@
 .searchInputWrapper {
   display: flex;
   align-items: center;
-  position: relative; 
+  position: relative;
 }
 
 .clearSearchButton {
   position: absolute;
-  right: 5px; 
+  right: 5px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -20,9 +20,147 @@
   }
 }
 
-.searchControl input[type="text"] {
-  padding-right: 25px;
+.searchControl {
+  display: flex;
+  input[type='text'] {
+    padding-right: 25px;
+  }
+  // .searchSubmitButton{
+  // }
+}
 
+
+// .gridHead,
+// .gridTable {
+//   display: flex;
+//   margin: 0;
+//   .sortButton,
+//   .headingCol,
+//   .gtCell {
+//     flex:1;
+//     background: none;
+//     border:0;
+//     border-right: 1px solid #ddd;
+//     border-bottom: 0;
+//     min-height: 50px;
+//     padding: 10px;
+//     &:last-child{
+//       border-right: 0;
+//     }
+//     &.small{
+//       max-width: 120px;
+//     }
+//   }
+// }
+
+// .gridHead {
+//   .sortButton,
+//   .headingCol {
+//     flex:1;
+//     background: none;
+//     border: 1px solid #ddd;
+//     border-bottom: 0;
+//     min-height: 50px;
+//     padding: 10px;
+//     &:last-child{
+//       border-right: 1px solid #ddd;
+      
+//     }
+//   }
+// }
+
+.gridContainer {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex; /* Make the container a flex container */
+  flex-direction: column; /* Stack header and rows vertically */
+}
+
+.gridHead,
+.gridRow {
+  display: flex;
+  margin: 0;
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+.sortButton{
+  cursor: pointer;
+}
+.gridHead {
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  .sortButton,
+  .headingCol {
+    
+    min-height: 50px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border:0;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+
+    
+    &.colSmall {
+      flex: 0 0 180px; 
+    }
+    &.colLarge {
+      flex: 0 0 250px; 
+    }
+    &.colFlex {
+      flex: 1; 
+      min-width: 100px; 
+    }
+  }
+}
+
+.gridRow {
+  border-left: 1px solid #ddd;
+  .gtCell {
+    
+    min-height: 50px;
+    padding: 10px;
+    background-color: #fff;
+    border: 0;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+
+    
+    &.colSmall {
+      flex: 0 0 180px;
+    }
+    &.colLarge {
+      flex: 0 0 250px;
+    }
+    &.colFlex {
+      flex: 1;
+      min-width: 100px;
+    }
+  }
+}
+
+.gridRow:hover {
+  background-color: #f9f9f9;
+}
+
+.gridContainer .gridRow:last-child .gtCell {
+  border-bottom: 1px solid #ddd;
 }
 
 .badge {
@@ -30,11 +168,13 @@
   padding: 4px;
   border-radius: 5px;
   background: blue;
-  color: #fff;;
-  &.admin{background: #127d00;}
-  &.blocked{ background:rgb(192, 3, 66);}
-
-
+  color: #fff;
+  &.admin {
+    background: #127d00;
+  }
+  &.blocked {
+    background: rgb(192, 3, 66);
+  }
 }
 
 .user-panel-inner {
@@ -43,13 +183,17 @@
 }
 
 .usersWrap {
+  margin: 0;
+  padding: 0;
   .userPanel {
-    margin: 20px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
+    margin: 0;
+    //border: 1px solid #ddd;
+    // &:last-child{
+    //   border-bottom: 1px solid #ddd;
+    // }
+    border-bottom: 0;
     list-style: none;
-    h3{
+    h3 {
       margin: 0;
       [data-tooltip] {
         display: inline;
@@ -65,9 +209,9 @@
         outline: 0;
         font-size: 12px;
         line-height: 14px;
-        width: auto; 
+        width: auto;
         height: auto;
-        i{
+        i {
           font-size: 14px;
         }
       }
@@ -75,7 +219,7 @@
   }
 }
 
-.summaryFooter{
+.summaryFooter {
   display: flex;
   justify-content: space-between;
 }

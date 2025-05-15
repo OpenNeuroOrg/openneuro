@@ -140,7 +140,7 @@ const Users = ({
         <div className="header-wrap ">
           <h2>Current Users</h2>
           <div className={styles.filterControls}>
-            <span>Filter:</span>
+            <div>Filter:</div>
             <label>
               Admin:
               <input
@@ -158,7 +158,8 @@ const Users = ({
               />
             </label>
           </div>
-          <div className={styles.sortControls}>
+          {
+            /* <div className={styles.sortControls}>
             <span>Sort By:</span>
             <select value={sortConfig.field || ""} onChange={handleFieldChange}>
               <option value="">-- Select Field --</option>
@@ -178,9 +179,9 @@ const Users = ({
               <option value="ascending">Ascending</option>
               <option value="descending">Descending</option>
             </select>
-          </div>
+          </div> */
+          }
           <div className={styles.searchControl}>
-            <span>Search:</span>
             <div className={styles.searchInputWrapper}>
               <input
                 type="text"
@@ -197,14 +198,19 @@ const Users = ({
                 </button>
               )}
             </div>
-            <button onClick={handleSearchSubmit}>Search</button>
+            <button
+              className={styles.searchSubmitButton}
+              onClick={handleSearchSubmit}
+            >
+              Search
+            </button>
           </div>
         </div>
 
-        <div>
+        <div className={styles.gridContainer}>
           <div className={styles.gridHead}>
             <button
-              className={`${styles.sortButton} ${
+              className={`${styles.sortButton} ${styles.colLarge} ${
                 sortConfig.field === "name" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("name")}
@@ -213,7 +219,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${
+              className={`${styles.sortButton} ${styles.colLarge} ${
                 sortConfig.field === "email" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("email")}
@@ -222,7 +228,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${
+              className={`${styles.sortButton} ${styles.colLarge} ${
                 sortConfig.field === "orcid" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("orcid")}
@@ -231,7 +237,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${
+              className={`${styles.sortButton} ${styles.colSmall} ${
                 sortConfig.field === "created" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("created")}
@@ -240,7 +246,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${
+              className={`${styles.sortButton} ${styles.colSmall} ${
                 sortConfig.field === "lastSeen" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("lastSeen")}
@@ -249,7 +255,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${
+              className={`${styles.sortButton} ${styles.colSmall} ${
                 sortConfig.field === "modified" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("modified")}
@@ -257,6 +263,9 @@ const Users = ({
               Modified {sortConfig.field === "modified" &&
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
+            <span className={`${styles.headingCol}  ${styles.colFlex}`}>
+              Actions
+            </span>
           </div>
           <ul className={styles.usersWrap}>
             {hasUsers
@@ -267,8 +276,7 @@ const Users = ({
                       " panel panel-default fade-in"}
                     key={index}
                   >
-                    <UserTools user={user} refetch={refetch} />
-                    <UserSummary user={user} />
+                    <UserSummary user={user} refetch={refetch} />
                   </li>
                 ))
               )

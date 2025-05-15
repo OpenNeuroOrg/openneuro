@@ -5,12 +5,14 @@ import { formatDate } from "../../utils/date.js"
 import { User } from "../../types/user-types"
 import styles from "./users.module.scss"
 import { Tooltip } from "../../components/tooltip/Tooltip"
+import { UserTools } from "./user-tools.js"
 
 interface UserSummaryProps {
   user: User
+  refetch: (variables?: Record<string, any>) => void
 }
 
-const UserSummary = ({ user }: UserSummaryProps) => {
+const UserSummary = ({ user, refetch }: UserSummaryProps) => {
   const adminBadge = user.admin
     ? (
       <Tooltip tooltip="Admin">
@@ -38,31 +40,51 @@ const UserSummary = ({ user }: UserSummaryProps) => {
   const userEmail = <a href={`mailto:${user.email}`}>{user.email}</a>
   const userOrcid = <a href={`/user/${user.orcid}`}>{user.orcid}</a>
   return (
-    <>
-      <h3>
-        {user.name}: {user.provider}
-        {adminBadge && adminBadge}
-        {blockedBadge}
-      </h3>
+    <div className={styles.gridRow}>
+      <div className={`${styles.gtCell} ${styles.colLarge}`}>
+        <h3>
+          {user.name}
+          {adminBadge && adminBadge}
+          {blockedBadge}
+          <br />
+          {user.provider}
+        </h3>
+      </div>
 
-      {user.email && userEmail}
-      {user.orcid && userOrcid}
-      <br />
-      <br />
-      <div className={styles.summaryFooter}>
-        <span>Created: {formatDate(user.created)}</span>
+      <div className={`${styles.gtCell} ${styles.colLarge}`}>
+        {user.email && userEmail}
+      </div>
+      <div className={`${styles.gtCell} ${styles.colLarge}`}>
+        {user.orcid && userOrcid}
+      </div>
+      <div className={`${styles.gtCell} ${styles.colSmall}`}>
+        <>
+          {formatDate(user.created)}
+          <br />Created:
+        </>
+      </div>
+      <div className={`${styles.gtCell} ${styles.colSmall}`}>
         {user.modified !== null && (
-          <span>
-            Modified: {formatDistanceToNow(parseISO(user.modified))} ago
-          </span>
-        )}
-        {user.lastSeen !== null && (
-          <span>
-            Last Login: {formatDistanceToNow(parseISO(user.lastSeen))} ago
-          </span>
+          <>
+            {formatDistanceToNow(parseISO(user.modified))} ago
+            <br />
+            Modified:
+          </>
         )}
       </div>
-    </>
+      <div className={`${styles.gtCell} ${styles.colSmall}`}>
+        {user.lastSeen !== null && (
+          <>
+            {formatDistanceToNow(parseISO(user.lastSeen))} ago
+            <br />
+            Last Login:
+          </>
+        )}
+      </div>
+      <div className={`${styles.gtCell} ${styles.colFlex}`}>
+        <UserTools user={user} refetch={refetch} />
+      </div>
+    </div>
   )
 }
 
