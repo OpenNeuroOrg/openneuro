@@ -290,7 +290,7 @@ export const UsersPage = () => {
     isAdmin: filters.admin,
     isBlocked: filters.blocked,
     search: search,
-    initialLimit: 2,
+    initialLimit: 100,
   })
 
   const handleSortChange = useCallback(
