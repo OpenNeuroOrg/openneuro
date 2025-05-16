@@ -10,6 +10,11 @@ import { useUsers } from "../../queries/users"
 import UserSummary from "./user-summary"
 import * as Sentry from "@sentry/react"
 
+// --- ADD THESE VARIABLES ---
+const SORT_ASC_ICON = "fa fa-sort-asc" // Font Awesome class for ascending
+const SORT_DESC_ICON = "fa fa-sort-desc" // Font Awesome class for descending
+// --- END ADDITION ---
+
 const noResults = (loading: boolean) =>
   loading ? <Loading /> : <h3>No Results Found</h3>
 
@@ -181,8 +186,16 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("name")}
             >
-              Name {sortConfig.field === "name" &&
-                (sortConfig.order === "ascending" ? "▲" : "▼")}
+              Name {sortConfig.field === "name" && (
+                // --- USE FONT AWESOME ICONS HERE ---
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+                // --- END CHANGE ---
+              )}
             </button>
             <button
               className={`${styles.sortButton} ${styles.colSmall} ${
@@ -190,8 +203,16 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("email")}
             >
-              Email {sortConfig.field === "email" &&
-                (sortConfig.order === "ascending" ? "▲" : "▼")}
+              Email {sortConfig.field === "email" && (
+                // --- USE FONT AWESOME ICONS HERE ---
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+                // --- END CHANGE ---
+              )}
             </button>
             <button
               className={`${styles.sortButton} ${styles.colSmall} ${
@@ -199,8 +220,16 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("orcid")}
             >
-              ORCID {sortConfig.field === "orcid" &&
-                (sortConfig.order === "ascending" ? "▲" : "▼")}
+              ORCID {sortConfig.field === "orcid" && (
+                // --- USE FONT AWESOME ICONS HERE ---
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+                // --- END CHANGE ---
+              )}
             </button>
             <button
               className={`${styles.sortButton} ${styles.colSmall} ${
@@ -208,8 +237,16 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("created")}
             >
-              Created {sortConfig.field === "created" &&
-                (sortConfig.order === "ascending" ? "▲" : "▼")}
+              Created {sortConfig.field === "created" && (
+                // --- USE FONT AWESOME ICONS HERE ---
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+                // --- END CHANGE ---
+              )}
             </button>
             <button
               className={`${styles.sortButton} ${styles.colSmall} ${
@@ -217,8 +254,16 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("lastSeen")}
             >
-              Login {sortConfig.field === "lastSeen" &&
-                (sortConfig.order === "ascending" ? "▲" : "▼")}
+              Login {sortConfig.field === "lastSeen" && (
+                // --- USE FONT AWESOME ICONS HERE ---
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+                // --- END CHANGE ---
+              )}
             </button>
             <button
               className={`${styles.sortButton} ${styles.colSmall} ${
@@ -226,8 +271,16 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("modified")}
             >
-              Modified {sortConfig.field === "modified" &&
-                (sortConfig.order === "ascending" ? "▲" : "▼")}
+              Modified {sortConfig.field === "modified" && (
+                // --- USE FONT AWESOME ICONS HERE ---
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+                // --- END CHANGE ---
+              )}
             </button>
             <span className={`${styles.headingCol}  ${styles.colFlex}`}>
               Actions
