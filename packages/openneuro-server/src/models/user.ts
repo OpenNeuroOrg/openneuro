@@ -37,6 +37,8 @@ export interface UserDocument extends Document {
   github: string
   // User profile links
   links: string[]
+  // Added for Mongoose timestamps
+  updatedAt: Date
 }
 
 const userSchema = new Schema({
@@ -57,7 +59,7 @@ const userSchema = new Schema({
   institution: { type: String, default: "" },
   github: { type: String, default: "" },
   links: { type: [String], default: [] },
-})
+}, { timestamps: { createdAt: false, updatedAt: true } })
 
 userSchema.index({ id: 1, provider: 1 }, { unique: true })
 // Allow case-insensitive email queries

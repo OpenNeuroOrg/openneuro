@@ -27,7 +27,7 @@
 // admin page
 .admin.route-wrapper {
   margin: 20px auto;
-  max-width: 1000px;
+  max-width: 1500px;
   width: 90%;
   .nav-pills.tabs {
     display: flex;
@@ -39,79 +39,11 @@
       display: block;
     }
   }
-  input {
-    display: inline-block;
-    appearance: none;
-    box-sizing: border-box;
-    border-radius: 0;
-    border: 0.1rem solid #dfdfdf;
-    padding: 10px 12px;
-    max-width: 100%;
-    line-height: 12px;
-  }
+
   .header-wrap {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .filters {
-    button {
-      margin: 0 10px;
-    }
-  }
-  .users-panel-wrap {
-    .user-panel {
-      display: flex;
-      justify-content: space-between;
-      margin: 20px 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 10px;
-      > .user-col {
-        flex: auto;
-        label {
-          display: block;
-          font-weight: 600;
-          font-size: 14px;
-        }
-      }
-      .user-panel-inner {
-        display: flex;
-        justify-content: space-between;
-        > .user-col {
-          flex: 1;
-        }
-      }
-      .uc-summary .summary-data,
-      .uc-provider {
-        font-size: 12px;
-        margin: 0 0 10px;
-      }
-      .uc-name {
-        font-size: 20px;
-        display: flex;
-        align-items: flex-start;
-        .badge {
-          font-size: 12px;
-          color: #fff;
-          background: red;
-          display: inline-block;
-          padding: 5px;
-          border-radius: 4px;
-          font-weight: bold;
-        }
-        .dataset-tools-wrap-admin .tools {
-          display: flex;
-          button {
-            background-color: transparent;
-            border: 0;
-            outline: 0;
-            font-size: 12px;
-          }
-        }
-      }
-    }
   }
 }
 

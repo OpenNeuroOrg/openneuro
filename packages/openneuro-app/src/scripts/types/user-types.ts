@@ -8,6 +8,12 @@ export interface User {
   avatar?: string
   orcid?: string
   links?: string[]
+  admin?: boolean
+  blocked?: boolean
+  lastSeen?: string
+  created?: string
+  provider?: string
+  modified?: string
 }
 
 export interface UserRoutesProps {
