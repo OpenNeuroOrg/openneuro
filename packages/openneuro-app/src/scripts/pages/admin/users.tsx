@@ -208,7 +208,7 @@ const Users = ({
               }`}
               onClick={() => handleSortButtonClick("created")}
             >
-              Joined {sortConfig.field === "created" &&
+              Created {sortConfig.field === "created" &&
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button

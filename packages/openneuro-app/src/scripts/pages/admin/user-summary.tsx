@@ -67,16 +67,6 @@ const UserSummary = ({ user, refetchCurrentPage }: UserSummaryProps) => {
         </>
       </div>
       <div className={`${styles.gtCell} ${styles.colSmall}`}>
-        {user.modified !== null && (
-          <>
-            <div>
-              <b>{formatDistanceToNow(parseISO(user.modified))} ago</b>
-            </div>
-            Modified
-          </>
-        )}
-      </div>
-      <div className={`${styles.gtCell} ${styles.colSmall}`}>
         {user.lastSeen !== null && (
           <>
             <div>
@@ -86,6 +76,17 @@ const UserSummary = ({ user, refetchCurrentPage }: UserSummaryProps) => {
           </>
         )}
       </div>
+      <div className={`${styles.gtCell} ${styles.colSmall}`}>
+        {user.modified !== null && (
+          <>
+            <div>
+              <b>{formatDistanceToNow(parseISO(user.modified))} ago</b>
+            </div>
+            Modified
+          </>
+        )}
+      </div>
+
       <div className={`${styles.gtCell} ${styles.colFlex}`}>
         <UserTools
           user={user}
