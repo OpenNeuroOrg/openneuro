@@ -2,20 +2,12 @@
  * User resolvers
  */
 import User from "../../models/user"
-import UserMigration from "../../models/userMigration"
-import { v4 as uuidv4 } from "uuid"
 
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
 
-function isValidUUID(uuid: string): boolean {
-  // Regex for standard UUID v4 format
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-    .test(uuid)
-}
-
-export const user = (obj, { id }) => {
+export const user = (obj: undefined, { id }: { id: string }) => {
   if (isValidOrcid(id)) {
     return User.findOne({
       $or: [{ "orcid": id }, { "providerId": id }],
@@ -39,9 +31,21 @@ export interface GraphQLContext {
   userInfo: UserInfo | null
 }
 
-export const users = (
-  obj: any,
-  { isAdmin, isBlocked, search, limit, offset, orderBy }: {
+type MongoQueryOperator<T> = T | {
+  $ne?: T
+  $regex?: string // Add for search queries
+  $options?: string // Add for search queries
+}
+
+// Define the shape of the $or array elements
+interface UserSearchQuery {
+  name?: { $regex: string; $options: string }
+  email?: { $regex: string; $options: string }
+}
+
+export const users = async (
+  obj: undefined,
+  { isAdmin, isBlocked, search, limit = 100, offset = 0, orderBy }: {
     isAdmin?: boolean
     isBlocked?: boolean
     search?: string
@@ -51,16 +55,26 @@ export const users = (
   },
   context: GraphQLContext,
 ) => {
-  console.log("usersqueried")
   if (!context.userInfo?.admin) {
     return Promise.reject(
       new Error("You must be a site admin to retrieve users"),
     )
   }
 
-  const filter: { admin?: boolean; blocked?: boolean; $or?: any[] } = {}
+  const filter: {
+    admin?: MongoQueryOperator<boolean>
+    blocked?: MongoQueryOperator<boolean>
+    migrated?: MongoQueryOperator<boolean>
+    $or?: UserSearchQuery[]
+    name?: MongoQueryOperator<string | RegExp>
+    email?: MongoQueryOperator<string | RegExp>
+  } = {}
+
   if (isAdmin !== undefined) filter.admin = isAdmin
   if (isBlocked !== undefined) filter.blocked = isBlocked
+
+  filter.migrated = { $ne: true }
+
   if (search) {
     filter.$or = [
       { name: { $regex: search, $options: "i" } },
@@ -75,67 +89,27 @@ export const users = (
         ? sortRule.order === "ascending" ? "asc" : "desc"
         : "asc"
     })
+
+    if (!sort._id) {
+      const primarySortOrder = sort[orderBy[0].field] || "asc"
+      sort._id = primarySortOrder
+    }
   } else {
-    sort = { updatedAt: "desc" }
+    sort = { updatedAt: "desc", _id: "desc" }
   }
+
+  const totalCount = await User.countDocuments(filter).exec()
 
   let query = User.find(filter)
   if (offset !== undefined) query = query.skip(offset)
   if (limit !== undefined) query = query.limit(limit)
   query = query.sort(sort)
 
-  return query.exec()
-}
+  const users = await query.exec()
 
-// Query a list of migrated users
-export const userMigrations = async (
-  obj: any,
-  args: {},
-  context: GraphQLContext,
-) => {
-  if (!context.userInfo?.admin) {
-    return Promise.reject(
-      new Error("You must be an admin to view user migrations."),
-    )
-  }
-
-  try {
-    const migrations = await UserMigration.find({}).exec()
-    return migrations
-  } catch (error: any) {
-    throw new Error("Failed to retrieve user migration records.")
-  }
-}
-
-// Query a migrated user by ID or orcid
-export const userMigration = async (
-  obj: any,
-  { id }: { id: string },
-  context: GraphQLContext,
-) => {
-  if (!context.userInfo?.admin) {
-    return Promise.reject(
-      new Error("You must be an admin to view user migration records."),
-    )
-  }
-
-  let query
-  if (isValidUUID(id)) {
-    query = UserMigration.findOne({ id }).exec()
-  } else if (isValidOrcid(id)) {
-    query = UserMigration.findOne({ "users.orcid": id }).exec()
-  } else {
-    throw new Error("Invalid ID format. Please provide a valid UUID or ORCID.")
-  }
-
-  try {
-    const migration = await query
-    if (!migration) {
-      console.log(`UserMigration not found for ID/ORCID: ${id}`)
-    }
-    return migration
-  } catch (error: any) {
-    throw new Error("Failed to retrieve user migration record.")
+  return {
+    users: users,
+    totalCount: totalCount,
   }
 }
 

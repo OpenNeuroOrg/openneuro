@@ -3,7 +3,7 @@
  */
 import { dataset, datasets } from "./dataset.js"
 import { participantCount, snapshot } from "./snapshots.js"
-import { user, userMigration, userMigrations, users } from "./user"
+import { user, users } from "./user.js"
 import { flaggedFiles } from "./flaggedFiles"
 import { publicMetadata } from "./metadata"
 
@@ -15,8 +15,6 @@ const Query = {
   snapshot,
   participantCount,
   flaggedFiles,
-  userMigrations,
-  userMigration,
   publicMetadata,
 }
 

@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Navigate, NavLink, Route, Routes } from "react-router-dom"
-import Users from "./users"
+import { UsersPage } from "./users"
 import FlaggedFiles from "./flagged-files.jsx"
 import AdminUser from "../../authentication/admin-user.jsx"
 
@@ -28,7 +28,7 @@ class Dashboard extends React.Component {
                 </li>
               </ul>
               <Routes>
-                <Route path="/users" element={<Users />} />
+                <Route path="/users" element={<UsersPage />} />
                 <Route path="/flagged-files" element={<FlaggedFiles />} />
                 <Route
                   path="/"

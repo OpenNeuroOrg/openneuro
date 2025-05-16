@@ -1,21 +1,17 @@
+// packages/openneuro-app/src/scripts/pages/admin/users.tsx
+
 import React, { useCallback, useEffect, useState } from "react"
-import { gql, useQuery } from "@apollo/client"
-import parseISO from "date-fns/parseISO"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Loading } from "../../components/loading/Loading"
-import { formatDate } from "../../utils/date.js"
 import Helmet from "react-helmet"
 import { pageTitle } from "../../resources/strings.js"
-import { UserTools } from "./user-tools.js"
-import { User } from "../../types/user-types"
+import type { User } from "../../types/user-types"
 import styles from "./users.module.scss"
 import { useUsers } from "../../queries/users"
 import UserSummary from "./user-summary"
 import * as Sentry from "@sentry/react"
 
-const noResults = (loading: boolean) => (
+const noResults = (loading: boolean) =>
   loading ? <Loading /> : <h3>No Results Found</h3>
-)
 
 interface SortConfig {
   field: string | null
@@ -24,7 +20,7 @@ interface SortConfig {
 
 interface UsersProps {
   users: User[]
-  refetch: (variables?: Record<string, any>) => void
+  refetchCurrentPage: () => void
   loading: boolean
   onSortChange: (
     field: string | null,
@@ -38,18 +34,24 @@ interface UsersProps {
   filters: { admin: boolean | null; blocked: boolean | null }
   onSearchChange: (searchValue: string | undefined) => void
   currentSearchTerm: string | undefined
+  loadMore: () => void
+  hasMore: boolean
+  totalCount: number
 }
 
 const Users = ({
   users,
-  refetch,
+  refetchCurrentPage,
   loading,
   onSortChange,
   sortConfig,
-  onFilterChange, // This prop handles all filters
+  onFilterChange,
   filters,
   onSearchChange,
   currentSearchTerm,
+  loadMore,
+  hasMore,
+  totalCount,
 }: UsersProps) => {
   const hasUsers = users && users.length > 0
   const [searchTerm, setSearchTerm] = useState<string | undefined>(
@@ -60,26 +62,6 @@ const Users = ({
     setSearchTerm(currentSearchTerm)
   }, [currentSearchTerm])
 
-  // Handler for sorting by field (from select dropdown, if you still have it)
-  const handleFieldChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      onSortChange(e.target.value, sortConfig.order)
-    },
-    [onSortChange, sortConfig.order],
-  )
-
-  // Handler for sorting order (from select dropdown, if you still have it)
-  const handleOrderChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      onSortChange(
-        sortConfig.field,
-        e.target.value as "ascending" | "descending",
-      )
-    },
-    [onSortChange, sortConfig.field],
-  )
-
-  // IMPORTANT: Use the onFilterChange prop directly for the checkboxes
   const handleAdminFilterCheckboxChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onFilterChange("admin", e.target.checked)
@@ -117,11 +99,12 @@ const Users = ({
       if (sortConfig.field === field) {
         newOrder = sortConfig.order === "ascending" ? "descending" : "ascending"
       } else {
-        // Determine default sort direction
         if (field === "name" || field === "email" || field === "orcid") {
           newOrder = "ascending"
         } else if (
-          field === "created" || field === "lastSeen" || field === "modified"
+          field === "created" ||
+          field === "lastSeen" ||
+          field === "modified"
         ) {
           newOrder = "descending"
         }
@@ -148,6 +131,9 @@ const Users = ({
                 checked={filters.admin === true}
                 onChange={handleAdminFilterCheckboxChange}
               />
+              {filters.admin === true
+                ? <i className="fa fa-check-square-o"></i>
+                : <i className="fa fa-square-o"></i>}
             </label>
             <label>
               Blocked:
@@ -156,31 +142,11 @@ const Users = ({
                 checked={filters.blocked === true}
                 onChange={handleBlockedFilterCheckboxChange}
               />
+              {filters.blocked === true
+                ? <i className="fa fa-check-square-o"></i>
+                : <i className="fa fa-square-o"></i>}
             </label>
           </div>
-          {
-            /* <div className={styles.sortControls}>
-            <span>Sort By:</span>
-            <select value={sortConfig.field || ""} onChange={handleFieldChange}>
-              <option value="">-- Select Field --</option>
-              <option value="name">Name</option>
-              <option value="email">Email</option>
-              <option value="orcid">ORCID</option>
-              <option value="created">Created</option>
-              <option value="lastSeen">Last Seen</option>
-              <option value="modified">Modified</option>
-            </select>
-
-            <select
-              id="sortOrder"
-              value={sortConfig.order}
-              onChange={handleOrderChange}
-            >
-              <option value="ascending">Ascending</option>
-              <option value="descending">Descending</option>
-            </select>
-          </div> */
-          }
           <div className={styles.searchControl}>
             <div className={styles.searchInputWrapper}>
               <input
@@ -219,7 +185,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${styles.colLarge} ${
+              className={`${styles.sortButton} ${styles.colSmall} ${
                 sortConfig.field === "email" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("email")}
@@ -228,7 +194,7 @@ const Users = ({
                 (sortConfig.order === "ascending" ? "▲" : "▼")}
             </button>
             <button
-              className={`${styles.sortButton} ${styles.colLarge} ${
+              className={`${styles.sortButton} ${styles.colSmall} ${
                 sortConfig.field === "orcid" ? styles.active : ""
               }`}
               onClick={() => handleSortButtonClick("orcid")}
@@ -269,21 +235,31 @@ const Users = ({
           </div>
           <ul className={styles.usersWrap}>
             {hasUsers
-              ? (
-                users.map((user, index) => (
-                  <li
-                    className={styles.userPanel +
-                      " panel panel-default fade-in"}
-                    key={index}
-                  >
-                    <UserSummary user={user} refetch={refetch} />
-                  </li>
-                ))
-              )
-              : (
-                noResults(loading)
-              )}
+              ? users.map((user, index) => (
+                <li
+                  className={styles.userPanel + " panel panel-default fade-in"}
+                  key={user.id || index}
+                >
+                  <UserSummary
+                    user={user}
+                    refetchCurrentPage={refetchCurrentPage}
+                  />
+                </li>
+              ))
+              : noResults(loading)}
           </ul>
+        </div>
+
+        <div className={styles.loadMoreContainer}>
+          {loading && users.length > 0 && <p>Loading more users...</p>}
+          {!loading && hasMore && (
+            <button onClick={loadMore} className={styles.loadMoreButton}>
+              Load More ({users.length} of {totalCount})
+            </button>
+          )}
+          {!hasMore && users.length > 0 && !loading && (
+            <p>All {totalCount} users loaded.</p>
+          )}
         </div>
       </div>
     </>
@@ -291,18 +267,30 @@ const Users = ({
 }
 
 export const UsersPage = () => {
-  const [sortConfig, setSortConfig] = useState<
-    { field: string | null; order: "ascending" | "descending" }
-  >({ field: "name", order: "ascending" })
-  const [filters, setFilters] = useState<
-    { admin: boolean | null; blocked: boolean | null }
-  >({ admin: null, blocked: null })
+  const [sortConfig, setSortConfig] = useState<{
+    field: string | null
+    order: "ascending" | "descending"
+  }>({ field: "name", order: "ascending" })
+  const [filters, setFilters] = useState<{
+    admin: boolean | null
+    blocked: boolean | null
+  }>({ admin: null, blocked: null })
   const [search, setSearch] = useState<string | undefined>(undefined)
-  const { users, loading, error, refetch } = useUsers({
+
+  const {
+    users,
+    loading,
+    error,
+    refetchCurrentPage,
+    loadMore,
+    hasMore,
+    totalCount,
+  } = useUsers({
     orderBy: sortConfig,
     isAdmin: filters.admin,
     isBlocked: filters.blocked,
     search: search,
+    initialLimit: 2,
   })
 
   const handleSortChange = useCallback(
@@ -314,7 +302,6 @@ export const UsersPage = () => {
 
   const handleFilterChange = useCallback(
     (filterType: "admin" | "blocked" | null, value: boolean) => {
-      console.log("handleFilterChange called:", filterType, value)
       setFilters((prevFilters) => ({
         ...prevFilters,
         [filterType]: value ? true : null,
@@ -323,15 +310,14 @@ export const UsersPage = () => {
     [setFilters],
   )
 
-  const handleSearchChange = useCallback((searchValue: string | undefined) => {
-    setSearch(searchValue)
-  }, [setSearch])
+  const handleSearchChange = useCallback(
+    (searchValue: string | undefined) => {
+      setSearch(searchValue)
+    },
+    [setSearch],
+  )
 
-  console.log("Current filters in UsersPage:", filters)
-  console.log("Current search in UsersPage:", search)
-  console.log("Current sortConfig in UsersPage:", sortConfig)
-
-  if (loading) {
+  if (loading && users.length === 0) {
     return <Loading />
   }
 
@@ -343,7 +329,7 @@ export const UsersPage = () => {
   return (
     <Users
       users={users || []}
-      refetch={refetch}
+      refetchCurrentPage={refetchCurrentPage}
       loading={loading}
       onSortChange={handleSortChange}
       sortConfig={sortConfig}
@@ -351,8 +337,9 @@ export const UsersPage = () => {
       filters={filters}
       onSearchChange={handleSearchChange}
       currentSearchTerm={search}
+      loadMore={loadMore}
+      hasMore={hasMore}
+      totalCount={totalCount}
     />
   )
 }
-
-export default UsersPage

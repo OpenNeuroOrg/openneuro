@@ -90,17 +90,13 @@ export const typeDefs = `
     user(id: ID!): User
     # Get a list of users
     users(
+      orderBy: [UserSortInput!]
       isAdmin: Boolean
       isBlocked: Boolean
       search: String
-      limit: Int
-      offset: Int
-      orderBy: [UserSortInput!] # Allow sorting by multiple fields
-    ): [User!]!
-    # Get one migrated user
-    userMigration(id: ID!): UserMigration
-    # Get a list of migrated users
-    userMigrations: [UserMigration!]!
+      limit: Int 
+      offset: Int 
+    ): UserList! 
     # Get the total number of dataset participants
     participantCount(modality: String): Int @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Request one snapshot
@@ -351,17 +347,9 @@ export const typeDefs = `
     links: [String]
   }
 
-  # Define the UserMigration type based on your Mongoose model
-  type UserMigration {
-    id: ID!
-    orcid: String
-    google: String
-    users: [JSON!] # Placeholder for flexible objects
-    datasets: [String!]
-    permissions: [JSON!] # Placeholder
-    comments: [JSON!] # Placeholder
-    deletions: [JSON!] # Placeholder
-    success: Boolean
+  type UserList {
+    users: [User!]!
+    totalCount: Int!
   }
 
   # Which provider a user login comes from

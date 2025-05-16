@@ -1,81 +1,102 @@
 import React from "react"
-import type { FC, ReactElement } from "react"
-import { gql } from "@apollo/client"
-import { Mutation } from "@apollo/client/react/components"
+import type { FC } from "react"
+import { useMutation } from "@apollo/client"
 import { WarnButton } from "../../components/warn-button/WarnButton"
 import { getProfile } from "../../authentication/profile"
 import { useCookies } from "react-cookie"
-import { USER_FRAGMENT } from "./user-fragment"
-import { User } from "../../types/user-types"
+import type { User } from "../../types/user-types"
 import styles from "./users.module.scss"
+import * as Sentry from "@sentry/react"
+
+import { SET_ADMIN_MUTATION, SET_BLOCKED_MUTATION } from "../../queries/users"
 
 interface UserToolsProps {
   user: User
-  refetch: (variables?: Record<string, any>) => void
+  refetchCurrentPage: () => void
 }
 
-export const SET_ADMIN = gql`
-  mutation ($id: ID!, $admin: Boolean!) {
-    setAdmin(id: $id, admin: $admin) {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
-
-export const SET_BLOCKED = gql`
-  mutation ($id: ID!, $blocked: Boolean!) {
-    setBlocked(id: $id, blocked: $blocked) {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
-
-export const UserTools: FC<UserToolsProps> = ({ user, refetch }) => {
+export const UserTools: FC<UserToolsProps> = ({ user, refetchCurrentPage }) => {
   const [cookies] = useCookies()
   const adminIcon = user.admin ? "fa-check-square-o" : "fa-square-o"
   const blacklistIcon = user.blocked ? "fa-check-square-o" : "fa-square-o"
+
+  // --- useMutation for SET_ADMIN ---
+  const [setAdmin] = useMutation(SET_ADMIN_MUTATION, {
+    update(cache, { data: { setAdmin: updatedUser } }) {
+      cache.modify({
+        id: cache.identify(updatedUser),
+        fields: {
+          admin() {
+            return updatedUser.admin
+          },
+          blocked() {
+            return updatedUser.blocked
+          },
+          modified() {
+            return updatedUser.modified
+          },
+        },
+      })
+    },
+    onCompleted: () => {
+      refetchCurrentPage()
+    },
+    onError: (error) => {
+      Sentry.captureException(error)
+    },
+  })
+
+  // --- useMutation for SET_BLOCKED ---
+  const [setBlocked] = useMutation(SET_BLOCKED_MUTATION, {
+    update(cache, { data: { setBlocked: updatedUser } }) {
+      cache.modify({
+        id: cache.identify(updatedUser),
+        fields: {
+          blocked() {
+            return updatedUser.blocked
+          },
+          admin() {
+            return updatedUser.admin
+          },
+          modified() {
+            return updatedUser.modified
+          },
+        },
+      })
+    },
+    onCompleted: () => {
+      refetchCurrentPage()
+    },
+    onError: (error) => {
+      Sentry.captureException(error)
+    },
+  })
 
   if (user.id !== getProfile(cookies).sub) {
     return (
       <div className="dataset-tools-wrap-admin">
         <div className={styles.tools}>
           <div className="tool">
-            <Mutation
-              mutation={SET_ADMIN}
-              variables={{ id: user.id, admin: !user.admin }}
-            >
-              {(setAdmin): ReactElement => (
-                <WarnButton
-                  message="Admin"
-                  icon={adminIcon}
-                  onConfirmedClick={(): void => {
-                    setAdmin().then(() => {
-                      refetch()
-                    })
-                  }}
-                />
-              )}
-            </Mutation>
+            <WarnButton
+              message="Admin"
+              icon={adminIcon}
+              onConfirmedClick={async (): Promise<void> => {
+                await setAdmin({
+                  variables: { id: user.id, admin: !user.admin },
+                })
+              }}
+            />
           </div>
           <div className="tool">
-            <Mutation
-              mutation={SET_BLOCKED}
-              variables={{ id: user.id, blocked: !user.blocked }}
-            >
-              {(setBlocked): ReactElement => (
-                <WarnButton
-                  message="Block"
-                  icon={blacklistIcon}
-                  onConfirmedClick={(): void => {
-                    setBlocked().then(() => {
-                      refetch()
-                    })
-                  }}
-                />
-              )}
-            </Mutation>
+            <WarnButton
+              message="Block"
+              icon={blacklistIcon}
+              onConfirmedClick={async (): Promise<void> => {
+                await setBlocked({
+                  variables: { id: user.id, blocked: !user.blocked },
+                })
+              }}
+            />
           </div>
         </div>
       </div>
