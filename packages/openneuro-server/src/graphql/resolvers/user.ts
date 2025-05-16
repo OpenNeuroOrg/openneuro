@@ -7,7 +7,7 @@ function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
 
-export const user = (obj: undefined, { id }: { id: string }) => {
+export const user = (obj, { id }) => {
   if (isValidOrcid(id)) {
     return User.findOne({
       $or: [{ "orcid": id }, { "providerId": id }],
@@ -33,18 +33,10 @@ export interface GraphQLContext {
 
 type MongoQueryOperator<T> = T | {
   $ne?: T
-  $regex?: string // Add for search queries
-  $options?: string // Add for search queries
-}
-
-// Define the shape of the $or array elements
-interface UserSearchQuery {
-  name?: { $regex: string; $options: string }
-  email?: { $regex: string; $options: string }
 }
 
 export const users = async (
-  obj: undefined,
+  obj: any,
   { isAdmin, isBlocked, search, limit = 100, offset = 0, orderBy }: {
     isAdmin?: boolean
     isBlocked?: boolean
@@ -55,6 +47,7 @@ export const users = async (
   },
   context: GraphQLContext,
 ) => {
+  console.log("usersqueried")
   if (!context.userInfo?.admin) {
     return Promise.reject(
       new Error("You must be a site admin to retrieve users"),
@@ -65,7 +58,7 @@ export const users = async (
     admin?: MongoQueryOperator<boolean>
     blocked?: MongoQueryOperator<boolean>
     migrated?: MongoQueryOperator<boolean>
-    $or?: UserSearchQuery[]
+    $or?: any[]
     name?: MongoQueryOperator<string | RegExp>
     email?: MongoQueryOperator<string | RegExp>
   } = {}
