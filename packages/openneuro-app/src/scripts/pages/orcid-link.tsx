@@ -36,6 +36,15 @@ export function OrcidLinkPage() {
           have will be merged into the combined OpenNeuro account linked to your
           ORCID iD.
         </p>
+        <p>
+        </p>
+        <p>
+          Please see{" "}
+          <a href="https://docs.openneuro.org/orcid.html">our documentation</a>
+          {" "}
+          for additional details on how we use ORCID data and how to link your
+          account.
+        </p>
         <h3>Why are we making this change?</h3>
         <p>
           ORCID allows richer researcher metadata for contributions and

@@ -17,3 +17,14 @@ Ensure that at least one email address is visible to everyone or trusted parties
 Sign out and reauthenticate with OpenNeuro to update your OpenNeuro account after any email changes on your ORCID profile.
 
 ![Log out button shown at bottom of user menu](./assets/orcid/step-3.png)
+
+
+## Migration of Google Accounts to ORCID
+
+OpenNeuro previously allowed registration of accounts with Google. In May of 2025, we began migrating accounts to use ORCID for all logins.
+
+If you created a Google registered account on OpenNeuro before this date, you can login and migrate it to an associated ORCID registered OpenNeuro account. If you already had both a Google and ORCID registered account, doing this will merge all contributions from both accounts into one accessed with your ORCID login. This step is irreversible, make sure to use an appropriate ORCID account during this linking step.
+
+If you had multiple Google accounts, you can merge their content into one ORCID registered OpenNeuro account. Login with each Google account and repeat the linking steps for ORCID and all contributions will be assigned to your ORCID account.
+
+If you encounter issues with the merged account, please open a support request and include the email of the Google account used and the ORCID iD of the ORCID account used.
