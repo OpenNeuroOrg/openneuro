@@ -30,7 +30,7 @@ export const storeRedirect = (
   res: Response,
   next: NextFunction,
 ) => {
-  req.query.redirectTo = (req.get("Referer") || "/") as string // Type assertion
+  req.query.redirectTo = (req.get("Referer") || "/") as string
   next()
 }
 
