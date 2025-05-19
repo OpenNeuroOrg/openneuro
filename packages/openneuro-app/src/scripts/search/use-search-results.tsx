@@ -266,7 +266,7 @@ export const useSearchResults = () => {
       matchQuery(
         "latestSnapshot.description.Authors",
         joinWithOR(authors),
-        "3",
+        "2",
       ),
     )
   }
