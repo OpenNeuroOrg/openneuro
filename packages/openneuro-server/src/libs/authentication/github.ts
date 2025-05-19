@@ -5,7 +5,34 @@ import config from "../../config"
 import User from "../../models/user"
 import * as Sentry from "@sentry/node"
 import { addJWT, jwtFromRequest } from "./jwt"
-import { NextFunction, Request, Response } from "express"
+import type { NextFunction, Request, Response } from "express"
+
+interface GitHubAuthInfo {
+  message?: string
+}
+
+interface GitHubUser {
+  _id: string
+  id: string
+  email?: string
+  name?: string
+  github?: string
+  avatar?: string
+  location?: string
+  institution?: string
+  links?: string[]
+  githubSynced?: Date
+}
+
+// Middleware to store last visited page before authentication
+export const storeRedirect = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  req.query.redirectTo = (req.get("Referer") || "/") as string // Type assertion
+  next()
+}
 
 export const setupGitHubAuth = () => {
   if (!config.auth.github.clientID || !config.auth.github.clientSecret) return
@@ -79,7 +106,13 @@ export const setupGitHubAuth = () => {
   passport.use("github", githubStrategy)
 }
 
-const getStringFromQuery = (query: any): string | undefined => {
+const getStringFromQuery = (
+  query:
+    | string
+    | string[]
+    | Record<string, string | string[] | undefined>
+    | undefined,
+): string | undefined => {
   if (typeof query === "string") {
     return query
   }
@@ -94,8 +127,11 @@ export const requestAuth = (
   res: Response,
   next: NextFunction,
 ) => {
-  const redirectToQuery = getStringFromQuery(req.query.redirectTo)
-  const redirectTo = redirectToQuery || "/"
+  const redirectToParam = req.query.redirectTo as string | undefined // Explicit cast
+  const redirectToQuery: string | undefined = getStringFromQuery(
+    redirectToParam,
+  )
+  const redirectTo: string = redirectToQuery || "/"
   passport.authenticate("github", {
     state: encodeURIComponent(redirectTo),
   })(req, res, next)
@@ -106,38 +142,44 @@ export const authCallback = (
   res: Response,
   next: NextFunction,
 ) => {
-  passport.authenticate("github", (err: any, user: any, info: any) => {
-    const stateQuery = getStringFromQuery(req.query.state)
-    const redirectTo = stateQuery ? decodeURIComponent(stateQuery) : "/"
+  passport.authenticate(
+    "github",
+    (err: Error | null, user: GitHubUser | false, info: GitHubAuthInfo) => {
+      const stateParam = req.query.state as string | undefined // Explicit cast
+      const stateQuery: string | undefined = getStringFromQuery(stateParam)
+      const redirectTo: string = stateQuery
+        ? decodeURIComponent(stateQuery)
+        : "/"
 
-    // Remove any existing query parameters
-    const cleanRedirectTo = redirectTo.split("?")[0]
+      // Remove any existing query parameters
+      const cleanRedirectTo = redirectTo.split("?")[0]
 
-    if (err) {
-      Sentry.captureException(err)
-      return res.redirect(
-        `${cleanRedirectTo}?error=${
-          encodeURIComponent(
-            err.message || "github_auth_failed",
-          )
-        }`,
-      )
-    }
+      if (err) {
+        Sentry.captureException(err)
+        return res.redirect(
+          `${cleanRedirectTo}?error=${
+            encodeURIComponent(
+              String(err?.message || "github_auth_failed"),
+            )
+          }`,
+        )
+      }
 
-    if (!user) {
-      Sentry.captureMessage(
-        `GitHub Auth Failed - Info: ${JSON.stringify(info)}`,
-        "warning",
-      )
-      return res.redirect(
-        `${cleanRedirectTo}?error=${
-          encodeURIComponent(
-            info?.message || "github_auth_failed",
-          )
-        }`,
-      )
-    }
+      if (!user) {
+        Sentry.captureMessage(
+          `GitHub Auth Failed - Info: ${JSON.stringify(info)}`,
+          "warning",
+        )
+        return res.redirect(
+          `${cleanRedirectTo}?error=${
+            encodeURIComponent(
+              info?.message || "github_auth_failed",
+            )
+          }`,
+        )
+      }
 
-    return res.redirect(`${cleanRedirectTo}?success=github_auth_success`)
-  })(req, res, next)
+      return res.redirect(`${cleanRedirectTo}?success=github_auth_success`)
+    },
+  )(req, res, next)
 }

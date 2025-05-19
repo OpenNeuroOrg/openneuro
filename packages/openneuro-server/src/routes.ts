@@ -1,7 +1,6 @@
 // dependencies ------------------------------------
 
 import express from "express"
-import passport from "passport"
 import * as users from "./handlers/users"
 import * as datalad from "./handlers/datalad"
 import * as comments from "./handlers/comments"
@@ -16,7 +15,7 @@ import * as auth from "./libs/authentication/states"
 import * as doi from "./handlers/doi"
 import { sitemapHandler } from "./handlers/sitemap"
 import { reviewerHandler } from "./handlers/reviewer"
-import * as Sentry from "@sentry/node"
+import { storeRedirect } from "./libs/authentication/github"
 
 const noCache = (req, res, next) => {
   res.setHeader("Surrogate-Control", "no-store")
@@ -27,11 +26,6 @@ const noCache = (req, res, next) => {
   res.setHeader("Pragma", "no-cache")
   res.setHeader("Expires", "0")
 
-  next()
-}
-// Middleware to store last visited page before authentication
-const storeRedirect = (req, res, next) => {
-  req.query.redirectTo = req.get("Referer") || "/"
   next()
 }
 
