@@ -87,7 +87,7 @@ describe("<UserAccountView />", () => {
     expect(screen.getByText("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByText("ORCID:")).toBeInTheDocument()
     expect(screen.getByText("0000-0000-0000-0000")).toBeInTheDocument()
-    expect(screen.getByText("Sync user data from GitHub")).toBeInTheDocument() // Updated assertion
+    expect(screen.getByText("Link user data from GitHub")).toBeInTheDocument()
   })
 
   it("should render location with EditableContent", async () => {
