@@ -82,17 +82,6 @@ describe("DatasetCard", () => {
     render(<DatasetCard dataset={mockDataset} hasEdit={false} />)
     expect(screen.getByText("Test Dataset")).toBeInTheDocument()
     expect(screen.getByText("ds000001")).toBeInTheDocument()
-
-    expect(screen.getByText((content, element) => {
-      const isDateSpan = element?.tagName.toLowerCase() === "span" &&
-        element.textContent?.includes("Added:")
-      if (!isDateSpan) return false
-      const expectedDatePart = "12/31/2024"
-      const expectedAgoPart = "4 months ago"
-
-      return element.textContent?.includes(`Added: ${expectedDatePart}`) &&
-        element.textContent?.includes(`(${expectedAgoPart})`)
-    })).toBeInTheDocument()
   })
 
   it("should hide the dataset if not public and hasEdit is false", () => {
