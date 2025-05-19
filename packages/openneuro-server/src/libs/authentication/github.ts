@@ -5,6 +5,7 @@ import config from "../../config"
 import User from "../../models/user"
 import * as Sentry from "@sentry/node"
 import { addJWT, jwtFromRequest } from "./jwt"
+import { NextFunction, Request, Response } from "express"
 
 export const setupGitHubAuth = () => {
   if (!config.auth.github.clientID || !config.auth.github.clientSecret) return
@@ -76,4 +77,67 @@ export const setupGitHubAuth = () => {
   )
 
   passport.use("github", githubStrategy)
+}
+
+const getStringFromQuery = (query: any): string | undefined => {
+  if (typeof query === "string") {
+    return query
+  }
+  if (Array.isArray(query) && query.length > 0) {
+    return query[0]
+  }
+  return undefined
+}
+
+export const requestAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const redirectToQuery = getStringFromQuery(req.query.redirectTo)
+  const redirectTo = redirectToQuery || "/"
+  passport.authenticate("github", {
+    state: encodeURIComponent(redirectTo),
+  })(req, res, next)
+}
+
+export const authCallback = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  passport.authenticate("github", (err: any, user: any, info: any) => {
+    const stateQuery = getStringFromQuery(req.query.state)
+    const redirectTo = stateQuery ? decodeURIComponent(stateQuery) : "/"
+
+    // Remove any existing query parameters
+    const cleanRedirectTo = redirectTo.split("?")[0]
+
+    if (err) {
+      Sentry.captureException(err)
+      return res.redirect(
+        `${cleanRedirectTo}?error=${
+          encodeURIComponent(
+            err.message || "github_auth_failed",
+          )
+        }`,
+      )
+    }
+
+    if (!user) {
+      Sentry.captureMessage(
+        `GitHub Auth Failed - Info: ${JSON.stringify(info)}`,
+        "warning",
+      )
+      return res.redirect(
+        `${cleanRedirectTo}?error=${
+          encodeURIComponent(
+            info?.message || "github_auth_failed",
+          )
+        }`,
+      )
+    }
+
+    return res.redirect(`${cleanRedirectTo}?success=github_auth_success`)
+  })(req, res, next)
 }

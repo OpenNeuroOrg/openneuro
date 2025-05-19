@@ -10,6 +10,7 @@ import * as subscriptions from "./handlers/subscriptions"
 import verifyUser from "./libs/authentication/verifyUser"
 import * as google from "./libs/authentication/google"
 import * as orcid from "./libs/authentication/orcid"
+import * as githubAuth from "./libs/authentication/github"
 import * as jwt from "./libs/authentication/jwt"
 import * as auth from "./libs/authentication/states"
 import * as doi from "./handlers/doi"
@@ -170,50 +171,13 @@ const routes = [
     method: "get",
     url: "/auth/github",
     middleware: [storeRedirect],
-    handler: (req, res, next) => {
-      const redirectTo = req.query.redirectTo || "/"
-      passport.authenticate("github", {
-        state: encodeURIComponent(redirectTo),
-      })(req, res, next)
-    },
+    handler: githubAuth.requestAuth,
   },
 
   {
     method: "get",
     url: "/auth/github/callback",
-    handler: (req, res, next) => {
-      passport.authenticate("github", (err, user, info) => {
-        const redirectTo = req.query.state
-          ? decodeURIComponent(req.query.state)
-          : "/"
-
-        // Remove any existing query parameters
-        const cleanRedirectTo = redirectTo.split("?")[0]
-
-        if (err) {
-          Sentry.captureException(err)
-          return res.redirect(
-            `${cleanRedirectTo}?error=${
-              encodeURIComponent(err.message || "github_auth_failed")
-            }`,
-          )
-        }
-
-        if (!user) {
-          Sentry.captureMessage(
-            `GitHub Auth Failed - Info: ${JSON.stringify(info)}`,
-            "warning",
-          )
-          return res.redirect(
-            `${cleanRedirectTo}?error=${
-              encodeURIComponent(info?.message || "github_auth_failed")
-            }`,
-          )
-        }
-
-        return res.redirect(`${cleanRedirectTo}?success=github_auth_success`)
-      })(req, res, next)
-    },
+    handler: githubAuth.authCallback,
   },
 
   // Anonymous reviewer access
