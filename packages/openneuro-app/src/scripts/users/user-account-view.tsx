@@ -81,6 +81,21 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     }
   }
 
+  // --- NEW REGEX FOR URL VALIDATION ---
+  // This regex requires the URL to start with "http://" or "https://".
+  // It checks for:
+  // ^               - Start of the string
+  // (http|https)    - Matches "http" or "https"
+  // :\\/\\/         - Matches "://"
+  // [a-zA-Z0-9.-]+  - Matches the domain name (e.g., "example.com")
+  // \\.[a-zA-Z]{2,} - Matches the top-level domain (e.g., ".com", ".org", minimum 2 letters)
+  // (:\\d+)?       - (Optional) Matches a port number (e.g., ":8080")
+  // (\\/[^\\s]*)?   - (Optional) Matches a path and query string (e.g., "/path?query=value")
+  // $               - End of the string
+  // i               - (Flag) Case-insensitive match for the scheme
+  const httpHttpsRequiredUrlValidation =
+    /^(http|https):\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/i
+
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
       <h3>Account</h3>
@@ -114,9 +129,8 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         setRows={handleLinksChange}
         className="custom-class"
         heading="Links"
-        // eslint-disable-next-line no-useless-escape
-        validation={/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/} // URL validation regex
-        validationMessage="Invalid URL format. Please use a valid link."
+        validation={httpHttpsRequiredUrlValidation}
+        validationMessage="Invalid URL format. Please use a valid link. http(s)://example.org"
         data-testid="links-section"
       />
 
