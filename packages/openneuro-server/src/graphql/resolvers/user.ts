@@ -31,12 +31,34 @@ export interface GraphQLContext {
   userInfo: UserInfo | null
 }
 
+type MongoOperatorValue =
+  | string
+  | number
+  | boolean
+  | RegExp
+  | (string | number | boolean | RegExp)[]
+
 type MongoQueryOperator<T> = T | {
   $ne?: T
+  $regex?: string
+  $options?: string
+  $gt?: T
+  $gte?: T
+  $lt?: T
+  $lte?: T
+  $in?: T[]
+  $nin?: T[]
 }
 
+type MongoFilterValue =
+  | MongoOperatorValue
+  | MongoQueryOperator<MongoOperatorValue>
+
+interface MongoQueryCondition {
+  [key: string]: MongoFilterValue
+}
 export const users = async (
-  obj: any,
+  obj: unknown,
   { isAdmin, isBlocked, search, limit = 100, offset = 0, orderBy }: {
     isAdmin?: boolean
     isBlocked?: boolean
@@ -45,20 +67,13 @@ export const users = async (
     offset?: number
     orderBy?: [{ field: string; order?: "ascending" | "descending" }]
   },
-  context: GraphQLContext,
+  _context: GraphQLContext,
 ) => {
-  console.log("usersqueried")
-  if (!context.userInfo?.admin) {
-    return Promise.reject(
-      new Error("You must be a site admin to retrieve users"),
-    )
-  }
-
   const filter: {
     admin?: MongoQueryOperator<boolean>
     blocked?: MongoQueryOperator<boolean>
     migrated?: MongoQueryOperator<boolean>
-    $or?: any[]
+    $or?: MongoQueryCondition[]
     name?: MongoQueryOperator<string | RegExp>
     email?: MongoQueryOperator<string | RegExp>
   } = {}

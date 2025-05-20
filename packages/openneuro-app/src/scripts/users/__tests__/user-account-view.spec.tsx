@@ -24,8 +24,8 @@ const baseUser: User = {
   links: [],
   admin: false,
   provider: "orcid",
-  created: new Date("2025-05-20T14:50:32.424Z"),
-  lastSeen: new Date("2025-05-20T14:50:32.424Z"),
+  created: new Date("2025-05-20T14:50:32.424Z").toISOString(),
+  lastSeen: new Date("2025-05-20T14:50:32.424Z").toISOString(),
   blocked: false,
   githubSynced: null,
 }
