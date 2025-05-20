@@ -76,7 +76,9 @@
     position: relative;
     border-bottom: 2px solid #eee;
    
-  
+    .searchLink{
+    margin-right: auto;
+  }
     .filterDiv,
     .sortDiv {
       cursor: pointer;
@@ -199,4 +201,6 @@
       background-color: var(--current-theme-primary);
     }
   }
+
+
 }
