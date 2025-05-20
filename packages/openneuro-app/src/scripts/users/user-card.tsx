@@ -23,11 +23,7 @@ export const UserCard: React.FC<UserCardProps> = ({ orcidUser }) => {
         )}
         <li>
           <i className="fas fa-envelope"></i>
-          <a
-            href={"mailto:" + email}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={"mailto:" + email} target="_blank" rel="noopener noreferrer">
             {email}
           </a>
         </li>
@@ -58,16 +54,14 @@ export const UserCard: React.FC<UserCardProps> = ({ orcidUser }) => {
           </li>
         )}
         {links.length > 0 &&
-          links
-            .filter(Boolean)
-            .map((link, index) => (
-              <li key={index}>
-                <i className="fa fa-link"></i>
-                <a href={link} target="_blank" rel="noopener noreferrer">
-                  {link}
-                </a>
-              </li>
-            ))}
+          links.filter(Boolean).map((link, index) => (
+            <li key={index}>
+              <i className="fa fa-link"></i>
+              <a href={link} target="_blank" rel="noopener noreferrer">
+                {link}
+              </a>
+            </li>
+          ))}
       </ul>
     </div>
   )

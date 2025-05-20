@@ -8,7 +8,12 @@ export interface User {
   avatar?: string
   orcid?: string
   links?: string[]
+  githubSynced?: Date
   admin?: boolean
+  provider?: string
+  created?: Date
+  lastSeen?: Date
+  blocked?: boolean
 }
 
 export interface UserRoutesProps {

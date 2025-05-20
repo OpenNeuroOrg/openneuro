@@ -8,10 +8,12 @@ import User from "../../models/user"
 import { encrypt } from "./crypto"
 import { addJWT, jwtFromRequest } from "./jwt"
 import orcid from "../orcid"
+import { setupGitHubAuth } from "./github"
 
 export const PROVIDERS = {
   GOOGLE: "google",
   ORCID: "orcid",
+  GITHUB: "github",
 }
 
 interface OauthProfile {
@@ -21,6 +23,7 @@ interface OauthProfile {
   providerId: string
   orcid?: string
   refresh?: string
+  avatar?: string
 }
 
 export const loadProfile = (profile): OauthProfile | Error => {
@@ -44,6 +47,13 @@ export const loadProfile = (profile): OauthProfile | Error => {
       providerId: profile.orcid,
       orcid: profile.orcid,
       refresh: undefined,
+    }
+  } else if (profile.provider === PROVIDERS.GITHUB) {
+    return {
+      email: profile.emails ? profile.emails[0].value : "",
+      name: profile.displayName || profile.username,
+      provider: profile.provider,
+      providerId: profile.id,
     }
   } else {
     // Some unknown profile type
@@ -110,11 +120,7 @@ export const setupPassportAuth = () => {
       { secretOrKey: config.auth.jwt.secret, jwtFromRequest },
       (jwt, done) => {
         if (jwt.scopes?.includes("dataset:indexing")) {
-          done(null, {
-            admin: false,
-            blocked: false,
-            indexer: true,
-          })
+          done(null, { admin: false, blocked: false, indexer: true })
         } else if (jwt.scopes?.includes("dataset:reviewer")) {
           done(null, {
             admin: false,
@@ -125,10 +131,9 @@ export const setupPassportAuth = () => {
         } else {
           // A user must already exist to use a JWT to auth a request
           User.findOne({ id: jwt.sub, provider: jwt.provider })
-            .then((user) => {
-              if (user) done(null, user.toObject())
-              else done(null, false)
-            })
+            .then((user) =>
+              user ? done(null, user.toObject()) : done(null, false)
+            )
             .catch(done)
         }
       },
@@ -168,4 +173,5 @@ export const setupPassportAuth = () => {
     )
     passport.use(PROVIDERS.ORCID, orcidStrategy)
   }
+  setupGitHubAuth()
 }

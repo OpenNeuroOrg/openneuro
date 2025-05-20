@@ -20,6 +20,8 @@ export const GET_USER = gql`
       created
       lastSeen
       blocked
+      githubSynced
+      github
     }
   }
 `

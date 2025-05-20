@@ -15,6 +15,9 @@ export interface OpenNeuroConfig {
       clientID: string
       ORCID_API_ENDPOINT: string
     }
+    github?: {
+      clientID: string
+    }
     globus?: {
       clientID: string
     }
@@ -47,6 +50,9 @@ export const config: OpenNeuroConfig = {
     orcid: {
       clientID: globalThis.OpenNeuroConfig.ORCID_CLIENT_ID,
       ORCID_API_ENDPOINT: globalThis.OpenNeuroConfig.ORCID_API_ENDPOINT,
+    },
+    github: {
+      clientID: globalThis.OpenNeuroConfig.GITHUB_CLIENT_ID,
     },
   },
   analytics: {
