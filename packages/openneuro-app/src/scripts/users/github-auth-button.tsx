@@ -39,10 +39,10 @@ const GithubSyncDiv = styled.div`
       .accordion-title {
         position: absolute;
         top: -25px;
-        left: 260px;
+        left: 270px;
       }
       &.synced .accordion-title {
-        left: 465px;
+        left: 430px;
       }
     }
   }
@@ -74,7 +74,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
         className="synced-btn"
         data-testid="github-sync-button" // Added data-testid here
       >
-        {buttonText} user data from <i className="fab fa-github"></i> GitHub
+        Link user data from <i className="fab fa-github"></i> GitHub
       </a>
       <span>
         {lastSyncedText && (
@@ -90,7 +90,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
             : "keyword-accordion"}
         >
           <span>
-            Sync profile data from GitHub (avatar, institution, or location).
+            Link profile data from GitHub (avatar, institution, or location).
           </span>
         </AccordionTab>
       </AccordionWrap>
