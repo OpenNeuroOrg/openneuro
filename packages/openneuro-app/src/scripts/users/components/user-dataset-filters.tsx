@@ -83,7 +83,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
   //check if user is current user to provide query to search "My Datasets"
   const { orcid } = useParams()
   const isOrcidValid = orcid && isValidOrcid(orcid)
-  const { user, loading, error } = useUser(orcid)
+  const { user } = useUser(orcid)
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
   const isUser = (user?.id === profile?.sub) ? true : false

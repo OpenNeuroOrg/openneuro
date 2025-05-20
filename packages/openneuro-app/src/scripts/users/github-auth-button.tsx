@@ -49,7 +49,6 @@ const GithubSyncDiv = styled.div`
 `
 
 export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
-  const buttonText = sync ? "Re-sync" : "Link"
   const lastSyncedText = sync ? `Last synced: ${sync.toLocaleString()}` : null
   const [searchParams] = useSearchParams()
   useEffect(() => {
