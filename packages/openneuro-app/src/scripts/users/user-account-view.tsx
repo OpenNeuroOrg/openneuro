@@ -2,16 +2,20 @@ import React, { useState } from "react"
 import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
-import { GET_USER, UPDATE_USER, useUser } from "../queries/user"
+import { GET_USER, UPDATE_USER } from "../queries/user"
 import styles from "./scss/useraccountview.module.scss"
+import { GitHubAuthButton } from "./github-auth-button"
+import type { UserAccountViewProps } from "../types/user-types"
 
-export const UserAccountView: React.FC = () => {
-  const { user, loading, error } = useUser()
-
-  const [userLinks, setLinks] = useState<string[]>(user?.links || [])
-  const [userLocation, setLocation] = useState<string>(user?.location || "")
+export const UserAccountView: React.FC<UserAccountViewProps> = ({
+  orcidUser,
+}) => {
+  const [userLinks, setLinks] = useState<string[]>(orcidUser?.links || [])
+  const [userLocation, setLocation] = useState<string>(
+    orcidUser?.location || "",
+  )
   const [userInstitution, setInstitution] = useState<string>(
-    user?.institution || "",
+    orcidUser?.institution || "",
   )
   const [updateUser] = useMutation(UPDATE_USER)
 
@@ -20,13 +24,13 @@ export const UserAccountView: React.FC = () => {
     try {
       await updateUser({
         variables: {
-          id: user?.orcid,
+          id: orcidUser?.orcid,
           links: newLinks,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: user?.orcid },
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
@@ -41,13 +45,13 @@ export const UserAccountView: React.FC = () => {
     try {
       await updateUser({
         variables: {
-          id: user?.orcid,
+          id: orcidUser?.orcid,
           location: newLocation,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: user?.orcid },
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
@@ -62,13 +66,13 @@ export const UserAccountView: React.FC = () => {
     try {
       await updateUser({
         variables: {
-          id: user?.orcid,
+          id: orcidUser?.orcid,
           institution: newInstitution,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: user?.orcid },
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
@@ -77,42 +81,32 @@ export const UserAccountView: React.FC = () => {
     }
   }
 
-  if (loading) {
-    return <div>Loading Account Information...</div>
-  }
-
-  if (error) {
-    return <div>Error loading account information. Please try again.</div>
-  }
-
-  if (!user) {
-    return <div>Could not load account information.</div>
-  }
-
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
       <h3>Account</h3>
       <ul className={styles.accountDetail}>
         <li>
           <span>Name:</span>
-          {user.name}
+          {orcidUser.name}
         </li>
         <li>
           <span>Email:</span>
-          {user.email}
+          {orcidUser.email}
         </li>
         <li>
           <span>ORCID:</span>
-          {user.orcid}
+          {orcidUser.orcid}
         </li>
-        {user.github
-          ? (
+        {orcidUser?.github &&
+          (
             <li>
               <span>GitHub:</span>
-              {user.github}
+              {orcidUser.github}
             </li>
-          )
-          : <li>Connect your GitHub</li>}
+          )}
+        <li>
+          <GitHubAuthButton sync={orcidUser.githubSynced} />
+        </li>
       </ul>
 
       <EditableContent

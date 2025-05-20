@@ -9,11 +9,13 @@ import * as subscriptions from "./handlers/subscriptions"
 import verifyUser from "./libs/authentication/verifyUser"
 import * as google from "./libs/authentication/google"
 import * as orcid from "./libs/authentication/orcid"
+import * as githubAuth from "./libs/authentication/github"
 import * as jwt from "./libs/authentication/jwt"
 import * as auth from "./libs/authentication/states"
 import * as doi from "./handlers/doi"
 import { sitemapHandler } from "./handlers/sitemap"
 import { reviewerHandler } from "./handlers/reviewer"
+import { storeRedirect } from "./libs/authentication/github"
 
 const noCache = (req, res, next) => {
   res.setHeader("Surrogate-Control", "no-store")
@@ -157,6 +159,21 @@ const routes = [
     middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
+
+  // GitHub authentication route
+  {
+    method: "get",
+    url: "/auth/github",
+    middleware: [storeRedirect],
+    handler: githubAuth.requestAuth,
+  },
+
+  {
+    method: "get",
+    url: "/auth/github/callback",
+    handler: githubAuth.authCallback,
+  },
+
   // Anonymous reviewer access
   {
     method: "get",

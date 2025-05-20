@@ -10,7 +10,7 @@ function isValidOrcid(orcid: string): boolean {
 export const user = (obj, { id }) => {
   if (isValidOrcid(id)) {
     return User.findOne({
-      $or: [{ "orcid": id }, { "providerId": id }],
+      $or: [{ "provider": "orcid", "providerId": id }],
     }).exec()
   } else {
     // If it's not a valid ORCID, fall back to querying by user id

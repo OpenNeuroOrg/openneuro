@@ -344,6 +344,7 @@ export const typeDefs = `
     location: String
     institution: String
     github: String
+    githubSynced: Date
     links: [String]
   }
 

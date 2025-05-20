@@ -3178,7 +3178,7 @@ __metadata:
     "@apollo/client": "npm:3.11.8"
     "@elastic/elasticsearch": "npm:8.13.1"
     "@openneuro/client": "npm:^4.30.2"
-    "@openneuro/search": "npm:^4.35.0-alpha.1"
+    "@openneuro/search": "npm:^4.35.0"
     "@types/jsonwebtoken": "npm:^8"
     "@types/node": "npm:20.12.7"
     "@types/tsc-watch": "npm:^4"
@@ -3192,7 +3192,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@npm:^4.35.0-alpha.1, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@npm:^4.35.0, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -3217,7 +3217,7 @@ __metadata:
     "@elastic/elasticsearch": "npm:8.13.1"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@keyv/redis": "npm:^2.7.0"
-    "@openneuro/search": "npm:^4.35.0-alpha.1"
+    "@openneuro/search": "npm:^4.35.0"
     "@sentry/node": "npm:^8.25.0"
     "@sentry/profiling-node": "npm:^8.25.0"
     "@types/cors": "npm:^2"
@@ -3255,6 +3255,7 @@ __metadata:
     nodemon: "npm:3.1.0"
     object-hash: "npm:2.1.1"
     passport: "npm:0.7.0"
+    passport-github2: "npm:^0.1.12"
     passport-google-oauth20: "npm:2.0.0"
     passport-jwt: "npm:4.0.1"
     passport-oauth2-refresh: "npm:2.2.0"
@@ -15924,6 +15925,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"passport-github2@npm:^0.1.12":
+  version: 0.1.12
+  resolution: "passport-github2@npm:0.1.12"
+  dependencies:
+    passport-oauth2: "npm:1.x.x"
+  checksum: 10/cf174d1738a2b1d398ec9f4ba2e1ca229214ef65cfd05f5754303f664d5cfd6e3bacbf49ece19fcd576be43bfcc1d3795541f50692148436b9e4ddbffbe625ac
+  languageName: node
+  linkType: hard
+
 "passport-google-oauth20@npm:2.0.0":
   version: 2.0.0
   resolution: "passport-google-oauth20@npm:2.0.0"
@@ -20300,11 +20310,11 @@ __metadata:
   linkType: hard
 
 "undici@npm:^5.22.1":
-  version: 5.28.5
-  resolution: "undici@npm:5.28.5"
+  version: 5.29.0
+  resolution: "undici@npm:5.29.0"
   dependencies:
     "@fastify/busboy": "npm:^2.0.0"
-  checksum: 10/459cd84ab75fe90d696fa2634a8b5b23f9e1080b27236c6809bd74e51862be85df6d95b4a8fed3ee42554495008cb3c05f1bc9d4a1807478f433cca567003d70
+  checksum: 10/0ceca8924a32acdcc0cfb8dd2d368c217840970aa3f5e314fc169608474be6341c5b8e50cad7bd257dbe3b4e432bc5d0a0d000f83644b54fa11a48735ec52b93
   languageName: node
   linkType: hard
 

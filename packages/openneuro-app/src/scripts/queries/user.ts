@@ -20,6 +20,8 @@ export const GET_USER = gql`
       created
       lastSeen
       blocked
+      githubSynced
+      github
     }
   }
 `
@@ -45,17 +47,132 @@ export const UPDATE_USER = gql`
   }
 `
 
+export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
+  query advancedSearchDatasets(
+    $query: JSON!
+    $cursor: String
+    $allDatasets: Boolean
+    $datasetStatus: String
+    $sortBy: JSON
+    $first: Int!
+  ) {
+    datasets: advancedSearch(
+      query: $query
+      allDatasets: $allDatasets
+      datasetStatus: $datasetStatus
+      sortBy: $sortBy
+      first: $first
+      after: $cursor
+    ) {
+      edges {
+        id
+        node {
+          id
+          created
+          name
+          uploader {
+            id
+            name
+            orcid
+          }
+          public
+          permissions {
+            id
+            userPermissions {
+              userId
+              level
+              access: level
+              user {
+                id
+                name
+                email
+                provider
+              }
+            }
+          }
+          metadata {
+            ages
+          }
+          latestSnapshot {
+            size
+            summary {
+              modalities
+              secondaryModalities
+              sessions
+              subjects
+              subjectMetadata {
+                participantId
+                age
+                sex
+                group
+              }
+              tasks
+              size
+              totalFiles
+              dataProcessed
+              pet {
+                BodyPart
+                ScannerManufacturer
+                ScannerManufacturersModelName
+                TracerName
+                TracerRadionuclide
+              }
+            }
+            issues {
+              severity
+            }
+            validation {
+              errors
+              warnings
+            }
+            description {
+              Name
+              Authors
+            }
+          }
+          analytics {
+            views
+            downloads
+          }
+          stars {
+            userId
+            datasetId
+          }
+          followers {
+            userId
+            datasetId
+          }
+          snapshots {
+            id
+            created
+            tag
+          }
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        count
+      }
+    }
+  }
+`
+
 // Reusable hook to fetch user data
-export const useUser = () => {
+export const useUser = (userId?: string) => {
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
   const profileSub = profile?.sub
 
+  const finalUserId = userId || profileSub
+
   const { data: userData, loading: userLoading, error: userError } = useQuery(
     GET_USER,
     {
-      variables: { userId: profileSub },
-      skip: !profileSub,
+      variables: { userId: finalUserId },
+      skip: !finalUserId,
     },
   )
 

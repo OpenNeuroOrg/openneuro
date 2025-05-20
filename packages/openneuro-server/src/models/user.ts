@@ -30,6 +30,7 @@ export interface UserDocument extends Document {
   created: Date
   // Last time the user authenticated
   lastSeen: Date
+  // Location populated from User or Github
   location: string
   // Institution populated from ORCID
   institution: string
@@ -39,6 +40,10 @@ export interface UserDocument extends Document {
   links: string[]
   // Added for Mongoose timestamps
   updatedAt: Date
+  // Avatar populated from Github
+  avatar: string
+  // githubSynced populated from Github OAuth use
+  githubSynced: Date
 }
 
 const userSchema = new Schema({
@@ -51,6 +56,7 @@ const userSchema = new Schema({
   google: String, // Google ID if this is an ORCID account with a Google account linked
   migrated: { type: Boolean, default: false },
   refresh: String,
+  avatar: String,
   admin: { type: Boolean, default: false },
   blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
@@ -58,6 +64,7 @@ const userSchema = new Schema({
   location: { type: String, default: "" },
   institution: { type: String, default: "" },
   github: { type: String, default: "" },
+  githubSynced: { type: Date },
   links: { type: [String], default: [] },
 }, { timestamps: { createdAt: false, updatedAt: true } })
 

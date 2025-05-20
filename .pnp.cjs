@@ -1339,7 +1339,7 @@ const RAW_RUNTIME_STATE =
           ["ms", "npm:2.1.3"],\
           ["secure-json-parse", "npm:2.4.0"],\
           ["tslib", "npm:2.6.1"],\
-          ["undici", "npm:5.28.5"]\
+          ["undici", "npm:5.29.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4108,6 +4108,7 @@ const RAW_RUNTIME_STATE =
           ["nodemon", "npm:3.1.0"],\
           ["object-hash", "npm:2.1.1"],\
           ["passport", "npm:0.7.0"],\
+          ["passport-github2", "npm:0.1.12"],\
           ["passport-google-oauth20", "npm:2.0.0"],\
           ["passport-jwt", "npm:4.0.1"],\
           ["passport-oauth2-refresh", "npm:2.2.0"],\
@@ -18976,6 +18977,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["passport-github2", [\
+      ["npm:0.1.12", {\
+        "packageLocation": "./.yarn/cache/passport-github2-npm-0.1.12-15890384b4-cf174d1738.zip/node_modules/passport-github2/",\
+        "packageDependencies": [\
+          ["passport-github2", "npm:0.1.12"],\
+          ["passport-oauth2", "npm:1.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["passport-google-oauth20", [\
       ["npm:2.0.0", {\
         "packageLocation": "./.yarn/cache/passport-google-oauth20-npm-2.0.0-4187da29c8-bfd1316ec7.zip/node_modules/passport-google-oauth20/",\
@@ -24063,10 +24074,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["undici", [\
-      ["npm:5.28.5", {\
-        "packageLocation": "./.yarn/cache/undici-npm-5.28.5-52b9d359fd-459cd84ab7.zip/node_modules/undici/",\
+      ["npm:5.29.0", {\
+        "packageLocation": "./.yarn/cache/undici-npm-5.29.0-caeb96c8ee-0ceca8924a.zip/node_modules/undici/",\
         "packageDependencies": [\
-          ["undici", "npm:5.28.5"],\
+          ["undici", "npm:5.29.0"],\
           ["@fastify/busboy", "npm:2.1.1"]\
         ],\
         "linkType": "HARD"\
