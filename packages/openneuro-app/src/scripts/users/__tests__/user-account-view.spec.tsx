@@ -22,19 +22,9 @@ const baseUser: User = {
   avatar: "https://dummyimage.com/200x200/000/fff",
   orcid: "0000-0000-0000-0000",
   links: [],
+  admin: false,
 }
-
-vi.mock("../../queries/user", async () => {
-  const actual = await vi.importActual("../../queries/user")
-  return {
-    ...actual,
-    useUser: () => ({
-      user: baseUser,
-      loading: false,
-      error: undefined,
-    }),
-  }
-})
+// UserAccountView receives `orcidUser` as a prop,
 
 const mocks = [
   {
@@ -72,14 +62,19 @@ const mocks = [
 ]
 
 describe("<UserAccountView />", () => {
-  it("should render the user details correctly", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.resetAllMocks()
+  })
+
+  it("should render the user details correctly", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
+        <UserAccountView orcidUser={baseUser} />
       </MockedProvider>,
     )
-    expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("John Doe")).toBeInTheDocument()
+    expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("Email:")).toBeInTheDocument()
     expect(screen.getByText("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByText("ORCID:")).toBeInTheDocument()
@@ -87,10 +82,10 @@ describe("<UserAccountView />", () => {
     expect(screen.getByText("Connect your GitHub")).toBeInTheDocument()
   })
 
-  it("should render location with EditableContent", async () => {
+  it("should render location with EditableContent and update", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
+        <UserAccountView orcidUser={baseUser} />
       </MockedProvider>,
     )
     const locationSection = within(screen.getByTestId("location-section"))
@@ -106,10 +101,10 @@ describe("<UserAccountView />", () => {
     })
   })
 
-  it("should render institution with EditableContent", async () => {
+  it("should render institution with EditableContent and update", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
+        <UserAccountView orcidUser={baseUser} />
       </MockedProvider>,
     )
     const institutionSection = within(screen.getByTestId("institution-section"))
@@ -125,10 +120,10 @@ describe("<UserAccountView />", () => {
     })
   })
 
-  it("should render links with EditableContent and validation", async () => {
+  it("should render links with EditableContent and handle valid URL input", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
+        <UserAccountView orcidUser={baseUser} />
       </MockedProvider>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
@@ -147,7 +142,7 @@ describe("<UserAccountView />", () => {
   it("should show an error message when invalid URL is entered in links section", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView />
+        <UserAccountView orcidUser={baseUser} />
       </MockedProvider>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
