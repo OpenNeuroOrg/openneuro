@@ -11,13 +11,20 @@ interface GitHubAuthButtonProps {
 
 const GithubSyncDiv = styled.div`
   .synced-btn {
-    border: 1px solid var(--on-dark-aqua);
-    padding: 3px 5px;
-    border-radius: 4px;
-    text-decoration: none;
+    border-radius: var(--border-radius-default);
+    padding: 2px 10px;
+    transition: background-color 0.3s;
+    border: 1px solid var(--current-theme-secondary);
+    margin: 10px;
+
     &:hover {
-      background: #efefef;
-      color: #333;
+      background-color: var(--current-theme-primary-light);
+       color: var(--current-theme-primary);
+    }
+    &.active {
+      background-color: transparent;
+      color: var(--current-theme-primary);
+      border-color: var(--current-theme-primary-hover);
     }
   }
 
@@ -32,10 +39,10 @@ const GithubSyncDiv = styled.div`
       .accordion-title {
         position: absolute;
         top: -25px;
-        left: 250px;
+        left: 260px;
       }
       &.synced .accordion-title {
-        left: 435px;
+        left: 465px;
       }
     }
   }
