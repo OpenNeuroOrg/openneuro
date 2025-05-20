@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 
-// Component under test
+// Component
 import { UserQuery } from "../user-query"
 import { isValidOrcid } from "../../utils/validationUtils"
 import { getProfile } from "../../authentication/profile"
@@ -12,6 +12,7 @@ import { isAdmin } from "../../authentication/admin-user"
 import { useCookies } from "react-cookie"
 import { useUser } from "../../queries/user"
 import type { User } from "../../types/user-types"
+import type { UserRoutesProps } from "../../types/user-types"
 
 // --- generate a random valid ORCID - maybe unnecessary ---
 const generateRandomValidOrcid = (): string => {
@@ -23,7 +24,7 @@ const generateRandomValidOrcid = (): string => {
 }
 
 vi.mock("./user-routes", () => ({
-  UserRoutes: vi.fn((props) => (
+  UserRoutes: vi.fn((props: UserRoutesProps) => (
     <div data-testid="mock-user-routes">
       Mocked UserRoutes Component
       <p>User ORCID: {props.orcidUser?.orcid}</p>
@@ -33,51 +34,46 @@ vi.mock("./user-routes", () => ({
   )),
 }))
 
-vi.mock("../../utils/validationUtils", async (importOriginal) => {
-  const actual = await importOriginal<
-    typeof import("../../utils/validationUtils")
-  >()
-  return {
-    ...actual,
-    isValidOrcid: vi.fn(),
-  }
-})
+vi.mock("../../utils/validationUtils", () => ({
+  isValidOrcid: vi.fn<typeof isValidOrcid>(),
+}))
 
-vi.mock("react-cookie", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("react-cookie")>()
-  return {
-    ...actual,
-    useCookies: vi.fn(),
-  }
-})
+vi.mock("react-cookie", () => ({
+  useCookies: vi.fn<typeof useCookies>(),
+}))
 
-vi.mock("../../authentication/profile", async (importOriginal) => {
-  const actual = await importOriginal<
-    typeof import("../../authentication/profile")
-  >()
-  return {
-    ...actual,
-    getProfile: vi.fn(),
-  }
-})
+vi.mock("../../authentication/profile", () => ({
+  getProfile: vi.fn<typeof getProfile>(),
+}))
 
-vi.mock("../../authentication/admin-user", async (importOriginal) => {
-  const actual = await importOriginal<
-    typeof import("../../authentication/admin-user")
-  >()
-  return {
-    ...actual,
-    isAdmin: vi.fn(),
-  }
-})
+vi.mock("../../authentication/admin-user", () => ({
+  isAdmin: vi.fn<typeof isAdmin>(),
+}))
 
-vi.mock("../../queries/user", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../../queries/user")>()
-  return {
-    ...actual,
-    useUser: vi.fn(),
-  }
-})
+vi.mock("../../queries/user", () => ({
+  useUser: vi.fn<typeof useUser>(),
+  ADVANCED_SEARCH_DATASETS_QUERY: {
+    kind: "Document",
+    definitions: [
+      {
+        kind: "OperationDefinition",
+        operation: "query",
+        name: { kind: "Name", value: "AdvancedSearchDatasets" },
+        variableDefinitions: [],
+        selectionSet: { kind: "SelectionSet", selections: [] },
+      },
+    ],
+    loc: {
+      start: 0,
+      end: 0,
+      source: {
+        body: "",
+        name: "Mocked",
+        locationOffset: { line: 1, column: 1 },
+      },
+    },
+  },
+}))
 
 export interface OpenNeuroTokenProfile {
   sub: string
