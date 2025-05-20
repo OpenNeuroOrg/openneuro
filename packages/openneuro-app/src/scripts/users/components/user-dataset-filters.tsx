@@ -95,7 +95,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
           ref={searchButtonRef}
           onClick={triggerSearch}
           onMouseOver={handleSearchButtonMouseOver}
-          className={styles.searchButton}
+          className={styles.searchSubmitButton}
         >
           Search
         </button>
