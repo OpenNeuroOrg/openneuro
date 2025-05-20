@@ -1,4 +1,3 @@
-import { vi } from "vitest"
 import React from "react"
 import { MockedProvider } from "@apollo/client/testing"
 import {
@@ -23,78 +22,91 @@ const baseUser: User = {
   avatar: "https://dummyimage.com/200x200/000/fff",
   orcid: "0000-0000-0000-0000",
   links: [],
+  admin: false,
+  provider: "orcid",
+  created: new Date("2025-05-20T14:50:32.424Z"),
+  lastSeen: new Date("2025-05-20T14:50:32.424Z"),
+  blocked: false,
+  githubSynced: null,
 }
 
-vi.mock("../../queries/user", async () => {
-  const actual = await vi.importActual("../../queries/user")
-  return {
-    ...actual,
-    useUser: () => ({
+const userMock = {
+  request: {
+    query: userQueries.GET_USER,
+    variables: { id: baseUser.orcid },
+  },
+  result: {
+    data: {
       user: baseUser,
-      loading: false,
-      error: undefined,
-    }),
-  }
-})
-
-const mocks = [
-  {
-    request: {
-      query: userQueries.GET_USER,
-      variables: { id: baseUser.orcid },
-    },
-    result: {
-      data: {
-        user: baseUser,
-      },
     },
   },
-  {
-    request: {
-      query: userQueries.UPDATE_USER,
-      variables: {
-        id: baseUser.orcid,
-        location: "Marin, CA",
-        links: ["https://newlink.com"],
-        institution: "New University",
-      },
-    },
-    result: {
-      data: {
-        updateUser: {
-          id: baseUser.orcid,
-          location: "Marin, CA",
-          links: ["https://newlink.com"],
-          institution: "New University",
-        },
-      },
-    },
-  },
-]
+}
 
 describe("<UserAccountView />", () => {
-  it("should render the user details correctly", () => {
+  it("should render the user details correctly", async () => {
+    const mocks = [
+      userMock,
+      {
+        request: {
+          query: userQueries.UPDATE_USER,
+          variables: {
+            id: baseUser.orcid,
+          },
+        },
+        result: {
+          data: {
+            updateUser: {
+              id: baseUser.orcid,
+              location: "Marin, CA",
+              links: ["https://newlink.com"],
+              institution: "New University",
+            },
+          },
+        },
+      },
+    ]
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView />
+          <UserAccountView orcidUser={baseUser} />
         </MockedProvider>
       </BrowserRouter>,
     )
-    expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("John Doe")).toBeInTheDocument()
+    expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("Email:")).toBeInTheDocument()
     expect(screen.getByText("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByText("ORCID:")).toBeInTheDocument()
     expect(screen.getByText("0000-0000-0000-0000")).toBeInTheDocument()
     expect(screen.getByText("Link user data from GitHub")).toBeInTheDocument()
   })
-
-  it("should render location with EditableContent", async () => {
+  it("should render location with EditableContent and update", async () => {
+    const mocks = [
+      userMock,
+      {
+        request: {
+          query: userQueries.UPDATE_USER,
+          variables: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+          },
+        },
+        result: {
+          data: {
+            updateUser: {
+              id: baseUser.orcid,
+              location: "Marin, CA",
+              links: ["https://newlink.com"],
+              institution: "New University",
+            },
+          },
+        },
+      },
+    ]
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView />
+          <UserAccountView orcidUser={baseUser} />
         </MockedProvider>
       </BrowserRouter>,
     )
@@ -111,11 +123,30 @@ describe("<UserAccountView />", () => {
     })
   })
 
-  it("should render institution with EditableContent", async () => {
+  it("should render institution with EditableContent and update", async () => {
+    const mocks = [userMock, {
+      request: {
+        query: userQueries.UPDATE_USER,
+        variables: {
+          id: baseUser.orcid,
+          institution: "New University",
+        },
+      },
+      result: {
+        data: {
+          updateUser: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+            links: ["https://newlink.com"],
+            institution: "New University",
+          },
+        },
+      },
+    }]
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView />
+          <UserAccountView orcidUser={baseUser} />
         </MockedProvider>,
       </BrowserRouter>,
     )
@@ -132,11 +163,30 @@ describe("<UserAccountView />", () => {
     })
   })
 
-  it("should render links with EditableContent and validation", async () => {
+  it("should render links with EditableContent and handle valid URL input", async () => {
+    const mocks = [userMock, {
+      request: {
+        query: userQueries.UPDATE_USER,
+        variables: {
+          id: baseUser.orcid,
+          links: ["https://newlink.com"],
+        },
+      },
+      result: {
+        data: {
+          updateUser: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+            links: ["https://newlink.com"],
+            institution: "New University",
+          },
+        },
+      },
+    }]
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView />
+          <UserAccountView orcidUser={baseUser} />
         </MockedProvider>,
       </BrowserRouter>,
     )
@@ -154,10 +204,29 @@ describe("<UserAccountView />", () => {
   })
 
   it("should show an error message when invalid URL is entered in links section", async () => {
+    const mocks = [{
+      request: {
+        query: userQueries.UPDATE_USER,
+        variables: {
+          id: baseUser.orcid,
+          links: ["https://newlink.com"],
+        },
+      },
+      result: {
+        data: {
+          updateUser: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+            links: ["https://newlink.com"],
+            institution: "New University",
+          },
+        },
+      },
+    }]
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView />
+          <UserAccountView orcidUser={baseUser} />
         </MockedProvider>,
       </BrowserRouter>,
     )

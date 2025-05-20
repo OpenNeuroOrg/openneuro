@@ -87,7 +87,6 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
       datasetSize = `${sizeInBytes} bytes`
     }
   }
-
   return (
     <div
       className={styles.userDsCard}
@@ -95,7 +94,9 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
       data-testid={`user-ds-${dataset.id}`}
     >
       <h4>
-        <a href={`/datasets/${dataset.id}`}>{dataset.name}</a>
+        <a href={`/datasets/${dataset.id}`}>
+          {dataset.name ? dataset.name : dataset.id}
+        </a>
       </h4>
       <div className={styles.userDsFooter}>
         <div className={styles.userMetawrap}>

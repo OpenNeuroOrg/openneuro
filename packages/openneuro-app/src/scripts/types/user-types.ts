@@ -9,28 +9,24 @@ export interface User {
   orcid?: string
   links?: string[]
   githubSynced?: Date
+  admin?: boolean
+  provider: string
+  created: Date
+  lastSeen: Date
+  blocked: boolean
 }
 
 export interface UserRoutesProps {
-  user: User
+  orcidUser: User
   hasEdit: boolean
   isUser: boolean
 }
 export interface UserCardProps {
-  user: User
+  orcidUser: User
 }
 
 export interface UserAccountViewProps {
-  user: {
-    name: string
-    email: string
-    orcid?: string
-    links?: string[]
-    location?: string
-    institution?: string
-    github?: string
-    githubSynced?: Date
-  }
+  orcidUser: User
 }
 
 export interface Dataset {
@@ -65,12 +61,12 @@ export interface DatasetCardProps {
 }
 
 export interface UserDatasetsViewProps {
-  user: User
+  orcidUser: User
   hasEdit: boolean
 }
 
 export interface AccountContainerProps {
-  user: User
+  orcidUser: User
   hasEdit: boolean
   isUser: boolean
 }

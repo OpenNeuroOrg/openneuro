@@ -1,18 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { UserCard } from "../user-card"
-
-interface User {
-  id: string
-  name: string
-  location: string
-  github?: string
-  institution: string
-  email: string
-  avatar: string
-  orcid: string
-  links: string[]
-}
+import type { User } from "../../types/user-types"
 
 describe("UserCard Component", () => {
   const baseUser: User = {
@@ -28,7 +17,7 @@ describe("UserCard Component", () => {
   }
 
   it("renders all user details when all data is provided", () => {
-    render(<UserCard user={baseUser} />)
+    render(<UserCard orcidUser={baseUser} />)
 
     const orcidLink = screen.getByRole("link", {
       name: "ORCID profile of John Doe",
@@ -67,7 +56,7 @@ describe("UserCard Component", () => {
       institution: "",
     }
 
-    render(<UserCard user={minimalUser} />)
+    render(<UserCard orcidUser={minimalUser} />)
 
     const orcidLink = screen.getByRole("link", {
       name: "ORCID profile of Jane Doe",
@@ -91,13 +80,13 @@ describe("UserCard Component", () => {
       name: "John Smith",
       email: "johnsmith@example.com",
       orcid: "0000-0003-4567-8901",
-      links: [], // Empty links
+      links: [],
       avatar: "https://example.com/avatar.jpg",
       location: "New York, NY",
       institution: "NYU",
     }
 
-    render(<UserCard user={userWithEmptyLinks} />)
+    render(<UserCard orcidUser={userWithEmptyLinks} />)
 
     expect(screen.queryByRole("link", { name: "https://example.com" })).not
       .toBeInTheDocument()
@@ -117,7 +106,7 @@ describe("UserCard Component", () => {
       institution: "",
     }
 
-    render(<UserCard user={userWithoutLocationAndInstitution} />)
+    render(<UserCard orcidUser={userWithoutLocationAndInstitution} />)
 
     const orcidLink = screen.getByRole("link", {
       name: "ORCID profile of Emily Doe",
