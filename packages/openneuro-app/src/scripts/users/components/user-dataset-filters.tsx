@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react"
+import { useParams } from "react-router-dom"
 import styles from "../scss/datasetcard.module.scss"
+import { isValidOrcid } from "../../utils/validationUtils"
+import { useCookies } from "react-cookie"
+import { getProfile } from "../../authentication/profile"
+import { useUser } from "../../queries/user"
 
 interface UserDatasetFiltersProps {
   publicFilter: string
@@ -66,6 +71,22 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
   useEffect(() => {
     setLocalSearchQuery(currentSearchTerm)
   }, [currentSearchTerm])
+  const datasetQuery = {
+    datasetType_selected: "My Datasets",
+  }
+
+  // construct query for "my datasets" search link
+  const jsonString = JSON.stringify(datasetQuery)
+  const encodedJsonString = encodeURIComponent(jsonString)
+  const searchPageUrl = `/search?query=${encodedJsonString}`
+
+  //check if user is current user to provide query to search "My Datasets"
+  const { orcid } = useParams()
+  const isOrcidValid = orcid && isValidOrcid(orcid)
+  const { user } = useUser(orcid)
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
+  const isUser = (user?.id === profile?.sub) ? true : false
 
   return (
     <>
@@ -95,7 +116,7 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
           ref={searchButtonRef}
           onClick={triggerSearch}
           onMouseOver={handleSearchButtonMouseOver}
-          className={styles.searchButton}
+          className={styles.searchSubmitButton}
         >
           Search
         </button>
@@ -103,6 +124,11 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
 
       <div className={styles.userDSfilters}>
         {/* Filter by Visibility */}
+        {isOrcidValid && hasEdit && isUser && (
+          <a className={styles.searchLink} href={searchPageUrl}>
+            View your datasets on the search page
+          </a>
+        )}
         {hasEdit &&
           (
             <div

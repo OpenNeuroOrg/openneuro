@@ -11,13 +11,20 @@ interface GitHubAuthButtonProps {
 
 const GithubSyncDiv = styled.div`
   .synced-btn {
-    border: 1px solid var(--on-dark-aqua);
-    padding: 3px 5px;
-    border-radius: 4px;
-    text-decoration: none;
+    border-radius: var(--border-radius-default);
+    padding: 2px 10px;
+    transition: background-color 0.3s;
+    border: 1px solid var(--current-theme-secondary);
+    margin: 10px;
+
     &:hover {
-      background: #efefef;
-      color: #333;
+      background-color: var(--current-theme-primary-light);
+       color: var(--current-theme-primary);
+    }
+    &.active {
+      background-color: transparent;
+      color: var(--current-theme-primary);
+      border-color: var(--current-theme-primary-hover);
     }
   }
 
@@ -32,17 +39,16 @@ const GithubSyncDiv = styled.div`
       .accordion-title {
         position: absolute;
         top: -25px;
-        left: 250px;
+        left: 270px;
       }
       &.synced .accordion-title {
-        left: 435px;
+        left: 430px;
       }
     }
   }
 `
 
 export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
-  const buttonText = sync ? "Re-sync" : "Link"
   const lastSyncedText = sync ? `Last synced: ${sync.toLocaleString()}` : null
   const [searchParams] = useSearchParams()
   useEffect(() => {
@@ -67,7 +73,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
         className="synced-btn"
         data-testid="github-sync-button" // Added data-testid here
       >
-        {buttonText} user data from <i className="fab fa-github"></i> GitHub
+        Link user data from <i className="fab fa-github"></i> GitHub
       </a>
       <span>
         {lastSyncedText && (
@@ -83,7 +89,7 @@ export const GitHubAuthButton: React.FC<GitHubAuthButtonProps> = ({ sync }) => {
             : "keyword-accordion"}
         >
           <span>
-            Sync profile data from GitHub (avatar, institution, or location).
+            Link profile data from GitHub (avatar, institution, or location).
           </span>
         </AccordionTab>
       </AccordionWrap>
