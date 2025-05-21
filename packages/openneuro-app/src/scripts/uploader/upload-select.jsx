@@ -6,7 +6,7 @@ import { useUser } from "../queries/user"
 const UploadSelect = () => {
   const { user, loading, error } = useUser()
   const disabled = loading || Boolean(error) || !user || !user.email
-  const noEmail = !user.email
+  const noEmail = !(user?.email)
   return (
     <div>
       <UploaderContext.Consumer>
