@@ -241,7 +241,7 @@ describe("<UserAccountView />", () => {
     await waitFor(() => {
       expect(
         linksSection.getByText(
-          "Invalid URL format. Please use a valid link. http(s)://example.org",
+          "Invalid URL format. Please start with http:// or https://",
         ),
       ).toBeInTheDocument()
     })
