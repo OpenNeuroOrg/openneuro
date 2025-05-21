@@ -90,8 +90,9 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
       const parsedUrl = new URL(url)
       // Check if the protocol is either http: or https:
       return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
-    } catch (e) {
+    } catch (error) {
       // If new URL() throws an error, the string is not a valid URL
+      Sentry.captureException(error)
       return false
     }
   }
