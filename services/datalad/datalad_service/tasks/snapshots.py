@@ -151,7 +151,7 @@ def save_snapshot(store, dataset, snapshot):
     repo.references.create(f'refs/tags/{snapshot}', str(repo.head.target))
 
 
-def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
+async def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
     """
     Create a new snapshot (git tag).
 
@@ -159,7 +159,7 @@ def create_snapshot(store, dataset, snapshot, description_fields, snapshot_chang
     """
     validate_snapshot_name(store, dataset, snapshot)
     validate_datalad_config(store, dataset)
-    update_description(store, dataset, description_fields)
+    await update_description(store, dataset, description_fields)
     update_changes(store, dataset, snapshot, snapshot_changes)
     save_snapshot(store, dataset, snapshot)
     return get_snapshot(store, dataset, snapshot)

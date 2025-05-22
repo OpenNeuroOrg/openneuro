@@ -52,7 +52,7 @@ class SnapshotResource:
         ds_path = self.store.get_dataset_path(dataset)
 
         try:
-            created = create_snapshot(
+            created = await create_snapshot(
                 self.store, dataset, snapshot, description_fields, snapshot_changes)
             resp.media = created
             resp.status = falcon.HTTP_OK

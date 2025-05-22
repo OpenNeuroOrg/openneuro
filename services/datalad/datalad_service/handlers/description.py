@@ -1,5 +1,5 @@
 import falcon
-import os
+import sentry_sdk
 
 from datalad_service.tasks.description import update_description
 
@@ -21,13 +21,14 @@ class DescriptionResource:
                 }
                 resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             try:
-                updated = update_description(
+                updated = await update_description(
                     self.store, dataset, description_fields)
                 dataset_description = updated
                 resp.media = dataset_description
                 resp.status = falcon.HTTP_OK
-            except:
-                resp.media = {'error': 'dataset update failed'}
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                resp.media = {'error': 'dataset_description.json update failed'}
                 resp.status = falcon.HTTP_500
         else:
             resp.media = {
