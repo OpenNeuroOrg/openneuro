@@ -240,7 +240,9 @@ describe("<UserAccountView />", () => {
     fireEvent.click(saveButton)
     await waitFor(() => {
       expect(
-        linksSection.getByText("Invalid URL format. Please use a valid link."),
+        linksSection.getByText(
+          "Invalid URL format. Please start with http:// or https://",
+        ),
       ).toBeInTheDocument()
     })
   })

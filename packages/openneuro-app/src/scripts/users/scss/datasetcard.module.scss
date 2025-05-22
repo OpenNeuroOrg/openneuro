@@ -76,7 +76,9 @@
     position: relative;
     border-bottom: 2px solid #eee;
    
-  
+    .searchLink{
+    margin-right: auto;
+  }
     .filterDiv,
     .sortDiv {
       cursor: pointer;
@@ -163,7 +165,8 @@
     margin-right: auto;
     width: 100%;
   }
-  
+ 
+
   .clearSearchButton {
     position: absolute;
     top: 50%;
@@ -185,4 +188,19 @@
       color: #333;
     }
   }}
+    .searchSubmitButton {
+    background-color: var(--current-theme-secondary);
+    color: #fff;
+    border-radius: var(--border-radius-default);
+    font-weight: bold;
+    margin: 0 0 0 5px;
+    font-size: 14px;
+    padding: 10px 15px;
+    border: 0;
+    &:hover {
+      background-color: var(--current-theme-primary);
+    }
+  }
+
+
 }

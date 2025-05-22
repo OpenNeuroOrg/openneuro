@@ -81,6 +81,22 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     }
   }
 
+  // --- URL VALIDATION FUNCTION ---
+  const validateHttpHttpsUrl = (url: string): boolean => {
+    if (!url) {
+      return false // Empty string is not a valid URL
+    }
+    try {
+      const parsedUrl = new URL(url)
+      // Check if the protocol is either http: or https:
+      return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
+    } catch (error) {
+      // If new URL() throws an error, the string is not a valid URL
+      Sentry.captureException(error)
+      return false
+    }
+  }
+
   return (
     <div data-testid="user-account-view" className={styles.useraccountview}>
       <h3>Account</h3>
@@ -114,9 +130,8 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         setRows={handleLinksChange}
         className="custom-class"
         heading="Links"
-        // eslint-disable-next-line no-useless-escape
-        validation={/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/} // URL validation regex
-        validationMessage="Invalid URL format. Please use a valid link."
+        validation={validateHttpHttpsUrl}
+        validationMessage="Invalid URL format. Please start with http:// or https://"
         data-testid="links-section"
       />
 

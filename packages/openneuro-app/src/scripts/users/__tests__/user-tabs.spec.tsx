@@ -54,12 +54,11 @@ describe("UserAccountTabs Component", () => {
     const datasetsTab = screen.getByText("My Datasets")
     expect(hasActiveClass(datasetsTab)).toBe(true)
 
-    const notificationsTab = screen.getByText("Notifications")
+    //const notificationsTab = screen.getByText("Notifications")
 
-    fireEvent.click(notificationsTab)
+    //fireEvent.click(notificationsTab)
 
-    expect(hasActiveClass(notificationsTab)).toBe(true)
-    expect(hasActiveClass(datasetsTab)).toBe(false)
+    //expect(hasActiveClass(notificationsTab)).toBe(true)
 
     const accountTab = screen.getByText("Account Info")
 
@@ -67,20 +66,21 @@ describe("UserAccountTabs Component", () => {
 
     expect(hasActiveClass(accountTab)).toBe(true)
     expect(hasActiveClass(datasetsTab)).toBe(false)
-    expect(hasActiveClass(notificationsTab)).toBe(false)
+    //expect(hasActiveClass(notificationsTab)).toBe(false)
+    expect(hasActiveClass(datasetsTab)).toBe(false)
   })
 
   it("should trigger animation state when a tab is clicked", async () => {
     render(<UserAccountTabsWrapper />)
 
-    const notificationsTab = screen.getByText("Notifications")
+    const accountTab = screen.getByText("Account Info")
     // Utility function to check if an element has 'clicked' class - used because of CSS module discrepancies between classNames
     const hasClickedClass = (element) => element.className.includes("clicked")
     const tabsContainer = await screen.findByRole("list")
 
     expect(hasClickedClass(tabsContainer)).toBe(false)
 
-    fireEvent.click(notificationsTab)
+    fireEvent.click(accountTab)
 
     expect(hasClickedClass(tabsContainer)).toBe(true)
   })

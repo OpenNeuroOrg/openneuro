@@ -15,7 +15,7 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "@apollo/client": "3.11.8",
+    "@apollo/client": "3.13.8",
     "@elastic/elasticsearch": "8.13.1",
     "graphql": "16.8.1",
     "jsonwebtoken": "^9.0.0"

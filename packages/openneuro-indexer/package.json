@@ -9,7 +9,7 @@
   "license": "MIT",
   "bin": "./src/index.ts",
   "dependencies": {
-    "@apollo/client": "3.11.8",
+    "@apollo/client": "3.13.8",
     "@elastic/elasticsearch": "8.13.1",
     "@openneuro/client": "^4.30.2",
     "@openneuro/search": "^4.35.0",

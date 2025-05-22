@@ -64,23 +64,18 @@ export const UserMenu = (
                 </p>
               </li>
               <li>
-                {
-                  /* {user?.orcid
+                {user?.orcid
                   ? <Link to={`/user/${user?.orcid}`}>My Datasets</Link>
-                  : <Link to="/search?mydatasets">My Datasets</Link>} */
-                }
-                <Link to="/search?mydatasets">My Datasets</Link>
+                  : <Link to="/search?mydatasets">My Datasets</Link>}
               </li>
 
-              {
-                /* {user?.orcid && (
+              {user?.orcid && (
                 <li>
                   <Link to={`/user/${user?.orcid}/account`}>
                     Account Info
                   </Link>
                 </li>
-              )} */
-              }
+              )}
 
               <li className="user-menu-link">
                 <Link to="/keygen">Obtain an API Key</Link>

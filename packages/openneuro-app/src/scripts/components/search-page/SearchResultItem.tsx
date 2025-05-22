@@ -127,6 +127,8 @@ export const SearchResultItem = ({
   const hasEdit = hasEditPermissions(node.permissions, profileSub) || isAdmin
 
   const heading = node.latestSnapshot.description?.Name
+    ? node.latestSnapshot.description?.Name
+    : node.id
   const summary = node.latestSnapshot?.summary
   const datasetId = node.id
   const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
@@ -134,7 +136,7 @@ export const SearchResultItem = ({
   const accessionNumber = (
     <span className="result-summary-meta">
       <strong>Openneuro Accession Number:</strong>
-      <span>{node.id}</span>
+      <Link to={"/datasets/" + datasetId}>{node.id}</Link>
     </span>
   )
   const sessions = (
