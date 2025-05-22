@@ -47,7 +47,6 @@ type MongoQueryOperator<T> = T | {
   $lt?: T
   $lte?: T
   $in?: T[]
-  $nin?: T[]
 }
 
 type MongoFilterValue =
