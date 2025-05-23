@@ -29,8 +29,8 @@ export function completeRequestLogin(req, res, next, user) {
   })
 }
 
-export const authCallback = (req: any, res: any, next: any) =>
-  passport.authenticate("orcid", async (err: any, user: any) => {
+export const authCallback = (req, res, next) =>
+  passport.authenticate("orcid", async (err, user) => {
     if (err) {
       Sentry.captureException(err)
       if (err.type) {
