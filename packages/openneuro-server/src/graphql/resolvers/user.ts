@@ -64,7 +64,7 @@ export const users = async (
     search?: string
     limit?: number
     offset?: number
-    orderBy?: [{ field: string; order?: "ascending" | "descending" }]
+    orderBy?: { field: string; order?: "ascending" | "descending" }[]
   },
   _context: GraphQLContext,
 ) => {
