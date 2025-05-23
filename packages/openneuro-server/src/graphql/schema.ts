@@ -26,6 +26,12 @@ export const typeDefs = `
     descending
   }
 
+  # Sorting order for users
+  input UserSortInput {
+    field: String!
+    order: SortOrdering = ascending 
+  }
+
   # Sorting order for datasets
   input DatasetSort {
     # Dataset created time
@@ -83,7 +89,14 @@ export const typeDefs = `
     # Get one user
     user(id: ID!): User
     # Get a list of users
-    users: [User]
+    users(
+      orderBy: [UserSortInput!]
+      isAdmin: Boolean
+      isBlocked: Boolean
+      search: String
+      limit: Int 
+      offset: Int 
+    ): UserList! 
     # Get the total number of dataset participants
     participantCount(modality: String): Int @cacheControl(maxAge: 3600, scope: PUBLIC)
     # Request one snapshot
@@ -333,6 +346,11 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+  }
+
+  type UserList {
+    users: [User!]!
+    totalCount: Int!
   }
 
   # Which provider a user login comes from

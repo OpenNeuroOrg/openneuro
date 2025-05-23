@@ -1,124 +1,121 @@
-import React, { useState } from "react"
-import { Query } from "@apollo/client/react/components"
-import { gql } from "@apollo/client"
-import parseISO from "date-fns/parseISO"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { Input } from "../../components/input/Input"
+// packages/openneuro-app/src/scripts/pages/admin/users.tsx
+
+import React, { useCallback, useEffect, useState } from "react"
 import { Loading } from "../../components/loading/Loading"
-import { formatDate } from "../../utils/date.js"
 import Helmet from "react-helmet"
 import { pageTitle } from "../../resources/strings.js"
-import { UserTools } from "./user-tools.js"
-import { USER_FRAGMENT } from "./user-fragment.js"
+import type { User } from "../../types/user-types"
+import styles from "./users.module.scss"
+import { useUsers } from "../../queries/users"
+import UserSummary from "./user-summary"
+import * as Sentry from "@sentry/react"
 
-export const GET_USERS = gql`
-  query {
-    users {
-      ...userFields
-    }
-  }
-  ${USER_FRAGMENT}
-`
+const SORT_ASC_ICON = "fa fa-sort-asc"
+const SORT_DESC_ICON = "fa fa-sort-desc"
 
-// TODO - Use the GraphQL type
-export interface User {
-  id: string
-  name: string
-  admin: boolean
-  blocked: boolean
-  email?: string
-  provider: string
-  lastSeen?: string
-  created: string
+const noResults = (loading: boolean) =>
+  loading ? <Loading /> : <h3>No Results Found</h3>
+
+interface SortConfig {
+  field: string | null
+  order: "ascending" | "descending"
 }
 
-interface UsersQueryResultProps {
+interface UsersProps {
+  users: User[]
+  refetchCurrentPage: () => void
   loading: boolean
-  data: { users: User[] }
-  refetch: () => void
+  onSortChange: (
+    field: string | null,
+    order: "ascending" | "descending",
+  ) => void
+  sortConfig: SortConfig
+  onFilterChange: (
+    filterType: "admin" | "blocked" | null,
+    value: boolean | null,
+  ) => void
+  filters: { admin: boolean | null; blocked: boolean | null }
+  onSearchChange: (searchValue: string | undefined) => void
+  currentSearchTerm: string | undefined
+  loadMore: () => void
+  hasMore: boolean
+  totalCount: number
 }
 
-export const UsersQueryResult = (
-  { loading, data, refetch }: UsersQueryResultProps,
-) => {
-  if (loading) {
-    return <Loading />
-  } else {
-    return (
-      <Users loading={loading} users={data.users || []} refetch={refetch} />
-    )
-  }
-}
-
-export const UsersQuery = () => (
-  <Query query={GET_USERS}>{UsersQueryResult}</Query>
-)
-
-const userSummary = (user) => {
-  const lastLogin = user.lastlogin ? user.lastlogin : user.created
-  const created = user.created
-  return (
-    <>
-      <div className="summary-data">
-        <b>Signed Up:</b>{" "}
-        <div>
-          {formatDate(created)} - {formatDistanceToNow(parseISO(created))} ago
-        </div>
-      </div>
-      <div className="summary-data">
-        <b>Last Signed In:</b>{" "}
-        <div>
-          {formatDate(lastLogin)} - {formatDistanceToNow(parseISO(lastLogin))}
-          {" "}
-          ago
-        </div>
-      </div>
-    </>
+const Users = ({
+  users,
+  refetchCurrentPage,
+  loading,
+  onSortChange,
+  sortConfig,
+  onFilterChange,
+  filters,
+  onSearchChange,
+  currentSearchTerm,
+  loadMore,
+  hasMore,
+  totalCount,
+}: UsersProps) => {
+  const hasUsers = users && users.length > 0
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(
+    currentSearchTerm,
   )
-}
 
-const noResults = (loading) => {
-  return loading ? <Loading /> : <h4>No Results Found</h4>
-}
+  useEffect(() => {
+    setSearchTerm(currentSearchTerm)
+  }, [currentSearchTerm])
 
-const Users = ({ users, refetch, loading }) => {
-  const [stringFilter, setStringFilter] = useState(null)
-  const [adminFilter, setAdminFilter] = useState(false)
-  const [blacklistFilter, setBlacklistFilter] = useState(false)
+  const handleAdminFilterCheckboxChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onFilterChange("admin", e.target.checked)
+    },
+    [onFilterChange],
+  )
 
-  const filteredUsers = users
-    .filter((user) => !adminFilter || user.admin)
-    .filter(
-      (user) =>
-        !stringFilter ||
-        user.email?.toLowerCase().includes(stringFilter.toLowerCase()) ||
-        user.name?.toLowerCase().includes(stringFilter.toLowerCase()),
-    )
-    .map((user, index) => {
-      const adminBadge = user.admin ? "Admin" : null
-      const userEmail = Object.hasOwn(user, "email") ? user.email : user.id
-      return (
-        <div className="fade-in user-panel  panel panel-default" key={index}>
-          <div className="user-col uc-name">
-            <div>
-              {user.name}{" "}
-              {adminBadge && <span className="badge">{adminBadge}</span>}
-              <UserTools user={user} refetch={refetch} />
-            </div>
-          </div>
-          <div className="user-col user-panel-inner">
-            <div className=" user-col uc-email">
-              {userEmail}
-              <div className=" uc-provider">
-                <b>Provider:</b> {user.provider}
-              </div>
-            </div>
+  const handleBlockedFilterCheckboxChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onFilterChange("blocked", e.target.checked)
+    },
+    [onFilterChange],
+  )
 
-            <div className=" user-col uc-summary">{userSummary(user)}</div>
-          </div>
-        </div>
-      )
-    })
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value || undefined)
+    },
+    [setSearchTerm],
+  )
+
+  const handleSearchSubmit = useCallback(() => {
+    onSearchChange(searchTerm)
+  }, [onSearchChange, searchTerm])
+
+  const handleClearSearch = useCallback(() => {
+    setSearchTerm(undefined)
+    onSearchChange(undefined)
+  }, [onSearchChange, setSearchTerm])
+
+  const handleSortButtonClick = useCallback(
+    (field: string) => {
+      let newOrder: "ascending" | "descending" = "ascending"
+
+      if (sortConfig.field === field) {
+        newOrder = sortConfig.order === "ascending" ? "descending" : "ascending"
+      } else {
+        if (field === "name" || field === "email" || field === "orcid") {
+          newOrder = "ascending"
+        } else if (
+          field === "created" ||
+          field === "lastSeen" ||
+          field === "modified"
+        ) {
+          newOrder = "descending"
+        }
+      }
+      onSortChange(field, newOrder)
+    },
+    [onSortChange, sortConfig],
+  )
 
   return (
     <>
@@ -128,58 +125,260 @@ const Users = ({ users, refetch, loading }) => {
       <div className="admin-users">
         <div className="header-wrap ">
           <h2>Current Users</h2>
-
-          <Input
-            name="Search Name Or Email"
-            type="text"
-            placeholder="Search Name or Email"
-            onKeyDown={(e) => setStringFilter(e.target.value)}
-            setValue={(_) => {}}
-          />
-        </div>
-
-        <div className="filters-sort-wrap ">
-          <span>
-            <div className="filters">
-              <label>Filter By:</label>
-              <button
-                className={adminFilter ? "active" : null}
-                onClick={() => setAdminFilter(!adminFilter)}
-              >
-                <span className="filter-admin">
-                  <i
-                    className={adminFilter
-                      ? "fa fa-check-square-o"
-                      : "fa fa-square-o"}
-                  />{" "}
-                  Admin
-                </span>
-              </button>
-              <button
-                className={blacklistFilter ? "active" : null}
-                onClick={() => setBlacklistFilter(!blacklistFilter)}
-              >
-                <span className="filter-admin">
-                  <i
-                    className={blacklistFilter
-                      ? "fa fa-check-square-o"
-                      : "fa fa-square-o"}
-                  />{" "}
-                  Blocked
-                </span>
-              </button>
-            </div>
-          </span>
-        </div>
-
-        <div>
-          <div className="users-panel-wrap">
-            {filteredUsers.length ? filteredUsers : noResults(loading)}
+          <div className={styles.filterControls}>
+            <div>Filter:</div>
+            <label>
+              Admin:
+              <input
+                type="checkbox"
+                checked={filters.admin === true}
+                onChange={handleAdminFilterCheckboxChange}
+              />
+              {filters.admin === true
+                ? <i className="fa fa-check-square-o"></i>
+                : <i className="fa fa-square-o"></i>}
+            </label>
+            <label>
+              Blocked:
+              <input
+                type="checkbox"
+                checked={filters.blocked === true}
+                onChange={handleBlockedFilterCheckboxChange}
+              />
+              {filters.blocked === true
+                ? <i className="fa fa-check-square-o"></i>
+                : <i className="fa fa-square-o"></i>}
+            </label>
           </div>
+          <div className={styles.searchControl}>
+            <div className={styles.searchInputWrapper}>
+              <input
+                type="text"
+                placeholder="Search name or email"
+                value={searchTerm || ""}
+                onChange={handleInputChange}
+              />
+              {searchTerm && (
+                <button
+                  className={styles.clearSearchButton}
+                  onClick={handleClearSearch}
+                >
+                  &#x2715;
+                </button>
+              )}
+            </div>
+            <button
+              className={styles.searchSubmitButton}
+              onClick={handleSearchSubmit}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.gridContainer}>
+          <div className={styles.gridHead}>
+            <button
+              className={`${styles.sortButton} ${styles.colLarge} ${
+                sortConfig.field === "name" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("name")}
+            >
+              Name {sortConfig.field === "name" && (
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+              )}
+            </button>
+            <button
+              className={`${styles.sortButton} ${styles.colSmall} ${
+                sortConfig.field === "email" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("email")}
+            >
+              Email {sortConfig.field === "email" && (
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+              )}
+            </button>
+            <button
+              className={`${styles.sortButton} ${styles.colSmall} ${
+                sortConfig.field === "orcid" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("orcid")}
+            >
+              ORCID {sortConfig.field === "orcid" && (
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+              )}
+            </button>
+            <button
+              className={`${styles.sortButton} ${styles.colSmall} ${
+                sortConfig.field === "created" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("created")}
+            >
+              Created {sortConfig.field === "created" && (
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+              )}
+            </button>
+            <button
+              className={`${styles.sortButton} ${styles.colSmall} ${
+                sortConfig.field === "lastSeen" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("lastSeen")}
+            >
+              Login {sortConfig.field === "lastSeen" && (
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+              )}
+            </button>
+            <button
+              className={`${styles.sortButton} ${styles.colSmall} ${
+                sortConfig.field === "modified" ? styles.active : ""
+              }`}
+              onClick={() => handleSortButtonClick("modified")}
+            >
+              Modified {sortConfig.field === "modified" && (
+                <i
+                  className={sortConfig.order === "ascending"
+                    ? SORT_ASC_ICON
+                    : SORT_DESC_ICON}
+                >
+                </i>
+              )}
+            </button>
+            <span className={`${styles.headingCol}  ${styles.colFlex}`}>
+              Actions
+            </span>
+          </div>
+          <ul className={styles.usersWrap}>
+            {hasUsers
+              ? users.map((user, index) => (
+                <li
+                  className={styles.userPanel + " panel panel-default fade-in"}
+                  key={user.id || index}
+                >
+                  <UserSummary
+                    user={user}
+                    refetchCurrentPage={refetchCurrentPage}
+                  />
+                </li>
+              ))
+              : noResults(loading)}
+          </ul>
+        </div>
+
+        <div className={styles.loadMoreContainer}>
+          {loading && users.length > 0 && <p>Loading more users...</p>}
+          {!loading && hasMore && (
+            <button onClick={loadMore} className={styles.loadMoreButton}>
+              Load More ({users.length} of {totalCount})
+            </button>
+          )}
+          {!hasMore && users.length > 0 && !loading && (
+            <p>All {totalCount} users loaded.</p>
+          )}
         </div>
       </div>
     </>
   )
 }
 
-export default UsersQuery
+export const UsersPage = () => {
+  const [sortConfig, setSortConfig] = useState<{
+    field: string | null
+    order: "ascending" | "descending"
+  }>({ field: "name", order: "ascending" })
+  const [filters, setFilters] = useState<{
+    admin: boolean | null
+    blocked: boolean | null
+  }>({ admin: null, blocked: null })
+  const [search, setSearch] = useState<string | undefined>(undefined)
+
+  const {
+    users,
+    loading,
+    error,
+    refetchCurrentPage,
+    loadMore,
+    hasMore,
+    totalCount,
+  } = useUsers({
+    orderBy: sortConfig,
+    isAdmin: filters.admin,
+    isBlocked: filters.blocked,
+    search: search,
+    initialLimit: 100,
+  })
+
+  const handleSortChange = useCallback(
+    (field: string | null, order: "ascending" | "descending") => {
+      setSortConfig({ field, order })
+    },
+    [setSortConfig],
+  )
+
+  const handleFilterChange = useCallback(
+    (filterType: "admin" | "blocked" | null, value: boolean) => {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterType]: value ? true : null,
+      }))
+    },
+    [setFilters],
+  )
+
+  const handleSearchChange = useCallback(
+    (searchValue: string | undefined) => {
+      setSearch(searchValue)
+    },
+    [setSearch],
+  )
+
+  if (loading && users.length === 0) {
+    return <Loading />
+  }
+
+  if (error) {
+    Sentry.captureException(error)
+    return <p>Error loading users...</p>
+  }
+
+  return (
+    <Users
+      users={users || []}
+      refetchCurrentPage={refetchCurrentPage}
+      loading={loading}
+      onSortChange={handleSortChange}
+      sortConfig={sortConfig}
+      onFilterChange={handleFilterChange}
+      filters={filters}
+      onSearchChange={handleSearchChange}
+      currentSearchTerm={search}
+      loadMore={loadMore}
+      hasMore={hasMore}
+      totalCount={totalCount}
+    />
+  )
+}
