@@ -26,6 +26,7 @@ dataset_description.json annex.largefiles=nothing
 CHANGES text eol=lf annex.largefiles=nothing
 README* text eol=lf annex.largefiles=nothing
 LICENSE* text eol=lf annex.largefiles=nothing
+CITATION.cff text eol=lf annex.largefiles=nothing
 """
 
 DATALAD_CONFIG = """[datalad "dataset"]
