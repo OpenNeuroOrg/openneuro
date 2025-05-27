@@ -29,7 +29,7 @@ exports[`File component > renders for dataset snapshots 1`] = `
         >
           <a
             aria-label="download file"
-            download=""
+            download="README"
             href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
           >
             <i
@@ -90,7 +90,7 @@ exports[`File component > renders with common props 1`] = `
         >
           <a
             aria-label="download file"
-            download=""
+            download="README"
             href="/crn/datasets/ds001/files/README"
           >
             <i

@@ -149,7 +149,7 @@ const File = ({
                 <a
                   href={urls?.[0] ||
                     apiPath(datasetId, snapshotTag, filePath(path, filename))}
-                  download
+                  download={filename}
                   aria-label="download file"
                 >
                   <i className="fa fa-download" />
