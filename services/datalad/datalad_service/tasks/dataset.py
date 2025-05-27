@@ -18,14 +18,14 @@ GIT_ATTRIBUTES = """* annex.backend=SHA256E
 **/.git* annex.largefiles=nothing
 *.bval annex.largefiles=nothing
 *.bvec annex.largefiles=nothing
-*.json annex.largefiles=largerthan=1mb
+*.json text eol=lf annex.largefiles=largerthan=1mb
+*.tsv text eol=lf annex.largefiles=largerthan=1mb
 phenotype/*.tsv annex.largefiles=anything
-*.tsv annex.largefiles=largerthan=1mb
 dataset_description.json annex.largefiles=nothing
 .bidsignore annex.largefiles=nothing
-CHANGES annex.largefiles=nothing
-README* annex.largefiles=nothing
-LICENSE annex.largefiles=nothing
+CHANGES text eol=lf annex.largefiles=nothing
+README* text eol=lf annex.largefiles=nothing
+LICENSE* text eol=lf annex.largefiles=nothing
 """
 
 DATALAD_CONFIG = """[datalad "dataset"]
