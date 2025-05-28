@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../authentication/profile"
 import { config } from "../config"
+import { useUser } from "../queries/user"
 
 const buildCustomQuery = (customText, prepopulatedFields) => {
   const customizerQueries = [
@@ -31,8 +32,11 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     screenshot: "No",
     captcha: "yes",
   }
+
+  const { user } = useUser()
+
   const prepopulatedFields = {
-    requester: profile && profile.email,
+    requester: profile && user?.email,
     subject,
     description: joinedDescription,
   }

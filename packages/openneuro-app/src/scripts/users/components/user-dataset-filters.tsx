@@ -1,13 +1,19 @@
-import React from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { useParams } from "react-router-dom"
 import styles from "../scss/datasetcard.module.scss"
+import { isValidOrcid } from "../../utils/validationUtils"
+import { useCookies } from "react-cookie"
+import { getProfile } from "../../authentication/profile"
+import { useUser } from "../../queries/user"
 
 interface UserDatasetFiltersProps {
   publicFilter: string
   setPublicFilter: React.Dispatch<React.SetStateAction<string>>
   sortOrder: string
   setSortOrder: React.Dispatch<React.SetStateAction<string>>
-  searchQuery: string
-  setSearchQuery: React.Dispatch<React.SetStateAction<string>>
+  onSearch: (query: string, publicFilter: string) => void
+  currentSearchTerm: string
+  hasEdit: boolean
 }
 
 export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
@@ -15,11 +21,15 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
   setPublicFilter,
   sortOrder,
   setSortOrder,
-  searchQuery,
-  setSearchQuery,
+  onSearch,
+  currentSearchTerm,
+  hasEdit,
 }) => {
-  const [isFilterOpen, setIsFilterOpen] = React.useState(false)
-  const [isSortOpen, setIsSortOpen] = React.useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isSortOpen, setIsSortOpen] = useState(false)
+  const [localSearchQuery, setLocalSearchQuery] = useState(currentSearchTerm)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const searchButtonRef = useRef<HTMLButtonElement>(null)
 
   const currentSortBy = sortOrder === "name-asc"
     ? "Name (A-Z)"
@@ -31,127 +41,201 @@ export const UserDatasetFilters: React.FC<UserDatasetFiltersProps> = ({
     ? "Oldest"
     : "Updated"
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchQuery(e.target.value)
+  }
+
+  const triggerSearch = () => {
+    onSearch(localSearchQuery, publicFilter)
+  }
+
+  const handleSearchInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Enter") {
+      triggerSearch()
+    }
+  }
+
+  const handleSearchButtonMouseOver = () => {
+    if (document.activeElement === searchButtonRef.current) {
+      triggerSearch()
+    }
+  }
+
+  const handleClearSearch = () => {
+    setLocalSearchQuery("")
+    onSearch("", publicFilter)
+  }
+
+  useEffect(() => {
+    setLocalSearchQuery(currentSearchTerm)
+  }, [currentSearchTerm])
+  const datasetQuery = {
+    datasetType_selected: "My Datasets",
+  }
+
+  // construct query for "my datasets" search link
+  const jsonString = JSON.stringify(datasetQuery)
+  const encodedJsonString = encodeURIComponent(jsonString)
+  const searchPageUrl = `/search?query=${encodedJsonString}`
+
+  //check if user is current user to provide query to search "My Datasets"
+  const { orcid } = useParams()
+  const isOrcidValid = orcid && isValidOrcid(orcid)
+  const { user } = useUser(orcid)
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
+  const isUser = (user?.id === profile?.sub) ? true : false
+
   return (
-    <div className={styles.userDSfilters}>
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Keyword Search (Name or ID)"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className={styles.searchInput}
-      />
-
-      {/* Filter by Visibility */}
-      <div
-        data-testid="public-filter"
-        className={`${styles.filterDiv} ${isFilterOpen ? styles.open : ""}`}
-        onClick={() => setIsFilterOpen(!isFilterOpen)}
-      >
-        <span>
-          Filter by:{" "}
-          <b>
-            {publicFilter === "all"
-              ? "All"
-              : publicFilter.charAt(0).toUpperCase() + publicFilter.slice(1)}
-          </b>
-        </span>
-        <div className={styles.filterDropdown}>
-          {isFilterOpen && (
-            <ul>
-              <li
-                onClick={() => {
-                  setPublicFilter("all")
-                  setIsFilterOpen(false)
-                }}
-                className={publicFilter === "all" ? styles.active : ""}
-              >
-                All
-              </li>
-              <li
-                onClick={() => {
-                  setPublicFilter("public")
-                  setIsFilterOpen(false)
-                }}
-                className={publicFilter === "public" ? styles.active : ""}
-              >
-                Public
-              </li>
-              <li
-                onClick={() => {
-                  setPublicFilter("private")
-                  setIsFilterOpen(false)
-                }}
-                className={publicFilter === "private" ? styles.active : ""}
-              >
-                Private
-              </li>
-            </ul>
+    <>
+      <div className={styles.searchInputContainer}>
+        {/* Search Input */}
+        <div className={styles.searchInputWrap}>
+          <input
+            ref={searchInputRef}
+            type="text"
+            placeholder="Keyword Search (Name, Authors, README, or ID)"
+            value={localSearchQuery}
+            onChange={handleSearchInputChange}
+            onKeyDown={handleSearchInputKeyDown}
+            className={styles.searchInput}
+          />
+          {localSearchQuery && (
+            <button
+              onClick={handleClearSearch}
+              className={styles.clearSearchButton}
+            >
+              <span aria-label="Clear Search">X</span>
+            </button>
           )}
         </div>
+        {/* Search Button */}
+        <button
+          ref={searchButtonRef}
+          onClick={triggerSearch}
+          onMouseOver={handleSearchButtonMouseOver}
+          className={styles.searchSubmitButton}
+        >
+          Search
+        </button>
       </div>
 
-      {/* Sort Options */}
-      <div
-        data-testid="sort-order"
-        className={`${styles.sortDiv} ${isSortOpen ? styles.open : ""}`}
-        onClick={() => setIsSortOpen(!isSortOpen)}
-      >
-        <span>
-          Sort by: <b>{currentSortBy}</b>
-        </span>
-        <div className={styles.sortDropdown}>
-          {isSortOpen && (
-            <ul>
-              <li
-                onClick={() => {
-                  setSortOrder("name-asc")
-                  setIsSortOpen(false)
-                }}
-                className={sortOrder === "name-asc" ? styles.active : ""}
-              >
-                Name (A-Z)
-              </li>
-              <li
-                onClick={() => {
-                  setSortOrder("name-desc")
-                  setIsSortOpen(false)
-                }}
-                className={sortOrder === "name-desc" ? styles.active : ""}
-              >
-                Name (Z-A)
-              </li>
-              <li
-                onClick={() => {
-                  setSortOrder("date-newest")
-                  setIsSortOpen(false)
-                }}
-                className={sortOrder === "date-newest" ? styles.active : ""}
-              >
-                Added
-              </li>
-              <li
-                onClick={() => {
-                  setSortOrder("date-oldest")
-                  setIsSortOpen(false)
-                }}
-                className={sortOrder === "date-oldest" ? styles.active : ""}
-              >
-                Oldest
-              </li>
-              <li
-                onClick={() => {
-                  setSortOrder("date-updated")
-                  setIsSortOpen(false)
-                }}
-                className={sortOrder === "date-updated" ? styles.active : ""}
-              >
-                Updated
-              </li>
-            </ul>
+      <div className={styles.userDSfilters}>
+        {/* Filter by Visibility */}
+        {isOrcidValid && hasEdit && isUser && (
+          <a className={styles.searchLink} href={searchPageUrl}>
+            View your datasets on the search page
+          </a>
+        )}
+        {hasEdit &&
+          (
+            <div
+              data-testid="public-filter"
+              className={`${styles.filterDiv} ${
+                isFilterOpen ? styles.open : ""
+              }`}
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+            >
+              <span>
+                Filter by:{" "}
+                <b>
+                  {publicFilter === "all"
+                    ? "All"
+                    : publicFilter.charAt(0).toUpperCase() +
+                      publicFilter.slice(1)}
+                </b>
+              </span>
+              <div className={styles.filterDropdown}>
+                {isFilterOpen && (
+                  <ul>
+                    <li
+                      onClick={() => {
+                        setPublicFilter("all")
+                        setIsFilterOpen(false)
+                      }}
+                      className={publicFilter === "all" ? styles.active : ""}
+                    >
+                      All
+                    </li>
+                    <li
+                      onClick={() => {
+                        setPublicFilter("public")
+                        setIsFilterOpen(false)
+                      }}
+                      className={publicFilter === "public" ? styles.active : ""}
+                    >
+                      Public
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
           )}
+
+        {/* Sort Options */}
+        <div
+          data-testid="sort-order"
+          className={`${styles.sortDiv} ${isSortOpen ? styles.open : ""}`}
+          onClick={() => setIsSortOpen(!isSortOpen)}
+        >
+          <span>
+            Sort by: <b>{currentSortBy}</b>
+          </span>
+          <div className={styles.sortDropdown}>
+            {isSortOpen && (
+              <ul>
+                <li
+                  onClick={() => {
+                    setSortOrder("name-asc")
+                    setIsSortOpen(false)
+                  }}
+                  className={sortOrder === "name-asc" ? styles.active : ""}
+                >
+                  Name (A-Z)
+                </li>
+                <li
+                  onClick={() => {
+                    setSortOrder("name-desc")
+                    setIsSortOpen(false)
+                  }}
+                  className={sortOrder === "name-desc" ? styles.active : ""}
+                >
+                  Name (Z-A)
+                </li>
+                <li
+                  onClick={() => {
+                    setSortOrder("date-newest")
+                    setIsSortOpen(false)
+                  }}
+                  className={sortOrder === "date-newest" ? styles.active : ""}
+                >
+                  Added
+                </li>
+                <li
+                  onClick={() => {
+                    setSortOrder("date-oldest")
+                    setIsSortOpen(false)
+                  }}
+                  className={sortOrder === "date-oldest" ? styles.active : ""}
+                >
+                  Oldest
+                </li>
+                <li
+                  onClick={() => {
+                    setSortOrder("date-updated")
+                    setIsSortOpen(false)
+                  }}
+                  className={sortOrder === "date-updated" ? styles.active : ""}
+                >
+                  Updated
+                </li>
+              </ul>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

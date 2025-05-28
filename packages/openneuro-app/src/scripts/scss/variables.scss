@@ -85,6 +85,16 @@ $on-light-orange: rgb(255, 110, 43);
 $primary: $on-dark-aqua;
 
 $chiclet-color: #a2059e;
+//Base unit used for spacing gutters
+$base-unit: 20px;
+
+//Screen Sizes
+$screen-sm: 480px;
+$screen-md: 767px;
+$screen-lg: 989px;
+
+$border-radius-default: 4px;
+
 
 /* CSS HEX */
 :root {
@@ -105,6 +115,9 @@ $chiclet-color: #a2059e;
   --current-theme-primary-light: #{$on-dark-aqua-light};
   --current-theme-header: #333;
   --current-theme-header-dark: #333;
+  --font-sans: #{$font-sans};
+  --border-radius-default: #{$border-radius-default};
+  --newspaper: #{$newspaper};
 }
 
 .mri-theme {
@@ -139,15 +152,6 @@ $chiclet-color: #a2059e;
   background: #f3f3f3;
 }
 
-//Base unit used for spacing gutters
-$base-unit: 20px;
-
-//Screen Sizes
-$screen-sm: 480px;
-$screen-md: 767px;
-$screen-lg: 989px;
-
-$border-radius-default: 4px;
 
 .search-page-mri,
 .dataset-page-mri {

@@ -1,0 +1,35 @@
+name: Check public datasets
+
+on:
+  push:
+    branches: ['feat/health-check']
+  schedule:
+    # 8am PST / 9am PDT Mondays
+    - cron: '0 16 * * 1'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  # Disable progress bar
+  TTY_COMPATIBLE: 0
+  FORCE_COLOR: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+      - run: scripts/check-github-sync

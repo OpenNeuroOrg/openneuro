@@ -6,7 +6,7 @@ interface EditListProps {
   placeholder?: string
   elements?: string[]
   setElements: (elements: string[]) => void
-  validation?: RegExp
+  validation?: RegExp | ((value: string) => boolean)
   validationMessage?: string
 }
 
@@ -30,17 +30,32 @@ export const EditList: React.FC<EditListProps> = (
   const removeElement = (index: number): void => {
     setElements(elements.filter((_, i) => i !== index))
   }
+  const isInputValid = (value: string): boolean => {
+    if (!validation) {
+      return true
+    }
+
+    if (validation instanceof RegExp) {
+      return validation.test(value)
+    } else if (typeof validation === "function") {
+      return validation(value)
+    }
+
+    return true
+  }
 
   // Add a new element to the list
   const addElement = (): void => {
-    if (!newElement.trim()) {
+    const trimmedNewElement = newElement.trim()
+
+    if (!trimmedNewElement) {
       setWarnEmpty(true)
       setWarnValidation(null)
-    } else if (validation && !validation.test(newElement.trim())) {
+    } else if (!isInputValid(trimmedNewElement)) {
       setWarnValidation(validationMessage || "Invalid input format")
       setWarnEmpty(false)
     } else {
-      setElements([...elements, newElement.trim()])
+      setElements([...elements, trimmedNewElement])
       setWarnEmpty(false)
       setWarnValidation(null)
       setNewElement("")
@@ -62,7 +77,13 @@ export const EditList: React.FC<EditListProps> = (
           className="form-control"
           placeholder={placeholder}
           value={newElement}
-          onChange={(e) => setNewElement(e.target.value)}
+          onChange={(e) => {
+            setNewElement(e.target.value)
+            if (warnEmpty || warnValidation) {
+              setWarnEmpty(false)
+              setWarnValidation(null)
+            }
+          }}
           onKeyDown={handleKeyDown}
         />
         <Button

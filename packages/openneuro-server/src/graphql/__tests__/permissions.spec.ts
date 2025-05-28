@@ -68,9 +68,15 @@ describe("resolver permissions helpers", () => {
     })
     it("resolves to true for admins", () => {
       return expect(
-        checkDatasetWrite("ds000001", "1234", { admin: true }, undefined, {
-          checkExists: false,
-        }),
+        checkDatasetWrite(
+          "ds000001",
+          "1234",
+          { email: "test@example.com", admin: true },
+          undefined,
+          {
+            checkExists: false,
+          },
+        ),
       ).resolves.toBe(true)
     })
   })
@@ -104,7 +110,7 @@ describe("resolver permissions helpers", () => {
         checkDatasetAdmin(
           "ds000001",
           "1234",
-          { admin: true },
+          { email: "test@example.com", admin: true },
           { checkExists: false },
         ),
       ).resolves.toBe(true)

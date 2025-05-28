@@ -34,6 +34,8 @@ header {
 }
 
 .navbar-navigation {
+  margin-left: auto;
+  margin-right: 20px;
   @media (max-width: 800px) {
     margin-top: 20px;
     margin-left: auto;
@@ -133,6 +135,7 @@ header {
       right: 8px;
       top: 8px;
     }
+
     &.nav-open {
       .navbar-navigation ul {
         transform: translateY(0);
@@ -200,8 +203,7 @@ header {
     align-items: center;
   }
   > div {
-    flex-basis: 50%;
-    max-width: 50%;
+    flex-basis: 100%;
     margin: 0 10px 0 0;
     &:last-child {
       margin: 0 0 0 10px;

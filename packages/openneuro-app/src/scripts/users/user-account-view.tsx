@@ -1,15 +1,21 @@
 import React, { useState } from "react"
+import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
+import { GET_USER, UPDATE_USER } from "../queries/user"
 import styles from "./scss/useraccountview.module.scss"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "./user-query"
+import { GitHubAuthButton } from "./github-auth-button"
 import type { UserAccountViewProps } from "../types/user-types"
 
-export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
-  const [userLinks, setLinks] = useState<string[]>(user.links || [])
-  const [userLocation, setLocation] = useState<string>(user.location || "")
+export const UserAccountView: React.FC<UserAccountViewProps> = ({
+  orcidUser,
+}) => {
+  const [userLinks, setLinks] = useState<string[]>(orcidUser?.links || [])
+  const [userLocation, setLocation] = useState<string>(
+    orcidUser?.location || "",
+  )
   const [userInstitution, setInstitution] = useState<string>(
-    user.institution || "",
+    orcidUser?.institution || "",
   )
   const [updateUser] = useMutation(UPDATE_USER)
 
@@ -18,18 +24,18 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
     try {
       await updateUser({
         variables: {
-          id: user.orcid,
+          id: orcidUser?.orcid,
           links: newLinks,
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
-            variables: { id: user.orcid },
+            query: GET_USER,
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
-    } catch {
-      // Error handling can be implemented here if needed
+    } catch (error) {
+      Sentry.captureException(error)
     }
   }
 
@@ -39,18 +45,18 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
     try {
       await updateUser({
         variables: {
-          id: user.orcid,
+          id: orcidUser?.orcid,
           location: newLocation,
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
-            variables: { id: user.orcid },
+            query: GET_USER,
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
-    } catch {
-      // Error handling can be implemented here if needed
+    } catch (error) {
+      Sentry.captureException(error)
     }
   }
 
@@ -60,18 +66,34 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
     try {
       await updateUser({
         variables: {
-          id: user.orcid,
+          id: orcidUser?.orcid,
           institution: newInstitution,
         },
         refetchQueries: [
           {
-            query: GET_USER_BY_ORCID,
-            variables: { id: user.orcid },
+            query: GET_USER,
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
-    } catch {
-      // Error handling can be implemented here if needed
+    } catch (error) {
+      Sentry.captureException(error)
+    }
+  }
+
+  // --- URL VALIDATION FUNCTION ---
+  const validateHttpHttpsUrl = (url: string): boolean => {
+    if (!url) {
+      return false // Empty string is not a valid URL
+    }
+    try {
+      const parsedUrl = new URL(url)
+      // Check if the protocol is either http: or https:
+      return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
+    } catch (error) {
+      // If new URL() throws an error, the string is not a valid URL
+      Sentry.captureException(error)
+      return false
     }
   }
 
@@ -81,24 +103,26 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
       <ul className={styles.accountDetail}>
         <li>
           <span>Name:</span>
-          {user.name}
+          {orcidUser.name}
         </li>
         <li>
           <span>Email:</span>
-          {user.email}
+          {orcidUser.email}
         </li>
         <li>
           <span>ORCID:</span>
-          {user.orcid}
+          {orcidUser.orcid}
         </li>
-        {user.github
-          ? (
+        {orcidUser?.github &&
+          (
             <li>
               <span>GitHub:</span>
-              {user.github}
+              {orcidUser.github}
             </li>
-          )
-          : <li>Connect your GitHub</li>}
+          )}
+        <li>
+          <GitHubAuthButton sync={orcidUser.githubSynced} />
+        </li>
       </ul>
 
       <EditableContent
@@ -106,9 +130,8 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({ user }) => {
         setRows={handleLinksChange}
         className="custom-class"
         heading="Links"
-        // eslint-disable-next-line no-useless-escape
-        validation={/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/} // URL validation regex
-        validationMessage="Invalid URL format. Please use a valid link."
+        validation={validateHttpHttpsUrl}
+        validationMessage="Invalid URL format. Please start with http:// or https://"
         data-testid="links-section"
       />
 

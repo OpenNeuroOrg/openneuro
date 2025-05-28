@@ -5,21 +5,40 @@ const { Schema, model } = mongoose
 
 export interface UserDocument extends Document {
   _id: string
+  // OpenNeuro specific user uuid
   id: string
+  // Best contact email for the user (notifications)
   email: string
+  // User's preferred name (visible)
   name: string
+  // Login provider
   provider: StaticRangeInit
+  // The id from the login provider
   providerId: string
+  // ORCID iD associated with this OpenNeuro user
   orcid: string
+  // Google account id associated with this OpenNeuro user
+  google: string
+  // Is this a migrated account? Migrated accounts were Google accounts moved to ORCID and disabled
+  migrated: boolean
   refresh: string
+  // Is this user a site admin with permissions for all datasets?
   admin: boolean
+  // Has this user been banned from the site?
   blocked: boolean
+  // Original account creation time
   created: Date
+  // Last time the user authenticated
   lastSeen: Date
   location: string
+  // Institution populated from ORCID
   institution: string
+  // GitHub account linked
   github: string
+  // User profile links
   links: string[]
+  avatar: string
+  githubSynced: Date
 }
 
 const userSchema = new Schema({
@@ -29,7 +48,10 @@ const userSchema = new Schema({
   provider: String, // Login provider
   providerId: String, // Login provider unique id
   orcid: String, // ORCID iD regardless of provider id
+  google: String, // Google ID if this is an ORCID account with a Google account linked
+  migrated: { type: Boolean, default: false },
   refresh: String,
+  avatar: String,
   admin: { type: Boolean, default: false },
   blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
@@ -37,6 +59,7 @@ const userSchema = new Schema({
   location: { type: String, default: "" },
   institution: { type: String, default: "" },
   github: { type: String, default: "" },
+  githubSynced: { type: Date },
   links: { type: [String], default: [] },
 })
 

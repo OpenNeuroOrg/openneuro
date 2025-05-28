@@ -7,7 +7,7 @@ interface EditStringProps {
   setValue: (value: string) => void
   placeholder?: string
   closeEditing: () => void
-  validation?: RegExp
+  validation?: RegExp | ((value: string) => boolean)
   validationMessage?: string
 }
 
@@ -25,18 +25,35 @@ export const EditString: React.FC<EditStringProps> = (
   const [warnEmpty, setWarnEmpty] = useState<string | null>(null)
   const [warnValidation, setWarnValidation] = useState<string | null>(null)
 
+  // Helper for validation logic
+  const isInputValid = (inputValue: string): boolean => {
+    if (!validation) {
+      return true
+    }
+
+    if (validation instanceof RegExp) {
+      return validation.test(inputValue)
+    } else if (typeof validation === "function") {
+      return validation(inputValue)
+    }
+
+    return true
+  }
+
+  const trimmedCurrentValue = currentValue.trim()
+
   useEffect(() => {
-    // Show warning only if there was an initial value and it was deleted
-    if (value !== "" && currentValue === "") {
+    // Logic for "empty" warning
+    if (value !== "" && trimmedCurrentValue === "") {
       setWarnEmpty(
-        "Your input is empty. This will delete the previously saved value..",
+        "Your input is empty. This will delete the previously saved value.",
       )
     } else {
       setWarnEmpty(null)
     }
 
-    // Validation logic
-    if (validation && currentValue && !validation.test(currentValue)) {
+    // Logic for "validation" warning
+    if (trimmedCurrentValue !== "" && !isInputValid(trimmedCurrentValue)) {
       setWarnValidation(validationMessage || "Invalid input")
     } else {
       setWarnValidation(null)
@@ -44,10 +61,13 @@ export const EditString: React.FC<EditStringProps> = (
   }, [currentValue, value, validation, validationMessage])
 
   const handleSave = (): void => {
-    if (!warnValidation) {
-      setValue(currentValue.trim())
-      closeEditing()
+    if (warnValidation) {
+      // Do not save if there's a validation error
+      return
     }
+
+    setValue(trimmedCurrentValue)
+    closeEditing()
   }
 
   // Handle Enter key press for saving
@@ -66,7 +86,14 @@ export const EditString: React.FC<EditStringProps> = (
           className="form-control"
           placeholder={placeholder}
           value={currentValue}
-          onChange={(e) => setCurrentValue(e.target.value)}
+          onChange={(e) => {
+            setCurrentValue(e.target.value)
+            // Clear warnings as user types again
+            if (warnEmpty || warnValidation) {
+              setWarnEmpty(null)
+              setWarnValidation(null)
+            }
+          }}
           onKeyDown={handleKeyDown}
         />
         <Button
@@ -77,11 +104,11 @@ export const EditString: React.FC<EditStringProps> = (
           onClick={handleSave}
         />
       </div>
-      {/* Show empty value warning only if content was deleted */}
-      {warnEmpty && currentValue === "" && (
+      {/* Display warning about deleting previous value if applicable */}
+      {warnEmpty && trimmedCurrentValue === "" && (
         <small className="warning-text">{warnEmpty}</small>
       )}
-      {/* Show validation error */}
+      {/* Display validation error */}
       {warnValidation && (
         <small className="warning-text">{warnValidation}</small>
       )}

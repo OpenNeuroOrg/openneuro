@@ -3,14 +3,15 @@ import bytes from "bytes"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
-
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { Icon } from "../../components/icon/Icon"
-
+import { useCookies } from "react-cookie"
+import { getProfile } from "../../authentication/profile"
+import { useUser } from "../../queries/user"
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { ModalityLabel } from "../../components/formatting/modality-label"
-
+import { hasEditPermissions } from "../../authentication/profile"
 /**
  * Return an equivalent to moment(date).format('L') without moment
  * @param {*} dateObject
@@ -110,22 +111,24 @@ export interface SearchResultItemProps {
       },
     ]
   }
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  profile: Record<string, any> // TODO - Use the actual user type here
   datasetTypeSelected?: string
-  hasEditPermissions: (permissions: object, userId: string) => boolean
 }
 
 export const SearchResultItem = ({
   node,
-  profile,
   datasetTypeSelected,
-  hasEditPermissions,
 }: SearchResultItemProps) => {
-  const isAdmin = profile?.admin
-  const hasEdit = hasEditPermissions(node.permissions, profile?.sub) || isAdmin
+  const { user } = useUser()
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
+  const profileSub = profile?.sub
+
+  const isAdmin = user?.admin
+  const hasEdit = hasEditPermissions(node.permissions, profileSub) || isAdmin
 
   const heading = node.latestSnapshot.description?.Name
+    ? node.latestSnapshot.description?.Name
+    : node.id
   const summary = node.latestSnapshot?.summary
   const datasetId = node.id
   const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
@@ -133,7 +136,7 @@ export const SearchResultItem = ({
   const accessionNumber = (
     <span className="result-summary-meta">
       <strong>Openneuro Accession Number:</strong>
-      <span>{node.id}</span>
+      <Link to={"/datasets/" + datasetId}>{node.id}</Link>
     </span>
   )
   const sessions = (
@@ -209,7 +212,7 @@ export const SearchResultItem = ({
   const uploader = (
     <div className="uploader">
       <span>Uploaded by:</span>
-      {node.uploader.name} on {dateAdded} - {dateAddedDifference} ago
+      {node.uploader?.name} on {dateAdded} - {dateAddedDifference} ago
     </div>
   )
   const downloads = node.analytics.downloads
@@ -318,11 +321,11 @@ export const SearchResultItem = ({
     // Test if there's any schema validator errors
     invalid = node.latestSnapshot.validation?.errors > 0
   }
-  const shared = !node.public && node.uploader.id !== profile.sub
+  const shared = !node.public && node.uploader?.id !== profileSub
 
   const MyDatasetsPage = datasetTypeSelected === "My Datasets"
   const datasetPerms = node.permissions.userPermissions.map((item) => {
-    if (item.user.id === profile?.sub && item.access !== null) {
+    if (item.user.id === profileSub && item.access !== null) {
       if (item.access === "ro") {
         return "Read Only"
       } else if (item.access === "rw") {

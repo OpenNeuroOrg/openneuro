@@ -14,28 +14,36 @@ import {
 
 import type { UserRoutesProps } from "../types/user-types"
 
-export const UserRoutes: React.FC<UserRoutesProps> = ({ user, hasEdit }) => {
+export const UserRoutes: React.FC<UserRoutesProps> = (
+  { orcidUser, hasEdit, isUser },
+) => {
   return (
     <Routes>
       <Route path="/*" element={<FourOFourPage />} />
       <Route
         path="*"
-        element={<UserAccountContainer user={user} hasEdit={hasEdit} />}
+        element={
+          <UserAccountContainer
+            orcidUser={orcidUser}
+            hasEdit={hasEdit}
+            isUser={isUser}
+          />
+        }
       >
         <Route
           path=""
-          element={<UserDatasetsView user={user} hasEdit={hasEdit} />}
+          element={<UserDatasetsView orcidUser={orcidUser} hasEdit={hasEdit} />}
         />
         <Route
           path="account"
           element={hasEdit
-            ? <UserAccountView user={user} />
+            ? <UserAccountView orcidUser={orcidUser} />
             : <FourOThreePage />}
         />
         <Route
           path="notifications/*"
           element={hasEdit
-            ? <UserNotificationsView user={user} />
+            ? <UserNotificationsView orcidUser={orcidUser} />
             : <FourOThreePage />}
         >
           <Route index element={<UnreadNotifications />} />

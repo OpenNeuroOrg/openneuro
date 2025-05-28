@@ -29,6 +29,7 @@ const client = new ApolloClient({
       },
     },
   }),
+  connectToDevTools: config.sentry.environment !== "production",
 })
 
 container.render(

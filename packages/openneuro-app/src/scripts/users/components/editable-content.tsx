@@ -11,7 +11,7 @@ interface EditableContentProps {
   setRows: React.Dispatch<React.SetStateAction<string[] | string>>
   className: string
   heading: string
-  validation?: RegExp
+  validation?: RegExp | ((value: string) => boolean)
   validationMessage?: string
   "data-testid"?: string
 }
@@ -33,9 +33,16 @@ export const EditableContent: React.FC<EditableContentProps> = ({
 
   // Function to handle validation of user input
   const handleValidation = (value: string): boolean => {
-    if (validation && !validation.test(value)) {
-      return false
+    if (!validation) {
+      return true
     }
+
+    if (validation instanceof RegExp) {
+      return validation.test(value)
+    } else if (typeof validation === "function") {
+      return validation(value)
+    }
+
     return true
   }
 

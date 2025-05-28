@@ -12,7 +12,10 @@ const UserAccountTabsWrapper: React.FC = () => {
       <button onClick={() => setHasEdit(!hasEdit)}>Toggle hasEdit</button>
       <MemoryRouter>
         <Routes>
-          <Route path="*" element={<UserAccountTabs hasEdit={hasEdit} />} />
+          <Route
+            path="*"
+            element={<UserAccountTabs hasEdit={hasEdit} isUser={true} />}
+          />
         </Routes>
       </MemoryRouter>
     </>
@@ -23,23 +26,23 @@ describe("UserAccountTabs Component", () => {
   it("should not render tabs when hasEdit is false", () => {
     render(<UserAccountTabsWrapper />)
 
-    expect(screen.getByText("User Datasets")).toBeInTheDocument()
+    expect(screen.getByText("My Datasets")).toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Toggle hasEdit"))
 
-    expect(screen.queryByText("User Datasets")).not.toBeInTheDocument()
+    expect(screen.queryByText("My Datasets")).not.toBeInTheDocument()
   })
 
   it("should render tabs when hasEdit is toggled back to true", () => {
     render(<UserAccountTabsWrapper />)
 
-    expect(screen.getByText("User Datasets")).toBeInTheDocument()
+    expect(screen.getByText("My Datasets")).toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Toggle hasEdit"))
-    expect(screen.queryByText("User Datasets")).not.toBeInTheDocument()
+    expect(screen.queryByText("My Datasets")).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Toggle hasEdit"))
-    expect(screen.getByText("User Datasets")).toBeInTheDocument()
+    expect(screen.getByText("My Datasets")).toBeInTheDocument()
   })
 
   it("should update active class on the correct NavLink based on route", () => {
@@ -48,15 +51,14 @@ describe("UserAccountTabs Component", () => {
     // Utility function to check if an element has 'active' class - used because of CSS module discrepancies between classNames
     const hasActiveClass = (element) => element.className.includes("active")
 
-    const datasetsTab = screen.getByText("User Datasets")
+    const datasetsTab = screen.getByText("My Datasets")
     expect(hasActiveClass(datasetsTab)).toBe(true)
 
-    const notificationsTab = screen.getByText("User Notifications")
+    //const notificationsTab = screen.getByText("Notifications")
 
-    fireEvent.click(notificationsTab)
+    //fireEvent.click(notificationsTab)
 
-    expect(hasActiveClass(notificationsTab)).toBe(true)
-    expect(hasActiveClass(datasetsTab)).toBe(false)
+    //expect(hasActiveClass(notificationsTab)).toBe(true)
 
     const accountTab = screen.getByText("Account Info")
 
@@ -64,20 +66,21 @@ describe("UserAccountTabs Component", () => {
 
     expect(hasActiveClass(accountTab)).toBe(true)
     expect(hasActiveClass(datasetsTab)).toBe(false)
-    expect(hasActiveClass(notificationsTab)).toBe(false)
+    //expect(hasActiveClass(notificationsTab)).toBe(false)
+    expect(hasActiveClass(datasetsTab)).toBe(false)
   })
 
   it("should trigger animation state when a tab is clicked", async () => {
     render(<UserAccountTabsWrapper />)
 
-    const notificationsTab = screen.getByText("User Notifications")
+    const accountTab = screen.getByText("Account Info")
     // Utility function to check if an element has 'clicked' class - used because of CSS module discrepancies between classNames
     const hasClickedClass = (element) => element.className.includes("clicked")
     const tabsContainer = await screen.findByRole("list")
 
     expect(hasClickedClass(tabsContainer)).toBe(false)
 
-    fireEvent.click(notificationsTab)
+    fireEvent.click(accountTab)
 
     expect(hasClickedClass(tabsContainer)).toBe(true)
   })

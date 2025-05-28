@@ -8,76 +8,107 @@ import {
   within,
 } from "@testing-library/react"
 import { UserAccountView } from "../user-account-view"
-import { GET_USER_BY_ORCID, UPDATE_USER } from "../user-query"
+import type { User } from "../../types/user-types"
+import * as userQueries from "../../queries/user"
+import { BrowserRouter } from "react-router-dom"
 
-const baseUser = {
+const baseUser: User = {
   id: "1",
   name: "John Doe",
-  email: "johndoe@example.com",
-  orcid: "0000-0001-2345-6789",
-  location: "San Francisco, CA",
-  institution: "University of California",
-  links: ["https://example.com", "https://example.org"],
-  github: "johndoe",
+  location: "Unknown",
+  github: "",
+  institution: "Unknown Institution",
+  email: "john.doe@example.com",
+  avatar: "https://dummyimage.com/200x200/000/fff",
+  orcid: "0000-0000-0000-0000",
+  links: [],
+  admin: false,
+  provider: "orcid",
+  created: new Date("2025-05-20T14:50:32.424Z"),
+  lastSeen: new Date("2025-05-20T14:50:32.424Z"),
+  blocked: false,
+  githubSynced: null,
 }
 
-const mocks = [
-  {
-    request: {
-      query: GET_USER_BY_ORCID,
-      variables: { userId: baseUser.id },
-    },
-    result: {
-      data: {
-        user: baseUser,
-      },
+const userMock = {
+  request: {
+    query: userQueries.GET_USER,
+    variables: { id: baseUser.orcid },
+  },
+  result: {
+    data: {
+      user: baseUser,
     },
   },
-  {
-    request: {
-      query: UPDATE_USER,
-      variables: {
-        id: baseUser.id,
-        location: "Marin, CA",
-        links: ["https://newlink.com"],
-        institution: "New University",
-      },
-    },
-    result: {
-      data: {
-        updateUser: {
-          id: baseUser.id,
-          location: "Marin, CA",
-          links: ["https://newlink.com"],
-          institution: "New University",
-        },
-      },
-    },
-  },
-]
+}
 
 describe("<UserAccountView />", () => {
-  it("should render the user details correctly", () => {
+  it("should render the user details correctly", async () => {
+    const mocks = [
+      userMock,
+      {
+        request: {
+          query: userQueries.UPDATE_USER,
+          variables: {
+            id: baseUser.orcid,
+          },
+        },
+        result: {
+          data: {
+            updateUser: {
+              id: baseUser.orcid,
+              location: "Marin, CA",
+              links: ["https://newlink.com"],
+              institution: "New University",
+            },
+          },
+        },
+      },
+    ]
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView orcidUser={baseUser} />
+        </MockedProvider>
+      </BrowserRouter>,
     )
-    expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("John Doe")).toBeInTheDocument()
+    expect(screen.getByText("Name:")).toBeInTheDocument()
     expect(screen.getByText("Email:")).toBeInTheDocument()
-    expect(screen.getByText("johndoe@example.com")).toBeInTheDocument()
+    expect(screen.getByText("john.doe@example.com")).toBeInTheDocument()
     expect(screen.getByText("ORCID:")).toBeInTheDocument()
-    expect(screen.getByText("0000-0001-2345-6789")).toBeInTheDocument()
-    expect(screen.getByText("GitHub:")).toBeInTheDocument()
-    expect(screen.getByText("johndoe")).toBeInTheDocument()
+    expect(screen.getByText("0000-0000-0000-0000")).toBeInTheDocument()
+    expect(screen.getByText("Link user data from GitHub")).toBeInTheDocument()
   })
-
-  it("should render location with EditableContent", async () => {
+  it("should render location with EditableContent and update", async () => {
+    const mocks = [
+      userMock,
+      {
+        request: {
+          query: userQueries.UPDATE_USER,
+          variables: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+          },
+        },
+        result: {
+          data: {
+            updateUser: {
+              id: baseUser.orcid,
+              location: "Marin, CA",
+              links: ["https://newlink.com"],
+              institution: "New University",
+            },
+          },
+        },
+      },
+    ]
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView orcidUser={baseUser} />
+        </MockedProvider>
+      </BrowserRouter>,
     )
     const locationSection = within(screen.getByTestId("location-section"))
     expect(screen.getByText("Location")).toBeInTheDocument()
@@ -92,11 +123,32 @@ describe("<UserAccountView />", () => {
     })
   })
 
-  it("should render institution with EditableContent", async () => {
+  it("should render institution with EditableContent and update", async () => {
+    const mocks = [userMock, {
+      request: {
+        query: userQueries.UPDATE_USER,
+        variables: {
+          id: baseUser.orcid,
+          institution: "New University",
+        },
+      },
+      result: {
+        data: {
+          updateUser: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+            links: ["https://newlink.com"],
+            institution: "New University",
+          },
+        },
+      },
+    }]
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView orcidUser={baseUser} />
+        </MockedProvider>,
+      </BrowserRouter>,
     )
     const institutionSection = within(screen.getByTestId("institution-section"))
     expect(screen.getByText("Institution")).toBeInTheDocument()
@@ -111,11 +163,32 @@ describe("<UserAccountView />", () => {
     })
   })
 
-  it("should render links with EditableContent and validation", async () => {
+  it("should render links with EditableContent and handle valid URL input", async () => {
+    const mocks = [userMock, {
+      request: {
+        query: userQueries.UPDATE_USER,
+        variables: {
+          id: baseUser.orcid,
+          links: ["https://newlink.com"],
+        },
+      },
+      result: {
+        data: {
+          updateUser: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+            links: ["https://newlink.com"],
+            institution: "New University",
+          },
+        },
+      },
+    }]
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView orcidUser={baseUser} />
+        </MockedProvider>,
+      </BrowserRouter>,
     )
     const linksSection = within(screen.getByTestId("links-section"))
     expect(screen.getByText("Links")).toBeInTheDocument()
@@ -131,11 +204,33 @@ describe("<UserAccountView />", () => {
   })
 
   it("should show an error message when invalid URL is entered in links section", async () => {
+    const mocks = [{
+      request: {
+        query: userQueries.UPDATE_USER,
+        variables: {
+          id: baseUser.orcid,
+          links: ["https://newlink.com"],
+        },
+      },
+      result: {
+        data: {
+          updateUser: {
+            id: baseUser.orcid,
+            location: "Marin, CA",
+            links: ["https://newlink.com"],
+            institution: "New University",
+          },
+        },
+      },
+    }]
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <UserAccountView user={baseUser} />
-      </MockedProvider>,
+      <BrowserRouter>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <UserAccountView orcidUser={baseUser} />
+        </MockedProvider>,
+      </BrowserRouter>,
     )
+
     const linksSection = within(screen.getByTestId("links-section"))
     const editButton = linksSection.getByText("Edit")
     fireEvent.click(editButton)
@@ -145,7 +240,9 @@ describe("<UserAccountView />", () => {
     fireEvent.click(saveButton)
     await waitFor(() => {
       expect(
-        linksSection.getByText("Invalid URL format. Please use a valid link."),
+        linksSection.getByText(
+          "Invalid URL format. Please start with http:// or https://",
+        ),
       ).toBeInTheDocument()
     })
   })

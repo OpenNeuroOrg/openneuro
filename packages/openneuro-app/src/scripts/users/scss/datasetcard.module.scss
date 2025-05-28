@@ -58,23 +58,27 @@
       }
     }
   }
+
+  .resultsSummary{
+    width: 100%;
+    font-size: 13px;
+    margin: 10px 0 0;
+  }
   
   .userDSfilters {
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin: 20px 0;
     padding-bottom:20px;
     align-items: center;
     z-index: 10000;
     position: relative;
     border-bottom: 2px solid #eee;
-  
-    input {
-      min-width: 50%;
-      margin-right: auto;
-    }
-  
+   
+    .searchLink{
+    margin-right: auto;
+  }
     .filterDiv,
     .sortDiv {
       cursor: pointer;
@@ -144,10 +148,59 @@
       margin-left: 20px;
     }
   }
-  
 
-  .resultsSummary{
-    width: 100%;
-    font-size: 13px;
-    margin: 10px 0 0;
+  .userDatasetsWrapper{
+    margin-bottom: 50px;
   }
+  .searchInputContainer {
+    position: relative;
+    display: flex;
+  
+    .searchInputWrap{
+      position: relative;
+    width: 100%;
+  .searchInput {
+    flex-grow: 1;
+    padding-right: 30px;
+    margin-right: auto;
+    width: 100%;
+  }
+ 
+
+  .clearSearchButton {
+    position: absolute;
+    top: 50%;
+    right: 5px; /* Adjust position as needed */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+    color: #888;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    &:hover {
+      color: #333;
+    }
+  }}
+    .searchSubmitButton {
+    background-color: var(--current-theme-secondary);
+    color: #fff;
+    border-radius: var(--border-radius-default);
+    font-weight: bold;
+    margin: 0 0 0 5px;
+    font-size: 14px;
+    padding: 10px 15px;
+    border: 0;
+    &:hover {
+      background-color: var(--current-theme-primary);
+    }
+  }
+
+
+}

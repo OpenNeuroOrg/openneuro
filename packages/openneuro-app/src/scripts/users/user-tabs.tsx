@@ -4,10 +4,11 @@ import styles from "./scss/usertabs.module.scss"
 
 export interface UserAccountTabsProps {
   hasEdit: boolean
+  isUser?: boolean
 }
 
 export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
-  { hasEdit },
+  { hasEdit, isUser },
 ) => {
   const ulRef = useRef<HTMLUListElement>(null)
   const [activePosition, setActivePosition] = useState<number>(0)
@@ -46,19 +47,21 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
             className={({ isActive }) => (isActive ? styles.active : "")}
             onClick={handleClick}
           >
-            User Datasets
+            {isUser ? "My" : "User"} Datasets
           </NavLink>
         </li>
-        <li>
+        {
+          /* <li>
           <NavLink
             data-testid="user-notifications-tab"
             to="notifications"
             className={({ isActive }) => (isActive ? styles.active : "")}
             onClick={handleClick}
           >
-            User Notifications
+            Notifications
           </NavLink>
-        </li>
+        </li> */
+        }
         <li>
           <NavLink
             to="account"

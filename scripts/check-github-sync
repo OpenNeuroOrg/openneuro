@@ -1,0 +1,127 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "gql[httpx]",
+#     "rich",
+#     "stamina",
+#     "structlog",
+# ]
+# ///
+
+import subprocess
+from functools import cache
+from operator import itemgetter
+from typing import Iterator
+
+import httpx
+import stamina
+import structlog
+from gql import Client, gql as gql_query
+from gql.transport.httpx import HTTPXTransport
+from rich.progress import Progress, TextColumn, BarColumn, MofNCompleteColumn
+
+logger = structlog.get_logger()
+
+ENDPOINT = "https://openneuro.org/crn/graphql"
+QUERY = gql_query("""
+query DatasetsWithLatestSnapshots($count: Int, $after: String) {
+  datasets(
+    first: $count,
+    after: $after,
+    orderBy: { created: ascending }
+    filterBy: { public: true }
+  ) {
+    edges {
+      node {
+        id
+        latestSnapshot {
+          tag
+          created
+          hexsha
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+      count
+    }
+  }
+}
+""")
+
+
+@cache
+def get_client(url: str) -> Client:
+    return Client(transport=HTTPXTransport(url=url))
+
+
+@stamina.retry(on=httpx.HTTPError)
+def get_page(url: str, count: int, after: str | None) -> dict:
+    return get_client(url).execute(
+        QUERY, variable_values={"count": count, "after": after}
+    )
+
+
+def get_dataset_count(url: str) -> int:
+    response = get_page(url, 0, None)
+    return response["datasets"]["pageInfo"]["count"]
+
+
+def dataset_iterator(url: str) -> Iterator[tuple[str, str, str, str]]:
+    page_info = {"hasNextPage": True, "endCursor": None}
+
+    while page_info["hasNextPage"]:
+        result = get_page(url, 100, page_info["endCursor"])
+
+        edges, page_info = itemgetter("edges", "pageInfo")(result["datasets"])
+
+        for edge in edges:
+            dataset_id, latest_snapshot = itemgetter("id", "latestSnapshot")(
+                edge["node"]
+            )
+            yield (dataset_id, *itemgetter("tag", "created", "hexsha")(latest_snapshot))
+
+
+def check_remote(dataset_id: str, tag: str, hexsha: str) -> bool | None:
+    log = logger.bind(dataset=dataset_id, tag=tag)
+    repo = f"https://github.com/OpenNeuroDatasets/{dataset_id}.git"
+    result = subprocess.run(
+        ["git", "ls-remote", "--exit-code", repo, tag],
+        capture_output=True,
+    )
+    if result.returncode:
+        if "Repository not found" in result.stderr.decode():
+            log.error("Missing repository")
+            return None
+        log.error("Missing latest tag")
+        return False
+
+    shasum, ref = result.stdout.decode("utf-8").strip().split()
+
+    if shasum != hexsha:
+        log.warning(f"mismatch: {shasum[:7]}({ref[10:]}) != {hexsha[:7]}")
+        return False
+
+    return ref == f"refs/tags/{tag}"
+
+
+if __name__ == "__main__":
+    count = get_dataset_count(ENDPOINT)
+
+    retcode = 0
+
+    with Progress(
+        TextColumn("[progress.description]{task.description} {task.fields[dataset]:8s}"),
+        BarColumn(),
+        MofNCompleteColumn(),
+    ) as progress:
+        task = progress.add_task("Checking", total=count, dataset="...")
+
+        for dataset_id, tag, created, hexsha in dataset_iterator(ENDPOINT):
+            progress.update(task, advance=1, dataset=dataset_id)
+
+            retcode |= not check_remote(dataset_id, tag, hexsha)
+
+    raise SystemExit(retcode)

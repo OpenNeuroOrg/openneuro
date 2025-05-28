@@ -22,6 +22,7 @@ import { UserQuery } from "./users/user-query"
 import LoggedIn from "../scripts/authentication/logged-in"
 import LoggedOut from "../scripts/authentication/logged-out"
 import FourOThreePage from "./errors/403page"
+import { OrcidLinkPage } from "./pages/orcid-link"
 
 const AppRoutes: React.VoidFunctionComponent = () => (
   <Routes>
@@ -39,6 +40,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/import" element={<ImportDataset />} />
     <Route path="/metadata" element={<DatasetMetadata />} />
     <Route path="/public" element={<Navigate to="/search" replace />} />
+    <Route path="/orcid-link" element={<OrcidLinkPage />} />
     <Route
       path="/user/:orcid/*"
       element={

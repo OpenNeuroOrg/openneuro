@@ -6,23 +6,28 @@ import styles from "./scss/usercontainer.module.scss"
 import type { AccountContainerProps } from "../types/user-types"
 
 export const UserAccountContainer: React.FC<AccountContainerProps> = ({
-  user,
+  orcidUser,
   hasEdit,
+  isUser,
 }) => {
   return (
     <>
       <div className="container">
         <header className={styles.userHeader}>
-          {user.avatar && (
-            <img className={styles.avatar} src={user.avatar} alt={user.name} />
+          {orcidUser.avatar && (
+            <img
+              className={styles.avatar}
+              src={orcidUser.avatar}
+              alt={orcidUser.name}
+            />
           )}
-          <h2 className={styles.username}>{user.name}</h2>
+          <h2 className={styles.username}>{orcidUser.name}</h2>
         </header>
       </div>
       <div className={styles.usercontainer + " container"}>
         <section className={styles.userSidebar}>
-          <UserCard user={user} />
-          <UserAccountTabs hasEdit={hasEdit} />
+          <UserCard orcidUser={orcidUser} />
+          <UserAccountTabs hasEdit={hasEdit} isUser={isUser} />
         </section>
         <section className={styles.userViews}>
           <Outlet />
