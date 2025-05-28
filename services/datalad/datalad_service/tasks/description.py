@@ -26,12 +26,16 @@ async def update_description(store, dataset, description_fields, name=None, emai
             description_fields, {'License': 'CC0'})
     if description_fields is not None and any(description_fields):
         updated = edit_description(description_json, description_fields)
-        path = os.path.realpath(os.path.join(store.get_dataset_path(dataset), 'dataset_description.json'))
-        async with aiofiles.open(path, 'r+', encoding='utf-8', newline='') as description_file:
+        path = os.path.join(store.get_dataset_path(dataset), 'dataset_description.json')
+        real_path = os.path.realpath(path)
+        # Read the contents (may be annexed)
+        async with aiofiles.open(real_path, 'r+', encoding='utf-8', newline='') as description_file:
             description_file_contents = await description_file.read()
             if description != description_file_contents:
                 raise Exception('unexpected dataset_description.json contents',
                                 description, description_file_contents)
+        # If contents are sensible, reopen and overwrite (at the symlink target for annexed files)
+        async with aiofiles.open(path, "a+", encoding='utf-8', newline='') as description_file:
             await description_file.seek(0)
             await description_file.truncate(0)
             await description_file.write(json.dumps(
