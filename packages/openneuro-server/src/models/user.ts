@@ -30,6 +30,7 @@ export interface UserDocument extends Document {
   created: Date
   // Last time the user authenticated
   lastSeen: Date
+  // Location populated from User or Github
   location: string
   // Institution populated from ORCID
   institution: string
@@ -37,7 +38,11 @@ export interface UserDocument extends Document {
   github: string
   // User profile links
   links: string[]
+  // Added for Mongoose timestamps
+  updatedAt: Date
+  // Avatar populated from Github
   avatar: string
+  // githubSynced populated from Github OAuth use
   githubSynced: Date
 }
 
@@ -61,7 +66,7 @@ const userSchema = new Schema({
   github: { type: String, default: "" },
   githubSynced: { type: Date },
   links: { type: [String], default: [] },
-})
+}, { timestamps: { createdAt: false, updatedAt: true } })
 
 userSchema.index({ id: 1, provider: 1 }, { unique: true })
 // Allow case-insensitive email queries
