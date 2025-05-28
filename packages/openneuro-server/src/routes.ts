@@ -159,7 +159,6 @@ const routes = [
     middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
-<<<<<<< HEAD
   // Coral SSO Token Generation ---------------------
   {
     method: "get",
@@ -167,7 +166,6 @@ const routes = [
     middleware: [noCache, jwt.authenticate, auth.authenticated],
     handler: users.generateCoralSSOToken,
   },
-=======
 
   // GitHub authentication route
   {
@@ -183,7 +181,6 @@ const routes = [
     handler: githubAuth.authCallback,
   },
 
->>>>>>> master
   // Anonymous reviewer access
   {
     method: "get",
