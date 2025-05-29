@@ -109,11 +109,12 @@ async def write_new_changes(dataset_path, tag, new_changes, date):
     updated = edit_changes(changes, new_changes, tag, date)
     path = os.path.join(dataset_path, 'CHANGES')
     real_path = os.path.realpath(path)
-    # Open the working tree or annexed path to verify contents
-    async with aiofiles.open(real_path, 'r', encoding='utf-8') as changes_file:
-        changes_file_contents = await changes_file.read()
-        if changes.strip() != changes_file_contents.strip():
-            raise SnapshotChangesException('unexpected CHANGES content')
+    if os.path.exists(real_path):
+        # Open the working tree or annexed path to verify contents
+        async with aiofiles.open(real_path, 'r', encoding='utf-8') as changes_file:
+            changes_file_contents = await changes_file.read()
+            if changes.strip() != changes_file_contents.strip():
+                raise SnapshotChangesException('unexpected CHANGES content')
     # Open the working tree path to overwrite
     if path != real_path:
         os.unlink(path)
