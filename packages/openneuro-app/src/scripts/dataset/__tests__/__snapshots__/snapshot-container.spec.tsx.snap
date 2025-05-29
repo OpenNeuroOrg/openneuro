@@ -747,15 +747,8 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
               </div>
             </div>
             <div
-              class="dataset-comments"
-            >
-              <h2>
-                Comments
-              </h2>
-              <div>
-                Please sign in to contribute to the discussion.
-              </div>
-            </div>
+              id="coral_thread"
+            />
           </div>
         </div>
         <div
