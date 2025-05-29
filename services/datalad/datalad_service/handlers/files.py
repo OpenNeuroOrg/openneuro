@@ -4,9 +4,8 @@ from pathlib import Path
 
 import falcon
 import pygit2
-import aiofiles
 
-from datalad_service.common.git import git_show, git_tree
+from datalad_service.common.git import git_show, git_show_content, git_tree, OpenNeuroGitError
 from datalad_service.common.user import get_user_info
 from datalad_service.common.stream import update_file
 from datalad_service.tasks.files import remove_files
@@ -19,7 +18,6 @@ class FilesResource:
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
     async def on_get(self, req, resp, dataset, filename, snapshot='HEAD'):
-        ds_path = self.store.get_dataset_path(dataset)
         try:
             try:
                 repo = self.store.get_dataset_repo(dataset)
@@ -31,23 +29,15 @@ class FilesResource:
                         if Path(obj.name).stem == path.name:
                             filename = obj.name
                             break
-                file_content = git_show(repo, snapshot, filename)
-                # If the file begins with an annex path, return that path
-                if file_content[0:4096].find('.git/annex') != -1:
-                    # Resolve absolute path for annex target
-                    target_path = os.path.normpath(os.path.join(
-                        ds_path, os.path.dirname(filename), file_content))
-                    # Verify the annex path is within the dataset dir
-                    if ds_path == os.path.commonpath((ds_path, target_path)):
-                        fd = await aiofiles.open(target_path, 'rb')
-                        resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
-                        resp.status = falcon.HTTP_OK
-                    else:
-                        resp.media = {'error': 'file not found in git tree'}
-                        resp.status = falcon.HTTP_NOT_FOUND
-                else:
-                    resp.text = file_content
+                try:
+                    resp.stream, resp.content_length = await git_show_content(repo, snapshot, filename)
                     resp.status = falcon.HTTP_OK
+                except pygit2.GitError:
+                    resp.status = falcon.HTTP_NOT_FOUND
+                    resp.media = {'error': 'file not found in git tree'}
+                except OpenNeuroGitError:
+                    resp.status = falcon.HTTP_NOT_FOUND
+                    resp.media = {'error': 'invalid symlink for annexed file', 'filename': filename}
             except pygit2.GitError:
                 resp.status = falcon.HTTP_NOT_FOUND
                 resp.media = {'error': 'dataset repository does not exist or could not be opened'}

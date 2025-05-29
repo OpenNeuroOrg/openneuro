@@ -4,9 +4,10 @@ import uuid
 
 import falcon
 from datalad.api import Dataset
+import pygit2
 
 from datalad_service.tasks.snapshots import write_new_changes
-from datalad_service.common.git import git_show
+from datalad_service.common.git import git_show, git_show_content
 
 
 def test_get_snapshot(client):
@@ -158,10 +159,10 @@ def test_description_update(client, new_dataset):
     assert ds_description[key] == value
 
 
-def test_write_new_changes(datalad_store, new_dataset):
+async def test_write_new_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    write_new_changes(new_dataset.path, '1.0.1', [
-                      'Some changes'], '2019-01-01')
+    await write_new_changes(new_dataset.path, '1.0.1', [
+                            'Some changes'], '2019-01-01')
     # Manually make the commit without validation
     new_dataset.save('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
@@ -175,11 +176,11 @@ def test_write_new_changes(datalad_store, new_dataset):
 '''
 
 
-def test_write_with_empty_changes(datalad_store, new_dataset):
+async def test_write_with_empty_changes(datalad_store, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     new_dataset.remove('CHANGES')
-    write_new_changes(new_dataset.path, '1.0.1', [
-                      'Some changes'], '2019-01-01')
+    await write_new_changes(new_dataset.path, '1.0.1', [
+                            'Some changes'], '2019-01-01')
     # Manually make the commit without validation
     new_dataset.save('CHANGES')
     # Get a fresh dataset object and verify correct CHANGES
@@ -189,3 +190,68 @@ def test_write_with_empty_changes(datalad_store, new_dataset):
     assert git_show(repo, 'HEAD', 'CHANGES') == '''1.0.1 2019-01-01
   - Some changes
 '''
+
+
+async def test_annexed_changes_snapshot_update(client, new_dataset, datalad_store):
+    """
+    Tests creating a snapshot when CHANGES is an annexed file.
+    1. Modify .gitattributes to make CHANGES annexable and commit.
+    2. Use git-annex add to make CHANGES an annexed symlink and commit.
+    3. Create a snapshot via API, which updates CHANGES.
+    4. Verify CHANGES is still annexed and its content is updated in the snapshot.
+    """
+    ds_id = os.path.basename(new_dataset.path)
+    dataset_path = new_dataset.path
+
+    # Get initial CHANGES content from the fixture-created file
+    initial_changes_content = new_dataset.pathobj.joinpath('CHANGES').read_text()
+
+    gitattributes_path = new_dataset.pathobj.joinpath('.gitattributes')
+    gitattributes_path.write_text("* annex.backend=SHA256E\n* annex.largefiles=nothing\nCHANGES annex.largefiles=anything\n")
+
+    # Convert CHANGES to an annexed file
+    new_dataset.repo.call_git(['rm', '--cached', 'CHANGES'])
+    new_dataset.repo.call_annex(['add', '.gitattributes', 'CHANGES'])
+
+    # Commit the annexed CHANGES file
+    new_dataset.save(message="Annex CHANGES file (now a symlink)")
+
+    # Verify CHANGES is now a symlink (annexed) in the working tree
+    assert os.path.islink(os.path.join(dataset_path, 'CHANGES')), "CHANGES file was not annexed as expected before snapshot."
+
+    # Define snapshot details
+    snapshot_tag = "1.1.0"
+    snapshot_desc_fields = {"Name": "Dataset with Annexed CHANGES"}
+    snapshot_changes_list = ["A new entry for the annexed CHANGES file."]
+
+    # Create the snapshot
+    async with client as conductor:
+        response = await conductor.simulate_post(
+            f'/datasets/{ds_id}/snapshots/{snapshot_tag}',
+            json={
+                'description_fields': snapshot_desc_fields,
+                'snapshot_changes': snapshot_changes_list,
+                'skip_publishing': True
+            }
+        )
+        assert response.status == falcon.HTTP_OK, f"Snapshot creation failed: {response.text}"
+        created_snapshot_data = response.json
+        snapshot_hexsha = created_snapshot_data['hexsha']
+
+    # Verify the CHANGES file in the created snapshot
+    repo = datalad_store.get_dataset_repo(ds_id)
+    commit = repo.revparse_single(snapshot_hexsha)
+
+    # Check if CHANGES is still a symlink (annexed)
+    changes_entry = commit.tree['CHANGES']
+    assert changes_entry.filemode == pygit2.GIT_FILEMODE_LINK, "CHANGES file is not a symlink in the snapshot commit."
+
+    # Verify the content of CHANGES
+    actual_changes_content, size = await git_show_content(repo, snapshot_hexsha, 'CHANGES')
+    lines_list = b''.join([chunk async for chunk in actual_changes_content]).decode().splitlines()
+
+    assert lines_list[0].startswith(snapshot_tag)
+    assert lines_list[1].strip() == f"- {snapshot_changes_list[0]}"
+    expected_initial_part_in_snapshot = initial_changes_content.strip()
+    actual_initial_part_in_snapshot = "\n".join(lines_list[2:]).strip()
+    assert actual_initial_part_in_snapshot == expected_initial_part_in_snapshot, "Initial CHANGES content not preserved correctly in snapshot."
