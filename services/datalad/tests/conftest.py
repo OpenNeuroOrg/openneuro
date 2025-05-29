@@ -179,3 +179,13 @@ def client(datalad_store, monkeypatch):
     monkeypatch.setenv('DATALAD_DATASET_PATH', str(datalad_store.annex_path))
     monkeypatch.setattr(datalad_service.config, 'DATALAD_DATASET_PATH', str(datalad_store.annex_path))
     return testing.TestClient(create_app())
+
+
+@pytest.fixture(autouse=True)
+def mock_validate_dataset_task(monkeypatch):
+    """
+    Mocks the validate_dataset task to prevent event loop errors in tests.
+    """
+    async def async_noop_validator(*args, **kwargs):
+        return None
+    monkeypatch.setattr('datalad_service.tasks.files.validate_dataset', async_noop_validator)
