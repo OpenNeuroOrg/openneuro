@@ -1,5 +1,4 @@
 import asyncio
-import io
 import os
 import pathlib
 import re
@@ -30,57 +29,56 @@ def git_show(repo, committish, obj):
     return str(result)
 
 
-async def read_from_bytes_as_stream(data: bytes, chunk_size: int = 1024):
-    """
-    Reads from a bytes object as an async stream, yielding chunks.
-    """
-    buffer = io.BytesIO(data)
-    while True:
-        chunk = await asyncio.to_thread(buffer.read, chunk_size)
-        if not chunk:
-            break
-        yield chunk
+async def optional_await(maybe_awaitable, *args, **kwargs):
+    """Await a non-couroutine function."""
+    if asyncio.iscoroutinefunction(maybe_awaitable):
+        return await maybe_awaitable(*args, **kwargs)
+    else:
+        return maybe_awaitable(*args, **kwargs)
 
 
-async def read_from_aiofile_as_stream(aiofile_obj, chunk_size: int = 1024):
-    """
-    Reads from an aiofiles file object as an async stream, yielding chunks.
-    Ensures the file is closed after streaming.
-    """
+async def stream_from_reader(reader, start=None, chunk_size: int = 1024):
+    """Stream from an asyncio or pygit2.BlobIO reader."""
+    if start is not None:
+        yield start
     try:
         while True:
-            chunk = await aiofile_obj.read(chunk_size)
+            chunk = await optional_await(reader.read, chunk_size)
             if not chunk:
                 break
             yield chunk
     finally:
-        await aiofile_obj.close()
+        await optional_await(reader.close)
 
 
 async def git_show_content(repo, committish, filename):
     """
     Similar to git_show but resolves annexed content if possible.
-    
+
     Returns a stream for the consumer.
     Annex content is typically much larger and worth streaming.
     """
     dataset_root = str(pathlib.Path(repo.path).parent)
     commit, _ = repo.resolve_refish(committish)
-    data_bytes = (commit.tree / filename).read_raw()
-    result = str(from_bytes(data_bytes[0:4096]).best())
-    if result.find('.git/annex') != -1:
+    blob = commit.tree / filename
+    blobio = pygit2.BlobIO(blob)
+    initial_bytes = blobio.read(4096)
+    if initial_bytes.find(b".git/annex") != -1:
+        with blobio:
+            result = str(from_bytes(initial_bytes + blobio.read()).best())
         # Resolve absolute path for annex target
-        target_path = os.path.normpath(os.path.join(
-            dataset_root, os.path.dirname(filename), result))
+        target_path = os.path.normpath(
+            os.path.join(dataset_root, os.path.dirname(filename), result)
+        )
         # Verify the annex path is within the dataset dir
         if dataset_root == os.path.commonpath((dataset_root, target_path)):
-            file_obj = await aiofiles.open(target_path, 'rb')
-            return read_from_aiofile_as_stream(file_obj), os.path.getsize(target_path)
+            file_obj = await aiofiles.open(target_path, "rb")
+            return stream_from_reader(file_obj), os.path.getsize(target_path)
         else:
             raise OpenNeuroGitError("Invalid symlinked path in git_show_content")
     else:
         # Git object
-        return read_from_bytes_as_stream(data_bytes), len(data_bytes)
+        return stream_from_reader(blobio, start=initial_bytes), blob.size
 
 
 def git_show_object(repo, obj):
