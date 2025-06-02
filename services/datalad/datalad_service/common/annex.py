@@ -3,7 +3,10 @@ import io
 import json
 from mmap import mmap
 import subprocess
+import os
 import urllib.parse
+
+import aiofiles
 
 import datalad_service.config
 
@@ -12,6 +15,10 @@ SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 S3_BUCKETS_WHITELIST = ['openneuro.org', 'openneuro-dev-datalad-public', 'openneuro-derivatives', 'bobsrepository']
 
+
+class EditAnnexedFileException(Exception):
+    """Snapshot conflicts with existing name."""
+    pass
 
 def init_annex(dataset_path):
     """Setup git-annex within an existing git repo"""
@@ -267,3 +274,24 @@ def is_git_annex_remote(dataset_path, remote):
     else:
         # Nothing like this exists
         return False
+
+
+async def edit_annexed_file(path, expected_content, new_content, encoding="utf-8"):
+    """
+    Edit a git or annexed file by correctly removing the symlink and writing the new content.
+
+    Check contents to verify the expected object is being modified.
+    """
+    real_path = os.path.realpath(path)
+    # Test if the annexed target exists
+    if os.path.exists(real_path):
+        # Open the working tree or annexed path to verify contents
+        async with aiofiles.open(real_path, 'r', encoding='utf-8', newline='') as annexed_file:
+            annexed_file_contents = await annexed_file.read()
+            if expected_content != annexed_file_contents:
+                raise EditAnnexedFileException('unexpected {path} content')
+    # Open the working tree path to overwrite
+    if path != real_path:
+        os.unlink(path)
+    async with aiofiles.open(path, 'w', encoding=encoding, newline='') as changes_file:
+        await changes_file.write(new_content)

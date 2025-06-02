@@ -2,9 +2,9 @@ import os
 from datetime import datetime
 import re
 
-import aiofiles
 import pygit2
 
+from datalad_service.common.annex import edit_annexed_file
 from datalad_service.common.git import git_show, git_show_content, git_tag
 from datalad_service.tasks.dataset import create_datalad_config
 from datalad_service.tasks.description import update_description
@@ -13,16 +13,6 @@ from datalad_service.tasks.files import commit_files
 
 class SnapshotExistsException(Exception):
     """Snapshot conflicts with existing name."""
-    pass
-
-
-class SnapshotDescriptionException(Exception):
-    """An error processing the snapshot description"""
-    pass
-
-
-class SnapshotChangesException(Exception):
-    """An error processing the snapshot CHANGES"""
     pass
 
 
@@ -108,18 +98,7 @@ async def write_new_changes(dataset_path, tag, new_changes, date):
     changes = await get_head_changes(dataset_path)
     updated = edit_changes(changes, new_changes, tag, date)
     path = os.path.join(dataset_path, 'CHANGES')
-    real_path = os.path.realpath(path)
-    if os.path.exists(real_path):
-        # Open the working tree or annexed path to verify contents
-        async with aiofiles.open(real_path, 'r', encoding='utf-8') as changes_file:
-            changes_file_contents = await changes_file.read()
-            if changes.strip() != changes_file_contents.strip():
-                raise SnapshotChangesException('unexpected CHANGES content')
-    # Open the working tree path to overwrite
-    if path != real_path:
-        os.unlink(path)
-    async with aiofiles.open(path, 'w', encoding='utf-8') as changes_file:
-        await changes_file.write(updated)
+    await edit_annexed_file(path, changes, updated)
     return updated
 
 

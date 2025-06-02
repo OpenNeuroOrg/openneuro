@@ -2,6 +2,7 @@ import aiofiles
 import json
 import os
 
+from datalad_service.common.annex import edit_annexed_file
 from datalad_service.common.git import git_show_content
 from datalad_service.tasks.files import commit_files
 
@@ -27,19 +28,8 @@ async def update_description(store, dataset, description_fields, name=None, emai
     if description_fields is not None and any(description_fields):
         updated = edit_description(description_json, description_fields)
         path = os.path.join(store.get_dataset_path(dataset), 'dataset_description.json')
-        real_path = os.path.realpath(path)
-        # Read the contents (may be annexed)
-        async with aiofiles.open(real_path, 'r+', encoding='utf-8', newline='') as description_file:
-            description_file_contents = await description_file.read()
-            if description != description_file_contents:
-                raise Exception('unexpected dataset_description.json contents',
-                                description, description_file_contents)
-        # If contents are sensible, reopen and overwrite (at the symlink target for annexed files)
-        async with aiofiles.open(path, "a+", encoding='utf-8', newline='') as description_file:
-            await description_file.seek(0)
-            await description_file.truncate(0)
-            await description_file.write(json.dumps(
-                updated, indent=4, ensure_ascii=False))
+        await edit_annexed_file(path, description, json.dumps(
+            updated, indent=4, ensure_ascii=False))
         # Commit new content, run validator
         commit_files(store, dataset, [
             'dataset_description.json'])
