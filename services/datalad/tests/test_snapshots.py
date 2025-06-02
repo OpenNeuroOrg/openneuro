@@ -255,3 +255,69 @@ async def test_annexed_changes_snapshot_update(client, new_dataset, datalad_stor
     expected_initial_part_in_snapshot = initial_changes_content.strip()
     actual_initial_part_in_snapshot = "\n".join(lines_list[2:]).strip()
     assert actual_initial_part_in_snapshot == expected_initial_part_in_snapshot, "Initial CHANGES content not preserved correctly in snapshot."
+
+
+async def test_annexed_description_snapshot_update(client, new_dataset, datalad_store):
+    """
+    Tests creating a snapshot when dataset_description.json is an annexed file.
+    """
+    ds_id = os.path.basename(new_dataset.path)
+    dataset_path = new_dataset.path
+
+    # Get initial dataset_description.json content
+    initial_description_path = new_dataset.pathobj.joinpath('dataset_description.json')
+    initial_description_content = json.loads(initial_description_path.read_text())
+
+    gitattributes_path = new_dataset.pathobj.joinpath('.gitattributes')
+    # Ensure other BIDS metadata files are not annexed by default, then add rule for dataset_description.json
+    gitattributes_path.write_text("* annex.backend=SHA256E\n* annex.largefiles=nothing\ndataset_description.json annex.largefiles=anything\n")
+
+
+    # Convert dataset_description.json to an annexed file
+    new_dataset.repo.call_git(['rm', '--cached', 'dataset_description.json'])
+    new_dataset.repo.call_annex(['add', '.gitattributes', 'dataset_description.json'])
+
+    # Commit the annexed dataset_description.json file
+    new_dataset.save(message="Annex dataset_description.json file (now a symlink)")
+
+    # Verify dataset_description.json is now a symlink (annexed) in the working tree
+    assert os.path.islink(os.path.join(dataset_path, 'dataset_description.json')), "dataset_description.json file was not annexed as expected before snapshot."
+
+    # Define snapshot details
+    snapshot_tag = "1.1.0"
+    updated_name = "Dataset with Annexed Description"
+    snapshot_desc_fields = {"Name": updated_name}
+    snapshot_changes_list = ["Updated dataset_description.json while it was annexed."]
+
+    # Create the snapshot
+    async with client as conductor:
+        response = await conductor.simulate_post(
+            f'/datasets/{ds_id}/snapshots/{snapshot_tag}',
+            json={
+                'description_fields': snapshot_desc_fields,
+                'snapshot_changes': snapshot_changes_list,
+                'skip_publishing': True
+            }
+        )
+        assert response.status == falcon.HTTP_OK, f"Snapshot creation failed: {response.text}"
+        created_snapshot_data = response.json
+        snapshot_hexsha = created_snapshot_data['hexsha']
+
+    # Verify the dataset_description.json file in the created snapshot
+    repo = datalad_store.get_dataset_repo(ds_id)
+    commit = repo.revparse_single(snapshot_hexsha)
+
+    # Check if dataset_description.json is still a symlink (annexed)
+    description_entry = commit.tree['dataset_description.json']
+    assert description_entry.filemode == pygit2.GIT_FILEMODE_LINK, "dataset_description.json file is not a symlink in the snapshot commit."
+
+    # Verify the content of dataset_description.json
+    actual_description_content_stream, size = await git_show_content(repo, snapshot_hexsha, 'dataset_description.json')
+    actual_description_content_bytes = b''.join([chunk async for chunk in actual_description_content_stream])
+    actual_description_data = json.loads(actual_description_content_bytes.decode())
+
+    assert actual_description_data['Name'] == updated_name, "Dataset Name not updated correctly in annexed description."
+    # Check if other fields from the initial description are preserved
+    for key, value in initial_description_content.items():
+        if key != 'Name' and key != 'License': # The field we explicitly updated and LICENSE (updated automatically)
+            assert actual_description_data.get(key) == value, f"Field '{key}' from initial description not preserved correctly."
