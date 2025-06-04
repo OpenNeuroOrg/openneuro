@@ -7,6 +7,7 @@ import {
   storeKey,
 } from "./transferKey.ts"
 import { assertEquals } from "@std/assert/equals"
+import { join } from "@std/path"
 import { assertStrictEquals } from "@std/assert/strict-equals"
 import { mockFetch } from "../tests/fetch-stub.ts"
 
@@ -58,6 +59,35 @@ Deno.test({
       assertEquals(result, testFileSize)
     } finally {
       mocked.restore()
+    }
+  },
+})
+
+Deno.test({
+  name: "storeKey() uploads successfully when source is a symlink",
+  async fn() {
+    const mocked = mockFetch(new Response("", { status: 200 }))
+    const testData = "symlink test data"
+    const tempDir = await Deno.makeTempDir()
+    const realFilePath = join(tempDir, "realfile.txt")
+    const symlinkPath = join(tempDir, "symlink.txt")
+    const textEncoder = new TextEncoder()
+
+    try {
+      await Deno.writeFile(realFilePath, textEncoder.encode(testData))
+      await Deno.symlink(realFilePath, symlinkPath)
+
+      const testFileSize = testData.length
+
+      const result = await storeKey(
+        { url: "http://localhost", token: "" },
+        "symlink_key",
+        symlinkPath,
+      )
+      assertEquals(result, testFileSize)
+    } finally {
+      mocked.restore()
+      await Deno.remove(tempDir, { recursive: true })
     }
   },
 })
