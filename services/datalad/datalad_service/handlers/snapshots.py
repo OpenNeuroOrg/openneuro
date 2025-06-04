@@ -4,10 +4,11 @@ import logging
 
 import falcon
 
-from datalad_service.tasks.snapshots import SnapshotDescriptionException, create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
+from datalad_service.common.annex import EditAnnexedFileException
+from datalad_service.common.git import delete_tag
+from datalad_service.tasks.snapshots import create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
 from datalad_service.tasks.files import get_tree
 from datalad_service.tasks.publish import export_dataset, monitor_remote_configs
-from datalad_service.common.git import delete_tag
 
 
 class SnapshotResource:
@@ -52,7 +53,7 @@ class SnapshotResource:
         ds_path = self.store.get_dataset_path(dataset)
 
         try:
-            created = create_snapshot(
+            created = await create_snapshot(
                 self.store, dataset, snapshot, description_fields, snapshot_changes)
             resp.media = created
             resp.status = falcon.HTTP_OK
@@ -65,7 +66,7 @@ class SnapshotResource:
         except SnapshotExistsException as err:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_CONFLICT
-        except SnapshotDescriptionException as err:
+        except EditAnnexedFileException as err:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_BAD_REQUEST
 

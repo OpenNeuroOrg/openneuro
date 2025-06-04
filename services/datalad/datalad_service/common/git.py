@@ -1,9 +1,12 @@
+import asyncio
+import os
 import pathlib
 import re
 import subprocess
 import logging
 import sentry_sdk
 
+import aiofiles
 import pygit2
 from charset_normalizer import from_bytes
 
@@ -24,6 +27,58 @@ def git_show(repo, committish, obj):
     data_bytes = (commit.tree / obj).read_raw()
     result = from_bytes(data_bytes).best()
     return str(result)
+
+
+async def optional_await(maybe_awaitable, *args, **kwargs):
+    """Await a non-couroutine function."""
+    if asyncio.iscoroutinefunction(maybe_awaitable):
+        return await maybe_awaitable(*args, **kwargs)
+    else:
+        return maybe_awaitable(*args, **kwargs)
+
+
+async def stream_from_reader(reader, start=None, chunk_size: int = 1024):
+    """Stream from an asyncio or pygit2.BlobIO reader."""
+    if start is not None:
+        yield start
+    try:
+        while True:
+            chunk = await optional_await(reader.read, chunk_size)
+            if not chunk:
+                break
+            yield chunk
+    finally:
+        await optional_await(reader.close)
+
+
+async def git_show_content(repo, committish, filename):
+    """
+    Similar to git_show but resolves annexed content if possible.
+
+    Returns a stream for the consumer.
+    Annex content is typically much larger and worth streaming.
+    """
+    dataset_root = str(pathlib.Path(repo.path).parent)
+    commit, _ = repo.resolve_refish(committish)
+    blob = commit.tree / filename
+    blobio = pygit2.BlobIO(blob)
+    initial_bytes = blobio.read(4096)
+    if initial_bytes.find(b".git/annex") != -1:
+        with blobio:
+            result = str(from_bytes(initial_bytes + blobio.read()).best())
+        # Resolve absolute path for annex target
+        target_path = os.path.normpath(
+            os.path.join(dataset_root, os.path.dirname(filename), result)
+        )
+        # Verify the annex path is within the dataset dir
+        if dataset_root == os.path.commonpath((dataset_root, target_path)):
+            file_obj = await aiofiles.open(target_path, "rb")
+            return stream_from_reader(file_obj), os.path.getsize(target_path)
+        else:
+            raise OpenNeuroGitError("Invalid symlinked path in git_show_content")
+    else:
+        # Git object
+        return stream_from_reader(blobio, start=initial_bytes), blob.size
 
 
 def git_show_object(repo, obj):

@@ -4,7 +4,8 @@ import re
 
 import pygit2
 
-from datalad_service.common.git import git_show, git_tag
+from datalad_service.common.annex import edit_annexed_file
+from datalad_service.common.git import git_show, git_show_content, git_tag
 from datalad_service.tasks.dataset import create_datalad_config
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.files import commit_files
@@ -12,11 +13,6 @@ from datalad_service.tasks.files import commit_files
 
 class SnapshotExistsException(Exception):
     """Snapshot conflicts with existing name."""
-    pass
-
-
-class SnapshotDescriptionException(Exception):
-    """An error processing the snapshot description"""
     pass
 
 
@@ -85,45 +81,38 @@ def edit_changes(changes, new_changes, tag, date):
     return '\n'.join(changelog_lines) + '\n'
 
 
-def get_head_changes(dataset_path):
+async def get_head_changes(dataset_path):
     try:
         repo = pygit2.Repository(dataset_path)
-        return git_show(repo, 'HEAD', 'CHANGES')
+        changes_stream, size = await git_show_content(repo, 'HEAD', 'CHANGES')
+        if changes_stream:
+            changes_bytes_list = []
+            async for chunk in changes_stream:
+                changes_bytes_list.append(chunk)
+            return b"".join(changes_bytes_list).decode()
     except KeyError:
-        return None
+        return ''
 
 
-def write_new_changes(dataset_path, tag, new_changes, date):
-    changes = get_head_changes(dataset_path)
-    # Prevent adding the git error if the file does not exist in HEAD
-    if not changes:
-        changes = ''
+async def write_new_changes(dataset_path, tag, new_changes, date):
+    changes = await get_head_changes(dataset_path)
     updated = edit_changes(changes, new_changes, tag, date)
     path = os.path.join(dataset_path, 'CHANGES')
-    with open(path, 'a+', encoding='utf-8') as changes_file:
-        # Seek first, this is r+ but creates the file if needed
-        changes_file.seek(0)
-        changes_file_contents = changes_file.read()
-        if changes.strip() != changes_file_contents.strip():
-            raise SnapshotDescriptionException('unexpected CHANGES content')
-        # Now that we have the file, overwrite it with the new one
-        changes_file.seek(0)
-        changes_file.truncate(0)
-        changes_file.write(updated)
+    await edit_annexed_file(path, changes, updated)
     return updated
 
 
-def update_changes(store, dataset, tag, new_changes):
+async def update_changes(store, dataset, tag, new_changes):
     dataset_path = store.get_dataset_path(dataset)
     if new_changes is not None and len(new_changes) > 0:
         current_date = datetime.today().strftime('%Y-%m-%d')
-        updated = write_new_changes(
+        updated = await write_new_changes(
             dataset_path, tag, new_changes, current_date)
         # Commit new content, run validator
         commit_files(store, dataset, ['CHANGES'])
         return updated
     else:
-        return get_head_changes(dataset_path)
+        return await get_head_changes(dataset_path)
 
 
 def validate_snapshot_name(store, dataset, snapshot):
@@ -151,7 +140,7 @@ def save_snapshot(store, dataset, snapshot):
     repo.references.create(f'refs/tags/{snapshot}', str(repo.head.target))
 
 
-def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
+async def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
     """
     Create a new snapshot (git tag).
 
@@ -159,7 +148,7 @@ def create_snapshot(store, dataset, snapshot, description_fields, snapshot_chang
     """
     validate_snapshot_name(store, dataset, snapshot)
     validate_datalad_config(store, dataset)
-    update_description(store, dataset, description_fields)
-    update_changes(store, dataset, snapshot, snapshot_changes)
+    await update_description(store, dataset, description_fields)
+    await update_changes(store, dataset, snapshot, snapshot_changes)
     save_snapshot(store, dataset, snapshot)
     return get_snapshot(store, dataset, snapshot)
