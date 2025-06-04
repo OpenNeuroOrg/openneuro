@@ -43,7 +43,7 @@ export async function addGitFiles(
   ) {
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
     if (
-      relativePath === ".bidsignore" || relativePath === ".gitattributes" ||
+      relativePath === ".bidsignore" ||
       !relativePath.startsWith(".")
     ) {
       worker.postMessage({
