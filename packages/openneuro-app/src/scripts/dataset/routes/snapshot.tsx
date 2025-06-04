@@ -18,7 +18,7 @@ const FormRow = styled.div`
 export const NoErrors = ({ validation, authors, children }) => {
   const noErrors = validation?.errors === 0
   // zero authors will cause DOI minting to fail
-  const hasAuthor = authors.length > 0
+  const hasAuthor = authors?.length > 0
   if (noErrors && hasAuthor) {
     return children
   } else {
