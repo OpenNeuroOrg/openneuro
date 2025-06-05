@@ -27,9 +27,6 @@ export const UserQuery: React.FC = () => {
     return <FourOFourPage />
   }
 
-  if (!profile || !profile.sub) {
-    return <FourOFourPage />
-  }
   // is admin or profile matches id from the user data being returned
   const isUser = (user?.id === profile?.sub) ? true : false
   const hasEdit = isAdminUser || (user?.id === profile?.sub) ? true : false

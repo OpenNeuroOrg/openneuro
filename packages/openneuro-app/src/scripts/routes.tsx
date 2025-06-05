@@ -19,9 +19,6 @@ import { DatasetMetadata } from "./pages/metadata/dataset-metadata"
 import { TermsPage } from "./pages/terms"
 import { ImageAttribution } from "./pages/image-attribution"
 import { UserQuery } from "./users/user-query"
-import LoggedIn from "../scripts/authentication/logged-in"
-import LoggedOut from "../scripts/authentication/logged-out"
-import FourOThreePage from "./errors/403page"
 import { OrcidLinkPage } from "./pages/orcid-link"
 
 const AppRoutes: React.VoidFunctionComponent = () => (
@@ -43,16 +40,7 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/orcid-link" element={<OrcidLinkPage />} />
     <Route
       path="/user/:orcid/*"
-      element={
-        <>
-          <LoggedIn>
-            <UserQuery />
-          </LoggedIn>
-          <LoggedOut>
-            <FourOThreePage />
-          </LoggedOut>
-        </>
-      }
+      element={<UserQuery />}
     />
     <Route
       path="/saved"
