@@ -159,6 +159,13 @@ const routes = [
     middleware: [noCache, orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
+  // Coral SSO Token Generation ---------------------
+  {
+    method: "get",
+    url: "/auth/coral-sso",
+    middleware: [noCache, jwt.authenticate, auth.authenticated],
+    handler: users.generateCoralSSOToken,
+  },
 
   // GitHub authentication route
   {

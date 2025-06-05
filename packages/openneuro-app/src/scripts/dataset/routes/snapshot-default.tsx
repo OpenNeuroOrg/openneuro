@@ -3,7 +3,7 @@ import { Markdown } from "../../utils/markdown"
 import { ReadMore } from "../../components/read-more/ReadMore"
 import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"
-import Comments from "../comments/comments"
+import { CoralEmbed } from "../comments/coral-embed"
 
 /**
  * Default tab for snapshot pages
@@ -30,10 +30,9 @@ export const SnapshotDefault = ({ dataset, snapshot }) => (
       datasetPermissions={dataset.permissions}
       summary={snapshot?.summary}
     />
-    <Comments
-      datasetId={dataset.id}
-      uploader={dataset.uploader}
-      comments={dataset.comments}
+    <CoralEmbed
+      storyID={dataset.id}
+      modalities={dataset.draft.summary.modalities}
     />
   </>
 )

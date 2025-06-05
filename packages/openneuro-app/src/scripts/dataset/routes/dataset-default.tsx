@@ -3,49 +3,50 @@ import { Markdown } from "../../utils/markdown"
 import { ReadMore } from "../../components/read-more/ReadMore"
 import { MetaDataBlock } from "../components/MetaDataBlock"
 import Files from "../files/files"
-import Comments from "../comments/comments"
 import EditDescriptionField from "../fragments/edit-description-field"
+import { CoralEmbed } from "../comments/coral-embed"
 
 /**
  * Default tab for dataset draft pages
  */
-export const DatasetDefault = ({ dataset, hasEdit }) => (
-  <>
-    <MetaDataBlock
-      heading="README"
-      className="dataset-readme markdown-body"
-      item={dataset.draft.readme}
-      renderEditor={() => (
-        <EditDescriptionField
-          datasetId={dataset.id}
-          field="readme"
-          rows={12}
-          description={dataset.draft.readme}
-          editMode={hasEdit}
-        >
-          <ReadMore
-            id="readme"
-            expandLabel="Read More"
-            collapseLabel="Collapse"
+export const DatasetDefault = ({ dataset, hasEdit }) => {
+  return (
+    <>
+      <MetaDataBlock
+        heading="README"
+        className="dataset-readme markdown-body"
+        item={dataset.draft.readme}
+        renderEditor={() => (
+          <EditDescriptionField
+            datasetId={dataset.id}
+            field="readme"
+            rows={12}
+            description={dataset.draft.readme}
+            editMode={hasEdit}
           >
-            <Markdown>{dataset.draft.readme || "N/A"}</Markdown>
-          </ReadMore>
-        </EditDescriptionField>
-      )}
-    />
-    <Files
-      datasetId={dataset.id}
-      snapshotTag={null}
-      datasetName={dataset.draft.description.Name}
-      files={dataset.draft.files}
-      editMode={hasEdit}
-      datasetPermissions={dataset.permissions}
-      summary={dataset.draft?.summary}
-    />
-    <Comments
-      datasetId={dataset.id}
-      uploader={dataset.uploader}
-      comments={dataset.comments}
-    />
-  </>
-)
+            <ReadMore
+              id="readme"
+              expandLabel="Read More"
+              collapseLabel="Collapse"
+            >
+              <Markdown>{dataset.draft.readme || "N/A"}</Markdown>
+            </ReadMore>
+          </EditDescriptionField>
+        )}
+      />
+      <Files
+        datasetId={dataset.id}
+        snapshotTag={null}
+        datasetName={dataset.draft.description.Name}
+        files={dataset.draft.files}
+        editMode={hasEdit}
+        datasetPermissions={dataset.permissions}
+        summary={dataset.draft?.summary}
+      />
+      <CoralEmbed
+        storyID={dataset.id}
+        modalities={dataset.draft.summary.modalities}
+      />
+    </>
+  )
+}

@@ -45,6 +45,9 @@ interface Blob {
 
 interface Window {
   showDirectoryPicker: any
+  Coral?: {
+    createStreamEmbed: (config: any) => void
+  }
 }
 
 interface Navigator {

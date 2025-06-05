@@ -34,6 +34,9 @@ const config = {
     jwt: {
       secret: process.env.JWT_SECRET,
     },
+    coral: {
+      secret: process.env.CORAL_JWT_SECRET,
+    },
   },
   mongo: {
     url: process.env.MONGO_URL,
