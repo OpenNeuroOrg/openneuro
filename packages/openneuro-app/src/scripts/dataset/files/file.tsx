@@ -170,7 +170,7 @@ const File = ({
         {editMode && (
           <Media greaterThanOrEqual="medium">
             <Tooltip tooltip="Update">
-              <UpdateFile datasetId={datasetId} path={path}>
+              <UpdateFile datasetId={datasetId} path={path} filename={filename}>
                 <i className="fa fa-cloud-upload" />
               </UpdateFile>
             </Tooltip>

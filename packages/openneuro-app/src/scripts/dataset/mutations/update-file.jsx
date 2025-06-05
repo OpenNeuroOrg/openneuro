@@ -7,6 +7,7 @@ const UpdateFile = ({
   directory = false,
   multiple = false,
   path = null,
+  filename = null,
   children,
 }) => {
   return (
@@ -18,11 +19,25 @@ const UpdateFile = ({
             className="update-file"
             onChange={(e) => {
               e.preventDefault()
-              uploader.resumeDataset(
-                datasetId,
-                path,
-                false,
-              )({ files: e.target.files })
+              if (filename && e.target.files.length === 1) {
+                // In the case that a single file was selected,
+                // name that file based on the original path and not the client side name.
+                const target = e.target.files[0]
+                const files = [
+                  new File([target], filename, { type: target.type }),
+                ]
+                uploader.resumeDataset(
+                  datasetId,
+                  path,
+                  false,
+                )({ files })
+              } else {
+                uploader.resumeDataset(
+                  datasetId,
+                  path,
+                  false,
+                )({ files: e.target.files })
+              }
             }}
             webkitdirectory={directory ? "true" : undefined}
             multiple={multiple && true}
