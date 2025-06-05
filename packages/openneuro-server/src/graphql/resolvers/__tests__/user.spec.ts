@@ -133,6 +133,12 @@ describe("user resolvers", () => {
   })
 
   describe("users()", () => {
+    it("rejects data for non-admin context", async () => {
+      await expect(users(null, {}, nonAdminContext)).rejects.toThrow(
+        "You must be a site admin to retrieve users",
+      )
+    })
+
     it("returns all non-migrated users by default, sorted by updatedAt desc then _id desc", async () => {
       const result = await users(null, {}, adminContext)
       // u5 is migrated. 6 non-migrated users: u1, u2, u3, u4, u6, u7
@@ -341,19 +347,6 @@ describe("user resolvers", () => {
       )
       expect(result.users.length).toBe(1)
       expect(result.totalCount).toBe(3) // u1, u4, u6 are admins
-    })
-
-    it("returns data for non-admin context (as current resolver has no top-level admin check)", async () => {
-      const result = await users(null, {}, nonAdminContext) // Using nonAdminContext
-      expect(result.users.length).toBe(6) // Should still return all non-migrated users
-      expect(result.totalCount).toBe(6)
-
-      const dbSortedUsers = await User.find({ migrated: { $ne: true } })
-        .sort({ updatedAt: -1, _id: -1 })
-        .exec()
-      expect(result.users.map((u) => u.id)).toEqual(
-        dbSortedUsers.map((u) => u.id),
-      )
     })
   })
 })
