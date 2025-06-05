@@ -66,8 +66,15 @@ export const users = async (
     offset?: number
     orderBy?: { field: string; order?: "ascending" | "descending" }[]
   },
-  _context: GraphQLContext,
+  context: GraphQLContext,
 ) => {
+  // --- check admin ---
+  if (!context.userInfo?.admin) {
+    return Promise.reject(
+      new Error("You must be a site admin to retrieve users"),
+    )
+  }
+
   const filter: {
     admin?: MongoQueryOperator<boolean>
     blocked?: MongoQueryOperator<boolean>
