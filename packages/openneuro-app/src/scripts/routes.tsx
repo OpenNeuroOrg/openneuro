@@ -20,6 +20,7 @@ import { TermsPage } from "./pages/terms"
 import { ImageAttribution } from "./pages/image-attribution"
 import { UserQuery } from "./users/user-query"
 import { OrcidLinkPage } from "./pages/orcid-link"
+import FourOThreePage from "./errors/403page"
 
 const AppRoutes: React.VoidFunctionComponent = () => (
   <Routes>
