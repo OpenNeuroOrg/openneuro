@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 // TODO - Re-enable code splitting these when we can
 import DatasetQuery from "./dataset/dataset-query"
 //import PreRefactorDatasetProps from './dataset/dataset-pre-refactor-container'
-
+import { isAdmin } from "./authentication/admin-user.jsx"
 import FaqPage from "./pages/faq/faq"
 import FrontPageContainer from "./pages/front-page/front-page"
 import Admin from "./pages/admin/admin"
@@ -31,7 +31,10 @@ const AppRoutes: React.VoidFunctionComponent = () => (
     <Route path="/keygen" element={<APIKey />} />
     <Route path="/datasets/:datasetId/*" element={<DatasetQuery />} />
     <Route path="/search/*" element={<SearchRoutes />} />
-    <Route path="/admin/*" element={<Admin />} />
+    <Route
+      path="/admin/*"
+      element={isAdmin() ? <Admin /> : <FourOThreePage />}
+    />
     <Route path="/error/*" element={<ErrorRoute />} />
     <Route path="/pet" element={<PETRedirect />} />
     <Route path="/cite" element={<Citation />} />
