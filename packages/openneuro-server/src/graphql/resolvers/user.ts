@@ -7,7 +7,11 @@ function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
 
-export async function user(obj, { id }, { userInfo }) {
+export async function user(
+  obj,
+  { id },
+  { userInfo }: { userInfo?: Record<string, unknown> } = {},
+) {
   let user
   if (isValidOrcid(id)) {
     user = await User.findOne({
