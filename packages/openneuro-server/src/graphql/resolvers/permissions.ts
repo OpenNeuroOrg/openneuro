@@ -34,7 +34,7 @@ const publishPermissions = async (datasetId) => {
     userPermissions: await Promise.all(
       userPermissions.map(async (userPermission) => ({
         ...userPermission,
-        user: await user(ds, { id: userPermission.userId }, null),
+        user: await user(ds, { id: userPermission.userId }),
       })),
     ),
   }
