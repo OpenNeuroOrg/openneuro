@@ -50,7 +50,10 @@ class DatasetResource:
         dataset_path = self.store.get_dataset_path(dataset)
 
         if await aiofiles.os.path.exists(dataset_path):
-            await delete_siblings(dataset)
+            repo = pygit2.Repository(dataset_path)
+            if 'github' in repo.remotes.names():
+                await delete_siblings(dataset)
+
             await delete_dataset(dataset_path)
 
             resp.media = {}
