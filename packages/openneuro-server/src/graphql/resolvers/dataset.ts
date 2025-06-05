@@ -278,7 +278,7 @@ const worker = (obj) => getDatasetWorker(obj.id)
  * Dataset object
  */
 const Dataset = {
-  uploader: (ds) => user(ds, { id: ds.uploader }),
+  uploader: (ds, _, context) => user(ds, { id: ds.uploader }, context),
   draft: async (obj) => {
     const draftHead = await datalad.getDraftHead(obj.id)
     return {

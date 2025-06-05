@@ -27,7 +27,7 @@ export const metadata = async (
   // TODO - This could be a user object that is resolved with the full type instead of just email
   // Email matches the existing records however and the user object would require other changes
   const adminUsers = []
-  const { userPermissions } = await permissions(dataset)
+  const { userPermissions } = await permissions(dataset, null, context)
   for (const user of userPermissions) {
     if (user.level === "admin") {
       const userObj = await user.user

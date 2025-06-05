@@ -11,14 +11,14 @@ interface DatasetPermission {
   userPermissions: (PermissionDocument & { user: Promise<UserDocument> })[]
 }
 
-export async function permissions(ds): Promise<DatasetPermission> {
+export async function permissions(ds, _, context): Promise<DatasetPermission> {
   const permissions = await Permission.find({ datasetId: ds.id }).exec()
   return {
     id: ds.id,
     userPermissions: permissions.map(
       (userPermission) => ({
         ...userPermission.toJSON(),
-        user: user(ds, { id: userPermission.userId }),
+        user: user(ds, { id: userPermission.userId }, context),
       } as unknown as PermissionDocument & { user: Promise<UserDocument> }),
     ),
   }
@@ -28,13 +28,13 @@ const publishPermissions = async (datasetId) => {
   // Create permissionsUpdated object with DatasetPermissions in Dataset
   // and resolve all promises before publishing
   const ds = { id: datasetId }
-  const { id, userPermissions } = await permissions(ds)
+  const { id, userPermissions } = await permissions(ds, null, null)
   const permissionsUpdated = {
     id,
     userPermissions: await Promise.all(
       userPermissions.map(async (userPermission) => ({
         ...userPermission,
-        user: await user(ds, { id: userPermission.userId }),
+        user: await user(ds, { id: userPermission.userId }, null),
       })),
     ),
   }
