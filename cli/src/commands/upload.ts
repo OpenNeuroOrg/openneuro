@@ -38,7 +38,7 @@ export async function addGitFiles(
   for await (
     const walkEntry of walk(dataset_directory_abs, {
       includeDirs: false,
-      includeSymlinks: false,
+      includeSymlinks: true,
     })
   ) {
     const relativePath = relative(dataset_directory_abs, walkEntry.path)

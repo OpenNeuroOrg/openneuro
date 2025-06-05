@@ -114,7 +114,16 @@ async function shouldBeAnnexed(
  * git-annex add equivalent
  */
 async function add(event: GitWorkerEventAdd) {
-  const { size } = await context.fs.promises.stat(event.data.path)
+  let size
+  try {
+    const stats = await context.fs.promises.stat(event.data.path)
+    size = stats.size
+  } catch (_err) {
+    console.log(
+      `${event.data.relativePath} could not be added, check if this file is accessible and not a broken symlink.`,
+    )
+    return await done()
+  }
   const annexed = await shouldBeAnnexed(
     event.data.relativePath,
     size,
