@@ -21,12 +21,18 @@ export const UserCard: React.FC<UserCardProps> = ({ orcidUser }) => {
             {location}
           </li>
         )}
-        <li>
-          <i className="fas fa-envelope"></i>
-          <a href={"mailto:" + email} target="_blank" rel="noopener noreferrer">
-            {email}
-          </a>
-        </li>
+        {email && (
+          <li>
+            <i className="fas fa-envelope"></i>
+            <a
+              href={"mailto:" + email}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {email}
+            </a>
+          </li>
+        )}
         {orcid && (
           <li className={styles.orcid}>
             <i className="fab fa-orcid" aria-hidden="true"></i>

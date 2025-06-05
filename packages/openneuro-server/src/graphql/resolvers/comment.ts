@@ -105,7 +105,7 @@ export const deleteComment = async (
 const CommentFields = {
   parent: (obj) => comment(obj, { id: obj.parentId }),
   replies,
-  user: (obj) => user(obj, { id: obj.user._id }),
+  user: (obj) => user(obj, { id: obj.user._id }, null),
 }
 
 export default CommentFields

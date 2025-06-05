@@ -6,14 +6,22 @@ function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
 
-export const user = (obj, { id }) => {
+export async function user(obj, { id }, { userInfo }) {
+  let user
   if (isValidOrcid(id)) {
-    return User.findOne({
+    user = await User.findOne({
       $or: [{ "provider": "orcid", "providerId": id }],
     }).exec()
   } else {
     // If it's not a valid ORCID, fall back to querying by user id
-    return User.findOne({ "id": id }).exec()
+    user = await User.findOne({ "id": id }).exec()
+  }
+  if (userInfo?.admin || user.id === userInfo?.id) {
+    return user.toObject()
+  } else {
+    const obj = user.toObject()
+    delete obj.email
+    return obj
   }
 }
 
