@@ -1,31 +1,35 @@
 ARG LERNA_JSON
 FROM docker.io/denoland/deno:bin-2.2.0 AS deno
-FROM docker.io/library/python:3.11-slim as production
+FROM ghcr.io/astral-sh/uv:0.7.11-python3.13-bookworm-slim as production
 
 WORKDIR /srv
 
-COPY hooks /hooks
-COPY Pipfile /srv/Pipfile
-COPY Pipfile.lock /srv/Pipfile.lock
-COPY datalad_service /srv/datalad_service
-COPY get_docker_scale.py /get_docker_scale.py
-COPY ./ssh_config /root/.ssh/config
-COPY tests /srv/tests
+RUN apt-get update \
+  && apt-get install -y git curl openssh-client \
+  && apt-get clean
+
+RUN mkdir -p /root/.ssh \
+  && ssh-keyscan github.com >> /root/.ssh/known_hosts \
+  && git config --global user.name "Git Worker" \
+  && git config --global user.email "git@openneuro.org" \
+  && git config --global receive.denyCurrentBranch updateInstead
+
 # Install Deno the Dockery-but-hacky-way
 COPY --from=deno /deno /usr/local/bin/deno
 
-RUN apt-get update \
-  && apt-get install -y curl openssh-client \
-  && ssh-keyscan github.com >> /root/.ssh/known_hosts \
-  && curl -L https://storage.googleapis.com/openneuro-git-annex/10.20250320/SHA256E-s62052170--58aadf91f6b05a8ed9fb6a351d5e786da9fe1890e202b9b935d18e876caf25a1.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz \
-  && pip3 install 'pipenv==2020.6.2' \
-  && pipenv install --deploy --system \
+RUN uv tool install git-annex==10.20250520b7
+
+COPY . /srv
+
+RUN ln -s /srv/hooks /hooks \
+  && mv /srv/ssh_config /root/.ssh/config \
   && chmod 600 /root/.ssh/config \
-  && rm -rf /var/lib/apt/lists/* \
-  && git config --global user.name "Git Worker" \
-  && git config --global user.email "git@openneuro.org" \
-  && git config --global receive.denyCurrentBranch updateInstead \
+  && ln -s /srv/get_docker_scale.py /get_docker_scale.py \
   && echo "$LERNA_JSON" > /srv/lerna.json
+
+RUN uv sync --locked
+
+ENV PATH="/srv/.venv/bin:${PATH}"
 
 HEALTHCHECK --interval=5s --timeout=30s --start-period=10s --retries=10 CMD [ "curl", "-f", "http://localhost/heartbeat" ]
 
