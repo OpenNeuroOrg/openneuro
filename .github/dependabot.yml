@@ -8,11 +8,11 @@ updates:
       actions-infrastructure:
         patterns:
           - "actions/*"
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/services/datalad"
     schedule:
       interval: "monthly"
     groups:
-      pipenv:
+      datalad:
         patterns:
           - "*"

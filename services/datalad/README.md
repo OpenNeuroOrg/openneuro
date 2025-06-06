@@ -8,10 +8,18 @@ A backend component of OpenNeuro, this service provides HTTP interfaces for crea
 
 # Setup
 
+## uv (recommended)
+
+```bash
+uv sync --locked
+```
+
+## virtualenv
+
 ```bash
 virtualenv --python python3 .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install .
 ```
 
 You will also need [npm](https://www.npmjs.com) or [Yarn](https://yarnpkg.com) to install the [bids-validator](https://github.com/INCF/bids-validator).
@@ -29,11 +37,14 @@ npm install
 # Running
 
 ```bash
-gunicorn --reload "datalad_service.app:create_app('/path-to-repos')"
+source .venv/bin/activate
+export DATALAD_DATASET_PATH=/path/to/repos
+uvicorn --factory "datalad_service.app:create_app"
 ```
 
 # Tests
 
 ```bash
-pytest
+uv sync --dev
+uv run pytest -n auto
 ```
