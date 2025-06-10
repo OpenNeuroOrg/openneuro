@@ -143,7 +143,7 @@ services:
         condition: service_healthy
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
     platform: linux/amd64
     environment:
       discovery.type: single-node
