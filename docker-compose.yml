@@ -75,7 +75,7 @@ services:
 
   # mongodb
   mongo:
-    image: docker.io/library/mongo:6.0
+    image: docker.io/library/mongo:8
     command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
     ports:
       - 27017:27017
