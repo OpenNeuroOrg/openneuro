@@ -144,7 +144,7 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.18.2
-    platform: linux/amd64
+    platform: linux/arm64
     environment:
       discovery.type: single-node
       cluster.routing.allocation.disk.threshold_enabled: "true"
