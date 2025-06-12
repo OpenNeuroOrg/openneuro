@@ -17,7 +17,6 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   datasetHeaderTools,
   datasetUserActions,
 }) => {
-  console.log(children)
   return (
     <div className="dataset-header">
       <div className="container">
