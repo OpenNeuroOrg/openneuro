@@ -110,8 +110,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   />
                 </div>
               }
-            >
-              <>
+              datasetUserActions={
                 <FollowToggles>
                   <FollowDataset
                     profile={profile !== null}
@@ -126,8 +125,8 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                     stars={dataset.stars.length}
                   />
                 </FollowToggles>
-              </>
-            </DatasetHeader>
+              }
+            />
           </>
         )}
         {!dataset.public && isDatasetAdmin && (
