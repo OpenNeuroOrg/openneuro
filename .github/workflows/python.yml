@@ -14,10 +14,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+      - name: Set up Python 3.13 (uv)
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.11"
+          version: "latest"
+          python-version: "3.13"
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
@@ -25,20 +26,18 @@ jobs:
       - name: Setup Deno stable
         uses: denoland/setup-deno@v2
         with:
-          deno-version: v1.x
+          deno-version: v2.x
       - name: Install git-annex
-        run: curl -L http://archive.org/download/git-annex-builds/SHA256E-s53592796--6e0a3c16d50379f89d2064081376a3f7f6efa1a89eb1afc2a2335597e7cf9fac.tar.gz | tar -C /usr/local/bin --strip-components 1 -xvz
-      - name: Install pipenv
-        run: pip install 'pipenv==2023.7.23'
+        run: uv tool install git-annex
       - name: Install dependencies
-        run: pipenv install --dev
+        run: uv sync --locked --dev
       - name: Configure git defaults
         run: |
           git config --global user.name "Git Worker"
           git config --global user.email "ci@openneuro.org"
           git config --global receive.denyCurrentBranch updateInstead
       - name: Run tests and collect coverage
-        run: pipenv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
+        run: uv run pytest -n 4 --cov=./datalad_service --cov-report=xml:coverage.xml ./tests
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
