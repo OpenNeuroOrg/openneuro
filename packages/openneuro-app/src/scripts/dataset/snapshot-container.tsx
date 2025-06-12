@@ -93,41 +93,39 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
         className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}
       >
         {summary && (
-          <>
-            <DatasetHeader
-              pageHeading={description.Name}
-              modality={summary?.modalities[0]}
-              datasetHeaderTools={
-                <div className="dataset-tool-buttons">
-                  <DatasetTools
-                    hasEdit={hasEdit}
-                    isPublic={dataset.public}
-                    datasetId={datasetId}
-                    snapshotId={snapshot.tag}
-                    isAdmin={isAdmin}
-                    isDatasetAdmin={isDatasetAdmin}
-                    hasDerivatives={hasDerivatives}
-                  />
-                </div>
-              }
-              datasetUserActions={
-                <FollowToggles>
-                  <FollowDataset
-                    profile={profile !== null}
-                    datasetId={dataset.id}
-                    following={dataset.following}
-                    followers={dataset.followers.length}
-                  />
-                  <StarDataset
-                    profile={profile !== null}
-                    datasetId={dataset.id}
-                    starred={dataset.starred}
-                    stars={dataset.stars.length}
-                  />
-                </FollowToggles>
-              }
-            />
-          </>
+          <DatasetHeader
+            pageHeading={description.Name}
+            modality={summary?.modalities[0]}
+            datasetHeaderTools={
+              <div className="dataset-tool-buttons">
+                <DatasetTools
+                  hasEdit={hasEdit}
+                  isPublic={dataset.public}
+                  datasetId={datasetId}
+                  snapshotId={snapshot.tag}
+                  isAdmin={isAdmin}
+                  isDatasetAdmin={isDatasetAdmin}
+                  hasDerivatives={hasDerivatives}
+                />
+              </div>
+            }
+            datasetUserActions={
+              <FollowToggles>
+                <FollowDataset
+                  profile={profile !== null}
+                  datasetId={dataset.id}
+                  following={dataset.following}
+                  followers={dataset.followers.length}
+                />
+                <StarDataset
+                  profile={profile !== null}
+                  datasetId={dataset.id}
+                  starred={dataset.starred}
+                  stars={dataset.stars.length}
+                />
+              </FollowToggles>
+            }
+          />
         )}
         {!dataset.public && isDatasetAdmin && (
           <DatasetAlertPrivate
