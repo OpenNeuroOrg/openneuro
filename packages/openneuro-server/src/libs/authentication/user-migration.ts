@@ -6,6 +6,7 @@ import Permission from "../../models/permission"
 import Comment from "../../models/comment"
 import Deletion from "../../models/deletion"
 import * as Sentry from "@sentry/node"
+import { reindexDataset } from "../../elasticsearch/reindex-dataset"
 
 /**
  * Move content from a Google account to an ORCID one
@@ -21,6 +22,7 @@ export async function userMigration(orcid: string, userId: string) {
   const session = await mongoose.startSession()
   try {
     await session.withTransaction(async () => {
+      const reindexDatasets = []
       try {
         // Load both original records
         const orcidUser = await User.findOne(
@@ -55,6 +57,7 @@ export async function userMigration(orcid: string, userId: string) {
           // Record this dataset uploader as migrated
           migration.datasets.push(dataset.id)
           await dataset.save({ session })
+          reindexDatasets.push(dataset.id)
         }
 
         // Migrate dataset permissions
@@ -70,6 +73,7 @@ export async function userMigration(orcid: string, userId: string) {
           // Record this permission as migrated
           migration.permissions.push(permission.toObject())
           await permission.save({ session })
+          reindexDatasets.push(permission.datasetId)
         }
 
         // Migrate dataset deletions
@@ -113,6 +117,11 @@ export async function userMigration(orcid: string, userId: string) {
       } catch (err) {
         Sentry.captureException(err)
         throw err
+      }
+      // After a successful migration, immediately reindex datasets modified
+      for (const dataset of reindexDatasets) {
+        // Don't await completion of these promises to avoid blocking login
+        reindexDataset(dataset)
       }
     })
   } finally {
