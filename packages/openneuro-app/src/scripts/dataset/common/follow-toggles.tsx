@@ -4,7 +4,7 @@ import "@emotion/react"
 export const FollowToggles = styled.div`
   display: flex;
   font-size: 14px;
-  margin-left: auto;
+  margin: 10px 0;
 
   .toggle-counter-wrap {
     display: inline-flex;

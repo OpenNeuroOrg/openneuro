@@ -93,11 +93,23 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
         className={`dataset dataset-draft dataset-page dataset-page-${modality?.toLowerCase()}`}
       >
         {summary && (
-          <>
-            <DatasetHeader
-              pageHeading={description.Name}
-              modality={summary?.modalities[0]}
-            >
+          <DatasetHeader
+            pageHeading={description.Name}
+            modality={summary?.modalities[0]}
+            datasetHeaderTools={
+              <div className="dataset-tool-buttons">
+                <DatasetTools
+                  hasEdit={hasEdit}
+                  isPublic={dataset.public}
+                  datasetId={datasetId}
+                  snapshotId={snapshot.tag}
+                  isAdmin={isAdmin}
+                  isDatasetAdmin={isDatasetAdmin}
+                  hasDerivatives={hasDerivatives}
+                />
+              </div>
+            }
+            datasetUserActions={
               <FollowToggles>
                 <FollowDataset
                   profile={profile !== null}
@@ -112,8 +124,8 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   stars={dataset.stars.length}
                 />
               </FollowToggles>
-            </DatasetHeader>
-          </>
+            }
+          />
         )}
         {!dataset.public && isDatasetAdmin && (
           <DatasetAlertPrivate
@@ -154,17 +166,6 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                       gitHash={snapshot.hexsha}
                     />
                   }
-                />
-              </div>
-              <div className="dataset-tool-buttons">
-                <DatasetTools
-                  hasEdit={hasEdit}
-                  isPublic={dataset.public}
-                  datasetId={datasetId}
-                  snapshotId={snapshot.tag}
-                  isAdmin={isAdmin}
-                  isDatasetAdmin={isDatasetAdmin}
-                  hasDerivatives={hasDerivatives}
                 />
               </div>
               <DatasetPageTabContainer>
@@ -263,18 +264,17 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                     />
                   </>
                 ))}
-              {!isAnonymousReviewer &&
-                (
-                  <MetaDataBlock
-                    heading="Uploaded by"
-                    item={
-                      <>
-                        <Username user={dataset.uploader} /> on{" "}
-                        <DateDistance date={dataset.created} />
-                      </>
-                    }
-                  />
-                )}
+              {!isAnonymousReviewer && (
+                <MetaDataBlock
+                  heading="Uploaded by"
+                  item={
+                    <>
+                      <Username user={dataset.uploader} /> on{" "}
+                      <DateDistance date={dataset.created} />
+                    </>
+                  }
+                />
+              )}
 
               {dataset.snapshots.length && (
                 <MetaDataBlock
@@ -362,16 +362,13 @@ export interface SnapshotLoaderProps {
 const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
   const { tag } = useParams()
   const { loading, error, data, fetchMore, stopPolling, startPolling } =
-    useQuery(
-      getSnapshotDetails,
-      {
-        variables: {
-          datasetId: dataset.id,
-          tag,
-        },
-        errorPolicy: "all",
+    useQuery(getSnapshotDetails, {
+      variables: {
+        datasetId: dataset.id,
+        tag,
       },
-    )
+      errorPolicy: "all",
+    })
   if (loading) {
     return (
       <div className="loading-dataset">
@@ -392,10 +389,7 @@ const SnapshotLoader: React.FC<SnapshotLoaderProps> = ({ dataset }) => {
           startPolling,
         }}
       >
-        <SnapshotContainer
-          dataset={dataset}
-          snapshot={data.snapshot}
-        />
+        <SnapshotContainer dataset={dataset} snapshot={data.snapshot} />
       </DatasetQueryContext.Provider>
     )
   }
