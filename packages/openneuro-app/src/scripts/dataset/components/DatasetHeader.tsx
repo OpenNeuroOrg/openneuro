@@ -13,7 +13,6 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   pageHeading,
   modality,
   renderEditor,
-  children,
   datasetHeaderTools,
   datasetUserActions,
 }) => {
