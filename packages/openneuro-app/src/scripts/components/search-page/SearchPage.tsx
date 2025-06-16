@@ -15,6 +15,7 @@ export interface PortalContent {
 }
 
 export interface SearchPageProps {
+  hasDetailsOpen?: boolean
   portalContent?: PortalContent
   renderSearchFacets: () => React.ReactNode
   renderSearchResultsList: () => React.ReactNode
@@ -23,15 +24,18 @@ export interface SearchPageProps {
   renderSearchHeader: () => React.ReactNode
   renderLoading: () => React.ReactNode
   renderAggregateCounts: () => React.ReactNode
+  renderItemDetails: () => React.ReactNode
 }
 
 export const SearchPage = ({
+  hasDetailsOpen,
   portalContent,
   renderSearchFacets,
   renderSearchResultsList,
   renderSortBy,
   renderFilterBlock,
   renderSearchHeader,
+  renderItemDetails,
   renderLoading,
   renderAggregateCounts,
 }: SearchPageProps) => {
@@ -69,12 +73,8 @@ export const SearchPage = ({
             </>
           )
           : null}
-        <div className="container">
-          <div className="grid grid-nogutter">
-            <div className="col col-12 search-heading">
-              <h1>{renderSearchHeader()}</h1>
-            </div>
-
+        <div className="container-full">
+          <div className="grid">
             <div className="col col-12 search-wrapper">
               <button
                 className="show-filters-btn"
@@ -95,16 +95,23 @@ export const SearchPage = ({
                 </button>
                 {renderSearchFacets()}
               </div>
-              <div className="search-content">
+              <div
+                className={`search-content  ${
+                  hasDetailsOpen ? " details-opened" : ""
+                }`}
+              >
+                <div className="search-heading">{renderSearchHeader()}</div>
                 {renderLoading()}
                 <div className="grid grid-nogutter">
                   <div className="col col-12">{renderFilterBlock()}</div>
                   <div className="col col-12">
                     <div className="grid grid-nogutter">{renderSortBy()}</div>
                   </div>
+
                   {renderSearchResultsList()}
                 </div>
               </div>
+              {renderItemDetails()}
             </div>
           </div>
         </div>

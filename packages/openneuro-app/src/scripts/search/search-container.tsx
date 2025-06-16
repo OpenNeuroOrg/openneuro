@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import type { FC } from "react"
 import { useLocation } from "react-router-dom"
 import { SearchPage } from "../components/search-page/SearchPage"
@@ -37,6 +37,7 @@ import { SearchParamsCtx } from "./search-params-ctx"
 import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
 import AdminUser from "../authentication/admin-user.jsx"
+import { SearchResultItemProps } from "../components/search-page/SearchResultItem"
 
 export interface SearchContainerProps {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -153,12 +154,37 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     hasNextPage = data.datasets.pageInfo.hasNextPage
   }
 
+  const [clickedItemData, setClickedItemData] = useState<
+    SearchResultItemProps["node"] | null
+  >(null)
+  useEffect(() => {
+    setClickedItemData(null)
+  }, [JSON.stringify(searchParams)])
+
+  const handleItemClick = (nodeData: SearchResultItemProps["node"]) => {
+    setClickedItemData((prevData) =>
+      prevData?.id === nodeData.id ? null : nodeData
+    )
+  }
+
+  const handleCloseDetails = () => {
+    setClickedItemData(null)
+  }
+
+  // Helper function to format date (assuming it's available or imported)
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "N/A"
+    const date = new Date(dateString)
+    return date.toISOString().split("T")[0]
+  }
+
   return (
     <>
       <Helmet>
         <title>OpenNeuro - {modality || selected_grant || ""} Search</title>
       </Helmet>
       <SearchPage
+        hasDetailsOpen={!!clickedItemData}
         portalContent={portalContent}
         renderAggregateCounts={() =>
           portalContent.modality
@@ -174,8 +200,12 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         renderSearchHeader={() => (
           <>
             {portalContent
-              ? "Search " + (modality || selected_grant || "") + " Portal"
-              : "Search All Datasets"}
+              ? (
+                <h2>
+                  {"Search " + (modality || selected_grant || "") + " Portal"}
+                </h2>
+              )
+              : <h1>{"Search All Datasets"}</h1>}
           </>
         )}
         renderSearchFacets={() => (
@@ -233,6 +263,8 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 <SearchResultsList
                   items={resultsList}
                   datasetTypeSelected={searchParams.datasetType_selected}
+                  clickedItemData={clickedItemData}
+                  handleItemClick={handleItemClick}
                 />
                 {/* TODO: make div below into display component. */}
                 <div className="grid grid-nogutter" style={{ width: "100%" }}>
@@ -245,6 +277,40 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 </div>
               </>
             )}
+        renderItemDetails={() => (clickedItemData && (
+          <div className="search-details">
+            <div className="search-details-scroll">
+              <button
+                className="close-details-button" // Add a class for styling
+                onClick={handleCloseDetails}
+                aria-label="Close details"
+              >
+                &times;{" "}
+                {/* HTML entity for a multiplication sign, commonly used for 'X' close button */}
+              </button>
+              <h4>
+                More Details for{" "}
+                {clickedItemData.latestSnapshot.description?.Name ||
+                  clickedItemData.id}
+              </h4>
+              <p>
+                <strong>Total Files:</strong>{" "}
+                {clickedItemData.latestSnapshot.summary?.totalFiles
+                  .toLocaleString()}
+              </p>
+              <p>
+                <strong>Last Updated:</strong> {formatDate(
+                  clickedItemData
+                    .snapshots[clickedItemData.snapshots.length - 1]?.created ||
+                    clickedItemData.created,
+                )}
+              </p>
+              <p>
+                <strong>Uploader:</strong> {clickedItemData.uploader?.name}
+              </p>
+            </div>
+          </div>
+        ))}
       />
     </>
   )

@@ -112,11 +112,15 @@ export interface SearchResultItemProps {
     ]
   }
   datasetTypeSelected?: string
+  onClick: (itemId: string) => void
+  isExpanded: boolean
 }
 
 export const SearchResultItem = ({
   node,
   datasetTypeSelected,
+  onClick,
+  isExpanded,
 }: SearchResultItemProps) => {
   const { user } = useUser()
   const [cookies] = useCookies()
@@ -379,7 +383,11 @@ export const SearchResultItem = ({
 
   return (
     <>
-      <div className="grid grid-nogutter search-result">
+      <div
+        className={`grid grid-nogutter search-result ${
+          isExpanded ? "expanded" : ""
+        }`}
+      >
         <div className="col col-9">
           <h3>
             <Link to={"/datasets/" + datasetId}>{heading}</Link>
@@ -413,6 +421,14 @@ export const SearchResultItem = ({
           {agesRange}
           {size}
           {files}
+        </div>
+        <div className="result-actions">
+          <button
+            className="btn btn-secondary"
+            onClick={() => onClick(node.id)}
+          >
+            {isExpanded ? "Hide Details" : "Show Details"}
+          </button>
         </div>
       </div>
     </>
