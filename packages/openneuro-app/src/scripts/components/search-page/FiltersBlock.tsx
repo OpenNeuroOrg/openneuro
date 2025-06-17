@@ -69,17 +69,17 @@ export const FiltersBlock = ({
   const subjectCountRangeIsNull =
     JSON.stringify(subjectCountRange) === JSON.stringify([null, null])
 
+  const labelText = modality_selected
+    ? JSON.stringify(modality_selected).toLowerCase() === "ieeg"
+      ? "iEEG"
+      : JSON.stringify(modality_selected).toUpperCase()
+    : ""
+
   return (
     <div className="filters-block">
       <h2>
         {noFilters
-          ? (
-            <b>
-              Showing all available {modality_selected ? modality_selected : ""}
-              {" "}
-              datasets
-            </b>
-          )
+          ? <b>Showing all available {labelText ? labelText : ""} datasets</b>
           : (
             <>
               {loading

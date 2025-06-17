@@ -173,10 +173,14 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     setClickedItemData(null)
   }
 
+  const labelText = modality
+    ? modality.toLowerCase() === "ieeg" ? "iEEG" : modality?.toUpperCase()
+    : null
+
   return (
     <>
       <Helmet>
-        <title>OpenNeuro - {modality || selected_grant || ""} Search</title>
+        <title>OpenNeuro - {labelText || selected_grant || ""} Search</title>
       </Helmet>
       <SearchPage
         hasDetailsOpen={!!clickedItemData}
@@ -197,7 +201,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             {portalContent
               ? (
                 <h2>
-                  {"Search " + (modality || selected_grant || "") + " Portal"}
+                  {"Search " + (labelText || selected_grant || "") + " Portal"}
                 </h2>
               )
               : <h1>{"Search All Datasets"}</h1>}
