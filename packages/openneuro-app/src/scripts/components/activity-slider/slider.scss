@@ -1,4 +1,4 @@
-@import '../scss/variables';
+@import '../../scss/variables';
 
 .activity-slider {
   h3 {
@@ -30,87 +30,6 @@
       font-weight: 600;
       font-size: 14px;
       margin: 10px 0 0;
-    }
-  }
-  .activity-slider-node {
-    .hexagon-wrapper {
-      text-align: center;
-      margin: 20px auto 0;
-      position: relative;
-      display: inline-block;
-      width: 45px;
-      height: 45px;
-      div.label {
-        position: absolute;
-        top: 0;
-        text-align: center;
-        width: 100%;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        font-weight: 600;
-        font-size: 13px;
-      }
-    }
-
-    .hexagon {
-      height: 100%;
-      width: calc(100% * 0.57735);
-      display: inline-block;
-    }
-
-    .hexagon:before {
-      position: absolute;
-      top: 0;
-      right: calc((100% / 2) - ((100% * 0.57735) / 2));
-      background-color: inherit;
-      height: inherit;
-      width: inherit;
-      content: '';
-      transform: rotateZ(60deg);
-    }
-
-    .hexagon:after {
-      position: absolute;
-      top: 0;
-      right: calc((100% / 2) - ((100% * 0.57735) / 2));
-      background-color: inherit;
-      height: inherit;
-      width: inherit;
-      content: '';
-      transform: rotateZ(-60deg);
-    }
-    .hexagon {
-      transition: background-color 0.3s;
-      background-color: $on-dark-aqua;
-
-      &.mri {
-        background-color: $mri-theme;
-      }
-      &.eeg {
-        background-color: $eeg-theme;
-      }
-
-      &.pet {
-        background-color: $pet-theme;
-      }
-      &.ieeg {
-        background-color: $ieeg-theme;
-      }
-
-      &.meg {
-        background-color: $meg-theme;
-      }
-      &.eeg {
-        background-color: $on-light-green;
-      }
-      &.nirs{
-        background-color: $nirs-theme;
-      }
     }
   }
 }

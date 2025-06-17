@@ -18,7 +18,7 @@ const GithubSyncDiv = styled.div`
     margin: 10px;
 
     &:hover {
-      background-color: var(--current-theme-primary-light);
+      background-color: var(--current-theme-primary-ultralight);
        color: var(--current-theme-primary);
     }
     &.active {

@@ -1,4 +1,4 @@
-@import '../scss/variables';
+@import '../../scss/variables';
 $rangeWidth: 90%;
 
 .formRange-inner {
@@ -82,7 +82,7 @@ $rangeWidth: 90%;
 /* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
   background-color: #fff;
-  border: 1px solid var(--current-theme-primary-light);
+  border: 1px solid var(--current-theme-primary-ultralight);
   border-radius: 50%;
   box-shadow: 0 0 5px -1px var(--current-theme-primary);
   cursor: pointer;
@@ -96,7 +96,7 @@ $rangeWidth: 90%;
 /* For Firefox browsers */
 .thumb::-moz-range-thumb {
   background-color: #fff;
-  border: 1px solid var(--current-theme-primary-light);
+  border: 1px solid var(--current-theme-primary-ultralight);
   border-radius: 50%;
   box-shadow: 0 0 5px -1px var(--current-theme-primary);
   cursor: pointer;

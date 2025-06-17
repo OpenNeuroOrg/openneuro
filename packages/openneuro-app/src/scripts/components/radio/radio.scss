@@ -1,4 +1,4 @@
-@import '../scss/variables';
+@import '../../scss/variables';
 .custom-radio {
   margin: 10px 0 20px;
   [type='radio']:checked,
@@ -319,7 +319,7 @@
       }
     }
     [type='radio']:not(:checked) + label:hover {
-      background-color: var(--current-theme-primary-light);
+      background-color: var(--current-theme-primary-ultralight);
     }
     [type='radio']:checked + label {
       color: #fff;

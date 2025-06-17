@@ -64,6 +64,7 @@ const searchQuery = gql`
             readme
             summary {
               modalities
+              primaryModality
               secondaryModalities
               sessions
               subjects

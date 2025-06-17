@@ -74,7 +74,7 @@ export const SearchPage = ({
           )
           : null}
         <div className="container-full">
-          <div className="grid">
+          <div className="grid grid-nogutter">
             <div className="col col-12 search-wrapper">
               <button
                 className="show-filters-btn"

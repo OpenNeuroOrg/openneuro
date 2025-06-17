@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
 
 export interface DatasetHeaderProps {
   modality: string
@@ -21,16 +22,9 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           <div className="col">
             <h1>
               <Link to={"/search/modality/" + modality}>
-                <div className="hexagon-wrapper">
-                  <div className="hexagon no-modality"></div>
-                  <div className="label">
-                    {modality
-                      ? (
-                        modality.substr(0, 4)
-                      )
-                      : <i className="fa fa-circle-o-notch fa-spin"></i>}
-                  </div>
-                </div>
+                <ModalityHexagon
+                  primaryModality={modality ? modality.substr(0, 4) : null}
+                />
               </Link>
               {renderEditor?.() || pageHeading}
               {children}

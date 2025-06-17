@@ -10,6 +10,8 @@ import { useUser } from "../../queries/user"
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { hasEditPermissions } from "../../authentication/profile"
+import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
+
 /**
  * Return an equivalent to moment(date).format('L') without moment
  * @param {*} dateObject
@@ -57,6 +59,7 @@ export interface SearchResultItemProps {
           TracerName: string[]
           TracerRadionuclide: string
         }
+        primaryModality: string
         modalities: string[]
         sessions: []
         subjects: string[]
@@ -217,8 +220,8 @@ export const SearchResultItem = ({
   let invalid = false
   // Legacy issues still flagged
   if (node.latestSnapshot.issues) {
-    invalid = node.latestSnapshot.issues.some((issue) =>
-      issue.severity === "error"
+    invalid = node.latestSnapshot.issues.some(
+      (issue) => issue.severity === "error",
     )
   } else {
     // Test if there's any schema validator errors
@@ -255,6 +258,8 @@ export const SearchResultItem = ({
     : "NO AUTHORS FOUND"
   const datasetCite =
     `${authors} (${year}). ${node.latestSnapshot.description.Name}. OpenNeuro. [Dataset] doi: ${node.latestSnapshot.description.DatasetDOI}`
+  const trimlength = 450
+
   return (
     <>
       <div
@@ -263,36 +268,44 @@ export const SearchResultItem = ({
         }`}
       >
         <div className="col col-9">
-          <h3>
-            <Link to={"/datasets/" + datasetId}>{heading}</Link>
-          </h3>
-        </div>
-
-        <div className="col col-3">
-          {MyDatasetsPage && (
-            <div className="dataset-permissions-tag">
-              <small>Access: {datasetPerms}</small>
-            </div>
-          )}
-          <div className="result-icon-wrap">
-            {datasetOwenerIcons}
-            {activityIcon}
+          <div className="col col-12">
+            <h3>
+              <Link to={"/datasets/" + datasetId}>{heading}</Link>
+            </h3>
+            {MyDatasetsPage && (
+              <div className="dataset-permissions-tag">
+                <small>Access: {datasetPerms}</small>
+              </div>
+            )}
+            <p>
+              {node.latestSnapshot?.readme
+                ? (node.latestSnapshot.readme.length > trimlength
+                  ? `${node.latestSnapshot.readme.substring(0, trimlength)}...`
+                  : node.latestSnapshot.readme)
+                : ""}
+            </p>
+            <cite>{datasetCite}</cite>
           </div>
         </div>
-        <div className="col col-12 result-meta-body">
-          {node.latestSnapshot?.readme}
-          <br />
-          {datasetCite}
-        </div>
-        <div className="result-meta-footer">
-        </div>
-        <div className="result-actions">
-          <button
-            className="btn btn-secondary"
-            onClick={() => onClick(node.id)}
-          >
-            {isExpanded ? "Hide Details" : "Show Details"}
-          </button>
+
+        <div className="col col-3 grid">
+          <div className="col col-12 result-icon-wrap">
+            {datasetOwenerIcons}
+            {activityIcon}
+            <ModalityHexagon
+              primaryModality={node.latestSnapshot.summary?.primaryModality}
+            />
+          </div>
+          <div className="col col-12 result-actions">
+            <button
+              className={`on-button on-button--small ${
+                isExpanded && "expanded"
+              }`}
+              onClick={() => onClick(node.id)}
+            >
+              {isExpanded ? "Hide Details" : "Show Details"}
+            </button>
+          </div>
         </div>
       </div>
     </>

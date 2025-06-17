@@ -1,4 +1,4 @@
-@import '../scss/variables';
+@import '../../scss/variables';
 
 .facet-accordion.on-accordion-wrapper {
   padding: 0 15px;
@@ -45,7 +45,7 @@
     .level-1 > li {
       border-top: 1px solid #dfdfdf;
       > span:hover {
-        background-color: var(--current-theme-primary-light);
+        background-color: var(--current-theme-primary-ultralight);
       }
 
       > .label {
@@ -60,7 +60,7 @@
         display: flex;
         justify-content: flex-start;
         &:hover {
-          background-color: var(--current-theme-primary-light);
+          background-color: var(--current-theme-primary-ultralight);
         }
 
         .label {
@@ -165,7 +165,8 @@
 .search-nav .facet-open.modality-facet {
   margin: 20px 0;
   border: 0;
-  background: #e5f4f7;
+  background: var(--current-theme-primary-ultralight);
+  border: 1px solid var(--current-theme-primary-light);
   border-radius: $border-radius-default;
   padding: 10px;
 
