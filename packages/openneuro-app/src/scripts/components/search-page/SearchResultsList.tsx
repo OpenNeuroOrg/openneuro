@@ -1,25 +1,26 @@
 import React from "react"
 import { SearchResultItem } from "./SearchResultItem"
-import "./search-page.scss" // Assuming your CSS is here
-import { SearchResultItemProps } from "./SearchResultItem" // Import for type safety
+import "./search-page.scss"
+import { SearchResultItemProps } from "./SearchResultItem"
 
 export interface SearchResultsListProps {
   items: any[]
   datasetTypeSelected: string
-  clickedItemData: SearchResultItemProps["node"] | null // Receive clicked item data from parent
-  handleItemClick: (nodeData: SearchResultItemProps["node"]) => void // Receive handler from parent
+  clickedItemData: SearchResultItemProps["node"] | null
+  handleItemClick: (nodeData: SearchResultItemProps["node"]) => void
 }
 
 export const SearchResultsList = ({
   items,
   datasetTypeSelected,
-  clickedItemData, // Destructure new prop
-  handleItemClick, // Destructure new prop
+  clickedItemData,
+  handleItemClick,
 }: SearchResultsListProps) => {
   return (
     <>
-      {/* Add 'open' class to search-results div if clickedItemData exists */}
-      <div className={`search-results ${clickedItemData ? "open" : ""}`}>
+      <div
+        className={`search-results col col-12 ${clickedItemData ? "open" : ""}`}
+      >
         {items.map((data) => {
           if (data) {
             const isActive = clickedItemData?.id === data.node.id

@@ -306,6 +306,9 @@
 
     .search-result {
       border-bottom: 1px solid $newspaper;
+      &.expanded {
+        background-color: red;
+      }
     }
   }
   &.details-opened {

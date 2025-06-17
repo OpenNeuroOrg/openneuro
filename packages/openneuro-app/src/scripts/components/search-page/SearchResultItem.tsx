@@ -1,7 +1,6 @@
 import React from "react"
-import bytes from "bytes"
+import getYear from "date-fns/getYear"
 import parseISO from "date-fns/parseISO"
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { Icon } from "../../components/icon/Icon"
@@ -10,7 +9,6 @@ import { getProfile } from "../../authentication/profile"
 import { useUser } from "../../queries/user"
 import "./search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
-import { ModalityLabel } from "../../components/formatting/modality-label"
 import { hasEditPermissions } from "../../authentication/profile"
 /**
  * Return an equivalent to moment(date).format('L') without moment
@@ -50,6 +48,7 @@ export interface SearchResultItemProps {
     latestSnapshot: {
       id: string
       size: number
+      readme: string
       summary: {
         pet: {
           BodyPart: string
@@ -84,7 +83,9 @@ export interface SearchResultItemProps {
         warnings: number
       }
       description: {
+        Authors: string[]
         Name: string
+        DatasetDOI: string
       }
     }
     analytics: {
@@ -133,92 +134,9 @@ export const SearchResultItem = ({
   const heading = node.latestSnapshot.description?.Name
     ? node.latestSnapshot.description?.Name
     : node.id
-  const summary = node.latestSnapshot?.summary
+
   const datasetId = node.id
-  const numSessions = summary?.sessions.length > 0 ? summary.sessions.length : 1
-  const numSubjects = summary?.subjects.length > 0 ? summary.subjects.length : 1
-  const accessionNumber = (
-    <span className="result-summary-meta">
-      <strong>Openneuro Accession Number:</strong>
-      <Link to={"/datasets/" + datasetId}>{node.id}</Link>
-    </span>
-  )
-  const sessions = (
-    <span className="result-summary-meta">
-      <strong>Sessions:</strong>
-      <span>{numSessions.toLocaleString()}</span>
-    </span>
-  )
 
-  const ages = (value) => {
-    if (value) {
-      const ages = value.filter((x) => x)
-      if (ages.length === 0) return "N/A"
-      else if (ages.length === 1) return ages[0]
-      else return `${Math.min(...ages)} - ${Math.max(...ages)}`
-    } else return "N/A"
-  }
-
-  const agesRange = (
-    <span className="result-summary-meta">
-      <strong>
-        {node?.metadata?.ages?.length === 1
-          ? "Participant's Age"
-          : "Participants' Ages"}
-        :{" "}
-      </strong>
-      <span>
-        {ages(summary?.subjectMetadata?.map((subject) => subject.age))}
-      </span>
-    </span>
-  )
-  const subjects = (
-    <span className="result-summary-meta">
-      <strong>Participants:</strong>
-      <span>{numSubjects.toLocaleString()}</span>
-    </span>
-  )
-  const size = (
-    <span className="result-summary-meta">
-      <strong>Size:</strong>
-      <span>{bytes(node?.latestSnapshot?.size) || "unknown"}</span>
-    </span>
-  )
-  const files = (
-    <span className="result-summary-meta">
-      <strong>Files:</strong>
-      <span>{summary?.totalFiles.toLocaleString()}</span>
-    </span>
-  )
-
-  const dateAdded = formatDate(node.created)
-  const dateAddedDifference = formatDistanceToNow(parseISO(node.created))
-  let lastUpdatedDate
-  if (node.snapshots.length) {
-    const dateUpdated = formatDate(
-      node.snapshots[node.snapshots.length - 1].created,
-    )
-    const dateUpdatedDifference = formatDistanceToNow(
-      parseISO(node.snapshots[node.snapshots.length - 1].created),
-    )
-
-    lastUpdatedDate = (
-      <>
-        <span className="updated-divider">|</span>
-        <div className="updated-date">
-          <span>Updated:</span>
-          {dateUpdated} - {dateUpdatedDifference} ago
-        </div>
-      </>
-    )
-  }
-
-  const uploader = (
-    <div className="uploader">
-      <span>Uploaded by:</span>
-      {node.uploader?.name} on {dateAdded} - {dateAddedDifference} ago
-    </div>
-  )
   const downloads = node.analytics.downloads
     ? node.analytics.downloads.toLocaleString() + " Downloads \n"
     : ""
@@ -296,25 +214,6 @@ export const SearchResultItem = ({
     </Tooltip>
   )
 
-  const _list = (type, items) => {
-    if (items && items.length > 0) {
-      return (
-        <>
-          <strong>{type}:</strong>
-          <div>
-            {items.map((item, index) => (
-              <span className="list-item" key={index}>
-                {item}
-              </span>
-            ))}
-          </div>
-        </>
-      )
-    } else {
-      return null
-    }
-  }
-
   let invalid = false
   // Legacy issues still flagged
   if (node.latestSnapshot.issues) {
@@ -350,37 +249,12 @@ export const SearchResultItem = ({
     </div>
   )
 
-  const modalityList = summary?.modalities.length
-    ? (
-      <div className="modality-list">
-        {_list(
-          <>{summary?.modalities.length === 1 ? "Modality" : "Modalities"}</>,
-          summary?.modalities.map((modality) => (
-            <ModalityLabel key={modality} modality={modality} />
-          )),
-        )}
-      </div>
-    )
-    : null
-  const taskList = summary?.tasks.length
-    ? <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
-    : null
-
-  const tracers = summary?.pet?.TracerName?.length
-    ? (
-      <div className="tracers-list">
-        {_list(
-          <>
-            {summary?.pet?.TracerName.length === 1
-              ? "Radiotracer"
-              : "Radiotracers"}
-          </>,
-          summary?.pet?.TracerName,
-        )}
-      </div>
-    )
-    : null
-
+  const year = getYear(parseISO(node.created))
+  const authors = node.latestSnapshot.description?.Authors
+    ? node.latestSnapshot.description.Authors.join(" and ")
+    : "NO AUTHORS FOUND"
+  const datasetCite =
+    `${authors} (${year}). ${node.latestSnapshot.description.Name}. OpenNeuro. [Dataset] doi: ${node.latestSnapshot.description.DatasetDOI}`
   return (
     <>
       <div
@@ -392,13 +266,9 @@ export const SearchResultItem = ({
           <h3>
             <Link to={"/datasets/" + datasetId}>{heading}</Link>
           </h3>
-          <div className="result-upload-info">
-            {uploader}
-            {lastUpdatedDate}
-          </div>
         </div>
 
-        <div className="col col-3 col-sm">
+        <div className="col col-3">
           {MyDatasetsPage && (
             <div className="dataset-permissions-tag">
               <small>Access: {datasetPerms}</small>
@@ -410,17 +280,11 @@ export const SearchResultItem = ({
           </div>
         </div>
         <div className="col col-12 result-meta-body">
-          {modalityList}
-          {taskList}
-          {tracers}
+          {node.latestSnapshot?.readme}
+          <br />
+          {datasetCite}
         </div>
         <div className="result-meta-footer">
-          {accessionNumber}
-          {sessions}
-          {subjects}
-          {agesRange}
-          {size}
-          {files}
         </div>
         <div className="result-actions">
           <button

@@ -38,6 +38,7 @@ import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
 import AdminUser from "../authentication/admin-user.jsx"
 import { SearchResultItemProps } from "../components/search-page/SearchResultItem"
+import { SearchResultDetails } from "../components/search-page/SearchResultDetails"
 
 export interface SearchContainerProps {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -98,7 +99,8 @@ export const setDefaultSearch = (
 
   // Check for grant-related conditions
   if (
-    is_grant_portal && grant === "nih" &&
+    is_grant_portal &&
+    grant === "nih" &&
     searchParams.brain_initiative !== "true"
   ) {
     setSearchParams((prevState) => ({
@@ -169,13 +171,6 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
 
   const handleCloseDetails = () => {
     setClickedItemData(null)
-  }
-
-  // Helper function to format date (assuming it's available or imported)
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "N/A"
-    const date = new Date(dateString)
-    return date.toISOString().split("T")[0]
   }
 
   return (
@@ -268,49 +263,21 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 />
                 {/* TODO: make div below into display component. */}
                 <div className="grid grid-nogutter" style={{ width: "100%" }}>
-                  {hasNextPage && resultsList.length > 0 &&
-                    (
-                      <div className="col col-12 load-more m-t-10">
-                        <Button label="Load More" onClick={loadMore} />
-                      </div>
-                    )}
+                  {hasNextPage && resultsList.length > 0 && (
+                    <div className="col col-12 load-more m-t-10">
+                      <Button label="Load More" onClick={loadMore} />
+                    </div>
+                  )}
                 </div>
               </>
             )}
-        renderItemDetails={() => (clickedItemData && (
-          <div className="search-details">
-            <div className="search-details-scroll">
-              <button
-                className="close-details-button" // Add a class for styling
-                onClick={handleCloseDetails}
-                aria-label="Close details"
-              >
-                &times;{" "}
-                {/* HTML entity for a multiplication sign, commonly used for 'X' close button */}
-              </button>
-              <h4>
-                More Details for{" "}
-                {clickedItemData.latestSnapshot.description?.Name ||
-                  clickedItemData.id}
-              </h4>
-              <p>
-                <strong>Total Files:</strong>{" "}
-                {clickedItemData.latestSnapshot.summary?.totalFiles
-                  .toLocaleString()}
-              </p>
-              <p>
-                <strong>Last Updated:</strong> {formatDate(
-                  clickedItemData
-                    .snapshots[clickedItemData.snapshots.length - 1]?.created ||
-                    clickedItemData.created,
-                )}
-              </p>
-              <p>
-                <strong>Uploader:</strong> {clickedItemData.uploader?.name}
-              </p>
-            </div>
-          </div>
-        ))}
+        renderItemDetails={() =>
+          clickedItemData && (
+            <SearchResultDetails
+              itemData={clickedItemData}
+              onClose={handleCloseDetails}
+            />
+          )}
       />
     </>
   )
