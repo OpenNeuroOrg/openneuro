@@ -48,67 +48,13 @@
     }
   }
 
-  // .result-meta-body > div {
-  //   font-size: 14px;
-  //   margin-bottom: 10px;
-  //   display: flex;
-  //   flex-direction: column;
-
-  //   strong {
-  //     text-transform: uppercase;
-  //     color: #666;
-  //     margin-bottom: 5px;
-  //   }
-  //   .list-item {
-  //     display: inline-block;
-
-  //     border-right: 1px solid #cacaca;
-  //     font-weight: 600;
-  //     padding: 3px 6px;
-  //     margin: 0 10px 5px 0;
-  //     color: var(--current-theme-secondary);
-  //     border: 1px solid;
-  //     border-radius: $border-radius-default;
-  //   }
-  // }
-
-  // .result-meta-footer {
-  //   display: flex;
-  //   flex-wrap: wrap;
-  //   .result-summary-meta {
-  //     margin: 0 10px 10px 0;
-  //     padding: 0 40px 0 0;
-  //     font-size: 14px;
-  //     font-weight: 600;
-  //     &:last-child {
-  //       padding-right: 0;
-  //     }
-  //     strong {
-  //       text-transform: uppercase;
-  //       color: #666;
-  //     }
-  //   }
-  // }
-
   .updated-divider {
     margin: 0 10px;
     @media (max-width: 767px) {
       display: none;
     }
   }
-  // .result-upload-info {
-  //   text-align: left;
-  //   font-size: 12px;
-  //   margin: 0 0 20px;
-  //   display: flex;
-  //   justify-content: flex-start;
-  //   @media (max-width: 767px) {
-  //     flex-direction: column;
-  //   }
-  //   span {
-  //     color: #666;
-  //   }
-  // }
+
   .result-actions {
     text-align: right;
     .on-button {

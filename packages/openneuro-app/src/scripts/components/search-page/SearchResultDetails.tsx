@@ -1,11 +1,11 @@
-import React from "react"
-import type { FC } from "react"
+import React, { FC, ReactNode } from "react" // Changed import: removed 'type' for ReactNode
 import bytes from "bytes"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 import { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../formatting/modality-label"
+import "./search-result-details.scss"
 
 interface SearchResultDetailsProps {
   itemData: SearchResultItemProps["node"] | null
@@ -31,8 +31,8 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   ): JSX.Element | null => {
     if (items && items.length > 0) {
       return (
-        <>
-          <strong>{type}:</strong>
+        <div className="result-summary-meta">
+          <label>{type}:</label>
           <div>
             {items.map((item, index) => (
               <span className="list-item" key={index}>
@@ -40,7 +40,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
               </span>
             ))}
           </div>
-        </>
+        </div>
       )
     } else {
       return null
@@ -55,83 +55,16 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     ? summary.subjects.length
     : 1
 
-  const sessions = (
-    <p className="result-summary-meta">
-      <strong>Sessions:</strong>
-      <span>{numSessions.toLocaleString()}</span>
-    </p>
-  )
-
-  const subjects = (
-    <p className="result-summary-meta">
-      <strong>Participants:</strong>
-      <span>{numSubjects.toLocaleString()}</span>
-    </p>
-  )
-
-  const size = (
-    <p className="result-summary-meta">
-      <strong>Size:</strong>
-      <span>{bytes(itemData?.latestSnapshot?.size) || "unknown"}</span>
-    </p>
-  )
-
-  const files = (
-    <p className="result-summary-meta">
-      <strong>Files:</strong>
-      <span>{summary?.totalFiles?.toLocaleString()}</span>
-    </p>
-  )
-
+  // Header for more details
   const moreDetailsHeader = (
-    <p className="result-summary-meta">
-      <strong>More Details for{" "}</strong>
-      <span>{itemData.latestSnapshot?.description?.Name || itemData.id}</span>
-    </p>
+    <h4>
+      <Link to={"/datasets/" + itemData?.id}>
+        {itemData.latestSnapshot?.description?.Name || itemData.id}
+      </Link>
+    </h4>
   )
 
-  const totalFilesDisplay = (
-    <p className="result-summary-meta">
-      <strong>Total Files:</strong>{" "}
-      <span>
-        {itemData.latestSnapshot?.summary?.totalFiles?.toLocaleString()}
-      </span>
-    </p>
-  )
-
-  const lastUpdatedDisplay = (
-    <p className="result-summary-meta">
-      <strong>Last Updated:</strong>{" "}
-      <span>
-        {formatDate(
-          itemData.snapshots?.[itemData.snapshots.length - 1]?.created ||
-            itemData.created,
-        )}
-      </span>
-    </p>
-  )
-
-  const accessionNumberDisplay = (
-    <p className="result-summary-meta">
-      <strong>Openneuro Accession Number:</strong>
-      <span>
-        <Link to={"/datasets/" + itemData?.id}>
-          {itemData?.id}
-        </Link>
-      </span>
-    </p>
-  )
-  const authors = itemData.latestSnapshot.description?.Authors
-  const uploaderDisplay = (
-    <p className="result-summary-meta">
-      <strong>Uploader:</strong>{" "}
-      <span>
-        {itemData.uploader?.name} on {formatDate(itemData?.created)} -{" "}
-        {formatDistanceToNow(parseISO(itemData?.created))} ago
-      </span>
-    </p>
-  )
-
+  // Lists
   const modalityList = summary?.modalities?.length
     ? (
       <div className="modality-list">
@@ -164,6 +97,52 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     )
     : null
 
+  // New helper function for consistent meta item rendering
+  const renderMetaItem = (
+    label: string | ReactNode,
+    content: ReactNode,
+  ): JSX.Element => (
+    <div className="result-summary-meta">
+      <label>{label}:&nbsp;</label>
+      {content}
+    </div>
+  )
+
+  //meta field items
+  const sessions = renderMetaItem("Sessions", numSessions.toLocaleString())
+  const subjects = renderMetaItem("Participants", numSubjects.toLocaleString())
+  const size = renderMetaItem(
+    "Size",
+    bytes(itemData?.latestSnapshot?.size) || "unknown",
+  )
+  const files = renderMetaItem("Files", summary?.totalFiles?.toLocaleString())
+  const lastUpdatedDisplay = renderMetaItem(
+    "Last Updated",
+    <div>
+      {formatDate(
+        itemData.snapshots?.[itemData.snapshots.length - 1]?.created ||
+          itemData.created,
+      )}
+    </div>,
+  )
+  const accessionNumberDisplay = renderMetaItem(
+    "Openneuro Accession Number",
+    <Link to={"/datasets/" + itemData?.id}>
+      {itemData?.id}
+    </Link>,
+  )
+  const authors = renderMetaItem(
+    "Authors",
+    <div>{itemData.latestSnapshot.description?.Authors}</div>,
+  )
+  const uploaderDisplay = renderMetaItem(
+    "Uploader by",
+    <div>
+      {itemData.uploader?.name} on {formatDate(itemData?.created)} -{" "}
+      {formatDistanceToNow(parseISO(itemData?.created))} ago
+    </div>,
+  )
+
   return (
     <div className="search-details">
       <div className="search-details-scroll">
@@ -176,17 +155,16 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
         </button>
         {moreDetailsHeader}
         {authors}
-        {totalFilesDisplay}
-        {lastUpdatedDisplay}
         {modalityList}
         {taskList}
+        {accessionNumberDisplay}
         {tracers}
         {sessions}
         {subjects}
         {size}
         {files}
-        {accessionNumberDisplay}
         {uploaderDisplay}
+        {lastUpdatedDisplay}
       </div>
     </div>
   )
