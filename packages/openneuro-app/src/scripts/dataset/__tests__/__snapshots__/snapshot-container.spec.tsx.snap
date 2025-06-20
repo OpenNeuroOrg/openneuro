@@ -407,7 +407,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 <span
                   class=" "
                   data-flow="up"
-                  data-tooltip="How to Download"
+                  data-tooltip="Agree to Terms of Service to Download"
                 >
                   <a
                     href="/datasets/ds001032/versions/1.0.0/download"

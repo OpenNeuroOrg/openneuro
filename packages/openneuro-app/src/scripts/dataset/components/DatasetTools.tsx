@@ -99,7 +99,7 @@ export const DatasetTools = ({
         />
       )}
       <DatasetToolButton
-        tooltip="How to Download"
+        tooltip={agree ? "How to Download" : "Agree to Terms of Service to Download"}
         path={snapshotId
           ? `/datasets/${datasetId}/versions/${snapshotId}/download`
           : `/datasets/${datasetId}/download`}
@@ -109,7 +109,7 @@ export const DatasetTools = ({
       />
       {hasDerivatives && (
         <DatasetToolButton
-          tooltip="Available Derivatives"
+          tooltip={agree ? "Available Derivatives" : "Agree to Terms of Service to access Derivatives"}
           path={snapshotId
             ? `/datasets/${datasetId}/versions/${snapshotId}/derivatives`
             : `/datasets/${datasetId}/derivatives`}
