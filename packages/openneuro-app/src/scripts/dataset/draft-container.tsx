@@ -93,34 +93,37 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
       >
         <DatasetHeader
           pageHeading={description.Name}
-          modality={modality}
-          renderEditor={() => (
-            <>
-              <EditDescriptionField
+          modality={summary?.modalities[0]}
+          datasetHeaderTools={
+            <div className="dataset-tool-buttons">
+              <DatasetTools
+                hasEdit={hasEdit}
+                isPublic={dataset.public}
                 datasetId={datasetId}
-                field="Name"
-                rows={2}
-                description={description.Name}
-                editMode={hasEdit}
-              >
-                {description.Name}
-              </EditDescriptionField>
-              <FollowToggles>
-                <FollowDataset
-                  profile={profile !== null}
-                  datasetId={dataset.id}
-                  following={dataset.following}
-                  followers={dataset.followers.length}
-                />
-                <StarDataset
-                  profile={profile !== null}
-                  datasetId={dataset.id}
-                  starred={dataset.starred}
-                  stars={dataset.stars.length}
-                />
-              </FollowToggles>
-            </>
-          )}
+                snapshotId={datasetId}
+                isAdmin={isAdmin}
+                isDatasetAdmin={isDatasetAdmin}
+                hasDerivatives={hasDerivatives}
+                hasSnapshot={dataset.snapshots.length !== 0}
+              />
+            </div>
+          }
+          datasetUserActions={
+            <FollowToggles>
+              <FollowDataset
+                profile={profile !== null}
+                datasetId={dataset.id}
+                following={dataset.following}
+                followers={dataset.followers.length}
+              />
+              <StarDataset
+                profile={profile !== null}
+                datasetId={dataset.id}
+                starred={dataset.starred}
+                stars={dataset.stars.length}
+              />
+            </FollowToggles>
+          }
         />
         <DatasetAlertDraft
           isPrivate={!dataset.public}
@@ -151,7 +154,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   }
                 />
               </div>
-              <DatasetTools
+              {
+                /* <DatasetTools
                 hasEdit={hasEdit}
                 isPublic={dataset.public}
                 datasetId={datasetId}
@@ -159,7 +163,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 hasSnapshot={dataset.snapshots.length !== 0}
                 isDatasetAdmin={isDatasetAdmin}
                 hasDerivatives={hasDerivatives}
-              />
+              /> */
+              }
               <DatasetPageTabContainer>
                 <TabRoutesDraft dataset={dataset} hasEdit={hasEdit} />
               </DatasetPageTabContainer>
