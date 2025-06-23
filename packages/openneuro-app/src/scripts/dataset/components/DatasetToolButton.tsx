@@ -21,7 +21,7 @@ export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
   justify-content: center;
   a {
     pointer-events: ${props.disable ? "none" : "auto"};
-    color: ${props.disable ? "rgba(0, 0, 0, 0.5)" : "#fff"};
+    color: ${props.disable ? "rgba(255, 255, 255, 0.7)" : "#fff"};
     font-size: 17px;
     text-decoration: none;
     font-weight: 400;
