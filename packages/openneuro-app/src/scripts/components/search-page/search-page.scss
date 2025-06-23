@@ -297,7 +297,10 @@
   flex: 1;
   padding: 20px 50px 20px 20px;
   position: relative;
-  max-width: 100%;
+  max-width: calc(100% - 450px - 380px);
+  @media screen and (max-width: 1410px) {
+    max-width: 100%;
+  }
   @media (max-width: 980px) {
     padding: 0;
   }
@@ -316,11 +319,22 @@
       }
     }
   }
-  &.details-opened {
-    max-width: calc(100% - 430px);
-    @media screen and (max-width: 1410px) {
-      max-width: 100%;
-    }
+}
+
+.search-details {
+  flex-grow: 1;
+  max-width: 380px;
+  @media screen and (max-width: 1410px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 5000;
+    padding: 20px;
+    overflow-y: auto;
   }
 }
 
@@ -383,7 +397,6 @@
     left: 70px;
   }
 }
-
 
 .facet-search .help-text {
   font-size: 12px;

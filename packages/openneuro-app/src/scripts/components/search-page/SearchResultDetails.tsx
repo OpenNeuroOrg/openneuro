@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import type { FC, ReactNode } from "react"
 import bytes from "bytes"
 import parseISO from "date-fns/parseISO"
@@ -16,6 +16,14 @@ interface SearchResultDetailsProps {
 export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   { itemData, onClose },
 ) => {
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (itemData && closeButtonRef.current) {
+      closeButtonRef.current.focus()
+    }
+  }, [itemData])
+
   if (!itemData) {
     return null
   }
@@ -65,7 +73,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     </h4>
   )
 
-  // Lists
+  // Lists - add defensive optional chaining as well
   const modalityList = summary?.modalities?.length
     ? (
       <div className="modality-list">
@@ -109,7 +117,6 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     </div>
   )
 
-  //meta field items
   const sessions = renderMetaItem("Sessions", numSessions.toLocaleString())
   const subjects = renderMetaItem("Participants", numSubjects.toLocaleString())
   const size = renderMetaItem(
@@ -134,7 +141,8 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   )
   const authors = renderMetaItem(
     "Authors",
-    <div>{itemData.latestSnapshot.description?.Authors}</div>,
+    // Ensure description exists before accessing Authors
+    <div>{itemData.latestSnapshot?.description?.Authors}</div>,
   )
   const uploaderDisplay = renderMetaItem(
     "Uploader by",
@@ -151,6 +159,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
           className="close-details-button"
           onClick={onClose}
           aria-label="Close details"
+          ref={closeButtonRef}
         >
           &times;
         </button>

@@ -7,7 +7,10 @@ export interface SearchResultsListProps {
   items: { node: SearchResultItemProps["node"] }[]
   datasetTypeSelected: string
   clickedItemData: SearchResultItemProps["node"] | null
-  handleItemClick: (nodeData: SearchResultItemProps["node"]) => void
+  handleItemClick: (
+    itemId: string,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => void
 }
 
 export const SearchResultsList = ({
@@ -29,7 +32,7 @@ export const SearchResultsList = ({
                 node={data.node}
                 key={data.node.id}
                 datasetTypeSelected={datasetTypeSelected}
-                onClick={() => handleItemClick(data.node)}
+                onClick={handleItemClick}
                 isExpanded={isActive}
               />
             )

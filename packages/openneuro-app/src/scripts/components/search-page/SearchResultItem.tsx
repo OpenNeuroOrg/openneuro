@@ -12,10 +12,6 @@ import activityPulseIcon from "../../../assets/activity-icon.png"
 import { hasEditPermissions } from "../../authentication/profile"
 import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
 
-/**
- * Return an equivalent to moment(date).format('L') without moment
- * @param {*} dateObject
- */
 export const formatDate = (dateObject) =>
   new Date(dateObject).toISOString().split("T")[0]
 
@@ -116,7 +112,7 @@ export interface SearchResultItemProps {
     ]
   }
   datasetTypeSelected?: string
-  onClick: (itemId: string) => void
+  onClick: (itemId: string, event: React.MouseEvent<HTMLButtonElement>) => void
   isExpanded: boolean
 }
 
@@ -218,13 +214,11 @@ export const SearchResultItem = ({
   )
 
   let invalid = false
-  // Legacy issues still flagged
   if (node.latestSnapshot.issues) {
     invalid = node.latestSnapshot.issues.some(
       (issue) => issue.severity === "error",
     )
   } else {
-    // Test if there's any schema validator errors
     invalid = node.latestSnapshot.validation?.errors > 0
   }
   const shared = !node.public && node.uploader?.id !== profileSub
@@ -301,7 +295,7 @@ export const SearchResultItem = ({
               className={`on-button on-button--small ${
                 isExpanded && "expanded"
               }`}
-              onClick={() => onClick(node.id)}
+              onClick={(e) => onClick(node.id, e)}
             >
               {isExpanded ? "Hide Details" : "Show Details"}
             </button>

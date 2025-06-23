@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import type { FC } from "react"
+import * as Sentry from "@sentry/react"
 import { useLocation } from "react-router-dom"
 import { SearchPage } from "../components/search-page/SearchPage"
 import { SearchResultsList } from "../components/search-page/SearchResultsList"
@@ -159,18 +160,45 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const [clickedItemData, setClickedItemData] = useState<
     SearchResultItemProps["node"] | null
   >(null)
+
+  const lastOpenedButtonRef = useRef<HTMLButtonElement | null>(null)
+
   useEffect(() => {
     setClickedItemData(null)
   }, [JSON.stringify(searchParams)])
 
-  const handleItemClick = (nodeData: SearchResultItemProps["node"]) => {
-    setClickedItemData((prevData) =>
-      prevData?.id === nodeData.id ? null : nodeData
-    )
+  // handleItemClick to accept itemId and event, and store the event.currentTarget
+  const handleItemClick = (
+    itemId: string,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    const nodeData =
+      resultsList.find((item) => item.node.id === itemId)?.node || null
+
+    if (!nodeData) {
+      Sentry.captureException(`Error: nodeData not found for ID: ${itemId}`)
+      return
+    }
+
+    if (clickedItemData && clickedItemData.id === nodeData.id) {
+      // If the same item is clicked again, close details
+      setClickedItemData(null)
+      // Focus will be returned by handleCloseDetails
+    } else {
+      setClickedItemData(nodeData)
+      lastOpenedButtonRef.current = event.currentTarget
+    }
   }
 
+  // handleCloseDetails to use setTimeout for focus
   const handleCloseDetails = () => {
     setClickedItemData(null)
+    setTimeout(() => {
+      if (lastOpenedButtonRef.current) {
+        lastOpenedButtonRef.current.focus()
+        lastOpenedButtonRef.current = null
+      }
+    }, 0)
   }
 
   const labelText = modality

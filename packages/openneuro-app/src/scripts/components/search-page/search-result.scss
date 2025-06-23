@@ -29,6 +29,7 @@
   .owner-icon-wrap {
     display: flex;
     justify-content: flex-end;
+    padding: 0;
     @media (max-width: 480px) {
       justify-content: flex-start;
       margin-bottom: 10px;
@@ -58,6 +59,7 @@
 
   .result-actions {
     text-align: right;
+    padding: 0;
     .on-button {
       border: 1px solid var(--current-theme-secondary);
       background-color: #fff;
