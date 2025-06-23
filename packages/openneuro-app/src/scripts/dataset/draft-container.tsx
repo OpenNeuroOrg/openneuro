@@ -100,7 +100,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 hasEdit={hasEdit}
                 isPublic={dataset.public}
                 datasetId={datasetId}
-                snapshotId={datasetId}
                 isAdmin={isAdmin}
                 isDatasetAdmin={isDatasetAdmin}
                 hasDerivatives={hasDerivatives}

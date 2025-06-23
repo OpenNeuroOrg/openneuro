@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 
 export interface DatasetHeaderProps {
-  modality: string
+  modality: string | null | undefined
   pageHeading: string
   renderEditor?: () => React.ReactNode
   datasetUserActions?: React.ReactNode
@@ -16,6 +16,8 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   datasetHeaderTools,
   datasetUserActions,
 }) => {
+  const hexagonClass = modality ? modality.toLowerCase() : "no-modality"
+
   return (
     <div className="dataset-header">
       <div className="container">
@@ -24,7 +26,7 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             <h1>
               <Link to={"/search/modality/" + modality}>
                 <div className="hexagon-wrapper">
-                  <div className="hexagon no-modality"></div>
+                  <div className={`hexagon ${hexagonClass}`}></div>
                   <div className="label">
                     {modality
                       ? (

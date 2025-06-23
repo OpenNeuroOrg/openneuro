@@ -52,7 +52,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                   class="hexagon-wrapper"
                 >
                   <div
-                    class="hexagon no-modality"
+                    class="hexagon mri"
                   />
                   <div
                     class="label"
