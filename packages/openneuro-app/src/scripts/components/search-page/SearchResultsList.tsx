@@ -1,10 +1,10 @@
 import React from "react"
 import { SearchResultItem } from "./SearchResultItem"
 import "./search-page.scss"
-import { SearchResultItemProps } from "./SearchResultItem"
+import type { SearchResultItemProps } from "./SearchResultItem"
 
 export interface SearchResultsListProps {
-  items: any[]
+  items: { node: SearchResultItemProps["node"] }[]
   datasetTypeSelected: string
   clickedItemData: SearchResultItemProps["node"] | null
   handleItemClick: (nodeData: SearchResultItemProps["node"]) => void

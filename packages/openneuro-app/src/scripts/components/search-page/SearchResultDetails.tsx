@@ -1,9 +1,10 @@
-import React, { FC, ReactNode } from "react" // Changed import: removed 'type' for ReactNode
+import React from "react"
+import type { FC, ReactNode } from "react"
 import bytes from "bytes"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
-import { SearchResultItemProps } from "./SearchResultItem"
+import type { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../formatting/modality-label"
 import "./search-result-details.scss"
 

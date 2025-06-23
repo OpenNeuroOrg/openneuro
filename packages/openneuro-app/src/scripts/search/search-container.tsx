@@ -37,7 +37,7 @@ import { SearchParamsCtx } from "./search-params-ctx"
 import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
 import AdminUser from "../authentication/admin-user.jsx"
-import { SearchResultItemProps } from "../components/search-page/SearchResultItem"
+import type { SearchResultItemProps } from "../components/search-page/SearchResultItem"
 import { SearchResultDetails } from "../components/search-page/SearchResultDetails"
 
 export interface SearchContainerProps {

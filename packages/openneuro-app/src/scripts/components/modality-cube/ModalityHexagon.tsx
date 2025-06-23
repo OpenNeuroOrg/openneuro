@@ -16,7 +16,7 @@ export const ModalityHexagon: FC<ModalityHexagonProps> = ({
     ? primaryModality.toLowerCase()
     : "no-modality"
 
-  const labelText = primaryModality.toLowerCase() === "ieeg"
+  const labelText = primaryModality?.toLowerCase() === "ieeg"
     ? "iEEG"
     : primaryModality?.toUpperCase() || (
       <i className="fa fa-circle-o-notch fa-spin"></i>
