@@ -6,7 +6,7 @@ import { getUnexpiredProfile } from "../../authentication/profile"
 import { useUser } from "../../queries/user"
 import SlidingRadioGroup from "../inputs/sliding-radio-group"
 
-const ShowDatasetRadios: FC = () => {
+export const DatasetsRadioTabs: FC = () => {
   const [cookies] = useCookies()
   const loggedOut = !getUnexpiredProfile(cookies)
   const { user } = useUser()
@@ -101,5 +101,3 @@ const ShowDatasetRadios: FC = () => {
     </>
   )
 }
-
-export default ShowDatasetRadios

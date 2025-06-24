@@ -266,11 +266,6 @@ export const SearchResultItem = ({
             <h3>
               <Link to={"/datasets/" + datasetId}>{heading}</Link>
             </h3>
-            {MyDatasetsPage && (
-              <div className="dataset-permissions-tag">
-                <small>Access: {datasetPerms}</small>
-              </div>
-            )}
             <p>
               {node.latestSnapshot?.readme
                 ? (node.latestSnapshot.readme.length > trimlength
@@ -290,6 +285,11 @@ export const SearchResultItem = ({
               primaryModality={node.latestSnapshot.summary?.primaryModality}
             />
           </div>
+          {MyDatasetsPage && (
+            <div className="col col-12 dataset-permissions-tag text-right">
+              <small>Access: {datasetPerms}</small>
+            </div>
+          )}
           <div className="col col-12 result-actions">
             <button
               className={`on-button on-button--small ${

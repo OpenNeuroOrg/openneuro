@@ -29,7 +29,7 @@ import {
   TracerNames,
   TracerRadionuclides,
 } from "./inputs"
-import ShowDatasetRadios from "./components/show-datasets-radios"
+import { DatasetsRadioTabs } from "./components/DatasetsRadioTabs"
 import FiltersBlockContainer from "./filters-block-container"
 import AggregateCountsContainer from "../pages/front-page/aggregate-queries/aggregate-counts-container"
 import { useSearchResults } from "./use-search-results"
@@ -235,7 +235,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 : <h1>{"Search All Datasets"}</h1>}
             </div>
             <div className="col-lg text-right">
-              <ShowDatasetRadios />
+              <DatasetsRadioTabs />
             </div>
           </div>
         )}

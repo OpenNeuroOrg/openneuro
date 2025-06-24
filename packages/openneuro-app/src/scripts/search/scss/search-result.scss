@@ -24,11 +24,12 @@
       font-weight: normal;
     }
   }
-
+  .dataset-permissions-tag,
   .result-icon-wrap,
   .owner-icon-wrap {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     padding: 0;
     @media (max-width: 480px) {
       justify-content: flex-start;
