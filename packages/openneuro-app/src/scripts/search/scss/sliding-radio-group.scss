@@ -1,22 +1,14 @@
 @import '../../scss/variables';
 
-/*
-  -------------------------------------------------------------
-  Apply box-sizing globally or to the component root for consistency
-  -------------------------------------------------------------
-*/
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 
-/*
-  -------------------------------------------------------------
-  Root container for the general SlidingRadioGroup component
-  -------------------------------------------------------------
-*/
+
+// Root container for the general SlidingRadioGroup component
 .sliding-radio-group-root {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
   &.btn-group-wrapper.facet-radio.show-dataset-radios-container {
     position: relative;
     margin: 0 0 10px;
@@ -41,11 +33,7 @@
     }
   }
 
-  /*
-    -------------------------------------------------------------
-    Styles for .dataset-filter-radio (individual radio button wrapper)
-    -------------------------------------------------------------
-  */
+  // Styles for .dataset-filter-radio (individual radio button wrapper)
   .dataset-filter-radio {
     margin: 0;
 
@@ -66,7 +54,6 @@
       height: 100%;
       white-space: nowrap;
       padding: 6px 12px;
-
       border-right: 1px solid #ddd;
 
       &::before,
@@ -79,13 +66,15 @@
     label.is-active {
       border-right: none;
     }
+
+    input[type='radio']:focus-within + label {
+      box-shadow: inset 0 0 3px 1px #00a3ff;
+      outline: 0;
+    }
   }
 
-  /*
-    -------------------------------------------------------------
-    Styles for the inner group of radio buttons container
-    -------------------------------------------------------------
-  */
+  // Styles for the inner group of radio buttons container
+
   .show-dataset-radios-group {
     display: flex;
     flex-direction: row;
@@ -107,11 +96,8 @@
     opacity: 0;
   }
 
-  /*
-    -------------------------------------------------------------
-    Specific button states within this component (text color changes)
-    -------------------------------------------------------------
-  */
+  //Specific button states within this component (text color changes)
+
   .dataset-filter-radio {
     > label {
       color: var(--current-theme-primary);
@@ -126,6 +112,4 @@
       color: var(--current-theme-primary-dark);
     }
   }
-
-
 }

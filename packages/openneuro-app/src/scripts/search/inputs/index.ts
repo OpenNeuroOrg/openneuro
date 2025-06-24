@@ -1,5 +1,4 @@
 import KeywordInput from "./keyword-input"
-import AllDatasetsToggle from "./admin-allDatasets-toggle"
 import ModalitySelect from "./modality-select"
 import InitiativeSelect from "./initiative-select"
 import AgeRangeInput from "./age-range-input"
@@ -22,7 +21,6 @@ import SortBySelect from "./sort-by-select"
 
 export {
   AgeRangeInput,
-  AllDatasetsToggle,
   AuthorInput,
   BodyPartsInput,
   DatasetTypeSelect,

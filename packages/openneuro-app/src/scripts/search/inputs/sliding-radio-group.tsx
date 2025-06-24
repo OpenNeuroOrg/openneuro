@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import type { FC } from "react"
-
 import "../scss/sliding-radio-group.scss"
 
 interface RadioItem {
@@ -59,12 +58,12 @@ const SlidingRadioGroup: FC<SlidingRadioGroupProps> = ({
         const newStyles = calculateSliderPosition(valueToCalculate)
         setSliderStyles(newStyles)
       } else {
+        // If nothing is selected, hide the slider
         setSliderStyles({ left: 0, width: 0, height: 0, top: 0 })
       }
     }
 
     const timeoutId = setTimeout(updateSlider, 50)
-
     window.addEventListener("resize", updateSlider)
 
     return () => {
@@ -92,8 +91,7 @@ const SlidingRadioGroup: FC<SlidingRadioGroupProps> = ({
         }}
       />
 
-      {/* The container for the actual radio buttons */}
-      <div className="show-dataset-radios-group">
+      <div className="show-dataset-radios-group" role="radiogroup">
         {items.map((item) => {
           const value = typeof item === "object" ? item.value : item
           const label = typeof item === "object" ? item.label : item
