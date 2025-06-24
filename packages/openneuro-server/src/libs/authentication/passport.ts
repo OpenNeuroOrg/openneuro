@@ -95,9 +95,8 @@ export const verifyORCIDUser = (
   params,
   done,
 ) => {
-  const token = `${profile.orcid}:${profile.access_token}`
   orcid
-    .getProfile(token)
+    .getProfile(profile.orcid, profile.access_token)
     .then((info) => {
       profile.info = info
       profile.provider = PROVIDERS.ORCID
