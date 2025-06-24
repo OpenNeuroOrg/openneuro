@@ -17,8 +17,6 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   datasetHeaderTools,
   datasetUserActions,
 }) => {
-  const hexagonClass = modality ? modality.toLowerCase() : "no-modality"
-
   return (
     <div className="dataset-header">
       <div className="container">
