@@ -73,7 +73,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     </h4>
   )
 
-  // Lists - add defensive optional chaining as well
+  // Lists
   const modalityList = summary?.modalities?.length
     ? (
       <div className="modality-list">
@@ -106,7 +106,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     )
     : null
 
-  // New helper function for consistent meta item rendering
+  // function for consistent meta item rendering
   const renderMetaItem = (
     label: string | ReactNode,
     content: ReactNode,
@@ -141,7 +141,6 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   )
   const authors = renderMetaItem(
     "Authors",
-    // Ensure description exists before accessing Authors
     <div>{itemData.latestSnapshot?.description?.Authors}</div>,
   )
   const uploaderDisplay = renderMetaItem(
