@@ -166,7 +166,7 @@ export const setupPassportAuth = () => {
           config.auth.orcid.apiURI.includes("sandbox"),
         clientID: config.auth.orcid.clientID,
         clientSecret: config.auth.orcid.clientSecret,
-        scope: "/activities/update",
+        scope: ["/activities/update", "/read-limited"],
         callbackURL: `${config.url + config.apiPrefix}auth/orcid/callback`,
       },
       verifyORCIDUser,
