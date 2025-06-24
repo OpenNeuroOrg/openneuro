@@ -39,10 +39,10 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
         class="container"
       >
         <div
-          class="grid grid-between"
+          class="ds-header-inner"
         >
           <div
-            class="col"
+            class="ds-inner-left"
           >
             <h1>
               <a
@@ -52,7 +52,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                   class="hexagon-wrapper"
                 >
                   <div
-                    class="hexagon no-modality"
+                    class="hexagon mri"
                   />
                   <div
                     class="label"
@@ -62,73 +62,157 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 </div>
               </a>
               DS003-downsampled (only T1)
-              <div
-                class="css-1dyyc64"
-              >
-                <div
-                  class="toggle-counter-wrap"
-                >
-                  <span
-                    class=" "
-                    data-flow="up"
-                    data-tooltip="Get notified on new versions/comments"
-                  >
-                    <span
-                      class="toggle-counter"
-                    >
-                      <button
-                        aria-label="Following"
-                        class="on-button on-button--medium on-button--default icon-text toggle-btn active"
-                        role="button"
-                        type="button"
-                      >
-                        <i
-                          aria-hidden="true"
-                          class="fa fa-star css-1qxtz39"
-                        />
-                        Following
-                        <span
-                          class="count-span"
-                        >
-                          1
-                        </span>
-                      </button>
-                    </span>
-                  </span>
-                </div>
-                <div
-                  class="toggle-counter-wrap"
-                >
-                  <span
-                    class=" "
-                    data-flow="up"
-                    data-tooltip="Save to your bookmarked datasets"
-                  >
-                    <span
-                      class="toggle-counter"
-                    >
-                      <button
-                        aria-label="Bookmark"
-                        class="on-button on-button--medium on-button--default icon-text toggle-btn"
-                        role="button"
-                        type="button"
-                      >
-                        <i
-                          aria-hidden="true"
-                          class="fa fa-bookmark css-1qxtz39"
-                        />
-                        Bookmark
-                        <span
-                          class="count-span"
-                        >
-                          0
-                        </span>
-                      </button>
-                    </span>
-                  </span>
-                </div>
-              </div>
             </h1>
+            <div
+              class="dataset-tool-buttons"
+            >
+              <span
+                class="css-1dvuowd"
+              >
+                <span
+                  class="css-1hlo510"
+                >
+                  <span
+                    class=" "
+                    data-flow="up"
+                    data-tooltip="View the dataset file tree"
+                  >
+                    <a
+                      href="/datasets/ds001032/versions/1.0.0"
+                    >
+                      <span
+                        aria-label="Files"
+                        class=" on-icon icon-text "
+                        role="img"
+                      >
+                        <i
+                          class="fa fa-folder"
+                        />
+                        Files
+                      </span>
+                    </a>
+                  </span>
+                </span>
+                <span
+                  class="css-126f3py"
+                >
+                  <span
+                    class=" "
+                    data-flow="up"
+                    data-tooltip="Agree to Terms of Service to Download"
+                  >
+                    <a
+                      href="/datasets/ds001032/versions/1.0.0/download"
+                    >
+                      <span
+                        aria-label="Download"
+                        class=" on-icon icon-text "
+                        role="img"
+                      >
+                        <i
+                          class="fa fa-download"
+                        />
+                        Download
+                      </span>
+                    </a>
+                  </span>
+                </span>
+                <span
+                  class="css-1hlo510"
+                >
+                  <span
+                    class=" "
+                    data-flow="up"
+                    data-tooltip="View the dataset metadata"
+                  >
+                    <a
+                      href="/datasets/ds001032/versions/1.0.0/metadata"
+                    >
+                      <span
+                        aria-label="Metadata"
+                        class=" on-icon icon-text "
+                        role="img"
+                      >
+                        <i
+                          class="fa fa-file-code"
+                        />
+                        Metadata
+                      </span>
+                    </a>
+                  </span>
+                </span>
+              </span>
+            </div>
+          </div>
+          <div
+            class="ds-inner-right"
+          >
+            <div
+              class="css-zw18vc"
+            >
+              <div
+                class="toggle-counter-wrap"
+              >
+                <span
+                  class=" "
+                  data-flow="up"
+                  data-tooltip="Get notified on new versions/comments"
+                >
+                  <span
+                    class="toggle-counter"
+                  >
+                    <button
+                      aria-label="Following"
+                      class="on-button on-button--medium on-button--default icon-text toggle-btn active"
+                      role="button"
+                      type="button"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="fa fa-star css-1qxtz39"
+                      />
+                      Following
+                      <span
+                        class="count-span"
+                      >
+                        1
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+              <div
+                class="toggle-counter-wrap"
+              >
+                <span
+                  class=" "
+                  data-flow="up"
+                  data-tooltip="Save to your bookmarked datasets"
+                >
+                  <span
+                    class="toggle-counter"
+                  >
+                    <button
+                      aria-label="Bookmark"
+                      class="on-button on-button--medium on-button--default icon-text toggle-btn"
+                      role="button"
+                      type="button"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="fa fa-bookmark css-1qxtz39"
+                      />
+                      Bookmark
+                      <span
+                        class="count-span"
+                      >
+                        0
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -370,86 +454,6 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 </div>
               </div>
             </div>
-          </div>
-          <div
-            class="dataset-tool-buttons"
-          >
-            <span
-              class="css-1dvuowd"
-            >
-              <span
-                class="css-1mdlu11"
-              >
-                <span
-                  class=" "
-                  data-flow="up"
-                  data-tooltip="View the dataset file tree"
-                >
-                  <a
-                    href="/datasets/ds001032/versions/1.0.0"
-                  >
-                    <span
-                      aria-label="Files"
-                      class=" on-icon icon-text "
-                      role="img"
-                    >
-                      <i
-                        class="fa fa-folder"
-                      />
-                      Files
-                    </span>
-                  </a>
-                </span>
-              </span>
-              <span
-                class="css-aokf2s"
-              >
-                <span
-                  class=" "
-                  data-flow="up"
-                  data-tooltip="Agree to Terms of Service to Download"
-                >
-                  <a
-                    href="/datasets/ds001032/versions/1.0.0/download"
-                  >
-                    <span
-                      aria-label="Download"
-                      class=" on-icon icon-text "
-                      role="img"
-                    >
-                      <i
-                        class="fa fa-download"
-                      />
-                      Download
-                    </span>
-                  </a>
-                </span>
-              </span>
-              <span
-                class="css-1mdlu11"
-              >
-                <span
-                  class=" "
-                  data-flow="up"
-                  data-tooltip="View the dataset metadata"
-                >
-                  <a
-                    href="/datasets/ds001032/versions/1.0.0/metadata"
-                  >
-                    <span
-                      aria-label="Metadata"
-                      class=" on-icon icon-text "
-                      role="img"
-                    >
-                      <i
-                        class="fa fa-file-code"
-                      />
-                      Metadata
-                    </span>
-                  </a>
-                </span>
-              </span>
-            </span>
           </div>
           <div
             class="css-1xk6djt"

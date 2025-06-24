@@ -15,29 +15,28 @@ export const DatasetToolStyle: StyledComponent<DatasetToolStyleProps> = styled
   .span<DatasetToolStyleProps>(
     (props) => `
   display: flex;
-  margin: 0 auto 10px;
+  margin: 0;
   flex-basis: auto;
   padding: 0 15px;
   justify-content: center;
   a {
     pointer-events: ${props.disable ? "none" : "auto"};
-    color: ${
-      props.disable ? "rgba(0, 0, 0, 0.5);" : "var(--current-theme-primary);"
-    }
+    color: ${props.disable ? "rgba(255, 255, 255, 0.7)" : "#fff"};
     font-size: 17px;
     text-decoration: none;
     font-weight: 400;
     padding: 4px;
-    border-bottom: 2px solid transparent;
+    border-bottom: 8px solid transparent;
     border-bottom-color: ${
-      props.active ? "var(--current-theme-primary)" : "transparent"
+      props.active ? "var(--current-theme-primary-light);" : "transparent;"
     };
     i {
       margin-right: 6px;
       font-size: 15px;
     }
     &:hover {
-      border-bottom-color: var(--current-theme-primary);
+      color: #fff;
+      border-bottom-color: #fff;
     }
   }
 `,
