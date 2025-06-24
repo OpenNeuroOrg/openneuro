@@ -153,17 +153,6 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   }
                 />
               </div>
-              {
-                /* <DatasetTools
-                hasEdit={hasEdit}
-                isPublic={dataset.public}
-                datasetId={datasetId}
-                isAdmin={isAdmin}
-                hasSnapshot={dataset.snapshots.length !== 0}
-                isDatasetAdmin={isDatasetAdmin}
-                hasDerivatives={hasDerivatives}
-              /> */
-              }
               <DatasetPageTabContainer>
                 <TabRoutesDraft dataset={dataset} hasEdit={hasEdit} />
               </DatasetPageTabContainer>
