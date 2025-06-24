@@ -3,23 +3,27 @@ import { Link } from "react-router-dom"
 import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
 
 export interface DatasetHeaderProps {
-  modality: string
+  modality: string | null | undefined
   pageHeading: string
   renderEditor?: () => React.ReactNode
-  children?: JSX.Element
+  datasetUserActions?: React.ReactNode
+  datasetHeaderTools?: React.ReactNode
 }
 
 export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   pageHeading,
   modality,
   renderEditor,
-  children,
+  datasetHeaderTools,
+  datasetUserActions,
 }) => {
+  const hexagonClass = modality ? modality.toLowerCase() : "no-modality"
+
   return (
     <div className="dataset-header">
       <div className="container">
-        <div className="grid grid-between">
-          <div className="col">
+        <div className="ds-header-inner">
+          <div className="ds-inner-left">
             <h1>
               <Link to={"/search/modality/" + modality}>
                 <ModalityHexagon
@@ -27,9 +31,10 @@ export const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                 />
               </Link>
               {renderEditor?.() || pageHeading}
-              {children}
             </h1>
+            {datasetHeaderTools}
           </div>
+          <div className="ds-inner-right">{datasetUserActions}</div>
         </div>
       </div>
     </div>

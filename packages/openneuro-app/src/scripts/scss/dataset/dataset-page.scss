@@ -1,25 +1,54 @@
 @import '../variables.scss';
 .dataset {
   .dataset-header {
-    h1 {
+    .ds-header-inner {
       display: flex;
       align-items: center;
-      color: #fff;
-      font-size: 24px;
-      @media (max-width: 767px) {
-        font-size: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      @media screen and (max-width: 767px) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
       }
-    }
-    .hexagon-wrapper {
-      margin-right: 10px;
-      @media (max-width: 767px) {
-        width: 56px;
-        height: 56px;
-        div.label {
-          font-size: 17px;
+      .ds-inner-left {
+        max-width: 70%;
+        @media screen and (max-width: 767px) {
+          max-width: 100%;
         }
+        h1 a {
+          margin-right: 10px;
+        }
+      }
+      .ds-inner-right {
+        max-width: 30%;
+        @media screen and (max-width: 767px) {
+          max-width: 100%;
+        }
+      }
+      h1 {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        font-size: 24px;
+        margin: 10px 0;
+        @media (max-width: 767px) {
+          font-size: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+      .hexagon-wrapper {
+        @media (max-width: 767px) {
+          width: 56px;
+          height: 56px;
+          div.label {
+            font-size: 17px;
+          }
+        }
+      }
+      .dataset-tool-buttons {
+        flex-basis: 100%;
       }
     }
   }
@@ -144,7 +173,6 @@
   }
 }
 
-
 .sidebar .dataset-meta-block {
   margin-bottom: 25px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
@@ -257,11 +285,6 @@
 .dataset-page {
   .dataset-header {
     background-color: var(--current-theme-header);
-    background: linear-gradient(
-      16deg,
-      var(--current-theme-header-dark),
-      var(--current-theme-header)
-    );
   }
 }
 
