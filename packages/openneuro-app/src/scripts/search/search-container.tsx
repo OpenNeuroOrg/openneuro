@@ -37,7 +37,6 @@ import { useSearchResults } from "./use-search-results"
 import { SearchParamsCtx } from "./search-params-ctx"
 import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
-import AdminUser from "../authentication/admin-user.jsx"
 import type { SearchResultItemProps } from "../components/search-page/SearchResultItem"
 import { SearchResultDetails } from "../components/search-page/SearchResultDetails"
 
@@ -225,24 +224,27 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         )}
         renderSortBy={() => <SortBySelect variables={variables} />}
         renderSearchHeader={() => (
-          <>
-            {portalContent
-              ? (
-                <h2>
-                  {"Search " + (labelText || selected_grant || "") + " Portal"}
-                </h2>
-              )
-              : <h1>{"Search All Datasets"}</h1>}
-          </>
+          <div className="grid grid-between grid-nogutter">
+            <div className="col">
+              {portalContent
+                ? (
+                  <h2>
+                    {"Search " + (labelText || selected_grant || "") +
+                      " Portal"}
+                  </h2>
+                )
+                : <h1>{"Search All Datasets"}</h1>}
+            </div>
+            <div className="col">
+              <ShowDatasetRadios />
+            </div>
+          </div>
         )}
         renderSearchFacets={() => (
           <>
             <NeurobagelSearch />
             <KeywordInput />
-            <AdminUser>
-              <AllDatasetsToggle />
-            </AdminUser>
-            {!searchParams.searchAllDatasets && <ShowDatasetRadios />}
+
             {!portalContent
               ? <ModalitySelect portalStyles={true} label="Modalities" />
               : <ModalitySelect portalStyles={false} label="Choose Modality" />}

@@ -1,0 +1,162 @@
+
+@import '../../scss/variables';
+
+/*
+  -------------------------------------------------------------
+  Apply box-sizing globally or to the component root for consistency
+  -------------------------------------------------------------
+*/
+
+
+/*
+  -------------------------------------------------------------
+  Root container for the ShowDatasetRadios component
+  All component-specific styles are nested here to prevent conflicts.
+  -------------------------------------------------------------
+*/
+.on-show-dataset-radios-root {
+  *, *::before, *::after {
+  box-sizing: border-box;
+}
+  &.btn-group-wrapper.facet-radio.show-dataset-radios-container {
+    position: relative;
+    margin: 0 0 10px; 
+    background-color: #f6f6f6;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    display: inline-block;
+
+    &:after {
+      content: none;
+      display: none;
+      background: none;
+      position: static;
+      width: 0;
+      height: 0;
+    }
+  }
+
+  /*
+    -------------------------------------------------------------
+    Styles for .dataset-filter-radio adapted for button groups
+    -------------------------------------------------------------
+  */
+  .dataset-filter-radio { 
+    margin: 0; 
+
+    [type='radio']:checked,
+    [type='radio']:not(:checked) {
+      position: absolute;
+      left: -9999px;
+    }
+
+    > label {
+      font-size: 13px;
+      line-height: 1.7em;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%; 
+      white-space: nowrap;
+      padding: 6px 12px; 
+
+      border-right: 1px solid #ddd; 
+
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+    &:last-child > label,
+    label.is-active {
+      border-right: none; 
+    }
+  }
+
+  /*
+    -------------------------------------------------------------
+    Styles for the inner group of radio buttons and the sliding highlight
+    -------------------------------------------------------------
+  */
+  .show-dataset-radios-group {
+    display: flex;
+    flex-direction: row; 
+    justify-content: flex-start;
+    align-items: stretch; 
+    z-index: 1;
+    position: relative;
+    width: 100%;
+  }
+
+  
+  .sliding-highlight {
+    position: absolute;
+    background-color: var(--current-theme-primary);
+    border-radius: 4px;
+    transition: left 0.3s ease, width 0.3s ease, top 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    z-index: 0;
+    opacity: 0;
+  }
+
+  /*
+    -------------------------------------------------------------
+    Specific button states within this component
+    -------------------------------------------------------------
+  */
+  .dataset-filter-radio { 
+    > label {
+      color: var(--current-theme-primary);
+      background-color: transparent;
+    }
+
+    [type='radio']:checked + label {
+      color: #fff;
+    }
+
+    [type='radio']:not(:checked) + label:hover {
+      color: var(--current-theme-primary-dark);
+    }
+  }
+
+  /*
+    -------------------------------------------------------------
+    Responsive Adjustments (Mobile first for column layout)
+    -------------------------------------------------------------
+  */
+  @media (max-width: 787px) {
+    &.btn-group-wrapper.facet-radio.show-dataset-radios-container {
+      flex-direction: column;
+      height: auto;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .show-dataset-radios-group {
+      flex-direction: column;
+      width: 100%;
+      height: auto;
+      align-items: stretch;
+    }
+
+    .sliding-highlight {
+      width: 100% !important;
+      left: 0 !important;
+    }
+
+    .dataset-filter-radio { 
+      > label {
+        height: 50px;
+        min-width: 100%;
+        border-bottom: 1px solid var(--current-theme-primary-ultralight);
+        border-right: none; 
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}
