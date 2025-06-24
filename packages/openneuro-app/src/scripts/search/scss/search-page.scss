@@ -219,7 +219,7 @@
   @media (max-width: 980px) {
     display: block; // Show on smaller screens
     position: absolute;
-    top: 40px;
+    top: 20px;
     right: 0;
     background: none;
     border: 0;
@@ -275,6 +275,7 @@
       opacity: 1;
       transform: translateX(0);
       transition: opacity 1s;
+      max-width: 100vw;
     }
   }
 
@@ -302,7 +303,7 @@
     max-width: 100%;
   }
   @media (max-width: 980px) {
-    padding: 0;
+    padding: 0 10px;
   }
   .search-results {
     max-width: 100%;

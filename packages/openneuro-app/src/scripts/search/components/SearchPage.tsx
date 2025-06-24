@@ -1,7 +1,7 @@
 import React from "react"
 import { ModalityHeader } from "./ModalityHeader"
 import { CommunityHeader } from "./CommunityHeader"
-import "./search-page.scss"
+import "../scss/search-page.scss"
 
 export interface PortalContent {
   className?: string
@@ -80,7 +80,7 @@ export const SearchPage = ({
                 className="show-filters-btn"
                 onClick={() => setOpen(!isOpen)}
               >
-                Show Filters
+                Show Additional Filters
               </button>
               <div
                 className={isOpen

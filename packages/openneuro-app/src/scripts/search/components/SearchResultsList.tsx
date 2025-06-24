@@ -1,6 +1,6 @@
 import React from "react"
 import { SearchResultItem } from "./SearchResultItem"
-import "./search-page.scss"
+import "../scss/search-page.scss"
 import type { SearchResultItemProps } from "./SearchResultItem"
 
 export interface SearchResultsListProps {

@@ -2,14 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import type { FC } from "react"
 import * as Sentry from "@sentry/react"
 import { useLocation } from "react-router-dom"
-import { SearchPage } from "../components/search-page/SearchPage"
-import { SearchResultsList } from "../components/search-page/SearchResultsList"
-import { NeurobagelSearch } from "../components/search-page/NeurobagelSearch"
+import { SearchPage } from "./components/SearchPage"
+import { SearchResultsList } from "./components/SearchResultsList"
+import { NeurobagelSearch } from "./components/NeurobagelSearch"
 import { Button } from "../components/button/Button"
 import { Loading } from "../components/loading/Loading"
 import {
   AgeRangeInput,
-  AllDatasetsToggle,
   AuthorInput,
   BodyPartsInput,
   DatasetTypeSelect,
@@ -22,7 +21,6 @@ import {
   ScannerManufacturersModelNames,
   SectionSelect,
   SexRadios,
-  ShowDatasetRadios,
   SortBySelect,
   SpeciesSelect,
   StudyDomainInput,
@@ -31,14 +29,15 @@ import {
   TracerNames,
   TracerRadionuclides,
 } from "./inputs"
+import ShowDatasetRadios from "./components/show-datasets-radios"
 import FiltersBlockContainer from "./filters-block-container"
 import AggregateCountsContainer from "../pages/front-page/aggregate-queries/aggregate-counts-container"
 import { useSearchResults } from "./use-search-results"
 import { SearchParamsCtx } from "./search-params-ctx"
 import type { SearchParams } from "./initial-search-params"
 import Helmet from "react-helmet"
-import type { SearchResultItemProps } from "../components/search-page/SearchResultItem"
-import { SearchResultDetails } from "../components/search-page/SearchResultDetails"
+import type { SearchResultItemProps } from "./components/SearchResultItem"
+import { SearchResultDetails } from "./components/SearchResultDetails"
 
 export interface SearchContainerProps {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -225,7 +224,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
         renderSortBy={() => <SortBySelect variables={variables} />}
         renderSearchHeader={() => (
           <div className="grid grid-between grid-nogutter">
-            <div className="col">
+            <div className="col-lg">
               {portalContent
                 ? (
                   <h2>
@@ -235,7 +234,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
                 )
                 : <h1>{"Search All Datasets"}</h1>}
             </div>
-            <div className="col">
+            <div className="col-lg text-right">
               <ShowDatasetRadios />
             </div>
           </div>

@@ -5,7 +5,7 @@
   background-color: var(--current-theme-primary-ultralight);
   padding: 20px;
   font-size: 14px;
-
+  min-height: calc(100vh - 106px);
   h4 {
     font-size: 16px;
   }

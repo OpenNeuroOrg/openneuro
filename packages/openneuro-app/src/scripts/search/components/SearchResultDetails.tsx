@@ -5,8 +5,8 @@ import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 import type { SearchResultItemProps } from "./SearchResultItem"
-import { ModalityLabel } from "../formatting/modality-label"
-import "./search-result-details.scss"
+import { ModalityLabel } from "../../components/formatting/modality-label"
+import "../scss/search-result-details.scss"
 
 interface SearchResultDetailsProps {
   itemData: SearchResultItemProps["node"] | null

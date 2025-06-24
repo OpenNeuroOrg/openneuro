@@ -3,7 +3,7 @@ import { Button } from "../../components/button/Button"
 import { FilterListItem } from "./FilterListItem"
 import { TermListItem } from "./TermListItem"
 import type { FacetSelectValueType } from "../../components/facets/FacetSelect"
-import "./filters-block.scss"
+import "../scss/filters-block.scss"
 
 export interface FiltersBlockProps {
   keywords: string[]
