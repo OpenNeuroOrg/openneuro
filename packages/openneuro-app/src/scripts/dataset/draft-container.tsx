@@ -107,6 +107,19 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               />
             </div>
           }
+          renderEditor={() => (
+            <>
+              <EditDescriptionField
+                datasetId={datasetId}
+                field="Name"
+                rows={2}
+                description={description.Name}
+                editMode={hasEdit}
+              >
+                {description.Name}
+              </EditDescriptionField>
+            </>
+          )}
           datasetUserActions={
             <FollowToggles>
               <FollowDataset
