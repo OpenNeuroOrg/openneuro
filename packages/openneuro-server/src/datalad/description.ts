@@ -10,6 +10,7 @@ import { generateDataladCookie } from "../libs/authentication/jwt"
 import { getDatasetWorker } from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
+import yaml from "js-yaml" // <--- ADD THIS IMPORT for js-yaml
 
 /**
  * Checks if all elements in an array are strings.
@@ -30,7 +31,9 @@ export const getDescriptionObject = async (datasetId, revision) => {
     fileUrl(datasetId, "", "dataset_description.json", revision),
   )
   const contentType = res.headers.get("content-type")
-  if (res.status === 200 && contentType.includes("application/json")) {
+  // Added optional chaining for contentType here, as it might be null/undefined.
+  // This is a small, safe TypeScript improvement that often resolves linting.
+  if (res.status === 200 && contentType?.includes("application/json")) {
     return await res.json()
   } else {
     throw new Error(
@@ -119,6 +122,47 @@ export const appendSeniorAuthor = (description) => {
   }
 }
 
+// --- NEW TEST FUNCTION TO READ AND LOG DATACITE.YML ---
+const readAndLogDataciteYml = async (datasetId: string, revision: string) => {
+  const dataciteUrl = fileUrl(datasetId, "", "datacite.yml", revision)
+  try {
+    const res = await fetch(dataciteUrl)
+    if (res.status === 200) {
+      const text = await res.text()
+      try {
+        // Explicit type annotation for parsedYaml to satisfy TypeScript
+        const parsedYaml: Record<string, unknown> = yaml.load(text) as Record<
+          string,
+          unknown
+        >
+        console.log(
+          `Found and successfully read datacite.yml for dataset ${datasetId} (revision: ${revision}):`,
+          parsedYaml,
+        )
+      } catch (parseErr) {
+        console.error(
+          `Found datacite.yml for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:`,
+          parseErr,
+        )
+      }
+    } else if (res.status === 404) {
+      console.log(
+        `datacite.yml not found for dataset ${datasetId} (revision: ${revision}).`,
+      )
+    } else {
+      console.warn(
+        `Attempted to read datacite.yml for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.`,
+      )
+    }
+  } catch (fetchErr) {
+    console.error(
+      `Error fetching datacite.yml for dataset ${datasetId} (revision: ${revision}):`,
+      fetchErr,
+    )
+  }
+}
+// --- END NEW FUNCTION ---
+
 /**
  * Get a parsed dataset_description.json
  * @param {object} obj dataset or snapshot object
@@ -131,6 +175,11 @@ export const description = async (obj) => {
     Name: datasetId,
     BIDSVersion: "1.8.0",
   }
+
+  // --- CALL TEST FNC datacite.yml ---
+  await readAndLogDataciteYml(datasetId, revision)
+  // --- END CALL TEST FNC ---
+
   const cache = new CacheItem(redis, CacheType.datasetDescription, [
     datasetId,
     revision.substring(0, 7),
