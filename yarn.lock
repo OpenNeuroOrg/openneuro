@@ -3112,8 +3112,10 @@ __metadata:
     "@openneuro/components": "npm:^4.33.4"
     "@sentry/react": "npm:^8.25.0"
     "@tanstack/react-table": "npm:^8.9.3"
+    "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:6.4.2"
     "@testing-library/react": "npm:^14.2.1"
+    "@testing-library/user-event": "npm:^14.6.1"
     "@types/dompurify": "npm:^3"
     "@types/jsdom": "npm:^16"
     "@types/node": "npm:20.12.7"
@@ -4608,6 +4610,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@testing-library/dom@npm:^10.4.0":
+  version: 10.4.0
+  resolution: "@testing-library/dom@npm:10.4.0"
+  dependencies:
+    "@babel/code-frame": "npm:^7.10.4"
+    "@babel/runtime": "npm:^7.12.5"
+    "@types/aria-query": "npm:^5.0.1"
+    aria-query: "npm:5.3.0"
+    chalk: "npm:^4.1.0"
+    dom-accessibility-api: "npm:^0.5.9"
+    lz-string: "npm:^1.5.0"
+    pretty-format: "npm:^27.0.2"
+  checksum: 10/05825ee9a15b88cbdae12c137db7111c34069ed3c7a1bd03b6696cb1b37b29f6f2d2de581ebf03033e7df1ab7ebf08399310293f440a4845d95c02c0a9ecc899
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^9.0.0":
   version: 9.3.4
   resolution: "@testing-library/dom@npm:9.3.4"
@@ -4698,6 +4716,15 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
   checksum: 10/e02b2f32ae79665a79fc4d8ee053fd3832bfcd4753aa1dba05cdece1a9f59c72a0fae91e0a9387597dcb686d631a722729f2878e38dc95e6f23b291ad8d09b6c
+  languageName: node
+  linkType: hard
+
+"@testing-library/user-event@npm:^14.6.1":
+  version: 14.6.1
+  resolution: "@testing-library/user-event@npm:14.6.1"
+  peerDependencies:
+    "@testing-library/dom": ">=7.21.4"
+  checksum: 10/34b74fff56a0447731a94b40d4cf246deb8dbc1c1e3aec93acd1c3377a760bb062e979f1572bb34ec164ad28ee2a391744b42d0d6d6cc16c4ce527e5e09610e1
   languageName: node
   linkType: hard
 
@@ -6386,6 +6413,15 @@ __metadata:
   dependencies:
     deep-equal: "npm:^2.0.5"
   checksum: 10/e5da608a7c4954bfece2d879342b6c218b6b207e2d9e5af270b5e38ef8418f02d122afdc948b68e32649b849a38377785252059090d66fa8081da95d1609c0d2
+  languageName: node
+  linkType: hard
+
+"aria-query@npm:5.3.0":
+  version: 5.3.0
+  resolution: "aria-query@npm:5.3.0"
+  dependencies:
+    dequal: "npm:^2.0.3"
+  checksum: 10/c3e1ed127cc6886fea4732e97dd6d3c3938e64180803acfb9df8955517c4943760746ffaf4020ce8f7ffaa7556a3b5f85c3769a1f5ca74a1288e02d042f9ae4e
   languageName: node
   linkType: hard
 
@@ -8532,7 +8568,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dequal@npm:^2.0.0":
+"dequal@npm:^2.0.0, dequal@npm:^2.0.3":
   version: 2.0.3
   resolution: "dequal@npm:2.0.3"
   checksum: 10/6ff05a7561f33603df87c45e389c9ac0a95e3c056be3da1a0c4702149e3a7f6fe5ffbb294478687ba51a9e95f3a60e8b6b9005993acd79c292c7d15f71964b6b

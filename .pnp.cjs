@@ -3925,8 +3925,10 @@ const RAW_RUNTIME_STATE =
           ["@openneuro/components", "npm:4.33.4"],\
           ["@sentry/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.25.0"],\
           ["@tanstack/react-table", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:8.9.3"],\
+          ["@testing-library/dom", "npm:10.4.0"],\
           ["@testing-library/jest-dom", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:6.4.2"],\
           ["@testing-library/react", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:14.2.1"],\
+          ["@testing-library/user-event", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:14.6.1"],\
           ["@types/dompurify", "npm:3.0.5"],\
           ["@types/jsdom", "npm:16.2.13"],\
           ["@types/node", "npm:20.12.7"],\
@@ -6191,6 +6193,21 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@testing-library/dom", [\
+      ["npm:10.4.0", {\
+        "packageLocation": "./.yarn/cache/@testing-library-dom-npm-10.4.0-a0d2ca848e-05825ee9a1.zip/node_modules/@testing-library/dom/",\
+        "packageDependencies": [\
+          ["@testing-library/dom", "npm:10.4.0"],\
+          ["@babel/code-frame", "npm:7.14.5"],\
+          ["@babel/runtime", "npm:7.27.0"],\
+          ["@types/aria-query", "npm:5.0.4"],\
+          ["aria-query", "npm:5.3.0"],\
+          ["chalk", "npm:4.1.2"],\
+          ["dom-accessibility-api", "npm:0.5.16"],\
+          ["lz-string", "npm:1.5.0"],\
+          ["pretty-format", "npm:27.5.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:9.3.4", {\
         "packageLocation": "./.yarn/cache/@testing-library-dom-npm-9.3.4-cfb609c4fc-510da752ea.zip/node_modules/@testing-library/dom/",\
         "packageDependencies": [\
@@ -6307,6 +6324,28 @@ const RAW_RUNTIME_STATE =
           "@types/react",\
           "react-dom",\
           "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@testing-library/user-event", [\
+      ["npm:14.6.1", {\
+        "packageLocation": "./.yarn/cache/@testing-library-user-event-npm-14.6.1-5da7e1d4e2-34b74fff56.zip/node_modules/@testing-library/user-event/",\
+        "packageDependencies": [\
+          ["@testing-library/user-event", "npm:14.6.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:14.6.1", {\
+        "packageLocation": "./.yarn/__virtual__/@testing-library-user-event-virtual-eb56c64e5e/0/cache/@testing-library-user-event-npm-14.6.1-5da7e1d4e2-34b74fff56.zip/node_modules/@testing-library/user-event/",\
+        "packageDependencies": [\
+          ["@testing-library/user-event", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:14.6.1"],\
+          ["@testing-library/dom", "npm:10.4.0"],\
+          ["@types/testing-library__dom", null]\
+        ],\
+        "packagePeers": [\
+          "@testing-library/dom",\
+          "@types/testing-library__dom"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8313,6 +8352,14 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["aria-query", "npm:5.1.3"],\
           ["deep-equal", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:5.3.0", {\
+        "packageLocation": "./.yarn/cache/aria-query-npm-5.3.0-76575ac83b-c3e1ed127c.zip/node_modules/aria-query/",\
+        "packageDependencies": [\
+          ["aria-query", "npm:5.3.0"],\
+          ["dequal", "npm:2.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
