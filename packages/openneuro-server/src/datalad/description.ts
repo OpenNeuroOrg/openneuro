@@ -133,27 +133,27 @@ const readAndLogDataciteYml = async (datasetId: string, revision: string) => {
           unknown
         >
         console.log(
-          `Found and successfully read datacite.yml for dataset ${datasetId} (revision: ${revision}):`,
+          "Found and successfully read datacite.yml for dataset ${datasetId} (revision: ${revision}):",
           parsedYaml,
         )
       } catch (parseErr) {
         console.error(
-          `Found datacite.yml for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:`,
+          "Found datacite.yml for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:",
           parseErr,
         )
       }
     } else if (res.status === 404) {
       console.log(
-        `datacite.yml not found for dataset ${datasetId} (revision: ${revision}).`,
+        "datacite.yml not found for dataset ${datasetId} (revision: ${revision}).",
       )
     } else {
       console.warn(
-        `Attempted to read datacite.yml for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.`,
+        "Attempted to read datacite.yml for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.",
       )
     }
   } catch (fetchErr) {
     console.error(
-      `Error fetching datacite.yml for dataset ${datasetId} (revision: ${revision}):`,
+      "Error fetching datacite.yml for dataset ${datasetId} (revision: ${revision}):",
       fetchErr,
     )
   }
