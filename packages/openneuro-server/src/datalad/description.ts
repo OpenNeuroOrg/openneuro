@@ -130,7 +130,6 @@ const readAndLogDataciteYml = async (datasetId: string, revision: string) => {
     if (res.status === 200) {
       const text = await res.text()
       try {
-        // Explicit type annotation for parsedYaml to satisfy TypeScript
         const parsedYaml: Record<string, unknown> = yaml.load(text) as Record<
           string,
           unknown
