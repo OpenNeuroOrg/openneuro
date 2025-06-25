@@ -2,41 +2,53 @@ import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import Validation from "../../models/validation"
-import { redlock } from "../../libs/redis"
+import { redis, redlock } from "../../libs/redis"
+import CacheItem from "../../cache/item"
+import { CacheType } from "../../cache/types"
 
 /**
  * Issues resolver for schema validator
  */
 export const validation = async (dataset, _, { userInfo }) => {
-  return Validation.findOne({
-    id: dataset.revision,
-    datasetId: dataset.id,
-  })
-    .exec()
-    .then((data) => {
-      if (!data && userInfo) {
-        // If no results were found, acquire a lock and run validation
-        revalidate(
-          null,
-          { datasetId: dataset.id, ref: dataset.revision },
-          { userInfo },
-        )
-      }
-      if (data) {
-        // Return with errors and warning counts appended
-        return {
-          ...data.toObject(),
-          errors: data.issues.filter((issue) =>
-            issue.severity === "error"
-          ).length,
-          warnings: data.issues.filter((issue) =>
-            issue.severity === "warning"
-          ).length,
-        }
-      } else {
-        return null
-      }
+  const cache = new CacheItem(
+    redis,
+    CacheType.validation,
+    [dataset.id, dataset.revision],
+    // This cache is valid forever but may be large, drop inaccessed values weekly
+    604800,
+  )
+  return cache.get((doNotCache) => {
+    return Validation.findOne({
+      id: dataset.revision,
+      datasetId: dataset.id,
     })
+      .exec()
+      .then((data) => {
+        if (!data && userInfo) {
+          // If no results were found, acquire a lock and run validation
+          revalidate(
+            null,
+            { datasetId: dataset.id, ref: dataset.revision },
+            { userInfo },
+          )
+        }
+        if (data) {
+          // Return with errors and warning counts appended
+          return {
+            ...data.toObject(),
+            errors: data.issues.filter((issue) =>
+              issue.severity === "error"
+            ).length,
+            warnings: data.issues.filter((issue) =>
+              issue.severity === "warning"
+            ).length,
+          }
+        } else {
+          doNotCache(true)
+          return null
+        }
+      })
+  })
 }
 
 /**
