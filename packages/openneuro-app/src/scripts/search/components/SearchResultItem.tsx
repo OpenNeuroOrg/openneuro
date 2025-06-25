@@ -131,9 +131,7 @@ export const SearchResultItem = ({
   const hasEdit = hasEditPermissions(node.permissions, profileSub) || isAdmin
   const datasetId = node.id
 
-  const heading = node.latestSnapshot.description?.Name
-    ? node.latestSnapshot.description?.Name
-    : datasetId
+  const heading = node.latestSnapshot.description?.Name?.trim() || datasetId
 
   const downloads = node.analytics.downloads
     ? node.analytics.downloads.toLocaleString() + " Downloads \n"
