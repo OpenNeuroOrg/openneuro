@@ -6,6 +6,7 @@
 export enum CacheType {
   datasetsConnection = "connection",
   datasetDescription = "description",
+  dataciteYml = "dataciteYml",
   commitFiles = "files",
   readme = "readme",
   snapshot = "snapshot",

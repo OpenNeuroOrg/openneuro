@@ -26,7 +26,7 @@ const isArrayOfStrings = (arr: unknown): arr is string[] => {
  * @param {string} datasetId
  * @returns {Promise<Record<string, unknown>>} Promise resolving to dataset_description.json contents or defaults
  */
-export const getDescriptionObject = async (datasetId, revision) => {
+export const getDatasetDescriptionJson = async (datasetId, revision) => {
   const res = await fetch(
     fileUrl(datasetId, "", "dataset_description.json", revision),
   )
@@ -120,75 +120,126 @@ export const appendSeniorAuthor = (description) => {
   }
 }
 
-// --- NEW TEST FUNCTION TO READ AND LOG DATACITE.YML ---
-const readAndLogDataciteYml = async (datasetId: string, revision: string) => {
+// --- FUNCTION TO READ AND PARSE DATACITE.YML ---
+/**
+ * Attempts to read and parse datacite.yml.
+ * @param {string} datasetId
+ * @param {string} revision
+ * @returns {Promise<Record<string, unknown> | null>}
+ */
+export const getDataciteYml = async (
+  datasetId: string,
+  revision: string,
+): Promise<Record<string, unknown> | null> => {
   const dataciteUrl = fileUrl(datasetId, "", "datacite.yml", revision)
   try {
     const res = await fetch(dataciteUrl)
-    if (res.status === 200) {
+    // const contentType = res.headers.get("content-type") // is something in datalad setting content-type header to json??
+
+    if (
+      res.status ===
+        200 /* && (contentType?.includes("application/yaml") || contentType?.includes("text/yaml")) */
+    ) {
       const text = await res.text()
       try {
         const parsedYaml: Record<string, unknown> = yaml.load(text) as Record<
           string,
           unknown
         >
-        console.log(
-          "Found and successfully read datacite.yml for dataset ${datasetId} (revision: ${revision}):",
-          parsedYaml,
-        )
+        return parsedYaml
       } catch (parseErr) {
-        console.error(
-          "Found datacite.yml for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:",
-          parseErr,
+        throw new Error(
+          `Found datacite.yml for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:`,
+          { cause: parseErr },
         )
       }
     } else if (res.status === 404) {
-      console.log(
-        "datacite.yml not found for dataset ${datasetId} (revision: ${revision}).",
+      throw new Error(
+        `datacite.yml not found for dataset ${datasetId} (revision: ${revision}).`,
       )
     } else {
-      console.warn(
-        "Attempted to read datacite.yml for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.",
+      throw new Error(
+        `Attempted to read datacite.yml for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.`,
       )
     }
   } catch (fetchErr) {
-    console.error(
-      "Error fetching datacite.yml for dataset ${datasetId} (revision: ${revision}):",
-      fetchErr,
+    throw new Error(
+      `Error fetching datacite.yml for dataset ${datasetId} (revision: ${revision}):`,
+      { cause: fetchErr },
     )
   }
 }
-// --- END NEW FUNCTION ---
+// --- END FUNCTION ---
 
 /**
- * Get a parsed dataset_description.json
+ * Get a parsed dataset_description.json or datacite.yml
  * @param {object} obj dataset or snapshot object
  */
 export const description = async (obj) => {
-  // Obtain datasetId from Dataset or Snapshot objects
   const { datasetId, revision } = datasetOrSnapshot(obj)
-  // Default fallback if dataset_description.json is not valid or missing
+  const revisionSubString = revision.substring(0, 7)
+
   const defaultDescription = {
     Name: datasetId,
     BIDSVersion: "1.8.0",
   }
 
-  // --- CALL TEST FNC datacite.yml ---
-  await readAndLogDataciteYml(datasetId, revision)
-  // --- END CALL TEST FNC ---
-
-  const cache = new CacheItem(redis, CacheType.datasetDescription, [
+  let descriptionLoadedFromFile: Record<string, unknown> | null = null
+  // --- Caching for datacite.yml ---
+  const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
     datasetId,
-    revision.substring(0, 7),
+    revisionSubString,
   ])
+
   try {
-    const datasetDescription = await cache.get(() => {
-      return getDescriptionObject(datasetId, revision).then(
-        (uncachedDescription) => ({ id: revision, ...uncachedDescription }),
-      )
+    // Try to get description from datacite.yml first, using its cache
+    const dataciteData = await dataciteCache.get(() => {
+      return getDataciteYml(datasetId, revision)
     })
-    return appendSeniorAuthor(repairDescriptionTypes(datasetDescription))
-  } catch (_err) {
+
+    if (dataciteData) {
+      descriptionLoadedFromFile = { id: revision, ...dataciteData }
+      console.log(
+        `Loaded description from datacite.yml for ${datasetId}:${revision}`,
+      )
+    }
+  } catch (error) {
+    console.warn(
+      `Could not load datacite.yml for ${datasetId}:${revision}, falling back to dataset_description.json. Error:`,
+      error.message,
+    )
+  }
+
+  // If datacite.yml wasn't found or had an error, try dataset_description.json
+  if (!descriptionLoadedFromFile) {
+    const descriptionJsonCache = new CacheItem(
+      redis,
+      CacheType.datasetDescription,
+      [datasetId, revisionSubString],
+    )
+    try {
+      // Use the cache for dataset_description.json
+      const datasetDescriptionJson = await descriptionJsonCache.get(() => {
+        return getDatasetDescriptionJson(datasetId, revision).then(
+          (uncachedDescription) => ({ id: revision, ...uncachedDescription }),
+        )
+      })
+      descriptionLoadedFromFile = datasetDescriptionJson
+      console.log(
+        `Loaded description from dataset_description.json for ${datasetId}:${revision}`,
+      )
+    } catch (error) {
+      console.error(
+        `Could not load dataset_description.json for ${datasetId}:${revision}. Error:`,
+        error.message,
+      )
+      // If both fail, descriptionLoadedFromFile remains null, leading to defaultDescription
+    }
+  }
+
+  if (descriptionLoadedFromFile) {
+    return appendSeniorAuthor(repairDescriptionTypes(descriptionLoadedFromFile))
+  } else {
     return defaultDescription
   }
 }
