@@ -1,6 +1,6 @@
 import React from "react"
 import type { FC } from "react"
-
+import { modalityShortMapping } from "../../components/formatting/modality-label"
 import "./modality-hexagon.scss"
 interface ModalityHexagonProps {
   primaryModality: string | null | undefined
@@ -16,11 +16,9 @@ export const ModalityHexagon: FC<ModalityHexagonProps> = ({
     ? primaryModality.toLowerCase()
     : "no-modality"
 
-  const labelText = primaryModality?.toLowerCase() === "ieeg"
-    ? "iEEG"
-    : primaryModality?.toUpperCase() || (
-      <i className="fa fa-circle-o-notch fa-spin"></i>
-    )
+  const labelText = primaryModality
+    ? modalityShortMapping(primaryModality)
+    : <i className="fa fa-circle-o-notch fa-spin"></i>
 
   return (
     <div className="hexagon-wrapper">

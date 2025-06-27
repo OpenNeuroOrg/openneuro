@@ -7,6 +7,8 @@ import { SearchResultsList } from "./components/SearchResultsList"
 import { NeurobagelSearch } from "./components/NeurobagelSearch"
 import { Button } from "../components/button/Button"
 import { Loading } from "../components/loading/Loading"
+import { modalityShortMapping } from "../components/formatting/modality-label"
+
 import {
   AgeRangeInput,
   AuthorInput,
@@ -199,9 +201,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
     }, 0)
   }
 
-  const labelText = modality
-    ? modality.toLowerCase() === "ieeg" ? "iEEG" : modality?.toUpperCase()
-    : null
+  const labelText = modality ? modalityShortMapping(modality) : null
 
   return (
     <>

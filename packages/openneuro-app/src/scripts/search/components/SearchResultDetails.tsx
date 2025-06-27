@@ -6,6 +6,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { Link } from "react-router-dom"
 import type { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../../components/formatting/modality-label"
+import { MetaListItemList } from "./MetaListItemList"
 import "../scss/search-result-details.scss"
 
 interface SearchResultDetailsProps {
@@ -34,28 +35,6 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
     return date.toISOString().split("T")[0]
   }
 
-  const _list = (
-    type: JSX.Element,
-    items: (string | JSX.Element)[],
-  ): JSX.Element | null => {
-    if (items && items.length > 0) {
-      return (
-        <div className="result-summary-meta">
-          <label>{type}:</label>
-          <div>
-            {items.map((item, index) => (
-              <span className="list-item" key={index}>
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-      )
-    } else {
-      return null
-    }
-  }
-
   const summary = itemData.latestSnapshot?.summary
   const numSessions = summary?.sessions?.length > 0
     ? summary.sessions.length
@@ -77,31 +56,39 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   const modalityList = summary?.modalities?.length
     ? (
       <div className="modality-list">
-        {_list(
-          <>{summary?.modalities.length === 1 ? "Modality" : "Modalities"}</>,
-          summary?.modalities.map((modality) => (
+        <MetaListItemList
+          typeLabel={
+            <>{summary?.modalities.length === 1 ? "Modality" : "Modalities"}</>
+          }
+          items={summary?.modalities.map((modality) => (
             <ModalityLabel key={modality} modality={modality} />
-          )),
-        )}
+          ))}
+        />
       </div>
     )
     : null
 
   const taskList = summary?.tasks?.length
-    ? <div className="task-list">{_list(<>Tasks</>, summary?.tasks)}</div>
+    ? (
+      <div className="task-list">
+        <MetaListItemList typeLabel={<>Tasks</>} items={summary?.tasks} />
+      </div>
+    )
     : null
 
   const tracers = summary?.pet?.TracerName?.length
     ? (
       <div className="tracers-list">
-        {_list(
-          <>
-            {summary?.pet?.TracerName.length === 1
-              ? "Radiotracer"
-              : "Radiotracers"}
-          </>,
-          summary?.pet?.TracerName,
-        )}
+        <MetaListItemList
+          typeLabel={
+            <>
+              {summary?.pet?.TracerName.length === 1
+                ? "Radiotracer"
+                : "Radiotracers"}
+            </>
+          }
+          items={summary?.pet?.TracerName}
+        />
       </div>
     )
     : null
