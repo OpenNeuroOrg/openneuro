@@ -437,7 +437,7 @@ export const typeDefs = `
     brainInitiative: Boolean
     # Log of events associated with this dataset
     events: [DatasetEvent]
-    # Authors list from datacite.yml
+    # Authors list from datacite.yml || dataset_description.json
     contributors: [Contributor] 
   }
 
@@ -579,7 +579,7 @@ export const typeDefs = `
     size: BigInt
     # Single list of files to download this snapshot (only available on snapshots)
     downloadFiles: [DatasetFile]
-    # Authors list from datacite.yml
+    # Authors list from datacite.yml || dataset_description.json
     contributors: [Contributor] 
   }
 
