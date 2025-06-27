@@ -437,6 +437,8 @@ export const typeDefs = `
     brainInitiative: Boolean
     # Log of events associated with this dataset
     events: [DatasetEvent]
+    # Authors list from datacite.yml
+    contributors: [Contributor] 
   }
 
   type DatasetDerivatives {
@@ -577,6 +579,8 @@ export const typeDefs = `
     size: BigInt
     # Single list of files to download this snapshot (only available on snapshots)
     downloadFiles: [DatasetFile]
+    # Authors list from datacite.yml
+    contributors: [Contributor] 
   }
 
   # RelatedObject nature of relationship
@@ -645,6 +649,16 @@ export const typeDefs = `
     # List of ethics committee approvals of the research protocols and/or protocol identifiers.
     EthicsApprovals: [String]
   }
+
+  # Defines the Contributor type in contributors.ts
+  type Contributor {
+    name: String!
+    firstname: String
+    lastname: String
+    id: String
+  }
+
+
 
   # User permissions on a dataset
   type Permission {

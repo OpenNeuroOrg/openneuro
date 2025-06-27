@@ -3255,6 +3255,7 @@ __metadata:
     "@types/express-serve-static-core": "npm:^4.17.35"
     "@types/ioredis": "npm:^4.17.1"
     "@types/ioredis-mock": "npm:^8.2.2"
+    "@types/js-yaml": "npm:^4"
     "@types/node-mailjet": "npm:^3"
     "@types/semver": "npm:^5"
     base64url: "npm:^3.0.0"
@@ -3273,6 +3274,7 @@ __metadata:
     immutable: "npm:^3.8.2"
     ioredis: "npm:4.17.3"
     ioredis-mock: "npm:^8.8.1"
+    js-yaml: "npm:^4.1.0"
     jsdom: "npm:24.0.0"
     jsonwebtoken: "npm:^9.0.0"
     keyv: "npm:^4.5.3"
@@ -5025,6 +5027,13 @@ __metadata:
     expect: "npm:^29.0.0"
     pretty-format: "npm:^29.0.0"
   checksum: 10/52f11214cd74949a9f6ce240dc83f9c0c4800d57161365d67cf4826ad089422f5b0357484688febf2e7366181637e85078cd390a29470518435d656605f96781
+  languageName: node
+  linkType: hard
+
+"@types/js-yaml@npm:^4":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: 10/a0ce595db8a987904badd21fc50f9f444cb73069f4b95a76cc222e0a17b3ff180669059c763ec314bc4c3ce284379177a9da80e83c5f650c6c1310cafbfaa8e6
   languageName: node
   linkType: hard
 

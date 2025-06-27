@@ -177,6 +177,36 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="OpenNeuro Accession Number"
                 item={datasetId}
               />
+              {/* TODO: update this to work with edit mutation and move to new component */}
+              <MetaDataBlock
+                heading="Contributors"
+                item={snapshot.contributors?.length
+                  ? snapshot.contributors.map((contributor, index) => {
+                    const cleanORCID = contributor.id
+                      ? contributor.id.replace(/^ORCID:/, "")
+                      : null
+                    return (
+                      <React.Fragment key={index}>
+                        {contributor.name || "Unknown Contributor"}
+                        {cleanORCID && (
+                          <>
+                            {" "}
+                            (<a
+                              href={`https://orcid.org/${cleanORCID}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {cleanORCID}
+                            </a>)
+                          </>
+                        )}
+                        {index < dataset.contributors.length - 1 && <br />}
+                      </React.Fragment>
+                    )
+                  })
+                  : "N/A"}
+              />
+
               <MetaDataBlock
                 heading="Authors"
                 item={description?.Authors?.length
