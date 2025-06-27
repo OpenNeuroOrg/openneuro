@@ -1,8 +1,6 @@
-import request from "superagent"
 import yaml from "js-yaml"
 import CacheItem, { CacheType } from "../cache/item"
 import { redis } from "../libs/redis"
-import { getDatasetWorker } from "../libs/datalad-service"
 import { fileUrl } from "./files"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 import { getDescriptionObject } from "./description"
@@ -88,8 +86,6 @@ const normalizeDataciteAuthors = (authors: unknown): Contributor[] => {
 
     // Construct the 'name' field
     const combinedName = [firstname, lastname].filter(Boolean).join(" ").trim()
-
-    // If no name parts are found, this author will NOT be included.
     if (!combinedName) {
       return null
     }
