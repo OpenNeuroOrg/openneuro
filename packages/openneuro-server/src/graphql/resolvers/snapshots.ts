@@ -311,7 +311,7 @@ const Snapshot = {
   issues: (snapshot) => snapshotIssues(snapshot),
   issuesStatus: (snapshot) => issuesSnapshotStatus(snapshot),
   validation: (snapshot) => snapshotValidation(snapshot),
-  contributors: (parent, args, context) => contributors(parent),
+  contributors: (parent) => contributors(parent),
 }
 
 export default Snapshot
