@@ -1,0 +1,93 @@
+@import '../../scss/variables';
+
+.hexagon-wrapper {
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+
+  div.label {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 13px;
+    color: #fff; // Default label color
+  }
+
+  .hexagon {
+    height: 100%;
+    width: calc(100% * 0.57735);
+    display: inline-block;
+    transition: background-color 0.3s;
+    background-color: $on-dark-aqua; // Default hexagon background
+
+    &:before,
+    &:after {
+      position: absolute;
+      top: 0;
+      right: calc((100% / 2) - ((100% * 0.57735) / 2));
+      background-color: inherit;
+      height: inherit;
+      width: inherit;
+      content: '';
+    }
+
+    &:before {
+      transform: rotateZ(60deg);
+    }
+
+    &:after {
+      transform: rotateZ(-60deg);
+    }
+
+    &.mri { background-color: $mri-theme; }
+    &.eeg { background-color: $on-light-green; } // EEG uses on-light-green
+    &.pet { background-color: $pet-theme; }
+    &.ieeg { background-color: $ieeg-theme; }
+    &.meg { background-color: $meg-theme; }
+    &.nirs { background-color: $nirs-theme; }
+  }
+}
+
+a {
+  .hexagon-wrapper {
+    margin: 20px auto; 
+
+    div.label {
+      color: unset; 
+    }
+
+    .hexagon {
+      transition: color 0.3s; 
+      background-color: #fff; 
+
+      // Modality specific colors (when inside 'a')
+      &.mri { background-color: #fff; color: $mri-theme; }
+      &.eeg { background-color: #fff; color: $eeg-theme; }
+      &.pet { background-color: #fff; color: $pet-theme; }
+      &.ieeg { background-color: #fff; color: $ieeg-theme; }
+      &.meg { background-color: #fff; color: $meg-theme; }
+      &.nirs { background-color: #fff; color: $nirs-theme; } 
+    }
+
+    &:hover {
+      .hexagon {
+        color: lighten($on-dark-aqua, 15%); 
+        &.mri { color: lighten($mri-theme, 10%); }
+        &.eeg { color: lighten($eeg-theme, 10%); }
+        &.pet { color: lighten($pet-theme, 10%); }
+        &.ieeg { color: lighten($ieeg-theme, 10%); }
+        &.meg { color: lighten($meg-theme, 10%); }
+      }
+    }
+  }
+}

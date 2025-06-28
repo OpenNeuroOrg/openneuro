@@ -6,6 +6,7 @@ import Carousel from "react-multi-carousel/lib/Carousel"
 import type { ArrowProps, ResponsiveType } from "react-multi-carousel/lib/types"
 import "react-multi-carousel/lib/styles.css"
 import "./slider.scss"
+import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
 
 export interface ActivitySliderProps {
   className?: string
@@ -62,28 +63,9 @@ export const ActivitySlider = ({
         {data.map(({ node }) => (
           <div className="activity-slider-node" key={node.id}>
             <div className="ds-modality">
-              <div className="hexagon-wrapper">
-                {node.latestSnapshot.summary?.primaryModality
-                  ? (
-                    <>
-                      <div
-                        className={"hexagon " +
-                          node.latestSnapshot.summary?.primaryModality
-                            .toLowerCase()}
-                      >
-                      </div>
-                      <div className="label">
-                        {node.latestSnapshot.summary?.primaryModality}
-                      </div>
-                    </>
-                  )
-                  : (
-                    <>
-                      <div className="hexagon no-modality"></div>
-                      <div className="label">N/A</div>
-                    </>
-                  )}
-              </div>
+              <ModalityHexagon
+                primaryModality={node.latestSnapshot.summary?.primaryModality}
+              />
             </div>
             <div className="ds-name">
               <h4>

@@ -61,8 +61,10 @@ const searchQuery = gql`
           }
           latestSnapshot {
             size
+            readme
             summary {
               modalities
+              primaryModality
               secondaryModalities
               sessions
               subjects
@@ -94,6 +96,7 @@ const searchQuery = gql`
             description {
               Name
               Authors
+              DatasetDOI
             }
           }
           analytics {

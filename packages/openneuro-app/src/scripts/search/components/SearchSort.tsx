@@ -1,6 +1,6 @@
 import React from "react"
-import { Dropdown } from "../dropdown/Dropdown"
-import "./search-sort.scss"
+import { Dropdown } from "../../components/dropdown/Dropdown"
+import "../scss/search-sort.scss"
 
 export interface SearchSortProps {
   items: {

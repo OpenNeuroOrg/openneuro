@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import type { FC } from "react"
 import { SearchParamsCtx } from "../search-params-ctx"
-import { SearchSort } from "../../components/search-page/SearchSort"
+import { SearchSort } from "../components/SearchSort"
 
 interface SortBySelectProps {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
