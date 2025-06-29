@@ -223,6 +223,12 @@ export const SNAPSHOT_FIELDS = gql`
     }
     ...SnapshotIssues
     hexsha
+    contributors {
+      name
+      firstname
+      lastname
+      id
+    }
   }
   ${SNAPSHOT_ISSUES}
 `
