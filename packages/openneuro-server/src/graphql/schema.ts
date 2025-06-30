@@ -437,8 +437,6 @@ export const typeDefs = `
     brainInitiative: Boolean
     # Log of events associated with this dataset
     events: [DatasetEvent]
-    # Authors list from datacite.yml || dataset_description.json
-    contributors: [Contributor] 
   }
 
   type DatasetDerivatives {
@@ -540,6 +538,8 @@ export const typeDefs = `
     head: String
     # Total size in bytes of this draft
     size: BigInt
+    # Authors list from datacite.yml || dataset_description.json
+    contributors: [Contributor] 
   }
 
   # Tagged snapshot of a draft

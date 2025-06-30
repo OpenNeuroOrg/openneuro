@@ -47,6 +47,12 @@ export const DRAFT_FRAGMENT = gql`
           version
         }
       }
+      contributors {
+        name
+        firstname
+        lastname
+        id
+      }
     }
   }
 `

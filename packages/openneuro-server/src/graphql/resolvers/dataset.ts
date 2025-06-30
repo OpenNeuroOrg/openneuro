@@ -16,7 +16,6 @@ import * as dataladAnalytics from "../../datalad/analytics"
 import DatasetModel from "../../models/dataset"
 import Deletion from "../../models/deletion"
 import { reviewers } from "./reviewer"
-import { contributors } from "../../datalad/contributors"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { getFileName } from "../../datalad/files"
 import { onBrainlife } from "./brainlife"
@@ -306,7 +305,6 @@ const Dataset = {
   reviewers,
   brainInitiative,
   events: datasetEvents,
-  contributors,
 }
 
 export default Dataset

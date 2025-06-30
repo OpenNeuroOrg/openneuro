@@ -200,7 +200,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                             </a>)
                           </>
                         )}
-                        {index < dataset.contributors.length - 1 && <br />}
+                        {index < snapshot.contributors.length - 1 && <br />}
                       </React.Fragment>
                     )
                   })

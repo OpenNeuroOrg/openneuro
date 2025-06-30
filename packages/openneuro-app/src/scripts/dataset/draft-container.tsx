@@ -178,8 +178,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
               {/* TODO: update this to work with edit mutation and move to new component */}
               <MetaDataBlock
                 heading="Contributors"
-                item={dataset.contributors?.length
-                  ? dataset.contributors.map((contributor, index) => {
+                item={dataset.draft.contributors?.length
+                  ? dataset.draft.contributors.map((contributor, index) => {
                     const cleanORCID = contributor.id
                       ? contributor.id.replace(/^ORCID:/, "")
                       : null
@@ -199,7 +199,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                             </a>)
                           </>
                         )}
-                        {index < dataset.contributors.length - 1 && <br />}
+                        {index < dataset.draft.contributors.length - 1 && (
+                          <br />
+                        )}
                       </React.Fragment>
                     )
                   })

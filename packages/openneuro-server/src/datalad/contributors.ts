@@ -5,7 +5,7 @@ import { fileUrl } from "./files"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 import { getDescriptionObject } from "./description"
 
-// structure for a author from datacite.yml with additional Name field
+// structure for a Authors from datacite.yml with additional Name field
 export interface Contributor {
   name: string
   firstname?: string

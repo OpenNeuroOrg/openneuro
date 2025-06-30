@@ -45,12 +45,6 @@ export const getDatasetPage = gql`
         dataladUrl
         local
       }
-      contributors {
-        name
-        firstname
-        lastname
-        id
-      }
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}
@@ -105,12 +99,6 @@ export const getDraftPage = gql`
         s3Url
         dataladUrl
         local
-      }
-      contributors {
-        name
-        firstname
-        lastname
-        id
       }
     }
   }
