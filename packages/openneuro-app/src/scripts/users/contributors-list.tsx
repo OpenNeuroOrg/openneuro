@@ -1,7 +1,7 @@
 import React from "react"
 import type { FC } from "react"
 
-import { SingleContributorDisplay } from "./single-contributor"
+import { SingleContributorDisplay } from "./contributor"
 import type { Contributor } from "../../scripts/types/contributors"
 
 interface ContributorListDisplayProps {
