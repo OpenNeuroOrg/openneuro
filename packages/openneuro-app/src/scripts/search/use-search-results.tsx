@@ -174,7 +174,7 @@ export const useSearchResults = () => {
         "id^20",
         "latestSnapshot.readme",
         "latestSnapshot.description.Name^6",
-        // "latestSnapshot.description.Authors^3", // TODO: do we need this?
+        "latestSnapshot.description.Authors^3", // TODO: Nell - do we need this still?
         "latestSnapshot.contributors.name^3",
       ]),
     )
@@ -270,7 +270,7 @@ export const useSearchResults = () => {
       ]),
     )
   }
-  if (authors.length) {
+  if (authors.length) { // TODO - NELL - this was switch to contributors - is that correct?
     boolQuery.addClause(
       "must",
       matchQuery(
