@@ -11,6 +11,7 @@ import "../scss/search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { hasEditPermissions } from "../../authentication/profile"
 import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
+import type { Contributor } from "../../types/contributors"
 
 export const formatDate = (dateObject) =>
   new Date(dateObject).toISOString().split("T")[0]
@@ -82,10 +83,10 @@ export interface SearchResultItemProps {
         warnings: number
       }
       description: {
-        Authors: string[]
         Name: string
         DatasetDOI: string
       }
+      contributors: Contributor[]
     }
     analytics: {
       views: number
@@ -244,11 +245,17 @@ export const SearchResultItem = ({
   )
 
   const year = getYear(parseISO(node.created))
-  const authors = node.latestSnapshot.description?.Authors
-    ? node.latestSnapshot.description.Authors.join(" and ")
+  const contributorsList = node.latestSnapshot.contributors
+    ? node.latestSnapshot.contributors.map((c) =>
+      c.name || "Unknown Contributor"
+    )
+    : []
+
+  const authorsDisplay = contributorsList.length
+    ? contributorsList.join(" and ")
     : "NO AUTHORS FOUND"
   const datasetCite =
-    `${authors} (${year}). ${node.latestSnapshot.description.Name}. OpenNeuro. [Dataset] doi: ${node.latestSnapshot.description.DatasetDOI}`
+    `${authorsDisplay} (${year}). ${node.latestSnapshot.description.Name}. OpenNeuro. [Dataset] doi: ${node.latestSnapshot.description.DatasetDOI}`
   const trimlength = 450
 
   return (

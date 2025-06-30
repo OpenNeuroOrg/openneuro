@@ -39,6 +39,7 @@ import { TabRoutesSnapshot } from "./routes/tab-routes-snapshot"
 import schemaGenerator from "../utils/json-ld.js"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { ContributorListDisplay } from "../users/contributors-list"
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -177,34 +178,13 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="OpenNeuro Accession Number"
                 item={datasetId}
               />
-              {/* TODO: update this to work with edit mutation and move to new component */}
               <MetaDataBlock
                 heading="Contributors"
-                item={snapshot.contributors?.length
-                  ? snapshot.contributors.map((contributor, index) => {
-                    const cleanORCID = contributor.id
-                      ? contributor.id.replace(/^ORCID:/, "")
-                      : null
-                    return (
-                      <React.Fragment key={index}>
-                        {contributor.name || "Unknown Contributor"}
-                        {cleanORCID && (
-                          <>
-                            {" "}
-                            (<a
-                              href={`https://orcid.org/${cleanORCID}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {cleanORCID}
-                            </a>)
-                          </>
-                        )}
-                        {index < snapshot.contributors.length - 1 && <br />}
-                      </React.Fragment>
-                    )
-                  })
-                  : "N/A"}
+                item={
+                  <ContributorListDisplay
+                    contributors={snapshot.contributors}
+                  />
+                }
               />
 
               <MetaDataBlock

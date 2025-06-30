@@ -98,6 +98,12 @@ const searchQuery = gql`
               Authors
               DatasetDOI
             }
+            contributors {
+              name
+              firstname
+              lastname
+              id
+            }
           }
           analytics {
             views
@@ -168,7 +174,8 @@ export const useSearchResults = () => {
         "id^20",
         "latestSnapshot.readme",
         "latestSnapshot.description.Name^6",
-        "latestSnapshot.description.Authors^3",
+        // "latestSnapshot.description.Authors^3", // TODO: do we need this?
+        "latestSnapshot.contributors.name^3",
       ]),
     )
   }
@@ -267,7 +274,7 @@ export const useSearchResults = () => {
     boolQuery.addClause(
       "must",
       matchQuery(
-        "latestSnapshot.description.Authors",
+        "latestSnapshot.contributors.name",
         joinWithOR(authors),
         "2",
       ),

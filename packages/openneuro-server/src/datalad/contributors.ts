@@ -1,4 +1,5 @@
 import yaml from "js-yaml"
+import * as Sentry from "@sentry/node"
 import CacheItem, { CacheType } from "../cache/item"
 import { redis } from "../libs/redis"
 import { fileUrl } from "./files"
@@ -8,6 +9,12 @@ import { getDescriptionObject } from "./description"
 // structure for a Authors from datacite.yml with additional Name field
 export interface Contributor {
   name: string
+  firstname?: string
+  lastname?: string
+  id?: string // ORCID ID
+}
+
+interface RawDataciteAuthor {
   firstname?: string
   lastname?: string
   id?: string
@@ -27,10 +34,10 @@ const getDataciteYml = async (
 
     if (res.status === 200) {
       if (
-        !(contentType?.includes("application/yaml")) &&
-        !(contentType?.includes("text/yaml"))
+        !contentType?.includes("application/yaml") &&
+        !contentType?.includes("text/yaml")
       ) {
-        console.warn(
+        Sentry.captureMessage(
           `datacite.yml for ${datasetId}:${revision} served with unexpected Content-Type: ${contentType}. Attempting YAML parse anyway.`,
         )
       }
@@ -73,57 +80,64 @@ const normalizeDataciteAuthors = (authors: unknown): Contributor[] => {
   if (!Array.isArray(authors)) {
     return []
   }
-  return authors.map((author) => {
-    const firstname = typeof (author as any).firstname === "string"
-      ? (author as any).firstname
-      : undefined
-    const lastname = typeof (author as any).lastname === "string"
-      ? (author as any).lastname
-      : undefined
-    const id = typeof (author as any).id === "string"
-      ? (author as any).id
-      : undefined
+  return authors
+    .map((author: unknown) => {
+      if (typeof author !== "object" || author === null) {
+        return null
+      }
 
-    // Construct the 'name' field
-    const combinedName = [firstname, lastname].filter(Boolean).join(" ").trim()
-    if (!combinedName) {
-      return null
-    }
+      const rawAuthor = author as RawDataciteAuthor
+      const firstname = typeof rawAuthor.firstname === "string"
+        ? rawAuthor.firstname
+        : undefined
+      const lastname = typeof rawAuthor.lastname === "string"
+        ? rawAuthor.lastname
+        : undefined
+      const id = typeof rawAuthor.id === "string" ? rawAuthor.id : undefined
 
-    const contributor: Contributor = {
-      name: combinedName,
-      firstname: firstname,
-      lastname: lastname,
-      id: id,
-    }
-    return contributor
-  }).filter(Boolean)
+      // Construct the 'name' field
+      const combinedName = [firstname, lastname]
+        .filter(Boolean)
+        .join(" ")
+        .trim()
+      if (!combinedName) {
+        return null
+      }
+
+      const contributor: Contributor = {
+        name: combinedName,
+        firstname: firstname,
+        lastname: lastname,
+        id: id,
+      }
+      return contributor
+    })
+    .filter(Boolean)
 }
 
 /**
- * Normalizes dataset_description.json authors (array of strings) to the Contributor interface.
+ * Normalizes dataset_description.json
  * Returns Contributor[] with only the 'name' field populated from the author string.
  */
 const normalizeBidsAuthors = (authors: unknown): Contributor[] => {
   if (!Array.isArray(authors)) {
     return []
   }
-  return authors.map((authorString) => {
-    if (typeof authorString === "string") {
-      const trimmedAuthorString = authorString.trim()
-      // Directly use the author string as the 'name'
-      return {
-        name: trimmedAuthorString,
+  return authors
+    .map((authorString) => {
+      if (typeof authorString === "string") {
+        const trimmedAuthorString = authorString.trim()
+        return {
+          name: trimmedAuthorString,
+        }
       }
-    }
-    return null
-  }).filter(Boolean)
+      return null
+    })
+    .filter(Boolean)
 }
 
 /**
  * Get contributors (authors) for a dataset, prioritizing datacite.yml.
- * @param {object} obj dataset or snapshot object
- * @returns {Promise<Contributor[]>}
  */
 export const contributors = async (obj): Promise<Contributor[]> => {
   const { datasetId, revision } = datasetOrSnapshot(obj)
@@ -131,65 +145,55 @@ export const contributors = async (obj): Promise<Contributor[]> => {
   // Default fallback for authors if neither file provides them
   const defaultAuthors: Contributor[] = []
   let parsedContributors: Contributor[] | null = null
-
   // 1. Try to get authors from datacite.yml
   const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
     datasetId,
     revisionShort,
   ])
-
   try {
     const dataciteData = await dataciteCache.get(() =>
       getDataciteYml(datasetId, revision)
     )
     if (dataciteData && Array.isArray(dataciteData.authors)) {
       parsedContributors = normalizeDataciteAuthors(dataciteData.authors)
-      console.log(
+      Sentry.captureMessage(
         `Loaded contributors from datacite.yml for ${datasetId}:${revision}`,
       )
     }
   } catch (error) {
-    console.warn(
-      `Could not load or parse datacite.yml authors for ${datasetId}:${revision}, falling back to dataset_description.json. Error:`,
-      error.message,
-    )
+    Sentry.captureException(error)
   }
-
   // 2. If datacite.yml didn't provide authors, try dataset_description.json
   if (!parsedContributors || parsedContributors.length === 0) {
     const descriptionJsonCache = new CacheItem(
       redis,
       CacheType.datasetDescription,
-      [
-        datasetId,
-        revisionShort,
-      ],
+      [datasetId, revisionShort],
     )
     try {
       const datasetDescriptionJson = await descriptionJsonCache.get(() =>
         getDescriptionObject(datasetId, revision).then(
-          (uncachedDescription) => ({ id: revision, ...uncachedDescription }),
+          (uncachedDescription) => ({
+            id: revision,
+            ...uncachedDescription,
+          }),
         )
       )
-
       if (
-        datasetDescriptionJson && Array.isArray(datasetDescriptionJson.Authors)
+        datasetDescriptionJson &&
+        Array.isArray(datasetDescriptionJson.Authors)
       ) {
         parsedContributors = normalizeBidsAuthors(
           datasetDescriptionJson.Authors,
         )
-        console.log(
+        Sentry.captureMessage(
           `Loaded contributors from dataset_description.json for ${datasetId}:${revision}`,
         )
       }
     } catch (error) {
-      console.error(
-        `Could not load dataset_description.json authors for ${datasetId}:${revision}. Error:`,
-        error.message,
-      )
+      Sentry.captureException(error)
     }
   }
-
   // Return the parsed contributors or the default empty array
   return parsedContributors || defaultAuthors
 }

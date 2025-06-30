@@ -34,6 +34,7 @@ import { DOILink } from "./fragments/doi-link"
 import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { ContributorListDisplay } from "../users/contributors-list"
 
 export interface DraftContainerProps {
   dataset
@@ -175,38 +176,15 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 item={datasetId}
               />
 
-              {/* TODO: update this to work with edit mutation and move to new component */}
               <MetaDataBlock
                 heading="Contributors"
-                item={dataset.draft.contributors?.length
-                  ? dataset.draft.contributors.map((contributor, index) => {
-                    const cleanORCID = contributor.id
-                      ? contributor.id.replace(/^ORCID:/, "")
-                      : null
-
-                    return (
-                      <React.Fragment key={index}>
-                        {contributor.name || "Unknown Contributor"}
-                        {cleanORCID && (
-                          <>
-                            {" "}
-                            (<a
-                              href={`https://orcid.org/${cleanORCID}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {cleanORCID}
-                            </a>)
-                          </>
-                        )}
-                        {index < dataset.draft.contributors.length - 1 && (
-                          <br />
-                        )}
-                      </React.Fragment>
-                    )
-                  })
-                  : "N/A"}
+                item={
+                  <ContributorListDisplay
+                    contributors={dataset.draft.contributors}
+                  />
+                }
               />
+
               <EditDescriptionList
                 className="dmb-inline-list"
                 datasetId={datasetId}
