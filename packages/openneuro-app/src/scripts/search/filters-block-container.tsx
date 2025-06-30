@@ -13,7 +13,7 @@ import {
   SearchParamsCtx,
   useCheckIfParamsAreSelected,
 } from "./search-params-ctx"
-import { FiltersBlock } from "../components/search-page/FiltersBlock"
+import { FiltersBlock } from "./components/FiltersBlock"
 import initialSearchParams from "./initial-search-params"
 
 interface FiltersBlockContainerProps {

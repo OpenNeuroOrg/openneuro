@@ -1,0 +1,70 @@
+@import '../../scss/variables';
+
+.search-details {
+  border-left: 1px solid var(--current-theme-primary-light);
+  background-color: var(--current-theme-primary-ultralight);
+  padding: 20px;
+  font-size: 14px;
+  min-height: calc(100vh - 106px);
+  h4 {
+    font-size: 16px;
+  }
+
+  .result-summary-meta {
+    margin-bottom: 10px;
+
+    label {
+      font-weight: 600;
+      color: #000;
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+  }
+
+  .search-details-scroll {
+    position: sticky;
+    top: 10px;
+    align-self: flex-start;
+    width: 100%;
+    padding: 15px;
+    z-index: 100;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+  }
+
+  .task-list,
+  .modality-list {
+    .list-item {
+      display: inline-block;
+      font-weight: 600;
+      padding: 3px 6px;
+      margin: 0 10px 5px 0;
+      color: var(--current-theme-secondary);
+      border: 1px solid;
+      border-radius: $border-radius-default;
+    }
+  }
+
+
+
+  .close-details-button {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+    background-color: transparent;
+    color: #000;
+    font-size: 20px;
+    padding: 2px 5px;
+    margin-right: 10px;
+    &:hover {
+      font-weight: bold;
+    }
+    &:focus {
+      outline: -webkit-focus-ring-color auto 1px;
+    }
+  }
+}

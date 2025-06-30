@@ -3,7 +3,8 @@ import { Button } from "../../components/button/Button"
 import { FilterListItem } from "./FilterListItem"
 import { TermListItem } from "./TermListItem"
 import type { FacetSelectValueType } from "../../components/facets/FacetSelect"
-import "./filters-block.scss"
+import "../scss/filters-block.scss"
+import { modalityShortMapping } from "../../components/formatting/modality-label"
 
 export interface FiltersBlockProps {
   keywords: string[]
@@ -69,17 +70,13 @@ export const FiltersBlock = ({
   const subjectCountRangeIsNull =
     JSON.stringify(subjectCountRange) === JSON.stringify([null, null])
 
+  const labelText = modalityShortMapping(modality_selected)
+
   return (
     <div className="filters-block">
       <h2>
         {noFilters
-          ? (
-            <b>
-              Showing all available {modality_selected ? modality_selected : ""}
-              {" "}
-              datasets
-            </b>
-          )
+          ? <b>Showing all available {labelText ? labelText : ""} datasets</b>
           : (
             <>
               {loading

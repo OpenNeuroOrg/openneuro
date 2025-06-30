@@ -1,5 +1,5 @@
 import React from "react"
-import { ModalityLabel } from "../formatting/modality-label"
+import { ModalityLabel } from "../../components/formatting/modality-label"
 
 type TextList = string[]
 type Text = string

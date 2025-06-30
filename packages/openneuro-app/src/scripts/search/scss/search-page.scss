@@ -1,9 +1,29 @@
-@import '../scss/variables';
+@import '../../scss/variables';
+
+// Common styles for portal headers (can be extended)
+.search-page-portal-header,
+.search-page-coms {
+  .primary-content {
+    font-weight: 300;
+  }
+  .secondary-content {
+    font-weight: 300;
+    margin-top: 25px;
+    display: flex;
+  }
+}
 
 .search-page-portal-header {
   position: relative;
   color: #fff;
   z-index: 1100;
+  background-color: var(--current-theme-primary);
+  background: linear-gradient(
+    16deg,
+    var(--current-theme-primary-dark) 0%,
+    var(--current-theme-primary) 70%
+  );
+
   @media (max-width: 980px) {
     z-index: 3;
   }
@@ -19,6 +39,7 @@
       display: none;
     }
   }
+
   @media (max-width: 767px) {
     .portal-primary {
       width: 100%;
@@ -27,12 +48,8 @@
     }
   }
 
-  .primary-content,
-  .secondary-content {
-    font-weight: 300;
-    font-size: 24px;
-  }
   .primary-content {
+    font-size: 24px;
     a {
       color: #fff;
     }
@@ -41,8 +58,7 @@
     }
   }
   .secondary-content {
-    margin: 25px 0 50px;
-    display: flex;
+    margin: 25px 0 50px; // This margin is specific to portal-header
     @media (max-width: 450px) {
       flex-direction: column;
       font-size: 17px;
@@ -56,31 +72,19 @@
   }
 }
 
-.search-page-portal-header {
-  background-color: var(--current-theme-primary);
-  background: linear-gradient(
-    16deg,
-    var(--current-theme-primary-dark) 0%,
-    var(--current-theme-primary) 70%
-  );
-}
-
 .search-page-coms {
-  position: relative;
   background-color: #f3f7f6;
   padding: 20px 0 40px;
+  position: relative; // Only defined here for .search-page-coms
+
   h2 {
     font-size: 19px;
   }
   .primary-content {
-    font-weight: 300;
     font-size: 19px;
   }
   .secondary-content {
-    font-weight: 300;
     font-size: 15px;
-    margin-top: 25px;
-    display: flex;
   }
 }
 
@@ -89,7 +93,6 @@
   width: 250px;
   height: 144.34px;
   margin: 72.17px 0;
-
   background-size: auto 288.6751px;
   background-position: center;
 
@@ -104,8 +107,6 @@
     background: inherit;
     left: 36.61px;
 
-    /*counter transform the bg image on the caps*/
-    &:after,
     &:after {
       content: '';
       position: absolute;
@@ -125,7 +126,6 @@
 
   .hexBottom {
     bottom: -88.3883px;
-
     &:after {
       background-position: center bottom;
     }
@@ -163,13 +163,13 @@
     width: 100%;
     color: #000;
     font-weight: bold;
+
     &.front {
       transform: translateZ(69px);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
       background-color: rgba(0, 0, 0, 0.32);
     }
     &.top {
@@ -184,9 +184,6 @@
   }
 }
 
-.search {
-  padding: 0 0 50px;
-}
 .search-heading {
   margin: 20px 0;
   @media (max-width: 450px) {
@@ -202,40 +199,48 @@
     font-size: 14px;
   }
 }
+
 .search-wrapper {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  flex-grow: 1;
+  flex-basis: 100%;
+  max-width: 100%;
+  min-width: 0;
   display: flex;
+  position: relative;
+  padding: 20px 35px;
 }
 
 .close-filters-btn,
 .show-filters-btn {
-  display: none;
-}
+  display: none; // Hidden by default
 
-@media (max-width: 980px) {
-  .close-filters-btn,
-  .show-filters-btn {
-    display: block;
+  @media (max-width: 980px) {
+    display: block; // Show on smaller screens
     position: absolute;
-    top: 40px;
+    top: 20px;
     right: 0;
     background: none;
     border: 0;
     font-size: 12px;
     margin: 10px;
     padding: 0;
+    z-index: 1100;
+    cursor: pointer;
   }
-}
 
-@media (max-width: 450px) {
-  .close-filters-btn,
-  .show-filters-btn {
+  @media (max-width: 450px) {
     top: 0px;
     left: 0;
     margin: 10px 0 20px;
     border: 1px solid #ccc;
     padding: 10px;
-    display: block;
   }
+}
+
+// Specific placement for close button on smaller screens
+@media (max-width: 450px) {
   .close-filters-btn {
     left: 20px;
   }
@@ -243,8 +248,9 @@
 
 .search-nav {
   flex: 0 0 auto;
-  padding: 0;
-  width: 430px;
+  padding: 20px 30px;
+  width: 40%;
+  max-width: 450px;
 
   @media (max-width: 980px) {
     opacity: 0;
@@ -261,13 +267,15 @@
     min-height: 100%;
     overflow: scroll;
     position: fixed;
-    z-index: 1205;
+    z-index: 1205; // Higher z-index for fixed overlay
     top: 0;
     padding: 80px 25px;
+
     &.show-mobile-filters {
       opacity: 1;
       transform: translateX(0);
       transition: opacity 1s;
+      max-width: 100vw;
     }
   }
 
@@ -288,21 +296,47 @@
 
 .search-content {
   flex: 1;
-  padding: 0 0 0 30px;
+  padding: 20px 50px 20px 20px;
   position: relative;
-  max-width: 100%;
+  max-width: calc(100% - 450px - 380px);
+  @media screen and (max-width: 1410px) {
+    max-width: 100%;
+  }
   @media (max-width: 980px) {
-    padding: 0;
+    padding: 0 10px;
   }
   .search-results {
-    border: 1px solid $newspaper;
-    border-radius: $border-radius-default;
     max-width: 100%;
+
     .search-result {
-      border-bottom: 1px solid $newspaper;
+      border: 1px solid transparent;
+      &:nth-child(odd) {
+        background-color: var(--cloud);
+      }
+      &.expanded {
+        border-top-color: var(--current-theme-primary-light);
+        border-bottom-color: var(--current-theme-primary-light);
+        background-color: var(--current-theme-primary-ultralight);
+      }
     }
   }
+}
 
+.search-details {
+  flex-grow: 1;
+  max-width: 380px;
+  @media screen and (max-width: 1410px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 5000;
+    padding: 20px;
+    overflow-y: auto;
+  }
 }
 
 .search-sort {
@@ -323,42 +357,42 @@
   flex-basis: 50%;
 }
 
-.on-accordion-wrapper .keyword-accordion {
-  .accordion-title {
-    background: #e9e9e9;
-    width: 18px;
-    border-radius: 50%;
-    line-height: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 18px;
-    font-size: 12px;
-    align-content: space-around;
-    flex-direction: row;
-    font-weight: 600;
-    color: #515151;
-    font-family: monospace;
-    &:after {
-      display: none;
+.on-accordion-wrapper {
+  .keyword-accordion {
+    .accordion-title {
+      background: #e9e9e9;
+      width: 18px;
+      border-radius: 50%;
+      line-height: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 18px;
+      font-size: 12px;
+      align-content: space-around;
+      flex-direction: row;
+      font-weight: 600;
+      color: #515151;
+      font-family: monospace;
+      &:after {
+        display: none;
+      }
+    }
+    .accordion-content {
+      font-size: 12px;
+      margin: 10px 0;
+      .on-icon {
+        font-size: 10px;
+        padding: 1px 4px;
+        border-radius: $border-radius-default;
+        line-height: 1;
+        background-color: var(--current-theme-primary);
+        color: #fff;
+      }
     }
   }
-  .accordion-content {
-    font-size: 12px;
-    margin: 10px 0;
-    .on-icon {
-      font-size: 10px;
-      padding: 1px 4px;
-      border-radius: $border-radius-default;
-      line-height: 1;
-      background-color: var(--current-theme-primary);
-      color: #fff;
-    }
-  }
-}
-
-.on-accordion-wrapper .keyword-accordion {
-  .accordion-title {
+  // Specific placement for keyword-accordion title
+  .keyword-accordion .accordion-title {
     position: absolute;
     top: -20px;
     left: 70px;
@@ -388,12 +422,10 @@
       cursor: pointer;
       align-items: center;
       justify-content: flex-start;
-
       font-size: 14px;
       border-top: 1px solid $newspaper;
       padding: 10px;
       display: block;
-      font-weight: 500;
       font-weight: 500;
       &.selected-item {
         color: var(--current-theme-primary);
@@ -406,10 +438,12 @@
   .search-facet-wrapper {
     .modality-facet.facet-accordion.on-accordion-wrapper {
       margin: 20px 0;
-      border: 0;
-      background: #e5f4f7;
+      border: 0; // Explicitly override border for mobile
+      background: var(--current-theme-primary-ultralight);
+      border: 1px solid var(--current-theme-primary-light);
       border-radius: $border-radius-default;
       padding: 10px;
+
       .accordion-item.collapsed {
         max-height: initial;
       }
@@ -421,7 +455,7 @@
         color: var(--current-theme-primary);
       }
       .accordion-title {
-        margin: 10px 0 15px 0;
+        margin: 10px 0 15px 0; // Explicitly override margin for accordion title
         padding: 0;
         &:after {
           display: none;
@@ -442,7 +476,6 @@
           display: flex;
           align-items: center;
           justify-content: flex-start;
-
           span {
             margin-left: 10px;
             display: inline-block;
@@ -452,7 +485,6 @@
 
         .level-1 > li {
           border-top: 1px solid $newspaper;
-
           > .label {
             padding: 10px;
             font-weight: 500;
@@ -465,7 +497,6 @@
           > li {
             display: flex;
             justify-content: flex-start;
-
             .label {
               margin-left: 15px;
             }

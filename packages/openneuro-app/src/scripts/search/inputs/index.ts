@@ -1,8 +1,6 @@
 import KeywordInput from "./keyword-input"
-import AllDatasetsToggle from "./admin-allDatasets-toggle"
 import ModalitySelect from "./modality-select"
 import InitiativeSelect from "./initiative-select"
-import ShowDatasetRadios from "./show-datasets-radios"
 import AgeRangeInput from "./age-range-input"
 import SubjectCountRangeInput from "./subject-count-range-input"
 import DatasetTypeSelect from "./dataset-type-select"
@@ -23,7 +21,6 @@ import SortBySelect from "./sort-by-select"
 
 export {
   AgeRangeInput,
-  AllDatasetsToggle,
   AuthorInput,
   BodyPartsInput,
   DatasetTypeSelect,
@@ -36,7 +33,6 @@ export {
   ScannerManufacturersModelNames,
   SectionSelect,
   SexRadios,
-  ShowDatasetRadios,
   SortBySelect,
   SpeciesSelect,
   StudyDomainInput,

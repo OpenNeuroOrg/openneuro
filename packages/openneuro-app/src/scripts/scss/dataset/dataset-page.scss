@@ -1,8 +1,8 @@
 @import '../variables.scss';
 .dataset {
   .dataset-header {
-    .ds-header-inner{
-      display:  flex;
+    .ds-header-inner {
+      display: flex;
       align-items: center;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -11,44 +11,46 @@
         justify-content: flex-start;
         align-items: center;
       }
-      .ds-inner-left{
+      .ds-inner-left {
         max-width: 70%;
         @media screen and (max-width: 767px) {
           max-width: 100%;
         }
+        h1 a {
+          margin-right: 10px;
+        }
       }
-      .ds-inner-right{
+      .ds-inner-right {
         max-width: 30%;
         @media screen and (max-width: 767px) {
           max-width: 100%;
         }
       }
-    h1 {
-      display: flex;
-      align-items: center;
-      color: #fff;
-      font-size: 24px;
-      margin:10px 0 ;
-      @media (max-width: 767px) {
-        font-size: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    }
-    .hexagon-wrapper {
-      
-      @media (max-width: 767px) {
-        width: 56px;
-        height: 56px;
-        div.label {
-          font-size: 17px;
+      h1 {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        font-size: 24px;
+        margin: 10px 0;
+        @media (max-width: 767px) {
+          font-size: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
         }
       }
+      .hexagon-wrapper {
+        @media (max-width: 767px) {
+          width: 56px;
+          height: 56px;
+          div.label {
+            font-size: 17px;
+          }
+        }
+      }
+      .dataset-tool-buttons {
+        flex-basis: 100%;
+      }
     }
-    .dataset-tool-buttons{
-      flex-basis: 100%;
-    }
-  }
   }
 
   .dataset-header-alert {
@@ -165,106 +167,6 @@
         button {
           padding: 0;
           margin-right: 10px;
-        }
-      }
-    }
-  }
-}
-
-.dataset {
-  .hexagon-wrapper {
-    text-align: center;
-    margin: 20px 10px;
-    position: relative;
-    display: inline-block;
-    width: 45px;
-    height: 45px;
-    div.label {
-      position: absolute;
-      top: 0;
-      text-align: center;
-      width: 100%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: 600;
-      font-size: 13px;
-    }
-
-    .hexagon {
-      height: 100%;
-      width: calc(100% * 0.57735);
-      display: inline-block;
-    }
-
-    .hexagon:before {
-      position: absolute;
-      top: 0;
-      right: calc((100% / 2) - ((100% * 0.57735) / 2));
-      background-color: inherit;
-      height: inherit;
-      width: inherit;
-      content: '';
-      transform: rotateZ(60deg);
-    }
-
-    .hexagon:after {
-      position: absolute;
-      top: 0;
-      right: calc((100% / 2) - ((100% * 0.57735) / 2));
-      background-color: inherit;
-      height: inherit;
-      width: inherit;
-      content: '';
-      transform: rotateZ(-60deg);
-    }
-  }
-
-  a {
-    .hexagon {
-      transition: color 0.3s;
-      background-color: #fff;
-
-      &.mri {
-        color: $mri-theme;
-      }
-      &.eeg {
-        color: $eeg-theme;
-      }
-
-      &.pet {
-        color: $pet-theme;
-      }
-      &.ieeg {
-        color: $ieeg-theme;
-      }
-
-      &.meg {
-        color: $meg-theme;
-      }
-    }
-    &:hover {
-      .hexagon {
-        color: lighten($on-dark-aqua, 15%);
-        &.mri {
-          color: lighten($mri-theme, 10%);
-        }
-        &.eeg {
-          color: lighten($eeg-theme, 10%);
-        }
-
-        &.pet {
-          color: lighten($pet-theme, 10%);
-        }
-        &.ieeg {
-          color: lighten($ieeg-theme, 10%);
-        }
-
-        &.meg {
-          color: lighten($meg-theme, 10%);
         }
       }
     }
