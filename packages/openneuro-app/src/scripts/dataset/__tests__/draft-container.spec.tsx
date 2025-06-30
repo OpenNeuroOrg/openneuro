@@ -9,7 +9,6 @@ import type { DraftContainerProps } from "../draft-container"
 import { UserModalOpenProvider } from "../../utils/user-login-modal-ctx"
 import { Cookies, CookiesProvider } from "react-cookie"
 import type * as UserQueriesModule from "../../queries/user"
-// --- END NEW ---
 
 vi.mock("../../config.ts")
 
