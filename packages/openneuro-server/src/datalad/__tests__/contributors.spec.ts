@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import yaml from "js-yaml"
 import * as Sentry from "@sentry/node"
 import CacheItem from "../../cache/item"
