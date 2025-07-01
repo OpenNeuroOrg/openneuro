@@ -270,7 +270,7 @@ export const useSearchResults = () => {
       ]),
     )
   }
-  if (authors.length) { // TODO - NELL - this was switch to contributors - is that correct?
+  if (authors.length) { // TODO - NELL - this was switched to contributors - is that correct?
     boolQuery.addClause(
       "must",
       matchQuery(
