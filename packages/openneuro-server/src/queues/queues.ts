@@ -1,5 +1,5 @@
 import { Queue } from "redis-smq"
-import { EQueueDeliveryModel, EQueueType } from "redis-smq"
+import { EQueueDeliveryModel, EQueueType, QueueRateLimit } from "redis-smq"
 import * as Sentry from "@sentry/node"
 
 export enum OpenNeuroQueues {
@@ -14,7 +14,20 @@ export function setupQueues() {
     EQueueDeliveryModel.POINT_TO_POINT,
     (err) => {
       // The queue may already exist, don't log that error
-      if (err.name !== "QueueQueueExistsError") {
+      console.log(err)
+      if (err !== "QueueQueueExistsError") {
+        Sentry.captureException(err)
+      }
+    },
+  )
+
+  // Limit indexing queue to 8 runs per minute to avoid stacking indexing excessively
+  const queueRateLimit = new QueueRateLimit()
+  queueRateLimit.set(
+    OpenNeuroQueues.INDEXING,
+    { limit: 8, interval: 60000 },
+    (err) => {
+      if (err) {
         Sentry.captureException(err)
       }
     },
