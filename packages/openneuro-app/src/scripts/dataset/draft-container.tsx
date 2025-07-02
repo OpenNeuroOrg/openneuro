@@ -34,6 +34,7 @@ import { DOILink } from "./fragments/doi-link"
 import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { ContributorListDisplay } from "../users/contributors-list"
 
 export interface DraftContainerProps {
   dataset
@@ -48,7 +49,6 @@ const snapshotVersion = (location) => {
 const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || "draft"
-
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
   const summary = dataset.draft.summary
   const description = dataset.draft.description
@@ -175,6 +175,16 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 heading="OpenNeuro Accession Number"
                 item={datasetId}
               />
+
+              <MetaDataBlock
+                heading="Contributors"
+                item={
+                  <ContributorListDisplay
+                    contributors={dataset.draft.contributors}
+                  />
+                }
+              />
+
               <EditDescriptionList
                 className="dmb-inline-list"
                 datasetId={datasetId}

@@ -39,6 +39,7 @@ import { TabRoutesSnapshot } from "./routes/tab-routes-snapshot"
 import schemaGenerator from "../utils/json-ld.js"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { ContributorListDisplay } from "../users/contributors-list"
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -177,6 +178,15 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="OpenNeuro Accession Number"
                 item={datasetId}
               />
+              <MetaDataBlock
+                heading="Contributors"
+                item={
+                  <ContributorListDisplay
+                    contributors={snapshot.contributors}
+                  />
+                }
+              />
+
               <MetaDataBlock
                 heading="Authors"
                 item={description?.Authors?.length

@@ -98,6 +98,12 @@ const searchQuery = gql`
               Authors
               DatasetDOI
             }
+            contributors {
+              name
+              firstname
+              lastname
+              id
+            }
           }
           analytics {
             views
@@ -168,7 +174,8 @@ export const useSearchResults = () => {
         "id^20",
         "latestSnapshot.readme",
         "latestSnapshot.description.Name^6",
-        "latestSnapshot.description.Authors^3",
+        "latestSnapshot.description.Authors^3", // TODO: Nell - do we need this still?
+        "latestSnapshot.contributors.name^3",
       ]),
     )
   }
@@ -263,11 +270,11 @@ export const useSearchResults = () => {
       ]),
     )
   }
-  if (authors.length) {
+  if (authors.length) { // TODO - NELL - this was switched to contributors - is that correct?
     boolQuery.addClause(
       "must",
       matchQuery(
-        "latestSnapshot.description.Authors",
+        "latestSnapshot.contributors.name",
         joinWithOR(authors),
         "2",
       ),
