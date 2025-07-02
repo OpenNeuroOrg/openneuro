@@ -2735,11 +2735,35 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@keyv/redis", [\
-      ["npm:2.7.0", {\
-        "packageLocation": "./.yarn/cache/@keyv-redis-npm-2.7.0-e70d04f1ac-2bf16d99f5.zip/node_modules/@keyv/redis/",\
+      ["npm:4.5.0", {\
+        "packageLocation": "./.yarn/cache/@keyv-redis-npm-4.5.0-8f3b57e799-afa09c967c.zip/node_modules/@keyv/redis/",\
         "packageDependencies": [\
-          ["@keyv/redis", "npm:2.7.0"],\
-          ["ioredis", "npm:5.3.2"]\
+          ["@keyv/redis", "npm:4.5.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0", {\
+        "packageLocation": "./.yarn/__virtual__/@keyv-redis-virtual-063ded56be/0/cache/@keyv-redis-npm-4.5.0-8f3b57e799-afa09c967c.zip/node_modules/@keyv/redis/",\
+        "packageDependencies": [\
+          ["@keyv/redis", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
+          ["@redis/client", "npm:1.6.1"],\
+          ["@types/keyv", null],\
+          ["cluster-key-slot", "npm:1.1.2"],\
+          ["keyv", "npm:5.3.4"]\
+        ],\
+        "packagePeers": [\
+          "@types/keyv",\
+          "keyv"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@keyv/serialize", [\
+      ["npm:1.0.3", {\
+        "packageLocation": "./.yarn/cache/@keyv-serialize-npm-1.0.3-8097f55a1b-d6a9194dd7.zip/node_modules/@keyv/serialize/",\
+        "packageDependencies": [\
+          ["@keyv/serialize", "npm:1.0.3"],\
+          ["buffer", "npm:6.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4074,7 +4098,7 @@ const RAW_RUNTIME_STATE =
           ["@apollo/utils.keyvadapter", "npm:3.0.0"],\
           ["@elastic/elasticsearch", "npm:8.13.1"],\
           ["@graphql-tools/schema", "virtual:7551ce9da6a1d08fa7e13a80e2f973b491766328bd179cc2db79caffc61371ac135c2ad0ad653010fa4ab35dcca89d6c85968158f6af4813bc27a96b906e116a#npm:10.0.0"],\
-          ["@keyv/redis", "npm:2.7.0"],\
+          ["@keyv/redis", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
           ["@openneuro/search", "workspace:packages/openneuro-search"],\
           ["@sentry/node", "npm:8.52.0"],\
           ["@sentry/profiling-node", "npm:8.25.0"],\
@@ -4104,7 +4128,7 @@ const RAW_RUNTIME_STATE =
           ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:8.8.1"],\
           ["jsdom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:24.0.0"],\
           ["jsonwebtoken", "npm:9.0.0"],\
-          ["keyv", "npm:4.5.3"],\
+          ["keyv", "npm:5.3.4"],\
           ["mime-types", "npm:2.1.32"],\
           ["mongodb-memory-server", "npm:9.2.0"],\
           ["mongoose", "npm:8.9.5"],\
@@ -5609,6 +5633,18 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@protobufjs-utf8-npm-1.1.0-02c590807c-131e289c57.zip/node_modules/@protobufjs/utf8/",\
         "packageDependencies": [\
           ["@protobufjs/utf8", "npm:1.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@redis/client", [\
+      ["npm:1.6.1", {\
+        "packageLocation": "./.yarn/cache/@redis-client-npm-1.6.1-d6f1be93ad-3ef20235b9.zip/node_modules/@redis/client/",\
+        "packageDependencies": [\
+          ["@redis/client", "npm:1.6.1"],\
+          ["cluster-key-slot", "npm:1.1.2"],\
+          ["generic-pool", "npm:3.9.0"],\
+          ["yallist", "npm:4.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9658,6 +9694,13 @@ const RAW_RUNTIME_STATE =
           ["cluster-key-slot", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.1.2", {\
+        "packageLocation": "./.yarn/cache/cluster-key-slot-npm-1.1.2-0571a28825-516ed8b5e1.zip/node_modules/cluster-key-slot/",\
+        "packageDependencies": [\
+          ["cluster-key-slot", "npm:1.1.2"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["code-point-at", [\
@@ -12889,6 +12932,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["generic-pool", [\
+      ["npm:3.9.0", {\
+        "packageLocation": "./.yarn/cache/generic-pool-npm-3.9.0-21fff1a77f-3c632d30a6.zip/node_modules/generic-pool/",\
+        "packageDependencies": [\
+          ["generic-pool", "npm:3.9.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["genfun", [\
       ["npm:5.0.0", {\
         "packageLocation": "./.yarn/cache/genfun-npm-5.0.0-4ef81f33fb-1d83543d83.zip/node_modules/genfun/",\
@@ -15721,6 +15773,14 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["keyv", "npm:4.5.4"],\
           ["json-buffer", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:5.3.4", {\
+        "packageLocation": "./.yarn/cache/keyv-npm-5.3.4-bf6aaecb1e-3e294eb116.zip/node_modules/keyv/",\
+        "packageDependencies": [\
+          ["keyv", "npm:5.3.4"],\
+          ["@keyv/serialize", "npm:1.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
