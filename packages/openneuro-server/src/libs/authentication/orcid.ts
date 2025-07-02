@@ -57,13 +57,13 @@ export const authCallback = (req, res, next) =>
 
     // Google user
     const existingAuth = parsedJwtFromRequest(req)
-    if (existingAuth) {
-      // Migrate Google to ORCID
-      if (existingAuth.provider === "google") {
-        return userMigration(user.providerId, existingAuth.sub).then(() => {
-          return completeRequestLogin(req, res, next, user)
-        })
-      }
+    if (
+      existingAuth && existingAuth.provider === "google" &&
+      existingAuth.exp * 1000 > Date.now()
+    ) {
+      return userMigration(user.providerId, existingAuth.sub).then(() => {
+        return completeRequestLogin(req, res, next, user)
+      })
     } else {
       return completeRequestLogin(req, res, next, user)
     }
