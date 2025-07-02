@@ -5,6 +5,7 @@ import Dataset from "../../models/dataset"
 import Permission from "../../models/permission"
 import Comment from "../../models/comment"
 import Deletion from "../../models/deletion"
+import { queueIndexDataset } from "../../queues/producer-methods"
 import * as Sentry from "@sentry/node"
 
 /**
@@ -20,6 +21,7 @@ import * as Sentry from "@sentry/node"
 export async function userMigration(orcid: string, userId: string) {
   const session = await mongoose.startSession()
   try {
+    let updateDatasets: Record<string, boolean> = {}
     await session.withTransaction(async () => {
       try {
         // Load both original records
@@ -55,6 +57,7 @@ export async function userMigration(orcid: string, userId: string) {
           // Record this dataset uploader as migrated
           migration.datasets.push(dataset.id)
           await dataset.save({ session })
+          updateDatasets[dataset.id] = true
         }
 
         // Migrate dataset permissions
@@ -70,6 +73,7 @@ export async function userMigration(orcid: string, userId: string) {
           // Record this permission as migrated
           migration.permissions.push(permission.toObject())
           await permission.save({ session })
+          updateDatasets[permission.datasetId] = true
         }
 
         // Migrate dataset deletions
@@ -110,6 +114,10 @@ export async function userMigration(orcid: string, userId: string) {
         // Save success
         migration.success = true
         await migration.save({ session })
+        // Request reindexing
+        for (const updateDataset of Object.keys(updateDatasets)) {
+          queueIndexDataset(updateDataset)
+        }
       } catch (err) {
         Sentry.captureException(err)
         throw err
