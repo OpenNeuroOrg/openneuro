@@ -21,7 +21,7 @@ import * as Sentry from "@sentry/node"
 export async function userMigration(orcid: string, userId: string) {
   const session = await mongoose.startSession()
   try {
-    let updateDatasets: Record<string, boolean> = {}
+    const updateDatasets: Record<string, boolean> = {}
     await session.withTransaction(async () => {
       try {
         // Load both original records
