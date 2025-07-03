@@ -4,6 +4,10 @@ const config = {
       secret: "123456",
     },
   },
+  redis: {
+    port: 6379,
+    host: "localhost",
+  },
   datalad: {
     uri: "datalad",
     workers: 4,

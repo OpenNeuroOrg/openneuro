@@ -3,7 +3,6 @@
  */
 import * as Sentry from "@sentry/node"
 import request from "superagent"
-import { reindexDataset } from "../elasticsearch/reindex-dataset"
 import { redis, redlock } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import config from "../config"
@@ -23,6 +22,7 @@ import { updateDatasetRevision } from "./draft"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { join } from "path"
 import { createEvent, updateEvent } from "../libs/events"
+import { queueIndexDataset } from "../queues/producer-methods"
 
 const lockSnapshot = (datasetId, tag) => {
   return redlock.lock(
@@ -177,7 +177,7 @@ export const createSnapshot = async (
     await updateEvent(event)
 
     // Immediate indexing for new snapshots
-    await reindexDataset(datasetId)
+    queueIndexDataset(datasetId)
 
     announceNewSnapshot(snapshot, datasetId, user)
     return snapshot
