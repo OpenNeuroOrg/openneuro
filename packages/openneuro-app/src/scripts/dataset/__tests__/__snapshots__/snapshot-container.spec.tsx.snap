@@ -49,7 +49,7 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                 href="/search/modality/MRI"
               >
                 <div
-                  class="hexagon-wrapper"
+                  class="hexagon-wrapper undefined"
                 >
                   <div
                     class="hexagon mri"
