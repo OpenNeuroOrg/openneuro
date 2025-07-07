@@ -1,12 +1,12 @@
 import React from "react"
 import { formatDistanceToNow, parseISO } from "date-fns"
-import getYear from "date-fns/getYear"
 import activityPulseIcon from "../../assets/activity-icon.png"
 import { Tooltip } from "../components/tooltip/Tooltip"
 import { Icon } from "../components/icon/Icon"
 import styles from "./scss/datasetcard.module.scss"
 import type { DatasetCardProps } from "../types/user-types"
 import { ModalityHexagon } from "../components/modality-cube/ModalityHexagon"
+import { SearchResultsCitation } from "../components/citation/search-results-citation"
 
 export const DatasetCard: React.FC<DatasetCardProps> = (
   { dataset, hasEdit },
@@ -90,13 +90,6 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
     }
   }
 
-  const year = getYear(parseISO(dataset.created))
-  const authors = dataset.latestSnapshot.description?.Authors
-    ? dataset.latestSnapshot.description.Authors.join(" and ")
-    : "NO AUTHORS FOUND"
-  const datasetCite =
-    `${authors} (${year}). ${dataset.latestSnapshot.description.Name}. OpenNeuro. [Dataset] doi: ${dataset.latestSnapshot.description.DatasetDOI}`
-
   return (
     <div
       className={styles.userDsCard}
@@ -109,7 +102,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
         </a>
       </h4>
       <div className={styles.userDsBody}>
-        <cite>{datasetCite}</cite>
+        <SearchResultsCitation dataset={dataset} />
       </div>
       <div className={styles.userDsFooter}>
         <div className={styles.userMetawrap}>

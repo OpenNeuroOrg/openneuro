@@ -1,6 +1,4 @@
 import React from "react"
-import getYear from "date-fns/getYear"
-import parseISO from "date-fns/parseISO"
 import { Link } from "react-router-dom"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { Icon } from "../../components/icon/Icon"
@@ -11,6 +9,7 @@ import "../scss/search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { hasEditPermissions } from "../../authentication/profile"
 import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
+import { SearchResultsCitation } from "../../components/citation/search-results-citation"
 
 export const formatDate = (dateObject) =>
   new Date(dateObject).toISOString().split("T")[0]
@@ -19,6 +18,7 @@ export interface SearchResultItemProps {
   node: {
     id: string
     created: string
+    name: string
     uploader: {
       id: string
       name: string
@@ -243,12 +243,6 @@ export const SearchResultItem = ({
     </div>
   )
 
-  const year = getYear(parseISO(node.created))
-  const authors = node.latestSnapshot.description?.Authors
-    ? node.latestSnapshot.description.Authors.join(" and ")
-    : "NO AUTHORS FOUND"
-  const datasetCite =
-    `${authors} (${year}). ${node.latestSnapshot.description.Name}. OpenNeuro. [Dataset] doi: ${node.latestSnapshot.description.DatasetDOI}`
   const trimlength = 450
 
   return (
@@ -270,7 +264,7 @@ export const SearchResultItem = ({
                   : node.latestSnapshot.readme)
                 : ""}
             </p>
-            <cite>{datasetCite}</cite>
+            <SearchResultsCitation dataset={node} />
           </div>
         </div>
 
