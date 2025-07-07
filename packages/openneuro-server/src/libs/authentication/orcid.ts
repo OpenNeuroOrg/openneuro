@@ -4,9 +4,11 @@ import * as Sentry from "@sentry/node"
 import { userMigration } from "./user-migration"
 import User from "../../models/user"
 
-export const requestAuth = passport.authenticate("orcid", {
-  session: false,
-})
+export const requestAuth = (req, res, next) =>
+  passport.authenticate("orcid", {
+    session: false,
+    state: req.query.redirectPath || null,
+  })(req, res, next)
 
 /**
  * Complete a successful login
