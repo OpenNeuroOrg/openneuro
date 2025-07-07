@@ -4,6 +4,7 @@ import { modalityShortMapping } from "../../components/formatting/modality-label
 import "./modality-hexagon.scss"
 interface ModalityHexagonProps {
   primaryModality: string | null | undefined
+  size?: string | null | undefined
 }
 
 //ModalityHexagon component displays a colored hexagon and label
@@ -11,6 +12,7 @@ interface ModalityHexagonProps {
 
 export const ModalityHexagon: FC<ModalityHexagonProps> = ({
   primaryModality,
+  size,
 }) => {
   const hexagonClass = primaryModality
     ? primaryModality.toLowerCase()
@@ -21,7 +23,7 @@ export const ModalityHexagon: FC<ModalityHexagonProps> = ({
     : <i className="fa fa-circle-o-notch fa-spin"></i>
 
   return (
-    <div className="hexagon-wrapper">
+    <div className={`hexagon-wrapper ${size}`}>
       <div className={`hexagon ${hexagonClass}`}></div>
       <div className="label">{labelText}</div>
     </div>
