@@ -48,11 +48,11 @@ export interface Dataset {
     created?: string
     description?: {
       Authors: string[]
-      DatasetDOI: string
+      DatasetDOI?: string | null
       Name: string
     }
     summary?: {
-      primaryModality: string
+      primaryModality?: string
     }
   }
   draft?: {
