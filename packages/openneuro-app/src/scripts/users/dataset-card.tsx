@@ -90,7 +90,6 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
     }
   }
 
-  console.log(dataset)
   const year = getYear(parseISO(dataset.created))
   const authors = dataset.latestSnapshot.description?.Authors
     ? dataset.latestSnapshot.description.Authors.join(" and ")
