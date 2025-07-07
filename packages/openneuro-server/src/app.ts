@@ -65,6 +65,7 @@ export async function expressApolloSetup() {
     schema,
     // Always allow introspection - our schema is public
     introspection: true,
+    // @ts-expect-error Type mismatch for keyv and ioredis recent releases
     cache: new KeyvAdapter(new Keyv({ store: new KeyvRedis(redis) })),
     plugins: [
       ApolloServerPluginLandingPageLocalDefault(),
