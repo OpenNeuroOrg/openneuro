@@ -32,41 +32,44 @@ export function completeRequestLogin(req, res, next, user) {
 }
 
 export const authCallback = (req, res, next) =>
-  passport.authenticate("orcid", async (err, user) => {
-    if (err) {
-      Sentry.captureException(err)
-      if (err.type) {
-        return res.redirect(`/error/orcid/${err.type}`)
-      } else {
-        return res.redirect("/error/orcid/unknown")
+  passport.authenticate(
+    "orcid",
+    async (err, user) => {
+      if (err) {
+        Sentry.captureException(err)
+        if (err.type) {
+          return res.redirect(`/error/orcid/${err.type}`)
+        } else {
+          return res.redirect("/error/orcid/unknown")
+        }
       }
-    }
-    if (!user) {
-      return res.redirect("/")
-    }
-
-    try {
-      // adds new date for login/lastSeen
-      await User.findByIdAndUpdate(user._id, { lastSeen: new Date() })
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        Sentry.captureException(error)
-      } else {
-        Sentry.captureException(new Error(String(error)))
+      if (!user) {
+        return res.redirect("/")
       }
-      // Don't block the login flow
-    }
 
-    // Google user
-    const existingAuth = parsedJwtFromRequest(req)
-    if (
-      existingAuth && existingAuth.provider === "google" &&
-      existingAuth.exp * 1000 > Date.now()
-    ) {
-      return userMigration(user.providerId, existingAuth.sub).then(() => {
+      try {
+        // adds new date for login/lastSeen
+        await User.findByIdAndUpdate(user._id, { lastSeen: new Date() })
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          Sentry.captureException(error)
+        } else {
+          Sentry.captureException(new Error(String(error)))
+        }
+        // Don't block the login flow
+      }
+
+      // Google user
+      const existingAuth = parsedJwtFromRequest(req)
+      if (
+        existingAuth && existingAuth.provider === "google" &&
+        existingAuth.exp * 1000 > Date.now()
+      ) {
+        return userMigration(user.providerId, existingAuth.sub).then(() => {
+          return completeRequestLogin(req, res, next, user)
+        })
+      } else {
         return completeRequestLogin(req, res, next, user)
-      })
-    } else {
-      return completeRequestLogin(req, res, next, user)
-    }
-  })(req, res, next)
+      }
+    },
+  )(req, res, next)
